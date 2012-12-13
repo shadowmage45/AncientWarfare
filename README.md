@@ -1,6 +1,8 @@
 AncientWarfare
 ==============
 
+Need to add license stuff (need to choose a licence)
+Need to remove old repo + stuff
 Updated Ancient Warfare mod for Minecraft 1.4.5+ (rewrite)
 
 http://techne.zeux.me/techne/editor
