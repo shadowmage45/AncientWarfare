@@ -1,6 +1,7 @@
 package shadowmage.ancient_warfare.common.aw_core.config;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import net.minecraftforge.common.Configuration;
 
@@ -20,6 +21,12 @@ public static ConfigManager instance()
  }
 
 private static Configuration config;
+private static Logger logger;
+
+public static void setLogger(Logger log)
+  {
+  logger = log;
+  }
 
 public static void loadConfig(File inputFile)
   {

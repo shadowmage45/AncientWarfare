@@ -1,6 +1,7 @@
 package shadowmage.ancient_warfare.common.aw_core;
 
 
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.config.ConfigManager;
 import shadowmage.ancient_warfare.common.aw_core.network.PacketHandler;
 import shadowmage.ancient_warfare.common.aw_core.proxy.CommonProxy;
@@ -14,15 +15,14 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
 
-@Mod( modid = "AncientWarfare", name="Ancient Warfare", version="0.1.0.001-alpha")
+@Mod( modid = "AncientWarfare", name="Ancient Warfare", version="MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+"-"+Config.CORE_BUILD_STATUS)
 @NetworkMod
 (
 clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
-channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier"},
-//connectionHandler = ConnectionHandler.class,
-versionBounds="[0.1.0,)"
+channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
+versionBounds="["+"MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+",)"
 )
 public class AncientWarfareCore {
 	
@@ -42,6 +42,7 @@ public void preInit(FMLPreInitializationEvent evt)
   /**
    * load config file
    */
+  ConfigManager.setLogger(evt.getModLog());
   ConfigManager.loadConfig(evt.getSuggestedConfigurationFile());
   }
 	

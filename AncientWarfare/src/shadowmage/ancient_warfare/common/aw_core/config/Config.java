@@ -1,3 +1,8 @@
+/**
+ * Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+ * This software is distributed under the terms of the GNU General Public Licence.
+ * Please see COPYING for precise license information.
+ */
 package shadowmage.ancient_warfare.common.aw_core.config;
 
 /**
@@ -20,9 +25,9 @@ public static final String CORE_BUILD_STATUS = "debug";
  */
 public static final String MC_VERSION = "1.4.5";
 
-public static final String CORE_COMPLETE_VERSION = String.valueOf("MC"+MC_VERSION+"--"+CORE_VERSION_MAJOR+"."+CORE_VERSION_MINOR+"."+CORE_VERSION_BUILD+"-"+CORE_BUILD_STATUS);
-public static final String VERSION_BOUNDS = String.valueOf("["+"MC"+MC_VERSION+"--"+CORE_VERSION_MAJOR+"."+CORE_VERSION_MINOR+"."+CORE_VERSION_BUILD+",)"); 
-
-
+/**
+ * should debug features be enabled? (debug keybinds, debug overlay rendering)
+ */
+public static final boolean DEBUG = false;
 
 }
