@@ -69,6 +69,7 @@ protected void constructPacket()
    * write custom data to the output stream
    */
   this.writeDataToStream(data);
+  packet250.isChunkDataPacket = this.chunkPacket;
   packet250.channel = this.getChannel();
   packet250.data = data.toByteArray();
   packet250.length = packet250.data.length;

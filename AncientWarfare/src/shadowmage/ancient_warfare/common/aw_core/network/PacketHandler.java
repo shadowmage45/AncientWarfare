@@ -43,6 +43,13 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
   realPacket.execute();
   }
 
+/**
+ * construct a new instance of a packet given only the packetType
+ * used on receiving a packet, so that it may be populated by the data stream
+ * in an intelligent manner
+ * @param type
+ * @return
+ */
 public PacketBase constructPacket(int type)
   {
   try

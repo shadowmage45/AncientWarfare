@@ -5,4 +5,9 @@ import shadowmage.ancient_warfare.common.aw_core.proxy.CommonProxy;
 public class ClientProxy extends CommonProxy
 {
 
+public ClientProxy()
+  {
+  this.inputHelper = new InputHelperClientProxy();
+  }
+
 }
