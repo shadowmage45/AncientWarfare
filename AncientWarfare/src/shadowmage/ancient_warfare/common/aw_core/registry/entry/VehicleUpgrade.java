@@ -1,4 +1,4 @@
-package shadowmage.ancient_warfare.common.aw_vehicles.upgrades;
+package shadowmage.ancient_warfare.common.aw_core.registry.entry;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.aw_vehicles.VehicleBase;

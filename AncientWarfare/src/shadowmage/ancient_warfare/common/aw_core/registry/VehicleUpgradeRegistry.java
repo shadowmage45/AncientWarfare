@@ -5,7 +5,8 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
-import shadowmage.ancient_warfare.common.aw_vehicles.upgrades.VehicleUpgrade;
+import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
+import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleUpgrade;
 
 public class VehicleUpgradeRegistry
 {
@@ -22,6 +23,7 @@ private static VehicleUpgradeRegistry INSTANCE;
 
 private Map upgradeTypeMap = new HashMap<Integer, VehicleUpgrade>();
 private Map upgradeNameMap = new HashMap<String, VehicleUpgrade>();
+private Map upgradeItemMap = new HashMap<ItemIDPair, VehicleUpgrade>();
 
 /**
  * called from ItemLoader
@@ -35,6 +37,7 @@ public void registerUpgrade(int dmg, int type, VehicleUpgrade upgrade)
   ItemLoader.vehicleUpgrade.addSubType(upgradeStack); 
   this.upgradeTypeMap.put(type, upgrade);
   this.upgradeNameMap.put(upgrade.getUpgradeName(), upgrade);
+  this.upgradeItemMap.put(new ItemIDPair(ItemLoader.vehicleUpgrade.shiftedIndex, dmg), upgrade);
   }
 
 public VehicleUpgrade getUpgrade(String name)

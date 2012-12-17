@@ -22,49 +22,35 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.registry.entry;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ItemDescription
-{
-
-public ItemIDPair itemID;
-public String displayName;
-public String description = "";
-public List usedToCraft = new ArrayList<String>();
-public List usedIn = new ArrayList<String>();//what this item is used IN, if it is a module type item (armor, upgrades, ammo)
-
-public ItemDescription(String name, ItemIDPair itemID)
-  {
-  this.displayName = name;
-  this.itemID = itemID;
-  }
-
-public ItemDescription setDescription(String desc)
-  {
-  this.description = desc;
-  return this;
-  }
-
-public void addCraft(String in)
-  {
-  this.usedToCraft.add(in);
-  }
-
-public void addUsedIn(String in)
-  {
-  this.usedIn.add(in);
-  }
+import net.minecraft.item.ItemStack;
 
 /**
- * return the description for this entry as a series of strings formatted for length
- * @param len 
- * @return
+ * @author Shadowmage
+ * lightweight wrapper for the base information to make up an item
  */
-public List<String> getFormattedDescription(int charLen)
+public class ItemIDPair
+{
+
+public ItemIDPair(int id, int dmg)
   {
-  //TODO
-  return null;
+  this.itemID = id;
+  this.dmg = dmg;  
+  }
+public int itemID;
+public int dmg;
+
+public boolean equals (ItemStack stack)
+  {
+  return itemID==stack.itemID && dmg==stack.getItemDamage();
   }
 
+public boolean equals (ItemIDPair pair)
+  {
+  return pair.itemID==this.itemID && pair.dmg ==this.dmg;
+  }
+
+public boolean equals (int id, int dmg)
+  {
+  return this.itemID==id && this.dmg==dmg;
+  }
 }

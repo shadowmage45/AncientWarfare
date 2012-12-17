@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import shadowmage.ancient_warfare.common.aw_core.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.aw_vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.aw_vehicles.upgrades.VehicleUpgrade;
 
 public class UpgradeStats
 {

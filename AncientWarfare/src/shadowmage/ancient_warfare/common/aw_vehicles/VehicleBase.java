@@ -47,7 +47,7 @@ public EntityPathfinder navigator;
  * for both saving to NBT and relaying via packet to the client
  * also, they should intelligently relay only _changed_ bits to clients..somehow
  */
-private AmmoStats ammoStats = new AmmoStats();
+private AmmoStats ammoStats;
 private ArmorStats armorStats = new ArmorStats();
 private GeneralStats generalStats = new GeneralStats();
 private UpgradeStats upgradeStats;
@@ -57,9 +57,15 @@ private VehicleInventory inventory;
 public VehicleBase(World par1World)
   {
   super(par1World);
-  this.navigator = new EntityPathfinder(this, worldObj, 16);  
+  this.navigator = new EntityPathfinder(this, worldObj, 16);
+  this.ammoStats = new AmmoStats(this);
+  this.addValidAmmoTypes();
   this.upgradeStats = new UpgradeStats(this);
+  this.addValidUpgradeTypes();  
   }
+
+public abstract void addValidAmmoTypes();
+public abstract void addValidUpgradeTypes();
 
 public boolean hasTurret()
   {

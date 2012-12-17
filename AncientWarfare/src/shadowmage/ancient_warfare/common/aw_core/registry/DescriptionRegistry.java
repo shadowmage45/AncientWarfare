@@ -1,16 +1,40 @@
+/**
+   Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+   This software is distributed under the terms of the GNU General Public Licence.
+   Please see COPYING for precise license information.
+
+   This file is part of Ancient Warfare.
+
+   Ancient Warfare is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Ancient Warfare is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+
+ */
 package shadowmage.ancient_warfare.common.aw_core.registry;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import cpw.mods.fml.common.registry.LanguageRegistry;
-
-import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemDescription;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemDescription;
+import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
+/**
+ * @author Shadowmage
+ *
+ */
 public class DescriptionRegistry
 {
 
@@ -18,16 +42,7 @@ public class DescriptionRegistry
 private static DescriptionRegistry INSTANCE;
 private DescriptionRegistry(){}
 
-private class ItemDescriptionIDPair
-{
-public ItemDescriptionIDPair(int id, int dmg)
-  {
-  this.itemID = id;
-  this.dmg = dmg;  
-  }
-public int itemID;
-public int dmg;
-}
+
 
 public static DescriptionRegistry instance()
   {
@@ -38,7 +53,7 @@ public static DescriptionRegistry instance()
   return INSTANCE;
   }
 
-private static Map<ItemDescriptionIDPair,ItemDescription> descriptions = new HashMap<ItemDescriptionIDPair,ItemDescription>();
+private static Map<ItemIDPair,ItemDescription> descriptions = new HashMap<ItemIDPair,ItemDescription>();
 
 public void registerItem(Item item, String displayName)
   {
@@ -53,18 +68,26 @@ public void registerItem(ItemStack stack, String displayName)
     }
   }
 
-/**
- * final regsiterItem call, all others go here, also registers item with languageRegistry
- * @param id
- * @param dmg
- * @param displayName
- */
 public void registerItem(int id, int dmg, String displayName)
   {
-  if(!this.contains(id, dmg))
+  this.registerItem(new ItemIDPair(id,dmg), displayName);
+  }
+
+/**
+ * final ID register call, all others are funneled through here
+ * @param id
+ * @param displayName
+ */
+public void registerItem(ItemIDPair id, String displayName)
+  {
+  if(!this.contains(id.itemID, id.dmg))
     {
-    this.descriptions.put(new ItemDescriptionIDPair(id, dmg), new ItemDescription(displayName));
-    LanguageRegistry.addName(new ItemStack(id,1,dmg), displayName);
+    if(displayName==null)
+      {
+      displayName = "";
+      }
+    this.descriptions.put(id, new ItemDescription(displayName, id));
+    LanguageRegistry.addName(new ItemStack(id.itemID,1,id.dmg), displayName);
     }
   }
 
@@ -76,9 +99,8 @@ public void registerItem(int id, int dmg, String displayName)
 public void addDescription(ItemStack stack, String description)
   {
   if(this.contains(stack))
-    {
-    this.getEntryFor(stack.itemID, stack.getItemDamage());
-    this.descriptions.get(new ItemDescriptionIDPair(stack.itemID, stack.getItemDamage())).setDescription(description);
+    {   
+    this.descriptions.get(new ItemIDPair(stack.itemID, stack.getItemDamage())).setDescription(description);
     }    
   }
 
@@ -114,9 +136,9 @@ public void addDescription(int id, int dmg, String desc)
  */
 public ItemDescription getEntryFor(int id, int dmg)
   {
-  for(ItemDescriptionIDPair desc : this.descriptions.keySet())
+  for(ItemIDPair desc : this.descriptions.keySet())
     {
-    if(desc.itemID == id && desc.dmg == dmg)
+    if(desc.equals(id, dmg))
       {
       return this.descriptions.get(desc);
       }
@@ -176,6 +198,15 @@ public boolean contains(Item item)
 public boolean contains(int id, int dmg)
   {
   if(this.getEntryFor(id, dmg)!=null)
+    {
+    return true;
+    }
+  return false;
+  }
+
+public boolean contains(ItemIDPair pair)
+  {
+  if(this.getEntryFor(pair.itemID, pair.dmg)!=null)
     {
     return true;
     }

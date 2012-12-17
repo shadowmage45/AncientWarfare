@@ -22,49 +22,35 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.registry.entry;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.item.ItemStack;
 
-public class ItemDescription
+/**
+ * @author Shadowmage
+ *
+ */
+public class VehicleAmmo
 {
 
 public ItemIDPair itemID;
+public String name;
 public String displayName;
-public String description = "";
-public List usedToCraft = new ArrayList<String>();
-public List usedIn = new ArrayList<String>();//what this item is used IN, if it is a module type item (armor, upgrades, ammo)
+public int type;
 
-public ItemDescription(String name, ItemIDPair itemID)
+public VehicleAmmo(ItemIDPair itemID, String name, String displayName, int globalType)
   {
-  this.displayName = name;
   this.itemID = itemID;
+  this.name = name;
+  this.displayName = displayName;
+  this.type = globalType;
   }
 
-public ItemDescription setDescription(String desc)
+public boolean isStackMatchingAmmo(ItemStack stack)
   {
-  this.description = desc;
-  return this;
-  }
-
-public void addCraft(String in)
-  {
-  this.usedToCraft.add(in);
-  }
-
-public void addUsedIn(String in)
-  {
-  this.usedIn.add(in);
-  }
-
-/**
- * return the description for this entry as a series of strings formatted for length
- * @param len 
- * @return
- */
-public List<String> getFormattedDescription(int charLen)
-  {
-  //TODO
-  return null;
+  if(stack==null)
+    {
+    return false;
+    }
+  return this.itemID.itemID==stack.itemID && this.itemID.dmg==stack.getItemDamage();
   }
 
 }

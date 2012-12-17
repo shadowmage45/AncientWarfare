@@ -22,49 +22,41 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.registry.entry;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ItemDescription
-{
-
-public ItemIDPair itemID;
-public String displayName;
-public String description = "";
-public List usedToCraft = new ArrayList<String>();
-public List usedIn = new ArrayList<String>();//what this item is used IN, if it is a module type item (armor, upgrades, ammo)
-
-public ItemDescription(String name, ItemIDPair itemID)
-  {
-  this.displayName = name;
-  this.itemID = itemID;
-  }
-
-public ItemDescription setDescription(String desc)
-  {
-  this.description = desc;
-  return this;
-  }
-
-public void addCraft(String in)
-  {
-  this.usedToCraft.add(in);
-  }
-
-public void addUsedIn(String in)
-  {
-  this.usedIn.add(in);
-  }
+import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
+import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleAmmo;
 
 /**
- * return the description for this entry as a series of strings formatted for length
- * @param len 
- * @return
+ * @author Shadowmage
+ * per-vehicle-per ammo count/restock/priority handler
  */
-public List<String> getFormattedDescription(int charLen)
+public class VehicleAmmoEntry
+{
+
+int count;
+int restockPriority;
+int restockAmount;
+VehicleAmmo ammoInfo;
+boolean enabled = false;
+
+public VehicleAmmoEntry(VehicleAmmo ammoInfo)
   {
-  //TODO
-  return null;
+  this.ammoInfo = ammoInfo;
+  }
+
+public VehicleAmmo getInfo()
+  {
+  return this.ammoInfo;
+  }
+
+public ItemIDPair getItemID()
+  {
+  return this.ammoInfo.itemID;
+  }
+
+public VehicleAmmoEntry setEnabled()
+  {
+  this.enabled = true;
+  return this;
   }
 
 }
