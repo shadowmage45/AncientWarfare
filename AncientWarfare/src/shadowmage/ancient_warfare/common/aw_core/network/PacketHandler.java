@@ -3,7 +3,11 @@ package shadowmage.ancient_warfare.common.aw_core.network;
 import java.util.HashMap;
 import java.util.Map;
 
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_core.utils.NBTWriter;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
@@ -26,21 +30,34 @@ public PacketHandler()
 @Override
 public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
   {
-  ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
-  int packetType = data.readInt();
-  PacketBase realPacket = this.constructPacket(packetType);
-  if(realPacket==null)
+  try
     {
-    System.out.println("Extreme error during packet handling");
-    return;
+    ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
+    int packetType = data.readInt();
+    boolean hasTag = data.readBoolean();
+    NBTTagCompound tag = null;
+    if(hasTag)
+      {
+      tag = NBTWriter.readTagFromStream(data);
+      }
+    PacketBase realPacket = this.constructPacket(packetType);
+    if(realPacket==null)
+      {
+      System.out.println("Extreme error during packet handling");
+      return;
+      }
+    realPacket.packetData = tag;
+    realPacket.player = (EntityPlayer)player;  
+    realPacket.world = realPacket.player.worldObj;    
+    realPacket.readDataStream(data);
+    realPacket.execute();
     }
-  realPacket.player = (EntityPlayer)player;
-  if(realPacket.player!=null)
+  catch(Exception e)
     {
-    realPacket.world = realPacket.player.worldObj;
-    }  
-  realPacket.readDataStream(data);
-  realPacket.execute();
+    Config.log("Exception During Packet Handling, problem reading packet data");
+    e.printStackTrace();
+    }
+  
   }
 
 /**
@@ -49,24 +66,12 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
  * in an intelligent manner
  * @param type
  * @return
+ * @throws IllegalAccessException 
+ * @throws InstantiationException 
  */
-public PacketBase constructPacket(int type)
+public PacketBase constructPacket(int type) throws InstantiationException, IllegalAccessException
   {
-  try
-    {
-    return (PacketBase) this.packetTypes.get(type).getClass().newInstance();
-    } 
-  catch (InstantiationException e)
-    { 
-    System.out.println("Exception while constructing packet from dataStream");
-    e.printStackTrace();
-    } 
-  catch (IllegalAccessException e)
-    {   
-    System.out.println("Exception while constructing packet from dataStream");
-    e.printStackTrace();
-    }
-  return null;
+  return (PacketBase) this.packetTypes.get(type).getClass().newInstance();
   }
 
 }

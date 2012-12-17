@@ -2,11 +2,11 @@ package shadowmage.ancient_warfare.common.aw_vehicles;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.aw_core.utils.IMissileHitCallback;
+import shadowmage.ancient_warfare.common.aw_vehicles.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.aw_vehicles.stats.AmmoStats;
 import shadowmage.ancient_warfare.common.aw_vehicles.stats.ArmorStats;
 import shadowmage.ancient_warfare.common.aw_vehicles.stats.GeneralStats;
@@ -50,12 +50,15 @@ public EntityPathfinder navigator;
 private AmmoStats ammoStats = new AmmoStats();
 private ArmorStats armorStats = new ArmorStats();
 private GeneralStats generalStats = new GeneralStats();
-private UpgradeStats upgradeStats = new UpgradeStats();
+private UpgradeStats upgradeStats;
+
+private VehicleInventory inventory;
 
 public VehicleBase(World par1World)
   {
   super(par1World);
-  this.navigator = new EntityPathfinder(this, worldObj, 16);
+  this.navigator = new EntityPathfinder(this, worldObj, 16);  
+  this.upgradeStats = new UpgradeStats(this);
   }
 
 public boolean hasTurret()
@@ -81,7 +84,6 @@ public void setDead()
   {
   super.setDead();
   }
-
 
 @Override
 public void onUpdate()
@@ -196,12 +198,14 @@ protected void writeEntityToNBT(NBTTagCompound var1)
 @Override
 public void onMissileImpact(World world, double x, double y, double z)
   {
- 
+  // TODO Auto-generated method stub
+  
   }
 
 @Override
 public void onMissileImpactEntity(World world, Entity entity)
   {
+  // TODO Auto-generated method stub
   
   }
 

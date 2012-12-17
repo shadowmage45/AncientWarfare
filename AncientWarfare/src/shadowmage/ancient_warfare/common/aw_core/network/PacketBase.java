@@ -1,6 +1,8 @@
 package shadowmage.ancient_warfare.common.aw_core.network;
 
+import shadowmage.ancient_warfare.common.aw_core.utils.NBTWriter;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 
@@ -18,6 +20,8 @@ public World world;
 public EntityPlayer player;
 
 public abstract String getChannel();
+
+public NBTTagCompound packetData = new NBTTagCompound();
 
 /**
  * the actual transformed packet that will be written and sent
@@ -64,6 +68,15 @@ protected void constructPacket()
    * write the packet type number to the stream, decoded in packetHandler to create a new packet
    */
   data.writeInt(this.getPacketType());
+  
+  /**
+   * write default packet data NBTCompound to the stream
+   */
+  if(this.packetData!=null)
+    {
+    data.writeBoolean(true);
+    NBTWriter.writeTagToStream(packetData, data);
+    }
   
   /**
    * write custom data to the output stream

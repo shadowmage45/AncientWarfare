@@ -2,7 +2,8 @@ package shadowmage.ancient_warfare.common.aw_core;
 
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
-import shadowmage.ancient_warfare.common.aw_core.config.ConfigManager;
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.network.PacketHandler;
 import shadowmage.ancient_warfare.common.aw_core.proxy.CommonProxy;
 import cpw.mods.fml.common.Mod;
@@ -24,14 +25,15 @@ packetHandler = PacketHandler.class,
 channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
 versionBounds="["+"MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+",)"
 )
-public class AncientWarfareCore {
-	
 
+public class AWCore 
+{	
 @SidedProxy(clientSide = "shadowmage.ancient_warfare.client.aw_core.proxy.ClientProxy", serverSide = "shadowmage.ancient_warfare.common.aw_core.proxy.CommonProxy")
 public static CommonProxy proxy;
 @Instance("AncientWarfare")
-public static AncientWarfareCore instance;	
+public static AWCore instance;	
 	
+
 /**
  * load settings, config, items
  * @param evt
@@ -39,29 +41,28 @@ public static AncientWarfareCore instance;
 @PreInit
 public void preInit(FMLPreInitializationEvent evt) 
   {
+
   /**
-   * load config file
+   * load config file and setup logger
    */
-  ConfigManager.setLogger(evt.getModLog());
-  ConfigManager.loadConfig(evt.getSuggestedConfigurationFile());
+  Config.loadConfig(evt.getSuggestedConfigurationFile());
+  ItemLoader.instance().load();
   }
 	
+
 /**
  * initialize modules
  * @param evt
  */
 @PostInit
 public void load(FMLPostInitializationEvent evt)
-  {
-  
-  
+  {  
   
   /**
    * and finally, save the config in case there were any changes made during init
    */
-  ConfigManager.saveConfig();
+  Config.saveConfig();
   }
-	
-	
+		
 
 }

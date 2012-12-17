@@ -21,14 +21,14 @@ public interface IMissileHitCallback
  * @param y
  * @param z
  */
-public void onMissileImpact(World world, double x, double y, double z);
+public abstract void onMissileImpact(World world, double x, double y, double z);
 
 /**
  * callback for when a fired missile impacts an entity
  * @param world
  * @param entity
  */
-public void onMissileImpactEntity(World world, Entity entity);
+public abstract void onMissileImpactEntity(World world, Entity entity);
 
 
   
