@@ -24,7 +24,9 @@ package shadowmage.ancient_warfare.client.aw_core.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import shadowmage.ancient_warfare.common.aw_core.network.PacketBase;
 import shadowmage.ancient_warfare.common.aw_core.proxy.CommonProxy;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class ClientProxy extends CommonProxy
 {
@@ -34,8 +36,16 @@ public ClientProxy()
   this.inputHelper = new InputHelperClientProxy();
   }
 
+@Override
 public EntityPlayer getClientPlayer()
   {
   return Minecraft.getMinecraft().thePlayer;
   }
+
+@Override
+public void sendPacketToServer(PacketBase pkt)
+  {
+  PacketDispatcher.sendPacketToServer(pkt.get250Packet());
+  }
+
 }

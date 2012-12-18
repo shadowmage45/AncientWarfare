@@ -32,4 +32,10 @@ import shadowmage.ancient_warfare.common.aw_core.proxy.InputHelperCommonProxy;
 public class InputHelperClientProxy extends InputHelperCommonProxy
 {
 
+@Override
+public boolean checkInput()
+  {
+  return false;
+  }
+
 }

@@ -110,5 +110,11 @@ protected void constructPacket()
   packet250.length = packet250.data.length;
   }
 
+public Packet250CustomPayload get250Packet()
+  {
+  this.constructPacket();
+  return this.packet250;
+  }
+
 
 }

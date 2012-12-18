@@ -28,6 +28,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.network.Packet02Vehicle;
+import shadowmage.ancient_warfare.common.aw_core.proxy.InputHelper;
+import shadowmage.ancient_warfare.common.aw_core.proxy.InputHelperCommonProxy;
 import shadowmage.ancient_warfare.common.aw_core.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.aw_core.utils.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.aw_vehicles.inventory.VehicleInventory;
@@ -81,9 +83,11 @@ private UpgradeStats upgradeStats;
 
 private VehicleInventory inventory;
 
+public static InputHelperCommonProxy inputHelper = InputHelper.intance();
+
 public VehicleBase(World par1World)
   {
-  super(par1World);
+  super(par1World);   
   this.navigator = new EntityPathfinder(this, worldObj, 16);
   this.ammoStats = new AmmoStats(this);
   this.addValidAmmoTypes();
@@ -136,18 +140,35 @@ public void onUpdate()
  * client-side updates, poll for input if ridden, send input to server
  */
 public void onUpdateClient()
-  {
+  {  
+  /**
+   * check for input
+   */
   if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
     {
-    byte forwards = AWCore.proxy.getForwardInput();
-    byte strafe = AWCore.proxy.getStrafeInput();
-    if(forwards!=this.forwardInput || strafe !=this.strafeInput)
+    if(inputHelper.checkInput())
       {
-      NBTTagCompound tag = new NBTTagCompound();
-      Packet02Vehicle pkt = new Packet02Vehicle();
-      pkt.setParams(this);
-      pkt.packetData.setCompoundTag("pi", tag);
-      }
+      byte forwards = inputHelper.forwardInput;
+      byte strafe = inputHelper.strafe;
+      if(this.isDrivable() && forwards!=this.forwardInput || strafe !=this.strafeInput)
+        {
+        NBTTagCompound tag = new NBTTagCompound();
+        if(forwards!=this.forwardInput)
+          {
+          tag.setByte("f", forwards);
+          }
+        if(strafe!=this.strafeInput)
+          {
+          tag.setByte("s", strafe);
+          }            
+        Packet02Vehicle pkt = new Packet02Vehicle();
+        pkt.setParams(this);
+        pkt.packetData.setCompoundTag("pi", tag);
+        AWCore.proxy.sendPacketToServer(pkt);
+        }
+      this.forwardInput = forwards;
+      this.strafeInput = strafe;
+      }    
     }
   }
 

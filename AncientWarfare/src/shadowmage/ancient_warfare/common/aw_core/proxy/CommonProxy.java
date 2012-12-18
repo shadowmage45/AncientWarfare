@@ -24,28 +24,33 @@ package shadowmage.ancient_warfare.common.aw_core.proxy;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import shadowmage.ancient_warfare.common.aw_core.network.PacketBase;
 
 public class CommonProxy
 {
-
 public InputHelperCommonProxy inputHelper = new InputHelperCommonProxy();
 
-public byte getForwardInput()
-  {
-  return inputHelper.getForwardInput();
-  }
-
-public byte getStrafeInput()
-  {
-  return inputHelper.getStrafeInput();
-  }
 
 public EntityPlayer getClientPlayer()
   {
   return null;
   }
 
+/**
+ * NOOP server side
+ */
+public void sendPacketToServer(PacketBase pkt)
+  {
+  
+  }
+
+/**
+ * server side only
+ * @param ent
+ */
+public void sendPacketToPlayersTrackingEntity(PacketBase packet, Entity ent)
+  {
+  
+  }
 
 }

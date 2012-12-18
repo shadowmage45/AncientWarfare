@@ -32,27 +32,19 @@ public static final byte REVERSE = 0;
 public static final byte LEFT = 0;
 public static final byte RIGHT = 2;
 public static final byte NO_INPUT = 1;
+public static final byte TRIGGERED = 0;
 
-/**
- * 0-reverse
- * 1-no input
- * 2-forward
- * @return
- */
-public byte getForwardInput()
-  {
-  return 0;
-  }
+public byte forwardInput = NO_INPUT;
+public byte strafe = NO_INPUT;
+public byte fire = NO_INPUT;
+public byte turretStrafe = NO_INPUT;
+public byte turretPitch = NO_INPUT;
+public byte mount = NO_INPUT;
 
-/**
- * 0-left
- * 1-no input
- * 2-right
- * @return
- */
-public byte getStrafeInput()
+public boolean checkInput()
   {
-  return 0;
+  //TODO keybindHandler, check input keys
+  return false;  
   }
 
 }
