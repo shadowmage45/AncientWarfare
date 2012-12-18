@@ -26,6 +26,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.aw_core.AWCore;
+import shadowmage.ancient_warfare.common.aw_core.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.aw_core.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.aw_core.utils.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.aw_vehicles.inventory.VehicleInventory;
@@ -57,6 +59,9 @@ private float turretPitchMax = 90.f;
 private int aimPower = 0;
 private int aimPowerMin = 0;
 private int aimPowreMax = 100;
+
+private byte forwardInput = 0;
+private byte strafeInput = 0;
 
 /**
  * vehicle pathfinding, used by soldiers when they are riding the vehicle
@@ -128,12 +133,22 @@ public void onUpdate()
   }
 
 /**
- * TODO
  * client-side updates, poll for input if ridden, send input to server
  */
 public void onUpdateClient()
   {
-  
+  if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
+    {
+    byte forwards = AWCore.proxy.getForwardInput();
+    byte strafe = AWCore.proxy.getStrafeInput();
+    if(forwards!=this.forwardInput || strafe !=this.strafeInput)
+      {
+      NBTTagCompound tag = new NBTTagCompound();
+      Packet02Vehicle pkt = new Packet02Vehicle();
+      pkt.setParams(this);
+      pkt.packetData.setCompoundTag("pi", tag);
+      }
+    }
   }
 
 /**
@@ -145,9 +160,41 @@ public void onUpdateServer()
   
   }
 
+/**
+ * Called from Packet02Vehicle
+ * Generic update method for client-server coms
+ * keyMap:
+ * pi -- player input
+ * fp -- fire params
+ * fc -- fire command
+ * rs -- restock update
+ * @param tag
+ */
+public void handlePacketUpdate(NBTTagCompound tag)
+  {
+  NBTTagCompound updateTag;
+  if(tag.hasKey("pi"))
+    {
+    this.handleInputUpdate(tag.getCompoundTag("pi")); 
+    }
+  }
+
+public void handleInputUpdate(NBTTagCompound tag)
+  {
+  if(tag.hasKey("f"))
+    {
+    this.forwardInput = tag.getByte("f");
+    }
+  if(tag.hasKey("s"))
+    {
+    this.strafeInput = tag.getByte("s");
+    }
+  }
+
 @Override
 public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   {
+  //TODO setup armor stuffs...
   return super.attackEntityFrom(par1DamageSource, par2);
   }
 

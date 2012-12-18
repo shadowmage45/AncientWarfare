@@ -22,6 +22,8 @@
  */
 package shadowmage.ancient_warfare.client.aw_core.proxy;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import shadowmage.ancient_warfare.common.aw_core.proxy.CommonProxy;
 
 public class ClientProxy extends CommonProxy
@@ -32,4 +34,8 @@ public ClientProxy()
   this.inputHelper = new InputHelperClientProxy();
   }
 
+public EntityPlayer getClientPlayer()
+  {
+  return Minecraft.getMinecraft().thePlayer;
+  }
 }

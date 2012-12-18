@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.aw_core.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.aw_vehicles.VehicleBase;
 
@@ -33,121 +34,59 @@ public class VehicleInventory extends AWInventoryBasic
 {
 private VehicleBase vehicle;
 
+/**
+ * slot counts, used by container for displaying slots in GUI
+ * max slot counts are hard-indexed, many may be empty
+ */
 public int upgradeSlots;
 public int ammoSlots;
 public int armorSlots;
 public int engineSlots;
 public int fuelSlots;
+public int storageSlots;
 
-public VehicleInventory(VehicleBase vehicle, int upgradeSlots, int ammoSlots, int armorSlots, int engineSlots, int fuelSlots)
+public VehicleInventory(VehicleBase vehicle)
   {
-  super(upgradeSlots+ammoSlots+armorSlots+engineSlots+fuelSlots);
-  this.vehicle = vehicle;
-  this.upgradeSlots = upgradeSlots;
-  this.ammoSlots = ammoSlots;
-  this.armorSlots = armorSlots;
-  this.engineSlots = engineSlots;
-  this.fuelSlots = fuelSlots;
+  super(54);//0-26 vehicle slots //27-53 storage slots
+  this.vehicle = vehicle; 
   }
 
-public List getUpgradeSlots()
+@Override
+public void writeToNBT(NBTTagCompound tag)
   {
-  List items = new ArrayList<ItemStack>();
-  for(int i = 0; i <this.upgradeSlots; i++)
-    {
-    items.add(this.getUpgradeInSlot(i));
-    }
-  return items;
+  super.writeToNBT(tag);
+  this.writeSlotDataToNBT(tag);
   }
 
-public ItemStack getUpgradeInSlot(int slot)  
+@Override
+public void readFromNBT(NBTTagCompound tag)
   {
-  if(slot<0 ||slot>=this.upgradeSlots)
-    {
-    return null;
-    }
-  return this.getStackInSlot(slot);
+  super.readFromNBT(tag);
+  this.readSlotDataFromNBT(tag);
   }
 
-public List getAmmoSlots()
+public void readSlotDataFromNBT(NBTTagCompound tag)
   {
-  List items = new ArrayList<ItemStack>();
-  for(int i = 0; i <this.ammoSlots; i++)
-    {
-    items.add(this.getAmmoInSlot(i));
-    }
-  return items;
+  this.upgradeSlots = tag.getInteger("uS");
+  this.ammoSlots = tag.getInteger("amS");
+  this.armorSlots = tag.getInteger("arS");
+  this.engineSlots = tag.getInteger("eS");
+  this.fuelSlots= tag.getInteger("fS");
+  this.storageSlots = tag.getInteger("sS");
   }
 
-public ItemStack getAmmoInSlot(int slot)
+/**
+ * get a compound tag returning data about slot counts, to be relayed client-side during vehicle client-data sending
+ * @return
+ */
+public void writeSlotDataToNBT(NBTTagCompound tag)
   {
-  if(slot<0 || slot>=this.ammoSlots)
-    {
-    return null;
-    }
-  return this.getStackInSlot(upgradeSlots+slot);
-  }
-
-public List getArmorSlots()
-  {
-  List items = new ArrayList<ItemStack>();
-  for(int i = 0; i <this.armorSlots; i++)
-    {
-    items.add(this.getArmorInSlot(i));
-    }
-  return items;
-  }
-
-public ItemStack getArmorInSlot(int slot)
-  {
-  if(slot<0 || slot>= this.armorSlots)
-    {
-    return null;
-    }
-  return this.getStackInSlot(upgradeSlots+ammoSlots+slot);
-  }
-
-public ItemStack getEngineInSlot(int slot)
-  {
-  if(slot<0 || slot>= this.engineSlots)
-    {
-    return null;
-    }
-  return this.getStackInSlot(upgradeSlots+ammoSlots+armorSlots+slot);
-  }
-
-public ItemStack getFuelInSlot(int slot)
-  {
-  if(slot<0 || slot>=this.fuelSlots)
-    {
-    return null;
-    }
-  return this.getStackInSlot(upgradeSlots+ammoSlots+armorSlots+engineSlots+slot);
-  }
-
-public boolean isValidForSlot(ItemStack stack, int slot)
-  {
-  if(slot<0 || slot>=this.getSizeInventory())
-    {
-    return false;
-    }
-  else if(slot<this.upgradeSlots)
-    {
-    //TODO return if is valid item from vehicle upgrade valid upgrades list
-    }
-  else if(slot<upgradeSlots+ammoSlots)
-    {
-    //TODO return if is valid item from vehicle valid ammo list
-    }
-  else if(slot<upgradeSlots+ammoSlots+armorSlots)
-    {
-    //TODO return if is valid armor
-    }
-  else if(slot<upgradeSlots+ammoSlots+armorSlots+engineSlots)
-    {
-    //TODO return if is valid engine
-    }  
-  return false;
+  tag.setInteger("uS", upgradeSlots);
+  tag.setInteger("amS", ammoSlots);
+  tag.setInteger("arS", armorSlots);
+  tag.setInteger("eS", engineSlots);
+  tag.setInteger("fS", fuelSlots);
+  tag.setInteger("sS", storageSlots);
   }
 
 }

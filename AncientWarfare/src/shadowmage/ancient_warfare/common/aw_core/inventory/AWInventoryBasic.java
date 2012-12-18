@@ -25,6 +25,8 @@ package shadowmage.ancient_warfare.common.aw_core.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class AWInventoryBasic implements IInventory
 {
@@ -141,6 +143,44 @@ public void openChest()
 public void closeChest()
   {
   
+  }
+
+/**
+ * return {@link NBTTagCompound} describing this inventory
+ * @return
+ */
+public void writeToNBT(NBTTagCompound tag)
+  {  
+  NBTTagList itemList = new NBTTagList();
+  for (int slotIndex = 0; slotIndex < this.getSizeInventory(); ++slotIndex)
+    {
+    if (this.getStackInSlot(slotIndex) != null)
+      {
+      NBTTagCompound itemEntryTag = new NBTTagCompound();
+      itemEntryTag.setByte("Slot", (byte)slotIndex);
+      this.getStackInSlot(slotIndex).writeToNBT(itemEntryTag);
+      itemList.appendTag(itemEntryTag);
+      }
+    }
+  tag.setTag("Items", itemList); 
+  }
+
+/**
+ * read the inventory from an NBT tag
+ * @param tag
+ */
+public void readFromNBT(NBTTagCompound tag)
+  {
+  NBTTagList itemList = tag.getTagList("Items");  
+  for (int tagIndex = 0; tagIndex < itemList.tagCount(); ++tagIndex)
+    {
+    NBTTagCompound itemStackTag = (NBTTagCompound)itemList.tagAt(tagIndex);
+    int slotForItem = itemStackTag.getByte("Slot") & 255;
+    if (slotForItem >= 0 && slotForItem < this.getSizeInventory())
+      {
+      this.setInventorySlotContents(slotForItem, ItemStack.loadItemStackFromNBT(itemStackTag));
+      }
+    }
   }
 
 }

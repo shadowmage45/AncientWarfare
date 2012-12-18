@@ -54,9 +54,7 @@ private Map upgradeItemMap = new HashMap<ItemIDPair, VehicleUpgrade>();
  * @param upgrade
  */
 public void registerUpgrade(int dmg, int type, VehicleUpgrade upgrade)
-  {
-  ItemStack upgradeStack = new ItemStack(ItemLoader.vehicleUpgrade,1,dmg); 
-  ItemLoader.vehicleUpgrade.addSubType(upgradeStack); 
+  {  
   this.upgradeTypeMap.put(type, upgrade);
   this.upgradeNameMap.put(upgrade.getUpgradeName(), upgrade);
   this.upgradeItemMap.put(new ItemIDPair(ItemLoader.vehicleUpgrade.shiftedIndex, dmg), upgrade);

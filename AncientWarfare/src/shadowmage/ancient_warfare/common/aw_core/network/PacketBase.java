@@ -62,12 +62,6 @@ private boolean chunkPacket = false;
 public abstract int getPacketType();
 
 /**
- * called to execute the contents of the packet, whether executed by the packet or passed
- * on to another entity/class
- */
-public abstract void execute();
-
-/**
  * write packet specific data to the stream
  * @param data
  */
@@ -78,6 +72,12 @@ public abstract void writeDataToStream(ByteArrayDataOutput data);
  * @param data
  */
 public abstract void readDataStream(ByteArrayDataInput data);
+
+/**
+ * called to execute the contents of the packet, whether executed by the packet or passed
+ * on to another entity/class
+ */
+public abstract void execute();
 
 /**
  * create the custom250packet from the current data in this packet.

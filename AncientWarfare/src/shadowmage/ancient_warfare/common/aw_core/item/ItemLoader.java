@@ -23,6 +23,7 @@
 package shadowmage.ancient_warfare.common.aw_core.item;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.registry.DescriptionRegistry;
 import shadowmage.ancient_warfare.common.aw_core.registry.VehicleAmmoRegistry;
@@ -30,12 +31,18 @@ import shadowmage.ancient_warfare.common.aw_core.registry.VehicleUpgradeRegistry
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleAmmo;
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleUpgrade;
+import shadowmage.ancient_warfare.common.aw_vehicles.item.ItemVehicleSpawner;
 
 public class ItemLoader
 {
 
+/**
+ * Items
+ */
 public static AWItemBase vehicleUpgrade = new AWItemBase(Config.getItemID("itemMulti.vehicleUpgrade", 13001, "Base item for all vehicle upgrades"),true);
 public static AWItemBase vehicleAmmo = new AWItemBase(Config.getItemID("itemMulti.vehicleAmmo", 13002, "Base item for all vehicle ammunition types"),true);
+public static AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 13003, "Base item for all vehicle-spawning items"));
+public static AWItemBase componentItem = new AWItemBase(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
 
 private static ItemLoader INSTANCE;
 private ItemLoader(){}
@@ -54,8 +61,20 @@ public static ItemLoader instance()
  */
 public void load()
   {
-  
+  this.loadItems();
+  this.loadRecipes();  
   }
+
+public void loadItems()
+  {
+  //TODO create item instances
+  }
+
+public void loadRecipes()
+  {
+  //TODO create recipes..figure out crafting..blahblah..
+  }
+
 
 /**
  * special registerUpgrade method, directly registers a new upgrade using the vehicleUpgrade item.  calls all necessary calls
@@ -67,7 +86,8 @@ public void load()
 public void registerVehicleUpgradeItem(int dmg, int type, VehicleUpgrade upgrade)
   {
   if(upgrade!=null)
-    {
+    {    
+    ItemLoader.vehicleUpgrade.addSubType(new ItemStack(ItemLoader.vehicleUpgrade,1,dmg)); 
     this.registerItem(vehicleUpgrade, dmg, upgrade.getUpgradeDisplayName());
     VehicleUpgradeRegistry.instance().registerUpgrade(dmg, type, upgrade);
     }
@@ -85,7 +105,20 @@ public void registerVehicleAmmoItem(int dmg, int type, String name, String displ
   ItemIDPair pair = new ItemIDPair(vehicleAmmo.shiftedIndex, dmg);
   VehicleAmmo entry = new VehicleAmmo(pair, name, displayName,type);
   this.registerItem(pair, displayName);
+  vehicleAmmo.addSubType(new ItemStack(entry.itemID.itemID, 1, entry.itemID.dmg));
   VehicleAmmoRegistry.instance().registerAmmoType(entry);
+  }
+
+/**
+ * used for generic non-registry items that still need subtypes, such as crafting subcomponents
+ * @param item
+ * @param dmg
+ * @param name
+ */
+public void registerItemWithSubtype(AWItemBase item, int dmg, String name)
+  {
+  item.addSubType(new ItemStack(item.shiftedIndex, 1,dmg));
+  this.registerItem(item.shiftedIndex, dmg, name);
   }
 
 public void registerItem(ItemIDPair id, String name)

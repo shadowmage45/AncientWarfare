@@ -17,35 +17,18 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.aw_core.proxy;
+package shadowmage.ancient_warfare.common.aw_core.registry.entry;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
-public class CommonProxy
+
+public class VehicleEntry
 {
-
-public InputHelperCommonProxy inputHelper = new InputHelperCommonProxy();
-
-public byte getForwardInput()
-  {
-  return inputHelper.getForwardInput();
-  }
-
-public byte getStrafeInput()
-  {
-  return inputHelper.getStrafeInput();
-  }
-
-public EntityPlayer getClientPlayer()
-  {
-  return null;
-  }
+private Class<? extends Entity> vehicleClass;
+private String entityName;
+private int fmlEntityID;
+private int renderID;//used client-side to get the correct render file
 
 
 }

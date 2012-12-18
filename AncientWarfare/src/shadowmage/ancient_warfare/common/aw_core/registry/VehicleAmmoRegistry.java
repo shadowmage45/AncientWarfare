@@ -61,9 +61,12 @@ private Map<String, VehicleAmmo> ammoNameMap = new HashMap<String, VehicleAmmo>(
  */
 private Map<ItemIDPair, VehicleAmmo> ammoItemMap = new HashMap<ItemIDPair, VehicleAmmo>();
 
+/**
+ * called from ItemLoader
+ * @param entry
+ */
 public void registerAmmoType(VehicleAmmo entry)
-  {
-  ItemLoader.vehicleAmmo.addSubType(new ItemStack(entry.itemID.itemID, 1, entry.itemID.dmg));
+  {  
   this.ammoItemMap.put(entry.itemID, entry);
   this.ammoTypeMap.put(entry.type, entry);
   this.ammoNameMap.put(entry.name, entry);    

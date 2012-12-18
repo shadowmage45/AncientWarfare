@@ -47,6 +47,7 @@ private Map packetTypes = new HashMap<Integer, Class<? extends PacketBase>>();
 public PacketHandler()  
   {
   this.packetTypes.put(1, Packet01ModInit.class);
+  this.packetTypes.put(2, Packet02Vehicle.class);
   }
 
 @Override
@@ -65,7 +66,7 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
     PacketBase realPacket = this.constructPacket(packetType);
     if(realPacket==null)
       {
-      System.out.println("Extreme error during packet handling");
+      //i think it will throw before this..but w/e
       return;
       }
     realPacket.packetData = tag;
@@ -76,6 +77,7 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
     }
   catch(Exception e)
     {
+    System.out.println("Extreme error during packet handling, could not instantiate packet instance, improper packetType info");
     Config.log("Exception During Packet Handling, problem reading packet data");
     e.printStackTrace();
     }

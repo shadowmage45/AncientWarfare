@@ -17,35 +17,51 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.aw_core.proxy;
+package shadowmage.ancient_warfare.client.aw_core.registry;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
-public class CommonProxy
+
+/**
+ * client-side rendering registry
+ * @author Shadowmage
+ *
+ */
+public class RenderRegistry
 {
-
-public InputHelperCommonProxy inputHelper = new InputHelperCommonProxy();
-
-public byte getForwardInput()
+private RenderRegistry(){}
+public static RenderRegistry instance()
   {
-  return inputHelper.getForwardInput();
+  if(INSTANCE==null)
+    {
+    INSTANCE = new RenderRegistry();
+    }
+  return INSTANCE;
+  }
+private static RenderRegistry INSTANCE;
+
+private Map<Class<? extends Entity>, Render> renderMap = new HashMap<Class<? extends Entity>, Render>();
+
+public void load()
+  {
+  /**
+   * add renders here
+   */
   }
 
-public byte getStrafeInput()
+private void registerRender(Class<? extends Entity> clz, Render render)
   {
-  return inputHelper.getStrafeInput();
+  
   }
 
-public EntityPlayer getClientPlayer()
+public Render getRenderFor(Entity ent)
   {
-  return null;
+  return this.renderMap.get(ent.getClass());
   }
-
 
 }

@@ -17,35 +17,59 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.aw_core.proxy;
+package shadowmage.ancient_warfare.common.aw_core.network;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import shadowmage.ancient_warfare.common.aw_vehicles.VehicleBase;
 
-public class CommonProxy
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
+public class Packet02Vehicle extends PacketBase
 {
 
-public InputHelperCommonProxy inputHelper = new InputHelperCommonProxy();
 
-public byte getForwardInput()
-  {
-  return inputHelper.getForwardInput();
+int entityID;
+
+
+@Override
+public String getChannel()
+  {  
+  return "AW_vehicle";
   }
 
-public byte getStrafeInput()
-  {
-  return inputHelper.getStrafeInput();
+public void setParams(Entity ent)
+  {  
+  this.entityID = ent.entityId;
   }
 
-public EntityPlayer getClientPlayer()
-  {
-  return null;
+@Override
+public int getPacketType()
+  {  
+  return 2;
   }
 
+@Override
+public void writeDataToStream(ByteArrayDataOutput data)
+  {
+  data.writeInt(entityID);
+  }
+
+@Override
+public void readDataStream(ByteArrayDataInput data)
+  {
+  this.entityID = data.readInt();
+  }
+
+@Override
+public void execute()
+  {
+  VehicleBase vehicle = (VehicleBase) world.getEntityByID(entityID);
+  if(vehicle!=null)
+    {
+    vehicle.handlePacketUpdate(packetData);
+    }  
+  }
 
 }
