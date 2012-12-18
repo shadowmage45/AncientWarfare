@@ -20,37 +20,9 @@
 
 
  */
-package shadowmage.ancient_warfare.common.aw_core.registry.entry;
+package shadowmage.ancient_warfare.common.aw_core.registry;
 
-import net.minecraft.item.ItemStack;
-
-/**
- * @author Shadowmage
- * lightweight wrapper for the base information to make up an item
- */
-public class ItemIDPair
+public class VehicleRegistry
 {
 
-public ItemIDPair(int id, int dmg)
-  {
-  this.itemID = id;
-  this.dmg = dmg;  
-  }
-public int itemID;
-public int dmg;
-
-public boolean equals (ItemStack stack)
-  {
-  return itemID==stack.itemID && dmg==stack.getItemDamage();
-  }
-
-public boolean equals (ItemIDPair pair)
-  {
-  return pair.itemID==this.itemID && pair.dmg ==this.dmg;
-  }
-
-public boolean equals (int id, int dmg)
-  {
-  return this.itemID==id && this.dmg==dmg;
-  }
 }

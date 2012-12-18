@@ -16,13 +16,14 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+   along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
 
 
  */
 package shadowmage.ancient_warfare.common.aw_core.registry;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.Item;
@@ -41,8 +42,6 @@ public class DescriptionRegistry
 
 private static DescriptionRegistry INSTANCE;
 private DescriptionRegistry(){}
-
-
 
 public static DescriptionRegistry instance()
   {
@@ -179,6 +178,22 @@ public String getDescriptionFor(int id, int dmg)
     return this.getEntryFor(id, dmg).description;        
     }
   return "";
+  }
+
+/**
+ * get tooltip for an item, in list format
+ * @param id
+ * @param dmg
+ * @return
+ */
+public List getTooltipFor(int id, int dmg)
+  {
+  ItemDescription entry = this.getEntryFor(id, dmg);  
+  if(entry!=null)
+    {
+    return entry.getTooltip();
+    }
+  return null;
   }
 
 public boolean contains(ItemStack stack)

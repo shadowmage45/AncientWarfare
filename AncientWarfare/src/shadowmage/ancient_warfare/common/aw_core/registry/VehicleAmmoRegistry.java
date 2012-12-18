@@ -25,6 +25,8 @@ package shadowmage.ancient_warfare.common.aw_core.registry;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleAmmo;
 
@@ -61,6 +63,7 @@ private Map<ItemIDPair, VehicleAmmo> ammoItemMap = new HashMap<ItemIDPair, Vehic
 
 public void registerAmmoType(VehicleAmmo entry)
   {
+  ItemLoader.vehicleAmmo.addSubType(new ItemStack(entry.itemID.itemID, 1, entry.itemID.dmg));
   this.ammoItemMap.put(entry.itemID, entry);
   this.ammoTypeMap.put(entry.type, entry);
   this.ammoNameMap.put(entry.name, entry);    

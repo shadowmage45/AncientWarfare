@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+   along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
 
 
  */
@@ -55,6 +55,15 @@ public void addUsedIn(String in)
   {
   this.usedIn.add(in);
   }
+
+public List getTooltip()
+  {
+  ArrayList<String> tooltip = new ArrayList<String>();
+  //TODO
+  return tooltip;
+  }
+
+
 
 /**
  * return the description for this entry as a series of strings formatted for length
