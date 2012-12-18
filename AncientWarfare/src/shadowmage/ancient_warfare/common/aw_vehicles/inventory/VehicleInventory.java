@@ -22,71 +22,125 @@
  */
 package shadowmage.ancient_warfare.common.aw_vehicles.inventory;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.aw_core.inventory.AWInventoryBasic;
+import shadowmage.ancient_warfare.common.aw_core.utils.IInventoryCallback;
 import shadowmage.ancient_warfare.common.aw_vehicles.VehicleBase;
 
-public class VehicleInventory extends AWInventoryBasic
+public class VehicleInventory implements IInventoryCallback
 {
+/**
+ * has this inventory been initialized, are the size of inventories set
+ * and are individual inventories valid (all of them)
+ */
+private boolean isInventoryValid = false;
 private VehicleBase vehicle;
 
 /**
- * slot counts, used by container for displaying slots in GUI
- * max slot counts are hard-indexed, many may be empty
+ * individual inventories
+ * 
+ */
+public AWInventoryBasic upgradeInventory = null;
+public AWInventoryBasic ammoInventory = null;
+public AWInventoryBasic armorInventory = null;
+public AWInventoryBasic engineInventory = null;
+public AWInventoryBasic storageInventory = null;
+
+/**
+ * number of valid slots this inventory possesses
+ * set from research stats from spawning item, and re-set at readFromNBT
+ * containers will use these numbers to add the appropriate slots
  */
 public int upgradeSlots;
 public int ammoSlots;
 public int armorSlots;
 public int engineSlots;
-public int fuelSlots;
 public int storageSlots;
 
-public VehicleInventory(VehicleBase vehicle)
+/**
+ * must be called by spawner item initially, and is then called by loadFromNBT
+ * @param upgrade
+ * @param ammo
+ * @param armor
+ * @param engine
+ * @param storage
+ */
+public void setInventorySizes(int upgrade, int ammo, int armor, int engine, int storage)
   {
-  super(54);//0-26 vehicle slots //27-53 storage slots
-  this.vehicle = vehicle; 
-  }
-
-@Override
-public void writeToNBT(NBTTagCompound tag)
-  {
-  super.writeToNBT(tag);
-  this.writeSlotDataToNBT(tag);
-  }
-
-@Override
-public void readFromNBT(NBTTagCompound tag)
-  {
-  super.readFromNBT(tag);
-  this.readSlotDataFromNBT(tag);
-  }
-
-public void readSlotDataFromNBT(NBTTagCompound tag)
-  {
-  this.upgradeSlots = tag.getInteger("uS");
-  this.ammoSlots = tag.getInteger("amS");
-  this.armorSlots = tag.getInteger("arS");
-  this.engineSlots = tag.getInteger("eS");
-  this.fuelSlots= tag.getInteger("fS");
-  this.storageSlots = tag.getInteger("sS");
+  this.upgradeSlots = upgrade;
+  this.ammoSlots = ammo;
+  this.armorSlots = armor;
+  this.engineSlots = engine;
+  this.storageSlots = storage;
+  this.upgradeInventory = new AWInventoryBasic(upgrade);
+  this.ammoInventory = new AWInventoryBasic(ammo);
+  this.armorInventory = new AWInventoryBasic(armor);
+  this.engineInventory = new AWInventoryBasic(engine);
+  this.storageInventory = new AWInventoryBasic(storage);
+  this.isInventoryValid = true;
   }
 
 /**
- * get a compound tag returning data about slot counts, to be relayed client-side during vehicle client-data sending
- * @return
+ * if inventory is valid, write this entire inventory to the passed tag
+ * @param commonTag
  */
-public void writeSlotDataToNBT(NBTTagCompound tag)
+public void writeToNBT(NBTTagCompound commonTag)
   {
+  NBTTagCompound tag = new NBTTagCompound();  
+  if(!this.isInventoryValid)
+    {
+    return;
+    }  
   tag.setInteger("uS", upgradeSlots);
   tag.setInteger("amS", ammoSlots);
   tag.setInteger("arS", armorSlots);
   tag.setInteger("eS", engineSlots);
-  tag.setInteger("fS", fuelSlots);
   tag.setInteger("sS", storageSlots);
+  tag.setCompoundTag("uI", this.upgradeInventory.getNBTTag());
+  tag.setCompoundTag("amI", this.ammoInventory.getNBTTag());
+  tag.setCompoundTag("arI", this.armorInventory.getNBTTag());
+  tag.setCompoundTag("eI", this.engineInventory.getNBTTag());
+  tag.setCompoundTag("sI", this.storageInventory.getNBTTag());
+  commonTag.setTag("inv", tag);
+  }
+
+/**
+ * blind read method, inv tag need not even be present
+ * if present, will read the entire inventory from tag,
+ * including setting initial inventory sizes
+ * @param commonTag
+ */
+public void readFromNBT(NBTTagCompound commonTag)
+  {  
+  if(!commonTag.hasKey("inv"))
+    {
+    return;
+    }
+  NBTTagCompound tag = commonTag.getCompoundTag("inv");  
+  this.upgradeSlots = tag.getInteger("uS");
+  this.ammoSlots = tag.getInteger("amS");
+  this.armorSlots = tag.getInteger("arS");
+  this.engineSlots = tag.getInteger("eS");
+  this.storageSlots = tag.getInteger("sS");
+  this.setInventorySizes(upgradeSlots, ammoSlots, armorSlots, engineSlots, storageSlots);
+  this.upgradeInventory.readFromNBT(tag.getCompoundTag("uI"));
+  this.ammoInventory.readFromNBT(tag.getCompoundTag("amI"));
+  this.armorInventory.readFromNBT(tag.getCompoundTag("arI"));
+  this.engineInventory.readFromNBT(tag.getCompoundTag("eI"));
+  this.storageInventory.readFromNBT(tag.getCompoundTag("sI"));
+  
+  }
+
+public VehicleInventory(VehicleBase vehicle)
+  {  
+  this.vehicle = vehicle; 
+  }
+
+@Override
+public void onInventoryChanged(IInventory changedInv)
+  {
+  
   }
 
 }

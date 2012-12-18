@@ -22,19 +22,39 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.inventory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInvBasic;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_warfare.common.aw_core.utils.IInventoryCallback;
 
 public class AWInventoryBasic implements IInventory
 {
 
+List<IInventoryCallback> callBacks = new ArrayList<IInventoryCallback>();
 ItemStack[] inventorySlots;
 public AWInventoryBasic(int size)
   {
   this.inventorySlots = new ItemStack[size];
+  }
+
+public AWInventoryBasic(int size, IInventoryCallback caller)
+  {
+  this(size);
+  this.addCallback(caller);
+  }
+
+public void addCallback(IInventoryCallback ent)
+  {
+  if(!this.callBacks.contains(ent))
+    {
+    this.callBacks.add(ent);
+    }
   }
 
 @Override
@@ -124,7 +144,10 @@ public int getInventoryStackLimit()
 @Override
 public void onInventoryChanged()
   {
-  // TODO Auto-generated method stub
+  for(IInventoryCallback cb : this.callBacks)
+    {
+    if(cb!=null){cb.onInventoryChanged(this);}
+    }
   }
 
 @Override
@@ -149,8 +172,9 @@ public void closeChest()
  * return {@link NBTTagCompound} describing this inventory
  * @return
  */
-public void writeToNBT(NBTTagCompound tag)
+public NBTTagCompound getNBTTag()
   {  
+  NBTTagCompound tag = new NBTTagCompound();
   NBTTagList itemList = new NBTTagList();
   for (int slotIndex = 0; slotIndex < this.getSizeInventory(); ++slotIndex)
     {
@@ -162,7 +186,8 @@ public void writeToNBT(NBTTagCompound tag)
       itemList.appendTag(itemEntryTag);
       }
     }
-  tag.setTag("Items", itemList); 
+  tag.setTag("Items", itemList);
+  return tag;
   }
 
 /**
