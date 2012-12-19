@@ -3,7 +3,7 @@ package codechicken.nei.recipe;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.minecraft.src.ItemStack;
+import net.minecraft.item.ItemStack;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.forge.GuiContainerManager;
 

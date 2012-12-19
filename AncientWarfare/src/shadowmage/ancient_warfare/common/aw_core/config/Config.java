@@ -68,6 +68,14 @@ public static void log(String info)
     }  
   }
 
+public static void logError(String info)
+  {
+  if(logger!=null)
+    {
+    logger.info(info);
+    }
+  }
+
 public static void setLogger(Logger log)
   {
   logger = log;

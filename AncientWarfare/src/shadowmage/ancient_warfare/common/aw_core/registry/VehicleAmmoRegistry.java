@@ -37,6 +37,7 @@ import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleAmmo;
  */
 public class VehicleAmmoRegistry
 {
+
 private VehicleAmmoRegistry(){}
 public static VehicleAmmoRegistry instance()
   {
