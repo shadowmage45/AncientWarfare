@@ -55,6 +55,21 @@ public void readDataStream(ByteArrayDataInput data)
   
   }
 
+public void setGuiToOpen(byte id, int x, int y, int z)
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setByte("id", id);
+  tag.setInteger("x", x);
+  tag.setInteger("y", y);
+  tag.setInteger("z", z);
+  this.packetData.setTag("openGUI", tag);
+  }
+
+public void setInputTag(NBTTagCompound tag)
+  {
+  this.packetData.setTag("input", tag);
+  }
+
 @Override
 public void execute()
   {

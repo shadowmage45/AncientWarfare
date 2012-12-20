@@ -18,58 +18,17 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.aw_core.network;
+package shadowmage.ancient_warfare.common.aw_vehicles.registry.entry;
 
 import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.aw_vehicles.vehicles.VehicleBase;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 
-public class Packet02Vehicle extends PacketBase
+public class VehicleEntry
 {
+private Class<? extends Entity> vehicleClass;
+private String entityName;
+private int fmlEntityID;
+private int renderID;//used client-side to get the correct render file
 
-
-int entityID;
-
-
-@Override
-public String getChannel()
-  {  
-  return "AW_vehicle";
-  }
-
-public void setParams(Entity ent)
-  {  
-  this.entityID = ent.entityId;
-  }
-
-@Override
-public int getPacketType()
-  {  
-  return 2;
-  }
-
-@Override
-public void writeDataToStream(ByteArrayDataOutput data)
-  {
-  data.writeInt(entityID);
-  }
-
-@Override
-public void readDataStream(ByteArrayDataInput data)
-  {
-  this.entityID = data.readInt();
-  }
-
-@Override
-public void execute()
-  {
-  VehicleBase vehicle = (VehicleBase) world.getEntityByID(entityID);
-  if(vehicle!=null)
-    {
-    vehicle.handlePacketUpdate(packetData);
-    }  
-  }
 
 }

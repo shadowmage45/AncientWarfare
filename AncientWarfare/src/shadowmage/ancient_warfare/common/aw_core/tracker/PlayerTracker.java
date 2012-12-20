@@ -25,7 +25,6 @@ import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.aw_core.registry.VehicleAmmoRegistry;
 import shadowmage.ancient_warfare.common.aw_core.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 import cpw.mods.fml.common.IPlayerTracker;

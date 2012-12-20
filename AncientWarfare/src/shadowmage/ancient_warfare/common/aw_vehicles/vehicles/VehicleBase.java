@@ -20,7 +20,7 @@
 
 
  */
-package shadowmage.ancient_warfare.common.aw_vehicles;
+package shadowmage.ancient_warfare.common.aw_vehicles.vehicles;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.aw_core.proxy.InputHelper;
 import shadowmage.ancient_warfare.common.aw_core.proxy.InputHelperCommonProxy;
+import shadowmage.ancient_warfare.common.aw_core.tracker.entry.TeamInfo;
 import shadowmage.ancient_warfare.common.aw_core.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.aw_core.utils.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.aw_vehicles.inventory.VehicleInventory;
@@ -60,10 +61,12 @@ private float turretPitchMax = 90.f;
 
 private int aimPower = 0;
 private int aimPowerMin = 0;
-private int aimPowreMax = 100;
+private int aimPowerMax = 100;
 
 private byte forwardInput = 0;
 private byte strafeInput = 0;
+
+private TeamInfo teamStats = new TeamInfo();
 
 /**
  * vehicle pathfinding, used by soldiers when they are riding the vehicle

@@ -17,42 +17,33 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.aw_core.registry.entry;
+package shadowmage.ancient_warfare.common.aw_core.tracker.entry;
 
-import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.aw_vehicles.VehicleBase;
+import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 
-public abstract class VehicleUpgrade
+/**
+ * dataStructClass that individual teamable entities will posess (aside from players, 
+ * where it is stored in the playerTracker)
+ * @author Shadowmage
+ *
+ */
+public class TeamInfo implements INBTTaggable
 {
 
-boolean directlyEffectsVehicle = false;
-
-public VehicleUpgrade()
+@Override
+public NBTTagCompound getNBTTag()
   {
-  
+  // TODO Auto-generated method stub
+  return null;
   }
 
-/**
- * apply the effects of this upgrade to the passed-in vehicle
- * @param vehicle
- */
-public abstract void applyUpgradeEffects(VehicleBase vehicle);
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub
 
-/**
- * get the full display name for this item, this name will be registered
- * with languageRegistry
- * @return
- */
-public abstract String getUpgradeDisplayName();
-
-/**
- * get the internal (short) name for this upgrade, must be unique or will
- * cause lookup conflicts
- * @return
- */
-public abstract String getUpgradeName();
+  }
 
 }

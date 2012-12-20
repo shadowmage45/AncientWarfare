@@ -20,43 +20,9 @@
 
 
  */
-package shadowmage.ancient_warfare.common.aw_core.registry.entry;
+package shadowmage.ancient_warfare.common.aw_vehicles.registry;
 
-import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
-import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleAmmo;
-
-/**
- * @author Shadowmage
- * per-vehicle-per ammo count/restock/priority handler
- */
-public class VehicleAmmoEntry
+public class VehicleRegistry
 {
-
-int count;
-int restockPriority;
-int restockAmount;
-VehicleAmmo ammoInfo;
-boolean enabled = false;
-
-public VehicleAmmoEntry(VehicleAmmo ammoInfo)
-  {
-  this.ammoInfo = ammoInfo;
-  }
-
-public VehicleAmmo getInfo()
-  {
-  return this.ammoInfo;
-  }
-
-public ItemIDPair getItemID()
-  {
-  return this.ammoInfo.itemID;
-  }
-
-public VehicleAmmoEntry setEnabled()
-  {
-  this.enabled = true;
-  return this;
-  }
 
 }

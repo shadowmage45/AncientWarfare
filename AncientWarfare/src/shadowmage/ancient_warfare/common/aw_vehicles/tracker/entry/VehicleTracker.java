@@ -18,17 +18,27 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.aw_core.registry.entry;
+package shadowmage.ancient_warfare.common.aw_vehicles.tracker.entry;
 
-import net.minecraft.entity.Entity;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
+import shadowmage.ancient_warfare.common.aw_vehicles.vehicles.VehicleBase;
 
-public class VehicleEntry
+public class VehicleTracker
 {
-private Class<? extends Entity> vehicleClass;
-private String entityName;
-private int fmlEntityID;
-private int renderID;//used client-side to get the correct render file
+private Map<UUID, WeakReference<VehicleBase>> vehicles = new HashMap<UUID, WeakReference<VehicleBase>>();
 
+public VehicleBase getEntityByUUID(UUID id)
+  {
+  return this.vehicles.get(id).get();
+  }
+
+public void setVehicle(VehicleBase vehicle)
+  {
+  this.vehicles.put(vehicle.getPersistentID(), new WeakReference(vehicle));
+  }
 
 }

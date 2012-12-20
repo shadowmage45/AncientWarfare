@@ -26,12 +26,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.registry.DescriptionRegistry;
-import shadowmage.ancient_warfare.common.aw_core.registry.VehicleAmmoRegistry;
-import shadowmage.ancient_warfare.common.aw_core.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
-import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleAmmo;
-import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.aw_vehicles.item.ItemVehicleSpawner;
+import shadowmage.ancient_warfare.common.aw_vehicles.registry.VehicleAmmoRegistry;
+import shadowmage.ancient_warfare.common.aw_vehicles.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.aw_vehicles.registry.entry.VehicleAmmo;
+import shadowmage.ancient_warfare.common.aw_vehicles.registry.entry.VehicleUpgrade;
 
 public class ItemLoader
 {

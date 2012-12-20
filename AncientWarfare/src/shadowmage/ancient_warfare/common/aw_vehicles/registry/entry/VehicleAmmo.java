@@ -17,59 +17,41 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
+
+
  */
-package shadowmage.ancient_warfare.common.aw_core.network;
+package shadowmage.ancient_warfare.common.aw_vehicles.registry.entry;
 
-import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.aw_vehicles.vehicles.VehicleBase;
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
-public class Packet02Vehicle extends PacketBase
+/**
+ * @author Shadowmage
+ *
+ */
+public class VehicleAmmo
 {
 
+public ItemIDPair itemID;
+public String name;
+public String displayName;
+public int type;
 
-int entityID;
-
-
-@Override
-public String getChannel()
-  {  
-  return "AW_vehicle";
-  }
-
-public void setParams(Entity ent)
-  {  
-  this.entityID = ent.entityId;
-  }
-
-@Override
-public int getPacketType()
-  {  
-  return 2;
-  }
-
-@Override
-public void writeDataToStream(ByteArrayDataOutput data)
+public VehicleAmmo(ItemIDPair itemID, String name, String displayName, int globalType)
   {
-  data.writeInt(entityID);
+  this.itemID = itemID;
+  this.name = name;
+  this.displayName = displayName;
+  this.type = globalType;
   }
 
-@Override
-public void readDataStream(ByteArrayDataInput data)
+public boolean isStackMatchingAmmo(ItemStack stack)
   {
-  this.entityID = data.readInt();
-  }
-
-@Override
-public void execute()
-  {
-  VehicleBase vehicle = (VehicleBase) world.getEntityByID(entityID);
-  if(vehicle!=null)
+  if(stack==null)
     {
-    vehicle.handlePacketUpdate(packetData);
-    }  
+    return false;
+    }
+  return this.itemID.itemID==stack.itemID && this.itemID.dmg==stack.getItemDamage();
   }
 
 }

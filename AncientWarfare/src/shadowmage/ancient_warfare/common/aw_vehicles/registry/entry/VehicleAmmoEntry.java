@@ -20,37 +20,42 @@
 
 
  */
-package shadowmage.ancient_warfare.common.aw_core.registry.entry;
+package shadowmage.ancient_warfare.common.aw_vehicles.registry.entry;
 
-import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
 
 /**
  * @author Shadowmage
- *
+ * per-vehicle-per ammo count/restock/priority handler
  */
-public class VehicleAmmo
+public class VehicleAmmoEntry
 {
 
-public ItemIDPair itemID;
-public String name;
-public String displayName;
-public int type;
+int count;
+int restockPriority;
+int restockAmount;
+VehicleAmmo ammoInfo;
+boolean enabled = false;
 
-public VehicleAmmo(ItemIDPair itemID, String name, String displayName, int globalType)
+public VehicleAmmoEntry(VehicleAmmo ammoInfo)
   {
-  this.itemID = itemID;
-  this.name = name;
-  this.displayName = displayName;
-  this.type = globalType;
+  this.ammoInfo = ammoInfo;
   }
 
-public boolean isStackMatchingAmmo(ItemStack stack)
+public VehicleAmmo getInfo()
   {
-  if(stack==null)
-    {
-    return false;
-    }
-  return this.itemID.itemID==stack.itemID && this.itemID.dmg==stack.getItemDamage();
+  return this.ammoInfo;
+  }
+
+public ItemIDPair getItemID()
+  {
+  return this.ammoInfo.itemID;
+  }
+
+public VehicleAmmoEntry setEnabled()
+  {
+  this.enabled = true;
+  return this;
   }
 
 }

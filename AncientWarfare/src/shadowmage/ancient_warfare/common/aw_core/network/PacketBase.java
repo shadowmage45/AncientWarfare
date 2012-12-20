@@ -41,8 +41,15 @@ public abstract class PacketBase
 public World world;
 public EntityPlayer player;
 
+/**
+ * static return channel
+ * @return
+ */
 public abstract String getChannel();
 
+/**
+ * NBTTag containing the actual data for this packet
+ */
 public NBTTagCompound packetData = new NBTTagCompound();
 
 /**

@@ -31,7 +31,6 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.aw_vehicles.VehicleBase;
 
 public class EntityPathfinder
 {

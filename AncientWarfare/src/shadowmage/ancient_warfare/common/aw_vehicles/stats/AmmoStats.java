@@ -26,10 +26,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import shadowmage.ancient_warfare.common.aw_core.registry.VehicleAmmoRegistry;
-import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleAmmo;
-import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleAmmoEntry;
-import shadowmage.ancient_warfare.common.aw_vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.aw_vehicles.registry.VehicleAmmoRegistry;
+import shadowmage.ancient_warfare.common.aw_vehicles.registry.entry.VehicleAmmo;
+import shadowmage.ancient_warfare.common.aw_vehicles.registry.entry.VehicleAmmoEntry;
+import shadowmage.ancient_warfare.common.aw_vehicles.vehicles.VehicleBase;
 
 public class AmmoStats
 {

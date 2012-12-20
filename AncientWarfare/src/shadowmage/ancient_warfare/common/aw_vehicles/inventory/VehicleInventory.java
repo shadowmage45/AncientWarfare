@@ -26,7 +26,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.aw_core.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.aw_core.utils.IInventoryCallback;
-import shadowmage.ancient_warfare.common.aw_vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.aw_vehicles.vehicles.VehicleBase;
 
 public class VehicleInventory implements IInventoryCallback
 {
@@ -73,11 +73,11 @@ public void setInventorySizes(int upgrade, int ammo, int armor, int engine, int 
   this.armorSlots = armor;
   this.engineSlots = engine;
   this.storageSlots = storage;
-  this.upgradeInventory = new AWInventoryBasic(upgrade);
-  this.ammoInventory = new AWInventoryBasic(ammo);
-  this.armorInventory = new AWInventoryBasic(armor);
-  this.engineInventory = new AWInventoryBasic(engine);
-  this.storageInventory = new AWInventoryBasic(storage);
+  this.upgradeInventory = new AWInventoryBasic(upgrade, this);
+  this.ammoInventory = new AWInventoryBasic(ammo, this);
+  this.armorInventory = new AWInventoryBasic(armor, this);
+  this.engineInventory = new AWInventoryBasic(engine, this);
+  this.storageInventory = new AWInventoryBasic(storage, this);
   this.isInventoryValid = true;
   }
 

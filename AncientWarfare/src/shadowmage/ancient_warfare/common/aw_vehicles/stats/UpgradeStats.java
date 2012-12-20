@@ -25,9 +25,9 @@ package shadowmage.ancient_warfare.common.aw_vehicles.stats;
 import java.util.ArrayList;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.aw_core.registry.VehicleUpgradeRegistry;
-import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleUpgrade;
-import shadowmage.ancient_warfare.common.aw_vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.aw_vehicles.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.aw_vehicles.registry.entry.VehicleUpgrade;
+import shadowmage.ancient_warfare.common.aw_vehicles.vehicles.VehicleBase;
 
 public class UpgradeStats
 {

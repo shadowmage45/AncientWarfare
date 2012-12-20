@@ -20,15 +20,14 @@
 
 
  */
-package shadowmage.ancient_warfare.common.aw_core.registry;
+package shadowmage.ancient_warfare.common.aw_vehicles.registry;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
-import shadowmage.ancient_warfare.common.aw_core.registry.entry.VehicleUpgrade;
+import shadowmage.ancient_warfare.common.aw_vehicles.registry.entry.VehicleUpgrade;
 
 public class VehicleUpgradeRegistry
 {
