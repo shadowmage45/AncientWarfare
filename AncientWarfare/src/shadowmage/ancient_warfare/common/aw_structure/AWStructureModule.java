@@ -20,22 +20,20 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemInWorldManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.WorldManager;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.WorldServerMulti;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.demo.DemoWorldServer;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
 
 /**
  * config/setup module for structures and structure related stuff....
+ * who knows if this stuff will actually work.....
  * @author Shadowmage
  *
  */
@@ -68,7 +66,9 @@ public void load()
     {
     worldSettings = new WorldSettings(var9);
     }
-
-  this.world = new WorldServer(this.server, saveHandler, "dummyWorld", 101, worldSettings, server.theProfiler);  
+  
+  //new ItemInWorldManager(this.mcServer.worldServerForDimension(0))
+  this.world = new WorldServer(this.server, saveHandler, "dummyWorld", 101, worldSettings, server.theProfiler);
+  this.player = new EntityPlayerMP(server, world, "AWDummy", new ItemInWorldManager(world));
   }
 }
