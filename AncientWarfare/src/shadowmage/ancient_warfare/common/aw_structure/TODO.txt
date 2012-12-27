@@ -1,0 +1,8 @@
+create new scanner item
+create new scanner algorithm
+    figure out how to dynamically call block meta-data
+        create dummy world (will need a subclass) and dummy player and iterate through blockList, setting player view/rotation manually
+        between iterations?  ---- or, wait until a world is loaded and use it with a dummy player (would mean
+        buildings aren't available until world-load).
+create new file format (all structures will be saved to disk, loaded at program start)
+create file reader to load to memory files that have been saved

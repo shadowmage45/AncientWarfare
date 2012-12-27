@@ -11,3 +11,5 @@ kingdoms--
 vehicles--
 
 soldiers--
+
+structures--

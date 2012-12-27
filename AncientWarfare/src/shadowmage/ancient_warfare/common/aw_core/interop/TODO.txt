@@ -1,1 +1,17 @@
-kingdoms readme
+compatibility module
+
+todo:
+Buildcraft -- pipes and stuff for tile entities, triggers for gates for TE's.(including stuff for RP and LP tubes and pipes)
+    optional engine use for siege engines
+    optional BC oil use for some recipes (flame ammo, pitch balls)
+    ADDON STUFF:
+    include optional pig/cow driven engine (multiblock/complex block/?? no clue but sounds fun)
+    include optional waterwheel driven engine (must be placed adjacent to moving water, with a waterwheel block placed on it(wood, decays))
+    
+Railcraft -- Steel, Rolling machine (steel plates, iron plates), look into using API for any railcart siege engines.
+
+Forge Ore and Liquid dictionaries -- Register/use ores from other mods.  Saltpeter, sulfur, potash (potasium nitrites?/nitrates?).
+    -- I would really like to use BC oil for some stuff
+
+others? -- something that adds a way to add gunpowder? (probably just make my own)
+
