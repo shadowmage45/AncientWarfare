@@ -47,7 +47,14 @@ public static PlayerTracker instance()
   }
 private static PlayerTracker INSTANCE;
 
+/**
+ * server-side list of all player entries
+ */
 private Map<String, PlayerEntry> playerEntries = new HashMap<String, PlayerEntry>();
+
+/**
+ * player entry used by thePlayer client-side
+ */
 private PlayerEntry clientEntry = new PlayerEntry();
 
 @Override

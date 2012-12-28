@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.tracker.entry;
 
+import java.util.HashMap;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
@@ -29,7 +31,12 @@ public class PlayerEntry implements INBTTaggable
 
 String playerName = "";
 EntityPlayer player = null;
+HashMap <String, Integer> cooldowns = new HashMap<String, Integer>();
 
+public boolean isOnCooldown(String type)
+  {
+  return this.cooldowns.containsKey(type);
+  }
 
 @Override
 public NBTTagCompound getNBTTag()

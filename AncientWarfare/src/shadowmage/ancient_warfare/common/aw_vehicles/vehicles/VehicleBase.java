@@ -297,15 +297,13 @@ protected void writeEntityToNBT(NBTTagCompound var1)
 @Override
 public void onMissileImpact(World world, double x, double y, double z)
   {
-  // TODO Auto-generated method stub
-  
+  // TODO Auto-generated method stub  
   }
 
 @Override
 public void onMissileImpactEntity(World world, Entity entity)
   {
-  // TODO Auto-generated method stub
-  
+  // TODO Auto-generated method stub  
   }
 
 }
