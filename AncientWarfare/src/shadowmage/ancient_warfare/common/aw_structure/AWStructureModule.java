@@ -65,9 +65,7 @@ public void load()
   else
     {
     worldSettings = new WorldSettings(var9);
-    }
-  
-  //new ItemInWorldManager(this.mcServer.worldServerForDimension(0))
+    }  
   this.world = new WorldServer(this.server, saveHandler, "dummyWorld", 101, worldSettings, server.theProfiler);
   this.player = new EntityPlayerMP(server, world, "AWDummy", new ItemInWorldManager(world));
   }

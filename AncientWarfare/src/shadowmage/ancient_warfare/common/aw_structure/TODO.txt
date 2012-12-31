@@ -6,3 +6,25 @@ create new scanner algorithm
         buildings aren't available until world-load).
 create new file format (all structures will be saved to disk, loaded at program start)
 create file reader to load to memory files that have been saved
+
+
+
+struct_name.dat    --- stored in .minecraft/config/AWConfig/struct_name.dat
+
+Stored as written NBT data
+will have the following data:
+
+Structure Name
+Scanned orientation (facing when player scanned, determines rotation amounts for building)
+Primary block type (cobble, stonebrick, brick, sandstone, smooth sandstone, nether brick, wood)--anything with stairs and slabs
+Bounding Box, defines area relative to block clicked on
+
+List of static primary/secondary swappable blocks (these blocks will not change by rank or anything aside from a block swap)
+List of position, rotation, and type for special blocks.
+
+
+
+
+Block substitution table will have:
+base block type (cobble, stone brick, brick, sandstone, smooth sandstone, nether brick, wood)
+sub-block IDs for secondary swap blocks (stairs, slabs)
