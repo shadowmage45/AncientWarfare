@@ -29,13 +29,17 @@ public class BlockSwapGroupSandstone extends BlockSwapGroup
 
 public BlockSwapGroupSandstone()
   {
-  this.canBeRandomized = true;
   this.baseID = new BlockData(Block.sandStone.blockID,0);
   this.alternateIDs.add(new BlockData(Block.sandStone.blockID, 1));
   this.alternateIDs.add(new BlockData(Block.sandStone.blockID, 2));
   
   this.stairID = Block.stairsSandStone.blockID;
+  
   this.slabID = Block.stoneSingleSlab.blockID;
+  this.slabMeta = 1;
+  
+  this.slabDoubleID = Block.stoneDoubleSlab.blockID;
+  this.slabDoubleMeta = 1;
   }
 
 }

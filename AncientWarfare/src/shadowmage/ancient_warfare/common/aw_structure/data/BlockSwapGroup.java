@@ -26,7 +26,24 @@ import java.util.List;
 public abstract class BlockSwapGroup
 {
 
-public boolean canBeRandomized = false;
+public static ArrayList<BlockSwapGroup> groups = new ArrayList<BlockSwapGroup>();
+
+public static boolean isBlockSwappable(int id, int meta)
+  {
+  for(BlockSwapGroup group : groups)
+    {
+    if(group.isBlockInGroup(id, meta))
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
+public BlockSwapGroup()
+  {
+  groups.add(this);
+  }
 
 /**
  * the primary solid block that makes up this group
@@ -43,19 +60,26 @@ public ArrayList<BlockData> alternateIDs = new ArrayList<BlockData>();
  * primary stairID;
  */
 public int stairID;
-/**
- * stair metaData (not sure if needed)
- */
-public int stairMeta;
 
 /**
  * primary slabID
  */
 public int slabID;
 /**
- * slab meta-data (not sure if needed)
+ * slab meta-data for bottom slab
  */
 public int slabMeta;
+/**
+ * slab meta-data for top slab
+ */
+public int slabSecondMeta;
+
+/**
+ * blockID of doubleSlab
+ */
+public int slabDoubleID;
+public int slabDoubleMeta;
+
 
 /**
  * list of biomes in which this block group type is allowed for swapping-in
@@ -67,7 +91,24 @@ public List<String> defaultAllowedBiomes = new ArrayList<String>();
  */
 public List<String> defaultExcludedBiomes = new ArrayList<String>();
 
-
+public boolean isBlockInGroup(int id, int meta)
+  {
+  if(id==this.baseID.id && meta==this.baseID.meta || id==this.stairID|| id==this.slabID && meta==this.slabMeta || id==this.slabID && meta==this.slabSecondMeta || id==this.slabDoubleID && meta==this.slabDoubleMeta)
+    {
+    return true;
+    }
+  else if(this.alternateIDs.size()>0)    
+    {
+    for(BlockData data : this.alternateIDs)
+      {
+      if(data.id==id && data.meta == meta)
+        {
+        return true;
+        }
+      }
+    }  
+  return false;
+  }
 
 
 }

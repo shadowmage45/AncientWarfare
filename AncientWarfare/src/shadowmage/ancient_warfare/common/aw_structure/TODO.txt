@@ -28,3 +28,15 @@ List of position, rotation, and type for special blocks.
 Block substitution table will have:
 base block type (cobble, stone brick, brick, sandstone, smooth sandstone, nether brick, wood)
 sub-block IDs for secondary swap blocks (stairs, slabs)
+
+
+------------------------------------------------------------------------------------------------------
+Structure brainstorming:
+
+
+
+
+
+
+
+

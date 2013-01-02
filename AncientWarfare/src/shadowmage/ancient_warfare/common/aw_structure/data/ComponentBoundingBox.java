@@ -18,29 +18,21 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.aw_structure.data.swap_groups;
+package shadowmage.ancient_warfare.common.aw_structure.data;
 
-import net.minecraft.block.Block;
-import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
-import shadowmage.ancient_warfare.common.aw_structure.data.BlockSwapGroup;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 
-public class BlockSwapGroupStoneBrick extends BlockSwapGroup
+public class ComponentBoundingBox
 {
 
-public BlockSwapGroupStoneBrick()
+public BlockPosition frontLeftBottom;
+public BlockPosition farRightTop;
+
+public ComponentBoundingBox(int fX, int fY, int fZ, int rX, int rY, int rZ)
   {
-  this.baseID = new BlockData(Block.stoneBrick.blockID, 0);
-  this.alternateIDs.add(new BlockData(Block.stoneBrick.blockID,1));//mossy
-  this.alternateIDs.add(new BlockData(Block.stoneBrick.blockID,2));//cracked 
-  
-  this.stairID = Block.stairsStoneBrickSmooth.blockID;
-  
-  this.slabID = Block.stoneSingleSlab.blockID;
-  this.slabMeta = 5;
-  
-  this.slabDoubleID = Block.stoneDoubleSlab.blockID;
-  this.slabDoubleMeta = 5;
-  
+  this.frontLeftBottom = new BlockPosition(fX,fY,fZ);
+  this.farRightTop = new BlockPosition(rX,rY,rZ);
   }
+
 
 }

@@ -26,11 +26,18 @@ import shadowmage.ancient_warfare.common.aw_structure.data.BlockSwapGroup;
 
 public class BlockSwapGroupBrick extends BlockSwapGroup
 {
+
 public BlockSwapGroupBrick()
-  {
-  this.canBeRandomized = false;
+  {  
   this.baseID = new BlockData(Block.brick.blockID, 0); 
   this.stairID = Block.stairsBrick.blockID;
+  
   this.slabID = Block.stoneSingleSlab.blockID;
+  this.slabMeta = 4;
+  
+  this.slabDoubleID = Block.stoneDoubleSlab.blockID;
+  this.slabDoubleMeta = 4;
+  
   }
+
 }

@@ -29,10 +29,14 @@ public class BlockSwapGroupNetherBrick extends BlockSwapGroup
 
 public BlockSwapGroupNetherBrick()
   {
-  this.canBeRandomized =false;
   this.baseID = new BlockData(Block.netherBrick.blockID, 0);
   this.stairID = Block.stairsNetherBrick.blockID;
+  
   this.slabID = Block.stoneSingleSlab.blockID;
+  this.slabMeta = 6;
+  
+  this.slabDoubleID = Block.stoneDoubleSlab.blockID;
+  this.slabDoubleMeta = 6;
   }
 
 }

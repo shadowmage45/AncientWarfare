@@ -30,13 +30,17 @@ public class BlockSwapGroupCobble extends BlockSwapGroup
 
 public BlockSwapGroupCobble()
   {
-  this.canBeRandomized = true;
   this.baseID = new BlockData(Block.cobblestone.blockID, 0);
   this.alternateIDs.add(new BlockData(Block.cobblestoneMossy.blockID,0));
   
   this.stairID = Block.stairCompactCobblestone.blockID;
   
   this.slabID = Block.stoneSingleSlab.blockID;
+  this.slabMeta = 3;
+  
+  this.slabDoubleID = Block.stoneDoubleSlab.blockID;
+  this.slabDoubleMeta = 3;
+  
   }
 
 }
