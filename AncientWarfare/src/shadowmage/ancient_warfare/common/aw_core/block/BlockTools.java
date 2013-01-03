@@ -127,8 +127,6 @@ public static BlockPosition getBlockClickedOn(EntityPlayer player, World world, 
   return new BlockPosition(var42, var43, var44); 
   }
 
-
-
 /**
  * checks to see if TEST lies somewhere in the cube bounded by pos1 and pos2
  * @param test
@@ -189,7 +187,6 @@ public static boolean isPositionWithinBounds(BlockPosition test, BlockPosition p
     }
   return false;
   }
-
 
 /**
  * returns an array of positions of every block between the pair of coordinates passed
@@ -315,4 +312,44 @@ public static boolean arePositionsValidHorizontalPair(BlockPosition pos1, BlockP
   return false;
   }
 
+/**
+ * returns the absolute size of the box bounded by pos1 and pos2, as a vector (start at 0,0,0, return value is the final x,y,z size)
+ * @param pos1
+ * @param pos2
+ * @return
+ */
+public static BlockPosition getBoxSize(BlockPosition pos1, BlockPosition pos2)
+  {  
+  int x = getDifference(pos1.x, pos2.x);
+  int y = getDifference(pos1.y, pos2.y);
+  int z = getDifference(pos1.z, pos2.z);
+  return new BlockPosition(x+1,y+1,z+1);
+  }
+
+public static int getDifference(int a, int b)
+  {
+  return a< b? b-a : a-b;
+  }
+
+public static int getMin(int a, int b)
+  {
+  return a < b ? a : b;
+  }
+
+public static int getMax(int a, int b)
+  {
+  return a < b ? b : a;
+  }
+
+public static BlockPosition getMin(BlockPosition pos1, BlockPosition pos2)
+  {
+  BlockPosition pos = new BlockPosition(getMin(pos1.x, pos2.x), getMin(pos1.y, pos2.y), getMin(pos1.z, pos2.z));
+  return pos;
+  }
+
+public static BlockPosition getMax(BlockPosition pos1, BlockPosition pos2)
+  {
+  BlockPosition pos = new BlockPosition(getMax(pos1.x, pos2.x), getMax(pos1.y, pos2.y), getMax(pos1.z, pos2.z));
+  return pos;
+  }
 }

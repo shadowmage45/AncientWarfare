@@ -20,27 +20,23 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
-import net.minecraft.world.World;
+import java.util.ArrayList;
+import java.util.List;
+
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 
-public abstract class StructureComponent
+public class ScannedStructureCompressed
 {
+public int facing;
+public BlockPosition buildKey;
+public List<StructureComponent> components = new ArrayList<StructureComponent>();
 
-/**
- * two blockPositions defining the bounding box for this component
- * local relative to the structure defining the box
- */
-public BlockPosition pos1;
-public BlockPosition pos2;
-
-public StructureComponent(BlockPosition pos1, BlockPosition pos2)
+public ScannedStructureCompressed(int facing, BlockPosition buildKey)
   {
-  this.pos1 = pos1;
-  this.pos2 = pos2;  
+  this.facing = facing;
+  this.buildKey = buildKey;  
   }
 
-public abstract void placeSingleElement(World world, BlockPosition startPos, int originFace, int rotationAmount);
 
-public abstract boolean isFinished();
 
 }

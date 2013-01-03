@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 
 public class ComponentBoundingBox
 {
@@ -34,5 +35,36 @@ public ComponentBoundingBox(int fX, int fY, int fZ, int rX, int rY, int rZ)
   this.farRightTop = new BlockPosition(rX,rY,rZ);
   }
 
+public ComponentBoundingBox(BlockPosition pos1, BlockPosition pos2)
+  {
+  this.frontLeftBottom = pos1.copy();
+  this.farRightTop = pos2.copy();
+  }
+
+/**
+ * construct the BB as a zero oriented BB from vector
+ * (fL is 0,0,0, bR is input vector)
+ * @param vec
+ */
+public ComponentBoundingBox(BlockPosition vec)
+  {
+  this.frontLeftBottom = new BlockPosition(0,0,0);
+  this.farRightTop = vec.copy();
+  }
+
+public int sizeX()
+  {
+  return BlockTools.getDifference(frontLeftBottom.x, farRightTop.x);
+  }
+
+public int sizeY()
+  {
+  return BlockTools.getDifference(frontLeftBottom.y, farRightTop.y);
+  }
+
+public int sizeZ()
+  {
+  return BlockTools.getDifference(frontLeftBottom.z, farRightTop.z);
+  }
 
 }

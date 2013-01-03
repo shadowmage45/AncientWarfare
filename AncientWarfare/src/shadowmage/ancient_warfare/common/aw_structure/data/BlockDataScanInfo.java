@@ -20,27 +20,20 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
-import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
-
-public abstract class StructureComponent
+public class BlockDataScanInfo extends BlockData
 {
 
-/**
- * two blockPositions defining the bounding box for this component
- * local relative to the structure defining the box
- */
-public BlockPosition pos1;
-public BlockPosition pos2;
+public boolean processed = false;
 
-public StructureComponent(BlockPosition pos1, BlockPosition pos2)
+/**
+ * @param id
+ * @param meta
+ */
+public BlockDataScanInfo(int id, int meta)
   {
-  this.pos1 = pos1;
-  this.pos2 = pos2;  
+  super(id, meta);
   }
 
-public abstract void placeSingleElement(World world, BlockPosition startPos, int originFace, int rotationAmount);
 
-public abstract boolean isFinished();
 
 }

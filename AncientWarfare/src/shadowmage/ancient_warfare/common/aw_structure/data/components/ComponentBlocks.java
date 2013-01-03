@@ -20,10 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data.components;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
+import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockInfo;
 import shadowmage.ancient_warfare.common.aw_structure.data.ComponentBoundingBox;
 import shadowmage.ancient_warfare.common.aw_structure.data.StructureComponent;
@@ -31,28 +34,40 @@ import shadowmage.ancient_warfare.common.aw_structure.data.StructureComponent;
 public class ComponentBlocks extends StructureComponent
 {
 
-ComponentBoundingBox boundingBox;
-int id;
-int meta;
+public BlockData blockData;
 LinkedList<BlockPosition> blocks = new LinkedList<BlockPosition>();
+
+/**
+   * @param pos1
+   * @param pos2
+   */
+public ComponentBlocks(BlockPosition pos1, BlockPosition pos2, BlockData data)
+  {
+  super(pos1, pos2);
+  this.blockData = data;
+  this.blocks.addAll(BlockTools.getAllBlockPositionsBetween(pos1, pos2));
+  }
 
 @Override
 public void placeSingleElement(World world, BlockPosition startPos,  int facing, int rotationAmount)
   {
+  if(blocks.isEmpty())
+    {
+    return;
+    }
   BlockPosition pos = startPos.copy();
   BlockPosition cons = blocks.pop();
   pos.moveForward(facing, cons.x);
   pos.moveRight(facing, cons.z);
-  pos.y += blocks.peekFirst().y;
-  int meta = this.meta;
-  if(BlockInfo.blockList[id]!=null)
+  pos.y += cons.y;
+  int meta = this.blockData.meta;
+  if(BlockInfo.blockList[this.blockData.id]!=null)
     {
-    if(BlockInfo.blockList[id].isRotatable())
+    if(BlockInfo.blockList[this.blockData.id].isRotatable())
       {
-      meta = BlockInfo.blockList[id].rotateRight(this.meta, rotationAmount);
+      meta = BlockInfo.blockList[this.blockData.id].rotateRight(this.blockData.meta, rotationAmount);
       }
-    }
-  
+    }  
   }
  
 @Override

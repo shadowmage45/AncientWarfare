@@ -32,4 +32,14 @@ public BlockData(int id, int meta)
   this.meta = meta;
   }
 
+public boolean equals(BlockData in)
+  {
+  return this.id==in.id && this.meta==in.meta;
+  }
+
+public BlockData copy()
+  {
+  return new BlockData(id, meta);
+  } 
+
 }
