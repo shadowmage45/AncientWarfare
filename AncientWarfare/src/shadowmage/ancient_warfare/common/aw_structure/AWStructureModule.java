@@ -20,53 +20,80 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemInWorldManager;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.WorldSettings;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.storage.ISaveHandler;
-import net.minecraft.world.storage.WorldInfo;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * config/setup module for structures and structure related stuff....
- * who knows if this stuff will actually work.....
  * @author Shadowmage
  *
  */
 public class AWStructureModule
 {
 
-WorldServer world;
-MinecraftServer server;
-EntityPlayer player;
+/**
+ * file path for reading structures
+ */
+public static String dir;
 
-public AWStructureModule()
+/**
+ * called probableStructureFiles because they haven't been opened/read/checked for validity
+ */
+private List<File> probableStructureFiles = new ArrayList<File>();
+
+
+private AWStructureModule(){}
+public AWStructureModule INSTANCE;
+public AWStructureModule instance()
   {
-
-  }
-
-public void load()
-  {
-  this.server = MinecraftServer.getServer();
-  long seed = 0;
-  ISaveHandler saveHandler = server.getActiveAnvilConverter().getSaveLoader("dummyWorld", true);
-  WorldInfo var9 = saveHandler.loadWorldInfo();
-  WorldSettings worldSettings;
-  WorldType type = WorldType.parseWorldType("DEFAULT");
-  if (var9 == null)
+  if(INSTANCE==null)
     {
-    worldSettings = new WorldSettings(seed, server.getGameType(), server.canStructuresSpawn(), server.isHardcore(), type);
-    worldSettings.func_82750_a("dummyWorld");
+    INSTANCE= new AWStructureModule();
     }
-  else
-    {
-    worldSettings = new WorldSettings(var9);
-    }  
-  this.world = new WorldServer(this.server, saveHandler, "dummyWorld", 101, worldSettings, server.theProfiler);
-  this.player = new EntityPlayerMP(server, world, "AWDummy", new ItemInWorldManager(world));
+  return INSTANCE;
   }
+
+public static void setFileDirectory(File location)
+  {
+  try
+    {
+    dir = location.getCanonicalPath()+"/AWConfig/structures/";
+    } 
+  catch (IOException e)
+    {
+    e.printStackTrace();
+    }
+  }
+
+public void scanForPrebuiltFiles()
+  {
+  probableStructureFiles.clear();
+  this.recursiveScan(new File(dir), probableStructureFiles);
+  }
+
+private void recursiveScan(File directory, List<File> fileList)
+  {
+  File[] allFiles = directory.listFiles();
+  File currentFile;
+  for(int i = 0; i < allFiles.length; i++)
+    {
+    currentFile = allFiles[i];
+    if(currentFile.isDirectory())
+      {
+      recursiveScan(directory, fileList);
+      }
+    else if(isProbableStructureFile(currentFile))
+      {
+      fileList.add(currentFile);
+      }
+    }
+  }
+
+public boolean isProbableStructureFile(File file)
+  {
+  return file.getName().endsWith(".dat") && file.getName().startsWith("AWStruct_");
+  }
+
 }

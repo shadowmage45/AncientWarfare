@@ -24,6 +24,7 @@ package shadowmage.ancient_warfare.common.aw_core.block;
 
 import java.util.ArrayList;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 
 public class BlockPosition
@@ -51,6 +52,13 @@ public BlockPosition(double x, double y, double z)
   this.z = MathHelper.floor_double(z);
   }
 
+public BlockPosition(NBTTagCompound tag)
+  {
+  this.x = tag.getInteger("x");
+  this.y = tag.getInteger("y");
+  this.z = tag.getInteger("z");
+  }
+
 /**
  * COPY constructor.  does not grab any references, makes a NEW object.
  * pos != this
@@ -61,6 +69,14 @@ public BlockPosition(BlockPosition pos)
   this.x = pos.x;
   this.y = pos.y;
   this.z = pos.z;
+  }
+
+public NBTTagCompound writeToNBT(NBTTagCompound tag)
+  {
+  tag.setInteger("x", x);
+  tag.setInteger("y", y);
+  tag.setInteger("z", z);
+  return tag;
   }
 
 /**

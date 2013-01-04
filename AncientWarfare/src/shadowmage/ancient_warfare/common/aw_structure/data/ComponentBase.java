@@ -23,7 +23,7 @@ package shadowmage.ancient_warfare.common.aw_structure.data;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 
-public abstract class StructureComponent
+public abstract class ComponentBase
 {
 
 /**
@@ -33,7 +33,7 @@ public abstract class StructureComponent
 public BlockPosition pos1;
 public BlockPosition pos2;
 
-public StructureComponent(BlockPosition pos1, BlockPosition pos2)
+public ComponentBase(BlockPosition pos1, BlockPosition pos2)
   {
   this.pos1 = pos1;
   this.pos2 = pos2;  

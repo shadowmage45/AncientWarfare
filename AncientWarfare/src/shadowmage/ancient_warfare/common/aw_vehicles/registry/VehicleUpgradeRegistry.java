@@ -56,7 +56,7 @@ public void registerUpgrade(int dmg, int type, VehicleUpgrade upgrade)
   {  
   this.upgradeTypeMap.put(type, upgrade);
   this.upgradeNameMap.put(upgrade.getUpgradeName(), upgrade);
-  this.upgradeItemMap.put(new ItemIDPair(ItemLoader.vehicleUpgrade.shiftedIndex, dmg), upgrade);
+  this.upgradeItemMap.put(new ItemIDPair(ItemLoader.vehicleUpgrade.shiftedIndex, dmg, true), upgrade);
   }
 
 public VehicleUpgrade getUpgrade(String name)

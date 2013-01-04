@@ -56,20 +56,20 @@ private static Map<ItemIDPair,ItemDescription> descriptions = new HashMap<ItemID
 
 public void registerItem(Item item, String displayName)
   {
-  this.registerItem(item.shiftedIndex, 1, displayName);
+  this.registerItem(item.shiftedIndex, 0, displayName, false);
   }
 
-public void registerItem(ItemStack stack, String displayName)
+public void registerItem(ItemStack stack, String displayName, boolean subTypes)
   {
   if(stack!=null)
     {
-    this.registerItem(stack.itemID, stack.getItemDamage(), displayName);
+    this.registerItem(stack.itemID, stack.getItemDamage(), displayName, subTypes);
     }
   }
 
-public void registerItem(int id, int dmg, String displayName)
-  {
-  this.registerItem(new ItemIDPair(id,dmg), displayName);
+public void registerItem(int id, int dmg, String displayName, boolean subTypes)
+  {  
+  this.registerItem(new ItemIDPair(id,dmg,subTypes), displayName);
   }
 
 /**
@@ -86,7 +86,7 @@ public void registerItem(ItemIDPair id, String displayName)
       displayName = "";
       }
     this.descriptions.put(id, new ItemDescription(displayName, id));
-    LanguageRegistry.addName(new ItemStack(id.itemID,1,id.dmg), displayName);
+    LanguageRegistry.addName(new ItemStack(id.itemID, 1 ,id.dmg), displayName);
     }
   }
 
@@ -99,7 +99,7 @@ public void addDescription(ItemStack stack, String description)
   {
   if(this.contains(stack))
     {   
-    this.descriptions.get(new ItemIDPair(stack.itemID, stack.getItemDamage())).setDescription(description);
+    this.descriptions.get(new ItemIDPair(stack.itemID, stack.getItemDamage(),true)).setDescription(description);
     }    
   }
 
@@ -137,7 +137,7 @@ public ItemDescription getEntryFor(int id, int dmg)
   {
   for(ItemIDPair desc : this.descriptions.keySet())
     {
-    if(desc.equals(id, dmg))
+    if(desc.equals(id, dmg) || (!desc.hasSubTypes && id==desc.itemID))
       {
       return this.descriptions.get(desc);
       }
@@ -156,13 +156,13 @@ public String getDescriptionFor(ItemStack stack)
   }
 
 /**
- * return description for an item, using dmg1
+ * return description for an item, using dmg0
  * @param item
  * @return
  */
 public String getDescriptionFor(Item item)
   {
-  return this.getDescriptionFor(item.shiftedIndex, 1);
+  return this.getDescriptionFor(item.shiftedIndex, 0);
   }
 
 /**
@@ -207,7 +207,7 @@ public boolean contains(ItemStack stack)
 
 public boolean contains(Item item)
   {
-  return this.contains(item.shiftedIndex, 1);
+  return this.contains(item.shiftedIndex, 0);
   }
 
 public boolean contains(int id, int dmg)

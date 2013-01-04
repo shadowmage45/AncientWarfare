@@ -37,6 +37,38 @@ import net.minecraft.world.World;
 public class BlockTools
 {
 
+public static BlockPosition offsetForSide(BlockPosition pos, int sideHit)
+  {
+  int x = pos.x;
+  int y = pos.y;
+  int z = pos.z;
+  /**
+   * if should offset for side hit (block clicked IN)
+   */
+  
+  switch (sideHit)
+    {
+    case 0:
+    pos.y--;
+    break;
+    case 1:
+    pos.y++;
+    break;
+    case 2:
+    pos.z--;
+    break;
+    case 3:
+    pos.z++;
+    break;
+    case 4:
+    pos.x--;
+    break;
+    case 5:
+    pos.x++;
+    }  
+  return pos;    
+  }
+
 /**
  * will return null if nothing is in range
  * @param player
@@ -352,4 +384,97 @@ public static BlockPosition getMax(BlockPosition pos1, BlockPosition pos2)
   BlockPosition pos = new BlockPosition(getMax(pos1.x, pos2.x), getMax(pos1.y, pos2.y), getMax(pos1.z, pos2.z));
   return pos;
   }
+
+
+public static int getFacingFromSide(int side)
+  {
+  return 0;
+  }
+
+/**
+ * returns a facing direction essentially opposite from the players current facing direction
+ * so that the block will face towards the player on spawn
+ * @param player
+ * @return
+ */
+public static int getBlockFacingMetaFromPlayerYaw(float rotation)
+  {  
+  //north = 180, south = 0
+  //east = 270
+  double yaw = (double)rotation;
+  while(yaw < 0.d)
+    {
+    yaw+=360.d;
+    }
+  while(yaw >=360.d)
+    {
+    yaw-=360.d;
+    }
+  double adjYaw = yaw +45;
+  adjYaw *=4;//multiply by four
+  adjYaw /= 360.d;
+  int facing = (MathHelper.floor_double(adjYaw)) % 4;//round down, mod 4 for a 0-3 range
+  
+  if(facing==0)//correct
+    {
+    return 2;
+    }
+  if(facing==1)//correct
+    {
+    return 5;
+    }
+  if(facing==2)//correct
+    {
+    return 3;
+    }
+  if(facing==3)
+    {
+    return 4;//correct
+    }
+  
+//  this.renderBottomFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(0));
+//  this.renderTopFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(1));
+//  this.renderEastFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(2));
+//  this.renderWestFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(3));
+//  this.renderNorthFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(4));
+//  this.renderSouthFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(5));    
+  
+  return facing;
+  }
+
+public static int getPlayerFacingFromYaw(float rotation)
+  {
+  double yaw = (double)rotation;
+  while(yaw < 0.d)
+    {
+    yaw+=360.d;
+    }
+  while(yaw >=360.d)
+    {
+    yaw-=360.d;
+    }
+  double adjYaw = yaw +45;
+  adjYaw *=4;//multiply by four
+  adjYaw /= 360.d;
+  int facing = (MathHelper.floor_double(adjYaw)) % 4;//round down, mod 4 for a 0-3 range
+  return facing;
+  }
+
+public static int getPlayerFacingFromMeta(int meta)
+  {
+  if(meta==2)
+    {
+    return 0;
+    }
+  if(meta==5){return 1;}
+  if(meta==3){return 2;}
+  if(meta==4){return 3;}
+  return 0;
+  }
+
+public static int getBlockFacingFromMeta(int meta)
+  {
+  return (getPlayerFacingFromMeta(meta)+2) %4;
+  }
+
 }

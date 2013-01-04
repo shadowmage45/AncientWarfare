@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.registry.DescriptionRegistry;
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.aw_vehicles.item.ItemVehicleSpawner;
 import shadowmage.ancient_warfare.common.aw_vehicles.registry.VehicleAmmoRegistry;
 import shadowmage.ancient_warfare.common.aw_vehicles.registry.VehicleUpgradeRegistry;
@@ -43,6 +44,7 @@ public static AWItemBase vehicleUpgrade = new AWItemBase(Config.getItemID("itemM
 public static AWItemBase vehicleAmmo = new AWItemBase(Config.getItemID("itemMulti.vehicleAmmo", 13002, "Base item for all vehicle ammunition types"),true);
 public static AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 13003, "Base item for all vehicle-spawning items"));
 public static AWItemBase componentItem = new AWItemBase(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
+
 
 private static ItemLoader INSTANCE;
 private ItemLoader(){}
@@ -67,6 +69,7 @@ public void load()
 
 public void loadItems()
   {
+  this.registerItem(ItemStructureScanner.item, 0, "Structure Scanner");
   //TODO create item instances
   }
 
@@ -102,7 +105,7 @@ public void registerVehicleUpgradeItem(int dmg, int type, VehicleUpgrade upgrade
  */
 public void registerVehicleAmmoItem(int dmg, int type, String name, String displayName)
   {
-  ItemIDPair pair = new ItemIDPair(vehicleAmmo.shiftedIndex, dmg);
+  ItemIDPair pair = new ItemIDPair(vehicleAmmo.shiftedIndex, dmg,true);
   VehicleAmmo entry = new VehicleAmmo(pair, name, displayName,type);
   this.registerItem(pair, displayName);
   vehicleAmmo.addSubType(new ItemStack(entry.itemID.itemID, 1, entry.itemID.dmg));
@@ -128,7 +131,7 @@ public void registerItem(ItemIDPair id, String name)
 
 public void registerItem(int id, int dmg, String name)
   {
-  DescriptionRegistry.instance().registerItem(id, dmg, name);
+  DescriptionRegistry.instance().registerItem(id, dmg, name, false);
   }
 
 public void registerItem(Item item, int dmg, String name)

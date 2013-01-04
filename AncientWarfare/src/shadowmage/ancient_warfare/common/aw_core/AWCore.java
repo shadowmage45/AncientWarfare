@@ -23,11 +23,14 @@
 package shadowmage.ancient_warfare.common.aw_core;
 
 
+import java.io.IOException;
+
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.network.PacketHandler;
 import shadowmage.ancient_warfare.common.aw_core.proxy.CommonProxy;
+import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
@@ -69,6 +72,16 @@ public void preInit(FMLPreInitializationEvent evt)
    */
   Config.loadConfig(evt.getSuggestedConfigurationFile());
   ItemLoader.instance().load();
+  
+  try
+    {
+    AWStructureModule.dir = evt.getModConfigurationDirectory().getCanonicalPath();
+    } 
+  catch (IOException e)
+    {
+    AWStructureModule.dir = null;
+    e.printStackTrace();
+    }
   }
 	
 

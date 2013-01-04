@@ -29,7 +29,7 @@ public class ScannedStructureCompressed
 {
 public int facing;
 public BlockPosition buildKey;
-public List<StructureComponent> components = new ArrayList<StructureComponent>();
+public List<ComponentBase> components = new ArrayList<ComponentBase>();
 
 public ScannedStructureCompressed(int facing, BlockPosition buildKey)
   {

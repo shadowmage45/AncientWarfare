@@ -31,13 +31,15 @@ import net.minecraft.item.ItemStack;
 public class ItemIDPair
 {
 
-public ItemIDPair(int id, int dmg)
+public ItemIDPair(int id, int dmg, boolean subType)
   {
   this.itemID = id;
   this.dmg = dmg;  
+  this.hasSubTypes = subType;
   }
 public int itemID;
 public int dmg;
+public boolean hasSubTypes = false;
 
 public boolean equals (ItemStack stack)
   {

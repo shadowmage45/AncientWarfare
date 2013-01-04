@@ -96,7 +96,8 @@ public ScannedStructureCompressed process()
           {
           info.processed = true;
           component = new ComponentBlocks(new BlockPosition(x,y,z), new BlockPosition(x,y,z), info.copy());
-          expand(component);          
+          expand(component); 
+          structure.components.add(component);
           }
         }
       }
@@ -104,7 +105,7 @@ public ScannedStructureCompressed process()
   return structure;
   }
 
-public StructureComponent expand(ComponentBlocks comp)
+public void expand(ComponentBlocks comp)
   {
   /**
    * used as a continuance flag for expansion
@@ -150,10 +151,9 @@ public StructureComponent expand(ComponentBlocks comp)
       canExpandUpward = false;
       }
     }  
-  return comp;
   }
 
-public void expandForward(StructureComponent comp)
+public void expandForward(ComponentBase comp)
   {
   comp.pos2.z++;
   for(int x = comp.pos1.x; x <= comp.pos2.x; x++)
@@ -246,6 +246,7 @@ public boolean canExpandUpward(ComponentBlocks comp)
         }      
       }
     }
+  
   return true;
   }
 

@@ -29,9 +29,9 @@ import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockInfo;
 import shadowmage.ancient_warfare.common.aw_structure.data.ComponentBoundingBox;
-import shadowmage.ancient_warfare.common.aw_structure.data.StructureComponent;
+import shadowmage.ancient_warfare.common.aw_structure.data.ComponentBase;
 
-public class ComponentBlocks extends StructureComponent
+public class ComponentBlocks extends ComponentBase
 {
 
 public BlockData blockData;

@@ -128,18 +128,18 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
 @Override
 public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
   {
-  if(stack.hasTagCompound())
-    {
-    NBTTagCompound tag = stack.getTagCompound();
-    if(tag.hasKey("AWModData"))
-      {
-      NBTTagCompound modTag = tag.getCompoundTag("AWModData");
-      if(modTag.hasKey("icon"))
-        {
-        return modTag.getInteger("icon");
-        }
-      }
-    }
+//  if(stack.hasTagCompound())
+//    {
+//    NBTTagCompound tag = stack.getTagCompound();
+//    if(tag.hasKey("AWModData"))
+//      {
+//      NBTTagCompound modTag = tag.getCompoundTag("AWModData");
+//      if(modTag.hasKey("icon"))
+//        {
+//        return modTag.getInteger("icon");
+//        }
+//      }
+//    }
   if(stack.getItem().getHasSubtypes())
     {
     return stack.getItemDamage();
@@ -147,18 +147,18 @@ public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, It
   return super.getIconIndex(stack, renderPass, player, usingItem, useRemaining);
   }
 
-public void setModTag(ItemStack stack)
-  {
-  NBTTagCompound modData = new NBTTagCompound("AWModData");
-  stack.setTagInfo("AWModData", modData);
-  }
-
-public static void setIconIndex(ItemStack stack, int index)
-  {  
-  if(stack.hasTagCompound())
-    {
-    stack.getTagCompound().getCompoundTag("AWModData").setInteger("icon", index);
-    }   
-  }
+//public void setModTag(ItemStack stack)
+//  {
+//  NBTTagCompound modData = new NBTTagCompound("AWModData");
+//  stack.setTagInfo("AWModData", modData);
+//  }
+//
+//public static void setIconIndex(ItemStack stack, int index)
+//  {  
+//  if(stack.hasTagCompound())
+//    {
+//    stack.getTagCompound().getCompoundTag("AWModData").setInteger("icon", index);
+//    }   
+//  }
 
 }
