@@ -24,7 +24,6 @@ package shadowmage.ancient_warfare.common.aw_core.registry;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -52,148 +51,50 @@ public static DescriptionRegistry instance()
   return INSTANCE;
   }
 
-private static Map<ItemIDPair,ItemDescription> descriptions = new HashMap<ItemIDPair,ItemDescription>();
+private static HashMap<Integer, ItemDescription> descriptions = new HashMap<Integer, ItemDescription>();
 
-public void registerItem(Item item, String displayName)
+public void registerItemSingle(Item item, String displayName)
   {
-  this.registerItem(item.shiftedIndex, 0, displayName, false);
+  this.registerItemSingle(item, displayName, "");
   }
 
-public void registerItem(ItemStack stack, String displayName, boolean subTypes)
+public void registerItemSingle(Item item, String displayName, String description)
   {
-  if(stack!=null)
+  item.setItemName(displayName);
+  this.descriptions.put(item.itemID, new ItemDescription(item.itemID, displayName, description));
+  LanguageRegistry.instance().addName(item, displayName);
+  }
+
+public void registerItemWithSubtypes(int id)
+  {
+  this.descriptions.put(id, new ItemDescription(id));  
+  }
+
+public void addSubtypeToItem(int id, int dmg, String name)
+  {
+  if(this.descriptions.containsKey(id))
     {
-    this.registerItem(stack.itemID, stack.getItemDamage(), displayName, subTypes);
+    this.descriptions.get(id).addSubtype(dmg, name);
+    LanguageRegistry.addName(new ItemStack(id,1,dmg), name);
     }
   }
 
-public void registerItem(int id, int dmg, String displayName, boolean subTypes)
-  {  
-  this.registerItem(new ItemIDPair(id,dmg,subTypes), displayName);
+public void setToolTip(int id, String tooltip)
+  {
+  this.setTooltip(id, 0, tooltip);
   }
 
-/**
- * final ID register call, all others are funneled through here
- * @param id
- * @param displayName
- */
-public void registerItem(ItemIDPair id, String displayName)
+public void setTooltip(int id, int dmg, String tooltip)
   {
-  if(!this.contains(id.itemID, id.dmg))
+  if(this.descriptions.containsKey(id))
     {
-    if(displayName==null)
-      {
-      displayName = "";
-      }
-    this.descriptions.put(id, new ItemDescription(displayName, id));
-    LanguageRegistry.addName(new ItemStack(id.itemID, 1 ,id.dmg), displayName);
+    this.descriptions.get(id).setTooltip(dmg, tooltip);
     }
   }
 
-/**
- * stack version of addDescription
- * @param stack
- * @param description
- */
-public void addDescription(ItemStack stack, String description)
+public ItemDescription getEntryFor(int id)
   {
-  if(this.contains(stack))
-    {   
-    this.descriptions.get(new ItemIDPair(stack.itemID, stack.getItemDamage(),true)).setDescription(description);
-    }    
-  }
-
-/**
- * item version of addDescription
- * @param item
- * @param description
- */
-public void addDescription(Item item, String description)
-  {
-  this.addDescription(item.shiftedIndex, 1, description);
-  }
-
-/**
- * final addDescription call, all others end up here
- * @param id
- * @param dmg
- * @param desc
- */
-public void addDescription(int id, int dmg, String desc)
-  {
-  if(this.contains(id, dmg))
-    {
-    this.getEntryFor(id, dmg).setDescription(desc);
-    }
-  }
-
-/**
- * return an entry for an id/dmg pair
- * @param id
- * @param dmg
- * @return
- */
-public ItemDescription getEntryFor(int id, int dmg)
-  {
-  for(ItemIDPair desc : this.descriptions.keySet())
-    {
-    if(desc.equals(id, dmg) || (!desc.hasSubTypes && id==desc.itemID))
-      {
-      return this.descriptions.get(desc);
-      }
-    }
-  return null;
-  }
-
-/**
- * return description for an itemStack, dmg sensitive
- * @param stack
- * @return
- */
-public String getDescriptionFor(ItemStack stack)
-  {  
-  return stack==null? "" : this.getDescriptionFor(stack.itemID, stack.getItemDamage());
-  }
-
-/**
- * return description for an item, using dmg0
- * @param item
- * @return
- */
-public String getDescriptionFor(Item item)
-  {
-  return this.getDescriptionFor(item.shiftedIndex, 0);
-  }
-
-/**
- * return description for item id/dmg pair
- * @param id
- * @param dmg
- * @return
- */
-public String getDescriptionFor(int id, int dmg)
-  {
-  if(this.contains(id, dmg))
-    {
-    return this.getEntryFor(id, dmg).description;        
-    }
-  return "";
-  }
-
-/**
- * get tooltip for an item, in list format
- * @param id
- * @param dmg
- * @return
- */
-public List getTooltipFor(int id, int dmg)
-  {
-  ItemDescription entry = this.getEntryFor(id, dmg);  
-  if(entry!=null)
-    {
-    return entry.getTooltip();
-    }
-  return null;
+  return this.descriptions.get(id);
   }
 
 public boolean contains(ItemStack stack)
@@ -207,24 +108,17 @@ public boolean contains(ItemStack stack)
 
 public boolean contains(Item item)
   {
-  return this.contains(item.shiftedIndex, 0);
+  return this.contains(item.itemID, 0);
   }
 
 public boolean contains(int id, int dmg)
   {
-  if(this.getEntryFor(id, dmg)!=null)
+  if(this.descriptions.containsKey(id))
     {
-    return true;
-    }
+    return this.descriptions.get(id).contains(dmg);
+    }  
   return false;
   }
 
-public boolean contains(ItemIDPair pair)
-  {
-  if(this.getEntryFor(pair.itemID, pair.dmg)!=null)
-    {
-    return true;
-    }
-  return false;
-  }
+
 }

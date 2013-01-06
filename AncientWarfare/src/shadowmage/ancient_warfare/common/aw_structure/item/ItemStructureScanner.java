@@ -20,21 +20,23 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.item;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
-import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
+import shadowmage.ancient_warfare.common.aw_core.registry.DescriptionRegistry;
+import shadowmage.ancient_warfare.common.aw_structure.data.ComponentBase;
+import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureCompressed;
+import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
 
 
 public class ItemStructureScanner extends AWItemBase
 {
-
-public static Item item = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 13005, "Item used to scan structures"));
 
 /**
  * @param itemID
@@ -42,27 +44,12 @@ public static Item item = new ItemStructureScanner(Config.getItemID("itemSingle.
  */
 public ItemStructureScanner(int itemID)
   {
-  super(itemID, false);  
-  this.canRepair = false;
-  this.setMaxDamage(0);
-  this.setMaxStackSize(1);
+  super(itemID, false);
+  this.setMaxStackSize(1);  
   }
 
 @Override
 public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float xOff, float yOff, float zOff)
-  {
-  return super.onItemUse(stack, player, world, x, y, z, side, xOff, yOff, zOff);
-  }
-
-@Override
-public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,EntityPlayer par3EntityPlayer)
-  {
-  onUsed(par2World, par3EntityPlayer, par1ItemStack);
-  return par1ItemStack;
-  }
-
-@Override
-public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
   {
   BlockPosition hitPos = new BlockPosition(x,y,z);
   if(player.isSneaking())
@@ -70,6 +57,49 @@ public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world,
     hitPos = BlockTools.offsetForSide(hitPos, side);
     }
   return onUsed(world, player, stack, hitPos);
+      
+  //return super.onItemUse(stack, player, world, x, y, z, side, xOff, yOff, zOff);
+  }
+
+@Override
+public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+  {
+  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);  
+  if(par1ItemStack!=null)
+    {
+    NBTTagCompound tag;
+    if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("structData"))
+      {
+      tag = par1ItemStack.getTagCompound().getCompoundTag("structData");
+      }
+    else
+      {
+      tag = new NBTTagCompound();
+      }
+    if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
+      {
+      par3List.add("ready to scan and process");
+      }        
+    else if(!tag.hasKey("pos1"))
+      {
+      par3List.add("item cleared");
+      }
+    else if(!tag.hasKey("pos2"))
+      {
+      par3List.add("pos1 set");
+      }
+    else if(!tag.hasKey("buildKey"))
+      {
+      par3List.add("pos2 set");
+      }    
+    }  
+  }
+
+@Override
+public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,EntityPlayer par3EntityPlayer)
+  {
+  onUsed(par2World, par3EntityPlayer, par1ItemStack);
+  return par1ItemStack;
   }
 
 @Override
@@ -124,7 +154,7 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
   if(world.isRemote)
     {
     return true;
-    }
+    }  
   NBTTagCompound tag;
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
     {
@@ -137,7 +167,7 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
   if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
     {
     BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
-    BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos1"));
+    BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
     BlockPosition key = new BlockPosition(tag.getCompoundTag("buildKey"));
     int face = tag.getCompoundTag("buildKey").getInteger("face");
     player.addChatMessage("Initiating Scan and clearing Position Data");
@@ -174,6 +204,15 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
 public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
   {
 
+  ScannedStructureRaw rawStructure = new ScannedStructureRaw(face ,pos1, pos2, key);
+  System.out.println("scanning");
+  rawStructure.scan(world);
+  System.out.println("processing");
+  ScannedStructureCompressed compressedStructure = rawStructure.process();
+  for(ComponentBase base : compressedStructure.components)
+    {
+    System.out.println(base);
+    }
   return true;
   }
 

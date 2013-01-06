@@ -50,14 +50,15 @@ BlockDataScanInfo[][][] allBlocks;
 
 public ScannedStructureRaw(int facing, BlockPosition close, BlockPosition far, BlockPosition buildKey)
   {
-  BlockPosition pos1 = BlockTools.getMin(close, far);
-  BlockPosition pos2 = BlockTools.getMax(close, far);
+  pos1 = BlockTools.getMin(close, far);
+  pos2 = BlockTools.getMax(close, far);
   this.facing = facing;
   BlockPosition size = BlockTools.getBoxSize(pos1, pos2);
   this.xSize = size.x;
   this.ySize = size.y;
   this.zSize = size.z;
   allBlocks = new BlockDataScanInfo[xSize][ySize][zSize];
+  System.out.println("xSize: "+this.xSize+" ySize "+this.ySize+" zSize "+this.zSize);
   }
 
 /**
@@ -68,12 +69,15 @@ public void scan(World world)
   int indexX = 0;
   int indexY = 0;
   int indexZ = 0;
-  for(int x = pos1.x; x < pos2.x; x++, indexX++)
-    {    
-    for(int y = pos1.y; y < pos2.y; y++, indexY++)
+  for(int x = pos1.x; x <= pos2.x; x++, indexX++)
+    { 
+    indexY = 0;
+    for(int y = pos1.y; y <= pos2.y; y++, indexY++)
       {
-      for(int z = pos1.z; z < pos2.z; z++, indexZ++)
+      indexZ = 0;
+      for(int z = pos1.z; z <= pos2.z; z++, indexZ++)
         {
+        System.out.println("scanning block:"+indexX+","+indexY+","+indexZ);
         allBlocks[indexX][indexY][indexZ] = new BlockDataScanInfo(world.getBlockId(x, y, z), world.getBlockMetadata(x, y, z));        
         }      
       }    
@@ -85,19 +89,24 @@ public ScannedStructureCompressed process()
   ScannedStructureCompressed structure = new ScannedStructureCompressed(this.facing, this.buildKey);
   BlockDataScanInfo info;
   ComponentBlocks component;
-  for(int y = 0; y < this.xSize ; y++)
+  for(int y = 0; y < this.ySize ; y++)
     {
-    for(int x = 0; x < this.ySize; x++)
+    for(int x = 0; x < this.xSize; x++)
       {
       for(int z = 0; z < this.zSize; z++)
         {
         info = allBlocks[x][y][z];
-        if(!info.processed)          
+        System.out.println("processing block "+x+","+y+","+z);
+        if(info !=null && !info.processed)          
           {
+          System.out.println("new component detected");
           info.processed = true;
           component = new ComponentBlocks(new BlockPosition(x,y,z), new BlockPosition(x,y,z), info.copy());
           expand(component); 
           structure.components.add(component);
+          System.out.println("component size: "+BlockTools.getBoxSize(component.pos1, component.pos2).toString());
+          System.out.println("component blockID:"+component.blockData.id);
+          System.out.println("component blockMeta:"+component.blockData.meta);
           }
         }
       }
@@ -176,7 +185,7 @@ public boolean canExpandForward(ComponentBlocks comp)
     for(int y = comp.pos1.y; y <= comp.pos2.y; y++)
       {  
       BlockDataScanInfo info = allBlocks[x][y][comp.pos2.z+1];
-      if(info.processed || !info.equals(comp.blockData))
+      if(info == null || info.processed || !info.equals(comp.blockData))
         {
         return false;
         }
@@ -208,7 +217,7 @@ public boolean canExpandRight(ComponentBlocks comp)
     for(int z = comp.pos1.z; z <= comp.pos2.z; z++)
       { 
       BlockDataScanInfo info = allBlocks[comp.pos2.x+1][y][z];
-      if(info.processed || !info.equals(comp.blockData))
+      if(info == null || info.processed || !info.equals(comp.blockData))
         {
         return false;
         }
@@ -240,7 +249,7 @@ public boolean canExpandUpward(ComponentBlocks comp)
     for(int z = comp.pos1.z; z <= comp.pos2.z; z++)
       {  
       BlockDataScanInfo info = allBlocks[x][comp.pos2.y+1][z];
-      if(info.processed || !info.equals(comp.blockData))
+      if(info == null || info.processed || !info.equals(comp.blockData))
         {
         return false;
         }      

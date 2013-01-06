@@ -22,6 +22,7 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.item;
 
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
@@ -44,6 +45,7 @@ public static AWItemBase vehicleUpgrade = new AWItemBase(Config.getItemID("itemM
 public static AWItemBase vehicleAmmo = new AWItemBase(Config.getItemID("itemMulti.vehicleAmmo", 13002, "Base item for all vehicle ammunition types"),true);
 public static AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 13003, "Base item for all vehicle-spawning items"));
 public static AWItemBase componentItem = new AWItemBase(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
+public static Item structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 13005, "Item used to scan structures")).setIconIndex(0);
 
 
 private static ItemLoader INSTANCE;
@@ -67,13 +69,16 @@ public void load()
   this.loadRecipes();  
   }
 
-public void loadItems()
-  {
-  this.registerItem(ItemStructureScanner.item, 0, "Structure Scanner");
-  //TODO create item instances
+private void loadItems()
+  {  
+  this.registerItemSingle(structureScanner, "Structure Scanner", "Structure Scanner", "Structure Scanning Item, Right-Click to Use");
+  this.registerItemWithSubtypes(componentItem);
+  this.registerItemWithSubtypes(vehicleAmmo);
+  this.registerItemWithSubtypes(vehicleSpawner);
+  this.registerItemWithSubtypes(vehicleUpgrade);
   }
 
-public void loadRecipes()
+private void loadRecipes()
   {
   //TODO create recipes..figure out crafting..blahblah..
   }
@@ -86,12 +91,11 @@ public void loadRecipes()
  * @param type
  * @param upgrade
  */
-public void registerVehicleUpgradeItem(int dmg, int type, VehicleUpgrade upgrade)
+private void registerVehicleUpgradeItem(int dmg, int type, VehicleUpgrade upgrade)
   {
   if(upgrade!=null)
     {    
-    ItemLoader.vehicleUpgrade.addSubType(new ItemStack(ItemLoader.vehicleUpgrade,1,dmg)); 
-    this.registerItem(vehicleUpgrade, dmg, upgrade.getUpgradeDisplayName());
+    this.addSubtypeToItem(vehicleUpgrade, dmg, upgrade.getUpgradeDisplayName());
     VehicleUpgradeRegistry.instance().registerUpgrade(dmg, type, upgrade);
     }
   }
@@ -103,41 +107,63 @@ public void registerVehicleUpgradeItem(int dmg, int type, VehicleUpgrade upgrade
  * @param name
  * @param displayName
  */
-public void registerVehicleAmmoItem(int dmg, int type, String name, String displayName)
+private void registerVehicleAmmoItem(int dmg, int type, String name, String displayName)
   {
-  ItemIDPair pair = new ItemIDPair(vehicleAmmo.shiftedIndex, dmg,true);
+  ItemIDPair pair = new ItemIDPair(vehicleAmmo.itemID, dmg,true);
   VehicleAmmo entry = new VehicleAmmo(pair, name, displayName,type);
-  this.registerItem(pair, displayName);
-  vehicleAmmo.addSubType(new ItemStack(entry.itemID.itemID, 1, entry.itemID.dmg));
+  this.addSubtypeToItem(vehicleAmmo, dmg, displayName);
   VehicleAmmoRegistry.instance().registerAmmoType(entry);
   }
 
-/**
- * used for generic non-registry items that still need subtypes, such as crafting subcomponents
- * @param item
- * @param dmg
- * @param name
- */
-public void registerItemWithSubtype(AWItemBase item, int dmg, String name)
+private ItemStack createVehicleAmmoSubtype(int dmg, int type, String name, String displayName)
   {
-  item.addSubType(new ItemStack(item.shiftedIndex, 1,dmg));
-  this.registerItem(item.shiftedIndex, dmg, name);
+  this.registerVehicleAmmoItem(dmg, type, name, displayName);
+  return new ItemStack(vehicleAmmo.itemID,1,dmg);
   }
 
-public void registerItem(ItemIDPair id, String name)
+private ItemStack createVehicleUpgradeSubtype(int dmg, int type, VehicleUpgrade upgrade)
   {
-  DescriptionRegistry.instance().registerItem(id, name);
+  this.registerVehicleUpgradeItem(dmg, type, upgrade);
+  return new ItemStack(vehicleUpgrade.itemID,1,dmg);
   }
 
-public void registerItem(int id, int dmg, String name)
+private ItemStack createItemSubtype(AWItemBase item, int dmg, String name)
   {
-  DescriptionRegistry.instance().registerItem(id, dmg, name, false);
+  this.addSubtypeToItem(item, dmg, name);
+  return new ItemStack(item.itemID,1,dmg);
   }
 
-public void registerItem(Item item, int dmg, String name)
+private void registerItemSingle(Item item, String name)
   {
-  this.registerItem(item.shiftedIndex, dmg, name);
+  this.registerItemSingle(item, name, "");
   }
 
+private void registerItemSingle(Item item, String name, String description)
+  {
+  DescriptionRegistry.instance().registerItemSingle(item, name, description);
+  }
+
+private void registerItemSingle(Item item, String name, String description, String tooltip)
+  {
+  this.registerItemSingle(item, name, description);
+  DescriptionRegistry.instance().setToolTip(item.itemID, tooltip);
+  }
+
+private void registerItemWithSubtypes(Item item)
+  {
+  DescriptionRegistry.instance().registerItemWithSubtypes(item.itemID);
+  }
+
+private void addSubtypeToItem(AWItemBase item, int dmg, String name)
+  {
+  item.addSubType(new ItemStack(item.itemID,1,dmg));
+  DescriptionRegistry.instance().addSubtypeToItem(item.itemID, dmg, name);
+  }
+
+private void addSubtypeToItem(AWItemBase item, int dmg, String name, String tooltip)
+  {
+  this.addSubtypeToItem(item, dmg, name);
+  DescriptionRegistry.instance().setTooltip(item.itemID, dmg, tooltip);
+  }
 
 }

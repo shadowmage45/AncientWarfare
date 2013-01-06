@@ -44,6 +44,7 @@ public AWItemBase(int itemID, boolean hasSubTypes)
   super(itemID);  
   this.setHasSubtypes(hasSubTypes);
   this.setCreativeTab(CreativeTabAW.instance());
+  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/items.png");
   }
 
 @Override
@@ -69,6 +70,10 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
         par3List.add(stack);
         }
       }
+    }
+  else
+    {
+    super.getSubItems(par1, par2CreativeTabs, par3List);
     }
   }
 
@@ -110,16 +115,19 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
   {
   if(par1ItemStack!=null)
     {
-    List tooltipInfo = DescriptionRegistry.instance().getTooltipFor(par1ItemStack.itemID, par1ItemStack.getItemDamage());
-    if(tooltipInfo!=null)
+    String toolTip = DescriptionRegistry.instance().getEntryFor(par1ItemStack.itemID).getTooltip(par1ItemStack.getItemDamage());
+    if(toolTip!=null)
       {
-      for(Object obj : tooltipInfo)
-        {
-        par3List.add(obj);
-        }
+      par3List.add(toolTip);
       }
+//    if(tooltipInfo!=null)
+//      {
+//      for(Object obj : tooltipInfo)
+//        {
+//        par3List.addAll(tooltipInfo);
+//        }
+//      }
     }  
-  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
   }
 
 /**
@@ -128,18 +136,6 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
 @Override
 public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
   {
-//  if(stack.hasTagCompound())
-//    {
-//    NBTTagCompound tag = stack.getTagCompound();
-//    if(tag.hasKey("AWModData"))
-//      {
-//      NBTTagCompound modTag = tag.getCompoundTag("AWModData");
-//      if(modTag.hasKey("icon"))
-//        {
-//        return modTag.getInteger("icon");
-//        }
-//      }
-//    }
   if(stack.getItem().getHasSubtypes())
     {
     return stack.getItemDamage();

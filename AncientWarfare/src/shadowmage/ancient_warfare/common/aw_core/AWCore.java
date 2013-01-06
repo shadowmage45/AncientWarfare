@@ -92,6 +92,7 @@ public void preInit(FMLPreInitializationEvent evt)
 @PostInit
 public void load(FMLPostInitializationEvent evt)
   {  
+  ItemLoader.instance().load();
   
   /**
    * and finally, save the config in case there were any changes made during init

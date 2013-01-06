@@ -23,57 +23,89 @@
 package shadowmage.ancient_warfare.common.aw_core.registry.entry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ItemDescription
 {
 
-public ItemIDPair itemID;
-public String displayName;
-public String description = "";
-public List usedToCraft = new ArrayList<String>();
-public List usedIn = new ArrayList<String>();//what this item is used IN, if it is a module type item (armor, upgrades, ammo)
+public final int itemID;
+private final boolean hasSubtypes;
+private final HashMap<Integer, String> names = new HashMap<Integer, String>();
+private final HashMap<Integer, String> descriptions = new HashMap<Integer, String>();
+private final HashMap<Integer, String> tooltips = new HashMap<Integer, String>();
 
-public ItemDescription(String name, ItemIDPair itemID)
+public ItemDescription(int id)
   {
-  this.displayName = name;
-  this.itemID = itemID;
+  this.itemID = id;
+  this.hasSubtypes = true;
   }
 
-public ItemDescription setDescription(String desc)
+public ItemDescription(int id, String name)
   {
-  this.description = desc;
-  return this;
+  this.itemID = id;
+  this.hasSubtypes = false;
+  this.names.put(0, name);
+  this.descriptions.put(0, "");
   }
 
-public void addCraft(String in)
+public ItemDescription(int id, String name, String description)
   {
-  this.usedToCraft.add(in);
+  this.itemID = id;
+  this.hasSubtypes = false;
+  this.names.put(0, name);
+  this.descriptions.put(0, description);
   }
 
-public void addUsedIn(String in)
+public void addSubtype(int damage, String name)
   {
-  this.usedIn.add(in);
+  this.addSubtype(damage, name, "");
   }
 
-public List getTooltip()
+public void addSubtype(int damage, String name, String description)
   {
-  ArrayList<String> tooltip = new ArrayList<String>();
-  //TODO
-  return tooltip;
+  if(!this.hasSubtypes)
+    {
+    return;
+    }
+  this.names.put(damage, name);
+  this.descriptions.put(damage, description);
   }
 
-
-
-/**
- * return the description for this entry as a series of strings formatted for length
- * @param len 
- * @return
- */
-public List<String> getFormattedDescription(int charLen)
+public void setDescription(String description)
   {
-  //TODO
-  return null;
+  this.descriptions.put(0, description);
   }
 
+public void setDescription(int dmg, String description)
+  {
+  if(this.names.containsKey(dmg))//keep names and descriptions lined up
+    {
+    this.descriptions.put(dmg, description);
+    }  
+  }
+
+public void setTooltip(int dmg, String tooltip)
+  {
+  if(this.names.containsKey(dmg))
+    {
+    this.tooltips.put(dmg, tooltip);
+    }
+  }
+
+public String getTooltip(int dmg)
+  {
+  if(this.tooltips.containsKey(dmg))
+    {
+    return this.tooltips.get(dmg);
+    }
+  return "";
+  }
+
+public boolean contains(int dmg)
+  {
+  return dmg ==0 || this.hasSubtypes && this.names.containsKey(dmg);
+  }
 }
