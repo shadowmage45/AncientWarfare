@@ -20,10 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
 
 /**
  * config/setup module for structures and structure related stuff....
@@ -33,20 +34,11 @@ import java.util.List;
 public class AWStructureModule
 {
 
-/**
- * file path for reading structures
- */
-public static String dir;
-
-/**
- * called probableStructureFiles because they haven't been opened/read/checked for validity
- */
-private List<File> probableStructureFiles = new ArrayList<File>();
-
-
+private List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
+private StructureLoader loader;
 private AWStructureModule(){}
-public AWStructureModule INSTANCE;
-public AWStructureModule instance()
+private static AWStructureModule INSTANCE;
+public static AWStructureModule instance()
   {
   if(INSTANCE==null)
     {
@@ -55,45 +47,19 @@ public AWStructureModule instance()
   return INSTANCE;
   }
 
-public static void setFileDirectory(File location)
+public void load(String directory)
   {
-  try
+  loader = new StructureLoader(directory);
+  loader.scanForPrebuiltFiles();    
+  }
+
+public void process()
+  {
+  if(loader==null)
     {
-    dir = location.getCanonicalPath()+"/AWConfig/structures/";
-    } 
-  catch (IOException e)
-    {
-    e.printStackTrace();
+    return;
     }
-  }
-
-public void scanForPrebuiltFiles()
-  {
-  probableStructureFiles.clear();
-  this.recursiveScan(new File(dir), probableStructureFiles);
-  }
-
-private void recursiveScan(File directory, List<File> fileList)
-  {
-  File[] allFiles = directory.listFiles();
-  File currentFile;
-  for(int i = 0; i < allFiles.length; i++)
-    {
-    currentFile = allFiles[i];
-    if(currentFile.isDirectory())
-      {
-      recursiveScan(directory, fileList);
-      }
-    else if(isProbableStructureFile(currentFile))
-      {
-      fileList.add(currentFile);
-      }
-    }
-  }
-
-public boolean isProbableStructureFile(File file)
-  {
-  return file.getName().endsWith(".dat") && file.getName().startsWith("AWStruct_");
+  structures.addAll(loader.processStructureFiles());
   }
 
 }

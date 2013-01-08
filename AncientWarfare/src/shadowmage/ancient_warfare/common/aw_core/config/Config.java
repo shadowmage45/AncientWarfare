@@ -35,7 +35,7 @@ public static final String CORE_VERSION_MAJOR = "0.1.0";
 public static final String CORE_VERSION_MINOR = "0";
 public static final String CORE_VERSION_BUILD = "001";
 public static final String CORE_BUILD_STATUS = "debug";
-public static final String MC_VERSION = "1.4.5";
+public static final String MC_VERSION = "1.4.7";
 
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering)
@@ -84,7 +84,7 @@ public static void setLogger(Logger log)
 //**************************************************CONFIG*****************************************************//
 
 public static void loadConfig(File inputFile)
-  {
+  {  
   config = new Configuration(inputFile);
   Config.instance().setCoreInfo();
   Config.instance().setVehicleInfo();

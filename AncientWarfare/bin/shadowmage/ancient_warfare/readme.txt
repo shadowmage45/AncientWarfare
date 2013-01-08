@@ -1,15 +1,2 @@
-core--
-All shared functionality, classes to bind the other modules together
---packet handler--done
---player tracker--investigate storing most player data in player NBT tag
---utility classes
---base proxy classes
---crafting managers
-
-kingdoms--
-
-vehicles--
-
-soldiers--
-
-structures--
+AncientWarfare c2012-2013 John Cummens aka Shadowmage
+Released under the General Public License v3.0 (or later)

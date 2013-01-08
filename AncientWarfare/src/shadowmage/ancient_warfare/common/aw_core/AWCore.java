@@ -66,33 +66,43 @@ public static AWCore instance;
 @PreInit
 public void preInit(FMLPreInitializationEvent evt) 
   {
-
   /**
    * load config file and setup logger
    */
   Config.loadConfig(evt.getSuggestedConfigurationFile());
+  
+  /**
+   * load items
+   */
   ItemLoader.instance().load();
   
+  /**
+   * load structure related stuff (needs config directory from this event, could save string and load later)
+   */
   try
     {
-    AWStructureModule.dir = evt.getModConfigurationDirectory().getCanonicalPath();
+    AWStructureModule.instance().load(evt.getModConfigurationDirectory().getCanonicalPath());
     } 
   catch (IOException e)
     {
-    AWStructureModule.dir = null;
     e.printStackTrace();
     }
+ 
   }
 	
 
 /**
- * initialize modules
+ * load modules
  * @param evt
  */
 @PostInit
 public void load(FMLPostInitializationEvent evt)
   {  
-  ItemLoader.instance().load();
+  
+  /**
+   * process loaded structures
+   */
+  AWStructureModule.instance().process();
   
   /**
    * and finally, save the config in case there were any changes made during init

@@ -20,26 +20,35 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 
 /**
- * fully processed structure, ready to build in-game.  Needs to support all of Ruins template
- * options.
+ * raw structure as loaded from disk. non validated or converted.
  * @author Shadowmage
  *
  */
-public class ProcessedStructure
+public class LoadedStructureRaw
 {
+
+String name;
+
 /**
  * preservation flags for entire structure
  */
-boolean preserveWater = false;
-boolean preserveLava = false;
-boolean preservePlants = false;
-boolean preserveBlocks = false;
+public boolean preserveWater = false;
+public boolean preserveLava = false;
+public boolean preservePlants = false;
+public boolean preserveBlocks = false;
 
 /**
  * individual blockRules, will override structure rules for individual blocks
@@ -52,79 +61,130 @@ Map<Integer, BlockRule> blockRules = new HashMap<Integer, BlockRule>();
  * these refer to the key in the blockRules map
  * this array basically holds the levels from the ruins template
  */
-byte [][][] structure;
+public byte [][][] structure;
 
 /**
  * how many blocks may be non-solid below this structure
  */
-int overhangMax;
+public int overhangMax;
 
 /**
  * how many blocks vertically above base may be cleared 
  */
-int maxVerticalClear;
+public int maxVerticalClear;
 
 /**
  * how many blocks around the structure to clear (outside of w,h,l)
  */
-int horizontalClearBuffer;
+public int horizontalClearBuffer;
 
 /**
  * maximum vertical fill distance for missing blocks below the structure
  * overrides overhang numbers
  */
-int maxLeveling;
+public int maxLeveling;
 
 /**
  * how many blocks outside of w,h,l should be leveled around the structure
  */
-int horizontalLevelBuffer;
+public int horizontalLevelBuffer;
 
 /**
  * valid targets to build this structure upon.
  * may be overridden with a custom list
  */
-int[] validTargetBlocks = {1,2,3,12,13};
+public int[] validTargetBlocks = {1,2,3,12,13};
 
 /**
  * i.e. embed_into_distance
  * how far should this structure generate below the chosen site level
  */
-int verticalOffset;
+public int verticalOffset;
 
-int width;//x dimension
-int length;//z dimension
-int height;//y dimension
+public int width;//x dimension
+public int length;//z dimension
+public int height;//y dimension
 
-public ProcessedStructure(LoadedStructureRaw rawStruct)
+File file;
+public boolean isValid = true;
+
+public LoadedStructureRaw(File file)
   {
-  this.width = rawStruct.width;
-  this.length = rawStruct.length;
-  this.height = rawStruct.height;
-  this.structure = new byte[width][height][length];
+  this.file = file;
   }
 
-public ProcessedStructure(int x, int y, int z)
+public void processFile()
   {
-  this.structure = new byte[x][y][z];
-  this.width = x;
-  this.length = z;
-  this.height = y;
+  Scanner reader = null;
+  try
+    {
+    reader = new Scanner(new FileInputStream(file));
+    } 
+  catch (FileNotFoundException e)
+    {
+    isValid = false;
+    e.printStackTrace();    
+    return;
+    }
+  
+  
+  LinkedList<String> lines = new LinkedList<String>();
+  
+  String line;
+  /**
+   * throw everything into a linked list, close the file
+   */
+  while(reader.hasNextLine())
+    {
+    line = reader.nextLine();
+    if(line.startsWith("#"))//skip comment lines entirely, no need to parse later
+      {
+      continue;
+      }
+    lines.add(reader.nextLine());
+    }  
+  reader.close();
+  
+  /**
+   * process from a nice in-memory list
+   */
+  
+    
   }
 
-public void setValidTargetBlocks(int[] validTargets)
+/**
+ * read name, dimensions
+ * @param lines
+ */
+public void readBasicStats(List<String> lines)
   {
-  this.validTargetBlocks = validTargets;
+  if(lines==null){return;}
+  Iterator<String> it = lines.iterator();
+  String line;
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.startsWith("name="))
+      {
+      if(line.length()>5)
+        {
+        this.name = line.substring(5);
+        }
+      it.remove();
+      }
+    if(line.startsWith("width="))
+      {
+      if(line.length()>6)
+        {
+        this.width = Integer.valueOf(line.substring(6));
+        }
+      it.remove();
+      }
+    
+    
+    
+    }  
   }
 
-public int[] getValidTargets()
-  {
-  return this.validTargetBlocks;
-  }
-
-public void addRule(int ruleNumber, BlockRule rule)
-  {
-  this.blockRules.put(ruleNumber, rule);
-  }
 
 }
