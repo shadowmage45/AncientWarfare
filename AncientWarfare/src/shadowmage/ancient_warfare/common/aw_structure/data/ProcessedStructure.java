@@ -98,9 +98,9 @@ int height;//y dimension
 
 public ProcessedStructure(LoadedStructureRaw rawStruct)
   {
-  this.width = rawStruct.width;
-  this.length = rawStruct.length;
-  this.height = rawStruct.height;
+  this.width = rawStruct.xSize;
+  this.length = rawStruct.zSize;
+  this.height = rawStruct.ySize;
   this.structure = new byte[width][height][length];
   }
 

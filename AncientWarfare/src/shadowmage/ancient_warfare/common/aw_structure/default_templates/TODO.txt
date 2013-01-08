@@ -1,0 +1,2 @@
+These templates will be auto-copied to the resource directory if the structures.exportdefaulttemplates
+  option is set to true in the config

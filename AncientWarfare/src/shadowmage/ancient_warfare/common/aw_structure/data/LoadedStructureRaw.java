@@ -55,6 +55,7 @@ public boolean preserveBlocks = false;
  * (incl advanced feature not supported by Ruins--per block preserve info)
  */
 Map<Integer, BlockRule> blockRules = new HashMap<Integer, BlockRule>();
+Map<Integer, BlockRule> specBlockRules = new HashMap<Integer, BlockRule>();
 
 /**
  * array of ruleID references making up this structure
@@ -66,7 +67,7 @@ public byte [][][] structure;
 /**
  * how many blocks may be non-solid below this structure
  */
-public int overhangMax;
+public int maxOverhang;
 
 /**
  * how many blocks vertically above base may be cleared 
@@ -101,9 +102,9 @@ public int[] validTargetBlocks = {1,2,3,12,13};
  */
 public int verticalOffset;
 
-public int width;//x dimension
-public int length;//z dimension
-public int height;//y dimension
+public int xSize;//x dimension
+public int zSize;//z dimension
+public int ySize;//y dimension
 
 File file;
 public boolean isValid = true;
@@ -176,7 +177,7 @@ public void readBasicStats(List<String> lines)
       {
       if(line.length()>6)
         {
-        this.width = Integer.valueOf(line.substring(6));
+        this.xSize = Integer.valueOf(line.substring(6));
         }
       it.remove();
       }

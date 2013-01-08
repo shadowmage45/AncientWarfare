@@ -1,0 +1,238 @@
+
+# -- denotes comment lines
+# all structures will be normalized to northward facing (2) during processing from a scanner
+# special rules will enable the placement of gates, soldiers, and vehicles
+#
+# all keys are not case-sensitive, e.g. XSIZE=xsize=XsIzE, as long as the letters are present in the
+# right order.
+# Values are taken directly after the '=' sign, and all whitespace will be trimmed
+# Comma delimited layers must contain the same number of x,y entries on EVERY layer 
+# (or air blocks will be substituted, and the design offset, probably not as intended)
+#
+#
+# most values have direct equivalents in the Ruins template format
+#
+# please see the AWStructureConverter for a java applet to convert from AWStructure format
+# to ruins format
+
+##basic variables area
+
+#structure name, used for display purposes, should be unique if you want to be able to id your struct
+#can include spaces and numbers, but will be scrubbed of special characters for display purposes
+name=template
+
+#should structure generate once per world
+unique=false
+
+#if not unique, minimum distance in chunks between structures of this type
+# (1 means there will be a 1-chunk gap between a success and further attempts to generate, 
+# 0 means it will check _every_ chunk)
+chunkDistance=0
+
+#tries per-chunk--how many times should this structure attempt to generate in a chunk if allowed to?
+#each attempt chooses a random location in the chunk
+chunkAttempts=1
+
+#subterranean structure? if true(1), this structure will not choose ground level, but will choose a random location
+# between min and max allowed levels, and will use the following additional variables during generation
+underground=0
+undergroundMin=1 #lowest level to attempt generation
+undergroundMax=255 #highest level to attempt generation, this will be truncated to max-world height in the nether
+undergroundMaxAirAbove=0 #max air blocks allowed directly above top of structure to allow generation -1 means no limit
+undergroundAllowPartial=0 #if true(1) allow generation when partly underground (not completely surrounded by validTargetBlocks)
+
+# dimensions of the structure, as viewed north-oriented 
+# x-right+/left-, y-up+,down-, z-towards viewer+, away from viewer-)
+# front doors should be placed on the SOUTH side, i.e. downwards in the template
+# all sizes should be at least 1, or it will be flagged as an invalid structure
+
+#east/west size
+xSize=2
+#vertical size
+ySize=6
+#north/south size
+zSize=2
+
+# what blocks are considered valid for this structure to build upon?
+# dirt, grass, stone, cobble?, mossy cobble?
+validTargetBlocks = 1,2,3,12,13
+
+# vertical offset--how many blocks below source block should this structure embed 
+# itself downard? 0=none, 1=move structure one block down, etc..
+#   for a floor level with the outside ground, use a value of 1.  Structures with a 
+#   basement may choose larger numbers as neeeded
+verticalOffset=0
+
+# xOffset-- how many blocks towards the LEFT do you want the structures frontLeft corner
+#   to spawn relative to the block clicked?
+xOffset=0
+
+# zOffset-- how many blocks TOWARDS THE VIEWER do you want the structures front edge to be
+#  relative to the block clicked?
+zOffset=0
+
+# how many air blocks may be directly below the chosen site when
+# construction starts, overridden by leveling if value>0
+maxOverhang=1
+
+# how many blocks below this should be filled with the leveling/fill block?
+maxLeveling=0
+
+# how many blocks outside of bounding box should be leveled?
+levelingBuffer=0
+
+# how many blocks up from source site should be cleared before construction?
+# intelligent use of preserveBlocks and air blocks can eliminate most need for this setting
+maxVerticalClear=6
+
+# how many blocks should be cleared outside of the structure bounding box?
+clearingBuffer=0
+
+# preservation rules for entire structure
+preserveWater=false
+preserveLave=false
+preservePlants=false
+preserveBlocks=false
+
+
+##blockRules
+# these determine what blocks/features will spawn in any given position
+# should start with rule: on its own line, and end with :endrule on its own line
+# most fields need not be present for each rule, but a minimum must be--such as:
+#  A--rule number--mandatory
+#  B--either blocks, vehicles, gates, or NPCs line ----one of those is mandatory
+# all other values will be set to a default if not present.  default values are:
+#  conditional=0
+#  percent=100
+#  swapGroup=-1
+#  preserveWater=0
+#  preserveLava=0
+#  preservePlants=0
+#  preserveBlocks=0
+#  team=0  # defaults to neutral team, supports csv for random team assignment
+#  orientation=0 #defaults to north-facing
+
+
+
+#hard-air rule
+rule:
+number=0
+conditional=0
+percent=100
+blocks=0
+:endrule
+
+#example block rule
+rule:
+number=1
+conditional=0
+percent=100
+blocks=1,2,3,12,13  #picks between these as a weighted list, supports meta-data the same as ruins (44-3)
+swapGroup=-1 # no swap group
+preserveWater=0
+preserveLave=0
+preservePlants=0
+preserveBlocks=1  #if a block is present, will leave it, else will place from blockList
+:endrule
+
+#example hostile vehicle rule using cannon and ballista turret
+rule:
+number=2
+conditional =1
+percent=100
+vehicles=2,7  #csv of vehicle types, from vehicle rules list
+team=1
+orientation=0  # 0-7 in 1/8th of a rotation increments. e.g. 2=90 degrees
+:endrule
+
+#example neutral gate rule using iron gates
+rule:
+number=3
+conditional=1
+percent=100
+gates=1  #csv of gate types
+team=0
+:endrule
+
+#example of NPC spawning rule
+rule:
+number=4
+conditional=1
+percent=100
+npcs=0,1,3,7  #csv of NPC types, from npc rules list
+:endrule
+
+#example block rule #2
+rule:
+number=5
+blocks=4,5
+:endrule
+
+
+##VEHICLE rules
+#hard no-vehicle rule, can be mixed in for random no-vehicle in blockRules
+vehicle:
+number=0
+type = -1
+:endvehicle
+
+vehicle:
+number=1
+type = 0 #catapult---must be a SINGLE vehicle type
+armorFront= -1,0,10,20 #none, iront1, stonet1, obst1 #csv supported weighted list
+armorMid=-1 #none
+armorRear=0 #iront1
+upgrade1=-1,0,1,2 #none, aim, power, bearings ---csv supported weighted list--see templateTypes.txt
+upgrade2=-1
+upgrade3=-1
+ammo1=
+ammo2=
+ammo3=
+ammo4=
+ammo5=
+ammo6=
+:endvehicle
+
+
+
+
+##NPC rules
+npc:
+
+endnpc:
+
+#1
+layer:
+1,1
+1,1
+:endlayer
+
+#2
+layer:
+1,1
+1,1
+:endlayer
+
+#3
+layer:
+1,1
+1,1
+:endlayer
+
+#4
+layer:
+1,1
+1,1
+:endlayer
+
+#5
+layer:
+5,5
+5,5
+:endlayer
+
+#6 -- has a NPC in topleft, vehicle in bottom-right, air blocks elsewise
+layer:
+4,0
+0,2
+:endlayer

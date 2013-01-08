@@ -1,0 +1,88 @@
+
+######################################### VEHICLES #####################################
+vehicle types:
+-1 none
+0 catapult
+1 ballista
+2 cannon
+3 trebuchet
+4 battering ram
+5 hwacha
+6 chest-cart
+7 ballista turret
+
+vehicle armors:
+-1 none
+0 iron t1
+1 iron t2
+2 iron t3
+10 stone t1
+11 stone t2
+12 stone t3
+20 obs t1
+21 obs t2
+22 obs t3
+
+vehicle upgrades:
+-1 none
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+
+######################################### GATES #####################################
+gate types:
+-1 none
+0 wood
+1 iron
+
+
+######################################### NPCS #####################################
+npc types:
+-1 none
+0 footsoldier (melee fighter)
+1 archer (ranged figher)
+2 medic (healer)
+3 engineer (repair, restock)
+4 driver (drive siege engines)
+5 leutenant 
+6 captain
+7 major
+8 colonel
+9 general
+
+20 villager-random (from entire list--can include special random mod-only villagers, not includable by specific rules)
+21 villager-farmer
+22 villager-smith?
+23 villager-priest?
+24 villager-?
+
+rank:
+ignored for normal NPCs
+for soldiers, determines the rank they will spawn at
+
+
+######################################### TEAMS #####################################
+teams:
+0-default white/neutral (default team for all new players)
+1-red/hostile (default team for hostile soldiers)
+2+other team colors/numbers
+
+######################################### ORIENTATIONS #####################################
+-1 random
+0-0' (north)
+1-45'  (NE)
+2-90' (east)
+3-135' (SE)
+4-180' (south)
+5-225' (SW)
+6-270 (west)
+7-315 (NW)

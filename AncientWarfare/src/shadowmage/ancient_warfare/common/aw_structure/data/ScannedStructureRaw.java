@@ -54,9 +54,20 @@ public ScannedStructureRaw(int facing, BlockPosition close, BlockPosition far, B
   pos2 = BlockTools.getMax(close, far);
   this.facing = facing;
   BlockPosition size = BlockTools.getBoxSize(pos1, pos2);
-  this.xSize = size.x;
-  this.ySize = size.y;
-  this.zSize = size.z;
+  if(facing== 0 || facing==2)
+    {
+    this.xSize = size.x;
+    this.ySize = size.y;
+    this.zSize = size.z;
+    }
+  else//swap axis sizes
+    {
+    System.out.println("rotating axis, swapping x,z sizes");
+    this.xSize = size.z;
+    this.ySize = size.y;
+    this.zSize = size.x;
+    }
+  
   allBlocks = new BlockDataScanInfo[xSize][ySize][zSize];
   System.out.println("xSize: "+this.xSize+" ySize "+this.ySize+" zSize "+this.zSize);
   }
@@ -76,12 +87,33 @@ public void scan(World world)
       {
       indexZ = 0;
       for(int z = pos1.z; z <= pos2.z; z++, indexZ++)
-        {
+        {       
         System.out.println("scanning block:"+indexX+","+indexY+","+indexZ);
         allBlocks[indexX][indexY][indexZ] = new BlockDataScanInfo(world.getBlockId(x, y, z), world.getBlockMetadata(x, y, z));        
         }      
       }    
     } 
+  }
+
+public BlockPosition getNorthRotatedPosition(int x, int y, int z, int rotation)
+  {
+  if(rotation==0)//south, invert x,z
+    {
+    return new BlockPosition(this.xSize-x,y,this.zSize-z);
+    }
+  if(rotation==1)//east, swap +x>+z,+z>-x
+    {
+    return new BlockPosition(this.xSize-z,y,x);
+    }
+  if(rotation==2)//north, no change
+    {
+    return new BlockPosition(x,y,z);
+    }
+  if(rotation==3)//west, swap +x>-z, +z>+x
+    {
+    return new BlockPosition(z,y,this.zSize-x);     
+    }
+  return null;
   }
 
 public ScannedStructureCompressed process()
