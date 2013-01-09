@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data.rules;
 
+import java.util.List;
 import java.util.Random;
 
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
@@ -30,7 +31,7 @@ public class BlockRule
 /**
  * base chance to lay this block
  */
-final int baseChance;
+int baseChance = 100;
 
 /**
  * block conditional
@@ -39,15 +40,17 @@ final int baseChance;
  * 2--must be block beside
  * 3--must be block above
  */
-final int conditional;
+int conditional = 0;
 
 /**
  * blockData array for each block ID/meta for this blockRule, may contain duplicates for weighting
  */
-final BlockData[] blockData;
-public boolean preserveBlocks = false;
+public BlockData[] blockData;
+
 public boolean preserveWater = false;
+public boolean preserveLava = false;
 public boolean preservePlants = false;
+public boolean preserveBlocks = false;
 
 public BlockRule(int chance, int conditional, BlockData[] blockIDs)
   {
@@ -56,35 +59,14 @@ public BlockRule(int chance, int conditional, BlockData[] blockIDs)
   this.blockData = blockIDs;
   }
 
-public BlockRule setPreservationRules(boolean blocks, boolean water, boolean plants)
-  {
-  this.preserveBlocks = blocks;
-  this.preserveWater = water;
-  this.preservePlants = plants;
-  return this;
-  }
-
-public BlockRule setPreserveBlocks()
-  {
-  this.preserveBlocks = true;
-  return this;
-  }
-
-public BlockRule setPreserveWater()
-  {
-  this.preserveWater = true;
-  return this;
-  }
-
-public BlockRule setPreservePlants()
-  {
-  this.preservePlants = true;
-  return this;
-  }
-
 public BlockData getBlockChoice(Random random)
   {
   return blockData[random.nextInt(blockData.length)];
+  }
+
+public static BlockRule parseRule(List<String> ruleLines)
+  {
+  return null;
   }
 
 }

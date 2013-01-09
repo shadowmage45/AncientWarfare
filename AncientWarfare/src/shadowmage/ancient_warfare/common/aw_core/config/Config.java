@@ -72,7 +72,7 @@ public static void logError(String info)
   {
   if(logger!=null)
     {
-    logger.info(info);
+    logger.severe(info);
     }
   }
 

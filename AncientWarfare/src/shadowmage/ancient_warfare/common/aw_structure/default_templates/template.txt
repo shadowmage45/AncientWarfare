@@ -35,11 +35,11 @@ chunkAttempts=1
 
 #subterranean structure? if true(1), this structure will not choose ground level, but will choose a random location
 # between min and max allowed levels, and will use the following additional variables during generation
-underground=0
-undergroundMin=1 #lowest level to attempt generation
-undergroundMax=255 #highest level to attempt generation, this will be truncated to max-world height in the nether
+underground=false
+undergroundMinLevel=1 #lowest level to attempt generation
+undergroundMaxLevel=255 #highest level to attempt generation, this will be truncated to max-world height in the nether
 undergroundMaxAirAbove=0 #max air blocks allowed directly above top of structure to allow generation -1 means no limit
-undergroundAllowPartial=0 #if true(1) allow generation when partly underground (not completely surrounded by validTargetBlocks)
+undergroundAllowPartial=false #if true(1) allow generation when partly underground (not completely surrounded by validTargetBlocks)
 
 # dimensions of the structure, as viewed north-oriented 
 # x-right+/left-, y-up+,down-, z-towards viewer+, away from viewer-)
@@ -90,7 +90,7 @@ clearingBuffer=0
 
 # preservation rules for entire structure
 preserveWater=false
-preserveLave=false
+preserveLava=false
 preservePlants=false
 preserveBlocks=false
 

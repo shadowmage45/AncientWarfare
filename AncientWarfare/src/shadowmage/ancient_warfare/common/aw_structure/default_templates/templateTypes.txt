@@ -53,17 +53,17 @@ npc types:
 2 medic (healer)
 3 engineer (repair, restock)
 4 driver (drive siege engines)
-5 leutenant 
+5 lieutenant 
 6 captain
 7 major
 8 colonel
 9 general
 
-20 villager-random (from entire list--can include special random mod-only villagers, not includable by specific rules)
-21 villager-farmer
-22 villager-smith?
-23 villager-priest?
-24 villager-?
+40 villager-random (from entire list--can include special random mod-only villagers, not includable by specific rules)
+41 villager-farmer
+42 villager-smith?
+43 villager-priest?
+44 villager-?
 
 rank:
 ignored for normal NPCs

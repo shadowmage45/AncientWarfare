@@ -72,12 +72,12 @@ private void recursiveScan(File directory, List<File> fileList)
     }
   }
 
-public boolean isProbableStructureFile(File file)
+private boolean isProbableStructureFile(File file)
   {
-  return file.getName().endsWith(".dat") && file.getName().startsWith("AWStruct_");
+  return file.getName().endsWith(".aws");
   }
 
-public ProcessedStructure parseFile(File file)
+private ProcessedStructure parseFile(File file)
   {  
   LoadedStructureRaw rawStruct = new LoadedStructureRaw(file);  
   if(!rawStruct.isValid)
