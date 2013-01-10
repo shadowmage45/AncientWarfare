@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data.rules;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -29,9 +30,14 @@ public class BlockRule
 {
 
 /**
+ * must be >=0 to be considered valid...this value MUST be set
+ */
+short ruleNumber = -1;
+
+/**
  * base chance to lay this block
  */
-int baseChance = 100;
+byte baseChance = 100;
 
 /**
  * block conditional
@@ -40,23 +46,28 @@ int baseChance = 100;
  * 2--must be block beside
  * 3--must be block above
  */
-int conditional = 0;
+byte conditional = 0;
+
+byte swapGroup = -1;
+
+byte team = 0;
+byte orientation = 0;
+
 
 /**
  * blockData array for each block ID/meta for this blockRule, may contain duplicates for weighting
  */
 public BlockData[] blockData;
+public int[] vehicles;
+public int[] npcs;
 
 public boolean preserveWater = false;
 public boolean preserveLava = false;
 public boolean preservePlants = false;
 public boolean preserveBlocks = false;
 
-public BlockRule(int chance, int conditional, BlockData[] blockIDs)
+private BlockRule()
   {
-  this.baseChance = chance;
-  this.conditional = conditional;
-  this.blockData = blockIDs;
   }
 
 public BlockData getBlockChoice(Random random)
@@ -66,7 +77,66 @@ public BlockData getBlockChoice(Random random)
 
 public static BlockRule parseRule(List<String> ruleLines)
   {
+  String line;
+  Iterator<String> it = ruleLines.iterator();
+  BlockRule rule = new BlockRule();
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("number="))
+      {
+      rule.ruleNumber = Short.parseShort(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("conditional="))
+      {
+      rule.conditional = Byte.parseByte(line.split("=")[1]);
+      }
+    if(line.toLowerCase().startsWith("percent="))
+      {
+      rule.baseChance = Byte.parseByte(line.split("=")[1]);
+      }
+    if(line.toLowerCase().startsWith("preservewater="))
+      {
+      rule.preserveWater = Boolean.parseBoolean(line.split("=")[1]);
+      }
+    if(line.toLowerCase().startsWith("preservelava="))
+      {
+      rule.preserveLava = Boolean.parseBoolean(line.split("=")[1]);
+      }
+    if(line.toLowerCase().startsWith("preserveplants="))
+      {
+      rule.preservePlants = Boolean.parseBoolean(line.split("=")[1]);
+      }
+    if(line.toLowerCase().startsWith("preserveblocks="))
+      {
+      rule.preserveBlocks = Boolean.parseBoolean(line.split("=")[1]);
+      }
+    if(line.toLowerCase().startsWith("blocks="))
+      {
+      rule.blockData = parseBlocks(line.split("=")[1]);
+      }
+    if(line.toLowerCase().startsWith("vehicles="))
+      {
+      rule.vehicles = parseIntArray(line.split("=")[1]);
+      }
+    if(line.toLowerCase().startsWith("npcs="))
+      {
+      rule.npcs = parseIntArray(line.split("=")[1]);
+      }
+    }
   return null;
   }
 
+
+private static BlockData[] parseBlocks(String csv)
+  {
+  //TODO
+  return null;
+  }
+
+private static int[] parseIntArray(String csv)
+  {
+  //TODO
+  return null;
+  }
 }
