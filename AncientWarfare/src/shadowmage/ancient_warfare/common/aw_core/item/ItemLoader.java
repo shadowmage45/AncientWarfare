@@ -22,12 +22,12 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.item;
 
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.registry.DescriptionRegistry;
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemBlockScanner;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.aw_vehicles.item.ItemVehicleSpawner;
 import shadowmage.ancient_warfare.common.aw_vehicles.registry.VehicleAmmoRegistry;
@@ -45,8 +45,13 @@ public static AWItemBase vehicleUpgrade = new AWItemBase(Config.getItemID("itemM
 public static AWItemBase vehicleAmmo = new AWItemBase(Config.getItemID("itemMulti.vehicleAmmo", 13002, "Base item for all vehicle ammunition types"),true);
 public static AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 13003, "Base item for all vehicle-spawning items"));
 public static AWItemBase componentItem = new AWItemBase(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
-public static Item structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 13005, "Item used to scan structures")).setIconIndex(0);
+public static AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 13005, "Item used to scan structures"));
 
+/**
+ * debug items, will only be given instances if debug is enabled in Config
+ * e.g. will be null unless debug mode is on
+ */
+public static AWItemBase blockScanner;
 
 private static ItemLoader INSTANCE;
 private ItemLoader(){}
@@ -67,6 +72,7 @@ public void load()
   {
   this.loadItems();
   this.loadRecipes();  
+  this.loadDebugItems();
   }
 
 private void loadItems()
@@ -83,6 +89,15 @@ private void loadRecipes()
   //TODO create recipes..figure out crafting..blahblah..
   }
 
+private void loadDebugItems()
+  {
+  if(!Config.DEBUG)
+    {
+    return;
+    }
+  blockScanner = new ItemBlockScanner(Config.getItemID("debug.blockScanner", 9000));
+  this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block");
+  }
 
 /**
  * special registerUpgrade method, directly registers a new upgrade using the vehicleUpgrade item.  calls all necessary calls

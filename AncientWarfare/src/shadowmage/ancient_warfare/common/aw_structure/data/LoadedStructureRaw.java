@@ -126,9 +126,10 @@ private int currentLayer = 0;//used during parsing to increment Y upwards with e
 public LoadedStructureRaw(File file)
   {
   this.file = file;
+  this.processFile();
   }
 
-public void processFile()
+private void processFile()
   {
   Scanner reader = null;
   try
@@ -166,7 +167,7 @@ public void processFile()
  * parse a list of lines into variables, rules, setups, and layers
  * @param lines
  */
-public void parseLines(List<String> lines)
+private void parseLines(List<String> lines)
   {
   if(lines==null){return;}
   Iterator<String> it = lines.iterator();
@@ -348,7 +349,7 @@ private void parseLayer(Iterator<String> it)
         {
         if(i>=structure.length ||currentLayer>=structure[i].length || currentRow>= structure[i][currentLayer].length)
           {
-          Config.logError("Error parsing layer in structure, an array index was out of bounds!");
+          Config.logError("Error parsing layer in structure, an array index was out of bounds! (Layer larger than dimensions!)");
           this.isValid = false;
           break;
           }

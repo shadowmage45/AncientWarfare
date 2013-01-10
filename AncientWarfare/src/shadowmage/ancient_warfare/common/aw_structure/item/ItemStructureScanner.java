@@ -29,7 +29,6 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
-import shadowmage.ancient_warfare.common.aw_core.registry.DescriptionRegistry;
 import shadowmage.ancient_warfare.common.aw_structure.data.ComponentBase;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureCompressed;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
@@ -46,6 +45,7 @@ public ItemStructureScanner(int itemID)
   {
   super(itemID, false);
   this.setMaxStackSize(1);  
+  this.setIconIndex(0);
   }
 
 @Override

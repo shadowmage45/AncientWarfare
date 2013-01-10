@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import shadowmage.ancient_warfare.common.aw_core.utils.StringTools;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
 
 public class BlockRule
@@ -117,26 +118,40 @@ public static BlockRule parseRule(List<String> ruleLines)
       }
     if(line.toLowerCase().startsWith("vehicles="))
       {
-      rule.vehicles = parseIntArray(line.split("=")[1]);
+      rule.vehicles = StringTools.parseIntArray(line.split("=")[1]);
       }
     if(line.toLowerCase().startsWith("npcs="))
       {
-      rule.npcs = parseIntArray(line.split("=")[1]);
+      rule.npcs = StringTools.parseIntArray(line.split("=")[1]);
       }
     }
   return null;
   }
 
-
 private static BlockData[] parseBlocks(String csv)
-  {
-  //TODO
-  return null;
+  {  
+  String[] csvValues = csv.split(",");
+  BlockData[] datas = new BlockData[csvValues.length];
+  String[] csvBlock;
+  String blockData;
+  String bID;
+  String mID;
+  for(int i = 0; i < csvValues.length; i++)
+    {
+    blockData = csvValues[i];
+    csvBlock = blockData.split("-");
+    bID = csvBlock[0];
+    if(csvBlock.length>1)
+      {
+      mID = csvBlock[1];
+      }
+    else
+      {
+      mID = "0";
+      }    
+    datas[i] = new BlockData(Integer.parseInt(bID), Integer.parseInt(mID));
+    }
+  return datas;
   }
 
-private static int[] parseIntArray(String csv)
-  {
-  //TODO
-  return null;
-  }
 }

@@ -38,9 +38,9 @@ public static final String CORE_BUILD_STATUS = "debug";
 public static final String MC_VERSION = "1.4.7";
 
 /**
- * should debug features be enabled? (debug keybinds, debug overlay rendering)
+ * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
-public static final boolean DEBUG = false;
+public static final boolean DEBUG = true;
 
 private static Configuration config;
 private static Logger logger;
