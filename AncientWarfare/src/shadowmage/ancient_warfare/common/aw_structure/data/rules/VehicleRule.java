@@ -20,7 +20,96 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data.rules;
 
+import java.util.Iterator;
+import java.util.List;
+
+import shadowmage.ancient_warfare.common.aw_core.utils.StringTools;
+
 public class VehicleRule
 {
+short ruleNumber;
+short vehicleType;
+byte armorFrontTypes[];
+byte armorMidTypes[];
+byte armorRearTypes[];
+byte upgradeFrontTypes[];
+byte upgradeMidTypes[];
+byte upgradeRearTypes[];
+byte[] ammoTypes = new byte[]{-1,-1,-1,-1,-1,-1};
 
+private VehicleRule()
+  {  
+  }
+
+public static VehicleRule parseRule(List<String> ruleLines)
+  {
+  String line;
+  VehicleRule rule = new VehicleRule();
+  Iterator<String> it = ruleLines.iterator();
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("number"))
+      {
+      rule.ruleNumber = Short.parseShort(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("type"))
+      {
+      rule.ruleNumber = Short.parseShort(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("armorfront"))
+      {
+      rule.armorFrontTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("armormid"))
+      {
+      rule.armorMidTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("armorrear"))
+      {
+      rule.armorRearTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("upgrade1"))
+      {
+      rule.upgradeFrontTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("upgrade2"))
+      {
+      rule.upgradeMidTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("upgrade3"))
+      {
+      rule.upgradeRearTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("ammo1"))
+      {
+      rule.ammoTypes[0]=Byte.parseByte(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("ammo2"))
+      {
+      rule.ammoTypes[1]=Byte.parseByte(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("ammo3"))
+      {
+      rule.ammoTypes[2]=Byte.parseByte(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("ammo4"))
+      {
+      rule.ammoTypes[3]=Byte.parseByte(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("ammo5"))
+      {
+      rule.ammoTypes[4]=Byte.parseByte(line.split("=")[1]);      
+      }
+    if(line.toLowerCase().startsWith("ammo6"))
+      {
+      rule.ammoTypes[5]=Byte.parseByte(line.split("=")[1]);      
+      }
+    }  
+  if(rule.ruleNumber>=0)
+    {
+    return rule;
+    }
+  return null;
+  }
 }

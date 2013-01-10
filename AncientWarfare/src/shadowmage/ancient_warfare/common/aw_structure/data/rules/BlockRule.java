@@ -41,6 +41,12 @@ short ruleNumber = -1;
 byte baseChance = 100;
 
 /**
+ * ordering of this rule, what pass it should place the block on
+ * higher numbers = block placed later (if it depends on other blocks to be present)
+ */
+byte order = 0;
+
+/**
  * block conditional
  * 0--always valid
  * 1--must be block below
@@ -84,46 +90,54 @@ public static BlockRule parseRule(List<String> ruleLines)
   while(it.hasNext())
     {
     line = it.next();
-    if(line.toLowerCase().startsWith("number="))
+    if(line.toLowerCase().startsWith("number"))
       {
       rule.ruleNumber = Short.parseShort(line.split("=")[1]);      
-      }
-    if(line.toLowerCase().startsWith("conditional="))
+      }    
+    if(line.toLowerCase().startsWith("conditional"))
       {
       rule.conditional = Byte.parseByte(line.split("=")[1]);
       }
-    if(line.toLowerCase().startsWith("percent="))
+    if(line.toLowerCase().startsWith("percent"))
       {
       rule.baseChance = Byte.parseByte(line.split("=")[1]);
       }
-    if(line.toLowerCase().startsWith("preservewater="))
+    if(line.toLowerCase().startsWith("order"))
+      {
+      rule.order = Byte.parseByte(line.split("=")[1]);
+      }
+    if(line.toLowerCase().startsWith("preservewater"))
       {
       rule.preserveWater = Boolean.parseBoolean(line.split("=")[1]);
       }
-    if(line.toLowerCase().startsWith("preservelava="))
+    if(line.toLowerCase().startsWith("preservelava"))
       {
       rule.preserveLava = Boolean.parseBoolean(line.split("=")[1]);
       }
-    if(line.toLowerCase().startsWith("preserveplants="))
+    if(line.toLowerCase().startsWith("preserveplants"))
       {
       rule.preservePlants = Boolean.parseBoolean(line.split("=")[1]);
       }
-    if(line.toLowerCase().startsWith("preserveblocks="))
+    if(line.toLowerCase().startsWith("preserveblocks"))
       {
       rule.preserveBlocks = Boolean.parseBoolean(line.split("=")[1]);
       }
-    if(line.toLowerCase().startsWith("blocks="))
+    if(line.toLowerCase().startsWith("blocks"))
       {
       rule.blockData = parseBlocks(line.split("=")[1]);
       }
-    if(line.toLowerCase().startsWith("vehicles="))
+    if(line.toLowerCase().startsWith("vehicles"))
       {
       rule.vehicles = StringTools.parseIntArray(line.split("=")[1]);
       }
-    if(line.toLowerCase().startsWith("npcs="))
+    if(line.toLowerCase().startsWith("npcs"))
       {
       rule.npcs = StringTools.parseIntArray(line.split("=")[1]);
       }
+    }
+  if((rule.blockData !=null || rule.vehicles !=null ||rule.npcs!=null )&& rule.ruleNumber>=0)
+    {
+    return rule;
     }
   return null;
   }

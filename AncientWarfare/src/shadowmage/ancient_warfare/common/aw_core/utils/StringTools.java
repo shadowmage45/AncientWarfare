@@ -25,7 +25,24 @@ public class StringTools
 
 public static int[] parseIntArray(String csv)
   {
-  return null;
+  String[] splits = csv.split(",");
+  int[] array = new int[splits.length];
+  for(int i = 0; i< splits.length; i++)
+    {
+    array[i]=Integer.parseInt(splits[i]);
+    }
+  return array;
+  }
+
+public static byte[] parseByteArray(String csv)
+  {
+  String[] splits = csv.split(",");
+  byte[] array = new byte[splits.length];
+  for(int i = 0; i< splits.length; i++)
+    {
+    array[i]=Byte.parseByte(splits[i]);
+    }
+  return array;
   }
 
 }

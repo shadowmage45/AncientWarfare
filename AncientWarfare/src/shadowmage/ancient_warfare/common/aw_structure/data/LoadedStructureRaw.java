@@ -24,15 +24,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.aw_structure.data.rules.NPCRule;
+import shadowmage.ancient_warfare.common.aw_structure.data.rules.VehicleRule;
 
 /**
  * raw structure as loaded from disk. non validated or converted.
@@ -66,7 +66,8 @@ public boolean preserveBlocks = false;
  * (incl advanced feature not supported by Ruins--per block preserve info)
  */
 List<BlockRule> blockRules = new ArrayList<BlockRule>();
-
+List<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
+List<NPCRule> NPCRules = new ArrayList<NPCRule>();
 
 /**
  * array of ruleID references making up this structure
@@ -175,47 +176,47 @@ private void parseLines(List<String> lines)
   while(it.hasNext())
     {
     line = it.next();    
-    if(line.toLowerCase().startsWith("name="))//structure name
+    if(line.toLowerCase().startsWith("name"))//structure name
       {
       this.name = line.split("=")[1];
       }
-    else if(line.toLowerCase().startsWith("unique="))//structure uniqueness
+    else if(line.toLowerCase().startsWith("unique"))//structure uniqueness
       {
       this.unique = Boolean.parseBoolean(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("underground="))
+    else if(line.toLowerCase().startsWith("underground"))
       {
       this.underground = Boolean.parseBoolean(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("undergroundminlevel="))
+    else if(line.toLowerCase().startsWith("undergroundminlevel"))
       {
       this.undergroundMinLevel = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("undergroundmaxlevel="))
+    else if(line.toLowerCase().startsWith("undergroundmaxlevel"))
       {
       this.undergroundMaxLevel = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("undergroundmaxairabove="))
+    else if(line.toLowerCase().startsWith("undergroundmaxairabove"))
       {
       this.undergroundMaxAirAbove = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("undergroundallowpartial="))
+    else if(line.toLowerCase().startsWith("undergroundallowpartial"))
       {
       this.undergroundAllowPartial = Boolean.parseBoolean(line.split("=")[1]);
       }    
-    else if(line.toLowerCase().startsWith("xsize="))
+    else if(line.toLowerCase().startsWith("xsize"))
       {
       this.xSize = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("ysize="))
+    else if(line.toLowerCase().startsWith("ysize"))
       {
       this.ySize = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("zsize="))
+    else if(line.toLowerCase().startsWith("zsize"))
       {
       this.zSize = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("validtargetblocks="))
+    else if(line.toLowerCase().startsWith("validtargetblocks"))
       {
       String[] targets = line.split("=");
       targets = targets[1].split(",");
@@ -225,51 +226,51 @@ private void parseLines(List<String> lines)
         this.validTargetBlocks[i]=Integer.parseInt(targets[i]);
         }
       }
-    else if(line.toLowerCase().startsWith("verticaloffset="))
+    else if(line.toLowerCase().startsWith("verticaloffset"))
       {
       this.verticalOffset = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("xoffset="))
+    else if(line.toLowerCase().startsWith("xoffset"))
       {
       this.xOffset = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("zoffset="))
+    else if(line.toLowerCase().startsWith("zoffset"))
       {
       this.zOffset = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("maxoverhang="))
+    else if(line.toLowerCase().startsWith("maxoverhang"))
       {
       this.maxOverhang = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("maxleveling="))
+    else if(line.toLowerCase().startsWith("maxleveling"))
       {
       this.maxLeveling = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("levelingbuffer="))
+    else if(line.toLowerCase().startsWith("levelingbuffer"))
       {
       this.levelingBuffer = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("maxverticalclear="))
+    else if(line.toLowerCase().startsWith("maxverticalclear"))
       {
       this.maxVerticalClear = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("clearingbuffer="))
+    else if(line.toLowerCase().startsWith("clearingbuffer"))
       {
       this.clearingBuffer = Integer.parseInt(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("preservewater="))// 
+    else if(line.toLowerCase().startsWith("preservewater"))// 
       {
       this.preserveWater = Boolean.parseBoolean(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("preservelava="))// 
+    else if(line.toLowerCase().startsWith("preservelava"))// 
       {
       this.preserveLava = Boolean.parseBoolean(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("preserveplants="))// 
+    else if(line.toLowerCase().startsWith("preserveplants"))// 
       {
       this.preservePlants = Boolean.parseBoolean(line.split("=")[1]);
       }
-    else if(line.toLowerCase().startsWith("preserveblocks="))// 
+    else if(line.toLowerCase().startsWith("preserveblocks"))// 
       {
       this.preserveBlocks = Boolean.parseBoolean(line.split("=")[1]);
       }    
@@ -408,7 +409,39 @@ private void parseRule(Iterator<String> it)
  */
 private void parseVehicle(Iterator<String> it)
   {
-  
+  if(!it.hasNext())
+    {
+    this.isValid = false;
+    return;
+    }
+  ArrayList<String> ruleLines = new ArrayList<String>();  
+  String line;  
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("rule:"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith(":endrule"))
+      {
+      break;      
+      }
+    else
+      {
+      ruleLines.add(line);      
+      }    
+    }     
+  VehicleRule rule = VehicleRule.parseRule(ruleLines);
+  if(rule!=null)
+    {    
+    this.vehicleRules.add(rule);    
+    }
+  else
+    {
+    Config.logError("Error parsing vehicle rule for structure!");
+    this.isValid = false;
+    }
   }
 
 /**

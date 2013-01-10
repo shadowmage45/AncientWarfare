@@ -127,6 +127,7 @@ blocks=0
 #example block rule
 rule:
 number=1
+order=1
 conditional=0
 percent=100
 blocks=1,2,3,12,13  #picks between these as a weighted list, supports meta-data the same as ruins (44-3)
@@ -140,6 +141,7 @@ preserveBlocks=1  #if a block is present, will leave it, else will place from bl
 #example hostile vehicle rule using cannon and ballista turret
 rule:
 number=2
+order=2
 conditional =1
 percent=100
 vehicles=2,7  #csv of vehicle types, from vehicle rules list
@@ -150,6 +152,7 @@ orientation=0  # 0-7 in 1/8th of a rotation increments. e.g. 2=90 degrees
 #example neutral gate rule using iron gates
 rule:
 number=3
+order=2
 conditional=1
 percent=100
 gates=1  #csv of gate types
@@ -159,6 +162,7 @@ team=0
 #example of NPC spawning rule
 rule:
 number=4
+order=2
 conditional=1
 percent=100
 npcs=0,1,3,7  #csv of NPC types, from npc rules list
@@ -167,6 +171,7 @@ npcs=0,1,3,7  #csv of NPC types, from npc rules list
 #example block rule #2
 rule:
 number=5
+order=1
 blocks=4,5
 :endrule
 
