@@ -20,8 +20,22 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
-import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
+import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_structure.export.StructureExporter;
+
+/**
+ * a north-normalized structure, ready for output to file or direct processing and building in-game
+ * holds only basic template values (block IDs/metas/positions, build offset)
+ * @author Shadowmage
+ *
+ */
 public class ScannedStructureNormalized extends ScannedStructureRaw
 {
 
@@ -81,7 +95,8 @@ public void processRawStructure(ScannedStructureRaw raw)
         BlockPosition pos = getNorthRotatedPosition(x,y,z, this.originFacing);
         this.allBlocks[pos.x][pos.y][pos.z]= raw.allBlocks[x][y][z];
         int rotationAmount = this.getRotationAmount(originFacing, 2);
-        this.allBlocks[pos.x][pos.y][pos.z].rotateRight(rotationAmount);        
+        this.allBlocks[pos.x][pos.y][pos.z].rotateRight(rotationAmount); 
+        this.addToBlocksList(this.allBlocks[pos.x][pos.y][pos.z]);
         }
       }
     }
@@ -120,6 +135,15 @@ private int getRotationAmount(int start, int destination)
     turn += 4;
     }  
   return turn;
+  }
+
+/**
+ * writes to the absolute fileName given.
+ * @param name
+ */
+public void writeToFile(String name)
+  {
+  StructureExporter.writeStructureToFile(this, name);  
   }
 
 }

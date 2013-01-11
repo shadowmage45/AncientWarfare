@@ -35,8 +35,11 @@ import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
 public class AWStructureModule
 {
 
-private List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
-private StructureLoader loader;
+private static String directory;
+public static String outputDirectory = null;
+
+private static List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
+private static StructureLoader loader;
 
 private AWStructureModule(){ }
 private static AWStructureModule INSTANCE;
@@ -51,6 +54,8 @@ public static AWStructureModule instance()
 
 public void load(String directory)
   {  
+  this.directory = directory;
+  outputDirectory = directory+"AWConfig/structures/export/";
   BlockDataManager.instance().loadBlockList();
   loader = new StructureLoader(directory);
   loader.scanForPrebuiltFiles();    

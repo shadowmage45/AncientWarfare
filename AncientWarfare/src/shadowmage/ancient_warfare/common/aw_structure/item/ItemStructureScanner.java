@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
-import shadowmage.ancient_warfare.common.aw_structure.data.ComponentBase;
+import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
 
@@ -203,13 +203,13 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
  */
 public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
   {
-
   ScannedStructureRaw rawStructure = new ScannedStructureRaw(face ,pos1, pos2, key);
   System.out.println("scanning");
   rawStructure.scan(world);
   System.out.println("processing");
   ScannedStructureNormalized normalizedStructure = rawStructure.process();
-  
+  String name = String.valueOf(System.currentTimeMillis());
+  normalizedStructure.writeToFile(AWStructureModule.outputDirectory+name+".aws");
   
   return true;
   }

@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
+import java.util.ArrayList;
+
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
@@ -41,6 +43,7 @@ public int xSize;
 public int ySize;
 public int zSize;
 public BlockData[][][] allBlocks;
+public ArrayList<BlockData> blockIDs = new ArrayList<BlockData>();
 
 /**
  * @param face
@@ -89,6 +92,23 @@ public void scan(World world)
         }      
       }    
     }    
+  }
+
+
+protected void addToBlocksList(BlockData data)
+  {
+  boolean shouldAdd = true;
+  for(BlockData block : this.blockIDs)
+    {
+    if(block.id==data.id && block.meta==data.meta)
+      {
+      shouldAdd = false;
+      }
+    }
+  if(shouldAdd)
+    {
+    this.blockIDs.add(data.copy());
+    }
   }
 
 public ScannedStructureNormalized process()

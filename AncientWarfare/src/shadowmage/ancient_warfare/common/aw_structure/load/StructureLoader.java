@@ -50,7 +50,8 @@ private List<File> probableStructureFiles = new ArrayList<File>();
 public void scanForPrebuiltFiles()
   {
   probableStructureFiles.clear();
-  this.recursiveScan(new File(dir), probableStructureFiles);
+  System.out.println("config base dir: " + dir);
+  this.recursiveScan(new File(dir+"AWConfig/structures/included"), probableStructureFiles);
   System.out.println("found: "+this.probableStructureFiles.size()+" probable structure files");
   }
 
@@ -67,6 +68,7 @@ private void recursiveScan(File directory, List<File> fileList)
       }
     else if(isProbableStructureFile(currentFile))
       {
+      System.out.println("adding: "+currentFile+" to probableStructuresList");
       fileList.add(currentFile);
       }
     }
@@ -74,7 +76,7 @@ private void recursiveScan(File directory, List<File> fileList)
 
 private boolean isProbableStructureFile(File file)
   {
-  return file.getName().endsWith(".aws");
+  return file.getName().toLowerCase().endsWith(".aws");
   }
 
 private ProcessedStructure parseFile(File file)
