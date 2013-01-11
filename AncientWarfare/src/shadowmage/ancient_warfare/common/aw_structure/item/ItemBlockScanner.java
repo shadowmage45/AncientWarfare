@@ -92,8 +92,10 @@ private boolean onActivated(World world, EntityPlayer player, ItemStack stack, B
     }
   int id = world.getBlockId(hit.x, hit.y, hit.z);
   int meta = world.getBlockMetadata(hit.x, hit.y, hit.z);
-  player.addChatMessage("ID: "+id+"  M: "+meta);
-  System.out.println("ID: "+id+"  M: "+meta);
+  int rotation = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+  String facing = rotation==0 ? "South": rotation==1? "West": rotation==2?"North":rotation==3?"East":"huh?";  
+  player.addChatMessage("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation);
+  System.out.println("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation);
   return true;
   }
 

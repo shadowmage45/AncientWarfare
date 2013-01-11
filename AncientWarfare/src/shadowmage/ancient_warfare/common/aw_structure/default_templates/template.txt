@@ -104,6 +104,7 @@ preserveBlocks=false
 # all other values will be set to a default if not present.  default values are:
 #  conditional=0
 #  percent=100
+#  order=1
 #  swapGroup = -1
 #  vehicles = -1
 #  npcs = -1
