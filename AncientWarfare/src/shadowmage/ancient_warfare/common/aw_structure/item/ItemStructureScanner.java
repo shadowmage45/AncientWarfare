@@ -28,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
@@ -115,7 +116,6 @@ public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par
 public int getIconFromDamage(int par1)
   {
   return this.iconIndex;
-  //return this.iconIndex + par1; //TODO use this for items multiple damage variants
   }
 
 public boolean onUsed(World world, EntityPlayer player, ItemStack stack)
@@ -194,6 +194,19 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
   return true;
   }
 
+private BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPosition pos2, BlockPosition key)
+  {
+  //TODO ...NFC how to figure this out
+  int minX ;
+  int minY;
+  int minZ;
+  if(face==2)
+    {
+    minX = pos1.x< pos2.x? pos1.x : pos2.x;
+    key.x = key.x-minX;
+    }
+  return key;
+  }
 
 /**
  * actually scan the structure.
@@ -204,13 +217,17 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
 public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
   {
   ScannedStructureRaw rawStructure = new ScannedStructureRaw(face ,pos1, pos2, key);
-  System.out.println("scanning");
   rawStructure.scan(world);
-  System.out.println("processing");
   ScannedStructureNormalized normalizedStructure = rawStructure.process();
   String name = String.valueOf(System.currentTimeMillis());
-  normalizedStructure.writeToFile(AWStructureModule.outputDirectory+name+".aws");
-  
+  if(AWStructureModule.outputDirectory!=null)
+    {
+    normalizedStructure.writeToFile(AWStructureModule.outputDirectory+name+".aws");
+    }
+  else
+    {
+    Config.logError("Invalid export/output directory specified in source, could not export structure!");
+    }
   return true;
   }
 

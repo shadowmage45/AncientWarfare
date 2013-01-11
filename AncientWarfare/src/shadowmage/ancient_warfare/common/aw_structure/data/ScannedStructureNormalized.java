@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_structure.export.StructureExporter;
 
@@ -47,7 +48,15 @@ public class ScannedStructureNormalized extends ScannedStructureRaw
    */
 public ScannedStructureNormalized(int face, BlockPosition pos1, BlockPosition pos2, BlockPosition key)
   {
-  super(face, pos1, pos2, key);
+  super(face, pos1, pos2, getNormalizedBuildKey(face, pos1, pos2, key));
+  }
+
+private static BlockPosition getNormalizedBuildKey(int face, BlockPosition pos1, BlockPosition pos2, BlockPosition key)
+  {
+  BlockPosition min = BlockTools.getMin(pos1, pos2);
+  BlockPosition offset = new BlockPosition(key.x-min.x, key.y-min.y, key.z-min.z);
+  //offset = getNorthRotatedPosition(face, offset.x, offset.y, offset.z);
+  return key;
   }
 
 @Override

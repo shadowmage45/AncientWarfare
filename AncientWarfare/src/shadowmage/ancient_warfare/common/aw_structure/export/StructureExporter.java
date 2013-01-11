@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.aw_structure.export;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Struct;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -49,7 +50,7 @@ public static void writeStructureToFile(ScannedStructureNormalized struct, Strin
     Calendar cal = Calendar.getInstance();
     
     writer.write("# Ancient Warfare Structure Template File\n");
-    writer.write("# generated structure file. created on: "+cal.get(cal.MONTH)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND)+"\n");
+    writer.write("# auto-generated structure file. created on: "+cal.get(cal.MONTH)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND)+"\n");
     writer.write("# Lines beginning with # denote comments\n");
     writer.write("\n");
     writer.write("name="+String.valueOf(System.currentTimeMillis())+"\n");
@@ -103,7 +104,7 @@ private static void writeBlockRules(FileWriter writer, ScannedStructureNormalize
   BlockData[] datas = findAllBlockTypes(struct);
   for(int i = 0; i < datas.length; i++)
     {
-    writeSingleBlockRule(writer, i, datas[i].id, datas[i].meta);
+    writeSingleBlockRule(writer, i+1, datas[i].id, datas[i].meta);
     }
   }
 
@@ -131,7 +132,31 @@ private static void writeSingleBlockRule(FileWriter writer, int ruleNum, int id,
 
 private static void writeLayers(FileWriter writer, ScannedStructureNormalized struct) throws IOException
   {
-  
+  for(int y = 0; y< struct.ySize; y++)
+    {
+    writeSingleLayer(writer, struct, y);
+    }
+  }
+
+private static void writeSingleLayer(FileWriter writer, ScannedStructureNormalized struct, int layerNumber) throws IOException
+  {
+  writer.write("layer:\n");
+  for(int x = 0; x<struct.allBlocks.length; x++)
+    {
+    for(int z = 0; z<struct.allBlocks[x][layerNumber].length; z++)
+      {
+      BlockData data = struct.allBlocks[x][layerNumber][z];
+      int ruleNum = struct.getRuleForBlock(data.id, data.meta)+1;
+      writer.write(ruleNum);
+      if(z<struct.allBlocks[x][layerNumber].length-1)
+        {
+        writer.write(",");
+        }
+      }
+    writer.write("\n");
+    }
+  writer.write(":endlayer\n");
+  writer.write("\n");
   }
 
 }

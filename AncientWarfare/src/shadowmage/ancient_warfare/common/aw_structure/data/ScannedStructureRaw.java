@@ -111,6 +111,18 @@ protected void addToBlocksList(BlockData data)
     }
   }
 
+public int getRuleForBlock(int id, int meta)
+  {
+  for(int i = 0; i< this.blockIDs.size(); i++)
+    {
+    if(this.blockIDs.get(i).id==id && this.blockIDs.get(i).meta==meta)
+      {
+      return i;
+      }
+    }
+  return 0;
+  } 
+
 public ScannedStructureNormalized process()
   {
   ScannedStructureNormalized struct = new ScannedStructureNormalized(originFacing, pos1, pos2, buildKey);
