@@ -20,18 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.item;
 
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
-import shadowmage.ancient_warfare.common.aw_structure.data.ComponentBase;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureCompressed;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
 
 public class ItemBlockScanner extends AWItemBase
 {

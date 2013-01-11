@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.aw_structure;
 import java.util.ArrayList;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
 
@@ -36,19 +37,21 @@ public class AWStructureModule
 
 private List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
 private StructureLoader loader;
-private AWStructureModule(){}
+
+private AWStructureModule(){ }
 private static AWStructureModule INSTANCE;
 public static AWStructureModule instance()
   {
   if(INSTANCE==null)
     {
-    INSTANCE= new AWStructureModule();
+    INSTANCE= new AWStructureModule();    
     }
   return INSTANCE;
   }
 
 public void load(String directory)
-  {
+  {  
+  BlockDataManager.instance().loadBlockList();
   loader = new StructureLoader(directory);
   loader.scanForPrebuiltFiles();    
   }

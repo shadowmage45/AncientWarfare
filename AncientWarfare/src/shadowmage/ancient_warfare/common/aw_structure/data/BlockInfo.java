@@ -39,17 +39,16 @@ public class BlockInfo
 public static BlockInfo[] blockList = new BlockInfo[4096];
 
 
-public BlockInfo(int id, int priority, String name)
+public BlockInfo(int id, String name)
   {
   this.blockID = id;
-  this.buildPriority = priority;
   this.name = name;
   blockList[id]=this;
   }
 
-public BlockInfo(Block block, int priority)
+public BlockInfo(Block block)
   {
-  this(block.blockID, priority, block.getBlockName());
+  this(block.blockID,block.getBlockName());
   }
 
 public BlockInfo setMeta(int set, int a, int b, int c, int d)
@@ -111,14 +110,6 @@ String name = "";
 boolean rotatable = false;
 
 /**
- * 0 is default, and built first.  Should be used for base blocks that do not need any blocks nearby to stay valid
- * 1 is for first-tier rotatable blocks (stairs, slabs)
- * 2 is for decorative blocks and those that need nearby structure to be valid (ladder, vine, torch, trapdoor, redstone)
- * 3 is for last-detail blocks, which may rely on blocks in list3 to be valid (2nd block for a door)
- */
-int buildPriority;
-
-/**
  * metadata rotation tables, one entry for each possible meta-data, broken into four tables.  Most blocks will only need
  * one or two tables.
  * all rotations will fallback to meta-data 0 if no valid information is found in the table
@@ -132,8 +123,11 @@ byte[][] metaRotations = new byte[4][4];
  */
 public int rotateRight(int current)
   {
+  if(!this.rotatable)
+    {
+    return current;
+    }
   byte cur = (byte)current;
-  byte exam = 0;
   for(int i = 0; i <4; i++)
     {
     for(int j = 0; j <4; j++)
@@ -162,6 +156,10 @@ public int rotateRight(int current)
  */
 public int rotateRight(int current, int turns)
   {
+  if(!this.rotatable)
+    {
+    return current;
+    }
   for(int i = 0; i < turns; i++)
     {
     current = rotateRight(current);
@@ -176,19 +174,28 @@ public int rotateRight(int current, int turns)
  * @param priority
  * @return
  */
-public static BlockInfo createEntryFor(Block block, int priority)
+public static BlockInfo createEntryFor(Block block)
   {
-  return createEntryFor(block.blockID, block.getBlockName(), priority);
+  return createEntryFor(block.blockID, block.getBlockName());
   }
 
-public static BlockInfo createEntryFor(int id, String name, int priority)
+public static BlockInfo createEntryFor(int id, String name)
   {
-  BlockInfo info = new BlockInfo(id, priority, name);
+  BlockInfo info = new BlockInfo(id, name);
   if(blockList[id]==null)
     {
     blockList[id]=info;
     }
   return info;
+  }
+
+public static int getRotatedMeta(int id, int meta, int rotationAmt)  
+  {
+  if(blockList[id]==null)
+    {
+    return meta;
+    }
+  return blockList[id].rotateRight(meta, rotationAmt);
   }
 
 }

@@ -30,7 +30,7 @@ import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
 import shadowmage.ancient_warfare.common.aw_structure.data.ComponentBase;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureCompressed;
+import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
 
 
@@ -208,11 +208,9 @@ public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos
   System.out.println("scanning");
   rawStructure.scan(world);
   System.out.println("processing");
-  ScannedStructureCompressed compressedStructure = rawStructure.process();
-  for(ComponentBase base : compressedStructure.components)
-    {
-    System.out.println(base);
-    }
+  ScannedStructureNormalized normalizedStructure = rawStructure.process();
+  
+  
   return true;
   }
 

@@ -57,68 +57,67 @@ public static BlockDataManager instance()
 
 public static void loadBlockList()
   {
-  addBlock(0, "air", 0);
-  addBlock(Block.sand,2);
-  addBlock(Block.gravel,2);
-  addBlock(Block.dispenser,1).setRotatable();  
-  addBlock(Block.railPowered,3).setRotatable();
-  addBlock(Block.railDetector,3).setRotatable();
-  addBlock(Block.pistonStickyBase,1).setRotatable();
-  addBlock(Block.tallGrass,3);
-  addBlock(Block.deadBush,3);
-  addBlock(Block.pistonBase,1).setRotatable();
-  addBlock(Block.pistonExtension,1).setRotatable();
-  addBlock(Block.pistonMoving,1).setRotatable();
-  addBlock(Block.plantRed,3);
-  addBlock(Block.plantYellow,3);
-  addBlock(Block.mushroomBrown,3);
-  addBlock(Block.mushroomRed,3);
-  addBlock(Block.torchWood,3).setRotatable();
-  addBlock(Block.stairCompactPlanks,1).setRotatable();
-  addBlock(Block.chest,1).setRotatable();
-  addBlock(Block.redstoneWire,3);
-  addBlock(Block.crops,3);
-  addBlock(Block.stoneOvenIdle,1).setRotatable();
-  addBlock(Block.stoneOvenActive,1).setRotatable();
-  addBlock(Block.signPost,3);
-  addBlock(Block.doorWood,3).setRotatable();
-  addBlock(Block.ladder,3).setRotatable();
-  addBlock(Block.rail,3).setRotatable();
-  addBlock(Block.stairCompactCobblestone,1).setRotatable();
-  addBlock(Block.signWall,3).setRotatable();
-  addBlock(Block.lever,3).setRotatable();
-  addBlock(Block.doorSteel,3).setRotatable();
-  addBlock(Block.torchRedstoneIdle,3).setRotatable();
-  addBlock(Block.torchRedstoneActive,3).setRotatable();
-  addBlock(Block.cactus,3);
-  addBlock(Block.reed,3);
-  addBlock(Block.fence,1).setRotatable();
-  addBlock(Block.redstoneRepeaterIdle,3).setRotatable();
-  addBlock(Block.redstoneLampActive,3).setRotatable();
-  addBlock(Block.vine,3).setRotatable();
-  addBlock(Block.fenceGate,1).setRotatable();
-  addBlock(Block.stairsBrick,1).setRotatable();
-  addBlock(Block.stairsStoneBrickSmooth,1).setRotatable();
-  addBlock(Block.netherFence,1).setRotatable();
-  addBlock(Block.stairsSandStone,1).setRotatable();
-  addBlock(Block.enderChest,1).setRotatable();
-  addBlock(Block.tripWireSource,3).setRotatable();
-  addBlock(Block.tripWire,3).setRotatable();
-  addBlock(Block.stairsWoodSpruce,1).setRotatable();
-  addBlock(Block.stairsWoodBirch,1).setRotatable();
-  addBlock(Block.stairsWoodJungle,1).setRotatable();
-  addBlock(Block.cobblestoneWall,1).setRotatable();
-  addBlock(Block.anvil,3).setRotatable();
-  addBlock(Block.woodenButton,3).setRotatable();
-  addBlock(Block.stoneButton,3).setRotatable();
-  addBlock(Block.skull,3);
-  addBlock(Block.cocoaPlant,3);
-  addBlock(Block.flowerPot,3);
-  addBlock(Block.carrot,3);
-  addBlock(Block.potato,3);
-  addBlock(Block.mushroomCapBrown,3);
-  addBlock(Block.mushroomCapRed,3);  
-  
+  addBlock(0, "air");
+  addBlock(Block.sand);
+  addBlock(Block.gravel);
+  addBlock(Block.dispenser).setRotatable();  
+  addBlock(Block.railPowered).setRotatable();
+  addBlock(Block.railDetector).setRotatable();
+  addBlock(Block.pistonStickyBase).setRotatable();
+  addBlock(Block.tallGrass);
+  addBlock(Block.deadBush);
+  addBlock(Block.pistonBase).setRotatable();
+  addBlock(Block.pistonExtension).setRotatable();
+  addBlock(Block.pistonMoving).setRotatable();
+  addBlock(Block.plantRed);
+  addBlock(Block.plantYellow);
+  addBlock(Block.mushroomBrown);
+  addBlock(Block.mushroomRed);
+  addBlock(Block.torchWood).setRotatable();
+  addBlock(Block.stairCompactPlanks).setRotatable();
+  addBlock(Block.chest).setRotatable();
+  addBlock(Block.redstoneWire);
+  addBlock(Block.crops);
+  addBlock(Block.stoneOvenIdle).setRotatable();
+  addBlock(Block.stoneOvenActive).setRotatable();
+  addBlock(Block.signPost);
+  addBlock(Block.doorWood).setRotatable();
+  addBlock(Block.ladder).setRotatable();
+  addBlock(Block.rail).setRotatable();
+  addBlock(Block.stairCompactCobblestone).setRotatable();
+  addBlock(Block.signWall).setRotatable();
+  addBlock(Block.lever).setRotatable();
+  addBlock(Block.doorSteel).setRotatable();
+  addBlock(Block.torchRedstoneIdle).setRotatable();
+  addBlock(Block.torchRedstoneActive).setRotatable();
+  addBlock(Block.cactus);
+  addBlock(Block.reed);
+  addBlock(Block.fence).setRotatable();
+  addBlock(Block.redstoneRepeaterIdle).setRotatable();
+  addBlock(Block.redstoneLampActive).setRotatable();
+  addBlock(Block.vine).setRotatable();
+  addBlock(Block.fenceGate).setRotatable();
+  addBlock(Block.stairsBrick).setRotatable();
+  addBlock(Block.stairsStoneBrickSmooth).setRotatable();
+  addBlock(Block.netherFence).setRotatable();
+  addBlock(Block.stairsSandStone).setRotatable();
+  addBlock(Block.enderChest).setRotatable();
+  addBlock(Block.tripWireSource).setRotatable();
+  addBlock(Block.tripWire).setRotatable();
+  addBlock(Block.stairsWoodSpruce).setRotatable();
+  addBlock(Block.stairsWoodBirch).setRotatable();
+  addBlock(Block.stairsWoodJungle).setRotatable();
+  addBlock(Block.cobblestoneWall).setRotatable();
+  addBlock(Block.anvil).setRotatable();
+  addBlock(Block.woodenButton).setRotatable();
+  addBlock(Block.stoneButton).setRotatable();
+  addBlock(Block.skull).setRotatable();
+  addBlock(Block.cocoaPlant).setRotatable();
+  addBlock(Block.flowerPot);
+  addBlock(Block.carrot);
+  addBlock(Block.potato);
+  addBlock(Block.mushroomCapBrown);
+  addBlock(Block.mushroomCapRed);    
   }
 
 public static void setMeta(Block block, int set, int a, int b, int c, int d)
@@ -141,14 +140,23 @@ public static void setMeta(int id, int set, int a, int b, int c, int d)
  * @param priority
  * @return
  */
-public static BlockInfo addBlock(Block block, int priority)
+public static BlockInfo addBlock(Block block)
   {
-  return BlockInfo.createEntryFor(block, priority);
+  return BlockInfo.createEntryFor(block);
   }
 
-public static BlockInfo addBlock(int id, String name, int priority)
+public static BlockInfo addBlock(int id, String name)
   {
-  return BlockInfo.createEntryFor(id, name, priority);
+  return BlockInfo.createEntryFor(id, name);
+  }
+
+public int getRotatedMeta(int id, int meta, int rotationAmt)
+  {
+  if(BlockInfo.blockList[id]==null)
+    {
+    return 0;
+    }
+  return BlockInfo.blockList[id].rotateRight(meta, rotationAmt);
   }
 
 }

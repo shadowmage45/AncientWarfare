@@ -42,4 +42,9 @@ public BlockData copy()
   return new BlockData(id, meta);
   } 
 
+public void rotateRight(int amt)
+  {
+  this.meta = BlockInfo.getRotatedMeta(id, meta, amt);
+  }
+
 }
