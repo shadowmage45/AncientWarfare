@@ -99,6 +99,7 @@ public void process()
     return;
     }
   structures.addAll(loader.processStructureFiles());
+  System.out.println("loaded: "+structures.size()+" structures!");
   }
 
 }

@@ -155,7 +155,7 @@ private void processFile()
       {
       continue;
       }
-    lines.add(reader.nextLine());
+    lines.add(line);
     }  
   reader.close();
   /**
