@@ -26,6 +26,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_structure.data.LoadedStructureRaw;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 
@@ -51,12 +52,17 @@ public void scanForPrebuiltFiles()
   {
   probableStructureFiles.clear();
   System.out.println("config base dir: " + dir);
-  this.recursiveScan(new File(dir+"AWConfig/structures/included"), probableStructureFiles);
+  this.recursiveScan(new File(dir+"/AWConfig/structures/included/"), probableStructureFiles);
   System.out.println("found: "+this.probableStructureFiles.size()+" probable structure files");
   }
 
 private void recursiveScan(File directory, List<File> fileList)
   {
+  if(directory==null)
+    {
+    Config.logError("Could not locate config/AWConfig/structures/included/ directory to load structures!");
+    return;
+    }
   File[] allFiles = directory.listFiles();
   File currentFile;
   for(int i = 0; i < allFiles.length; i++)

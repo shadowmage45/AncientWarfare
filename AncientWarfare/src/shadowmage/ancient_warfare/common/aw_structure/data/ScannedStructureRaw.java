@@ -126,7 +126,7 @@ public int getRuleForBlock(int id, int meta)
 public ScannedStructureNormalized process()
   {
   ScannedStructureNormalized struct = new ScannedStructureNormalized(originFacing, pos1, pos2, buildKey);
-  struct.process();
+  struct.processRawStructure(this);//.process();
   return struct;
   }
 

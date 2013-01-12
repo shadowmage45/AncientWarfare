@@ -55,7 +55,7 @@ public static AWStructureModule instance()
 public void load(String directory)
   {  
   this.directory = directory;
-  outputDirectory = directory+"AWConfig/structures/export/";
+  outputDirectory = directory+"/AWConfig/structures/export/";
   BlockDataManager.instance().loadBlockList();
   loader = new StructureLoader(directory);
   loader.scanForPrebuiltFiles();    

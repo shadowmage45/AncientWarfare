@@ -41,10 +41,23 @@ public class StructureExporter
 public static void writeStructureToFile(ScannedStructureNormalized struct, String name)
   {
   File outputFile = new File(name);
+  
+  if(!outputFile.exists())
+    {
+    try
+      {
+      outputFile.createNewFile();
+      } 
+    catch (IOException e)
+      {
+      Config.logError("Could not create file for structure: "+name);
+      e.printStackTrace();
+      }
+    }
   FileWriter writer = null;
   try
     {
-    writer = new FileWriter(outputFile);    
+    writer = new FileWriter(outputFile);
     
     Date date = new Date(System.currentTimeMillis());
     Calendar cal = Calendar.getInstance();
@@ -147,7 +160,7 @@ private static void writeSingleLayer(FileWriter writer, ScannedStructureNormaliz
       {
       BlockData data = struct.allBlocks[x][layerNumber][z];
       int ruleNum = struct.getRuleForBlock(data.id, data.meta)+1;
-      writer.write(ruleNum);
+      writer.write(String.valueOf(ruleNum));
       if(z<struct.allBlocks[x][layerNumber].length-1)
         {
         writer.write(",");
