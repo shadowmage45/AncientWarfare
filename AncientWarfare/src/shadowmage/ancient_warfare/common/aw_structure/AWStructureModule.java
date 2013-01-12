@@ -20,8 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.io.Files;
 
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
@@ -35,8 +38,12 @@ import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
 public class AWStructureModule
 {
 
+/**
+ * the base config directory
+ */
 private static String directory;
 public static String outputDirectory = null;
+public static String includeDirectory = null;
 
 private static List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
 private static StructureLoader loader;
@@ -54,11 +61,35 @@ public static AWStructureModule instance()
 
 public void load(String directory)
   {  
-  this.directory = directory;
+  this.directory = directory;  
   outputDirectory = directory+"/AWConfig/structures/export/";
+  includeDirectory = directory+"/AWConfig/structures/included/";
+  
+  File existTest = new File(outputDirectory);
+  if(!existTest.exists())
+    {
+    System.out.println("creating directory");
+    existTest.mkdirs();
+    }
+ 
+  existTest = new File(includeDirectory);
+  if(!existTest.exists())
+    {
+    System.out.println("creating directory");
+    existTest.mkdirs();
+    }
+  
   BlockDataManager.instance().loadBlockList();
   loader = new StructureLoader(directory);
   loader.scanForPrebuiltFiles();    
+  }
+
+private void createDirectory(File file)
+  {
+  if(!file.exists())
+    {
+    file.mkdirs();
+    }
   }
 
 public void process()

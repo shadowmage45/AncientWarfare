@@ -53,7 +53,7 @@ public BlockInfo(Block block)
 
 public BlockInfo setMeta(int set, int a, int b, int c, int d)
   {
-  if(set>=0 && set<4)
+  if(set>=0 && set<metaRotations.length)
     {
     this.metaRotations[set][0]=(byte)a;
     this.metaRotations[set][1]=(byte)b;
@@ -114,7 +114,7 @@ boolean rotatable = false;
  * one or two tables.
  * all rotations will fallback to meta-data 0 if no valid information is found in the table
  */
-byte[][] metaRotations = new byte[4][4];
+byte[][] metaRotations = new byte[6][4];
 
 /**
  * return rotated metadata for this block for one turn to the right
@@ -128,9 +128,9 @@ public int rotateRight(int current)
     return current;
     }
   byte cur = (byte)current;
-  for(int i = 0; i <4; i++)
+  for(int i = 0; i <metaRotations.length; i++)
     {
-    for(int j = 0; j <4; j++)
+    for(int j = 0; j <metaRotations[i].length; j++)
       {
       if(metaRotations[i][j]==cur)
         {

@@ -64,6 +64,11 @@ private void recursiveScan(File directory, List<File> fileList)
     return;
     }
   File[] allFiles = directory.listFiles();
+  if(allFiles==null)
+    {
+    Config.logError("Could not locate config/AWConfig/structures/included/ directory to load structures!--no files in directory file list!");
+    return;
+    }
   File currentFile;
   for(int i = 0; i < allFiles.length; i++)
     {

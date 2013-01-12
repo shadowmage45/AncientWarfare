@@ -166,7 +166,7 @@ private static void writeSingleLayer(FileWriter writer, ScannedStructureNormaliz
       BlockData data = struct.allBlocks[x][layerNumber][z];
       int ruleNum = struct.getRuleForBlock(data.id, data.meta);
       writer.write(String.valueOf(ruleNum));
-      if(x < struct.allBlocks[x].length)
+      if(x < struct.allBlocks.length-1)
         {
         writer.write(",");
         }
