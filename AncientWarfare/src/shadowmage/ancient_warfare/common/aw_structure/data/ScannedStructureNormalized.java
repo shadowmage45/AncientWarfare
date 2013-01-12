@@ -95,6 +95,7 @@ public void setArraySize(int facing, int x, int y, int z)
  */
 public void processRawStructure(ScannedStructureRaw raw)
   {
+  this.addToBlocksList(new BlockData(0,0));
   for(int x = 0; x<raw.xSize; x++)
     {
     for(int y = 0; y < raw.ySize; y++)
@@ -102,10 +103,15 @@ public void processRawStructure(ScannedStructureRaw raw)
       for(int z = 0; z< raw.zSize; z++)
         {
         BlockPosition pos = getNorthRotatedPosition(x,y,z, this.originFacing);
+        System.out.println("rotatedPos: "+pos.toString());
+        System.out.println(raw.xSize+" "+raw.ySize+" "+raw.zSize);
         this.allBlocks[pos.x][pos.y][pos.z]= raw.allBlocks[x][y][z];
         int rotationAmount = this.getRotationAmount(originFacing, 2);
-        this.allBlocks[pos.x][pos.y][pos.z].rotateRight(rotationAmount); 
-        this.addToBlocksList(this.allBlocks[pos.x][pos.y][pos.z]);
+        this.allBlocks[pos.x][pos.y][pos.z].rotateRight(rotationAmount);
+        if(this.allBlocks[pos.x][pos.y][pos.z].id!=0)
+          {
+          this.addToBlocksList(this.allBlocks[pos.x][pos.y][pos.z]);
+          }
         }
       }
     }
@@ -113,21 +119,22 @@ public void processRawStructure(ScannedStructureRaw raw)
 
 private BlockPosition getNorthRotatedPosition(int x, int y, int z, int rotation)
   {
+  System.out.println("getting rotated POS: "+x+" "+y+" "+z);
   if(rotation==0)//south, invert x,z
     {
-    return new BlockPosition(this.xSize-x,y,this.zSize-z);
+    return new BlockPosition(this.xSize-x-1,y,this.zSize-z-1);
     }
-  if(rotation==1)//east, swap +x>+z,+z>-x
+  if(rotation==1)//west, swap +x>+z,+z>-x
     {
-    return new BlockPosition(this.xSize-z,y,x);
+    return new BlockPosition(this.xSize-z-1,y,x);
     }
   if(rotation==2)//north, no change
     {
     return new BlockPosition(x,y,z);
     }
-  if(rotation==3)//west, swap +x>-z, +z>+x
+  if(rotation==3)//east, swap +x>-z, +z>+x
     {
-    return new BlockPosition(z,y,this.zSize-x);     
+    return new BlockPosition(z,y,this.zSize-x-1);     
     }
   return null;
   }

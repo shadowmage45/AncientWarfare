@@ -97,6 +97,7 @@ public static void writeStructureToFile(ScannedStructureNormalized struct, Strin
     writer.write("preserveBlocks=false\n");    
     writer.write("\n");
     writer.write("####BLOCK RULES####\n");
+    //writeAirRule(writer);
     writeBlockRules(writer, struct);    
     writer.write("\n");
     writer.write("####LAYERS####\n");
@@ -111,13 +112,17 @@ public static void writeStructureToFile(ScannedStructureNormalized struct, Strin
     }
   }
 
+private static void writeAirRule(FileWriter writer) throws IOException
+  {
+  writeSingleBlockRule(writer,0,0,0);
+  }
 
 private static void writeBlockRules(FileWriter writer, ScannedStructureNormalized struct) throws IOException
   {
   BlockData[] datas = findAllBlockTypes(struct);
   for(int i = 0; i < datas.length; i++)
     {
-    writeSingleBlockRule(writer, i+1, datas[i].id, datas[i].meta);
+    writeSingleBlockRule(writer, i, datas[i].id, datas[i].meta);
     }
   }
 
@@ -154,20 +159,20 @@ private static void writeLayers(FileWriter writer, ScannedStructureNormalized st
 private static void writeSingleLayer(FileWriter writer, ScannedStructureNormalized struct, int layerNumber) throws IOException
   {
   writer.write("layer:\n");
-  for(int x = 0; x<struct.allBlocks.length; x++)
+  for(int z = 0; z <struct.allBlocks[0][0].length; z++)
     {
-    for(int z = 0; z<struct.allBlocks[x][layerNumber].length; z++)
+    for(int x = 0; x<struct.allBlocks.length; x++)
       {
       BlockData data = struct.allBlocks[x][layerNumber][z];
-      int ruleNum = struct.getRuleForBlock(data.id, data.meta)+1;
+      int ruleNum = struct.getRuleForBlock(data.id, data.meta);
       writer.write(String.valueOf(ruleNum));
-      if(z<struct.allBlocks[x][layerNumber].length-1)
+      if(x < struct.allBlocks[x].length)
         {
         writer.write(",");
         }
       }
     writer.write("\n");
-    }
+    }  
   writer.write(":endlayer\n");
   writer.write("\n");
   }
