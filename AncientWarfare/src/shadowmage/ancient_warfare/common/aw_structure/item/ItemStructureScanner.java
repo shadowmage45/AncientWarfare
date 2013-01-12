@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.item;
 
+import java.io.File;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,6 +34,7 @@ import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
+import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
 
 
 public class ItemStructureScanner extends AWItemBase
@@ -223,6 +225,11 @@ public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos
   if(AWStructureModule.outputDirectory!=null)
     {
     normalizedStructure.writeToFile(AWStructureModule.outputDirectory+name+".aws");
+    if(Config.DEBUG)
+      {
+      ItemDebugBuilder.buildStructures.put(player, StructureLoader.processSingleStructure(new File(AWStructureModule.outputDirectory+name+".aws")));
+      System.out.println("Adding newly created structure to temp builder queu.");
+      }
     }
   else
     {

@@ -95,6 +95,7 @@ private ProcessedStructure parseFile(File file)
   LoadedStructureRaw rawStruct = new LoadedStructureRaw(file);  
   if(!rawStruct.isValid)
     {
+    Config.logError("Structure parser returned invalid structure, there is a problem with the template file: "+file.getName());
     return null;
     }
   ProcessedStructure struct = new ProcessedStructure(rawStruct);  
@@ -115,4 +116,22 @@ public List<ProcessedStructure> processStructureFiles()
     }  
   return structures;
   }
+
+/**
+ * debug method, used to set temp building for debug builder
+ * @param file
+ * @return
+ */
+public static ProcessedStructure processSingleStructure(File file)
+  {
+  LoadedStructureRaw rawStruct = new LoadedStructureRaw(file);  
+  if(!rawStruct.isValid)
+    {
+    Config.logError("Structure parser returned invalid structure, there is a problem with the template file: "+file.getName());
+    return null;
+    }
+  ProcessedStructure struct = new ProcessedStructure(rawStruct);  
+  return struct;
+  }
+
 }
