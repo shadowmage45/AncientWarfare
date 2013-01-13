@@ -477,4 +477,46 @@ public static int getBlockFacingFromMeta(int meta)
   return (getPlayerFacingFromMeta(meta)+2) %4;
   }
 
+
+//facing south greatest X, lowest Z
+//facing west greatest X, greatest Z
+//facing north. FL corner is lowest X, greatest Z
+//facing east FL corner is lowest X, lowest Z
+
+/**
+ * return this actual position of target relative to min
+ * target is a raw vector, not an actual position, relative to the building template(facing 2) and facing input
+ * @param min
+ * @param target
+ * @param face
+ * @param size the size of the area
+ * @return
+ */
+public static BlockPosition getTranslatedPosition(BlockPosition min, BlockPosition target, int face, BlockPosition size)
+  {
+  BlockPosition hit = new BlockPosition(min);
+  hit.y = min.y + target.y;
+  if(face==0)
+    {
+    hit.x = min.x-target.x;
+    hit.z = min.z+(size.z-target.z)-1;
+    }
+  if(face==1)
+    {
+    hit.x = min.x-(size.z-target.z)+1;
+    hit.z = min.z-target.x;
+    }
+  if(face==2)
+    {
+    hit.x = min.x+target.x;
+    hit.z = min.z-(size.z-target.z)+1;
+    }
+  if(face==3)
+    {
+    hit.x = min.x+(size.z-target.z)-1;
+    hit.z = min.z+target.x;
+    }
+  return hit;
+  }
+
 }

@@ -97,9 +97,8 @@ private ProcessedStructure parseFile(File file)
     {
     Config.logError("Structure parser returned invalid structure, there is a problem with the template file: "+file.getName());
     return null;
-    }
-  ProcessedStructure struct = new ProcessedStructure(rawStruct);  
-  return struct;
+    }    
+  return rawStruct;
   }
 
 public List<ProcessedStructure> processStructureFiles()
@@ -130,8 +129,7 @@ public static ProcessedStructure processSingleStructure(File file)
     Config.logError("Structure parser returned invalid structure, there is a problem with the template file: "+file.getName());
     return null;
     }
-  ProcessedStructure struct = new ProcessedStructure(rawStruct);  
-  return struct;
+  return rawStruct;
   }
 
 }

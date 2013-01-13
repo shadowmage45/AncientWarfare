@@ -35,90 +35,12 @@ import shadowmage.ancient_warfare.common.aw_structure.data.rules.NPCRule;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.VehicleRule;
 
 /**
- * raw structure as loaded from disk. non validated or converted.
+ * raw structure as loaded from disk.
  * @author Shadowmage
  *
  */
-public class LoadedStructureRaw
+public class LoadedStructureRaw extends ProcessedStructure
 {
-
-String name;
-public boolean unique;
-public int chunkDistance=0;
-public int chunkAttempts=1;
-
-public boolean underground = false;
-public int undergroundMinLevel=1;
-public int undergroundMaxLevel=255;
-public int undergroundMaxAirAbove = 0;
-public boolean undergroundAllowPartial = false;
-
-/**
- * preservation flags for entire structure
- */
-public boolean preserveWater = false;
-public boolean preserveLava = false;
-public boolean preservePlants = false;
-public boolean preserveBlocks = false;
-
-/**
- * individual blockRules, will override structure rules for individual blocks
- * (incl advanced feature not supported by Ruins--per block preserve info)
- */
-List<BlockRule> blockRules = new ArrayList<BlockRule>();
-List<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
-List<NPCRule> NPCRules = new ArrayList<NPCRule>();
-
-/**
- * array of ruleID references making up this structure
- * these refer to the key in the blockRules map
- * this array basically holds the levels from the ruins template
- */
-public short [][][] structure;
-
-/**
- * how many blocks may be non-solid below this structure
- */
-public int maxOverhang;
-
-/**
- * how many blocks vertically above base may be cleared 
- */
-public int maxVerticalClear;
-
-/**
- * how many blocks around the structure to clear (outside of w,h,l)
- */
-public int clearingBuffer;
-
-/**
- * maximum vertical fill distance for missing blocks below the structure
- * overrides overhang numbers
- */
-public int maxLeveling;
-
-/**
- * how many blocks outside of w,h,l should be leveled around the structure
- */
-public int levelingBuffer;
-
-/**
- * valid targets to build this structure upon.
- * may be overridden with a custom list
- */
-public int[] validTargetBlocks = {1,2,3,12,13};
-
-/**
- * i.e. embed_into_distance
- * how far should this structure generate below the chosen site level
- */
-public int verticalOffset;
-public int xOffset;
-public int zOffset;
-
-public int xSize;//x dimension
-public int zSize;//z dimension
-public int ySize;//y dimension
 
 File file;
 public boolean isValid = true;

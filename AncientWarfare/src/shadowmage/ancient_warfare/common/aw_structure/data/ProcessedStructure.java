@@ -20,111 +20,31 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.aw_structure.data.rules.NPCRule;
+import shadowmage.ancient_warfare.common.aw_structure.data.rules.VehicleRule;
 
 /**
- * fully processed structure, ready to build in-game.  Needs to support all of Ruins template
- * options.
+ * fully processed structure, ready to build in-game. 
  * @author Shadowmage
  *
  */
-public class ProcessedStructure
+public class ProcessedStructure extends AWStructure
 {
-/**
- * preservation flags for entire structure
- */
-boolean preserveWater = false;
-boolean preserveLava = false;
-boolean preservePlants = false;
-boolean preserveBlocks = false;
 
-/**
- * individual blockRules, will override structure rules for individual blocks
- * (incl advanced feature not supported by Ruins--per block preserve info)
- */
-Map<Integer, BlockRule> blockRules = new HashMap<Integer, BlockRule>();
-
-/**
- * array of ruleID references making up this structure
- * these refer to the key in the blockRules map
- * this array basically holds the levels from the ruins template
- */
-byte [][][] structure;
-
-/**
- * how many blocks may be non-solid below this structure
- */
-int overhangMax;
-
-/**
- * how many blocks vertically above base may be cleared 
- */
-int maxVerticalClear;
-
-/**
- * how many blocks around the structure to clear (outside of w,h,l)
- */
-int horizontalClearBuffer;
-
-/**
- * maximum vertical fill distance for missing blocks below the structure
- * overrides overhang numbers
- */
-int maxLeveling;
-
-/**
- * how many blocks outside of w,h,l should be leveled around the structure
- */
-int horizontalLevelBuffer;
-
-/**
- * valid targets to build this structure upon.
- * may be overridden with a custom list
- */
-int[] validTargetBlocks = {1,2,3,12,13};
-
-/**
- * i.e. embed_into_distance
- * how far should this structure generate below the chosen site level
- */
-int verticalOffset;
-
-int width;//x dimension
-int length;//z dimension
-int height;//y dimension
-
-public ProcessedStructure(LoadedStructureRaw rawStruct)
+public ProcessedStructure()
   {
-  this.width = rawStruct.xSize;
-  this.length = rawStruct.zSize;
-  this.height = rawStruct.ySize;
-  this.structure = new byte[width][height][length];
+  
   }
 
-public ProcessedStructure(int x, int y, int z)
+public BlockRule getRuleAt(int x, int y, int z)
   {
-  this.structure = new byte[x][y][z];
-  this.width = x;
-  this.length = z;
-  this.height = y;
-  }
-
-public void setValidTargetBlocks(int[] validTargets)
-  {
-  this.validTargetBlocks = validTargets;
-  }
-
-public int[] getValidTargets()
-  {
-  return this.validTargetBlocks;
-  }
-
-public void addRule(int ruleNumber, BlockRule rule)
-  {
-  this.blockRules.put(ruleNumber, rule);
+  return this.blockRules.get(this.structure[x][y][z]);
   }
 
 }

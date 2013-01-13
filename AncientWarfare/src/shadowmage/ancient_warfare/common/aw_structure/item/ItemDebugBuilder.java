@@ -24,7 +24,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
+import shadowmage.ancient_warfare.common.aw_structure.build.BuilderInstant;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 
 public class ItemDebugBuilder extends AWItemBase
@@ -40,9 +45,74 @@ public static Map<EntityPlayer, ProcessedStructure> buildStructures = new HashMa
 public ItemDebugBuilder(int itemID)
   {
   super(itemID, false);
+  this.setIconIndex(2);
+  }
+
+
+@Override
+public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float xOff, float yOff, float zOff)
+  {
+  BlockPosition hitPos = new BlockPosition(x,y,z);
+  if(!player.isSneaking())
+    {
+    hitPos = BlockTools.offsetForSide(hitPos, side);
+    }
+  return onActivated(world, player, stack, hitPos);
+  }
+
+//
+//@Override
+//public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float xOff, float yOff, float zOff)
+//  {
+//  return onActivated(world, player, stack, new BlockPosition(x,y,z));
+//  }
+
+@Override
+public ItemStack onItemRightClick(ItemStack stack, World world,EntityPlayer player)
+  {  
+  onActivated(world, player, stack, BlockTools.getBlockClickedOn(player, world, !player.isSneaking()));
+  return stack;
   }
 
 
 
+@Override
+public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par5, int par6)
+  {
+  return false;
+  }
 
+/**
+ * Gets an icon index based on an item's damage value
+ */
+@Override
+public int getIconFromDamage(int par1)
+  {
+  return this.iconIndex;
+  }
+
+/**
+ * the actual onActivated call, all rightclick/onUsed/onUse functions funnel through to here.
+ * @param world
+ * @param player
+ * @param stack
+ * @param hit
+ * @return
+ */
+private boolean onActivated(World world, EntityPlayer player, ItemStack stack, BlockPosition hit)
+  {
+  if(world.isRemote || hit==null)
+    {
+    return true;
+    }
+  ProcessedStructure struct = buildStructures.get(player);
+  if(struct==null)
+    {
+    return true;
+    }   
+  int rotation = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+  BuilderInstant builder = new BuilderInstant(world, struct, rotation, hit);
+  builder.startConstruction();
+  return true;
+  }
 }

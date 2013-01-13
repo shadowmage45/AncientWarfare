@@ -33,7 +33,7 @@ public class BlockRule
 /**
  * must be >=0 to be considered valid...this value MUST be set
  */
-short ruleNumber = -1;
+public short ruleNumber = -1;
 
 /**
  * base chance to lay this block

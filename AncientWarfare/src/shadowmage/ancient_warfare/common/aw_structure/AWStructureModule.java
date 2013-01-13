@@ -22,10 +22,15 @@ package shadowmage.ancient_warfare.common.aw_structure;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
-import com.google.common.io.Files;
+import net.minecraft.world.World;
 
+import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.TickType;
+
+import shadowmage.ancient_warfare.common.aw_structure.build.Builder;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
@@ -35,7 +40,7 @@ import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
  * @author Shadowmage
  *
  */
-public class AWStructureModule
+public class AWStructureModule implements ITickHandler
 {
 
 /**
@@ -46,6 +51,13 @@ public static String outputDirectory = null;
 public static String includeDirectory = null;
 
 private static List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
+
+/**
+ * ticked builders
+ */
+private static List<Builder> builders = new ArrayList<Builder>();
+
+
 private static StructureLoader loader;
 
 private AWStructureModule(){ }
@@ -100,6 +112,52 @@ public void process()
     }
   structures.addAll(loader.processStructureFiles());
   System.out.println("loaded: "+structures.size()+" structures!");
+  }
+
+public void addBuilder(Builder builder)
+  {
+  this.builders.add(builder);  
+  }
+
+public void removeBuilder(Builder builder)
+  {
+  this.builders.remove(builder);
+  }
+
+
+
+
+
+/*************************************************************************** TICK HANDLING ****************************************************************************/
+@Override
+public void tickStart(EnumSet<TickType> type, Object... tickData)
+  {
+  
+  }
+
+@Override
+public void tickEnd(EnumSet<TickType> type, Object... tickData)
+  {
+  World world = (World)tickData[0];
+  for(Builder builder : builders)
+    {
+    if(builder.world==world)
+      {
+      builder.onTick();
+      }
+    }
+  }
+
+@Override
+public EnumSet<TickType> ticks()
+  {
+  return EnumSet.of(TickType.WORLD);
+  }
+
+@Override
+public String getLabel()
+  {
+  return "AWStructTicker";
   }
 
 }
