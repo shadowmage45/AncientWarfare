@@ -198,16 +198,35 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
 
 private BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPosition pos2, BlockPosition key)
   {
-  //TODO ...NFC how to figure this out
-  int minX ;
-  int minY;
-  int minZ;
+  //facing south greatest X, lowest Z
+  //facing west greatest X, greatest Z
+  //facing north. FL corner is lowest X, greatest Z
+  //facing east FL corner is lowest X, lowest Z
+  BlockPosition min = BlockTools.getMin(pos1, pos2);
+  BlockPosition max = BlockTools.getMax(pos1, pos2);
+  BlockPosition realKey = new BlockPosition(0,0,0);
+  realKey.y = key.y-min.y;
+  if(face==0)
+    {
+    realKey.x = max.x - key.x;
+    realKey.z = key.z - min.z;
+    }
   if(face==2)
     {
-    minX = pos1.x< pos2.x? pos1.x : pos2.x;
-    key.x = key.x-minX;
+    realKey.x = key.x - min.x;
+    realKey.z = max.z - key.z;
     }
-  return key;
+  if(face==1)
+    {
+    realKey.x = max.z - key.z;
+    realKey.z = max.x - key.x;
+    }
+  if(face==3)
+    {
+    realKey.x = key.z - min.z;
+    realKey.z = key.x - min.x;
+    }
+  return realKey;
   }
 
 /**
@@ -218,6 +237,7 @@ private BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPosition
  */
 public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
   {
+  key = offsetBuildKey(face, pos1, pos2, key);
   ScannedStructureRaw rawStructure = new ScannedStructureRaw(face ,pos1, pos2, key);
   rawStructure.scan(world);
   ScannedStructureNormalized normalizedStructure = rawStructure.process();
