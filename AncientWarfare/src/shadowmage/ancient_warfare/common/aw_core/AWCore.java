@@ -26,19 +26,22 @@ package shadowmage.ancient_warfare.common.aw_core;
 import java.io.IOException;
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
-import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.network.PacketHandler;
 import shadowmage.ancient_warfare.common.aw_core.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 
 @Mod( modid = "AncientWarfare", name="Ancient Warfare", version="MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+"-"+Config.CORE_BUILD_STATUS)
@@ -88,6 +91,12 @@ public void preInit(FMLPreInitializationEvent evt)
     e.printStackTrace();
     }
  
+  }
+
+@Init
+public void init(FMLInitializationEvent evt)
+  {
+  //TickRegistry.registerTickHandler(AWStructureModule.instance(), Side.SERVER);
   }
 	
 

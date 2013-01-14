@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
 import shadowmage.ancient_warfare.common.aw_structure.build.BuilderInstant;
+import shadowmage.ancient_warfare.common.aw_structure.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 
 public class ItemDebugBuilder extends AWItemBase
@@ -111,8 +112,11 @@ private boolean onActivated(World world, EntityPlayer player, ItemStack stack, B
     return true;
     }   
   int rotation = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-  BuilderInstant builder = new BuilderInstant(world, struct, rotation, hit);
+  //BuilderInstant builder = new BuilderInstant(world, struct, rotation, hit);
+  BuilderTicked builder = new BuilderTicked(world, struct, rotation, hit);
   builder.startConstruction();
   return true;
   }
+
+
 }

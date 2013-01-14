@@ -23,17 +23,18 @@ package shadowmage.ancient_warfare.common.aw_structure;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.world.World;
-
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
-
 import shadowmage.ancient_warfare.common.aw_structure.build.Builder;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
+import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * config/setup module for structures and structure related stuff....
@@ -73,6 +74,7 @@ public static AWStructureModule instance()
 
 public void load(String directory)
   {  
+  TickRegistry.registerTickHandler(this, Side.SERVER);
   this.directory = directory;  
   outputDirectory = directory+"/AWConfig/structures/export/";
   includeDirectory = directory+"/AWConfig/structures/included/";
@@ -144,6 +146,16 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
     if(builder.world==world)
       {
       builder.onTick();
+      }
+    }
+  Iterator<Builder> it = builders.iterator();
+  Builder builder;
+  while(it.hasNext())
+    {
+    builder = it.next();
+    if(builder.isFinished())
+      {
+      it.remove();
       }
     }
   }

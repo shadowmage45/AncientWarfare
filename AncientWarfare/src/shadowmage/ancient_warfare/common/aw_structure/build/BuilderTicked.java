@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
@@ -36,7 +37,7 @@ import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 public class BuilderTicked extends Builder
 {
 
-int tickNum = 0;
+int tickNum = 0; 
 /**
    * @param world
    * @param struct
@@ -62,10 +63,10 @@ public void finishConstruction()
 
 @Override
 public void onTick()
-  {  
+  {   
   if(this.isFinished)
     {
-    this.finishConstruction();
+    Config.logError("Ticking finished ticked-builder, was not removed from list when finished");
     return;
     }
   /**
@@ -77,12 +78,14 @@ public void onTick()
     return;
     }
   tickNum=0;
+  
+  placeBlock(currentX, currentY, currentZ);
+  
   if(!tryIncrementing())
     {
-    this.isFinished = true;//let it fail over and be removed next pass
+    this.isFinished = true;//let it fail over and be removed by ticker
     return;
-    }
-  placeBlock(currentX, currentY, currentZ);
+    }  
   }
 
 
