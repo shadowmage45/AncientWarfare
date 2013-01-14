@@ -20,29 +20,33 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.build;
 
+import java.util.Random;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
+import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
+import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 
 
 public class BuilderTicked extends Builder
 {
 
-
+int tickNum = 0;
 /**
    * @param world
    * @param struct
    * @param facing
    * @param hit
    */
-  public BuilderTicked(World world, ProcessedStructure struct, int facing,
-      BlockPosition hit)
-    {
-    super(world, struct, facing, hit);
-    // TODO Auto-generated constructor stub
-    }
+public BuilderTicked(World world, ProcessedStructure struct, int facing, BlockPosition hit)
+  {
+  super(world, struct, facing, hit);
+  }
 
 @Override
 public void startConstruction()
@@ -52,19 +56,33 @@ public void startConstruction()
 
 @Override
 public void finishConstruction()
-  {
+  {  
   AWStructureModule.instance().removeBuilder(this);
   }
 
 @Override
 public void onTick()
-  {
+  {  
   if(this.isFinished)
     {
     this.finishConstruction();
     return;
     }
-  // TODO Auto-generated method stub  
+  /**
+   * timer/counter, only place a block every half-second
+   */
+  tickNum++;
+  if(tickNum<10)
+    {
+    return;
+    }
+  tickNum=0;
+  if(!tryIncrementing())
+    {
+    this.isFinished = true;//let it fail over and be removed next pass
+    return;
+    }
+  placeBlock(currentX, currentY, currentZ);
   }
 
 

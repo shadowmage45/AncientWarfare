@@ -63,17 +63,8 @@ public void onTick()
   //NOOP on instant building
   }
 
-int maxPriority;
-
 public void instantConstruction()
-  {
-  for(BlockRule rule : struct.blockRules)
-    {
-    if(rule.order>this.maxPriority)
-      {
-      this.maxPriority = rule.order;
-      }
-    }
+  {  
   for(int priority = 0; priority <=maxPriority; priority++)
     {
     this.buildPriority(priority);
@@ -88,39 +79,23 @@ private void buildPriority(int priority)
       {
       for(int z = 0; z<struct.zSize; z++)
         {
-        BlockRule rule = struct.getRuleAt(x, y, z);  
-        if(rule.order==priority)
+        if(struct.getRuleAt(x, y, z).order==priority)
           {
-          BlockData data = rule.getBlockChoice(new Random());        
-          BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset,z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));        
-          int rotAmt = getRotationAmt(facing);        
-          int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, rotAmt);
-          this.placeBlock(world, target, data.id, meta);
+          placeBlock(x,y,z);
           }
+        
+//        BlockRule rule = struct.getRuleAt(x, y, z);  
+//        if(rule.order==priority)
+//          {
+//          BlockData data = rule.getBlockChoice(new Random());        
+//          BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset,z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));        
+//          int rotAmt = getRotationAmt(facing);        
+//          int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, rotAmt);
+//          this.placeBlock(world, target, data.id, meta);
+//          }
         }
       }
     }
-  }
-
-private int getRotationAmt(int facing)
-  {
-  if(facing==2)
-    {
-    return 0;
-    }
-  else if(facing==3)
-    {
-    return 1;
-    }
-  else if(facing==0)
-    {
-    return 2;
-    }
-  else if(facing==1)
-    {
-    return 3;
-    }
-  return 0;
   }
 
 }

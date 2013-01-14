@@ -20,17 +20,29 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.build;
 
+import java.util.Random;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
+import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
+import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 
 public abstract class Builder implements INBTTaggable
 {
 public final ProcessedStructure struct;
 public final World world;
+
+/**
+ * build passes
+ */
 int currentPriority = 0;
+int maxPriority;
+
 public int facing = 0;
 public int currentX = 0;
 public int currentY = 0; 
@@ -46,6 +58,13 @@ public Builder(World world, ProcessedStructure struct, int facing, BlockPosition
   this.dimension = world.getWorldInfo().getDimension();
   this.buildPos = hit;  
   this.facing = facing;
+  for(BlockRule rule : struct.blockRules)
+    {
+    if(rule.order>this.maxPriority)
+      {
+      this.maxPriority = rule.order;
+      }
+    }
   }
 
 /**
@@ -72,16 +91,130 @@ public boolean isFinished()
   return isFinished;
   }
 
+public void setFinished()
+  {
+  this.isFinished = true;
+  }
+
 protected void placeBlock(World world, BlockPosition pos, int id, int meta)
   {
   world.setBlockAndMetadata(pos.x, pos.y, pos.z, id, meta);
   }
 
-public void setProgress(int x, int y, int z)
+protected void placeBlockNotify(World world, BlockPosition pos, int id, int meta)
+  {
+  world.setBlockAndMetadataWithNotify(pos.x, pos.y, pos.z, id, meta);
+  }
+
+/**
+ * place a single block from this structure
+ * @param x coord in the template
+ * @param y coord in the template
+ * @param z coord in the template
+ */
+protected void placeBlock(int x, int y, int z)
+  {
+  BlockRule rule = struct.getRuleAt(x, y, z);    
+  BlockData data = rule.getBlockChoice(new Random());        
+  BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset,z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));        
+  int rotAmt = getRotationAmt(facing);        
+  int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, rotAmt);
+  this.placeBlock(world, target, data.id, meta);    
+  }
+
+/**
+ * get rotation amount relative to default facing of 2
+ * @param facing
+ * @return
+ */
+protected int getRotationAmt(int facing)
+  {
+  if(facing==2)
+    {
+    return 0;
+    }
+  else if(facing==3)
+    {
+    return 1;
+    }
+  else if(facing==0)
+    {
+    return 2;
+    }
+  else if(facing==1)
+    {
+    return 3;
+    }
+  return 0;
+  }
+
+
+/**
+ * return true if could increment coords OR build pass
+ * @return
+ */
+protected boolean tryIncrementing()
+  {
+  if(!this.incrementCoords())
+    {
+    if(!this.incrementBuildPass())
+      {      
+      return false;
+      }    
+    }
+  return true;
+  }
+
+/**
+ * return true if can continue (currentPriority++ is valid priority) 
+ * @return
+ */
+protected boolean incrementBuildPass()
+  {
+  this.currentX = 0;
+  this.currentY = 0;
+  this.currentZ = 0;
+  this.currentPriority++;
+  if(this.currentPriority>this.maxPriority)
+    {
+    return false;
+    }
+  return true;
+  }
+
+/**
+ * return true if can continue (increment was to a valid coord)
+ * @return
+ */
+protected boolean incrementCoords()
+  {
+  if(this.currentX+1 < this.struct.xSize )
+    {
+    this.currentX++;
+    return true;
+    }
+  if(this.currentZ+1 < this.struct.zSize)
+    {
+    this.currentZ++;
+    this.currentX = 0;
+    return true;
+    }
+  if(this.currentY+1 < this.struct.ySize)
+    {
+    this.currentY++;
+    this.currentX = 0;
+    this.currentZ = 0;
+    return true;
+    }
+  return false;
+  }
+
+public void setProgress(int x, int y, int z, int pass)
   {
   this.currentX = x;
   this.currentY = y;
   this.currentZ = z;
+  this.currentPriority = pass;
   }
 
 public NBTTagCompound getNBTTag()

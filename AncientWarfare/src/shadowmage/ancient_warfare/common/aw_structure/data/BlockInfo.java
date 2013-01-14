@@ -20,7 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.block.Block;
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_core.utils.IDPair;
+import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
 
 /**
  * info wrapper for blocks which may be rotated dynamically
@@ -37,6 +43,44 @@ public class BlockInfo
  * e.g  Ladder: priority 3, to build after all normal first/second tier blocks are placed
  */
 public static BlockInfo[] blockList = new BlockInfo[4096];
+
+
+/**
+ * MC blockID for this block
+ */
+int blockID;
+
+/**
+ * name of the block
+ */
+String name = "";
+
+/**
+ * can be rotated through meta-data
+ */
+boolean rotatable = false;
+
+boolean isBasicSubTypeBlock = false;
+
+/**
+ * the default build priority for this block, added to blockRules created for this block when templates are generated
+ * may be overridden in template by user
+ */
+byte buildOrder = 0;
+
+/**
+ * metadata rotation tables, one entry for each possible meta-data, broken into six tables.  Most blocks will only need
+ * one or two tables. (pistons and levers need all six)
+ * all rotations will fallback to meta-data 0 if no valid information is found in the table
+ */
+byte[][] metaRotations = new byte[6][4];
+
+
+/**
+ * list of meta id -> inventory id/meta
+ * i.e. returns the itemstack itemid/meta needed to place this block given an input meta
+ */
+Map<Integer, IDPairCount> metaToBlocks = new HashMap<Integer, IDPairCount>();
 
 
 public BlockInfo(int id, String name)
@@ -94,33 +138,11 @@ public boolean isRotatable()
   return this.rotatable;
   }
 
-/**
- * MC blockID for this block
- */
-int blockID;
-
-/**
- * name of the block
- */
-String name = "";
-
-/**
- * can be rotated through meta-data
- */
-boolean rotatable = false;
-
-/**
- * the default build priority for this block, added to blockRules created for this block when templates are generated
- * may be overridden in template by user
- */
-byte buildOrder = 0;
-
-/**
- * metadata rotation tables, one entry for each possible meta-data, broken into four tables.  Most blocks will only need
- * one or two tables.
- * all rotations will fallback to meta-data 0 if no valid information is found in the table
- */
-byte[][] metaRotations = new byte[6][4];
+public BlockInfo setIsBasicSubtype()
+  {
+  this.isBasicSubTypeBlock = true;
+  return this;
+  }
 
 /**
  * return rotated metadata for this block for one turn to the right
@@ -173,12 +195,22 @@ public int rotateRight(int current, int turns)
   return current;
   }
 
+
 public BlockInfo setPriority(int p)
   {
   this.buildOrder = (byte)p;
   return this;
   }
 
+
+public BlockInfo setInventoryBlock(int meta, IDPairCount data)
+  {
+  this.metaToBlocks.put(meta, data);
+  return this;
+  }
+  
+  
+/************************************** STATIC METHODS **************************************/
 /**
  * create a BlockInfo entry for specified Block, and ensure it is added into
  * the BlockInfo.blockList[]
@@ -209,5 +241,46 @@ public static int getRotatedMeta(int id, int meta, int rotationAmt)
     }
   return blockList[id].rotateRight(meta, rotationAmt);
   }
+
+
+/**
+ * get the block or item id/meta combo needed in inventory in order to place this block
+ * @param id of the block in the template
+ * @param meta of the block in the template
+ * @return id, meta, and count (double slab) making up the block necessary to place this block in the world
+ */
+public static IDPairCount getInventoryBlock(int id, int meta)
+  {  
+  BlockInfo data = blockList[id];
+  IDPairCount info = null; 
+  if(data != null)
+    {
+    if(data.isBasicSubTypeBlock)
+      {
+      return new IDPairCount(id, meta);
+      }
+    info = data.metaToBlocks.get(id);        
+    }    
+  return info==null ? new IDPairCount(id,0) : info;
+  }
+
+public static void setInventoryBlock(int id, int meta, int resultID, int resultMeta, int count)
+  {
+  if(blockList[id]!=null)
+    {
+    blockList[id].metaToBlocks.put(meta, new IDPairCount(resultID, resultMeta, count));
+    } 
+  else
+    {
+    Config.logError("Attempt to set inventory block for invalid block: "+id+","+meta);
+    }
+  }
+
+public static void setInventoryBlock(Block block, int meta, int resultID, int resultMeta)
+  {
+  setInventoryBlock(block.blockID, meta, resultID, resultMeta, 1);
+  }
+
+
 
 }
