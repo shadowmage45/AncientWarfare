@@ -44,7 +44,7 @@ byte baseChance = 100;
  * ordering of this rule, what pass it should place the block on
  * higher numbers = block placed later (if it depends on other blocks to be present)
  */
-byte order = 0;
+public byte order = 0;
 
 /**
  * block conditional

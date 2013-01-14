@@ -110,6 +110,12 @@ String name = "";
 boolean rotatable = false;
 
 /**
+ * the default build priority for this block, added to blockRules created for this block when templates are generated
+ * may be overridden in template by user
+ */
+byte buildOrder = 0;
+
+/**
  * metadata rotation tables, one entry for each possible meta-data, broken into four tables.  Most blocks will only need
  * one or two tables.
  * all rotations will fallback to meta-data 0 if no valid information is found in the table
@@ -165,6 +171,12 @@ public int rotateRight(int current, int turns)
     current = rotateRight(current);
     }
   return current;
+  }
+
+public BlockInfo setPriority(int p)
+  {
+  this.buildOrder = (byte)p;
+  return this;
   }
 
 /**

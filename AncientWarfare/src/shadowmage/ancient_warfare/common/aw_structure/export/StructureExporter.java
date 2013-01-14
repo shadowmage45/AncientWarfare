@@ -31,6 +31,7 @@ import com.google.common.collect.Lists;
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
+import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
 
@@ -140,7 +141,7 @@ private static void writeSingleBlockRule(FileWriter writer, int ruleNum, int id,
   {
   writer.write("rule:\n");
   writer.write("number="+ruleNum+"\n");
-  writer.write("order=1\n");
+  writer.write("order="+BlockDataManager.getBlockPriority(id, meta)+"\n");
   writer.write("conditional=0\n");
   writer.write("percent=100\n");
   writer.write("blocks="+id+"-"+meta+"\n");

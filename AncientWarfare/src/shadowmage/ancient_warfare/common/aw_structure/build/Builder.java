@@ -30,6 +30,7 @@ public abstract class Builder implements INBTTaggable
 {
 public final ProcessedStructure struct;
 public final World world;
+int currentPriority = 0;
 public int facing = 0;
 public int currentX = 0;
 public int currentY = 0; 

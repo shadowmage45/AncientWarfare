@@ -63,34 +63,40 @@ public void onTick()
   //NOOP on instant building
   }
 
+int maxPriority;
+
 public void instantConstruction()
   {
-  System.out.println("doing instant construction:");
-  System.out.println("building size: "+struct.xSize+","+struct.ySize+","+struct.zSize);
+  for(BlockRule rule : struct.blockRules)
+    {
+    if(rule.order>this.maxPriority)
+      {
+      this.maxPriority = rule.order;
+      }
+    }
+  for(int priority = 0; priority <=maxPriority; priority++)
+    {
+    this.buildPriority(priority);
+    }
+  }
+
+private void buildPriority(int priority)
+  {
   for(int x = 0; x< struct.xSize; x++)
     {
     for(int y = 0; y<struct.ySize; y++)
       {
       for(int z = 0; z<struct.zSize; z++)
         {
-        BlockRule rule = struct.getRuleAt(x, y, z);        
-        BlockData data = rule.getBlockChoice(new Random());
-        System.out.println("struct position: "+x+","+y+","+z);
-        System.out.println("rule data: "+data.id+","+data.meta);
-        
-        BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset,z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
-        
-        System.out.println("base targetY: "+target.y);
-//        target.x+=buildPos.x;
-//        target.y+=buildPos.y;
-//        target.z+=buildPos.z;
-        System.out.println("addedY: "+target.y);
-        System.out.println("translatedPosition: "+target.toString());
-        int rotAmt = getRotationAmt(facing);
-        
-        int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, rotAmt);
-        System.out.println("rotated meta:"+meta);
-        this.placeBlock(world, target, data.id, meta);
+        BlockRule rule = struct.getRuleAt(x, y, z);  
+        if(rule.order==priority)
+          {
+          BlockData data = rule.getBlockChoice(new Random());        
+          BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset,z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));        
+          int rotAmt = getRotationAmt(facing);        
+          int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, rotAmt);
+          this.placeBlock(world, target, data.id, meta);
+          }
         }
       }
     }

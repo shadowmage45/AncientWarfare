@@ -53,9 +53,9 @@ public boolean preserveBlocks = false;
  * individual blockRules, will override structure rules for individual blocks
  * (incl advanced feature not supported by Ruins--per block preserve info)
  */
-List<BlockRule> blockRules = new ArrayList<BlockRule>();
-List<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
-List<NPCRule> NPCRules = new ArrayList<NPCRule>();
+public List<BlockRule> blockRules = new ArrayList<BlockRule>();
+public List<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
+public List<NPCRule> NPCRules = new ArrayList<NPCRule>();
 
 /**
  * array of ruleID references making up this structure
