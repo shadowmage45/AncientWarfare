@@ -87,7 +87,6 @@ public void scan(World world)
       indexZ = 0;
       for(int z = pos1.z; z <= pos2.z; z++, indexZ++)
         {       
-        System.out.println("scanning block:"+indexX+","+indexY+","+indexZ);
         allBlocks[indexX][indexY][indexZ] = new BlockData(world.getBlockId(x, y, z), world.getBlockMetadata(x, y, z));        
         }      
       }    
@@ -126,7 +125,7 @@ public int getRuleForBlock(int id, int meta)
 public ScannedStructureNormalized process()
   {
   ScannedStructureNormalized struct = new ScannedStructureNormalized(originFacing, pos1, pos2, buildKey);
-  struct.processRawStructure(this);//.process();
+  struct.processRawStructure(this);
   return struct;
   }
 
