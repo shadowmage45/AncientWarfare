@@ -48,15 +48,7 @@ public class ScannedStructureNormalized extends ScannedStructureRaw
    */
 public ScannedStructureNormalized(int face, BlockPosition pos1, BlockPosition pos2, BlockPosition key)
   {
-  super(face, pos1, pos2, getNormalizedBuildKey(face, pos1, pos2, key));
-  }
-
-private static BlockPosition getNormalizedBuildKey(int face, BlockPosition pos1, BlockPosition pos2, BlockPosition key)
-  {
-  BlockPosition min = BlockTools.getMin(pos1, pos2);
-  BlockPosition offset = new BlockPosition(key.x-min.x, key.y-min.y, key.z-min.z);
-  //offset = getNorthRotatedPosition(face, offset.x, offset.y, offset.z);
-  return key;
+  super(face, pos1, pos2, key);
   }
 
 @Override
@@ -103,8 +95,6 @@ public void processRawStructure(ScannedStructureRaw raw)
       for(int z = 0; z< raw.zSize; z++)
         {
         BlockPosition pos = getNorthRotatedPosition(x,y,z, this.originFacing);
-        System.out.println("rotatedPos: "+pos.toString());
-        System.out.println(raw.xSize+" "+raw.ySize+" "+raw.zSize);
         this.allBlocks[pos.x][pos.y][pos.z]= raw.allBlocks[x][y][z];
         int rotationAmount = this.getRotationAmount(originFacing, 2);
         this.allBlocks[pos.x][pos.y][pos.z].rotateRight(rotationAmount);
@@ -119,7 +109,6 @@ public void processRawStructure(ScannedStructureRaw raw)
 
 private BlockPosition getNorthRotatedPosition(int x, int y, int z, int rotation)
   {
-  System.out.println("getting rotated POS: "+x+" "+y+" "+z);
   if(rotation==0)//south, invert x,z
     {
     return new BlockPosition(this.xSize-x-1,y,this.zSize-z-1);

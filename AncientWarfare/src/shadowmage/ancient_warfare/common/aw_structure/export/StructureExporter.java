@@ -144,15 +144,7 @@ private static void writeSingleBlockRule(FileWriter writer, int ruleNum, int id,
   writer.write("order="+BlockDataManager.getBlockPriority(id, meta)+"\n");
   writer.write("conditional=0\n");
   writer.write("percent=100\n");
-  if(meta!=0)
-    {
-    writer.write("blocks="+id+"-"+meta+"\n");
-    }
-  else
-    {
-    writer.write("blocks="+id+"\n");
-    }
-  
+  writer.write("blocks="+id+"-"+meta+"\n");  
   writer.write(":endrule\n");
   writer.write("\n");
   }

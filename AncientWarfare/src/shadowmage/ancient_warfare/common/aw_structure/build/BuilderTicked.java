@@ -79,11 +79,14 @@ public void onTick()
     }
   tickNum=0;
   
+  BlockRule rule = getCurrentRule();    
+          
+  BlockPosition target = getCurrentTarget();
   
   /**
    * if current block is of a higher order than current pass, skip until you find a lower/equal block or cannot increment build pass
    */
-  while(struct.getRuleAt(currentX, currentY, currentZ).order>currentPriority)
+  while(rule.order>currentPriority || rule.ruleNumber==0 && isAirBlock(target))
     {
     if(!incrementCoords())
       {
@@ -93,12 +96,18 @@ public void onTick()
         return;
         }
       }    
+    rule = getCurrentRule();
+    target = getCurrentTarget();
     }
+  
+  BlockData data = rule.getBlockChoice(new Random());
+  int rotAmt = getRotationAmt(facing);
+  int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, rotAmt);
   
   /**
    * place a block once we have found a block to place....
    */
-  placeBlock(currentX, currentY, currentZ);
+  placeBlock(world, target, data.id, meta);
   
   /**
    * and then once again try incrementing
@@ -108,9 +117,26 @@ public void onTick()
     this.setFinished();
     return;
     }
-  
-  
+  }
+
+private boolean isAirBlock(BlockPosition target)
+  {
+  return world.getBlockId(target.x, target.y, target.z)==0;
+  }
+
+private BlockPosition getCurrentTarget()
+  {
+  return BlockTools.getTranslatedPosition(buildPos, new BlockPosition(currentX-struct.xOffset,currentY-struct.verticalOffset,currentZ-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
+  }
+
+private BlockRule getCurrentRule()
+  {
+  return struct.getRuleAt(currentX, currentY, currentZ);
   }
 
 
+private void placeBlock()
+  {
+  
+  }
 }

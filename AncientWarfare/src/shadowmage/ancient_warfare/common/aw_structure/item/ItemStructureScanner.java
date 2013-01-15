@@ -209,22 +209,22 @@ private BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPosition
   if(face==0)
     {
     realKey.x = max.x - key.x;
-    realKey.z = key.z - min.z;
+    realKey.z = min.z - key.z;//key.z - min.z;
     }
   if(face==2)
     {
     realKey.x = key.x - min.x;
-    realKey.z = max.z - key.z;
+    realKey.z = key.z - max.z;//max.z - key.z;
     }
   if(face==1)
     {
     realKey.x = max.z - key.z;
-    realKey.z = max.x - key.x;
+    realKey.z = key.x-max.x;//max.x - key.x;
     }
   if(face==3)
     {
     realKey.x = key.z - min.z;
-    realKey.z = key.x - min.x;
+    realKey.z = min.x-key.x;//key.x - min.x;
     }
   return realKey;
   }

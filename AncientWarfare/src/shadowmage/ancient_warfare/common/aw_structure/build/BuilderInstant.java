@@ -98,4 +98,21 @@ private void buildPriority(int priority)
     }
   }
 
+
+/**
+ * place a single block from this structure
+ * @param x coord in the template
+ * @param y coord in the template
+ * @param z coord in the template
+ */
+protected void placeBlock(int x, int y, int z)
+  {
+  BlockRule rule = struct.getRuleAt(x, y, z);    
+  BlockData data = rule.getBlockChoice(new Random());        
+  BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset, z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));        
+  int rotAmt = getRotationAmt(facing);        
+  int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, rotAmt);
+  this.placeBlock(world, target, data.id, meta);    
+  }
+
 }
