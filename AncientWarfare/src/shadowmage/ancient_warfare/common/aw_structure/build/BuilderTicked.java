@@ -86,7 +86,7 @@ public void onTick()
   /**
    * if current block is of a higher order than current pass, skip until you find a lower/equal block or cannot increment build pass
    */
-  while(rule.order>currentPriority || rule.ruleNumber==0 && isAirBlock(target))
+  while(rule.order!=currentPriority || rule.ruleNumber==0 && isAirBlock(target))
     {
     if(!incrementCoords())
       {
