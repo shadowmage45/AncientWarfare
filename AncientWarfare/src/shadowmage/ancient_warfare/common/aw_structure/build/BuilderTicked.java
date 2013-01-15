@@ -79,13 +79,37 @@ public void onTick()
     }
   tickNum=0;
   
+  
+  /**
+   * if current block is of a higher order than current pass, skip until you find a lower/equal block or cannot increment build pass
+   */
+  while(struct.getRuleAt(currentX, currentY, currentZ).order>currentPriority)
+    {
+    if(!incrementCoords())
+      {
+      if(!incrementBuildPass())
+        {
+        this.setFinished();
+        return;
+        }
+      }    
+    }
+  
+  /**
+   * place a block once we have found a block to place....
+   */
   placeBlock(currentX, currentY, currentZ);
   
+  /**
+   * and then once again try incrementing
+   */
   if(!tryIncrementing())
     {
-    this.isFinished = true;//let it fail over and be removed by ticker
+    this.setFinished();
     return;
-    }  
+    }
+  
+  
   }
 
 

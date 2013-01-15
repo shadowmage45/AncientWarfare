@@ -154,7 +154,7 @@ protected int getRotationAmt(int facing)
  * @return
  */
 protected boolean tryIncrementing()
-  {
+  {  
   if(!this.incrementCoords())
     {
     if(!this.incrementBuildPass())
