@@ -17,48 +17,31 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.aw_core.proxy;
+package shadowmage.ancient_warfare.client.aw_structure.gui;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import shadowmage.ancient_warfare.common.aw_core.network.PacketBase;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
+import net.minecraft.inventory.Container;
+import shadowmage.ancient_warfare.client.aw_core.gui.GuiSimpleBase;
 
-public class CommonProxy
+public class GUICreativeStructureBuilder extends GuiSimpleBase
 {
-public InputHelperCommonProxy inputHelper = new InputHelperCommonProxy();
+/**
+ * need option to force team number/setting (override template)
+ * 
+ * checkBox forceTeam
+ * merchantButtons to select forcedTeam number
+ * display list of structures on the left, (as buttons?)-- basic info on the right (name, sizes)
+ * button to set selection (add selection info to builder itemStack NBTTag)
+ */
 
-
-public EntityPlayer getClientPlayer()
-  {
-  return null;
-  }
 
 /**
- * NOOP server side
+ * @param par1Container
  */
-public void sendPacketToServer(PacketBase pkt)
+public GUICreativeStructureBuilder(Container container)
   {
-  
+  super(container);
   }
 
-/**
- * server side only
- * @param ent
- */
-public void sendPacketToPlayersTrackingEntity(PacketBase packet, Entity ent)
-  {
-  
-  }
-
-public void sendPacketToPlayer(EntityPlayer player, PacketBase packet)
-  {
-  PacketDispatcher.sendPacketToPlayer(packet.get250Packet(), (Player)player);
-  }
-  
 
 }

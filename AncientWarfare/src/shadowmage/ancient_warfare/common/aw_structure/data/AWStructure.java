@@ -27,10 +27,10 @@ import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.NPCRule;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.VehicleRule;
 
-public class AWStructure
+public abstract class AWStructure
 {
 
-String name;
+public String name;
 public boolean unique;
 public int chunkDistance=0;
 public int chunkAttempts=1;

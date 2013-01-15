@@ -17,48 +17,32 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.aw_core.proxy;
+package shadowmage.ancient_warfare.common.aw_structure.container.data;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import shadowmage.ancient_warfare.common.aw_core.network.PacketBase;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
+import net.minecraft.nbt.NBTTagCompound;
 
-public class CommonProxy
+public class StructureInfo
 {
-public InputHelperCommonProxy inputHelper = new InputHelperCommonProxy();
+public final String name;
+public final int xSize;
+public final int ySize;
+public final int zSize;
 
-
-public EntityPlayer getClientPlayer()
+public StructureInfo(NBTTagCompound tag)
   {
-  return null;
+  this.name = tag.getString("name");
+  this.xSize = tag.getShort("x");
+  this.ySize = tag.getShort("y");
+  this.zSize = tag.getShort("z");
   }
 
-/**
- * NOOP server side
- */
-public void sendPacketToServer(PacketBase pkt)
+public StructureInfo(String name, int x, int y, int z)
   {
-  
+  this.name = name;
+  this.xSize = x;
+  this.ySize = y;
+  this.zSize = z;
   }
-
-/**
- * server side only
- * @param ent
- */
-public void sendPacketToPlayersTrackingEntity(PacketBase packet, Entity ent)
-  {
-  
-  }
-
-public void sendPacketToPlayer(EntityPlayer player, PacketBase packet)
-  {
-  PacketDispatcher.sendPacketToPlayer(packet.get250Packet(), (Player)player);
-  }
-  
 
 }

@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.aw_core.network;
 
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.aw_core.AWCore;
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -65,27 +66,30 @@ public void setGuiToOpen(byte id, int x, int y, int z)
   this.packetData.setTag("openGUI", tag);
   }
 
-public void setInputTag(NBTTagCompound tag)
+public void setData(NBTTagCompound tag)
   {
-  this.packetData.setTag("input", tag);
+  this.packetData.setCompoundTag("data", tag);
   }
 
 @Override
 public void execute()
   {
-  NBTTagCompound tag = null;
-  if(this.packetData.hasKey("input") && player.openContainer instanceof IHandlePacketData)//"input" may be client->server input OR server->client updates, as long as the GUI reads from the container
+  if(packetData.hasKey("openGUI"))
     {
-    tag = packetData.getCompoundTag("input");
-    ((IHandlePacketData)player.openContainer).handlePacketData(tag);
+    NBTTagCompound tag = packetData.getCompoundTag("openGUI");
+    FMLNetworkHandler.openGui(player, AWCore.instance, tag.getInteger("id"), world, tag.getInteger("x"), tag.getInteger("y"), tag.getInteger("z"));
+    if(world.isRemote)
+      {
+      Config.logError("Opening GUI on client-side only from openGUI packet.  This is not proper gui handling.");
+      }
     return;
-    }  
-  else if(this.packetData.hasKey("openGUI") && !this.world.isRemote)//only accept open-gui command on server-side, allow client-side GUIs to be opened by FML
+    }
+  if(player.openContainer instanceof IHandlePacketData && packetData.hasKey("data"))
     {
-    tag = packetData.getCompoundTag("openGUI");
-    FMLNetworkHandler.openGui(player, AWCore.instance, tag.getByte("id"), world, tag.getInteger("x"), tag.getInteger("y"), tag.getInteger("z"));
+    ((IHandlePacketData)player.openContainer).handlePacketData(packetData.getCompoundTag("data"));
     return;
-    }  
+    }
+  Config.logError("Attempt to send container data packet to non-applicable container (no valid interface)");
   }
 
 }

@@ -17,48 +17,20 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.aw_core.proxy;
+package shadowmage.ancient_warfare.common.aw_core.utils;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import shadowmage.ancient_warfare.common.aw_core.network.PacketBase;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
+import net.minecraft.nbt.NBTTagCompound;
 
-public class CommonProxy
+
+public interface IContainerGUICallback
 {
-public InputHelperCommonProxy inputHelper = new InputHelperCommonProxy();
-
-
-public EntityPlayer getClientPlayer()
-  {
-  return null;
-  }
 
 /**
- * NOOP server side
+ * handle information sent from server to the container underlying this GUI
+ * @param tag
  */
-public void sendPacketToServer(PacketBase pkt)
-  {
-  
-  }
+public void handleUpdateInfo(NBTTagCompound tag);
 
-/**
- * server side only
- * @param ent
- */
-public void sendPacketToPlayersTrackingEntity(PacketBase packet, Entity ent)
-  {
-  
-  }
-
-public void sendPacketToPlayer(EntityPlayer player, PacketBase packet)
-  {
-  PacketDispatcher.sendPacketToPlayer(packet.get250Packet(), (Player)player);
-  }
-  
 
 }

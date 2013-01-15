@@ -117,9 +117,7 @@ public static void loadBlockList()
   addBlock(Block.tripWireSource).setPriority(1).setRotatable().setMeta(0, 2, 3, 0, 1).setMeta(1, 6, 7, 4, 5).setMeta(2, 14, 15, 12, 13);
   addBlock(Block.tripWire).setPriority(1).setRotatable().setMeta(0, 1, 1, 1, 1).setMeta(1, 0, 0, 0, 0);
   
-
-  addBlock(Block.torchWood).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);
-  
+  addBlock(Block.torchWood).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);  
   addBlock(Block.torchRedstoneIdle).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);
   addBlock(Block.torchRedstoneActive).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);  
    

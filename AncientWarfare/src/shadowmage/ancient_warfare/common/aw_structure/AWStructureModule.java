@@ -72,6 +72,13 @@ public static AWStructureModule instance()
   return INSTANCE;
   }
 
+public List<ProcessedStructure> getStructureList()
+  {
+  List<ProcessedStructure> list = new ArrayList<ProcessedStructure>();
+  list.addAll(this.structures);
+  return list;
+  }
+
 public void load(String directory)
   {  
   TickRegistry.registerTickHandler(this, Side.SERVER);

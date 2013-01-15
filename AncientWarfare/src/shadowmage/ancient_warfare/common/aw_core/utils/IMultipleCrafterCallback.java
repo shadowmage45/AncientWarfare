@@ -17,48 +17,35 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.aw_core.proxy;
+package shadowmage.ancient_warfare.common.aw_core.utils;
 
-import net.minecraft.entity.Entity;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
-import shadowmage.ancient_warfare.common.aw_core.network.PacketBase;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
+import net.minecraft.nbt.NBTTagCompound;
 
-public class CommonProxy
+public interface IMultipleCrafterCallback
 {
-public InputHelperCommonProxy inputHelper = new InputHelperCommonProxy();
-
-
-public EntityPlayer getClientPlayer()
-  {
-  return null;
-  }
 
 /**
- * NOOP server side
+ * get a list of players viewing this container
+ * internally, this list should use weakReferences and cull null references before
+ * adding to a normal reference list and returning to caller 
+ * @return
  */
-public void sendPacketToServer(PacketBase pkt)
-  {
-  
-  }
+public List<EntityPlayer> getPlayersViewingContainer();
+
+
+public void addPlayerToList(EntityPlayer player);
+public void removePlayer(EntityPlayer player);
 
 /**
- * server side only
- * @param ent
+ * return true to cancel further processing (i.e. data only needs go to TE or Entity),
+ * return false to continue passing data onto underlying containing container(i.e. container needs data as well (local update))
+ * @param tag
+ * @return
  */
-public void sendPacketToPlayersTrackingEntity(PacketBase packet, Entity ent)
-  {
-  
-  }
-
-public void sendPacketToPlayer(EntityPlayer player, PacketBase packet)
-  {
-  PacketDispatcher.sendPacketToPlayer(packet.get250Packet(), (Player)player);
-  }
-  
+public boolean handleUpdate(NBTTagCompound tag);
 
 }
