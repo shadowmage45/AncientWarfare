@@ -20,10 +20,12 @@
  */
 package shadowmage.ancient_warfare.client.aw_structure.gui;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.Container;
-import shadowmage.ancient_warfare.client.aw_core.gui.GuiSimpleBase;
+import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.client.aw_core.gui.GuiContainerAdvanced;
 
-public class GUICreativeStructureBuilder extends GuiSimpleBase
+public class GUICreativeStructureBuilder extends GuiContainerAdvanced
 {
 /**
  * need option to force team number/setting (override template)
@@ -41,6 +43,62 @@ public class GUICreativeStructureBuilder extends GuiSimpleBase
 public GUICreativeStructureBuilder(Container container)
   {
   super(container);
+  }
+
+@Override
+public int getXSize()
+  {
+  // TODO Auto-generated method stub
+  return 0;
+  }
+
+@Override
+public int getYSize()
+  {
+  // TODO Auto-generated method stub
+  return 0;
+  }
+
+@Override
+public String getGuiBackGroundTexture()
+  {
+  // TODO Auto-generated method stub
+  return null;
+  }
+
+@Override
+public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void setupGui()
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void updateScreenContents()
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void buttonClicked(GuiButton button)
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void handleUpdateFromContainer(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub
+  
   }
 
 

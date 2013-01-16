@@ -60,7 +60,6 @@ public static void writeStructureToFile(ScannedStructureNormalized struct, Strin
     {
     writer = new FileWriter(outputFile);
     
-    Date date = new Date(System.currentTimeMillis());
     Calendar cal = Calendar.getInstance();
     
     writer.write("# Ancient Warfare Structure Template File\n");

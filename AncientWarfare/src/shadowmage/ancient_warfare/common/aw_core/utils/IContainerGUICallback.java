@@ -30,7 +30,7 @@ public interface IContainerGUICallback
  * handle information sent from server to the container underlying this GUI
  * @param tag
  */
-public void handleUpdateInfo(NBTTagCompound tag);
+public void handleUpdateFromContainer(NBTTagCompound tag);
 
 
 }
