@@ -20,162 +20,63 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.aw_core.AWCore;
-import shadowmage.ancient_warfare.common.aw_core.network.IHandlePacketData;
-import shadowmage.ancient_warfare.common.aw_core.network.Packet03GuiInput;
-import shadowmage.ancient_warfare.common.aw_core.utils.IContainerGUICallback;
-import shadowmage.ancient_warfare.common.aw_core.utils.IMultipleCrafterCallback;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_core.network.Packet03GuiComs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 
+
+
+/**
+ * client-server synching container
+ * @author Shadowmage
+ *
+ */
 public abstract class ContainerBase extends Container implements IHandlePacketData
 {
 
-protected final EntityPlayer player;
+/**
+ * the player who opened this container
+ */
+public final EntityPlayer player;
 
 /**
- * if opened client-side, will contain an instance of the GUI
+ * the TE or Entity responsible for server-side base data, and multi-crafter support
  */
-protected final IContainerGUICallback gui;
+public final IEntityContainerSynch entity;
 
-/**
- * if opened server side, might contain an instance of the base tile/entity
- * this entity should maintain a list of interacting players, so as to only
- * need to update client-side info for players actively viewing the container
- */
-protected final IMultipleCrafterCallback multiCrafters;
-
-/**
- * 
- * @param player thePlayer opening the GUI that uses this container
- * @param gui an instance of a GUI implementing the callback, NULL on server side
- * @param crafter a reference to the base entity--NULL on client side.  MAY be NULL on server side.
- */
-public ContainerBase(EntityPlayer player, IContainerGUICallback gui, IMultipleCrafterCallback crafters)
+public ContainerBase(EntityPlayer openingPlayer, IEntityContainerSynch synch)
   {
-  this.player = player;  
-  this.gui = gui;
-  this.multiCrafters = crafters;
-  
-  if(!player.worldObj.isRemote)
+  this.player = openingPlayer;
+  this.entity = synch;
+  if(entity!=null)
     {
-    if(this.multiCrafters!=null)
-      {
-      this.multiCrafters.addPlayerToList(player);
-      }    
-    NBTTagCompound tag = this.getInitData();
-    if(tag!=null)
-      {
-      sendPacketToViewingPlayer(tag);
-      }
-    }  
-  }
-
-public final EntityPlayer getPlayer()
-  {
-  return this.player;
-  }
-
-
-@Override
-public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
-  {
-  super.onCraftGuiClosed(par1EntityPlayer);
-  /**
-   * if on server side, and has multi-crafter container, remove player from
-   * tracking list
-   */
-  if(!par1EntityPlayer.worldObj.isRemote && this.multiCrafters!=null)
-    {
-    this.multiCrafters.removePlayer(player);
+    entity.addPlayer(player);
     }
   }
 
 @Override
 public boolean canInteractWith(EntityPlayer var1)
-  {
+  {  
+  if(entity!=null)
+    {
+    return entity.canInteract(var1);
+    }
   return true;
-  }
-
-/**
- * params are tunc. to shorts before sent...max value ~16k
- * @param a
- * @param b
- */
-public void sendUpdateToClient(int a, int b)
-  {
-  if(!this.player.worldObj.isRemote && this.player instanceof EntityPlayerMP )
-    {
-    ((EntityPlayerMP)player).sendProgressBarUpdate(this, a, b);
-    }
-  }
-
-@SideOnly(Side.CLIENT)
-public void updateProgressBar(int par1, int par2)
-  {
-  super.updateProgressBar(par1, par2);
-  }
-
-@Override
-public void handlePacketData(NBTTagCompound tag)
-  {
-  if(this.player.worldObj.isRemote)
-    {
-    this.handleUpdateClient(tag);
-    }
-  else
-    {    
-    if(this.multiCrafters!=null)
-      {
-      /**
-       * if handled by the entity completely, exit, else pass same data onto
-       * container update method
-       */
-      if(this.multiCrafters.handleUpdate(tag))
-        {
-        return;          
-        }
-      }
-    this.handleUpdateServer(tag);    
-    }
-  }
-
-/**
- * individual container classes should implement this to handle information sent from the server to
- * this container client-side (complex information updates)
- * @param tag
- */
-public abstract void handleUpdateClient(NBTTagCompound tag);
-
-/**
- * individual container classes should implement this to handle information sent from the client to
- * this container on the server
- * @param tag
- */
-public abstract void handleUpdateServer(NBTTagCompound tag);
-
-/**
- * when the container is first opened server side, this data will be sent to the client to populate the
- * open containers fields
- * @return
- */
-public abstract NBTTagCompound getInitData();
-
-public void sendPacketToViewingPlayer(NBTTagCompound tag)
-  {
-  Packet03GuiInput pkt = new Packet03GuiInput();
-  pkt.setData(tag);
-  AWCore.proxy.sendPacketToPlayer(player, pkt);
   }
 
 public void sendDataToServer(NBTTagCompound tag)
   {
-  Packet03GuiInput pkt = new Packet03GuiInput();
+  if(!player.worldObj.isRemote)
+    {
+    Config.logError("Attempt to send data to server FROM server");
+    Exception e = new IllegalAccessException();
+    e.printStackTrace();
+    return;
+    }
+  Packet03GuiComs pkt = new Packet03GuiComs();
   pkt.setData(tag);
   AWCore.proxy.sendPacketToServer(pkt);
   }

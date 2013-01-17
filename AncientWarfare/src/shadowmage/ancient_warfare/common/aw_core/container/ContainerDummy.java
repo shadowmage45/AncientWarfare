@@ -18,19 +18,18 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.aw_core.utils;
+package shadowmage.ancient_warfare.common.aw_core.container;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 
-
-public interface IContainerGUICallback
+public class ContainerDummy extends Container
 {
 
-/**
- * handle information sent from server to the container underlying this GUI
- * @param tag
- */
-public void handleUpdateFromContainer(NBTTagCompound tag);
-
+@Override
+public boolean canInteractWith(EntityPlayer var1)
+  {
+  return true;
+  }
 
 }

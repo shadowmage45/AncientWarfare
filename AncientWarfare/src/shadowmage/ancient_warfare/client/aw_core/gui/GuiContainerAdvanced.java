@@ -23,32 +23,37 @@ import org.lwjgl.opengl.GL12;
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
-import shadowmage.ancient_warfare.common.aw_core.utils.IContainerGUICallback;
 
 
-public abstract class GuiContainerAdvanced extends GuiContainer implements IContainerGUICallback
+public abstract class GuiContainerAdvanced extends GuiContainer
 {
 
 protected final EntityPlayer player;
-protected final ContainerBase container;
 public DecimalFormat formatter = new DecimalFormat("#");
 public DecimalFormat formatterOneDec = new DecimalFormat("#.#");
-
 
 public GuiContainerAdvanced(Container container)
   {
   super(container);
   this.player = Minecraft.getMinecraft().thePlayer;
-  this.container = (ContainerBase)this.inventorySlots;
-  if(container==null)
-    {
-    Config.logError("Attempt to pass vanilla MC Container to :"+this.getClass());
-    throw new IllegalArgumentException("Attempt to pass vanilla MC Container to :"+this.getClass());
-    }
   this.xSize = this.getXSize();
   this.ySize = this.getYSize();
   guiLeft = (this.width - this.xSize) / 2;
   guiTop = (this.height - this.ySize) / 2;  
+  }
+
+public void sendDataToServer(NBTTagCompound tag)
+  {
+  if(this.inventorySlots instanceof ContainerBase)
+    {
+    ((ContainerBase)this.inventorySlots).sendDataToServer(tag);
+    }
+  else
+    {
+    Config.logError("Attempt to send data to server container from improperly setup GUI/Container.");
+    Exception e = new IllegalAccessException();
+    e.printStackTrace();
+    }
   }
 
 /**
@@ -205,21 +210,24 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
   GL11.glEnable(GL11.GL_DEPTH_TEST);
   }
 
-protected void renderTooltip(int x, int y, List<String> info, ItemStack stack)
+/**
+ * render the given list of strings as a tooltip at the given mouse x,y coordinates
+ * @param x
+ * @param y
+ * @param info
+ */
+protected void renderTooltip(int x, int y, List<String> info)
   {
   GL11.glDisable(GL12.GL_RESCALE_NORMAL);
   RenderHelper.disableStandardItemLighting();
   GL11.glDisable(GL11.GL_LIGHTING);
   GL11.glDisable(GL11.GL_DEPTH_TEST);
-
   Iterator<String> it = info.iterator();
   String line;
   if(!it.hasNext())
     {
     return;
     }  
-  
-  
   int widestLength = 0;
   int testLength;
   while(it.hasNext())
@@ -230,12 +238,10 @@ protected void renderTooltip(int x, int y, List<String> info, ItemStack stack)
       {
       widestLength = this.fontRenderer.getStringWidth(line);
       }
-    }    
-
+    }  
   int renderX = x + 12;
   int renderY = y - 12;
   int borderSize = 8;
-
   if (info.size() > 1)
     {
     borderSize += 2 + (info.size() - 1) * 10;
@@ -244,7 +250,6 @@ protected void renderTooltip(int x, int y, List<String> info, ItemStack stack)
     {
     renderY = this.height - borderSize - this.guiTop - 6;
     }
-
   this.zLevel = 300.0F;
   itemRenderer.zLevel = 300.0F;
   int renderColor = -267386864;
@@ -259,14 +264,10 @@ protected void renderTooltip(int x, int y, List<String> info, ItemStack stack)
   this.drawGradientRect(renderX + widestLength + 2, renderY - 3 + 1, renderX + widestLength + 3, renderY + borderSize + 3 - 1, var11, var12);
   this.drawGradientRect(renderX - 3, renderY - 3, renderX + widestLength + 3, renderY - 3 + 1, var11, var11);
   this.drawGradientRect(renderX - 3, renderY + borderSize + 2, renderX + widestLength + 3, renderY + borderSize + 3, var12, var12);
-
-
-
   /**
    * re-grab a fresh iterator
    */
   it = info.iterator();
-
   boolean firstPass = true;
   while(it.hasNext())
     {
@@ -280,11 +281,8 @@ protected void renderTooltip(int x, int y, List<String> info, ItemStack stack)
       }
     renderY += 10;       
     }
-
-
   this.zLevel = 0.0F;
   itemRenderer.zLevel = 0.0F;
-
   }
 
 /**
@@ -304,7 +302,6 @@ protected boolean isMouseInAdjustedArea(int slotX, int slotY, int slotWidth, int
   mouseY-=this.guiTop;
   return mouseX >= slotX - 1 && mouseX < slotX + slotWidth + 1 && mouseY >= slotY - 1 && mouseY < slotY + slotHeight + 1;
   }
-
 
 /**
  * render a 50px X 10px status bar, at the X,Y location relative to the topleft of the actual GUI
@@ -391,6 +388,11 @@ public void renderEntityLivingIntoInventory(Minecraft par0Minecraft, EntityLivin
   OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
   GL11.glDisable(GL11.GL_TEXTURE_2D);
   OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+  }
+
+public void closeGUI()
+  {
+  this.player.closeScreen();
   }
 
 }

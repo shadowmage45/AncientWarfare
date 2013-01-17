@@ -138,23 +138,20 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {
   World world = (World)tickData[0];
-  for(Builder builder : builders)
-    {
-    if(builder.world==world)
-      {
-      builder.onTick();
-      }
-    }
   Iterator<Builder> it = builders.iterator();
   Builder builder;
   while(it.hasNext())
     {
     builder = it.next();
+    if(builder.world==world)
+      {
+      builder.onTick();      
+      }
     if(builder.isFinished())
       {
       it.remove();
-      }
-    }
+      }    
+    } 
   }
 
 @Override

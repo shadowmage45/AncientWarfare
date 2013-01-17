@@ -23,13 +23,14 @@ package shadowmage.ancient_warfare.common.aw_core.network;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_core.container.IHandlePacketData;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 
-public class Packet03GuiInput extends PacketBase
+public class Packet03GuiComs extends PacketBase
 {
 
 @Override
@@ -84,11 +85,20 @@ public void execute()
       }
     return;
     }
-  if(player.openContainer instanceof IHandlePacketData && packetData.hasKey("data"))
+  if(player.openContainer instanceof IHandlePacketData)
     {
-    ((IHandlePacketData)player.openContainer).handlePacketData(packetData.getCompoundTag("data"));
-    return;
+    if(packetData.hasKey("data"))
+      {
+      ((IHandlePacketData)player.openContainer).handlePacketData(packetData.getCompoundTag("data"));
+      return;
+      }
+    if(packetData.hasKey("init") && world.isRemote)
+      {
+      ((IHandlePacketData)player.openContainer).handleInitData(packetData.getCompoundTag("init"));
+      return;      
+      }    
     }
+  
   Config.logError("Attempt to send container data packet to non-applicable container (no valid interface)");
   }
 

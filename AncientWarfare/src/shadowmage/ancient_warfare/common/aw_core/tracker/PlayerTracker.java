@@ -63,12 +63,7 @@ private PlayerEntry clientEntry = new PlayerEntry();
 @Override
 public void onPlayerLogin(EntityPlayer player)
   {
-  if(!player.worldObj.isRemote)
-    {
-    Packet01ModData init = new Packet01ModData();
-    init.packetData.setCompoundTag("structInit", StructureManager.instance().getClientInitData());
-    AWCore.proxy.sendPacketToPlayer(player, init);
-    }
+  StructureManager.instance().handlePlayerLogin(player);  
   if(!playerEntries.containsKey(player.getEntityName()))
     {
     //TODO create player entry for player
@@ -77,9 +72,7 @@ public void onPlayerLogin(EntityPlayer player)
 
 @Override
 public void onPlayerLogout(EntityPlayer player)
-  {
-  // TODO Auto-generated method stub
-
+  {  
   }
 
 @Override
@@ -102,8 +95,7 @@ public NBTTagCompound getNBTTag()
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // load data from persistent file from world directory....
-  // TODO Auto-generated method stub
+  // TODO load data from persistent file from world directory....
   
   }
 

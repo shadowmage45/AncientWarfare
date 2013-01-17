@@ -37,7 +37,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class AWItemBase extends Item
 {
 
-protected List subTypes = new ArrayList<ItemStack>();
+protected List<ItemStack> subTypes = new ArrayList<ItemStack>();
 
 public AWItemBase(int itemID, boolean hasSubTypes)
   {
@@ -45,12 +45,6 @@ public AWItemBase(int itemID, boolean hasSubTypes)
   this.setHasSubtypes(hasSubTypes);
   this.setCreativeTab(CreativeTabAW.instance());
   this.setTextureFile("/shadowmage/ancient_warfare/resources/item/items.png");
-  }
-
-@Override
-public String getTextureFile()
-  {
-  return "/shadowmage/ancient_warfare/resources/item/items.png";
   }
 
 /**
@@ -62,9 +56,8 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {
   if(this.hasSubtypes)
     {
-    for(Object obj : this.subTypes)
-      {
-      ItemStack stack = (ItemStack)obj;
+    for(ItemStack stack : this.subTypes)
+      {      
       if(stack!=null)
         {
         par3List.add(stack);

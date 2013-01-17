@@ -18,34 +18,17 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.aw_core.utils;
-
-import java.util.List;
+package shadowmage.ancient_warfare.common.aw_core.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-public interface IMultipleCrafterCallback
+public interface IEntityContainerSynch
 {
 
-/**
- * get a list of players viewing this container
- * internally, this list should use weakReferences and cull null references before
- * adding to a normal reference list and returning to caller 
- * @return
- */
-public List<EntityPlayer> getPlayersViewingContainer();
-
-
-public void addPlayerToList(EntityPlayer player);
+public void handleClientInput(NBTTagCompound tag);
+public void addPlayer(EntityPlayer player);
 public void removePlayer(EntityPlayer player);
-
-/**
- * return true to cancel further processing (i.e. data only needs go to TE or Entity),
- * return false to continue passing data onto underlying containing container(i.e. container needs data as well (local update))
- * @param tag
- * @return
- */
-public boolean handleUpdate(NBTTagCompound tag);
+public boolean canInteract(EntityPlayer player);
 
 }

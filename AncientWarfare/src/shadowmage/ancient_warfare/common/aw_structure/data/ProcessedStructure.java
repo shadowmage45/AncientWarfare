@@ -20,14 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
-import shadowmage.ancient_warfare.common.aw_structure.data.rules.NPCRule;
-import shadowmage.ancient_warfare.common.aw_structure.data.rules.VehicleRule;
 
 /**
  * fully processed structure, ready to build in-game. 
@@ -46,5 +41,6 @@ public BlockRule getRuleAt(int x, int y, int z)
   {
   return this.blockRules.get(this.structure[x][y][z]);
   }
+
 
 }

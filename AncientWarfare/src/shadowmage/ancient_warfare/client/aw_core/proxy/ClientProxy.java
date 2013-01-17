@@ -25,7 +25,7 @@ package shadowmage.ancient_warfare.client.aw_core.proxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.aw_core.network.IHandlePacketData;
+import shadowmage.ancient_warfare.common.aw_core.container.IHandlePacketData;
 import shadowmage.ancient_warfare.common.aw_core.network.PacketBase;
 import shadowmage.ancient_warfare.common.aw_core.proxy.CommonProxy;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -50,17 +50,5 @@ public void sendPacketToServer(PacketBase pkt)
   PacketDispatcher.sendPacketToServer(pkt.get250Packet());
   }
 
-public void handleClientGUIPacketData(NBTTagCompound tag)
-  {
-  if(Minecraft.getMinecraft().currentScreen instanceof IHandlePacketData)
-    {
-    ((IHandlePacketData)Minecraft.getMinecraft().currentScreen).handlePacketData(tag);
-    }
-  else
-    {
-    
-    }
-  
-  }
 
 }

@@ -24,12 +24,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.aw_core.config.Config;
-import shadowmage.ancient_warfare.common.aw_structure.build.Builder;
-import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
+import shadowmage.ancient_warfare.common.aw_core.AWCore;
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_core.network.Packet01ModData;
+import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 public class StructureManager
 {
@@ -50,6 +55,21 @@ public static StructureManager instance()
   return INSTANCE;
   }
 
+public ProcessedStructure getStructure(String name)
+  {
+  Iterator<ProcessedStructure> it = structures.iterator();
+  ProcessedStructure struct;
+  while(it.hasNext())
+    {
+    struct = it.next();
+    if(struct.name.equals(name))
+      {
+      return struct;
+      }
+    }
+  return null;
+  }
+
 public void addStructure(ProcessedStructure struct)
   {
   structures.add(struct);
@@ -64,29 +84,36 @@ public void addStructures(List<ProcessedStructure> structs)
     }
   }
 
-public List<ProcessedStructure> getStructureList()
-  {
-  List<ProcessedStructure> list = new ArrayList<ProcessedStructure>();
-  list.addAll(this.structures);  
-  return list;
+public List<StructureClientInfo> getClientStructures()
+  { 
+  return clientStructures;
   }
 
-public NBTTagCompound getClientInitData()
+public List<ProcessedStructure> getStructureList()
+  {
+  return structures;
+  }
+
+public void handlePlayerLogin(EntityPlayer player)
+  {
+  if(!player.worldObj.isRemote)
+    {
+    Packet01ModData init = new Packet01ModData();
+    init.packetData.setCompoundTag("structInit", getClientInitData());
+    AWCore.proxy.sendPacketToPlayer(player, init);
+    }
+  }
+
+private NBTTagCompound getClientInitData()
   {
   NBTTagCompound tag = new NBTTagCompound();
   NBTTagList list = new NBTTagList();
   Iterator<ProcessedStructure> it = structures.iterator();
-  ProcessedStructure structure;
-  NBTTagCompound structTag;
+  ProcessedStructure structure;  
   while(it.hasNext())
     {    
-    structure = it.next();
-    structTag = new NBTTagCompound();
-    structTag.setString("name", String.valueOf(structure.name));
-    structTag.setShort("x", (short)structure.xSize);
-    structTag.setShort("y", (short)structure.ySize);
-    structTag.setShort("z", (short)structure.zSize);
-    list.appendTag(structTag);    
+    structure = it.next();    
+    list.appendTag(structure.getClientTag());    
     }  
   tag.setTag("structData", list);
   return tag;
@@ -94,10 +121,12 @@ public NBTTagCompound getClientInitData()
 
 private void handleInitClient(NBTTagCompound tag)
   {
+  System.out.println("Handling client structure init data.  Current size: "+clientStructures.size());
   if(tag.hasKey("structData"))
     {
     this.addClientStructuresFromNBT(tag.getTagList("structData"));
     }
+  System.out.println("Client structure init data loaded.  Loaded size: "+clientStructures.size());
   }
 
 public void handleUpdateClient(NBTTagCompound tag)

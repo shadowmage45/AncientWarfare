@@ -20,22 +20,31 @@
  */
 package shadowmage.ancient_warfare.client.aw_structure.gui;
 
+import java.util.List;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.Container;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.management.LowerStringMap;
 import shadowmage.ancient_warfare.client.aw_core.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
+import shadowmage.ancient_warfare.common.aw_structure.container.ContainerStructureSelectCreative;
+import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 public class GUICreativeStructureBuilder extends GuiContainerAdvanced
 {
 /**
  * need option to force team number/setting (override template)
  * 
- * checkBox forceTeam
- * merchantButtons to select forcedTeam number
+ * checkBox forceTeam, force vehicle, force gate, force npc
+ * merchantButtons to select forcedTeam, forcedvehicle, forcedgate, forcedNPC
  * display list of structures on the left, (as buttons?)-- basic info on the right (name, sizes)
  * button to set selection (add selection info to builder itemStack NBTTag)
  */
 
+private final ItemStack builder;
+private final List<StructureClientInfo> clientStructures;
+int currentLowestViewed = 0;
 
 /**
  * @param par1Container
@@ -43,20 +52,32 @@ public class GUICreativeStructureBuilder extends GuiContainerAdvanced
 public GUICreativeStructureBuilder(Container container)
   {
   super(container);
+  if(container instanceof ContainerStructureSelectCreative)
+    {
+    builder = ((ContainerStructureSelectCreative)container).builderItem;
+    clientStructures = StructureManager.instance().getClientStructures();
+    }  
+  else
+    {
+    builder = null;
+    clientStructures = null;
+    }    
+  if(builder==null || clientStructures==null)
+    {
+    closeGUI();
+    }
   }
 
 @Override
 public int getXSize()
   {
-  // TODO Auto-generated method stub
-  return 0;
+  return 256;
   }
 
 @Override
 public int getYSize()
-  {
-  // TODO Auto-generated method stub
-  return 0;
+  {  
+  return 240;
   }
 
 @Override
@@ -68,37 +89,30 @@ public String getGuiBackGroundTexture()
 
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
-  {
-  // TODO Auto-generated method stub
-  
+  {  
+  int maxDisplayed = this.currentLowestViewed +10 > clientStructures.size() ? clientStructures.size()-this.currentLowestViewed : this.currentLowestViewed+10;
+  for(int i = this.currentLowestViewed; i < maxDisplayed; i++)
+    {
+    this.drawString(fontRenderer, clientStructures.get(i).name, 20, 20 * i + 10, 0xffffffff);
+    }  
   }
 
 @Override
 public void setupGui()
   {
-  // TODO Auto-generated method stub
-  
+  // TODO Auto-generated method stub  
   }
 
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
-  
+  // TODO Auto-generated method stub  
   }
 
 @Override
 public void buttonClicked(GuiButton button)
   {
-  // TODO Auto-generated method stub
-  
-  }
-
-@Override
-public void handleUpdateFromContainer(NBTTagCompound tag)
-  {
-  // TODO Auto-generated method stub
-  
+  // TODO Auto-generated method stub  
   }
 
 

@@ -23,6 +23,9 @@ package shadowmage.ancient_warfare.common.aw_structure.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.nbt.NBTTagCompound;
+
+import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.NPCRule;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.VehicleRule;
@@ -107,5 +110,15 @@ public int zOffset;
 public int xSize;//x dimension
 public int zSize;//z dimension
 public int ySize;//y dimension
+
+public NBTTagCompound getClientTag()
+  {
+  NBTTagCompound structTag = new NBTTagCompound();
+  structTag.setString("name", String.valueOf(this.name));
+  structTag.setShort("x", (short)this.xSize);
+  structTag.setShort("y", (short)this.ySize);
+  structTag.setShort("z", (short)this.zSize);
+  return structTag; 
+  }
 
 }

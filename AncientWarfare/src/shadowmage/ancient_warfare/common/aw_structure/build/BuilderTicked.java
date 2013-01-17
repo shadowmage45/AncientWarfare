@@ -57,8 +57,9 @@ public void startConstruction()
 
 @Override
 public void finishConstruction()
-  {  
-  AWStructureModule.instance().removeBuilder(this);
+  { 
+  //TODO this doesn't work...can't remove while iterating....now handled in the iterator code
+  //AWStructureModule.instance().removeBuilder(this);
   }
 
 @Override
