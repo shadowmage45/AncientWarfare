@@ -57,13 +57,8 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
   try
     {
     ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
-    int packetType = data.readInt();
-    boolean hasTag = data.readBoolean();
-    NBTTagCompound tag = null;
-    if(hasTag)
-      {
-      tag = NBTWriter.readTagFromStream(data);
-      }
+    int packetType = data.readInt();  
+    NBTTagCompound tag =  NBTWriter.readTagFromStream(data);      
     PacketBase realPacket = this.constructPacket(packetType);
     if(realPacket==null)
       {

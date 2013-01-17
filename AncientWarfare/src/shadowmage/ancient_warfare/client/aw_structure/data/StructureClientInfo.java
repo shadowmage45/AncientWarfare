@@ -18,18 +18,18 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.aw_structure.container.data;
+package shadowmage.ancient_warfare.client.aw_structure.data;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class StructureInfo
+public class StructureClientInfo
 {
 public final String name;
 public final int xSize;
 public final int ySize;
 public final int zSize;
 
-public StructureInfo(NBTTagCompound tag)
+public StructureClientInfo(NBTTagCompound tag)
   {
   this.name = tag.getString("name");
   this.xSize = tag.getShort("x");
@@ -37,7 +37,7 @@ public StructureInfo(NBTTagCompound tag)
   this.zSize = tag.getShort("z");
   }
 
-public StructureInfo(String name, int x, int y, int z)
+public StructureClientInfo(String name, int x, int y, int z)
   {
   this.name = name;
   this.xSize = x;

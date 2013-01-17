@@ -100,12 +100,8 @@ protected void constructPacket()
   
   /**
    * write default packet data NBTCompound to the stream
-   */
-  if(this.packetData!=null)
-    {
-    data.writeBoolean(true);
-    NBTWriter.writeTagToStream(packetData, data);
-    }
+   */  
+  NBTWriter.writeTagToStream(packetData, data);    
   
   /**
    * write custom data to the output stream

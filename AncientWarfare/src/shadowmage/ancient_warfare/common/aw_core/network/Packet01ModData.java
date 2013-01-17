@@ -22,6 +22,7 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.network;
 
+import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -41,16 +42,14 @@ public class Packet01ModData extends PacketBase
 
 @Override
 public String getChannel()
-  {
-  // TODO Auto-generated method stub
-  return null;
+  {  
+  return "AW_mod";
   }
 
 @Override
 public int getPacketType()
-  {
-  // TODO Auto-generated method stub
-  return 0;
+  {  
+  return 1;
   }
 
 
@@ -58,38 +57,59 @@ public int getPacketType()
 @Override
 public void writeDataToStream(ByteArrayDataOutput data)
   {
-  // TODO Auto-generated method stub
-
+  
   }
 
 @Override
 public void readDataStream(ByteArrayDataInput data)
   {
-  // TODO Auto-generated method stub
-
+  
   }
 
 @Override
 public void execute()
   {
   NBTTagCompound tag;
-  if(this.packetData.hasKey("clientInput") && !world.isRemote)
+  
+  /***
+   * init data, should break out to player entry, team entry, pass to client-trackers
+   */
+  if(this.packetData.hasKey("init"))
     {
-    tag = packetData.getCompoundTag("clientInput");
-    //TODO handle various inputs...
-    return;//stop processing after reading client input if it was a client->server packet
-    }
-  if(!world.isRemote)
-    {
-    //exit out if server recieves a packet intended for client
-    }
+    if(world.isRemote)
+      {
+      //TODO handle initialization data
+      }
+    }  
   
   /**
-   * cooldown update info, pass tag off to cooldownTracker...or have playerEntry have cooldownData directly?
+   * cooldown update
    */
   if(this.packetData.hasKey("cdn"))
     {
-    tag = packetData.getCompoundTag("cdn");    
+    if(world.isRemote)
+      {
+      
+      }
+    else
+      {
+      
+      }    
+    }
+  
+  /**
+   * 
+   */
+  if(this.packetData.hasKey("struct"))
+    {
+    if(world.isRemote)
+      {
+      StructureManager.instance().handleUpdateClient(packetData.getCompoundTag("struct"));
+      }
+    else
+      {
+      StructureManager.instance().handleUpdateServer(packetData.getCompoundTag("struct"));
+      }
     }
   
   /**

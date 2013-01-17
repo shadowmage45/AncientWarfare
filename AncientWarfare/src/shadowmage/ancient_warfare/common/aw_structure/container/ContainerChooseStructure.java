@@ -27,17 +27,17 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
 import shadowmage.ancient_warfare.common.aw_core.utils.IContainerGUICallback;
-import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
-import shadowmage.ancient_warfare.common.aw_structure.container.data.StructureInfo;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 public class ContainerChooseStructure extends ContainerBase
 {
 
 String currentSelection = "";
-List<StructureInfo> structureInfo = new ArrayList<StructureInfo>();
+List<StructureClientInfo> structureInfo = new ArrayList<StructureClientInfo>();
 
 /**
  * @param player
@@ -61,11 +61,11 @@ public void handleUpdateClient(NBTTagCompound tag)
 private void readStructureData(NBTTagList list)
   {
   NBTTagCompound tag;
-  StructureInfo info;
+  StructureClientInfo info;
   for(int i = 0; i < list.tagCount(); i++)
     {
     tag = (NBTTagCompound) list.tagAt(i);
-    this.structureInfo.add(new StructureInfo(tag));    
+    this.structureInfo.add(new StructureClientInfo(tag));    
     }
   }
 
@@ -101,28 +101,8 @@ public void handleUpdateServer(NBTTagCompound tag)
 @Override
 public NBTTagCompound getInitData()
   {
-  NBTTagCompound tag = new NBTTagCompound();
-  NBTTagList list = new NBTTagList();
-  List<ProcessedStructure> structures = AWStructureModule.instance().getStructureList();
-  Iterator<ProcessedStructure> it = structures.iterator();
-  ProcessedStructure structure;
-  NBTTagCompound structTag;
-  while(it.hasNext())
-    {    
-    structure = it.next();
-    structTag = new NBTTagCompound();
-    structTag.setString("name", String.valueOf(structure.name));
-    structTag.setShort("x", (short)structure.xSize);
-    structTag.setShort("y", (short)structure.ySize);
-    structTag.setShort("z", (short)structure.zSize);
-    list.appendTag(structTag);
-    /**
-     * also adding structures server side in case I need them synced for some reason.
-     */
-    this.structureInfo.add(new StructureInfo(structTag));
-    }  
-  tag.setTag("structData", list);
-  return tag;
+  
+  return null;
   }
 
 

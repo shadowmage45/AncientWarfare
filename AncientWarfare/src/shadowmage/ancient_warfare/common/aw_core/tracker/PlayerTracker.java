@@ -25,8 +25,11 @@ import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.aw_core.AWCore;
+import shadowmage.ancient_warfare.common.aw_core.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.aw_core.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
+import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 import cpw.mods.fml.common.IPlayerTracker;
 
 /**
@@ -60,9 +63,15 @@ private PlayerEntry clientEntry = new PlayerEntry();
 @Override
 public void onPlayerLogin(EntityPlayer player)
   {
+  if(!player.worldObj.isRemote)
+    {
+    Packet01ModData init = new Packet01ModData();
+    init.packetData.setCompoundTag("structInit", StructureManager.instance().getClientInitData());
+    AWCore.proxy.sendPacketToPlayer(player, init);
+    }
   if(!playerEntries.containsKey(player.getEntityName()))
     {
-    
+    //TODO create player entry for player
     }  
   }
 
@@ -76,25 +85,24 @@ public void onPlayerLogout(EntityPlayer player)
 @Override
 public void onPlayerChangedDimension(EntityPlayer player)
   {
-  // TODO Auto-generated method stub
-
   }
 
 @Override
 public void onPlayerRespawn(EntityPlayer player)
   {
-  // TODO Auto-generated method stub
-
   }
+
 @Override
 public NBTTagCompound getNBTTag()
   {
-  // TODO Auto-generated method stub
+  // TODO return NBTTag of persistent data to save to world directory, SERVER SIDE ONLY...but that should be handled @ the caller
   return null;
   }
+
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
+  // load data from persistent file from world directory....
   // TODO Auto-generated method stub
   
   }

@@ -27,10 +27,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.aw_structure.build.Builder;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
+import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -51,7 +53,6 @@ private static String directory;
 public static String outputDirectory = null;
 public static String includeDirectory = null;
 
-private static List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
 
 /**
  * ticked builders
@@ -72,12 +73,6 @@ public static AWStructureModule instance()
   return INSTANCE;
   }
 
-public List<ProcessedStructure> getStructureList()
-  {
-  List<ProcessedStructure> list = new ArrayList<ProcessedStructure>();
-  list.addAll(this.structures);
-  return list;
-  }
 
 public void load(String directory)
   {  
@@ -119,8 +114,7 @@ public void process()
     {
     return;
     }
-  structures.addAll(loader.processStructureFiles());
-  System.out.println("loaded: "+structures.size()+" structures!");
+  StructureManager.instance().addStructures(loader.processStructureFiles());  
   }
 
 public void addBuilder(Builder builder)
@@ -132,10 +126,6 @@ public void removeBuilder(Builder builder)
   {
   this.builders.remove(builder);
   }
-
-
-
-
 
 /*************************************************************************** TICK HANDLING ****************************************************************************/
 @Override
