@@ -47,6 +47,7 @@ public class GUICreativeStructureBuilder extends GuiContainerAdvanced
 
 private final List<StructureClientInfo> clientStructures;
 int currentLowestViewed = 0;
+private boolean shouldForceUpdate = false;
 String currentStructure = "";
 
 /**
@@ -67,8 +68,16 @@ public GUICreativeStructureBuilder(Container container)
     {
     closeGUI();
     }
- 
+  ItemStack builderItem = player.inventory.getCurrentItem();
+  if(builderItem==null || !(builderItem.getItem() instanceof ItemStructureBuilderCreative))
+    {
+    return;
+    } 
   
+  if(builderItem.stackTagCompound!=null)
+    {
+    currentStructure = builderItem.stackTagCompound.getCompoundTag("structData").getString("name");
+    }
   }
 
 @Override
@@ -103,53 +112,76 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void setupGui()
   {
-  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done");  
+  this.controlList.clear();
+  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
+  this.addGuiButton(1, 10, 40, 35, 18, "Prev");
+  this.addGuiButton(2, 50, 40, 35, 18, "Next");
   
-  int displaySize = 8;
-  int maxDisplayed = this.currentLowestViewed +displaySize > clientStructures.size() ? clientStructures.size()-this.currentLowestViewed : this.currentLowestViewed+displaySize;
   int buttonNum = 3;
-  for(int i = this.currentLowestViewed; i < maxDisplayed; i++, buttonNum++)
+  for(int i = 0; i+currentLowestViewed < clientStructures.size() && buttonNum<11; i++, buttonNum++)
     {
-    this.addGuiButton(buttonNum, 10, 60 + (20*i) , 90, 18, StringTools.subStringBeginning(clientStructures.get(i).name, 10));
+    this.addGuiButton(buttonNum, 10, 60 + (20*i) , 90, 18, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 10));
     //this.drawString(fontRenderer, StringTools.subStringBeginning(clientStructures.get(i).name, 10), 20, 20 * i + 10, 0xffffffff);
     }  
   
-  ItemStack builderItem = player.inventory.getCurrentItem();
-  if(builderItem==null || !(builderItem.getItem() instanceof ItemStructureBuilderCreative))
-    {
-    return;
-    } 
   
-  if(builderItem.stackTagCompound!=null)
-    {
-    currentStructure = builderItem.stackTagCompound.getCompoundTag("structData").getString("name");
-    }
   }
 
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub  
+  if(shouldForceUpdate)
+    {
+    shouldForceUpdate = false;
+    this.initGui();
+    }  
   }
 
 @Override
 public void buttonClicked(GuiButton button)
   {
+ 
+  System.out.println("buttonID: "+button.id);
+  System.out.println("lowestViewed "+this.currentLowestViewed);
+  if(button.id==1)
+    {
+    if(this.currentLowestViewed-8 >=0)
+      {
+      shouldForceUpdate = true;
+      System.out.println("decrementing!");
+      this.currentLowestViewed-=8;
+      return;
+      }
+    }
+  else if(button.id==2);
+    {
+    if(this.currentLowestViewed+8 < this.clientStructures.size())
+      {
+      System.out.println("incrementing!");
+      this.currentLowestViewed+=8;
+      shouldForceUpdate = true;
+      return;
+      }      
+    }
+    
+  this.shouldForceUpdate = true;
+  
   if(button.id>=3 && button.id < 11)
     {
-    this.setStructureName(this.clientStructures.get(this.currentLowestViewed+button.id-3).name);
+    int index = (this.currentLowestViewed + button.id) - 3;
+    if(index>=this.clientStructures.size())
+      {
+      System.out.println("OOB index > size -- "+index);      
+      return;
+      }
+    this.setStructureName(this.clientStructures.get(index).name);
     }
-  //this.initGui();  
   }
 
 
-/**
- * CLIENT SIDE ONLY...
- * @param name
- */
 public void setStructureName(String name)
   {
-  System.out.println("sending name packet for: "+name);
+  this.currentStructure = name;
   NBTTagCompound tag = new NBTTagCompound();
   tag.setString("name", name);
   this.sendDataToServer(tag);
