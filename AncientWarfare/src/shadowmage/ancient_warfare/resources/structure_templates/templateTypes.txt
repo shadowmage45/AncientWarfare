@@ -1,5 +1,6 @@
 ######################################### STRUCT TYPES #####################################
-structure types:
+structure types (for kingdoms):
+none (special type)
 military (barracks, siege-engineers workshop)
 agricultural (farms, tree groves)
 infrastructure (smith, lumber mill, water tower)

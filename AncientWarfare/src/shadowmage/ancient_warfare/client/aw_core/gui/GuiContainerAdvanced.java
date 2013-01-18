@@ -126,11 +126,18 @@ public void actionPerformed(GuiButton button)
  * @param name
  * @return
  */
-public GuiButton addGuiButton(int id, int x, int y, int len, int wid, String name)
+public GuiButton addGuiButton(int id, int x, int y, int len, int high, String name)
   {
-  GuiButton button = new GuiButton(id, guiLeft+x, guiTop+y, len, wid, name);
+  GuiButtonMultiSize button = new GuiButtonMultiSize(id, guiLeft+x, guiTop+y, len, high, name);
   this.controlList.add(button);
   return button;
+  }
+
+public GuiButton addCheckBox(int id, int x, int y, int len, int high)
+  {
+  GuiCheckBox box = new GuiCheckBox(id, guiLeft + x, guiTop + y, len, high);
+  this.controlList.add(box);
+  return box;
   }
 
 /**

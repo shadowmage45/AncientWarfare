@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.aw_structure.build;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemDoor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
@@ -123,6 +124,7 @@ protected void placeBlockNotify(World world, BlockPosition pos, int id, int meta
       }
     else
       {
+      ItemDoor.placeDoorBlock(world, pos.x, pos.y, pos.z, 0, Block.blocksList[id]);
       world.setBlockAndMetadataWithNotify(pos.x, pos.y+1, pos.z, id, 8);
       }
     }
