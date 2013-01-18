@@ -77,6 +77,10 @@ public GUICreativeStructureBuilder(Container container)
   if(builderItem.stackTagCompound!=null)
     {
     currentStructure = builderItem.stackTagCompound.getCompoundTag("structData").getString("name");
+    if(currentStructure.equals(""))
+      {
+      currentStructure = "No selection";
+      } 
     }
   }
 
@@ -101,12 +105,19 @@ public String getGuiBackGroundTexture()
 
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
-  {  
-//  int maxDisplayed = this.currentLowestViewed +10 > clientStructures.size() ? clientStructures.size()-this.currentLowestViewed : this.currentLowestViewed+10;
-//  for(int i = this.currentLowestViewed; i < maxDisplayed; i++)
-//    {
-//    this.drawString(fontRenderer, StringTools.subStringBeginning(clientStructures.get(i).name, 10), 20, 20 * i + 10, 0xffffffff);
-//    }  
+  {
+  this.drawString(fontRenderer, "Structure: "+currentStructure, guiLeft + 10, guiTop + 14, 0xffffffff);
+  
+  this.drawString(fontRenderer, "Wid", guiLeft + 190, guiTop + 46, 0xffffffff);
+  this.drawString(fontRenderer, "Len", guiLeft + 210, guiTop + 46, 0xffffffff);
+  this.drawString(fontRenderer, "Hig", guiLeft + 230, guiTop + 46, 0xffffffff);
+  
+  for(int i = 0; i+currentLowestViewed < clientStructures.size() && i < 8; i++)
+    {
+    this.drawString(fontRenderer, String.valueOf(clientStructures.get(i+currentLowestViewed).xSize), guiLeft + 190, guiTop + 20 * i + 64, 0xffffffff);
+    this.drawString(fontRenderer, String.valueOf(clientStructures.get(i+currentLowestViewed).zSize), guiLeft + 210, guiTop + 20 * i + 64, 0xffffffff);
+    this.drawString(fontRenderer, String.valueOf(clientStructures.get(i+currentLowestViewed).ySize), guiLeft + 230, guiTop + 20 * i + 64, 0xffffffff);
+    }  
   }
 
 @Override
@@ -116,14 +127,11 @@ public void setupGui()
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
   this.addGuiButton(1, 10, 40, 35, 18, "Prev");
   this.addGuiButton(2, 50, 40, 35, 18, "Next");
-  
-  int buttonNum = 3;
-  for(int i = 0; i+currentLowestViewed < clientStructures.size() && buttonNum<11; i++, buttonNum++)
+    
+  for(int i = 0, buttonNum = 3; i+currentLowestViewed < clientStructures.size() && i < 8; i++, buttonNum++)
     {
-    this.addGuiButton(buttonNum, 10, 60 + (20*i) , 90, 18, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 10));
-    //this.drawString(fontRenderer, StringTools.subStringBeginning(clientStructures.get(i).name, 10), 20, 20 * i + 10, 0xffffffff);
-    }  
-  
+    this.addGuiButton(buttonNum, 10, 60 + (20*i) , 120, 18, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
+    } 
   
   }
 
@@ -143,29 +151,41 @@ public void buttonClicked(GuiButton button)
  
   System.out.println("buttonID: "+button.id);
   System.out.println("lowestViewed "+this.currentLowestViewed);
-  if(button.id==1)
+  
+  switch(button.id)
     {
+    case 0:
+    closeGUI();
+    return;
+    
+    case 1:
     if(this.currentLowestViewed-8 >=0)
       {
-      shouldForceUpdate = true;
       System.out.println("decrementing!");
       this.currentLowestViewed-=8;
-      return;
+      shouldForceUpdate = true;
       }
-    }
-  else if(button.id==2);
-    {
+    return;
+    
+    case 2:
     if(this.currentLowestViewed+8 < this.clientStructures.size())
       {
       System.out.println("incrementing!");
       this.currentLowestViewed+=8;
-      shouldForceUpdate = true;
-      return;
-      }      
-    }
+      shouldForceUpdate = true;   
+      }
+    return;
     
-  this.shouldForceUpdate = true;
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    return;
+    }
   
+ 
   if(button.id>=3 && button.id < 11)
     {
     int index = (this.currentLowestViewed + button.id) - 3;
@@ -174,8 +194,9 @@ public void buttonClicked(GuiButton button)
       System.out.println("OOB index > size -- "+index);      
       return;
       }
+    shouldForceUpdate = true;
     this.setStructureName(this.clientStructures.get(index).name);
-    }
+    }  
   }
 
 

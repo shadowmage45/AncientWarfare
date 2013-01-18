@@ -59,7 +59,9 @@ public void openGUI(EntityPlayer player)
 @Override
 public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float xOff, float yOff, float zOff)
   {
-  return onUsed(world, player, stack, new BlockPosition(x,y,z));
+  BlockPosition hit = new BlockPosition(x,y,z);
+  hit = BlockTools.offsetForSide(hit, side);
+  return onUsed(world, player, stack, hit);
   }
 
 @Override
