@@ -47,6 +47,7 @@ public class GUICreativeStructureBuilder extends GuiContainerAdvanced
 
 private final List<StructureClientInfo> clientStructures;
 int currentLowestViewed = 0;
+private static final int numberDisplayed = 8;
 private boolean shouldForceUpdate = false;
 String currentStructure = "";
 
@@ -112,7 +113,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Len", guiLeft + 210, guiTop + 46, 0xffffffff);
   this.drawString(fontRenderer, "Hig", guiLeft + 230, guiTop + 46, 0xffffffff);
   
-  for(int i = 0; i+currentLowestViewed < clientStructures.size() && i < 8; i++)
+  for(int i = 0; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++)
     {
     this.drawString(fontRenderer, String.valueOf(clientStructures.get(i+currentLowestViewed).xSize), guiLeft + 190, guiTop + 20 * i + 64, 0xffffffff);
     this.drawString(fontRenderer, String.valueOf(clientStructures.get(i+currentLowestViewed).zSize), guiLeft + 210, guiTop + 20 * i + 64, 0xffffffff);
@@ -128,7 +129,7 @@ public void setupGui()
   this.addGuiButton(1, 10, 40, 35, 18, "Prev");
   this.addGuiButton(2, 50, 40, 35, 18, "Next");
     
-  for(int i = 0, buttonNum = 3; i+currentLowestViewed < clientStructures.size() && i < 8; i++, buttonNum++)
+  for(int i = 0, buttonNum = 3; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++, buttonNum++)
     {
     this.addGuiButton(buttonNum, 10, 60 + (20*i) , 120, 18, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
     } 
@@ -148,7 +149,6 @@ public void updateScreenContents()
 @Override
 public void buttonClicked(GuiButton button)
   {
- 
   System.out.println("buttonID: "+button.id);
   System.out.println("lowestViewed "+this.currentLowestViewed);
   

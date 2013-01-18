@@ -20,6 +20,9 @@
 #structure name, used for display purposes, should be unique if you want to be able to id your struct
 #can include spaces and numbers, but will be scrubbed of special characters for display purposes
 name=template
+worldgen=false
+creative=true
+survival=false
 
 #should structure generate once per world
 unique=false

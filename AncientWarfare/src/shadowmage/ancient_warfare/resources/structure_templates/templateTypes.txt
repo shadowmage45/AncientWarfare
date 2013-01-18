@@ -1,3 +1,15 @@
+######################################### STRUCT TYPES #####################################
+structure types:
+military (barracks, siege-engineers workshop)
+agricultural (farms, tree groves)
+infrastructure (smith, lumber mill, water tower)
+civil (town hall, houses)
+royal (vault)
+
+tiers:
+0-basic non-tech structures (houses, farms, simple infrastructure buildings)
+1-simple research structures (first tier advanced structures--barracks, workshop), higher tier basic buildings
+2-higher tiers of all, royal buildings (vault)
 
 ######################################### VEHICLES #####################################
 vehicle types:
@@ -59,14 +71,10 @@ npc types:
 8 colonel
 9 general
 
-40 villager-random (from entire list--can include special random mod-only villagers, not includable by specific rules)
-41 villager-farmer
-42 villager-smith?
-43 villager-priest?
-44 villager-?
+40 villager--type by rank
 
 rank:
-ignored for normal NPCs
+used for type for villagers.
 for soldiers, determines the rank they will spawn at
 
 

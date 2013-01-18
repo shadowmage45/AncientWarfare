@@ -75,6 +75,7 @@ public void preInit(FMLPreInitializationEvent evt)
    * load config file and setup logger
    */
   Config.loadConfig(evt.getSuggestedConfigurationFile());
+  Config.setLogger(evt.getModLog());
   
   /**
    * load items

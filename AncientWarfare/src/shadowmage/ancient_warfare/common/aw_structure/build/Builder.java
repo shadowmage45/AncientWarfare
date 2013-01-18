@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.aw_structure.build;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
@@ -98,11 +99,33 @@ public void setFinished()
 
 protected void placeBlock(World world, BlockPosition pos, int id, int meta)
   {
+  if(id==Block.doorSteel.blockID || id==Block.doorWood.blockID)
+    {
+    if(meta==8)
+      {
+      return;
+      }
+    else
+      {
+      world.setBlockAndMetadata(pos.x, pos.y+1, pos.z, id, 8);
+      }
+    }
   world.setBlockAndMetadata(pos.x, pos.y, pos.z, id, meta);
   }
 
 protected void placeBlockNotify(World world, BlockPosition pos, int id, int meta)
   {
+  if(id==Block.doorSteel.blockID || id==Block.doorWood.blockID)
+    {
+    if(meta==8)
+      {
+      return;
+      }
+    else
+      {
+      world.setBlockAndMetadataWithNotify(pos.x, pos.y+1, pos.z, id, 8);
+      }
+    }
   world.setBlockAndMetadataWithNotify(pos.x, pos.y, pos.z, id, meta);
   }
 

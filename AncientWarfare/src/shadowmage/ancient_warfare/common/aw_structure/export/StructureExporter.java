@@ -67,6 +67,9 @@ public static void writeStructureToFile(ScannedStructureNormalized struct, Strin
     writer.write("# Lines beginning with # denote comments\n");
     writer.write("\n");
     writer.write("name="+String.valueOf(System.currentTimeMillis())+"\n");
+    writer.write("worldgen=false");
+    writer.write("creative=true");
+    writer.write("survival=false");
     writer.write("\n");
     writer.write("unique=false\n");
     writer.write("chunkDistance=0\n");
