@@ -27,6 +27,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
@@ -99,6 +100,7 @@ public void handlePlayerLogin(EntityPlayer player)
   if(!player.worldObj.isRemote)
     {
     Packet01ModData init = new Packet01ModData();
+    init.packetData.setBoolean("struct", true);
     init.packetData.setCompoundTag("structInit", getClientInitData());
     AWCore.proxy.sendPacketToPlayer(player, init);
     }
@@ -115,16 +117,29 @@ private NBTTagCompound getClientInitData()
     structure = it.next();    
     list.appendTag(structure.getClientTag());    
     }  
-  tag.setTag("structData", list);
+  tag.setTag("initList", list);
+  System.out.println("setting data to send to client. size: "+list.tagCount());
   return tag;
   }
 
-private void handleInitClient(NBTTagCompound tag)
+public void handlePacketData(NBTTagCompound tag, World world)
+  {
+  if(world.isRemote)
+    {
+    this.handleUpdateClient(tag);
+    }
+  else
+    {
+    this.handleUpdateServer(tag);
+    }
+  }
+
+public void handleInitClient(NBTTagCompound tag)
   {
   System.out.println("Handling client structure init data.  Current size: "+clientStructures.size());
-  if(tag.hasKey("structData"))
+  if(tag.hasKey("initList"))
     {
-    this.addClientStructuresFromNBT(tag.getTagList("structData"));
+    this.addClientStructuresFromNBT(tag.getTagList("initList"));
     }
   System.out.println("Client structure init data loaded.  Loaded size: "+clientStructures.size());
   }

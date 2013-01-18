@@ -69,6 +69,7 @@ public void readDataStream(ByteArrayDataInput data)
 @Override
 public void execute()
   {
+  System.out.println("executing packet01");
   NBTTagCompound tag;
   
   /***
@@ -97,21 +98,13 @@ public void execute()
       }    
     }
   
-  /**
-   * 
-   */
   if(this.packetData.hasKey("struct"))
     {
-    if(world.isRemote)
-      {
-      StructureManager.instance().handleUpdateClient(packetData.getCompoundTag("struct"));
-      }
-    else
-      {
-      StructureManager.instance().handleUpdateServer(packetData.getCompoundTag("struct"));
-      }
+    System.out.println("struct info detected");
+    StructureManager.instance().handlePacketData(packetData, world);
+    return;
     }
-  
+    
   /**
    * server->client team update data
    * should be passed onto client team tracker

@@ -25,10 +25,13 @@ import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.LowerStringMap;
 import shadowmage.ancient_warfare.client.aw_core.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
+import shadowmage.ancient_warfare.common.aw_core.utils.StringTools;
 import shadowmage.ancient_warfare.common.aw_structure.container.ContainerStructureSelectCreative;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 public class GUICreativeStructureBuilder extends GuiContainerAdvanced
@@ -42,9 +45,9 @@ public class GUICreativeStructureBuilder extends GuiContainerAdvanced
  * button to set selection (add selection info to builder itemStack NBTTag)
  */
 
-private final ItemStack builder;
 private final List<StructureClientInfo> clientStructures;
 int currentLowestViewed = 0;
+String currentStructure = "";
 
 /**
  * @param par1Container
@@ -54,18 +57,18 @@ public GUICreativeStructureBuilder(Container container)
   super(container);
   if(container instanceof ContainerStructureSelectCreative)
     {
-    builder = ((ContainerStructureSelectCreative)container).builderItem;
     clientStructures = StructureManager.instance().getClientStructures();
     }  
   else
     {
-    builder = null;
     clientStructures = null;
     }    
-  if(builder==null || clientStructures==null)
+  if(clientStructures==null)
     {
     closeGUI();
     }
+ 
+  
   }
 
 @Override
@@ -90,17 +93,37 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {  
-  int maxDisplayed = this.currentLowestViewed +10 > clientStructures.size() ? clientStructures.size()-this.currentLowestViewed : this.currentLowestViewed+10;
-  for(int i = this.currentLowestViewed; i < maxDisplayed; i++)
-    {
-    this.drawString(fontRenderer, clientStructures.get(i).name, 20, 20 * i + 10, 0xffffffff);
-    }  
+//  int maxDisplayed = this.currentLowestViewed +10 > clientStructures.size() ? clientStructures.size()-this.currentLowestViewed : this.currentLowestViewed+10;
+//  for(int i = this.currentLowestViewed; i < maxDisplayed; i++)
+//    {
+//    this.drawString(fontRenderer, StringTools.subStringBeginning(clientStructures.get(i).name, 10), 20, 20 * i + 10, 0xffffffff);
+//    }  
   }
 
 @Override
 public void setupGui()
   {
-  // TODO Auto-generated method stub  
+  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done");  
+  
+  int displaySize = 8;
+  int maxDisplayed = this.currentLowestViewed +displaySize > clientStructures.size() ? clientStructures.size()-this.currentLowestViewed : this.currentLowestViewed+displaySize;
+  int buttonNum = 3;
+  for(int i = this.currentLowestViewed; i < maxDisplayed; i++, buttonNum++)
+    {
+    this.addGuiButton(buttonNum, 10, 60 + (20*i) , 90, 18, StringTools.subStringBeginning(clientStructures.get(i).name, 10));
+    //this.drawString(fontRenderer, StringTools.subStringBeginning(clientStructures.get(i).name, 10), 20, 20 * i + 10, 0xffffffff);
+    }  
+  
+  ItemStack builderItem = player.inventory.getCurrentItem();
+  if(builderItem==null || !(builderItem.getItem() instanceof ItemStructureBuilderCreative))
+    {
+    return;
+    } 
+  
+  if(builderItem.stackTagCompound!=null)
+    {
+    currentStructure = builderItem.stackTagCompound.getCompoundTag("structData").getString("name");
+    }
   }
 
 @Override
@@ -112,7 +135,24 @@ public void updateScreenContents()
 @Override
 public void buttonClicked(GuiButton button)
   {
-  // TODO Auto-generated method stub  
+  if(button.id>=3 && button.id < 11)
+    {
+    this.setStructureName(this.clientStructures.get(this.currentLowestViewed+button.id-3).name);
+    }
+  //this.initGui();  
+  }
+
+
+/**
+ * CLIENT SIDE ONLY...
+ * @param name
+ */
+public void setStructureName(String name)
+  {
+  System.out.println("sending name packet for: "+name);
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("name", name);
+  this.sendDataToServer(tag);
   }
 
 

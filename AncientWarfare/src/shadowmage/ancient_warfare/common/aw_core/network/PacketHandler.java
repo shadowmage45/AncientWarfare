@@ -42,7 +42,7 @@ import cpw.mods.fml.common.network.Player;
 public class PacketHandler implements IPacketHandler
 {
 
-private Map packetTypes = new HashMap<Integer, Class<? extends PacketBase>>();
+private Map<Integer, Class<? extends PacketBase>> packetTypes = new HashMap<Integer, Class<? extends PacketBase>>();
 
 public PacketHandler()  
   {
@@ -57,7 +57,7 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
   try
     {
     ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
-    int packetType = data.readInt();  
+    int packetType = data.readInt();      
     NBTTagCompound tag =  NBTWriter.readTagFromStream(data);      
     PacketBase realPacket = this.constructPacket(packetType);
     if(realPacket==null)
@@ -91,7 +91,7 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
  */
 public PacketBase constructPacket(int type) throws InstantiationException, IllegalAccessException
   {
-  return (PacketBase) this.packetTypes.get(type).getClass().newInstance();
+  return this.packetTypes.get(type).newInstance();
   }
 
 }

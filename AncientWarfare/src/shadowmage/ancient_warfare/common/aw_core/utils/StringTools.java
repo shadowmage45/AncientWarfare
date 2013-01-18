@@ -45,4 +45,9 @@ public static byte[] parseByteArray(String csv)
   return array;
   }
 
+public static String subStringBeginning(String in, int len)
+  {  
+  return len > in.length() ? in : in.substring(0, len);
+  }
+
 }

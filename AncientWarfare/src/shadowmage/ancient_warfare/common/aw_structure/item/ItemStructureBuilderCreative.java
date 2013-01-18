@@ -75,7 +75,7 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
       tag = par1ItemStack.getTagCompound().getCompoundTag("structData");
       }
     else
-      {
+      {      
       tag = new NBTTagCompound();
       }
     if(tag.hasKey("name"))
@@ -139,7 +139,7 @@ public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par
 
 public boolean onUsed(World world, EntityPlayer player, ItemStack stack)
   {
-  BlockPosition hit = BlockTools.getBlockClickedOn(player, world, false);
+  BlockPosition hit = BlockTools.getBlockClickedOn(player, world, true);
   return onUsed(world, player, stack, hit);
   }
 
@@ -190,6 +190,7 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
     }
   if(tag.hasKey("name"))
     {
+    System.out.println("attemtpting construction");
     ProcessedStructure struct = StructureManager.instance().getStructure(tag.getString("name"));
     if(struct==null)
       {
@@ -197,7 +198,6 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
       return true;
       }
     BuilderInstant builder = new BuilderInstant(world, struct, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit);
-
     builder.startConstruction();
     }
   return true;

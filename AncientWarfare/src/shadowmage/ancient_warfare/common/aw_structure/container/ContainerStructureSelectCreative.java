@@ -31,7 +31,7 @@ import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderC
 public class ContainerStructureSelectCreative extends ContainerBase
 {
 
-public final ItemStack builderItem;
+//public final ItemStack builderItem;
 
 /**
  * @param openingPlayer
@@ -40,16 +40,12 @@ public final ItemStack builderItem;
 public ContainerStructureSelectCreative(EntityPlayer openingPlayer, IEntityContainerSynch synch) 
   {
   super(openingPlayer, synch);
-  if(player.inventory.getCurrentItem() != null && player.inventory.getCurrentItem().getItem() instanceof ItemStructureBuilderCreative)
+  if(player.inventory.getCurrentItem() == null && !(player.inventory.getCurrentItem().getItem() instanceof ItemStructureBuilderCreative))
     {
-    this.builderItem = player.inventory.getCurrentItem();
-    }
-  else
-    {
-    this.builderItem = null;
     Config.logError("Severe error initializing Creative Structure Builder Container, improper ItemStack detected.");
     }
   }
+
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
@@ -59,10 +55,11 @@ public void handlePacketData(NBTTagCompound tag)
     Config.logError("Server packet recieved on client side!");
     return;
     }
-  if(builderItem==null)
+  ItemStack builderItem = player.inventory.getCurrentItem();
+  if(builderItem==null || !(builderItem.getItem() instanceof ItemStructureBuilderCreative))
     {
     return;
-    }
+    }  
   NBTTagCompound stackTag;
   if(builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("structData"))
     {
@@ -74,7 +71,9 @@ public void handlePacketData(NBTTagCompound tag)
     }  
   if(tag.hasKey("name"))
     {
+    System.out.println("receiving name data");
     stackTag.setString("name", tag.getString("name"));
+    System.out.println("setting name to: "+stackTag.getString("name"));
     }  
   if(tag.hasKey("team"))
     {
@@ -93,6 +92,15 @@ public void handlePacketData(NBTTagCompound tag)
     stackTag.setInteger("gate", tag.getInteger("gate"));
     }  
   builderItem.setTagInfo("structData", stackTag);
+  if(builderItem.getTagCompound().getCompoundTag("structData").hasKey("name"))
+    {
+    System.out.println("name actually set to: "+builderItem.getTagCompound().getCompoundTag("structData").getString("name"));
+    if(builderItem!=player.inventory.getCurrentItem())
+      {
+      System.out.println("builderItem is not current player item!!!");
+      }
+    }
+  
   }
 
 @Override

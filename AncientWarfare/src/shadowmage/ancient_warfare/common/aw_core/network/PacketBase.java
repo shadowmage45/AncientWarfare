@@ -107,6 +107,7 @@ protected void constructPacket()
    * write custom data to the output stream
    */
   this.writeDataToStream(data);
+  this.packet250 = new Packet250CustomPayload();
   packet250.isChunkDataPacket = this.chunkPacket;
   packet250.channel = this.getChannel();
   packet250.data = data.toByteArray();
