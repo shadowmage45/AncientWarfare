@@ -131,7 +131,7 @@ public void setupGui()
     
   for(int i = 0, buttonNum = 3; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++, buttonNum++)
     {
-    this.addGuiButton(buttonNum, 10, 60 + (20*i) , 120, 18, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
+    this.addGuiButton(buttonNum, 10, 60 + (20*i) , 120, 14, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
     } 
   
   }
