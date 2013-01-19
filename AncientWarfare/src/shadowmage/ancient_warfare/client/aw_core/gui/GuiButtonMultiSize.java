@@ -70,9 +70,9 @@ public void drawButton(Minecraft mc, int mouseX, int mouseY)
     
     //this.drawTexturedModalRect(this.xPosition, this.yPosition, u, v, w, h);
     this.drawTexturedModalRect(this.xPosition, this.yPosition, tlX, tlY + vOffset, halfWidth, halfHeight);
-    this.drawTexturedModalRect(this.xPosition, this.yPosition, trX, trY + vOffset, halfWidth, halfHeight);
-    this.drawTexturedModalRect(this.xPosition, this.yPosition, blX, blY + vOffset, halfWidth, halfHeight);
-    this.drawTexturedModalRect(this.xPosition, this.yPosition, brX, brY + vOffset, halfWidth, halfHeight);
+    this.drawTexturedModalRect(this.xPosition + halfWidth, this.yPosition, trX, trY + vOffset, halfWidth, halfHeight);
+    this.drawTexturedModalRect(this.xPosition, this.yPosition + halfHeight, blX, blY + vOffset, halfWidth, halfHeight);
+    this.drawTexturedModalRect(this.xPosition + halfWidth, this.yPosition + halfHeight, brX, brY + vOffset, halfWidth, halfHeight);
         
     this.mouseDragged(mc, mouseX, mouseY);
     int fontColor = 14737632;

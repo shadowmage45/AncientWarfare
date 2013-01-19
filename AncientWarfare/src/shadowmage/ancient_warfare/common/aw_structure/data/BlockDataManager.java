@@ -121,8 +121,8 @@ public static void loadBlockList()
   addBlock(Block.torchRedstoneIdle).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);
   addBlock(Block.torchRedstoneActive).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);  
    
-  addBlock(Block.doorWood).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4);
-  addBlock(Block.doorSteel).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4);
+  addBlock(Block.doorWood).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4).setMeta(2, 8, 8, 8, 8);
+  addBlock(Block.doorSteel).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4).setMeta(2, 8, 8, 8, 8);
   addBlock(Block.fenceGate).setRotatable().setMeta(0, 0, 1, 2, 3).setMeta(1, 4, 5, 6, 7);//HUH? rotated one block from door data?
   
   addBlock(Block.stairCompactPlanks).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);

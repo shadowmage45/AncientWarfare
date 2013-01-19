@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.aw_structure.data;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
@@ -79,15 +80,25 @@ public void scan(World world)
   int indexX = 0;
   int indexY = 0;
   int indexZ = 0;
-  for(int x = pos1.x; x <= pos2.x; x++, indexX++)
-    { 
-    indexY = 0;
-    for(int y = pos1.y; y <= pos2.y; y++, indexY++)
+  int id;
+  int meta;
+  for(int x = pos1.x; x <= pos2.x; x++, indexX++, indexY=0)
+    {
+    for(int y = pos1.y; y <= pos2.y; y++, indexY++, indexZ=0)
       {
-      indexZ = 0;
       for(int z = pos1.z; z <= pos2.z; z++, indexZ++)
         {       
-        allBlocks[indexX][indexY][indexZ] = new BlockData(world.getBlockId(x, y, z), world.getBlockMetadata(x, y, z));        
+        id = world.getBlockId(x, y, z);
+        meta = world.getBlockMetadata(x, y, z);
+        if(id==Block.doorWood.blockID || id==Block.doorSteel.blockID)
+          {
+          int lowerID = world.getBlockId(x, y-1, z);
+          if(lowerID==Block.doorWood.blockID || lowerID==Block.doorSteel.blockID)
+            {
+            meta = 8;
+            }
+          }
+        allBlocks[indexX][indexY][indexZ] = new BlockData(id, meta);        
         }      
       }    
     }    
