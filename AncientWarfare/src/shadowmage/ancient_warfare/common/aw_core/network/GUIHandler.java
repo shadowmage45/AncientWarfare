@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.aw_core.network;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.client.aw_structure.gui.GUICreativeStructureBuilder;
+import shadowmage.ancient_warfare.client.aw_structure.gui.GuiCSB;
 import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
 import shadowmage.ancient_warfare.common.aw_structure.container.ContainerStructureSelectCreative;
@@ -88,7 +88,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   switch(ID)
   {
   case STRUCTURE_SELECT:
-  return new GUICreativeStructureBuilder(new ContainerStructureSelectCreative(player, null));  
+  return new GuiCSB(new ContainerStructureSelectCreative(player, null));  
   case 1:
   return null;  
   case 2:

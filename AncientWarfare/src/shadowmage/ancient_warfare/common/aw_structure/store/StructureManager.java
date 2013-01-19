@@ -175,8 +175,25 @@ public void handleUpdateServer(NBTTagCompound tag)
     }
   }
 
+public boolean isValidStructureClient(String name)
+  {
+  for(ProcessedStructure struct : this.structures)
+    {
+    if(struct.name.equals(name))
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
+/**
+ * INIT method, clears structure list before adding from nbt list * 
+ * @param list
+ */
 private void addClientStructuresFromNBT(NBTTagList list)
   {
+  this.clientStructures.clear();
   NBTTagCompound tag;
   for(int i = 0; i < list.tagCount(); i++)
     {
@@ -208,6 +225,18 @@ private void removeClientStructure(String name)
 public void clearClientData()
   {
   this.clientStructures.clear();
+  }
+
+public StructureClientInfo getClientStructure(String name)
+  {
+  for(StructureClientInfo info : this.clientStructures)
+    {
+    if(info.name.equals(name))
+      {
+      return info;
+      }
+    }
+  return null;
   }
 
 }

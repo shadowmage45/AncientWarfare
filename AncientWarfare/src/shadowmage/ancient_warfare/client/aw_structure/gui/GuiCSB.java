@@ -26,7 +26,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.management.LowerStringMap;
 import shadowmage.ancient_warfare.client.aw_core.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.aw_core.utils.StringTools;
@@ -34,7 +33,12 @@ import shadowmage.ancient_warfare.common.aw_structure.container.ContainerStructu
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
-public class GUICreativeStructureBuilder extends GuiContainerAdvanced
+/**
+ * creative structure builder
+ * @author Shadowmage
+ *
+ */
+public class GuiCSB extends GuiContainerAdvanced
 {
 /**
  * need option to force team number/setting (override template)
@@ -54,7 +58,7 @@ String currentStructure = "";
 /**
  * @param par1Container
  */
-public GUICreativeStructureBuilder(Container container)
+public GuiCSB(Container container)
   {
   super(container);
   if(container instanceof ContainerStructureSelectCreative)
@@ -81,7 +85,14 @@ public GUICreativeStructureBuilder(Container container)
     if(currentStructure.equals(""))
       {
       currentStructure = "No selection";
-      } 
+      }
+    else
+      {
+      if(StructureManager.instance().getClientStructure(currentStructure)==null)
+        {
+        currentStructure = "No selection";
+        }
+      }
     }
   }
 
@@ -159,7 +170,8 @@ public void buttonClicked(GuiButton button)
   switch(button.id)
     {
     case 0:
-    closeGUI();
+    mc.displayGuiScreen(new GuiCSBAdvancedSelection(inventorySlots, this));
+    //closeGUI();
     return;
     
     case 1:

@@ -171,16 +171,8 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
   if(world.isRemote)
     {
     return true;
-    }  
-  if(player.isSneaking())
-    {
-    openGUI(player);
-    return true;
-    }
-  if(hit==null)
-    {
-    return true;
-    }
+    }    
+  
   NBTTagCompound tag;
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
     {
@@ -189,20 +181,35 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
   else
     {
     tag = new NBTTagCompound();
-    }
-  if(tag.hasKey("name"))
+    } 
+  if(player.isSneaking())
     {
+    if(tag.hasKey("name") && !StructureManager.instance().isValidStructureClient(tag.getString("name")))
+      {      
+      clearStructureData(stack);
+      }
+    openGUI(player);
+    return true;
+    }
+  if(tag.hasKey("name") && hit !=null)
+    {    
     System.out.println("attemtpting construction");
     ProcessedStructure struct = StructureManager.instance().getStructure(tag.getString("name"));
     if(struct==null)
       {
       Config.logError("Structure Manager returned NULL structure to build for name : "+tag.getString("name"));
+      clearStructureData(stack);
       return true;
       }
     BuilderInstant builder = new BuilderInstant(world, struct, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit);
     builder.startConstruction();
     }
   return true;
+  }
+
+private void clearStructureData(ItemStack stack)
+  {
+  stack.setTagInfo("structData", new NBTTagCompound());
   }
 
 
