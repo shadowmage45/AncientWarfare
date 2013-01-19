@@ -58,7 +58,7 @@ public void drawButton(Minecraft mc, int mouseX, int mouseY)
     int tlY = 120;
 
     //topRight corner to be drawn
-    int trX = 256 - halfWidth;
+    int trX = 40 - halfWidth;
     int trY = 120;
 
     //bottomLeft corner to be drawn
@@ -66,7 +66,7 @@ public void drawButton(Minecraft mc, int mouseX, int mouseY)
     int blY = 120+40 - halfHeight;
 
     //bottomRight corner to be drawn    
-    int brX = 256 - halfWidth;
+    int brX = 40 - halfWidth;
     int brY = 120+40 - halfHeight;     
 
     GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture("/shadowmage/ancient_warfare/resources/gui/guiButtons.png"));
@@ -76,11 +76,13 @@ public void drawButton(Minecraft mc, int mouseX, int mouseY)
     int vOffset = isMouseOver * 40;//will return 0, 40, or 80..for inactive, active, hover, apply to Y offset in UV rendering
     int hOffset = checked ? 40 : 0;
 
+    
+    
     //this.drawTexturedModalRect(this.xPosition, this.yPosition, u, v, w, h);
     this.drawTexturedModalRect(this.xPosition, this.yPosition, tlX + hOffset, tlY + vOffset, halfWidth, halfHeight);
-    this.drawTexturedModalRect(this.xPosition, this.yPosition, trX + hOffset, trY + vOffset, halfWidth, halfHeight);
-    this.drawTexturedModalRect(this.xPosition, this.yPosition, blX + hOffset, blY + vOffset, halfWidth, halfHeight);
-    this.drawTexturedModalRect(this.xPosition, this.yPosition, brX + hOffset, brY + vOffset, halfWidth, halfHeight);
+    this.drawTexturedModalRect(this.xPosition+halfWidth, this.yPosition, trX + hOffset, trY + vOffset, halfWidth, halfHeight);
+    this.drawTexturedModalRect(this.xPosition, this.yPosition+halfHeight, blX + hOffset, blY + vOffset, halfWidth, halfHeight);
+    this.drawTexturedModalRect(this.xPosition+halfWidth, this.yPosition+halfHeight, brX + hOffset, brY + vOffset, halfWidth, halfHeight);
 
     this.mouseDragged(mc, mouseX, mouseY);   
     }

@@ -109,6 +109,8 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   this.drawString(fontRenderer, "Structure: "+currentStructure, guiLeft + 10, guiTop + 14, 0xffffffff);
   
+  
+  
   this.drawString(fontRenderer, "Wid", guiLeft + 190, guiTop + 46, 0xffffffff);
   this.drawString(fontRenderer, "Len", guiLeft + 210, guiTop + 46, 0xffffffff);
   this.drawString(fontRenderer, "Hig", guiLeft + 230, guiTop + 46, 0xffffffff);
@@ -128,7 +130,9 @@ public void setupGui()
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
   this.addGuiButton(1, 10, 40, 35, 18, "Prev");
   this.addGuiButton(2, 50, 40, 35, 18, "Next");
-    
+  
+  this.addCheckBox(20, 10, 30, 16, 16);
+  
   for(int i = 0, buttonNum = 3; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++, buttonNum++)
     {
     this.addGuiButton(buttonNum, 10, 60 + (20*i) , 120, 14, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
