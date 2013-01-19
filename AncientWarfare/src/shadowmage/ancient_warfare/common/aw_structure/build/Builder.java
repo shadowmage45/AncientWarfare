@@ -369,6 +369,7 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("bX", this.buildPos.x);
   tag.setInteger("bY", this.buildPos.y);
   tag.setInteger("bZ", this.buildPos.z);
+  //TODO add info for overrides
   return tag;
   }
 
