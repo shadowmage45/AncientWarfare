@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.aw_structure.gui.GuiCSB;
 import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
-import shadowmage.ancient_warfare.common.aw_structure.container.ContainerStructureSelectCreative;
+import shadowmage.ancient_warfare.common.aw_structure.container.ContainerCSB;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 
@@ -56,7 +56,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   switch(ID)
   {
   case STRUCTURE_SELECT:
-  return new ContainerStructureSelectCreative(player, null);
+  return new ContainerCSB(player, null);
   
   case 1:
   return null;
@@ -88,7 +88,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   switch(ID)
   {
   case STRUCTURE_SELECT:
-  return new GuiCSB(new ContainerStructureSelectCreative(player, null));  
+  return new GuiCSB(new ContainerCSB(player, null));  
   case 1:
   return null;  
   case 2:

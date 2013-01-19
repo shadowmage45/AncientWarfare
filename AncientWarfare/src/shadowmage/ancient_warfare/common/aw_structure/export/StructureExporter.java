@@ -100,12 +100,11 @@ public static void writeStructureToFile(ScannedStructureNormalized struct, Strin
     writer.write("preserveBlocks=false\n");    
     writer.write("\n");
     writer.write("####BLOCK RULES####\n");
-    //writeAirRule(writer);
     writeBlockRules(writer, struct);    
     writer.write("\n");
     writer.write("####LAYERS####\n");
-    writeLayers(writer, struct);
-    
+    writeLayers(writer, struct);    
+    writer.write("\n");
     writer.close();
     } 
   catch (IOException e)

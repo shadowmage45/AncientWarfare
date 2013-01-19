@@ -20,8 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
-import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
+import java.util.List;
+
+import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 
 /**
@@ -34,7 +37,7 @@ public class ProcessedStructure extends AWStructure
 
 public ProcessedStructure()
   {
-  
+
   }
 
 public BlockRule getRuleAt(int x, int y, int z)
@@ -42,5 +45,89 @@ public BlockRule getRuleAt(int x, int y, int z)
   return this.blockRules.get(this.structure[x][y][z]);
   }
 
+public boolean canGenerateAt(World world, BlockPosition hit, int facing)
+  {
+  if(!areBlocksValid(getFoundationBlocks(hit, facing), world))
+    {
+    return false;
+    }  
+  //TODO validate structure...leveling, clearing, overhang, underground
+  return true;
+  }
+
+public boolean isValidTargetBlock(int id)
+  {
+  for(int i = 0; i < this.validTargetBlocks.length; i++)
+    {
+    if(id==this.validTargetBlocks[i])
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
+/**
+ * returns true if blockIDs==0(handled in overhang and leveling) or is on the validTargetBlocks list
+ * @param blocks
+ * @param world
+ * @return
+ */
+private boolean areBlocksValid(List<BlockPosition> blocks, World world)
+  {
+  int id;
+  for(BlockPosition pos : blocks)
+    {
+    id = world.getBlockId(pos.x, pos.y, pos.z);
+    if(id==0)
+      {
+      continue;
+      }
+    if(!isValidTargetBlock(id))
+      {
+      return false;
+      }
+    }
+  return true;  
+  } 
+
+/**
+ * gets world coordinates of blocks for the foundation of this structure at the given orientation and chosen build position 
+ * @param hit
+ * @param facing
+ * @return
+ */
+private List<BlockPosition> getFoundationBlocks(BlockPosition hit, int facing)
+  {
+  BlockPosition pos1 = hit.copy();
+  pos1.moveForward(facing, this.zOffset);
+  pos1.moveLeft(facing, this.xOffset);
+  pos1.y += this.verticalOffset - 1;
+  
+  BlockPosition pos2 = pos1.copy();  
+  pos2.moveRight(facing, this.xSize);
+  pos2.moveForward(facing, this.zSize);
+  return BlockTools.getAllBlockPositionsBetween(pos1, pos2);
+  }
+
+/**
+ * get world corrdinate BB of this structure if built at hit position and input facing
+ * @param hit
+ * @param facing
+ * @return
+ */
+public StructureBB getStructureBB(BlockPosition hit, int facing)
+  {
+  BlockPosition pos1 = hit.copy();
+  pos1.moveForward(facing, this.zOffset);
+  pos1.moveLeft(facing, this.xOffset);
+  pos1.y += this.verticalOffset;
+  
+  BlockPosition pos2 = pos1.copy();  
+  pos2.moveRight(facing, this.xSize);
+  pos2.moveForward(facing, this.zSize);
+  pos2.y += this.ySize;
+  return new StructureBB(pos1, pos2);
+  }
 
 }

@@ -65,7 +65,7 @@ private void processFile()
     e.printStackTrace();    
     return;
     }
-  LinkedList<String> lines = new LinkedList<String>();
+  List<String> lines = new ArrayList<String>();
   String line;
   /**
    * throw everything into a linked list, close the file
@@ -101,6 +101,18 @@ private void parseLines(List<String> lines)
     if(line.toLowerCase().startsWith("name"))//structure name
       {
       this.name = line.split("=")[1];
+      }
+    else if(line.toLowerCase().startsWith("worldgen"))
+      {
+      this.worldGen = Boolean.parseBoolean(line.split("=")[1]);
+      }
+    else if(line.toLowerCase().startsWith("creative"))
+      {
+      this.creative = Boolean.parseBoolean(line.split("=")[1]);
+      }
+    else if(line.toLowerCase().startsWith("survival"))
+      {
+      this.survival = Boolean.parseBoolean(line.split("=")[1]);
       }
     else if(line.toLowerCase().startsWith("unique"))//structure uniqueness
       {

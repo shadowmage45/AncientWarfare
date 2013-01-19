@@ -20,38 +20,83 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.build;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemDoor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
-import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
-import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
-import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 public abstract class Builder implements INBTTaggable
 {
+/**
+ * the structure being built
+ */
 public final ProcessedStructure struct;
+
+/**
+ * the world in which the structure is being built
+ */
 public final World world;
 
 /**
  * build passes
  */
 int currentPriority = 0;
+
+/**
+ * highest priority found when scanning blockrules
+ */
 int maxPriority;
 
+/**
+ * the facing chosen for this builder
+ */
 public int facing = 0;
+
+/**
+ * current iteration position through template
+ */
 public int currentX = 0;
-public int currentY = 0; 
+
+/**
+ * current iteration position through template
+ */
+public int currentY = 0;
+
+/**
+ * current iteration position through template
+ */
 public int currentZ = 0;
+
+/**
+ * the chosen build position for this structure
+ */
 public BlockPosition buildPos;
+
+/**
+ * flipped if this structure is finished, will be removed from ticking queues
+ */
 protected boolean isFinished = false;
+
+/**
+ * what dimension this builder is working in, used for save/load from NBT
+ */
 public int dimension = 0;
+
+
+/************************************************************ OVERRIDE VALUES ************************************************************/
+int overrideVehicle=-2;
+int overrideNPC=-2;
+int overrideGate=-2;
+int overrideTeam=-1;
+int overrideMaxOverhang;
+int overrideMaxVerticalClear;
+int overrideClearingBuffer;
+int overrideMaxLeveling;
+int overrideLevelingBuffer;
 
 public Builder(World world, ProcessedStructure struct, int facing, BlockPosition hit)
   {
@@ -69,6 +114,7 @@ public Builder(World world, ProcessedStructure struct, int facing, BlockPosition
     }
   }
 
+
 /**
  * for instantBuilder--construct
  * for tickedBuilder--add to tickQue in AWStructureModule
@@ -77,7 +123,7 @@ public abstract void startConstruction();
 
 /**
  * for instantBuilder--NOOP
- * for tickedBuilder--self-remove from buildQue
+ * for tickedBuilder--NOOP
  */
 public abstract void finishConstruction();
 
@@ -98,19 +144,37 @@ public void setFinished()
   this.isFinished = true;
   }
 
-protected void placeBlock(World world, BlockPosition pos, int id, int meta)
+public void setVehicleOverride(int type)
   {
-  if(id==Block.doorSteel.blockID || id==Block.doorWood.blockID)
-    {
-    if(meta==8)
-      {
-      return;
-      }
-    else
-      {
-      world.setBlockAndMetadata(pos.x, pos.y+1, pos.z, id, 8);
-      }
-    }
+  this.overrideVehicle =type;
+  }
+
+public void setNPCOverride(int type)
+  {
+  this.overrideNPC = type;
+  }
+
+public void setGateOverride(int type)
+  {
+  this.overrideGate = type;
+  }
+
+public void setTeamOverride(int type)
+  {
+  this.overrideTeam = type;
+  }
+
+/**
+ * calls leveling and clearing functions, does not validate the site
+ */
+protected void preConstruction()
+  {
+  //TODO leveling, clearing, etc
+  //check overrides, or use structure values
+  }
+
+protected void placeBlock(World world, BlockPosition pos, int id, int meta)
+  { 
   world.setBlockAndMetadata(pos.x, pos.y, pos.z, id, meta);
   }
 
@@ -131,6 +195,70 @@ protected void placeBlockNotify(World world, BlockPosition pos, int id, int meta
   world.setBlockAndMetadataWithNotify(pos.x, pos.y, pos.z, id, meta);
   }
 
+protected boolean isAirBlock(BlockPosition target)
+  {
+  return world.getBlockId(target.x, target.y, target.z)==0;
+  }
+
+protected boolean isAirBlock(int id)
+  {
+  return id==0;
+  }
+
+protected boolean isPlant(int id)
+  {  
+  //TODO
+  return false;
+  }
+
+protected boolean isWater(int id)
+  {  
+  if(id==Block.waterMoving.blockID || id==Block.waterStill.blockID)
+    {
+    return true;
+    }
+  return false;
+  }
+
+protected boolean isLava(int id)
+  {
+  if(id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)
+    {
+    return true;
+    }
+  return false;
+  }
+
+protected boolean shouldSkipBlock(BlockRule rule, BlockPosition target, int currentPriority)
+  {
+  int id = world.getBlockId(target.x, target.y, target.z);
+  boolean airBlock = isAirBlock(target);
+  if(rule.order!=currentPriority)
+    {
+    return true;
+    }
+  if(rule.ruleNumber==0 && airBlock)
+    {
+    return true;
+    }
+  if(!airBlock && (rule.preserveBlocks || struct.preserveBlocks))
+    {
+    return true;
+    }  
+  if(isPlant(id) && (rule.preservePlants || struct.preservePlants))
+    {
+    return true;
+    }
+  if(isWater(id) && (rule.preserveWater || struct.preserveWater))
+    {
+    return true;
+    }
+  if(isLava(id) && (rule.preserveLava || struct.preserveLava))
+    {
+    return true;
+    }  
+  return false;
+  }
 
 /**
  * get rotation amount relative to default facing of 2
@@ -235,6 +363,8 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("x", currentX);
   tag.setInteger("y", currentY);
   tag.setInteger("z", currentZ);
+  tag.setInteger("p", currentPriority);
+  tag.setInteger("mP", maxPriority);
   tag.setInteger("dim", this.world.getWorldInfo().getDimension());
   tag.setInteger("bX", this.buildPos.x);
   tag.setInteger("bY", this.buildPos.y);
@@ -244,13 +374,29 @@ public NBTTagCompound getNBTTag()
 
 public void readFromNBT(NBTTagCompound tag)
   {
-  this.isFinished = tag.getBoolean("finished");
-  this.facing = tag.getByte("face");
+  this.isFinished = tag.getBoolean("finished");  
   this.currentX = tag.getInteger("x");
   this.currentY = tag.getInteger("y");
   this.currentZ = tag.getInteger("z");
-  this.dimension = tag.getInteger("dim");
-  this.buildPos = new BlockPosition(tag.getInteger("bX"), tag.getInteger("bY"), tag.getInteger("bZ"));  
+  this.currentPriority = tag.getInteger("p");
+  this.maxPriority = tag.getInteger("mP");
+  this.dimension = tag.getInteger("dim");  
   }
+
+public static Builder readTickedBuilderFromNBT(NBTTagCompound tag, World world)
+  {  
+  String name = tag.getString("name");
+  ProcessedStructure struct = StructureManager.instance().getStructure(name);
+  if(struct==null)
+    {
+    return null;
+    }
+  BlockPosition hit = new BlockPosition(tag.getInteger("bX"), tag.getInteger("bY"), tag.getInteger("bZ"));
+  int facing = tag.getByte("face");
+  Builder builder = new BuilderTicked(world, struct, facing, hit);
+  builder.readFromNBT(tag);
+  return builder;
+  }
+
 
 }

@@ -42,6 +42,11 @@ public GuiCheckBox setChecked(boolean checked)
   return this;
   }
 
+public boolean checked()
+  {
+  return checked;
+  }
+
 
 /**
  * Draws this button to the screen.

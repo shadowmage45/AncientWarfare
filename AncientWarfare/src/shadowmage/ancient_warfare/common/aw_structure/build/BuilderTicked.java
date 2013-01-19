@@ -87,7 +87,7 @@ public void onTick()
   /**
    * if current block is of a higher order than current pass, skip until you find a lower/equal block or cannot increment build pass
    */
-  while(rule.order!=currentPriority || rule.ruleNumber==0 && isAirBlock(target))
+  while(shouldSkipBlock(rule, target, currentPriority))
     {
     if(!incrementCoords())
       {
@@ -120,10 +120,6 @@ public void onTick()
     }
   }
 
-private boolean isAirBlock(BlockPosition target)
-  {
-  return world.getBlockId(target.x, target.y, target.z)==0;
-  }
 
 private BlockPosition getCurrentTarget()
   {
@@ -136,8 +132,6 @@ private BlockRule getCurrentRule()
   }
 
 
-private void placeBlock()
-  {
-  
-  }
+
+
 }

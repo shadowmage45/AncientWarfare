@@ -34,6 +34,9 @@ public abstract class AWStructure
 {
 
 public String name;
+public boolean worldGen = false;
+public boolean creative = true;
+public boolean survival = false;
 public boolean unique;
 public int chunkDistance=0;
 public int chunkAttempts=1;
@@ -111,14 +114,5 @@ public int xSize;//x dimension
 public int zSize;//z dimension
 public int ySize;//y dimension
 
-public NBTTagCompound getClientTag()
-  {
-  NBTTagCompound structTag = new NBTTagCompound();
-  structTag.setString("name", String.valueOf(this.name));
-  structTag.setShort("x", (short)this.xSize);
-  structTag.setShort("y", (short)this.ySize);
-  structTag.setShort("z", (short)this.zSize);
-  return structTag; 
-  }
 
 }

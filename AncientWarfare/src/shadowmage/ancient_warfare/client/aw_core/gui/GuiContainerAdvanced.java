@@ -133,7 +133,7 @@ public GuiButton addGuiButton(int id, int x, int y, int len, int high, String na
   return button;
   }
 
-public GuiButton addCheckBox(int id, int x, int y, int len, int high)
+public GuiCheckBox addCheckBox(int id, int x, int y, int len, int high)
   {
   GuiCheckBox box = new GuiCheckBox(id, guiLeft + x, guiTop + y, len, high);
   this.controlList.add(box);
@@ -400,6 +400,39 @@ public void renderEntityLivingIntoInventory(Minecraft par0Minecraft, EntityLivin
 public void closeGUI()
   {
   this.player.closeScreen();
+  }
+
+/**
+ * Called when the mouse is clicked.
+ */
+@Override
+protected void mouseClicked(int mouseX, int mouseY, int buttonNum)
+  {
+  for (int var4 = 0; var4 < this.controlList.size(); ++var4)
+    {
+    GuiButton var5 = (GuiButton)this.controlList.get(var4);
+    if (var5.mousePressed(this.mc, mouseX, mouseY))
+      {
+      this.currentGuiButton = var5;
+      this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+      this.actionPerformed(var5);
+      }
+    }
+  }
+
+protected GuiButton currentGuiButton = null;
+
+/**
+ * Called when the mouse is moved or a mouse button is released.  Signature: (mouseX, mouseY, which) which==-1 is
+ * mouseMove, which==0 or which==1 is mouseUp
+ */
+protected void mouseMovedOrUp(int par1, int par2, int par3)
+  {
+  if (this.currentGuiButton != null && (par3==0 || par3==1 || par3==2))
+    {
+    this.currentGuiButton.mouseReleased(par1, par2);
+    this.currentGuiButton = null;
+    }
   }
 
 }

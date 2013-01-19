@@ -28,7 +28,7 @@ import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
 import shadowmage.ancient_warfare.common.aw_core.container.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
 
-public class ContainerStructureSelectCreative extends ContainerBase
+public class ContainerCSB extends ContainerBase
 {
 
 //public final ItemStack builderItem;
@@ -37,7 +37,7 @@ public class ContainerStructureSelectCreative extends ContainerBase
  * @param openingPlayer
  * @param synch
  */
-public ContainerStructureSelectCreative(EntityPlayer openingPlayer, IEntityContainerSynch synch) 
+public ContainerCSB(EntityPlayer openingPlayer, IEntityContainerSynch synch) 
   {
   super(openingPlayer, synch);
   if(player.inventory.getCurrentItem() == null && !(player.inventory.getCurrentItem().getItem() instanceof ItemStructureBuilderCreative))
@@ -71,9 +71,7 @@ public void handlePacketData(NBTTagCompound tag)
     }  
   if(tag.hasKey("name"))
     {
-    System.out.println("receiving name data");
     stackTag.setString("name", tag.getString("name"));
-    System.out.println("setting name to: "+stackTag.getString("name"));
     }  
   if(tag.hasKey("team"))
     {
@@ -85,22 +83,13 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("npc"))
     {
-    stackTag.setInteger("veh", tag.getInteger("npc"));
+    stackTag.setInteger("npc", tag.getInteger("npc"));
     }
   if(tag.hasKey("gate"))
     {
     stackTag.setInteger("gate", tag.getInteger("gate"));
     }  
   builderItem.setTagInfo("structData", stackTag);
-  if(builderItem.getTagCompound().getCompoundTag("structData").hasKey("name"))
-    {
-    System.out.println("name actually set to: "+builderItem.getTagCompound().getCompoundTag("structData").getString("name"));
-    if(builderItem!=player.inventory.getCurrentItem())
-      {
-      System.out.println("builderItem is not current player item!!!");
-      }
-    }
-  
   }
 
 @Override

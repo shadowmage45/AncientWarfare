@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.client.aw_structure.data;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.aw_structure.data.AWStructure;
 
 public class StructureClientInfo
 {
@@ -28,6 +29,9 @@ public final String name;
 public final int xSize;
 public final int ySize;
 public final int zSize;
+public boolean creative = true;
+public boolean worldGen = false;
+public boolean survival = false;
 
 public StructureClientInfo(NBTTagCompound tag)
   {
@@ -35,6 +39,9 @@ public StructureClientInfo(NBTTagCompound tag)
   this.xSize = tag.getShort("x");
   this.ySize = tag.getShort("y");
   this.zSize = tag.getShort("z");
+  this.creative = tag.getBoolean("creat");
+  this.worldGen = tag.getBoolean("world");
+  this.survival = tag.getBoolean("surv");
   }
 
 public StructureClientInfo(String name, int x, int y, int z)
@@ -44,5 +51,21 @@ public StructureClientInfo(String name, int x, int y, int z)
   this.ySize = y;
   this.zSize = z;
   }
+
+public static NBTTagCompound getClientTag(AWStructure struct)
+ {
+ NBTTagCompound structTag = new NBTTagCompound();
+ if(struct!=null)
+   {
+   structTag.setString("name", String.valueOf(struct.name));
+   structTag.setShort("x", (short)struct.xSize);
+   structTag.setShort("y", (short)struct.ySize);
+   structTag.setShort("z", (short)struct.zSize);
+   structTag.setBoolean("creat", struct.creative);
+   structTag.setBoolean("world", struct.worldGen);
+   structTag.setBoolean("surv", struct.survival);
+   }
+ return structTag;
+ }
 
 }

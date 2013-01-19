@@ -171,8 +171,7 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
   if(world.isRemote)
     {
     return true;
-    }    
-  
+    } 
   NBTTagCompound tag;
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
     {
@@ -181,13 +180,15 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
   else
     {
     tag = new NBTTagCompound();
+    //tag = getDefaultTag();
+    //stack.setTagInfo("structData", tag);
     } 
   if(player.isSneaking())
     {
-    if(tag.hasKey("name") && !StructureManager.instance().isValidStructureClient(tag.getString("name")))
-      {      
-      clearStructureData(stack);
-      }
+//    if(tag.hasKey("name") && !tag.getString("name").equals("") && !StructureManager.instance().isValidStructureClient(tag.getString("name")))
+//      {      
+//      clearStructureData(stack);
+//      }
     openGUI(player);
     return true;
     }
@@ -197,8 +198,7 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
     ProcessedStructure struct = StructureManager.instance().getStructure(tag.getString("name"));
     if(struct==null)
       {
-      Config.logError("Structure Manager returned NULL structure to build for name : "+tag.getString("name"));
-      clearStructureData(stack);
+      Config.logError("Structure Manager returned NULL structure to build for name : "+tag.getString("name"));      
       return true;
       }
     BuilderInstant builder = new BuilderInstant(world, struct, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit);
@@ -207,9 +207,21 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
   return true;
   }
 
+
+private NBTTagCompound getDefaultTag()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("name", "");
+  tag.setInteger("veh", -2);
+  tag.setInteger("npc", -2);
+  tag.setInteger("gate", -2);
+  tag.setInteger("team", -2);
+  return tag;
+  }
+
 private void clearStructureData(ItemStack stack)
   {
-  stack.setTagInfo("structData", new NBTTagCompound());
+  stack.setTagInfo("structData", getDefaultTag());
   }
 
 

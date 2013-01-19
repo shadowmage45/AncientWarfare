@@ -18,26 +18,19 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.aw_structure.store;
+package shadowmage.ancient_warfare.common.aw_structure.data;
 
-/**
- * In memory stored structure data.  Builders will pull from an instance
- * of this class to populate block and component lists.
- * @author Shadowmage
- *
- */
-public class AWStructure
+import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
+
+public class StructureBB
 {
-/**
- * The beginning orientation of this structure; i.e. what direction the player was facing when he scanned it.
- * Determines where the 'door' will be.
- */
-int facing;
 
-/**
- * Used by GUI's, need not be unique, but should be (mostly set by players, might enforce validation on entry
- * by a player)
- */
-String name;
+public BlockPosition pos1;
+public BlockPosition pos2;
 
+public StructureBB(BlockPosition pos1, BlockPosition pos2)
+  {
+  this.pos1 = pos1;
+  this.pos2 = pos2;
+  }
 }

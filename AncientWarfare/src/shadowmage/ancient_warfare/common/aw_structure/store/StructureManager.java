@@ -115,7 +115,7 @@ private NBTTagCompound getClientInitData()
   while(it.hasNext())
     {    
     structure = it.next();    
-    list.appendTag(structure.getClientTag());    
+    list.appendTag(StructureClientInfo.getClientTag(structure));    
     }  
   tag.setTag("initList", list);
   System.out.println("setting data to send to client. size: "+list.tagCount());
