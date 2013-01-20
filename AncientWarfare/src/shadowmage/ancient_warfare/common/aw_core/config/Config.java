@@ -25,6 +25,8 @@ package shadowmage.ancient_warfare.common.aw_core.config;
 import java.io.File;
 import java.util.logging.Logger;
 
+import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
+
 import net.minecraftforge.common.Configuration;
 
 public class Config 
@@ -87,10 +89,11 @@ public static void setLogger(Logger log)
 public static void loadConfig(File inputFile)
   {  
   config = new Configuration(inputFile);
-  Config.instance().setCoreInfo();
-  Config.instance().setVehicleInfo();
-  Config.instance().setKingdomInfo();
-  Config.instance().setWorldGenInfo();
+  instance().setCoreInfo();
+  instance().setVehicleInfo();
+  instance().setKingdomInfo();
+  instance().setWorldGenInfo(); 
+  instance().setStructureInfo();
   config.save();
   }
 
@@ -139,6 +142,17 @@ public void setKingdomInfo()
 
 public void setWorldGenInfo()
   {
+  
+  }
+
+private void setStructureInfo()
+  {
+  boolean exportDefaults = config.get("structure-management", "exportdefaults", true, "Re-export default included structures, in case they have been changed in any way, or need files regenerated").getBoolean(true);
+  if(exportDefaults)
+    {
+    config.get("structure-management", "exportdefaults", false).value = "false";
+    AWStructureModule.instance().setExportDefaults();
+    }
   
   }
 
