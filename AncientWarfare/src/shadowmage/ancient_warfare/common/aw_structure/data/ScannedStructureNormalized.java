@@ -20,15 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
-import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
-import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.aw_structure.export.StructureExporter;
 
 /**
@@ -149,6 +142,56 @@ private int getRotationAmount(int start, int destination)
 public void writeToFile(String name)
   {
   StructureExporter.writeStructureToFile(this, name);  
+  }
+
+/**
+ * returns a processed structure populated with enough data to _build_ this structure,
+ * though it is not as configured as if done through a proper template
+ * @param name
+ * @return
+ */
+public ProcessedStructure convertToProcessedStructure(String name)
+  {
+  ProcessedStructure struct = new ProcessedStructure();
+  struct.name = name;
+  struct.xSize = this.xSize;
+  struct.ySize = this.ySize;
+  struct.zSize = this.zSize;
+  
+  struct.xOffset = this.buildKey.x;
+  struct.verticalOffset = this.buildKey.y;
+  struct.zOffset = this.buildKey.z;
+  
+  BlockData[] blocks = this.getAllBlockTypes();
+  for(int i = 0; i < blocks.length; i++)
+    {
+    BlockData data = blocks[i];
+    BlockRule rule = new BlockRule(i, data.id, data.meta);
+    struct.blockRules.add(rule);
+    }
+  struct.structure = new short[xSize][ySize][zSize];
+  for(int x = 0; x <struct.structure.length; x++)
+    {
+    for(int y = 0; y <struct.structure[x].length; y++)
+      {
+      for(int z = 0; z < struct.structure[x][y].length; z++)
+        {
+        BlockData data = this.allBlocks[x][y][z];
+        struct.structure[x][y][z]=(short) this.getRuleForBlock(data.id, data.meta);
+        }
+      }
+    }
+  return struct;
+  }
+
+public BlockData[] getAllBlockTypes()
+  {  
+  BlockData[] datas = new BlockData[this.blockIDs.size()];
+  for(int i = 0; i <this.blockIDs.size(); i++)
+    {
+    datas[i]=this.blockIDs.get(i);
+    }
+  return datas;
   }
 
 }

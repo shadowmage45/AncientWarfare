@@ -28,6 +28,7 @@ import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.registry.DescriptionRegistry;
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemBlockScanner;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderDirect;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemDebugBuilder;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureScanner;
@@ -49,6 +50,7 @@ public static final AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.ge
 public static final AWItemBase componentItem = new AWItemBase(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
 public static final AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 13005, "Item used to scan structures"));
 public static final AWItemBase structureCreativeBuilder = new ItemStructureBuilderCreative(Config.getItemID("itemSingle.structureBuilderCreative", 13006, "Creative-Mode Selectable Structure Builder"));
+public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Config.getItemID("itemSingle.builderDirect", 13007, "Survival mode builder, uses blocks from inventory"));
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -83,6 +85,7 @@ private void loadItems()
   {  
   this.registerItemSingle(structureScanner, "Structure Scanner", "Structure Scanner", "Structure Scanning Item, Right-Click to Use");
   this.registerItemSingle(structureCreativeBuilder, "Creative Builder", "Creative Mode Building Tool", "Right-Click to Build, Sneak+Right-Click to open GUI");
+  this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Right-Click to Scan, and then Build");
   this.registerItemWithSubtypes(componentItem);
   this.registerItemWithSubtypes(vehicleAmmo);
   this.registerItemWithSubtypes(vehicleSpawner);

@@ -28,16 +28,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.common.network.PacketDispatcher;
+import shadowmage.ancient_warfare.common.aw_structure.data.StructureClientInfo;
 
 public class StructureManager
 {

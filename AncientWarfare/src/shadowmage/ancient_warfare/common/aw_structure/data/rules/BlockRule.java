@@ -26,6 +26,7 @@ import java.util.Random;
 
 import shadowmage.ancient_warfare.common.aw_core.utils.StringTools;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
+import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 
 public class BlockRule
 {
@@ -75,6 +76,14 @@ public boolean preserveBlocks = false;
 
 private BlockRule()
   {
+  }
+
+public BlockRule(int ruleNum, int id, int meta)
+  {
+  this.ruleNumber = (short) ruleNum;
+  this.blockData = new BlockData[1];
+  this.blockData[0] = new BlockData(id, meta);
+  this.order = (byte) BlockDataManager.getBlockPriority(id, meta);
   }
 
 public BlockData getBlockChoice(Random random)

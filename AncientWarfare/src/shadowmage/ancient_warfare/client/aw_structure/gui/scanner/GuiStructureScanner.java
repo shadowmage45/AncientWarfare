@@ -105,12 +105,12 @@ public void setupGui()
   this.controlList.clear();
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
   this.addGuiButton(1, 256-45-10, 30, 45, 18, "Export");
-  formatAWBox = this.addCheckBox(2, 125, 50, 16, 16).setChecked(formatAW);
-  includeBox = this.addCheckBox(3, 125, 70, 16, 16).setChecked(include);
-  formatRuinsBox = this.addCheckBox(4, 125, 90, 16, 16).setChecked(formatRuins);
-  worldGenBox = this.addCheckBox(5, 125, 110, 16, 16).setChecked(worldGen);
-  creativeBox = this.addCheckBox(6, 125, 130, 16, 16).setChecked(creative);
-  survivalBox = this.addCheckBox(7, 125, 150, 16, 16).setChecked(survival);
+  formatAWBox = this.addCheckBox(2, 145, 50, 16, 16).setChecked(formatAW);
+  includeBox = this.addCheckBox(3, 145, 70, 16, 16).setChecked(include);
+  formatRuinsBox = this.addCheckBox(4, 145, 90, 16, 16).setChecked(formatRuins);
+  worldGenBox = this.addCheckBox(5, 145, 110, 16, 16).setChecked(worldGen);
+  creativeBox = this.addCheckBox(6, 145, 130, 16, 16).setChecked(creative);
+  survivalBox = this.addCheckBox(7, 145, 150, 16, 16).setChecked(survival);
     
   nameBox = new GuiTextField(fontRenderer, guiLeft+10, guiTop+30, 120, 10);
   nameBox.setTextColor(-1);

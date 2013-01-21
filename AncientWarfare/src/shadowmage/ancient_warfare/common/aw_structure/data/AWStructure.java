@@ -23,9 +23,6 @@ package shadowmage.ancient_warfare.common.aw_structure.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.nbt.NBTTagCompound;
-
-import shadowmage.ancient_warfare.client.aw_structure.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.NPCRule;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.VehicleRule;

@@ -124,21 +124,11 @@ public static boolean writeStructureToFile(ScannedStructureNormalized struct, St
 
 private static void writeBlockRules(FileWriter writer, ScannedStructureNormalized struct) throws IOException
   {
-  BlockData[] datas = findAllBlockTypes(struct);
+  BlockData[] datas = struct.getAllBlockTypes();
   for(int i = 0; i < datas.length; i++)
     {
     writeSingleBlockRule(writer, i, datas[i].id, datas[i].meta);
     }
-  }
-
-private static BlockData[] findAllBlockTypes(ScannedStructureRaw struct)
-  {  
-  BlockData[] datas = new BlockData[struct.blockIDs.size()];
-  for(int i = 0; i <struct.blockIDs.size(); i++)
-    {
-    datas[i]=struct.blockIDs.get(i);
-    }
-  return datas;
   }
 
 private static void writeSingleBlockRule(FileWriter writer, int ruleNum, int id, int meta) throws IOException
