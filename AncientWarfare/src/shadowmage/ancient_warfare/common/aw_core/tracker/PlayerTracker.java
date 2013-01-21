@@ -63,11 +63,42 @@ private PlayerEntry clientEntry = new PlayerEntry();
 @Override
 public void onPlayerLogin(EntityPlayer player)
   {
+  if(player.worldObj.isRemote)
+    {
+    return;
+    }
   StructureManager.instance().handlePlayerLogin(player);  
   if(!playerEntries.containsKey(player.getEntityName()))
     {
-    //TODO create player entry for player
+    this.createEntryForNewPlayer(player);
     }  
+  
+  NBTTagCompound initTag = new NBTTagCompound();
+  NBTTagCompound tag = this.getClientInitData();
+  if(tag!=null)
+    {
+    initTag.setCompoundTag("playerData", tag);
+    }
+  tag = TeamTracker.instance().getClientInitData();
+  if(tag!=null)
+    {
+    initTag.setCompoundTag("teamData", tag);
+    }
+  
+  Packet01ModData init = new Packet01ModData();
+  init.setInitData(initTag);
+  AWCore.proxy.sendPacketToPlayer(player, init);  
+  }
+
+public void handleClientInit(NBTTagCompound tag)
+  {
+  //TODO
+  }
+
+private NBTTagCompound getClientInitData()
+  {
+  //TODO
+  return null;
   }
 
 /**
@@ -80,8 +111,7 @@ private void createEntryForNewPlayer(EntityPlayer player)
     {
     return;
     }
-  //TODO
-  
+  //TODO  
   TeamTracker.instance().handleNewPlayerLogin(player);
   }
 
@@ -110,8 +140,7 @@ public NBTTagCompound getNBTTag()
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO load data from persistent file from world directory....
-  
+  // TODO load data from persistent file from world directory....  
   }
 
 public void clearAllData()

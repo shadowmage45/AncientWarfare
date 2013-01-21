@@ -37,7 +37,7 @@ public static EventHandler instance()
 
 
 
-
+/************************************** WORLD LOAD/SAVE HANDLERS **************************************/
 @ForgeSubscribe
 public void onWorldLoad(WorldEvent.Load evt)
   {
@@ -50,10 +50,6 @@ public void onWorldLoad(WorldEvent.Load evt)
 @ForgeSubscribe
 public void onWorldUnload(WorldEvent.Unload evt)
   {
-//  if(evt.world instanceof WorldServer)
-//    {
-//    
-//    }  
   }
 
 @ForgeSubscribe

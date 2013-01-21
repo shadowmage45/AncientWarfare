@@ -78,7 +78,17 @@ public void preInit(FMLPreInitializationEvent evt)
    */
   Config.loadConfig(evt.getSuggestedConfigurationFile());
   Config.setLogger(evt.getModLog());
+  
+  /**
+   * register player tracker
+   */
+  GameRegistry.registerPlayerTracker(PlayerTracker.instance());
+  
+  /**
+   * register eventHandler
+   */
   MinecraftForge.EVENT_BUS.register(EventHandler.instance());
+  
   /**
    * load items
    */
@@ -106,22 +116,21 @@ public void preInit(FMLPreInitializationEvent evt)
 public void init(FMLInitializationEvent evt)
   {
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
-  GameRegistry.registerPlayerTracker(PlayerTracker.instance());
-  }
-	
-
-/**
- * load modules
- * @param evt
- */
-@PostInit
-public void load(FMLPostInitializationEvent evt)
-  {  
+  proxy.registerClientData();
   
   /**
    * process loaded structures
    */
   AWStructureModule.instance().process();
+  }
+	
+/**
+ * finalize config settings
+ * @param evt
+ */
+@PostInit
+public void load(FMLPostInitializationEvent evt)
+  {  
   
   /**
    * and finally, save the config in case there were any changes made during init

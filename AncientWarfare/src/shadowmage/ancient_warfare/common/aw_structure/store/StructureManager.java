@@ -68,12 +68,21 @@ public ProcessedStructure getStructure(String name)
   return null;
   }
 
+/**
+ * server side method to add a structure, relays client data to all logged in clients to update
+ * their structure map
+ * @param struct
+ */
 public void addStructure(ProcessedStructure struct)
   {
   structures.add(struct);
   sendStructureToClients(StructureClientInfo.getClientTag(struct));
   }
 
+/**
+ * send the client-structure tag to all logged in players
+ * @param tag
+ */
 public void sendStructureToClients(NBTTagCompound tag)
   {
   Packet01ModData pkt = new Packet01ModData();
@@ -82,8 +91,13 @@ public void sendStructureToClients(NBTTagCompound tag)
   AWCore.proxy.sendPacketToAllPlayers(pkt);
   }
 
+/**
+ * clear structure data, and add an entire list of structures to it
+ * @param structs
+ */
 public void addStructures(List<ProcessedStructure> structs)
   {
+  structures.clear();
   structures.addAll(structs);
   if(Config.DEBUG)
     {
@@ -128,18 +142,6 @@ private NBTTagCompound getClientInitData()
   return tag;
   }
 
-public void handlePacketData(NBTTagCompound tag, World world)
-  {
-  if(world.isRemote)
-    {
-    this.handleUpdateClient(tag);
-    }
-  else
-    {
-    this.handleUpdateServer(tag);
-    }
-  }
-
 public void handleInitClient(NBTTagCompound tag)
   {
   System.out.println("Handling client structure init data.  Current size: "+clientStructures.size());
@@ -166,6 +168,7 @@ public void handleUpdateClient(NBTTagCompound tag)
     }
   }
 
+@Deprecated //handled in server-side container, through gui/container interaction code 
 public void handleUpdateServer(NBTTagCompound tag)
   {
   //TODO

@@ -22,6 +22,8 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.network;
 
+import shadowmage.ancient_warfare.common.aw_core.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.aw_core.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -52,7 +54,10 @@ public int getPacketType()
   return 1;
   }
 
-
+public void setInitData(NBTTagCompound tag)
+  {
+  this.packetData.setCompoundTag("init", tag);
+  }
 
 @Override
 public void writeDataToStream(ByteArrayDataOutput data)
@@ -75,54 +80,50 @@ public void execute()
   /***
    * init data, should break out to player entry, team entry, pass to client-trackers
    */
-  if(this.packetData.hasKey("init"))
+  if(this.packetData.hasKey("init") && world.isRemote)
     {
-    if(world.isRemote)
+    tag = packetData.getCompoundTag("init");
+    if(tag.hasKey("playerData"))
       {
-      //TODO handle initialization data
+      PlayerTracker.instance().handleClientInit(tag.getCompoundTag("playerData"));
       }
+    if(tag.hasKey("teamData"))
+      {
+      TeamTracker.instance().handleClientUpdate(tag.getCompoundTag("teamData"));
+      }    
     }  
   
   /**
-   * cooldown update
+   * structure information, completely handled in structManager
    */
-  if(this.packetData.hasKey("cdn"))
+  if(this.packetData.hasKey("struct"))
     {
     if(world.isRemote)
       {
-      
+      StructureManager.instance().handleUpdateClient(packetData);
       }
     else
       {
-      
-      }    
-    }
-  
-  if(this.packetData.hasKey("struct"))
-    {
-    System.out.println("struct info detected");
-    StructureManager.instance().handlePacketData(packetData, world);
-    return;
+      StructureManager.instance().handleUpdateServer(packetData);
+      }
     }
     
   /**
-   * server->client team update data
-   * should be passed onto client team tracker
+   * team update tag..
    */
   if(this.packetData.hasKey("team"))
     {
     tag = packetData.getCompoundTag("team");
-    }
+    if(world.isRemote)
+      {      
+      TeamTracker.instance().handleClientUpdate(tag);
+      }
+    else
+      {
+      TeamTracker.instance().handleServerUpdate(tag);
+      }    
+    }  
   
-  /**
-   * server->client research update data
-   * should be passed into client player entry, and from there passed
-   * into client player research data.
-   */
-  if(this.packetData.hasKey("res"))
-    {
-    tag = packetData.getCompoundTag("res");
-    }
   }
   
     

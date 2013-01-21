@@ -31,12 +31,6 @@ public class PlayerEntry implements INBTTaggable
 
 String playerName = "";
 EntityPlayer player = null;
-HashMap <String, Integer> cooldowns = new HashMap<String, Integer>();
-
-public boolean isOnCooldown(String type)
-  {
-  return this.cooldowns.containsKey(type);
-  }
 
 @Override
 public NBTTagCompound getNBTTag()

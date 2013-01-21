@@ -54,10 +54,30 @@ public static TeamTracker instance()
   }
 private static TeamTracker INSTANCE;
 
-
 public void handleNewPlayerLogin(EntityPlayer player)
   {
   //TODO add player to team 0, relay info to all other logged in clients...
+  }
+
+public void handleClientUpdate(NBTTagCompound tag)
+  {
+  //TODO
+  }
+
+public void handleClientInit(NBTTagCompound tag)
+  {
+  //TODO
+  }
+
+public NBTTagCompound getClientInitData()
+  {
+  //TODO
+  return null;
+  }
+
+public void handleServerUpdate(NBTTagCompound tag)
+  {
+  
   }
 
 /**

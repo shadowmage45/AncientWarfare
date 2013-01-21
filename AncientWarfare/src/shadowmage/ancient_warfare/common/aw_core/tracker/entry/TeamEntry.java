@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.tracker.entry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 
@@ -32,6 +35,7 @@ public class TeamEntry implements INBTTaggable
 {
 
 public int teamNum;
+List<String> memberNames = new ArrayList<String>();
 
 @Override
 public NBTTagCompound getNBTTag()

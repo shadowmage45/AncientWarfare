@@ -24,6 +24,7 @@ package shadowmage.ancient_warfare.common.aw_core.proxy;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.WorldServer;
 import shadowmage.ancient_warfare.common.aw_core.network.PacketBase;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -38,6 +39,11 @@ public EntityPlayer getClientPlayer()
   return null;
   }
 
+public void registerClientData()
+  {
+  //NOOP server side
+  }
+
 /**
  * NOOP server side
  */
@@ -47,13 +53,18 @@ public void sendPacketToServer(PacketBase pkt)
   }
 
 /**
- * server side only
- * TODO
+ * Server Only...NOOP client side
  * @param ent
+ * @param pkt
  */
-public void sendPacketToPlayersTrackingEntity(PacketBase packet, Entity ent)
+
+public void sendPacketToAllClientsTracking(Entity ent, PacketBase pkt)
   {
-  
+  WorldServer world = (WorldServer)ent.worldObj;
+  if(world!=null)
+    {
+    world.getEntityTracker().sendPacketToAllPlayersTrackingEntity(ent, pkt.get250Packet());
+    }
   }
 
 public void sendPacketToPlayer(EntityPlayer player, PacketBase packet)

@@ -50,5 +50,10 @@ public void sendPacketToServer(PacketBase pkt)
   PacketDispatcher.sendPacketToServer(pkt.get250Packet());
   }
 
+@Override
+public void registerClientData()
+  {
+  //TODO register renders, tick handlers, etc...
+  }
 
 }

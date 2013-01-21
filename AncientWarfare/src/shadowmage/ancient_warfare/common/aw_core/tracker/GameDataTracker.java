@@ -60,6 +60,7 @@ public void resetAllTrackedData()
   PlayerTracker.instance().clearAllData();
   TeamTracker.instance().clearAllData();
   AWStructureModule.instance().clearAllData();
+  this.lastLoadedTimeStamp = -1L;
   }
 
 public void handleWorldLoad(World world)
@@ -97,9 +98,9 @@ public void handleWorldLoad(World world)
   if(this.lastLoadedTimeStamp>0)
     {
     /**
-     * compare timestamps...if the just read one is OLDER than the existing copy....do nothing
+     * compare timestamps...if the just read one is OLDER/THE SAME as the existing copy....do nothing
      */    
-    if(time>this.lastLoadedTimeStamp)
+    if(time <= this.lastLoadedTimeStamp)
       {        
       return;
       }    
