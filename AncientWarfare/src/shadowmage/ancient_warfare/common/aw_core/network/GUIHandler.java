@@ -25,10 +25,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.aw_structure.gui.creative_selection.GuiCSB;
 import shadowmage.ancient_warfare.client.aw_structure.gui.scanner.GuiStructureScanner;
+import shadowmage.ancient_warfare.client.aw_structure.gui.survival_builder.GuiSurvivalBuilder;
 import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
 import shadowmage.ancient_warfare.common.aw_structure.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.aw_structure.container.ContainerStructureScanner;
+import shadowmage.ancient_warfare.common.aw_structure.container.ContainerSurvivalBuilder;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 
@@ -40,6 +42,7 @@ public class GUIHandler implements IGuiHandler
  */
 public static final int STRUCTURE_SELECT = 0;
 public static final int STRUCTURE_SCANNER = 1;
+public static final int STRUCTURE_BUILD_DIRECT = 2;
 
 
 
@@ -66,9 +69,10 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   case STRUCTURE_SCANNER:
   return new ContainerStructureScanner(player);
   
-  case 2:
-  return null;
-  case 3:
+  case STRUCTURE_BUILD_DIRECT:
+  return new ContainerSurvivalBuilder(player);
+  
+  case 3:  
   return null;
   case 4:
   return null;
@@ -100,8 +104,9 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   case STRUCTURE_SCANNER:
   return new GuiStructureScanner(new ContainerStructureScanner(player));
   
-  case 2:
-  return null;
+  case STRUCTURE_BUILD_DIRECT:
+  return new GuiSurvivalBuilder(new ContainerSurvivalBuilder(player));
+  
   case 3:
   return null;
   case 4:
@@ -135,7 +140,6 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
  */
 public void openGUI(int ID, EntityPlayer player, World world, int x, int y, int z)
   {
-  System.out.println("opening GUI");
   if(player.worldObj.isRemote)
     {
     Packet03GuiComs pkt = new Packet03GuiComs();
@@ -156,7 +160,6 @@ public void openGUI(int ID, EntityPlayer player, World world, int x, int y, int 
         }      
       }
     }
-  System.out.println("gui opened");
   }
 
 }

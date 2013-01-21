@@ -27,46 +27,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import shadowmage.ancient_warfare.common.aw_structure.data.LoadedStructureRaw;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 
 public class StructureLoader
 {
 
-public StructureLoader(String directory)
+public StructureLoader()
   {
-  this.dir = directory;
+ 
   }
-
-/**
- * file path for reading structures
- */
-public String dir;
 
 /**
  * called probableStructureFiles because they haven't been opened/read/checked for validity
  */
 private List<File> probableStructureFiles = new ArrayList<File>();
 
+private List<File> probableTempStructureFiles = new ArrayList<File>();
+
 public void scanForPrebuiltFiles()
   {
-  probableStructureFiles.clear();
-  System.out.println("config base dir: " + dir);
-  this.recursiveScan(new File(dir+"/AWConfig/structures/included/"), probableStructureFiles);
-  System.out.println("found: "+this.probableStructureFiles.size()+" probable structure files");
+  probableStructureFiles.clear();  
+  this.recursiveScan(new File(AWStructureModule.includeDirectory), probableStructureFiles);  
+  }
+
+public void scanForTempFiles()
+  {
+  probableTempStructureFiles.clear();
+  this.recursiveScan(new File(AWStructureModule.playerTempDirectory), probableTempStructureFiles);
   }
 
 private void recursiveScan(File directory, List<File> fileList)
   {
   if(directory==null)
     {
-    Config.logError("Could not locate config/AWConfig/structures/included/ directory to load structures!");
+    Config.logError("Could not locate "+directory+" directory to load structures!");
     return;
     }
   File[] allFiles = directory.listFiles();
   if(allFiles==null)
     {
-    Config.logError("Could not locate config/AWConfig/structures/included/ directory to load structures!--no files in directory file list!");
+    Config.logError("Could not locate "+directory+" directory to load structures!--no files in directory file list!");
     return;
     }
   File currentFile;
@@ -79,7 +81,6 @@ private void recursiveScan(File directory, List<File> fileList)
       }
     else if(isProbableStructureFile(currentFile))
       {
-      System.out.println("adding: "+currentFile+" to probableStructuresList");
       fileList.add(currentFile);
       }
     }
@@ -101,11 +102,11 @@ private ProcessedStructure parseFile(File file)
   return rawStruct;
   }
 
-public List<ProcessedStructure> processStructureFiles()
+private List<ProcessedStructure> processFilesFor(List<File> fileList)
   {
   List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
   ProcessedStructure struct;
-  for(File file : probableStructureFiles)
+  for(File file : fileList)
     {
     struct = this.parseFile(file);
     if(struct!=null)
@@ -113,7 +114,18 @@ public List<ProcessedStructure> processStructureFiles()
       structures.add(struct);
       }
     }  
-  return structures;
+  return structures;  
+  }
+
+
+public List<ProcessedStructure> processTempFiles()
+  {
+  return processFilesFor(probableTempStructureFiles);
+  }
+
+public List<ProcessedStructure> processStructureFiles()
+  {
+  return processFilesFor(probableStructureFiles);
   }
 
 /**
@@ -121,6 +133,7 @@ public List<ProcessedStructure> processStructureFiles()
  * @param file
  * @return
  */
+@Deprecated
 public static ProcessedStructure processSingleStructure(File file)
   {
   LoadedStructureRaw rawStruct = new LoadedStructureRaw(file);  

@@ -136,15 +136,6 @@ private int getRotationAmount(int start, int destination)
   }
 
 /**
- * writes to the absolute fileName given.
- * @param name
- */
-public void writeToFile(String name)
-  {
-  StructureExporter.writeStructureToFile(this, name);  
-  }
-
-/**
  * returns a processed structure populated with enough data to _build_ this structure,
  * though it is not as configured as if done through a proper template
  * @param name

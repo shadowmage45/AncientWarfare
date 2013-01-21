@@ -204,38 +204,7 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
   return true;
   }
 
-private BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPosition pos2, BlockPosition key)
-  {
-  //facing south greatest X, lowest Z
-  //facing west greatest X, greatest Z
-  //facing north. FL corner is lowest X, greatest Z
-  //facing east FL corner is lowest X, lowest Z
-  BlockPosition min = BlockTools.getMin(pos1, pos2);
-  BlockPosition max = BlockTools.getMax(pos1, pos2);
-  BlockPosition realKey = new BlockPosition(0,0,0);
-  realKey.y = key.y-min.y;
-  if(face==0)
-    {
-    realKey.x = max.x - key.x;
-    realKey.z = min.z - key.z;//key.z - min.z;
-    }
-  if(face==2)
-    {
-    realKey.x = key.x - min.x;
-    realKey.z = key.z - max.z;//max.z - key.z;
-    }
-  if(face==1)
-    {
-    realKey.x = max.z - key.z;
-    realKey.z = key.x-max.x;//max.x - key.x;
-    }
-  if(face==3)
-    {
-    realKey.x = key.z - min.z;
-    realKey.z = min.x-key.x;//key.x - min.x;
-    }
-  return realKey;
-  }
+
 
 /**
  * actually scan the structure.
@@ -245,31 +214,19 @@ private BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPosition
  */
 public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
   {
-  key = offsetBuildKey(face, pos1, pos2, key);
+  key = BlockTools.offsetBuildKey(face, pos1, pos2, key);
   ScannedStructureRaw rawStructure = new ScannedStructureRaw(face ,pos1, pos2, key);
   rawStructure.scan(world);
   ScannedStructureNormalized normalizedStructure = rawStructure.process();
   String name = String.valueOf(System.currentTimeMillis());
   this.scannedStructures.put(player, normalizedStructure);
   GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_SCANNER, player, world, 0, 0, 0);
-//  if(AWStructureModule.outputDirectory!=null)
-//    {
-//    normalizedStructure.writeToFile(AWStructureModule.outputDirectory+name+".aws");
-//    if(Config.DEBUG)
-//      {
-//      ItemDebugBuilder.buildStructures.put(player, StructureLoader.processSingleStructure(new File(AWStructureModule.outputDirectory+name+".aws")));
-//      }
-//    }
-//  else
-//    {
-//    Config.logError("Invalid export/output directory specified in source, could not export structure!");
-//    }
   return true;
   }
 
 public static ItemStack clearStructureData(ItemStack stack)
   {
-  if(stack.hasTagCompound())
+  if(stack!=null && stack.hasTagCompound())
     {    
     stack.setTagInfo("structData", new NBTTagCompound());    
     } 

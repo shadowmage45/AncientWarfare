@@ -33,6 +33,12 @@ import shadowmage.ancient_warfare.common.aw_structure.build.BuilderInstant;
 import shadowmage.ancient_warfare.common.aw_structure.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 
+/***
+ * rendered deprecated by builderDirect.  needs removed completely....
+ * @author Shadowmage
+ *
+ */
+@Deprecated
 public class ItemDebugBuilder extends AWItemBase
 {
 

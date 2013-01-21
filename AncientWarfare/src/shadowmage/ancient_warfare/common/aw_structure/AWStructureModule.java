@@ -22,19 +22,25 @@ package shadowmage.ancient_warfare.common.aw_structure;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-
-import com.google.common.io.Files;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_structure.build.Builder;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderDirect;
 import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
+
+import com.google.common.io.Files;
+
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -54,6 +60,7 @@ public class AWStructureModule implements ITickHandler
 private static String directory;
 public static String outputDirectory = null;
 public static String includeDirectory = null;
+public static String playerTempDirectory = null;
 
 private boolean shouldExportDefaults = false;
 
@@ -87,41 +94,48 @@ public void load(String directory)
   this.directory = directory;  
   outputDirectory = directory+"/AWConfig/structures/export/";
   includeDirectory = directory+"/AWConfig/structures/included/";
+  playerTempDirectory = directory+"/AWConfig/structures/temp/";
   
   File existTest = new File(outputDirectory);
   if(!existTest.exists())
     {
-    //System.out.println("creating directory");
+    Config.log("Creating default Export Directory");
     existTest.mkdirs();
     }
  
   existTest = new File(includeDirectory);
   if(!existTest.exists())
     {
-    //System.out.println("creating directory");
+    Config.log("Creating default Include Directory");
     existTest.mkdirs();
     }
   
+  existTest = new File(playerTempDirectory);
+  if(!existTest.exists())
+    {
+    Config.log("Creating default Temp Directory");
+    existTest.mkdirs();
+    }  
+  
   BlockDataManager.instance().loadBlockList();
   
-  if(shouldExportDefaults)
+  if(shouldExportDefaults || Config.DEBUG)
     {
     this.copyDefaultStructures(includeDirectory);
     this.shouldExportDefaults = false;
     }
   
-  loader = new StructureLoader(directory);
-  loader.scanForPrebuiltFiles();    
+  loader = new StructureLoader();
+  loader.scanForPrebuiltFiles();   
+  loader.scanForTempFiles();
   }
 
 private void copyDefaultStructures(String pathName)
   {
-  File [] files = new File("shadowmage/ancient_warfare/resources/structure_templates").listFiles();
-  if(files==null)
-    {
-    Config.logError("COULD NOT EXPORT DEFAULT STRUCTURES");
-    return;
-    }
+  //TODO figure this whole thing out....
+  ArrayList<File> files = new ArrayList<File>();
+  
+  
   File destinationFile;
   for(File file : files)
     {
@@ -154,6 +168,7 @@ public void process()
     return;
     }
   StructureManager.instance().addStructures(loader.processStructureFiles());  
+  ItemBuilderDirect.addStructures(loader.processTempFiles());
   }
 
 public void addBuilder(Builder builder)

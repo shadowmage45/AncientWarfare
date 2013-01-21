@@ -519,4 +519,46 @@ public static BlockPosition getTranslatedPosition(BlockPosition min, BlockPositi
   return hit;
   }
 
+/**
+ * return a normalized buildKey for a raw scanned structure, given the input bounding, given key, and given facing
+ * normalizes to a playerFacing of 2 (north)
+ * @param face
+ * @param pos1
+ * @param pos2
+ * @param key
+ * @return
+ */
+public static BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPosition pos2, BlockPosition key)
+  {
+  //facing south greatest X, lowest Z
+  //facing west greatest X, greatest Z
+  //facing north. FL corner is lowest X, greatest Z
+  //facing east FL corner is lowest X, lowest Z
+  BlockPosition min = BlockTools.getMin(pos1, pos2);
+  BlockPosition max = BlockTools.getMax(pos1, pos2);
+  BlockPosition realKey = new BlockPosition(0,0,0);
+  realKey.y = key.y - min.y;
+  if(face==0)
+    {
+    realKey.x = max.x - key.x;
+    realKey.z = min.z - key.z;
+    }
+  if(face==2)
+    {
+    realKey.x = key.x - min.x;
+    realKey.z = key.z - max.z;
+    }
+  if(face==1)
+    {
+    realKey.x = max.z - key.z;
+    realKey.z = key.x - max.x;
+    }
+  if(face==3)
+    {
+    realKey.x = key.z - min.z;
+    realKey.z = min.x - key.x;
+    }
+  return realKey;
+  }
+
 }
