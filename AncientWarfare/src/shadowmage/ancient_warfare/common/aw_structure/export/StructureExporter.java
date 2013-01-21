@@ -39,7 +39,7 @@ public class StructureExporter
 {
 
 
-public static void writeStructureToFile(ScannedStructureNormalized struct, String name)
+public static boolean writeStructureToFile(ScannedStructureNormalized struct, String name)
   {
   File outputFile = new File(name);
   
@@ -53,7 +53,13 @@ public static void writeStructureToFile(ScannedStructureNormalized struct, Strin
       {
       Config.logError("Could not create file for structure: "+name);
       e.printStackTrace();
+      return false;
       }
+    }
+  else
+    {
+    Config.logError("Exporting would overwrite structure with name: "+name+"  Operation aborted.  Please choose a different name before rescanning and exporting");
+    return false;    
     }
   FileWriter writer = null;
   try
@@ -66,10 +72,10 @@ public static void writeStructureToFile(ScannedStructureNormalized struct, Strin
     writer.write("# auto-generated structure file. created on: "+cal.get(cal.MONTH)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND)+"\n");
     writer.write("# Lines beginning with # denote comments\n");
     writer.write("\n");
-    writer.write("name="+String.valueOf(System.currentTimeMillis())+"\n");
-    writer.write("worldgen=false\n");
-    writer.write("creative=true\n");
-    writer.write("survival=false\n");
+    writer.write("name="+struct.name+"\n");
+    writer.write("worldgen="+String.valueOf(struct.world)+"\n");
+    writer.write("creative="+String.valueOf(struct.creative)+"\n");
+    writer.write("survival="+String.valueOf(struct.survival)+"\n");
     writer.write("\n");
     writer.write("unique=false\n");
     writer.write("chunkDistance=0\n");
@@ -106,17 +112,14 @@ public static void writeStructureToFile(ScannedStructureNormalized struct, Strin
     writeLayers(writer, struct);    
     writer.write("\n");
     writer.close();
+    return true;
     } 
   catch (IOException e)
     {
     Config.logError("Severe error attempting to write structure to export directory!");
     e.printStackTrace();
     }
-  }
-
-private static void writeAirRule(FileWriter writer) throws IOException
-  {
-  writeSingleBlockRule(writer,0,0,0);
+  return false;
   }
 
 private static void writeBlockRules(FileWriter writer, ScannedStructureNormalized struct) throws IOException

@@ -37,6 +37,8 @@ import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
+
 public class StructureManager
 {
 
@@ -74,6 +76,15 @@ public ProcessedStructure getStructure(String name)
 public void addStructure(ProcessedStructure struct)
   {
   structures.add(struct);
+  sendStructureToClients(StructureClientInfo.getClientTag(struct));
+  }
+
+public void sendStructureToClients(NBTTagCompound tag)
+  {
+  Packet01ModData pkt = new Packet01ModData();
+  pkt.packetData.setBoolean("struct", true);
+  pkt.packetData.setCompoundTag("add", tag);
+  AWCore.proxy.sendPacketToAllPlayers(pkt);
   }
 
 public void addStructures(List<ProcessedStructure> structs)
@@ -204,6 +215,7 @@ private void addClientStructuresFromNBT(NBTTagList list)
 
 private void addClientStructureFromNBT(NBTTagCompound tag)
   {
+  System.out.println("receiving client-add structure command");
   this.clientStructures.add(new StructureClientInfo(tag));
   }
 

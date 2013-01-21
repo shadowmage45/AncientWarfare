@@ -21,11 +21,14 @@
 package shadowmage.ancient_warfare.common.aw_core.network;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.client.aw_structure.gui.GuiCSB;
+import shadowmage.ancient_warfare.client.aw_structure.gui.creative_selection.GuiCSB;
+import shadowmage.ancient_warfare.client.aw_structure.gui.scanner.GuiStructureScanner;
 import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
 import shadowmage.ancient_warfare.common.aw_structure.container.ContainerCSB;
+import shadowmage.ancient_warfare.common.aw_structure.container.ContainerStructureScanner;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 
@@ -36,6 +39,7 @@ public class GUIHandler implements IGuiHandler
  * GUI IDs....listed here for...uhh...keeping track of them
  */
 public static final int STRUCTURE_SELECT = 0;
+public static final int STRUCTURE_SCANNER = 1;
 
 
 
@@ -53,13 +57,15 @@ public static GUIHandler instance()
 @Override
 public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
   {
+  System.out.println("getting server element: "+ID);
   switch(ID)
   {
   case STRUCTURE_SELECT:
   return new ContainerCSB(player, null);
   
-  case 1:
-  return null;
+  case STRUCTURE_SCANNER:
+  return new ContainerStructureScanner(player);
+  
   case 2:
   return null;
   case 3:
@@ -85,12 +91,15 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
 @Override
 public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
   {
+  System.out.println("getting client element: "+ID);
   switch(ID)
   {
   case STRUCTURE_SELECT:
-  return new GuiCSB(new ContainerCSB(player, null));  
-  case 1:
-  return null;  
+  return new GuiCSB(new ContainerCSB(player, null));
+  
+  case STRUCTURE_SCANNER:
+  return new GuiStructureScanner(new ContainerStructureScanner(player));
+  
   case 2:
   return null;
   case 3:
@@ -115,7 +124,8 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
 
 /**
  * auto-wrapper for sending an openGUI packet from client-server to open a server side GUI without
- * special scripting in every damn entity/TE
+ * special scripting in every damn entity/TE, also handles sending init data after the GUI is opened
+ * all synched containers must openGUI through here, or they must handle synching manually
  * @param ID
  * @param player
  * @param world
@@ -125,6 +135,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
  */
 public void openGUI(int ID, EntityPlayer player, World world, int x, int y, int z)
   {
+  System.out.println("opening GUI");
   if(player.worldObj.isRemote)
     {
     Packet03GuiComs pkt = new Packet03GuiComs();
@@ -134,7 +145,18 @@ public void openGUI(int ID, EntityPlayer player, World world, int x, int y, int 
   else
     {
     FMLNetworkHandler.openGui(player, AWCore.instance, ID, world, x, y, z);
+    if(player.openContainer instanceof ContainerBase)
+      {
+      NBTTagCompound tag = ((ContainerBase)player.openContainer).getInitData();
+      if(tag!=null)
+        {
+        Packet03GuiComs pkt = new Packet03GuiComs();
+        pkt.setInitData(tag);
+        AWCore.proxy.sendPacketToPlayer(player, pkt);
+        }      
+      }
     }
+  System.out.println("gui opened");
   }
 
 }

@@ -21,7 +21,9 @@
 package shadowmage.ancient_warfare.common.aw_structure.item;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -31,7 +33,9 @@ import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
+import shadowmage.ancient_warfare.common.aw_core.network.GUIHandler;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
+import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
 import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
@@ -39,6 +43,9 @@ import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
 
 public class ItemStructureScanner extends AWItemBase
 {
+
+
+public static Map<EntityPlayer, ScannedStructureNormalized> scannedStructures = new HashMap<EntityPlayer, ScannedStructureNormalized>();
 
 /**
  * @param itemID
@@ -174,7 +181,8 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
     int face = tag.getCompoundTag("buildKey").getInteger("face");
     player.addChatMessage("Initiating Scan and clearing Position Data");
     scanStructure(world, player,pos1, pos2, key, face);
-    tag = new NBTTagCompound();//reset scan data in item with clean tag    
+    return true;
+    //tag = new NBTTagCompound();//reset scan data in item with clean tag    
     }        
   else if(!tag.hasKey("pos1"))
     {
@@ -242,21 +250,30 @@ public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos
   rawStructure.scan(world);
   ScannedStructureNormalized normalizedStructure = rawStructure.process();
   String name = String.valueOf(System.currentTimeMillis());
-  if(AWStructureModule.outputDirectory!=null)
-    {
-    normalizedStructure.writeToFile(AWStructureModule.outputDirectory+name+".aws");
-    if(Config.DEBUG)
-      {
-      ItemDebugBuilder.buildStructures.put(player, StructureLoader.processSingleStructure(new File(AWStructureModule.outputDirectory+name+".aws")));
-      System.out.println("Adding newly created structure to temp builder queu.");
-      }
-    }
-  else
-    {
-    Config.logError("Invalid export/output directory specified in source, could not export structure!");
-    }
+  this.scannedStructures.put(player, normalizedStructure);
+  GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_SCANNER, player, world, 0, 0, 0);
+//  if(AWStructureModule.outputDirectory!=null)
+//    {
+//    normalizedStructure.writeToFile(AWStructureModule.outputDirectory+name+".aws");
+//    if(Config.DEBUG)
+//      {
+//      ItemDebugBuilder.buildStructures.put(player, StructureLoader.processSingleStructure(new File(AWStructureModule.outputDirectory+name+".aws")));
+//      }
+//    }
+//  else
+//    {
+//    Config.logError("Invalid export/output directory specified in source, could not export structure!");
+//    }
   return true;
   }
 
+public static ItemStack clearStructureData(ItemStack stack)
+  {
+  if(stack.hasTagCompound())
+    {    
+    stack.setTagInfo("structData", new NBTTagCompound());    
+    } 
+  return stack;
+  }
 
 }

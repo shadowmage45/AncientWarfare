@@ -81,4 +81,6 @@ public void sendDataToServer(NBTTagCompound tag)
   AWCore.proxy.sendPacketToServer(pkt);
   }
 
+public abstract NBTTagCompound getInitData();
+
 }

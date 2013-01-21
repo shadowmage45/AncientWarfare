@@ -72,14 +72,19 @@ public void setData(NBTTagCompound tag)
   this.packetData.setCompoundTag("data", tag);
   }
 
+public void setInitData(NBTTagCompound tag)
+  {
+  this.packetData.setCompoundTag("init", tag);
+  }
+
 @Override
 public void execute()
   {
-  //System.out.println("executing packet03. server: "+!this.world.isRemote);
+  System.out.println("executing packet03. server: "+!this.world.isRemote);
   if(packetData.hasKey("openGUI"))
     {
     NBTTagCompound tag = packetData.getCompoundTag("openGUI");
-    FMLNetworkHandler.openGui(player, AWCore.instance, tag.getInteger("id"), world, tag.getInteger("x"), tag.getInteger("y"), tag.getInteger("z"));
+    GUIHandler.instance().openGUI(tag.getInteger("id"), player, world, tag.getInteger("x"), tag.getInteger("y"), tag.getInteger("z"));    
     if(world.isRemote)
       {
       Config.logError("Opening GUI on client-side only from openGUI packet.  This is not proper gui handling.");

@@ -47,6 +47,14 @@ public BlockData[][][] allBlocks;
 public ArrayList<BlockData> blockIDs = new ArrayList<BlockData>();
 
 /**
+ * set by structure scanner GUI prior to export
+ */
+public String name = "";
+public boolean world;
+public boolean survival;
+public boolean creative;
+
+/**
  * @param face
  * @param pos1
  * @param pos2

@@ -48,6 +48,7 @@ public void sendPacketToServer(PacketBase pkt)
 
 /**
  * server side only
+ * TODO
  * @param ent
  */
 public void sendPacketToPlayersTrackingEntity(PacketBase packet, Entity ent)
@@ -58,6 +59,11 @@ public void sendPacketToPlayersTrackingEntity(PacketBase packet, Entity ent)
 public void sendPacketToPlayer(EntityPlayer player, PacketBase packet)
   {
   PacketDispatcher.sendPacketToPlayer(packet.get250Packet(), (Player)player);
+  }
+
+public void sendPacketToAllPlayers(PacketBase packet)
+  {
+  PacketDispatcher.sendPacketToAllPlayers(packet.get250Packet());
   }
   
 
