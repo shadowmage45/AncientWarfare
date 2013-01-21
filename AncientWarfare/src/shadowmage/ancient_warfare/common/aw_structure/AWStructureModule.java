@@ -31,8 +31,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 import shadowmage.ancient_warfare.common.aw_structure.build.Builder;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderDirect;
@@ -51,7 +53,7 @@ import cpw.mods.fml.relauncher.Side;
  * @author Shadowmage
  *
  */
-public class AWStructureModule implements ITickHandler
+public class AWStructureModule implements ITickHandler, INBTTaggable
 {
 
 /**
@@ -218,6 +220,25 @@ public EnumSet<TickType> ticks()
 public String getLabel()
   {
   return "AWStructTicker";
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  // TODO Auto-generated method stub
+  return null;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+public void clearAllData()
+  {
+  this.builders.clear();
   }
 
 }

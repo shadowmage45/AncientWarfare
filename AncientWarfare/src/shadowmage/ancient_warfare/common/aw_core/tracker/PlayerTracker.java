@@ -70,6 +70,21 @@ public void onPlayerLogin(EntityPlayer player)
     }  
   }
 
+/**
+ * create a new entry for a player, set team to 0,
+ * and relay new player/team info to all logged in players
+ */
+private void createEntryForNewPlayer(EntityPlayer player)
+  {
+  if(player.worldObj.isRemote)
+    {
+    return;
+    }
+  //TODO
+  
+  TeamTracker.instance().handleNewPlayerLogin(player);
+  }
+
 @Override
 public void onPlayerLogout(EntityPlayer player)
   {  
@@ -97,6 +112,12 @@ public void readFromNBT(NBTTagCompound tag)
   {
   // TODO load data from persistent file from world directory....
   
+  }
+
+public void clearAllData()
+  {
+  this.clientEntry = new PlayerEntry();
+  this.playerEntries.clear();
   }
 
 }

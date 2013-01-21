@@ -20,10 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.utils;
 
-import shadowmage.ancient_warfare.common.aw_core.tracker.entry.TeamInfo;
 
 public interface ITeamable
 {
-public TeamInfo getTeamInfo();
+public int getTeamNumber();
+public boolean isHostileTowards(int teamNum);
+
 
 }

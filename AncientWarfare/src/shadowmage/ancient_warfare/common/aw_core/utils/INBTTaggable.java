@@ -24,7 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * interface for objects which may be represented/packeted through an NBTTag
- * mostly used for complex data which must be relayed to clients
+ * mostly used for complex data which must be relayed to clients intact
  * @author Shadowmage
  *
  */

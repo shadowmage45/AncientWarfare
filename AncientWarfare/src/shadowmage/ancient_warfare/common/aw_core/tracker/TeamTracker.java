@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.tracker;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
@@ -53,6 +54,12 @@ public static TeamTracker instance()
   }
 private static TeamTracker INSTANCE;
 
+
+public void handleNewPlayerLogin(EntityPlayer player)
+  {
+  //TODO add player to team 0, relay info to all other logged in clients...
+  }
+
 /**
  * client/server sensitive version of getEntry automatically pulls correct
  * entry depending upon if world.isRemote
@@ -72,7 +79,7 @@ public TeamEntry getTeamEntry(World world, int teamNum)
     }
   }
 
-public TeamEntry getTeamEntryClient(int teamNum)
+private TeamEntry getTeamEntryClient(int teamNum)
   {
   if(teamNum<0 || teamNum>=this.clientTeamEntries.length)
     {
@@ -81,7 +88,7 @@ public TeamEntry getTeamEntryClient(int teamNum)
   return this.clientTeamEntries[teamNum];
   }
 
-public TeamEntry getTeamEntryServer(int teamNum)
+private TeamEntry getTeamEntryServer(int teamNum)
   {
   if(teamNum<0 || teamNum>=this.serverTeamEntries.length)
     {
@@ -128,6 +135,12 @@ public void readFromNBT(NBTTagCompound tag)
       Config.logError("Error reading Team Data from NBT, duplicate team detected");
       }
     }
+  }
+
+public void clearAllData()
+  {
+  this.serverTeamEntries = new TeamEntry[16];
+  this.clientTeamEntries = new TeamEntry[16];
   }
 
 }

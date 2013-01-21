@@ -25,7 +25,9 @@ package shadowmage.ancient_warfare.common.aw_core;
 
 import java.io.IOException;
 
+import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_core.event.EventHandler;
 import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.network.GUIHandler;
 import shadowmage.ancient_warfare.common.aw_core.network.PacketHandler;
@@ -76,7 +78,7 @@ public void preInit(FMLPreInitializationEvent evt)
    */
   Config.loadConfig(evt.getSuggestedConfigurationFile());
   Config.setLogger(evt.getModLog());
-  
+  MinecraftForge.EVENT_BUS.register(EventHandler.instance());
   /**
    * load items
    */
