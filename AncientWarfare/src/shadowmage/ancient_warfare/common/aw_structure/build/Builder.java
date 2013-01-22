@@ -123,7 +123,7 @@ public abstract void startConstruction();
 
 /**
  * for instantBuilder--NOOP
- * for tickedBuilder--NOOP
+ * for tickedBuilder--remove tickerBlock TODO
  */
 public abstract void finishConstruction();
 
@@ -180,18 +180,6 @@ protected void placeBlock(World world, BlockPosition pos, int id, int meta)
 
 protected void placeBlockNotify(World world, BlockPosition pos, int id, int meta)
   {
-//  if(id==Block.doorSteel.blockID || id==Block.doorWood.blockID)
-//    {
-//    if(meta==8)
-//      {
-//      return;
-//      }
-//    else
-//      {
-//      ItemDoor.placeDoorBlock(world, pos.x, pos.y, pos.z, 0, Block.blocksList[id]);
-//      world.setBlockAndMetadataWithNotify(pos.x, pos.y+1, pos.z, id, 8);
-//      }
-//    }
   world.setBlockAndMetadataWithNotify(pos.x, pos.y, pos.z, id, meta);
   }
 

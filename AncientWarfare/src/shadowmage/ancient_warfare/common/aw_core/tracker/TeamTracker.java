@@ -56,7 +56,13 @@ private static TeamTracker INSTANCE;
 
 public void handleNewPlayerLogin(EntityPlayer player)
   {
-  //TODO add player to team 0, relay info to all other logged in clients...
+  if(this.serverTeamEntries[0]==null)
+    {
+    this.serverTeamEntries[0] = new TeamEntry();
+    this.serverTeamEntries[0].teamNum = 0;    
+    }
+  this.serverTeamEntries[0].memberNames.add(player.getEntityName());
+  //TODO relay info to all other logged in clients...
   }
 
 public void handleClientUpdate(NBTTagCompound tag)

@@ -31,6 +31,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 import shadowmage.ancient_warfare.common.aw_structure.build.Builder;
@@ -40,7 +41,9 @@ import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 import com.google.common.io.Files;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -132,6 +135,11 @@ private void copyDefaultStructures(String pathName)
   {
   //TODO figure this whole thing out....
   ArrayList<File> files = new ArrayList<File>();
+  
+  ModContainer mc = FMLCommonHandler.instance().findContainerFor(AWCore.instance);
+  File sourceFile = mc.getSource();
+  System.out.println("found source file: "+sourceFile.getName());
+  System.out.println("source file path: "+sourceFile.getPath());
   
   
   File destinationFile;
@@ -252,6 +260,10 @@ public void readFromNBT(NBTTagCompound tag)
         {
         builders.add(builder);
         }
+      }
+    else
+      {
+      Config.logError("SEVERE ERROR LOADING BUILDERS, NULL WORLD FOR DIMENSION: "+dimension);
       }
     }
   }
