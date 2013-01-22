@@ -128,7 +128,10 @@ public NBTTagCompound getNBTTag()
   NBTTagCompound teamTag = null;
   for(TeamEntry entry : this.serverTeamEntries)
     {
-    teamList.appendTag(entry.getNBTTag());
+    if(entry!=null)
+      {
+      teamList.appendTag(entry.getNBTTag());
+      }    
     }
   tag.setTag("tL", teamList);
   return tag;

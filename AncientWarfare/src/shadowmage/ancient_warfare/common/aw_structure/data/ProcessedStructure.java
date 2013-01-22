@@ -20,11 +20,15 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
+import shadowmage.ancient_warfare.common.aw_core.utils.IDPair;
+import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 
 /**
@@ -34,6 +38,9 @@ import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
  */
 public class ProcessedStructure extends AWStructure
 {
+
+
+private  List<IDPairCount> cachedCounts = null;
 
 public ProcessedStructure()
   {
@@ -129,5 +136,54 @@ public StructureBB getStructureBB(BlockPosition hit, int facing)
   pos2.y += this.ySize;
   return new StructureBB(pos1, pos2);
   }
+
+/**
+ * return a trimmed and tallied list of id/meta pairs necessary to construct this building
+ * used for survival direct builder.
+ * @return
+ */
+public List<IDPairCount> getResourceList()
+  {
+  List<IDPairCount> finalCounts;
+  if(cachedCounts!=null)
+    {
+    return cachedCounts;
+    }
+  else
+    {
+    finalCounts = new ArrayList<IDPairCount>();
+    }
+  
+  for(int x = 0; x < this.structure.length; x++)
+    {
+    for(int y = 0; y < this.structure[x].length; y++)
+      {
+      for(int z = 0; z < this.structure[x][y].length; z++)
+        {
+        BlockRule rule = this.getRuleAt(x, y, z);
+        BlockData data = rule.blockData[0];
+        IDPairCount count = BlockInfo.getInventoryBlock(data.id, data.meta);        
+        boolean found = false;
+        for(IDPairCount tc : finalCounts)
+          {
+          if(tc.id==count.id && tc.meta == count.meta)
+            {
+            tc.count += count.count;
+            found = true;
+            break;
+            }
+          }
+        if(!found)
+          {
+          finalCounts.add(count);
+          }        
+        }
+      }
+    }  
+  this.cachedCounts = finalCounts;;
+  return finalCounts;
+  }
+
+
 
 }

@@ -44,18 +44,11 @@ public StructureLoader()
  */
 private List<File> probableStructureFiles = new ArrayList<File>();
 
-private List<File> probableTempStructureFiles = new ArrayList<File>();
 
 public void scanForPrebuiltFiles()
   {
   probableStructureFiles.clear();  
   this.recursiveScan(new File(AWStructureModule.includeDirectory), probableStructureFiles);  
-  }
-
-public void scanForTempFiles()
-  {
-  probableTempStructureFiles.clear();
-  this.recursiveScan(new File(AWStructureModule.playerTempDirectory), probableTempStructureFiles);
   }
 
 private void recursiveScan(File directory, List<File> fileList)
@@ -118,10 +111,6 @@ private List<ProcessedStructure> processFilesFor(List<File> fileList)
   }
 
 
-public List<ProcessedStructure> processTempFiles()
-  {
-  return processFilesFor(probableTempStructureFiles);
-  }
 
 public List<ProcessedStructure> processStructureFiles()
   {

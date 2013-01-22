@@ -38,5 +38,15 @@ public IDPairCount(int id, int meta, int count)
   this.count = count;
   }
 
+public IDPairCount copy()
+  {
+  return new IDPairCount(id, meta, count);
+  }
+
 public int count = 1;
+
+public String toString()
+  {
+  return String.valueOf("ID: "+id+" MT: "+meta+" CT: "+count);
+  }
 }

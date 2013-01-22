@@ -128,8 +128,7 @@ public void load(String directory)
     }
   
   loader = new StructureLoader();
-  loader.scanForPrebuiltFiles();   
-  loader.scanForTempFiles();
+  loader.scanForPrebuiltFiles(); 
   }
 
 private void copyDefaultStructures(String pathName)
@@ -170,7 +169,6 @@ public void process()
     return;
     }
   StructureManager.instance().addStructures(loader.processStructureFiles());  
-  ItemBuilderDirect.addStructures(loader.processTempFiles());
   }
 
 public void addBuilder(Builder builder)

@@ -247,7 +247,7 @@ public static int getRotatedMeta(int id, int meta, int rotationAmt)
  * get the block or item id/meta combo needed in inventory in order to place this block
  * @param id of the block in the template
  * @param meta of the block in the template
- * @return id, meta, and count (double slab) making up the block necessary to place this block in the world
+ * @return id, meta, and count (double slab) making up the block necessary to place this block in the world returns NEW object
  */
 public static IDPairCount getInventoryBlock(int id, int meta)
   {  
@@ -261,7 +261,7 @@ public static IDPairCount getInventoryBlock(int id, int meta)
       }
     info = data.metaToBlocks.get(id);        
     }    
-  return info==null ? new IDPairCount(id,0) : info;
+  return info==null ? new IDPairCount(id,0) : info.copy();
   }
 
 public static void setInventoryBlock(int id, int meta, int resultID, int resultMeta, int count)

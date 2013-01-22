@@ -141,10 +141,10 @@ private int getRotationAmount(int start, int destination)
  * @param name
  * @return
  */
-public ProcessedStructure convertToProcessedStructure(String name)
+public ProcessedStructure convertToProcessedStructure()
   {
   ProcessedStructure struct = new ProcessedStructure();
-  struct.name = name;
+  struct.name = String.valueOf(this.name);
   struct.xSize = this.xSize;
   struct.ySize = this.ySize;
   struct.zSize = this.zSize;

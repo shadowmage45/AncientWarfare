@@ -187,11 +187,11 @@ public static BlockInfo addBlock(int id, String name)
   return BlockInfo.createEntryFor(id, name);
   }
 
-public int getRotatedMeta(int id, int meta, int rotationAmt)
+public static int getRotatedMeta(int id, int meta, int rotationAmt)
   {
   if(BlockInfo.blockList[id]==null)
     {
-    return 0;
+    return meta;
     }
   return BlockInfo.blockList[id].rotateRight(meta, rotationAmt);
   }

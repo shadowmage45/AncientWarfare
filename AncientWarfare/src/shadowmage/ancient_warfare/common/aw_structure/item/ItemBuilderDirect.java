@@ -33,6 +33,7 @@ import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
 import shadowmage.ancient_warfare.common.aw_core.network.GUIHandler;
+import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import shadowmage.ancient_warfare.common.aw_structure.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
@@ -59,14 +60,14 @@ public ItemBuilderDirect(int itemID)
 @Override
 public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float xOff, float yOff, float zOff)
   {
-  BlockPosition hitPos = new BlockPosition(x,y,z);
-  if(player.isSneaking())
-    {
-    hitPos = BlockTools.offsetForSide(hitPos, side);
-    }
-  return onUsed(world, player, stack, hitPos);
+  return onUsedFinal(world, player, stack, new BlockPosition(x,y,z), side);
+  }
 
-  //return super.onItemUse(stack, player, world, x, y, z, side, xOff, yOff, zOff);
+@Override
+public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,EntityPlayer par3EntityPlayer)
+  {
+  onUsedFinal(par2World, par3EntityPlayer, par1ItemStack, null, -1);  
+  return par1ItemStack;
   }
 
 @Override
@@ -84,7 +85,7 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
       {
       tag = new NBTTagCompound();
       }
-    if(tag.hasKey("scanning"))
+    if(!tag.hasKey("scanning") || tag.getBoolean("scanning")==true)
       {     
       if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
         {
@@ -107,17 +108,14 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
       {
       par3List.add("Ready to Build.  Needed Blocks: ");
       NBTTagList blockList = tag.getTagList("blockList");
-      //TODO add blockList data to tooltip
+      for(int i = 0; i < blockList.tagCount(); i++)
+        {
+        NBTTagCompound blockTag = (NBTTagCompound) blockList.tagAt(i);
+        par3List.add(String.valueOf("ID: "+blockTag.getInteger("id")+" meta: "+blockTag.getInteger("mt")+" count: "+blockTag.getInteger("ct")));
+        }
       }
 
     }  
-  }
-
-@Override
-public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,EntityPlayer par3EntityPlayer)
-  {
-  onUsed(par2World, par3EntityPlayer, par1ItemStack);
-  return par1ItemStack;
   }
 
 @Override
@@ -135,36 +133,16 @@ public int getIconFromDamage(int par1)
   return this.iconIndex;
   }
 
-public boolean onUsed(World world, EntityPlayer player, ItemStack stack)
-  {
-  boolean building = isItemBuilding(stack);
-  boolean offset = building ? true : player.isSneaking();
-  BlockPosition hit = BlockTools.getBlockClickedOn(player, world, offset);
-  return onUsed(world, player, stack, hit);
-  }
-
 /**
- * final onUsed call, passes information on to onActivated
+ * 
  * @param world
  * @param player
  * @param stack
- * @param hit
+ * @param hit null if nothing hit
+ * @param side -1 if nothing hit
  * @return
  */
-public boolean onUsed(World world, EntityPlayer player, ItemStack stack, BlockPosition hit)
-  {
-  return onActivated(world, player, stack, hit);
-  }
-
-/**
- * the actual onActivated call, all rightclick/onUsed/onUse functions funnel through to here.
- * @param world
- * @param player
- * @param stack
- * @param hit
- * @return
- */
-public boolean onActivated(World world, EntityPlayer player, ItemStack stack, BlockPosition hit)
+private boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
   boolean openGUI = false;
   if(world.isRemote)
@@ -180,12 +158,12 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
     {
     tag = new NBTTagCompound();
     } 
-  
-  /**
-   * if it does not have a scanning key, or scanning key is true...
-   */
-  if(hit != null && ( tag.hasKey("scanning") || tag.getBoolean("scanning")==true ))
+  if(hit != null && ( !tag.hasKey("scanning") || tag.getBoolean("scanning")==true ))
     {
+    if(player.isSneaking())
+      {
+      hit = BlockTools.offsetForSide(hit, side);
+      }
     /**
      * if item is ready to scan, initite scan
      */
@@ -196,7 +174,26 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
       BlockPosition key = new BlockPosition(tag.getCompoundTag("buildKey"));
       int face = tag.getCompoundTag("buildKey").getInteger("face");
       player.addChatMessage("Initiating Scan and clearing Position Data");
-      this.scannedStructures.put(player.getEntityName(), scanAndProcess(world, player, pos1, pos2, key, face));   
+      tag.setString("name", player.getEntityName());
+      ProcessedStructure struct = scanAndProcess(world, player, pos1, pos2, key, face);
+      this.scannedStructures.put(player.getEntityName(), struct);   
+      List<IDPairCount> blockList = struct.getResourceList();
+      
+      
+      NBTTagList blocks = new NBTTagList();
+      for(IDPairCount ct : blockList)
+        {
+        if(ct.id==0)
+          {
+          continue;
+          }
+        NBTTagCompound countTag = new NBTTagCompound();
+        countTag.setInteger("id", ct.id);
+        countTag.setInteger("mt", ct.meta);
+        countTag.setInteger("ct", ct.count);
+        blocks.appendTag(countTag);       
+        }
+      tag.setTag("blockList", blocks);
       tag.setBoolean("scanning", false);
       tag.setBoolean("building", true);
       }        
@@ -225,12 +222,12 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
       }
     else if(hit!=null)
       {
+      hit = BlockTools.offsetForSide(hit, side);
       int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-      ProcessedStructure struct = this.scannedStructures.get(player.getEntityName());
+      ProcessedStructure struct = this.scannedStructures.get(tag.getString("name"));
       if(struct==null)
         {
-        tag.setBoolean("building", false);
-        tag.setBoolean("scanning", false);
+        tag = new NBTTagCompound();
         }
       else
         {
@@ -239,9 +236,7 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
         builder.startConstruction();
         }      
       }
-    }
-  
-     
+    } 
   /**
    * apply any changes to the itemStackTag
    */
@@ -250,73 +245,8 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
   if(openGUI)
     {
     GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_BUILD_DIRECT, player, world, 0, 0, 0);
-    }
+    }  
   return true;
-  }
-
-public static void clearBuildingData(ItemStack stack)
-  {
-  if(stack!=null && stack.hasTagCompound() && stack.getTagCompound().hasKey("building"))
-    {
-    stack.getTagCompound().getCompoundTag("structData").setBoolean("building", false);
-    }
-  }
-
-public static void clearScanningData(ItemStack stack)
-  {
-  if(stack!=null && stack.hasTagCompound() && stack.getTagCompound().hasKey("scanning"))
-    {
-    stack.getTagCompound().getCompoundTag("structData").setBoolean("scanning", false);
-    }
-  }
-
-
-
-/**
- * actually scan the structure.
- * @param world
- * @param player
- * @return
- */
-public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
-  {
-  //  key = offsetBuildKey(face, pos1, pos2, key);
-  //  ScannedStructureRaw rawStructure = new ScannedStructureRaw(face ,pos1, pos2, key);
-  //  rawStructure.scan(world);
-  //  ScannedStructureNormalized normalizedStructure = rawStructure.process();
-  //  String name = String.valueOf(System.currentTimeMillis());
-  //  this.scannedStructures.put(player, normalizedStructure);
-  //  GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_SCANNER, player, world, 0, 0, 0);
-
-
-
-  //  if(AWStructureModule.outputDirectory!=null)  
-  //    {
-  //    normalizedStructure.writeToFile(AWStructureModule.outputDirectory+name+".aws");
-  //    if(Config.DEBUG)
-  //      {
-  //      ItemDebugBuilder.buildStructures.put(player, StructureLoader.processSingleStructure(new File(AWStructureModule.outputDirectory+name+".aws")));
-  //      }
-  //    }
-  //  else
-  //    {
-  //    Config.logError("Invalid export/output directory specified in source, could not export structure!");
-  //    }
-  return true;
-  }
-
-/**
- * clears ALL struct data by replacing structData tag with empty tag
- * @param stack
- * @return
- */
-public static ItemStack clearStructureData(ItemStack stack)
-  {
-  if(stack!=null && stack.hasTagCompound())
-    {    
-    stack.setTagInfo("structData", new NBTTagCompound());    
-    } 
-  return stack;
   }
 
 private ProcessedStructure scanAndProcess(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
@@ -325,33 +255,10 @@ private ProcessedStructure scanAndProcess(World world, EntityPlayer player, Bloc
   ScannedStructureRaw raw = new ScannedStructureRaw(face, pos1, pos2, key);
   raw.scan(world);
   ScannedStructureNormalized norm = raw.process();
-  File oldFile = new File(AWStructureModule.playerTempDirectory+player.getEntityName()+".aws");
-  if(oldFile.exists())
-    {
-    oldFile.delete();
-    }
-  StructureExporter.writeStructureToFile(norm, AWStructureModule.playerTempDirectory+player.getEntityName()+".aws");
-  return norm.convertToProcessedStructure(player.getEntityName());  
+  norm.name = player.getEntityName();
+  return norm.convertToProcessedStructure();  
   }
 
-public static void addStructures(List<ProcessedStructure> structs)
-  {
-  scannedStructures.clear();
-  for(ProcessedStructure struct : structs)
-    {
-    scannedStructures.put(struct.name, struct);
-    }
-  }
-
-private boolean isItemScanning(ItemStack stack)
-  {
-  return stack.hasTagCompound() && stack.getTagCompound().getBoolean("scanning")==true;
-  }
-
-private boolean isItemBuilding(ItemStack stack)
-  {
-  return stack.hasTagCompound() && stack.getTagCompound().getBoolean("building")==true;
-  }
 
 
 }

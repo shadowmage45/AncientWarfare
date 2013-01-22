@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.client.aw_structure.gui.survival_builder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.aw_core.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.common.aw_structure.container.ContainerStructureScanner;
 
 public class GuiSurvivalBuilder extends GuiContainerAdvanced
 {
@@ -33,7 +34,6 @@ public class GuiSurvivalBuilder extends GuiContainerAdvanced
 public GuiSurvivalBuilder(Container container)
   {
   super(container);
-  // TODO Auto-generated constructor stub
   }
 
 @Override
@@ -51,36 +51,56 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  // TODO Auto-generated method stub
-  return null;
+  return "/shadowmage/ancient_warfare/resources/gui/guiBackgroundLarge.png";
   }
 
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  // TODO Auto-generated method stub
 
   }
 
 @Override
 public void setupGui()
   {
-  // TODO Auto-generated method stub
-
+  this.controlList.clear();
+  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
+  
   }
 
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
-
+  
   }
 
 @Override
 public void buttonClicked(GuiButton button)
   {
-  // TODO Auto-generated method stub
-
+  switch(button.id)
+  {
+  case 0:
+  closeGUI();
+  break;
+  
+  case 1:  
+  closeGUI();
+  break;
+  
+  case 2:
+  break;
+  
+  case 11:
+  case 12:
+  case 13:
+  case 14:
+  case 15:
+  case 16:
+  
+  default:
+  break;
+  }
+ 
   }
 
 }

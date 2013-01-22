@@ -93,6 +93,11 @@ public void handleWorldLoad(World world)
     Config.logError("could not load AWWorldData, no such file, or improper format");
     return;
     }
+  if(tag==null)
+    {
+    Config.logError("Null data tag loaded from file, aborting loading of world stats");
+    return;
+    }
   long time = tag.getLong("tS");
   
   if(this.lastLoadedTimeStamp>0)
