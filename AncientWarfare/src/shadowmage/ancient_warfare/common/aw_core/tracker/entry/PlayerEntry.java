@@ -29,20 +29,21 @@ import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 public class PlayerEntry implements INBTTaggable
 {
 
-String playerName = "";
+public String playerName = "";
 EntityPlayer player = null;
 
 @Override
 public NBTTagCompound getNBTTag()
   {
-  // TODO Auto-generated method stub
-  return null;
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("name", playerName);
+  return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
+  this.playerName = tag.getString("name");
   }
 
 }

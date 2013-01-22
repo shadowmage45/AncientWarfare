@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 
 /**
@@ -35,20 +37,33 @@ public class TeamEntry implements INBTTaggable
 {
 
 public int teamNum;
-List<String> memberNames = new ArrayList<String>();
+public List<String> memberNames = new ArrayList<String>();
 
 @Override
 public NBTTagCompound getNBTTag()
   {
-  // TODO Auto-generated method stub
-  return null;
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setInteger("num", this.teamNum);
+  NBTTagList namesList = new NBTTagList();
+  for(int i = 0; i < this.memberNames.size(); i++)
+    {    
+    NBTTagString memberName = new NBTTagString(this.memberNames.get(i));
+    namesList.appendTag(memberName);
+    }  
+  tag.setTag("teamMembers", namesList);
+  return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-  
+  this.teamNum = tag.getInteger("num");
+  NBTTagList namesList = tag.getTagList("teamMembers");
+  for(int i = 0; i < namesList.tagCount(); i++)
+    {
+    NBTTagString memberTag = (NBTTagString) namesList.tagAt(i);
+    this.memberNames.add(memberTag.data);
+    }
   }
 
 }

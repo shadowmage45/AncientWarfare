@@ -22,22 +22,19 @@ package shadowmage.ancient_warfare.common.aw_structure;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 import shadowmage.ancient_warfare.common.aw_structure.build.Builder;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
-import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderDirect;
 import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
@@ -223,15 +220,40 @@ public String getLabel()
 @Override
 public NBTTagCompound getNBTTag()
   {
-  // TODO Auto-generated method stub
-  return null;
+  NBTTagCompound tag = new NBTTagCompound();
+  NBTTagList builderList = new NBTTagList();
+  for(Builder builder : builders)
+    {
+    builderList.appendTag(builder.getNBTTag());
+    }  
+  tag.setTag("builderList", builderList);
+  return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-  
+  MinecraftServer server = MinecraftServer.getServer();
+  if(server==null)
+    {
+    Config.logError("SEVERE ERROR LOADING BUILDERS, NULL SERVER");
+    return;
+    }
+  NBTTagList builderList = tag.getTagList("builderList");
+  for(int i = 0; i < builderList.tagCount(); i++)
+    {
+    NBTTagCompound builderTag = (NBTTagCompound) builderList.tagAt(i);
+    int dimension = builderTag.getInteger("dim");
+    World world = server.worldServerForDimension(dimension);
+    if(world!=null)
+      {
+      Builder builder = Builder.readTickedBuilderFromNBT(builderTag, world);
+      if(builder!=null)
+        {
+        builders.add(builder);
+        }
+      }
+    }
   }
 
 public void clearAllData()

@@ -24,11 +24,13 @@ package shadowmage.ancient_warfare.client.aw_core.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.aw_core.container.IHandlePacketData;
+import net.minecraftforge.common.MinecraftForge;
+import shadowmage.ancient_warfare.client.aw_core.render.AWRenderHelper;
 import shadowmage.ancient_warfare.common.aw_core.network.PacketBase;
 import shadowmage.ancient_warfare.common.aw_core.proxy.CommonProxy;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy
 {
@@ -53,7 +55,9 @@ public void sendPacketToServer(PacketBase pkt)
 @Override
 public void registerClientData()
   {
-  //TODO register renders, tick handlers, etc...
+  TickRegistry.registerTickHandler(AWRenderHelper.instance(), Side.CLIENT);
+  
+  MinecraftForge.EVENT_BUS.register(AWRenderHelper.instance());
   }
 
 }

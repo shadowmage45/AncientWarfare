@@ -369,7 +369,10 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("bX", this.buildPos.x);
   tag.setInteger("bY", this.buildPos.y);
   tag.setInteger("bZ", this.buildPos.z);
-  //TODO add info for overrides
+  tag.setInteger("ovT", this.overrideTeam);
+  tag.setInteger("ovV", this.overrideVehicle);
+  tag.setInteger("ovN", this.overrideNPC);
+  tag.setInteger("ovG", this.overrideGate);
   return tag;
   }
 
@@ -382,6 +385,10 @@ public void readFromNBT(NBTTagCompound tag)
   this.currentPriority = tag.getInteger("p");
   this.maxPriority = tag.getInteger("mP");
   this.dimension = tag.getInteger("dim");  
+  this.overrideTeam = tag.getInteger("ovT");
+  this.overrideVehicle = tag.getInteger("ovV");
+  this.overrideNPC = tag.getInteger("ovN");
+  this.overrideGate = tag.getInteger("ovG");
   }
 
 public static Builder readTickedBuilderFromNBT(NBTTagCompound tag, World world)

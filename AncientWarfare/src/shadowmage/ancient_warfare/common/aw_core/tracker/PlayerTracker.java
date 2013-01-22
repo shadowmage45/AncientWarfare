@@ -111,7 +111,9 @@ private void createEntryForNewPlayer(EntityPlayer player)
     {
     return;
     }
-  //TODO  
+  PlayerEntry entry = new PlayerEntry();
+  entry.playerName = player.getEntityName();
+  this.playerEntries.put(player.getEntityName(), entry);
   TeamTracker.instance().handleNewPlayerLogin(player);
   }
 
