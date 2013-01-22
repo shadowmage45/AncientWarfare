@@ -270,7 +270,11 @@ private boolean attemptConstruction(World world, EntityPlayer player, BlockPosit
     List<IDPairCount> need = getNeededBlocks(player, counts);
     if(need.size()>0)
       {
-      System.out.println("needed blocks > 0!");      
+      System.out.println("needed blocks > 0!");   
+      for(IDPairCount entry : need)
+        {
+        System.out.println("missing: "+entry.toString());
+        }
       }
     else
       {
@@ -300,6 +304,10 @@ private List<IDPairCount> getNeededBlocks(EntityPlayer player, List<IDPairCount>
     }  
   for(IDPairCount entry : counts)
     {
+    if(entry.id==0)
+      {
+      continue;
+      }
     IDPairCount need = entry.copy();
     for(int index = 0; index < player.inventory.getSizeInventory(); index++)
       {
@@ -308,6 +316,7 @@ private List<IDPairCount> getNeededBlocks(EntityPlayer player, List<IDPairCount>
         {
         continue;
         }
+     
       if(stack.itemID==entry.id && stack.getItemDamage() == entry.meta)
         {
         need.count -= stack.stackSize;
@@ -331,6 +340,10 @@ private boolean decrementItems(EntityPlayer player, List<IDPairCount> counts)
   int countFails = 0;
   for(IDPairCount entry : counts)
     {
+    if(entry.id==0)
+      {
+      continue;
+      }
     int countLeft = entry.count;    
     for(int index = 0; index < player.inventory.getSizeInventory(); index++)
       {      
@@ -356,7 +369,6 @@ private boolean decrementItems(EntityPlayer player, List<IDPairCount> counts)
       countFails++;
       }
     }  
-  player.inventory.onInventoryChanged();
   player.openContainer.detectAndSendChanges();
   if(countFails==0)
     {

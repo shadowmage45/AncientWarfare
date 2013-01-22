@@ -62,6 +62,11 @@ boolean rotatable = false;
 
 boolean isBasicSubTypeBlock = false;
 
+boolean isBasicInventoryItem = false;
+int basicInventoryItemID = -1;
+int basicInventoryItemMeta = -1;
+int basicInventoryItemCount = -1;
+
 /**
  * the default build priority for this block, added to blockRules created for this block when templates are generated
  * may be overridden in template by user
@@ -208,6 +213,15 @@ public BlockInfo setInventoryBlock(int meta, IDPairCount data)
   this.metaToBlocks.put(meta, data);
   return this;
   }
+
+public BlockInfo setBasicInventoryItem(int id, int meta, int count)
+  {
+  this.isBasicInventoryItem = true;
+  this.basicInventoryItemID = id;
+  this.basicInventoryItemMeta = meta;
+  this.basicInventoryItemCount = count;
+  return this;
+  }
   
   
 /************************************** STATIC METHODS **************************************/
@@ -252,15 +266,19 @@ public static int getRotatedMeta(int id, int meta, int rotationAmt)
 public static IDPairCount getInventoryBlock(int id, int meta)
   {  
   BlockInfo data = blockList[id];
-  IDPairCount info = null; 
-  if(data != null)
+  if(data==null)
     {
-    if(data.isBasicSubTypeBlock)
-      {
-      return new IDPairCount(id, meta);
-      }
-    info = data.metaToBlocks.get(id);        
-    }    
+    return new IDPairCount(id,0);
+    }
+  if(data.isBasicSubTypeBlock)
+    {
+    return new IDPairCount(id, meta);
+    }
+  else if(data.isBasicInventoryItem)
+    {
+    return new IDPairCount(data.basicInventoryItemID, data.basicInventoryItemMeta, data.basicInventoryItemCount);
+    }
+  IDPairCount info = data.metaToBlocks.get(id);
   return info==null ? new IDPairCount(id,0) : info.copy();
   }
 

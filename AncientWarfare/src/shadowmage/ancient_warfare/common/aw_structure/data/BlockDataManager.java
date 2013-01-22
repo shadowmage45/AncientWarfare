@@ -21,7 +21,7 @@
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
 import net.minecraft.block.Block;
-import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
+import net.minecraft.item.Item;
 import shadowmage.ancient_warfare.common.aw_structure.data.swap_groups.BlockSwapGroupBrick;
 import shadowmage.ancient_warfare.common.aw_structure.data.swap_groups.BlockSwapGroupCobble;
 import shadowmage.ancient_warfare.common.aw_structure.data.swap_groups.BlockSwapGroupNetherBrick;
