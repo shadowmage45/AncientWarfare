@@ -20,17 +20,24 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
-import shadowmage.ancient_warfare.common.aw_core.container.IEntityContainerSynch;
+import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
+import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderDirect;
 
 public class ContainerSurvivalBuilder extends ContainerBase
 {
 
+public List<IDPairCount> idCounts = new ArrayList<IDPairCount>();
+
 /**
  * @param openingPlayer
- * @param synch
  */
 public ContainerSurvivalBuilder(EntityPlayer openingPlayer)
   {
@@ -46,17 +53,34 @@ public void handlePacketData(NBTTagCompound tag)
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
+  this.idCounts.clear();
   if(tag.hasKey("blockList"))
     {
-    
+    NBTTagList blockListTag = tag.getTagList("blockList");
+    for(int i = 0; i < blockListTag.tagCount(); i++)
+      {
+      NBTTagCompound ct = (NBTTagCompound) blockListTag.tagAt(i);
+      this.idCounts.add(new IDPairCount(ct));      
+      }
     }  
   }
 
 @Override
 public NBTTagCompound getInitData()
   {
-  //TODO get blocksList
-  return null;
+  NBTTagCompound tag = new NBTTagCompound();
+  NBTTagList blockListTag = new NBTTagList();
+  ProcessedStructure struct = ItemBuilderDirect.getStructureFor(player.getEntityName());
+  if(struct!=null)
+    {
+    List<IDPairCount> counts = struct.getResourceList();
+    for(IDPairCount count : counts)
+      {      
+      blockListTag.appendTag(count.getTag());
+      }
+    }
+  tag.setTag("blockList", blockListTag);
+  return tag;
   }
 
 }

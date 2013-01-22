@@ -23,10 +23,12 @@ package shadowmage.ancient_warfare.client.aw_structure.gui.survival_builder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.aw_core.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.common.aw_structure.container.ContainerStructureScanner;
+import shadowmage.ancient_warfare.common.aw_structure.container.ContainerSurvivalBuilder;
 
 public class GuiSurvivalBuilder extends GuiContainerAdvanced
 {
+
+private final ContainerSurvivalBuilder cont;
 
 /**
  * @param container
@@ -34,6 +36,11 @@ public class GuiSurvivalBuilder extends GuiContainerAdvanced
 public GuiSurvivalBuilder(Container container)
   {
   super(container);
+  this.cont = (ContainerSurvivalBuilder)container;
+  if(cont==null)
+    {
+    closeGUI();
+    }
   }
 
 @Override
@@ -57,7 +64,7 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-
+  
   }
 
 @Override

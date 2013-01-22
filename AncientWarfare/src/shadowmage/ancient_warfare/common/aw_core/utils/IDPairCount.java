@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.utils;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 public class IDPairCount extends IDPair
 {
 
@@ -32,10 +34,25 @@ public IDPairCount(int id, int meta)
   super(id, meta);
   }
 
+public IDPairCount(NBTTagCompound tag)
+  {
+  super(tag.getInteger("id"), tag.getInteger("mt"));
+  count=tag.getInteger("ct");
+  }
+
 public IDPairCount(int id, int meta, int count)
   {
   this(id, meta);
   this.count = count;
+  }
+
+public NBTTagCompound getTag()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setInteger("id", id);
+  tag.setInteger("mt", meta);
+  tag.setInteger("ct", count);
+  return tag;
   }
 
 public IDPairCount copy()
@@ -49,4 +66,6 @@ public String toString()
   {
   return String.valueOf("ID: "+id+" MT: "+meta+" CT: "+count);
   }
+
+
 }

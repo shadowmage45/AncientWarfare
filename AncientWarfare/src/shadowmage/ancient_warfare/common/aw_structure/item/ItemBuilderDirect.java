@@ -259,6 +259,10 @@ private ProcessedStructure scanAndProcess(World world, EntityPlayer player, Bloc
   return norm.convertToProcessedStructure();  
   }
 
+public static ProcessedStructure getStructureFor(String name)
+  {
+  return scannedStructures.get(name);
+  }
 
 
 }
