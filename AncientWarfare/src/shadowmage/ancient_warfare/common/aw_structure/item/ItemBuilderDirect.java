@@ -20,7 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.item;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,7 +39,6 @@ import shadowmage.ancient_warfare.common.aw_structure.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
-import shadowmage.ancient_warfare.common.aw_structure.export.StructureExporter;
 
 public class ItemBuilderDirect extends AWItemBase
 {
@@ -178,8 +177,6 @@ private boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, B
       ProcessedStructure struct = scanAndProcess(world, player, pos1, pos2, key, face);
       this.scannedStructures.put(player.getEntityName(), struct);   
       List<IDPairCount> blockList = struct.getResourceList();
-      
-      
       NBTTagList blocks = new NBTTagList();
       for(IDPairCount ct : blockList)
         {
@@ -231,9 +228,7 @@ private boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, B
         }
       else
         {
-        BuilderTicked builder = new BuilderTicked(world, struct, face, hit);
-        AWStructureModule.instance().addBuilder(builder);
-        builder.startConstruction();
+        this.attemptConstruction(world, player, hit, face, struct);
         }      
       }
     } 
@@ -264,5 +259,110 @@ public static ProcessedStructure getStructureFor(String name)
   return scannedStructures.get(name);
   }
 
+private boolean attemptConstruction(World world, EntityPlayer player, BlockPosition hit, int face, ProcessedStructure struct)
+  {
+  List<IDPairCount> counts = struct.getResourceList();
+  
+  boolean shouldConstruct = player.capabilities.isCreativeMode;
+  
+  if(!shouldConstruct)
+    {
+    List<IDPairCount> need = getNeededBlocks(player, counts);
+    if(need.size()>0)
+      {
+      System.out.println("needed blocks > 0!");      
+      }
+    else
+      {
+      if(!decrementItems(player, counts))
+        {
+        System.out.println("Error removing items from player!");
+        }
+      shouldConstruct = true;
+      }
+    }  
+  if(shouldConstruct)
+    {
+    BuilderTicked builder = new BuilderTicked(world, struct, face, hit);
+    AWStructureModule.instance().addBuilder(builder);
+    builder.startConstruction();
+    return true;
+    }
+  return false;
+  }
+
+private List<IDPairCount> getNeededBlocks(EntityPlayer player, List<IDPairCount> counts)
+  {
+  ArrayList<IDPairCount> needed = new ArrayList<IDPairCount>();
+  if(player==null || counts == null)
+    {
+    return needed;
+    }  
+  for(IDPairCount entry : counts)
+    {
+    IDPairCount need = entry.copy();
+    for(int index = 0; index < player.inventory.getSizeInventory(); index++)
+      {
+      ItemStack stack = player.inventory.getStackInSlot(index);
+      if(stack==null)
+        {
+        continue;
+        }
+      if(stack.itemID==entry.id && stack.getItemDamage() == entry.meta)
+        {
+        need.count -= stack.stackSize;
+        if(need.count<=0)
+          {
+          need.count=0;
+          break;
+          }
+        }
+      }
+    if(need.count>0)
+      {
+      needed.add(need);
+      }
+    }
+  return needed;
+  }
+
+private boolean decrementItems(EntityPlayer player, List<IDPairCount> counts)
+  {
+  int countFails = 0;
+  for(IDPairCount entry : counts)
+    {
+    int countLeft = entry.count;    
+    for(int index = 0; index < player.inventory.getSizeInventory(); index++)
+      {      
+      ItemStack stack = player.inventory.getStackInSlot(index);
+      if(stack==null)
+        {
+        continue;
+        }      
+      if(stack.itemID==entry.id && stack.getItemDamage()==entry.meta)
+        {
+        int decAmt;
+        decAmt = stack.stackSize < countLeft? stack.stackSize : countLeft;
+        stack.stackSize -= decAmt;
+        countLeft-=decAmt;
+        if(countLeft<=0)
+          {
+          break;
+          }
+        }
+      }
+    if(countLeft>0)
+      {
+      countFails++;
+      }
+    }  
+  player.inventory.onInventoryChanged();
+  player.openContainer.detectAndSendChanges();
+  if(countFails==0)
+    {
+    return true;
+    }
+  return false;
+  }
 
 }
