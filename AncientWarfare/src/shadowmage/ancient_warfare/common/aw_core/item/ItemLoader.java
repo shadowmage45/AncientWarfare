@@ -30,8 +30,8 @@ import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemBlockScanner;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderDirect;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemDebugBuilder;
-import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
-import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreativeTicked;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderInstant;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderTicked;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.aw_vehicles.item.ItemVehicleSpawner;
 import shadowmage.ancient_warfare.common.aw_vehicles.registry.VehicleAmmoRegistry;
@@ -50,9 +50,9 @@ public static final AWItemBase vehicleAmmo = new AWItemBase(Config.getItemID("it
 public static final AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 13003, "Base item for all vehicle-spawning items"));
 public static final AWItemBase componentItem = new AWItemBase(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
 public static final AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 13005, "Item used to scan structures"));
-public static final AWItemBase structureCreativeBuilder = new ItemStructureBuilderCreative(Config.getItemID("itemSingle.structureBuilderCreative", 13006, "Creative-Mode Selectable Structure Builder"));
+public static final AWItemBase structureCreativeBuilder = new ItemBuilderInstant(Config.getItemID("itemSingle.structureBuilderCreative", 13006, "Creative-Mode Selectable Structure Builder"));
 public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Config.getItemID("itemSingle.builderDirect", 13007, "Survival mode builder, uses blocks from inventory"));
-public static final AWItemBase structureCreativeBuilderTicked = new ItemStructureBuilderCreativeTicked(Config.getItemID("itemSingle.structureBuilderCreativeTicked", 13008, "Creative-mode slow (ticked) builder"));
+public static final AWItemBase structureCreativeBuilderTicked = new ItemBuilderTicked(Config.getItemID("itemSingle.structureBuilderCreativeTicked", 13008, "Creative-mode slow (ticked) builder"));
 
 /**
  * debug items, will only be given instances if debug is enabled in Config

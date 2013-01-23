@@ -388,7 +388,7 @@ public void readFromNBT(NBTTagCompound tag)
 public static BuilderTicked readTickedBuilderFromNBT(NBTTagCompound tag)
   {  
   String name = tag.getString("name");
-  ProcessedStructure struct = StructureManager.instance().getStructure(name);
+  ProcessedStructure struct = StructureManager.instance().getStructureServer(name);
   if(struct==null)
     {
     return null;

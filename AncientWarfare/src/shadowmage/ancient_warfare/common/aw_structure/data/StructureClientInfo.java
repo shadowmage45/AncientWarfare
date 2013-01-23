@@ -21,7 +21,8 @@
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.aw_structure.data.AWStructure;
+import net.minecraft.util.AxisAlignedBB;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 
 public class StructureClientInfo
 {
@@ -79,5 +80,30 @@ public static NBTTagCompound getClientTag(AWStructure struct)
    }
  return structTag;
  }
+
+/**
+ * returns a world-coordinate bounding box for a given hitPosition
+ * and facing
+ * @param hit
+ * @param face
+ * @return
+ */
+public AxisAlignedBB getBBForRender(BlockPosition hit, int face)
+  {
+  BlockPosition size = new BlockPosition(xSize, ySize, zSize);
+  BlockPosition offset = new BlockPosition (xOffset, yOffset, zOffset);
+    
+  BlockPosition p1 = hit.copy();
+  p1.moveLeft(face, offset.x);
+  p1.moveForward(face, offset.z);
+
+  BlockPosition p2 = p1.copy();
+  p2.moveRight(face, size.x);
+  p2.moveForward(face, size.z);
+  p2.y += size.y;
+    
+  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
+  return bb;
+  }
 
 }

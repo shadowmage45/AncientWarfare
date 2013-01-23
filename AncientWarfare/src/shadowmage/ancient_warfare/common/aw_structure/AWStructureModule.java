@@ -29,6 +29,7 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -136,16 +137,13 @@ private void copyDefaultStructures(String pathName)
   if(includeDirectory==null)
     {
     return;
-    }
-  //TODO figure this whole thing out....
-
-  //ByteArrayInputStream bais = 
+    }  
   InputStream is = null;
-  FileOutputStream os;
+  FileOutputStream os = null;
   File file = null;
   Config.log("Exporting default structures....");
   int exportCount = 0;
-  byte[] byteBuffer = new byte[1024];
+  byte[] byteBuffer;
   for(String fileName : defaultExportStructures)
     {
     try
@@ -181,24 +179,10 @@ private void copyDefaultStructures(String pathName)
     catch(Exception e)
       {
       Config.logError("Error during export of: "+fileName);
-      e.printStackTrace();      
+      e.printStackTrace();
       }    
     }
-  Config.log("Exported "+exportCount+" structures");
-  
-  
-  
-//  is = this.getClass().getResourceAsStream("/shadowmage/ancient_warfare/resources/templates/library.aws");
-//  if(is==null)
-//    {
-//    Config.logDebug("NULL INPUT STREAM FOR RESOURCE");
-//    }
-//  else
-//    {
-//    Config.logDebug("LOCATED RESOURCE STREAM!");
-//    }
-
-
+  Config.log("Exported "+exportCount+" structures");  
   }
 
 private void createDirectory(File file)

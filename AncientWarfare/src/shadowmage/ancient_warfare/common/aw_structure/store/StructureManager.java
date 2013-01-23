@@ -21,13 +21,13 @@
 package shadowmage.ancient_warfare.common.aw_structure.store;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.network.Packet01ModData;
@@ -41,6 +41,9 @@ public class StructureManager
 private static List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
 private static List<StructureClientInfo> clientStructures = new ArrayList<StructureClientInfo>();
 
+private static  HashMap<String, ProcessedStructure> tempBuilderStructures = new HashMap<String, ProcessedStructure>();
+private static  StructureClientInfo tempBuilderClientInfo;
+
 
 private StructureManager(){}
 private static StructureManager INSTANCE;
@@ -53,7 +56,20 @@ public static StructureManager instance()
   return INSTANCE;
   }
 
-public ProcessedStructure getStructure(String name)
+private Packet01ModData constructPacket(NBTTagCompound tag)
+  {
+  Packet01ModData pkt = new Packet01ModData();
+  pkt.setStructData(tag);
+  return pkt;
+  }
+
+/************************************* SERVER METHODS ************************************/
+public void handlePacketDataServer(NBTTagCompound tag)
+  {
+  //TODO??
+  }
+
+public ProcessedStructure getStructureServer(String name)
   {
   Iterator<ProcessedStructure> it = structures.iterator();
   ProcessedStructure struct;
@@ -69,6 +85,19 @@ public ProcessedStructure getStructure(String name)
   }
 
 /**
+ * server side method to add a temp structure and relay to ITS client
+ * @param tag
+ */
+public void addTempStructure(EntityPlayer player, ProcessedStructure struct)
+  {
+  this.tempBuilderStructures.put(String.valueOf(player.getEntityName()), struct);
+  
+  NBTTagCompound structData = new NBTTagCompound();
+  structData.setCompoundTag("addTemp", StructureClientInfo.getClientTag(struct));
+  AWCore.proxy.sendPacketToPlayer(player, constructPacket(structData));
+  }
+
+/**
  * server side method to add a structure, relays client data to all logged in clients to update
  * their structure map
  * @param struct
@@ -76,23 +105,15 @@ public ProcessedStructure getStructure(String name)
 public void addStructure(ProcessedStructure struct)
   {
   structures.add(struct);
-  sendStructureToClients(StructureClientInfo.getClientTag(struct));
-  }
-
-/**
- * send the client-structure tag to all logged in players
- * @param tag
- */
-public void sendStructureToClients(NBTTagCompound tag)
-  {
-  Packet01ModData pkt = new Packet01ModData();
-  pkt.packetData.setBoolean("struct", true);
-  pkt.packetData.setCompoundTag("add", tag);
-  AWCore.proxy.sendPacketToAllPlayers(pkt);
+  
+  NBTTagCompound structData = new NBTTagCompound();
+  structData.setCompoundTag("add", StructureClientInfo.getClientTag(struct));   
+  AWCore.proxy.sendPacketToAllPlayers(constructPacket(structData));
   }
 
 /**
  * clear structure data, and add an entire list of structures to it
+ * DOES NOT RELAY CHANGES TO CLIENTS, THIS IS A LOAD/INIT METHOD ONLY
  * @param structs
  */
 public void addStructures(List<ProcessedStructure> structs)
@@ -101,34 +122,22 @@ public void addStructures(List<ProcessedStructure> structs)
   structures.addAll(structs);
   if(Config.DEBUG)
     {
-    System.out.println("loaded: "+structures.size()+" structures!");
+    System.out.println("Sucessfully loaded: "+structures.size()+" structures!");
     }
-  }
-
-public List<StructureClientInfo> getClientStructures()
-  { 
-  return clientStructures;
-  }
-
-public List<ProcessedStructure> getStructureList()
-  {
-  return structures;
   }
 
 public void handlePlayerLogin(EntityPlayer player)
   {
   if(!player.worldObj.isRemote)
     {
-    Packet01ModData init = new Packet01ModData();
-    init.packetData.setBoolean("struct", true);
-    init.packetData.setCompoundTag("structInit", getClientInitData());
-    AWCore.proxy.sendPacketToPlayer(player, init);
+    NBTTagCompound structData = new NBTTagCompound();
+    structData.setTag("structInit", this.getClientInitData());
+    AWCore.proxy.sendPacketToPlayer(player, constructPacket(structData));
     }
   }
 
-private NBTTagCompound getClientInitData()
+private NBTTagList getClientInitData()
   {
-  NBTTagCompound tag = new NBTTagCompound();
   NBTTagList list = new NBTTagList();
   Iterator<ProcessedStructure> it = structures.iterator();
   ProcessedStructure structure;  
@@ -137,26 +146,16 @@ private NBTTagCompound getClientInitData()
     structure = it.next();    
     list.appendTag(StructureClientInfo.getClientTag(structure));    
     }  
-  tag.setTag("initList", list);
-  System.out.println("setting data to send to client. size: "+list.tagCount());
-  return tag;
+  return list;
   }
 
-public void handleInitClient(NBTTagCompound tag)
-  {
-  System.out.println("Handling client structure init data.  Current size: "+clientStructures.size());
-  if(tag.hasKey("initList"))
-    {
-    this.addClientStructuresFromNBT(tag.getTagList("initList"));
-    }
-  System.out.println("Client structure init data loaded.  Loaded size: "+clientStructures.size());
-  }
+/********************************** CLIENT METHODS *********************************/
 
-public void handleUpdateClient(NBTTagCompound tag)
+public void handlePacketDataClient(NBTTagCompound tag)
   {
   if(tag.hasKey("structInit"))
     {
-    handleInitClient(tag.getCompoundTag("structInit"));
+    this.handleInitClient(tag.getTagList("structInit"));
     }
   if(tag.hasKey("add"))
     {
@@ -166,27 +165,20 @@ public void handleUpdateClient(NBTTagCompound tag)
     {
     removeClientStructure(tag.getString("remove"));
     }
+  if(tag.hasKey("addTemp"))
+    {
+    addTempClientInfo(tag.getCompoundTag("addTemp"));
+    }
   }
 
-@Deprecated //handled in server-side container, through gui/container interaction code 
-public void handleUpdateServer(NBTTagCompound tag)
+public void addTempClientInfo(NBTTagCompound tag)
   {
-  //TODO
-  //handle add structure, relay to clients
-  //handle remove structure, relay to clients
-  if(tag.hasKey("add"))
-    {
-    
-    }
-  if(tag.hasKey("remove"))
-    {
-    
-    }
+  this.tempBuilderClientInfo = new StructureClientInfo(tag);
   }
 
 public boolean isValidStructureClient(String name)
   {
-  for(ProcessedStructure struct : this.structures)
+  for(StructureClientInfo struct : this.clientStructures)
     {
     if(struct.name.equals(name))
       {
@@ -196,24 +188,19 @@ public boolean isValidStructureClient(String name)
   return false;
   }
 
-/**
- * INIT method, clears structure list before adding from nbt list * 
- * @param list
- */
-private void addClientStructuresFromNBT(NBTTagList list)
+private void handleInitClient(NBTTagList list)
   {
   this.clientStructures.clear();
   NBTTagCompound tag;
   for(int i = 0; i < list.tagCount(); i++)
     {
     tag = (NBTTagCompound) list.tagAt(i);
-    this.addClientStructureFromNBT(tag);    
+    this.clientStructures.add(new StructureClientInfo(tag));
     }
   }
 
 private void addClientStructureFromNBT(NBTTagCompound tag)
   {
-  System.out.println("receiving client-add structure command");
   this.clientStructures.add(new StructureClientInfo(tag));
   }
 
@@ -247,6 +234,16 @@ public StructureClientInfo getClientStructure(String name)
       }
     }
   return null;
+  }
+
+public StructureClientInfo getClientTempStructure()
+  {
+  return this.tempBuilderClientInfo;
+  }
+
+public List<StructureClientInfo> getClientStructures()
+  {
+  return this.clientStructures;
   }
 
 }

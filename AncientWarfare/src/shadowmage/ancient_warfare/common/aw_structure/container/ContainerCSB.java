@@ -27,7 +27,7 @@ import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
 import shadowmage.ancient_warfare.common.aw_core.container.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
-import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderInstant;
 
 public class ContainerCSB extends ContainerBase
 {
@@ -41,7 +41,7 @@ public class ContainerCSB extends ContainerBase
 public ContainerCSB(EntityPlayer openingPlayer, IEntityContainerSynch synch) 
   {
   super(openingPlayer, synch);
-  if(player.inventory.getCurrentItem() == null && !(player.inventory.getCurrentItem().getItem() instanceof ItemStructureBuilderCreative))
+  if(player.inventory.getCurrentItem() == null && !(player.inventory.getCurrentItem().getItem() instanceof ItemBuilderInstant))
     {
     Config.logError("Severe error initializing Creative Structure Builder Container, improper ItemStack detected.");
     }

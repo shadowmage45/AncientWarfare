@@ -20,14 +20,21 @@
  */
 package shadowmage.ancient_warfare.client.aw_structure.render;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
+import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.utils.Pos3f;
+import shadowmage.ancient_warfare.common.aw_structure.data.StructureClientInfo;
+import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 
 public class BoundingBoxRender
@@ -44,49 +51,18 @@ public static BoundingBoxRender instance()
   return INSTANCE;
   }
 
- 
-
-public static void renderBoundingBox(BlockPosition hit, int face, BlockPosition offset, BlockPosition size, Pos3f playerOffset)
-  { 
-  //stupid hack because positioning is wierd...
-  if(face==0 || face == 1)//south
-    {
-    hit.moveLeft(face,1);
-    }  
-  if(face==2 || face==1)
-    {
-    hit.moveBack(face, 1);
-    }
-  //end stupid hack
-  
-  BlockPosition p1 = hit;
-  p1.moveLeft(face, offset.x);
-  p1.moveForward(face, offset.z);
-
-  BlockPosition p2 = p1.copy();
-  p2.moveRight(face, size.x);
-  p2.moveForward(face, size.z);
-  p2.y += size.y;
-  
-  BlockPosition min = BlockTools.getMin(p1, p2);
-  BlockPosition max = BlockTools.getMax(p1, p2);
-
+/**
+ * draw a player-position-normalized bounding box (can only be called during worldRender)
+ * @param bb
+ */
+public static void drawOutlinedBoundingBox(AxisAlignedBB bb)
+  {
   GL11.glEnable(GL11.GL_BLEND);
   GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
   GL11.glColor4f(0.8F, 0.0F, 0.0F, 0.4F);
   GL11.glLineWidth(8.0F);
   GL11.glDisable(GL11.GL_TEXTURE_2D);
   GL11.glDepthMask(false);
-  
-  drawOutlinedBoundingBox(AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z).offset(-playerOffset.x, -playerOffset.y, -playerOffset.z).contract(.02f, .02f, .02f));
-  
-  GL11.glDepthMask(true);
-  GL11.glEnable(GL11.GL_TEXTURE_2D);
-  GL11.glDisable(GL11.GL_BLEND);
-  }
-
-private static void drawOutlinedBoundingBox(AxisAlignedBB bb)
-  {
   Tessellator tess = Tessellator.instance;
   tess.startDrawing(3);
   tess.addVertex(bb.minX, bb.minY, bb.minZ);
@@ -112,6 +88,9 @@ private static void drawOutlinedBoundingBox(AxisAlignedBB bb)
   tess.addVertex(bb.minX, bb.minY, bb.maxZ);
   tess.addVertex(bb.minX, bb.maxY, bb.maxZ);
   tess.draw();
+  GL11.glDepthMask(true);
+  GL11.glEnable(GL11.GL_TEXTURE_2D);
+  GL11.glDisable(GL11.GL_BLEND);
   }
 
 }

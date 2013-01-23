@@ -1,8 +1,6 @@
 TODO before first alpha release:
 
 
-* bb rendering for all other structure builders...
-* cleanup bb rendering code, its freaking ugly
 * cleanup bug where overwriting a chest will crash the client (render tick error)
 
 
@@ -13,4 +11,6 @@ default structure exporting...
 * inventoried blocks for door, bed, slabs, double slabs
 * test door coding for inventoried builder
 * builder blocks + link builder to structure....
-* TEST FREAKING BUILDER SAVE AND LOADING--IT FAILS--NEEDS WORK
+* TEST FREAKING BUILDER SAVE AND LOADING--IT FAILS--NEEDS WORK--NAOW IT WORKS!
+* bb rendering for all other structure builders...
+* cleanup bb rendering code, its freaking ugly

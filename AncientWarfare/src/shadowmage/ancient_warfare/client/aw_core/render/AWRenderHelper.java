@@ -21,11 +21,13 @@
 package shadowmage.ancient_warfare.client.aw_core.render;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import shadowmage.ancient_warfare.client.aw_structure.render.BoundingBoxRender;
@@ -34,7 +36,7 @@ import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.utils.Pos3f;
 import shadowmage.ancient_warfare.common.aw_structure.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderBase;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -86,47 +88,19 @@ private void renderStructureBB()
     {
     return;
     }
-  int id = stack.itemID;
-  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
-  if(hit==null)
+  if(stack.getItem() instanceof ItemBuilderBase)
     {
-    return;
-    }
-  
-  if(id == ItemLoader.structureCreativeBuilder.itemID || id == ItemLoader.structureCreativeBuilderTicked.itemID || id==ItemLoader.structureBuilderDirect.itemID)
-    {
-    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
+    if(!stack.hasTagCompound() || !stack.getTagCompound().hasKey("structData") || !stack.getTagCompound().getCompoundTag("structData").hasKey("name"))
       {
-      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("structData");
-      if(id==ItemLoader.structureBuilderDirect.itemID)
-        {               
-        if(tag.hasKey("clientData"))
-          {
-          tag = tag.getCompoundTag("clientData");
-          BlockPosition size = new BlockPosition(tag.getCompoundTag("size"));
-          BlockPosition offset = new BlockPosition(tag.getCompoundTag("offset"));        
-          Pos3f playerOffset = new Pos3f(player.posX, player.posY, player.posZ);
-          int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-          BoundingBoxRender.renderBoundingBox(hit, face, offset, size, playerOffset);   
-          } 
-        }
-      else
-        {
-        if(tag.hasKey("name"))
-          {
-          StructureClientInfo struct = StructureManager.instance().getClientStructure(tag.getString("name"));
-          if(struct!=null)
-            {           
-            BlockPosition size = new BlockPosition(struct.xSize, struct.ySize, struct.zSize);           
-            Pos3f playerOffset = new Pos3f(player.posX, player.posY, player.posZ);
-            BlockPosition offset = new BlockPosition (struct.xOffset, struct.yOffset, struct.zOffset);
-            int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-            BoundingBoxRender.renderBoundingBox(hit, face, offset, size, playerOffset);              
-            }
-          }
-        }      
+      return;
       }
-    }  
+    List<AxisAlignedBB> bbs =  ((ItemBuilderBase)stack.getItem()).getBBForStructure(player, stack.getTagCompound().getCompoundTag("structData").getString("name"));
+    for(AxisAlignedBB bb : bbs)
+      {
+      BoundingBoxRender.drawOutlinedBoundingBox(bb);
+      }
+    }    
+ 
   }
 
 @Override

@@ -385,10 +385,25 @@ public static BlockPosition getMax(BlockPosition pos1, BlockPosition pos2)
   return pos;
   }
 
-
-public static int getFacingFromSide(int side)
+public static int getBlockMetaFromPlayerFace(int face)
   {
-  return 0;
+  if(face==0)//correct
+    {
+    return 2;
+    }
+  if(face==1)//correct
+    {
+    return 5;
+    }
+  if(face==2)//correct
+    {
+    return 3;
+    }
+  if(face==3)
+    {
+    return 4;//correct
+    }
+  return face;
   }
 
 /**
@@ -398,10 +413,8 @@ public static int getFacingFromSide(int side)
  * @return
  */
 public static int getBlockFacingMetaFromPlayerYaw(float rotation)
-  {  
-  //north = 180, south = 0
-  //east = 270
-  double yaw = (double)rotation;
+  { 
+  float yaw = (float)rotation;
   while(yaw < 0.d)
     {
     yaw+=360.d;
@@ -410,36 +423,11 @@ public static int getBlockFacingMetaFromPlayerYaw(float rotation)
     {
     yaw-=360.d;
     }
-  double adjYaw = yaw +45;
-  adjYaw *=4;//multiply by four
+  float adjYaw = yaw +45;
+  adjYaw *=4;
   adjYaw /= 360.d;
-  int facing = (MathHelper.floor_double(adjYaw)) % 4;//round down, mod 4 for a 0-3 range
-  
-  if(facing==0)//correct
-    {
-    return 2;
-    }
-  if(facing==1)//correct
-    {
-    return 5;
-    }
-  if(facing==2)//correct
-    {
-    return 3;
-    }
-  if(facing==3)
-    {
-    return 4;//correct
-    }
-  
-//  this.renderBottomFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(0));
-//  this.renderTopFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(1));
-//  this.renderEastFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(2));
-//  this.renderWestFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(3));
-//  this.renderNorthFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(4));
-//  this.renderSouthFace(par1Block, 0.0D, 0.0D, 0.0D, par1Block.getBlockTextureFromSide(5));    
-  
-  return facing;
+  int facing = (MathHelper.floor_float(adjYaw)) % 4;//round down, mod 4 for a 0-3 range
+  return getBlockMetaFromPlayerFace(facing);
   }
 
 public static int getPlayerFacingFromYaw(float rotation)

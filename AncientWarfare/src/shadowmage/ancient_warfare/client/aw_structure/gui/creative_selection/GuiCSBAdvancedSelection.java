@@ -31,7 +31,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.aw_core.gui.GuiCheckBox;
 import shadowmage.ancient_warfare.client.aw_core.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
-import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderInstant;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 public class GuiCSBAdvancedSelection extends   GuiContainerAdvanced

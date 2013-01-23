@@ -20,48 +20,44 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.item;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.client.aw_structure.render.BoundingBoxRender;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
-import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
 import shadowmage.ancient_warfare.common.aw_core.network.GUIHandler;
+import shadowmage.ancient_warfare.common.aw_core.utils.Pos3f;
 import shadowmage.ancient_warfare.common.aw_structure.build.BuilderInstant;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.aw_structure.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
-public class ItemStructureBuilderCreative extends AWItemBase
+public class ItemBuilderInstant extends ItemBuilderBase
 {
 
 /**
  * @param itemID
  * @param hasSubTypes
  */
-public ItemStructureBuilderCreative(int itemID)
+public ItemBuilderInstant(int itemID)
   {
-  super(itemID, false);
+  super(itemID);
   this.setIconIndex(3);
   }
 
 public void openGUI(EntityPlayer player)
   {
   GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_SELECT, player, player.worldObj, 0, 0, 0);
-  }
-
-/**
- * only called when something is actually HIT with the click
- */
-@Override
-public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float xOff, float yOff, float zOff)
-  {
-  BlockPosition hit = new BlockPosition(x,y,z);
-  hit = BlockTools.offsetForSide(hit, side);
-  return onUsed(world, player, stack, hit);
   }
 
 @Override
@@ -123,92 +119,6 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
     }  
   }
 
-/**
- * called when nothing is hit with right-click
- */
-@Override
-public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,EntityPlayer par3EntityPlayer)
-  {
-  onUsed(par2World, par3EntityPlayer, par1ItemStack);
-  return par1ItemStack;
-  }
-
-@Override
-public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par5, int par6)
-  {
-  return false;
-  }
-
-public boolean onUsed(World world, EntityPlayer player, ItemStack stack)
-  {
-  BlockPosition hit = BlockTools.getBlockClickedOn(player, world, true);
-  return onUsed(world, player, stack, hit);
-  }
-
-/**
- * final onUsed call, passes information on to onActivated
- * @param world
- * @param player
- * @param stack
- * @param hit
- * @return
- */
-public boolean onUsed(World world, EntityPlayer player, ItemStack stack, BlockPosition hit)
-  {
-  return onActivated(world, player, stack, hit);
-  }
-
-/**
- * the actual onActivated call, all rightclick/onUsed/onUse functions funnel through to here.
- * @param world
- * @param player
- * @param stack
- * @param hit
- * @return
- */
-public boolean onActivated(World world, EntityPlayer player, ItemStack stack, BlockPosition hit)
-  {
-  if(world.isRemote)
-    {
-    return true;
-    } 
-  NBTTagCompound tag;
-  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
-    {
-    tag = stack.getTagCompound().getCompoundTag("structData");
-    }
-  else
-    {
-    tag = new NBTTagCompound();
-    //tag = getDefaultTag();
-    //stack.setTagInfo("structData", tag);
-    } 
-  if(player.isSneaking())
-    {
-//    if(tag.hasKey("name") && !tag.getString("name").equals("") && !StructureManager.instance().isValidStructureClient(tag.getString("name")))
-//      {      
-//      clearStructureData(stack);
-//      }
-    openGUI(player);
-    return true;
-    }
-  if(tag.hasKey("name") && hit !=null)
-    {    
-    System.out.println("attemtpting construction");
-    ProcessedStructure struct = StructureManager.instance().getStructure(tag.getString("name"));
-    if(struct==null)
-      {
-      Config.logError("Structure Manager returned NULL structure to build for name : "+tag.getString("name"));      
-      return true;
-      }
-    BuilderInstant builder = new BuilderInstant(struct, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit);
-    builder.setWorld(world);
-    builder.startConstruction();
-    }
-  return true;
-  }
-
-
 private NBTTagCompound getDefaultTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
@@ -223,6 +133,67 @@ private NBTTagCompound getDefaultTag()
 private void clearStructureData(ItemStack stack)
   {
   stack.setTagInfo("structData", getDefaultTag());
+  }
+
+@Override
+public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+  {
+  if(world.isRemote || hit==null)
+    {
+    return true;
+    } 
+  hit = BlockTools.offsetForSide(hit, side);
+  NBTTagCompound tag;
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
+    {
+    tag = stack.getTagCompound().getCompoundTag("structData");
+    }
+  else
+    {
+    tag = new NBTTagCompound();
+    } 
+  if(player.isSneaking())
+    {
+    openGUI(player);
+    return true;
+    }
+  if(tag.hasKey("name") && hit !=null)
+    {    
+    ProcessedStructure struct = StructureManager.instance().getStructureServer(tag.getString("name"));
+    if(struct==null)
+      {
+      Config.logError("Structure Manager returned NULL structure to build for name : "+tag.getString("name"));      
+      return true;
+      }
+    this.attemptConstruction(world, struct, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit);
+    }
+  return true;
+  }
+
+protected void attemptConstruction(World world, ProcessedStructure struct, int face, BlockPosition hit)
+  {
+  BuilderInstant builder = new BuilderInstant(struct, face, hit);
+  builder.setWorld(world);
+  builder.startConstruction();
+  } 
+
+@Override
+@SideOnly(Side.CLIENT)
+public List<AxisAlignedBB> getBBForStructure(EntityPlayer player, String name)
+  {  
+  StructureClientInfo struct = StructureManager.instance().getClientStructure(name);
+  if(struct==null)
+    {
+    return null;
+    }
+  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
+  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);  
+  hit = this.offsetForWorldRender(hit, face);
+  AxisAlignedBB b = struct.getBBForRender(hit, face);  
+  b = this.adjustBBForPlayerPos(b, player);  
+  ArrayList<AxisAlignedBB> bbs = new ArrayList<AxisAlignedBB>();
+  bbs.add(b);
+  return bbs;
   }
 
 

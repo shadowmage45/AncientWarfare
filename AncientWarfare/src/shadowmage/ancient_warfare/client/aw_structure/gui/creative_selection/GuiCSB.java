@@ -31,7 +31,7 @@ import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.utils.StringTools;
 import shadowmage.ancient_warfare.common.aw_structure.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.aw_structure.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderInstant;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 /**

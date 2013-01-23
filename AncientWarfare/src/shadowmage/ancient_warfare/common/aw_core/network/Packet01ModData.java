@@ -59,6 +59,11 @@ public void setInitData(NBTTagCompound tag)
   this.packetData.setCompoundTag("init", tag);
   }
 
+public void setStructData(NBTTagCompound tag)
+  {
+  this.packetData.setCompoundTag("struct", tag);
+  }
+
 @Override
 public void writeDataToStream(ByteArrayDataOutput data)
   {
@@ -89,7 +94,7 @@ public void execute()
       }
     if(tag.hasKey("teamData"))
       {
-      TeamTracker.instance().handleClientUpdate(tag.getCompoundTag("teamData"));
+      TeamTracker.instance().handleClientInit(tag.getCompoundTag("teamData"));
       }    
     }  
   
@@ -100,11 +105,11 @@ public void execute()
     {
     if(world.isRemote)
       {
-      StructureManager.instance().handleUpdateClient(packetData);
+      StructureManager.instance().handlePacketDataClient(packetData.getCompoundTag("struct"));
       }
     else
       {
-      StructureManager.instance().handleUpdateServer(packetData);
+      StructureManager.instance().handlePacketDataServer(packetData.getCompoundTag("struct"));
       }
     }
     
