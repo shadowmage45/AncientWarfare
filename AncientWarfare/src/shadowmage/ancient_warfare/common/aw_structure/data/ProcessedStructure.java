@@ -117,7 +117,7 @@ private List<BlockPosition> getFoundationBlocks(BlockPosition hit, int facing)
   }
 
 /**
- * get world corrdinate BB of this structure if built at hit position and input facing
+ * get world coordinate BB of this structure if built at hit position and input facing
  * @param hit
  * @param facing
  * @return
@@ -125,7 +125,7 @@ private List<BlockPosition> getFoundationBlocks(BlockPosition hit, int facing)
 public StructureBB getStructureBB(BlockPosition hit, int facing)
   {
   BlockPosition pos1 = hit.copy();
-  pos1.moveForward(facing, this.zOffset);
+  pos1.moveForward(facing, -this.zOffset);
   pos1.moveLeft(facing, this.xOffset);
   pos1.y += this.verticalOffset;
   
@@ -197,7 +197,7 @@ private boolean isDoorTop(int id, int meta)
 
 private boolean isBedTop(int id, int meta)
   {
-  return meta >3 && id == Block.bed.blockID;
+  return meta >=8 && id == Block.bed.blockID;
   }
 
 

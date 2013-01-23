@@ -1,4 +1,0 @@
-
-((a)ncient (w)arfare (s)tructure)
-struct_name.aws    --- stored in .minecraft/config/AWConfig/structures/*.aws
-

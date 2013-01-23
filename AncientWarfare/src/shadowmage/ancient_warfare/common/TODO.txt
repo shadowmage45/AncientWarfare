@@ -1,13 +1,33 @@
 TODO before first alpha release:
 
+GENERAL
+* cleanup bug where overwriting a chest will crash the client (render tick error)(notify on update, or mark blocks dirty)
 
-* cleanup bug where overwriting a chest will crash the client (render tick error)
+TEMPLATES/STRUCTURE
+* ruins .tml importer
+* ruins .tml exporter
+* biome exclusion list in template
+* biome specific list in template
+* biome block swapping
+* add preservedBlocksList
+* add resourceList stuff to template--so others can denote custom resource lists to construct a building
+* add default templates, and add them to export list
+
+WORLD GEN STUFF
+* site validation
+* site preparation
+* built structures map --store in nbt?
+
+STRUCTURE BUILDING
+* verify block rule randomization works as intended
+* finish isPlant
+* verify that preserveBlocks works as intended
+* add world-gen frequency options to export GUI
 
 
-
-DONE*************************
-BB rendering working...
-default structure exporting...
+********************* DONE STUFF *************************
+* BB rendering working...
+* default structure exporting...
 * inventoried blocks for door, bed, slabs, double slabs
 * test door coding for inventoried builder
 * builder blocks + link builder to structure....
