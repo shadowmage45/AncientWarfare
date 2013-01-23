@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
 import shadowmage.ancient_warfare.common.aw_core.container.IEntityContainerSynch;
+import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
 
 public class ContainerCSB extends ContainerBase
@@ -56,10 +57,15 @@ public void handlePacketData(NBTTagCompound tag)
     return;
     }
   ItemStack builderItem = player.inventory.getCurrentItem();
-  if(builderItem==null || !(builderItem.getItem() instanceof ItemStructureBuilderCreative))
+  if(builderItem==null || builderItem.getItem()==null)
     {
     return;
-    }  
+    }
+  int id = builderItem.itemID;
+  if(id != ItemLoader.instance().structureCreativeBuilder.itemID && id != ItemLoader.instance().structureCreativeBuilderTicked.itemID)
+    {
+    return;
+    }   
   NBTTagCompound stackTag;
   if(builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("structData"))
     {

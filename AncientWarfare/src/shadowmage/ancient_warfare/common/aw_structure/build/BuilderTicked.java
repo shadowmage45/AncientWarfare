@@ -44,27 +44,31 @@ int tickNum = 0;
    * @param facing
    * @param hit
    */
-public BuilderTicked(World world, ProcessedStructure struct, int facing, BlockPosition hit)
+public BuilderTicked(ProcessedStructure struct, int facing, BlockPosition hit)
   {
-  super(world, struct, facing, hit);
+  super(struct, facing, hit);
   }
 
 @Override
 public void startConstruction()
   {
-  AWStructureModule.instance().addBuilder(this);
+  
   }
 
 @Override
 public void finishConstruction()
   { 
-  //TODO this doesn't work...can't remove while iterating....now handled in the iterator code
-  //AWStructureModule.instance().removeBuilder(this);
+  
   }
 
 @Override
 public void onTick()
   {   
+  if(world==null)
+    {
+    Config.logError("Builder being ticked with a null World!");
+    return;
+    }
   if(this.isFinished)
     {
     Config.logError("Ticking finished ticked-builder, was not removed from list when finished");
@@ -87,7 +91,7 @@ public void onTick()
   /**
    * if current block is of a higher order than current pass, skip until you find a lower/equal block or cannot increment build pass
    */
-  while(shouldSkipBlock(rule, target, currentPriority))
+  while(shouldSkipBlock(world, rule, target, currentPriority))
     {
     if(!incrementCoords())
       {

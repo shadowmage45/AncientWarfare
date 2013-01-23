@@ -108,11 +108,15 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
   {
   if(par1ItemStack!=null)
     {
-    String toolTip = DescriptionRegistry.instance().getEntryFor(par1ItemStack.itemID).getTooltip(par1ItemStack.getItemDamage());
-    if(toolTip!=null)
+    if(DescriptionRegistry.instance().contains(par1ItemStack))
       {
-      par3List.add(toolTip);
+      String toolTip = DescriptionRegistry.instance().getEntryFor(par1ItemStack.itemID).getTooltip(par1ItemStack.getItemDamage());
+      if(toolTip!=null)
+        {
+        par3List.add(toolTip);
+        }
       }
+    
 //    if(tooltipInfo!=null)
 //      {
 //      for(Object obj : tooltipInfo)

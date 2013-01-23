@@ -109,11 +109,7 @@ public void handleWorldLoad(World world)
     if(time <= this.lastLoadedTimeStamp)
       {        
       return;
-      }    
-    //      if(!this.compareDates(globalTag.getLong("tS"), time))
-    //        {
-    //        return;
-    //        }
+      }       
     }   
   this.lastLoadedTimeStamp = time;
   

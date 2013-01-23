@@ -20,30 +20,28 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.io.ByteStreams;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 import shadowmage.ancient_warfare.common.aw_structure.build.Builder;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
-
-import com.google.common.io.Files;
-
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -56,13 +54,16 @@ import cpw.mods.fml.relauncher.Side;
 public class AWStructureModule implements ITickHandler, INBTTaggable
 {
 
+
+private static final String defaultTemplateDirectory = "/shadowmage/ancient_warfare/resources/templates/";
 /**
  * the base config directory
  */
 private static String directory;
 public static String outputDirectory = null;
 public static String includeDirectory = null;
-public static String playerTempDirectory = null;
+
+private static final List<String> defaultExportStructures = new ArrayList<String>();
 
 private boolean shouldExportDefaults = false;
 
@@ -96,67 +97,108 @@ public void load(String directory)
   this.directory = directory;  
   outputDirectory = directory+"/AWConfig/structures/export/";
   includeDirectory = directory+"/AWConfig/structures/included/";
-  playerTempDirectory = directory+"/AWConfig/structures/temp/";
-  
+
+  this.setDefaultStructureNames();
+
   File existTest = new File(outputDirectory);
   if(!existTest.exists())
     {
     Config.log("Creating default Export Directory");
     existTest.mkdirs();
     }
- 
+
   existTest = new File(includeDirectory);
   if(!existTest.exists())
     {
     Config.log("Creating default Include Directory");
     existTest.mkdirs();
     }
-  
-  existTest = new File(playerTempDirectory);
-  if(!existTest.exists())
-    {
-    Config.log("Creating default Temp Directory");
-    existTest.mkdirs();
-    }  
-  
-  BlockDataManager.instance().loadBlockList();
-  
+
+  BlockDataManager.instance().loadBlockList();  
+
   if(shouldExportDefaults || Config.DEBUG)
     {
     this.copyDefaultStructures(includeDirectory);
     this.shouldExportDefaults = false;
     }
-  
+
   loader = new StructureLoader();
   loader.scanForPrebuiltFiles(); 
   }
 
+private void setDefaultStructureNames()
+  {
+  this.defaultExportStructures.add("library.aws");
+  }
+
 private void copyDefaultStructures(String pathName)
   {
-  //TODO figure this whole thing out....
-  ArrayList<File> files = new ArrayList<File>();
-  
-  ModContainer mc = FMLCommonHandler.instance().findContainerFor(AWCore.instance);
-  File sourceFile = mc.getSource();
-  System.out.println("found source file: "+sourceFile.getName());
-  System.out.println("source file path: "+sourceFile.getPath());
-  
-  
-  File destinationFile;
-  for(File file : files)
+  if(includeDirectory==null)
     {
-    destinationFile = new File(pathName,file.getName());
+    return;
+    }
+  //TODO figure this whole thing out....
+
+  //ByteArrayInputStream bais = 
+  InputStream is = null;
+  FileOutputStream os;
+  File file = null;
+  Config.log("Exporting default structures....");
+  int exportCount = 0;
+  byte[] byteBuffer = new byte[1024];
+  for(String fileName : defaultExportStructures)
+    {
     try
       {
-      Files.copy(file, destinationFile);
-      } 
-    catch (IOException e)
-      {
-      Config.logError("COULD NOT EXPORT DEFAULT STRUCTURES");
-      e.printStackTrace();
-      break;
+      is = this.getClass().getResourceAsStream(defaultTemplateDirectory+fileName);
+      if(is==null)
+        {
+        continue;
+        }
+      
+      file = new File(includeDirectory,fileName);
+  
+      if(!file.exists())
+        {
+        Config.log("Exporting: "+fileName);
+        file.createNewFile();
+        }
+      else
+        {
+        Config.log("Overwriting: "+fileName);
+        }
+  
+      byteBuffer = ByteStreams.toByteArray(is);
+      is.close();
+      if(byteBuffer.length>0)
+        {
+        os = new FileOutputStream(file);        
+        os.write(byteBuffer);
+        os.close();
+        exportCount++;
+        }
       }
-    }  
+    catch(Exception e)
+      {
+      Config.logError("Error during export of: "+fileName);
+      e.printStackTrace();      
+      }    
+    }
+  Config.log("Exported "+exportCount+" structures");
+  
+  
+  
+//  is = this.getClass().getResourceAsStream("/shadowmage/ancient_warfare/resources/templates/library.aws");
+//  if(is==null)
+//    {
+//    Config.logDebug("NULL INPUT STREAM FOR RESOURCE");
+//    }
+//  else
+//    {
+//    Config.logDebug("LOCATED RESOURCE STREAM!");
+//    }
+
+
   }
 
 private void createDirectory(File file)
@@ -190,7 +232,7 @@ public void removeBuilder(Builder builder)
 @Override
 public void tickStart(EnumSet<TickType> type, Object... tickData)
   {
-  
+
   }
 
 @Override
@@ -215,9 +257,9 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
 
 @Override
 public EnumSet<TickType> ticks()
-  {
-  return EnumSet.of(TickType.WORLD);
-  }
+{
+return EnumSet.of(TickType.WORLD);
+}
 
 @Override
 public String getLabel()
@@ -255,9 +297,10 @@ public void readFromNBT(NBTTagCompound tag)
     World world = server.worldServerForDimension(dimension);
     if(world!=null)
       {
-      Builder builder = Builder.readTickedBuilderFromNBT(builderTag, world);
+      Builder builder = Builder.readTickedBuilderFromNBT(builderTag);
       if(builder!=null)
         {
+        builder.setWorld(world);
         builders.add(builder);
         }
       }

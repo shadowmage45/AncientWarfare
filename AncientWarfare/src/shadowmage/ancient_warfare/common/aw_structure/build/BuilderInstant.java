@@ -39,9 +39,9 @@ public class BuilderInstant extends Builder
    * @param facing
    * @param hit
    */
-public BuilderInstant(World world, ProcessedStructure struct, int facing, BlockPosition hit)
+public BuilderInstant(ProcessedStructure struct, int facing, BlockPosition hit)
   {
-  super(world, struct, facing, hit);
+  super(struct, facing, hit);
   }
 
 @Override

@@ -30,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.aw_core.gui.GuiCheckBox;
 import shadowmage.ancient_warfare.client.aw_core.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
@@ -63,11 +64,17 @@ public GuiCSBAdvancedSelection(Container container, GuiScreen parent)
   this.parent = parent;
   
   ItemStack builderItem = player.inventory.getCurrentItem();
-  if(builderItem==null || !(builderItem.getItem() instanceof ItemStructureBuilderCreative))
+  if(builderItem==null || builderItem.getItem()==null)
     {
     closeGUI();
     return;
     }
+  int id = builderItem.itemID;
+  if(id != ItemLoader.instance().structureCreativeBuilder.itemID && id != ItemLoader.instance().structureCreativeBuilderTicked.itemID)
+    {
+    closeGUI();
+    return;
+    } 
   
   NBTTagCompound tag = builderItem.stackTagCompound.getCompoundTag("structData");
   if(tag.hasKey("veh"))

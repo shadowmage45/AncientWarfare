@@ -278,15 +278,15 @@ public static IDPairCount getInventoryBlock(int id, int meta)
     {
     return new IDPairCount(data.basicInventoryItemID, data.basicInventoryItemMeta, data.basicInventoryItemCount);
     }
-  IDPairCount info = data.metaToBlocks.get(id);
+  IDPairCount info = data.metaToBlocks.get(meta);
   return info==null ? new IDPairCount(id,0) : info.copy();
   }
 
-public static void setInventoryBlock(int id, int meta, int resultID, int resultMeta, int count)
+public static void setInventoryBlock(int id, int meta, int neededID, int neededMeta, int count)
   {
   if(blockList[id]!=null)
     {
-    blockList[id].metaToBlocks.put(meta, new IDPairCount(resultID, resultMeta, count));
+    blockList[id].metaToBlocks.put(meta, new IDPairCount(neededID, neededMeta, count));
     } 
   else
     {
@@ -294,9 +294,9 @@ public static void setInventoryBlock(int id, int meta, int resultID, int resultM
     }
   }
 
-public static void setInventoryBlock(Block block, int meta, int resultID, int resultMeta)
+public static void setInventoryBlock(Block block, int meta, int neededID, int neededMeta)
   {
-  setInventoryBlock(block.blockID, meta, resultID, resultMeta, 1);
+  setInventoryBlock(block.blockID, meta, neededID, neededMeta, 1);
   }
 
 

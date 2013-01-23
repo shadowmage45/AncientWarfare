@@ -119,7 +119,8 @@ private boolean onActivated(World world, EntityPlayer player, ItemStack stack, B
     }   
   int rotation = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
   //BuilderInstant builder = new BuilderInstant(world, struct, rotation, hit);
-  BuilderTicked builder = new BuilderTicked(world, struct, rotation, hit);
+  BuilderTicked builder = new BuilderTicked(struct, rotation, hit);
+  builder.setWorld(world);
   builder.startConstruction();
   return true;
   }

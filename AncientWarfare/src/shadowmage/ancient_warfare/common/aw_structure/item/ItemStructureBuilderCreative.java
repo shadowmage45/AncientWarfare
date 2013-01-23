@@ -201,7 +201,8 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
       Config.logError("Structure Manager returned NULL structure to build for name : "+tag.getString("name"));      
       return true;
       }
-    BuilderInstant builder = new BuilderInstant(world, struct, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit);
+    BuilderInstant builder = new BuilderInstant(struct, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit);
+    builder.setWorld(world);
     builder.startConstruction();
     }
   return true;

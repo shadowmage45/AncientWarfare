@@ -27,6 +27,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.aw_core.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.utils.StringTools;
 import shadowmage.ancient_warfare.common.aw_structure.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.aw_structure.data.StructureClientInfo;
@@ -66,7 +67,13 @@ public GuiCSB(Container container)
     closeGUI();
     }
   ItemStack builderItem = player.inventory.getCurrentItem();
-  if(builderItem==null || !(builderItem.getItem() instanceof ItemStructureBuilderCreative))
+  if(builderItem==null || builderItem.getItem()==null)
+    {
+    closeGUI();
+    return;
+    }
+  int id = builderItem.itemID;
+  if(id != ItemLoader.instance().structureCreativeBuilder.itemID && id != ItemLoader.instance().structureCreativeBuilderTicked.itemID)
     {
     closeGUI();
     return;

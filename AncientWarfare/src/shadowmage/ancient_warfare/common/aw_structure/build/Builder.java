@@ -39,7 +39,7 @@ public final ProcessedStructure struct;
 /**
  * the world in which the structure is being built
  */
-public final World world;
+public World world;
 
 /**
  * build passes
@@ -74,7 +74,7 @@ public int currentZ = 0;
 /**
  * the chosen build position for this structure
  */
-public BlockPosition buildPos;
+public final BlockPosition buildPos;
 
 /**
  * flipped if this structure is finished, will be removed from ticking queues
@@ -98,11 +98,9 @@ int overrideClearingBuffer;
 int overrideMaxLeveling;
 int overrideLevelingBuffer;
 
-public Builder(World world, ProcessedStructure struct, int facing, BlockPosition hit)
+public Builder(ProcessedStructure struct, int facing, BlockPosition hit)
   {
   this.struct = struct;
-  this.world = world; 
-  this.dimension = world.getWorldInfo().getDimension();
   this.buildPos = hit;  
   this.facing = facing;
   for(BlockRule rule : struct.blockRules)
@@ -114,7 +112,14 @@ public Builder(World world, ProcessedStructure struct, int facing, BlockPosition
     }
   }
 
-
+public void setWorld(World world)
+  {
+  this.world = world;
+  if(world!=null)
+    {
+    this.dimension = world.getWorldInfo().getDimension();
+    }
+  }
 /**
  * for instantBuilder--construct
  * for tickedBuilder--add to tickQue in AWStructureModule
@@ -183,7 +188,7 @@ protected void placeBlockNotify(World world, BlockPosition pos, int id, int meta
   world.setBlockAndMetadataWithNotify(pos.x, pos.y, pos.z, id, meta);
   }
 
-protected boolean isAirBlock(BlockPosition target)
+protected boolean isAirBlock(World world, BlockPosition target)
   {
   return world.getBlockId(target.x, target.y, target.z)==0;
   }
@@ -217,10 +222,10 @@ protected boolean isLava(int id)
   return false;
   }
 
-protected boolean shouldSkipBlock(BlockRule rule, BlockPosition target, int currentPriority)
+protected boolean shouldSkipBlock(World world, BlockRule rule, BlockPosition target, int currentPriority)
   {
   int id = world.getBlockId(target.x, target.y, target.z);
-  boolean airBlock = isAirBlock(target);
+  boolean airBlock = isAirBlock(world, target);
   if(rule.order!=currentPriority)
     {
     return true;
@@ -346,6 +351,7 @@ public void setProgress(int x, int y, int z, int pass)
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("name", this.struct.name);
   tag.setBoolean("finished", isFinished);
   tag.setByte("face", (byte)facing);
   tag.setInteger("x", currentX);
@@ -379,7 +385,7 @@ public void readFromNBT(NBTTagCompound tag)
   this.overrideGate = tag.getInteger("ovG");
   }
 
-public static Builder readTickedBuilderFromNBT(NBTTagCompound tag, World world)
+public static BuilderTicked readTickedBuilderFromNBT(NBTTagCompound tag)
   {  
   String name = tag.getString("name");
   ProcessedStructure struct = StructureManager.instance().getStructure(name);
@@ -389,7 +395,7 @@ public static Builder readTickedBuilderFromNBT(NBTTagCompound tag, World world)
     }
   BlockPosition hit = new BlockPosition(tag.getInteger("bX"), tag.getInteger("bY"), tag.getInteger("bZ"));
   int facing = tag.getByte("face");
-  Builder builder = new BuilderTicked(world, struct, facing, hit);
+  BuilderTicked builder = new BuilderTicked(struct, facing, hit);
   builder.readFromNBT(tag);
   return builder;
   }

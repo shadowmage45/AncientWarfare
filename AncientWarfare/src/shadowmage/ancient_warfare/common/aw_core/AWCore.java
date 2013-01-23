@@ -26,6 +26,7 @@ package shadowmage.ancient_warfare.common.aw_core;
 import java.io.IOException;
 
 import net.minecraftforge.common.MinecraftForge;
+import shadowmage.ancient_warfare.common.aw_core.block.BlockLoader;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.event.EventHandler;
 import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
@@ -93,6 +94,7 @@ public void preInit(FMLPreInitializationEvent evt)
    * load items
    */
   ItemLoader.instance().load();
+  BlockLoader.instance().load();
   
   /**
    * load structure related stuff (needs config directory from this event, could save string and load later)

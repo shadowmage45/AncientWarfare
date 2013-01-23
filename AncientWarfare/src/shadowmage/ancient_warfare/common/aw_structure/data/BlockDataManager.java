@@ -63,6 +63,7 @@ public static void loadBlockList()
   addBlock(Block.cobblestoneWall).setIsBasicSubtype();
   
   /************************************ ADVANCED SUBTYPED BLOCKS ************************************/
+  addBlock(Block.grass);  
   addBlock(Block.stoneSingleSlab);
   addBlock(Block.stoneDoubleSlab);
   addBlock(Block.woodSingleSlab);
@@ -77,17 +78,17 @@ public static void loadBlockList()
   addBlock(Block.plantYellow).setPriority(1);
   addBlock(Block.mushroomBrown).setPriority(1);
   addBlock(Block.mushroomRed).setPriority(1);
-  addBlock(Block.redstoneWire).setPriority(1);
-  addBlock(Block.crops).setPriority(1);
-  addBlock(Block.signPost).setPriority(1);
+  addBlock(Block.redstoneWire).setPriority(1).setBasicInventoryItem(Item.redstone.itemID, 0, 1);
+  addBlock(Block.crops).setPriority(1).setBasicInventoryItem(Item.seeds.itemID, 0, 4);
+  addBlock(Block.signPost).setPriority(1).setBasicInventoryItem(Item.sign.itemID, 0, 1);
   addBlock(Block.cactus).setPriority(1);
   addBlock(Block.reed).setPriority(1);
   addBlock(Block.fence);
   addBlock(Block.netherFence);
   addBlock(Block.skull).setPriority(1);
   addBlock(Block.flowerPot).setPriority(1);
-  addBlock(Block.carrot).setPriority(1);
-  addBlock(Block.potato).setPriority(1);
+  addBlock(Block.carrot).setPriority(1).setBasicInventoryItem(Item.carrot.itemID, 0, 4);
+  addBlock(Block.potato).setPriority(1).setBasicInventoryItem(Item.potato.itemID, 0, 4);
   addBlock(Block.mushroomCapBrown).setPriority(1);
   addBlock(Block.mushroomCapRed).setPriority(1);
   
@@ -97,8 +98,10 @@ public static void loadBlockList()
   addBlock(Block.stoneOvenIdle).setRotatable().setMeta(0, 2, 5, 3, 4);
   addBlock(Block.stoneOvenActive).setRotatable().setMeta(0, 2, 5, 3, 4);
   addBlock(Block.ladder).setPriority(1).setRotatable().setMeta(0, 2, 5, 3, 4);
-  addBlock(Block.signWall).setPriority(1).setRotatable().setMeta(0, 2, 5, 3, 4);
+  addBlock(Block.signWall).setPriority(1).setRotatable().setMeta(0, 2, 5, 3, 4).setBasicInventoryItem(Item.sign.itemID, 0, 1);
   addBlock(Block.enderChest).setRotatable().setMeta(0, 2, 5, 3, 4);
+  
+  addBlock(Block.bed).setRotatable().setMeta(0, 0, 1, 2, 3).setMeta(1, 8, 9, 10, 11).setBasicInventoryItem(Item.bed.itemID, 0, 1);
   
   addBlock(Block.rail).setPriority(1).setRotatable().setMeta(0, 0, 1, 0, 1).setMeta(1, 7, 8, 9, 6).setMeta(2, 5, 3, 4, 2);
   addBlock(Block.railPowered).setPriority(1).setRotatable().setMeta(0, 5, 3, 4, 2).setMeta(1, 0, 1, 0, 1).setMeta(2, 13, 11, 12, 10).setMeta(3, 8, 9, 8, 9);
@@ -118,11 +121,11 @@ public static void loadBlockList()
   addBlock(Block.tripWire).setPriority(1).setRotatable().setMeta(0, 1, 1, 1, 1).setMeta(1, 0, 0, 0, 0);
   
   addBlock(Block.torchWood).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);  
-  addBlock(Block.torchRedstoneIdle).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);
-  addBlock(Block.torchRedstoneActive).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);  
+  addBlock(Block.torchRedstoneIdle).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5).setBasicInventoryItem(Item.redstoneRepeater.itemID, 0, 1);
+  addBlock(Block.torchRedstoneActive).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5).setBasicInventoryItem(Item.redstoneRepeater.itemID, 0, 1);  
    
-  addBlock(Block.doorWood).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4).setMeta(2, 8, 8, 8, 8);
-  addBlock(Block.doorSteel).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4).setMeta(2, 8, 8, 8, 8);
+  addBlock(Block.doorWood).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4).setMeta(2, 8, 8, 8, 8).setBasicInventoryItem(Item.doorWood.itemID, 0, 1);
+  addBlock(Block.doorSteel).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4).setMeta(2, 8, 8, 8, 8).setBasicInventoryItem(Item.doorSteel.itemID, 0, 1);
   addBlock(Block.fenceGate).setRotatable().setMeta(0, 0, 1, 2, 3).setMeta(1, 4, 5, 6, 7);//HUH? rotated one block from door data?
   
   addBlock(Block.stairCompactPlanks).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
@@ -133,19 +136,45 @@ public static void loadBlockList()
   addBlock(Block.stairsWoodSpruce).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
   addBlock(Block.stairsWoodBirch).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
   addBlock(Block.stairsWoodJungle).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
-  
-
-  
+    
   addBlock(Block.vine).setPriority(1).setRotatable().setMeta(0, 1, 2, 4, 8);
-  
-  
-  
     
   addBlock(Block.anvil).setPriority(1).setRotatable().setMeta(0, 3, 0, 1, 2).setMeta(1, 7, 4, 5, 6).setMeta(2, 11, 8, 9, 10);
    
-  addBlock(Block.cocoaPlant).setRotatable().setMeta(0, 0, 1, 2, 3).setMeta(1, 4, 5, 6, 7).setMeta(2, 8, 9, 10, 11).setMeta(3, 12, 13, 14, 15);
-     
+  addBlock(Block.cocoaPlant).setRotatable().setMeta(0, 0, 1, 2, 3).setMeta(1, 4, 5, 6, 7).setMeta(2, 8, 9, 10, 11).setMeta(3, 12, 13, 14, 15);//TODO set dye for itemID...whatever taht is
+    
+  /**
+   * add single slabs, and double slabs for stone
+   */
+  int id = Block.stoneSingleSlab.blockID;
+  int id2 = Block.stoneDoubleSlab.blockID;
+  for(int i = 0; i< 8 ; i++)
+    {
+    BlockInfo.setInventoryBlock(id, i, id, i, 1);
+    BlockInfo.setInventoryBlock(id, i+8, id, i, 1);
+    }
+  for(int i = 0; i < 8 ; i++)
+    {
+    BlockInfo.setInventoryBlock(id2, i, id, i, 2);
+    }
   
+  /**
+   * do the same for wood slabs
+   */
+  id = Block.woodSingleSlab.blockID;
+  id2= Block.woodDoubleSlab.blockID;
+  for(int i = 0; i< 8 ; i++)
+    {
+    BlockInfo.setInventoryBlock(id, i, id, i, 1);
+    BlockInfo.setInventoryBlock(id, i+8, id, i, 1);
+    }
+  for(int i = 0; i < 8 ; i++)
+    {
+    BlockInfo.setInventoryBlock(id2, i, id, i, 2);
+    }
+  
+  id = Block.grass.blockID;
+  BlockInfo.setInventoryBlock(id, 0, Block.dirt.blockID, 0, 1);  
   }
 
 public static int getBlockPriority(int id, int meta)

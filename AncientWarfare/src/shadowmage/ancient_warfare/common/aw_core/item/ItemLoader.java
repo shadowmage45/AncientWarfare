@@ -31,6 +31,7 @@ import shadowmage.ancient_warfare.common.aw_structure.item.ItemBlockScanner;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderDirect;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemDebugBuilder;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
+import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreativeTicked;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.aw_vehicles.item.ItemVehicleSpawner;
 import shadowmage.ancient_warfare.common.aw_vehicles.registry.VehicleAmmoRegistry;
@@ -51,6 +52,7 @@ public static final AWItemBase componentItem = new AWItemBase(Config.getItemID("
 public static final AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 13005, "Item used to scan structures"));
 public static final AWItemBase structureCreativeBuilder = new ItemStructureBuilderCreative(Config.getItemID("itemSingle.structureBuilderCreative", 13006, "Creative-Mode Selectable Structure Builder"));
 public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Config.getItemID("itemSingle.builderDirect", 13007, "Survival mode builder, uses blocks from inventory"));
+public static final AWItemBase structureCreativeBuilderTicked = new ItemStructureBuilderCreativeTicked(Config.getItemID("itemSingle.structureBuilderCreativeTicked", 13008, "Creative-mode slow (ticked) builder"));
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -83,6 +85,7 @@ public void load()
 
 private void loadItems()
   {  
+  this.registerItemSingle(structureCreativeBuilderTicked, "Creative Builder Ticked", "Creative Mode Building Tool with Builder Block", "Right-Click to Use, Sneak+Right-Click to open GUI");
   this.registerItemSingle(structureScanner, "Structure Scanner", "Structure Scanner", "Structure Scanning Item, Right-Click to Use");
   this.registerItemSingle(structureCreativeBuilder, "Creative Builder", "Creative Mode Building Tool", "Right-Click to Build, Sneak+Right-Click to open GUI");
   this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Right-Click to Scan, and then Build");

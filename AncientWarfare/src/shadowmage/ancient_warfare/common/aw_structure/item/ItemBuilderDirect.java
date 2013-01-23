@@ -31,7 +31,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
-import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
+import shadowmage.ancient_warfare.common.aw_core.item.AWItemClickable;
 import shadowmage.ancient_warfare.common.aw_core.network.GUIHandler;
 import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
@@ -40,7 +40,7 @@ import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
 
-public class ItemBuilderDirect extends AWItemBase
+public class ItemBuilderDirect extends AWItemClickable
 {
 
 private static HashMap<String, ProcessedStructure> scannedStructures = new HashMap<String, ProcessedStructure>();
@@ -54,19 +54,6 @@ public ItemBuilderDirect(int itemID)
   super(itemID, false);
   this.setIconIndex(4);
   this.setMaxStackSize(1);
-  }
-
-@Override
-public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float xOff, float yOff, float zOff)
-  {
-  return onUsedFinal(world, player, stack, new BlockPosition(x,y,z), side);
-  }
-
-@Override
-public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,EntityPlayer par3EntityPlayer)
-  {
-  onUsedFinal(par2World, par3EntityPlayer, par1ItemStack, null, -1);  
-  return par1ItemStack;
   }
 
 @Override
@@ -141,7 +128,8 @@ public int getIconFromDamage(int par1)
  * @param side -1 if nothing hit
  * @return
  */
-private boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+@Override
+public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
   boolean openGUI = false;
   if(world.isRemote)
@@ -164,10 +152,13 @@ private boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, B
       hit = BlockTools.offsetForSide(hit, side);
       }
     /**
-     * if item is ready to scan, initite scan
+     * if item is ready to scan, initiate scan
      */
     if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
       {
+      //TODO move this out...
+      
+      //TODO other TODO.... really move this stuff out...to playerEntry data...
       BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
       BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
       BlockPosition key = new BlockPosition(tag.getCompoundTag("buildKey"));
@@ -191,6 +182,12 @@ private boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, B
         blocks.appendTag(countTag);       
         }
       tag.setTag("blockList", blocks);
+      
+      NBTTagCompound bbTag = new NBTTagCompound();
+      bbTag.setCompoundTag("size", new BlockPosition(struct.xSize, struct.ySize, struct.zSize).writeToNBT(new NBTTagCompound()));
+      bbTag.setCompoundTag("offset", new BlockPosition(struct.xOffset, struct.verticalOffset, struct.zOffset).writeToNBT(new NBTTagCompound()));      
+      tag.setTag("clientData", bbTag);
+      
       tag.setBoolean("scanning", false);
       tag.setBoolean("building", true);
       }        
@@ -287,9 +284,10 @@ private boolean attemptConstruction(World world, EntityPlayer player, BlockPosit
     }  
   if(shouldConstruct)
     {
-    BuilderTicked builder = new BuilderTicked(world, struct, face, hit);
-    AWStructureModule.instance().addBuilder(builder);
+    BuilderTicked builder = new BuilderTicked(struct, face, hit);
+    builder.setWorld(world);
     builder.startConstruction();
+    AWStructureModule.instance().addBuilder(builder);
     return true;
     }
   return false;
@@ -358,6 +356,10 @@ private boolean decrementItems(EntityPlayer player, List<IDPairCount> counts)
         decAmt = stack.stackSize < countLeft? stack.stackSize : countLeft;
         stack.stackSize -= decAmt;
         countLeft-=decAmt;
+        if(stack.stackSize==0)
+          {
+          player.inventory.setInventorySlotContents(index, null);
+          }
         if(countLeft<=0)
           {
           break;

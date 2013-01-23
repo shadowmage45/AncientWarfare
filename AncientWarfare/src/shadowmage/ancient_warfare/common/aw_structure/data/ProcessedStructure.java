@@ -21,13 +21,12 @@
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
-import shadowmage.ancient_warfare.common.aw_core.utils.IDPair;
 import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 
@@ -162,6 +161,13 @@ public List<IDPairCount> getResourceList()
         {
         BlockRule rule = this.getRuleAt(x, y, z);
         BlockData data = rule.blockData[0];
+        
+        //TODO HACK...
+        if(isDoorTop(data.id,data.meta) || isBedTop(data.id, data.meta)) 
+          {
+          continue;
+          }
+                
         IDPairCount count = BlockInfo.getInventoryBlock(data.id, data.meta);        
         boolean found = false;
         for(IDPairCount tc : finalCounts)
@@ -184,6 +190,15 @@ public List<IDPairCount> getResourceList()
   return finalCounts;
   }
 
+private boolean isDoorTop(int id, int meta)
+  {  
+  return meta==8 && (id == Block.doorWood.blockID || id == Block.doorSteel.blockID );
+  }
+
+private boolean isBedTop(int id, int meta)
+  {
+  return meta >3 && id == Block.bed.blockID;
+  }
 
 
 }
