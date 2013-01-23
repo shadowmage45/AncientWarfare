@@ -66,8 +66,16 @@ public static void log(String info)
   {
   if(logger!=null)
     {
-    logger.fine(info);
+    logger.info(info);
     }  
+  }
+
+public static void logDebug(String info)
+  {
+  if(logger!=null && DEBUG)
+    {    
+    logger.info(String.valueOf("[DEBUG] "+info));        
+    }
   }
 
 public static void logError(String info)

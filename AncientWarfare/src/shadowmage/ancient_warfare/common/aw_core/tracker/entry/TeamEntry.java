@@ -47,8 +47,9 @@ public NBTTagCompound getNBTTag()
   NBTTagList namesList = new NBTTagList();
   for(int i = 0; i < this.memberNames.size(); i++)
     {    
-    NBTTagString memberName = new NBTTagString(this.memberNames.get(i));
-    namesList.appendTag(memberName);
+    NBTTagCompound memberTag = new NBTTagCompound();
+    memberTag.setString("name", this.memberNames.get(i));
+    namesList.appendTag(memberTag);
     }  
   tag.setTag("teamMembers", namesList);
   return tag;
@@ -61,8 +62,9 @@ public void readFromNBT(NBTTagCompound tag)
   NBTTagList namesList = tag.getTagList("teamMembers");
   for(int i = 0; i < namesList.tagCount(); i++)
     {
-    NBTTagString memberTag = (NBTTagString) namesList.tagAt(i);
-    this.memberNames.add(memberTag.data);
+    NBTTagCompound memberTag = (NBTTagCompound) namesList.tagAt(i);
+    String name = memberTag.getString("name");
+    this.memberNames.add(name);
     }
   }
 

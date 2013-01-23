@@ -112,8 +112,8 @@ private void createEntryForNewPlayer(EntityPlayer player)
     return;
     }
   PlayerEntry entry = new PlayerEntry();
-  entry.playerName = player.getEntityName();
-  this.playerEntries.put(player.getEntityName(), entry);
+  entry.playerName = String.valueOf(player.getEntityName());
+  this.playerEntries.put(String.valueOf(player.getEntityName()), entry);
   TeamTracker.instance().handleNewPlayerLogin(player);
   }
 
@@ -135,7 +135,7 @@ public void onPlayerRespawn(EntityPlayer player)
 @Override
 public NBTTagCompound getNBTTag()
   {
-  // TODO return NBTTag of persistent data to save to world directory, SERVER SIDE ONLY...but that should be handled @ the caller
+  
   return null;
   }
 

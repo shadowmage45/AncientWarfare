@@ -82,7 +82,8 @@ public void handleWorldLoad(World world)
     this.resetAllTrackedData();
     }
 
-  File rawFile = new File(filePart2,"AWWorldData.dat");
+  File rawFile = new File(filePart2, "AWWorldData.dat");
+ 
   NBTTagCompound tag = null;
   try
     {
@@ -163,10 +164,16 @@ public void handleWorldSave(World world)
       {
       tag.setCompoundTag("builders", setTag);
       }
+    if(tag==null || rawFile==null)
+      {
+      System.out.println("null tag or rawFile detected on WorldSave");
+      return;
+      }
     CompressedStreamTools.write(tag, rawFile);
     }
   catch (IOException e)
     {
+    e.printStackTrace();
     Config.logError("SEVERE ERROR SAVING WORLD STATS FILE TO WORLD FOLDER");
     return;
     }  

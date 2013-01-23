@@ -29,6 +29,9 @@ public final String name;
 public final int xSize;
 public final int ySize;
 public final int zSize;
+public final int xOffset;
+public final int yOffset;
+public final int zOffset;
 public boolean creative = true;
 public boolean worldGen = false;
 public boolean survival = false;
@@ -39,17 +42,23 @@ public StructureClientInfo(NBTTagCompound tag)
   this.xSize = tag.getShort("x");
   this.ySize = tag.getShort("y");
   this.zSize = tag.getShort("z");
+  this.xOffset = tag.getShort("xO");
+  this.yOffset = tag.getShort("yO");
+  this.zOffset = tag.getShort("zO");
   this.creative = tag.getBoolean("creat");
   this.worldGen = tag.getBoolean("world");
   this.survival = tag.getBoolean("surv");
   }
 
-public StructureClientInfo(String name, int x, int y, int z)
+public StructureClientInfo(String name, int x, int y, int z, int xOff, int yOff, int zOff)
   {
   this.name = name;
   this.xSize = x;
   this.ySize = y;
   this.zSize = z;
+  this.xOffset = xOff;
+  this.yOffset = yOff;
+  this.zOffset = zOff;
   }
 
 public static NBTTagCompound getClientTag(AWStructure struct)
@@ -61,6 +70,9 @@ public static NBTTagCompound getClientTag(AWStructure struct)
    structTag.setShort("x", (short)struct.xSize);
    structTag.setShort("y", (short)struct.ySize);
    structTag.setShort("z", (short)struct.zSize);
+   structTag.setShort("xO", (short)struct.xOffset);
+   structTag.setShort("yO", (short)struct.verticalOffset);
+   structTag.setShort("zO", (short)struct.zOffset);
    structTag.setBoolean("creat", struct.creative);
    structTag.setBoolean("world", struct.worldGen);
    structTag.setBoolean("surv", struct.survival);

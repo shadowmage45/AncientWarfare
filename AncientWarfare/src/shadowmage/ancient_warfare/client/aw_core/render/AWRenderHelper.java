@@ -31,7 +31,8 @@ import net.minecraftforge.event.ForgeSubscribe;
 import shadowmage.ancient_warfare.client.aw_structure.render.BoundingBoxRender;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
-import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.aw_core.utils.Pos3f;
+import shadowmage.ancient_warfare.common.aw_structure.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureBuilderCreative;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 import cpw.mods.fml.common.ITickHandler;
@@ -62,9 +63,9 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
 @Override
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {
-  System.out.println("rendering from tick");
-  this.renderStructureBB();
-  System.out.println("END rendering from tick");
+  //System.out.println("rendering from tick");
+  //this.renderStructureBB();
+  //System.out.println("END rendering from tick");
   }
 
 private void renderStructureBB()
@@ -87,14 +88,18 @@ private void renderStructureBB()
       NBTTagCompound tag = stack.getTagCompound().getCompoundTag("structData");
       if(tag.hasKey("name"))
         {
-        ProcessedStructure struct = StructureManager.instance().getStructure(tag.getString("name"));
+        StructureClientInfo struct = StructureManager.instance().getClientStructure(tag.getString("name"));
         if(struct!=null)
           {
           BlockPosition size = new BlockPosition(struct.xSize, struct.ySize, struct.zSize);
           BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
-          BlockPosition offset = new BlockPosition (struct.xOffset, struct.verticalOffset, struct.zOffset);
-          int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-          BoundingBoxRender.renderBoundingBox(hit, face, offset, size);
+          if(hit!=null)
+            {
+            Pos3f playerOffset = new Pos3f(player.posX, player.posY, player.posZ);
+            BlockPosition offset = new BlockPosition (struct.xOffset, struct.yOffset, struct.zOffset);
+            int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+            BoundingBoxRender.renderBoundingBox(hit, face, offset, size, playerOffset);
+            }
           }
         }      
       }  
@@ -116,8 +121,6 @@ public String getLabel()
 @ForgeSubscribe
 public void handleRenderLastEvent(RenderWorldLastEvent evt)
   {
-  System.out.println("rendering from event");
   this.renderStructureBB();
-  System.out.println("END rendering from event");
   }
 }
