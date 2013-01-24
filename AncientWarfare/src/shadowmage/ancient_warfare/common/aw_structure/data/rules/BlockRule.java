@@ -74,6 +74,8 @@ public boolean preserveLava = false;
 public boolean preservePlants = false;
 public boolean preserveBlocks = false;
 
+public BlockData[] preservedBlocks;
+
 private BlockRule()
   {
   }
@@ -89,6 +91,27 @@ public BlockRule(int ruleNum, int id, int meta)
 public BlockData getBlockChoice(Random random)
   {
   return blockData[random.nextInt(blockData.length)];
+  }
+
+/**
+ * checks preservedBlocks list, does not validate plants/etc
+ * @param id
+ * @param meta
+ * @return
+ */
+public boolean shouldPreserveBlock(int id, int meta)
+  {
+  if(preservedBlocks!=null)
+    {
+    for(BlockData data : this.preservedBlocks)
+      {
+      if(data.id==id && data.meta==meta)
+        {
+        return true;
+        }
+      }
+    }
+  return false;
   }
 
 public static BlockRule parseRule(List<String> ruleLines)
@@ -130,6 +153,10 @@ public static BlockRule parseRule(List<String> ruleLines)
     if(line.toLowerCase().startsWith("preserveblocks"))
       {
       rule.preserveBlocks = Boolean.parseBoolean(line.split("=")[1]);
+      }
+    if(line.toLowerCase().startsWith("preservedblocks"))
+      {
+      rule.preservedBlocks = parseBlocks(line.split("=")[1]);
       }
     if(line.toLowerCase().startsWith("blocks"))
       {
