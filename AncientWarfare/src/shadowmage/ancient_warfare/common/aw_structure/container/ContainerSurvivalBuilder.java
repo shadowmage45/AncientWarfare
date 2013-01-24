@@ -24,17 +24,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
+import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderDirect;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 public class ContainerSurvivalBuilder extends ContainerBase
 {
 
+/**
+ * client side blockList data
+ */
 public List<IDPairCount> idCounts = new ArrayList<IDPairCount>();
 
 /**
@@ -48,7 +52,15 @@ public ContainerSurvivalBuilder(EntityPlayer openingPlayer)
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {  
-  // TODO Auto-generated method stub  
+  if(tag.hasKey("clear"))
+    {
+    ItemStack stack = player.getCurrentEquippedItem();
+    if(stack==null || stack.getItem() == null || stack.getItem().itemID!= ItemLoader.structureBuilderDirect.itemID)
+      {
+      return;
+      }
+    stack.setTagInfo("structData", new NBTTagCompound());
+    }  
   }
 
 @Override

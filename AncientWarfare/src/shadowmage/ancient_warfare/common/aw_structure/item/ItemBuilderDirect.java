@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -106,6 +107,12 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
       }
 
     }  
+  }
+
+@Override
+public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) 
+  {
+  //TODO clear data if structure is not valid..
   }
 
 @Override

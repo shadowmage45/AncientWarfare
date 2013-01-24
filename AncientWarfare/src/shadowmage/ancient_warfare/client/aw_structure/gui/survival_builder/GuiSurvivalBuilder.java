@@ -22,7 +22,10 @@ package shadowmage.ancient_warfare.client.aw_structure.gui.survival_builder;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.aw_core.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
 import shadowmage.ancient_warfare.common.aw_structure.container.ContainerSurvivalBuilder;
 
 public class GuiSurvivalBuilder extends GuiContainerAdvanced
@@ -64,7 +67,26 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  
+  this.drawString(fontRenderer, "Needed Blocks:", guiLeft+10, guiTop+10, 0xffffffff);
+  int pos = 0;
+  int row = 0;
+  int col = 0;
+  for(IDPairCount count : this.cont.idCounts)
+    {
+    ItemStack stack = new ItemStack(count.id, count.count, count.meta);
+    if(stack.getItem()==null)
+      {
+      continue;      
+      }
+    this.renderItemStack(stack, guiLeft+10 +20*col , guiTop+30 + 20*row, mouseX, mouseY, true);    
+    row++;
+    if(row>=10)
+      {
+      row=0;
+      col++;
+      }
+    pos++;
+    }
   }
 
 @Override
@@ -72,7 +94,7 @@ public void setupGui()
   {
   this.controlList.clear();
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
-  
+  this.addGuiButton(1, 256-35-10, 30, 35, 18, "Clear");  
   }
 
 @Override
@@ -91,6 +113,9 @@ public void buttonClicked(GuiButton button)
   break;
   
   case 1:  
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setBoolean("clear", true);
+  this.sendDataToServer(tag);
   closeGUI();
   break;
   

@@ -4,6 +4,8 @@ GENERAL
 * cleanup bug where overwriting a chest will crash the client (render tick error)(notify on update, or mark blocks dirty)
 * clear button on survival builder
 * survival builder blockList rendering
+* fix temp builder to clear if no valid structure is found
+* survival builder drop blocks before replace?
 
 TEMPLATES/STRUCTURE
 * ruins .tml importer
@@ -14,6 +16,7 @@ TEMPLATES/STRUCTURE
 * add preservedBlocksList
 * add resourceList stuff to template--so others can denote custom resource lists to construct a building
 * add default templates, and add them to export list
+
 
 WORLD GEN STUFF
 * site validation
