@@ -55,6 +55,7 @@ public LoadedStructureRaw(File file)
 
 private void processFile()
   {
+  //TODO move this out to the loader class....
   Scanner reader = null;
   try
     {
@@ -69,7 +70,7 @@ private void processFile()
   List<String> lines = new ArrayList<String>();
   String line;
   /**
-   * throw everything into a linked list, close the file
+   * throw everything into a list, close the file
    */
   while(reader.hasNextLine())
     {
@@ -86,7 +87,14 @@ private void processFile()
    */
   try
     {
-    this.parseLines(lines);
+    if(file.getName().endsWith(".aws"))
+      {
+      this.parseLinesAW(lines);
+      }
+    else
+      {
+      this.parseLinesRuins(lines);
+      }
     }
   catch(Exception e)
     {
@@ -95,13 +103,102 @@ private void processFile()
     }
   }
 
+private void parseLinesRuins(List<String> lines)
+  {
+  if(lines==null)
+    {
+    this.isValid = false;
+    return;
+    }
+  Iterator<String> it = lines.iterator();
+  String line;
+  while(it.hasNext() && (line = it.next())!=null)
+    {
+    if(line.toLowerCase().startsWith("acceptable_target_blocks"))
+      {
+      this.validTargetBlocks = StringTools.safeParseIntArray("=", line);
+      }
+    else if(line.toLowerCase().startsWith("dimensions"))
+      {
+      int[] dim = StringTools.safeParseIntArray("=", line);
+      if(dim.length != 3 )
+        {
+        this.isValid = false;
+        Config.logError("Error encountered while parsing Ruins .tml file, improper dimensions specified");
+        return;
+        }
+      this.ySize = dim[0];
+      this.xSize = dim[1];
+      this.zSize = dim[2];
+      this.xOffset = this.xSize/2;
+      this.zOffset = this.zSize/2;
+      }
+    else if(line.toLowerCase().startsWith("weight"))
+      {
+      this.structureWeight = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("unique"))
+      {
+      this.unique = StringTools.safeParseIntAsBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("embed_into_distance"))
+      {
+      this.verticalOffset = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("allowable_overhang"))
+      {
+      this.maxOverhang = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("max_cut_in"))
+      {
+      this.maxVerticalClear = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("max_leveling"))
+      {
+      this.maxLeveling = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("leveling_buffer"))
+      {
+      this.levelingBuffer = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("preserve_water"))
+      {
+      this.preserveWater = StringTools.safeParseIntAsBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("preserve_pants"))
+      {
+      this.preserveLava = StringTools.safeParseIntAsBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("preserve_lava"))
+      {
+      this.preservePlants = StringTools.safeParseIntAsBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("rule"))
+      {
+      BlockRule rule = BlockRule.parseRuinsRule(line, this.blockRules.size());
+      if(rule!=null)
+        {
+        this.blockRules.add(rule);
+        }
+      }
+    else if(line.toLowerCase().startsWith("layer"))
+      {
+      this.parseLayer(it);
+      }    
+    }  
+  }
+
 /**
  * parse a list of lines into variables, rules, setups, and layers
  * @param lines
  */
-private void parseLines(List<String> lines)
+private void parseLinesAW(List<String> lines)
   {
-  if(lines==null){return;}
+  if(lines==null)
+    {
+    this.isValid = false;
+    return;
+    }
   Iterator<String> it = lines.iterator();
   String line;
   while(it.hasNext())
@@ -291,11 +388,11 @@ private void parseLayer(Iterator<String> it)
   while(it.hasNext())
     {
     line = it.next();
-    if(line.toLowerCase().startsWith("layer:"))
+    if(line.toLowerCase().startsWith("layer:") || line.toLowerCase().startsWith("layer"))
       {
       continue;
       }
-    else if(line.toLowerCase().startsWith(":endlayer"))
+    else if(line.toLowerCase().startsWith(":endlayer") || line.toLowerCase().startsWith("endlayer"))
       {
       break;      
       }

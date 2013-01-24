@@ -20,9 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data.rules;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import net.minecraft.block.Block;
 
 import shadowmage.ancient_warfare.common.aw_core.utils.StringTools;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
@@ -39,7 +42,7 @@ public short ruleNumber = -1;
 /**
  * base chance to lay this block
  */
-byte baseChance = 100;
+public byte baseChance = 100;
 
 /**
  * ordering of this rule, what pass it should place the block on
@@ -54,7 +57,7 @@ public byte order = 0;
  * 2--must be block beside
  * 3--must be block above
  */
-byte conditional = 0;
+public byte conditional = 0;
 
 byte swapGroup = -1;
 
@@ -68,6 +71,7 @@ byte orientation = 0;
 public BlockData[] blockData;
 public int[] vehicles;
 public int[] npcs;
+public String[] ruinsSpecialData;
 
 public boolean preserveWater = false;
 public boolean preserveLava = false;
@@ -114,6 +118,106 @@ public boolean shouldPreserveBlock(int id, int meta)
   return false;
   }
 
+public static BlockRule parseRuinsRule(String line, int ruleNum)
+  {
+  BlockRule rule = new BlockRule();
+  rule.ruleNumber = (short) ruleNum;
+  String[] split = StringTools.safeParseStringArray("=", line);
+  if(split.length>2)
+    {
+    rule.conditional =  Byte.parseByte(split[0]);
+    rule.baseChance = Byte.parseByte(split[1]);
+    }
+  else //not enough data to make a valid rule, might as well not even look at it
+    {
+    return null;
+    }
+  List<String> specialStrings = new ArrayList<String>();
+  List<BlockData> parsedBlocks = new ArrayList<BlockData>();
+  for(int i = 2; i <split.length; i++)
+    {
+    String data = split[i];
+    if(split[i].toLowerCase().startsWith("preserveBlock"))
+      {
+      specialStrings.add(data);      
+      }
+    else if(split[i].toLowerCase().startsWith("mobspawner:"))
+      {
+      specialStrings.add(data);
+      }
+    else if(split[i].toLowerCase().startsWith("uprightmobspawn"))
+      {
+      specialStrings.add(data);
+      }
+    else if(split[i].toLowerCase().startsWith("easymobspawn"))
+      {
+      specialStrings.add(data);
+      }
+    else if(split[i].toLowerCase().startsWith("mediummobspawn"))
+      {
+      specialStrings.add(data);
+      }
+    else if(split[i].toLowerCase().startsWith("hardmobspawn"))
+      {
+      specialStrings.add(data);
+      }
+    else if(split[i].toLowerCase().startsWith("easychest"))
+      {
+      specialStrings.add(data);
+      }
+    else if(split[i].toLowerCase().startsWith("mediumchest"))
+      {
+      specialStrings.add(data);
+      }
+    else if(split[i].toLowerCase().startsWith("hardchest"))
+      {
+      specialStrings.add(data);
+      }
+    else
+      {
+      int id = 0;
+      int meta = 0;
+      String[] ruleSplit = data.split("-");
+      if(StringTools.isNumber(ruleSplit[0]))
+        {
+        id = Integer.parseInt(ruleSplit[0]);
+        }
+      else
+        {
+        id = findBlockByName(ruleSplit[0]);
+        }
+      if(ruleSplit.length>1)
+        {
+        meta = Integer.parseInt(ruleSplit[1]);
+        }
+      parsedBlocks.add(new BlockData(id, meta));
+      //TODO attempt to parse block data...check if it has a "-" in it, check if [0] is a string or number.  if len>1 grab meta from[1].  if [0] string, try parsing blockID, if[0] number build blockData with meta
+      }
+    }
+  rule.ruinsSpecialData = new String[specialStrings.size()];
+  for(int i = 0; i < specialStrings.size(); i++)
+    {
+    rule.ruinsSpecialData[i] = specialStrings.get(i);
+    }  
+  return rule;
+  }
+
+private static int findBlockByName(String name)
+  {
+  if(name==null)
+    {
+    return 0;
+    }
+  for(Block block : Block.blocksList)
+    {
+    if(block!= null && name.equals(block.getBlockName()));
+      {
+      return block.blockID;
+      }
+    }  
+  return 0;
+  }
+
 public static BlockRule parseRule(List<String> ruleLines)
   {
   String line;
@@ -124,35 +228,35 @@ public static BlockRule parseRule(List<String> ruleLines)
     line = it.next();
     if(line.toLowerCase().startsWith("number"))
       {
-      rule.ruleNumber = Short.parseShort(line.split("=")[1]);      
+      rule.ruleNumber = StringTools.safeParseShort("=", line);//Short.parseShort(line.split("=")[1]);      
       }    
     if(line.toLowerCase().startsWith("conditional"))
       {
-      rule.conditional = Byte.parseByte(line.split("=")[1]);
+      rule.conditional = StringTools.safeParseByte("=", line);Byte.parseByte(line.split("=")[1]);
       }
     if(line.toLowerCase().startsWith("percent"))
       {
-      rule.baseChance = Byte.parseByte(line.split("=")[1]);
+      rule.baseChance = StringTools.safeParseByte("=", line);
       }
     if(line.toLowerCase().startsWith("order"))
       {
-      rule.order = Byte.parseByte(line.split("=")[1]);
+      rule.order = StringTools.safeParseByte("=", line);
       }
     if(line.toLowerCase().startsWith("preservewater"))
       {
-      rule.preserveWater = Boolean.parseBoolean(line.split("=")[1]);
+      rule.preserveWater = StringTools.safeParseBoolean("=", line);//Boolean.parseBoolean(line.split("=")[1]);
       }
     if(line.toLowerCase().startsWith("preservelava"))
       {
-      rule.preserveLava = Boolean.parseBoolean(line.split("=")[1]);
+      rule.preserveLava = StringTools.safeParseBoolean("=", line);
       }
     if(line.toLowerCase().startsWith("preserveplants"))
       {
-      rule.preservePlants = Boolean.parseBoolean(line.split("=")[1]);
+      rule.preservePlants = StringTools.safeParseBoolean("=", line);
       }
     if(line.toLowerCase().startsWith("preserveblocks"))
       {
-      rule.preserveBlocks = Boolean.parseBoolean(line.split("=")[1]);
+      rule.preserveBlocks = StringTools.safeParseBoolean("=", line);
       }
     if(line.toLowerCase().startsWith("preservedblocks"))
       {

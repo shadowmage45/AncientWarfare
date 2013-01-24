@@ -6,12 +6,11 @@ GENERAL
 * add world-gen frequency options to export GUI???
 
 TEMPLATES/STRUCTURE
-* ruins .tml importer
-* ruins .tml exporter
+* add settings to allow ruins export/import
 * biome block swapping
 * add resourceList stuff to template--so others can denote custom resource lists to construct a building
 * add default templates, and add them to export list
-* clean up blockRule internal parsing to use new safeParse code
+* add default 0 rule to ruins template importer
 
 STRUCTURE BUILDING
 * verify block rule randomization works as intended
@@ -22,7 +21,7 @@ STRUCTURE BUILDING
 
 WORLD GEN STUFF
 * site validation
-* site preparation
+* site preparation (clearing, leveling)
 * built structures map --store in nbt?
 
 
@@ -43,3 +42,6 @@ WORLD GEN STUFF
 * biome exclusion list in template
 * biome specific list in template
 * add preservedBlocksList to template, blockRule, parsing....
+* ruins .tml importer
+* ruins .tml exporter
+* clean up blockRule internal parsing to use new safeParse code

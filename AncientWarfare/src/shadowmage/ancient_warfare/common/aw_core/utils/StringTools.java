@@ -124,6 +124,17 @@ public static boolean safeParseBoolean(String regex, String test)
   return false;
   }
 
+public static boolean safeParseIntAsBoolean(String regex, String test)
+  {
+  String[] split = test.split(regex);
+  if(split.length>1 && Integer.parseInt(split[1])==1)
+    {
+    return true;
+    }
+  return false;
+  }
+
+
 /**
  * returns a value after a split at regex, or an empty string
  * @param regex
@@ -186,6 +197,19 @@ public static short safeParseShort(String regex, String test)
     return Short.parseShort(split[1]);
     }  
   return 0;
+  }
+
+public static boolean isNumber(String test)
+  {
+  try
+    {
+    Integer.parseInt(test);
+    }
+  catch(NumberFormatException e)
+    {
+    return false;
+    }
+  return false;
   }
 
 }
