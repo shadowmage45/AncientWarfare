@@ -35,6 +35,7 @@ public boolean worldGen = false;
 public boolean creative = true;
 public boolean survival = false;
 public boolean unique;
+public int structureWeight=1;
 public int chunkDistance=0;
 public int chunkAttempts=1;
 
@@ -59,6 +60,13 @@ public boolean preserveBlocks = false;
 public List<BlockRule> blockRules = new ArrayList<BlockRule>();
 public List<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
 public List<NPCRule> NPCRules = new ArrayList<NPCRule>();
+
+/**
+ * structure biome settings
+ */
+
+public String[] biomesOnlyIn;
+public String[] biomesNotIn;
 
 /**
  * array of ruleID references making up this structure

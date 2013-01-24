@@ -115,12 +115,6 @@ public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity
   //TODO clear data if structure is not valid..
   }
 
-@Override
-public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par5, int par6)
-  {
-  return false;
-  }
-
 /**
  * Gets an icon index based on an item's damage value
  */

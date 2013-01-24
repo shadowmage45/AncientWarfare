@@ -76,10 +76,11 @@ public static boolean writeStructureToFile(ScannedStructureNormalized struct, St
     writer.write("worldgen="+String.valueOf(struct.world)+"\n");
     writer.write("creative="+String.valueOf(struct.creative)+"\n");
     writer.write("survival="+String.valueOf(struct.survival)+"\n");
+    writer.write("structureWeight="+String.valueOf(struct.structureWeight)+"\n");
     writer.write("\n");
     writer.write("unique=false\n");
-    writer.write("chunkDistance=0\n");
-    writer.write("chunkAttempts=1\n");
+    writer.write("chunkDistance="+struct.chunkDistance+"\n");
+    writer.write("chunkAttempts="+struct.chunkAttempts+"\n");
     writer.write("\n");
     writer.write("underground=false\n");
     writer.write("undergroundMinLevel=1\n");
@@ -103,7 +104,9 @@ public static boolean writeStructureToFile(ScannedStructureNormalized struct, St
     writer.write("preserveWater=false\n");
     writer.write("preserveLava=false\n");
     writer.write("preservePlants=false\n");
-    writer.write("preserveBlocks=false\n");    
+    writer.write("preserveBlocks=false\n"); 
+    writer.write("biomesOnlyIn=none\n");
+    writer.write("biomesNotIn=none\n");
     writer.write("\n");
     writer.write("####BLOCK RULES####\n");
     writeBlockRules(writer, struct);    

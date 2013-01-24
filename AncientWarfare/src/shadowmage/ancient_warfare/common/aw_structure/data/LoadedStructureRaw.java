@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_core.utils.StringTools;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.NPCRule;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.VehicleRule;
@@ -83,7 +84,15 @@ private void processFile()
   /**
    * process from a nice in-memory list
    */
-  this.parseLines(lines);
+  try
+    {
+    this.parseLines(lines);
+    }
+  catch(Exception e)
+    {
+    this.isValid = false;
+    Config.logError("Error parsing structure for file: "+file.getName());
+    }
   }
 
 /**
@@ -104,110 +113,115 @@ private void parseLines(List<String> lines)
       }
     else if(line.toLowerCase().startsWith("worldgen"))
       {
-      this.worldGen = Boolean.parseBoolean(line.split("=")[1]);
+      this.worldGen = StringTools.safeParseBoolean("=", line);
       }
     else if(line.toLowerCase().startsWith("creative"))
       {
-      this.creative = Boolean.parseBoolean(line.split("=")[1]);
+      this.creative = StringTools.safeParseBoolean("=", line);
       }
     else if(line.toLowerCase().startsWith("survival"))
       {
-      this.survival = Boolean.parseBoolean(line.split("=")[1]);
+      this.survival = StringTools.safeParseBoolean("=", line);
       }
     else if(line.toLowerCase().startsWith("unique"))//structure uniqueness
       {
-      this.unique = Boolean.parseBoolean(line.split("=")[1]);
+      this.unique = StringTools.safeParseBoolean("=", line);
       }
     else if(line.toLowerCase().startsWith("underground"))
       {
-      this.underground = Boolean.parseBoolean(line.split("=")[1]);
+      this.underground = StringTools.safeParseBoolean("=", line);
       }
     else if(line.toLowerCase().startsWith("undergroundminlevel"))
       {
-      this.undergroundMinLevel = Integer.parseInt(line.split("=")[1]);
+      this.undergroundMinLevel = StringTools.safeParseInt("=", line);//Integer.parseInt(line.split("=")[1]);
       }
     else if(line.toLowerCase().startsWith("undergroundmaxlevel"))
       {
-      this.undergroundMaxLevel = Integer.parseInt(line.split("=")[1]);
+      this.undergroundMaxLevel = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("undergroundmaxairabove"))
       {
-      this.undergroundMaxAirAbove = Integer.parseInt(line.split("=")[1]);
+      this.undergroundMaxAirAbove = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("undergroundallowpartial"))
       {
-      this.undergroundAllowPartial = Boolean.parseBoolean(line.split("=")[1]);
+      this.undergroundAllowPartial = StringTools.safeParseBoolean("=", line);
       }    
     else if(line.toLowerCase().startsWith("xsize"))
       {
-      this.xSize = Integer.parseInt(line.split("=")[1]);
+      this.xSize = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("ysize"))
       {
-      this.ySize = Integer.parseInt(line.split("=")[1]);
+      this.ySize = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("zsize"))
       {
-      this.zSize = Integer.parseInt(line.split("=")[1]);
+      this.zSize = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("validtargetblocks"))
       {
-      String[] targets = line.split("=");
-      targets = targets[1].split(",");
-      this.validTargetBlocks = new int[targets.length];
-      for(int i = 0; i<targets.length; i++)
-        {
-        this.validTargetBlocks[i]=Integer.parseInt(targets[i]);
-        }
+      String blocks = StringTools.safeParseString("=", line);      
+      this.validTargetBlocks = StringTools.parseIntArray(blocks);
       }
     else if(line.toLowerCase().startsWith("verticaloffset"))
       {
-      this.verticalOffset = Integer.parseInt(line.split("=")[1]);
+      this.verticalOffset = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("xoffset"))
       {
-      this.xOffset = Integer.parseInt(line.split("=")[1]);
+      this.xOffset = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("zoffset"))
       {
-      this.zOffset = Integer.parseInt(line.split("=")[1]);
+      this.zOffset = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("maxoverhang"))
       {
-      this.maxOverhang = Integer.parseInt(line.split("=")[1]);
+      this.maxOverhang = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("maxleveling"))
       {
-      this.maxLeveling = Integer.parseInt(line.split("=")[1]);
+      this.maxLeveling = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("levelingbuffer"))
       {
-      this.levelingBuffer = Integer.parseInt(line.split("=")[1]);
+      this.levelingBuffer = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("maxverticalclear"))
       {
-      this.maxVerticalClear = Integer.parseInt(line.split("=")[1]);
+      this.maxVerticalClear = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("clearingbuffer"))
       {
-      this.clearingBuffer = Integer.parseInt(line.split("=")[1]);
+      this.clearingBuffer = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("preservewater"))// 
       {
-      this.preserveWater = Boolean.parseBoolean(line.split("=")[1]);
+      this.preserveWater = StringTools.safeParseBoolean("=", line);
       }
     else if(line.toLowerCase().startsWith("preservelava"))// 
       {
-      this.preserveLava = Boolean.parseBoolean(line.split("=")[1]);
+      this.preserveLava = StringTools.safeParseBoolean("=", line);
       }
     else if(line.toLowerCase().startsWith("preserveplants"))// 
       {
-      this.preservePlants = Boolean.parseBoolean(line.split("=")[1]);
+      this.preservePlants = StringTools.safeParseBoolean("=", line);
       }
     else if(line.toLowerCase().startsWith("preserveblocks"))// 
       {
-      this.preserveBlocks = Boolean.parseBoolean(line.split("=")[1]);
+      this.preserveBlocks = StringTools.safeParseBoolean("=", line);
       }    
+    else if(line.toLowerCase().startsWith("biomesonlyin"))
+      {
+      this.biomesOnlyIn = StringTools.parseStringArray(line.split("=")[1]);
+      }
+    else if(line.toLowerCase().startsWith("biomesnotin"))
+      {
+      this.biomesNotIn = StringTools.parseStringArray(line.split("=")[1]);
+      }
+    
+    
     
     /**
      * parse out block rules
@@ -239,6 +253,11 @@ private void parseLines(List<String> lines)
     else if(line.toLowerCase().startsWith("layer:"))
       {
       parseLayer(it);
+      }
+    
+    if(!this.isValid)
+      {
+      break;
       }
     }  
   }

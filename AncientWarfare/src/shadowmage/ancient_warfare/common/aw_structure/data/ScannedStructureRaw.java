@@ -53,6 +53,9 @@ public String name = "";
 public boolean world;
 public boolean survival;
 public boolean creative;
+public int structureWeight = 1;
+public int chunkDistance = 0;
+public int chunkAttempts = 1;
 
 /**
  * @param face

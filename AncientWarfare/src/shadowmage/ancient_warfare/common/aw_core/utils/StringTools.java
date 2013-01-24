@@ -45,9 +45,64 @@ public static byte[] parseByteArray(String csv)
   return array;
   }
 
+public static String[] parseStringArray(String csv)
+  {
+  String[] splits = csv.split(",");
+  return splits;
+  }
+
 public static String subStringBeginning(String in, int len)
   {  
   return len > in.length() ? in : in.substring(0, len);
   }
+
+/**
+ * returns the value after a split at regex, or false
+ * @param regex
+ * @param test
+ * @return
+ */
+public static boolean safeParseBoolean(String regex, String test)
+  {
+  String[] split = test.split(regex);
+  if(split.length>1)
+    {
+    return Boolean.parseBoolean(split[1]);
+    }  
+  return false;
+  }
+
+/**
+ * returns a value after a split at regex, or an empty string
+ * @param regex
+ * @param test
+ * @return
+ */
+public static String safeParseString(String regex, String test)
+  {
+  String[] split = test.split(regex);
+  if(split.length>1)
+    {
+    return split[1];
+    }  
+  return "";
+  }
+
+/**
+ * returns a value after a split at regex, or zero (0)
+ * @param regex
+ * @param test
+ * @return
+ */
+public static int safeParseInt(String regex, String test)
+  {
+  String[] split = test.split(regex);
+  if(split.length>1)
+    {
+    return Integer.parseInt(split[1]);
+    }  
+  return 0;
+  }
+
 
 }
