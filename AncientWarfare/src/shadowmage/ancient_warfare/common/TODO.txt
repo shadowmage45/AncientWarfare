@@ -2,6 +2,8 @@ TODO before first alpha release:
 
 GENERAL
 * cleanup bug where overwriting a chest will crash the client (render tick error)(notify on update, or mark blocks dirty)
+* clear button on survival builder
+* survival builder blockList rendering
 
 TEMPLATES/STRUCTURE
 * ruins .tml importer
@@ -34,3 +36,4 @@ STRUCTURE BUILDING
 * TEST FREAKING BUILDER SAVE AND LOADING--IT FAILS--NEEDS WORK--NAOW IT WORKS!
 * bb rendering for all other structure builders...
 * cleanup bb rendering code, its freaking ugly
+* rewrite BB rendering to use partialTickTime from event

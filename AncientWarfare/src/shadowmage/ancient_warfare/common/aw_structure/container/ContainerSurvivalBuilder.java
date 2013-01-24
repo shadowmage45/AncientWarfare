@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
 import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderDirect;
+import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 public class ContainerSurvivalBuilder extends ContainerBase
 {
@@ -70,7 +71,7 @@ public NBTTagCompound getInitData()
   {
   NBTTagCompound tag = new NBTTagCompound();
   NBTTagList blockListTag = new NBTTagList();
-  ProcessedStructure struct = ItemBuilderDirect.getStructureFor(player.getEntityName());
+  ProcessedStructure struct = StructureManager.instance().getTempStructure(player.getEntityName());//ItemBuilderDirect.getStructureFor(player.getEntityName());
   if(struct!=null)
     {
     List<IDPairCount> counts = struct.getResourceList();

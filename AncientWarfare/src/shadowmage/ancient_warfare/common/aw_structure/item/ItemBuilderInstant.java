@@ -138,11 +138,20 @@ private void clearStructureData(ItemStack stack)
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
-  if(world.isRemote || hit==null)
+  if(world.isRemote)
     {
     return true;
-    } 
-  hit = BlockTools.offsetForSide(hit, side);
+    }  
+  if(player.isSneaking())
+    {
+    openGUI(player);
+    return true;
+    }
+  if(hit==null)
+    {
+    return true;
+    }
+  hit = BlockTools.offsetForSide(hit, side);   
   NBTTagCompound tag;
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
     {
@@ -151,11 +160,6 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   else
     {
     tag = new NBTTagCompound();
-    } 
-  if(player.isSneaking())
-    {
-    openGUI(player);
-    return true;
     }
   if(tag.hasKey("name") && hit !=null)
     {    
@@ -163,6 +167,8 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     if(struct==null)
       {
       Config.logError("Structure Manager returned NULL structure to build for name : "+tag.getString("name"));      
+      tag = new NBTTagCompound();
+      stack.setTagInfo("structData", tag);
       return true;
       }
     this.attemptConstruction(world, struct, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit);
@@ -187,10 +193,13 @@ public List<AxisAlignedBB> getBBForStructure(EntityPlayer player, String name)
     return null;
     }
   BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
+  if(hit==null)
+    {
+    return null;
+    }
   int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);  
   hit = this.offsetForWorldRender(hit, face);
-  AxisAlignedBB b = struct.getBBForRender(hit, face);  
-  b = this.adjustBBForPlayerPos(b, player);  
+  AxisAlignedBB b = struct.getBBForRender(hit, face);
   ArrayList<AxisAlignedBB> bbs = new ArrayList<AxisAlignedBB>();
   bbs.add(b);
   return bbs;

@@ -149,12 +149,23 @@ private NBTTagList getClientInitData()
   return list;
   }
 
+/**
+ * SERVER SIDE
+ * @param playerName
+ * @return
+ */
+public ProcessedStructure getTempStructure(String playerName)
+  {
+  return this.tempBuilderStructures.get(String.valueOf(playerName));
+  }
+
 /********************************** CLIENT METHODS *********************************/
 
 public void handlePacketDataClient(NBTTagCompound tag)
   {
   if(tag.hasKey("structInit"))
     {
+    Config.logDebug("Receiving client struct init list");
     this.handleInitClient(tag.getTagList("structInit"));
     }
   if(tag.hasKey("add"))
@@ -173,6 +184,7 @@ public void handlePacketDataClient(NBTTagCompound tag)
 
 public void addTempClientInfo(NBTTagCompound tag)
   {
+  Config.logDebug("Setting client side temp structure");
   this.tempBuilderClientInfo = new StructureClientInfo(tag);
   }
 
@@ -197,6 +209,7 @@ private void handleInitClient(NBTTagList list)
     tag = (NBTTagCompound) list.tagAt(i);
     this.clientStructures.add(new StructureClientInfo(tag));
     }
+  Config.logDebug("Added "+this.clientStructures.size()+" structures to client map");
   }
 
 private void addClientStructureFromNBT(NBTTagCompound tag)

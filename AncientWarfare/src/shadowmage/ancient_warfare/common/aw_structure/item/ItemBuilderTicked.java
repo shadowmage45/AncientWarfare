@@ -81,11 +81,14 @@ public List<AxisAlignedBB> getBBForStructure(EntityPlayer player, String name)
     }
   int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);  
   BlockPosition originalHit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
+  if(originalHit==null)
+    {
+    return null;
+    }
   BlockPosition hit = originalHit.copy();    
   hit.moveForward(face, -struct.zOffset + 1);
   hit = this.offsetForWorldRender(hit, face);
   AxisAlignedBB b = struct.getBBForRender(hit, face);  
-  b = this.adjustBBForPlayerPos(b, player);  
   ArrayList<AxisAlignedBB> bbs = new ArrayList<AxisAlignedBB>();
   bbs.add(b);
     
@@ -94,7 +97,6 @@ public List<AxisAlignedBB> getBBForStructure(EntityPlayer player, String name)
    */
   hit = originalHit;
   b = AxisAlignedBB.getBoundingBox(hit.x, hit.y, hit.z, hit.x+1, hit.y+1, hit.z+1);
-  b= this.adjustBBForPlayerPos(b, player);
   bbs.add(b);
     
   return bbs;

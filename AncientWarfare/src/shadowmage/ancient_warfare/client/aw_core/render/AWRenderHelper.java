@@ -40,6 +40,8 @@ import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderBase;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class AWRenderHelper implements ITickHandler
 {
@@ -71,7 +73,7 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
   //System.out.println("END rendering from tick");
   }
 
-private void renderStructureBB()
+private void renderStructureBB(float partialTick)
   {
   Minecraft mc = Minecraft.getMinecraft();
   if(mc==null)
@@ -95,12 +97,23 @@ private void renderStructureBB()
       return;
       }
     List<AxisAlignedBB> bbs =  ((ItemBuilderBase)stack.getItem()).getBBForStructure(player, stack.getTagCompound().getCompoundTag("structData").getString("name"));
-    for(AxisAlignedBB bb : bbs)
+    if(bbs!=null)
       {
-      BoundingBoxRender.drawOutlinedBoundingBox(bb);
+      for(AxisAlignedBB bb : bbs)
+        {
+        BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D));
+        }
       }
-    }    
- 
+    } 
+  }
+
+@SideOnly(Side.CLIENT)
+protected AxisAlignedBB adjustBBForPlayerPos(AxisAlignedBB bb, EntityPlayer player, float partialTick)
+  {
+  double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTick;
+  double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTick;
+  double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTick;  
+  return bb.offset(-x, -y, -z);
   }
 
 @Override
@@ -118,6 +131,6 @@ public String getLabel()
 @ForgeSubscribe
 public void handleRenderLastEvent(RenderWorldLastEvent evt)
   {
-  this.renderStructureBB();
+  this.renderStructureBB(evt.partialTicks);
   }
 }

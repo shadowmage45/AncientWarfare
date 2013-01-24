@@ -44,14 +44,7 @@ public ItemBuilderBase(int itemID)
 @SideOnly(Side.CLIENT)
 public abstract List<AxisAlignedBB> getBBForStructure(EntityPlayer player, String name);
 
-@SideOnly(Side.CLIENT)
-protected AxisAlignedBB adjustBBForPlayerPos(AxisAlignedBB bb, EntityPlayer player)
-  {
-  double x = player.lastTickPosX - (player.posX - player.lastTickPosX);
-  double y = player.lastTickPosY - (player.posY - player.lastTickPosY);
-  double z = player.lastTickPosZ - (player.posZ - player.lastTickPosZ);  
-  return bb.offset(-x, -y, -z);
-  }
+
 
 protected BlockPosition offsetForWorldRender(BlockPosition hit, int face)
   {

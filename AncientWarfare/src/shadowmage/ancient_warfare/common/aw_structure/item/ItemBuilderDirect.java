@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.aw_structure.render.BoundingBoxRender;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemClickable;
 import shadowmage.ancient_warfare.common.aw_core.network.GUIHandler;
 import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
@@ -47,8 +48,6 @@ import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 public class ItemBuilderDirect extends ItemBuilderBase
 {
-
-private static HashMap<String, ProcessedStructure> scannedStructures = new HashMap<String, ProcessedStructure>();
 
 /**
  * @param itemID
@@ -171,7 +170,8 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       player.addChatMessage("Initiating Scan and clearing Position Data");
       tag.setString("name", player.getEntityName());
       ProcessedStructure struct = scanAndProcess(world, player, pos1, pos2, key, face);
-      this.scannedStructures.put(player.getEntityName(), struct);   
+      
+      StructureManager.instance().addTempStructure(player, struct);         
       List<IDPairCount> blockList = struct.getResourceList();
       NBTTagList blocks = new NBTTagList();
       for(IDPairCount ct : blockList)
@@ -187,12 +187,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         blocks.appendTag(countTag);       
         }
       tag.setTag("blockList", blocks);
-      
-      NBTTagCompound bbTag = new NBTTagCompound();
-      bbTag.setCompoundTag("size", new BlockPosition(struct.xSize, struct.ySize, struct.zSize).writeToNBT(new NBTTagCompound()));
-      bbTag.setCompoundTag("offset", new BlockPosition(struct.xOffset, struct.verticalOffset, struct.zOffset).writeToNBT(new NBTTagCompound()));      
-      tag.setTag("clientData", bbTag);
-      
+               
       tag.setBoolean("scanning", false);
       tag.setBoolean("building", true);
       }        
@@ -223,7 +218,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       {
       hit = BlockTools.offsetForSide(hit, side);
       int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-      ProcessedStructure struct = this.scannedStructures.get(tag.getString("name"));
+      ProcessedStructure struct = StructureManager.instance().getTempStructure(player.getEntityName());
       if(struct==null)
         {
         tag = new NBTTagCompound();
@@ -256,11 +251,6 @@ private ProcessedStructure scanAndProcess(World world, EntityPlayer player, Bloc
   return norm.convertToProcessedStructure();  
   }
 
-public static ProcessedStructure getStructureFor(String name)
-  {
-  return scannedStructures.get(name);
-  }
-
 private boolean attemptConstruction(World world, EntityPlayer player, BlockPosition hit, int face, ProcessedStructure struct)
   {
   List<IDPairCount> counts = struct.getResourceList();
@@ -272,17 +262,17 @@ private boolean attemptConstruction(World world, EntityPlayer player, BlockPosit
     List<IDPairCount> need = getNeededBlocks(player, counts);
     if(need.size()>0)
       {
-      System.out.println("needed blocks > 0!");   
+      player.addChatMessage("Missing components:");
       for(IDPairCount entry : need)
         {
-        System.out.println("missing: "+entry.toString());
+        player.addChatMessage(entry.toString());
         }
       }
     else
       {
       if(!decrementItems(player, counts))
         {
-        System.out.println("Error removing items from player!");
+        Config.logError("Error removing items from player inventory!");        
         }
       shouldConstruct = true;
       }
@@ -393,10 +383,13 @@ public List<AxisAlignedBB> getBBForStructure(EntityPlayer player, String name)
     return null;
     }
   BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
+  if(hit==null)
+    {
+    return null;
+    }
   int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);  
   hit = this.offsetForWorldRender(hit, face);
   AxisAlignedBB b = struct.getBBForRender(hit, face);  
-  b = this.adjustBBForPlayerPos(b, player);  
   ArrayList<AxisAlignedBB> bbs = new ArrayList<AxisAlignedBB>();
   bbs.add(b);
   return bbs;
