@@ -23,6 +23,23 @@ package shadowmage.ancient_warfare.common.aw_core.utils;
 public class StringTools
 {
 
+/**
+ * splits test at regex, returns parsed int array from csv value of remaining string
+ * returns size 1 int array if no valid split is found
+ * @param regex
+ * @param test
+ * @return
+ */
+public static int[] safeParseIntArray(String regex, String test)
+  {
+  String[] splits = test.split(regex);
+  if(splits.length>1)
+    {
+    return parseIntArray(splits[1]);
+    }
+  return new int[1];
+  }
+
 public static int[] parseIntArray(String csv)
   {
   String[] splits = csv.split(",");
@@ -32,6 +49,23 @@ public static int[] parseIntArray(String csv)
     array[i]=Integer.parseInt(splits[i]);
     }
   return array;
+  }
+
+/**
+ * splits test at regex, returns parsed byte array from csv value of remaining string
+ * returns size 1 byte array if no valid split is found
+ * @param regex
+ * @param test
+ * @return
+ */
+public static byte[] safeParseByteArray(String regex, String test)
+  {
+  String[] splits = test.split(regex);
+  if(splits.length>1)
+    {
+    return parseByteArray(splits[1]);
+    }
+  return new byte[1];
   }
 
 public static byte[] parseByteArray(String csv)
@@ -45,12 +79,30 @@ public static byte[] parseByteArray(String csv)
   return array;
   }
 
+public static String[] safeParseStringArray(String regex, String test)
+  {
+  String[] splits = test.split(regex);
+  if(splits.length>1)
+    {
+    return parseStringArray(splits[1]);
+    }  
+  splits = new String[1];
+  splits[0]="";
+  return splits;
+  }
+
 public static String[] parseStringArray(String csv)
   {
   String[] splits = csv.split(",");
   return splits;
   }
 
+/**
+ * returns beginning of string up to len
+ * @param in
+ * @param len
+ * @return
+ */
 public static String subStringBeginning(String in, int len)
   {  
   return len > in.length() ? in : in.substring(0, len);
@@ -104,5 +156,36 @@ public static int safeParseInt(String regex, String test)
   return 0;
   }
 
+/**
+ * returns a value after a split at regex, or zero (0)
+ * @param regex
+ * @param test
+ * @return
+ */
+public static byte safeParseByte(String regex, String test)
+  {
+  String[] split = test.split(regex);
+  if(split.length>1)
+    {
+    return Byte.parseByte(split[1]);
+    }  
+  return 0;
+  }
+
+/**
+ * returns a value after a split at regex, or zero (0)
+ * @param regex
+ * @param test
+ * @return
+ */
+public static short safeParseShort(String regex, String test)
+  {
+  String[] split = test.split(regex);
+  if(split.length>1)
+    {
+    return Short.parseShort(split[1]);
+    }  
+  return 0;
+  }
 
 }

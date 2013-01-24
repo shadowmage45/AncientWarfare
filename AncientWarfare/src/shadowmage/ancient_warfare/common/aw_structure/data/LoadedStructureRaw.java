@@ -127,6 +127,10 @@ private void parseLines(List<String> lines)
       {
       this.unique = StringTools.safeParseBoolean("=", line);
       }
+    else if(line.toLowerCase().startsWith("structureWeight"))
+      {
+      this.structureWeight = StringTools.safeParseInt("=", line);
+      }
     else if(line.toLowerCase().startsWith("underground"))
       {
       this.underground = StringTools.safeParseBoolean("=", line);
@@ -160,9 +164,8 @@ private void parseLines(List<String> lines)
       this.zSize = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("validtargetblocks"))
-      {
-      String blocks = StringTools.safeParseString("=", line);      
-      this.validTargetBlocks = StringTools.parseIntArray(blocks);
+      {      
+      this.validTargetBlocks = StringTools.safeParseIntArray("=",line);
       }
     else if(line.toLowerCase().startsWith("verticaloffset"))
       {
@@ -214,11 +217,11 @@ private void parseLines(List<String> lines)
       }    
     else if(line.toLowerCase().startsWith("biomesonlyin"))
       {
-      this.biomesOnlyIn = StringTools.parseStringArray(line.split("=")[1]);
+      this.biomesOnlyIn = StringTools.safeParseStringArray("=", line);
       }
     else if(line.toLowerCase().startsWith("biomesnotin"))
       {
-      this.biomesNotIn = StringTools.parseStringArray(line.split("=")[1]);
+      this.biomesNotIn = StringTools.safeParseStringArray("=", line);
       }
     
     

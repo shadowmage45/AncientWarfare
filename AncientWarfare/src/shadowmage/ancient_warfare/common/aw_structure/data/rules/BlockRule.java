@@ -164,11 +164,11 @@ public static BlockRule parseRule(List<String> ruleLines)
       }
     if(line.toLowerCase().startsWith("vehicles"))
       {
-      rule.vehicles = StringTools.parseIntArray(line.split("=")[1]);
+      rule.vehicles = StringTools.safeParseIntArray("=", line);
       }
     if(line.toLowerCase().startsWith("npcs"))
       {
-      rule.npcs = StringTools.parseIntArray(line.split("=")[1]);
+      rule.npcs = StringTools.safeParseIntArray("=", line);
       }
     }
   if((rule.blockData !=null || rule.vehicles !=null ||rule.npcs!=null )&& rule.ruleNumber>=0)
