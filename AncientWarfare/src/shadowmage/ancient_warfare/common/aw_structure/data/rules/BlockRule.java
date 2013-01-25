@@ -62,22 +62,41 @@ public byte conditional = 0;
 byte swapGroup = -1;
 
 byte team = 0;
-byte orientation = 0;
+public byte orientation = 0;
 
 
 /**
  * blockData array for each block ID/meta for this blockRule, may contain duplicates for weighting
  */
 public BlockData[] blockData;
-public int[] vehicles;
-public int[] npcs;
+/**
+ * ruins special block data (chests, spawners)
+ */
 public String[] ruinsSpecialData;
+/**
+ * int array of vehicle rules which may be used here
+ */
+public int[] vehicles;
+/**
+ * int array of npc rules which may be used here
+ */
+public int[] npcs;
 
+/**
+ * should preserve water/lava/plants when attempting to place this rule?
+ */
 public boolean preserveWater = false;
 public boolean preserveLava = false;
 public boolean preservePlants = false;
-public boolean preserveBlocks = false;
 
+/**
+ * special preserveBlocks flag, see below
+ */
+public boolean preserveBlocks = false;
+/**
+ * if preserveBlocks is true, and preservedBlocks is not null, will check preservedBlocks to see
+ * if block should be kept or overwritten.  If preservedBlocks is null, all blocks will be preserved
+ */
 public BlockData[] preservedBlocks;
 
 private BlockRule()
@@ -118,6 +137,12 @@ public boolean shouldPreserveBlock(int id, int meta)
   return false;
   }
 
+/**
+ * parse a blockRule from a ruins format template
+ * @param line
+ * @param ruleNum
+ * @return
+ */
 public static BlockRule parseRuinsRule(String line, int ruleNum)
   {
   BlockRule rule = new BlockRule();
@@ -202,6 +227,11 @@ public static BlockRule parseRuinsRule(String line, int ruleNum)
   return rule;
   }
 
+/**
+ * attempts to find a block from Block.blocksList by name
+ * @param name
+ * @return id or 0 if not found
+ */
 private static int findBlockByName(String name)
   {
   if(name==null)
@@ -218,6 +248,11 @@ private static int findBlockByName(String name)
   return 0;
   }
 
+/**
+ * parse a blockRule from an AW format template
+ * @param ruleLines
+ * @return
+ */
 public static BlockRule parseRule(List<String> ruleLines)
   {
   String line;
@@ -282,6 +317,12 @@ public static BlockRule parseRule(List<String> ruleLines)
   return null;
   }
 
+/**
+ * parse out an array of blockData from a csv and '-' delimited string 
+ * (csv for records, '-' for meta in each record)
+ * @param csv
+ * @return
+ */
 private static BlockData[] parseBlocks(String csv)
   {  
   String[] csvValues = csv.split(",");

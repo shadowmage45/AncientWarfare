@@ -142,7 +142,7 @@ private static void writeSingleBlockRule(FileWriter writer, int ruleNum, BlockRu
   int totalElements = rule.blockData.length + rule.ruinsSpecialData.length;
   int totalWritten = 0;
   for(int i = 0; i < rule.blockData.length; i++)
-    {
+    {   
     writer.write(rule.blockData[i].id+"-"+rule.blockData[i].meta);
     totalWritten++;
     if(totalWritten<totalElements)
@@ -177,12 +177,12 @@ private static void writeSingleLayer(FileWriter writer, ProcessedStructure struc
     {
     for(int x = 0; x<struct.structure.length; x++)
       {
-      int rule = struct.structure[x][layerNumber][z];      
-      writer.write(String.valueOf(rule));
-      if(x < struct.structure.length-1)
+      if(x>0)
         {
         writer.write(",");
         }
+      int rule = struct.structure[x][layerNumber][z];      
+      writer.write(String.valueOf(rule));      
       }
     writer.write("\n");
     }  

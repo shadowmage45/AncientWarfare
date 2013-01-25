@@ -142,18 +142,75 @@ private static void writeBlockRules(FileWriter writer, ProcessedStructure struct
     writer.write("number="+rule.ruleNumber+"\n");
     writer.write("order="+rule.order+"\n");
     writer.write("conditional="+rule.conditional+"\n");
-    writer.write("percent="+rule.baseChance+"\n");
-    //TODO this is where it gets silly....need to handle all possible rule stuff in a processed structure...vehicle, npc, gate, blocks, preserveBlocks, preserveLava, preserveWater, preservePlants,,,,
-    writer.write("blocks=");
-    writeBlockDataArray(writer, rule.blockData);
-    writer.write("\n");
-    writer.write("ruinsSpecialData=");
-    writeStringArray(writer, rule.ruinsSpecialData);
-    writer.write("\n");
-    //TODO write preservation rules, preserved blocks, orientation, vehicles, npcs
-    
+    writer.write("percent="+rule.baseChance+"\n"); 
+    if(rule.blockData!=null)
+      {
+      writer.write("blocks=");
+      writeBlockDataArray(writer, rule.blockData);
+      writer.write("\n");
+      }
+    if(rule.ruinsSpecialData!=null)
+      {
+      writer.write("ruinsSpecialData=");
+      writeStringArray(writer, rule.ruinsSpecialData);
+      writer.write("\n");
+      }
+    if(rule.preserveBlocks==true)
+      {
+      writer.write("preserveBlocks=true\n");
+      if(rule.preservedBlocks!=null)
+        {
+        writer.write("preservedBlocks=");
+        writeBlockDataArray(writer, rule.preservedBlocks);
+        writer.write("\n");
+        }
+      }    
+    if(rule.preserveLava)
+      {
+      writer.write("preserveLava=true\n");
+      }
+    if(rule.preservePlants)
+      {
+      writer.write("preservePlants=true\n");
+      }
+    if(rule.preserveWater)
+      {
+      writer.write("preserveWater=true\n");
+      }
+    if(rule.orientation!=0)
+      {
+      writer.write("orientation="+rule.orientation+"\n");
+      }
+    if(rule.vehicles!=null)
+      {
+      writer.write("vehicles=");
+      writeIntArray(writer, rule.vehicles);
+      writer.write("\n");
+      }
+    if(rule.npcs!=null)
+      {
+      writer.write("npcs=");
+      writeIntArray(writer, rule.vehicles);
+      writer.write("\n");
+      }
     writer.write(":endrule\n");
     writer.write("\n");
+    }
+  }
+
+private static void writeIntArray(FileWriter writer, int[] ints) throws IOException
+  {
+  if(ints==null)
+    {
+    return;
+    }
+  for(int i = 0; i < ints.length; i++)
+    {
+    writer.write(ints[i]);
+    if(i+1< ints.length)
+      {
+      writer.write(",");
+      }
     }
   }
 

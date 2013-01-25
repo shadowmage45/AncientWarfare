@@ -20,8 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.container;
 
-import java.io.File;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,8 +29,8 @@ import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureData;
 import shadowmage.ancient_warfare.common.aw_structure.export.StructureExporter;
+import shadowmage.ancient_warfare.common.aw_structure.export.StructureExporterRuins;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureScanner;
-import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 public class ContainerStructureScanner extends ContainerBase
@@ -145,14 +143,20 @@ public void sendSettingsAndExport(String name, boolean world, boolean creat, boo
  */
 public void export()
   {
-  ScannedStructureData struct = ItemStructureScanner.scannedStructures.get(this.player);
+  ProcessedStructure struct = ItemStructureScanner.scannedStructures.get(this.player);
+  ItemStructureScanner.scannedStructures.remove(this.player);
   if(struct==null)
     {
-    Config.log("Could not locate structure for player");
+    Config.logError("Could not locate structure for: "+this.player.getEntityName());
+    return;
+    }
+  if(this.name==null || this.name.equals(""))
+    {
+    Config.logError("Improperly named structure for export");
     return;
     }
   struct.name = this.name;
-  struct.world = this.world;
+  struct.worldGen = this.world;
   struct.creative = this.creative;
   struct.survival = this.survival;
   String path;
@@ -167,12 +171,11 @@ public void export()
       {
       path = String.valueOf(AWStructureModule.includeDirectory+name+".aws");
       }    
-    boolean success = false;//TODO FIX THIS...   StructureExporter.writeStructureToFile(struct, path); 
+    boolean success = StructureExporter.writeStructureToFile(struct, path); 
     if(success && includeOnExport)
       {
       player.addChatMessage("Including structure in live structure lists");
-      ProcessedStructure procStruct = StructureLoader.processSingleStructure(new File(AWStructureModule.includeDirectory+name+".aws"));
-      StructureManager.instance().addStructure(procStruct);
+      StructureManager.instance().addStructure(struct);
       }    
     else if(!success)
       {
@@ -183,7 +186,7 @@ public void export()
     {
     player.addChatMessage("Exporting structure to Ruins Format");
     path = String.valueOf(AWStructureModule.outputDirectory+name+".tml");
-    //TODO output structure to ruins template format
+    StructureExporterRuins.writeStructureToFile(struct, path);
     }  
   }
 
@@ -212,7 +215,7 @@ public void handleInitData(NBTTagCompound tag)
 public NBTTagCompound getInitData()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  ScannedStructureData struct = ItemStructureScanner.scannedStructures.get(this.player);
+  ProcessedStructure struct = ItemStructureScanner.scannedStructures.get(this.player);
   if(struct==null)
     {
     return null;

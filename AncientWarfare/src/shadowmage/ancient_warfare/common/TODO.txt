@@ -4,13 +4,20 @@ GENERAL
 * cleanup bug where overwriting a chest will crash the client (render tick error)(notify on update, or mark blocks dirty)
 * fix temp builder to clear if no valid structure is found
 * add world-gen frequency options to export GUI???
+* add inventory blocks for water, lava
+* fix inventory block for redstone dust (it is a repeater)
+* add inventory block for repeater...others?
+* restructure folders...its a mess
 
 TEMPLATES/STRUCTURE
-* add settings to allow ruins export/import
 * biome block swapping
 * add resourceList stuff to template--so others can denote custom resource lists to construct a building
 * add default templates, and add them to export list
 * add default 0 rule to ruins template importer
+* fix vehicleRule rule parsing to use safeParse methods
+* figure out better way to handle ruins import (current is convert on run, manual copy and re-run)
+* restructure scanner to scan into a processedStructure, removeScanDataContainer completely
+
 
 STRUCTURE BUILDING
 * verify block rule randomization works as intended
@@ -18,6 +25,7 @@ STRUCTURE BUILDING
 * survival builder drop blocks before replace?
 * add preserved block testing into builder placement code
 * verify that preserveBlocks works as intended
+* make sure hard air zero rule is in place after loading or importing, and prior to exporting
 
 WORLD GEN STUFF
 * site validation
@@ -45,3 +53,5 @@ WORLD GEN STUFF
 * ruins .tml importer
 * ruins .tml exporter
 * clean up blockRule internal parsing to use new safeParse code
+* rewrite exporter to use ProcessedStructure
+* add settings to allow ruins export

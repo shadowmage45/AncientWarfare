@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
 import shadowmage.ancient_warfare.common.aw_core.network.GUIHandler;
+import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureData;
 
 
@@ -39,7 +40,7 @@ public class ItemStructureScanner extends AWItemBase
 {
 
 
-public static Map<EntityPlayer, ScannedStructureData> scannedStructures = new HashMap<EntityPlayer, ScannedStructureData>();
+public static Map<EntityPlayer, ProcessedStructure> scannedStructures = new HashMap<EntityPlayer, ProcessedStructure>();
 
 /**
  * @param itemID
@@ -211,7 +212,7 @@ public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos
   key = BlockTools.offsetBuildKey(face, pos1, pos2, key);
   ScannedStructureData scanData = new ScannedStructureData(face, pos1, pos2, key);
   scanData.scan(world);     
-  this.scannedStructures.put(player, scanData);
+  this.scannedStructures.put(player, scanData.convertToProcessedStructure());
   GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_SCANNER, player, world, 0, 0, 0);
   return true;
   }
