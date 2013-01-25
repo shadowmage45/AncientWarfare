@@ -1,0 +1,122 @@
+/**
+   Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+   This software is distributed under the terms of the GNU General Public Licence.
+   Please see COPYING for precise license information.
+
+   This file is part of Ancient Warfare.
+
+   Ancient Warfare is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Ancient Warfare is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
+
+
+ */
+package shadowmage.ancient_warfare.common.registry;
+
+import java.util.HashMap;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.registry.entry.ItemDescription;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+
+/**
+ * @author Shadowmage
+ *
+ */
+public class DescriptionRegistry
+{
+
+
+private static DescriptionRegistry INSTANCE;
+private DescriptionRegistry(){}
+
+public static DescriptionRegistry instance()
+  {
+  if(INSTANCE==null)
+    {
+    INSTANCE = new DescriptionRegistry();
+    }
+  return INSTANCE;
+  }
+
+private static HashMap<Integer, ItemDescription> descriptions = new HashMap<Integer, ItemDescription>();
+
+public void registerItemSingle(Item item, String displayName)
+  {
+  this.registerItemSingle(item, displayName, "");
+  }
+
+public void registerItemSingle(Item item, String displayName, String description)
+  {
+  item.setItemName(displayName);
+  this.descriptions.put(item.itemID, new ItemDescription(item.itemID, displayName, description));
+  LanguageRegistry.instance().addName(item, displayName);
+  }
+
+public void registerItemWithSubtypes(int id)
+  {
+  this.descriptions.put(id, new ItemDescription(id));  
+  }
+
+public void addSubtypeToItem(int id, int dmg, String name)
+  {
+  if(this.descriptions.containsKey(id))
+    {
+    this.descriptions.get(id).addSubtype(dmg, name);
+    LanguageRegistry.addName(new ItemStack(id,1,dmg), name);
+    }
+  }
+
+public void setToolTip(int id, String tooltip)
+  {
+  this.setTooltip(id, 0, tooltip);
+  }
+
+public void setTooltip(int id, int dmg, String tooltip)
+  {
+  if(this.descriptions.containsKey(id))
+    {
+    this.descriptions.get(id).setTooltip(dmg, tooltip);
+    }
+  }
+
+public ItemDescription getEntryFor(int id)
+  {
+  return this.descriptions.get(id);
+  }
+
+public boolean contains(ItemStack stack)
+  {
+  if(stack==null)
+    {
+    return false;
+    }
+  return this.contains(stack.itemID, stack.getItemDamage());
+  }
+
+public boolean contains(Item item)
+  {
+  return this.contains(item.itemID, 0);
+  }
+
+public boolean contains(int id, int dmg)
+  {
+  if(this.descriptions.containsKey(id))
+    {
+    return this.descriptions.get(id).contains(dmg);
+    }  
+  return false;
+  }
+
+
+}

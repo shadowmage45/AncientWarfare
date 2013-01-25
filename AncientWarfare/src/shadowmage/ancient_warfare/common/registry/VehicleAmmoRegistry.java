@@ -1,0 +1,112 @@
+/**
+   Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+   This software is distributed under the terms of the GNU General Public Licence.
+   Please see COPYING for precise license information.
+
+   This file is part of Ancient Warfare.
+
+   Ancient Warfare is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Ancient Warfare is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+
+ */
+package shadowmage.ancient_warfare.common.registry;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import shadowmage.ancient_warfare.common.registry.entry.ItemIDPair;
+import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmo;
+
+/**
+ * @author Shadowmage
+ * vehicle ammunition registry, called from ItemLoader to register items as an ammo type
+ * 
+ */
+public class VehicleAmmoRegistry
+{
+
+private VehicleAmmoRegistry(){}
+public static VehicleAmmoRegistry instance()
+  {
+  if(INSTANCE==null)
+    {
+    INSTANCE = new VehicleAmmoRegistry();
+    }
+  return INSTANCE;
+  }
+private static VehicleAmmoRegistry INSTANCE;
+
+/**
+ * globalType map
+ */
+private Map<Integer, VehicleAmmo> ammoTypeMap = new HashMap<Integer, VehicleAmmo>();
+/**
+ * reference by name
+ */
+private Map<String, VehicleAmmo> ammoNameMap = new HashMap<String, VehicleAmmo>();
+/**
+ * reference by itemID
+ */
+private Map<ItemIDPair, VehicleAmmo> ammoItemMap = new HashMap<ItemIDPair, VehicleAmmo>();
+
+/**
+ * called from ItemLoader
+ * @param entry
+ */
+public void registerAmmoType(VehicleAmmo entry)
+  {  
+  this.ammoItemMap.put(entry.itemID, entry);
+  this.ammoTypeMap.put(entry.type, entry);
+  this.ammoNameMap.put(entry.name, entry);    
+  }
+
+
+/**
+ * is the item id/dmg pair representative of an ammo item?
+ * @param id
+ * @param dmg
+ * @return
+ */
+public boolean isAmmo(int id, int dmg)
+  {
+  return this.getEntryFor(id, dmg)!=null;
+  }
+
+public boolean isAmmo(String name)
+  {
+  return this.ammoNameMap.containsKey(name);
+  }
+
+public VehicleAmmo getEntryFor(int id, int dmg)
+  {
+  for(ItemIDPair pair : this.ammoItemMap.keySet())
+    {
+    if(pair.equals(id, dmg))
+      {
+      return this.ammoItemMap.get(pair);
+      }
+    }
+  return null;
+  }
+
+public VehicleAmmo getEntryFor(String name)
+  {
+  return this.ammoNameMap.get(name);
+  }
+
+public VehicleAmmo getEntryFor(int type)
+  {
+  return this.ammoTypeMap.get(type);  
+  }
+}
