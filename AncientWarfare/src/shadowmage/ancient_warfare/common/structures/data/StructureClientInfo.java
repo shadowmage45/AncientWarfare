@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.structures.data;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import shadowmage.ancient_warfare.common.block.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class StructureClientInfo
 {

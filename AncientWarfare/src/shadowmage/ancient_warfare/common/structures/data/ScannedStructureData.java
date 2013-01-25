@@ -24,9 +24,9 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.block.BlockPosition;
-import shadowmage.ancient_warfare.common.block.BlockTools;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public class ScannedStructureData
 {

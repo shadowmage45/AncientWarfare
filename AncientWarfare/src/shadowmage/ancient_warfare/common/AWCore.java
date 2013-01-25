@@ -26,7 +26,6 @@ package shadowmage.ancient_warfare.common;
 import java.io.IOException;
 
 import net.minecraftforge.common.MinecraftForge;
-import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -34,6 +33,7 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.utils.BlockLoader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;

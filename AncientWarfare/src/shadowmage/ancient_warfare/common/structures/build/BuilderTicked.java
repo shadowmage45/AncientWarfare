@@ -22,13 +22,13 @@ package shadowmage.ancient_warfare.common.structures.build;
 
 import java.util.Random;
 
-import shadowmage.ancient_warfare.common.block.BlockPosition;
-import shadowmage.ancient_warfare.common.block.BlockTools;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 
 public class BuilderTicked extends Builder

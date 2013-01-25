@@ -20,7 +20,7 @@
 
 
  */
-package shadowmage.ancient_warfare.common.block;
+package shadowmage.ancient_warfare.common.utils;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;

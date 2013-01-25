@@ -20,7 +20,7 @@
 
 
  */
-package shadowmage.ancient_warfare.common.block;
+package shadowmage.ancient_warfare.common.utils;
 
 import java.util.ArrayList;
 import java.util.Iterator;

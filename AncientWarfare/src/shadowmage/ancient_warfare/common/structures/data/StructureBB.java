@@ -20,7 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.structures.data;
 
-import shadowmage.ancient_warfare.common.block.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class StructureBB
 {

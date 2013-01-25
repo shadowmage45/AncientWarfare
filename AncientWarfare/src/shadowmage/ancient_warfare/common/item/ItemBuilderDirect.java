@@ -31,8 +31,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
-import shadowmage.ancient_warfare.common.block.BlockPosition;
-import shadowmage.ancient_warfare.common.block.BlockTools;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
@@ -40,6 +38,8 @@ import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.ScannedStructureData;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
 public class ItemBuilderDirect extends ItemBuilderBase

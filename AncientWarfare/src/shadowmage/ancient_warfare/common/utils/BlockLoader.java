@@ -18,9 +18,11 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.block;
+package shadowmage.ancient_warfare.common.utils;
 
 import net.minecraft.block.Block;
+import shadowmage.ancient_warfare.common.block.BlockBuilder;
+import shadowmage.ancient_warfare.common.block.TEBuilder;
 import shadowmage.ancient_warfare.common.config.Config;
 import cpw.mods.fml.common.registry.GameRegistry;
 

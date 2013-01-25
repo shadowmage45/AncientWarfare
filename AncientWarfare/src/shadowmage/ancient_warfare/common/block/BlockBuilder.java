@@ -25,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.utils.BlockContainerSimpleSided;
 
 public class BlockBuilder extends BlockContainerSimpleSided
 {

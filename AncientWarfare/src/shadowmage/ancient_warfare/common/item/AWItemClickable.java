@@ -23,7 +23,7 @@ package shadowmage.ancient_warfare.common.item;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.block.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public abstract class AWItemClickable extends AWItemBase
 {
