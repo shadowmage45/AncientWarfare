@@ -23,23 +23,21 @@ package shadowmage.ancient_warfare.common.aw_structure.export;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Struct;
 import java.util.Calendar;
-import java.util.Date;
-
-import com.google.common.collect.Lists;
+import java.util.List;
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
+import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureData;
+import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 
 public class StructureExporter
 {
 
 
-public static boolean writeStructureToFile(ScannedStructureNormalized struct, String name)
+public static boolean writeStructureToFile(ProcessedStructure struct, String name)
   {
   File outputFile = new File(name);
   
@@ -73,44 +71,54 @@ public static boolean writeStructureToFile(ScannedStructureNormalized struct, St
     writer.write("# Lines beginning with # denote comments\n");
     writer.write("\n");
     writer.write("name="+struct.name+"\n");
-    writer.write("worldgen="+String.valueOf(struct.world)+"\n");
+    writer.write("worldgen="+String.valueOf(struct.worldGen)+"\n");
     writer.write("creative="+String.valueOf(struct.creative)+"\n");
     writer.write("survival="+String.valueOf(struct.survival)+"\n");
-    writer.write("structureWeight="+String.valueOf(struct.structureWeight)+"\n");
+    writer.write("structureWeight="+struct.structureWeight+"\n");
     writer.write("\n");
-    writer.write("unique=false\n");
+    writer.write("unique="+String.valueOf(struct.unique)+"\n");
     writer.write("chunkDistance="+struct.chunkDistance+"\n");
     writer.write("chunkAttempts="+struct.chunkAttempts+"\n");
     writer.write("\n");
-    writer.write("underground=false\n");
-    writer.write("undergroundMinLevel=1\n");
+    writer.write("underground="+String.valueOf(struct.underground)+"\n");
+    writer.write("undergroundMinLevel="+struct.undergroundMinLevel+"\n");
     writer.write("undergroundMaxLevel="+ (255-struct.ySize)+"\n");
-    writer.write("undergroundMaxAirAbove=0\n");
-    writer.write("undergroundAllowPartial=false\n");
+    writer.write("undergroundMaxAirAbove="+struct.undergroundMaxAirAbove+"\n");
+    writer.write("undergroundAllowPartial="+String.valueOf(struct.undergroundAllowPartial)+"\n");
     writer.write("\n");
     writer.write("xSize="+struct.xSize+"\n");
     writer.write("ySize="+struct.ySize+"\n");
     writer.write("zSize="+struct.zSize+"\n");
     writer.write("\n");
-    writer.write("verticalOffset="+struct.buildKey.y+"\n");
-    writer.write("xOffset="+struct.buildKey.x+"\n");
-    writer.write("zOffset="+struct.buildKey.z+"\n");
+    writer.write("verticalOffset="+struct.verticalOffset+"\n");
+    writer.write("xOffset="+struct.xOffset+"\n");
+    writer.write("zOffset="+struct.zOffset+"\n");
     writer.write("\n");
-    writer.write("maxOverhang=0\n");
-    writer.write("maxLeveling=0\n");
-    writer.write("levelingBuffer=0\n");
-    writer.write("maxVerticalClear=0\n");
-    writer.write("clearingBuffer=0\n");
-    writer.write("preserveWater=false\n");
-    writer.write("preserveLava=false\n");
-    writer.write("preservePlants=false\n");
-    writer.write("preserveBlocks=false\n"); 
-    writer.write("biomesOnlyIn=none\n");
-    writer.write("biomesNotIn=none\n");
+    writer.write("maxOverhang="+struct.maxOverhang+"\n");
+    writer.write("maxLeveling="+struct.maxLeveling+"\n");
+    writer.write("levelingBuffer="+struct.levelingBuffer+"\n");
+    writer.write("maxVerticalClear="+struct.maxVerticalClear+"\n");
+    writer.write("clearingBuffer="+struct.clearingBuffer+"\n");
+    writer.write("preserveWater="+struct.preserveWater+"\n");
+    writer.write("preserveLava="+struct.preserveLava+"\n");
+    writer.write("preservePlants="+struct.preservePlants+"\n");
+    writer.write("preserveBlocks="+struct.preserveBlocks+"\n"); 
+    writer.write("biomesOnlyIn=");
+    writeStringArray(writer, struct.biomesOnlyIn);
+    writer.write("\n");
+    writer.write("biomesNotIn=");
+    writeStringArray(writer, struct.biomesNotIn);
+    writer.write("\n");    
     writer.write("\n");
     writer.write("####BLOCK RULES####\n");
     writeBlockRules(writer, struct);    
     writer.write("\n");
+    //TODO
+    writer.write("####VEHICLE RULES####\n");
+    writer.write("\n");
+    writer.write("####NPC RULES####\n");
+    writer.write("\n");
+    //END TODO
     writer.write("####LAYERS####\n");
     writeLayers(writer, struct);    
     writer.write("\n");
@@ -125,28 +133,52 @@ public static boolean writeStructureToFile(ScannedStructureNormalized struct, St
   return false;
   }
 
-private static void writeBlockRules(FileWriter writer, ScannedStructureNormalized struct) throws IOException
+private static void writeBlockRules(FileWriter writer, ProcessedStructure struct) throws IOException
   {
-  BlockData[] datas = struct.getAllBlockTypes();
-  for(int i = 0; i < datas.length; i++)
-    {
-    writeSingleBlockRule(writer, i, datas[i].id, datas[i].meta);
+  List<BlockRule> rules = struct.blockRules;
+  for(BlockRule rule : rules)
+    { 
+    writer.write("rule:\n");
+    writer.write("number="+rule.ruleNumber+"\n");
+    writer.write("order="+rule.order+"\n");
+    writer.write("conditional="+rule.conditional+"\n");
+    writer.write("percent="+rule.baseChance+"\n");
+    //TODO this is where it gets silly....need to handle all possible rule stuff in a processed structure...vehicle, npc, gate, blocks, preserveBlocks, preserveLava, preserveWater, preservePlants,,,,
+    writer.write("blocks=");
+    writeBlockDataArray(writer, rule.blockData);
+    writer.write("\n");
+    writer.write("ruinsSpecialData=");
+    writeStringArray(writer, rule.ruinsSpecialData);
+    writer.write("\n");
+    //TODO write preservation rules, preserved blocks, orientation, vehicles, npcs
+    
+    writer.write(":endrule\n");
+    writer.write("\n");
     }
   }
 
-private static void writeSingleBlockRule(FileWriter writer, int ruleNum, int id, int meta) throws IOException
+private static void writeBlockDataArray(FileWriter writer, BlockData[] datas) throws IOException
   {
-  writer.write("rule:\n");
-  writer.write("number="+ruleNum+"\n");
-  writer.write("order="+BlockDataManager.getBlockPriority(id, meta)+"\n");
-  writer.write("conditional=0\n");
-  writer.write("percent=100\n");
-  writer.write("blocks="+id+"-"+meta+"\n");  
-  writer.write(":endrule\n");
-  writer.write("\n");
+  if(datas==null)
+    {
+    return;
+    }  
+  for(int i = 0; i < datas.length; i++)
+    {
+    BlockData data = datas[i];
+    if(data==null)
+      {
+      continue;
+      }
+    if(i>0)
+      {
+      writer.write(",");
+      }
+    writer.write(data.id+"-"+data.meta);
+    }  
   }
 
-private static void writeLayers(FileWriter writer, ScannedStructureNormalized struct) throws IOException
+private static void writeLayers(FileWriter writer, ProcessedStructure struct) throws IOException
   {
   for(int y = 0; y< struct.ySize; y++)
     {
@@ -154,17 +186,15 @@ private static void writeLayers(FileWriter writer, ScannedStructureNormalized st
     }
   }
 
-private static void writeSingleLayer(FileWriter writer, ScannedStructureNormalized struct, int layerNumber) throws IOException
+private static void writeSingleLayer(FileWriter writer, ProcessedStructure struct, int layerNumber) throws IOException
   {
   writer.write("layer:\n");
-  for(int z = 0; z <struct.allBlocks[0][0].length; z++)
+  for(int z = 0; z <struct.structure[0][0].length; z++)
     {
-    for(int x = 0; x<struct.allBlocks.length; x++)
-      {
-      BlockData data = struct.allBlocks[x][layerNumber][z];
-      int ruleNum = struct.getRuleForBlock(data.id, data.meta);
-      writer.write(String.valueOf(ruleNum));
-      if(x < struct.allBlocks.length-1)
+    for(int x = 0; x<struct.structure.length; x++)
+      {   
+      writer.write(struct.structure[x][layerNumber][z]);
+      if(x < struct.structure.length-1)
         {
         writer.write(",");
         }
@@ -172,7 +202,23 @@ private static void writeSingleLayer(FileWriter writer, ScannedStructureNormaliz
     writer.write("\n");
     }  
   writer.write(":endlayer\n");
-  writer.write("\n");
+  writer.write("\n"); 
+  }
+
+private static void writeStringArray(FileWriter writer, String[] split) throws IOException
+  {
+  if(split==null)
+    {
+    return;
+    }
+  for(int i = 0; i < split.length; i++)
+    {
+    writer.write(split[i]);
+    if(i+1<split.length)
+      {
+      writer.write(",");
+      }    
+    }
   }
 
 }

@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.item;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,21 +30,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
-import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
 import shadowmage.ancient_warfare.common.aw_core.network.GUIHandler;
-import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
-import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
-import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
+import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureData;
 
 
 public class ItemStructureScanner extends AWItemBase
 {
 
 
-public static Map<EntityPlayer, ScannedStructureNormalized> scannedStructures = new HashMap<EntityPlayer, ScannedStructureNormalized>();
+public static Map<EntityPlayer, ScannedStructureData> scannedStructures = new HashMap<EntityPlayer, ScannedStructureData>();
 
 /**
  * @param itemID
@@ -215,11 +209,9 @@ public boolean onActivated(World world, EntityPlayer player, ItemStack stack, Bl
 public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
   {
   key = BlockTools.offsetBuildKey(face, pos1, pos2, key);
-  ScannedStructureRaw rawStructure = new ScannedStructureRaw(face ,pos1, pos2, key);
-  rawStructure.scan(world);
-  ScannedStructureNormalized normalizedStructure = rawStructure.process();
-  String name = String.valueOf(System.currentTimeMillis());
-  this.scannedStructures.put(player, normalizedStructure);
+  ScannedStructureData scanData = new ScannedStructureData(face, pos1, pos2, key);
+  scanData.scan(world);     
+  this.scannedStructures.put(player, scanData);
   GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_SCANNER, player, world, 0, 0, 0);
   return true;
   }

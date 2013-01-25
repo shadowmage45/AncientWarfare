@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.aw_structure.item;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -31,19 +30,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.client.aw_structure.render.BoundingBoxRender;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
-import shadowmage.ancient_warfare.common.aw_core.item.AWItemClickable;
 import shadowmage.ancient_warfare.common.aw_core.network.GUIHandler;
 import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
-import shadowmage.ancient_warfare.common.aw_core.utils.Pos3f;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import shadowmage.ancient_warfare.common.aw_structure.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureRaw;
+import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureData;
 import shadowmage.ancient_warfare.common.aw_structure.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
@@ -245,11 +240,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 private ProcessedStructure scanAndProcess(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
   {
   key = BlockTools.offsetBuildKey(face, pos1, pos2, key);
-  ScannedStructureRaw raw = new ScannedStructureRaw(face, pos1, pos2, key);
+  ScannedStructureData raw = new ScannedStructureData(face, pos1, pos2, key);
   raw.scan(world);
-  ScannedStructureNormalized norm = raw.process();
-  norm.name = player.getEntityName();
-  return norm.convertToProcessedStructure();  
+  raw.name = player.getEntityName();
+  return raw.convertToProcessedStructure();  
   }
 
 private boolean attemptConstruction(World world, EntityPlayer player, BlockPosition hit, int face, ProcessedStructure struct)

@@ -26,9 +26,7 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
-import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 
 public class StructureExporterRuins

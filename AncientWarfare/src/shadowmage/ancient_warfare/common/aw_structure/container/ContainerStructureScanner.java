@@ -29,7 +29,7 @@ import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureNormalized;
+import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureData;
 import shadowmage.ancient_warfare.common.aw_structure.export.StructureExporter;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
@@ -145,7 +145,7 @@ public void sendSettingsAndExport(String name, boolean world, boolean creat, boo
  */
 public void export()
   {
-  ScannedStructureNormalized struct = ItemStructureScanner.scannedStructures.get(this.player);
+  ScannedStructureData struct = ItemStructureScanner.scannedStructures.get(this.player);
   if(struct==null)
     {
     Config.log("Could not locate structure for player");
@@ -167,7 +167,7 @@ public void export()
       {
       path = String.valueOf(AWStructureModule.includeDirectory+name+".aws");
       }    
-    boolean success = StructureExporter.writeStructureToFile(struct, path); 
+    boolean success = false;//TODO FIX THIS...   StructureExporter.writeStructureToFile(struct, path); 
     if(success && includeOnExport)
       {
       player.addChatMessage("Including structure in live structure lists");
@@ -212,7 +212,7 @@ public void handleInitData(NBTTagCompound tag)
 public NBTTagCompound getInitData()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  ScannedStructureNormalized struct = ItemStructureScanner.scannedStructures.get(this.player);
+  ScannedStructureData struct = ItemStructureScanner.scannedStructures.get(this.player);
   if(struct==null)
     {
     return null;
