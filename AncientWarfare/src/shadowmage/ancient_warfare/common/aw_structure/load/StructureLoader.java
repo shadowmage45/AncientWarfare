@@ -43,15 +43,17 @@ public StructureLoader()
  * called probableStructureFiles because they haven't been opened/read/checked for validity
  */
 private List<File> probableStructureFiles = new ArrayList<File>();
+private List<File> probableRuinsFiles = new ArrayList<File>();
 
 
 public void scanForPrebuiltFiles()
   {
   probableStructureFiles.clear();  
-  this.recursiveScan(new File(AWStructureModule.includeDirectory), probableStructureFiles);  
+  this.recursiveScan(new File(AWStructureModule.includeDirectory), probableStructureFiles, ".aws");  
+  this.recursiveScan(new File(AWStructureModule.convertDirectory), probableRuinsFiles, ".tml");
   }
 
-private void recursiveScan(File directory, List<File> fileList)
+private void recursiveScan(File directory, List<File> fileList, String extension)
   {
   if(directory==null)
     {
@@ -70,18 +72,18 @@ private void recursiveScan(File directory, List<File> fileList)
     currentFile = allFiles[i];
     if(currentFile.isDirectory())
       {
-      recursiveScan(currentFile, fileList);
+      recursiveScan(currentFile, fileList, extension);
       }
-    else if(isProbableStructureFile(currentFile))
+    else if(isProbableFile(currentFile, extension))
       {
       fileList.add(currentFile);
       }
     }
   }
 
-private boolean isProbableStructureFile(File file)
+private boolean isProbableFile(File file, String extension)
   {
-  return file.getName().toLowerCase().endsWith(".aws");
+  return file.getName().toLowerCase().endsWith(extension);
   }
 
 private ProcessedStructure parseFile(File file)
@@ -110,12 +112,30 @@ private List<ProcessedStructure> processFilesFor(List<File> fileList)
   return structures;  
   }
 
-
-
 public List<ProcessedStructure> processStructureFiles()
   {
   return processFilesFor(probableStructureFiles);
   }
+
+public void convertRuinsTemplates()
+  {
+  for(File file : this.probableRuinsFiles)
+    {
+    String name = file.getName();
+    name = name.split(".tml")[0];//.substring(0, name.length()-4);
+    File newFile = new File(AWStructureModule.outputDirectory+name+".aws");
+    
+    if(newFile.exists())
+      {
+      Config.logError("Exporting : "+file.getName()+" would overwrite : "+newFile.getName()+" .   Operation Aborted.  Please clean out your convert directory after converting templates!");
+      }
+    String renamedName = file.getName()+".cvt";
+    File renamedFile = new File(AWStructureModule.convertDirectory+renamedName);
+    file.renameTo(renamedFile);
+    }
+  }
+
+
 
 /**
  * debug method, used to set temp building for debug builder

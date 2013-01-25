@@ -63,6 +63,7 @@ private static final String defaultTemplateDirectory = "/shadowmage/ancient_warf
 private static String directory;
 public static String outputDirectory = null;
 public static String includeDirectory = null;
+public static String convertDirectory = null;
 
 private static final List<String> defaultExportStructures = new ArrayList<String>();
 
@@ -98,8 +99,9 @@ public void load(String directory)
   this.directory = directory;  
   outputDirectory = directory+"/AWConfig/structures/export/";
   includeDirectory = directory+"/AWConfig/structures/included/";
+  convertDirectory = directory+"/AWConfig/structures/convert/";
 
-  this.setDefaultStructureNames();
+ 
 
   File existTest = new File(outputDirectory);
   if(!existTest.exists())
@@ -114,6 +116,14 @@ public void load(String directory)
     Config.log("Creating default Include Directory");
     existTest.mkdirs();
     }
+  
+  existTest = new File(convertDirectory);
+  if(!existTest.exists())
+    {
+    Config.log("Creating default Convert Directory");
+    existTest.mkdirs();
+    }
+  
 
   BlockDataManager.instance().loadBlockList();  
 
@@ -138,6 +148,7 @@ private void copyDefaultStructures(String pathName)
     {
     return;
     }  
+  this.setDefaultStructureNames();
   InputStream is = null;
   FileOutputStream os = null;
   File file = null;
@@ -199,6 +210,8 @@ public void process()
     {
     return;
     }
+  
+  loader.convertRuinsTemplates();
   StructureManager.instance().addStructures(loader.processStructureFiles());  
   }
 
