@@ -43,63 +43,18 @@ import shadowmage.ancient_warfare.common.aw_structure.data.rules.VehicleRule;
 public class LoadedStructureRaw extends ProcessedStructure
 {
 
-File file;
 public boolean isValid = true;
 private int currentLayer = 0;//used during parsing to increment Y upwards with each layer parsed
 
-public LoadedStructureRaw(File file)
+public LoadedStructureRaw(List<String> lines, boolean ruins)
   {
-  this.file = file;
-  this.processFile();
-  }
-
-private void processFile()
-  {
-  //TODO move this out to the loader class....
-  Scanner reader = null;
-  try
+  if(ruins)
     {
-    reader = new Scanner(new FileInputStream(file));
-    } 
-  catch (FileNotFoundException e)
-    {
-    isValid = false;
-    e.printStackTrace();    
-    return;
+    this.parseLinesRuins(lines);
     }
-  List<String> lines = new ArrayList<String>();
-  String line;
-  /**
-   * throw everything into a list, close the file
-   */
-  while(reader.hasNextLine())
+  else
     {
-    line = reader.nextLine();
-    if(line.startsWith("#"))//skip comment lines entirely, no need to parse later
-      {
-      continue;
-      }
-    lines.add(line);
-    }  
-  reader.close();
-  /**
-   * process from a nice in-memory list
-   */
-  try
-    {
-    if(file.getName().endsWith(".aws"))
-      {
-      this.parseLinesAW(lines);
-      }
-    else
-      {
-      this.parseLinesRuins(lines);
-      }
-    }
-  catch(Exception e)
-    {
-    this.isValid = false;
-    Config.logError("Error parsing structure for file: "+file.getName());
+    this.parseLinesAW(lines);
     }
   }
 

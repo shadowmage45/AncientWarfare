@@ -21,15 +21,18 @@
 package shadowmage.ancient_warfare.common.aw_structure.load;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
+import shadowmage.ancient_warfare.common.aw_structure.data.AWStructure;
 import shadowmage.ancient_warfare.common.aw_structure.data.LoadedStructureRaw;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.aw_structure.export.StructureExporterRuins;
 
 public class StructureLoader
 {
@@ -86,30 +89,76 @@ private boolean isProbableFile(File file, String extension)
   return file.getName().toLowerCase().endsWith(extension);
   }
 
-private ProcessedStructure parseFile(File file)
-  {  
-  LoadedStructureRaw rawStruct = new LoadedStructureRaw(file);  
-  if(!rawStruct.isValid)
-    {
-    Config.logError("Structure parser returned invalid structure, there is a problem with the template file: "+file.getName());
-    return null;
-    }    
-  return rawStruct;
-  }
-
 private List<ProcessedStructure> processFilesFor(List<File> fileList)
   {
   List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
   ProcessedStructure struct;
   for(File file : fileList)
     {
-    struct = this.parseFile(file);
+    struct = this.processFile(file);
     if(struct!=null)
       {
       structures.add(struct);
       }
     }  
   return structures;  
+  }
+
+private LoadedStructureRaw processFile(File file)
+  {
+  Scanner reader = null;
+  try
+    {
+    reader = new Scanner(new FileInputStream(file));
+    } 
+  catch (FileNotFoundException e)
+    {    
+    Config.logError("There was an error while parsing template file: "+file.getName()); 
+    e.printStackTrace();    
+    return null;
+    }
+  List<String> lines = new ArrayList<String>();
+  String line;
+  /**
+   * throw everything into a list, close the file
+   */
+  while(reader.hasNextLine())
+    {
+    line = reader.nextLine();
+    if(line.startsWith("#"))//skip comment lines entirely, no need to parse later
+      {
+      continue;
+      }
+    lines.add(line);
+    }  
+  reader.close();
+  
+  LoadedStructureRaw struct = null;
+  /**
+   * process from a nice in-memory list
+   */
+  try
+    {
+    if(file.getName().endsWith(".aws"))
+      {
+      struct = new LoadedStructureRaw(lines, false);
+      }
+    else
+      {
+      struct = new LoadedStructureRaw(lines, true);
+      }
+    }
+  catch(Exception e)
+    {    
+    Config.logError("There was an error while parsing template file: "+file.getName()); 
+    return null;
+    }
+  if(struct !=null && !struct.isValid)
+    {
+    Config.logError("There was an error while parsing template file: "+file.getName()); 
+    return null;
+    }
+  return struct;
   }
 
 public List<ProcessedStructure> processStructureFiles()
@@ -122,36 +171,22 @@ public void convertRuinsTemplates()
   for(File file : this.probableRuinsFiles)
     {
     String name = file.getName();
-    name = name.split(".tml")[0];//.substring(0, name.length()-4);
-    File newFile = new File(AWStructureModule.outputDirectory+name+".aws");
+    name = name.split(".tml")[0];
+    String newFile = String.valueOf(AWStructureModule.outputDirectory+name+".aws");
     
-    if(newFile.exists())
+    LoadedStructureRaw raw = processFile(file);
+    if(raw==null || !raw.isValid)
       {
-      Config.logError("Exporting : "+file.getName()+" would overwrite : "+newFile.getName()+" .   Operation Aborted.  Please clean out your convert directory after converting templates!");
-      }
+      continue;
+      }    
+    if(!StructureExporterRuins.writeStructureToFile(raw, newFile))
+      {
+      continue;
+      }       
     String renamedName = file.getName()+".cvt";
     File renamedFile = new File(AWStructureModule.convertDirectory+renamedName);
     file.renameTo(renamedFile);
     }
-  }
-
-
-
-/**
- * debug method, used to set temp building for debug builder
- * @param file
- * @return
- */
-@Deprecated
-public static ProcessedStructure processSingleStructure(File file)
-  {
-  LoadedStructureRaw rawStruct = new LoadedStructureRaw(file);  
-  if(!rawStruct.isValid)
-    {
-    Config.logError("Structure parser returned invalid structure, there is a problem with the template file: "+file.getName());
-    return null;
-    }
-  return rawStruct;
   }
 
 }

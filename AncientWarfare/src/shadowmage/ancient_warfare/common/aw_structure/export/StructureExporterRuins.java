@@ -52,7 +52,7 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     }
   else
     {
-    Config.logError("Exporting would overwrite structure with name: "+name+"  Operation aborted.  Please choose a different name before rescanning and exporting");
+    Config.logError("Exporting would overwrite structure with name: "+name+"  Operation aborted.  Please choose a different name before attempting to export again.");
     return false;    
     }
   FileWriter writer = null;
