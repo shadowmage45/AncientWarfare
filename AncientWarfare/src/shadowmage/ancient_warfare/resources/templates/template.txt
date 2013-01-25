@@ -18,7 +18,7 @@
 ##basic variables area
 
 #structure name, used for display purposes, should be unique if you want to be able to id your struct
-#can include spaces and numbers, but will be scrubbed of special characters for display purposes
+#for all intents and purposes this should be the same as the filename
 name=template
 worldgen=false
 creative=true

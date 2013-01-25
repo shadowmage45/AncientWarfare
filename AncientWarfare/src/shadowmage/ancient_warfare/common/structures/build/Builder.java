@@ -23,11 +23,11 @@ package shadowmage.ancient_warfare.common.structures.build;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.utils.INBTTaggable;
 
 public abstract class Builder implements INBTTaggable
 {

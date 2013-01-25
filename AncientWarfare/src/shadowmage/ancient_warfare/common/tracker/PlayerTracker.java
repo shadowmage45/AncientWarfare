@@ -26,10 +26,10 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
-import shadowmage.ancient_warfare.common.utils.INBTTaggable;
 import cpw.mods.fml.common.IPlayerTracker;
 
 /**

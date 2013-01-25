@@ -17,18 +17,42 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
+
+
  */
-package shadowmage.ancient_warfare.common.container;
+package shadowmage.ancient_warfare.common.interfaces;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 
-public interface IEntityContainerSynch
+/**
+ * used by missiles to communicate hit information to vastly different classes
+ * (soldiers and vehicles)
+ * soldiers and vehicles use this for stat tracking purposes
+ * effectively server-side only.
+ * @author Shadowmage
+ *
+ */
+public interface IMissileHitCallback
 {
 
-public void handleClientInput(NBTTagCompound tag);
-public void addPlayer(EntityPlayer player);
-public void removePlayer(EntityPlayer player);
-public boolean canInteract(EntityPlayer player);
+/**
+ * callback for when a fired missile impacts a position
+ * @param world
+ * @param x
+ * @param y
+ * @param z
+ */
+public abstract void onMissileImpact(World world, double x, double y, double z);
+
+/**
+ * callback for when a fired missile impacts an entity
+ * @param world
+ * @param entity
+ */
+public abstract void onMissileImpactEntity(World world, Entity entity);
+
+
+  
 
 }

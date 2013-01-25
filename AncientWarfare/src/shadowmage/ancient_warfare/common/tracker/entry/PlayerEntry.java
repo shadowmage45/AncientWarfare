@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.tracker.entry;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.utils.INBTTaggable;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 
 public class PlayerEntry implements INBTTaggable
 {

@@ -25,7 +25,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_warfare.common.utils.INBTTaggable;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 
 /**
  * dataStruct representing all data for a single team

@@ -24,7 +24,7 @@ package shadowmage.ancient_warfare.common.inventory;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.utils.IInventoryCallback;
+import shadowmage.ancient_warfare.common.interfaces.IInventoryCallback;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleInventory implements IInventoryCallback

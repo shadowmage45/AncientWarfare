@@ -25,6 +25,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
+import shadowmage.ancient_warfare.common.interfaces.IHandlePacketData;
 import shadowmage.ancient_warfare.common.network.Packet03GuiComs;
 
 

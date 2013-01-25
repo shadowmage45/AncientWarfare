@@ -18,12 +18,17 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.interfaces;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 
-public interface IInventoryCallback
+public interface IEntityContainerSynch
 {
-public abstract void onInventoryChanged(IInventory changedInv);
+
+public void handleClientInput(NBTTagCompound tag);
+public void addPlayer(EntityPlayer player);
+public void removePlayer(EntityPlayer player);
+public boolean canInteract(EntityPlayer player);
 
 }

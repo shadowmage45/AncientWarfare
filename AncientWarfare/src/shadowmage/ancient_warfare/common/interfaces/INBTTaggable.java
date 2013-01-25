@@ -17,42 +17,32 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.interfaces;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * used by missiles to communicate hit information to vastly different classes
- * (soldiers and vehicles)
- * soldiers and vehicles use this for stat tracking purposes
- * effectively server-side only.
+ * interface for objects which may be represented/packeted through an NBTTag
+ * mostly used for complex data which must be relayed to clients intact
  * @author Shadowmage
  *
  */
-public interface IMissileHitCallback
+public interface INBTTaggable
 {
 
 /**
- * callback for when a fired missile impacts a position
- * @param world
- * @param x
- * @param y
- * @param z
+ * get a tag representing the entire data structure for this object;
+ * i.e., the entire object should be able to be reconstructed from 
+ * this tag alone
+ * @return
  */
-public abstract void onMissileImpact(World world, double x, double y, double z);
+public NBTTagCompound getNBTTag();
 
 /**
- * callback for when a fired missile impacts an entity
- * @param world
- * @param entity
+ * populate the entire data structure for this entity from a tag
+ * @param tag
  */
-public abstract void onMissileImpactEntity(World world, Entity entity);
-
-
-  
+public void readFromNBT(NBTTagCompound tag);
 
 }

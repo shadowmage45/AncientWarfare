@@ -30,7 +30,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_warfare.common.utils.IInventoryCallback;
+import shadowmage.ancient_warfare.common.interfaces.IInventoryCallback;
 
 public class AWInventoryBasic implements IInventory
 {

@@ -17,12 +17,33 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.interfaces;
 
-public interface IPathableEntity
+import net.minecraft.nbt.NBTTagCompound;
+
+
+/**
+ * an interface for containers or other abstract structures that need to directly 
+ * handle data from packets.  Normally used for container server-client synching
+ * @author Shadowmage
+ *
+ */
+public interface IHandlePacketData
 {
+
+/**
+ * regular coms, should blindly update container.
+ * @param tag
+ */
+public void handlePacketData(NBTTagCompound tag);
+
+/**
+ * server->client init data, should only exec client side, to setup any params not available
+ * on client end.
+ * @param tag
+ */
+public void handleInitData(NBTTagCompound tag);
+
 
 }

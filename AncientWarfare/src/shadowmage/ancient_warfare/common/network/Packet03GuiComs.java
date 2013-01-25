@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.container.IHandlePacketData;
+import shadowmage.ancient_warfare.common.interfaces.IHandlePacketData;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;

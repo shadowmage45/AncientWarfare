@@ -17,32 +17,12 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
- */
-package shadowmage.ancient_warfare.common.utils;
 
-import net.minecraft.nbt.NBTTagCompound;
 
-/**
- * interface for objects which may be represented/packeted through an NBTTag
- * mostly used for complex data which must be relayed to clients intact
- * @author Shadowmage
- *
  */
-public interface INBTTaggable
+package shadowmage.ancient_warfare.common.interfaces;
+
+public interface IPathableEntity
 {
-
-/**
- * get a tag representing the entire data structure for this object;
- * i.e., the entire object should be able to be reconstructed from 
- * this tag alone
- * @return
- */
-public NBTTagCompound getNBTTag();
-
-/**
- * populate the entire data structure for this entity from a tag
- * @param tag
- */
-public void readFromNBT(NBTTagCompound tag);
 
 }

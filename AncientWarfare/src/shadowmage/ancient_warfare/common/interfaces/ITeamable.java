@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.interfaces;
 
 
 public interface ITeamable
