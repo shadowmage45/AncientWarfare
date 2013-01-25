@@ -25,7 +25,6 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 
 /**

@@ -26,10 +26,9 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-
 import shadowmage.ancient_warfare.common.aw_core.utils.StringTools;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
-import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
+import shadowmage.ancient_warfare.common.aw_structure.manager.BlockDataManager;
 
 public class BlockRule
 {

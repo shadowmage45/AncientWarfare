@@ -23,26 +23,19 @@ package shadowmage.ancient_warfare.common.aw_structure.item;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockLoader;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
-import shadowmage.ancient_warfare.common.aw_core.config.Config;
-import shadowmage.ancient_warfare.common.aw_core.item.AWItemClickable;
-import shadowmage.ancient_warfare.common.aw_core.network.GUIHandler;
 import shadowmage.ancient_warfare.common.aw_structure.block.TEBuilder;
-import shadowmage.ancient_warfare.common.aw_structure.build.BuilderInstant;
 import shadowmage.ancient_warfare.common.aw_structure.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
+import shadowmage.ancient_warfare.common.aw_structure.manager.StructureManager;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBuilderTicked extends ItemBuilderInstant
 {

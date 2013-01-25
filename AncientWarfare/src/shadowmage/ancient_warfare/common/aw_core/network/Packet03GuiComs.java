@@ -21,14 +21,11 @@
 package shadowmage.ancient_warfare.common.aw_core.network;
 
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.container.IHandlePacketData;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
-
-import cpw.mods.fml.common.network.FMLNetworkHandler;
 
 public class Packet03GuiComs extends PacketBase
 {

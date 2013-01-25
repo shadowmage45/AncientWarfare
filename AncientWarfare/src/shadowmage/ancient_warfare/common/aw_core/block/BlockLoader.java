@@ -20,12 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.block;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_structure.block.BlockBuilder;
 import shadowmage.ancient_warfare.common.aw_structure.block.TEBuilder;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockLoader
 {

@@ -22,13 +22,12 @@ package shadowmage.ancient_warfare.common.aw_structure.build;
 
 import java.util.Random;
 
-import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
-import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.aw_structure.manager.BlockDataManager;
 
 public class BuilderInstant extends Builder
 {

@@ -27,7 +27,7 @@ import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
-import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
+import shadowmage.ancient_warfare.common.aw_structure.manager.StructureManager;
 
 public abstract class Builder implements INBTTaggable
 {

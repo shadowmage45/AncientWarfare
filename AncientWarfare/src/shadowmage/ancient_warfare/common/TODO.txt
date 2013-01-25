@@ -10,14 +10,14 @@ GENERAL
 * restructure folders...its a mess
 
 TEMPLATES/STRUCTURE
-* biome block swapping
+* figure out biome block swapping
 * add resourceList stuff to template--so others can denote custom resource lists to construct a building
 * add default templates, and add them to export list
 * add default 0 rule to ruins template importer
+* make sure all structs have default 0 rule after loaded
 * fix vehicleRule rule parsing to use safeParse methods
 * figure out better way to handle ruins import (current is convert on run, manual copy and re-run)
 * restructure scanner to scan into a processedStructure, removeScanDataContainer completely
-
 
 STRUCTURE BUILDING
 * verify block rule randomization works as intended

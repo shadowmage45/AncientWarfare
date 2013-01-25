@@ -25,7 +25,6 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
-import shadowmage.ancient_warfare.common.aw_core.utils.IDPair;
 import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
 
 /**
@@ -71,7 +70,7 @@ int basicInventoryItemCount = -1;
  * the default build priority for this block, added to blockRules created for this block when templates are generated
  * may be overridden in template by user
  */
-byte buildOrder = 0;
+public byte buildOrder = 0;
 
 /**
  * metadata rotation tables, one entry for each possible meta-data, broken into six tables.  Most blocks will only need

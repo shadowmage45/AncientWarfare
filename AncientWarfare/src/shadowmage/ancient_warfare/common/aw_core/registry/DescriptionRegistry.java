@@ -23,12 +23,10 @@
 package shadowmage.ancient_warfare.common.aw_core.registry;
 
 import java.util.HashMap;
-import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemDescription;
-import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 /**

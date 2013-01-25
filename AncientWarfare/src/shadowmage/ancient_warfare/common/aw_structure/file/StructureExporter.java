@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.aw_structure.export;
+package shadowmage.ancient_warfare.common.aw_structure.file;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -28,9 +28,7 @@ import java.util.List;
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_structure.data.BlockData;
-import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureData;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
 
 public class StructureExporter

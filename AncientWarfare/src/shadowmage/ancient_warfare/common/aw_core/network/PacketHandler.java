@@ -25,13 +25,12 @@ package shadowmage.ancient_warfare.common.aw_core.network;
 import java.util.HashMap;
 import java.util.Map;
 
-import shadowmage.ancient_warfare.common.aw_core.config.Config;
-import shadowmage.ancient_warfare.common.aw_core.utils.NBTWriter;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_core.utils.NBTWriter;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;

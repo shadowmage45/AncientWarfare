@@ -31,7 +31,7 @@ import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
 import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
 import shadowmage.ancient_warfare.common.aw_core.utils.IDPairCount;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
+import shadowmage.ancient_warfare.common.aw_structure.manager.StructureManager;
 
 public class ContainerSurvivalBuilder extends ContainerBase
 {

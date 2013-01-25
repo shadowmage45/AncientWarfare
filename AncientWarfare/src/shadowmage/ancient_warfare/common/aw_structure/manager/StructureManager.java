@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.aw_structure.store;
+package shadowmage.ancient_warfare.common.aw_structure.manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

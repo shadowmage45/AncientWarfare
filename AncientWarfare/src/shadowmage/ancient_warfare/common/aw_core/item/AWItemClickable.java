@@ -24,7 +24,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
-import shadowmage.ancient_warfare.common.aw_core.item.AWItemBase;
 
 public abstract class AWItemClickable extends AWItemBase
 {

@@ -20,10 +20,10 @@
  */
 package shadowmage.ancient_warfare.client.aw_core.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiCheckBox extends GuiButton
 {

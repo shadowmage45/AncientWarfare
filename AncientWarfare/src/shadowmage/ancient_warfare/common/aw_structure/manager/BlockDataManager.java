@@ -18,29 +18,14 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.aw_structure.data;
+package shadowmage.ancient_warfare.common.aw_structure.manager;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import shadowmage.ancient_warfare.common.aw_structure.data.swap_groups.BlockSwapGroupBrick;
-import shadowmage.ancient_warfare.common.aw_structure.data.swap_groups.BlockSwapGroupCobble;
-import shadowmage.ancient_warfare.common.aw_structure.data.swap_groups.BlockSwapGroupNetherBrick;
-import shadowmage.ancient_warfare.common.aw_structure.data.swap_groups.BlockSwapGroupSandstone;
-import shadowmage.ancient_warfare.common.aw_structure.data.swap_groups.BlockSwapGroupStoneBrick;
+import shadowmage.ancient_warfare.common.aw_structure.data.BlockInfo;
 
 public class BlockDataManager
 {
-
-static BlockSwapGroup COBBLE = new BlockSwapGroupCobble();
-static BlockSwapGroup STONE_BRICK = new BlockSwapGroupStoneBrick();
-static BlockSwapGroup NETHER_BRICK = new BlockSwapGroupNetherBrick();
-static BlockSwapGroup BRICK = new BlockSwapGroupBrick();
-static BlockSwapGroup SANDSTONE = new BlockSwapGroupSandstone();
-static BlockSwapGroup WOOD_OAK;
-static BlockSwapGroup WOOD_JUNGLE;
-static BlockSwapGroup WOOD_SPRUCE;
-static BlockSwapGroup WOOD_BIRCH;
-static BlockSwapGroup WOOD_RANDOM;
 
 private static BlockDataManager INSTANCE;
 private BlockDataManager(){}

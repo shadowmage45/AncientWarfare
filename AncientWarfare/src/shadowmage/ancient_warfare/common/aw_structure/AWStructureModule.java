@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -29,9 +28,6 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteStreams;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
@@ -39,9 +35,12 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
 import shadowmage.ancient_warfare.common.aw_structure.build.Builder;
-import shadowmage.ancient_warfare.common.aw_structure.data.BlockDataManager;
-import shadowmage.ancient_warfare.common.aw_structure.load.StructureLoader;
-import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
+import shadowmage.ancient_warfare.common.aw_structure.file.StructureLoader;
+import shadowmage.ancient_warfare.common.aw_structure.manager.BlockDataManager;
+import shadowmage.ancient_warfare.common.aw_structure.manager.StructureManager;
+
+import com.google.common.io.ByteStreams;
+
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.registry.TickRegistry;

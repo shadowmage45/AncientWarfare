@@ -22,10 +22,10 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.network;
 
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.aw_core.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.aw_core.tracker.TeamTracker;
-import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
-import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.aw_structure.manager.StructureManager;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;

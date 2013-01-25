@@ -27,11 +27,10 @@ import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.container.ContainerBase;
 import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureData;
-import shadowmage.ancient_warfare.common.aw_structure.export.StructureExporter;
-import shadowmage.ancient_warfare.common.aw_structure.export.StructureExporterRuins;
+import shadowmage.ancient_warfare.common.aw_structure.file.StructureExporter;
+import shadowmage.ancient_warfare.common.aw_structure.file.StructureExporterRuins;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureScanner;
-import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
+import shadowmage.ancient_warfare.common.aw_structure.manager.StructureManager;
 
 public class ContainerStructureScanner extends ContainerBase
 {

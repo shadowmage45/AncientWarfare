@@ -20,19 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.aw_structure.data;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 
 import shadowmage.ancient_warfare.common.aw_core.config.Config;
 import shadowmage.ancient_warfare.common.aw_core.utils.StringTools;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
-import shadowmage.ancient_warfare.common.aw_structure.data.rules.NPCRule;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.VehicleRule;
 
 /**

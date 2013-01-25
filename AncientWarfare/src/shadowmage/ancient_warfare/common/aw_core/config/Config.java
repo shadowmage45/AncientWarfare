@@ -25,9 +25,8 @@ package shadowmage.ancient_warfare.common.aw_core.config;
 import java.io.File;
 import java.util.logging.Logger;
 
-import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
-
 import net.minecraftforge.common.Configuration;
+import shadowmage.ancient_warfare.common.aw_structure.AWStructureModule;
 
 public class Config 
 {

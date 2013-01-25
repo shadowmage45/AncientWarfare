@@ -20,21 +20,10 @@
  */
 package shadowmage.ancient_warfare.client.aw_structure.render;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
 import org.lwjgl.opengl.GL11;
-
-import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
-import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
-import shadowmage.ancient_warfare.common.aw_core.item.ItemLoader;
-import shadowmage.ancient_warfare.common.aw_core.utils.Pos3f;
-import shadowmage.ancient_warfare.common.aw_structure.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
 
 
 public class BoundingBoxRender

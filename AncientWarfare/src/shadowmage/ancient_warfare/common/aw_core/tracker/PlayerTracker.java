@@ -29,7 +29,7 @@ import shadowmage.ancient_warfare.common.aw_core.AWCore;
 import shadowmage.ancient_warfare.common.aw_core.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.aw_core.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;
-import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
+import shadowmage.ancient_warfare.common.aw_structure.manager.StructureManager;
 import cpw.mods.fml.common.IPlayerTracker;
 
 /**

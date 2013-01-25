@@ -22,11 +22,11 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.network;
 
-import shadowmage.ancient_warfare.common.aw_core.utils.NBTWriter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.aw_core.utils.NBTWriter;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;

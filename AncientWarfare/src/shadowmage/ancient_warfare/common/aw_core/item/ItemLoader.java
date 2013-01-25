@@ -29,7 +29,6 @@ import shadowmage.ancient_warfare.common.aw_core.registry.DescriptionRegistry;
 import shadowmage.ancient_warfare.common.aw_core.registry.entry.ItemIDPair;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemBlockScanner;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderDirect;
-import shadowmage.ancient_warfare.common.aw_structure.item.ItemDebugBuilder;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderInstant;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemBuilderTicked;
 import shadowmage.ancient_warfare.common.aw_structure.item.ItemStructureScanner;
@@ -59,7 +58,6 @@ public static final AWItemBase structureCreativeBuilderTicked = new ItemBuilderT
  * e.g. will be null unless debug mode is on
  */
 public static AWItemBase blockScanner;
-public static AWItemBase debugBuilder;
 
 private static ItemLoader INSTANCE;
 private ItemLoader(){}
@@ -107,9 +105,7 @@ private void loadDebugItems()
     return;
     }
   blockScanner = new ItemBlockScanner(Config.getItemID("debug.blockScanner", 9000));
-  debugBuilder = new ItemDebugBuilder(Config.getItemID("debug.builder", 9001));
-  this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block");
-  this.registerItemSingle(debugBuilder, "Debug Builder", "Debug Structure Builder", "Right-Click to construct the most recently scanned building");
+  this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block");  
   }
 
 /**

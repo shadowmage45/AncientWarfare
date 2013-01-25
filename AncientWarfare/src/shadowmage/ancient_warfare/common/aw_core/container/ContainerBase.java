@@ -20,12 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.container;
 
-import shadowmage.ancient_warfare.common.aw_core.AWCore;
-import shadowmage.ancient_warfare.common.aw_core.config.Config;
-import shadowmage.ancient_warfare.common.aw_core.network.Packet03GuiComs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.aw_core.AWCore;
+import shadowmage.ancient_warfare.common.aw_core.config.Config;
+import shadowmage.ancient_warfare.common.aw_core.network.Packet03GuiComs;
 
 
 

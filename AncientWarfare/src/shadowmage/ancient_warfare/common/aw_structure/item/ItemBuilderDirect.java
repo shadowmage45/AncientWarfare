@@ -40,7 +40,7 @@ import shadowmage.ancient_warfare.common.aw_structure.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.aw_structure.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.aw_structure.data.ScannedStructureData;
 import shadowmage.ancient_warfare.common.aw_structure.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.aw_structure.store.StructureManager;
+import shadowmage.ancient_warfare.common.aw_structure.manager.StructureManager;
 
 public class ItemBuilderDirect extends ItemBuilderBase
 {

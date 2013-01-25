@@ -22,7 +22,6 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.proxy;
 
-import shadowmage.ancient_warfare.common.aw_core.AWCore;
 
 public class InputHelperCommonProxy
 {

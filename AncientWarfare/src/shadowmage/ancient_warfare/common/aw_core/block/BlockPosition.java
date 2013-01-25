@@ -22,8 +22,6 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.block;
 
-import java.util.ArrayList;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 

@@ -20,8 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.aw_core.tracker.entry;
 
-import java.util.HashMap;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.aw_core.utils.INBTTaggable;

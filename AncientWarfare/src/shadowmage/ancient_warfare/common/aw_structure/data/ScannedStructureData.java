@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-
 import shadowmage.ancient_warfare.common.aw_core.block.BlockPosition;
 import shadowmage.ancient_warfare.common.aw_core.block.BlockTools;
 import shadowmage.ancient_warfare.common.aw_structure.data.rules.BlockRule;
