@@ -54,12 +54,19 @@ import cpw.mods.fml.relauncher.Side;
 public class AWStructureModule implements ITickHandler, INBTTaggable
 {
 
-
+/**
+ * used to grab streams of resources from inside the jar/zip/whatever....
+ */
 private static final String defaultTemplateDirectory = "/shadowmage/ancient_warfare/resources/templates/";
+
 /**
  * the base config directory
  */
 private static String directory;
+
+/**
+ * specific directories.
+ */
 public static String outputDirectory = null;
 public static String includeDirectory = null;
 public static String convertDirectory = null;
@@ -93,15 +100,18 @@ public void setExportDefaults()
   }
 
 public void load(String directory)
-  {  
-  TickRegistry.registerTickHandler(this, Side.SERVER);
+  {
   this.directory = directory;  
   outputDirectory = directory+"/AWConfig/structures/export/";
   includeDirectory = directory+"/AWConfig/structures/included/";
   convertDirectory = directory+"/AWConfig/structures/convert/";
-
- 
-
+  
+  TickRegistry.registerTickHandler(this, Side.SERVER);
+  BlockDataManager.instance().loadBlockList();
+  
+  /**
+   * create default dirs if they don't exist...
+   */
   File existTest = new File(outputDirectory);
   if(!existTest.exists())
     {
@@ -122,10 +132,7 @@ public void load(String directory)
     Config.log("Creating default Convert Directory");
     existTest.mkdirs();
     }
-  
-
-  BlockDataManager.instance().loadBlockList();  
-
+     
   if(shouldExportDefaults || Config.DEBUG)
     {
     this.copyDefaultStructures(includeDirectory);
@@ -253,9 +260,9 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
 
 @Override
 public EnumSet<TickType> ticks()
-{
-return EnumSet.of(TickType.WORLD);
-}
+  {
+  return EnumSet.of(TickType.WORLD);
+  }
 
 @Override
 public String getLabel()

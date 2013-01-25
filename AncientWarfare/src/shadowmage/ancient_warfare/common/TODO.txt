@@ -7,7 +7,6 @@ GENERAL
 * add inventory blocks for water, lava
 * fix inventory block for redstone dust (it is a repeater)
 * add inventory block for repeater...others?
-* restructure folders...its a mess
 
 TEMPLATES/STRUCTURE
 * figure out biome block swapping
@@ -55,3 +54,4 @@ WORLD GEN STUFF
 * clean up blockRule internal parsing to use new safeParse code
 * rewrite exporter to use ProcessedStructure
 * add settings to allow ruins export
+* restructure folders...its a mess

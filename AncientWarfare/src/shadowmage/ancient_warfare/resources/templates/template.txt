@@ -108,13 +108,14 @@ preserveBlocks=false
 #  conditional=0
 #  percent=100
 #  order=1
-#  swapGroup = -1
-#  vehicles = -1
-#  npcs = -1
+#  swapGroup = 0
+#  vehicles = <blank>  #none
+#  npcs = <blank>  #none
 #  preserveWater=false
 #  preserveLava=false
 #  preservePlants=false
 #  preserveBlocks=false
+#  preservedBlocks= <blank> #none
 #  team=0  # defaults to neutral team, supports csv for random team assignment
 #  orientation=0 #defaults to north-facing
 
@@ -134,12 +135,12 @@ number=1
 order=1
 conditional=0
 percent=100
-blocks=1,2,3,12,13  #picks between these as a weighted list, supports meta-data the same as ruins (44-3)
-swapGroup=-1 # no swap group
+blocks=1,2,3,12,13
+swap=1
 preserveWater=0
 preserveLave=0
 preservePlants=0
-preserveBlocks=1  #if a block is present, will leave it, else will place from blockList
+preserveBlocks=1
 :endrule
 
 #example hostile vehicle rule using cannon and ballista turret
@@ -204,7 +205,11 @@ ammo5=
 ammo6=
 :endvehicle
 
-
+biomeswap:
+number=1
+biome=swamp,2-0,3-0
+biome=desert,cobblestone-0,sandstone-0
+:endbiomeswap
 
 
 ##NPC rules

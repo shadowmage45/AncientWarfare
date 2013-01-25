@@ -225,6 +225,7 @@ protected boolean isLava(int id)
 protected boolean shouldSkipBlock(World world, BlockRule rule, BlockPosition target, int currentPriority)
   {
   int id = world.getBlockId(target.x, target.y, target.z);
+  int meta = world.getBlockMetadata(target.x, target.y, target.z);
   boolean airBlock = isAirBlock(world, target);
   if(rule.order!=currentPriority)
     {
@@ -234,10 +235,14 @@ protected boolean shouldSkipBlock(World world, BlockRule rule, BlockPosition tar
     {
     return true;
     }
-  if(!airBlock && (rule.preserveBlocks || struct.preserveBlocks))
+  if(!airBlock &&  struct.preserveBlocks)
     {
     return true;
     }  
+  if(!airBlock && rule.preserveBlocks )    
+    {    
+    return rule.shouldPreserveBlock(id, meta);
+    }
   if(isPlant(id) && (rule.preservePlants || struct.preservePlants))
     {
     return true;

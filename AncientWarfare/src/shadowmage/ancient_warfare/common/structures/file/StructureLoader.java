@@ -46,7 +46,10 @@ public StructureLoader()
 private List<File> probableStructureFiles = new ArrayList<File>();
 private List<File> probableRuinsFiles = new ArrayList<File>();
 
-
+/**
+ * scans directores from AWStructureModule for probable structure template files and loads them into
+ * a temporary file list for parsing...
+ */
 public void scanForPrebuiltFiles()
   {
   probableStructureFiles.clear();  
