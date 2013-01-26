@@ -72,41 +72,47 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     writer.write("worldgen="+String.valueOf(struct.worldGen)+"\n");
     writer.write("creative="+String.valueOf(struct.creative)+"\n");
     writer.write("survival="+String.valueOf(struct.survival)+"\n");
-    writer.write("structureWeight="+struct.structureWeight+"\n");
+    writer.write("structureWeight="+String.valueOf(struct.structureWeight)+"\n");
     writer.write("\n");
     writer.write("unique="+String.valueOf(struct.unique)+"\n");
-    writer.write("chunkDistance="+struct.chunkDistance+"\n");
-    writer.write("chunkAttempts="+struct.chunkAttempts+"\n");
+    writer.write("chunkDistance="+String.valueOf(struct.chunkDistance)+"\n");
+    writer.write("chunkAttempts="+String.valueOf(struct.chunkAttempts)+"\n");
     writer.write("\n");
     writer.write("underground="+String.valueOf(struct.underground)+"\n");
-    writer.write("undergroundMinLevel="+struct.undergroundMinLevel+"\n");
+    writer.write("undergroundMinLevel="+String.valueOf(struct.undergroundMinLevel)+"\n");
     writer.write("undergroundMaxLevel="+ (255-struct.ySize)+"\n");
-    writer.write("undergroundMaxAirAbove="+struct.undergroundMaxAirAbove+"\n");
+    writer.write("undergroundMaxAirAbove="+String.valueOf(struct.undergroundMaxAirAbove)+"\n");
     writer.write("undergroundAllowPartial="+String.valueOf(struct.undergroundAllowPartial)+"\n");
     writer.write("\n");
-    writer.write("xSize="+struct.xSize+"\n");
-    writer.write("ySize="+struct.ySize+"\n");
-    writer.write("zSize="+struct.zSize+"\n");
+    writer.write("xSize="+String.valueOf(struct.xSize)+"\n");
+    writer.write("ySize="+String.valueOf(struct.ySize)+"\n");
+    writer.write("zSize="+String.valueOf(struct.zSize)+"\n");
     writer.write("\n");
-    writer.write("verticalOffset="+struct.verticalOffset+"\n");
-    writer.write("xOffset="+struct.xOffset+"\n");
-    writer.write("zOffset="+struct.zOffset+"\n");
+    writer.write("verticalOffset="+String.valueOf(struct.verticalOffset)+"\n");
+    writer.write("xOffset="+String.valueOf(struct.xOffset)+"\n");
+    writer.write("zOffset="+String.valueOf(struct.zOffset)+"\n");
     writer.write("\n");
-    writer.write("maxOverhang="+struct.maxOverhang+"\n");
-    writer.write("maxLeveling="+struct.maxLeveling+"\n");
-    writer.write("levelingBuffer="+struct.levelingBuffer+"\n");
-    writer.write("maxVerticalClear="+struct.maxVerticalClear+"\n");
-    writer.write("clearingBuffer="+struct.clearingBuffer+"\n");
-    writer.write("preserveWater="+struct.preserveWater+"\n");
-    writer.write("preserveLava="+struct.preserveLava+"\n");
-    writer.write("preservePlants="+struct.preservePlants+"\n");
-    writer.write("preserveBlocks="+struct.preserveBlocks+"\n"); 
-    writer.write("biomesOnlyIn=");
-    writeStringArray(writer, struct.biomesOnlyIn);
-    writer.write("\n");
-    writer.write("biomesNotIn=");
-    writeStringArray(writer, struct.biomesNotIn);
-    writer.write("\n");    
+    writer.write("maxOverhang="+String.valueOf(struct.maxOverhang)+"\n");
+    writer.write("maxLeveling="+String.valueOf(struct.maxLeveling)+"\n");
+    writer.write("levelingBuffer="+String.valueOf(struct.levelingBuffer)+"\n");
+    writer.write("maxVerticalClear="+String.valueOf(struct.maxVerticalClear)+"\n");
+    writer.write("clearingBuffer="+String.valueOf(struct.clearingBuffer)+"\n");
+    writer.write("preserveWater="+String.valueOf(struct.preserveWater)+"\n");
+    writer.write("preserveLava="+String.valueOf(struct.preserveLava)+"\n");
+    writer.write("preservePlants="+String.valueOf(struct.preservePlants)+"\n");
+    writer.write("preserveBlocks="+String.valueOf(struct.preserveBlocks)+"\n");
+    if(struct.biomesOnlyIn!=null)
+      {
+      writer.write("biomesOnlyIn=");
+      writeStringArray(writer, struct.biomesOnlyIn);
+      writer.write("\n");
+      }
+    if(struct.biomesNotIn!=null)
+      {
+      writer.write("biomesNotIn=");
+      writeStringArray(writer, struct.biomesNotIn);
+      writer.write("\n");
+      }    
     writer.write("\n");
     writer.write("####BLOCK RULES####\n");
     writeBlockRules(writer, struct);    
@@ -137,10 +143,10 @@ private static void writeBlockRules(FileWriter writer, ProcessedStructure struct
   for(BlockRule rule : rules)
     { 
     writer.write("rule:\n");
-    writer.write("number="+rule.ruleNumber+"\n");
-    writer.write("order="+rule.order+"\n");
-    writer.write("conditional="+rule.conditional+"\n");
-    writer.write("percent="+rule.baseChance+"\n"); 
+    writer.write("number="+String.valueOf(rule.ruleNumber)+"\n");
+    writer.write("order="+String.valueOf(rule.order)+"\n");
+    writer.write("conditional="+String.valueOf(rule.conditional)+"\n");
+    writer.write("percent="+String.valueOf(rule.baseChance)+"\n"); 
     if(rule.blockData!=null)
       {
       writer.write("blocks=");
@@ -177,7 +183,7 @@ private static void writeBlockRules(FileWriter writer, ProcessedStructure struct
       }
     if(rule.orientation!=0)
       {
-      writer.write("orientation="+rule.orientation+"\n");
+      writer.write("orientation="+String.valueOf(rule.orientation)+"\n");
       }
     if(rule.vehicles!=null)
       {
@@ -204,7 +210,7 @@ private static void writeIntArray(FileWriter writer, int[] ints) throws IOExcept
     }
   for(int i = 0; i < ints.length; i++)
     {
-    writer.write(ints[i]);
+    writer.write(String.valueOf(ints[i]));
     if(i+1< ints.length)
       {
       writer.write(",");
@@ -229,7 +235,7 @@ private static void writeBlockDataArray(FileWriter writer, BlockData[] datas) th
       {
       writer.write(",");
       }
-    writer.write(data.id+"-"+data.meta);
+    writer.write(String.valueOf(data.id+"-"+data.meta));
     }  
   }
 
@@ -247,8 +253,8 @@ private static void writeSingleLayer(FileWriter writer, ProcessedStructure struc
   for(int z = 0; z <struct.structure[0][0].length; z++)
     {
     for(int x = 0; x<struct.structure.length; x++)
-      {   
-      writer.write(struct.structure[x][layerNumber][z]);
+      {
+      writer.write(String.valueOf(struct.structure[x][layerNumber][z]));
       if(x < struct.structure.length-1)
         {
         writer.write(",");

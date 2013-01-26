@@ -150,13 +150,14 @@ private LoadedStructureRaw processFile(File file)
       }
     }
   catch(Exception e)
-    {    
-    Config.logError("There was an error while parsing template file: "+file.getName()); 
+    {        
+    Config.logError("PARSING EXCEPTION: There was an error while parsing template file: "+file.getName());
+    e.printStackTrace();
     return null;
     }
   if(struct !=null && !struct.isValid)
     {
-    Config.logError("There was an error while parsing template file: "+file.getName()); 
+    Config.logError("INVALID STRUCTURE: There was an error while parsing template file: "+file.getName()); 
     return null;
     }
   return struct;
@@ -180,7 +181,7 @@ public void convertRuinsTemplates()
       {
       continue;
       }    
-    if(!StructureExporterRuins.writeStructureToFile(raw, newFile))
+    if(!StructureExporter.writeStructureToFile(raw, newFile))
       {
       continue;
       }       

@@ -239,6 +239,10 @@ private static int findBlockByName(String name)
     }
   for(Block block : Block.blocksList)
     {
+    if(block==null)
+      {
+      continue;
+      }
     if(block!= null && name.equals(block.getBlockName()));
       {
       return block.blockID;

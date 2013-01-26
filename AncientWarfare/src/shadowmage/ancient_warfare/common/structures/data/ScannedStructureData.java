@@ -146,23 +146,25 @@ public int getRuleForBlock(int id, int meta)
 
 private void normalizeForNorthFacing()
   {
-  int newXSize = this.xSize;
+  int newXSize;// = this.xSize;
   int newYSize = this.ySize;
-  int newZSize = this.zSize;
+  int newZSize;// = this.zSize;
+  BlockData[][][] newBlocks;
   if(this.originFacing==1 || this.originFacing ==3)
     {
     newXSize = this.zSize;
-    newZSize = this.xSize;
-    }
-  BlockData[][][] newBlocks;
-  if(originFacing==0 || originFacing==2)
-    {
-    newBlocks = new BlockData[newXSize][newYSize][newZSize];
+    newZSize = this.xSize;  
     }
   else
     {
-    newBlocks = new BlockData[newZSize][newYSize][newXSize];
-    }  
+    newXSize = this.xSize;
+    newZSize = this.zSize;
+    }
+    
+  newBlocks = new BlockData[newXSize][newYSize][newZSize];
+  
+  System.out.println("sx: "+newBlocks.length);
+  System.out.println("sz: "+newBlocks[0][0].length);
   
   this.blockIDs.clear();
   this.addToBlocksList(new BlockData(0,0));
@@ -174,12 +176,17 @@ private void normalizeForNorthFacing()
       for(int z = 0; z< this.zSize; z++)
         {
         BlockPosition pos = getNorthRotatedPosition(x,y,z, this.originFacing, newXSize, newZSize);
+        //DEBUG
+        System.out.println("facing: "+originFacing);
+        System.out.println("currentSize: "+this.xSize+","+ySize+","+zSize);        
+        System.out.println("newSize: "+newXSize+","+newYSize+","+newZSize);
+        System.out.println("currentPos: "+x+","+y+","+z+" newPos: "+pos.toString());
         BlockData data = this.allBlocks[x][y][z];
         data.rotateRight(rotationAmount);
         newBlocks[pos.x][pos.y][pos.z] = data;
         if(data.id!=0)
           {
-          this.addToBlocksList(this.allBlocks[pos.x][pos.y][pos.z]);
+          this.addToBlocksList(newBlocks[pos.x][pos.y][pos.z]);
           }
         }
       }
@@ -197,17 +204,17 @@ private BlockPosition getNorthRotatedPosition(int x, int y, int z, int rotation,
     {
     return new BlockPosition(xSize - x - 1 , y, zSize - z - 1 );
     }
-  if(rotation==1)//west, swap +x>+z,+z>-x
+  if(rotation==1)//west
     {
-    return new BlockPosition(xSize-z-1,y,x);
+    return new BlockPosition(xSize - z - 1, y, x);
     }
   if(rotation==2)//north, no change
     {
     return new BlockPosition(x,y,z);
     }
-  if(rotation==3)//east, swap +x>-z, +z>+x
+  if(rotation==3)//east
     {
-    return new BlockPosition(z,y,zSize-x-1);     
+    return new BlockPosition(z, y, zSize - x - 1);
     }
   return null;
   }

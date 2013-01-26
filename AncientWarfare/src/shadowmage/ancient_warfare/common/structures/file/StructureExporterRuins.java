@@ -125,7 +125,7 @@ private static void writeIntArray(FileWriter writer, int[] ints) throws IOExcept
     }
   for(int i = 0; i < ints.length; i++)
     {
-    writer.write(ints[i]);
+    writer.write(String.valueOf(ints[i]));
     if(i+1< ints.length)
       {
       writer.write(",");
@@ -135,30 +135,48 @@ private static void writeIntArray(FileWriter writer, int[] ints) throws IOExcept
 
 private static void writeSingleBlockRule(FileWriter writer, int ruleNum, BlockRule rule) throws IOException
   {
-  writer.write("rule"+ruleNum+"=");  
-  writer.write(rule.conditional+",");
-  writer.write(rule.baseChance+",");
+  if(rule==null)
+    {
+    return;
+    }
+  writer.write(String.valueOf("rule"+ruleNum+"="));  
+  writer.write(String.valueOf(rule.conditional+","));
+  writer.write(String.valueOf(rule.baseChance+","));
   
-  int totalElements = rule.blockData.length + rule.ruinsSpecialData.length;
+  int totalElements = 0;// = rule.blockData.length + rule.ruinsSpecialData.length;
+  if(rule.blockData!=null)
+    {
+    totalElements += rule.blockData.length;
+    }
+  if(rule.ruinsSpecialData!=null)
+    {
+    totalElements += rule.ruinsSpecialData.length;
+    }
   int totalWritten = 0;
-  for(int i = 0; i < rule.blockData.length; i++)
-    {   
-    writer.write(rule.blockData[i].id+"-"+rule.blockData[i].meta);
-    totalWritten++;
-    if(totalWritten<totalElements)
-      {
-      writer.write(",");
+  if(rule.blockData!=null)
+    {
+    for(int i = 0; i < rule.blockData.length; i++)
+      {   
+      writer.write(String.valueOf(rule.blockData[i].id+"-"+rule.blockData[i].meta));
+      totalWritten++;
+      if(totalWritten<totalElements)
+        {
+        writer.write(",");
+        }
       }
     }
-  for(int i = 0; i <rule.ruinsSpecialData.length; i++)
+  if(rule.ruinsSpecialData!=null)
     {
-    writer.write(rule.ruinsSpecialData[i]);
-    totalWritten++;
-    if(totalWritten<totalElements)
+    for(int i = 0; i <rule.ruinsSpecialData.length; i++)
       {
-      writer.write(",");
+      writer.write(rule.ruinsSpecialData[i]);
+      totalWritten++;
+      if(totalWritten<totalElements)
+        {
+        writer.write(",");
+        }
       }
-    }  
+    }
   writer.write("\n");
   }
 
@@ -180,9 +198,8 @@ private static void writeSingleLayer(FileWriter writer, ProcessedStructure struc
       if(x>0)
         {
         writer.write(",");
-        }
-      int rule = struct.structure[x][layerNumber][z];      
-      writer.write(String.valueOf(rule));      
+        } 
+      writer.write(String.valueOf(struct.structure[x][layerNumber][z]));      
       }
     writer.write("\n");
     }  
