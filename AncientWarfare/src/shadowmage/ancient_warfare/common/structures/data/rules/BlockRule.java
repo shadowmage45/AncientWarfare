@@ -58,7 +58,7 @@ public byte order = 0;
  */
 public byte conditional = 0;
 
-byte swapGroup = -1;
+public byte swapGroup = -1;
 
 byte team = 0;
 public byte orientation = 0;
@@ -92,6 +92,7 @@ public boolean preservePlants = false;
  * special preserveBlocks flag, see below
  */
 public boolean preserveBlocks = false;
+
 /**
  * if preserveBlocks is true, and preservedBlocks is not null, will check preservedBlocks to see
  * if block should be kept or overwritten.  If preservedBlocks is null, all blocks will be preserved
@@ -214,15 +215,17 @@ public static BlockRule parseRuinsRule(String line, int ruleNum)
         {
         meta = Integer.parseInt(ruleSplit[1]);
         }
-      parsedBlocks.add(new BlockData(id, meta));
-      //TODO attempt to parse block data...check if it has a "-" in it, check if [0] is a string or number.  if len>1 grab meta from[1].  if [0] string, try parsing blockID, if[0] number build blockData with meta
+      parsedBlocks.add(new BlockData(id, meta));      
       }
     }
-  rule.ruinsSpecialData = new String[specialStrings.size()];
-  for(int i = 0; i < specialStrings.size(); i++)
+  if(specialStrings.size()>0)
     {
-    rule.ruinsSpecialData[i] = specialStrings.get(i);
-    }  
+    rule.ruinsSpecialData = new String[specialStrings.size()];
+    for(int i = 0; i < specialStrings.size(); i++)
+      {
+      rule.ruinsSpecialData[i] = specialStrings.get(i);
+      }
+    }
   return rule;
   }
 
@@ -279,6 +282,10 @@ public static BlockRule parseRule(List<String> ruleLines)
     if(line.toLowerCase().startsWith("order"))
       {
       rule.order = StringTools.safeParseByte("=", line);
+      }
+    if(line.toLowerCase().startsWith("swap"))
+      {
+      rule.swapGroup = StringTools.safeParseByte("=", line);
       }
     if(line.toLowerCase().startsWith("preservewater"))
       {

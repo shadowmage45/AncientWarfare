@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 
 public class StructureExporter
 {
@@ -117,6 +118,9 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     writer.write("####BLOCK RULES####\n");
     writeBlockRules(writer, struct);    
     writer.write("\n");
+    writer.write("####SWAP RULESS####\n");
+    writeSwapRules(writer, struct);
+    writer.write("\n");
     //TODO
     writer.write("####VEHICLE RULES####\n");
     writer.write("\n");
@@ -135,6 +139,18 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     e.printStackTrace();
     }
   return false;
+  }
+
+private static void writeSwapRules(FileWriter writer, ProcessedStructure struct) throws IOException
+  {
+  for(SwapRule rule : struct.swapRules)
+    {
+    List<String> lines= rule.getExportData();
+    for(String line : lines)
+      {
+      writer.write(line);
+      }
+    }
   }
 
 private static void writeBlockRules(FileWriter writer, ProcessedStructure struct) throws IOException

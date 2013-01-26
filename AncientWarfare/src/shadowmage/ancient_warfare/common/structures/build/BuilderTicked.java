@@ -102,9 +102,21 @@ public void onTick()
     target = getCurrentTarget();
     }
   
-  BlockData data = rule.getBlockChoice(new Random());
-  int rotAmt = getRotationAmt(facing);
-  int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, rotAmt);
+  
+  //TODO fix random
+  BlockData data;
+  if(this.shouldSwapRule(rule))
+    {
+    String biomeName = world.getBiomeGenForCoords(target.x, target.z).biomeName;
+    data = this.getSwappedDataFor(rule, biomeName);
+    }
+  else
+    {
+    data = rule.getBlockChoice(random);
+    }
+  
+  //BlockData data = rule.getBlockChoice(new Random());  
+  int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, getRotationAmt(facing));
   
   /**
    * place a block once we have found a block to place....

@@ -24,20 +24,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.structures.data.LoadedStructureRaw;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
+import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class StructureLoader
 {
 
 public StructureLoader()
   {
- 
+
   }
 
 /**
@@ -45,6 +49,11 @@ public StructureLoader()
  */
 private List<File> probableStructureFiles = new ArrayList<File>();
 private List<File> probableRuinsFiles = new ArrayList<File>();
+
+/**
+ * used to keep track of layer number
+ */
+int currentLayer = 0;
 
 /**
  * scans directores from AWStructureModule for probable structure template files and loads them into
@@ -91,21 +100,21 @@ private boolean isProbableFile(File file, String extension)
   }
 
 private List<ProcessedStructure> processFilesFor(List<File> fileList)
+{
+List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
+ProcessedStructure struct;
+for(File file : fileList)
   {
-  List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
-  ProcessedStructure struct;
-  for(File file : fileList)
+  struct = this.processFile(file);
+  if(struct!=null)
     {
-    struct = this.processFile(file);
-    if(struct!=null)
-      {
-      structures.add(struct);
-      }
-    }  
-  return structures;  
-  }
+    structures.add(struct);
+    }
+  }  
+return structures;  
+}
 
-private LoadedStructureRaw processFile(File file)
+private ProcessedStructure processFile(File file)
   {
   Scanner reader = null;
   try
@@ -133,20 +142,20 @@ private LoadedStructureRaw processFile(File file)
     lines.add(line);
     }  
   reader.close();
-  
-  LoadedStructureRaw struct = null;
+
+  ProcessedStructure struct = null;
   /**
    * process from a nice in-memory list
    */
   try
     {
     if(file.getName().endsWith(".aws"))
-      {
-      struct = new LoadedStructureRaw(lines, false);
+      {      
+      struct = this.loadStructureAW(lines);
       }
     else
       {
-      struct = new LoadedStructureRaw(lines, true);
+      struct = this.loadStructureRuins(lines);
       }
     }
   catch(Exception e)
@@ -164,9 +173,9 @@ private LoadedStructureRaw processFile(File file)
   }
 
 public List<ProcessedStructure> processStructureFiles()
-  {
-  return processFilesFor(probableStructureFiles);
-  }
+{
+return processFilesFor(probableStructureFiles);
+}
 
 public void convertRuinsTemplates()
   {
@@ -175,8 +184,8 @@ public void convertRuinsTemplates()
     String name = file.getName();
     name = name.split(".tml")[0];
     String newFile = String.valueOf(AWStructureModule.outputDirectory+name+".aws");
-    
-    LoadedStructureRaw raw = processFile(file);
+
+    ProcessedStructure raw = processFile(file);
     if(raw==null || !raw.isValid)
       {
       continue;
@@ -191,4 +200,458 @@ public void convertRuinsTemplates()
     }
   }
 
+public ProcessedStructure loadStructureAW(List<String> lines)
+  {
+  this.currentLayer = 0;
+  ProcessedStructure struct = new ProcessedStructure();
+  if(lines==null)
+    {
+    struct.isValid = false;
+    return null;
+    }
+  Iterator<String> it = lines.iterator();
+  String line;
+  while(it.hasNext())
+    {
+    line = it.next();    
+    if(line.toLowerCase().startsWith("name"))//structure name
+      {
+      struct.name = line.split("=")[1];
+      }
+    else if(line.toLowerCase().startsWith("worldgen"))
+      {
+      struct.worldGen = StringTools.safeParseBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("creative"))
+      {
+      struct.creative = StringTools.safeParseBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("survival"))
+      {
+      struct.survival = StringTools.safeParseBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("unique"))//structure uniqueness
+      {
+      struct.unique = StringTools.safeParseBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("structureWeight"))
+      {
+      struct.structureWeight = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("underground"))
+      {
+      struct.underground = StringTools.safeParseBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("undergroundminlevel"))
+      {
+      struct.undergroundMinLevel = StringTools.safeParseInt("=", line);//Integer.parseInt(line.split("=")[1]);
+      }
+    else if(line.toLowerCase().startsWith("undergroundmaxlevel"))
+      {
+      struct.undergroundMaxLevel = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("undergroundmaxairabove"))
+      {
+      struct.undergroundMaxAirAbove = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("undergroundallowpartial"))
+      {
+      struct.undergroundAllowPartial = StringTools.safeParseBoolean("=", line);
+      }    
+    else if(line.toLowerCase().startsWith("xsize"))
+      {
+      struct.xSize = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("ysize"))
+      {
+      struct.ySize = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("zsize"))
+      {
+      struct.zSize = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("validtargetblocks"))
+      {      
+      struct.validTargetBlocks = StringTools.safeParseIntArray("=",line);
+      }
+    else if(line.toLowerCase().startsWith("verticaloffset"))
+      {
+      struct.verticalOffset = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("xoffset"))
+      {
+      struct.xOffset = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("zoffset"))
+      {
+      struct.zOffset = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("maxoverhang"))
+      {
+      struct.maxOverhang = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("maxleveling"))
+      {
+      struct.maxLeveling = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("levelingbuffer"))
+      {
+      struct.levelingBuffer = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("maxverticalclear"))
+      {
+      struct.maxVerticalClear = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("clearingbuffer"))
+      {
+      struct.clearingBuffer = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("preservewater"))// 
+      {
+      struct.preserveWater = StringTools.safeParseBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("preservelava"))// 
+      {
+      struct.preserveLava = StringTools.safeParseBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("preserveplants"))// 
+      {
+      struct.preservePlants = StringTools.safeParseBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("preserveblocks"))// 
+      {
+      struct.preserveBlocks = StringTools.safeParseBoolean("=", line);
+      }    
+    else if(line.toLowerCase().startsWith("biomesonlyin"))
+      {
+      struct.biomesOnlyIn = StringTools.safeParseStringArray("=", line);
+      }
+    else if(line.toLowerCase().startsWith("biomesnotin"))
+      {
+      struct.biomesNotIn = StringTools.safeParseStringArray("=", line);
+      }
+
+
+
+    /**
+     * parse out block rules
+     */
+    else if(line.toLowerCase().startsWith("rule:"))
+      {      
+      this.parseRule(struct, it);
+      }
+
+    /**
+     * parse out vehicle setups
+     */
+    else if(line.toLowerCase().startsWith("vehicle:"))
+      {      
+      this.parseVehicle(struct, it);
+      }
+
+    /**
+     * parse out npc setups
+     */
+    else if(line.toLowerCase().startsWith("npc:"))
+      {      
+      this.parseNPC(struct, it);
+      }
+
+    /**
+     * parse out layers
+     */
+    else if(line.toLowerCase().startsWith("layer:"))
+      {
+      this.parseLayer(struct, it);
+      }
+
+    if(!struct.isValid)
+      {
+      return null;
+      }
+    }  
+  if(!struct.isValid)
+    {
+    return null;
+    }
+  return struct;
+  }
+
+
+public ProcessedStructure loadStructureRuins(List<String> lines)
+  {
+  this.currentLayer = 0;
+  ProcessedStructure struct = new ProcessedStructure();
+  if(lines==null)
+    {
+    struct.isValid = false;
+    return null;
+    }  
+  Iterator<String> it = lines.iterator();
+  String line;
+  while(it.hasNext() && (line = it.next())!=null)
+    {
+    if(line.toLowerCase().startsWith("acceptable_target_blocks"))
+      {
+      struct.validTargetBlocks = StringTools.safeParseIntArray("=", line);
+      }
+    else if(line.toLowerCase().startsWith("dimensions"))
+      {
+      int[] dim = StringTools.safeParseIntArray("=", line);
+      if(dim.length != 3 )
+        {
+        struct.isValid = false;
+        Config.logError("Error encountered while parsing Ruins .tml file, improper dimensions specified");
+        return null;
+        }
+      struct.ySize = dim[0];
+      struct.xSize = dim[1];
+      struct.zSize = dim[2];
+      struct.xOffset = struct.xSize/2;
+      struct.zOffset = struct.zSize/2;
+      }
+    else if(line.toLowerCase().startsWith("weight"))
+      {
+      struct.structureWeight = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("unique"))
+      {
+      struct.unique = StringTools.safeParseIntAsBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("embed_into_distance"))
+      {
+      struct.verticalOffset = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("allowable_overhang"))
+      {
+      struct.maxOverhang = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("max_cut_in"))
+      {
+      struct.maxVerticalClear = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("max_leveling"))
+      {
+      struct.maxLeveling = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("leveling_buffer"))
+      {
+      struct.levelingBuffer = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("preserve_water"))
+      {
+      struct.preserveWater = StringTools.safeParseIntAsBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("preserve_pants"))
+      {
+      struct.preserveLava = StringTools.safeParseIntAsBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("preserve_lava"))
+      {
+      struct.preservePlants = StringTools.safeParseIntAsBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("rule"))
+      {
+      BlockRule rule = BlockRule.parseRuinsRule(line, struct.blockRules.size());
+      if(rule!=null)
+        {
+        struct.blockRules.add(rule);
+        }
+      }
+    else if(line.toLowerCase().startsWith("layer"))
+      {
+      this.parseLayer(struct, it);
+      }    
+    }  
+
+  if(!struct.isValid)
+    {
+    return null;
+    }
+  return struct;
+  }
+
+
+
+private void parseLayer(ProcessedStructure struct, Iterator<String> it)
+  {
+  if(!it.hasNext())
+    {
+    return;
+    }  
+  if(struct.structure==null)
+    {
+    if(struct.xSize ==0 || struct.ySize==0 || struct.zSize==0)
+      {
+      Config.logError("Invalid structure size while attempting to create layers, one or more axis are size 0!");
+      struct.isValid = false;
+      return;
+      }
+    else
+      {
+      struct.structure = new short[struct.xSize][struct.ySize][struct.zSize];
+      }
+    }
+  String line;
+  String [] vals;
+  int currentRow = 0;
+
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("layer:") || line.toLowerCase().startsWith("layer"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith(":endlayer") || line.toLowerCase().startsWith("endlayer"))
+      {
+      break;      
+      }
+    else
+      {
+      vals = line.split(",");
+      for(int i = 0; i < vals.length; i++)
+        {
+        if(i>=struct.structure.length ||currentLayer>=struct.structure[i].length || currentRow>= struct.structure[i][currentLayer].length)
+          {
+          Config.logError("Error parsing layer in structure, an array index was out of bounds! (Layer larger than dimensions!)");
+          struct.isValid = false;
+          break;
+          }
+        struct.structure[i][this.currentLayer][currentRow] = Short.parseShort(vals[i]);
+        }      
+      currentRow++;
+      }    
+    }
+  this.currentLayer++;
+  }
+
+/**
+ * parses out a single blockRule from the iterator of lines passed in
+ * @param it
+ */
+private void parseRule(ProcessedStructure struct, Iterator<String> it)
+  {
+  if(!it.hasNext())
+    {
+    struct.isValid = false;
+    return;
+    }
+  ArrayList<String> ruleLines = new ArrayList<String>();  
+  String line;  
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("rule:"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith(":endrule"))
+      {
+      break;      
+      }
+    else
+      {
+      ruleLines.add(line);      
+      }    
+    }     
+  BlockRule rule = BlockRule.parseRule(ruleLines);
+  if(rule!=null)
+    {    
+    struct.blockRules.add(rule);    
+    }
+  else
+    {
+    Config.logError("Error parsing block rule for structure!");
+    struct.isValid = false;
+    }
+  }
+
+/**
+ * parse out a single vehicleRule/setup type from the iterator of lines
+ * @param it
+ */
+private void parseVehicle(ProcessedStructure struct, Iterator<String> it)
+  {
+  if(!it.hasNext())
+    {
+    struct.isValid = false;
+    return;
+    }
+  ArrayList<String> ruleLines = new ArrayList<String>();  
+  String line;  
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("rule:"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith(":endrule"))
+      {
+      break;      
+      }
+    else
+      {
+      ruleLines.add(line);      
+      }    
+    }     
+  VehicleRule rule = VehicleRule.parseRule(ruleLines);
+  if(rule!=null)
+    {    
+    struct.vehicleRules.add(rule);    
+    }
+  else
+    {
+    Config.logError("Error parsing vehicle rule for structure!");
+    struct.isValid = false;
+    }
+  }
+
+/**
+ * parse out a single npcRule/setup type from the iterator of lines
+ * @param it
+ */
+private void parseNPC(ProcessedStructure struct, Iterator<String> it)
+  {
+
+  }
+
+
+private void parseSwap(ProcessedStructure struct, Iterator<String> it)
+  {
+  if(!it.hasNext())
+    {
+    struct.isValid = false;
+    return;
+    }
+  ArrayList<String> ruleLines = new ArrayList<String>();  
+  String line;  
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("swap:"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith(":endswap"))
+      {
+      break;      
+      }
+    else
+      {
+      ruleLines.add(line);      
+      }    
+    }     
+  SwapRule rule = SwapRule.parseRule(ruleLines);
+  if(rule!=null)
+    {    
+    struct.swapRules.add(rule);    
+    }
+  else
+    {
+    Config.logError("Error parsing vehicle rule for structure!");
+    struct.isValid = false;
+    }
+  }
 }

@@ -2,14 +2,16 @@ TODO before first alpha release:
 
 GENERAL
 * cleanup bug where overwriting a chest will crash the client (render tick error)(notify on update, or mark blocks dirty)
+*       this one is apparently going to be tought to fix...instant builder may be borked
 * fix temp builder to clear if no valid structure is found
 * add world-gen frequency options to export GUI???
 * add inventory blocks for water, lava
 * fix inventory block for redstone dust (it is a repeater)
 * add inventory block for repeater...others?
+* add inventory block for plants (grass, shrub, dead shrub, flowers?? others?)
+* restructure lookups for rules to use maps by ruleNumber
 
 TEMPLATES/STRUCTURE
-* figure out biome block swapping
 * add resourceList stuff to template--so others can denote custom resource lists to construct a building
 * add default templates, and add them to export list
 * add default 0 rule to ruins template importer
@@ -55,3 +57,6 @@ WORLD GEN STUFF
 * rewrite exporter to use ProcessedStructure
 * add settings to allow ruins export
 * restructure folders...its a mess
+* parse swap rules
+* add swap rules functionality to structure and builder
+* export swap rules

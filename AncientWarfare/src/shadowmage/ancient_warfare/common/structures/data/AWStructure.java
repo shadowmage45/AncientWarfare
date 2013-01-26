@@ -25,7 +25,9 @@ import java.util.List;
 
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NPCRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
+import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
 public abstract class AWStructure
 {
@@ -60,6 +62,12 @@ public boolean preserveBlocks = false;
 public List<BlockRule> blockRules = new ArrayList<BlockRule>();
 public List<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
 public List<NPCRule> NPCRules = new ArrayList<NPCRule>();
+public List<SwapRule> swapRules = new ArrayList<SwapRule>();
+
+
+public boolean isValid = true;
+protected  List<IDPairCount> cachedCounts = null;
+
 
 /**
  * structure biome settings

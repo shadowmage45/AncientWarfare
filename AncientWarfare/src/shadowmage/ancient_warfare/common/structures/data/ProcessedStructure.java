@@ -26,6 +26,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
@@ -39,7 +40,6 @@ public class ProcessedStructure extends AWStructure
 {
 
 
-private  List<IDPairCount> cachedCounts = null;
 
 public ProcessedStructure()
   {
@@ -71,6 +71,19 @@ public boolean isValidTargetBlock(int id)
       }
     }
   return false;
+  }
+
+public BlockData getSwappedData(int swapGroup, String biomeName, BlockData sourceID)
+  {
+  SwapRule rule;
+  for(SwapRule test : this.swapRules)
+    {
+    if(test.ruleNumber == swapGroup)      
+      {
+      return test.getSwappedData(biomeName, sourceID);
+      }
+    }
+  return sourceID;
   }
 
 /**

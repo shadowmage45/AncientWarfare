@@ -205,11 +205,11 @@ ammo5=
 ammo6=
 :endvehicle
 
-biomeswap:
+swap:
 number=1
 biome=swamp,2-0,3-0
 biome=desert,cobblestone-0,sandstone-0
-:endbiomeswap
+:endswap
 
 
 ##NPC rules

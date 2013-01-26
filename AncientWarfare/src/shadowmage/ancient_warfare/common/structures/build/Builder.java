@@ -20,11 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.structures.build;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
+import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -98,6 +103,11 @@ int overrideClearingBuffer;
 int overrideMaxLeveling;
 int overrideLevelingBuffer;
 
+/**
+ * RNG used for structure building for non-world gen
+ */
+protected Random random = new Random();
+
 public Builder(ProcessedStructure struct, int facing, BlockPosition hit)
   {
   this.struct = struct;
@@ -128,7 +138,7 @@ public abstract void startConstruction();
 
 /**
  * for instantBuilder--NOOP
- * for tickedBuilder--remove tickerBlock TODO
+ * for tickedBuilder--remove tickerBlock
  */
 public abstract void finishConstruction();
 
@@ -183,9 +193,22 @@ protected void placeBlock(World world, BlockPosition pos, int id, int meta)
   world.setBlockAndMetadata(pos.x, pos.y, pos.z, id, meta);
   }
 
+/**
+ * debug testing
+ */
+protected Map<BlockPosition, BlockData> deferredBlocks = new HashMap<BlockPosition, BlockData>();
+
 protected void placeBlockNotify(World world, BlockPosition pos, int id, int meta)
   {
-  world.setBlockAndMetadataWithNotify(pos.x, pos.y, pos.z, id, meta);
+  if(world.getBlockTileEntity(pos.x, pos.y, pos.z)!=null)
+    {
+    world.setBlock(pos.x, pos.y, pos.z, 0);    
+    this.deferredBlocks.put(pos, new BlockData(id, meta));  
+    }
+  else
+    {
+    world.setBlockAndMetadataWithUpdate(pos.x, pos.y, pos.z, id, meta, true);
+    }  
   }
 
 protected boolean isAirBlock(World world, BlockPosition target)
@@ -256,6 +279,21 @@ protected boolean shouldSkipBlock(World world, BlockRule rule, BlockPosition tar
     return true;
     }  
   return false;
+  }
+
+protected boolean shouldSwapRule(BlockRule rule)
+  {
+  if(rule.swapGroup>-1)
+    {
+    return true;
+    }
+  return false;
+  }
+
+protected BlockData getSwappedDataFor(BlockRule rule, String biomeName)
+  {  
+  BlockData data = rule.getBlockChoice(random);
+  return struct.getSwappedData(rule.swapGroup, biomeName, data);
   }
 
 /**
