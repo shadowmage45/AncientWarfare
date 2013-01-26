@@ -1,1 +1,0 @@
-dummy placeholder files to make development of plugins when NEI is not installed easier (or more precisely, allow for compiling without NEI present)
