@@ -20,8 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.structures.build;
 
-import java.util.Random;
-
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
@@ -34,14 +33,13 @@ import shadowmage.ancient_warfare.common.utils.BlockTools;
 public class BuilderTicked extends Builder
 {
 
-int tickNum = 0; 
-/**
-   * @param world
-   * @param struct
-   * @param facing
-   * @param hit
-   */
-public BuilderTicked(ProcessedStructure struct, int facing, BlockPosition hit)
+
+public BuilderTicked(World world, ProcessedStructure struct, int facing, BlockPosition hit)
+  {
+  super(world, struct, facing, hit);
+  }
+
+protected BuilderTicked(ProcessedStructure struct, int facing, BlockPosition hit)
   {
   super(struct, facing, hit);
   }
@@ -49,7 +47,7 @@ public BuilderTicked(ProcessedStructure struct, int facing, BlockPosition hit)
 @Override
 public void startConstruction()
   {
-  
+  this.preConstruction();
   }
 
 @Override
@@ -71,6 +69,8 @@ public void onTick()
     Config.logError("Ticking finished ticked-builder, was not removed from list when finished");
     return;
     }
+  
+  
   /**
    * timer/counter, only place a block every half-second
    */
@@ -101,9 +101,7 @@ public void onTick()
     rule = getCurrentRule();
     target = getCurrentTarget();
     }
-  
-  
-  //TODO fix random
+    
   BlockData data;
   if(this.shouldSwapRule(rule))
     {
@@ -114,8 +112,7 @@ public void onTick()
     {
     data = rule.getBlockChoice(random);
     }
-  
-  //BlockData data = rule.getBlockChoice(new Random());  
+   
   int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, getRotationAmt(facing));
   
   /**

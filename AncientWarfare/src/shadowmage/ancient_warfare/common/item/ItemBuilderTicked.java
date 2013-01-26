@@ -57,8 +57,8 @@ protected void attemptConstruction(World world, ProcessedStructure struct, int f
   TEBuilder te = (TEBuilder) world.getBlockTileEntity(hit.x, hit.y, hit.z);
   if(te!=null)
     {
-    BuilderTicked builder = new BuilderTicked(struct, face, offsetHit);
-    builder.setWorld(world);
+    BuilderTicked builder = new BuilderTicked(world, struct, face, offsetHit);
+    builder.startConstruction();
     te.setBuilder(builder);
     }  
   } 

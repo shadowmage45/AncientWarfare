@@ -20,8 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.structures.build;
 
-import java.util.Random;
-
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
@@ -33,20 +32,15 @@ import shadowmage.ancient_warfare.common.utils.BlockTools;
 public class BuilderInstant extends Builder
 {
 
-/**
-   * @param world
-   * @param struct
-   * @param facing
-   * @param hit
-   */
-public BuilderInstant(ProcessedStructure struct, int facing, BlockPosition hit)
+public BuilderInstant(World world, ProcessedStructure struct, int facing, BlockPosition hit)
   {
-  super(struct, facing, hit);
+  super(world, struct, facing, hit);
   }
 
 @Override
 public void startConstruction()
   {
+  this.preConstruction();
   this.instantConstruction();
   if(this.deferredBlocks.isEmpty())
     {
@@ -64,12 +58,11 @@ public void finishConstruction()
   //NOOP on instant building
   }
 
-int currentTick = 0;
 @Override
 public void onTick()
   {
-  this.currentTick++;
-  if(this.currentTick<10)
+  this.tickNum++;
+  if(this.tickNum<10)
     {
     return;
     }
@@ -128,7 +121,7 @@ protected void placeBlock(int x, int y, int z)
     data = rule.getBlockChoice(random);
     }
   int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, getRotationAmt(facing));
-  this.placeBlockNotify(world, target, data.id, meta);    
+  this.placeBlockWithDefer(world, target, data.id, meta);    
   }
 
 }

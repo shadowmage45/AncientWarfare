@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.structures.build;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -33,6 +34,7 @@ import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public abstract class Builder implements INBTTaggable
 {
@@ -45,6 +47,11 @@ public final ProcessedStructure struct;
  * the world in which the structure is being built
  */
 public World world;
+
+/**
+ * current tick...used for...ticking...
+ */
+int tickNum = 0; 
 
 /**
  * build passes
@@ -82,6 +89,16 @@ public int currentZ = 0;
 public final BlockPosition buildPos;
 
 /**
+ * the actual minimum x, y, z of the world-coordinate bounding box of this structure
+ */
+public final BlockPosition minBounds;
+
+/**
+ * the actual maximum x,y,z of the world-coordinate bounding box of this structure
+ */
+public final BlockPosition maxBounds;
+
+/**
  * flipped if this structure is finished, will be removed from ticking queues
  */
 protected boolean isFinished = false;
@@ -97,18 +114,25 @@ int overrideVehicle=-2;
 int overrideNPC=-2;
 int overrideGate=-2;
 int overrideTeam=-1;
-int overrideMaxOverhang;
-int overrideMaxVerticalClear;
-int overrideClearingBuffer;
-int overrideMaxLeveling;
-int overrideLevelingBuffer;
+
+
+/**
+ * hack to get around overwriting tile entity blocks during non-world gen instant-builders
+ */
+protected Map<BlockPosition, BlockData> deferredBlocks = new HashMap<BlockPosition, BlockData>();
 
 /**
  * RNG used for structure building for non-world gen
  */
 protected Random random = new Random();
 
-public Builder(ProcessedStructure struct, int facing, BlockPosition hit)
+public Builder(World world, ProcessedStructure struct, int facing, BlockPosition hit)
+  {
+  this(struct, facing, hit);
+  this.setWorld(world);
+  }
+
+protected Builder(ProcessedStructure struct, int facing, BlockPosition hit)
   {
   this.struct = struct;
   this.buildPos = hit;  
@@ -120,6 +144,20 @@ public Builder(ProcessedStructure struct, int facing, BlockPosition hit)
       this.maxPriority = rule.order;
       }
     }
+    
+  BlockPosition minBounds = hit.copy();
+  minBounds.y -= struct.verticalOffset;
+  minBounds.moveBack(facing, struct.zOffset);
+  minBounds.moveLeft(facing, struct.xSize);
+  minBounds.moveRight(facing, struct.xOffset);
+  
+  BlockPosition maxBounds = minBounds.copy();
+  maxBounds.y += struct.ySize;
+  maxBounds.moveForward(facing, struct.zSize);
+  maxBounds.moveRight(facing, struct.xSize);
+  
+  this.minBounds = BlockTools.getMin(minBounds, maxBounds);
+  this.maxBounds = BlockTools.getMax(minBounds, maxBounds);
   }
 
 public void setWorld(World world)
@@ -184,8 +222,68 @@ public void setTeamOverride(int type)
  */
 protected void preConstruction()
   {
-  //TODO leveling, clearing, etc
-  //check overrides, or use structure values
+  if(struct.maxLeveling>0)
+    {
+    doLeveling();
+    }
+  if(struct.maxVerticalClear>0)
+    {
+    doClearing();
+    }
+  }
+
+/**
+ * does leveling according to maxLeveling, levelingBuffer, minBounds, maxBounds.  No preservation
+ */
+protected void doLeveling()
+  {
+  BlockPosition min = this.minBounds.copy();
+  BlockPosition max = this.maxBounds.copy();
+  max.y = min.y;
+  min.x -= struct.levelingBuffer;
+  min.z -= struct.levelingBuffer;
+  min.y -= struct.maxLeveling;
+  max.x += struct.levelingBuffer;
+  max.z += struct.levelingBuffer;  
+  int rnd = this.random.nextInt(2);
+  int id = Block.stone.blockID;
+  if(rnd ==0)
+    {
+    id = Block.dirt.blockID;
+    }
+  List<BlockPosition> blocksToLevel = BlockTools.getAllBlockPositionsBetween(min, max);
+  for(BlockPosition pos : blocksToLevel)
+    {
+    int testID = world.getBlockId(pos.x, pos.y, pos.z);
+    if(testID!=0)
+      {
+      world.setBlock(pos.x, pos.y, pos.z, id);
+      }
+    }
+  }
+
+protected void doClearing()
+  {
+  BlockPosition min = this.minBounds.copy();
+  BlockPosition max = this.maxBounds.copy();
+  min.x -= struct.levelingBuffer;
+  min.z -= struct.levelingBuffer;
+  max.x += struct.levelingBuffer;
+  max.z += struct.levelingBuffer;
+  max.y += struct.clearingBuffer;
+  List<BlockPosition> blocksToClear = BlockTools.getAllBlockPositionsBetween(min, max);  
+  for(BlockPosition pos : blocksToClear)
+    {
+    if(pos.x >=minBounds.x && pos.x <=maxBounds.x && pos.y >=minBounds.y && pos.y <=maxBounds.y && pos.z >=minBounds.z && pos.z <=maxBounds.z)
+      {
+      continue;
+      }
+    int id = world.getBlockId(pos.x, pos.y, pos.z);
+    if(!shouldPreserveBlockDuringClearing(id))
+      {
+      world.setBlock(pos.x, pos.y, pos.z, 0);
+      }
+    }  
   }
 
 protected void placeBlock(World world, BlockPosition pos, int id, int meta)
@@ -194,11 +292,13 @@ protected void placeBlock(World world, BlockPosition pos, int id, int meta)
   }
 
 /**
- * debug testing
+ * used for instant builder during non-world-gen....
+ * @param world
+ * @param pos
+ * @param id
+ * @param meta
  */
-protected Map<BlockPosition, BlockData> deferredBlocks = new HashMap<BlockPosition, BlockData>();
-
-protected void placeBlockNotify(World world, BlockPosition pos, int id, int meta)
+protected void placeBlockWithDefer(World world, BlockPosition pos, int id, int meta)
   {
   if(world.getBlockTileEntity(pos.x, pos.y, pos.z)!=null)
     {
@@ -223,7 +323,23 @@ protected boolean isAirBlock(int id)
 
 protected boolean isPlant(int id)
   {  
-  //TODO
+  if(id == Block.plantRed.blockID || id == Block.plantYellow.blockID)
+    {
+    return true;
+    }
+  if(id == Block.cactus.blockID || id == Block.reed.blockID)
+    {
+    return true;
+    }
+  if(id == Block.mushroomBrown.blockID || id == Block.mushroomRed.blockID || id == Block.netherStalk.blockID) 
+    {
+    return true;
+    }
+  if(id == Block.pumpkinStem.blockID || id == Block.melonStem.blockID || id == Block.pumpkin.blockID || id == Block.melon.blockID)
+    {
+    return true;
+    }
+  //TODO check for logs, leaves, saplings ???  
   return false;
   }
 
@@ -239,6 +355,32 @@ protected boolean isWater(int id)
 protected boolean isLava(int id)
   {
   if(id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)
+    {
+    return true;
+    }
+  return false;
+  }
+
+/**
+ * checks for plants, lava, water, etc during clearing
+ * @param id
+ * @return
+ */
+protected boolean shouldPreserveBlockDuringClearing(int id)
+  {
+  if(struct.preserveBlocks)
+    {
+    return true;
+    }
+  if(struct.preserveLava && isLava(id))    
+    {
+    return true;
+    }
+  if(struct.preserveWater && isWater(id))
+    {
+    return true;
+    }
+  if(struct.preservePlants && isPlant(id))
     {
     return true;
     }

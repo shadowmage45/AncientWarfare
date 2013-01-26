@@ -274,7 +274,7 @@ private boolean attemptConstruction(World world, EntityPlayer player, BlockPosit
     }  
   if(shouldConstruct)
     {
-    BuilderTicked builder = new BuilderTicked(struct, face, hit);
+    BuilderTicked builder = new BuilderTicked(world, struct, face, hit);
     builder.setWorld(world);
     builder.startConstruction();
     AWStructureModule.instance().addBuilder(builder);

@@ -190,6 +190,7 @@ public void convertRuinsTemplates()
       {
       continue;
       }    
+    raw.name = String.valueOf(name);
     if(!StructureExporter.writeStructureToFile(raw, newFile))
       {
       continue;
@@ -209,6 +210,7 @@ public ProcessedStructure loadStructureAW(List<String> lines)
     struct.isValid = false;
     return null;
     }
+  struct.blockRules.add(new BlockRule(0,0,0));
   Iterator<String> it = lines.iterator();
   String line;
   while(it.hasNext())
@@ -387,6 +389,7 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
     struct.isValid = false;
     return null;
     }  
+  struct.blockRules.add(new BlockRule(0,0,0));
   Iterator<String> it = lines.iterator();
   String line;
   while(it.hasNext() && (line = it.next())!=null)

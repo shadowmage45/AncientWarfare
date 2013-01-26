@@ -149,6 +149,30 @@ public StructureBB getStructureBB(BlockPosition hit, int facing)
   return new StructureBB(pos1, pos2);
   }
 
+public StructureBB getLevelingBB(BlockPosition hit, int facing)
+  {
+  return null;
+  }
+
+public StructureBB getClearingBB(BlockPosition hit, int facing)
+  {
+  return null;
+  }
+
+/**
+ * returns a facing normalized frontleftbottom corner position for this building
+ * used by boundingboxes
+ * @param hit
+ * @param facing
+ */
+public BlockPosition getOffsetHitPosition(BlockPosition hit, int facing)
+  {
+  BlockPosition test = hit.copy();
+  test.moveLeft(facing, this.xOffset);
+  test.moveForward(facing, -this.zOffset);  
+  return test;
+  }
+
 /**
  * return a trimmed and tallied list of id/meta pairs necessary to construct this building
  * used for survival direct builder.

@@ -175,8 +175,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 
 protected void attemptConstruction(World world, ProcessedStructure struct, int face, BlockPosition hit)
   {
-  BuilderInstant builder = new BuilderInstant(struct, face, hit);
-  builder.setWorld(world);
+  BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
   builder.startConstruction();
   } 
 
