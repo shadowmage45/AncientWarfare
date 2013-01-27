@@ -21,6 +21,8 @@ TEMPLATES/STRUCTURE
 * restructure scanner to scan into a processedStructure, removeScanDataContainer completely
 
 STRUCTURE BUILDING
+* handle no block rule
+* handle building rules for ruins special spawn stuff
 * move builder block outside of the cleared area, or ensure builder block is placed after clearing is done....
 * verify block rule randomization works as intended
 * finish isPlant

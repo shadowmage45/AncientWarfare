@@ -44,11 +44,11 @@ public static BoundingBoxRender instance()
  * draw a player-position-normalized bounding box (can only be called during worldRender)
  * @param bb
  */
-public static void drawOutlinedBoundingBox(AxisAlignedBB bb)
+public static void drawOutlinedBoundingBox(AxisAlignedBB bb, float r, float g, float b)
   {
   GL11.glEnable(GL11.GL_BLEND);
   GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-  GL11.glColor4f(0.8F, 0.0F, 0.0F, 0.4F);
+  GL11.glColor4f(r, g, b, 0.4F);
   GL11.glLineWidth(8.0F);
   GL11.glDisable(GL11.GL_TEXTURE_2D);
   GL11.glDepthMask(false);

@@ -210,7 +210,7 @@ public ProcessedStructure loadStructureAW(List<String> lines)
     struct.isValid = false;
     return null;
     }
-  struct.blockRules.add(new BlockRule(0,0,0));
+  //struct.blockRules.add(new BlockRule(0,0,0));
   Iterator<String> it = lines.iterator();
   String line;
   while(it.hasNext())

@@ -63,37 +63,42 @@ protected void attemptConstruction(World world, ProcessedStructure struct, int f
     }  
   } 
 
+//@Override
+//@SideOnly(Side.CLIENT)
+//public List<AxisAlignedBB> getBBForStructure(EntityPlayer player, String name)
+//  {  
+//  StructureClientInfo struct = StructureManager.instance().getClientStructure(name);
+//  if(struct==null)
+//    {
+//    return null;
+//    }
+//  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);  
+//  BlockPosition originalHit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
+//  if(originalHit==null)
+//    {
+//    return null;
+//    }
+//  BlockPosition hit = originalHit.copy();    
+//  hit.moveForward(face, -struct.zOffset + 1);
+//  hit = this.offsetForWorldRender(hit, face);
+//  AxisAlignedBB b = struct.getBBForRender(hit, face);  
+//  ArrayList<AxisAlignedBB> bbs = new ArrayList<AxisAlignedBB>();
+//  bbs.add(b);
+//    
+//  /**
+//   * get single-block BB for the builder block
+//   */
+//  hit = originalHit;
+//  b = AxisAlignedBB.getBoundingBox(hit.x, hit.y, hit.z, hit.x+1, hit.y+1, hit.z+1);
+//  bbs.add(b);
+//    
+//  return bbs;
+//  }
+
+
 @Override
-@SideOnly(Side.CLIENT)
-public List<AxisAlignedBB> getBBForStructure(EntityPlayer player, String name)
-  {  
-  StructureClientInfo struct = StructureManager.instance().getClientStructure(name);
-  if(struct==null)
-    {
-    return null;
-    }
-  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);  
-  BlockPosition originalHit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
-  if(originalHit==null)
-    {
-    return null;
-    }
-  BlockPosition hit = originalHit.copy();    
-  hit.moveForward(face, -struct.zOffset + 1);
-  hit = this.offsetForWorldRender(hit, face);
-  AxisAlignedBB b = struct.getBBForRender(hit, face);  
-  ArrayList<AxisAlignedBB> bbs = new ArrayList<AxisAlignedBB>();
-  bbs.add(b);
-    
-  /**
-   * get single-block BB for the builder block
-   */
-  hit = originalHit;
-  b = AxisAlignedBB.getBoundingBox(hit.x, hit.y, hit.z, hit.x+1, hit.y+1, hit.z+1);
-  bbs.add(b);
-    
-  return bbs;
+public boolean renderBuilderBlockBB()
+  {
+  return true;
   }
-
-
 }

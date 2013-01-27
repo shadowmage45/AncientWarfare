@@ -239,6 +239,7 @@ protected void doLeveling()
   {
   BlockPosition min = this.minBounds.copy();
   BlockPosition max = this.maxBounds.copy();
+  min.y -= 1;
   max.y = min.y;
   min.x -= struct.levelingBuffer;
   min.z -= struct.levelingBuffer;

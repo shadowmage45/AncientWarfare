@@ -180,25 +180,20 @@ protected void attemptConstruction(World world, ProcessedStructure struct, int f
   } 
 
 @Override
-@SideOnly(Side.CLIENT)
-public List<AxisAlignedBB> getBBForStructure(EntityPlayer player, String name)
-  {  
-  StructureClientInfo struct = StructureManager.instance().getClientStructure(name);
-  if(struct==null)
+public StructureClientInfo getStructureForStack(ItemStack stack)
+  {
+  if(!stack.hasTagCompound() || !stack.getTagCompound().hasKey("structData") || !stack.getTagCompound().getCompoundTag("structData").hasKey("name"))
     {
-    return null;
+    return null;    
     }
-  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
-  if(hit==null)
-    {
-    return null;
-    }
-  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);  
-  hit = this.offsetForWorldRender(hit, face);
-  AxisAlignedBB b = struct.getBBForRender(hit, face);
-  ArrayList<AxisAlignedBB> bbs = new ArrayList<AxisAlignedBB>();
-  bbs.add(b);
-  return bbs;
+  return StructureManager.instance().getClientStructure(stack.getTagCompound().getCompoundTag("structData").getString("name"));  
+  }
+
+@Override
+public boolean renderBuilderBlockBB()
+  {
+  // TODO Auto-generated method stub
+  return false;
   }
 
 

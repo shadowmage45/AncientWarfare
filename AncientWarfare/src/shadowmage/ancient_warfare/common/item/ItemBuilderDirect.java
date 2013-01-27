@@ -369,25 +369,18 @@ private boolean decrementItems(EntityPlayer player, List<IDPairCount> counts)
   return false;
   }
 
+
 @Override
-public List<AxisAlignedBB> getBBForStructure(EntityPlayer player, String name)
+public StructureClientInfo getStructureForStack(ItemStack stack)
   {
-  StructureClientInfo struct = StructureManager.instance().getClientTempStructure();
-  if(struct==null)
-    {
-    return null;
-    }
-  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
-  if(hit==null)
-    {
-    return null;
-    }
-  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);  
-  hit = this.offsetForWorldRender(hit, face);
-  AxisAlignedBB b = struct.getBBForRender(hit, face);  
-  ArrayList<AxisAlignedBB> bbs = new ArrayList<AxisAlignedBB>();
-  bbs.add(b);
-  return bbs;
+  return StructureManager.instance().getClientTempStructure();
+  }
+
+@Override
+public boolean renderBuilderBlockBB()
+  {
+  // TODO Auto-generated method stub
+  return false;
   }
 
 

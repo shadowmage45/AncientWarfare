@@ -151,23 +151,40 @@ public StructureBB getStructureBB(BlockPosition hit, int facing)
 
 public StructureBB getLevelingBB(BlockPosition hit, int facing)
   {
-  return null;
+  hit = getOffsetHitPosition(hit, facing);
+  BlockPosition min = hit.copy();
+  BlockPosition max = hit.copy();
+  min.y -= verticalOffset;
+  min.moveBack(facing, levelingBuffer);
+  min.moveLeft(facing, levelingBuffer);
+  max.y -=1;
+  max.moveForward(facing, zSize+levelingBuffer);
+  max.moveRight(facing, xSize+levelingBuffer);
+  return new StructureBB(min, max);
   }
 
 public StructureBB getClearingBB(BlockPosition hit, int facing)
-  {
-  return null;
+  { 
+  hit = getOffsetHitPosition(hit, facing);
+  BlockPosition min = hit.copy();
+  BlockPosition max = hit.copy();
+  min.moveBack(facing, levelingBuffer);
+  min.moveLeft(facing, levelingBuffer);
+  max.moveForward(facing, zSize+levelingBuffer);
+  max.moveRight(facing, xSize+levelingBuffer);
+  max.y+=ySize+clearingBuffer;  
+  return new StructureBB(min, max);
   }
 
 /**
  * returns a facing normalized frontleftbottom corner position for this building
- * used by boundingboxes
+ * used by boundingboxes, alters the passed in position
  * @param hit
  * @param facing
  */
 public BlockPosition getOffsetHitPosition(BlockPosition hit, int facing)
   {
-  BlockPosition test = hit.copy();
+  BlockPosition test = hit;
   test.moveLeft(facing, this.xOffset);
   test.moveForward(facing, -this.zOffset);  
   return test;

@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -29,7 +30,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemBuilderBase;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.manager.StructureManager;
+import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.relauncher.Side;
@@ -82,22 +89,89 @@ private void renderStructureBB(float partialTick)
     {
     return;
     }
-  if(stack.getItem() instanceof ItemBuilderBase)
+  int id = stack.itemID;
+  if(id != ItemLoader.structureBuilderDirect.itemID && id != ItemLoader.structureCreativeBuilder.itemID && id != ItemLoader.structureCreativeBuilderTicked.itemID)
+    {    
+    return;
+    }
+  ItemBuilderBase item = (ItemBuilderBase)stack.getItem();
+  if(item==null)
     {
-    if(!stack.hasTagCompound() || !stack.getTagCompound().hasKey("structData") || !stack.getTagCompound().getCompoundTag("structData").hasKey("name"))
-      {
-      return;
-      }
-    List<AxisAlignedBB> bbs =  ((ItemBuilderBase)stack.getItem()).getBBForStructure(player, stack.getTagCompound().getCompoundTag("structData").getString("name"));
-    if(bbs!=null)
-      {
-      for(AxisAlignedBB bb : bbs)
-        {
-        BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D));
-        }
-      }
+    return;
     } 
+  StructureClientInfo info = item.getStructureForStack(stack);    
+  if(info==null)
+    {
+    //Config.logDebug("null structInfo");
+    return;
+    }
+  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
+  if(hit==null)
+    {
+    //Config.logDebug("null hit");
+    return;
+    }
+  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+  BlockPosition originalHit = hit.copy();
+  hit = this.offsetForWorldRender(hit, face);  
+  
+  if(item.renderBuilderBlockBB())
+    {
+    hit.moveForward(face, -info.zOffset + 1);
+    } 
+  
+  AxisAlignedBB bb = info.getBBForRender(hit, face);  
+  BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.3f, 0.3f, 0.8f);
+  //TODO re-render builder block..
+  if(item.renderBuilderBlockBB())
+    {
+    bb = AxisAlignedBB.getBoundingBox(originalHit.x, originalHit.y, originalHit.z, originalHit.x+1, originalHit.y+1, originalHit.z+1);
+    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.3f, 0.3f, 0.8f);
+    }
+  
+  if(info.maxClearing > 0|| info.clearingBuffer >0)
+    {
+    bb = info.getClearingBBForRender(hit, face);
+    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.8f, 0.f, 0.f);
+    }
+  
+  if(info.maxLeveling >0)
+    {
+    bb = info.getLevelingBBForRender(hit, face);
+    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.3f, 0.8f, 0.3f);
+    }
+
   }
+
+protected BlockPosition offsetForWorldRender(BlockPosition hit, int face)
+  {
+  if(face==0 || face == 1)//south
+    {
+    hit.moveLeft(face,1);
+    }  
+  if(face==2 || face==1)
+    {
+    hit.moveBack(face, 1);
+    }
+  return hit;
+  }
+/**
+ * 
+ *   
+  hit = this.offsetForWorldRender(hit, face);
+  AxisAlignedBB b = struct.getBBForRender(hit, face);  
+  ArrayList<AxisAlignedBB> bbs = new ArrayList<AxisAlignedBB>();
+  bbs.add(b);
+  return bbs;
+  */
+
+
+/**
+ * @param bb
+ * @param player
+ * @param partialTick
+ * @return
+ */
 
 @SideOnly(Side.CLIENT)
 protected AxisAlignedBB adjustBBForPlayerPos(AxisAlignedBB bb, EntityPlayer player, float partialTick)

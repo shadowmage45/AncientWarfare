@@ -23,8 +23,10 @@ package shadowmage.ancient_warfare.common.item;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,23 +42,10 @@ public ItemBuilderBase(int itemID)
   super(itemID, false);
   }
 
-@SideOnly(Side.CLIENT)
-public abstract List<AxisAlignedBB> getBBForStructure(EntityPlayer player, String name);
+public abstract StructureClientInfo getStructureForStack(ItemStack stack);
 
+public abstract boolean renderBuilderBlockBB();
 
-
-protected BlockPosition offsetForWorldRender(BlockPosition hit, int face)
-  {
-  if(face==0 || face == 1)//south
-    {
-    hit.moveLeft(face,1);
-    }  
-  if(face==2 || face==1)
-    {
-    hit.moveBack(face, 1);
-    }
-  return hit;
-  }
   
 @Override
 public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par5, int par6)

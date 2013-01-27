@@ -33,6 +33,10 @@ public final int zSize;
 public final int xOffset;
 public final int yOffset;
 public final int zOffset;
+public final int maxLeveling;
+public final int maxClearing;
+public final int levelingBuffer;
+public final int clearingBuffer;
 public boolean creative = true;
 public boolean worldGen = false;
 public boolean survival = false;
@@ -49,17 +53,10 @@ public StructureClientInfo(NBTTagCompound tag)
   this.creative = tag.getBoolean("creat");
   this.worldGen = tag.getBoolean("world");
   this.survival = tag.getBoolean("surv");
-  }
-
-public StructureClientInfo(String name, int x, int y, int z, int xOff, int yOff, int zOff)
-  {
-  this.name = name;
-  this.xSize = x;
-  this.ySize = y;
-  this.zSize = z;
-  this.xOffset = xOff;
-  this.yOffset = yOff;
-  this.zOffset = zOff;
+  this.maxLeveling = tag.getInteger("mL");
+  this.maxClearing = tag.getInteger("mC");
+  this.levelingBuffer = tag.getInteger("lB");
+  this.clearingBuffer = tag.getInteger("cB");
   }
 
 public static NBTTagCompound getClientTag(AWStructure struct)
@@ -77,6 +74,10 @@ public static NBTTagCompound getClientTag(AWStructure struct)
    structTag.setBoolean("creat", struct.creative);
    structTag.setBoolean("world", struct.worldGen);
    structTag.setBoolean("surv", struct.survival);
+   structTag.setInteger("mL", struct.maxLeveling);
+   structTag.setInteger("mC", struct.maxVerticalClear);
+   structTag.setInteger("lB", struct.levelingBuffer);
+   structTag.setInteger("cB", struct.clearingBuffer);
    }
  return structTag;
  }
@@ -105,5 +106,32 @@ public AxisAlignedBB getBBForRender(BlockPosition hit, int face)
   AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
   return bb;
   }
+
+public AxisAlignedBB getLevelingBBForRender(BlockPosition hit, int face)
+  {
+  AxisAlignedBB bb = this.getBBForRender(hit, face);
+  bb.maxY = bb.minY;
+  bb.minY -= maxLeveling;
+  
+  bb.minX -= levelingBuffer;
+  bb.minZ -= levelingBuffer;
+  bb.maxX += levelingBuffer;
+  bb.maxZ += levelingBuffer;
+  return bb;
+  }
+
+public AxisAlignedBB getClearingBBForRender(BlockPosition hit, int face)
+  {
+  AxisAlignedBB bb = this.getBBForRender(hit, face);
+  
+  bb.minX -= clearingBuffer;
+  bb.minZ -= clearingBuffer;
+  bb.maxX += clearingBuffer;
+  bb.maxZ += clearingBuffer;
+  bb.maxY += maxClearing;
+  return bb;
+  }
+
+
 
 }
