@@ -20,14 +20,22 @@
  */
 package shadowmage.ancient_warfare.common.world_gen;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_warfare.common.manager.StructureManager;
+import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import cpw.mods.fml.common.IWorldGenerator;
 
-public class WorldGenManager implements IWorldGenerator
+public class WorldGenManager implements IWorldGenerator, INBTTaggable
 {
+
+private static Map<Integer, GeneratedStructureMap> dimensionStructures = new HashMap<Integer, GeneratedStructureMap>();
 
 private WorldGenManager(){};
 private static WorldGenManager INSTANCE;
@@ -43,12 +51,33 @@ public static WorldGenManager instance()
 @Override
 public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {
-  //check distance in structureGen map. check against world gen structures to find appropriate structures for the range 
+  //TODO fix this...
+  int dist = 10;
+  ProcessedStructure struct = StructureManager.instance().getStructureForGenDistance(dist,  random);
+  
+  //check distance
+  //do random check against total bin wieght
+  //    if weighted random <= distance
+  //    select weighted level from bins 0->distance (inclusive)
+  //    select structure from level
   int x = chunkX + random.nextInt(16);
   int z = chunkZ + random.nextInt(16);
   //
   }
 
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  //TODO
+  return tag;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub  
+  }
 
 
 

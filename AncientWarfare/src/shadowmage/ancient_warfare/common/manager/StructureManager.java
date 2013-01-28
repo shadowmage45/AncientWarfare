@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,6 +45,7 @@ private static List<StructureClientInfo> clientStructures = new ArrayList<Struct
 private static HashMap<String, ProcessedStructure> tempBuilderStructures = new HashMap<String, ProcessedStructure>();
 private static StructureClientInfo tempBuilderClientInfo;
 
+private static HashMap<Integer, StructureDistanceList> distanceMap = new HashMap<Integer, StructureDistanceList>();
 
 private StructureManager(){}
 private static StructureManager INSTANCE;
@@ -57,8 +58,99 @@ public static StructureManager instance()
   return INSTANCE;
   }
 
+private class StructureDistanceList
+{
+public int chunkDistance;
+/**
+ * this could totally be a list of strings...and then pull the actual struct from struct manager...
+ * ....or not....
+ */
+private List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
+private int totalBinWeight;
 
+public ProcessedStructure getRandomSelection(Random rnd)
+  { 
+  int sel = rnd.nextInt(totalBinWeight);
+  for(ProcessedStructure struct : this.structures)
+    {
+    if(sel>struct.structureWeight)
+      {
+      sel -= struct.structureWeight;
+      }
+    else
+      {
+      return struct;
+      }
+    }
+  return null;
+  }
 
+public void addStructure(ProcessedStructure struct)
+  {
+  this.structures.add(struct);
+  this.totalBinWeight += struct.structureWeight;
+  }
+
+public int getEntrySize()
+  {
+  return this.structures.size();
+  }
+
+public int getBinWieght()
+  {  
+  return totalBinWeight * this.chunkDistance;
+  }
+}//////////////********** END STRUCTUREWEIGHTLIST ************///////////////
+
+public int getWeightForLevel(int level)
+  {
+  if(this.distanceMap.containsKey(Integer.valueOf(level)))
+    {
+    return this.distanceMap.get(level).getBinWieght();
+    }
+  return 0;
+  }
+
+public int getTotalStructureWeights()
+  {
+  int run = 0;
+  for(Integer i : this.distanceMap.keySet())
+    {
+    run += this.distanceMap.get(i).getBinWieght();
+    }
+  return run;
+  }
+
+public int getTotalStructureWeightsUpTo(int max)
+  {
+  int run = 0;
+  for(Integer i = 0; i <= max; i++)
+    {
+    if(this.distanceMap.containsKey(i))
+      {
+      run += this.distanceMap.get(i).getBinWieght();
+      }
+    }
+  return run;
+  }
+
+public ProcessedStructure getStructureForGenDistance(int distance, Random random)
+  {
+  int total = this.getTotalStructureWeights();
+  for(Integer i : this.distanceMap.keySet())
+    {
+    StructureDistanceList entry = this.distanceMap.get(i);
+    if(total>entry.getBinWieght())
+      {
+      total-=entry.getBinWieght();
+      }    
+    else
+      {      
+      return entry.getRandomSelection(random);
+      }
+    }
+  return null;
+  }
 
 private Packet01ModData constructPacket(NBTTagCompound tag)
   {
