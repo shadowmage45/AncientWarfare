@@ -5,10 +5,8 @@ GENERAL
 *       this one is apparently going to be tought to fix...instant builder may be borked--workaround with deferred block placement list
 * fix temp builder to clear if no valid structure is found
 * add inventory blocks for water, lava, redstone torch(fix), repeater, plants
-* restructure lookups for rules to use maps by ruleNumber
 
 TEMPLATES/STRUCTURE
-* fix parsing of spaces ( use .trim() )
 * fix vehicleRule rule parsing to use safeParse methods
 * add resourceList stuff to template--so others can denote custom resource lists to construct a building
 * add default templates, and add them to export list
@@ -17,11 +15,10 @@ TEMPLATES/STRUCTURE
 * convert ruins block metadata to northfacing on import---NFC why
 
 STRUCTURE BUILDING
-* handle building rules for ruins special spawn stuff
-* verify that preserveBlocks works as intended
-* move builder block outside of the cleared area, or ensure builder block is placed after clearing is done....
+* verify that preservedBlocks works as intended
+* move builder block outside of the cleared area, or ensure builder block is placed after clearing is done--for creative ticked builder
+*     survival ticked builder will not clear or level.  struct BB needs validated for clear before being built
 * finish isPlant
-* survival builder drop blocks before replace? no--ensure structure BB and 'clearing' area are clear....
 * leveling code appears to be off on some axis for ruins imported structures
 
 WORLD GEN STUFF
@@ -69,3 +66,6 @@ WORLD GEN STUFF
 * fix block percentage chance placement
 * restructure builders to a more unified system for checking block validity
 * handle mob spawners in import, rules, and export 
+* restructure lookups for rules to use maps by ruleNumber
+* handle building rules for ruins special spawn stuff
+* fix parsing of spaces ( use .trim() )

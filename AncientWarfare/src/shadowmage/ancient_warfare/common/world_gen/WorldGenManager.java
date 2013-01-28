@@ -43,7 +43,10 @@ public static WorldGenManager instance()
 @Override
 public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {
-  
+  //check distance in structureGen map. check against world gen structures to find appropriate structures for the range 
+  int x = chunkX + random.nextInt(16);
+  int z = chunkZ + random.nextInt(16);
+  //
   }
 
 

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,12 +38,12 @@ import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 public class StructureManager
 {
 
-
+//TODO change these to hashmap by name
 private static List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
 private static List<StructureClientInfo> clientStructures = new ArrayList<StructureClientInfo>();
 
-private static  HashMap<String, ProcessedStructure> tempBuilderStructures = new HashMap<String, ProcessedStructure>();
-private static  StructureClientInfo tempBuilderClientInfo;
+private static HashMap<String, ProcessedStructure> tempBuilderStructures = new HashMap<String, ProcessedStructure>();
+private static StructureClientInfo tempBuilderClientInfo;
 
 
 private StructureManager(){}
@@ -55,6 +56,9 @@ public static StructureManager instance()
     }
   return INSTANCE;
   }
+
+
+
 
 private Packet01ModData constructPacket(NBTTagCompound tag)
   {

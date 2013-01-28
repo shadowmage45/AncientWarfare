@@ -46,7 +46,7 @@ public static int[] parseIntArray(String csv)
   int[] array = new int[splits.length];
   for(int i = 0; i< splits.length; i++)
     {
-    array[i]=Integer.parseInt(splits[i]);
+    array[i]=Integer.parseInt(splits[i].trim());
     }
   return array;
   }
@@ -63,7 +63,7 @@ public static byte[] safeParseByteArray(String regex, String test)
   String[] splits = test.split(regex);
   if(splits.length>1)
     {
-    return parseByteArray(splits[1]);
+    return parseByteArray(splits[1].trim());
     }
   return new byte[1];
   }
@@ -74,7 +74,7 @@ public static byte[] parseByteArray(String csv)
   byte[] array = new byte[splits.length];
   for(int i = 0; i< splits.length; i++)
     {
-    array[i]=Byte.parseByte(splits[i]);
+    array[i]=Byte.parseByte(splits[i].trim());
     }
   return array;
   }
@@ -119,7 +119,7 @@ public static boolean safeParseBoolean(String regex, String test)
   String[] split = test.split(regex);
   if(split.length>1)
     {
-    return Boolean.parseBoolean(split[1]);
+    return Boolean.parseBoolean(split[1].trim());
     }  
   return false;
   }
@@ -127,7 +127,7 @@ public static boolean safeParseBoolean(String regex, String test)
 public static boolean safeParseIntAsBoolean(String regex, String test)
   {
   String[] split = test.split(regex);
-  if(split.length>1 && Integer.parseInt(split[1])==1)
+  if(split.length>1 && Integer.parseInt(split[1].trim())==1)
     {
     return true;
     }
@@ -162,7 +162,7 @@ public static int safeParseInt(String regex, String test)
   String[] split = test.split(regex);
   if(split.length>1)
     {
-    return Integer.parseInt(split[1]);
+    return Integer.parseInt(split[1].trim());
     }  
   return 0;
   }
@@ -178,7 +178,7 @@ public static byte safeParseByte(String regex, String test)
   String[] split = test.split(regex);
   if(split.length>1)
     {
-    return Byte.parseByte(split[1]);
+    return Byte.parseByte(split[1].trim());
     }  
   return 0;
   }
@@ -194,7 +194,7 @@ public static short safeParseShort(String regex, String test)
   String[] split = test.split(regex);
   if(split.length>1)
     {
-    return Short.parseShort(split[1]);
+    return Short.parseShort(split[1].trim());
     }  
   return 0;
   }
@@ -203,7 +203,7 @@ public static boolean isNumber(String test)
   {
   try
     {
-    Integer.parseInt(test);
+    Integer.parseInt(test.trim());
     }
   catch(NumberFormatException e)
     {

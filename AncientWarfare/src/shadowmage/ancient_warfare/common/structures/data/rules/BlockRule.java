@@ -171,14 +171,14 @@ public static BlockRule parseRuinsRule(String line, int ruleNum)
     String data = split[i];
     if(split[i].toLowerCase().startsWith("preserveBlock"))
       {
-      specialStrings.add(data);      
+      specialStrings.add(data.trim());      
       }
     else if(split[i].toLowerCase().startsWith("mobspawner:"))
       {
       String[] sp = split[i].split(":");
       if(sp.length>1)
         {
-        spawnerStrings.add(sp[1]);
+        spawnerStrings.add(sp[1].trim());
         }
       }
     else if(split[i].toLowerCase().startsWith("uprightmobspawn"))
@@ -208,15 +208,15 @@ public static BlockRule parseRuinsRule(String line, int ruleNum)
       }
     else if(split[i].toLowerCase().startsWith("easychest"))
       {
-      specialStrings.add(data);
+      specialStrings.add(data.trim());
       }
     else if(split[i].toLowerCase().startsWith("mediumchest"))
       {
-      specialStrings.add(data);
+      specialStrings.add(data.trim());
       }
     else if(split[i].toLowerCase().startsWith("hardchest"))
       {
-      specialStrings.add(data);
+      specialStrings.add(data.trim());
       }
     else
       {
@@ -225,15 +225,15 @@ public static BlockRule parseRuinsRule(String line, int ruleNum)
       String[] ruleSplit = data.split("-");
       if(StringTools.isNumber(ruleSplit[0]))
         {
-        id = Integer.parseInt(ruleSplit[0]);
+        id = Integer.parseInt(ruleSplit[0].trim());
         }
       else
         {
-        id = findBlockByName(ruleSplit[0]);
+        id = findBlockByName(ruleSplit[0].trim());
         }
       if(ruleSplit.length>1)
         {
-        meta = Integer.parseInt(ruleSplit[1]);
+        meta = Integer.parseInt(ruleSplit[1].trim());
         }
       parsedBlocks.add(new BlockData(id, meta));      
       }
@@ -389,10 +389,10 @@ private static BlockData[] parseBlocks(String csv)
     {
     blockData = csvValues[i];
     csvBlock = blockData.split("-");
-    bID = csvBlock[0];
+    bID = csvBlock[0].trim();
     if(csvBlock.length>1)
       {
-      mID = csvBlock[1];
+      mID = csvBlock[1].trim();
       }
     else
       {
