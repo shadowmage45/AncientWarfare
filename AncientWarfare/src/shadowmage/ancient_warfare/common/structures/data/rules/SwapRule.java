@@ -137,7 +137,7 @@ public List<String> getExportData()
   lines.add("number="+String.valueOf(this.ruleNumber)+"\n");
   for(SwapEntry entry : this.entries)
     {
-    lines.add(String.valueOf("biome="+entry.biomeName+","+entry.sourceID.id+"-"+entry.sourceID.meta+","+entry.resultID.id+"-"+entry.resultID.meta));
+    lines.add(String.valueOf("biome="+entry.biomeName+","+entry.sourceID.id+"-"+entry.sourceID.meta+","+entry.resultID.id+"-"+entry.resultID.meta+"\n"));
     }  
   lines.add(":endswap\n");
   return lines;

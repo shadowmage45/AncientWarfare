@@ -6,7 +6,6 @@ GENERAL
 * fix temp builder to clear if no valid structure is found
 * add inventory blocks for water, lava, redstone torch(fix), repeater, plants
 * restructure lookups for rules to use maps by ruleNumber
-* handle mob spawners in scanning, rules, and export <use ruinsSpecialData to store it?>
 
 TEMPLATES/STRUCTURE
 * fix parsing of spaces ( use .trim() )
@@ -69,3 +68,4 @@ WORLD GEN STUFF
 * verify and fix structure clearance code
 * fix block percentage chance placement
 * restructure builders to a more unified system for checking block validity
+* handle mob spawners in import, rules, and export 

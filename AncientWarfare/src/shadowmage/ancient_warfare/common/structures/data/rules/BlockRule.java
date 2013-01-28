@@ -305,11 +305,11 @@ public static BlockRule parseRule(List<String> ruleLines)
     line = it.next();
     if(line.toLowerCase().startsWith("number"))
       {
-      rule.ruleNumber = StringTools.safeParseShort("=", line);//Short.parseShort(line.split("=")[1]);      
+      rule.ruleNumber = StringTools.safeParseShort("=", line);      
       }    
     if(line.toLowerCase().startsWith("conditional"))
       {
-      rule.conditional = StringTools.safeParseByte("=", line);Byte.parseByte(line.split("=")[1]);
+      rule.conditional = StringTools.safeParseByte("=", line);
       }
     if(line.toLowerCase().startsWith("percent"))
       {
@@ -325,7 +325,7 @@ public static BlockRule parseRule(List<String> ruleLines)
       }
     if(line.toLowerCase().startsWith("preservewater"))
       {
-      rule.preserveWater = StringTools.safeParseBoolean("=", line);//Boolean.parseBoolean(line.split("=")[1]);
+      rule.preserveWater = StringTools.safeParseBoolean("=", line);
       }
     if(line.toLowerCase().startsWith("preservelava"))
       {
@@ -367,15 +367,7 @@ public static BlockRule parseRule(List<String> ruleLines)
   if((rule.blockData !=null || rule.vehicles !=null ||rule.npcs!=null || rule.ruinsSpecialData !=null || rule.spawnerTypes != null)&& rule.ruleNumber>=0)
     {
     return rule;
-    }
-  if(rule.blockData==null && rule.vehicles==null && rule.npcs== null && rule.ruinsSpecialData ==null)
-    {
-    Config.logDebug("null rule data for Rule");    
-    }
-  if(rule.ruleNumber<0)
-    {
-    Config.logDebug("improper rule number");
-    }
+    }  
   return null;
   }
 
