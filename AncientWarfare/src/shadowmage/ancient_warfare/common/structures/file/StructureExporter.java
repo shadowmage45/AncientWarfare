@@ -25,6 +25,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
@@ -143,8 +144,9 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
 
 private static void writeSwapRules(FileWriter writer, ProcessedStructure struct) throws IOException
   {
-  for(SwapRule rule : struct.swapRules)
+  for(Integer i : struct.swapRules.keySet())
     {
+    SwapRule rule = struct.swapRules.get(i);
     List<String> lines= rule.getExportData();
     for(String line : lines)
       {
@@ -155,9 +157,10 @@ private static void writeSwapRules(FileWriter writer, ProcessedStructure struct)
 
 private static void writeBlockRules(FileWriter writer, ProcessedStructure struct) throws IOException
   {
-  List<BlockRule> rules = struct.blockRules;
-  for(BlockRule rule : rules)
-    { 
+  Map<Integer, BlockRule> rules = struct.blockRules;
+  for(Integer i : rules.keySet())
+    {
+    BlockRule rule = rules.get(i);
     writer.write("rule:\n");
     writer.write("number="+String.valueOf(rule.ruleNumber)+"\n");
     writer.write("order="+String.valueOf(rule.order)+"\n");
@@ -171,16 +174,22 @@ private static void writeBlockRules(FileWriter writer, ProcessedStructure struct
       }
     if(rule.ruinsSpecialData!=null)
       {
-      writer.write("ruinsSpecialData=");
+      writer.write("ruinsspecialdata=");
       writeStringArray(writer, rule.ruinsSpecialData);
+      writer.write("\n");
+      }
+    if(rule.spawnerTypes!=null)
+      {
+      writer.write("spawner=");
+      writeStringArray(writer, rule.spawnerTypes);
       writer.write("\n");
       }
     if(rule.preserveBlocks==true)
       {
-      writer.write("preserveBlocks=true\n");
+      writer.write("preserveblocks=true\n");
       if(rule.preservedBlocks!=null)
         {
-        writer.write("preservedBlocks=");
+        writer.write("preservedblocks=");
         writeBlockDataArray(writer, rule.preservedBlocks);
         writer.write("\n");
         }
@@ -215,7 +224,7 @@ private static void writeBlockRules(FileWriter writer, ProcessedStructure struct
       }
     writer.write(":endrule\n");
     writer.write("\n");
-    }
+    } 
   }
 
 private static void writeIntArray(FileWriter writer, int[] ints) throws IOException

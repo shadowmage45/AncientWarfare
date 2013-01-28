@@ -27,7 +27,7 @@ import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class VehicleRule
 {
-short ruleNumber;
+public short ruleNumber;
 short vehicleType;
 byte armorFrontTypes[];
 byte armorMidTypes[];

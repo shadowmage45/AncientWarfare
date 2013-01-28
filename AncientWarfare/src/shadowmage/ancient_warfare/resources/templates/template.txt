@@ -70,7 +70,7 @@ verticalOffset=0
 #   to spawn relative to the block clicked?
 xOffset=0
 
-# zOffset-- how many blocks TOWARDS THE VIEWER do you want the structures front edge to be
+# zOffset-- how many blocks AWAY FROM THE VIEWER do you want the structures front edge to be
 #  relative to the block clicked?
 zOffset=0
 

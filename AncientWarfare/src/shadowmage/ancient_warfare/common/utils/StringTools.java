@@ -209,7 +209,7 @@ public static boolean isNumber(String test)
     {
     return false;
     }
-  return false;
+  return true;
   }
 
 }

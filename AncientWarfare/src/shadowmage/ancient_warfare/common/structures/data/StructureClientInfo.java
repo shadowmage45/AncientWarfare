@@ -113,21 +113,29 @@ public AxisAlignedBB getLevelingBBForRender(BlockPosition hit, int face)
   bb.maxY = bb.minY;
   bb.minY -= maxLeveling;
   
-  bb.minX -= levelingBuffer;
-  bb.minZ -= levelingBuffer;
-  bb.maxX += levelingBuffer;
-  bb.maxZ += levelingBuffer;
+  
+  boolean xNorm = bb.minX < bb.maxX;
+  boolean zNorm = bb.minZ < bb.maxZ;
+  bb.minX = xNorm? bb.minX - levelingBuffer : bb.minX + levelingBuffer;
+  bb.minZ = zNorm? bb.minZ - levelingBuffer : bb.minZ + levelingBuffer;
+  bb.maxX = xNorm? bb.maxX + levelingBuffer : bb.maxX - levelingBuffer;
+  bb.maxZ = zNorm? bb.maxZ + levelingBuffer : bb.maxZ - levelingBuffer;
+//  bb.minX -= levelingBuffer;
+//  bb.minZ -= levelingBuffer;
+//  bb.maxX += levelingBuffer;
+//  bb.maxZ += levelingBuffer;
   return bb;
   }
 
 public AxisAlignedBB getClearingBBForRender(BlockPosition hit, int face)
   {
   AxisAlignedBB bb = this.getBBForRender(hit, face);
-  
-  bb.minX -= clearingBuffer;
-  bb.minZ -= clearingBuffer;
-  bb.maxX += clearingBuffer;
-  bb.maxZ += clearingBuffer;
+  boolean xNorm = bb.minX < bb.maxX;
+  boolean zNorm = bb.minZ < bb.maxZ;
+  bb.minX = xNorm? bb.minX - clearingBuffer : bb.minX + clearingBuffer;
+  bb.minZ = zNorm? bb.minZ - clearingBuffer : bb.minZ + clearingBuffer;
+  bb.maxX = xNorm? bb.maxX + clearingBuffer : bb.maxX - clearingBuffer;
+  bb.maxZ = zNorm? bb.maxZ + clearingBuffer : bb.maxZ - clearingBuffer;  
   bb.maxY += maxClearing;
   return bb;
   }

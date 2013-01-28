@@ -389,7 +389,7 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
     struct.isValid = false;
     return null;
     }  
-  struct.blockRules.add(new BlockRule(0,0,0));
+  struct.blockRules.put(0, new BlockRule(0,0,0));
   Iterator<String> it = lines.iterator();
   String line;
   while(it.hasNext() && (line = it.next())!=null)
@@ -411,7 +411,7 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
       struct.xSize = dim[1];
       struct.zSize = dim[2];
       struct.xOffset = struct.xSize/2;
-      struct.zOffset = struct.zSize/2;
+      struct.zOffset = 1;
       }
     else if(line.toLowerCase().startsWith("weight"))
       {
@@ -424,6 +424,7 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
     else if(line.toLowerCase().startsWith("embed_into_distance"))
       {
       struct.verticalOffset = StringTools.safeParseInt("=", line);
+      struct.verticalOffset++;//fix for floors being off by one...
       }
     else if(line.toLowerCase().startsWith("allowable_overhang"))
       {
@@ -458,7 +459,7 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
       BlockRule rule = BlockRule.parseRuinsRule(line, struct.blockRules.size());
       if(rule!=null)
         {
-        struct.blockRules.add(rule);
+        struct.blockRules.put((int) rule.ruleNumber, rule);
         }
       }
     else if(line.toLowerCase().startsWith("layer"))
@@ -561,7 +562,7 @@ private void parseRule(ProcessedStructure struct, Iterator<String> it)
   BlockRule rule = BlockRule.parseRule(ruleLines);
   if(rule!=null)
     {    
-    struct.blockRules.add(rule);    
+    struct.blockRules.put(Integer.valueOf((int) rule.ruleNumber), rule);    
     }
   else
     {
@@ -602,7 +603,7 @@ private void parseVehicle(ProcessedStructure struct, Iterator<String> it)
   VehicleRule rule = VehicleRule.parseRule(ruleLines);
   if(rule!=null)
     {    
-    struct.vehicleRules.add(rule);    
+    struct.vehicleRules.put(Integer.valueOf((int) rule.ruleNumber), rule);     
     }
   else
     {
@@ -649,7 +650,7 @@ private void parseSwap(ProcessedStructure struct, Iterator<String> it)
   SwapRule rule = SwapRule.parseRule(ruleLines);
   if(rule!=null)
     {    
-    struct.swapRules.add(rule);    
+    struct.swapRules.put(Integer.valueOf((int) rule.ruleNumber), rule);  
     }
   else
     {

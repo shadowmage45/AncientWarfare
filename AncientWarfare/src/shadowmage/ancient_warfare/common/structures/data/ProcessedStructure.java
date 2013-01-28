@@ -48,7 +48,11 @@ public ProcessedStructure()
 
 public BlockRule getRuleAt(int x, int y, int z)
   {
-  return this.blockRules.get(this.structure[x][y][z]);
+  if(this.blockRules==null)
+    {
+    return null;
+    }
+  return this.blockRules.get(Integer.valueOf(this.structure[x][y][z]));
   }
 
 public boolean canGenerateAt(World world, BlockPosition hit, int facing)
@@ -74,14 +78,10 @@ public boolean isValidTargetBlock(int id)
   }
 
 public BlockData getSwappedData(int swapGroup, String biomeName, BlockData sourceID)
-  {
-  SwapRule rule;
-  for(SwapRule test : this.swapRules)
+  {  
+  if(this.swapRules.containsKey(swapGroup))
     {
-    if(test.ruleNumber == swapGroup)      
-      {
-      return test.getSwappedData(biomeName, sourceID);
-      }
+    return this.swapRules.get(swapGroup).getSwappedData(biomeName, sourceID);
     }
   return sourceID;
   }
@@ -214,6 +214,11 @@ public List<IDPairCount> getResourceList()
       for(int z = 0; z < this.structure[x][y].length; z++)
         {
         BlockRule rule = this.getRuleAt(x, y, z);
+        if(rule.blockData==null)
+          {
+          //TODO...fix handling for no blocks but existing vehicle/npc/gate types
+          continue;
+          }
         BlockData data = rule.blockData[0];
         
         //TODO HACK...

@@ -102,17 +102,16 @@ private void renderStructureBB(float partialTick)
   StructureClientInfo info = item.getStructureForStack(stack);    
   if(info==null)
     {
-    //Config.logDebug("null structInfo");
     return;
     }
   BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
   if(hit==null)
     {
-    //Config.logDebug("null hit");
     return;
     }
   int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
   BlockPosition originalHit = hit.copy();
+  hit.y-=info.yOffset;
   hit = this.offsetForWorldRender(hit, face);  
   
   if(item.renderBuilderBlockBB())
@@ -121,8 +120,7 @@ private void renderStructureBB(float partialTick)
     } 
   
   AxisAlignedBB bb = info.getBBForRender(hit, face);  
-  BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.3f, 0.3f, 0.8f);
-  //TODO re-render builder block..
+  BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.8f, 0.2f, 0.8f);
   if(item.renderBuilderBlockBB())
     {
     bb = AxisAlignedBB.getBoundingBox(originalHit.x, originalHit.y, originalHit.z, originalHit.x+1, originalHit.y+1, originalHit.z+1);
@@ -155,16 +153,6 @@ protected BlockPosition offsetForWorldRender(BlockPosition hit, int face)
     }
   return hit;
   }
-/**
- * 
- *   
-  hit = this.offsetForWorldRender(hit, face);
-  AxisAlignedBB b = struct.getBBForRender(hit, face);  
-  ArrayList<AxisAlignedBB> bbs = new ArrayList<AxisAlignedBB>();
-  bbs.add(b);
-  return bbs;
-  */
-
 
 /**
  * @param bb
@@ -172,8 +160,6 @@ protected BlockPosition offsetForWorldRender(BlockPosition hit, int face)
  * @param partialTick
  * @return
  */
-
-@SideOnly(Side.CLIENT)
 protected AxisAlignedBB adjustBBForPlayerPos(AxisAlignedBB bb, EntityPlayer player, float partialTick)
   {
   double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTick;

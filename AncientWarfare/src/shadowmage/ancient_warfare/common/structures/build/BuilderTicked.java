@@ -88,7 +88,7 @@ public void onTick()
   /**
    * if current block is of a higher order than current pass, skip until you find a lower/equal block or cannot increment build pass
    */
-  while(shouldSkipBlock(world, rule, target, currentPriority))
+  while(shouldSkipBlock(world, rule, target.x, target.y, target.z, currentPriority))
     {
     if(!incrementCoords())
       {
@@ -101,24 +101,11 @@ public void onTick()
     rule = getCurrentRule();
     target = getCurrentTarget();
     }
-    
-  BlockData data;
-  if(this.shouldSwapRule(rule))
-    {
-    String biomeName = world.getBiomeGenForCoords(target.x, target.z).biomeName;
-    data = this.getSwappedDataFor(rule, biomeName);
-    }
-  else
-    {
-    data = rule.getBlockChoice(random);
-    }
-   
-  int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, getRotationAmt(facing));
   
   /**
-   * place a block once we have found a block to place....
+   * once a valid target has been found, place block
    */
-  placeBlock(world, target, data.id, meta);
+  handleBlockRulePlacement(world, target.x, target.y, target.z, rule, false, false);
   
   /**
    * and then once again try incrementing

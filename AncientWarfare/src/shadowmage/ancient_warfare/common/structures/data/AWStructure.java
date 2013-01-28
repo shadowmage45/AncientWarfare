@@ -21,7 +21,9 @@
 package shadowmage.ancient_warfare.common.structures.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NPCRule;
@@ -59,10 +61,15 @@ public boolean preserveBlocks = false;
  * individual blockRules, will override structure rules for individual blocks
  * (incl advanced feature not supported by Ruins--per block preserve info)
  */
-public List<BlockRule> blockRules = new ArrayList<BlockRule>();
-public List<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
-public List<NPCRule> NPCRules = new ArrayList<NPCRule>();
-public List<SwapRule> swapRules = new ArrayList<SwapRule>();
+//public List<BlockRule> blockRules = new ArrayList<BlockRule>();
+//public List<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
+//public List<NPCRule> NPCRules = new ArrayList<NPCRule>();
+//public List<SwapRule> swapRules = new ArrayList<SwapRule>();
+
+public Map<Integer, BlockRule> blockRules = new HashMap<Integer, BlockRule>();
+public Map<Integer, VehicleRule> vehicleRules = new HashMap<Integer, VehicleRule>();
+public Map<Integer, NPCRule> NPCRules = new HashMap<Integer, NPCRule>();
+public Map<Integer, SwapRule> swapRules = new HashMap<Integer, SwapRule>();
 
 
 public boolean isValid = true;

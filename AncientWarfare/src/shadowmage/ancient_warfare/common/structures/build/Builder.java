@@ -25,10 +25,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import cpw.mods.fml.common.registry.EntityRegistry;
+
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
@@ -137,24 +142,24 @@ protected Builder(ProcessedStructure struct, int facing, BlockPosition hit)
   this.struct = struct;
   this.buildPos = hit;  
   this.facing = facing;
-  for(BlockRule rule : struct.blockRules)
+  for(Integer i : struct.blockRules.keySet())
     {
-    if(rule.order>this.maxPriority)
+    if(i>this.maxPriority)
       {
-      this.maxPriority = rule.order;
+      this.maxPriority = i;
       }
     }
     
   BlockPosition minBounds = hit.copy();
   minBounds.y -= struct.verticalOffset;
   minBounds.moveBack(facing, struct.zOffset);
-  minBounds.moveLeft(facing, struct.xSize);
+  minBounds.moveLeft(facing, struct.xSize-1);
   minBounds.moveRight(facing, struct.xOffset);
   
   BlockPosition maxBounds = minBounds.copy();
   maxBounds.y += struct.ySize;
-  maxBounds.moveForward(facing, struct.zSize);
-  maxBounds.moveRight(facing, struct.xSize);
+  maxBounds.moveForward(facing, struct.zSize-1);
+  maxBounds.moveRight(facing, struct.xSize-1);
   
   this.minBounds = BlockTools.getMin(minBounds, maxBounds);
   this.maxBounds = BlockTools.getMax(minBounds, maxBounds);
@@ -226,7 +231,7 @@ protected void preConstruction()
     {
     doLeveling();
     }
-  if(struct.maxVerticalClear>0)
+  if(struct.maxVerticalClear>0 || struct.clearingBuffer >0)
     {
     doClearing();
     }
@@ -256,7 +261,7 @@ protected void doLeveling()
   for(BlockPosition pos : blocksToLevel)
     {
     int testID = world.getBlockId(pos.x, pos.y, pos.z);
-    if(testID!=0)
+    if(testID==0)
       {
       world.setBlock(pos.x, pos.y, pos.z, id);
       }
@@ -266,12 +271,12 @@ protected void doLeveling()
 protected void doClearing()
   {
   BlockPosition min = this.minBounds.copy();
-  BlockPosition max = this.maxBounds.copy();
-  min.x -= struct.levelingBuffer;
-  min.z -= struct.levelingBuffer;
-  max.x += struct.levelingBuffer;
-  max.z += struct.levelingBuffer;
-  max.y += struct.clearingBuffer;
+  BlockPosition max = this.maxBounds.copy();  
+  min.x -= struct.clearingBuffer;
+  min.z -= struct.clearingBuffer;
+  max.x += struct.clearingBuffer;
+  max.z += struct.clearingBuffer;
+  max.y += struct.maxVerticalClear;
   List<BlockPosition> blocksToClear = BlockTools.getAllBlockPositionsBetween(min, max);  
   for(BlockPosition pos : blocksToClear)
     {
@@ -287,9 +292,9 @@ protected void doClearing()
     }  
   }
 
-protected void placeBlock(World world, BlockPosition pos, int id, int meta)
+protected void placeBlock(World world, int x, int y, int z, int id, int meta)
   { 
-  world.setBlockAndMetadata(pos.x, pos.y, pos.z, id, meta);
+  world.setBlockAndMetadata(x, y, z, id, meta);
   }
 
 /**
@@ -299,22 +304,213 @@ protected void placeBlock(World world, BlockPosition pos, int id, int meta)
  * @param id
  * @param meta
  */
-protected void placeBlockWithDefer(World world, BlockPosition pos, int id, int meta)
+protected void placeBlockWithDefer(World world, int x, int y, int z, int id, int meta)
   {
-  if(world.getBlockTileEntity(pos.x, pos.y, pos.z)!=null)
+  if(world.getBlockTileEntity(x, y, z)!=null)
     {
-    world.setBlock(pos.x, pos.y, pos.z, 0);    
-    this.deferredBlocks.put(pos, new BlockData(id, meta));  
+    world.setBlock(x, y, z, 0);    
+    this.deferredBlocks.put(new BlockPosition(x,y,z), new BlockData(id, meta));  
     }
   else
-    {
-    world.setBlockAndMetadataWithUpdate(pos.x, pos.y, pos.z, id, meta, true);
+    {   
+    world.setBlockAndMetadata(x, y, z, id, meta);
     }  
   }
 
-protected boolean isAirBlock(World world, BlockPosition target)
+/**
+ * 
+ * @param world world in which to build
+ * @param x world x coord
+ * @param y world y coord
+ * @param z world z coord
+ * @param rule current blockRule
+ * @param defer should deferPlacement of overwritten tile-entity blocks?
+ * @param worldGen should use world random/gen random?
+ */
+protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockRule rule, boolean defer, boolean worldGen)
+  {   
+ 
+  /**
+   * check to see if block should be placed by rule percent chance
+   */
+  int rnd = random.nextInt(100);
+  if(rnd>=rule.baseChance)
+    {
+    return;
+    }
+  
+  
+  
+  
+  //TODO handle gates
+//  if(rule.gateType>-1)
+//    {
+//    
+//    return;
+//    }
+    
+  /**
+   * else check to see whether should use
+   * 
+   * validity/checking vars
+   */
+  int checkLen = 0;
+  boolean validBlocks = false;
+  boolean validSpecials = false;
+  boolean validVehicles = false;
+  boolean validNPCs = false;  
+  boolean validSpawner = false;
+  if(rule.blockData!=null)
+    {
+    validBlocks = true;
+    checkLen += rule.blockData.length;
+    }
+  if(rule.ruinsSpecialData!=null)
+    {
+    validSpecials = true;
+    checkLen += rule.ruinsSpecialData.length;
+    }
+  if(rule.vehicles!=null)
+    {
+    validVehicles = true;
+    checkLen += rule.vehicles.length;
+    }
+  if(rule.npcs!=null)
+    {
+    validNPCs = true;
+    checkLen += rule.npcs.length;
+    }  
+  if(rule.spawnerTypes!=null)
+    {
+    validSpawner = true;
+    checkLen += rule.spawnerTypes.length;
+    }
+    
+  rnd = random.nextInt(checkLen);
+  if(validBlocks)
+    {
+    if(rnd>=rule.blockData.length)
+      {
+      rnd -=rule.blockData.length;      
+      }
+    else
+      {
+     
+      BlockData data = rule.blockData[rnd];
+      if(rule.swapGroup > -1)
+        {
+        String biomeName = world.getBiomeGenForCoords(x, z).biomeName;
+        data = this.getSwappedDataFor(rule, biomeName, data);
+        }
+      placeBlockData(world, x, y, z, data, defer);
+      return;
+      }
+    }  
+  if(validSpecials)
+    {
+    if(rnd>=rule.ruinsSpecialData.length)
+      {
+      rnd -= rule.ruinsSpecialData.length;
+      }
+    else
+      {
+      placeSpecials(world, x, y, z, rule.ruinsSpecialData[rnd]);     
+      return;
+      }
+    }  
+  if(validVehicles)
+    {
+    if(rnd>=rule.vehicles.length)
+      {
+      rnd -= rule.vehicles.length;      
+      }
+    else
+      {
+      placeVehicle(world, x, y, z, rule.vehicles[rnd]);    
+      return;
+      }    
+    }
+  if(validNPCs)
+    {
+    if(rnd>=rule.npcs.length)
+      {
+      rnd -= rule.npcs.length;
+      }
+    else
+      {
+      //TODO handle npcs...
+      return;
+      }
+    }
+  if(validSpawner)
+    {
+    if(rnd>=rule.spawnerTypes.length)
+      {
+      rnd -= rule.spawnerTypes.length;      
+      }
+    else
+      {
+      handleNamedSpawner(world, x, y, z, rule.spawnerTypes[rnd]);
+      }
+    }
+  }
+
+protected void placeBlockData(World world, int x, int y, int z, BlockData data, boolean defer)
+  {  
+  int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, getRotationAmt(facing));
+  if(defer)
+    {
+    this.placeBlockWithDefer(world, x,y,z , data.id, meta);
+    }
+  else
+    {
+    this.placeBlock(world, x,y,z, data.id, meta);
+    }   
+  }
+
+protected void placeVehicle(World world, int x, int y, int z, int vehicleType)
   {
-  return world.getBlockId(target.x, target.y, target.z)==0;
+  //TODO
+  }
+
+protected void placeSpecials(World world, int x, int y, int z, String name)
+  {
+  if(name == null)
+    {
+    return;
+    }
+  if(name.toLowerCase().startsWith("preserveblock"))
+    {
+    return;
+    } 
+  if(name.toLowerCase().endsWith("chest"))
+    {
+    //TODO handle chests
+    return;
+    }
+  else
+    {
+    world.setBlock(x, y, z, 0);
+    //TODO handle other special rules (custom chests, ?)
+    }
+  }
+
+
+protected void handleNamedSpawner(World world, int x, int y, int z, String name)
+  {
+  world.setBlockAndMetadata(x, y, z, Block.mobSpawner.blockID, 0);
+  TileEntityMobSpawner ent = (TileEntityMobSpawner) world.getBlockTileEntity(x, y, z);  
+  if(ent==null)
+    {
+    return;
+    }
+  ent.setMobID(name);
+  }
+
+
+protected boolean isAirBlock(World world, int x, int y, int z)
+  {
+  return world.getBlockId(x, y, z)==0;
   }
 
 protected boolean isAirBlock(int id)
@@ -388,11 +584,11 @@ protected boolean shouldPreserveBlockDuringClearing(int id)
   return false;
   }
 
-protected boolean shouldSkipBlock(World world, BlockRule rule, BlockPosition target, int currentPriority)
+protected boolean shouldSkipBlock(World world, BlockRule rule, int x, int y, int z, int currentPriority)
   {
-  int id = world.getBlockId(target.x, target.y, target.z);
-  int meta = world.getBlockMetadata(target.x, target.y, target.z);
-  boolean airBlock = isAirBlock(world, target);
+  int id = world.getBlockId(x, y, z);
+  int meta = world.getBlockMetadata(x, y, z);
+  boolean airBlock = id==0;
   if(rule.order!=currentPriority)
     {
     return true;
@@ -420,7 +616,12 @@ protected boolean shouldSkipBlock(World world, BlockRule rule, BlockPosition tar
   if(isLava(id) && (rule.preserveLava || struct.preserveLava))
     {
     return true;
-    }  
+    } 
+  int rnd = random.nextInt(100);
+  if(rnd>=rule.baseChance)
+    {
+    return true;
+    }
   return false;
   }
 
@@ -433,9 +634,8 @@ protected boolean shouldSwapRule(BlockRule rule)
   return false;
   }
 
-protected BlockData getSwappedDataFor(BlockRule rule, String biomeName)
+protected BlockData getSwappedDataFor(BlockRule rule, String biomeName, BlockData data)
   {  
-  BlockData data = rule.getBlockChoice(random);
   return struct.getSwappedData(rule.swapGroup, biomeName, data);
   }
 

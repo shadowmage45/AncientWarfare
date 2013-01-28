@@ -110,10 +110,9 @@ private static void writeAcceptableBlocks(FileWriter writer, ProcessedStructure 
 
 private static void writeBlockRules(FileWriter writer, ProcessedStructure struct) throws IOException
   {
-  int ruleNum = 1;
-  for(BlockRule rule : struct.blockRules)
+  for(Integer i : struct.blockRules.keySet())
     {
-    writeSingleBlockRule(writer, ruleNum, rule);
+    writeSingleBlockRule(writer, i, struct.blockRules.get(i));
     }
   }
 

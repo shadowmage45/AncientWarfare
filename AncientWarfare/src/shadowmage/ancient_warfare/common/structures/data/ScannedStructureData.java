@@ -258,7 +258,7 @@ public ProcessedStructure convertToProcessedStructure()
     {
     BlockData data = blocks[i];
     BlockRule rule = new BlockRule(i, data.id, data.meta);
-    struct.blockRules.add(rule);
+    struct.blockRules.put(Integer.valueOf((int) rule.ruleNumber), rule);    
     }
   struct.structure = new short[xSize][ySize][zSize];
   for(int x = 0; x <struct.structure.length; x++)

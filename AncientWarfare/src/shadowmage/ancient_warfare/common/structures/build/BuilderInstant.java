@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.structures.build;
 
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
@@ -39,8 +40,18 @@ public BuilderInstant(World world, ProcessedStructure struct, int facing, BlockP
 
 @Override
 public void startConstruction()
-  {
+  {  
+  long t1;
+  if(Config.DEBUG)
+    {
+    t1 = System.nanoTime();
+    }
   this.preConstruction();
+  long t2;
+  if(Config.DEBUG)
+    {
+    t2 = System.nanoTime();
+    }
   this.instantConstruction();
   if(this.deferredBlocks.isEmpty())
     {
@@ -50,6 +61,15 @@ public void startConstruction()
     {
     AWStructureModule.instance().addBuilder(this);
     }      
+  long t3;
+  if(Config.DEBUG)
+    {
+    t3 = System.nanoTime();
+    Config.logDebug("preconst: "+(t2-t1));
+    Config.logDebug("const: "+(t3-t2));
+    Config.logDebug("Struct gen time: "+(t3-t1));
+    }
+ 
   }
 
 @Override
@@ -90,38 +110,21 @@ private void buildPriority(int priority)
       {
       for(int z = 0; z<struct.zSize; z++)
         {
-        if(struct.getRuleAt(x, y, z).order==priority)
+        BlockRule rule = struct.getRuleAt(x, y, z);
+        if(rule==null || rule.order!=priority)
           {
-          placeBlock(x,y,z);
-          }    
+          continue;
+          } 
+        BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset, z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));        
+        if(shouldSkipBlock(world, rule, target.x, target.y, target.z, priority))
+          {
+          continue;
+          }        
+        handleBlockRulePlacement(world, target.x, target.y, target.z, rule, true, false);      
         }
       }
     }
   }
 
-
-/**
- * place a single block from this structure
- * @param x coord in the template
- * @param y coord in the template
- * @param z coord in the template
- */
-protected void placeBlock(int x, int y, int z)
-  {
-  BlockRule rule = struct.getRuleAt(x, y, z);
-  BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset, z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
-  BlockData data;
-  if(this.shouldSwapRule(rule))
-    {
-    String biomeName = world.getBiomeGenForCoords(target.x, target.z).biomeName;
-    data = this.getSwappedDataFor(rule, biomeName);
-    }
-  else
-    {
-    data = rule.getBlockChoice(random);
-    }
-  int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, getRotationAmt(facing));
-  this.placeBlockWithDefer(world, target, data.id, meta);    
-  }
 
 }

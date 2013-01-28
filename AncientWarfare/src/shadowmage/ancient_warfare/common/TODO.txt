@@ -4,31 +4,26 @@ GENERAL
 * cleanup bug where overwriting a chest will crash the client (render tick error)(notify on update, or mark blocks dirty)
 *       this one is apparently going to be tought to fix...instant builder may be borked--workaround with deferred block placement list
 * fix temp builder to clear if no valid structure is found
-* add world-gen frequency options to export GUI???
-* add inventory blocks for water, lava
-* fix inventory block for redstone torch (it is a repeater)
-* add inventory block for repeater...others?
-* add inventory block for plants (grass, shrub, dead shrub, flowers?? others?)
+* add inventory blocks for water, lava, redstone torch(fix), repeater, plants
 * restructure lookups for rules to use maps by ruleNumber
-* add bb getters and renders for leveling and clearing areas...
 * handle mob spawners in scanning, rules, and export <use ruinsSpecialData to store it?>
 
 TEMPLATES/STRUCTURE
+* fix parsing of spaces ( use .trim() )
+* fix vehicleRule rule parsing to use safeParse methods
 * add resourceList stuff to template--so others can denote custom resource lists to construct a building
 * add default templates, and add them to export list
-* fix vehicleRule rule parsing to use safeParse methods
 * figure out better way to handle ruins import (current is convert on run, manual copy and re-run)
 * restructure scanner to scan into a processedStructure, removeScanDataContainer completely
+* convert ruins block metadata to northfacing on import---NFC why
 
 STRUCTURE BUILDING
-* handle no block rule
 * handle building rules for ruins special spawn stuff
+* verify that preserveBlocks works as intended
 * move builder block outside of the cleared area, or ensure builder block is placed after clearing is done....
-* verify block rule randomization works as intended
 * finish isPlant
 * survival builder drop blocks before replace? no--ensure structure BB and 'clearing' area are clear....
-* verify that preserveBlocks works as intended
-* make sure hard air zero rule is in place after loading or importing, and prior to exporting
+* leveling code appears to be off on some axis for ruins imported structures
 
 WORLD GEN STUFF
 * site validation
@@ -66,3 +61,11 @@ WORLD GEN STUFF
 * fix ruins exporter structure naming
 * site preparation (clearing, leveling)
 * add preserved block testing into builder placement code
+* handle no block rule
+* add bb getters and renders for leveling and clearing areas...
+* verify block rule randomization works as intended
+* make sure hard air zero rule is in place after loading or importing, and prior to exporting
+* fix leveling and clearing bb renders
+* verify and fix structure clearance code
+* fix block percentage chance placement
+* restructure builders to a more unified system for checking block validity

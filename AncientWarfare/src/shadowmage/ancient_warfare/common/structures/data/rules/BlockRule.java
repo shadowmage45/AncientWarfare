@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.utils.StringTools;
@@ -80,6 +81,11 @@ public int[] vehicles;
  * int array of npc rules which may be used here
  */
 public int[] npcs;
+
+/**
+ * possible entity names for spawners
+ */
+public String[] spawnerTypes;
 
 /**
  * should preserve water/lava/plants when attempting to place this rule?
@@ -158,6 +164,7 @@ public static BlockRule parseRuinsRule(String line, int ruleNum)
     return null;
     }
   List<String> specialStrings = new ArrayList<String>();
+  List<String> spawnerStrings = new ArrayList<String>();
   List<BlockData> parsedBlocks = new ArrayList<BlockData>();
   for(int i = 2; i <split.length; i++)
     {
@@ -168,23 +175,36 @@ public static BlockRule parseRuinsRule(String line, int ruleNum)
       }
     else if(split[i].toLowerCase().startsWith("mobspawner:"))
       {
-      specialStrings.add(data);
+      String[] sp = split[i].split(":");
+      if(sp.length>1)
+        {
+        spawnerStrings.add(sp[1]);
+        }
       }
     else if(split[i].toLowerCase().startsWith("uprightmobspawn"))
       {
-      specialStrings.add(data);
+      spawnerStrings.add("Creeper");
+      spawnerStrings.add("Skeleton");
+      spawnerStrings.add("Zombie");
       }
     else if(split[i].toLowerCase().startsWith("easymobspawn"))
       {
-      specialStrings.add(data);
+      spawnerStrings.add("Zombie");
+      spawnerStrings.add("Skeleton");
       }
     else if(split[i].toLowerCase().startsWith("mediummobspawn"))
       {
-      specialStrings.add(data);
+      spawnerStrings.add("Spider");
+      spawnerStrings.add("CaveSpider");
+      spawnerStrings.add("Skeleton");
+      spawnerStrings.add("Zombie");
       }
     else if(split[i].toLowerCase().startsWith("hardmobspawn"))
       {
-      specialStrings.add(data);
+      spawnerStrings.add("Blaze");
+      spawnerStrings.add("Creeper");
+      spawnerStrings.add("Skeleton");
+      spawnerStrings.add("CaveSpider");
       }
     else if(split[i].toLowerCase().startsWith("easychest"))
       {
@@ -218,12 +238,28 @@ public static BlockRule parseRuinsRule(String line, int ruleNum)
       parsedBlocks.add(new BlockData(id, meta));      
       }
     }
+  if(parsedBlocks.size()>0)
+    {
+    rule.blockData = new BlockData[parsedBlocks.size()];
+    for(int i = 0; i < parsedBlocks.size(); i++)
+      {
+      rule.blockData[i] = parsedBlocks.get(i);
+      }
+    }
   if(specialStrings.size()>0)
     {
     rule.ruinsSpecialData = new String[specialStrings.size()];
     for(int i = 0; i < specialStrings.size(); i++)
       {
       rule.ruinsSpecialData[i] = specialStrings.get(i);
+      }
+    }
+  if(spawnerStrings.size()>0)
+    {
+    rule.spawnerTypes = new String[spawnerStrings.size()];
+    for(int i = 0; i < spawnerStrings.size(); i++)
+      {
+      rule.spawnerTypes[i] = spawnerStrings.get(i);
       }
     }
   return rule;
@@ -319,10 +355,26 @@ public static BlockRule parseRule(List<String> ruleLines)
       {
       rule.npcs = StringTools.safeParseIntArray("=", line);
       }
+    if(line.toLowerCase().startsWith("ruinsspecialdata"))
+      {
+      rule.ruinsSpecialData = StringTools.safeParseStringArray("=", line);
+      }    
+    if(line.toLowerCase().startsWith("spawner"))
+      {
+      rule.spawnerTypes = StringTools.safeParseStringArray("=", line);
+      }
     }
-  if((rule.blockData !=null || rule.vehicles !=null ||rule.npcs!=null )&& rule.ruleNumber>=0)
+  if((rule.blockData !=null || rule.vehicles !=null ||rule.npcs!=null || rule.ruinsSpecialData !=null || rule.spawnerTypes != null)&& rule.ruleNumber>=0)
     {
     return rule;
+    }
+  if(rule.blockData==null && rule.vehicles==null && rule.npcs== null && rule.ruinsSpecialData ==null)
+    {
+    Config.logDebug("null rule data for Rule");    
+    }
+  if(rule.ruleNumber<0)
+    {
+    Config.logDebug("improper rule number");
     }
   return null;
   }
