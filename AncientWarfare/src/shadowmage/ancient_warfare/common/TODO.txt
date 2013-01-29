@@ -1,8 +1,7 @@
 TODO before first alpha release:
 
 GENERAL
-* cleanup bug where overwriting a chest will crash the client (render tick error)(notify on update, or mark blocks dirty)
-*       this one is apparently going to be tought to fix...instant builder may be borked--workaround with deferred block placement list
+* remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
 * fix temp builder to clear if no valid structure is found ??
 * add inventory blocks for water, lava, redstone torch(fix), repeater, plants
 
@@ -73,3 +72,5 @@ WORLD GEN STUFF
 * leveling code appears to be off on some axis for ruins imported structures, fixed...
 * stop exporter from exporting 0-0 data (stop resourceList from counting it in the first place)
 * move builder block outside of the cleared area, or ensure builder block is placed after clearing is done--for creative ticked builder
+* cleanup bug where overwriting a chest will crash the client (render tick error)(notify on update, or mark blocks dirty)
+*       this one is apparently going to be tought to fix...instant builder may be borked--workaround with deferred block placement list

@@ -59,6 +59,9 @@ String name = "";
  */
 boolean rotatable = false;
 
+/**
+ * does this block with metadata represent itself as an inventory block (and vice-versa)?
+ */
 boolean isBasicSubTypeBlock = false;
 
 boolean isBasicInventoryItem = false;
