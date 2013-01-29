@@ -35,7 +35,8 @@ import cpw.mods.fml.common.IWorldGenerator;
 public class WorldGenManager implements IWorldGenerator, INBTTaggable
 {
 
-private static Map<Integer, GeneratedStructureMap> dimensionStructures = new HashMap<Integer, GeneratedStructureMap>();
+//TODO change back to private...
+public static Map<Integer, GeneratedStructureMap> dimensionStructures = new HashMap<Integer, GeneratedStructureMap>();
 
 private WorldGenManager(){};
 private static WorldGenManager INSTANCE;
@@ -51,18 +52,26 @@ public static WorldGenManager instance()
 @Override
 public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {
-  //TODO fix this...
-  int dist = 10;
-  ProcessedStructure struct = StructureManager.instance().getStructureForGenDistance(dist,  random);
+  int dim = world.getWorldInfo().getDimension();
+  int maxRange = 50;
+  if(!dimensionStructures.containsKey(dim))
+    {
+    dimensionStructures.put(dim, new GeneratedStructureMap());
+    }
+  float dist = dimensionStructures.get(dim).getClosestStructureDistance(chunkX, chunkZ, maxRange);
+  if(dist==-1)
+    {
+    dist = maxRange;
+    }
+  ProcessedStructure struct = StructureManager.instance().getStructureForGenDistance((int)dist,  random);  
+  if(struct==null)
+    {
+    return;
+    }
   
-  //check distance
-  //do random check against total bin wieght
-  //    if weighted random <= distance
-  //    select weighted level from bins 0->distance (inclusive)
-  //    select structure from level
   int x = chunkX + random.nextInt(16);
   int z = chunkZ + random.nextInt(16);
-  //
+  
   }
 
 @Override

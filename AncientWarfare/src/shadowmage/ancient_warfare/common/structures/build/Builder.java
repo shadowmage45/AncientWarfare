@@ -94,16 +94,6 @@ public int currentZ = 0;
 public final BlockPosition buildPos;
 
 /**
- * the actual minimum x, y, z of the world-coordinate bounding box of this structure
- */
-public final BlockPosition minBounds;
-
-/**
- * the actual maximum x,y,z of the world-coordinate bounding box of this structure
- */
-public final BlockPosition maxBounds;
-
-/**
  * flipped if this structure is finished, will be removed from ticking queues
  */
 protected boolean isFinished = false;
@@ -149,20 +139,7 @@ protected Builder(ProcessedStructure struct, int facing, BlockPosition hit)
       this.maxPriority = i;
       }
     }
-    
-  BlockPosition minBounds = hit.copy();
-  minBounds.y -= struct.verticalOffset;
-  minBounds.moveBack(facing, struct.zOffset);
-  minBounds.moveLeft(facing, struct.xSize-1);
-  minBounds.moveRight(facing, struct.xOffset);
-  
-  BlockPosition maxBounds = minBounds.copy();
-  maxBounds.y += struct.ySize;
-  maxBounds.moveForward(facing, struct.zSize-1);
-  maxBounds.moveRight(facing, struct.xSize-1);
-  
-  this.minBounds = BlockTools.getMin(minBounds, maxBounds);
-  this.maxBounds = BlockTools.getMax(minBounds, maxBounds);
+     
   }
 
 public void setWorld(World world)
@@ -242,22 +219,30 @@ protected void preConstruction()
  */
 protected void doLeveling()
   {
-  BlockPosition min = this.minBounds.copy();
-  BlockPosition max = this.maxBounds.copy();
-  min.y -= 1;
-  max.y = min.y;
-  min.x -= struct.levelingBuffer;
-  min.z -= struct.levelingBuffer;
-  min.y -= struct.maxLeveling;
-  max.x += struct.levelingBuffer;
-  max.z += struct.levelingBuffer;  
+  BlockPosition fl = this.buildPos.copy();
+  fl.moveLeft(facing, struct.xOffset);
+  //fl.moveLeft(facing, struct.xSize - (struct.xOffset+1));  
+  fl.moveForward(facing, struct.zOffset);
+  fl.y -=struct.verticalOffset;
+  fl.y--;
+  BlockPosition br = fl.copy();
+  br.y-= (struct.maxLeveling)-1;
+  br.moveRight(facing, struct.xSize-1);
+  br.moveForward(facing, struct.zSize-1);
+  
+  //now, offset for leveling bounds
+  fl.moveLeft(facing, struct.levelingBuffer);
+  fl.moveBack(facing, struct.levelingBuffer);
+  
+  br.moveRight(facing, struct.levelingBuffer);
+  br.moveForward(facing, struct.levelingBuffer);  
   int rnd = this.random.nextInt(2);
   int id = Block.stone.blockID;
   if(rnd ==0)
     {
     id = Block.dirt.blockID;
     }
-  List<BlockPosition> blocksToLevel = BlockTools.getAllBlockPositionsBetween(min, max);
+  List<BlockPosition> blocksToLevel = BlockTools.getAllBlockPositionsBetween(br, fl);
   for(BlockPosition pos : blocksToLevel)
     {
     int testID = world.getBlockId(pos.x, pos.y, pos.z);
@@ -270,14 +255,27 @@ protected void doLeveling()
 
 protected void doClearing()
   {
-  BlockPosition min = this.minBounds.copy();
-  BlockPosition max = this.maxBounds.copy();  
-  min.x -= struct.clearingBuffer;
-  min.z -= struct.clearingBuffer;
-  max.x += struct.clearingBuffer;
-  max.z += struct.clearingBuffer;
-  max.y += struct.maxVerticalClear;
-  List<BlockPosition> blocksToClear = BlockTools.getAllBlockPositionsBetween(min, max);  
+  BlockPosition fl = this.buildPos.copy();
+  fl.moveLeft(facing, struct.xSize - (struct.xOffset+1));
+  fl.moveForward(facing, struct.zOffset);
+  BlockPosition br = fl.copy();
+  br.moveRight(facing, struct.xSize-1);
+  br.moveForward(facing, struct.zSize-1);
+  br.y+= (struct.ySize-1)-struct.verticalOffset;  
+  
+  BlockPosition minBounds = BlockTools.getMin(fl, br);
+  BlockPosition maxBounds = BlockTools.getMax(fl, br);
+  
+  /**
+   * offset for buffer
+   */
+  br.y+=struct.maxVerticalClear;
+  fl.moveLeft(facing, struct.clearingBuffer);
+  fl.moveBack(facing, struct.clearingBuffer);
+  br.moveRight(facing, struct.clearingBuffer);
+  br.moveForward(facing, struct.clearingBuffer);
+  
+  List<BlockPosition> blocksToClear = BlockTools.getAllBlockPositionsBetween(fl, br);  
   for(BlockPosition pos : blocksToClear)
     {
     if(pos.x >=minBounds.x && pos.x <=maxBounds.x && pos.y >=minBounds.y && pos.y <=maxBounds.y && pos.z >=minBounds.z && pos.z <=maxBounds.z)

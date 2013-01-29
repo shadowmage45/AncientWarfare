@@ -116,7 +116,7 @@ private void renderStructureBB(float partialTick)
   
   if(item.renderBuilderBlockBB())
     {
-    hit.moveForward(face, -info.zOffset + 1);
+    hit.moveForward(face, -info.zOffset + 1 + info.clearingBuffer);
     } 
   
   AxisAlignedBB bb = info.getBBForRender(hit, face);  

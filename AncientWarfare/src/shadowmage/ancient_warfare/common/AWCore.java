@@ -24,16 +24,21 @@ package shadowmage.ancient_warfare.common;
 
 
 import java.io.IOException;
+import java.util.Random;
 
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
+import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
+import shadowmage.ancient_warfare.common.world_gen.GeneratedStructureMap;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -137,6 +142,41 @@ public void load(FMLPostInitializationEvent evt)
    * and finally, save the config in case there were any changes made during init
    */
   Config.saveConfig();
+  
+  
+  Random random = new Random();
+  for(int x = 0; x < 30; x++)
+    {
+    for(int z = 0; z < 30; z++)
+      {
+      
+      int dim =0;
+      int maxRange = 50;
+      if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
+        {
+        WorldGenManager.instance().dimensionStructures.put(dim, new GeneratedStructureMap());
+        }
+      float dist = WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(x, z, maxRange);
+      Config.logDebug("closest distance: "+dist);
+      if(dist==-1)
+        {
+        dist = maxRange;
+        }
+      Config.logDebug("getting struct for distance: "+dist);
+      ProcessedStructure struct = StructureManager.instance().getStructureForGenDistance((int)dist, random);
+      if(struct==null)
+        {
+        Config.logDebug("coord: "+x+","+z+" struct NULL");
+        }
+      else
+        {
+        Config.logDebug("coord: "+x+","+z+" struct :"+struct.name);
+        WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(x, z, struct.chunkDistance, struct.name);
+        }
+      }
+    } 
+  
+  
   }
 		
 

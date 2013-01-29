@@ -221,6 +221,11 @@ public List<IDPairCount> getResourceList()
           }
         BlockData data = rule.blockData[0];
         
+        if(data.id==0)
+          {
+          continue;
+          }
+        
         //TODO HACK...
         if(isDoorTop(data.id,data.meta) || isBedTop(data.id, data.meta)) 
           {

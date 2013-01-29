@@ -205,6 +205,7 @@ ammo5=
 ammo6=
 :endvehicle
 
+######SWAP RULE
 swap:
 number=1
 biome=swamp,2-0,3-0
@@ -215,7 +216,16 @@ biome=desert,cobblestone-0,sandstone-0
 ##NPC rules
 npc:
 
-endnpc:
+:endnpc
+
+
+######RESOURCELIST
+resources:
+---TODO, how to handle blockID and itemID shift? parse item names? e.g. item.redstonedust, block.cobblestone, item.diamond, block.orediamond
+ID-META, QTY
+:endresources
+
+
 
 #1
 layer:

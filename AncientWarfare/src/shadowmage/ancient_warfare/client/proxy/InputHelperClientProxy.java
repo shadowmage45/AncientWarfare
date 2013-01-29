@@ -32,6 +32,19 @@ import shadowmage.ancient_warfare.common.proxy.InputHelperCommonProxy;
 public class InputHelperClientProxy extends InputHelperCommonProxy
 {
 
+
+/**
+ * input model:
+ * get input from client, send to server;
+ * server updates internal state, tracks acceleration, motion, position;
+ * RELAY input from server to ALL tracking clients (including rider/sender)
+ * clients accept pos and motion update packets from server
+ * BUT they also calc acceleration locally (hopefully in sych with server) based upon the input packets relayed from inputHelper
+ * 
+ * 
+ */
+
+
 @Override
 public boolean checkInput()
   {

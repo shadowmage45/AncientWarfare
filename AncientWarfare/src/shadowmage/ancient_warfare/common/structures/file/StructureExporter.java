@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
+import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
 public class StructureExporter
 {
@@ -126,8 +128,11 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     writer.write("####VEHICLE RULES####\n");
     writer.write("\n");
     writer.write("####NPC RULES####\n");
-    writer.write("\n");
+    writer.write("\n");    
     //END TODO
+    writer.write("####RESOURCE LIST####\n");
+    writeResourceList(writer, struct);
+    writer.write("\n");
     writer.write("####LAYERS####\n");
     writeLayers(writer, struct);    
     writer.write("\n");
@@ -140,6 +145,19 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     e.printStackTrace();
     }
   return false;
+  }
+
+private static void writeResourceList(FileWriter writer, ProcessedStructure struct) throws IOException
+  {
+  writer.write("resources:\n");
+  List<IDPairCount> resList = struct.getResourceList();
+  Iterator<IDPairCount> it = resList.iterator();
+  while(it.hasNext())
+    {
+    IDPairCount count = it.next();
+    writer.write(String.valueOf(count.id+"-"+count.meta+","+count.count+"\n"));
+    }
+  writer.write(":endresources\n");
   }
 
 private static void writeSwapRules(FileWriter writer, ProcessedStructure struct) throws IOException

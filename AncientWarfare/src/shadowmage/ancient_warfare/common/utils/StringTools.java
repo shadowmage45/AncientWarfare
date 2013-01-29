@@ -151,6 +151,19 @@ public static String safeParseString(String regex, String test)
   return "";
   }
 
+public static int safeParseInt(String num)
+  {  
+  try
+    {
+    return Integer.parseInt(num.trim());
+    }
+  catch(NumberFormatException e)
+    {
+    
+    }
+  return 0;
+  }
+
 /**
  * returns a value after a split at regex, or zero (0)
  * @param regex

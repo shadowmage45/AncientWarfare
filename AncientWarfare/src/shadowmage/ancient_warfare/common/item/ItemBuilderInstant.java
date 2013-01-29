@@ -192,7 +192,6 @@ public StructureClientInfo getStructureForStack(ItemStack stack)
 @Override
 public boolean renderBuilderBlockBB()
   {
-  // TODO Auto-generated method stub
   return false;
   }
 

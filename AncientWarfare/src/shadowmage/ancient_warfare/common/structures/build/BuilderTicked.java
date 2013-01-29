@@ -29,7 +29,12 @@ import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
-
+/**
+ * used by creative mode ticked builder, and survival mode combo scan/builder
+ *  
+ * @author Shadowmage
+ *
+ */
 public class BuilderTicked extends Builder
 {
 

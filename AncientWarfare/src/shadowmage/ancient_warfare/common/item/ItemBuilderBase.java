@@ -42,8 +42,18 @@ public ItemBuilderBase(int itemID)
   super(itemID, false);
   }
 
+/**
+ * client side, return the client info associated with the structure to be built for this
+ * item stack, null if none
+ * @param stack
+ * @return
+ */
 public abstract StructureClientInfo getStructureForStack(ItemStack stack);
 
+/**
+ * should this item also render the bounding box for the builder block? (ticked builder)
+ * @return
+ */
 public abstract boolean renderBuilderBlockBB();
 
   

@@ -26,6 +26,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 
 public class GeneratedStructureMap implements INBTTaggable
@@ -124,6 +125,15 @@ public boolean canGenerateAt(int x, int z, int range)
   return true;
   }
 
+private boolean isStructureAt(int x, int z)
+  {
+  if(!this.generatedStructures.containsKey(x))
+    {
+    return false;
+    }
+  return this.generatedStructures.get(x).containsKey(z);
+  }
+
 public void setGeneratedAt(int x, int z, int range, String name)
   {
   GeneratedStructureEntry ent = new GeneratedStructureEntry();
@@ -131,4 +141,101 @@ public void setGeneratedAt(int x, int z, int range, String name)
   ent.structureMinDistance = range;
   this.setEntry(x, z, ent);
   }
+
+//TODO move this to a proper mathtools class....
+public static int getAbsDiff(int a, int b)
+  {
+  if(a<b)
+    {
+    return b-a;
+    }
+  return a-b;
+  }
+
+/**
+ * checks for the closest structure by essentially spiraling outward
+ * @param sourceX
+ * @param sourceZ
+ * @param maxDistance
+ * @return
+ */
+public float getClosestStructureDistance(int sourceX, int sourceZ, int maxDistance)
+  {
+  int currentDistance = 1;
+  for(currentDistance = 1; currentDistance <= maxDistance; currentDistance++)
+    {
+    int x = sourceX - currentDistance;
+    int z = sourceZ - currentDistance; 
+    
+    for(int i = 0; i < currentDistance*2 + 1; i++)
+      {
+      if(isStructureAt(x, z))
+        {
+        int xdiff = getAbsDiff(x, sourceX);
+        int zdiff = getAbsDiff(z, sourceZ);
+        return MathHelper.sqrt_float(xdiff*xdiff+zdiff*zdiff);
+        }
+      x++;
+      }
+    for(int i = 0; i < currentDistance*2 + 1; i++)
+      {
+      if(isStructureAt(x, z))
+        {
+        
+        }
+      z++;
+      }
+    for(int i = 0; i < currentDistance*2 + 1; i++)
+      {
+      if(isStructureAt(x, z))
+        {
+        
+        }
+      x--;
+      }
+    for(int i = 0; i < currentDistance*2 + 1; i++)
+      {
+      if(isStructureAt(x, z))
+        {
+        
+        }
+      z--;
+      }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    for(int i = 0; i < currentDistance; i++)
+      {      
+      if(isStructureAt(x-i, z) || isStructureAt(x+i,z))
+        {
+        return MathHelper.sqrt_float(i*i+currentDistance*currentDistance);
+        }
+      if(isStructureAt(x, z - i) || isStructureAt(x,z+ i))
+        {
+        return MathHelper.sqrt_float(i*i+currentDistance*currentDistance);
+        }
+      }
+    x = sourceX + currentDistance;
+    z = sourceZ + currentDistance; 
+    for(int i = 0; i < currentDistance; i++)
+      {      
+      if(isStructureAt(x-i, z) || isStructureAt(x+i,z))
+        {
+        return MathHelper.sqrt_float(i*i+currentDistance*currentDistance);
+        }
+      if(isStructureAt(x, z - i) || isStructureAt(x,z+ i))
+        {
+        return MathHelper.sqrt_float(i*i+currentDistance*currentDistance);
+        }
+      }
+    }  
+  return -1;
+  }
+
 }

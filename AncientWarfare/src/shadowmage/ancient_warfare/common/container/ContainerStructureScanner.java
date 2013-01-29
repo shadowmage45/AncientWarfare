@@ -173,7 +173,7 @@ public void export()
     if(success && includeOnExport)
       {
       player.addChatMessage("Including structure in live structure lists");
-      StructureManager.instance().addStructure(struct);
+      StructureManager.instance().addStructure(struct, true);
       }    
     else if(!success)
       {

@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
+import shadowmage.ancient_warfare.common.utils.IDPairCount;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class StructureLoader
@@ -359,6 +360,10 @@ public ProcessedStructure loadStructureAW(List<String> lines)
       this.parseNPC(struct, it);
       }
 
+    else if(line.toLowerCase().startsWith("resources:"))
+      {
+      this.parseResources(struct, it);
+      }
     /**
      * parse out layers
      */
@@ -476,6 +481,63 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
   }
 
 
+private void parseResources(ProcessedStructure struct, Iterator<String> it)
+  {
+  String line;
+  String[] sp1;
+  String[] sp2;
+  List<IDPairCount> resourceList = new ArrayList<IDPairCount>();
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.startsWith("resources:"))
+      {
+      continue;
+      }    
+    if(line.startsWith(":endresources"))
+      {
+      break;
+      }
+    sp1 = line.split(",");
+    if(sp1.length<2)
+      {
+      break;
+      }
+    line = sp1[0];
+    sp2 = line.split("-");
+    int id = 0;
+    int meta = 0;
+    int qty = 0;
+    if(sp2.length>1)
+      {
+      meta = StringTools.safeParseInt(sp2[1]);
+      }
+    if(StringTools.isNumber(sp2[0]))
+      {
+      id = StringTools.safeParseInt(sp2[0]);
+      }
+    else
+      {
+      //TODO parse item/block names...
+      }
+    /**
+     * qty...
+     */
+    line = sp1[1];
+    if(StringTools.isNumber(line))
+      {
+      qty = StringTools.safeParseInt(line);
+      }
+    if(qty>0 && id>0)
+      {
+      resourceList.add(new IDPairCount(id, meta, qty));
+      }    
+    }
+  if(resourceList.size()>0)
+    {
+    struct.cachedCounts = resourceList;
+    }  
+  }
 
 private void parseLayer(ProcessedStructure struct, Iterator<String> it)
   {

@@ -68,9 +68,14 @@ public int chunkDistance;
 private List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
 private int totalBinWeight;
 
+public StructureDistanceList(int dist)
+  {
+  this.chunkDistance = dist;
+  }
+
 public ProcessedStructure getRandomSelection(Random rnd)
   { 
-  int sel = rnd.nextInt(totalBinWeight);
+  int sel = rnd.nextInt(totalBinWeight+1);
   for(ProcessedStructure struct : this.structures)
     {
     if(sel>struct.structureWeight)
@@ -96,9 +101,9 @@ public int getEntrySize()
   return this.structures.size();
   }
 
-public int getBinWieght()
+public int getBinWeight()
   {  
-  return totalBinWeight * this.chunkDistance;
+  return totalBinWeight * (this.chunkDistance+1);
   }
 }//////////////********** END STRUCTUREWEIGHTLIST ************///////////////
 
@@ -106,7 +111,7 @@ public int getWeightForLevel(int level)
   {
   if(this.distanceMap.containsKey(Integer.valueOf(level)))
     {
-    return this.distanceMap.get(level).getBinWieght();
+    return this.distanceMap.get(level).getBinWeight();
     }
   return 0;
   }
@@ -116,7 +121,8 @@ public int getTotalStructureWeights()
   int run = 0;
   for(Integer i : this.distanceMap.keySet())
     {
-    run += this.distanceMap.get(i).getBinWieght();
+    StructureDistanceList lst = this.distanceMap.get(i);    
+    run += lst.getBinWeight();
     }
   return run;
   }
@@ -128,7 +134,7 @@ public int getTotalStructureWeightsUpTo(int max)
     {
     if(this.distanceMap.containsKey(i))
       {
-      run += this.distanceMap.get(i).getBinWieght();
+      run += this.distanceMap.get(i).getBinWeight();
       }
     }
   return run;
@@ -137,15 +143,22 @@ public int getTotalStructureWeightsUpTo(int max)
 public ProcessedStructure getStructureForGenDistance(int distance, Random random)
   {
   int total = this.getTotalStructureWeights();
-  for(Integer i : this.distanceMap.keySet())
+  int target = random.nextInt(total);
+  
+  for(int i = 0; i < distance; i++)
     {
-    StructureDistanceList entry = this.distanceMap.get(i);
-    if(total>entry.getBinWieght())
+    if(!distanceMap.containsKey(i))
       {
-      total-=entry.getBinWieght();
+      Config.logDebug("no map for range: "+i);
+      continue;
+      }
+    StructureDistanceList entry = this.distanceMap.get(i);
+    if(target>entry.getBinWeight())
+      {
+      target-=entry.getBinWeight();
       }    
     else
-      {      
+      {
       return entry.getRandomSelection(random);
       }
     }
@@ -198,13 +211,23 @@ public void addTempStructure(EntityPlayer player, ProcessedStructure struct)
  * their structure map
  * @param struct
  */
-public void addStructure(ProcessedStructure struct)
+public void addStructure(ProcessedStructure struct, boolean sendPacket)
   {
   structures.add(struct);
-  
-  NBTTagCompound structData = new NBTTagCompound();
-  structData.setCompoundTag("add", StructureClientInfo.getClientTag(struct));   
-  AWCore.proxy.sendPacketToAllPlayers(constructPacket(structData));
+  if(struct.worldGen)
+    {
+    if(!this.distanceMap.containsKey(struct.chunkDistance))
+      {
+      this.distanceMap.put(Integer.valueOf(struct.chunkDistance), new StructureDistanceList(struct.chunkDistance));
+      }
+    this.distanceMap.get(struct.chunkDistance).addStructure(struct);
+    }
+  if(sendPacket)
+    {
+    NBTTagCompound structData = new NBTTagCompound();
+    structData.setCompoundTag("add", StructureClientInfo.getClientTag(struct));   
+    AWCore.proxy.sendPacketToAllPlayers(constructPacket(structData));
+    }
   }
 
 /**
@@ -215,11 +238,12 @@ public void addStructure(ProcessedStructure struct)
 public void addStructures(List<ProcessedStructure> structs)
   {
   structures.clear();
-  structures.addAll(structs);
-  if(Config.DEBUG)
+  this.distanceMap.clear();
+  for(ProcessedStructure struct : structs)
     {
-    System.out.println("Sucessfully loaded: "+structures.size()+" structures!");
-    }
+    this.addStructure(struct, false);
+    } 
+  Config.logDebug("Sucessfully loaded: "+structures.size()+" structures!");  
   }
 
 public void handlePlayerLogin(EntityPlayer player)

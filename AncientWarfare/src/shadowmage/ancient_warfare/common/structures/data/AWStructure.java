@@ -73,7 +73,7 @@ public Map<Integer, SwapRule> swapRules = new HashMap<Integer, SwapRule>();
 
 
 public boolean isValid = true;
-protected  List<IDPairCount> cachedCounts = null;
+public  List<IDPairCount> cachedCounts = null;
 
 
 /**
