@@ -1,12 +1,14 @@
 package shadowmage.ancient_warfare.client.gui;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonMerchant;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -31,6 +33,7 @@ public abstract class GuiContainerAdvanced extends GuiContainer
 protected final EntityPlayer player;
 public DecimalFormat formatter = new DecimalFormat("#");
 public DecimalFormat formatterOneDec = new DecimalFormat("#.#");
+ArrayList<GuiTextField> textBoxes = new ArrayList<GuiTextField>();
 
 public GuiContainerAdvanced(Container container)
   {
@@ -40,6 +43,25 @@ public GuiContainerAdvanced(Container container)
   this.ySize = this.getYSize();
   guiLeft = (this.width - this.xSize) / 2;
   guiTop = (this.height - this.ySize) / 2;  
+  }
+
+@Override
+protected void keyTyped(char par1, int par2)
+  {
+  boolean callSuper = true;
+  for(GuiTextField box : this.textBoxes)
+    {
+    if(box.textboxKeyTyped(par1, par2))
+      {
+      callSuper = false;
+      break;
+      }
+    }
+  if(callSuper)
+    {
+    super.keyTyped(par1, par2);
+    }
+  
   }
 
 public void sendDataToServer(NBTTagCompound tag)
@@ -140,6 +162,18 @@ public GuiCheckBox addCheckBox(int id, int x, int y, int len, int high)
   return box;
   }
 
+public GuiTextField addTextField(int x, int y, int width, int height, int maxChars, String initText)
+  {
+  GuiTextField box = new GuiTextField(this.fontRenderer, guiLeft+x, guiTop+y, width, height);
+  box.setText(initText);
+  box.setMaxStringLength(maxChars);
+  box.setTextColor(-1);
+  box.func_82266_h(-1);
+  box.setEnableBackgroundDrawing(true);
+  this.textBoxes.add(box);
+  return box;
+  }
+
 /**
  * add a small merchant button with adjusted position, relative to GUI topLeft corner
  * @param id
@@ -159,6 +193,7 @@ public GuiButtonMerchant addMerchantButton(int id, int x, int y, boolean pointsR
 public void initGui()
   { 
   super.initGui();  
+  this.textBoxes.clear();
   this.setupGui();
   }
 
@@ -182,6 +217,10 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     this.mc.renderEngine.bindTexture(texInt);
     this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, this.xSize, this.ySize);
     }  
+  for(GuiTextField box : this.textBoxes)
+    {
+    box.drawTextBox();
+    }
   GL11.glPushMatrix();
   this.renderExtraBackGround(mouseX, mouseY, var1);
   GL11.glPopMatrix();
@@ -417,6 +456,10 @@ protected void mouseClicked(int mouseX, int mouseY, int buttonNum)
       this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
       this.actionPerformed(var5);
       }
+    }
+  for(GuiTextField box : this.textBoxes)
+    {
+    box.mouseClicked(mouseX, mouseY, buttonNum);
     }
   }
 
