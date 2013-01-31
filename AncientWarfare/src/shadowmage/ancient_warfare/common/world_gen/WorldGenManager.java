@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -74,6 +75,31 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   
   int x = chunkX + random.nextInt(16);
   int z = chunkZ + random.nextInt(16);  
+  }
+
+/**
+ * return the topMost solid block, -1 if no valid block is found
+ * @param world
+ * @param x
+ * @param z
+ * @return
+ */
+public int getTopBlockHeight(World world, int x, int z, boolean allowLiquid)
+  {
+  int top = world.provider.getActualHeight();
+  for(int i = top; i > 0; i--)
+    {
+    int id = world.getBlockId(x, i, z);
+    if(id!=0)
+      {
+      world.provider.getBiomeGenForCoords(x/16, z/16).topBlock
+      if(Block.isNormalCube(id))
+        {
+        //TODO....hmm..
+        }
+      }
+    }
+  return 0;
   }
 
 @Override
