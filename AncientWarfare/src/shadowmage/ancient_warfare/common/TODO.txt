@@ -1,4 +1,6 @@
 TODO before first alpha release:
+read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
+http://mrl.nyu.edu/~perlin/noise/
 
 GENERAL
 * remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
@@ -6,7 +8,7 @@ GENERAL
 * add inventory blocks for water, lava, redstone torch(fix), repeater, plants
 
 TEMPLATES/STRUCTURE
-* fix validTargetBlocks import/export/default inclusion...
+* fix validTargetBlocks import/default inclusion...
 * convert ruins block metadata to northfacing on import---NFC why, or what is going on...
 * fix vehicleRule rule parsing to use safeParse methods
 * add default templates, and add them to export list
@@ -19,7 +21,8 @@ STRUCTURE BUILDING
 
 WORLD GEN STUFF
 * site validation
-* figure out decent structure selection algorithm
+* above ground height selection algorithm
+* underground height selection algorithm
 * hook generatedStructures map up to gametracker for save/load
 * optimize clearing code to not include inside bounds
 
@@ -74,3 +77,5 @@ WORLD GEN STUFF
 * move builder block outside of the cleared area, or ensure builder block is placed after clearing is done--for creative ticked builder
 * cleanup bug where overwriting a chest will crash the client (render tick error)(notify on update, or mark blocks dirty)
 *       this one is apparently going to be tought to fix...instant builder may be borked--workaround with deferred block placement list
+* fix validTargetBlocks export
+* figure out decent structure selection algorithm

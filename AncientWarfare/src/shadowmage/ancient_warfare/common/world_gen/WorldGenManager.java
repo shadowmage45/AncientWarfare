@@ -30,6 +30,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.utils.Pair;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenManager implements IWorldGenerator, INBTTaggable
@@ -58,7 +59,9 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     {
     dimensionStructures.put(dim, new GeneratedStructureMap());
     }
-  float dist = dimensionStructures.get(dim).getClosestStructureDistance(chunkX, chunkZ, maxRange);
+  Pair<Float, Integer> values =dimensionStructures.get(dim).getClosestStructureDistance(chunkX, chunkZ, maxRange); 
+  float dist = values.key();
+  int foundValue = values.value();
   if(dist==-1)
     {
     dist = maxRange;
@@ -70,22 +73,21 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     }
   
   int x = chunkX + random.nextInt(16);
-  int z = chunkZ + random.nextInt(16);
-  
+  int z = chunkZ + random.nextInt(16);  
   }
 
 @Override
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  //TODO
+  //TODO save generated struct map
   return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub  
+  //TODO load gen structure map  
   }
 
 

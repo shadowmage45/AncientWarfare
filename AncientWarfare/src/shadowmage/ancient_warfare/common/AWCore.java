@@ -37,6 +37,7 @@ import shadowmage.ancient_warfare.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
+import shadowmage.ancient_warfare.common.utils.Pair;
 import shadowmage.ancient_warfare.common.world_gen.GeneratedStructureMap;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import cpw.mods.fml.common.Mod;
@@ -153,23 +154,46 @@ public void load(FMLPostInitializationEvent evt)
   for(int x = 0; x < xSize; x++)
     {
     for(int z = 0; z < zSize; z++)
-      {
-      
+      {      
       int dim =0;
-      int maxRange = 50;
+      int maxRange = Config.structureGenMaxCheckRange;
+      float dist = 0;
+      int foundValue = 0;
       if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
         {
         WorldGenManager.instance().dimensionStructures.put(dim, new GeneratedStructureMap());
         }
-      float dist = WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(x, z, maxRange);
-      if(dist==-1)
+      Pair<Float, Integer> values =  WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(x, z, maxRange);
+      foundValue = values.value();
+      if(values.key()==-1)
         {
         dist = maxRange;
         }
-      
-      ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructure(random);
-      if(struct!=null && dist >= 2 && check.nextInt(1000)<10)
+      else
         {
+        dist = values.key();
+        }      
+      ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructureBelowValue(random, Config.structureGenMaxClusterValue-foundValue);
+      
+      int randCheck = check.nextInt(Config.structureGeneratorRandomRange);
+      
+      float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
+      valPercent = 1 - valPercent;
+      if(valPercent<.4f)
+        {
+        valPercent = .4f;
+        }
+      float randChance = Config.structureGeneratorRandomChance * valPercent;
+      
+      
+      if(randCheck > randChance)
+        {
+        continue;
+        }
+      
+      if(struct!=null && dist >= 1  && foundValue + struct.chunkDistance < Config.structureGenMaxClusterValue)
+        {
+        //&& check.nextInt(Config.structureGeneratorRandomRange) < Config.structureGeneratorRandomChance
         map[x][z] = struct.chunkDistance;
         WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(x, z, struct.chunkDistance, struct.name);        
         }

@@ -88,6 +88,37 @@ public ProcessedStructure getRandomWeightedStructure(Random random)
   return null;
   }
 
+public ProcessedStructure getRandomBelow(Random rand, int val)
+  {
+  ArrayList<ProcessedStructure> structs = new ArrayList<ProcessedStructure>();
+  int foundWeight = 0;
+  for(ProcessedStructure struct : this.structures)
+    {
+    if(struct!=null && struct.chunkDistance<=val)
+      {
+      structs.add(struct);
+      foundWeight += struct.structureWeight;
+      }
+    }
+  if(foundWeight<=0)
+    {
+    return null;
+    }
+  int check = rand.nextInt(foundWeight);
+  for(ProcessedStructure struct : structs)
+    {
+    if(check>=struct.structureWeight)
+      {
+      check-=struct.structureWeight;
+      }
+    else
+      {
+      return struct;
+      }
+    }
+  return null;
+  }
+
 public void addStructure(ProcessedStructure struct)
   {
   if(struct!=null)
@@ -213,6 +244,11 @@ public ProcessedStructure getStructureForGenDistance(int distance, Random random
 public ProcessedStructure getRandomWeightedStructure(Random rand)
   {
   return this.structureSelector.getRandomWeightedStructure(rand);
+  }
+
+public ProcessedStructure getRandomWeightedStructureBelowValue(Random rand, int val)
+  {
+  return this.structureSelector.getRandomBelow(rand, val);
   }
 
 private Packet01ModData constructPacket(NBTTagCompound tag)

@@ -18,28 +18,37 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.world_gen;
+package shadowmage.ancient_warfare.common.utils;
 
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import net.minecraft.nbt.NBTTagCompound;
-
-public class GeneratedStructureEntry implements INBTTaggable
+/**
+ * generic 2-tuple...becuase...java doesn't freaking have one...
+ * @author Shadowmage
+ *
+ */
+public class Pair<T1, T2>
 {
-byte structureValue;
-String name = "";
+private T1 a;
+private T2 b;
 
-@Override
-public NBTTagCompound getNBTTag()
+public Pair(T1 a, T2 b)
   {
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setByte("val", this.structureValue);
-  tag.setString("name", this.name);
-  return null;
+  this.a = a;
+  this.b = b;  
   }
-@Override
-public void readFromNBT(NBTTagCompound tag)
+
+public T1 key()
   {
-  this.structureValue = tag.getByte("val");
-  this.name = tag.getString("name");
+  return a;
   }
+
+public T2 value()
+  {
+  return b;
+  }
+
+//TODO -- all used for hashing..if I ever intend to use it as a key...
+//hashcode
+//equals
+//tostring
+
 }

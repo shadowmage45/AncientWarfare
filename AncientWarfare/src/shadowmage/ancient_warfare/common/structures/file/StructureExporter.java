@@ -77,6 +77,16 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     writer.write("creative="+String.valueOf(struct.creative)+"\n");
     writer.write("survival="+String.valueOf(struct.survival)+"\n");
     writer.write("structureWeight="+String.valueOf(struct.structureWeight)+"\n");
+    writer.write("validTargetblocks=");
+    if(struct.validTargetBlocks!=null)
+      {
+      writeIntArray(writer, struct.validTargetBlocks);
+      writer.write("\n");
+      }
+    else
+      {
+      writer.write("1,2,3,4,12,13\n");
+      }
     writer.write("\n");
     writer.write("unique="+String.valueOf(struct.unique)+"\n");
     writer.write("chunkDistance="+String.valueOf(struct.chunkDistance)+"\n");

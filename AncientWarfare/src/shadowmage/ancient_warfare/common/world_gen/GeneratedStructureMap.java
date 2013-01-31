@@ -27,7 +27,10 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.MathHelper;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_warfare.common.utils.Pair;
+import shadowmage.ancient_warfare.common.utils.Pos3f;
 
 public class GeneratedStructureMap implements INBTTaggable
 {
@@ -114,7 +117,7 @@ public boolean canGenerateAt(int x, int z, int range)
         {
         if(this.generatedStructures.get(i).containsKey(j))
           {
-          if(range< this.generatedStructures.get(i).get(j).structureMinDistance)
+          if(range< this.generatedStructures.get(i).get(j).structureValue)
             {
             return false;
             }          
@@ -134,11 +137,11 @@ private boolean isStructureAt(int x, int z)
   return this.generatedStructures.get(x).containsKey(z);
   }
 
-public void setGeneratedAt(int x, int z, int range, String name)
+public void setGeneratedAt(int x, int z, int value, String name)
   {
   GeneratedStructureEntry ent = new GeneratedStructureEntry();
   ent.name = name;
-  ent.structureMinDistance = range;
+  ent.structureValue = (byte)value;
   this.setEntry(x, z, ent);
   }
 
@@ -159,18 +162,18 @@ public float getDistance(int sourceX, int sourceZ, int x, int z)
   return MathHelper.sqrt_float(xdiff*xdiff+zdiff*zdiff);
   }
 
-public int getStructureMinDistance(int x, int z)
+public int getStructureValue(int x, int z)
   {
   if(this.generatedStructures.containsKey(x) && this.generatedStructures.get(x).containsKey(z))
     {
-    return this.generatedStructures.get(x).get(z).structureMinDistance;
+    return this.generatedStructures.get(x).get(z).structureValue;
     }
-  return -1;
+  return 0;
   }
 
 public float getDistanceAndSetDistCache(int sourceX, int sourceZ, int foundX, int foundZ)
   {
-  this.structureDistanceBounds = getStructureMinDistance(foundX, foundZ);
+  this.structureDistanceBounds = getStructureValue(foundX, foundZ);
   return getDistance(sourceX,sourceZ,foundX,foundZ);
   }
 
@@ -182,8 +185,10 @@ public int structureDistanceBounds = 0;
  * @param maxDistance
  * @return
  */
-public float getClosestStructureDistance(int sourceX, int sourceZ, int maxDistance)
+public Pair<Float, Integer> getClosestStructureDistance(int sourceX, int sourceZ, int maxDistance)
   {
+  int foundValue = 0;
+  float closestStructure = maxDistance;
   int currentDistance = 1;
   for(currentDistance = 1; currentDistance <= maxDistance; currentDistance++)
     {
@@ -193,11 +198,27 @@ public float getClosestStructureDistance(int sourceX, int sourceZ, int maxDistan
       {
       if(isStructureAt(x+i, z))
         {
-        return this.getDistanceAndSetDistCache(sourceX, sourceZ, x+i, z);
+        float dist = this.getDistance(sourceX, sourceZ, x+i, z);
+        if(dist<closestStructure)
+          {
+          closestStructure = dist;
+          }
+        if(dist<maxDistance)//circular...
+          {
+          foundValue += this.generatedStructures.get(x+i).get(z).structureValue;
+          }
         }
       if(isStructureAt(x, z-i))
         {
-        return this.getDistanceAndSetDistCache(sourceX, sourceZ, x, z-i);
+        float dist = this.getDistance(sourceX, sourceZ, x, z-i);
+        if(dist<closestStructure)
+          {
+          closestStructure = dist;
+          }
+        if(dist<maxDistance)
+          {
+          foundValue += this.generatedStructures.get(x).get(z-i).structureValue;
+          }
         }
       }
     x = sourceX + currentDistance;
@@ -206,15 +227,31 @@ public float getClosestStructureDistance(int sourceX, int sourceZ, int maxDistan
       {
       if(isStructureAt(x-i, z))
         {
-        return this.getDistanceAndSetDistCache(sourceX, sourceZ, x-i, z);
+        float dist = this.getDistance(sourceX, sourceZ, x-i, z);
+        if(dist<closestStructure)
+          {
+          closestStructure = dist;
+          }
+        if(dist<maxDistance)
+          {
+          foundValue += this.generatedStructures.get(x-i).get(z).structureValue;
+          }
         }
       if(isStructureAt(x, z+i))
         {
-        return this.getDistanceAndSetDistCache(sourceX, sourceZ, x, z+i);
+        float dist = this.getDistance(sourceX, sourceZ, x, z+i);
+        if(dist<closestStructure)
+          {
+          closestStructure = dist;
+          }
+        if(dist<maxDistance)
+          {
+          foundValue += this.generatedStructures.get(x).get(z+i).structureValue;
+          }
         }
       }    
     }  
-  return -1;
+  return new Pair<Float, Integer>(closestStructure, foundValue);
   }
 
 }
