@@ -152,6 +152,29 @@ public static int getAbsDiff(int a, int b)
   return a-b;
   }
 
+public float getDistance(int sourceX, int sourceZ, int x, int z)
+  {
+  int xdiff = getAbsDiff(x, sourceX);
+  int zdiff = getAbsDiff(z, sourceZ);
+  return MathHelper.sqrt_float(xdiff*xdiff+zdiff*zdiff);
+  }
+
+public int getStructureMinDistance(int x, int z)
+  {
+  if(this.generatedStructures.containsKey(x) && this.generatedStructures.get(x).containsKey(z))
+    {
+    return this.generatedStructures.get(x).get(z).structureMinDistance;
+    }
+  return -1;
+  }
+
+public float getDistanceAndSetDistCache(int sourceX, int sourceZ, int foundX, int foundZ)
+  {
+  this.structureDistanceBounds = getStructureMinDistance(foundX, foundZ);
+  return getDistance(sourceX,sourceZ,foundX,foundZ);
+  }
+
+public int structureDistanceBounds = 0;
 /**
  * checks for the closest structure by essentially spiraling outward
  * @param sourceX
@@ -165,75 +188,31 @@ public float getClosestStructureDistance(int sourceX, int sourceZ, int maxDistan
   for(currentDistance = 1; currentDistance <= maxDistance; currentDistance++)
     {
     int x = sourceX - currentDistance;
-    int z = sourceZ - currentDistance; 
-    
+    int z = sourceZ + currentDistance;     
     for(int i = 0; i < currentDistance*2 + 1; i++)
       {
-      if(isStructureAt(x, z))
+      if(isStructureAt(x+i, z))
         {
-        int xdiff = getAbsDiff(x, sourceX);
-        int zdiff = getAbsDiff(z, sourceZ);
-        return MathHelper.sqrt_float(xdiff*xdiff+zdiff*zdiff);
+        return this.getDistanceAndSetDistCache(sourceX, sourceZ, x+i, z);
         }
-      x++;
-      }
-    for(int i = 0; i < currentDistance*2 + 1; i++)
-      {
-      if(isStructureAt(x, z))
+      if(isStructureAt(x, z-i))
         {
-        
-        }
-      z++;
-      }
-    for(int i = 0; i < currentDistance*2 + 1; i++)
-      {
-      if(isStructureAt(x, z))
-        {
-        
-        }
-      x--;
-      }
-    for(int i = 0; i < currentDistance*2 + 1; i++)
-      {
-      if(isStructureAt(x, z))
-        {
-        
-        }
-      z--;
-      }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    for(int i = 0; i < currentDistance; i++)
-      {      
-      if(isStructureAt(x-i, z) || isStructureAt(x+i,z))
-        {
-        return MathHelper.sqrt_float(i*i+currentDistance*currentDistance);
-        }
-      if(isStructureAt(x, z - i) || isStructureAt(x,z+ i))
-        {
-        return MathHelper.sqrt_float(i*i+currentDistance*currentDistance);
+        return this.getDistanceAndSetDistCache(sourceX, sourceZ, x, z-i);
         }
       }
     x = sourceX + currentDistance;
-    z = sourceZ + currentDistance; 
-    for(int i = 0; i < currentDistance; i++)
-      {      
-      if(isStructureAt(x-i, z) || isStructureAt(x+i,z))
+    z = sourceZ - currentDistance;
+    for(int i = 0; i < currentDistance*2 + 1; i++)
+      {
+      if(isStructureAt(x-i, z))
         {
-        return MathHelper.sqrt_float(i*i+currentDistance*currentDistance);
+        return this.getDistanceAndSetDistCache(sourceX, sourceZ, x-i, z);
         }
-      if(isStructureAt(x, z - i) || isStructureAt(x,z+ i))
+      if(isStructureAt(x, z+i))
         {
-        return MathHelper.sqrt_float(i*i+currentDistance*currentDistance);
+        return this.getDistanceAndSetDistCache(sourceX, sourceZ, x, z+i);
         }
-      }
+      }    
     }  
   return -1;
   }

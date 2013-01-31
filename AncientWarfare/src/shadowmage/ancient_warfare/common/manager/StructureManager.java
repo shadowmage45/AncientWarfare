@@ -47,6 +47,8 @@ private static StructureClientInfo tempBuilderClientInfo;
 
 private static HashMap<Integer, StructureDistanceList> distanceMap = new HashMap<Integer, StructureDistanceList>();
 
+private StructureGeneratorSelector structureSelector = new StructureGeneratorSelector();
+
 private StructureManager(){}
 private static StructureManager INSTANCE;
 public static StructureManager instance()
@@ -57,6 +59,46 @@ public static StructureManager instance()
     }
   return INSTANCE;
   }
+
+private class StructureGeneratorSelector
+{
+
+private List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
+
+private int totalWeight;
+
+
+public ProcessedStructure getRandomWeightedStructure(Random random)
+  {
+  if(this.structures.size()>0 && totalWeight >0)
+    {
+    int check = random.nextInt(totalWeight);
+    for(ProcessedStructure struct : this.structures)
+      {
+      if(check>=struct.structureWeight)
+        {
+        check-=struct.structureWeight;
+        }
+      else
+        {
+        return struct;
+        }
+      }
+    }
+  return null;
+  }
+
+public void addStructure(ProcessedStructure struct)
+  {
+  if(struct!=null)
+    {
+    this.structures.add(struct);
+    this.totalWeight += struct.structureWeight;
+    }
+  }
+
+
+}
 
 private class StructureDistanceList
 {
@@ -103,7 +145,7 @@ public int getEntrySize()
 
 public int getBinWeight()
   {  
-  return totalBinWeight * (this.chunkDistance+1);
+  return totalBinWeight * (this.chunkDistance+1)^8 ;
   }
 }//////////////********** END STRUCTUREWEIGHTLIST ************///////////////
 
@@ -143,26 +185,34 @@ public int getTotalStructureWeightsUpTo(int max)
 public ProcessedStructure getStructureForGenDistance(int distance, Random random)
   {
   int total = this.getTotalStructureWeights();
-  int target = random.nextInt(total);
-  
+  int target = random.nextInt(total);  
   for(int i = 0; i < distance; i++)
     {
     if(!distanceMap.containsKey(i))
       {
-      Config.logDebug("no map for range: "+i);
       continue;
       }
     StructureDistanceList entry = this.distanceMap.get(i);
-    if(target>entry.getBinWeight())
-      {
+    int bin = entry.getBinWeight();
+    if(target>bin)
+      {      
       target-=entry.getBinWeight();
       }    
     else
       {
+      if(i>distance)
+        {
+        return null;
+        }
       return entry.getRandomSelection(random);
       }
     }
   return null;
+  }
+
+public ProcessedStructure getRandomWeightedStructure(Random rand)
+  {
+  return this.structureSelector.getRandomWeightedStructure(rand);
   }
 
 private Packet01ModData constructPacket(NBTTagCompound tag)
@@ -214,8 +264,10 @@ public void addTempStructure(EntityPlayer player, ProcessedStructure struct)
 public void addStructure(ProcessedStructure struct, boolean sendPacket)
   {
   structures.add(struct);
+  
   if(struct.worldGen)
     {
+    this.structureSelector.addStructure(struct);
     if(!this.distanceMap.containsKey(struct.chunkDistance))
       {
       this.distanceMap.put(Integer.valueOf(struct.chunkDistance), new StructureDistanceList(struct.chunkDistance));

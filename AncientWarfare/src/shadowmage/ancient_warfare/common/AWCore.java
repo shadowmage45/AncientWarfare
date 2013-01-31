@@ -143,11 +143,16 @@ public void load(FMLPostInitializationEvent evt)
    */
   Config.saveConfig();
   
+  int xSize = 50;
+  int zSize = 50;
   
+  int[][] map = new int[xSize][zSize];
   Random random = new Random();
-  for(int x = 0; x < 30; x++)
+  
+  Random check = new Random();
+  for(int x = 0; x < xSize; x++)
     {
-    for(int z = 0; z < 30; z++)
+    for(int z = 0; z < zSize; z++)
       {
       
       int dim =0;
@@ -157,25 +162,37 @@ public void load(FMLPostInitializationEvent evt)
         WorldGenManager.instance().dimensionStructures.put(dim, new GeneratedStructureMap());
         }
       float dist = WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(x, z, maxRange);
-      Config.logDebug("closest distance: "+dist);
       if(dist==-1)
         {
         dist = maxRange;
         }
-      Config.logDebug("getting struct for distance: "+dist);
-      ProcessedStructure struct = StructureManager.instance().getStructureForGenDistance((int)dist, random);
-      if(struct==null)
+      
+      ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructure(random);
+      if(struct!=null && dist >= 2 && check.nextInt(1000)<10)
         {
-        Config.logDebug("coord: "+x+","+z+" struct NULL");
+        map[x][z] = struct.chunkDistance;
+        WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(x, z, struct.chunkDistance, struct.name);        
         }
       else
         {
-        Config.logDebug("coord: "+x+","+z+" struct :"+struct.name);
-        WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(x, z, struct.chunkDistance, struct.name);
+        map[x][z] = 0;
         }
       }
     } 
   
+  for(int z = 0; z < xSize; z++)
+    {
+    String line = "";
+    for(int x = 0; x< zSize; x++)
+      {
+      if(x>0)
+        {
+        line = line + ",";
+        }
+      line = line + String.valueOf(map[x][z]);
+      }
+    Config.logDebug(line);
+    }
   
   }
 		

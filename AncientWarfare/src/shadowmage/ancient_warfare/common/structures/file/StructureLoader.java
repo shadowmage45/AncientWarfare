@@ -237,9 +237,13 @@ public ProcessedStructure loadStructureAW(List<String> lines)
       {
       struct.unique = StringTools.safeParseBoolean("=", line);
       }
-    else if(line.toLowerCase().startsWith("structureWeight"))
+    else if(line.toLowerCase().startsWith("structureweight"))
       {
       struct.structureWeight = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("chunkdistance"))
+      {
+      struct.chunkDistance = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("underground"))
       {
