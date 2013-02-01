@@ -25,18 +25,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
-
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -221,7 +220,6 @@ protected void doLeveling()
   {
   BlockPosition fl = this.buildPos.copy();
   fl.moveLeft(facing, struct.xOffset);
-  //fl.moveLeft(facing, struct.xSize - (struct.xOffset+1));  
   fl.moveForward(facing, struct.zOffset);
   fl.y -=struct.verticalOffset;
   fl.y--;
@@ -236,6 +234,8 @@ protected void doLeveling()
   
   br.moveRight(facing, struct.levelingBuffer);
   br.moveForward(facing, struct.levelingBuffer);  
+  
+  Config.logDebug("Leveling Bounds: "+fl.toString() +"---"+br.toString());
   int rnd = this.random.nextInt(2);
   int id = Block.stone.blockID;
   if(rnd ==0)
@@ -255,26 +255,21 @@ protected void doLeveling()
 
 protected void doClearing()
   {
-  BlockPosition fl = this.buildPos.copy();
-  fl.moveLeft(facing, struct.xSize - (struct.xOffset+1));
-  fl.moveForward(facing, struct.zOffset);
-  BlockPosition br = fl.copy();
-  br.moveRight(facing, struct.xSize-1);
-  br.moveForward(facing, struct.zSize-1);
-  br.y+= (struct.ySize-1)-struct.verticalOffset;  
+  StructureBB bb = struct.getStructureBB(buildPos, facing);
   
+  BlockPosition fl = bb.pos1.copy();
+  BlockPosition br = bb.pos2.copy();
   BlockPosition minBounds = BlockTools.getMin(fl, br);
   BlockPosition maxBounds = BlockTools.getMax(fl, br);
   
-  /**
-   * offset for buffer
-   */
-  br.y+=struct.maxVerticalClear;
+  fl.y += struct.verticalOffset;
   fl.moveLeft(facing, struct.clearingBuffer);
   fl.moveBack(facing, struct.clearingBuffer);
+  br.y = fl.y + struct.maxVerticalClear - 1;;
   br.moveRight(facing, struct.clearingBuffer);
   br.moveForward(facing, struct.clearingBuffer);
   
+  Config.logDebug("Clearing Bounds: "+fl.toString() +"---"+br.toString());
   List<BlockPosition> blocksToClear = BlockTools.getAllBlockPositionsBetween(fl, br);  
   for(BlockPosition pos : blocksToClear)
     {
@@ -336,10 +331,7 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
     {
     return;
     }
-  
-  
-  
-  
+ 
   //TODO handle gates
 //  if(rule.gateType>-1)
 //    {

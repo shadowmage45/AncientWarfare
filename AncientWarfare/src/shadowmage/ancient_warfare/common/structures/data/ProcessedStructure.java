@@ -25,6 +25,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -55,18 +56,114 @@ public BlockRule getRuleAt(int x, int y, int z)
   return this.blockRules.get(Integer.valueOf(this.structure[x][y][z]));
   }
 
-public boolean canGenerateAt(World world, BlockPosition hit, int facing)
+public boolean canGenerateAtSurface(World world, BlockPosition hit, int facing)
   {
-  if(!areBlocksValid(getFoundationBlocks(hit, facing), world))
+  int missingBlocks = 0;
+  boolean canGen = true;  
+  StructureBB bb = getStructureBB(hit, facing);
+  if(maxLeveling==0)//should level the site, or check for overhang?
     {
-    return false;
-    }  
-  //TODO validate structure...leveling, clearing, overhang, underground
+    BlockPosition front = bb.pos1.copy();
+    front.y --;
+    BlockPosition back = bb.pos2.copy();
+    back.y = front.y;
+    List<BlockPosition> foundationBlocks = BlockTools.getAllBlockPositionsBetween(front, back);
+    for(BlockPosition pos : foundationBlocks)
+      {      
+      if(!isValidTargetBlock(world.getBlockId(pos.x, pos.y, pos.z)))
+        {
+        missingBlocks++;
+        }
+      if(missingBlocks>this.maxOverhang)
+        {
+        Config.logDebug("Rejected due to overhang");
+        return false;
+        }    
+      }
+    }
+  else
+    {
+    BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
+    BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
+    if(!isValidLevelingTarget(world, min, max))
+      {
+      Config.logDebug("rejected for improper leveling");
+      return false;
+      }   
+    }
+  
+  if(maxVerticalClear >= ySize -verticalOffset)//the whole thing will be cleared
+    {
+    Config.logDebug("skipping clearing check");
+    return true;
+    }
+    
+  BlockPosition clearTest = bb.pos1.copy();
+  BlockPosition clearTest2 = bb.pos2.copy();
+  
+  clearTest.y+=verticalOffset+ maxVerticalClear - 1;
+  List<BlockPosition> nonClearedBlocks = BlockTools.getAllBlockPositionsBetween(clearTest, clearTest2);
+  
+  if(clearTest.y==clearTest2.y && maxVerticalClear>0)
+    {
+    Config.logDebug("second skip clearance check");
+    }
+  
+  for(BlockPosition pos : nonClearedBlocks)
+    {
+    if(world.getBlockId(pos.x, pos.y, pos.z)!=0)
+      {
+      Config.logDebug("rejected due to clearance");
+      return false;
+      }
+    }
+    
+  return true;
+  }
+
+public boolean isValidLevelingTarget(World world, BlockPosition min, BlockPosition max)
+  {
+  //TODO check beneath as well as just beside?
+  min.x-= 1 +levelingBuffer;
+  min.z-= 1 + levelingBuffer;
+  max.x+= 1 + levelingBuffer;
+  max.z+= 1 + levelingBuffer;
+  
+  for(int x = min.x; x <= max.x; x++)
+    {
+    int id = world.getBlockId(x, min.y, min.z);
+    if(!isValidTargetBlock(id) || id==0)
+      {
+      return false;
+      }
+    id = world.getBlockId(x, min.y, max.z);
+    if(!isValidTargetBlock(id) || id==0)
+      {
+      return false;
+      }
+    }
+  for(int z = min.z; z <= max.z; z++)
+    {
+    int id = world.getBlockId(min.x, min.y, z);
+    if(!isValidTargetBlock(id) || id==0)
+      {
+      return false;
+      }
+    id = world.getBlockId(max.x, min.y, z);
+    if(!isValidTargetBlock(id) || id==0)
+      {
+      return false;
+      }
+    }
   return true;
   }
 
 public boolean isValidTargetBlock(int id)
   {
+  if(this.validTargetBlocks==null)
+    {
+    return true;
+    }
   for(int i = 0; i < this.validTargetBlocks.length; i++)
     {
     if(id==this.validTargetBlocks[i])
@@ -118,15 +215,11 @@ private boolean areBlocksValid(List<BlockPosition> blocks, World world)
  */
 private List<BlockPosition> getFoundationBlocks(BlockPosition hit, int facing)
   {
-  BlockPosition pos1 = hit.copy();
-  pos1.moveForward(facing, this.zOffset);
-  pos1.moveLeft(facing, this.xOffset);
-  pos1.y += this.verticalOffset - 1;
-  
-  BlockPosition pos2 = pos1.copy();  
-  pos2.moveRight(facing, this.xSize);
-  pos2.moveForward(facing, this.zSize);
-  return BlockTools.getAllBlockPositionsBetween(pos1, pos2);
+  hit = getOffsetHitPosition(hit, facing);
+  BlockPosition max = hit.copy();
+  max.moveForward(facing, zSize);
+  max.moveRight(facing, xSize);
+  return BlockTools.getAllBlockPositionsBetween(hit, max);
   }
 
 /**
@@ -137,16 +230,16 @@ private List<BlockPosition> getFoundationBlocks(BlockPosition hit, int facing)
  */
 public StructureBB getStructureBB(BlockPosition hit, int facing)
   {
-  BlockPosition pos1 = hit.copy();
-  pos1.moveForward(facing, -this.zOffset);
-  pos1.moveLeft(facing, this.xOffset);
-  pos1.y += this.verticalOffset;
+  BlockPosition fl = hit.copy();
+  fl.moveLeft(facing, xOffset);
+  fl.moveForward(facing, zOffset);
+  fl.y -=verticalOffset;
+  BlockPosition br = fl.copy();
+  br.y+= ySize-1;
+  br.moveRight(facing, xSize-1);
+  br.moveForward(facing, zSize-1);
   
-  BlockPosition pos2 = pos1.copy();  
-  pos2.moveRight(facing, this.xSize);
-  pos2.moveForward(facing, this.zSize);
-  pos2.y += this.ySize;
-  return new StructureBB(pos1, pos2);
+  return new StructureBB(fl, br);
   }
 
 public StructureBB getLevelingBB(BlockPosition hit, int facing)
@@ -177,7 +270,7 @@ public StructureBB getClearingBB(BlockPosition hit, int facing)
   }
 
 /**
- * returns a facing normalized frontleftbottom corner position for this building
+ * returns a facing normalized frontleft corner position for this building (no Y adjustment)
  * used by boundingboxes, alters the passed in position
  * @param hit
  * @param facing

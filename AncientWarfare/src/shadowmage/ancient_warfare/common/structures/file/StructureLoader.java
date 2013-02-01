@@ -243,7 +243,7 @@ public ProcessedStructure loadStructureAW(List<String> lines)
       }
     else if(line.toLowerCase().startsWith("chunkdistance"))
       {
-      struct.chunkDistance = StringTools.safeParseInt("=", line);
+      struct.structureValue = StringTools.safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("underground"))
       {

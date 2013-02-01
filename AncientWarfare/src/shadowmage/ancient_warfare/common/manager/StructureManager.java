@@ -45,7 +45,6 @@ private static List<StructureClientInfo> clientStructures = new ArrayList<Struct
 private static HashMap<String, ProcessedStructure> tempBuilderStructures = new HashMap<String, ProcessedStructure>();
 private static StructureClientInfo tempBuilderClientInfo;
 
-private static HashMap<Integer, StructureDistanceList> distanceMap = new HashMap<Integer, StructureDistanceList>();
 
 private StructureGeneratorSelector structureSelector = new StructureGeneratorSelector();
 
@@ -94,7 +93,7 @@ public ProcessedStructure getRandomBelow(Random rand, int val)
   int foundWeight = 0;
   for(ProcessedStructure struct : this.structures)
     {
-    if(struct!=null && struct.chunkDistance<=val)
+    if(struct!=null && struct.structureValue<=val)
       {
       structs.add(struct);
       foundWeight += struct.structureWeight;
@@ -180,67 +179,6 @@ public int getBinWeight()
   }
 }//////////////********** END STRUCTUREWEIGHTLIST ************///////////////
 
-public int getWeightForLevel(int level)
-  {
-  if(this.distanceMap.containsKey(Integer.valueOf(level)))
-    {
-    return this.distanceMap.get(level).getBinWeight();
-    }
-  return 0;
-  }
-
-public int getTotalStructureWeights()
-  {
-  int run = 0;
-  for(Integer i : this.distanceMap.keySet())
-    {
-    StructureDistanceList lst = this.distanceMap.get(i);    
-    run += lst.getBinWeight();
-    }
-  return run;
-  }
-
-public int getTotalStructureWeightsUpTo(int max)
-  {
-  int run = 0;
-  for(Integer i = 0; i <= max; i++)
-    {
-    if(this.distanceMap.containsKey(i))
-      {
-      run += this.distanceMap.get(i).getBinWeight();
-      }
-    }
-  return run;
-  }
-
-public ProcessedStructure getStructureForGenDistance(int distance, Random random)
-  {
-  int total = this.getTotalStructureWeights();
-  int target = random.nextInt(total);  
-  for(int i = 0; i < distance; i++)
-    {
-    if(!distanceMap.containsKey(i))
-      {
-      continue;
-      }
-    StructureDistanceList entry = this.distanceMap.get(i);
-    int bin = entry.getBinWeight();
-    if(target>bin)
-      {      
-      target-=entry.getBinWeight();
-      }    
-    else
-      {
-      if(i>distance)
-        {
-        return null;
-        }
-      return entry.getRandomSelection(random);
-      }
-    }
-  return null;
-  }
-
 public ProcessedStructure getRandomWeightedStructure(Random rand)
   {
   return this.structureSelector.getRandomWeightedStructure(rand);
@@ -303,12 +241,7 @@ public void addStructure(ProcessedStructure struct, boolean sendPacket)
   
   if(struct.worldGen)
     {
-    this.structureSelector.addStructure(struct);
-    if(!this.distanceMap.containsKey(struct.chunkDistance))
-      {
-      this.distanceMap.put(Integer.valueOf(struct.chunkDistance), new StructureDistanceList(struct.chunkDistance));
-      }
-    this.distanceMap.get(struct.chunkDistance).addStructure(struct);
+    this.structureSelector.addStructure(struct);    
     }
   if(sendPacket)
     {
@@ -326,7 +259,7 @@ public void addStructure(ProcessedStructure struct, boolean sendPacket)
 public void addStructures(List<ProcessedStructure> structs)
   {
   structures.clear();
-  this.distanceMap.clear();
+  this.structureSelector.structures.clear();
   for(ProcessedStructure struct : structs)
     {
     this.addStructure(struct, false);

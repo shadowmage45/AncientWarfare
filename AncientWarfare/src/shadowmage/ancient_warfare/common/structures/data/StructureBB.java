@@ -33,4 +33,10 @@ public StructureBB(BlockPosition pos1, BlockPosition pos2)
   this.pos1 = pos1;
   this.pos2 = pos2;
   }
+
+@Override
+public String toString()
+  {
+  return pos1.toString() + " : " +pos2.toString();
+  }
 }

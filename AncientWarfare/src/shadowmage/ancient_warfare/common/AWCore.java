@@ -96,6 +96,11 @@ public void preInit(FMLPreInitializationEvent evt)
   MinecraftForge.EVENT_BUS.register(EventHandler.instance());
   
   /**
+   * register worldGenHandler
+   */
+  GameRegistry.registerWorldGenerator(WorldGenManager.instance());
+  
+  /**
    * load items
    */
   ItemLoader.instance().load();
@@ -191,11 +196,11 @@ public void load(FMLPostInitializationEvent evt)
         continue;
         }
       
-      if(struct!=null && dist >= 1  && foundValue + struct.chunkDistance < Config.structureGenMaxClusterValue)
+      if(struct!=null && dist >= 1  && foundValue + struct.structureValue < Config.structureGenMaxClusterValue)
         {
         //&& check.nextInt(Config.structureGeneratorRandomRange) < Config.structureGeneratorRandomChance
-        map[x][z] = struct.chunkDistance;
-        WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(x, z, struct.chunkDistance, struct.name);        
+        map[x][z] = struct.structureValue;
+        WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(x, z, struct.structureValue, struct.name);        
         }
       else
         {

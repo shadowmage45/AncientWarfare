@@ -267,11 +267,6 @@ public static ArrayList<BlockPosition> getAllBlockPositionsBetween(BlockPosition
     }
   BlockPosition min = new BlockPosition(minX, minY, minZ);
   BlockPosition max = new BlockPosition(maxX, maxY, maxZ);
-  BlockPosition diff = max.getOffsetFrom(min);
-  if(diff.x >20 || diff.y > 20 || diff.z > 20)//if there are ALOT of blocks in the cube
-    {
-    return null;
-    }
   ArrayList<BlockPosition> blocks = new ArrayList<BlockPosition>();
   blocks.clear();
   int cX;//

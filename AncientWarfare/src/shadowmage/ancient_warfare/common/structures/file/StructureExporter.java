@@ -89,7 +89,7 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
       }
     writer.write("\n");
     writer.write("unique="+String.valueOf(struct.unique)+"\n");
-    writer.write("chunkDistance="+String.valueOf(struct.chunkDistance)+"\n");
+    writer.write("chunkDistance="+String.valueOf(struct.structureValue)+"\n");
     writer.write("chunkAttempts="+String.valueOf(struct.chunkAttempts)+"\n");
     writer.write("\n");
     writer.write("underground="+String.valueOf(struct.underground)+"\n");
