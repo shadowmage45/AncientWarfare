@@ -33,7 +33,15 @@ WORLD GEN STUFF
 * optimize struct distance checking code, no longer needs to spiral, can use a double nested for/loop
 
 
+WORLD GEN ALGORITHM:
 
+do quick random check if should place at all CHANCE in RANGE (200 in 1000)
+
+examine value of structures in distance MAX_SEARCH_DISTANCE (16)
+do check to see if should place based on foundValue / MAX_CLUSTER_VALUE (anti-clustering mechanism)
+select structure from available structures by value
+    weight by value ? (try and place higher value as much as possible
+    todo--add max range into value/weighting balancing
 
 ********************* DONE STUFF *************************
 * BB rendering working...

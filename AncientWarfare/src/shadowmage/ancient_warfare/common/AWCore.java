@@ -159,11 +159,22 @@ public void load(FMLPostInitializationEvent evt)
   for(int x = 0; x < xSize; x++)
     {
     for(int z = 0; z < zSize; z++)
-      {      
+      {   
+      /**
+       * early base percentage chance--basically set structure density
+       */
+      if(check.nextInt(Config.structureGeneratorRandomRange)>Config.structureGeneratorRandomChance)
+        {
+        Config.logDebug("Exit for early random chance check");
+        map[x][z]=0;
+        continue;
+        }
+      
       int dim =0;
       int maxRange = Config.structureGenMaxCheckRange;
-      float dist = 0;
-      int foundValue = 0;
+      
+      float dist = 0;//found distance
+      int foundValue = 0;//found value
       if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
         {
         WorldGenManager.instance().dimensionStructures.put(dim, new GeneratedStructureMap());
@@ -177,33 +188,56 @@ public void load(FMLPostInitializationEvent evt)
       else
         {
         dist = values.key();
-        }      
-      ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructureBelowValue(random, Config.structureGenMaxClusterValue-foundValue);
+        } 
       
-      int randCheck = check.nextInt(Config.structureGeneratorRandomRange);
-      
-      float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
-      valPercent = 1 - valPercent;
-      if(valPercent<.4f)
+      /**
+       * if value is too high to even place anything....
+       * TODO have this check to place 0-value structures.... (decoration)
+       */
+      if(values.value()>=Config.structureGenMaxClusterValue)
         {
-        valPercent = .4f;
-        }
-      float randChance = Config.structureGeneratorRandomChance * valPercent;
-      
-      
-      if(randCheck > randChance)
-        {
+        Config.logDebug("exit due to max value");
+        map[x][z]=0;
         continue;
         }
       
-      if(struct!=null && dist >= 1  && foundValue + struct.structureValue < Config.structureGenMaxClusterValue)
+      
+      /**
+       * second exit code, exit early depending upon percentage of populated max value
+       */
+      float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
+      if(random.nextFloat() < valPercent)
         {
-        //&& check.nextInt(Config.structureGeneratorRandomRange) < Config.structureGeneratorRandomChance
+        Config.logDebug("Exit for value ratio check");
+        map[x][z]=0;
+        continue;
+        }
+      
+      /**
+       * select structure from those available to the current available value....
+       */
+      ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructureBelowValue(random, Config.structureGenMaxClusterValue-foundValue);
+                        
+      if(struct!=null)
+        {
+        /**
+         * simulate placement fails..
+         */
+        if(random.nextInt(100)>40)
+          {
+          Config.logDebug("exit for placement simulated fail");
+          map[x][z]=0;
+          continue;
+          }
+        /**
+         * else, place the struct....
+         */
         map[x][z] = struct.structureValue;
         WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(x, z, struct.structureValue, struct.name);        
         }
       else
         {
+        Config.logDebug("exit for null structure");
         map[x][z] = 0;
         }
       }
