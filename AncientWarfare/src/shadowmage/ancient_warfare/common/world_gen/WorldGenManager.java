@@ -126,13 +126,11 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     {
     return;//TODO setup config for other dimensions
     }
-  
   if(random.nextInt(Config.structureGeneratorRandomRange)>Config.structureGeneratorRandomChance)
     {
     Config.logDebug("Exit for early random chance check");
     return;
     }
-
   
   int maxRange = Config.structureGenMaxCheckRange;
 
@@ -158,10 +156,19 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
    * select structure from those available to the current available value....
    */
   ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructureBelowValue(random, Config.structureGenMaxClusterValue-foundValue);
-
+ 
+  
   if(struct!=null)
     {   
     
+    String biomeName = world.provider.getBiomeGenForCoords(chunkX*16+8, chunkZ*16+8).biomeName;
+    if(!struct.isValidBiome(biomeName))
+      {
+      Config.logDebug("struct rejected location due to incompatible biomes");
+      return;
+      }
+    
+   
     /**
      * if it is not a decorative structure, check value
      */

@@ -422,8 +422,8 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
         return null;
         }
       struct.ySize = dim[0];
-      struct.xSize = dim[1];
-      struct.zSize = dim[2];
+      struct.zSize = dim[1];
+      struct.xSize = dim[2];
       struct.xOffset = struct.xSize/2;
       struct.zOffset = 1;
       }
@@ -435,7 +435,7 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
     else if(line.toLowerCase().startsWith("embed_into_distance"))
       {
       struct.verticalOffset = StringTools.safeParseInt("=", line);
-      struct.verticalOffset++;//fix for floors being off by one...
+      //struct.verticalOffset++;//fix for floors being off by one...
       }
     else if(line.toLowerCase().startsWith("allowable_overhang"))
       {

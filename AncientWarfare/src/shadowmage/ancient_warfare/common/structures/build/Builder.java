@@ -26,7 +26,9 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -39,6 +41,7 @@ import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.world_gen.LootGenerator;
 
 public abstract class Builder implements INBTTaggable
 {
@@ -240,24 +243,11 @@ protected void doLeveling()
 
 protected void doClearing()
   {
-  StructureBB bb = struct.getClearingBB(buildPos, facing);//.getStructureBB(buildPos, facing);
-  
-//  BlockPosition fl = bb.pos1.copy();
-//  BlockPosition br = bb.pos2.copy();
+  StructureBB bb = struct.getClearingBB(buildPos, facing);  
   StructureBB bounds = struct.getStructureBB(buildPos, facing);
   BlockPosition minBounds = BlockTools.getMin(bounds.pos1, bounds.pos2);
-  BlockPosition maxBounds = BlockTools.getMax(bounds.pos1, bounds.pos2);
-  
-//  fl.y += struct.verticalOffset;
-//  fl.moveLeft(facing, struct.clearingBuffer);
-//  fl.moveBack(facing, struct.clearingBuffer);
-//  br.y = fl.y + struct.maxVerticalClear - 1;;
-//  br.moveRight(facing, struct.clearingBuffer);
-//  br.moveForward(facing, struct.clearingBuffer);
-  
-  Config.logDebug("Clearing Bounds: "+bb.pos1.toString() +"---"+bb.pos2.toString());
-  
-  
+  BlockPosition maxBounds = BlockTools.getMax(bounds.pos1, bounds.pos2);  
+  Config.logDebug("Clearing Bounds: "+bb.pos1.toString() +"---"+bb.pos2.toString());    
   List<BlockPosition> blocksToClear = BlockTools.getAllBlockPositionsBetween(bb.pos1, bb.pos2);  
   for(BlockPosition pos : blocksToClear)
     {
@@ -463,7 +453,26 @@ protected void placeSpecials(World world, int x, int y, int z, String name)
     } 
   if(name.toLowerCase().endsWith("chest"))
     {
-    //TODO handle chests
+    int[] tables = new int[]{0,1,2,3,4,5,6,7};
+    List<ItemStack> loot = null;
+    if(name.toLowerCase().startsWith("easy"))
+      {
+      loot = LootGenerator.instance().getRandomLoot(30, 3, 15, tables, random);
+      }
+    else if(name.toLowerCase().startsWith("medium"))
+      {
+      loot = LootGenerator.instance().getRandomLoot(65, 6, 20, tables, random);
+      }
+    else if(name.toLowerCase().startsWith("hard"))
+      {
+      loot = LootGenerator.instance().getRandomLoot(105, 6, 25, tables, random);
+      }
+    if(loot!=null)
+      {
+      int meta = 0;
+      createChestAt(world, x, y, z, meta);
+      setChestLoot(world, x, y, z, loot);
+      }   
     return;
     }
   else
@@ -473,6 +482,19 @@ protected void placeSpecials(World world, int x, int y, int z, String name)
     }
   }
 
+protected void createChestAt(World world, int x, int y, int z, int meta)
+  {
+  world.setBlockAndMetadataWithUpdate(x, y, z, 54, 0, true);
+  }
+
+protected void setChestLoot(World world, int x, int y, int z, List<ItemStack> items)
+  {
+  TileEntityChest chst = (TileEntityChest) world.getBlockTileEntity(x, y, z);
+  for(int i = 0; i < items.size() && i < chst.getSizeInventory(); i++)
+    {
+    chst.setInventorySlotContents(i, items.get(i));
+    }
+  }
 
 protected void handleNamedSpawner(World world, int x, int y, int z, String name)
   {

@@ -134,10 +134,6 @@ public int xSize;//x dimension
 public int zSize;//z dimension
 public int ySize;//y dimension
 
-
-
-
-
 public static StructureBB getBoundingBox(BlockPosition hit, int facing, int xOffset, int yOffset, int zOffset, int xSize, int ySize, int zSize)  
   {  
   BlockPosition fl = hit.copy();
@@ -175,8 +171,6 @@ public static StructureBB getClearingBoundinBox(BlockPosition hit, int facing, i
   
   BlockPosition fl = bb.pos1.copy();
   BlockPosition br = bb.pos2.copy();
-  BlockPosition minBounds = BlockTools.getMin(fl, br);
-  BlockPosition maxBounds = BlockTools.getMax(fl, br);
   
   fl.y += yOffset;
   fl.moveLeft(facing, clearingBuffer);
@@ -188,19 +182,6 @@ public static StructureBB getClearingBoundinBox(BlockPosition hit, int facing, i
   bb.pos1 = fl;
   bb.pos2 = br;
   return bb;
-  
-  //StructureBB bb = struct.getStructureBB(buildPos, facing);
-//  hit = getOffsetHitPosition(hit, facing);
-//  BlockPosition min = hit.copy();
-//  BlockPosition max = hit.copy();
-//  min.moveBack(facing, levelingBuffer);
-//  min.moveLeft(facing, levelingBuffer);
-//  max.moveForward(facing, zSize+levelingBuffer);
-//  max.moveRight(facing, xSize+levelingBuffer);
-//  max.y+=ySize+clearingBuffer;  
-//  return new StructureBB(min, max);
-  
-  
   }
 
 }

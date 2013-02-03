@@ -3,20 +3,18 @@ read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
 
 GENERAL
-* remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
 * fix temp builder to clear if no valid structure is found ??
 * add inventory blocks for water, lava, redstone torch(fix), repeater, plants
 
 
 TEMPLATES/STRUCTURE
 * work out chest/loot system
-* convert ruins block metadata to northfacing on import---NFC why, or what is going on...
 * add default templates, and add them to export list
 
 
 STRUCTURE BUILDING
 * finish isPlant
-* adjust leveling, correct for yOffset
+
 
 WORLD GEN STUFF
 
@@ -35,6 +33,7 @@ TWEAKS/OPTIMIZATION
 * optimize, optimize, optimize.  Do massive timing/checking for generation times.
 * change creative instant builder to be...not so instant.  break it up into ticks to smooth built-times to sub 10ms/tick
 * figure out better way to handle ruins import (current is convert on run, manual copy and re-run)
+* remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
 
 
 COMPLEXES
@@ -121,3 +120,9 @@ select structure from available structures by value
 * underground generation
 * verify that preservedBlocks works as intended
 * move over to unified bounding-box system...it is now all set in AWStructure, as static methods
+* adjust leveling, correct for yOffset
+* convert ruins block metadata to northfacing on import---NFC why, or what is going on...
+* fix ruins x,z coord inversion on import
+* fix ruins vertical offset being...off
+* biome validation
+* chest loot support

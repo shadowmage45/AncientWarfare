@@ -236,6 +236,7 @@ public static BlockRule parseRuinsRule(String line, int ruleNum)
         {
         meta = Integer.parseInt(ruleSplit[1].trim());
         }
+      meta = BlockDataManager.getRotatedMeta(id, meta, 1);//fix for ruins meta rotations being...weird...
       parsedBlocks.add(new BlockData(id, meta));      
       }
     }

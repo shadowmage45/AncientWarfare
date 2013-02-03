@@ -276,71 +276,15 @@ private List<BlockPosition> getFoundationBlocks(BlockPosition hit, int facing)
 public StructureBB getStructureBB(BlockPosition hit, int facing)
   {
   return getBoundingBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize);
-  
-//  BlockPosition fl = hit.copy();
-//  fl.moveLeft(facing, xOffset);
-//  fl.moveForward(facing, zOffset);
-//  fl.y -=verticalOffset;
-//  BlockPosition br = fl.copy();
-//  br.y+= ySize-1;
-//  br.moveRight(facing, xSize-1);
-//  br.moveForward(facing, zSize-1);
-//  
-//  
-//  
-//  return new StructureBB(fl, br);
   }
 
 public StructureBB getLevelingBB(BlockPosition hit, int facing)
   {
-  return getLevelingBoundingBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize, maxLeveling, levelingBuffer);
-
-  
-//  StructureBB bb = getStructureBB(hit, facing);
-//
-//  BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
-//  BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
-//  min.y+=verticalOffset;
-//  min.y--;  
-//  max.y = min.y;  
-//  min.y -= maxLeveling - 1;  
-//  min.x -= levelingBuffer;
-//  min.z -= levelingBuffer;
-//  max.x += levelingBuffer;
-//  max.z += levelingBuffer;
-//  bb.pos1 = min;
-//  bb.pos2 = max;
-//  return bb;
-  
-  
-  
-//  hit = getOffsetHitPosition(hit, facing);
-//  BlockPosition min = hit.copy();
-//  BlockPosition max = hit.copy();
-//  min.y -= verticalOffset;
-//  min.moveBack(facing, levelingBuffer);
-//  min.moveLeft(facing, levelingBuffer);
-//  max.y -=1;
-//  max.moveForward(facing, zSize+levelingBuffer);
-//  max.moveRight(facing, xSize+levelingBuffer);
-//  return new StructureBB(min, max);
-  
-  
-  }
+  return getLevelingBoundingBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize, maxLeveling, levelingBuffer);}
 
 public StructureBB getClearingBB(BlockPosition hit, int facing)
   { 
   return getClearingBoundinBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize, maxVerticalClear, clearingBuffer);
-  
-//  hit = getOffsetHitPosition(hit, facing);
-//  BlockPosition min = hit.copy();
-//  BlockPosition max = hit.copy();
-//  min.moveBack(facing, levelingBuffer);
-//  min.moveLeft(facing, levelingBuffer);
-//  max.moveForward(facing, zSize+levelingBuffer);
-//  max.moveRight(facing, xSize+levelingBuffer);
-//  max.y+=ySize+clearingBuffer;  
-//  return new StructureBB(min, max);
   }
 
 /**
@@ -431,5 +375,34 @@ private boolean isBedTop(int id, int meta)
   return meta >=8 && id == Block.bed.blockID;
   }
 
+public boolean isValidBiome(String biomeName)
+  {
+  if(this.biomesNotIn == null && this.biomesOnlyIn == null)
+    {
+    return true;
+    }
+  if(this.biomesNotIn!=null)
+    {
+    for(String bio : this.biomesNotIn)
+      {
+      if(bio.equals(biomeName))
+        {
+        return false;
+        }
+      }
+    }
+  if(this.biomesOnlyIn!=null)
+    {
+    for(String bio : this.biomesOnlyIn)
+      {
+      if(bio.equals(biomeName))
+        {
+        return true;
+        }
+      }
+    return false;
+    }  
+  return true;
+  }
 
 }
