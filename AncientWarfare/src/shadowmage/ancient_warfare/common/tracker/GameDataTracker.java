@@ -30,6 +30,7 @@ import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 
 /**
  * handles saving and loading of game data to world directory
@@ -60,6 +61,7 @@ public void resetAllTrackedData()
   PlayerTracker.instance().clearAllData();
   TeamTracker.instance().clearAllData();
   AWStructureModule.instance().clearAllData();
+  WorldGenManager.resetMap();
   this.lastLoadedTimeStamp = -1L;
   }
 
@@ -125,6 +127,10 @@ public void handleWorldLoad(World world)
     {
     AWStructureModule.instance().readFromNBT(tag.getCompoundTag("builders"));
     }  
+  if(tag.hasKey("structMap"))
+    {
+    WorldGenManager.instance().readFromNBT(tag.getCompoundTag("structMap"));
+    }
   }
 
 public void handleWorldSave(World world)
@@ -146,6 +152,7 @@ public void handleWorldSave(World world)
     {
     this.lastSavePath = filePart2;
     NBTTagCompound setTag = PlayerTracker.instance().getNBTTag();
+    
     if(setTag!=null)
       {
       tag.setCompoundTag("playerData", setTag);
@@ -160,9 +167,14 @@ public void handleWorldSave(World world)
       {
       tag.setCompoundTag("builders", setTag);
       }
+    setTag = WorldGenManager.instance().getNBTTag();
+    if(setTag!=null)
+      {
+      tag.setCompoundTag("structMap", setTag);
+      }
     if(tag==null || rawFile==null)
       {
-      System.out.println("null tag or rawFile detected on WorldSave");
+      Config.logDebug("null tag or rawFile detected on WorldSave");
       return;
       }
     CompressedStreamTools.write(tag, rawFile);

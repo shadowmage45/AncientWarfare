@@ -9,9 +9,7 @@ GENERAL
 
 TEMPLATES/STRUCTURE
 * work out chest/loot system
-* add canSpawnInLiquid
 * add maxSubmergedDepth
-* fix validTargetBlocks import/default inclusion...
 * convert ruins block metadata to northfacing on import---NFC why, or what is going on...
 * fix vehicleRule rule parsing to use safeParse methods
 * add default templates, and add them to export list
@@ -23,12 +21,9 @@ STRUCTURE BUILDING
 * finish isPlant
 
 WORLD GEN STUFF
-* switch over to using a word_gen_template file? (stores name, weight, value for each world-gen struct, also store
-        complex' information for the future)
-* site validation
-* above ground height selection algorithm
 * underground height selection algorithm
-* hook generatedStructures map up to gametracker for save/load
+* underground generation
+* alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
 * optimize clearing code to not include inside bounds of structure
 * optimize struct distance checking code, no longer needs to spiral, can use a double nested for/loop
 
@@ -93,3 +88,10 @@ select structure from available structures by value
 *       this one is apparently going to be tought to fix...instant builder may be borked--workaround with deferred block placement list
 * fix validTargetBlocks export
 * figure out decent structure selection algorithm
+* switch over to using a word_gen_template file? (stores name, weight, value for each world-gen struct, also store
+        complex' information for the future)
+* add canSpawnInLiquid -- uses preserveWater / preserveLava
+* site validation
+* above ground height selection algorithm
+* hook generatedStructures map up to gametracker for save/load
+* fix validTargetBlocks import/default inclusion...

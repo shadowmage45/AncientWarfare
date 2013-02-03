@@ -26,6 +26,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -278,14 +279,30 @@ public int getTopBlockHeight(World world, int x, int z, boolean allowWater, bool
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  //TODO save generated struct map
+  NBTTagList tagList = new NBTTagList();
+  for(Integer i : dimensionStructures.keySet())
+    {
+    GeneratedStructureMap map = dimensionStructures.get(i);
+    NBTTagCompound mapTag = map.getNBTTag();
+    mapTag.setInteger("dim", i);
+    tagList.appendTag(mapTag);
+    }  
+  tag.setTag("dimList", tagList);
   return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  //TODO load gen structure map  
+  NBTTagList tagList = tag.getTagList("dimList");
+  for(int i = 0; i < tagList.tagCount(); i++)
+    {
+    NBTTagCompound entTag = (NBTTagCompound) tagList.tagAt(i);    
+    int dim = entTag.getInteger("dim");
+    GeneratedStructureMap map = new GeneratedStructureMap();
+    map.readFromNBT(entTag);
+    dimensionStructures.put(dim, map);
+    }
   }
 
 

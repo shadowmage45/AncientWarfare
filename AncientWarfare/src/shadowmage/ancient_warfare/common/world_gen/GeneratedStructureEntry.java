@@ -34,7 +34,7 @@ public NBTTagCompound getNBTTag()
   NBTTagCompound tag = new NBTTagCompound();
   tag.setByte("val", this.structureValue);
   tag.setString("name", this.name);
-  return null;
+  return tag;
   }
 @Override
 public void readFromNBT(NBTTagCompound tag)

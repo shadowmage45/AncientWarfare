@@ -40,16 +40,35 @@ private List<String> generatedUniques = new ArrayList<String>();
 @Override
 public NBTTagCompound getNBTTag()
   {
+  /**
+   * struct:
+   * tag-  -mainData
+   *   list- xList
+   *     tag xTag
+   *      int x  pos in map
+   *      list zList
+   *        tag z pos in map
+   *        <also entry tag, z is appended to entrytag> 
+   * 
+   */
   NBTTagCompound tag = new NBTTagCompound();
   NBTTagList xList = new NBTTagList();
   for(Integer x : this.generatedStructures.keySet())
     {
+    NBTTagCompound xTag = new NBTTagCompound();
+    xTag.setInteger("x", x);
     NBTTagList zList = new NBTTagList();
     for(Integer z : this.generatedStructures.get(x).keySet())
       {
-      zList.appendTag(this.generatedStructures.get(x).get(z).getNBTTag());
-      }
-    xList.appendTag(zList);
+      NBTTagCompound entTag = this.generatedStructures.get(x).get(z).getNBTTag();
+      if(entTag!=null)
+        {
+        entTag.setInteger("z", z);
+        zList.appendTag(entTag);
+        }
+      }    
+    xTag.setTag("z", zList);
+    xList.appendTag(xTag);
     }
   tag.setTag("x", xList);  
   return tag;
@@ -58,19 +77,35 @@ public NBTTagCompound getNBTTag()
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
+  /**
+   * struct:
+   * tag-  -mainData
+   *   list- xList "x"
+   *     tag xTag "x"
+   *      int x  pos in map "x"
+   *      list zList "z"
+   *        tag z pos in map "z"
+   *        <also entry tag, z is appended to entrytag> 
+   * 
+   */
   NBTTagList xList = tag.getTagList("x");
   for(int x = 0; x <xList.tagCount(); x++)
     {
-    NBTTagList zList = (NBTTagList) xList.tagAt(x);
+    NBTTagCompound xTag = (NBTTagCompound) xList.tagAt(x);
+    int xPos = xTag.getInteger("x");
+    int zPos;
+    NBTTagList zList = xTag.getTagList("z");
     for(int z = 0; z< zList.tagCount(); z++)
       {
       GeneratedStructureEntry ent = new GeneratedStructureEntry();
-      ent.readFromNBT((NBTTagCompound)zList.tagAt(z));
-      if(!this.generatedStructures.containsKey(x))
+      NBTTagCompound entTag = (NBTTagCompound) zList.tagAt(z);
+      zPos = entTag.getInteger("z");
+      ent.readFromNBT(entTag);
+      if(!this.generatedStructures.containsKey(xPos))
         {
-        this.generatedStructures.put(x, new HashMap<Integer, GeneratedStructureEntry>());
+        this.generatedStructures.put(xPos, new HashMap<Integer, GeneratedStructureEntry>());
         }      
-      this.generatedStructures.get(x).put(z, ent);
+      this.generatedStructures.get(xPos).put(zPos, ent);
       }
     }
   }
