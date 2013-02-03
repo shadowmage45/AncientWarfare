@@ -11,7 +11,6 @@ TEMPLATES/STRUCTURE
 * work out chest/loot system
 * add maxSubmergedDepth
 * convert ruins block metadata to northfacing on import---NFC why, or what is going on...
-* fix vehicleRule rule parsing to use safeParse methods
 * add default templates, and add them to export list
 * figure out better way to handle ruins import (current is convert on run, manual copy and re-run)
 
@@ -19,6 +18,7 @@ STRUCTURE BUILDING
 * verify that preservedBlocks works as intended
 * make sure survival ticked builder will not clear or level.  struct BB needs validated for clear before being built
 * finish isPlant
+* change creative instant builder to be...not so instant.  break it up into ticks to smooth built-times to sub 10ms/tick
 
 WORLD GEN STUFF
 * underground height selection algorithm
@@ -26,7 +26,12 @@ WORLD GEN STUFF
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
 * optimize clearing code to not include inside bounds of structure
 * optimize struct distance checking code, no longer needs to spiral, can use a double nested for/loop
+* optimize, optimize, optimize.  Do massive timing/checking for generation times.
 
+SURVIVAL MODE STRUCTURE BUILDING
+* create drafting workstation
+* single-use item scanner--cannot add to world gen, only add to survival/creative mode and export to ruins
+* add template text-editing capabilities to drafting workstation
 
 WORLD GEN ALGORITHM:
 
@@ -95,3 +100,5 @@ select structure from available structures by value
 * above ground height selection algorithm
 * hook generatedStructures map up to gametracker for save/load
 * fix validTargetBlocks import/default inclusion...
+* invert level weighting for chest loot
+* fix vehicleRule rule parsing to use safeParse methods

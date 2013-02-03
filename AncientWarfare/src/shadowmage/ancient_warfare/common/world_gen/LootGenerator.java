@@ -31,6 +31,17 @@ import net.minecraft.item.ItemStack;
 public class LootGenerator
 {
 
+private static LootGenerator INSTANCE;
+private LootGenerator(){}
+public static LootGenerator instance()
+  {
+  if(INSTANCE==null)
+    {
+    INSTANCE = new LootGenerator();
+    }
+  return INSTANCE;
+  }
+
 /**
  * loot table types
  */
@@ -131,14 +142,24 @@ public List<ItemStack> getRandomLoot(int maxValue, int maxLvl, int numOfStacks, 
   int foundVal = 0;
   int table = 0;
   int level = 0;
+  int retryCount;
   for(int i = 0; i < numOfStacks; i++)
     {
+    retryCount = maxLvl;
     table = selectTable(tables, random);
     level = selectLevel(maxLvl, random);
     ItemEntry entry = getEntryFromTable(table,level, random);
     if(entry!=null)
       {
       loot.add(new ItemStack(entry.id, entry.count, entry.meta));
+      }
+    else//if nothing at that level, keep checking levels until 0...      
+      {
+      while(entry==null && retryCount >0)
+        {
+        retryCount--;
+        entry = getEntryFromTable(table, retryCount, random);        
+        }
       }
     }    
   return loot;
@@ -150,24 +171,33 @@ private ItemEntry getEntryFromTable(int table, int level, Random random)
     {
     return null;
     }
+  return getTable(table)[level].getRandomWeightedEntry(random);
+  }
+
+private WeightedLootLevel[] getTable(int table)
+  {
+  if(table > 7 || table < 0)
+    {
+    return null;
+    }
   switch(table)
   {
   case GENERIC:
-  return genericLootTable[level].getRandomWeightedEntry(random);
+  return genericLootTable;
   case VALUABLES:
-  return valuablesTable[level].getRandomWeightedEntry(random);
+  return valuablesTable;
   case RESEARCH:
-  return researchTable[level].getRandomWeightedEntry(random);
+  return researchTable;
   case COMPONENTS:
-  return componentsTable[level].getRandomWeightedEntry(random);
+  return componentsTable;
   case FOOD:
-  return foodTable[level].getRandomWeightedEntry(random);
+  return foodTable;
   case AMMO:
-  return ammoTable[level].getRandomWeightedEntry(random);
+  return ammoTable;
   case WEAPONS:
-  return weaponsTable[level].getRandomWeightedEntry(random);
+  return weaponsTable;
   case VEHICLES:  
-  return vehiclesTable[level].getRandomWeightedEntry(random);
+  return vehiclesTable;
   default:
   return null;  
   }
@@ -188,7 +218,7 @@ private int selectLevel(int maxLevel, Random random)
   int check = random.nextInt(totalLevelWeight);
   for(int i = 0; i <= maxLevel; i++)
     {
-    int pow = (i+1)^4;
+    int pow = (maxLevel-i+1)^4;
     if(check>=pow)
       {
       check-=pow;
@@ -207,43 +237,7 @@ private void addLootEntry(int table, int level, int id, int meta, int count, int
     {
     return;
     }
-  switch(table)
-  {
-  case GENERIC:
-  genericLootTable[level].addItem(id, meta, count, weight, value);
-  break;
-  
-  case VALUABLES:
-  valuablesTable[level].addItem(id, meta, count, weight, value);
-  break;
-  
-  case RESEARCH:
-  researchTable[level].addItem(id, meta, count, weight, value);
-  break;
-  
-  case COMPONENTS:
-  componentsTable[level].addItem(id, meta, count, weight, value);
-  break;
-  
-  case FOOD:
-  foodTable[level].addItem(id, meta, count, weight, value);
-  break;
-  
-  case AMMO:
-  ammoTable[level].addItem(id, meta, count, weight, value);
-  break;
-  
-  case WEAPONS:
-  weaponsTable[level].addItem(id, meta, count, weight, value);
-  break;
-  
-  case VEHICLES:  
-  vehiclesTable[level].addItem(id, meta, count, weight, value);
-  break;
-  
-  default:
-  return;  
-  }
+  getTable(table)[level].addItem(id, meta, count, weight, value);
   }
 
 private void addLootEntry(int table, int level, Item item, int count, int weight, int value)

@@ -51,59 +51,59 @@ public static VehicleRule parseRule(List<String> ruleLines)
     line = it.next();
     if(line.toLowerCase().startsWith("number"))
       {
-      rule.ruleNumber = Short.parseShort(line.split("=")[1]);      
+      rule.ruleNumber = StringTools.safeParseShort("=", line);      
       }
     if(line.toLowerCase().startsWith("type"))
       {
-      rule.ruleNumber = Short.parseShort(line.split("=")[1]);      
+      rule.ruleNumber = StringTools.safeParseShort("=", line);     
       }
     if(line.toLowerCase().startsWith("armorfront"))
       {
-      rule.armorFrontTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      rule.armorFrontTypes = StringTools.safeParseByteArray("=", line);      
       }
     if(line.toLowerCase().startsWith("armormid"))
       {
-      rule.armorMidTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      rule.armorMidTypes = StringTools.safeParseByteArray("=", line);
       }
     if(line.toLowerCase().startsWith("armorrear"))
       {
-      rule.armorRearTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      rule.armorRearTypes = StringTools.safeParseByteArray("=", line);
       }
     if(line.toLowerCase().startsWith("upgrade1"))
       {
-      rule.upgradeFrontTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      rule.upgradeFrontTypes = StringTools.safeParseByteArray("=", line);
       }
     if(line.toLowerCase().startsWith("upgrade2"))
       {
-      rule.upgradeMidTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      rule.upgradeMidTypes = StringTools.safeParseByteArray("=", line);
       }
     if(line.toLowerCase().startsWith("upgrade3"))
       {
-      rule.upgradeRearTypes = StringTools.parseByteArray(line.split("=")[1]);      
+      rule.upgradeRearTypes = StringTools.safeParseByteArray("=", line);
       }
     if(line.toLowerCase().startsWith("ammo1"))
       {
-      rule.ammoTypes[0]=Byte.parseByte(line.split("=")[1]);      
+      rule.ammoTypes[0] = StringTools.safeParseByte("=", line);      
       }
     if(line.toLowerCase().startsWith("ammo2"))
       {
-      rule.ammoTypes[1]=Byte.parseByte(line.split("=")[1]);      
+      rule.ammoTypes[1]=StringTools.safeParseByte("=", line);
       }
     if(line.toLowerCase().startsWith("ammo3"))
       {
-      rule.ammoTypes[2]=Byte.parseByte(line.split("=")[1]);      
+      rule.ammoTypes[2]=StringTools.safeParseByte("=", line);  
       }
     if(line.toLowerCase().startsWith("ammo4"))
       {
-      rule.ammoTypes[3]=Byte.parseByte(line.split("=")[1]);      
+      rule.ammoTypes[3]=StringTools.safeParseByte("=", line);
       }
     if(line.toLowerCase().startsWith("ammo5"))
       {
-      rule.ammoTypes[4]=Byte.parseByte(line.split("=")[1]);      
+      rule.ammoTypes[4]=StringTools.safeParseByte("=", line);
       }
     if(line.toLowerCase().startsWith("ammo6"))
       {
-      rule.ammoTypes[5]=Byte.parseByte(line.split("=")[1]);      
+      rule.ammoTypes[5]=StringTools.safeParseByte("=", line);
       }
     }  
   if(rule.ruleNumber>=0)
