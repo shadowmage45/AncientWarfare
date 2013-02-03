@@ -76,7 +76,6 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     writer.write("worldgen="+String.valueOf(struct.worldGen)+"\n");
     writer.write("creative="+String.valueOf(struct.creative)+"\n");
     writer.write("survival="+String.valueOf(struct.survival)+"\n");
-    writer.write("structureWeight="+String.valueOf(struct.structureWeight)+"\n");
     writer.write("validTargetblocks=");
     if(struct.validTargetBlocks!=null)
       {

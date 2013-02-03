@@ -43,6 +43,8 @@ public class WorldGenManager implements IWorldGenerator, INBTTaggable
 //TODO change back to private...
 public static Map<Integer, GeneratedStructureMap> dimensionStructures = new HashMap<Integer, GeneratedStructureMap>();
 
+private WorldGenConfig config = new WorldGenConfig();
+
 private WorldGenManager(){};
 private static WorldGenManager INSTANCE;
 public static WorldGenManager instance()  
@@ -54,6 +56,42 @@ public static WorldGenManager instance()
   return INSTANCE;
   }
 
+public void loadConfig(String pathName)
+  {
+  this.config.loadFromDirectory(pathName);
+  }
+
+public static void resetMap()
+  {
+  dimensionStructures = new HashMap<Integer, GeneratedStructureMap>();
+  }
+
+public boolean attemptPlacementAt(World world, int chunkX, int chunkZ, ProcessedStructure struct, Random random)
+  {
+  
+  int x = chunkX*16 + random.nextInt(16);
+  int z = chunkZ*16 + random.nextInt(16);  
+  
+  int y = getTopBlockHeight(world, x, z, struct.preserveWater, struct.preserveLava, struct.validTargetBlocks);
+  if(y==-1)
+    {
+    Config.logDebug("invalid topBlock");
+    return false;
+    }
+  int face = random.nextInt(4);
+  BlockPosition hit = new BlockPosition(x,y,z);    
+  if(!struct.canGenerateAtSurface(world, hit.copy(), face))
+    {
+    Config.logDebug("site rejected by structure: "+struct.name);
+    return false;
+    }  
+  hit.y++;   
+  Config.logDebug("structBB : "+struct.getStructureBB(hit, face));
+  BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
+  builder.startConstruction();  
+  return true;
+  }
+
 @Override
 public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {  
@@ -62,10 +100,18 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     {
     return;//TODO setup config for other dimensions
     }
+  
+  if(random.nextInt(Config.structureGeneratorRandomRange)>Config.structureGeneratorRandomChance)
+    {
+    Config.logDebug("Exit for early random chance check");
+    return;
+    }
+
+  
   int maxRange = Config.structureGenMaxCheckRange;
-  int minRange = Config.structureGenMinDistance;
-  float dist = 0;
-  int foundValue = 0;
+
+  float dist = 0;//found distance
+  int foundValue = 0;//found value
   if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
     {
     WorldGenManager.instance().dimensionStructures.put(dim, new GeneratedStructureMap());
@@ -79,44 +125,95 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   else
     {
     dist = values.key();
-    }      
-  ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructureBelowValue(random, Config.structureGenMaxClusterValue-foundValue);
-  int randCheck = random.nextInt(Config.structureGeneratorRandomRange);
-  float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
-  valPercent = 1 - valPercent;
-  if(valPercent<.4f)
-    {
-    valPercent = .4f;
-    }
-  float randChance = Config.structureGeneratorRandomChance * valPercent;
-  if(randCheck > randChance)
-    {
-    return;
-    }  
-  if(struct!=null && dist >= minRange  && foundValue + struct.structureValue < Config.structureGenMaxClusterValue)
-    {
-    int x = chunkX*16 + random.nextInt(16);
-    int z = chunkZ*16 + random.nextInt(16);  
-    
-    int y = getTopBlockHeight(world, x, z, struct.preserveWater, struct.preserveLava, struct.validTargetBlocks);
-    if(y==-1)
-      {
-      Config.logDebug("invalid topBlock");
-      return;
-      }
-    int face = random.nextInt(4);
-    BlockPosition hit = new BlockPosition(x,y,z);    
-    if(!struct.canGenerateAtSurface(world, hit.copy(), face))
-      {
-      Config.logDebug("site rejected by structure: "+struct.name);
-      return;
-      }  
-    hit.y++;   
-    Config.logDebug("structBB : "+struct.getStructureBB(hit, face));
-    BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
-    builder.startConstruction();
-    WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(chunkX, chunkZ, struct.structureValue, struct.name);
     } 
+
+  /**
+   * if value is too high to even place anything....
+   * TODO have this check to place 0-value structures.... (decoration)
+   */
+  if(values.value()>=Config.structureGenMaxClusterValue)
+    {
+    Config.logDebug("exit due to max value");
+    return;
+    }
+
+  /**
+   * second exit code, exit early depending upon percentage of populated max value
+   */
+  float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
+  if(random.nextFloat() < valPercent)
+    {
+    Config.logDebug("Exit for value ratio check");
+    return;
+    }
+
+  /**
+   * select structure from those available to the current available value....
+   */
+  ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructureBelowValue(random, Config.structureGenMaxClusterValue-foundValue);
+
+  if(struct!=null)
+    {   
+    /**
+     * else, place the struct....
+     */    
+    if(this.attemptPlacementAt(world, chunkX, chunkZ, struct, random))
+      {
+      WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(chunkX, chunkZ, struct.structureValue, struct.name);
+      }
+    else
+      {
+      Config.logDebug("placement fail");
+      }
+    }
+  else
+    {
+    Config.logDebug("exit for null structure");
+    }
+  
+  
+  
+  
+  
+  
+  
+  
+//  int maxRange = Config.structureGenMaxCheckRange;
+//  int minRange = Config.structureGenMinDistance;
+//  float dist = 0;
+//  int foundValue = 0;
+//  if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
+//    {
+//    WorldGenManager.instance().dimensionStructures.put(dim, new GeneratedStructureMap());
+//    }
+//  Pair<Float, Integer> values =  WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(chunkX, chunkZ, maxRange);
+//  foundValue = values.value();
+//  if(values.key()==-1)
+//    {
+//    dist = maxRange;
+//    }
+//  else
+//    {
+//    dist = values.key();
+//    }      
+//  ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructureBelowValue(random, Config.structureGenMaxClusterValue-foundValue);
+//  int randCheck = random.nextInt(Config.structureGeneratorRandomRange);
+//  float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
+//  valPercent = 1 - valPercent;
+//  if(valPercent<.4f)
+//    {
+//    valPercent = .4f;
+//    }
+//  float randChance = Config.structureGeneratorRandomChance * valPercent;
+//  if(randCheck > randChance)
+//    {
+//    return;
+//    }  
+//  if(struct!=null && dist >= minRange  && foundValue + struct.structureValue < Config.structureGenMaxClusterValue)
+//    {
+
+//    WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(chunkX, chunkZ, struct.structureValue, struct.name);
+//    } 
   }
 
 /**

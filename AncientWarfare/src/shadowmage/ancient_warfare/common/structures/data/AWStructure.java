@@ -39,7 +39,6 @@ public boolean worldGen = false;
 public boolean creative = true;
 public boolean survival = false;
 public boolean unique;
-public int structureWeight=1;
 public int structureValue=0;
 public int chunkAttempts=1;
 

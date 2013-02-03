@@ -174,6 +174,10 @@ public void export()
       {
       player.addChatMessage("Including structure in live structure lists");
       StructureManager.instance().addStructure(struct, true);
+      if(struct.worldGen)
+        {
+        StructureManager.instance().addStructureToWorldGen(struct,1,1);//TODO add values to export config....
+        }
       }    
     else if(!success)
       {

@@ -67,7 +67,6 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     writer.write("# Template was generated with the Ancient Warfare structure exporter");
     writer.write("# Lines beginning with # denote comments\n");
     writer.write("\n");    
-    writer.write("weight="+String.valueOf(struct.structureWeight)+"\n");
     writer.write("unique="+getIntForBoolean(struct.unique)+"\n");
     writeAcceptableBlocks(writer, struct);
     writer.write("\n");   

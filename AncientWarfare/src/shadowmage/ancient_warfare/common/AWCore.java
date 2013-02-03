@@ -23,7 +23,11 @@
 package shadowmage.ancient_warfare.common;
 
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -57,12 +61,12 @@ import cpw.mods.fml.common.registry.GameRegistry;
 @Mod( modid = "AncientWarfare", name="Ancient Warfare", version="MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+"-"+Config.CORE_BUILD_STATUS)
 @NetworkMod
 (
-clientSideRequired = true,
-serverSideRequired = true,
-packetHandler = PacketHandler.class,
-channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
-versionBounds="["+"MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+",)"
-)
+    clientSideRequired = true,
+    serverSideRequired = true,
+    packetHandler = PacketHandler.class,
+    channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
+    versionBounds="["+"MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+",)"
+    )
 
 public class AWCore 
 {	
@@ -70,7 +74,7 @@ public class AWCore
 public static CommonProxy proxy;
 @Instance("AncientWarfare")
 public static AWCore instance;	
-	
+
 
 /**
  * load settings, config, items
@@ -84,28 +88,28 @@ public void preInit(FMLPreInitializationEvent evt)
    */
   Config.loadConfig(evt.getSuggestedConfigurationFile());
   Config.setLogger(evt.getModLog());
-  
+
   /**
    * register player tracker
    */
   GameRegistry.registerPlayerTracker(PlayerTracker.instance());
-  
+
   /**
    * register eventHandler
    */
   MinecraftForge.EVENT_BUS.register(EventHandler.instance());
-  
+
   /**
    * register worldGenHandler
    */
   GameRegistry.registerWorldGenerator(WorldGenManager.instance());
-  
+
   /**
    * load items
    */
   ItemLoader.instance().load();
   BlockLoader.instance().load();
-  
+
   /**
    * load structure related stuff (needs config directory from this event, could save string and load later)
    */
@@ -117,7 +121,7 @@ public void preInit(FMLPreInitializationEvent evt)
     {
     e.printStackTrace();
     }
- 
+
   }
 
 /**
@@ -129,13 +133,13 @@ public void init(FMLInitializationEvent evt)
   {
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
   proxy.registerClientData();
-  
+
   /**
    * process loaded structures
    */
   AWStructureModule.instance().process();
   }
-	
+
 /**
  * finalize config settings
  * @param evt
@@ -143,18 +147,66 @@ public void init(FMLInitializationEvent evt)
 @PostInit
 public void load(FMLPostInitializationEvent evt)
   {  
-  
+
   /**
    * and finally, save the config in case there were any changes made during init
    */
   Config.saveConfig();
-  
+
+  //this.debugStructureGen();
+  }
+
+
+public void debugStructureGen()
+  {
+  long ts = System.currentTimeMillis();
+  String path = String.valueOf(AWStructureModule.outputDirectory+String.valueOf(ts)+".debug");
+  File tempFile = new File(path);
+  try
+    {
+    if(!tempFile.exists())
+      {
+      tempFile.createNewFile();
+      }
+    
+    FileWriter writer = new FileWriter(tempFile);
+    
+    
+    List<String> lines = this.doStructGenRun();
+    for(String line : lines)
+      {
+      writer.write(line+"\n");
+      }
+    
+    writer.write("\n");
+    writer.write("***************************************************************************************************\n");
+    writer.write("\n");
+    
+    lines = this.doStructGenRun();
+    for(String line : lines)
+      {
+      writer.write(line+"\n");
+      }
+      
+    
+    writer.close();
+    }
+  catch (IOException e)
+    {
+    Config.logDebug("error writing debug export file");
+    e.printStackTrace();
+    }
+  }
+
+private List<String> doStructGenRun()
+  {
+  WorldGenManager.resetMap();
   int xSize = 50;
   int zSize = 50;
-  
+
   int[][] map = new int[xSize][zSize];
   Random random = new Random();
-  
+
   Random check = new Random();
   for(int x = 0; x < xSize; x++)
     {
@@ -169,10 +221,10 @@ public void load(FMLPostInitializationEvent evt)
         map[x][z]=0;
         continue;
         }
-      
+
       int dim =0;
       int maxRange = Config.structureGenMaxCheckRange;
-      
+
       float dist = 0;//found distance
       int foundValue = 0;//found value
       if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
@@ -189,7 +241,7 @@ public void load(FMLPostInitializationEvent evt)
         {
         dist = values.key();
         } 
-      
+
       /**
        * if value is too high to even place anything....
        * TODO have this check to place 0-value structures.... (decoration)
@@ -200,8 +252,8 @@ public void load(FMLPostInitializationEvent evt)
         map[x][z]=0;
         continue;
         }
-      
-      
+
+
       /**
        * second exit code, exit early depending upon percentage of populated max value
        */
@@ -212,12 +264,12 @@ public void load(FMLPostInitializationEvent evt)
         map[x][z]=0;
         continue;
         }
-      
+
       /**
        * select structure from those available to the current available value....
        */
       ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructureBelowValue(random, Config.structureGenMaxClusterValue-foundValue);
-                        
+
       if(struct!=null)
         {
         /**
@@ -242,6 +294,15 @@ public void load(FMLPostInitializationEvent evt)
         }
       }
     } 
+
+  ArrayList<String> lines = new ArrayList<String>();
+  lines.add("chanceRange: "+Config.structureGeneratorRandomRange);
+  lines.add("chance: "+Config.structureGeneratorRandomChance);
+  lines.add("percent chance: "+(((float)Config.structureGeneratorRandomChance/(float)Config.structureGeneratorRandomRange)*100));
+  lines.add("searchRange: "+Config.structureGenMaxCheckRange);
+  lines.add("minRange: "+Config.structureGenMinDistance);
+  lines.add("maxClusterVal: "+Config.structureGenMaxClusterValue);
+  lines.add("simulatedFail: "+ " 60%");
   
   for(int z = 0; z < xSize; z++)
     {
@@ -254,10 +315,10 @@ public void load(FMLPostInitializationEvent evt)
         }
       line = line + String.valueOf(map[x][z]);
       }
-    Config.logDebug(line);
+    lines.add(line);
     }
-  
+  return lines;
   }
-		
+
 
 }

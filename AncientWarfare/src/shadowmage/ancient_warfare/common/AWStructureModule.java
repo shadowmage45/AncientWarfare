@@ -38,6 +38,7 @@ import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.file.StructureLoader;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 
 import com.google.common.io.ByteStreams;
 
@@ -70,6 +71,7 @@ private static String directory;
 public static String outputDirectory = null;
 public static String includeDirectory = null;
 public static String convertDirectory = null;
+public static String structureBaseDirectory = null;
 
 private static final List<String> defaultExportStructures = new ArrayList<String>();
 
@@ -105,6 +107,7 @@ public void load(String directory)
   outputDirectory = directory+"/AWConfig/structures/export/";
   includeDirectory = directory+"/AWConfig/structures/included/";
   convertDirectory = directory+"/AWConfig/structures/convert/";
+  structureBaseDirectory = directory+"/AWConfig/structures/";
   
   TickRegistry.registerTickHandler(this, Side.SERVER);
   BlockDataManager.instance().loadBlockList();
@@ -210,6 +213,9 @@ private void createDirectory(File file)
     }
   }
 
+/**
+ * aka. post-load, post-init..w/e
+ */
 public void process()
   {
   if(loader==null)
@@ -219,6 +225,8 @@ public void process()
   
   loader.convertRuinsTemplates();
   StructureManager.instance().addStructures(loader.processStructureFiles());  
+  
+  WorldGenManager.instance().loadConfig(structureBaseDirectory);
   }
 
 public void addBuilder(Builder builder)
