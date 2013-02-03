@@ -258,10 +258,18 @@ public ProcessedStructure loadStructureAW(List<String> lines)
       {
       struct.undergroundMaxAirAbove = StringTools.safeParseInt("=", line);
       }
-    else if(line.toLowerCase().startsWith("undergroundallowpartial"))
+    else if(line.toLowerCase().startsWith("minsubmergeddepth"))
       {
-      struct.undergroundAllowPartial = StringTools.safeParseBoolean("=", line);
+      struct.minSubmergedDepth = StringTools.safeParseInt("=", line);
       }    
+    else if(line.toLowerCase().startsWith("maxwaterdepth"))
+      {
+      struct.maxWaterDepth = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("maxlavadepth"))
+      {
+      struct.maxLavaDepth = StringTools.safeParseInt("=", line);
+      }
     else if(line.toLowerCase().startsWith("xsize"))
       {
       struct.xSize = StringTools.safeParseInt("=", line);

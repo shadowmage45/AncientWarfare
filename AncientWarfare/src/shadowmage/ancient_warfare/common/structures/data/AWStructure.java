@@ -29,6 +29,8 @@ import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NPCRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
 public abstract class AWStructure
@@ -46,7 +48,9 @@ public boolean underground = false;
 public int undergroundMinLevel=1;
 public int undergroundMaxLevel=255;
 public int undergroundMaxAirAbove = 0;
-public boolean undergroundAllowPartial = false;
+public int minSubmergedDepth = 0;
+public int maxWaterDepth = 0;
+public int maxLavaDepth = 0;
 
 /**
  * preservation flags for entire structure
@@ -60,17 +64,14 @@ public boolean preserveBlocks = false;
  * individual blockRules, will override structure rules for individual blocks
  * (incl advanced feature not supported by Ruins--per block preserve info)
  */
-//public List<BlockRule> blockRules = new ArrayList<BlockRule>();
-//public List<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
-//public List<NPCRule> NPCRules = new ArrayList<NPCRule>();
-//public List<SwapRule> swapRules = new ArrayList<SwapRule>();
-
 public Map<Integer, BlockRule> blockRules = new HashMap<Integer, BlockRule>();
 public Map<Integer, VehicleRule> vehicleRules = new HashMap<Integer, VehicleRule>();
 public Map<Integer, NPCRule> NPCRules = new HashMap<Integer, NPCRule>();
 public Map<Integer, SwapRule> swapRules = new HashMap<Integer, SwapRule>();
 
-
+/**
+ * only set to false for bad values during parsing, struct is then discarded and not loaded into structures map
+ */
 public boolean isValid = true;
 public  List<IDPairCount> cachedCounts = null;
 
@@ -133,5 +134,73 @@ public int xSize;//x dimension
 public int zSize;//z dimension
 public int ySize;//y dimension
 
+
+
+
+
+public static StructureBB getBoundingBox(BlockPosition hit, int facing, int xOffset, int yOffset, int zOffset, int xSize, int ySize, int zSize)  
+  {  
+  BlockPosition fl = hit.copy();
+  fl.moveLeft(facing, xOffset);
+  fl.moveForward(facing, zOffset);
+  fl.y -=yOffset;
+  BlockPosition br = fl.copy();
+  br.y+= ySize-1;
+  br.moveRight(facing, xSize-1);
+  br.moveForward(facing, zSize-1);
+  return new StructureBB(fl, br);
+  }
+
+public static StructureBB getLevelingBoundingBox(BlockPosition hit, int facing, int xOffset, int yOffset, int zOffset, int xSize, int ySize, int zSize, int maxLeveling, int levelingBuffer)
+  {
+  StructureBB bb = getBoundingBox(hit, facing, xOffset, yOffset, zOffset, xSize, ySize, zSize);
+  BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
+  BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
+  min.y+=yOffset;
+  min.y--;  
+  max.y = min.y;  
+  min.y -= maxLeveling - 1;  
+  min.x -= levelingBuffer;
+  min.z -= levelingBuffer;
+  max.x += levelingBuffer;
+  max.z += levelingBuffer;
+  bb.pos1 = min;
+  bb.pos2 = max;
+  return bb;
+  }
+
+public static StructureBB getClearingBoundinBox(BlockPosition hit, int facing, int xOffset, int yOffset, int zOffset, int xSize, int ySize, int zSize, int maxVerticalClear, int clearingBuffer)
+  {
+  StructureBB bb = getBoundingBox(hit, facing, xOffset, yOffset, zOffset, xSize, ySize, zSize);
+  
+  BlockPosition fl = bb.pos1.copy();
+  BlockPosition br = bb.pos2.copy();
+  BlockPosition minBounds = BlockTools.getMin(fl, br);
+  BlockPosition maxBounds = BlockTools.getMax(fl, br);
+  
+  fl.y += yOffset;
+  fl.moveLeft(facing, clearingBuffer);
+  fl.moveBack(facing, clearingBuffer);
+  br.y = fl.y + maxVerticalClear - 1;;
+  br.moveRight(facing, clearingBuffer);
+  br.moveForward(facing, clearingBuffer);
+  
+  bb.pos1 = fl;
+  bb.pos2 = br;
+  return bb;
+  
+  //StructureBB bb = struct.getStructureBB(buildPos, facing);
+//  hit = getOffsetHitPosition(hit, facing);
+//  BlockPosition min = hit.copy();
+//  BlockPosition max = hit.copy();
+//  min.moveBack(facing, levelingBuffer);
+//  min.moveLeft(facing, levelingBuffer);
+//  max.moveForward(facing, zSize+levelingBuffer);
+//  max.moveRight(facing, xSize+levelingBuffer);
+//  max.y+=ySize+clearingBuffer;  
+//  return new StructureBB(min, max);
+  
+  
+  }
 
 }

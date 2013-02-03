@@ -91,53 +91,20 @@ public static NBTTagCompound getClientTag(AWStructure struct)
  */
 public AxisAlignedBB getBBForRender(BlockPosition hit, int face)
   {
-  BlockPosition size = new BlockPosition(xSize, ySize, zSize);
-  BlockPosition offset = new BlockPosition (xOffset, yOffset, zOffset);
-    
-  BlockPosition p1 = hit.copy();
-  p1.moveLeft(face, offset.x);
-  p1.moveForward(face, offset.z);
-
-  BlockPosition p2 = p1.copy();
-  p2.moveRight(face, size.x);
-  p2.moveForward(face, size.z);
-  p2.y += size.y;
-    
-  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
-  return bb;
+  StructureBB bb = AWStructure.getBoundingBox(hit, face, xOffset, yOffset, zOffset, xSize+1, ySize+1, zSize+1);  
+  return AxisAlignedBB.getBoundingBox(bb.pos1.x, bb.pos1.y, bb.pos1.z, bb.pos2.x, bb.pos2.y, bb.pos2.z);  
   }
 
 public AxisAlignedBB getLevelingBBForRender(BlockPosition hit, int face)
   {
-  AxisAlignedBB bb = this.getBBForRender(hit, face);
-  bb.maxY = bb.minY;
-  bb.minY -= maxLeveling;
-  
-  
-  boolean xNorm = bb.minX < bb.maxX;
-  boolean zNorm = bb.minZ < bb.maxZ;
-  bb.minX = xNorm? bb.minX - levelingBuffer : bb.minX + levelingBuffer;
-  bb.minZ = zNorm? bb.minZ - levelingBuffer : bb.minZ + levelingBuffer;
-  bb.maxX = xNorm? bb.maxX + levelingBuffer : bb.maxX - levelingBuffer;
-  bb.maxZ = zNorm? bb.maxZ + levelingBuffer : bb.maxZ - levelingBuffer;
-//  bb.minX -= levelingBuffer;
-//  bb.minZ -= levelingBuffer;
-//  bb.maxX += levelingBuffer;
-//  bb.maxZ += levelingBuffer;
-  return bb;
+  StructureBB bb = AWStructure.getLevelingBoundingBox(hit, face, xOffset, yOffset, zOffset, xSize+1, ySize+1, zSize+1, maxLeveling, levelingBuffer);
+  return AxisAlignedBB.getBoundingBox(bb.pos1.x, bb.pos1.y+yOffset, bb.pos1.z, bb.pos2.x, bb.pos2.y+yOffset+1, bb.pos2.z);
   }
 
 public AxisAlignedBB getClearingBBForRender(BlockPosition hit, int face)
   {
-  AxisAlignedBB bb = this.getBBForRender(hit, face);
-  boolean xNorm = bb.minX < bb.maxX;
-  boolean zNorm = bb.minZ < bb.maxZ;
-  bb.minX = xNorm? bb.minX - clearingBuffer : bb.minX + clearingBuffer;
-  bb.minZ = zNorm? bb.minZ - clearingBuffer : bb.minZ + clearingBuffer;
-  bb.maxX = xNorm? bb.maxX + clearingBuffer : bb.maxX - clearingBuffer;
-  bb.maxZ = zNorm? bb.maxZ + clearingBuffer : bb.maxZ - clearingBuffer;  
-  bb.maxY += maxClearing;
-  return bb;
+  StructureBB bb = AWStructure.getClearingBoundinBox(hit, face, xOffset, yOffset, zOffset, xSize+1, ySize+1, zSize+1, maxClearing, clearingBuffer);
+  return AxisAlignedBB.getBoundingBox(bb.pos1.x, bb.pos1.y, bb.pos1.z, bb.pos2.x, bb.pos2.y, bb.pos2.z);
   }
 
 

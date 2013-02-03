@@ -95,7 +95,9 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     writer.write("undergroundMinLevel="+String.valueOf(struct.undergroundMinLevel)+"\n");
     writer.write("undergroundMaxLevel="+ (255-struct.ySize)+"\n");
     writer.write("undergroundMaxAirAbove="+String.valueOf(struct.undergroundMaxAirAbove)+"\n");
-    writer.write("undergroundAllowPartial="+String.valueOf(struct.undergroundAllowPartial)+"\n");
+    writer.write("minSubmergedDepth="+String.valueOf(struct.minSubmergedDepth)+"\n");
+    writer.write("maxWaterDepth="+String.valueOf(struct.maxWaterDepth)+"\n");
+    writer.write("maxLavaDepth="+String.valueOf(struct.maxLavaDepth)+"\n");
     writer.write("\n");
     writer.write("xSize="+String.valueOf(struct.xSize)+"\n");
     writer.write("ySize="+String.valueOf(struct.ySize)+"\n");

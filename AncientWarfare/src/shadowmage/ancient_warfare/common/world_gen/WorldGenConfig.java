@@ -23,8 +23,8 @@ package shadowmage.ancient_warfare.common.world_gen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import shadowmage.ancient_warfare.common.manager.StructureManager;
@@ -51,7 +51,7 @@ public Entry(String csv)
   }
 }
 
-private List<Entry> entries = new ArrayList<Entry>();
+private Map<String, Entry> entries = new HashMap<String, Entry>();
 
 public void loadFromDirectory(String pathName)
   {
@@ -74,14 +74,15 @@ public void loadFromDirectory(String pathName)
       if(!line.startsWith("#"))
         {
         Entry ent = new Entry(line);
-        this.entries.add(ent);
+        this.entries.put(ent.name, ent);
         }
       }
     scan.close();
     fis.close();
     
-    for(Entry ent : this.entries)
+    for(String name : this.entries.keySet())
       {
+      Entry ent = this.entries.get(name);
       ProcessedStructure struct = StructureManager.instance().getStructureServer(ent.name);
       if(struct!=null)        
         {
@@ -107,6 +108,17 @@ public void loadFromDirectory(String pathName)
     }
   }
 
+public int getValueFor(String name)
+  {
+  if(!this.entries.containsKey(name))
+    {
+    return 0;
+    }
+  else
+    {
+    return this.entries.get(name).value;
+    }
+  }
 
 
 }

@@ -139,8 +139,9 @@ public boolean shouldPreserveBlock(int id, int meta)
         return true;
         }
       }
+    return false;
     }
-  return false;
+  return true;
   }
 
 /**

@@ -84,6 +84,7 @@ public boolean canGenerateAtSurface(World world, BlockPosition hit, int facing)
   else
     {
     BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
+    min.y += verticalOffset;
     BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
     if(!isValidLevelingTarget(world, min, max))
       {
@@ -121,10 +122,54 @@ public boolean canGenerateAtSurface(World world, BlockPosition hit, int facing)
   return true;
   }
 
+public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facing)
+  {
+  /**
+   * what to check for underground validation?   * 
+   * if !partial underground 
+   *   check perimiter for max allowed air?
+   */
+  int missingBlocks = 0;
+  boolean canGen = true;  
+  StructureBB bb = getStructureBB(hit, facing);
+  if(maxLeveling==0)//should level the site, or check for overhang?
+    {
+    BlockPosition front = bb.pos1.copy();
+    front.y --;
+    BlockPosition back = bb.pos2.copy();
+    back.y = front.y;
+    List<BlockPosition> foundationBlocks = BlockTools.getAllBlockPositionsBetween(front, back);
+    for(BlockPosition pos : foundationBlocks)
+      {      
+      if(!isValidTargetBlock(world.getBlockId(pos.x, pos.y, pos.z)))
+        {
+        missingBlocks++;
+        }
+      if(missingBlocks>this.maxOverhang)
+        {
+        Config.logDebug("Rejected due to overhang");
+        return false;
+        }    
+      }
+    }
+  else
+    {
+    BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
+    min.y += verticalOffset;
+    BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
+    if(!isValidLevelingTarget(world, min, max))
+      {
+      Config.logDebug("rejected for improper leveling");
+      return false;
+      }   
+    }
+  return true;
+  }
+
 public boolean isValidLevelingTarget(World world, BlockPosition min, BlockPosition max)
   {
   //TODO check beneath as well as just beside?
-  min.x-= 1 +levelingBuffer;
+  min.x-= 1 + levelingBuffer;
   min.z-= 1 + levelingBuffer;
   max.x+= 1 + levelingBuffer;
   max.z+= 1 + levelingBuffer;
@@ -230,43 +275,72 @@ private List<BlockPosition> getFoundationBlocks(BlockPosition hit, int facing)
  */
 public StructureBB getStructureBB(BlockPosition hit, int facing)
   {
-  BlockPosition fl = hit.copy();
-  fl.moveLeft(facing, xOffset);
-  fl.moveForward(facing, zOffset);
-  fl.y -=verticalOffset;
-  BlockPosition br = fl.copy();
-  br.y+= ySize-1;
-  br.moveRight(facing, xSize-1);
-  br.moveForward(facing, zSize-1);
+  return getBoundingBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize);
   
-  return new StructureBB(fl, br);
+//  BlockPosition fl = hit.copy();
+//  fl.moveLeft(facing, xOffset);
+//  fl.moveForward(facing, zOffset);
+//  fl.y -=verticalOffset;
+//  BlockPosition br = fl.copy();
+//  br.y+= ySize-1;
+//  br.moveRight(facing, xSize-1);
+//  br.moveForward(facing, zSize-1);
+//  
+//  
+//  
+//  return new StructureBB(fl, br);
   }
 
 public StructureBB getLevelingBB(BlockPosition hit, int facing)
   {
-  hit = getOffsetHitPosition(hit, facing);
-  BlockPosition min = hit.copy();
-  BlockPosition max = hit.copy();
-  min.y -= verticalOffset;
-  min.moveBack(facing, levelingBuffer);
-  min.moveLeft(facing, levelingBuffer);
-  max.y -=1;
-  max.moveForward(facing, zSize+levelingBuffer);
-  max.moveRight(facing, xSize+levelingBuffer);
-  return new StructureBB(min, max);
+  return getLevelingBoundingBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize, maxLeveling, levelingBuffer);
+
+  
+//  StructureBB bb = getStructureBB(hit, facing);
+//
+//  BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
+//  BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
+//  min.y+=verticalOffset;
+//  min.y--;  
+//  max.y = min.y;  
+//  min.y -= maxLeveling - 1;  
+//  min.x -= levelingBuffer;
+//  min.z -= levelingBuffer;
+//  max.x += levelingBuffer;
+//  max.z += levelingBuffer;
+//  bb.pos1 = min;
+//  bb.pos2 = max;
+//  return bb;
+  
+  
+  
+//  hit = getOffsetHitPosition(hit, facing);
+//  BlockPosition min = hit.copy();
+//  BlockPosition max = hit.copy();
+//  min.y -= verticalOffset;
+//  min.moveBack(facing, levelingBuffer);
+//  min.moveLeft(facing, levelingBuffer);
+//  max.y -=1;
+//  max.moveForward(facing, zSize+levelingBuffer);
+//  max.moveRight(facing, xSize+levelingBuffer);
+//  return new StructureBB(min, max);
+  
+  
   }
 
 public StructureBB getClearingBB(BlockPosition hit, int facing)
   { 
-  hit = getOffsetHitPosition(hit, facing);
-  BlockPosition min = hit.copy();
-  BlockPosition max = hit.copy();
-  min.moveBack(facing, levelingBuffer);
-  min.moveLeft(facing, levelingBuffer);
-  max.moveForward(facing, zSize+levelingBuffer);
-  max.moveRight(facing, xSize+levelingBuffer);
-  max.y+=ySize+clearingBuffer;  
-  return new StructureBB(min, max);
+  return getClearingBoundinBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize, maxVerticalClear, clearingBuffer);
+  
+//  hit = getOffsetHitPosition(hit, facing);
+//  BlockPosition min = hit.copy();
+//  BlockPosition max = hit.copy();
+//  min.moveBack(facing, levelingBuffer);
+//  min.moveLeft(facing, levelingBuffer);
+//  max.moveForward(facing, zSize+levelingBuffer);
+//  max.moveRight(facing, xSize+levelingBuffer);
+//  max.y+=ySize+clearingBuffer;  
+//  return new StructureBB(min, max);
   }
 
 /**

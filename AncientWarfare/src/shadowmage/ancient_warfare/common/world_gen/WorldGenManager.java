@@ -67,13 +67,38 @@ public static void resetMap()
   dimensionStructures = new HashMap<Integer, GeneratedStructureMap>();
   }
 
-public boolean attemptPlacementAt(World world, int chunkX, int chunkZ, ProcessedStructure struct, Random random)
+public boolean attemptPlacementSubsurface(World world, int chunkX, int chunkZ, ProcessedStructure struct, Random random)
+  {
+  int x = chunkX*16 + random.nextInt(16);
+  int z = chunkZ*16 + random.nextInt(16);  
+  int y = getSubsurfaceTarget(world, x, z, struct.undergroundMinLevel, struct.undergroundMaxLevel, struct.minSubmergedDepth, random);
+  if(y==-1)
+    {
+    Config.logDebug("underground structure--invalid topBlock");
+    return false;
+    }
+  int face = random.nextInt(4);
+  BlockPosition hit = new BlockPosition(x,y,z);    
+  if(!struct.canGenerateAtSubSurface(world, hit, face))
+    {
+    Config.logDebug("underground structure rejected build site");
+    return false;
+    }
+  
+  hit.y++;   
+  Config.logDebug("underground structBB : "+struct.getStructureBB(hit, face));
+  BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
+  builder.startConstruction(); 
+  return true;
+  }
+
+public boolean attemptPlacementSurface(World world, int chunkX, int chunkZ, ProcessedStructure struct, Random random)
   {
   
   int x = chunkX*16 + random.nextInt(16);
   int z = chunkZ*16 + random.nextInt(16);  
   
-  int y = getTopBlockHeight(world, x, z, struct.preserveWater, struct.preserveLava, struct.validTargetBlocks);
+  int y = getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
   if(y==-1)
     {
     Config.logDebug("invalid topBlock");
@@ -128,26 +153,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     dist = values.key();
     } 
 
-  /**
-   * if value is too high to even place anything....
-   * TODO have this check to place 0-value structures.... (decoration)
-   */
-  if(values.value()>=Config.structureGenMaxClusterValue)
-    {
-    Config.logDebug("exit due to max value");
-    return;
-    }
-
-  /**
-   * second exit code, exit early depending upon percentage of populated max value
-   */
-  float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
-  if(random.nextFloat() < valPercent)
-    {
-    Config.logDebug("Exit for value ratio check");
-    return;
-    }
-
+ 
   /**
    * select structure from those available to the current available value....
    */
@@ -155,10 +161,47 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
 
   if(struct!=null)
     {   
+    
+    /**
+     * if it is not a decorative structure, check value
+     */
+    if(config.getValueFor(struct.name)>0)
+      {
+      /**
+       * if value is too high to even place anything....
+       */
+      if(values.value()>=Config.structureGenMaxClusterValue)
+        {
+        Config.logDebug("exit due to max value");
+        return;
+        }
+      
+      /**
+       * second exit code, exit early depending upon percentage of populated max value
+       */
+      float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
+      if(random.nextFloat() < valPercent)
+        {
+        Config.logDebug("Exit for value ratio check");
+        return;
+        }
+      }
+    
+
     /**
      * else, place the struct....
      */    
-    if(this.attemptPlacementAt(world, chunkX, chunkZ, struct, random))
+    
+    boolean placed = false;
+    if(struct.underground)
+      {
+      placed = this.attemptPlacementSubsurface(world, chunkX, chunkZ, struct, random);
+      }
+    else
+      {
+      placed = this.attemptPlacementSurface(world, chunkX, chunkZ, struct, random);
+      }    
+    if(placed)
       {
       WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(chunkX, chunkZ, struct.structureValue, struct.name);
       }
@@ -171,50 +214,49 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     {
     Config.logDebug("exit for null structure");
     }
-  
-  
-  
-  
-  
-  
-  
-  
-//  int maxRange = Config.structureGenMaxCheckRange;
-//  int minRange = Config.structureGenMinDistance;
-//  float dist = 0;
-//  int foundValue = 0;
-//  if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
-//    {
-//    WorldGenManager.instance().dimensionStructures.put(dim, new GeneratedStructureMap());
-//    }
-//  Pair<Float, Integer> values =  WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(chunkX, chunkZ, maxRange);
-//  foundValue = values.value();
-//  if(values.key()==-1)
-//    {
-//    dist = maxRange;
-//    }
-//  else
-//    {
-//    dist = values.key();
-//    }      
-//  ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructureBelowValue(random, Config.structureGenMaxClusterValue-foundValue);
-//  int randCheck = random.nextInt(Config.structureGeneratorRandomRange);
-//  float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
-//  valPercent = 1 - valPercent;
-//  if(valPercent<.4f)
-//    {
-//    valPercent = .4f;
-//    }
-//  float randChance = Config.structureGeneratorRandomChance * valPercent;
-//  if(randCheck > randChance)
-//    {
-//    return;
-//    }  
-//  if(struct!=null && dist >= minRange  && foundValue + struct.structureValue < Config.structureGenMaxClusterValue)
-//    {
+  }
 
-//    WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(chunkX, chunkZ, struct.structureValue, struct.name);
-//    } 
+public int getSubsurfaceTarget(World world, int x, int z, int minLevel, int maxLevel, int minSubmerged, Random random)
+  {
+  int y = getRawTopBlockHeight(world, x, z);
+  int genLevel = minLevel;
+  if(y>maxLevel)
+    {
+    int diff = y - maxLevel;
+    if(diff<minSubmerged)
+      {
+      genLevel = maxLevel - (minSubmerged-diff);
+      }
+    else
+      {
+      genLevel = maxLevel;
+      }    
+    }
+  else
+    {
+    genLevel = y - minSubmerged;    
+    }
+  if(genLevel<minLevel)
+    {
+    return -1;
+    }
+  int range = genLevel - minLevel;
+  int level = random.nextInt(range) + minLevel;
+  return level;
+  }
+
+private int getRawTopBlockHeight(World world, int x, int z)
+  {
+  int top = world.provider.getActualHeight();
+  for(int i = top; i > 0; i--)
+    {
+    int id = world.getBlockId(x, i, z);
+    if(id!=0 && Block.isNormalCube(id) && id != Block.wood.blockID)      
+      {
+      return i;
+      }
+    }
+  return -1;
   }
 
 /**
@@ -224,52 +266,65 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
  * @param z
  * @return
  */
-public int getTopBlockHeight(World world, int x, int z, boolean allowWater, boolean allowLava, int[] allowedTargetBlocks)
+public int getTopBlockHeight(World world, int x, int z, int maxWater, int maxLava, int[] allowedTargetBlocks)
   {
-  int top = world.provider.getActualHeight();
-  for(int i = top; i > 0; i--)
-    {
-    int id = world.getBlockId(x, i, z);
-    if(id!=0 && Block.isNormalCube(id) && id != Block.wood.blockID)
-      {      
-      if(allowedTargetBlocks !=null)
-        {        
-        boolean valid = false;
-        for(int allowedID : allowedTargetBlocks)
-          {
-          if(id==allowedID)
-            {
-            valid = true;
-            }
-          }
-        if(valid)
-          {
-          int topID = world.getBlockId(x, i+1, z);
-          if(topID == Block.waterMoving.blockID || topID == Block.waterStill.blockID)
-            {
-            if(allowWater)
-              {
-              
-              }
-            return -1;
-            //TODO get count of water above block...            
-            }
-          else if(topID == Block.lavaMoving.blockID || topID== Block.lavaStill.blockID)
-            {
-            if(allowLava)
-              {
-              
-              }
-            return -1;
-            //TODO count lava blocks...
-            }
-          else if(!Block.isNormalCube(topID))//else it is some other non-solid block, like snow, grass, leaves
-            {
-            return i;
-            }
-          }
+  int y = getRawTopBlockHeight(world, x, z);
+  int id = world.getBlockId(x, y, z);
+  if(allowedTargetBlocks !=null)
+    {        
+    boolean valid = false;
+    for(int allowedID : allowedTargetBlocks)
+      {
+      if(id==allowedID)
+        {
+        valid = true;
         }
-      return -1;
+      }
+    if(valid)
+      {
+      int topID = world.getBlockId(x, y+1, z);
+      if(topID == Block.waterMoving.blockID || topID == Block.waterStill.blockID)
+        {
+        if(maxWater>0)
+          {
+          int run = 1;
+          int foundWater = 1;
+          while(world.getBlockId(x, y+1+run, z)!=0 && y+1+run<world.provider.getActualHeight() && foundWater <= maxWater);
+            {
+            foundWater++;
+            run++;
+            if(foundWater>maxWater)
+              {
+              return -1;
+              }
+            }
+          return y;
+          }
+        return -1;       
+        }
+      else if(topID == Block.lavaMoving.blockID || topID== Block.lavaStill.blockID)
+        {
+        if(maxLava>0)
+          {
+          int run = 1;
+          int foundWater = 1;
+          while(world.getBlockId(x, y+1+run, z)!=0 && y+1+run<world.provider.getActualHeight() && foundWater <= maxLava);
+            {
+            foundWater++;
+            run++;
+            if(foundWater>maxLava)
+              {
+              return -1;
+              }
+            }
+          return y;
+          }
+        return -1;
+        }
+      else if(!Block.isNormalCube(topID))//else it is some other non-solid block, like snow, grass, leaves
+        {
+        return y;
+        }
       }
     }
   return -1;
