@@ -27,31 +27,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
-import shadowmage.meim.common.config.Config;
 
 public class WorldGenConfig
 {
 
-private class Entry
-{
-String name;
-boolean unique;
-int weight;
-int value;
 
-public Entry(String csv)
-  {
-  String[] split = csv.trim().split(",");
-  name = split[0];
-  unique = Boolean.parseBoolean(split[1].trim());
-  weight = Integer.parseInt(split[2].trim());
-  value = Integer.parseInt(split[3].trim());
-  }
-}
 
-private Map<String, Entry> entries = new HashMap<String, Entry>();
+private Map<String, WorldGenStructureEntry> entries = new HashMap<String, WorldGenStructureEntry>();
 
 public void loadFromDirectory(String pathName)
   {
@@ -73,7 +58,7 @@ public void loadFromDirectory(String pathName)
       line = scan.next();
       if(!line.startsWith("#"))
         {
-        Entry ent = new Entry(line);
+        WorldGenStructureEntry ent = new WorldGenStructureEntry(line);
         this.entries.put(ent.name, ent);
         }
       }
@@ -82,7 +67,7 @@ public void loadFromDirectory(String pathName)
     
     for(String name : this.entries.keySet())
       {
-      Entry ent = this.entries.get(name);
+      WorldGenStructureEntry ent = this.entries.get(name);
       ProcessedStructure struct = StructureManager.instance().getStructureServer(ent.name);
       if(struct!=null)        
         {

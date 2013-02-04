@@ -17,6 +17,8 @@ WORLD GEN STUFF
 * test biome inclusion/exclusion
 * find better method to sort available structures per-biome, to reduce rejected structures
 * verify world gen map loads properly
+* handle multi-dimensions
+
 
 SURVIVAL MODE STRUCTURE BUILDING
 * create drafting workstation
