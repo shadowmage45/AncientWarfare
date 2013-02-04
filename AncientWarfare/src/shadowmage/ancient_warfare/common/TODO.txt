@@ -3,17 +3,13 @@ read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
 
 GENERAL
-* fix temp builder to clear if no valid structure is found ??
-* add inventory blocks for water, lava, redstone torch(fix), repeater, plants
-
 
 TEMPLATES/STRUCTURE
 * work out chest/loot system
 * add default templates, and add them to export list
 
-
 STRUCTURE BUILDING
-* finish isPlant
+* test block swapping
 
 
 WORLD GEN STUFF
@@ -40,6 +36,10 @@ COMPLEXES
 * THDT
 
 
+RESEARCH
+* THDT
+
+
 WORLD GEN ALGORITHM:
 
 do quick random check if should place at all CHANCE in RANGE (200 in 1000)
@@ -49,9 +49,6 @@ do check to see if should place based on foundValue / MAX_CLUSTER_VALUE (anti-cl
 select structure from available structures by value
     weight by value ? (try and place higher value as much as possible
     todo--add max range into value/weighting balancing
-
-
-
 
 
 
@@ -126,3 +123,8 @@ select structure from available structures by value
 * fix ruins vertical offset being...off
 * biome validation
 * chest loot support
+* fix temp builder to clear if no valid structure is found ??
+* add inventory blocks for *water, *lava, *redstone torch(fix), *repeater, plants
+* finish isPlant
+* fully implement overrides for creative builder (as far as possible without NPCs/Vehicles/Gates/Teams/Etc)
+* add gates to blockRules

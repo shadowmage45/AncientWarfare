@@ -88,6 +88,11 @@ public int[] npcs;
 public String[] spawnerTypes;
 
 /**
+ * single gate type, if this is set to >= 0, no other blocks will be checked.
+ */
+public int gateNum = -1;
+
+/**
  * should preserve water/lava/plants when attempting to place this rule?
  */
 public boolean preserveWater = false;
@@ -365,8 +370,12 @@ public static BlockRule parseRule(List<String> ruleLines)
       {
       rule.spawnerTypes = StringTools.safeParseStringArray("=", line);
       }
+    if(line.toLowerCase().startsWith("gate"))
+      {
+      rule.gateNum = StringTools.safeParseInt("=", line);
+      }
     }
-  if((rule.blockData !=null || rule.vehicles !=null ||rule.npcs!=null || rule.ruinsSpecialData !=null || rule.spawnerTypes != null)&& rule.ruleNumber>=0)
+  if((rule.blockData !=null || rule.vehicles !=null ||rule.npcs!=null || rule.ruinsSpecialData !=null || rule.spawnerTypes != null || rule.gateNum > -1)&& rule.ruleNumber>=0)
     {
     return rule;
     }  

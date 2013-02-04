@@ -139,6 +139,8 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     writer.write("####VEHICLE RULES####\n");
     writer.write("\n");
     writer.write("####NPC RULES####\n");
+    writer.write("\n");  
+    writer.write("####GATE RULES####\n");
     writer.write("\n");    
     //END TODO
     writer.write("####RESOURCE LIST####\n");
@@ -195,6 +197,10 @@ private static void writeBlockRules(FileWriter writer, ProcessedStructure struct
     writer.write("order="+String.valueOf(rule.order)+"\n");
     writer.write("conditional="+String.valueOf(rule.conditional)+"\n");
     writer.write("percent="+String.valueOf(rule.baseChance)+"\n"); 
+    if(rule.gateNum>-1)
+      {
+      writer.write("gate="+String.valueOf(rule.gateNum)+"\n");
+      }
     if(rule.blockData!=null)
       {
       writer.write("blocks=");

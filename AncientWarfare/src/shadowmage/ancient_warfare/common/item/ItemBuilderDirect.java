@@ -105,9 +105,34 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
   }
 
 @Override
-public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) 
+public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) 
   {
-  //TODO clear data if structure is not valid..
+  boolean openGUI = false;
+  if(world.isRemote)
+    {
+    return;
+    }  
+  NBTTagCompound tag;
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
+    {
+    tag = stack.getTagCompound().getCompoundTag("structData");
+    }
+  else
+    {
+    tag = new NBTTagCompound();
+    } 
+  if(tag.hasKey("building") && tag.getBoolean("building")==true)
+    {
+    if(entity instanceof EntityPlayer)
+      {
+      EntityPlayer player = (EntityPlayer)entity;
+      if(StructureManager.instance().getTempStructure(player.getEntityName())==null)
+        {
+        tag = new NBTTagCompound();
+        stack.setTagInfo("structData", tag);
+        }
+      }
+    }
   }
 
 /**

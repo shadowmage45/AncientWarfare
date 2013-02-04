@@ -111,6 +111,7 @@ int overrideVehicle=-2;
 int overrideNPC=-2;
 int overrideGate=-2;
 int overrideTeam=-1;
+int overrideRank=-1;
 
 
 /**
@@ -310,12 +311,14 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
     return;
     }
  
-  //TODO handle gates
-//  if(rule.gateType>-1)
-//    {
-//    
-//    return;
-//    }
+  /**
+   * if the blockRule represents a gate, place it.  That is all.
+   */
+  if(rule.gateNum>-1)
+    {
+    this.placeGate(world, x, y, z, rule.gateNum, overrideGate, overrideRank, overrideTeam);
+    return;
+    }
     
   /**
    * else check to see whether should use
@@ -394,7 +397,7 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
       }
     else
       {
-      placeVehicle(world, x, y, z, rule.vehicles[rnd]);    
+      placeVehicle(world, x, y, z, rule.vehicles[rnd], overrideVehicle, overrideRank, overrideTeam);    
       return;
       }    
     }
@@ -406,7 +409,7 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
       }
     else
       {
-      //TODO handle npcs...
+      placeNPC(world, x, y, z, rule.npcs[rnd], overrideNPC, overrideRank, overrideTeam);
       return;
       }
     }
@@ -436,9 +439,28 @@ protected void placeBlockData(World world, int x, int y, int z, BlockData data, 
     }   
   }
 
-protected void placeVehicle(World world, int x, int y, int z, int vehicleType)
+protected void placeVehicle(World world, int x, int y, int z, int vehicleType, int overrideType, int overrideRank, int overrideTeam)
   {
   //TODO
+  //get vehicle rule from struct, apply overrides, get vehicle from vehicle registry, apply upgrades/ammo
+  //spawn vehicle
+  }
+
+protected void placeNPC(World world, int x, int y, int z, int npcType, int overrideType, int overrideRank, int overrideTeam)
+  {
+  //get npc rule from struct, apply overrides, get npc from registry, apply upgrades
+  //spawn npc
+  }
+
+protected void placeGate(World world, int x, int y, int z, int gateType, int overrideType, int overrideRank, int overrideTeam)
+  {
+  //TODO re-do templates to include a gate reference number, to know what 'blocks' belong to what gate.  these will become a type of
+  //    gate 'rule', if a simple one
+  //use gateType if override.  If gate # does not exist, create.
+  //add piece to gate
+  //at end of build, construct gates
+  //TODO how to store gate stuff---scan building upon reload?
+  
   }
 
 protected void placeSpecials(World world, int x, int y, int z, String name)
@@ -533,6 +555,10 @@ protected boolean isPlant(int id)
     return true;
     }
   if(id == Block.pumpkinStem.blockID || id == Block.melonStem.blockID || id == Block.pumpkin.blockID || id == Block.melon.blockID)
+    {
+    return true;
+    }
+  if(id == Block.crops.blockID || id == Block.carrot.blockID || id == Block.potato.blockID)
     {
     return true;
     }
@@ -753,6 +779,7 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("ovV", this.overrideVehicle);
   tag.setInteger("ovN", this.overrideNPC);
   tag.setInteger("ovG", this.overrideGate);
+  tag.setInteger("ovR", this.overrideRank);
   return tag;
   }
 
@@ -769,6 +796,7 @@ public void readFromNBT(NBTTagCompound tag)
   this.overrideVehicle = tag.getInteger("ovV");
   this.overrideNPC = tag.getInteger("ovN");
   this.overrideGate = tag.getInteger("ovG");
+  this.overrideRank = tag.getInteger("ovR");
   }
 
 public static BuilderTicked readTickedBuilderFromNBT(NBTTagCompound tag)

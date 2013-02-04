@@ -54,7 +54,11 @@ public static void loadBlockList()
   addBlock(Block.woodSingleSlab);
   addBlock(Block.woodDoubleSlab);
   
-  /************************************ PRIORITY ONLY BLOCK ENTRIES ************************************/
+  /************************************ PRIORITY ONLY AND BASIC INVENTORIED BLOCK ENTRIES ************************************/
+  addBlock(Block.waterMoving).setPriority(1).setBasicInventoryItem(Item.bucketWater.itemID, 0, 1);
+  addBlock(Block.waterStill).setPriority(1).setBasicInventoryItem(Item.bucketWater.itemID, 0, 1);
+  addBlock(Block.lavaStill).setPriority(1).setBasicInventoryItem(Item.bucketLava.itemID, 0, 1);
+  addBlock(Block.lavaMoving).setPriority(1).setBasicInventoryItem(Item.bucketLava.itemID, 0, 1);
   addBlock(Block.sand).setPriority(1);
   addBlock(Block.gravel).setPriority(1);  
   addBlock(Block.tallGrass).setPriority(1);
@@ -81,7 +85,7 @@ public static void loadBlockList()
   addBlock(Block.dispenser).setRotatable().setMeta(0, 2, 5, 3, 4);
   addBlock(Block.chest).setRotatable().setMeta(0, 2, 5, 3, 4);  
   addBlock(Block.stoneOvenIdle).setRotatable().setMeta(0, 2, 5, 3, 4);
-  addBlock(Block.stoneOvenActive).setRotatable().setMeta(0, 2, 5, 3, 4);
+  addBlock(Block.stoneOvenActive).setRotatable().setMeta(0, 2, 5, 3, 4).setBasicInventoryItem(Block.stoneOvenIdle.blockID, 0, 1);
   addBlock(Block.ladder).setPriority(1).setRotatable().setMeta(0, 2, 5, 3, 4);
   addBlock(Block.signWall).setPriority(1).setRotatable().setMeta(0, 2, 5, 3, 4).setBasicInventoryItem(Item.sign.itemID, 0, 1);
   addBlock(Block.enderChest).setRotatable().setMeta(0, 2, 5, 3, 4);
