@@ -20,10 +20,19 @@
  */
 package shadowmage.ancient_warfare.common.world_gen;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import net.minecraft.world.biome.BiomeGenBase;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 
 public class WorldGenStructureManager
@@ -120,8 +129,8 @@ public void addStructure(ProcessedStructure struct, boolean unique, int weight, 
   if(struct==null)
     {
     return;
-    }
-  WorldGenStructureEntry ent = new WorldGenStructureEntry(struct.name, unique, weight, value);  
+    }  
+  WorldGenStructureEntry ent = new WorldGenStructureEntry(struct.name, unique, weight, value); 
   if(struct.biomesNotIn!=null)
     {
     this.addToAllButBiomes(ent, struct.biomesNotIn);
@@ -177,6 +186,82 @@ private void addToAllButBiomes(WorldGenStructureEntry ent, String[] notIn)
       this.biomesStructureMap.get(k).addEntry(ent);
       }
     }
+  }
+
+public void loadFromDirectory(String pathName)
+  {
+  try
+    {
+    String fileName = pathName + "worldGenConfig.cfg";
+    File configFile = new File(fileName);
+    if(!configFile.exists())
+      {
+      configFile.createNewFile();
+      Config.logDebug("worldGenConfig.cfg could not be located, created empty file");
+      return;
+      }
+    FileInputStream fis = new FileInputStream(configFile);
+    List<WorldGenStructureEntry> lst = new ArrayList<WorldGenStructureEntry>();       
+    Scanner scan = new Scanner(fis);    
+    String line;
+    while(scan.hasNext())
+      {
+      line = scan.next();
+      if(!line.startsWith("#"))
+        {
+        WorldGenStructureEntry ent = new WorldGenStructureEntry(line);
+        lst.add(ent);
+        }
+      }
+    scan.close();
+    fis.close();
+    
+    for(WorldGenStructureEntry ent : lst)
+      {
+      ProcessedStructure struct = StructureManager.instance().getStructureServer(ent.name);
+      if(struct!=null)        
+        {
+        //TODO......meh..
+        StructureManager.instance().addStructureToWorldGen(struct, ent.value, ent.weight);
+        }
+      }
+    
+    }
+  catch(IOException e)
+    {
+    Config.logError("Error while loading world_gen configuration file, no structures will be generated");
+    e.printStackTrace();
+    }
+  catch(NumberFormatException e)
+    {
+    Config.logError("Improperly formatted world gen config file, could not parse a number value");
+    e.printStackTrace();
+    }
+  catch(IndexOutOfBoundsException e)
+    {
+    Config.logError("Improperly formatted world gen config file, an entry was missing one or more csv values\nthe format is<name>,<unique>,<weight>,<value> f");
+    e.printStackTrace();
+    }
+  }
+
+private WorldGenStructureEntry parseEntry(Iterator<String> it)
+  {
+  //TODO...figure out entry format...
+  /**
+   * config:
+   * dimensionsOnlyIn=
+   * dimensionsNotIn=
+   * endConfig:
+   */
+  /**
+   * entry:
+   * name=structName
+   * unique=false
+   * weight=1
+   * value=0
+   * endentry:
+   */
+  return null;
   }
 
 

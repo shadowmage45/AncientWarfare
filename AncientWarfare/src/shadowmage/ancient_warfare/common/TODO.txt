@@ -17,7 +17,8 @@ WORLD GEN STUFF
 * test biome inclusion/exclusion
 * find better method to sort available structures per-biome, to reduce rejected structures
 * verify world gen map loads properly
-* handle multi-dimensions
+* handle multi-dimensions (make them mod-global, and not per-structure(ease of handling)?)
+* finish reworking structure selector, needs weighting stuff done
 
 
 SURVIVAL MODE STRUCTURE BUILDING
