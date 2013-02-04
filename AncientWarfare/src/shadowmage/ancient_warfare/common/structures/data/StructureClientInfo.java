@@ -92,7 +92,7 @@ public static NBTTagCompound getClientTag(AWStructure struct)
 public AxisAlignedBB getBBForRender(BlockPosition hit, int face)
   {
   StructureBB bb = AWStructure.getBoundingBox(hit, face, xOffset, yOffset, zOffset, xSize+1, ySize+1, zSize+1);  
-  return AxisAlignedBB.getBoundingBox(bb.pos1.x, bb.pos1.y, bb.pos1.z, bb.pos2.x, bb.pos2.y, bb.pos2.z);  
+  return AxisAlignedBB.getBoundingBox(bb.pos1.x, bb.pos1.y+yOffset, bb.pos1.z, bb.pos2.x, bb.pos2.y+yOffset, bb.pos2.z);  
   }
 
 public AxisAlignedBB getLevelingBBForRender(BlockPosition hit, int face)
@@ -104,7 +104,7 @@ public AxisAlignedBB getLevelingBBForRender(BlockPosition hit, int face)
 public AxisAlignedBB getClearingBBForRender(BlockPosition hit, int face)
   {
   StructureBB bb = AWStructure.getClearingBoundinBox(hit, face, xOffset, yOffset, zOffset, xSize+1, ySize+1, zSize+1, maxClearing, clearingBuffer);
-  return AxisAlignedBB.getBoundingBox(bb.pos1.x, bb.pos1.y, bb.pos1.z, bb.pos2.x, bb.pos2.y, bb.pos2.z);
+  return AxisAlignedBB.getBoundingBox(bb.pos1.x, bb.pos1.y+yOffset, bb.pos1.z, bb.pos2.x, bb.pos2.y+yOffset+1, bb.pos2.z);
   }
 
 

@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import shadowmage.meim.common.config.Config;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -152,13 +154,20 @@ public List<ItemStack> getRandomLoot(int maxValue, int maxLvl, int numOfStacks, 
     if(entry!=null)
       {
       loot.add(new ItemStack(entry.id, entry.count, entry.meta));
+      Config.logDebug("adding stack "+entry.id+","+entry.meta);
       }
     else//if nothing at that level, keep checking levels until 0...      
       {
+      Config.logDebug("null stack, retrying");
       while(entry==null && retryCount >0)
         {
         retryCount--;
         entry = getEntryFromTable(table, retryCount, random);        
+        }
+      if(entry!=null)
+        {
+        loot.add(new ItemStack(entry.id, entry.count, entry.meta));
+        Config.logDebug("adding stack "+entry.id+","+entry.meta+"   from retry");
         }
       }
     }    
@@ -171,7 +180,12 @@ private ItemEntry getEntryFromTable(int table, int level, Random random)
     {
     return null;
     }
-  return getTable(table)[level].getRandomWeightedEntry(random);
+  WeightedLootLevel lvl = getTable(table)[level];
+  if(lvl!=null)
+    {
+    return lvl.getRandomWeightedEntry(random);
+    }
+  return null;
   }
 
 private WeightedLootLevel[] getTable(int table)
@@ -237,7 +251,12 @@ private void addLootEntry(int table, int level, int id, int meta, int count, int
     {
     return;
     }
-  getTable(table)[level].addItem(id, meta, count, weight, value);
+  WeightedLootLevel[] tbl = getTable(table);
+  if(tbl[level]==null)
+    {
+    tbl[level] = new WeightedLootLevel();
+    }
+  tbl[level].addItem(id, meta, count, weight, value);
   }
 
 private void addLootEntry(int table, int level, Item item, int count, int weight, int value)
@@ -247,9 +266,9 @@ private void addLootEntry(int table, int level, Item item, int count, int weight
 
 public void loadStaticLootTables()
   {
-  this.addLootEntry(GENERIC, 0, Block.torchWood.blockID, 0, 1, 10, 1);
-  this.addLootEntry(GENERIC, 1, Item.silk, 2, 10, 2);
-  this.addLootEntry(GENERIC, 2, Item.gunpowder, 1, 10, 4);
+//  this.addLootEntry(GENERIC, 0, Block.torchWood.blockID, 0, 1, 10, 1);
+//  this.addLootEntry(GENERIC, 1, Item.silk, 2, 10, 2);
+//  this.addLootEntry(GENERIC, 2, Item.gunpowder, 1, 10, 4);
   this.addLootEntry(VALUABLES, 0, Item.coal, 1, 10, 1);
   this.addLootEntry(VALUABLES, 1, Item.ingotIron, 1, 10, 3);
   this.addLootEntry(VALUABLES, 2, Item.swordSteel, 1, 10, 5);
@@ -260,6 +279,39 @@ public void loadStaticLootTables()
   this.addLootEntry(VALUABLES, 7, Item.ingotIron, 10, 10, 30);
   this.addLootEntry(VALUABLES, 8, Item.diamond, 1, 10, 50);
   this.addLootEntry(VALUABLES, 9, Item.swordDiamond, 1, 10, 100);
+  
+  this.addLootEntry(GENERIC, 0, Item.coal, 1, 10, 1);
+  this.addLootEntry(GENERIC, 1, Item.ingotIron, 1, 10, 3);
+  this.addLootEntry(GENERIC, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(GENERIC, 3, Item.goldNugget, 1, 10, 1);
+  this.addLootEntry(GENERIC, 4, Item.ingotIron, 5, 10, 15);
+  this.addLootEntry(GENERIC, 5, Item.ingotGold, 1, 10, 10);
+  this.addLootEntry(GENERIC, 6, Item.ingotGold, 2, 10, 20);
+  this.addLootEntry(GENERIC, 7, Item.ingotIron, 10, 10, 30);
+  this.addLootEntry(GENERIC, 8, Item.diamond, 1, 10, 50);
+  this.addLootEntry(GENERIC, 9, Item.swordDiamond, 1, 10, 100);
+  
+  this.addLootEntry(RESEARCH, 0, Item.coal, 1, 10, 1);
+  this.addLootEntry(RESEARCH, 1, Item.ingotIron, 1, 10, 3);
+  this.addLootEntry(RESEARCH, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(RESEARCH, 3, Item.goldNugget, 1, 10, 1);
+  this.addLootEntry(RESEARCH, 4, Item.ingotIron, 5, 10, 15);
+  this.addLootEntry(RESEARCH, 5, Item.ingotGold, 1, 10, 10);
+  this.addLootEntry(RESEARCH, 6, Item.ingotGold, 2, 10, 20);
+  this.addLootEntry(RESEARCH, 7, Item.ingotIron, 10, 10, 30);
+  this.addLootEntry(RESEARCH, 8, Item.diamond, 1, 10, 50);
+  this.addLootEntry(RESEARCH, 9, Item.swordDiamond, 1, 10, 100);
+  
+  this.addLootEntry(COMPONENTS, 0, Item.coal, 1, 10, 1);
+  this.addLootEntry(COMPONENTS, 1, Item.ingotIron, 1, 10, 3);
+  this.addLootEntry(COMPONENTS, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(COMPONENTS, 3, Item.goldNugget, 1, 10, 1);
+  this.addLootEntry(COMPONENTS, 4, Item.ingotIron, 5, 10, 15);
+  this.addLootEntry(COMPONENTS, 5, Item.ingotGold, 1, 10, 10);
+  this.addLootEntry(COMPONENTS, 6, Item.ingotGold, 2, 10, 20);
+  this.addLootEntry(COMPONENTS, 7, Item.ingotIron, 10, 10, 30);
+  this.addLootEntry(COMPONENTS, 8, Item.diamond, 1, 10, 50);
+  this.addLootEntry(COMPONENTS, 9, Item.swordDiamond, 1, 10, 100);
   
   }
 

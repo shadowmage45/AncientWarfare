@@ -113,7 +113,10 @@ public void handleWorldLoad(World world)
       return;
       }       
     }   
+  
   this.lastLoadedTimeStamp = time;
+  
+  
   
   if(tag.hasKey("playerData"))
     {

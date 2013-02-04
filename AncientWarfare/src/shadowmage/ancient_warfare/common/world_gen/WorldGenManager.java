@@ -60,6 +60,7 @@ public static WorldGenManager instance()
 public void loadConfig(String pathName)
   {
   this.config.loadFromDirectory(pathName);
+  LootGenerator.instance().loadStaticLootTables();
   }
 
 public static void resetMap()

@@ -5,15 +5,17 @@ http://mrl.nyu.edu/~perlin/noise/
 GENERAL
 
 TEMPLATES/STRUCTURE
-* work out chest/loot system
 * add default templates, and add them to export list
+* some ruins structures (one, jungle throne) appears offset -1Y
 
 STRUCTURE BUILDING
 * test block swapping
 
 
 WORLD GEN STUFF
-
+* finish adding things to lootgenerator
+* add percentage of an empty slot to lootgenerator
+* verify weighting for levels in loot generator
 
 SURVIVAL MODE STRUCTURE BUILDING
 * create drafting workstation
@@ -128,3 +130,5 @@ select structure from available structures by value
 * finish isPlant
 * fully implement overrides for creative builder (as far as possible without NPCs/Vehicles/Gates/Teams/Etc)
 * add gates to blockRules
+* work out chest/loot system
+* fix bb rendering...again....
