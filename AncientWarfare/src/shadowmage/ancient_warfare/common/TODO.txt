@@ -6,16 +6,15 @@ GENERAL
 
 TEMPLATES/STRUCTURE
 * add default templates, and add them to export list
-* some ruins structures (one, jungle throne) appears offset -1Y
 
 STRUCTURE BUILDING
-* test block swapping
 
 
 WORLD GEN STUFF
 * finish adding things to lootgenerator
 * add percentage of an empty slot to lootgenerator
 * verify weighting for levels in loot generator
+* test biome stuff
 
 SURVIVAL MODE STRUCTURE BUILDING
 * create drafting workstation
@@ -32,6 +31,7 @@ TWEAKS/OPTIMIZATION
 * change creative instant builder to be...not so instant.  break it up into ticks to smooth built-times to sub 10ms/tick
 * figure out better way to handle ruins import (current is convert on run, manual copy and re-run)
 * remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
+* some ruins structures (one, jungle throne) appears offset -1Y
 
 
 COMPLEXES
@@ -132,3 +132,4 @@ select structure from available structures by value
 * add gates to blockRules
 * work out chest/loot system
 * fix bb rendering...again....
+* test block swapping

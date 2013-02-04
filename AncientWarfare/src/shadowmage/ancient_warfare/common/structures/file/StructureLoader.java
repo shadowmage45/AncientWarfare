@@ -373,6 +373,11 @@ public ProcessedStructure loadStructureAW(List<String> lines)
       {
       this.parseResources(struct, it);
       }
+    
+    else if(line.toLowerCase().startsWith("swap:"))
+      {
+      this.parseSwap(struct, it);
+      }
     /**
      * parse out layers
      */

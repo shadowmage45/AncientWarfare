@@ -99,7 +99,7 @@ public static SwapRule parseRule(List<String> lines)
           }
         if(sp2.length>1)
           {
-          rmt = Integer.parseInt(sp2[2]);
+          rmt = Integer.parseInt(sp2[1]);
           }
         rule.addNewSwapEntry(name, id, meta, rid, rmt);      
         }
@@ -109,6 +109,7 @@ public static SwapRule parseRule(List<String> lines)
   catch(Exception e)
     {
     Config.logError("Error parsing biome rule");
+    e.printStackTrace();
     return null;
     }  
   }
@@ -122,7 +123,7 @@ public BlockData getSwappedData(String name, BlockData sourceID)
   {
   for(SwapEntry entry : this.entries)
     {
-    if(entry.biomeName.equals(name) && entry.sourceID.id == sourceID.id && entry.sourceID.meta == sourceID.meta)
+    if(entry.biomeName.equalsIgnoreCase(name) && entry.sourceID.id == sourceID.id && entry.sourceID.meta == sourceID.meta)
       {
       return entry.resultID;
       }
