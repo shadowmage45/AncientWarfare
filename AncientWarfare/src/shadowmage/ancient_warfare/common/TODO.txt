@@ -14,7 +14,9 @@ WORLD GEN STUFF
 * finish adding things to lootgenerator
 * add percentage of an empty slot to lootgenerator
 * verify weighting for levels in loot generator
-* test biome stuff
+* test biome inclusion/exclusion
+* find better method to sort available structures per-biome, to reduce rejected structures
+* verify world gen map loads properly
 
 SURVIVAL MODE STRUCTURE BUILDING
 * create drafting workstation
