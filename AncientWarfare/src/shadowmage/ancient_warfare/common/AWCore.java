@@ -44,6 +44,7 @@ import shadowmage.ancient_warfare.common.utils.BlockLoader;
 import shadowmage.ancient_warfare.common.utils.Pair;
 import shadowmage.ancient_warfare.common.world_gen.GeneratedStructureMap;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -268,8 +269,9 @@ private List<String> doStructGenRun()
       /**
        * select structure from those available to the current available value....
        */
-      ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructureBelowValue(random, Config.structureGenMaxClusterValue-foundValue);
-
+      String biomeName = "plains";
+      int maxValue = Config.structureGenMaxClusterValue - foundValue;
+      ProcessedStructure struct = WorldGenStructureManager.instance().getStructureForBiome(biomeName, maxValue, random);
       if(struct!=null)
         {
         /**

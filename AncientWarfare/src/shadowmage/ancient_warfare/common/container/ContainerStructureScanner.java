@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
 import shadowmage.ancient_warfare.common.structures.file.StructureExporterRuins;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 
 public class ContainerStructureScanner extends ContainerBase
 {
@@ -176,7 +177,7 @@ public void export()
       StructureManager.instance().addStructure(struct, true);
       if(struct.worldGen)
         {
-        StructureManager.instance().addStructureToWorldGen(struct,1,1);//TODO add values to export config....
+        WorldGenStructureManager.instance().addStructure(struct, struct.unique, 1, 1);//TODO add values to export config, or remove the entire thing...
         }
       }    
     else if(!success)

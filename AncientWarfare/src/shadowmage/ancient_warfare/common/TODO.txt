@@ -5,6 +5,7 @@ http://mrl.nyu.edu/~perlin/noise/
 GENERAL
 
 TEMPLATES/STRUCTURE
+* add submerged water/lava values to template import/export
 * add default templates, and add them to export list
 
 STRUCTURE BUILDING
@@ -15,10 +16,9 @@ WORLD GEN STUFF
 * add percentage of an empty slot to lootgenerator
 * verify weighting for levels in loot generator
 * test biome inclusion/exclusion
-* find better method to sort available structures per-biome, to reduce rejected structures
-* verify world gen map loads properly
-* handle multi-dimensions (make them mod-global, and not per-structure(ease of handling)?)
-* finish reworking structure selector, needs weighting stuff done
+* write default values to world gen config if no file is found
+* move and rename world-gen config file
+* test structure weighting
 
 
 SURVIVAL MODE STRUCTURE BUILDING
@@ -138,3 +138,7 @@ select structure from available structures by value
 * work out chest/loot system
 * fix bb rendering...again....
 * test block swapping
+* verify world gen map loads properly
+* find better method to sort available structures per-biome, to reduce rejected structures
+* finish reworking structure selector, needs weighting stuff done
+* handle multi-dimensions (make them mod-global, and not per-structure(ease of handling)?)

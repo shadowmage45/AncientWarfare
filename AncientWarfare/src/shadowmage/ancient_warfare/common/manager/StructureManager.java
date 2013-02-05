@@ -35,6 +35,11 @@ import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 
+/**
+ * Manages server side processed structures, and their client-side data equivalents
+ * @author Shadowmage
+ *
+ */
 public class StructureManager
 {
 
@@ -42,11 +47,16 @@ public class StructureManager
 private static List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
 private static List<StructureClientInfo> clientStructures = new ArrayList<StructureClientInfo>();
 
+/**
+ * playerName, scannedStructure
+ */
 private static HashMap<String, ProcessedStructure> tempBuilderStructures = new HashMap<String, ProcessedStructure>();
+
+/**
+ * current client-side scannedStructure
+ */
 private static StructureClientInfo tempBuilderClientInfo;
 
-
-private StructureGeneratorSelector structureSelector = new StructureGeneratorSelector();
 
 private StructureManager(){}
 private static StructureManager INSTANCE;
@@ -57,152 +67,6 @@ public static StructureManager instance()
     INSTANCE=new StructureManager();
     }
   return INSTANCE;
-  }
-
-private class SelectionEntry
-{
-ProcessedStructure struct;
-int value;
-int weight;
-
-public SelectionEntry(ProcessedStructure struct, int val, int weight)
-  {
-  this.struct = struct;
-  this.value = val;
-  this.weight = weight;      
-  }
-}
-
-private class StructureGeneratorSelector
-{
-
-private List<SelectionEntry> structures = new ArrayList<SelectionEntry>();
-
-
-
-private int totalWeight;
-
-
-public ProcessedStructure getRandomWeightedStructure(Random random)
-  {
-  if(this.structures.size()>0 && totalWeight >0)
-    {
-    int check = random.nextInt(totalWeight);
-    for(SelectionEntry struct : this.structures)
-      {
-      if(check>=struct.weight)
-        {
-        check-=struct.weight;
-        }
-      else
-        {
-        return struct.struct;
-        }
-      }
-    }
-  return null;
-  }
-
-public ProcessedStructure getRandomBelow(Random rand, int val)
-  {
-  ArrayList<SelectionEntry> structs = new ArrayList<SelectionEntry>();
-  int foundWeight = 0;
-  for(SelectionEntry struct : this.structures)
-    {
-    if(struct!=null && struct.value<=val)
-      {
-      structs.add(struct);
-      foundWeight += struct.weight;
-      }
-    }
-  if(foundWeight<=0)
-    {
-    return null;
-    }
-  int check = rand.nextInt(foundWeight);
-  for(SelectionEntry struct : structs)
-    {
-    if(check>=struct.weight)
-      {
-      check-=struct.weight;
-      }
-    else
-      {
-      return struct.struct;
-      }
-    }
-  return null;
-  }
-
-public void addStructure(ProcessedStructure struct, int value, int weight)
-  {
-  if(struct!=null)
-    {
-    this.structures.add(new SelectionEntry(struct, value, weight));
-    this.totalWeight += weight;
-    }
-  }
-}
-
-
-//
-//private class StructureDistanceList
-//{
-//public int chunkDistance;
-///**
-// * this could totally be a list of strings...and then pull the actual struct from struct manager...
-// * ....or not....
-// */
-//private List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
-//private int totalBinWeight;
-//
-//public StructureDistanceList(int dist)
-//  {
-//  this.chunkDistance = dist;
-//  }
-//
-//public ProcessedStructure getRandomSelection(Random rnd)
-//  { 
-//  int sel = rnd.nextInt(totalBinWeight+1);
-//  for(ProcessedStructure struct : this.structures)
-//    {
-//    if(sel>struct.structureWeight)
-//      {
-//      sel -= struct.structureWeight;
-//      }
-//    else
-//      {
-//      return struct;
-//      }
-//    }
-//  return null;
-//  }
-//
-//public void addStructure(ProcessedStructure struct)
-//  {
-//  this.structures.add(struct);
-//  this.totalBinWeight += struct.structureWeight;
-//  }
-//
-//public int getEntrySize()
-//  {
-//  return this.structures.size();
-//  }
-//
-//public int getBinWeight()
-//  {  
-//  return totalBinWeight * (this.chunkDistance+1)^8 ;
-//  }
-//}//////////////********** END STRUCTUREWEIGHTLIST ************///////////////
-
-public ProcessedStructure getRandomWeightedStructure(Random rand)
-  {
-  return this.structureSelector.getRandomWeightedStructure(rand);
-  }
-
-public ProcessedStructure getRandomWeightedStructureBelowValue(Random rand, int val)
-  {
-  return this.structureSelector.getRandomBelow(rand, val);
   }
 
 private Packet01ModData constructPacket(NBTTagCompound tag)
@@ -246,12 +110,6 @@ public void addTempStructure(EntityPlayer player, ProcessedStructure struct)
   AWCore.proxy.sendPacketToPlayer(player, constructPacket(structData));
   }
 
-public void addStructureToWorldGen(ProcessedStructure struct, int val, int weight)
-  {
-  Config.logDebug("adding struct to world-gen: "+struct.name);
-  this.structureSelector.addStructure(struct, val, weight);
-  }
-
 /**
  * server side method to add a structure, relays client data to all logged in clients to update
  * their structure map. does not add struct to world gen selection, needs manual adding..
@@ -276,7 +134,6 @@ public void addStructure(ProcessedStructure struct, boolean sendPacket)
 public void addStructures(List<ProcessedStructure> structs)
   {
   structures.clear();
-  this.structureSelector.structures.clear();
   for(ProcessedStructure struct : structs)
     {
     this.addStructure(struct, false);

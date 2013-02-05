@@ -28,12 +28,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 
 import net.minecraft.world.biome.BiomeGenBase;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class WorldGenStructureManager
 {
@@ -44,10 +46,12 @@ public class WorldGenStructureManager
  */
 private HashMap<String, WorldGenBiomeStructList> biomesStructureMap = new HashMap<String, WorldGenBiomeStructList>();
 
+private int[] validDimensions;
+private int[] invalidDimensions;
+
 private class WorldGenBiomeStructList
 {
 int totalWeight;//weight for this entire biome, used for structure selection
-Map<Integer, Integer> valueWeights = new HashMap<Integer, Integer>();//total weights for each value, used when selecting a struct below a certain value threshold
 Map<String, WorldGenStructureEntry> structureEntries = new HashMap<String, WorldGenStructureEntry>();
 
 /**
@@ -65,24 +69,58 @@ public void addEntry(WorldGenStructureEntry entry)
     {
     return;
     }
-  totalWeight += entry.weight;
-  if(!valueWeights.containsKey(entry.value))
-    {
-    valueWeights.put(entry.value, 0);
-    }
-  int totVal = valueWeights.get(entry.value);
-  valueWeights.put(entry.value, totVal+entry.weight);
+  totalWeight += entry.weight; 
   }
 
-public String getRandomWeightedEntry()
+public String getRandomWeightedEntry(Random random)
   {
-  //TODO
+  int value = random.nextInt(totalWeight);
+  for(String name : this.structureEntries.keySet())
+    {
+    WorldGenStructureEntry ent = this.structureEntries.get(name);
+    if(value>ent.weight)
+      {
+      value-=ent.weight;
+      }
+    else
+      {
+      return ent.name;
+      }
+    }  
   return "";
   }
 
-public String getRandomWeightedEntryBelow(int value)
+public String getRandomWeightedEntryBelow(int maxValue, Random random)
   {
-  //TODO
+  int foundTotalWeight = 0;
+  for(String name : this.structureEntries.keySet())
+    {
+    WorldGenStructureEntry ent = this.structureEntries.get(name);
+    if(ent.value<=maxValue)
+      {
+      foundTotalWeight += ent.weight;
+      }    
+    }  
+  if(foundTotalWeight==0)
+    {
+    return "";
+    }  
+  int value = random.nextInt(foundTotalWeight);
+  for(String name : this.structureEntries.keySet())
+    {
+    WorldGenStructureEntry ent = this.structureEntries.get(name);
+    if(ent.value<=maxValue)
+      {
+      if(value>ent.weight)
+        {
+        value-=ent.weight;
+        }
+      else
+        {
+        return ent.name;
+        }
+      }
+    }  
   return "";
   }
 
@@ -97,6 +135,35 @@ public static WorldGenStructureManager instance()
     INSTANCE = new WorldGenStructureManager();
     }
   return INSTANCE;
+  }
+
+public boolean isValidDimension(int dim)
+  {
+  if(this.validDimensions==null && this.invalidDimensions==null)
+    {
+    return true;
+    }
+  else if(this.validDimensions!=null)
+    {
+    for(int i = 0; i < validDimensions.length; i ++)
+      {
+      if(dim == validDimensions[i])
+        {
+        return true;
+        }
+      }
+    }
+  else if(this.invalidDimensions!=null)
+    {
+    for(int i = 0; i < invalidDimensions.length; i ++)
+      {
+      if(dim == invalidDimensions[i])
+        {
+        return false;
+        }
+      }
+    }
+  return false;
   }
 
 /**
@@ -119,6 +186,7 @@ private void loadBiomesList()
     {
     if(bio!=null && bio.biomeName!= null && !bio.biomeName.equals(""))
       {
+      Config.logDebug("Adding to biome list: "+bio.biomeName);
       this.biomesStructureMap.put(String.valueOf(bio.biomeName), new WorldGenBiomeStructList());
       }
     }
@@ -142,6 +210,40 @@ public void addStructure(ProcessedStructure struct, boolean unique, int weight, 
   else
     {
     this.addToAllBiomes(ent);
+    }
+  }
+
+private void addStructureEntry(WorldGenStructureEntry ent)
+  {
+  if(ent==null)
+    {
+    return;
+    }
+  Config.logDebug("Attempting to add world gen entry for structure: "+ent.name);
+  ProcessedStructure struct = StructureManager.instance().getStructureServer(ent.name);
+  if(struct!=null)
+    {
+    if(struct.biomesNotIn!=null && struct.biomesOnlyIn!=null)
+      {
+      Config.logError("Error detected in a structure template:  it has both exclusive and inclusive biome lists.  Please use only one or the other.  Structure name: "+struct.name);
+      return;
+      }
+    if(struct.biomesNotIn!=null)
+      {
+      addToAllButBiomes(ent, struct.biomesNotIn);
+      }
+    else if(struct.biomesOnlyIn!=null)
+      {
+      addToOnlyBiomes(ent, struct.biomesOnlyIn);
+      }
+    else
+      {
+      addToAllBiomes(ent);
+      }
+    }
+  else
+    {
+    Config.logDebug("Null structure returned when trying to add world gen entry for structure: "+ent.name);
     }
   }
 
@@ -201,31 +303,35 @@ public void loadFromDirectory(String pathName)
       return;
       }
     FileInputStream fis = new FileInputStream(configFile);
-    List<WorldGenStructureEntry> lst = new ArrayList<WorldGenStructureEntry>();       
-    Scanner scan = new Scanner(fis);    
+           
+    Scanner scan = new Scanner(fis);
+    List<String> lines= new ArrayList<String>();
     String line;
     while(scan.hasNext())
       {
       line = scan.next();
       if(!line.startsWith("#"))
         {
-        WorldGenStructureEntry ent = new WorldGenStructureEntry(line);
-        lst.add(ent);
+        lines.add(line);
         }
       }
     scan.close();
     fis.close();
     
-    for(WorldGenStructureEntry ent : lst)
+    Iterator<String> it= lines.iterator();
+    while(it.hasNext())
       {
-      ProcessedStructure struct = StructureManager.instance().getStructureServer(ent.name);
-      if(struct!=null)        
+      line = it.next();
+      if(line.toLowerCase().startsWith("entry:"))
         {
-        //TODO......meh..
-        StructureManager.instance().addStructureToWorldGen(struct, ent.value, ent.weight);
+        WorldGenStructureEntry ent = parseEntry(it);
+        addStructureEntry(ent);
         }
-      }
-    
+      if(line.toLowerCase().startsWith("config:"))
+        {
+        parseConfig(it);
+        }
+      }    
     }
   catch(IOException e)
     {
@@ -236,33 +342,92 @@ public void loadFromDirectory(String pathName)
     {
     Config.logError("Improperly formatted world gen config file, could not parse a number value");
     e.printStackTrace();
-    }
-  catch(IndexOutOfBoundsException e)
+    } 
+  }
+
+
+private void parseConfig(Iterator<String> it)
+  {
+  String line;
+  while(it.hasNext())
     {
-    Config.logError("Improperly formatted world gen config file, an entry was missing one or more csv values\nthe format is<name>,<unique>,<weight>,<value> f");
-    e.printStackTrace();
+    line = it.next();
+    if(line.toLowerCase().startsWith("config:"))
+      {
+      continue;
+      }
+    if(line.toLowerCase().startsWith(":endconfig"))
+      {
+      break;
+      }
+    if(line.toLowerCase().startsWith("validDimensions"))
+      {
+      this.validDimensions = StringTools.safeParseIntArray("=", line);
+      }
+    if(line.toLowerCase().startsWith("invalidDimensions"))
+      {
+      this.invalidDimensions = StringTools.safeParseIntArray("=", line);
+      }    
+    }
+  if(this.validDimensions!=null && this.invalidDimensions !=null)
+    {
+    Config.logError("Invalid World Gen configuration detected.  Entry detected for both valid and invalid dimensions.  You may specify one OR the other, but may not specify both.");
     }
   }
 
 private WorldGenStructureEntry parseEntry(Iterator<String> it)
   {
-  //TODO...figure out entry format...
-  /**
-   * config:
-   * dimensionsOnlyIn=
-   * dimensionsNotIn=
-   * endConfig:
-   */
-  /**
-   * entry:
-   * name=structName
-   * unique=false
-   * weight=1
-   * value=0
-   * endentry:
-   */
-  return null;
+  String line;  
+  String name = "";
+  int weight = 0;
+  int value = -1;
+  boolean unique = false;
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("entry:"))
+      {
+      continue;
+      }
+    if(line.toLowerCase().startsWith(":endentry"))
+      {
+      break;
+      }
+    if(line.toLowerCase().startsWith("name"))
+      {
+      name = StringTools.safeParseString("=", line);
+      }
+    if(line.toLowerCase().startsWith("weight"))
+      {
+      weight = StringTools.safeParseInt("=", line);
+      }
+    if(line.toLowerCase().startsWith("value"))
+      {
+      value = StringTools.safeParseInt("=", line);
+      }
+    if(line.toLowerCase().startsWith("unique"))
+      {
+      unique = StringTools.safeParseBoolean("=", line);
+      }
+    }
+  if(name.equals("") || weight == 0 || value == -1)
+    {
+    Config.logError("Improperly formatted structure in world gen config file");
+    return null;
+    }
+  WorldGenStructureEntry ent = new WorldGenStructureEntry(name, unique, weight, value);
+  return ent;
   }
 
+
+public ProcessedStructure getStructureForBiome(String biomeName, int maxValue, Random random)
+  {
+  if(this.biomesStructureMap.containsKey(biomeName))
+    {
+    String name = this.biomesStructureMap.get(biomeName).getRandomWeightedEntryBelow(maxValue, random);        
+    return StructureManager.instance().getStructureServer(name);
+    }
+  return null;
+  }
 
 }

@@ -39,6 +39,7 @@ import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.file.StructureLoader;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 
 import com.google.common.io.ByteStreams;
 
@@ -111,6 +112,7 @@ public void load(String directory)
   
   TickRegistry.registerTickHandler(this, Side.SERVER);
   BlockDataManager.instance().loadBlockList();
+  WorldGenStructureManager.instance().load();
   
   /**
    * create default dirs if they don't exist...

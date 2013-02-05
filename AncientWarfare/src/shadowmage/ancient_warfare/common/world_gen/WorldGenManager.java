@@ -44,8 +44,6 @@ public class WorldGenManager implements IWorldGenerator, INBTTaggable
 //TODO change back to private...
 public static Map<Integer, GeneratedStructureMap> dimensionStructures = new HashMap<Integer, GeneratedStructureMap>();
 
-private WorldGenConfig config = new WorldGenConfig();
-
 private WorldGenManager(){};
 private static WorldGenManager INSTANCE;
 public static WorldGenManager instance()  
@@ -59,7 +57,7 @@ public static WorldGenManager instance()
 
 public void loadConfig(String pathName)
   {
-  this.config.loadFromDirectory(pathName);
+  WorldGenStructureManager.instance().loadFromDirectory(pathName);
   LootGenerator.instance().loadStaticLootTables();
   }
 
@@ -68,10 +66,9 @@ public static void resetMap()
   dimensionStructures = new HashMap<Integer, GeneratedStructureMap>();
   }
 
-public boolean attemptPlacementSubsurface(World world, int chunkX, int chunkZ, ProcessedStructure struct, Random random)
+public boolean attemptPlacementSubsurface(World world, int x, int z, ProcessedStructure struct, Random random)
   {
-  int x = chunkX*16 + random.nextInt(16);
-  int z = chunkZ*16 + random.nextInt(16);  
+  
   int y = getSubsurfaceTarget(world, x, z, struct.undergroundMinLevel, struct.undergroundMaxLevel, struct.minSubmergedDepth, random);
   if(y==-1)
     {
@@ -93,11 +90,8 @@ public boolean attemptPlacementSubsurface(World world, int chunkX, int chunkZ, P
   return true;
   }
 
-public boolean attemptPlacementSurface(World world, int chunkX, int chunkZ, ProcessedStructure struct, Random random)
-  {
-  
-  int x = chunkX*16 + random.nextInt(16);
-  int z = chunkZ*16 + random.nextInt(16);  
+public boolean attemptPlacementSurface(World world, int x, int z, ProcessedStructure struct, Random random)
+  {   
   
   int y = getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
   if(y==-1)
@@ -123,10 +117,11 @@ public boolean attemptPlacementSurface(World world, int chunkX, int chunkZ, Proc
 public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {  
   int dim =world.getWorldInfo().getDimension();
-  if(dim!=0)
+  if(!WorldGenStructureManager.instance().isValidDimension(dim))
     {
-    return;//TODO setup config for other dimensions
+    return;
     }
+  
   if(random.nextInt(Config.structureGeneratorRandomRange)>Config.structureGeneratorRandomChance)
     {
     Config.logDebug("Exit for early random chance check");
@@ -156,58 +151,40 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   /**
    * select structure from those available to the current available value....
    */
-  ProcessedStructure struct = StructureManager.instance().getRandomWeightedStructureBelowValue(random, Config.structureGenMaxClusterValue-foundValue);
- 
-  
+  int x = chunkX*16 + random.nextInt(16);
+  int z = chunkZ*16 + random.nextInt(16);  
+  String biomeName = world.provider.getBiomeGenForCoords(x, z).biomeName;
+  int maxValue = Config.structureGenMaxClusterValue - foundValue;
+  ProcessedStructure struct = WorldGenStructureManager.instance().getStructureForBiome(biomeName, maxValue, random);
   if(struct!=null)
     {   
-    
-    String biomeName = world.provider.getBiomeGenForCoords(chunkX*16+8, chunkZ*16+8).biomeName;
-    if(!struct.isValidBiome(biomeName))
-      {
-      Config.logDebug("struct rejected location due to incompatible biomes");
-      return;
-      }
-    
-   
     /**
      * if it is not a decorative structure, check value
      */
-    if(config.getValueFor(struct.name)>0)
-      {
-      /**
-       * if value is too high to even place anything....
-       */
-      if(values.value()>=Config.structureGenMaxClusterValue)
-        {
-        Config.logDebug("exit due to max value");
-        return;
-        }
-      
-      /**
-       * second exit code, exit early depending upon percentage of populated max value
-       */
-      float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
-      if(random.nextFloat() < valPercent)
-        {
-        Config.logDebug("Exit for value ratio check");
-        return;
-        }
-      }
+    //TODO
     
-
+    
+    /**
+     * then check cluster filled percentage
+     */
+    float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
+    if(random.nextFloat() < valPercent)
+      {
+      Config.logDebug("Exit for value ratio check");
+      return;
+      }
+        
     /**
      * else, place the struct....
-     */    
-    
+     */
     boolean placed = false;
     if(struct.underground)
       {
-      placed = this.attemptPlacementSubsurface(world, chunkX, chunkZ, struct, random);
+      placed = this.attemptPlacementSubsurface(world, x, z, struct, random);
       }
     else
       {
-      placed = this.attemptPlacementSurface(world, chunkX, chunkZ, struct, random);
+      placed = this.attemptPlacementSurface(world, x, z, struct, random);
       }    
     if(placed)
       {
