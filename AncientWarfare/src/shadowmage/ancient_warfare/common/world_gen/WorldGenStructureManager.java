@@ -22,7 +22,9 @@ package shadowmage.ancient_warfare.common.world_gen;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
+
+import com.google.common.io.ByteStreams;
 
 import net.minecraft.world.biome.BiomeGenBase;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -290,16 +294,64 @@ private void addToAllButBiomes(WorldGenStructureEntry ent, String[] notIn)
     }
   }
 
+/**
+ * 
+ * @param fileName the fully qualified file name destination, including path (source is pulled statically)
+ */
+private void copyDefaultFile(String fileName)
+  {
+  if(fileName==null)
+    {
+    return;
+    } 
+  InputStream is = null;
+  FileOutputStream os = null;
+  File file = null;
+  Config.log("Exporting default AWWorldGen.cfg ....");
+  int exportCount = 0;
+  byte[] byteBuffer;
+  try
+    {
+    is = this.getClass().getResourceAsStream("/shadowmage/ancient_warfare/resources/config/AWWorldGen.cfg");
+    if(is==null)
+      {
+      return;
+      }
+    
+    file = new File(fileName);
+
+    if(!file.exists())
+      {
+      file.createNewFile();
+      }   
+
+    byteBuffer = ByteStreams.toByteArray(is);
+    is.close();
+    if(byteBuffer.length>0)
+      {
+      os = new FileOutputStream(file);        
+      os.write(byteBuffer);
+      os.close();
+      }
+    }
+  catch(Exception e)
+    {
+    Config.logError("Error during export of: "+fileName);
+    e.printStackTrace();
+    }  
+  Config.log("Exported default file: AWConfig.cfg");  
+  }
+
 public void loadFromDirectory(String pathName)
   {
   try
     {
-    String fileName = pathName + "worldGenConfig.cfg";
+    String fileName = pathName + "AWWorldGen.cfg";
     File configFile = new File(fileName);
     if(!configFile.exists())
       {
-      configFile.createNewFile();
-      Config.logDebug("worldGenConfig.cfg could not be located, created empty file");
+      copyDefaultFile(fileName);
+      Config.logDebug("AWWorldGen.cfg could not be located, creating default file.");
       return;
       }
     FileInputStream fis = new FileInputStream(configFile);

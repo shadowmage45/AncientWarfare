@@ -145,6 +145,10 @@ public List<ItemStack> getRandomLoot(int maxValue, int maxLvl, int numOfStacks, 
   int retryCount;
   for(int i = 0; i < numOfStacks; i++)
     {
+    if(random.nextInt(100)<=50)//50% empty stacks...might adjust
+      {
+      continue;
+      }
     retryCount = maxLvl;
     table = selectTable(tables, random);
     level = selectLevel(maxLvl, random);
@@ -157,7 +161,7 @@ public List<ItemStack> getRandomLoot(int maxValue, int maxLvl, int numOfStacks, 
     else//if nothing at that level, keep checking levels until 0...      
       {
       Config.logDebug("null stack, retrying");
-      while(entry==null && retryCount >0)
+      while(entry==null && retryCount >=0)
         {
         retryCount--;
         entry = getEntryFromTable(table, retryCount, random);        
@@ -310,6 +314,50 @@ public void loadStaticLootTables()
   this.addLootEntry(COMPONENTS, 7, Item.ingotIron, 10, 10, 30);
   this.addLootEntry(COMPONENTS, 8, Item.diamond, 1, 10, 50);
   this.addLootEntry(COMPONENTS, 9, Item.swordDiamond, 1, 10, 100);
+  
+  this.addLootEntry(FOOD, 0, Item.coal, 1, 10, 1);
+  this.addLootEntry(FOOD, 1, Item.ingotIron, 1, 10, 3);
+  this.addLootEntry(FOOD, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(FOOD, 3, Item.goldNugget, 1, 10, 1);
+  this.addLootEntry(FOOD, 4, Item.ingotIron, 5, 10, 15);
+  this.addLootEntry(FOOD, 5, Item.ingotGold, 1, 10, 10);
+  this.addLootEntry(FOOD, 6, Item.ingotGold, 2, 10, 20);
+  this.addLootEntry(FOOD, 7, Item.ingotIron, 10, 10, 30);
+  this.addLootEntry(FOOD, 8, Item.diamond, 1, 10, 50);
+  this.addLootEntry(FOOD, 9, Item.swordDiamond, 1, 10, 100);
+  
+  this.addLootEntry(AMMO, 0, Item.coal, 1, 10, 1);
+  this.addLootEntry(AMMO, 1, Item.ingotIron, 1, 10, 3);
+  this.addLootEntry(AMMO, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(AMMO, 3, Item.goldNugget, 1, 10, 1);
+  this.addLootEntry(AMMO, 4, Item.ingotIron, 5, 10, 15);
+  this.addLootEntry(AMMO, 5, Item.ingotGold, 1, 10, 10);
+  this.addLootEntry(AMMO, 6, Item.ingotGold, 2, 10, 20);
+  this.addLootEntry(AMMO, 7, Item.ingotIron, 10, 10, 30);
+  this.addLootEntry(AMMO, 8, Item.diamond, 1, 10, 50);
+  this.addLootEntry(AMMO, 9, Item.swordDiamond, 1, 10, 100);
+  
+  this.addLootEntry(WEAPONS, 0, Item.coal, 1, 10, 1);
+  this.addLootEntry(WEAPONS, 1, Item.ingotIron, 1, 10, 3);
+  this.addLootEntry(WEAPONS, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(WEAPONS, 3, Item.goldNugget, 1, 10, 1);
+  this.addLootEntry(WEAPONS, 4, Item.ingotIron, 5, 10, 15);
+  this.addLootEntry(WEAPONS, 5, Item.ingotGold, 1, 10, 10);
+  this.addLootEntry(WEAPONS, 6, Item.ingotGold, 2, 10, 20);
+  this.addLootEntry(WEAPONS, 7, Item.ingotIron, 10, 10, 30);
+  this.addLootEntry(WEAPONS, 8, Item.diamond, 1, 10, 50);
+  this.addLootEntry(WEAPONS, 9, Item.swordDiamond, 1, 10, 100);
+  
+  this.addLootEntry(VEHICLES, 0, Item.coal, 1, 10, 1);
+  this.addLootEntry(VEHICLES, 1, Item.ingotIron, 1, 10, 3);
+  this.addLootEntry(VEHICLES, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(VEHICLES, 3, Item.goldNugget, 1, 10, 1);
+  this.addLootEntry(VEHICLES, 4, Item.ingotIron, 5, 10, 15);
+  this.addLootEntry(VEHICLES, 5, Item.ingotGold, 1, 10, 10);
+  this.addLootEntry(VEHICLES, 6, Item.ingotGold, 2, 10, 20);
+  this.addLootEntry(VEHICLES, 7, Item.ingotIron, 10, 10, 30);
+  this.addLootEntry(VEHICLES, 8, Item.diamond, 1, 10, 50);
+  this.addLootEntry(VEHICLES, 9, Item.swordDiamond, 1, 10, 100);
   
   }
 

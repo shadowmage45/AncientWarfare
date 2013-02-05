@@ -72,7 +72,7 @@ private static String directory;
 public static String outputDirectory = null;
 public static String includeDirectory = null;
 public static String convertDirectory = null;
-public static String structureBaseDirectory = null;
+public static String configBaseDirectory = null;
 
 private static final List<String> defaultExportStructures = new ArrayList<String>();
 
@@ -108,7 +108,7 @@ public void load(String directory)
   outputDirectory = directory+"/AWConfig/structures/export/";
   includeDirectory = directory+"/AWConfig/structures/included/";
   convertDirectory = directory+"/AWConfig/structures/convert/";
-  structureBaseDirectory = directory+"/AWConfig/structures/";
+  configBaseDirectory = directory+"/AWConfig/";
   
   TickRegistry.registerTickHandler(this, Side.SERVER);
   BlockDataManager.instance().loadBlockList();
@@ -228,7 +228,7 @@ public void process()
   loader.convertRuinsTemplates();
   StructureManager.instance().addStructures(loader.processStructureFiles());  
   
-  WorldGenManager.instance().loadConfig(structureBaseDirectory);
+  WorldGenManager.instance().loadConfig(configBaseDirectory);
   }
 
 public void addBuilder(Builder builder)
