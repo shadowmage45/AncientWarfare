@@ -68,10 +68,9 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
 @Override
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {
-  //System.out.println("rendering from tick");
-  //this.renderStructureBB();
-  //System.out.println("END rendering from tick");
+  
   }
+
 
 private void renderScannerBB(EntityPlayer player, ItemStack stack, ItemStructureScanner item, float partialTick)
   {
@@ -82,28 +81,28 @@ private void renderScannerBB(EntityPlayer player, ItemStack stack, ItemStructure
   BlockPosition p1 = item.getPos1(stack);
   if(p1==null)
     {
-    Config.logDebug("null scan pos1");
     return;
     }  
   int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-  //TODO test if offset is correct, or needed...possibly write another offset function
-  //p1 = offsetForWorldRender(p1, face);
   BlockPosition p2 = item.getPos2(stack);
   if(p2==null)
     {
     p2 = BlockTools.getBlockClickedOn(player, player.worldObj, player.isSneaking());
-    }
-  if(p2==null)
-    {
-    Config.logDebug("null scan pos2");
-    return;
+    if(p2==null)
+      {   
+      return;
+      }
     }
   adjustPositionsForScanBB(p1, p2);
-  //p2 = offsetForWorldRender(p2, face);
   AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
   BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.8f, 0.2f, 0.8f);
   }
 
+/**
+ * uhh..yah......wonderful manual correction...
+ * @param p1
+ * @param p2
+ */
 private void adjustPositionsForScanBB(BlockPosition p1, BlockPosition p2)
   {
   if(p2.x<p1.x)
