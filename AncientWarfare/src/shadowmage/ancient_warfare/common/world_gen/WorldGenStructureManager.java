@@ -115,7 +115,7 @@ public String getRandomWeightedEntryBelow(int maxValue, Random random)
     WorldGenStructureEntry ent = this.structureEntries.get(name);
     if(ent.value<=maxValue)
       {
-      if(value>ent.weight)
+      if(value>=ent.weight)
         {
         value-=ent.weight;
         }
@@ -266,9 +266,13 @@ private void addToOnlyBiomes(WorldGenStructureEntry ent, String[] only)
     {
     for(String on : only)
       {
-      if(on.equals(k))
+      if(on.equalsIgnoreCase(k))
         {
-        this.biomesStructureMap.get(k).addEntry(ent);
+        if(this.biomesStructureMap.containsKey(k))
+          {
+          Config.logDebug("Adding: "+ent.name+"  to biome: "+k);
+          this.biomesStructureMap.get(k).addEntry(ent);
+          }
         }
       }
     }  
@@ -281,13 +285,13 @@ private void addToAllButBiomes(WorldGenStructureEntry ent, String[] notIn)
     boolean found = false;
     for(String st : notIn)
       {
-      if(st.equals(k))
+      if(st.equalsIgnoreCase(k))
         {
         found = true;
         break;
         }
       }
-    if(!found)
+    if(!found && this.biomesStructureMap.containsKey(k))
       {
       this.biomesStructureMap.get(k).addEntry(ent);
       }

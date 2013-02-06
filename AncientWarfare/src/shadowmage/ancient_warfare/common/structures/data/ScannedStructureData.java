@@ -163,9 +163,6 @@ private void normalizeForNorthFacing()
     
   newBlocks = new BlockData[newXSize][newYSize][newZSize];
   
-  System.out.println("sx: "+newBlocks.length);
-  System.out.println("sz: "+newBlocks[0][0].length);
-  
   this.blockIDs.clear();
   this.addToBlocksList(new BlockData(0,0));
   int rotationAmount = this.getRotationAmount(originFacing, 2);
@@ -175,12 +172,7 @@ private void normalizeForNorthFacing()
       {
       for(int z = 0; z< this.zSize; z++)
         {
-        BlockPosition pos = getNorthRotatedPosition(x,y,z, this.originFacing, newXSize, newZSize);
-        //DEBUG
-        System.out.println("facing: "+originFacing);
-        System.out.println("currentSize: "+this.xSize+","+ySize+","+zSize);        
-        System.out.println("newSize: "+newXSize+","+newYSize+","+newZSize);
-        System.out.println("currentPos: "+x+","+y+","+z+" newPos: "+pos.toString());
+        BlockPosition pos = getNorthRotatedPosition(x,y,z, this.originFacing, newXSize, newZSize);      
         BlockData data = this.allBlocks[x][y][z];
         data.rotateRight(rotationAmount);
         newBlocks[pos.x][pos.y][pos.z] = data;

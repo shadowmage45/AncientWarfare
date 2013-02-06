@@ -92,7 +92,6 @@ public static void logDebug(String info)
 
 public static void logError(String info)
   {
-  //System.out.println("AWCORE SEVERE ERROR: "+info);
   if(logger!=null)
     {
     logger.severe(info);

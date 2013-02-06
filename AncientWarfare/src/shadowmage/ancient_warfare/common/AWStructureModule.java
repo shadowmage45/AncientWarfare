@@ -150,7 +150,17 @@ public void load(String directory)
 
 private void setDefaultStructureNames()
   {
-  this.defaultExportStructures.add("library.aws");
+  this.defaultExportStructures.add("villageGardenLarge.aws");
+  this.defaultExportStructures.add("villageGardenSmall.aws");
+  this.defaultExportStructures.add("villageHouse1.aws");
+  this.defaultExportStructures.add("villageHouse2.aws");
+  this.defaultExportStructures.add("villageHouseGarden.aws");
+  this.defaultExportStructures.add("villageHouseSmall.aws");
+  this.defaultExportStructures.add("villageHouseSmall2.aws");
+  this.defaultExportStructures.add("villageLibrary.aws");
+  this.defaultExportStructures.add("villageSmith.aws");
+  this.defaultExportStructures.add("villageTorch.aws");
+  this.defaultExportStructures.add("villageWell.aws");
   }
 
 private void copyDefaultStructures(String pathName)

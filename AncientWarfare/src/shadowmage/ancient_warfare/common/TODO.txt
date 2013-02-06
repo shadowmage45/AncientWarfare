@@ -3,10 +3,12 @@ read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
 
 GENERAL
+* add BB render to scanner?
 
 
 TEMPLATES/STRUCTURE
-* add default templates, and add them to export list
+* remove unused fields (chunkDistance, chunkAttempts
+* actually use creative/survival flags in templates
 
 
 STRUCTURE BUILDING
@@ -14,7 +16,6 @@ STRUCTURE BUILDING
 
 WORLD GEN STUFF
 * verify weighting for levels in loot generator
-* test biome inclusion/exclusion
 * test structure weighting
 * test underground buildings
 * test submerged code
@@ -148,3 +149,5 @@ select structure from available structures by value
 * move and rename world-gen config file
 * finish adding things to lootgenerator
 * add percentage of an empty slot to lootgenerator
+* test biome inclusion/exclusion
+* add default templates, and add them to export list
