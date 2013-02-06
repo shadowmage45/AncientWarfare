@@ -33,6 +33,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemBuilderBase;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -72,33 +73,36 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
   //System.out.println("END rendering from tick");
   }
 
-private void renderStructureBB(float partialTick)
+private void renderScannerBB(EntityPlayer player, ItemStack stack, ItemStructureScanner item, float partialTick)
   {
-  Minecraft mc = Minecraft.getMinecraft();
-  if(mc==null)
+  if(player==null || stack==null || item== null)
     {
     return;
+    }    
+  BlockPosition p1 = item.getPos1(stack);
+  if(p1==null)
+    {
+    return;
+    }  
+  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+  //TODO test if offset is correct, or needed...possibly write another offset function
+  p1 = offsetForWorldRender(p1, face);
+  BlockPosition p2 = item.getPos2(stack);
+  if(p2==null)
+    {
+    p2 = BlockTools.getBlockClickedOn(player, player.worldObj, player.isSneaking());
     }
-  EntityPlayer player = mc.thePlayer;
-  if(player==null)
+  p2 = offsetForWorldRender(p2, face);
+  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
+  BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.8f, 0.2f, 0.8f);
+  }
+
+private void renderStructureBB(EntityPlayer player, ItemStack stack, ItemBuilderBase item, float partialTick)
+  {
+  if(player==null || stack==null || item== null)
     {
     return;
-    } 
-  ItemStack stack = player.inventory.getCurrentItem();
-  if(stack==null || stack.getItem()==null)
-    {
-    return;
-    }
-  int id = stack.itemID;
-  if(id != ItemLoader.structureBuilderDirect.itemID && id != ItemLoader.structureCreativeBuilder.itemID && id != ItemLoader.structureCreativeBuilderTicked.itemID)
-    {    
-    return;
-    }
-  ItemBuilderBase item = (ItemBuilderBase)stack.getItem();
-  if(item==null)
-    {
-    return;
-    } 
+    }  
   StructureClientInfo info = item.getStructureForStack(stack);    
   if(info==null)
     {
@@ -138,7 +142,6 @@ private void renderStructureBB(float partialTick)
     bb = info.getLevelingBBForRender(hit, face);
     BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.3f, 0.8f, 0.3f);
     }
-
   }
 
 protected BlockPosition offsetForWorldRender(BlockPosition hit, int face)
@@ -152,6 +155,11 @@ protected BlockPosition offsetForWorldRender(BlockPosition hit, int face)
     hit.moveBack(face, 1);
     }
   return hit;
+  }
+
+protected void renderScanningBB()
+  {
+  
   }
 
 /**
@@ -183,6 +191,30 @@ public String getLabel()
 @ForgeSubscribe
 public void handleRenderLastEvent(RenderWorldLastEvent evt)
   {
-  this.renderStructureBB(evt.partialTicks);
+  Minecraft mc = Minecraft.getMinecraft();
+  if(mc==null)
+    {
+    return;
+    }
+  EntityPlayer player = mc.thePlayer;
+  if(player==null)
+    {
+    return;
+    } 
+  ItemStack stack = player.inventory.getCurrentItem();
+  if(stack==null || stack.getItem()==null)
+    {
+    return;
+    }
+  int id = stack.itemID;
+  
+  if(ItemBuilderBase.isBuilderItem(id))
+    {
+    this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
+    }
+  else if(ItemStructureScanner.isScannerItem(id))
+    {
+    this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks);
+    }
   }
 }

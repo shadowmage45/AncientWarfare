@@ -225,4 +225,27 @@ public static ItemStack clearStructureData(ItemStack stack)
   return stack;
   }
 
+public static boolean isScannerItem(int id)
+  {
+  return id == ItemLoader.structureScanner.itemID;
+  }
+
+public static BlockPosition getPos1(ItemStack stack)
+  {
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData") && stack.getTagCompound().getCompoundTag("structData").hasKey("pos1"))
+    {
+    return new BlockPosition(stack.getTagCompound().getCompoundTag("structData").getCompoundTag("pos1"));
+    }
+  return null;
+  }
+
+public static BlockPosition getPos2(ItemStack stack)
+  {
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData") && stack.getTagCompound().getCompoundTag("structData").hasKey("pos2"))
+    {
+    return new BlockPosition(stack.getTagCompound().getCompoundTag("structData").getCompoundTag("pos2"));
+    }
+  return null;
+  }
+
 }

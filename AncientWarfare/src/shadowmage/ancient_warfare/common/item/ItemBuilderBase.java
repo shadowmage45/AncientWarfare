@@ -63,4 +63,9 @@ public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par
   return false;
   }
 
+public static boolean isBuilderItem(int id)
+  {
+  return id== ItemLoader.structureBuilderDirect.itemID || id == ItemLoader.structureCreativeBuilder.itemID || id == ItemLoader.structureCreativeBuilderTicked.itemID;
+  }
+
 }

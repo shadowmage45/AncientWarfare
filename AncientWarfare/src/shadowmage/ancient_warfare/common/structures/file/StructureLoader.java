@@ -24,8 +24,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import shadowmage.ancient_warfare.common.AWStructureModule;
@@ -42,9 +44,7 @@ public class StructureLoader
 
 public StructureLoader()
   {
-
   }
-
 /**
  * called probableStructureFiles because they haven't been opened/read/checked for validity
  */
@@ -52,7 +52,7 @@ private List<File> probableStructureFiles = new ArrayList<File>();
 private List<File> probableRuinsFiles = new ArrayList<File>();
 
 /**
- * used to keep track of layer number
+ * used to keep track of layer number during parsing
  */
 int currentLayer = 0;
 
@@ -101,19 +101,19 @@ private boolean isProbableFile(File file, String extension)
   }
 
 private List<ProcessedStructure> processFilesFor(List<File> fileList)
-{
-List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
-ProcessedStructure struct;
-for(File file : fileList)
   {
-  struct = this.processFile(file);
-  if(struct!=null)
+  List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
+  ProcessedStructure struct;
+  for(File file : fileList)
     {
-    structures.add(struct);
-    }
-  }  
-return structures;  
-}
+    struct = this.processFile(file);
+    if(struct!=null)
+      {
+      structures.add(struct);
+      }
+    }  
+  return structures;  
+  }
 
 private ProcessedStructure processFile(File file)
   {
@@ -174,9 +174,9 @@ private ProcessedStructure processFile(File file)
   }
 
 public List<ProcessedStructure> processStructureFiles()
-{
-return processFilesFor(probableStructureFiles);
-}
+  {
+  return processFilesFor(probableStructureFiles);
+  }
 
 public void convertRuinsTemplates()
   {
@@ -531,9 +531,6 @@ private void parseResources(ProcessedStructure struct, Iterator<String> it)
       {
       //TODO parse item/block names...
       }
-    /**
-     * qty...
-     */
     line = sp1[1];
     if(StringTools.isNumber(line))
       {
