@@ -38,10 +38,17 @@ SURVIVAL MODE STRUCTURE BUILDING
 * create advanced drafting workstation (template editor)
 
 
-
 STRUCTURE EDITOR
 * transfer data via container init code
 * figure out multi-line text box...
+
+
+COMPLEXES
+* THDT
+
+
+RESEARCH
+* THDT
 
 
 TWEAKS/OPTIMIZATION
@@ -54,13 +61,6 @@ TWEAKS/OPTIMIZATION
 * remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
 * some ruins structures (one, jungle throne) appears offset -1Y
 
-
-COMPLEXES
-* THDT
-
-
-RESEARCH
-* THDT
 
 
 WORLD GEN ALGORITHM:

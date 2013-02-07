@@ -23,22 +23,14 @@ package shadowmage.ancient_warfare.client.gui.structure;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.common.container.ContainerCSB;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
-/**
- * creative structure builder
- * @author Shadowmage
- *
- */
-public class GuiCSB extends GuiContainerAdvanced
+public class GuiEditorSelect extends GuiContainerAdvanced
 {
 
 private final List<StructureClientInfo> clientStructures;
@@ -46,53 +38,16 @@ int currentLowestViewed = 0;
 private static final int numberDisplayed = 8;
 private boolean shouldForceUpdate = false;
 String currentStructure = "";
+private ContainerEditor container;
 
 /**
- * @param par1Container
+ * @param container
  */
-public GuiCSB(Container container)
+public GuiEditorSelect(ContainerEditor container)
   {
   super(container);
-  if(container instanceof ContainerCSB)
-    {
-    clientStructures = StructureManager.instance().getClientStructures();
-    }  
-  else
-    {
-    clientStructures = null;
-    }    
-  if(clientStructures==null)
-    {
-    closeGUI();
-    }
-  ItemStack builderItem = player.inventory.getCurrentItem();
-  if(builderItem==null || builderItem.getItem()==null)
-    {
-    closeGUI();
-    return;
-    }
-  int id = builderItem.itemID;
-  if(id != ItemLoader.instance().structureCreativeBuilder.itemID && id != ItemLoader.instance().structureCreativeBuilderTicked.itemID)
-    {
-    closeGUI();
-    return;
-    } 
-  
-  if(builderItem.stackTagCompound!=null)
-    {
-    currentStructure = builderItem.stackTagCompound.getCompoundTag("structData").getString("name");
-    if(currentStructure.equals(""))
-      {
-      currentStructure = "No selection";
-      }
-    else
-      {
-      if(StructureManager.instance().getClientStructure(currentStructure)==null)
-        {
-        currentStructure = "No selection";
-        }
-      }
-    }
+  this.container = container;
+  clientStructures = StructureManager.instance().getClientStructures();
   }
 
 @Override
@@ -103,27 +58,23 @@ public int getXSize()
 
 @Override
 public int getYSize()
-  {  
+  {
   return 240;
   }
-
 @Override
 public String getGuiBackGroundTexture()
   {
   return "/shadowmage/ancient_warfare/resources/gui/guiBackgroundLarge.png";
   }
-
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   this.drawString(fontRenderer, "Structure: "+currentStructure, guiLeft + 10, guiTop + 14, 0xffffffff);
-  
-  
-  
+
   this.drawString(fontRenderer, "Wid", guiLeft + 190, guiTop + 46+8, 0xffffffff);
   this.drawString(fontRenderer, "Len", guiLeft + 210, guiTop + 46+8, 0xffffffff);
   this.drawString(fontRenderer, "Hig", guiLeft + 230, guiTop + 46+8, 0xffffffff);
-  
+
   for(int i = 0; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++)
     {
     this.drawString(fontRenderer, String.valueOf(clientStructures.get(i+currentLowestViewed).xSize), guiLeft + 190, guiTop + 20 * i + 64+8, 0xffffffff);
@@ -139,14 +90,13 @@ public void setupGui()
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
   this.addGuiButton(1, 10, 40+8, 35, 18, "Prev");
   this.addGuiButton(2, 50, 40+8, 35, 18, "Next");
-  
-  this.addGuiButton(20, 256-85-10, 30, 85, 16, "Advanced Setup");
-  
+
+  this.addGuiButton(20, 256-35-10, 30, 85, 18, "Edit");
+
   for(int i = 0, buttonNum = 3; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++, buttonNum++)
     {
     this.addGuiButton(buttonNum, 10, 60 + (20*i) +8, 120, 14, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
     } 
-  
   }
 
 @Override
@@ -161,51 +111,43 @@ public void updateScreenContents()
 
 @Override
 public void buttonClicked(GuiButton button)
-  { 
-  
+  {
   switch(button.id)
+  {
+  case 0:
+  closeGUI();
+  return;
+
+  case 1:
+  if(this.currentLowestViewed-8 >=0)
     {
-    case 0:
-    closeGUI();
-    return;
-    
-    case 1:
-    if(this.currentLowestViewed-8 >=0)
-      {
-      System.out.println("decrementing!");
-      this.currentLowestViewed-=8;
-      shouldForceUpdate = true;
-      }
-    return;
-    
-    case 2:
-    if(this.currentLowestViewed+8 < this.clientStructures.size())
-      {
-      System.out.println("incrementing!");
-      this.currentLowestViewed+=8;
-      shouldForceUpdate = true;   
-      }
-    return;
-    
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-    case 16:
-    return;
-    case 20:
-    mc.displayGuiScreen(new GuiCSBAdvancedSelection(inventorySlots, this));
-    return;
+    this.currentLowestViewed-=8;
+    shouldForceUpdate = true;
     }
+  return;
+
+  case 2:
+  if(this.currentLowestViewed+8 < this.clientStructures.size())
+    {
+    this.currentLowestViewed+=8;
+    shouldForceUpdate = true;   
+    }
+  return;
   
- 
+  case 20:
+  if(StructureManager.instance().getClientStructure(currentStructure)!=null)
+    {
+    this.selectStructureToEdit(currentStructure);
+    mc.displayGuiScreen(new GuiEditor(this.container));
+    }
+  return;
+  }
+  
   if(button.id>=3 && button.id < 11)
     {
     int index = (this.currentLowestViewed + button.id) - 3;
     if(index>=this.clientStructures.size())
       {
-      System.out.println("OOB index > size -- "+index);      
       return;
       }
     shouldForceUpdate = true;
@@ -213,7 +155,24 @@ public void buttonClicked(GuiButton button)
     }  
   }
 
+/**
+ * sets the structure to be edited, sends the name to server which will pull 
+ * the actual structure and send its template to the underlying container
+ * for this gui
+ * @param name
+ */
+public void selectStructureToEdit(String name)
+  {
+  this.currentStructure = name;
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("setStructure", name);
+  this.sendDataToServer(tag);
+  }
 
+/**
+ * used when buttons are clicked to select what structure to display on top of the gui (also synchs server-side to the same)
+ * @param name
+ */
 public void setStructureName(String name)
   {
   this.currentStructure = name;
@@ -221,6 +180,5 @@ public void setStructureName(String name)
   tag.setString("name", name);
   this.sendDataToServer(tag);
   }
-
 
 }

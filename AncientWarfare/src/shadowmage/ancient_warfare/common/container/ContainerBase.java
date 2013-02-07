@@ -85,6 +85,24 @@ public void sendDataToServer(NBTTagCompound tag)
   AWCore.proxy.sendPacketToServer(pkt);
   }
 
+/**
+ * send data from server to populate client-side container
+ * @param tag
+ */
+public void sendDataToPlayer(NBTTagCompound tag)
+  {
+  if(player.worldObj.isRemote)
+    {
+    Config.logError("Attempt to send data to client FROM client");
+    Exception e = new IllegalAccessException();
+    e.printStackTrace();
+    return;
+    }
+  Packet03GuiComs pkt = new Packet03GuiComs();
+  pkt.setData(tag);
+  AWCore.proxy.sendPacketToPlayer(player, pkt);
+  }
+
 public abstract List<NBTTagCompound> getInitData();
 
 }

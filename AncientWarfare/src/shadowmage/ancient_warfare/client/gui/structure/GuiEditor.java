@@ -59,8 +59,14 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  // TODO Auto-generated method stub
-  
+  if(this.cont.clientLines!=null)
+    {
+    int maxSize = cont.clientLines.size() < 20 ? cont.clientLines.size() : 20;
+    for(int i = 0; i < maxSize; i++)
+      {
+      this.drawString(fontRenderer, cont.clientLines.get(i), 10, 10*i, 0xffffffff);
+      }
+    }
   }
 
 @Override

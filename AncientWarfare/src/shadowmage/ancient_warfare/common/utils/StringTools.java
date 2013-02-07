@@ -20,6 +20,14 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 public class StringTools
 {
 
@@ -223,6 +231,41 @@ public static boolean isNumber(String test)
     return false;
     }
   return true;
+  }
+
+/**
+ * write a list of lines to a byte[] as UTF-8 encoded chars
+ * @param lines
+ * @return
+ * @throws UnsupportedEncodingException
+ * @throws IOException
+ */
+public static byte[] getByteArray(List<String> lines) throws UnsupportedEncodingException, IOException
+  {
+  ByteArrayOutputStream baos = new ByteArrayOutputStream();
+  for(String line : lines)
+    {
+    baos.write(line.getBytes("UTF-8"));
+    }
+  byte[] allBytes = baos.toByteArray();
+  return allBytes;
+  }
+
+/**
+ * read a list of lines from a byte[] as UTF-8 encoded chars
+ * @param bytes
+ * @return
+ */
+public static List<String> getLines(byte[] bytes)
+  {
+  ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+  List<String> lines = new ArrayList<String>();
+  Scanner scan = new Scanner(bais, "UTF-8");
+  while(scan.hasNext())
+    {    
+    lines.add(scan.nextLine());
+    }
+  return lines;
   }
 
 }

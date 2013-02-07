@@ -18,44 +18,45 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.structures.data;
+package shadowmage.ancient_warfare.common.utils;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.utils.ByteTools;
-import shadowmage.ancient_warfare.common.utils.StringTools;
-
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-
-/**
- * in-memory template w/ methods to handle breaking data up into packet-sized chunks of bytes
- * @author Shadowmage
- *
- */
-public class MemoryTemplate
+public class ByteTools
 {
-ArrayList<String> templateLines = new ArrayList<String>();
 
-
-public void setLines(List<String> lines)
+public static List<byte[]> getByteChunks(byte[] allBytes, int packetSize)
   {
-  templateLines.clear();
-  templateLines.addAll(lines);
+  int numOfChunks = (allBytes.length/packetSize)+1;  
+  List<byte[]> byteChunks = new ArrayList<byte[]>(numOfChunks);  
+  for(int i = 0; i < numOfChunks; i++)
+    {
+    byte[] chunk = new byte[packetSize];
+    for(int k = 0; k < packetSize ; k++)
+      {
+      if(k + i*packetSize < allBytes.length)
+        {
+        chunk[k] = allBytes[k+i*packetSize];
+        }
+      }
+    byteChunks.add(chunk);
+    }
+  return byteChunks;
   }
 
-public List<String> getLines()
+public static byte[] compositeByteChunks(List<byte[]> chunks, int packetSize)
   {
-  return this.templateLines;
-  }
-
-public List<byte[]> getPacketBytes(int packetSize) throws UnsupportedEncodingException, IOException
-  {
-  byte [] fullFile = StringTools.getByteArray(templateLines);  
-  return ByteTools.getByteChunks(fullFile, packetSize);
+  byte[] fullFile = new byte[chunks.size()*packetSize];    
+  for(int i = 0; i < chunks.size(); i++)
+    {
+    for(int k = 0; k < packetSize; k++)
+      {
+      fullFile[ i * packetSize + k] = chunks.get(i)[k];
+      }
+    }
+  return fullFile;
   }
 
 }

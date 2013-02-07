@@ -33,8 +33,6 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 public class ContainerCSB extends ContainerBase
 {
 
-//public final ItemStack builderItem;
-
 /**
  * @param openingPlayer
  * @param synch
@@ -47,7 +45,6 @@ public ContainerCSB(EntityPlayer openingPlayer, IEntityContainerSynch synch)
     Config.logError("Severe error initializing Creative Structure Builder Container, improper ItemStack detected.");
     }
   }
-
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
@@ -104,7 +101,6 @@ public void handleInitData(NBTTagCompound tag)
   {
   
   }
-
 
 @Override
 public List<NBTTagCompound> getInitData()
