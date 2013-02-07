@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.container;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
@@ -83,6 +85,6 @@ public void sendDataToServer(NBTTagCompound tag)
   AWCore.proxy.sendPacketToServer(pkt);
   }
 
-public abstract NBTTagCompound getInitData();
+public abstract List<NBTTagCompound> getInitData();
 
 }

@@ -134,13 +134,8 @@ private ProcessedStructure processFile(File file)
    * throw everything into a list, close the file
    */
   while(reader.hasNextLine())
-    {
-    line = reader.nextLine();
-    if(line.startsWith("#"))//skip comment lines entirely, no need to parse later
-      {
-      continue;
-      }
-    lines.add(line);
+    {    
+    lines.add(reader.nextLine());
     }  
   reader.close();
 
@@ -170,6 +165,7 @@ private ProcessedStructure processFile(File file)
     Config.logError("INVALID STRUCTURE: There was an error while parsing template file: "+file.getName()); 
     return null;
     }
+  struct.setTemplateLines(lines);
   return struct;
   }
 

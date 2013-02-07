@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -215,8 +218,9 @@ public void handleInitData(NBTTagCompound tag)
   }
 
 @Override
-public NBTTagCompound getInitData()
+public List<NBTTagCompound> getInitData()
   {
+  ArrayList<NBTTagCompound> packetTags = new ArrayList<NBTTagCompound>();
   NBTTagCompound tag = new NBTTagCompound();
   ProcessedStructure struct = ItemStructureScanner.scannedStructures.get(this.player);
   if(struct==null)
@@ -225,8 +229,9 @@ public NBTTagCompound getInitData()
     }
   tag.setInteger("x", struct.xSize);
   tag.setInteger("y", struct.ySize);
-  tag.setInteger("z", struct.zSize);
-  return tag;
+  tag.setInteger("z", struct.zSize);  
+  packetTags.add(tag);
+  return packetTags;
   }
 
 }

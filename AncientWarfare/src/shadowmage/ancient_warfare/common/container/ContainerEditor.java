@@ -24,76 +24,94 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
-public class ContainerSurvivalBuilder extends ContainerBase
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
+public class ContainerEditor extends ContainerBase
 {
 
-/**
- * client side blockList data
- */
-public List<IDPairCount> idCounts = new ArrayList<IDPairCount>();
+List<String> serverEditorLines;
+
+List<String> clientEditorLines;
+
 
 /**
  * @param openingPlayer
+ * @param synch
  */
-public ContainerSurvivalBuilder(EntityPlayer openingPlayer)
+public ContainerEditor(EntityPlayer openingPlayer)
   {
-  super(openingPlayer, null);
+  super(openingPlayer, null); 
   }
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
-  {  
-  if(tag.hasKey("clear"))
+  {
+  if(player.worldObj.isRemote)
     {
-    ItemStack stack = player.getCurrentEquippedItem();
-    if(stack==null || stack.getItem() == null || stack.getItem().itemID!= ItemLoader.structureBuilderDirect.itemID)
+    
+    }
+  else
+    {
+    if(tag.hasKey("name"))
       {
-      return;
+      String name = tag.getString("name");
+      ProcessedStructure struct = StructureManager.instance().getStructureServer(name);
+      struct.lock();
+      List<String> templateLines = struct.getTemplateLines();
+      
+      
       }
-    stack.setTagInfo("structData", new NBTTagCompound());
-    }  
+    }
   }
 
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
-  this.idCounts.clear();
-  if(tag.hasKey("blockList"))
-    {
-    NBTTagList blockListTag = tag.getTagList("blockList");
-    for(int i = 0; i < blockListTag.tagCount(); i++)
-      {
-      NBTTagCompound ct = (NBTTagCompound) blockListTag.tagAt(i);
-      this.idCounts.add(new IDPairCount(ct));      
-      }
-    }  
+  // TODO Auto-generated method stub
+
   }
 
 @Override
 public List<NBTTagCompound> getInitData()
   {
   ArrayList<NBTTagCompound> packetTags = new ArrayList<NBTTagCompound>();
-  NBTTagCompound tag = new NBTTagCompound();
-  NBTTagList blockListTag = new NBTTagList();
-  ProcessedStructure struct = StructureManager.instance().getTempStructure(player.getEntityName());//ItemBuilderDirect.getStructureFor(player.getEntityName());
-  if(struct!=null)
+  if(serverEditorLines==null)
     {
-    List<IDPairCount> counts = struct.getResourceList();
-    for(IDPairCount count : counts)
-      {      
-      blockListTag.appendTag(count.getTag());
-      }
+    return packetTags;
     }
-  tag.setTag("blockList", blockListTag);
-  packetTags.add(tag);
+  
+  ByteArrayDataOutput bado = ByteStreams.newDataOutput();    
+  for(String line : serverEditorLines)      
+    {
+    bado.writeChars(line);
+    }
+  int packetSize = 8192;    
+  byte[] allBytes = bado.toByteArray();
+  ByteArrayDataInput badi = ByteStreams.newDataInput(allBytes);  
+  int numOfPackets = (allBytes.length/packetSize)+1;
+  byte[][] packetBytes = new byte[numOfPackets][packetSize];
+  int currentByte = 0;    
+  for(int x = 0; x < numOfPackets; x++)
+    {
+    for(int y = 0; y <packetSize; y++)
+      {
+      packetBytes[x][y] = allBytes[x*packetSize + y];
+      }
+    }    
+  for(int i = 0; i < numOfPackets; i++)
+    {    
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setInteger("num", i);     
+    tag.setInteger("of", numOfPackets);
+    tag.setByteArray("bytes", packetBytes[i]);
+    packetTags.add(tag);
+    }  
   return packetTags;
   }
 

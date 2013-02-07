@@ -79,7 +79,6 @@ public void readDataStream(ByteArrayDataInput data)
 @Override
 public void execute()
   {
-  System.out.println("executing packet01");
   NBTTagCompound tag;
   
   /***

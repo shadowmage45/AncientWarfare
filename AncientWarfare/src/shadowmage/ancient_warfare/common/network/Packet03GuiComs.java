@@ -77,7 +77,6 @@ public void setInitData(NBTTagCompound tag)
 @Override
 public void execute()
   {
-  System.out.println("executing packet03. server: "+!this.world.isRemote);
   if(packetData.hasKey("openGUI"))
     {
     NBTTagCompound tag = packetData.getCompoundTag("openGUI");

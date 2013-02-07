@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.container;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -105,9 +107,8 @@ public void handleInitData(NBTTagCompound tag)
 
 
 @Override
-public NBTTagCompound getInitData()
+public List<NBTTagCompound> getInitData()
   {
-  // TODO Auto-generated method stub
   return null;
   }
 

@@ -24,6 +24,7 @@ package shadowmage.ancient_warfare.client.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
 import shadowmage.ancient_warfare.common.network.PacketBase;
@@ -58,6 +59,7 @@ public void registerClientData()
   TickRegistry.registerTickHandler(AWRenderHelper.instance(), Side.CLIENT);
   
   MinecraftForge.EVENT_BUS.register(AWRenderHelper.instance());
+  MinecraftForgeClient.preloadTexture("/shadowmage/ancient_warfare/resources/block/blocks.png");
   }
 
 }

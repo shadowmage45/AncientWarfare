@@ -98,7 +98,7 @@ public void handleWorldLoad(World world)
     }
   if(tag==null)
     {
-    Config.logError("Null data tag loaded from file, aborting loading of world stats");
+    //Config.logError("Null data tag loaded from file, aborting loading of world stats");
     return;
     }
   long time = tag.getLong("tS");

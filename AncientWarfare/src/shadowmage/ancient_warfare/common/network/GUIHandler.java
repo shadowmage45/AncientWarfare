@@ -20,15 +20,19 @@
  */
 package shadowmage.ancient_warfare.common.network;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.client.gui.creative_selection.GuiCSB;
-import shadowmage.ancient_warfare.client.gui.scanner.GuiStructureScanner;
-import shadowmage.ancient_warfare.client.gui.survival_builder.GuiSurvivalBuilder;
+import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
+import shadowmage.ancient_warfare.client.gui.structure.GuiEditor;
+import shadowmage.ancient_warfare.client.gui.structure.GuiStructureScanner;
+import shadowmage.ancient_warfare.client.gui.structure.GuiSurvivalBuilder;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
+import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
@@ -43,6 +47,7 @@ public class GUIHandler implements IGuiHandler
 public static final int STRUCTURE_SELECT = 0;
 public static final int STRUCTURE_SCANNER = 1;
 public static final int STRUCTURE_BUILD_DIRECT = 2;
+public static final int STRUCTURE_EDITOR = 3;
 
 
 
@@ -72,8 +77,9 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   case STRUCTURE_BUILD_DIRECT:
   return new ContainerSurvivalBuilder(player);
   
-  case 3:  
-  return null;
+  case STRUCTURE_EDITOR:  
+  return new ContainerEditor(player);
+  
   case 4:
   return null;
   case 5:
@@ -107,9 +113,10 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   case STRUCTURE_BUILD_DIRECT:
   return new GuiSurvivalBuilder(new ContainerSurvivalBuilder(player));
   
-  case 3:
-  return null;
-  case 4:
+  case STRUCTURE_EDITOR:
+  return new GuiEditor(new ContainerEditor(player));
+  
+  case 4:  
   return null;
   case 5:
   return null;
@@ -151,13 +158,19 @@ public void openGUI(int ID, EntityPlayer player, World world, int x, int y, int 
     FMLNetworkHandler.openGui(player, AWCore.instance, ID, world, x, y, z);
     if(player.openContainer instanceof ContainerBase)
       {
-      NBTTagCompound tag = ((ContainerBase)player.openContainer).getInitData();
-      if(tag!=null)
+      List<NBTTagCompound> packetTags = ((ContainerBase)player.openContainer).getInitData();
+      if(packetTags!=null)
         {
-        Packet03GuiComs pkt = new Packet03GuiComs();
-        pkt.setInitData(tag);
-        AWCore.proxy.sendPacketToPlayer(player, pkt);
-        }      
+        for(NBTTagCompound tag : packetTags)
+          {
+          if(tag!=null)
+            {
+            Packet03GuiComs pkt = new Packet03GuiComs();
+            pkt.setInitData(tag);
+            AWCore.proxy.sendPacketToPlayer(player, pkt);
+            }
+          }
+        }
       }
     }
   }

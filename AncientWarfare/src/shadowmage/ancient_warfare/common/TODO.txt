@@ -1,18 +1,26 @@
 TODO before first alpha release:
 read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
-
+scan-vid--http://youtu.be/vwt-c8Q0UOk
+builders vid--http://youtu.be/dPN1ErgV1qw
+https://www.dropbox.com/s/jrg6vy8610ziua7/AW-DevTest--02-06-13.zip
 GENERAL
 
 
-TEMPLATES/STRUCTURE
+TEMPLATES
 * remove unused fields (chunkDistance, chunkAttempts
 * actually use creative/survival flags in templates
 
 
+
+SCANNER
+* add clear/reset button to GUI, in case someone wants to ditch a scan
+
+
 STRUCTURE BUILDING
 * ensure that builders will not crash/corrupt world if they are loaded with a template
-      that has changed after they were fist placed.
+      that has changed after they were fist placed.  save an md5 of the file into the processedStructure
+      save that md5 out to the builder.  when builder is loaded, check saved md5 versus the passed-in structure
 
 
 WORLD GEN STUFF
@@ -28,12 +36,12 @@ SURVIVAL MODE STRUCTURE BUILDING
 * add template text-editing capabilities to drafting workstation
 * make sure survival ticked builder will not clear or level.  struct BB needs validated for clear before being built
 * create advanced drafting workstation (template editor)
-* swap survival mode scanner over to necessitate use of an drafting station in order to process its contents.
-      (use of advanced station will allow for editing of the template upon finalization)
+
 
 
 STRUCTURE EDITOR
-* no fucking clue.....
+* transfer data via container init code
+* figure out multi-line text box...
 
 
 TWEAKS/OPTIMIZATION
