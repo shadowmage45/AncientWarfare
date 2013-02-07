@@ -63,8 +63,7 @@ public void handlePacketData(NBTTagCompound tag)
       String name = tag.getString("name");
       ProcessedStructure struct = StructureManager.instance().getStructureServer(name);
       struct.lock();
-      List<String> templateLines = struct.getTemplateLines();
-      
+      //TODO...hrrm...
       
       }
     }
