@@ -68,4 +68,9 @@ public static boolean isBuilderItem(int id)
   return id== ItemLoader.structureBuilderDirect.itemID || id == ItemLoader.structureCreativeBuilder.itemID || id == ItemLoader.structureCreativeBuilderTicked.itemID;
   }
 
+public static boolean hasScanBB(int id)
+  {
+  return id==ItemLoader.structureBuilderDirect.itemID;
+  }
+
 }

@@ -39,7 +39,6 @@ SURVIVAL MODE STRUCTURE BUILDING
 
 
 STRUCTURE EDITOR
-* transfer data via container init code
 * figure out multi-line text box...
 
 
@@ -165,3 +164,6 @@ select structure from available structures by value
 * test biome inclusion/exclusion
 * add default templates, and add them to export list
 * add BB render to scanner
+* store template lines in structure
+* break template lines into byte chunks
+* send template byte chunks to client for entire structure

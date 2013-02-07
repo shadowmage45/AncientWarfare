@@ -246,7 +246,11 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
     }
-  else if(ItemStructureScanner.isScannerItem(id))
+  if(ItemBuilderBase.hasScanBB(id))
+    {
+    
+    }
+  if(ItemStructureScanner.isScannerItem(id))
     {
     this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks);
     }
