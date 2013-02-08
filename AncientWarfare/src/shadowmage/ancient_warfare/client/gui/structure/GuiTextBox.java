@@ -32,6 +32,9 @@ import net.minecraft.client.gui.Gui;
 public class GuiTextBox extends Gui
 {
 
+/**
+ * basic params
+ */
 int xSize;
 int ySize;
 final int displayLines;
@@ -40,10 +43,10 @@ int textColor;
 int backGroundColor;
 boolean activated = false;
 
-
-
+/**
+ * the actual lines driving the char array to be displayed
+ */
 List<String> lines;
-
 
 /**
  * cursor position on screen
@@ -53,21 +56,20 @@ int cursorPosY;
 
 /**
  * leftMost char drawn
+ * and topMost drawn char
  */
 int viewX;
-/**
- * topMost line drawn
- */
 int viewY;
 
 /**
  * used to trigger updates in viewedChars array
  */
 int prevViewX;
-
 int prevViewY;
 
-
+/**
+ * the data that is drawn onto the screen
+ */
 char[][] screenChars;
 
 public GuiTextBox(int xSize, int ySize, List<String> lines)
@@ -93,31 +95,175 @@ public GuiTextBox(int xSize, int ySize, int displayLines, int lineLength, int te
 
 public boolean onKeyTyped(char charValue, int keyCode)
   {
-//  if(!this.activated)
-//    {
-//    return false;
-//    }  
-  if(keyCode==200)
+  if(!this.activated)
+    {
+    return false;
+    }  
+  if(keyCode==200)//up arrow
     {
     this.moveCursor(0, -1);
     }
-  else if(keyCode==208)
+  else if(keyCode==208)//down arrow
     {
     this.moveCursor(0, 1);
     }
+  else if(keyCode==203)
+    {
+    this.moveCursor(-1, 0);    
+    }
+  else if(keyCode==205)
+    {
+    this.moveCursor(1, 0);
+    }
+  else if(keyCode==211)//delete
+    {
+    this.handleDeleteAction();
+    }
+  else if(keyCode==14)//backspace
+    {
+    this.handleBackspaceAction();
+    }
+  else if(keyCode==28)
+    {
+    this.handleEnterAction();
+    }
+  
+  
   /**
    * TODO
-   * up-arrow -- prev line  -- 200
-   * down arrow-- next line -- 208
-   * left arrow -- prev char -- 203
-   * right arrow -- next char -- 205
-   * enter -- truncate line and insert on next -- 28
-   * backspace -- remove prev char or remove empty line -- 14
-   * delete -- remove next char or remove empty line -- 211
    * shift+arrow keys--highlight selection
    * copy/cut/paste -- copy/cut/paste
    */
+  
+  
   return true;
+  }
+
+private void handleEnterAction()
+  {
+  
+  }
+
+private void handleDeleteAction()
+  {
+  String line = getCurrentLine();
+  int lineNum = viewY+cursorPosY;
+  int charNum = viewX+cursorPosX;
+  if(charNum==line.length())//pointer is at end of the line, bring next line up onto the end of this one
+    {
+    line = joinLines(line, this.lines.get(viewY+cursorPosY+1));
+    this.setCurrentLine(line);
+    this.deleteLine(lineNum+1);
+    }
+  else if(line.length()>0)
+    {    
+    deleteCharInString(line, viewX+cursorPosX);      
+    }  
+  this.updateScreenChars();
+  }
+
+private void handleBackspaceAction()
+  {
+  String line = getCurrentLine();
+  int lineNum = viewY+cursorPosY;
+  int charNum = viewX+cursorPosX;
+  if(charNum==0)//cursor is at beginning of line, bring this line up onto the end of the previous
+    {
+    if(lineNum>0)
+      {
+      moveCursor(0,-1);//move cursor up to previous line;
+      setCursorToEndOfCurrentLine();
+      line = getCurrentLine();
+      line = joinLines(line, lines.get(viewY+cursorPosY));
+      this.setCurrentLine(line);
+      this.deleteLine(viewY+cursorPosY+1);
+      }
+    }
+  else
+    {
+    this.deleteCharInString(line, charNum-1);
+    this.setCurrentLine(line);
+    }
+  this.updateScreenChars();
+  }
+
+private void setCursorToEndOfCurrentLine()
+  {
+  int lineLen = this.currentStringLength();
+  if(lineLen < lineLength)
+    {
+    this.cursorPosX = lineLen;
+    }
+  else
+    {
+    this.cursorPosX = lineLen-viewX;
+    }
+  }
+
+private String getCurrentLine()
+  {
+  if(viewY+cursorPosY < 0 || viewY+cursorPosY >= this.lines.size())
+    {
+    return "";
+    }
+  return this.lines.get(viewY+cursorPosY);
+  }
+
+private void deleteCurrentLine()
+  {
+  deleteLine(this.viewY+cursorPosY);
+  }
+
+private void deleteLine(int lineNum)
+  {
+  //TODO needs checking
+  this.lines.remove(lineNum);
+  }
+
+/**
+ * replaces the current indexed line with the input param
+ * @param line
+ */
+private void setCurrentLine(String line)
+  {
+  //TODO needs checking
+  this.lines.set(viewY+cursorPosY, line);
+  }
+
+private int getCharIndex()
+  {
+  //TODO needs checking
+  return this.viewX+cursorPosX;
+  }
+
+private int currentStringLength()
+  {
+  //TODO needs checking
+  return this.lines.get(viewY+cursorPosY).length();
+  }
+
+private String joinLines(String first, String second)
+  {
+  //TODO needs checking
+  return first+second;
+  }
+
+private String deleteCharInString(String line, int charIndex)
+  {
+  if(charIndex >= line.length() || charIndex <= 0)
+    {
+    return line;
+    }
+  int len = line.length();
+  String ret = new String("");
+  for(int i = 0; i < line.length(); i++)
+    {
+    if(i!=charIndex)
+      {
+      ret = ret + line.charAt(i);
+      }
+    }
+  return ret;
   }
 
 private void moveCursor(int xMove, int yMove)

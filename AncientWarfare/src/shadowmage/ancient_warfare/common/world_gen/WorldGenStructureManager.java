@@ -53,6 +53,8 @@ private HashMap<String, WorldGenBiomeStructList> biomesStructureMap = new HashMa
 private int[] validDimensions;
 private int[] invalidDimensions;
 
+private HashMap<String, WorldGenStructureEntry> namesStructureMap = new HashMap<String, WorldGenStructureEntry>();
+
 private class WorldGenBiomeStructList
 {
 int totalWeight;//weight for this entire biome, used for structure selection
@@ -141,6 +143,15 @@ public static WorldGenStructureManager instance()
   return INSTANCE;
   }
 
+public int getValueFor(String name)
+  {
+  if(this.namesStructureMap.containsKey(name))
+    {
+    return this.namesStructureMap.get(name).value;
+    }
+  return 0;
+  }
+
 public boolean isValidDimension(int dim)
   {
   if(this.validDimensions==null && this.invalidDimensions==null)
@@ -191,7 +202,7 @@ private void loadBiomesList()
     if(bio!=null && bio.biomeName!= null && !bio.biomeName.equals(""))
       {
       Config.logDebug("Adding to biome list: "+bio.biomeName);
-      this.biomesStructureMap.put(String.valueOf(bio.biomeName), new WorldGenBiomeStructList());
+      this.biomesStructureMap.put(String.valueOf(bio.biomeName.toLowerCase()), new WorldGenBiomeStructList());
       }
     }
   }
@@ -231,7 +242,7 @@ private void addStructureEntry(WorldGenStructureEntry ent)
       {
       Config.logError("Error detected in a structure template:  it has both exclusive and inclusive biome lists.  Please use only one or the other.  Structure name: "+struct.name);
       return;
-      }
+      }    
     if(struct.biomesNotIn!=null)
       {
       addToAllButBiomes(ent, struct.biomesNotIn);
@@ -243,6 +254,10 @@ private void addStructureEntry(WorldGenStructureEntry ent)
     else
       {
       addToAllBiomes(ent);
+      }
+    if(!this.namesStructureMap.containsKey(ent.name))
+      {
+      this.namesStructureMap.put(ent.name, ent);
       }
     }
   else
@@ -478,9 +493,9 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
 
 public ProcessedStructure getStructureForBiome(String biomeName, int maxValue, Random random)
   {
-  if(this.biomesStructureMap.containsKey(biomeName))
+  if(this.biomesStructureMap.containsKey(biomeName.toLowerCase()))
     {
-    String name = this.biomesStructureMap.get(biomeName).getRandomWeightedEntryBelow(maxValue, random);        
+    String name = this.biomesStructureMap.get(biomeName.toLowerCase()).getRandomWeightedEntryBelow(maxValue, random);        
     return StructureManager.instance().getStructureServer(name);
     }
   return null;

@@ -180,7 +180,7 @@ public void export()
       StructureManager.instance().addStructure(struct, true);
       if(struct.worldGen)
         {
-        WorldGenStructureManager.instance().addStructure(struct, struct.unique, 1, 1);//TODO add values to export config, or remove the entire thing...
+        WorldGenStructureManager.instance().addStructure(struct, false, 1, 1);//TODO add values to export config, or remove the entire thing...
         }
       }    
     else if(!success)

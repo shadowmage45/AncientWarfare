@@ -154,7 +154,7 @@ public void load(FMLPostInitializationEvent evt)
    */
   Config.saveConfig();
 
-  //this.debugStructureGen();
+  this.debugStructureGen();
   }
 
 
@@ -213,17 +213,15 @@ private List<String> doStructGenRun()
     {
     for(int z = 0; z < zSize; z++)
       {   
-      /**
-       * early base percentage chance--basically set structure density
-       */
-      if(check.nextInt(Config.structureGeneratorRandomRange)>Config.structureGeneratorRandomChance)
+      int dim = 0;
+      
+      if(random.nextInt(Config.structureGeneratorRandomRange)>Config.structureGeneratorRandomChance)
         {
         Config.logDebug("Exit for early random chance check");
         map[x][z]=0;
         continue;
         }
-
-      int dim =0;
+      
       int maxRange = Config.structureGenMaxCheckRange;
 
       float dist = 0;//found distance
@@ -243,56 +241,50 @@ private List<String> doStructGenRun()
         dist = values.key();
         } 
 
-      /**
-       * if value is too high to even place anything....
-       * TODO have this check to place 0-value structures.... (decoration)
-       */
-      if(values.value()>=Config.structureGenMaxClusterValue)
-        {
-        Config.logDebug("exit due to max value");
-        map[x][z]=0;
-        continue;
-        }
-
-
-      /**
-       * second exit code, exit early depending upon percentage of populated max value
-       */
-      float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
-      if(random.nextFloat() < valPercent)
-        {
-        Config.logDebug("Exit for value ratio check");
-        map[x][z]=0;
-        continue;
-        }
-
+     
       /**
        * select structure from those available to the current available value....
-       */
+       */      
       String biomeName = "plains";
       int maxValue = Config.structureGenMaxClusterValue - foundValue;
       ProcessedStructure struct = WorldGenStructureManager.instance().getStructureForBiome(biomeName, maxValue, random);
       if(struct!=null)
-        {
+        {   
         /**
-         * simulate placement fails..
+         * if it is not a decorative structure, check value
          */
-        if(random.nextInt(100)>40)
+        //TODO
+        
+        
+        /**
+         * then check cluster filled percentage
+         */
+        float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
+        if(random.nextFloat() < valPercent)
           {
-          Config.logDebug("exit for placement simulated fail");
-          map[x][z]=0;
+          Config.logDebug("Exit for value ratio check");
           continue;
           }
+            
         /**
          * else, place the struct....
          */
-        map[x][z] = struct.structureValue;
-        WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(x, z, struct.structureValue, struct.name);        
+        boolean placed = true;        
+        if(placed)
+          {
+          int value = WorldGenStructureManager.instance().getValueFor(struct.name);
+          WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(x, z, value, struct.name);
+          map[x][z]=value;
+          }
+        else
+          {
+          Config.logDebug("placement fail");
+          }
         }
       else
         {
         Config.logDebug("exit for null structure");
-        map[x][z] = 0;
+        map[x][z]=0;
         }
       }
     } 

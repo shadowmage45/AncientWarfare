@@ -40,9 +40,6 @@ public String name;
 public boolean worldGen = false;
 public boolean creative = true;
 public boolean survival = false;
-public boolean unique;
-public int structureValue=0;
-public int chunkAttempts=1;
 
 public boolean underground = false;
 public int undergroundMinLevel=1;

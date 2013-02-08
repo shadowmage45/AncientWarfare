@@ -44,8 +44,9 @@ SURVIVAL MODE STRUCTURE BUILDING
 
 
 STRUCTURE EDITOR
-* figure out multi-line text box...
-
+* cursor left-right movement in text-box
+* clean up file transmission, it leaves 'null' lines at the end of the file
+* per-character editing capabilities (string manip)
 
 COMPLEXES
 * THDT
@@ -173,3 +174,4 @@ select structure from available structures by value
 * break template lines into byte chunks to send to client
 * send template byte chunks to client for entire structure
 * composite byte chunks into structure on client side
+* figure out multi-line text box...

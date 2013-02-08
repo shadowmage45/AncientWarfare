@@ -188,7 +188,8 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
       }    
     if(placed)
       {
-      WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(chunkX, chunkZ, struct.structureValue, struct.name);
+      int value = WorldGenStructureManager.instance().getValueFor(struct.name);
+      WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(chunkX, chunkZ, value, struct.name);
       }
     else
       {

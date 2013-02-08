@@ -228,16 +228,7 @@ public ProcessedStructure loadStructureAW(List<String> lines)
     else if(line.toLowerCase().startsWith("survival"))
       {
       struct.survival = StringTools.safeParseBoolean("=", line);
-      }
-    else if(line.toLowerCase().startsWith("unique"))//structure uniqueness
-      {
-      struct.unique = StringTools.safeParseBoolean("=", line);
-      }
-    
-    else if(line.toLowerCase().startsWith("chunkdistance"))
-      {
-      struct.structureValue = StringTools.safeParseInt("=", line);
-      }
+      } 
     else if(line.toLowerCase().startsWith("underground"))
       {
       struct.underground = StringTools.safeParseBoolean("=", line);
@@ -428,15 +419,9 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
       struct.xOffset = struct.xSize/2;
       struct.zOffset = 1;
       }
-    
-    else if(line.toLowerCase().startsWith("unique"))
-      {
-      struct.unique = StringTools.safeParseIntAsBoolean("=", line);
-      }
     else if(line.toLowerCase().startsWith("embed_into_distance"))
       {
       struct.verticalOffset = StringTools.safeParseInt("=", line);
-      //struct.verticalOffset++;//fix for floors being off by one...
       }
     else if(line.toLowerCase().startsWith("allowable_overhang"))
       {
