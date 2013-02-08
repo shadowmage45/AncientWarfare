@@ -29,6 +29,8 @@ public class GuiEditor extends GuiContainerAdvanced
 
 private ContainerEditor cont;
 
+private GuiTextBox editor;
+
 /**
  * @param container
  */
@@ -58,14 +60,10 @@ public String getGuiBackGroundTexture()
 
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
-  {
-  if(this.cont.clientLines!=null)
+  { 
+  if(this.editor!=null)
     {
-    int maxSize = cont.clientLines.size() < 20 ? cont.clientLines.size() : 20;
-    for(int i = 0; i < maxSize; i++)
-      {
-      this.drawString(fontRenderer, cont.clientLines.get(i), 10, 10*i, 0xffffffff);
-      }
+    this.editor.drawTextBox(fontRenderer, guiLeft+4, guiTop+4);
     }
   }
 
@@ -79,14 +77,30 @@ public void setupGui()
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
-  
+  if(this.editor==null && this.cont.clientLines!=null)
+    {
+    this.editor = new GuiTextBox(248, 232, 20, 32, 0xffffffff, 0x00000000, cont.clientLines);
+    }
   }
 
 @Override
 public void buttonClicked(GuiButton button)
   {
   // TODO Auto-generated method stub
+  
+  }
+
+@Override
+protected void keyTyped(char par1, int par2)
+  {
+  if (par2 == 1)
+    {
+    super.keyTyped(par1, par2);
+    }
+  if(this.editor!=null)
+    {
+    this.editor.onKeyTyped(par1, par2);
+    }
   
   }
 

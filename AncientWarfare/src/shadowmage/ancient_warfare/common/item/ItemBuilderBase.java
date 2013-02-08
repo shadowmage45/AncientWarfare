@@ -20,18 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.interfaces.IBuilderItem;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class ItemBuilderBase extends AWItemClickable
+public abstract class ItemBuilderBase extends AWItemClickable 
 {
 /**
  * @param itemID
@@ -72,5 +66,6 @@ public static boolean hasScanBB(int id)
   {
   return id==ItemLoader.structureBuilderDirect.itemID;
   }
+
 
 }

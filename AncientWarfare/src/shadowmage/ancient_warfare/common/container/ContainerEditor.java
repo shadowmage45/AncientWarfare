@@ -91,12 +91,13 @@ public void handlePacketData(NBTTagCompound tag)
 
 private void handlePartialTemplateClient(NBTTagCompound tag)
   {
+  Config.logDebug("receiving partial template packet");
   /**
    * composite recieved packetData into full byte array
    */
   NBTTagCompound templateTag = tag.getCompoundTag("templateData");
-  int total = templateTag.getInteger("num");
-  int current = templateTag.getInteger("of");
+  int current = templateTag.getInteger("num");
+  int total = templateTag.getInteger("of");
   int size = templateTag.getInteger("packetSize");
   byte[] bytes = templateTag.getByteArray("bytes");
   if(packetData==null)
@@ -126,10 +127,12 @@ private void handlePartialTemplateClient(NBTTagCompound tag)
 
 private void sendTemplateToClient(ProcessedStructure struct) throws UnsupportedEncodingException, IOException
   {
+  Config.logDebug("sending template to client....");
   int packetSize = 8192;
   List<byte[]> chunks = struct.getTemplate().getPacketBytes(packetSize);
   for(int i = 0; i < chunks.size(); i++)
     {
+    Config.logDebug("sending template chunk to client");
     NBTTagCompound outerTag = new NBTTagCompound();
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("num", i);
@@ -143,6 +146,7 @@ private void sendTemplateToClient(ProcessedStructure struct) throws UnsupportedE
 
 public void setStructureServer(NBTTagCompound tag)
   {
+  Config.logDebug("Setting structure to edit");
   this.currentEditingStructure = tag.getString("setStructure");
   this.currentSelectedStructure = this.currentEditingStructure;
   this.serverStructure = StructureManager.instance().getStructureServer(currentEditingStructure);

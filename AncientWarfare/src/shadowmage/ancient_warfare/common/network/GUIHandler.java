@@ -27,6 +27,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
 import shadowmage.ancient_warfare.client.gui.structure.GuiEditor;
+import shadowmage.ancient_warfare.client.gui.structure.GuiEditorSelect;
 import shadowmage.ancient_warfare.client.gui.structure.GuiStructureScanner;
 import shadowmage.ancient_warfare.client.gui.structure.GuiSurvivalBuilder;
 import shadowmage.ancient_warfare.common.AWCore;
@@ -69,7 +70,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   switch(ID)
   {
   case STRUCTURE_SELECT:
-  return new ContainerCSB(player, null);
+  return new ContainerCSB(player);
   
   case STRUCTURE_SCANNER:
   return new ContainerStructureScanner(player);
@@ -105,7 +106,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   switch(ID)
   {
   case STRUCTURE_SELECT:
-  return new GuiCSB(new ContainerCSB(player, null));
+  return new GuiCSB(new ContainerCSB(player));
   
   case STRUCTURE_SCANNER:
   return new GuiStructureScanner(new ContainerStructureScanner(player));
@@ -114,7 +115,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   return new GuiSurvivalBuilder(new ContainerSurvivalBuilder(player));
   
   case STRUCTURE_EDITOR:
-  return new GuiEditor(new ContainerEditor(player));
+  return new GuiEditorSelect(new ContainerEditor(player));
   
   case 4:  
   return null;

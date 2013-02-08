@@ -52,6 +52,7 @@ public static final AWItemBase structureCreativeBuilderTicked = new ItemBuilderT
  * e.g. will be null unless debug mode is on
  */
 public static AWItemBase blockScanner;
+public static AWItemBase debugEditor;
 
 private static ItemLoader INSTANCE;
 private ItemLoader(){}
@@ -97,9 +98,12 @@ private void loadDebugItems()
   if(!Config.DEBUG)
     {
     return;
-    }
+    }  
   blockScanner = new ItemBlockScanner(Config.getItemID("debug.blockScanner", 9000));
-  this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block");  
+  this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block");
+  
+  debugEditor = new ItemDebugEditor(Config.getItemID("debug.editor", 9001));
+  this.registerItemSingle(debugEditor, "Debug Editor", "Debug editor gui opening item", "Right-Click to open editing selection GUI");
   }
 
 /**

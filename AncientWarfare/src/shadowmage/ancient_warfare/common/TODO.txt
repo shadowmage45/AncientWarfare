@@ -4,7 +4,10 @@ http://mrl.nyu.edu/~perlin/noise/
 scan-vid--http://youtu.be/vwt-c8Q0UOk
 builders vid--http://youtu.be/dPN1ErgV1qw
 https://www.dropbox.com/s/jrg6vy8610ziua7/AW-DevTest--02-06-13.zip
+
+
 GENERAL
+* add some null checks to container/guis...mostly there, but probably still missing a few
 
 
 TEMPLATES
@@ -36,6 +39,8 @@ SURVIVAL MODE STRUCTURE BUILDING
 * add template text-editing capabilities to drafting workstation
 * make sure survival ticked builder will not clear or level.  struct BB needs validated for clear before being built
 * create advanced drafting workstation (template editor)
+* fix BB not clearing after template is cleared
+* add scanning BB
 
 
 STRUCTURE EDITOR
@@ -165,5 +170,6 @@ select structure from available structures by value
 * add default templates, and add them to export list
 * add BB render to scanner
 * store template lines in structure
-* break template lines into byte chunks
+* break template lines into byte chunks to send to client
 * send template byte chunks to client for entire structure
+* composite byte chunks into structure on client side

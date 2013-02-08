@@ -22,30 +22,20 @@ package shadowmage.ancient_warfare.client.gui.structure;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import org.lwjgl.input.Mouse;
 
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.common.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 public class GuiCSBAdvancedSelection extends   GuiContainerAdvanced
 {
 
 private GuiScreen parent;
-
-
-boolean forceVeh;
-boolean forceNPC;
-boolean forceGate;
-boolean forceTeam;
-
-int veh = -2;
-int npc = -2;
-int gate = -2;
-int team = -1;
+private ContainerCSB container;
 
 String vehicleString = "Not Forced";
 String npcString = "Not Forced";
@@ -55,49 +45,12 @@ String teamString = "Not Forced";
 /**
  * @param container
  */
-public GuiCSBAdvancedSelection(Container container, GuiScreen parent)
+public GuiCSBAdvancedSelection(ContainerCSB container, GuiScreen parent)
   {
   super(container);
   this.parent = parent;
+  this.container = container;
   
-  ItemStack builderItem = player.inventory.getCurrentItem();
-  if(builderItem==null || builderItem.getItem()==null)
-    {
-    closeGUI();
-    return;
-    }
-  int id = builderItem.itemID;
-  if(id != ItemLoader.instance().structureCreativeBuilder.itemID && id != ItemLoader.instance().structureCreativeBuilderTicked.itemID)
-    {
-    closeGUI();
-    return;
-    } 
-  
-  NBTTagCompound tag = builderItem.stackTagCompound.getCompoundTag("structData");
-  if(tag.hasKey("veh"))
-    {
-    this.veh = tag.getInteger("veh");
-    this.forceVeh = veh > -2;
-    }
-  if(tag.hasKey("npc"))
-    {
-    this.npc = tag.getInteger("npc");
-    this.forceNPC = npc > -2;
-    }
-  if(tag.hasKey("gate"))    
-    {
-    this.gate = tag.getInteger("gate");
-    this.forceGate = gate > -2;
-    }
-  if(tag.hasKey("team"))
-    {
-    this.team = tag.getInteger("team");
-    this.forceTeam = team > -1;
-    if(this.team > -1)
-      {
-      this.teamString = String.valueOf(this.team);
-      }
-    }
   }
 
 @Override
@@ -161,10 +114,28 @@ public void setupGui()
 
 @Override
 public void updateScreenContents()
-  {
+  {  
   if(forceUpdate)
     {
     forceUpdate=false;
+    if(this.container.clientSettings!=null)
+      {
+      if(container.clientSettings.team>=0)
+        {
+        this.teamString = String.valueOf(container.clientSettings.team);
+        }
+      else
+        {
+        this.teamString = "Not Forced";
+        }  
+      }
+    //TODO
+    /**
+     * handle the other overrides, update local display string from container
+     */
+    
+    
+    
     this.initGui();
     }
   }
@@ -233,36 +204,22 @@ public void buttonClicked(GuiButton button)
 
 public void adjustTeam(int adj)
   {
-  this.team += adj;
-  if(this.team<-1)
+  container.clientSettings.team += adj;
+  if(container.clientSettings.team<-1)
     {
-    this.team=-1;
+    container.clientSettings.team=-1;
     }
-  if(this.team>15)
+  if(container.clientSettings.team>15)
     {
-    this.team=15;
+    container.clientSettings.team=15;
     }
-  if(this.team>=0)
-    {
-    this.teamString = String.valueOf(team);
-    }
-  else
-    {
-    this.teamString = "Not Forced";
-    }
-  
   }
 
 public void switchBackToParent()
   {
   if(this.updateOnClose)
     {
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setInteger("team", this.team);
-    tag.setInteger("npc", this.npc);
-    tag.setInteger("gate", this.gate);
-    tag.setInteger("veh", this.veh);
-    this.sendDataToServer(tag);
+    this.container.updateServerContainer();
     }
   mc.displayGuiScreen(parent);
   }

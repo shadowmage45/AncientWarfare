@@ -18,35 +18,38 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.interfaces;
+package shadowmage.ancient_warfare.common.item;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
+import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
-public interface IBuilderItem
+public class ItemDebugEditor extends AWItemClickable
 {
 
 /**
- * return client-side info for the structure to be built, null if none
- * @param stack
- * @return
- */
-public abstract StructureClientInfo getClientInfo(ItemStack stack);
+   * @param itemID
+   * @param hasSubTypes
+   */
+public ItemDebugEditor(int itemID)
+  {
+  super(itemID, false);
+  }
 
-/**
- * is this a ticked-builder with a controller-block?
- * @param stack
- * @return
- */
-public abstract boolean hasBuilderBox(ItemStack stack);
-
-
-public abstract String getBuildingName(ItemStack stack);
-public abstract NBTTagCompound getBuilderSettings(ItemStack stack);
-
-
-
+@Override
+public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  BlockPosition hit, int side)
+  {
+  if(player.worldObj.isRemote)
+    {
+    return true;
+    }
+  else
+    {
+    GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_EDITOR, player, world, 0, 0, 0);
+    }
+  return true;
+  }
 
 }

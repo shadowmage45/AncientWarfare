@@ -189,6 +189,21 @@ public StructureClientInfo getStructureForStack(ItemStack stack)
   return StructureManager.instance().getClientStructure(stack.getTagCompound().getCompoundTag("structData").getString("name"));  
   }
 
+protected NBTTagCompound getStructData(ItemStack stack)
+  {
+  NBTTagCompound tag;
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
+    {    
+    tag = stack.getTagCompound().getCompoundTag("structData");
+    }
+  else
+    {
+    tag = new NBTTagCompound();
+    stack.setTagInfo("structData", tag);
+    }
+  return tag;
+  }
+
 @Override
 public boolean renderBuilderBlockBB()
   {

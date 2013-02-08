@@ -245,6 +245,7 @@ public static byte[] getByteArray(List<String> lines) throws UnsupportedEncoding
   ByteArrayOutputStream baos = new ByteArrayOutputStream();
   for(String line : lines)
     {
+    line = line +"\n";
     baos.write(line.getBytes("UTF-8"));
     }
   byte[] allBytes = baos.toByteArray();
