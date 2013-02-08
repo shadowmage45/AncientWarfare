@@ -127,7 +127,10 @@ public boolean onKeyTyped(char charValue, int keyCode)
     {
     this.handleEnterAction();
     }
-  
+  else
+    {
+    this.handleCharAction(charValue);
+    }
   
   /**
    * TODO
@@ -135,13 +138,53 @@ public boolean onKeyTyped(char charValue, int keyCode)
    * copy/cut/paste -- copy/cut/paste
    */
   
+  /**
+   * delete--
+   * if at end of line, bring next line up if available and add onto end of this line
+   * else if at a char, remove char at cursor
+   */
   
+  /**
+   * backspace--
+   * if at beginning of line, bring current line up if possible and add onto end of previous line 
+   * else remove character preceding cursor
+   * move cursor back
+   */
+  
+  /**
+   * return--
+   * cut current line at pos, from pos onwards move down onto next line.
+   */
+   
+  /**
+   * chars--
+   * insert char into string, set string, move cursor
+   */
   return true;
+  }
+
+private void handleCharAction(char ch)
+  {
+  String line = getCurrentLine();
+  int lineNum = viewY+cursorPosY;
+  int charNum = viewX+cursorPosX;
+  String newLine = "";
+  for(int i = 0; i < line.length(); i ++)
+    {
+    if(i==charNum)
+      {
+      newLine = newLine + String.valueOf(ch);
+      }
+    newLine = newLine + line.charAt(i);
+    }
+  this.moveCursor(1, 0);
   }
 
 private void handleEnterAction()
   {
-  
+  String line = getCurrentLine();
+  int lineNum = viewY+cursorPosY;
+  int charNum = viewX+cursorPosX;
   }
 
 private void handleDeleteAction()
@@ -220,10 +263,6 @@ private void deleteLine(int lineNum)
   this.lines.remove(lineNum);
   }
 
-/**
- * replaces the current indexed line with the input param
- * @param line
- */
 private void setCurrentLine(String line)
   {
   //TODO needs checking
@@ -277,6 +316,7 @@ private void moveCursor(int xMove, int yMove)
 
   cursorPosY += yMove;
   cursorPosX += xMove;
+  
   if(cursorPosY < 0)
     {
     this.cursorPosY = 0;
@@ -399,7 +439,8 @@ private void updateScreenChars()
 
 private void renderCharAt(FontRenderer fontRenderer, int x, int y, char ch)
   {  
-  //TODO not make this so freaking ghetto
+  //TODO not make this so freaking ghetto--- e.g. write a proper char renderer instead of 
+  //using an entire string renderer to render a single char
   fontRenderer.drawString(String.valueOf(ch), x, y, textColor, false);
   }
 

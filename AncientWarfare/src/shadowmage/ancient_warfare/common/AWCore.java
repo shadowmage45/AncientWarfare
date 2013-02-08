@@ -311,6 +311,7 @@ private List<String> doStructGenRun()
       }
     lines.add(line);
     }
+  WorldGenManager.resetMap();
   return lines;
   }
 
