@@ -55,6 +55,12 @@ int cursorPosX;
 int cursorPosY;
 
 /**
+ * raw x and y of cursor relative to lines
+ */
+int cursorRawX;
+int cursorRawY;
+
+/**
  * leftMost char drawn
  * and topMost drawn char
  */
@@ -71,6 +77,11 @@ int prevViewY;
  * the data that is drawn onto the screen
  */
 char[][] screenChars;
+
+/**
+ * if true, will update screen characters, and set to false
+ */
+private boolean dirty = true;
 
 public GuiTextBox(int xSize, int ySize, List<String> lines)
   {
@@ -94,26 +105,26 @@ public GuiTextBox(int xSize, int ySize, int displayLines, int lineLength, int te
   }
 
 public boolean onKeyTyped(char charValue, int keyCode)
-  {
+  {  
   if(!this.activated)
     {
     return false;
     }  
   if(keyCode==200)//up arrow
     {
-    this.moveCursor(0, -1);
+    this.moveCursorUp();
     }
   else if(keyCode==208)//down arrow
     {
-    this.moveCursor(0, 1);
+    this.moveCursorDown();
     }
-  else if(keyCode==203)
+  else if(keyCode==203)//left arrow
     {
-    this.moveCursor(-1, 0);    
+    this.moveCursorLeft();
     }
-  else if(keyCode==205)
+  else if(keyCode==205)//right arrow
     {
-    this.moveCursor(1, 0);
+    this.moveCursorRight();
     }
   else if(keyCode==211)//delete
     {
@@ -127,8 +138,13 @@ public boolean onKeyTyped(char charValue, int keyCode)
     {
     this.handleEnterAction();
     }
+  else if(keyCode==1)
+    {
+    //escape...
+    }
   else
     {
+    Config.logDebug("keyTyped: " + charValue + " : " + keyCode);
     this.handleCharAction(charValue);
     }
   
@@ -163,203 +179,324 @@ public boolean onKeyTyped(char charValue, int keyCode)
   return true;
   }
 
+private void setLineAt(String line, int y)
+  {
+  if(y>=lines.size())
+    {
+    lines.add(line);    
+    }
+  else
+    {
+    this.lines.set(y, line);
+    }
+  }
+
+private void insertLineAt(String line, int y)
+  {
+  if(y>=this.lines.size())
+    {
+    this.lines.add(line);
+    }
+  else
+    {
+    this.lines.add(y, line);
+    }
+  }
+
+private String removeLineAt(int y)
+  {
+  if(y>=lines.size() || y<0)
+    {
+    return "";
+    }
+  String line = lines.get(y);  
+  lines.remove(y);
+  return line;
+  }
+
+private String getLineAt(int y)
+  {
+  if(y>=lines.size())
+    {
+    return "";
+    }
+  return lines.get(y);
+  }
+
+private String removeCharAt(String line, int x)
+  {
+  if(x<0 || x>=line.length())
+    {    
+    return "";
+    }
+  String newLine = "";
+  for(int i = 0; i < line.length(); i++)
+    {
+    if(i != x)
+      {
+      newLine = newLine + String.valueOf(line.charAt(i));
+      }
+    }
+  return newLine;
+  }
+
+private String insertCharAt(String line, int x, char ch)
+  {
+  if(x<0 || x>line.length())
+    {    
+    return "";
+    }
+  String newLine = "";
+  for(int i = 0; i < x; i++)
+    {
+    newLine = newLine + String.valueOf(line.charAt(i));
+    }
+  newLine = newLine + String.valueOf(ch);
+  for(int i = x; i <line.length(); i++)
+    {
+    newLine = newLine + String.valueOf(line.charAt(i));
+    }
+  return newLine;
+  }
+
 private void handleCharAction(char ch)
   {
-  String line = getCurrentLine();
-  int lineNum = viewY+cursorPosY;
-  int charNum = viewX+cursorPosX;
-  String newLine = "";
-  for(int i = 0; i < line.length(); i ++)
+  if(this.cursorRawY>=this.lines.size())
     {
-    if(i==charNum)
-      {
-      newLine = newLine + String.valueOf(ch);
-      }
-    newLine = newLine + line.charAt(i);
+    this.lines.add(String.valueOf(ch));
+    this.moveCursorRight();
+    this.setDirty();
     }
-  this.moveCursor(1, 0);
+  else
+    {
+    String line = this.getLineAt(cursorRawY);
+    line = this.insertCharAt(line, cursorRawX, ch);
+    this.setLineAt(line, cursorRawY);
+    this.moveCursorRight();
+    this.setDirty();
+    }
   }
 
 private void handleEnterAction()
   {
-  String line = getCurrentLine();
-  int lineNum = viewY+cursorPosY;
-  int charNum = viewX+cursorPosX;
+  if(this.cursorRawY>=this.lines.size())
+    {
+    this.lines.add("");
+    this.moveCursorDown();
+    this.setDirty();
+    }
+  else
+    {
+    String line = this.getLineAt(cursorRawY);
+    String curLine = line.substring(0, cursorRawX);
+    this.setLineAt(curLine, cursorRawY);      
+    String nextLine = line.substring(cursorRawX);
+    this.insertLineAt(nextLine, cursorRawY+1);
+//    if(this.cursorRawX >= line.length())//if at end of current line...
+//      {
+//      this.insertLineAt("", cursorRawY+1);//insert new line      
+//      }
+//    else
+//      {
+//      
+//      }
+    this.cursorRawX=0;
+    this.viewX = 0;
+    this.moveCursorDown();
+    this.updateLocalCursorPos();
+    this.setDirty();
+    }  
   }
+
+private void handleEndAction(){}
+private void handleHomeAction(){}
+private void handlePgDownAction(){}
+private void handlePgUpAction(){}
 
 private void handleDeleteAction()
   {
-  String line = getCurrentLine();
-  int lineNum = viewY+cursorPosY;
-  int charNum = viewX+cursorPosX;
-  if(charNum==line.length())//pointer is at end of the line, bring next line up onto the end of this one
+  if(this.cursorRawY >= this.lines.size() || this.cursorRawY<0)
     {
-    line = joinLines(line, this.lines.get(viewY+cursorPosY+1));
-    this.setCurrentLine(line);
-    this.deleteLine(lineNum+1);
+    return;//at end of lines..nothing to delete... || is out of bounds...
     }
-  else if(line.length()>0)
-    {    
-    deleteCharInString(line, viewX+cursorPosX);      
+  String line = this.getLineAt(cursorRawY);
+  if(this.cursorRawX>=line.length())//at end of current line..
+    {
+    if(this.cursorRawY+1 < this.lines.size())//if there is a next line..
+      {
+      String nextLine = this.removeLineAt(this.cursorRawY+1);//grab it
+      line = line + nextLine;//throw it onto current line
+      this.setLineAt(line, cursorRawY);//and set that line as current line in lines array
+      this.setDirty();
+      }
+    }
+  else//has chars to delete...
+    {
+    line = this.removeCharAt(line, cursorRawX);
+    this.setLineAt(line, cursorRawY);
+    this.setDirty();
     }  
-  this.updateScreenChars();
+  }
+
+private boolean setDirty()
+  {
+  boolean dirty = this.dirty;
+  this.dirty = true;
+  return dirty;
   }
 
 private void handleBackspaceAction()
   {
-  String line = getCurrentLine();
-  int lineNum = viewY+cursorPosY;
-  int charNum = viewX+cursorPosX;
-  if(charNum==0)//cursor is at beginning of line, bring this line up onto the end of the previous
+  if(this.cursorRawX<=0 && this.cursorRawY <=0)
     {
-    if(lineNum>0)
-      {
-      moveCursor(0,-1);//move cursor up to previous line;
-      setCursorToEndOfCurrentLine();
-      line = getCurrentLine();
-      line = joinLines(line, lines.get(viewY+cursorPosY));
-      this.setCurrentLine(line);
-      this.deleteLine(viewY+cursorPosY+1);
-      }
-    }
-  else
-    {
-    this.deleteCharInString(line, charNum-1);
-    this.setCurrentLine(line);
-    }
-  this.updateScreenChars();
-  }
-
-private void setCursorToEndOfCurrentLine()
-  {
-  int lineLen = this.currentStringLength();
-  if(lineLen < lineLength)
-    {
-    this.cursorPosX = lineLen;
-    }
-  else
-    {
-    this.cursorPosX = lineLen-viewX;
-    }
-  }
-
-private String getCurrentLine()
-  {
-  if(viewY+cursorPosY < 0 || viewY+cursorPosY >= this.lines.size())
-    {
-    return "";
-    }
-  return this.lines.get(viewY+cursorPosY);
-  }
-
-private void deleteCurrentLine()
-  {
-  deleteLine(this.viewY+cursorPosY);
-  }
-
-private void deleteLine(int lineNum)
-  {
-  //TODO needs checking
-  this.lines.remove(lineNum);
-  }
-
-private void setCurrentLine(String line)
-  {
-  //TODO needs checking
-  this.lines.set(viewY+cursorPosY, line);
-  }
-
-private int getCharIndex()
-  {
-  //TODO needs checking
-  return this.viewX+cursorPosX;
-  }
-
-private int currentStringLength()
-  {
-  //TODO needs checking
-  return this.lines.get(viewY+cursorPosY).length();
-  }
-
-private String joinLines(String first, String second)
-  {
-  //TODO needs checking
-  return first+second;
-  }
-
-private String deleteCharInString(String line, int charIndex)
-  {
-  if(charIndex >= line.length() || charIndex <= 0)
-    {
-    return line;
-    }
-  int len = line.length();
-  String ret = new String("");
-  for(int i = 0; i < line.length(); i++)
-    {
-    if(i!=charIndex)
-      {
-      ret = ret + line.charAt(i);
-      }
-    }
-  return ret;
-  }
-
-private void moveCursor(int xMove, int yMove)
-  {
-  if(this.lines==null)
-    {
-    this.cursorPosX = 0;
-    this.cursorPosY = 0;
     return;
     }
-
-  cursorPosY += yMove;
-  cursorPosX += xMove;
-  
-  if(cursorPosY < 0)
+  if(cursorRawX<=0 && this.cursorRawY>0)
     {
-    this.cursorPosY = 0;
-    if(this.viewY>0)
-      {
-      this.viewY--;
-      }
-    }
-  else if(this.cursorPosY >= this.displayLines)
-    {
-    this.cursorPosY = this.displayLines-1;//reset to bottom line, and check if can scroll entire view down    
-    if(viewY + displayLines < lines.size())
-      {
-      Config.logDebug("scrolling down");
-      viewY++;
-      }
-    }
-  
-  if(cursorPosX<0)
-    {
-    cursorPosX = 0;
-    if(this.viewX>0)
-      {
-      this.viewX--;
-      }
-    }
-  else if(cursorPosX >= this.lineLength)
-    {
-    cursorPosX = this.lineLength-1;
-    int lastCharIndex = this.viewX+this.lineLength - 1;
-    if(lastCharIndex +1 < lines.get(viewY+cursorPosY).length())
-      {
-      viewX++;
-      }
-    }
-  
-  if(this.hasViewChanged())
-    {    
-    Config.logDebug("updating screen chars");
-    this.updateScreenChars();
-    }
+    String line = this.removeLineAt(cursorRawY);
+    String prevLine = this.getLineAt(cursorRawY-1);
+    this.setCursorXAtEndOfLine(prevLine);
+    prevLine = prevLine+line;
+    this.setLineAt(prevLine, cursorRawY-1);    
+    this.moveCursorUp();
+    this.setDirty();
+    return;
+    }  
+  String line = this.getLineAt(cursorRawY);
+  line = this.removeCharAt(line, cursorRawX-1);
+  this.setLineAt(line, cursorRawY);
+  this.moveCursorLeft();
+  this.setDirty();
   }
 
+private void setCursorXAtEndOfLine(String line)
+  {
+  this.cursorRawX = line.length();
+  this.updateLocalCursorPos();
+  if(this.cursorRawX < this.viewX)
+    {
+    this.viewX = this.cursorRawX;
+    }
+  if(this.cursorRawX > this.viewX + this.lineLength)
+    {
+    this.viewX = this.cursorRawX - this.lineLength;//TODO this might be off by one...
+    }
+  this.setDirty();
+  }
+
+public void updateLocalCursorPos()
+  {
+  cursorPosY = cursorRawY - viewY;
+  cursorPosX = cursorRawX - viewX;
+  }
+
+private void moveCursorUp()
+  {
+  if(cursorRawY <= 0)
+    {
+    return;
+    }
+  Config.logDebug("moving cursor up");  
+  cursorRawY--;
+  if(cursorRawY<lines.size())//if this line is a valid line...
+    {
+    if(cursorRawX > lines.get(cursorRawY).length())//if cursor would now be past end of line
+      {
+      cursorRawX = lines.get(cursorRawY).length();//set it to end of line
+      if(cursorRawX < viewX)
+        {
+        viewX = cursorRawX;
+        }      
+      }
+    }    
+  else//else set cursor to x=0;
+    {
+    cursorRawX = 0;
+    }
+  if(cursorRawY < viewY)
+    {
+    Config.logDebug("moving cursor down");
+    viewY--;    
+    }
+  if(hasViewChanged())
+    {
+    this.setDirty();
+    }
+  updateLocalCursorPos();
+  }
+
+private void moveCursorDown()
+  {
+  if(cursorRawY>=lines.size())
+    {
+    return;
+    }
+  Config.logDebug("moving cursor down");
+  cursorRawY++;
+  if(cursorRawY<lines.size())//if this line is a valid line...
+    {
+    if(cursorRawX > lines.get(cursorRawY).length())//if cursor would now be past end of line
+      {
+      cursorRawX = lines.get(cursorRawY).length();//set it to end of line
+      if(cursorRawX < viewX)
+        {
+        viewX = cursorRawX;
+        }
+      }
+    }    
+  else//else set cursor to x=0;
+    {
+    cursorRawX = 0;
+    }
+  if(cursorRawY-displayLines > viewY)
+    {
+    Config.logDebug("scrolling down");
+    viewY++;
+    }
+  if(hasViewChanged())
+    {
+    this.setDirty();
+    }
+  updateLocalCursorPos();
+  }
+
+private void moveCursorLeft()
+  {
+  if(cursorRawX <= 0)
+    {
+    return;
+    }
+  Config.logDebug("moving cursor left");
+  cursorRawX--;
+  if(cursorRawX < viewX)
+    {
+    Config.logDebug("scrolling left");
+    viewX--;
+    this.setDirty();
+    }
+  updateLocalCursorPos();
+  }
+
+private void moveCursorRight()
+  {
+  if(cursorRawY >= lines.size())
+    {
+    return;
+    }
+  if(cursorRawX >= lines.get(cursorRawY).length())
+    {
+    return;
+    }
+  Config.logDebug("moving cursor right");
+  cursorRawX++;  
+  if(cursorRawX - lineLength > viewX)
+    {    
+    viewX++;
+    Config.logDebug("scrolling right");
+    this.setDirty();
+    }
+  updateLocalCursorPos();
+  }
 
 private boolean hasViewChanged()
   {
@@ -368,11 +505,14 @@ private boolean hasViewChanged()
 
 public boolean isMouseOver(int x, int y)
   {
+  //TODO
+  //return if x,y is within bounds...  
   return false;
   }
 
 public boolean onMouseClicked(int buttonNum, int x, int y)
   {
+  //TODO set currentcursor pos from mouse input
   return false;
   }
 
@@ -389,7 +529,7 @@ public void drawTextBox(FontRenderer fontRenderer, int xPos, int yPos)
     {
     return;
     }
-  if(this.hasViewChanged())
+  if(this.dirty)
     {
     this.updateScreenChars();
     }  
@@ -410,30 +550,39 @@ private void renderCursor(FontRenderer fontRenderer, int posX, int posY)
 
 private void updateScreenChars()
   {
+  if(!this.dirty)
+    {
+    return;
+    }
+  this.dirty = false;
   this.prevViewX = this.viewX;
   this.prevViewY = this.viewY;
   for(int y = 0; y < this.displayLines; y++)
     {
-    boolean blankLine = this.viewY+y >= this.lines.size();    
-    for(int x = 0; x < this.lineLength; x++)
-      {       
-      if(blankLine)
+    int currentLine = viewY + y;
+    if(currentLine>=lines.size())
+      {
+      for(int x = 0; x < this.lineLength; x++)
         {
         this.screenChars[y][x] = ' ';
         }
-      else
+      }
+    else
+      {
+      for(int x = 0; x < this.lineLength; x++)
         {
-        boolean blankChar = x >= this.lines.get(y+viewY).length();
-        if(blankChar)
+        int charIndex = this.viewX + x;
+        String line = lines.get(currentLine);
+        if(charIndex>=line.length())
           {
           this.screenChars[y][x] = ' ';
           }
         else
           {
-          this.screenChars[y][x] = this.lines.get(y+viewY).charAt(x+viewX);
+          this.screenChars[y][x] = line.charAt(charIndex);
           }
         }
-      }
+      } 
     }
   }
 
@@ -443,6 +592,5 @@ private void renderCharAt(FontRenderer fontRenderer, int x, int y, char ch)
   //using an entire string renderer to render a single char
   fontRenderer.drawString(String.valueOf(ch), x, y, textColor, false);
   }
-
 
 }

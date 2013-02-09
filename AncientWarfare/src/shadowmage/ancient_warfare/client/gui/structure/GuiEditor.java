@@ -80,6 +80,7 @@ public void updateScreenContents()
   if(this.editor==null && this.cont.clientLines!=null)
     {
     this.editor = new GuiTextBox(248, 232, 20, 32, 0xffffffff, 0x00000000, cont.clientLines);
+    this.editor.activated = true;
     }
   }
 
