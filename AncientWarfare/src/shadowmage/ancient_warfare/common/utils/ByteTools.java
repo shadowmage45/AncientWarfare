@@ -59,4 +59,28 @@ public static byte[] compositeByteChunks(List<byte[]> chunks, int packetSize)
   return fullFile;
   }
 
+public static byte[] compositeByteChunks(byte[][] bytes)
+  {
+  byte [] allBytes;
+  int totalLen = 0;
+  for(int i = 0; i < bytes.length; i++)
+    {
+    totalLen += bytes[i].length;
+    }
+  allBytes = new byte[totalLen];
+  
+  int currentPos = 0;
+  for(int i = 0; i < bytes.length; i++)
+    {
+    byte[] chunk = bytes[i];
+    for(int k = 0; k < chunk.length; k++)
+      {
+      allBytes[currentPos]=chunk[k];
+      currentPos++;
+      }
+    }
+  
+  return allBytes;
+  }
+
 }

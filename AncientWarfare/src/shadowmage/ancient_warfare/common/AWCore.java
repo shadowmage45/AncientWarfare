@@ -154,7 +154,7 @@ public void load(FMLPostInitializationEvent evt)
    */
   Config.saveConfig();
 
-  this.debugStructureGen();
+  //this.debugStructureGen();
   }
 
 

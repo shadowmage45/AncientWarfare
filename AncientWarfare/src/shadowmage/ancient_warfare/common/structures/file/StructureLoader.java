@@ -20,14 +20,17 @@
  */
 package shadowmage.ancient_warfare.common.structures.file;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import shadowmage.ancient_warfare.common.AWStructureModule;
@@ -39,11 +42,23 @@ import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
+import com.google.common.io.ByteStreams;
+
 public class StructureLoader
 {
 
-public StructureLoader()
+private StructureLoader()
   {
+  }
+
+private static StructureLoader INSTANCE;
+public static StructureLoader instance()
+  {
+  if(INSTANCE==null)
+    {
+    INSTANCE = new StructureLoader();
+    }
+  return INSTANCE;
   }
 /**
  * called probableStructureFiles because they haven't been opened/read/checked for validity
@@ -115,19 +130,61 @@ private List<ProcessedStructure> processFilesFor(List<File> fileList)
   return structures;  
   }
 
+public String getMD5(byte[] bytes)
+  {  
+  byte[] md5Bytes;
+  MessageDigest md;
+  try
+    {
+    md = MessageDigest.getInstance("MD5");
+    } 
+  catch (NoSuchAlgorithmException e)
+    {
+    e.printStackTrace();
+    return "";
+    }    
+  md5Bytes = md.digest(bytes);
+  BigInteger md5Num = new BigInteger(1, md5Bytes);
+  String md5String = md5Num.toString(16);
+  if(md5String.length()<32)
+    {
+    while(md5String.length()<32)
+      {
+      md5String = "0"+md5String;
+      }
+    }
+  return md5String;
+  }
+
 private ProcessedStructure processFile(File file)
   {
   Scanner reader = null;
+  FileInputStream fis = null;
+  ByteArrayInputStream bais;
+  byte[] fileBytes;
+  
+  String md5String = "";
   try
     {
-    reader = new Scanner(new FileInputStream(file));
+    fis = new FileInputStream(file);
+    fileBytes = ByteStreams.toByteArray(fis);
+    fis.close();        
+    md5String = getMD5(fileBytes);    
+    bais = new ByteArrayInputStream(fileBytes);
+    reader = new Scanner(bais);
     } 
   catch (FileNotFoundException e)
     {    
     Config.logError("There was an error while parsing template file: "+file.getName()); 
     e.printStackTrace();    
     return null;
-    }
+    } 
+  catch (IOException e)
+    {
+    Config.logError("There was an error while parsing template file: "+file.getName()); 
+    e.printStackTrace();    
+    return null;
+    }   
   List<String> lines = new ArrayList<String>();
   String line;
   /**
@@ -147,7 +204,7 @@ private ProcessedStructure processFile(File file)
     {
     if(file.getName().endsWith(".aws"))
       {      
-      struct = this.loadStructureAW(lines);
+      struct = this.loadStructureAW(lines, md5String);
       }
     else
       {
@@ -164,8 +221,18 @@ private ProcessedStructure processFile(File file)
     {
     Config.logError("INVALID STRUCTURE: There was an error while parsing template file: "+file.getName()); 
     return null;
+    }  
+  Config.logDebug("md5 for struct:"+struct.name+" == "+md5String);
+  struct.filePath = file.getAbsolutePath();
+
+  String name = file.getName();
+  if(name.endsWith(".aws") || name.endsWith(".tml"))
+    {
+    name = name.substring(0, name.length()-4);
     }
-  struct.setTemplateLines(lines);
+  Config.logDebug("trimmed name: "+name);
+  struct.name = name; 
+  //
   return struct;
   }
 
@@ -188,7 +255,7 @@ public void convertRuinsTemplates()
       continue;
       }    
     raw.name = String.valueOf(name);
-    if(!StructureExporter.writeStructureToFile(raw, newFile))
+    if(!StructureExporter.writeStructureToFile(raw, newFile, false))
       {
       continue;
       }       
@@ -198,7 +265,7 @@ public void convertRuinsTemplates()
     }
   }
 
-public ProcessedStructure loadStructureAW(List<String> lines)
+public ProcessedStructure loadStructureAW(List<String> lines, String md5)
   {
   this.currentLayer = 0;
   ProcessedStructure struct = new ProcessedStructure();
@@ -213,11 +280,7 @@ public ProcessedStructure loadStructureAW(List<String> lines)
   while(it.hasNext())
     {
     line = it.next();    
-    if(line.toLowerCase().startsWith("name"))//structure name
-      {
-      struct.name = line.split("=")[1];
-      }
-    else if(line.toLowerCase().startsWith("worldgen"))
+    if(line.toLowerCase().startsWith("worldgen"))
       {
       struct.worldGen = StringTools.safeParseBoolean("=", line);
       }
@@ -382,6 +445,8 @@ public ProcessedStructure loadStructureAW(List<String> lines)
     {
     return null;
     }
+  struct.md5 = md5;
+  struct.setTemplateLines(lines);
   return struct;
   }
 
@@ -469,6 +534,7 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
     {
     return null;
     }
+  struct.setTemplateLines(lines);
   return struct;
   }
 

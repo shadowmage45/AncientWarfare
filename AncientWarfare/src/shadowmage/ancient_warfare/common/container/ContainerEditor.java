@@ -32,6 +32,8 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
+import shadowmage.ancient_warfare.common.structures.file.StructureLoader;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
@@ -44,6 +46,7 @@ public class ContainerEditor extends ContainerBase
 private String currentEditingStructure = "";
 private String currentSelectedStructure = "";
 
+private String structureFilePath = null;
 private ProcessedStructure serverStructure;
 
 private StructureClientInfo clientStructure;
@@ -53,6 +56,7 @@ public List<String> clientLines;
  * temporary store for packetData sent to client
  */
 private byte[][] packetData;
+
 int recievedParts = 0;
 int totalParts = 0;
 boolean finishedReceiving = false;
@@ -85,6 +89,10 @@ public void handlePacketData(NBTTagCompound tag)
     if(tag.hasKey("name"))
       {
       this.currentSelectedStructure = tag.getString("name");
+      }
+    if(tag.hasKey("saveData"))
+      {
+      this.handlePartialTemplateServer(tag.getCompoundTag("saveData"));
       }
     }  
   }
@@ -122,6 +130,7 @@ private void handlePartialTemplateClient(NBTTagCompound tag)
       {
       this.clientLines = lines;
       }
+    packetData=null;
     }  
   }
 
@@ -157,6 +166,7 @@ public void setStructureServer(NBTTagCompound tag)
     return;    
     }
   this.serverStructure.lock();
+  this.structureFilePath = serverStructure.filePath;
   try
     {
     this.sendTemplateToClient(serverStructure);
@@ -171,6 +181,77 @@ public void setStructureServer(NBTTagCompound tag)
     Config.logError("Error sending template to client");
     e.printStackTrace();
     }
+  }
+
+public void saveTemplate()
+  {
+  Config.logDebug("sending template to server....");
+  byte[] allBytes;
+  try
+    {
+    allBytes = StringTools.getByteArray(clientLines);
+    } 
+  catch (UnsupportedEncodingException e)
+    {    
+    e.printStackTrace();
+    return;
+    } 
+  catch (IOException e)
+    {    
+    e.printStackTrace();
+    return;
+    }
+  int packetSize = 8192;
+  List<byte[]> chunks = ByteTools.getByteChunks(allBytes, packetSize);
+  for(int i = 0; i < chunks.size(); i++)
+    {
+    Config.logDebug("sending template chunk to client");
+    NBTTagCompound outerTag = new NBTTagCompound();
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setInteger("num", i);
+    tag.setInteger("of",chunks.size());
+    tag.setInteger("size", packetSize);
+    tag.setByteArray("bytes", chunks.get(i));
+    outerTag.setTag("saveData", tag);
+    this.sendDataToServer(outerTag);
+    }
+  }
+
+private void handlePartialTemplateServer(NBTTagCompound tag)
+  {
+  int packetNum = tag.getInteger("num");
+  int packetsTotal = tag.getInteger("of");
+  int packetSize = tag.getInteger("size");
+  byte[] packetBytes = tag.getByteArray("bytes");
+  if(this.packetData==null)
+    {
+    this.recievedParts= 0;
+    this.totalParts = packetsTotal;
+    this.packetData = new byte[packetsTotal][packetSize];
+    }
+  this.packetData[packetNum]=packetBytes;
+  this.recievedParts++;  
+  if(this.recievedParts>=this.totalParts)
+    {
+    byte [] allBytes = ByteTools.compositeByteChunks(packetData);
+    List<String> lines = StringTools.getLines(allBytes);
+    String md5 = StructureLoader.instance().getMD5(allBytes);
+    packetData = null;
+    ProcessedStructure struct = StructureLoader.instance().loadStructureAW(lines, md5);
+    if(struct!=null)
+      {      
+      Config.logDebug("returned valid structure on server");
+      this.saveTemplateServer(struct);
+      }
+    }
+  }
+
+private void saveTemplateServer(ProcessedStructure newStruct)
+  {
+  newStruct.filePath = serverStructure.filePath;
+  newStruct.name = serverStructure.name;
+  StructureExporter.writeStructureToFile(newStruct, newStruct.filePath, true);
+  StructureManager.instance().addStructure(newStruct, true);
   }
 
 @Override

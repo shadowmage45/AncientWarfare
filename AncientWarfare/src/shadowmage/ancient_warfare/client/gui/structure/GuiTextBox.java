@@ -109,73 +109,102 @@ public boolean onKeyTyped(char charValue, int keyCode)
   if(!this.activated)
     {
     return false;
-    }  
-  if(keyCode==200)//up arrow
-    {
-    this.moveCursorUp();
     }
-  else if(keyCode==208)//down arrow
-    {
-    this.moveCursorDown();
-    }
-  else if(keyCode==203)//left arrow
-    {
-    this.moveCursorLeft();
-    }
-  else if(keyCode==205)//right arrow
-    {
-    this.moveCursorRight();
-    }
-  else if(keyCode==211)//delete
-    {
-    this.handleDeleteAction();
-    }
-  else if(keyCode==14)//backspace
-    {
-    this.handleBackspaceAction();
-    }
-  else if(keyCode==28)
-    {
-    this.handleEnterAction();
-    }
-  else if(keyCode==1)
-    {
-    //escape...
-    }
-  else
+  
+  boolean validChar = false;
+  switch(keyCode)
+  {
+  case 200:
+  moveCursorUp();
+  break;
+  
+  case 208:
+  moveCursorDown();
+  break;
+  
+  case 203:
+  moveCursorLeft();
+  break;
+  
+  case 205:
+  moveCursorRight();
+  break;
+  
+  case 211:
+  handleDeleteAction();
+  break;
+  
+  case 14:
+  handleBackspaceAction();
+  break;
+  
+  case 28:
+  handleEnterAction();
+  break;
+  
+  case 1:
+  break;
+  
+  case 210:
+  break;
+  
+  case 199:
+  this.handleHomeAction();
+  break;
+  
+  case 201:
+  this.handlePgUpAction();
+  break;
+  
+  case 207:
+  this.handleEndAction();
+  break;
+  
+  case 209:
+  this.handlePgDownAction();
+  break;
+  
+  case 54://rShift
+  case 184://Ralt--Rmenu
+  case 220://Rmeta
+  case 157://RControl
+  case 69://numlock
+  case 183://sysReq
+  case 70://scrollLock
+  case 197://pause
+  case 59://f1-f12
+  case 60:
+  case 61:
+  case 62:
+  case 63:
+  case 64:
+  case 65:
+  case 66:
+  case 67:
+  case 68:
+  case 87:
+  case 88:  
+  case 58://capslock
+  case 42://Lshift
+  case 29://Lcont
+  case 219://LMeta
+  case 56://Lalt
+  break;
+  
+  default:
+  validChar = true;
+  break;
+  }
+  if(validChar)
     {
     Config.logDebug("keyTyped: " + charValue + " : " + keyCode);
     this.handleCharAction(charValue);
-    }
-  
+    }  
   /**
    * TODO
    * shift+arrow keys--highlight selection
    * copy/cut/paste -- copy/cut/paste
-   */
-  
-  /**
-   * delete--
-   * if at end of line, bring next line up if available and add onto end of this line
-   * else if at a char, remove char at cursor
-   */
-  
-  /**
-   * backspace--
-   * if at beginning of line, bring current line up if possible and add onto end of previous line 
-   * else remove character preceding cursor
-   * move cursor back
-   */
-  
-  /**
-   * return--
-   * cut current line at pos, from pos onwards move down onto next line.
-   */
-   
-  /**
-   * chars--
-   * insert char into string, set string, move cursor
-   */
+   */ 
   return true;
   }
 
@@ -448,7 +477,7 @@ private void moveCursorDown()
     {
     cursorRawX = 0;
     }
-  if(cursorRawY-displayLines > viewY)
+  if(cursorRawY - displayLines >= viewY)
     {
     Config.logDebug("scrolling down");
     viewY++;
@@ -590,7 +619,10 @@ private void renderCharAt(FontRenderer fontRenderer, int x, int y, char ch)
   {  
   //TODO not make this so freaking ghetto--- e.g. write a proper char renderer instead of 
   //using an entire string renderer to render a single char
-  fontRenderer.drawString(String.valueOf(ch), x, y, textColor, false);
+  int wid = fontRenderer.getCharWidth(ch);
+  int xOff = (7-wid)/2;
+  fontRenderer.drawString(String.valueOf(ch), x+xOff, y, textColor, false);
+  
   }
 
 }

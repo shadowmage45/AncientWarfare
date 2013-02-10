@@ -173,7 +173,7 @@ public void export()
       {
       path = String.valueOf(AWStructureModule.includeDirectory+name+".aws");
       }    
-    boolean success = StructureExporter.writeStructureToFile(struct, path); 
+    boolean success = StructureExporter.writeStructureToFile(struct, path,false); 
     if(success && includeOnExport)
       {
       player.addChatMessage("Including structure in live structure lists");

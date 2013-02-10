@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,8 +44,8 @@ public class StructureManager
 {
 
 //TODO change these to hashmap by name
-private static List<ProcessedStructure> structures = new ArrayList<ProcessedStructure>();
-private static List<StructureClientInfo> clientStructures = new ArrayList<StructureClientInfo>();
+private static Map<String, ProcessedStructure> structures = new HashMap<String, ProcessedStructure>();
+private static Map<String, StructureClientInfo> clientStructures = new HashMap<String, StructureClientInfo>();
 
 /**
  * playerName, scannedStructure
@@ -84,17 +84,7 @@ public void handlePacketDataServer(NBTTagCompound tag)
 
 public ProcessedStructure getStructureServer(String name)
   {
-  Iterator<ProcessedStructure> it = structures.iterator();
-  ProcessedStructure struct;
-  while(it.hasNext())
-    {
-    struct = it.next();
-    if(struct.name.equals(name))
-      {
-      return struct;
-      }
-    }
-  return null;
+  return this.structures.get(name);
   }
 
 /**
@@ -117,7 +107,7 @@ public void addTempStructure(EntityPlayer player, ProcessedStructure struct)
  */
 public void addStructure(ProcessedStructure struct, boolean sendPacket)
   {
-  structures.add(struct);
+  this.structures.put(struct.name, struct);
   if(sendPacket)
     {
     NBTTagCompound structData = new NBTTagCompound();
@@ -154,12 +144,10 @@ public void handlePlayerLogin(EntityPlayer player)
 private NBTTagList getClientInitData()
   {
   NBTTagList list = new NBTTagList();
-  Iterator<ProcessedStructure> it = structures.iterator();
-  ProcessedStructure structure;  
-  while(it.hasNext())
-    {    
-    structure = it.next();    
-    list.appendTag(StructureClientInfo.getClientTag(structure));    
+  for(String name : this.structures.keySet())
+    {
+    ProcessedStructure structure = this.structures.get(name);
+    list.appendTag(StructureClientInfo.getClientTag(structure));
     }  
   return list;
   }
@@ -205,12 +193,9 @@ public void addTempClientInfo(NBTTagCompound tag)
 
 public boolean isValidStructureClient(String name)
   {
-  for(StructureClientInfo struct : this.clientStructures)
+  if(this.clientStructures.containsKey(name))
     {
-    if(struct.name.equals(name))
-      {
-      return true;
-      }
+    return true;
     }
   return false;
   }
@@ -222,28 +207,23 @@ private void handleInitClient(NBTTagList list)
   for(int i = 0; i < list.tagCount(); i++)
     {
     tag = (NBTTagCompound) list.tagAt(i);
-    this.clientStructures.add(new StructureClientInfo(tag));
+    StructureClientInfo info = new StructureClientInfo(tag);
+    this.clientStructures.put(info.name, info);
     }
   Config.logDebug("Added "+this.clientStructures.size()+" structures to client map");
   }
 
 private void addClientStructureFromNBT(NBTTagCompound tag)
   {
-  this.clientStructures.add(new StructureClientInfo(tag));
+  StructureClientInfo info = new StructureClientInfo(tag);
+  this.clientStructures.put(info.name, info);
   }
 
 private void removeClientStructure(String name)
   {
-  Iterator<StructureClientInfo> it = clientStructures.iterator();
-  StructureClientInfo info;
-  while(it.hasNext())
+  if(this.clientStructures.containsKey(name))
     {
-    info = it.next();
-    if(info.name.equals(name))
-      {
-      it.remove();
-      break;
-      }
+    this.clientStructures.remove(name);
     }  
   }
 
@@ -254,14 +234,7 @@ public void clearClientData()
 
 public StructureClientInfo getClientStructure(String name)
   {
-  for(StructureClientInfo info : this.clientStructures)
-    {
-    if(info.name.equals(name))
-      {
-      return info;
-      }
-    }
-  return null;
+  return this.clientStructures.get(name);
   }
 
 public StructureClientInfo getClientTempStructure()
@@ -271,7 +244,16 @@ public StructureClientInfo getClientTempStructure()
 
 public List<StructureClientInfo> getClientStructures()
   {
-  return this.clientStructures;
+  ArrayList<StructureClientInfo> clientStructures = new ArrayList<StructureClientInfo>();
+  for(String name : this.clientStructures.keySet())
+    {
+    StructureClientInfo struct = this.clientStructures.get(name);
+    if(struct!=null)
+      {
+      clientStructures.add(struct);
+      }
+    }
+  return clientStructures;
   }
 
 }

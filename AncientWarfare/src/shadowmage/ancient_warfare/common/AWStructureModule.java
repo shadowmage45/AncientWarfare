@@ -144,7 +144,7 @@ public void load(String directory)
     this.shouldExportDefaults = false;
     }
 
-  loader = new StructureLoader();
+  loader = StructureLoader.instance();
   loader.scanForPrebuiltFiles(); 
   }
 

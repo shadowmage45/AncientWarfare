@@ -69,7 +69,7 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawString(fontRenderer, "Structure: "+currentStructure, guiLeft + 10, guiTop + 14, 0xffffffff);
+  this.drawString(fontRenderer, "Structure to Edit: "+currentStructure, guiLeft + 10, guiTop + 14, 0xffffffff);
 
   this.drawString(fontRenderer, "Wid", guiLeft + 190, guiTop + 46+8, 0xffffffff);
   this.drawString(fontRenderer, "Len", guiLeft + 210, guiTop + 46+8, 0xffffffff);
@@ -91,7 +91,7 @@ public void setupGui()
   this.addGuiButton(1, 10, 40+8, 35, 18, "Prev");
   this.addGuiButton(2, 50, 40+8, 35, 18, "Next");
 
-  this.addGuiButton(20, 256-35-10, 30, 85, 18, "Edit");
+  this.addGuiButton(20, 256-35-10, 30, 35, 18, "Edit");
 
   for(int i = 0, buttonNum = 3; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++, buttonNum++)
     {

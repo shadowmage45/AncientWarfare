@@ -38,8 +38,13 @@ import shadowmage.ancient_warfare.common.utils.IDPairCount;
 public class StructureExporter
 {
 
-
-public static boolean writeStructureToFile(ProcessedStructure struct, String name)
+/**
+ * write a structure to file given the fully qualified path and filename
+ * @param struct
+ * @param name
+ * @return
+ */
+public static boolean writeStructureToFile(ProcessedStructure struct, String name, boolean canOverwrite)
   {
   File outputFile = new File(name);
   
@@ -56,7 +61,7 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
       return false;
       }
     }
-  else
+  else if(!canOverwrite)
     {
     Config.logError("Exporting would overwrite structure with name: "+name+"  Operation aborted.  Please choose a different name before rescanning and exporting");
     return false;    
@@ -72,7 +77,6 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     writer.write("# auto-generated structure file. created on: "+cal.get(cal.MONTH)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND)+"\n");
     writer.write("# Lines beginning with # denote comments\n");
     writer.write("\n");
-    writer.write("name="+struct.name+"\n");
     writer.write("worldgen="+String.valueOf(struct.worldGen)+"\n");
     writer.write("creative="+String.valueOf(struct.creative)+"\n");
     writer.write("survival="+String.valueOf(struct.survival)+"\n");

@@ -8,12 +8,13 @@ https://www.dropbox.com/s/jrg6vy8610ziua7/AW-DevTest--02-06-13.zip
 
 GENERAL
 * add some null checks to container/guis...mostly there, but probably still missing a few
+* add shift/invert option to config and items.  indiv. or global?
 
 
 TEMPLATES
-* remove unused fields (chunkDistance, chunkAttempts
 * actually use creative/survival flags in templates
-
+* remove name= line from templates, only use internally in structure/code (set from filename, upon load)
+* on load, validate struct name for uniqueness
 
 
 SCANNER
@@ -24,6 +25,7 @@ STRUCTURE BUILDING
 * ensure that builders will not crash/corrupt world if they are loaded with a template
       that has changed after they were fist placed.  save an md5 of the file into the processedStructure
       save that md5 out to the builder.  when builder is loaded, check saved md5 versus the passed-in structure
+* advanced setup gui, set values on init according to existing values in container
 
 
 WORLD GEN STUFF
@@ -44,9 +46,9 @@ SURVIVAL MODE STRUCTURE BUILDING
 
 
 STRUCTURE EDITOR
-* cursor left-right movement in text-box
 * clean up file transmission, it leaves 'null' lines at the end of the file
-* per-character editing capabilities (string manip)
+* validate struct before transmit to save
+
 
 COMPLEXES
 * THDT
@@ -175,3 +177,4 @@ select structure from available structures by value
 * send template byte chunks to client for entire structure
 * composite byte chunks into structure on client side
 * figure out multi-line text box...
+* remove unused fields (chunkDistance, chunkAttempts)

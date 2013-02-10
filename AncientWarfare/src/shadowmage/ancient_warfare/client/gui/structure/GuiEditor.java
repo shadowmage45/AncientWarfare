@@ -70,8 +70,9 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void setupGui()
   {
-  // TODO Auto-generated method stub
-  
+  this.controlList.clear();
+  this.addGuiButton(0, 128-50-2, 240-18-4, 50, 18, "Discard");
+  this.addGuiButton(1, 128 + 2, 240-18-4, 50, 18, "Save");
   }
 
 @Override
@@ -79,7 +80,7 @@ public void updateScreenContents()
   {
   if(this.editor==null && this.cont.clientLines!=null)
     {
-    this.editor = new GuiTextBox(248, 232, 20, 32, 0xffffffff, 0x00000000, cont.clientLines);
+    this.editor = new GuiTextBox(248, 240-18-4-2-10, 20, 32, 0xffffffff, 0x00000000, cont.clientLines);
     this.editor.activated = true;
     }
   }
@@ -87,9 +88,24 @@ public void updateScreenContents()
 @Override
 public void buttonClicked(GuiButton button)
   {
-  // TODO Auto-generated method stub
+  switch(button.id)
+  {
+  case 0:
+  this.closeGUI();
+  break;
   
+  case 1:
+  //TODO validate template is a valid struct before transmitting...
+  this.cont.saveTemplate();
+  this.closeGUI();
+  break;
+  
+  default:
+  break;
   }
+  // TODO Auto-generated method stub  
+  }
+
 
 @Override
 protected void keyTyped(char par1, int par2)

@@ -36,7 +36,9 @@ import shadowmage.ancient_warfare.common.utils.IDPairCount;
 public abstract class AWStructure
 {
 
-public String name;
+public String md5;
+public String filePath;
+public String name = "";
 public boolean worldGen = false;
 public boolean creative = true;
 public boolean survival = false;
