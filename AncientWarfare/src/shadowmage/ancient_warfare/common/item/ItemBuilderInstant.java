@@ -139,7 +139,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     return true;
     }  
-  if(player.isSneaking())
+  if(isShiftClick(player))
     {
     openGUI(player);
     return true;

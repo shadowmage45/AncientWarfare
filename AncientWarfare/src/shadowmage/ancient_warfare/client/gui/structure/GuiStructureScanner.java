@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.client.gui.structure;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiCheckBox;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -105,6 +106,7 @@ public void setupGui()
   this.controlList.clear();
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
   this.addGuiButton(1, 256-45-10, 30, 45, 18, "Export");
+  this.addGuiButton(8, 256-45-10, 50, 45, 18, "Reset");
   formatAWBox = this.addCheckBox(2, 145, 50, 16, 16).setChecked(formatAW);
   includeBox = this.addCheckBox(3, 145, 70, 16, 16).setChecked(include);
   formatRuinsBox = this.addCheckBox(4, 145, 90, 16, 16).setChecked(formatRuins);
@@ -149,6 +151,13 @@ public void buttonClicked(GuiButton button)
   break;
   
   case 2:
+  break;
+  
+  case 8://clearData
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setBoolean("clearItem", true);
+  this.sendDataToServer(tag);
+  closeGUI();
   break;
   
   case 11:

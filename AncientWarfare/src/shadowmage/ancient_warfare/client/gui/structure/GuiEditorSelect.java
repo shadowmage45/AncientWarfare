@@ -51,6 +51,19 @@ public GuiEditorSelect(ContainerEditor container)
   }
 
 @Override
+public void handleDataFromContainer(NBTTagCompound tag)
+  {
+  if(tag.hasKey("openEdit"))
+    {
+    mc.displayGuiScreen(new GuiEditor(this.container, this));
+    }
+  else if(tag.hasKey("badSel"))
+    {
+    //TODO DISPLAY REJECT MESSAGE......
+    }
+  }
+
+@Override
 public int getXSize()
   {
   return 256;
@@ -133,16 +146,15 @@ public void buttonClicked(GuiButton button)
     shouldForceUpdate = true;   
     }
   return;
-  
+
   case 20:
   if(StructureManager.instance().getClientStructure(currentStructure)!=null)
     {
-    this.selectStructureToEdit(currentStructure);
-    mc.displayGuiScreen(new GuiEditor(this.container));
+    this.selectStructureToEdit(currentStructure);    
     }
   return;
   }
-  
+
   if(button.id>=3 && button.id < 11)
     {
     int index = (this.currentLowestViewed + button.id) - 3;

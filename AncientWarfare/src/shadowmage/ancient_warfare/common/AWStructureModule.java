@@ -274,6 +274,7 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
     if(builder.isFinished())
       {
       it.remove();
+      builder.clearBuilderFromStructure();
       }    
     } 
   }

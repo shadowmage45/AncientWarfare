@@ -25,9 +25,10 @@ import org.lwjgl.opengl.GL12;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
+import shadowmage.ancient_warfare.common.interfaces.IContainerGuiCallback;
 
 
-public abstract class GuiContainerAdvanced extends GuiContainer
+public abstract class GuiContainerAdvanced extends GuiContainer implements IContainerGuiCallback
 {
 
 protected final EntityPlayer player;
@@ -43,6 +44,10 @@ public GuiContainerAdvanced(Container container)
   this.ySize = this.getYSize();
   guiLeft = (this.width - this.xSize) / 2;
   guiTop = (this.height - this.ySize) / 2;  
+  if(container instanceof ContainerBase)
+    {
+    ((ContainerBase)container).setGui(this);
+    }
   }
 
 @Override
@@ -60,8 +65,13 @@ protected void keyTyped(char par1, int par2)
   if(callSuper)
     {
     super.keyTyped(par1, par2);
-    }
-  
+    }  
+  }
+
+@Override
+public void handleDataFromContainer(NBTTagCompound tag)
+  {
+  //REGULARLY NO-OP, MUST OVERRIDE
   }
 
 public void sendDataToServer(NBTTagCompound tag)

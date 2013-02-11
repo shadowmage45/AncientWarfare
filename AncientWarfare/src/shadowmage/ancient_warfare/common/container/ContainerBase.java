@@ -27,6 +27,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.IContainerGuiCallback;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IHandlePacketData;
 import shadowmage.ancient_warfare.common.network.Packet03GuiComs;
@@ -50,6 +51,7 @@ public final EntityPlayer player;
  * the TE or Entity responsible for server-side base data, and multi-crafter support
  */
 public final IEntityContainerSynch entity;
+public IContainerGuiCallback gui;
 
 public ContainerBase(EntityPlayer openingPlayer, IEntityContainerSynch synch)
   {
@@ -58,6 +60,33 @@ public ContainerBase(EntityPlayer openingPlayer, IEntityContainerSynch synch)
   if(entity!=null)
     {
     entity.addPlayer(player);
+    }
+  }
+
+public void setGui(IContainerGuiCallback gui)
+  {
+  this.gui = gui;
+  }
+
+public void sendDataToGUI(NBTTagCompound tag)
+  {
+  NBTTagCompound baseTag = new NBTTagCompound();
+  baseTag.setTag("guiData", tag);
+  this.sendDataToPlayer(baseTag);
+  }
+
+public void handleRawPacketData(NBTTagCompound tag)
+  {
+  if(tag.hasKey("guiData"))
+    {
+    if(this.gui!=null)
+      {    
+      this.gui.handleDataFromContainer(tag.getCompoundTag("guiData"));
+      }
+    }
+  else
+    {
+    this.handlePacketData(tag);
     }
   }
 

@@ -91,7 +91,7 @@ public void execute()
     {
     if(packetData.hasKey("data"))
       {
-      ((IHandlePacketData)player.openContainer).handlePacketData(packetData.getCompoundTag("data"));
+      ((IHandlePacketData)player.openContainer).handleRawPacketData(packetData.getCompoundTag("data"));
       return;
       }
     if(packetData.hasKey("init") && world.isRemote)

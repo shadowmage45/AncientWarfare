@@ -22,6 +22,8 @@ package shadowmage.ancient_warfare.common.block;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
@@ -31,7 +33,25 @@ public class TEBuilder extends TileEntity
 
 private BuilderTicked builder;
 
+private boolean shouldRemove = false;
 
+private Ticket tk = null;
+
+public void setTicket(Ticket tk)
+  {
+  
+  }
+
+public void removeBuilder()
+  {
+  this.invalidate();
+  this.worldObj.setBlock(xCoord, yCoord, zCoord, 0);
+  if(this.tk!=null)
+    {
+    ForgeChunkManager.releaseTicket(tk);
+    this.tk = null;
+    }
+  }
 
 @Override
 public void readFromNBT(NBTTagCompound par1nbtTagCompound)
@@ -42,6 +62,10 @@ public void readFromNBT(NBTTagCompound par1nbtTagCompound)
     System.out.println("reading builder data");
     NBTTagCompound builder = par1nbtTagCompound.getCompoundTag("builder");
     this.builder = Builder.readTickedBuilderFromNBT(builder);
+    if(this.builder==null)
+      {
+      this.shouldRemove = true;
+      }
     }  
   }
 
@@ -66,10 +90,13 @@ public void updateEntity()
   if(builder==null)
     {
     Config.logError("Invalid builder in TE detected in builder block");
-    //TODO invalidate and remove
     return;
     }
-  
+  if(this.shouldRemove)
+    {    
+    this.removeBuilder();
+    return;
+    }  
   if(builder.world==null)
     {
     builder.world=this.worldObj;
@@ -78,8 +105,7 @@ public void updateEntity()
   
   if(builder.isFinished())
     {
-    this.invalidate();
-    this.worldObj.setBlock(xCoord, yCoord, zCoord, 0);
+    this.removeBuilder();
     }
   }
 

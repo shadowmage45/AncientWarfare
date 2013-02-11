@@ -20,11 +20,14 @@
  */
 package shadowmage.ancient_warfare.common.structures.data;
 
-import java.util.ArrayList;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NPCRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
@@ -35,6 +38,12 @@ import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
 public abstract class AWStructure
 {
+
+/**
+ * used to determine if the structure can be edited, (won't allow editing if there are known builders using
+ * the struct)
+ */
+private Set<Builder> openBuilders = new HashSet<Builder>();
 
 public String md5;
 public String filePath;
@@ -73,7 +82,6 @@ public Map<Integer, SwapRule> swapRules = new HashMap<Integer, SwapRule>();
  */
 public boolean isValid = true;
 public  List<IDPairCount> cachedCounts = null;
-
 
 /**
  * structure biome settings
@@ -132,6 +140,21 @@ public int zOffset;
 public int xSize;//x dimension
 public int zSize;//z dimension
 public int ySize;//y dimension
+
+public int openBuilderCount()
+  {
+  return this.openBuilders.size();
+  }
+
+public void addBuilder(Builder build)
+  {
+  this.openBuilders.add(build);
+  }
+
+public void removeBuilder(Builder build)
+  {
+  this.openBuilders.remove(build);
+  }
 
 public static StructureBB getBoundingBox(BlockPosition hit, int facing, int xOffset, int yOffset, int zOffset, int xSize, int ySize, int zSize)  
   {  

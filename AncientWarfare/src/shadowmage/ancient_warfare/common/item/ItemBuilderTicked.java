@@ -20,22 +20,18 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
+import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.block.TEBuilder;
-import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBuilderTicked extends ItemBuilderInstant
 {
@@ -60,6 +56,13 @@ protected void attemptConstruction(World world, ProcessedStructure struct, int f
     BuilderTicked builder = new BuilderTicked(world, struct, face, offsetHit);
     builder.startConstruction();
     te.setBuilder(builder);
+    Ticket tk = ForgeChunkManager.requestTicket(AWCore.instance, world, Type.NORMAL);
+    if(tk!=null)
+      {
+      ForgeChunkManager.forceChunk(tk, new ChunkCoordIntPair(hit.x/16, hit.z/16));
+      te.setTicket(tk);
+      }
+    struct.addBuilder(builder);
     }  
   } 
 

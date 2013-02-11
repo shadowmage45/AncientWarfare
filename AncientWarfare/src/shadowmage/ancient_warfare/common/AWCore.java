@@ -30,11 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
+import shadowmage.ancient_warfare.common.chunkloading.ChunkLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
@@ -105,6 +106,11 @@ public void preInit(FMLPreInitializationEvent evt)
    */
   GameRegistry.registerWorldGenerator(WorldGenManager.instance());
 
+  /**
+   * register chunk loader 
+   */
+  ForgeChunkManager.setForcedChunkLoadingCallback(this, ChunkLoader.instance());
+  
   /**
    * load items
    */

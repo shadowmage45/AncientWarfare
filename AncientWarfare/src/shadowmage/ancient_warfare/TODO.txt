@@ -1,38 +1,32 @@
 TODO before first alpha release:
 read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
-scan-vid--http://youtu.be/vwt-c8Q0UOk
-builders vid--http://youtu.be/dPN1ErgV1qw
-https://www.dropbox.com/s/jrg6vy8610ziua7/AW-DevTest--02-06-13.zip
 
 
 GENERAL
 * add some null checks to container/guis...mostly there, but probably still missing a few
-* add shift/invert option to config and items.  indiv. or global?
 
 
-TEMPLATES
-* actually use creative/survival flags in templates
-* remove name= line from templates, only use internally in structure/code (set from filename, upon load)
-* on load, validate struct name for uniqueness
-
-
-SCANNER
-* add clear/reset button to GUI, in case someone wants to ditch a scan
-
-
-STRUCTURE BUILDING
-* ensure that builders will not crash/corrupt world if they are loaded with a template
-      that has changed after they were fist placed.  save an md5 of the file into the processedStructure
-      save that md5 out to the builder.  when builder is loaded, check saved md5 versus the passed-in structure
-* advanced setup gui, set values on init according to existing values in container
-
-
-WORLD GEN STUFF
+TESTING
 * verify weighting for levels in loot generator
 * test structure weighting
 * test underground buildings
 * test submerged code
+
+
+TEMPLATES
+* remove creative flag--all will be available
+* use survival flag for survival drafting table structureSelection...(from structureClientInfo in client store)
+
+
+SCANNER
+        
+
+STRUCTURE BUILDING
+
+
+WORLD GEN STUFF
+* see TESTING
 
 
 SURVIVAL MODE STRUCTURE BUILDING
@@ -48,6 +42,18 @@ SURVIVAL MODE STRUCTURE BUILDING
 STRUCTURE EDITOR
 * clean up file transmission, it leaves 'null' lines at the end of the file
 * validate struct before transmit to save
+* add reject message display if attempting to open a locked structure...
+* add method to 'lock' structure when editing, so no other player could edit the same struct
+
+
+BASIC DRAFTING STATION
+* selection screen w/only survival eligible buildings available
+* works much like drafting station from catmod (e.g. input box, compile blocks/resources into a finished item)
+* create single-use builder item for output--stores struct data in NBT (basically, just a name and struct md5)....
+
+
+ADVANCED DRAFTING STATION (editor)
+* THDT
 
 
 COMPLEXES
@@ -67,18 +73,7 @@ TWEAKS/OPTIMIZATION
 * figure out better way to handle ruins import (current is convert on run, manual copy and re-run)
 * remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
 * some ruins structures (one, jungle throne) appears offset -1Y
-
-
-
-WORLD GEN ALGORITHM:
-
-do quick random check if should place at all CHANCE in RANGE (200 in 1000)
-
-examine value of structures in distance MAX_SEARCH_DISTANCE (16)
-do check to see if should place based on foundValue / MAX_CLUSTER_VALUE (anti-clustering mechanism)
-select structure from available structures by value
-    weight by value ? (try and place higher value as much as possible
-    todo--add max range into value/weighting balancing
+* editor GUI has some really ugly code to render chars....
 
 
 
@@ -172,9 +167,21 @@ select structure from available structures by value
 * test biome inclusion/exclusion
 * add default templates, and add them to export list
 * add BB render to scanner
+/****************************************FIRST TEST RELEASE****************************************/
 * store template lines in structure
 * break template lines into byte chunks to send to client
 * send template byte chunks to client for entire structure
 * composite byte chunks into structure on client side
 * figure out multi-line text box...
 * remove unused fields (chunkDistance, chunkAttempts)
+* auto-forced chunkloading for builder blocks
+* remove name= line from templates, only use internally in structure/code (set from filename, upon load)
+* on load, validate struct name for uniqueness
+* ensure that builders will not crash/corrupt world if they are loaded with a template
+      that has changed after they were fist placed.  save an md5 of the file into the processedStructure
+      save that md5 out to the builder.  when builder is loaded, check saved md5 versus the passed-in structure
+* add counting/ref mechanism for structures, to know which are editable, disallow editing if locked/in-use
+* don't close GUI on save, only on discard
+* add shift/invert option to config and items--global (does not effect scanners, due to client-server config differences, could probably synch config from server-client onLogin)
+* advanced setup gui, set values on init according to existing values in container
+* add clear/reset button to GUI, in case someone wants to ditch a scan

@@ -120,6 +120,13 @@ int overrideRank=-1;
 protected Map<BlockPosition, BlockData> deferredBlocks = new HashMap<BlockPosition, BlockData>();
 
 /**
+ * md5 of the original file for the structure for this builder.
+ * If builder is loaded from disc and the passed-in struct has a different md5
+ * the builder will invalidate itself....
+ */
+String md5;
+
+/**
  * RNG used for structure building for non-world gen
  */
 protected Random random = new Random();
@@ -142,7 +149,7 @@ protected Builder(ProcessedStructure struct, int facing, BlockPosition hit)
       this.maxPriority = i;
       }
     }
-     
+  this.md5 = String.valueOf(struct.md5);
   }
 
 public void setWorld(World world)
@@ -153,6 +160,12 @@ public void setWorld(World world)
     this.dimension = world.getWorldInfo().getDimension();
     }
   }
+
+public void clearBuilderFromStructure()
+  {
+  this.struct.removeBuilder(this);
+  }
+
 /**
  * for instantBuilder--construct
  * for tickedBuilder--add to tickQue in AWStructureModule
@@ -180,6 +193,7 @@ public boolean isFinished()
 public void setFinished()
   {
   this.isFinished = true;
+  this.clearBuilderFromStructure();
   }
 
 public void setVehicleOverride(int type)
@@ -780,6 +794,7 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("ovN", this.overrideNPC);
   tag.setInteger("ovG", this.overrideGate);
   tag.setInteger("ovR", this.overrideRank);
+  tag.setString("md5", this.md5);
   return tag;
   }
 
@@ -802,15 +817,22 @@ public void readFromNBT(NBTTagCompound tag)
 public static BuilderTicked readTickedBuilderFromNBT(NBTTagCompound tag)
   {  
   String name = tag.getString("name");
+  String md5 = tag.getString("md5");
   ProcessedStructure struct = StructureManager.instance().getStructureServer(name);
   if(struct==null)
     {
+    return null;
+    }
+  if(!struct.md5.equals(md5))
+    {
+    Config.logError("Severe error loading ticked builder from disc.  The structure it was building has been changed.  The builder will be invalidated.");
     return null;
     }
   BlockPosition hit = new BlockPosition(tag.getInteger("bX"), tag.getInteger("bY"), tag.getInteger("bZ"));
   int facing = tag.getByte("face");
   BuilderTicked builder = new BuilderTicked(struct, facing, hit);
   builder.readFromNBT(tag);
+  struct.addBuilder(builder);
   return builder;
   }
 

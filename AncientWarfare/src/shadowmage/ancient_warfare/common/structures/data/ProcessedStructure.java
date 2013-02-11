@@ -40,7 +40,6 @@ import shadowmage.ancient_warfare.common.utils.IDPairCount;
 public class ProcessedStructure extends AWStructure
 {
 
-boolean isLocked = false;
 private MemoryTemplate template = new MemoryTemplate();
 
 public ProcessedStructure()
@@ -51,11 +50,6 @@ public ProcessedStructure()
 public void setTemplateLines(List<String> lines)
   {
   template.setLines(lines);
-  }
-
-public void lock()
-  {
-  this.isLocked = true;
   }
 
 public MemoryTemplate getTemplate()

@@ -114,7 +114,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   case STRUCTURE_BUILD_DIRECT:
   return new GuiSurvivalBuilder(new ContainerSurvivalBuilder(player));
   
-  case STRUCTURE_EDITOR:
+  case STRUCTURE_EDITOR:  
   return new GuiEditorSelect(new ContainerEditor(player));
   
   case 4:  

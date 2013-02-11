@@ -77,9 +77,15 @@ public ContainerStructureScanner(EntityPlayer openingPlayer)
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
+  
   /**
    * server side only
    */
+  if(tag.hasKey("clearItem"))
+    {
+    this.clearItem();
+    return;
+    }  
   if(tag.hasKey("export"))
     {
     this.handleExportSettings(tag.getCompoundTag("export"));

@@ -155,7 +155,7 @@ public int getIconFromDamage(int par1)
  */
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
-  {
+  {  
   boolean openGUI = false;
   if(world.isRemote)
     {
@@ -231,7 +231,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     }
   else if(tag.hasKey("building") && tag.getBoolean("building")==true)
     {
-    if(player.isSneaking())
+    if(isShiftClick(player))
       {
       openGUI = true;
       }

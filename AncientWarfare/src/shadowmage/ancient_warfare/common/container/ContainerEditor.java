@@ -29,6 +29,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.IContainerGuiCallback;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
@@ -39,6 +40,8 @@ import shadowmage.ancient_warfare.common.utils.StringTools;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
+
+import cpw.mods.fml.common.network.IGuiHandler;
 
 public class ContainerEditor extends ContainerBase
 {
@@ -151,6 +154,9 @@ private void sendTemplateToClient(ProcessedStructure struct) throws UnsupportedE
     outerTag.setTag("templateData", tag);
     this.sendDataToPlayer(outerTag);
     }
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setBoolean("openEdit", true);
+  this.sendDataToGUI(tag);
   }
 
 public void setStructureServer(NBTTagCompound tag)
@@ -164,8 +170,16 @@ public void setStructureServer(NBTTagCompound tag)
     Config.logError("Severe error attempting to set structure for editing: "+this.currentEditingStructure);
     this.currentEditingStructure= "";
     return;    
+    } 
+  if(this.serverStructure.openBuilderCount()>0)
+    {
+    NBTTagCompound rejectTag = new NBTTagCompound();
+    rejectTag.setBoolean("badSel", true);
+    this.sendDataToGUI(rejectTag);
+    this.currentEditingStructure = "";
+    this.serverStructure = null;
+    return;
     }
-  this.serverStructure.lock();
   this.structureFilePath = serverStructure.filePath;
   try
     {

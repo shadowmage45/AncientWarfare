@@ -50,7 +50,7 @@ public GuiCSBAdvancedSelection(ContainerCSB container, GuiScreen parent)
   super(container);
   this.parent = parent;
   this.container = container;
-  
+  this.forceUpdate = true;
   }
 
 @Override

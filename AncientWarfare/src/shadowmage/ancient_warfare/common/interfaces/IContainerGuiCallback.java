@@ -22,37 +22,9 @@ package shadowmage.ancient_warfare.common.interfaces;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-
-/**
- * an interface for containers or other abstract structures that need to directly 
- * handle data from packets.  Normally used for container server-client synching
- * @author Shadowmage
- *
- */
-public interface IHandlePacketData
+public interface IContainerGuiCallback
 {
 
-
-/**
- * intial data call, should be set by base container, not overriden
- * @param tag
- */
-public void handleRawPacketData(NBTTagCompound tag);
-
-/**
- * regular coms, should blindly update container.
- * @param tag
- */
-public void handlePacketData(NBTTagCompound tag);
-
-
-
-/**
- * server->client init data, should only exec client side, to setup any params not available
- * on client end.
- * @param tag
- */
-public void handleInitData(NBTTagCompound tag);
-
+public abstract void handleDataFromContainer(NBTTagCompound tag);
 
 }

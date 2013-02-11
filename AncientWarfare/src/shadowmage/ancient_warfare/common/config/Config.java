@@ -51,7 +51,7 @@ public static int structureGenMaxCheckRange = 16;
 public static int structureGeneratorRandomChance = 10;
 public static int structureGeneratorRandomRange = 1000;
 public static int structureGenMaxClusterValue = 50;
-
+public static boolean invertShiftClickOnItems = false;
 
 
 
