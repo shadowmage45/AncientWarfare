@@ -50,8 +50,6 @@ public StructureClientInfo(NBTTagCompound tag)
   this.xOffset = tag.getShort("xO");
   this.yOffset = tag.getShort("yO");
   this.zOffset = tag.getShort("zO");
-  this.creative = tag.getBoolean("creat");
-  this.worldGen = tag.getBoolean("world");
   this.survival = tag.getBoolean("surv");
   this.maxLeveling = tag.getInteger("mL");
   this.maxClearing = tag.getInteger("mC");
@@ -71,8 +69,6 @@ public static NBTTagCompound getClientTag(AWStructure struct)
    structTag.setShort("xO", (short)struct.xOffset);
    structTag.setShort("yO", (short)struct.verticalOffset);
    structTag.setShort("zO", (short)struct.zOffset);
-   structTag.setBoolean("creat", struct.creative);
-   structTag.setBoolean("world", struct.worldGen);
    structTag.setBoolean("surv", struct.survival);
    structTag.setInteger("mL", struct.maxLeveling);
    structTag.setInteger("mC", struct.maxVerticalClear);

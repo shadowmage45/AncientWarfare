@@ -280,15 +280,7 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
   while(it.hasNext())
     {
     line = it.next();    
-    if(line.toLowerCase().startsWith("worldgen"))
-      {
-      struct.worldGen = StringTools.safeParseBoolean("=", line);
-      }
-    else if(line.toLowerCase().startsWith("creative"))
-      {
-      struct.creative = StringTools.safeParseBoolean("=", line);
-      }
-    else if(line.toLowerCase().startsWith("survival"))
+    if(line.toLowerCase().startsWith("survival"))
       {
       struct.survival = StringTools.safeParseBoolean("=", line);
       } 

@@ -134,13 +134,13 @@ public BlockData getSwappedData(String name, BlockData sourceID)
 public List<String> getExportData()
   {
   List<String> lines= new ArrayList<String>();
-  lines.add("swap:\n");
-  lines.add("number="+String.valueOf(this.ruleNumber)+"\n");
+  lines.add("swap:");
+  lines.add("number="+String.valueOf(this.ruleNumber));
   for(SwapEntry entry : this.entries)
     {
-    lines.add(String.valueOf("biome="+entry.biomeName+","+entry.sourceID.id+"-"+entry.sourceID.meta+","+entry.resultID.id+"-"+entry.resultID.meta+"\n"));
+    lines.add(String.valueOf("biome="+entry.biomeName+","+entry.sourceID.id+"-"+entry.sourceID.meta+","+entry.resultID.id+"-"+entry.resultID.meta));
     }  
-  lines.add(":endswap\n");
+  lines.add(":endswap");
   return lines;
   }
 

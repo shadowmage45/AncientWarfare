@@ -21,10 +21,12 @@
 package shadowmage.ancient_warfare.common.structures.data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
@@ -264,6 +266,8 @@ public ProcessedStructure convertToProcessedStructure()
         }
       }
     }
+  List<String> lines = StructureExporter.getExportLinesFor(struct);
+  struct.setTemplateLines(lines);
   return struct;
   }
 

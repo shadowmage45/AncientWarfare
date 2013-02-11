@@ -50,7 +50,6 @@ public int zSize;
  */
 String name = "default";
 boolean world = false;
-boolean creative = true;
 boolean survival = false;
 
 /**
@@ -77,7 +76,6 @@ public ContainerStructureScanner(EntityPlayer openingPlayer)
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  
   /**
    * server side only
    */
@@ -91,6 +89,10 @@ public void handlePacketData(NBTTagCompound tag)
     this.handleExportSettings(tag.getCompoundTag("export"));
     this.export();
     this.clearItem();
+    }
+  if(tag.hasKey("edit"))
+    {
+    this.handleEditServer(tag.getCompoundTag("edit"));
     }
   }
 
@@ -107,11 +109,7 @@ public void handleExportSettings(NBTTagCompound tag)
   if(tag.hasKey("world"))
     {
     this.world = tag.getBoolean("world");
-    }
-  if(tag.hasKey("creat"))
-    {
-    this.creative = tag.getBoolean("creat");
-    }
+    }  
   if(tag.hasKey("surv"))
     {
     this.survival = tag.getBoolean("surv");
@@ -130,19 +128,45 @@ public void handleExportSettings(NBTTagCompound tag)
     }
   }
 
-public void sendSettingsAndExport(String name, boolean world, boolean creat, boolean surv, boolean fR, boolean fAW, boolean inc)
+public void sendSettingsAndExport(String name, boolean world, boolean surv, boolean fR, boolean fAW, boolean inc)
   {
   NBTTagCompound baseTag = new NBTTagCompound();
   NBTTagCompound tag = new NBTTagCompound();
   tag.setString("name", name);
   tag.setBoolean("world", world);
-  tag.setBoolean("creat", creat);
   tag.setBoolean("surv", surv);
   tag.setBoolean("fR", fR);
   tag.setBoolean("fAW", fAW);
   tag.setBoolean("inc", inc);
   
   baseTag.setTag("export", tag);
+  this.sendDataToServer(baseTag);
+  }
+
+public void handleEditServer(NBTTagCompound tag)
+  {
+  this.handleExportSettings(tag);
+  this.export();
+  ContainerEditor edit = new ContainerEditor(player);
+  edit.setStructureServer(tag);
+  //TODO manually set structure of edit to the exported name of this structure....
+  player.openContainer = edit;
+  }
+
+public void handleEditClient(String name, boolean world, boolean surv, boolean fR, boolean fAW, boolean inc)
+  {
+  NBTTagCompound baseTag = new NBTTagCompound();
+  NBTTagCompound tag = new NBTTagCompound();
+  
+  tag.setString("name", name);
+  tag.setBoolean("world", world);
+  tag.setBoolean("surv", surv);
+  tag.setBoolean("fR", fR);
+  tag.setBoolean("fAW", fAW);
+  tag.setBoolean("inc", inc);
+  tag.setString("setStructure", name);
+  
+  baseTag.setTag("edit", tag);
   this.sendDataToServer(baseTag);
   }
 
@@ -164,8 +188,14 @@ public void export()
     return;
     }
   struct.name = this.name;
-  struct.worldGen = this.world;
-  struct.creative = this.creative;
+  if(this.world)
+    {
+//    if(struct.worldGen)
+//      {
+//      WorldGenStructureManager.instance().addStructure(struct, false, 1, 1);//TODO add values to export config, or remove the entire thing...
+//      }
+    //TODO export to world-gen settings, update world-gen file....(dirty hack)
+    }
   struct.survival = this.survival;
   String path;
   if(this.formatAW)
@@ -184,10 +214,6 @@ public void export()
       {
       player.addChatMessage("Including structure in live structure lists");
       StructureManager.instance().addStructure(struct, true);
-      if(struct.worldGen)
-        {
-        WorldGenStructureManager.instance().addStructure(struct, false, 1, 1);//TODO add values to export config, or remove the entire thing...
-        }
       }    
     else if(!success)
       {

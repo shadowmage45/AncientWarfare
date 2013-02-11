@@ -27,6 +27,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiCheckBox;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 
 public class GuiStructureScanner extends GuiContainerAdvanced
@@ -37,7 +38,6 @@ boolean include = false;
 boolean formatRuins;
 boolean worldGen;
 boolean survival;
-boolean creative;
 String name = "";
 
 
@@ -45,7 +45,6 @@ GuiCheckBox formatAWBox;
 GuiCheckBox includeBox;
 GuiCheckBox formatRuinsBox;
 GuiCheckBox worldGenBox;
-GuiCheckBox creativeBox;
 GuiCheckBox survivalBox;
 
 GuiTextField nameBox;
@@ -95,9 +94,8 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Export to AW Format   : ", guiLeft+10, guiTop+53, 0xffffffff);
   this.drawString(fontRenderer, "Include after export  : ", guiLeft+10, guiTop+73, 0xffffffff);  
   this.drawString(fontRenderer, "Export to Ruins Format: ", guiLeft+10, guiTop+93, 0xffffffff);
-  this.drawString(fontRenderer, "Flag for World Gen    : ", guiLeft+10, guiTop+113, 0xffffffff);
-  this.drawString(fontRenderer, "Flag for Creative Mode: ", guiLeft+10, guiTop+133, 0xffffffff);
-  this.drawString(fontRenderer, "Flag for Survival Mode: ", guiLeft+10, guiTop+153, 0xffffffff);  
+  this.drawString(fontRenderer, "Flag for World Gen    : ", guiLeft+10, guiTop+113, 0xffffffff);  
+  this.drawString(fontRenderer, "Flag for Survival Mode: ", guiLeft+10, guiTop+133, 0xffffffff);  
   }
 
 @Override
@@ -107,12 +105,12 @@ public void setupGui()
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
   this.addGuiButton(1, 256-45-10, 30, 45, 18, "Export");
   this.addGuiButton(8, 256-45-10, 50, 45, 18, "Reset");
+  this.addGuiButton(9, 256-45-10, 70, 45, 18, "Edit");
   formatAWBox = this.addCheckBox(2, 145, 50, 16, 16).setChecked(formatAW);
   includeBox = this.addCheckBox(3, 145, 70, 16, 16).setChecked(include);
   formatRuinsBox = this.addCheckBox(4, 145, 90, 16, 16).setChecked(formatRuins);
   worldGenBox = this.addCheckBox(5, 145, 110, 16, 16).setChecked(worldGen);
-  creativeBox = this.addCheckBox(6, 145, 130, 16, 16).setChecked(creative);
-  survivalBox = this.addCheckBox(7, 145, 150, 16, 16).setChecked(survival);
+  survivalBox = this.addCheckBox(7, 145, 130, 16, 16).setChecked(survival);
     
   nameBox = new GuiTextField(fontRenderer, guiLeft+10, guiTop+30, 120, 10);
   nameBox.setTextColor(-1);
@@ -135,6 +133,7 @@ public void updateScreenContents()
 @Override
 public void buttonClicked(GuiButton button)
   {
+  ContainerStructureScanner container =null;
   switch(button.id)
   {
   case 0:
@@ -142,10 +141,10 @@ public void buttonClicked(GuiButton button)
   break;
   
   case 1: 
-  ContainerStructureScanner container = (ContainerStructureScanner)this.inventorySlots;
+  container = (ContainerStructureScanner)this.inventorySlots;
   if(container!=null && !name.equals(""))
     {
-    container.sendSettingsAndExport(name, worldGen, creative, survival, formatRuins, formatAW, include);
+    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include);
     } 
   closeGUI();
   break;
@@ -158,6 +157,19 @@ public void buttonClicked(GuiButton button)
   tag.setBoolean("clearItem", true);
   this.sendDataToServer(tag);
   closeGUI();
+  break;
+  
+  case 9://manual edit and then save...  
+  NBTTagCompound editTag = new NBTTagCompound();
+  container = (ContainerStructureScanner)this.inventorySlots;
+  if(container!=null && !name.equals(""))
+    {
+    container.handleEditClient(name, worldGen, survival, formatRuins, formatAW, include); 
+    
+    player.openContainer = new ContainerEditor(player);
+    mc.displayGuiScreen(new GuiEditor((ContainerEditor)player.openContainer, null));
+    closeGUI();
+    } 
   break;
   
   case 11:
@@ -174,7 +186,6 @@ public void buttonClicked(GuiButton button)
   this.include = includeBox.checked();
   this.formatRuins = formatRuinsBox.checked();
   this.worldGen = worldGenBox.checked();
-  this.creative = creativeBox.checked();
   this.survival = survivalBox.checked();
   this.name = nameBox.getText();
   }

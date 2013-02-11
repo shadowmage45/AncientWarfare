@@ -45,13 +45,26 @@ public abstract class AWStructure
  */
 private Set<Builder> openBuilders = new HashSet<Builder>();
 
+/**
+ * if it is being edited....
+ */
+public boolean lockedForEdit = false;
+
+/**
+ * mostly file IO stuff...
+ */
 public String md5;
 public String filePath;
 public String name = "";
-public boolean worldGen = false;
-public boolean creative = true;
+
+/**
+ * is this structure available in survival-mode drafting station (should have a valid resourceList)
+ */
 public boolean survival = false;
 
+/**
+ * advanced world-gen settings (can spawn underground, in water/lava, partially underground, etc..)
+ */
 public boolean underground = false;
 public int undergroundMinLevel=1;
 public int undergroundMaxLevel=255;
@@ -81,6 +94,10 @@ public Map<Integer, SwapRule> swapRules = new HashMap<Integer, SwapRule>();
  * only set to false for bad values during parsing, struct is then discarded and not loaded into structures map
  */
 public boolean isValid = true;
+
+/**
+ * if resourceList has been calculated or loaded from disk, this will not be null...
+ */
 public  List<IDPairCount> cachedCounts = null;
 
 /**

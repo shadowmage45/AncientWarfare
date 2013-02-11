@@ -31,6 +31,9 @@ private ContainerEditor cont;
 
 private GuiTextBox editor;
 
+/**
+ * might be null, if force-opened from scanner....
+ */
 private GuiEditorSelect parentScreen;
 
 /**
@@ -40,6 +43,7 @@ public GuiEditor(ContainerEditor cont, GuiEditorSelect parent)
   {
   super(cont);
   this.cont = cont; 
+  this.parentScreen = parent;
   }
 
 @Override

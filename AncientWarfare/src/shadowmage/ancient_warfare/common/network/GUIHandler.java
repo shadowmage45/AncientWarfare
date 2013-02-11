@@ -49,6 +49,7 @@ public static final int STRUCTURE_SELECT = 0;
 public static final int STRUCTURE_SCANNER = 1;
 public static final int STRUCTURE_BUILD_DIRECT = 2;
 public static final int STRUCTURE_EDITOR = 3;
+public static final int STRUCTURE_SCAN_EDIT = 4;
 
 
 
@@ -81,8 +82,11 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   case STRUCTURE_EDITOR:  
   return new ContainerEditor(player);
   
-  case 4:
-  return null;
+  case STRUCTURE_SCAN_EDIT:
+  ContainerEditor edit = new ContainerEditor(player);  
+  //TODO manually set container structure...
+  return edit;
+  
   case 5:
   return null;
   case 6:
@@ -117,8 +121,9 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   case STRUCTURE_EDITOR:  
   return new GuiEditorSelect(new ContainerEditor(player));
   
-  case 4:  
-  return null;
+  case STRUCTURE_SCAN_EDIT:  
+  return new GuiEditorSelect(new ContainerEditor(player));
+  
   case 5:
   return null;
   case 6:
