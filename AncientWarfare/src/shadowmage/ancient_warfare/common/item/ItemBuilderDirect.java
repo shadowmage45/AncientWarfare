@@ -28,10 +28,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
@@ -42,7 +42,7 @@ import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
-public class ItemBuilderDirect extends ItemBuilderBase
+public class ItemBuilderDirect extends ItemBuilderBase implements IScannerItem
 {
 
 /**
@@ -404,8 +404,32 @@ public StructureClientInfo getStructureForStack(ItemStack stack)
 @Override
 public boolean renderBuilderBlockBB()
   {
-  // TODO Auto-generated method stub
   return false;
+  }
+
+public static boolean isScanning(ItemStack stack)
+  {
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
+    {
+    return stack.getTagCompound().getCompoundTag("structData").getBoolean("scanning")==true;
+    }
+  return false;
+  }
+
+/**
+ * these ugly hacks only work because the NBT structure for scan data -- "structData" is the same between
+ * most of the items....
+ */
+@Override
+public BlockPosition getScanPos1(ItemStack stack)
+  {  
+  return ItemStructureScanner.getPos1(stack);  
+  }
+
+@Override
+public BlockPosition getScanPos2(ItemStack stack)
+  {
+  return ItemStructureScanner.getPos2(stack);
   }
 
 

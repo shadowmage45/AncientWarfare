@@ -26,8 +26,9 @@ import shadowmage.ancient_warfare.common.utils.BlockPosition;
 public interface IScannerItem
 {
 
-abstract BlockPosition getPos1(ItemStack stack);
-abstract BlockPosition getPos2(ItemStack stack);
+
+abstract BlockPosition getScanPos1(ItemStack stack);
+abstract BlockPosition getScanPos2(ItemStack stack);
 
 
 

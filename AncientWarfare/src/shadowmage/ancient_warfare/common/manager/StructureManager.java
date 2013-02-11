@@ -53,7 +53,7 @@ private static Map<String, StructureClientInfo> clientStructures = new HashMap<S
 private static HashMap<String, ProcessedStructure> tempBuilderStructures = new HashMap<String, ProcessedStructure>();
 
 /**
- * current client-side scannedStructure
+ * current client-side scannedStructure (used by ItemBuilderDirect)
  */
 private static StructureClientInfo tempBuilderClientInfo;
 
@@ -230,6 +230,7 @@ private void removeClientStructure(String name)
 public void clearClientData()
   {
   this.clientStructures.clear();
+  this.tempBuilderClientInfo = null;  
   }
 
 public StructureClientInfo getClientStructure(String name)
@@ -240,6 +241,11 @@ public StructureClientInfo getClientStructure(String name)
 public StructureClientInfo getClientTempStructure()
   {
   return this.tempBuilderClientInfo;
+  }
+
+public void clearClientTempInfo()
+  {
+  this.tempBuilderClientInfo = null;
   }
 
 public List<StructureClientInfo> getClientStructures()

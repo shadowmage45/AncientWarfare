@@ -26,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
+import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
 public class GuiSurvivalBuilder extends GuiContainerAdvanced
@@ -115,6 +116,7 @@ public void buttonClicked(GuiButton button)
   case 1:  
   NBTTagCompound tag = new NBTTagCompound();
   tag.setBoolean("clear", true);
+  StructureManager.instance().clearClientTempInfo();
   this.sendDataToServer(tag);
   closeGUI();
   break;

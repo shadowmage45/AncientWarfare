@@ -20,9 +20,7 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,18 +28,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.item.ItemBuilderBase;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemBuilderDirect;
 import shadowmage.ancient_warfare.common.item.ItemStructureScanner;
-import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class AWRenderHelper implements ITickHandler
 {
@@ -72,19 +67,19 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
   }
 
 
-private void renderScannerBB(EntityPlayer player, ItemStack stack, ItemStructureScanner item, float partialTick)
+private void renderScannerBB(EntityPlayer player, ItemStack stack, IScannerItem item, float partialTick)
   {
   if(player==null || stack==null || item== null)
     {
     return;
     }    
-  BlockPosition p1 = item.getPos1(stack);
+  BlockPosition p1 = item.getScanPos1(stack);
   if(p1==null)
     {
     return;
     }  
   int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-  BlockPosition p2 = item.getPos2(stack);
+  BlockPosition p2 = item.getScanPos2(stack);
   if(p2==null)
     {
     p2 = BlockTools.getBlockClickedOn(player, player.worldObj, player.isSneaking());
@@ -245,10 +240,10 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
   if(ItemBuilderBase.isBuilderItem(id))
     {
     this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
-    }
-  if(ItemBuilderBase.hasScanBB(id))
+    }  
+  if(ItemBuilderBase.hasScanBB(id) && ItemBuilderDirect.isScanning(stack))
     {
-    
+    this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks);
     }
   if(ItemStructureScanner.isScannerItem(id))
     {

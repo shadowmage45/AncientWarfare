@@ -36,6 +36,8 @@ public class BlockBuilder extends BlockContainerSimpleSided
 public BlockBuilder(int par1)
   {
   super(par1, Material.rock);
+  this.setCreativeTab(null);
+  this.setBlockName("Structure Builder Block");
   }
 
 @Override

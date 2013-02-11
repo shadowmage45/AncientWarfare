@@ -185,3 +185,7 @@ TWEAKS/OPTIMIZATION
 * add shift/invert option to config and items--global (does not effect scanners, due to client-server config differences, could probably synch config from server-client onLogin)
 * advanced setup gui, set values on init according to existing values in container
 * add clear/reset button to GUI, in case someone wants to ditch a scan
+* fix ticked builder block available in creative inventory
+* add more concise chat message as to what is going on when it is used (step _ of 4)
+* direct builder has some issues with BB not clearing on client-side when the struct is cleared...
+* direct builder scanning BB not rendering...
