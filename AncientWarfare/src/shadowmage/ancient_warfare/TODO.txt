@@ -20,6 +20,7 @@ TEMPLATES
 SCANNER
 * add export settings for world-gen (weight, value)
 
+
 STRUCTURE BUILDING
 
 
@@ -197,6 +198,7 @@ TWEAKS/OPTIMIZATION
         --it will technically export with include
         --and then force-open the editor GUI with the just
         --exported structure...
+* clean up various bugs from the days work at work... pt1
 
 /********** 02-12-13 **********/
 /********** 02-13-13 **********/

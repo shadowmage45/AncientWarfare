@@ -107,6 +107,7 @@ public void addTempStructure(EntityPlayer player, ProcessedStructure struct)
  */
 public void addStructure(ProcessedStructure struct, boolean sendPacket)
   {
+  Config.logDebug("adding structure(server): "+struct.name);
   this.structures.put(struct.name, struct);
   if(sendPacket)
     {

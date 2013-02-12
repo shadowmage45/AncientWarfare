@@ -149,7 +149,7 @@ public void handleEditServer(NBTTagCompound tag)
   this.export();
   ContainerEditor edit = new ContainerEditor(player);
   edit.setStructureServer(tag);
-  //TODO manually set structure of edit to the exported name of this structure....
+  this.clearItem();
   player.openContainer = edit;
   }
 
@@ -209,7 +209,8 @@ public void export()
       {
       path = String.valueOf(AWStructureModule.includeDirectory+name+".aws");
       }    
-    boolean success = StructureExporter.writeStructureToFile(struct, path,false); 
+    boolean success = StructureExporter.writeStructureToFile(struct, path,false);
+    struct.filePath = path;
     if(success && includeOnExport)
       {
       player.addChatMessage("Including structure in live structure lists");

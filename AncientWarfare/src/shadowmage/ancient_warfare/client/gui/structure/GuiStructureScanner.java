@@ -164,11 +164,9 @@ public void buttonClicked(GuiButton button)
   container = (ContainerStructureScanner)this.inventorySlots;
   if(container!=null && !name.equals(""))
     {
-    container.handleEditClient(name, worldGen, survival, formatRuins, formatAW, include); 
-    
+    container.handleEditClient(name, worldGen, survival, formatRuins, formatAW, include);     
     player.openContainer = new ContainerEditor(player);
     mc.displayGuiScreen(new GuiEditor((ContainerEditor)player.openContainer, null));
-    closeGUI();
     } 
   break;
   

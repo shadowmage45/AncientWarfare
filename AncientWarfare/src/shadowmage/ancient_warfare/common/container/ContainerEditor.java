@@ -219,7 +219,7 @@ public void saveTemplate()
   List<byte[]> chunks = ByteTools.getByteChunks(allBytes, packetSize);
   for(int i = 0; i < chunks.size(); i++)
     {
-    Config.logDebug("sending template chunk to client");
+    Config.logDebug("sending template chunk to server");
     NBTTagCompound outerTag = new NBTTagCompound();
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("num", i);
@@ -257,6 +257,12 @@ private void handlePartialTemplateServer(NBTTagCompound tag)
       Config.logDebug("returned valid structure on server");
       this.saveTemplateServer(struct);
       }
+//    Config.logDebug("rec lines****************************************************************");
+//    for(String line : lines)
+//      {
+//      Config.logDebug(line);
+//      }
+//    Config.logDebug("end lines****************************************************************");
     }
   }
 
@@ -264,8 +270,12 @@ private void saveTemplateServer(ProcessedStructure newStruct)
   {
   newStruct.filePath = serverStructure.filePath;
   newStruct.name = serverStructure.name;
-  StructureExporter.writeStructureToFile(newStruct, newStruct.filePath, true);
+  if(!StructureExporter.writeStructureToFile(newStruct, newStruct.filePath, true))
+    {
+    Config.logDebug("Error exporting structure: "+newStruct.name);
+    }
   StructureManager.instance().addStructure(newStruct, true);
+  serverStructure = newStruct;
   }
 
 @Override

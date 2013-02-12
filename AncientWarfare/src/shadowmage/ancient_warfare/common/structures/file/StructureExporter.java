@@ -48,7 +48,7 @@ public class StructureExporter
 public static boolean writeStructureToFile(ProcessedStructure struct, String name, boolean canOverwrite)
   {
   File outputFile = new File(name);
-  
+  Config.logDebug("exporting struct to:"+name);
   if(!outputFile.exists())
     {
     try
@@ -70,8 +70,16 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
   FileWriter writer = null;
   try
     {
-    writer = new FileWriter(outputFile);    
-    List<String> lines = getExportLinesFor(struct);
+    writer = new FileWriter(outputFile);
+    List<String> lines = null;
+    if(!struct.getTemplate().getLines().isEmpty())
+      {
+      lines = struct.getTemplate().getLines();
+      }
+    else
+      {
+      lines = getExportLinesFor(struct);
+      }
     for(String line : lines)
       {
       writer.write(line+"\n");

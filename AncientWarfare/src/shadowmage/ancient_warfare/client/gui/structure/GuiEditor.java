@@ -103,7 +103,7 @@ public void buttonClicked(GuiButton button)
   case 1:
   //TODO validate template is a valid struct before transmitting...
   this.cont.saveTemplate();
-  //this.closeGUI();
+  this.closeGUI();
   break;
   
   default:
