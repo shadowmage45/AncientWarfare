@@ -47,6 +47,9 @@ GuiCheckBox formatRuinsBox;
 GuiCheckBox worldGenBox;
 GuiCheckBox survivalBox;
 
+GuiTextField weight;
+GuiTextField value;
+
 GuiTextField nameBox;
 
 /**
@@ -91,6 +94,8 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     closeGUI();
     }
   this.nameBox.drawTextBox();
+  this.weight.drawTextBox();
+  this.value.drawTextBox();
   this.drawString(fontRenderer, "Export to AW Format   : ", guiLeft+10, guiTop+53, 0xffffffff);
   this.drawString(fontRenderer, "Include after export  : ", guiLeft+10, guiTop+73, 0xffffffff);  
   this.drawString(fontRenderer, "Export to Ruins Format: ", guiLeft+10, guiTop+93, 0xffffffff);

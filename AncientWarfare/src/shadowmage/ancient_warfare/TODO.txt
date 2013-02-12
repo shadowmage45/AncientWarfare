@@ -26,17 +26,13 @@ STRUCTURE BUILDING
 
 
 WORLD GEN STUFF
-* see TESTING
+* handle structure spawning in cave dimensions (test for hasSky? and dissallow non-dungeon structures?)
 
 
 SURVIVAL MODE STRUCTURE BUILDING
 * create drafting workstation
 * single-use item scanner--cannot add to world gen, only add to survival/creative mode and export to ruins
-* add template text-editing capabilities to drafting workstation
 * make sure survival ticked builder will not clear or level.  struct BB needs validated for clear before being built
-* create advanced drafting workstation (template editor)
-* fix BB not clearing after template is cleared
-* add scanning BB
 * builder item will carry an md5 of original structure, compare before starting construction..?
 * use survival flag for survival drafting table structureSelection...(from structureClientInfo in client store)
 
@@ -52,6 +48,7 @@ BASIC DRAFTING STATION
 * selection screen w/only survival eligible buildings available
 * works much like drafting station from catmod (e.g. input box, compile blocks/resources into a finished item)
 * create single-use builder item for output--stores struct data in NBT (basically, just a name and struct md5)....
+* create single use scanner item for survival mode (item is consumed on successful scan/export)
 
 
 ADVANCED DRAFTING STATION (editor)
@@ -64,6 +61,12 @@ COMPLEXES
 
 RESEARCH
 * THDT
+- vehicles can be built with different base components, which help determine the outcome characteristics
+        of the vehicle.  Such as using raw wood, fine wood, processed wood, ironshod wood, or iron channel
+        as base construction materials.  Each grade of material will help determine the base stats of the
+        vehicle (health, range modifier, damage done on hit, speed/weight), as well as secondary stats (i.e.
+        number of upgrade slots in the vehicle and upgrade points available for customization during construction)
+        
 
 
 TWEAKS/OPTIMIZATION
@@ -204,8 +207,12 @@ TWEAKS/OPTIMIZATION
 * clean up directBuilder scan BB rendering and item-clearing (bugs from the day, pt3)
 * clean up a few chunkloading related bugs (bugs from the day, pt4)
 * add builderTE/block onRemove code to release tickets...
-
 /********** 02-12-13 **********/
+
+
+
+
+
 /********** 02-13-13 **********/
 /********** 02-14-13 **********/
 /********** 02-15-13 **********/

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonMerchant;
 import net.minecraft.client.gui.GuiTextField;
@@ -20,6 +21,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -34,7 +36,16 @@ public abstract class GuiContainerAdvanced extends GuiContainer implements ICont
 protected final EntityPlayer player;
 public DecimalFormat formatter = new DecimalFormat("#");
 public DecimalFormat formatterOneDec = new DecimalFormat("#.#");
-ArrayList<GuiTextField> textBoxes = new ArrayList<GuiTextField>();
+
+/**
+ * gui controls...these are substitutes for the vanilla controlList...and allow for total control
+ * over buttons and functions, while only overridding a minimal amount of vanilla code (and still allowing
+ * for full use of the vanilla slot rendering and interface)
+ */
+ArrayList<GuiTextFieldAdvanced> textBoxes = new ArrayList<GuiTextFieldAdvanced>();
+ArrayList<GuiButton> buttons = new ArrayList<GuiButton>();
+protected GuiButton currentButton = null;
+
 
 public GuiContainerAdvanced(Container container)
   {
@@ -48,6 +59,14 @@ public GuiContainerAdvanced(Container container)
     {
     ((ContainerBase)container).setGui(this);
     }
+  }
+
+@Override
+public void setWorldAndResolution(Minecraft par1Minecraft, int par2, int par3)
+  {
+  this.buttons.clear();
+  this.textBoxes.clear();
+  super.setWorldAndResolution(par1Minecraft, par2, par3);
   }
 
 @Override
@@ -161,20 +180,31 @@ public void actionPerformed(GuiButton button)
 public GuiButton addGuiButton(int id, int x, int y, int len, int high, String name)
   {
   GuiButtonMultiSize button = new GuiButtonMultiSize(id, guiLeft+x, guiTop+y, len, high, name);
-  this.controlList.add(button);
+  this.buttons.add(button);
   return button;
   }
 
 public GuiCheckBox addCheckBox(int id, int x, int y, int len, int high)
   {
   GuiCheckBox box = new GuiCheckBox(id, guiLeft + x, guiTop + y, len, high);
-  this.controlList.add(box);
+  this.buttons.add(box);
   return box;
   }
 
-public GuiTextField addTextField(int x, int y, int width, int height, int maxChars, String initText)
+/**
+ * add an advanced textField box, includes callback methods for when text changes...
+ * @param id
+ * @param x
+ * @param y
+ * @param width
+ * @param height
+ * @param maxChars
+ * @param initText
+ * @return
+ */
+public GuiTextFieldAdvanced addTextField(int id, int x, int y, int width, int height, int maxChars, String initText)
   {
-  GuiTextField box = new GuiTextField(this.fontRenderer, guiLeft+x, guiTop+y, width, height);
+  GuiTextFieldAdvanced box = new GuiTextFieldAdvanced(id, this, guiLeft+x, guiTop+y, width, height);
   box.setText(initText);
   box.setMaxStringLength(maxChars);
   box.setTextColor(-1);
@@ -195,7 +225,7 @@ public GuiTextField addTextField(int x, int y, int width, int height, int maxCha
 public GuiButtonMerchant addMerchantButton(int id, int x, int y, boolean pointsRight)
   {
   GuiButtonMerchant button = new GuiButtonMerchant(id, guiLeft+x, guiTop+y, pointsRight);
-  this.controlList.add(button);
+  this.buttons.add(button);
   return button;
   }
 
@@ -457,35 +487,79 @@ public void closeGUI()
 @Override
 protected void mouseClicked(int mouseX, int mouseY, int buttonNum)
   {
-  for (int var4 = 0; var4 < this.controlList.size(); ++var4)
-    {
-    GuiButton var5 = (GuiButton)this.controlList.get(var4);
-    if (var5.mousePressed(this.mc, mouseX, mouseY))
-      {
-      this.currentGuiButton = var5;
-      this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-      this.actionPerformed(var5);
-      }
-    }
+  super.mouseClicked(mouseX, mouseY, buttonNum);
   for(GuiTextField box : this.textBoxes)
     {
     box.mouseClicked(mouseX, mouseY, buttonNum);
     }
+  for(Object but: this.buttons)
+    {
+    GuiButton button = (GuiButton)but;
+    if(button.mousePressed(mc, mouseX, mouseY))
+      {
+      this.currentButton = button;
+      this.actionPerformed(button);
+      }
+    } 
   }
 
-protected GuiButton currentGuiButton = null;
-
-/**
- * Called when the mouse is moved or a mouse button is released.  Signature: (mouseX, mouseY, which) which==-1 is
- * mouseMove, which==0 or which==1 is mouseUp
- */
-protected void mouseMovedOrUp(int par1, int par2, int par3)
+@Override
+protected void mouseMovedOrUp(int mouseX, int mouseY, int buttonNum)
   {
-  if (this.currentGuiButton != null && (par3==0 || par3==1 || par3==2))
+  super.mouseMovedOrUp(mouseX, mouseY, buttonNum);
+  if (this.currentButton != null)
     {
-    this.currentGuiButton.mouseReleased(par1, par2);
-    this.currentGuiButton = null;
+    this.currentButton.mouseReleased(mouseX, mouseY);
+    this.currentButton = null;
     }
   }
+
+protected void onMouseWheel(int mouseX, int mouseY, int wheel)
+  {
+  for(GuiTextFieldAdvanced  box : this.textBoxes)
+    {
+    if(box.isMouseOver(mouseX, mouseY))
+      {      
+      box.onMouseWheel(wheel);
+      break;
+      }
+    }   
+  }
+
+@Override
+public void handleMouseInput()
+  {  
+  int wheel = Mouse.getEventDWheel();
+  wheel = wheel > 0 ? 1 : wheel < 0 ? -1 : 0;  
+  if(wheel!=0)
+    {
+    int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+    int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+    this.onMouseWheel(mouseX, mouseY, wheel);
+    }
+  else
+    {
+    super.handleMouseInput();
+    }  
+  }
+
+/**
+ * @return
+ */
+public FontRenderer getFontRenderer()
+  {
+  return this.fontRenderer;
+  }
+
+/**
+ * equavalent to buttonPressed, etc...
+ * @param guiTextFieldAdvanced
+ * @param i change amount (scroll up/down, arrow up/down) 0 if enter was pressed
+ */
+public void onTextBoxActivated(GuiTextFieldAdvanced guiTextFieldAdvanced, int i)
+  {
+
+  }
+
 
 }
