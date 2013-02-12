@@ -15,6 +15,7 @@ TESTING
 
 
 TEMPLATES
+* change template extension--enable it in config properties, or...manually set?
 
 
 SCANNER
@@ -22,7 +23,6 @@ SCANNER
 
 
 STRUCTURE BUILDING
-* add builderTE/block onRemove code to release tickets...
 
 
 WORLD GEN STUFF
@@ -203,6 +203,7 @@ TWEAKS/OPTIMIZATION
 * clean up file transmission, it leaves 'null' lines at the end of the file (bugs from the day, pt2)
 * clean up directBuilder scan BB rendering and item-clearing (bugs from the day, pt3)
 * clean up a few chunkloading related bugs (bugs from the day, pt4)
+* add builderTE/block onRemove code to release tickets...
 
 /********** 02-12-13 **********/
 /********** 02-13-13 **********/

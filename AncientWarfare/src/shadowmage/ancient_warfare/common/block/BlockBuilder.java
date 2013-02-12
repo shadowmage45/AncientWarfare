@@ -55,9 +55,22 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
   }
 
 @Override
+public void breakBlock(World world, int x, int y, int z, int par5, int par6)
+  {
+  TEBuilder builder = (TEBuilder) world.getBlockTileEntity(x, y, z);
+  if(builder!=null)
+    {
+    builder.removeBuilder();
+    }
+  super.breakBlock(world, x, y, z, par5, par6);
+  }
+
+@Override
 public TileEntity createNewTileEntity(World var1)
   {
   return new TEBuilder();
   }
+
+
 
 }

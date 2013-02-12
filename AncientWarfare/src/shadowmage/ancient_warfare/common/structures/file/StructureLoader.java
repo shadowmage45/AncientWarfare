@@ -78,7 +78,7 @@ int currentLayer = 0;
 public void scanForPrebuiltFiles()
   {
   probableStructureFiles.clear();  
-  this.recursiveScan(new File(AWStructureModule.includeDirectory), probableStructureFiles, ".aws");  
+  this.recursiveScan(new File(AWStructureModule.includeDirectory), probableStructureFiles, "."+Config.TEMPLATE_EXTENSION);  
   this.recursiveScan(new File(AWStructureModule.convertDirectory), probableRuinsFiles, ".tml");
   }
 
@@ -202,7 +202,7 @@ private ProcessedStructure processFile(File file)
    */
   try
     {
-    if(file.getName().endsWith(".aws"))
+    if(file.getName().endsWith("."+Config.TEMPLATE_EXTENSION))
       {      
       struct = this.loadStructureAW(lines, md5String);
       }
@@ -222,15 +222,13 @@ private ProcessedStructure processFile(File file)
     Config.logError("INVALID STRUCTURE: There was an error while parsing template file: "+file.getName()); 
     return null;
     }  
-  Config.logDebug("md5 for struct:"+struct.name+" == "+md5String);
   struct.filePath = file.getAbsolutePath();
 
   String name = file.getName();
-  if(name.endsWith(".aws") || name.endsWith(".tml"))
+  if(name.endsWith("."+Config.TEMPLATE_EXTENSION) || name.endsWith(".tml"))
     {
     name = name.substring(0, name.length()-4);
     }
-  Config.logDebug("trimmed name: "+name);
   struct.name = name; 
   //
   return struct;
@@ -247,7 +245,7 @@ public void convertRuinsTemplates()
     {
     String name = file.getName();
     name = name.split(".tml")[0];
-    String newFile = String.valueOf(AWStructureModule.outputDirectory+name+".aws");
+    String newFile = String.valueOf(AWStructureModule.outputDirectory+name+"."+Config.TEMPLATE_EXTENSION);
 
     ProcessedStructure raw = processFile(file);
     if(raw==null || !raw.isValid)

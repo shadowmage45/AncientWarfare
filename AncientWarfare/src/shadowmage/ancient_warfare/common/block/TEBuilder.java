@@ -45,7 +45,12 @@ public void setTicket(Ticket tk)
 public void removeBuilder()
   {
   this.invalidate();
-  this.worldObj.setBlock(xCoord, yCoord, zCoord, 0);
+  
+  this.releaseTicket();
+  }
+
+public void releaseTicket()
+  {
   if(this.tk!=null)
     {
     ForgeChunkManager.releaseTicket(tk);
@@ -90,6 +95,7 @@ public void updateEntity()
   if(this.shouldRemove)
     {    
     this.removeBuilder();
+    this.worldObj.setBlock(xCoord, yCoord, zCoord, 0);
     return;
     }  
   if(builder==null)
@@ -106,6 +112,7 @@ public void updateEntity()
   if(builder.isFinished())
     {
     this.removeBuilder();
+    this.worldObj.setBlock(xCoord, yCoord, zCoord, 0);
     }
   }
 

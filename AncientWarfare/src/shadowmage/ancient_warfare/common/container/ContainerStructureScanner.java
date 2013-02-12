@@ -203,11 +203,11 @@ public void export()
     player.addChatMessage("Exporting structure to AW Format: "+name);
     if(!this.includeOnExport)
       {
-      path = String.valueOf(AWStructureModule.outputDirectory+name+".aws");
+      path = String.valueOf(AWStructureModule.outputDirectory+name+"."+Config.TEMPLATE_EXTENSION);
       }
     else
       {
-      path = String.valueOf(AWStructureModule.includeDirectory+name+".aws");
+      path = String.valueOf(AWStructureModule.includeDirectory+name+"."+Config.TEMPLATE_EXTENSION);
       }    
     boolean success = StructureExporter.writeStructureToFile(struct, path,false);
     struct.filePath = path;
