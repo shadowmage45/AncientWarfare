@@ -24,23 +24,48 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.config.Config;
+
 public class ByteTools
 {
 
+//public static List<byte[]> getByteChunks(byte[] allBytes, int packetSize)
+//  {
+//  int numOfChunks = (allBytes.length/packetSize)+1;  
+//  List<byte[]> byteChunks = new ArrayList<byte[]>(numOfChunks);  
+//  for(int i = 0; i < numOfChunks; i++)
+//    {
+//    byte[] chunk = new byte[packetSize];
+//    for(int k = 0; k < packetSize ; k++)
+//      {
+//      if(k + i*packetSize < allBytes.length)
+//        {
+//        chunk[k] = allBytes[k+i*packetSize];
+//        }
+//      }
+//    byteChunks.add(chunk);
+//    }
+//  return byteChunks;
+//  }
+
 public static List<byte[]> getByteChunks(byte[] allBytes, int packetSize)
   {
-  int numOfChunks = (allBytes.length/packetSize)+1;  
+  int numOfChunks = (allBytes.length/packetSize)+1;
+  Config.logDebug("bytesLength: "+allBytes.length+"  numOfCunks: "+numOfChunks);
   List<byte[]> byteChunks = new ArrayList<byte[]>(numOfChunks);  
+  int totalToWrite = allBytes.length;
   for(int i = 0; i < numOfChunks; i++)
     {
-    byte[] chunk = new byte[packetSize];
-    for(int k = 0; k < packetSize ; k++)
+    int pkSize = totalToWrite>packetSize? packetSize : totalToWrite;
+    byte[] chunk = new byte[pkSize];
+    for(int k = 0; k < pkSize ; k++)
       {
       if(k + i*packetSize < allBytes.length)
         {
         chunk[k] = allBytes[k+i*packetSize];
         }
       }
+    totalToWrite -= chunk.length;
     byteChunks.add(chunk);
     }
   return byteChunks;
@@ -48,12 +73,19 @@ public static List<byte[]> getByteChunks(byte[] allBytes, int packetSize)
 
 public static byte[] compositeByteChunks(List<byte[]> chunks, int packetSize)
   {
-  byte[] fullFile = new byte[chunks.size()*packetSize];    
+  int totalLen = 0;
+  for(byte[] ck : chunks)
+    {
+    totalLen += ck.length;
+    }
+  byte[] fullFile = new byte[totalLen];   
+  
+  int currentPos = 0;
   for(int i = 0; i < chunks.size(); i++)
     {
-    for(int k = 0; k < packetSize; k++)
+    for(int k = 0; k < chunks.get(i).length; k++, currentPos++)
       {
-      fullFile[ i * packetSize + k] = chunks.get(i)[k];
+      fullFile[currentPos] = chunks.get(i)[k];
       }
     }
   return fullFile;

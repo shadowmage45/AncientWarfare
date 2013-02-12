@@ -59,7 +59,7 @@ public void readFromNBT(NBTTagCompound par1nbtTagCompound)
   super.readFromNBT(par1nbtTagCompound);
   if(par1nbtTagCompound.hasKey("builder"))
     {
-    System.out.println("reading builder data");
+    Config.logDebug("reading builder data");
     NBTTagCompound builder = par1nbtTagCompound.getCompoundTag("builder");
     this.builder = Builder.readTickedBuilderFromNBT(builder);
     if(this.builder==null)
@@ -87,16 +87,16 @@ public void updateEntity()
     {
     return;
     }
-  if(builder==null)
-    {
-    Config.logError("Invalid builder in TE detected in builder block");
-    return;
-    }
   if(this.shouldRemove)
     {    
     this.removeBuilder();
     return;
     }  
+  if(builder==null)
+    {
+    Config.logError("Invalid builder in TE detected in builder block");
+    return;
+    }
   if(builder.world==null)
     {
     builder.world=this.worldObj;

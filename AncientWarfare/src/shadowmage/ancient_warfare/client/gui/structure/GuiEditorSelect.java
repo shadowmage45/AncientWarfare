@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
@@ -59,6 +60,7 @@ public void handleDataFromContainer(NBTTagCompound tag)
     }
   else if(tag.hasKey("badSel"))
     {
+    Config.logDebug("received bad sel packet on editor select GUI");
     //TODO DISPLAY REJECT MESSAGE......
     }
   }

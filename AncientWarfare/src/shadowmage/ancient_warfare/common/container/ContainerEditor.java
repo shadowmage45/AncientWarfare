@@ -257,12 +257,6 @@ private void handlePartialTemplateServer(NBTTagCompound tag)
       Config.logDebug("returned valid structure on server");
       this.saveTemplateServer(struct);
       }
-//    Config.logDebug("rec lines****************************************************************");
-//    for(String line : lines)
-//      {
-//      Config.logDebug(line);
-//      }
-//    Config.logDebug("end lines****************************************************************");
     }
   }
 

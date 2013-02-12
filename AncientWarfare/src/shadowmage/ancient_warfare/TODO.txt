@@ -22,6 +22,7 @@ SCANNER
 
 
 STRUCTURE BUILDING
+* add builderTE/block onRemove code to release tickets...
 
 
 WORLD GEN STUFF
@@ -41,10 +42,10 @@ SURVIVAL MODE STRUCTURE BUILDING
 
 
 STRUCTURE EDITOR
-* clean up file transmission, it leaves 'null' lines at the end of the file
 * validate struct before transmit to save
 * add reject message display if attempting to open a locked structure...
 * add method to 'lock' structure when editing, so no other player could edit the same struct
+* add dirty flag to editor, so it won't retransmit template unless it has been edited
 
 
 BASIC DRAFTING STATION
@@ -199,6 +200,9 @@ TWEAKS/OPTIMIZATION
         --and then force-open the editor GUI with the just
         --exported structure...
 * clean up various bugs from the days work at work... pt1
+* clean up file transmission, it leaves 'null' lines at the end of the file (bugs from the day, pt2)
+* clean up directBuilder scan BB rendering and item-clearing (bugs from the day, pt3)
+* clean up a few chunkloading related bugs (bugs from the day, pt4)
 
 /********** 02-12-13 **********/
 /********** 02-13-13 **********/

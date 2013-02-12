@@ -171,7 +171,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     tag = new NBTTagCompound();
     } 
   if(hit != null && ( !tag.hasKey("scanning") || tag.getBoolean("scanning")==true ))
-    {
+    {    
     if(player.isSneaking())
       {
       hit = BlockTools.offsetForSide(hit, side);
@@ -211,6 +211,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
                
       tag.setBoolean("scanning", false);
       tag.setBoolean("building", true);
+      tag.removeTag("pos1");
+      tag.removeTag("pos2");
+      tag.removeTag("buildKey");
+      tag.removeTag("face");
       }        
     else if(!tag.hasKey("pos1"))
       {

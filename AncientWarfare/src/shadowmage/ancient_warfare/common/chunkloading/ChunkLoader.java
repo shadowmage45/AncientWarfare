@@ -63,13 +63,13 @@ private HashMap<Integer, ArrayList<Ticket>> dimensionTickets = new HashMap<Integ
 @Override
 public List<Ticket> ticketsLoaded(List<Ticket> tickets, World world, int maxTicketCount)
   {
-  return null;
+  return tickets;
   }
 
 @Override
 public void ticketsLoaded(List<Ticket> tickets, World world)
   {
-  this.dimensionTickets.get(world.getWorldInfo().getDimension()).addAll(tickets);
+  //this.dimensionTickets.get(world.getWorldInfo().getDimension()).addAll(tickets);
   for(Ticket tk : tickets)
     {
     NBTTagCompound tag = tk.getModData();
