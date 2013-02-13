@@ -66,11 +66,11 @@ public BlockRule getRuleAt(int x, int y, int z)
   return this.blockRules.get(Integer.valueOf(this.structure[x][y][z]));
   }
 
-public boolean canGenerateAtSurface(World world, BlockPosition hit, int facing)
-  {
+public static boolean canGenerateAtSurface(World world, BlockPosition hit, int facing, ProcessedStructure struct, int maxOverhang, int maxLeveling, int levelingBuffer, int maxVerticalClear, int clearingBuffer)
+  {  
   int missingBlocks = 0;
   boolean canGen = true;  
-  StructureBB bb = getStructureBB(hit, facing);
+  StructureBB bb = getBoundingBox(hit, facing, struct.xOffset, struct.ySize, struct.zOffset, struct.xSize, struct.ySize, struct.zSize);
   if(maxLeveling==0)//should level the site, or check for overhang?
     {
     BlockPosition front = bb.pos1.copy();
@@ -80,11 +80,11 @@ public boolean canGenerateAtSurface(World world, BlockPosition hit, int facing)
     List<BlockPosition> foundationBlocks = BlockTools.getAllBlockPositionsBetween(front, back);
     for(BlockPosition pos : foundationBlocks)
       {      
-      if(!isValidTargetBlock(world.getBlockId(pos.x, pos.y, pos.z)))
+      if(!isValidTargetBlock(world.getBlockId(pos.x, pos.y, pos.z), struct.validTargetBlocks));
         {
         missingBlocks++;
         }
-      if(missingBlocks>this.maxOverhang)
+      if(missingBlocks>maxOverhang)
         {
         Config.logDebug("Rejected due to overhang");
         return false;
@@ -94,16 +94,16 @@ public boolean canGenerateAtSurface(World world, BlockPosition hit, int facing)
   else
     {
     BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
-    min.y += verticalOffset;
+    min.y += struct.verticalOffset;
     BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
-    if(!isValidLevelingTarget(world, min, max))
+    if(!isValidLevelingTarget(world, min, max, struct.validTargetBlocks, levelingBuffer))
       {
       Config.logDebug("rejected for improper leveling");
       return false;
       }   
     }
   
-  if(maxVerticalClear >= ySize -verticalOffset)//the whole thing will be cleared
+  if(maxVerticalClear >= struct.ySize -struct.verticalOffset)//the whole thing will be cleared
     {
     Config.logDebug("skipping clearing check");
     return true;
@@ -112,7 +112,7 @@ public boolean canGenerateAtSurface(World world, BlockPosition hit, int facing)
   BlockPosition clearTest = bb.pos1.copy();
   BlockPosition clearTest2 = bb.pos2.copy();
   
-  clearTest.y+=verticalOffset+ maxVerticalClear - 1;
+  clearTest.y+=struct.verticalOffset+ maxVerticalClear - 1;
   List<BlockPosition> nonClearedBlocks = BlockTools.getAllBlockPositionsBetween(clearTest, clearTest2);
   
   if(clearTest.y==clearTest2.y && maxVerticalClear>0)
@@ -132,7 +132,7 @@ public boolean canGenerateAtSurface(World world, BlockPosition hit, int facing)
   return true;
   }
 
-public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facing)
+public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facing, ProcessedStructure struct)
   {
   /**
    * what to check for underground validation?   * 
@@ -151,7 +151,7 @@ public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facin
     List<BlockPosition> foundationBlocks = BlockTools.getAllBlockPositionsBetween(front, back);
     for(BlockPosition pos : foundationBlocks)
       {      
-      if(!isValidTargetBlock(world.getBlockId(pos.x, pos.y, pos.z)))
+      if(!isValidTargetBlock(world.getBlockId(pos.x, pos.y, pos.z), struct.validTargetBlocks))
         {
         missingBlocks++;
         }
@@ -167,7 +167,7 @@ public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facin
     BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
     min.y += verticalOffset;
     BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
-    if(!isValidLevelingTarget(world, min, max))
+    if(!isValidLevelingTarget(world, min, max, struct.validTargetBlocks, struct.levelingBuffer))
       {
       Config.logDebug("rejected for improper leveling");
       return false;
@@ -176,7 +176,7 @@ public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facin
   return true;
   }
 
-public boolean isValidLevelingTarget(World world, BlockPosition min, BlockPosition max)
+public static boolean isValidLevelingTarget(World world, BlockPosition min, BlockPosition max, int[] validTargetBlocks, int levelingBuffer)
   {
   //TODO check beneath as well as just beside?
   min.x-= 1 + levelingBuffer;
@@ -187,12 +187,12 @@ public boolean isValidLevelingTarget(World world, BlockPosition min, BlockPositi
   for(int x = min.x; x <= max.x; x++)
     {
     int id = world.getBlockId(x, min.y, min.z);
-    if(!isValidTargetBlock(id) || id==0)
+    if(!isValidTargetBlock(id, validTargetBlocks) || id==0)
       {
       return false;
       }
     id = world.getBlockId(x, min.y, max.z);
-    if(!isValidTargetBlock(id) || id==0)
+    if(!isValidTargetBlock(id, validTargetBlocks) || id==0)
       {
       return false;
       }
@@ -200,12 +200,12 @@ public boolean isValidLevelingTarget(World world, BlockPosition min, BlockPositi
   for(int z = min.z; z <= max.z; z++)
     {
     int id = world.getBlockId(min.x, min.y, z);
-    if(!isValidTargetBlock(id) || id==0)
+    if(!isValidTargetBlock(id, validTargetBlocks) || id==0)
       {
       return false;
       }
     id = world.getBlockId(max.x, min.y, z);
-    if(!isValidTargetBlock(id) || id==0)
+    if(!isValidTargetBlock(id, validTargetBlocks) || id==0)
       {
       return false;
       }
@@ -213,15 +213,15 @@ public boolean isValidLevelingTarget(World world, BlockPosition min, BlockPositi
   return true;
   }
 
-public boolean isValidTargetBlock(int id)
+public static boolean isValidTargetBlock(int id, int[] validTargetBlocks)
   {
-  if(this.validTargetBlocks==null)
+  if(validTargetBlocks==null)
     {
     return true;
     }
-  for(int i = 0; i < this.validTargetBlocks.length; i++)
+  for(int i = 0; i < validTargetBlocks.length; i++)
     {
-    if(id==this.validTargetBlocks[i])
+    if(id==validTargetBlocks[i])
       {
       return true;
       }
@@ -244,7 +244,7 @@ public BlockData getSwappedData(int swapGroup, String biomeName, BlockData sourc
  * @param world
  * @return
  */
-private boolean areBlocksValid(List<BlockPosition> blocks, World world)
+private static boolean areBlocksValid(List<BlockPosition> blocks, World world, int[] validTargetBlocks)
   {
   int id;
   for(BlockPosition pos : blocks)
@@ -254,7 +254,7 @@ private boolean areBlocksValid(List<BlockPosition> blocks, World world)
       {
       continue;
       }
-    if(!isValidTargetBlock(id))
+    if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
       }

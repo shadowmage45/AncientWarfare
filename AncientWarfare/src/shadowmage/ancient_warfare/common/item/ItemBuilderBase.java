@@ -22,8 +22,9 @@ package shadowmage.ancient_warfare.common.item;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.interfaces.IBuilderItem;
+import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public abstract class ItemBuilderBase extends AWItemClickable 
 {
@@ -66,6 +67,17 @@ public static boolean hasScanBB(int id)
   {
   return id==ItemLoader.structureBuilderDirect.itemID;
   }
+
+/**
+ * did construction start sucessfully? (e.g. struct was not locked, location was valid)
+ * @param world
+ * @param struct
+ * @param hit
+ * @param facing
+ * @return
+ */
+public abstract boolean attemptConstruction(World world, ProcessedStructure struct, BlockPosition hit, int facing);
+  
 
 
 }

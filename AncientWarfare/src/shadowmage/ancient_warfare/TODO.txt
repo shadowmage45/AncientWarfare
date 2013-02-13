@@ -5,6 +5,7 @@ http://mrl.nyu.edu/~perlin/noise/
 
 GENERAL
 * add some null checks to container/guis...mostly there, but probably still missing a few
+* start working on complexes....
 
 
 TESTING
@@ -13,24 +14,36 @@ TESTING
 * test underground buildings
 * test submerged code
 * test that static air rule works properly
-
+* test world-gen export
 
 TEMPLATES
 * change template extension--enable it in config properties, or...manually set?
 
 
 SCANNER
-* remove export settings for world-gen (files will have to be explicitly added)
-        the only settings that should remain are - export to ruins
         
 
 STRUCTURE BUILDING
+* remove builder load/save from gameData...--it isn't used
 
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and dissallow non-dungeon structures?)
-* change world-gen config over to use a regular config file format??
+* check overrides for structure for biome settings....
+* check nearby chunks in generatedMap for structure bb's, make sure bb's will not overwrite...
+            should probably be called in attemptGenerateAt<surface/subsurface>
 
+
+STRUCTURE EDITOR
+* validate struct before transmit to save
+* add reject message display if attempting to open a locked structure...
+* add method to 'lock' structure when editing, so no other player could edit the same struct
+            and release when no longer in use..so it can be built, etc...
+* add dirty flag to editor, so it won't retransmit template unless it has been edited
+
+
+COMPLEXES
+* THDT
 
 
 SURVIVAL MODE STRUCTURE BUILDING
@@ -39,13 +52,6 @@ SURVIVAL MODE STRUCTURE BUILDING
 * make sure survival ticked builder will not clear or level.  struct BB needs validated for clear before being built
 * builder item will carry an md5 of original structure, compare before starting construction..?
 * use survival flag for survival drafting table structureSelection...(from structureClientInfo in client store)
-
-
-STRUCTURE EDITOR
-* validate struct before transmit to save
-* add reject message display if attempting to open a locked structure...
-* add method to 'lock' structure when editing, so no other player could edit the same struct
-* add dirty flag to editor, so it won't retransmit template unless it has been edited
 
 
 BASIC DRAFTING STATION
@@ -59,10 +65,6 @@ ADVANCED DRAFTING STATION (editor)
 * THDT
 
 
-COMPLEXES
-* THDT
-
-
 RESEARCH
 * THDT
 - vehicles can be built with different base components, which help determine the outcome characteristics
@@ -70,6 +72,11 @@ RESEARCH
         as base construction materials.  Each grade of material will help determine the base stats of the
         vehicle (health, range modifier, damage done on hit, speed/weight), as well as secondary stats (i.e.
         number of upgrade slots in the vehicle and upgrade points available for customization during construction)
+        add 'imbued' versions of these materials, each level of imbue will decrease some of the drawbacks for using 
+        higher-tier materials.  Imbued versions are created by combining various materials with the regular version
+        --such as combining with redstone for a t1 imbue, glowstone for a t2 imbue, both for t3 imbue.  Highest
+        level imbue will require glowstone, redstone, and ender pearls.
+
         
 
 
@@ -84,6 +91,29 @@ TWEAKS/OPTIMIZATION
 * some ruins structures (one, jungle throne) appears offset -1Y
 * editor GUI has some really ugly code to render chars....
 
+
+/*****************************************************************************************/
+public class MyWorldData extends WorldSavedData 
+{
+
+final static String key = "my.unique.string";
+
+// Fields containing your data here
+
+public static MyWorldData forWorld(World world) 
+    {
+    // Retrieves the MyWorldData instance for the given world, creating it if necessary
+    MapStorage storage = world.perWorldStorage;
+    MyWorldData result = (MyWorldData)storage.loadData(MyWorldData.class, key);
+    if (result == null) 
+        {
+        result = new MyWorldData();
+        storage.setData(key, result);
+        }
+    return result;
+    }
+}
+/*****************************************************************************************/
 
 
 ********************* DONE STUFF *************************
@@ -213,11 +243,19 @@ TWEAKS/OPTIMIZATION
 * add builderTE/block onRemove code to release tickets...
 /********** 02-12-13 **********/
 * enforce air-zero rule (hard-coded, non-replaceable)
-
-
-
-
+* rework guiContainerAdvanced to include fully custom button and text-box handling
 /********** 02-13-13 **********/
+* rework worldgen/structures slightly to allow for overrides from world-gen file to globally effect structures 
+        as/after they are loaded (functions as a complete overrride without touching the orig structures values)
+* add save ability to world-gen config file--should allow for in-game addition of structures (values are all final however, cannot be edited)
+* add leveling/clearing/overhang overrides to worldgenstructentry
+* move generated stucture maps into world.perWorldStorage (see notes...)
+* enable value/weight settings for structure export
+* enable add-to-world-gen for newly created structures (w/ given world-gen values)...
+* check openEditors list instead of edit-flag
+
+
+
 /********** 02-14-13 **********/
 /********** 02-15-13 **********/
 /********** 02-16-13 **********/

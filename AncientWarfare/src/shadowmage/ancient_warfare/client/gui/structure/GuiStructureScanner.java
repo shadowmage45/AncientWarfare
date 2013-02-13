@@ -29,6 +29,7 @@ import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
+import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class GuiStructureScanner extends GuiContainerAdvanced
 {
@@ -41,6 +42,7 @@ boolean survival;
 String name = "";
 String weightString = "";
 String valueString = "";
+boolean unique;
 
 
 GuiCheckBox formatAWBox;
@@ -48,6 +50,7 @@ GuiCheckBox includeBox;
 GuiCheckBox formatRuinsBox;
 GuiCheckBox worldGenBox;
 GuiCheckBox survivalBox;
+GuiCheckBox uniqueBox;
 
 GuiTextField weight;
 GuiTextField value;
@@ -96,8 +99,6 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     closeGUI();
     }
   this.nameBox.drawTextBox();
-  this.weight.drawTextBox();
-  this.value.drawTextBox();
   this.drawString(fontRenderer, "Export to AW Format   : ", guiLeft+10, guiTop+53, 0xffffffff);
   this.drawString(fontRenderer, "Include after export  : ", guiLeft+10, guiTop+73, 0xffffffff);  
   this.drawString(fontRenderer, "Export to Ruins Format: ", guiLeft+10, guiTop+93, 0xffffffff);
@@ -117,13 +118,15 @@ public void setupGui()
   formatRuinsBox = this.addCheckBox(4, 145, 90, 16, 16).setChecked(formatRuins);
   worldGenBox = this.addCheckBox(5, 145, 110, 16, 16).setChecked(worldGen);
   survivalBox = this.addCheckBox(7, 145, 130, 16, 16).setChecked(survival);
-    
-  nameBox = new GuiTextField(fontRenderer, guiLeft+10, guiTop+30, 120, 10);
-  nameBox.setTextColor(-1);
-  nameBox.func_82266_h(-1);
-  nameBox.setEnableBackgroundDrawing(true);
-  nameBox.setMaxStringLength(30);
-  nameBox.setText(name);
+  uniqueBox = this.addCheckBox(8, 145, 190, 16, 16).setChecked(unique);  
+  
+  nameBox = this.addTextField(0, 10, 30, 120, 10, 30, name);
+//  nameBox = new GuiTextField(fontRenderer, guiLeft+10, guiTop+30, 120, 10);
+//  nameBox.setTextColor(-1);
+//  nameBox.func_82266_h(-1);
+//  nameBox.setEnableBackgroundDrawing(true);
+//  nameBox.setMaxStringLength(30);
+//  nameBox.setText(name);
   
   weight = this.addTextField(1, 145, 150, 20, 10, 3, weightString).setAsNumberBox();
   value = this.addTextField(2, 145, 170, 20, 10, 3, valueString).setAsNumberBox();
@@ -161,7 +164,10 @@ public void buttonClicked(GuiButton button)
   container = (ContainerStructureScanner)this.inventorySlots;
   if(container!=null && !name.equals(""))
     {
-    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include);
+    int weight = StringTools.safeParseInt(this.weight.getText());
+    int value = StringTools.safeParseInt(this.value.getText());
+    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include, weight, value, unique); 
+    //container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include);
     } 
   closeGUI();
   break;
@@ -181,7 +187,9 @@ public void buttonClicked(GuiButton button)
   container = (ContainerStructureScanner)this.inventorySlots;
   if(container!=null && !name.equals(""))
     {
-    container.handleEditClient(name, worldGen, survival, formatRuins, formatAW, include);     
+    int weight = StringTools.safeParseInt(this.weight.getText());
+    int value = StringTools.safeParseInt(this.value.getText());
+    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include, weight, value, unique);     
     player.openContainer = new ContainerEditor(player);
     mc.displayGuiScreen(new GuiEditor((ContainerEditor)player.openContainer, null));
     } 
@@ -202,7 +210,10 @@ public void buttonClicked(GuiButton button)
   this.formatRuins = formatRuinsBox.checked();
   this.worldGen = worldGenBox.checked();
   this.survival = survivalBox.checked();
+  this.unique = uniqueBox.checked();
   this.name = nameBox.getText();
+  this.valueString = value.getText();
+  this.weightString = weight.getText();
   }
 
 
@@ -214,7 +225,6 @@ public void buttonClicked(GuiButton button)
 protected void mouseClicked(int par1, int par2, int par3)
   {
   super.mouseClicked(par1, par2, par3);
-  this.nameBox.mouseClicked(par1, par2, par3);
   }
 
 /**
@@ -223,14 +233,16 @@ protected void mouseClicked(int par1, int par2, int par3)
 @Override
 protected void keyTyped(char par1, int par2)
   {
-  if (this.nameBox.textboxKeyTyped(par1, par2))
-    {
-    
-    }
-  else
-    {
-    super.keyTyped(par1, par2);
-    }
+  super.keyTyped(par1, par2);
+  
+//  if (this.nameBox.textboxKeyTyped(par1, par2))
+//    {
+//    
+//    }
+//  else
+//    {
+//    super.keyTyped(par1, par2);
+//    }
   }
 
 

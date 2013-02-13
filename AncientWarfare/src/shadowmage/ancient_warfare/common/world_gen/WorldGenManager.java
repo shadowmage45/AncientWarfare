@@ -42,7 +42,7 @@ public class WorldGenManager implements IWorldGenerator, INBTTaggable
 {
 
 //TODO change back to private...
-public static Map<Integer, GeneratedStructureMap> dimensionStructures = new HashMap<Integer, GeneratedStructureMap>();
+public static Map<Integer, WorldGenStructureMap> dimensionStructures = new HashMap<Integer, WorldGenStructureMap>();
 
 private WorldGenManager(){};
 private static WorldGenManager INSTANCE;
@@ -57,13 +57,13 @@ public static WorldGenManager instance()
 
 public void loadConfig(String pathName)
   {
-  WorldGenStructureManager.instance().loadFromDirectory(pathName);
+  WorldGenStructureManager.instance().loadConfig(pathName);
   LootGenerator.instance().loadStaticLootTables();
   }
 
 public static void resetMap()
   {
-  dimensionStructures = new HashMap<Integer, GeneratedStructureMap>();
+  dimensionStructures = new HashMap<Integer, WorldGenStructureMap>();
   }
 
 public boolean attemptPlacementSubsurface(World world, int x, int z, ProcessedStructure struct, Random random)
@@ -77,7 +77,7 @@ public boolean attemptPlacementSubsurface(World world, int x, int z, ProcessedSt
     }
   int face = random.nextInt(4);
   BlockPosition hit = new BlockPosition(x,y,z);    
-  if(!struct.canGenerateAtSubSurface(world, hit, face))
+  if(!struct.canGenerateAtSubSurface(world, hit, face, struct))
     {
     Config.logDebug("underground structure rejected build site");
     return false;
@@ -91,7 +91,32 @@ public boolean attemptPlacementSubsurface(World world, int x, int z, ProcessedSt
   }
 
 public boolean attemptPlacementSurface(World world, int x, int z, ProcessedStructure struct, Random random)
-  {   
+  {  
+  WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
+  
+
+  int overhang = struct.maxOverhang;
+  int leveling = struct.maxLeveling;
+  int levelingB = struct.levelingBuffer;
+  int clearing = struct.maxVerticalClear;
+  int clearingB = struct.clearingBuffer;
+  if(ent!=null)
+    {
+    if(ent.hasOverhangOverride())
+      {
+      overhang = ent.overhang;
+      }
+    if(ent.hasClearingOverride())
+      {
+      clearing = ent.maxClearing;
+      clearingB = ent.clearingBuffer;
+      }
+    if(ent.hasLevlingOverride())
+      {
+      leveling = ent.maxLeveling;
+      levelingB = ent.levelingBuffer;
+      }
+    }
   
   int y = getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
   if(y==-1)
@@ -101,7 +126,7 @@ public boolean attemptPlacementSurface(World world, int x, int z, ProcessedStruc
     }
   int face = random.nextInt(4);
   BlockPosition hit = new BlockPosition(x,y,z);    
-  if(!struct.canGenerateAtSurface(world, hit.copy(), face))
+  if(!struct.canGenerateAtSurface(world, hit.copy(), face, struct, overhang, leveling, levelingB, clearing, clearingB))
     {
     Config.logDebug("site rejected by structure: "+struct.name);
     return false;
@@ -134,7 +159,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   int foundValue = 0;//found value
   if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
     {
-    WorldGenManager.instance().dimensionStructures.put(dim, new GeneratedStructureMap());
+    WorldGenManager.instance().dimensionStructures.put(dim, new WorldGenStructureMap("AWstructMap"));
     }
   Pair<Float, Integer> values =  WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(chunkX, chunkZ, maxRange);
   foundValue = values.value();
@@ -321,30 +346,35 @@ public int getTopBlockHeight(World world, int x, int z, int maxWater, int maxLav
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  NBTTagList tagList = new NBTTagList();
-  for(Integer i : dimensionStructures.keySet())
-    {
-    GeneratedStructureMap map = dimensionStructures.get(i);
-    NBTTagCompound mapTag = map.getNBTTag();
-    mapTag.setInteger("dim", i);
-    tagList.appendTag(mapTag);
-    }  
-  tag.setTag("dimList", tagList);
+//  NBTTagList tagList = new NBTTagList();
+//  for(Integer i : dimensionStructures.keySet())
+//    {
+//    GeneratedStructureMap map = dimensionStructures.get(i);
+//    NBTTagCompound mapTag = map.getNBTTag();
+//    mapTag.setInteger("dim", i);
+//    tagList.appendTag(mapTag);
+//    }  
+//  tag.setTag("dimList", tagList);
   return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  NBTTagList tagList = tag.getTagList("dimList");
-  for(int i = 0; i < tagList.tagCount(); i++)
-    {
-    NBTTagCompound entTag = (NBTTagCompound) tagList.tagAt(i);    
-    int dim = entTag.getInteger("dim");
-    GeneratedStructureMap map = new GeneratedStructureMap();
-    map.readFromNBT(entTag);
-    dimensionStructures.put(dim, map);
-    }
+//  NBTTagList tagList = tag.getTagList("dimList");
+//  for(int i = 0; i < tagList.tagCount(); i++)
+//    {
+//    NBTTagCompound entTag = (NBTTagCompound) tagList.tagAt(i);    
+//    int dim = entTag.getInteger("dim");
+//    GeneratedStructureMap map = new GeneratedStructureMap();
+//    map.readFromNBT(entTag);
+//    dimensionStructures.put(dim, map);
+//    }
+  }
+
+public void addStructureMapForDimension(int dim, WorldGenStructureMap map)
+  {
+  this.dimensionStructures.put(dim, map);
   }
 
 

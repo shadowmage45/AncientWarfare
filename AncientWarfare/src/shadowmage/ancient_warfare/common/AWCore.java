@@ -43,9 +43,9 @@ import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
 import shadowmage.ancient_warfare.common.utils.Pair;
-import shadowmage.ancient_warfare.common.world_gen.GeneratedStructureMap;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureMap;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -234,7 +234,7 @@ private List<String> doStructGenRun()
       int foundValue = 0;//found value
       if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
         {
-        WorldGenManager.instance().dimensionStructures.put(dim, new GeneratedStructureMap());
+        WorldGenManager.instance().dimensionStructures.put(dim, new WorldGenStructureMap("AWstructMap"));
         }
       Pair<Float, Integer> values =  WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(x, z, maxRange);
       foundValue = values.value();

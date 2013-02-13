@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.structures.build.BuilderInstant;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.ScannedStructureData;
@@ -303,10 +304,27 @@ private boolean attemptConstruction(World world, EntityPlayer player, BlockPosit
     }  
   if(shouldConstruct)
     {
-    BuilderTicked builder = new BuilderTicked(world, struct, face, hit);
+    return this.attemptConstruction(world, struct, hit, face);
+//    BuilderTicked builder = new BuilderTicked(world, struct, face, hit);
+//    builder.setWorld(world);
+//    builder.startConstruction();
+//    AWStructureModule.instance().addBuilder(builder);
+//    return true;
+    }
+  return false;
+  }
+
+@Override
+public boolean attemptConstruction(World world, ProcessedStructure struct,   BlockPosition hit, int facing)
+  {
+  if(!struct.isLocked())
+    {
+    BuilderTicked builder = new BuilderTicked(world, struct, facing, hit);
     builder.setWorld(world);
     builder.startConstruction();
     AWStructureModule.instance().addBuilder(builder);
+//    BuilderInstant builder = new BuilderInstant(world, struct, facing, hit);
+//    builder.startConstruction();
     return true;
     }
   return false;

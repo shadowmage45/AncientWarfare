@@ -168,16 +168,20 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       stack.setTagInfo("structData", tag);
       return true;
       }
-    this.attemptConstruction(world, struct, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit);
+    if(!this.attemptConstruction(world, struct, hit, BlockTools.getPlayerFacingFromYaw(player.rotationYaw)))
+      {
+      player.addChatMessage("Structure is currently locked for editing!!");
+      }
     }
   return true;
   }
 
-protected void attemptConstruction(World world, ProcessedStructure struct, int face, BlockPosition hit)
-  {
-  BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
-  builder.startConstruction();
-  } 
+//protected void attemptConstruction(World world, ProcessedStructure struct, int face, BlockPosition hit)
+//  {
+//  
+//  BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
+//  builder.startConstruction();
+//  } 
 
 @Override
 public StructureClientInfo getStructureForStack(ItemStack stack)
@@ -207,6 +211,19 @@ protected NBTTagCompound getStructData(ItemStack stack)
 @Override
 public boolean renderBuilderBlockBB()
   {
+  return false;
+  }
+
+
+@Override
+public boolean attemptConstruction(World world, ProcessedStructure struct,   BlockPosition hit, int facing)
+  {
+  if(!struct.isLocked())
+    {
+    BuilderInstant builder = new BuilderInstant(world, struct, facing, hit);
+    builder.startConstruction();
+    return true;
+    }
   return false;
   }
 

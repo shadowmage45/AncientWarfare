@@ -20,12 +20,22 @@
  */
 package shadowmage.ancient_warfare.common.world_gen;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import shadowmage.ancient_warfare.common.utils.StringTools;
+
 public class WorldGenStructureEntry
 {
 public final String name;
 public final boolean unique;
 public final int weight;
 public final int value;
+
+/**
+ * override values
+ */
+public final int overhang;
 public final int maxClearing;
 public final int clearingBuffer;
 public final int maxLeveling;
@@ -33,12 +43,12 @@ public final int levelingBuffer;
 public final String[] biomesOnly;
 public final String[] biomesNot;
 
-
+private final boolean overhangOverride;
 private final boolean clearingOverride;
 private final boolean levelingOverride;
 private final boolean biomeOverride;
 
-public WorldGenStructureEntry(String name, boolean unique, int weight, int value, int mC, int cB, int mL, int lB, String[] bO, String[] bN)
+public WorldGenStructureEntry(String name, boolean unique, int weight, int value, int mC, int cB, int mL, int lB, String[] bO, String[] bN, int overHang)
   {
   this.name = name;
   this.unique = unique;
@@ -50,6 +60,15 @@ public WorldGenStructureEntry(String name, boolean unique, int weight, int value
   this.levelingBuffer = lB;
   this.biomesOnly = bO;
   this.biomesNot = bN;
+  this.overhang = overHang;
+  if(this.overhang>=0)
+    {
+    this.overhangOverride = true;
+    }
+  else
+    {
+    this.overhangOverride = false;
+    }
   if(this.maxClearing>=0)
     {
     this.clearingOverride = true;
@@ -91,6 +110,50 @@ public boolean hasBiomeOverride()
   return this.biomeOverride;
   }
 
+public boolean hasOverhangOverride()
+  {
+  return this.overhangOverride;
+  }
 
+/**
+ * returns a list of lines which represent this entire entry (including header and terminator)
+ * @return
+ */
+public List<String> getEntryLines()
+  {
+  ArrayList<String> lines = new ArrayList<String>();
+  lines.add("entry:");
+  lines.add("name="+name);
+  lines.add("weight="+weight);
+  lines.add("value="+value);
+  if(overhangOverride)
+    {
+    lines.add("overhang="+overhang);
+    }
+  if(clearingOverride)
+    {
+    lines.add("maxVerticalClear="+maxClearing);
+    lines.add("clearingBuffer="+clearingBuffer);
+    }
+  if(levelingOverride)
+    {
+    lines.add("maxLeveling="+maxLeveling);
+    lines.add("levelingBuffer="+levelingBuffer);
+    }
+  if(biomeOverride)
+    {
+    if(biomesNot!=null)
+      {
+      lines.add("biomesNotIn="+StringTools.getCSVValueFor(biomesNot));
+      }
+    else if(biomesOnly!=null)
+      {
+      lines.add("biomesOnlyIn="+StringTools.getCSVValueFor(biomesOnly));
+      }
+    }
+  
+  lines.add(":endentry");  
+  return lines;
+  }
 
 }

@@ -20,13 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.structures.data;
 
-import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NPCRule;
@@ -48,7 +51,8 @@ private Set<Builder> openBuilders = new HashSet<Builder>();
 /**
  * if it is being edited....
  */
-public boolean lockedForEdit = false;
+//public boolean lockedForEdit = false;
+private List<String> openEditors = new ArrayList<String>();
 
 /**
  * mostly file IO stuff...
@@ -157,6 +161,46 @@ public int zOffset;
 public int xSize;//x dimension
 public int zSize;//z dimension
 public int ySize;//y dimension
+
+public boolean isLocked()
+  {
+  if(this.openEditors.size()==0)
+    {
+    return false;
+    }
+  Iterator<String> it = this.openEditors.iterator();
+  String name;
+  EntityPlayer player;
+  while(it.hasNext())
+    {
+    name = it.next();
+    player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name);
+    if(player==null)
+      {
+      it.remove();
+      }
+    }
+  if(this.openEditors.size()>0)
+    {
+    return true;
+    }
+  return false;
+  }
+
+public int openEditorcount()
+  {
+  return this.openEditors.size();  
+  }
+
+public void addEditor(String name)
+  {
+  this.openEditors.add(name);
+  }
+
+public void removeEditor(String name)
+  {
+  this.openEditors.remove(name);
+  }
 
 public int openBuilderCount()
   {

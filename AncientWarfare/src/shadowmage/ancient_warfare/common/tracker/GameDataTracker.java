@@ -31,6 +31,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureMap;
 
 /**
  * handles saving and loading of game data to world directory
@@ -130,10 +131,18 @@ public void handleWorldLoad(World world)
     {
     AWStructureModule.instance().readFromNBT(tag.getCompoundTag("builders"));
     }  
-  if(tag.hasKey("structMap"))
+  
+  
+  WorldGenStructureMap map = (WorldGenStructureMap)world.perWorldStorage.loadData(WorldGenStructureMap.class, "AWstructMap");
+  if(map!=null)
     {
-    WorldGenManager.instance().readFromNBT(tag.getCompoundTag("structMap"));
+    WorldGenManager.instance().addStructureMapForDimension(world.getWorldInfo().getDimension(), map);
     }
+  
+//  if(tag.hasKey("structMap"))
+//    {
+//    WorldGenManager.instance().readFromNBT(tag.getCompoundTag("structMap"));
+//    }
   }
 
 public void handleWorldSave(World world)
@@ -169,18 +178,28 @@ public void handleWorldSave(World world)
     if(setTag!=null)
       {
       tag.setCompoundTag("builders", setTag);
-      }
-    setTag = WorldGenManager.instance().getNBTTag();
-    if(setTag!=null)
-      {
-      tag.setCompoundTag("structMap", setTag);
-      }
+      } 
+//    setTag = WorldGenManager.instance().getNBTTag();
+//    if(setTag!=null)
+//      {
+//      tag.setCompoundTag("structMap", setTag);
+//      }
     if(tag==null || rawFile==null)
       {
       Config.logDebug("null tag or rawFile detected on WorldSave");
       return;
       }
     CompressedStreamTools.write(tag, rawFile);
+    
+    /**
+     * this ensures that the savedData is the most-recent data...
+     */
+    WorldGenStructureMap map = WorldGenManager.dimensionStructures.get(world.getWorldInfo().getDimension());
+    if(map!=null)
+      {
+      world.perWorldStorage.setData("AWstructMap", map);
+      }
+    
     }
   catch (IOException e)
     {

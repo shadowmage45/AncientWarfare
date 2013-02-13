@@ -51,6 +51,9 @@ public int zSize;
 String name = "default";
 boolean world = false;
 boolean survival = false;
+int weight;
+int value;
+boolean unique;
 
 /**
  * what formats to export to
@@ -126,22 +129,34 @@ public void handleExportSettings(NBTTagCompound tag)
     {
     this.includeOnExport = tag.getBoolean("inc");
     }
+  if(tag.hasKey("weight"))
+    {
+    this.weight = tag.getInteger("weight");
+    }
+  if(tag.hasKey("value"))
+    {
+    this.value = tag.getInteger("value");
+    }
+  if(tag.hasKey("unique"))
+    {
+    this.unique = tag.getBoolean("unique");
+    }
   }
 
-public void sendSettingsAndExport(String name, boolean world, boolean surv, boolean fR, boolean fAW, boolean inc)
-  {
-  NBTTagCompound baseTag = new NBTTagCompound();
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setString("name", name);
-  tag.setBoolean("world", world);
-  tag.setBoolean("surv", surv);
-  tag.setBoolean("fR", fR);
-  tag.setBoolean("fAW", fAW);
-  tag.setBoolean("inc", inc);
-  
-  baseTag.setTag("export", tag);
-  this.sendDataToServer(baseTag);
-  }
+//public void sendSettingsAndExport(String name, boolean world, boolean surv, boolean fR, boolean fAW, boolean inc)
+//  {
+//  NBTTagCompound baseTag = new NBTTagCompound();
+//  NBTTagCompound tag = new NBTTagCompound();
+//  tag.setString("name", name);
+//  tag.setBoolean("world", world);
+//  tag.setBoolean("surv", surv);
+//  tag.setBoolean("fR", fR);
+//  tag.setBoolean("fAW", fAW);
+//  tag.setBoolean("inc", inc);
+//  
+//  baseTag.setTag("export", tag);
+//  this.sendDataToServer(baseTag);
+//  }
 
 public void handleEditServer(NBTTagCompound tag)
   {
@@ -153,7 +168,7 @@ public void handleEditServer(NBTTagCompound tag)
   player.openContainer = edit;
   }
 
-public void handleEditClient(String name, boolean world, boolean surv, boolean fR, boolean fAW, boolean inc)
+public void sendSettingsAndExport(String name, boolean world, boolean surv, boolean fR, boolean fAW, boolean inc, int weight, int val, boolean unique)
   {
   NBTTagCompound baseTag = new NBTTagCompound();
   NBTTagCompound tag = new NBTTagCompound();
@@ -165,7 +180,12 @@ public void handleEditClient(String name, boolean world, boolean surv, boolean f
   tag.setBoolean("fAW", fAW);
   tag.setBoolean("inc", inc);
   tag.setString("setStructure", name);
-  
+  if(world)
+    {
+    tag.setBoolean("unique", unique);
+    tag.setInteger("value", value);
+    tag.setInteger("weight", weight);
+    }  
   baseTag.setTag("edit", tag);
   this.sendDataToServer(baseTag);
   }
@@ -190,6 +210,7 @@ public void export()
   struct.name = this.name;
   if(this.world)
     {
+    WorldGenStructureManager.instance().addEntry(struct, weight, value, unique);
 //    if(struct.worldGen)
 //      {
 //      WorldGenStructureManager.instance().addStructure(struct, false, 1, 1);//TODO add values to export config, or remove the entire thing...

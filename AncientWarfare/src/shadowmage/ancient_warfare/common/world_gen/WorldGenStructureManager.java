@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.world_gen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -33,13 +34,13 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
-import com.google.common.io.ByteStreams;
-
 import net.minecraft.world.biome.BiomeGenBase;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.utils.StringTools;
+
+import com.google.common.io.ByteStreams;
 
 public class WorldGenStructureManager
 {
@@ -50,10 +51,18 @@ public class WorldGenStructureManager
  */
 private HashMap<String, WorldGenBiomeStructList> biomesStructureMap = new HashMap<String, WorldGenBiomeStructList>();
 
+/**
+ * config values for world gen global settings
+ */
 private int[] validDimensions;
 private int[] invalidDimensions;
 
+/**
+ * name-map of loaded world-gen structure settings...
+ */
 private HashMap<String, WorldGenStructureEntry> namesStructureMap = new HashMap<String, WorldGenStructureEntry>();
+
+private static File configFile;
 
 private class WorldGenBiomeStructList
 {
@@ -73,6 +82,7 @@ public void addEntry(WorldGenStructureEntry entry)
     }
   else
     {
+    Config.logError("Attempt to register duplicate structure name for world-generation. name: "+entry.name);
     return;
     }
   totalWeight += entry.weight; 
@@ -149,6 +159,11 @@ public static WorldGenStructureManager instance()
   return INSTANCE;
   }
 
+public WorldGenStructureEntry getEntryFor(String name)
+  {
+  return this.namesStructureMap.get(name);
+  }
+
 public int getValueFor(String name)
   {
   if(this.namesStructureMap.containsKey(name))
@@ -213,26 +228,27 @@ private void loadBiomesList()
     }
   }
 
-//public void addStructure(ProcessedStructure struct, boolean unique, int weight, int value)
-//  {
-//  if(struct==null)
-//    {
-//    return;
-//    }  
-//  WorldGenStructureEntry ent = new WorldGenStructureEntry(struct.name, unique, weight, value); 
-//  if(struct.biomesNotIn!=null)
-//    {
-//    this.addToAllButBiomes(ent, struct.biomesNotIn);
-//    }
-//  else if(struct.biomesOnlyIn!=null)
-//    {
-//    this.addToOnlyBiomes(ent, struct.biomesOnlyIn);
-//    }
-//  else
-//    {
-//    this.addToAllBiomes(ent);
-//    }
-//  }
+/**
+ * adds a world-gen entry from a processed structure (used by structure scanner exporter)
+ * calls saveConfig, to ensure exported settings are re-loaded upon game restart... 
+ * @param struct
+ * @param weight
+ * @param value
+ */
+public void addEntry(ProcessedStructure struct, int weight, int value, boolean unique)
+  {
+  String name = struct.name;
+  int ov = struct.maxOverhang;
+  int mL = struct.maxLeveling;
+  int lB = struct.levelingBuffer;
+  int mC = struct.maxVerticalClear;
+  int cB = struct.clearingBuffer;
+  String[] bO = struct.biomesOnlyIn;
+  String[] bN = struct.biomesNotIn;
+  WorldGenStructureEntry entry = new WorldGenStructureEntry(name, unique, weight, value, mC, cB, mL, lB, bO, bN, ov);
+  this.addStructureEntry(entry);
+  this.saveConfig();
+  }
 
 private void addStructureEntry(WorldGenStructureEntry ent)
   {
@@ -371,7 +387,7 @@ private void copyDefaultFile(String fileName)
  * load config from file, or export default if none exists
  * @param pathName
  */
-public void loadFromDirectory(String pathName)
+public void loadConfig(String pathName)
   {
   try
     {
@@ -383,6 +399,7 @@ public void loadFromDirectory(String pathName)
       Config.logDebug("AWWorldGen.cfg could not be located, creating default file.");
       return;
       }
+    this.configFile = configFile;
     FileInputStream fis = new FileInputStream(configFile);
            
     Scanner scan = new Scanner(fis);
@@ -426,6 +443,60 @@ public void loadFromDirectory(String pathName)
     } 
   }
 
+/**
+ * attempts to save current in-game config out to disk, using currently set config file
+ * fails if current file is null (means original load failed...you've got bigger problems)
+ */
+public void saveConfig()
+  {
+  if(this.configFile==null)
+    {
+    Config.logError("Null file reference when attempting to save world-gen config to disk");
+    return;
+    }
+  try
+    {
+    FileWriter writer = new FileWriter(this.configFile);
+    List<String> lines = this.getConfigLines();
+    for(String line : lines)
+      {
+      writer.write(line+"\n");      
+      }
+    writer.write("\n");
+    
+    for(String name : this.namesStructureMap.keySet())
+      {
+      WorldGenStructureEntry ent = this.namesStructureMap.get(name);
+      writer.write("\n");      
+      lines = ent.getEntryLines();
+      for(String line : lines)
+        {
+        writer.write(line+"\n");      
+        }
+      }    
+    writer.close();
+    }
+  catch(IOException e)
+    {
+    Config.logError("Error while attempting to save world-gen config to disk");
+    }
+  }
+
+private List<String> getConfigLines()
+  {
+  ArrayList<String> lines = new ArrayList<String>();
+  lines.add("config:");  
+  if(this.invalidDimensions!=null)
+    {
+    lines.add("invalidDimensions=");
+    }
+  else if(this.validDimensions!=null)
+    {
+    lines.add("validDimensions=");
+    }
+  lines.add(":endconfig");
+  return lines;
+  }
 
 private void parseConfig(Iterator<String> it)
   {
@@ -466,6 +537,7 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
   int cB = -1;
   int mL = -1;
   int lB = -1;
+  int ov = -1;
   String[] bO = null;
   String[] bN = null;
   boolean unique = false;
@@ -496,11 +568,11 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
       {
       unique = StringTools.safeParseBoolean("=", line);
       }
-    if(line.toLowerCase().startsWith("maxverticalClear"))
+    if(line.toLowerCase().startsWith("maxverticalclear"))
       {
       mC = StringTools.safeParseInt("=", line);
       }
-    if(line.toLowerCase().startsWith("clearingBuffer"))
+    if(line.toLowerCase().startsWith("clearingbuffer"))
       {
       cB = StringTools.safeParseInt("=", line);
       }
@@ -508,7 +580,7 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
       {
       mL = StringTools.safeParseInt("=", line);
       }
-    if(line.toLowerCase().startsWith("levelingBuffer"))
+    if(line.toLowerCase().startsWith("levelingbuffer"))
       {
       lB = StringTools.safeParseInt("=", line);
       }
@@ -519,7 +591,11 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
     if(line.toLowerCase().startsWith("biomesonlyin"))
       {
       bO = StringTools.safeParseStringArray("=", line);
-      }    
+      }   
+    if(line.toLowerCase().startsWith("overhang"))
+      {
+      ov = StringTools.safeParseInt("=", line);
+      }
     }
   if(name.equals("") || weight == 0 || value == -1)
     {
@@ -534,11 +610,17 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
     {
     lB = 0;
     }
-  WorldGenStructureEntry ent = new WorldGenStructureEntry(name, unique, weight, value, mC, cB, mL, lB, bO, bN);
+  WorldGenStructureEntry ent = new WorldGenStructureEntry(name, unique, weight, value, mC, cB, mL, lB, bO, bN, ov);
   return ent;
   }
 
-
+/**
+ * attempt to find a world-gen structure valid for the given biome and maxValue, null if none
+ * @param biomeName
+ * @param maxValue
+ * @param random
+ * @return
+ */
 public ProcessedStructure getStructureForBiome(String biomeName, int maxValue, Random random)
   {
   if(this.biomesStructureMap.containsKey(biomeName.toLowerCase()))

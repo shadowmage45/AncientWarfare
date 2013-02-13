@@ -180,6 +180,7 @@ public void setStructureServer(NBTTagCompound tag)
     this.serverStructure = null;
     return;
     }
+  this.serverStructure.addEditor(this.player.getEntityName());
   this.structureFilePath = serverStructure.filePath;
   try
     {
@@ -270,6 +271,7 @@ private void saveTemplateServer(ProcessedStructure newStruct)
     }
   StructureManager.instance().addStructure(newStruct, true);
   serverStructure = newStruct;
+  serverStructure.addEditor(this.player.getEntityName());
   }
 
 @Override
@@ -282,5 +284,17 @@ public List<NBTTagCompound> getInitData()
   {
   return null;
   }
+
+@Override
+public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
+  {
+  if(this.serverStructure!=null)
+    {
+    this.serverStructure.removeEditor(this.player.getEntityName());
+    }
+  super.onCraftGuiClosed(par1EntityPlayer);
+  }
+
+
 
 }

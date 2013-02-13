@@ -23,6 +23,8 @@ package shadowmage.ancient_warfare.common.structures.data;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureEntry;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 
 public class StructureClientInfo
 {
@@ -59,6 +61,25 @@ public StructureClientInfo(NBTTagCompound tag)
 
 public static NBTTagCompound getClientTag(AWStructure struct)
  {
+ WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
+ int leveling = struct.maxLeveling;
+ int levelingB = struct.levelingBuffer;
+ int clearing = struct.maxVerticalClear;
+ int clearingB = struct.clearingBuffer;
+ if(ent!=null)
+   {   
+   if(ent.hasClearingOverride())
+     {
+     clearing = ent.maxClearing;
+     clearingB = ent.clearingBuffer;
+     }
+   if(ent.hasLevlingOverride())
+     {
+     leveling = ent.maxLeveling;
+     levelingB = ent.levelingBuffer;
+     }
+   } 
+ 
  NBTTagCompound structTag = new NBTTagCompound();
  if(struct!=null)
    {
@@ -70,10 +91,10 @@ public static NBTTagCompound getClientTag(AWStructure struct)
    structTag.setShort("yO", (short)struct.verticalOffset);
    structTag.setShort("zO", (short)struct.zOffset);
    structTag.setBoolean("surv", struct.survival);
-   structTag.setInteger("mL", struct.maxLeveling);
-   structTag.setInteger("mC", struct.maxVerticalClear);
-   structTag.setInteger("lB", struct.levelingBuffer);
-   structTag.setInteger("cB", struct.clearingBuffer);
+   structTag.setInteger("mL", leveling);
+   structTag.setInteger("mC", clearing);
+   structTag.setInteger("lB", levelingB);
+   structTag.setInteger("cB", clearingB);
    }
  return structTag;
  }

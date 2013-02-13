@@ -31,6 +31,20 @@ import java.util.Scanner;
 public class StringTools
 {
 
+public static String getCSVValueFor(String[] values)
+  {
+  String line = "";
+  for(int i = 0; i < values.length; i++)
+    {
+    if(i >=1 )
+      {
+      line = line + ",";
+      }
+    line = line + values[i];    
+    }
+  return "";
+  }
+
 /**
  * splits test at regex, returns parsed int array from csv value of remaining string
  * returns size 1 int array if no valid split is found

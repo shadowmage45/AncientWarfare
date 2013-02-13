@@ -24,54 +24,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.utils.Pair;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.MathHelper;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.utils.Pair;
-import shadowmage.ancient_warfare.common.utils.Pos3f;
+import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.storage.ISaveHandler;
 
-public class GeneratedStructureMap implements INBTTaggable
+/**
+ * per-world generated structure map....saved with world-data on world-save...
+ * @author Shadowmage
+ *
+ */
+public class WorldGenStructureMap extends WorldSavedData
 {
+
 private HashMap<Integer, HashMap<Integer, GeneratedStructureEntry>> generatedStructures = new HashMap<Integer, HashMap<Integer, GeneratedStructureEntry>>();
 private List<String> generatedUniques = new ArrayList<String>();
 
-@Override
-public NBTTagCompound getNBTTag()
+/**
+ * @param par1Str
+ */
+public WorldGenStructureMap(String par1Str)
   {
-  /**
-   * struct:
-   * tag-  -mainData
-   *   list- xList
-   *     tag xTag
-   *      int x  pos in map
-   *      list zList
-   *        tag z pos in map
-   *        <also entry tag, z is appended to entrytag> 
-   * 
-   */
-  NBTTagCompound tag = new NBTTagCompound();
-  NBTTagList xList = new NBTTagList();
-  for(Integer x : this.generatedStructures.keySet())
-    {
-    NBTTagCompound xTag = new NBTTagCompound();
-    xTag.setInteger("x", x);
-    NBTTagList zList = new NBTTagList();
-    for(Integer z : this.generatedStructures.get(x).keySet())
-      {
-      NBTTagCompound entTag = this.generatedStructures.get(x).get(z).getNBTTag();
-      if(entTag!=null)
-        {
-        entTag.setInteger("z", z);
-        zList.appendTag(entTag);
-        }
-      }    
-    xTag.setTag("z", zList);
-    xList.appendTag(xTag);
-    }
-  tag.setTag("x", xList);  
-  return tag;
+  super(par1Str);
   }
 
 @Override
@@ -108,6 +85,41 @@ public void readFromNBT(NBTTagCompound tag)
       this.generatedStructures.get(xPos).put(zPos, ent);
       }
     }
+  }
+
+@Override
+public void writeToNBT(NBTTagCompound tag)
+  {
+  /**
+   * struct:
+   * tag-  -mainData
+   *   list- xList
+   *     tag xTag
+   *      int x  pos in map
+   *      list zList
+   *        tag z pos in map
+   *        <also entry tag, z is appended to entrytag> 
+   * 
+   */  
+  NBTTagList xList = new NBTTagList();
+  for(Integer x : this.generatedStructures.keySet())
+    {
+    NBTTagCompound xTag = new NBTTagCompound();
+    xTag.setInteger("x", x);
+    NBTTagList zList = new NBTTagList();
+    for(Integer z : this.generatedStructures.get(x).keySet())
+      {
+      NBTTagCompound entTag = this.generatedStructures.get(x).get(z).getNBTTag();
+      if(entTag!=null)
+        {
+        entTag.setInteger("z", z);
+        zList.appendTag(entTag);
+        }
+      }    
+    xTag.setTag("z", zList);
+    xList.appendTag(xTag);
+    }
+  tag.setTag("x", xList);
   }
 
 /**
@@ -288,5 +300,4 @@ public Pair<Float, Integer> getClosestStructureDistance(int sourceX, int sourceZ
     }  
   return new Pair<Float, Integer>(closestStructure, foundValue);
   }
-
 }
