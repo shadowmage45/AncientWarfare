@@ -271,8 +271,7 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
     {
     struct.isValid = false;
     return null;
-    }
-  //struct.blockRules.add(new BlockRule(0,0,0));
+    }  
   Iterator<String> it = lines.iterator();
   String line;
   while(it.hasNext())
@@ -435,6 +434,7 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
     {
     return null;
     }
+  struct.blockRules.put(0, new BlockRule(0,0,0));
   struct.md5 = md5;
   struct.setTemplateLines(lines);
   return struct;

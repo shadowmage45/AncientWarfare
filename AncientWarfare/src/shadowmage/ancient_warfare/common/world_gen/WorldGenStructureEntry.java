@@ -26,22 +26,71 @@ public final String name;
 public final boolean unique;
 public final int weight;
 public final int value;
+public final int maxClearing;
+public final int clearingBuffer;
+public final int maxLeveling;
+public final int levelingBuffer;
+public final String[] biomesOnly;
+public final String[] biomesNot;
 
-public WorldGenStructureEntry(String csv)
-  {
-  String[] split = csv.trim().split(",");
-  name = split[0];
-  unique = Boolean.parseBoolean(split[1].trim());
-  weight = Integer.parseInt(split[2].trim());
-  value = Integer.parseInt(split[3].trim());
-  }
 
-public WorldGenStructureEntry(String name, boolean unique, int weight, int value)
+private final boolean clearingOverride;
+private final boolean levelingOverride;
+private final boolean biomeOverride;
+
+public WorldGenStructureEntry(String name, boolean unique, int weight, int value, int mC, int cB, int mL, int lB, String[] bO, String[] bN)
   {
   this.name = name;
   this.unique = unique;
   this.weight = weight;
   this.value = value;
+  this.maxClearing = mC;
+  this.clearingBuffer = cB;
+  this.maxLeveling = mL;
+  this.levelingBuffer = lB;
+  this.biomesOnly = bO;
+  this.biomesNot = bN;
+  if(this.maxClearing>=0)
+    {
+    this.clearingOverride = true;
+    }
+  else
+    {
+    this.clearingOverride = false;
+    }
+  if(this.maxLeveling>=0)
+    {
+    this.levelingOverride = true;
+    }
+  else
+    {
+    this.levelingOverride = false;
+    }
+  if(this.biomesNot !=null || this.biomesOnly!=null)
+    {
+    this.biomeOverride = true;
+    }
+  else
+    {
+    this.biomeOverride = false;
+    }
   }
+
+public boolean hasClearingOverride()
+  {
+  return this.clearingOverride;
+  }
+
+public boolean hasLevlingOverride()
+  {
+  return this.levelingOverride;
+  }
+
+public boolean hasBiomeOverride()
+  {
+  return this.biomeOverride;
+  }
+
+
 
 }

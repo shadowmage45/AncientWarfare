@@ -155,6 +155,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   int z = chunkZ*16 + random.nextInt(16);  
   String biomeName = world.provider.getBiomeGenForCoords(x, z).biomeName;
   int maxValue = Config.structureGenMaxClusterValue - foundValue;
+  maxValue = maxValue < 0 ? 0 : maxValue;
   ProcessedStructure struct = WorldGenStructureManager.instance().getStructureForBiome(biomeName, maxValue, random);
   if(struct!=null)
     {   

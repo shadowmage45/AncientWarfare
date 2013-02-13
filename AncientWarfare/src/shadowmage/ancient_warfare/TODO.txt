@@ -12,6 +12,7 @@ TESTING
 * test structure weighting
 * test underground buildings
 * test submerged code
+* test that static air rule works properly
 
 
 TEMPLATES
@@ -19,14 +20,17 @@ TEMPLATES
 
 
 SCANNER
-* add export settings for world-gen (weight, value)
-
+* remove export settings for world-gen (files will have to be explicitly added)
+        the only settings that should remain are - export to ruins
+        
 
 STRUCTURE BUILDING
 
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and dissallow non-dungeon structures?)
+* change world-gen config over to use a regular config file format??
+
 
 
 SURVIVAL MODE STRUCTURE BUILDING
@@ -208,7 +212,7 @@ TWEAKS/OPTIMIZATION
 * clean up a few chunkloading related bugs (bugs from the day, pt4)
 * add builderTE/block onRemove code to release tickets...
 /********** 02-12-13 **********/
-
+* enforce air-zero rule (hard-coded, non-replaceable)
 
 
 

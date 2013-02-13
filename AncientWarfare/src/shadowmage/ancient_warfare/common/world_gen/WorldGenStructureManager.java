@@ -96,6 +96,12 @@ public String getRandomWeightedEntry(Random random)
   return "";
   }
 
+/**
+ * actually gets a structure equal to or less than maxValue, so it should get zero-valued structures still
+ * @param maxValue
+ * @param random
+ * @return
+ */
 public String getRandomWeightedEntryBelow(int maxValue, Random random)
   {
   int foundTotalWeight = 0;
@@ -207,26 +213,26 @@ private void loadBiomesList()
     }
   }
 
-public void addStructure(ProcessedStructure struct, boolean unique, int weight, int value)
-  {
-  if(struct==null)
-    {
-    return;
-    }  
-  WorldGenStructureEntry ent = new WorldGenStructureEntry(struct.name, unique, weight, value); 
-  if(struct.biomesNotIn!=null)
-    {
-    this.addToAllButBiomes(ent, struct.biomesNotIn);
-    }
-  else if(struct.biomesOnlyIn!=null)
-    {
-    this.addToOnlyBiomes(ent, struct.biomesOnlyIn);
-    }
-  else
-    {
-    this.addToAllBiomes(ent);
-    }
-  }
+//public void addStructure(ProcessedStructure struct, boolean unique, int weight, int value)
+//  {
+//  if(struct==null)
+//    {
+//    return;
+//    }  
+//  WorldGenStructureEntry ent = new WorldGenStructureEntry(struct.name, unique, weight, value); 
+//  if(struct.biomesNotIn!=null)
+//    {
+//    this.addToAllButBiomes(ent, struct.biomesNotIn);
+//    }
+//  else if(struct.biomesOnlyIn!=null)
+//    {
+//    this.addToOnlyBiomes(ent, struct.biomesOnlyIn);
+//    }
+//  else
+//    {
+//    this.addToAllBiomes(ent);
+//    }
+//  }
 
 private void addStructureEntry(WorldGenStructureEntry ent)
   {
@@ -361,6 +367,10 @@ private void copyDefaultFile(String fileName)
   Config.log("Exported default file: AWConfig.cfg");  
   }
 
+/**
+ * load config from file, or export default if none exists
+ * @param pathName
+ */
 public void loadFromDirectory(String pathName)
   {
   try
@@ -452,6 +462,12 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
   String name = "";
   int weight = 0;
   int value = -1;
+  int mC = -1;
+  int cB = -1;
+  int mL = -1;
+  int lB = -1;
+  String[] bO = null;
+  String[] bN = null;
   boolean unique = false;
   while(it.hasNext())
     {
@@ -480,13 +496,45 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
       {
       unique = StringTools.safeParseBoolean("=", line);
       }
+    if(line.toLowerCase().startsWith("maxverticalClear"))
+      {
+      mC = StringTools.safeParseInt("=", line);
+      }
+    if(line.toLowerCase().startsWith("clearingBuffer"))
+      {
+      cB = StringTools.safeParseInt("=", line);
+      }
+    if(line.toLowerCase().startsWith("maxleveling"))
+      {
+      mL = StringTools.safeParseInt("=", line);
+      }
+    if(line.toLowerCase().startsWith("levelingBuffer"))
+      {
+      lB = StringTools.safeParseInt("=", line);
+      }
+    if(line.toLowerCase().startsWith("biomesnotin"))
+      {
+      bN = StringTools.safeParseStringArray("=", line);
+      }
+    if(line.toLowerCase().startsWith("biomesonlyin"))
+      {
+      bO = StringTools.safeParseStringArray("=", line);
+      }    
     }
   if(name.equals("") || weight == 0 || value == -1)
     {
     Config.logError("Improperly formatted structure in world gen config file");
     return null;
     }
-  WorldGenStructureEntry ent = new WorldGenStructureEntry(name, unique, weight, value);
+  if(mC >=0 && cB<0)
+    {
+    cB = 0;
+    }
+  if(mL >=0 && lB < 0)
+    {
+    lB = 0;
+    }
+  WorldGenStructureEntry ent = new WorldGenStructureEntry(name, unique, weight, value, mC, cB, mL, lB, bO, bN);
   return ent;
   }
 

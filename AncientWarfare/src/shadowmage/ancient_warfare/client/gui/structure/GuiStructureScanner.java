@@ -39,6 +39,8 @@ boolean formatRuins;
 boolean worldGen;
 boolean survival;
 String name = "";
+String weightString = "";
+String valueString = "";
 
 
 GuiCheckBox formatAWBox;
@@ -106,7 +108,6 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void setupGui()
   {
-  this.controlList.clear();
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
   this.addGuiButton(1, 256-45-10, 30, 45, 18, "Export");
   this.addGuiButton(8, 256-45-10, 50, 45, 18, "Reset");
@@ -124,6 +125,9 @@ public void setupGui()
   nameBox.setMaxStringLength(30);
   nameBox.setText(name);
   
+  weight = this.addTextField(1, 145, 150, 20, 10, 3, weightString).setAsNumberBox();
+  value = this.addTextField(2, 145, 170, 20, 10, 3, valueString).setAsNumberBox();
+  
   }
 
 @Override
@@ -132,6 +136,14 @@ public void updateScreenContents()
   if(nameBox!=null)
     {
     this.name = nameBox.getText();
+    }
+  if(this.weight!=null)
+    {
+    this.weightString = this.weight.getText();
+    }
+  if(this.value!=null)
+    {
+    this.valueString = this.value.getText();
     }
   }
 

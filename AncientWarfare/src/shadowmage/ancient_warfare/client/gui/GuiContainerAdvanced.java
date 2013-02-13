@@ -42,8 +42,8 @@ public DecimalFormat formatterOneDec = new DecimalFormat("#.#");
  * over buttons and functions, while only overridding a minimal amount of vanilla code (and still allowing
  * for full use of the vanilla slot rendering and interface)
  */
-ArrayList<GuiTextFieldAdvanced> textBoxes = new ArrayList<GuiTextFieldAdvanced>();
-ArrayList<GuiButton> buttons = new ArrayList<GuiButton>();
+protected ArrayList<GuiTextFieldAdvanced> textBoxes = new ArrayList<GuiTextFieldAdvanced>();
+protected ArrayList<GuiButton> buttons = new ArrayList<GuiButton>();
 protected GuiButton currentButton = null;
 
 
@@ -234,6 +234,7 @@ public void initGui()
   { 
   super.initGui();  
   this.textBoxes.clear();
+  this.buttons.clear();
   this.setupGui();
   }
 
@@ -498,9 +499,24 @@ protected void mouseClicked(int mouseX, int mouseY, int buttonNum)
     if(button.mousePressed(mc, mouseX, mouseY))
       {
       this.currentButton = button;
+      this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
       this.actionPerformed(button);
       }
     } 
+  }
+
+@Override
+public void drawScreen(int par1, int par2, float par3)
+  {  
+  super.drawScreen(par1, par2, par3);
+  GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+  RenderHelper.disableStandardItemLighting();
+  GL11.glDisable(GL11.GL_LIGHTING);
+  GL11.glDisable(GL11.GL_DEPTH_TEST);
+  for (GuiButton button : this.buttons)
+    {
+    button.drawButton(mc, par1, par2);
+    }
   }
 
 @Override

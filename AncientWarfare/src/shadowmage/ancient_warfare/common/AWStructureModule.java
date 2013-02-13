@@ -32,6 +32,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
@@ -61,6 +62,7 @@ public class AWStructureModule implements ITickHandler, INBTTaggable
  */
 private static final String defaultTemplateDirectory = "/shadowmage/ancient_warfare/resources/templates/";
 
+
 /**
  * the base config directory
  */
@@ -79,7 +81,7 @@ private static final List<String> defaultExportStructures = new ArrayList<String
 private boolean shouldExportDefaults = false;
 
 /**
- * ticked builders
+ * ticked builders (direct builders, those with no building block)
  */
 private static List<Builder> builders = new ArrayList<Builder>();
 

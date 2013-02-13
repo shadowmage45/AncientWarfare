@@ -26,9 +26,10 @@ public GuiTextFieldAdvanced(int id, GuiContainerAdvanced parent, int xPos,  int 
   this.ySize = ySize;
   }
 
-public void setAsNumberBox()
+public GuiTextField setAsNumberBox()
   {
   this.isNumberValue = true;
+  return this;
   }
 
 @Override
@@ -49,9 +50,27 @@ public boolean textboxKeyTyped(char par1, int par2)
       this.parent.onTextBoxActivated(this, -1);
       }
     }
+  if(this.isNumberValue)
+    {
+    boolean found = false;
+    for(char ch : this.validNumbers)
+      {
+      if(ch == par1)
+        {
+        found =true;
+        break;
+        }
+      }
+    if(!found)
+      {
+      return false;
+      }
+    }
   
   return super.textboxKeyTyped(par1, par2);
   }
+
+char[] validNumbers = new char[]{'0','1','2','3','4','5','6','7','8','9'};
 
 public boolean onMouseWheel(int change)
   {
