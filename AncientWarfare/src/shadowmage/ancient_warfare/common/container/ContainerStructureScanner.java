@@ -168,7 +168,7 @@ public void handleEditServer(NBTTagCompound tag)
   player.openContainer = edit;
   }
 
-public void sendSettingsAndExport(String name, boolean world, boolean surv, boolean fR, boolean fAW, boolean inc, int weight, int val, boolean unique)
+public void sendSettingsAndExport(String name, boolean world, boolean surv, boolean fR, boolean fAW, boolean inc, int weight, int val, boolean unique, boolean edit)
   {
   NBTTagCompound baseTag = new NBTTagCompound();
   NBTTagCompound tag = new NBTTagCompound();
@@ -183,10 +183,17 @@ public void sendSettingsAndExport(String name, boolean world, boolean surv, bool
   if(world)
     {
     tag.setBoolean("unique", unique);
-    tag.setInteger("value", value);
+    tag.setInteger("value", val);
     tag.setInteger("weight", weight);
     }  
-  baseTag.setTag("edit", tag);
+  if(edit)
+    {
+    baseTag.setTag("edit", tag);
+    }
+  else
+    {
+    baseTag.setTag("export", tag);
+    }
   this.sendDataToServer(baseTag);
   }
 
@@ -208,15 +215,7 @@ public void export()
     return;
     }
   struct.name = this.name;
-  if(this.world)
-    {
-    WorldGenStructureManager.instance().addEntry(struct, weight, value, unique);
-//    if(struct.worldGen)
-//      {
-//      WorldGenStructureManager.instance().addStructure(struct, false, 1, 1);//TODO add values to export config, or remove the entire thing...
-//      }
-    //TODO export to world-gen settings, update world-gen file....(dirty hack)
-    }
+
   struct.survival = this.survival;
   String path;
   if(this.formatAW)
@@ -241,6 +240,15 @@ public void export()
       {
       player.addChatMessage("Error exporting to AW Format, check naming");
       }
+    }
+  if(this.world)
+    {
+    WorldGenStructureManager.instance().addEntry(struct, weight, value, unique);
+//    if(struct.worldGen)
+//      {
+//      WorldGenStructureManager.instance().addStructure(struct, false, 1, 1);//TODO add values to export config, or remove the entire thing...
+//      }
+    //TODO export to world-gen settings, update world-gen file....(dirty hack)
     }
   if(this.formatRuins)
     {

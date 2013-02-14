@@ -238,14 +238,14 @@ private void loadBiomesList()
 public void addEntry(ProcessedStructure struct, int weight, int value, boolean unique)
   {
   String name = struct.name;
-  int ov = struct.maxOverhang;
-  int mL = struct.maxLeveling;
-  int lB = struct.levelingBuffer;
-  int mC = struct.maxVerticalClear;
-  int cB = struct.clearingBuffer;
-  String[] bO = struct.biomesOnlyIn;
-  String[] bN = struct.biomesNotIn;
-  WorldGenStructureEntry entry = new WorldGenStructureEntry(name, unique, weight, value, mC, cB, mL, lB, bO, bN, ov);
+//  int ov = struct.maxOverhang;
+//  int mL = struct.maxLeveling;
+//  int lB = struct.levelingBuffer;
+//  int mC = struct.maxVerticalClear;
+//  int cB = struct.clearingBuffer;
+//  String[] bO = struct.biomesOnlyIn;
+//  String[] bN = struct.biomesNotIn;
+  WorldGenStructureEntry entry = new WorldGenStructureEntry(name, unique, weight, value, -1, -1, -1, -1, null, null, -1);
   this.addStructureEntry(entry);
   this.saveConfig();
   }
@@ -258,18 +258,30 @@ private void addStructureEntry(WorldGenStructureEntry ent)
     }
   Config.logDebug("Attempting to add world gen entry for structure: "+ent.name);
   ProcessedStructure struct = StructureManager.instance().getStructureServer(ent.name);
+  String[] biomesNotIn = null;
+  String[] biomesOnlyIn = null;
+  if(ent.hasBiomeOverride())
+    {
+    biomesNotIn = ent.biomesNot;
+    biomesOnlyIn = ent.biomesOnly;
+    }
+  else
+    {
+    biomesNotIn = struct.biomesNotIn;
+    biomesOnlyIn = struct.biomesOnlyIn;
+    }
   if(struct!=null)
     {
-    if(struct.biomesNotIn!=null && struct.biomesOnlyIn!=null)
+    if(biomesNotIn!=null && biomesOnlyIn!=null)
       {
       Config.logError("Error detected in a structure template:  it has both exclusive and inclusive biome lists.  Please use only one or the other.  Structure name: "+struct.name);
       return;
       }    
-    if(struct.biomesNotIn!=null)
+    if(biomesNotIn!=null)
       {
       addToAllButBiomes(ent, struct.biomesNotIn);
       }
-    else if(struct.biomesOnlyIn!=null)
+    else if(biomesOnlyIn!=null)
       {
       addToOnlyBiomes(ent, struct.biomesOnlyIn);
       }

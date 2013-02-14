@@ -234,7 +234,7 @@ private List<String> doStructGenRun()
       int foundValue = 0;//found value
       if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
         {
-        WorldGenManager.instance().dimensionStructures.put(dim, new WorldGenStructureMap("AWstructMap"));
+        WorldGenManager.instance().dimensionStructures.put(dim, new WorldGenStructureMap());
         }
       Pair<Float, Integer> values =  WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(x, z, maxRange);
       foundValue = values.value();

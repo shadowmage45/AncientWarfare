@@ -118,7 +118,7 @@ public void setupGui()
   formatRuinsBox = this.addCheckBox(4, 145, 90, 16, 16).setChecked(formatRuins);
   worldGenBox = this.addCheckBox(5, 145, 110, 16, 16).setChecked(worldGen);
   survivalBox = this.addCheckBox(7, 145, 130, 16, 16).setChecked(survival);
-  uniqueBox = this.addCheckBox(8, 145, 190, 16, 16).setChecked(unique);  
+  uniqueBox = this.addCheckBox(10, 145, 190, 16, 16).setChecked(unique);  
   
   nameBox = this.addTextField(0, 10, 30, 120, 10, 30, name);
 //  nameBox = new GuiTextField(fontRenderer, guiLeft+10, guiTop+30, 120, 10);
@@ -166,7 +166,7 @@ public void buttonClicked(GuiButton button)
     {
     int weight = StringTools.safeParseInt(this.weight.getText());
     int value = StringTools.safeParseInt(this.value.getText());
-    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include, weight, value, unique); 
+    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include, weight, value, unique, false); 
     //container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include);
     } 
   closeGUI();
@@ -189,7 +189,7 @@ public void buttonClicked(GuiButton button)
     {
     int weight = StringTools.safeParseInt(this.weight.getText());
     int value = StringTools.safeParseInt(this.value.getText());
-    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include, weight, value, unique);     
+    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include, weight, value, unique, true);     
     player.openContainer = new ContainerEditor(player);
     mc.displayGuiScreen(new GuiEditor((ContainerEditor)player.openContainer, null));
     } 

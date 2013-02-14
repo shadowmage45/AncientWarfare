@@ -68,6 +68,17 @@ public void resetAllTrackedData()
 
 public void handleWorldLoad(World world)
   {
+  if(world.isRemote)
+    {
+    return;
+    }
+//  Config.logDebug("attempting to retrieve generated structures map for dimension: "+world.getWorldInfo().getDimension());
+//  WorldGenStructureMap map = (WorldGenStructureMap)world.perWorldStorage.loadData(WorldGenStructureMap.class, "AWstructMap"+world.getWorldInfo().getDimension());
+//  if(map!=null)
+//    {
+//    Config.logDebug("adding loaded world map data");
+//    WorldGenManager.instance().addStructureMapForDimension(world.getWorldInfo().getDimension(), map);
+//    }
   /**
    * load stats file, populate globalTag
    */  
@@ -131,22 +142,18 @@ public void handleWorldLoad(World world)
     {
     AWStructureModule.instance().readFromNBT(tag.getCompoundTag("builders"));
     }  
-  
-  
-  WorldGenStructureMap map = (WorldGenStructureMap)world.perWorldStorage.loadData(WorldGenStructureMap.class, "AWstructMap");
-  if(map!=null)
+  if(tag.hasKey("structMap"))
     {
-    WorldGenManager.instance().addStructureMapForDimension(world.getWorldInfo().getDimension(), map);
+    WorldGenManager.instance().readFromNBT(tag.getCompoundTag("structMap"));
     }
-  
-//  if(tag.hasKey("structMap"))
-//    {
-//    WorldGenManager.instance().readFromNBT(tag.getCompoundTag("structMap"));
-//    }
   }
 
 public void handleWorldSave(World world)
   {
+  if(world.isRemote)
+    {
+    return;
+    }
   NBTTagCompound tag = new NBTTagCompound();
   /**
    * save system time into tag
@@ -179,11 +186,11 @@ public void handleWorldSave(World world)
       {
       tag.setCompoundTag("builders", setTag);
       } 
-//    setTag = WorldGenManager.instance().getNBTTag();
-//    if(setTag!=null)
-//      {
-//      tag.setCompoundTag("structMap", setTag);
-//      }
+    setTag = WorldGenManager.instance().getNBTTag();
+    if(setTag!=null)
+      {
+      tag.setCompoundTag("structMap", setTag);
+      }
     if(tag==null || rawFile==null)
       {
       Config.logDebug("null tag or rawFile detected on WorldSave");
@@ -191,14 +198,15 @@ public void handleWorldSave(World world)
       }
     CompressedStreamTools.write(tag, rawFile);
     
-    /**
-     * this ensures that the savedData is the most-recent data...
-     */
-    WorldGenStructureMap map = WorldGenManager.dimensionStructures.get(world.getWorldInfo().getDimension());
-    if(map!=null)
-      {
-      world.perWorldStorage.setData("AWstructMap", map);
-      }
+//    /**
+//     * this ensures that the savedData is the most-recent data...
+//     */
+//    WorldGenStructureMap map = WorldGenManager.dimensionStructures.get(world.getWorldInfo().getDimension());
+//    if(map!=null)
+//      {
+//      Config.logDebug("setting structure map to save for dimension: "+world.getWorldInfo().getDimension());
+//      world.perWorldStorage.setData("AWstructMap"+world.getWorldInfo().getDimension(), map);      
+//      }
     
     }
   catch (IOException e)

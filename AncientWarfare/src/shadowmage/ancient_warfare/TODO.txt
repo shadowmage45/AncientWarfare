@@ -14,7 +14,8 @@ TESTING
 * test underground buildings
 * test submerged code
 * test that static air rule works properly
-* test world-gen export
+* test world gen overrides...
+
 
 TEMPLATES
 * change template extension--enable it in config properties, or...manually set?
@@ -24,22 +25,24 @@ SCANNER
         
 
 STRUCTURE BUILDING
-* remove builder load/save from gameData...--it isn't used
 
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and dissallow non-dungeon structures?)
-* check overrides for structure for biome settings....
 * check nearby chunks in generatedMap for structure bb's, make sure bb's will not overwrite...
             should probably be called in attemptGenerateAt<surface/subsurface>
 
 
 STRUCTURE EDITOR
 * validate struct before transmit to save
+* don't close gui on save...somehow display a message if saved sucessfully?
 * add reject message display if attempting to open a locked structure...
 * add method to 'lock' structure when editing, so no other player could edit the same struct
             and release when no longer in use..so it can be built, etc...
 * add dirty flag to editor, so it won't retransmit template unless it has been edited
+* add home, pgUp, pgDwn, end functionality
+* add selection ability
+* add mouse input
 
 
 COMPLEXES
@@ -90,6 +93,7 @@ TWEAKS/OPTIMIZATION
 * remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
 * some ruins structures (one, jungle throne) appears offset -1Y
 * editor GUI has some really ugly code to render chars....
+* remove builder load/save from gameData...--it isn't used
 
 
 /*****************************************************************************************/
@@ -253,6 +257,9 @@ public static MyWorldData forWorld(World world)
 * enable value/weight settings for structure export
 * enable add-to-world-gen for newly created structures (w/ given world-gen values)...
 * check openEditors list instead of edit-flag
+* move gen structure maps back into AWsaved data...NFC how MC saved file works...
+* test world-gen export
+* check overrides for structure for biome settings....
 
 
 

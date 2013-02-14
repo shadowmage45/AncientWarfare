@@ -45,8 +45,13 @@ public ItemBuilderTicked(int itemID)
   super(itemID);
   }
 
-protected void attemptConstruction(World world, ProcessedStructure struct, int face, BlockPosition hit)
+@Override
+public boolean attemptConstruction(World world, ProcessedStructure struct, BlockPosition hit, int face)
   {
+  if(struct.isLocked())
+    {
+    return false;
+    }
   BlockPosition offsetHit = hit.copy();
   offsetHit.moveForward(face, -struct.zOffset + 1 + struct.clearingBuffer);
   world.setBlockAndMetadata(hit.x, hit.y, hit.z, BlockLoader.instance().builder.blockID, BlockTools.getBlockMetaFromPlayerFace(face));    
@@ -63,7 +68,9 @@ protected void attemptConstruction(World world, ProcessedStructure struct, int f
       te.setTicket(tk);
       }
     struct.addBuilder(builder);
+    return true;
     }  
+  return false;
   } 
 
 @Override

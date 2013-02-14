@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.build.BuilderInstant;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.Pair;
 import cpw.mods.fml.common.IWorldGenerator;
@@ -159,7 +160,8 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   int foundValue = 0;//found value
   if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
     {
-    WorldGenManager.instance().dimensionStructures.put(dim, new WorldGenStructureMap("AWstructMap"));
+    WorldGenStructureMap map = new WorldGenStructureMap();
+    WorldGenManager.instance().dimensionStructures.put(dim, map);
     }
   Pair<Float, Integer> values =  WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(chunkX, chunkZ, maxRange);
   foundValue = values.value();
@@ -346,30 +348,30 @@ public int getTopBlockHeight(World world, int x, int z, int maxWater, int maxLav
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-//  NBTTagList tagList = new NBTTagList();
-//  for(Integer i : dimensionStructures.keySet())
-//    {
-//    GeneratedStructureMap map = dimensionStructures.get(i);
-//    NBTTagCompound mapTag = map.getNBTTag();
-//    mapTag.setInteger("dim", i);
-//    tagList.appendTag(mapTag);
-//    }  
-//  tag.setTag("dimList", tagList);
+  NBTTagList tagList = new NBTTagList();
+  for(Integer i : dimensionStructures.keySet())
+    {
+    WorldGenStructureMap map = dimensionStructures.get(i);
+    NBTTagCompound mapTag = map.getNBTTag();
+    mapTag.setInteger("dim", i);
+    tagList.appendTag(mapTag);
+    }  
+  tag.setTag("dimList", tagList);
   return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-//  NBTTagList tagList = tag.getTagList("dimList");
-//  for(int i = 0; i < tagList.tagCount(); i++)
-//    {
-//    NBTTagCompound entTag = (NBTTagCompound) tagList.tagAt(i);    
-//    int dim = entTag.getInteger("dim");
-//    GeneratedStructureMap map = new GeneratedStructureMap();
-//    map.readFromNBT(entTag);
-//    dimensionStructures.put(dim, map);
-//    }
+  NBTTagList tagList = tag.getTagList("dimList");
+  for(int i = 0; i < tagList.tagCount(); i++)
+    {
+    NBTTagCompound entTag = (NBTTagCompound) tagList.tagAt(i);    
+    int dim = entTag.getInteger("dim");
+    WorldGenStructureMap map = new WorldGenStructureMap();
+    map.readFromNBT(entTag);
+    dimensionStructures.put(dim, map);
+    }
   }
 
 public void addStructureMapForDimension(int dim, WorldGenStructureMap map)
@@ -377,6 +379,39 @@ public void addStructureMapForDimension(int dim, WorldGenStructureMap map)
   this.dimensionStructures.put(dim, map);
   }
 
-
+/**
+ * checks around the chosen site for a chosen structure, to see if there are any structures in nearby chunks
+ * if so, it chcks to see if structBB has overlap with the previously generated struct BB
+ * @return
+ */
+private boolean checkBBCollisions(World world, ProcessedStructure struct, BlockPosition hit, int face, int chunkX, int chunkZ)
+  {
+  int dim = world.getWorldInfo().getDimension();
+  if(!dimensionStructures.containsKey(dim))
+    {
+    return false;
+    }
+  WorldGenStructureMap mp = dimensionStructures.get(dim);
+  StructureBB bb = null;
+  ProcessedStructure check;
+  for(int cX = chunkX-1; cX <= chunkX+1; cX++)
+    {
+    for(int cZ = chunkZ-1; cZ <= chunkZ+1; cZ++)
+      {
+      GeneratedStructureEntry gen = mp.getEntryFor(cX, cZ);
+      if(gen!=null)
+        {
+        if(bb==null)
+          {
+          bb=struct.getStructureBB(hit, face);          
+          }
+        check = StructureManager.instance().getStructureServer(gen.name);
+                
+        }
+      }
+    }
+  return false;
+  }
+  
 
 }
