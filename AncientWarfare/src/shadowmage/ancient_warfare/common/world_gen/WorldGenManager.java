@@ -43,7 +43,7 @@ public class WorldGenManager implements IWorldGenerator, INBTTaggable
 {
 
 //TODO change back to private...
-public static Map<Integer, WorldGenStructureMap> dimensionStructures = new HashMap<Integer, WorldGenStructureMap>();
+private static Map<Integer, WorldGenStructureMap> dimensionStructures = new HashMap<Integer, WorldGenStructureMap>();
 
 private WorldGenManager(){};
 private static WorldGenManager INSTANCE;
@@ -54,6 +54,24 @@ public static WorldGenManager instance()
     INSTANCE = new WorldGenManager();
     }
   return INSTANCE;
+  }
+
+public WorldGenStructureMap getDimensionMapFor(int dim)
+  {
+  if(!dimensionStructures.containsKey(dim))
+    {
+    this.dimensionStructures.put(dim, new WorldGenStructureMap());
+    }
+  return this.dimensionStructures.get(dim);
+  }
+
+public void setGeneratedAt(int dim, int worldX, int worldY, int worldZ, int face, int value, String name, boolean unique)
+  {
+  if(!dimensionStructures.containsKey(dim))
+    {
+    this.dimensionStructures.put(dim, new WorldGenStructureMap());
+    }
+  this.dimensionStructures.get(dim).setGeneratedAt(worldX, worldY, worldZ,face , value, name, unique);
   }
 
 public void loadConfig(String pathName)
@@ -67,31 +85,32 @@ public static void resetMap()
   dimensionStructures = new HashMap<Integer, WorldGenStructureMap>();
   }
 
-public boolean attemptPlacementSubsurface(World world, int x, int z, ProcessedStructure struct, Random random)
+public boolean attemptPlacementSubsurface(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random)
   {
   
-  int y = getSubsurfaceTarget(world, x, z, struct.undergroundMinLevel, struct.undergroundMaxLevel, struct.minSubmergedDepth, random);
   if(y==-1)
     {
     Config.logDebug("underground structure--invalid topBlock");
     return false;
     }
-  int face = random.nextInt(4);
   BlockPosition hit = new BlockPosition(x,y,z);    
   if(!struct.canGenerateAtSubSurface(world, hit, face, struct))
     {
     Config.logDebug("underground structure rejected build site");
     return false;
     }
-  
-  hit.y++;   
-  Config.logDebug("underground structBB : "+struct.getStructureBB(hit, face));
+  hit.y++;
+  if(this.checkBBCollisions(world, struct, hit, face, x/16, z/16))
+    {
+    return false;
+    }
+  //Config.logDebug("underground structBB : "+struct.getStructureBB(hit, face));
   BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
   builder.startConstruction(); 
   return true;
   }
 
-public boolean attemptPlacementSurface(World world, int x, int z, ProcessedStructure struct, Random random)
+public boolean attemptPlacementSurface(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random)
   {  
   WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
   
@@ -119,13 +138,13 @@ public boolean attemptPlacementSurface(World world, int x, int z, ProcessedStruc
       }
     }
   
-  int y = getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
+  //int y = getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
   if(y==-1)
     {
     Config.logDebug("invalid topBlock");
     return false;
     }
-  int face = random.nextInt(4);
+  //int face = random.nextInt(4);
   BlockPosition hit = new BlockPosition(x,y,z);    
   if(!struct.canGenerateAtSurface(world, hit.copy(), face, struct, overhang, leveling, levelingB, clearing, clearingB))
     {
@@ -133,7 +152,12 @@ public boolean attemptPlacementSurface(World world, int x, int z, ProcessedStruc
     return false;
     }  
   hit.y++;   
-  Config.logDebug("structBB : "+struct.getStructureBB(hit, face));
+  if(this.checkBBCollisions(world, struct, hit, face, x/16, z/16))
+    {
+    Config.logDebug("site rejected due to structure overlap");
+    return false;
+    }
+  //Config.logDebug("structBB : "+struct.getStructureBB(hit, face));
   BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
   builder.startConstruction();  
   return true;
@@ -206,18 +230,27 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
      * else, place the struct....
      */
     boolean placed = false;
+    
+    int y = 0;
+    int face = random.nextInt(4);    
     if(struct.underground)
       {
-      placed = this.attemptPlacementSubsurface(world, x, z, struct, random);
+      y = getSubsurfaceTarget(world, x, z, struct.undergroundMinLevel, struct.undergroundMaxLevel, struct.minSubmergedDepth, random);
+      
+      placed = this.attemptPlacementSubsurface(world, x, y, z, face, struct, random);
       }
     else
       {
-      placed = this.attemptPlacementSurface(world, x, z, struct, random);
+      y = getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
+      placed = this.attemptPlacementSurface(world, x, y, z, face, struct, random);
       }    
     if(placed)
       {
-      int value = WorldGenStructureManager.instance().getValueFor(struct.name);
-      WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(chunkX, chunkZ, value, struct.name);
+      WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
+      if(ent!=null)
+        {
+        WorldGenManager.instance().setGeneratedAt(dim, x, y, z, face, ent.value, ent.name, ent.unique);
+        }      
       }
     else
       {
@@ -393,6 +426,7 @@ private boolean checkBBCollisions(World world, ProcessedStructure struct, BlockP
     }
   WorldGenStructureMap mp = dimensionStructures.get(dim);
   StructureBB bb = null;
+  StructureBB checkBB = null;
   ProcessedStructure check;
   for(int cX = chunkX-1; cX <= chunkX+1; cX++)
     {
@@ -406,7 +440,11 @@ private boolean checkBBCollisions(World world, ProcessedStructure struct, BlockP
           bb=struct.getStructureBB(hit, face);          
           }
         check = StructureManager.instance().getStructureServer(gen.name);
-                
+        checkBB = check.getStructureBB(new BlockPosition(cX*16+gen.xOff, gen.yPos, cZ*16+gen.zOff), gen.face);
+        if(bb.collidesWith(checkBB))
+          {
+          return true;
+          }
         }
       }
     }

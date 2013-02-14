@@ -204,14 +204,12 @@ public static boolean isPositionWithinBounds(BlockPosition test, BlockPosition p
     minZ = pos2.z;
     maxZ = pos1.z;
     }
-  BlockPosition min = new BlockPosition(minX, minY, minZ);
-  BlockPosition max = new BlockPosition(maxX, maxY, maxZ);
-
-  if(test.x >= min.x && test.x <=max.x)
+  
+  if(test.x >= minX && test.x <=maxX)
     {
-    if(test.y >= min.y && test.y <=max.y)
+    if(test.y >= minY && test.y <=maxY)
       {
-      if(test.z >= min.z && test.z <=max.z)
+      if(test.z >= minZ && test.z <=maxZ)
         {
         return true;
         }

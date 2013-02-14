@@ -198,9 +198,28 @@ public void setStructureServer(NBTTagCompound tag)
     }
   }
 
+/**
+ * client side saveTemplate--attempts to validate lines before saving (attempt to process into structure on client-side)
+ */
 public void saveTemplate()
   {
   Config.logDebug("sending template to server....");
+  Config.logDebug("validating structure client side...");
+  ProcessedStructure struct = StructureLoader.instance().loadStructureAW(clientLines, "0");
+  if(struct==null)
+    {
+    Config.logDebug("Invalid structure client-side, cannot send to server");
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("badSave", true);
+    this.gui.handleDataFromContainer(tag);
+    }  
+  else
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("goodSave", true);
+    this.gui.handleDataFromContainer(tag);
+    }
+  Config.logDebug("structure is valid, sending to server...");
   byte[] allBytes;
   try
     {

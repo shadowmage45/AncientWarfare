@@ -74,11 +74,10 @@ public void readFromNBT(NBTTagCompound tag)
     int zPos;
     NBTTagList zList = xTag.getTagList("z");
     for(int z = 0; z< zList.tagCount(); z++)
-      {
-      GeneratedStructureEntry ent = new GeneratedStructureEntry();
+      {      
       NBTTagCompound entTag = (NBTTagCompound) zList.tagAt(z);
-      zPos = entTag.getInteger("z");
-      ent.readFromNBT(entTag);
+      GeneratedStructureEntry ent = new GeneratedStructureEntry(entTag);
+      zPos = entTag.getInteger("z");      
       if(!this.generatedStructures.containsKey(xPos))
         {
         this.generatedStructures.put(xPos, new HashMap<Integer, GeneratedStructureEntry>());
@@ -150,12 +149,23 @@ private boolean isStructureAt(int x, int z)
   return this.generatedStructures.get(x).containsKey(z);
   }
 
-public void setGeneratedAt(int x, int z, int value, String name)
+/**
+ * world x and worldZ
+ * @param x
+ * @param z
+ * @param value
+ * @param name
+ */
+public void setGeneratedAt(int x, int y, int z, int face, int value, String name, boolean unique)
   {
-  GeneratedStructureEntry ent = new GeneratedStructureEntry();
+  int cX = x/16;
+  int cZ = z/16;  
+  byte oX = (byte) (x %16);
+  byte oZ = (byte) (z %16);
+  GeneratedStructureEntry ent = new GeneratedStructureEntry(name, oX, (byte)y, oZ, (byte)face, (byte) value);
   ent.name = name;
   ent.structureValue = (byte)value;
-  this.setEntry(x, z, ent);
+  this.setEntry(cX, cZ, ent);
   }
 
 //TODO move this to a proper mathtools class....

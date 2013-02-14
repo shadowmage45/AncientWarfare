@@ -52,25 +52,49 @@ public boolean textboxKeyTyped(char par1, int par2)
     }
   if(this.isNumberValue)
     {
-    boolean found = false;
-    for(char ch : this.validNumbers)
-      {
-      if(ch == par1)
-        {
-        found =true;
-        break;
-        }
-      }
-    if(!found)
+    if(!this.numberBoxKeyTyped(par1, par2))
       {
       return false;
-      }
-    }
-  
+      }    
+    }  
   return super.textboxKeyTyped(par1, par2);
   }
 
-char[] validNumbers = new char[]{'0','1','2','3','4','5','6','7','8','9'};
+/**
+ * validates that the input is either : valid control input, or valid number intput....
+ * @param charVal
+ * @param charNum
+ * @return
+ */
+public boolean numberBoxKeyTyped(char charVal, int charNum)
+  {
+  for(int i : this.validCharNums)
+    {
+    if(charVal==i)
+      {
+      return true;
+      }
+    }
+  for(int i : this.validControlNums)
+    {
+    if(charNum==i)
+      {
+      return true;
+      }
+    }
+  for(char ch: this.validNumbers)
+    {
+    if(charVal == ch)
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
+char[] validNumbers = new char[]{'0','1','2','3','4','5','6','7','8','9','.'};
+int[] validCharNums = new int[]{1,3,22,24};
+int[] validControlNums = new int[]{14,199,203,205,207,211};
 
 public boolean onMouseWheel(int change)
   {
@@ -83,5 +107,28 @@ public boolean isMouseOver(int rawX, int rawY)
   return rawX>=x && rawX<x+xSize && rawY >=y && rawY < y+ySize;
   }
 
+public int getIntValue()
+  {
+  try
+    {
+    return Integer.parseInt(this.getText());
+    }
+  catch(NumberFormatException e)
+    {
+    return 0;
+    }
+  }
+
+public float getFloatValue()
+  {
+  try
+    {
+    return Float.parseFloat(this.getText());
+    }
+  catch(NumberFormatException e)
+    {
+    return 0;
+    }
+  }
 
 }

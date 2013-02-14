@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.client.gui.structure;
 
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 
@@ -30,6 +31,9 @@ public class GuiEditor extends GuiContainerAdvanced
 private ContainerEditor cont;
 
 private GuiTextBox editor;
+
+private String errorMsg;
+private int errorDisplayCount = 0;
 
 /**
  * might be null, if force-opened from scanner....
@@ -71,6 +75,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     {
     this.editor.drawTextBox(fontRenderer, guiLeft+4, guiTop+4);
     }
+  this.drawString(fontRenderer, errorMsg, guiLeft+10, guiTop+10, 0xffff0000);
   }
 
 @Override
@@ -89,6 +94,31 @@ public void updateScreenContents()
     this.editor = new GuiTextBox(248, 240-18-4-2-10, 20, 32, 0xffffffff, 0x00000000, cont.clientLines);
     this.editor.activated = true;
     }
+  if(this.errorDisplayCount>0)
+    {
+    this.errorDisplayCount--;
+    }
+  if(this.errorDisplayCount<=0)
+    {
+    this.errorMsg = "";
+    }
+  }
+
+@Override
+public void handleDataFromContainer(NBTTagCompound tag)
+  {
+  if(tag.hasKey("badSave"))
+    {
+    this.errorMsg = "Invalid template, could not be saved to server.";
+    this.errorDisplayCount = 200;//ten seconds...
+    }
+  if(tag.hasKey("goodSave"))
+    {
+    if(this.editor!=null)
+      {
+      this.editor.setFileClean();
+      }
+    }
   }
 
 @Override
@@ -101,9 +131,11 @@ public void buttonClicked(GuiButton button)
   break;
   
   case 1:
-  //TODO validate template is a valid struct before transmitting...
-  this.cont.saveTemplate();
-  this.closeGUI();
+  if(this.editor.isFileDirty())
+    {
+    this.cont.saveTemplate();
+    }
+  //this.closeGUI();
   break;
   
   default:

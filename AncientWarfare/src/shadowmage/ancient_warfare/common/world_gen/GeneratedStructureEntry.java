@@ -25,8 +25,28 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class GeneratedStructureEntry implements INBTTaggable
 {
+
 byte structureValue;
 String name = "";
+byte xOff;
+byte zOff;
+byte face;
+byte yPos;
+
+public GeneratedStructureEntry(String name, byte xOff, byte yPos, byte zOff, byte face, byte value)
+  {
+  this.structureValue = value;
+  this.name = name;
+  this.xOff = xOff;
+  this.zOff = zOff;
+  this.face = face;
+  this.yPos = yPos;
+  }
+
+public GeneratedStructureEntry(NBTTagCompound tag)
+  {
+  this.readFromNBT(tag);
+  }
 
 @Override
 public NBTTagCompound getNBTTag()
@@ -34,6 +54,10 @@ public NBTTagCompound getNBTTag()
   NBTTagCompound tag = new NBTTagCompound();
   tag.setByte("val", this.structureValue);
   tag.setString("name", this.name);
+  tag.setByte("x", this.xOff);
+  tag.setByte("z", this.zOff);
+  tag.setByte("f", this.face);
+  tag.setByte("y", this.yPos);
   return tag;
   }
 @Override
@@ -41,5 +65,9 @@ public void readFromNBT(NBTTagCompound tag)
   {
   this.structureValue = tag.getByte("val");
   this.name = tag.getString("name");
+  this.xOff = tag.getByte("x");
+  this.zOff = tag.getByte("z");
+  this.face = tag.getByte("face");
+  this.yPos = tag.getByte("y");
   }
 }

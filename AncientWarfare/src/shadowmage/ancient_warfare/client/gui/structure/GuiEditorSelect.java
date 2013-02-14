@@ -41,6 +41,8 @@ private boolean shouldForceUpdate = false;
 String currentStructure = "";
 private ContainerEditor container;
 
+String errorMessage = "";
+
 /**
  * @param container
  */
@@ -61,7 +63,7 @@ public void handleDataFromContainer(NBTTagCompound tag)
   else if(tag.hasKey("badSel"))
     {
     Config.logDebug("received bad sel packet on editor select GUI");
-    //TODO DISPLAY REJECT MESSAGE......
+    this.errorMessage = "Structure is not currently available for editing";
     }
   }
 
@@ -85,7 +87,8 @@ public String getGuiBackGroundTexture()
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   this.drawString(fontRenderer, "Structure to Edit: "+currentStructure, guiLeft + 10, guiTop + 14, 0xffffffff);
-
+  this.drawString(fontRenderer, errorMessage, guiLeft+10, guiTop+14, 0xffff0000);
+  
   this.drawString(fontRenderer, "Wid", guiLeft + 190, guiTop + 46+8, 0xffffffff);
   this.drawString(fontRenderer, "Len", guiLeft + 210, guiTop + 46+8, 0xffffffff);
   this.drawString(fontRenderer, "Hig", guiLeft + 230, guiTop + 46+8, 0xffffffff);
@@ -156,7 +159,7 @@ public void buttonClicked(GuiButton button)
     }
   return;
   }
-
+  this.errorMessage = "";
   if(button.id>=3 && button.id < 11)
     {
     int index = (this.currentLowestViewed + button.id) - 3;
@@ -166,7 +169,8 @@ public void buttonClicked(GuiButton button)
       }
     shouldForceUpdate = true;
     this.setStructureName(this.clientStructures.get(index).name);
-    }  
+    }
+  
   }
 
 /**

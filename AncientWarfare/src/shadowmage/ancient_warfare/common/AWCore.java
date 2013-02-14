@@ -44,6 +44,7 @@ import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
 import shadowmage.ancient_warfare.common.utils.Pair;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureEntry;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureMap;
 import cpw.mods.fml.common.Mod;
@@ -231,12 +232,8 @@ private List<String> doStructGenRun()
       int maxRange = Config.structureGenMaxCheckRange;
 
       float dist = 0;//found distance
-      int foundValue = 0;//found value
-      if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
-        {
-        WorldGenManager.instance().dimensionStructures.put(dim, new WorldGenStructureMap());
-        }
-      Pair<Float, Integer> values =  WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(x, z, maxRange);
+      int foundValue = 0;//found value      
+      Pair<Float, Integer> values =  WorldGenManager.instance().getDimensionMapFor(dim).getClosestStructureDistance(x, z, maxRange);
       foundValue = values.value();
       if(values.key()==-1)
         {
@@ -278,9 +275,14 @@ private List<String> doStructGenRun()
         boolean placed = true;        
         if(placed)
           {
-          int value = WorldGenStructureManager.instance().getValueFor(struct.name);
-          WorldGenManager.instance().dimensionStructures.get(dim).setGeneratedAt(x, z, value, struct.name);
-          map[x][z]=value;
+          WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);          
+          if(ent!=null)
+            {
+            int y = 0;
+            int face = 0;
+            WorldGenManager.instance().setGeneratedAt(dim, x, y, z, face, ent.value, ent.name, ent.unique);
+            map[x][z]=ent.value;
+            }                      
           }
         else
           {

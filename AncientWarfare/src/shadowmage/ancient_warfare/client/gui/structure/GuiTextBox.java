@@ -42,6 +42,7 @@ final int lineLength;
 int textColor;
 int backGroundColor;
 boolean activated = false;
+boolean fileDirty = false;
 
 /**
  * the actual lines driving the char array to be displayed
@@ -102,6 +103,16 @@ public GuiTextBox(int xSize, int ySize, int displayLines, int lineLength, int te
     {
     this.updateScreenChars();
     }
+  }
+
+public boolean isFileDirty()
+  {
+  return this.fileDirty;
+  }
+
+public void setFileClean()
+  {
+  this.fileDirty = false;
   }
 
 public boolean onKeyTyped(char charValue, int keyCode)
@@ -292,27 +303,24 @@ private void handleCharAction(char ch)
   {
   if(this.cursorRawY>=this.lines.size())
     {
-    this.lines.add(String.valueOf(ch));
-    this.moveCursorRight();
-    this.setDirty();
+    this.lines.add(String.valueOf(ch));    
     }
   else
     {
     String line = this.getLineAt(cursorRawY);
     line = this.insertCharAt(line, cursorRawX, ch);
-    this.setLineAt(line, cursorRawY);
-    this.moveCursorRight();
-    this.setDirty();
+    this.setLineAt(line, cursorRawY);    
     }
+  this.moveCursorRight();
+  this.setDirty();
+  this.fileDirty = true;
   }
 
 private void handleEnterAction()
   {
   if(this.cursorRawY>=this.lines.size())
     {
-    this.lines.add("");
-    this.moveCursorDown();
-    this.setDirty();
+    this.lines.add("");    
     }
   else
     {
@@ -321,20 +329,12 @@ private void handleEnterAction()
     this.setLineAt(curLine, cursorRawY);      
     String nextLine = line.substring(cursorRawX);
     this.insertLineAt(nextLine, cursorRawY+1);
-//    if(this.cursorRawX >= line.length())//if at end of current line...
-//      {
-//      this.insertLineAt("", cursorRawY+1);//insert new line      
-//      }
-//    else
-//      {
-//      
-//      }
     this.cursorRawX=0;
-    this.viewX = 0;
-    this.moveCursorDown();
-    this.updateLocalCursorPos();
-    this.setDirty();
-    }  
+    this.viewX = 0;    
+    }
+  this.moveCursorDown();
+  this.setDirty();
+  this.fileDirty = true;
   }
 
 private void handleEndAction(){}
@@ -365,6 +365,7 @@ private void handleDeleteAction()
     this.setLineAt(line, cursorRawY);
     this.setDirty();
     }  
+  this.fileDirty = true;
   }
 
 private boolean setDirty()
@@ -388,6 +389,7 @@ private void handleBackspaceAction()
     prevLine = prevLine+line;
     this.setLineAt(prevLine, cursorRawY-1);    
     this.moveCursorUp();
+    this.fileDirty = true;
     this.setDirty();
     return;
     }  
@@ -396,6 +398,7 @@ private void handleBackspaceAction()
   this.setLineAt(line, cursorRawY);
   this.moveCursorLeft();
   this.setDirty();
+  this.fileDirty = true;
   }
 
 private void setCursorXAtEndOfLine(String line)

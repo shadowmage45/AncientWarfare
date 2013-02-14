@@ -99,11 +99,14 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     closeGUI();
     }
   this.nameBox.drawTextBox();
-  this.drawString(fontRenderer, "Export to AW Format   : ", guiLeft+10, guiTop+53, 0xffffffff);
-  this.drawString(fontRenderer, "Include after export  : ", guiLeft+10, guiTop+73, 0xffffffff);  
-  this.drawString(fontRenderer, "Export to Ruins Format: ", guiLeft+10, guiTop+93, 0xffffffff);
-  this.drawString(fontRenderer, "Flag for World Gen    : ", guiLeft+10, guiTop+113, 0xffffffff);  
-  this.drawString(fontRenderer, "Flag for Survival Mode: ", guiLeft+10, guiTop+133, 0xffffffff);  
+  this.drawString(fontRenderer, "Export to AW Format    : ", guiLeft+10, guiTop+53, 0xffffffff);
+  this.drawString(fontRenderer, "Add to game immediately: ", guiLeft+10, guiTop+73, 0xffffffff);  
+  this.drawString(fontRenderer, "Export to Ruins Format : ", guiLeft+10, guiTop+93, 0xffffffff);
+  this.drawString(fontRenderer, "Include for World-Gen  : ", guiLeft+10, guiTop+113, 0xffffffff);  
+  this.drawString(fontRenderer, "Include for Survival   : ", guiLeft+10, guiTop+133, 0xffffffff);  
+  this.drawString(fontRenderer, "World-Gen Weight       : ", guiLeft+10, guiTop+153, 0xffffffff);
+  this.drawString(fontRenderer, "World-Gen Value        : ", guiLeft+10, guiTop+173, 0xffffffff);
+  this.drawString(fontRenderer, "World-Gen Unique?      : ", guiLeft+10, guiTop+193, 0xffffffff);
   }
 
 @Override
@@ -120,16 +123,22 @@ public void setupGui()
   survivalBox = this.addCheckBox(7, 145, 130, 16, 16).setChecked(survival);
   uniqueBox = this.addCheckBox(10, 145, 190, 16, 16).setChecked(unique);  
   
-  nameBox = this.addTextField(0, 10, 30, 120, 10, 30, name);
-//  nameBox = new GuiTextField(fontRenderer, guiLeft+10, guiTop+30, 120, 10);
-//  nameBox.setTextColor(-1);
-//  nameBox.func_82266_h(-1);
-//  nameBox.setEnableBackgroundDrawing(true);
-//  nameBox.setMaxStringLength(30);
-//  nameBox.setText(name);
-  
+  nameBox = this.addTextField(0, 10, 30, 120, 10, 30, name);  
   weight = this.addTextField(1, 145, 150, 20, 10, 3, weightString).setAsNumberBox();
   value = this.addTextField(2, 145, 170, 20, 10, 3, valueString).setAsNumberBox();
+  
+  if(worldGenBox.checked())
+    {
+    weight.setVisible(true);
+    value.setVisible(true);
+    uniqueBox.drawButton = true;
+    }
+  else
+    {
+    uniqueBox.drawButton = false;
+    weight.setVisible(false);
+    value.setVisible(false);
+    }
   
   }
 
@@ -214,6 +223,18 @@ public void buttonClicked(GuiButton button)
   this.name = nameBox.getText();
   this.valueString = value.getText();
   this.weightString = weight.getText();
+  if(worldGenBox.checked())
+    {
+    weight.setVisible(true);
+    value.setVisible(true);
+    uniqueBox.drawButton = true;
+    }
+  else
+    {
+    uniqueBox.drawButton = false;
+    weight.setVisible(false);
+    value.setVisible(false);
+    }
   }
 
 

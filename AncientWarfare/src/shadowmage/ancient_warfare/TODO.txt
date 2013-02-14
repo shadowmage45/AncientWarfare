@@ -2,52 +2,38 @@ TODO before first alpha release:
 read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
 
-
 GENERAL
 * add some null checks to container/guis...mostly there, but probably still missing a few
 * start working on complexes....
 
-
 TESTING
-* verify weighting for levels in loot generator
+* test loot weighting
 * test structure weighting
 * test underground buildings
 * test submerged code
 * test that static air rule works properly
 * test world gen overrides...
-
+* test that structBBs didn't get screwed by using min/max on them
+* test structure BB collision code...
 
 TEMPLATES
 * change template extension--enable it in config properties, or...manually set?
 
-
 SCANNER
-        
 
 STRUCTURE BUILDING
 
-
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and dissallow non-dungeon structures?)
-* check nearby chunks in generatedMap for structure bb's, make sure bb's will not overwrite...
-            should probably be called in attemptGenerateAt<surface/subsurface>
-
+* add clearing/leveling code to the structureBB collision test...
 
 STRUCTURE EDITOR
-* validate struct before transmit to save
-* don't close gui on save...somehow display a message if saved sucessfully?
-* add reject message display if attempting to open a locked structure...
-* add method to 'lock' structure when editing, so no other player could edit the same struct
-            and release when no longer in use..so it can be built, etc...
-* add dirty flag to editor, so it won't retransmit template unless it has been edited
 * add home, pgUp, pgDwn, end functionality
 * add selection ability
 * add mouse input
 
-
 COMPLEXES
 * THDT
-
 
 SURVIVAL MODE STRUCTURE BUILDING
 * create drafting workstation
@@ -56,17 +42,14 @@ SURVIVAL MODE STRUCTURE BUILDING
 * builder item will carry an md5 of original structure, compare before starting construction..?
 * use survival flag for survival drafting table structureSelection...(from structureClientInfo in client store)
 
-
 BASIC DRAFTING STATION
 * selection screen w/only survival eligible buildings available
 * works much like drafting station from catmod (e.g. input box, compile blocks/resources into a finished item)
 * create single-use builder item for output--stores struct data in NBT (basically, just a name and struct md5)....
 * create single use scanner item for survival mode (item is consumed on successful scan/export)
 
-
 ADVANCED DRAFTING STATION (editor)
 * THDT
-
 
 RESEARCH
 * THDT
@@ -78,11 +61,12 @@ RESEARCH
         add 'imbued' versions of these materials, each level of imbue will decrease some of the drawbacks for using 
         higher-tier materials.  Imbued versions are created by combining various materials with the regular version
         --such as combining with redstone for a t1 imbue, glowstone for a t2 imbue, both for t3 imbue.  Highest
-        level imbue will require glowstone, redstone, and ender pearls.
-
-        
-
-
+        level imbue will require glowstone, redstone, and ender pearls. (7 total levels of imbue)
+-- GUI --  Render full-screen background image.  On top of that, render mid-ground image of current position in research map.
+        On top of that, render a border to clean up edges.  Render mid-ground at .75f brightness, if over a control spot, render that
+        control spot at 1.f brightness.  Research map has list of control spots which keep internal coords.  Mid-ground tex
+        is recomputed every time screen changes (as a partial texture of the full texture)
+ 
 TWEAKS/OPTIMIZATION
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
 * optimize clearing code to not include inside bounds of structure
@@ -94,6 +78,8 @@ TWEAKS/OPTIMIZATION
 * some ruins structures (one, jungle throne) appears offset -1Y
 * editor GUI has some really ugly code to render chars....
 * remove builder load/save from gameData...--it isn't used
+* custom block placement code for creative/survival builders (set server block, manually relay to client--should 
+        decrease overall network used from vanilla MC resending entire chunks..)
 
 
 /*****************************************************************************************/
@@ -217,6 +203,7 @@ public static MyWorldData forWorld(World world)
 * composite byte chunks into structure on client side
 * figure out multi-line text box...
 * remove unused fields (chunkDistance, chunkAttempts)
+* ohh..and add editor...
 /********** 02-11-13 **********/
 * auto-forced chunkloading for builder blocks
 * remove name= line from templates, only use internally in structure/code (set from filename, upon load)
@@ -260,10 +247,26 @@ public static MyWorldData forWorld(World world)
 * move gen structure maps back into AWsaved data...NFC how MC saved file works...
 * test world-gen export
 * check overrides for structure for biome settings....
-
-
-
 /********** 02-14-13 **********/
+* add more info to genstructmap, to be able to recreate the bb for that struct...
+* check nearby chunks in generatedMap for structure bb's, make sure bb's will not overwrite...
+            should probably be called in attemptGenerateAt<surface/subsurface>.. need to store old struct buildPos
+            in the gen struct map (stored as an offset from chunkPos (as bytes))
+* add text to scanner GUI for weight, value, unique
+* only display world-gen export options if world-gen output is enabled
+* add reject message display if attempting to open a locked structure...
+* validate struct before transmit to save
+* don't close gui on save...somehow display a message if saved sucessfully?
+* add method to 'lock' structure when editing, so no other player could edit the same struct
+            and release when no longer in use..so it can be built, etc...
+* add dirty flag to editor, so it won't retransmit template unless it has been edited
+* update textFieldAdvanced number handling--it should now allow control input, but still only allow numerical input
+* add getIntVal and getFloatVal to textFieldAdvanced
+
+
+
+
+
 /********** 02-15-13 **********/
 /********** 02-16-13 **********/
 /********** 02-17-13 **********/

@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.structures.data;
 
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public class StructureBB
 {
@@ -30,13 +31,20 @@ public BlockPosition pos2;
 
 public StructureBB(BlockPosition pos1, BlockPosition pos2)
   {
-  this.pos1 = pos1;
-  this.pos2 = pos2;
+  this.pos1 = BlockTools.getMin(pos1, pos2);
+  this.pos2 = BlockTools.getMax(pos1, pos2);
   }
 
 @Override
 public String toString()
   {
   return pos1.toString() + " : " +pos2.toString();
+  }
+
+public boolean collidesWith(StructureBB bb)
+  {
+  boolean a = BlockTools.isPositionWithinBounds(bb.pos1, pos1, pos2);
+  boolean b = BlockTools.isPositionWithinBounds(bb.pos2, pos1, pos2);
+  return a || b;
   }
 }
