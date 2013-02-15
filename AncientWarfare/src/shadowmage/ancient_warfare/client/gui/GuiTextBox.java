@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.gui.structure;
+package shadowmage.ancient_warfare.client.gui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ final int displayLines;
 final int lineLength;
 int textColor;
 int backGroundColor;
-boolean activated = false;
+public boolean activated = false;
 boolean fileDirty = false;
 
 /**
@@ -67,6 +67,24 @@ int cursorPosY;
  */
 int cursorRawX;
 int cursorRawY;
+
+/**
+ * selection start xy
+ */
+int selectionRawX;
+int selectionRawY;
+
+/**
+ * selection end xy
+ */
+int selectionEndRawX;
+int selectionEndRawY;
+
+/**
+ * data stored in the clipboard.... attempt to grab input from system clipboard first?
+ */
+List<String> clipboardLines = new ArrayList<String>();
+
 
 /**
  * leftMost char drawn
@@ -576,6 +594,34 @@ public boolean isMouseOver(int x, int y)
   }
 
 /**
+ * has mouse button been depressed on this control?
+ */
+private boolean buttonDown = false;
+
+public boolean onMouseReleased(int buttonNum, int x, int y)
+  {
+  if(!isButtonDown())
+    {
+    return false;
+    }
+  
+  this.setButtonDown(false);
+  
+  int xMin = this.xPos+this.border;
+  int xMax = this.xPos+this.xSize-this.border;
+  int yMin = this.yPos+this.border;
+  int yMax = this.yPos+this.ySize-this.border;
+  if(x>=xMin && x < xMax && y >= yMin && y < yMax)
+    {
+    return true;
+    }
+  else
+    {
+    return false;
+    }
+  }
+
+/**
  * called when mouse is over, and button pressed
  * @param buttonNum
  * @param x raw screen x
@@ -692,6 +738,22 @@ private void renderCharAt(FontRenderer fontRenderer, int x, int y, char ch)
   int xOff = (7-wid)/2;
   fontRenderer.drawString(String.valueOf(ch), x+xOff, y, textColor, false);
   
+  }
+
+/**
+ * @return the buttonDown
+ */
+public boolean isButtonDown()
+  {
+    return buttonDown;
+  }
+
+/**
+ * @param buttonDown the buttonDown to set
+ */
+public void setButtonDown(boolean buttonDown)
+  {
+    this.buttonDown = buttonDown;
   }
 
 }

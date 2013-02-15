@@ -20,24 +20,21 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.structures.build.BuilderInstant;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBuilderInstant extends ItemBuilderBase
 {
@@ -220,6 +217,15 @@ public boolean attemptConstruction(World world, ProcessedStructure struct,   Blo
   {
   if(!struct.isLocked())
     {
+    
+    //DEBUG...
+    StructureBB levelingBB = struct.getLevelingBoundingBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, struct.getLevelingMax(), struct.getLevelingBuffer());
+    if(!struct.isValidLevelingTarget(world, levelingBB, struct.validTargetBlocks, struct.getLevelingBuffer()))
+      {
+      Config.logDebug("invalid leveling target!!");
+      }
+    //END DEBUG....   
+    
     BuilderInstant builder = new BuilderInstant(world, struct, facing, hit);
     builder.startConstruction();
     return true;

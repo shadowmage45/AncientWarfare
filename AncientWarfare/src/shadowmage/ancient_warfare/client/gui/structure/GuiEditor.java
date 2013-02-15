@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.client.gui.structure;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.GuiTextBox;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 
 public class GuiEditor extends GuiContainerAdvanced
@@ -176,6 +177,26 @@ protected void mouseClicked(int mouseX, int mouseY, int buttonNum)
   else
     {
     super.mouseClicked(mouseX, mouseY, buttonNum);
+    }
+  }
+
+@Override
+protected void mouseMovedOrUp(int mouseX, int mouseY, int buttonNum)
+  {
+  boolean callSuper = true;
+  if(this.editor!=null)
+    {
+    if(this.editor.isMouseOver(mouseX, mouseY) || this.editor.isButtonDown())
+      {
+      if(this.editor.onMouseReleased(buttonNum, mouseX, mouseY))
+        {
+        callSuper = false;
+        }    
+      }    
+    }
+  if(callSuper)
+    {
+    super.mouseMovedOrUp(mouseX, mouseY, buttonNum);
     }
   }
 

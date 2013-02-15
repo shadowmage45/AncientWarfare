@@ -74,4 +74,18 @@ public boolean collidesWith(StructureBB bb)
     }  
   return true;
   }
+
+/**
+ * can be used to contract by specifying negative amounts...
+ * @param amt
+ */
+public void expand(int x, int y, int z)
+  {
+  pos1.x-=x;
+  pos1.y-=y;
+  pos1.z-=z;
+  pos2.x+=x;
+  pos2.y+=y;
+  pos2.z+=z;
+  }
 }

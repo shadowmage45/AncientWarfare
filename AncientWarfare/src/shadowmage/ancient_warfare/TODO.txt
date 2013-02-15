@@ -3,7 +3,6 @@ read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
 
 GENERAL
-* add some null checks to container/guis...mostly there, but probably still missing a few
 * start working on complexes....
 
 TESTING
@@ -11,9 +10,6 @@ TESTING
 * test structure weighting
 * test underground buildings
 * test submerged code
-* test that static air rule works properly
-* test world gen overrides...
-* test structure BB collision code...
 
 TEMPLATES
 
@@ -21,20 +17,44 @@ SCANNER
 
 STRUCTURE BUILDING
 * fix up leveling check--it is not checking bounds properly
+        added debug test code to instant-builder, needs thorough testing and validation
+        using this debug code...
+* include overhang calc in leveling check? (allow overhang on leveling bounds?)        
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and dissallow non-dungeon structures?)
-* add clearing/leveling code to the structureBB collision test...
 
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
 
 COMPLEXES
-* THDT
+* features--
+        -min width
+        -max widht
+        -min length
+        -max length
+        -amount of terrain leveling to do (will level or fill-in and replace top-blocks)
+        -list of structures w/min spacing around the structure
+                -min spacing around the structure
+                -max # of that structure
+                -min # of that structure
+        -list of acceptable biomes (or unnaceptable biomes)
+        -# of structures in a 'city block' (min/max) (determines road frequency)
+        -size of a 'city block' (min/max)
+        -layout type (grid, staggered grid, haphazard)
+        -wall types
+        -team override for structures within
+        -road width
+        -ability to specify a basic template??
+        -will have full biome-block swapping in-place for all structures AND walls
+-- all structures will have fill-under/backfill below them, no matter the amount of terraforming
+-- walls wil be placed slightly inside of terrain leveling bounds
+-- outer leveling bounds will use a stepped approach, out to a certain radius/height...
+
 
 SURVIVAL MODE STRUCTURE BUILDING
 * create drafting workstation
-* single-use item scanner--cannot add to world gen, only add to survival/creative mode and export to ruins
+* single-use item scanner--cannot add to world gen, only add to survival/creative mode
 * make sure survival ticked builder will not clear or level.  struct BB needs validated for clear before being built
 * builder item will carry an md5 of original structure, compare before starting construction..?
 * use survival flag for survival drafting table structureSelection...(from structureClientInfo in client store)
@@ -179,11 +199,22 @@ public static MyWorldData forWorld(World world)
 * fix up bb collision code...it..was terrible...
 * fix up some of the world-gen override code that wasn't quite overridden...it should now function reliably....
 * find better manner of handling overrides
-
-
-
-
+* test that static air rule works properly
+* test structure BB collision code...
+* test world gen overrides...
 /********** 02-15-13 **********/
+* add clearing/leveling code to the structureBB collision test...
+* enable decorative structures (value 0)
+* add some null checks to container/guis...mostly there, but probably still missing a few
+* add method to retrieve top block between bounds..
+
+
+
+
+
+
+
+
 /********** 02-16-13 **********/
 /********** 02-17-13 **********/
 /********** 02-18-13 **********/

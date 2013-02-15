@@ -42,7 +42,6 @@ import cpw.mods.fml.common.IWorldGenerator;
 public class WorldGenManager implements IWorldGenerator, INBTTaggable
 {
 
-//TODO change back to private...
 private static Map<Integer, WorldGenStructureMap> dimensionStructures = new HashMap<Integer, WorldGenStructureMap>();
 
 private WorldGenManager(){};
@@ -167,7 +166,6 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     dist = values.key();
     } 
 
- 
   /**
    * select structure from those available to the current available value....
    */
@@ -179,13 +177,6 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   ProcessedStructure struct = WorldGenStructureManager.instance().getStructureForBiome(biomeName, maxValue, random);
   if(struct!=null)
     {
-    
-    /**
-     * if it is not a decorative structure, check value
-     */
-    //TODO
-    
-    
     /**
      * then check cluster filled percentage
      */
@@ -204,8 +195,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     int face = random.nextInt(4);    
     if(struct.underground)
       {
-      y = getSubsurfaceTarget(world, x, z, struct.undergroundMinLevel, struct.undergroundMaxLevel, struct.minSubmergedDepth, random);
-      
+      y = getSubsurfaceTarget(world, x, z, struct.undergroundMinLevel, struct.undergroundMaxLevel, struct.minSubmergedDepth, random);      
       placed = this.attemptPlacementSubsurface(world, x, y, z, face, struct, random);
       }
     else
@@ -264,7 +254,14 @@ public int getSubsurfaceTarget(World world, int x, int z, int minLevel, int maxL
 private int getRawTopBlockHeight(World world, int x, int z)
   {
   int top = world.provider.getActualHeight();
-  for(int i = top; i > 0; i--)
+  return getRawTopBlockBetween(world, x, z, 1, top);
+  }
+
+private int getRawTopBlockBetween(World world, int x, int z, int min, int max)
+  {
+  int top = world.provider.getActualHeight();
+  top = top > max? max : top;
+  for(int i = top; i >= min; i--)
     {
     int id = world.getBlockId(x, i, z);
     if(id!=0 && Block.isNormalCube(id) && id != Block.wood.blockID)      
@@ -294,6 +291,7 @@ public int getTopBlockHeight(World world, int x, int z, int maxWater, int maxLav
       if(id==allowedID)
         {
         valid = true;
+        break;
         }
       }
     if(valid)
@@ -406,10 +404,18 @@ private boolean checkBBCollisions(World world, ProcessedStructure struct, BlockP
         {
         if(bb==null)
           {
-          bb=struct.getStructureBB(hit, face);          
+          bb=struct.getStructureBB(hit, face);  
+          int expA = struct.getClearingBuffer();
+          int expB = struct.getLevelingBuffer();
+          int expAmt = expA > expB ? expA : expB;
+          bb.expand(expAmt, expAmt, expAmt);
           }
         check = StructureManager.instance().getStructureServer(gen.name);
         checkBB = check.getStructureBB(new BlockPosition(cX*16+gen.xOff, gen.yPos, cZ*16+gen.zOff), gen.face);
+        int expA = check.getClearingBuffer();
+        int expB = check.getLevelingBuffer();
+        int expAmt = expA > expB ? expA : expB;
+        checkBB.expand(expAmt, expAmt, expAmt);
         if(bb.collidesWith(checkBB))
           {
           return true;
