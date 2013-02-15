@@ -223,46 +223,23 @@ public void setTeamOverride(int type)
  * calls leveling and clearing functions, does not validate the site
  */
 protected void preConstruction()
-  {
-  WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
-  if(ent!=null && ent.hasLevlingOverride() || struct.maxLeveling>0)
+  {  
+  if(struct.getLevelingMax() > 0)
     {
     doLeveling();
     }
-  if(ent!=null && ent.hasClearingOverride() || struct.clearingBuffer>0 || struct.maxVerticalClear>0)
+  if(struct.getClearingMax() > 0)
     {
     doClearing();
     }
-//  if(struct.maxVerticalClear>0 || struct.clearingBuffer >0)
-//    {
-//    doClearing();
-//    }
   }
 
 /**
  * does leveling according to maxLeveling, levelingBuffer, minBounds, maxBounds.  No preservation
  */
 protected void doLeveling()
-  {    
-  
-  
-  int mL;
-  int lB;
-  WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
-  if(ent!=null && ent.hasLevlingOverride())
-    {
-    mL = ent.maxLeveling;
-    lB = ent.levelingBuffer;
-    }
-  else
-    {
-    mL = struct.maxLeveling;
-    lB = struct.levelingBuffer;
-    }
-  StructureBB bb = AWStructure.getLevelingBoundingBox(buildPos, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, mL, lB);
-  //StructureBB bb = struct.getLevelingBB(buildPos, facing);
-
-  Config.logDebug("Leveling Bounds: "+bb.pos1.toString() +"---"+bb.pos2.toString());
+  {
+  StructureBB bb = AWStructure.getLevelingBoundingBox(buildPos, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, struct.getLevelingMax(), struct.getLevelingBuffer());  
   int rnd = this.random.nextInt(2);
   int id = Block.stone.blockID;
   if(rnd ==0)
@@ -282,21 +259,8 @@ protected void doLeveling()
 
 protected void doClearing()
   {
-  int mC;
-  int cB;
-  WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
-  if(ent!=null && ent.hasLevlingOverride())
-    {
-    mC = ent.maxClearing;
-    cB = ent.clearingBuffer;
-    }
-  else
-    {
-    mC = struct.maxVerticalClear;
-    cB = struct.clearingBuffer;
-    }
   
-  StructureBB bb = AWStructure.getClearingBoundinBox(buildPos, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, mC, cB);
+  StructureBB bb = AWStructure.getClearingBoundinBox(buildPos, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, struct.getClearingMax(), struct.getClearingBuffer());
   
   //StructureBB bb = struct.getClearingBB(buildPos, facing);  
   StructureBB bounds = struct.getStructureBB(buildPos, facing);

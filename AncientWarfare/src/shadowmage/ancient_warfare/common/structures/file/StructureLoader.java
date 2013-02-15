@@ -339,23 +339,23 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
       }
     else if(line.toLowerCase().startsWith("maxoverhang"))
       {
-      struct.maxOverhang = StringTools.safeParseInt("=", line);
+      struct.setOverhang(StringTools.safeParseInt("=", line));
       }
     else if(line.toLowerCase().startsWith("maxleveling"))
       {
-      struct.maxLeveling = StringTools.safeParseInt("=", line);
+      struct.setLevelingMax(StringTools.safeParseInt("=", line));
       }
     else if(line.toLowerCase().startsWith("levelingbuffer"))
       {
-      struct.levelingBuffer = StringTools.safeParseInt("=", line);
+      struct.setLevelingBuffer(StringTools.safeParseInt("=", line));
       }
     else if(line.toLowerCase().startsWith("maxverticalclear"))
       {
-      struct.maxVerticalClear = StringTools.safeParseInt("=", line);
+      struct.setClearingMax(StringTools.safeParseInt("=", line));
       }
     else if(line.toLowerCase().startsWith("clearingbuffer"))
       {
-      struct.clearingBuffer = StringTools.safeParseInt("=", line);
+      struct.setClearingBuffer(StringTools.safeParseInt("=", line));
       }
     else if(line.toLowerCase().startsWith("preservewater"))// 
       {
@@ -480,19 +480,19 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
       }
     else if(line.toLowerCase().startsWith("allowable_overhang"))
       {
-      struct.maxOverhang = StringTools.safeParseInt("=", line);
+      struct.setOverhang(StringTools.safeParseInt("=", line));
       }
     else if(line.toLowerCase().startsWith("max_cut_in"))
       {
-      struct.maxVerticalClear = StringTools.safeParseInt("=", line);
+      struct.setClearingMax(StringTools.safeParseInt("=", line));
       }
     else if(line.toLowerCase().startsWith("max_leveling"))
       {
-      struct.maxLeveling = StringTools.safeParseInt("=", line);
+      struct.setLevelingMax(StringTools.safeParseInt("=", line));
       }
     else if(line.toLowerCase().startsWith("leveling_buffer"))
       {
-      struct.levelingBuffer = StringTools.safeParseInt("=", line);
+      struct.setLevelingBuffer(StringTools.safeParseInt("=", line));
       }
     else if(line.toLowerCase().startsWith("preserve_water"))
       {

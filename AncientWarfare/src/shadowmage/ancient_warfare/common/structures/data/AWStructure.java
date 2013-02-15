@@ -39,6 +39,7 @@ import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureEntry;
 
 public abstract class AWStructure
 {
@@ -54,6 +55,8 @@ private Set<Builder> openBuilders = new HashSet<Builder>();
  */
 //public boolean lockedForEdit = false;
 private List<String> openEditors = new ArrayList<String>();
+
+private WorldGenStructureEntry worldGen;
 
 /**
  * mostly file IO stuff...
@@ -122,28 +125,28 @@ public short [][][] structure;
 /**
  * how many blocks may be non-solid below this structure
  */
-public int maxOverhang;
+private int maxOverhang;
 
 /**
  * how many blocks vertically above base may be cleared 
  */
-public int maxVerticalClear;
+private int maxVerticalClear;
 
 /**
  * how many blocks around the structure to clear (outside of w,h,l)
  */
-public int clearingBuffer;
+private int clearingBuffer;
 
 /**
  * maximum vertical fill distance for missing blocks below the structure
  * overrides overhang numbers
  */
-public int maxLeveling;
+private int maxLeveling;
 
 /**
  * how many blocks outside of w,h,l should be leveled around the structure
  */
-public int levelingBuffer;
+private int levelingBuffer;
 
 /**
  * valid targets to build this structure upon.
@@ -162,6 +165,72 @@ public int zOffset;
 public int xSize;//x dimension
 public int zSize;//z dimension
 public int ySize;//y dimension
+
+public void setOverhang(int overhang){this.maxOverhang = overhang;}
+public void setLevelingMax(int leveling){this.maxLeveling = leveling;}
+public void setLevelingBuffer(int buffer){this.levelingBuffer = buffer;}
+public void setClearingMax(int clearing){this.maxVerticalClear = clearing;}
+public void setClearingBuffer(int buffer){this.clearingBuffer = buffer;}
+public int getLevelingMaxRaw(){return this.maxLeveling;};
+public int getLevelingBufferRaw(){return this.levelingBuffer;}
+public int getClearingMaxRaw(){return this.maxVerticalClear;}
+public int getClearingBufferRaw(){return this.clearingBuffer;}
+public int getOverHangRaw(){return this.maxOverhang;}
+
+public int getLevelingMax()
+  {
+  if(this.worldGen!=null && this.worldGen.hasLevlingOverride())
+    {
+    return worldGen.maxLeveling;
+    }
+  return this.maxLeveling;
+  }
+
+public int getLevelingBuffer()
+  {
+  if(this.worldGen!=null && this.worldGen.hasLevlingOverride())
+    {
+    return worldGen.levelingBuffer;
+    }
+  return this.levelingBuffer;
+  }
+
+public int getOverhangMax()
+  {
+  if(this.worldGen!=null && this.worldGen.hasOverhangOverride())
+    {
+    return worldGen.overhang;
+    }
+  return this.maxOverhang;
+  }
+
+public int getClearingMax()
+  {
+  if(this.worldGen!=null && this.worldGen.hasClearingOverride())
+    {
+    return this.worldGen.maxClearing;
+    }
+  return this.maxVerticalClear;
+  }
+
+public int getClearingBuffer()
+  {
+  if(this.worldGen!=null && this.worldGen.hasClearingOverride())
+    {
+    return this.worldGen.clearingBuffer;
+    }
+  return this.clearingBuffer;
+  }
+
+public void setWorldGenEntry(WorldGenStructureEntry ent)
+  {
+  this.worldGen = ent;
+  }
+
+public WorldGenStructureEntry getWorldGenEntry()
+  {
+  return this.worldGen;
+  }
 
 public boolean isLocked()
   {

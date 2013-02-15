@@ -73,11 +73,11 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     writer.write("\n");
     writer.write("embed_into_distance="+struct.verticalOffset+"\n");
     writer.write("\n");
-    writer.write("allowable_overhang="+struct.maxOverhang+"\n");
-    writer.write("max_leveling="+struct.maxLeveling+"\n");
-    writer.write("levelingBuffer="+struct.levelingBuffer+"\n");
-    writer.write("max_cut_in="+struct.maxVerticalClear+"\n");
-    writer.write("cut_in_buffer="+struct.clearingBuffer+"\n");
+    writer.write("allowable_overhang="+struct.getOverHangRaw()+"\n");
+    writer.write("max_leveling="+struct.getLevelingMaxRaw()+"\n");
+    writer.write("levelingBuffer="+struct.getLevelingBufferRaw()+"\n");
+    writer.write("max_cut_in="+struct.getClearingMaxRaw()+"\n");
+    writer.write("cut_in_buffer="+struct.getClearingBufferRaw()+"\n");
     writer.write("preserve_water="+getIntForBoolean(struct.preserveWater)+"\n");
     writer.write("preserve_lava="+getIntForBoolean(struct.preserveLava)+"\n");
     writer.write("preserve_plants="+getIntForBoolean(struct.preservePlants)+"\n");

@@ -123,11 +123,11 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
   lines.add("xOffset="+String.valueOf(struct.xOffset));
   lines.add("zOffset="+String.valueOf(struct.zOffset));
   lines.add("");
-  lines.add("maxOverhang="+String.valueOf(struct.maxOverhang));
-  lines.add("maxLeveling="+String.valueOf(struct.maxLeveling));
-  lines.add("levelingBuffer="+String.valueOf(struct.levelingBuffer));
-  lines.add("maxVerticalClear="+String.valueOf(struct.maxVerticalClear));
-  lines.add("clearingBuffer="+String.valueOf(struct.clearingBuffer));
+  lines.add("maxOverhang="+String.valueOf(struct.getOverHangRaw()));
+  lines.add("maxLeveling="+String.valueOf(struct.getLevelingMaxRaw()));
+  lines.add("levelingBuffer="+String.valueOf(struct.getLevelingBufferRaw()));
+  lines.add("maxVerticalClear="+String.valueOf(struct.getClearingMaxRaw()));
+  lines.add("clearingBuffer="+String.valueOf(struct.getClearingBufferRaw()));
   lines.add("preserveWater="+String.valueOf(struct.preserveWater));
   lines.add("preserveLava="+String.valueOf(struct.preserveLava));
   lines.add("preservePlants="+String.valueOf(struct.preservePlants));

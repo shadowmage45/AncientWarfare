@@ -66,12 +66,12 @@ public BlockRule getRuleAt(int x, int y, int z)
   return this.blockRules.get(Integer.valueOf(this.structure[x][y][z]));
   }
 
-public static boolean canGenerateAtSurface(World world, BlockPosition hit, int facing, ProcessedStructure struct, int maxOverhang, int maxLeveling, int levelingBuffer, int maxVerticalClear, int clearingBuffer)
+public static boolean canGenerateAtSurface(World world, BlockPosition hit, int facing, ProcessedStructure struct)
   {  
   int missingBlocks = 0;
   boolean canGen = true;  
   StructureBB bb = getBoundingBox(hit, facing, struct.xOffset, struct.ySize, struct.zOffset, struct.xSize, struct.ySize, struct.zSize);
-  if(maxLeveling==0)//should level the site, or check for overhang?
+  if(struct.getLevelingMax()==0)//should level the site, or check for overhang?
     {
     BlockPosition front = bb.pos1.copy();
     front.y --;
@@ -84,7 +84,7 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
         {
         missingBlocks++;
         }
-      if(missingBlocks>maxOverhang)
+      if(missingBlocks>struct.getOverhangMax())
         {
         Config.logDebug("Rejected due to overhang");
         return false;
@@ -96,14 +96,14 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
     BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
     min.y += struct.verticalOffset;
     BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
-    if(!isValidLevelingTarget(world, min, max, struct.validTargetBlocks, levelingBuffer))
+    if(!isValidLevelingTarget(world, min, max, struct.validTargetBlocks, struct.getLevelingBuffer()))
       {
       Config.logDebug("rejected for improper leveling");
       return false;
       }   
     }
   
-  if(maxVerticalClear >= struct.ySize -struct.verticalOffset)//the whole thing will be cleared
+  if(struct.getClearingMax() >= struct.ySize -struct.verticalOffset)//the whole thing will be cleared
     {
     Config.logDebug("skipping clearing check");
     return true;
@@ -112,10 +112,10 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
   BlockPosition clearTest = bb.pos1.copy();
   BlockPosition clearTest2 = bb.pos2.copy();
   
-  clearTest.y+=struct.verticalOffset+ maxVerticalClear - 1;
+  clearTest.y+=struct.verticalOffset+ struct.getClearingMax() - 1;
   List<BlockPosition> nonClearedBlocks = BlockTools.getAllBlockPositionsBetween(clearTest, clearTest2);
   
-  if(clearTest.y==clearTest2.y && maxVerticalClear>0)
+  if(clearTest.y==clearTest2.y && struct.getClearingMax()>0)
     {
     Config.logDebug("second skip clearance check");
     }
@@ -132,7 +132,7 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
   return true;
   }
 
-public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facing, ProcessedStructure struct, int maxOverhang, int maxLeveling, int levelingBuffer)
+public static boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facing, ProcessedStructure struct)
   {
   /**
    * what to check for underground validation?   * 
@@ -141,8 +141,8 @@ public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facin
    */
   int missingBlocks = 0;
   boolean canGen = true;  
-  StructureBB bb = getStructureBB(hit, facing);
-  if(maxLeveling==0)//should level the site, or check for overhang?
+  StructureBB bb = struct.getStructureBB(hit, facing);
+  if(struct.getLevelingMax()==0)//should level the site, or check for overhang?
     {
     BlockPosition front = bb.pos1.copy();
     front.y --;
@@ -155,7 +155,7 @@ public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facin
         {
         missingBlocks++;
         }
-      if(missingBlocks>this.maxOverhang)
+      if(missingBlocks>struct.getOverhangMax())
         {
         Config.logDebug("Rejected due to overhang");
         return false;
@@ -165,9 +165,9 @@ public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facin
   else
     {
     BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
-    min.y += verticalOffset;
+    min.y += struct.verticalOffset;
     BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
-    if(!isValidLevelingTarget(world, min, max, struct.validTargetBlocks, levelingBuffer))
+    if(!isValidLevelingTarget(world, min, max, struct.validTargetBlocks, struct.getLevelingBuffer()))
       {
       Config.logDebug("rejected for improper leveling");
       return false;

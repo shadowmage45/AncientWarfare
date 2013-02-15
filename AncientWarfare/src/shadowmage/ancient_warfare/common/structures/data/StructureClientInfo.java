@@ -61,24 +61,11 @@ public StructureClientInfo(NBTTagCompound tag)
 
 public static NBTTagCompound getClientTag(AWStructure struct)
  {
- WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
- int leveling = struct.maxLeveling;
- int levelingB = struct.levelingBuffer;
- int clearing = struct.maxVerticalClear;
- int clearingB = struct.clearingBuffer;
- if(ent!=null)
-   {   
-   if(ent.hasClearingOverride())
-     {
-     clearing = ent.maxClearing;
-     clearingB = ent.clearingBuffer;
-     }
-   if(ent.hasLevlingOverride())
-     {
-     leveling = ent.maxLeveling;
-     levelingB = ent.levelingBuffer;
-     }
-   } 
+ 
+ int leveling = struct.getLevelingMax();
+ int levelingB = struct.getLevelingBuffer();
+ int clearing = struct.getClearingMax();
+ int clearingB = struct.getClearingBuffer(); 
  
  NBTTagCompound structTag = new NBTTagCompound();
  if(struct!=null)

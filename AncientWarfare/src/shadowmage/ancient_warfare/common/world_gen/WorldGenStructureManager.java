@@ -238,13 +238,6 @@ private void loadBiomesList()
 public void addEntry(ProcessedStructure struct, int weight, int value, boolean unique)
   {
   String name = struct.name;
-//  int ov = struct.maxOverhang;
-//  int mL = struct.maxLeveling;
-//  int lB = struct.levelingBuffer;
-//  int mC = struct.maxVerticalClear;
-//  int cB = struct.clearingBuffer;
-//  String[] bO = struct.biomesOnlyIn;
-//  String[] bN = struct.biomesNotIn;
   WorldGenStructureEntry entry = new WorldGenStructureEntry(name, unique, weight, value, -1, -1, -1, -1, null, null, -1);
   this.addStructureEntry(entry);
   this.saveConfig();
@@ -279,11 +272,11 @@ private void addStructureEntry(WorldGenStructureEntry ent)
       }    
     if(biomesNotIn!=null)
       {
-      addToAllButBiomes(ent, struct.biomesNotIn);
+      addToAllButBiomes(ent, biomesNotIn);
       }
     else if(biomesOnlyIn!=null)
       {
-      addToOnlyBiomes(ent, struct.biomesOnlyIn);
+      addToOnlyBiomes(ent, biomesOnlyIn);
       }
     else
       {
@@ -293,6 +286,7 @@ private void addStructureEntry(WorldGenStructureEntry ent)
       {
       this.namesStructureMap.put(ent.name, ent);
       }
+    struct.setWorldGenEntry(ent);
     }
   else
     {

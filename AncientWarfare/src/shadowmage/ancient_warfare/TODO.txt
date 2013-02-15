@@ -20,7 +20,7 @@ TEMPLATES
 SCANNER
 
 STRUCTURE BUILDING
-* find better manner of handling overrides
+* fix up leveling check--it is not checking bounds properly
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and dissallow non-dungeon structures?)
@@ -178,7 +178,7 @@ public static MyWorldData forWorld(World world)
 * find better placement for error msgs...
 * fix up bb collision code...it..was terrible...
 * fix up some of the world-gen override code that wasn't quite overridden...it should now function reliably....
-
+* find better manner of handling overrides
 
 
 

@@ -85,7 +85,7 @@ public static void resetMap()
   dimensionStructures = new HashMap<Integer, WorldGenStructureMap>();
   }
 
-public boolean attemptPlacementSubsurface(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random, int mL, int lB, int mC, int cB, int o)
+public boolean attemptPlacementSubsurface(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random)
   {  
   if(y==-1)
     {
@@ -93,7 +93,7 @@ public boolean attemptPlacementSubsurface(World world, int x, int y, int z, int 
     return false;
     }
   BlockPosition hit = new BlockPosition(x,y,z);    
-  if(!struct.canGenerateAtSubSurface(world, hit, face, struct, o, mL, lB))
+  if(!struct.canGenerateAtSubSurface(world, hit, face, struct))
     {
     Config.logDebug("underground structure rejected build site");
     return false;
@@ -108,7 +108,7 @@ public boolean attemptPlacementSubsurface(World world, int x, int y, int z, int 
   return true;
   }
 
-public boolean attemptPlacementSurface(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random, int mL, int lB, int mC, int cB, int o)
+public boolean attemptPlacementSurface(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random)
   {  
   if(y==-1)
     {
@@ -116,7 +116,7 @@ public boolean attemptPlacementSurface(World world, int x, int y, int z, int fac
     return false;
     }
   BlockPosition hit = new BlockPosition(x,y,z);    
-  if(!struct.canGenerateAtSurface(world, hit.copy(), face, struct, o, mL, lB, mC, cB))
+  if(!struct.canGenerateAtSurface(world, hit.copy(), face, struct))
     {
     Config.logDebug("site rejected by structure: "+struct.name);
     return false;
@@ -179,30 +179,6 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   ProcessedStructure struct = WorldGenStructureManager.instance().getStructureForBiome(biomeName, maxValue, random);
   if(struct!=null)
     {
-    WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
-    int mL = struct.maxLeveling;
-    int lB = struct.levelingBuffer;
-    int mC = struct.maxVerticalClear;
-    int cB = struct.clearingBuffer;
-    int o = struct.maxOverhang;
-    if(ent!=null)
-      {
-      if(ent.hasLevlingOverride())
-        {
-        mL = ent.maxLeveling;
-        lB = ent.levelingBuffer;
-        }
-      if(ent.hasClearingOverride())
-        {
-        mC = ent.maxClearing;
-        cB = ent.clearingBuffer;
-        }
-      if(ent.hasOverhangOverride())
-        {
-        o = ent.overhang;
-        }
-      }
-    
     
     /**
      * if it is not a decorative structure, check value
@@ -230,15 +206,16 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
       {
       y = getSubsurfaceTarget(world, x, z, struct.undergroundMinLevel, struct.undergroundMaxLevel, struct.minSubmergedDepth, random);
       
-      placed = this.attemptPlacementSubsurface(world, x, y, z, face, struct, random, mL, lB, mC, cB, o);
+      placed = this.attemptPlacementSubsurface(world, x, y, z, face, struct, random);
       }
     else
       {
       y = getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
-      placed = this.attemptPlacementSurface(world, x, y, z, face, struct, random, mL, lB, mC, cB, o);
+      placed = this.attemptPlacementSurface(world, x, y, z, face, struct, random);
       }    
     if(placed)
       {      
+      WorldGenStructureEntry ent = struct.getWorldGenEntry();
       if(ent!=null)
         {
         WorldGenManager.instance().setGeneratedAt(dim, x, y, z, face, ent.value, ent.name, ent.unique);
