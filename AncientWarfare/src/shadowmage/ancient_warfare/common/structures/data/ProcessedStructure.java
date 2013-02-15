@@ -175,21 +175,26 @@ public static boolean canGenerateAtSubSurface(World world, BlockPosition hit, in
 
 public static boolean isValidLevelingTarget(World world, StructureBB levelingBB, int[] validTargetBlocks, int levelingBuffer)
   {
+  Config.logDebug("LevelingBB: "+levelingBB.toString());
   int minX = levelingBB.pos1.x - 1 - levelingBuffer;
   int maxX = levelingBB.pos2.x + 1 + levelingBuffer;
   int minZ = levelingBB.pos1.z - 1 - levelingBuffer;
   int maxZ = levelingBB.pos2.z + 1 + levelingBuffer;
-    
   int y = levelingBB.pos2.y;
+  
+  Config.logDebug("checkBB: "+minX+","+y+","+minZ+" :: "+maxX+","+y+","+maxZ);
+  
     
   for(int x = minX; x <= maxX; x++)
     {
     int id = world.getBlockId(x, y, minZ);
+    Config.logDebug(x+","+y+","+minZ+" :: "+id);
     if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
       }
     id = world.getBlockId(x, y, maxZ);
+    Config.logDebug(x+","+y+","+maxZ+" :: "+id);
     if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
@@ -198,11 +203,13 @@ public static boolean isValidLevelingTarget(World world, StructureBB levelingBB,
   for(int z = minZ; z <= maxZ; z++)
     {
     int id = world.getBlockId(minX, y, z);
+    Config.logDebug(minX+","+y+","+z+" :: "+id);
     if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
       }
     id = world.getBlockId(maxX, y, z);
+    Config.logDebug(maxX+","+y+","+z+" :: "+id);
     if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
