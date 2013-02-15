@@ -35,6 +35,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
+import shadowmage.ancient_warfare.common.structures.data.AWStructure;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureBB;
@@ -42,6 +43,8 @@ import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.world_gen.LootGenerator;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureEntry;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 
 public abstract class Builder implements INBTTaggable
 {
@@ -221,14 +224,19 @@ public void setTeamOverride(int type)
  */
 protected void preConstruction()
   {
-  if(struct.maxLeveling>0)
+  WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
+  if(ent!=null && ent.hasLevlingOverride() || struct.maxLeveling>0)
     {
     doLeveling();
     }
-  if(struct.maxVerticalClear>0 || struct.clearingBuffer >0)
+  if(ent!=null && ent.hasClearingOverride() || struct.clearingBuffer>0 || struct.maxVerticalClear>0)
     {
     doClearing();
     }
+//  if(struct.maxVerticalClear>0 || struct.clearingBuffer >0)
+//    {
+//    doClearing();
+//    }
   }
 
 /**
@@ -236,7 +244,23 @@ protected void preConstruction()
  */
 protected void doLeveling()
   {    
-  StructureBB bb = struct.getLevelingBB(buildPos, facing);
+  
+  
+  int mL;
+  int lB;
+  WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
+  if(ent!=null && ent.hasLevlingOverride())
+    {
+    mL = ent.maxLeveling;
+    lB = ent.levelingBuffer;
+    }
+  else
+    {
+    mL = struct.maxLeveling;
+    lB = struct.levelingBuffer;
+    }
+  StructureBB bb = AWStructure.getLevelingBoundingBox(buildPos, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, mL, lB);
+  //StructureBB bb = struct.getLevelingBB(buildPos, facing);
 
   Config.logDebug("Leveling Bounds: "+bb.pos1.toString() +"---"+bb.pos2.toString());
   int rnd = this.random.nextInt(2);
@@ -258,7 +282,23 @@ protected void doLeveling()
 
 protected void doClearing()
   {
-  StructureBB bb = struct.getClearingBB(buildPos, facing);  
+  int mC;
+  int cB;
+  WorldGenStructureEntry ent = WorldGenStructureManager.instance().getEntryFor(struct.name);
+  if(ent!=null && ent.hasLevlingOverride())
+    {
+    mC = ent.maxClearing;
+    cB = ent.clearingBuffer;
+    }
+  else
+    {
+    mC = struct.maxVerticalClear;
+    cB = struct.clearingBuffer;
+    }
+  
+  StructureBB bb = AWStructure.getClearingBoundinBox(buildPos, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, mC, cB);
+  
+  //StructureBB bb = struct.getClearingBB(buildPos, facing);  
   StructureBB bounds = struct.getStructureBB(buildPos, facing);
   BlockPosition minBounds = BlockTools.getMin(bounds.pos1, bounds.pos2);
   BlockPosition maxBounds = BlockTools.getMax(bounds.pos1, bounds.pos2);  

@@ -54,20 +54,21 @@ public NBTTagCompound getNBTTag()
   NBTTagCompound tag = new NBTTagCompound();
   tag.setByte("val", this.structureValue);
   tag.setString("name", this.name);
-  tag.setByte("x", this.xOff);
-  tag.setByte("z", this.zOff);
+  tag.setByte("xO", this.xOff);
+  tag.setByte("yO", this.yPos);
+  tag.setByte("zO", this.zOff);
   tag.setByte("f", this.face);
-  tag.setByte("y", this.yPos);
   return tag;
   }
+
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
   this.structureValue = tag.getByte("val");
   this.name = tag.getString("name");
-  this.xOff = tag.getByte("x");
-  this.zOff = tag.getByte("z");
-  this.face = tag.getByte("face");
-  this.yPos = tag.getByte("y");
+  this.xOff = tag.getByte("xO");
+  this.yPos = tag.getByte("yO");
+  this.zOff = tag.getByte("zO");
+  this.face = tag.getByte("f");
   }
 }

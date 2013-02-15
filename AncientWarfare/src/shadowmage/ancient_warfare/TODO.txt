@@ -13,24 +13,21 @@ TESTING
 * test submerged code
 * test that static air rule works properly
 * test world gen overrides...
-* test that structBBs didn't get screwed by using min/max on them
 * test structure BB collision code...
 
 TEMPLATES
-* change template extension--enable it in config properties, or...manually set?
 
 SCANNER
 
 STRUCTURE BUILDING
+* find better manner of handling overrides
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and dissallow non-dungeon structures?)
 * add clearing/leveling code to the structureBB collision test...
 
 STRUCTURE EDITOR
-* add home, pgUp, pgDwn, end functionality
-* add selection ability
-* add mouse input
+* add selection ability (clipboard/copy/paste)
 
 COMPLEXES
 * THDT
@@ -107,95 +104,7 @@ public static MyWorldData forWorld(World world)
 
 
 ********************* DONE STUFF *************************
-* BB rendering working...
-* default structure exporting...
-* inventoried blocks for door, bed, slabs, double slabs
-* test door coding for inventoried builder
-* builder blocks + link builder to structure....
-* TEST FREAKING BUILDER SAVE AND LOADING--IT FAILS--NEEDS WORK--NAOW IT WORKS!
-* bb rendering for all other structure builders...
-* cleanup bb rendering code, its freaking ugly
-* rewrite BB rendering to use partialTickTime from event
-* clear button on survival builder
-* survival builder blockList rendering
-* biome exclusion list in template
-* biome specific list in template
-* add preservedBlocksList to template, blockRule, parsing....
-* ruins .tml importer
-* ruins .tml exporter
-* clean up blockRule internal parsing to use new safeParse code
-* rewrite exporter to use ProcessedStructure
-* add settings to allow ruins export
-* restructure folders...its a mess
-* parse swap rules
-* add swap rules functionality to structure and builder
-* export swap rules
-* add default 0 rule to ruins template importer
-* make sure all structs have default 0 rule after loaded
-* fix ruins exporter structure naming
-* site preparation (clearing, leveling)
-* add preserved block testing into builder placement code
-* handle no block rule
-* add bb getters and renders for leveling and clearing areas...
-* verify block rule randomization works as intended
-* make sure hard air zero rule is in place after loading or importing, and prior to exporting
-* fix leveling and clearing bb renders
-* verify and fix structure clearance code
-* fix block percentage chance placement
-* restructure builders to a more unified system for checking block validity
-* handle mob spawners in import, rules, and export 
-* restructure lookups for rules to use maps by ruleNumber
-* handle building rules for ruins special spawn stuff
-* fix parsing of spaces ( use .trim() )
-* built structures map --store in nbt?
-* add resourceList stuff to template--so others can denote custom resource lists to construct a building
-* leveling code appears to be off on some axis for ruins imported structures, fixed...
-* stop exporter from exporting 0-0 data (stop resourceList from counting it in the first place)
-* move builder block outside of the cleared area, or ensure builder block is placed after clearing is done--for creative ticked builder
-* cleanup bug where overwriting a chest will crash the client (render tick error)(notify on update, or mark blocks dirty)
-        this one is apparently going to be tought to fix...instant builder may be borked--workaround with deferred block placement list
-* fix validTargetBlocks export
-* figure out decent structure selection algorithm
-* switch over to using a word_gen_template file? (stores name, weight, value for each world-gen struct, also store
-        complex' information for the future)
-* add canSpawnInLiquid -- uses preserveWater / preserveLava
-* site validation
-* above ground height selection algorithm
-* hook generatedStructures map up to gametracker for save/load
-* fix validTargetBlocks import/default inclusion...
-* invert level weighting for chest loot
-* fix vehicleRule rule parsing to use safeParse methods
-* add maxSubmergedDepth
-* handle max submerged level during generation, for lava and water
-* underground height selection algorithm
-* underground generation
-* verify that preservedBlocks works as intended
-* move over to unified bounding-box system...it is now all set in AWStructure, as static methods
-* adjust leveling, correct for yOffset
-* convert ruins block metadata to northfacing on import---NFC why, or what is going on...
-* fix ruins x,z coord inversion on import
-* fix ruins vertical offset being...off
-* biome validation
-* chest loot support
-* fix temp builder to clear if no valid structure is found ??
-* add inventory blocks for *water, *lava, *redstone torch(fix), *repeater, plants
-* finish isPlant
-* fully implement overrides for creative builder (as far as possible without NPCs/Vehicles/Gates/Teams/Etc)
-* add gates to blockRules
-* work out chest/loot system
-* fix bb rendering...again....
-* test block swapping
-* verify world gen map loads properly
-* find better method to sort available structures per-biome, to reduce rejected structures
-* finish reworking structure selector, needs weighting stuff done
-* handle multi-dimensions (make them mod-global, and not per-structure(ease of handling)?)
-* write default values to world gen config if no file is found
-* move and rename world-gen config file
-* finish adding things to lootgenerator
-* add percentage of an empty slot to lootgenerator
-* test biome inclusion/exclusion
-* add default templates, and add them to export list
-* add BB render to scanner
+
 /****************************************FIRST TEST RELEASE****************************************/
 * store template lines in structure
 * break template lines into byte chunks to send to client
@@ -262,6 +171,13 @@ public static MyWorldData forWorld(World world)
 * add dirty flag to editor, so it won't retransmit template unless it has been edited
 * update textFieldAdvanced number handling--it should now allow control input, but still only allow numerical input
 * add getIntVal and getFloatVal to textFieldAdvanced
+* change template extension--enable it in config properties
+* test that structBBs didn't get screwed by using min/max on them
+* add home, pgUp, pgDwn, end functionality to editor
+* add mouse input to editor
+* find better placement for error msgs...
+* fix up bb collision code...it..was terrible...
+* fix up some of the world-gen override code that wasn't quite overridden...it should now function reliably....
 
 
 

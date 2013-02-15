@@ -189,7 +189,7 @@ private void copyDefaultStructures(String pathName)
         }
       
       String trimmedName = fileName.substring(0, fileName.length()-4);
-      fileName = trimmedName +"."+Config.TEMPLATE_EXTENSION;
+      fileName = trimmedName +"."+Config.templateExtension;
       file = new File(includeDirectory,fileName);
   
       if(!file.exists())

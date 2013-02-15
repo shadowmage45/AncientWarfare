@@ -132,7 +132,7 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
   return true;
   }
 
-public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facing, ProcessedStructure struct)
+public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facing, ProcessedStructure struct, int maxOverhang, int maxLeveling, int levelingBuffer)
   {
   /**
    * what to check for underground validation?   * 
@@ -167,7 +167,7 @@ public boolean canGenerateAtSubSurface(World world, BlockPosition hit, int facin
     BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
     min.y += verticalOffset;
     BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
-    if(!isValidLevelingTarget(world, min, max, struct.validTargetBlocks, struct.levelingBuffer))
+    if(!isValidLevelingTarget(world, min, max, struct.validTargetBlocks, levelingBuffer))
       {
       Config.logDebug("rejected for improper leveling");
       return false;
@@ -288,14 +288,14 @@ public StructureBB getStructureBB(BlockPosition hit, int facing)
   return getBoundingBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize);
   }
 
-public StructureBB getLevelingBB(BlockPosition hit, int facing)
-  {
-  return getLevelingBoundingBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize, maxLeveling, levelingBuffer);}
-
-public StructureBB getClearingBB(BlockPosition hit, int facing)
-  { 
-  return getClearingBoundinBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize, maxVerticalClear, clearingBuffer);
-  }
+//public StructureBB getLevelingBB(BlockPosition hit, int facing)
+//  {
+//  return getLevelingBoundingBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize, maxLeveling, levelingBuffer);}
+//
+//public StructureBB getClearingBB(BlockPosition hit, int facing)
+//  { 
+//  return getClearingBoundinBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize, maxVerticalClear, clearingBuffer);
+//  }
 
 /**
  * returns a facing normalized frontleft corner position for this building (no Y adjustment)

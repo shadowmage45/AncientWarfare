@@ -75,7 +75,8 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     {
     this.editor.drawTextBox(fontRenderer, guiLeft+4, guiTop+4);
     }
-  this.drawString(fontRenderer, errorMsg, guiLeft+10, guiTop+10, 0xffff0000);
+  this.fontRenderer.drawString(errorMsg, guiLeft+10, guiTop+240-4-18-1-7, 0xffff0000, false);
+  //this.drawString(fontRenderer, errorMsg, guiLeft+10, guiTop+240-4-18-1-10, 0xffff0000);
   }
 
 @Override
@@ -84,6 +85,11 @@ public void setupGui()
   this.controlList.clear();
   this.addGuiButton(0, 128-50-2, 240-18-4, 50, 18, "Discard");
   this.addGuiButton(1, 128 + 2, 240-18-4, 50, 18, "Save");
+  if(editor!=null)    
+    {
+    editor.updateDrawPos(guiLeft+4, guiTop+4);
+    }  
+  this.errorMsg = "";
   }
 
 @Override
@@ -93,6 +99,7 @@ public void updateScreenContents()
     {
     this.editor = new GuiTextBox(248, 240-18-4-2-10, 20, 32, 0xffffffff, 0x00000000, cont.clientLines);
     this.editor.activated = true;
+    this.editor.updateDrawPos(guiLeft+4, guiTop+4);
     }
   if(this.errorDisplayCount>0)
     {
@@ -157,6 +164,19 @@ protected void keyTyped(char par1, int par2)
     this.editor.onKeyTyped(par1, par2);
     }
   
+  }
+
+@Override
+protected void mouseClicked(int mouseX, int mouseY, int buttonNum)
+  {
+  if(editor!=null && editor.isMouseOver(mouseX, mouseY))
+    {
+    editor.onMouseClicked(buttonNum, mouseX, mouseY);
+    }
+  else
+    {
+    super.mouseClicked(mouseX, mouseY, buttonNum);
+    }
   }
 
 

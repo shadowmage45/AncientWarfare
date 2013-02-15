@@ -223,11 +223,11 @@ public void export()
     player.addChatMessage("Exporting structure to AW Format: "+name);
     if(!this.includeOnExport)
       {
-      path = String.valueOf(AWStructureModule.outputDirectory+name+"."+Config.TEMPLATE_EXTENSION);
+      path = String.valueOf(AWStructureModule.outputDirectory+name+"."+Config.templateExtension);
       }
     else
       {
-      path = String.valueOf(AWStructureModule.includeDirectory+name+"."+Config.TEMPLATE_EXTENSION);
+      path = String.valueOf(AWStructureModule.includeDirectory+name+"."+Config.templateExtension);
       }    
     boolean success = StructureExporter.writeStructureToFile(struct, path,false);
     struct.filePath = path;

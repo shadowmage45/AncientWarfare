@@ -78,7 +78,7 @@ int currentLayer = 0;
 public void scanForPrebuiltFiles()
   {
   probableStructureFiles.clear();  
-  this.recursiveScan(new File(AWStructureModule.includeDirectory), probableStructureFiles, "."+Config.TEMPLATE_EXTENSION);  
+  this.recursiveScan(new File(AWStructureModule.includeDirectory), probableStructureFiles, "."+Config.templateExtension);  
   this.recursiveScan(new File(AWStructureModule.convertDirectory), probableRuinsFiles, ".tml");
   }
 
@@ -202,7 +202,7 @@ private ProcessedStructure processFile(File file)
    */
   try
     {
-    if(file.getName().endsWith("."+Config.TEMPLATE_EXTENSION))
+    if(file.getName().endsWith("."+Config.templateExtension))
       {      
       struct = this.loadStructureAW(lines, md5String);
       }
@@ -225,7 +225,7 @@ private ProcessedStructure processFile(File file)
   struct.filePath = file.getAbsolutePath();
 
   String name = file.getName();
-  if(name.endsWith("."+Config.TEMPLATE_EXTENSION) || name.endsWith(".tml"))
+  if(name.endsWith("."+Config.templateExtension) || name.endsWith(".tml"))
     {
     name = name.substring(0, name.length()-4);
     }
@@ -245,7 +245,7 @@ public void convertRuinsTemplates()
     {
     String name = file.getName();
     name = name.split(".tml")[0];
-    String newFile = String.valueOf(AWStructureModule.outputDirectory+name+"."+Config.TEMPLATE_EXTENSION);
+    String newFile = String.valueOf(AWStructureModule.outputDirectory+name+"."+Config.templateExtension);
 
     ProcessedStructure raw = processFile(file);
     if(raw==null || !raw.isValid)

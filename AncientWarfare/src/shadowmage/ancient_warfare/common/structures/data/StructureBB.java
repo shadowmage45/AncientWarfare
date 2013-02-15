@@ -41,10 +41,37 @@ public String toString()
   return pos1.toString() + " : " +pos2.toString();
   }
 
+/**
+ * does the input bb share any blocks with this bounding box?
+ * @param bb
+ * @return
+ */
 public boolean collidesWith(StructureBB bb)
   {
-  boolean a = BlockTools.isPositionWithinBounds(bb.pos1, pos1, pos2);
-  boolean b = BlockTools.isPositionWithinBounds(bb.pos2, pos1, pos2);
-  return a || b;
+  if(pos2.x < bb.pos1.x)
+    {
+    return false;
+    }
+  if(pos2.y < bb.pos1.y)
+    {
+    return false;
+    }
+  if(pos2.z < bb.pos1.z)
+    {
+    return false;
+    }
+  if(pos1.x > bb.pos2.x)
+    {
+    return false;
+    }
+  if(pos1.y > bb.pos2.y)
+    {
+    return false;
+    }
+  if(pos1.z > bb.pos2.z)
+    {
+    return false;
+    }  
+  return true;
   }
 }

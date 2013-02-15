@@ -37,6 +37,13 @@ public class GuiTextBox extends Gui
  */
 int xSize;
 int ySize;
+int xPos;
+int yPos;
+
+final int charWidth = 7;
+final int border = 4;
+final int charHeight = 10;
+
 final int displayLines;
 final int lineLength;
 int textColor;
@@ -337,10 +344,34 @@ private void handleEnterAction()
   this.fileDirty = true;
   }
 
-private void handleEndAction(){}
-private void handleHomeAction(){}
-private void handlePgDownAction(){}
-private void handlePgUpAction(){}
+private void handleEndAction()
+  {
+  this.setCursorXAtEndOfLine(this.getLineAt(cursorRawY));
+  }
+
+private void handleHomeAction()
+  {
+  this.cursorRawX = 0;
+  this.viewX = 0;
+  this.updateLocalCursorPos();
+  this.setDirty();
+  }
+
+private void handlePgDownAction()
+  {
+  for(int i = 0; i < displayLines; i++)
+    {
+    this.moveCursorDown();
+    }
+  }
+
+private void handlePgUpAction()
+  {
+  for(int i = 0; i < displayLines; i++)
+    {
+    this.moveCursorUp();
+    }
+  }
 
 private void handleDeleteAction()
   {
@@ -403,8 +434,7 @@ private void handleBackspaceAction()
 
 private void setCursorXAtEndOfLine(String line)
   {
-  this.cursorRawX = line.length();
-  this.updateLocalCursorPos();
+  this.cursorRawX = line.length();  
   if(this.cursorRawX < this.viewX)
     {
     this.viewX = this.cursorRawX;
@@ -413,6 +443,7 @@ private void setCursorXAtEndOfLine(String line)
     {
     this.viewX = this.cursorRawX - this.lineLength;//TODO this might be off by one...
     }
+  this.updateLocalCursorPos();
   this.setDirty();
   }
 
@@ -447,7 +478,7 @@ private void moveCursorUp()
     }
   if(cursorRawY < viewY)
     {
-    Config.logDebug("moving cursor down");
+    Config.logDebug("scrolling view down");
     viewY--;    
     }
   if(hasViewChanged())
@@ -537,24 +568,59 @@ private boolean hasViewChanged()
 
 public boolean isMouseOver(int x, int y)
   {
-  //TODO
-  //return if x,y is within bounds...  
+  if(x>= this.xPos && x < this.xPos+this.xSize && y >=this.yPos && y < this.yPos+this.ySize)
+    {
+    return true;
+    }  
   return false;
   }
 
+/**
+ * called when mouse is over, and button pressed
+ * @param buttonNum
+ * @param x raw screen x
+ * @param y raw screen y
+ * @return
+ */
 public boolean onMouseClicked(int buttonNum, int x, int y)
   {
-  //TODO set currentcursor pos from mouse input
+  int xMin = this.xPos+this.border;
+  int xMax = this.xPos+this.xSize-this.border;
+  int yMin = this.yPos+this.border;
+  int yMax = this.yPos+this.ySize-this.border;
+  if(x>=xMin && x < xMax && y >= yMin && y < yMax)
+    {
+    x-=xMin;
+    y-=yMin;
+    int charX = x/charWidth + viewX;
+    int charY = y/charHeight + viewY;
+    String line = this.getLineAt(charY);
+    this.cursorRawY = charY;
+    if(charX>=line.length())
+      {
+      this.setCursorXAtEndOfLine(line);
+      }
+    else
+      {
+      this.cursorRawX = charX;
+      }
+    this.updateLocalCursorPos();
+    this.setDirty();
+    Config.logDebug("set cursor pos from mouse input");
+    return true;
+    }  
+  Config.logDebug("cursor not in bounds");
   return false;
+  }
+
+public void updateDrawPos(int x, int y)
+  {
+  this.xPos = x;
+  this.yPos = y;
   }
 
 public void drawTextBox(FontRenderer fontRenderer, int xPos, int yPos)
-  {
-  
-  int border = 4;
-  int charWidth = 7;
-  int charHeight = 10;
-
+  {   
   drawRect(xPos - 1, yPos - 1, xPos + this.xSize + 1, yPos + this.ySize + 1, -6250336);
   drawRect(xPos, yPos, xPos + this.xSize, yPos + this.ySize, -16777216);
   if(this.lines==null)

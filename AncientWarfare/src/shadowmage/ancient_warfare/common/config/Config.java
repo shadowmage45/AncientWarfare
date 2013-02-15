@@ -37,7 +37,6 @@ public static final String CORE_VERSION_MINOR = "0";
 public static final String CORE_VERSION_BUILD = "002";
 public static final String CORE_BUILD_STATUS = "dev";
 public static final String MC_VERSION = "1.4.7";
-public static final String TEMPLATE_EXTENSION = "aws";
 
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
@@ -53,7 +52,7 @@ public static int structureGeneratorRandomChance = 10;
 public static int structureGeneratorRandomRange = 1000;
 public static int structureGenMaxClusterValue = 50;
 public static boolean invertShiftClickOnItems = false;
-
+public static String templateExtension = "aws";
 
 
 
@@ -147,7 +146,9 @@ public static int getBlockID(String name, int defaultID, String comment)
 
 public void setCoreInfo()
   {
-  
+  config.addCustomCategoryComment("a-general-options", "Global options that effect the entire mod");
+  config.addCustomCategoryComment("structure-management", "Global World Generation options, effect every save/world");
+  this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").value;
   }
 
 public void setVehicleInfo()
