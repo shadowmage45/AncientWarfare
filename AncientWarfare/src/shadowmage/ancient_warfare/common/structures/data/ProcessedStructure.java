@@ -93,10 +93,9 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
     }
   else
     {
-    BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
-    min.y += struct.verticalOffset;
-    BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
-    if(!isValidLevelingTarget(world, min, max, struct.validTargetBlocks, struct.getLevelingBuffer()))
+    StructureBB levelingBB = getLevelingBoundingBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.zSize, struct.ySize, struct.zSize, struct.getLevelingMax(), struct.getLevelingBuffer());
+   
+    if(!isValidLevelingTarget(world, levelingBB, struct.validTargetBlocks, struct.getLevelingBuffer()))
       {
       Config.logDebug("rejected for improper leveling");
       return false;
@@ -164,10 +163,8 @@ public static boolean canGenerateAtSubSurface(World world, BlockPosition hit, in
     }
   else
     {
-    BlockPosition min = BlockTools.getMin(bb.pos1, bb.pos2);
-    min.y += struct.verticalOffset;
-    BlockPosition max = BlockTools.getMax(bb.pos1, bb.pos2);
-    if(!isValidLevelingTarget(world, min, max, struct.validTargetBlocks, struct.getLevelingBuffer()))
+    StructureBB levelingBB = getLevelingBoundingBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.zSize, struct.ySize, struct.zSize, struct.getLevelingMax(), struct.getLevelingBuffer());    
+    if(!isValidLevelingTarget(world, levelingBB, struct.validTargetBlocks, struct.getLevelingBuffer()))
       {
       Config.logDebug("rejected for improper leveling");
       return false;
@@ -176,36 +173,37 @@ public static boolean canGenerateAtSubSurface(World world, BlockPosition hit, in
   return true;
   }
 
-public static boolean isValidLevelingTarget(World world, BlockPosition min, BlockPosition max, int[] validTargetBlocks, int levelingBuffer)
+public static boolean isValidLevelingTarget(World world, StructureBB levelingBB, int[] validTargetBlocks, int levelingBuffer)
   {
-  //TODO check beneath as well as just beside?
-  min.x-= 1 + levelingBuffer;
-  min.z-= 1 + levelingBuffer;
-  max.x+= 1 + levelingBuffer;
-  max.z+= 1 + levelingBuffer;
-  
-  for(int x = min.x; x <= max.x; x++)
+  int minX = levelingBB.pos1.x - 1 - levelingBuffer;
+  int maxX = levelingBB.pos2.x + 1 + levelingBuffer;
+  int minZ = levelingBB.pos1.z - 1 - levelingBuffer;
+  int maxZ = levelingBB.pos2.z + 1 + levelingBuffer;
+    
+  int y = levelingBB.pos2.y;
+    
+  for(int x = minX; x <= maxX; x++)
     {
-    int id = world.getBlockId(x, min.y, min.z);
-    if(!isValidTargetBlock(id, validTargetBlocks) || id==0)
+    int id = world.getBlockId(x, y, minZ);
+    if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
       }
-    id = world.getBlockId(x, min.y, max.z);
-    if(!isValidTargetBlock(id, validTargetBlocks) || id==0)
+    id = world.getBlockId(x, y, maxZ);
+    if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
       }
     }
-  for(int z = min.z; z <= max.z; z++)
+  for(int z = minZ; z <= maxZ; z++)
     {
-    int id = world.getBlockId(min.x, min.y, z);
-    if(!isValidTargetBlock(id, validTargetBlocks) || id==0)
+    int id = world.getBlockId(minX, y, z);
+    if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
       }
-    id = world.getBlockId(max.x, min.y, z);
-    if(!isValidTargetBlock(id, validTargetBlocks) || id==0)
+    id = world.getBlockId(maxX, y, z);
+    if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
       }
@@ -287,15 +285,6 @@ public StructureBB getStructureBB(BlockPosition hit, int facing)
   {
   return getBoundingBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize);
   }
-
-//public StructureBB getLevelingBB(BlockPosition hit, int facing)
-//  {
-//  return getLevelingBoundingBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize, maxLeveling, levelingBuffer);}
-//
-//public StructureBB getClearingBB(BlockPosition hit, int facing)
-//  { 
-//  return getClearingBoundinBox(hit, facing, xOffset, verticalOffset, zOffset, xSize, ySize, zSize, maxVerticalClear, clearingBuffer);
-//  }
 
 /**
  * returns a facing normalized frontleft corner position for this building (no Y adjustment)
