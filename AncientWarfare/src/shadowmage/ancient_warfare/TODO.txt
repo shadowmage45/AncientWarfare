@@ -16,10 +16,6 @@ TEMPLATES
 SCANNER
 
 STRUCTURE BUILDING
-* fix up leveling check--it is not checking bounds properly
-        added debug test code to instant-builder, needs thorough testing and validation
-        using this debug code...
-* include overhang calc in leveling check? (allow overhang on leveling bounds?)        
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and dissallow non-dungeon structures?)
@@ -207,15 +203,17 @@ public static MyWorldData forWorld(World world)
 * enable decorative structures (value 0)
 * add some null checks to container/guis...mostly there, but probably still missing a few
 * add method to retrieve top block between bounds..
-
-
-
-
-
-
-
-
 /********** 02-16-13 **********/
+* fix up leveling check--it is not checking bounds properly
+        added debug test code to instant-builder, needs thorough testing and validation
+        using this debug code...
+* clearance validation code is still a bit....off..
+        
+        
+        
+        
+        
+        
 /********** 02-17-13 **********/
 /********** 02-18-13 **********/
 /********** 02-19-13 **********/

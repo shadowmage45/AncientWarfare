@@ -92,12 +92,12 @@ public boolean attemptPlacementSubsurface(World world, int x, int y, int z, int 
     return false;
     }
   BlockPosition hit = new BlockPosition(x,y,z);    
+  hit.y++;
   if(!struct.canGenerateAtSubSurface(world, hit, face, struct))
     {
     Config.logDebug("underground structure rejected build site");
     return false;
-    }
-  hit.y++;
+    }  
   if(this.checkBBCollisions(world, struct, hit, face, x/16, z/16))
     {
     return false;
@@ -114,13 +114,14 @@ public boolean attemptPlacementSurface(World world, int x, int y, int z, int fac
     Config.logDebug("invalid topBlock");
     return false;
     }
-  BlockPosition hit = new BlockPosition(x,y,z);    
+  BlockPosition hit = new BlockPosition(x,y,z);
+  hit.y++;
   if(!struct.canGenerateAtSurface(world, hit.copy(), face, struct))
     {
     Config.logDebug("site rejected by structure: "+struct.name);
     return false;
     }  
-  hit.y++;   
+  
   if(this.checkBBCollisions(world, struct, hit, face, x/16, z/16))
     {
     Config.logDebug("site rejected due to structure overlap");

@@ -27,7 +27,6 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
-import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
@@ -68,23 +67,24 @@ public BlockRule getRuleAt(int x, int y, int z)
 
 public static boolean canGenerateAtSurface(World world, BlockPosition hit, int facing, ProcessedStructure struct)
   {  
-  int missingBlocks = 0;
-  boolean canGen = true;  
-  StructureBB bb = getBoundingBox(hit, facing, struct.xOffset, struct.ySize, struct.zOffset, struct.xSize, struct.ySize, struct.zSize);
+  int missingBlocks = 0; 
+  
+  StructureBB levelingBB = getLevelingBoundingBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.zSize, struct.ySize, struct.zSize, struct.getLevelingMax(), struct.getLevelingBuffer());
+  
   if(struct.getLevelingMax()==0)//should level the site, or check for overhang?
     {
-    BlockPosition front = bb.pos1.copy();
-    front.y --;
-    BlockPosition back = bb.pos2.copy();
+    BlockPosition front = levelingBB.pos1.copy();    
+    BlockPosition back = levelingBB.pos2.copy();
+    front.y--;
     back.y = front.y;
     List<BlockPosition> foundationBlocks = BlockTools.getAllBlockPositionsBetween(front, back);
     for(BlockPosition pos : foundationBlocks)
-      {      
-      if(!isValidTargetBlock(world.getBlockId(pos.x, pos.y, pos.z), struct.validTargetBlocks));
+      {     
+      if(!isValidTargetBlock(world.getBlockId(pos.x, pos.y, pos.z), struct.validTargetBlocks))
         {
         missingBlocks++;
         }
-      if(missingBlocks>struct.getOverhangMax())
+      if(missingBlocks > struct.getOverhangMax())
         {
         Config.logDebug("Rejected due to overhang");
         return false;
@@ -92,9 +92,7 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
       }
     }
   else
-    {
-    StructureBB levelingBB = getLevelingBoundingBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.zSize, struct.ySize, struct.zSize, struct.getLevelingMax(), struct.getLevelingBuffer());
-   
+    { 
     if(!isValidLevelingTarget(world, levelingBB, struct.validTargetBlocks, struct.getLevelingBuffer()))
       {
       Config.logDebug("rejected for improper leveling");
@@ -102,23 +100,16 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
       }   
     }
   
-  if(struct.getClearingMax() >= struct.ySize -struct.verticalOffset)//the whole thing will be cleared
-    {
-    Config.logDebug("skipping clearing check");
-    return true;
-    }
-    
-  BlockPosition clearTest = bb.pos1.copy();
-  BlockPosition clearTest2 = bb.pos2.copy();
-  
-  clearTest.y+=struct.verticalOffset+ struct.getClearingMax() - 1;
-  List<BlockPosition> nonClearedBlocks = BlockTools.getAllBlockPositionsBetween(clearTest, clearTest2);
-  
-  if(clearTest.y==clearTest2.y && struct.getClearingMax()>0)
-    {
-    Config.logDebug("second skip clearance check");
-    }
-  
+   
+//  if(struct.getClearingMax() >= struct.ySize -struct.verticalOffset)//the whole thing will be cleared
+//    {
+//    Config.logDebug("skipping clearing check");
+//    return true;
+//    }
+  Config.logDebug("hitPos"+hit);
+  StructureBB bb = getClearingValidationBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, struct.getClearingMax()); 
+  Config.logDebug("clearance validation bb: "+bb);
+  List<BlockPosition> nonClearedBlocks = BlockTools.getAllBlockPositionsBetween(bb.pos1, bb.pos2);
   for(BlockPosition pos : nonClearedBlocks)
     {
     if(world.getBlockId(pos.x, pos.y, pos.z)!=0)
@@ -127,7 +118,6 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
       return false;
       }
     }
-    
   return true;
   }
 
@@ -163,7 +153,10 @@ public static boolean canGenerateAtSubSurface(World world, BlockPosition hit, in
     }
   else
     {
-    StructureBB levelingBB = getLevelingBoundingBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.zSize, struct.ySize, struct.zSize, struct.getLevelingMax(), struct.getLevelingBuffer());    
+    /**
+     * hack to fix vertical one-off in world-gen leveling....
+     */    
+    StructureBB levelingBB = getLevelingBoundingBox(hit.copy(), facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.zSize, struct.ySize, struct.zSize, struct.getLevelingMax(), struct.getLevelingBuffer());    
     if(!isValidLevelingTarget(world, levelingBB, struct.validTargetBlocks, struct.getLevelingBuffer()))
       {
       Config.logDebug("rejected for improper leveling");
@@ -175,26 +168,26 @@ public static boolean canGenerateAtSubSurface(World world, BlockPosition hit, in
 
 public static boolean isValidLevelingTarget(World world, StructureBB levelingBB, int[] validTargetBlocks, int levelingBuffer)
   {
-  Config.logDebug("LevelingBB: "+levelingBB.toString());
-  int minX = levelingBB.pos1.x - 1 - levelingBuffer;
-  int maxX = levelingBB.pos2.x + 1 + levelingBuffer;
-  int minZ = levelingBB.pos1.z - 1 - levelingBuffer;
-  int maxZ = levelingBB.pos2.z + 1 + levelingBuffer;
+  //Config.logDebug("LevelingBB: "+levelingBB.toString());
+  int minX = levelingBB.pos1.x - 1;
+  int maxX = levelingBB.pos2.x + 1;
+  int minZ = levelingBB.pos1.z - 1;
+  int maxZ = levelingBB.pos2.z + 1;
   int y = levelingBB.pos2.y;
   
-  Config.logDebug("checkBB: "+minX+","+y+","+minZ+" :: "+maxX+","+y+","+maxZ);
+  //Config.logDebug("checkBB: "+minX+","+y+","+minZ+" :: "+maxX+","+y+","+maxZ);
   
     
   for(int x = minX; x <= maxX; x++)
     {
     int id = world.getBlockId(x, y, minZ);
-    Config.logDebug(x+","+y+","+minZ+" :: "+id);
+    //Config.logDebug(x+","+y+","+minZ+" :: "+id);
     if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
       }
     id = world.getBlockId(x, y, maxZ);
-    Config.logDebug(x+","+y+","+maxZ+" :: "+id);
+    //Config.logDebug(x+","+y+","+maxZ+" :: "+id);
     if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
@@ -203,13 +196,13 @@ public static boolean isValidLevelingTarget(World world, StructureBB levelingBB,
   for(int z = minZ; z <= maxZ; z++)
     {
     int id = world.getBlockId(minX, y, z);
-    Config.logDebug(minX+","+y+","+z+" :: "+id);
+    //Config.logDebug(minX+","+y+","+z+" :: "+id);
     if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;
       }
     id = world.getBlockId(maxX, y, z);
-    Config.logDebug(maxX+","+y+","+z+" :: "+id);
+    //Config.logDebug(maxX+","+y+","+z+" :: "+id);
     if(!isValidTargetBlock(id, validTargetBlocks))
       {
       return false;

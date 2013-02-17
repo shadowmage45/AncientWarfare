@@ -297,11 +297,25 @@ public static StructureBB getBoundingBox(BlockPosition hit, int facing, int xOff
   fl.moveLeft(facing, xOffset);
   fl.moveForward(facing, zOffset);
   fl.y -=yOffset;
+  
   BlockPosition br = fl.copy();
   br.y+= ySize-1;
   br.moveRight(facing, xSize-1);
   br.moveForward(facing, zSize-1);
   return new StructureBB(fl, br);
+  }
+
+public static StructureBB getClearingValidationBox(BlockPosition hit, int facing, int xOffset, int yOffset, int zOffset, int xSize, int ySize, int zSize, int maxClearing)
+  {
+  StructureBB bb = getBoundingBox(hit, facing, xOffset, yOffset, zOffset, xSize, ySize, zSize);  
+  int cl = ySize - yOffset - maxClearing;
+  if(cl<0)
+    {
+    bb.pos2.y -= cl;
+    }
+  bb.pos2.y ++;
+  bb.pos1.y = bb.pos2.y;
+  return bb;
   }
 
 public static StructureBB getLevelingBoundingBox(BlockPosition hit, int facing, int xOffset, int yOffset, int zOffset, int xSize, int ySize, int zSize, int maxLeveling, int levelingBuffer)
