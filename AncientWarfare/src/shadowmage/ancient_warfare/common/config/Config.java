@@ -34,7 +34,7 @@ public class Config
 
 public static final String CORE_VERSION_MAJOR = "0.1.0";
 public static final String CORE_VERSION_MINOR = "0";
-public static final String CORE_VERSION_BUILD = "002";
+public static final String CORE_VERSION_BUILD = "003";
 public static final String CORE_BUILD_STATUS = "dev";
 public static final String MC_VERSION = "1.4.7";
 

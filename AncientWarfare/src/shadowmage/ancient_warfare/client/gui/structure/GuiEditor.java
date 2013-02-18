@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.gui.structure;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
@@ -49,6 +51,7 @@ public GuiEditor(ContainerEditor cont, GuiEditorSelect parent)
   super(cont);
   this.cont = cont; 
   this.parentScreen = parent;
+  Keyboard.enableRepeatEvents(true);
   }
 
 @Override
@@ -198,6 +201,14 @@ protected void mouseMovedOrUp(int mouseX, int mouseY, int buttonNum)
     {
     super.mouseMovedOrUp(mouseX, mouseY, buttonNum);
     }
+  }
+
+
+@Override
+public void onGuiClosed()
+  {
+  Keyboard.enableRepeatEvents(true);
+  super.onGuiClosed();
   }
 
 

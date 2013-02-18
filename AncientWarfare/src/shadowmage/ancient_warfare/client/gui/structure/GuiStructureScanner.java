@@ -104,9 +104,12 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Export to Ruins Format : ", guiLeft+10, guiTop+93, 0xffffffff);
   this.drawString(fontRenderer, "Include for World-Gen  : ", guiLeft+10, guiTop+113, 0xffffffff);  
   this.drawString(fontRenderer, "Include for Survival   : ", guiLeft+10, guiTop+133, 0xffffffff);  
-  this.drawString(fontRenderer, "World-Gen Weight       : ", guiLeft+10, guiTop+153, 0xffffffff);
-  this.drawString(fontRenderer, "World-Gen Value        : ", guiLeft+10, guiTop+173, 0xffffffff);
-  this.drawString(fontRenderer, "World-Gen Unique?      : ", guiLeft+10, guiTop+193, 0xffffffff);
+  if(worldGenBox.checked())
+    {
+    this.drawString(fontRenderer, "World-Gen Weight       : ", guiLeft+10, guiTop+153, 0xffffffff);
+    this.drawString(fontRenderer, "World-Gen Value        : ", guiLeft+10, guiTop+173, 0xffffffff);
+    this.drawString(fontRenderer, "World-Gen Unique?      : ", guiLeft+10, guiTop+193, 0xffffffff);
+    }  
   }
 
 @Override
@@ -124,8 +127,8 @@ public void setupGui()
   uniqueBox = this.addCheckBox(10, 145, 190, 16, 16).setChecked(unique);  
   
   nameBox = this.addTextField(0, 10, 30, 120, 10, 30, name);  
-  weight = this.addTextField(1, 145, 150, 20, 10, 3, weightString).setAsNumberBox();
-  value = this.addTextField(2, 145, 170, 20, 10, 3, valueString).setAsNumberBox();
+  weight = this.addTextField(1, 145, 150, 40, 10, 3, weightString).setAsNumberBox();
+  value = this.addTextField(2, 145, 170, 40, 10, 3, valueString).setAsNumberBox();
   
   if(worldGenBox.checked())
     {

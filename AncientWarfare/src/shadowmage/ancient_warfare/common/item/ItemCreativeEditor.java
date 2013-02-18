@@ -26,16 +26,17 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
-public class ItemDebugEditor extends AWItemClickable
+public class ItemCreativeEditor extends AWItemClickable
 {
 
 /**
    * @param itemID
    * @param hasSubTypes
    */
-public ItemDebugEditor(int itemID)
+public ItemCreativeEditor(int itemID)
   {
   super(itemID, false);
+  this.setIconIndex(10);
   }
 
 @Override
