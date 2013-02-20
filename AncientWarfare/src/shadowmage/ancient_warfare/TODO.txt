@@ -3,6 +3,9 @@ read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
 
 GENERAL
+* rework all GUIs to enable new IGuiElement code and style...rewrite
+            GuiTextFieldAdvanced, from the ground up... (yes, painful)
+* add basic GUI tooltip functionality -- GuiTooltip class (int x, int y, int w, int h, List<String> info)            
 * start working on complexes....
 
 TESTING

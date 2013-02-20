@@ -30,23 +30,34 @@ import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.interfaces.IContainerGuiCallback;
 
 
-public abstract class GuiContainerAdvanced extends GuiContainer implements IContainerGuiCallback
+public abstract class GuiContainerAdvanced extends GuiContainer implements IContainerGuiCallback, IGuiElementCallback
 {
 
 protected final EntityPlayer player;
 public DecimalFormat formatter = new DecimalFormat("#");
 public DecimalFormat formatterOneDec = new DecimalFormat("#.#");
+public DecimalFormat formatterTwoDec = new DecimalFormat("#.##");
 public DecimalFormat formatterThreeDec = new DecimalFormat("#.###");
 /**
  * gui controls...these are substitutes for the vanilla controlList...and allow for total control
  * over buttons and functions, while only overridding a minimal amount of vanilla code (and still allowing
  * for full use of the vanilla slot rendering and interface)
  */
+
+@Deprecated
 protected ArrayList<GuiTextFieldAdvanced> textBoxes = new ArrayList<GuiTextFieldAdvanced>();
+
+@Deprecated
 protected ArrayList<GuiButton> buttons = new ArrayList<GuiButton>();
+
+@Deprecated
 protected GuiButton currentButton = null;
+
+@Deprecated
 protected GuiTextFieldAdvanced currentTextField = null;
 
+
+protected ArrayList<GuiElement> guiElements = new ArrayList<GuiElement>();
 
 public GuiContainerAdvanced(Container container)
   {
@@ -63,6 +74,37 @@ public GuiContainerAdvanced(Container container)
   }
 
 @Override
+public void onElementReleased(IGuiElement element)
+  {
+  
+  }
+
+@Override
+public void onElementDragged(IGuiElement element)
+  {
+  
+  }
+
+@Override
+public void onElementActivated(IGuiElement el)
+  {
+  //TODO...
+  }
+
+@Override
+public void onElementMouseWheel(IGuiElement element, int amt)
+  {
+  //TODO
+  }
+
+@Override
+public void onElementKeyTyped(char ch, int keyNum)
+  {
+  //TODO
+  }
+
+@Override
+@Deprecated
 public void setWorldAndResolution(Minecraft par1Minecraft, int par2, int par3)
   {
   this.buttons.clear();
@@ -71,8 +113,13 @@ public void setWorldAndResolution(Minecraft par1Minecraft, int par2, int par3)
   }
 
 @Override
+@Deprecated
 protected void keyTyped(char par1, int par2)
   {
+  for(GuiElement el : this.guiElements)
+    {
+    el.onKeyTyped(par1, par2);
+    }
   boolean callSuper = true;
   for(GuiTextField box : this.textBoxes)
     {
@@ -149,8 +196,8 @@ public abstract void updateScreenContents();
  * called when a GUI button is clicked, wraps actionPerformed
  * @param button
  */
+@Deprecated
 public abstract void buttonClicked(GuiButton button);
-
 
 public int getGuiLeft()
   {
@@ -178,6 +225,7 @@ public void actionPerformed(GuiButton button)
  * @param name
  * @return
  */
+@Deprecated
 public GuiButton addGuiButton(int id, int x, int y, int len, int high, String name)
   {
   GuiButtonMultiSize button = new GuiButtonMultiSize(id, guiLeft+x, guiTop+y, len, high, name);
@@ -185,6 +233,7 @@ public GuiButton addGuiButton(int id, int x, int y, int len, int high, String na
   return button;
   }
 
+@Deprecated
 public GuiCheckBox addCheckBox(int id, int x, int y, int len, int high)
   {
   GuiCheckBox box = new GuiCheckBox(id, guiLeft + x, guiTop + y, len, high);
@@ -203,6 +252,7 @@ public GuiCheckBox addCheckBox(int id, int x, int y, int len, int high)
  * @param initText
  * @return
  */
+@Deprecated
 public GuiTextFieldAdvanced addTextField(int id, int x, int y, int width, int height, int maxChars, String initText)
   {
   GuiTextFieldAdvanced box = new GuiTextFieldAdvanced(id, this, guiLeft+x, guiTop+y, width, height);
@@ -223,6 +273,7 @@ public GuiTextFieldAdvanced addTextField(int id, int x, int y, int width, int he
  * @param pointsRight
  * @return
  */
+@Deprecated
 public GuiButtonMerchant addMerchantButton(int id, int x, int y, boolean pointsRight)
   {
   GuiButtonMerchant button = new GuiButtonMerchant(id, guiLeft+x, guiTop+y, pointsRight);
@@ -258,7 +309,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     this.mc.renderEngine.bindTexture(texInt);
     this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, this.xSize, this.ySize);
-    }  
+    }
   for(GuiTextField box : this.textBoxes)
     {
     box.drawTextBox();
@@ -487,6 +538,7 @@ public void closeGUI()
  * Called when the mouse is clicked.
  */
 @Override
+@Deprecated
 protected void mouseClicked(int mouseX, int mouseY, int buttonNum)
   {
   super.mouseClicked(mouseX, mouseY, buttonNum);
@@ -514,6 +566,10 @@ public void drawScreen(int par1, int par2, float par3)
   RenderHelper.disableStandardItemLighting();
   GL11.glDisable(GL11.GL_LIGHTING);
   GL11.glDisable(GL11.GL_DEPTH_TEST);
+  for(GuiElement el : this.guiElements)
+    {
+    el.drawElement(par1, par2, guiLeft, guiTop);
+    }
   for (GuiButton button : this.buttons)
     {
     button.drawButton(mc, par1, par2);
@@ -521,6 +577,7 @@ public void drawScreen(int par1, int par2, float par3)
   }
 
 @Override
+@Deprecated
 protected void mouseMovedOrUp(int mouseX, int mouseY, int buttonNum)
   {
   super.mouseMovedOrUp(mouseX, mouseY, buttonNum);
@@ -538,6 +595,7 @@ protected void mouseMovedOrUp(int mouseX, int mouseY, int buttonNum)
     }
   }
 
+@Deprecated
 protected void onMouseWheel(int mouseX, int mouseY, int wheel)
   {
   for(GuiTextFieldAdvanced  box : this.textBoxes)
@@ -556,9 +614,31 @@ public void handleMouseInput()
   int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
   int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
   int wheel = Mouse.getEventDWheel();
-  wheel = wheel > 0 ? 1 : wheel < 0 ? -1 : 0;
+  wheel = wheel > 0 ? 1 : wheel < 0 ? -1 : 0;  
+  int buttonNum = Mouse.getEventButton();
+  boolean buttonActivated = buttonNum != -1;
+  boolean buttonPressed = Mouse.getEventButtonState();
+  boolean wheelActivated = wheel!= 0;
   
-  boolean callSuper = true;
+  for(GuiElement el : this.guiElements)
+    {
+    if(buttonActivated && buttonPressed)
+      {
+      el.onMousePressed(mouseX, mouseY, buttonNum);
+      }
+    else if(buttonActivated)
+      {
+      el.onMouseReleased(mouseX, mouseY, buttonNum);
+      }
+    else if(wheelActivated)
+      {
+      el.onMouseWheel(mouseX, mouseY, wheel);
+      }
+    else
+      {
+      el.onMouseMoved(mouseX, mouseY, buttonNum);
+      }
+    }  
   if(this.currentTextField==null)
     {
     for(GuiTextFieldAdvanced  box : this.textBoxes)
@@ -567,7 +647,6 @@ public void handleMouseInput()
         {
         if(wheel!=0)
           {
-          callSuper = false;
           box.onMouseWheel(wheel);
           }
         this.currentTextField = box;
@@ -576,10 +655,8 @@ public void handleMouseInput()
       }   
     
     }   
-  if(callSuper)
-    {
-    super.handleMouseInput();
-    }  
+  
+  super.handleMouseInput();
   }
 
 /**
@@ -595,6 +672,7 @@ public FontRenderer getFontRenderer()
  * @param guiTextFieldAdvanced
  * @param i change amount (scroll up/down, arrow up/down) 0 if enter was pressed
  */
+@Deprecated
 public void onTextBoxActivated(GuiTextFieldAdvanced guiTextFieldAdvanced, int i)
   {
 
