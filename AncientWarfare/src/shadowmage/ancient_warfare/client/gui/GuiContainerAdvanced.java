@@ -36,7 +36,7 @@ public abstract class GuiContainerAdvanced extends GuiContainer implements ICont
 protected final EntityPlayer player;
 public DecimalFormat formatter = new DecimalFormat("#");
 public DecimalFormat formatterOneDec = new DecimalFormat("#.#");
-
+public DecimalFormat formatterThreeDec = new DecimalFormat("#.###");
 /**
  * gui controls...these are substitutes for the vanilla controlList...and allow for total control
  * over buttons and functions, while only overridding a minimal amount of vanilla code (and still allowing
@@ -45,6 +45,7 @@ public DecimalFormat formatterOneDec = new DecimalFormat("#.#");
 protected ArrayList<GuiTextFieldAdvanced> textBoxes = new ArrayList<GuiTextFieldAdvanced>();
 protected ArrayList<GuiButton> buttons = new ArrayList<GuiButton>();
 protected GuiButton currentButton = null;
+protected GuiTextFieldAdvanced currentTextField = null;
 
 
 public GuiContainerAdvanced(Container container)
@@ -528,6 +529,13 @@ protected void mouseMovedOrUp(int mouseX, int mouseY, int buttonNum)
     this.currentButton.mouseReleased(mouseX, mouseY);
     this.currentButton = null;
     }
+  if(this.currentTextField!=null)
+    {
+    if(!this.currentTextField.isMouseOver(mouseX, mouseY))
+      {
+      this.currentTextField = null;
+      }
+    }
   }
 
 protected void onMouseWheel(int mouseX, int mouseY, int wheel)
@@ -545,15 +553,30 @@ protected void onMouseWheel(int mouseX, int mouseY, int wheel)
 @Override
 public void handleMouseInput()
   {  
+  int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+  int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
   int wheel = Mouse.getEventDWheel();
-  wheel = wheel > 0 ? 1 : wheel < 0 ? -1 : 0;  
-  if(wheel!=0)
+  wheel = wheel > 0 ? 1 : wheel < 0 ? -1 : 0;
+  
+  boolean callSuper = true;
+  if(this.currentTextField==null)
     {
-    int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
-    int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-    this.onMouseWheel(mouseX, mouseY, wheel);
-    }
-  else
+    for(GuiTextFieldAdvanced  box : this.textBoxes)
+      {
+      if(box.isMouseOver(mouseX, mouseY))
+        {
+        if(wheel!=0)
+          {
+          callSuper = false;
+          box.onMouseWheel(wheel);
+          }
+        this.currentTextField = box;
+        break;
+        }
+      }   
+    
+    }   
+  if(callSuper)
     {
     super.handleMouseInput();
     }  
