@@ -88,7 +88,7 @@ public void onElementDragged(IGuiElement element)
 @Override
 public void onElementActivated(IGuiElement el)
   {
-  //TODO...
+  Config.logDebug("Element activated.  Num: "+el.getElementNumber());
   }
 
 @Override
@@ -225,20 +225,25 @@ public void actionPerformed(GuiButton button)
  * @param name
  * @return
  */
-@Deprecated
-public GuiButton addGuiButton(int id, int x, int y, int len, int high, String name)
+public GuiButtonSimple addGuiButton(int id, int x, int y, int len, int high, String name)
   {
-  GuiButtonMultiSize button = new GuiButtonMultiSize(id, guiLeft+x, guiTop+y, len, high, name);
-  this.buttons.add(button);
+  GuiButtonSimple button = new GuiButtonSimple(id, this, x, y, len, high, name);
+  this.guiElements.add(button);
   return button;
+//  GuiButtonMultiSize button = new GuiButtonMultiSize(id, guiLeft+x, guiTop+y, len, high, name);
+//  this.buttons.add(button);
+//  return button;
   }
 
-@Deprecated
-public GuiCheckBox addCheckBox(int id, int x, int y, int len, int high)
+
+public GuiCheckBoxSimple addCheckBox(int id, int x, int y, int len, int high)
   {
-  GuiCheckBox box = new GuiCheckBox(id, guiLeft + x, guiTop + y, len, high);
-  this.buttons.add(box);
+  GuiCheckBoxSimple box = new GuiCheckBoxSimple(id, this, x, y, len, high);
+  this.guiElements.add(box);
   return box;
+//  GuiCheckBox box = new GuiCheckBox(id, guiLeft + x, guiTop + y, len, high);
+//  this.buttons.add(box);
+//  return box;
   }
 
 /**

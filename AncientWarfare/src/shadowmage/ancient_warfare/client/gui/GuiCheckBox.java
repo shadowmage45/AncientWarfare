@@ -25,6 +25,7 @@ import net.minecraft.client.gui.GuiButton;
 
 import org.lwjgl.opengl.GL11;
 
+@Deprecated
 public class GuiCheckBox extends GuiButton
 {
 
@@ -34,6 +35,7 @@ boolean autoSet = true;
 public GuiCheckBox(int buttonID, int posX, int posY, int width, int height)
   {
   super(buttonID, posX, posY, width, height, "");
+ 
   }
 
 public GuiCheckBox setChecked(boolean checked)
@@ -89,7 +91,7 @@ public void drawButton(Minecraft mc, int mouseX, int mouseY)
     this.drawTexturedModalRect(this.xPosition, this.yPosition+halfHeight, blX + hOffset, blY + vOffset, halfWidth, halfHeight);
     this.drawTexturedModalRect(this.xPosition+halfWidth, this.yPosition+halfHeight, brX + hOffset, brY + vOffset, halfWidth, halfHeight);
 
-    this.mouseDragged(mc, mouseX, mouseY);   
+    
     }
   }
 

@@ -55,8 +55,8 @@ int mouseLastX;
 int mouseLastY;
 
 protected boolean isMouseOver = false;
-protected boolean enabled = true;
-protected boolean hidden = false;
+public boolean enabled = true;
+public boolean hidden = false;
 
 protected Minecraft mc;
 protected FontRenderer fr;

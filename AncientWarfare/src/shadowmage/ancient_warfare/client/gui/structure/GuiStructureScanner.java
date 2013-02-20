@@ -24,7 +24,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.client.gui.GuiCheckBox;
+import shadowmage.ancient_warfare.client.gui.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
@@ -45,12 +45,12 @@ String valueString = "";
 boolean unique;
 
 
-GuiCheckBox formatAWBox;
-GuiCheckBox includeBox;
-GuiCheckBox formatRuinsBox;
-GuiCheckBox worldGenBox;
-GuiCheckBox survivalBox;
-GuiCheckBox uniqueBox;
+GuiCheckBoxSimple formatAWBox;
+GuiCheckBoxSimple includeBox;
+GuiCheckBoxSimple formatRuinsBox;
+GuiCheckBoxSimple worldGenBox;
+GuiCheckBoxSimple survivalBox;
+GuiCheckBoxSimple uniqueBox;
 
 GuiTextField weight;
 GuiTextField value;
@@ -134,11 +134,11 @@ public void setupGui()
     {
     weight.setVisible(true);
     value.setVisible(true);
-    uniqueBox.drawButton = true;
+    uniqueBox.hidden = false;
     }
   else
     {
-    uniqueBox.drawButton = false;
+    uniqueBox.hidden = true;
     weight.setVisible(false);
     value.setVisible(false);
     }
@@ -230,11 +230,11 @@ public void buttonClicked(GuiButton button)
     {
     weight.setVisible(true);
     value.setVisible(true);
-    uniqueBox.drawButton = true;
+    uniqueBox.hidden = false;
     }
   else
     {
-    uniqueBox.drawButton = false;
+    uniqueBox.hidden = true;
     weight.setVisible(false);
     value.setVisible(false);
     }
