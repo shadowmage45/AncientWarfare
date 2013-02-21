@@ -20,8 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.world_gen;
 
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 
 public class GeneratedStructureEntry implements INBTTaggable
 {

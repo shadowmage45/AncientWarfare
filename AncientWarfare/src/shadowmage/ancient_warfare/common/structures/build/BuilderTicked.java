@@ -22,8 +22,6 @@ package shadowmage.ancient_warfare.common.structures.build;
 
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.manager.BlockDataManager;
-import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;

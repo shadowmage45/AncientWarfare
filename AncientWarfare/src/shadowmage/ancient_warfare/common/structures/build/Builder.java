@@ -43,8 +43,6 @@ import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.world_gen.LootGenerator;
-import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureEntry;
-import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 
 public abstract class Builder implements INBTTaggable
 {

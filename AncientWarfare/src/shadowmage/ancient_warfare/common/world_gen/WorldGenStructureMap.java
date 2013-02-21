@@ -24,14 +24,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.utils.Pair;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.WorldSavedData;
-import net.minecraft.world.storage.ISaveHandler;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_warfare.common.utils.Pair;
 
 /**
  * per-world generated structure map....saved with world-data on world-save...

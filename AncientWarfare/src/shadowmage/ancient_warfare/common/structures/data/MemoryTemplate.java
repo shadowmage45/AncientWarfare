@@ -28,9 +28,6 @@ import java.util.List;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-
 /**
  * in-memory template w/ methods to handle breaking data up into packet-sized chunks of bytes
  * @author Shadowmage

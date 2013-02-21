@@ -31,7 +31,6 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
-import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureMap;
 
 /**
  * handles saving and loading of game data to world directory

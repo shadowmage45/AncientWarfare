@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.common.interfaces;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public interface IBuilderItem
 {

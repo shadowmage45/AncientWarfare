@@ -18,15 +18,14 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.gui;
+package shadowmage.ancient_warfare.client.gui.elements;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.config.Config;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import shadowmage.ancient_warfare.common.config.Config;
 
 
 public class GuiTextBox extends Gui

@@ -46,7 +46,6 @@ import shadowmage.ancient_warfare.common.utils.Pair;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureEntry;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
-import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureMap;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;

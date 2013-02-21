@@ -20,17 +20,13 @@
  */
 package shadowmage.ancient_warfare.client.gui.structure;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import org.lwjgl.input.Mouse;
 
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.IGuiElement;
+import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 public class GuiCSBAdvancedSelection extends   GuiContainerAdvanced
 {

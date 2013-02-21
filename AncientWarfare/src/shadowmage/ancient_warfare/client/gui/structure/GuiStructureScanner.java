@@ -22,10 +22,10 @@ package shadowmage.ancient_warfare.client.gui.structure;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.client.gui.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.GuiTextFieldSimple;
-import shadowmage.ancient_warfare.client.gui.IGuiElement;
+import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiTextFieldSimple;
+import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;

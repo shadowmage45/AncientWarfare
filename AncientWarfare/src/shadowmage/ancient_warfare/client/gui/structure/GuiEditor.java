@@ -20,13 +20,13 @@
  */
 package shadowmage.ancient_warfare.client.gui.structure;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import org.lwjgl.input.Keyboard;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.GuiTextBox;
-import shadowmage.ancient_warfare.client.gui.IGuiElement;
+import shadowmage.ancient_warfare.client.gui.elements.GuiTextBox;
+import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 
 public class GuiEditor extends GuiContainerAdvanced

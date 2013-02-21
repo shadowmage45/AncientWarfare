@@ -1,7 +1,7 @@
-package shadowmage.ancient_warfare.client.gui;
+package shadowmage.ancient_warfare.client.gui.elements;
 
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
+import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 
 @Deprecated
 public class GuiTextFieldAdvanced extends GuiTextField

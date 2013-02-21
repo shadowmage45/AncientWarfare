@@ -18,13 +18,13 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.gui;
-
-import org.lwjgl.opengl.GL11;
+package shadowmage.ancient_warfare.client.gui.elements;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+
+import org.lwjgl.opengl.GL11;
 
 public abstract class GuiElement extends Gui implements IGuiElement
 {
