@@ -40,14 +40,26 @@ String displayString = "";
 public GuiButtonSimple(int elementNum, IGuiElementCallback parent, int x, int y, int w, int h, String name)
   {
   super(elementNum, parent, x, y, w, h);
-  if(displayString!=null)
+  if(name!=null)
     {
     this.displayString = name;
     }
   }
 
+public void setButtonText(String name)
+  {
+  if(name!=null)
+    {
+    this.displayString = name;
+    }
+  else
+    {
+    this.displayString = "";
+    }
+  }
+
 @Override
-public void drawElement(int mouseX, int mouseY, int guiLeft, int guiTop)
+public void drawElement(int mouseX, int mouseY)
   {
   if(!this.hidden)
     {
@@ -65,7 +77,7 @@ public void drawElement(int mouseX, int mouseY, int guiLeft, int guiTop)
       {
       fontColor = 16777120;
       }
-    this.drawCenteredString(Minecraft.getMinecraft().fontRenderer, this.displayString, this.renderPosX + this.width / 2, this.renderPosY + (this.height - 8) / 2, fontColor);
+    this.drawCenteredString(Minecraft.getMinecraft().fontRenderer, this.displayString, guiLeft + this.renderPosX + this.width / 2, guiTop + this.renderPosY + (this.height - 8) / 2, fontColor);
     }  
   }
 
@@ -88,6 +100,7 @@ public boolean handleMousePressed(int x, int y, int num)
   {
   if(this.enabled && !this.hidden)
     {
+    this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
     return true;
     }  
   return false;

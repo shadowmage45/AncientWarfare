@@ -20,15 +20,15 @@
  */
 package shadowmage.ancient_warfare.client.gui.structure;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.client.gui.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.StringTools;
@@ -45,8 +45,10 @@ private final ContainerCSB container;
 private final List<StructureClientInfo> clientStructures;
 int currentLowestViewed = 0;
 private static final int numberDisplayed = 8;
-private boolean shouldForceUpdate = false;
+//private boolean shouldForceUpdate = false;
 String currentStructure = "";
+
+
 
 /**
  * @param par1Container
@@ -103,22 +105,6 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   }
 
 @Override
-public void setupGui()
-  {
-  this.controlList.clear();
-  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
-  this.addGuiButton(1, 10, 40+8, 35, 18, "Prev");
-  this.addGuiButton(2, 50, 40+8, 35, 18, "Next");  
-  this.addGuiButton(20, 256-85-10, 30, 85, 16, "Advanced Setup");
-  
-  for(int i = 0, buttonNum = 3; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++, buttonNum++)
-    {
-    this.addGuiButton(buttonNum, 10, 60 + (20*i) +8, 120, 14, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
-    } 
-  
-  }
-
-@Override
 public void updateScreenContents()
   {
   if(this.container.clientSettings!=null)
@@ -127,19 +113,58 @@ public void updateScreenContents()
       {
       this.currentStructure = container.clientSettings.name;
       }
-    }
-  if(shouldForceUpdate)
-    {
-    shouldForceUpdate = false;
-    this.initGui();
-    }  
+    } 
+  }
+
+
+public void setStructureName(String name)
+  {
+  this.currentStructure = name;
+  this.container.clientSettings.name = name;
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("name", name);
+  this.sendDataToServer(tag);
   }
 
 @Override
-public void buttonClicked(GuiButton button)
-  { 
-  
-  switch(button.id)
+public void setupControls()
+  {
+  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
+  this.addGuiButton(1, 10, 40+8, 35, 18, "Prev");
+  this.addGuiButton(2, 50, 40+8, 35, 18, "Next");  
+  this.addGuiButton(20, 256-85-10, 30, 85, 16, "Advanced Setup"); 
+  for(int i = 0, buttonNum = 3; i< numberDisplayed; i++, buttonNum++)
+    {
+    structureButtons.add(this.addGuiButton(buttonNum, 10, 60 + (20*i) +8, 120, 14, ""));
+    }
+  }
+
+private List<GuiButtonSimple> structureButtons = new ArrayList<GuiButtonSimple>();
+
+@Override
+public void updateControls()
+  {
+  for(int i = 0; i <numberDisplayed; i++)
+    {
+    GuiButtonSimple button = this.structureButtons.get(i);
+    if(i+currentLowestViewed < clientStructures.size())
+      {
+      button.enabled = true;
+      button.hidden = false;
+      button.setButtonText(StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
+      }
+    else
+      {
+      button.enabled = false;
+      button.hidden = true;
+      }
+    } 
+  }
+
+@Override
+public void onElementActivated(IGuiElement button)
+  {  
+  switch(button.getElementNumber())
     {
     case 0:
     closeGUI();
@@ -149,7 +174,7 @@ public void buttonClicked(GuiButton button)
     if(this.currentLowestViewed-8 >=0)
       {
       this.currentLowestViewed-=8;
-      shouldForceUpdate = true;
+      forceUpdate = true;
       }
     return;
     
@@ -157,7 +182,7 @@ public void buttonClicked(GuiButton button)
     if(this.currentLowestViewed+8 < this.clientStructures.size())
       {
       this.currentLowestViewed+=8;
-      shouldForceUpdate = true;   
+      forceUpdate = true;   
       }
     return;
     
@@ -171,29 +196,18 @@ public void buttonClicked(GuiButton button)
     case 20:
     mc.displayGuiScreen(new GuiCSBAdvancedSelection((ContainerCSB)inventorySlots, this));
     return;
-    }
-  
+    }  
  
-  if(button.id>=3 && button.id < 11)
+  if(button.getElementNumber()>=3 && button.getElementNumber() < 11)
     {
-    int index = (this.currentLowestViewed + button.id) - 3;
+    int index = (this.currentLowestViewed + button.getElementNumber()) - 3;
     if(index>=this.clientStructures.size())
       { 
       return;
       }
-    shouldForceUpdate = true;
+    this.forceUpdate = true;
     this.setStructureName(this.clientStructures.get(index).name);
     }  
-  }
-
-
-public void setStructureName(String name)
-  {
-  this.currentStructure = name;
-  this.container.clientSettings.name = name;
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setString("name", name);
-  this.sendDataToServer(tag);
   }
 
 

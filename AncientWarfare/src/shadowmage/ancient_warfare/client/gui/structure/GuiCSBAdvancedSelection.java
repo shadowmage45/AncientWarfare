@@ -28,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import org.lwjgl.input.Mouse;
 
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 
@@ -84,9 +85,67 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   }
 
 @Override
-public void setupGui()
+public void updateScreenContents()
+  {  
+  
+  if(this.container.clientSettings!=null)
+    {
+    if(container.clientSettings.team>=0)
+      {
+      this.teamString = String.valueOf(container.clientSettings.team);
+      }
+    else
+      {
+      this.teamString = "Not Forced";
+      }  
+    //TODO
+    /**
+     * handle the other overrides, update local display string from container
+     */
+    }
+  }
+
+
+boolean updateOnClose = false;
+
+public void adjustTeam(int adj)
   {
-  this.controlList.clear();
+  container.clientSettings.team += adj;
+  if(container.clientSettings.team<-1)
+    {
+    container.clientSettings.team=-1;
+    }
+  if(container.clientSettings.team>15)
+    {
+    container.clientSettings.team=15;
+    }
+  }
+
+public void switchBackToParent()
+  {
+  if(this.updateOnClose)
+    {
+    this.container.updateServerContainer();
+    }
+  mc.displayGuiScreen(parent);
+  }
+
+@Override
+protected void keyTyped(char par1, int par2)
+  {
+  if (par2 == 1 || par2 == this.mc.gameSettings.keyBindInventory.keyCode)
+    {
+    this.switchBackToParent();
+    }
+  else
+    {
+    super.keyTyped(par1, par2);
+    }
+  }
+
+@Override
+public void setupControls()
+  {
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done");
   int merchWidth = 12;
   int labelWidth = 80;
@@ -94,59 +153,36 @@ public void setupGui()
   int leftCol = 95;
   int midCol = leftCol + merchWidth + buffer;
   int rightCol = midCol + labelWidth + buffer;
-  
-  this.addMerchantButton(1, leftCol, 30-1, false);
+
+  this.addGuiButton(1, leftCol, 30, 12, 16, "<");
   this.addGuiButton(2, midCol, 30, 80, 16, this.vehicleString);
-  this.addMerchantButton(3, rightCol, 30-1, true);
-  
-  this.addMerchantButton(4, leftCol, 50-1, false);
+  this.addGuiButton(3, rightCol, 30, 12, 16, ">");
+
+  this.addGuiButton(4, leftCol, 50, 12, 16, "<");
   this.addGuiButton(5, midCol, 50, 80, 16, this.npcString);
-  this.addMerchantButton(6, rightCol, 50-1, true);
+  this.addGuiButton(6, rightCol, 50, 12, 16, ">");
     
-  this.addMerchantButton(7, leftCol, 70-1, false);
+  this.addGuiButton(7, leftCol, 70, 12, 16, "<");
   this.addGuiButton(8, midCol, 70, 80, 16, this.gateString);
-  this.addMerchantButton(9, rightCol, 70-1, true);
-  
-  this.addMerchantButton(10, leftCol, 90-1, false);
+  this.addGuiButton(9, rightCol, 70, 12, 16, ">");
+    
+  this.addGuiButton(10, leftCol, 90, 12, 16, "<");
   this.addGuiButton(11, midCol, 90, 80, 16, this.teamString);
-  this.addMerchantButton(12, rightCol, 90-1, true);
+  this.addGuiButton(12, rightCol, 90, 12, 16, ">");
   }
 
 @Override
-public void updateScreenContents()
-  {  
-  if(forceUpdate)
-    {
-    forceUpdate=false;
-    if(this.container.clientSettings!=null)
-      {
-      if(container.clientSettings.team>=0)
-        {
-        this.teamString = String.valueOf(container.clientSettings.team);
-        }
-      else
-        {
-        this.teamString = "Not Forced";
-        }  
-      }
-    //TODO
-    /**
-     * handle the other overrides, update local display string from container
-     */
-    
-    
-    
-    this.initGui();
-    }
+public void updateControls()
+  {
+  
+  // TODO Auto-generated method stub
+  
   }
 
-boolean updateOnClose = false;
-boolean forceUpdate = false;
-
 @Override
-public void buttonClicked(GuiButton button)
-  {  
-  switch(button.id)
+public void onElementActivated(IGuiElement element)
+  {
+  switch(element.getElementNumber())
   {
   case 0:
   this.switchBackToParent();
@@ -199,42 +235,6 @@ public void buttonClicked(GuiButton button)
   default:
   break;
   }  
-  
-  }
-
-public void adjustTeam(int adj)
-  {
-  container.clientSettings.team += adj;
-  if(container.clientSettings.team<-1)
-    {
-    container.clientSettings.team=-1;
-    }
-  if(container.clientSettings.team>15)
-    {
-    container.clientSettings.team=15;
-    }
-  }
-
-public void switchBackToParent()
-  {
-  if(this.updateOnClose)
-    {
-    this.container.updateServerContainer();
-    }
-  mc.displayGuiScreen(parent);
-  }
-
-@Override
-protected void keyTyped(char par1, int par2)
-  {
-  if (par2 == 1 || par2 == this.mc.gameSettings.keyBindInventory.keyCode)
-    {
-    this.switchBackToParent();
-    }
-  else
-    {
-    super.keyTyped(par1, par2);
-    }
   }
 
 

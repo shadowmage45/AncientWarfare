@@ -20,12 +20,12 @@
  */
 package shadowmage.ancient_warfare.client.gui.structure;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.GuiTextFieldSimple;
+import shadowmage.ancient_warfare.client.gui.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
@@ -52,10 +52,10 @@ GuiCheckBoxSimple worldGenBox;
 GuiCheckBoxSimple survivalBox;
 GuiCheckBoxSimple uniqueBox;
 
-GuiTextField weight;
-GuiTextField value;
+GuiTextFieldSimple weight;
+GuiTextFieldSimple value;
 
-GuiTextField nameBox;
+GuiTextFieldSimple nameBox;
 
 /**
  * @param container
@@ -98,7 +98,6 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     Config.logError("IMPROPER CONTAINER DETECTED IN SCANNING GUI");
     closeGUI();
     }
-  this.nameBox.drawTextBox();
   this.drawString(fontRenderer, "Export to AW Format    : ", guiLeft+10, guiTop+53, 0xffffffff);
   this.drawString(fontRenderer, "Add to game immediately: ", guiLeft+10, guiTop+73, 0xffffffff);  
   this.drawString(fontRenderer, "Export to Ruins Format : ", guiLeft+10, guiTop+93, 0xffffffff);
@@ -113,7 +112,15 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   }
 
 @Override
-public void setupGui()
+public void updateScreenContents()
+  {
+  this.name = nameBox.getText();
+  this.weightString = this.weight.getText();  
+  this.valueString = this.value.getText();  
+  }
+
+@Override
+public void setupControls()
   {
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
   this.addGuiButton(1, 256-45-10, 30, 45, 18, "Export");
@@ -126,47 +133,46 @@ public void setupGui()
   survivalBox = this.addCheckBox(7, 145, 130, 16, 16).setChecked(survival);
   uniqueBox = this.addCheckBox(10, 145, 190, 16, 16).setChecked(unique);  
   
-  nameBox = this.addTextField(0, 10, 30, 120, 10, 30, name);  
-  weight = this.addTextField(1, 145, 150, 40, 10, 3, weightString).setAsNumberBox();
-  value = this.addTextField(2, 145, 170, 40, 10, 3, valueString).setAsNumberBox();
+  nameBox = this.addTextField(11, 10, 30, 120, 10, 30, name);  
+  weight = this.addTextField(12, 145, 150, 40, 10, 3, weightString);
+  value = this.addTextField(13, 145, 170, 40, 10, 3, valueString);
   
   if(worldGenBox.checked())
     {
-    weight.setVisible(true);
-    value.setVisible(true);
+    weight.hidden = false;
+    value.hidden = false;;
     uniqueBox.hidden = false;
     }
   else
     {
     uniqueBox.hidden = true;
-    weight.setVisible(false);
-    value.setVisible(false);
+    weight.hidden = true;
+    value.hidden = true;
     }
-  
   }
 
 @Override
-public void updateScreenContents()
+public void updateControls()
   {
-  if(nameBox!=null)
+  if(worldGenBox.checked())
     {
-    this.name = nameBox.getText();
+    weight.hidden = false;
+    value.hidden = false;;
+    uniqueBox.hidden = false;
     }
-  if(this.weight!=null)
+  else
     {
-    this.weightString = this.weight.getText();
-    }
-  if(this.value!=null)
-    {
-    this.valueString = this.value.getText();
+    uniqueBox.hidden = true;
+    weight.hidden = true;
+    value.hidden = true;
     }
   }
 
 @Override
-public void buttonClicked(GuiButton button)
+public void onElementActivated(IGuiElement element)
   {
   ContainerStructureScanner container =null;
-  switch(button.id)
+  switch(element.getElementNumber())
   {
   case 0:
   closeGUI();
@@ -228,45 +234,16 @@ public void buttonClicked(GuiButton button)
   this.weightString = weight.getText();
   if(worldGenBox.checked())
     {
-    weight.setVisible(true);
-    value.setVisible(true);
+    weight.hidden = false;
+    value.hidden = false;;
     uniqueBox.hidden = false;
     }
   else
     {
     uniqueBox.hidden = true;
-    weight.setVisible(false);
-    value.setVisible(false);
+    weight.hidden = true;
+    value.hidden = true;
     }
-  }
-
-
-
-/**
- * Called when the mouse is clicked.
- */
-@Override
-protected void mouseClicked(int par1, int par2, int par3)
-  {
-  super.mouseClicked(par1, par2, par3);
-  }
-
-/**
- * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
- */
-@Override
-protected void keyTyped(char par1, int par2)
-  {
-  super.keyTyped(par1, par2);
-  
-//  if (this.nameBox.textboxKeyTyped(par1, par2))
-//    {
-//    
-//    }
-//  else
-//    {
-//    super.keyTyped(par1, par2);
-//    }
   }
 
 

@@ -49,7 +49,7 @@ public GuiCheckBoxSimple(int elementNum, IGuiElementCallback parent, int x, int 
   }
 
 @Override
-public void drawElement(int mouseX, int mouseY, int guiLeft, int guiTop)
+public void drawElement(int mouseX, int mouseY)
   {
   if(!this.hidden)
     {

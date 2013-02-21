@@ -20,11 +20,14 @@
  */
 package shadowmage.ancient_warfare.client.gui.structure;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.client.gui.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
@@ -37,7 +40,7 @@ public class GuiEditorSelect extends GuiContainerAdvanced
 private final List<StructureClientInfo> clientStructures;
 int currentLowestViewed = 0;
 private static final int numberDisplayed = 8;
-private boolean shouldForceUpdate = false;
+//private boolean shouldForceUpdate = false;
 String currentStructure = "";
 private ContainerEditor container;
 
@@ -103,75 +106,9 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   }
 
 @Override
-public void setupGui()
-  {
-  this.controlList.clear();
-  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
-  this.addGuiButton(1, 10, 40+8, 35, 18, "Prev");
-  this.addGuiButton(2, 50, 40+8, 35, 18, "Next");
-
-  this.addGuiButton(20, 256-35-10, 30, 35, 18, "Edit");
-
-  for(int i = 0, buttonNum = 3; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++, buttonNum++)
-    {
-    this.addGuiButton(buttonNum, 10, 60 + (20*i) +8, 120, 14, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
-    } 
-  }
-
-@Override
 public void updateScreenContents()
   {
-  if(shouldForceUpdate)
-    {
-    shouldForceUpdate = false;
-    this.initGui();
-    }  
-  }
-
-@Override
-public void buttonClicked(GuiButton button)
-  {
-  switch(button.id)
-  {
-  case 0:
-  closeGUI();
-  return;
-
-  case 1:
-  if(this.currentLowestViewed-8 >=0)
-    {
-    this.currentLowestViewed-=8;
-    shouldForceUpdate = true;
-    }
-  return;
-
-  case 2:
-  if(this.currentLowestViewed+8 < this.clientStructures.size())
-    {
-    this.currentLowestViewed+=8;
-    shouldForceUpdate = true;   
-    }
-  return;
-
-  case 20:
-  if(StructureManager.instance().getClientStructure(currentStructure)!=null)
-    {
-    this.selectStructureToEdit(currentStructure);    
-    }
-  return;
-  }
-  this.errorMessage = "";
-  if(button.id>=3 && button.id < 11)
-    {
-    int index = (this.currentLowestViewed + button.id) - 3;
-    if(index>=this.clientStructures.size())
-      {
-      return;
-      }
-    shouldForceUpdate = true;
-    this.setStructureName(this.clientStructures.get(index).name);
-    }
-  
+ 
   }
 
 /**
@@ -198,6 +135,93 @@ public void setStructureName(String name)
   NBTTagCompound tag = new NBTTagCompound();
   tag.setString("name", name);
   this.sendDataToServer(tag);
+  }
+
+private List<GuiButtonSimple> structureButtons = new ArrayList<GuiButtonSimple>();
+
+@Override
+public void setupControls()
+  {
+  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
+  this.addGuiButton(1, 10, 40+8, 35, 18, "Prev");
+  this.addGuiButton(2, 50, 40+8, 35, 18, "Next");
+
+  this.addGuiButton(20, 256-35-10, 30, 35, 18, "Edit");
+  
+  for(int i = 0, buttonNum = 3; i< numberDisplayed; i++, buttonNum++)
+    {
+    structureButtons.add(this.addGuiButton(buttonNum, 10, 60 + (20*i) +8, 120, 14, ""));
+    }
+
+//  for(int i = 0, buttonNum = 3; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++, buttonNum++)
+//    {
+//    this.addGuiButton(buttonNum, 10, 60 + (20*i) +8, 120, 14, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
+//    } 
+  }
+
+@Override
+public void updateControls()
+  {
+  for(int i = 0; i <numberDisplayed; i++)
+    {
+    GuiButtonSimple button = this.structureButtons.get(i);
+    if(i+currentLowestViewed < clientStructures.size())
+      {
+      button.enabled = true;
+      button.hidden = false;
+      button.setButtonText(StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
+      }
+    else
+      {
+      button.enabled = false;
+      button.hidden = true;
+      }
+    } 
+  }
+
+@Override
+public void onElementActivated(IGuiElement element)
+  {
+  switch(element.getElementNumber())
+  {
+  case 0:
+  closeGUI();
+  return;
+
+  case 1:
+  if(this.currentLowestViewed-8 >=0)
+    {
+    this.currentLowestViewed-=8;
+    forceUpdate = true;
+    }
+  return;
+
+  case 2:
+  if(this.currentLowestViewed+8 < this.clientStructures.size())
+    {
+    this.currentLowestViewed+=8;
+    forceUpdate = true;   
+    }
+  return;
+
+  case 20:
+  if(StructureManager.instance().getClientStructure(currentStructure)!=null)
+    {
+    this.selectStructureToEdit(currentStructure);    
+    }
+  return;
+  }
+  this.errorMessage = "";
+  if(element.getElementNumber()>=3 && element.getElementNumber() < 11)
+    {
+    int index = (this.currentLowestViewed + element.getElementNumber()) - 3;
+    if(index>=this.clientStructures.size())
+      {
+      return;
+      }
+    forceUpdate = true;
+    this.setStructureName(this.clientStructures.get(index).name);
+    }
   }
 
 }

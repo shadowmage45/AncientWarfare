@@ -3,6 +3,7 @@ package shadowmage.ancient_warfare.client.gui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 
+@Deprecated
 public class GuiTextFieldAdvanced extends GuiTextField
 {
 
@@ -37,18 +38,18 @@ public boolean textboxKeyTyped(char par1, int par2)
   {
   if(this.isFocused())
     {
-    if(par2==28)//enter
-      {
-      this.parent.onTextBoxActivated(this, 0);
-      }
-    if(par2==200)//up arrow
-      {
-      this.parent.onTextBoxActivated(this, 1);
-      }
-    if(par2==208)//down arrow
-      {
-      this.parent.onTextBoxActivated(this, -1);
-      }
+//    if(par2==28)//enter
+//      {
+//      this.parent.onTextBoxActivated(this, 0);
+//      }
+//    if(par2==200)//up arrow
+//      {
+//      this.parent.onTextBoxActivated(this, 1);
+//      }
+//    if(par2==208)//down arrow
+//      {
+//      this.parent.onTextBoxActivated(this, -1);
+//      }
     }
   if(this.isNumberValue)
     {
@@ -98,7 +99,7 @@ int[] validControlNums = new int[]{14,199,203,205,207,211};
 
 public boolean onMouseWheel(int change)
   {
-  this.parent.onTextBoxActivated(this, change);
+//  this.parent.onTextBoxActivated(this, change);
   return true;
   }
 

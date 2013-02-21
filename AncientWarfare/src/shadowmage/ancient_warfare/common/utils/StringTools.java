@@ -283,4 +283,21 @@ public static List<String> getLines(byte[] bytes)
   return lines;
   }
 
+public static String removeCharAt(String line, int x)
+  {
+  if(x<0 || x>=line.length())
+    {    
+    return line;
+    }
+  String newLine = "";
+  for(int i = 0; i < line.length(); i++)
+    {
+    if(i != x)
+      {
+      newLine = newLine + String.valueOf(line.charAt(i));
+      }
+    }
+  return newLine;
+  }
+
 }

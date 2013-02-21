@@ -24,7 +24,8 @@ public interface IGuiElement
 {
 
 public int getElementNumber();
-public void drawElement(int mouseX, int mouseY, int guiLeft, int guiTop);
+public void drawElement(int mouseX, int mouseY);
+public void updateGuiPos(int newX, int newY);
 public boolean isMouseOver(int x, int y);
 public void onMousePressed(int x, int y, int num);
 public void onMouseReleased(int x, int y, int num);

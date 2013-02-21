@@ -25,6 +25,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
@@ -91,23 +92,28 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   }
 
 @Override
-public void setupGui()
-  {
-  this.controlList.clear();
-  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
-  this.addGuiButton(1, 256-35-10, 30, 35, 18, "Clear");  
-  }
-
-@Override
 public void updateScreenContents()
   {
   
   }
 
 @Override
-public void buttonClicked(GuiButton button)
+public void setupControls()
   {
-  switch(button.id)
+  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
+  this.addGuiButton(1, 256-35-10, 30, 35, 18, "Clear");  
+  }
+
+@Override
+public void updateControls()
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public void onElementActivated(IGuiElement element)
+  {
+  switch(element.getElementNumber())
   {
   case 0:
   closeGUI();

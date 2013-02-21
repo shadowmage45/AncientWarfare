@@ -26,6 +26,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.GuiTextBox;
+import shadowmage.ancient_warfare.client.gui.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 
 public class GuiEditor extends GuiContainerAdvanced
@@ -80,20 +81,6 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     this.editor.drawTextBox(fontRenderer, guiLeft+4, guiTop+4);
     }
   this.fontRenderer.drawString(errorMsg, guiLeft+10, guiTop+240-4-18-1-7, 0xffff0000, false);
-  //this.drawString(fontRenderer, errorMsg, guiLeft+10, guiTop+240-4-18-1-10, 0xffff0000);
-  }
-
-@Override
-public void setupGui()
-  {
-  this.controlList.clear();
-  this.addGuiButton(0, 128-50-2, 240-18-4, 50, 18, "Discard");
-  this.addGuiButton(1, 128 + 2, 240-18-4, 50, 18, "Save");
-  if(editor!=null)    
-    {
-    editor.updateDrawPos(guiLeft+4, guiTop+4);
-    }  
-  this.errorMsg = "";
   }
 
 @Override
@@ -130,29 +117,6 @@ public void handleDataFromContainer(NBTTagCompound tag)
       this.editor.setFileClean();
       }
     }
-  }
-
-@Override
-public void buttonClicked(GuiButton button)
-  {
-  switch(button.id)
-  {
-  case 0:
-  this.closeGUI();
-  break;
-  
-  case 1:
-  if(this.editor.isFileDirty())
-    {
-    this.cont.saveTemplate();
-    }
-  //this.closeGUI();
-  break;
-  
-  default:
-  break;
-  }
-  // TODO Auto-generated method stub  
   }
 
 
@@ -209,6 +173,46 @@ public void onGuiClosed()
   {
   Keyboard.enableRepeatEvents(true);
   super.onGuiClosed();
+  }
+
+@Override
+public void setupControls()
+  {
+  this.addGuiButton(0, 128-50-2, 240-18-4, 50, 18, "Discard");
+  this.addGuiButton(1, 128 + 2, 240-18-4, 50, 18, "Save");
+  
+  }
+
+@Override
+public void updateControls()
+  {
+  if(editor!=null)    
+    {
+    editor.updateDrawPos(guiLeft+4, guiTop+4);
+    }  
+  this.errorMsg = "";  
+  }
+
+@Override
+public void onElementActivated(IGuiElement element)
+  {
+  switch(element.getElementNumber())
+  {
+  case 0:
+  this.closeGUI();
+  break;
+  
+  case 1:
+  if(this.editor.isFileDirty())
+    {
+    this.cont.saveTemplate();
+    }
+  //this.closeGUI();
+  break;
+  
+  default:
+  break;
+  }
   }
 
 

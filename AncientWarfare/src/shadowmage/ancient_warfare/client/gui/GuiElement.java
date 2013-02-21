@@ -40,7 +40,7 @@ int height;
 /**
  * the most recently pressed button on this element, -1 for none
  */
-int mouseButton;
+int mouseButton = -1;
 
 /**
  * the X,Y of where the mouse button was pressed or moved to
@@ -53,6 +53,9 @@ int mouseDownY;
  */
 int mouseLastX;
 int mouseLastY;
+
+int guiLeft;
+int guiTop;
 
 protected boolean isMouseOver = false;
 public boolean enabled = true;
@@ -71,6 +74,13 @@ public GuiElement(int elementNum, IGuiElementCallback parent, int x, int y, int 
   this.height = h;
   this.mc = Minecraft.getMinecraft();
   this.fr = mc.fontRenderer;
+  }
+
+@Override
+public void updateGuiPos(int x, int y)
+  {
+  this.guiLeft = x;
+  this.guiTop = y;
   }
 
 @Override
@@ -172,16 +182,16 @@ protected void drawQuadedTexture(int x, int y, int w, int h, int tw, int th, Str
   int v1 = v + th - halfH;
   GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture(tex));
   GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-  this.drawTexturedModalRect(this.renderPosX, this.renderPosY, u, v, halfW, halfH);
-  this.drawTexturedModalRect(this.renderPosX + halfW, this.renderPosY, u1, v, halfW, halfH);
-  this.drawTexturedModalRect(this.renderPosX, this.renderPosY + halfH, u, v1, halfW, halfH);
-  this.drawTexturedModalRect(this.renderPosX + halfW, this.renderPosY + halfH, u1, v1, halfW, halfH);
+  this.drawTexturedModalRect(x, y, u, v, halfW, halfH);
+  this.drawTexturedModalRect(x + halfW, y, u1, v, halfW, halfH);
+  this.drawTexturedModalRect(x, y + halfH, u, v1, halfW, halfH);
+  this.drawTexturedModalRect(x + halfW, y + halfH, u1, v1, halfW, halfH);
   }
 
 @Override
 public boolean isMouseOver(int x, int y)
   {
-  return x >=this.renderPosX && x<this.renderPosX+width && y>=this.renderPosY && y<this.renderPosY+height;
+  return x >=this.renderPosX+guiLeft && x<this.renderPosX+width+guiLeft && y>=this.renderPosY+guiTop && y<this.renderPosY+height+guiTop;
   }
 
 public void clearMouseButton()
