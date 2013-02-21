@@ -29,7 +29,7 @@ import org.lwjgl.opengl.GL11;
 public abstract class GuiElement extends Gui implements IGuiElement
 {
 
-private final IGuiElementCallback parent;
+protected final IGuiElementCallback parent;
 
 final int elementNum;
 int renderPosX;

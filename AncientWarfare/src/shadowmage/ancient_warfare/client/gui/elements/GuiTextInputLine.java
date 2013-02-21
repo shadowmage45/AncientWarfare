@@ -23,7 +23,7 @@ package shadowmage.ancient_warfare.client.gui.elements;
 import net.minecraft.util.ChatAllowedCharacters;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
-public class GuiTextFieldSimple extends GuiElement
+public class GuiTextInputLine extends GuiElement
 {
 
 String text = "";
@@ -60,7 +60,7 @@ boolean selected;
  * @param h
  * @param defaultText
  */
-public GuiTextFieldSimple(int elementNum, IGuiElementCallback parent, int x, int y, int w, int h, int maxChars, String defaultText)
+public GuiTextInputLine(int elementNum, IGuiElementCallback parent, int x, int y, int w, int h, int maxChars, String defaultText)
   {
   super(elementNum, parent, x, y, w, h);
   }
@@ -122,108 +122,109 @@ public boolean handleMouseWheel(int x, int y, int wheel)
 public boolean handleKeyInput(char ch, int keyCode)
   {
   if(this.selected && this.enabled && !this.hidden)
+    {          
+    switch(keyCode)
     {
-    if(ChatAllowedCharacters.isAllowedCharacter(ch))
+    case 200://up arrow
+    break;
+
+    case 208://dwn arrow
+    break;
+
+    case 203:
+    moveCursorLeft();
+    break;
+
+    case 205:
+    moveCursorRight();
+    break;
+
+    case 211:
+    handleDeleteAction();
+    break;
+
+    case 14:
+    handleBackspaceAction();
+    break;
+
+    case 28:
+    handleEnterAction();
+    break;
+
+    case 1:
+    break;
+
+    case 210:
+    break;
+
+    case 199:
+    this.handleHomeAction();
+    break;
+
+    case 201://pg up
+    break;
+
+    case 207:
+    this.handleEndAction();
+    break;
+
+    case 209://pg dwn
+    break;
+
+    case 54://rShift
+    case 184://Ralt--Rmenu
+    case 220://Rmeta
+    case 157://RControl
+    case 69://numlock
+    case 183://sysReq
+    case 70://scrollLock
+    case 197://pause
+    case 59://f1
+    case 60://f2
+    case 61://f3
+    case 62://f4
+    case 63://f5
+    case 64://f6
+    case 65://f7
+    case 66://f8
+    case 67://f9
+    case 68://f10
+    case 87://f11
+    case 88://f12  
+    case 58://capslock
+    case 42://Lshift
+    case 29://Lcont
+    case 219://LMeta
+    case 56://Lalt
+    break;
+
+    default:
+    if(this.isValidChar(ch))
       {
       this.handleCharAction(ch);
       return true;
-      }
+      } 
     else
       {
-      
-      switch(keyCode)
-      {
-      case 200:
-//      moveCursorUp();
-      break;
-      
-      case 208:
-//      moveCursorDown();
-      break;
-      
-      case 203:
-      moveCursorLeft();
-      break;
-      
-      case 205:
-      moveCursorRight();
-      break;
-      
-      case 211:
-      handleDeleteAction();
-      break;
-      
-      case 14:
-      handleBackspaceAction();
-      break;
-      
-      case 28:
-      handleEnterAction();
-      break;
-      
-      case 1:
-      break;
-      
-      case 210:
-      break;
-      
-      case 199:
-      this.handleHomeAction();
-      break;
-      
-      case 201:
-//      this.handlePgUpAction();
-      break;
-      
-      case 207:
-      this.handleEndAction();
-      break;
-      
-      case 209:
-//      this.handlePgDownAction();
-      break;
-      
-      case 54://rShift
-      case 184://Ralt--Rmenu
-      case 220://Rmeta
-      case 157://RControl
-      case 69://numlock
-      case 183://sysReq
-      case 70://scrollLock
-      case 197://pause
-      case 59://f1-f12
-      case 60:
-      case 61:
-      case 62:
-      case 63:
-      case 64:
-      case 65:
-      case 66:
-      case 67:
-      case 68:
-      case 87:
-      case 88:  
-      case 58://capslock
-      case 42://Lshift
-      case 29://Lcont
-      case 219://LMeta
-      case 56://Lalt
-      break;
-      
-      default:
-      break;
+      return false;
       }
-      /**
-       * TODO
-       * shift+arrow keys--highlight selection
-       * copy/cut/paste -- copy/cut/paste
-       */ 
-      return true;
-      }
+    }   
+    return true;
     }
   return false;
   }
 
+protected boolean isValidChar(char ch)
+  {
+  if(ChatAllowedCharacters.isAllowedCharacter(ch))
+    {
+    return true;
+    } 
+  else
+    {
+    return false;
+    }
+  }
 
 public void setText(String text)
   {
@@ -235,7 +236,7 @@ public String getText()
   return this.text;
   }
 
-private void updateCursorOffset()
+protected void updateCursorOffset()
   {
   cursorOffset = 0;
   for(int i = 0; i < this.cursorPos; i++)
@@ -251,7 +252,7 @@ private void updateCursorOffset()
     }
   }
 
-private void moveCursorRight()
+protected void moveCursorRight()
   {
   cursorPos++;
   if(cursorPos>this.text.length())
@@ -260,7 +261,7 @@ private void moveCursorRight()
     }
   }
 
-private void moveCursorLeft()
+protected void moveCursorLeft()
   {
   cursorPos--;
   if(cursorPos<0)
@@ -269,24 +270,24 @@ private void moveCursorLeft()
     }
   }
 
-private void handleHomeAction()
+protected void handleHomeAction()
   {
   this.cursorPos = 0;
   }
 
-private void handleEndAction()
+protected void handleEndAction()
   {
   this.cursorPos = this.text.length();
   }
 
-private void handleCharAction(char ch)
+protected void handleCharAction(char ch)
   {
   String firstPart = "";
   String lastPart = "";
   firstPart = this.text.substring(0, this.cursorPos);
   lastPart = this.text.substring(cursorPos, text.length());
   this.text = firstPart + ch + lastPart;
-  this.cursorPos++; 
+  this.moveCursorRight();
   }
 
 private void handleDeleteAction()
@@ -297,13 +298,13 @@ private void handleDeleteAction()
 private void handleBackspaceAction()
   {
   this.text = StringTools.removeCharAt(text, cursorPos-1);
-  this.cursorPos--;
-  if(this.cursorPos<0)
-    {
-    this.cursorPos = 0;
-    }
+  this.moveCursorLeft();
   }
 
-private void handleEnterAction(){}
+private void handleEnterAction()
+  {
+  this.selected = false;
+  this.parent.onElementActivated(this);
+  }
 
 }

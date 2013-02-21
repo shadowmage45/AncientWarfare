@@ -31,6 +31,21 @@ import java.util.Scanner;
 public class StringTools
 {
 
+
+public static String getCSVStringForArray(int[] values)
+  {
+  String line = "";
+  for(int i = 0; i < values.length; i++)
+    {
+    if(i >=1 )
+      {
+      line = line + ",";
+      }
+    line = line + values[i];    
+    }
+  return line;
+  }
+
 public static String getCSVValueFor(String[] values)
   {
   String line = "";
@@ -42,7 +57,7 @@ public static String getCSVValueFor(String[] values)
       }
     line = line + values[i];    
     }
-  return "";
+  return line;
   }
 
 /**
@@ -156,6 +171,27 @@ public static boolean safeParseIntAsBoolean(String regex, String test)
   return false;
   }
 
+public static float safeParseFloat(String regex, String test)
+  {
+  String[] split = test.trim().split(regex);
+  if(split.length>1)
+    {
+    return safeParseFloat(split[1]);
+    }
+  return 0;
+  }
+
+public static float safeParseFloat(String val)
+  {
+  try
+    {
+    return Float.parseFloat(val.trim());
+    }
+  catch(NumberFormatException e)
+    {
+    return 0;
+    }  
+  }
 
 /**
  * returns a value after a split at regex, or an empty string

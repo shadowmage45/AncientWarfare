@@ -494,11 +494,11 @@ private List<String> getConfigLines()
   lines.add("config:");  
   if(this.invalidDimensions!=null)
     {
-    lines.add("invalidDimensions=");
+    lines.add("invalidDimensions="+StringTools.getCSVStringForArray(invalidDimensions));
     }
   else if(this.validDimensions!=null)
     {
-    lines.add("validDimensions=");
+    lines.add("validDimensions="+StringTools.getCSVStringForArray(validDimensions));
     }
   lines.add(":endconfig");
   return lines;

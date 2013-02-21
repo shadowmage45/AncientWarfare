@@ -24,7 +24,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
-import shadowmage.ancient_warfare.client.gui.elements.GuiTextFieldSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
@@ -52,10 +52,10 @@ GuiCheckBoxSimple worldGenBox;
 GuiCheckBoxSimple survivalBox;
 GuiCheckBoxSimple uniqueBox;
 
-GuiTextFieldSimple weight;
-GuiTextFieldSimple value;
+GuiTextInputLine weight;
+GuiTextInputLine value;
 
-GuiTextFieldSimple nameBox;
+GuiTextInputLine nameBox;
 
 /**
  * @param container

@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL12;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
-import shadowmage.ancient_warfare.client.gui.elements.GuiTextFieldSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElementCallback;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -237,9 +237,9 @@ public GuiCheckBoxSimple addCheckBox(int id, int x, int y, int len, int high)
  * @param initText
  * @return
  */
-public GuiTextFieldSimple addTextField(int id, int x, int y, int width, int height, int maxChars, String initText)
+public GuiTextInputLine addTextField(int id, int x, int y, int width, int height, int maxChars, String initText)
   {
-  GuiTextFieldSimple box = new GuiTextFieldSimple(id, this, x, y, width, height, maxChars, initText);
+  GuiTextInputLine box = new GuiTextInputLine(id, this, x, y, width, height, maxChars, initText);
 //  GuiTextFieldAdvanced box = new GuiTextFieldAdvanced(id, this, guiLeft+x, guiTop+y, width, height);
 //  box.setText(initText);
 //  box.setMaxStringLength(maxChars);
