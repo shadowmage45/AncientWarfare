@@ -131,8 +131,8 @@ public void onMouseMoved(int x, int y, int num)
     }
   if(this.mouseButton>=0)
     {
-    this.mouseDownX = this.mouseLastX;
-    this.mouseDownY = this.mouseLastY;
+    this.mouseLastX = this.mouseDownX;
+    this.mouseLastY = this.mouseDownY;
     this.mouseDownX = x;
     this.mouseDownY = y;
     if(this.handleMouseMoved(x, y, num) && this.parent!=null)

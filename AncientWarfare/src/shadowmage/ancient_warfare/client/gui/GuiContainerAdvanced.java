@@ -44,20 +44,15 @@ public DecimalFormat formatterThreeDec = new DecimalFormat("#.###");
 
 protected boolean forceUpdate = false;
 private boolean shouldInit = true;
+boolean isMouseOverControl = false;
+protected int mouseX = 0;
+protected int mouseY = 0;
 
 /**
  * gui controls...these are substitutes for the vanilla controlList...and allow for total control
  * over buttons and functions, while only overridding a minimal amount of vanilla code (and still allowing
  * for full use of the vanilla slot rendering and interface)
  */
-
-//@Deprecated
-//protected ArrayList<GuiTextFieldAdvanced> textBoxes = new ArrayList<GuiTextFieldAdvanced>();
-
-//@Deprecated
-//protected GuiTextFieldAdvanced currentTextField = null;
-
-//protected ArrayList<GuiElement> guiElements = new ArrayList<GuiElement>();
 protected HashMap<Integer, GuiElement> guiElements = new HashMap<Integer, GuiElement>();
 
 public GuiContainerAdvanced(Container container)
@@ -74,34 +69,36 @@ public GuiContainerAdvanced(Container container)
     }  
   }
 
+public boolean isMouseOverControl(int mouseX, int mouseY)
+  {
+  for(Integer i : this.guiElements.keySet())
+    {
+    if(this.guiElements.get(i).isMouseOver(mouseX, mouseY))
+      {
+      return true;
+      }
+    }  
+  return false;
+  }
+
 @Override
 public void onElementReleased(IGuiElement element)
-  {
-  
+  {  
   }
 
 @Override
 public void onElementDragged(IGuiElement element)
-  {
-  
+  {  
   }
-
-//@Override
-//public void onElementActivated(IGuiElement el)
-//  {
-//  Config.logDebug("Element activated.  Num: "+el.getElementNumber());
-//  }
 
 @Override
 public void onElementMouseWheel(IGuiElement element, int amt)
   {
-  //TODO
   }
 
 @Override
 public void onElementKeyTyped(char ch, int keyNum)
   {
-  //TODO
   }
 
 @Override
@@ -210,20 +207,13 @@ public GuiButtonSimple addGuiButton(int id, int x, int y, int len, int high, Str
   GuiButtonSimple button = new GuiButtonSimple(id, this, x, y, len, high, name);
   this.guiElements.put(id, button);
   return button;
-//  GuiButtonMultiSize button = new GuiButtonMultiSize(id, guiLeft+x, guiTop+y, len, high, name);
-//  this.buttons.add(button);
-//  return button;
   }
-
 
 public GuiCheckBoxSimple addCheckBox(int id, int x, int y, int len, int high)
   {
   GuiCheckBoxSimple box = new GuiCheckBoxSimple(id, this, x, y, len, high);
   this.guiElements.put(id, box);
   return box;
-//  GuiCheckBox box = new GuiCheckBox(id, guiLeft + x, guiTop + y, len, high);
-//  this.buttons.add(box);
-//  return box;
   }
 
 /**
@@ -240,32 +230,9 @@ public GuiCheckBoxSimple addCheckBox(int id, int x, int y, int len, int high)
 public GuiTextInputLine addTextField(int id, int x, int y, int width, int height, int maxChars, String initText)
   {
   GuiTextInputLine box = new GuiTextInputLine(id, this, x, y, width, height, maxChars, initText);
-//  GuiTextFieldAdvanced box = new GuiTextFieldAdvanced(id, this, guiLeft+x, guiTop+y, width, height);
-//  box.setText(initText);
-//  box.setMaxStringLength(maxChars);
-//  box.setTextColor(-1);
-//  box.func_82266_h(-1);
-//  box.setEnableBackgroundDrawing(true);
-//  this.textBoxes.add(box);
   this.guiElements.put(id, box);
   return box;
   }
-
-/**
- * add a small merchant button with adjusted position, relative to GUI topLeft corner
- * @param id
- * @param x
- * @param y
- * @param pointsRight
- * @return
- */
-//@Deprecated
-//public GuiButtonMerchant addMerchantButton(int id, int x, int y, boolean pointsRight)
-//  {
-//  GuiButtonMerchant button = new GuiButtonMerchant(id, guiLeft+x, guiTop+y, pointsRight);
-//  this.buttons.add(button);
-//  return button;
-//  }
 
 @Override
 public void initGui()
@@ -289,12 +256,24 @@ public void updateScreen()
   super.updateScreen();
   guiLeft = (this.width - this.xSize) / 2;
   guiTop = (this.height - this.ySize) / 2;
+  
+  this.isMouseOverControl = false;
+  GuiElement el;
+  for(Integer i : this.guiElements.keySet())
+    {   
+    if(this.guiElements.get(i).isMouseOver(mouseX, mouseY))
+      {
+      this.isMouseOverControl = true;
+      break;
+      }
+    }  
   if(this.forceUpdate)
     {
     this.updateControls();
     this.forceUpdate = false;
     }
   this.updateScreenContents();
+  
   }
 
 @Override
@@ -547,6 +526,8 @@ public void handleMouseInput()
   {  
   int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
   int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+  this.mouseX = mouseX;
+  this.mouseY = mouseY;
   int wheel = Mouse.getEventDWheel();
   wheel = wheel > 0 ? 1 : wheel < 0 ? -1 : 0;  
   int buttonNum = Mouse.getEventButton();
