@@ -7,6 +7,22 @@ GENERAL
 
 VEHICLES
 * start!!!
+    ---base vehicle class will need:
+        input proxy -- poll from here for info client side, server side is dummy class
+            -- all input will be sent from the client (riding the vehicle) to the server.
+                    server maintains state, relays input changes to all tracking clients (including sender)
+        basic internal client/server comms. need a reliable vehicle channel. see: container networking
+        vehicle type number--used to reference for spawning and renders
+        subclass for every vehicle (use render# on rendering, run through renderManager--low overhead)
+        local ammoStats--maintains viable ammo types and counts
+        local vehicleStats--
+        per-entity pathfinder (possibly custom) for use with soldiers and player set waypoints
+    ---
+            
+AMMO TYPES
+---single instance referenced class, ala Item/Block.  Ammo types will have calls for onHit and a few
+        other convenience methods
+            
 
 GUI FRAMEWORK
 * add GuiStringScrollFrame (completely handles displaying of a list of strings w/ callback info

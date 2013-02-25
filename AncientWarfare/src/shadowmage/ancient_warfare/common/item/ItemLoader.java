@@ -120,27 +120,6 @@ private void registerVehicleUpgradeItem(int dmg, int type, VehicleUpgrade upgrad
     }
   }
 
-/**
- * special itemRegister function that will create the necessary items and add them to all registers
- * @param dmg
- * @param type
- * @param name
- * @param displayName
- */
-private void registerVehicleAmmoItem(int dmg, int type, String name, String displayName)
-  {
-  ItemIDPair pair = new ItemIDPair(vehicleAmmo.itemID, dmg,true);
-  VehicleAmmo entry = new VehicleAmmo(pair, name, displayName,type);
-  this.addSubtypeToItem(vehicleAmmo, dmg, displayName);
-  VehicleAmmoRegistry.instance().registerAmmoType(entry);
-  }
-
-private ItemStack createVehicleAmmoSubtype(int dmg, int type, String name, String displayName)
-  {
-  this.registerVehicleAmmoItem(dmg, type, name, displayName);
-  return new ItemStack(vehicleAmmo.itemID,1,dmg);
-  }
-
 private ItemStack createVehicleUpgradeSubtype(int dmg, int type, VehicleUpgrade upgrade)
   {
   this.registerVehicleUpgradeItem(dmg, type, upgrade);
