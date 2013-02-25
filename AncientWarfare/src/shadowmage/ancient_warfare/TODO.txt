@@ -3,8 +3,10 @@ read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
 
 GENERAL
-* add basic GUI tooltip functionality -- GuiTooltip class (int x, int y, int w, int h, List<String> info)            
-* start working on complexes....
+* add basic GUI tooltip functionality -- GuiTooltip class (int x, int y, int w, int h, List<String> info)
+
+VEHICLES
+* start!!!
 
 GUI FRAMEWORK
 * add GuiStringScrollFrame (completely handles displaying of a list of strings w/ callback info
