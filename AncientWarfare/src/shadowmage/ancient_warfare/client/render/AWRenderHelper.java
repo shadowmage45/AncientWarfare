@@ -38,7 +38,7 @@ import shadowmage.ancient_warfare.common.utils.BlockTools;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
-public class AWRenderHelper implements ITickHandler
+public class AWRenderHelper
 {
 
 private static AWRenderHelper INSTANCE;
@@ -52,18 +52,6 @@ public static AWRenderHelper instance()
     INSTANCE = new AWRenderHelper();
     }
   return INSTANCE;
-  }
-
-@Override
-public void tickStart(EnumSet<TickType> type, Object... tickData)
-  {
-  
-  }
-
-@Override
-public void tickEnd(EnumSet<TickType> type, Object... tickData)
-  {
-  
   }
 
 
@@ -203,18 +191,6 @@ protected AxisAlignedBB adjustBBForPlayerPos(AxisAlignedBB bb, EntityPlayer play
   double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTick;
   double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTick;  
   return bb.offset(-x, -y, -z);
-  }
-
-@Override
-public EnumSet<TickType> ticks()
-  {
-  return EnumSet.of(TickType.RENDER);
-  }
-
-@Override
-public String getLabel()
-  {
-  return "AWRenderTicker";
   }
 
 @ForgeSubscribe

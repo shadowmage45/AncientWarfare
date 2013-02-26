@@ -20,6 +20,14 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+
 /**
  * handle render information
  * @author Shadowmage
@@ -27,5 +35,43 @@ package shadowmage.ancient_warfare.client.render;
  */
 public class RenderManager
 {
+
+private RenderManager(){}
+private static RenderManager INSTANCE;
+public static RenderManager instance()
+  {
+  if(INSTANCE==null){INSTANCE = new RenderManager();}
+  return INSTANCE;
+  }
+
+private HashMap<Integer, RenderBase> vehicleRenders = new HashMap<Integer, RenderBase>();
+
+public void loadRenders()
+  {
+  
+  }
+
+/**
+ * API call for adding vehicles render types
+ * @param vehType
+ * @param render
+ */
+public void addVehicleRender(int vehType, RenderBase render)
+  {
+  
+  }
+
+public RenderBase getRenderForVehicle(int vehicle)
+  {
+  return this.vehicleRenders.get(vehicle);
+  }
+
+public void doVehicleRender(int vehicleType, VehicleBase veh, double x, double y, double z, float yaw, float tick)
+  {
+  if(this.vehicleRenders.containsKey(vehicleType))
+    {
+    this.vehicleRenders.get(vehicleType).renderVehicle(veh, x, y, z, yaw, tick);
+    }
+  }
 
 }

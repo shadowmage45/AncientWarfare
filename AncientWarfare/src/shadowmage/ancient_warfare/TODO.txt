@@ -237,4 +237,10 @@ public static MyWorldData forWorld(World world)
 * clearance validation code is still a bit....off..        
 /********** 02-20-13 **********/
 * rework all GUIs to enable new IGuiElement code and style...rewrite
-            GuiTextFieldAdvanced, from the ground up... (yes, painful)
+            GuiTextFieldAdvanced, from the ground up... (yes, painful)            
+/********** 02-25-13 **********/
+* prep vehicle work
+/********** 02-26-13 **********/
+* add renderManager, methods to register vehicle renders            
+            
+            

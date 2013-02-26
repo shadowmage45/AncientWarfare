@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -28,10 +29,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 public class Packet02Vehicle extends PacketBase
 {
-
-
 int entityID;
-
 
 @Override
 public String getChannel()
@@ -42,6 +40,16 @@ public String getChannel()
 public void setParams(Entity ent)
   {  
   this.entityID = ent.entityId;
+  }
+
+public void setInputData(NBTTagCompound tag)
+  {
+  this.packetData.setTag("pi", tag);
+  }
+
+public void setRelayData(NBTTagCompound tag)
+  {
+  this.packetData.setTag("si", tag);
   }
 
 @Override

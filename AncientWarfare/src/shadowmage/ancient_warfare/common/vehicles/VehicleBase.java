@@ -22,12 +22,17 @@
  */
 package shadowmage.ancient_warfare.common.vehicles;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
+import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
+import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.vehicles.stats.ArmorStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.GeneralStats;
@@ -40,6 +45,14 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public abstract class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback
 {
+
+public static final int CATAPULT = 0;
+public static final int BALLISTA = 1;
+public static final int TREBUCHET = 2;
+public static final int RAM = 3;
+public static final int HWACHA = 4;
+public static final int CHESTCART = 5;
+public static final int BALLISTA_TURRET = 6;
 
 private float vehicleMaxHealthBase = 100;
 private float vehicleMaxHealth = 100;
@@ -77,17 +90,27 @@ private GeneralStats generalStats = new GeneralStats();
 private UpgradeStats upgradeStats;
 private VehicleInventory inventory;
 
+public int vehicleType = -1;
+
 public VehicleBase(World par1World)
   {
   super(par1World);   
-  this.navigator = new EntityPathfinder(this, worldObj, 16);
-  this.addValidAmmoTypes();
+  this.navigator = new EntityPathfinder(this, worldObj, 16);  
   this.upgradeStats = new UpgradeStats(this);
+  this.addValidAmmoTypes();
   this.addValidUpgradeTypes();  
   }
 
-public abstract void addValidAmmoTypes();
-public abstract void addValidUpgradeTypes();
+protected void addValidAmmoTypes()
+  {  
+  List<IAmmoType> ammos = AmmoRegistry.instance().getEntriesForVehicleType(CATAPULT);
+  
+  }
+
+protected void addValidUpgradeTypes()
+  {
+  
+  }
 
 public boolean hasTurret()
   {
@@ -159,7 +182,7 @@ public void handlePacketUpdate(NBTTagCompound tag)
   NBTTagCompound updateTag;
   if(tag.hasKey("pi"))//player input
     {
-    this.handleInputUpdate(tag.getCompoundTag("pi")); 
+    this.handlePacketServer(tag.getCompoundTag("pi")); 
     }
   if(tag.hasKey("si"))//server input (commands from server)
     {
@@ -167,7 +190,7 @@ public void handlePacketUpdate(NBTTagCompound tag)
     }
   }
 
-public void handleInputUpdate(NBTTagCompound tag)
+public void handlePacketServer(NBTTagCompound tag)
   {
   if(tag.hasKey("f"))
     {
@@ -181,33 +204,40 @@ public void handleInputUpdate(NBTTagCompound tag)
     {
     //TODO handle fire missile
     }
+  Packet02Vehicle pkt = new Packet02Vehicle();
+  pkt.setParams(this);
+  //TODO relay packet to all clients tracking this entity
   }
 
 public void handlePacketClient(NBTTagCompound tag)
   {
+  if(tag.hasKey("f"))//forward
+    {
+    
+    }
+  if(tag.hasKey("s"))//strafe
+    {
+    
+    }
   if(tag.hasKey("fm"))//fire missile
     {
-    //TODO handle fire missile client
+    
     }
   if(tag.hasKey("au"))//ammo update
     {
     
-    }
-  if(tag.hasKey("ac"))//ammo count (complete ammo count packet)
-    {
-    
-    }
+    }  
   if(tag.hasKey("uu"))//upgrade update
     {
     
-    }
-  if(tag.hasKey("us"))//upgrade stats (complete upgrade stats packet)
+    }  
+  if(tag.hasKey("iu"))//inventory update
     {
     
-    }
+    } 
   if(tag.hasKey("health"))//health update packet
     {
-    
+    this.vehicleHealth = tag.getFloat("health");
     }
   }
 

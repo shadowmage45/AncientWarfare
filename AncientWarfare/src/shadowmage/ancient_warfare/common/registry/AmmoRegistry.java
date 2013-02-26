@@ -22,12 +22,12 @@ package shadowmage.ancient_warfare.common.registry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.Item;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 public class AmmoRegistry
 {
@@ -111,5 +111,13 @@ public void addAmmoTypeToVehicle(int vehicleType, IAmmoType ammo)
     }   
   }
 
+public List<IAmmoType> getEntriesForVehicleType(int vehicle)
+  {
+  if(this.vehicleAmmoTypes.containsKey(vehicle))
+    {
+    return this.vehicleAmmoTypes.get(vehicle);
+    }
+  return null;
+  }
 
 }
