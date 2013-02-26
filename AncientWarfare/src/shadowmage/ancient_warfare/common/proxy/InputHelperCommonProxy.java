@@ -26,24 +26,19 @@ package shadowmage.ancient_warfare.common.proxy;
 public class InputHelperCommonProxy
 {
 
-public static final byte FORWARD = 2;
-public static final byte REVERSE = 0;
-public static final byte LEFT = 0;
-public static final byte RIGHT = 2;
-public static final byte NO_INPUT = 1;
-public static final byte TRIGGERED = 0;
-
-public byte forwardInput = NO_INPUT;
-public byte strafe = NO_INPUT;
-public byte fire = NO_INPUT;
-public byte turretStrafe = NO_INPUT;
-public byte turretPitch = NO_INPUT;
-public byte mount = NO_INPUT;
-
-public boolean checkInput()
+public int getStrafeInput()
   {
-  //TODO keybindHandler, check input keys
-  return false;  
+  return 0;
+  }
+
+public int getForwardInput()
+  {
+  return 0;
+  }
+
+public boolean getFireInput()
+  {
+  return false;
   }
 
 }

@@ -144,6 +144,11 @@ public static int getBlockID(String name, int defaultID, String comment)
   return config.getBlock(name, defaultID, comment).getInt(defaultID);
   }
 
+public static int getKeyBindID(String name, int defaultID, String comment)
+  {
+  return config.get("keybinds", name, defaultID, comment).getInt(defaultID);
+  }
+
 public void setCoreInfo()
   {
   config.addCustomCategoryComment("a-general-options", "Global options that effect the entire mod");

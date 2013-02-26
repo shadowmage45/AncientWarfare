@@ -26,10 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry;
-import shadowmage.ancient_warfare.common.registry.VehicleAmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
-import shadowmage.ancient_warfare.common.registry.entry.ItemIDPair;
-import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmo;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 
 public class ItemLoader
@@ -52,6 +49,7 @@ public static final AWItemBase debugEditor = new ItemCreativeEditor(Config.getIt
  * e.g. will be null unless debug mode is on
  */
 public static AWItemBase blockScanner;
+public static AWItemBase vehicleDebugSpawner;
 
 
 private static ItemLoader INSTANCE;
@@ -102,6 +100,7 @@ private void loadDebugItems()
     }  
   blockScanner = new ItemBlockScanner(Config.getItemID("debug.blockScanner", 9000));
   this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block");
+  
   }
 
 /**

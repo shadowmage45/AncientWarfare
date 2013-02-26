@@ -26,9 +26,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
+import shadowmage.ancient_warfare.client.input.InputHelper;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
 import shadowmage.ancient_warfare.common.network.PacketBase;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -56,10 +58,23 @@ public void sendPacketToServer(PacketBase pkt)
 @Override
 public void registerClientData()
   {
+  //TODO remove this..was an attempt to do world-bb rendering
   TickRegistry.registerTickHandler(AWRenderHelper.instance(), Side.CLIENT);
   
+  
+  /**
+   * load keybinds and register keybind handler
+   */
+  InputHelper.instance().loadKeysFromConfig();
+  KeyBindingRegistry.registerKeyBinding(InputHelper.instance());
+  
+  /**
+   * event helper for world-render ticks for BB rendering
+   */
   MinecraftForge.EVENT_BUS.register(AWRenderHelper.instance());
+  
   MinecraftForgeClient.preloadTexture("/shadowmage/ancient_warfare/resources/block/blocks.png");
+  //TODO preload all textures...pass off to rendermanager...
   }
 
 }

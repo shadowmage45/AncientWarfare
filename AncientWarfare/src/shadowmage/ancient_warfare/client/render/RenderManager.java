@@ -18,50 +18,14 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.registry;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-
+package shadowmage.ancient_warfare.client.render;
 
 /**
- * client-side rendering registry
+ * handle render information
  * @author Shadowmage
  *
  */
-public class RenderRegistry
+public class RenderManager
 {
-private RenderRegistry(){}
-public static RenderRegistry instance()
-  {
-  if(INSTANCE==null)
-    {
-    INSTANCE = new RenderRegistry();
-    }
-  return INSTANCE;
-  }
-private static RenderRegistry INSTANCE;
-
-private Map<Class<? extends Entity>, Render> renderMap = new HashMap<Class<? extends Entity>, Render>();
-
-public void load()
-  {
-  /**
-   * add renders here
-   */
-  }
-
-private void registerRender(Class<? extends Entity> clz, Render render)
-  {
-  
-  }
-
-public Render getRenderFor(Entity ent)
-  {
-  return this.renderMap.get(ent.getClass());
-  }
 
 }

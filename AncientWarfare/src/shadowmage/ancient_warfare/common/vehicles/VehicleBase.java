@@ -26,14 +26,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
-import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
-import shadowmage.ancient_warfare.common.proxy.InputHelper;
-import shadowmage.ancient_warfare.common.proxy.InputHelperCommonProxy;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
-import shadowmage.ancient_warfare.common.vehicles.stats.AmmoStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.ArmorStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.GeneralStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.UpgradeStats;
@@ -77,20 +72,15 @@ public EntityPathfinder navigator;
  * for both saving to NBT and relaying via packet to the client
  * also, they should intelligently relay only _changed_ bits to clients..somehow
  */
-private AmmoStats ammoStats;
 private ArmorStats armorStats = new ArmorStats();
 private GeneralStats generalStats = new GeneralStats();
 private UpgradeStats upgradeStats;
-
 private VehicleInventory inventory;
-
-public static InputHelperCommonProxy inputHelper = InputHelper.intance();
 
 public VehicleBase(World par1World)
   {
   super(par1World);   
   this.navigator = new EntityPathfinder(this, worldObj, 16);
-  this.ammoStats = new AmmoStats(this);
   this.addValidAmmoTypes();
   this.upgradeStats = new UpgradeStats(this);
   this.addValidUpgradeTypes();  
@@ -115,7 +105,7 @@ public boolean isMountable()
   }
 
 /**
- * need to setup on-death item drops, clear any caching of vehicle
+ * need to setup on-death item drops
  */
 @Override
 public void setDead()
@@ -142,35 +132,7 @@ public void onUpdate()
  */
 public void onUpdateClient()
   {  
-  /**
-   * check for input
-   */
-  if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
-    {
-    if(inputHelper.checkInput())
-      {
-      byte forwards = inputHelper.forwardInput;
-      byte strafe = inputHelper.strafe;
-      if(this.isDrivable() && forwards!=this.forwardInput || strafe !=this.strafeInput)
-        {
-        NBTTagCompound tag = new NBTTagCompound();
-        if(forwards!=this.forwardInput)
-          {
-          tag.setByte("f", forwards);
-          }
-        if(strafe!=this.strafeInput)
-          {
-          tag.setByte("s", strafe);
-          }            
-        Packet02Vehicle pkt = new Packet02Vehicle();
-        pkt.setParams(this);
-        pkt.packetData.setCompoundTag("pi", tag);
-        AWCore.proxy.sendPacketToServer(pkt);
-        }
-      this.forwardInput = forwards;
-      this.strafeInput = strafe;
-      }    
-    }
+
   }
 
 /**
@@ -195,9 +157,13 @@ public void onUpdateServer()
 public void handlePacketUpdate(NBTTagCompound tag)
   {
   NBTTagCompound updateTag;
-  if(tag.hasKey("pi"))
+  if(tag.hasKey("pi"))//player input
     {
     this.handleInputUpdate(tag.getCompoundTag("pi")); 
+    }
+  if(tag.hasKey("si"))//server input (commands from server)
+    {
+    this.handlePacketClient(tag.getCompoundTag("si"));
     }
   }
 
@@ -211,13 +177,51 @@ public void handleInputUpdate(NBTTagCompound tag)
     {
     this.strafeInput = tag.getByte("s");
     }
+  if(tag.hasKey("fm"))
+    {
+    //TODO handle fire missile
+    }
+  }
+
+public void handlePacketClient(NBTTagCompound tag)
+  {
+  if(tag.hasKey("fm"))//fire missile
+    {
+    //TODO handle fire missile client
+    }
+  if(tag.hasKey("au"))//ammo update
+    {
+    
+    }
+  if(tag.hasKey("ac"))//ammo count (complete ammo count packet)
+    {
+    
+    }
+  if(tag.hasKey("uu"))//upgrade update
+    {
+    
+    }
+  if(tag.hasKey("us"))//upgrade stats (complete upgrade stats packet)
+    {
+    
+    }
+  if(tag.hasKey("health"))//health update packet
+    {
+    
+    }
   }
 
 @Override
 public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   {
-  //TODO setup armor stuffs...
-  return super.attackEntityFrom(par1DamageSource, par2);
+  super.attackEntityFrom(par1DamageSource, par2);
+  this.vehicleHealth-=par2;
+  if(this.vehicleHealth<=0)
+    {
+    this.setDead();
+    return true;
+    }
+  return false;
   }
 
 @Override
@@ -295,13 +299,11 @@ protected void writeEntityToNBT(NBTTagCompound var1)
 @Override
 public void onMissileImpact(World world, double x, double y, double z)
   {
-  // TODO Auto-generated method stub  
   }
 
 @Override
 public void onMissileImpactEntity(World world, Entity entity)
   {
-  // TODO Auto-generated method stub  
   }
 
 }

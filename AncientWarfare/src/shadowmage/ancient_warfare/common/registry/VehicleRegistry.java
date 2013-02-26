@@ -22,7 +22,26 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+
 public class VehicleRegistry
 {
+
+
+
+
+private VehicleRegistry(){}
+private static VehicleRegistry INSTANCE;
+public static VehicleRegistry instance()
+  {
+  if(INSTANCE==null){INSTANCE = new VehicleRegistry();}
+  return INSTANCE;
+  }
+
+
 
 }
