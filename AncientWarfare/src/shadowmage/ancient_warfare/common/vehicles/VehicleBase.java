@@ -29,16 +29,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
+import shadowmage.ancient_warfare.common.utils.Trig;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
 import shadowmage.ancient_warfare.common.vehicles.stats.ArmorStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.GeneralStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.UpgradeStats;
-import shadowmage.meim.common.util.Trig;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -68,12 +70,11 @@ private float turretPitch = 0.f;
 private float turretPitchMin = 0.f;
 private float turretPitchMax = 90.f;
 
+private float accuracy = 1.f;
+
 private int aimPower = 0;
 private int aimPowerMin = 0;
 private int aimPowerMax = 100;
-
-private byte forwardInput = 0;
-private byte strafeInput = 0;
 
 public String texture = "";
 
@@ -84,14 +85,13 @@ public String texture = "";
 public EntityPathfinder navigator;
 
 /**
- * complex stat-tracking, each will have a read/write NBT function
- * for both saving to NBT and relaying via packet to the client
- * also, they should intelligently relay only _changed_ bits to clients..somehow
+ * complex stat tracking helpers, move, ammo, upgrades, general stats
  */
 private ArmorStats armorStats = new ArmorStats();
 private GeneralStats generalStats = new GeneralStats();
 private UpgradeStats upgradeStats;
 private VehicleInventory inventory;
+private VehicleMovementHelper moveHelper;
 
 public int vehicleType = -1;
 
@@ -100,13 +100,16 @@ public VehicleBase(World par1World)
   super(par1World);   
   this.navigator = new EntityPathfinder(this, worldObj, 16);  
   this.upgradeStats = new UpgradeStats(this);
+  this.moveHelper = new VehicleMovementHelper(this);
   this.addValidAmmoTypes();
   this.addValidUpgradeTypes();  
   }
 
+
+
 protected void addValidAmmoTypes()
   {  
-  List<IAmmoType> ammos = AmmoRegistry.instance().getEntriesForVehicleType(CATAPULT);
+  
 
   }
 
@@ -173,7 +176,11 @@ public void onUpdate()
  */
 public void onUpdateClient()
   {  
-
+  if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
+    {
+    int forward = AWCore.proxy.inputHelper.getForwardInput();
+    int strafe = AWCore.proxy.inputHelper.getStrafeInput();
+    }
   }
 
 /**
@@ -197,67 +204,52 @@ public void onUpdateServer()
  */
 public void handlePacketUpdate(NBTTagCompound tag)
   {
-  NBTTagCompound updateTag;
-  if(tag.hasKey("pi"))//player input
+  if(tag.hasKey("input"))
     {
-    this.handlePacketServer(tag.getCompoundTag("pi")); 
+    this.handleInputData(tag.getCompoundTag("input"));
     }
-  if(tag.hasKey("si"))//server input (commands from server)
+  if(tag.hasKey("health"))
+    {    
+    this.handleHealthUpdateData(tag);
+    }
+  if(tag.hasKey("upgrades"))
     {
-    this.handlePacketClient(tag.getCompoundTag("si"));
+    
+    }
+  if(tag.hasKey("ammo"))
+    {
+    
     }
   }
 
-public void handlePacketServer(NBTTagCompound tag)
+public void handleHealthUpdateData(NBTTagCompound tag)
+  {
+  this.vehicleHealth = tag.getFloat("health");
+  }
+
+public void handleInputData(NBTTagCompound tag)
   {
   if(tag.hasKey("f"))
     {
-    this.forwardInput = tag.getByte("f");
+    this.moveHelper.setForwardInput(tag.getByte("f"));
     }
   if(tag.hasKey("s"))
     {
-    this.strafeInput = tag.getByte("s");
+    this.moveHelper.setStrafeInput(tag.getByte("s"));
     }
   if(tag.hasKey("fm"))
     {
     //TODO handle fire missile
     }
-  Packet02Vehicle pkt = new Packet02Vehicle();
-  pkt.setParams(this);
-  //TODO relay packet to all clients tracking this entity
-  }
-
-public void handlePacketClient(NBTTagCompound tag)
-  {
-  if(tag.hasKey("f"))//forward
+  if(!this.worldObj.isRemote)
     {
-
-    }
-  if(tag.hasKey("s"))//strafe
-    {
-
-    }
-  if(tag.hasKey("fm"))//fire missile
-    {
-
-    }
-  if(tag.hasKey("au"))//ammo update
-    {
-
-    }  
-  if(tag.hasKey("uu"))//upgrade update
-    {
-
-    }  
-  if(tag.hasKey("iu"))//inventory update
-    {
-
-    } 
-  if(tag.hasKey("health"))//health update packet
-    {
-    this.vehicleHealth = tag.getFloat("health");
+    Packet02Vehicle pkt = new Packet02Vehicle();
+    pkt.setParams(this);
+    pkt.setInputData(tag);
+    AWCore.proxy.sendPacketToAllClientsTracking(this, pkt);
     }
   }
+
 
 @Override
 public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
@@ -299,12 +291,15 @@ public void updateRiderPosition()
     this.riddenByEntity.lastTickPosY = this.lastTickPosY + this.getMountedYOffset() + this.riddenByEntity.getYOffset();
     this.riddenByEntity.lastTickPosZ = this.lastTickPosZ;
     }
-  
-  //TODO figure out...this...
-    
-  double posX = this.posX + Trig.cosDegrees(rotationYaw)*this.getRiderForwardOffset() + Trig.sinDegrees(rotationYaw)*this.getRiderHorizontalOffset();
+  double posX = this.posX;// + Trig.cosDegrees(rotationYaw)*this.getRiderForwardOffset() + Trig.sinDegrees(rotationYaw)*this.getRiderHorizontalOffset();
   double posY = this.posY + this.getRiderVerticalOffset();
-  double posZ = this.posZ + Trig.sinDegrees(rotationYaw)*this.getRiderForwardOffset() + Trig.cosDegrees(rotationYaw)*this.getRiderHorizontalOffset();
+  double posZ = this.posZ;// + Trig.sinDegrees(rotationYaw)*this.getRiderForwardOffset() + Trig.cosDegrees(rotationYaw)*this.getRiderHorizontalOffset();
+  
+  posX += Trig.cosDegrees(rotationYaw)*this.getRiderForwardOffset();
+  posX += Trig.sinDegrees(rotationYaw)*this.getRiderHorizontalOffset();
+  posZ += Trig.sinDegrees(rotationYaw)*this.getRiderForwardOffset();
+  posZ += Trig.cosDegrees(rotationYaw)*this.getRiderHorizontalOffset();
+  
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
   }
 

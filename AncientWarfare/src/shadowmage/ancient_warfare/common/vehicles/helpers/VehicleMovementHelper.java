@@ -17,33 +17,50 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.proxy;
+package shadowmage.ancient_warfare.common.vehicles.helpers;
 
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class InputHelperCommonProxy
+public class VehicleMovementHelper
 {
+private VehicleBase vehicle;
+private byte forwardInput = 0;
+private byte strafeInput = 0;
+private float forwardMotion = 0;
+private float strafeMotion = 0;
 
-public int getStrafeInput()
+boolean hasInput = false;
+
+public VehicleMovementHelper (VehicleBase veh)
   {
-  return 0;
+  this.vehicle = veh;
   }
 
-public int getForwardInput()
+public void setForwardInput(byte in)
   {
-  return 0;
+  this.hasInput = true;
+  this.forwardInput = in;
   }
 
-public boolean getFireInput()
+public void setStrafeInput(byte in)
   {
-  return false;
+  this.hasInput = true;
+  this.strafeInput = in;
   }
 
-public boolean hasInputChanged()
+
+/**
+ * called every tick from vehicle onUpdate
+ */
+public void onMovementTick()
   {
-  return false;
+  if(this.hasInput)    
+    {
+    //update forwardMotion and strafeMotion from input...
+    }
+  
+  this.hasInput = false;//reset input flag at end of every move tick
   }
 
 }

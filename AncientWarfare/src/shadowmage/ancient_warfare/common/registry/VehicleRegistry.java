@@ -22,13 +22,14 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
-
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
+import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class VehicleRegistry
 {
@@ -55,6 +56,42 @@ public void registerVehicle(Class <? extends VehicleBase> clz, String entName, i
   {
   EntityRegistry.registerModEntity(clz, entName, entityID, AWCore.instance, 130, 3, true);
   this.vehicleTypes.put(vehicleType, clz);
+  }
+
+public VehicleBase getVehicleForType(World world, int type)
+  {
+  if(this.vehicleTypes.containsKey(type))
+    {
+    try
+      {
+      return this.vehicleTypes.get(type).getDeclaredConstructor(World.class).newInstance(world);
+      } 
+    catch (InstantiationException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (IllegalAccessException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (IllegalArgumentException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (InvocationTargetException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (NoSuchMethodException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (SecurityException e)
+      {
+      e.printStackTrace();
+      }
+    }
+  return null;
   }
 
 

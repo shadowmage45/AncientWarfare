@@ -1,6 +1,7 @@
 TODO before first alpha release:
 read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
+http://gafferongames.com/networking-for-game-programmers/what-every-programmer-needs-to-know-about-game-networking/
 
 GENERAL
 * add basic GUI tooltip functionality -- GuiTooltip class (int x, int y, int w, int h, List<String> info)
@@ -17,7 +18,8 @@ VEHICLES
         local ammoStats--maintains viable ammo types and counts
         local vehicleStats--
         per-entity pathfinder (possibly custom) for use with soldiers and player set waypoints
-    ---
+    ---INPUT MODEL
+        
             
 AMMO TYPES
 ---single instance referenced class, ala Item/Block.  Ammo types will have calls for onHit and a few

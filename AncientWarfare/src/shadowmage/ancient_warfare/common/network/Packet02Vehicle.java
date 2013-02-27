@@ -44,12 +44,7 @@ public void setParams(Entity ent)
 
 public void setInputData(NBTTagCompound tag)
   {
-  this.packetData.setTag("pi", tag);
-  }
-
-public void setRelayData(NBTTagCompound tag)
-  {
-  this.packetData.setTag("si", tag);
+  this.packetData.setTag("input", tag);
   }
 
 @Override

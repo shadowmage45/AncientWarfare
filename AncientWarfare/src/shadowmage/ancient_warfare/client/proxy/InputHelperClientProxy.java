@@ -51,5 +51,10 @@ public boolean getFireInput()
   return InputHelper.instance().getFireInput();
   }
 
+@Override
+public boolean hasInputChanged()
+  {
+  return InputHelper.instance().checkForInput();
+  }
 
 }

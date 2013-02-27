@@ -33,8 +33,6 @@ import cpw.mods.fml.common.TickType;
 
 public class InputHelper extends KeyHandler
 {
-
-
 static int FORWARD = Keyboard.KEY_W;
 static int BACKWARD = Keyboard.KEY_S;
 static int LEFT = Keyboard.KEY_A;
@@ -50,6 +48,13 @@ private static KeyBinding[] keys = new KeyBinding[]{options};
 private static boolean[] keyRepeats = new boolean []{false};
 
 private static InputHelper INSTANCE;
+
+boolean prevFireInput;
+boolean fireInput;
+private int prevForwardsInput = 0;
+private int prevStrafeInput = 0;
+private int forwardsInput = 0;
+private int strafeInput = 0;
 
 private InputHelper()
   {
@@ -95,22 +100,57 @@ public EnumSet<TickType> ticks()
 
 public static byte getForwardsInput()
   {
-  boolean forward = Keyboard.isKeyDown(FORWARD);
-  boolean reverse = Keyboard.isKeyDown(BACKWARD);
-  return (byte) (forward && reverse ? 0 : reverse ? -1 : forward? 1 : 0); // 0 if none or both are pressed, -1 for reverse, 1 for forward
+  return (byte) InputHelper.instance().forwardsInput;
   }
 
 public static byte getStrafeInput()
   {
-  boolean left = Keyboard.isKeyDown(LEFT);
-  boolean right = Keyboard.isKeyDown(RIGHT);
-  return (byte) (left && right ? 0 : left ? -1 : right ? 1 : 0);//return 0 if left and right are pressed, else return -1 if only left is pressed or 1 if only right is pressed. finally, return 0 if no input
+  return (byte) InputHelper.instance().strafeInput;
   }
 
 public static boolean getFireInput()
   {
-  return Keyboard.isKeyDown(FIRE);
+  return InputHelper.instance().checkForFire();
   }
 
+private void updateMovementInputFlags()
+  {
+  this.prevForwardsInput = this.forwardsInput;
+  this.prevStrafeInput = this.strafeInput;  
+  
+  boolean forward = Keyboard.isKeyDown(FORWARD);
+  boolean reverse = Keyboard.isKeyDown(BACKWARD);
+  this.forwardsInput = forward && reverse ? 0 : reverse ? -1 : forward? 1 : 0;
+  
+  boolean left = Keyboard.isKeyDown(LEFT);
+  boolean right = Keyboard.isKeyDown(RIGHT);
+  this.strafeInput = left && right ? 0 : left ? -1 : right ? 1 : 0; 
+  }
+
+public boolean checkForInput()
+  {
+  this.updateMovementInputFlags();
+  return this.forwardsInput != this.prevForwardsInput || this.strafeInput !=this.prevStrafeInput;
+  }
+
+public boolean checkForFire()
+  {
+  this.prevFireInput = this.fireInput;
+  this.fireInput = Keyboard.isKeyDown(FIRE);
+  return this.fireInput!=this.prevFireInput && this.fireInput;
+  }
+
+/**
+ * used when a vehicle is dismounted by local client, to clear inputHelper input caching
+ */
+public void clearInput()
+  {
+  this.prevForwardsInput = 0;
+  this.prevStrafeInput = 0;
+  this.prevFireInput = false;
+  this.forwardsInput = 0;
+  this.fireInput = false;
+  this.strafeInput = 0;  
+  }
 
 }
