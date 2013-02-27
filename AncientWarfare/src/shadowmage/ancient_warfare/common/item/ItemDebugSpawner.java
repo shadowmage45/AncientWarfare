@@ -23,8 +23,10 @@ package shadowmage.ancient_warfare.common.item;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
 
 public class ItemDebugSpawner extends AWItemClickable
 {
@@ -63,7 +65,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
 
 public void spawnVehicle(World world, EntityPlayer player, BlockPosition hit)
   {
-  
+  Config.logDebug("spawning vehicle");
+  VehicleCatapult veh = new VehicleCatapult(world);
+  veh.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
+  world.spawnEntityInWorld(veh);
   }
 
 }

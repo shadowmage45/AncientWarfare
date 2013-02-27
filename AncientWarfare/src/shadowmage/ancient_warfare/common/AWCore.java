@@ -39,6 +39,7 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
+import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
@@ -128,7 +129,12 @@ public void preInit(FMLPreInitializationEvent evt)
     {
     e.printStackTrace();
     }
-
+  
+  /**
+   *load vehicles, ammo, upgrades 
+   */
+  VehicleRegistry.instance().registerVehicles();
+  
   }
 
 /**

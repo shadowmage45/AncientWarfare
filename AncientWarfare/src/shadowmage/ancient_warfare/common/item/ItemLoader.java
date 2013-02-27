@@ -100,7 +100,8 @@ private void loadDebugItems()
     }  
   blockScanner = new ItemBlockScanner(Config.getItemID("debug.blockScanner", 9000));
   this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block");
-  
+  vehicleDebugSpawner = new ItemDebugSpawner(Config.getItemID("debug.vehicleSpawner", 9023));
+  this.registerItemSingle(vehicleDebugSpawner, "Debug Spawner", "Spawns Various Entities", "Right click to spawn current debug entity");
   }
 
 /**

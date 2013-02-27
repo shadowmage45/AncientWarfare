@@ -22,17 +22,18 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import cpw.mods.fml.common.registry.EntityRegistry;
+
+import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
 
 public class VehicleRegistry
 {
 
-
-
+private HashMap<Integer, Class <? extends VehicleBase>> vehicleTypes = new HashMap<Integer, Class <? extends VehicleBase>>();
 
 private VehicleRegistry(){}
 private static VehicleRegistry INSTANCE;
@@ -42,6 +43,19 @@ public static VehicleRegistry instance()
   return INSTANCE;
   }
 
+/**
+ * register method called from AWCore to register all included vehicles
+ */
+public void registerVehicles()
+  {
+  this.registerVehicle(VehicleCatapult.class, "AW_Catapult", 0, 0);
+  }
+
+public void registerVehicle(Class <? extends VehicleBase> clz, String entName, int entityID, int vehicleType)
+  {
+  EntityRegistry.registerModEntity(clz, entName, entityID, AWCore.instance, 130, 3, true);
+  this.vehicleTypes.put(vehicleType, clz);
+  }
 
 
 }

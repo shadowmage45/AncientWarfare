@@ -18,21 +18,11 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.render;
+package shadowmage.ancient_warfare.client.model;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import net.minecraft.client.model.ModelBase;
 
-public abstract class RenderBase extends Render
+public class ModelVehicleBase extends ModelBase
 {
-
-@Override
-public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
-  {
-  
-  }
-
-public abstract void renderVehicle(VehicleBase veh, double x, double y, double z, float yaw, float tick);
 
 }

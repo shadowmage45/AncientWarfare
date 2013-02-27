@@ -43,6 +43,11 @@ public ModelRendererCustom(ModelBase par1ModelBase, int par2, int par3)
   super(par1ModelBase, par2, par3);
   }
 
+public ModelRendererCustom(ModelBase par1ModelBase, String par2Str)
+  {
+  super(par1ModelBase, par2Str);
+  }
+
 public ModelRendererCustom setCustomTexture(String tex)
   {
   this.customTexture = true;

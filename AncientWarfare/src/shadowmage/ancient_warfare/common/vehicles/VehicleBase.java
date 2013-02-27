@@ -73,6 +73,7 @@ private int aimPowerMax = 100;
 private byte forwardInput = 0;
 private byte strafeInput = 0;
 
+public String texture = "";
 
 /**
  * vehicle pathfinding, used by soldiers when they are riding the vehicle
@@ -263,7 +264,7 @@ public boolean canBePushed()
 @Override
 public String getTexture()
   {
-  return super.getTexture();
+  return texture;
   }
 
 @Override

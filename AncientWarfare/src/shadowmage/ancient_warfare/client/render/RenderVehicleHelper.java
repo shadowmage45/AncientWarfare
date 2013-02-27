@@ -22,17 +22,18 @@ package shadowmage.ancient_warfare.client.render;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 
-public class RenderVehicle extends Render
+public class RenderVehicleHelper extends Render
 {
 
 @Override
 public void doRender(Entity var1, double var2, double var4, double var6,  float var8, float var9)
   {
   VehicleBase veh = (VehicleBase)var1;
-  RenderManager.instance().doVehicleRender(veh.vehicleType, veh, var2, var4, var6, var8, var9);
+  RenderRegistry.instance().doVehicleRender(veh.vehicleType, veh, var2, var4, var6, var8, var9);
   }
 
 }

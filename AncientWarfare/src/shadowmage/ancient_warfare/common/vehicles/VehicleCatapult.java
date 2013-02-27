@@ -28,6 +28,15 @@ public class VehicleCatapult extends VehicleBase
 {
 static boolean staticBlockCalled = false;
 
+
+
+public float armAngle = 0.f;
+public float armSpeed = 0.f;
+public float crankAngle = 0.f;
+public float crankSpeed = 0.f;
+public float wheelAngle = 0.f;
+public float wheelSpeed = 0.f;
+
 /**
  * @param par1World
  */
@@ -35,6 +44,9 @@ public VehicleCatapult(World par1World)
   {
   super(par1World);
   this.vehicleType = CATAPULT;
+  this.setSize(2.f, 2.f);
+  this.yOffset = 0;
+  this.texture = "foo.png";
   }
 
 /**
@@ -42,6 +54,7 @@ public VehicleCatapult(World par1World)
  */
 static
   {
+  Config.logDebug("loading static block from catapult");
   if(staticBlockCalled==true)
     {
     Config.logDebug("static block being called MORE THAN ONCE");

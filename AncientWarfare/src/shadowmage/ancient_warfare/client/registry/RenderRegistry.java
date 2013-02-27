@@ -18,14 +18,12 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.render;
+package shadowmage.ancient_warfare.client.registry;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
+import shadowmage.ancient_warfare.client.render.RenderCatapult;
+import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 /**
@@ -33,22 +31,22 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
  * @author Shadowmage
  *
  */
-public class RenderManager
+public class RenderRegistry
 {
 
-private RenderManager(){}
-private static RenderManager INSTANCE;
-public static RenderManager instance()
+private RenderRegistry(){}
+private static RenderRegistry INSTANCE;
+public static RenderRegistry instance()
   {
-  if(INSTANCE==null){INSTANCE = new RenderManager();}
+  if(INSTANCE==null){INSTANCE = new RenderRegistry();}
   return INSTANCE;
   }
 
-private HashMap<Integer, RenderBase> vehicleRenders = new HashMap<Integer, RenderBase>();
+private HashMap<Integer, RenderVehicleBase> vehicleRenders = new HashMap<Integer, RenderVehicleBase>();
 
 public void loadRenders()
   {
-  
+  this.addVehicleRender(0, new RenderCatapult());
   }
 
 /**
@@ -56,12 +54,12 @@ public void loadRenders()
  * @param vehType
  * @param render
  */
-public void addVehicleRender(int vehType, RenderBase render)
+public void addVehicleRender(int vehType, RenderVehicleBase render)
   {
-  
+  this.vehicleRenders.put(vehType, render);
   }
 
-public RenderBase getRenderForVehicle(int vehicle)
+public RenderVehicleBase getRenderForVehicle(int vehicle)
   {
   return this.vehicleRenders.get(vehicle);
   }

@@ -58,7 +58,10 @@ private InputHelper()
 
 public static InputHelper instance()
   {
-  if(INSTANCE == null){}
+  if(INSTANCE == null)
+    {
+    INSTANCE = new InputHelper();
+    }
   return INSTANCE;
   }
 

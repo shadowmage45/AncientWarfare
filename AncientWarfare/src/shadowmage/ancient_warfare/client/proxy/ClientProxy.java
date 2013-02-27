@@ -27,8 +27,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.client.input.InputHelper;
+import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
-import shadowmage.ancient_warfare.client.render.RenderVehicle;
+import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
 import shadowmage.ancient_warfare.common.network.PacketBase;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -64,7 +65,8 @@ public void registerClientData()
   /**
    * register single render for all vehicles, local renderManager handles from there...
    */
-  RenderingRegistry.registerEntityRenderingHandler(VehicleBase.class, new RenderVehicle());
+  RenderingRegistry.registerEntityRenderingHandler(VehicleBase.class, new RenderVehicleHelper());
+  RenderRegistry.instance().loadRenders();
   
   /**
    * load keybinds and register keybind handler
