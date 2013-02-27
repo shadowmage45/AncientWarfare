@@ -26,9 +26,6 @@ import net.minecraft.world.World;
 
 public class VehicleCatapult extends VehicleBase
 {
-static boolean staticBlockCalled = false;
-
-
 
 public float armAngle = 0.f;
 public float armSpeed = 0.f;
@@ -49,17 +46,13 @@ public VehicleCatapult(World par1World)
   this.texture = "foo.png";
   }
 
+
 /**
  * load ammo types for this vehicle...
  */
 static
   {
-  Config.logDebug("loading static block from catapult");
-  if(staticBlockCalled==true)
-    {
-    Config.logDebug("static block being called MORE THAN ONCE");
-    }
-  staticBlockCalled = true;  
+ 
   }
 
 }

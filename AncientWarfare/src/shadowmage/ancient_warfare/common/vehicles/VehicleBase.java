@@ -25,6 +25,7 @@ package shadowmage.ancient_warfare.common.vehicles;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -37,6 +38,7 @@ import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.vehicles.stats.ArmorStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.GeneralStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.UpgradeStats;
+import shadowmage.meim.common.util.Trig;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -105,12 +107,12 @@ public VehicleBase(World par1World)
 protected void addValidAmmoTypes()
   {  
   List<IAmmoType> ammos = AmmoRegistry.instance().getEntriesForVehicleType(CATAPULT);
-  
+
   }
 
 protected void addValidUpgradeTypes()
   {
-  
+
   }
 
 public boolean hasTurret()
@@ -126,6 +128,21 @@ public boolean isDrivable()
 public boolean isMountable()
   {
   return false;
+  }
+
+public float getRiderForwardOffset()
+  {
+  return 0.f;  
+  }
+
+public float getRiderVerticalOffset()
+  {
+  return 0.8f;
+  }
+
+public float getRiderHorizontalOffset()
+  {
+  return 0.f;
   }
 
 /**
@@ -165,7 +182,7 @@ public void onUpdateClient()
  */
 public void onUpdateServer()
   {
-  
+
   }
 
 /**
@@ -214,27 +231,27 @@ public void handlePacketClient(NBTTagCompound tag)
   {
   if(tag.hasKey("f"))//forward
     {
-    
+
     }
   if(tag.hasKey("s"))//strafe
     {
-    
+
     }
   if(tag.hasKey("fm"))//fire missile
     {
-    
+
     }
   if(tag.hasKey("au"))//ammo update
     {
-    
+
     }  
   if(tag.hasKey("uu"))//upgrade update
     {
-    
+
     }  
   if(tag.hasKey("iu"))//inventory update
     {
-    
+
     } 
   if(tag.hasKey("health"))//health update packet
     {
@@ -276,7 +293,30 @@ public void updateRidden()
 @Override
 public void updateRiderPosition()
   {
-  super.updateRiderPosition();
+  if (!(this.riddenByEntity instanceof EntityPlayer) || !((EntityPlayer)this.riddenByEntity).func_71066_bF())
+    {
+    this.riddenByEntity.lastTickPosX = this.lastTickPosX;
+    this.riddenByEntity.lastTickPosY = this.lastTickPosY + this.getMountedYOffset() + this.riddenByEntity.getYOffset();
+    this.riddenByEntity.lastTickPosZ = this.lastTickPosZ;
+    }
+  
+  //TODO figure out...this...
+    
+  double posX = this.posX + Trig.cosDegrees(rotationYaw)*this.getRiderForwardOffset() + Trig.sinDegrees(rotationYaw)*this.getRiderHorizontalOffset();
+  double posY = this.posY + this.getRiderVerticalOffset();
+  double posZ = this.posZ + Trig.sinDegrees(rotationYaw)*this.getRiderForwardOffset() + Trig.cosDegrees(rotationYaw)*this.getRiderHorizontalOffset();
+  this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
+  }
+
+@Override
+public boolean interact(EntityPlayer player)
+  {
+  if(player.worldObj.isRemote)
+    {
+    return false;
+    }
+  player.mountEntity(this);
+  return true;
   }
 
 @Override
@@ -294,19 +334,19 @@ public void unmountEntity(Entity par1Entity)
 @Override
 public boolean shouldRiderSit()
   {
-  return super.shouldRiderSit();
+  return true;
   }
 
 @Override
 public void writeSpawnData(ByteArrayDataOutput data)
   {
-  
+
   }
 
 @Override
 public void readSpawnData(ByteArrayDataInput data)
   {
-  
+
   }
 
 @Override
@@ -318,13 +358,13 @@ protected void entityInit()
 @Override
 protected void readEntityFromNBT(NBTTagCompound var1)
   {
-  
+
   }
 
 @Override
 protected void writeEntityToNBT(NBTTagCompound var1)
   {
-  
+
   }
 
 @Override
