@@ -143,6 +143,8 @@ public void onMovementTick()
   float absFor = MathHelper.abs(forwardMotion);
   float absStr = MathHelper.abs(strafeMotion);
   
+  
+  //TODO fix this stuff...reset current to bound of max, not abs
   if(absFor > maxSpeedCurrent)
     {
     absFor = maxSpeedCurrent;
