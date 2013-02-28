@@ -18,57 +18,20 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles;
+package shadowmage.ancient_warfare.client.input;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
-import net.minecraft.world.World;
-
-public class VehicleCatapult extends VehicleBase
+public class Keybind
 {
 
-public float armAngle = 0.f;
-public float armSpeed = 0.f;
-public float crankAngle = 0.f;
-public float crankSpeed = 0.f;
-public float wheelAngle = 0.f;
-public float wheelSpeed = 0.f;
 
-/**
- * @param par1World
- */
-public VehicleCatapult(World par1World)
-  {
-  super(par1World);
-  this.vehicleType = CATAPULT;
-  this.yOffset = 0;
-  this.texture = "foo.png";
-  }
+int keyCode;
+String keyName;
+boolean isPressed;
 
-/**
- * load ammo types for this vehicle...
- */
-static
+public Keybind(int keyCode, String name)
   {
- 
-  }
-
-@Override
-public boolean isMountable()
-  {
-  return true;
-  }
-
-@Override
-public float getHeight()
-  {
-  return 2.f;
-  }
-
-@Override
-public float getWidth()
-  {
-  return 2.f;
+  this.keyCode = keyCode;
+  this.keyName = name;
   }
 
 }

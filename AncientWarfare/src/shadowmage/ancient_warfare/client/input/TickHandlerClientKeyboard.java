@@ -18,57 +18,40 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles;
+package shadowmage.ancient_warfare.client.input;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
-import net.minecraft.world.World;
+import java.util.EnumSet;
 
-public class VehicleCatapult extends VehicleBase
+import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.TickType;
+
+
+public class TickHandlerClientKeyboard implements ITickHandler
 {
 
-public float armAngle = 0.f;
-public float armSpeed = 0.f;
-public float crankAngle = 0.f;
-public float crankSpeed = 0.f;
-public float wheelAngle = 0.f;
-public float wheelSpeed = 0.f;
-
-/**
- * @param par1World
- */
-public VehicleCatapult(World par1World)
+@Override
+public void tickStart(EnumSet<TickType> type, Object... tickData)
   {
-  super(par1World);
-  this.vehicleType = CATAPULT;
-  this.yOffset = 0;
-  this.texture = "foo.png";
-  }
-
-/**
- * load ammo types for this vehicle...
- */
-static
-  {
- 
+  KeybindManager.onTick();
   }
 
 @Override
-public boolean isMountable()
+public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {
-  return true;
+  KeybindManager.onTick();
+  InputHelper.instance().onTickEnd();
   }
 
 @Override
-public float getHeight()
+public EnumSet<TickType> ticks()
   {
-  return 2.f;
+  return EnumSet.of(TickType.CLIENT);
   }
 
 @Override
-public float getWidth()
+public String getLabel()
   {
-  return 2.f;
+  return "AWKeybindCustom";
   }
 
 }

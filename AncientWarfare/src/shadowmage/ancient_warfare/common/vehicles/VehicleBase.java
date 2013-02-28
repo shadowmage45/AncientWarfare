@@ -22,19 +22,16 @@
  */
 package shadowmage.ancient_warfare.common.vehicles;
 
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWCore;
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
-import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
@@ -58,23 +55,27 @@ public static final int HWACHA = 4;
 public static final int CHESTCART = 5;
 public static final int BALLISTA_TURRET = 6;
 
-private float vehicleMaxHealthBase = 100;
-private float vehicleMaxHealth = 100;
-private float vehicleHealth = 100;
+public float vehicleMaxHealthBase = 100;
+public float vehicleMaxHealth = 100;
+public float vehicleHealth = 100;
 
-private float turretRotation = 0.f;
-private float turretRotationMin = 0.f;
-private float turretRotationMax = 360.f;
 
-private float turretPitch = 0.f;
-private float turretPitchMin = 0.f;
-private float turretPitchMax = 90.f;
 
-private float accuracy = 1.f;
+public float turretRotation = 0.f;
+public float turretRotationMin = 0.f;
+public float turretRotationMax = 360.f;
 
-private int aimPower = 0;
-private int aimPowerMin = 0;
-private int aimPowerMax = 100;
+public float turretPitch = 0.f;
+public float turretPitchMin = 0.f;
+public float turretPitchMax = 90.f;
+
+public float accuracy = 1.f;
+
+public int aimPower = 0;
+public int aimPowerMin = 0;
+public int aimPowerMax = 100;
+
+private boolean isRidden = false;
 
 public String texture = "";
 
@@ -97,19 +98,33 @@ public int vehicleType = -1;
 
 public VehicleBase(World par1World)
   {
-  super(par1World);   
+  super(par1World);
+
+
   this.navigator = new EntityPathfinder(this, worldObj, 16);  
   this.upgradeStats = new UpgradeStats(this);
   this.moveHelper = new VehicleMovementHelper(this);
   this.addValidAmmoTypes();
-  this.addValidUpgradeTypes();  
+  this.addValidUpgradeTypes();
+
+
+  float width = this.getWidth();
+  float height = this.getHeight();
+  this.setSize(width, height);
+  this.yOffset = height/2.f;  
+  //  this.boundingBox.maxX += width *0.5f;
+  //  this.boundingBox.minX -= width *0.5f;
+  //  this.boundingBox.maxZ += width *0.5f;
+  //  this.boundingBox.minZ -= width *0.5f;
+  //  this.boundingBox.maxX += height;
   }
 
-
+public abstract float getHeight();
+public abstract float getWidth();
 
 protected void addValidAmmoTypes()
   {  
-  
+
 
   }
 
@@ -135,7 +150,7 @@ public boolean isMountable()
 
 public float getRiderForwardOffset()
   {
-  return 0.f;  
+  return 2.f;  
   }
 
 public float getRiderVerticalOffset()
@@ -160,15 +175,16 @@ public void setDead()
 @Override
 public void onUpdate()
   { 
-  super.onUpdate();
+  super.onUpdate();  
   if(this.worldObj.isRemote)
     {
     this.onUpdateClient();
     }
   else
-    {
+    {    
     this.onUpdateServer();
-    }  
+    }
+  this.moveHelper.onMovementTick();
   }
 
 /**
@@ -178,9 +194,15 @@ public void onUpdateClient()
   {  
   if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
     {
-    int forward = AWCore.proxy.inputHelper.getForwardInput();
-    int strafe = AWCore.proxy.inputHelper.getStrafeInput();
+    if(AWCore.proxy.inputHelper.hasInputChanged())
+      {
+      int forward = AWCore.proxy.inputHelper.getForwardInput();
+      int strafe = AWCore.proxy.inputHelper.getStrafeInput();
+      this.handleKeyboardMovement((byte)forward, (byte)strafe);
+      }
+
     }
+  //  Config.logDebug("client pos :"+this.posX+","+this.posY+","+this.posZ);
   }
 
 /**
@@ -189,17 +211,17 @@ public void onUpdateClient()
  */
 public void onUpdateServer()
   {
-
+  if(this.isRidden && this.riddenByEntity==null)
+    {
+    this.isRidden = false;
+    //TODO clear input and send input clear packet to client-instances
+    }
+  //  Config.logDebug("server pos :"+this.posX+","+this.posY+","+this.posZ);
   }
 
 /**
  * Called from Packet02Vehicle
  * Generic update method for client-server coms
- * keyMap:
- * pi -- player input
- * fp -- fire params
- * fc -- fire command
- * rs -- restock update
  * @param tag
  */
 public void handlePacketUpdate(NBTTagCompound tag)
@@ -214,11 +236,11 @@ public void handlePacketUpdate(NBTTagCompound tag)
     }
   if(tag.hasKey("upgrades"))
     {
-    
+
     }
   if(tag.hasKey("ammo"))
     {
-    
+
     }
   }
 
@@ -229,27 +251,23 @@ public void handleHealthUpdateData(NBTTagCompound tag)
 
 public void handleInputData(NBTTagCompound tag)
   {
-  if(tag.hasKey("f"))
-    {
-    this.moveHelper.setForwardInput(tag.getByte("f"));
-    }
-  if(tag.hasKey("s"))
-    {
-    this.moveHelper.setStrafeInput(tag.getByte("s"));
-    }
+  Config.logDebug("receiving input packet data. server: "+!worldObj.isRemote);
+  this.moveHelper.handleInputData(tag);
   if(tag.hasKey("fm"))
     {
     //TODO handle fire missile
     }
-  if(!this.worldObj.isRemote)
-    {
-    Packet02Vehicle pkt = new Packet02Vehicle();
-    pkt.setParams(this);
-    pkt.setInputData(tag);
-    AWCore.proxy.sendPacketToAllClientsTracking(this, pkt);
-    }
   }
 
+/**
+ * handle movement input, sent from inputHelper when vehicle is ridden
+ * @param forward
+ * @param strafe
+ */
+public void handleKeyboardMovement(byte forward, byte strafe)
+  {
+  this.moveHelper.handleKeyboardInput(forward, strafe);  
+  }
 
 @Override
 public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
@@ -265,21 +283,9 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   }
 
 @Override
-public boolean canBePushed()
-  {
-  return super.canBePushed();
-  }
-
-@Override
 public String getTexture()
   {
   return texture;
-  }
-
-@Override
-public void updateRidden()
-  {
-  super.updateRidden();
   }
 
 @Override
@@ -288,46 +294,70 @@ public void updateRiderPosition()
   if (!(this.riddenByEntity instanceof EntityPlayer) || !((EntityPlayer)this.riddenByEntity).func_71066_bF())
     {
     this.riddenByEntity.lastTickPosX = this.lastTickPosX;
-    this.riddenByEntity.lastTickPosY = this.lastTickPosY + this.getMountedYOffset() + this.riddenByEntity.getYOffset();
+    this.riddenByEntity.lastTickPosY = this.lastTickPosY + this.getRiderVerticalOffset() + this.riddenByEntity.getYOffset();
     this.riddenByEntity.lastTickPosZ = this.lastTickPosZ;
     }
   double posX = this.posX;// + Trig.cosDegrees(rotationYaw)*this.getRiderForwardOffset() + Trig.sinDegrees(rotationYaw)*this.getRiderHorizontalOffset();
   double posY = this.posY + this.getRiderVerticalOffset();
   double posZ = this.posZ;// + Trig.sinDegrees(rotationYaw)*this.getRiderForwardOffset() + Trig.cosDegrees(rotationYaw)*this.getRiderHorizontalOffset();
-  
-  posX += Trig.cosDegrees(rotationYaw)*this.getRiderForwardOffset();
-  posX += Trig.sinDegrees(rotationYaw)*this.getRiderHorizontalOffset();
-  posZ += Trig.sinDegrees(rotationYaw)*this.getRiderForwardOffset();
-  posZ += Trig.cosDegrees(rotationYaw)*this.getRiderHorizontalOffset();
-  
+
+  posX += Trig.sinDegrees(rotationYaw)*-this.getRiderForwardOffset();
+  posX += Trig.cosDegrees(rotationYaw)*this.getRiderHorizontalOffset();
+  posZ += Trig.cosDegrees(rotationYaw)*-this.getRiderForwardOffset();
+  posZ += Trig.sinDegrees(rotationYaw)*this.getRiderHorizontalOffset();
+
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
   }
 
 @Override
 public boolean interact(EntityPlayer player)
-  {
-  if(player.worldObj.isRemote)
+  {  
+  Config.logDebug("interact!");
+  if(this.isMountable() && !player.worldObj.isRemote && !player.isSneaking())
     {
-    return false;
+    Config.logDebug("attemping mount interact action");
+    player.mountEntity(this);
+    return true;
     }
-  player.mountEntity(this);
   return true;
   }
 
 @Override
-public void mountEntity(Entity par1Entity)
+public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9)
   {
-  super.mountEntity(par1Entity);
+  if(this.riddenByEntity==null || this.riddenByEntity != AWCore.proxy.getClientPlayer())
+    {
+    
+    } 
+  else
+    {
+    double var10 = par1 - this.posX;
+    double var12 = par3 - this.posY;
+    double var14 = par5 - this.posZ;
+    double var16 = var10 * var10 + var12 * var12 + var14 * var14;
+    if (var16 <= 1.0D)
+      {
+      return;
+      }
+    Config.logDebug("crazy synch error!!");
+    }
+  super.setPositionAndRotation2(par1, par3, par5, par7, par8, par9);
   }
 
 @Override
-public void unmountEntity(Entity par1Entity)
+public AxisAlignedBB getBoundingBox()
   {
-  super.unmountEntity(par1Entity);
+  return this.boundingBox;
   }
 
 @Override
-public boolean shouldRiderSit()
+public AxisAlignedBB getCollisionBox(Entity par1Entity)
+  {
+  return par1Entity.boundingBox;
+  }
+
+@Override
+public boolean canBeCollidedWith()
   {
   return true;
   }

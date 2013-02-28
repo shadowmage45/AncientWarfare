@@ -22,40 +22,34 @@ package shadowmage.ancient_warfare.client.input;
 
 import java.util.EnumSet;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.nbt.NBTTagCompound;
+
 import org.lwjgl.input.Keyboard;
 
 import shadowmage.ancient_warfare.common.config.Config;
-
-import net.minecraft.client.settings.KeyBinding;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
 
 
-public class InputHelper extends KeyHandler
+public class InputHelper extends KeyHandler implements IHandleInput
 {
-static int FORWARD = Keyboard.KEY_W;
-static int BACKWARD = Keyboard.KEY_S;
-static int LEFT = Keyboard.KEY_A;
-static int RIGHT = Keyboard.KEY_D;
-static int FIRE = Keyboard.KEY_SPACE;
+
 
 /**
- * options screen to set the config on the above keys;
+ * VANILLA KEYBINDS (TO SHOW UP IN VANILLA CONFIG MENU)
  */
 static KeyBinding options = new KeyBinding("AW-options", Keyboard.KEY_F7);
-
 private static KeyBinding[] keys = new KeyBinding[]{options};
 private static boolean[] keyRepeats = new boolean []{false};
+private static Minecraft mc = Minecraft.getMinecraft();
+
+private boolean hasMoveInput = false;
+
 
 private static InputHelper INSTANCE;
-
-boolean prevFireInput;
-boolean fireInput;
-private int prevForwardsInput = 0;
-private int prevStrafeInput = 0;
-private int forwardsInput = 0;
-private int strafeInput = 0;
-
 private InputHelper()
   {
   super(keys, keyRepeats);
@@ -70,26 +64,53 @@ public static InputHelper instance()
   return INSTANCE;
   }
 
+public static Keybind forward;
+public static Keybind reverse;
+public static Keybind left;
+public static Keybind right;
+public static Keybind fire;
+public static Keybind ammoPrev;
+public static Keybind ammoNext;
+public static Keybind pitchUp;
+public static Keybind pitchDown;
+public static Keybind turretLeft;
+public static Keybind turretRight;
+
 public void loadKeysFromConfig()
   {
-  //TODO load any keybindings from config file that need custom binding (Because they may conflict with vanilla keybinds)
-  FORWARD = Config.getKeyBindID("forward", Keyboard.KEY_W, "Move Forwards/Accelerate");
+  KeybindManager.addHandler(this);
+  
+  forward = new Keybind(Config.getKeyBindID("keybind.forward", Keyboard.KEY_W, "forwards/accelerate"), "Forward");
+  KeybindManager.addKeybind(forward);
+  reverse = new Keybind(Config.getKeyBindID("keybind.reverse", Keyboard.KEY_S, "reverse/deccelerate"), "Reverse");
+  KeybindManager.addKeybind(reverse);
+  left = new Keybind(Config.getKeyBindID("keybind.left", Keyboard.KEY_A, "turn/strafe left"), "Left Turn");
+  KeybindManager.addKeybind(left);
+  right = new Keybind(Config.getKeyBindID("keybind.right", Keyboard.KEY_D, "turn/strafe right"), "Right Turn");
+  KeybindManager.addKeybind(right);
+  fire = new Keybind(Config.getKeyBindID("keybind.fire", Keyboard.KEY_SPACE, "fire missile"), "Fire");
+  KeybindManager.addKeybind(fire);
   }
 
 @Override
 public String getLabel()
   {
-  return null;
+  return "AWKeybinds";
   }
 
+/**
+ * VANILLA KEYBINDS....
+ */
 @Override
 public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
   {
+ 
   }
 
 @Override
 public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)
   {
+  
   }
 
 @Override
@@ -100,57 +121,69 @@ public EnumSet<TickType> ticks()
 
 public static byte getForwardsInput()
   {
-  return (byte) InputHelper.instance().forwardsInput;
+  return (byte) 0;
   }
 
 public static byte getStrafeInput()
   {
-  return (byte) InputHelper.instance().strafeInput;
+  return (byte) 0;
   }
 
 public static boolean getFireInput()
   {
-  return InputHelper.instance().checkForFire();
-  }
-
-private void updateMovementInputFlags()
-  {
-  this.prevForwardsInput = this.forwardsInput;
-  this.prevStrafeInput = this.strafeInput;  
-  
-  boolean forward = Keyboard.isKeyDown(FORWARD);
-  boolean reverse = Keyboard.isKeyDown(BACKWARD);
-  this.forwardsInput = forward && reverse ? 0 : reverse ? -1 : forward? 1 : 0;
-  
-  boolean left = Keyboard.isKeyDown(LEFT);
-  boolean right = Keyboard.isKeyDown(RIGHT);
-  this.strafeInput = left && right ? 0 : left ? -1 : right ? 1 : 0; 
+  return false;
   }
 
 public boolean checkForInput()
   {
-  this.updateMovementInputFlags();
-  return this.forwardsInput != this.prevForwardsInput || this.strafeInput !=this.prevStrafeInput;
+  return false;
   }
 
 public boolean checkForFire()
   {
-  this.prevFireInput = this.fireInput;
-  this.fireInput = Keyboard.isKeyDown(FIRE);
-  return this.fireInput!=this.prevFireInput && this.fireInput;
+  return false;
   }
 
+
 /**
- * used when a vehicle is dismounted by local client, to clear inputHelper input caching
+ * AWKEYBINDS....
  */
-public void clearInput()
+@Override
+public void onKeyUp(Keybind kb)
   {
-  this.prevForwardsInput = 0;
-  this.prevStrafeInput = 0;
-  this.prevFireInput = false;
-  this.forwardsInput = 0;
-  this.fireInput = false;
-  this.strafeInput = 0;  
+//  Config.logDebug("key up: "+kb.keyName);
+  if(kb==forward || kb==left || kb==right || kb==reverse)
+    {
+    hasMoveInput = true;
+    }
   }
+
+@Override
+public void onKeyPressed(Keybind kb)
+  {
+//  Config.logDebug("key down: "+kb.keyName);
+  if(kb==forward || kb==left || kb==right || kb==reverse)
+    {
+    hasMoveInput = true;
+    }
+  }
+
+@Override
+public void onTickEnd()
+  {
+  if(hasMoveInput)
+    {
+    hasMoveInput = false;
+    if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
+      {
+//      Config.logDebug("player riding vehicle");
+      int strafe = right.isPressed && left.isPressed ? 0 : left.isPressed ? -1 : right.isPressed ? 1 : 0;
+      int forwards = forward.isPressed && reverse.isPressed ? 0 : reverse.isPressed ? -1 : forward.isPressed ? 1 : 0;
+      ((VehicleBase)mc.thePlayer.ridingEntity).handleKeyboardMovement((byte)forwards, (byte)strafe);
+      }
+    }
+  }
+
+
 
 }

@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.client.input.InputHelper;
+import shadowmage.ancient_warfare.client.input.TickHandlerClientKeyboard;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
 import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
@@ -67,6 +68,7 @@ public void registerClientData()
    */
   RenderingRegistry.registerEntityRenderingHandler(VehicleBase.class, new RenderVehicleHelper());
   RenderRegistry.instance().loadRenders();
+  TickRegistry.registerTickHandler(new TickHandlerClientKeyboard(), Side.CLIENT);
   
   /**
    * load keybinds and register keybind handler
