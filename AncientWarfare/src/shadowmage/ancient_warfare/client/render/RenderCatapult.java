@@ -47,7 +47,7 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z, float y
     
   model.setArmRotation(cat.armAngle + (tick*cat.armSpeed));
   model.setCrankRotations(cat.crankAngle + (tick*cat.crankSpeed));
-  float wheelAngle = cat.wheelAngle + (tick*cat.wheelSpeed);
+  float wheelAngle = cat.wheelRotation + (tick * (cat.wheelRotation-cat.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
   GL11.glPopMatrix();

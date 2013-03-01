@@ -36,7 +36,6 @@ private AmmoRegistry(){}
 private static AmmoRegistry INSTANCE;
 
 private Map<Integer, IAmmoType> ammoInstances = new HashMap<Integer, IAmmoType>();
-private Map<Integer, ArrayList<IAmmoType>> vehicleAmmoTypes = new HashMap<Integer, ArrayList<IAmmoType>>();
 
 public static AmmoRegistry instance()
   {
@@ -92,32 +91,6 @@ public int getAvailableAmmoType()
       }
     }
   return -1;
-  }
-
-public void addAmmoTypeToVehicle(int vehicleType, IAmmoType ammo)
-  {
-  if(!this.vehicleAmmoTypes.containsKey(vehicleType))
-    {    
-    this.vehicleAmmoTypes.put(vehicleType, new ArrayList<IAmmoType>());
-    }
-  if(!this.vehicleAmmoTypes.get(vehicleType).contains(ammo))
-    {
-    this.vehicleAmmoTypes.get(vehicleType).add(ammo);
-    }
-  else
-    {
-    Config.logError("Attempt to register duplicate ammo type for vehicle number: "+vehicleType);
-    Config.logError("Ammo attempting to being registered: "+ammo.getDisplayName());
-    }   
-  }
-
-public List<IAmmoType> getEntriesForVehicleType(int vehicle)
-  {
-  if(this.vehicleAmmoTypes.containsKey(vehicle))
-    {
-    return this.vehicleAmmoTypes.get(vehicle);
-    }
-  return null;
   }
 
 }

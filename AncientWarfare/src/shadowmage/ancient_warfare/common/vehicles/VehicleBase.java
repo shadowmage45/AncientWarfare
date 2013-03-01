@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
+import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
@@ -69,11 +70,45 @@ public float turretPitch = 0.f;
 public float turretPitchMin = 0.f;
 public float turretPitchMax = 90.f;
 
-public float accuracy = 1.f;
+/**
+ * is this vehicle in the process of launching a missile ? (animation, etc)
+ */
+public boolean isFiring = false;
 
+/**
+ * if this vehicle isFiring, has it already launched, and is in the process of cooling down?
+ */
+public boolean hasLaunched = false;
+
+/**
+ * how many ticks until this vehicle is done reloading and can fire again
+ */
+public int reloadingTicks = 0;
+
+/**
+ * current and base reload timers, used to set current reload timer upon completion of missile launch
+ */
+public int reloadTimeBase = 100;
+public int reloadTimeCurrent = 100;
+
+/**
+ * accuracy stats...
+ */
+public float accuracyBase = 1.f;
+public float accuracyCurrent = 1.f;
+
+/**
+ * power is deprecated as a controllable stat, but will still be affected by upgrades and base vehicle stats
+ */
 public int aimPower = 0;
 public int aimPowerMin = 0;
 public int aimPowerMax = 100;
+
+/**
+ * set by move helper
+ */
+public float wheelRotation = 0.f;
+public float wheelRotationPrev = 0.f;
 
 private boolean isRidden = false;
 
@@ -99,39 +134,17 @@ public int vehicleType = -1;
 public VehicleBase(World par1World)
   {
   super(par1World);
-
-
   this.navigator = new EntityPathfinder(this, worldObj, 16);  
   this.upgradeStats = new UpgradeStats(this);
   this.moveHelper = new VehicleMovementHelper(this);
-  this.addValidAmmoTypes();
-  this.addValidUpgradeTypes();
-
-
   float width = this.getWidth();
   float height = this.getHeight();
   this.setSize(width, height);
   this.yOffset = height/2.f;  
-  //  this.boundingBox.maxX += width *0.5f;
-  //  this.boundingBox.minX -= width *0.5f;
-  //  this.boundingBox.maxZ += width *0.5f;
-  //  this.boundingBox.minZ -= width *0.5f;
-  //  this.boundingBox.maxX += height;
   }
 
 public abstract float getHeight();
 public abstract float getWidth();
-
-protected void addValidAmmoTypes()
-  {  
-
-
-  }
-
-protected void addValidUpgradeTypes()
-  {
-
-  }
 
 public boolean hasTurret()
   {
@@ -150,7 +163,7 @@ public boolean isMountable()
 
 public float getRiderForwardOffset()
   {
-  return 2.f;  
+  return 1.3f;  
   }
 
 public float getRiderVerticalOffset()
@@ -161,6 +174,37 @@ public float getRiderVerticalOffset()
 public float getRiderHorizontalOffset()
   {
   return 0.f;
+  }
+
+public boolean startMissileLaunch()
+  {
+  if(!this.isFiring && this.reloadingTicks <=0)
+    {
+    this.isFiring = true;
+    return true;
+    }
+  return false;
+  }
+
+public boolean launchMissile()
+  {
+  if(this.isFiring && !this.hasLaunched)
+    {
+    this.hasLaunched = true;
+    this.reloadingTicks = this.reloadTimeCurrent;
+    return true;
+    }  
+  return false;
+  }
+
+public void onFiringUpdate()
+  {
+  
+  }
+
+public void onReloadUpdate()
+  {
+  
   }
 
 /**
@@ -185,6 +229,15 @@ public void onUpdate()
     this.onUpdateServer();
     }
   this.moveHelper.onMovementTick();
+  if(this.isFiring)
+    {
+    this.onFiringUpdate();
+    }
+  if(this.reloadingTicks>0)
+    {
+    this.reloadingTicks--;
+    this.onReloadUpdate();
+    }
   }
 
 /**
@@ -195,28 +248,22 @@ public void onUpdateClient()
   if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
     {
     if(AWCore.proxy.inputHelper.hasInputChanged())
-      {
-      int forward = AWCore.proxy.inputHelper.getForwardInput();
-      int strafe = AWCore.proxy.inputHelper.getStrafeInput();
-      this.handleKeyboardMovement((byte)forward, (byte)strafe);
+      {      
+      this.handleKeyboardMovement((byte)AWCore.proxy.inputHelper.getForwardInput(), (byte)AWCore.proxy.inputHelper.getStrafeInput());
       }
-
     }
-  //  Config.logDebug("client pos :"+this.posX+","+this.posY+","+this.posZ);
   }
 
 /**
- * TODO
- * apply motion from input if ridden and not pathfinding
+ * 
  */
 public void onUpdateServer()
   {
   if(this.isRidden && this.riddenByEntity==null)
     {
     this.isRidden = false;
-    //TODO clear input and send input clear packet to client-instances
+    this.moveHelper.clearInputFromDismount();
     }
-  //  Config.logDebug("server pos :"+this.posX+","+this.posY+","+this.posZ);
   }
 
 /**
@@ -297,25 +344,21 @@ public void updateRiderPosition()
     this.riddenByEntity.lastTickPosY = this.lastTickPosY + this.getRiderVerticalOffset() + this.riddenByEntity.getYOffset();
     this.riddenByEntity.lastTickPosZ = this.lastTickPosZ;
     }
-  double posX = this.posX;// + Trig.cosDegrees(rotationYaw)*this.getRiderForwardOffset() + Trig.sinDegrees(rotationYaw)*this.getRiderHorizontalOffset();
+  double posX = this.posX;
   double posY = this.posY + this.getRiderVerticalOffset();
-  double posZ = this.posZ;// + Trig.sinDegrees(rotationYaw)*this.getRiderForwardOffset() + Trig.cosDegrees(rotationYaw)*this.getRiderHorizontalOffset();
-
+  double posZ = this.posZ;
   posX += Trig.sinDegrees(rotationYaw)*-this.getRiderForwardOffset();
   posX += Trig.cosDegrees(rotationYaw)*this.getRiderHorizontalOffset();
   posZ += Trig.cosDegrees(rotationYaw)*-this.getRiderForwardOffset();
   posZ += Trig.sinDegrees(rotationYaw)*this.getRiderHorizontalOffset();
-
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
   }
 
 @Override
 public boolean interact(EntityPlayer player)
   {  
-  Config.logDebug("interact!");
   if(this.isMountable() && !player.worldObj.isRemote && !player.isSneaking())
     {
-    Config.logDebug("attemping mount interact action");
     player.mountEntity(this);
     return true;
     }
@@ -323,25 +366,28 @@ public boolean interact(EntityPlayer player)
   }
 
 @Override
-public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9)
-  {
-  if(this.riddenByEntity==null || this.riddenByEntity != AWCore.proxy.getClientPlayer())
-    {
-    
-    } 
-  else
+public void setPositionAndRotation2(double par1, double par3, double par5, float yaw, float par8, int par9)
+  {      
+  if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
     {
     double var10 = par1 - this.posX;
     double var12 = par3 - this.posY;
     double var14 = par5 - this.posZ;
-    double var16 = var10 * var10 + var12 * var12 + var14 * var14;
+    double var16 = var10 * var10 + var12 * var12 + var14 * var14;    
     if (var16 <= 1.0D)
       {
+      float rot = this.rotationYaw;
+      float rot2 = yaw;      
+      if(Trig.getAbsDiff(rot, rot2)>2)
+        {       
+        this.setRotation(yaw, par8);
+        this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
+        }      
       return;
       }
     Config.logDebug("crazy synch error!!");
-    }
-  super.setPositionAndRotation2(par1, par3, par5, par7, par8, par9);
+    } 
+  super.setPositionAndRotation(par1, par3, par5, yaw, par8);
   }
 
 @Override

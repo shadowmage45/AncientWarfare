@@ -18,55 +18,36 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles;
+package shadowmage.ancient_warfare.common.vehicles.helpers;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
-import net.minecraft.world.World;
+import java.util.ArrayList;
+import java.util.List;
 
-public class VehicleCatapult extends VehicleBase
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmoEntry;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+
+public class AmmoHelper
 {
 
-public float armAngle = 0.f;
-public float armSpeed = 0.f;
-public float crankAngle = 0.f;
-public float crankSpeed = 0.f;
+private VehicleBase vehicle;
 
-/**
- * @param par1World
- */
-public VehicleCatapult(World par1World)
+private List<VehicleAmmoEntry> ammoTypes = new ArrayList<VehicleAmmoEntry>();
+
+public AmmoHelper(VehicleBase vehicle)
   {
-  super(par1World);
-  this.vehicleType = CATAPULT;
-  this.yOffset = 0;
-  this.texture = "foo.png";
+  this.vehicle = vehicle;
   }
 
-/**
- * load ammo types for this vehicle...
- */
-static
+public void addUseableAmmo(IAmmoType ammo)
   {
- 
+  this.ammoTypes.add(new VehicleAmmoEntry(ammo));
   }
 
-@Override
-public boolean isMountable()
+public void updateAmmoCounts()
   {
-  return true;
+  //TODO
   }
 
-@Override
-public float getHeight()
-  {
-  return 2.f;
-  }
-
-@Override
-public float getWidth()
-  {
-  return 2.f;
-  }
 
 }

@@ -40,8 +40,8 @@ private byte strafeInput = 0;
 public float maxSpeedBase = 0.8f;
 public float maxSpeedCurrent = 0.8f;
 
-public float maxStrafeBase = 0.4f;
-public float maxStrafeCurrent = 0.4f;
+public float maxStrafeBase = 2.0f;
+public float maxStrafeCurrent = 2.0f;
 
 private float forwardAccel = 0;
 private float strafeAccel = 0;
@@ -65,7 +65,6 @@ public void setStrafeInput(byte in)
 
 public void handleKeyboardInput(byte forward, byte strafe)
   {
-//  Config.logDebug("receiving keyboard input :"+forward+","+strafe); 
   NBTTagCompound tag = new NBTTagCompound();
   tag.setByte("f", forward);
   tag.setByte("s", strafe);
@@ -123,6 +122,10 @@ public void onMovementTick()
   if(forwardInput!=0)
     {
     forwardAccel = forwardInput * 0.03f * (this.maxSpeedCurrent - MathHelper.abs(forwardMotion));
+    if(forwardInput<0)
+      {
+      forwardAccel *= 0.6f;
+      }
     }
   else
     {
@@ -130,11 +133,11 @@ public void onMovementTick()
     }
   if(strafeInput!=0)
     {
-    strafeAccel = -strafeInput * 0.03f * (this.maxStrafeCurrent-MathHelper.abs(strafeMotion));
+    strafeAccel = -strafeInput * 0.06f * (this.maxStrafeCurrent-MathHelper.abs(strafeMotion));
     }
   else
     {
-    strafeAccel = strafeMotion * -0.06f;
+    strafeAccel = strafeMotion * -0.1f;
     }
   
   strafeMotion +=strafeAccel;
@@ -142,32 +145,61 @@ public void onMovementTick()
   
   float absFor = MathHelper.abs(forwardMotion);
   float absStr = MathHelper.abs(strafeMotion);
-  
-  
-  //TODO fix this stuff...reset current to bound of max, not abs
-  if(absFor > maxSpeedCurrent)
+    
+  if(forwardInput ==1 && absFor > maxSpeedCurrent)
     {
-    absFor = maxSpeedCurrent;
+    forwardMotion = maxSpeedCurrent;
     }
-  else if(absFor <= 0.1f && forwardInput == 0)
+  else if(forwardInput == -1 && absFor > maxSpeedCurrent * 0.6f)
     {
-    absFor = 0;
+    forwardMotion = -maxSpeedCurrent * 0.6f;
+    }
+  else if(absFor <= 0.02f && forwardInput == 0)
+    {
+    forwardMotion = 0;
     }
   if(absStr > maxStrafeCurrent)
     {
-    absStr = maxStrafeCurrent;
+    if(strafeMotion>0)
+      {
+      strafeMotion = maxStrafeCurrent;
+      }
+    else
+      {
+      strafeMotion = -maxStrafeCurrent;
+      }     
     }
-  else if(absStr <= 0.1f && strafeInput == 0)
+  else if(absStr <= 0.2f && strafeInput == 0)
     {
-    absStr = 0;
+    strafeMotion = 0;
+    }  
+  vehicle.wheelRotationPrev = vehicle.wheelRotation;
+  vehicle.wheelRotation += forwardMotion*0.02f;
+  vehicle.rotationYaw += strafeMotion;    
+  if(strafeMotion !=0 || forwardMotion !=0)
+    {
+    vehicle.moveEntity(vehicle.motionX, 0, vehicle.motionZ);
+    float x = Trig.sinDegrees(vehicle.rotationYaw)*-forwardMotion;
+    float z = Trig.cosDegrees(vehicle.rotationYaw)*-forwardMotion;  
+    vehicle.motionX = x;
+    vehicle.motionZ = z;
     }
-  
-  vehicle.rotationYaw += strafeMotion;
-  float x = Trig.sinDegrees(vehicle.rotationYaw)*-forwardMotion;
-  float z = Trig.cosDegrees(vehicle.rotationYaw)*-forwardMotion;  
-  vehicle.motionX = x;
-  vehicle.motionZ = z;  
-  vehicle.moveEntity(vehicle.motionX, 0, vehicle.motionZ);
+  }
+
+public void clearInputFromDismount()
+  {
+  this.setForwardInput((byte) 0);
+  this.setStrafeInput((byte) 0);  
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setByte("f", (byte) 0);
+  tag.setByte("s", (byte) 0);
+  Packet02Vehicle pkt = new Packet02Vehicle();
+  pkt.setParams(this.vehicle);
+  pkt.setInputData(tag);
+  if(!this.vehicle.worldObj.isRemote)
+    {
+    AWCore.proxy.sendPacketToAllClientsTracking(this.vehicle, pkt);
+    }
   }
 
 }
