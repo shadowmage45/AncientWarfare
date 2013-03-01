@@ -2,6 +2,7 @@ TODO before first alpha release:
 read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
 http://gafferongames.com/networking-for-game-programmers/what-every-programmer-needs-to-know-about-game-networking/
+http://en.wikipedia.org/wiki/Trajectory_of_a_projectile
 
 GENERAL
 * add basic GUI tooltip functionality -- GuiTooltip class (int x, int y, int w, int h, List<String> info)
@@ -12,9 +13,7 @@ VEHICLES
         input proxy -- poll from here for info client side, server side is dummy class
             -- all input will be sent from the client (riding the vehicle) to the server.
                     server maintains state, relays input changes to all tracking clients (including sender)
-        basic internal client/server comms. need a reliable vehicle channel. see: container networking
-        vehicle type number--used to reference for spawning and renders
-        subclass for every vehicle (use render# on rendering, run through renderManager--low overhead)
+        
         local ammoStats--maintains viable ammo types and counts
         local vehicleStats--
         per-entity pathfinder (possibly custom) for use with soldiers and player set waypoints
@@ -24,6 +23,7 @@ VEHICLES
 AMMO TYPES
 ---single instance referenced class, ala Item/Block.  Ammo types will have calls for onHit and a few
         other convenience methods
+---new trajectory class and model--no drag (it wasn't realistic anyhow without including BC)        
             
 
 GUI FRAMEWORK
@@ -244,5 +244,12 @@ public static MyWorldData forWorld(World world)
 * prep vehicle work
 /********** 02-26-13 **********/
 * add renderManager, methods to register vehicle renders            
-            
+/********** 02-27-13 **********/
+* basic internal client/server comms. need a reliable vehicle channel. see: container networking
+* prep work on vehicle movement
+/********** 02-28-13 **********/
+* vehicles can move!
+/********** 03-01-13 **********/
+* vehicle type number--used to reference for spawning and renders
+* subclass for every vehicle (use render# on rendering, run through renderManager--low overhead)   
             

@@ -379,9 +379,11 @@ public void setPositionAndRotation2(double par1, double par3, double par5, float
       float rot = this.rotationYaw;
       float rot2 = yaw;      
       if(Trig.getAbsDiff(rot, rot2)>2)
-        {       
+        { 
+        float diff = this.rotationYaw - this.prevRotationYaw;//pull diff of current rot and prev rot.  change rot. change prev rot to rot. apply diff to prev rot DONE
         this.setRotation(yaw, par8);
-        this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
+        this.prevRotationYaw = this.rotationYaw + diff;
+        //this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
         }      
       return;
       }

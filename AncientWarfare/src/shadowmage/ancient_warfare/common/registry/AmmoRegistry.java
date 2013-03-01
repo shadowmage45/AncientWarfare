@@ -20,12 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
-import java.util.ArrayList;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 
@@ -36,6 +37,7 @@ private AmmoRegistry(){}
 private static AmmoRegistry INSTANCE;
 
 private Map<Integer, IAmmoType> ammoInstances = new HashMap<Integer, IAmmoType>();
+private Map<IAmmoType, Class<? extends Entity>> ammoEntities = new HashMap<IAmmoType, Class<? extends Entity>>();
 
 public static AmmoRegistry instance()
   {
@@ -43,12 +45,17 @@ public static AmmoRegistry instance()
   return INSTANCE;
   }
 
+/**
+ * used by structure gen to fill get ammo types to fill vehicles with
+ * @param type
+ * @return
+ */
 public IAmmoType getAmmoEntry(int type)
   {
   return this.ammoInstances.get(type);
   }
 
-public void registerAmmoTypeWithItem(IAmmoType ammo, Item item, int itemDamage)
+public void registerAmmoTypeWithItem(IAmmoType ammo, Item item, int itemDamage, Class <? extends Entity> missileEntity)
   {
   if(!DescriptionRegistry.instance().contains(item))
     {
@@ -56,10 +63,10 @@ public void registerAmmoTypeWithItem(IAmmoType ammo, Item item, int itemDamage)
     }  
   DescriptionRegistry.instance().addSubtypeToItem(item.itemID, itemDamage, ammo.getDisplayName());
   DescriptionRegistry.instance().setTooltip(item.itemID, itemDamage, ammo.getDisplayTooltip());
-  this.registerAmmoType(ammo);
+  this.registerAmmoType(ammo, missileEntity);
   }
 
-public void registerAmmoType(IAmmoType ammo)
+public void registerAmmoType(IAmmoType ammo, Class <? extends Entity> clz)
   {
   if(ammo==null)
     {
@@ -69,6 +76,8 @@ public void registerAmmoType(IAmmoType ammo)
   if(!this.ammoInstances.containsKey(type))
     {
     this.ammoInstances.put(type, ammo);
+    AWEntityRegistry.registerEntity(clz, ammo.getEntityName(), 170, 5, true);
+    this.ammoEntities.put(ammo, clz);
     }
   else
     {
@@ -77,20 +86,60 @@ public void registerAmmoType(IAmmoType ammo)
     }  
   }
 
+static int nextAmmoType = 0;
 /**
  * get the next open global ammo number type (searches up to 400 indices)
  * @return available index, or -1 if none
  */
 public int getAvailableAmmoType()
   {
-  for(int i = 0; i < 400; i++)
+  int id = nextAmmoType;
+  nextAmmoType++;
+  if(this.ammoInstances.containsKey(id))
     {
-    if(!this.ammoInstances.containsKey(i))
+    Config.logError("Error while attempting to generate next valid ammo type ID: "+id+" Id already exists.");    
+    }
+  return id;
+  }
+
+public Entity getAmmoEntityFor(int type, World world)
+  {
+  if(this.ammoInstances.containsKey(type))
+    {
+    IAmmoType ammo = this.ammoInstances.get(type);
+    if(this.ammoEntities.containsKey(ammo))
       {
-      return i;
+      try
+        {
+        return this.ammoEntities.get(ammo).getDeclaredConstructor(World.class).newInstance(world);
+        } 
+      catch (InstantiationException e)
+        {
+        e.printStackTrace();
+        } 
+      catch (IllegalAccessException e)
+        {
+        e.printStackTrace();
+        } 
+      catch (IllegalArgumentException e)
+        {
+        e.printStackTrace();
+        } 
+      catch (InvocationTargetException e)
+        {
+        e.printStackTrace();
+        } 
+      catch (NoSuchMethodException e)
+        {
+        e.printStackTrace();
+        } 
+      catch (SecurityException e)
+        {
+        e.printStackTrace();
+        }
       }
     }
-  return -1;
+  return null;
   }
 
 }

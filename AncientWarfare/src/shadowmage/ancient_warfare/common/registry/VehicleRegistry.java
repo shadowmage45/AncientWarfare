@@ -49,12 +49,12 @@ public static VehicleRegistry instance()
  */
 public void registerVehicles()
   {
-  this.registerVehicle(VehicleCatapult.class, "AW_Catapult", 0, 0);
+  this.registerVehicle(VehicleCatapult.class, "AW_Catapult", 0);
   }
 
-public void registerVehicle(Class <? extends VehicleBase> clz, String entName, int entityID, int vehicleType)
+public void registerVehicle(Class <? extends VehicleBase> clz, String entName, int vehicleType)
   {
-  EntityRegistry.registerModEntity(clz, entName, entityID, AWCore.instance, 130, 3, true);
+  AWEntityRegistry.registerEntity(clz, entName, 130, 3, false);
   this.vehicleTypes.put(vehicleType, clz);
   }
 

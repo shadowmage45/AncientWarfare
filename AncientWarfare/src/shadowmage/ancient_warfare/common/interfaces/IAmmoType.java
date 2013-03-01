@@ -39,16 +39,20 @@ public interface IAmmoType
  * get this ammo types global reference/ID number (used by vehicles to determine usability)
  * @return
  */
-int getAmmoType();
-String getDisplayName();
-String getDisplayTooltip();
-int getItemID();
-int getItemMeta();
-ItemStack getDisplayStack();
+int getAmmoType();//the global unique ammo type, used by structure spawning to fill ammo bays
+String getEntityName();//the entity name associated with this ammo as an entity in the world
+String getDisplayName();//the displayed item-name/ammo name for this ammo
+String getDisplayTooltip();//the display tooltip for this ammo
+int getItemID();//basic item information for this ammo type
+int getItemMeta();//basic item information for this ammo type
+ItemStack getDisplayStack();//should be a persistent stack in the ammo instance, used to display ammo...
+ItemStack getAmmoStack(int qty);//used to create a stack of this ammo.  used in structure spawning
 
 boolean isAmmoValidFor(VehicleBase vehicle);//can be used for per-upgrade compatibility.  vehicle will check this before firing or adding ammo to the vehicle
 boolean isRocket();//determines flight characteristics
 boolean isPersistent();//should die on impact, or stay on ground(arrows)
+float getGravityFactor();// per-tick gravity acceleration
+float getDragFactor();//0-1 float (velocity *= dragFactor) applied per-tick..
 float getWeightFactor();// | 0 <-> 1.f |  factor applied to initial velocity
 
 void onImpactWorld(World world, float x, float y, float z);//called when the entity impacts a world block
