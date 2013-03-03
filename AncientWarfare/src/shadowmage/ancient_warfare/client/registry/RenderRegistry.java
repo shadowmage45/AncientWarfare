@@ -22,9 +22,13 @@ package shadowmage.ancient_warfare.client.registry;
 
 import java.util.HashMap;
 
+import net.minecraft.client.renderer.entity.Render;
+import shadowmage.ancient_warfare.client.render.RenderArrow;
 import shadowmage.ancient_warfare.client.render.RenderCatapult;
-import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
+import shadowmage.ancient_warfare.common.missiles.MissileBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 
 /**
  * handle render information
@@ -42,34 +46,31 @@ public static RenderRegistry instance()
   return INSTANCE;
   }
 
-private HashMap<Integer, RenderVehicleBase> vehicleRenders = new HashMap<Integer, RenderVehicleBase>();
+private HashMap<Integer, Render> missileRenders = new HashMap<Integer, Render>();
 
 public void loadRenders()
+  {  
+  /**
+   * vehicles..
+   */
+  RenderingRegistry.registerEntityRenderingHandler(VehicleCatapult.class, new RenderCatapult());
+  
+  /**
+   * missiles...
+   */
+  RenderingRegistry.registerEntityRenderingHandler(MissileBase.class, new RenderMissileHelper());
+  this.addMissileRender(0, new RenderArrow());  
+  }
+  
+public void addMissileRender(int type, Render rend)
   {
-  this.addVehicleRender(0, new RenderCatapult());
+  this.missileRenders.put(type, rend); 
   }
 
-/**
- * API call for adding vehicles render types
- * @param vehType
- * @param render
- */
-public void addVehicleRender(int vehType, RenderVehicleBase render)
+public Render getRenderForMissile(int type)
   {
-  this.vehicleRenders.put(vehType, render);
+  return this.missileRenders.get(type);
   }
 
-public RenderVehicleBase getRenderForVehicle(int vehicle)
-  {
-  return this.vehicleRenders.get(vehicle);
-  }
-
-public void doVehicleRender(int vehicleType, VehicleBase veh, double x, double y, double z, float yaw, float tick)
-  {
-  if(this.vehicleRenders.containsKey(vehicleType))
-    {
-    this.vehicleRenders.get(vehicleType).renderVehicle(veh, x, y, z, yaw, tick);
-    }
-  }
 
 }

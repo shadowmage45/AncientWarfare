@@ -29,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import org.lwjgl.input.Keyboard;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
@@ -79,7 +80,7 @@ public static Keybind turretRight;
 public void loadKeysFromConfig()
   {
   KeybindManager.addHandler(this);
-  
+
   forward = new Keybind(Config.getKeyBindID("keybind.forward", Keyboard.KEY_W, "forwards/accelerate"), "Forward");
   KeybindManager.addKeybind(forward);
   reverse = new Keybind(Config.getKeyBindID("keybind.reverse", Keyboard.KEY_S, "reverse/deccelerate"), "Reverse");
@@ -104,20 +105,20 @@ public String getLabel()
 @Override
 public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
   {
- 
+
   }
 
 @Override
 public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)
   {
-  
+
   }
 
 @Override
 public EnumSet<TickType> ticks()
-  {
-  return EnumSet.of(TickType.CLIENT);
-  }
+{
+return EnumSet.of(TickType.CLIENT);
+}
 
 public static byte getForwardsInput()
   {
@@ -151,7 +152,6 @@ public boolean checkForFire()
 @Override
 public void onKeyUp(Keybind kb)
   {
-//  Config.logDebug("key up: "+kb.keyName);
   if(kb==forward || kb==left || kb==right || kb==reverse)
     {
     hasMoveInput = true;
@@ -161,10 +161,21 @@ public void onKeyUp(Keybind kb)
 @Override
 public void onKeyPressed(Keybind kb)
   {
-//  Config.logDebug("key down: "+kb.keyName);
   if(kb==forward || kb==left || kb==right || kb==reverse)
     {
     hasMoveInput = true;
+    }
+  if(kb==fire)
+    {
+    if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
+      {
+      Packet02Vehicle pkt = new Packet02Vehicle();
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setBoolean("fm", true);
+      pkt.setParams(mc.thePlayer.ridingEntity);
+      pkt.setInputData(tag);
+      pkt.sendPacketToServer();
+      }
     }
   }
 
@@ -176,12 +187,11 @@ public void onTickEnd()
     hasMoveInput = false;
     if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
       {
-//      Config.logDebug("player riding vehicle");
       int strafe = right.isPressed && left.isPressed ? 0 : left.isPressed ? -1 : right.isPressed ? 1 : 0;
       int forwards = forward.isPressed && reverse.isPressed ? 0 : reverse.isPressed ? -1 : forward.isPressed ? 1 : 0;
       ((VehicleBase)mc.thePlayer.ridingEntity).handleKeyboardMovement((byte)forwards, (byte)strafe);
       }
-    }
+    }  
   }
 
 

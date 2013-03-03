@@ -64,6 +64,7 @@ public static void onTick()
     else if(!kb.isPressed && down)//KEY DOWN
       {
       kb.isPressed = true;
+      kb.checked = false;
       for(IHandleInput ih : inputHandlers)
         {
         ih.onKeyPressed(kb);

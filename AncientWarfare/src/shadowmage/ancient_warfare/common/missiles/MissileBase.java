@@ -20,14 +20,21 @@
  */
 package shadowmage.ancient_warfare.common.missiles;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
+import shadowmage.ancient_warfare.common.utils.Trig;
 
-public abstract class MissileBase extends Entity
+public class MissileBase extends Entity implements IEntityAdditionalSpawnData
 {
 
 /**
@@ -35,8 +42,8 @@ public abstract class MissileBase extends Entity
  * effects of impact, and model/render instance used.
  */
 IAmmoType ammoType = null;
-
-float gravity = 0.006f;
+public int missileType = 0;
+public float currentGrav = 0.f;
 
 /**
  * @param par1World
@@ -46,33 +53,48 @@ public MissileBase(World par1World)
   super(par1World);
   }
 
-public void setAmmoType(IAmmoType type)
+/**
+ * called server side after creating but before spawning. ammoType is set client-side by the readSpawnData method, as should all other movement (rotation/motion) params.
+ * @param type
+ * @param x
+ * @param y
+ * @param z
+ * @param mx
+ * @param my
+ * @param mz
+ */
+public void setMissileParams(IAmmoType type, float x, float y, float z, float mx, float my, float mz)
   {
   this.ammoType = type;
   if(ammoType!=null)
     {
-    this.gravity = ammoType.getGravityFactor();    
-    }
+    this.missileType = ammoType.getAmmoType();
+    }  
+  this.setPosition(x, y, z);
+  this.prevPosX = this.posX;
+  this.prevPosY = this.posY;
+  this.prevPosZ = this.posZ;
+  this.motionX = mx;
+  this.motionY = my;
+  this.motionZ = mz;
+  
+  float radAng = (float) Math.atan2(mz, mx);
+  this.rotationYaw = Trig.toDegrees(radAng)  - 90 ;
+  this.prevRotationYaw = this.rotationYaw;  
+  float velH = (float) Math.sqrt(mx*mx + mz*mz);//the X in the pitch setting..
+  this.rotationPitch = Trig.toDegrees((float) Math.atan2(my, velH));
+  this.prevRotationPitch = this.rotationPitch;  
   }
 
-public void setMissileParams(float x, float y, float z, float mx, float my, float mz)
+public void onImpactEntity(Entity ent, float x, float y, float z)
   {
-  float weightFactor = 1.f;
-  if(this.ammoType!=null)
-    {
-    weightFactor = this.ammoType.getWeightFactor();
-    }
-  this.prevPosX = this.posX = x;
-  this.prevPosY = this.posY = y;
-  this.prevPosZ = this.posZ = z;
-  this.motionX = mx * weightFactor;
-  this.motionY = my * weightFactor;
-  this.motionZ = mz * weightFactor;
+  this.ammoType.onImpactEntity(worldObj, ent, x, y, z);
   }
 
-public void onImpactEntity(){}
-public void onImpactWorld(){}
-
+public void onImpactWorld()
+  {
+  this.ammoType.onImpactWorld(worldObj, (float)posX,(float)posY, (float)posZ);  
+  }
 
 @Override
 public void onUpdate()
@@ -81,25 +103,79 @@ public void onUpdate()
   this.onMovementTick();
   }
 
+
+int tickNum = 0;
+
 public void onMovementTick()
   {
   
+  //this.currentGrav += ;
+  this.motionY -= this.ammoType.getGravityFactor();
+  
+  if(!this.worldObj.isRemote)
+    {
+    Config.logDebug("tickNum: "+tickNum+" :: "+motionY+" :: "+currentGrav);
+    tickNum++;
+    }
+  
+  if(this.motionX != 0 || this.motionY != 0 || this.motionZ != 0)
+    {
+    this.prevPosX = this.posX;
+    this.prevPosY = this.posY;
+    this.prevPosZ = this.posZ;
+    this.prevRotationPitch = this.rotationPitch;
+    this.prevRotationYaw = this.rotationYaw;
+    
+    this.posX += this.motionX;
+    this.posY += this.motionY;
+    this.posZ += this.motionZ;
+    
+    float radAng = (float) Math.atan2(motionZ, motionX);
+    this.rotationYaw = Trig.toDegrees(radAng) - 90;
+    
+    float velH = (float) Math.sqrt(motionX*motionX + motionZ*motionZ);//the X in the pitch setting..
+    this.rotationPitch = Trig.toDegrees((float) Math.atan2(motionY, velH));     
+    }
   }
 
 @Override
-protected void readEntityFromNBT(NBTTagCompound var1)
+public String getTexture()
   {
-  // TODO Auto-generated method stub  
+  return ammoType.getModelTexture();
   }
 
 @Override
-protected void writeEntityToNBT(NBTTagCompound var1)
+protected void readEntityFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub  
+  this.missileType = tag.getInteger("type");
+  this.ammoType = AmmoRegistry.instance().getAmmoEntry(missileType);
+  this.currentGrav = tag.getFloat("grav");
+  }
+
+@Override
+protected void writeEntityToNBT(NBTTagCompound tag)
+  {
+  tag.setInteger("type", missileType);
+  tag.setFloat("grav", this.currentGrav);
   }
 
 @Override
 protected void entityInit()
   {
+  }
+
+@Override
+public void writeSpawnData(ByteArrayDataOutput data)
+  {
+  data.writeInt(missileType);
+  data.writeFloat(this.currentGrav);
+  }
+
+@Override
+public void readSpawnData(ByteArrayDataInput data)
+  {
+  this.missileType =data.readInt();
+  this.ammoType = AmmoRegistry.instance().getAmmoEntry(missileType);
+  this.currentGrav = data.readFloat();
   }
 }

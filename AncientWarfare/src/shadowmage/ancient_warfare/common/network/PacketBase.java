@@ -22,6 +22,7 @@
  */
 package shadowmage.ancient_warfare.common.network;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -126,5 +127,9 @@ public void sendPacketToServer()
   AWCore.proxy.sendPacketToServer(this);
   }
 
+public void sendPacketToAllTrackingClients(Entity ent)
+  {
+  AWCore.proxy.sendPacketToAllClientsTracking(ent, this);
+  }
 
 }

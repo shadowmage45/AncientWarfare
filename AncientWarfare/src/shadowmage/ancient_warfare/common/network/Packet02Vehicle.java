@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -74,5 +75,6 @@ public void execute()
     vehicle.handlePacketUpdate(packetData);
     }  
   }
+
 
 }

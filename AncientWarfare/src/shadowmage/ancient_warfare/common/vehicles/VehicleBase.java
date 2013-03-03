@@ -32,9 +32,11 @@ import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
+import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Trig;
+import shadowmage.ancient_warfare.common.vehicles.helpers.AmmoHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
 import shadowmage.ancient_warfare.common.vehicles.stats.ArmorStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.GeneralStats;
@@ -123,6 +125,7 @@ public EntityPathfinder navigator;
 /**
  * complex stat tracking helpers, move, ammo, upgrades, general stats
  */
+public AmmoHelper ammoHelper;
 private ArmorStats armorStats = new ArmorStats();
 private GeneralStats generalStats = new GeneralStats();
 private UpgradeStats upgradeStats;
@@ -137,6 +140,7 @@ public VehicleBase(World par1World)
   this.navigator = new EntityPathfinder(this, worldObj, 16);  
   this.upgradeStats = new UpgradeStats(this);
   this.moveHelper = new VehicleMovementHelper(this);
+  this.ammoHelper = new AmmoHelper(this);
   float width = this.getWidth();
   float height = this.getHeight();
   this.setSize(width, height);
@@ -163,7 +167,7 @@ public boolean isMountable()
 
 public float getRiderForwardOffset()
   {
-  return 1.3f;  
+  return 1.0f;  
   }
 
 public float getRiderVerticalOffset()
@@ -186,26 +190,32 @@ public boolean startMissileLaunch()
   return false;
   }
 
+/**
+ * has to be called from onFiringUpdate, triggers fireMissile()--
+ * @return
+ */
 public boolean launchMissile()
   {
   if(this.isFiring && !this.hasLaunched)
     {
     this.hasLaunched = true;
     this.reloadingTicks = this.reloadTimeCurrent;
+    if(!this.worldObj.isRemote)
+      {
+      MissileBase missile = this.ammoHelper.getMissile((float)posX, (float)posY+5, (float)posZ, 0*0.05f, 10*0.05f, 0);
+      if(missile!=null)
+        {
+        this.worldObj.spawnEntityInWorld(missile);
+        }
+      }
     return true;
     }  
   return false;
   }
 
-public void onFiringUpdate()
-  {
-  
-  }
+public abstract void onFiringUpdate();
 
-public void onReloadUpdate()
-  {
-  
-  }
+public abstract void onReloadUpdate();
 
 /**
  * need to setup on-death item drops
@@ -237,6 +247,12 @@ public void onUpdate()
     {
     this.reloadingTicks--;
     this.onReloadUpdate();
+    if(this.reloadingTicks<=0)
+      {
+      this.hasLaunched = false;
+      this.isFiring = false;
+      this.reloadingTicks = 0;      
+      }
     }
   }
 
@@ -255,7 +271,7 @@ public void onUpdateClient()
   }
 
 /**
- * 
+ * server-side updates...
  */
 public void onUpdateServer()
   {
@@ -302,8 +318,20 @@ public void handleInputData(NBTTagCompound tag)
   this.moveHelper.handleInputData(tag);
   if(tag.hasKey("fm"))
     {
-    //TODO handle fire missile
+    if(!this.worldObj.isRemote && !this.isFiring)
+      {
+      Packet02Vehicle pkt = new Packet02Vehicle();
+      pkt.setParams(this);
+      NBTTagCompound reply = new NBTTagCompound();
+      reply.setBoolean("fm", true);
+      pkt.setInputData(reply);
+      pkt.sendPacketToAllTrackingClients(this);
+      
+      Config.logDebug("Initiating launch missile sequence");
+      this.startMissileLaunch();
+      }
     }
+ 
   }
 
 /**
@@ -380,10 +408,11 @@ public void setPositionAndRotation2(double par1, double par3, double par5, float
       float rot2 = yaw;      
       if(Trig.getAbsDiff(rot, rot2)>2)
         { 
-        float diff = this.rotationYaw - this.prevRotationYaw;//pull diff of current rot and prev rot.  change rot. change prev rot to rot. apply diff to prev rot DONE
+        //float diff = this.rotationYaw - this.prevRotationYaw;//pull diff of current rot and prev rot.  change rot. change prev rot to rot. apply diff to prev rot DONE
         this.setRotation(yaw, par8);
-        this.prevRotationYaw = this.rotationYaw + diff;
-        //this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
+        this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
+//        this.prevRotationYaw = this.rotationYaw + diff;
+        
         }      
       return;
       }

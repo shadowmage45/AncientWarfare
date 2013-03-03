@@ -18,23 +18,27 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.input;
+package shadowmage.ancient_warfare.client.render;
 
-public class Keybind
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.client.model.ModelArrow;
+
+public class RenderArrow extends RenderMissileBase
 {
 
+public ModelArrow arrow = new ModelArrow();
 
-int keyCode;
-String keyName;
-boolean isPressed;
-boolean checked = false;
-
-public Keybind(int keyCode, String name)
+@Override
+public void doRender(Entity var1, double var2, double var4, double var6,  float var8, float var9)
   {
-  this.keyCode = keyCode;
-  this.keyName = name;
+  GL11.glPushMatrix();
+  GL11.glTranslated(var2, var4, var6);
+  GL11.glRotatef(var8, 0, 1, 0);
+  GL11.glScaled(-1, -1, 1);  
+  arrow.render(var1, 0, 0, 0, 0, 0, 0.0625f);
+  GL11.glPopMatrix();
   }
-
-
 
 }

@@ -41,6 +41,7 @@ public VehicleCatapult(World par1World)
   this.vehicleType = CATAPULT;
   this.yOffset = 0;
   this.texture = "foo.png";
+  this.ammoHelper.addUseableAmmo(AmmoRegistry.ammoArrow);
   }
 
 @Override
@@ -59,6 +60,18 @@ public float getHeight()
 public float getWidth()
   {
   return 2.f;
+  }
+
+@Override
+public void onFiringUpdate()
+  {
+  this.launchMissile();
+  }
+
+@Override
+public void onReloadUpdate()
+  {
+  
   }
 
 }

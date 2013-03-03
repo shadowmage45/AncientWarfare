@@ -24,25 +24,35 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.missiles.AmmoArrow;
+import shadowmage.ancient_warfare.common.missiles.AmmoBase;
+import shadowmage.ancient_warfare.common.missiles.MissileBase;
 
 public class AmmoRegistry
 {
-private AmmoRegistry(){}
 
+public static AmmoBase ammoArrow = new AmmoArrow(0);
+
+private AmmoRegistry(){}
 private static AmmoRegistry INSTANCE;
 
 private Map<Integer, IAmmoType> ammoInstances = new HashMap<Integer, IAmmoType>();
-private Map<IAmmoType, Class<? extends Entity>> ammoEntities = new HashMap<IAmmoType, Class<? extends Entity>>();
 
 public static AmmoRegistry instance()
   {
   if(INSTANCE==null){INSTANCE = new AmmoRegistry();}
   return INSTANCE;
+  }
+
+public void registerAmmoTypes()
+  {
+  AWEntityRegistry.registerEntity(MissileBase.class, "AWMissileBase", 165, 5, true);  
+  
+  this.registerAmmoType(ammoArrow);
   }
 
 /**
@@ -55,7 +65,7 @@ public IAmmoType getAmmoEntry(int type)
   return this.ammoInstances.get(type);
   }
 
-public void registerAmmoTypeWithItem(IAmmoType ammo, Item item, int itemDamage, Class <? extends Entity> missileEntity)
+public void registerAmmoTypeWithItem(IAmmoType ammo, Item item, int itemDamage)
   {
   if(!DescriptionRegistry.instance().contains(item))
     {
@@ -63,10 +73,10 @@ public void registerAmmoTypeWithItem(IAmmoType ammo, Item item, int itemDamage, 
     }  
   DescriptionRegistry.instance().addSubtypeToItem(item.itemID, itemDamage, ammo.getDisplayName());
   DescriptionRegistry.instance().setTooltip(item.itemID, itemDamage, ammo.getDisplayTooltip());
-  this.registerAmmoType(ammo, missileEntity);
+  this.registerAmmoType(ammo);
   }
 
-public void registerAmmoType(IAmmoType ammo, Class <? extends Entity> clz)
+public void registerAmmoType(IAmmoType ammo)
   {
   if(ammo==null)
     {
@@ -76,70 +86,12 @@ public void registerAmmoType(IAmmoType ammo, Class <? extends Entity> clz)
   if(!this.ammoInstances.containsKey(type))
     {
     this.ammoInstances.put(type, ammo);
-    AWEntityRegistry.registerEntity(clz, ammo.getEntityName(), 170, 5, true);
-    this.ammoEntities.put(ammo, clz);
     }
   else
     {
     Config.logError("Attempt to register a duplicate ammo type for number: "+type);
     Config.logError("Ammo attempting to being registered: "+ammo.getDisplayName());
     }  
-  }
-
-static int nextAmmoType = 0;
-/**
- * get the next open global ammo number type (searches up to 400 indices)
- * @return available index, or -1 if none
- */
-public int getAvailableAmmoType()
-  {
-  int id = nextAmmoType;
-  nextAmmoType++;
-  if(this.ammoInstances.containsKey(id))
-    {
-    Config.logError("Error while attempting to generate next valid ammo type ID: "+id+" Id already exists.");    
-    }
-  return id;
-  }
-
-public Entity getAmmoEntityFor(int type, World world)
-  {
-  if(this.ammoInstances.containsKey(type))
-    {
-    IAmmoType ammo = this.ammoInstances.get(type);
-    if(this.ammoEntities.containsKey(ammo))
-      {
-      try
-        {
-        return this.ammoEntities.get(ammo).getDeclaredConstructor(World.class).newInstance(world);
-        } 
-      catch (InstantiationException e)
-        {
-        e.printStackTrace();
-        } 
-      catch (IllegalAccessException e)
-        {
-        e.printStackTrace();
-        } 
-      catch (IllegalArgumentException e)
-        {
-        e.printStackTrace();
-        } 
-      catch (InvocationTargetException e)
-        {
-        e.printStackTrace();
-        } 
-      catch (NoSuchMethodException e)
-        {
-        e.printStackTrace();
-        } 
-      catch (SecurityException e)
-        {
-        e.printStackTrace();
-        }
-      }
-    }
-  return null;
   }
 
 }

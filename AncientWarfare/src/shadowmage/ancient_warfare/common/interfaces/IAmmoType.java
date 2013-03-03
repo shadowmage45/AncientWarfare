@@ -43,6 +43,7 @@ int getAmmoType();//the global unique ammo type, used by structure spawning to f
 String getEntityName();//the entity name associated with this ammo as an entity in the world
 String getDisplayName();//the displayed item-name/ammo name for this ammo
 String getDisplayTooltip();//the display tooltip for this ammo
+String getModelTexture();
 int getItemID();//basic item information for this ammo type
 int getItemMeta();//basic item information for this ammo type
 ItemStack getDisplayStack();//should be a persistent stack in the ammo instance, used to display ammo...

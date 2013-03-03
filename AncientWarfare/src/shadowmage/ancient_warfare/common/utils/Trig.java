@@ -33,9 +33,9 @@ import net.minecraft.util.MathHelper;
  */
 public class Trig
 {
-public static final float PI = 3.141592653589793f;
-public static final float TORADIANS = PI / 180.f;
-public static final float TODEGREES = 180.f / PI;
+private static final float PI = 3.141592653589793f;
+private static final float TORADIANS = PI / 180.f;
+private static final float TODEGREES = 180.f / PI;
 
 public static int getPower(int num, int exp)
   {
@@ -215,5 +215,35 @@ public static Pos3f calcAngles(float yaw, float pitch)
   aim.y = MathHelper.sin(pitch);
   return aim;
   }
+
+public static float getAngle(float x, float y)
+  {
+  return toDegrees((float) Math.atan2(y, x));
+  }
+
+/**
+ * calcs the range of the shot, no drag..
+ * @param x
+ * @param y
+ * @param z
+ * @param mx
+ * @param my
+ * @param mz
+ * @return
+ */
+public static float calcTrajectoryRange3D(float mx, float my, float mz, float gravSecond)
+  {
+  float distance = MathHelper.sqrt_float(mx*mx + mz*mz);
+  return calcTrajectoryRange2D(distance, my, gravSecond);
+  }
+
+public static float calcTrajectoryRange2D(float mx, float my, float gravSecond)
+  {
+  float seconds = (my * 20 * 2)/gravSecond;  
+  float distance = mx * seconds;
+  return distance;
+  }
+
+
 
 }

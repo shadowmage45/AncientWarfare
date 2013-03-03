@@ -21,54 +21,88 @@
 package shadowmage.ancient_warfare.common.missiles;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public abstract class AmmoBase implements IAmmoType
+public class AmmoArrow extends AmmoBase
 {
 
-private ItemStack ammoStack;
-int ammoType;
-
-public AmmoBase(int ammoType)
+public AmmoArrow(int ammoType)
   {
-  this.ammoStack = new ItemStack(this.getItemID(), 1, this.getItemMeta());
-  this.ammoType = ammoType;
+  super(ammoType);
   }
 
 @Override
-public int getAmmoType()
+public String getEntityName()
   {
-  return this.ammoType;
+  return "AWArrow";
   }
 
 @Override
-public ItemStack getDisplayStack()
+public String getDisplayName()
   {
-  return this.ammoStack;
+  return "Arrow";
   }
 
 @Override
-public ItemStack getAmmoStack(int qty)
+public String getDisplayTooltip()
   {
-  return new ItemStack(this.getItemID(), qty, this.getItemMeta());
-  }
-
-/**
- * override to implement upgrade-specific ammo use.  this method will be checked before a vehicle will accept ammo into its bay, or fire ammo from its bay
- */
-@Override
-public boolean isAmmoValidFor(VehicleBase vehicle)
-  {
-  return true;
+  return "Arrow";
   }
 
 @Override
-public float getGravityFactor()
+public String getModelTexture()
   {
-  return 9.81f * 0.05f * 0.05f;
+  return "foo.png";
+  }
+
+@Override
+public int getItemID()
+  {
+  return 0;
+  }
+
+@Override
+public int getItemMeta()
+  {
+  return 0;
+  }
+
+@Override
+public boolean isRocket()
+  {
+  return false;
+  }
+
+@Override
+public boolean isPersistent()
+  {
+  return false;
+  }
+
+@Override
+public float getDragFactor()
+  {
+  // TODO Auto-generated method stub
+  return 0;
+  }
+
+@Override
+public float getWeightFactor()
+  {
+  // TODO Auto-generated method stub
+  return 0;
+  }
+
+@Override
+public void onImpactWorld(World world, float x, float y, float z)
+  {
+  // TODO Auto-generated method stub
+  }
+
+@Override
+public void onImpactEntity(World world, Entity ent, float x, float y, float z)
+  {
+  // TODO Auto-generated method stub
   }
 
 }

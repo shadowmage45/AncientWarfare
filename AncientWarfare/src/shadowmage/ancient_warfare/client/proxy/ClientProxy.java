@@ -30,7 +30,7 @@ import shadowmage.ancient_warfare.client.input.InputHelper;
 import shadowmage.ancient_warfare.client.input.TickHandlerClientKeyboard;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
-import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
+import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.network.PacketBase;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -66,7 +66,6 @@ public void registerClientData()
   /**
    * register single render for all vehicles, local renderManager handles from there...
    */
-  RenderingRegistry.registerEntityRenderingHandler(VehicleBase.class, new RenderVehicleHelper());
   RenderRegistry.instance().loadRenders();
   TickRegistry.registerTickHandler(new TickHandlerClientKeyboard(), Side.CLIENT);
   

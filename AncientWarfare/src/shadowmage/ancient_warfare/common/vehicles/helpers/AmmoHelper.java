@@ -21,9 +21,12 @@
 package shadowmage.ancient_warfare.common.vehicles.helpers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.missiles.MissileBase;
+import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmoEntry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -32,7 +35,10 @@ public class AmmoHelper
 
 private VehicleBase vehicle;
 
-private List<VehicleAmmoEntry> ammoTypes = new ArrayList<VehicleAmmoEntry>();
+public int currentAmmoType = 0;
+
+private List<VehicleAmmoEntry> ammoEntries = new ArrayList<VehicleAmmoEntry>();
+private HashMap<Integer, IAmmoType> ammoTypes = new HashMap<Integer, IAmmoType>();//local ammo type to global entry
 
 public AmmoHelper(VehicleBase vehicle)
   {
@@ -41,13 +47,30 @@ public AmmoHelper(VehicleBase vehicle)
 
 public void addUseableAmmo(IAmmoType ammo)
   {
-  this.ammoTypes.add(new VehicleAmmoEntry(ammo));
+  this.ammoEntries.add(new VehicleAmmoEntry(ammo));
+  this.ammoTypes.put(this.ammoEntries.size()-1, ammo);
   }
 
 public void updateAmmoCounts()
   {
-  //TODO
+  
   }
 
+public IAmmoType getCurrentAmmoType()
+  {
+  return this.ammoTypes.get(currentAmmoType);
+  }
+
+public MissileBase getMissile(float x, float y, float z, float mx, float my, float mz)
+  {
+  IAmmoType ammo = this.getCurrentAmmoType();
+  if(ammo!=null)
+    {
+    MissileBase missile = new MissileBase(vehicle.worldObj);   
+    missile.setMissileParams(ammo, x, y, z, mx, my, mz);
+    return missile;
+    }
+  return null;  
+  }
 
 }

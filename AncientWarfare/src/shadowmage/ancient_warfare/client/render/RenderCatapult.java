@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import net.minecraft.entity.Entity;
+
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelCatapult;
@@ -41,8 +43,6 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z, float y
   GL11.glPushMatrix();
   GL11.glTranslated(x, y, z);
   GL11.glRotatef(yaw, 0, 1, 0);
-  
-  
   GL11.glScalef(-1, -1, 1);  
     
   model.setArmRotation(cat.armAngle + (tick*cat.armSpeed));
@@ -51,6 +51,12 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z, float y
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
   GL11.glPopMatrix();
+  }
+
+@Override
+public void doRender(Entity var1, double var2, double var4, double var6,   float var8, float var9)
+  {
+  this.renderVehicle((VehicleBase)var1, var2, var4, var6, var8, var9);  
   }
 
 }
