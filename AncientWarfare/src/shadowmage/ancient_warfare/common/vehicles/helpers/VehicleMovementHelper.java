@@ -186,6 +186,9 @@ public void onMovementTick()
     }
   }
 
+/**
+ * TODO clean this up...
+ */
 public void clearInputFromDismount()
   {
   this.setForwardInput((byte) 0);
