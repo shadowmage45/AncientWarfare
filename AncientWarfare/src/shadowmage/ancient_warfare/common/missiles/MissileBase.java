@@ -27,6 +27,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -78,12 +79,18 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
   this.motionY = my;
   this.motionZ = mz;
   
-  float radAng = (float) Math.atan2(mz, mx);
-  this.rotationYaw = Trig.toDegrees(radAng)  - 90 ;
-  this.prevRotationYaw = this.rotationYaw;  
-  float velH = (float) Math.sqrt(mx*mx + mz*mz);//the X in the pitch setting..
-  this.rotationPitch = Trig.toDegrees((float) Math.atan2(my, velH));
-  this.prevRotationPitch = this.rotationPitch;  
+  this.onUpdateArrowRotation();
+  this.prevRotationPitch = this.rotationPitch;
+  this.prevRotationYaw = this.rotationYaw;
+  }
+
+public void setMissileParams2(IAmmoType ammo, float x, float y, float z, float yaw, float angle, float velocity)
+  {
+  float vX = -Trig.sinDegrees(yaw)* Trig.cosDegrees(angle) *velocity * 0.05f;
+  float vY = Trig.sinDegrees(angle) * velocity  * 0.05f;
+  float vZ = -Trig.cosDegrees(yaw)* Trig.cosDegrees(angle) *velocity  * 0.05f;
+  Config.logDebug("computed velocity: "+vX+","+vY+","+vZ);
+  this.setMissileParams(ammo, x, y, z, vX, vY, vZ);
   }
 
 public void onImpactEntity(Entity ent, float x, float y, float z)
@@ -114,7 +121,7 @@ public void onMovementTick()
   
   if(!this.worldObj.isRemote)
     {
-    Config.logDebug("tickNum: "+tickNum+" :: "+motionY+" :: "+currentGrav);
+    //Config.logDebug("tickNum: "+tickNum+" :: "+motionY+" :: "+currentGrav);
     tickNum++;
     }
   
@@ -130,12 +137,21 @@ public void onMovementTick()
     this.posY += this.motionY;
     this.posZ += this.motionZ;
     
-    float radAng = (float) Math.atan2(motionZ, motionX);
-    this.rotationYaw = Trig.toDegrees(radAng) - 90;
-    
-    float velH = (float) Math.sqrt(motionX*motionX + motionZ*motionZ);//the X in the pitch setting..
-    this.rotationPitch = Trig.toDegrees((float) Math.atan2(motionY, velH));     
+    this.onUpdateArrowRotation();
+//    float radAng = (float) Math.atan2(motionZ, motionX);
+//    this.rotationYaw = Trig.toDegrees(radAng) - 90;
+//    
+//    float velH = (float) Math.sqrt(motionX*motionX + motionZ*motionZ);//the X in the pitch setting..
+//    this.rotationPitch = Trig.toDegrees((float) Math.atan2(motionY, velH));     
     }
+  }
+
+public void onUpdateArrowRotation()
+  {
+  double motionSpeed = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+  this.rotationYaw =Trig.toDegrees((float) Math.atan2(this.motionX, this.motionZ)) - 90 ;
+  this.rotationPitch = Trig.toDegrees((float)Math.atan2(this.motionY, (double)motionSpeed)) - 90;
+  //Config.logDebug("setting rotPitch to: "+this.rotationPitch);
   }
 
 @Override

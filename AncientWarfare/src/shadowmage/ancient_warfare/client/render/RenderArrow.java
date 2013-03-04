@@ -24,6 +24,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.entity.Entity;
 import shadowmage.ancient_warfare.client.model.ModelArrow;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class RenderArrow extends RenderMissileBase
 {
@@ -35,7 +36,8 @@ public void doRender(Entity var1, double var2, double var4, double var6,  float 
   {
   GL11.glPushMatrix();
   GL11.glTranslated(var2, var4, var6);
-  GL11.glRotatef(var8, 0, 1, 0);
+  GL11.glRotatef(var8 - 90, 0, 1, 0);
+  GL11.glRotatef(var1.rotationPitch - 90, 1, 0, 0);
   GL11.glScaled(-1, -1, 1);  
   arrow.render(var1, 0, 0, 0, 0, 0, 0.0625f);
   GL11.glPopMatrix();

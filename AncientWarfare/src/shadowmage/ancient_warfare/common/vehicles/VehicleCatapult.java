@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
+import shadowmage.ancient_warfare.common.utils.Trig;
 import net.minecraft.world.World;
 
 public class VehicleCatapult extends VehicleBase
@@ -65,13 +66,52 @@ public float getWidth()
 @Override
 public void onFiringUpdate()
   {
-  this.launchMissile();
+  this.firingHelper.launchMissile();
   }
 
 @Override
 public void onReloadUpdate()
   {
   
+  }
+
+@Override
+public float getHorizontalMissileOffset()
+  {
+  return 0;
+  }
+
+@Override
+public float getVerticalMissileOffset()
+  {
+  return 3* Trig.sinDegrees(45) + 0.4f;
+  }
+
+@Override
+public float getForwardsMissileOffset()
+  {
+  return -3* Trig.cosDegrees(45);
+  }
+
+@Override
+public float getHorizontalMissileOffsetForAim()
+  {
+  // TODO Auto-generated method stub
+  return 0;
+  }
+
+@Override
+public float getVerticalMissileOffsetForAim()
+  {
+  // TODO Auto-generated method stub
+  return 0;
+  }
+
+@Override
+public float getForwardsMissileOffsetForAim()
+  {
+  // TODO Auto-generated method stub
+  return 0;
   }
 
 }

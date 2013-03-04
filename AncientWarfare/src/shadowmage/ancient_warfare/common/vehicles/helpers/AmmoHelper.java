@@ -73,4 +73,16 @@ public MissileBase getMissile(float x, float y, float z, float mx, float my, flo
   return null;  
   }
 
+public MissileBase getMissile2(float x, float y, float z, float yaw, float pitch, float velocity)
+  {
+  IAmmoType ammo = this.getCurrentAmmoType();
+  if(ammo!=null)
+    {
+    MissileBase missile = new MissileBase(vehicle.worldObj);   
+    missile.setMissileParams2(ammo, x, y, z, yaw, pitch, velocity);
+    return missile;
+    }
+  return null;
+  }
+
 }

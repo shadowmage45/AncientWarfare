@@ -24,7 +24,10 @@ import java.util.EnumSet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 
 import org.lwjgl.input.Keyboard;
 
@@ -167,15 +170,8 @@ public void onKeyPressed(Keybind kb)
     }
   if(kb==fire)
     {
-    if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
-      {
-      Packet02Vehicle pkt = new Packet02Vehicle();
-      NBTTagCompound tag = new NBTTagCompound();
-      tag.setBoolean("fm", true);
-      pkt.setParams(mc.thePlayer.ridingEntity);
-      pkt.setInputData(tag);
-      pkt.sendPacketToServer();
-      }
+    this.handleFireAction();
+    
     }
   }
 
@@ -191,9 +187,48 @@ public void onTickEnd()
       int forwards = forward.isPressed && reverse.isPressed ? 0 : reverse.isPressed ? -1 : forward.isPressed ? 1 : 0;
       ((VehicleBase)mc.thePlayer.ridingEntity).handleKeyboardMovement((byte)forwards, (byte)strafe);
       }
-    }  
+    } 
+  if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
+    {
+    updateVehicleAim();
+    }
   }
 
+public void updateVehicleAim()
+  {
+  MovingObjectPosition pos = getPlayerlookTarget(mc.thePlayer, 170.f);
+  VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
+  if(pos!=null)
+    {
+    vehicle.firingHelper.handleAimInput(pos.hitVec);
+    }
+  else
+    {
+    vehicle.firingHelper.handleAimInput(null);
+    }
+  }
+
+public void handleFireAction()
+  {
+  if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
+    {
+    MovingObjectPosition pos = getPlayerlookTarget(mc.thePlayer, 170.f);
+    VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
+    if(pos!=null)
+      {
+      vehicle.firingHelper.handleFireInput(pos.hitVec);
+      }
+    else
+      {
+      vehicle.firingHelper.handleFireInput(null);
+      }    
+    }
+  }
+
+public MovingObjectPosition getPlayerlookTarget(EntityPlayer player, float range)
+  {
+  return player.rayTrace(range, 0);
+  }
 
 
 }

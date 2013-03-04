@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -35,8 +36,11 @@ import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
+import shadowmage.ancient_warfare.common.utils.Pair;
+import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.helpers.AmmoHelper;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
 import shadowmage.ancient_warfare.common.vehicles.stats.ArmorStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.GeneralStats;
@@ -64,47 +68,6 @@ public float vehicleHealth = 100;
 
 
 
-public float turretRotation = 0.f;
-public float turretRotationMin = 0.f;
-public float turretRotationMax = 360.f;
-
-public float turretPitch = 0.f;
-public float turretPitchMin = 0.f;
-public float turretPitchMax = 90.f;
-
-/**
- * is this vehicle in the process of launching a missile ? (animation, etc)
- */
-public boolean isFiring = false;
-
-/**
- * if this vehicle isFiring, has it already launched, and is in the process of cooling down?
- */
-public boolean hasLaunched = false;
-
-/**
- * how many ticks until this vehicle is done reloading and can fire again
- */
-public int reloadingTicks = 0;
-
-/**
- * current and base reload timers, used to set current reload timer upon completion of missile launch
- */
-public int reloadTimeBase = 100;
-public int reloadTimeCurrent = 100;
-
-/**
- * accuracy stats...
- */
-public float accuracyBase = 1.f;
-public float accuracyCurrent = 1.f;
-
-/**
- * power is deprecated as a controllable stat, but will still be affected by upgrades and base vehicle stats
- */
-public int aimPower = 0;
-public int aimPowerMin = 0;
-public int aimPowerMax = 100;
 
 /**
  * set by move helper
@@ -131,6 +94,7 @@ private GeneralStats generalStats = new GeneralStats();
 private UpgradeStats upgradeStats;
 private VehicleInventory inventory;
 private VehicleMovementHelper moveHelper;
+public VehicleFiringHelper firingHelper;
 
 public int vehicleType = -1;
 
@@ -141,6 +105,7 @@ public VehicleBase(World par1World)
   this.upgradeStats = new UpgradeStats(this);
   this.moveHelper = new VehicleMovementHelper(this);
   this.ammoHelper = new AmmoHelper(this);
+  this.firingHelper = new VehicleFiringHelper(this);
   float width = this.getWidth();
   float height = this.getHeight();
   this.setSize(width, height);
@@ -149,6 +114,13 @@ public VehicleBase(World par1World)
 
 public abstract float getHeight();
 public abstract float getWidth();
+public abstract float getHorizontalMissileOffset();//x axis
+public abstract float getVerticalMissileOffset();
+public abstract float getForwardsMissileOffset();//z axis
+
+public abstract float getHorizontalMissileOffsetForAim();
+public abstract float getVerticalMissileOffsetForAim();
+public abstract float getForwardsMissileOffsetForAim();
 
 public boolean hasTurret()
   {
@@ -180,37 +152,53 @@ public float getRiderHorizontalOffset()
   return 0.f;
   }
 
-public boolean startMissileLaunch()
+
+public Pos3f getMissileOffset()
   {
-  if(!this.isFiring && this.reloadingTicks <=0)
-    {
-    this.isFiring = true;
-    return true;
-    }
-  return false;
+  Pos3f off = new Pos3f();
+  
+  float x = this.getHorizontalMissileOffset();
+  float y = this.getVerticalMissileOffset();
+  float z = this.getForwardsMissileOffset();
+  float angle = Trig.toDegrees((float) Math.atan2(x, z));
+  float len = MathHelper.sqrt_float(x*x+z*z);
+  angle+= this.rotationYaw;
+  
+  x = Trig.sinDegrees(-angle)*len;
+  z = Trig.cosDegrees(-angle)*len;
+  
+  off.x = x;
+  off.y = y;
+  off.z = z;  
+  return off;
   }
 
-/**
- * has to be called from onFiringUpdate, triggers fireMissile()--
- * @return
- */
-public boolean launchMissile()
+public void debugLaunch()
   {
-  if(this.isFiring && !this.hasLaunched)
-    {
-    this.hasLaunched = true;
-    this.reloadingTicks = this.reloadTimeCurrent;
-    if(!this.worldObj.isRemote)
-      {
-      MissileBase missile = this.ammoHelper.getMissile((float)posX, (float)posY+5, (float)posZ, 0*0.05f, 10*0.05f, 0);
-      if(missile!=null)
-        {
-        this.worldObj.spawnEntityInWorld(missile);
-        }
-      }
-    return true;
-    }  
-  return false;
+//  if(this.riddenByEntity!=null)
+//    {
+//    EntityPlayer player = (EntityPlayer)this.riddenByEntity;
+//
+//    Vec3 hit = getPlayerLookHit(player, 170);
+//    double x = hit.xCoord - this.posX;
+//    double y = hit.yCoord - this.posY;
+//    double z = hit.zCoord - this.posZ;
+//    
+//    float len = MathHelper.sqrt_float((float) (x*x+y*y+z*z));
+//    
+//    Pair<Float, Float> angles = Trig.getLaunchAngleToHit((float)x, (float)y, (float)z, 20, 9.81f);
+//    Config.logDebug("player look hitPos: "+hit.xCoord +","+ hit.yCoord +","+ hit.zCoord);
+//    Config.logDebug("toHit playerLook: " + angles.toString() + " for distance: "+len);
+//    
+//    
+//    //Config.logDebug("trajectory: "+Trig.getLaunchAngleToHit(100, 0, 20, 9.81f));
+//    MissileBase missile = this.ammoHelper.getMissile2((float)posX, (float)posY+5, (float)posZ, this.rotationYaw, angles.key(), 20.f);
+//    if(missile!=null)
+//      {
+//      this.worldObj.spawnEntityInWorld(missile);
+//      }
+//    }
+  
   }
 
 public abstract void onFiringUpdate();
@@ -239,21 +227,8 @@ public void onUpdate()
     this.onUpdateServer();
     }
   this.moveHelper.onMovementTick();
-  if(this.isFiring)
-    {
-    this.onFiringUpdate();
-    }
-  if(this.reloadingTicks>0)
-    {
-    this.reloadingTicks--;
-    this.onReloadUpdate();
-    if(this.reloadingTicks<=0)
-      {
-      this.hasLaunched = false;
-      this.isFiring = false;
-      this.reloadingTicks = 0;      
-      }
-    }
+  this.firingHelper.onTick();
+ 
   }
 
 /**
@@ -316,22 +291,7 @@ public void handleInputData(NBTTagCompound tag)
   {
   Config.logDebug("receiving input packet data. server: "+!worldObj.isRemote);
   this.moveHelper.handleInputData(tag);
-  if(tag.hasKey("fm"))
-    {
-    if(!this.worldObj.isRemote && !this.isFiring)
-      {
-      Packet02Vehicle pkt = new Packet02Vehicle();
-      pkt.setParams(this);
-      NBTTagCompound reply = new NBTTagCompound();
-      reply.setBoolean("fm", true);
-      pkt.setInputData(reply);
-      pkt.sendPacketToAllTrackingClients(this);
-      
-      Config.logDebug("Initiating launch missile sequence");
-      this.startMissileLaunch();
-      }
-    }
- 
+  this.firingHelper.handleInputData(tag);
   }
 
 /**

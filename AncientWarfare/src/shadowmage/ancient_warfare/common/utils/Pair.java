@@ -46,9 +46,13 @@ public T2 value()
   return b;
   }
 
+@Override
+public String toString()
+  {
+  return String.valueOf(a.toString() + "," + b.toString());
+  }
+
 //TODO -- all used for hashing..if I ever intend to use it as a key...
 //hashcode
 //equals
-//tostring
-
 }

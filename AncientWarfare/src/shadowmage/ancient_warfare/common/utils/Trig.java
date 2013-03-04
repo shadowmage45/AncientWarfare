@@ -36,6 +36,7 @@ public class Trig
 private static final float PI = 3.141592653589793f;
 private static final float TORADIANS = PI / 180.f;
 private static final float TODEGREES = 180.f / PI;
+private static final float GRAVITY = 9.81f;
 
 public static int getPower(int num, int exp)
   {
@@ -244,6 +245,42 @@ public static float calcTrajectoryRange2D(float mx, float my, float gravSecond)
   return distance;
   }
 
+/**
+ * 
+ * @param x input hit x (horizontal distance)
+ * @param y input hit y (vertical distance)
+ * @param v velocity per second
+ * @param g gravity per second
+ * @return
+ */
+public static Pair<Float, Float> getLaunchAngleToHit(float x, float y, float v)
+  {
+  float v2 = v*v;
+  float v4 = v*v*v*v;
+  float x2 = x*x;  
+  float sqRtVal = MathHelper.sqrt_float(v4 - GRAVITY * (GRAVITY*x2 + 2*y*v2));  
+  float h = v2 +sqRtVal;
+  float l = v2 -sqRtVal;  
+  h /= GRAVITY*x;
+  l /= GRAVITY*x;  
+  h = toDegrees((float) Math.atan(h));
+  l = toDegrees((float) Math.atan(l));  
+  return new Pair<Float, Float>(h, l);  
+  }
+
+/**
+ * 
+ * @param x raw X distance (x2 - x1)
+ * @param y vertical distance (y2 - y1)
+ * @param z raw Z distance (z2 - z1)
+ * @param v initial launch velocity per second
+ * @param g gravity per second acceleration
+ * @return
+ */
+public static Pair<Float, Float> getLaunchAngleToHit(float x, float y, float z, float v)
+  {
+  return getLaunchAngleToHit(MathHelper.sqrt_float(x*x+z*z), y, v);
+  }
 
 
 }
