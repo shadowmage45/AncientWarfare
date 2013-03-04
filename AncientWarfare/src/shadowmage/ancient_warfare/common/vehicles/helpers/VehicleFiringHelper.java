@@ -20,10 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.helpers;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.utils.Pair;
@@ -35,17 +38,18 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 /**
  * handles aiming, firing, updating turret, and client/server comms for input updates
  * @author Shadowmage
- *
  */
-public class VehicleFiringHelper
+public class VehicleFiringHelper implements INBTTaggable
 {
-
 /**
  * client-side values used by the riding player to check current input vs previous to see if new input packets should be sent...
  */
 public float clientTurretYaw = 0.f;
 public float clientTurretPitch = 0.f;
 
+/**
+ * used on final launch, to calc final angle from 'approximate' firing arm/turret angle
+ */
 public Pos3f targetPos = null;
 
 public float turretRotation = 0.f;
@@ -65,6 +69,7 @@ public float turretPitchInc = 1.f;
  */
 public float launchPowerBase = 31.321f;//the necessary speed to go 100m at near 45' angle(s) at 0 launch height
 public float launchPowerCurrent = launchPowerBase * 0.65f;
+
 
 /**
  * is this vehicle in the process of launching a missile ? (animation, etc)
@@ -121,6 +126,10 @@ public void onTick()
     {
     this.updateTurretPitch();
     }
+  if(this.turretRotation!=this.turretDestRot)
+    {
+    this.updateTurretRotation();
+    }
   }
 
 public void updateTurretPitch()
@@ -139,42 +148,26 @@ public void updateTurretPitch()
     }
   }
 
-public void handleInputData(NBTTagCompound tag)
-  {  
-  this.handleAimUpdate(tag);
-  //todo fire missile...
-  if(tag.hasKey("fm") && (!this.isFiring || vehicle.worldObj.isRemote))//if fire command and not already firing (or is client)...
-    { 
-    Config.logDebug("Initiating launch missile sequence");
-    this.startMissileLaunch();
-    if(!vehicle.worldObj.isRemote)//relay info to tracking clients..
-      {
-      Packet02Vehicle pkt = new Packet02Vehicle();
-      pkt.setParams(vehicle);
-      NBTTagCompound reply = new NBTTagCompound();
-      reply.setBoolean("fm", true);      
-      pkt.setInputData(reply);
-      pkt.sendPacketToAllTrackingClients(vehicle);      
-      }
-    }
- 
+public void updateTurretRotation()
+  {
+  //TODO
   }
 
-public boolean startMissileLaunch()
+/**
+ * if not already firing, this will initiate the launch sequence
+ */
+public void startMissileLaunch()
   {
   if(!this.isFiring && this.reloadingTicks <=0)
     {
+    Config.logDebug("Initiating launch missile sequence");
     this.isFiring = true;
-    return true;
     }
-  return false;
   }
 
-
-
 /**
- * has to be called from onFiringUpdate, triggers fireMissile()--
- * @return
+ * has to be called from vehicle.onFiringUpdate, triggers fireMissile()--
+ * @return true if missile was launched
  */
 public boolean launchMissile()
   {
@@ -183,34 +176,140 @@ public boolean launchMissile()
     this.hasLaunched = true;
     this.reloadingTicks = this.reloadTimeCurrent;
     if(!vehicle.worldObj.isRemote)
-      {
+      {      
       Pos3f off = vehicle.getMissileOffset();
-      
       Config.logDebug("offset: "+off.toString());
-      float angle = this.turretPitch;        
+      float angle = this.turretPitch;
       float x = (float) vehicle.posX + off.x;
       float y = (float) vehicle.posY + off.y;
       float z = (float) vehicle.posZ + off.z;
+      if(this.targetPos!=null && this.turretPitch==this.turretDestPitch)//if has target, and is lined up..do good fire..
+        {
+        float tx = this.targetPos.x - x;
+        float ty = this.targetPos.y - y;
+        float tz = this.targetPos.z - z;
+        Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, launchPowerCurrent);
+        angle = getBestAngle(angles.value(), angles.key());
+        }      
       MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, vehicle.rotationYaw, angle, launchPowerCurrent);
       if(missile!=null)
         {
         Config.logDebug("launching missile server side");
         vehicle.worldObj.spawnEntityInWorld(missile);
         }
-//      this.debugLaunch();
       }
     return true;
     }  
   return false;
   }
 
-public void handleFireInput()
+public float getBestAngle(float a, float b)
+  {
+  if(a>=this.turretPitchMin && a <=this.turretPitchMax)
+    {
+    return a;
+    }
+  else
+    {
+    return b;
+    }
+  }
+
+/**
+ * called from the vehicle to handle input packet data for firing and/or aim updates
+ * @param tag
+ */
+public void handleInputData(NBTTagCompound tag)
+  {  
+  if(tag.hasKey("fm") && (!this.isFiring || vehicle.worldObj.isRemote))//if fire command and not already firing (or is client)...
+    { 
+    this.handleFireUpdate(tag);    
+    } 
+  if(tag.hasKey("aim"))
+    {
+    this.handleAimUpdate(tag);
+    }
+  }
+
+/**
+ * handle fire updates
+ * @param tag
+ */
+public void handleFireUpdate(NBTTagCompound tag)
+  {  
+  if(tag.hasKey("fmx"))
+    {
+    this.targetPos = new Pos3f(tag.getFloat("fmx"), tag.getFloat("fmy"), tag.getFloat("fmz"));
+    }
+  else
+    {
+    this.targetPos = null;
+    }
+  if(!vehicle.worldObj.isRemote)//relay info to tracking clients..
+    {
+    Packet02Vehicle pkt = new Packet02Vehicle();
+    pkt.setParams(vehicle);
+    NBTTagCompound reply = new NBTTagCompound();
+    reply.setBoolean("fm", true);  
+    if(targetPos!=null)
+      {
+      reply.setFloat("fmx", targetPos.x);
+      reply.setFloat("fmy", targetPos.y);
+      reply.setFloat("fmz", targetPos.z);
+      }
+    pkt.setInputData(reply);
+    pkt.sendPacketToAllTrackingClients(vehicle); 
+    }
+  this.startMissileLaunch();
+  }
+
+/**
+ * handle aim-update information
+ * @param tag
+ */
+public void handleAimUpdate(NBTTagCompound tag)
+  {
+  NBTTagCompound reply = new NBTTagCompound();
+  boolean sendReply = false;
+  if(tag.hasKey("aimPitch"))
+    {
+    sendReply = true;
+    this.turretDestPitch = tag.getFloat("aimPitch");
+    reply.setFloat("aimPitch", this.turretDestPitch);
+    Config.logDebug("setting desired turret pitch to: "+this.turretDestPitch);
+    } 
+  if(tag.hasKey("aimYaw"))
+    {
+    sendReply = true;
+    this.turretDestRot = tag.getFloat("aimYaw");
+    reply.setFloat("aimYaw", this.turretDestRot);
+    }
+  if(!vehicle.worldObj.isRemote) 
+    { 
+    reply.setBoolean("aim", true);
+    Packet02Vehicle pkt = new Packet02Vehicle();
+    pkt.setParams(vehicle);
+    pkt.setInputData(reply);
+    pkt.sendPacketToAllTrackingClients(vehicle);
+    }
+  }
+
+/**
+ * CLIENT SIDE--handle fire-button input from riding client.  Relay to server.  Include target vector if appropriate.
+ * @param target
+ */
+public void handleFireInput(Vec3 target)
   {
   if(!this.isFiring)
     {
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("fm", true);
-    
+    if(target!=null)
+      {
+      tag.setFloat("fmx", (float) target.xCoord);
+      tag.setFloat("fmy", (float) target.yCoord);
+      tag.setFloat("fmz", (float) target.zCoord);
+      }
     Packet02Vehicle pkt = new Packet02Vehicle();
     pkt.setParams(vehicle);
     pkt.setInputData(tag);
@@ -219,83 +318,82 @@ public void handleFireInput()
   }
 
 /**
- * used client side to update client desired pitch and yaw
+ * CLIENT SIDE--used client side to update client desired pitch and yaw and send these to server/other clients...
  * @param target
  */
 public void handleAimInput(Vec3 target)
-  {
-  if(target!=null)
-    {    
-    Pos3f offset = vehicle.getMissileOffsetForAim();
-    float x = (float) vehicle.posX + offset.x;
-    float y = (float) vehicle.posY + offset.y;
-    float z = (float) vehicle.posZ + offset.z;
-    float tx = (float) (target.xCoord - x);
-    float ty = (float) (target.yCoord - y);
-    float tz = (float) (target.zCoord - z);
-    float range = MathHelper.sqrt_float(tx*tx+tz*tz);
-    Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, launchPowerCurrent);
-    
-    Config.logDebug("angle pair for hit: "+angles.toString()+" range: "+range);
-    
-    
-    boolean updated = false;
-    if(angles.value()>=this.turretPitchMin && angles.value()<=this.turretPitchMax)
+  {    
+  Pos3f offset = vehicle.getMissileOffsetForAim();
+  float x = (float) vehicle.posX + offset.x;
+  float y = (float) vehicle.posY + offset.y;
+  float z = (float) vehicle.posZ + offset.z;
+  float tx = (float) (target.xCoord - x);
+  float ty = (float) (target.yCoord - y);
+  float tz = (float) (target.zCoord - z);
+  float range = MathHelper.sqrt_float(tx*tx+tz*tz);
+  Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, launchPowerCurrent);
+  
+  Config.logDebug("input::::angle pair for hit: "+angles.toString()+" range: "+range);
+  
+  boolean updated = false;
+  if(angles.value()>=this.turretPitchMin && angles.value()<=this.turretPitchMax)
+    {
+    if(this.clientTurretPitch!=angles.value())
       {
-      if(this.clientTurretPitch!=angles.value())
-        {
-        this.clientTurretPitch = angles.value();
-        updated = true;
-        }
-      }
-    else if(angles.key()>=this.turretPitchMin && angles.key() <= this.turretPitchMax)
-      {
-      if(this.clientTurretPitch!=angles.key())
-        {
-        this.clientTurretPitch = angles.key();
-        updated = true;
-        }
-      }    
-    if(updated)
-      {
-      NBTTagCompound tag = new NBTTagCompound();
-      //TODO add desired yaw...
-      tag.setFloat("aimPitch", this.clientTurretPitch);
-      
-      
-      Packet02Vehicle pkt = new Packet02Vehicle();
-      pkt.setParams(vehicle);
-      pkt.setInputData(tag);
-      pkt.sendPacketToServer();
+      this.clientTurretPitch = angles.value();
+      updated = true;
       }
     }
-  /**
-   * compare input to current, send new aim params to server
-   */
-  }
-
-public void handleAimUpdate(NBTTagCompound tag)
-  {
-  boolean hadInput = false;
-  if(tag.hasKey("aimPitch"))
+  else if(angles.key()>=this.turretPitchMin && angles.key() <= this.turretPitchMax)
     {
-    hadInput = true;
-    this.turretDestPitch = tag.getFloat("aimPitch");
-    Config.logDebug("setting desired turret pitch to: "+this.turretDestPitch);
-    }  
-  //TODO handle other aim params...same as above...
-  if(hadInput && !vehicle.worldObj.isRemote) 
-    {
-    NBTTagCompound reply = new NBTTagCompound();
-    if(tag.hasKey("aimPitch"))
+    if(this.clientTurretPitch!=angles.key())
       {
-      reply.setFloat("aimPitch", tag.getFloat("aimPitch"));
-      }        
+      this.clientTurretPitch = angles.key();
+      updated = true;
+      }
+    }
+  float xAO = (float) (vehicle.posX - target.xCoord);  
+  float zAO = (float) (vehicle.posZ - target.zCoord);
+  float yaw = Trig.toDegrees((float) Math.atan2(zAO, xAO));
+  if(yaw!=this.clientTurretYaw && yaw >=this.turretRotationMin && yaw <= this.turretRotationMax)
+    {
+    this.clientTurretYaw = yaw;
+    updated = true;
+    }  
+  if(updated)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("aim", true);
+    tag.setFloat("aimPitch", this.clientTurretPitch);    
+    tag.setFloat("aimYaw", this.clientTurretYaw);    
     Packet02Vehicle pkt = new Packet02Vehicle();
     pkt.setParams(vehicle);
-    pkt.setInputData(reply);
-    pkt.sendPacketToAllTrackingClients(vehicle);
+    pkt.setInputData(tag);
+    pkt.sendPacketToServer();
     }
+  }
+
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  //TODO
+  return tag;
+  }
+
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  //TODO
+  }
+
+public void resetUpgradeStats()
+  {
+  this.launchPowerCurrent = this.launchPowerBase;
+  this.accuracyCurrent = this.accuracyBase;
+  this.reloadTimeCurrent = this.reloadTimeBase;
   }
 
 }

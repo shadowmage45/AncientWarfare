@@ -36,7 +36,7 @@ public class ItemLoader
  * Items
  */
 public static final AWItemBase vehicleUpgrade = new AWItemBase(Config.getItemID("itemMulti.vehicleUpgrade", 13001, "Base item for all vehicle upgrades"),true);
-public static final AWItemBase vehicleAmmo = new AWItemBase(Config.getItemID("itemMulti.vehicleAmmo", 13002, "Base item for all vehicle ammunition types"),true);
+public static final AWItemBase ammoItem = new AWItemBase(Config.getItemID("itemMulti.vehicleAmmo", 13002, "Base item for all vehicle ammunition types"),true);
 public static final AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 13003, "Base item for all vehicle-spawning items"));
 public static final AWItemBase componentItem = new AWItemBase(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
 public static final AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 13005, "Item used to scan structures"));
@@ -82,7 +82,7 @@ private void loadItems()
   this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Right-Click to Scan, and then Build");
   this.registerItemSingle(debugEditor, "Debug Editor", "Debug editor gui opening item", "Right-Click to open editing selection GUI");
   this.registerItemWithSubtypes(componentItem);
-  this.registerItemWithSubtypes(vehicleAmmo);
+  this.registerItemWithSubtypes(ammoItem);
   this.registerItemWithSubtypes(vehicleSpawner);
   this.registerItemWithSubtypes(vehicleUpgrade);
   }

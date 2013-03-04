@@ -27,11 +27,15 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 public abstract class VehicleUpgrade
 {
 
-boolean directlyEffectsVehicle = false;
+int itemID;
+int itemMeta;
 
-public VehicleUpgrade()
+boolean directlyEffectsVehicle = false;
+int upgradeNum = 0;
+
+public VehicleUpgrade(int num)
   {
-  
+  this.upgradeNum = num;
   }
 
 /**
@@ -53,5 +57,10 @@ public abstract String getUpgradeDisplayName();
  * @return
  */
 public abstract String getUpgradeName();
+
+public int getGlobalUpgradeNum()
+  {
+  return this.upgradeNum;
+  }
 
 }

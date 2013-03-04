@@ -22,62 +22,40 @@
  */
 package shadowmage.ancient_warfare.common.inventory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.IInventoryCallback;
+import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmoEntry;
+import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleInventory implements IInventoryCallback
 {
-/**
- * has this inventory been initialized, are the size of inventories set
- * and are individual inventories valid (all of them)
- */
-private boolean isInventoryValid = false;
+
+
 private VehicleBase vehicle;
 
 /**
  * individual inventories
  * 
  */
-public AWInventoryBasic upgradeInventory = null;
-public AWInventoryBasic ammoInventory = null;
-public AWInventoryBasic armorInventory = null;
-public AWInventoryBasic engineInventory = null;
-public AWInventoryBasic storageInventory = null;
+public AWInventoryBasic upgradeInventory = new AWInventoryBasic(6);
+public AWInventoryBasic ammoInventory = new AWInventoryBasic(6);
+public AWInventoryBasic storageInventory = new AWInventoryBasic(27);
 
-/**
- * number of valid slots this inventory possesses
- * set from research stats from spawning item, and re-set at readFromNBT
- * containers will use these numbers to add the appropriate slots
- */
-public int upgradeSlots;
-public int ammoSlots;
-public int armorSlots;
-public int engineSlots;
-public int storageSlots;
-
-/**
- * must be called by spawner item initially, and is then called by loadFromNBT
- * @param upgrade
- * @param ammo
- * @param armor
- * @param engine
- * @param storage
- */
-public void setInventorySizes(int upgrade, int ammo, int armor, int engine, int storage)
-  {
-  this.upgradeSlots = upgrade;
-  this.ammoSlots = ammo;
-  this.armorSlots = armor;
-  this.engineSlots = engine;
-  this.storageSlots = storage;
-  this.upgradeInventory = new AWInventoryBasic(upgrade, this);
-  this.ammoInventory = new AWInventoryBasic(ammo, this);
-  this.armorInventory = new AWInventoryBasic(armor, this);
-  this.engineInventory = new AWInventoryBasic(engine, this);
-  this.storageInventory = new AWInventoryBasic(storage, this);
-  this.isInventoryValid = true;
+public VehicleInventory(VehicleBase vehicle)
+  {  
+  this.vehicle = vehicle; 
+  this.upgradeInventory.addCallback(this);
+  this.ammoInventory.addCallback(this);
+  this.storageInventory.addCallback(this);
   }
 
 /**
@@ -86,20 +64,9 @@ public void setInventorySizes(int upgrade, int ammo, int armor, int engine, int 
  */
 public void writeToNBT(NBTTagCompound commonTag)
   {
-  NBTTagCompound tag = new NBTTagCompound();  
-  if(!this.isInventoryValid)
-    {
-    return;
-    }  
-  tag.setInteger("uS", upgradeSlots);
-  tag.setInteger("amS", ammoSlots);
-  tag.setInteger("arS", armorSlots);
-  tag.setInteger("eS", engineSlots);
-  tag.setInteger("sS", storageSlots);
+  NBTTagCompound tag = new NBTTagCompound();
   tag.setCompoundTag("uI", this.upgradeInventory.getNBTTag());
   tag.setCompoundTag("amI", this.ammoInventory.getNBTTag());
-  tag.setCompoundTag("arI", this.armorInventory.getNBTTag());
-  tag.setCompoundTag("eI", this.engineInventory.getNBTTag());
   tag.setCompoundTag("sI", this.storageInventory.getNBTTag());
   commonTag.setTag("inv", tag);
   }
@@ -116,30 +83,67 @@ public void readFromNBT(NBTTagCompound commonTag)
     {
     return;
     }
-  NBTTagCompound tag = commonTag.getCompoundTag("inv");  
-  this.upgradeSlots = tag.getInteger("uS");
-  this.ammoSlots = tag.getInteger("amS");
-  this.armorSlots = tag.getInteger("arS");
-  this.engineSlots = tag.getInteger("eS");
-  this.storageSlots = tag.getInteger("sS");
-  this.setInventorySizes(upgradeSlots, ammoSlots, armorSlots, engineSlots, storageSlots);
+  NBTTagCompound tag = commonTag.getCompoundTag("inv"); 
   this.upgradeInventory.readFromNBT(tag.getCompoundTag("uI"));
   this.ammoInventory.readFromNBT(tag.getCompoundTag("amI"));
-  this.armorInventory.readFromNBT(tag.getCompoundTag("arI"));
-  this.engineInventory.readFromNBT(tag.getCompoundTag("eI"));
-  this.storageInventory.readFromNBT(tag.getCompoundTag("sI"));
-  
-  }
-
-public VehicleInventory(VehicleBase vehicle)
-  {  
-  this.vehicle = vehicle; 
+  this.storageInventory.readFromNBT(tag.getCompoundTag("sI"));  
   }
 
 @Override
 public void onInventoryChanged(IInventory changedInv)
   {
-  
+  if(changedInv == this.ammoInventory && !vehicle.worldObj.isRemote)
+    {
+    vehicle.ammoHelper.updateAmmoCounts();
+    }
+  else if(changedInv == this.upgradeInventory && !vehicle.worldObj.isRemote)
+    {
+    vehicle.upgradeHelper.updateUpgrades();
+    }  
+  }
+
+public List<VehicleUpgrade> getInventoryUpgrades()
+  {
+  ArrayList<VehicleUpgrade> upgrades = new ArrayList<VehicleUpgrade>();
+  for(int i = 0; i < this.upgradeInventory.getSizeInventory(); i++)
+    {
+    ItemStack stack = this.upgradeInventory.getStackInSlot(i);
+    VehicleUpgrade upgrade = VehicleUpgradeRegistry.instance().getUpgrade(stack);
+    if(upgrade!=null)
+      {
+      upgrades.add(upgrade);
+      }     
+    }
+  return upgrades;  
+  }
+
+public List<VehicleAmmoEntry> getAmmoCounts()
+  {
+  ArrayList<VehicleAmmoEntry> counts = new ArrayList<VehicleAmmoEntry>();
+  for(int i = 0; i < this.ammoInventory.getSizeInventory(); i++)
+    {
+    ItemStack stack = this.ammoInventory.getStackInSlot(i);
+    IAmmoType ammo = AmmoRegistry.instance().getAmmoForStack(stack);
+    if(ammo!=null)
+      {
+      boolean found = false;
+      for(VehicleAmmoEntry ent : counts)
+        {
+        if(ent.baseAmmoType == ammo)
+          {
+          found = true;
+          ent.ammoCount += stack.stackSize;
+          break;
+          }
+        }
+      if(!found)
+        {
+        counts.add(new VehicleAmmoEntry(ammo));
+        counts.get(counts.size()-1).ammoCount+=stack.stackSize;
+        }
+      }
+    }  
+  return counts;
   }
 
 }

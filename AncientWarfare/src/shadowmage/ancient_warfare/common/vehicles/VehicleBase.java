@@ -33,18 +33,15 @@ import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
-import shadowmage.ancient_warfare.common.missiles.MissileBase;
-import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
-import shadowmage.ancient_warfare.common.utils.Pair;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
-import shadowmage.ancient_warfare.common.vehicles.helpers.AmmoHelper;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleAmmoHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleUpgradeHelper;
 import shadowmage.ancient_warfare.common.vehicles.stats.ArmorStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.GeneralStats;
-import shadowmage.ancient_warfare.common.vehicles.stats.UpgradeStats;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -88,13 +85,11 @@ public EntityPathfinder navigator;
 /**
  * complex stat tracking helpers, move, ammo, upgrades, general stats
  */
-public AmmoHelper ammoHelper;
-private ArmorStats armorStats = new ArmorStats();
-private GeneralStats generalStats = new GeneralStats();
-private UpgradeStats upgradeStats;
-private VehicleInventory inventory;
+public VehicleAmmoHelper ammoHelper;
+public VehicleUpgradeHelper upgradeHelper;
 public VehicleMovementHelper moveHelper;
 public VehicleFiringHelper firingHelper;
+public VehicleInventory inventory;
 
 public int vehicleType = -1;
 
@@ -102,9 +97,9 @@ public VehicleBase(World par1World)
   {
   super(par1World);
   this.navigator = new EntityPathfinder(this, worldObj, 16);  
-  this.upgradeStats = new UpgradeStats(this);
+  this.upgradeHelper = new VehicleUpgradeHelper(this);
   this.moveHelper = new VehicleMovementHelper(this);
-  this.ammoHelper = new AmmoHelper(this);
+  this.ammoHelper = new VehicleAmmoHelper(this);
   this.firingHelper = new VehicleFiringHelper(this);
   float width = this.getWidth();
   float height = this.getHeight();
@@ -122,19 +117,29 @@ public abstract float getHorizontalMissileOffsetForAim();
 public abstract float getVerticalMissileOffsetForAim();
 public abstract float getForwardsMissileOffsetForAim();
 
-public boolean hasTurret()
+public boolean isAimable()
+  {
+  return true;
+  }
+
+public boolean canAimRotate()
   {
   return false;
+  }
+
+public boolean canAimPitch()
+  {
+  return true;
   }
 
 public boolean isDrivable()
   {
-  return false;
+  return true;
   }
 
 public boolean isMountable()
   {
-  return false;
+  return true;
   }
 
 public float getRiderForwardOffset()
@@ -151,7 +156,6 @@ public float getRiderHorizontalOffset()
   {
   return 0.f;
   }
-
 
 public Pos3f getMissileOffset()
   {
@@ -223,9 +227,25 @@ public void debugLaunch()
   
   }
 
+/**
+ * called on every tick that the vehicle is 'firing' to update the firing animation and to call
+ * launchMissile when animation has reached launch point
+ */
 public abstract void onFiringUpdate();
 
+/**
+ * called every tick after the vehicle has fired, until reload timer is complete, to update animations
+ */
 public abstract void onReloadUpdate();
+
+/**
+ * reset all upgradeable stats back to the base for this vehicle
+ */
+public void resetUpgradeStats()
+  {
+  this.firingHelper.resetUpgradeStats();
+  this.moveHelper.resetUpgradeStats();
+  }
 
 /**
  * need to setup on-death item drops
@@ -249,8 +269,7 @@ public void onUpdate()
     this.onUpdateServer();
     }
   this.moveHelper.onMovementTick();
-  this.firingHelper.onTick();
- 
+  this.firingHelper.onTick(); 
   }
 
 /**
@@ -258,13 +277,7 @@ public void onUpdate()
  */
 public void onUpdateClient()
   {  
-  if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
-    {
-    if(AWCore.proxy.inputHelper.hasInputChanged())
-      {      
-      this.handleKeyboardMovement((byte)AWCore.proxy.inputHelper.getForwardInput(), (byte)AWCore.proxy.inputHelper.getStrafeInput());
-      }
-    }
+  
   }
 
 /**
@@ -294,9 +307,9 @@ public void handlePacketUpdate(NBTTagCompound tag)
     {    
     this.handleHealthUpdateData(tag);
     }
-  if(tag.hasKey("upgrades"))
+  if(tag.hasKey("upgrade"))
     {
-
+    this.upgradeHelper.handleUpgradePacketData(tag.getCompoundTag("upgrade"));
     }
   if(tag.hasKey("ammo"))
     {
@@ -393,8 +406,7 @@ public void setPositionAndRotation2(double par1, double par3, double par5, float
         //float diff = this.rotationYaw - this.prevRotationYaw;//pull diff of current rot and prev rot.  change rot. change prev rot to rot. apply diff to prev rot DONE
         this.setRotation(yaw, par8);
         this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
-//        this.prevRotationYaw = this.rotationYaw + diff;
-        
+//        this.prevRotationYaw = this.rotationYaw + diff;        
         }      
       return;
       }
@@ -424,13 +436,13 @@ public boolean canBeCollidedWith()
 @Override
 public void writeSpawnData(ByteArrayDataOutput data)
   {
-
+  data.writeFloat(this.vehicleHealth);
   }
 
 @Override
 public void readSpawnData(ByteArrayDataInput data)
   {
-
+  this.vehicleHealth = data.readFloat();
   }
 
 @Override
@@ -440,25 +452,43 @@ protected void entityInit()
   }
 
 @Override
-protected void readEntityFromNBT(NBTTagCompound var1)
+protected void readEntityFromNBT(NBTTagCompound tag)
   {
-
+  this.vehicleHealth = tag.getFloat("health");
+  this.inventory.readFromNBT(tag);
+  this.upgradeHelper.readFromNBT(tag.getCompoundTag("upgrades"));
+  this.ammoHelper.readFromNBT(tag.getCompoundTag("ammo"));
+  this.moveHelper.readFromNBT(tag.getCompoundTag("move"));
+  this.firingHelper.readFromNBT(tag.getCompoundTag("fire"));
   }
 
 @Override
-protected void writeEntityToNBT(NBTTagCompound var1)
+protected void writeEntityToNBT(NBTTagCompound tag)
   {
-
+  tag.setFloat("health", this.vehicleHealth);
+  this.inventory.writeToNBT(tag);
+  tag.setCompoundTag("upgrades", this.upgradeHelper.getNBTTag());
+  tag.setCompoundTag("ammo", this.ammoHelper.getNBTTag());
+  tag.setCompoundTag("move", this.moveHelper.getNBTTag());
+  tag.setCompoundTag("fire", this.firingHelper.getNBTTag());
   }
 
 @Override
 public void onMissileImpact(World world, double x, double y, double z)
   {
+  if(this.ridingEntity instanceof IMissileHitCallback)
+    {
+    ((IMissileHitCallback)this.ridingEntity).onMissileImpact(world, x, y, z);
+    }
   }
 
 @Override
 public void onMissileImpactEntity(World world, Entity entity)
   {
+  if(this.ridingEntity instanceof IMissileHitCallback)
+    {
+    ((IMissileHitCallback)this.ridingEntity).onMissileImpactEntity(world, entity);
+    }
   }
 
 }

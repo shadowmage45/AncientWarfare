@@ -24,13 +24,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
+import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmoEntry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class AmmoHelper
+public class VehicleAmmoHelper  implements INBTTaggable
 {
 
 private VehicleBase vehicle;
@@ -40,7 +45,7 @@ public int currentAmmoType = 0;
 private List<VehicleAmmoEntry> ammoEntries = new ArrayList<VehicleAmmoEntry>();
 private HashMap<Integer, IAmmoType> ammoTypes = new HashMap<Integer, IAmmoType>();//local ammo type to global entry
 
-public AmmoHelper(VehicleBase vehicle)
+public VehicleAmmoHelper(VehicleBase vehicle)
   {
   this.vehicle = vehicle;
   }
@@ -51,9 +56,65 @@ public void addUseableAmmo(IAmmoType ammo)
   this.ammoTypes.put(this.ammoEntries.size()-1, ammo);
   }
 
+/**
+ * SERVER ONLY....
+ */
 public void updateAmmoCounts()
   {
+  for(VehicleAmmoEntry ent : this.ammoEntries)
+    {
+    ent.ammoCount = 0;
+    }
+  List<VehicleAmmoEntry> counts = vehicle.inventory.getAmmoCounts();
   
+  NBTTagCompound tag = new NBTTagCompound();
+  NBTTagList tagList = new NBTTagList();
+  for(VehicleAmmoEntry count : counts)
+    {
+    NBTTagCompound entryTag = new NBTTagCompound();
+    for(VehicleAmmoEntry ent : this.ammoEntries)
+      {
+      if(ent.baseAmmoType == count.baseAmmoType)
+        {
+        ent.ammoCount = count.ammoCount;
+        }
+      }
+    entryTag.setInteger("type", count.baseAmmoType.getAmmoType());
+    entryTag.setInteger("count", count.ammoCount);
+    tagList.appendTag(entryTag);
+    }  
+  tag.setTag("list", tagList);
+  Packet02Vehicle pkt = new Packet02Vehicle();
+  pkt.setParams(vehicle);
+  pkt.setAmmoData(tag);
+  pkt.sendPacketToAllTrackingClients(vehicle);
+  }
+
+/**
+ * CLIENT ONLY--version of above
+ * @param tag
+ */
+public void handleAmmoUpdatePacket(NBTTagCompound tag)
+  {
+  for(VehicleAmmoEntry ent : this.ammoEntries)
+    {
+    ent.ammoCount = 0;
+    }
+  NBTTagList tagList = tag.getTagList("list");
+  for(int i = 0; i <tagList.tagCount(); i++)
+    {
+    NBTTagCompound entryTag = (NBTTagCompound) tagList.tagAt(i);
+    int type = entryTag.getInteger("type");
+    int count = entryTag.getInteger("count");
+    for(VehicleAmmoEntry ent : this.ammoEntries)
+      {
+      if(ent.baseAmmoType.getAmmoType()==type)
+        {
+        ent.ammoCount = count;
+        break;
+        }
+      }
+    }
   }
 
 public IAmmoType getCurrentAmmoType()
@@ -68,6 +129,7 @@ public MissileBase getMissile(float x, float y, float z, float mx, float my, flo
     {
     MissileBase missile = new MissileBase(vehicle.worldObj);   
     missile.setMissileParams(ammo, x, y, z, mx, my, mz);
+    missile.setMissileCallback(vehicle);    
     return missile;
     }
   return null;  
@@ -83,6 +145,20 @@ public MissileBase getMissile2(float x, float y, float z, float yaw, float pitch
     return missile;
     }
   return null;
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  // TODO Auto-generated method stub
+  return null;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub
+  
   }
 
 }

@@ -35,6 +35,11 @@ import shadowmage.ancient_warfare.common.interfaces.IInventoryCallback;
 public class AWInventoryBasic implements IInventory
 {
 
+/**
+ * a list of concerned entities (viewers/synch objects) for this inventory.
+ * when inventory is changed, they will all receive notice, being passed the inventory
+ * 
+ */
 List<IInventoryCallback> callBacks = new ArrayList<IInventoryCallback>();
 ItemStack[] inventorySlots;
 public AWInventoryBasic(int size)

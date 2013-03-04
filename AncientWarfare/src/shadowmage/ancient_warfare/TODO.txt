@@ -6,25 +6,26 @@ http://en.wikipedia.org/wiki/Trajectory_of_a_projectile
 
 GENERAL
 * add basic GUI tooltip functionality -- GuiTooltip class (int x, int y, int w, int h, List<String> info)
+* move world-gen base config from AncientWarfare.cfg into /AWConfig/AWWorldGen.cfg
 
-VEHICLES
-* start!!!
-    ---base vehicle class will need:
-        input proxy -- poll from here for info client side, server side is dummy class
-            -- all input will be sent from the client (riding the vehicle) to the server.
-                    server maintains state, relays input changes to all tracking clients (including sender)
-        
-        local ammoStats--maintains viable ammo types and counts
-        local vehicleStats--
-        per-entity pathfinder (possibly custom) for use with soldiers and player set waypoints
-    ---INPUT MODEL
-        
+VEHICLES   
+* figure out accuracy calculation methods (when to apply accuracy)(probably apply it to the output angle and yaw when spawning a missile)
+* NBT save/load stuff for firingHelper, moveHelper, ammoHelper    
+* upgrade system
+* implement double-texturing system (overlay second texture on top of first, for armor/imbues)
+* vehicle research system
+    --5 tiers of material
+        --materials determine weight(speed/responsiveness), base hp and firepower
+    --3 types of resistance additives
+        --imbues determine fire, explosive, and general damage resistances
+    
             
-AMMO TYPES
----single instance referenced class, ala Item/Block.  Ammo types will have calls for onHit and a few
-        other convenience methods
----new trajectory class and model--no drag (it wasn't realistic anyhow without including BC)        
-            
+AMMO TYPES 
+* add arrow persistent entity coding
+* fix rendering of arrows (rotation goes all screwy at some angles, spins)            
+* fix arrow model to use point of head as its position point
+* import stone ammo model
+* create more ammo types
 
 GUI FRAMEWORK
 * add GuiStringScrollFrame (completely handles displaying of a list of strings w/ callback info
@@ -37,7 +38,7 @@ GUI FRAMEWORK
 TESTING
 * test loot weighting
 * test structure weighting
-* test underground buildings
+* test underground buildings (dungeons)
 * test submerged code
 
 TEMPLATES
@@ -47,7 +48,7 @@ SCANNER
 STRUCTURE BUILDING
 
 WORLD GEN STUFF
-* handle structure spawning in cave dimensions (test for hasSky? and dissallow non-dungeon structures?)
+* handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
 
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
@@ -123,6 +124,18 @@ TWEAKS/OPTIMIZATION
 * custom block placement code for creative/survival builders (set server block, manually relay to client--should 
         decrease overall network used from vanilla MC resending entire chunks..)
 
+
+MODS LIST FOR NEXT WORLD (147)
+Mystcraft
+Thaumcraft
+Railcraft
+--steves carts
+Industrialcraft
+Buildcraft
+Redpower
+--forestry
+--thermal expansion
+--portal gun
 
 /*****************************************************************************************/
 public class MyWorldData extends WorldSavedData 
@@ -252,4 +265,12 @@ public static MyWorldData forWorld(World world)
 /********** 03-01-13 **********/
 * vehicle type number--used to reference for spawning and renders
 * subclass for every vehicle (use render# on rendering, run through renderManager--low overhead)   
-            
+/********** 03-02-13 **********/
+* work on getting ammo/missiles working
+/********** 03-03-13 **********/
+* fully implement missile ballistics
+* begin working on siege-engine missile aiming
+/********** 03-04-13 **********/
+* more work on siege-engine aiming.  Mostly worked out, need to flesh out vehicles more fully.
+* vehicle upgrades onInventoryChanged send upgradeNumbersList to tracking clients and call updateUpgradeStats
+* add vehicle ammo count updating            

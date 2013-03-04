@@ -48,6 +48,16 @@ public void setInputData(NBTTagCompound tag)
   this.packetData.setTag("input", tag);
   }
 
+public void setUpgradeData(NBTTagCompound tag)
+  {
+  this.packetData.setTag("upgrade", tag);
+  }
+
+public void setAmmoData(NBTTagCompound tag)
+  {
+  this.packetData.setTag("ammo", tag);
+  }
+
 @Override
 public int getPacketType()
   {  

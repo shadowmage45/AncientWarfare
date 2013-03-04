@@ -26,11 +26,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class VehicleMovementHelper
+public class VehicleMovementHelper implements INBTTaggable
 {
 
 private VehicleBase vehicle;
@@ -203,6 +204,27 @@ public void clearInputFromDismount()
     {
     AWCore.proxy.sendPacketToAllClientsTracking(this.vehicle, pkt);
     }
+  }
+
+public void resetUpgradeStats()
+  {
+  this.maxStrafeCurrent = this.maxStrafeBase;
+  this.maxSpeedCurrent = this.maxSpeedBase;
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  // TODO Auto-generated method stub
+  return tag;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub
+  
   }
 
 }

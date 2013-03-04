@@ -25,6 +25,7 @@ package shadowmage.ancient_warfare.common.registry;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.entry.ItemIDPair;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
@@ -42,9 +43,9 @@ public static VehicleUpgradeRegistry instance()
   }
 private static VehicleUpgradeRegistry INSTANCE;
 
-private Map upgradeTypeMap = new HashMap<Integer, VehicleUpgrade>();
+private Map<Integer, VehicleUpgrade> upgradeTypeMap = new HashMap<Integer, VehicleUpgrade>();
 private Map upgradeNameMap = new HashMap<String, VehicleUpgrade>();
-private Map upgradeItemMap = new HashMap<ItemIDPair, VehicleUpgrade>();
+private Map<Integer, VehicleUpgrade> upgradeItemMap = new HashMap<Integer, VehicleUpgrade>();
 
 /**
  * called from ItemLoader
@@ -56,7 +57,7 @@ public void registerUpgrade(int dmg, int type, VehicleUpgrade upgrade)
   {  
   this.upgradeTypeMap.put(type, upgrade);
   this.upgradeNameMap.put(upgrade.getUpgradeName(), upgrade);
-  this.upgradeItemMap.put(new ItemIDPair(ItemLoader.vehicleUpgrade.itemID, dmg, true), upgrade);
+  this.upgradeItemMap.put(dmg, upgrade);
   }
 
 public VehicleUpgrade getUpgrade(String name)
@@ -67,6 +68,32 @@ public VehicleUpgrade getUpgrade(String name)
 public VehicleUpgrade getUpgrade(int type)
   {
   return (VehicleUpgrade) this.upgradeTypeMap.get(type);
+  }
+
+public VehicleUpgrade getUpgrade(ItemStack stack)
+  {
+  if(stack==null)
+    {
+    return null;
+    }
+  if(stack.itemID == ItemLoader.vehicleUpgrade.itemID)
+    {
+    return this.upgradeItemMap.get(stack.getItemDamage());
+    }
+  return null;
+  }
+
+public boolean isStackUpgradeItem(ItemStack stack)
+  {
+  if(stack==null)
+    {
+    return false;
+    }
+  if(stack.itemID==ItemLoader.vehicleUpgrade.itemID)
+    {
+    return true;
+    }  
+  return false;
   }
 
 }

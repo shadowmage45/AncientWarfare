@@ -32,6 +32,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
@@ -43,6 +44,7 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData
  * effects of impact, and model/render instance used.
  */
 IAmmoType ammoType = null;
+IMissileHitCallback shooter = null;
 public int missileType = 0;
 public float currentGrav = 0.f;
 
@@ -93,14 +95,27 @@ public void setMissileParams2(IAmmoType ammo, float x, float y, float z, float y
   this.setMissileParams(ammo, x, y, z, vX, vY, vZ);
   }
 
+public void setMissileCallback(IMissileHitCallback shooter)
+  {
+  this.shooter = shooter;
+  }
+
 public void onImpactEntity(Entity ent, float x, float y, float z)
   {
   this.ammoType.onImpactEntity(worldObj, ent, x, y, z);
+  if(this.shooter!=null)
+    {
+    this.shooter.onMissileImpactEntity(worldObj, ent);
+    }
   }
 
 public void onImpactWorld()
   {
-  this.ammoType.onImpactWorld(worldObj, (float)posX,(float)posY, (float)posZ);  
+  this.ammoType.onImpactWorld(worldObj, (float)posX,(float)posY, (float)posZ);
+  if(this.shooter!=null)
+    {
+    this.shooter.onMissileImpact(worldObj, (float)posX,(float)posY, (float)posZ);
+    }
   }
 
 @Override

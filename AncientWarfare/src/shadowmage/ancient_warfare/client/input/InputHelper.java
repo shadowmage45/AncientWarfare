@@ -120,35 +120,9 @@ public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)
 
 @Override
 public EnumSet<TickType> ticks()
-{
-return EnumSet.of(TickType.CLIENT);
-}
-
-public static byte getForwardsInput()
   {
-  return (byte) 0;
+  return EnumSet.of(TickType.CLIENT);
   }
-
-public static byte getStrafeInput()
-  {
-  return (byte) 0;
-  }
-
-public static boolean getFireInput()
-  {
-  return false;
-  }
-
-public boolean checkForInput()
-  {
-  return false;
-  }
-
-public boolean checkForFire()
-  {
-  return false;
-  }
-
 
 /**
  * AWKEYBINDS....
@@ -171,8 +145,7 @@ public void onKeyPressed(Keybind kb)
     }
   if(kb==fire)
     {
-    this.handleFireAction();
-    
+    this.handleFireAction();    
     }
   }
 
@@ -189,29 +162,26 @@ public void onTickEnd()
       ((VehicleBase)mc.thePlayer.ridingEntity).handleKeyboardMovement((byte)forwards, (byte)strafe);
       }
     } 
-  if(!mc.isGamePaused && mc.currentScreen == null && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
+  if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
     {
-    updateVehicleAim();
+    this.handleAimUpdate();
     }
   }
 
-public void updateVehicleAim()
+int inputUpdateTicks = 0;
+
+public void handleAimUpdate()
   {
-  this.aimInputUpdateTicks--;
-  if(this.aimInputUpdateTicks>0)
+  inputUpdateTicks--;
+  if(inputUpdateTicks>0)
     {
     return;
     }
-  this.aimInputUpdateTicks = 5;
-  MovingObjectPosition pos = getPlayerlookTarget(mc.thePlayer, 170.f);
-  VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
+  inputUpdateTicks = 5;
+  MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140);
   if(pos!=null)
     {
-    vehicle.firingHelper.handleAimInput(pos.hitVec);
-    }
-  else
-    {
-    vehicle.firingHelper.handleAimInput(null);
+    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimInput(pos.hitVec);
     }
   }
 
@@ -220,11 +190,19 @@ public void handleFireAction()
   if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
     {
     VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
-    vehicle.firingHelper.handleFireInput();    
+    MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140);
+    if(pos!=null)
+      {
+      vehicle.firingHelper.handleFireInput(pos.hitVec);
+      }
+    else
+      {
+      vehicle.firingHelper.handleFireInput(null);
+      } 
     }
   }
 
-public MovingObjectPosition getPlayerlookTarget(EntityPlayer player, float range)
+public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float range)
   {
   Vec3 var4 = player.getPosition(0);
   Vec3 var5 = player.getLook(0);
