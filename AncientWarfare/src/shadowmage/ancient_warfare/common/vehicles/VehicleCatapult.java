@@ -75,6 +75,15 @@ public void onReloadUpdate()
   
   }
 
+
+
+@Override
+public void onUpdate()
+  {
+  super.onUpdate();
+  this.armAngle = 90- this.firingHelper.turretPitch -7;
+  }
+
 @Override
 public float getHorizontalMissileOffset()
   {
@@ -84,34 +93,33 @@ public float getHorizontalMissileOffset()
 @Override
 public float getVerticalMissileOffset()
   {
-  return 3* Trig.sinDegrees(45) + 0.4f;
+  return 3* Trig.sinDegrees(90-firingHelper.turretPitch) + 0.4f;
   }
 
 @Override
 public float getForwardsMissileOffset()
   {
-  return -3* Trig.cosDegrees(45);
+  return -3* Trig.cosDegrees(90-firingHelper.turretPitch);
   }
 
 @Override
 public float getHorizontalMissileOffsetForAim()
   {
-  // TODO Auto-generated method stub
   return 0;
   }
 
 @Override
 public float getVerticalMissileOffsetForAim()
   {
-  // TODO Auto-generated method stub
-  return 0;
+  return  3* Trig.sinDegrees(45) + 0.4f;
   }
 
 @Override
 public float getForwardsMissileOffsetForAim()
   {
-  // TODO Auto-generated method stub
-  return 0;
+  return -3* Trig.cosDegrees(45);
   }
+
+
 
 }

@@ -52,6 +52,7 @@ private static Minecraft mc = Minecraft.getMinecraft();
 
 private boolean hasMoveInput = false;
 
+private int aimInputUpdateTicks = 5;
 
 private static InputHelper INSTANCE;
 private InputHelper()
@@ -188,7 +189,7 @@ public void onTickEnd()
       ((VehicleBase)mc.thePlayer.ridingEntity).handleKeyboardMovement((byte)forwards, (byte)strafe);
       }
     } 
-  if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
+  if(!mc.isGamePaused && mc.currentScreen == null && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
     {
     updateVehicleAim();
     }
@@ -196,6 +197,12 @@ public void onTickEnd()
 
 public void updateVehicleAim()
   {
+  this.aimInputUpdateTicks--;
+  if(this.aimInputUpdateTicks>0)
+    {
+    return;
+    }
+  this.aimInputUpdateTicks = 5;
   MovingObjectPosition pos = getPlayerlookTarget(mc.thePlayer, 170.f);
   VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
   if(pos!=null)
@@ -212,22 +219,17 @@ public void handleFireAction()
   {
   if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
     {
-    MovingObjectPosition pos = getPlayerlookTarget(mc.thePlayer, 170.f);
     VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
-    if(pos!=null)
-      {
-      vehicle.firingHelper.handleFireInput(pos.hitVec);
-      }
-    else
-      {
-      vehicle.firingHelper.handleFireInput(null);
-      }    
+    vehicle.firingHelper.handleFireInput();    
     }
   }
 
 public MovingObjectPosition getPlayerlookTarget(EntityPlayer player, float range)
   {
-  return player.rayTrace(range, 0);
+  Vec3 var4 = player.getPosition(0);
+  Vec3 var5 = player.getLook(0);
+  Vec3 var6 = var4.addVector(var5.xCoord * range, var5.yCoord * range, var5.zCoord * range);
+  return player.worldObj.rayTraceBlocks(var4, var6);
   }
 
 

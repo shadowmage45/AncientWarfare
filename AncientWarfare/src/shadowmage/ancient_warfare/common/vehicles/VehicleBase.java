@@ -93,7 +93,7 @@ private ArmorStats armorStats = new ArmorStats();
 private GeneralStats generalStats = new GeneralStats();
 private UpgradeStats upgradeStats;
 private VehicleInventory inventory;
-private VehicleMovementHelper moveHelper;
+public VehicleMovementHelper moveHelper;
 public VehicleFiringHelper firingHelper;
 
 public int vehicleType = -1;
@@ -160,16 +160,38 @@ public Pos3f getMissileOffset()
   float x = this.getHorizontalMissileOffset();
   float y = this.getVerticalMissileOffset();
   float z = this.getForwardsMissileOffset();
-  float angle = Trig.toDegrees((float) Math.atan2(x, z));
+  float angle = Trig.toDegrees((float) Math.atan2(z, x));
   float len = MathHelper.sqrt_float(x*x+z*z);
   angle+= this.rotationYaw;
   
-  x = Trig.sinDegrees(-angle)*len;
-  z = Trig.cosDegrees(-angle)*len;
+  x = Trig.cosDegrees(angle)*len;
+  z = -Trig.sinDegrees(angle)*len;
   
   off.x = x;
   off.y = y;
   off.z = z;  
+  return off;
+  }
+
+public Pos3f getMissileOffsetForAim()
+  {
+  Pos3f off = new Pos3f();
+  
+  float x = this.getHorizontalMissileOffsetForAim();
+  float y = this.getVerticalMissileOffsetForAim();
+  float z = this.getForwardsMissileOffsetForAim();
+  float angle = Trig.toDegrees((float) Math.atan2(z, x));
+  float len = MathHelper.sqrt_float(x*x+z*z);
+  angle+= this.rotationYaw;
+  
+  x = Trig.cosDegrees(angle)*len;
+  z = -Trig.sinDegrees(angle)*len;
+  
+  off.x = x;
+  off.y = y;
+  off.z = z;  
+  
+//  Config.logDebug("offset for aim: "+off.toString());
   return off;
   }
 

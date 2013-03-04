@@ -137,7 +137,7 @@ public void onMovementTick()
     }
   else
     {
-    strafeAccel = strafeMotion * -0.1f;
+    strafeAccel = strafeMotion * -0.13f;
     }
   
   strafeMotion +=strafeAccel;
