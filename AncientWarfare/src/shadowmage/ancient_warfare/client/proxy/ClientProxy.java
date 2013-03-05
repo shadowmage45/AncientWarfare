@@ -30,12 +30,10 @@ import shadowmage.ancient_warfare.client.input.InputHelper;
 import shadowmage.ancient_warfare.client.input.TickHandlerClientKeyboard;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
-import shadowmage.ancient_warfare.common.missiles.MissileBase;
+import shadowmage.ancient_warfare.client.render.RenderOverlay;
 import shadowmage.ancient_warfare.common.network.PacketBase;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -45,7 +43,6 @@ public class ClientProxy extends CommonProxy
 
 public ClientProxy()
   {
-  this.inputHelper = new InputHelperClientProxy();
   }
 
 @Override
@@ -68,6 +65,7 @@ public void registerClientData()
    */
   RenderRegistry.instance().loadRenders();
   TickRegistry.registerTickHandler(new TickHandlerClientKeyboard(), Side.CLIENT);
+  TickRegistry.registerTickHandler(new RenderOverlay(), Side.CLIENT);
   
   /**
    * load keybinds and register keybind handler

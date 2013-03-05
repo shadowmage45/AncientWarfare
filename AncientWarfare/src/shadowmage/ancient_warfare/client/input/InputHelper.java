@@ -21,18 +21,20 @@
 package shadowmage.ancient_warfare.client.input;
 
 import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
 import org.lwjgl.input.Keyboard;
 
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
@@ -120,9 +122,9 @@ public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)
 
 @Override
 public EnumSet<TickType> ticks()
-  {
-  return EnumSet.of(TickType.CLIENT);
-  }
+{
+return EnumSet.of(TickType.CLIENT);
+}
 
 /**
  * AWKEYBINDS....
@@ -204,10 +206,61 @@ public void handleFireAction()
 
 public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float range)
   {
-  Vec3 var4 = player.getPosition(0);
-  Vec3 var5 = player.getLook(0);
-  Vec3 var6 = var4.addVector(var5.xCoord * range, var5.yCoord * range, var5.zCoord * range);
-  return player.worldObj.rayTraceBlocks(var4, var6);
+  Vec3 playerPos = player.getPosition(0);
+  Vec3 lookVector = player.getLook(0);
+  Vec3 endVector = playerPos.addVector(lookVector.xCoord * range, lookVector.yCoord * range, lookVector.zCoord * range);
+
+  MovingObjectPosition blockHit = player.worldObj.rayTraceBlocks(playerPos, endVector);
+  
+  float var9 = 1.f;
+  
+  float closestFound = 0.f;
+  if(blockHit!=null)
+    {
+    closestFound = (float) blockHit.hitVec.distanceTo(playerPos);
+    }
+  List possibleHitEntities = this.mc.theWorld.getEntitiesWithinAABBExcludingEntity(this.mc.renderViewEntity, this.mc.renderViewEntity.boundingBox.addCoord(lookVector.xCoord * range, lookVector.yCoord * range, lookVector.zCoord * range).expand((double)var9, (double)var9, (double)var9));
+  Iterator<Entity> it = possibleHitEntities.iterator();
+  Entity hitEntity = null;
+  Entity currentExaminingEntity = null;
+  while(it.hasNext())
+    {
+    currentExaminingEntity = it.next();
+    if(currentExaminingEntity.canBeCollidedWith())
+      {
+      float borderSize = currentExaminingEntity.getCollisionBorderSize();
+      AxisAlignedBB entBB = currentExaminingEntity.boundingBox.expand((double)borderSize, (double)borderSize, (double)borderSize);
+      MovingObjectPosition var17 = entBB.calculateIntercept(playerPos, endVector);
+
+      if (entBB.isVecInside(playerPos))
+        {
+        if (0.0D < closestFound || closestFound == 0.0D)
+          {
+          hitEntity = currentExaminingEntity;
+          closestFound = 0.0f;
+          }
+        }
+      else if (var17 != null)
+        {
+        double var18 = playerPos.distanceTo(var17.hitVec);
+
+        if (var18 < closestFound || closestFound == 0.0D)
+          {
+          hitEntity = currentExaminingEntity;
+          closestFound = (float) var18;
+          }
+        }
+      }
+    }
+  if(hitEntity!=null)
+    {
+    //Config.logDebug("entity hit!!");
+    blockHit = new MovingObjectPosition(hitEntity);
+    }
+  //get bounding box of entities between var4 and either var6 or blockHit.hitVec..
+  //    break into segments by length, check in chunks, plan for overlap?
+
+  return blockHit;
   }
 
 

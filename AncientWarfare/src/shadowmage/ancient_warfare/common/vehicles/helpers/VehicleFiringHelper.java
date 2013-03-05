@@ -41,6 +41,15 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
  */
 public class VehicleFiringHelper implements INBTTaggable
 {
+
+/**
+ * these values are updated when the client chooses an aim point, used by overlay rendering gui 
+ */
+public float clientHitRange = 0.f;
+public float clientHitPosX = 0.f;
+public float clientHitPosY = 0.f;
+public float clientHitPosZ = 0.f;
+
 /**
  * client-side values used by the riding player to check current input vs previous to see if new input packets should be sent...
  */
@@ -134,6 +143,11 @@ public void onTick()
 
 public void updateTurretPitch()
   {
+  if(!vehicle.canAimPitch())
+    {
+    this.turretDestPitch = this.turretPitch;
+    return;
+    }
   if(this.turretPitch>this.turretDestPitch)
     {
     this.turretPitch-=this.turretPitchInc;
@@ -150,6 +164,11 @@ public void updateTurretPitch()
 
 public void updateTurretRotation()
   {
+  if(!vehicle.canAimRotate())
+    {
+    this.turretDestRot = this.turretRotation;
+    return;
+    }
   //TODO
   }
 
@@ -160,7 +179,6 @@ public void startMissileLaunch()
   {
   if(!this.isFiring && this.reloadingTicks <=0)
     {
-    Config.logDebug("Initiating launch missile sequence");
     this.isFiring = true;
     }
   }
@@ -322,7 +340,8 @@ public void handleFireInput(Vec3 target)
  * @param target
  */
 public void handleAimInput(Vec3 target)
-  {    
+  {  
+  boolean updated = false;
   Pos3f offset = vehicle.getMissileOffsetForAim();
   float x = (float) vehicle.posX + offset.x;
   float y = (float) vehicle.posY + offset.y;
@@ -330,38 +349,50 @@ public void handleAimInput(Vec3 target)
   float tx = (float) (target.xCoord - x);
   float ty = (float) (target.yCoord - y);
   float tz = (float) (target.zCoord - z);
-  float range = MathHelper.sqrt_float(tx*tx+tz*tz);
-  Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, launchPowerCurrent);
+  float range = MathHelper.sqrt_float(tx*tx+tz*tz);  
   
-  Config.logDebug("input::::angle pair for hit: "+angles.toString()+" range: "+range);
-  
-  boolean updated = false;
-  if(angles.value()>=this.turretPitchMin && angles.value()<=this.turretPitchMax)
-    {
-    if(this.clientTurretPitch!=angles.value())
+  if(vehicle.canAimPitch())
+    {   
+    Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, launchPowerCurrent);    
+    Config.logDebug("input::::angle pair for hit: "+angles.toString()+" range: "+range);
+    if(angles.key().isNaN() || angles.value().isNaN())
       {
-      this.clientTurretPitch = angles.value();
-      updated = true;
+      Config.logDebug("exiting aim pitch input due to NaN params!!");      
+      }
+    else if(angles.value()>=this.turretPitchMin && angles.value()<=this.turretPitchMax)
+      {
+      if(this.clientTurretPitch!=angles.value())
+        {
+        this.clientTurretPitch = angles.value();
+        updated = true;
+        }
+      }
+    else if(angles.key()>=this.turretPitchMin && angles.key() <= this.turretPitchMax)
+      {
+      if(this.clientTurretPitch!=angles.key())
+        {
+        this.clientTurretPitch = angles.key();
+        updated = true;
+        }
       }
     }
-  else if(angles.key()>=this.turretPitchMin && angles.key() <= this.turretPitchMax)
+  
+  if(vehicle.canAimRotate())
     {
-    if(this.clientTurretPitch!=angles.key())
-      {
-      this.clientTurretPitch = angles.key();
+    float xAO = (float) (vehicle.posX - target.xCoord);  
+    float zAO = (float) (vehicle.posZ - target.zCoord);
+    float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
+    Config.logDebug("calculated yaw target: "+yaw+" vehicle current yaw: "+vehicle.rotationYaw);
+    if(yaw!=this.clientTurretYaw && yaw >=this.turretRotationMin && yaw <= this.turretRotationMax)
+      {    
+      this.clientTurretYaw = yaw;
       updated = true;
-      }
+      }  
     }
-  float xAO = (float) (vehicle.posX - target.xCoord);  
-  float zAO = (float) (vehicle.posZ - target.zCoord);
-  float yaw = Trig.toDegrees((float) Math.atan2(zAO, xAO));
-  if(yaw!=this.clientTurretYaw && yaw >=this.turretRotationMin && yaw <= this.turretRotationMax)
-    {
-    this.clientTurretYaw = yaw;
-    updated = true;
-    }  
+   
   if(updated)
     {
+    this.clientHitRange = range;
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("aim", true);
     tag.setFloat("aimPitch", this.clientTurretPitch);    
@@ -373,20 +404,42 @@ public void handleAimInput(Vec3 target)
     }
   }
 
-
 @Override
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  //TODO
+  tag.setFloat("lb", this.launchPowerBase);
+  tag.setFloat("lc", launchPowerCurrent);
+  tag.setFloat("ab", accuracyBase);
+  tag.setFloat("ac", accuracyCurrent);
+  tag.setInteger("rb", reloadTimeBase);
+  tag.setInteger("rc", reloadTimeCurrent);
+  tag.setInteger("rt", reloadingTicks);
+  tag.setFloat("tp", turretPitch);
+  tag.setFloat("tpd", turretDestPitch);
+  tag.setFloat("tr", turretRotation);
+  tag.setFloat("trd", turretDestRot);
+  tag.setFloat("trmn", turretRotationMin);
+  tag.setFloat("trmx", turretRotationMax);
   return tag;
   }
-
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  //TODO
+  this.launchPowerBase = tag.getFloat("lb");
+  this.launchPowerCurrent = tag.getFloat("lc");
+  this.accuracyBase = tag.getFloat("ab");
+  this.accuracyCurrent = tag.getFloat("ac");
+  this.reloadTimeBase = tag.getInteger("rb");
+  this.reloadTimeCurrent = tag.getInteger("rc");
+  this.reloadingTicks = tag.getInteger("rt");
+  this.turretPitch = tag.getFloat("tp");
+  this.turretDestPitch = tag.getFloat("tpd");
+  this.turretRotation = tag.getFloat("tr");
+  this.turretDestRot = tag.getFloat("trd");
+  this.turretRotationMin = tag.getFloat("trmn");
+  this.turretRotationMax = tag.getFloat("trmx");
   }
 
 public void resetUpgradeStats()

@@ -20,8 +20,17 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 
 import shadowmage.ancient_warfare.common.config.Config;
 
@@ -112,6 +121,99 @@ public static byte[] compositeByteChunks(byte[][] bytes)
     }
   
   return allBytes;
+  }
+
+
+/**
+ * Writes a compressed NBTTagCompound to the OutputStream
+ */
+public static void writeNBTTagCompound(NBTTagCompound par0NBTTagCompound, DataOutputStream par1DataOutputStream) throws IOException
+  {
+  if (par0NBTTagCompound == null)
+    {
+    par1DataOutputStream.writeShort(-1);
+    }
+  else
+    {
+    byte[] var2 = CompressedStreamTools.compress(par0NBTTagCompound);
+    par1DataOutputStream.writeShort((short)var2.length);
+    par1DataOutputStream.write(var2);
+    }
+  }
+
+/**
+ * Reads a compressed NBTTagCompound from the InputStream
+ */
+public static NBTTagCompound readNBTTagCompound(DataInputStream par0DataInputStream) throws IOException
+  {
+  short var1 = par0DataInputStream.readShort();
+  
+  if (var1 < 0)
+    {
+    return null;
+    }
+  else
+    {
+    byte[] var2 = new byte[var1];
+    par0DataInputStream.readFully(var2);
+    return CompressedStreamTools.decompress(var2);
+    }
+  }
+
+/**
+ * Writes a compressed NBTTagCompound to the OutputStream
+ */
+public static void writeNBTTagCompound(NBTTagCompound par0NBTTagCompound, ByteArrayDataOutput data)
+  {
+  if (par0NBTTagCompound == null)
+    {
+    data.writeShort(-1);
+    }
+  else
+    {
+   
+    byte[] var2;
+    try
+      {
+      var2 = CompressedStreamTools.compress(par0NBTTagCompound);
+      data.writeShort((short)var2.length);
+      data.write(var2);
+      } 
+    catch (IOException e)
+      {
+      Config.logError("Severe error writing NBTTagCompound to dataStream");
+      e.printStackTrace();
+      } 
+    }
+  }
+
+/**
+ * Reads a compressed NBTTagCompound from the InputStream
+ */
+public static NBTTagCompound readNBTTagCompound(ByteArrayDataInput data)
+  {
+  short var1 = data.readShort();
+  
+  if (var1 < 0)
+    {
+    return null;
+    }
+  else
+    {
+    byte[] var2 = new byte[var1];
+    data.readFully(var2);
+    try
+      {
+      return CompressedStreamTools.decompress(var2);
+      } 
+    catch (IOException e)
+      {
+      Config.logError("Severe error reading NBTTagCompound to dataStream");
+      e.printStackTrace();
+      }
+    }
+  NBTTagCompound tag = new NBTTagCompound();
+  return tag;
   }
 
 }

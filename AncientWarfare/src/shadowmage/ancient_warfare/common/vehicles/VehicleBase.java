@@ -33,6 +33,7 @@ import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
+import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -101,6 +102,7 @@ public VehicleBase(World par1World)
   this.moveHelper = new VehicleMovementHelper(this);
   this.ammoHelper = new VehicleAmmoHelper(this);
   this.firingHelper = new VehicleFiringHelper(this);
+  this.inventory = new VehicleInventory(this);
   float width = this.getWidth();
   float height = this.getHeight();
   this.setSize(width, height);
@@ -434,21 +436,28 @@ public boolean canBeCollidedWith()
   }
 
 @Override
+protected void entityInit()
+  {
+  }
+
+@Override
 public void writeSpawnData(ByteArrayDataOutput data)
   {
   data.writeFloat(this.vehicleHealth);
+  ByteTools.writeNBTTagCompound(upgradeHelper.getNBTTag(), data);
+  ByteTools.writeNBTTagCompound(ammoHelper.getNBTTag(), data);
+  ByteTools.writeNBTTagCompound(moveHelper.getNBTTag(), data);
+  ByteTools.writeNBTTagCompound(firingHelper.getNBTTag(), data);  
   }
 
 @Override
 public void readSpawnData(ByteArrayDataInput data)
   {
   this.vehicleHealth = data.readFloat();
-  }
-
-@Override
-protected void entityInit()
-  {
-
+  this.upgradeHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
+  this.ammoHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
+  this.moveHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
+  this.firingHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   }
 
 @Override

@@ -31,8 +31,6 @@ import cpw.mods.fml.common.network.Player;
 
 public class CommonProxy
 {
-public InputHelperCommonProxy inputHelper = new InputHelperCommonProxy();
-
 
 public EntityPlayer getClientPlayer()
   {

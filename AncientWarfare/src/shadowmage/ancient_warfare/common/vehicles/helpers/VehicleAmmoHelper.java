@@ -43,7 +43,7 @@ private VehicleBase vehicle;
 public int currentAmmoType = 0;
 
 private List<VehicleAmmoEntry> ammoEntries = new ArrayList<VehicleAmmoEntry>();
-private HashMap<Integer, IAmmoType> ammoTypes = new HashMap<Integer, IAmmoType>();//local ammo type to global entry
+private HashMap<Integer, VehicleAmmoEntry> ammoTypes = new HashMap<Integer, VehicleAmmoEntry>();//local ammo type to global entry
 
 public VehicleAmmoHelper(VehicleBase vehicle)
   {
@@ -52,8 +52,9 @@ public VehicleAmmoHelper(VehicleBase vehicle)
 
 public void addUseableAmmo(IAmmoType ammo)
   {
-  this.ammoEntries.add(new VehicleAmmoEntry(ammo));
-  this.ammoTypes.put(this.ammoEntries.size()-1, ammo);
+  VehicleAmmoEntry ent = new VehicleAmmoEntry(ammo);
+  this.ammoEntries.add(ent);
+  this.ammoTypes.put(ammo.getAmmoType(), ent);
   }
 
 /**
@@ -118,8 +119,16 @@ public void handleAmmoUpdatePacket(NBTTagCompound tag)
   }
 
 public IAmmoType getCurrentAmmoType()
-  {
-  return this.ammoTypes.get(currentAmmoType);
+  {  
+  if(currentAmmoType<this.ammoEntries.size() && currentAmmoType>=0)
+    {
+    VehicleAmmoEntry entry = this.ammoEntries.get(currentAmmoType);
+    if(entry!=null)
+      {
+      return entry.baseAmmoType;
+      }
+    }
+  return null;
   }
 
 public MissileBase getMissile(float x, float y, float z, float mx, float my, float mz)
@@ -142,6 +151,7 @@ public MissileBase getMissile2(float x, float y, float z, float yaw, float pitch
     {
     MissileBase missile = new MissileBase(vehicle.worldObj);   
     missile.setMissileParams2(ammo, x, y, z, yaw, pitch, velocity);
+    missile.setMissileCallback(vehicle);
     return missile;
     }
   return null;
@@ -150,15 +160,41 @@ public MissileBase getMissile2(float x, float y, float z, float yaw, float pitch
 @Override
 public NBTTagCompound getNBTTag()
   {
-  // TODO Auto-generated method stub
-  return null;
+  NBTTagCompound tag = new NBTTagCompound();
+  
+  tag.setInteger("am", currentAmmoType);
+  
+  NBTTagList tagList = new NBTTagList();
+  for(VehicleAmmoEntry ent : this.ammoEntries)
+    {
+    NBTTagCompound entryTag = new NBTTagCompound();
+    tag.setInteger("num", ent.baseAmmoType.getAmmoType());
+    tag.setInteger("cnt", ent.ammoCount);
+    tagList.appendTag(entryTag);
+    }  
+  tag.setTag("list", tagList);
+  return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-  
+  for(VehicleAmmoEntry ent : this.ammoEntries)
+    {
+    ent.ammoCount = 0;
+    } 
+  this.currentAmmoType = tag.getInteger("am");
+  NBTTagList tagList = tag.getTagList("list");
+  for(int i = 0; i < tagList.tagCount(); i++)
+    {
+    NBTTagCompound entryTag = (NBTTagCompound) tagList.tagAt(i);
+    int num = entryTag.getInteger("num");
+    int cnt = entryTag.getInteger("cnt");
+    if(this.ammoTypes.containsKey(num))
+      {
+      this.ammoTypes.get(num).ammoCount = cnt;
+      }
+    }
   }
 
 }

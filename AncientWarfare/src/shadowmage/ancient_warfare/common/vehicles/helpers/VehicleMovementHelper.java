@@ -216,15 +216,32 @@ public void resetUpgradeStats()
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  // TODO Auto-generated method stub
+  tag.setFloat("sb", maxStrafeBase);
+  tag.setFloat("sc", maxStrafeCurrent);
+  tag.setFloat("fb", maxSpeedBase);
+  tag.setFloat("fc", maxSpeedCurrent);
+  tag.setByte("s", strafeInput);
+  tag.setByte("f", forwardInput);
+  tag.setFloat("ms", strafeMotion);
+  tag.setFloat("sa", strafeAccel);
+  tag.setFloat("mf", forwardMotion);
+  tag.setFloat("fa", forwardAccel);
   return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-  
+  this.maxStrafeBase = tag.getFloat("sb");
+  this.maxStrafeCurrent = tag.getFloat("sc");
+  this.maxSpeedBase = tag.getFloat("fb");
+  this.maxSpeedCurrent = tag.getFloat("fc");
+  this.strafeInput = tag.getByte("s");
+  this.forwardInput = tag.getByte("f");
+  this.strafeMotion = tag.getFloat("ms");
+  this.strafeAccel = tag.getFloat("sa");
+  this.forwardMotion = tag.getFloat("mf");
+  this.forwardAccel = tag.getFloat("fa");
   }
 
 }

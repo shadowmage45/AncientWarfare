@@ -134,15 +134,25 @@ public void addValidUpgrade(String name)
 @Override
 public NBTTagCompound getNBTTag()
   {
-  // TODO Auto-generated method stub
-  return null;
+  NBTTagCompound tag = new NBTTagCompound();
+  int[] ints = new int[this.upgrades.size()];
+  for(int i = 0; i < this.upgrades.size(); i++)
+    {
+    ints[i]=this.upgrades.get(i).getGlobalUpgradeNum();
+    }
+  tag.setIntArray("ints", ints);
+  return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-  
+  this.upgrades.clear();
+  int[] ints = tag.getIntArray("ints");
+  for(int i = 0; i < ints.length; i++)
+    {
+    this.upgrades.add(VehicleUpgradeRegistry.instance().getUpgrade(ints[i]));
+    }  
   }
 
 }
