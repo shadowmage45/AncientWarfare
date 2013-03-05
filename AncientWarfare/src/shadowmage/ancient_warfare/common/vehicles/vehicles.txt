@@ -15,3 +15,15 @@ stat = base stat taken from VehicleType for the vehicle
 stat *= materialModifier for that stat, if any (generally percentage based)   
 stat += any modifiers from upgrades for that stat, if any
 return stat;
+
+
+
+
+power using vehicles:
+catapult
+trebuchet
+
+pitch using vehicles:
+hwacha
+ballista/turret
+cannon

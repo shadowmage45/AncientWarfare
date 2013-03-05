@@ -11,9 +11,12 @@ GENERAL
 * move world-gen base config from AncientWarfare.cfg into /AWConfig/AWWorldGen.cfg
 
 VEHICLES   
+* re-implement auto-aiming to include vehicles that use power instead of pitch
+* implement vehicle weighting system (should it include upgrades, and ammo in bay)
+* tie acceleration to weight
 * figure out accuracy calculation methods (when to apply accuracy)(probably apply it to the output angle and yaw when spawning a missile)
 * upgrade system
-* implement double-texturing system (overlay second texture on top of first, for armor/imbues)
+* implement armor system
 * vehicle research system
     --5 tiers of material
         --materials determine weight(speed/responsiveness), base hp and firepower

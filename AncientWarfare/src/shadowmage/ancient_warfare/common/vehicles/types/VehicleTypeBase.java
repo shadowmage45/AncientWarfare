@@ -26,6 +26,7 @@ import java.util.List;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
+import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 
 /**
  * basically, a first-tier data construct class describing a vehicle.  Each vehicle will
@@ -46,7 +47,7 @@ public float height = 2;
 public float weight = 1000;//kg
 
 public int vehicleType = 0;
-public int vehicleMaterial = 0;
+public IVehicleMaterial vehicleMaterial = null;
 public boolean isMountable = false;
 public boolean isDrivable = false;
 public boolean isCombatEngine = false;
@@ -71,6 +72,8 @@ public float turretRotationMax;
 public float baseMissileVelocityMax;
 public float baseHealth = 100;
 
+public float accuracy = 1.f;
+
 public List<IAmmoType> validAmmoTypes = new ArrayList<IAmmoType>();
 public List<VehicleUpgrade> validUpgrades = new ArrayList<VehicleUpgrade>();
 
@@ -86,7 +89,7 @@ public int getGlobalVehicleType()
   }
 
 @Override
-public int getMaterialType()
+public IVehicleMaterial getMaterialType()
   {
   return this.vehicleMaterial;
   }
@@ -218,7 +221,7 @@ public float getBaseWeight()
   }
 
 @Override
-public float getTurretRotationAmount()
+public float getBaseTurretRotationAmount()
   {
   return this.turretRotationMax;
   }
@@ -239,6 +242,12 @@ public boolean isAmmoValidForInventory(IAmmoType ammo)
 public boolean isUpgradeValid(VehicleUpgrade upgrade)
   {
   return this.validUpgrades.contains(upgrade);
+  }
+
+@Override
+public float getBaseAccuracy()
+  {
+  return this.accuracy;
   }
 
 }

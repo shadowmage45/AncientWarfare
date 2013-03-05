@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles;
 
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
+import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 
 public interface IVehicleType
 {
@@ -34,7 +35,7 @@ public abstract float getBaseHealth();//base max health, before any materials or
 public abstract String getTextureForMaterialLevel(int level);//get the texture for the input material quality level
 
 public abstract int getGlobalVehicleType();//by number, registry num...
-public abstract int getMaterialType();//wood, iron...?? material type will apply adjustments to base stats, before upgrades/etc are applied
+public abstract IVehicleMaterial getMaterialType();//wood, iron...?? material type will apply adjustments to base stats, before upgrades/etc are applied
 
 public abstract boolean isMountable();//should allow mounting
 public abstract boolean isDrivable();//should check movement input params?
@@ -56,8 +57,10 @@ public abstract float getBaseStrafeSpeed();
 
 public abstract float getBasePitchMin();
 public abstract float getBasePitchMax();
-public abstract float getTurretRotationAmount();//max rotation from a center point. >=180 means the turret can spin around completely
+public abstract float getBaseTurretRotationAmount();//max rotation from a center point. >=180 means the turret can spin around completely
 public abstract float getBaseMissileVelocityMax();//base missile velocity, before materials or upgrades
+
+public abstract float getBaseAccuracy();
 
 public abstract boolean isAmmoValidForInventory(IAmmoType ammo);
 public abstract boolean isUpgradeValid(VehicleUpgrade upgrade);
