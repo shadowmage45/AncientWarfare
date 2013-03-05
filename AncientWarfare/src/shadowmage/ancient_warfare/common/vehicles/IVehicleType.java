@@ -20,15 +20,28 @@
  */
 package shadowmage.ancient_warfare.common.vehicles;
 
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
+
 public interface IVehicleType
 {
 
-public abstract boolean isMountable();
-public abstract boolean isDrivable();
-public abstract boolean isCombatEngine();
-public abstract boolean canAdjustYaw();
-public abstract boolean canAdjustPitch();
-public abstract boolean canAdjustPower();
+public abstract float getWidth();
+public abstract float getHeight();
+public abstract float getBaseWeight();
+public abstract float getBaseHealth();//base max health, before any materials or upgrades adjustments
+
+public abstract String getTextureForMaterialLevel(int level);//get the texture for the input material quality level
+
+public abstract int getGlobalVehicleType();//by number, registry num...
+public abstract int getMaterialType();//wood, iron...?? material type will apply adjustments to base stats, before upgrades/etc are applied
+
+public abstract boolean isMountable();//should allow mounting
+public abstract boolean isDrivable();//should check movement input params?
+public abstract boolean isCombatEngine();//should check non-movement input params?
+public abstract boolean canAdjustYaw();//can aim yaw be adjusted independently of vehicle yaw?
+public abstract boolean canAdjustPitch();//can aim pitch be adjusted? (should be EITHER pitch OR power)
+public abstract boolean canAdjustPower();//can shot velocity be adjusted? (should be EITHER pitch OR power)
 
 public abstract float getMissileForwardsOffset();
 public abstract float getMissileHorizontalOffset();
@@ -37,6 +50,17 @@ public abstract float getMissileVerticalOffset();
 public abstract float getRiderForwardsOffset();
 public abstract float getRiderHorizontalOffset();
 public abstract float getRiderVerticalOffest();
+
+public abstract float getBaseForwardSpeed();
+public abstract float getBaseStrafeSpeed();
+
+public abstract float getBasePitchMin();
+public abstract float getBasePitchMax();
+public abstract float getTurretRotationAmount();//max rotation from a center point. >=180 means the turret can spin around completely
+public abstract float getBaseMissileVelocityMax();//base missile velocity, before materials or upgrades
+
+public abstract boolean isAmmoValidForInventory(IAmmoType ammo);
+public abstract boolean isUpgradeValid(VehicleUpgrade upgrade);
 
 
 

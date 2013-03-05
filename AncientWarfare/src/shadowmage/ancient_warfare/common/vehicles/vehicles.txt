@@ -1,0 +1,17 @@
+Vehicles:
+
+IVehicleType -- basic interface for what is necessary to describe a vehicle
+VehicleTypeBase -- base class implementing above interface.
+        -- there will should be one VehicleTypeBase subclass for each vehicle description
+VehicleBase -- the base entity that all vehicles will use.  it will implement most methods (through helpers for many)
+    to handle the basics of vehicles (input, movement, updates).  The entity class will also handle the animations
+    that will be applied to the model.
+    
+A vehicleType may be used in multiple Vehicle entity classes, provided they are similar enough (same model, very similar performance, same ammo/upgrades) 
+    
+    
+Vehicle stats will be calculated thusly:
+stat = base stat taken from VehicleType for the vehicle
+stat *= materialModifier for that stat, if any (generally percentage based)   
+stat += any modifiers from upgrades for that stat, if any
+return stat;

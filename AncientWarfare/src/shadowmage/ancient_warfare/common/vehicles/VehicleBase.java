@@ -33,6 +33,7 @@ import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
+import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
@@ -51,21 +52,24 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public abstract class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback
 {
+public int vehicleMaterialLevel = 0;
 
-public static final int CATAPULT = 0;
-public static final int BALLISTA = 1;
-public static final int TREBUCHET = 2;
-public static final int RAM = 3;
-public static final int HWACHA = 4;
-public static final int CHESTCART = 5;
-public static final int BALLISTA_TURRET = 6;
-
-public float vehicleMaxHealthBase = 100;
+/**
+ * these are the current max stats.  set from
+ */
 public float vehicleMaxHealth = 100;
 public float vehicleHealth = 100;
 
+public float speedForwardMax;
+public float speedStrafeMax;
 
+public float turretRotationHome;
+public float turretRotationMax;
 
+public float turretPitchMin;
+public float turretPitchMax;
+
+public float missileVelocityMax;
 
 /**
  * set by move helper
@@ -73,15 +77,9 @@ public float vehicleHealth = 100;
 public float wheelRotation = 0.f;
 public float wheelRotationPrev = 0.f;
 
+
+
 private boolean isRidden = false;
-
-public String texture = "";
-
-/**
- * vehicle pathfinding, used by soldiers when they are riding the vehicle
- * also will be used for player set waypoints
- */
-public EntityPathfinder navigator;
 
 /**
  * complex stat tracking helpers, move, ammo, upgrades, general stats
@@ -91,8 +89,9 @@ public VehicleUpgradeHelper upgradeHelper;
 public VehicleMovementHelper moveHelper;
 public VehicleFiringHelper firingHelper;
 public VehicleInventory inventory;
+public EntityPathfinder navigator;
 
-public int vehicleType = -1;
+public IVehicleType vehicleType = VehicleRegistry.DUMMY_VEHICLE;//set to dummy vehicle so it is never null...
 
 public VehicleBase(World par1World)
   {
@@ -102,70 +101,83 @@ public VehicleBase(World par1World)
   this.moveHelper = new VehicleMovementHelper(this);
   this.ammoHelper = new VehicleAmmoHelper(this);
   this.firingHelper = new VehicleFiringHelper(this);
-  this.inventory = new VehicleInventory(this);
-  float width = this.getWidth();
-  float height = this.getHeight();
-  this.setSize(width, height);
-  this.yOffset = height/2.f;  
+  this.inventory = new VehicleInventory(this);  
   }
 
-public abstract float getHeight();
-public abstract float getWidth();
-public abstract float getHorizontalMissileOffset();//x axis
-public abstract float getVerticalMissileOffset();
-public abstract float getForwardsMissileOffset();//z axis
+public void setVehicleType(IVehicleType vehicle, int materialLevel)
+  {
+  this.vehicleType = vehicle;
+  float width = vehicleType.getWidth();
+  float height = vehicleType.getHeight();
+  this.setSize(width, height);
+  this.yOffset = height/2.f; 
+  /**
+   * TODO set all base values to those from vehicleType, adjusted for material
+   */
+  }
 
-public abstract float getHorizontalMissileOffsetForAim();
-public abstract float getVerticalMissileOffsetForAim();
-public abstract float getForwardsMissileOffsetForAim();
+public float getHorizontalMissileOffset(float pitch, float yaw)
+  {
+  return this.vehicleType.getMissileHorizontalOffset();
+  }
+
+public float getVerticalMissileOffset(float pitch, float yaw)
+  {
+  return this.vehicleType.getMissileVerticalOffset();
+  }
+
+public float getForwardsMissileOffset(float pitch, float yaw)
+  {
+  return this.vehicleType.getMissileForwardsOffset();
+  }
 
 public boolean isAimable()
   {
-  return true;
+  return vehicleType.isCombatEngine();
   }
 
 public boolean canAimRotate()
   {
-  return false;
+  return vehicleType.canAdjustYaw();
   }
 
 public boolean canAimPitch()
   {
-  return true;
+  return vehicleType.canAdjustPitch();
   }
 
 public boolean isDrivable()
   {
-  return true;
+  return vehicleType.isDrivable();
   }
 
 public boolean isMountable()
   {
-  return true;
+  return vehicleType.isMountable();
   }
 
 public float getRiderForwardOffset()
   {
-  return 1.0f;  
+  return vehicleType.getRiderForwardsOffset();  
   }
 
 public float getRiderVerticalOffset()
   {
-  return 0.8f;
+  return vehicleType.getRiderVerticalOffest();
   }
 
 public float getRiderHorizontalOffset()
   {
-  return 0.f;
+  return vehicleType.getRiderHorizontalOffset();
   }
 
 public Pos3f getMissileOffset()
   {
   Pos3f off = new Pos3f();
   
-  float x = this.getHorizontalMissileOffset();
-  float y = this.getVerticalMissileOffset();
-  float z = this.getForwardsMissileOffset();
+  float x = this.getHorizontalMissileOffset(this.firingHelper.turretPitch, this.firingHelper.turretRotation);
+  float y = this.getVerticalMissileOffset(this.firingHelper.turretPitch, this.firingHelper.turretRotation);
+  float z = this.getForwardsMissileOffset(this.firingHelper.turretPitch, this.firingHelper.turretRotation);
   float angle = Trig.toDegrees((float) Math.atan2(z, x));
   float len = MathHelper.sqrt_float(x*x+z*z);
   angle+= this.rotationYaw;
@@ -181,52 +193,7 @@ public Pos3f getMissileOffset()
 
 public Pos3f getMissileOffsetForAim()
   {
-  Pos3f off = new Pos3f();
-  
-  float x = this.getHorizontalMissileOffsetForAim();
-  float y = this.getVerticalMissileOffsetForAim();
-  float z = this.getForwardsMissileOffsetForAim();
-  float angle = Trig.toDegrees((float) Math.atan2(z, x));
-  float len = MathHelper.sqrt_float(x*x+z*z);
-  angle+= this.rotationYaw;
-  
-  x = Trig.cosDegrees(angle)*len;
-  z = -Trig.sinDegrees(angle)*len;
-  
-  off.x = x;
-  off.y = y;
-  off.z = z;  
-  
-//  Config.logDebug("offset for aim: "+off.toString());
-  return off;
-  }
-
-public void debugLaunch()
-  {
-//  if(this.riddenByEntity!=null)
-//    {
-//    EntityPlayer player = (EntityPlayer)this.riddenByEntity;
-//
-//    Vec3 hit = getPlayerLookHit(player, 170);
-//    double x = hit.xCoord - this.posX;
-//    double y = hit.yCoord - this.posY;
-//    double z = hit.zCoord - this.posZ;
-//    
-//    float len = MathHelper.sqrt_float((float) (x*x+y*y+z*z));
-//    
-//    Pair<Float, Float> angles = Trig.getLaunchAngleToHit((float)x, (float)y, (float)z, 20, 9.81f);
-//    Config.logDebug("player look hitPos: "+hit.xCoord +","+ hit.yCoord +","+ hit.zCoord);
-//    Config.logDebug("toHit playerLook: " + angles.toString() + " for distance: "+len);
-//    
-//    
-//    //Config.logDebug("trajectory: "+Trig.getLaunchAngleToHit(100, 0, 20, 9.81f));
-//    MissileBase missile = this.ammoHelper.getMissile2((float)posX, (float)posY+5, (float)posZ, this.rotationYaw, angles.key(), 20.f);
-//    if(missile!=null)
-//      {
-//      this.worldObj.spawnEntityInWorld(missile);
-//      }
-//    }
-  
+  return getMissileOffset();  
   }
 
 /**
@@ -357,7 +324,7 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
 @Override
 public String getTexture()
   {
-  return texture;
+  return vehicleType.getTextureForMaterialLevel(vehicleMaterialLevel);
   }
 
 @Override

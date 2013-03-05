@@ -39,9 +39,7 @@ public float crankSpeed = 0.f;
 public VehicleCatapult(World par1World)
   {
   super(par1World);
-  this.vehicleType = CATAPULT;
   this.yOffset = 0;
-  this.texture = "foo.png";
   this.ammoHelper.addUseableAmmo(AmmoRegistry.ammoArrow);
   }
 
@@ -49,18 +47,6 @@ public VehicleCatapult(World par1World)
 public boolean isMountable()
   {
   return true;
-  }
-
-@Override
-public float getHeight()
-  {
-  return 2.f;
-  }
-
-@Override
-public float getWidth()
-  {
-  return 2.f;
   }
 
 @Override
@@ -83,41 +69,21 @@ public void onUpdate()
   }
 
 @Override
-public float getHorizontalMissileOffset()
+public float getHorizontalMissileOffset(float pitch, float yaw)
   {
   return 0;
   }
 
 @Override
-public float getVerticalMissileOffset()
+public float getVerticalMissileOffset(float pitch, float yaw)
   {
-  return 3* Trig.sinDegrees(90-firingHelper.turretPitch) + 0.4f;
+  return 3* Trig.sinDegrees(90-pitch) + 0.4f;
   }
 
 @Override
-public float getForwardsMissileOffset()
+public float getForwardsMissileOffset(float pitch, float yaw)
   {
-  return -3* Trig.cosDegrees(90-firingHelper.turretPitch);
+  return -3* Trig.cosDegrees(90-pitch);
   }
-
-@Override
-public float getHorizontalMissileOffsetForAim()
-  {
-  return 0;
-  }
-
-@Override
-public float getVerticalMissileOffsetForAim()
-  {
-  return  3* Trig.sinDegrees(45) + 0.4f;
-  }
-
-@Override
-public float getForwardsMissileOffsetForAim()
-  {
-  return -3* Trig.cosDegrees(45);
-  }
-
-
 
 }

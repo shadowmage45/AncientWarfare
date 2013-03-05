@@ -26,15 +26,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
-import cpw.mods.fml.common.registry.EntityRegistry;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBase;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapult;
 
 public class VehicleRegistry
 {
 
-private HashMap<Integer, Class <? extends VehicleBase>> vehicleTypes = new HashMap<Integer, Class <? extends VehicleBase>>();
+private HashMap<Integer, IVehicleType> vehicleTypes = new HashMap<Integer, IVehicleType>();
+private HashMap<IVehicleType, Class <? extends VehicleBase>> vehicleClasses = new HashMap<IVehicleType, Class<? extends VehicleBase>>();
+
+public static final IVehicleType DUMMY_VEHICLE = new VehicleTypeBase(-1);
+public static IVehicleType CATAPULT = new VehicleTypeCatapult(0);
 
 private VehicleRegistry(){}
 private static VehicleRegistry INSTANCE;
@@ -49,13 +54,14 @@ public static VehicleRegistry instance()
  */
 public void registerVehicles()
   {
-  this.registerVehicle(VehicleCatapult.class, "AW_Catapult", 0);
+  this.registerVehicle(VehicleCatapult.class, "AW_Catapult", CATAPULT);
   }
 
-public void registerVehicle(Class <? extends VehicleBase> clz, String entName, int vehicleType)
+public void registerVehicle(Class <? extends VehicleBase> clz, String entName, IVehicleType type)
   {
   AWEntityRegistry.registerEntity(clz, entName, 130, 3, false);
-  this.vehicleTypes.put(vehicleType, clz);
+  this.vehicleTypes.put(type.getGlobalVehicleType(), type);
+  this.vehicleClasses.put(type, clz);
   }
 
 public VehicleBase getVehicleForType(World world, int type)
@@ -64,7 +70,7 @@ public VehicleBase getVehicleForType(World world, int type)
     {
     try
       {
-      return this.vehicleTypes.get(type).getDeclaredConstructor(World.class).newInstance(world);
+      return this.vehicleClasses.get(this.vehicleTypes.get(type)).getDeclaredConstructor(World.class).newInstance(world);
       } 
     catch (InstantiationException e)
       {
