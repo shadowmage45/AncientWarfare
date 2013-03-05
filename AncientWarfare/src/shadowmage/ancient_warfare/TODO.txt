@@ -3,6 +3,8 @@ read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
 http://gafferongames.com/networking-for-game-programmers/what-every-programmer-needs-to-know-about-game-networking/
 http://en.wikipedia.org/wiki/Trajectory_of_a_projectile
+http://gamedev.stackexchange.com/questions/17467/calculating-velocity-needed-to-hit-target-in-parabolic-arc
+http://math.stackexchange.com/questions/150242/teenager-solves-newton-dynamics-problem-where-is-the-paper
 
 GENERAL
 * add basic GUI tooltip functionality -- GuiTooltip class (int x, int y, int w, int h, List<String> info)
@@ -15,14 +17,17 @@ VEHICLES
 * vehicle research system
     --5 tiers of material
         --materials determine weight(speed/responsiveness), base hp and firepower
-    --3 types of resistance additives
-        --imbues determine fire, explosive, and general damage resistances
-    
+            --rough rood (60% hp, 80%speed, 60% damage)
+            --treated wood (100 % hp, 100% speed, 100% damage)
+            --iron banded wood (110%hp, 95% speed, 110% damage)
+            --iron core beams (145%hp, 70% speed, 130% damage) 
+            --iron beams (200% hp, 50% speed, 175% damage)
+               
             
 AMMO TYPES 
-* add arrow persistent entity coding
-* fix rendering of arrows (rotation goes all screwy at some angles, spins)            
-* fix arrow model to use point of head as its position point
+* fix hit point of persistent arrows (they seem to use one of only a few hit-points on the block)
+* fix rendering of arrows (rotation goes all screwy at some angles, spins) 
+* fix load/save of persistent arrows (they go vertical upon reload and fall to the ground)
 * import stone ammo model
 * create more ammo types
 
@@ -273,4 +278,6 @@ public static MyWorldData forWorld(World world)
 * more work on siege-engine aiming.  Mostly worked out, need to flesh out vehicles more fully.
 * vehicle upgrades onInventoryChanged send upgradeNumbersList to tracking clients and call updateUpgradeStats
 * add vehicle ammo count updating    
-* NBT save/load stuff for firingHelper, moveHelper, ammoHelper            
+* NBT save/load stuff for firingHelper, moveHelper, ammoHelper             
+* fix arrow model to use point of head as its position point         
+* add arrow persistent entity coding
