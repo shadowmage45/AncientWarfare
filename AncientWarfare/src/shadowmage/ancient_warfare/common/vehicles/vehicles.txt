@@ -19,11 +19,12 @@ return stat;
 
 
 
-power using vehicles:
+power using vehicles (use power to determine shot range): 
 catapult
 trebuchet
 
-pitch using vehicles:
+
+pitch using vehicles (use pitch to determine shot range):
 hwacha
 ballista/turret
 cannon
