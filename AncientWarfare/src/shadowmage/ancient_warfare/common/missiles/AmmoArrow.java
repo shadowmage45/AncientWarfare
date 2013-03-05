@@ -76,7 +76,7 @@ public boolean isRocket()
 @Override
 public boolean isPersistent()
   {
-  return false;
+  return true;
   }
 
 @Override

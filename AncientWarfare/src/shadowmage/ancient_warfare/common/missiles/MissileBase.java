@@ -29,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
@@ -47,6 +48,8 @@ IAmmoType ammoType = null;
 IMissileHitCallback shooter = null;
 public int missileType = 0;
 public float currentGrav = 0.f;
+
+public boolean inGround = false;
 
 /**
  * @param par1World
@@ -125,39 +128,47 @@ public void onUpdate()
   this.onMovementTick();
   }
 
-
-int tickNum = 0;
-
 public void onMovementTick()
   {
-  
-  //this.currentGrav += ;
-  this.motionY -= this.ammoType.getGravityFactor();
-  
-  if(!this.worldObj.isRemote)
+  if(!this.inGround)
     {
-    //Config.logDebug("tickNum: "+tickNum+" :: "+motionY+" :: "+currentGrav);
-    tickNum++;
-    }
-  
-  if(this.motionX != 0 || this.motionY != 0 || this.motionZ != 0)
-    {
-    this.prevPosX = this.posX;
-    this.prevPosY = this.posY;
-    this.prevPosZ = this.posZ;
-    this.prevRotationPitch = this.rotationPitch;
-    this.prevRotationYaw = this.rotationYaw;
-    
-    this.posX += this.motionX;
-    this.posY += this.motionY;
-    this.posZ += this.motionZ;
-    
-    this.onUpdateArrowRotation();
-//    float radAng = (float) Math.atan2(motionZ, motionX);
-//    this.rotationYaw = Trig.toDegrees(radAng) - 90;
-//    
-//    float velH = (float) Math.sqrt(motionX*motionX + motionZ*motionZ);//the X in the pitch setting..
-//    this.rotationPitch = Trig.toDegrees((float) Math.atan2(motionY, velH));     
+    this.motionY -= this.ammoType.getGravityFactor();
+    if(this.motionX != 0 || this.motionY != 0 || this.motionZ != 0)
+      {
+      this.prevPosX = this.posX;
+      this.prevPosY = this.posY;
+      this.prevPosZ = this.posZ;
+      this.prevRotationPitch = this.rotationPitch;
+      this.prevRotationYaw = this.rotationYaw;
+      this.posX += this.motionX;
+      this.posY += this.motionY;
+      this.posZ += this.motionZ;
+      this.onUpdateArrowRotation();
+      
+      Vec3 pos = Vec3.createVectorHelper(posX, posY, posZ);
+      Vec3 move = Vec3.createVectorHelper(posX+motionX, posY+motionY, posZ+motionZ);
+      
+      MovingObjectPosition blockHit = worldObj.rayTraceBlocks(pos, move);
+      if(blockHit!=null)
+        { 
+        Config.logDebug("setting in ground");
+        Config.logDebug("hitVec: "+blockHit.hitVec.toString());
+        this.inGround = true;
+        this.posX = blockHit.hitVec.xCoord;
+        this.posY = blockHit.hitVec.yCoord;
+        this.posZ = blockHit.hitVec.zCoord;
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
+        this.motionX = 0;
+        this.motionY = 0;
+        this.motionZ = 0;
+        if(!this.ammoType.isPersistent() && !this.worldObj.isRemote)
+          {
+          this.setDead();
+          }
+        } 
+      }
     }
   }
 

@@ -10,7 +10,6 @@ GENERAL
 
 VEHICLES   
 * figure out accuracy calculation methods (when to apply accuracy)(probably apply it to the output angle and yaw when spawning a missile)
-* NBT save/load stuff for firingHelper, moveHelper, ammoHelper    
 * upgrade system
 * implement double-texturing system (overlay second texture on top of first, for armor/imbues)
 * vehicle research system
@@ -273,4 +272,5 @@ public static MyWorldData forWorld(World world)
 /********** 03-04-13 **********/
 * more work on siege-engine aiming.  Mostly worked out, need to flesh out vehicles more fully.
 * vehicle upgrades onInventoryChanged send upgradeNumbersList to tracking clients and call updateUpgradeStats
-* add vehicle ammo count updating            
+* add vehicle ammo count updating    
+* NBT save/load stuff for firingHelper, moveHelper, ammoHelper            

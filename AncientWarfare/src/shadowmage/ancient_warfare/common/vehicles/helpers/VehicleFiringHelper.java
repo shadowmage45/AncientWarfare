@@ -77,7 +77,7 @@ public float turretPitchInc = 1.f;
  * in meters/second
  */
 public float launchPowerBase = 31.321f;//the necessary speed to go 100m at near 45' angle(s) at 0 launch height
-public float launchPowerCurrent = launchPowerBase * 0.65f;
+public float launchPowerCurrent = launchPowerBase * 0.4f;
 
 
 /**
