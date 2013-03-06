@@ -38,11 +38,7 @@ private VehicleBase vehicle;
 private byte forwardInput = 0;
 private byte strafeInput = 0;
 
-public float maxSpeedBase = 0.8f;
-public float maxSpeedCurrent = 0.8f;
 
-public float maxStrafeBase = 2.0f;
-public float maxStrafeCurrent = 2.0f;
 
 private float forwardAccel = 0;
 private float strafeAccel = 0;
@@ -122,7 +118,7 @@ public void onMovementTick()
   {
   if(forwardInput!=0)
     {
-    forwardAccel = forwardInput * 0.03f * (this.maxSpeedCurrent - MathHelper.abs(forwardMotion));
+    forwardAccel = forwardInput * 0.03f * (vehicle.maxForwardSpeedCurrent - MathHelper.abs(forwardMotion));
     if(forwardInput<0)
       {
       forwardAccel *= 0.6f;
@@ -134,7 +130,7 @@ public void onMovementTick()
     }
   if(strafeInput!=0)
     {
-    strafeAccel = -strafeInput * 0.06f * (this.maxStrafeCurrent-MathHelper.abs(strafeMotion));
+    strafeAccel = -strafeInput * 0.06f * (vehicle.maxStrafeSpeedCurrent-MathHelper.abs(strafeMotion));
     }
   else
     {
@@ -147,27 +143,27 @@ public void onMovementTick()
   float absFor = MathHelper.abs(forwardMotion);
   float absStr = MathHelper.abs(strafeMotion);
     
-  if(forwardInput ==1 && absFor > maxSpeedCurrent)
+  if(forwardInput ==1 && absFor > vehicle.maxForwardSpeedCurrent)
     {
-    forwardMotion = maxSpeedCurrent;
+    forwardMotion = vehicle.maxForwardSpeedCurrent;
     }
-  else if(forwardInput == -1 && absFor > maxSpeedCurrent * 0.6f)
+  else if(forwardInput == -1 && absFor > vehicle.maxForwardSpeedCurrent * 0.6f)
     {
-    forwardMotion = -maxSpeedCurrent * 0.6f;
+    forwardMotion = -vehicle.maxForwardSpeedCurrent * 0.6f;
     }
   else if(absFor <= 0.02f && forwardInput == 0)
     {
     forwardMotion = 0;
     }
-  if(absStr > maxStrafeCurrent)
+  if(absStr > vehicle.maxStrafeSpeedCurrent)
     {
     if(strafeMotion>0)
       {
-      strafeMotion = maxStrafeCurrent;
+      strafeMotion = vehicle.maxStrafeSpeedCurrent;
       }
     else
       {
-      strafeMotion = -maxStrafeCurrent;
+      strafeMotion = -vehicle.maxStrafeSpeedCurrent;
       }     
     }
   else if(absStr <= 0.2f && strafeInput == 0)
@@ -208,18 +204,13 @@ public void clearInputFromDismount()
 
 public void resetUpgradeStats()
   {
-  this.maxStrafeCurrent = this.maxStrafeBase;
-  this.maxSpeedCurrent = this.maxSpeedBase;
+ 
   }
 
 @Override
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setFloat("sb", maxStrafeBase);
-  tag.setFloat("sc", maxStrafeCurrent);
-  tag.setFloat("fb", maxSpeedBase);
-  tag.setFloat("fc", maxSpeedCurrent);
   tag.setByte("s", strafeInput);
   tag.setByte("f", forwardInput);
   tag.setFloat("ms", strafeMotion);
@@ -231,11 +222,7 @@ public NBTTagCompound getNBTTag()
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
-  {
-  this.maxStrafeBase = tag.getFloat("sb");
-  this.maxStrafeCurrent = tag.getFloat("sc");
-  this.maxSpeedBase = tag.getFloat("fb");
-  this.maxSpeedCurrent = tag.getFloat("fc");
+  { 
   this.strafeInput = tag.getByte("s");
   this.forwardInput = tag.getByte("f");
   this.strafeMotion = tag.getFloat("ms");

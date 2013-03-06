@@ -54,6 +54,8 @@ public static VehicleRegistry instance()
  */
 public void registerVehicles()
   {
+  this.vehicleTypes.put(-1, DUMMY_VEHICLE);
+  
   this.registerVehicle(VehicleCatapult.class, "AW_Catapult", CATAPULT);
   }
 
@@ -62,6 +64,11 @@ public void registerVehicle(Class <? extends VehicleBase> clz, String entName, I
   AWEntityRegistry.registerEntity(clz, entName, 130, 3, false);
   this.vehicleTypes.put(type.getGlobalVehicleType(), type);
   this.vehicleClasses.put(type, clz);
+  }
+
+public IVehicleType getVehicleType(int num)
+  {
+  return this.vehicleTypes.get(num);
   }
 
 public VehicleBase getVehicleForType(World world, int type)
