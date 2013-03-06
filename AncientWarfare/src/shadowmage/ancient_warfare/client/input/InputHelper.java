@@ -35,6 +35,8 @@ import net.minecraft.util.Vec3;
 import org.lwjgl.input.Keyboard;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.config.Settings;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
@@ -97,6 +99,11 @@ public void loadKeysFromConfig()
   KeybindManager.addKeybind(right);
   fire = new Keybind(Config.getKeyBindID("keybind.fire", Keyboard.KEY_SPACE, "fire missile"), "Fire");
   KeybindManager.addKeybind(fire);
+  
+  pitchUp = new Keybind(Config.getKeyBindID("keybind.aimUp", Keyboard.KEY_R, "Aim Up"), "Aim Up");
+  KeybindManager.addKeybind(pitchUp);
+  pitchDown = new Keybind(Config.getKeyBindID("keybind.aimDown", Keyboard.KEY_F, "Aim Down"), "Aim Down");
+  KeybindManager.addKeybind(pitchDown);
   }
 
 @Override
@@ -111,9 +118,15 @@ public String getLabel()
 @Override
 public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
   {
-  if(kb==options)
+  if(!tickEnd)
     {
-    //TODO open client-side options GUI
+    return;
+    }
+  if(kb==options && mc.currentScreen==null && mc.thePlayer!=null && mc.theWorld!=null)
+    {
+    Config.logDebug("sending openGUI request");
+    //mc.displayGuiScreen(new GuiClientSettings(new ContainerDummy()));
+    GUIHandler.instance().openGUI((byte)GUIHandler.SETTINGS, mc.thePlayer, mc.theWorld, 0, 0, 0);
     }
   }
 
@@ -152,6 +165,10 @@ public void onKeyPressed(Keybind kb)
     {
     this.handleFireAction();    
     }
+  if(kb==pitchUp || kb == pitchDown || kb == turretLeft || kb==turretRight)
+    {
+    this.handleAimAction(kb);
+    }
   }
 
 @Override
@@ -167,15 +184,35 @@ public void onTickEnd()
       ((VehicleBase)mc.thePlayer.ridingEntity).handleKeyboardMovement((byte)forwards, (byte)strafe);
       }
     } 
-  if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
+  if(Settings.enableMouseAim && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
     {
-    this.handleAimUpdate();
+    this.handleMouseAimUpdate();
     }
   }
 
 int inputUpdateTicks = 0;
 
-public void handleAimUpdate()
+public void handleAimAction(Keybind kb)
+  {
+  if(kb==pitchDown)
+    {    
+    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(-1, 0);
+    }
+  else if(kb==pitchUp)
+    {
+    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(1, 0);
+    }
+  else if(kb==turretLeft)
+    {
+    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(0, -1);
+    }
+  else if(kb==turretRight)
+    {
+    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(0, 1);
+    }  
+  }
+
+public void handleMouseAimUpdate()
   {
   inputUpdateTicks--;
   if(inputUpdateTicks>0)
@@ -186,7 +223,7 @@ public void handleAimUpdate()
   MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140);
   if(pos!=null)
     {
-    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimInput(pos.hitVec);
+    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimMouseInput(pos.hitVec);
     }
   }
 

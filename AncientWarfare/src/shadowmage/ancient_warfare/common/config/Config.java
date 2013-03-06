@@ -54,7 +54,7 @@ public static int structureGenMaxClusterValue = 50;
 public static boolean invertShiftClickOnItems = false;
 public static String templateExtension = "aws";
 
-
+public static int trajectoryIterationsServer = 20;
 
 private static Configuration config;
 private static Logger logger;

@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.client.gui.GuiClientSettings;
 import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
 import shadowmage.ancient_warfare.client.gui.structure.GuiEditorSelect;
 import shadowmage.ancient_warfare.client.gui.structure.GuiStructureScanner;
@@ -32,6 +33,7 @@ import shadowmage.ancient_warfare.client.gui.structure.GuiSurvivalBuilder;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
+import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
@@ -49,6 +51,7 @@ public static final int STRUCTURE_SCANNER = 1;
 public static final int STRUCTURE_BUILD_DIRECT = 2;
 public static final int STRUCTURE_EDITOR = 3;
 public static final int STRUCTURE_SCAN_EDIT = 4;
+public static final int SETTINGS = 5;
 
 
 
@@ -66,7 +69,6 @@ public static GUIHandler instance()
 @Override
 public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
   {
-  System.out.println("getting server element: "+ID);
   switch(ID)
   {
   case STRUCTURE_SELECT:
@@ -82,12 +84,12 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   return new ContainerEditor(player);
   
   case STRUCTURE_SCAN_EDIT:
-  ContainerEditor edit = new ContainerEditor(player);  
-  //TODO manually set container structure...
+  ContainerEditor edit = new ContainerEditor(player);
   return edit;
   
-  case 5:
-  return null;
+  case SETTINGS:
+  return new ContainerDummy();
+  
   case 6:
   return null;
   case 7:
@@ -104,8 +106,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
 
 @Override
 public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-  {
-  System.out.println("getting client element: "+ID);
+  {  
   switch(ID)
   {
   case STRUCTURE_SELECT:
@@ -123,8 +124,9 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   case STRUCTURE_SCAN_EDIT:  
   return new GuiEditorSelect(new ContainerEditor(player));
   
-  case 5:
-  return null;
+  case SETTINGS:
+  return new GuiClientSettings(new ContainerDummy());
+  
   case 6:
   return null;
   case 7:

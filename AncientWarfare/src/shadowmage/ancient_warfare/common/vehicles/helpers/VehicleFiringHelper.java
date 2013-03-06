@@ -26,6 +26,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
@@ -274,10 +275,82 @@ public void handleFireInput(Vec3 target)
   }
 
 /**
+ * params are in change DELTAS
+ * @param pitch
+ * @param yaw
+ */
+public void handleAimKeyInput(float pitch, float yaw)
+  {
+  boolean pitchUpdated = false;
+  boolean powerUpdated = false;
+  boolean yawUpdated = false;
+  if(vehicle.canAimPitch())
+    {
+    float pitchTest = this.clientTurretPitch + pitch;
+    if(pitchTest<vehicle.turretPitchMin)
+      {
+      pitchTest = vehicle.turretPitchMin;
+      }
+    else if(pitchTest>vehicle.turretPitchMax)
+      {
+      pitchTest = vehicle.turretPitchMax;
+      }
+    if(pitchTest!=this.clientTurretPitch)
+      {
+      pitchUpdated = true;
+      this.clientTurretPitch = pitchTest;
+      }
+    }
+  else if(vehicle.canAimPower())
+    {
+    float powerTest = vehicle.launchPowerCurrent + pitch;
+    if(powerTest<0)
+      {
+      powerTest = 0;
+      }
+    else if(powerTest>vehicle.launchSpeedCurrentMax)
+      {
+      powerTest = vehicle.launchSpeedCurrentMax;
+      }
+    if(this.clientLaunchSpeed!=powerTest)
+      {
+      powerUpdated =true;
+      this.clientLaunchSpeed = powerTest;
+      }
+    }
+  if(vehicle.canAimRotate())
+    {
+    yawUpdated = true;
+    this.clientTurretYaw += yaw;
+    }
+  
+  if(powerUpdated || pitchUpdated || yawUpdated)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    if(pitchUpdated)
+      {
+      tag.setFloat("aimPitch", clientTurretPitch);      
+      }
+    if(powerUpdated)
+      {
+      tag.setFloat("aimPow", clientLaunchSpeed);
+      }
+    if(yawUpdated)
+      {
+      tag.setFloat("aimYaw", clientTurretYaw);
+      }
+    Packet02Vehicle pkt = new Packet02Vehicle();
+    pkt.setParams(vehicle);
+    pkt.setInputData(tag);
+    pkt.sendPacketToServer();
+    }
+  }
+
+/**
  * CLIENT SIDE--used client side to update client desired pitch and yaw and send these to server/other clients...
  * @param target
  */
-public void handleAimInput(Vec3 target)
+public void handleAimMouseInput(Vec3 target)
   {  
   boolean updated = false;
   boolean updatePitch = false;
@@ -323,25 +396,15 @@ public void handleAimInput(Vec3 target)
       }
     }
   else if(vehicle.canAimPower())
-    {
-    float power = Trig.getLaunchSpeedToHit(tx, ty, tz, vehicle.turretPitch);
+    {     
+    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.turretPitch, Settings.trajectoryIterationsClient);
     if(this.clientLaunchSpeed!=power && power < vehicle.launchSpeedCurrentMax)
       {
       this.clientLaunchSpeed = power;
       updated = true;
       updatePower = true;
       }
-    }
-  
-  if(!vehicle.canAimPitch())
-    {
-    this.clientTurretPitch = vehicle.turretPitch;
-    }
-  if(!vehicle.canAimPower())
-    {
-    this.clientLaunchSpeed = vehicle.launchPowerCurrent;
-    }
-  
+    }  
   if(vehicle.canAimRotate())
     {
     float xAO = (float) (vehicle.posX - target.xCoord);  
@@ -355,11 +418,18 @@ public void handleAimInput(Vec3 target)
       updateYaw = true;
       }  
     }
-  else
+  if(!vehicle.canAimPitch())
+    {
+    this.clientTurretPitch = vehicle.turretPitch;
+    }
+  if(!vehicle.canAimPower())
+    {
+    this.clientLaunchSpeed = vehicle.launchPowerCurrent;
+    }
+  if(!vehicle.canAimRotate())
     {
     this.clientTurretYaw = vehicle.rotationYaw;
     }
-   
   if(updated)
     {
     this.clientHitRange = range;

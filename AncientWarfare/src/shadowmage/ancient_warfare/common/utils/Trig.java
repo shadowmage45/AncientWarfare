@@ -22,6 +22,7 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 
@@ -282,19 +283,123 @@ public static Pair<Float, Float> getLaunchAngleToHit(float x, float y, float z, 
   return getLaunchAngleToHit(MathHelper.sqrt_float(x*x+z*z), y, v);
   }
 
-public static float getLaunchSpeedToHit(float x, float y, float angle)
-  { 
-  
-  float g = GRAVITY;
-  double weirdFactor = 0.6158787133d;//manually found this factor to correct, it was originally +1
-  double firstHalf = Math.sqrt(g)*Math.sqrt(x)*Math.sqrt( (Math.tan(angle)*Math.tan(angle)) + weirdFactor );
-  double secondHalf = Math.sqrt(2 * Math.tan(angle)-(2*g*y)/x);
-  return (float) (firstHalf/secondHalf);
+//public static float getLaunchSpeedToHit(float x, float y, float angle)
+//  { 
+//  /**
+//   * STILL ONLY FUCKING CORRECT FOR FLAT/EVEN (ZERO VALUES OF Y)
+//   */
+//  float g = GRAVITY;
+//  float vOff = x - y;
+//  float gx2 = g * x *x;
+//  float factor = gx2/vOff;
+//  return (float) Math.sqrt(factor);
+//  
+////  double weirdFactor = 0.6158787133d;//manually found this factor to correct, it was originally +1
+////  double firstHalf = Math.sqrt(g)*Math.sqrt(x)*Math.sqrt( (Math.tan(angle)*Math.tan(angle)) + weirdFactor );
+////  double secondHalf = Math.sqrt(2 * Math.tan(angle)-(2*g*y)/x);
+////  return (float) (firstHalf/secondHalf);
+//  }
+//
+//public static float getLaunchSpeedToHit(float x, float y, float z, float angle)
+//  {
+//  return getLaunchSpeedToHit(MathHelper.sqrt_float(x*x+z*z), y, angle);
+//  }
+
+public static float iterativeSpeedFinder(float x, float y, float z, float angle, int maxIterations)
+  {
+  return iterativeSpeedFinder(MathHelper.sqrt_float(x*x+z*z), y, angle, maxIterations);
   }
 
-public static float getLaunchSpeedToHit(float x, float y, float z, float angle)
+public static float iterativeSpeedFinder(float x, float y, float angle, int maxIterations)
   {
-  return getLaunchSpeedToHit(MathHelper.sqrt_float(x*x+z*z), y, angle);
+  Config.logDebug("/********************************************/");
+  
+  /**
+   * get a rough velocity value from an x,0 target
+   */
+  float g = GRAVITY;
+  float vOff = x - 0;
+  float gx2 = g * x *x;
+  float factor = gx2/vOff;
+  float firstTestVel = (float) Math.sqrt(factor);
+  
+  
+  float testFactor = 1.f;
+  float bestDiff = 999.f;
+  float prevDiff = bestDiff;
+  float testVelocity = firstTestVel;
+  float bestVelocity = testVelocity;
+  float prevVelocity = testVelocity;
+  
+  boolean wasPreviousNAN = false;
+  boolean useUpper = y >= 0? false : true;
+  int iter = 1;
+  
+  if(y<0)//if already over powered,  might as well start in the right direction
+    {
+    testFactor *= -1;
+    }
+  
+  while(iter<=maxIterations)
+    {
+      
+    Config.logDebug("/********************************************/");   
+    Config.logDebug("iteration: "+iter+ "testing: "+testVelocity);
+    Config.logDebug("testFactor: "+testFactor);    
+    Pair<Float, Float> angles = getLaunchAngleToHit(x, y, testVelocity);
+
+    Float foundAngle = useUpper? angles.key() : angles.value();   
+    
+    if(foundAngle.isNaN())
+      {
+      wasPreviousNAN=true;
+      Config.logDebug("incrementing power for NAN angle");
+      if(testFactor<0)
+        {
+        testFactor *= -1;
+        }
+      if(iter>1 && !wasPreviousNAN)
+        {
+        testFactor *= 0.5f;
+        }
+      testVelocity += testFactor;
+      bestVelocity = testVelocity;         
+      Config.logDebug("/********************************************/");
+      continue;      
+      }    
+    wasPreviousNAN = false;
+    
+    float diff = getAbsDiff(foundAngle, 45.f);      
+   
+    if(diff>prevDiff)//we're going in the wrong direction
+      {
+      Config.logDebug("diff: "+diff+ "prevDiff: "+prevDiff);
+      Config.logDebug("bestDiff: " +bestDiff);
+      Config.logDebug("foundAngle: "+foundAngle);  
+      Config.logDebug("should invert direction!!");
+      testFactor *= -1;//reverse test factor;
+      testFactor *= 0.5f;//reduce test factor 
+      testVelocity = prevVelocity;
+      }
+    else
+      {       
+      bestDiff = diff;
+      bestVelocity = testVelocity;
+      Config.logDebug("diff: "+diff+ "prevDiff: "+prevDiff);
+      Config.logDebug("found new best: "+testVelocity);
+      Config.logDebug("bestDiff: " +bestDiff);
+      Config.logDebug("foundAngle: "+foundAngle);  
+      }
+    
+    prevVelocity = testVelocity;
+    testVelocity += testFactor;
+    prevDiff = diff;      
+    iter++;    
+    Config.logDebug("/********************************************/");
+    }
+  
+  testVelocity = prevVelocity;  
+  return bestVelocity;
   }
 
 }

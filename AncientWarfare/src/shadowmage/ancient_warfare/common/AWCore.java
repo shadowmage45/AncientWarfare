@@ -45,6 +45,7 @@ import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
 import shadowmage.ancient_warfare.common.utils.Pair;
+import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureEntry;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
@@ -168,7 +169,16 @@ public void load(FMLPostInitializationEvent evt)
    */
   Config.saveConfig();
 
+  this.debugTrajectory();
   //this.debugStructureGen();
+  }
+
+public void debugTrajectory()
+  {
+  int x = 100;
+  int y = 10;
+  Config.logDebug("Range test for 100,10: "+String.valueOf(Trig.iterativeSpeedFinder(x, y, 45, 20)));
+  Config.logDebug("Range test for 100,10: "+String.valueOf(Trig.iterativeSpeedFinder(x, -y, 45, 20)));
   }
 
 

@@ -80,7 +80,11 @@ public void execute()
   if(packetData.hasKey("openGUI"))
     {
     NBTTagCompound tag = packetData.getCompoundTag("openGUI");
-    GUIHandler.instance().openGUI(tag.getInteger("id"), player, world, tag.getInteger("x"), tag.getInteger("y"), tag.getInteger("z"));    
+    int id = tag.getByte("id");
+    int x = tag.getInteger("x");
+    int y = tag.getInteger("y");
+    int z = tag.getInteger("z");
+    GUIHandler.instance().openGUI(id, player, world, x, y, z);    
     if(world.isRemote)
       {
       Config.logError("Opening GUI on client-side only from openGUI packet.  This is not proper gui handling.");

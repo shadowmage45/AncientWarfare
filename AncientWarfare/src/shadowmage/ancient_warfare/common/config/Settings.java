@@ -32,6 +32,7 @@ public static boolean renderOverlay = true;
 public static boolean advancedOverlay = true;
 public static boolean enableMouseAim = true;
 public static int mouseLookRange = 140;
+public static int trajectoryIterationsClient = 20;
 
 private Settings(){};
 private static Settings INSTANCE;
