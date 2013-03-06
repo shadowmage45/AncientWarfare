@@ -23,6 +23,8 @@ package shadowmage.ancient_warfare.common.vehicles.materials;
 public class VehicleMaterial implements IVehicleMaterial
 {
 
+public static VehicleMaterial materialWood = new VehicleMaterialWood();
+
 public MaterialLevel[] materialLevels;
 
 public VehicleMaterial(int levelCount)

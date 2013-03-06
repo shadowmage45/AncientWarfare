@@ -21,9 +21,11 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.utils.Trig;
+import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
 public class VehicleTypeCatapult extends VehicleTypeBase
 {
+
 /**
  * @param typeNum
  */
@@ -34,6 +36,20 @@ public VehicleTypeCatapult(int typeNum)
   this.height = 2;
   this.missileVerticalOffset = 2.75f* Trig.sinDegrees(45) + 0.4f;
   this.missileForwardsOffset = -2.75f* Trig.cosDegrees(45);
+  this.isMountable = true;
+  this.isDrivable = true;
+  this.isCombatEngine = true;
+  this.canAdjustPower = true;
+  this.canAdjustPitch = false;
+  this.canAdjustYaw = false;
+  this.baseStrafeSpeed = 2.f;
+  this.baseForwardSpeed = 0.8f;  
+  this.basePitchMax = 45;
+  this.basePitchMin = 45;
+  this.baseMissileVelocityMax = 32.f;  
+  this.vehicleMaterial = VehicleMaterial.materialWood;
+  this.riderForwardsOffset = 1.3f;
+  this.riderVerticalOffset = 0.8f;
   }
 
 }

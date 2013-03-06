@@ -42,6 +42,7 @@ import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleAmmoHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleUpgradeHelper;
+import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.stats.ArmorStats;
 import shadowmage.ancient_warfare.common.vehicles.stats.GeneralStats;
 
@@ -52,33 +53,61 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public abstract class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback
 {
-public int vehicleMaterialLevel = 0;
+
 
 /**
- * these are the current max stats.  set from
+ * these are the current max stats.  set from setVehicleType().  these are local cached bases, after application of material factors
  */
-public float vehicleMaxHealth = 100;
-public float vehicleHealth = 100;
-
-public float speedForwardMax;
-public float speedStrafeMax;
-
-public float turretRotationHome;
-public float turretRotationMax;
-
-public float turretPitchMin;
-public float turretPitchMax;
-
-public float missileVelocityMax;
+public float baseForwardSpeed;
+public float baseStrafeSpeed;
+public float basePitchMin;
+public float basePitchMax;
+public float baseTurretRotationMax;
+public float baseLaunchSpeedMax;
+public float baseHealth = 100;
+public float baseAccuracy = 1.f;
+public float baseWeight = 1000;//kg
+public int reloadTimeBase = 100;
 
 /**
- * set by move helper
+ * in meters/second
+ */
+public float launchPowerCurrent = 31.321f * 0.4f;
+
+/**
+ * local current stats, fully updated and modified from upgrades/etc
+ */
+public float maxForwardSpeedCurrent = 0.8f;
+public float maxStrafeSpeedCurrent = 2.0f;
+public int reloadTimeCurrent = 100;
+public float accuracyCurrent = 1.f;
+public float turretPitchMin = 0.f;
+public float turretPitchMax = 90.f;
+public float launchSpeedCurrentMax = 32.321f;
+
+/**
+ * local variables
+ */
+public float vehicleHealth = 100;
+public float turretRotationHome;
+public float turretRotationMax = 45.f;
+public float turretRotation = 0.f;
+public float turretDestRot = 0.f;
+public float turretRotInc = 1.f;
+public float turretPitch = 45.f;
+public float turretDestPitch = 45.f;
+public float turretPitchInc = 1.f;
+
+/**
+ * set by move helper on movement update. used during client rendering to update wheel rotation and other animations
  */
 public float wheelRotation = 0.f;
 public float wheelRotationPrev = 0.f;
+public float velocity = 0.f; //TODO set this in move helper onUpdate tick
 
-
-
+/**
+ * used to clear input if the vehicle WAS ridden but isn't any more
+ */
 private boolean isRidden = false;
 
 /**
@@ -92,6 +121,7 @@ public VehicleInventory inventory;
 public EntityPathfinder navigator;
 
 public IVehicleType vehicleType = VehicleRegistry.DUMMY_VEHICLE;//set to dummy vehicle so it is never null...
+public int vehicleMaterialLevel = 0;//the current material level of this vehicle. should be read/set prior to calling updateBaseStats
 
 public VehicleBase(World par1World)
   {
@@ -110,23 +140,36 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
   float width = vehicleType.getWidth();
   float height = vehicleType.getHeight();
   this.setSize(width, height);
-  this.yOffset = height/2.f; 
-  /**
-   * TODO set all base values to those from vehicleType, adjusted for material
-   */
+  this.yOffset = height/2.f;   
+  this.updateBaseStats();
   }
 
-public float getHorizontalMissileOffset(float pitch, float yaw)
+public void updateBaseStats()
+  {
+  IVehicleMaterial material = vehicleType.getMaterialType();
+  int level = this.vehicleMaterialLevel;
+  float baseForwardSpeed = vehicleType.getBaseForwardSpeed() * material.getSpeedForwardFactor(level);
+  float baseStrafeSpeed = vehicleType.getBaseStrafeSpeed() * material.getSpeedStrafeFactor(level);
+  float basePitchMin = vehicleType.getBasePitchMin();
+  float basePitchMax = vehicleType.getBasePitchMax();
+  float baseTurretRotationMax = vehicleType.getBaseTurretRotationAmount();
+  float baseMissileVelocityMax = vehicleType.getBaseMissileVelocityMax();
+  float baseHealth = vehicleType.getBaseHealth() * material.getHPFactor(level);
+  float baseAccuracy = vehicleType.getBaseAccuracy() * material.getAccuracyFactor(level);
+  float baseWeight = vehicleType.getBaseWeight() * material.getWeightFactor(level);  
+  }
+
+public float getHorizontalMissileOffset()
   {
   return this.vehicleType.getMissileHorizontalOffset();
   }
 
-public float getVerticalMissileOffset(float pitch, float yaw)
+public float getVerticalMissileOffset()
   {
   return this.vehicleType.getMissileVerticalOffset();
   }
 
-public float getForwardsMissileOffset(float pitch, float yaw)
+public float getForwardsMissileOffset()
   {
   return this.vehicleType.getMissileForwardsOffset();
   }
@@ -144,6 +187,11 @@ public boolean canAimRotate()
 public boolean canAimPitch()
   {
   return vehicleType.canAdjustPitch();
+  }
+
+public boolean canAimPower()
+  {
+  return vehicleType.canAdjustPower();
   }
 
 public boolean isDrivable()
@@ -173,27 +221,19 @@ public float getRiderHorizontalOffset()
 
 public Pos3f getMissileOffset()
   {
-  Pos3f off = new Pos3f();
-  
-  float x = this.getHorizontalMissileOffset(this.firingHelper.turretPitch, this.firingHelper.turretRotation);
-  float y = this.getVerticalMissileOffset(this.firingHelper.turretPitch, this.firingHelper.turretRotation);
-  float z = this.getForwardsMissileOffset(this.firingHelper.turretPitch, this.firingHelper.turretRotation);
+  Pos3f off = new Pos3f();  
+  float x = this.getHorizontalMissileOffset();
+  float y = this.getVerticalMissileOffset();
+  float z = this.getForwardsMissileOffset();
   float angle = Trig.toDegrees((float) Math.atan2(z, x));
   float len = MathHelper.sqrt_float(x*x+z*z);
-  angle+= this.rotationYaw;
-  
+  angle+= this.rotationYaw;  
   x = Trig.cosDegrees(angle)*len;
   z = -Trig.sinDegrees(angle)*len;
-  
   off.x = x;
   off.y = y;
   off.z = z;  
   return off;
-  }
-
-public Pos3f getMissileOffsetForAim()
-  {
-  return getMissileOffset();  
   }
 
 /**
@@ -239,6 +279,14 @@ public void onUpdate()
     }
   this.moveHelper.onMovementTick();
   this.firingHelper.onTick(); 
+  if(turretPitch!=turretDestPitch)
+    {
+    this.updateTurretPitch();
+    }
+  if(turretRotation!=turretDestRot)
+    {
+    this.updateTurretRotation();
+    }
   }
 
 /**
@@ -260,6 +308,38 @@ public void onUpdateServer()
     this.moveHelper.clearInputFromDismount();
     }
   }
+
+public void updateTurretPitch()
+  {
+  if(!canAimPitch())
+    {
+    turretDestPitch = turretPitch;
+    return;
+    }
+  if(turretPitch>turretDestPitch)
+    {
+    turretPitch-=turretPitchInc;
+    }
+  else if(turretPitch<turretDestPitch)
+    {
+    turretPitch+=turretPitchInc;
+    }
+  if(Trig.getAbsDiff(turretDestPitch, turretPitch)<turretPitchInc)
+    {
+    turretPitch = turretDestPitch;
+    }
+  }
+
+public void updateTurretRotation()
+  {
+  if(!canAimRotate())
+    {
+    turretDestRot = turretRotation;
+    return;
+    }
+  //TODO
+  }
+
 
 /**
  * Called from Packet02Vehicle
@@ -410,7 +490,7 @@ protected void entityInit()
 @Override
 public void writeSpawnData(ByteArrayDataOutput data)
   {
-  data.writeFloat(this.vehicleHealth);
+  data.writeFloat(this.vehicleHealth);  
   ByteTools.writeNBTTagCompound(upgradeHelper.getNBTTag(), data);
   ByteTools.writeNBTTagCompound(ammoHelper.getNBTTag(), data);
   ByteTools.writeNBTTagCompound(moveHelper.getNBTTag(), data);
@@ -430,23 +510,40 @@ public void readSpawnData(ByteArrayDataInput data)
 @Override
 protected void readEntityFromNBT(NBTTagCompound tag)
   {
+  IVehicleType vehType = VehicleRegistry.instance().getVehicleType(tag.getInteger("vehType"));
+  int level = tag.getInteger("matLvl");
+  this.setVehicleType(vehType, level);
   this.vehicleHealth = tag.getFloat("health");
+  this.turretRotationHome = tag.getFloat("turHome");
   this.inventory.readFromNBT(tag);
   this.upgradeHelper.readFromNBT(tag.getCompoundTag("upgrades"));
   this.ammoHelper.readFromNBT(tag.getCompoundTag("ammo"));
   this.moveHelper.readFromNBT(tag.getCompoundTag("move"));
   this.firingHelper.readFromNBT(tag.getCompoundTag("fire"));
+  this.launchPowerCurrent = tag.getFloat("lc");
+  this.turretPitch = tag.getFloat("tp");
+  this.turretDestPitch = tag.getFloat("tpd");
+  this.turretRotation = tag.getFloat("tr");
+  this.turretDestRot = tag.getFloat("trd");
   }
 
 @Override
 protected void writeEntityToNBT(NBTTagCompound tag)
   {
+  tag.setInteger("vehType", this.vehicleType.getGlobalVehicleType());
+  tag.setInteger("matLvl", this.vehicleMaterialLevel);
   tag.setFloat("health", this.vehicleHealth);
+  tag.setFloat("turHome", this.turretRotationHome);
   this.inventory.writeToNBT(tag);
   tag.setCompoundTag("upgrades", this.upgradeHelper.getNBTTag());
   tag.setCompoundTag("ammo", this.ammoHelper.getNBTTag());
   tag.setCompoundTag("move", this.moveHelper.getNBTTag());
-  tag.setCompoundTag("fire", this.firingHelper.getNBTTag());
+  tag.setCompoundTag("fire", this.firingHelper.getNBTTag());  
+  tag.setFloat("lc", launchPowerCurrent);
+  tag.setFloat("tp", turretPitch);
+  tag.setFloat("tpd", turretDestPitch);
+  tag.setFloat("tr", turretRotation);
+  tag.setFloat("trd", turretDestRot);
   }
 
 @Override

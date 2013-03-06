@@ -57,7 +57,9 @@ public boolean inGround = false;
 public MissileBase(World par1World)
   {
   super(par1World);
+  this.entityCollisionReduction = 1.f;
   }
+
 
 /**
  * called server side after creating but before spawning. ammoType is set client-side by the readSpawnData method, as should all other movement (rotation/motion) params.
@@ -95,6 +97,7 @@ public void setMissileParams2(IAmmoType ammo, float x, float y, float z, float y
   float vY = Trig.sinDegrees(angle) * velocity  * 0.05f;
   float vZ = -Trig.cosDegrees(yaw)* Trig.cosDegrees(angle) *velocity  * 0.05f;
   Config.logDebug("computed velocity: "+vX+","+vY+","+vZ);
+  Config.logDebug("linear velocity: "+ (MathHelper.sqrt_float(vX*vX+vY*vY+vZ*vZ)*20f));
   this.setMissileParams(ammo, x, y, z, vX, vY, vZ);
   }
 
@@ -134,40 +137,56 @@ public void onMovementTick()
     {
     this.motionY -= this.ammoType.getGravityFactor();
     if(this.motionX != 0 || this.motionY != 0 || this.motionZ != 0)
-      {
-      this.prevPosX = this.posX;
-      this.prevPosY = this.posY;
-      this.prevPosZ = this.posZ;
-      this.prevRotationPitch = this.rotationPitch;
-      this.prevRotationYaw = this.rotationYaw;
-      this.posX += this.motionX;
-      this.posY += this.motionY;
-      this.posZ += this.motionZ;
-      this.onUpdateArrowRotation();
+      {     
       
       Vec3 pos = Vec3.createVectorHelper(posX, posY, posZ);
       Vec3 move = Vec3.createVectorHelper(posX+motionX, posY+motionY, posZ+motionZ);
       
-      MovingObjectPosition blockHit = worldObj.rayTraceBlocks(pos, move);
-      if(blockHit!=null)
+//      MovingObjectPosition blockHit = worldObj.rayTraceBlocks(pos, move);
+      MovingObjectPosition hit = this.worldObj.rayTraceBlocks_do_do(pos, move, false, true);   
+      if(hit!=null)
         { 
+        
         Config.logDebug("setting in ground");
-        Config.logDebug("hitVec: "+blockHit.hitVec.toString());
+        Config.logDebug("hitVec: "+hit.hitVec.toString());
         this.inGround = true;
-        this.posX = blockHit.hitVec.xCoord;
-        this.posY = blockHit.hitVec.yCoord;
-        this.posZ = blockHit.hitVec.zCoord;
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
-        this.motionX = 0;
-        this.motionY = 0;
-        this.motionZ = 0;
+//        this.posX = hit.hitVec.xCoord;
+//        this.posY = hit.hitVec.yCoord;
+//        this.posZ = hit.hitVec.zCoord;
+//       
+//        this.motionX = 0;
+//        this.motionY = 0;
+//        this.motionZ = 0;
         if(!this.ammoType.isPersistent() && !this.worldObj.isRemote)
           {
           this.setDead();
           }
+          /**
+           * TESTING
+           */
+        this.motionX = (double)((float)(hit.hitVec.xCoord - this.posX));
+        this.motionY = (double)((float)(hit.hitVec.yCoord - this.posY));
+        this.motionZ = (double)((float)(hit.hitVec.zCoord - this.posZ));
+        float motionSpeed = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+        this.posX -= this.motionX / (double)motionSpeed * 0.05000000074505806D;
+        this.posY -= this.motionY / (double)motionSpeed * 0.05000000074505806D;
+        this.posZ -= this.motionZ / (double)motionSpeed * 0.05000000074505806D;
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
         } 
+      else
+        {
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
+        this.prevRotationPitch = this.rotationPitch;
+        this.prevRotationYaw = this.rotationYaw;
+        this.posX += this.motionX;
+        this.posY += this.motionY;
+        this.posZ += this.motionZ;
+        this.onUpdateArrowRotation();
+        }
       }
     }
   }

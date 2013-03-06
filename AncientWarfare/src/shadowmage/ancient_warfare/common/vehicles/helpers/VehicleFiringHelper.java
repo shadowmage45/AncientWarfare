@@ -55,30 +55,12 @@ public float clientHitPosZ = 0.f;
  */
 public float clientTurretYaw = 0.f;
 public float clientTurretPitch = 0.f;
+public float clientLaunchSpeed = 0.f;
 
 /**
  * used on final launch, to calc final angle from 'approximate' firing arm/turret angle
  */
 public Pos3f targetPos = null;
-
-public float turretRotation = 0.f;
-public float turretDestRot = 0.f;
-public float turretRotationMin = 0.f;
-public float turretRotationMax = 360.f;
-public float turretRotInc = 1.f;
-
-public float turretPitch = 45.f;
-public float turretDestPitch = 45.f;
-public float turretPitchMin = 0.f;
-public float turretPitchMax = 90.f;
-public float turretPitchInc = 1.f;
-
-/**
- * in meters/second
- */
-public float launchPowerBase = 31.321f;//the necessary speed to go 100m at near 45' angle(s) at 0 launch height
-public float launchPowerCurrent = launchPowerBase * 0.4f;
-
 
 /**
  * is this vehicle in the process of launching a missile ? (animation, etc)
@@ -94,18 +76,6 @@ public boolean hasLaunched = false;
  * how many ticks until this vehicle is done reloading and can fire again
  */
 public int reloadingTicks = 0;
-
-/**
- * current and base reload timers, used to set current reload timer upon completion of missile launch
- */
-public int reloadTimeBase = 100;
-public int reloadTimeCurrent = 100;
-
-/**
- * accuracy stats...
- */
-public float accuracyBase = 1.f;
-public float accuracyCurrent = 1.f;
 
 private VehicleBase vehicle;
 
@@ -131,46 +101,9 @@ public void onTick()
       this.reloadingTicks = 0;      
       }
     }
-  if(this.turretPitch!=this.turretDestPitch)
-    {
-    this.updateTurretPitch();
-    }
-  if(this.turretRotation!=this.turretDestRot)
-    {
-    this.updateTurretRotation();
-    }
+ 
   }
 
-public void updateTurretPitch()
-  {
-  if(!vehicle.canAimPitch())
-    {
-    this.turretDestPitch = this.turretPitch;
-    return;
-    }
-  if(this.turretPitch>this.turretDestPitch)
-    {
-    this.turretPitch-=this.turretPitchInc;
-    }
-  else if(this.turretPitch<this.turretDestPitch)
-    {
-    this.turretPitch+=this.turretPitchInc;
-    }
-  if(Trig.getAbsDiff(this.turretDestPitch, this.turretPitch)<this.turretPitchInc)
-    {
-    this.turretPitch = this.turretDestPitch;
-    }
-  }
-
-public void updateTurretRotation()
-  {
-  if(!vehicle.canAimRotate())
-    {
-    this.turretDestRot = this.turretRotation;
-    return;
-    }
-  //TODO
-  }
 
 /**
  * if not already firing, this will initiate the launch sequence
@@ -192,24 +125,23 @@ public boolean launchMissile()
   if(this.isFiring && !this.hasLaunched)
     {
     this.hasLaunched = true;
-    this.reloadingTicks = this.reloadTimeCurrent;
+    this.reloadingTicks = vehicle.reloadTimeCurrent;
     if(!vehicle.worldObj.isRemote)
       {      
       Pos3f off = vehicle.getMissileOffset();
       Config.logDebug("offset: "+off.toString());
-      float angle = this.turretPitch;
       float x = (float) vehicle.posX + off.x;
       float y = (float) vehicle.posY + off.y;
       float z = (float) vehicle.posZ + off.z;
-      if(this.targetPos!=null && this.turretPitch==this.turretDestPitch)//if has target, and is lined up..do good fire..
-        {
-        float tx = this.targetPos.x - x;
-        float ty = this.targetPos.y - y;
-        float tz = this.targetPos.z - z;
-        Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, launchPowerCurrent);
-        angle = getBestAngle(angles.value(), angles.key());
-        }      
-      MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, vehicle.rotationYaw, angle, launchPowerCurrent);
+//      if(this.targetPos!=null && vehicle.turretPitch==vehicle.turretDestPitch)//if has target, and is lined up..do good fire..
+//        {
+//        float tx = this.targetPos.x - x;
+//        float ty = this.targetPos.y - y;
+//        float tz = this.targetPos.z - z;
+//        Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.launchPowerCurrent);
+//        angle = getBestAngle(angles.value(), angles.key());
+//        }      
+      MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, vehicle.rotationYaw, vehicle.turretPitch, vehicle.launchPowerCurrent);
       if(missile!=null)
         {
         Config.logDebug("launching missile server side");
@@ -223,7 +155,7 @@ public boolean launchMissile()
 
 public float getBestAngle(float a, float b)
   {
-  if(a>=this.turretPitchMin && a <=this.turretPitchMax)
+  if(a>=vehicle.turretPitchMin && a <=vehicle.turretPitchMax)
     {
     return a;
     }
@@ -292,17 +224,23 @@ public void handleAimUpdate(NBTTagCompound tag)
   if(tag.hasKey("aimPitch"))
     {
     sendReply = true;
-    this.turretDestPitch = tag.getFloat("aimPitch");
-    reply.setFloat("aimPitch", this.turretDestPitch);
-    Config.logDebug("setting desired turret pitch to: "+this.turretDestPitch);
+    vehicle.turretDestPitch = tag.getFloat("aimPitch");
+    reply.setFloat("aimPitch", vehicle.turretDestPitch);
+    Config.logDebug("setting desired turret pitch to: "+vehicle.turretDestPitch);
     } 
   if(tag.hasKey("aimYaw"))
     {
     sendReply = true;
-    this.turretDestRot = tag.getFloat("aimYaw");
-    reply.setFloat("aimYaw", this.turretDestRot);
+    vehicle.turretDestRot = tag.getFloat("aimYaw");
+    reply.setFloat("aimYaw", vehicle.turretDestRot);
     }
-  if(!vehicle.worldObj.isRemote) 
+  if(tag.hasKey("aimPow"))
+    {
+    sendReply = true;
+    vehicle.launchPowerCurrent = tag.getFloat("aimPow");
+    reply.setFloat("aimPow", vehicle.launchPowerCurrent);
+    }
+  if(!vehicle.worldObj.isRemote && sendReply) 
     { 
     reply.setBoolean("aim", true);
     Packet02Vehicle pkt = new Packet02Vehicle();
@@ -342,39 +280,66 @@ public void handleFireInput(Vec3 target)
 public void handleAimInput(Vec3 target)
   {  
   boolean updated = false;
-  Pos3f offset = vehicle.getMissileOffsetForAim();
+  boolean updatePitch = false;
+  boolean updatePower = false;
+  boolean updateYaw = false;
+  Pos3f offset = vehicle.getMissileOffset();
   float x = (float) vehicle.posX + offset.x;
   float y = (float) vehicle.posY + offset.y;
   float z = (float) vehicle.posZ + offset.z;
   float tx = (float) (target.xCoord - x);
   float ty = (float) (target.yCoord - y);
   float tz = (float) (target.zCoord - z);
-  float range = MathHelper.sqrt_float(tx*tx+tz*tz);  
+  float range = MathHelper.sqrt_float(tx*tx+tz*tz);
+  Config.logDebug("range: "+range);
+  Config.logDebug("horiz rise: "+ty);
+  
   
   if(vehicle.canAimPitch())
     {   
-    Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, launchPowerCurrent);    
+    Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.launchPowerCurrent);    
     Config.logDebug("input::::angle pair for hit: "+angles.toString()+" range: "+range);
     if(angles.key().isNaN() || angles.value().isNaN())
       {
       Config.logDebug("exiting aim pitch input due to NaN params!!");      
       }
-    else if(angles.value()>=this.turretPitchMin && angles.value()<=this.turretPitchMax)
+    else if(angles.value()>=vehicle.turretPitchMin && angles.value()<=vehicle.turretPitchMax)
       {
       if(this.clientTurretPitch!=angles.value())
         {
         this.clientTurretPitch = angles.value();
         updated = true;
+        updatePitch = true;
         }
       }
-    else if(angles.key()>=this.turretPitchMin && angles.key() <= this.turretPitchMax)
+    else if(angles.key()>=vehicle.turretPitchMin && angles.key() <= vehicle.turretPitchMax)
       {
       if(this.clientTurretPitch!=angles.key())
         {
         this.clientTurretPitch = angles.key();
         updated = true;
+        updatePitch = true;
         }
       }
+    }
+  else if(vehicle.canAimPower())
+    {
+    float power = Trig.getLaunchSpeedToHit(tx, ty, tz, vehicle.turretPitch);
+    if(this.clientLaunchSpeed!=power && power < vehicle.launchSpeedCurrentMax)
+      {
+      this.clientLaunchSpeed = power;
+      updated = true;
+      updatePower = true;
+      }
+    }
+  
+  if(!vehicle.canAimPitch())
+    {
+    this.clientTurretPitch = vehicle.turretPitch;
+    }
+  if(!vehicle.canAimPower())
+    {
+    this.clientLaunchSpeed = vehicle.launchPowerCurrent;
     }
   
   if(vehicle.canAimRotate())
@@ -383,11 +348,16 @@ public void handleAimInput(Vec3 target)
     float zAO = (float) (vehicle.posZ - target.zCoord);
     float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
     Config.logDebug("calculated yaw target: "+yaw+" vehicle current yaw: "+vehicle.rotationYaw);
-    if(yaw!=this.clientTurretYaw && yaw >=this.turretRotationMin && yaw <= this.turretRotationMax)
+    if(yaw!=this.clientTurretYaw && yaw >=vehicle.turretRotationHome - vehicle.turretRotationMax && yaw <= vehicle.turretRotationHome + vehicle.turretRotationMax)
       {    
       this.clientTurretYaw = yaw;
       updated = true;
+      updateYaw = true;
       }  
+    }
+  else
+    {
+    this.clientTurretYaw = vehicle.rotationYaw;
     }
    
   if(updated)
@@ -395,8 +365,18 @@ public void handleAimInput(Vec3 target)
     this.clientHitRange = range;
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("aim", true);
-    tag.setFloat("aimPitch", this.clientTurretPitch);    
-    tag.setFloat("aimYaw", this.clientTurretYaw);    
+    if(updatePitch)
+      {
+      tag.setFloat("aimPitch", this.clientTurretPitch);
+      }
+    if(updateYaw)
+      {
+      tag.setFloat("aimYaw", this.clientTurretYaw);
+      }
+    if(updatePower)
+      {
+      tag.setFloat("aimPow", this.clientLaunchSpeed);
+      }
     Packet02Vehicle pkt = new Packet02Vehicle();
     pkt.setParams(vehicle);
     pkt.setInputData(tag);
@@ -408,45 +388,19 @@ public void handleAimInput(Vec3 target)
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setFloat("lb", this.launchPowerBase);
-  tag.setFloat("lc", launchPowerCurrent);
-  tag.setFloat("ab", accuracyBase);
-  tag.setFloat("ac", accuracyCurrent);
-  tag.setInteger("rb", reloadTimeBase);
-  tag.setInteger("rc", reloadTimeCurrent);
   tag.setInteger("rt", reloadingTicks);
-  tag.setFloat("tp", turretPitch);
-  tag.setFloat("tpd", turretDestPitch);
-  tag.setFloat("tr", turretRotation);
-  tag.setFloat("trd", turretDestRot);
-  tag.setFloat("trmn", turretRotationMin);
-  tag.setFloat("trmx", turretRotationMax);
   return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  this.launchPowerBase = tag.getFloat("lb");
-  this.launchPowerCurrent = tag.getFloat("lc");
-  this.accuracyBase = tag.getFloat("ab");
-  this.accuracyCurrent = tag.getFloat("ac");
-  this.reloadTimeBase = tag.getInteger("rb");
-  this.reloadTimeCurrent = tag.getInteger("rc");
   this.reloadingTicks = tag.getInteger("rt");
-  this.turretPitch = tag.getFloat("tp");
-  this.turretDestPitch = tag.getFloat("tpd");
-  this.turretRotation = tag.getFloat("tr");
-  this.turretDestRot = tag.getFloat("trd");
-  this.turretRotationMin = tag.getFloat("trmn");
-  this.turretRotationMax = tag.getFloat("trmx");
   }
 
 public void resetUpgradeStats()
   {
-  this.launchPowerCurrent = this.launchPowerBase;
-  this.accuracyCurrent = this.accuracyBase;
-  this.reloadTimeCurrent = this.reloadTimeBase;
+  
   }
 
 }

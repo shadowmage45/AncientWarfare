@@ -62,7 +62,7 @@ public abstract float getBaseMissileVelocityMax();//base missile velocity, befor
 
 public abstract float getBaseAccuracy();
 
-public abstract boolean isAmmoValidForInventory(IAmmoType ammo);
+public abstract boolean isAmmoValidForInventory(IAmmoType ammo);//does not determine if it can be fired, only if it can be placed into inventory
 public abstract boolean isUpgradeValid(VehicleUpgrade upgrade);
 
 

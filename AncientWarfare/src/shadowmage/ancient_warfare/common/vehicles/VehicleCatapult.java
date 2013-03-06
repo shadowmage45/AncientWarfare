@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
+import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import net.minecraft.world.World;
 
@@ -39,14 +40,9 @@ public float crankSpeed = 0.f;
 public VehicleCatapult(World par1World)
   {
   super(par1World);
+  this.setVehicleType(VehicleRegistry.CATAPULT, 0);
   this.yOffset = 0;
   this.ammoHelper.addUseableAmmo(AmmoRegistry.ammoArrow);
-  }
-
-@Override
-public boolean isMountable()
-  {
-  return true;
   }
 
 @Override
@@ -65,25 +61,8 @@ public void onReloadUpdate()
 public void onUpdate()
   {
   super.onUpdate();
-  this.armAngle = 90- this.firingHelper.turretPitch -7;
+  this.armAngle = 90- this.turretPitch -7;
   }
 
-@Override
-public float getHorizontalMissileOffset(float pitch, float yaw)
-  {
-  return 0;
-  }
-
-@Override
-public float getVerticalMissileOffset(float pitch, float yaw)
-  {
-  return 3* Trig.sinDegrees(90-pitch) + 0.4f;
-  }
-
-@Override
-public float getForwardsMissileOffset(float pitch, float yaw)
-  {
-  return -3* Trig.cosDegrees(90-pitch);
-  }
 
 }

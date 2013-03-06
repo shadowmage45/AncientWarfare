@@ -283,11 +283,18 @@ public static Pair<Float, Float> getLaunchAngleToHit(float x, float y, float z, 
   }
 
 public static float getLaunchSpeedToHit(float x, float y, float angle)
-  {
+  { 
+  
   float g = GRAVITY;
-  double firstHalf = Math.sqrt(g)*Math.sqrt(x)*Math.sqrt((Math.tan(angle)*Math.tan(angle))+1);
+  double weirdFactor = 0.6158787133d;//manually found this factor to correct, it was originally +1
+  double firstHalf = Math.sqrt(g)*Math.sqrt(x)*Math.sqrt( (Math.tan(angle)*Math.tan(angle)) + weirdFactor );
   double secondHalf = Math.sqrt(2 * Math.tan(angle)-(2*g*y)/x);
   return (float) (firstHalf/secondHalf);
+  }
+
+public static float getLaunchSpeedToHit(float x, float y, float z, float angle)
+  {
+  return getLaunchSpeedToHit(MathHelper.sqrt_float(x*x+z*z), y, angle);
   }
 
 }

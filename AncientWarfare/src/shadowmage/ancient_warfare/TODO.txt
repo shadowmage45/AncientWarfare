@@ -4,14 +4,15 @@ http://mrl.nyu.edu/~perlin/noise/
 http://gafferongames.com/networking-for-game-programmers/what-every-programmer-needs-to-know-about-game-networking/
 http://en.wikipedia.org/wiki/Trajectory_of_a_projectile
 http://gamedev.stackexchange.com/questions/17467/calculating-velocity-needed-to-hit-target-in-parabolic-arc
-http://math.stackexchange.com/questions/150242/teenager-solves-newton-dynamics-problem-where-is-the-paper
+
 
 GENERAL
 * add basic GUI tooltip functionality -- GuiTooltip class (int x, int y, int w, int h, List<String> info)
 * move world-gen base config from AncientWarfare.cfg into /AWConfig/AWWorldGen.cfg
 
 VEHICLES   
-* re-implement auto-aiming to include vehicles that use power instead of pitch
+* scrap vehicle powerAdj system. rework to use pitch only.  All vehicles will need a fixed firing point
+    --catapults and trebuchet will have narrowed allowed upper angle (70' or so) and slightly narrowed lower angle (10-15' -- to clear the model from the bucket at 45')
 * implement vehicle weighting system (should it include upgrades, and ammo in bay)
 * tie acceleration to weight
 * figure out accuracy calculation methods (when to apply accuracy)(probably apply it to the output angle and yaw when spawning a missile)
@@ -165,6 +166,31 @@ public static MyWorldData forWorld(World world)
     return result;
     }
 }
+
+
+
+/*****************************************************************************************/
+  float vAspect = this.mc.displayWidth/this.mc.displayHeight;
+  int yPixels = this.mc.displayHeight;
+  int newYPixels = yPixels - (int)(50.f*vAspect);
+  float scaleY = (float)yPixels/(float)newYPixels;
+  
+  int xPixels = this.mc.displayWidth;
+  int newXPixels = xPixels - 50;
+  float scaleX = (float)xPixels/(float)newXPixels;
+  
+  GL11.glViewport(0, (int)(50*vAspect), newXPixels, newYPixels);
+  
+  
+  
+      
+  GL11.glScalef(scaleX, scaleY, 1);
+  for(int i = 0; i < 50; i++)
+    {
+    this.drawString(this.fontRenderer, "testString....aba;lkja;lhasdfasdfqwerqweradfadfaqwerqwetasdfawerqwerqasdfawerqwerqwerqasdfasdfasdfaqewrqwreghjkghuityuitftyertyfbgsrtwertsdfgasdfawreqwe", 0, i*10, 0xffffffff);
+    }  
+  GL11.glViewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
+
 /*****************************************************************************************/
 
 
@@ -284,3 +310,12 @@ public static MyWorldData forWorld(World world)
 * NBT save/load stuff for firingHelper, moveHelper, ammoHelper             
 * fix arrow model to use point of head as its position point         
 * add arrow persistent entity coding
+/********** 03-05-13 **********/
+* re-implement auto-aiming to include vehicles that use power instead of pitch
+
+
+/********** 03-06-13 **********/
+/********** 03-07-13 **********/
+/********** 03-08-13 **********/
+/********** 03-09-13 **********/
+/********** 03-10-13 **********/

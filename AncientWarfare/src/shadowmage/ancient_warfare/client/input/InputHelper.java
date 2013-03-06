@@ -111,7 +111,10 @@ public String getLabel()
 @Override
 public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
   {
-
+  if(kb==options)
+    {
+    //TODO open client-side options GUI
+    }
   }
 
 @Override
@@ -254,7 +257,7 @@ public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float
     }
   if(hitEntity!=null)
     {
-    //Config.logDebug("entity hit!!");
+    Config.logDebug("entity hit!!");
     blockHit = new MovingObjectPosition(hitEntity);
     }
   //get bounding box of entities between var4 and either var6 or blockHit.hitVec..
