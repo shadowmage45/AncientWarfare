@@ -21,7 +21,7 @@
 package shadowmage.ancient_warfare.client.gui.elements;
 
 import net.minecraft.util.ChatAllowedCharacters;
-import shadowmage.meim.common.util.StringTools;
+import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class GuiTextInputLine extends GuiElement
 {

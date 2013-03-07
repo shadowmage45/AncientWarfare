@@ -29,9 +29,7 @@ GUI FRAMEWORK
             for when a string is clicked with mouse, w/scroll bar and mouse-wheel interaction)
 * add mouse-wheel interaction to scroll-bar
 * enable float-based handle render positioning to scroll bar as well as float-based handle positioning
-            will require polling raw (non-scaled) mouse position....       
-* import updates to guicontadv... from MEIM   
-* add a viewport ability to guiScrollable (it should be a dummy gui that has its own rendering and input handling methods)            
+            will require polling raw (non-scaled) mouse position....    
 
 TESTING
 * test loot weighting
@@ -164,9 +162,6 @@ public static MyWorldData forWorld(World world)
   
   GL11.glViewport(0, (int)(50*vAspect), newXPixels, newYPixels);
   
-  
-  
-      
   GL11.glScalef(scaleX, scaleY, 1);
   for(int i = 0; i < 50; i++)
     {
@@ -216,7 +211,9 @@ public static MyWorldData forWorld(World world)
 * fix hit point of persistent arrows (they seem to use one of only a few hit-points on the block)
 * fix rendering of arrows (rotation goes all screwy at some angles, spins) 
 * fix load/save of persistent arrows (they go vertical upon reload and fall to the ground)
-* fix depth rendering on advanced overlay
+* fix depth rendering on advanced overlay   
+* import updates to guicontadv... from MEIM      
+* add basic scrollable area using viewport coding. needs much work.
 
 /********** 03-07-13 **********/
 /********** 03-08-13 **********/

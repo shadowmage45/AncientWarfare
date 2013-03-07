@@ -18,11 +18,13 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.gui;
+package shadowmage.ancient_warfare.client.gui.settings;
 
 import net.minecraft.inventory.Container;
+import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Settings;
 
@@ -35,6 +37,7 @@ GuiCheckBoxSimple enableMouseAim;
 GuiButtonSimple keyBinds;
 
 
+GuiScrollableArea testArea;
 /**
  * @param container
  */
@@ -42,8 +45,6 @@ public GuiClientSettings(Container container)
   {
   super(container);  
   }
-
-
 
 @Override
 public int getXSize()
@@ -71,13 +72,13 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Use Mouse Aim Input", guiLeft+10+16+2, guiTop+50+4, 0xffffffff);
   // TODO Auto-generated method stub
 
+  this.testArea.drawElement(mouseX, mouseY);
   }
 
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
-
+  this.testArea.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override
@@ -115,12 +116,14 @@ public void setupControls()
   this.enableMouseAim = this.addCheckBox(2, 10, 50, 16, 16).setChecked(Settings.getMouseAim());
   this.keyBinds = this.addGuiButton(3, this.getXSize()-45-10, 30, 45, 16, "Keybinds");
   this.addGuiButton(4, getXSize()-45-10, 10, 45, 16, "Done");
+  
+  this.testArea = new GuiScrollableArea(5, this, 100, 100, this.getXSize(), this.getYSize());
+  this.testArea.updateRenderPos(50, 70);
   }
 
 @Override
 public void updateControls()
   {
-  
   // TODO Auto-generated method stub
 
   }

@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.client.gui.elements;
 
 import java.text.DecimalFormat;
 
-import shadowmage.meim.common.util.StringTools;
+import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class GuiNumberInputLine extends GuiTextInputLine
 {

@@ -25,7 +25,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.client.gui.GuiClientSettings;
+import shadowmage.ancient_warfare.client.gui.settings.GuiClientSettings;
 import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
 import shadowmage.ancient_warfare.client.gui.structure.GuiEditorSelect;
 import shadowmage.ancient_warfare.client.gui.structure.GuiStructureScanner;
