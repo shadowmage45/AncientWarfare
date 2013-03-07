@@ -184,7 +184,7 @@ public void onTickEnd()
       ((VehicleBase)mc.thePlayer.ridingEntity).handleKeyboardMovement((byte)forwards, (byte)strafe);
       }
     } 
-  if(Settings.enableMouseAim && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
+  if(Settings.getMouseAim() && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
     {
     this.handleMouseAimUpdate();
     }

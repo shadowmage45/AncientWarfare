@@ -10,23 +10,13 @@ GENERAL
 * add basic GUI tooltip functionality -- GuiTooltip class (int x, int y, int w, int h, List<String> info)
 * move world-gen base config from AncientWarfare.cfg into /AWConfig/AWWorldGen.cfg
 
-VEHICLES   
-* scrap vehicle powerAdj system. rework to use pitch only.  All vehicles will need a fixed firing point
-    --catapults and trebuchet will have narrowed allowed upper angle (70' or so) and slightly narrowed lower angle (10-15' -- to clear the model from the bucket at 45')
+VEHICLES
 * implement vehicle weighting system (should it include upgrades, and ammo in bay)
 * tie acceleration to weight
 * figure out accuracy calculation methods (when to apply accuracy)(probably apply it to the output angle and yaw when spawning a missile)
 * upgrade system
 * implement armor system
 * vehicle research system
-    --5 tiers of material
-        --materials determine weight(speed/responsiveness), base hp and firepower
-            --rough rood (60% hp, 80%speed, 60% damage)
-            --treated wood (100 % hp, 100% speed, 100% damage)
-            --iron banded wood (110%hp, 95% speed, 110% damage)
-            --iron core beams (145%hp, 70% speed, 130% damage) 
-            --iron beams (200% hp, 50% speed, 175% damage)
-               
             
 AMMO TYPES 
 * fix hit point of persistent arrows (they seem to use one of only a few hit-points on the block)
@@ -41,7 +31,8 @@ GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
 * enable float-based handle render positioning to scroll bar as well as float-based handle positioning
             will require polling raw (non-scaled) mouse position....       
-* import updates to guicontadv... from MEIM               
+* import updates to guicontadv... from MEIM   
+* add a viewport ability to guiScrollable (it should be a dummy gui that has its own rendering and input handling methods)            
 
 TESTING
 * test loot weighting
@@ -103,16 +94,9 @@ ADVANCED DRAFTING STATION (editor)
 * THDT
 
 RESEARCH
-* THDT
-- vehicles can be built with different base components, which help determine the outcome characteristics
-        of the vehicle.  Such as using raw wood, fine wood, processed wood, ironshod wood, or iron channel
-        as base construction materials.  Each grade of material will help determine the base stats of the
-        vehicle (health, range modifier, damage done on hit, speed/weight), as well as secondary stats (i.e.
-        number of upgrade slots in the vehicle and upgrade points available for customization during construction)
-        add 'imbued' versions of these materials, each level of imbue will decrease some of the drawbacks for using 
-        higher-tier materials.  Imbued versions are created by combining various materials with the regular version
-        --such as combining with redstone for a t1 imbue, glowstone for a t2 imbue, both for t3 imbue.  Highest
-        level imbue will require glowstone, redstone, and ender pearls. (7 total levels of imbue)
+* research gui--base background GUI with scrollable viewport.  viewport will consist of a dummy GUI class that will have 
+        its methods called by the parent gui.  parent will call drawScreen, handleMouseInput, and handleKeyInput.  mouse input coords will
+        need to be scaled and adjusted (truncated) to the display region and only called if mouse is in the viewport region.
 -- GUI --  Render full-screen background image.  On top of that, render mid-ground image of current position in research map.
         On top of that, render a border to clean up edges.  Render mid-ground at .75f brightness, if over a control spot, render that
         control spot at 1.f brightness.  Research map has list of control spots which keep internal coords.  Mid-ground tex
@@ -311,10 +295,15 @@ public static MyWorldData forWorld(World world)
 * fix arrow model to use point of head as its position point         
 * add arrow persistent entity coding
 /********** 03-05-13 **********/
+* convert vehicles over to use interface typing.  they now consist of two parts, the entity (for animations), and the type (defines statistics)
 * re-implement auto-aiming to include vehicles that use power instead of pitch
-
-
+* bit of work on arrow persistence/hit point/sticking in the ground
+* add wood material and first-pass statistics to it.
 /********** 03-06-13 **********/
+* implement iterative algorithm to find best guess power for auto-aim, iteration count set by client-config setting (20000ns for 20 iterations avg on dev comp)
+* add basic client-side settings GUI, needs tons of work
+
+
 /********** 03-07-13 **********/
 /********** 03-08-13 **********/
 /********** 03-09-13 **********/

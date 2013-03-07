@@ -53,7 +53,7 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
 @Override
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {
-  if(Settings.renderOverlay && mc.currentScreen==null && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
+  if(Settings.getRenderOverlay() && mc.currentScreen==null && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
     {
     VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
     this.drawString(fontRenderer, "Range: "+vehicle.firingHelper.clientHitRange, 10, 10, 0xffffffff);

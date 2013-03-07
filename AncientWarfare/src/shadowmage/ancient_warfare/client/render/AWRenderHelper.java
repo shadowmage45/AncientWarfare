@@ -20,14 +20,17 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
-import java.util.EnumSet;
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.item.ItemBuilderBase;
 import shadowmage.ancient_warfare.common.item.ItemBuilderDirect;
@@ -35,8 +38,8 @@ import shadowmage.ancient_warfare.common.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.meim.common.util.Trig;
 
 public class AWRenderHelper
 {
@@ -134,12 +137,12 @@ private void renderStructureBB(EntityPlayer player, ItemStack stack, ItemBuilder
   BlockPosition originalHit = hit.copy();
   hit.y-=info.yOffset;
   hit = this.offsetForWorldRender(hit, face);  
-  
+
   if(item.renderBuilderBlockBB())
     {
     hit.moveForward(face, -info.zOffset + 1 + info.clearingBuffer);
     } 
-  
+
   AxisAlignedBB bb = info.getBBForRender(hit, face);  
   BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.8f, 0.2f, 0.8f);
   if(item.renderBuilderBlockBB())
@@ -147,13 +150,13 @@ private void renderStructureBB(EntityPlayer player, ItemStack stack, ItemBuilder
     bb = AxisAlignedBB.getBoundingBox(originalHit.x, originalHit.y, originalHit.z, originalHit.x+1, originalHit.y+1, originalHit.z+1);
     BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.3f, 0.3f, 0.8f);
     }
-  
+
   if(info.maxClearing > 0|| info.clearingBuffer >0)
     {
     bb = info.getClearingBBForRender(hit, face);
     BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.8f, 0.f, 0.f);
     }
-  
+
   if(info.maxLeveling >0)
     {
     bb = info.getLevelingBBForRender(hit, face);
@@ -176,7 +179,7 @@ protected BlockPosition offsetForWorldRender(BlockPosition hit, int face)
 
 protected void renderScanningBB()
   {
-  
+
   }
 
 /**
@@ -205,14 +208,20 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
   if(player==null)
     {
     return;
-    } 
+    }
+
+  if(Settings.getRenderAdvOverlay() && player.ridingEntity instanceof VehicleBase && mc.currentScreen==null)
+    {
+    this.renderAdvancedVehicleOverlay((VehicleBase)player.ridingEntity, player, evt.partialTicks);
+    }
+
   ItemStack stack = player.inventory.getCurrentItem();
   if(stack==null || stack.getItem()==null)
     {
     return;
     }
   int id = stack.itemID;
-  
+
   if(ItemBuilderBase.isBuilderItem(id))
     {
     this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
@@ -225,5 +234,70 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks);
     }
+
+
   }
+
+public void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlayer player, float partialTick)
+  {
+  //  Config.logDebug("rendering overlay stuffs");
+  //  double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTick;
+  //  double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTick;
+  //  double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTick;  
+  //  
+  //  y+=1;
+  //  double x1 = x +1 ;
+  //  double z1 = z +1;
+  //  GL11.glEnable(GL11.GL_BLEND);
+  //  GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+  //  GL11.glDepthMask(false);
+  //  GL11.glDisable(GL11.GL_TEXTURE_2D);
+  //  GL11.glColor4f(1.f, 0.4f, 0.4f, 0.4F);
+  //  
+  //  GL11.glColor3f(0.0f, 1.0f, 0.2f);
+  //  GL11.glBegin(GL11.GL_LINES);
+  //
+  //  GL11.glLineWidth(8.0F);
+  //  GL11.glVertex3d(x, y, z);
+  //  GL11.glVertex3d(x1, y, z1);
+  //  GL11.glEnd();
+  //  
+  //
+  //  GL11.glDepthMask(true);
+  //  GL11.glEnable(GL11.GL_TEXTURE_2D);
+  //  GL11.glDisable(GL11.GL_BLEND);
+
+  GL11.glPushMatrix();
+  GL11.glDisable(GL11.GL_TEXTURE_2D);
+  GL11.glDisable(GL11.GL_LIGHTING);
+  GL11.glDisable(GL11.GL_DEPTH_TEST);
+  GL11.glDepthMask(false);
+  GL11.glColor4d(1, 1, 1, 1);
+  
+  double x1 = vehicle.posX - player.posX;
+  double y1 = vehicle.posY - player.posY;
+  double z1 = vehicle.posZ - player.posZ;
+  
+  double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw);
+  double y2 = y1;
+  double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw);
+
+  GL11.glLineWidth(3f);
+  GL11.glBegin(GL11.GL_LINES);
+    
+  GL11.glVertex3d(x1, y1, z1);
+  GL11.glVertex3d(x2, y2, z2);
+  
+  GL11.glEnd();
+  GL11.glPopMatrix();
+
+
+  GL11.glDepthMask(true);
+  GL11.glEnable(GL11.GL_TEXTURE_2D);
+  }
+
+
+
+
+
 }

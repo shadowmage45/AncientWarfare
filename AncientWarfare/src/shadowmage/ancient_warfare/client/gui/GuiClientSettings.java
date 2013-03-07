@@ -66,9 +66,9 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawString(fontRenderer, "Render Overlay", guiLeft+10+16+2, 10+4, 0xffffffff);
-  this.drawString(fontRenderer, "Render Advanced Overlay", guiLeft+10+16+2, 30+4, 0xffffffff);
-  this.drawString(fontRenderer, "Use Mouse Aim Input", guiLeft+10+16+2, 50+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Overlay", guiLeft+10+16+2, guiTop+10+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Advanced Overlay", guiLeft+10+16+2, guiTop+30+4, 0xffffffff);
+  this.drawString(fontRenderer, "Use Mouse Aim Input", guiLeft+10+16+2, guiTop+50+4, 0xffffffff);
   // TODO Auto-generated method stub
 
   }
@@ -86,13 +86,14 @@ public void onElementActivated(IGuiElement element)
   switch(element.getElementNumber())
     {
     case 0:
-    Settings.renderOverlay = this.enableOverlayBox.checked();
+    Settings.setRenderOverlay(this.enableOverlayBox.checked());
     break;
+    
     case 1:
-    Settings.advancedOverlay = this.enableAdvancedOverlay.checked();
+    Settings.setRenderAdvOverlay(this.enableAdvancedOverlay.checked());
     break;
     case 2:
-    Settings.enableMouseAim = this.enableMouseAim.checked();
+    Settings.setMouseAim(this.enableMouseAim.checked());
     break;
     case 3:
     //TODO display keybinds config GUI
@@ -109,9 +110,9 @@ public void onElementActivated(IGuiElement element)
 @Override
 public void setupControls()
   {
-  this.enableOverlayBox = this.addCheckBox(0, 10, 10, 16, 16).setChecked(Settings.renderOverlay);
-  this.enableAdvancedOverlay = this.addCheckBox(1, 10, 30, 16, 16).setChecked(Settings.advancedOverlay);
-  this.enableMouseAim = this.addCheckBox(2, 10, 50, 16, 16).setChecked(Settings.enableMouseAim);
+  this.enableOverlayBox = this.addCheckBox(0, 10, 10, 16, 16).setChecked(Settings.getRenderOverlay());
+  this.enableAdvancedOverlay = this.addCheckBox(1, 10, 30, 16, 16).setChecked(Settings.getRenderAdvOverlay());
+  this.enableMouseAim = this.addCheckBox(2, 10, 50, 16, 16).setChecked(Settings.getMouseAim());
   this.keyBinds = this.addGuiButton(3, this.getXSize()-45-10, 30, 45, 16, "Keybinds");
   this.addGuiButton(4, getXSize()-45-10, 10, 45, 16, "Done");
   }

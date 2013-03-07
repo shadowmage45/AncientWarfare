@@ -281,6 +281,7 @@ public void handleFireInput(Vec3 target)
  */
 public void handleAimKeyInput(float pitch, float yaw)
   {
+  Config.logDebug("receiving key input. pitch: "+pitch+ " yaw: "+yaw);
   boolean pitchUpdated = false;
   boolean powerUpdated = false;
   boolean yawUpdated = false;
@@ -303,7 +304,7 @@ public void handleAimKeyInput(float pitch, float yaw)
     }
   else if(vehicle.canAimPower())
     {
-    float powerTest = vehicle.launchPowerCurrent + pitch;
+    float powerTest = clientLaunchSpeed + pitch;
     if(powerTest<0)
       {
       powerTest = 0;
@@ -327,6 +328,7 @@ public void handleAimKeyInput(float pitch, float yaw)
   if(powerUpdated || pitchUpdated || yawUpdated)
     {
     NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("aim", true);
     if(pitchUpdated)
       {
       tag.setFloat("aimPitch", clientTurretPitch);      
@@ -397,7 +399,7 @@ public void handleAimMouseInput(Vec3 target)
     }
   else if(vehicle.canAimPower())
     {     
-    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.turretPitch, Settings.trajectoryIterationsClient);
+    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.turretPitch, Settings.getClientPowerIterations());
     if(this.clientLaunchSpeed!=power && power < vehicle.launchSpeedCurrentMax)
       {
       this.clientLaunchSpeed = power;

@@ -113,6 +113,7 @@ public static void loadConfig(File inputFile)
   instance().setKingdomInfo();
   instance().setWorldGenInfo(); 
   instance().setStructureInfo();
+  Settings.instance().loadSettings();
   config.save();
   }
 
@@ -122,6 +123,11 @@ public static void saveConfig()
     {
     config.save();
     }
+  }
+
+public static Configuration getConfig()
+  {
+  return config;
   }
 
 public static int getItemID(String name, int defaultID)

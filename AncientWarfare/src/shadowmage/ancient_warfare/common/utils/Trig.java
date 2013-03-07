@@ -312,8 +312,8 @@ public static float iterativeSpeedFinder(float x, float y, float z, float angle,
 
 public static float iterativeSpeedFinder(float x, float y, float angle, int maxIterations)
   {
-  Config.logDebug("/********************************************/");
-  
+//  Config.logDebug("/********************************************/");
+//  long ts1 = System.nanoTime();
   /**
    * get a rough velocity value from an x,0 target
    */
@@ -343,9 +343,9 @@ public static float iterativeSpeedFinder(float x, float y, float angle, int maxI
   while(iter<=maxIterations)
     {
       
-    Config.logDebug("/********************************************/");   
-    Config.logDebug("iteration: "+iter+ "testing: "+testVelocity);
-    Config.logDebug("testFactor: "+testFactor);    
+//    Config.logDebug("/********************************************/");   
+//    Config.logDebug("iteration: "+iter+ "testing: "+testVelocity);
+//    Config.logDebug("testFactor: "+testFactor);    
     Pair<Float, Float> angles = getLaunchAngleToHit(x, y, testVelocity);
 
     Float foundAngle = useUpper? angles.key() : angles.value();   
@@ -353,7 +353,7 @@ public static float iterativeSpeedFinder(float x, float y, float angle, int maxI
     if(foundAngle.isNaN())
       {
       wasPreviousNAN=true;
-      Config.logDebug("incrementing power for NAN angle");
+//      Config.logDebug("incrementing power for NAN angle");
       if(testFactor<0)
         {
         testFactor *= -1;
@@ -364,7 +364,7 @@ public static float iterativeSpeedFinder(float x, float y, float angle, int maxI
         }
       testVelocity += testFactor;
       bestVelocity = testVelocity;         
-      Config.logDebug("/********************************************/");
+//      Config.logDebug("/********************************************/");
       continue;      
       }    
     wasPreviousNAN = false;
@@ -373,10 +373,10 @@ public static float iterativeSpeedFinder(float x, float y, float angle, int maxI
    
     if(diff>prevDiff)//we're going in the wrong direction
       {
-      Config.logDebug("diff: "+diff+ "prevDiff: "+prevDiff);
-      Config.logDebug("bestDiff: " +bestDiff);
-      Config.logDebug("foundAngle: "+foundAngle);  
-      Config.logDebug("should invert direction!!");
+//      Config.logDebug("diff: "+diff+ "prevDiff: "+prevDiff);
+//      Config.logDebug("bestDiff: " +bestDiff);
+//      Config.logDebug("foundAngle: "+foundAngle);  
+//      Config.logDebug("should invert direction!!");
       testFactor *= -1;//reverse test factor;
       testFactor *= 0.5f;//reduce test factor 
       testVelocity = prevVelocity;
@@ -385,18 +385,22 @@ public static float iterativeSpeedFinder(float x, float y, float angle, int maxI
       {       
       bestDiff = diff;
       bestVelocity = testVelocity;
-      Config.logDebug("diff: "+diff+ "prevDiff: "+prevDiff);
-      Config.logDebug("found new best: "+testVelocity);
-      Config.logDebug("bestDiff: " +bestDiff);
-      Config.logDebug("foundAngle: "+foundAngle);  
+//      Config.logDebug("diff: "+diff+ "prevDiff: "+prevDiff);
+//      Config.logDebug("found new best: "+testVelocity);
+//      Config.logDebug("bestDiff: " +bestDiff);
+//      Config.logDebug("foundAngle: "+foundAngle);  
       }
     
     prevVelocity = testVelocity;
     testVelocity += testFactor;
     prevDiff = diff;      
     iter++;    
-    Config.logDebug("/********************************************/");
+//    Config.logDebug("/********************************************/");
     }
+  
+//  long ts2 = System.nanoTime();
+//  long diff = ts2-ts1;
+//  Config.logDebug("traj calc time nanos: "+diff);
   
   testVelocity = prevVelocity;  
   return bestVelocity;

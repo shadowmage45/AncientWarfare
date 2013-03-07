@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.config;
 
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.Property;
+
 /**
  * client-side only game settings
  * @author Shadowmage
@@ -28,11 +31,20 @@ package shadowmage.ancient_warfare.common.config;
 public class Settings
 {
 
-public static boolean renderOverlay = true;
-public static boolean advancedOverlay = true;
-public static boolean enableMouseAim = true;
-public static int mouseLookRange = 140;
-public static int trajectoryIterationsClient = 20;
+private static Configuration config;
+
+public static Property overlayProp;
+public static Property advOverlayProp;
+public static Property mouseAimProp;
+public static Property mouseRangeProp;
+public static Property trajectoryIterationsProp;
+
+
+private static boolean renderOverlay = true;
+private static boolean renderAdvancedOverlay = true;
+private static boolean enableMouseAim = true;
+private static int mouseLookRange = 140;
+private static int trajectoryIterationsClient = 20;
 
 private Settings(){};
 private static Settings INSTANCE;
@@ -44,6 +56,72 @@ public static Settings instance()
    }
  return INSTANCE;
  }
+
+
+public void loadSettings()
+  {
+  this.config = Config.getConfig();
+  config.addCustomCategoryComment("client-settings", "These settings are effective client-side only, and may differ from client to client.  Most only effect local performance, and none may necessarily be used to 'cheat'.");
+  this.overlayProp = config.get("client-settings", "render_overlay", true, "Render the basic stats overlay when riding a vehicle?");
+  this.advOverlayProp = config.get("client-settings", "render_overlay_advanced", true, "Render the advanced vehicle overlay?");
+  this.mouseAimProp = config.get("client-settings", "use_mouse_aim", true, "Use auto-aiming from mouse intput/cursor position?  May be toggled in-game to do manual aiming.");
+  this.mouseRangeProp = config.get("client-settings", "mouse_aim_look_range", 140, "The distance to which a ray-trace will be performed when calculating auto-aim.  Lower settings may improve performance at the cost of being unable to auto-aim past that distance.");
+  this.trajectoryIterationsProp = config.get("client-settings", "power_calculation_accuracy", 20, "How many iterations should be done for calculating power settings for mouse-aim.  Higher settings may cause lag on slower computers.  Lower settings WILL reduce accuracy of auto-aim.");
+  
+  this.renderOverlay = overlayProp.getBoolean(true);
+  this.renderAdvancedOverlay = advOverlayProp.getBoolean(true);
+  this.enableMouseAim = mouseAimProp.getBoolean(true);
+  }
+
+public static boolean getMouseAim()
+  {
+  return enableMouseAim;
+  }
+
+public static boolean getRenderOverlay()
+  {
+  return renderOverlay;
+  }
+
+public static boolean getRenderAdvOverlay()
+  {
+  return renderAdvancedOverlay;
+  }
+
+public static int getClientPowerIterations()
+  {
+  return trajectoryIterationsClient;
+  }
+
+public static void setMouseAim(boolean aim)
+  {
+  if(aim!=enableMouseAim)
+    {
+    enableMouseAim = aim;
+    mouseAimProp.value = String.valueOf(aim);
+    config.save();
+    }  
+  }
+
+public static void setRenderOverlay(boolean rend)  
+  {
+  if(rend!=renderOverlay)
+    {
+    renderOverlay = rend;
+    overlayProp.value = String.valueOf(rend);
+    config.save();
+    }
+  }
+
+public static void setRenderAdvOverlay(boolean rend)  
+  {
+  if(rend!=renderAdvancedOverlay)
+    {
+    renderAdvancedOverlay = rend;
+    advOverlayProp.value = String.valueOf(rend);
+    config.save();
+    }
+  }
 
 
 
