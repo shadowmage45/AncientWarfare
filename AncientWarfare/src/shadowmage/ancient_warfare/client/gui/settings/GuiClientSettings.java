@@ -70,8 +70,6 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Render Overlay", guiLeft+10+16+2, guiTop+10+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Advanced Overlay", guiLeft+10+16+2, guiTop+30+4, 0xffffffff);
   this.drawString(fontRenderer, "Use Mouse Aim Input", guiLeft+10+16+2, guiTop+50+4, 0xffffffff);
-  // TODO Auto-generated method stub
-
   this.testArea.drawElement(mouseX, mouseY);
   }
 
@@ -97,7 +95,7 @@ public void onElementActivated(IGuiElement element)
     Settings.setMouseAim(this.enableMouseAim.checked());
     break;
     case 3:
-    //TODO display keybinds config GUI
+    mc.displayGuiScreen(new GuiKeybinds(inventorySlots, this));
     break;
     case 4:
     mc.displayGuiScreen(null);
@@ -117,8 +115,10 @@ public void setupControls()
   this.keyBinds = this.addGuiButton(3, this.getXSize()-45-10, 30, 45, 16, "Keybinds");
   this.addGuiButton(4, getXSize()-45-10, 10, 45, 16, "Done");
   
-  this.testArea = new GuiScrollableArea(5, this, 100, 100, this.getXSize(), this.getYSize());
-  this.testArea.updateRenderPos(50, 70);
+  this.testArea = new GuiScrollableArea(5, this, 50, 70, 100, 100, 200);
+  this.testArea.addGuiElement(new GuiButtonSimple(7, testArea, 55, 16, "TestButton").updateRenderPos(0, 0));
+  this.testArea.addGuiElement(new GuiButtonSimple(8, testArea, 55, 16, "TestButton2").updateRenderPos(0, 100));
+  this.guiElements.put(6, testArea);
   }
 
 @Override

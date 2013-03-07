@@ -214,8 +214,11 @@ public static MyWorldData forWorld(World world)
 * fix depth rendering on advanced overlay   
 * import updates to guicontadv... from MEIM      
 * add basic scrollable area using viewport coding. needs much work.
-
 /********** 03-07-13 **********/
+* work on setting up elements on scrollable area (working aside from Y render issues (its too far north)
+* fix scrollable area render positioning. it now positions elements correctly
+* fix scrollable area element positioning, as well as mouse-input.  It now scrolls elements properly 
+
 /********** 03-08-13 **********/
 /********** 03-09-13 **********/
 /********** 03-10-13 **********/

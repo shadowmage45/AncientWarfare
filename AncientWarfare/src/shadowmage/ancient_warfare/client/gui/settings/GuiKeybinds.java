@@ -22,39 +22,38 @@ package shadowmage.ancient_warfare.client.gui.settings;
 
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class GuiKeybinds extends GuiContainerAdvanced
 {
 
+GuiContainerAdvanced parentGui;
+GuiScrollableArea area;
+
+
 /**
  * @param container
  */
-public GuiKeybinds(Container container)
+public GuiKeybinds(Container container, GuiContainerAdvanced parent)
   {
   super(container);
-  // TODO Auto-generated constructor stub
+  this.parentGui = parent;
   }
 
-@Override
-public void onElementActivated(IGuiElement element)
-  {
-  // TODO Auto-generated method stub
-  
-  }
 
 @Override
 public int getXSize()
   {
-  // TODO Auto-generated method stub
-  return 0;
+  return 256;
   }
 
 @Override
 public int getYSize()
   {
-  // TODO Auto-generated method stub
-  return 0;
+  return 240;
   }
 
 @Override
@@ -67,29 +66,56 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  // TODO Auto-generated method stub
-  
+  area.drawElement(mouseX, mouseY);
   }
 
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
+  area.updateGuiPos(guiLeft, guiTop);
+  }
+
+
+@Override
+public void onElementActivated(IGuiElement element)
+  {
+  switch(element.getElementNumber())
+    {
+    case 0:
+    break;
+    case 1:
+    mc.displayGuiScreen(parentGui);
+    break;
+    default:
+    break;
+    }
   
   }
 
 @Override
 public void setupControls()
   {
-  // TODO Auto-generated method stub
-  
+  int buffer = 2;
+  int buttonSize = 16;
+  int keyBindCount = 20;
+  int totalHeight = keyBindCount * (buffer+buttonSize);
+  Config.logDebug("total area height: "+totalHeight);
+  area = new GuiScrollableArea(0, this, 10, 20, this.getXSize()-20, this.getYSize()-30, totalHeight);
+  this.addGuiButton(1, getXSize()-35-5, 5, 35, 12, "Done");
+  int kX = 5;
+  int kY = 0;
+  for(int i = 0; i < keyBindCount; i++)
+    {
+    kY = i * (buffer+buttonSize);    
+    area.addGuiElement(new GuiButtonSimple(i+2, area, 100, buttonSize, "Button"+i).updateRenderPos(kX, kY));
+    }
+  this.guiElements.put(0, area);
   }
 
 @Override
 public void updateControls()
   {
   // TODO Auto-generated method stub
-  
   }
 
 }

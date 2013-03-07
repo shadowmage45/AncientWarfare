@@ -66,7 +66,7 @@ public void drawElement(int mouseX, int mouseY)
     int guiLeftOffset = this.renderWithGuiOffset ? this.guiLeft : 0;
     int guiTopOffset = this.renderWithGuiOffset ? this.guiTop : 0;
     
-    String tex = "/shadowmage/meim/resources/gui/guiButtons.png";
+    String tex = "/shadowmage/ancient_warfare/resources/gui/guiButtons.png";
     this.drawQuadedTexture(guiLeftOffset+renderPosX, guiTopOffset+renderPosY, width, height, 256, 40, tex, 0, vOffset);
     int fontColor = 14737632;
     if(!this.enabled)
