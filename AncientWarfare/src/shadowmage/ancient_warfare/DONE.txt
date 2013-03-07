@@ -87,3 +87,93 @@
 * test biome inclusion/exclusion
 * add default templates, and add them to export list
 * add BB render to scanner
+/****************************************FIRST TEST RELEASE****************************************/
+* store template lines in structure
+* break template lines into byte chunks to send to client
+* send template byte chunks to client for entire structure
+* composite byte chunks into structure on client side
+* figure out multi-line text box...
+* remove unused fields (chunkDistance, chunkAttempts)
+* ohh..and add editor...
+/********** 02-11-13 **********/
+* auto-forced chunkloading for builder blocks
+* remove name= line from templates, only use internally in structure/code (set from filename, upon load)
+* on load, validate struct name for uniqueness
+* ensure that builders will not crash/corrupt world if they are loaded with a template
+      that has changed after they were fist placed.  save an md5 of the file into the processedStructure
+      save that md5 out to the builder.  when builder is loaded, check saved md5 versus the passed-in structure
+* add counting/ref mechanism for structures, to know which are editable, disallow editing if locked/in-use
+* don't close GUI on save, only on discard
+* add shift/invert option to config and items--global (does not effect scanners, due to client-server config differences, could probably synch config from server-client onLogin)
+* advanced setup gui, set values on init according to existing values in container
+* add clear/reset button to GUI, in case someone wants to ditch a scan
+* fix ticked builder block available in creative inventory
+* add more concise chat message as to what is going on when it is used (step _ of 4)
+* direct builder has some issues with BB not clearing on client-side when the struct is cleared...
+* direct builder scanning BB not rendering...
+* remove creative flag--all will be available
+* exporter now can convert entire structure to lines (uses this before writing)....
+* scanner now sets template lines into freshly scanned buildings (for use of edit prior to save)...
+* add advanced button to enable editing prior to first save
+        --it will technically export with include
+        --and then force-open the editor GUI with the just
+        --exported structure...
+* clean up various bugs from the days work at work... pt1
+* clean up file transmission, it leaves 'null' lines at the end of the file (bugs from the day, pt2)
+* clean up directBuilder scan BB rendering and item-clearing (bugs from the day, pt3)
+* clean up a few chunkloading related bugs (bugs from the day, pt4)
+* add builderTE/block onRemove code to release tickets...
+/********** 02-12-13 **********/
+* enforce air-zero rule (hard-coded, non-replaceable)
+* rework guiContainerAdvanced to include fully custom button and text-box handling
+/********** 02-13-13 **********/
+* rework worldgen/structures slightly to allow for overrides from world-gen file to globally effect structures 
+        as/after they are loaded (functions as a complete overrride without touching the orig structures values)
+* add save ability to world-gen config file--should allow for in-game addition of structures (values are all final however, cannot be edited)
+* add leveling/clearing/overhang overrides to worldgenstructentry
+* move generated stucture maps into world.perWorldStorage (see notes...)
+* enable value/weight settings for structure export
+* enable add-to-world-gen for newly created structures (w/ given world-gen values)...
+* check openEditors list instead of edit-flag
+* move gen structure maps back into AWsaved data...NFC how MC saved file works...
+* test world-gen export
+* check overrides for structure for biome settings....
+/********** 02-14-13 **********/
+* add more info to genstructmap, to be able to recreate the bb for that struct...
+* check nearby chunks in generatedMap for structure bb's, make sure bb's will not overwrite...
+            should probably be called in attemptGenerateAt<surface/subsurface>.. need to store old struct buildPos
+            in the gen struct map (stored as an offset from chunkPos (as bytes))
+* add text to scanner GUI for weight, value, unique
+* only display world-gen export options if world-gen output is enabled
+* add reject message display if attempting to open a locked structure...
+* validate struct before transmit to save
+* don't close gui on save...somehow display a message if saved sucessfully?
+* add method to 'lock' structure when editing, so no other player could edit the same struct
+            and release when no longer in use..so it can be built, etc...
+* add dirty flag to editor, so it won't retransmit template unless it has been edited
+* update textFieldAdvanced number handling--it should now allow control input, but still only allow numerical input
+* add getIntVal and getFloatVal to textFieldAdvanced
+* change template extension--enable it in config properties
+* test that structBBs didn't get screwed by using min/max on them
+* add home, pgUp, pgDwn, end functionality to editor
+* add mouse input to editor
+* find better placement for error msgs...
+* fix up bb collision code...it..was terrible...
+* fix up some of the world-gen override code that wasn't quite overridden...it should now function reliably....
+* find better manner of handling overrides
+* test that static air rule works properly
+* test structure BB collision code...
+* test world gen overrides...
+/********** 02-15-13 **********/
+* add clearing/leveling code to the structureBB collision test...
+* enable decorative structures (value 0)
+* add some null checks to container/guis...mostly there, but probably still missing a few
+* add method to retrieve top block between bounds..
+/********** 02-16-13 **********/
+* fix up leveling check--it is not checking bounds properly
+        added debug test code to instant-builder, needs thorough testing and validation
+        using this debug code...
+* clearance validation code is still a bit....off..        
+/********** 02-20-13 **********/
+* rework all GUIs to enable new IGuiElement code and style...rewrite
+            GuiTextFieldAdvanced, from the ground up... (yes, painful)   

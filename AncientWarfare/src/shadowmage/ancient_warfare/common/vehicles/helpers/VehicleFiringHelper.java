@@ -102,7 +102,22 @@ public void onTick()
       this.reloadingTicks = 0;      
       }
     }
- 
+  
+  if(vehicle.worldObj.isRemote)
+    {
+    if(!vehicle.canAimPitch())
+      {
+      this.clientTurretPitch = vehicle.turretPitch;
+      }
+    if(!vehicle.canAimPower())
+      {
+      this.clientLaunchSpeed = vehicle.launchPowerCurrent;
+      }
+    if(!vehicle.canAimRotate())
+      {
+      this.clientTurretYaw = vehicle.rotationYaw;
+      }
+    }
   }
 
 

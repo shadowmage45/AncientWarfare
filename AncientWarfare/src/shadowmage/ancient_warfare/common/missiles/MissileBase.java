@@ -20,13 +20,24 @@
  */
 package shadowmage.ancient_warfare.common.missiles;
 
+import java.util.List;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraft.block.Block;
+import net.minecraft.enchantment.EnchantmentThorns;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet70GameEvent;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -85,7 +96,7 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
   this.motionX = mx;
   this.motionY = my;
   this.motionZ = mz;
-  
+
   this.onUpdateArrowRotation();
   this.prevRotationPitch = this.rotationPitch;
   this.prevRotationYaw = this.rotationYaw;
@@ -135,51 +146,49 @@ public void onMovementTick()
   {
   if(!this.inGround)
     {
-    this.motionY -= this.ammoType.getGravityFactor();
-    if(this.motionX != 0 || this.motionY != 0 || this.motionZ != 0)
-      {     
-      
-      Vec3 pos = Vec3.createVectorHelper(posX, posY, posZ);
-      Vec3 move = Vec3.createVectorHelper(posX+motionX, posY+motionY, posZ+motionZ);      
-      MovingObjectPosition hit = this.worldObj.rayTraceBlocks_do_do(pos, move, false, true);   
-      if(hit!=null)
-        { 
-        
-        Config.logDebug("setting in ground");
-        Config.logDebug("hitVec: "+hit.hitVec.toString());
+    this.onUpdateArrowRotation();
+    this.onUpdateArrowMotion();
+    }
+  
+  if(!this.inGround)
+    {
+    Vec3 var17 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
+    Vec3 var3 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+    MovingObjectPosition var4 = this.worldObj.rayTraceBlocks_do_do(var17, var3, false, true);
+    if (var4 != null)
+      {
+      if (var4.entityHit != null)
+        {
+
+        }
+      else
+        {
+        this.motionX = (double)((float)(var4.hitVec.xCoord - this.posX));
+        this.motionY = (double)((float)(var4.hitVec.yCoord - this.posY));
+        this.motionZ = (double)((float)(var4.hitVec.zCoord - this.posZ));
+        float var20 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+        this.posX -= this.motionX / (double)var20 * 0.05000000074505806D;
+        this.posY -= this.motionY / (double)var20 * 0.05000000074505806D;
+        this.posZ -= this.motionZ / (double)var20 * 0.05000000074505806D;
+        this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
         this.inGround = true;
         if(!this.ammoType.isPersistent() && !this.worldObj.isRemote)
           {
           this.setDead();
           }
-          /**
-           * TESTING
-           */
-        this.motionX = (double)((float)(hit.hitVec.xCoord - this.posX));
-        this.motionY = (double)((float)(hit.hitVec.yCoord - this.posY));
-        this.motionZ = (double)((float)(hit.hitVec.zCoord - this.posZ));
-        float motionSpeed = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-        this.posX -= this.motionX / (double)motionSpeed * 0.05000000074505806D;
-        this.posY -= this.motionY / (double)motionSpeed * 0.05000000074505806D;
-        this.posZ -= this.motionZ / (double)motionSpeed * 0.05000000074505806D;
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
-        } 
-      else
-        {
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
-        this.prevRotationPitch = this.rotationPitch;
-        this.prevRotationYaw = this.rotationYaw;
-        this.posX += this.motionX;
-        this.posY += this.motionY;
-        this.posZ += this.motionZ;
-        this.onUpdateArrowRotation();
         }
       }
-    }
+    this.posX += this.motionX;
+    this.posY += this.motionY;
+    this.posZ += this.motionZ; 
+    this.motionY -= (double)this.ammoType.getGravityFactor();
+    this.setPosition(this.posX, this.posY, this.posZ);
+    }  
+  }
+
+public void onUpdateArrowMotion()
+  {
+  
   }
 
 public void onUpdateArrowRotation()
@@ -187,7 +196,32 @@ public void onUpdateArrowRotation()
   double motionSpeed = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
   this.rotationYaw =Trig.toDegrees((float) Math.atan2(this.motionX, this.motionZ)) - 90 ;
   this.rotationPitch = Trig.toDegrees((float)Math.atan2(this.motionY, (double)motionSpeed)) - 90;
+  while(this.rotationPitch - this.prevRotationPitch < -180.0F)
+    {
+    this.prevRotationPitch -= 360.0F;
+    }
+
+  while (this.rotationPitch - this.prevRotationPitch >= 180.0F)
+    {
+    this.prevRotationPitch += 360.0F;
+    }
+
+  while (this.rotationYaw - this.prevRotationYaw < -180.0F)
+    {
+    this.prevRotationYaw -= 360.0F;
+    }
+
+  while (this.rotationYaw - this.prevRotationYaw >= 180.0F)
+    {
+    this.prevRotationYaw += 360.0F;
+    }
   //Config.logDebug("setting rotPitch to: "+this.rotationPitch);
+  }
+
+@Override
+public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9)
+  {
+  this.setPosition(par1, par3, par5); 
   }
 
 @Override
@@ -201,14 +235,14 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   {
   this.missileType = tag.getInteger("type");
   this.ammoType = AmmoRegistry.instance().getAmmoEntry(missileType);
-  this.currentGrav = tag.getFloat("grav");
+  this.inGround = tag.getBoolean("inGround");
   }
 
 @Override
 protected void writeEntityToNBT(NBTTagCompound tag)
   {
   tag.setInteger("type", missileType);
-  tag.setFloat("grav", this.currentGrav);
+  tag.setBoolean("inGround", this.inGround);
   }
 
 @Override
@@ -220,7 +254,9 @@ protected void entityInit()
 public void writeSpawnData(ByteArrayDataOutput data)
   {
   data.writeInt(missileType);
-  data.writeFloat(this.currentGrav);
+  data.writeFloat(rotationYaw);
+  data.writeFloat(rotationPitch);
+  data.writeBoolean(inGround);
   }
 
 @Override
@@ -228,6 +264,8 @@ public void readSpawnData(ByteArrayDataInput data)
   {
   this.missileType =data.readInt();
   this.ammoType = AmmoRegistry.instance().getAmmoEntry(missileType);
-  this.currentGrav = data.readFloat();
+  this.rotationYaw = data.readFloat();
+  this.rotationPitch = data.readFloat();
+  this.inGround = data.readBoolean();
   }
 }

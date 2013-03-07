@@ -84,6 +84,7 @@ public static Keybind pitchUp;
 public static Keybind pitchDown;
 public static Keybind turretLeft;
 public static Keybind turretRight;
+public static Keybind mouseAim;
 
 public void loadKeysFromConfig()
   {
@@ -104,6 +105,10 @@ public void loadKeysFromConfig()
   KeybindManager.addKeybind(pitchUp);
   pitchDown = new Keybind(Config.getKeyBindID("keybind.aimDown", Keyboard.KEY_F, "Aim Down"), "Aim Down");
   KeybindManager.addKeybind(pitchDown);
+  
+  
+  mouseAim = new Keybind(Config.getKeyBindID("keybind.mouseAim", Keyboard.KEY_C, "Enable/Disable Mouse Aim"), "Mouse Aim");
+  KeybindManager.addKeybind(mouseAim);
   }
 
 @Override
@@ -157,17 +162,24 @@ public void onKeyUp(Keybind kb)
 @Override
 public void onKeyPressed(Keybind kb)
   {
-  if(kb==forward || kb==left || kb==right || kb==reverse)
+  if(mc.currentScreen==null && mc.theWorld != null && mc.thePlayer!=null && !mc.isGamePaused)
     {
-    hasMoveInput = true;
-    }
-  if(kb==fire)
-    {
-    this.handleFireAction();    
-    }
-  if(kb==pitchUp || kb == pitchDown || kb == turretLeft || kb==turretRight)
-    {
-    this.handleAimAction(kb);
+    if(kb==this.mouseAim )
+      {
+      Settings.setMouseAim(!Settings.getMouseAim());
+      }
+    if(kb==forward || kb==left || kb==right || kb==reverse)
+      {
+      hasMoveInput = true;
+      }
+    if(kb==fire)
+      {
+      this.handleFireAction();    
+      }
+    if(kb==pitchUp || kb == pitchDown || kb == turretLeft || kb==turretRight)
+      {
+      this.handleAimAction(kb);
+      }
     }
   }
 
@@ -194,21 +206,24 @@ int inputUpdateTicks = 0;
 
 public void handleAimAction(Keybind kb)
   {
-  if(kb==pitchDown)
-    {    
-    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(-1, 0);
-    }
-  else if(kb==pitchUp)
+  if(mc.thePlayer.ridingEntity instanceof VehicleBase)
     {
-    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(1, 0);
-    }
-  else if(kb==turretLeft)
-    {
-    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(0, -1);
-    }
-  else if(kb==turretRight)
-    {
-    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(0, 1);
+    if(kb==pitchDown)
+      {    
+      ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(-1, 0);
+      }
+    else if(kb==pitchUp)
+      {
+      ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(1, 0);
+      }
+    else if(kb==turretLeft)
+      {
+      ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(0, -1);
+      }
+    else if(kb==turretRight)
+      {
+      ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(0, 1);
+      }
     }  
   }
 

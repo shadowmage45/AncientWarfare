@@ -246,8 +246,8 @@ public void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlayer playe
   GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
   GL11.glDisable(GL11.GL_TEXTURE_2D);
 //  GL11.glDisable(GL11.GL_LIGHTING);
-  GL11.glDisable(GL11.GL_DEPTH_TEST);
-  GL11.glDepthMask(false);
+//  GL11.glDisable(GL11.GL_DEPTH_TEST);
+  //GL11.glDepthMask(false);
   GL11.glColor4d(1, 1, 1, 0.6d);
   
   double x1 = vehicle.posX - player.posX;
@@ -261,8 +261,8 @@ public void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlayer playe
   GL11.glLineWidth(3f);
   GL11.glBegin(GL11.GL_LINES);
     
-  GL11.glVertex3d(x1, y1, z1);
-  GL11.glVertex3d(x2, y2, z2);
+  GL11.glVertex3d(x1, y1+0.12d, z1);
+  GL11.glVertex3d(x2, y2+0.12d, z2);
   
   GL11.glEnd();
   
@@ -302,6 +302,7 @@ public void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlayer playe
   GL11.glPopMatrix();
 
   GL11.glDepthMask(true);
+  
   GL11.glDisable(GL11.GL_BLEND);
   GL11.glEnable(GL11.GL_TEXTURE_2D);
   }

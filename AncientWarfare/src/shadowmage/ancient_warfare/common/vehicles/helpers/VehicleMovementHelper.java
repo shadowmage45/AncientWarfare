@@ -173,13 +173,21 @@ public void onMovementTick()
   vehicle.wheelRotationPrev = vehicle.wheelRotation;
   vehicle.wheelRotation += forwardMotion*0.02f;
   vehicle.rotationYaw += strafeMotion;    
-  if(strafeMotion !=0 || forwardMotion !=0)
+  if(!vehicle.isCollidedVertically)
     {
-    vehicle.moveEntity(vehicle.motionX, 0, vehicle.motionZ);
+    vehicle.motionY -= (9.81f*0.05f*0.05f);
+    }
+  else
+    {
+    vehicle.motionY = 0.f;
+    }
+  if(strafeMotion !=0 || forwardMotion !=0 || vehicle.motionY !=0)
+    {    
+    vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
     float x = Trig.sinDegrees(vehicle.rotationYaw)*-forwardMotion;
     float z = Trig.cosDegrees(vehicle.rotationYaw)*-forwardMotion;  
     vehicle.motionX = x;
-    vehicle.motionZ = z;
+    vehicle.motionZ = z;    
     }
   }
 
