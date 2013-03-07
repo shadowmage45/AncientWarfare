@@ -128,13 +128,14 @@ public void setStructureName(String name)
 @Override
 public void setupControls()
   {
-  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
-  this.addGuiButton(1, 10, 40+8, 35, 18, "Prev");
-  this.addGuiButton(2, 50, 40+8, 35, 18, "Next");  
-  this.addGuiButton(20, 256-85-10, 30, 85, 16, "Advanced Setup"); 
+  this.addGuiButton(0, 35, 18, "Done").updateRenderPos(256-35-10, 10); 
+  this.addGuiButton(1, 35, 18, "Prev").updateRenderPos(10, 40+8);
+  this.addGuiButton(2, 35, 18, "Next").updateRenderPos(50, 40+8);  
+  this.addGuiButton(20, 85, 16, "Advanced Setup").updateRenderPos(256-85-10, 30); 
   for(int i = 0, buttonNum = 3; i< numberDisplayed; i++, buttonNum++)
     {
-    structureButtons.add(this.addGuiButton(buttonNum, 10, 60 + (20*i) +8, 120, 14, ""));
+    structureButtons.add(this.addGuiButton(buttonNum, 120, 14, ""));
+    this.structureButtons.get(this.structureButtons.size()-1).updateRenderPos(10, 60 + (20*i) +8);
     }
   }
 

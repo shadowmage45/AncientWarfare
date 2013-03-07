@@ -20,18 +20,20 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
+import org.lwjgl.opengl.GL11;
+
 public class GuiScrollBarSimple extends GuiElement
 {
 
 /**
- * height of the handle-button/barthingie, in MCpixels...
+ * height of the handle-button/barthingie, in pixels...
  */
 int handleHeight;
 
 /**
  * current position of the scroll bar
  */
-public int handleTop;
+int handleTop;
 
 
 final int buffer = 5;
@@ -44,9 +46,9 @@ final int buffer = 5;
  * @param w
  * @param h
  */
-public GuiScrollBarSimple(int elementNum, IGuiElementCallback parent, int w, int h, int intialSetSize, int displaySize)
+public GuiScrollBarSimple(int elementNum, IGuiElementCallback parent, int x, int y, int w, int h, int intialSetSize, int displaySize)
   {
-  super(elementNum, parent, w, h);
+  super(elementNum, parent, x, y, w, h);
   this.updateHandleHeight(intialSetSize, displaySize);
   this.handleTop = 0;
   }
@@ -54,12 +56,9 @@ public GuiScrollBarSimple(int elementNum, IGuiElementCallback parent, int w, int
 @Override
 public void drawElement(int mouseX, int mouseY)
   {
-  if(!this.hidden)
-    {
-    String tex = "/shadowmage/meim/resources/gui/guiButtons.png";  
-    this.drawQuadedTexture(renderPosX+guiLeft, renderPosY+guiTop, width, height, 40, 128, tex, 80, 120); 
-    this.drawQuadedTexture(renderPosX+guiLeft+buffer, renderPosY+guiTop+buffer+handleTop, width-buffer*2, handleHeight, 30, 128, tex, 120, 120);
-    }
+  String tex = "/shadowmage/ancient_warfare/resources/gui/guiButtons.png";  
+  this.drawQuadedTexture(renderPosX+guiLeft, renderPosY+guiTop, width, height, 40, 128, tex, 80, 120); 
+  this.drawQuadedTexture(renderPosX+guiLeft+buffer, renderPosY+guiTop+buffer+handleTop, width-buffer*2, handleHeight, 30, 128, tex, 120, 120);  
   }
 
 @Override
@@ -123,7 +122,7 @@ private void updateHandleDisplayPos(int yDelta)
  *  update the size of the handle, relative to the size of the underlying elementSet
  *  should be called BEFORE updateHandlePos, and before getTopIndex...
  */
-public void updateHandleHeight(int setSize, int displayElements)
+private void updateHandleHeight(int setSize, int displayElements)
   {
   int availBarHeight = this.height - this.buffer*2 - 20;//20 is the minimum handle height...
   float elementPercent = (float)displayElements/(float)setSize;

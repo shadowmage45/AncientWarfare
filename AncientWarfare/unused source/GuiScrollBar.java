@@ -86,7 +86,7 @@ public void drawScrollBar()
    * used to determine the active texture (highlighted or not)...
    */
   
-  GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture("/shadowmage/meim/resources/gui/guiButtons.png"));
+  GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture("/shadowmage/ancient_warfare/resources/gui/guiButtons.png"));
   GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
    
   //this.drawTexturedModalRect(this.xPosition, this.yPosition, u, v, w, h);

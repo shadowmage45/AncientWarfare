@@ -25,7 +25,7 @@ import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import shadowmage.meim.common.config.Config;
+import shadowmage.ancient_warfare.common.config.Config;
 
 
 public class GuiTextBox extends Gui

@@ -60,15 +60,16 @@ int guiTop;
 protected boolean isMouseOver = false;
 public boolean enabled = true;
 public boolean hidden = false;
-public boolean renderWithGuiOffset = true;
 
 protected Minecraft mc;
 protected FontRenderer fr;
 
-public GuiElement(int elementNum, IGuiElementCallback parent, int w, int h)
+public GuiElement(int elementNum, IGuiElementCallback parent, int x, int y, int w, int h)
   {
   this.elementNum = elementNum;
   this.parent = parent;
+  this.renderPosX = x;
+  this.renderPosY = y;
   this.width = w;
   this.height = h;
   this.mc = Minecraft.getMinecraft();
@@ -76,18 +77,10 @@ public GuiElement(int elementNum, IGuiElementCallback parent, int w, int h)
   }
 
 @Override
-public GuiElement updateRenderPos(int newX, int newY)
-  {
-  this.renderPosX = newX;
-  this.renderPosY = newY;
-  return this;
-  }
-
-@Override
 public void updateGuiPos(int x, int y)
-  {  
+  {
   this.guiLeft = x;
-  this.guiTop = y; 
+  this.guiTop = y;
   }
 
 @Override
@@ -198,10 +191,6 @@ protected void drawQuadedTexture(int x, int y, int w, int h, int tw, int th, Str
 @Override
 public boolean isMouseOver(int x, int y)
   {
-  if(!this.renderWithGuiOffset)
-    {
-    return x >=this.renderPosX && x<this.renderPosX+width && y>=this.renderPosY && y<this.renderPosY+height;
-    }
   return x >=this.renderPosX+guiLeft && x<this.renderPosX+width+guiLeft && y>=this.renderPosY+guiTop && y<this.renderPosY+height+guiTop;
   }
 

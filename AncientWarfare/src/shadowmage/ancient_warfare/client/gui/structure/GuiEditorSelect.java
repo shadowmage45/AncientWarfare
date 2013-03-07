@@ -90,7 +90,6 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   this.drawString(fontRenderer, "Structure to Edit: "+currentStructure, guiLeft + 10, guiTop + 14, 0xffffffff);
   this.fontRenderer.drawSplitString(errorMessage, guiLeft+10, guiTop+24, 190, 0xffff0000);
-  //this.drawString(fontRenderer, errorMessage, guiLeft+10, guiTop+24, 0xffff0000);
   
   this.drawString(fontRenderer, "Wid", guiLeft + 190, guiTop + 46+8, 0xffffffff);
   this.drawString(fontRenderer, "Len", guiLeft + 210, guiTop + 46+8, 0xffffffff);
@@ -181,6 +180,7 @@ public void updateControls()
 @Override
 public void onElementActivated(IGuiElement element)
   {
+  this.errorMessage = "";
   switch(element.getElementNumber())
   {
   case 0:
@@ -210,7 +210,7 @@ public void onElementActivated(IGuiElement element)
     }
   return;
   }
-  this.errorMessage = "";
+  
   if(element.getElementNumber()>=3 && element.getElementNumber() < 11)
     {
     int index = (this.currentLowestViewed + element.getElementNumber()) - 3;

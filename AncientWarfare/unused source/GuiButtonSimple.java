@@ -35,9 +35,9 @@ String displayString = "";
  * @param w
  * @param h
  */
-public GuiButtonSimple(int elementNum, IGuiElementCallback parent, int w, int h, String name)
+public GuiButtonSimple(int elementNum, IGuiElementCallback parent, int x, int y, int w, int h, String name)
   {
-  super(elementNum, parent, w, h);
+  super(elementNum, parent, x, y, w, h);
   if(name!=null)
     {
     this.displayString = name;
@@ -63,11 +63,9 @@ public void drawElement(int mouseX, int mouseY)
     {
     int texOffset = this.getHoverState();
     int vOffset = texOffset * 40;//will return 0, 40, or 80..for inactive, active, hover, apply to Y offset in UV rendering
-    int guiLeftOffset = this.renderWithGuiOffset ? this.guiLeft : 0;
-    int guiTopOffset = this.renderWithGuiOffset ? this.guiTop : 0;
     
-    String tex = "/shadowmage/meim/resources/gui/guiButtons.png";
-    this.drawQuadedTexture(guiLeftOffset+renderPosX, guiTopOffset+renderPosY, width, height, 256, 40, tex, 0, vOffset);
+    String tex = "/shadowmage/ancient_warfare/resources/gui/guiButtons.png";
+    this.drawQuadedTexture(guiLeft+renderPosX, guiTop+renderPosY, width, height, 256, 40, tex, 0, vOffset);
     int fontColor = 14737632;
     if(!this.enabled)
       {
@@ -77,7 +75,7 @@ public void drawElement(int mouseX, int mouseY)
       {
       fontColor = 16777120;
       }
-    this.drawCenteredString(Minecraft.getMinecraft().fontRenderer, this.displayString, guiLeftOffset + this.renderPosX + this.width / 2, guiTopOffset + this.renderPosY + (this.height - 8) / 2, fontColor);
+    this.drawCenteredString(Minecraft.getMinecraft().fontRenderer, this.displayString, guiLeft + this.renderPosX + this.width / 2, guiTop + this.renderPosY + (this.height - 8) / 2, fontColor);
     }  
   }
 

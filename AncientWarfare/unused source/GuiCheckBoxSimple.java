@@ -34,9 +34,9 @@ public boolean checked = false;
  * @param w
  * @param h
  */
-public GuiCheckBoxSimple(int elementNum, IGuiElementCallback parent, int w, int h)
+public GuiCheckBoxSimple(int elementNum, IGuiElementCallback parent, int x, int y, int w, int h)
   {
-  super(elementNum, parent, w, h, "");
+  super(elementNum, parent, x, y, w, h, "");
   if(width>40)
     {
     this.width = 40;
@@ -55,7 +55,7 @@ public void drawElement(int mouseX, int mouseY)
     int texOffset = this.getHoverState();
     int vOffset = texOffset * 40;//will return 0, 40, or 80..for inactive, active, hover, apply to Y offset in UV rendering
     int hOffset = checked ? 40 : 0;
-    String tex = "/shadowmage/meim/resources/gui/guiButtons.png";
+    String tex = "/shadowmage/ancient_warfare/resources/gui/guiButtons.png";
     this.drawQuadedTexture(guiLeft+renderPosX, guiTop+renderPosY, width, height, 40, 40, tex, 0+hOffset, 120+vOffset);     
     }  
   }

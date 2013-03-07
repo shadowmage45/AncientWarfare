@@ -122,14 +122,18 @@ public void updateScreenContents()
 @Override
 public void setupControls()
   {
-  this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
-  this.addGuiButton(1, 256-45-10, 30, 45, 18, "Export");
-  this.addGuiButton(8, 256-45-10, 50, 45, 18, "Reset");
-  this.addGuiButton(9, 256-45-10, 70, 45, 18, "Edit");
-  formatAWBox = this.addCheckBox(2, 145, 50, 16, 16).setChecked(formatAW);
-  includeBox = this.addCheckBox(3, 145, 70, 16, 16).setChecked(include);
-  formatRuinsBox = this.addCheckBox(4, 145, 90, 16, 16).setChecked(formatRuins);
-  worldGenBox = this.addCheckBox(5, 145, 110, 16, 16).setChecked(worldGen);
+  this.addGuiButton(0, 35, 18, "Done").updateRenderPos(256-35-10, 10); 
+  this.addGuiButton(1, 45, 18, "Export").updateRenderPos(256-45-10, 30);
+  this.addGuiButton(8, 45, 18, "Reset").updateRenderPos(256-45-10, 50);
+  this.addGuiButton(9, 45, 18, "Edit").updateRenderPos(256-45-10, 70);
+  formatAWBox = this.addCheckBox(2, 16, 16).setChecked(formatAW);
+  formatAWBox.updateRenderPos(145, 50);
+  includeBox = this.addCheckBox(3, 16, 16).setChecked(include);
+  includeBox.updateRenderPos(145, 70);
+  formatRuinsBox = this.addCheckBox(4, 16, 16).setChecked(formatRuins);
+  formatRuinsBox.updateRenderPos(145, 90);
+  worldGenBox = this.addCheckBox(5,16, 16).setChecked(worldGen);
+  worldGenBox.updateRenderPos(145, 110);
   survivalBox = this.addCheckBox(7, 145, 130, 16, 16).setChecked(survival);
   uniqueBox = this.addCheckBox(10, 145, 190, 16, 16).setChecked(unique);  
   

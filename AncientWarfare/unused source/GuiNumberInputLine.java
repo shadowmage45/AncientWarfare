@@ -20,14 +20,12 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
-import java.text.DecimalFormat;
-
-import shadowmage.meim.common.util.StringTools;
+import shadowmage.ancient_warfare.common.utils.StringTools;
+import net.minecraft.util.ChatAllowedCharacters;
 
 public class GuiNumberInputLine extends GuiTextInputLine
 {
 
-public DecimalFormat formatterThreeDec = new DecimalFormat("#.###");
 float floatVal;
 /**
  * @param elementNum
@@ -39,9 +37,9 @@ float floatVal;
  * @param maxChars
  * @param defaultText
  */
-public GuiNumberInputLine(int elementNum, IGuiElementCallback parent,  int w, int h, int maxChars, String defaultText)
+public GuiNumberInputLine(int elementNum, IGuiElementCallback parent, int x, int y, int w, int h, int maxChars, String defaultText)
   {
-  super(elementNum, parent, w, h, maxChars, defaultText);
+  super(elementNum, parent, x, y, w, h, maxChars, defaultText);
   }
 
 @Override
@@ -54,7 +52,7 @@ protected boolean isValidChar(char ch)
   return false;
   }
 
-char[] validNums = new char []{'0','1','2','3','4','5','6','7','8','9','.','-'};
+char[] validNums = new char []{'0','1','2','3','4','5','6','7','8','9','.'};
 
 protected boolean isValidNumber(char ch)
   {
@@ -73,7 +71,6 @@ public boolean handleMouseWheel(int x, int y, int wheel)
   {
   this.floatVal += wheel;
   this.text = String.valueOf(floatVal);
-  this.parent.onElementActivated(this);
   return true;
   }
 
@@ -97,22 +94,21 @@ public float getFloatVal()
 @Override
 public void setText(String text)
   {
-  this.text = text;
-  try 
+  boolean validText = true;
+  for(int i = 0; i <text.length(); i++)
     {
-    this.floatVal = Float.parseFloat(text);
+    char ch = text.charAt(i);
+    if(!this.isValidNumber(ch))
+      {
+      validText = false;
+      break;
+      }
     }
-  catch(Exception e)
+  if(validText)
     {
-    this.text = "";
-    this.floatVal = 0.f;
+    this.text = text;
+    this.floatVal = StringTools.safeParseFloat(text);
     }
-  }
-
-public void setValue(float val)
-  {
-  this.floatVal = val;
-  this.text = this.formatterThreeDec.format(floatVal);      
   }
 
 }

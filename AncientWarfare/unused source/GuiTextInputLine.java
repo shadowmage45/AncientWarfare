@@ -21,7 +21,7 @@
 package shadowmage.ancient_warfare.client.gui.elements;
 
 import net.minecraft.util.ChatAllowedCharacters;
-import shadowmage.meim.common.util.StringTools;
+import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class GuiTextInputLine extends GuiElement
 {
@@ -60,9 +60,9 @@ boolean selected;
  * @param h
  * @param defaultText
  */
-public GuiTextInputLine(int elementNum, IGuiElementCallback parent, int w, int h, int maxChars, String defaultText)
+public GuiTextInputLine(int elementNum, IGuiElementCallback parent, int x, int y, int w, int h, int maxChars, String defaultText)
   {
-  super(elementNum, parent, w, h);
+  super(elementNum, parent, x, y, w, h);
   }
 
 @Override
@@ -89,13 +89,8 @@ public void drawElement(int mouseX, int mouseY)
 @Override
 public void onMousePressed(int x, int y, int num)
   {
-  boolean wasSelected = this.selected;
   this.selected = false;
   super.onMousePressed(x, y, num);
-  if(this.selected && !wasSelected)
-    {
-    this.cursorPos = this.text.length();
-    }
   }
 
 @Override

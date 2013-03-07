@@ -25,8 +25,6 @@ import org.lwjgl.opengl.GL12;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
-import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
-import shadowmage.ancient_warfare.client.gui.elements.GuiScrollBarSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElementCallback;
@@ -46,10 +44,9 @@ public DecimalFormat formatterThreeDec = new DecimalFormat("#.###");
 
 protected boolean forceUpdate = false;
 private boolean shouldInit = true;
-protected int mouseX;
-protected int mouseY;
-
-protected boolean shouldCloseOnVanillaKeys = false;
+boolean isMouseOverControl = false;
+protected int mouseX = 0;
+protected int mouseY = 0;
 
 /**
  * gui controls...these are substitutes for the vanilla controlList...and allow for total control
@@ -70,11 +67,6 @@ public GuiContainerAdvanced(Container container)
     {
     ((ContainerBase)container).setGui(this);
     }  
-  }
-
-public void drawStringGui(String string, int x, int y, int color)
-  {
-  this.drawString(fontRenderer, string, guiLeft+x, guiTop+y, color);
   }
 
 public boolean isMouseOverControl(int mouseX, int mouseY)
@@ -117,22 +109,15 @@ protected void keyTyped(char par1, int par2)
     GuiElement el = this.guiElements.get(i);
     el.onKeyTyped(par1, par2);
     }
-  if(this.shouldCloseOnVanillaKeys)
+  boolean callSuper = true;
+  if (par2 == 1 || par2 == this.mc.gameSettings.keyBindInventory.keyCode)
+    {
+    callSuper = false;
+    }
+  if(callSuper)
     {
     super.keyTyped(par1, par2);
-    }
-  else
-    {
-    boolean callSuper = true;
-    if(par2 == this.mc.gameSettings.keyBindInventory.keyCode)
-      {
-      callSuper = false;
-      }
-    if(callSuper)
-      {
-      super.keyTyped(par1, par2);
-      } 
-    }
+    }  
   }
 
 @Override
@@ -219,28 +204,14 @@ public int getGuiTop()
  */
 public GuiButtonSimple addGuiButton(int id, int x, int y, int len, int high, String name)
   {
-  GuiButtonSimple button = this.addGuiButton(id, len, high, name);
-  button.updateRenderPos(x, y);
-  return button;
-  }
-
-public GuiButtonSimple addGuiButton(int id, int len, int high, String name)
-  {
-  GuiButtonSimple button = new GuiButtonSimple(id, this, len, high, name);
+  GuiButtonSimple button = new GuiButtonSimple(id, this, x, y, len, high, name);
   this.guiElements.put(id, button);
   return button;
   }
 
 public GuiCheckBoxSimple addCheckBox(int id, int x, int y, int len, int high)
   {
-  GuiCheckBoxSimple box = this.addCheckBox(id, len, high);
-  box.updateRenderPos(x, y);
-  return box;
-  }
-
-public GuiCheckBoxSimple addCheckBox(int id, int len, int high)
-  {
-  GuiCheckBoxSimple box = new GuiCheckBoxSimple(id, this, len, high);
+  GuiCheckBoxSimple box = new GuiCheckBoxSimple(id, this, x, y, len, high);
   this.guiElements.put(id, box);
   return box;
   }
@@ -258,30 +229,9 @@ public GuiCheckBoxSimple addCheckBox(int id, int len, int high)
  */
 public GuiTextInputLine addTextField(int id, int x, int y, int width, int height, int maxChars, String initText)
   {
-  GuiTextInputLine box = this.addTextField(id, width, height, maxChars, initText);
-  box.updateRenderPos(x, y);
-  return box;
-  }
-
-public GuiTextInputLine addTextField(int id, int width, int height, int maxChars, String initText)
-  {
-  GuiTextInputLine box = new GuiTextInputLine(id, this, width, height, maxChars, initText);
+  GuiTextInputLine box = new GuiTextInputLine(id, this, x, y, width, height, maxChars, initText);
   this.guiElements.put(id, box);
   return box;
-  }
-
-public GuiNumberInputLine addNumberField(int id, int width, int height, int maxChars, String initText)
-  {
-  GuiNumberInputLine box = new GuiNumberInputLine(id, this, width, height, maxChars, initText);
-  this.guiElements.put(id, box);
-  return box;
-  }
-
-public GuiScrollBarSimple addScrollBarSimple(int id, int width, int height, int setSize, int displayedElements)
-  {
-  GuiScrollBarSimple bar = new GuiScrollBarSimple(id, this, width, height, setSize, displayedElements);
-  this.guiElements.put(id, bar);
-  return bar;
   }
 
 @Override
@@ -307,7 +257,16 @@ public void updateScreen()
   guiLeft = (this.width - this.xSize) / 2;
   guiTop = (this.height - this.ySize) / 2;
   
-  
+  this.isMouseOverControl = false;
+  GuiElement el;
+  for(Integer i : this.guiElements.keySet())
+    {   
+    if(this.guiElements.get(i).isMouseOver(mouseX, mouseY))
+      {
+      this.isMouseOverControl = true;
+      break;
+      }
+    }  
   if(this.forceUpdate)
     {
     this.updateControls();
