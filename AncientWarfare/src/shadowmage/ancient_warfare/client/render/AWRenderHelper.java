@@ -20,15 +20,15 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
+
+import org.lwjgl.opengl.GL11;
+
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
@@ -38,6 +38,7 @@ import shadowmage.ancient_warfare.common.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.meim.common.util.Trig;
 
@@ -239,40 +240,15 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
   }
 
 public void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlayer player, float partialTick)
-  {
-  //  Config.logDebug("rendering overlay stuffs");
-  //  double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTick;
-  //  double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTick;
-  //  double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTick;  
-  //  
-  //  y+=1;
-  //  double x1 = x +1 ;
-  //  double z1 = z +1;
-  //  GL11.glEnable(GL11.GL_BLEND);
-  //  GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-  //  GL11.glDepthMask(false);
-  //  GL11.glDisable(GL11.GL_TEXTURE_2D);
-  //  GL11.glColor4f(1.f, 0.4f, 0.4f, 0.4F);
-  //  
-  //  GL11.glColor3f(0.0f, 1.0f, 0.2f);
-  //  GL11.glBegin(GL11.GL_LINES);
-  //
-  //  GL11.glLineWidth(8.0F);
-  //  GL11.glVertex3d(x, y, z);
-  //  GL11.glVertex3d(x1, y, z1);
-  //  GL11.glEnd();
-  //  
-  //
-  //  GL11.glDepthMask(true);
-  //  GL11.glEnable(GL11.GL_TEXTURE_2D);
-  //  GL11.glDisable(GL11.GL_BLEND);
-
+  {  
   GL11.glPushMatrix();
+  GL11.glEnable(GL11.GL_BLEND);
+  GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
   GL11.glDisable(GL11.GL_TEXTURE_2D);
-  GL11.glDisable(GL11.GL_LIGHTING);
+//  GL11.glDisable(GL11.GL_LIGHTING);
   GL11.glDisable(GL11.GL_DEPTH_TEST);
   GL11.glDepthMask(false);
-  GL11.glColor4d(1, 1, 1, 1);
+  GL11.glColor4d(1, 1, 1, 0.6d);
   
   double x1 = vehicle.posX - player.posX;
   double y1 = vehicle.posY - player.posY;
@@ -289,10 +265,44 @@ public void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlayer playe
   GL11.glVertex3d(x2, y2, z2);
   
   GL11.glEnd();
+  
+  
+  GL11.glLineWidth(4f);
+  
+  
+  GL11.glColor4f(1.f, 0.4f, 0.4f, 0.4f);
+  GL11.glBegin(GL11.GL_LINES);
+  Pos3f offset = vehicle.getMissileOffset();
+  x2 = x1+offset.x;
+  y2 = y1+offset.y;
+  z2 = z1+offset.z;
+   
+  double gravity = 9.81d * 0.05d *0.05d;
+  double speed = vehicle.firingHelper.clientLaunchSpeed * 0.05d;
+  double angle = vehicle.firingHelper.clientTurretPitch;
+  double yaw = vehicle.firingHelper.clientTurretYaw;
+  
+  double vH = -Trig.sinDegrees((float) angle)*speed;
+  double vY = Trig.cosDegrees((float) angle)*speed ;
+  double vX = Trig.sinDegrees((float) yaw)*vH ;
+  double vZ = Trig.cosDegrees((float) yaw)*vH ;
+  
+  
+  while(y2>=y1)
+    {
+    GL11.glVertex3d(x2, y2, z2);
+    vY -= gravity;
+    x2+=vX;
+    z2+=vZ;
+    y2+=vY;  
+    GL11.glVertex3d(x2, y2, z2);
+    }
+  GL11.glEnd();
+  
   GL11.glPopMatrix();
 
-
   GL11.glDepthMask(true);
+  GL11.glDisable(GL11.GL_BLEND);
   GL11.glEnable(GL11.GL_TEXTURE_2D);
   }
 

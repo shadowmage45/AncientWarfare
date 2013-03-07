@@ -9,6 +9,7 @@ http://gamedev.stackexchange.com/questions/17467/calculating-velocity-needed-to-
 GENERAL
 * add basic GUI tooltip functionality -- GuiTooltip class (int x, int y, int w, int h, List<String> info)
 * move world-gen base config from AncientWarfare.cfg into /AWConfig/AWWorldGen.cfg
+* add keybind config setting to options gui
 
 VEHICLES
 * implement vehicle weighting system (should it include upgrades, and ammo in bay)
@@ -17,6 +18,7 @@ VEHICLES
 * upgrade system
 * implement armor system
 * vehicle research system
+* fix entity hit detection for auto-aim...its borked
             
 AMMO TYPES 
 * fix hit point of persistent arrows (they seem to use one of only a few hit-points on the block)
@@ -295,13 +297,14 @@ public static MyWorldData forWorld(World world)
 * fix arrow model to use point of head as its position point         
 * add arrow persistent entity coding
 /********** 03-05-13 **********/
-* convert vehicles over to use interface typing.  they now consist of two parts, the entity (for animations), and the type (defines statistics)
+* convert vehicles over to use interface typing.  they now consist of two parts, the entity (for animations and other local variables), and the type (defines statistics)
 * re-implement auto-aiming to include vehicles that use power instead of pitch
 * bit of work on arrow persistence/hit point/sticking in the ground
 * add wood material and first-pass statistics to it.
 /********** 03-06-13 **********/
-* implement iterative algorithm to find best guess power for auto-aim, iteration count set by client-config setting (20000ns for 20 iterations avg on dev comp)
+* implement iterative algorithm to find best guess power for auto-aim, iteration count set by client-config setting (<20000ns for 20 iterations avg on dev comp)
 * add basic client-side settings GUI, needs tons of work
+* add advanced overlay rendering (yaw line + trajectory)
 
 
 /********** 03-07-13 **********/

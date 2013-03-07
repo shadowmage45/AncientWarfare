@@ -140,9 +140,7 @@ public void onMovementTick()
       {     
       
       Vec3 pos = Vec3.createVectorHelper(posX, posY, posZ);
-      Vec3 move = Vec3.createVectorHelper(posX+motionX, posY+motionY, posZ+motionZ);
-      
-//      MovingObjectPosition blockHit = worldObj.rayTraceBlocks(pos, move);
+      Vec3 move = Vec3.createVectorHelper(posX+motionX, posY+motionY, posZ+motionZ);      
       MovingObjectPosition hit = this.worldObj.rayTraceBlocks_do_do(pos, move, false, true);   
       if(hit!=null)
         { 
@@ -150,13 +148,6 @@ public void onMovementTick()
         Config.logDebug("setting in ground");
         Config.logDebug("hitVec: "+hit.hitVec.toString());
         this.inGround = true;
-//        this.posX = hit.hitVec.xCoord;
-//        this.posY = hit.hitVec.yCoord;
-//        this.posZ = hit.hitVec.zCoord;
-//       
-//        this.motionX = 0;
-//        this.motionY = 0;
-//        this.motionZ = 0;
         if(!this.ammoType.isPersistent() && !this.worldObj.isRemote)
           {
           this.setDead();

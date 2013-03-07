@@ -290,16 +290,13 @@ public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float
           closestFound = (float) var18;
           }
         }
-      }
+      }   
     }
   if(hitEntity!=null)
     {
     Config.logDebug("entity hit!!");
     blockHit = new MovingObjectPosition(hitEntity);
     }
-  //get bounding box of entities between var4 and either var6 or blockHit.hitVec..
-  //    break into segments by length, check in chunks, plan for overlap?
-
   return blockHit;
   }
 
