@@ -33,53 +33,17 @@ import shadowmage.ancient_warfare.common.config.Config;
 public class GuiScrollableArea extends GuiScrollableAreaSimple
 {
 
-
 /**
  * @param elementNum
  * @param parent
  * @param w
  * @param h
  */
-public GuiScrollableArea(int elementNum, GuiContainerAdvanced parent, int x, int y, int w,  int h,int totalWidth, int totalHeight)
+public GuiScrollableArea(int elementNum, GuiContainerAdvanced parent, int x, int y, int w,  int h, int totalHeight)
   {
-  super(elementNum, parent, x, y, w, h, totalWidth, totalHeight); 
+  super(elementNum, parent, x, y, w, h, w, totalHeight); 
   this.scrollBar = new GuiScrollBarSimple(elementNum, this, 16, h, totalHeight, h);
   this.scrollBar.updateRenderPos(w-16, 0);
-  }
-
-@Override
-public void drawElement(int mouseX, int mouseY)
-  {
-  this.setupViewport();  
-  mouseX = mouseX - this.scrollPosX - this.guiLeft - this.renderPosX;
-  mouseY = mouseY + this.scrollPosY - this.guiTop - this.renderPosY;
-  this.scrollBar.updateHandleHeight(totalHeight, height);  
-  this.scrollPosY = this.scrollBar.getTopIndexForSet(totalHeight, height);  
-  this.scrollBar.updateGuiPos(0, 0);
-  this.scrollBar.drawElement(mouseX, mouseY-scrollPosY);
-  for(GuiElement el : this.elements)
-    {
-    el.drawElement(mouseX, mouseY);
-    }    
-  this.resetViewPort();
-  }
-
-@Override
-public void onMouseWheel(int x, int y, int wheel)
-  {
-  if(this.isMouseOver(x,y))
-    {
-    int adjX = x - this.guiLeft - renderPosX;
-    int adjY = y - this.guiTop - renderPosY;
-    this.scrollBar.onMouseWheel(adjX, adjY, wheel);
-    }
-  super.onMouseWheel(x, y, wheel);
-  }
-
-public void onKeyTyped(char ch, int keyNum)
-  {  
-  super.onKeyTyped(ch, keyNum);
-  this.scrollBar.onKeyTyped(ch, keyNum);
   }
 
 }

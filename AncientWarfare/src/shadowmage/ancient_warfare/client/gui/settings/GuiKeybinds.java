@@ -125,7 +125,7 @@ public void setupControls()
 
   this.addGuiButton(0, getXSize()-55-10, 10, 55, 16, "Done");
   
-  area = new GuiScrollableArea(1, this, 10, 30, this.getXSize()-20, this.getYSize()-40, this.getXSize()-20, totalHeight);
+  area = new GuiScrollableArea(1, this, 10, 30, this.getXSize()-20, this.getYSize()-40, totalHeight);
   this.guiElements.put(1, area);
   
   int kX = 5;

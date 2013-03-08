@@ -33,12 +33,11 @@ import shadowmage.ancient_warfare.common.config.Config;
 public class GuiScrollableAreaSimple extends GuiElement implements IGuiElementCallback
 {
 
-int scrollPosX;//topLeft of the screen currently being drawn (the sub
+int scrollPosX;//topLeft of the screen currently being drawn 
 int scrollPosY;//topLeft of the screen currently being drawn
 
 int parentGuiWidth;
 int parentGuiHeight;
-
 
 protected int totalHeight;
 protected int totalWidth;
@@ -49,13 +48,6 @@ protected GuiContainerAdvanced parentGui;
 
 GuiScrollBarSimple scrollBar;
 
-
-/**
- * @param elementNum
- * @param parent
- * @param w
- * @param h
- */
 public GuiScrollableAreaSimple(int elementNum, GuiContainerAdvanced parent, int x, int y, int w,  int h, int totalWidth, int totalHeight)
   {
   super(elementNum, parent, w, h);
@@ -77,7 +69,14 @@ public void drawElement(int mouseX, int mouseY)
   {
   this.setupViewport();  
   mouseX = mouseX - this.scrollPosX - this.guiLeft - this.renderPosX;
-  mouseY = mouseY + this.scrollPosY - this.guiTop - this.renderPosY;
+  mouseY = mouseY + this.scrollPosY - this.guiTop - this.renderPosY;  
+  if(this.scrollBar!=null)
+    {
+    this.scrollBar.updateHandleHeight(totalHeight, height);  
+    this.scrollPosY = this.scrollBar.getTopIndexForSet(totalHeight, height);  
+    this.scrollBar.updateGuiPos(0, 0);
+    this.scrollBar.drawElement(mouseX, mouseY-scrollPosY);
+    }
   for(GuiElement el : this.elements)
     {
     el.drawElement(mouseX, mouseY);
@@ -104,7 +103,6 @@ public void resetViewPort()
   {
   GL11.glViewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
   }
-
 
 @Override
 public void updateGuiPos(int x, int y)
@@ -208,7 +206,6 @@ public void onKeyTyped(char ch, int keyNum)
     }
   super.onKeyTyped(ch, keyNum); 
   }
-
 
 public void updateScrollPos(int x, int y)
   {  
