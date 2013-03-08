@@ -22,16 +22,17 @@ package shadowmage.ancient_warfare.client.gui.settings;
 
 import java.util.List;
 
+import net.minecraft.inventory.Container;
+
 import org.lwjgl.input.Keyboard;
 
-import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.client.input.Keybind;
 import shadowmage.ancient_warfare.client.input.KeybindManager;
-import shadowmage.meim.common.config.Config;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class GuiKeybinds extends GuiContainerAdvanced
 {
