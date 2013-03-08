@@ -36,8 +36,6 @@ GuiCheckBoxSimple enableAdvancedOverlay;
 GuiCheckBoxSimple enableMouseAim;
 GuiButtonSimple keyBinds;
 
-
-//GuiScrollableArea testArea;
 /**
  * @param container
  */
@@ -70,13 +68,11 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Render Overlay", guiLeft+10+16+2, guiTop+10+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Advanced Overlay", guiLeft+10+16+2, guiTop+30+4, 0xffffffff);
   this.drawString(fontRenderer, "Use Mouse Aim Input", guiLeft+10+16+2, guiTop+50+4, 0xffffffff);
-//  this.testArea.drawElement(mouseX, mouseY);
   }
 
 @Override
 public void updateScreenContents()
   {
-//  this.testArea.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override
@@ -115,10 +111,7 @@ public void setupControls()
   this.keyBinds = this.addGuiButton(3, this.getXSize()-55-10, 30, 55, 16, "Keybinds");
   this.addGuiButton(4, getXSize()-55-10, 10, 55, 16, "Done");
   
-//  this.testArea = new GuiScrollableArea(5, this, 50, 70, 100, 100, 300);
-//  this.testArea.addGuiElement(new GuiButtonSimple(7, testArea, 55, 16, "TestButton").updateRenderPos(0, 0));
-//  this.testArea.addGuiElement(new GuiButtonSimple(8, testArea, 55, 16, "TestButton2").updateRenderPos(0, 100));
-//  this.guiElements.put(6, testArea);
+
   }
 
 @Override

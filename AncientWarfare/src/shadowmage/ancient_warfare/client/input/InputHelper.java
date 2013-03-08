@@ -105,7 +105,10 @@ public void loadKeysFromConfig()
   KeybindManager.addKeybind(pitchUp);
   pitchDown = new Keybind(Config.getKeyBindID("keybind.aimDown", Keyboard.KEY_F, "Aim Down"), "Aim Down");
   KeybindManager.addKeybind(pitchDown);
-  
+  turretLeft = new Keybind(Config.getKeyBindID("keybind.turretLeft", Keyboard.KEY_Z, "turret left"),"Turret Left");
+  KeybindManager.addKeybind(turretLeft);
+  turretRight = new Keybind(Config.getKeyBindID("keybind.turretRight", Keyboard.KEY_X, "turret right"),"Turret Right");  
+  KeybindManager.addKeybind(turretRight);
   
   mouseAim = new Keybind(Config.getKeyBindID("keybind.mouseAim", Keyboard.KEY_C, "Enable/Disable Mouse Aim"), "Mouse Aim");
   KeybindManager.addKeybind(mouseAim);
@@ -130,7 +133,6 @@ public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boo
   if(kb==options && mc.currentScreen==null && mc.thePlayer!=null && mc.theWorld!=null)
     {
     Config.logDebug("sending openGUI request");
-    //mc.displayGuiScreen(new GuiClientSettings(new ContainerDummy()));
     GUIHandler.instance().openGUI((byte)GUIHandler.SETTINGS, mc.thePlayer, mc.theWorld, 0, 0, 0);
     }
   }
@@ -143,9 +145,9 @@ public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)
 
 @Override
 public EnumSet<TickType> ticks()
-{
-return EnumSet.of(TickType.CLIENT);
-}
+  {
+  return EnumSet.of(TickType.CLIENT);
+  }
 
 /**
  * AWKEYBINDS....

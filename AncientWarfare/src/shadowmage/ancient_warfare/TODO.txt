@@ -25,8 +25,6 @@ AMMO TYPES
 * create more ammo types
 
 GUI FRAMEWORK
-* add GuiStringScrollFrame (completely handles displaying of a list of strings w/ callback info
-            for when a string is clicked with mouse, w/scroll bar and mouse-wheel interaction)
 * add mouse-wheel interaction to scroll-bar
 * enable float-based handle render positioning to scroll bar as well as float-based handle positioning
             will require polling raw (non-scaled) mouse position....    

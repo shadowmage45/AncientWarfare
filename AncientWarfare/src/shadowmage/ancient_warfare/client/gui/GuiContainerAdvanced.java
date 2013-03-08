@@ -18,6 +18,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -124,7 +125,7 @@ protected void keyTyped(char par1, int par2)
   else
     {
     boolean callSuper = true;
-    if(par2 == this.mc.gameSettings.keyBindInventory.keyCode)
+    if(par2 == this.mc.gameSettings.keyBindInventory.keyCode || par2 == Keyboard.KEY_ESCAPE)
       {
       callSuper = false;
       }

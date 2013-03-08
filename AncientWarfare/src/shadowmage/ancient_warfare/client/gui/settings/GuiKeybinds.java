@@ -50,7 +50,8 @@ public GuiKeybinds(Container container, GuiContainerAdvanced parent)
   {
   super(container);
   this.parentGui = parent;
-  this.keybinds = KeybindManager.getKeybinds();  
+  this.keybinds = KeybindManager.getKeybinds();
+  this.shouldCloseOnVanillaKeys = false;
   }
 
 
@@ -80,7 +81,6 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     this.drawStringGui("Setting key for:"+kb.getKeyName(), 15, 8, 0xffffffff);
     this.drawStringGui("Press Esc to Cancel", 15, 18, 0xffffffff);
     }
-  //area.drawElement(mouseX, mouseY);
   }
 
 @Override
@@ -159,11 +159,8 @@ protected void keyTyped(char par1, int par2)
     kbButton.setButtonText(kb.getKeyName() + " :: "+kb.getKeyChar());
     kb=null;
     kbButton=null;        
-    }
-  if(par2 != Keyboard.KEY_ESCAPE)
-    {
-    super.keyTyped(par1, par2);
-    }
+    }  
+  super.keyTyped(par1, par2);    
   }
 
 
