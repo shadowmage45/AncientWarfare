@@ -8,5 +8,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Minecraft/jars/bin/natives"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Minecraft/lib/bcprov-jdk15on-147.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
