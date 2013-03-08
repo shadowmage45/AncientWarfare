@@ -58,10 +58,13 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData
 IAmmoType ammoType = null;
 IMissileHitCallback shooter = null;
 public int missileType = 0;
-public float currentGrav = 0.f;
 
 public boolean inGround = false;
-
+int blockX;
+int blockY;
+int blockZ;
+int blockID;
+int blockMeta;
 /**
  * @param par1World
  */
@@ -96,8 +99,10 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
   this.motionX = mx;
   this.motionY = my;
   this.motionZ = mz;
-
-  this.onUpdateArrowRotation();
+  if(this.ammoType.updateAsArrow())
+    {
+    this.onUpdateArrowRotation();
+    }
   this.prevRotationPitch = this.rotationPitch;
   this.prevRotationYaw = this.rotationYaw;
   }
@@ -107,8 +112,6 @@ public void setMissileParams2(IAmmoType ammo, float x, float y, float z, float y
   float vX = -Trig.sinDegrees(yaw)* Trig.cosDegrees(angle) *velocity * 0.05f;
   float vY = Trig.sinDegrees(angle) * velocity  * 0.05f;
   float vZ = -Trig.cosDegrees(yaw)* Trig.cosDegrees(angle) *velocity  * 0.05f;
-  Config.logDebug("computed velocity: "+vX+","+vY+","+vZ);
-  Config.logDebug("linear velocity: "+ (MathHelper.sqrt_float(vX*vX+vY*vY+vZ*vZ)*20f));
   this.setMissileParams(ammo, x, y, z, vX, vY, vZ);
   }
 
@@ -142,30 +145,77 @@ public void onUpdate()
   this.onMovementTick();
   }
 
+
 public void onMovementTick()
   {
-  if(!this.inGround)
+  if(this.inGround)
     {
-    this.onUpdateArrowRotation();
-    this.onUpdateArrowMotion();
-    }
-  
-  if(!this.inGround)
-    {
-    Vec3 var17 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
-    Vec3 var3 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-    MovingObjectPosition var4 = this.worldObj.rayTraceBlocks_do_do(var17, var3, false, true);
-    if (var4 != null)
+    int id = this.worldObj.getBlockId(blockX, blockY, blockZ);
+    int meta = this.worldObj.getBlockMetadata(blockX, blockY, blockZ);
+    if(id!=blockID || meta != blockMeta)
       {
-      if (var4.entityHit != null)
+      this.motionX = 0;
+      this.motionY = 0;
+      this.motionZ = 0;
+      this.inGround = false;
+      }
+    }  
+  if(!this.inGround)
+    {    
+    Vec3 positionVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
+    Vec3 moveVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+    MovingObjectPosition hitPosition = this.worldObj.rayTraceBlocks_do_do(positionVector, moveVector, false, true);
+    positionVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
+    moveVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ); 
+    Entity hitEntity = null;
+    List nearbyEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+    double closestHit = 0.0D;
+    float borderSize;
+    for (int i = 0; i < nearbyEntities.size(); ++i)
+      {
+      Entity curEnt = (Entity)nearbyEntities.get(i);
+      if (curEnt.canBeCollidedWith())
         {
-
+        borderSize = 0.3F;
+        AxisAlignedBB var12 = curEnt.boundingBox.expand((double)borderSize, (double)borderSize, (double)borderSize);
+        MovingObjectPosition checkHit = var12.calculateIntercept(positionVector, moveVector);
+        if (checkHit != null)
+          {
+          double hitDistance = positionVector.distanceTo(checkHit.hitVec);
+          if (hitDistance < closestHit || closestHit == 0.0D)
+            {
+            hitEntity = curEnt;
+            closestHit = hitDistance;
+            }
+          }
+        }
+      }
+    if (hitEntity != null)
+      {
+      hitPosition = new MovingObjectPosition(hitEntity);
+      }
+    if (hitPosition != null)
+      {
+      if (hitPosition.entityHit != null)
+        {
+        this.onImpactEntity(hitPosition.entityHit, (float)posX ,(float)posY, (float)posZ);
+        if(!this.ammoType.isPersistent() && !this.worldObj.isRemote)
+          {
+          this.setDead();
+          }
+        else if(this.ammoType.isPersistent())
+          {
+          this.motionX *= - 0.25f;
+          this.motionY *= - 0.25f;
+          this.motionZ *= - 0.25f;
+          }  
         }
       else
         {
-        this.motionX = (double)((float)(var4.hitVec.xCoord - this.posX));
-        this.motionY = (double)((float)(var4.hitVec.yCoord - this.posY));
-        this.motionZ = (double)((float)(var4.hitVec.zCoord - this.posZ));
+        this.onImpactWorld();
+        this.motionX = (double)((float)(hitPosition.hitVec.xCoord - this.posX));
+        this.motionY = (double)((float)(hitPosition.hitVec.yCoord - this.posY));
+        this.motionZ = (double)((float)(hitPosition.hitVec.zCoord - this.posZ));
         float var20 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
         this.posX -= this.motionX / (double)var20 * 0.05000000074505806D;
         this.posY -= this.motionY / (double)var20 * 0.05000000074505806D;
@@ -176,6 +226,14 @@ public void onMovementTick()
           {
           this.setDead();
           }
+        else if(this.ammoType.isPersistent())
+          {
+          this.blockX = hitPosition.blockX;
+          this.blockY = hitPosition.blockY;
+          this.blockZ = hitPosition.blockZ;
+          this.blockID = this.worldObj.getBlockId(blockX, blockY, blockZ);
+          this.blockMeta = this.worldObj.getBlockMetadata(blockX, blockY, blockZ);
+          }          
         }
       }
     this.posX += this.motionX;
@@ -183,12 +241,11 @@ public void onMovementTick()
     this.posZ += this.motionZ; 
     this.motionY -= (double)this.ammoType.getGravityFactor();
     this.setPosition(this.posX, this.posY, this.posZ);
+    if(this.ammoType.updateAsArrow())
+      {
+      this.onUpdateArrowRotation();
+      }
     }  
-  }
-
-public void onUpdateArrowMotion()
-  {
-  
   }
 
 public void onUpdateArrowRotation()
@@ -215,7 +272,6 @@ public void onUpdateArrowRotation()
     {
     this.prevRotationYaw += 360.0F;
     }
-  //Config.logDebug("setting rotPitch to: "+this.rotationPitch);
   }
 
 @Override
@@ -236,6 +292,11 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.missileType = tag.getInteger("type");
   this.ammoType = AmmoRegistry.instance().getAmmoEntry(missileType);
   this.inGround = tag.getBoolean("inGround");
+  this.blockX = tag.getInteger("bX");
+  this.blockY = tag.getInteger("bY");
+  this.blockZ = tag.getInteger("bZ");
+  this.blockID = tag.getInteger("bID");
+  this.blockMeta = tag.getInteger("bMd");
   }
 
 @Override
@@ -243,6 +304,11 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   {
   tag.setInteger("type", missileType);
   tag.setBoolean("inGround", this.inGround);
+  tag.setInteger("bX", this.blockX);
+  tag.setInteger("bY", this.blockY);
+  tag.setInteger("bZ", this.blockZ);
+  tag.setInteger("bID", this.blockID);
+  tag.setInteger("bMd", this.blockMeta);
   }
 
 @Override
@@ -257,6 +323,11 @@ public void writeSpawnData(ByteArrayDataOutput data)
   data.writeFloat(rotationYaw);
   data.writeFloat(rotationPitch);
   data.writeBoolean(inGround);
+  data.writeInt(blockX);
+  data.writeInt(blockY);
+  data.writeInt(blockZ);
+  data.writeInt(blockID);
+  data.writeInt(blockMeta);
   }
 
 @Override
@@ -267,5 +338,10 @@ public void readSpawnData(ByteArrayDataInput data)
   this.rotationYaw = data.readFloat();
   this.rotationPitch = data.readFloat();
   this.inGround = data.readBoolean();
+  this.blockX = data.readInt();
+  this.blockY = data.readInt();
+  this.blockZ = data.readInt();
+  this.blockID = data.readInt();
+  this.blockMeta = data.readInt();
   }
 }

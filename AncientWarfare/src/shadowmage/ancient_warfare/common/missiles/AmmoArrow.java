@@ -105,4 +105,10 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z)
   // TODO Auto-generated method stub
   }
 
+@Override
+public boolean updateAsArrow()
+  {
+  return true;
+  }
+
 }

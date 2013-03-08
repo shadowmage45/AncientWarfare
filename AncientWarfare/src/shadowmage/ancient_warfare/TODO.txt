@@ -19,6 +19,10 @@ VEHICLES
 * implement armor system
 * vehicle research system
 * fix entity hit detection for auto-aim...its borked
+* add gravity..
+* fix rider collision detection
+* update stepSize so that they can go over things...
+* implement ammo weight use for calculating shots
             
 AMMO TYPES 
 * import stone ammo model
@@ -216,6 +220,10 @@ public static MyWorldData forWorld(World world)
 * work on setting up elements on scrollable area (working aside from Y render issues (its too far north)
 * fix scrollable area render positioning. it now positions elements correctly
 * fix scrollable area element positioning, as well as mouse-input.  It now scrolls elements properly 
+* add/update keybinds gui, fully featured/implemented w/ scroll bar for additional keybinds in the future.
+* implement ammo inGround rechecking, caching of blockPos and blockID/meta (similar to arrow)
+* implement ammo onImpact methods
+* implement ammo entityHit detection
 
 /********** 03-08-13 **********/
 /********** 03-09-13 **********/

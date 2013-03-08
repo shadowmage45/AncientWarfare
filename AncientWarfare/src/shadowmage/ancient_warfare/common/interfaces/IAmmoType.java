@@ -50,6 +50,7 @@ ItemStack getDisplayStack();//should be a persistent stack in the ammo instance,
 ItemStack getAmmoStack(int qty);//used to create a stack of this ammo.  used in structure spawning
 
 boolean isAmmoValidFor(VehicleBase vehicle);//can be used for per-upgrade compatibility.  vehicle will check this before firing or adding ammo to the vehicle
+boolean updateAsArrow();//should update pitch like an arrow (relative to flight direction)
 boolean isRocket();//determines flight characteristics
 boolean isPersistent();//should die on impact, or stay on ground(arrows)
 float getGravityFactor();// per-tick gravity acceleration
