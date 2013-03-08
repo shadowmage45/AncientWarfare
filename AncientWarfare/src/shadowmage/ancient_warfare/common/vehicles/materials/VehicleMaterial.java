@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.materials;
 
+import shadowmage.ancient_warfare.common.utils.Pair;
+
 public class VehicleMaterial implements IVehicleMaterial
 {
 
@@ -81,6 +83,18 @@ public float getAccuracyFactor(int level)
 public float getMisfireChance(int level)
   {
   return getLevel(level).misfireChance;
+  }
+
+@Override
+public int getItemID(int level)
+  {
+  return getLevel(level).itemID;
+  }
+
+@Override
+public int getItemMeta(int level)
+  {
+  return getLevel(level).itemMeta;
   }
 
 }

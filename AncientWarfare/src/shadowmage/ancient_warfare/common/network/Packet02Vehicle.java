@@ -63,6 +63,11 @@ public void setAmmoSelect(NBTTagCompound tag)
   this.packetData.setTag("ammoSel", tag);
   }
 
+public void setAmmoUpdate(NBTTagCompound tag)
+  {
+  this.packetData.setTag("ammoUpd", tag);
+  }
+
 @Override
 public int getPacketType()
   {  

@@ -22,7 +22,6 @@ VEHICLES
 * fix rider collision detection
 * implement ammo weight use for calculating shots
 * make it so vehicles won't collide with arrows...
-* make sure vehicles with no ammo types won't crash
 * fix crashing when all missile offsets are 0 (render hard-lock)
             
 AMMO TYPES 
@@ -174,10 +173,7 @@ public static MyWorldData forWorld(World world)
 
 /*****************************************************************************************/
 
-
-********************* DONE STUFF *************************
-
-         
+********************* DONE STUFF *************************         
 /********** 02-25-13 **********/
 * prep vehicle work
 /********** 02-26-13 **********/
@@ -228,7 +224,12 @@ public static MyWorldData forWorld(World world)
 * add vehicle gravity..
 * update vehicle stepSize so that they can go over things...
 * vehicle ammo switching capability
-
 /********** 03-08-13 **********/
+* implement no-scroll bar scrollable area (uses mouse input)
+* add parchment background img (guiBackgroundParchment.png)
+* make sure vehicles with no ammo types won't crash
+
+
+
 /********** 03-09-13 **********/
 /********** 03-10-13 **********/

@@ -29,5 +29,7 @@ public float speedStrafeFactor;
 public float weightFactor;
 public float accuracyFactor;
 public float misfireChance;
+public int itemID;
+public int itemMeta;
 
 }

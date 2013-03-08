@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles;
 
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
@@ -69,5 +70,8 @@ public abstract boolean isUpgradeValid(VehicleUpgrade upgrade);
 
 public abstract List<IAmmoType> getValidAmmoTypes();
 public abstract List<VehicleUpgrade> getValidUpgrades();
+
+public abstract int getMaterialQuantity();//get the quantity of the main material to construct this vehicle
+public abstract List<ItemStack> getAdditionalMaterials();//get a list of additional materials needed to construct this vehicle
 
 }

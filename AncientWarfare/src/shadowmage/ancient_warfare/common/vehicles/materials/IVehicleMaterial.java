@@ -31,4 +31,7 @@ public abstract float getWeightFactor(int level);
 public abstract float getAccuracyFactor(int level);
 public abstract float getMisfireChance(int level);
 
+public abstract int getItemID(int level);
+public abstract int getItemMeta(int level);
+
 }

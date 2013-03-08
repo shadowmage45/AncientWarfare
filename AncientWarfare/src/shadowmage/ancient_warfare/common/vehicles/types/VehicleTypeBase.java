@@ -23,6 +23,8 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+
 import com.google.common.collect.Lists;
 
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
@@ -78,6 +80,9 @@ public float accuracy = 1.f;
 
 public List<IAmmoType> validAmmoTypes = new ArrayList<IAmmoType>();
 public List<VehicleUpgrade> validUpgrades = new ArrayList<VehicleUpgrade>();
+
+public int materialCount = 1;
+public List<ItemStack> additionalMaterials = new ArrayList<ItemStack>();
 
 public VehicleTypeBase(int typeNum)
   {
@@ -262,6 +267,18 @@ public List<IAmmoType> getValidAmmoTypes()
 public List<VehicleUpgrade> getValidUpgrades()
   {
   return this.validUpgrades;
+  }
+
+@Override
+public int getMaterialQuantity()
+  {
+  return materialCount;
+  }
+
+@Override
+public List<ItemStack> getAdditionalMaterials()
+  {
+  return additionalMaterials;
   }
 
 }

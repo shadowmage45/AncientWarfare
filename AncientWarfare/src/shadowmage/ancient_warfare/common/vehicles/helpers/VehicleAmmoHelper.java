@@ -51,6 +51,38 @@ public VehicleAmmoHelper(VehicleBase vehicle)
   this.vehicle = vehicle;
   }
 
+/**
+ * SERVER ONLY relays changes to clients to update a single ammo type
+ * @param num
+ */
+public void decreaseCurrentAmmo(int num)
+  {
+  if(vehicle.worldObj.isRemote)
+    {
+    return;
+    }
+  if(currentAmmoType>=0 && currentAmmoType<this.ammoEntries.size())
+    {
+    VehicleAmmoEntry entry = this.ammoEntries.get(num);
+    int origCount = entry.ammoCount;    
+    entry.ammoCount -= num;
+    if(entry.ammoCount<0)
+      {
+      entry.ammoCount = 0;
+      }
+    if(entry.ammoCount!=origCount)
+      {
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setInteger("num", this.currentAmmoType);
+      tag.setInteger("cnt", entry.ammoCount);    
+      Packet02Vehicle pkt = new Packet02Vehicle();
+      pkt.setParams(vehicle);
+      pkt.setAmmoUpdate(tag);
+      pkt.sendPacketToAllTrackingClients(vehicle);
+      }    
+    }
+  }
+
 public void addUseableAmmo(IAmmoType ammo)
   {
   VehicleAmmoEntry ent = new VehicleAmmoEntry(ammo);
@@ -92,26 +124,37 @@ public void handleAmmoSelectInput(int delta)
   }
 
 public void handleAmmoSelectPacket(NBTTagCompound tag)
-  {
-  
-  boolean updated = false;
+  {  
   int num = tag.getInteger("num");
   Config.logDebug("handling ammo selection packet. server: "+!vehicle.worldObj.isRemote+" ammoNum: "+num);
   if(num>=0 && num < this.ammoEntries.size() && num != this.currentAmmoType)
     {
     this.currentAmmoType = num;
-    updated = true;    
-    }  
-  if(!vehicle.worldObj.isRemote && updated)
-    {    
-    NBTTagCompound innerTag = new NBTTagCompound();
-    innerTag.setInteger("num", num);    
-    Packet02Vehicle pkt = new Packet02Vehicle();
-    pkt.setParams(vehicle);
-    pkt.setAmmoSelect(innerTag);
-    pkt.sendPacketToAllTrackingClients(vehicle);
+    if(!vehicle.worldObj.isRemote)
+      {    
+      NBTTagCompound innerTag = new NBTTagCompound();
+      innerTag.setInteger("num", num);    
+      Packet02Vehicle pkt = new Packet02Vehicle();
+      pkt.setParams(vehicle);
+      pkt.setAmmoSelect(innerTag);
+      pkt.sendPacketToAllTrackingClients(vehicle);
+      }
+    } 
+  }
+
+/**
+ * sent to clients when ammo is used from firing...
+ * CLIENT ONLY
+ * @param tag
+ */
+public void handleAmmoCountUpdate(NBTTagCompound tag)
+  {
+  int num = tag.getInteger("num");
+  if(num>=0 && num < this.ammoEntries.size())
+    {
+    int count = tag.getInteger("cnt");
+    this.ammoEntries.get(num).ammoCount = count;
     }
-  
   }
 
 /**
