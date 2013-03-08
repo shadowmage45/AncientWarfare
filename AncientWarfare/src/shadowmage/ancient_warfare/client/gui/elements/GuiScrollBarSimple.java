@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
+import shadowmage.ancient_warfare.common.config.Config;
+
 public class GuiScrollBarSimple extends GuiElement
 {
 
@@ -126,7 +128,7 @@ private void updateHandleDisplayPos(int yDelta)
 public void updateHandleHeight(int setSize, int displayElements)
   {
   int availBarHeight = this.height - this.buffer*2 - 20;//20 is the minimum handle height...
-  float elementPercent = (float)displayElements/(float)setSize;
+  float elementPercent = (float )displayElements / (float) setSize;
   if(elementPercent>1)
     {
     elementPercent = 1;

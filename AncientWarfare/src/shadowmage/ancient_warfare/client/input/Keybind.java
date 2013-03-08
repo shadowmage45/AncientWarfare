@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.input;
 
+import org.lwjgl.input.Keyboard;
+
 public class Keybind
 {
 
@@ -35,6 +37,25 @@ public Keybind(int keyCode, String name)
   this.keyName = name;
   }
 
+public String getKeyName()
+  {
+  return keyName;
+  }
+
+public int getKeyCode()
+  {
+  return keyCode;
+  }
+
+public String getKeyChar()
+  {
+  return Keyboard.getKeyName(keyCode);
+  }
+
+public void setKeyCode(int key)
+  {
+  this.keyCode = key;
+  }
 
 
 }

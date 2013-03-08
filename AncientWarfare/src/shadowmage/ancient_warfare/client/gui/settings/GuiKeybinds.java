@@ -20,12 +20,18 @@
  */
 package shadowmage.ancient_warfare.client.gui.settings;
 
+import java.util.List;
+
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.client.input.Keybind;
+import shadowmage.ancient_warfare.client.input.KeybindManager;
+import shadowmage.meim.common.config.Config;
 
 public class GuiKeybinds extends GuiContainerAdvanced
 {
@@ -33,6 +39,9 @@ public class GuiKeybinds extends GuiContainerAdvanced
 GuiContainerAdvanced parentGui;
 GuiScrollableArea area;
 
+private List<Keybind> keybinds;
+private Keybind kb = null;//current editing keybind
+private GuiButtonSimple kbButton = null;
 
 /**
  * @param container
@@ -41,6 +50,7 @@ public GuiKeybinds(Container container, GuiContainerAdvanced parent)
   {
   super(container);
   this.parentGui = parent;
+  this.keybinds = KeybindManager.getKeybinds();  
   }
 
 
@@ -59,14 +69,18 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  // TODO Auto-generated method stub
-  return null;
+  return "/shadowmage/ancient_warfare/resources/gui/guiBackgroundLarge.png";
   }
 
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  area.drawElement(mouseX, mouseY);
+  if(kb!=null)
+    {
+    this.drawStringGui("Setting key for:"+kb.getKeyName(), 15, 8, 0xffffffff);
+    this.drawStringGui("Press Esc to Cancel", 15, 18, 0xffffffff);
+    }
+  //area.drawElement(mouseX, mouseY);
   }
 
 @Override
@@ -82,14 +96,20 @@ public void onElementActivated(IGuiElement element)
   switch(element.getElementNumber())
     {
     case 0:
-    break;
-    case 1:
     mc.displayGuiScreen(parentGui);
     break;
+    
+    case 1:
+    break;
+    
     default:
     break;
+    }  
+  if(element.getElementNumber()>=2 && element.getElementNumber() < keybinds.size()+2)
+    {
+    this.kb = keybinds.get(element.getElementNumber()-2);
+    this.kbButton = (GuiButtonSimple) element;
     }
-  
   }
 
 @Override
@@ -97,19 +117,24 @@ public void setupControls()
   {
   int buffer = 2;
   int buttonSize = 16;
-  int keyBindCount = 20;
+  int keyBindCount = keybinds.size();
+  
   int totalHeight = keyBindCount * (buffer+buttonSize);
-  Config.logDebug("total area height: "+totalHeight);
-  area = new GuiScrollableArea(0, this, 10, 20, this.getXSize()-20, this.getYSize()-30, totalHeight);
-  this.addGuiButton(1, getXSize()-35-5, 5, 35, 12, "Done");
+  
+
+  this.addGuiButton(0, getXSize()-55-10, 10, 55, 16, "Done");
+  
+  area = new GuiScrollableArea(1, this, 10, 30, this.getXSize()-20, this.getYSize()-40, totalHeight);
+  this.guiElements.put(1, area);
+  
   int kX = 5;
   int kY = 0;
   for(int i = 0; i < keyBindCount; i++)
     {
-    kY = i * (buffer+buttonSize);    
-    area.addGuiElement(new GuiButtonSimple(i+2, area, 100, buttonSize, "Button"+i).updateRenderPos(kX, kY));
+    kY = i * (buffer+buttonSize);  
+    Keybind kb = keybinds.get(i);
+    area.addGuiElement(new GuiButtonSimple(i+2, area, this.getXSize()-20-16-10, buttonSize, kb.getKeyName() + " :: "+kb.getKeyChar()).updateRenderPos(kX, kY));
     }
-  this.guiElements.put(0, area);
   }
 
 @Override
@@ -117,5 +142,30 @@ public void updateControls()
   {
   // TODO Auto-generated method stub
   }
+
+
+@Override
+protected void keyTyped(char par1, int par2)
+  {
+  if(par2 == Keyboard.KEY_ESCAPE)
+    {
+    kb=null;
+    kbButton=null;
+    }
+  if(kb!=null)
+    {
+    Config.logDebug("setting keybind "+kb.getKeyName()+" to: "+Keyboard.getKeyName(par2));
+    kb.setKeyCode(par2);
+    kbButton.setButtonText(kb.getKeyName() + " :: "+kb.getKeyChar());
+    kb=null;
+    kbButton=null;        
+    }
+  if(par2 != Keyboard.KEY_ESCAPE)
+    {
+    super.keyTyped(par1, par2);
+    }
+  }
+
+
 
 }

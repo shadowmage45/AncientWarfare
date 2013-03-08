@@ -32,6 +32,11 @@ public class KeybindManager
 private static List<Keybind> keybinds = new ArrayList<Keybind>();
 private static List<IHandleInput> inputHandlers = new ArrayList<IHandleInput>();
 
+public static List<Keybind> getKeybinds()
+  {
+  return keybinds;
+  }
+
 public static void addKeybind(Keybind kb)
   {
   keybinds.add(kb);

@@ -204,11 +204,11 @@ public boolean isMouseOver(int x, int y)
     {
     return x >=this.renderPosX && x<this.renderPosX+width && y>=this.renderPosY && y<this.renderPosY+height;
     }
-  int xMin = this.renderPosX + guiLeft;
-  int xMax = this.renderPosX + guiLeft + width;
-  int yMin = this.renderPosY + guiTop;
-  int yMax = this.renderPosY + guiTop + height;
-  Config.logDebug(this.getElementNumber() +"---"+ xMin+","+xMax+","+yMin+","+yMax);
+//  int xMin = this.renderPosX + guiLeft;
+//  int xMax = this.renderPosX + guiLeft + width;
+//  int yMin = this.renderPosY + guiTop;
+//  int yMax = this.renderPosY + guiTop + height;
+  //Config.logDebug(this.getElementNumber() +"---"+ xMin+","+xMax+","+yMin+","+yMax);
   return x >=this.renderPosX+guiLeft && x<this.renderPosX+width+guiLeft && y>=this.renderPosY+guiTop && y<this.renderPosY+height+guiTop;
   }
 

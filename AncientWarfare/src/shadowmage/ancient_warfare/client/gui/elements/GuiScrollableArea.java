@@ -67,7 +67,6 @@ public GuiScrollableArea(int elementNum, GuiContainerAdvanced parent, int x, int
   this.totalHeight = totalHeight;
   this.scrollBar = new GuiScrollBarSimple(elementNum, this, 16, h, totalHeight, h);
   this.scrollBar.updateRenderPos(w-16, 0);
-  this.scrollPosY = this.scrollBar.getTopIndexForSet(totalHeight, height);
   }
 
 public void addGuiElement(GuiElement el)
@@ -92,23 +91,17 @@ public void drawElement(int mouseX, int mouseY)
   float scaleX = (float)mc.displayWidth / w;  
   GL11.glViewport((int)x, (int)y, (int)w, (int)h);  
   GL11.glScalef(scaleX, scaleY, 1);
-//  for(int i = 0; i < 50; i++)
-//    {
-//    this.drawString(mc.fontRenderer, "testString....aba;lkja;lhasdfasdfqwerqweradfadfaqwerqwetasdfawerqwerqasdfawerqwerqwerqasdfasdfasdfaqewrqwreghjkghuityuitftyertyfbgsrtwertsdfgasdfawreqwe", 0, i*10, 0xffffffff);
-//    } 
-
 
   mouseX = mouseX - this.scrollPosX - this.guiLeft - this.renderPosX;
   mouseY = mouseY + this.scrollPosY - this.guiTop - this.renderPosY;
 
-  this.scrollPosY = this.scrollBar.getTopIndexForSet(2*width, width);
+  this.scrollBar.updateHandleHeight(totalHeight, height);  
+  this.scrollPosY = this.scrollBar.getTopIndexForSet(totalHeight, height);  
   this.scrollBar.updateGuiPos(0, 0);
   this.scrollBar.drawElement(mouseX, mouseY-scrollPosY);
-  //Config.logDebug("adj mouse X: "+mouseX+","+mouseY);
   for(GuiElement el : this.elements)
     {
     el.drawElement(mouseX, mouseY);
-    //Config.logDebug("drawing element. x: "+(el.guiLeft+el.renderPosX)+" y: "+(el.guiTop+el.renderPosY));
     }  
   GL11.glViewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
   }
