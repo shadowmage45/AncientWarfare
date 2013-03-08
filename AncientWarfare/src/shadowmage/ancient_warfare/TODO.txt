@@ -3,7 +3,7 @@ read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
 http://mrl.nyu.edu/~perlin/noise/
 http://gafferongames.com/networking-for-game-programmers/what-every-programmer-needs-to-know-about-game-networking/
 http://en.wikipedia.org/wiki/Trajectory_of_a_projectile
-http://gamedev.stackexchange.com/questions/17467/calculating-velocity-needed-to-hit-target-in-parabolic-arc
+http://gamedev.stackexchange.com/questions/17467/calculating-velocity-needed-to-hit-target-in-parabolic-arc  (its wrong...)
 
 
 GENERAL
@@ -19,10 +19,11 @@ VEHICLES
 * implement armor system
 * vehicle research system
 * fix entity hit detection for auto-aim...its borked
-* add gravity..
 * fix rider collision detection
-* update stepSize so that they can go over things...
 * implement ammo weight use for calculating shots
+* make it so vehicles won't collide with arrows...
+* make sure vehicles with no ammo types won't crash
+* fix crashing when all missile offsets are 0 (render hard-lock)
             
 AMMO TYPES 
 * import stone ammo model
@@ -224,6 +225,9 @@ public static MyWorldData forWorld(World world)
 * implement ammo inGround rechecking, caching of blockPos and blockID/meta (similar to arrow)
 * implement ammo onImpact methods
 * implement ammo entityHit detection
+* add vehicle gravity..
+* update vehicle stepSize so that they can go over things...
+* vehicle ammo switching capability
 
 /********** 03-08-13 **********/
 /********** 03-09-13 **********/

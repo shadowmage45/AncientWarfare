@@ -31,13 +31,13 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.missiles.AmmoArrow;
-import shadowmage.ancient_warfare.common.missiles.AmmoBase;
+import shadowmage.ancient_warfare.common.missiles.Ammo;
+import shadowmage.ancient_warfare.common.missiles.AmmoStoneShot;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 
 public class AmmoRegistry
 {
 
-public static AmmoBase ammoArrow = new AmmoArrow(0);
 
 private AmmoRegistry(){}
 private static AmmoRegistry INSTANCE;
@@ -55,7 +55,11 @@ public void registerAmmoTypes()
   {
   AWEntityRegistry.registerEntity(MissileBase.class, "AWMissileBase", 165, 5, true);  
   
-  this.registerAmmoType(ammoArrow);
+  /**
+   * debug..these will need to use the itemRegistry method..
+   */
+  this.registerAmmoType(Ammo.ammoArrow);
+  this.registerAmmoType(Ammo.ammoStoneShot);
   }
 
 /**

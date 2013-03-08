@@ -170,10 +170,8 @@ public void onMovementTick()
     {
     strafeMotion = 0;
     }  
-  vehicle.wheelRotationPrev = vehicle.wheelRotation;
-  vehicle.wheelRotation += forwardMotion*0.02f;
-  vehicle.rotationYaw += strafeMotion;    
-  if(!vehicle.isCollidedVertically)
+  
+  if(!vehicle.onGround)
     {
     vehicle.motionY -= (9.81f*0.05f*0.05f);
     }
@@ -187,7 +185,11 @@ public void onMovementTick()
     float x = Trig.sinDegrees(vehicle.rotationYaw)*-forwardMotion;
     float z = Trig.cosDegrees(vehicle.rotationYaw)*-forwardMotion;  
     vehicle.motionX = x;
-    vehicle.motionZ = z;    
+    vehicle.motionZ = z;   
+    vehicle.rotationYaw += strafeMotion;  
+    vehicle.wheelRotationPrev = vehicle.wheelRotation;
+    vehicle.wheelRotation += forwardMotion*0.02f;
+    vehicle.velocity = forwardMotion;
     }
   }
 

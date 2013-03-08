@@ -41,8 +41,6 @@ public VehicleCatapult(World par1World)
   {
   super(par1World);
   this.setVehicleType(VehicleRegistry.CATAPULT, 0);
-  this.yOffset = 0;
-  this.ammoHelper.addUseableAmmo(AmmoRegistry.ammoArrow);
   }
 
 @Override

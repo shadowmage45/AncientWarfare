@@ -149,14 +149,6 @@ public boolean launchMissile()
       float x = (float) vehicle.posX + off.x;
       float y = (float) vehicle.posY + off.y;
       float z = (float) vehicle.posZ + off.z;
-//      if(this.targetPos!=null && vehicle.turretPitch==vehicle.turretDestPitch)//if has target, and is lined up..do good fire..
-//        {
-//        float tx = this.targetPos.x - x;
-//        float ty = this.targetPos.y - y;
-//        float tz = this.targetPos.z - z;
-//        Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.launchPowerCurrent);
-//        angle = getBestAngle(angles.value(), angles.key());
-//        }      
       MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, vehicle.rotationYaw, vehicle.turretPitch, vehicle.launchPowerCurrent);
       if(missile!=null)
         {
@@ -381,8 +373,8 @@ public void handleAimMouseInput(Vec3 target)
   float ty = (float) (target.yCoord - y);
   float tz = (float) (target.zCoord - z);
   float range = MathHelper.sqrt_float(tx*tx+tz*tz);
-  Config.logDebug("range: "+range);
-  Config.logDebug("horiz rise: "+ty);
+//  Config.logDebug("range: "+range);
+//  Config.logDebug("horiz rise: "+ty);
   
   
   if(vehicle.canAimPitch())
@@ -391,7 +383,7 @@ public void handleAimMouseInput(Vec3 target)
     Config.logDebug("input::::angle pair for hit: "+angles.toString()+" range: "+range);
     if(angles.key().isNaN() || angles.value().isNaN())
       {
-      Config.logDebug("exiting aim pitch input due to NaN params!!");      
+//      Config.logDebug("exiting aim pitch input due to NaN params!!");      
       }
     else if(angles.value()>=vehicle.turretPitchMin && angles.value()<=vehicle.turretPitchMax)
       {
@@ -427,7 +419,7 @@ public void handleAimMouseInput(Vec3 target)
     float xAO = (float) (vehicle.posX - target.xCoord);  
     float zAO = (float) (vehicle.posZ - target.zCoord);
     float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
-    Config.logDebug("calculated yaw target: "+yaw+" vehicle current yaw: "+vehicle.rotationYaw);
+//    Config.logDebug("calculated yaw target: "+yaw+" vehicle current yaw: "+vehicle.rotationYaw);
     if(yaw!=this.clientTurretYaw && yaw >=vehicle.turretRotationHome - vehicle.turretRotationMax && yaw <= vehicle.turretRotationHome + vehicle.turretRotationMax)
       {    
       this.clientTurretYaw = yaw;

@@ -89,7 +89,6 @@ public static Keybind mouseAim;
 public void loadKeysFromConfig()
   {
   KeybindManager.addHandler(this);
-
   forward = new Keybind(Config.getKeyBindID("keybind.forward", Keyboard.KEY_W, "forwards/accelerate"), "Forward");
   KeybindManager.addKeybind(forward);
   reverse = new Keybind(Config.getKeyBindID("keybind.reverse", Keyboard.KEY_S, "reverse/deccelerate"), "Reverse");
@@ -99,8 +98,11 @@ public void loadKeysFromConfig()
   right = new Keybind(Config.getKeyBindID("keybind.right", Keyboard.KEY_D, "turn/strafe right"), "Right Turn");
   KeybindManager.addKeybind(right);
   fire = new Keybind(Config.getKeyBindID("keybind.fire", Keyboard.KEY_SPACE, "fire missile"), "Fire");
-  KeybindManager.addKeybind(fire);
-  
+  KeybindManager.addKeybind(fire);  
+  ammoPrev = new Keybind(Config.getKeyBindID("keybind.ammoPrev", Keyboard.KEY_T, "previous ammo"), "Prev Ammo");
+  KeybindManager.addKeybind(ammoPrev);
+  ammoNext = new Keybind(Config.getKeyBindID("keybind.ammoNext", Keyboard.KEY_G, "next ammo"), "Next Ammo");
+  KeybindManager.addKeybind(ammoNext);
   pitchUp = new Keybind(Config.getKeyBindID("keybind.aimUp", Keyboard.KEY_R, "Aim Up"), "Aim Up");
   KeybindManager.addKeybind(pitchUp);
   pitchDown = new Keybind(Config.getKeyBindID("keybind.aimDown", Keyboard.KEY_F, "Aim Down"), "Aim Down");
@@ -108,8 +110,7 @@ public void loadKeysFromConfig()
   turretLeft = new Keybind(Config.getKeyBindID("keybind.turretLeft", Keyboard.KEY_Z, "turret left"),"Turret Left");
   KeybindManager.addKeybind(turretLeft);
   turretRight = new Keybind(Config.getKeyBindID("keybind.turretRight", Keyboard.KEY_X, "turret right"),"Turret Right");  
-  KeybindManager.addKeybind(turretRight);
-  
+  KeybindManager.addKeybind(turretRight);  
   mouseAim = new Keybind(Config.getKeyBindID("keybind.mouseAim", Keyboard.KEY_C, "Enable/Disable Mouse Aim"), "Mouse Aim");
   KeybindManager.addKeybind(mouseAim);
   }
@@ -182,6 +183,10 @@ public void onKeyPressed(Keybind kb)
       {
       this.handleAimAction(kb);
       }
+    if(kb==ammoPrev || kb== ammoNext)
+      {
+      this.handleAmmoKeyAction(kb);
+      }
     }
   }
 
@@ -201,6 +206,23 @@ public void onTickEnd()
   if(Settings.getMouseAim() && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
     {
     this.handleMouseAimUpdate();
+    }
+  }
+
+private void handleAmmoKeyAction(Keybind kb)
+  {
+  if(mc.currentScreen==null && mc.thePlayer!=null && mc.theWorld!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
+    {
+    int amt = 0;
+    if(kb==ammoPrev)
+      {
+      amt = -1;
+      }
+    else if(kb==ammoNext)
+      {
+      amt = 1;
+      }
+    ((VehicleBase)mc.thePlayer.ridingEntity).ammoHelper.handleAmmoSelectInput(amt);
     }
   }
 

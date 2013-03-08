@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_warfare.common.missiles.Ammo;
+import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
@@ -34,8 +36,8 @@ public VehicleTypeCatapult(int typeNum)
   super(typeNum);
   this.width = 2;
   this.height = 2;
-  this.missileVerticalOffset = 2.75f* Trig.sinDegrees(45) + 0.4f;
-  this.missileForwardsOffset = -2.75f* Trig.cosDegrees(45);
+  this.missileVerticalOffset = 2.70f* Trig.sinDegrees(45) + 0.4f;
+  this.missileForwardsOffset = -2.70f* Trig.cosDegrees(45);
   this.isMountable = true;
   this.isDrivable = true;
   this.isCombatEngine = true;
@@ -48,8 +50,11 @@ public VehicleTypeCatapult(int typeNum)
   this.basePitchMin = 45;
   this.baseMissileVelocityMax = 32.f;  
   this.vehicleMaterial = VehicleMaterial.materialWood;
-  this.riderForwardsOffset = 1.3f;
-  this.riderVerticalOffset = 0.8f;
+  this.riderForwardsOffset = 1.2f;
+  this.riderVerticalOffset = 0.7f;
+  
+  this.validAmmoTypes.add(Ammo.ammoArrow);
+  this.validAmmoTypes.add(Ammo.ammoStoneShot);
   }
 
 }

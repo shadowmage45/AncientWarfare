@@ -113,6 +113,14 @@ public void updateUpgradeStats()
     }
   }
 
+public void addValidUpgrade(VehicleUpgrade upgrade)
+  {
+  if(upgrade!=null && !this.validUpgrades.contains(upgrade))
+    {
+    this.validUpgrades.add(upgrade);
+    }
+  }
+
 public void addValidUpgrade(int type)
   {
   VehicleUpgrade upgrade = VehicleUpgradeRegistry.instance().getUpgrade(type);

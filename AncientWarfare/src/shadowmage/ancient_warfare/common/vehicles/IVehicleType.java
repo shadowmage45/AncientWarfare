@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles;
 
+import java.util.List;
+
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
@@ -65,6 +67,7 @@ public abstract float getBaseAccuracy();
 public abstract boolean isAmmoValidForInventory(IAmmoType ammo);//does not determine if it can be fired, only if it can be placed into inventory
 public abstract boolean isUpgradeValid(VehicleUpgrade upgrade);
 
-
+public abstract List<IAmmoType> getValidAmmoTypes();
+public abstract List<VehicleUpgrade> getValidUpgrades();
 
 }

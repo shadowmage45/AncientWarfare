@@ -26,13 +26,26 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public abstract class AmmoBase implements IAmmoType
+public abstract class Ammo implements IAmmoType
 {
+
+/**
+ * procedure to make new ammo type:
+ * create ammo class
+ * create static instance below (or anywhere really)
+ * register static instance in AmmoRegistry (or register it with ammoregistry during startup)
+ * register the render in renderRegistry (or register it with renderregistry during startup)
+ * add ammo to applicable vehicle type constructors 
+ */
+
+public static Ammo ammoArrow = new AmmoArrow(0);
+public static Ammo ammoStoneShot = new AmmoStoneShot(1);
+
 
 private ItemStack ammoStack;
 int ammoType;
 
-public AmmoBase(int ammoType)
+public Ammo(int ammoType)
   {
   this.ammoStack = new ItemStack(this.getItemID(), 1, this.getItemMeta());
   this.ammoType = ammoType;

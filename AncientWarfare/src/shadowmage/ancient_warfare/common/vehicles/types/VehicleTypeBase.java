@@ -23,6 +23,8 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
@@ -248,6 +250,18 @@ public boolean isUpgradeValid(VehicleUpgrade upgrade)
 public float getBaseAccuracy()
   {
   return this.accuracy;
+  }
+
+@Override
+public List<IAmmoType> getValidAmmoTypes()
+  {
+  return this.validAmmoTypes;
+  }
+
+@Override
+public List<VehicleUpgrade> getValidUpgrades()
+  {
+  return this.validUpgrades;
   }
 
 }

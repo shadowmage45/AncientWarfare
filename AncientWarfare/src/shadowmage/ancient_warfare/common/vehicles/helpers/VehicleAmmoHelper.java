@@ -27,6 +27,7 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
@@ -55,6 +56,62 @@ public void addUseableAmmo(IAmmoType ammo)
   VehicleAmmoEntry ent = new VehicleAmmoEntry(ammo);
   this.ammoEntries.add(ent);
   this.ammoTypes.put(ammo.getAmmoType(), ent);
+  }
+
+public void handleAmmoSelectInput(int delta)
+  {
+  Config.logDebug("handling ammo selection INPUT. server: "+!vehicle.worldObj.isRemote+" delta: "+delta);
+  if(this.ammoEntries.size()>0)
+    {
+    boolean updated = false;
+    int test = this.currentAmmoType + delta;
+    if(test<0)
+      {
+      while(test<0)
+        {
+        test += this.ammoEntries.size();
+        }    
+      }
+    else if(test>=this.ammoEntries.size())
+      {
+      while(test>=this.ammoEntries.size())
+        {
+        test -= this.ammoEntries.size();
+        }
+      }
+    if(test>=0 && test <this.ammoEntries.size() && test !=this.currentAmmoType)
+      {
+      NBTTagCompound innerTag = new NBTTagCompound();
+      innerTag.setInteger("num", test);    
+      Packet02Vehicle pkt = new Packet02Vehicle();
+      pkt.setParams(vehicle);
+      pkt.setAmmoSelect(innerTag);
+      pkt.sendPacketToServer();
+      }    
+    }
+  }
+
+public void handleAmmoSelectPacket(NBTTagCompound tag)
+  {
+  
+  boolean updated = false;
+  int num = tag.getInteger("num");
+  Config.logDebug("handling ammo selection packet. server: "+!vehicle.worldObj.isRemote+" ammoNum: "+num);
+  if(num>=0 && num < this.ammoEntries.size() && num != this.currentAmmoType)
+    {
+    this.currentAmmoType = num;
+    updated = true;    
+    }  
+  if(!vehicle.worldObj.isRemote && updated)
+    {    
+    NBTTagCompound innerTag = new NBTTagCompound();
+    innerTag.setInteger("num", num);    
+    Packet02Vehicle pkt = new Packet02Vehicle();
+    pkt.setParams(vehicle);
+    pkt.setAmmoSelect(innerTag);
+    pkt.sendPacketToAllTrackingClients(vehicle);
+    }
+  
   }
 
 /**

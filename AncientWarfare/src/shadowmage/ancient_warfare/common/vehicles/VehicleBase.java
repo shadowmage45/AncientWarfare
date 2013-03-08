@@ -31,9 +31,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
+import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
@@ -43,8 +45,6 @@ import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleUpgradeHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
-import shadowmage.ancient_warfare.common.vehicles.stats.ArmorStats;
-import shadowmage.ancient_warfare.common.vehicles.stats.GeneralStats;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -99,7 +99,7 @@ public float turretDestPitch = 45.f;
 public float turretPitchInc = 1.f;
 
 /**
- * set by move helper on movement update. used during client rendering to update wheel rotation and other animations
+ * set by move helper on movement update. used during client rendering to update wheel rotation and other movement speed based animations
  */
 public float wheelRotation = 0.f;
 public float wheelRotationPrev = 0.f;
@@ -131,7 +131,8 @@ public VehicleBase(World par1World)
   this.moveHelper = new VehicleMovementHelper(this);
   this.ammoHelper = new VehicleAmmoHelper(this);
   this.firingHelper = new VehicleFiringHelper(this);
-  this.inventory = new VehicleInventory(this);  
+  this.inventory = new VehicleInventory(this);
+  this.stepHeight = 1.12f;
   }
 
 public void setVehicleType(IVehicleType vehicle, int materialLevel)
@@ -140,7 +141,14 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
   float width = vehicleType.getWidth();
   float height = vehicleType.getHeight();
   this.setSize(width, height);
-  this.yOffset = height/2.f;   
+  for(IAmmoType ammo : vehicleType.getValidAmmoTypes())
+    {
+    this.ammoHelper.addUseableAmmo(ammo);
+    }
+  for(VehicleUpgrade up : this.vehicleType.getValidUpgrades())
+    {
+    this.upgradeHelper.addValidUpgrade(up);
+    }
   this.updateBaseStats();
   }
 
@@ -290,7 +298,7 @@ public void onUpdate()
   }
 
 /**
- * client-side updates, poll for input if ridden, send input to server
+ * client-side updates
  */
 public void onUpdateClient()
   {  
@@ -307,6 +315,7 @@ public void onUpdateServer()
     this.isRidden = false;
     this.moveHelper.clearInputFromDismount();
     }
+  this.isRidden = this.riddenByEntity != null;
   }
 
 public void updateTurretPitch()
@@ -340,7 +349,6 @@ public void updateTurretRotation()
   //TODO
   }
 
-
 /**
  * Called from Packet02Vehicle
  * Generic update method for client-server coms
@@ -362,7 +370,11 @@ public void handlePacketUpdate(NBTTagCompound tag)
     }
   if(tag.hasKey("ammo"))
     {
-
+    this.ammoHelper.handleAmmoUpdatePacket(tag.getCompoundTag("ammo"));
+    }
+  if(tag.hasKey("ammoSel"))
+    {
+    this.ammoHelper.handleAmmoSelectPacket(tag.getCompoundTag("ammoSel"));
     }
   }
 
@@ -429,7 +441,7 @@ public void updateRiderPosition()
 @Override
 public boolean interact(EntityPlayer player)
   {  
-  if(this.isMountable() && !player.worldObj.isRemote && !player.isSneaking())
+  if(this.isMountable() && !player.worldObj.isRemote && !player.isSneaking() && (this.riddenByEntity==null || this.riddenByEntity==player))
     {
     player.mountEntity(this);
     return true;
@@ -505,6 +517,7 @@ public void readSpawnData(ByteArrayDataInput data)
   this.ammoHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.moveHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.firingHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
+  //TODO write/read extra stats--turret pitch/rotation/destinations
   }
 
 @Override

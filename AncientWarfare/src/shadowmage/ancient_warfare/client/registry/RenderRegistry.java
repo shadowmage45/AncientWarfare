@@ -60,6 +60,7 @@ public void loadRenders()
    */
   RenderingRegistry.registerEntityRenderingHandler(MissileBase.class, new RenderMissileHelper());
   this.addMissileRender(0, new RenderArrow());  
+  this.addMissileRender(1, new RenderArrow());
   }
   
 public void addMissileRender(int type, Render rend)

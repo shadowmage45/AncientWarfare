@@ -23,10 +23,13 @@ package shadowmage.ancient_warfare.common.missiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class AmmoArrow extends Ammo
+public class AmmoStoneShot extends Ammo
 {
 
-public AmmoArrow(int ammoType)
+/**
+ * @param ammoType
+ */
+public AmmoStoneShot(int ammoType)
   {
   super(ammoType);
   }
@@ -34,49 +37,63 @@ public AmmoArrow(int ammoType)
 @Override
 public String getEntityName()
   {
-  return "AWArrow";
+  return "AW.StoneShot";
   }
 
 @Override
 public String getDisplayName()
   {
-  return "Arrow";
+  // TODO Auto-generated method stub
+  return "AW.StoneShot";
   }
 
 @Override
 public String getDisplayTooltip()
   {
-  return "Arrow";
+  // TODO Auto-generated method stub
+  return "AW.StoneShot";
   }
 
 @Override
 public String getModelTexture()
   {
+  // TODO Auto-generated method stub
   return "foo.png";
   }
 
 @Override
 public int getItemID()
   {
+  // TODO Auto-generated method stub
   return 0;
   }
 
 @Override
 public int getItemMeta()
   {
+  // TODO Auto-generated method stub
   return 0;
+  }
+
+@Override
+public boolean updateAsArrow()
+  {
+  // TODO Auto-generated method stub
+  return false;
   }
 
 @Override
 public boolean isRocket()
   {
+  // TODO Auto-generated method stub
   return false;
   }
 
 @Override
 public boolean isPersistent()
   {
-  return true;
+  // TODO Auto-generated method stub
+  return false;
   }
 
 @Override
@@ -97,18 +114,14 @@ public float getWeightFactor()
 public void onImpactWorld(World world, float x, float y, float z)
   {
   // TODO Auto-generated method stub
+
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z)
   {
   // TODO Auto-generated method stub
-  }
 
-@Override
-public boolean updateAsArrow()
-  {
-  return true;
   }
 
 }
