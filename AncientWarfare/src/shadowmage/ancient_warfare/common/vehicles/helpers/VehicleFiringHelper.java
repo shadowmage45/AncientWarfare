@@ -376,7 +376,6 @@ public void handleAimMouseInput(Vec3 target)
 //  Config.logDebug("range: "+range);
 //  Config.logDebug("horiz rise: "+ty);
   
-  
   if(vehicle.canAimPitch())
     {   
     Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.launchPowerCurrent);    

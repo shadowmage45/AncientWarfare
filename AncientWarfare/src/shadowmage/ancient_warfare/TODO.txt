@@ -22,16 +22,12 @@ VEHICLES
 * fix rider collision detection
 * implement ammo weight use for calculating shots
 * make it so vehicles won't collide with arrows...
-* fix crashing when all missile offsets are 0 (render hard-lock)
             
 AMMO TYPES 
-* import stone ammo model
 * create more ammo types
 
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
-* enable float-based handle render positioning to scroll bar as well as float-based handle positioning
-            will require polling raw (non-scaled) mouse position....    
 
 TESTING
 * test loot weighting
@@ -75,7 +71,6 @@ COMPLEXES
 -- walls wil be placed slightly inside of terrain leveling bounds
 -- outer leveling bounds will use a stepped approach, out to a certain radius/height...
 
-
 SURVIVAL MODE STRUCTURE BUILDING
 * create drafting workstation
 * single-use item scanner--cannot add to world gen, only add to survival/creative mode
@@ -93,13 +88,7 @@ ADVANCED DRAFTING STATION (editor)
 * THDT
 
 RESEARCH
-* research gui--base background GUI with scrollable viewport.  viewport will consist of a dummy GUI class that will have 
-        its methods called by the parent gui.  parent will call drawScreen, handleMouseInput, and handleKeyInput.  mouse input coords will
-        need to be scaled and adjusted (truncated) to the display region and only called if mouse is in the viewport region.
--- GUI --  Render full-screen background image.  On top of that, render mid-ground image of current position in research map.
-        On top of that, render a border to clean up edges.  Render mid-ground at .75f brightness, if over a control spot, render that
-        control spot at 1.f brightness.  Research map has list of control spots which keep internal coords.  Mid-ground tex
-        is recomputed every time screen changes (as a partial texture of the full texture)
+* THDT
  
 TWEAKS/OPTIMIZATION
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
@@ -115,7 +104,6 @@ TWEAKS/OPTIMIZATION
 * custom block placement code for creative/survival builders (set server block, manually relay to client--should 
         decrease overall network used from vanilla MC resending entire chunks..)
 
-
 MODS LIST FOR NEXT WORLD (147)
 Mystcraft
 Thaumcraft
@@ -127,6 +115,11 @@ Redpower
 --forestry
 --thermal expansion
 --portal gun
+REI minimap
+NEI
+WRCBE
+IronChests
+EnderStorage
 
 /*****************************************************************************************/
 public class MyWorldData extends WorldSavedData 
@@ -228,7 +221,8 @@ public static MyWorldData forWorld(World world)
 * implement no-scroll bar scrollable area (uses mouse input)
 * add parchment background img (guiBackgroundParchment.png)
 * make sure vehicles with no ammo types won't crash
-
+* import stone ammo model
+* fix crashing when all missile offsets are 0 (render hard-lock--was endlessly calcing range for NaN)
 
 
 /********** 03-09-13 **********/

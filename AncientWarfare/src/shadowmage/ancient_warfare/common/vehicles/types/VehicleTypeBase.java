@@ -59,12 +59,12 @@ public boolean canAdjustYaw = false;
 public boolean canAdjustPitch = false;
 public boolean canAdjustPower = false;
 
-public float missileForwardsOffset;
-public float missileHorizontalOffset;
-public float missileVerticalOffset;
-public float riderForwardsOffset;
-public float riderHorizontalOffset;
-public float riderVerticalOffset;
+public float missileForwardsOffset = 0.f;
+public float missileHorizontalOffset= 0.f;
+public float missileVerticalOffset= 0.f;
+public float riderForwardsOffset= 0.f;
+public float riderHorizontalOffset= 0.f;
+public float riderVerticalOffset= 0.f;
 
 public float baseForwardSpeed;
 public float baseStrafeSpeed;

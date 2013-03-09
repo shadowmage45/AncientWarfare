@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.entity.Render;
 import shadowmage.ancient_warfare.client.render.RenderArrow;
 import shadowmage.ancient_warfare.client.render.RenderCatapult;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
+import shadowmage.ancient_warfare.client.render.RenderShot;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -60,7 +61,7 @@ public void loadRenders()
    */
   RenderingRegistry.registerEntityRenderingHandler(MissileBase.class, new RenderMissileHelper());
   this.addMissileRender(0, new RenderArrow());  
-  this.addMissileRender(1, new RenderArrow());
+  this.addMissileRender(1, new RenderShot());
   }
   
 public void addMissileRender(int type, Render rend)

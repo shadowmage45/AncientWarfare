@@ -291,6 +291,10 @@ public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float
 
   MovingObjectPosition blockHit = player.worldObj.rayTraceBlocks(playerPos, endVector);
   
+  /**
+   * redo..
+   * bb = new bb (px, py, pz, tx, ty, tz).expand(world.MAX_ENTITY_RADIUS)
+   */
   float var9 = 1.f;
   
   float closestFound = 0.f;

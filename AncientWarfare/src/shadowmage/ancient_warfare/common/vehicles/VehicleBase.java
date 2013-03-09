@@ -240,7 +240,7 @@ public Pos3f getMissileOffset()
   z = -Trig.sinDegrees(angle)*len;
   off.x = x;
   off.y = y;
-  off.z = z;  
+  off.z = z;
   return off;
   }
 
