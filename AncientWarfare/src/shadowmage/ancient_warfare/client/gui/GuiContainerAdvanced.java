@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -324,11 +325,18 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   String tex = this.getGuiBackGroundTexture();
   if(tex!=null)
     {
-    int texInt = this.mc.renderEngine.getTexture(tex);
-    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-    this.mc.renderEngine.bindTexture(texInt);
-    this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, this.xSize, this.ySize);
+    this.drawQuadedTexture(guiLeft, guiTop, this.xSize, this.ySize, 256, 240, tex, 0, 0);
     }
+  if(this.inventorySlots.inventorySlots.size()>0)
+    {
+    tex = "/shadowmage/ancient_warfare/resources/gui/guiButtons.png";
+    this.mc.renderEngine.bindTexture(this.mc.renderEngine.getTexture(tex));
+    for(Object ob : this.inventorySlots.inventorySlots)    
+      {      
+      Slot slot = (Slot)ob;
+      this.drawTexturedModalRect(slot.xDisplayPosition-1+guiLeft, slot.yDisplayPosition-1+guiTop, 150, 120, 18, 18);      
+      }    
+    }  
   GL11.glPushMatrix();
   this.renderExtraBackGround(mouseX, mouseY, var1);
   GL11.glPopMatrix();
@@ -616,6 +624,32 @@ public FontRenderer getFontRenderer()
 public GuiElement getElementByNumber(int num)
   {
   return this.guiElements.get(num);
+  }
+
+/**
+ * renders the four corners of a texture, from the corner inward (e.g. for size-adaptable elements)
+ * @param x renderPosX
+ * @param y renderPosY
+ * @param w renderWidth
+ * @param h renderHeight
+ * @param tw textureUsedWidth
+ * @param th textureUsedHeight
+ * @param tex theTexture
+ * @param u textureStartX
+ * @param v textureStartY
+ */
+protected void drawQuadedTexture(int x, int y, int w, int h, int tw, int th, String tex, int u, int v)
+  {  
+  int halfW = w/2;
+  int halfH = h/2;  
+  int u1 = u + tw - halfW;
+  int v1 = v + th - halfH;
+  GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture(tex));
+  GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+  this.drawTexturedModalRect(x, y, u, v, halfW, halfH);
+  this.drawTexturedModalRect(x + halfW, y, u1, v, halfW, halfH);
+  this.drawTexturedModalRect(x, y + halfH, u, v1, halfW, halfH);
+  this.drawTexturedModalRect(x + halfW, y + halfH, u1, v1, halfW, halfH);
   }
 
 }

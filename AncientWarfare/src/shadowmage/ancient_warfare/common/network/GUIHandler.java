@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
 import shadowmage.ancient_warfare.client.gui.structure.GuiEditorSelect;
 import shadowmage.ancient_warfare.client.gui.structure.GuiStructureScanner;
 import shadowmage.ancient_warfare.client.gui.structure.GuiSurvivalBuilder;
+import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleDebug;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
@@ -37,6 +38,8 @@ import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
+import shadowmage.ancient_warfare.common.container.ContainerVehicle;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 
@@ -102,7 +105,12 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   case 10:
   return null;  
   case VEHICLE_DEBUG:
-  return null;//TODO make/set container..
+  VehicleBase vehicle = (VehicleBase)world.getEntityByID(x);
+  if(vehicle!=null)
+    {
+    return new ContainerVehicle(player, vehicle, vehicle);
+    }
+  return null;//TODO make/set gui & container..
   } 
   return null;
   }
@@ -141,6 +149,11 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   case 10:
   return null;  
   case VEHICLE_DEBUG:
+  VehicleBase vehicle = (VehicleBase)world.getEntityByID(x);
+  if(vehicle!=null)
+    {
+    return new GuiVehicleDebug(new ContainerVehicle(player, vehicle, vehicle));
+    }
   return null;//TODO make/set gui & container..
   } 
   return null;

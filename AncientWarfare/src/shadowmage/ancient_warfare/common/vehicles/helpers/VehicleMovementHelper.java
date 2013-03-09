@@ -191,6 +191,10 @@ public void onMovementTick()
     vehicle.wheelRotation += forwardMotion*0.02f;
     vehicle.velocity = forwardMotion;
     }
+  else if(forwardMotion==0)
+    {
+    vehicle.wheelRotationPrev = vehicle.wheelRotation;
+    }
   }
 
 /**

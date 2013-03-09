@@ -37,6 +37,7 @@ GUI FRAMEWORK
 * add String label to checkboxes (optional)
 * create basic GuiString element. has options for color, hover-color, callBackOnClick, drawShadow, drawCentered 
 * rework all structure GUIs to include new bling!! (scroll areas, etc...)
+* put quaded texture rendering someplace central...
 
 TESTING
 * test loot weighting
@@ -232,7 +233,7 @@ public static MyWorldData forWorld(World world)
 * make sure vehicles with no ammo types won't crash
 * import stone ammo model
 * fix crashing when all missile offsets are 0 (render hard-lock--was endlessly calcing range for NaN)
-
-
 /********** 03-09-13 **********/
+* add slot background to guiButtons.img ( @ 150x120 in image)
+* add ability to render custom background from background file, using quaded texture rendering for dynamic sizing
 /********** 03-10-13 **********/

@@ -42,9 +42,12 @@ public class AWInventoryBasic implements IInventory
  */
 List<IInventoryCallback> callBacks = new ArrayList<IInventoryCallback>();
 ItemStack[] inventorySlots;
+ItemStack[] prevContents;
+
 public AWInventoryBasic(int size)
   {
   this.inventorySlots = new ItemStack[size];
+  this.prevContents = new ItemStack[size];
   }
 
 public AWInventoryBasic(int size, IInventoryCallback caller)
@@ -87,7 +90,6 @@ public ItemStack decrStackSize(int slotNum, int decreaseBy)
       {
       tempStack = this.inventorySlots[slotNum];
       this.inventorySlots[slotNum] = null;
-      this.onInventoryChanged();
       return tempStack;
       }
     else
@@ -97,7 +99,6 @@ public ItemStack decrStackSize(int slotNum, int decreaseBy)
         {
         this.inventorySlots[slotNum] = null;
         }
-      this.onInventoryChanged();
       return tempStack;
       }
     }
@@ -130,7 +131,6 @@ public void setInventorySlotContents(int stackIndex, ItemStack newContents)
     {
     newContents.stackSize = this.getInventoryStackLimit();
     }
-  this.onInventoryChanged();
   }
 
 @Override
@@ -148,9 +148,38 @@ public int getInventoryStackLimit()
 @Override
 public void onInventoryChanged()
   {
-  for(IInventoryCallback cb : this.callBacks)
+  boolean changed = false;  
+  ArrayList<Integer> changedSlots = null;
+  for(int i = 0; i < this.prevContents.length; i++)
     {
-    if(cb!=null){cb.onInventoryChanged(this);}
+    if(!ItemStack.areItemStacksEqual(prevContents[i], inventorySlots[i]))
+      {      
+      if(changedSlots==null)
+        {
+        changedSlots = new ArrayList<Integer>();
+        }
+      changedSlots.add(i);
+      changed = true;
+      if(inventorySlots[i]!=null)
+        {
+        prevContents[i] = inventorySlots[i].copy();
+        }
+      else
+        {
+        prevContents[i] = null;
+        }
+      break;
+      }
+    }
+  if(changed)
+    {
+    for(IInventoryCallback cb : this.callBacks)
+      {
+      if(cb!=null)
+        {
+        cb.onInventoryChanged(this, changedSlots);
+        }
+      }
     }
   }
 

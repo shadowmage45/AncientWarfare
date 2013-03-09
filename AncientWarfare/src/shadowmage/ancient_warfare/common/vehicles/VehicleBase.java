@@ -32,8 +32,10 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
@@ -51,7 +53,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public abstract class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback
+public abstract class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IEntityContainerSynch
 {
 
 
@@ -446,6 +448,10 @@ public boolean interact(EntityPlayer player)
     player.mountEntity(this);
     return true;
     }
+  else if(!player.worldObj.isRemote && player.isSneaking())
+    {
+    GUIHandler.instance().openGUI(GUIHandler.VEHICLE_DEBUG, player, worldObj, this.entityId, 0, 0);
+    }
   return true;
   }
 
@@ -576,5 +582,32 @@ public void onMissileImpactEntity(World world, Entity entity)
     ((IMissileHitCallback)this.ridingEntity).onMissileImpactEntity(world, entity);
     }
   }
+
+/**
+ * container sych methods
+ */
+@Override
+public void handleClientInput(NBTTagCompound tag)
+  {
+  
+  }
+
+@Override
+public void addPlayer(EntityPlayer player)
+  {
+  
+  }
+
+@Override
+public void removePlayer(EntityPlayer player)
+  {
+  }
+
+@Override
+public boolean canInteract(EntityPlayer player)
+  {
+  return true;
+  }
+
 
 }

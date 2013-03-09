@@ -90,11 +90,11 @@ public void readFromNBT(NBTTagCompound commonTag)
   }
 
 @Override
-public void onInventoryChanged(IInventory changedInv)
-  {
+public void onInventoryChanged(IInventory changedInv, List<Integer> slotNums)
+  { 
   if(changedInv == this.ammoInventory && !vehicle.worldObj.isRemote)
     {
-    vehicle.ammoHelper.updateAmmoCounts();
+    vehicle.ammoHelper.updateAmmoCounts(slotNums);
     }
   else if(changedInv == this.upgradeInventory && !vehicle.worldObj.isRemote)
     {

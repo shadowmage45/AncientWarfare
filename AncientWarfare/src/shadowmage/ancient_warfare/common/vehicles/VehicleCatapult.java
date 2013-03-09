@@ -24,6 +24,8 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.Trig;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public class VehicleCatapult extends VehicleBase
@@ -61,6 +63,5 @@ public void onUpdate()
   super.onUpdate();
   this.armAngle = 90- this.turretPitch -7;
   }
-
 
 }

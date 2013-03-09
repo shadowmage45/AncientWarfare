@@ -160,8 +160,9 @@ public void handleAmmoCountUpdate(NBTTagCompound tag)
 /**
  * SERVER ONLY....
  */
-public void updateAmmoCounts()
+public void updateAmmoCounts(List<Integer> changedSlots)
   {
+  Config.logDebug("counting ammos!!");
   for(VehicleAmmoEntry ent : this.ammoEntries)
     {
     ent.ammoCount = 0;
@@ -197,6 +198,7 @@ public void updateAmmoCounts()
  */
 public void handleAmmoUpdatePacket(NBTTagCompound tag)
   {
+  Config.logDebug("receiving ammo count client update");
   for(VehicleAmmoEntry ent : this.ammoEntries)
     {
     ent.ammoCount = 0;

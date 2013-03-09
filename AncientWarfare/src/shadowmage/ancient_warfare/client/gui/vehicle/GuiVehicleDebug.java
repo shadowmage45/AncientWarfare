@@ -33,35 +33,30 @@ public class GuiVehicleDebug extends GuiContainerAdvanced
 public GuiVehicleDebug(Container container)
   {
   super(container);
-  // TODO Auto-generated constructor stub
+  this.shouldCloseOnVanillaKeys = true;
   }
 
 @Override
 public void onElementActivated(IGuiElement element)
-  {
-  // TODO Auto-generated method stub
-
+  {  
   }
 
 @Override
 public int getXSize()
   {
-  // TODO Auto-generated method stub
   return 256;
   }
 
 @Override
 public int getYSize()
   {
-  // TODO Auto-generated method stub
   return 196;
   }
 
 @Override
 public String getGuiBackGroundTexture()
   {
-  // TODO Auto-generated method stub
-  return null;
+  return "/shadowmage/ancient_warfare/resources/gui/guiBackgroundLarge.png";
   }
 
 @Override
