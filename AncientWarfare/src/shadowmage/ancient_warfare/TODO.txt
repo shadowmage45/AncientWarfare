@@ -5,11 +5,8 @@ http://gafferongames.com/networking-for-game-programmers/what-every-programmer-n
 http://en.wikipedia.org/wiki/Trajectory_of_a_projectile
 http://gamedev.stackexchange.com/questions/17467/calculating-velocity-needed-to-hit-target-in-parabolic-arc  (its wrong...)
 
-
 GENERAL
-* add basic GUI tooltip functionality -- GuiTooltip class (int x, int y, int w, int h, List<String> info)
 * move world-gen base config from AncientWarfare.cfg into /AWConfig/AWWorldGen.cfg
-* add keybind config setting to options gui
 
 VEHICLES
 * implement vehicle weighting system (should it include upgrades, and ammo in bay)
@@ -19,15 +16,27 @@ VEHICLES
 * implement armor system
 * vehicle research system
 * fix entity hit detection for auto-aim...its borked
-* fix rider collision detection
+* fix rider collision detection???
 * implement ammo weight use for calculating shots
 * make it so vehicles won't collide with arrows...
+* import more models
+* textures...textures...everywhere [there are missing] textures....
+* figure out how to handle items for vehicles (getItemStackFor(int type, int level)?)
+* find a good method for battering ram block damage (take point-hit, and simply do a 3D x on it?)
+* after ammo/armor/upgrades--add vehicles into structure gen
+* vehicle inventory (make a debug GUI)
+* so...slots display position is client only...use that to move slots off screen (or use that in a scrollable area somehow?)
             
 AMMO TYPES 
 * create more ammo types
+* create damage types
 
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
+* add tooltip functionality to elements (optional tooltip rendering, if enabled on the element)
+* add String label to checkboxes (optional)
+* create basic GuiString element. has options for color, hover-color, callBackOnClick, drawShadow, drawCentered 
+* rework all structure GUIs to include new bling!! (scroll areas, etc...)
 
 TESTING
 * test loot weighting

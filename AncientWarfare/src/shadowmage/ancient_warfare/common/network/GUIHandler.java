@@ -52,6 +52,7 @@ public static final int STRUCTURE_BUILD_DIRECT = 2;
 public static final int STRUCTURE_EDITOR = 3;
 public static final int STRUCTURE_SCAN_EDIT = 4;
 public static final int SETTINGS = 5;
+public static final int VEHICLE_DEBUG = 99;
 
 
 
@@ -100,6 +101,8 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   return null;
   case 10:
   return null;  
+  case VEHICLE_DEBUG:
+  return null;//TODO make/set container..
   } 
   return null;
   }
@@ -137,6 +140,8 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   return null;
   case 10:
   return null;  
+  case VEHICLE_DEBUG:
+  return null;//TODO make/set gui & container..
   } 
   return null;
   }

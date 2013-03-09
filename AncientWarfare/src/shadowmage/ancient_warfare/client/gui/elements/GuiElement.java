@@ -56,12 +56,28 @@ int mouseDownY;
 int mouseLastX;
 int mouseLastY;
 
+/**
+ * set by parent GUI to update render pos & mouse interaction relative to scaled screen size/etc. scrollable area uses this to offset render & mousePos relative to the scroll area
+ */
 int guiLeft;
 int guiTop;
 
+/**
+ * cached variable of isMouseOver(x,y). updated onMouseMoved
+ */
 protected boolean isMouseOver = false;
+
+/**
+ * determines interaction status, render status for some elements
+ */
 public boolean enabled = true;
+/**
+ * if should render at all, and/or accept input
+ */
 public boolean hidden = false;
+/**
+ * if should render offset using guiLeft/guiTop (not fully implemented in all elements...mostly deprecated in favor of renderPos updating)
+ */
 public boolean renderWithGuiOffset = true;
 
 protected Minecraft mc;
