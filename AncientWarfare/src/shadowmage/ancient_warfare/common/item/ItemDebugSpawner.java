@@ -24,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
@@ -67,6 +68,7 @@ public void spawnVehicle(World world, EntityPlayer player, BlockPosition hit)
   {
   Config.logDebug("spawning vehicle");
   VehicleCatapult veh = new VehicleCatapult(world);
+  veh.setVehicleType(VehicleRegistry.CATAPULT, 0);
   veh.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
   world.spawnEntityInWorld(veh);
   }

@@ -33,8 +33,8 @@ import shadowmage.ancient_warfare.common.interfaces.IInventoryCallback;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmoEntry;
-import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 public class VehicleInventory implements IInventoryCallback
 {
@@ -94,7 +94,7 @@ public void onInventoryChanged(IInventory changedInv, List<Integer> slotNums)
   { 
   if(changedInv == this.ammoInventory && !vehicle.worldObj.isRemote)
     {
-    vehicle.ammoHelper.updateAmmoCounts(slotNums);
+    vehicle.ammoHelper.updateAmmoCounts();
     }
   else if(changedInv == this.upgradeInventory && !vehicle.worldObj.isRemote)
     {
@@ -102,13 +102,13 @@ public void onInventoryChanged(IInventory changedInv, List<Integer> slotNums)
     }  
   }
 
-public List<VehicleUpgrade> getInventoryUpgrades()
+public List<IVehicleUpgradeType> getInventoryUpgrades()
   {
-  ArrayList<VehicleUpgrade> upgrades = new ArrayList<VehicleUpgrade>();
+  ArrayList<IVehicleUpgradeType> upgrades = new ArrayList<IVehicleUpgradeType>();
   for(int i = 0; i < this.upgradeInventory.getSizeInventory(); i++)
     {
     ItemStack stack = this.upgradeInventory.getStackInSlot(i);
-    VehicleUpgrade upgrade = VehicleUpgradeRegistry.instance().getUpgrade(stack);
+    IVehicleUpgradeType upgrade = VehicleUpgradeRegistry.instance().getUpgrade(stack);
     if(upgrade!=null)
       {
       upgrades.add(upgrade);

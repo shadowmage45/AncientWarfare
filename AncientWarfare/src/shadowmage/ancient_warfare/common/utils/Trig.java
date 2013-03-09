@@ -342,7 +342,6 @@ public static float iterativeSpeedFinder(float x, float y, float angle, int maxI
   
   while(iter<=maxIterations)
     {
-    Config.logDebug("doing distance calc. it: "+iter);
 //    Config.logDebug("/********************************************/");   
 //    Config.logDebug("iteration: "+iter+ "testing: "+testVelocity);
 //    Config.logDebug("testFactor: "+testFactor);    

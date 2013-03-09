@@ -23,6 +23,11 @@ package shadowmage.ancient_warfare.common.interfaces;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+/**
+ * interface for tile entities or entities that need info synched between client(s), but only when gui's are open...
+ * @author Shadowmage
+ *
+ */
 public interface IEntityContainerSynch
 {
 

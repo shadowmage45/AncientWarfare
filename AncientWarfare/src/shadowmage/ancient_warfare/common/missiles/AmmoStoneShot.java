@@ -43,70 +43,60 @@ public String getEntityName()
 @Override
 public String getDisplayName()
   {
-  // TODO Auto-generated method stub
-  return "AW.StoneShot";
+  return "Stone Shot 50kg";
   }
 
 @Override
 public String getDisplayTooltip()
   {
-  // TODO Auto-generated method stub
-  return "AW.StoneShot";
+  return "~10kg rough stone shot";
   }
 
 @Override
 public String getModelTexture()
   {
-  // TODO Auto-generated method stub
   return "foo.png";
   }
 
 @Override
 public boolean updateAsArrow()
   {
-  // TODO Auto-generated method stub
   return false;
   }
 
 @Override
 public boolean isRocket()
   {
-  // TODO Auto-generated method stub
   return false;
   }
 
 @Override
 public boolean isPersistent()
   {
-  // TODO Auto-generated method stub
   return false;
   }
 
 @Override
 public float getDragFactor()
   {
-  // TODO Auto-generated method stub
   return 0;
   }
 
 @Override
 public float getWeightFactor()
   {
-  // TODO Auto-generated method stub
   return 0;
   }
 
 @Override
 public void onImpactWorld(World world, float x, float y, float z)
   {
-  // TODO Auto-generated method stub
 
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z)
   {
-  // TODO Auto-generated method stub
 
   }
 

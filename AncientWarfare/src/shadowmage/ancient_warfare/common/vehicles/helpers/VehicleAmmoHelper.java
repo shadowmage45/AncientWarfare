@@ -30,6 +30,7 @@ import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
@@ -52,7 +53,7 @@ public VehicleAmmoHelper(VehicleBase vehicle)
   }
 
 /**
- * SERVER ONLY relays changes to clients to update a single ammo type
+ * SERVER ONLY relays changes to clients to update a single ammo type, also handles updating underlying inventory...
  * @param num
  */
 public void decreaseCurrentAmmo(int num)
@@ -62,8 +63,9 @@ public void decreaseCurrentAmmo(int num)
     return;
     }
   if(currentAmmoType>=0 && currentAmmoType<this.ammoEntries.size())
-    {
-    VehicleAmmoEntry entry = this.ammoEntries.get(num);
+    {    
+    num = num - vehicle.inventory.ammoInventory.decreaseCountOf(ItemLoader.ammoItem.itemID, this.getCurrentAmmoType().getAmmoType(), num);
+    VehicleAmmoEntry entry = this.ammoEntries.get(this.currentAmmoType);
     int origCount = entry.ammoCount;    
     entry.ammoCount -= num;
     if(entry.ammoCount<0)
@@ -81,6 +83,15 @@ public void decreaseCurrentAmmo(int num)
       pkt.sendPacketToAllTrackingClients(vehicle);
       }    
     }
+  }
+
+public int getCurrentAmmoCount()
+  {
+  if(this.ammoEntries.size()>0 && this.currentAmmoType < this.ammoEntries.size())
+    {
+    return this.ammoEntries.get(currentAmmoType).ammoCount;
+    }
+  return 0;
   }
 
 public void addUseableAmmo(IAmmoType ammo)
@@ -149,6 +160,7 @@ public void handleAmmoSelectPacket(NBTTagCompound tag)
  */
 public void handleAmmoCountUpdate(NBTTagCompound tag)
   {
+  Config.logDebug("updating single ammo type");
   int num = tag.getInteger("num");
   if(num>=0 && num < this.ammoEntries.size())
     {
@@ -160,8 +172,12 @@ public void handleAmmoCountUpdate(NBTTagCompound tag)
 /**
  * SERVER ONLY....
  */
-public void updateAmmoCounts(List<Integer> changedSlots)
+public void updateAmmoCounts()
   {
+  if(vehicle.worldObj.isRemote)
+    {
+    return;
+    }
   Config.logDebug("counting ammos!!");
   for(VehicleAmmoEntry ent : this.ammoEntries)
     {
@@ -270,8 +286,9 @@ public NBTTagCompound getNBTTag()
   for(VehicleAmmoEntry ent : this.ammoEntries)
     {
     NBTTagCompound entryTag = new NBTTagCompound();
-    tag.setInteger("num", ent.baseAmmoType.getAmmoType());
-    tag.setInteger("cnt", ent.ammoCount);
+    entryTag.setInteger("num", ent.baseAmmoType.getAmmoType());
+    entryTag.setInteger("cnt", ent.ammoCount);
+    Config.logDebug("writing ammo count "+entryTag.getInteger("num")+","+entryTag.getInteger("cnt"));
     tagList.appendTag(entryTag);
     }  
   tag.setTag("list", tagList);
@@ -291,9 +308,10 @@ public void readFromNBT(NBTTagCompound tag)
     {
     NBTTagCompound entryTag = (NBTTagCompound) tagList.tagAt(i);
     int num = entryTag.getInteger("num");
-    int cnt = entryTag.getInteger("cnt");
+    int cnt = entryTag.getInteger("cnt");    
     if(this.ammoTypes.containsKey(num))
       {
+      Config.logDebug("reading ammo count "+num+","+cnt);
       this.ammoTypes.get(num).ammoCount = cnt;
       }
     }

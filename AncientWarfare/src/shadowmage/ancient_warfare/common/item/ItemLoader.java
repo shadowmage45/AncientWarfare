@@ -27,7 +27,6 @@ import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
-import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 
 public class ItemLoader
 {
@@ -35,7 +34,7 @@ public class ItemLoader
 /**
  * Items
  */
-public static final AWItemBase vehicleUpgrade = new AWItemBase(Config.getItemID("itemMulti.vehicleUpgrade", 13001, "Base item for all vehicle upgrades"),true);
+public static final AWItemBase vehicleUpgrade = new ItemVehicleUpgrade(Config.getItemID("itemMulti.vehicleUpgrade", 13001, "Base item for all vehicle upgrades"));
 public static final AWItemBase ammoItem = new ItemAmmo(Config.getItemID("itemMulti.vehicleAmmo", 13002, "Base item for all vehicle ammunition types"));
 public static final AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 13003, "Base item for all vehicle-spawning items"));
 public static final AWItemBase componentItem = new AWItemBase(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
@@ -102,28 +101,6 @@ private void loadDebugItems()
   this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block");
   vehicleDebugSpawner = new ItemDebugSpawner(Config.getItemID("debug.vehicleSpawner", 9023));
   this.registerItemSingle(vehicleDebugSpawner, "Debug Spawner", "Spawns Various Entities", "Right click to spawn current debug entity");
-  }
-
-/**
- * special registerUpgrade method, directly registers a new upgrade using the vehicleUpgrade item.  calls all necessary calls
- * for languageRegistry, descriptionRegistry, etc----null upgrades are not registered
- * @param dmg
- * @param type
- * @param upgrade
- */
-private void registerVehicleUpgradeItem(int dmg, int type, VehicleUpgrade upgrade)
-  {
-  if(upgrade!=null)
-    {    
-    this.addSubtypeToItem(vehicleUpgrade, dmg, upgrade.getUpgradeDisplayName());
-    VehicleUpgradeRegistry.instance().registerUpgrade(dmg, type, upgrade);
-    }
-  }
-
-private ItemStack createVehicleUpgradeSubtype(int dmg, int type, VehicleUpgrade upgrade)
-  {
-  this.registerVehicleUpgradeItem(dmg, type, upgrade);
-  return new ItemStack(vehicleUpgrade.itemID,1,dmg);
   }
 
 private ItemStack createItemSubtype(AWItemBase item, int dmg, String name)

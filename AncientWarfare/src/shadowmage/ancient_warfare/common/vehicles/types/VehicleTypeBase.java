@@ -24,13 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-
-import com.google.common.collect.Lists;
-
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
-import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 /**
  * basically, a first-tier data construct class describing a vehicle.  Each vehicle will
@@ -79,7 +76,7 @@ public float baseHealth = 100;
 public float accuracy = 1.f;
 
 public List<IAmmoType> validAmmoTypes = new ArrayList<IAmmoType>();
-public List<VehicleUpgrade> validUpgrades = new ArrayList<VehicleUpgrade>();
+public List<IVehicleUpgradeType> validUpgrades = new ArrayList<IVehicleUpgradeType>();
 
 public int materialCount = 1;
 public List<ItemStack> additionalMaterials = new ArrayList<ItemStack>();
@@ -246,7 +243,7 @@ public boolean isAmmoValidForInventory(IAmmoType ammo)
   }
 
 @Override
-public boolean isUpgradeValid(VehicleUpgrade upgrade)
+public boolean isUpgradeValid(IVehicleUpgradeType upgrade)
   {
   return this.validUpgrades.contains(upgrade);
   }
@@ -264,7 +261,7 @@ public List<IAmmoType> getValidAmmoTypes()
   }
 
 @Override
-public List<VehicleUpgrade> getValidUpgrades()
+public List<IVehicleUpgradeType> getValidUpgrades()
   {
   return this.validUpgrades;
   }

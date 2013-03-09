@@ -18,49 +18,25 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles;
+package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
-import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
-import shadowmage.ancient_warfare.common.utils.Trig;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class VehicleCatapult extends VehicleBase
+public abstract class VehicleUpgradeBase implements IVehicleUpgradeType
 {
 
-public float armAngle = 0.f;
-public float armSpeed = 0.f;
-public float crankAngle = 0.f;
-public float crankSpeed = 0.f;
+int typeNum = 0;
 
-/**
- * @param par1World
- */
-public VehicleCatapult(World par1World)
+public VehicleUpgradeBase(int num)
   {
-  super(par1World);
+  this.typeNum = num;
   }
 
 @Override
-public void onFiringUpdate()
+public int getUpgradeGlobalTypeNum()
   {
-  this.firingHelper.launchMissile();
+  return typeNum;
   }
 
-@Override
-public void onReloadUpdate()
-  {
-  
-  }
-
-@Override
-public void onUpdate()
-  {
-  super.onUpdate();
-  this.armAngle = 90- this.turretPitch -7;
-  }
 
 }

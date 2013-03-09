@@ -26,12 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
-
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
-import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 public class VehicleUpgradeHelper implements INBTTaggable
 {
@@ -39,12 +38,12 @@ public class VehicleUpgradeHelper implements INBTTaggable
 /**
  * currently installed upgrades, will be iterated through linearly to call upgrade.applyEffects, multiple upgrades may have cumulative effects
  */
-private List<VehicleUpgrade> upgrades = new ArrayList<VehicleUpgrade>();
+private List<IVehicleUpgradeType> upgrades = new ArrayList<IVehicleUpgradeType>();
 
 /**
  * list of all upgrades that are valid for this vehicle, used by inventoryChecking to see whether it can be installed or not
  */
-private List validUpgrades = new ArrayList<VehicleUpgrade>();
+private List validUpgrades = new ArrayList<IVehicleUpgradeType>();
 private VehicleBase vehicle;
 
 public VehicleUpgradeHelper(VehicleBase vehicle)
@@ -57,9 +56,13 @@ public VehicleUpgradeHelper(VehicleBase vehicle)
  */
 public void updateUpgrades()
   {
+  if(vehicle.worldObj.isRemote)
+    {
+    return;
+    }
   this.upgrades.clear();
-  List<VehicleUpgrade> upgrades = vehicle.inventory.getInventoryUpgrades();
-  for(VehicleUpgrade up : upgrades)
+  List<IVehicleUpgradeType> upgrades = vehicle.inventory.getInventoryUpgrades();
+  for(IVehicleUpgradeType up : upgrades)
     {
     if(this.validUpgrades.contains(up))
       {
@@ -71,7 +74,7 @@ public void updateUpgrades()
   int[] upInts = new int[len];
   for(int i = 0; i < this.upgrades.size(); i++)
     {
-    upInts[i] = this.upgrades.get(i).getGlobalUpgradeNum();
+    upInts[i] = this.upgrades.get(i).getUpgradeGlobalTypeNum();
     }  
   tag.setIntArray("ints", upInts);
   Packet02Vehicle pkt = new Packet02Vehicle();
@@ -91,7 +94,7 @@ public void handleUpgradePacketData(NBTTagCompound tag)
   for(int i = 0; i < upInts.length; i++)
     {
     int up = upInts[i];
-    VehicleUpgrade upgrade = VehicleUpgradeRegistry.instance().getUpgrade(up);
+    IVehicleUpgradeType upgrade = VehicleUpgradeRegistry.instance().getUpgrade(up);
     if(upgrade!=null)
       {
       this.upgrades.add(upgrade);
@@ -107,13 +110,13 @@ public void handleUpgradePacketData(NBTTagCompound tag)
 public void updateUpgradeStats()
   {
   vehicle.resetUpgradeStats();
-  for(VehicleUpgrade upgrade : this.upgrades)
+  for(IVehicleUpgradeType upgrade : this.upgrades)
     {
-    upgrade.applyUpgradeEffects(vehicle);
+    upgrade.applyVehicleEffects(vehicle);
     }
   }
 
-public void addValidUpgrade(VehicleUpgrade upgrade)
+public void addValidUpgrade(IVehicleUpgradeType upgrade)
   {
   if(upgrade!=null && !this.validUpgrades.contains(upgrade))
     {
@@ -123,16 +126,7 @@ public void addValidUpgrade(VehicleUpgrade upgrade)
 
 public void addValidUpgrade(int type)
   {
-  VehicleUpgrade upgrade = VehicleUpgradeRegistry.instance().getUpgrade(type);
-  if(upgrade!=null && !this.validUpgrades.contains(upgrade))
-    {
-    this.validUpgrades.add(upgrade);
-    }
-  }
-
-public void addValidUpgrade(String name)
-  {
-  VehicleUpgrade upgrade = VehicleUpgradeRegistry.instance().getUpgrade(name);
+  IVehicleUpgradeType upgrade = VehicleUpgradeRegistry.instance().getUpgrade(type);
   if(upgrade!=null && !this.validUpgrades.contains(upgrade))
     {
     this.validUpgrades.add(upgrade);
@@ -146,7 +140,7 @@ public NBTTagCompound getNBTTag()
   int[] ints = new int[this.upgrades.size()];
   for(int i = 0; i < this.upgrades.size(); i++)
     {
-    ints[i]=this.upgrades.get(i).getGlobalUpgradeNum();
+    ints[i]=this.upgrades.get(i).getUpgradeGlobalTypeNum();
     }
   tag.setIntArray("ints", ints);
   return tag;

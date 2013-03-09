@@ -7,12 +7,12 @@ http://gamedev.stackexchange.com/questions/17467/calculating-velocity-needed-to-
 
 GENERAL
 * move world-gen base config from AncientWarfare.cfg into /AWConfig/AWWorldGen.cfg
+* change inventoryTools to manipulate containers as well
 
 VEHICLES
 * implement vehicle weighting system (should it include upgrades, and ammo in bay)
 * tie acceleration to weight
 * figure out accuracy calculation methods (when to apply accuracy)(probably apply it to the output angle and yaw when spawning a missile)
-* upgrade system
 * implement armor system
 * vehicle research system
 * fix entity hit detection for auto-aim...its borked
@@ -21,11 +21,16 @@ VEHICLES
 * make it so vehicles won't collide with arrows...
 * import more models
 * textures...textures...everywhere [there are missing] textures....
-* figure out how to handle items for vehicles (getItemStackFor(int type, int level)?)
+* figure out how to handle spawner items for vehicles (getItemStackFor(int type, int level)?)
 * find a good method for battering ram block damage (take point-hit, and simply do a 3D x on it?)
 * after ammo/armor/upgrades--add vehicles into structure gen
-* vehicle inventory (make a debug GUI)
 * so...slots display position is client only...use that to move slots off screen (or use that in a scrollable area somehow?)
+* restructure vehicle firing sequence
+    --initiateFiringSequence()
+    --onFiringAnimationFinished()
+    --
+* add new inventory-size setting code.InventoryHelper can be set when the vehicleType is read (or re-set to non-default sizes)
+* move over to client-movement scheme....
             
 AMMO TYPES 
 * create more ammo types
@@ -236,4 +241,10 @@ public static MyWorldData forWorld(World world)
 /********** 03-09-13 **********/
 * add slot background to guiButtons.img ( @ 150x120 in image)
 * add ability to render custom background from background file, using quaded texture rendering for dynamic sizing
+* vehicle inventory (make a debug GUI)
+* description/registry system cleanup...works great
+* vehicles don't update ammo count on load... 
+* upgrade system   
+* make vehicles use ammo when firing
+* upgrade item naming weirdness...
 /********** 03-10-13 **********/

@@ -39,7 +39,7 @@ public ItemAmmo(int itemID)
 @Override
 public String getItemNameIS(ItemStack par1ItemStack)
   {
-  return "Component" + String.valueOf(par1ItemStack.getItemDamage()); 
+  return "Ammo" + String.valueOf(par1ItemStack.getItemDamage()); 
   }
 
 }

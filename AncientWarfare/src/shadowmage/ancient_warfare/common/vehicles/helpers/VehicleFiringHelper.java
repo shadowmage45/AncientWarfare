@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.Pair;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -144,16 +145,21 @@ public boolean launchMissile()
     this.reloadingTicks = vehicle.reloadTimeCurrent;
     if(!vehicle.worldObj.isRemote)
       {      
-      Pos3f off = vehicle.getMissileOffset();
-      Config.logDebug("offset: "+off.toString());
-      float x = (float) vehicle.posX + off.x;
-      float y = (float) vehicle.posY + off.y;
-      float z = (float) vehicle.posZ + off.z;
-      MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, vehicle.rotationYaw, vehicle.turretPitch, vehicle.launchPowerCurrent);
-      if(missile!=null)
+      if(vehicle.ammoHelper.getCurrentAmmoCount()>0)
         {
-        Config.logDebug("launching missile server side");
-        vehicle.worldObj.spawnEntityInWorld(missile);
+        vehicle.ammoHelper.decreaseCurrentAmmo(1);
+        
+        Pos3f off = vehicle.getMissileOffset();
+        Config.logDebug("offset: "+off.toString());
+        float x = (float) vehicle.posX + off.x;
+        float y = (float) vehicle.posY + off.y;
+        float z = (float) vehicle.posZ + off.z;
+        MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, vehicle.rotationYaw, vehicle.turretPitch, vehicle.launchPowerCurrent);
+        if(missile!=null)
+          {
+          Config.logDebug("launching missile server side");
+          vehicle.worldObj.spawnEntityInWorld(missile);
+          }
         }
       }
     return true;

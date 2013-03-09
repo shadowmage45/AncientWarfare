@@ -18,49 +18,41 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles;
+package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
-import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
-import shadowmage.ancient_warfare.common.utils.Trig;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class VehicleCatapult extends VehicleBase
+public class VehicleUpgradeSpeed extends VehicleUpgradeBase
 {
 
-public float armAngle = 0.f;
-public float armSpeed = 0.f;
-public float crankAngle = 0.f;
-public float crankSpeed = 0.f;
-
 /**
- * @param par1World
+ * @param num
  */
-public VehicleCatapult(World par1World)
+public VehicleUpgradeSpeed(int num)
   {
-  super(par1World);
+  super(num);
   }
 
 @Override
-public void onFiringUpdate()
+public String getDisplayName()
   {
-  this.firingHelper.launchMissile();
+  // TODO Auto-generated method stub
+  return "Iron Bearings";
   }
 
 @Override
-public void onReloadUpdate()
+public String getDisplayTooltip()
   {
-  
+  return "Increases Vehicle Max Speed by 0.25m/s";
   }
 
 @Override
-public void onUpdate()
+public void applyVehicleEffects(VehicleBase vehicle)
   {
-  super.onUpdate();
-  this.armAngle = 90- this.turretPitch -7;
+  Config.logDebug("prev vehicle max speed: "+vehicle.maxForwardSpeedCurrent);
+  vehicle.maxForwardSpeedCurrent += 0.25f*0.05f;
+  Config.logDebug("new vehicle max speed: "+vehicle.maxForwardSpeedCurrent);
   }
 
 }

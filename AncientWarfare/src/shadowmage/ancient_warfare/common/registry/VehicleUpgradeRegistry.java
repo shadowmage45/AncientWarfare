@@ -27,8 +27,8 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.registry.entry.ItemIDPair;
-import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeSpeed;
 
 public class VehicleUpgradeRegistry
 {
@@ -43,34 +43,36 @@ public static VehicleUpgradeRegistry instance()
   }
 private static VehicleUpgradeRegistry INSTANCE;
 
-private Map<Integer, VehicleUpgrade> upgradeTypeMap = new HashMap<Integer, VehicleUpgrade>();
-private Map upgradeNameMap = new HashMap<String, VehicleUpgrade>();
-private Map<Integer, VehicleUpgrade> upgradeItemMap = new HashMap<Integer, VehicleUpgrade>();
+private Map<Integer, IVehicleUpgradeType> upgradeTypeMap = new HashMap<Integer, IVehicleUpgradeType>();
+
+
+public static final IVehicleUpgradeType speedUpgrade = new VehicleUpgradeSpeed(0);
 
 /**
- * called from ItemLoader
+ * called during init to register upgrade types as items
+ */
+public void registerUpgrades()
+  {
+  this.registerUpgrade(speedUpgrade);
+  }
+
+/**
  * @param dmg
  * @param type
  * @param upgrade
  */
-public void registerUpgrade(int dmg, int type, VehicleUpgrade upgrade)
+public void registerUpgrade(IVehicleUpgradeType upgrade)
   {  
-  this.upgradeTypeMap.put(type, upgrade);
-  this.upgradeNameMap.put(upgrade.getUpgradeName(), upgrade);
-  this.upgradeItemMap.put(dmg, upgrade);
+  this.upgradeTypeMap.put(upgrade.getUpgradeGlobalTypeNum(), upgrade);
+  ItemLoader.instance().addSubtypeToItem(ItemLoader.vehicleUpgrade, upgrade.getUpgradeGlobalTypeNum(), upgrade.getDisplayName(), upgrade.getDisplayTooltip());
   }
 
-public VehicleUpgrade getUpgrade(String name)
+public IVehicleUpgradeType getUpgrade(int type)
   {
-  return (VehicleUpgrade) this.upgradeNameMap.get(name);
+  return this.upgradeTypeMap.get(type);
   }
 
-public VehicleUpgrade getUpgrade(int type)
-  {
-  return (VehicleUpgrade) this.upgradeTypeMap.get(type);
-  }
-
-public VehicleUpgrade getUpgrade(ItemStack stack)
+public IVehicleUpgradeType getUpgrade(ItemStack stack)
   {
   if(stack==null)
     {
@@ -78,7 +80,7 @@ public VehicleUpgrade getUpgrade(ItemStack stack)
     }
   if(stack.itemID == ItemLoader.vehicleUpgrade.itemID)
     {
-    return this.upgradeItemMap.get(stack.getItemDamage());
+    return this.upgradeTypeMap.get(stack.getItemDamage());
     }
   return null;
   }

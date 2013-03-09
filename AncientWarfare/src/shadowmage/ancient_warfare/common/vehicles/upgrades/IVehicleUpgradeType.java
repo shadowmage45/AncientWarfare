@@ -17,50 +17,19 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.registry.entry;
+package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public abstract class VehicleUpgrade
+public interface IVehicleUpgradeType
 {
 
-int itemID;
-int itemMeta;
+public abstract int getUpgradeGlobalTypeNum();
+public abstract String getDisplayName();
+public abstract String getDisplayTooltip();
 
-boolean directlyEffectsVehicle = false;
-int upgradeNum = 0;
+public abstract void applyVehicleEffects(VehicleBase vehicle);
 
-public VehicleUpgrade(int num)
-  {
-  this.upgradeNum = num;
-  }
-
-/**
- * apply the effects of this upgrade to the passed-in vehicle
- * @param vehicle
- */
-public abstract void applyUpgradeEffects(VehicleBase vehicle);
-
-/**
- * get the full display name for this item, this name will be registered
- * with languageRegistry
- * @return
- */
-public abstract String getUpgradeDisplayName();
-
-/**
- * get the internal (short) name for this upgrade, must be unique or will
- * cause lookup conflicts
- * @return
- */
-public abstract String getUpgradeName();
-
-public int getGlobalUpgradeNum()
-  {
-  return this.upgradeNum;
-  }
 
 }

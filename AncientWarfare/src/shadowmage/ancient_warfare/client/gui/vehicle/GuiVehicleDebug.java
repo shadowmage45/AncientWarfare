@@ -21,6 +21,10 @@
 package shadowmage.ancient_warfare.client.gui.vehicle;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+
+import org.lwjgl.input.Keyboard;
+
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 
@@ -63,14 +67,12 @@ public String getGuiBackGroundTexture()
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   // TODO Auto-generated method stub
-
   }
 
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
-
+ 
   }
 
 @Override

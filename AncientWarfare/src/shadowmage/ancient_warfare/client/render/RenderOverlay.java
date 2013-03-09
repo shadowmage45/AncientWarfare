@@ -26,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import shadowmage.ancient_warfare.common.config.Settings;
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -60,6 +61,17 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
     this.drawString(fontRenderer, "Pitch: "+vehicle.firingHelper.clientTurretPitch, 10, 20, 0xffffffff);
     this.drawString(fontRenderer, "Yaw: "+vehicle.firingHelper.clientTurretYaw, 10, 30, 0xffffffff);
     this.drawString(fontRenderer, "Velocity: "+vehicle.firingHelper.clientLaunchSpeed, 10, 40, 0xffffffff);
+    IAmmoType ammo = vehicle.ammoHelper.getCurrentAmmoType();
+    if(ammo!=null)
+      {
+      int count = vehicle.ammoHelper.getCurrentAmmoCount();
+      this.drawString(fontRenderer, "Ammo: "+ammo.getDisplayName(), 10, 50, 0xffffffff);
+      this.drawString(fontRenderer, "Count: "+count, 10, 60, 0xffffffff);
+      }
+    else
+      {
+      this.drawString(fontRenderer, "No Ammo Selected", 10, 50, 0xffffffff);
+      }
     }   
   }
 

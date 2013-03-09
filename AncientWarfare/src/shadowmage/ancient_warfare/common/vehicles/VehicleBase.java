@@ -37,7 +37,6 @@ import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
-import shadowmage.ancient_warfare.common.registry.entry.VehicleUpgrade;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
@@ -47,6 +46,7 @@ import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleUpgradeHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -147,11 +147,12 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
     {
     this.ammoHelper.addUseableAmmo(ammo);
     }
-  for(VehicleUpgrade up : this.vehicleType.getValidUpgrades())
+  for(IVehicleUpgradeType up : this.vehicleType.getValidUpgrades())
     {
     this.upgradeHelper.addValidUpgrade(up);
     }
   this.updateBaseStats();
+  this.resetUpgradeStats();
   }
 
 public void updateBaseStats()
@@ -264,6 +265,13 @@ public void resetUpgradeStats()
   {
   this.firingHelper.resetUpgradeStats();
   this.moveHelper.resetUpgradeStats();
+  this.maxForwardSpeedCurrent = this.baseForwardSpeed;
+  this.maxStrafeSpeedCurrent = this.baseStrafeSpeed;
+  this.turretPitchMin = this.basePitchMin;
+  this.turretPitchMax = this.basePitchMax;
+  this.turretRotationMax = this.baseTurretRotationMax;
+  this.reloadTimeCurrent = this.reloadTimeBase;
+  this.launchSpeedCurrentMax = this.baseLaunchSpeedMax;
   }
 
 /**
@@ -377,6 +385,10 @@ public void handlePacketUpdate(NBTTagCompound tag)
   if(tag.hasKey("ammoSel"))
     {
     this.ammoHelper.handleAmmoSelectPacket(tag.getCompoundTag("ammoSel"));
+    }
+  if(tag.hasKey("ammoUpd"))
+    {
+    this.ammoHelper.handleAmmoCountUpdate(tag.getCompoundTag("ammoUpd"));
     }
   }
 
@@ -509,6 +521,8 @@ protected void entityInit()
 public void writeSpawnData(ByteArrayDataOutput data)
   {
   data.writeFloat(this.vehicleHealth);  
+  data.writeInt(this.vehicleType.getGlobalVehicleType());
+  data.writeInt(this.vehicleMaterialLevel);
   ByteTools.writeNBTTagCompound(upgradeHelper.getNBTTag(), data);
   ByteTools.writeNBTTagCompound(ammoHelper.getNBTTag(), data);
   ByteTools.writeNBTTagCompound(moveHelper.getNBTTag(), data);
@@ -519,10 +533,13 @@ public void writeSpawnData(ByteArrayDataOutput data)
 public void readSpawnData(ByteArrayDataInput data)
   {
   this.vehicleHealth = data.readFloat();
+  IVehicleType type = VehicleRegistry.instance().getVehicleType(data.readInt());
+  this.setVehicleType(type, data.readInt());
   this.upgradeHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.ammoHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.moveHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.firingHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
+  this.upgradeHelper.updateUpgrades();
   //TODO write/read extra stats--turret pitch/rotation/destinations
   }
 
@@ -544,6 +561,8 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.turretDestPitch = tag.getFloat("tpd");
   this.turretRotation = tag.getFloat("tr");
   this.turretDestRot = tag.getFloat("trd");
+  this.upgradeHelper.updateUpgrades();
+  this.ammoHelper.updateAmmoCounts();
   }
 
 @Override

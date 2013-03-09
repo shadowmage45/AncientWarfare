@@ -48,12 +48,12 @@ public static ItemStack putInFirstOpenSlot(IInventory inv, ItemStack in)
  * puts between start/end indexes (0-18 is slots 0-17)
  * @param in
  * @param start
- * @param end
+ * @param stopBefore
  * @return
  */
-public static ItemStack putInFirstOpenSlotBetween(IInventory inv, ItemStack in, int start, int end)
+public static ItemStack putInFirstOpenSlotBetween(IInventory inv, ItemStack in, int start, int stopBefore)
   {
-  return mergeItemStack(inv, in, start, end);
+  return mergeItemStack(inv, in, start, stopBefore);
   }
 
 /**
@@ -85,12 +85,14 @@ private static ItemStack mergeItemStack(IInventory inv, ItemStack in, int startI
         int tempTotal = tempStack.stackSize + in.stackSize;
         if (tempTotal <= in.getMaxStackSize())
           {          
-          tempStack.stackSize = tempTotal;         
+          tempStack.stackSize = tempTotal;
+          inv.onInventoryChanged();
           return null;
           }
         else if (tempStack.stackSize < in.getMaxStackSize())
           {
           in.stackSize -= in.getMaxStackSize() - tempStack.stackSize;
+          inv.onInventoryChanged();
           tempStack.stackSize = in.getMaxStackSize();
           }
         }
@@ -106,6 +108,7 @@ private static ItemStack mergeItemStack(IInventory inv, ItemStack in, int startI
       if (tempStack == null)
         {
         inv.setInventorySlotContents(iteratorIndex, in);
+        inv.onInventoryChanged();
         return null;
         }     
       ++iteratorIndex;        

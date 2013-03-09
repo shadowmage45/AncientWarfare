@@ -64,6 +64,44 @@ public void addCallback(IInventoryCallback ent)
     }
   }
 
+/**
+ * return qty left that could not be removed from inventory
+ * does not call onInventoryChanged
+ * @param id
+ * @param dmg
+ * @param qty
+ * @return
+ */
+public int decreaseCountOf(int id, int dmg, int qty)
+  {  
+  for(int i = 0; i < this.getSizeInventory(); i++)
+    {
+    ItemStack stack = inventorySlots[i];
+    if(stack!=null && stack.itemID==id && stack.getItemDamage()==dmg)
+      {
+      if(stack.stackSize>=qty)
+        {
+        stack.stackSize-=qty;
+        qty = 0;
+        }
+      else
+        {
+        qty-=stack.stackSize;
+        stack.stackSize = 0;
+        }
+      if(stack.stackSize==0)
+        {
+        this.inventorySlots[i]=null;        
+        }
+      if(qty<=0)
+        {
+        return 0;
+        }
+      }
+    } 
+  return qty;
+  }
+
 @Override
 public int getSizeInventory()
   {
