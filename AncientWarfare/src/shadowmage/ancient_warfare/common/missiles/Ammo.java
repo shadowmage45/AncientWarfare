@@ -24,6 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public abstract class Ammo implements IAmmoType
@@ -47,7 +48,7 @@ int ammoType;
 
 public Ammo(int ammoType)
   {
-  this.ammoStack = new ItemStack(this.getItemID(), 1, this.getItemMeta());
+  this.ammoStack = new ItemStack(ItemLoader.ammoItem.itemID, 1, ammoType);
   this.ammoType = ammoType;
   }
 
@@ -66,7 +67,7 @@ public ItemStack getDisplayStack()
 @Override
 public ItemStack getAmmoStack(int qty)
   {
-  return new ItemStack(this.getItemID(), qty, this.getItemMeta());
+  return new ItemStack(ItemLoader.ammoItem.itemID, qty, this.getAmmoType());
   }
 
 /**

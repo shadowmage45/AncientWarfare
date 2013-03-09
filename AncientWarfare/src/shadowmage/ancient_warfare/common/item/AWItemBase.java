@@ -153,18 +153,4 @@ public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, It
   return super.getIconIndex(stack, renderPass, player, usingItem, useRemaining);
   }
 
-//public void setModTag(ItemStack stack)
-//  {
-//  NBTTagCompound modData = new NBTTagCompound("AWModData");
-//  stack.setTagInfo("AWModData", modData);
-//  }
-//
-//public static void setIconIndex(ItemStack stack, int index)
-//  {  
-//  if(stack.hasTagCompound())
-//    {
-//    stack.getTagCompound().getCompoundTag("AWModData").setInteger("icon", index);
-//    }   
-//  }
-
 }

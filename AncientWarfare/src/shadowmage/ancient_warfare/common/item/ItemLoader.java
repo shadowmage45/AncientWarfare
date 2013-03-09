@@ -36,7 +36,7 @@ public class ItemLoader
  * Items
  */
 public static final AWItemBase vehicleUpgrade = new AWItemBase(Config.getItemID("itemMulti.vehicleUpgrade", 13001, "Base item for all vehicle upgrades"),true);
-public static final AWItemBase ammoItem = new AWItemBase(Config.getItemID("itemMulti.vehicleAmmo", 13002, "Base item for all vehicle ammunition types"),true);
+public static final AWItemBase ammoItem = new ItemAmmo(Config.getItemID("itemMulti.vehicleAmmo", 13002, "Base item for all vehicle ammunition types"));
 public static final AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 13003, "Base item for all vehicle-spawning items"));
 public static final AWItemBase componentItem = new AWItemBase(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
 public static final AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 13005, "Item used to scan structures"));
@@ -159,7 +159,7 @@ private void addSubtypeToItem(AWItemBase item, int dmg, String name)
   DescriptionRegistry.instance().addSubtypeToItem(item.itemID, dmg, name);
   }
 
-private void addSubtypeToItem(AWItemBase item, int dmg, String name, String tooltip)
+public void addSubtypeToItem(AWItemBase item, int dmg, String name, String tooltip)
   {
   this.addSubtypeToItem(item, dmg, name);
   DescriptionRegistry.instance().setTooltip(item.itemID, dmg, tooltip);

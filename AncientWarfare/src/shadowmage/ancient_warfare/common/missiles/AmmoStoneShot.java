@@ -62,20 +62,6 @@ public String getModelTexture()
   }
 
 @Override
-public int getItemID()
-  {
-  // TODO Auto-generated method stub
-  return 0;
-  }
-
-@Override
-public int getItemMeta()
-  {
-  // TODO Auto-generated method stub
-  return 0;
-  }
-
-@Override
 public boolean updateAsArrow()
   {
   // TODO Auto-generated method stub

@@ -40,7 +40,7 @@ public String getEntityName()
 @Override
 public String getDisplayName()
   {
-  return "Arrow";
+  return "AW.Arrow";
   }
 
 @Override
@@ -53,18 +53,6 @@ public String getDisplayTooltip()
 public String getModelTexture()
   {
   return "foo.png";
-  }
-
-@Override
-public int getItemID()
-  {
-  return 0;
-  }
-
-@Override
-public int getItemMeta()
-  {
-  return 0;
   }
 
 @Override

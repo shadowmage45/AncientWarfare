@@ -51,6 +51,7 @@ public static DescriptionRegistry instance()
 
 private static HashMap<Integer, ItemDescription> descriptions = new HashMap<Integer, ItemDescription>();
 
+
 public void registerItemSingle(Item item, String displayName)
   {
   this.registerItemSingle(item, displayName, "");

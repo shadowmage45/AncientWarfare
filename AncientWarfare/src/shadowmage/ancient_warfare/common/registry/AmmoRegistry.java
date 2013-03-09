@@ -20,19 +20,15 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.item.AWItemBase;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.missiles.AmmoArrow;
 import shadowmage.ancient_warfare.common.missiles.Ammo;
-import shadowmage.ancient_warfare.common.missiles.AmmoStoneShot;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 
 public class AmmoRegistry
@@ -43,7 +39,7 @@ private AmmoRegistry(){}
 private static AmmoRegistry INSTANCE;
 
 private Map<Integer, IAmmoType> ammoInstances = new HashMap<Integer, IAmmoType>();
-private Map<Integer, IAmmoType> itemDamageMap = new HashMap<Integer, IAmmoType>();
+//private Map<Integer, IAmmoType> itemDamageMap = new HashMap<Integer, IAmmoType>();
 
 public static AmmoRegistry instance()
   {
@@ -58,8 +54,8 @@ public void registerAmmoTypes()
   /**
    * debug..these will need to use the itemRegistry method..
    */
-  this.registerAmmoType(Ammo.ammoArrow);
-  this.registerAmmoType(Ammo.ammoStoneShot);
+  this.registerAmmoTypeWithItem(Ammo.ammoArrow);
+  this.registerAmmoTypeWithItem(Ammo.ammoStoneShot);
   }
 
 /**
@@ -72,15 +68,12 @@ public IAmmoType getAmmoEntry(int type)
   return this.ammoInstances.get(type);
   }
 
-public void registerAmmoTypeWithItem(IAmmoType ammo, int itemDamage)
+public void registerAmmoTypeWithItem(IAmmoType ammo)
   {
-  Item item = ItemLoader.ammoItem;
-  if(!DescriptionRegistry.instance().contains(item))
-    {
-    DescriptionRegistry.instance().registerItemWithSubtypes(item.itemID);
-    }  
-  DescriptionRegistry.instance().addSubtypeToItem(item.itemID, itemDamage, ammo.getDisplayName());
-  DescriptionRegistry.instance().setTooltip(item.itemID, itemDamage, ammo.getDisplayTooltip());
+  AWItemBase item = ItemLoader.ammoItem; 
+  ItemLoader.instance().addSubtypeToItem(item, ammo.getAmmoType(), ammo.getDisplayName(), ammo.getDisplayTooltip());  
+//  DescriptionRegistry.instance().addSubtypeToItem(item.itemID, ammo.getAmmoType(), ammo.getDisplayName());
+//  DescriptionRegistry.instance().setTooltip(item.itemID, ammo.getAmmoType(), ammo.getDisplayTooltip());
   this.registerAmmoType(ammo);
   }
 
@@ -94,7 +87,6 @@ public void registerAmmoType(IAmmoType ammo)
   if(!this.ammoInstances.containsKey(type))
     {
     this.ammoInstances.put(type, ammo);
-    this.itemDamageMap.put(ammo.getItemMeta(), ammo);
     }
   else
     {
@@ -109,7 +101,7 @@ public IAmmoType getAmmoForStack(ItemStack stack)
     {
     return null;
     }
-  return this.itemDamageMap.get(stack.getItemDamage());
+  return this.ammoInstances.get(stack.getItemDamage());
   }
 
 }
