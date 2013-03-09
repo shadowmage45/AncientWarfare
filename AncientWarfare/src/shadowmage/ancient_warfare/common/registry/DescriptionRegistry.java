@@ -35,8 +35,6 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
  */
 public class DescriptionRegistry
 {
-
-
 private static DescriptionRegistry INSTANCE;
 private DescriptionRegistry(){}
 

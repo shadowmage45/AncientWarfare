@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import net.minecraft.item.ItemStack;
+
 public class ItemAmmo extends AWItemBase
 {
 
@@ -34,6 +36,10 @@ public ItemAmmo(int itemID)
   this.setItemName("awAmmo");
   }
 
-
+@Override
+public String getItemNameIS(ItemStack par1ItemStack)
+  {
+  return "Component" + String.valueOf(par1ItemStack.getItemDamage()); 
+  }
 
 }
