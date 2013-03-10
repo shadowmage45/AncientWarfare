@@ -24,6 +24,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
@@ -67,9 +68,11 @@ public abstract float getBaseAccuracy();
 
 public abstract boolean isAmmoValidForInventory(IAmmoType ammo);//does not determine if it can be fired, only if it can be placed into inventory
 public abstract boolean isUpgradeValid(IVehicleUpgradeType upgrade);
+public abstract boolean isArmorValid(IVehicleArmorType armor);
 
 public abstract List<IAmmoType> getValidAmmoTypes();
 public abstract List<IVehicleUpgradeType> getValidUpgrades();
+public abstract List<IVehicleArmorType> getValidArmors();
 
 public abstract int getMaterialQuantity();//get the quantity of the main material to construct this vehicle
 public abstract List<ItemStack> getAdditionalMaterials();//get a list of additional materials needed to construct this vehicle

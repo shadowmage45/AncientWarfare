@@ -48,6 +48,7 @@ private VehicleBase vehicle;
  */
 public AWInventoryBasic upgradeInventory = new AWInventoryBasic(6);
 public AWInventoryBasic ammoInventory = new AWInventoryBasic(6);
+public AWInventoryBasic armorInventory = new AWInventoryBasic(6);
 public AWInventoryBasic storageInventory = new AWInventoryBasic(27);
 
 public VehicleInventory(VehicleBase vehicle)
@@ -55,6 +56,7 @@ public VehicleInventory(VehicleBase vehicle)
   this.vehicle = vehicle; 
   this.upgradeInventory.addCallback(this);
   this.ammoInventory.addCallback(this);
+  this.armorInventory.addCallback(this);
   this.storageInventory.addCallback(this);
   }
 
@@ -68,6 +70,7 @@ public void writeToNBT(NBTTagCompound commonTag)
   tag.setCompoundTag("uI", this.upgradeInventory.getNBTTag());
   tag.setCompoundTag("amI", this.ammoInventory.getNBTTag());
   tag.setCompoundTag("sI", this.storageInventory.getNBTTag());
+  tag.setCompoundTag("arI", this.armorInventory.getNBTTag());
   commonTag.setTag("inv", tag);
   }
 
@@ -87,6 +90,7 @@ public void readFromNBT(NBTTagCompound commonTag)
   this.upgradeInventory.readFromNBT(tag.getCompoundTag("uI"));
   this.ammoInventory.readFromNBT(tag.getCompoundTag("amI"));
   this.storageInventory.readFromNBT(tag.getCompoundTag("sI"));  
+  this.armorInventory.readFromNBT(tag.getCompoundTag("arI"));
   }
 
 @Override

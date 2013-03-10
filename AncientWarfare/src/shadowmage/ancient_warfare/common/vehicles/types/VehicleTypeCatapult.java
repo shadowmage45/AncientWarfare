@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
+import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
@@ -58,6 +59,7 @@ public VehicleTypeCatapult(int typeNum)
   this.validAmmoTypes.add(Ammo.ammoStoneShot);
   
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
+  this.validArmors.add(ArmorRegistry.armorStone);
   }
 
 }

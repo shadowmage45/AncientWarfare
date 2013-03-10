@@ -26,6 +26,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
+import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
@@ -77,6 +78,7 @@ public float accuracy = 1.f;
 
 public List<IAmmoType> validAmmoTypes = new ArrayList<IAmmoType>();
 public List<IVehicleUpgradeType> validUpgrades = new ArrayList<IVehicleUpgradeType>();
+public List<IVehicleArmorType> validArmors = new ArrayList<IVehicleArmorType>();
 
 public int materialCount = 1;
 public List<ItemStack> additionalMaterials = new ArrayList<ItemStack>();
@@ -276,6 +278,18 @@ public int getMaterialQuantity()
 public List<ItemStack> getAdditionalMaterials()
   {
   return additionalMaterials;
+  }
+
+@Override
+public boolean isArmorValid(IVehicleArmorType armor)
+  {
+  return this.validArmors.contains(armor);
+  }
+
+@Override
+public List<IVehicleArmorType> getValidArmors()
+  {
+  return this.validArmors;
   }
 
 }

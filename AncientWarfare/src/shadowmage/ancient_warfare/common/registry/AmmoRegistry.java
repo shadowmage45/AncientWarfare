@@ -71,9 +71,7 @@ public IAmmoType getAmmoEntry(int type)
 public void registerAmmoTypeWithItem(IAmmoType ammo)
   {
   AWItemBase item = ItemLoader.ammoItem; 
-  ItemLoader.instance().addSubtypeToItem(item, ammo.getAmmoType(), ammo.getDisplayName(), ammo.getDisplayTooltip());  
-//  DescriptionRegistry.instance().addSubtypeToItem(item.itemID, ammo.getAmmoType(), ammo.getDisplayName());
-//  DescriptionRegistry.instance().setTooltip(item.itemID, ammo.getAmmoType(), ammo.getDisplayTooltip());
+  ItemLoader.instance().addSubtypeToItem(item, ammo.getAmmoType(), ammo.getDisplayName(), ammo.getDisplayTooltip()); 
   this.registerAmmoType(ammo);
   }
 

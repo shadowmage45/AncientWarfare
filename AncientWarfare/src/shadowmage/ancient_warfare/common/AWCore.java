@@ -40,6 +40,7 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
+import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
@@ -138,7 +139,7 @@ public void preInit(FMLPreInitializationEvent evt)
    */
   AmmoRegistry.instance().registerAmmoTypes();
   VehicleUpgradeRegistry.instance().registerUpgrades();
-
+  ArmorRegistry.instance().registerArmorTypes();
   /**
    * have to load vehicles after everything else i think...
    */

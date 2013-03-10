@@ -28,8 +28,10 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
+import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 public class VehicleUpgradeHelper implements INBTTaggable
@@ -39,11 +41,13 @@ public class VehicleUpgradeHelper implements INBTTaggable
  * currently installed upgrades, will be iterated through linearly to call upgrade.applyEffects, multiple upgrades may have cumulative effects
  */
 private List<IVehicleUpgradeType> upgrades = new ArrayList<IVehicleUpgradeType>();
+private List<IVehicleArmorType> installedArmor = new ArrayList<IVehicleArmorType>();
 
 /**
  * list of all upgrades that are valid for this vehicle, used by inventoryChecking to see whether it can be installed or not
  */
 private List validUpgrades = new ArrayList<IVehicleUpgradeType>();
+private List validArmorTypes = new ArrayList<IVehicleArmorType>();
 private VehicleBase vehicle;
 
 public VehicleUpgradeHelper(VehicleBase vehicle)
@@ -116,6 +120,23 @@ public void updateUpgradeStats()
     }
   }
 
+public void addValidArmor(IVehicleArmorType armor)
+  {
+  if(armor!=null && this.validArmorTypes.contains(armor))
+    {
+    this.validArmorTypes.add(armor);
+    }
+  }
+
+public void addValidArmor(int type)
+  {
+  IVehicleArmorType armor = ArmorRegistry.instance().getArmorType(type);
+  if(armor!=null && !this.validArmorTypes.contains(armor))
+    {
+    this.validArmorTypes.add(armor);
+    }
+  }
+
 public void addValidUpgrade(IVehicleUpgradeType upgrade)
   {
   if(upgrade!=null && !this.validUpgrades.contains(upgrade))
@@ -143,6 +164,13 @@ public NBTTagCompound getNBTTag()
     ints[i]=this.upgrades.get(i).getUpgradeGlobalTypeNum();
     }
   tag.setIntArray("ints", ints);
+  
+  int[] ints2 = new int[this.installedArmor.size()];
+  for(int i = 0; i < this.installedArmor.size(); i++)
+    {
+    ints2[i]=this.installedArmor.get(i).getGlobalArmorType();
+    }
+  tag.setIntArray("ints2", ints2);
   return tag;
   }
 
@@ -155,6 +183,12 @@ public void readFromNBT(NBTTagCompound tag)
     {
     this.upgrades.add(VehicleUpgradeRegistry.instance().getUpgrade(ints[i]));
     }  
+  this.installedArmor.clear();
+  ints = tag.getIntArray("ints2");
+  for(int i = 0; i < ints.length;i++)
+    {
+    this.installedArmor.add(ArmorRegistry.instance().getArmorType(ints[i]));
+    }
   }
 
 }

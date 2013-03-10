@@ -41,6 +41,7 @@ import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
+import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleAmmoHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
@@ -151,23 +152,27 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
     {
     this.upgradeHelper.addValidUpgrade(up);
     }
+  for(IVehicleArmorType armor : this.vehicleType.getValidArmors())
+    {
+    this.upgradeHelper.addValidArmor(armor);
+    }
   this.updateBaseStats();
-  this.resetUpgradeStats();
   }
 
 public void updateBaseStats()
   {
+  Config.logDebug("updating base stats. server"+!worldObj.isRemote);
   IVehicleMaterial material = vehicleType.getMaterialType();
   int level = this.vehicleMaterialLevel;
-  float baseForwardSpeed = vehicleType.getBaseForwardSpeed() * material.getSpeedForwardFactor(level);
-  float baseStrafeSpeed = vehicleType.getBaseStrafeSpeed() * material.getSpeedStrafeFactor(level);
-  float basePitchMin = vehicleType.getBasePitchMin();
-  float basePitchMax = vehicleType.getBasePitchMax();
-  float baseTurretRotationMax = vehicleType.getBaseTurretRotationAmount();
-  float baseMissileVelocityMax = vehicleType.getBaseMissileVelocityMax();
-  float baseHealth = vehicleType.getBaseHealth() * material.getHPFactor(level);
-  float baseAccuracy = vehicleType.getBaseAccuracy() * material.getAccuracyFactor(level);
-  float baseWeight = vehicleType.getBaseWeight() * material.getWeightFactor(level);  
+  baseForwardSpeed = vehicleType.getBaseForwardSpeed() * material.getSpeedForwardFactor(level);
+  baseStrafeSpeed = vehicleType.getBaseStrafeSpeed() * material.getSpeedStrafeFactor(level);
+  basePitchMin = vehicleType.getBasePitchMin();
+  basePitchMax = vehicleType.getBasePitchMax();
+  baseTurretRotationMax = vehicleType.getBaseTurretRotationAmount();
+  baseLaunchSpeedMax = vehicleType.getBaseMissileVelocityMax();
+  baseHealth = vehicleType.getBaseHealth() * material.getHPFactor(level);
+  baseAccuracy = vehicleType.getBaseAccuracy() * material.getAccuracyFactor(level);
+  baseWeight = vehicleType.getBaseWeight() * material.getWeightFactor(level);  
   }
 
 public float getHorizontalMissileOffset()
@@ -263,6 +268,7 @@ public abstract void onReloadUpdate();
  */
 public void resetUpgradeStats()
   {
+  Config.logDebug("resetting upgrade stats. server"+!worldObj.isRemote);
   this.firingHelper.resetUpgradeStats();
   this.moveHelper.resetUpgradeStats();
   this.maxForwardSpeedCurrent = this.baseForwardSpeed;
@@ -526,7 +532,12 @@ public void writeSpawnData(ByteArrayDataOutput data)
   ByteTools.writeNBTTagCompound(upgradeHelper.getNBTTag(), data);
   ByteTools.writeNBTTagCompound(ammoHelper.getNBTTag(), data);
   ByteTools.writeNBTTagCompound(moveHelper.getNBTTag(), data);
-  ByteTools.writeNBTTagCompound(firingHelper.getNBTTag(), data);  
+  ByteTools.writeNBTTagCompound(firingHelper.getNBTTag(), data);
+  data.writeFloat(launchPowerCurrent);
+  data.writeFloat(turretPitch);
+  data.writeFloat(turretRotation);
+  data.writeFloat(turretDestPitch);
+  data.writeFloat(turretDestRot);
   }
 
 @Override
@@ -540,7 +551,11 @@ public void readSpawnData(ByteArrayDataInput data)
   this.moveHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.firingHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.upgradeHelper.updateUpgrades();
-  //TODO write/read extra stats--turret pitch/rotation/destinations
+  this.launchPowerCurrent = data.readFloat();
+  this.turretPitch = data.readFloat();
+  this.turretRotation = data.readFloat();
+  this.turretDestPitch = data.readFloat();
+  this.turretDestRot = data.readFloat();
   }
 
 @Override
@@ -561,7 +576,14 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.turretDestPitch = tag.getFloat("tpd");
   this.turretRotation = tag.getFloat("tr");
   this.turretDestRot = tag.getFloat("trd");
-  this.upgradeHelper.updateUpgrades();
+  if(!worldObj.isRemote)
+    {
+    this.upgradeHelper.updateUpgrades();
+    }
+  else
+    {
+    this.upgradeHelper.updateUpgradeStats();
+    }
   this.ammoHelper.updateAmmoCounts();
   }
 

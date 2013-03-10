@@ -12,7 +12,7 @@ GENERAL
 VEHICLES
 * implement vehicle weighting system (should it include upgrades, and ammo in bay)
 * tie acceleration to weight
-* figure out accuracy calculation methods (when to apply accuracy)(probably apply it to the output angle and yaw when spawning a missile)
+* figure out accuracy calculation methods (when to apply accuracy)(probably apply it to the output angle and yaw (and speed) when spawning a missile)
 * implement armor system
 * vehicle research system
 * fix entity hit detection for auto-aim...its borked
@@ -248,3 +248,5 @@ public static MyWorldData forWorld(World world)
 * make vehicles use ammo when firing
 * upgrade item naming weirdness...
 /********** 03-10-13 **********/
+* synching of upgrades and base stats is...off...
+* add armor inventory, item...need handling of damage reduction code (need to handle damage types, etc)

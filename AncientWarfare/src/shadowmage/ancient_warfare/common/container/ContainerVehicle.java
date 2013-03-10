@@ -93,6 +93,20 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
         }
       }
     }
+  for (y = 0; y < 2; y++)
+    {
+    for(x = 0; x <3 ;x++)
+      {
+      
+      slotNum = y*3 + x;
+      if(slotNum<vehicle.inventory.armorInventory.getSizeInventory())
+        {
+        xPos = 8 + x * 18 + 6*18 + 2*5;
+        yPos = 84 + y * 18 - 2*18 - 5+28;
+        this.addSlotToContainer(new Slot(vehicle.inventory.armorInventory, slotNum, xPos, yPos));
+        }
+      }
+    }
   for(y = 0; y < 3; y++)
     {
     for(x = 0; x < 9; x++)
@@ -120,7 +134,7 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
     slotStackCopy = slotStack.copy();
     int ammoSlots = vehicle.inventory.ammoInventory.getSizeInventory();
     int upgradeSlots = vehicle.inventory.upgradeInventory.getSizeInventory();
-    int armorSlots = 0;//vehicle.inventory.armorInventory.getSizeInventory();
+    int armorSlots = vehicle.inventory.armorInventory.getSizeInventory();
     int storageSlots = vehicle.inventory.storageInventory.getSizeInventory();
     if (slotClickedIndex < 36)//player slots...
       {
@@ -139,13 +153,13 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
           return null;
           }
         }       
-//      else if(slotStackCopy.itemID==ItemLoader.vehicleArmor.itemID)
-//        {
-//        if (!this.mergeItemStack(slotStack, 36+ammoSlots+upgradeSlots, 36+ammoSlots+upgradeSlots+armorSlots, false))//merge into armor inventory
-//          {
-//          return null;
-//          }
-//        }
+      else if(slotStackCopy.itemID==ItemLoader.armorItem.itemID)
+        {
+        if (!this.mergeItemStack(slotStack, 36+ammoSlots+upgradeSlots, 36+ammoSlots+upgradeSlots+armorSlots, false))//merge into armor inventory
+          {
+          return null;
+          }
+        }
       else//attempt merge into storage inventory, if vehicle has one...
         {
         if (!this.mergeItemStack(slotStack, 36+ammoSlots+upgradeSlots+armorSlots, 36+ammoSlots+upgradeSlots+armorSlots+storageSlots, false))//merge into storage inventory

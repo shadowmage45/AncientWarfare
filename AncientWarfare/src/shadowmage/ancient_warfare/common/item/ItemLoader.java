@@ -26,7 +26,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry;
-import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 
 public class ItemLoader
 {
@@ -43,6 +42,7 @@ public static final AWItemBase structureCreativeBuilder = new ItemBuilderInstant
 public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Config.getItemID("itemSingle.builderDirect", 13007, "Survival mode builder, uses blocks from inventory"));
 public static final AWItemBase structureCreativeBuilderTicked = new ItemBuilderTicked(Config.getItemID("itemSingle.structureBuilderCreativeTicked", 13008, "Creative-mode slow (ticked) builder"));
 public static final AWItemBase debugEditor = new ItemCreativeEditor(Config.getItemID("itemSingle.templateEditor", 13009, "Creative-mode template editor"));
+public static final AWItemBase armorItem = new ItemVehicleArmor(Config.getItemID("itemMulti.vehicleArmor", 13010, "Vehicle Armor Component"));
 /**
  * debug items, will only be given instances if debug is enabled in Config
  * e.g. will be null unless debug mode is on
@@ -84,6 +84,7 @@ private void loadItems()
   this.registerItemWithSubtypes(ammoItem);
   this.registerItemWithSubtypes(vehicleSpawner);
   this.registerItemWithSubtypes(vehicleUpgrade);
+  this.registerItemWithSubtypes(armorItem);
   }
 
 private void loadRecipes()
