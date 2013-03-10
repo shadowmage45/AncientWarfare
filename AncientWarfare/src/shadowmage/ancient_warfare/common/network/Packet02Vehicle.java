@@ -43,6 +43,11 @@ public void setParams(Entity ent)
   this.entityID = ent.entityId;
   }
 
+public void setClientMoveData(NBTTagCompound tag)
+  {
+  this.packetData.setTag("clientMove", tag);
+  }
+
 public void setInputData(NBTTagCompound tag)
   {
   this.packetData.setTag("input", tag);

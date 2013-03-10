@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
@@ -313,12 +314,33 @@ public void onUpdate()
     }
   }
 
+
+int moveUpdateTicks = 0;
+
 /**
  * client-side updates
  */
 public void onUpdateClient()
   {  
-  
+  if(Config.clientVehicleMovement && this.riddenByEntity !=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
+    {
+    moveUpdateTicks++;
+    if(moveUpdateTicks>=Config.clientMoveUpdateTicks)
+      {
+      moveUpdateTicks=0;
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setFloat("x", (float)this.posX);
+      tag.setFloat("y", (float)this.posY);
+      tag.setFloat("z", (float)this.posZ);
+      tag.setFloat("ry", (float)this.rotationYaw);
+      tag.setFloat("fm", this.moveHelper.forwardMotion);
+      tag.setFloat("sm", this.moveHelper.strafeMotion);      
+      Packet02Vehicle pkt = new Packet02Vehicle();
+      pkt.setParams(this);
+      pkt.setClientMoveData(tag);
+      pkt.sendPacketToServer();
+      }
+    }
   }
 
 /**
@@ -396,6 +418,23 @@ public void handlePacketUpdate(NBTTagCompound tag)
     {
     this.ammoHelper.handleAmmoCountUpdate(tag.getCompoundTag("ammoUpd"));
     }
+  if(tag.hasKey("clientMove"))
+    {
+    this.handleClientMoveData(tag.getCompoundTag("clientMove"));
+    }
+  }
+
+public void handleClientMoveData(NBTTagCompound tag)
+  { 
+  float x = tag.getFloat("px");
+  float y = tag.getFloat("py");
+  float z = tag.getFloat("pz");
+  float ry = tag.getFloat("ry");
+  float fm = tag.getFloat("fm");
+  float sm = tag.getFloat("sm");
+  this.setPositionAndRotationNormalized(x, y, z, ry, 0.f, 0);
+  this.moveHelper.forwardMotion = fm;
+  this.moveHelper.strafeMotion = sm;
   }
 
 public void handleHealthUpdateData(NBTTagCompound tag)
@@ -476,8 +515,18 @@ public boolean interact(EntityPlayer player)
 @Override
 public void setPositionAndRotation2(double par1, double par3, double par5, float yaw, float par8, int par9)
   {      
+  this.setPositionAndRotationNormalized(par1, par3, par5, yaw, par8, par9);
+  }
+
+
+public void setPositionAndRotationNormalized(double par1, double par3, double par5, float yaw, float par8, int par9)
+  {
   if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
     {
+    if(Config.clientVehicleMovement)
+      {
+      return;
+      }
     double var10 = par1 - this.posX;
     double var12 = par3 - this.posY;
     double var14 = par5 - this.posZ;
@@ -499,6 +548,7 @@ public void setPositionAndRotation2(double par1, double par3, double par5, float
     } 
   super.setPositionAndRotation(par1, par3, par5, yaw, par8);
   }
+
 
 @Override
 public AxisAlignedBB getBoundingBox()

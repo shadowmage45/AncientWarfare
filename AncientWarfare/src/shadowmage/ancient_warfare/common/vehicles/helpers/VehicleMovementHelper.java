@@ -42,8 +42,8 @@ private byte strafeInput = 0;
 
 private float forwardAccel = 0;
 private float strafeAccel = 0;
-private float forwardMotion = 0;
-private float strafeMotion = 0;
+public float forwardMotion = 0;
+public float strafeMotion = 0;
 
 public VehicleMovementHelper (VehicleBase veh)
   {
@@ -69,6 +69,11 @@ public void handleKeyboardInput(byte forward, byte strafe)
   pkt.setParams(this.vehicle);
   pkt.setInputData(tag);
   pkt.sendPacketToServer();
+  if(Config.clientVehicleMovement)
+    {
+    this.setForwardInput(forward);
+    this.setStrafeInput(strafe);
+    }
   }
 
 /**
@@ -78,6 +83,10 @@ public void handleKeyboardInput(byte forward, byte strafe)
  */
 public void handleInputData(NBTTagCompound tag)
   {
+  if(Config.clientVehicleMovement && vehicle.riddenByEntity!=null && vehicle.riddenByEntity==AWCore.proxy.getClientPlayer())//this is a client, with thePlayer riding
+    {
+    return;
+    }
   boolean inputChanged = false;
   if(tag.hasKey("f"))
     {
@@ -174,6 +183,7 @@ public void onMovementTick()
   if(!vehicle.onGround)
     {
     vehicle.motionY -= (9.81f*0.05f*0.05f);
+    Config.logDebug("vehicle not on ground, falling!!");
     }
   else
     {

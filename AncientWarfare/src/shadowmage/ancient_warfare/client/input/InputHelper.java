@@ -45,7 +45,6 @@ import cpw.mods.fml.common.TickType;
 public class InputHelper extends KeyHandler implements IHandleInput
 {
 
-
 /**
  * VANILLA KEYBINDS (TO SHOW UP IN VANILLA CONFIG MENU)
  */

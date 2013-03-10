@@ -56,6 +56,9 @@ public static String templateExtension = "aws";
 
 public static int trajectoryIterationsServer = 20;
 
+public static boolean clientVehicleMovement = true;
+public static int clientMoveUpdateTicks = 3;
+
 private static Configuration config;
 private static Logger logger;
 
