@@ -28,10 +28,10 @@ VEHICLES
     --onLaunchingFinished()
     --onReloadAnimationFinished()
 * add new inventory-size setting code.InventoryHelper can be set when the vehicleType is read (or re-set to non-default sizes)
-* move over to client-movement scheme....
 * implement damage types...
 * move spawner item over to new creative tab
 * remove debug spawner
+* add config settings to mod init data
             
 AMMO TYPES 
 * create more ammo types
@@ -239,3 +239,4 @@ public static MyWorldData forWorld(World world)
 * implement armor system (partially, needs stats/damage stuff)
 * figure out how to handle spawner items for vehicles (getItemStackFor(int type, int level)?)
 * add all vehicle type/material level combos to creative tab
+* add optional client-movement scheme....
