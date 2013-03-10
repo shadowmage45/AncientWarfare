@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public interface IVehicleUpgradeType
@@ -31,5 +32,6 @@ public abstract String getDisplayTooltip();
 
 public abstract void applyVehicleEffects(VehicleBase vehicle);
 
+public abstract ItemStack getUpgradeStack(int qty);
 
 }

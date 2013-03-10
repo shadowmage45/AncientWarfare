@@ -67,9 +67,9 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
 public void spawnVehicle(World world, EntityPlayer player, BlockPosition hit)
   {
   Config.logDebug("spawning vehicle");
-  VehicleBase veh = VehicleRegistry.instance().getVehicleForType(world, 0);
+  VehicleBase veh = VehicleRegistry.instance().getVehicleForType(world, 0, 0);
 //  VehicleCatapult veh = new VehicleCatapult(world);
-  veh.setVehicleType(VehicleRegistry.CATAPULT, 0);
+//  veh.setVehicleType(VehicleRegistry.CATAPULT, 0);
   veh.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
   world.spawnEntityInWorld(veh);
   }

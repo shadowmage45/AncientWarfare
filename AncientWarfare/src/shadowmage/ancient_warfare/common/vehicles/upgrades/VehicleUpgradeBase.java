@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public abstract class VehicleUpgradeBase implements IVehicleUpgradeType
@@ -38,5 +40,9 @@ public int getUpgradeGlobalTypeNum()
   return typeNum;
   }
 
-
+@Override
+public ItemStack getUpgradeStack(int qty)
+  {
+  return new ItemStack(ItemLoader.vehicleUpgrade.itemID, qty, this.typeNum);
+  }
 }

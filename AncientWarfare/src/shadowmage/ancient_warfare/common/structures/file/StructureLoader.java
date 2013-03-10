@@ -694,11 +694,11 @@ private void parseVehicle(ProcessedStructure struct, Iterator<String> it)
   while(it.hasNext())
     {
     line = it.next();
-    if(line.toLowerCase().startsWith("rule:"))
+    if(line.toLowerCase().startsWith("vehicle:"))
       {
       continue;
       }
-    else if(line.toLowerCase().startsWith(":endrule"))
+    else if(line.toLowerCase().startsWith(":endvehicle"))
       {
       break;      
       }

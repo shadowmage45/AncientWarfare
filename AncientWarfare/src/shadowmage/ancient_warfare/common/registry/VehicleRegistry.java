@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
+import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBase;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapult;
 
@@ -71,13 +72,19 @@ public IVehicleType getVehicleType(int num)
   return this.vehicleTypes.get(num);
   }
 
-public VehicleBase getVehicleForType(World world, int type)
+public VehicleBase getVehicleForType(World world, int type, int level)
   {
   if(this.vehicleTypes.containsKey(type))
     {
     try
       {
-      return this.vehicleClasses.get(this.vehicleTypes.get(type)).getDeclaredConstructor(World.class).newInstance(world);
+      IVehicleType vehType = this.getVehicleType(type);
+      VehicleBase vehicle = this.vehicleClasses.get(vehType).getDeclaredConstructor(World.class).newInstance(world);      
+      if(vehicle!=null)
+        {
+        vehicle.setVehicleType(vehType, level);
+        }
+      return vehicle;
       } 
     catch (InstantiationException e)
       {

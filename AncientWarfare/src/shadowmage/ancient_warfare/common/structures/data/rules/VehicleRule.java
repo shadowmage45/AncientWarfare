@@ -28,14 +28,10 @@ import shadowmage.ancient_warfare.common.utils.StringTools;
 public class VehicleRule
 {
 public short ruleNumber;
-short vehicleType;
-byte armorFrontTypes[];
-byte armorMidTypes[];
-byte armorRearTypes[];
-byte upgradeFrontTypes[];
-byte upgradeMidTypes[];
-byte upgradeRearTypes[];
-byte[] ammoTypes = new byte[]{-1,-1,-1,-1,-1,-1};
+public short vehicleType;
+public byte[] armorFrontTypes;
+public byte[] upgradeTypes;
+public byte[] ammoTypes;
 
 private VehicleRule()
   {  
@@ -60,51 +56,15 @@ public static VehicleRule parseRule(List<String> ruleLines)
     if(line.toLowerCase().startsWith("armorfront"))
       {
       rule.armorFrontTypes = StringTools.safeParseByteArray("=", line);      
-      }
-    if(line.toLowerCase().startsWith("armormid"))
+      }    
+    if(line.toLowerCase().startsWith("upgrades"))
       {
-      rule.armorMidTypes = StringTools.safeParseByteArray("=", line);
-      }
-    if(line.toLowerCase().startsWith("armorrear"))
+      rule.upgradeTypes = StringTools.safeParseByteArray("=", line);
+      }   
+    if(line.toLowerCase().startsWith("ammos"))
       {
-      rule.armorRearTypes = StringTools.safeParseByteArray("=", line);
-      }
-    if(line.toLowerCase().startsWith("upgrade1"))
-      {
-      rule.upgradeFrontTypes = StringTools.safeParseByteArray("=", line);
-      }
-    if(line.toLowerCase().startsWith("upgrade2"))
-      {
-      rule.upgradeMidTypes = StringTools.safeParseByteArray("=", line);
-      }
-    if(line.toLowerCase().startsWith("upgrade3"))
-      {
-      rule.upgradeRearTypes = StringTools.safeParseByteArray("=", line);
-      }
-    if(line.toLowerCase().startsWith("ammo1"))
-      {
-      rule.ammoTypes[0] = StringTools.safeParseByte("=", line);      
-      }
-    if(line.toLowerCase().startsWith("ammo2"))
-      {
-      rule.ammoTypes[1]=StringTools.safeParseByte("=", line);
-      }
-    if(line.toLowerCase().startsWith("ammo3"))
-      {
-      rule.ammoTypes[2]=StringTools.safeParseByte("=", line);  
-      }
-    if(line.toLowerCase().startsWith("ammo4"))
-      {
-      rule.ammoTypes[3]=StringTools.safeParseByte("=", line);
-      }
-    if(line.toLowerCase().startsWith("ammo5"))
-      {
-      rule.ammoTypes[4]=StringTools.safeParseByte("=", line);
-      }
-    if(line.toLowerCase().startsWith("ammo6"))
-      {
-      rule.ammoTypes[5]=StringTools.safeParseByte("=", line);
-      }
+      rule.ammoTypes = StringTools.safeParseByteArray("=", line);      
+      }    
     }  
   if(rule.ruleNumber>=0)
     {

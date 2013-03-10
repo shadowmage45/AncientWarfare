@@ -32,16 +32,22 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
+import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.structures.data.AWStructure;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 import shadowmage.ancient_warfare.common.world_gen.LootGenerator;
 
 public abstract class Builder implements INBTTaggable
@@ -413,7 +419,7 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
       }
     else
       {
-      placeVehicle(world, x, y, z, rule.vehicles[rnd], overrideVehicle, overrideRank, overrideTeam);    
+      placeVehicle(world, x, y, z, rule, rule.vehicles[rnd], overrideVehicle, overrideRank, overrideTeam);    
       return;
       }    
     }
@@ -455,11 +461,57 @@ protected void placeBlockData(World world, int x, int y, int z, BlockData data, 
     }   
   }
 
-protected void placeVehicle(World world, int x, int y, int z, int vehicleType, int overrideType, int overrideRank, int overrideTeam)
+protected void placeVehicle(World world, int x, int y, int z, BlockRule parentRule, int vehicleType, int overrideType, int overrideRank, int overrideTeam)
   {
-  //TODO
-  //get vehicle rule from struct, apply overrides, get vehicle from vehicle registry, apply upgrades/ammo
-  //spawn vehicle
+  VehicleRule vehRule = struct.vehicleRules.get(vehicleType);
+  if(vehRule==null)
+    {
+    return;
+    }
+  int type = overrideType>=0 ? overrideType : vehRule.vehicleType;
+  int rank = overrideRank;
+  VehicleBase vehicle = VehicleRegistry.instance().getVehicleForType(world, type, rank);
+  if(vehicle!=null)
+    {
+    List<IAmmoType> vehicleAmmoTypes = vehicle.vehicleType.getValidAmmoTypes();
+    for(int i = 0; i < vehRule.ammoTypes.length && i <vehicle.inventory.ammoInventory.getSizeInventory(); i++)
+      {
+      int ammoType = vehRule.ammoTypes[i];
+      if(ammoType>vehicleAmmoTypes.size())
+        {
+        ammoType = this.random.nextInt(vehicleAmmoTypes.size());
+        }
+      ItemStack ammoStack = vehicleAmmoTypes.get(ammoType).getAmmoStack(64);
+      vehicle.inventory.ammoInventory.setInventorySlotContents(i, ammoStack);
+      }
+    List<IVehicleUpgradeType> vehicleUpgradeTypes = vehicle.vehicleType.getValidUpgrades();
+    for(int i = 0; i < vehRule.upgradeTypes.length && i < vehicle.inventory.upgradeInventory.getSizeInventory(); i++)
+      {
+      int upgradeType = vehRule.upgradeTypes[i];
+      if(upgradeType>=vehicleUpgradeTypes.size())
+        {
+        upgradeType = this.random.nextInt(vehicleUpgradeTypes.size());
+        }
+      ItemStack upgradeStack = vehicleUpgradeTypes.get(upgradeType).getUpgradeStack(1);
+      vehicle.inventory.upgradeInventory.setInventorySlotContents(i, upgradeStack);
+      }
+    List<IVehicleArmorType> vehicleArmors = vehicle.vehicleType.getValidArmors();
+    for(int i = 0; i < vehRule.armorFrontTypes.length && i < vehicle.inventory.armorInventory.getSizeInventory(); i++)
+      {
+      int armorType = vehRule.armorFrontTypes[i];
+      if(armorType>=vehicleArmors.size())
+        {
+        armorType = this.random.nextInt(vehicleArmors.size());
+        }
+      ItemStack upgradeStack = vehicleArmors.get(armorType).getArmorStack(1);
+      vehicle.inventory.armorInventory.setInventorySlotContents(i, upgradeStack);
+      }    
+    vehicle.setPosition(x+0.5d, y, z+0.5d);
+    float rotation = (float)parentRule.orientation * -45.f;
+    rotation -= 90 * this.getRotationAmt(facing);
+    vehicle.rotationYaw = vehicle.prevRotationYaw = rotation;
+    world.spawnEntityInWorld(vehicle);
+    }
   }
 
 protected void placeNPC(World world, int x, int y, int z, int npcType, int overrideType, int overrideRank, int overrideTeam)

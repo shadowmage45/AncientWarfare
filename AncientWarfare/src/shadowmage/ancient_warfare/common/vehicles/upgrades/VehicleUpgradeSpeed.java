@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -54,5 +55,6 @@ public void applyVehicleEffects(VehicleBase vehicle)
   vehicle.maxForwardSpeedCurrent += 0.25f*0.05f;
   Config.logDebug("new vehicle max speed: "+vehicle.maxForwardSpeedCurrent);
   }
+
 
 }

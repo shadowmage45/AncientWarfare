@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.armors;
 
+import net.minecraft.item.ItemStack;
+
 public interface IVehicleArmorType
 {
 
@@ -31,5 +33,7 @@ public abstract String getDisplayTooltip();
 public abstract float getGeneralDamageReduction();
 public abstract float getExplosiveDamageReduction();
 public abstract float getFireDamageReduction();
+
+public abstract ItemStack getArmorStack(int qty);
 
 }

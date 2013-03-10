@@ -61,6 +61,10 @@ public byte conditional = 0;
 public byte swapGroup = -1;
 
 byte team = 0;
+
+/**
+ * in 45 degrees....
+ */
 public byte orientation = 0;
 
 
@@ -320,6 +324,10 @@ public static BlockRule parseRule(List<String> ruleLines)
     if(line.toLowerCase().startsWith("percent"))
       {
       rule.baseChance = StringTools.safeParseByte("=", line);
+      }
+    if(line.toLowerCase().startsWith("orientation"))
+      {
+      rule.orientation = StringTools.safeParseByte("=", line);
       }
     if(line.toLowerCase().startsWith("order"))
       {
