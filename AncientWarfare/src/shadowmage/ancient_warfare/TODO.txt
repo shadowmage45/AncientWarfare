@@ -11,9 +11,9 @@ GENERAL
 
 VEHICLES
 * implement vehicle weighting system (should it include upgrades, and ammo in bay)
-* tie acceleration to weight
+* tie acceleration to weight (base weight/ baseWeight + inventory weight for a leveled percentage to decrease speed by)
+* calc weight of ammo in inventory, upgrades, and armor.  Also calc items in storage (raw weight/item/stack, don't worry about ammo/upgrades/armor in storage)
 * figure out accuracy calculation methods (when to apply accuracy)(probably apply it to the output angle and yaw (and speed) when spawning a missile)
-* implement armor system
 * vehicle research system
 * fix entity hit detection for auto-aim...its borked
 * fix rider collision detection???
@@ -21,16 +21,17 @@ VEHICLES
 * make it so vehicles won't collide with arrows...
 * import more models
 * textures...textures...everywhere [there are missing] textures....
-* figure out how to handle spawner items for vehicles (getItemStackFor(int type, int level)?)
 * find a good method for battering ram block damage (take point-hit, and simply do a 3D x on it?)
-* after ammo/armor/upgrades--add vehicles into structure gen
-* so...slots display position is client only...use that to move slots off screen (or use that in a scrollable area somehow?)
 * restructure vehicle firing sequence
     --initiateFiringSequence()
     --onFiringAnimationFinished()
-    --
+    --onLaunchingFinished()
+    --onReloadAnimationFinished()
 * add new inventory-size setting code.InventoryHelper can be set when the vehicleType is read (or re-set to non-default sizes)
 * move over to client-movement scheme....
+* implement damage types...
+* move spawner item over to new creative tab
+* remove debug spawner
             
 AMMO TYPES 
 * create more ammo types
@@ -43,6 +44,7 @@ GUI FRAMEWORK
 * create basic GuiString element. has options for color, hover-color, callBackOnClick, drawShadow, drawCentered 
 * rework all structure GUIs to include new bling!! (scroll areas, etc...)
 * put quaded texture rendering someplace central...
+* so...slots display position is client only...use that to move slots off screen (or use that in a scrollable area somehow?)
 
 TESTING
 * test loot weighting
@@ -118,23 +120,6 @@ TWEAKS/OPTIMIZATION
 * remove builder load/save from gameData...--it isn't used
 * custom block placement code for creative/survival builders (set server block, manually relay to client--should 
         decrease overall network used from vanilla MC resending entire chunks..)
-
-MODS LIST FOR NEXT WORLD (147)
-Mystcraft
-Thaumcraft
-Railcraft
---steves carts
-Industrialcraft
-Buildcraft
-Redpower
---forestry
---thermal expansion
---portal gun
-REI minimap
-NEI
-WRCBE
-IronChests
-EnderStorage
 
 /*****************************************************************************************/
 public class MyWorldData extends WorldSavedData 
@@ -250,3 +235,7 @@ public static MyWorldData forWorld(World world)
 /********** 03-10-13 **********/
 * synching of upgrades and base stats is...off...
 * add armor inventory, item...need handling of damage reduction code (need to handle damage types, etc)
+* after ammo/armor/upgrades--add vehicles into structure gen
+* implement armor system (partially, needs stats/damage stuff)
+* figure out how to handle spawner items for vehicles (getItemStackFor(int type, int level)?)
+* add all vehicle type/material level combos to creative tab

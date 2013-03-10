@@ -23,13 +23,20 @@
 package shadowmage.ancient_warfare.common.registry;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
-import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBase;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapult;
 
@@ -65,6 +72,7 @@ public void registerVehicle(Class <? extends VehicleBase> clz, String entName, I
   AWEntityRegistry.registerEntity(clz, entName, 130, 3, false);
   this.vehicleTypes.put(type.getGlobalVehicleType(), type);
   this.vehicleClasses.put(type, clz);
+  ItemLoader.instance().addSubtypeToItem(ItemLoader.vehicleSpawner, type.getGlobalVehicleType(), type.getDisplayName(), type.getDisplayTooltip());
   }
 
 public IVehicleType getVehicleType(int num)
@@ -112,6 +120,34 @@ public VehicleBase getVehicleForType(World world, int type, int level)
       }
     }
   return null;
+  }
+
+public List getCreativeDisplayItems()
+  {
+  List<ItemStack> stacks = new ArrayList<ItemStack>();
+  Iterator<Entry<Integer, IVehicleType>> it = this.vehicleTypes.entrySet().iterator();
+  Entry<Integer, IVehicleType> ent = null;
+  ItemStack stack = null;
+  IVehicleType type = null;
+  while(it.hasNext())
+    {
+    ent = it.next();
+    type = ent.getValue();
+    if(type==null || type.getMaterialType()==null)
+      {
+      continue;
+      }
+    Config.logDebug("material Type: "+type.getDisplayName());
+    for(int i = 0; i < type.getMaterialType().getNumOfLevels(); i++)
+      {
+      stack = new ItemStack(ItemLoader.vehicleSpawner,1,type.getGlobalVehicleType());
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setInteger("lev", i);
+      stack.setTagInfo("AWVehSpawner", tag);
+      stacks.add(stack);
+      }
+    }
+  return stacks;
   }
 
 

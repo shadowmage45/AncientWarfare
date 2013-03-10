@@ -37,6 +37,8 @@ public abstract float getBaseWeight();
 public abstract float getBaseHealth();//base max health, before any materials or upgrades adjustments
 
 public abstract String getTextureForMaterialLevel(int level);//get the texture for the input material quality level
+public abstract String getDisplayName();
+public abstract String getDisplayTooltip();
 
 public abstract int getGlobalVehicleType();//by number, registry num...
 public abstract IVehicleMaterial getMaterialType();//wood, iron...?? material type will apply adjustments to base stats, before upgrades/etc are applied
@@ -76,5 +78,7 @@ public abstract List<IVehicleArmorType> getValidArmors();
 
 public abstract int getMaterialQuantity();//get the quantity of the main material to construct this vehicle
 public abstract List<ItemStack> getAdditionalMaterials();//get a list of additional materials needed to construct this vehicle
+
+public abstract ItemStack getStackForLevel(int level);
 
 }

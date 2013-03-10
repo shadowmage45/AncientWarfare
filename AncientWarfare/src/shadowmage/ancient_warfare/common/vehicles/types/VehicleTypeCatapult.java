@@ -55,6 +55,9 @@ public VehicleTypeCatapult(int typeNum)
   this.riderForwardsOffset = 1.2f;
   this.riderVerticalOffset = 0.7f;
   
+  this.displayName = "Catapult";
+  this.displayTooltip = "The original, classic, catapult.";
+  
   this.validAmmoTypes.add(Ammo.ammoArrow);
   this.validAmmoTypes.add(Ammo.ammoStoneShot);
   

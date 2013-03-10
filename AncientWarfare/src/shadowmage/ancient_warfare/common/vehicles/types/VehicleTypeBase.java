@@ -24,7 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
@@ -75,6 +77,9 @@ public float baseMissileVelocityMax;
 public float baseHealth = 100;
 
 public float accuracy = 1.f;
+
+public String displayName = "AWVehicleBase";
+public String displayTooltip = "AWVehicleBase";
 
 public List<IAmmoType> validAmmoTypes = new ArrayList<IAmmoType>();
 public List<IVehicleUpgradeType> validUpgrades = new ArrayList<IVehicleUpgradeType>();
@@ -290,6 +295,28 @@ public boolean isArmorValid(IVehicleArmorType armor)
 public List<IVehicleArmorType> getValidArmors()
   {
   return this.validArmors;
+  }
+
+@Override
+public String getDisplayName()
+  {
+  return displayName;
+  }
+
+@Override
+public String getDisplayTooltip()
+  {
+  return displayTooltip;
+  }
+
+@Override
+public ItemStack getStackForLevel(int level)
+  {
+  ItemStack stack = new ItemStack(ItemLoader.vehicleSpawner,1,this.getGlobalVehicleType());
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setInteger("lev", level);
+  stack.setTagInfo("AWVehSpawner", tag);
+  return stack;
   }
 
 }
