@@ -329,9 +329,9 @@ public void onUpdateClient()
       {
       moveUpdateTicks=0;
       NBTTagCompound tag = new NBTTagCompound();
-      tag.setFloat("x", (float)this.posX);
-      tag.setFloat("y", (float)this.posY);
-      tag.setFloat("z", (float)this.posZ);
+      tag.setFloat("px", (float)this.posX);
+      tag.setFloat("py", (float)this.posY);
+      tag.setFloat("pz", (float)this.posZ);
       tag.setFloat("ry", (float)this.rotationYaw);
       tag.setFloat("fm", this.moveHelper.forwardMotion);
       tag.setFloat("sm", this.moveHelper.strafeMotion);      

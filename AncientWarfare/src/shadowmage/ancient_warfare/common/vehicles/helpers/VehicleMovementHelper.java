@@ -125,6 +125,7 @@ public void handleInputData(NBTTagCompound tag)
  */
 public void onMovementTick()
   {
+  Config.logDebug("updating motion for vehicle. server: "+!vehicle.worldObj.isRemote);
   if(forwardInput!=0)
     {
     forwardAccel = forwardInput * 0.03f * (vehicle.maxForwardSpeedCurrent - MathHelper.abs(forwardMotion));
