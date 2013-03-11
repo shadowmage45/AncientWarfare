@@ -12,19 +12,22 @@ GENERAL
 PRE-VEHICLE TEST RELEASE
 * add vehicles
     -- models
-    -- textures
+    -- model-textures
     -- renders
+    -- animations
+    -- armor model...yay...blearghh...
 * add ammos
-    -- textures
+    -- model-textures
     -- renders
 
 VEHICLES
 * find a good method for battering ram block damage (take point-hit, and simply do a 3D x on it?)
-* catapult animations
-            
-AMMO TYPES 
-* create more ammo types
-
+* add ammo types
+* add upgrade types
+* add armor types
+* onHit client-side animation (can use the client-side health update method to trigger on - health updates)
+* add method to public String getTextureForArmorInSlot(IVehicleArmorType armor, int slotNum) to vehicle, to get vehicle-specific armor texture for that armor type and slot
+         
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
 * add tooltip functionality to elements (optional tooltip rendering, if enabled on the element)
@@ -35,10 +38,14 @@ GUI FRAMEWORK
 * so...slots display position is client only...use that to move slots off screen (or use that in a scrollable area somehow?)
 
 TESTING
-* test loot weighting
+* test structure loot weighting
 * test structure weighting
-* test underground buildings (dungeons)
-* test submerged code
+* test structure underground buildings (dungeons)
+* test structure submerged code
+* test new adjustable size inventory
+* test new vehicle accuracy stuff
+* test new weight based acceleration coding
+* test vehicle armor damage reduction
 
 TEMPLATES
 
@@ -93,10 +100,20 @@ ADVANCED DRAFTING STATION (editor)
 * THDT
 
 RESEARCH
-* THDT
-* vehicle research system
-* npc research system
-* civics research system
+* vehicle research system (initial only t0(rough) mats and t0(rough) vehicle variants)
+* vehicle upgrade research (0 known until researched)
+* materials research (2 known, rough quality wood/iron, other tiers/materials must be researched)
+* npc research system (0 known until researched)
+* civics research system (0 known until researched)
+
+CRAFTING
+    VEHICLE CRAFTING
+        --at least 2 sizes of crafting area
+        --will be multiblock structures that will render the in-progress vehicle being built
+                will slowly add pieces over construction duration until finished constructing.
+    NPC CRAFTING
+    AMMO CRAFTING
+    UPGRADE AND ARMOR CRAFTING
  
 TWEAKS/OPTIMIZATION
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
