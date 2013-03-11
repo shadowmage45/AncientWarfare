@@ -327,16 +327,21 @@ public void onUpdate()
     {    
     this.onUpdateServer();
     }
-  this.moveHelper.onMovementTick();
-  this.firingHelper.onTick(); 
   if(turretPitch!=turretDestPitch)
     {
     this.updateTurretPitch();
     }
-  if(turretRotation!=turretDestRot)
+  if(!this.vehicleType.canAdjustYaw())
+    {
+    this.turretRotation = this.rotationYaw;
+    }
+  else if(turretRotation!=turretDestRot)
     {
     this.updateTurretRotation();
     }
+  this.moveHelper.onMovementTick();
+  this.firingHelper.onTick(); 
+  
   }
 
 

@@ -176,4 +176,77 @@
 * clearance validation code is still a bit....off..        
 /********** 02-20-13 **********/
 * rework all GUIs to enable new IGuiElement code and style...rewrite
-            GuiTextFieldAdvanced, from the ground up... (yes, painful)   
+            GuiTextFieldAdvanced, from the ground up... (yes, painful)  
+            /********** 02-25-13 **********/
+* prep vehicle work
+/********** 02-26-13 **********/
+* add renderManager, methods to register vehicle renders            
+/********** 02-27-13 **********/
+* basic internal client/server comms. need a reliable vehicle channel. see: container networking
+* prep work on vehicle movement
+/********** 02-28-13 **********/
+* vehicles can move!
+/********** 03-01-13 **********/
+* vehicle type number--used to reference for spawning and renders
+* subclass for every vehicle (use render# on rendering, run through renderManager--low overhead)   
+/********** 03-02-13 **********/
+* work on getting ammo/missiles working
+/********** 03-03-13 **********/
+* fully implement missile ballistics
+* begin working on siege-engine missile aiming
+/********** 03-04-13 **********/
+* more work on siege-engine aiming.  Mostly worked out, need to flesh out vehicles more fully.
+* vehicle upgrades onInventoryChanged send upgradeNumbersList to tracking clients and call updateUpgradeStats
+* add vehicle ammo count updating    
+* NBT save/load stuff for firingHelper, moveHelper, ammoHelper             
+* fix arrow model to use point of head as its position point         
+* add arrow persistent entity coding
+/********** 03-05-13 **********/
+* convert vehicles over to use interface typing.  they now consist of two parts, the entity (for animations and other local variables), and the type (defines statistics)
+* re-implement auto-aiming to include vehicles that use power instead of pitch
+* bit of work on arrow persistence/hit point/sticking in the ground
+* add wood material and first-pass statistics to it.
+/********** 03-06-13 **********/
+* implement iterative algorithm to find best guess power for auto-aim, iteration count set by client-config setting (<20000ns for 20 iterations avg on dev comp)
+* add basic client-side settings GUI, needs tons of work
+* add advanced overlay rendering (yaw line + trajectory)
+* fix hit point of persistent arrows (they seem to use one of only a few hit-points on the block)
+* fix rendering of arrows (rotation goes all screwy at some angles, spins) 
+* fix load/save of persistent arrows (they go vertical upon reload and fall to the ground)
+* fix depth rendering on advanced overlay   
+* import updates to guicontadv... from MEIM      
+* add basic scrollable area using viewport coding. needs much work.
+/********** 03-07-13 **********/
+* work on setting up elements on scrollable area (working aside from Y render issues (its too far north)
+* fix scrollable area render positioning. it now positions elements correctly
+* fix scrollable area element positioning, as well as mouse-input.  It now scrolls elements properly 
+* add/update keybinds gui, fully featured/implemented w/ scroll bar for additional keybinds in the future.
+* implement ammo inGround rechecking, caching of blockPos and blockID/meta (similar to arrow)
+* implement ammo onImpact methods
+* implement ammo entityHit detection
+* add vehicle gravity..
+* update vehicle stepSize so that they can go over things...
+* vehicle ammo switching capability
+/********** 03-08-13 **********/
+* implement no-scroll bar scrollable area (uses mouse input)
+* add parchment background img (guiBackgroundParchment.png)
+* make sure vehicles with no ammo types won't crash
+* import stone ammo model
+* fix crashing when all missile offsets are 0 (render hard-lock--was endlessly calcing range for NaN)
+/********** 03-09-13 **********/
+* add slot background to guiButtons.img ( @ 150x120 in image)
+* add ability to render custom background from background file, using quaded texture rendering for dynamic sizing
+* vehicle inventory (make a debug GUI)
+* description/registry system cleanup...works great
+* vehicles don't update ammo count on load... 
+* upgrade system   
+* make vehicles use ammo when firing
+* upgrade item naming weirdness...
+/********** 03-10-13 **********/
+* synching of upgrades and base stats is...off...
+* add armor inventory, item...need handling of damage reduction code (need to handle damage types, etc)
+* after ammo/armor/upgrades--add vehicles into structure gen
+* implement armor system (partially, needs stats/damage stuff)
+* figure out how to handle spawner items for vehicles (getItemStackFor(int type, int level)?)
+* add all vehicle type/material level combos to creative tab
+* add optional client-movement scheme.... 

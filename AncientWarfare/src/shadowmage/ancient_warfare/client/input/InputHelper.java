@@ -284,16 +284,25 @@ public void handleFireAction()
 
 public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float range)
   {
+  
+  /**
+   * Vec3 positionVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
+    Vec3 moveVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+    MovingObjectPosition hitPosition = this.worldObj.rayTraceBlocks_do_do(positionVector, moveVector, false, true);
+    positionVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
+    moveVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+   */
   Vec3 playerPos = player.getPosition(0);
   Vec3 lookVector = player.getLook(0);
   Vec3 endVector = playerPos.addVector(lookVector.xCoord * range, lookVector.yCoord * range, lookVector.zCoord * range);
-
   MovingObjectPosition blockHit = player.worldObj.rayTraceBlocks(playerPos, endVector);
   
   /**
-   * redo..
-   * bb = new bb (px, py, pz, tx, ty, tz).expand(world.MAX_ENTITY_RADIUS)
+   * reseat vectors, as they get fucked with in the rayTrace...
    */
+  playerPos = player.getPosition(0);
+  lookVector = player.getLook(0);
+  
   float var9 = 1.f;
   
   float closestFound = 0.f;

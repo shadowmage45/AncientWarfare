@@ -126,6 +126,11 @@ public void handleInputData(NBTTagCompound tag)
 public void onMovementTick()
   {
   Config.logDebug("updating motion for vehicle. server: "+!vehicle.worldObj.isRemote);
+  float accelAdjust = 1.f;
+  if(vehicle.currentWeight > vehicle.baseWeight)
+    {
+    accelAdjust = vehicle.baseWeight  / vehicle.currentWeight;
+    }
   if(forwardInput!=0)
     {
     forwardAccel = forwardInput * 0.03f * (vehicle.maxForwardSpeedCurrent - MathHelper.abs(forwardMotion));
@@ -133,6 +138,7 @@ public void onMovementTick()
       {
       forwardAccel *= 0.6f;
       }
+    forwardAccel *= accelAdjust;
     }
   else
     {
@@ -141,6 +147,7 @@ public void onMovementTick()
   if(strafeInput!=0)
     {
     strafeAccel = -strafeInput * 0.06f * (vehicle.maxStrafeSpeedCurrent-MathHelper.abs(strafeMotion));
+    strafeAccel *= accelAdjust;
     }
   else
     {

@@ -55,8 +55,10 @@ public static int structureGeneratorRandomRange = 1000;
 public static int structureGenMaxClusterValue = 50;
 public static boolean invertShiftClickOnItems = false;
 public static String templateExtension = "aws";
+public static boolean adjustMissilesForAccuracy = true;
 
 public static int trajectoryIterationsServer = 20;
+
 
 /**
  * the base (Server side) and current (client side) values...

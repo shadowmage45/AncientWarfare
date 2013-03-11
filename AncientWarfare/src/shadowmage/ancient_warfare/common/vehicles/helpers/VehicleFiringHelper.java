@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.helpers;
 
+import java.util.Random;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -104,15 +106,30 @@ public void spawnMissile(float ox, float oy, float oz)
       vehicle.ammoHelper.decreaseCurrentAmmo(1);
       
       Pos3f off = vehicle.getMissileOffset();
-      Config.logDebug("offset: "+off.toString());
       float x = (float) vehicle.posX + off.x + ox;
       float y = (float) vehicle.posY + off.y + oy;
       float z = (float) vehicle.posZ + off.z + oz;
-      float power = vehicle.launchPowerCurrent> getAdjustedMaxMissileVelocity() ? getAdjustedMaxMissileVelocity() : vehicle.launchPowerCurrent;
-      MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, vehicle.rotationYaw, vehicle.turretPitch, power);
+      
+      float power = vehicle.launchPowerCurrent> getAdjustedMaxMissileVelocity() ? getAdjustedMaxMissileVelocity() : vehicle.launchPowerCurrent;      
+      float yaw = vehicle.turretRotation;
+      float pitch = vehicle.turretPitch; 
+      if(Config.adjustMissilesForAccuracy)
+        {
+        //TODO fix all this crap up, make a dedicated random somewhere for this
+        //TODO check the variance on random, and if I am inverting properly
+        Random rnd = new Random();
+        float accuracy = getAccuracyAdjusted();
+        float adj = (float)rnd.nextGaussian() * ( 1.f - accuracy);
+        
+        yaw   += adj*5;
+        pitch += adj*5;
+        power *= adj;
+        
+        }
+      
+      MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, yaw, pitch, power);
       if(missile!=null)
         {
-        Config.logDebug("launching missile server side");
         vehicle.worldObj.spawnEntityInWorld(missile);
         }
       }
@@ -173,7 +190,7 @@ public float getAdjustedMaxMissileVelocity()
   return velocity;
   }
 
-public float getAccuracyAdjustment()
+public float getAccuracyAdjusted()
   {
   float accuracy = this.vehicle.accuracyCurrent;
   if(vehicle.riddenByEntity!=null && vehicle.riddenByEntity instanceof NpcBase)
