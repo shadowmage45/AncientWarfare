@@ -67,4 +67,10 @@ public float getFireDamageReduction()
   return 10;
   }
 
+@Override
+public float getArmorWeight()
+  {
+  return 50;
+  }
+
 }

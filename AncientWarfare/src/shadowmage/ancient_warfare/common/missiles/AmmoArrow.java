@@ -75,7 +75,7 @@ public float getDragFactor()
   }
 
 @Override
-public float getWeightFactor()
+public float getAmmoWeight()
   {
   // TODO Auto-generated method stub
   return 0;

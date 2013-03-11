@@ -43,6 +43,11 @@ public void setParams(Entity ent)
   this.entityID = ent.entityId;
   }
 
+public void setHealthUpdate(float health)
+  {
+  this.packetData.setFloat("health", health);
+  }
+
 public void setClientMoveData(NBTTagCompound tag)
   {
   this.packetData.setTag("clientMove", tag);

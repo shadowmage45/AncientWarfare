@@ -1,10 +1,14 @@
 AncientWarfare
 ==============
 
-Need to add license stuff (need to choose a licence)
-Need to remove old repo + stuff
-Updated Ancient Warfare mod for Minecraft 1.4.5+ (rewrite)
+Updated Ancient Warfare mod for Minecraft 1.4.7+ (rewrite)
+Complete rewrite of structures module.
+Complete rewrite of vehicles module (client/server coms, interaction, crafting)
+Complete rewrite of soldiers module (more npc types, interaction, ai simplification)
+Improvements to Gates (Portcullis'), also, adding drawbridges, larger swing-style doors, and mid-open doors(star-trek style)
+Integration of teams into everything, from the ground up.
 
-http://techne.zeux.me/techne/editor
-http://sparklinlabs.com/2012/08/craftstudio-minecraft-exporter/
-http://www.minecraftforum.net/topic/1573373-continued-modelertool-mcmodeler-v13-new-in-13-linux-gui-redoundo-and-downloadable-texture-mapsmacpclinux/
+Overall reduced network use, only relaying necessary information.
+Greatly enhanced crafting mechanisms
+Introduction of research system
+Introduction of Civics Building system

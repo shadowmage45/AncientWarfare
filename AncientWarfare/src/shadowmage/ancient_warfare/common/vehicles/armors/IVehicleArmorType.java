@@ -34,6 +34,8 @@ public abstract float getGeneralDamageReduction();
 public abstract float getExplosiveDamageReduction();
 public abstract float getFireDamageReduction();
 
+public abstract float getArmorWeight();
+
 public abstract ItemStack getArmorStack(int qty);
 
 }

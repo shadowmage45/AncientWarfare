@@ -18,57 +18,28 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles;
+package shadowmage.ancient_warfare.common.soldiers;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
-import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
-import shadowmage.ancient_warfare.common.utils.Trig;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.world.World;
 
-public class VehicleCatapult extends VehicleBase
+public class NpcBase extends EntityCreature
 {
 
-public float armAngle = 0.f;
-public float armSpeed = 0.f;
-public float crankAngle = 0.f;
-public float crankSpeed = 0.f;
+public INpcType npcType = null;
 
 /**
  * @param par1World
  */
-public VehicleCatapult(World par1World)
+public NpcBase(World par1World)
   {
   super(par1World);
   }
 
 @Override
-public void onFiringUpdate()
+public int getMaxHealth()
   {
-  this.firingHelper.startLaunching();
+  return 0;
   }
-
-@Override
-public void onLaunchingUpdate()
-  {
-  this.firingHelper.spawnMissile(0, 0, 0);
-  this.firingHelper.setFinishedLaunching();
-  }
-
-@Override
-public void onReloadUpdate()
-  {
-  
-  }
-
-@Override
-public void onUpdate()
-  {
-  super.onUpdate();
-  this.armAngle = 90- this.turretPitch -7;
-  }
-
 
 }

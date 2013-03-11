@@ -137,7 +137,6 @@ public List getCreativeDisplayItems()
       {
       continue;
       }
-    Config.logDebug("material Type: "+type.getDisplayName());
     for(int i = 0; i < type.getMaterialType().getNumOfLevels(); i++)
       {
       stack = new ItemStack(ItemLoader.vehicleSpawner,1,type.getGlobalVehicleType());

@@ -26,7 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_warfare.common.missiles.DamageType;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
@@ -79,8 +81,26 @@ public void updateUpgrades()
   for(int i = 0; i < this.upgrades.size(); i++)
     {
     upInts[i] = this.upgrades.get(i).getUpgradeGlobalTypeNum();
-    }  
+    }
+  
   tag.setIntArray("ints", upInts);
+  
+  this.installedArmor.clear();
+  List<IVehicleArmorType> armors = vehicle.inventory.getInventoryArmor();
+  for(IVehicleArmorType ar : armors)
+    {
+    if(this.validArmorTypes.contains(ar))
+      {
+      this.installedArmor.add(ar);
+      }
+    }
+  int [] arInts = new int[this.installedArmor.size()];
+  for(int i = 0; i < this.installedArmor.size(); i++)
+    {
+    arInts[i] = this.installedArmor.get(i).getGlobalArmorType();        
+    }
+  tag.setIntArray("ints2", arInts);  
+  
   Packet02Vehicle pkt = new Packet02Vehicle();
   pkt.setParams(vehicle);
   pkt.setUpgradeData(tag);
@@ -104,6 +124,18 @@ public void handleUpgradePacketData(NBTTagCompound tag)
       this.upgrades.add(upgrade);
       }
     }
+  
+  this.installedArmor.clear();
+  int[] arInts = tag.getIntArray("ints2");
+  for(int i = 0; i < arInts.length; i++)
+    {
+    IVehicleArmorType armor = ArmorRegistry.instance().getArmorType(arInts[i]);
+    if(armor!=null)
+      {
+      this.installedArmor.add(armor);
+      }
+    }
+  
   this.updateUpgradeStats();
   }
 
@@ -117,6 +149,13 @@ public void updateUpgradeStats()
   for(IVehicleUpgradeType upgrade : this.upgrades)
     {
     upgrade.applyVehicleEffects(vehicle);
+    }
+  for(IVehicleArmorType armor : this.installedArmor)
+    {
+    vehicle.currentExplosionResist += armor.getExplosiveDamageReduction();
+    vehicle.currentFireResist += armor.getFireDamageReduction();
+    vehicle.currentGenericResist += armor.getGeneralDamageReduction();
+    vehicle.currentWeight += armor.getArmorWeight();
     }
   }
 
@@ -152,6 +191,19 @@ public void addValidUpgrade(int type)
     {
     this.validUpgrades.add(upgrade);
     }
+  }
+
+public float getScaledDamage(DamageSource src, int amt)
+  { 
+  if(src==DamageType.explosiveMissile || src== DamageType.explosion || src==DamageType.explosion2)
+    {
+    return (float) amt * vehicle.currentExplosionResist;
+    }
+  else if(src==DamageType.fireMissile || src == DamageType.inFire || src== DamageType.lava || src== DamageType.onFire || src.isFireDamage())
+    {
+    return (float) amt * vehicle.currentFireResist;
+    }  
+  return (float) amt * vehicle.currentGenericResist;
   }
 
 @Override

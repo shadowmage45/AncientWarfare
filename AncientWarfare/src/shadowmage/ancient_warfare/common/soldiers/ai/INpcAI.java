@@ -18,28 +18,20 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers;
+package shadowmage.ancient_warfare.common.soldiers.ai;
 
-import java.util.List;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
-import net.minecraft.entity.Entity;
-
-public interface INpcType
+public interface INpcAI
 {
 
-public abstract int getGlobalNpcType();
-public abstract int getRanks();
-public abstract String getEntityName();
-public abstract String getDisplayName();
-public abstract String getModelTexture();
+public abstract int getGlobalAIType();//global reference number for AI, used for reconstructing trees from data
+public abstract int getSuccessTicks();//how many ticks to check before executing again, if previous execution succeeded
+public abstract int getFailureTicks();//how many ticks to check before executing again, if previous execution failed
+public abstract boolean shouldExecute();//a quick pre-check to see if the task should execute this tick
+public abstract int[] exclusiveTasks();//tasks that cannot execute the same time as this
 
-public abstract int getNpcHealth();
-public abstract boolean isSoldier();
-public abstract boolean canMelee();//can this npc fight with whatever he has equipped?
-public abstract boolean canDriveSiegeEngines();//can this npc drive siege engines?
+public abstract void onTick(NpcBase npc);//apply your AI actions to the NPC here.  Called during the AI update loop, only if shouldExecute()==true && ticksTilTry<=0
 
-public abstract List getNpcAiTasks();
-
-public abstract void onTick(Entity ent);
 
 }

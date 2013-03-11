@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.registry;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.item.AWItemBase;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
@@ -31,12 +32,13 @@ import shadowmage.ancient_warfare.common.vehicles.armors.VehicleArmorStone;
 public class ArmorRegistry
 {
 
+public static IVehicleArmorType armorStone = new VehicleArmorStone(0);
+
+
+
 private ArmorRegistry(){}
 private static ArmorRegistry INSTANCE;
-
 private Map<Integer, IVehicleArmorType> armorInstances = new HashMap<Integer, IVehicleArmorType>();
-
-public static IVehicleArmorType armorStone = new VehicleArmorStone(0);
 
 public static ArmorRegistry instance()
   {
@@ -61,7 +63,14 @@ public IVehicleArmorType getArmorType(int type)
   return this.armorInstances.get(type);
   }
 
-
+public IVehicleArmorType getArmorForStack(ItemStack stack)
+  {
+  if(stack!=null && stack.itemID==ItemLoader.armorItem.itemID)
+    {
+    return armorInstances.get(stack.getItemDamage());
+    }      
+  return null;
+  }
 
 
 }

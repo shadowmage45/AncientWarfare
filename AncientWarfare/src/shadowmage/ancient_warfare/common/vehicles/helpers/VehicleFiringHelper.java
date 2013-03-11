@@ -20,17 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.helpers;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.Pair;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -70,9 +69,13 @@ public Pos3f targetPos = null;
 public boolean isFiring = false;
 
 /**
- * if this vehicle isFiring, has it already launched, and is in the process of cooling down?
+ * has started launching...
  */
-public boolean hasLaunched = false;
+public boolean isLaunching = false;
+/**
+ * if this vehicle isFiring, has it already finished launched, and is in the process of cooling down?
+ */
+public boolean finishedLaunching = false;
 
 /**
  * how many ticks until this vehicle is done reloading and can fire again
@@ -84,6 +87,36 @@ private VehicleBase vehicle;
 public VehicleFiringHelper(VehicleBase vehicle)
   {
   this.vehicle = vehicle;
+  }
+
+/**
+ * spawn a missile of current missile type, with current firing paramaters, with additional raw x, y, z offsets
+ * @param ox
+ * @param oy
+ * @param oz
+ */
+public void spawnMissile(float ox, float oy, float oz)
+  {
+  if(!vehicle.worldObj.isRemote)
+    {      
+    if(vehicle.ammoHelper.getCurrentAmmoCount()>0)
+      {
+      vehicle.ammoHelper.decreaseCurrentAmmo(1);
+      
+      Pos3f off = vehicle.getMissileOffset();
+      Config.logDebug("offset: "+off.toString());
+      float x = (float) vehicle.posX + off.x + ox;
+      float y = (float) vehicle.posY + off.y + oy;
+      float z = (float) vehicle.posZ + off.z + oz;
+      float power = vehicle.launchPowerCurrent> getAdjustedMaxMissileVelocity() ? getAdjustedMaxMissileVelocity() : vehicle.launchPowerCurrent;
+      MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, vehicle.rotationYaw, vehicle.turretPitch, power);
+      if(missile!=null)
+        {
+        Config.logDebug("launching missile server side");
+        vehicle.worldObj.spawnEntityInWorld(missile);
+        }
+      }
+    }
   }
 
 public void onTick()
@@ -98,12 +131,16 @@ public void onTick()
     this.vehicle.onReloadUpdate();
     if(this.reloadingTicks<=0)
       {
-      this.hasLaunched = false;
+      this.finishedLaunching = false;
       this.isFiring = false;
+      this.isLaunching = false;
       this.reloadingTicks = 0;      
       }
     }
-  
+  if(this.isFiring && this.isLaunching && !this.finishedLaunching)
+    {
+    vehicle.onLaunchingUpdate();
+    }  
   if(vehicle.worldObj.isRemote)
     {
     if(!vehicle.canAimPitch())
@@ -121,6 +158,30 @@ public void onTick()
     }
   }
 
+public float getAdjustedMaxMissileVelocity()
+  {
+  float velocity = vehicle.launchSpeedCurrentMax;  
+  IAmmoType ammo = vehicle.ammoHelper.getCurrentAmmoType();
+  if(ammo!=null)
+    {
+    float missileWeight = ammo.getAmmoWeight();
+    if(missileWeight>vehicle.vehicleType.getMaxMissileWeight())
+      {
+      velocity *= vehicle.vehicleType.getMaxMissileWeight()/missileWeight;
+      }
+    }
+  return velocity;
+  }
+
+public float getAccuracyAdjustment()
+  {
+  float accuracy = this.vehicle.accuracyCurrent;
+  if(vehicle.riddenByEntity!=null && vehicle.riddenByEntity instanceof NpcBase)
+    {
+    //TODO adjust accuracy by soldier accuracy offset amount...
+    }  
+  return accuracy;
+  }
 
 /**
  * if not already firing, this will initiate the launch sequence
@@ -133,38 +194,19 @@ public void startMissileLaunch()
     }
   }
 
-/**
- * has to be called from vehicle.onFiringUpdate, triggers fireMissile()--
- * @return true if missile was launched
- */
-public boolean launchMissile()
+public void startLaunching()
   {
-  if(this.isFiring && !this.hasLaunched)
-    {
-    this.hasLaunched = true;
-    this.reloadingTicks = vehicle.reloadTimeCurrent;
-    if(!vehicle.worldObj.isRemote)
-      {      
-      if(vehicle.ammoHelper.getCurrentAmmoCount()>0)
-        {
-        vehicle.ammoHelper.decreaseCurrentAmmo(1);
-        
-        Pos3f off = vehicle.getMissileOffset();
-        Config.logDebug("offset: "+off.toString());
-        float x = (float) vehicle.posX + off.x;
-        float y = (float) vehicle.posY + off.y;
-        float z = (float) vehicle.posZ + off.z;
-        MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, vehicle.rotationYaw, vehicle.turretPitch, vehicle.launchPowerCurrent);
-        if(missile!=null)
-          {
-          Config.logDebug("launching missile server side");
-          vehicle.worldObj.spawnEntityInWorld(missile);
-          }
-        }
-      }
-    return true;
-    }  
-  return false;
+  this.isFiring = true;
+  this.isLaunching = true;
+  this.finishedLaunching = false;
+  }
+
+public void setFinishedLaunching()
+  {
+  this.isFiring = true;
+  this.finishedLaunching = true;
+  this.isLaunching = false;
+  this.reloadingTicks = vehicle.reloadTimeCurrent; 
   }
 
 public float getBestAngle(float a, float b)
@@ -322,9 +364,9 @@ public void handleAimKeyInput(float pitch, float yaw)
       {
       powerTest = 0;
       }
-    else if(powerTest>vehicle.launchSpeedCurrentMax)
+    else if(powerTest>getAdjustedMaxMissileVelocity())
       {
-      powerTest = vehicle.launchSpeedCurrentMax;
+      powerTest = getAdjustedMaxMissileVelocity();
       }
     if(this.clientLaunchSpeed!=powerTest)
       {
@@ -412,7 +454,7 @@ public void handleAimMouseInput(Vec3 target)
   else if(vehicle.canAimPower())
     {     
     float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.turretPitch, Settings.getClientPowerIterations());
-    if(this.clientLaunchSpeed!=power && power < vehicle.launchSpeedCurrentMax)
+    if(this.clientLaunchSpeed!=power && power < getAdjustedMaxMissileVelocity())
       {
       this.clientLaunchSpeed = power;
       updated = true;

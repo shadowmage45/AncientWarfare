@@ -43,12 +43,13 @@ public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Co
 public static final AWItemBase structureCreativeBuilderTicked = new ItemBuilderTicked(Config.getItemID("itemSingle.structureBuilderCreativeTicked", 13008, "Creative-mode slow (ticked) builder"));
 public static final AWItemBase debugEditor = new ItemCreativeEditor(Config.getItemID("itemSingle.templateEditor", 13009, "Creative-mode template editor"));
 public static final AWItemBase armorItem = new ItemVehicleArmor(Config.getItemID("itemMulti.vehicleArmor", 13010, "Vehicle Armor Component"));
+public static final AWItemBase npcSpawner = new ItemNpcSpawner(Config.getItemID("itemMulti.npcSpawner", 13010, "Npc Spawning Item"));
+
 /**
  * debug items, will only be given instances if debug is enabled in Config
  * e.g. will be null unless debug mode is on
  */
 public static AWItemBase blockScanner;
-public static AWItemBase vehicleDebugSpawner;
 
 
 private static ItemLoader INSTANCE;
@@ -85,6 +86,7 @@ private void loadItems()
   this.registerItemWithSubtypes(vehicleSpawner);
   this.registerItemWithSubtypes(vehicleUpgrade);
   this.registerItemWithSubtypes(armorItem);
+  this.registerItemWithSubtypes(npcSpawner);
   }
 
 private void loadRecipes()
@@ -100,8 +102,6 @@ private void loadDebugItems()
     }  
   blockScanner = new ItemBlockScanner(Config.getItemID("debug.blockScanner", 9000));
   this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block");
-  vehicleDebugSpawner = new ItemDebugSpawner(Config.getItemID("debug.vehicleSpawner", 9023));
-  this.registerItemSingle(vehicleDebugSpawner, "Debug Spawner", "Spawns Various Entities", "Right click to spawn current debug entity");
   }
 
 private ItemStack createItemSubtype(AWItemBase item, int dmg, String name)

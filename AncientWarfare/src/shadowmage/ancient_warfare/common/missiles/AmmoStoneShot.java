@@ -83,7 +83,7 @@ public float getDragFactor()
   }
 
 @Override
-public float getWeightFactor()
+public float getAmmoWeight()
   {
   return 0;
   }

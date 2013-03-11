@@ -17,29 +17,50 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
+
+
  */
-package shadowmage.ancient_warfare.common.soldiers;
+package shadowmage.ancient_warfare.common.item;
 
-import java.util.List;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-import net.minecraft.entity.Entity;
-
-public interface INpcType
+public class CreativeTabAWVehicle extends CreativeTabs
 {
 
-public abstract int getGlobalNpcType();
-public abstract int getRanks();
-public abstract String getEntityName();
-public abstract String getDisplayName();
-public abstract String getModelTexture();
+private static CreativeTabAWVehicle INSTANCE = new CreativeTabAWVehicle("Ancient Warfare Vehicles");
 
-public abstract int getNpcHealth();
-public abstract boolean isSoldier();
-public abstract boolean canMelee();//can this npc fight with whatever he has equipped?
-public abstract boolean canDriveSiegeEngines();//can this npc drive siege engines?
+public static CreativeTabAWVehicle instance()
+  {
+  return INSTANCE;
+  }
 
-public abstract List getNpcAiTasks();
+private CreativeTabAWVehicle(String label)
+  {
+  super(label); 
+  }
 
-public abstract void onTick(Entity ent);
+@SideOnly(Side.CLIENT)
+
+/**
+ * Get the ItemStack that will be rendered to the tab.
+ */
+@Override
+public ItemStack getIconItemStack()
+  {
+  return new ItemStack(ItemLoader.vehicleSpawner,1,0);
+  }
+
+/**
+ * Gets the translated Label.
+ */
+@Override
+public String getTranslatedTabLabel()
+  {
+  return this.getTabLabel();
+  }
 
 }

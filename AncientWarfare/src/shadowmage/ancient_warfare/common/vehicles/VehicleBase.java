@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
+import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
@@ -72,6 +73,10 @@ public float baseHealth = 100;
 public float baseAccuracy = 1.f;
 public float baseWeight = 1000;//kg
 public int reloadTimeBase = 100;
+public float baseGenericResist = 0.f;
+public float baseFireResist = 0.f;
+public float baseExplosionResist = 0.f;
+
 
 /**
  * in meters/second
@@ -88,6 +93,10 @@ public float accuracyCurrent = 1.f;
 public float turretPitchMin = 0.f;
 public float turretPitchMax = 90.f;
 public float launchSpeedCurrentMax = 32.321f;
+public float currentGenericResist = 0.f;
+public float currentFireResist = 0.f;
+public float currentExplosionResist = 0.f;
+public float currentWeight = 1000.f;
 
 /**
  * local variables
@@ -157,6 +166,10 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
     {
     this.upgradeHelper.addValidArmor(armor);
     }
+  this.inventory.ammoInventory = new AWInventoryBasic(vehicle.getAmmoBaySize(), this.inventory);
+  this.inventory.armorInventory = new AWInventoryBasic(vehicle.getArmorBaySize(), this.inventory);
+  this.inventory.storageInventory = new AWInventoryBasic(vehicle.getStorageBaySize(), this.inventory);
+  this.inventory.upgradeInventory = new AWInventoryBasic(vehicle.getUpgradeBaySize(), this.inventory);
   this.updateBaseStats();
   }
 
@@ -173,7 +186,10 @@ public void updateBaseStats()
   baseLaunchSpeedMax = vehicleType.getBaseMissileVelocityMax();
   baseHealth = vehicleType.getBaseHealth() * material.getHPFactor(level);
   baseAccuracy = vehicleType.getBaseAccuracy() * material.getAccuracyFactor(level);
-  baseWeight = vehicleType.getBaseWeight() * material.getWeightFactor(level);  
+  baseWeight = vehicleType.getBaseWeight() * material.getWeightFactor(level); 
+  this.baseExplosionResist = 0.f;
+  this.baseFireResist = 0.f;
+  this.baseGenericResist = 0.f;
   }
 
 public float getHorizontalMissileOffset()
@@ -265,6 +281,11 @@ public abstract void onFiringUpdate();
 public abstract void onReloadUpdate();
 
 /**
+ * called every tick after startLaunching() is called, until setFinishedLaunching() is called...
+ */
+public abstract void onLaunchingUpdate();
+
+/**
  * reset all upgradeable stats back to the base for this vehicle
  */
 public void resetUpgradeStats()
@@ -279,6 +300,10 @@ public void resetUpgradeStats()
   this.turretRotationMax = this.baseTurretRotationMax;
   this.reloadTimeCurrent = this.reloadTimeBase;
   this.launchSpeedCurrentMax = this.baseLaunchSpeedMax;
+  this.currentExplosionResist = this.baseExplosionResist;
+  this.currentFireResist = this.baseFireResist;
+  this.currentGenericResist = this.baseGenericResist;
+  this.currentWeight = this.baseWeight;
   }
 
 /**
@@ -400,7 +425,7 @@ public void handlePacketUpdate(NBTTagCompound tag)
     }
   if(tag.hasKey("health"))
     {    
-    this.handleHealthUpdateData(tag);
+    this.handleHealthUpdateData(tag.getFloat("health"));
     }
   if(tag.hasKey("upgrade"))
     {
@@ -437,9 +462,9 @@ public void handleClientMoveData(NBTTagCompound tag)
   this.moveHelper.strafeMotion = sm;
   }
 
-public void handleHealthUpdateData(NBTTagCompound tag)
+public void handleHealthUpdateData(float health)
   {
-  this.vehicleHealth = tag.getFloat("health");
+  this.vehicleHealth = health;
   }
 
 public void handleInputData(NBTTagCompound tag)
@@ -461,13 +486,21 @@ public void handleKeyboardMovement(byte forward, byte strafe)
 
 @Override
 public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
-  {
+  {  
   super.attackEntityFrom(par1DamageSource, par2);
-  this.vehicleHealth-=par2;
+  float adjDmg = upgradeHelper.getScaledDamage(par1DamageSource, par2);
+  this.vehicleHealth -= adjDmg;  
   if(this.vehicleHealth<=0)
     {
     this.setDead();
     return true;
+    }
+  if(!this.worldObj.isRemote)
+    {
+    Packet02Vehicle pkt = new Packet02Vehicle();
+    pkt.setParams(this);
+    pkt.setHealthUpdate(this.vehicleHealth);
+    pkt.sendPacketToAllTrackingClients(this);
     }
   return false;
   }
@@ -521,7 +554,7 @@ public void setPositionAndRotation2(double par1, double par3, double par5, float
 
 public void setPositionAndRotationNormalized(double par1, double par3, double par5, float yaw, float par8, int par9)
   {
-  if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
+  if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())//if this is a client instance, and thePlayer is riding...
     {
     if(Config.clientVehicleMovement)
       {

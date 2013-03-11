@@ -53,7 +53,7 @@ boolean isRocket();//determines flight characteristics
 boolean isPersistent();//should die on impact, or stay on ground(arrows)
 float getGravityFactor();// per-tick gravity acceleration
 float getDragFactor();//0-1 float (velocity *= dragFactor) applied per-tick..
-float getWeightFactor();// | 0 <-> 1.f |  factor applied to initial velocity
+float getAmmoWeight();// | 0 <-> 1.f |  factor applied to initial velocity
 
 void onImpactWorld(World world, float x, float y, float z);//called when the entity impacts a world block
 void onImpactEntity(World world, Entity ent, float x, float y, float z);//called when the entity impacts another entity

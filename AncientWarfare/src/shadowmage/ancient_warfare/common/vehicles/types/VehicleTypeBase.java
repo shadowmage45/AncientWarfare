@@ -76,6 +76,8 @@ public float turretRotationMax;
 public float baseMissileVelocityMax;
 public float baseHealth = 100;
 
+public float baseMissileMaxWeight = 10;
+
 public float accuracy = 1.f;
 
 public String displayName = "AWVehicleBase";
@@ -84,6 +86,11 @@ public String displayTooltip = "AWVehicleBase";
 public List<IAmmoType> validAmmoTypes = new ArrayList<IAmmoType>();
 public List<IVehicleUpgradeType> validUpgrades = new ArrayList<IVehicleUpgradeType>();
 public List<IVehicleArmorType> validArmors = new ArrayList<IVehicleArmorType>();
+
+int storageBaySize = 0;
+int ammoBaySize = 6;
+int upgradeBaySize = 3;
+int armorBaySize = 3;
 
 public int materialCount = 1;
 public List<ItemStack> additionalMaterials = new ArrayList<ItemStack>();
@@ -317,6 +324,36 @@ public ItemStack getStackForLevel(int level)
   tag.setInteger("lev", level);
   stack.setTagInfo("AWVehSpawner", tag);
   return stack;
+  }
+
+@Override
+public int getStorageBaySize()
+  {
+  return this.storageBaySize;
+  }
+
+@Override
+public int getAmmoBaySize()
+  {
+  return this.ammoBaySize;
+  }
+
+@Override
+public int getArmorBaySize()
+  {
+  return this.armorBaySize;
+  }
+
+@Override
+public int getUpgradeBaySize()
+  {
+  return this.upgradeBaySize;
+  }
+
+@Override
+public float getMaxMissileWeight()
+  {
+  return this.baseMissileMaxWeight;
   }
 
 }

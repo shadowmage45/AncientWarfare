@@ -23,6 +23,7 @@
 package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -94,7 +95,11 @@ public void execute()
     if(tag.hasKey("teamData"))
       {
       TeamTracker.instance().handleClientInit(tag.getCompoundTag("teamData"));
-      }    
+      } 
+    if(tag.hasKey("config"))
+      {
+      Config.instance().handleClientInit(tag.getCompoundTag("configData"));
+      }
     }  
   
   /**

@@ -18,28 +18,23 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers;
+package shadowmage.ancient_warfare.common.missiles;
 
-import java.util.List;
+import net.minecraft.util.DamageSource;
 
-import net.minecraft.entity.Entity;
-
-public interface INpcType
+public class DamageType extends DamageSource
 {
 
-public abstract int getGlobalNpcType();
-public abstract int getRanks();
-public abstract String getEntityName();
-public abstract String getDisplayName();
-public abstract String getModelTexture();
+public static DamageType fireMissile = (DamageType) new DamageType("AWFireMissile").setFireDamage().setProjectile();
+public static DamageType explosiveMissile = (DamageType) new DamageType("AWExplMissile").setFireDamage().setProjectile();
+public static DamageType genericMissile = (DamageType) new DamageType("AWGenMissile").setProjectile();
+public static DamageType piercingMissile = (DamageType) new DamageType("AWPierceMissile").setDamageBypassesArmor().setProjectile();
 
-public abstract int getNpcHealth();
-public abstract boolean isSoldier();
-public abstract boolean canMelee();//can this npc fight with whatever he has equipped?
-public abstract boolean canDriveSiegeEngines();//can this npc drive siege engines?
-
-public abstract List getNpcAiTasks();
-
-public abstract void onTick(Entity ent);
-
+/**
+ * @param par1Str
+ */
+protected DamageType(String par1Str)
+  {
+  super(par1Str);
+  }
 }

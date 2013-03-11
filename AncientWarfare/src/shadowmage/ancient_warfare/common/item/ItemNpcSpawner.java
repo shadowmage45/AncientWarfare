@@ -17,8 +17,6 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
 package shadowmage.ancient_warfare.common.item;
 
@@ -29,67 +27,68 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
+import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-
-public class ItemVehicleSpawner extends AWItemClickable
+public class ItemNpcSpawner extends AWItemClickable
 {
-
-public ItemVehicleSpawner(int itemID)
+/**
+ * @param itemID
+ * @param hasSubTypes
+ */
+public ItemNpcSpawner(int itemID)
   {
-  super(itemID,true);
+  super(itemID, true);
   this.setCreativeTab(CreativeTabAWVehicle.instance());
-  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/vehicles.png");
-  this.setItemName("awVehicleItem");
+  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/npcs.png");
+  this.setItemName("awNpcItem");
   }
 
 @Override
 public String getItemNameIS(ItemStack par1ItemStack)
   {
-  return "Vehicle" + String.valueOf(par1ItemStack.getItemDamage()); 
+  return "Npc" + String.valueOf(par1ItemStack.getItemDamage()); 
   }
 
 @Override
-public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,    BlockPosition hit, int side)
   {
   if(hit==null || world.isRemote || stack == null)
     {
     return false;
     }
-  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWVehSpawner"))
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
     {
-    int level = stack.getTagCompound().getCompoundTag("AWVehSpawner").getInteger("lev");    
+    int level = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");    
     hit = BlockTools.offsetForSide(hit, side);      
-    VehicleBase vehicle = VehicleRegistry.instance().getVehicleForType(world, stack.getItemDamage(), level);
-    vehicle.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
-    vehicle.prevRotationYaw = vehicle.rotationYaw = player.rotationYaw;
-    world.spawnEntityInWorld(vehicle);      
-    if(!player.capabilities.isCreativeMode)
-      {
-      stack.stackSize--;
-      if(stack.stackSize<=0)
-        {
-        player.inventory.setInventorySlotContents(player.inventory.currentItem, null);    
-        }
-      }
+//    VehicleBase vehicle = VehicleRegistry.instance().getVehicleForType(world, stack.getItemDamage(), level);
+//    vehicle.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
+//    vehicle.prevRotationYaw = vehicle.rotationYaw = player.rotationYaw;
+//    world.spawnEntityInWorld(vehicle);      
+//    if(!player.capabilities.isCreativeMode)
+//      {
+//      stack.stackSize--;
+//      if(stack.stackSize<=0)
+//        {
+//        player.inventory.setInventorySlotContents(player.inventory.currentItem, null);    
+//        }
+//      }
     return true;
     }
-  Config.logError("Vehicle spawner item was missing NBT data, something may have corrupted this item");
+  Config.logError("Npc spawner item was missing NBT data, something may have corrupted this item");
   return false;
   }
 
 @Override
 public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
   {
-  super.addInformation(stack, par2EntityPlayer, par3List, par4);  
+  super.addInformation(stack, par2EntityPlayer, par3List, par4); 
   if(stack!=null)
     {
-    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWVehSpawner"))
+    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
       {
-      par3List.add("Material Level: "+stack.getTagCompound().getCompoundTag("AWVehSpawner").getInteger("lev"));
+      par3List.add("NPC Rank: "+stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev"));
       }
     }  
   }
@@ -97,8 +96,7 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
 @Override
 public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {
-  List displayStacks = VehicleRegistry.instance().getCreativeDisplayItems();
+  List displayStacks = NpcRegistry.instance().getCreativeDisplayItems();
   par3List.addAll(displayStacks);
   }
-
 }

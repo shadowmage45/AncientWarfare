@@ -25,10 +25,12 @@ package shadowmage.ancient_warfare.common.config;
 import java.io.File;
 import java.util.logging.Logger;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_warfare.common.AWStructureModule;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 
-public class Config 
+public class Config
 {
 //*******************************************************FIELDS**********************************************//
 
@@ -56,6 +58,11 @@ public static String templateExtension = "aws";
 
 public static int trajectoryIterationsServer = 20;
 
+/**
+ * the base (Server side) and current (client side) values...
+ */
+public static boolean clientVehicleMovementBase = true;
+public static int clientMoveUpdateTicksBase = 3;
 public static boolean clientVehicleMovement = true;
 public static int clientMoveUpdateTicks = 3;
 
@@ -193,6 +200,23 @@ private void setStructureInfo()
     AWStructureModule.instance().setExportDefaults();
     }
   
+  }
+
+public void handleClientInit(NBTTagCompound tag)
+  {
+  if(tag.hasKey("cm"))
+    {
+    this.clientVehicleMovement = tag.getBoolean("cm");
+    this.clientMoveUpdateTicks = tag.getInteger("cmt");
+    }
+  }
+
+public NBTTagCompound getClientInitData()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setBoolean("cm", this.clientVehicleMovementBase);
+  tag.setInteger("cmt", this.clientMoveUpdateTicksBase);
+  return tag;
   }
 
 }

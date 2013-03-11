@@ -76,6 +76,13 @@ public abstract List<IAmmoType> getValidAmmoTypes();
 public abstract List<IVehicleUpgradeType> getValidUpgrades();
 public abstract List<IVehicleArmorType> getValidArmors();
 
+public abstract int getStorageBaySize();
+public abstract int getAmmoBaySize();
+public abstract int getArmorBaySize();
+public abstract int getUpgradeBaySize();
+
+public abstract float getMaxMissileWeight();//in KG--will be adjusted by material... any additional missile weight over this will reduce max launch speed by a ratio
+
 public abstract int getMaterialQuantity();//get the quantity of the main material to construct this vehicle
 public abstract List<ItemStack> getAdditionalMaterials();//get a list of additional materials needed to construct this vehicle
 

@@ -31,9 +31,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.IInventoryCallback;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
+import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmoEntry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 public class VehicleInventory implements IInventoryCallback
@@ -46,18 +48,14 @@ private VehicleBase vehicle;
  * individual inventories
  * 
  */
-public AWInventoryBasic upgradeInventory = new AWInventoryBasic(6);
-public AWInventoryBasic ammoInventory = new AWInventoryBasic(6);
-public AWInventoryBasic armorInventory = new AWInventoryBasic(6);
-public AWInventoryBasic storageInventory = new AWInventoryBasic(27);
+public AWInventoryBasic upgradeInventory;// = new AWInventoryBasic(6);
+public AWInventoryBasic ammoInventory;// = new AWInventoryBasic(6);
+public AWInventoryBasic armorInventory;// = new AWInventoryBasic(6);
+public AWInventoryBasic storageInventory;// = new AWInventoryBasic(27);
 
 public VehicleInventory(VehicleBase vehicle)
   {  
-  this.vehicle = vehicle; 
-  this.upgradeInventory.addCallback(this);
-  this.ammoInventory.addCallback(this);
-  this.armorInventory.addCallback(this);
-  this.storageInventory.addCallback(this);
+  this.vehicle = vehicle;   
   }
 
 /**
@@ -67,10 +65,22 @@ public VehicleInventory(VehicleBase vehicle)
 public void writeToNBT(NBTTagCompound commonTag)
   {
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setCompoundTag("uI", this.upgradeInventory.getNBTTag());
-  tag.setCompoundTag("amI", this.ammoInventory.getNBTTag());
-  tag.setCompoundTag("sI", this.storageInventory.getNBTTag());
-  tag.setCompoundTag("arI", this.armorInventory.getNBTTag());
+  if(this.upgradeInventory!=null)
+    {
+    tag.setCompoundTag("uI", this.upgradeInventory.getNBTTag());
+    }
+  if(this.ammoInventory!=null)
+    {
+    tag.setCompoundTag("amI", this.ammoInventory.getNBTTag());
+    }
+  if(this.storageInventory!=null)
+    {
+    tag.setCompoundTag("sI", this.storageInventory.getNBTTag());
+    }
+  if(this.armorInventory!=null)
+    {
+    tag.setCompoundTag("arI", this.armorInventory.getNBTTag());
+    }
   commonTag.setTag("inv", tag);
   }
 
@@ -87,10 +97,22 @@ public void readFromNBT(NBTTagCompound commonTag)
     return;
     }
   NBTTagCompound tag = commonTag.getCompoundTag("inv"); 
-  this.upgradeInventory.readFromNBT(tag.getCompoundTag("uI"));
-  this.ammoInventory.readFromNBT(tag.getCompoundTag("amI"));
-  this.storageInventory.readFromNBT(tag.getCompoundTag("sI"));  
-  this.armorInventory.readFromNBT(tag.getCompoundTag("arI"));
+  if(this.upgradeInventory!=null)
+    {
+    this.upgradeInventory.readFromNBT(tag.getCompoundTag("uI"));
+    }
+  if(this.ammoInventory!=null)
+    {
+    this.ammoInventory.readFromNBT(tag.getCompoundTag("amI"));
+    }
+  if(this.storageInventory!=null)
+    {
+    this.storageInventory.readFromNBT(tag.getCompoundTag("sI"));
+    }
+  if(this.armorInventory!=null)
+    {
+    this.armorInventory.readFromNBT(tag.getCompoundTag("arI"));
+    }
   }
 
 @Override
@@ -106,6 +128,21 @@ public void onInventoryChanged(IInventory changedInv, List<Integer> slotNums)
     }  
   }
 
+public List<IVehicleArmorType> getInventoryArmor()
+  {
+  ArrayList<IVehicleArmorType> armors = new ArrayList<IVehicleArmorType>();
+  for(int i = 0; i < this.armorInventory.getSizeInventory(); i++)
+    {
+    ItemStack stack = this.armorInventory.getStackInSlot(i);
+    IVehicleArmorType upgrade = ArmorRegistry.instance().getArmorForStack(stack);
+    if(upgrade!=null)
+      {
+      armors.add(upgrade);
+      }     
+    }
+  return armors;  
+  }
+  
 public List<IVehicleUpgradeType> getInventoryUpgrades()
   {
   ArrayList<IVehicleUpgradeType> upgrades = new ArrayList<IVehicleUpgradeType>();

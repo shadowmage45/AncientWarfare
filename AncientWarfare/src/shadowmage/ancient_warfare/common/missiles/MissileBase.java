@@ -65,6 +65,7 @@ int blockY;
 int blockZ;
 int blockID;
 int blockMeta;
+
 /**
  * @param par1World
  */
@@ -73,7 +74,6 @@ public MissileBase(World par1World)
   super(par1World);
   this.entityCollisionReduction = 1.f;
   }
-
 
 /**
  * called server side after creating but before spawning. ammoType is set client-side by the readSpawnData method, as should all other movement (rotation/motion) params.
@@ -139,12 +139,17 @@ public void onImpactWorld()
   }
 
 @Override
+public void applyEntityCollision(Entity par1Entity)
+  {
+  //NOOP..they can't freaking collide in this manner...
+  }
+
+@Override
 public void onUpdate()
   {
   super.onUpdate();
   this.onMovementTick();
   }
-
 
 public void onMovementTick()
   {

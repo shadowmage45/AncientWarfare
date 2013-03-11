@@ -26,6 +26,7 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
@@ -84,7 +85,11 @@ public void onPlayerLogin(EntityPlayer player)
     {
     initTag.setCompoundTag("teamData", tag);
     }
-  
+  tag = Config.instance().getClientInitData();
+  if(tag!=null)
+    {
+    initTag.setCompoundTag("configData", tag);
+    }  
   Packet01ModData init = new Packet01ModData();
   init.setInitData(initTag);
   AWCore.proxy.sendPacketToPlayer(player, init);  
