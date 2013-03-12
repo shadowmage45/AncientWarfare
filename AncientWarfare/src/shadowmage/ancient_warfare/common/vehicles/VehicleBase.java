@@ -451,7 +451,109 @@ public void updateTurretRotation()
     {
     turretRotation = turretDestRot;
     }
+  
+  byte turnDirection = 0;
   //TODO
+  //from cat-mod
+  /**
+   * desiredYawDegrees = desiredYawDegrees % 360.f;//mod 360, normalize to 0-359
+  if(desiredYawDegrees < 0)
+    {
+    desiredYawDegrees += 360;
+    }  
+  if(this.aimYaw >=360)
+    {
+    this.aimYaw -= 360;
+    }
+  if(this.aimYaw < 0)
+    {
+    this.aimYaw += 360;
+    }
+  this.desiredYaw = desiredYawDegrees;
+  float aim = this.aimYaw % 360.f;
+  float desired = (float)(this.desiredYaw % 360.d);
+  float rawDiff = 0;
+  float delta = 0;
+  int turn = 0;
+  if(aim > desired)
+    {
+    rawDiff = aim - desired;    
+    }
+  else
+    {    
+    rawDiff = desired - aim;
+    }
+  if(rawDiff > 180.f)
+    {
+    delta = 360.f - rawDiff;    
+    }
+  else
+    {
+    delta = rawDiff;
+    }
+  if(rawDiff < 180)
+    {
+    if(aim<desired)
+      {
+      turn = 1;
+      }
+    else
+      {
+      turn = -1;
+      }
+    }
+  else
+    {
+    if(aim<desired)
+      {
+      turn =-1;
+      }
+    else
+      {
+      turn =1;
+      }
+    }
+  if(delta >=360)
+    {
+    delta = delta % 360;
+    }
+  this.turnDirection = turn;
+  this.yawDelta = delta;
+  this.isTurretTurning = true;
+  if(this.yawDelta == 0)
+    {
+    this.isTurretTurning = false;
+    this.turnDirection = 0;
+    }  
+   */
+  /*******************************************************************************/
+  /**
+   * if (this.aimYaw != this.desiredYaw)
+    {
+    this.aimYaw += this.turnDirection;
+    if(this.aimYaw >=360)
+      {
+      this.aimYaw -= 360;
+      }
+    if(this.aimYaw < 0)
+      {
+      this.aimYaw += 360;
+      }
+    this.yawDelta--;
+    this.needsCalcAngles = true;
+    if(this.yawDelta < 1.f)
+      {
+      this.yawDelta = 0;
+      this.isTurretTurning = false;
+      this.turnDirection = 0;
+      }
+    return false;
+    }
+  this.needsCalcAngles = true;
+  this.isTurretTurning = false;
+  this.turnDirection = 0;
+  return true;
+   */
   }
 
 /**
