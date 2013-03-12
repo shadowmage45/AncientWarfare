@@ -27,12 +27,10 @@ VEHICLES
 * add armor types
 * onHit client-side animation (can use the client-side health update method to trigger on - health updates)
 * final vehicle gui will need slots that only accept stack size 1 and that validate against the vehicles valid<whatever type> list
-* add team stuff to vehicle, basic flag rendering call in vehicle base render
-* set vehicles to not fire if their current ammo type is valid but empty (don't trigger/send firing animation start packet)
 * remove old targetPos code...
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
 * fix catapult and ballista models--flags need to be seperate pieces, not attached to the base (so they can use custom textures)
-
+* create rockets (will require some hackery for their flight dynamics)
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
@@ -192,13 +190,15 @@ TWEAKS/OPTIMIZATION
 * add catapult animation.
 * set catapult firing angle to 70'
 * hmm..whats this...added the ballista?
+/********** 03-12-13 **********/
+* clean up team stuff
+* set vehicles to not fire if their current ammo type is valid but empty (don't trigger/send firing animation start packet)
     
 
 
 
 
 
-/********** 03-12-13 **********/
 /********** 03-13-13 **********/
 /********** 03-14-13 **********/
 /********** 03-15-13 **********/
