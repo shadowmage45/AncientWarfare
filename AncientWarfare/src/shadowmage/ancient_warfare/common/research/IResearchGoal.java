@@ -18,23 +18,20 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles.armors;
+package shadowmage.ancient_warfare.common.research;
 
-public class VehicleArmorStone extends VehicleArmorBase
+import java.util.List;
+
+public interface IResearchGoal
 {
 
-/**
- * @param armorType
- */
-public VehicleArmorStone(int armorType)
-  {
-  super(armorType);
-  this.displayName = "Stone Armor Tier 1";
-  this.tooltip = "Reduces fire damage by ~7%";
-  this.general = 2.5f;
-  this.explosive = 2.5f;
-  this.fire = 7;
-  }
 
+public abstract int getGlobalResearchNum();
+public abstract String getDisplayName();
+public abstract String getDisplayTooltip();
+public abstract List<IResearchGoal> getDependencies();
+public abstract List<String> getDetailedDescription();
+public abstract IResearchGoal getGoalByNumber(int num);
+public abstract void addDependencies(IResearchGoal... deps);
 
 }

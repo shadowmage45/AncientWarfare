@@ -28,6 +28,9 @@ public abstract class VehicleUpgradeBase implements IVehicleUpgradeType
 {
 
 int typeNum = 0;
+String displayName = "";
+String tooltip = "";
+
 
 public VehicleUpgradeBase(int num)
   {
@@ -38,6 +41,18 @@ public VehicleUpgradeBase(int num)
 public int getUpgradeGlobalTypeNum()
   {
   return typeNum;
+  }
+
+@Override
+public String getDisplayName()
+  {
+  return displayName;
+  }
+
+@Override
+public String getDisplayTooltip()
+  {
+  return tooltip;
   }
 
 @Override

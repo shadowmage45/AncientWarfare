@@ -33,19 +33,8 @@ public class VehicleUpgradeSpeed extends VehicleUpgradeBase
 public VehicleUpgradeSpeed(int num)
   {
   super(num);
-  }
-
-@Override
-public String getDisplayName()
-  {
-  // TODO Auto-generated method stub
-  return "Iron Bearings";
-  }
-
-@Override
-public String getDisplayTooltip()
-  {
-  return "Increases Vehicle Max Speed by 0.25m/s";
+  this.displayName = "Iron Bearings";
+  this.tooltip = "Increases Vehicle Max Speed by 0.25m/s";
   }
 
 @Override

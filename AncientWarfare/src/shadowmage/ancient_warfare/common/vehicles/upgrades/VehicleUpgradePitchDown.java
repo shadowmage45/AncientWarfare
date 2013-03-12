@@ -18,23 +18,28 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles.armors;
+package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
-public class VehicleArmorStone extends VehicleArmorBase
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+
+public class VehicleUpgradePitchDown extends VehicleUpgradeBase
 {
 
 /**
- * @param armorType
+ * @param num
  */
-public VehicleArmorStone(int armorType)
+public VehicleUpgradePitchDown(int num)
   {
-  super(armorType);
-  this.displayName = "Stone Armor Tier 1";
-  this.tooltip = "Reduces fire damage by ~7%";
-  this.general = 2.5f;
-  this.explosive = 2.5f;
-  this.fire = 7;
+  super(num);
+  this.displayName = "Turret Wedge: -3";
+  this.tooltip = "Decreases turret pitch by 3 degrees.";
   }
 
+@Override
+public void applyVehicleEffects(VehicleBase vehicle)
+  {
+  vehicle.turretPitchMax-=3;
+  vehicle.turretPitchMin-=3;
+  }
 
 }

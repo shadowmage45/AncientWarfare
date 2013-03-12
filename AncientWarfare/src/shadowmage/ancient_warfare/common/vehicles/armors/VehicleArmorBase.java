@@ -28,11 +28,59 @@ public abstract class VehicleArmorBase implements IVehicleArmorType
 {
 
 int armorType = 0;
+String displayName = "";
+String tooltip = "";
+float general = 0.f;
+float explosive = 0.f;
+float fire = 0.f;
+float weight = 50.f;
+
 public VehicleArmorBase(int armorType)
   {
   this.armorType = armorType;
   }
 
+@Override
+public int getGlobalArmorType()
+  {
+  return this.armorType;
+  }
+
+@Override
+public String getDisplayName()
+  {
+  return displayName;
+  }
+
+@Override
+public String getDisplayTooltip()
+  {
+  return tooltip;
+  }
+
+@Override
+public float getGeneralDamageReduction()
+  {
+  return general;
+  }
+
+@Override
+public float getExplosiveDamageReduction()
+  {
+  return explosive;
+  }
+
+@Override
+public float getFireDamageReduction()
+  {
+  return fire;
+  }
+
+@Override
+public float getArmorWeight()
+  {
+  return weight;
+  }
 
 @Override
 public ItemStack getArmorStack(int qty)

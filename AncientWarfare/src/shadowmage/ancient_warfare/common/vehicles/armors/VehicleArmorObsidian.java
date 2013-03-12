@@ -20,21 +20,20 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.armors;
 
-public class VehicleArmorStone extends VehicleArmorBase
+public class VehicleArmorObsidian extends VehicleArmorBase
 {
 
 /**
  * @param armorType
  */
-public VehicleArmorStone(int armorType)
+public VehicleArmorObsidian(int armorType)
   {
   super(armorType);
-  this.displayName = "Stone Armor Tier 1";
-  this.tooltip = "Reduces fire damage by ~7%";
+  this.displayName = "Obsidian Armor Tier 1";
+  this.tooltip = "Reduces explosive damage by ~7%";
   this.general = 2.5f;
-  this.explosive = 2.5f;
-  this.fire = 7;
+  this.explosive = 7.f;
+  this.fire = 2.5f;
   }
-
 
 }

@@ -128,6 +128,12 @@ public int teamNum = 0;
 private boolean isRidden = false;
 
 /**
+ * set client-side when incoming damage is taken
+ */
+public int hitAnimationTicks = 0;
+public int moveUpdateTicks = 0;
+
+/**
  * complex stat tracking helpers, move, ammo, upgrades, general stats
  */
 public VehicleAmmoHelper ammoHelper;
@@ -358,12 +364,13 @@ public void onUpdate()
     this.updateTurretRotation();
     }
   this.moveHelper.onMovementTick();
-  this.firingHelper.onTick();
-  
+  this.firingHelper.onTick();  
+  if(this.hitAnimationTicks>0)
+    {
+    this.hitAnimationTicks--;
+    }
   }
 
-
-int moveUpdateTicks = 0;
 
 /**
  * client-side updates
@@ -497,9 +504,14 @@ public void handleClientMoveData(NBTTagCompound tag)
   this.moveHelper.strafeMotion = sm;
   }
 
+/**
+ * called client-side to
+ * @param health
+ */
 public void handleHealthUpdateData(float health)
   {
   this.vehicleHealth = health;
+  this.hitAnimationTicks = 20;
   }
 
 public void handleInputData(NBTTagCompound tag)

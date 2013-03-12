@@ -141,13 +141,13 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     return;
     }
   
-  if(random.nextInt(Config.structureGeneratorRandomRange)>Config.structureGeneratorRandomChance)
+  if(random.nextInt(WorldGenStructureManager.structureGenRandomRange)>WorldGenStructureManager.structureGenRandomChance)
     {
     Config.logDebug("Exit for early random chance check");
     return;
     }
   
-  int maxRange = Config.structureGenMaxCheckRange;
+  int maxRange = WorldGenStructureManager.structureGenMaxCheckRange;
 
   float dist = 0;//found distance
   int foundValue = 0;//found value
@@ -173,7 +173,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   int x = chunkX*16 + random.nextInt(16);
   int z = chunkZ*16 + random.nextInt(16);  
   String biomeName = world.provider.getBiomeGenForCoords(x, z).biomeName;
-  int maxValue = Config.structureGenMaxClusterValue - foundValue;
+  int maxValue = WorldGenStructureManager.structureGenMaxClusterValue - foundValue;
   maxValue = maxValue < 0 ? 0 : maxValue;
   ProcessedStructure struct = WorldGenStructureManager.instance().getStructureForBiome(biomeName, maxValue, random);
   if(struct!=null)
@@ -181,7 +181,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     /**
      * then check cluster filled percentage
      */
-    float valPercent = (float)foundValue / (float) Config.structureGenMaxClusterValue;
+    float valPercent = (float)foundValue / (float) WorldGenStructureManager.structureGenMaxClusterValue;
     if(random.nextFloat() < valPercent)
       {
       Config.logDebug("Exit for value ratio check");

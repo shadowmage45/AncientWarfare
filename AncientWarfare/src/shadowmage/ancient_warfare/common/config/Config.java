@@ -48,11 +48,12 @@ public static final boolean DEBUG = true;
 
 //***************************************************LOADED CONFIGS******************************************//
 
-public static int structureGenMinDistance = 2;
-public static int structureGenMaxCheckRange = 16;
-public static int structureGeneratorRandomChance = 10;
-public static int structureGeneratorRandomRange = 1000;
-public static int structureGenMaxClusterValue = 50;
+//public static int structureGenMinDistance = 2;
+//public static int structureGenMaxCheckRange = 16;
+//public static int structureGeneratorRandomChance = 10;
+//public static int structureGeneratorRandomRange = 1000;
+//public static int structureGenMaxClusterValue = 50;
+
 public static boolean invertShiftClickOnItems = false;
 public static String templateExtension = "aws";
 public static boolean adjustMissilesForAccuracy = true;
@@ -186,11 +187,12 @@ public void setKingdomInfo()
 
 public void setWorldGenInfo()
   {
-  this.structureGenMinDistance = config.get("structure-management", "world_gen_min_dist", 1).getInt(1);
-  this.structureGenMaxCheckRange = config.get("structure-management", "world_gen_max_search", 16).getInt(1);
-  this.structureGeneratorRandomChance = config.get("structure-management", "world_gen_random_chance", 10).getInt(10);
-  this.structureGeneratorRandomRange = config.get("structure-management", "world_gen_random_range", 1000).getInt(1000);
-  this.structureGenMaxClusterValue = config.get("structure-management", "world_gen_max_cluster_value", 50).getInt(50);
+  //NOOP--moved to worldGenConfig.cfg in AWConfig/ directory
+//  this.structureGenMinDistance = config.get("structure-management", "world_gen_min_dist", 1).getInt(1);
+//  this.structureGenMaxCheckRange = config.get("structure-management", "world_gen_max_search", 16).getInt(1);
+//  this.structureGeneratorRandomChance = config.get("structure-management", "world_gen_random_chance", 10).getInt(10);
+//  this.structureGeneratorRandomRange = config.get("structure-management", "world_gen_random_range", 1000).getInt(1000);
+//  this.structureGenMaxClusterValue = config.get("structure-management", "world_gen_max_cluster_value", 50).getInt(50);
   }
 
 private void setStructureInfo()

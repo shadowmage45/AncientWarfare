@@ -56,6 +56,11 @@ private HashMap<String, WorldGenBiomeStructList> biomesStructureMap = new HashMa
  */
 private int[] validDimensions;
 private int[] invalidDimensions;
+public static int structureGenMinDistance=2;
+public static int structureGenMaxCheckRange=16;
+public static int structureGenRandomChance=10;
+public static int structureGenRandomRange=1000;
+public static int structureGenMaxClusterValue=50;
 
 /**
  * name-map of loaded world-gen structure settings...
@@ -518,14 +523,34 @@ private void parseConfig(Iterator<String> it)
       {
       break;
       }
-    if(line.toLowerCase().startsWith("validDimensions"))
+    if(line.toLowerCase().startsWith("validdimensions"))
       {
       this.validDimensions = StringTools.safeParseIntArray("=", line);
       }
-    if(line.toLowerCase().startsWith("invalidDimensions"))
+    if(line.toLowerCase().startsWith("invaliddimensions"))
       {
       this.invalidDimensions = StringTools.safeParseIntArray("=", line);
-      }    
+      }  
+    if(line.toLowerCase().startsWith("structuregenmindistance"))
+      {
+      this.structureGenMinDistance = StringTools.safeParseInt("=", line);
+      }
+    if(line.toLowerCase().startsWith("structuregenmaxcheckrange"))
+      {
+      this.structureGenMaxCheckRange = StringTools.safeParseInt("=", line);
+      }
+    if(line.toLowerCase().startsWith("structuregenrandomchance"))
+      {
+      this.structureGenRandomChance = StringTools.safeParseInt("=", line);
+      }
+    if(line.toLowerCase().startsWith("structuregenrandomrange"))
+      {
+      this.structureGenRandomRange = StringTools.safeParseInt("=", line);
+      }
+    if(line.toLowerCase().startsWith("structuregenmaxclustervalue"))
+      {
+      this.structureGenMaxClusterValue = StringTools.safeParseInt("=", line);
+      }
     }
   if(this.validDimensions!=null && this.invalidDimensions !=null)
     {

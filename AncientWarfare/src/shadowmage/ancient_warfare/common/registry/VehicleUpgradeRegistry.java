@@ -28,10 +28,30 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeAim;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradePitchDown;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradePitchUp;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradePower;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeReload;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeSpeed;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeTurretLock;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeTurretPitch;
 
 public class VehicleUpgradeRegistry
 {
+
+
+public static final IVehicleUpgradeType speedUpgrade = new VehicleUpgradeSpeed(0);
+public static final IVehicleUpgradeType aimUpgrade = new VehicleUpgradeAim(1);
+public static final IVehicleUpgradeType reloadUpgrade = new VehicleUpgradeReload(2);
+public static final IVehicleUpgradeType turretLockUpgrade = new VehicleUpgradeTurretLock(3);
+public static final IVehicleUpgradeType powerUpgrade = new VehicleUpgradePower(4);
+public static final IVehicleUpgradeType pitchExtUpgrade = new VehicleUpgradeTurretPitch(5);
+public static final IVehicleUpgradeType pitchUpUpgrade = new VehicleUpgradePitchUp(6);
+public static final IVehicleUpgradeType pitchDownUpgrade = new VehicleUpgradePitchDown(7);
+
+private Map<Integer, IVehicleUpgradeType> upgradeTypeMap = new HashMap<Integer, IVehicleUpgradeType>();
+
 private VehicleUpgradeRegistry(){}
 public static VehicleUpgradeRegistry instance()
   {
@@ -43,10 +63,6 @@ public static VehicleUpgradeRegistry instance()
   }
 private static VehicleUpgradeRegistry INSTANCE;
 
-private Map<Integer, IVehicleUpgradeType> upgradeTypeMap = new HashMap<Integer, IVehicleUpgradeType>();
-
-
-public static final IVehicleUpgradeType speedUpgrade = new VehicleUpgradeSpeed(0);
 
 /**
  * called during init to register upgrade types as items
@@ -54,6 +70,13 @@ public static final IVehicleUpgradeType speedUpgrade = new VehicleUpgradeSpeed(0
 public void registerUpgrades()
   {
   this.registerUpgrade(speedUpgrade);
+  this.registerUpgrade(aimUpgrade);
+  this.registerUpgrade(reloadUpgrade);
+  this.registerUpgrade(turretLockUpgrade);
+  this.registerUpgrade(powerUpgrade);
+  this.registerUpgrade(pitchExtUpgrade);
+  this.registerUpgrade(pitchUpUpgrade);
+  this.registerUpgrade(pitchDownUpgrade);
   }
 
 /**

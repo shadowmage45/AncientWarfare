@@ -250,3 +250,39 @@
 * figure out how to handle spawner items for vehicles (getItemStackFor(int type, int level)?)
 * add all vehicle type/material level combos to creative tab
 * add optional client-movement scheme.... 
+/********** 03-11-13 **********/
+* add config settings to mod init data
+* remove debug spawner
+* move spawner item over to new creative tab
+* implement damage types...
+* implement armor coding incl. damage reduction (should be fully implemented)
+* implement vehicle weighting system (currently only armor has weight...the rest will require update on every inventory change)
+* add new inventory-size setting code.InventoryHelper can be set when the vehicleType is read (or re-set to non-default sizes)
+* make it so vehicles won't collide with arrows...
+* implement ammo weight use for calculating shot max velocity
+* restruct firing system:
+    --initiate firing
+    --onFiring animation update (onFiringUpdate())
+    --animationComplete (launch missile)(callback to parent class to fire missiles/reset to fire next missile
+    --onReload animation update (onReloadUpdate())
+    --reset state
+    
+    --to launch a missile, call startMissileLaunch()
+    --update state every tick in base entity
+    --when animation is complete, call startLaunching()
+    --onLaunchingUpdate() will be called that tick and every tick until setFinishedLaunching() is called
+            --this allows you to fire multiple missiles
+    --when finished launching missiles, call setFinishedLaunching(), which will start the cooldown and reload-animation updating process
+* figure out accuracy calculation methods (when to apply accuracy)(probably apply it to the output angle and yaw (and speed) when spawning a missile)
+    -- it will need to include a hook for soldier accuracy adjustments... (or accuracy needs to accomodate rider when being updated..trickier)
+* fix entity hit detection for auto-aim...its borked
+* tie acceleration to weight (base weight/ baseWeight for a leveled percentage to decrease speed by)
+* test new adjustable size inventory
+* figure out accuracy adjustment...its fubar..
+* test new vehicle accuracy stuff
+* test new weight based acceleration coding
+* test arrow collision coding...
+* fix shot aimYaw render not updating with mouseAim disabled
+* add catapult animation.
+* set catapult firing angle to 70'
+* hmm..whats this...added the ballista?

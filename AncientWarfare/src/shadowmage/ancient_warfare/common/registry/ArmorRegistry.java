@@ -27,12 +27,16 @@ import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.item.AWItemBase;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
+import shadowmage.ancient_warfare.common.vehicles.armors.VehicleArmorIron;
+import shadowmage.ancient_warfare.common.vehicles.armors.VehicleArmorObsidian;
 import shadowmage.ancient_warfare.common.vehicles.armors.VehicleArmorStone;
 
 public class ArmorRegistry
 {
 
 public static IVehicleArmorType armorStone = new VehicleArmorStone(0);
+public static IVehicleArmorType armorIron = new VehicleArmorIron(1);
+public static IVehicleArmorType armorObsidian = new VehicleArmorObsidian(2);
 
 
 
@@ -49,6 +53,8 @@ public static ArmorRegistry instance()
 public void registerArmorTypes()
   {
   this.registerArmorType(armorStone);
+  this.registerArmorType(armorIron);
+  this.registerArmorType(armorObsidian);
   }
 
 public void registerArmorType(IVehicleArmorType armor)
