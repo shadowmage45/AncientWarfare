@@ -27,6 +27,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.missiles.DamageType;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
@@ -48,8 +49,8 @@ private List<IVehicleArmorType> installedArmor = new ArrayList<IVehicleArmorType
 /**
  * list of all upgrades that are valid for this vehicle, used by inventoryChecking to see whether it can be installed or not
  */
-private List validUpgrades = new ArrayList<IVehicleUpgradeType>();
-private List validArmorTypes = new ArrayList<IVehicleArmorType>();
+private List<IVehicleUpgradeType> validUpgrades = new ArrayList<IVehicleUpgradeType>();
+private List<IVehicleArmorType> validArmorTypes = new ArrayList<IVehicleArmorType>();
 private VehicleBase vehicle;
 
 public VehicleUpgradeHelper(VehicleBase vehicle)
@@ -89,9 +90,18 @@ public void updateUpgrades()
   List<IVehicleArmorType> armors = vehicle.inventory.getInventoryArmor();
   for(IVehicleArmorType ar : armors)
     {
+    Config.logDebug("installed armor: "+ar.getDisplayName());
     if(this.validArmorTypes.contains(ar))
       {
       this.installedArmor.add(ar);
+      }
+    else
+      {
+      Config.logDebug("invalid armor! this vehicle has: "+this.validArmorTypes.size()+" valid armor types");
+      for(IVehicleArmorType type : this.validArmorTypes)
+        {
+        Config.logDebug(type.getDisplayName());
+        }
       }
     }
   int [] arInts = new int[this.installedArmor.size()];
@@ -145,13 +155,14 @@ public void handleUpgradePacketData(NBTTagCompound tag)
  */
 public void updateUpgradeStats()
   {
-  vehicle.resetUpgradeStats();
+  vehicle.resetCurrentStats();
   for(IVehicleUpgradeType upgrade : this.upgrades)
     {
     upgrade.applyVehicleEffects(vehicle);
     }
   for(IVehicleArmorType armor : this.installedArmor)
     {
+    Config.logDebug("updating armor stats");
     vehicle.currentExplosionResist += armor.getExplosiveDamageReduction();
     vehicle.currentFireResist += armor.getFireDamageReduction();
     vehicle.currentGenericResist += armor.getGeneralDamageReduction();
@@ -161,7 +172,7 @@ public void updateUpgradeStats()
 
 public void addValidArmor(IVehicleArmorType armor)
   {
-  if(armor!=null && this.validArmorTypes.contains(armor))
+  if(armor!=null && !this.validArmorTypes.contains(armor))
     {
     this.validArmorTypes.add(armor);
     }

@@ -32,11 +32,12 @@ import java.util.Map.Entry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBallista;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallista;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBase;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapult;
 
@@ -48,6 +49,7 @@ private HashMap<IVehicleType, Class <? extends VehicleBase>> vehicleClasses = ne
 
 public static final IVehicleType DUMMY_VEHICLE = new VehicleTypeBase(-1);
 public static IVehicleType CATAPULT = new VehicleTypeCatapult(0);
+public static IVehicleType BALLISTA = new VehicleTypeBallista(1);
 
 private VehicleRegistry(){}
 private static VehicleRegistry INSTANCE;
@@ -65,6 +67,7 @@ public void registerVehicles()
   this.vehicleTypes.put(-1, DUMMY_VEHICLE);
   
   this.registerVehicle(VehicleCatapult.class, "AW_Catapult", CATAPULT);
+  this.registerVehicle(VehicleBallista.class, "AW.Ballista", BALLISTA);
   }
 
 public void registerVehicle(Class <? extends VehicleBase> clz, String entName, IVehicleType type)

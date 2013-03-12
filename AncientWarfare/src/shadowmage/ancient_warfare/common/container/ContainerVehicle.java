@@ -168,7 +168,7 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
           }
         }
       }
-    else if(slotClickedIndex >=36 &&slotClickedIndex < 36+ammoSlots+upgradeSlots+storageSlots)//vehicle slots, merge to player inventory
+    else if(slotClickedIndex >=36 &&slotClickedIndex < 36+ammoSlots+upgradeSlots+armorSlots+storageSlots)//vehicle slots, merge to player inventory
       {
       if (!this.mergeItemStack(slotStack, 0, 36, true))//merge into player inventory
         {

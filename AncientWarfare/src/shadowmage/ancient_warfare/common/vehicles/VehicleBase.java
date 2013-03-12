@@ -89,7 +89,7 @@ public float launchPowerCurrent = 31.321f * 0.4f;
 public float maxForwardSpeedCurrent = 0.8f;
 public float maxStrafeSpeedCurrent = 2.0f;
 public int reloadTimeCurrent = 100;
-public float accuracyCurrent = 1.f;
+public float currentAccuracy = 1.f;
 public float turretPitchMin = 0.f;
 public float turretPitchMax = 90.f;
 public float launchSpeedCurrentMax = 32.321f;
@@ -151,6 +151,7 @@ public VehicleBase(World par1World)
 public void setVehicleType(IVehicleType vehicle, int materialLevel)
   {
   this.vehicleType = vehicle;
+  this.vehicleMaterialLevel = materialLevel;
   float width = vehicleType.getWidth();
   float height = vehicleType.getHeight();
   this.setSize(width, height);
@@ -171,6 +172,17 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
   this.inventory.storageInventory = new AWInventoryBasic(vehicle.getStorageBaySize(), this.inventory);
   this.inventory.upgradeInventory = new AWInventoryBasic(vehicle.getUpgradeBaySize(), this.inventory);
   this.updateBaseStats();
+  this.resetCurrentStats();
+
+  if(this.turretPitch<this.turretPitchMin)
+    {
+    this.turretPitch = this.turretPitchMin;    
+    }
+  else if(this.turretPitch > this.turretPitchMax)
+    {
+    this.turretPitch = this.turretPitchMax;
+    }
+  this.launchPowerCurrent = this.firingHelper.getAdjustedMaxMissileVelocity();
   }
 
 public void updateBaseStats()
@@ -288,7 +300,7 @@ public abstract void onLaunchingUpdate();
 /**
  * reset all upgradeable stats back to the base for this vehicle
  */
-public void resetUpgradeStats()
+public void resetCurrentStats()
   {
   Config.logDebug("resetting upgrade stats. server"+!worldObj.isRemote);
   this.firingHelper.resetUpgradeStats();
@@ -304,6 +316,8 @@ public void resetUpgradeStats()
   this.currentFireResist = this.baseFireResist;
   this.currentGenericResist = this.baseGenericResist;
   this.currentWeight = this.baseWeight;
+  this.currentAccuracy = this.baseAccuracy;
+  Config.logDebug("lscm: "+this.launchSpeedCurrentMax);
   }
 
 /**
@@ -340,7 +354,7 @@ public void onUpdate()
     this.updateTurretRotation();
     }
   this.moveHelper.onMovementTick();
-  this.firingHelper.onTick(); 
+  this.firingHelper.onTick();
   
   }
 
@@ -413,6 +427,18 @@ public void updateTurretRotation()
     {
     turretDestRot = turretRotation;
     return;
+    }
+  if(turretDestRot<turretRotation)
+    {
+    turretRotation -= turretRotInc;;
+    }
+  else if(turretDestRot>turretRotation)
+    {
+    turretRotation += turretRotInc;
+    }
+  if(Trig.getAbsDiff(turretDestRot, turretRotation)<turretRotInc)
+    {
+    turretRotation = turretDestRot;
     }
   //TODO
   }
@@ -597,7 +623,7 @@ public AxisAlignedBB getBoundingBox()
 @Override
 public AxisAlignedBB getCollisionBox(Entity par1Entity)
   {
-  return par1Entity.boundingBox;
+  return par1Entity.getBoundingBox();
   }
 
 @Override
@@ -638,12 +664,12 @@ public void readSpawnData(ByteArrayDataInput data)
   this.ammoHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.moveHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.firingHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
-  this.upgradeHelper.updateUpgrades();
   this.launchPowerCurrent = data.readFloat();
   this.turretPitch = data.readFloat();
   this.turretRotation = data.readFloat();
   this.turretDestPitch = data.readFloat();
   this.turretDestRot = data.readFloat();
+  this.upgradeHelper.updateUpgradeStats();
   }
 
 @Override
@@ -663,15 +689,8 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.turretPitch = tag.getFloat("tp");
   this.turretDestPitch = tag.getFloat("tpd");
   this.turretRotation = tag.getFloat("tr");
-  this.turretDestRot = tag.getFloat("trd");
-  if(!worldObj.isRemote)
-    {
-    this.upgradeHelper.updateUpgrades();
-    }
-  else
-    {
-    this.upgradeHelper.updateUpgradeStats();
-    }
+  this.turretDestRot = tag.getFloat("trd");  
+  this.upgradeHelper.updateUpgrades(); 
   this.ammoHelper.updateAmmoCounts();
   }
 

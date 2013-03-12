@@ -278,7 +278,7 @@ public void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlayer playe
    
   double gravity = 9.81d * 0.05d *0.05d;
   double speed = vehicle.firingHelper.clientLaunchSpeed * 0.05d;
-  double angle = vehicle.firingHelper.clientTurretPitch;
+  double angle = 90 - vehicle.firingHelper.clientTurretPitch;
   double yaw = vehicle.firingHelper.clientTurretYaw;
   
   double vH = -Trig.sinDegrees((float) angle)*speed;

@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 public class VehicleCatapult extends VehicleBase
 {
 
-public float armAngle = 0.f;
+public float armAngle = -7.f;
 public float armSpeed = 0.f;
 public float crankAngle = 0.f;
 public float crankSpeed = 0.f;
@@ -41,33 +41,62 @@ public float crankSpeed = 0.f;
  */
 public VehicleCatapult(World par1World)
   {
-  super(par1World);
+  super(par1World);  
   }
 
 @Override
 public void onFiringUpdate()
-  {
-  this.firingHelper.startLaunching();
+  {  
+  if(!worldObj.isRemote)
+    {
+    Config.logDebug("onFiringUpdate");
+    }
+  float prevAngle = this.armAngle;
+  this.armAngle += 87.f/20;
+  if(this.armAngle>=70)
+    {
+    this.firingHelper.startLaunching();
+    this.armAngle = 70.f;
+    }
+  this.armSpeed = this.armAngle - prevAngle;
   }
 
 @Override
 public void onLaunchingUpdate()
-  {
-  this.firingHelper.spawnMissile(0, 0, 0);
+  {  
+  if(!worldObj.isRemote)
+    {
+    Config.logDebug("onLaunchingUpdate");
+    }
+  for(int i = 0; i <10; i++)
+    {
+    this.firingHelper.spawnMissile(0, 0, 0);
+    }
+  
   this.firingHelper.setFinishedLaunching();
   }
 
 @Override
 public void onReloadUpdate()
   {
-  
+  if(!worldObj.isRemote)
+    {
+    Config.logDebug("onReloadUpdate");
+    }
+  float prevAngle = this.armAngle;
+  this.armAngle -= 87 / (float)this.reloadTimeCurrent;
+  if(this.armAngle <= -7)
+    {
+    this.armAngle = -7;
+    }
+  this.armSpeed =this.armAngle - prevAngle;
   }
 
 @Override
 public void onUpdate()
   {
   super.onUpdate();
-  this.armAngle = 90- this.turretPitch -7;
+  //this.armAngle = 90- this.turretPitch -7;
   }
 
 

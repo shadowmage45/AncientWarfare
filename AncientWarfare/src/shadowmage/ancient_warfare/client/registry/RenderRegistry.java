@@ -24,10 +24,12 @@ import java.util.HashMap;
 
 import net.minecraft.client.renderer.entity.Render;
 import shadowmage.ancient_warfare.client.render.RenderArrow;
+import shadowmage.ancient_warfare.client.render.RenderBallista;
 import shadowmage.ancient_warfare.client.render.RenderCatapult;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
 import shadowmage.ancient_warfare.client.render.RenderShot;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBallista;
 import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -55,7 +57,7 @@ public void loadRenders()
    * vehicles..
    */
   RenderingRegistry.registerEntityRenderingHandler(VehicleCatapult.class, new RenderCatapult());
-  
+  RenderingRegistry.registerEntityRenderingHandler(VehicleBallista.class, new RenderBallista());
   /**
    * missiles...
    */

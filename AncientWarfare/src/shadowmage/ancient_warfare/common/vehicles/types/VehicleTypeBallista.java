@@ -21,43 +21,43 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.missiles.Ammo;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
-public class VehicleTypeCatapult extends VehicleTypeBase
+public class VehicleTypeBallista extends VehicleTypeBase
 {
 
 /**
  * @param typeNum
  */
-public VehicleTypeCatapult(int typeNum)
+public VehicleTypeBallista(int typeNum)
   {
-  super(typeNum);
+  super(typeNum);  
   this.width = 2;
   this.height = 2;
-  this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.4f;
-  this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
+  this.missileVerticalOffset = 1.2f;
+  this.missileForwardsOffset = 1.f;
   this.isMountable = true;
   this.isDrivable = true;
   this.isCombatEngine = true;
-  this.canAdjustPower = true;
-  this.canAdjustPitch = false;
-  this.canAdjustYaw = false;
-  this.accuracy = 0.95f;
+  this.canAdjustPower = false;
+  this.canAdjustPitch = true;
+  this.canAdjustYaw = true;
+  this.turretRotationMax=360.f;
+  this.accuracy = 0.98f;
   this.baseStrafeSpeed = 2.f;
   this.baseForwardSpeed = 6.f*0.05f;  
-  this.basePitchMax = 20;
-  this.basePitchMin = 20;
-  this.baseMissileVelocityMax = 32.f;  
+  this.basePitchMax = 15;
+  this.basePitchMin = -15;
+  this.baseMissileVelocityMax = 42.f;  
   this.vehicleMaterial = VehicleMaterial.materialWood;
-  this.riderForwardsOffset = 1.2f;
+  this.riderForwardsOffset = -1.2f;
   this.riderVerticalOffset = 0.7f;
   
-  this.displayName = "Catapult";
-  this.displayTooltip = "The original, classic, catapult.";
+  this.displayName = "Ballista";
+  this.displayTooltip = "The original, classic, ballista.";
   
   this.validAmmoTypes.add(Ammo.ammoArrow);
   this.validAmmoTypes.add(Ammo.ammoStoneShot);
@@ -68,5 +68,7 @@ public VehicleTypeCatapult(int typeNum)
   this.storageBaySize = 0;
   this.armorBaySize = 3;
   }
+
+
 
 }

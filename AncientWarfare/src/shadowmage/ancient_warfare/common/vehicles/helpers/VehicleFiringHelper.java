@@ -77,7 +77,7 @@ public boolean isLaunching = false;
 /**
  * if this vehicle isFiring, has it already finished launched, and is in the process of cooling down?
  */
-public boolean finishedLaunching = false;
+public boolean isReloading = false;
 
 /**
  * how many ticks until this vehicle is done reloading and can fire again
@@ -117,13 +117,29 @@ public void spawnMissile(float ox, float oy, float oz)
         {
         //TODO fix all this crap up, make a dedicated random somewhere for this
         //TODO check the variance on random, and if I am inverting properly
+        Config.logDebug("spawning missile");
+        Config.logDebug("orig params");
+        Config.logDebug("po: "+power+" y: "+yaw+" pi: "+pitch);
         Random rnd = new Random();
         float accuracy = getAccuracyAdjusted();
-        float adj = (float)rnd.nextGaussian() * ( 1.f - accuracy);
+        Config.logDebug("adj acc: "+accuracy);
+        yaw   += (float)rnd.nextGaussian() * (1.f - accuracy)*10.f;
+        if(vehicle.canAimPower())
+          {
+          power += (float)rnd.nextGaussian() * (1.f - accuracy)*2.5f; 
+          if(power<1.f)
+            {
+            power=1.f;
+            }
+          }
+        else if(vehicle.canAimPitch())
+          {
+          pitch += (float)rnd.nextGaussian() * (1.f - accuracy)*10.f;
+          }        
         
-        yaw   += adj*5;
-        pitch += adj*5;
-        power *= adj;
+        
+        Config.logDebug("new params");
+        Config.logDebug("po: "+power+" y: "+yaw+" pi: "+pitch);
         
         }
       
@@ -138,23 +154,20 @@ public void spawnMissile(float ox, float oy, float oz)
 
 public void onTick()
   {
+  if(this.isReloading)
+    {    
+    this.vehicle.onReloadUpdate();
+    if(this.reloadingTicks<=0)
+      {
+      this.setFinishedReloading();            
+      }
+    this.reloadingTicks--;
+    }
   if(this.isFiring)
     {
     this.vehicle.onFiringUpdate();
     }
-  if(this.reloadingTicks>0)
-    {
-    this.reloadingTicks--;
-    this.vehicle.onReloadUpdate();
-    if(this.reloadingTicks<=0)
-      {
-      this.finishedLaunching = false;
-      this.isFiring = false;
-      this.isLaunching = false;
-      this.reloadingTicks = 0;      
-      }
-    }
-  if(this.isFiring && this.isLaunching && !this.finishedLaunching)
+  if(this.isLaunching)
     {
     vehicle.onLaunchingUpdate();
     }  
@@ -173,11 +186,23 @@ public void onTick()
       this.clientTurretYaw = vehicle.rotationYaw;
       }
     }
+  if(vehicle.turretPitch<vehicle.turretPitchMin)
+    {
+    vehicle.turretPitch = vehicle.turretPitchMin;    
+    }
+  else if(vehicle.turretPitch > vehicle.turretPitchMax)
+    {
+    vehicle.turretPitch = vehicle.turretPitchMax;
+    }  
+  if(!vehicle.canAimPower())
+    {
+    vehicle.launchPowerCurrent = vehicle.launchSpeedCurrentMax;
+    }
   }
 
 public float getAdjustedMaxMissileVelocity()
-  {
-  float velocity = vehicle.launchSpeedCurrentMax;  
+  {  
+  float velocity = vehicle.launchSpeedCurrentMax;
   IAmmoType ammo = vehicle.ammoHelper.getCurrentAmmoType();
   if(ammo!=null)
     {
@@ -192,7 +217,7 @@ public float getAdjustedMaxMissileVelocity()
 
 public float getAccuracyAdjusted()
   {
-  float accuracy = this.vehicle.accuracyCurrent;
+  float accuracy = this.vehicle.currentAccuracy;
   if(vehicle.riddenByEntity!=null && vehicle.riddenByEntity instanceof NpcBase)
     {
     //TODO adjust accuracy by soldier accuracy offset amount...
@@ -208,20 +233,30 @@ public void startMissileLaunch()
   if(!this.isFiring && this.reloadingTicks <=0)
     {
     this.isFiring = true;
+    this.isLaunching = false;
+    this.isReloading = false;
     }
+  }
+
+public void setFinishedReloading()
+  {
+  this.isFiring = false;
+  this.isReloading = false;
+  this.isLaunching = false;
+  this.reloadingTicks = 0;
   }
 
 public void startLaunching()
   {
-  this.isFiring = true;
+  this.isFiring = false;
   this.isLaunching = true;
-  this.finishedLaunching = false;
+  this.isReloading = false;
   }
 
 public void setFinishedLaunching()
   {
-  this.isFiring = true;
-  this.finishedLaunching = true;
+  this.isFiring = false;
+  this.isReloading = true;
   this.isLaunching = false;
   this.reloadingTicks = vehicle.reloadTimeCurrent; 
   }
@@ -438,16 +473,11 @@ public void handleAimMouseInput(Vec3 target)
   float ty = (float) (target.yCoord - y);
   float tz = (float) (target.zCoord - z);
   float range = MathHelper.sqrt_float(tx*tx+tz*tz);
-//  Config.logDebug("range: "+range);
-//  Config.logDebug("horiz rise: "+ty);
-  
   if(vehicle.canAimPitch())
     {   
-    Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.launchPowerCurrent);    
-    Config.logDebug("input::::angle pair for hit: "+angles.toString()+" range: "+range);
+    Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.launchPowerCurrent);  
     if(angles.key().isNaN() || angles.value().isNaN())
-      {
-//      Config.logDebug("exiting aim pitch input due to NaN params!!");      
+      { 
       }
     else if(angles.value()>=vehicle.turretPitchMin && angles.value()<=vehicle.turretPitchMax)
       {
@@ -483,7 +513,6 @@ public void handleAimMouseInput(Vec3 target)
     float xAO = (float) (vehicle.posX - target.xCoord);  
     float zAO = (float) (vehicle.posZ - target.zCoord);
     float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
-//    Config.logDebug("calculated yaw target: "+yaw+" vehicle current yaw: "+vehicle.rotationYaw);
     if(yaw!=this.clientTurretYaw && yaw >=vehicle.turretRotationHome - vehicle.turretRotationMax && yaw <= vehicle.turretRotationHome + vehicle.turretRotationMax)
       {    
       this.clientTurretYaw = yaw;
@@ -532,6 +561,9 @@ public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
   tag.setInteger("rt", reloadingTicks);
+  tag.setBoolean("f", this.isFiring);
+  tag.setBoolean("r", this.isReloading);
+  tag.setBoolean("l", this.isLaunching);
   return tag;
   }
 
@@ -539,6 +571,9 @@ public NBTTagCompound getNBTTag()
 public void readFromNBT(NBTTagCompound tag)
   {
   this.reloadingTicks = tag.getInteger("rt");
+  this.isFiring = tag.getBoolean("f");
+  this.isReloading = tag.getBoolean("r");
+  this.isLaunching = tag.getBoolean("l");
   }
 
 public void resetUpgradeStats()

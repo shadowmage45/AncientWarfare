@@ -125,20 +125,24 @@ public void handleInputData(NBTTagCompound tag)
  */
 public void onMovementTick()
   {
-  Config.logDebug("updating motion for vehicle. server: "+!vehicle.worldObj.isRemote);
-  float accelAdjust = 1.f;
+//  Config.logDebug("updating motion for vehicle. server: "+!vehicle.worldObj.isRemote);
+  float weightAdjust = 1.f;
   if(vehicle.currentWeight > vehicle.baseWeight)
     {
-    accelAdjust = vehicle.baseWeight  / vehicle.currentWeight;
+    weightAdjust = vehicle.baseWeight  / vehicle.currentWeight;
     }
   if(forwardInput!=0)
     {
-    forwardAccel = forwardInput * 0.03f * (vehicle.maxForwardSpeedCurrent - MathHelper.abs(forwardMotion));
+    forwardAccel = forwardInput * 0.03f * (vehicle.maxForwardSpeedCurrent*weightAdjust - MathHelper.abs(forwardMotion));
     if(forwardInput<0)
       {
       forwardAccel *= 0.6f;
       }
-    forwardAccel *= accelAdjust;
+    forwardAccel *= weightAdjust;
+//    if((forwardInput<0 && forwardMotion >0 ) || (forwardInput>0 && forwardMotion<0))
+//      {
+//      forwardAccel += forwardMotion * -0.08f;
+//      }    
     }
   else
     {
@@ -146,9 +150,13 @@ public void onMovementTick()
     }
   if(strafeInput!=0)
     {
-    strafeAccel = -strafeInput * 0.06f * (vehicle.maxStrafeSpeedCurrent-MathHelper.abs(strafeMotion));
-    strafeAccel *= accelAdjust;
-    }
+    strafeAccel = -strafeInput * 0.06f * (vehicle.maxStrafeSpeedCurrent*weightAdjust -MathHelper.abs(strafeMotion));
+    strafeAccel *= weightAdjust;
+    if((strafeInput>0 && strafeMotion >0 ) || (strafeInput<0 && strafeMotion<0))
+      {
+      strafeAccel += strafeMotion * -0.13f;
+      }
+    }  
   else
     {
     strafeAccel = strafeMotion * -0.13f;
@@ -160,7 +168,7 @@ public void onMovementTick()
   float absFor = MathHelper.abs(forwardMotion);
   float absStr = MathHelper.abs(strafeMotion);
     
-  if(forwardInput ==1 && absFor > vehicle.maxForwardSpeedCurrent)
+  if(forwardInput ==1 && absFor > vehicle.maxForwardSpeedCurrent*weightAdjust)
     {
     forwardMotion = vehicle.maxForwardSpeedCurrent;
     }
@@ -172,7 +180,7 @@ public void onMovementTick()
     {
     forwardMotion = 0;
     }
-  if(absStr > vehicle.maxStrafeSpeedCurrent)
+  if(absStr > vehicle.maxStrafeSpeedCurrent * weightAdjust)
     {
     if(strafeMotion>0)
       {

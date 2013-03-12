@@ -28,6 +28,7 @@ import java.util.List;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.IInventoryCallback;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
@@ -122,7 +123,7 @@ public void onInventoryChanged(IInventory changedInv, List<Integer> slotNums)
     {
     vehicle.ammoHelper.updateAmmoCounts();
     }
-  else if(changedInv == this.upgradeInventory && !vehicle.worldObj.isRemote)
+  else if((changedInv == this.upgradeInventory  || changedInv == this.armorInventory) && !vehicle.worldObj.isRemote)
     {
     vehicle.upgradeHelper.updateUpgrades();
     }  
@@ -133,11 +134,13 @@ public List<IVehicleArmorType> getInventoryArmor()
   ArrayList<IVehicleArmorType> armors = new ArrayList<IVehicleArmorType>();
   for(int i = 0; i < this.armorInventory.getSizeInventory(); i++)
     {
+    Config.logDebug("getting armor inventory stack");
     ItemStack stack = this.armorInventory.getStackInSlot(i);
-    IVehicleArmorType upgrade = ArmorRegistry.instance().getArmorForStack(stack);
-    if(upgrade!=null)
+    IVehicleArmorType armor = ArmorRegistry.instance().getArmorForStack(stack);
+    if(armor!=null)
       {
-      armors.add(upgrade);
+      Config.logDebug("found armor of type: "+armor);
+      armors.add(armor);
       }     
     }
   return armors;  

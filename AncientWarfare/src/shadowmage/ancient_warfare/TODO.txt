@@ -26,7 +26,10 @@ VEHICLES
 * add upgrade types
 * add armor types
 * onHit client-side animation (can use the client-side health update method to trigger on - health updates)
-* add method to public String getTextureForArmorInSlot(IVehicleArmorType armor, int slotNum) to vehicle, to get vehicle-specific armor texture for that armor type and slot
+* final vehicle gui will need slots that only accept stack size 1 and that validate against the vehicles valid<whatever type> list
+* add team stuff to vehicle, basic flag rendering call in vehicle base render
+* set vehicles to not fire if their current ammo type is valid but empty (don't trigger/send firing animation start packet)
+* remove old targetPos code...
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
@@ -42,9 +45,6 @@ TESTING
 * test structure weighting
 * test structure underground buildings (dungeons)
 * test structure submerged code
-* test new adjustable size inventory
-* test new vehicle accuracy stuff
-* test new weight based acceleration coding
 * test vehicle armor damage reduction
 
 TEMPLATES
@@ -55,6 +55,7 @@ STRUCTURE BUILDING
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
+* don't spawn stuff in X blocks of spawn (config setting)
 
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
@@ -179,6 +180,15 @@ TWEAKS/OPTIMIZATION
     -- it will need to include a hook for soldier accuracy adjustments... (or accuracy needs to accomodate rider when being updated..trickier)
 * fix entity hit detection for auto-aim...its borked
 * tie acceleration to weight (base weight/ baseWeight for a leveled percentage to decrease speed by)
+* test new adjustable size inventory
+* figure out accuracy adjustment...its fubar..
+* test new vehicle accuracy stuff
+* test new weight based acceleration coding
+* test arrow collision coding...
+* fix shot aimYaw render not updating with mouseAim disabled
+* add catapult animation.
+* set catapult firing angle to 70'
+* hmm..whats this...added the ballista?
     
 
 

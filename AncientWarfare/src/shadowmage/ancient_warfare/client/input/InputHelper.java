@@ -258,7 +258,7 @@ public void handleMouseAimUpdate()
     return;
     }
   inputUpdateTicks = 5;
-  MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140);
+  MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140, mc.thePlayer.ridingEntity);
   if(pos!=null)
     {
     ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimMouseInput(pos.hitVec);
@@ -270,7 +270,7 @@ public void handleFireAction()
   if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
     {
     VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
-    MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140);
+    MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140, mc.thePlayer.ridingEntity);
     if(pos!=null)
       {
       vehicle.firingHelper.handleFireInput(pos.hitVec);
@@ -282,7 +282,7 @@ public void handleFireAction()
     }
   }
 
-public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float range)
+public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float range, Entity excludedEntity)
   {
   
   /**
@@ -317,6 +317,10 @@ public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float
   while(it.hasNext())
     {
     currentExaminingEntity = it.next();
+    if(currentExaminingEntity == excludedEntity)
+      {
+      continue;
+      }
     if(currentExaminingEntity.canBeCollidedWith())
       {
       float borderSize = currentExaminingEntity.getCollisionBorderSize();

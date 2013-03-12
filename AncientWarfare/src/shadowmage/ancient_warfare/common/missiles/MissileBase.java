@@ -173,28 +173,34 @@ public void onMovementTick()
     positionVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
     moveVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ); 
     Entity hitEntity = null;
-    List nearbyEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
-    double closestHit = 0.0D;
-    float borderSize;
-    for (int i = 0; i < nearbyEntities.size(); ++i)
+    
+    if(this.ticksExisted>10)//TODO set a firingEntity...or two..
       {
-      Entity curEnt = (Entity)nearbyEntities.get(i);
-      if (curEnt.canBeCollidedWith())
+      List nearbyEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+      double closestHit = 0.0D;
+      float borderSize;
+      
+      
+      for (int i = 0; i < nearbyEntities.size(); ++i)
         {
-        borderSize = 0.3F;
-        AxisAlignedBB var12 = curEnt.boundingBox.expand((double)borderSize, (double)borderSize, (double)borderSize);
-        MovingObjectPosition checkHit = var12.calculateIntercept(positionVector, moveVector);
-        if (checkHit != null)
+        Entity curEnt = (Entity)nearbyEntities.get(i);
+        if (curEnt.canBeCollidedWith())
           {
-          double hitDistance = positionVector.distanceTo(checkHit.hitVec);
-          if (hitDistance < closestHit || closestHit == 0.0D)
+          borderSize = 0.3F;
+          AxisAlignedBB var12 = curEnt.boundingBox.expand((double)borderSize, (double)borderSize, (double)borderSize);
+          MovingObjectPosition checkHit = var12.calculateIntercept(positionVector, moveVector);
+          if (checkHit != null)
             {
-            hitEntity = curEnt;
-            closestHit = hitDistance;
+            double hitDistance = positionVector.distanceTo(checkHit.hitVec);
+            if (hitDistance < closestHit || closestHit == 0.0D)
+              {
+              hitEntity = curEnt;
+              closestHit = hitDistance;
+              }
             }
           }
         }
-      }
+      }    
     if (hitEntity != null)
       {
       hitPosition = new MovingObjectPosition(hitEntity);

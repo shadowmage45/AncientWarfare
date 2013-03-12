@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.materials;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.Pair;
 
 public class VehicleMaterial implements IVehicleMaterial
@@ -38,6 +39,7 @@ private MaterialLevel getLevel(int num)
   {
   if(num<0 || num>=this.materialLevels.length)
     {
+    Config.logError("out of range vehicle material requested. num: "+num+" current levels: "+this.materialLevels.length);
     return new MaterialLevel();
     }
   return this.materialLevels[num];

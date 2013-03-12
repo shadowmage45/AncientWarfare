@@ -24,30 +24,28 @@ import net.minecraft.entity.Entity;
 
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_warfare.client.model.ModelCatapult;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
+import shadowmage.ancient_warfare.client.model.ModelBallista;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBallista;
 
-public class RenderCatapult extends RenderVehicleBase
+public class RenderBallista extends RenderVehicleBase
 {
 
-ModelCatapult model = new ModelCatapult();
-
+ModelBallista model = new ModelBallista();
 
 @Override
 public void doRender(Entity var1, double x, double y, double z,  float yaw, float tick)
   {
-  VehicleCatapult cat = (VehicleCatapult)var1;
-  //Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture("foo.png"));
+  VehicleBallista ballista = (VehicleBallista)var1;
   
   GL11.glPushMatrix();
   GL11.glTranslated(x, y, z);
   GL11.glRotatef(yaw, 0, 1, 0);
   GL11.glScalef(-1, -1, 1);  
     
-  model.setArmRotation(cat.armAngle + (tick*cat.armSpeed));
-  model.setCrankRotations(cat.crankAngle + (tick*cat.crankSpeed));
-  float wheelAngle = cat.wheelRotation + (tick * (cat.wheelRotation-cat.wheelRotationPrev));
+//  model.setArmRotation(cat.armAngle + (tick*cat.armSpeed));
+  model.setTurretRotation(yaw-ballista.turretRotation, -ballista.turretPitch);
+  model.setCrankRotations(ballista.crankAngle + (tick*ballista.crankSpeed));
+  float wheelAngle = ballista.wheelRotation + (tick * (ballista.wheelRotation-ballista.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
   model.render(var1, 0, 0, 0, 0, 0, 0.0625f);
   GL11.glPopMatrix();

@@ -130,7 +130,7 @@ public void handleAmmoSelectInput(int delta)
       pkt.setParams(vehicle);
       pkt.setAmmoSelect(innerTag);
       pkt.sendPacketToServer();
-      }    
+      }   
     }
   }
 
@@ -149,6 +149,10 @@ public void handleAmmoSelectPacket(NBTTagCompound tag)
       pkt.setParams(vehicle);
       pkt.setAmmoSelect(innerTag);
       pkt.sendPacketToAllTrackingClients(vehicle);
+      }
+    if(!vehicle.canAimPower())
+      {
+      vehicle.launchPowerCurrent = vehicle.firingHelper.getAdjustedMaxMissileVelocity();
       }
     } 
   }
