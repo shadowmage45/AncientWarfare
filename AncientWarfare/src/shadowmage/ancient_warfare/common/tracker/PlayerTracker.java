@@ -25,6 +25,7 @@ import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
@@ -75,7 +76,7 @@ public void onPlayerLogin(EntityPlayer player)
     }  
   
   NBTTagCompound initTag = new NBTTagCompound();
-  NBTTagCompound tag = this.getClientInitData();
+  NBTTagCompound tag = this.getClientInitData(player);
   if(tag!=null)
     {
     initTag.setCompoundTag("playerData", tag);
@@ -97,12 +98,17 @@ public void onPlayerLogin(EntityPlayer player)
 
 public void handleClientInit(NBTTagCompound tag)
   {
-  //TODO
+  this.clientEntry = new PlayerEntry();
+  this.clientEntry.readFromNBT(tag);
   }
 
-private NBTTagCompound getClientInitData()
+private NBTTagCompound getClientInitData(EntityPlayer player)
   {
-  //TODO
+  PlayerEntry ent = this.playerEntries.get(player.getEntityName());
+  if(ent!=null)
+    {
+    return ent.getNBTTag();
+    }
   return null;
   }
 
@@ -140,14 +146,29 @@ public void onPlayerRespawn(EntityPlayer player)
 @Override
 public NBTTagCompound getNBTTag()
   {
-  
-  return null;
+  NBTTagCompound tag = new NBTTagCompound();
+  NBTTagList list = new NBTTagList();  
+  for(String name : this.playerEntries.keySet())
+    {
+    PlayerEntry ent = this.playerEntries.get(name);
+    list.appendTag(ent.getNBTTag());
+    }
+  tag.setTag("list", list);
+  return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO load data from persistent file from world directory....  
+  this.playerEntries.clear();
+  NBTTagList list = tag.getTagList("list");
+  for(int i = 0; i < list.tagCount(); i++)
+    {
+    NBTTagCompound entTag = (NBTTagCompound) list.tagAt(i);
+    PlayerEntry ent = new PlayerEntry();
+    ent.readFromNBT(entTag);
+    this.playerEntries.put(ent.playerName, ent);
+    }
   }
 
 public void clearAllData()

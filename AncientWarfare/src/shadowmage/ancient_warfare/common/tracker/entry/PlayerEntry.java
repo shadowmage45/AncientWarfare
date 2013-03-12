@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.tracker.entry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
@@ -29,12 +32,24 @@ public class PlayerEntry implements INBTTaggable
 
 public String playerName = "";
 EntityPlayer player = null;
+List<Integer> doneResearch = new ArrayList<Integer>();
+
+public void addCompletedResearch(int num)
+  {
+  this.doneResearch.add(num);
+  }
 
 @Override
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
   tag.setString("name", playerName);
+  int[] research = new int[doneResearch.size()];
+  for(int i = 0; i < doneResearch.size(); i++)
+    {
+    research[i] = doneResearch.get(i);
+    }
+  tag.setIntArray("res", research);
   return tag;
   }
 
@@ -42,6 +57,12 @@ public NBTTagCompound getNBTTag()
 public void readFromNBT(NBTTagCompound tag)
   {
   this.playerName = tag.getString("name");
+  this.doneResearch.clear();
+  int[] research = tag.getIntArray("res");
+  for(int i = 0; i< research.length; i++)
+    {
+    doneResearch.add(research[i]);
+    }
   }
 
 }

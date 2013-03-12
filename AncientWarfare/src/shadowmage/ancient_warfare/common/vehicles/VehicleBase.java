@@ -119,6 +119,10 @@ public float wheelRotationPrev = 0.f;
 public float velocity = 0.f; //TODO set this in move helper onUpdate tick
 
 /**
+ * the team number this vehicle was assigned to
+ */
+public int teamNum = 0;
+/**
  * used to clear input if the vehicle WAS ridden but isn't any more
  */
 private boolean isRidden = false;
@@ -613,7 +617,6 @@ public void setPositionAndRotationNormalized(double par1, double par3, double pa
   super.setPositionAndRotation(par1, par3, par5, yaw, par8);
   }
 
-
 @Override
 public AxisAlignedBB getBoundingBox()
   {
@@ -652,6 +655,7 @@ public void writeSpawnData(ByteArrayDataOutput data)
   data.writeFloat(turretRotation);
   data.writeFloat(turretDestPitch);
   data.writeFloat(turretDestRot);
+  data.writeInt(teamNum);
   }
 
 @Override
@@ -670,6 +674,7 @@ public void readSpawnData(ByteArrayDataInput data)
   this.turretDestPitch = data.readFloat();
   this.turretDestRot = data.readFloat();
   this.upgradeHelper.updateUpgradeStats();
+  this.teamNum = data.readInt();
   }
 
 @Override
@@ -692,6 +697,7 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.turretDestRot = tag.getFloat("trd");  
   this.upgradeHelper.updateUpgrades(); 
   this.ammoHelper.updateAmmoCounts();
+  this.teamNum = tag.getInteger("team");
   }
 
 @Override
@@ -711,6 +717,7 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setFloat("tpd", turretDestPitch);
   tag.setFloat("tr", turretRotation);
   tag.setFloat("trd", turretDestRot);
+  tag.setInteger("team", this.teamNum);
   }
 
 @Override

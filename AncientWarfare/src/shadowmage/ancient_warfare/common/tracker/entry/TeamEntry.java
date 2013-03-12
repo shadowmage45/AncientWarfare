@@ -37,6 +37,7 @@ public class TeamEntry implements INBTTaggable
 
 public int teamNum;
 public List<String> memberNames = new ArrayList<String>();
+public List<Integer> nonHostileTeams = new ArrayList<Integer>();
 
 @Override
 public NBTTagCompound getNBTTag()
@@ -51,12 +52,20 @@ public NBTTagCompound getNBTTag()
     namesList.appendTag(memberTag);
     }  
   tag.setTag("teamMembers", namesList);
+  
+  int[] nonHost = new int[this.nonHostileTeams.size()];
+  for(int i = 0; i < this.nonHostileTeams.size(); i++)
+    {
+    nonHost[i] = this.nonHostileTeams.get(i);
+    }
+  tag.setIntArray("nonHost", nonHost);  
   return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
+  this.memberNames.clear();
   this.teamNum = tag.getInteger("num");
   NBTTagList namesList = tag.getTagList("teamMembers");
   for(int i = 0; i < namesList.tagCount(); i++)
@@ -64,7 +73,19 @@ public void readFromNBT(NBTTagCompound tag)
     NBTTagCompound memberTag = (NBTTagCompound) namesList.tagAt(i);
     String name = memberTag.getString("name");
     this.memberNames.add(name);
-    }
+    }  
+  int[] nonHost = tag.getIntArray("nonHost");
+  this.nonHostileTeams.clear();
+  for(int i = 0; i < nonHost.length; i++)
+    {
+    this.nonHostileTeams.add(nonHost[i]);
+    }  
   }
+
+public boolean isHostileTowards(int num)
+  {
+  return num !=this.teamNum && !this.nonHostileTeams.contains(num);
+  }
+
 
 }

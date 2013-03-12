@@ -65,6 +65,11 @@ public void setStructData(NBTTagCompound tag)
   this.packetData.setCompoundTag("struct", tag);
   }
 
+public void setTeamUpdate(NBTTagCompound tag)
+  {
+  this.packetData.setCompoundTag("team", packetData);
+  }
+
 @Override
 public void writeDataToStream(ByteArrayDataOutput data)
   {

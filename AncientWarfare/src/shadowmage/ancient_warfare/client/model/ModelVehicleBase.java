@@ -22,7 +22,9 @@ package shadowmage.ancient_warfare.client.model;
 
 import net.minecraft.client.model.ModelBase;
 
-public class ModelVehicleBase extends ModelBase
+public abstract class ModelVehicleBase extends ModelBase
 {
+
+public abstract void renderFlag(int color);
 
 }

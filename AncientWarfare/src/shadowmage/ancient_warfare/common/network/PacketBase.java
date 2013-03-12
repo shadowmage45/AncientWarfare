@@ -132,4 +132,9 @@ public void sendPacketToAllTrackingClients(Entity ent)
   AWCore.proxy.sendPacketToAllClientsTracking(ent, this);
   }
 
+public void sendPacketToPlayer(EntityPlayer player)
+  {
+  AWCore.proxy.sendPacketToPlayer(player, this);
+  }
+
 }

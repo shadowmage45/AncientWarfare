@@ -874,4 +874,11 @@ public void setWheelRotations(float fl, float fr, float rl, float rr)
   this.RRWheelPivot.rotateAngleX = Trig.toDegrees(rr);
   this.RLWheelPivot.rotateAngleX = Trig.toDegrees(rl);
   }
+
+@Override
+public void renderFlag(int color)
+  {
+  // TODO Auto-generated method stub
+  
+  }
 }

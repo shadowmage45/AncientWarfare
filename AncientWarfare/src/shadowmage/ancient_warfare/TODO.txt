@@ -30,6 +30,9 @@ VEHICLES
 * add team stuff to vehicle, basic flag rendering call in vehicle base render
 * set vehicles to not fire if their current ammo type is valid but empty (don't trigger/send firing animation start packet)
 * remove old targetPos code...
+* fix rotation yaw bounding (prev rotation not lining up with current rotation)
+* fix catapult and ballista models--flags need to be seperate pieces, not attached to the base (so they can use custom textures)
+
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar

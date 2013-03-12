@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
 
 /**
@@ -62,28 +63,103 @@ public void handleNewPlayerLogin(EntityPlayer player)
     this.serverTeamEntries[0].teamNum = 0;    
     }
   this.serverTeamEntries[0].memberNames.add(player.getEntityName());
-  //TODO relay info to all other logged in clients...
+  
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setInteger("num", 0);
+  tag.setString("pName", player.getEntityName());
+  tag.setBoolean("new", true);
+  Packet01ModData pkt = new Packet01ModData();
+  pkt.setTeamUpdate(tag);
+  pkt.sendPacketToPlayer(player);
   }
 
 public void handleClientUpdate(NBTTagCompound tag)
   {
-  //TODO
+  if(tag.hasKey("new"))
+    {
+    int num = tag.getInteger("num");
+    this.clientTeamEntries[num].memberNames.add(tag.getString("pName"));
+    }
+  else if(tag.hasKey("change"))
+    {
+    int num = tag.getInteger("num");
+    String name = tag.getString("pName");
+    int oldTeam = this.getTeamForPlayerClient(name);
+    this.clientTeamEntries[oldTeam].memberNames.remove(name);
+    this.clientTeamEntries[num].memberNames.add(name);
+    }
   }
 
 public void handleClientInit(NBTTagCompound tag)
   {
-  //TODO
+  this.clientTeamEntries = new TeamEntry[16];
+  NBTTagList teamList = tag.getTagList("tL");
+  NBTTagCompound teamTag = null;
+  TeamEntry entry = null;
+  for(int i = 0; i < teamList.tagCount(); i++)
+    {
+    teamTag = (NBTTagCompound) teamList.tagAt(i);
+    entry = new TeamEntry();
+    entry.readFromNBT(teamTag);
+    if(this.clientTeamEntries[entry.teamNum]==null)
+      {
+      this.clientTeamEntries[entry.teamNum]=entry;
+      }
+    else
+      {
+      Config.logError("Error reading Team Data from NBT, duplicate team detected");
+      }
+    }
   }
 
 public NBTTagCompound getClientInitData()
   {
-  //TODO
-  return null;
+  NBTTagCompound tag = new NBTTagCompound();
+  NBTTagList teamList = new NBTTagList();  
+  NBTTagCompound teamTag = null;
+  for(TeamEntry entry : this.serverTeamEntries)
+    {
+    if(entry!=null)
+      {
+      teamList.appendTag(entry.getNBTTag());
+      }    
+    }
+  tag.setTag("tL", teamList);
+  return tag;
   }
 
 public void handleServerUpdate(NBTTagCompound tag)
   {
   
+  }
+
+public int getTeamForPlayerServer(String name)
+  {
+  for(TeamEntry ent : this.serverTeamEntries)
+    {
+    if(ent.memberNames.contains(name))
+      {
+      return ent.teamNum;
+      }
+    }
+  return 0;
+  }
+
+public int getTeamForPlayerClient(String name)
+  {
+  for(TeamEntry ent : this.clientTeamEntries)
+    {
+    if(ent.memberNames.contains(name))
+      {
+      return ent.teamNum;
+      }
+    }
+  return 0;
+  }
+
+public boolean isHostileTowards(World world, int aggressor, int defender)
+  {
+  return this.getTeamEntry(world, aggressor).isHostileTowards(defender);
   }
 
 /**

@@ -615,7 +615,7 @@ public void render(Entity entity, float f1, float f2, float f3, float f4, float 
   super.render(entity, f1, f2, f3, f4, f5, f6);
   setRotationAngles(f1, f2, f3, f4, f5, f6, entity);
   frontCrossBeam.bindParentTexture(entity.getTexture());
-  frontCrossBeam.render(f6); 
+  frontCrossBeam.render(f6);
   }
 
 public void setWheelRotations(float fl, float fr, float rl, float rr)
@@ -642,4 +642,11 @@ public void setPieceRotation(ModelRenderer model, float x, float y, float z)
   model.rotateAngleY = y;
   model.rotateAngleZ = z;
   }
+
+@Override
+public void renderFlag(int color)
+  {
+    
+  }
+
 }
