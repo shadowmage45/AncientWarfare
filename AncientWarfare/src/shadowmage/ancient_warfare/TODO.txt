@@ -22,7 +22,6 @@ VEHICLES
 * fix catapult and ballista models--flags need to be seperate pieces, not attached to the base (so they can use custom textures)
 * create rockets (will require some hackery for their flight dynamics)
 * add turret-lock upgrade code somewhere...
-* create a real turretYawUpdate algorithm instead of the hack that is currently in place
 * finish catapult and ballista animations
 * add yawSpeed smoothing updates to render for turret yaw/pitch changes for ballista
          
@@ -135,6 +134,7 @@ TWEAKS/OPTIMIZATION
 * add upgrade types
 * onHit client-side animation (can use the client-side health update method to trigger on - health updates)
 * move world-gen base config from AncientWarfare.cfg into /AWConfig/AWWorldGen.cfg
+* create a real turretYawUpdate algorithm instead of the hack that is currently in place
 
 
 

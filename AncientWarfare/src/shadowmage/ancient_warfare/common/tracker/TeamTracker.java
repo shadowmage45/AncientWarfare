@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.tracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
@@ -63,14 +64,22 @@ public void handleNewPlayerLogin(EntityPlayer player)
     this.serverTeamEntries[0].teamNum = 0;    
     }
   this.serverTeamEntries[0].memberNames.add(player.getEntityName());
-  
+      
   NBTTagCompound tag = new NBTTagCompound();
   tag.setInteger("num", 0);
   tag.setString("pName", player.getEntityName());
   tag.setBoolean("new", true);
   Packet01ModData pkt = new Packet01ModData();
   pkt.setTeamUpdate(tag);
-  pkt.sendPacketToPlayer(player);
+  EntityPlayer otherPlayer;
+  for(Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList)
+    {
+    otherPlayer = (EntityPlayer)obj;
+    if(otherPlayer!=null && otherPlayer != player)
+      {
+      pkt.sendPacketToPlayer(otherPlayer);
+      }
+    }    
   }
 
 public void handleClientUpdate(NBTTagCompound tag)

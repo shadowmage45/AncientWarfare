@@ -63,6 +63,11 @@ public VehicleTypeCatapult(int typeNum)
   this.validAmmoTypes.add(Ammo.ammoStoneShot);
   
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);  
   this.validArmors.add(ArmorRegistry.armorStone);
   
   this.storageBaySize = 0;
