@@ -3,6 +3,7 @@ TODO before first alpha release:
 GENERAL
 * change inventoryTools to manipulate containers as well
 * figure out a good way to index images for item subtypes--vehicles could use their own icons for each material level, not just vehicle type
+        --might be made easier in 1.5 by the icon changes...maybe...also icon changes are a pain in the ass in general...
 
 PRE-VEHICLE TEST RELEASE
 * add vehicles
@@ -10,7 +11,7 @@ PRE-VEHICLE TEST RELEASE
     -- model-textures
     -- renders
     -- animations
-* add ammos
+* add ammo types
     -- model-textures
     -- renders
 
@@ -39,6 +40,7 @@ TESTING
 * test structure underground buildings (dungeons)
 * test structure submerged code
 * test vehicle armor damage reduction
+* test vehicle missile weight factoring
 
 TEMPLATES
 
