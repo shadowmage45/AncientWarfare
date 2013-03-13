@@ -29,8 +29,8 @@ import shadowmage.ancient_warfare.client.render.RenderCatapult;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
 import shadowmage.ancient_warfare.client.render.RenderShot;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBallista;
-import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
+import shadowmage.ancient_warfare.common.vehicles.entities.VehicleBallista;
+import shadowmage.ancient_warfare.common.vehicles.entities.VehicleCatapult;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 /**

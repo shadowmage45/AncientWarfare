@@ -20,8 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.armors;
 
-import shadowmage.ancient_warfare.common.item.ItemLoader;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 
 public abstract class VehicleArmorBase implements IVehicleArmorType 

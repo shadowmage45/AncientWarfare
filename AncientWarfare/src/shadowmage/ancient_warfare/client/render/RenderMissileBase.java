@@ -21,9 +21,6 @@
 package shadowmage.ancient_warfare.client.render;
 
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.client.registry.RenderRegistry;
-import shadowmage.ancient_warfare.common.missiles.MissileBase;
 
 public abstract class RenderMissileBase extends Render
 {

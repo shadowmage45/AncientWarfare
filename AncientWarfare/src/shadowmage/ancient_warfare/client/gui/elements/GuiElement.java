@@ -26,8 +26,6 @@ import net.minecraft.client.gui.Gui;
 
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_warfare.common.config.Config;
-
 public abstract class GuiElement extends Gui implements IGuiElement
 {
 

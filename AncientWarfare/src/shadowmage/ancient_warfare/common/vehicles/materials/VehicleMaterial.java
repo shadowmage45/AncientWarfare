@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.vehicles.materials;
 
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.utils.Pair;
 
 public class VehicleMaterial implements IVehicleMaterial
 {

@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
-import shadowmage.ancient_warfare.common.config.Config;
 
 public class GuiScrollBarSimple extends GuiElement
 {

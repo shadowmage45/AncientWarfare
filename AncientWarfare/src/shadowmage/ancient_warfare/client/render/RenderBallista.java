@@ -25,7 +25,7 @@ import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelBallista;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBallista;
+import shadowmage.ancient_warfare.common.vehicles.entities.VehicleBallista;
 
 public class RenderBallista extends RenderVehicleBase
 {

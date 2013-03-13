@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
@@ -57,6 +58,7 @@ public abstract float getMissileVerticalOffset();
 public abstract float getRiderForwardsOffset();
 public abstract float getRiderHorizontalOffset();
 public abstract float getRiderVerticalOffest();
+public abstract boolean shouldRiderSit();
 
 public abstract float getBaseForwardSpeed();
 public abstract float getBaseStrafeSpeed();
@@ -88,4 +90,5 @@ public abstract List<ItemStack> getAdditionalMaterials();//get a list of additio
 
 public abstract ItemStack getStackForLevel(int level);
 
+public abstract VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh);
 }

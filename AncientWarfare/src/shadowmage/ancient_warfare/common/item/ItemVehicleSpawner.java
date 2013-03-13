@@ -29,11 +29,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 
 
 public class ItemVehicleSpawner extends AWItemClickable
@@ -64,7 +64,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     int level = stack.getTagCompound().getCompoundTag("AWVehSpawner").getInteger("lev");    
     hit = BlockTools.offsetForSide(hit, side);      
-    VehicleBase vehicle = VehicleRegistry.instance().getVehicleForType(world, stack.getItemDamage(), level);
+    VehicleBase vehicle = VehicleType.getVehicleForType(world, stack.getItemDamage(), level);
     vehicle.teamNum = TeamTracker.instance().getTeamForPlayerServer(player.getEntityName());
     vehicle.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
     vehicle.prevRotationYaw = vehicle.rotationYaw = player.rotationYaw;
@@ -99,7 +99,7 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
 @Override
 public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {
-  List displayStacks = VehicleRegistry.instance().getCreativeDisplayItems();
+  List displayStacks = VehicleType.getCreativeDisplayItems();
   par3List.addAll(displayStacks);
   }
 

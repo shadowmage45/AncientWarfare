@@ -29,12 +29,8 @@ import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.soldiers.INpcType;
-import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 
 
 public class NpcRegistry

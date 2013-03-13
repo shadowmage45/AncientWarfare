@@ -20,15 +20,24 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
+import shadowmage.ancient_warfare.common.vehicles.entities.VehicleBallista;
+import shadowmage.ancient_warfare.common.vehicles.entities.VehicleCatapult;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
@@ -43,9 +52,32 @@ import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
  * @author Shadowmage
  *
  */
-public class VehicleTypeBase implements IVehicleType
+public abstract class VehicleType implements IVehicleType
 {
 
+public static final IVehicleType CATAPULT_STAND_FIXED = new VehicleTypeCatapult(0, VehicleCatapult.class);
+public static final IVehicleType CATAPULT_STAND_TURRET = new VehicleTypeCatapult(1, VehicleCatapult.class);
+public static final IVehicleType CATAPULT_MOBILE_FIXED = new VehicleTypeCatapult(2, VehicleCatapult.class);
+public static final IVehicleType CATAPULT_MOBILE_TURRET = new VehicleTypeCatapult(3, VehicleCatapult.class);
+
+public static final IVehicleType BALLISTA_STAND_FIXED = new VehicleTypeBallistaStand(4, VehicleBallista.class);
+public static final IVehicleType BALLISTA_STAND_TURRET = new VehicleTypeBallistaStandTurret(5, VehicleBallista.class);
+public static final IVehicleType BALLISTA_MOBILE_FIXED = new VehicleTypeBallistaMobile(6, VehicleBallista.class);
+public static final IVehicleType BALLISTA_MOBILE_TURRET = new VehicleTypeBallistaMobileTurret(7, VehicleBallista.class);
+
+/**
+ * REGISTRY STUFF.....
+ */
+private static HashMap<Integer, IVehicleType> vehicleTypes = new HashMap<Integer, IVehicleType>();
+private static HashMap<Integer, Class <? extends VehicleBase>> vehicleClasses = new HashMap<Integer, Class<? extends VehicleBase>>();
+
+
+
+
+
+/**
+ * INSTANCE VARIABLES......
+ */
 public float width = 2;
 public float height = 2;
 public float weight = 1000;//kg
@@ -65,6 +97,7 @@ public float missileVerticalOffset= 0.f;
 public float riderForwardsOffset= 0.f;
 public float riderHorizontalOffset= 0.f;
 public float riderVerticalOffset= 0.f;
+public boolean shouldRiderSit = true;
 
 public float baseForwardSpeed;
 public float baseStrafeSpeed;
@@ -95,9 +128,12 @@ int armorBaySize = 3;
 public int materialCount = 1;
 public List<ItemStack> additionalMaterials = new ArrayList<ItemStack>();
 
-public VehicleTypeBase(int typeNum)
+protected VehicleType(int typeNum, Class <? extends VehicleBase> vehicleClass)
   {
   this.vehicleType = typeNum;
+  this.vehicleTypes.put(typeNum, this);
+  this.vehicleClasses.put(typeNum, vehicleClass);
+  ItemLoader.instance().addSubtypeToItem(ItemLoader.vehicleSpawner, this.getGlobalVehicleType(), this.getDisplayName(), this.getDisplayTooltip());
   }
 
 @Override
@@ -355,5 +391,92 @@ public float getMaxMissileWeight()
   {
   return this.baseMissileMaxWeight;
   }
+
+@Override
+public boolean shouldRiderSit()
+  {
+  return this.shouldRiderSit;
+  }
+
+public static IVehicleType getVehicleType(int num)
+  {
+  return vehicleTypes.get(num);
+  }
+
+public static VehicleBase getVehicleForType(World world, int type, int level)
+  {
+  if(vehicleClasses.containsKey(type))
+    {
+    try
+      {
+      IVehicleType vehType = getVehicleType(type);
+      VehicleBase vehicle = vehicleClasses.get(type).getDeclaredConstructor(World.class).newInstance(world);      
+      if(vehicle!=null)
+        {
+        vehicle.setVehicleType(vehType, level);
+        }
+      return vehicle;
+      } 
+    catch (InstantiationException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (IllegalAccessException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (IllegalArgumentException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (InvocationTargetException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (NoSuchMethodException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (SecurityException e)
+      {
+      e.printStackTrace();
+      }
+    }
+  return null;
+  }
+
+public static List getCreativeDisplayItems()
+  {
+  List<ItemStack> stacks = new ArrayList<ItemStack>();
+  Iterator<Entry<Integer, IVehicleType>> it = vehicleTypes.entrySet().iterator();
+  Entry<Integer, IVehicleType> ent = null;
+  ItemStack stack = null;
+  IVehicleType type = null;
+  while(it.hasNext())
+    {
+    ent = it.next();
+    type = ent.getValue();
+    if(type==null || type.getMaterialType()==null)
+      {
+      continue;
+      }
+    for(int i = 0; i < type.getMaterialType().getNumOfLevels(); i++)
+      {
+      stack = new ItemStack(ItemLoader.vehicleSpawner,1,type.getGlobalVehicleType());
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setInteger("lev", i);
+      stack.setTagInfo("AWVehSpawner", tag);
+      stacks.add(stack);
+      }
+    }
+  return stacks;
+  }
+
+/**
+ * empty method to make sure the class is instantiated during load-time
+ */
+public static void load(){}
+  
+
 
 }

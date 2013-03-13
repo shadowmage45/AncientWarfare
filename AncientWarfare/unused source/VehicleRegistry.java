@@ -34,11 +34,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBallista;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallista;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBase;
+import shadowmage.ancient_warfare.common.vehicles.entities.VehicleBallista;
+import shadowmage.ancient_warfare.common.vehicles.entities.VehicleCatapult;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobile;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobileTurret;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStand;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStandTurret;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapult;
 
 public class VehicleRegistry
@@ -47,9 +50,6 @@ public class VehicleRegistry
 private HashMap<Integer, IVehicleType> vehicleTypes = new HashMap<Integer, IVehicleType>();
 private HashMap<IVehicleType, Class <? extends VehicleBase>> vehicleClasses = new HashMap<IVehicleType, Class<? extends VehicleBase>>();
 
-public static final IVehicleType DUMMY_VEHICLE = new VehicleTypeBase(-1);
-public static IVehicleType CATAPULT = new VehicleTypeCatapult(0);
-public static IVehicleType BALLISTA = new VehicleTypeBallista(1);
 
 private VehicleRegistry(){}
 private static VehicleRegistry INSTANCE;
@@ -64,15 +64,19 @@ public static VehicleRegistry instance()
  */
 public void registerVehicles()
   {
-  this.vehicleTypes.put(-1, DUMMY_VEHICLE);
   
-  this.registerVehicle(VehicleCatapult.class, "AW_Catapult", CATAPULT);
-  this.registerVehicle(VehicleBallista.class, "AW.Ballista", BALLISTA);
+//  this.vehicleTypes.put(-1, DUMMY_VEHICLE);
+//  
+//  this.registerVehicle(VehicleCatapult.class, CATAPULT_MOBILE_FIXED);
+//  this.registerVehicle(VehicleBallista.class, BALLISTA_STAND_FIXED);
+//  this.registerVehicle(VehicleBallista.class, BALLISTA_STAND_TURRET);
+//  this.registerVehicle(VehicleBallista.class, BALLISTA_MOBILE_FIXED);
+//  this.registerVehicle(VehicleBallista.class, BALLISTA_MOBILE_TURRET);
   }
 
-public void registerVehicle(Class <? extends VehicleBase> clz, String entName, IVehicleType type)
+public void registerVehicle(Class <? extends VehicleBase> clz, IVehicleType type)
   {
-  AWEntityRegistry.registerEntity(clz, entName, 130, 3, false);
+  //AWEntityRegistry.registerEntity(clz, entName, 130, 3, false);
   this.vehicleTypes.put(type.getGlobalVehicleType(), type);
   this.vehicleClasses.put(type, clz);
   ItemLoader.instance().addSubtypeToItem(ItemLoader.vehicleSpawner, type.getGlobalVehicleType(), type.getDisplayName(), type.getDisplayTooltip());

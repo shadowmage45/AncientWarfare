@@ -24,41 +24,19 @@ import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
-public class VehicleTypeBallista extends VehicleType
+public class VehicleTypeBallistaMobileTurret extends VehicleTypeBallista
 {
+
 /**
  * @param typeNum
  */
-public VehicleTypeBallista(int typeNum, Class <? extends VehicleBase> vehicleClass)
+public VehicleTypeBallistaMobileTurret(int typeNum, Class <? extends VehicleBase> vehicleClass)
   {
   super(typeNum, vehicleClass);
-
-  this.vehicleMaterial = VehicleMaterial.materialWood;  
   
-  this.validAmmoTypes.add(Ammo.ammoArrow);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot);
-  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
-  this.validArmors.add(ArmorRegistry.armorStone);
-  
-  this.storageBaySize = 0;  
-  this.accuracy = 0.98f;
-  this.baseStrafeSpeed = 2.f;
-  this.baseForwardSpeed = 6.f*0.05f; 
-  this.basePitchMax = 15;
-  this.basePitchMin = -15; 
-  this.isMountable = true;
-  this.isCombatEngine = true;
-  this.canAdjustPitch = true;
-  this.canAdjustPower = false;
-  
-
-  /**
-   * default values that should be overriden by ballista types...
-   */
-  this.baseMissileVelocityMax = 42.f;//stand versions should have higher velocity, as should fixed version--i.e. mobile turret should have the worst of all versions   
+  this.baseMissileVelocityMax = 37.f;//stand versions should have higher velocity, as should fixed version--i.e. mobile turret should have the worst of all versions   
   this.width = 2;
   this.height = 2;  
   
@@ -70,17 +48,14 @@ public VehicleTypeBallista(int typeNum, Class <? extends VehicleBase> vehicleCla
   this.missileForwardsOffset = 1.f;
   this.riderForwardsOffset = -1.2f;
   this.riderVerticalOffset = 0.7f;
+  this.shouldRiderSit = true;
   
-  this.isDrivable = false;//adjust based on isMobile or not
-  this.canAdjustYaw = false;//adjust based on hasTurret or not
-  this.turretRotationMax=360.f;//adjust based on mobile fixed (0), stand fixed(90'), or mobile or stand turret (360)
+  this.isDrivable = true;//adjust based on isMobile or not
+  this.canAdjustYaw = true;//adjust based on hasTurret or not
+  this.turretRotationMax=360.f;//adjust based on mobile fixed (0), stand fixed(90'), or mobile or stand turret (360) 
+  
   }
 
-@Override
-public VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh)
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
+
 
 }

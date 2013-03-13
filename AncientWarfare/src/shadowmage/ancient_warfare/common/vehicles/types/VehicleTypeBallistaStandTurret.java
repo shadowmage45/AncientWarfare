@@ -18,31 +18,36 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles.upgrades;
+package shadowmage.ancient_warfare.common.vehicles.types;
 
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class VehicleUpgradeSpeed extends VehicleUpgradeBase
+public class VehicleTypeBallistaStandTurret extends VehicleTypeBallista
 {
 
 /**
- * @param num
+ * @param typeNum
  */
-public VehicleUpgradeSpeed(int num)
+public VehicleTypeBallistaStandTurret(int typeNum, Class <? extends VehicleBase> vehicleClass)
   {
-  super(num);
-  this.displayName = "Iron Bearings";
-  this.tooltip = "Increases Vehicle Max Speed by 0.25m/s";
-  }
+  super(typeNum, vehicleClass);
+  this.baseMissileVelocityMax = 42.f;//stand versions should have higher velocity, as should fixed version--i.e. mobile turret should have the worst of all versions   
+  this.width = 2;
+  this.height = 2;  
 
-@Override
-public void applyVehicleEffects(VehicleBase vehicle)
-  {
-  Config.logDebug("prev vehicle max speed: "+vehicle.maxForwardSpeedCurrent);
-  vehicle.maxForwardSpeedCurrent += 0.25f*0.05f;
-  Config.logDebug("new vehicle max speed: "+vehicle.maxForwardSpeedCurrent);
-  }
+  this.armorBaySize = 4;
+  this.upgradeBaySize = 4;
 
+  this.missileVerticalOffset = 1.2f;
+  this.missileForwardsOffset = 1.f;
+  this.riderForwardsOffset = -1.2f;
+  this.riderVerticalOffset = 0.7f;
+  this.shouldRiderSit = false;
+
+  this.isDrivable = false;//adjust based on isMobile or not
+  this.canAdjustYaw = true;//adjust based on hasTurret or not
+  this.turretRotationMax=360.f;//adjust based on mobile/stand fixed (0), stand fixed(90'), or mobile or stand turret (360) 
+
+  }
 
 }

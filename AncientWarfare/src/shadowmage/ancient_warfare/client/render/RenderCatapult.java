@@ -25,8 +25,7 @@ import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelCatapult;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.VehicleCatapult;
+import shadowmage.ancient_warfare.common.vehicles.entities.VehicleCatapult;
 
 public class RenderCatapult extends RenderVehicleBase
 {

@@ -18,13 +18,21 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.render;
+package shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers;
 
-import net.minecraft.client.renderer.entity.Render;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
-public abstract class RenderVehicleBase extends Render
+public class CatapultVarHelper extends VehicleFiringVarsHelper
 {
 
-
+/**
+ * @param vehicle
+ */
+public CatapultVarHelper(VehicleBase vehicle)
+  {
+  super(vehicle);
+  // TODO Auto-generated constructor stub
+  }
 
 }

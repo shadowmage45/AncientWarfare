@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_warfare.common.AWStructureModule;
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 
 public class Config
 {

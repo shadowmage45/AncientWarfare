@@ -14,6 +14,13 @@ PRE-VEHICLE TEST RELEASE
     -- renders
 
 VEHICLES
+TO ADD:
+    Catapult stand
+    Catapult turret
+    Catapult mobile w/turret
+    Ballista stand
+    Ballista turret
+    Ballista mobile w/fixed    
 * find a good method for battering ram block damage (take point-hit, and simply do a 3D x on it?)
 * add ammo types
 * final vehicle gui will need slots that only accept stack size 1 and that validate against the vehicles valid<whatever type> list
@@ -24,6 +31,8 @@ VEHICLES
 * add turret-lock upgrade code somewhere...
 * finish catapult and ballista animations
 * add yawSpeed smoothing updates to render for turret yaw/pitch changes for ballista
+* fix vehicle placement rotation
+* fix vehicle placement turret rotation (set to vehicle rotation, set pitch to nominal)
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
@@ -135,10 +144,11 @@ TWEAKS/OPTIMIZATION
 * onHit client-side animation (can use the client-side health update method to trigger on - health updates)
 * move world-gen base config from AncientWarfare.cfg into /AWConfig/AWWorldGen.cfg
 * create a real turretYawUpdate algorithm instead of the hack that is currently in place
-
-
-
 /********** 03-13-13 **********/
+* create catapult and ballista vehicle types
+* rework vehicle registry to use a single vehicleBase class..... (ahh...polymorphism CAN work for you once in awhile--or not..f'n client/server bs)
+
+
 /********** 03-14-13 **********/
 /********** 03-15-13 **********/
 /********** 03-16-13 **********/

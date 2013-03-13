@@ -20,9 +20,10 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import net.minecraft.entity.Entity;
+
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.entity.Entity;
 import shadowmage.ancient_warfare.client.model.ModelShot;
 
 public class RenderShot extends RenderMissileBase

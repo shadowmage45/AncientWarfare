@@ -21,21 +21,23 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.missiles.Ammo;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.utils.Trig;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.CatapultVarHelper;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
-public class VehicleTypeCatapult extends VehicleTypeBase
+public class VehicleTypeCatapult extends VehicleType
 {
 
 /**
  * @param typeNum
  */
-public VehicleTypeCatapult(int typeNum)
+public VehicleTypeCatapult(int typeNum, Class <? extends VehicleBase> vehicleClass)
   {
-  super(typeNum);
+  super(typeNum, vehicleClass);
   this.width = 2;
   this.height = 2;
   this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.4f;
@@ -72,6 +74,12 @@ public VehicleTypeCatapult(int typeNum)
   
   this.storageBaySize = 0;
   this.armorBaySize = 3;
+  }
+
+@Override
+public VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh)
+  {
+  return new CatapultVarHelper(veh);
   }
 
 }

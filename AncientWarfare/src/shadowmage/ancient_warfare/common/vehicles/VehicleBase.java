@@ -38,7 +38,6 @@ import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
-import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
@@ -46,9 +45,11 @@ import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleAmmoHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringHelper;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleUpgradeHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -81,7 +82,7 @@ public float baseExplosionResist = 0.f;
 /**
  * in meters/second
  */
-public float launchPowerCurrent = 31.321f * 0.4f;
+public float launchPowerCurrent = 31.321f;
 
 /**
  * local current stats, fully updated and modified from upgrades/etc
@@ -134,16 +135,26 @@ public int hitAnimationTicks = 0;
 public int moveUpdateTicks = 0;
 
 /**
+ * local vars for keeping track of animation and timers
+ */
+public float animationAngle1 = 0.f;
+public float animationAngle2 = 0.f;
+public float animationAngle3 = 0.f;
+public float animationAngle4 = 0.f;
+public float animationAngle5 = 0.f;
+
+/**
  * complex stat tracking helpers, move, ammo, upgrades, general stats
  */
 public VehicleAmmoHelper ammoHelper;
 public VehicleUpgradeHelper upgradeHelper;
 public VehicleMovementHelper moveHelper;
 public VehicleFiringHelper firingHelper;
+public VehicleFiringVarsHelper firingVarsHelper;
 public VehicleInventory inventory;
 public EntityPathfinder navigator;
 
-public IVehicleType vehicleType = VehicleRegistry.DUMMY_VEHICLE;//set to dummy vehicle so it is never null...
+public IVehicleType vehicleType = VehicleType.CATAPULT_STAND_FIXED;//set to dummy vehicle so it is never null...
 public int vehicleMaterialLevel = 0;//the current material level of this vehicle. should be read/set prior to calling updateBaseStats
 
 public VehicleBase(World par1World)
@@ -154,6 +165,7 @@ public VehicleBase(World par1World)
   this.moveHelper = new VehicleMovementHelper(this);
   this.ammoHelper = new VehicleAmmoHelper(this);
   this.firingHelper = new VehicleFiringHelper(this);
+  this.firingVarsHelper = new VehicleFiringVarsHelper(this);
   this.inventory = new VehicleInventory(this);
   this.stepHeight = 1.12f;
   }
@@ -162,6 +174,11 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
   {
   this.vehicleType = vehicle;
   this.vehicleMaterialLevel = materialLevel;
+  VehicleFiringVarsHelper help =vehicle.getFiringVarsHelper(this);
+  if(help!=null)
+    {
+    this.firingVarsHelper = help;
+    }
   float width = vehicleType.getWidth();
   float height = vehicleType.getHeight();
   this.setSize(width, height);
@@ -295,17 +312,26 @@ public Pos3f getMissileOffset()
  * called on every tick that the vehicle is 'firing' to update the firing animation and to call
  * launchMissile when animation has reached launch point
  */
-public abstract void onFiringUpdate();
+public void onFiringUpdate()
+  {
+  this.firingVarsHelper.onFiringUpdate();
+  }
 
 /**
  * called every tick after the vehicle has fired, until reload timer is complete, to update animations
  */
-public abstract void onReloadUpdate();
+public void onReloadUpdate()
+  {
+  this.firingVarsHelper.onReloadUpdate();
+  }
 
 /**
  * called every tick after startLaunching() is called, until setFinishedLaunching() is called...
  */
-public abstract void onLaunchingUpdate();
+public void onLaunchingUpdate()
+  {
+  this.firingVarsHelper.onLaunchingUpdate();
+  }
 
 /**
  * reset all upgradeable stats back to the base for this vehicle
@@ -717,7 +743,7 @@ public void writeSpawnData(ByteArrayDataOutput data)
 public void readSpawnData(ByteArrayDataInput data)
   {
   this.vehicleHealth = data.readFloat();
-  IVehicleType type = VehicleRegistry.instance().getVehicleType(data.readInt());
+  IVehicleType type = VehicleType.getVehicleType(data.readInt());
   this.setVehicleType(type, data.readInt());
   this.upgradeHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.ammoHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
@@ -735,7 +761,7 @@ public void readSpawnData(ByteArrayDataInput data)
 @Override
 protected void readEntityFromNBT(NBTTagCompound tag)
   {
-  IVehicleType vehType = VehicleRegistry.instance().getVehicleType(tag.getInteger("vehType"));
+  IVehicleType vehType = VehicleType.getVehicleType(tag.getInteger("vehType"));
   int level = tag.getInteger("matLvl");
   this.setVehicleType(vehType, level);
   this.vehicleHealth = tag.getFloat("health");

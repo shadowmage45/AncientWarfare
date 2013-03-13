@@ -36,7 +36,6 @@ import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
-import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.structures.data.AWStructure;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
@@ -47,6 +46,7 @@ import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 import shadowmage.ancient_warfare.common.world_gen.LootGenerator;
 
@@ -470,7 +470,7 @@ protected void placeVehicle(World world, int x, int y, int z, BlockRule parentRu
     }
   int type = overrideType>=0 ? overrideType : vehRule.vehicleType;
   int rank = overrideRank;
-  VehicleBase vehicle = VehicleRegistry.instance().getVehicleForType(world, type, rank);
+  VehicleBase vehicle = VehicleType.getVehicleForType(world, type, rank);
   if(vehicle!=null)
     {
     List<IAmmoType> vehicleAmmoTypes = vehicle.vehicleType.getValidAmmoTypes();

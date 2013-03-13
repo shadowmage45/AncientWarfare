@@ -18,31 +18,52 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles.upgrades;
+package shadowmage.ancient_warfare.common.vehicles.helpers;
 
-import shadowmage.ancient_warfare.common.config.Config;
+import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class VehicleUpgradeSpeed extends VehicleUpgradeBase
+
+
+public class VehicleFiringVarsHelper implements INBTTaggable
 {
 
-/**
- * @param num
- */
-public VehicleUpgradeSpeed(int num)
+protected VehicleBase vehicle;
+
+public VehicleFiringVarsHelper(VehicleBase vehicle)
   {
-  super(num);
-  this.displayName = "Iron Bearings";
-  this.tooltip = "Increases Vehicle Max Speed by 0.25m/s";
+  this.vehicle = vehicle;
+  }
+
+/**
+ * called on every tick that the vehicle is 'firing' to update the firing animation and to call
+ * launchMissile when animation has reached launch point
+ */
+public void onFiringUpdate(){}
+
+/**
+ * called every tick after the vehicle has fired, until reload timer is complete, to update animations
+ */
+public void onReloadUpdate(){}
+
+/**
+ * called every tick after startLaunching() is called, until setFinishedLaunching() is called...
+ */
+public void onLaunchingUpdate(){}
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  // TODO Auto-generated method stub
+  return null;
   }
 
 @Override
-public void applyVehicleEffects(VehicleBase vehicle)
+public void readFromNBT(NBTTagCompound tag)
   {
-  Config.logDebug("prev vehicle max speed: "+vehicle.maxForwardSpeedCurrent);
-  vehicle.maxForwardSpeedCurrent += 0.25f*0.05f;
-  Config.logDebug("new vehicle max speed: "+vehicle.maxForwardSpeedCurrent);
+  // TODO Auto-generated method stub
+  
   }
-
 
 }

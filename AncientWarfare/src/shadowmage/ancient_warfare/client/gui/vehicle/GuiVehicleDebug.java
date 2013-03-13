@@ -21,10 +21,6 @@
 package shadowmage.ancient_warfare.client.gui.vehicle;
 
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-
-import org.lwjgl.input.Keyboard;
-
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 
