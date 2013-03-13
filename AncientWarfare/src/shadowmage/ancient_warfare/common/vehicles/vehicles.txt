@@ -9,6 +9,15 @@ VehicleBase -- the base entity that all vehicles will use.  it will implement mo
     
 A vehicleType may be used in multiple Vehicle entity classes, provided they are similar enough (same model, very similar performance, same ammo/upgrades) 
     
+Registry Process:
+Create VehicleType, extends VehicleType)
+Create VehicleVarsHelper, extends VehicleVarsHelper, set VehicleType to return that specific type;
+Create static instance of type in VehicleType
+        --static instance creation will trigger registry of item and mapping of type
+Create Vehicle Model
+Create VehicleRender, extends RenderVehicleBase
+Register VehicleRender in RenderRegistry
+    
     
 Vehicle stats will be calculated thusly:
 stat = base stat taken from VehicleType for the vehicle

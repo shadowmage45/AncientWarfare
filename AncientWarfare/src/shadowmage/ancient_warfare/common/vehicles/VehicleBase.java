@@ -42,6 +42,7 @@ import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
+import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.DummyVehicleHelper;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleAmmoHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringHelper;
@@ -57,7 +58,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public abstract class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IEntityContainerSynch
+public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IEntityContainerSynch
 {
 
 
@@ -165,7 +166,7 @@ public VehicleBase(World par1World)
   this.moveHelper = new VehicleMovementHelper(this);
   this.ammoHelper = new VehicleAmmoHelper(this);
   this.firingHelper = new VehicleFiringHelper(this);
-  this.firingVarsHelper = new VehicleFiringVarsHelper(this);
+  this.firingVarsHelper = new DummyVehicleHelper(this);
   this.inventory = new VehicleInventory(this);
   this.stepHeight = 1.12f;
   }
@@ -731,6 +732,7 @@ public void writeSpawnData(ByteArrayDataOutput data)
   ByteTools.writeNBTTagCompound(ammoHelper.getNBTTag(), data);
   ByteTools.writeNBTTagCompound(moveHelper.getNBTTag(), data);
   ByteTools.writeNBTTagCompound(firingHelper.getNBTTag(), data);
+  ByteTools.writeNBTTagCompound(firingVarsHelper.getNBTTag(), data);
   data.writeFloat(launchPowerCurrent);
   data.writeFloat(turretPitch);
   data.writeFloat(turretRotation);
@@ -749,6 +751,7 @@ public void readSpawnData(ByteArrayDataInput data)
   this.ammoHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.moveHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.firingHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
+  this.firingVarsHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.launchPowerCurrent = data.readFloat();
   this.turretPitch = data.readFloat();
   this.turretRotation = data.readFloat();
@@ -771,6 +774,7 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.ammoHelper.readFromNBT(tag.getCompoundTag("ammo"));
   this.moveHelper.readFromNBT(tag.getCompoundTag("move"));
   this.firingHelper.readFromNBT(tag.getCompoundTag("fire"));
+  this.firingVarsHelper.readFromNBT(tag.getCompoundTag("vars"));
   this.launchPowerCurrent = tag.getFloat("lc");
   this.turretPitch = tag.getFloat("tp");
   this.turretDestPitch = tag.getFloat("tpd");
@@ -793,6 +797,7 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setCompoundTag("ammo", this.ammoHelper.getNBTTag());
   tag.setCompoundTag("move", this.moveHelper.getNBTTag());
   tag.setCompoundTag("fire", this.firingHelper.getNBTTag());  
+  tag.setCompoundTag("vars", this.firingVarsHelper.getNBTTag());
   tag.setFloat("lc", launchPowerCurrent);
   tag.setFloat("tp", turretPitch);
   tag.setFloat("tpd", turretDestPitch);
@@ -801,6 +806,10 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setInteger("team", this.teamNum);
   }
 
+
+/**
+ * missile callback methods...
+ */
 @Override
 public void onMissileImpact(World world, double x, double y, double z)
   {

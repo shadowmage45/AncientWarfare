@@ -26,7 +26,7 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 
 
-public class VehicleFiringVarsHelper implements INBTTaggable
+public abstract class VehicleFiringVarsHelper implements INBTTaggable
 {
 
 protected VehicleBase vehicle;
@@ -40,30 +40,26 @@ public VehicleFiringVarsHelper(VehicleBase vehicle)
  * called on every tick that the vehicle is 'firing' to update the firing animation and to call
  * launchMissile when animation has reached launch point
  */
-public void onFiringUpdate(){}
+public abstract void onFiringUpdate();
 
 /**
  * called every tick after the vehicle has fired, until reload timer is complete, to update animations
  */
-public void onReloadUpdate(){}
+public abstract void onReloadUpdate();
 
 /**
  * called every tick after startLaunching() is called, until setFinishedLaunching() is called...
  */
-public void onLaunchingUpdate(){}
+public abstract void onLaunchingUpdate();
 
-@Override
-public NBTTagCompound getNBTTag()
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
+public abstract float getVar1();
+public abstract float getVar2();
+public abstract float getVar3();
+public abstract float getVar4();
+public abstract float getVar5();
+public abstract float getVar6();
+public abstract float getVar7();
+public abstract float getVar8();
 
-@Override
-public void readFromNBT(NBTTagCompound tag)
-  {
-  // TODO Auto-generated method stub
-  
-  }
 
 }

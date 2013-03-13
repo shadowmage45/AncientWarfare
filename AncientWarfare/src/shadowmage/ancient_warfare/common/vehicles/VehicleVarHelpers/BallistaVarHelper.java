@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers;
 
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
@@ -27,6 +28,8 @@ public class BallistaVarHelper extends VehicleFiringVarsHelper
 {
 
 
+public float crankAngle = 0.f;
+public float crankSpeed = 0.f;
 /**
  * @param vehicle
  */
@@ -35,6 +38,87 @@ public BallistaVarHelper(VehicleBase vehicle)
   super(vehicle);
   }
 
+@Override
+public void onFiringUpdate()
+  {
+  vehicle.firingHelper.startLaunching();
+  }
 
+@Override
+public void onReloadUpdate()
+  {
+  
+  }
+
+@Override
+public void onLaunchingUpdate()
+  {
+  vehicle.firingHelper.spawnMissile(0, 0, 0);
+  vehicle.firingHelper.setFinishedLaunching();
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setFloat("cA", crankAngle);
+  tag.setFloat("cS", crankSpeed);
+  return tag;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  this.crankAngle = tag.getFloat("cA");
+  this.crankSpeed = tag.getFloat("cS"); 
+  }
+
+@Override
+public float getVar1()
+  {
+  return crankAngle;
+  }
+
+@Override
+public float getVar2()
+  {
+  return crankSpeed;
+  }
+
+@Override
+public float getVar3()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar4()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar5()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar6()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar7()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar8()
+  {
+  return 0;
+  }
 
 }

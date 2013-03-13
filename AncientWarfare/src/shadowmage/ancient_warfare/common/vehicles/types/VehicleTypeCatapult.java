@@ -35,9 +35,9 @@ public class VehicleTypeCatapult extends VehicleType
 /**
  * @param typeNum
  */
-public VehicleTypeCatapult(int typeNum, Class <? extends VehicleBase> vehicleClass)
+public VehicleTypeCatapult(int typeNum)
   {
-  super(typeNum, vehicleClass);
+  super(typeNum);
   this.width = 2;
   this.height = 2;
   this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.4f;

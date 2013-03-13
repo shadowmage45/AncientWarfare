@@ -32,9 +32,9 @@ public class VehicleTypeBallista extends VehicleType
 /**
  * @param typeNum
  */
-public VehicleTypeBallista(int typeNum, Class <? extends VehicleBase> vehicleClass)
+public VehicleTypeBallista(int typeNum)
   {
-  super(typeNum, vehicleClass);
+  super(typeNum);
 
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   

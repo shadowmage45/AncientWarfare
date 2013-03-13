@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,9 +34,6 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
-import shadowmage.ancient_warfare.common.vehicles.entities.VehicleBallista;
-import shadowmage.ancient_warfare.common.vehicles.entities.VehicleCatapult;
-import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
@@ -55,24 +51,20 @@ import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 public abstract class VehicleType implements IVehicleType
 {
 
-public static final IVehicleType CATAPULT_STAND_FIXED = new VehicleTypeCatapult(0, VehicleCatapult.class);
-public static final IVehicleType CATAPULT_STAND_TURRET = new VehicleTypeCatapult(1, VehicleCatapult.class);
-public static final IVehicleType CATAPULT_MOBILE_FIXED = new VehicleTypeCatapult(2, VehicleCatapult.class);
-public static final IVehicleType CATAPULT_MOBILE_TURRET = new VehicleTypeCatapult(3, VehicleCatapult.class);
+public static final IVehicleType CATAPULT_STAND_FIXED = new VehicleTypeCatapult(0);
+public static final IVehicleType CATAPULT_STAND_TURRET = new VehicleTypeCatapult(1);
+public static final IVehicleType CATAPULT_MOBILE_FIXED = new VehicleTypeCatapult(2);
+public static final IVehicleType CATAPULT_MOBILE_TURRET = new VehicleTypeCatapult(3);
 
-public static final IVehicleType BALLISTA_STAND_FIXED = new VehicleTypeBallistaStand(4, VehicleBallista.class);
-public static final IVehicleType BALLISTA_STAND_TURRET = new VehicleTypeBallistaStandTurret(5, VehicleBallista.class);
-public static final IVehicleType BALLISTA_MOBILE_FIXED = new VehicleTypeBallistaMobile(6, VehicleBallista.class);
-public static final IVehicleType BALLISTA_MOBILE_TURRET = new VehicleTypeBallistaMobileTurret(7, VehicleBallista.class);
+public static final IVehicleType BALLISTA_STAND_FIXED = new VehicleTypeBallistaStand(4);
+public static final IVehicleType BALLISTA_STAND_TURRET = new VehicleTypeBallistaStandTurret(5);
+public static final IVehicleType BALLISTA_MOBILE_FIXED = new VehicleTypeBallistaMobile(6);
+public static final IVehicleType BALLISTA_MOBILE_TURRET = new VehicleTypeBallistaMobileTurret(7);
 
 /**
- * REGISTRY STUFF.....
+ * SELF-REGISTRY STUFF.....
  */
 private static HashMap<Integer, IVehicleType> vehicleTypes = new HashMap<Integer, IVehicleType>();
-private static HashMap<Integer, Class <? extends VehicleBase>> vehicleClasses = new HashMap<Integer, Class<? extends VehicleBase>>();
-
-
-
 
 
 /**
@@ -128,11 +120,10 @@ int armorBaySize = 3;
 public int materialCount = 1;
 public List<ItemStack> additionalMaterials = new ArrayList<ItemStack>();
 
-protected VehicleType(int typeNum, Class <? extends VehicleBase> vehicleClass)
+protected VehicleType(int typeNum)
   {
   this.vehicleType = typeNum;
   this.vehicleTypes.put(typeNum, this);
-  this.vehicleClasses.put(typeNum, vehicleClass);
   ItemLoader.instance().addSubtypeToItem(ItemLoader.vehicleSpawner, this.getGlobalVehicleType(), this.getDisplayName(), this.getDisplayTooltip());
   }
 
@@ -398,6 +389,8 @@ public boolean shouldRiderSit()
   return this.shouldRiderSit;
   }
 
+/********************************REGISTRY METHODS********************************/
+
 public static IVehicleType getVehicleType(int num)
   {
   return vehicleTypes.get(num);
@@ -405,43 +398,13 @@ public static IVehicleType getVehicleType(int num)
 
 public static VehicleBase getVehicleForType(World world, int type, int level)
   {
-  if(vehicleClasses.containsKey(type))
+  if(vehicleTypes.containsKey(type))
     {
-    try
-      {
-      IVehicleType vehType = getVehicleType(type);
-      VehicleBase vehicle = vehicleClasses.get(type).getDeclaredConstructor(World.class).newInstance(world);      
-      if(vehicle!=null)
-        {
-        vehicle.setVehicleType(vehType, level);
-        }
-      return vehicle;
-      } 
-    catch (InstantiationException e)
-      {
-      e.printStackTrace();
-      } 
-    catch (IllegalAccessException e)
-      {
-      e.printStackTrace();
-      } 
-    catch (IllegalArgumentException e)
-      {
-      e.printStackTrace();
-      } 
-    catch (InvocationTargetException e)
-      {
-      e.printStackTrace();
-      } 
-    catch (NoSuchMethodException e)
-      {
-      e.printStackTrace();
-      } 
-    catch (SecurityException e)
-      {
-      e.printStackTrace();
-      }
-    }
+    IVehicleType vehType = getVehicleType(type);
+    VehicleBase vehicle = new VehicleBase(world);
+    vehicle.setVehicleType(vehType, level);
+    return vehicle;
+    }  
   return null;
   }
 

@@ -28,9 +28,9 @@ public class VehicleTypeBallistaStandTurret extends VehicleTypeBallista
 /**
  * @param typeNum
  */
-public VehicleTypeBallistaStandTurret(int typeNum, Class <? extends VehicleBase> vehicleClass)
+public VehicleTypeBallistaStandTurret(int typeNum)
   {
-  super(typeNum, vehicleClass);
+  super(typeNum);
   this.baseMissileVelocityMax = 42.f;//stand versions should have higher velocity, as should fixed version--i.e. mobile turret should have the worst of all versions   
   this.width = 2;
   this.height = 2;  

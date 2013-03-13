@@ -20,11 +20,19 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers;
 
+import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
 public class CatapultVarHelper extends VehicleFiringVarsHelper
 {
+
+public float armAngle = -7.f;
+public float armSpeed = 0.f;
+public float crankAngle = 0.f;
+public float crankSpeed = 0.f;
+
 
 /**
  * @param vehicle
@@ -32,7 +40,109 @@ public class CatapultVarHelper extends VehicleFiringVarsHelper
 public CatapultVarHelper(VehicleBase vehicle)
   {
   super(vehicle);
-  // TODO Auto-generated constructor stub
+  }
+
+@Override
+public void onFiringUpdate()
+  {    
+  float prevAngle = this.armAngle;
+  this.armAngle += 87.f/20;
+  if(this.armAngle>=70)
+    {
+    vehicle.firingHelper.startLaunching();
+    this.armAngle = 70.f;
+    }
+  this.armSpeed = this.armAngle - prevAngle;
+  }
+
+@Override
+public void onLaunchingUpdate()
+  { 
+  for(int i = 0; i <10; i++)
+    {
+    vehicle.firingHelper.spawnMissile(0, 0, 0);
+    }  
+  vehicle.firingHelper.setFinishedLaunching();
+  }
+
+@Override
+public void onReloadUpdate()
+  {  
+  float prevAngle = this.armAngle;
+  this.armAngle -= 87 / (float)vehicle.reloadTimeCurrent;
+  if(this.armAngle <= -7)
+    {
+    this.armAngle = -7;
+    }
+  this.armSpeed =this.armAngle - prevAngle;
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setFloat("cA", crankAngle);
+  tag.setFloat("cS", crankSpeed);
+  tag.setFloat("aA", armAngle);
+  tag.setFloat("aS", armSpeed);
+  return tag;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  this.crankAngle = tag.getFloat("cA");
+  this.crankSpeed = tag.getFloat("cS");
+  this.armAngle = tag.getFloat("aA");
+  this.armSpeed = tag.getLong("aS");
+  }
+
+@Override
+public float getVar1()
+  {  
+  return armAngle;
+  }
+
+@Override
+public float getVar2()
+  {
+  return armSpeed;
+  }
+
+@Override
+public float getVar3()
+  {
+  return crankAngle;
+  }
+
+@Override
+public float getVar4()
+  {
+  return crankSpeed;
+  }
+
+@Override
+public float getVar5()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar6()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar7()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar8()
+  {
+  return 0;
   }
 
 }

@@ -21,10 +21,19 @@
 package shadowmage.ancient_warfare.client.render;
 
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public abstract class RenderVehicleBase extends Render
 {
 
+@Override
+public void doRender(Entity var1, double var2, double var4, double var6,  float var8, float var9)
+  {
+
+  }
+
+public abstract void renderVehicle(VehicleBase vehicle, double x, double y, double z, float yaw, float tick);
 
 
 }

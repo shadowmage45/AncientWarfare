@@ -18,42 +18,21 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles.entities;
+package shadowmage.ancient_warfare.client.render;
 
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class VehicleBallista extends VehicleBase
+public class RenderVehicleHelper extends Render
 {
 
-public float crankAngle = 0.f;
-public float crankSpeed = 0.f;
-/**
- * @param par1World
- */
-public VehicleBallista(World par1World)
-  {
-  super(par1World);
-  // TODO Auto-generated constructor stub
-  }
-
 @Override
-public void onFiringUpdate()
+public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
   {
-  this.firingHelper.startLaunching();
-  }
-
-@Override
-public void onReloadUpdate()
-  {
-  
-  }
-
-@Override
-public void onLaunchingUpdate()
-  {
-  this.firingHelper.spawnMissile(0, 0, 0);
-  this.firingHelper.setFinishedLaunching();
+  VehicleBase vehicle = (VehicleBase) var1;
+  RenderRegistry.instance().getRenderForVehicle(vehicle.vehicleType.getGlobalVehicleType()).renderVehicle(vehicle, var2, var4, var6, var8, var9);
   }
 
 }

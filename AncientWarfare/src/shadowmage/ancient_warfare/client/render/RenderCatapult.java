@@ -25,7 +25,8 @@ import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelCatapult;
-import shadowmage.ancient_warfare.common.vehicles.entities.VehicleCatapult;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
 public class RenderCatapult extends RenderVehicleBase
 {
@@ -36,19 +37,27 @@ ModelCatapult model = new ModelCatapult();
 @Override
 public void doRender(Entity var1, double x, double y, double z,  float yaw, float tick)
   {
-  VehicleCatapult cat = (VehicleCatapult)var1;
-  //Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture("foo.png"));
+  VehicleBase veh = (VehicleBase)var1;
+  
+  }
+
+
+@Override
+public void renderVehicle(VehicleBase veh, double x, double y, double z,
+    float yaw, float tick)
+  {
+VehicleFiringVarsHelper var = veh.firingVarsHelper;
   
   GL11.glPushMatrix();
   GL11.glTranslated(x, y, z);
   GL11.glRotatef(yaw, 0, 1, 0);
-  GL11.glScalef(-1, -1, 1);  
-    
-  model.setArmRotation(cat.armAngle + (tick*cat.armSpeed));
-  model.setCrankRotations(cat.crankAngle + (tick*cat.crankSpeed));
-  float wheelAngle = cat.wheelRotation + (tick * (cat.wheelRotation-cat.wheelRotationPrev));
+  GL11.glScalef(-1, -1, 1);      
+  
+  model.setArmRotation(var.getVar1() + (tick*var.getVar2()));
+  model.setCrankRotations(var.getVar3() + (tick*var.getVar4()));
+  float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
-  model.render(var1, 0, 0, 0, 0, 0, 0.0625f);
+  model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
   GL11.glPopMatrix();
   }
 
