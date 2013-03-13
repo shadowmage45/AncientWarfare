@@ -29,7 +29,6 @@ VEHICLES
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
 * add tooltip functionality to elements (optional tooltip rendering, if enabled on the element)
-* add String label to checkboxes (optional)
 * rework all structure GUIs to include new bling!! (scroll areas, etc...)
 * put quaded texture rendering someplace central...
 * so...slots display position is client only...use that to move slots off screen (or use that in a scrollable area somehow?)
@@ -141,6 +140,7 @@ TWEAKS/OPTIMIZATION
 * fix vehicle placement rotation
 * fix vehicle placement turret rotation (set to vehicle rotation, set pitch to nominal)
 * create basic GuiString element. has options for color, hover-color, callBackOnClick, drawShadow, drawCentered 
+* add String label to checkboxes (optional)
 
 
 /********** 03-14-13 **********/
