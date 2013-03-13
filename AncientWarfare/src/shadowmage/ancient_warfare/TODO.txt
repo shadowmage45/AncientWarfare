@@ -2,6 +2,7 @@ TODO before first alpha release:
 
 GENERAL
 * change inventoryTools to manipulate containers as well
+* figure out a good way to index images for item subtypes--vehicles could use their own icons for each material level, not just vehicle type
 
 PRE-VEHICLE TEST RELEASE
 * add vehicles
@@ -13,14 +14,7 @@ PRE-VEHICLE TEST RELEASE
     -- model-textures
     -- renders
 
-VEHICLES
-TO ADD:
-    Catapult stand
-    Catapult turret
-    Catapult mobile w/turret
-    Ballista stand
-    Ballista turret
-    Ballista mobile w/fixed    
+VEHICLES    
 * find a good method for battering ram block damage (take point-hit, and simply do a 3D x on it?)
 * add ammo types
 * final vehicle gui will need slots that only accept stack size 1 and that validate against the vehicles valid<whatever type> list
@@ -30,15 +24,12 @@ TO ADD:
 * create rockets (will require some hackery for their flight dynamics)
 * add turret-lock upgrade code somewhere...
 * finish catapult and ballista animations
-* add yawSpeed smoothing updates to render for turret yaw/pitch changes for ballista
-* fix vehicle placement rotation
-* fix vehicle placement turret rotation (set to vehicle rotation, set pitch to nominal)
+* add yawSpeed smoothing updates to render for turret yaw/pitch changes for ballista (will require a yaw/pitch speed var in vehicleBase)
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
 * add tooltip functionality to elements (optional tooltip rendering, if enabled on the element)
 * add String label to checkboxes (optional)
-* create basic GuiString element. has options for color, hover-color, callBackOnClick, drawShadow, drawCentered 
 * rework all structure GUIs to include new bling!! (scroll areas, etc...)
 * put quaded texture rendering someplace central...
 * so...slots display position is client only...use that to move slots off screen (or use that in a scrollable area somehow?)
@@ -146,7 +137,10 @@ TWEAKS/OPTIMIZATION
 * create a real turretYawUpdate algorithm instead of the hack that is currently in place
 /********** 03-13-13 **********/
 * create catapult and ballista vehicle types
-* rework vehicle registry to use a single vehicleBase class..... (ahh...polymorphism CAN work for you once in awhile--or not..f'n client/server bs)
+* rework vehicle registry to use a single vehicleBase class..... 
+* fix vehicle placement rotation
+* fix vehicle placement turret rotation (set to vehicle rotation, set pitch to nominal)
+* create basic GuiString element. has options for color, hover-color, callBackOnClick, drawShadow, drawCentered 
 
 
 /********** 03-14-13 **********/
