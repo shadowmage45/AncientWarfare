@@ -52,7 +52,9 @@ public VehicleTypeBallistaMobileTurret(int typeNum)
   
   this.isDrivable = true;//adjust based on isMobile or not
   this.canAdjustYaw = true;//adjust based on hasTurret or not
-  this.turretRotationMax=360.f;//adjust based on mobile fixed (0), stand fixed(90'), or mobile or stand turret (360) 
+  this.turretRotationMax=360.f;//adjust based on mobile fixed (0), stand fixed(90'), or mobile or stand turret (360)
+  this.displayName = "Ballista Mobile Turret";
+  this.displayTooltip = "A turret-mounted ballista on a wheeled frame.";
   
   }
 

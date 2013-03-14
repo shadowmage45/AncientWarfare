@@ -35,6 +35,7 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
@@ -84,6 +85,7 @@ public float riderForwardsOffset= 0.f;
 public float riderHorizontalOffset= 0.f;
 public float riderVerticalOffset= 0.f;
 public boolean shouldRiderSit = true;
+public boolean moveRiderWithTurret = false;
 
 public float baseForwardSpeed;
 public float baseStrafeSpeed;
@@ -425,6 +427,12 @@ public static List getCreativeDisplayItems()
       }
     } 
   return stacks;
+  }
+
+@Override
+public boolean moveRiderWithTurret()
+  {
+  return this.moveRiderWithTurret;
   }
 
 

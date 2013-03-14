@@ -27,9 +27,11 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.BallistaVarHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeReload;
 
-public class VehicleTypeBallista extends VehicleType
+public abstract class VehicleTypeBallista extends VehicleType
 {
+
 /**
  * @param typeNum
  */
@@ -42,6 +44,13 @@ public VehicleTypeBallista(int typeNum)
   this.validAmmoTypes.add(Ammo.ammoArrow);
   this.validAmmoTypes.add(Ammo.ammoStoneShot);
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.pitchExtUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
+  
   this.validArmors.add(ArmorRegistry.armorStone);
   
   this.storageBaySize = 0;  

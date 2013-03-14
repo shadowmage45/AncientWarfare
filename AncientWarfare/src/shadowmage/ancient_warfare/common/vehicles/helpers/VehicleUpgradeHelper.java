@@ -254,4 +254,9 @@ public void readFromNBT(NBTTagCompound tag)
     }
   }
 
+public boolean hasUpgrade(IVehicleUpgradeType upgrade)
+  {
+  return this.upgrades.contains(upgrade);
+  }
+
 }

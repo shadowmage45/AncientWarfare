@@ -31,6 +31,7 @@ import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.Pair;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
@@ -197,6 +198,12 @@ public void onTick()
   if(!vehicle.canAimPower())
     {
     vehicle.launchPowerCurrent = vehicle.launchSpeedCurrentMax;
+    }
+  if(vehicle.canAimRotate() && vehicle.upgradeHelper.hasUpgrade(VehicleUpgradeRegistry.turretLockUpgrade))
+    {
+    float diff = vehicle.rotationYaw - vehicle.prevRotationYaw;
+    vehicle.turretRotation +=diff;
+    this.clientTurretYaw += diff;
     }
   }
 
@@ -508,7 +515,7 @@ public void handleAimMouseInput(Vec3 target)
       updatePower = true;
       }
     }  
-  if(vehicle.canAimRotate())
+  if(vehicle.canAimRotate() && !vehicle.upgradeHelper.hasUpgrade(VehicleUpgradeRegistry.turretLockUpgrade))
     {
     float xAO = (float) (vehicle.posX - target.xCoord);  
     float zAO = (float) (vehicle.posZ - target.zCoord);

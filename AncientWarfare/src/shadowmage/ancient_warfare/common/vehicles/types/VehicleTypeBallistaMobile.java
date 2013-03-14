@@ -47,7 +47,8 @@ public class VehicleTypeBallistaMobile extends VehicleTypeBallista
     this.isDrivable = true;//adjust based on isMobile or not
     this.canAdjustYaw = false;//adjust based on hasTurret or not
     this.turretRotationMax=0.f;//adjust based on mobile/stand fixed (0), stand fixed(90'), or mobile or stand turret (360) 
-    
+    this.displayName = "Ballista Mobile Fixed";
+    this.displayTooltip = "A ballista mounted on a wheeled frame.";
     }
 
 }

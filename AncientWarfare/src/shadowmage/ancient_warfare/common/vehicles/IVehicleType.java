@@ -59,6 +59,7 @@ public abstract float getRiderForwardsOffset();
 public abstract float getRiderHorizontalOffset();
 public abstract float getRiderVerticalOffest();
 public abstract boolean shouldRiderSit();
+public abstract boolean moveRiderWithTurret();
 
 public abstract float getBaseForwardSpeed();
 public abstract float getBaseStrafeSpeed();
