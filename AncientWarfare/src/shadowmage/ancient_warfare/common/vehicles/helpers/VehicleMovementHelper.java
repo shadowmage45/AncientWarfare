@@ -60,6 +60,10 @@ public void setStrafeInput(byte in)
 
 public void handleKeyboardInput(byte forward, byte strafe)
   {
+  if(!vehicle.isDrivable())
+    {
+    return;
+    }
   NBTTagCompound tag = new NBTTagCompound();
   tag.setByte("f", forward);
   tag.setByte("s", strafe);

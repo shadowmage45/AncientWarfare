@@ -24,6 +24,7 @@ import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.BallistaVarHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
@@ -79,8 +80,7 @@ public VehicleTypeBallista(int typeNum)
 @Override
 public VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh)
   {
-  // TODO Auto-generated method stub
-  return null;
+  return new BallistaVarHelper(veh);
   }
 
 }

@@ -24,16 +24,20 @@ import java.util.HashMap;
 
 import net.minecraft.client.renderer.entity.Render;
 import shadowmage.ancient_warfare.client.render.RenderArrow;
-import shadowmage.ancient_warfare.client.render.RenderBallista;
-import shadowmage.ancient_warfare.client.render.RenderCatapult;
+import shadowmage.ancient_warfare.client.render.RenderBallistaMobile;
+import shadowmage.ancient_warfare.client.render.RenderBallistaStand;
+import shadowmage.ancient_warfare.client.render.RenderCatapultMobileFixed;
+import shadowmage.ancient_warfare.client.render.RenderCatapultMobileTurret;
+import shadowmage.ancient_warfare.client.render.RenderCatapultStandFixed;
+import shadowmage.ancient_warfare.client.render.RenderCatapultStandTurret;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
 import shadowmage.ancient_warfare.client.render.RenderShot;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
+import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 /**
@@ -61,14 +65,14 @@ public void loadRenders()
    * vehicles..
    */  
   RenderingRegistry.registerEntityRenderingHandler(VehicleBase.class, new RenderVehicleHelper());
-  this.addVehicleRender(VehicleType.CATAPULT_STAND_FIXED, new RenderCatapult());
-  this.addVehicleRender(VehicleType.CATAPULT_STAND_TURRET, new RenderCatapult());
-  this.addVehicleRender(VehicleType.CATAPULT_MOBILE_FIXED, new RenderCatapult());
-  this.addVehicleRender(VehicleType.CATAPULT_MOBILE_TURRET, new RenderCatapult());
-  this.addVehicleRender(VehicleType.BALLISTA_STAND_FIXED, new RenderBallista());
-  this.addVehicleRender(VehicleType.BALLISTA_STAND_TURRET, new RenderBallista());
-  this.addVehicleRender(VehicleType.BALLISTA_MOBILE_FIXED, new RenderBallista());
-  this.addVehicleRender(VehicleType.BALLISTA_MOBILE_TURRET, new RenderBallista());
+  this.addVehicleRender(VehicleRegistry.CATAPULT_STAND_FIXED, new RenderCatapultStandFixed());
+  this.addVehicleRender(VehicleRegistry.CATAPULT_STAND_TURRET, new RenderCatapultStandTurret());
+  this.addVehicleRender(VehicleRegistry.CATAPULT_MOBILE_FIXED, new RenderCatapultMobileFixed());
+  this.addVehicleRender(VehicleRegistry.CATAPULT_MOBILE_TURRET, new RenderCatapultMobileTurret());
+  this.addVehicleRender(VehicleRegistry.BALLISTA_STAND_FIXED, new RenderBallistaStand());
+  this.addVehicleRender(VehicleRegistry.BALLISTA_STAND_TURRET, new RenderBallistaStand());
+  this.addVehicleRender(VehicleRegistry.BALLISTA_MOBILE_FIXED, new RenderBallistaMobile());
+  this.addVehicleRender(VehicleRegistry.BALLISTA_MOBILE_TURRET, new RenderBallistaMobile());
   
   
   /**

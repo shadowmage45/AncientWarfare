@@ -38,6 +38,7 @@ import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
+import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
@@ -155,7 +156,7 @@ public VehicleFiringVarsHelper firingVarsHelper;
 public VehicleInventory inventory;
 public EntityPathfinder navigator;
 
-public IVehicleType vehicleType = VehicleType.CATAPULT_STAND_FIXED;//set to dummy vehicle so it is never null...
+public IVehicleType vehicleType = VehicleRegistry.CATAPULT_STAND_FIXED;//set to dummy vehicle so it is never null...
 public int vehicleMaterialLevel = 0;//the current material level of this vehicle. should be read/set prior to calling updateBaseStats
 
 public VehicleBase(World par1World)
@@ -211,6 +212,10 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
     this.turretPitch = this.turretPitchMax;
     }
   this.launchPowerCurrent = this.firingHelper.getAdjustedMaxMissileVelocity();
+  if(!this.canAimRotate())
+    {
+    this.turretRotation = this.rotationYaw;
+    }
   }
 
 public void updateBaseStats()
@@ -739,6 +744,7 @@ public void writeSpawnData(ByteArrayDataOutput data)
   data.writeFloat(turretDestPitch);
   data.writeFloat(turretDestRot);
   data.writeInt(teamNum);
+  data.writeFloat(turretRotationHome);
   }
 
 @Override
@@ -759,6 +765,7 @@ public void readSpawnData(ByteArrayDataInput data)
   this.turretDestRot = data.readFloat();
   this.upgradeHelper.updateUpgradeStats();
   this.teamNum = data.readInt();
+  this.turretRotationHome = data.readFloat();
   }
 
 @Override

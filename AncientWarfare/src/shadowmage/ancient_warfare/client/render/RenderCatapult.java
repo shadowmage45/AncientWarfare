@@ -43,15 +43,13 @@ public void doRender(Entity var1, double x, double y, double z,  float yaw, floa
 
 
 @Override
-public void renderVehicle(VehicleBase veh, double x, double y, double z,
-    float yaw, float tick)
+public void renderVehicle(VehicleBase veh, double x, double y, double z, float yaw, float tick)
   {
-VehicleFiringVarsHelper var = veh.firingVarsHelper;
-  
+  VehicleFiringVarsHelper var = veh.firingVarsHelper;  
   GL11.glPushMatrix();
   GL11.glTranslated(x, y, z);
   GL11.glRotatef(yaw, 0, 1, 0);
-  GL11.glScalef(-1, -1, 1);      
+  GL11.glScalef(-1, -1, 1);     
   
   model.setArmRotation(var.getVar1() + (tick*var.getVar2()));
   model.setCrankRotations(var.getVar3() + (tick*var.getVar4()));

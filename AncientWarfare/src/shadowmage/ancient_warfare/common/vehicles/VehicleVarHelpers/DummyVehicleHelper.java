@@ -33,97 +33,84 @@ public class DummyVehicleHelper extends VehicleFiringVarsHelper
   public DummyVehicleHelper(VehicleBase vehicle)
     {
     super(vehicle);
-    // TODO Auto-generated constructor stub
     }
 
   @Override
   public NBTTagCompound getNBTTag()
     {
     // TODO Auto-generated method stub
-    return null;
+    return new NBTTagCompound();
     }
 
   @Override
   public void readFromNBT(NBTTagCompound tag)
     {
-    // TODO Auto-generated method stub
     
     }
 
   @Override
   public void onFiringUpdate()
     {
-    // TODO Auto-generated method stub
     
     }
 
   @Override
   public void onReloadUpdate()
     {
-    // TODO Auto-generated method stub
     
     }
 
   @Override
   public void onLaunchingUpdate()
     {
-    // TODO Auto-generated method stub
     
     }
 
   @Override
   public float getVar1()
     {
-    // TODO Auto-generated method stub
     return 0;
     }
 
   @Override
   public float getVar2()
     {
-    // TODO Auto-generated method stub
     return 0;
     }
 
   @Override
   public float getVar3()
     {
-    // TODO Auto-generated method stub
     return 0;
     }
 
   @Override
   public float getVar4()
     {
-    // TODO Auto-generated method stub
     return 0;
     }
 
   @Override
   public float getVar5()
     {
-    // TODO Auto-generated method stub
     return 0;
     }
 
   @Override
   public float getVar6()
     {
-    // TODO Auto-generated method stub
     return 0;
     }
 
   @Override
   public float getVar7()
     {
-    // TODO Auto-generated method stub
     return 0;
     }
 
   @Override
   public float getVar8()
     {
-    // TODO Auto-generated method stub
     return 0;
     }
 

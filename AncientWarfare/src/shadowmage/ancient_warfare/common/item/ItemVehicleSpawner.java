@@ -67,7 +67,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     VehicleBase vehicle = VehicleType.getVehicleForType(world, stack.getItemDamage(), level);
     vehicle.teamNum = TeamTracker.instance().getTeamForPlayerServer(player.getEntityName());
     vehicle.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
-    vehicle.prevRotationYaw = vehicle.rotationYaw = -player.rotationYaw;
+    vehicle.prevRotationYaw = vehicle.rotationYaw = -player.rotationYaw + 180;
     vehicle.turretDestRot = vehicle.turretRotation = vehicle.turretRotationHome = vehicle.rotationYaw;
     world.spawnEntityInWorld(vehicle);      
     if(!player.capabilities.isCreativeMode)

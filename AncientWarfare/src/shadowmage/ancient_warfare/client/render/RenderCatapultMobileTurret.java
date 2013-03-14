@@ -20,21 +20,34 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.client.registry.RenderRegistry;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import org.lwjgl.opengl.GL11;
 
-public class RenderVehicleHelper extends Render
+import shadowmage.ancient_warfare.client.model.ModelCatapultMobileTurret;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
+
+public class RenderCatapultMobileTurret extends RenderVehicleBase
 {
 
+ModelCatapultMobileTurret model = new ModelCatapultMobileTurret();
+
 @Override
-public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
+public void renderVehicle(VehicleBase veh, double x, double y, double z, float yaw, float tick)
   {
-  VehicleBase vehicle = (VehicleBase) var1;
-  Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(var1.getTexture()));
-  RenderRegistry.instance().getRenderForVehicle(vehicle.vehicleType.getGlobalVehicleType()).renderVehicle(vehicle, var2, var4, var6, var8, var9);
+  VehicleFiringVarsHelper var = veh.firingVarsHelper;  
+  GL11.glPushMatrix();
+  GL11.glTranslated(x, y, z);
+  GL11.glRotatef(yaw, 0, 1, 0);
+  GL11.glScalef(-1, -1, 1);      
+
+  model.setTurretRotation(yaw-veh.turretRotation);
+  model.setArmRotation(var.getVar1() + (tick*var.getVar2()));
+  model.setCrankRotations(var.getVar3() + (tick*var.getVar4()));
+  float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
+  model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
+  model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
+  GL11.glPopMatrix();
+
   }
 
 }

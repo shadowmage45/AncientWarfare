@@ -94,7 +94,7 @@ public void readFromNBT(NBTTagCompound tag)
   this.crankAngle = tag.getFloat("cA");
   this.crankSpeed = tag.getFloat("cS");
   this.armAngle = tag.getFloat("aA");
-  this.armSpeed = tag.getLong("aS");
+  this.armSpeed = tag.getFloat("aS");
   }
 
 @Override

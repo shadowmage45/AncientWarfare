@@ -45,7 +45,7 @@ public class VehicleTypeBallistaMobile extends VehicleTypeBallista
     this.shouldRiderSit = true;
     
     this.isDrivable = true;//adjust based on isMobile or not
-    this.canAdjustYaw = true;//adjust based on hasTurret or not
+    this.canAdjustYaw = false;//adjust based on hasTurret or not
     this.turretRotationMax=0.f;//adjust based on mobile/stand fixed (0), stand fixed(90'), or mobile or stand turret (360) 
     
     }

@@ -20,36 +20,32 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
-import net.minecraft.entity.Entity;
-
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_warfare.client.model.ModelBallista;
+import shadowmage.ancient_warfare.client.model.ModelCatapultMobileFixed;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
-public class RenderBallista extends RenderVehicleBase
+public class RenderCatapultMobileFixed extends RenderVehicleBase
 {
 
-ModelBallista model = new ModelBallista();
+ModelCatapultMobileFixed model = new ModelCatapultMobileFixed();
 
 @Override
-public void renderVehicle(VehicleBase veh, double x, double y, double z,  float yaw, float tick)
+public void renderVehicle(VehicleBase veh, double x, double y, double z, float yaw, float tick)
   {
-  VehicleFiringVarsHelper var = veh.firingVarsHelper;
-  
+  VehicleFiringVarsHelper var = veh.firingVarsHelper;  
   GL11.glPushMatrix();
   GL11.glTranslated(x, y, z);
   GL11.glRotatef(yaw, 0, 1, 0);
-  GL11.glScalef(-1, -1, 1);  
-    
-//  model.setArmRotation(cat.armAngle + (tick*cat.armSpeed));
-  model.setTurretRotation(yaw-veh.turretRotation, -veh.turretPitch);
-  model.setCrankRotations(var.getVar1() + (tick*var.getVar2()));
+  GL11.glScalef(-1, -1, 1);      
+  model.setArmRotation(var.getVar1() + (tick*var.getVar2()));
+  model.setCrankRotations(var.getVar3() + (tick*var.getVar4()));
   float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
   GL11.glPopMatrix();
+
   }
 
 }

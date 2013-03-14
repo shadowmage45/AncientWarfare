@@ -29,6 +29,7 @@ import java.util.Map.Entry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
@@ -51,20 +52,13 @@ import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 public abstract class VehicleType implements IVehicleType
 {
 
-public static final IVehicleType CATAPULT_STAND_FIXED = new VehicleTypeCatapult(0);
-public static final IVehicleType CATAPULT_STAND_TURRET = new VehicleTypeCatapult(1);
-public static final IVehicleType CATAPULT_MOBILE_FIXED = new VehicleTypeCatapult(2);
-public static final IVehicleType CATAPULT_MOBILE_TURRET = new VehicleTypeCatapult(3);
 
-public static final IVehicleType BALLISTA_STAND_FIXED = new VehicleTypeBallistaStand(4);
-public static final IVehicleType BALLISTA_STAND_TURRET = new VehicleTypeBallistaStandTurret(5);
-public static final IVehicleType BALLISTA_MOBILE_FIXED = new VehicleTypeBallistaMobile(6);
-public static final IVehicleType BALLISTA_MOBILE_TURRET = new VehicleTypeBallistaMobileTurret(7);
 
 /**
  * SELF-REGISTRY STUFF.....
  */
-private static HashMap<Integer, IVehicleType> vehicleTypes = new HashMap<Integer, IVehicleType>();
+public static final IVehicleType[] vehicleTypes = new IVehicleType[1024];
+//private static HashMap<Integer, IVehicleType> vehicleTypes = new HashMap<Integer, IVehicleType>();
 
 
 /**
@@ -120,11 +114,10 @@ int armorBaySize = 3;
 public int materialCount = 1;
 public List<ItemStack> additionalMaterials = new ArrayList<ItemStack>();
 
-protected VehicleType(int typeNum)
+public VehicleType(int typeNum)
   {
-  this.vehicleType = typeNum;
-  this.vehicleTypes.put(typeNum, this);
-  ItemLoader.instance().addSubtypeToItem(ItemLoader.vehicleSpawner, this.getGlobalVehicleType(), this.getDisplayName(), this.getDisplayTooltip());
+  this.vehicleType = typeNum; 
+  vehicleTypes[typeNum] = this;
   }
 
 @Override
@@ -393,12 +386,16 @@ public boolean shouldRiderSit()
 
 public static IVehicleType getVehicleType(int num)
   {
-  return vehicleTypes.get(num);
+  if(num>=0 && num < vehicleTypes.length)
+    {
+    return vehicleTypes[num];
+    }
+  return null;
   }
 
 public static VehicleBase getVehicleForType(World world, int type, int level)
   {
-  if(vehicleTypes.containsKey(type))
+  if(vehicleTypes[type]!=null)
     {
     IVehicleType vehType = getVehicleType(type);
     VehicleBase vehicle = new VehicleBase(world);
@@ -411,14 +408,9 @@ public static VehicleBase getVehicleForType(World world, int type, int level)
 public static List getCreativeDisplayItems()
   {
   List<ItemStack> stacks = new ArrayList<ItemStack>();
-  Iterator<Entry<Integer, IVehicleType>> it = vehicleTypes.entrySet().iterator();
-  Entry<Integer, IVehicleType> ent = null;
   ItemStack stack = null;
-  IVehicleType type = null;
-  while(it.hasNext())
+  for(IVehicleType type : vehicleTypes)
     {
-    ent = it.next();
-    type = ent.getValue();
     if(type==null || type.getMaterialType()==null)
       {
       continue;
@@ -431,15 +423,9 @@ public static List getCreativeDisplayItems()
       stack.setTagInfo("AWVehSpawner", tag);
       stacks.add(stack);
       }
-    }
+    } 
   return stacks;
   }
-
-/**
- * empty method to make sure the class is instantiated during load-time
- */
-public static void load(){}
-  
 
 
 }
