@@ -135,7 +135,7 @@ public void onMovementTick()
     }
   if(forwardInput!=0)
     {
-    forwardAccel = forwardInput * 0.03f * (vehicle.maxForwardSpeedCurrent*weightAdjust - MathHelper.abs(forwardMotion));
+    forwardAccel = forwardInput * 0.03f * (vehicle.currentForwardSpeedMax*weightAdjust - MathHelper.abs(forwardMotion));
     if(forwardInput<0)
       {
       forwardAccel *= 0.6f;
@@ -152,7 +152,7 @@ public void onMovementTick()
     }
   if(strafeInput!=0)
     {
-    strafeAccel = -strafeInput * 0.06f * (vehicle.maxStrafeSpeedCurrent*weightAdjust -MathHelper.abs(strafeMotion));
+    strafeAccel = -strafeInput * 0.06f * (vehicle.currentStrafeSpeedMax*weightAdjust -MathHelper.abs(strafeMotion));
     strafeAccel *= weightAdjust;
     if((strafeInput>0 && strafeMotion >0 ) || (strafeInput<0 && strafeMotion<0))
       {
@@ -170,27 +170,27 @@ public void onMovementTick()
   float absFor = MathHelper.abs(forwardMotion);
   float absStr = MathHelper.abs(strafeMotion);
     
-  if(forwardInput ==1 && absFor > vehicle.maxForwardSpeedCurrent*weightAdjust)
+  if(forwardInput ==1 && absFor > vehicle.currentForwardSpeedMax*weightAdjust)
     {
-    forwardMotion = vehicle.maxForwardSpeedCurrent;
+    forwardMotion = vehicle.currentForwardSpeedMax;
     }
-  else if(forwardInput == -1 && absFor > vehicle.maxForwardSpeedCurrent * 0.6f)
+  else if(forwardInput == -1 && absFor > vehicle.currentForwardSpeedMax * 0.6f)
     {
-    forwardMotion = -vehicle.maxForwardSpeedCurrent * 0.6f;
+    forwardMotion = -vehicle.currentForwardSpeedMax * 0.6f;
     }
   else if(absFor <= 0.02f && forwardInput == 0)
     {
     forwardMotion = 0;
     }
-  if(absStr > vehicle.maxStrafeSpeedCurrent * weightAdjust)
+  if(absStr > vehicle.currentStrafeSpeedMax * weightAdjust)
     {
     if(strafeMotion>0)
       {
-      strafeMotion = vehicle.maxStrafeSpeedCurrent;
+      strafeMotion = vehicle.currentStrafeSpeedMax;
       }
     else
       {
-      strafeMotion = -vehicle.maxStrafeSpeedCurrent;
+      strafeMotion = -vehicle.currentStrafeSpeedMax;
       }     
     }
   else if(absStr <= 0.2f && strafeInput == 0)
@@ -217,7 +217,6 @@ public void onMovementTick()
     vehicle.rotationYaw += strafeMotion;  
     vehicle.wheelRotationPrev = vehicle.wheelRotation;
     vehicle.wheelRotation += forwardMotion*0.02f;
-    vehicle.velocity = forwardMotion;
     }
   else if(forwardMotion==0)
     {

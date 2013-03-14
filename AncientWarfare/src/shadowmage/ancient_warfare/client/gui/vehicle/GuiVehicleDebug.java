@@ -23,6 +23,8 @@ package shadowmage.ancient_warfare.client.gui.vehicle;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.container.ContainerDummy;
+import shadowmage.ancient_warfare.common.container.ContainerVehicle;
 
 public class GuiVehicleDebug extends GuiContainerAdvanced
 {
@@ -36,10 +38,6 @@ public GuiVehicleDebug(Container container)
   this.shouldCloseOnVanillaKeys = true;
   }
 
-@Override
-public void onElementActivated(IGuiElement element)
-  {  
-  }
 
 @Override
 public int getXSize()
@@ -71,11 +69,28 @@ public void updateScreenContents()
  
   }
 
+
+@Override
+public void onElementActivated(IGuiElement element)
+  {  
+  switch(element.getElementNumber())
+  {
+  case 0:
+  this.closeGUI();
+  break;
+  case 1:
+  mc.displayGuiScreen(new GuiVehicleStats(new ContainerDummy(), ((ContainerVehicle)this.inventorySlots).vehicle));
+  break;
+  default:
+  break;
+  }
+  }
+
 @Override
 public void setupControls()
   {
-  // TODO Auto-generated method stub
-
+  this.addGuiButton(0, width-45-5, 5+16, 45, 16, "Done");
+  this.addGuiButton(1, width-45-5, 5+16+5+16, 45, 16, "Stats");
   }
 
 @Override

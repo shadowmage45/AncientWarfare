@@ -150,7 +150,7 @@ public void handleAmmoSelectPacket(NBTTagCompound tag)
       }
     if(!vehicle.canAimPower())
       {
-      vehicle.launchPowerCurrent = vehicle.firingHelper.getAdjustedMaxMissileVelocity();
+      vehicle.currentLaunchPower = vehicle.firingHelper.getAdjustedMaxMissileVelocity();
       }
     } 
   }

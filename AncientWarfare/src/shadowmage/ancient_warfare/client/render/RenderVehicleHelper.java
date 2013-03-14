@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -30,11 +32,16 @@ public class RenderVehicleHelper extends Render
 {
 
 @Override
-public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
+public void doRender(Entity var1, double x, double y, double z, float yaw, float tick)
   {
   VehicleBase vehicle = (VehicleBase) var1;
+  GL11.glPushMatrix();
+  GL11.glTranslated(x, y, z);
+  GL11.glRotatef(yaw, 0, 1, 0);
+  GL11.glScalef(-1, -1, 1);    
   Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(var1.getTexture()));
-  RenderRegistry.instance().getRenderForVehicle(vehicle.vehicleType.getGlobalVehicleType()).renderVehicle(vehicle, var2, var4, var6, var8, var9);
+  RenderRegistry.instance().getRenderForVehicle(vehicle.vehicleType.getGlobalVehicleType()).renderVehicle(vehicle, x, y, z, yaw, tick);  
+  GL11.glPopMatrix();
   }
 
 }

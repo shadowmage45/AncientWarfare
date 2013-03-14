@@ -18,31 +18,41 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.render;
+package shadowmage.ancient_warfare.common.vehicles.types;
 
-import org.lwjgl.opengl.GL11;
-
-import shadowmage.ancient_warfare.client.model.ModelCatapultStandFixed;
+import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
-public class RenderCatapultStandFixed extends RenderVehicleBase
+
+public class VehicleTypeCatapultStandFixed extends VehicleTypeCatapult
 {
-
-ModelCatapultStandFixed model = new ModelCatapultStandFixed();
-
-@Override
-public void renderVehicle(VehicleBase veh, double x, double y, double z,  float yaw, float tick)
-  {  
-  VehicleFiringVarsHelper var = veh.firingVarsHelper;  
-  GL11.glPushMatrix();
-  GL11.glTranslated(x, y, z);
-  GL11.glRotatef(yaw, 0, 1, 0);
-  GL11.glScalef(-1, -1, 1);      
-  model.setArmRotation(var.getVar1() + (tick*var.getVar2()));
-  model.setCrankRotations(var.getVar3() + (tick*var.getVar4()));
-  model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
-  GL11.glPopMatrix();
+/**
+ * @param typeNum
+ */
+public VehicleTypeCatapultStandFixed(int typeNum)
+  {
+  super(typeNum);
+  
+  this.width = 2;
+  this.height = 1.8f; 
+  this.baseMissileVelocityMax = 37.f;  
+  this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.1f;
+  this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
+  this.riderForwardsOffset = -1.2f;
+  this.riderVerticalOffset = 0.0f;
+  this.displayName = "Catapult Stand Fixed";
+  this.displayTooltip = "A fixed-placement catapult with limited aim capability.";
+  this.storageBaySize = 0;
+  this.armorBaySize = 4;
+  this.upgradeBaySize = 4;
+  this.canAdjustYaw = false;
+  this.isDrivable = false;
+  this.shouldRiderSit = false;
+  this.moveRiderWithTurret = false;  
+  
   }
+
+
 
 }

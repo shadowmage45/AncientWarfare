@@ -38,42 +38,42 @@ public class VehicleTypeCatapult extends VehicleType
 public VehicleTypeCatapult(int typeNum)
   {
   super(typeNum);
-  this.width = 2;
-  this.height = 2;
-  this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.4f;
-  this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
-  this.isMountable = true;
-  this.isDrivable = true;
+  this.vehicleMaterial = VehicleMaterial.materialWood;
+  this.validAmmoTypes.add(Ammo.ammoArrow);
+  this.validAmmoTypes.add(Ammo.ammoStoneShot);  
+  this.validArmors.add(ArmorRegistry.armorStone);
+  
+  this.isMountable = true;  
   this.isCombatEngine = true;
   this.canAdjustPower = true;
-  this.canAdjustPitch = false;
-  this.canAdjustYaw = false;
+  this.canAdjustPitch = false;  
   this.accuracy = 0.95f;
   this.baseStrafeSpeed = 2.f;
   this.baseForwardSpeed = 6.f*0.05f;  
   this.basePitchMax = 20;
   this.basePitchMin = 20;
-  this.baseMissileVelocityMax = 32.f;  
-  this.vehicleMaterial = VehicleMaterial.materialWood;
-  this.riderForwardsOffset = 1.2f;
-  this.riderVerticalOffset = 0.7f;
-  
-  this.displayName = "Catapult";
-  this.displayTooltip = "The original, classic, catapult.";
-  
-  this.validAmmoTypes.add(Ammo.ammoArrow);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot);
-  
-  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
+    
   this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);  
-  this.validArmors.add(ArmorRegistry.armorStone);
+  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);  
   
+  this.width = 2;
+  this.height = 2; 
+  this.baseMissileVelocityMax = 32.f;  
+  this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.4f;
+  this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
+  this.riderForwardsOffset = 1.2f;
+  this.riderVerticalOffset = 0.7f;
+  this.displayName = "Catapult";
+  this.displayTooltip = "The original, classic, catapult.";
   this.storageBaySize = 0;
   this.armorBaySize = 3;
+  this.upgradeBaySize = 3;
+  this.canAdjustYaw = false;
+  this.isDrivable = false;
+  this.shouldRiderSit = true;
+  this.moveRiderWithTurret = false;
   }
 
 @Override

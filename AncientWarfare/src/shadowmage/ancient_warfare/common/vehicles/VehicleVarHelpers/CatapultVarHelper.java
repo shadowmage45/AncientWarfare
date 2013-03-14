@@ -69,7 +69,7 @@ public void onLaunchingUpdate()
 public void onReloadUpdate()
   {  
   float prevAngle = this.armAngle;
-  this.armAngle -= 87 / (float)vehicle.reloadTimeCurrent;
+  this.armAngle -= 87 / (float)vehicle.currentReloadTicks;
   if(this.armAngle <= -7)
     {
     this.armAngle = -7;

@@ -18,45 +18,28 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.render;
-
-import net.minecraft.entity.Entity;
+package shadowmage.ancient_warfare.client.render.vehicle;
 
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_warfare.client.model.ModelCatapult;
+import shadowmage.ancient_warfare.client.model.ModelBallistaStand;
+import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
-public class RenderCatapult extends RenderVehicleBase
+public class RenderBallistaStand extends RenderVehicleBase
 {
 
-ModelCatapult model = new ModelCatapult();
-
-
-@Override
-public void doRender(Entity var1, double x, double y, double z,  float yaw, float tick)
-  {
-  VehicleBase veh = (VehicleBase)var1;
-  
-  }
-
+ModelBallistaStand model = new ModelBallistaStand();
 
 @Override
 public void renderVehicle(VehicleBase veh, double x, double y, double z, float yaw, float tick)
   {
-  VehicleFiringVarsHelper var = veh.firingVarsHelper;  
-  GL11.glPushMatrix();
-  GL11.glTranslated(x, y, z);
-  GL11.glRotatef(yaw, 0, 1, 0);
-  GL11.glScalef(-1, -1, 1);     
-  
-  model.setArmRotation(var.getVar1() + (tick*var.getVar2()));
-  model.setCrankRotations(var.getVar3() + (tick*var.getVar4()));
+  VehicleFiringVarsHelper var = veh.firingVarsHelper;
+  model.setTurretRotation(yaw-veh.currentTurretRotation, -veh.currentTurretPitch);
+  model.setCrankRotations(var.getVar1() + (tick*var.getVar2()));
   float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
-  model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
-  GL11.glPopMatrix();
   }
 
 }

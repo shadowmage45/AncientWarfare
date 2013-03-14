@@ -18,38 +18,29 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.render;
-
-import net.minecraft.entity.Entity;
+package shadowmage.ancient_warfare.client.render.vehicle;
 
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_warfare.client.model.ModelBallistaMobile;
+import shadowmage.ancient_warfare.client.model.ModelCatapultStandTurret;
+import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
-public class RenderBallistaMobile extends RenderVehicleBase
+public class RenderCatapultStandTurret extends RenderVehicleBase
 {
 
-ModelBallistaMobile model = new ModelBallistaMobile();
+ModelCatapultStandTurret model = new ModelCatapultStandTurret();
 
 @Override
-public void renderVehicle(VehicleBase veh, double x, double y, double z,  float yaw, float tick)
+public void renderVehicle(VehicleBase veh, double x, double y, double z, float yaw, float tick)
   {
-  VehicleFiringVarsHelper var = veh.firingVarsHelper;
-  
-  GL11.glPushMatrix();
-  GL11.glTranslated(x, y, z);
-  GL11.glRotatef(yaw, 0, 1, 0);
-  GL11.glScalef(-1, -1, 1);  
-    
-//  model.setArmRotation(cat.armAngle + (tick*cat.armSpeed));
-  model.setTurretRotation(yaw-veh.turretRotation, -veh.turretPitch);
-  model.setCrankRotations(var.getVar1() + (tick*var.getVar2()));
-  float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
-  model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
+  VehicleFiringVarsHelper var = veh.firingVarsHelper; 
+  float diff = veh.rotationYaw - veh.prevRotationYaw * tick;
+  model.setTurretRotation(yaw - veh.currentTurretRotation + tick*veh.currentTurretYawSpeed);
+  model.setArmRotation(var.getVar1() + (tick*var.getVar2()));
+  model.setCrankRotations(var.getVar3() + (tick*var.getVar4()));
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
-  GL11.glPopMatrix();
   }
 
 }

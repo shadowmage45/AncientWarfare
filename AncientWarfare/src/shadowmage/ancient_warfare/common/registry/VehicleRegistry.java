@@ -20,10 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
@@ -31,15 +27,18 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobil
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobileTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStand;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStandTurret;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapult;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultMobileFixed;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultMobileTurret;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultStandFixed;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicletypeCatapultStandTurret;
 
 public class VehicleRegistry
 {
 
-public static final IVehicleType CATAPULT_STAND_FIXED = new VehicleTypeCatapult(0);
-public static final IVehicleType CATAPULT_STAND_TURRET = new VehicleTypeCatapult(1);
-public static final IVehicleType CATAPULT_MOBILE_FIXED = new VehicleTypeCatapult(2);
-public static final IVehicleType CATAPULT_MOBILE_TURRET = new VehicleTypeCatapult(3);
+public static final IVehicleType CATAPULT_STAND_FIXED = new VehicleTypeCatapultStandFixed(0);
+public static final IVehicleType CATAPULT_STAND_TURRET = new VehicletypeCatapultStandTurret(1);
+public static final IVehicleType CATAPULT_MOBILE_FIXED = new VehicleTypeCatapultMobileFixed(2);
+public static final IVehicleType CATAPULT_MOBILE_TURRET = new VehicleTypeCatapultMobileTurret(3);
 
 public static final IVehicleType BALLISTA_STAND_FIXED = new VehicleTypeBallistaStand(4);
 public static final IVehicleType BALLISTA_STAND_TURRET = new VehicleTypeBallistaStandTurret(5);

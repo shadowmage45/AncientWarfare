@@ -77,13 +77,13 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
       this.drawString(fontRenderer, "FSp: "+vehicle.moveHelper.forwardMotion*20.f, 10, 70, 0xffffffff);
       this.drawString(fontRenderer, "SSp: "+vehicle.moveHelper.strafeMotion*20.f, 10, 80, 0xffffffff);
       this.drawString(fontRenderer, "Wgt: "+vehicle.currentWeight+ " base: "+vehicle.baseWeight, 10, 90, 0xffffffff);
-      this.drawString(fontRenderer, "Speed: "+vehicle.maxForwardSpeedCurrent*20.f+ " base: "+vehicle.baseForwardSpeed*20.f + " root: "+vehicle.vehicleType.getBaseForwardSpeed()*20.f, 10, 100, 0xffffffff);    
+      this.drawString(fontRenderer, "Speed: "+vehicle.currentForwardSpeedMax*20.f+ " base: "+vehicle.baseForwardSpeed*20.f + " root: "+vehicle.vehicleType.getBaseForwardSpeed()*20.f, 10, 100, 0xffffffff);    
       float weightAdjust = 1.f;
       if(vehicle.currentWeight > vehicle.baseWeight)
         {
         weightAdjust = vehicle.baseWeight  / vehicle.currentWeight;
         }
-      this.drawString(fontRenderer, "WeightAdjusted max Speed: "+vehicle.maxForwardSpeedCurrent*weightAdjust*20.f, 10, 110, 0xffffffff);
+      this.drawString(fontRenderer, "WeightAdjusted max Speed: "+vehicle.currentForwardSpeedMax*weightAdjust*20.f, 10, 110, 0xffffffff);
       }    
     }   
   }

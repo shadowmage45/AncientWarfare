@@ -39,9 +39,9 @@ public VehicleUpgradeSpeed(int num)
 @Override
 public void applyVehicleEffects(VehicleBase vehicle)
   {
-  Config.logDebug("prev vehicle max speed: "+vehicle.maxForwardSpeedCurrent);
-  vehicle.maxForwardSpeedCurrent += 0.25f*0.05f;
-  Config.logDebug("new vehicle max speed: "+vehicle.maxForwardSpeedCurrent);
+  Config.logDebug("prev vehicle max speed: "+vehicle.currentForwardSpeedMax);
+  vehicle.currentForwardSpeedMax += 0.25f*0.05f;
+  Config.logDebug("new vehicle max speed: "+vehicle.currentForwardSpeedMax);
   }
 
 

@@ -38,7 +38,7 @@ public VehicleUpgradeReload(int num)
 @Override
 public void applyVehicleEffects(VehicleBase vehicle)
   {
-  vehicle.reloadTimeCurrent *= 0.9f;
+  vehicle.currentReloadTicks *= 0.9f;
   }
 
 }

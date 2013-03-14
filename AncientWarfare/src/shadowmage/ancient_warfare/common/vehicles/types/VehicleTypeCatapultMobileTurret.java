@@ -18,31 +18,35 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles.upgrades;
+package shadowmage.ancient_warfare.common.vehicles.types;
 
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.utils.Trig;
 
-public class VehicleUpgradeTurretPitch extends VehicleUpgradeBase
+public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
 {
 
-/**
- * @param num
- */
-public VehicleUpgradeTurretPitch(int num)
-  {
-  super(num);
-  this.displayName = "Turret Pitch Range Extender";
-  this.tooltip = "Expands the available pitch range on a pitch-adjustable vehicle by 3 degrees";
-  }
-
-@Override
-public void applyVehicleEffects(VehicleBase vehicle)
-  {
-  if(vehicle.canAimPitch())
+  /**
+   * @param typeNum
+   */
+  public VehicleTypeCatapultMobileTurret(int typeNum)
     {
-    vehicle.currentTurretPitchMax+=3;
-    vehicle.currentTurretPitchMin-=3;
+    super(typeNum);
+    this.width = 2;
+    this.height = 2; 
+    this.baseMissileVelocityMax = 30.f;  
+    this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.4f;
+    this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
+    this.riderForwardsOffset = 1.2f;
+    this.riderVerticalOffset = 0.8f;
+    this.displayName = "Catapult Mobile Turret";
+    this.displayTooltip = "A turret-mounted catapult on a wheeled frame.";
+    this.storageBaySize = 0;
+    this.armorBaySize = 3;
+    this.upgradeBaySize = 3;
+    this.canAdjustYaw = true;
+    this.isDrivable = true;
+    this.shouldRiderSit = true;
+    this.moveRiderWithTurret = true;
     }
-  }
 
 }

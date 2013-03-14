@@ -38,15 +38,15 @@ public VehicleUpgradePitchUp(int num)
 @Override
 public void applyVehicleEffects(VehicleBase vehicle)
   {
-  vehicle.turretPitchMax+=3;
-  vehicle.turretPitchMin+=3;
-  if(vehicle.turretPitch<vehicle.turretPitchMin)
+  vehicle.currentTurretPitchMax+=3;
+  vehicle.currentTurretPitchMin+=3;
+  if(vehicle.currentTurretPitch<vehicle.currentTurretPitchMin)
     {
-    vehicle.turretPitch = vehicle.turretPitchMin;
+    vehicle.currentTurretPitch = vehicle.currentTurretPitchMin;
     }
-  if(vehicle.turretPitch>vehicle.turretPitchMax)
+  if(vehicle.currentTurretPitch>vehicle.currentTurretPitchMax)
     {
-    vehicle.turretPitch = vehicle.turretPitchMax;
+    vehicle.currentTurretPitch = vehicle.currentTurretPitchMax;
     }
   }
 

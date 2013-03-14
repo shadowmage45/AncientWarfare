@@ -38,7 +38,7 @@ public VehicleUpgradePower(int num)
 @Override
 public void applyVehicleEffects(VehicleBase vehicle)
   {
-  vehicle.launchSpeedCurrentMax+=2;
+  vehicle.currentLaunchSpeedPowerMax+=2;
   }
 
 }
