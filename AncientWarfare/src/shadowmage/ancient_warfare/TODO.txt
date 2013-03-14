@@ -23,11 +23,11 @@ VEHICLES
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
 * create rockets (will require some hackery for their flight dynamics)
 * finish catapult and ballista animations
-* add vehicle health stuff to save/load/send to client
-* add vehicle health updating from max
 * clean up stand-based vehicles--
     --non-turret versions should have fixed turret rotation but have slow whole-vehicle turning
-    --turreted versions should have limited turret rotation ability, still allow slow whole-vehicle turning    
+    --turreted versions should have limited turret rotation ability, still allow slow whole-vehicle turning
+* update missile offset code to use turret position + missile offset
+* update input/aim helper to update yaw based on turretPosition relative to hitPos rather than raw playerYaw...        
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar

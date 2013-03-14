@@ -69,10 +69,10 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   int color = 0xffffffff;
   this.drawStringGui("Vehicle Type: " + vehicle.vehicleType.getDisplayName(), 10, 4, color);
   this.drawStringGui("Material Level: "+vehicle.vehicleMaterialLevel, 10, 14, color);
-  this.drawStringGui("Health: "+vehicle.currentVehicleHealth + "/"+vehicle.baseHealth, 10, 24, color);
+  this.drawStringGui("Health: "+vehicle.localVehicleHealth + "/"+vehicle.baseHealth, 10, 24, color);
   this.drawStringGui("Weight: "+vehicle.currentWeight + "/"+vehicle.baseWeight, 10, 34, color);
   this.drawStringGui("Speed: "+(vehicle.moveHelper.forwardMotion*20) + "/"+(vehicle.currentForwardSpeedMax*20), 10, 44, color);
-  this.drawStringGui("Missile Velocity: "+vehicle.currentLaunchPower + "/" +vehicle.currentLaunchSpeedPowerMax, 10, 54, color);
+  this.drawStringGui("Missile Velocity: "+vehicle.localLaunchPower + "/" +vehicle.currentLaunchSpeedPowerMax, 10, 54, color);
   this.drawStringGui("Resists: F: "+vehicle.currentFireResist+" E: "+vehicle.currentExplosionResist+ " G: "+vehicle.currentGenericResist, 10, 64, color);
   this.drawStringGui("Mountable: "+vehicle.isMountable(), 10, 74, color);
   this.drawStringGui("Drivable: "+vehicle.isDrivable(), 10, 84, color);
@@ -84,8 +84,8 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawStringGui("Adjustable Power: "+vehicle.canAimPower(), 10, 144, color);
   this.drawStringGui("Pitch Min: "+vehicle.currentTurretPitchMin, 10, 154, color);
   this.drawStringGui("Pitch Max: "+vehicle.currentTurretPitchMax, 10, 164, color);
-  this.drawStringGui("Yaw Min: "+(vehicle.currentTurretRotationHome - vehicle.currentTurretRotationMax), 10, 174, color);
-  this.drawStringGui("Yaw Max: "+(vehicle.currentTurretRotationHome + vehicle.currentTurretRotationMax), 10, 184, color);
+  this.drawStringGui("Yaw Min: "+(vehicle.localTurretRotationHome - vehicle.localTurretRotationMax), 10, 174, color);
+  this.drawStringGui("Yaw Max: "+(vehicle.localTurretRotationHome + vehicle.localTurretRotationMax), 10, 184, color);
   this.drawStringGui("", 10, 194, color);
   this.drawStringGui("", 10, 204, color);
   this.drawStringGui("", 10, 214, color);

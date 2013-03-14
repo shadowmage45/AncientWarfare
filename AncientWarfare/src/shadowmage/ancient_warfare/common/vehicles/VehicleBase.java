@@ -62,10 +62,10 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IEntityContainerSynch
 {
-
-
 /**
- * these are the current max stats.  set from setVehicleType().  these are local cached bases, after application of material factors
+ * these are the current max stats.  set from setVehicleType().  
+ * these are local cached bases, after application of material factors
+ * should not be altered at all after vehicle is first initialized
  */
 public float baseForwardSpeed;
 public float baseStrafeSpeed;
@@ -81,14 +81,9 @@ public float baseGenericResist = 0.f;
 public float baseFireResist = 0.f;
 public float baseExplosionResist = 0.f;
 
-
 /**
- * in meters/second
- */
-
-
-/**
- * local current stats, fully updated and modified from upgrades/etc
+ * local current stats, fully updated and modified from upgrades/etc. should not be altered aside from
+ * upgrades/armor
  */
 public float currentForwardSpeedMax = 0.8f;
 public float currentStrafeSpeedMax = 2.0f;
@@ -107,16 +102,16 @@ public float currentAccuracy = 1.f;
 /**
  * local variables, may be altered by input/etc...
  */
-public float currentVehicleHealth = 100;
-public float currentTurretRotationHome = 0.f;
-public float currentTurretRotationMax = 45.f;
-public float currentTurretRotation = 0.f;
-public float currentTurretDestRot = 0.f;
-public float currentTurretRotInc = 1.f;
-public float currentTurretPitch = 45.f;
-public float currentTurretDestPitch = 45.f;
-public float currentTurretPitchInc = 1.f;
-public float currentLaunchPower = 31.321f;
+public float localVehicleHealth = 100;
+public float localTurretRotationHome = 0.f;
+public float localTurretRotationMax = 45.f;
+public float localTurretRotation = 0.f;
+public float localTurretDestRot = 0.f;
+public float localTurretRotInc = 1.f;
+public float localTurretPitch = 45.f;
+public float localTurretDestPitch = 45.f;
+public float localTurretPitchInc = 1.f;
+public float localLaunchPower = 31.321f;
 
 /**
  * set by move helper on movement update. used during client rendering to update wheel rotation and other movement speed based animations
@@ -197,18 +192,18 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
   this.updateBaseStats();
   this.resetCurrentStats();
 
-  if(this.currentTurretPitch<this.currentTurretPitchMin)
+  if(this.localTurretPitch<this.currentTurretPitchMin)
     {
-    this.currentTurretPitch = this.currentTurretPitchMin;    
+    this.localTurretPitch = this.currentTurretPitchMin;    
     }
-  else if(this.currentTurretPitch > this.currentTurretPitchMax)
+  else if(this.localTurretPitch > this.currentTurretPitchMax)
     {
-    this.currentTurretPitch = this.currentTurretPitchMax;
+    this.localTurretPitch = this.currentTurretPitchMax;
     }
-  this.currentLaunchPower = this.firingHelper.getAdjustedMaxMissileVelocity();
+  this.localLaunchPower = this.firingHelper.getAdjustedMaxMissileVelocity();
   if(!this.canAimRotate())
     {
-    this.currentTurretRotation = this.rotationYaw;
+    this.localTurretRotation = this.rotationYaw;
     }
   }
 
@@ -226,9 +221,9 @@ public void updateBaseStats()
   baseHealth = vehicleType.getBaseHealth() * material.getHPFactor(level);
   baseAccuracy = vehicleType.getBaseAccuracy() * material.getAccuracyFactor(level);
   baseWeight = vehicleType.getBaseWeight() * material.getWeightFactor(level); 
-  this.baseExplosionResist = 0.f;
-  this.baseFireResist = 0.f;
-  this.baseGenericResist = 0.f;
+  baseExplosionResist = 0.f;
+  baseFireResist = 0.f;
+  baseGenericResist = 0.f;
   }
 
 public float getHorizontalMissileOffset()
@@ -300,6 +295,10 @@ public Pos3f getMissileOffset()
   float angle = Trig.toDegrees((float) Math.atan2(z, x));
   float len = MathHelper.sqrt_float(x*x+z*z);
   angle+= this.rotationYaw;  
+  if(canAimRotate())
+    {
+    angle+=this.localTurretRotation;
+    }
   x = Trig.cosDegrees(angle)*len;
   z = -Trig.sinDegrees(angle)*len;
   off.x = x;
@@ -345,7 +344,7 @@ public void resetCurrentStats()
   this.currentStrafeSpeedMax = this.baseStrafeSpeed;
   this.currentTurretPitchMin = this.basePitchMin;
   this.currentTurretPitchMax = this.basePitchMax;
-  this.currentTurretRotationMax = this.baseTurretRotationMax;
+  this.localTurretRotationMax = this.baseTurretRotationMax;
   this.currentReloadTicks = this.baseReloadTicks;
   this.currentLaunchSpeedPowerMax = this.baseLaunchSpeedMax;
   this.currentExplosionResist = this.baseExplosionResist;
@@ -369,8 +368,8 @@ public void setDead()
 public void onUpdate()
   { 
   super.onUpdate(); 
-  float prevPitch = this.currentTurretPitch;
-  float prevYaw = this.currentTurretRotation;
+  float prevPitch = this.localTurretPitch;
+  float prevYaw = this.localTurretRotation;
   if(this.worldObj.isRemote)
     {
     this.onUpdateClient();
@@ -379,26 +378,27 @@ public void onUpdate()
     {    
     this.onUpdateServer();
     }
-  if(currentTurretPitch!=currentTurretDestPitch)
+  if(localTurretPitch!=localTurretDestPitch)
     {
     this.updateTurretPitch();
     }
-  if(!this.vehicleType.canAdjustYaw())
+  if(!this.canAimRotate())
     {
-    this.currentTurretRotation = this.rotationYaw;
+    this.localTurretRotation = this.rotationYaw;    
     }
-  else if(currentTurretRotation!=currentTurretDestRot)
+  else if(localTurretRotation!=localTurretDestRot)
     {
     this.updateTurretRotation();
-    }
+    } 
+  this.localTurretRotationHome = this.rotationYaw;
   this.moveHelper.onMovementTick();
   this.firingHelper.onTick();  
   if(this.hitAnimationTicks>0)
     {
     this.hitAnimationTicks--;
     }  
-  this.currentTurretPitchSpeed = this.currentTurretPitch - prevPitch;;
-  this.currentTurretYawSpeed = this.currentTurretRotation - prevYaw;
+  this.currentTurretPitchSpeed = this.localTurretPitch - prevPitch;;
+  this.currentTurretYawSpeed = this.localTurretRotation - prevYaw;
   }
 
 
@@ -445,20 +445,20 @@ public void updateTurretPitch()
   {
   if(!canAimPitch())
     {
-    currentTurretDestPitch = currentTurretPitch;
+    localTurretDestPitch = localTurretPitch;
     return;
     }
-  if(currentTurretPitch>currentTurretDestPitch)
+  if(localTurretPitch>localTurretDestPitch)
     {
-    currentTurretPitch-=currentTurretPitchInc;
+    localTurretPitch-=localTurretPitchInc;
     }
-  else if(currentTurretPitch<currentTurretDestPitch)
+  else if(localTurretPitch<localTurretDestPitch)
     {
-    currentTurretPitch+=currentTurretPitchInc;
+    localTurretPitch+=localTurretPitchInc;
     }
-  if(Trig.getAbsDiff(currentTurretDestPitch, currentTurretPitch)<currentTurretPitchInc)
+  if(Trig.getAbsDiff(localTurretDestPitch, localTurretPitch)<localTurretPitchInc)
     {
-    currentTurretPitch = currentTurretDestPitch;
+    localTurretPitch = localTurretDestPitch;
     }
   }
 
@@ -466,35 +466,35 @@ public void updateTurretRotation()
   {
   if(!canAimRotate())
     {
-    currentTurretDestRot = currentTurretRotation;
+    localTurretDestRot = localTurretRotation;
     return;
     }
  
-  if(currentTurretRotation==currentTurretDestRot)
+  if(localTurretRotation==localTurretDestRot)
     {
     return;
     }
-  while(currentTurretRotation<0)
+  while(localTurretRotation<0)
     {
-    currentTurretRotation+=360;
+    localTurretRotation+=360;
     }
-  while(currentTurretRotation>=360)
+  while(localTurretRotation>=360)
     {
-    currentTurretRotation-=360;
+    localTurretRotation-=360;
     }
-  while(currentTurretDestRot<0)
+  while(localTurretDestRot<0)
     {
-    currentTurretDestRot+=360;
+    localTurretDestRot+=360;
     }
-  while(currentTurretDestRot>=360)
+  while(localTurretDestRot>=360)
     {
-    currentTurretDestRot-=360;
+    localTurretDestRot-=360;
     }
   
   byte turnDirection = 0;
   
-  float curMod = currentTurretRotation%360;
-  float destMod = currentTurretDestRot%360;
+  float curMod = localTurretRotation%360;
+  float destMod = localTurretDestRot%360;
   float diff = curMod>destMod ? curMod - destMod : destMod-curMod;
   
   byte turnDir = 0;
@@ -520,10 +520,10 @@ public void updateTurretRotation()
       turnDir = -1;
       }
     } 
-  currentTurretRotation += (float)currentTurretRotInc * (float)turnDir;  
-  if(Trig.getAbsDiff(currentTurretDestRot, currentTurretRotation) <= currentTurretRotInc)
+  localTurretRotation += (float)localTurretRotInc * (float)turnDir;  
+  if(Trig.getAbsDiff(localTurretDestRot, localTurretRotation) <= localTurretRotInc)
     {
-    currentTurretRotation = currentTurretDestRot;
+    localTurretRotation = localTurretDestRot;
     }
   }
 
@@ -583,7 +583,7 @@ public void handleClientMoveData(NBTTagCompound tag)
  */
 public void handleHealthUpdateData(float health)
   {
-  this.currentVehicleHealth = health;
+  this.localVehicleHealth = health;
   this.hitAnimationTicks = 20;
   }
 
@@ -608,8 +608,8 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   {  
   super.attackEntityFrom(par1DamageSource, par2);
   float adjDmg = upgradeHelper.getScaledDamage(par1DamageSource, par2);
-  this.currentVehicleHealth -= adjDmg;  
-  if(this.currentVehicleHealth<=0)
+  this.localVehicleHealth -= adjDmg;  
+  if(this.localVehicleHealth<=0)
     {
     this.setDead();
     return true;
@@ -618,7 +618,7 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     {
     Packet02Vehicle pkt = new Packet02Vehicle();
     pkt.setParams(this);
-    pkt.setHealthUpdate(this.currentVehicleHealth);
+    pkt.setHealthUpdate(this.localVehicleHealth);
     pkt.sendPacketToAllTrackingClients(this);
     }
   return false;
@@ -642,7 +642,7 @@ public void updateRiderPosition()
   double posX = this.posX;
   double posY = this.posY + this.getRiderVerticalOffset();
   double posZ = this.posZ;
-  float yaw = this.vehicleType.moveRiderWithTurret() ? currentTurretRotation : rotationYaw;
+  float yaw = this.vehicleType.moveRiderWithTurret() ? localTurretRotation : rotationYaw;
   posX += Trig.sinDegrees(yaw)*-this.getRiderForwardOffset();
   posX += Trig.cosDegrees(yaw)*this.getRiderHorizontalOffset();
   posZ += Trig.cosDegrees(yaw)*-this.getRiderForwardOffset();
@@ -727,7 +727,7 @@ protected void entityInit()
 @Override
 public void writeSpawnData(ByteArrayDataOutput data)
   {
-  data.writeFloat(this.currentVehicleHealth);  
+  data.writeFloat(this.localVehicleHealth);  
   data.writeInt(this.vehicleType.getGlobalVehicleType());
   data.writeInt(this.vehicleMaterialLevel);
   ByteTools.writeNBTTagCompound(upgradeHelper.getNBTTag(), data);
@@ -735,19 +735,19 @@ public void writeSpawnData(ByteArrayDataOutput data)
   ByteTools.writeNBTTagCompound(moveHelper.getNBTTag(), data);
   ByteTools.writeNBTTagCompound(firingHelper.getNBTTag(), data);
   ByteTools.writeNBTTagCompound(firingVarsHelper.getNBTTag(), data);
-  data.writeFloat(currentLaunchPower);
-  data.writeFloat(currentTurretPitch);
-  data.writeFloat(currentTurretRotation);
-  data.writeFloat(currentTurretDestPitch);
-  data.writeFloat(currentTurretDestRot);
+  data.writeFloat(localLaunchPower);
+  data.writeFloat(localTurretPitch);
+  data.writeFloat(localTurretRotation);
+  data.writeFloat(localTurretDestPitch);
+  data.writeFloat(localTurretDestRot);
   data.writeInt(teamNum);
-  data.writeFloat(currentTurretRotationHome);
+  data.writeFloat(localTurretRotationHome);
   }
 
 @Override
 public void readSpawnData(ByteArrayDataInput data)
   {
-  this.currentVehicleHealth = data.readFloat();
+  this.localVehicleHealth = data.readFloat();
   IVehicleType type = VehicleType.getVehicleType(data.readInt());
   this.setVehicleType(type, data.readInt());
   this.upgradeHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
@@ -755,14 +755,14 @@ public void readSpawnData(ByteArrayDataInput data)
   this.moveHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.firingHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
   this.firingVarsHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
-  this.currentLaunchPower = data.readFloat();
-  this.currentTurretPitch = data.readFloat();
-  this.currentTurretRotation = data.readFloat();
-  this.currentTurretDestPitch = data.readFloat();
-  this.currentTurretDestRot = data.readFloat();
+  this.localLaunchPower = data.readFloat();
+  this.localTurretPitch = data.readFloat();
+  this.localTurretRotation = data.readFloat();
+  this.localTurretDestPitch = data.readFloat();
+  this.localTurretDestRot = data.readFloat();
   this.upgradeHelper.updateUpgradeStats();
   this.teamNum = data.readInt();
-  this.currentTurretRotationHome = data.readFloat();
+  this.localTurretRotationHome = data.readFloat();
   }
 
 @Override
@@ -771,19 +771,19 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   IVehicleType vehType = VehicleType.getVehicleType(tag.getInteger("vehType"));
   int level = tag.getInteger("matLvl");
   this.setVehicleType(vehType, level);
-  this.currentVehicleHealth = tag.getFloat("health");
-  this.currentTurretRotationHome = tag.getFloat("turHome");
+  this.localVehicleHealth = tag.getFloat("health");
+  this.localTurretRotationHome = tag.getFloat("turHome");
   this.inventory.readFromNBT(tag);
   this.upgradeHelper.readFromNBT(tag.getCompoundTag("upgrades"));
   this.ammoHelper.readFromNBT(tag.getCompoundTag("ammo"));
   this.moveHelper.readFromNBT(tag.getCompoundTag("move"));
   this.firingHelper.readFromNBT(tag.getCompoundTag("fire"));
   this.firingVarsHelper.readFromNBT(tag.getCompoundTag("vars"));
-  this.currentLaunchPower = tag.getFloat("lc");
-  this.currentTurretPitch = tag.getFloat("tp");
-  this.currentTurretDestPitch = tag.getFloat("tpd");
-  this.currentTurretRotation = tag.getFloat("tr");
-  this.currentTurretDestRot = tag.getFloat("trd");  
+  this.localLaunchPower = tag.getFloat("lc");
+  this.localTurretPitch = tag.getFloat("tp");
+  this.localTurretDestPitch = tag.getFloat("tpd");
+  this.localTurretRotation = tag.getFloat("tr");
+  this.localTurretDestRot = tag.getFloat("trd");  
   this.upgradeHelper.updateUpgrades(); 
   this.ammoHelper.updateAmmoCounts();
   this.teamNum = tag.getInteger("team");
@@ -794,19 +794,19 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   {
   tag.setInteger("vehType", this.vehicleType.getGlobalVehicleType());
   tag.setInteger("matLvl", this.vehicleMaterialLevel);
-  tag.setFloat("health", this.currentVehicleHealth);
-  tag.setFloat("turHome", this.currentTurretRotationHome);
+  tag.setFloat("health", this.localVehicleHealth);
+  tag.setFloat("turHome", this.localTurretRotationHome);
   this.inventory.writeToNBT(tag);
   tag.setCompoundTag("upgrades", this.upgradeHelper.getNBTTag());
   tag.setCompoundTag("ammo", this.ammoHelper.getNBTTag());
   tag.setCompoundTag("move", this.moveHelper.getNBTTag());
   tag.setCompoundTag("fire", this.firingHelper.getNBTTag());  
   tag.setCompoundTag("vars", this.firingVarsHelper.getNBTTag());
-  tag.setFloat("lc", currentLaunchPower);
-  tag.setFloat("tp", currentTurretPitch);
-  tag.setFloat("tpd", currentTurretDestPitch);
-  tag.setFloat("tr", currentTurretRotation);
-  tag.setFloat("trd", currentTurretDestRot);
+  tag.setFloat("lc", localLaunchPower);
+  tag.setFloat("tp", localTurretPitch);
+  tag.setFloat("tpd", localTurretDestPitch);
+  tag.setFloat("tr", localTurretRotation);
+  tag.setFloat("trd", localTurretDestRot);
   tag.setInteger("team", this.teamNum);
   }
 

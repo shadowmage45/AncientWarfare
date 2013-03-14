@@ -40,13 +40,13 @@ public void applyVehicleEffects(VehicleBase vehicle)
   {
   vehicle.currentTurretPitchMax-=3;
   vehicle.currentTurretPitchMin-=3;
-  if(vehicle.currentTurretPitch<vehicle.currentTurretPitchMin)
+  if(vehicle.localTurretPitch<vehicle.currentTurretPitchMin)
     {
-    vehicle.currentTurretPitch = vehicle.currentTurretPitchMin;
+    vehicle.localTurretPitch = vehicle.currentTurretPitchMin;
     }
-  if(vehicle.currentTurretPitch>vehicle.currentTurretPitchMax)
+  if(vehicle.localTurretPitch>vehicle.currentTurretPitchMax)
     {
-    vehicle.currentTurretPitch = vehicle.currentTurretPitchMax;
+    vehicle.localTurretPitch = vehicle.currentTurretPitchMax;
     }
   }
 

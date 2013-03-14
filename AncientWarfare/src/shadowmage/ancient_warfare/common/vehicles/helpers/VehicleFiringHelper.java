@@ -111,9 +111,9 @@ public void spawnMissile(float ox, float oy, float oz)
       float y = (float) vehicle.posY + off.y + oy;
       float z = (float) vehicle.posZ + off.z + oz;
       
-      float power = vehicle.currentLaunchPower> getAdjustedMaxMissileVelocity() ? getAdjustedMaxMissileVelocity() : vehicle.currentLaunchPower;      
-      float yaw = vehicle.currentTurretRotation;
-      float pitch = vehicle.currentTurretPitch; 
+      float power = vehicle.localLaunchPower> getAdjustedMaxMissileVelocity() ? getAdjustedMaxMissileVelocity() : vehicle.localLaunchPower;      
+      float yaw = vehicle.localTurretRotation;
+      float pitch = vehicle.localTurretPitch; 
       if(Config.adjustMissilesForAccuracy)
         {
         //TODO fix all this crap up, make a dedicated random somewhere for this
@@ -176,33 +176,33 @@ public void onTick()
     {
     if(!vehicle.canAimPitch())
       {
-      this.clientTurretPitch = vehicle.currentTurretPitch;
+      this.clientTurretPitch = vehicle.localTurretPitch;
       }
     if(!vehicle.canAimPower())
       {
-      this.clientLaunchSpeed = vehicle.currentLaunchPower;
+      this.clientLaunchSpeed = vehicle.localLaunchPower;
       }
     if(!vehicle.canAimRotate())
       {
       this.clientTurretYaw = vehicle.rotationYaw;
       }
     }
-  if(vehicle.currentTurretPitch<vehicle.currentTurretPitchMin)
+  if(vehicle.localTurretPitch<vehicle.currentTurretPitchMin)
     {
-    vehicle.currentTurretPitch = vehicle.currentTurretPitchMin;    
+    vehicle.localTurretPitch = vehicle.currentTurretPitchMin;    
     }
-  else if(vehicle.currentTurretPitch > vehicle.currentTurretPitchMax)
+  else if(vehicle.localTurretPitch > vehicle.currentTurretPitchMax)
     {
-    vehicle.currentTurretPitch = vehicle.currentTurretPitchMax;
+    vehicle.localTurretPitch = vehicle.currentTurretPitchMax;
     }  
   if(!vehicle.canAimPower())
     {
-    vehicle.currentLaunchPower = vehicle.currentLaunchSpeedPowerMax;
+    vehicle.localLaunchPower = vehicle.currentLaunchSpeedPowerMax;
     }
   if(vehicle.canAimRotate() && vehicle.upgradeHelper.hasUpgrade(VehicleUpgradeRegistry.turretLockUpgrade))
     {
     float diff = vehicle.rotationYaw - vehicle.prevRotationYaw;
-    vehicle.currentTurretRotation +=diff;
+    vehicle.localTurretRotation +=diff;
     this.clientTurretYaw += diff;
     }
   }
@@ -327,21 +327,21 @@ public void handleAimUpdate(NBTTagCompound tag)
   if(tag.hasKey("aimPitch"))
     {
     sendReply = true;
-    vehicle.currentTurretDestPitch = tag.getFloat("aimPitch");
-    reply.setFloat("aimPitch", vehicle.currentTurretDestPitch);
-    Config.logDebug("setting desired turret pitch to: "+vehicle.currentTurretDestPitch);
+    vehicle.localTurretDestPitch = tag.getFloat("aimPitch");
+    reply.setFloat("aimPitch", vehicle.localTurretDestPitch);
+    Config.logDebug("setting desired turret pitch to: "+vehicle.localTurretDestPitch);
     } 
   if(tag.hasKey("aimYaw"))
     {
     sendReply = true;
-    vehicle.currentTurretDestRot = tag.getFloat("aimYaw");
-    reply.setFloat("aimYaw", vehicle.currentTurretDestRot);
+    vehicle.localTurretDestRot = tag.getFloat("aimYaw");
+    reply.setFloat("aimYaw", vehicle.localTurretDestRot);
     }
   if(tag.hasKey("aimPow"))
     {
     sendReply = true;
-    vehicle.currentLaunchPower = tag.getFloat("aimPow");
-    reply.setFloat("aimPow", vehicle.currentLaunchPower);
+    vehicle.localLaunchPower = tag.getFloat("aimPow");
+    reply.setFloat("aimPow", vehicle.localLaunchPower);
     }
   if(!vehicle.worldObj.isRemote && sendReply) 
     { 
@@ -470,7 +470,7 @@ public void handleAimMouseInput(Vec3 target)
   float range = MathHelper.sqrt_float(tx*tx+tz*tz);
   if(vehicle.canAimPitch())
     {   
-    Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.currentLaunchPower);  
+    Pair<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.localLaunchPower);  
     if(angles.key().isNaN() || angles.value().isNaN())
       { 
       }
@@ -495,7 +495,7 @@ public void handleAimMouseInput(Vec3 target)
     }
   else if(vehicle.canAimPower())
     {     
-    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.currentTurretPitch, Settings.getClientPowerIterations());
+    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch, Settings.getClientPowerIterations());
     if(this.clientLaunchSpeed!=power && power < getAdjustedMaxMissileVelocity())
       {
       this.clientLaunchSpeed = power;
@@ -508,7 +508,7 @@ public void handleAimMouseInput(Vec3 target)
     float xAO = (float) (vehicle.posX - target.xCoord);  
     float zAO = (float) (vehicle.posZ - target.zCoord);
     float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
-    if(yaw!=this.clientTurretYaw && yaw >=vehicle.currentTurretRotationHome - vehicle.currentTurretRotationMax && yaw <= vehicle.currentTurretRotationHome + vehicle.currentTurretRotationMax)
+    if(yaw!=this.clientTurretYaw && yaw >=vehicle.localTurretRotationHome - vehicle.localTurretRotationMax && yaw <= vehicle.localTurretRotationHome + vehicle.localTurretRotationMax)
       {    
       this.clientTurretYaw = yaw;
       updated = true;
@@ -517,11 +517,11 @@ public void handleAimMouseInput(Vec3 target)
     }
   if(!vehicle.canAimPitch())
     {
-    this.clientTurretPitch = vehicle.currentTurretPitch;
+    this.clientTurretPitch = vehicle.localTurretPitch;
     }
   if(!vehicle.canAimPower())
     {
-    this.clientLaunchSpeed = vehicle.currentLaunchPower;
+    this.clientLaunchSpeed = vehicle.localLaunchPower;
     }
   if(!vehicle.canAimRotate())
     {

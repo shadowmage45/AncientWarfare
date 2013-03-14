@@ -35,7 +35,7 @@ public interface IVehicleType
 public abstract float getWidth();
 public abstract float getHeight();
 public abstract float getBaseWeight();
-public abstract float getBaseHealth();//base max health, before any materials or upgrades adjustments
+public abstract float getBaseHealth();//base max health, before any materials adjustments
 
 public abstract String getTextureForMaterialLevel(int level);//get the texture for the input material quality level
 public abstract String getDisplayName();
@@ -51,15 +51,20 @@ public abstract boolean canAdjustYaw();//can aim yaw be adjusted independently o
 public abstract boolean canAdjustPitch();//can aim pitch be adjusted? (should be EITHER pitch OR power)
 public abstract boolean canAdjustPower();//can shot velocity be adjusted? (should be EITHER pitch OR power)
 
-public abstract float getMissileForwardsOffset();
-public abstract float getMissileHorizontalOffset();
-public abstract float getMissileVerticalOffset();
+public abstract float getMissileForwardsOffset();//the offset in the turretYaw direction from the turretPosition
+public abstract float getMissileHorizontalOffset();//the offset in the turretYaw+90 direction from the turretPosition
+public abstract float getMissileVerticalOffset();//the offset in the y+ direction from the turretPosition
 
-public abstract float getRiderForwardsOffset();
-public abstract float getRiderHorizontalOffset();
-public abstract float getRiderVerticalOffest();
-public abstract boolean shouldRiderSit();
-public abstract boolean moveRiderWithTurret();
+public abstract float getTurretPosX();//the offset of the turret from 0,0 at vehicle rotation 0
+public abstract float getTurretPosY();//the offset of the turret from 0,0 at vehicle rotation 0
+public abstract float getTurretPosZ();//the offset of the turret from 0,0 at vehicle rotation 0
+
+public abstract float getRiderForwardsOffset();//the offset from 0,0 or turretPos of the rider
+public abstract float getRiderHorizontalOffset();//the offset from 0,0 or turretPos of the rider
+public abstract float getRiderVerticalOffest();//the offset from 0,0 or turretPos of the rider
+
+public abstract boolean shouldRiderSit();//should rider be seated while riding?
+public abstract boolean moveRiderWithTurret();//should position of rider update with the position of the turret, rather than vehicle?
 
 public abstract float getBaseForwardSpeed();
 public abstract float getBaseStrafeSpeed();

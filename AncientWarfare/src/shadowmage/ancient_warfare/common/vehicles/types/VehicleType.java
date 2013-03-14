@@ -78,6 +78,9 @@ public boolean canAdjustYaw = false;
 public boolean canAdjustPitch = false;
 public boolean canAdjustPower = false;
 
+public float turretForwardsOffset = 0.f;
+public float turretHorizontalOffset = 0.f;
+public float turretVerticalOffset = 0.f;
 public float missileForwardsOffset = 0.f;
 public float missileHorizontalOffset= 0.f;
 public float missileVerticalOffset= 0.f;
@@ -435,5 +438,22 @@ public boolean moveRiderWithTurret()
   return this.moveRiderWithTurret;
   }
 
+@Override
+public float getTurretPosX()
+  {
+  return turretHorizontalOffset;
+  }
+
+@Override
+public float getTurretPosY()
+  {
+  return turretVerticalOffset;
+  }
+
+@Override
+public float getTurretPosZ()
+  {
+  return turretForwardsOffset;
+  }
 
 }

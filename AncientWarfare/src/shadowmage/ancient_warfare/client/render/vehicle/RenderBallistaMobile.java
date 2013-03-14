@@ -36,7 +36,7 @@ ModelBallistaMobile model = new ModelBallistaMobile();
 public void renderVehicle(VehicleBase veh, double x, double y, double z,  float yaw, float tick)
   {
   VehicleFiringVarsHelper var = veh.firingVarsHelper;
-  model.setTurretRotation(yaw-veh.currentTurretRotation, -veh.currentTurretPitch);
+  model.setTurretRotation(yaw-veh.localTurretRotation, -veh.localTurretPitch);
   model.setCrankRotations(var.getVar1() + (tick*var.getVar2()));
   float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
