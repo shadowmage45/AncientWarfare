@@ -647,10 +647,11 @@ public void updateRiderPosition()
   double posX = this.posX;
   double posY = this.posY + this.getRiderVerticalOffset();
   double posZ = this.posZ;
-  posX += Trig.sinDegrees(rotationYaw)*-this.getRiderForwardOffset();
-  posX += Trig.cosDegrees(rotationYaw)*this.getRiderHorizontalOffset();
-  posZ += Trig.cosDegrees(rotationYaw)*-this.getRiderForwardOffset();
-  posZ += Trig.sinDegrees(rotationYaw)*this.getRiderHorizontalOffset();
+  float yaw = this.vehicleType.moveRiderWithTurret() ? turretRotation : rotationYaw;
+  posX += Trig.sinDegrees(yaw)*-this.getRiderForwardOffset();
+  posX += Trig.cosDegrees(yaw)*this.getRiderHorizontalOffset();
+  posZ += Trig.cosDegrees(yaw)*-this.getRiderForwardOffset();
+  posZ += Trig.sinDegrees(yaw)*this.getRiderHorizontalOffset();
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
   }
 
@@ -674,7 +675,6 @@ public void setPositionAndRotation2(double par1, double par3, double par5, float
   {      
   this.setPositionAndRotationNormalized(par1, par3, par5, yaw, par8, par9);
   }
-
 
 public void setPositionAndRotationNormalized(double par1, double par3, double par5, float yaw, float par8, int par9)
   {
@@ -862,6 +862,5 @@ public boolean canInteract(EntityPlayer player)
   {
   return true;
   }
-
 
 }
