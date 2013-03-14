@@ -84,8 +84,8 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawStringGui("Adjustable Power: "+vehicle.canAimPower(), 10, 144, color);
   this.drawStringGui("Pitch Min: "+vehicle.currentTurretPitchMin, 10, 154, color);
   this.drawStringGui("Pitch Max: "+vehicle.currentTurretPitchMax, 10, 164, color);
-  this.drawStringGui("Yaw Min: "+(vehicle.localTurretRotationHome - vehicle.localTurretRotationMax), 10, 174, color);
-  this.drawStringGui("Yaw Max: "+(vehicle.localTurretRotationHome + vehicle.localTurretRotationMax), 10, 184, color);
+  this.drawStringGui("Yaw Min: "+(vehicle.localTurretRotationHome - vehicle.currentTurretRotationMax), 10, 174, color);
+  this.drawStringGui("Yaw Max: "+(vehicle.localTurretRotationHome + vehicle.currentTurretRotationMax), 10, 184, color);
   this.drawStringGui("", 10, 194, color);
   this.drawStringGui("", 10, 204, color);
   this.drawStringGui("", 10, 214, color);

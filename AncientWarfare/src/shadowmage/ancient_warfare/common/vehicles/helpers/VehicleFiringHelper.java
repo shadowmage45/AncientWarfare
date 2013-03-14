@@ -508,7 +508,7 @@ public void handleAimMouseInput(Vec3 target)
     float xAO = (float) (vehicle.posX - target.xCoord);  
     float zAO = (float) (vehicle.posZ - target.zCoord);
     float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
-    if(yaw!=this.clientTurretYaw && yaw >=vehicle.localTurretRotationHome - vehicle.localTurretRotationMax && yaw <= vehicle.localTurretRotationHome + vehicle.localTurretRotationMax)
+    if(yaw!=this.clientTurretYaw && yaw >=vehicle.localTurretRotationHome - vehicle.currentTurretRotationMax && yaw <= vehicle.localTurretRotationHome + vehicle.currentTurretRotationMax)
       {    
       this.clientTurretYaw = yaw;
       updated = true;

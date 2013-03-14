@@ -98,13 +98,13 @@ public float currentWeight = 1000.f;
 public float currentTurretPitchSpeed = 0.f;
 public float currentTurretYawSpeed = 0.f;
 public float currentAccuracy = 1.f;
+public float currentTurretRotationMax = 45.f;
 
 /**
  * local variables, may be altered by input/etc...
  */
 public float localVehicleHealth = 100;
 public float localTurretRotationHome = 0.f;
-public float localTurretRotationMax = 45.f;
 public float localTurretRotation = 0.f;
 public float localTurretDestRot = 0.f;
 public float localTurretRotInc = 1.f;
@@ -344,7 +344,7 @@ public void resetCurrentStats()
   this.currentStrafeSpeedMax = this.baseStrafeSpeed;
   this.currentTurretPitchMin = this.basePitchMin;
   this.currentTurretPitchMax = this.basePitchMax;
-  this.localTurretRotationMax = this.baseTurretRotationMax;
+  this.currentTurretRotationMax = this.baseTurretRotationMax;
   this.currentReloadTicks = this.baseReloadTicks;
   this.currentLaunchSpeedPowerMax = this.baseLaunchSpeedMax;
   this.currentExplosionResist = this.baseExplosionResist;
