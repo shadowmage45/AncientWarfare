@@ -25,9 +25,12 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
@@ -61,19 +64,21 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,   
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
     {
     int level = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");    
-    hit = BlockTools.offsetForSide(hit, side);      
-//    VehicleBase vehicle = VehicleRegistry.instance().getVehicleForType(world, stack.getItemDamage(), level);
-//    vehicle.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
-//    vehicle.prevRotationYaw = vehicle.rotationYaw = player.rotationYaw;
-//    world.spawnEntityInWorld(vehicle);      
-//    if(!player.capabilities.isCreativeMode)
-//      {
-//      stack.stackSize--;
-//      if(stack.stackSize<=0)
-//        {
-//        player.inventory.setInventorySlotContents(player.inventory.currentItem, null);    
-//        }
-//      }
+    hit = BlockTools.offsetForSide(hit, side);  
+    NpcBase npc = NpcRegistry.getNpcForType(stack.getItemDamage(), world);
+    npc.setRank(level);
+    npc.teamNum = TeamTracker.instance().getTeamForPlayerServer(player.getEntityName());
+    npc.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
+    npc.prevRotationYaw = npc.rotationYaw = -player.rotationYaw;
+    world.spawnEntityInWorld(npc);
+    if(!player.capabilities.isCreativeMode)
+      {
+      stack.stackSize--;
+      if(stack.stackSize<=0)
+        {
+        player.inventory.setInventorySlotContents(player.inventory.currentItem, null);    
+        }
+      }
     return true;
     }
   Config.logError("Npc spawner item was missing NBT data, something may have corrupted this item");
@@ -88,7 +93,12 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
     {
     if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
       {
-      par3List.add("NPC Rank: "+stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev"));
+      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
+      if(tag.hasKey("name"))
+        {
+        par3List.add("NPC Type: "+tag.getString("name"));
+        }
+      par3List.add("NPC Rank: "+tag.getInteger("lev"));      
       }
     }  
   }

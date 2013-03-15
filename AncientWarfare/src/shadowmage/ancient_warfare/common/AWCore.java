@@ -46,7 +46,6 @@ import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -142,6 +141,7 @@ public void preInit(FMLPreInitializationEvent evt)
    */
   AWEntityRegistry.registerEntity(VehicleBase.class, "Vehicle.VehicleBase", 130, 3, false);
   VehicleRegistry.instance().registerVehicles();
+  
   }
 
 /**

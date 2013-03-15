@@ -18,28 +18,28 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers;
+package shadowmage.ancient_warfare.common.registry.entry;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
-public interface INpcType
+public class NpcEntry
 {
+public final String displayName;
+public final String displayTooltip;
+public final int numOfRanks;
+public final List<String> rankNames = new ArrayList<String>();
+public final Class <? extends NpcBase> entityClass;
 
-public abstract int getGlobalNpcType();
-public abstract int getRanks();
-public abstract String getEntityName();
-public abstract String getDisplayName();
-public abstract String getModelTexture();
-
-public abstract int getNpcHealth();
-public abstract boolean isSoldier();
-public abstract boolean canMelee();//can this npc fight with whatever he has equipped?
-public abstract boolean canDriveSiegeEngines();//can this npc drive siege engines?
-
-public abstract List getNpcAiTasks();
-
-public abstract void onTick(Entity ent);
+public NpcEntry (Class <? extends NpcBase> clz, String name, String tooltip, int ranks, List<String> rankNames)
+  {
+  this.entityClass = clz;
+  this.displayName = name;
+  this.displayTooltip = tooltip;
+  this.numOfRanks = ranks;
+  this.rankNames.addAll(rankNames);      
+  }
 
 }

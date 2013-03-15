@@ -20,18 +20,23 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
 public interface INpcAI
 {
 
 public abstract int getGlobalAIType();//global reference number for AI, used for reconstructing trees from data
+public abstract String getTaskName();//the name of the task..for GUI referencing...
 public abstract int getSuccessTicks();//how many ticks to check before executing again, if previous execution succeeded
 public abstract int getFailureTicks();//how many ticks to check before executing again, if previous execution failed
-public abstract boolean shouldExecute();//a quick pre-check to see if the task should execute this tick
-public abstract int[] exclusiveTasks();//tasks that cannot execute the same time as this
+public abstract boolean shouldExecute(NpcBase npc);//a quick pre-check to see if the task should execute this tick
+public abstract int[] exclusiveTasks();//tasks that cannot execute the same time as this, checked in first-come fist serve order
 
 public abstract void onTick(NpcBase npc);//apply your AI actions to the NPC here.  Called during the AI update loop, only if shouldExecute()==true && ticksTilTry<=0
+
+public abstract void readFromNBT(NBTTagCompound tag);
+public abstract NBTTagCompound getNBTTag();
 
 
 }

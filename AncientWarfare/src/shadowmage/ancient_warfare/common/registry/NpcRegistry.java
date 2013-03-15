@@ -29,14 +29,16 @@ import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.soldiers.INpcType;
+import shadowmage.ancient_warfare.common.registry.entry.NpcEntry;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
 
 public class NpcRegistry
 {
 
-private Map<Integer, INpcType> npcInstances = new HashMap<Integer, INpcType>();
+private static Map<Integer, NpcEntry> npcTypes = new HashMap<Integer, NpcEntry>();
 
 private NpcRegistry(){}
 private static NpcRegistry INSTANCE;
@@ -51,23 +53,13 @@ public void registerNPCs()
   
   }
 
-public void registerNPC(INpcType type)
-  {
-  
-  }
-
-public INpcType getNpcType(int type)
-  {
-  return this.npcInstances.get(type);
-  }
-
 public List getCreativeDisplayItems()
   {
   List<ItemStack> stacks = new ArrayList<ItemStack>();
-  Iterator<Entry<Integer, INpcType>> it = this.npcInstances.entrySet().iterator();
-  Entry<Integer, INpcType> ent = null;
+  Iterator<Entry<Integer, NpcEntry>> it = this.npcTypes.entrySet().iterator();
+  Entry<Integer, NpcEntry> ent = null;
   ItemStack stack = null;
-  INpcType type = null;
+  NpcEntry type = null;
   while(it.hasNext())
     {
     ent = it.next();
@@ -76,16 +68,33 @@ public List getCreativeDisplayItems()
       {
       continue;
       }
-    for(int i = 0; i < type.getRanks(); i++)
+    for(int i = 0; i < type.numOfRanks; i++)
       {
-      stack = new ItemStack(ItemLoader.npcSpawner,1,type.getGlobalNpcType());
+      stack = new ItemStack(ItemLoader.npcSpawner,1, ent.getKey());
       NBTTagCompound tag = new NBTTagCompound();
       tag.setInteger("lev", i);
+      if(i <type.rankNames.size())
+        {
+        tag.setString("name", type.rankNames.get(i));
+        }
       stack.setTagInfo("AWNpcSpawner", tag);
       stacks.add(stack);
       }
     }
   return stacks;
+  }
+
+public static NpcBase getNpcForType(int num, World world)
+  {
+  if(npcTypes.containsKey(num))
+    {
+    try
+      {
+      return npcTypes.get(num).entityClass.getDeclaredConstructor(World.class).newInstance(world);
+      }
+    catch(Exception e){}    
+    }
+  return null;
   }
 
 }

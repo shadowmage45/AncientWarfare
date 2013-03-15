@@ -1,0 +1,25 @@
+AncientWarfare c2012-2013 John Cummens aka Shadowmage
+Released under the General Public License v3.0 (or later)
+
+Creating an NPC Type
+
+
+
+
+NPC types:
+
+Soldiers:
+    Footsoldier
+    Medic
+    Engineer
+    Lieutenant
+    Commander
+    General
+
+Civillians:
+    Farmer (internal subtypes for dif. plants)
+    Breeder (internal subtypes for dif. animals)
+    Miner
+    Builder ?
+    Researcher ?
+    Recruiter ? 
