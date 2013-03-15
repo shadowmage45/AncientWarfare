@@ -286,24 +286,60 @@ public float getRiderHorizontalOffset()
   return vehicleType.getRiderHorizontalOffset();
   }
 
+/**
+ * get a fully translated offset position for missile spawn for the current aim and vehicle params
+ * @return
+ */
 public Pos3f getMissileOffset()
   {
-  Pos3f off = new Pos3f();  
+  Pos3f off = new Pos3f();
+  float x1 = this.vehicleType.getTurretPosX();
+  float y1 = this.vehicleType.getTurretPosY();
+  float z1 = this.vehicleType.getTurretPosZ();
+  float angle = 0;
+  float len = 0;
+  if( x1 != 0 || z1 != 0)
+    {
+    angle = Trig.toDegrees((float) Math.atan2(z1, x1));
+    len = MathHelper.sqrt_float(x1*x1+z1*z1);
+    angle+= this.rotationYaw;
+    x1 = Trig.cosDegrees(angle)*len;
+    z1 = -Trig.sinDegrees(angle)*len;
+    } 
+  
   float x = this.getHorizontalMissileOffset();
   float y = this.getVerticalMissileOffset();
   float z = this.getForwardsMissileOffset();
-  float angle = Trig.toDegrees((float) Math.atan2(z, x));
-  float len = MathHelper.sqrt_float(x*x+z*z);
-  angle+= this.rotationYaw;  
-  if(canAimRotate())
+  if(x != 0 || z != 0)
     {
-    angle+=this.localTurretRotation;
+    angle = Trig.toDegrees((float) Math.atan2(z, x));
+    len = MathHelper.sqrt_float(x*x+z*z);
+    angle+= this.localTurretRotation;   
+    x = Trig.cosDegrees(angle)*len;
+    z = -Trig.sinDegrees(angle)*len;
     }
-  x = Trig.cosDegrees(angle)*len;
-  z = -Trig.sinDegrees(angle)*len;
+  
+  x+=x1;
+  z+=z1;
+  y+=y1;
   off.x = x;
   off.y = y;
   off.z = z;
+//  Pos3f off = new Pos3f();  
+//  float x = this.getHorizontalMissileOffset();
+//  float y = this.getVerticalMissileOffset();
+//  float z = this.getForwardsMissileOffset();
+//  float x1 = this.vehicleType.getTurretPosX();
+//  float y1 = this.vehicleType.getTurretPosY();
+//  float z1 = this.vehicleType.getTurretPosZ();
+//  float angle = Trig.toDegrees((float) Math.atan2(z, x));
+//  float len = MathHelper.sqrt_float(x*x+z*z);
+//  angle+= this.rotationYaw;   
+//  x = Trig.cosDegrees(angle)*len;
+//  z = -Trig.sinDegrees(angle)*len;
+//  off.x = x;
+//  off.y = y;
+//  off.z = z;
   return off;
   }
 
@@ -367,9 +403,23 @@ public void setDead()
 @Override
 public void onUpdate()
   { 
+  /***
+   * every tick bound turretRotation between home and home+-min/max
+    every tick bound pitch between min and max
+    every tick update rotation home point to vehicle rotation
+    every tick update rotation and pitch if rotating or pitching
+    every tick if not power-adjustable, bound power to 1<->maxPower
+
+    Client:
+    on keyboard input, if aimable, send input to server
+    on mouse input, if aimable, send input to server
+    update local client vars from input
+
+    Server:
+    on client input received, if valid and an update, send input update packet to all clients
+   */
   super.onUpdate(); 
-  float prevPitch = this.localTurretPitch;
-  float prevYaw = this.localTurretRotation;
+
   if(this.worldObj.isRemote)
     {
     this.onUpdateClient();
@@ -378,27 +428,15 @@ public void onUpdate()
     {    
     this.onUpdateServer();
     }
-  if(localTurretPitch!=localTurretDestPitch)
-    {
-    this.updateTurretPitch();
-    }
-  if(!this.canAimRotate())
-    {
-    this.localTurretRotation = this.rotationYaw;    
-    }
-  else if(localTurretRotation!=localTurretDestRot)
-    {
-    this.updateTurretRotation();
-    } 
-  this.localTurretRotationHome = this.rotationYaw;
+
+  this.updateTurretPitch();
+  this.updateTurretRotation(); 
   this.moveHelper.onMovementTick();
   this.firingHelper.onTick();  
   if(this.hitAnimationTicks>0)
     {
     this.hitAnimationTicks--;
     }  
-  this.currentTurretPitchSpeed = this.localTurretPitch - prevPitch;;
-  this.currentTurretYawSpeed = this.localTurretRotation - prevYaw;
   }
 
 
@@ -442,89 +480,108 @@ public void onUpdateServer()
   }
 
 public void updateTurretPitch()
-  {
+  {  
+  float prevPitch = this.localTurretPitch;
+  if(localTurretPitch < currentTurretPitchMin)
+    {
+    localTurretPitch = currentTurretPitchMin;
+    }
+  else if(localTurretPitch>currentTurretPitchMax)
+    {
+    localTurretPitch = currentTurretPitchMax;
+    }
+  if(localTurretDestPitch < currentTurretPitchMin)
+    {
+    localTurretDestPitch = currentTurretPitchMin;
+    }
+  else if(localTurretDestPitch > currentTurretPitchMax)
+    {
+    localTurretDestPitch = currentTurretPitchMax;
+    }
   if(!canAimPitch())
     {
     localTurretDestPitch = localTurretPitch;
-    return;
     }
-  if(localTurretPitch>localTurretDestPitch)
+  if(localTurretPitch != localTurretDestPitch)
     {
-    localTurretPitch-=localTurretPitchInc;
+    if(Trig.getAbsDiff(localTurretDestPitch, localTurretPitch)<localTurretPitchInc)
+      {
+      localTurretPitch = localTurretDestPitch;
+      }
+    if(localTurretPitch>localTurretDestPitch)
+      {
+      localTurretPitch-=localTurretPitchInc;
+      }
+    else if(localTurretPitch<localTurretDestPitch)
+      {
+      localTurretPitch+=localTurretPitchInc;
+      }
     }
-  else if(localTurretPitch<localTurretDestPitch)
-    {
-    localTurretPitch+=localTurretPitchInc;
-    }
-  if(Trig.getAbsDiff(localTurretDestPitch, localTurretPitch)<localTurretPitchInc)
-    {
-    localTurretPitch = localTurretDestPitch;
-    }
+  this.currentTurretPitchSpeed = prevPitch - this.localTurretPitch;
   }
 
 public void updateTurretRotation()
-  {
+  { 
+  float prevYaw = this.localTurretRotation;  
+  this.localTurretRotationHome = Trig.wrapTo360(this.rotationYaw);
   if(!canAimRotate())
     {
+    localTurretRotation = this.rotationYaw;
     localTurretDestRot = localTurretRotation;
-    return;
-    }
- 
-  if(localTurretRotation==localTurretDestRot)
-    {
-    return;
-    }
-  while(localTurretRotation<0)
-    {
-    localTurretRotation+=360;
-    }
-  while(localTurretRotation>=360)
-    {
-    localTurretRotation-=360;
-    }
-  while(localTurretDestRot<0)
-    {
-    localTurretDestRot+=360;
-    }
-  while(localTurretDestRot>=360)
-    {
-    localTurretDestRot-=360;
-    }
-  
-  byte turnDirection = 0;
-  
-  float curMod = localTurretRotation%360;
-  float destMod = localTurretDestRot%360;
-  float diff = curMod>destMod ? curMod - destMod : destMod-curMod;
-  
-  byte turnDir = 0;
-  if(curMod>destMod)
-    {
-    if(diff<180)
-      {
-      turnDir=-1;
-      }
-    else
-      {
-      turnDir = 1;
-      }
-    }
-  else if (curMod<destMod)
-    {
-    if(diff<180)
-      {
-      turnDir=1;
-      }
-    else
-      {
-      turnDir = -1;
-      }
     } 
-  localTurretRotation += (float)localTurretRotInc * (float)turnDir;  
-  if(Trig.getAbsDiff(localTurretDestRot, localTurretRotation) <= localTurretRotInc)
+  if(Trig.getAbsDiff(localTurretDestRot, localTurretRotation) > localTurretRotInc)
     {
+    while(localTurretRotation<0)
+      {
+      localTurretRotation+=360;
+      prevYaw+=360;
+      }
+    while(localTurretRotation>=360)
+      {
+      localTurretRotation-=360;
+      prevYaw-=360;
+      }
+    localTurretDestRot = Trig.wrapTo360(localTurretDestRot);
+    byte turnDirection = 0;  
+    float curMod = localTurretRotation;
+    float destMod = localTurretDestRot;
+    float diff = curMod>destMod ? curMod - destMod : destMod-curMod;      
+    float turnDir = 0;
+    if(curMod>destMod)
+      {
+      if(diff<180)
+        {
+        turnDir=-1;
+        }
+      else
+        {
+        turnDir = 1;
+        }
+      }
+    else if (curMod<destMod)
+      {
+      if(diff<180)
+        {
+        turnDir = 1;
+        }
+      else
+        {
+        turnDir = -1;
+        }
+      } 
+    localTurretRotation += localTurretRotInc * turnDir; 
+    }
+  else
+    {
+
     localTurretRotation = localTurretDestRot;
     }
+  if(localTurretRotation!=localTurretDestRot)
+    {   
+
+    
+    }  
+  this.currentTurretYawSpeed = this.localTurretRotation - prevYaw;
   }
 
 /**
@@ -692,7 +749,7 @@ public void setPositionAndRotationNormalized(double par1, double par3, double pa
         //float diff = this.rotationYaw - this.prevRotationYaw;//pull diff of current rot and prev rot.  change rot. change prev rot to rot. apply diff to prev rot DONE
         this.setRotation(yaw, par8);
         this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
-//        this.prevRotationYaw = this.rotationYaw + diff;        
+        //        this.prevRotationYaw = this.rotationYaw + diff;        
         }      
       return;
       }
@@ -838,13 +895,13 @@ public void onMissileImpactEntity(World world, Entity entity)
 @Override
 public void handleClientInput(NBTTagCompound tag)
   {
-  
+
   }
 
 @Override
 public void addPlayer(EntityPlayer player)
   {
-  
+
   }
 
 @Override

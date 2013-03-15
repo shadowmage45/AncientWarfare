@@ -166,7 +166,7 @@ public void onTick()
     }
   if(this.isFiring)
     {
-    this.vehicle.onFiringUpdate();
+    vehicle.onFiringUpdate();
     }
   if(this.isLaunching)
     {
@@ -187,14 +187,6 @@ public void onTick()
       this.clientTurretYaw = vehicle.rotationYaw;
       }
     }
-  if(vehicle.localTurretPitch<vehicle.currentTurretPitchMin)
-    {
-    vehicle.localTurretPitch = vehicle.currentTurretPitchMin;    
-    }
-  else if(vehicle.localTurretPitch > vehicle.currentTurretPitchMax)
-    {
-    vehicle.localTurretPitch = vehicle.currentTurretPitchMax;
-    }  
   if(!vehicle.canAimPower())
     {
     vehicle.localLaunchPower = vehicle.currentLaunchSpeedPowerMax;
@@ -425,6 +417,7 @@ public void handleAimKeyInput(float pitch, float yaw)
     {
     yawUpdated = true;
     this.clientTurretYaw += yaw;
+    //TODO bound yaw with keyboard...
     }
   
   if(powerUpdated || pitchUpdated || yawUpdated)
@@ -505,28 +498,20 @@ public void handleAimMouseInput(Vec3 target)
     }  
   if(vehicle.canAimRotate() && !vehicle.upgradeHelper.hasUpgrade(VehicleUpgradeRegistry.turretLockUpgrade))
     {
-    float xAO = (float) (vehicle.posX - target.xCoord);  
-    float zAO = (float) (vehicle.posZ - target.zCoord);
+    float xAO = (float) (vehicle.posX + offset.x - target.xCoord);  
+    float zAO = (float) (vehicle.posZ + offset.z - target.zCoord);
     float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
-    if(yaw!=this.clientTurretYaw && yaw >=vehicle.localTurretRotationHome - vehicle.currentTurretRotationMax && yaw <= vehicle.localTurretRotationHome + vehicle.currentTurretRotationMax)
+    if(yaw!=this.clientTurretYaw && (vehicle.currentTurretRotationMax>=180 || Trig.isAngleBetween(yaw, vehicle.localTurretRotationHome - vehicle.currentTurretRotationMax, vehicle.localTurretRotationHome + vehicle.currentTurretRotationMax)))
       {    
-      this.clientTurretYaw = yaw;
-      updated = true;
-      updateYaw = true;
+      if(Trig.getAbsDiff(yaw, this.clientTurretYaw)>0.25f)
+        {
+        this.clientTurretYaw = yaw;
+        updated = true;
+        updateYaw = true;
+        }
       }  
     }
-  if(!vehicle.canAimPitch())
-    {
-    this.clientTurretPitch = vehicle.localTurretPitch;
-    }
-  if(!vehicle.canAimPower())
-    {
-    this.clientLaunchSpeed = vehicle.localLaunchPower;
-    }
-  if(!vehicle.canAimRotate())
-    {
-    this.clientTurretYaw = vehicle.rotationYaw;
-    }
+ 
   if(updated)
     {
     this.clientHitRange = range;

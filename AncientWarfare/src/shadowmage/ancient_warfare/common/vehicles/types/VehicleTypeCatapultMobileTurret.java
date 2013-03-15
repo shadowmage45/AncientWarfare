@@ -47,6 +47,7 @@ public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
     this.isDrivable = true;
     this.shouldRiderSit = true;
     this.moveRiderWithTurret = true;
+    this.turretRotationMax=180.f;
     }
 
 }

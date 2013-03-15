@@ -89,8 +89,8 @@ public void onElementActivated(IGuiElement element)
 @Override
 public void setupControls()
   {
-  this.addGuiButton(0, width-45-5, 5+16, 45, 16, "Done");
-  this.addGuiButton(1, width-45-5, 5+16+5+16, 45, 16, "Stats");
+  this.addGuiButton(0, 0, 0, 45, 16, "Done");
+  this.addGuiButton(1, 0, 16, 45, 16, "Stats");
   }
 
 @Override

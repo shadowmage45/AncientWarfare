@@ -22,6 +22,7 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 
@@ -124,6 +125,30 @@ public static double getAbsDiff(double a, double b)
     return b-a;
     }
   return a-b;
+  }
+
+/**
+ * is the angle between min and max (inclusive e.g. test <= max && test>=min) 
+ * @param test
+ * @param min
+ * @param max
+ * @return
+ */
+public static boolean isAngleBetween(float test, float min, float max)
+  {
+  test = Trig.wrapTo360(test);
+  min = Trig.wrapTo360(min);
+  max = Trig.wrapTo360(max);
+  Config.logDebug(test+","+min+","+max);
+  if(min > max)
+    {
+    return test>=min || test <= max;
+    }  
+  if(test >= min && test <= max)
+    {
+    return true;
+    }      
+  return false;
   }
 
 /**

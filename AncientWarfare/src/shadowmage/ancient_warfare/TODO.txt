@@ -26,8 +26,8 @@ VEHICLES
 * clean up stand-based vehicles--
     --non-turret versions should have fixed turret rotation but have slow whole-vehicle turning
     --turreted versions should have limited turret rotation ability, still allow slow whole-vehicle turning
-* update missile offset code to use turret position + missile offset
-* update input/aim helper to update yaw based on turretPosition relative to hitPos rather than raw playerYaw...        
+* update input/aim helper to update yaw based on turretPosition relative to hitPos rather than raw playerYaw...      
+* fix vehicle to not turn player/camera in opposite direction...or rather fix it to update with vehicle rotation && turret rotation  
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
@@ -152,7 +152,8 @@ TWEAKS/OPTIMIZATION
 /********** 03-14-13 **********/
 * finish adding catapult and ballista types, models, and renders
 * add turret-lock upgrade code somewhere...
-* add yawSpeed smoothing updates to render for turret yaw/pitch changes for ballista (will require a yaw/pitch speed var in vehicleBase)
+* add yawSpeed smoothing updates to render for turret yaw/pitch changes for vehicles (will require a yaw/pitch speed var in vehicleBase)
+* update missile offset code to use turret position + missile offset
 /********** 03-15-13 **********/
 /********** 03-16-13 **********/
 /********** 03-17-13 **********/

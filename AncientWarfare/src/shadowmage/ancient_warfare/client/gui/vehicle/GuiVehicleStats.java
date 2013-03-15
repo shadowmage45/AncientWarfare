@@ -38,6 +38,7 @@ public GuiVehicleStats(Container container, VehicleBase vehicle)
   {
   super(container);
   this.vehicle = vehicle;
+  this.shouldCloseOnVanillaKeys = true;
   }
 
 @Override

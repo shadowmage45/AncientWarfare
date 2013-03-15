@@ -39,7 +39,7 @@ public VehicleTypeCatapultStandFixed(int typeNum)
   this.baseMissileVelocityMax = 37.f;  
   this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.1f;
   this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
-  this.riderForwardsOffset = -1.2f;
+  this.riderForwardsOffset = 1.2f;
   this.riderVerticalOffset = 0.0f;
   this.displayName = "Catapult Stand Fixed";
   this.displayTooltip = "A fixed-placement catapult with limited aim capability.";
@@ -47,10 +47,10 @@ public VehicleTypeCatapultStandFixed(int typeNum)
   this.armorBaySize = 4;
   this.upgradeBaySize = 4;
   this.canAdjustYaw = false;
-  this.isDrivable = false;
+  this.isDrivable = true;
+  this.baseForwardSpeed = 0.f;  
   this.shouldRiderSit = false;
-  this.moveRiderWithTurret = false;  
-  
+  this.moveRiderWithTurret = false;
   }
 
 

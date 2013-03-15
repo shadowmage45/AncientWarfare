@@ -253,33 +253,34 @@ public void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlayer playe
   double y1 = vehicle.posY - player.posY;
   double z1 = vehicle.posZ - player.posZ;
   
+  /**
+   * vectors for a straight line
+   */
   double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw);
   double y2 = y1;
   double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw);
-
   GL11.glLineWidth(3f);
-  GL11.glBegin(GL11.GL_LINES);
-    
+  GL11.glBegin(GL11.GL_LINES);    
   GL11.glVertex3d(x1, y1+0.12d, z1);
-  GL11.glVertex3d(x2, y2+0.12d, z2);
-  
+  GL11.glVertex3d(x2, y2+0.12d, z2);  
   GL11.glEnd();
   
   
-  GL11.glLineWidth(4f);
   
   
+  GL11.glLineWidth(4f);    
   GL11.glColor4f(1.f, 0.4f, 0.4f, 0.4f);
   GL11.glBegin(GL11.GL_LINES);
+  
   Pos3f offset = vehicle.getMissileOffset();
   x2 = x1+offset.x;
   y2 = y1+offset.y;
   z2 = z1+offset.z;
    
   double gravity = 9.81d * 0.05d *0.05d;
-  double speed = vehicle.firingHelper.clientLaunchSpeed * 0.05d;
-  double angle = 90 - vehicle.firingHelper.clientTurretPitch;
-  double yaw = vehicle.firingHelper.clientTurretYaw;
+  double speed = vehicle.localLaunchPower * 0.05d;
+  double angle = 90 - vehicle.localTurretPitch;
+  double yaw = vehicle.localTurretRotation;
   
   double vH = -Trig.sinDegrees((float) angle)*speed;
   double vY = Trig.cosDegrees((float) angle)*speed ;

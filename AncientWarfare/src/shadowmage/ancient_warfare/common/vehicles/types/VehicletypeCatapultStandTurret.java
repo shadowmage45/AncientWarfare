@@ -35,8 +35,9 @@ public VehicletypeCatapultStandTurret(int typeNum)
   this.width = 2.7f;
   this.height = 2.2f; 
   this.baseMissileVelocityMax = 32.f;  
-  this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.4f;
+  this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70);
   this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
+  this.turretVerticalOffset = 0.4f;
   this.riderForwardsOffset = -1.2f;
   this.riderVerticalOffset = 0.0f;
   this.displayName = "Catapult Stand Turret";
@@ -45,7 +46,9 @@ public VehicletypeCatapultStandTurret(int typeNum)
   this.armorBaySize = 4;
   this.upgradeBaySize = 4;
   this.canAdjustYaw = true;
-  this.isDrivable = false;
+  this.baseForwardSpeed = 0.f;
+  this.turretRotationMax=45.f;
+  this.isDrivable = true;
   this.shouldRiderSit = false;
   this.moveRiderWithTurret = false;
   }

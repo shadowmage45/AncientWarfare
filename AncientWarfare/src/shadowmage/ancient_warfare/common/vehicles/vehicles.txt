@@ -1,14 +1,65 @@
 Vehicles:
 
+Catapult
+    Stand Fixed
+        ammo
+        armor        
+        upgrades
+        rider offset
+        missile offset
+        name
+    Stand Turret
+    Mobile Fixed
+    Mobile Turret
+
+Ballista
+    Stand Fixed
+    Stand Turret
+    Mobile Fixed
+    Mobile Turret
+
+Battering Ram
+    Mobile Fixed
+
+Trebuchet
+    Stand Fixed
+    Stand Turret
+    Mobile Fixed
+
+Hwacha
+    Stand Fixed
+    Stand Turret
+    Mobile Fixed
+    Mobile Turret
+
+Cannon
+    Stand Fixed
+    Stand Turret
+    Mobile Fixed
+    Mobile Turret
+    
+Chest Cart
+    Mobile Fixed
+
+Transport Ship
+
+
+
+
+
+
+
+
+
+
+/*****************************************************************************/
 IVehicleType -- basic interface for what is necessary to describe a vehicle
 VehicleTypeBase -- base class implementing above interface.
         -- there will should be one VehicleTypeBase subclass for each vehicle description
 VehicleBase -- the base entity that all vehicles will use.  it will implement most methods (through helpers for many)
     to handle the basics of vehicles (input, movement, updates).
 VehicleVarsHelper -- holds vehicle-specific variables, mostly used for client-side animation updating
-  
- 
-    
+/*****************************************************************************/    
 Registry Process:
 Create VehicleType, extends VehicleType)
 Create VehicleVarsHelper, extends VehicleVarsHelper, set VehicleType to return that specific type;
@@ -17,14 +68,12 @@ Create static instance of type in VehicleType
 Create Vehicle Model
 Create VehicleRender, extends RenderVehicleBase
 Register VehicleRender in RenderRegistry
-    
-    
+/*****************************************************************************/    
 Vehicle stats will be calculated thusly:
 stat = base stat taken from VehicleType for the vehicle
 stat *= materialModifier for that stat, if any (generally percentage based)   
 stat += any modifiers from upgrades for that stat, if any
 return stat;
-
 /*****************************************************************************/
 Vehicle Aiming:
 every tick bound turretRotation between home and home+-min/max
@@ -41,13 +90,9 @@ update local client vars from input
 Server:
 on client input received, if valid and an update, send input update packet to all clients
 /*****************************************************************************/
-
-/*****************************************************************************/
 Missile Positioning:
 calc turretPos relative to vehicle from vehicle yaw and vehicle.turretPos
 calc position relative to turretPos from turret yaw and missileOffset
-/*****************************************************************************/
-
 /*****************************************************************************/
 Rider Positioning:
 if movesWithTurret

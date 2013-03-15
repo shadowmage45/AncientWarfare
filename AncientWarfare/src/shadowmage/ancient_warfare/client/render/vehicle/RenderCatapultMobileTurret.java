@@ -37,7 +37,7 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z, float y
   {
   VehicleFiringVarsHelper var = veh.firingVarsHelper;  
  
-  model.setTurretRotation(yaw-veh.localTurretRotation + tick*veh.currentTurretYawSpeed);
+  model.setTurretRotation(yaw-veh.localTurretRotation - tick*veh.currentTurretYawSpeed);
   model.setArmRotation(var.getVar1() + (tick*var.getVar2()));
   model.setCrankRotations(var.getVar3() + (tick*var.getVar4()));
   float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
