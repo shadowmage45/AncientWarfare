@@ -758,6 +758,14 @@ public void setPositionAndRotationNormalized(double par1, double par3, double pa
   super.setPositionAndRotation(par1, par3, par5, yaw, par8);
   }
 
+
+
+@Override
+public boolean shouldRiderSit()
+  {
+  return this.vehicleType.shouldRiderSit();
+  }
+
 @Override
 public AxisAlignedBB getBoundingBox()
   {

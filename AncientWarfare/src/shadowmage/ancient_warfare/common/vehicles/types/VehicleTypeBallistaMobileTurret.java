@@ -44,8 +44,8 @@ public VehicleTypeBallistaMobileTurret(int typeNum)
   this.upgradeBaySize = 3;
   this.ammoBaySize = 6;
   
-  this.missileVerticalOffset = 1.2f;
-  this.missileForwardsOffset = 1.f;
+  this.turretForwardsOffset = 1.f;
+  this.turretVerticalOffset = 1.2f;
   this.riderForwardsOffset = -1.2f;
   this.riderVerticalOffset = 0.7f;
   this.shouldRiderSit = true;

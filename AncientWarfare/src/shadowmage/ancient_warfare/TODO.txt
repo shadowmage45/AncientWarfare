@@ -27,7 +27,8 @@ VEHICLES
     --non-turret versions should have fixed turret rotation but have slow whole-vehicle turning
     --turreted versions should have limited turret rotation ability, still allow slow whole-vehicle turning
 * update input/aim helper to update yaw based on turretPosition relative to hitPos rather than raw playerYaw...      
-* fix vehicle to not turn player/camera in opposite direction...or rather fix it to update with vehicle rotation && turret rotation  
+* fix vehicle to not turn player/camera in opposite direction...or rather fix it to update with vehicle rotation && turret rotation
+* fix catapult hit stuff...its borked...  
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar

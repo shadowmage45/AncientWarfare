@@ -30,6 +30,13 @@ public class BallistaVarHelper extends VehicleFiringVarsHelper
 
 public float crankAngle = 0.f;
 public float crankSpeed = 0.f;
+
+public float bowAngle = 0.f;
+public float bowSpeed = 0.f;
+
+public float stringAngle = 0.f;
+public float stringSpeed = 0.f;
+
 /**
  * @param vehicle
  */
@@ -88,25 +95,25 @@ public float getVar2()
 @Override
 public float getVar3()
   {
-  return 0;
+  return bowAngle;
   }
 
 @Override
 public float getVar4()
   {
-  return 0;
+  return bowSpeed;
   }
 
 @Override
 public float getVar5()
   {
-  return 0;
+  return stringAngle;
   }
 
 @Override
 public float getVar6()
   {
-  return 0;
+  return stringSpeed;
   }
 
 @Override

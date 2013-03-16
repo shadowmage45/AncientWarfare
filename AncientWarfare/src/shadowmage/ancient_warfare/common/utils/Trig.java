@@ -23,8 +23,10 @@
 package shadowmage.ancient_warfare.common.utils;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.config.Settings;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 
 /**
  * because I hate it so much...why not make the 
@@ -303,130 +305,75 @@ public static Pair<Float, Float> getLaunchAngleToHit(float x, float y, float v)
  * @return
  */
 public static Pair<Float, Float> getLaunchAngleToHit(float x, float y, float z, float v)
-  {
-  return getLaunchAngleToHit(MathHelper.sqrt_float(x*x+z*z), y, v);
-  }
-
-//public static float getLaunchSpeedToHit(float x, float y, float angle)
-//  { 
-//  /**
-//   * STILL ONLY FUCKING CORRECT FOR FLAT/EVEN (ZERO VALUES OF Y)
-//   */
-//  float g = GRAVITY;
-//  float vOff = x - y;
-//  float gx2 = g * x *x;
-//  float factor = gx2/vOff;
-//  return (float) Math.sqrt(factor);
-//  
-////  double weirdFactor = 0.6158787133d;//manually found this factor to correct, it was originally +1
-////  double firstHalf = Math.sqrt(g)*Math.sqrt(x)*Math.sqrt( (Math.tan(angle)*Math.tan(angle)) + weirdFactor );
-////  double secondHalf = Math.sqrt(2 * Math.tan(angle)-(2*g*y)/x);
-////  return (float) (firstHalf/secondHalf);
-//  }
-//
-//public static float getLaunchSpeedToHit(float x, float y, float z, float angle)
-//  {
-//  return getLaunchSpeedToHit(MathHelper.sqrt_float(x*x+z*z), y, angle);
-//  }
+{
+return getLaunchAngleToHit(MathHelper.sqrt_float(x*x+z*z), y, v);
+}
 
 public static float iterativeSpeedFinder(float x, float y, float z, float angle, int maxIterations)
   {
-  return iterativeSpeedFinder(MathHelper.sqrt_float(x*x+z*z), y, angle, maxIterations);
+  return bruteForceSpeedFinder(MathHelper.sqrt_float(x*x+z*z), y, angle, maxIterations);
   }
 
-public static float iterativeSpeedFinder(float x, float y, float angle, int maxIterations)
-  {
-//  Config.logDebug("/********************************************/");
-//  long ts1 = System.nanoTime();
-  /**
-   * get a rough velocity value from an x,0 target
-   */
-  float g = GRAVITY;
-  float vOff = x - 0;
-  float gx2 = g * x *x;
-  float factor = gx2/vOff;
-  float firstTestVel = (float) Math.sqrt(factor);
-  
-  
-  float testFactor = 1.f;
-  float bestDiff = 999.f;
-  float prevDiff = bestDiff;
-  float testVelocity = firstTestVel;
-  float bestVelocity = testVelocity;
-  float prevVelocity = testVelocity;
-  
-  boolean wasPreviousNAN = false;
-  boolean useUpper = y >= 0? false : true;
-  int iter = 1;
-  
-  if(y<0)//if already over powered,  might as well start in the right direction
-    {
-    testFactor *= -1;
-    }
-  
-  while(iter<=maxIterations)
-    {
-//    Config.logDebug("/********************************************/");   
-//    Config.logDebug("iteration: "+iter+ "testing: "+testVelocity);
-//    Config.logDebug("testFactor: "+testFactor);    
-    Pair<Float, Float> angles = getLaunchAngleToHit(x, y, testVelocity);
-
-    Float foundAngle = useUpper? angles.key() : angles.value();   
+public static float bruteForceSpeedFinder(float x, float y, float angle, int maxIterations)
+  {  
+  angle = 90-angle;
+  float bestVelocity = 0.f;
+  float velocityIncrement = 10.f;
+  float testVelocity = 10.f;
+  float gravityTick = 9.81f *0.05f*0.05f;
+  float posX = 0;
+  float posY = 0;
+  float motX = 0;
+  float motY = 0;
+  float hitX = 0;
+  float hitY = 0;
+  boolean hitGround = true;
     
-    if(foundAngle.isNaN())
+  for(int iter = 0; iter < maxIterations; iter++)
+    {
+    //reset pos
+    //calc initial motion from input angle and current testVelocity
+    hitGround = true;
+    posX = 0.f;
+    posY = 0.f;
+    motX = Trig.sinDegrees(angle)*testVelocity*0.05f;
+    motY = Trig.cosDegrees(angle)*testVelocity*0.05f;
+    while(motY>=0 || posY >= y)
       {
-      wasPreviousNAN=true;
-//      Config.logDebug("incrementing power for NAN angle");
-      if(testFactor<0)
+      //move
+      //check hit
+      //apply gravity if not hit
+      posX+=motX;
+      posY+=motY;
+      if(posX>x)
         {
-        testFactor *= -1;
+        hitGround = false;
+        break;//missile went too far
         }
-      if(iter>1 && !wasPreviousNAN)
-        {
-        testFactor *= 0.5f;
-        }
-      testVelocity += testFactor;
-      bestVelocity = testVelocity;         
-//      Config.logDebug("/********************************************/");
-      iter++;
-      continue;
+      motY-=gravityTick;
       }    
-    wasPreviousNAN = false;
-    
-    float diff = getAbsDiff(foundAngle, 45.f);      
-   
-    if(diff>prevDiff)//we're going in the wrong direction
+    if(hitGround)//if break was triggered by going negative on y axis, get a more precise hit vector
       {
-//      Config.logDebug("diff: "+diff+ "prevDiff: "+prevDiff);
-//      Config.logDebug("bestDiff: " +bestDiff);
-//      Config.logDebug("foundAngle: "+foundAngle);  
-//      Config.logDebug("should invert direction!!");
-      testFactor *= -1;//reverse test factor;
-      testFactor *= 0.5f;//reduce test factor 
-      testVelocity = prevVelocity;
-      }
-    else
-      {       
-      bestDiff = diff;
+      motY+=gravityTick;
+      double var4 = motX - posX;
+      double var6 = motY - posY;            
+      double var10 = (y - posY) / var6;
+      hitX = (float) (posX + var4 * var10);
+      hitY = (float) (posY + + var6 * var10);
+      } 
+    if(hitGround && hitX < x)// hit was not far enough, increase power
+      {
       bestVelocity = testVelocity;
-//      Config.logDebug("diff: "+diff+ "prevDiff: "+prevDiff);
-//      Config.logDebug("found new best: "+testVelocity);
-//      Config.logDebug("bestDiff: " +bestDiff);
-//      Config.logDebug("foundAngle: "+foundAngle);  
+      testVelocity += velocityIncrement;        
       }
-    
-    prevVelocity = testVelocity;
-    testVelocity += testFactor;
-    prevDiff = diff;      
-    iter++;    
-//    Config.logDebug("/********************************************/");
+    else//it was too far, go back to previous power, decrease increment, increase by new increment
+      {
+      testVelocity -= velocityIncrement;
+      bestVelocity = testVelocity;
+      velocityIncrement *= 0.5f;
+      testVelocity +=velocityIncrement;
+      } 
     }
-  
-//  long ts2 = System.nanoTime();
-//  long diff = ts2-ts1;
-//  Config.logDebug("traj calc time nanos: "+diff);
-  
-  testVelocity = prevVelocity;  
   return bestVelocity;
   }
 

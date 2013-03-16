@@ -35,11 +35,12 @@ public VehicletypeCatapultStandTurret(int typeNum)
   this.width = 2.7f;
   this.height = 2.2f; 
   this.baseMissileVelocityMax = 32.f;  
-  this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70);
-  this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
+  this.turretVerticalOffset = 13 * 0.0625f;
+  this.missileVerticalOffset = 2.0f* Trig.sinDegrees(70);
+  this.missileForwardsOffset = -2.0f* Trig.cosDegrees(70);
   this.turretVerticalOffset = 0.4f;
-  this.riderForwardsOffset = -1.2f;
-  this.riderVerticalOffset = 0.0f;
+  this.riderForwardsOffset = 1.2f;
+  this.riderVerticalOffset = 0.8f;
   this.displayName = "Catapult Stand Turret";
   this.displayTooltip = "An immobile catapult mounted on a swiveling turret.";
   this.storageBaySize = 0;
@@ -49,8 +50,8 @@ public VehicletypeCatapultStandTurret(int typeNum)
   this.baseForwardSpeed = 0.f;
   this.turretRotationMax=45.f;
   this.isDrivable = true;
-  this.shouldRiderSit = false;
-  this.moveRiderWithTurret = false;
+  this.shouldRiderSit = true;
+  this.moveRiderWithTurret = true;
   }
 
 }

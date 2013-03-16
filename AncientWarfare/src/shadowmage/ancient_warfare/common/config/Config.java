@@ -47,15 +47,9 @@ public static final boolean DEBUG = true;
 
 //***************************************************LOADED CONFIGS******************************************//
 
-//public static int structureGenMinDistance = 2;
-//public static int structureGenMaxCheckRange = 16;
-//public static int structureGeneratorRandomChance = 10;
-//public static int structureGeneratorRandomRange = 1000;
-//public static int structureGenMaxClusterValue = 50;
-
 public static boolean invertShiftClickOnItems = false;
 public static String templateExtension = "aws";
-public static boolean adjustMissilesForAccuracy = true;
+public static boolean adjustMissilesForAccuracy = false;
 
 public static int trajectoryIterationsServer = 20;
 

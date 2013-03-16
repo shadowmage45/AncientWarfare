@@ -37,12 +37,11 @@ public VehicleTypeBallistaStand(int typeNum)
   this.armorBaySize = 4;
   this.upgradeBaySize = 4;
     
-  this.missileVerticalOffset = 1.2f;
-  this.missileForwardsOffset = 1.f;
+  //20 units vertical, 0 forwards
+  this.turretVerticalOffset = 20.f * 0.0625f;  
   this.riderForwardsOffset = -1.2f;
   this.riderVerticalOffset = 0.7f;
-  this.shouldRiderSit = false;
-  
+  this.shouldRiderSit = false;  
   this.isDrivable = false;//adjust based on isMobile or not
   this.canAdjustYaw = true;//adjust based on hasTurret or not
   this.turretRotationMax=45.f;//adjust based on mobile/stand fixed (0), stand fixed(90'), or mobile or stand turret (360) 

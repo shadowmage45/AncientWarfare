@@ -37,8 +37,9 @@ public VehicleTypeCatapultStandFixed(int typeNum)
   this.width = 2;
   this.height = 1.8f; 
   this.baseMissileVelocityMax = 37.f;  
-  this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.1f;
-  this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
+  this.turretVerticalOffset = 3*0.0625f;
+  this.missileVerticalOffset = 2.0f* Trig.sinDegrees(70);
+  this.missileForwardsOffset = -2.0f* Trig.cosDegrees(70);
   this.riderForwardsOffset = 1.2f;
   this.riderVerticalOffset = 0.0f;
   this.displayName = "Catapult Stand Fixed";
@@ -49,7 +50,7 @@ public VehicleTypeCatapultStandFixed(int typeNum)
   this.canAdjustYaw = false;
   this.isDrivable = true;
   this.baseForwardSpeed = 0.f;  
-  this.shouldRiderSit = false;
+  this.shouldRiderSit = true;
   this.moveRiderWithTurret = false;
   }
 

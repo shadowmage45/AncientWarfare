@@ -34,8 +34,9 @@ public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
     this.width = 2;
     this.height = 2; 
     this.baseMissileVelocityMax = 30.f;  
-    this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.4f;
-    this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
+    this.turretVerticalOffset = 15 * 0.0625f;
+    this.missileVerticalOffset = 2.0f* Trig.sinDegrees(70);
+    this.missileForwardsOffset = -2.0f* Trig.cosDegrees(70);
     this.riderForwardsOffset = 1.2f;
     this.riderVerticalOffset = 0.8f;
     this.displayName = "Catapult Mobile Turret";

@@ -74,14 +74,7 @@ public VehicleTypeBallista(int typeNum)
   
   this.armorBaySize = 3;
   this.upgradeBaySize = 3;
-  this.ammoBaySize = 6;
-  
-  this.turretForwardsOffset = 1.f;
-  this.turretVerticalOffset = 1.2f;
-//  this.missileVerticalOffset = 1.2f;
-//  this.missileForwardsOffset = 1.f;
-  this.riderForwardsOffset = -1.2f;
-  this.riderVerticalOffset = 0.7f;
+  this.ammoBaySize = 6;    
   
   this.isDrivable = false;//adjust based on isMobile or not
   this.canAdjustYaw = false;//adjust based on hasTurret or not

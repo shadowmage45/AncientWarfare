@@ -489,6 +489,8 @@ public void handleAimMouseInput(Vec3 target)
   else if(vehicle.canAimPower())
     {     
     float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch, Settings.getClientPowerIterations());
+    float xLen = MathHelper.sqrt_float(tx*tx+tz*tz);
+    Config.logDebug("target:" +xLen+","+ty);
     if(this.clientLaunchSpeed!=power && power < getAdjustedMaxMissileVelocity())
       {
       this.clientLaunchSpeed = power;

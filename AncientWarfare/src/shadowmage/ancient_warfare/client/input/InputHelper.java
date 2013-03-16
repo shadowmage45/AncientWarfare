@@ -258,9 +258,32 @@ public void handleMouseAimUpdate()
     return;
     }
   inputUpdateTicks = 5;
-  MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140, mc.thePlayer.ridingEntity);
+  MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140, mc.thePlayer.ridingEntity);  
   if(pos!=null)
     {
+//    if(pos.entityHit==null)//is a tile hit
+//      {
+//      switch (pos.sideHit)
+//      {
+//      case 0:
+////      --y;
+//      break;
+//      case 1:
+////      ++y;
+//      break;
+//      case 2:
+//      pos.hitVec.zCoord += 0.5d;
+//      break;
+//      case 3:
+//      pos.hitVec.zCoord -= 0.5d;
+//      break;
+//      case 4:
+//      pos.hitVec.xCoord += 0.5d;
+//      break;
+//      case 5:
+//      pos.hitVec.xCoord -= 0.5d;
+//      }
+//      }
     ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimMouseInput(pos.hitVec);
     }
   }

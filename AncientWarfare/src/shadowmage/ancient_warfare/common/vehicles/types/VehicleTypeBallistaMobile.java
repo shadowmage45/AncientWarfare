@@ -38,8 +38,8 @@ public class VehicleTypeBallistaMobile extends VehicleTypeBallista
     this.armorBaySize = 3;
     this.upgradeBaySize = 3;
       
-    this.missileVerticalOffset = 1.2f;
-    this.missileForwardsOffset = 1.f;
+    this.turretForwardsOffset = 1.f;
+    this.turretVerticalOffset = 1.2f;
     this.riderForwardsOffset = -1.2f;
     this.riderVerticalOffset = 0.7f;
     this.shouldRiderSit = true;

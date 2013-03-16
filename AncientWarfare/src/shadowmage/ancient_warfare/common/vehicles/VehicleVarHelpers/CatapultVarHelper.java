@@ -28,7 +28,7 @@ import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelpe
 public class CatapultVarHelper extends VehicleFiringVarsHelper
 {
 
-public float armAngle = -7.f;
+public float armAngle = 0.f;
 public float armSpeed = 0.f;
 public float crankAngle = 0.f;
 public float crankSpeed = 0.f;
@@ -46,7 +46,7 @@ public CatapultVarHelper(VehicleBase vehicle)
 public void onFiringUpdate()
   {    
   float prevAngle = this.armAngle;
-  this.armAngle += 87.f/20;
+  this.armAngle += 80.f/20;
   if(this.armAngle>=70)
     {
     vehicle.firingHelper.startLaunching();
@@ -68,13 +68,17 @@ public void onLaunchingUpdate()
 @Override
 public void onReloadUpdate()
   {  
-  float prevAngle = this.armAngle;
-  this.armAngle -= 87 / (float)vehicle.currentReloadTicks;
-  if(this.armAngle <= -7)
-    {
-    this.armAngle = -7;
-    }
+  float prevAngle = this.armAngle;  
+  this.armAngle -= 80 / (float)(vehicle.currentReloadTicks-2);
+  this.crankAngle+=4;
+  this.crankSpeed = 1;
   this.armSpeed =this.armAngle - prevAngle;
+  if(this.armAngle <= 0)
+    {
+    this.armAngle = 0;
+    this.crankSpeed = 0;
+    this.armSpeed = 0;
+    }
   }
 
 @Override
