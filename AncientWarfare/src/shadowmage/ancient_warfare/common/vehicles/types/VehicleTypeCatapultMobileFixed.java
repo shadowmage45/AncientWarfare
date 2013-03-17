@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class VehicleTypeCatapultMobileFixed extends VehicleTypeCatapult
@@ -50,4 +51,23 @@ public VehicleTypeCatapultMobileFixed(int typeNum)
   this.moveRiderWithTurret = false;
   }
 
+@Override
+public String getTextureForMaterialLevel(int level)
+  {
+  switch(level)
+    {
+    case 0:
+    return Config.texturePath + "models/catapultMobileFixed1.png";
+    case 1:
+    return Config.texturePath + "models/catapultMobileFixed2.png";
+    case 2:
+    return Config.texturePath + "models/catapultMobileFixed3.png";
+    case 3:
+    return Config.texturePath + "models/catapultMobileFixed4.png";
+    case 4:
+    return Config.texturePath + "models/catapultMobileFixed5.png";
+    default:
+    return Config.texturePath + "models/catapultMobileFixed1.png";
+    }
+  }
 }

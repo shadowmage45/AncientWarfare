@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
@@ -56,5 +57,24 @@ public VehicleTypeCatapultStandFixed(int typeNum)
   }
 
 
+@Override
+public String getTextureForMaterialLevel(int level)
+  {
+  switch(level)
+    {
+    case 0:
+    return Config.texturePath + "models/catapultStandFixed1.png";
+    case 1:
+    return Config.texturePath + "models/catapultStandFixed2.png";
+    case 2:
+    return Config.texturePath + "models/catapultStandFixed3.png";
+    case 3:
+    return Config.texturePath + "models/catapultStandFixed4.png";
+    case 4:
+    return Config.texturePath + "models/catapultStandFixed5.png";
+    default:
+    return Config.texturePath + "models/catapultStandFixed1.png";
+    }
+  }
 
 }

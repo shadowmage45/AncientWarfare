@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
@@ -51,4 +52,23 @@ public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
     this.turretRotationMax=180.f;
     }
 
+@Override
+public String getTextureForMaterialLevel(int level)
+  {
+  switch(level)
+    {
+    case 0:
+    return Config.texturePath + "models/catapultMobileTurret1.png";
+    case 1:
+    return Config.texturePath + "models/catapultMobileTurret2.png";
+    case 2:
+    return Config.texturePath + "models/catapultMobileTurret3.png";
+    case 3:
+    return Config.texturePath + "models/catapultMobileTurret4.png";
+    case 4:
+    return Config.texturePath + "models/catapultMobileTurret5.png";
+    default:
+    return Config.texturePath + "models/catapultMobileTurret1.png";
+    }
+  }
 }

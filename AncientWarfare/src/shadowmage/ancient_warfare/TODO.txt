@@ -23,7 +23,6 @@ VEHICLES
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
 * create rockets (will require some hackery for their flight dynamics)
 * finish catapult and ballista animations
-* move player back more on ballista stand
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
@@ -161,7 +160,9 @@ TWEAKS/OPTIMIZATION
 * ballista stand is too tall
 * fix ballista stand rider positioning
 * ballista textures....all of zhem
+* move player back more on ballista stand
 /********** 03-17-13 **********/
+* add catapult textures--all of them
 /********** 03-18-13 **********/
 /********** 03-19-13 **********/
 /********** 03-20-13 **********/
