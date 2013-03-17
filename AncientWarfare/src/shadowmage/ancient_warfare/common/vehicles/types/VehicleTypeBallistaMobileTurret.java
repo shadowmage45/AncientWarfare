@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
@@ -59,5 +60,24 @@ public VehicleTypeBallistaMobileTurret(int typeNum)
   }
 
 
+@Override
+public String getTextureForMaterialLevel(int level)
+  {
+  switch(level)
+    {
+    case 0:
+    return Config.texturePath + "models/ballistaMobile1.png";
+    case 1:
+    return Config.texturePath + "models/ballistaMobile2.png";
+    case 2:
+    return Config.texturePath + "models/ballistaMobile3.png";
+    case 3:
+    return Config.texturePath + "models/ballistaMobile4.png";
+    case 4:
+    return Config.texturePath + "models/ballistaMobile5.png";
+    default:
+    return Config.texturePath + "models/ballistaMobile1.png";
+    }
+  }
 
 }

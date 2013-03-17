@@ -19,16 +19,11 @@ VEHICLES
 * find a good method for battering ram block damage (take point-hit, and simply do a 3D x on it?)
 * add ammo types
 * final vehicle gui will need slots that only accept stack size 1 and that validate against the vehicles valid<whatever type> list
-* remove old targetPos code...
+* remove old targetPos code...or use it for other things....
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
 * create rockets (will require some hackery for their flight dynamics)
 * finish catapult and ballista animations
-* clean up stand-based vehicles--
-    --non-turret versions should have fixed turret rotation but have slow whole-vehicle turning
-    --turreted versions should have limited turret rotation ability, still allow slow whole-vehicle turning
-* update input/aim helper to update yaw based on turretPosition relative to hitPos rather than raw playerYaw...      
-* fix vehicle to not turn player/camera in opposite direction...or rather fix it to update with vehicle rotation && turret rotation
-* fix catapult hit stuff...its borked...  
+* move player back more on ballista stand
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
@@ -156,7 +151,16 @@ TWEAKS/OPTIMIZATION
 * add yawSpeed smoothing updates to render for turret yaw/pitch changes for vehicles (will require a yaw/pitch speed var in vehicleBase)
 * update missile offset code to use turret position + missile offset
 /********** 03-15-13 **********/
+* prep layout for npcs
 /********** 03-16-13 **********/
+* fix trajectory finding for power-based vehicles
+* clean up stand/turret distinctions.
+    --non-turret versions should have fixed turret rotation but have slow whole-vehicle turning
+    --turreted versions should have limited turret rotation ability, still allow slow whole-vehicle turning  
+* fix vehicle to not turn player/camera in opposite direction...or rather fix it to update with vehicle rotation && turret rotation
+* ballista stand is too tall
+* fix ballista stand rider positioning
+* ballista textures....all of zhem
 /********** 03-17-13 **********/
 /********** 03-18-13 **********/
 /********** 03-19-13 **********/

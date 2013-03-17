@@ -241,7 +241,7 @@ public void setCrankRotations(float angle)
   }
 
 @Override
-public void renderFlag(int color)
+public void renderFlag()
   {
   // TODO Auto-generated method stub
   

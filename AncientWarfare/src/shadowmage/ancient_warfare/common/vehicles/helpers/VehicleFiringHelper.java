@@ -160,7 +160,8 @@ public void onTick()
     this.vehicle.onReloadUpdate();
     if(this.reloadingTicks<=0)
       {
-      this.setFinishedReloading();            
+      this.setFinishedReloading();  
+      this.vehicle.firingVarsHelper.onReloadingFinished();
       }
     this.reloadingTicks--;
     }
@@ -490,7 +491,6 @@ public void handleAimMouseInput(Vec3 target)
     {     
     float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch, Settings.getClientPowerIterations());
     float xLen = MathHelper.sqrt_float(tx*tx+tz*tz);
-    Config.logDebug("target:" +xLen+","+ty);
     if(this.clientLaunchSpeed!=power && power < getAdjustedMaxMissileVelocity())
       {
       this.clientLaunchSpeed = power;

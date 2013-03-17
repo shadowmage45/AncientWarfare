@@ -47,10 +47,10 @@ public static final boolean DEBUG = true;
 
 //***************************************************LOADED CONFIGS******************************************//
 
+public static String texturePath = "/shadowmage/ancient_warfare/resources/";
 public static boolean invertShiftClickOnItems = false;
 public static String templateExtension = "aws";
 public static boolean adjustMissilesForAccuracy = false;
-
 public static int trajectoryIterationsServer = 20;
 
 

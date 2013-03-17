@@ -34,5 +34,6 @@ public void doRender(Entity var1, double var2, double var4, double var6,  float 
   }
 
 public abstract void renderVehicle(VehicleBase vehicle, double x, double y, double z, float yaw, float tick);
+public abstract void renderVehicleFlag();
 
 }

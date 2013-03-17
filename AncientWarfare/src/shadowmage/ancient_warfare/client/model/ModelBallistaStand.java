@@ -5,9 +5,11 @@
  
 package shadowmage.ancient_warfare.client.model;
 
-import shadowmage.ancient_warfare.common.utils.Trig;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.utils.Trig;
  
  
 public class ModelBallistaStand extends ModelVehicleBase
@@ -70,9 +72,9 @@ public ModelBallistaStand(){
   basePillar = new ModelRenderer(this,"basePillar");
   basePillar.setTextureOffset(0,0);
   basePillar.setTextureSize(256,256);
-  basePillar.setRotationPoint(0.0f, -18.0f, 0.0f);
+  basePillar.setRotationPoint(0.0f, -12.0f, 0.0f);
   setPieceRotation(basePillar,0.0f, 0.0f, 0.0f);
-  basePillar.addBox(-2.0f,0.0f,-2.0f,4,16,4);
+  basePillar.addBox(-2.0f,0.0f,-2.0f,4,10,4);
   pivot = new ModelRenderer(this,"pivot");
   pivot.setTextureOffset(17,0);
   pivot.setTextureSize(256,256);
@@ -84,7 +86,7 @@ public ModelBallistaStand(){
   armMain = new ModelRenderer(this,"armMain");
   armMain.setTextureOffset(0,128);
   armMain.setTextureSize(256,256);
-  armMain.setRotationPoint(0.0f, -20.0f, 0.0f);
+  armMain.setRotationPoint(0.0f, -14.0f, 0.0f);
   setPieceRotation(armMain,-6.585082E-7f, -2.3593943E-6f, 0.0f);
   armMain.addBox(-1.5f,-2.0f,-4.5f,3,2,28);
   armFront = new ModelRenderer(this,"armFront");
@@ -377,13 +379,13 @@ public ModelBallistaStand(){
   flagPole = new ModelRenderer(this,"flagPole");
   flagPole.setTextureOffset(0,38);
   flagPole.setTextureSize(256,256);
-  flagPole.setRotationPoint(-7.0f, -18.0f, -7.0f);
+  flagPole.setRotationPoint(0.0f, -15.0f, 0.0f);
   setPieceRotation(flagPole,0.0f, 0.0f, 0.0f);
-  flagPole.addBox(0.0f,0.0f,0.0f,1,16,1);
+  flagPole.addBox(-10.0f,-24.0f,-6.5f,1,16,1);
   flagCloth = new ModelRenderer(this,"flagCloth");
   flagCloth.setTextureOffset(5,38);
   flagCloth.setTextureSize(256,256);
-  flagCloth.setRotationPoint(0.0f, 0.0f, 1.0f);
+  flagCloth.setRotationPoint(-10.0f, -24.0f, -5.5f);
   setPieceRotation(flagCloth,0.0f, 0.0f, 0.0f);
   flagCloth.addBox(0.0f,0.0f,0.0f,1,8,11);
   flagPole.addChild(flagCloth);
@@ -396,7 +398,7 @@ public void render(Entity entity, float f1, float f2, float f3, float f4, float 
   setRotationAngles(f1, f2, f3, f4, f5, f6, entity);
   baseMain.render(f6);
   armMain.render(f6);
-  flagPole.render(f6);
+  
   }
  
 public void setPieceRotation(ModelRenderer model, float x, float y, float z)
@@ -406,20 +408,30 @@ public void setPieceRotation(ModelRenderer model, float x, float y, float z)
   model.rotateAngleZ = z;
   }
 
+public void setBowAndStringRotation(float bow, float string)
+  {
+  this.armLeftMain.rotateAngleY = Trig.toRadians(-bow);
+  this.armRightMain.rotateAngleY = Trig.toRadians(bow);
+  this.stringLeft.rotateAngleY = Trig.toRadians(-string);
+  this.stringRight.rotateAngleY = Trig.toRadians(string);
+  }
+
 public void setTurretRotation(float yaw, float pitch)
   {
   this.armMain.rotateAngleY = Trig.toRadians(yaw);
   this.armMain.rotateAngleX = Trig.toRadians(pitch);
+  this.flagPole.rotateAngleX = this.armMain.rotateAngleX;
+  this.flagPole.rotateAngleY = this.armMain.rotateAngleY;
   }
 
 public void setCrankRotations(float angle)
   {
   this.crankAxle.rotateAngleX = Trig.toRadians(angle);
   }
+
 @Override
-public void renderFlag(int color)
-  {
-  // TODO Auto-generated method stub
-  
+public void renderFlag()
+  {  
+  flagPole.render(0.0625f);  
   }
 }

@@ -644,7 +644,7 @@ public void setPieceRotation(ModelRenderer model, float x, float y, float z)
   }
 
 @Override
-public void renderFlag(int color)
+public void renderFlag()
   {
     
   }

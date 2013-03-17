@@ -282,16 +282,11 @@ public void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlayer playe
   double angle = 90 - vehicle.localTurretPitch;
   double yaw = vehicle.localTurretRotation;
   
-//  double speed = vehicle.firingHelper.clientLaunchSpeed * 0.05d;
-//  double angle = 90 - vehicle.firingHelper.clientTurretPitch;
-//  double yaw = vehicle.firingHelper.clientTurretYaw;
-//  
   double vH = -Trig.sinDegrees((float) angle)*speed;
   double vY = Trig.cosDegrees((float) angle)*speed ;
   double vX = Trig.sinDegrees((float) yaw)*vH ;
   double vZ = Trig.cosDegrees((float) yaw)*vH ;
-  
-  
+    
   while(y2>=y1)
     {
     GL11.glVertex3d(x2, y2, z2);   

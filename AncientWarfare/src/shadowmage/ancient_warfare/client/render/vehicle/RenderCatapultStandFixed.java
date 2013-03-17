@@ -41,4 +41,10 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z,  float 
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
   }
 
+@Override
+public void renderVehicleFlag()
+  {
+  model.renderFlag();
+  }
+
 }

@@ -24,6 +24,7 @@ import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelBallistaStand;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
@@ -38,8 +39,16 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z, float y
   VehicleFiringVarsHelper var = veh.firingVarsHelper;
   model.setTurretRotation(yaw-veh.localTurretRotation - tick*veh.currentTurretYawSpeed, -veh.localTurretPitch + tick * veh.currentTurretPitchSpeed);
   model.setCrankRotations(var.getVar1() + (tick*var.getVar2()));
+  model.setBowAndStringRotation(var.getVar3() + tick*var.getVar4(), var.getVar5() + tick*var.getVar6());
   float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
+  }
+
+@Override
+public void renderVehicleFlag()
+  {
+  // TODO Auto-generated method stub
+  
   }
 
 }

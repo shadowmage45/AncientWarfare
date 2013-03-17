@@ -328,7 +328,9 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
   float hitX = 0;
   float hitY = 0;
   boolean hitGround = true;
-    
+  double hitDiffX;
+  double hitDiffY;            
+  double hitPercent;
   for(int iter = 0; iter < maxIterations; iter++)
     {
     //reset pos
@@ -355,11 +357,11 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
     if(hitGround)//if break was triggered by going negative on y axis, get a more precise hit vector
       {
       motY+=gravityTick;
-      double var4 = motX - posX;
-      double var6 = motY - posY;            
-      double var10 = (y - posY) / var6;
-      hitX = (float) (posX + var4 * var10);
-      hitY = (float) (posY + + var6 * var10);
+      hitDiffX = motX - posX;
+      hitDiffY = motY - posY;            
+      hitPercent = (y - posY) / hitDiffY;
+      hitX = (float) (posX + hitDiffX * hitPercent);
+      hitY = (float) (posY + + hitDiffY * hitPercent);
       } 
     if(hitGround && hitX < x)// hit was not far enough, increase power
       {

@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.render.vehicle;
 
+import net.minecraft.client.Minecraft;
+
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelBallistaMobile;
@@ -38,9 +40,16 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z,  float 
   VehicleFiringVarsHelper var = veh.firingVarsHelper;
   model.setTurretRotation(yaw-veh.localTurretRotation - tick*veh.currentTurretYawSpeed, -veh.localTurretPitch + tick * veh.currentTurretPitchSpeed);
   model.setCrankRotations(var.getVar1() + (tick*var.getVar2()));
+  model.setBowAndStringRotation(var.getVar3() + tick*var.getVar4(), var.getVar5() + tick*var.getVar6());
   float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
+  }
+
+@Override
+public void renderVehicleFlag()
+  {
+  model.renderFlag();
   }
 
 }

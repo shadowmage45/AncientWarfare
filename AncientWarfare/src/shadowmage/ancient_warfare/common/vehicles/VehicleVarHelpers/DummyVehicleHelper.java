@@ -65,6 +65,12 @@ public class DummyVehicleHelper extends VehicleFiringVarsHelper
     {
     
     }
+  
+  @Override
+  public void onReloadingFinished()
+    {
+    
+    }
 
   @Override
   public float getVar1()
@@ -113,5 +119,6 @@ public class DummyVehicleHelper extends VehicleFiringVarsHelper
     {
     return 0;
     }
+
 
 }

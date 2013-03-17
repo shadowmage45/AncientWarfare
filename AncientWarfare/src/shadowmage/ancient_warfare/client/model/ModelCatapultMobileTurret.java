@@ -717,7 +717,7 @@ public void setCrankRotations(float angle)
   this.pulleyAxle.rotateAngleX = Trig.toRadians(angle);
   }
 @Override
-public void renderFlag(int color)
+public void renderFlag()
   {
   // TODO Auto-generated method stub
   

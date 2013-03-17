@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleTypeBallistaStandTurret extends VehicleTypeBallista
@@ -38,15 +39,38 @@ public VehicleTypeBallistaStandTurret(int typeNum)
   this.armorBaySize = 4;
   this.upgradeBaySize = 4;
 
-  this.turretVerticalOffset = 20.f * 0.0625f;    
-  this.riderForwardsOffset = -1.2f;
-  this.riderVerticalOffset = 0.7f;
+  this.turretVerticalOffset = 18.f * 0.0625f;   
+  this.riderForwardsOffset = -1.8f;
+  this.riderVerticalOffset = 0.5f;
   this.shouldRiderSit = false;
-  this.isDrivable = false;//adjust based on isMobile or not
+  this.isDrivable = true;//adjust based on isMobile or not
+  this.baseForwardSpeed = 0.f;
+  this.baseStrafeSpeed = .5f;
+  this.moveRiderWithTurret = true;
   this.canAdjustYaw = true;//adjust based on hasTurret or not
-  this.turretRotationMax=360.f;//adjust based on mobile/stand fixed (0), stand fixed(90'), or mobile or stand turret (360) 
+  this.turretRotationMax=45.f; 
   this.displayName = "Ballista Stand Turret";
-  this.displayTooltip = "A ballista mounted on a fully rotatable stand.";
+  this.displayTooltip = "A ballista mounted on a rotatable stand.";
+  }
+
+@Override
+public String getTextureForMaterialLevel(int level)
+  {
+  switch(level)
+    {
+    case 0:
+    return Config.texturePath + "models/ballistaStand1.png";
+    case 1:
+    return Config.texturePath + "models/ballistaStand2.png";
+    case 2:
+    return Config.texturePath + "models/ballistaStand3.png";
+    case 3:
+    return Config.texturePath + "models/ballistaStand4.png";
+    case 4:
+    return Config.texturePath + "models/ballistaStand5.png";
+    default:
+    return Config.texturePath + "models/ballistaStand1.png";
+    }
   }
 
 }

@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
@@ -31,12 +32,13 @@ public class BallistaVarHelper extends VehicleFiringVarsHelper
 public float crankAngle = 0.f;
 public float crankSpeed = 0.f;
 
-public float bowAngle = 0.f;
+public float bowAngle = 67.5f;
 public float bowSpeed = 0.f;
 
-public float stringAngle = 0.f;
+public float stringAngle = getStringAngle(bowAngle);
 public float stringSpeed = 0.f;
 
+public float triggerAngle = 0.f;
 /**
  * @param vehicle
  */
@@ -47,21 +49,52 @@ public BallistaVarHelper(VehicleBase vehicle)
 
 @Override
 public void onFiringUpdate()
-  {
+  { 
   vehicle.firingHelper.startLaunching();
+  vehicle.firingHelper.spawnMissile(0, 0, 0);
   }
 
 @Override
 public void onReloadUpdate()
   {
-  
+  float prevAngle = bowAngle;
+  bowAngle += (float)((float)37.5f / (float)vehicle.currentReloadTicks);
+  if(bowAngle>=67.5f)
+    {
+    bowAngle = 67.5f;
+    }
+  bowSpeed = bowAngle - prevAngle;
+  prevAngle = stringAngle;
+  stringAngle = getStringAngle(bowAngle);
+  stringSpeed = stringAngle -prevAngle;
+  this.crankAngle-=4;
+  this.crankSpeed = -4;
   }
 
 @Override
 public void onLaunchingUpdate()
+  {  
+  float prevAngle = bowAngle;
+  bowAngle -= 37.5 / 5;
+  if(bowAngle<30)
+    {
+    bowAngle = 30;
+    vehicle.firingHelper.setFinishedLaunching();
+    }
+  bowSpeed = bowAngle - prevAngle;
+  prevAngle = stringAngle;
+  stringAngle = getStringAngle(bowAngle);
+  stringSpeed = stringAngle -prevAngle;
+  }
+
+@Override
+public void onReloadingFinished()
   {
-  vehicle.firingHelper.spawnMissile(0, 0, 0);
-  vehicle.firingHelper.setFinishedLaunching();
+  this.bowAngle = 67.5f;
+  this.stringAngle = getStringAngle(bowAngle);
+  this.bowSpeed = 0.f;
+  this.stringSpeed = 0.f;  
+  this.crankSpeed = 0.f;
   }
 
 @Override
@@ -71,6 +104,13 @@ public NBTTagCompound getNBTTag()
   tag.setFloat("cA", crankAngle);
   tag.setFloat("cS", crankSpeed);
   return tag;
+  }
+
+public float getStringAngle(float bowAngle)
+  {
+  float percentTravel = (bowAngle-30.f)/37.5f;
+  float adj = percentTravel * 1.305f;
+  return -30-adj * bowAngle;
   }
 
 @Override
@@ -127,5 +167,6 @@ public float getVar8()
   {
   return 0;
   }
+
 
 }

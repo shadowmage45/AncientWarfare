@@ -40,7 +40,7 @@ public VehicletypeCatapultStandTurret(int typeNum)
   this.missileForwardsOffset = -2.0f* Trig.cosDegrees(70);
   this.turretVerticalOffset = 0.4f;
   this.riderForwardsOffset = 1.2f;
-  this.riderVerticalOffset = 0.8f;
+  this.riderVerticalOffset = 0.7f;
   this.displayName = "Catapult Stand Turret";
   this.displayTooltip = "An immobile catapult mounted on a swiveling turret.";
   this.storageBaySize = 0;
@@ -48,6 +48,7 @@ public VehicletypeCatapultStandTurret(int typeNum)
   this.upgradeBaySize = 4;
   this.canAdjustYaw = true;
   this.baseForwardSpeed = 0.f;
+  this.baseStrafeSpeed = .5f;
   this.turretRotationMax=45.f;
   this.isDrivable = true;
   this.shouldRiderSit = true;

@@ -64,7 +64,7 @@ public void handleKeyboardInput(byte forward, byte strafe)
     {
     return;
     }
-  NBTTagCompound tag = new NBTTagCompound();
+  NBTTagCompound tag = new NBTTagCompound();  
   tag.setByte("f", forward);
   tag.setByte("s", strafe);
   Packet02Vehicle pkt = new Packet02Vehicle();

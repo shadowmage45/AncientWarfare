@@ -50,6 +50,7 @@ public VehicleTypeCatapultStandFixed(int typeNum)
   this.canAdjustYaw = false;
   this.isDrivable = true;
   this.baseForwardSpeed = 0.f;  
+  this.baseStrafeSpeed = .5f;
   this.shouldRiderSit = true;
   this.moveRiderWithTurret = false;
   }

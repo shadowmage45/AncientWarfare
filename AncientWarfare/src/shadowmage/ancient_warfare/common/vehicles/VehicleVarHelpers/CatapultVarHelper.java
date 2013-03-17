@@ -71,7 +71,7 @@ public void onReloadUpdate()
   float prevAngle = this.armAngle;  
   this.armAngle -= 80 / (float)(vehicle.currentReloadTicks-2);
   this.crankAngle+=4;
-  this.crankSpeed = 1;
+  this.crankSpeed = 4;
   this.armSpeed =this.armAngle - prevAngle;
   if(this.armAngle <= 0)
     {
@@ -79,6 +79,13 @@ public void onReloadUpdate()
     this.crankSpeed = 0;
     this.armSpeed = 0;
     }
+  }
+
+@Override
+public void onReloadingFinished()
+  {
+  this.crankSpeed = 0;
+  this.armSpeed = 0;
   }
 
 @Override
@@ -148,5 +155,7 @@ public float getVar8()
   {
   return 0;
   }
+
+
 
 }

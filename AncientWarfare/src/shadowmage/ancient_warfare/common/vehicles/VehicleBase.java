@@ -306,7 +306,7 @@ public Pos3f getMissileOffset()
     x1 = Trig.cosDegrees(angle)*len;
     z1 = -Trig.sinDegrees(angle)*len;
     } 
-  
+
   float x = this.getHorizontalMissileOffset();
   float y = this.getVerticalMissileOffset();
   float z = this.getForwardsMissileOffset();
@@ -318,28 +318,28 @@ public Pos3f getMissileOffset()
     x = Trig.cosDegrees(angle)*len;
     z = -Trig.sinDegrees(angle)*len;
     }
-  
+
   x+=x1;
   z+=z1;
   y+=y1;
   off.x = x;
   off.y = y;
   off.z = z;
-//  Pos3f off = new Pos3f();  
-//  float x = this.getHorizontalMissileOffset();
-//  float y = this.getVerticalMissileOffset();
-//  float z = this.getForwardsMissileOffset();
-//  float x1 = this.vehicleType.getTurretPosX();
-//  float y1 = this.vehicleType.getTurretPosY();
-//  float z1 = this.vehicleType.getTurretPosZ();
-//  float angle = Trig.toDegrees((float) Math.atan2(z, x));
-//  float len = MathHelper.sqrt_float(x*x+z*z);
-//  angle+= this.rotationYaw;   
-//  x = Trig.cosDegrees(angle)*len;
-//  z = -Trig.sinDegrees(angle)*len;
-//  off.x = x;
-//  off.y = y;
-//  off.z = z;
+  //  Pos3f off = new Pos3f();  
+  //  float x = this.getHorizontalMissileOffset();
+  //  float y = this.getVerticalMissileOffset();
+  //  float z = this.getForwardsMissileOffset();
+  //  float x1 = this.vehicleType.getTurretPosX();
+  //  float y1 = this.vehicleType.getTurretPosY();
+  //  float z1 = this.vehicleType.getTurretPosZ();
+  //  float angle = Trig.toDegrees((float) Math.atan2(z, x));
+  //  float len = MathHelper.sqrt_float(x*x+z*z);
+  //  angle+= this.rotationYaw;   
+  //  x = Trig.cosDegrees(angle)*len;
+  //  z = -Trig.sinDegrees(angle)*len;
+  //  off.x = x;
+  //  off.y = y;
+  //  off.z = z;
   return off;
   }
 
@@ -528,7 +528,11 @@ public void updateTurretRotation()
     {
     localTurretRotation = this.rotationYaw;
     localTurretDestRot = localTurretRotation;
-    } 
+    }
+  else
+    {
+    localTurretRotation += moveHelper.strafeMotion;
+    }
   if(Trig.getAbsDiff(localTurretDestRot, localTurretRotation) > localTurretRotInc)
     {
     while(localTurretRotation<0)
@@ -579,7 +583,7 @@ public void updateTurretRotation()
   if(localTurretRotation!=localTurretDestRot)
     {   
 
-    
+
     }  
   this.currentTurretYawSpeed = this.localTurretRotation - prevYaw;
   }
@@ -705,6 +709,7 @@ public void updateRiderPosition()
   posZ += Trig.cosDegrees(yaw)*-this.getRiderForwardOffset();
   posZ += Trig.sinDegrees(yaw)*this.getRiderHorizontalOffset();
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
+  this.riddenByEntity.rotationYaw -= this.moveHelper.strafeMotion*2;
   }
 
 @Override
@@ -731,30 +736,30 @@ public void setPositionAndRotation2(double par1, double par3, double par5, float
 public void setPositionAndRotationNormalized(double par1, double par3, double par5, float yaw, float par8, int par9)
   {
   if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())//if this is a client instance, and thePlayer is riding...
+  {
+  if(Config.clientVehicleMovement)
     {
-    if(Config.clientVehicleMovement)
-      {
-      return;
-      }
-    double var10 = par1 - this.posX;
-    double var12 = par3 - this.posY;
-    double var14 = par5 - this.posZ;
-    double var16 = var10 * var10 + var12 * var12 + var14 * var14;    
-    if (var16 <= 1.0D)
-      {
-      float rot = this.rotationYaw;
-      float rot2 = yaw;      
-      if(Trig.getAbsDiff(rot, rot2)>2)
-        { 
-        //float diff = this.rotationYaw - this.prevRotationYaw;//pull diff of current rot and prev rot.  change rot. change prev rot to rot. apply diff to prev rot DONE
-        this.setRotation(yaw, par8);
-        this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
-        //        this.prevRotationYaw = this.rotationYaw + diff;        
-        }      
-      return;
-      }
-    Config.logDebug("crazy synch error!!");
-    } 
+    return;
+    }
+  double var10 = par1 - this.posX;
+  double var12 = par3 - this.posY;
+  double var14 = par5 - this.posZ;
+  double var16 = var10 * var10 + var12 * var12 + var14 * var14;    
+  if (var16 <= 1.0D)
+    {
+    float rot = this.rotationYaw;
+    float rot2 = yaw;      
+    if(Trig.getAbsDiff(rot, rot2)>2)
+      { 
+      //float diff = this.rotationYaw - this.prevRotationYaw;//pull diff of current rot and prev rot.  change rot. change prev rot to rot. apply diff to prev rot DONE
+      this.setRotation(yaw, par8);
+      this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
+      //        this.prevRotationYaw = this.rotationYaw + diff;        
+      }      
+    return;
+    }
+  Config.logDebug("crazy synch error!!");
+  } 
   super.setPositionAndRotation(par1, par3, par5, yaw, par8);
   }
 

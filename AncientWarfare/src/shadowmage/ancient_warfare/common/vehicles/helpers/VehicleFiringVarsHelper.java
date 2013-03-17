@@ -52,6 +52,8 @@ public abstract void onReloadUpdate();
  */
 public abstract void onLaunchingUpdate();
 
+public abstract void onReloadingFinished();
+
 public abstract float getVar1();
 public abstract float getVar2();
 public abstract float getVar3();
