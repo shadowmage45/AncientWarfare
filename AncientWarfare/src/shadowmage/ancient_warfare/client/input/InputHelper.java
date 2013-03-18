@@ -261,29 +261,6 @@ public void handleMouseAimUpdate()
   MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140, mc.thePlayer.ridingEntity);  
   if(pos!=null)
     {
-//    if(pos.entityHit==null)//is a tile hit
-//      {
-//      switch (pos.sideHit)
-//      {
-//      case 0:
-////      --y;
-//      break;
-//      case 1:
-////      ++y;
-//      break;
-//      case 2:
-//      pos.hitVec.zCoord += 0.5d;
-//      break;
-//      case 3:
-//      pos.hitVec.zCoord -= 0.5d;
-//      break;
-//      case 4:
-//      pos.hitVec.xCoord += 0.5d;
-//      break;
-//      case 5:
-//      pos.hitVec.xCoord -= 0.5d;
-//      }
-//      }
     ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimMouseInput(pos.hitVec);
     }
   }
@@ -293,15 +270,18 @@ public void handleFireAction()
   if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
     {
     VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
-    MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140, mc.thePlayer.ridingEntity);
-    if(pos!=null)
+    if(vehicle.isAimable())
       {
-      vehicle.firingHelper.handleFireInput(pos.hitVec);
+      MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140, mc.thePlayer.ridingEntity);
+      if(pos!=null)
+        {
+        vehicle.firingHelper.handleFireInput(pos.hitVec);
+        }
+      else
+        {
+        vehicle.firingHelper.handleFireInput(null);
+        }
       }
-    else
-      {
-      vehicle.firingHelper.handleFireInput(null);
-      } 
     }
   }
 

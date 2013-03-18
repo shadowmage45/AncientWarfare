@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobil
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobileTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStand;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStandTurret;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBatteringRam;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultMobileFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultMobileTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultStandFixed;
@@ -45,6 +46,7 @@ public static final IVehicleType BALLISTA_STAND_TURRET = new VehicleTypeBallista
 public static final IVehicleType BALLISTA_MOBILE_FIXED = new VehicleTypeBallistaMobile(6);
 public static final IVehicleType BALLISTA_MOBILE_TURRET = new VehicleTypeBallistaMobileTurret(7);
 
+public static final IVehicleType BATTERING_RAM = new VehicleTypeBatteringRam(8);
 
 private VehicleRegistry(){}
 private static VehicleRegistry INSTANCE;

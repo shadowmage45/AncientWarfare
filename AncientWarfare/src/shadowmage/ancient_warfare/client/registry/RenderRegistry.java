@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaMobile;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaStand;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderBatteringRam;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileTurret;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandFixed;
@@ -73,6 +74,7 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.BALLISTA_STAND_TURRET, new RenderBallistaStand());
   this.addVehicleRender(VehicleRegistry.BALLISTA_MOBILE_FIXED, new RenderBallistaMobile());
   this.addVehicleRender(VehicleRegistry.BALLISTA_MOBILE_TURRET, new RenderBallistaMobile());
+  this.addVehicleRender(VehicleRegistry.BATTERING_RAM, new RenderBatteringRam());
   
   
   /**

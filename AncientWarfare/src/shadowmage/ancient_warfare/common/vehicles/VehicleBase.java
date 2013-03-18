@@ -705,9 +705,9 @@ public void updateRiderPosition()
   double posZ = this.posZ;
   float yaw = this.vehicleType.moveRiderWithTurret() ? localTurretRotation : rotationYaw;
   posX += Trig.sinDegrees(yaw)*-this.getRiderForwardOffset();
-  posX += Trig.cosDegrees(yaw)*this.getRiderHorizontalOffset();
+  posX += Trig.sinDegrees(yaw+90)*this.getRiderHorizontalOffset();
   posZ += Trig.cosDegrees(yaw)*-this.getRiderForwardOffset();
-  posZ += Trig.sinDegrees(yaw)*this.getRiderHorizontalOffset();
+  posZ += Trig.cosDegrees(yaw+90)*this.getRiderHorizontalOffset();
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
   this.riddenByEntity.rotationYaw -= this.moveHelper.strafeMotion*2;
   }

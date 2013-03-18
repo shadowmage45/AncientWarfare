@@ -352,7 +352,7 @@ public void handleAimUpdate(NBTTagCompound tag)
  */
 public void handleFireInput(Vec3 target)
   {
-  if(!this.isFiring && vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoCount()>0)
+  if(!this.isFiring && (vehicle.ammoHelper.getCurrentAmmoCount()>0 || vehicle.ammoHelper.getCurrentAmmoType()==null))
     {
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("fm", true);

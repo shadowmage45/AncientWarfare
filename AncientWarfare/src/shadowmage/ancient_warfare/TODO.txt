@@ -23,6 +23,8 @@ VEHICLES
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
 * create rockets (will require some hackery for their flight dynamics)
 * finish catapult and ballista animations
+* not on ground, falling!!! (and no hit-detection for vehicles while riding)
+* if logging out while on a vehicle it will continue to spin...
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
