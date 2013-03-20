@@ -58,6 +58,11 @@ public static RenderRegistry instance()
   return INSTANCE;
   }
 
+/**
+ * dummy render to be used in case a vehicle render doesn't exist...
+ */
+private RenderCatapultStandFixed dummyRender = new RenderCatapultStandFixed();
+
 private HashMap<Integer, Render> missileRenders = new HashMap<Integer, Render>();
 private HashMap<Integer, RenderVehicleBase> vehicleRenders = new HashMap<Integer, RenderVehicleBase>();
 
@@ -78,9 +83,7 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.BATTERING_RAM, new RenderBatteringRam());
   this.addVehicleRender(VehicleRegistry.CANNON_STAND_FIXED, new RenderCannonStandFixed());
   this.addVehicleRender(VehicleRegistry.CANNON_STAND_TURRET, new RenderCannonStandFixed());
-  this.addVehicleRender(VehicleRegistry.CANNON_MOBILE_FIXED, new RenderCannonStandFixed());
-  this.addVehicleRender(VehicleRegistry.CANNON_MOBILE_TURRET, new RenderCannonStandFixed());
-  
+  this.addVehicleRender(VehicleRegistry.CANNON_MOBILE_FIXED, new RenderCannonStandFixed());  
   
   /**
    * missiles...
@@ -107,6 +110,10 @@ public Render getRenderForMissile(int type)
 
 public RenderVehicleBase getRenderForVehicle(int type)
   {
+  if(!this.vehicleRenders.containsKey(type))
+    {
+    return dummyRender;
+    }
   return this.vehicleRenders.get(type);
   }
 

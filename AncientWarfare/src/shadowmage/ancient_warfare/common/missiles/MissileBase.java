@@ -49,6 +49,7 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData
 IAmmoType ammoType = null;
 IMissileHitCallback shooter = null;
 public int missileType = 0;
+int rocketBurnTime = 0;
 
 public boolean inGround = false;
 int blockX;
@@ -96,6 +97,13 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
     }
   this.prevRotationPitch = this.rotationPitch;
   this.prevRotationYaw = this.rotationYaw;
+  if(this.ammoType.isRocket())//use launch power to determine rocket burn time...
+    {
+    this.rocketBurnTime = (int) MathHelper.sqrt_float(mx*mx+my*my+mz*mz);
+    this.motionX*= 0.1f;
+    this.motionZ*= 0.1f;
+    this.motionY*= 0.1f;
+    }
   }
 
 public void setMissileParams2(IAmmoType ammo, float x, float y, float z, float yaw, float angle, float velocity)
@@ -238,10 +246,26 @@ public void onMovementTick()
           }          
         }
       }
+    
     this.posX += this.motionX;
     this.posY += this.motionY;
     this.posZ += this.motionZ; 
-    this.motionY -= (double)this.ammoType.getGravityFactor();
+    
+    if(this.ammoType.isRocket() && this.rocketBurnTime>0)//if it is a rocket, accellerate if still burning
+      {
+      this.rocketBurnTime--;
+      this.motionX *= 1.05f;
+      this.motionZ *= 1.05f;
+      this.motionY *= 1.05f;
+      if(this.worldObj.isRemote)
+        {
+        //TODO spawn particles...smoke..fire...wtf ever
+        }
+      }
+    else
+      {      
+      this.motionY -= (double)this.ammoType.getGravityFactor();      
+      }
     this.setPosition(this.posX, this.posY, this.posZ);
     if(this.ammoType.updateAsArrow())
       {

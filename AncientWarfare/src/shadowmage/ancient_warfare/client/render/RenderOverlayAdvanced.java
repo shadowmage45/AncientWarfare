@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.client.render;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
@@ -37,14 +38,92 @@ public class RenderOverlayAdvanced
 
 public static void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlayer player, float partialTick)
   { 
-  if(vehicle.vehicleType != VehicleRegistry.BATTERING_RAM)
+  if(vehicle.vehicleType == VehicleRegistry.BATTERING_RAM)
     {
-    renderNormalVehicleOverlay(vehicle, player, partialTick);
+    renderBatteringRamOverlay(vehicle, player, partialTick);
+    }
+  else if(vehicle.vehicleType == VehicleRegistry.HWACHA)
+    {
+    renderRocketFlightPath(vehicle, player, partialTick);
     }
   else
     {
-    renderBatteringRamOverlay(vehicle, player, partialTick);
+    renderNormalVehicleOverlay(vehicle, player, partialTick);
     }  
+  }
+
+public static void renderRocketFlightPath(VehicleBase vehicle, EntityPlayer player, float partialTick)
+  {  
+  GL11.glPushMatrix();
+  GL11.glEnable(GL11.GL_BLEND);
+  GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+  GL11.glDisable(GL11.GL_TEXTURE_2D);
+  GL11.glColor4d(1, 1, 1, 0.6d);
+  
+  double x1 = vehicle.posX - player.posX;
+  double y1 = vehicle.posY - player.posY;
+  double z1 = vehicle.posZ - player.posZ;
+  
+  /**
+   * vectors for a straight line
+   */
+  double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw);
+  double y2 = y1;
+  double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw);
+  GL11.glLineWidth(3f);
+  GL11.glBegin(GL11.GL_LINES);    
+  GL11.glVertex3d(x1, y1+0.12d, z1);
+  GL11.glVertex3d(x2, y2+0.12d, z2);  
+  GL11.glEnd();
+  
+  GL11.glLineWidth(4f);    
+  GL11.glColor4f(1.f, 0.4f, 0.4f, 0.4f);
+  GL11.glBegin(GL11.GL_LINES);
+  
+  Pos3f offset = vehicle.getMissileOffset();
+  x2 = x1+offset.x;
+  y2 = y1+offset.y;
+  z2 = z1+offset.z;
+   
+  double gravity = 9.81d * 0.05d *0.05d;
+  double speed = vehicle.localLaunchPower * 0.05d;
+  double angle = 90 - vehicle.localTurretPitch;
+  double yaw = vehicle.localTurretRotation;
+  
+  double vH = -Trig.sinDegrees((float) angle)*speed;
+  double vY = Trig.cosDegrees((float) angle)*speed ;
+  double vX = Trig.sinDegrees((float) yaw)*vH ;
+  double vZ = Trig.cosDegrees((float) yaw)*vH ;
+  int rocketBurnTime = (int) MathHelper.sqrt_double(vX*vX+vY*vY+vZ*vZ);
+  vY *= 0.1f;
+  vX *= 0.1f;
+  vZ *= 0.1f;  
+  
+  while(y2>=y1)
+    {
+    GL11.glVertex3d(x2, y2, z2);   
+    x2+=vX;
+    z2+=vZ;
+    y2+=vY;  
+    if(rocketBurnTime>0)
+      {      
+      rocketBurnTime--;
+      vX *= 1.05f;
+      vZ *= 1.05f;
+      vY *= 1.05f;
+      }
+    else
+      {
+      vY -= gravity;
+      }    
+    GL11.glVertex3d(x2, y2, z2);
+    }
+  GL11.glEnd();
+  
+  GL11.glPopMatrix();
+  GL11.glDepthMask(true);  
+  GL11.glDisable(GL11.GL_BLEND);
+  GL11.glEnable(GL11.GL_TEXTURE_2D);
   }
 
 public static void renderBatteringRamOverlay(VehicleBase vehicle, EntityPlayer player, float partialTick)

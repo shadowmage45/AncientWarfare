@@ -21,28 +21,33 @@ Ballista
 Battering Ram
     Mobile Fixed
 
-Trebuchet
+Trebuchet Small
     Stand Fixed
     Stand Turret
     Mobile Fixed
+    
+Trebuchet Large
+    Stand Fixed
 
-Hwacha
-    Stand Fixed
-    Stand Turret
+Hwacha---maybe......    
     Mobile Fixed
-    Mobile Turret
 
 Cannon
     Stand Fixed
     Stand Turret
     Mobile Fixed
-    Mobile Turret
     
 Chest Cart
-    Mobile Fixed
+    No Combat
 
 Transport Ship
+    No Combat
 
+Destroyer (ship w/ large ballista -- for anti-ship use)
+
+BattleShip (coastal direct fire -- w/ either cannon/catapult)
+
+BombardShip (coastal bombard -- w/ either trebuchet or hwacha)
 
 
 
@@ -56,6 +61,7 @@ Transport Ship
 IVehicleType -- basic interface for what is necessary to describe a vehicle
 VehicleTypeBase -- base class implementing above interface.
         -- there will should be one VehicleTypeBase subclass for each vehicle description
+        -- will have an inner class for the VehicleVarsHelper, just to keep things in one freaking place...
 VehicleBase -- the base entity that all vehicles will use.  it will implement most methods (through helpers for many)
     to handle the basics of vehicles (input, movement, updates).
 VehicleVarsHelper -- holds vehicle-specific variables, mostly used for client-side animation updating
@@ -105,9 +111,8 @@ else
 power using vehicles (use power to determine shot range): 
 catapult
 trebuchet
-
+hwacha
 
 pitch using vehicles (use pitch to determine shot range):
-hwacha
 ballista/turret
 cannon

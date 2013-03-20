@@ -24,68 +24,71 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
-public class VehicleTypeCannon extends VehicleType
+
+public class VehicleTypeHwacha extends VehicleType
 {
 
 /**
  * @param typeNum
  */
-public VehicleTypeCannon(int typeNum)
+public VehicleTypeHwacha(int typeNum)
   {
   super(typeNum);
-  this.vehicleMaterial = VehicleMaterial.materialIron;
-
+  this.vehicleMaterial = VehicleMaterial.materialWood;
+  this.validAmmoTypes.add(Ammo.ammoArrow);
   this.validAmmoTypes.add(Ammo.ammoStoneShot);  
+  this.validArmors.add(ArmorRegistry.armorStone);
 
+  this.isMountable = true;  
+  this.isCombatEngine = true;
+  this.canAdjustPower = true;
+  this.canAdjustPitch = false;  
+  this.accuracy = 0.95f;
+  this.baseStrafeSpeed = 2.f;
+  this.baseForwardSpeed = 6.f*0.05f;  
+  this.basePitchMax = 20;
+  this.basePitchMin = 20;
+
+  this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.pitchExtUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);  
 
-  this.validArmors.add(ArmorRegistry.armorStone);
-  this.validArmors.add(ArmorRegistry.armorIron);
-  this.validArmors.add(ArmorRegistry.armorObsidian);
-
-  this.storageBaySize = 0; 
-  this.accuracy = 0.98f;
-  this.baseStrafeSpeed = 2.f;
-  this.baseForwardSpeed = 6.f*0.05f; 
-  this.basePitchMax = 15;
-  this.basePitchMin = -15; 
-  this.isMountable = true;
-  this.isCombatEngine = true;
-  this.canAdjustPitch = true;
-  this.canAdjustPower = false;
-
-  this.baseMissileVelocityMax = 42.f;//stand versions should have higher velocity, as should fixed version--i.e. mobile turret should have the worst of all versions   
   this.width = 2;
-  this.height = 2;  
-
+  this.height = 2; 
+  this.baseMissileVelocityMax = 32.f;  
+  this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.4f;
+  this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
+  this.riderForwardsOffset = 1.2f;
+  this.riderVerticalOffset = 0.7f;
+  this.displayName = "Catapult";
+  this.displayTooltip = "The original, classic, catapult.";
+  this.storageBaySize = 0;
   this.armorBaySize = 3;
   this.upgradeBaySize = 3;
-  this.ammoBaySize = 6;
+  this.canAdjustYaw = false;
+  this.isDrivable = false;
+  this.shouldRiderSit = true;
+  this.moveRiderWithTurret = false;
   }
 
 @Override
 public VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh)
   {
-  return new CannonVarHelper(veh);
+  return new HwachaFiringVarsHelper(veh);
   }
 
-public class CannonVarHelper extends VehicleFiringVarsHelper
+public class HwachaFiringVarsHelper extends VehicleFiringVarsHelper
 {
-
-
 /**
  * @param vehicle
  */
-public CannonVarHelper(VehicleBase vehicle)
+public HwachaFiringVarsHelper(VehicleBase vehicle)
   {
   super(vehicle);
   }
@@ -111,7 +114,7 @@ public void onFiringUpdate()
 @Override
 public void onReloadUpdate()
   {
-
+  
   }
 
 @Override
@@ -174,5 +177,4 @@ public float getVar8()
   return 0;
   }
 }
-
 }

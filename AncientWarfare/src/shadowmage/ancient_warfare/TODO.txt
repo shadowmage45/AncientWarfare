@@ -4,6 +4,7 @@ GENERAL
 * change inventoryTools to manipulate containers as well
 * figure out a good way to index images for item subtypes--vehicles could use their own icons for each material level, not just vehicle type
         --might be made easier in 1.5 by the icon changes...maybe...also icon changes are a pain in the ass in general...
+* partially destroyable blocks ? (hold destruction status as meta-data?)
 
 PRE-VEHICLE TEST RELEASE
 * add vehicles

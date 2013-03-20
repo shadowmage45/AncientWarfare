@@ -489,7 +489,7 @@ public void handleAimMouseInput(Vec3 target)
     }
   else if(vehicle.canAimPower())
     {     
-    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch, Settings.getClientPowerIterations());
+    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch, Settings.getClientPowerIterations(), (vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));
     float xLen = MathHelper.sqrt_float(tx*tx+tz*tz);
     if(this.clientLaunchSpeed!=power && power < getAdjustedMaxMissileVelocity())
       {
