@@ -159,6 +159,7 @@ public VehicleBase(World par1World)
   this.firingVarsHelper = new DummyVehicleHelper(this);
   this.inventory = new VehicleInventory(this);
   this.stepHeight = 1.12f;
+  this.entityCollisionReduction = 1.f;
   }
 
 public void setVehicleType(IVehicleType vehicle, int materialLevel)
@@ -686,6 +687,39 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   }
 
 @Override
+public void applyEntityCollision(Entity par1Entity)
+  {
+  if (par1Entity.riddenByEntity != this && par1Entity.ridingEntity != this)
+    {
+    double var2 = par1Entity.posX - this.posX;
+    double var4 = par1Entity.posZ - this.posZ;
+    double var6 = MathHelper.abs_max(var2, var4);
+
+    if (var6 >= 0.009999999776482582D)
+      {
+      var6 = (double)MathHelper.sqrt_double(var6);
+      var2 /= var6;
+      var4 /= var6;
+      double var8 = 1.0D / var6;
+
+      if (var8 > 1.0D)
+        {
+        var8 = 1.0D;
+        }
+
+      var2 *= var8;
+      var4 *= var8;
+      var2 *= 0.05000000074505806D;
+      var4 *= 0.05000000074505806D;
+      var2 *= (double)(1.0F - this.entityCollisionReduction);
+      var4 *= (double)(1.0F - this.entityCollisionReduction);
+      this.addVelocity(-var2, 0.0D, -var4);
+      par1Entity.addVelocity(var2, 0.0D, var4);
+      }
+    }
+  }
+
+@Override
 public String getTexture()
   {
   return vehicleType.getTextureForMaterialLevel(vehicleMaterialLevel);
@@ -857,6 +891,7 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.upgradeHelper.updateUpgrades(); 
   this.ammoHelper.updateAmmoCounts();
   this.teamNum = tag.getInteger("team");
+  this.isRidden = tag.getBoolean("ridden");
   }
 
 @Override
@@ -878,6 +913,7 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setFloat("tr", localTurretRotation);
   tag.setFloat("trd", localTurretDestRot);
   tag.setInteger("team", this.teamNum);
+  tag.setBoolean("ridden", this.isRidden);
   }
 
 

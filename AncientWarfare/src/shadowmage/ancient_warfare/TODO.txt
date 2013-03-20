@@ -17,15 +17,14 @@ PRE-VEHICLE TEST RELEASE
     -- renders
 
 VEHICLES    
-* find a good method for battering ram block damage (take point-hit, and simply do a 3D x on it?)
 * add ammo types
 * final vehicle gui will need slots that only accept stack size 1 and that validate against the vehicles valid<whatever type> list
 * remove old targetPos code...or use it for other things....
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
-* create rockets (will require some hackery for their flight dynamics)
-* finish catapult and ballista animations
+* finish ballista animations (trigger)
 * not on ground, falling!!! (and no hit-detection for vehicles while riding)
-* if logging out while on a vehicle it will continue to spin...
+* entity collision detection and pushback/slowdown..
+* add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
@@ -173,6 +172,8 @@ TWEAKS/OPTIMIZATION
 * denada--work on catMod 1.5 update...
 /********** 03-20-13 **********/
 * add rockets, hwacha dummy class...
+* if logging out while on a vehicle it will continue to spin...
+* no entity collision
 
 /********** 03-21-13 **********/
 /********** 03-22-13 **********/

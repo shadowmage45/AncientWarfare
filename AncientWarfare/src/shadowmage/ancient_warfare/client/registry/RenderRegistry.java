@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileFixe
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileTurret;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandTurret;
+import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
@@ -84,13 +85,15 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.CANNON_STAND_FIXED, new RenderCannonStandFixed());
   this.addVehicleRender(VehicleRegistry.CANNON_STAND_TURRET, new RenderCannonStandFixed());
   this.addVehicleRender(VehicleRegistry.CANNON_MOBILE_FIXED, new RenderCannonStandFixed());  
+  this.addVehicleRender(VehicleRegistry.HWACHA, new RenderCatapultStandFixed());
   
   /**
    * missiles...
    */
   RenderingRegistry.registerEntityRenderingHandler(MissileBase.class, new RenderMissileHelper());
-  this.addMissileRender(0, new RenderArrow());  
-  this.addMissileRender(1, new RenderShot());
+  this.addMissileRender(Ammo.ammoArrow.getAmmoType(), new RenderArrow());  
+  this.addMissileRender(Ammo.ammoStoneShot.getAmmoType(), new RenderShot());
+  this.addMissileRender(Ammo.ammoRocket.getAmmoType(), new RenderArrow());
   }
 
 public void addVehicleRender(IVehicleType type, RenderVehicleBase rend)

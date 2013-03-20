@@ -127,7 +127,6 @@ public void handleInputData(NBTTagCompound tag)
  */
 public void onMovementTick()
   {
-//  Config.logDebug("updating motion for vehicle. server: "+!vehicle.worldObj.isRemote);
   float weightAdjust = 1.f;
   if(vehicle.currentWeight > vehicle.baseWeight)
     {
@@ -141,10 +140,6 @@ public void onMovementTick()
       forwardAccel *= 0.6f;
       }
     forwardAccel *= weightAdjust;
-//    if((forwardInput<0 && forwardMotion >0 ) || (forwardInput>0 && forwardMotion<0))
-//      {
-//      forwardAccel += forwardMotion * -0.08f;
-//      }    
     }
   else
     {
@@ -201,7 +196,7 @@ public void onMovementTick()
   if(!vehicle.onGround)
     {
     vehicle.motionY -= (9.81f*0.05f*0.05f);
-    Config.logDebug("vehicle not on ground, falling!!");
+    Config.logDebug("vehicle not on ground, falling!! server:"+!vehicle.worldObj.isRemote+"  pos: "+vehicle.posX+","+vehicle.posY+","+vehicle.posZ);
     }
   else
     {
