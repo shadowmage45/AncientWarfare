@@ -159,7 +159,7 @@ public VehicleBase(World par1World)
   this.firingVarsHelper = new DummyVehicleHelper(this);
   this.inventory = new VehicleInventory(this);
   this.stepHeight = 1.12f;
-  this.entityCollisionReduction = 1.f;
+  this.entityCollisionReduction = 0.9f;
   }
 
 public void setVehicleType(IVehicleType vehicle, int materialLevel)
@@ -691,32 +691,45 @@ public void applyEntityCollision(Entity par1Entity)
   {
   if (par1Entity.riddenByEntity != this && par1Entity.ridingEntity != this)
     {
-    double var2 = par1Entity.posX - this.posX;
-    double var4 = par1Entity.posZ - this.posZ;
-    double var6 = MathHelper.abs_max(var2, var4);
+    double xDiff = par1Entity.posX - this.posX;
+    double zDiff = par1Entity.posZ - this.posZ;
+    double entityDistance = MathHelper.abs_max(xDiff, zDiff);
 
-    if (var6 >= 0.009999999776482582D)
+    if (entityDistance >= 0.009999999776482582D)
       {
-      var6 = (double)MathHelper.sqrt_double(var6);
-      var2 /= var6;
-      var4 /= var6;
-      double var8 = 1.0D / var6;
+      entityDistance = (double)MathHelper.sqrt_double(entityDistance);
+      xDiff /= entityDistance;
+      zDiff /= entityDistance;
+      double normalizeToDistance = 1.0D / entityDistance;
 
-      if (var8 > 1.0D)
+      if (normalizeToDistance > 1.0D)
         {
-        var8 = 1.0D;
+        normalizeToDistance = 1.0D;
         }
 
-      var2 *= var8;
-      var4 *= var8;
-      var2 *= 0.05000000074505806D;
-      var4 *= 0.05000000074505806D;
-      var2 *= (double)(1.0F - this.entityCollisionReduction);
-      var4 *= (double)(1.0F - this.entityCollisionReduction);
-      this.addVelocity(-var2, 0.0D, -var4);
-      par1Entity.addVelocity(var2, 0.0D, var4);
+      xDiff *= normalizeToDistance;
+      zDiff *= normalizeToDistance;
+      xDiff *= 0.05000000074505806D;//wtf..normalize to ticks?
+      zDiff *= 0.05000000074505806D;
+      xDiff *= (double)(1.0F - this.entityCollisionReduction);
+      zDiff *= (double)(1.0F - this.entityCollisionReduction);
+      this.addVelocity(-xDiff, 0.0D, -zDiff);
+      par1Entity.addVelocity(xDiff, 0.0D, zDiff);
       }
     }
+  }
+
+@Override
+public void addVelocity(double x, double y, double z)
+  {  
+  //TODO this may be all F@!#%D up...
+  this.motionY += y;
+  float velocity = MathHelper.sqrt_double(x*x+z*z);
+  this.moveHelper.forwardMotion += velocity;
+  
+  float yaw = (float) Math.atan2(z, x);
+  this.moveHelper.strafeMotion += rotationYaw-yaw;
+    
   }
 
 @Override
@@ -728,7 +741,7 @@ public String getTexture()
 @Override
 public void updateRiderPosition()
   {
-  if (!(this.riddenByEntity instanceof EntityPlayer) || !((EntityPlayer)this.riddenByEntity).func_71066_bF())
+  if(!(this.riddenByEntity instanceof EntityPlayer) || !((EntityPlayer)this.riddenByEntity).func_71066_bF())
     {
     this.riddenByEntity.lastTickPosX = this.lastTickPosX;
     this.riddenByEntity.lastTickPosY = this.lastTickPosY + this.getRiderVerticalOffset() + this.riddenByEntity.getYOffset();
@@ -770,30 +783,30 @@ public void setPositionAndRotation2(double par1, double par3, double par5, float
 public void setPositionAndRotationNormalized(double par1, double par3, double par5, float yaw, float par8, int par9)
   {
   if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())//if this is a client instance, and thePlayer is riding...
-  {
-  if(Config.clientVehicleMovement)
     {
-    return;
-    }
-  double var10 = par1 - this.posX;
-  double var12 = par3 - this.posY;
-  double var14 = par5 - this.posZ;
-  double var16 = var10 * var10 + var12 * var12 + var14 * var14;    
-  if (var16 <= 1.0D)
-    {
-    float rot = this.rotationYaw;
-    float rot2 = yaw;      
-    if(Trig.getAbsDiff(rot, rot2)>2)
-      { 
-      //float diff = this.rotationYaw - this.prevRotationYaw;//pull diff of current rot and prev rot.  change rot. change prev rot to rot. apply diff to prev rot DONE
-      this.setRotation(yaw, par8);
-      this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
-      //        this.prevRotationYaw = this.rotationYaw + diff;        
-      }      
-    return;
-    }
-  Config.logDebug("crazy synch error!!");
-  } 
+    if(Config.clientVehicleMovement)
+      {
+      return;
+      }
+    double var10 = par1 - this.posX;
+    double var12 = par3 - this.posY;
+    double var14 = par5 - this.posZ;
+    double var16 = var10 * var10 + var12 * var12 + var14 * var14;    
+    if (var16 <= 1.0D)
+      {
+      float rot = this.rotationYaw;
+      float rot2 = yaw;      
+      if(Trig.getAbsDiff(rot, rot2)>2)
+        { 
+        //float diff = this.rotationYaw - this.prevRotationYaw;//pull diff of current rot and prev rot.  change rot. change prev rot to rot. apply diff to prev rot DONE
+        this.setRotation(yaw, par8);
+        this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
+        //        this.prevRotationYaw = this.rotationYaw + diff;        
+        }      
+      return;
+      }
+    Config.logDebug("crazy synch error!!");
+    } 
   super.setPositionAndRotation(par1, par3, par5, yaw, par8);
   }
 
