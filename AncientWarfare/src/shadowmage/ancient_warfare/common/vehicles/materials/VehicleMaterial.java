@@ -26,6 +26,7 @@ public class VehicleMaterial implements IVehicleMaterial
 {
 
 public static VehicleMaterial materialWood = new VehicleMaterialWood();
+public static VehicleMaterial materialIron = new VehicleMaterialIron();
 
 public MaterialLevel[] materialLevels;
 
