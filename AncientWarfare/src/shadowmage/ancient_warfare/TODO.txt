@@ -168,7 +168,7 @@ TWEAKS/OPTIMIZATION
 * add catapult textures--all of them
 * also...battering ram, mostly complete.
 /********** 03-18-13 **********/
-* add some cannon types, not fully fleshed out
+* add some cannon types, not fully fleshed out.
 /********** 03-19-13 **********/
 * denada--work on catMod 1.5 update...
 /********** 03-20-13 **********/

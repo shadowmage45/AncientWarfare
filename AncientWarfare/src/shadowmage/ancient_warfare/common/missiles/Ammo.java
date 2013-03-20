@@ -39,6 +39,7 @@ public abstract class Ammo implements IAmmoType
 
 public static Ammo ammoArrow = new AmmoArrow(0);
 public static Ammo ammoStoneShot = new AmmoStoneShot(1);
+public static Ammo ammoRocket = new AmmoRocket(2);
 
 
 private ItemStack ammoStack;

@@ -39,18 +39,23 @@ public class VehicleTypeHwacha extends VehicleType
 public VehicleTypeHwacha(int typeNum)
   {
   super(typeNum);
-  this.vehicleMaterial = VehicleMaterial.materialWood;
-  this.validAmmoTypes.add(Ammo.ammoArrow);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot);  
+  this.vehicleMaterial = VehicleMaterial.materialWood;  
+  this.validAmmoTypes.add(Ammo.ammoRocket);
   this.validArmors.add(ArmorRegistry.armorStone);
+  this.validArmors.add(ArmorRegistry.armorIron);
+  this.validArmors.add(ArmorRegistry.armorObsidian);
 
-  this.isMountable = true;  
+  this.isMountable = true;
+  this.isDrivable = true;
+  this.shouldRiderSit = false;
+  this.moveRiderWithTurret = false;
   this.isCombatEngine = true;
   this.canAdjustPower = true;
-  this.canAdjustPitch = false;  
-  this.accuracy = 0.95f;
-  this.baseStrafeSpeed = 2.f;
-  this.baseForwardSpeed = 6.f*0.05f;  
+  this.canAdjustPitch = false;
+  this.canAdjustYaw = false;
+  this.accuracy = 0.75f;
+  this.baseStrafeSpeed = 1.f;
+  this.baseForwardSpeed = 4.f*0.05f;  
   this.basePitchMax = 20;
   this.basePitchMin = 20;
 
@@ -58,23 +63,21 @@ public VehicleTypeHwacha(int typeNum)
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);  
+  this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
 
   this.width = 2;
   this.height = 2; 
-  this.baseMissileVelocityMax = 32.f;  
-  this.missileVerticalOffset = 2.70f* Trig.sinDegrees(70) + 0.4f;
-  this.missileForwardsOffset = -2.70f* Trig.cosDegrees(70);
-  this.riderForwardsOffset = 1.2f;
-  this.riderVerticalOffset = 0.7f;
-  this.displayName = "Catapult";
-  this.displayTooltip = "The original, classic, catapult.";
+  this.baseMissileVelocityMax = 42.f;  
+  this.missileVerticalOffset = 1.6f;
+  this.missileForwardsOffset = 0.8f;
+  this.riderForwardsOffset = -1.2f;
+  this.riderVerticalOffset = 0.5f;
+  this.displayName = "Hwacha";
+  this.displayTooltip = "OMGZ Rockets!";
   this.storageBaySize = 0;
   this.armorBaySize = 3;
   this.upgradeBaySize = 3;
-  this.canAdjustYaw = false;
-  this.isDrivable = false;
-  this.shouldRiderSit = true;
-  this.moveRiderWithTurret = false;
   }
 
 @Override

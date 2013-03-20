@@ -100,9 +100,9 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
   if(this.ammoType.isRocket())//use launch power to determine rocket burn time...
     {
     this.rocketBurnTime = (int) MathHelper.sqrt_float(mx*mx+my*my+mz*mz);
-    this.motionX*= 0.1f;
-    this.motionZ*= 0.1f;
-    this.motionY*= 0.1f;
+    this.motionX*= AmmoRocket.initalVelocityFactor;
+    this.motionZ*= AmmoRocket.initalVelocityFactor;
+    this.motionY*= AmmoRocket.initalVelocityFactor;
     }
   }
 
@@ -254,9 +254,9 @@ public void onMovementTick()
     if(this.ammoType.isRocket() && this.rocketBurnTime>0)//if it is a rocket, accellerate if still burning
       {
       this.rocketBurnTime--;
-      this.motionX *= 1.05f;
-      this.motionZ *= 1.05f;
-      this.motionY *= 1.05f;
+      this.motionX*= AmmoRocket.accelerationFactor;
+      this.motionZ*= AmmoRocket.accelerationFactor;
+      this.motionY*= AmmoRocket.accelerationFactor;
       if(this.worldObj.isRemote)
         {
         //TODO spawn particles...smoke..fire...wtf ever

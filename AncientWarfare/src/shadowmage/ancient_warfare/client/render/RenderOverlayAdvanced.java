@@ -26,6 +26,7 @@ import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_warfare.common.missiles.AmmoRocket;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -95,9 +96,9 @@ public static void renderRocketFlightPath(VehicleBase vehicle, EntityPlayer play
   double vX = Trig.sinDegrees((float) yaw)*vH ;
   double vZ = Trig.cosDegrees((float) yaw)*vH ;
   int rocketBurnTime = (int) MathHelper.sqrt_double(vX*vX+vY*vY+vZ*vZ);
-  vY *= 0.1f;
-  vX *= 0.1f;
-  vZ *= 0.1f;  
+  vY *= AmmoRocket.initalVelocityFactor;
+  vX *= AmmoRocket.initalVelocityFactor;
+  vZ *= AmmoRocket.initalVelocityFactor;  
   
   while(y2>=y1)
     {
@@ -108,9 +109,9 @@ public static void renderRocketFlightPath(VehicleBase vehicle, EntityPlayer play
     if(rocketBurnTime>0)
       {      
       rocketBurnTime--;
-      vX *= 1.05f;
-      vZ *= 1.05f;
-      vY *= 1.05f;
+      vX *= AmmoRocket.accelerationFactor;
+      vZ *= AmmoRocket.accelerationFactor;
+      vY *= AmmoRocket.accelerationFactor;
       }
     else
       {

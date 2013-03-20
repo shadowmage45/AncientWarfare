@@ -24,6 +24,7 @@ package shadowmage.ancient_warfare.common.utils;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
+import shadowmage.ancient_warfare.common.missiles.AmmoRocket;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -344,8 +345,8 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
     if(rocket)
       {
       rocketBurnTime = (int) MathHelper.sqrt_float(motX*motX+motY*motY);
-      motX *= 0.1f;
-      motY *= 0.1f;
+      motX *= AmmoRocket.initalVelocityFactor;
+      motY *= AmmoRocket.initalVelocityFactor;
       }
     while(motY>=0 || posY >= y)
       {
@@ -362,8 +363,8 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
       if(rocket && rocketBurnTime >0)
         {
         rocketBurnTime--;
-        motX*= 1.05f;
-        motY*= 1.05f;
+        motX*= AmmoRocket.accelerationFactor;
+        motY*= AmmoRocket.accelerationFactor;
         }
       else
         {
