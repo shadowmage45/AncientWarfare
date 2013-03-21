@@ -66,7 +66,13 @@ public void setNpcType(INpcType type, int level)
   this.rank = level;
   this.npcAI.clear();
   this.executingTasks.clear();
-  this.npcAI.addAll(type.getAI(this, level));
+  this.npcAI.addAll(type.getAI(this, level));  
+  }
+
+public boolean isAggroTowards(NpcBase npc)
+  {
+  //TODO no fucking clue... 
+  return false;
   }
 
 public Entity getTargetEntity()

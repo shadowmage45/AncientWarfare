@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -39,6 +40,7 @@ public class NpcRegistry
 
 private NpcRegistry(){}
 private static NpcRegistry INSTANCE;
+
 public static NpcRegistry instance()
   {
   if(INSTANCE==null){INSTANCE = new NpcRegistry();}
@@ -56,7 +58,7 @@ public void registerNPCs()
     {
     if(type==null || type.getGlobalNpcType()==0){continue;}//if null or dummy type, don't register....
     ItemLoader.instance().addSubtypeToItem(ItemLoader.npcSpawner, type.getGlobalNpcType(), type.getDisplayName(), type.getDisplayTooltip());
-    }
+    } 
   }
 
 public List getCreativeDisplayItems()

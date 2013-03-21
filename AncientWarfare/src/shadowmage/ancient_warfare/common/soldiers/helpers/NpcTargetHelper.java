@@ -23,8 +23,11 @@ package shadowmage.ancient_warfare.common.soldiers.helpers;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
 public class NpcTargetHelper
@@ -32,7 +35,14 @@ public class NpcTargetHelper
 
 NpcBase npc;
 
+/**
+ * list of all potential targets
+ */
 ArrayList<AITargetEntry> targetEntries = new ArrayList<AITargetEntry>();
+
+/**
+ * future/potential targets based on aggro priority -- mapped by entityID
+ */
 HashMap<Integer, AIAggroEntry> aggroEntries = new HashMap<Integer, AIAggroEntry>();
 
 public NpcTargetHelper(NpcBase npc)
@@ -68,7 +78,26 @@ public void addOrUpdateAggroEntry(Entity ent, int aggroAmt)
 
 public void updateAggroEntries()
   {
-  
+  Iterator<Entry<Integer, AIAggroEntry>> entryIt = aggroEntries.entrySet().iterator();  
+  Entry<Integer, AIAggroEntry> entry;
+  AIAggroEntry aiEntry;
+  while(entryIt.hasNext())
+    {
+    entry = entryIt.next();
+    aiEntry = entry.getValue();
+    if(!aiEntry.isValidEntry())
+      {
+      entryIt.remove();
+      }
+    else
+      {      
+      aiEntry.aggroLevel--;
+      if(aiEntry.aggroLevel<=0)
+        {
+        entryIt.remove();
+        }
+      }
+    }
   }
 
 public class AITargetEntry
