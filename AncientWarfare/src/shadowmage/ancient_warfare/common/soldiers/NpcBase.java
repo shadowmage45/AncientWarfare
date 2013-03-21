@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.soldiers;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -48,6 +49,8 @@ public ArrayList<INpcAI> executingTasks = new ArrayList<INpcAI>();
 public INpcType npcType = NpcTypeBase.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
 
+private WeakReference<Entity> target = new WeakReference(null);
+
 /**
  * @param par1World
  */
@@ -64,6 +67,16 @@ public void setNpcType(INpcType type, int level)
   this.npcAI.clear();
   this.executingTasks.clear();
   this.npcAI.addAll(type.getAI(this, level));
+  }
+
+public Entity getTargetEntity()
+  {
+  return this.target.get();
+  }
+
+public void setTargetEntity(Entity ent)
+  {
+  this.target = new WeakReference<Entity>(ent);
   }
 
 @Override

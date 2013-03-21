@@ -1,8 +1,13 @@
 AncientWarfare c2012-2013 John Cummens aka Shadowmage
 Released under the General Public License v3.0 (or later)
 
-Creating an NPC Type
-
+Creating an NPC Type:
+Create the NPCType
+    set base params in NPCType
+    add AI entries
+    create npcVarsHelper in NpcType
+        set any per-entity special crap in NPCVarsHelper onTick methods...
+    it will self register for item creation
 
 
 

@@ -30,6 +30,13 @@ VEHICLES
 * rockets need adjusted to a set start velocity--will help with aim calculation greatly I think
 * fix flag rendering..need to figure out where it needs to go, and setup the colors part...
          
+NPCS
+* add save/load from NBT stuff
+* vars helper save/load stuff
+* inventory helper
+* attack/target helper
+* lots and lots of stuf....
+         
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
 * add tooltip functionality to elements (optional tooltip rendering, if enabled on the element)
