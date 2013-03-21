@@ -26,6 +26,7 @@ VEHICLES
 * entity collision detection and pushback/slowdown..
 * no entity collision
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
+* rockets need adjusted to a set start velocity--will help with aim calculation greatly I think
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar

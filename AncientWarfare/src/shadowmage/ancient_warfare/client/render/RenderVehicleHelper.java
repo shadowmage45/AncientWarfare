@@ -20,17 +20,34 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
+
+import org.lwjgl.opengl.GL11;
+
 import shadowmage.ancient_warfare.client.model.ModelVehicleBase;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
+import shadowmage.ancient_warfare.common.item.ItemVehicleSpawner;
+import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 
-public class RenderVehicleHelper extends Render
+public class RenderVehicleHelper extends Render implements IItemRenderer
 {
+
+private RenderVehicleHelper(){}
+private static RenderVehicleHelper INSTANCE;
+public static RenderVehicleHelper instance()
+  {
+  if(INSTANCE==null)
+    {
+    INSTANCE = new RenderVehicleHelper();
+    }
+  return INSTANCE;
+  }
 
 @Override
 public void doRender(Entity var1, double x, double y, double z, float yaw, float tick)
@@ -45,10 +62,40 @@ public void doRender(Entity var1, double x, double y, double z, float yaw, float
   GL11.glPopMatrix();
   }
 
-public static void renderVehicleModel(int type)
+public static void renderVehicleModel(int typeNum, int level)
   {
-  ModelVehicleBase model = RenderRegistry.instance().getVehicleModel(type);
-  model.render(null, 0, 0, 0, 0, 0, 0.0625f);
+  IVehicleType type = VehicleType.getVehicleType(typeNum);
+  ModelVehicleBase model = RenderRegistry.instance().getVehicleModel(typeNum);
+  if(type!=null && model!= null)
+    {
+    GL11.glPushMatrix();
+    GL11.glScalef(-1, -1, 1);    
+    Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(type.getTextureForMaterialLevel(level)));    
+    model.render(null, 0, 0, 0, 0, 0, 0.0625f);
+    GL11.glPopMatrix();
+    }
+  }
+
+@Override
+public boolean handleRenderType(ItemStack item, ItemRenderType type)
+  {  
+  return true;
+  }
+
+@Override
+public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
+  {
+  return true;
+  }
+
+@Override
+public void renderItem(ItemRenderType type, ItemStack item, Object... data)
+  {
+  GL11.glPushMatrix();
+  GL11.glScalef(0.35f, 0.35f, 0.35f);
+  GL11.glTranslatef(0, -1.f, 0);
+  renderVehicleModel(item.getItemDamage(), ItemVehicleSpawner.getVehicleLevelForStack(item));
+  GL11.glPopMatrix();
   }
 
 }

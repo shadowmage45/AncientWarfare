@@ -104,4 +104,13 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   par3List.addAll(displayStacks);
   }
 
+public static int getVehicleLevelForStack(ItemStack stack)
+  {
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWVehSpawner"))
+    {
+    return stack.getTagCompound().getCompoundTag("AWVehSpawner").getInteger("lev");
+    }
+  return 0;
+  }
+
 }

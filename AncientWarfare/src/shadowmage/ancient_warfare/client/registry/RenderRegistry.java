@@ -23,6 +23,9 @@ package shadowmage.ancient_warfare.client.registry;
 import java.util.HashMap;
 
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.ForgeHooks;
 import shadowmage.ancient_warfare.client.model.ModelBallistaStand;
 import shadowmage.ancient_warfare.client.model.ModelBatteringRam;
 import shadowmage.ancient_warfare.client.model.ModelCatapultMobileFixed;
@@ -43,6 +46,7 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileFixe
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileTurret;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandTurret;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
@@ -80,7 +84,7 @@ public void loadRenders()
   /**
    * vehicles..
    */  
-  RenderingRegistry.registerEntityRenderingHandler(VehicleBase.class, new RenderVehicleHelper());
+  RenderingRegistry.registerEntityRenderingHandler(VehicleBase.class, RenderVehicleHelper.instance());
   this.addVehicleRender(VehicleRegistry.CATAPULT_STAND_FIXED, new RenderCatapultStandFixed(), new ModelCatapultStandFixed());
   this.addVehicleRender(VehicleRegistry.CATAPULT_STAND_TURRET, new RenderCatapultStandTurret(), new ModelCatapultStandTurret());
   this.addVehicleRender(VehicleRegistry.CATAPULT_MOBILE_FIXED, new RenderCatapultMobileFixed(), new ModelCatapultMobileFixed());
@@ -102,6 +106,11 @@ public void loadRenders()
   this.addMissileRender(Ammo.ammoArrow.getAmmoType(), new RenderArrow());  
   this.addMissileRender(Ammo.ammoStoneShot.getAmmoType(), new RenderShot());
   this.addMissileRender(Ammo.ammoRocket.getAmmoType(), new RenderArrow());
+  
+  /**
+   * load up the vehicle item renderer...
+   */
+  MinecraftForgeClient.registerItemRenderer(ItemLoader.vehicleSpawner.itemID, RenderVehicleHelper.instance());
   }
 
 public void addVehicleRender(IVehicleType type, RenderVehicleBase rend, ModelVehicleBase model)
@@ -130,7 +139,7 @@ public RenderVehicleBase getRenderForVehicle(int type)
   }
 
 public ModelVehicleBase getVehicleModel(int type)
-  {
+  {  
   return this.vehicleModels.get(type);
   }
 
