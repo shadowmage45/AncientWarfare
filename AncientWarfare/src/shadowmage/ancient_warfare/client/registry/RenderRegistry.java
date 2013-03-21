@@ -23,6 +23,13 @@ package shadowmage.ancient_warfare.client.registry;
 import java.util.HashMap;
 
 import net.minecraft.client.renderer.entity.Render;
+import shadowmage.ancient_warfare.client.model.ModelBallistaStand;
+import shadowmage.ancient_warfare.client.model.ModelBatteringRam;
+import shadowmage.ancient_warfare.client.model.ModelCatapultMobileFixed;
+import shadowmage.ancient_warfare.client.model.ModelCatapultMobileTurret;
+import shadowmage.ancient_warfare.client.model.ModelCatapultStandFixed;
+import shadowmage.ancient_warfare.client.model.ModelCatapultStandTurret;
+import shadowmage.ancient_warfare.client.model.ModelVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderArrow;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
 import shadowmage.ancient_warfare.client.render.RenderShot;
@@ -66,6 +73,7 @@ private RenderCatapultStandFixed dummyRender = new RenderCatapultStandFixed();
 
 private HashMap<Integer, Render> missileRenders = new HashMap<Integer, Render>();
 private HashMap<Integer, RenderVehicleBase> vehicleRenders = new HashMap<Integer, RenderVehicleBase>();
+private HashMap<Integer, ModelVehicleBase> vehicleModels = new HashMap<Integer, ModelVehicleBase>();
 
 public void loadRenders()
   {  
@@ -73,19 +81,19 @@ public void loadRenders()
    * vehicles..
    */  
   RenderingRegistry.registerEntityRenderingHandler(VehicleBase.class, new RenderVehicleHelper());
-  this.addVehicleRender(VehicleRegistry.CATAPULT_STAND_FIXED, new RenderCatapultStandFixed());
-  this.addVehicleRender(VehicleRegistry.CATAPULT_STAND_TURRET, new RenderCatapultStandTurret());
-  this.addVehicleRender(VehicleRegistry.CATAPULT_MOBILE_FIXED, new RenderCatapultMobileFixed());
-  this.addVehicleRender(VehicleRegistry.CATAPULT_MOBILE_TURRET, new RenderCatapultMobileTurret());
-  this.addVehicleRender(VehicleRegistry.BALLISTA_STAND_FIXED, new RenderBallistaStand());
-  this.addVehicleRender(VehicleRegistry.BALLISTA_STAND_TURRET, new RenderBallistaStand());
-  this.addVehicleRender(VehicleRegistry.BALLISTA_MOBILE_FIXED, new RenderBallistaMobile());
-  this.addVehicleRender(VehicleRegistry.BALLISTA_MOBILE_TURRET, new RenderBallistaMobile());
-  this.addVehicleRender(VehicleRegistry.BATTERING_RAM, new RenderBatteringRam());
-  this.addVehicleRender(VehicleRegistry.CANNON_STAND_FIXED, new RenderCannonStandFixed());
-  this.addVehicleRender(VehicleRegistry.CANNON_STAND_TURRET, new RenderCannonStandFixed());
-  this.addVehicleRender(VehicleRegistry.CANNON_MOBILE_FIXED, new RenderCannonStandFixed());  
-  this.addVehicleRender(VehicleRegistry.HWACHA, new RenderCatapultStandFixed());
+  this.addVehicleRender(VehicleRegistry.CATAPULT_STAND_FIXED, new RenderCatapultStandFixed(), new ModelCatapultStandFixed());
+  this.addVehicleRender(VehicleRegistry.CATAPULT_STAND_TURRET, new RenderCatapultStandTurret(), new ModelCatapultStandTurret());
+  this.addVehicleRender(VehicleRegistry.CATAPULT_MOBILE_FIXED, new RenderCatapultMobileFixed(), new ModelCatapultMobileFixed());
+  this.addVehicleRender(VehicleRegistry.CATAPULT_MOBILE_TURRET, new RenderCatapultMobileTurret(), new ModelCatapultMobileTurret());
+  this.addVehicleRender(VehicleRegistry.BALLISTA_STAND_FIXED, new RenderBallistaStand(), new ModelBallistaStand());
+  this.addVehicleRender(VehicleRegistry.BALLISTA_STAND_TURRET, new RenderBallistaStand(), new ModelBallistaStand());
+  this.addVehicleRender(VehicleRegistry.BALLISTA_MOBILE_FIXED, new RenderBallistaMobile(), new ModelBallistaStand());
+  this.addVehicleRender(VehicleRegistry.BALLISTA_MOBILE_TURRET, new RenderBallistaMobile(), new ModelBallistaStand());
+  this.addVehicleRender(VehicleRegistry.BATTERING_RAM, new RenderBatteringRam(), new ModelBatteringRam());
+  this.addVehicleRender(VehicleRegistry.CANNON_STAND_FIXED, new RenderCannonStandFixed(), null);
+  this.addVehicleRender(VehicleRegistry.CANNON_STAND_TURRET, new RenderCannonStandFixed(), null);
+  this.addVehicleRender(VehicleRegistry.CANNON_MOBILE_FIXED, new RenderCannonStandFixed(), null);  
+  this.addVehicleRender(VehicleRegistry.HWACHA, new RenderCatapultStandFixed(), null);
   
   /**
    * missiles...
@@ -96,9 +104,10 @@ public void loadRenders()
   this.addMissileRender(Ammo.ammoRocket.getAmmoType(), new RenderArrow());
   }
 
-public void addVehicleRender(IVehicleType type, RenderVehicleBase rend)
+public void addVehicleRender(IVehicleType type, RenderVehicleBase rend, ModelVehicleBase model)
   {
   this.vehicleRenders.put(type.getGlobalVehicleType(), rend);
+  this.vehicleModels.put(type.getGlobalVehicleType(), model);
   }
   
 public void addMissileRender(int type, Render rend)
@@ -118,6 +127,11 @@ public RenderVehicleBase getRenderForVehicle(int type)
     return dummyRender;
     }
   return this.vehicleRenders.get(type);
+  }
+
+public ModelVehicleBase getVehicleModel(int type)
+  {
+  return this.vehicleModels.get(type);
   }
 
 

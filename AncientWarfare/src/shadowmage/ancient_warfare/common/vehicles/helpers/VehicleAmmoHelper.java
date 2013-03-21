@@ -101,7 +101,7 @@ public void addUseableAmmo(IAmmoType ammo)
 
 public void handleAmmoSelectInput(int delta)
   {
-  Config.logDebug("handling ammo selection INPUT. server: "+!vehicle.worldObj.isRemote+" delta: "+delta);
+//  Config.logDebug("handling ammo selection INPUT. server: "+!vehicle.worldObj.isRemote+" delta: "+delta);
   if(this.ammoEntries.size()>0)
     {
     boolean updated = false;
@@ -135,7 +135,7 @@ public void handleAmmoSelectInput(int delta)
 public void handleAmmoSelectPacket(NBTTagCompound tag)
   {  
   int num = tag.getInteger("num");
-  Config.logDebug("handling ammo selection packet. server: "+!vehicle.worldObj.isRemote+" ammoNum: "+num);
+//  Config.logDebug("handling ammo selection packet. server: "+!vehicle.worldObj.isRemote+" ammoNum: "+num);
   if(num>=0 && num < this.ammoEntries.size() && num != this.currentAmmoType)
     {
     this.currentAmmoType = num;
@@ -162,7 +162,7 @@ public void handleAmmoSelectPacket(NBTTagCompound tag)
  */
 public void handleAmmoCountUpdate(NBTTagCompound tag)
   {
-  Config.logDebug("updating single ammo type");
+//  Config.logDebug("updating single ammo type");
   int num = tag.getInteger("num");
   if(num>=0 && num < this.ammoEntries.size())
     {
@@ -180,7 +180,7 @@ public void updateAmmoCounts()
     {
     return;
     }
-  Config.logDebug("counting ammos!!");
+//  Config.logDebug("counting ammos!!");
   for(VehicleAmmoEntry ent : this.ammoEntries)
     {
     ent.ammoCount = 0;
@@ -216,7 +216,7 @@ public void updateAmmoCounts()
  */
 public void handleAmmoUpdatePacket(NBTTagCompound tag)
   {
-  Config.logDebug("receiving ammo count client update");
+//  Config.logDebug("receiving ammo count client update");
   for(VehicleAmmoEntry ent : this.ammoEntries)
     {
     ent.ammoCount = 0;
@@ -290,7 +290,7 @@ public NBTTagCompound getNBTTag()
     NBTTagCompound entryTag = new NBTTagCompound();
     entryTag.setInteger("num", ent.baseAmmoType.getAmmoType());
     entryTag.setInteger("cnt", ent.ammoCount);
-    Config.logDebug("writing ammo count "+entryTag.getInteger("num")+","+entryTag.getInteger("cnt"));
+//    Config.logDebug("writing ammo count "+entryTag.getInteger("num")+","+entryTag.getInteger("cnt"));
     tagList.appendTag(entryTag);
     }  
   tag.setTag("list", tagList);
@@ -313,7 +313,7 @@ public void readFromNBT(NBTTagCompound tag)
     int cnt = entryTag.getInteger("cnt");    
     if(this.ammoTypes.containsKey(num))
       {
-      Config.logDebug("reading ammo count "+num+","+cnt);
+//      Config.logDebug("reading ammo count "+num+","+cnt);
       this.ammoTypes.get(num).ammoCount = cnt;
       }
     }

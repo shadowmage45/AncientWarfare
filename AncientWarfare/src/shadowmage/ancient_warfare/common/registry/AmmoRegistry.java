@@ -56,6 +56,7 @@ public void registerAmmoTypes()
    */
   this.registerAmmoTypeWithItem(Ammo.ammoArrow);
   this.registerAmmoTypeWithItem(Ammo.ammoStoneShot);
+  this.registerAmmoTypeWithItem(Ammo.ammoRocket);
   }
 
 /**

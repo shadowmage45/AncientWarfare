@@ -25,6 +25,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.client.model.ModelVehicleBase;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -42,6 +43,12 @@ public void doRender(Entity var1, double x, double y, double z, float yaw, float
   Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(var1.getTexture()));
   RenderRegistry.instance().getRenderForVehicle(vehicle.vehicleType.getGlobalVehicleType()).renderVehicle(vehicle, x, y, z, yaw, tick);  
   GL11.glPopMatrix();
+  }
+
+public static void renderVehicleModel(int type)
+  {
+  ModelVehicleBase model = RenderRegistry.instance().getVehicleModel(type);
+  model.render(null, 0, 0, 0, 0, 0, 0.0625f);
   }
 
 }

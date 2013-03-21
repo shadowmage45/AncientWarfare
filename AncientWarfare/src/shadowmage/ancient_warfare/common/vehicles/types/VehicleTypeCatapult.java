@@ -41,6 +41,7 @@ public VehicleTypeCatapult(int typeNum)
   this.vehicleMaterial = VehicleMaterial.materialWood;
   this.validAmmoTypes.add(Ammo.ammoArrow);
   this.validAmmoTypes.add(Ammo.ammoStoneShot);  
+  this.validAmmoTypes.add(Ammo.ammoRocket);
   this.validArmors.add(ArmorRegistry.armorStone);
   
   this.isMountable = true;  

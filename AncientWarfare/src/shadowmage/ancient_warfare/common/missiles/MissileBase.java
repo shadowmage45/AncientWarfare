@@ -99,7 +99,7 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
   this.prevRotationYaw = this.rotationYaw;
   if(this.ammoType.isRocket())//use launch power to determine rocket burn time...
     {
-    this.rocketBurnTime = (int) MathHelper.sqrt_float(mx*mx+my*my+mz*mz);
+    this.rocketBurnTime = (int) MathHelper.sqrt_float(mx*mx+my*my+mz*mz)*20;
     this.motionX*= AmmoRocket.initalVelocityFactor;
     this.motionZ*= AmmoRocket.initalVelocityFactor;
     this.motionY*= AmmoRocket.initalVelocityFactor;
@@ -146,8 +146,13 @@ public void applyEntityCollision(Entity par1Entity)
 @Override
 public void onUpdate()
   {
+  this.ticksExisted++;
   super.onUpdate();
   this.onMovementTick();
+  if(this.ticksExisted>6000 && !this.worldObj.isRemote)//5 min timer max for missiles...
+    {
+    this.setDead();
+    }
   }
 
 public void onMovementTick()
@@ -260,6 +265,7 @@ public void onMovementTick()
       if(this.worldObj.isRemote)
         {
         //TODO spawn particles...smoke..fire...wtf ever
+        this.worldObj.spawnParticle("smoke", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
         }
       }
     else
@@ -323,6 +329,7 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.blockZ = tag.getInteger("bZ");
   this.blockID = tag.getInteger("bID");
   this.blockMeta = tag.getInteger("bMd");
+  this.ticksExisted = tag.getInteger("ticks");
   }
 
 @Override
@@ -335,6 +342,7 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setInteger("bZ", this.blockZ);
   tag.setInteger("bID", this.blockID);
   tag.setInteger("bMd", this.blockMeta);
+  tag.setInteger("ticks", this.ticksExisted);
   }
 
 @Override
@@ -354,6 +362,7 @@ public void writeSpawnData(ByteArrayDataOutput data)
   data.writeInt(blockZ);
   data.writeInt(blockID);
   data.writeInt(blockMeta);
+  data.writeInt(rocketBurnTime);
   }
 
 @Override
@@ -369,5 +378,6 @@ public void readSpawnData(ByteArrayDataInput data)
   this.blockZ = data.readInt();
   this.blockID = data.readInt();
   this.blockMeta = data.readInt();
+  this.rocketBurnTime = data.readInt();
   }
 }

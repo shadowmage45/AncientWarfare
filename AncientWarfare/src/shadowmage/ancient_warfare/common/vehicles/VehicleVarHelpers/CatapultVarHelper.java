@@ -58,7 +58,7 @@ public void onFiringUpdate()
 @Override
 public void onLaunchingUpdate()
   { 
-  for(int i = 0; i <10; i++)
+  for(int i = 0; i <1; i++)
     {
     vehicle.firingHelper.spawnMissile(0, 0, 0);
     }  

@@ -26,7 +26,9 @@ import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.missiles.AmmoRocket;
+import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -43,7 +45,7 @@ public static void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlaye
     {
     renderBatteringRamOverlay(vehicle, player, partialTick);
     }
-  else if(vehicle.vehicleType == VehicleRegistry.HWACHA)
+  else if(vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType()==Ammo.ammoRocket)
     {
     renderRocketFlightPath(vehicle, player, partialTick);
     }
@@ -95,7 +97,8 @@ public static void renderRocketFlightPath(VehicleBase vehicle, EntityPlayer play
   double vY = Trig.cosDegrees((float) angle)*speed ;
   double vX = Trig.sinDegrees((float) yaw)*vH ;
   double vZ = Trig.cosDegrees((float) yaw)*vH ;
-  int rocketBurnTime = (int) MathHelper.sqrt_double(vX*vX+vY*vY+vZ*vZ);
+  int rocketBurnTime = (int) MathHelper.sqrt_double(vX*vX+vY*vY+vZ*vZ)*20;
+  
   vY *= AmmoRocket.initalVelocityFactor;
   vX *= AmmoRocket.initalVelocityFactor;
   vZ *= AmmoRocket.initalVelocityFactor;  

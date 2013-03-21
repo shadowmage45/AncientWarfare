@@ -344,7 +344,7 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
     motY = Trig.cosDegrees(angle)*testVelocity*0.05f;
     if(rocket)
       {
-      rocketBurnTime = (int) MathHelper.sqrt_float(motX*motX+motY*motY);
+      rocketBurnTime = (int) MathHelper.sqrt_float(motX*motX+motY*motY)*20;
       motX *= AmmoRocket.initalVelocityFactor;
       motY *= AmmoRocket.initalVelocityFactor;
       }

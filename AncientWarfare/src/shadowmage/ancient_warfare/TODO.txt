@@ -22,8 +22,9 @@ VEHICLES
 * remove old targetPos code...or use it for other things....
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
 * finish ballista animations (trigger)
-* not on ground, falling!!! (and no hit-detection for vehicles while riding)
+* not on ground, falling!!! (and no hit-detection for vehicles while riding)--nothing to worry about on this one, it is consistent between client/server
 * entity collision detection and pushback/slowdown..
+* no entity collision
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
          
 GUI FRAMEWORK
@@ -173,7 +174,7 @@ TWEAKS/OPTIMIZATION
 /********** 03-20-13 **********/
 * add rockets, hwacha dummy class...
 * if logging out while on a vehicle it will continue to spin...
-* no entity collision
+* fix rockets up...mostly done'ish. need better range-finding capabilities...
 
 /********** 03-21-13 **********/
 /********** 03-22-13 **********/
