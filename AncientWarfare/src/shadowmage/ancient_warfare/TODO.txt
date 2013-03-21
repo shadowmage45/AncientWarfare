@@ -5,6 +5,7 @@ GENERAL
 * figure out a good way to index images for item subtypes--vehicles could use their own icons for each material level, not just vehicle type
         --might be made easier in 1.5 by the icon changes...maybe...also icon changes are a pain in the ass in general...
 * partially destroyable blocks ? (hold destruction status as meta-data?)
+* cache display stack list for vehicles/ammo/upgrades/armor/npcs/etc
 
 PRE-VEHICLE TEST RELEASE
 * add vehicles
@@ -27,6 +28,7 @@ VEHICLES
 * no entity collision
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
 * rockets need adjusted to a set start velocity--will help with aim calculation greatly I think
+* fix flag rendering..need to figure out where it needs to go, and setup the colors part...
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
@@ -176,8 +178,8 @@ TWEAKS/OPTIMIZATION
 * add rockets, hwacha dummy class...
 * if logging out while on a vehicle it will continue to spin...
 * fix rockets up...mostly done'ish. need better range-finding capabilities...
-
 /********** 03-21-13 **********/
+* add vehicle inventory item render
 /********** 03-22-13 **********/
 /********** 03-23-13 **********/
 /********** 03-24-13 **********/

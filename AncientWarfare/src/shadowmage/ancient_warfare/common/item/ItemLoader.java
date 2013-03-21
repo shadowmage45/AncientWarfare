@@ -41,7 +41,7 @@ public static final AWItemBase structureScanner = new ItemStructureScanner(Confi
 public static final AWItemBase structureCreativeBuilder = new ItemBuilderInstant(Config.getItemID("itemSingle.structureBuilderCreative", 13006, "Creative-Mode Selectable Structure Builder"));
 public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Config.getItemID("itemSingle.builderDirect", 13007, "Survival mode builder, uses blocks from inventory"));
 public static final AWItemBase structureCreativeBuilderTicked = new ItemBuilderTicked(Config.getItemID("itemSingle.structureBuilderCreativeTicked", 13008, "Creative-mode slow (ticked) builder"));
-public static final AWItemBase debugEditor = new ItemCreativeEditor(Config.getItemID("itemSingle.templateEditor", 13009, "Creative-mode template editor"));
+public static final AWItemBase structureEditor = new ItemCreativeEditor(Config.getItemID("itemSingle.templateEditor", 13009, "Creative-mode template editor"));
 public static final AWItemBase armorItem = new ItemVehicleArmor(Config.getItemID("itemMulti.vehicleArmor", 13010, "Vehicle Armor Component"));
 public static final AWItemBase npcSpawner = new ItemNpcSpawner(Config.getItemID("itemMulti.npcSpawner", 13010, "Npc Spawning Item"));
 
@@ -80,7 +80,7 @@ private void loadItems()
   this.registerItemSingle(structureScanner, "Structure Scanner", "Structure Scanner", "Structure Scanning Item, Right-Click to Use");
   this.registerItemSingle(structureCreativeBuilder, "Creative Builder", "Creative Mode Building Tool", "Right-Click to Build, Sneak+Right-Click to open GUI");
   this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Right-Click to Scan, and then Build");
-  this.registerItemSingle(debugEditor, "Debug Editor", "Debug editor gui opening item", "Right-Click to open editing selection GUI");
+  this.registerItemSingle(structureEditor, "Structure Editor", "Structure Template Editor", "Right-Click to open editor selection GUI");
   this.registerItemWithSubtypes(componentItem);
   this.registerItemWithSubtypes(ammoItem);
   this.registerItemWithSubtypes(vehicleSpawner);

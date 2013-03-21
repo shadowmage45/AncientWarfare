@@ -22,10 +22,10 @@ package shadowmage.ancient_warfare.client.registry;
 
 import java.util.HashMap;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.ForgeHooks;
 import shadowmage.ancient_warfare.client.model.ModelBallistaStand;
 import shadowmage.ancient_warfare.client.model.ModelBatteringRam;
 import shadowmage.ancient_warfare.client.model.ModelCatapultMobileFixed;
@@ -50,6 +50,7 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -111,6 +112,11 @@ public void loadRenders()
    * load up the vehicle item renderer...
    */
   MinecraftForgeClient.registerItemRenderer(ItemLoader.vehicleSpawner.itemID, RenderVehicleHelper.instance());
+  
+  /**
+   * npcs...
+   */
+  RenderingRegistry.registerEntityRenderingHandler(NpcBase.class, new RenderBiped(new ModelBiped(), 1.0f));
   }
 
 public void addVehicleRender(IVehicleType type, RenderVehicleBase rend, ModelVehicleBase model)

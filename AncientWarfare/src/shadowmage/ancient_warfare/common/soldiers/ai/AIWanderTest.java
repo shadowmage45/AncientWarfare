@@ -21,22 +21,56 @@
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
-public interface INpcAI
+public class AIWanderTest extends NpcAI
 {
 
-public abstract int getGlobalAIType();//global reference number for AI, used for reconstructing trees from data
-public abstract String getTaskName();//the name of the task..for GUI referencing...
-public abstract int getSuccessTicks();//how many ticks to check before executing again, if previous execution succeeded
-public abstract int getFailureTicks();//how many ticks to check before executing again, if previous execution failed
-public abstract boolean shouldExecute(NpcBase npc);//a quick pre-check to see if the task should execute this tick
-public abstract int[] exclusiveTasks();//tasks that cannot execute the same time as this, checked in first-come fist serve order
+/**
+ * @param typeNum
+ * @param npc
+ */
+public AIWanderTest(NpcBase npc)
+  {
+  super(npc);
+  this.successTicks = 80;
+  this.failureTicks = 10;
+  }
 
-public abstract void onTick(NpcBase npc);//apply your AI actions to the NPC here.  Called during the AI update loop, only if shouldExecute()==true && ticksTilTry<=0
+@Override
+public int exclusiveTasks()
+  {
+  return ATTACK+MOVE_TO+MOUNT_VEHICLE+FOLLOW+REPAIR+HEAL+HARVEST;
+  }
 
-public abstract void readFromNBT(NBTTagCompound tag);
-public abstract NBTTagCompound getNBTTag();
+@Override
+public void onTick()
+  {
+  double bX = npc.posX + rng.nextInt(32)-16;
+  double bY = npc.posY;
+  double bZ = npc.posZ + rng.nextInt(32)-16;
+  npc.getMoveHelper().setMoveTo(bX, bY, bZ, npc.getAIMoveSpeed());
+  this.success = true;
+  this.finished = true; 
+  }
 
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  return new NBTTagCompound();
+  }
+
+@Override
+public void onAiStarted()
+  {
+
+  }
 
 }

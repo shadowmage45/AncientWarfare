@@ -29,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
+import shadowmage.ancient_warfare.common.soldiers.INpcType;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -65,11 +66,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,   
     {
     int level = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");    
     hit = BlockTools.offsetForSide(hit, side);  
-    NpcBase npc = NpcRegistry.getNpcForType(stack.getItemDamage(), world);
-    npc.setRank(level);
+    NpcBase npc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level);
     npc.teamNum = TeamTracker.instance().getTeamForPlayerServer(player.getEntityName());
     npc.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
-    npc.prevRotationYaw = npc.rotationYaw = -player.rotationYaw;
+    npc.prevRotationYaw = npc.rotationYaw = player.rotationYaw;
     world.spawnEntityInWorld(npc);
     if(!player.capabilities.isCreativeMode)
       {
@@ -94,11 +94,12 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
     if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
       {
       NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
-      if(tag.hasKey("name"))
-        {
-        par3List.add("NPC Type: "+tag.getString("name"));
-        }
+      par3List.add("NPC Type: "+tag.getString("name"));
       par3List.add("NPC Rank: "+tag.getInteger("lev"));      
+      }
+    else
+      {
+      par3List.add("Invalid NPC Spawner--Something has corrupted or removed the itemStack NBT data.");
       }
     }  
   }
@@ -109,4 +110,6 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   List displayStacks = NpcRegistry.instance().getCreativeDisplayItems();
   par3List.addAll(displayStacks);
   }
+
+
 }

@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.soldiers;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -28,7 +29,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
-import shadowmage.ancient_warfare.common.soldiers.ai.INpcAI;
+import shadowmage.ancient_warfare.common.soldiers.INpcType.NpcVarsHelper;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -44,43 +45,71 @@ public int rank = 0;
 public ArrayList<INpcAI> npcAI = new ArrayList<INpcAI>();
 public ArrayList<INpcAI> executingTasks = new ArrayList<INpcAI>();
 
+public INpcType npcType = NpcTypeBase.npcDummy;
+public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
+
 /**
  * @param par1World
  */
 public NpcBase(World par1World)
   {
   super(par1World);
+  this.varsHelper = new NpcDummyVarHelper(this);  
   }
 
-public void setRank(int num){}
+public void setNpcType(INpcType type, int level)
+  {
+  this.npcType = type;
+  this.rank = level;
+  this.npcAI.clear();
+  this.executingTasks.clear();
+  this.npcAI.addAll(type.getAI(this, level));
+  }
 
 @Override
 protected void updateAITick() 
   {
-  this.executingTasks.clear();
-  for(INpcAI task : this.npcAI)
-    {
-    boolean found = false;
-    int[] exclude = task.exclusiveTasks();
-    for(INpcAI execTask : this.executingTasks)
-      {      
-      for(int i = 0; i < exclude.length; i++)
+  Iterator<INpcAI> it = this.executingTasks.iterator();
+  INpcAI task;
+  while(it.hasNext())
+    {    
+    task = it.next();
+    if(task.shouldExecute(this))
+      {
+      if(!task.hasStarted())
         {
-        if(exclude[i]==execTask.getGlobalAIType())
-          {
-          found = true;
-          break;
-          }
+        task.startAI();
         }
-      if(found)
+      task.onTick();
+      if(task.isFinished())
         {
-        break;
+        it.remove();
         }
       }
-    if(!found && task.shouldExecute(this))
+    else
       {
-      this.executingTasks.add(task);
-      task.onTick(this);
+      it.remove();
+      }    
+    }
+  for(INpcAI possibleTask : this.npcAI)
+    {
+    if(this.executingTasks.contains(possibleTask))//if task is already present in executing list, do not add
+      {
+      continue;
+      }
+    boolean found = false;
+    int exclude = possibleTask.exclusiveTasks();   
+    for(INpcAI execTask : this.executingTasks)
+      {  
+      if((execTask.exclusiveTasks() & exclude )!= 0)
+        {
+        found = true;
+        break;
+        }      
+      }
+    if(!found && possibleTask.shouldExecute(this))
+      {
+      this.executingTasks.add(possibleTask);
       }
     }
   }
@@ -100,13 +129,14 @@ public int getMaxHealth()
 @Override
 public String getTexture()
   {
-  return this.texture;
+  return this.npcType.getDisplayTexture(rank);
   }
 
 @Override
 public void onUpdate()
   {
   super.onUpdate();
+  this.varsHelper.onTick();
   }
 
 @Override
@@ -135,6 +165,7 @@ public void writeToNBT(NBTTagCompound tag)
   super.writeToNBT(tag);
   tag.setInteger("team", this.teamNum);
   tag.setInteger("rank", this.rank);
+  tag.setInteger("type", this.npcType.getGlobalNpcType());
   }
 
 @Override
@@ -143,6 +174,8 @@ public void readFromNBT(NBTTagCompound tag)
   super.readFromNBT(tag);
   this.teamNum = tag.getInteger("team");
   this.rank = tag.getInteger("rank");
+  int type = tag.getInteger("type");
+  this.setNpcType(NpcTypeBase.getNpcType(type), this.rank);
   }
 
 @Override

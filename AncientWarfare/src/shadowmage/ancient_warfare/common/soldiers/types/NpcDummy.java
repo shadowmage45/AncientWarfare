@@ -18,28 +18,38 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.registry.entry;
+package shadowmage.ancient_warfare.common.soldiers.types;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.soldiers.INpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
+import shadowmage.ancient_warfare.common.soldiers.ai.AIWanderTest;
 
-public class NpcEntry
+public class NpcDummy extends NpcTypeBase
 {
-public final String displayName;
-public final String displayTooltip;
-public final int numOfRanks;
-public final List<String> rankNames = new ArrayList<String>();
-public final Class <? extends NpcBase> entityClass;
 
-public NpcEntry (Class <? extends NpcBase> clz, String name, String tooltip, int ranks, List<String> rankNames)
+/**
+ * @param type
+ */
+public NpcDummy(int type)
   {
-  this.entityClass = clz;
-  this.displayName = name;
-  this.displayTooltip = tooltip;
-  this.numOfRanks = ranks;
-  this.rankNames.addAll(rankNames);      
+  super(type);
+  this.displayName = "Dummy Test";
+  this.tooltip = "Dummy Test -- PlaceHolder tooltip";
+  this.addLevel("Dummy Test Level Name 1", "foo");
+  this.addLevel("Dummy Test Level Name 2", "foo");
+  this.isCombatUnit = true;
+  }
+
+@Override
+public List<INpcAI> getAI(NpcBase npc, int level)
+  {
+  ArrayList<INpcAI> aiEntries = new ArrayList<INpcAI>();
+  aiEntries.add(new AIWanderTest(npc));
+  return aiEntries;
   }
 
 }

@@ -21,24 +21,21 @@
 package shadowmage.ancient_warfare.common.registry;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.registry.entry.NpcEntry;
+import shadowmage.ancient_warfare.common.soldiers.INpcType;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
 
 
 public class NpcRegistry
 {
-
-private static Map<Integer, NpcEntry> npcTypes = new HashMap<Integer, NpcEntry>();
 
 private NpcRegistry(){}
 private static NpcRegistry INSTANCE;
@@ -50,51 +47,59 @@ public static NpcRegistry instance()
 
 public void registerNPCs()
   {
+  //DEBUG
+  ItemLoader.instance().addSubtypeToItem(ItemLoader.npcSpawner, NpcTypeBase.npcDummy.getGlobalNpcType(), NpcTypeBase.npcDummy.getDisplayName(), NpcTypeBase.npcDummy.getDisplayTooltip());
+  //END DEBUG...
   
+  INpcType[] types = NpcTypeBase.getNpcTypes();
+  for(INpcType type : types)
+    {
+    if(type==null || type.getGlobalNpcType()==0){continue;}//if null or dummy type, don't register....
+    ItemLoader.instance().addSubtypeToItem(ItemLoader.npcSpawner, type.getGlobalNpcType(), type.getDisplayName(), type.getDisplayTooltip());
+    }
   }
 
 public List getCreativeDisplayItems()
   {
   List<ItemStack> stacks = new ArrayList<ItemStack>();
-  Iterator<Entry<Integer, NpcEntry>> it = this.npcTypes.entrySet().iterator();
-  Entry<Integer, NpcEntry> ent = null;
-  ItemStack stack = null;
-  NpcEntry type = null;
-  while(it.hasNext())
+  ItemStack stack = null;  
+  NBTTagCompound tag = null;
+  INpcType[] types = NpcTypeBase.getNpcTypes();
+  for(INpcType type : types)
     {
-    ent = it.next();
-    type = ent.getValue();
-    if(type==null )
+    if(type==null || type.getGlobalNpcType()==0){continue;}//if null or dummy type, don't register....
+    for(int i = 0; i < type.getNumOfLevels(); i++)
       {
-      continue;
-      }
-    for(int i = 0; i < type.numOfRanks; i++)
-      {
-      stack = new ItemStack(ItemLoader.npcSpawner,1, ent.getKey());
-      NBTTagCompound tag = new NBTTagCompound();
+      stack = new ItemStack(ItemLoader.npcSpawner,1,type.getGlobalNpcType());
+      tag = new NBTTagCompound();
       tag.setInteger("lev", i);
-      if(i <type.rankNames.size())
-        {
-        tag.setString("name", type.rankNames.get(i));
-        }
+      tag.setString("name", type.getLevelName(i));
       stack.setTagInfo("AWNpcSpawner", tag);
       stacks.add(stack);
       }
-    }
+    }  
   return stacks;
   }
 
-public static NpcBase getNpcForType(int num, World world)
+public static NpcBase getNpcForType(int num, World world, int level)
   {
-  if(npcTypes.containsKey(num))
+  NpcBase npc = new NpcBase(world);
+  INpcType type = NpcTypeBase.getNpcType(num);
+  if(type==null)
     {
-    try
-      {
-      return npcTypes.get(num).entityClass.getDeclaredConstructor(World.class).newInstance(world);
-      }
-    catch(Exception e){}    
+    return null;
     }
-  return null;
+  npc.setNpcType(type, level);  
+  return npc;
   }
 
+public static ItemStack getStackFor(INpcType type, int level)
+  {
+  ItemStack stack = new ItemStack(ItemLoader.npcSpawner.itemID, 1, type.getGlobalNpcType());
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setInteger("lev", level);
+  tag.setString("name", type.getLevelName(level));
+  stack.setTagInfo("AWNpcSpawner", tag);
+  return null;
+  }
 }
