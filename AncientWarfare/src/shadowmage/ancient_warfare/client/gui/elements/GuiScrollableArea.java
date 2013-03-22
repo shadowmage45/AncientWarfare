@@ -38,4 +38,10 @@ public GuiScrollableArea(int elementNum, GuiContainerAdvanced parent, int x, int
   this.scrollBar.updateRenderPos(w-16, 0);
   }
 
+@Override
+public void updateTotalHeight(int height)
+  {
+  this.totalHeight = height;
+  this.scrollBar.updateHandleHeight(totalHeight, height);  
+  }
 }

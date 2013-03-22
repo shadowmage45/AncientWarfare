@@ -83,12 +83,13 @@ public static AWCore instance;
  */
 @PreInit
 public void preInit(FMLPreInitializationEvent evt) 
-  {
+  {  
   /**
    * load config file and setup logger
    */
   Config.loadConfig(evt.getSuggestedConfigurationFile());
   Config.setLogger(evt.getModLog());
+  Config.log("Starting Loading.  Version: "+"MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+"-"+Config.CORE_BUILD_STATUS);
 
   /**
    * register player tracker
@@ -140,7 +141,7 @@ public void preInit(FMLPreInitializationEvent evt)
   AWEntityRegistry.registerEntity(VehicleBase.class, "Vehicle.VehicleBase", 130, 3, false);
   VehicleRegistry.instance().registerVehicles();
   AWEntityRegistry.registerEntity(NpcBase.class, "Npc.NpcBase", 130, 3, true);
-  NpcRegistry.instance().registerNPCs();  
+  Config.log("Ancient Warfare Pre-Init finished");
   }
 
 /**
@@ -150,6 +151,7 @@ public void preInit(FMLPreInitializationEvent evt)
 @Init
 public void init(FMLInitializationEvent evt)
   {
+  Config.log("Ancient Warfare Init started");
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
   proxy.registerClientData();
 
@@ -157,20 +159,23 @@ public void init(FMLInitializationEvent evt)
    * process loaded structures
    */
   AWStructureModule.instance().process();
+  Config.log("Ancient Warfare Init completed");
   }
 
 /**
- * finalize config settings
+ * finalize config settings, load NPCs (which rely on other crap from other mods..potentially)
  * @param evt
  */
 @PostInit
 public void load(FMLPostInitializationEvent evt)
   {  
-
+  Config.log("Ancient Warfare Post-Init started");
+  NpcRegistry.instance().registerNPCs(); 
   /**
    * and finally, save the config in case there were any changes made during init
    */
   Config.saveConfig();
+  Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages.");
   }
 
 

@@ -39,6 +39,7 @@ public abstract int getInventorySize(int level);
 public abstract List<INpcAI> getAI(NpcBase npc, int level);
 
 public abstract boolean isCombatUnit();
+public abstract boolean isVanillaVillager();
 public abstract List<ItemStack> getValidTools();
 public abstract List<ItemStack> getValidArmors();
 

@@ -49,8 +49,9 @@ public class InputHelper extends KeyHandler implements IHandleInput
  * VANILLA KEYBINDS (TO SHOW UP IN VANILLA CONFIG MENU)
  */
 static KeyBinding options = new KeyBinding("AW-options", Keyboard.KEY_F7);
-private static KeyBinding[] keys = new KeyBinding[]{options};
-private static boolean[] keyRepeats = new boolean []{false};
+static KeyBinding teamControl = new KeyBinding("AW-TeamControl", Keyboard.KEY_F6);
+private static KeyBinding[] keys = new KeyBinding[]{options, teamControl};
+private static boolean[] keyRepeats = new boolean []{false, false};
 private static Minecraft mc = Minecraft.getMinecraft();
 
 private boolean hasMoveInput = false;
@@ -130,10 +131,18 @@ public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boo
     {
     return;
     }
-  if(kb==options && mc.currentScreen==null && mc.thePlayer!=null && mc.theWorld!=null)
-    {
-    Config.logDebug("sending openGUI request");
-    GUIHandler.instance().openGUI((byte)GUIHandler.SETTINGS, mc.thePlayer, mc.theWorld, 0, 0, 0);
+  if(mc.currentScreen==null && mc.thePlayer!=null && mc.theWorld!=null)
+    {    
+    if(kb==options)
+      {
+      Config.logDebug("sending client settings openGUI request");
+      GUIHandler.instance().openGUI((byte)GUIHandler.SETTINGS, mc.thePlayer, mc.theWorld, 0, 0, 0);
+      }
+    else if(kb==teamControl)
+      {
+      Config.logDebug("sending teamControl openGUI request");
+      GUIHandler.instance().openGUI((byte)GUIHandler.TEAM_CONTROL, mc.thePlayer, mc.theWorld, 0, 0, 0);
+      }    
     }
   }
 

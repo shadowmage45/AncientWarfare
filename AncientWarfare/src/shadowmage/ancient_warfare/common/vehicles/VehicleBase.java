@@ -227,6 +227,16 @@ public void updateBaseStats()
   baseGenericResist = 0.f;
   }
 
+/**
+ * used by soldiers to determine if they should try and 'drive' the engine anywhere 
+ * (so that they won't try and turn stand-fixed varieties of vehicles)
+ * @return
+ */
+public boolean isMoveable()
+  {
+  return this.isDrivable() && this.baseForwardSpeed > 0;
+  }
+
 public float getHorizontalMissileOffset()
   {
   return this.vehicleType.getMissileHorizontalOffset();
@@ -262,6 +272,10 @@ public boolean canAimPower()
   return vehicleType.canAdjustPower();
   }
 
+/**
+ * used by inputHelper to determine if it should check movement input keys and send info to server..
+ * @return
+ */
 public boolean isDrivable()
   {
   return vehicleType.isDrivable();

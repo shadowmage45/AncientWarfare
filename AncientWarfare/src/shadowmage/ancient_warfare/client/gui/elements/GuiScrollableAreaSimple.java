@@ -41,7 +41,7 @@ int parentGuiHeight;
 protected int totalHeight;
 protected int totalWidth;
 
-List<GuiElement> elements = new ArrayList<GuiElement>();
+public List<GuiElement> elements = new ArrayList<GuiElement>();
 
 protected GuiContainerAdvanced parentGui;
 
@@ -56,6 +56,11 @@ public GuiScrollableAreaSimple(int elementNum, GuiContainerAdvanced parent, int 
   this.renderPosX = x;
   this.renderPosY = y;
   this.totalHeight = totalHeight;  
+  }
+
+public void updateTotalHeight(int height)
+  {
+  this.totalHeight = height;
   }
 
 public void addGuiElement(GuiElement el)

@@ -30,6 +30,7 @@ import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelVehicleBase;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
+import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.item.ItemVehicleSpawner;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -84,13 +85,13 @@ public static void renderVehicleModel(int typeNum, int level)
 @Override
 public boolean handleRenderType(ItemStack item, ItemRenderType type)
   {  
-  return true;
+  return Settings.useVehicleInventoryModels;
   }
 
 @Override
 public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
   {
-  return true;
+  return Settings.useVehicleInventoryModels;
   }
 
 @Override

@@ -138,8 +138,24 @@ public NBTTagCompound getClientInitData()
   }
 
 public void handleServerUpdate(NBTTagCompound tag)
+  { 
+  if(tag.hasKey("change"))
+    {
+    int num = tag.getInteger("num");
+    String name = tag.getString("pName");
+    int oldTeam = this.getTeamForPlayerClient(name);
+    this.serverTeamEntries[oldTeam].memberNames.remove(name);
+    this.serverTeamEntries[num].memberNames.add(name);
+    Packet01ModData pkt = new Packet01ModData();    
+    pkt.setTeamUpdate(tag);
+    pkt.sendPacketToAllPlayers();
+    }
+  }
+
+public TeamEntry getTeamEntryFor(EntityPlayer player)
   {
-  
+  int teamNum = getTeamForPlayer(player);
+  return getTeamEntry(player.worldObj, teamNum);
   }
 
 public int getTeamForPlayerServer(String name)
@@ -152,6 +168,18 @@ public int getTeamForPlayerServer(String name)
       }
     }
   return 0;
+  }
+
+public int getTeamForPlayer(EntityPlayer player)
+  {
+  if(player.worldObj.isRemote)    
+    {
+    return getTeamForPlayerClient(player.getEntityName());
+    }
+  else
+    {
+    return getTeamForPlayerServer(player.getEntityName());
+    }
   }
 
 public int getTeamForPlayerClient(String name)

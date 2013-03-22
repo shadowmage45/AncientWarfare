@@ -42,7 +42,7 @@ public class ItemVehicleSpawner extends AWItemClickable
 public ItemVehicleSpawner(int itemID)
   {
   super(itemID,true);
-  this.setCreativeTab(CreativeTabAWVehicle.instance());
+  this.setCreativeTab(CreativeTabAW.vehicleTab);
   this.setTextureFile("/shadowmage/ancient_warfare/resources/item/vehicles.png");
   this.setItemName("awVehicleItem");
   }

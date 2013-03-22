@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
 import shadowmage.ancient_warfare.client.gui.structure.GuiEditorSelect;
 import shadowmage.ancient_warfare.client.gui.structure.GuiStructureScanner;
 import shadowmage.ancient_warfare.client.gui.structure.GuiSurvivalBuilder;
+import shadowmage.ancient_warfare.client.gui.teams.GuiTeamControl;
 import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleDebug;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
@@ -55,6 +56,7 @@ public static final int STRUCTURE_BUILD_DIRECT = 2;
 public static final int STRUCTURE_EDITOR = 3;
 public static final int STRUCTURE_SCAN_EDIT = 4;
 public static final int SETTINGS = 5;
+public static final int TEAM_CONTROL = 6;
 public static final int VEHICLE_DEBUG = 99;
 
 
@@ -94,8 +96,9 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   case SETTINGS:
   return new ContainerDummy();
   
-  case 6:
-  return null;
+  case TEAM_CONTROL:
+  return new ContainerDummy();
+  
   case 7:
   return null;
   case 8:
@@ -138,8 +141,9 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   case SETTINGS:
   return new GuiClientSettings(new ContainerDummy());
   
-  case 6:
-  return null;
+  case TEAM_CONTROL:
+  return new GuiTeamControl(new ContainerDummy());
+  
   case 7:
   return null;
   case 8:

@@ -31,10 +31,6 @@ public abstract class NpcTypeBase implements INpcType
 
 public static NpcTypeBase [] npcTypes = new NpcTypeBase[256];
 
-public static INpcType npcDummy = new NpcDummy(0);
-
-
-
 protected int npcType;
 private int numOfLevels = 0;
 protected String displayName = "AW.Npc";
@@ -44,6 +40,7 @@ private List<String> displayTexture = new ArrayList<String>();
 protected int maxHealth = 20;
 protected int inventorySize = 0;
 protected boolean isCombatUnit = false;
+protected boolean isVanillaVillager = false;
 protected List<ItemStack> validTools = new ArrayList<ItemStack>();
 protected List<ItemStack> validArmors = new ArrayList<ItemStack>();
 
@@ -141,6 +138,12 @@ public List<ItemStack> getValidArmors()
 public NpcVarsHelper getVarsHelper(NpcBase npc)
   {
   return new NpcVarHelperDummy(npc);
+  }
+
+@Override
+public boolean isVanillaVillager()
+  {
+  return isVanillaVillager;
   }
 
 public static INpcType getNpcType(int num)

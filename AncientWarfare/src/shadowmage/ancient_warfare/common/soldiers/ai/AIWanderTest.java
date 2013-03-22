@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.soldiers.ai;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.meim.common.config.Config;
 
 public class AIWanderTest extends NpcAI
 {
@@ -36,6 +37,7 @@ public AIWanderTest(NpcBase npc)
   super(npc);
   this.successTicks = 80;
   this.failureTicks = 10;
+  this.taskName = "Wander.Basic";
   }
 
 @Override
@@ -47,10 +49,12 @@ public int exclusiveTasks()
 @Override
 public void onTick()
   {
-  double bX = npc.posX + rng.nextInt(32)-16;
+  Config.logDebug("executing wander tick");
+  double bX = npc.posX + rng.nextInt(20)-10;
   double bY = npc.posY;
-  double bZ = npc.posZ + rng.nextInt(32)-16;
-  npc.getMoveHelper().setMoveTo(bX, bY, bZ, npc.getAIMoveSpeed());
+  double bZ = npc.posZ + rng.nextInt(20)-10;
+  npc.getNavigator().tryMoveToXYZ(bX, bY, bZ, npc.getAIMoveSpeed());
+  //npc.getMoveHelper().setMoveTo(bX, bY, bZ, npc.getAIMoveSpeed());
   this.success = true;
   this.finished = true; 
   }

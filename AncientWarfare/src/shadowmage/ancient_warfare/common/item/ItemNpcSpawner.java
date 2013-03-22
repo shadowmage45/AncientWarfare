@@ -23,14 +23,13 @@ package shadowmage.ancient_warfare.common.item;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
-import shadowmage.ancient_warfare.common.soldiers.INpcType;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -44,7 +43,7 @@ public class ItemNpcSpawner extends AWItemClickable
 public ItemNpcSpawner(int itemID)
   {
   super(itemID, true);
-  this.setCreativeTab(CreativeTabAWVehicle.instance());
+  this.setCreativeTab(CreativeTabAW.npcTab);
   this.setTextureFile("/shadowmage/ancient_warfare/resources/item/npcs.png");
   this.setItemName("awNpcItem");
   }
@@ -66,8 +65,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,   
     {
     int level = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");    
     hit = BlockTools.offsetForSide(hit, side);  
-    NpcBase npc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level);
-    npc.teamNum = TeamTracker.instance().getTeamForPlayerServer(player.getEntityName());
+    Entity npc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, TeamTracker.instance().getTeamForPlayerServer(player.getEntityName()));
     npc.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
     npc.prevRotationYaw = npc.rotationYaw = player.rotationYaw;
     world.spawnEntityInWorld(npc);

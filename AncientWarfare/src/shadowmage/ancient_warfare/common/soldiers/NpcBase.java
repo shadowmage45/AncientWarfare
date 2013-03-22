@@ -29,8 +29,13 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
+import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.soldiers.INpcType.NpcVarsHelper;
+import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper.AIAggroEntry;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -46,10 +51,11 @@ public int rank = 0;
 public ArrayList<INpcAI> npcAI = new ArrayList<INpcAI>();
 public ArrayList<INpcAI> executingTasks = new ArrayList<INpcAI>();
 
-public INpcType npcType = NpcTypeBase.npcDummy;
+public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
+public NpcTargetHelper targetHelper;
 
-private WeakReference<Entity> target = new WeakReference(null);
+private AIAggroEntry target = null;
 
 /**
  * @param par1World
@@ -58,6 +64,7 @@ public NpcBase(World par1World)
   {
   super(par1World);
   this.varsHelper = new NpcDummyVarHelper(this);  
+  this.targetHelper = new NpcTargetHelper(this);
   }
 
 public void setNpcType(INpcType type, int level)
@@ -66,28 +73,35 @@ public void setNpcType(INpcType type, int level)
   this.rank = level;
   this.npcAI.clear();
   this.executingTasks.clear();
-  this.npcAI.addAll(type.getAI(this, level));  
+  this.npcAI.addAll(type.getAI(this, level)); 
+  this.moveSpeed = 0.3255f;
+  this.setAIMoveSpeed(0.325f); 
   }
 
 public boolean isAggroTowards(NpcBase npc)
   {
-  //TODO no fucking clue... 
-  return false;
+  return npc.npcType.isCombatUnit() && isAggroTowards(npc.teamNum);
+  }
+
+public boolean isAggroTowards(EntityPlayer player)
+  {
+  return isAggroTowards(TeamTracker.instance().getTeamForPlayer(player));
+  }
+
+public boolean isAggroTowards(int otherTeam)
+  {
+  return TeamTracker.instance().isHostileTowards(worldObj, teamNum, otherTeam);
   }
 
 public Entity getTargetEntity()
   {
-  return this.target.get();
-  }
-
-public void setTargetEntity(Entity ent)
-  {
-  this.target = new WeakReference<Entity>(ent);
+  return this.target!=null ? this.target.getEntity() : null;
   }
 
 @Override
 protected void updateAITick() 
   {
+  Config.logDebug("AI Tick. currently executing tasks: "+this.executingTasks.size());  
   Iterator<INpcAI> it = this.executingTasks.iterator();
   INpcAI task;
   while(it.hasNext())
@@ -110,8 +124,11 @@ protected void updateAITick()
       it.remove();
       }    
     }
+  
   for(INpcAI possibleTask : this.npcAI)
-    {
+    {    
+    Config.logDebug("examining possible AI task: "+possibleTask.getTaskName());
+    possibleTask.incrementTickCounts();
     if(this.executingTasks.contains(possibleTask))//if task is already present in executing list, do not add
       {
       continue;
@@ -123,6 +140,7 @@ protected void updateAITick()
       if((execTask.exclusiveTasks() & exclude )!= 0)
         {
         found = true;
+        Config.logDebug("mutex exception!! will not add to executing tasks");
         break;
         }      
       }
@@ -130,7 +148,11 @@ protected void updateAITick()
       {
       this.executingTasks.add(possibleTask);
       }
-    }
+    else if(!possibleTask.shouldExecute(this))
+      {
+      Config.logDebug("task self-denied execution");
+      }
+    }  
   }
 
 @Override
@@ -156,6 +178,7 @@ public void onUpdate()
   {
   super.onUpdate();
   this.varsHelper.onTick();
+  this.targetHelper.updateAggroEntries();
   }
 
 @Override

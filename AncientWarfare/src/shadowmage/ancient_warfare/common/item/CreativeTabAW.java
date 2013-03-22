@@ -31,11 +31,28 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class CreativeTabAW extends CreativeTabs
 {
 
-private static CreativeTabAW INSTANCE = new CreativeTabAW("Ancient Warfare");
+public static CreativeTabAW normal = new CreativeTabAW("Ancient Warfare");
+
+public static CreativeTabAW vehicleTab = new CreativeTabAW("Ancient Warfare Vehicles")
+  {
+  @Override
+  public ItemStack getIconItemStack()
+    {
+    return new ItemStack(ItemLoader.vehicleSpawner);
+    }
+  };
+public static CreativeTabAW npcTab = new CreativeTabAW("Ancient Warfare Npcs")
+  {
+  @Override
+  public ItemStack getIconItemStack()
+    {
+    return new ItemStack(ItemLoader.npcSpawner);
+    }
+  };
 
 public static CreativeTabAW instance()
   {
-  return INSTANCE;
+  return normal;
   }
 
 private CreativeTabAW(String label)

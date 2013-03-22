@@ -29,6 +29,7 @@ public class VehicleTypeCannonStandFixed extends VehicleTypeCannon
 public VehicleTypeCannonStandFixed(int typeNum)
   {
   super(typeNum);
+  this.isDrivable = false;
   }
 
 }

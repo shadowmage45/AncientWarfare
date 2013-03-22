@@ -33,6 +33,9 @@ public class AIChooseTarget extends NpcAI
 public AIChooseTarget(NpcBase npc)
   {
   super(npc);
+  this.failureTicks = 20;
+  this.successTicks = 100;
+  this.taskName = "ChooseTarget";
   }
 
 @Override
@@ -49,21 +52,21 @@ public void onAiStarted()
 
 @Override
 public void onTick()
-  {
-  // TODO Auto-generated method stub
+  {  
+  this.finished = true;
+  this.success = true;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
+  
   }
 
 @Override
 public NBTTagCompound getNBTTag()
   {
-  // TODO Auto-generated method stub
-  return null;
+  return new NBTTagCompound();
   }
 
 }

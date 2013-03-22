@@ -38,13 +38,15 @@ public static Property advOverlayProp;
 public static Property mouseAimProp;
 public static Property mouseRangeProp;
 public static Property trajectoryIterationsProp;
-
+public static Property npcAITicksProp;
 
 private static boolean renderOverlay = true;
 private static boolean renderAdvancedOverlay = true;
 private static boolean enableMouseAim = true;
 private static int mouseLookRange = 140;
 private static int trajectoryIterationsClient = 20;
+
+public static boolean useVehicleInventoryModels = true;
 
 private Settings(){};
 private static Settings INSTANCE;
@@ -71,6 +73,7 @@ public void loadSettings()
   this.renderOverlay = overlayProp.getBoolean(true);
   this.renderAdvancedOverlay = advOverlayProp.getBoolean(true);
   this.enableMouseAim = mouseAimProp.getBoolean(true);
+  this.useVehicleInventoryModels = config.get("client-settings", "vehicle_inventory_models", true, "Use vehicle models instead of icons for rendering of vehicle items?").getBoolean(true);
   }
 
 public static boolean getMouseAim()

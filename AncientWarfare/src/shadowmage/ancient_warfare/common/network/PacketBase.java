@@ -137,4 +137,9 @@ public void sendPacketToPlayer(EntityPlayer player)
   AWCore.proxy.sendPacketToPlayer(player, this);
   }
 
+public void sendPacketToAllPlayers()
+  {
+  AWCore.proxy.sendPacketToAllPlayers(this);
+  }
+
 }

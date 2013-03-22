@@ -21,11 +21,10 @@
 package shadowmage.ancient_warfare.common.registry;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 
-import net.minecraft.entity.EntityList;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -33,10 +32,16 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.soldiers.INpcType;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
+import shadowmage.ancient_warfare.common.soldiers.types.NpcDummy;
+import shadowmage.ancient_warfare.common.soldiers.types.NpcVillager;
 
 
 public class NpcRegistry
 {
+
+
+public static INpcType npcDummy = new NpcDummy(0);
+public static INpcType npcVillager = new NpcVillager(1);
 
 private NpcRegistry(){}
 private static NpcRegistry INSTANCE;
@@ -50,7 +55,7 @@ public static NpcRegistry instance()
 public void registerNPCs()
   {
   //DEBUG
-  ItemLoader.instance().addSubtypeToItem(ItemLoader.npcSpawner, NpcTypeBase.npcDummy.getGlobalNpcType(), NpcTypeBase.npcDummy.getDisplayName(), NpcTypeBase.npcDummy.getDisplayTooltip());
+  ItemLoader.instance().addSubtypeToItem(ItemLoader.npcSpawner, npcDummy.getGlobalNpcType(), npcDummy.getDisplayName(), npcDummy.getDisplayTooltip());
   //END DEBUG...
   
   INpcType[] types = NpcTypeBase.getNpcTypes();
@@ -69,7 +74,8 @@ public List getCreativeDisplayItems()
   INpcType[] types = NpcTypeBase.getNpcTypes();
   for(INpcType type : types)
     {
-    if(type==null || type.getGlobalNpcType()==0){continue;}//if null or dummy type, don't register....
+    //DEBUG//|| type.getGlobalNpcType()==0
+    if(type==null ){continue;}//if null or dummy type, don't register....
     for(int i = 0; i < type.getNumOfLevels(); i++)
       {
       stack = new ItemStack(ItemLoader.npcSpawner,1,type.getGlobalNpcType());
@@ -83,16 +89,25 @@ public List getCreativeDisplayItems()
   return stacks;
   }
 
-public static NpcBase getNpcForType(int num, World world, int level)
+public static Entity getNpcForType(int num, World world, int level, int team)
   {
-  NpcBase npc = new NpcBase(world);
   INpcType type = NpcTypeBase.getNpcType(num);
   if(type==null)
     {
     return null;
     }
-  npc.setNpcType(type, level);  
-  return npc;
+  if(type.isVanillaVillager())
+    {
+    EntityVillager villager = new EntityVillager(world, level);
+    return villager;
+    }
+  else
+    {
+    NpcBase npc = new NpcBase(world);
+    npc.setNpcType(type, level);  
+    npc.teamNum = team;
+    return npc;
+    }
   }
 
 public static ItemStack getStackFor(INpcType type, int level)

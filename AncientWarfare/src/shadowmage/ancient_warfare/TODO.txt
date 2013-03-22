@@ -6,16 +6,7 @@ GENERAL
         --might be made easier in 1.5 by the icon changes...maybe...also icon changes are a pain in the ass in general...
 * partially destroyable blocks ? (hold destruction status as meta-data?)
 * cache display stack list for vehicles/ammo/upgrades/armor/npcs/etc
-
-PRE-VEHICLE TEST RELEASE
-* add vehicles
-    -- models
-    -- model-textures
-    -- renders
-    -- animations
-* add ammo types
-    -- model-textures
-    -- renders
+* create a way for tile entities to broadcast to nearby soldiers (to denote valuable target)(event bus?)
 
 VEHICLES    
 * add ammo types
@@ -28,7 +19,6 @@ VEHICLES
 * no entity collision
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
 * rockets need adjusted to a set start velocity--will help with aim calculation greatly I think
-* fix flag rendering..need to figure out where it needs to go, and setup the colors part...
          
 NPCS
 * add save/load from NBT stuff
@@ -54,6 +44,9 @@ TESTING
 * test vehicle types/models/renders
 
 TEMPLATES
+* gates--each gate will have a SEPARATE gate rule pointing to the gate rule
+        --gate rule will have orientation, position, w, h
+        --any blocks occupied by gate when scanned should be set to an invalid rule..or something...
 
 SCANNER
 
@@ -187,7 +180,13 @@ TWEAKS/OPTIMIZATION
 * fix rockets up...mostly done'ish. need better range-finding capabilities...
 /********** 03-21-13 **********/
 * add vehicle inventory item render
+* fix flag rendering..need to figure out where it needs to go, and setup the colors part...
+* add cannon textures and models
 /********** 03-22-13 **********/
+* prep work on npc...they spawn in-game...
+* add many more options into config/settings
+* add villager spawner...
+* team tracker--add server update method and relay
 /********** 03-23-13 **********/
 /********** 03-24-13 **********/
 /********** 03-25-13 **********/

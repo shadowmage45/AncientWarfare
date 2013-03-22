@@ -28,6 +28,8 @@ import java.util.Map.Entry;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.util.MathHelper;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
 public class NpcTargetHelper
@@ -43,7 +45,9 @@ ArrayList<AITargetEntry> targetEntries = new ArrayList<AITargetEntry>();
 /**
  * future/potential targets based on aggro priority -- mapped by entityID
  */
-HashMap<Integer, AIAggroEntry> aggroEntries = new HashMap<Integer, AIAggroEntry>();
+ArrayList<AIAggroEntry> aggroEntries = new ArrayList<AIAggroEntry>();
+
+int tickCount = 0;
 
 public NpcTargetHelper(NpcBase npc)
   {
@@ -67,66 +71,141 @@ public int getPriorityFor(Entity ent)
   return -1;
   }
 
-public void addOrUpdateAggroEntry(Entity ent, int aggroAmt)
+public void addOrUpdateAggroEntry(int x, int y, int z, int aggroAmt)
   {
-  if(!this.aggroEntries.containsKey(ent.entityId))
+  boolean found = false;
+  for(AIAggroEntry ent : this.aggroEntries)
     {
-    this.aggroEntries.put(ent.entityId, new AIAggroEntry(ent));
+    if(ent.matches(x, y, z))
+      {
+      found = true;
+      ent.aggroLevel += aggroAmt;
+      }
     }
-  this.aggroEntries.get(ent.entityId).aggroLevel +=aggroAmt;
+  if(!found)
+    {
+    this.aggroEntries.add(new AIAggroEntry(x, y, z).setAggro(aggroAmt));
+    }
+  }
+
+public void addOrUpdateAggroEntry(Entity entity, int aggroAmt)
+  {
+  boolean found = false;
+  for(AIAggroEntry ent : this.aggroEntries)
+    {
+    if(ent.matches(entity))
+      {
+      found = true;
+      ent.aggroLevel += aggroAmt;
+      }
+    }
+  if(!found)
+    {
+    this.aggroEntries.add(new AIAggroEntry(entity).setAggro(aggroAmt));
+    }
   }
 
 public void updateAggroEntries()
   {
-  Iterator<Entry<Integer, AIAggroEntry>> entryIt = aggroEntries.entrySet().iterator();  
-  Entry<Integer, AIAggroEntry> entry;
-  AIAggroEntry aiEntry;
-  while(entryIt.hasNext())
+  tickCount++;
+  if(tickCount < Config.npcAITicks)
     {
-    entry = entryIt.next();
-    aiEntry = entry.getValue();
-    if(!aiEntry.isValidEntry())
-      {
-      entryIt.remove();
-      }
-    else
-      {      
-      aiEntry.aggroLevel--;
-      if(aiEntry.aggroLevel<=0)
-        {
-        entryIt.remove();
-        }
-      }
+    return;
     }
+  tickCount = 0;
+  Iterator<AIAggroEntry> it = this.aggroEntries.iterator();
+  AIAggroEntry entry;
+  while(it.hasNext())
+    {
+    entry = it.next();
+    entry.aggroLevel -= Config.npcAITicks;
+    if(!entry.isValidEntry() || entry.aggroLevel<=0)
+      {
+      it.remove();
+      }    
+    }
+  }
+
+public AIAggroEntry getHighestAggroTarget()
+  {
+  
+  return null;
   }
 
 public class AITargetEntry
   {  
   Class entityClass = null;
   public int priority = 0;
+  public boolean isEntityTarget = false;
   public AITargetEntry(Class <? extends Entity> clz, int priority)
     {
     this.entityClass = clz;
     this.priority = priority;
+    this.isEntityTarget = true;
     }  
   
   public boolean isTarget(Entity ent)
     {
     return entityClass.isAssignableFrom(ent.getClass());//ent.getClass().isAssignableFrom(entityClass);
-    }
+    }    
   }
 
 public class AIAggroEntry
   {
-  WeakReference<Entity> ent;
+  private WeakReference<Entity> ent = new WeakReference<Entity>(null);
+  public int blockX;
+  public int blockY;
+  public int blockZ;
   public int aggroLevel;
+  public boolean isEntityEntry = false;
   public AIAggroEntry(Entity ent)
     {
     this.ent = new WeakReference<Entity>(ent);
+    this.isEntityEntry = true;
     } 
+  
+  public AIAggroEntry(int x, int y, int z)
+    {
+    this.blockX = x;
+    this.blockY = y;
+    this.blockZ = z;
+    }
+  
+  public AIAggroEntry setAggro(int aggro)
+    {
+    this.aggroLevel = aggro;
+    return this;
+    }
+  
+  public Entity getEntity()
+    {
+    return ent.get();
+    }
   
   public boolean isValidEntry()
     {
+    if(!this.isEntityEntry)
+      {
+      if(npc.worldObj.getChunkProvider().chunkExists(blockX/16, blockZ/16))
+        {
+        //TODO check and see if the block at x,y,z is still a valid target block (enemy priority block)
+        }
+      else
+        {
+        return false;
+        }
+      }
+    else
+      {
+      if(this.ent.get()==null)
+        {
+        return true;
+        }
+      else
+        {
+        //get distance, if out of range, return false...
+        }
+      }
     return this.ent.get()!=null;
     }
   
@@ -134,6 +213,10 @@ public class AIAggroEntry
     {
     return this.ent.get() != null && this.ent.get()==ent;
     }
+  
+  public boolean matches(int x, int y, int z)
+    {
+    return this.blockX == x && this.blockY == y && this.blockZ == z;
+    }
   }
-
 }

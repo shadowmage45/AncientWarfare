@@ -52,6 +52,7 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileFixe
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileTurret;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandTurret;
+import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
@@ -118,7 +119,6 @@ public void loadRenders()
    * load up the vehicle item renderer...
    */
   MinecraftForgeClient.registerItemRenderer(ItemLoader.vehicleSpawner.itemID, RenderVehicleHelper.instance());
-  
   /**
    * npcs...
    */

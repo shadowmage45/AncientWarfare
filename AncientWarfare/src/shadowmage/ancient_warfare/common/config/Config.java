@@ -52,7 +52,7 @@ public static boolean invertShiftClickOnItems = false;
 public static String templateExtension = "aws";
 public static boolean adjustMissilesForAccuracy = false;
 public static int trajectoryIterationsServer = 20;
-
+public static int npcAITicks = 5;
 
 /**
  * the base (Server side) and current (client side) values...
@@ -164,8 +164,22 @@ public static int getKeyBindID(String name, int defaultID, String comment)
 public void setCoreInfo()
   {
   config.addCustomCategoryComment("a-general-options", "Global options that effect the entire mod");
+  config.addCustomCategoryComment("b-performance", "Global options that may effect performance in some way");
   config.addCustomCategoryComment("structure-management", "Global World Generation options, effect every save/world");
+  
+  /**
+   * general options
+   */
   this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").value;
+  this.clientVehicleMovementBase = config.get("a-general-options", "client_movement", true, "If true, movement is calculated and authenticated client-side (smoother motion for clients)").getBoolean(true);
+  this.adjustMissilesForAccuracy = config.get("a-general-options", "missile_accuracy", true, "If true, missiles will be adjusted for vehicle and rider accuracy when launched.").getBoolean(true);
+  
+  /**
+   * performance options
+   */
+  this.npcAITicks = config.get("b-performance", "npc_aiticks", 5, "How many ticks should pass between updating passive ai tasks for NPCs?").getInt(5);
+  this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory", 5, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);
+  this.clientMoveUpdateTicksBase = config.get("b-performance", "client_movement_ticks", 3, "How many ticks between client movement update packets if client movement is enabled? (setting is sent and synched to clients on login)").getInt(3);
   }
 
 public void setVehicleInfo()
@@ -180,12 +194,7 @@ public void setKingdomInfo()
 
 public void setWorldGenInfo()
   {
-  //NOOP--moved to worldGenConfig.cfg in AWConfig/ directory
-//  this.structureGenMinDistance = config.get("structure-management", "world_gen_min_dist", 1).getInt(1);
-//  this.structureGenMaxCheckRange = config.get("structure-management", "world_gen_max_search", 16).getInt(1);
-//  this.structureGeneratorRandomChance = config.get("structure-management", "world_gen_random_chance", 10).getInt(10);
-//  this.structureGeneratorRandomRange = config.get("structure-management", "world_gen_random_range", 1000).getInt(1000);
-//  this.structureGenMaxClusterValue = config.get("structure-management", "world_gen_max_cluster_value", 50).getInt(50);
+
   }
 
 private void setStructureInfo()
@@ -195,8 +204,7 @@ private void setStructureInfo()
     {
     config.get("structure-management", "exportdefaults", false).value = "false";
     AWStructureModule.instance().setExportDefaults();
-    }
-  
+    }  
   }
 
 public void handleClientInit(NBTTagCompound tag)
