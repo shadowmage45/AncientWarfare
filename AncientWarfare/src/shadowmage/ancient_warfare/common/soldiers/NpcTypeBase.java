@@ -29,10 +29,11 @@ import shadowmage.ancient_warfare.common.soldiers.types.NpcDummy;
 public abstract class NpcTypeBase implements INpcType
 {
 
+public static NpcTypeBase [] npcTypes = new NpcTypeBase[256];
+
 public static INpcType npcDummy = new NpcDummy(0);
 
 
-public static NpcTypeBase [] npcTypes = new NpcTypeBase[256];
 
 protected int npcType;
 private int numOfLevels = 0;

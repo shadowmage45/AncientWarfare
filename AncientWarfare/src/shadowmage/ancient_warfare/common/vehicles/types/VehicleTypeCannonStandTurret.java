@@ -29,7 +29,13 @@ public class VehicleTypeCannonStandTurret extends VehicleTypeCannon
 public VehicleTypeCannonStandTurret(int typeNum)
   {
   super(typeNum);
-  // TODO Auto-generated constructor stub
+  this.turretRotationMax=45;
+  this.moveRiderWithTurret = true;
+  this.canAdjustYaw = true;
+
+  this.turretVerticalOffset = 13.5f*0.0625f;
+  this.riderVerticalOffset = 0.55f;
+  this.riderForwardsOffset = -1.25f;
   }
 
 }

@@ -11,8 +11,7 @@ import net.minecraft.entity.Entity;
  
  
 public class ModelCatapultStandFixed extends ModelVehicleBase
-{
- 
+{ 
 ModelRenderer turretMidBeam;
 ModelRenderer upright1;
 ModelRenderer upright2;
@@ -208,10 +207,10 @@ public ModelCatapultStandFixed(){
   flagCloth = new ModelRenderer(this,"flagCloth");
   flagCloth.setTextureOffset(5,0);
   flagCloth.setTextureSize(256,256);
-  flagCloth.setRotationPoint(0.0f, 0.0f, 1.0f);
+  flagCloth.setRotationPoint(-14.0f, -36.0f, 1.0f);
   setPieceRotation(flagCloth,0.0f, 0.0f, 0.0f);
   flagCloth.addBox(0.0f,0.0f,0.0f,1,8,11);
-  flagPole.addChild(flagCloth);
+
   }
  
 @Override
@@ -220,7 +219,7 @@ public void render(Entity entity, float f1, float f2, float f3, float f4, float 
   super.render(entity, f1, f2, f3, f4, f5, f6);
   setRotationAngles(f1, f2, f3, f4, f5, f6, entity);
   turretMidBeam.render(f6);
-  flagPole.render(f6);
+  flagPole.render(0.0625f);
   }
  
 public void setPieceRotation(ModelRenderer model, float x, float y, float z)
@@ -243,7 +242,6 @@ public void setCrankRotations(float angle)
 @Override
 public void renderFlag()
   {
-  // TODO Auto-generated method stub
-  
+  flagCloth.render(0.0625f);
   }
 }

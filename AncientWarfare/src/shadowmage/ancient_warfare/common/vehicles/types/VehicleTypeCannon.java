@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
@@ -52,16 +53,19 @@ public VehicleTypeCannon(int typeNum)
   this.validArmors.add(ArmorRegistry.armorIron);
   this.validArmors.add(ArmorRegistry.armorObsidian);
 
+  this.turretVerticalOffset = 11.5f*0.0625f;
   this.storageBaySize = 0; 
   this.accuracy = 0.98f;
-  this.baseStrafeSpeed = 2.f;
-  this.baseForwardSpeed = 6.f*0.05f; 
+  this.isDrivable = true;
+  this.baseForwardSpeed = 0.f;
+  this.baseStrafeSpeed = .5f;
   this.basePitchMax = 15;
   this.basePitchMin = -15; 
   this.isMountable = true;
   this.isCombatEngine = true;
   this.canAdjustPitch = true;
   this.canAdjustPower = false;
+  this.canAdjustYaw = false;
 
   this.baseMissileVelocityMax = 42.f;//stand versions should have higher velocity, as should fixed version--i.e. mobile turret should have the worst of all versions   
   this.width = 2;
@@ -71,6 +75,27 @@ public VehicleTypeCannon(int typeNum)
   this.upgradeBaySize = 3;
   this.ammoBaySize = 6;
   }
+
+@Override
+public String getTextureForMaterialLevel(int level)
+  {
+  switch(level)
+    {
+    case 0:
+    return Config.texturePath + "models/cannon1.png";
+    case 1:
+    return Config.texturePath + "models/cannon2.png";
+    case 2:
+    return Config.texturePath + "models/cannon3.png";
+    case 3:
+    return Config.texturePath + "models/cannon4.png";
+    case 4:
+    return Config.texturePath + "models/cannon5.png";
+    default:
+    return Config.texturePath + "models/cannon1.png";
+    }
+  }
+
 
 @Override
 public VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh)

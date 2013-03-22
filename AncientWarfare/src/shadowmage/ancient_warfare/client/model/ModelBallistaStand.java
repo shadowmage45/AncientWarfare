@@ -379,16 +379,15 @@ public ModelBallistaStand(){
   flagPole = new ModelRenderer(this,"flagPole");
   flagPole.setTextureOffset(0,38);
   flagPole.setTextureSize(256,256);
-  flagPole.setRotationPoint(0.0f, -15.0f, 0.0f);
+  flagPole.setRotationPoint(0.0f, -14.0f, 0.0f);
   setPieceRotation(flagPole,0.0f, 0.0f, 0.0f);
-  flagPole.addBox(-10.0f,-24.0f,-6.5f,1,16,1);
+  flagPole.addBox(-10.0f,-25.0f,-6.5f,1,16,1);
   flagCloth = new ModelRenderer(this,"flagCloth");
   flagCloth.setTextureOffset(5,38);
   flagCloth.setTextureSize(256,256);
-  flagCloth.setRotationPoint(-10.0f, -24.0f, -5.5f);
+  flagCloth.setRotationPoint(0.0f, -14.0f, 0.0f);
   setPieceRotation(flagCloth,0.0f, 0.0f, 0.0f);
-  flagCloth.addBox(0.0f,0.0f,0.0f,1,8,11);
-  flagPole.addChild(flagCloth);
+  flagCloth.addBox(-10.0f,-25.0f,-5.5f,1,8,11);
   }
  
 @Override
@@ -397,8 +396,8 @@ public void render(Entity entity, float f1, float f2, float f3, float f4, float 
   super.render(entity, f1, f2, f3, f4, f5, f6);
   setRotationAngles(f1, f2, f3, f4, f5, f6, entity);
   baseMain.render(f6);
-  armMain.render(f6);
-  
+  armMain.render(f6);  
+  flagPole.render(0.0625f);  
   }
  
 public void setPieceRotation(ModelRenderer model, float x, float y, float z)
@@ -422,6 +421,8 @@ public void setTurretRotation(float yaw, float pitch)
   this.armMain.rotateAngleX = Trig.toRadians(pitch);
   this.flagPole.rotateAngleX = this.armMain.rotateAngleX;
   this.flagPole.rotateAngleY = this.armMain.rotateAngleY;
+  this.flagCloth.rotateAngleX = this.armMain.rotateAngleX;
+  this.flagCloth.rotateAngleY = this.armMain.rotateAngleY;
   }
 
 public void setCrankRotations(float angle)
@@ -432,6 +433,6 @@ public void setCrankRotations(float angle)
 @Override
 public void renderFlag()
   {  
-  flagPole.render(0.0625f);  
+  flagCloth.render(0.0625f);
   }
 }

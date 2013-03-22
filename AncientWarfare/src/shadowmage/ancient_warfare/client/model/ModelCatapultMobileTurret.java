@@ -490,10 +490,9 @@ public ModelCatapultMobileTurret(){
   flagCloth = new ModelRenderer(this,"flagCloth");
   flagCloth.setTextureOffset(24,78);
   flagCloth.setTextureSize(256,256);
-  flagCloth.setRotationPoint(0.0f, 0.0f, 1.0f);
+  flagCloth.setRotationPoint(-14.0f, -27.0f, 22.5f);
   setPieceRotation(flagCloth,0.0f, 0.0f, 0.0f);
   flagCloth.addBox(0.0f,0.0f,0.0f,1,8,11);
-  flagPole.addChild(flagCloth);
   turretMidBeam = new ModelRenderer(this,"turretMidBeam");
   turretMidBeam.setTextureOffset(0,134);
   turretMidBeam.setTextureSize(256,256);
@@ -683,8 +682,8 @@ public void render(Entity entity, float f1, float f2, float f3, float f4, float 
   super.render(entity, f1, f2, f3, f4, f5, f6);
   setRotationAngles(f1, f2, f3, f4, f5, f6, entity);
   frontCrossBeam.render(f6);
-  flagPole.render(f6);
   turretMidBeam.render(f6);
+  flagPole.render(0.0625f);
   }
  
 public void setPieceRotation(ModelRenderer model, float x, float y, float z)
@@ -719,7 +718,6 @@ public void setCrankRotations(float angle)
 @Override
 public void renderFlag()
   {
-  // TODO Auto-generated method stub
-  
+  flagCloth.render(0.0625f);
   }
 }

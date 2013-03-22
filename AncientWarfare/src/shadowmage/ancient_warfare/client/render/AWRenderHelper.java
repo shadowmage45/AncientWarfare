@@ -237,7 +237,46 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
   }
 
 
-
+public static void setTeamRenderColor(int teamNum)
+  {
+  switch(teamNum)
+  {
+  case 0:
+  GL11.glColor3ub((byte)221,(byte)221,(byte)221);     
+  case 1:
+  GL11.glColor3ub((byte)219,(byte)125,(byte)62);      
+  case 2:
+  GL11.glColor3ub((byte)179,(byte)80,(byte)188);      
+  case 3:
+  GL11.glColor3ub((byte)107,(byte)138,(byte)201);      
+  case 4:
+  GL11.glColor3ub((byte)177,(byte)166,(byte)39);
+  case 5:
+  GL11.glColor3ub((byte)65,(byte)174,(byte)56);
+  case 6:
+  GL11.glColor3ub((byte)208,(byte)132,(byte)153);
+  case 7:
+  GL11.glColor3ub((byte)64,(byte)64,(byte)64);
+  case 8:
+  GL11.glColor3ub((byte)154,(byte)161,(byte)161);
+  case 9:
+  GL11.glColor3ub((byte)46,(byte)110,(byte)137);
+  case 10:
+  GL11.glColor3ub((byte)126,(byte)61,(byte)181);
+  case 11:
+  GL11.glColor3ub((byte)46,(byte)56,(byte)141);
+  case 12:
+  GL11.glColor3ub((byte)79,(byte)50,(byte)31);
+  case 13:
+  GL11.glColor3ub((byte)53,(byte)70,(byte)27);
+  case 14:
+  GL11.glColor3ub((byte)150,(byte)52,(byte)48);
+  case 15:
+  GL11.glColor3ub((byte)25,(byte)22,(byte)22);
+  default:
+  GL11.glColor4f(1, 1, 1, 1);
+  }    
+  }
 
 
 }

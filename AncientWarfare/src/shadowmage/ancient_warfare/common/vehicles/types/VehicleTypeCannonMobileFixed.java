@@ -29,7 +29,9 @@ public class VehicleTypeCannonMobileFixed extends VehicleTypeCannon
 public VehicleTypeCannonMobileFixed(int typeNum)
   {
   super(typeNum);
-  // TODO Auto-generated constructor stub
+  this.baseForwardSpeed = 6*0.05f;
+  this.baseStrafeSpeed = 1.5f;
+  this.turretVerticalOffset = 14.5f*0.0625f;
   }
 
 }

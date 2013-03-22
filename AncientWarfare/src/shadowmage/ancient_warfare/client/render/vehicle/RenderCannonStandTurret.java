@@ -20,21 +20,27 @@
  */
 package shadowmage.ancient_warfare.client.render.vehicle;
 
+import shadowmage.ancient_warfare.client.model.ModelCannonStandTurret;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
 public class RenderCannonStandTurret extends RenderVehicleBase
 {
+
+ModelCannonStandTurret model = new ModelCannonStandTurret();
 @Override
 public void renderVehicle(VehicleBase vehicle, double x, double y, double z, float yaw, float tick)
   {
-  
+  VehicleFiringVarsHelper var = vehicle.firingVarsHelper;    
+  model.setTurretRotation(yaw-vehicle.localTurretRotation - tick*vehicle.currentTurretYawSpeed, vehicle.localTurretPitch - tick*vehicle.currentTurretPitchSpeed);
+  model.render(vehicle, 0, 0, 0, 0, 0, 0.0625f);
   }
 
 @Override
 public void renderVehicleFlag()
   {
-
+  model.renderFlag();
   }
 
 }

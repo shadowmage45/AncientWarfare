@@ -58,7 +58,11 @@ public void doRender(Entity var1, double x, double y, double z, float yaw, float
   GL11.glRotatef(yaw, 0, 1, 0);
   GL11.glScalef(-1, -1, 1);    
   Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(var1.getTexture()));
-  RenderRegistry.instance().getRenderForVehicle(vehicle.vehicleType.getGlobalVehicleType()).renderVehicle(vehicle, x, y, z, yaw, tick);  
+  RenderVehicleBase render = RenderRegistry.instance().getRenderForVehicle(vehicle.vehicleType.getGlobalVehicleType());
+  render.renderVehicle(vehicle, x, y, z, yaw, tick);
+  AWRenderHelper.instance().setTeamRenderColor(vehicle.teamNum);
+  render.renderVehicleFlag();
+  GL11.glColor4f(1.f, 1.f, 1.f, 1.f);
   GL11.glPopMatrix();
   }
 
@@ -72,6 +76,7 @@ public static void renderVehicleModel(int typeNum, int level)
     GL11.glScalef(-1, -1, 1);    
     Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(type.getTextureForMaterialLevel(level)));    
     model.render(null, 0, 0, 0, 0, 0, 0.0625f);
+    model.renderFlag();
     GL11.glPopMatrix();
     }
   }
@@ -90,10 +95,18 @@ public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRe
 
 @Override
 public void renderItem(ItemRenderType type, ItemStack item, Object... data)
-  {
+  {  
   GL11.glPushMatrix();
+  if(type==ItemRenderType.EQUIPPED)
+    {    
+    GL11.glTranslatef(0.25f, 1.0f, 1.0f);
+    }
   GL11.glScalef(0.35f, 0.35f, 0.35f);
   GL11.glTranslatef(0, -1.f, 0);
+  if(type!=ItemRenderType.EQUIPPED)
+    {
+    GL11.glRotatef(180.f, 0, 1, 0);
+    }
   renderVehicleModel(item.getItemDamage(), ItemVehicleSpawner.getVehicleLevelForStack(item));
   GL11.glPopMatrix();
   }

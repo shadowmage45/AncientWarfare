@@ -646,7 +646,7 @@ public void setPieceRotation(ModelRenderer model, float x, float y, float z)
 @Override
 public void renderFlag()
   {
-    
+  this.flagCloth.render(0.0625f); 
   }
 
 }
