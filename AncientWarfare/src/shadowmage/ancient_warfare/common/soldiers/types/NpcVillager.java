@@ -67,18 +67,5 @@ public NpcVillager(int type)
     }
   }
 
-@Override
-public List<INpcAI> getAI(NpcBase npc, int level)
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
-
-@Override
-public boolean isVanillaVillager()
-  {
-  // TODO Auto-generated method stub
-  return false;
-  }
 
 }

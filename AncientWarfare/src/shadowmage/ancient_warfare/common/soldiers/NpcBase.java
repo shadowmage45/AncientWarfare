@@ -65,17 +65,18 @@ public NpcBase(World par1World)
   super(par1World);
   this.varsHelper = new NpcDummyVarHelper(this);  
   this.targetHelper = new NpcTargetHelper(this);
+  this.moveSpeed = 0.3255f;
+  this.setAIMoveSpeed(0.325f); 
   }
 
 public void setNpcType(INpcType type, int level)
   {
+//  Config.logDebug("npc type being assinged: "+type.getDisplayName());
   this.npcType = type;
   this.rank = level;
   this.npcAI.clear();
   this.executingTasks.clear();
   this.npcAI.addAll(type.getAI(this, level)); 
-  this.moveSpeed = 0.3255f;
-  this.setAIMoveSpeed(0.325f); 
   }
 
 public boolean isAggroTowards(NpcBase npc)
@@ -101,7 +102,7 @@ public Entity getTargetEntity()
 @Override
 protected void updateAITick() 
   {
-  Config.logDebug("AI Tick. currently executing tasks: "+this.executingTasks.size());  
+//  Config.logDebug("AI Tick. currently executing tasks: "+this.executingTasks.size());  
   Iterator<INpcAI> it = this.executingTasks.iterator();
   INpcAI task;
   while(it.hasNext())
@@ -127,7 +128,7 @@ protected void updateAITick()
   
   for(INpcAI possibleTask : this.npcAI)
     {    
-    Config.logDebug("examining possible AI task: "+possibleTask.getTaskName());
+//    Config.logDebug("examining possible AI task: "+possibleTask.getTaskName());
     possibleTask.incrementTickCounts();
     if(this.executingTasks.contains(possibleTask))//if task is already present in executing list, do not add
       {
@@ -140,7 +141,7 @@ protected void updateAITick()
       if((execTask.exclusiveTasks() & exclude )!= 0)
         {
         found = true;
-        Config.logDebug("mutex exception!! will not add to executing tasks");
+//        Config.logDebug("mutex exception!! will not add to executing tasks");
         break;
         }      
       }
@@ -150,7 +151,7 @@ protected void updateAITick()
       }
     else if(!possibleTask.shouldExecute(this))
       {
-      Config.logDebug("task self-denied execution");
+//      Config.logDebug("task self-denied execution");
       }
     }  
   }
