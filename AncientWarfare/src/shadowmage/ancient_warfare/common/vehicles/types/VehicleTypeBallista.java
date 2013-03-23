@@ -52,11 +52,13 @@ public VehicleTypeBallista(int typeNum)
   this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
   
   this.validArmors.add(ArmorRegistry.armorStone);
+  this.validArmors.add(ArmorRegistry.armorObsidian);
+  this.validArmors.add(ArmorRegistry.armorIron);
   
   this.storageBaySize = 0;  
   this.accuracy = 0.98f;
-  this.baseStrafeSpeed = 2.f;
-  this.baseForwardSpeed = 6.f*0.05f; 
+  this.baseStrafeSpeed = 1.5f;
+  this.baseForwardSpeed = 4.f*0.05f; 
   this.basePitchMax = 15;
   this.basePitchMin = -15; 
   this.isMountable = true;

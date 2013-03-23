@@ -59,6 +59,13 @@ int blockID;
 int blockMeta;
 
 /**
+ * initial velocities, used by rocket for acceleration factor
+ */
+float mX;
+float mY;
+float mZ;
+
+/**
  * @param par1World
  */
 public MissileBase(World par1World)
@@ -91,6 +98,9 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
   this.motionX = mx;
   this.motionY = my;
   this.motionZ = mz;
+  this.mX = mx;
+  this.mY = my;
+  this.mZ = mz;
   if(this.ammoType.updateAsArrow())
     {
     this.onUpdateArrowRotation();
@@ -99,10 +109,15 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
   this.prevRotationYaw = this.rotationYaw;
   if(this.ammoType.isRocket())//use launch power to determine rocket burn time...
     {
-    this.rocketBurnTime = (int) MathHelper.sqrt_float(mx*mx+my*my+mz*mz)*20;
-    this.motionX*= AmmoRocket.initalVelocityFactor;
-    this.motionZ*= AmmoRocket.initalVelocityFactor;
-    this.motionY*= AmmoRocket.initalVelocityFactor;
+    float temp = MathHelper.sqrt_float(mx*mx+my*my+mz*mz);
+    this.rocketBurnTime = (int) (temp*20.f*AmmoRocket.burnTimeFactor);
+    
+    this.mX = (float) (motionX/temp) *AmmoRocket.accelerationFactor;
+    this.mY = (float) (motionY/temp) *AmmoRocket.accelerationFactor;
+    this.mZ = (float) (motionZ/temp) *AmmoRocket.accelerationFactor;
+    this.motionX = mX;
+    this.motionY = mY;
+    this.motionZ = mZ;    
     }
   }
 
@@ -259,9 +274,9 @@ public void onMovementTick()
     if(this.ammoType.isRocket() && this.rocketBurnTime>0)//if it is a rocket, accellerate if still burning
       {
       this.rocketBurnTime--;
-      this.motionX*= AmmoRocket.accelerationFactor;
-      this.motionZ*= AmmoRocket.accelerationFactor;
-      this.motionY*= AmmoRocket.accelerationFactor;
+      this.motionX += mX;
+      this.motionY += mY;
+      this.motionZ += mZ;
       if(this.worldObj.isRemote)
         {
         //TODO spawn particles...smoke..fire...wtf ever
@@ -330,6 +345,9 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.blockID = tag.getInteger("bID");
   this.blockMeta = tag.getInteger("bMd");
   this.ticksExisted = tag.getInteger("ticks");
+  this.mX = tag.getFloat("mX");
+  this.mY = tag.getFloat("mY");
+  this.mZ = tag.getFloat("mZ");
   }
 
 @Override
@@ -343,6 +361,9 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setInteger("bID", this.blockID);
   tag.setInteger("bMd", this.blockMeta);
   tag.setInteger("ticks", this.ticksExisted);
+  tag.setFloat("mX", this.mX);
+  tag.setFloat("mY", this.mY);
+  tag.setFloat("mZ", this.mZ);
   }
 
 @Override
@@ -370,8 +391,8 @@ public void readSpawnData(ByteArrayDataInput data)
   {
   this.missileType =data.readInt();
   this.ammoType = AmmoRegistry.instance().getAmmoEntry(missileType);
-  this.rotationYaw = data.readFloat();
-  this.rotationPitch = data.readFloat();
+  this.prevRotationYaw = this.rotationYaw = data.readFloat();
+  this.prevRotationPitch = this.rotationPitch = data.readFloat();
   this.inGround = data.readBoolean();
   this.blockX = data.readInt();
   this.blockY = data.readInt();

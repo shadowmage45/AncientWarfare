@@ -53,8 +53,8 @@ public VehicleTypeBatteringRam(int typeNum)
   this.shouldRiderSit = true;
   this.moveRiderWithTurret = false;
   this.accuracy = 0.99f;
-  this.baseStrafeSpeed = 2.f;
-  this.baseForwardSpeed = 6.f*0.05f;  
+  this.baseStrafeSpeed = 1.f;
+  this.baseForwardSpeed = 4.5f*0.05f;  
   this.basePitchMax = 0.f;
   this.basePitchMin = 0.f;
   this.turretRotationMax = 0.f;

@@ -30,6 +30,15 @@ public VehicleTypeCannonStandFixed(int typeNum)
   {
   super(typeNum);
   this.isDrivable = false;
+  
+  this.baseStrafeSpeed = 0.5f;
+  this.baseForwardSpeed = 0.f;
+  this.shouldRiderSit = false;
+  this.riderVerticalOffset = 0.5f;
+  this.riderForwardsOffset = -1.5f;
+  this.armorBaySize = 4;
+  this.upgradeBaySize = 4;
+  this.ammoBaySize = 6;
   }
 
 }

@@ -32,7 +32,10 @@ public VehicleTypeCannonStandTurret(int typeNum)
   this.turretRotationMax=45;
   this.moveRiderWithTurret = true;
   this.canAdjustYaw = true;
-
+  this.shouldRiderSit = true;
+  this.baseStrafeSpeed = 0.5f;
+  this.baseForwardSpeed = 0.f;
+  
   this.turretVerticalOffset = 13.5f*0.0625f;
   this.riderVerticalOffset = 0.55f;
   this.riderForwardsOffset = -1.25f;

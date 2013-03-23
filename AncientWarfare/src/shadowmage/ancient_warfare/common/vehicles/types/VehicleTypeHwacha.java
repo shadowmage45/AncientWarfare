@@ -41,11 +41,20 @@ public VehicleTypeHwacha(int typeNum)
   {
   super(typeNum);
   this.vehicleMaterial = VehicleMaterial.materialWood;  
+  
   this.validAmmoTypes.add(Ammo.ammoRocket);
+  
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorIron);
   this.validArmors.add(ArmorRegistry.armorObsidian);
 
+  this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);  
+  this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
+  
   this.isMountable = true;
   this.isDrivable = true;
   this.shouldRiderSit = false;
@@ -56,31 +65,25 @@ public VehicleTypeHwacha(int typeNum)
   this.canAdjustYaw = false;
   this.accuracy = 0.75f;
   this.baseStrafeSpeed = 1.f;
-  this.baseForwardSpeed = 4.f*0.05f;  
-  this.basePitchMax = 20;
-  this.basePitchMin = 20;
-
-  this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);  
-  this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
+  this.baseForwardSpeed = 3.5f*0.05f;  
+  this.basePitchMax = 39;
+  this.basePitchMin = 39;
+  this.turretRotationMax = 0.f;  
 
   this.width = 2;
   this.height = 2; 
   this.baseMissileVelocityMax = 42.f;  
   this.missileVerticalOffset = 1.6f;
   this.missileForwardsOffset = 0.8f;
-  this.riderForwardsOffset = -1.2f;
+  this.riderForwardsOffset = -1.4f;
   this.riderVerticalOffset = 0.5f;
   this.displayName = "Hwacha";
   this.displayTooltip = "OMGZ Rockets!";
   this.storageBaySize = 0;
   this.armorBaySize = 3;
+  this.ammoBaySize = 6;
   this.upgradeBaySize = 3;
   }
-
 
 @Override
 public String getTextureForMaterialLevel(int level)

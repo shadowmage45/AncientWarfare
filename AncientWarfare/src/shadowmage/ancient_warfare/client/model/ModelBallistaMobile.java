@@ -873,6 +873,11 @@ public void setCrankRotations(float angle)
   this.crankAxle.rotateAngleX = Trig.toRadians(angle);
   }
 
+public void setTriggerAngle(float angle)
+  {
+  this.trigger1.rotateAngleX = Trig.toRadians(angle);
+  }
+
 public void setBowAndStringRotation(float bow, float string)
   {
   this.armLeftMain.rotateAngleY = Trig.toRadians(-bow);

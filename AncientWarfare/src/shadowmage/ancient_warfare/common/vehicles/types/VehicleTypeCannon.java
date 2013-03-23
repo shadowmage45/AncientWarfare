@@ -67,7 +67,7 @@ public VehicleTypeCannon(int typeNum)
   this.canAdjustPower = false;
   this.canAdjustYaw = false;
 
-  this.baseMissileVelocityMax = 42.f;//stand versions should have higher velocity, as should fixed version--i.e. mobile turret should have the worst of all versions   
+  this.baseMissileVelocityMax = 42.f;   
   this.width = 2;
   this.height = 2;  
 
@@ -106,7 +106,7 @@ public VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh)
 public class CannonVarHelper extends VehicleFiringVarsHelper
 {
 
-
+int firingTicks = 0;
 /**
  * @param vehicle
  */
@@ -118,7 +118,9 @@ public CannonVarHelper(VehicleBase vehicle)
 @Override
 public NBTTagCompound getNBTTag()
   {
-  return new NBTTagCompound();
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setInteger("fT", firingTicks);
+  return tag;
   }
 
 @Override
@@ -130,7 +132,21 @@ public void readFromNBT(NBTTagCompound tag)
 @Override
 public void onFiringUpdate()
   {
-
+  if(firingTicks==0)
+    {
+    //start playing sound
+    }
+  firingTicks++;
+  if(vehicle.worldObj.isRemote)
+    {
+    //TODO offset
+    vehicle.worldObj.spawnParticle("smoke", vehicle.posX, vehicle.posY+1.2d, vehicle.posZ, 0.0D, 0.05D, 0.0D);
+    }
+  if(firingTicks>10)
+    {
+    this.vehicle.firingHelper.startLaunching();
+    firingTicks=0;
+    }
   }
 
 @Override
@@ -142,13 +158,16 @@ public void onReloadUpdate()
 @Override
 public void onLaunchingUpdate()
   {
-
+  vehicle.firingHelper.spawnMissile(0, 0, 0);
+  //TODO play explosion sound
+  //TODO spawn particles for explosion in direction of missile flight @ end of barrel (translate/offset)
+  vehicle.firingHelper.setFinishedLaunching();
   }
 
 @Override
 public void onReloadingFinished()
   {
-
+  firingTicks = 0;
   }
 
 @Override

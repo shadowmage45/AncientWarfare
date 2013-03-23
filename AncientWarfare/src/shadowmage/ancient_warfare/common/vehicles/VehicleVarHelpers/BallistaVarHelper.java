@@ -50,8 +50,9 @@ public BallistaVarHelper(VehicleBase vehicle)
 @Override
 public void onFiringUpdate()
   { 
-  vehicle.firingHelper.startLaunching();
+  vehicle.firingHelper.startLaunching();  
   vehicle.firingHelper.spawnMissile(0, 0, 0);
+  triggerAngle = 0.f;
   }
 
 @Override
@@ -62,6 +63,7 @@ public void onReloadUpdate()
   if(bowAngle>=67.5f)
     {
     bowAngle = 67.5f;
+    triggerAngle = -70.f;
     }
   bowSpeed = bowAngle - prevAngle;
   prevAngle = stringAngle;
@@ -95,6 +97,7 @@ public void onReloadingFinished()
   this.bowSpeed = 0.f;
   this.stringSpeed = 0.f;  
   this.crankSpeed = 0.f;
+  triggerAngle = -70.f;
   }
 
 @Override
@@ -103,6 +106,11 @@ public NBTTagCompound getNBTTag()
   NBTTagCompound tag = new NBTTagCompound();
   tag.setFloat("cA", crankAngle);
   tag.setFloat("cS", crankSpeed);
+  tag.setFloat("bA", bowAngle);
+  tag.setFloat("bS", bowSpeed);
+  tag.setFloat("sA", stringAngle);
+  tag.setFloat("sS", stringSpeed);
+  tag.setFloat("tA", triggerAngle);
   return tag;
   }
 
@@ -118,6 +126,11 @@ public void readFromNBT(NBTTagCompound tag)
   {
   this.crankAngle = tag.getFloat("cA");
   this.crankSpeed = tag.getFloat("cS"); 
+  this.bowAngle = tag.getFloat("bA");
+  this.bowSpeed = tag.getFloat("bS");
+  this.stringAngle = tag.getFloat("sA");
+  this.stringSpeed = tag.getFloat("sS");
+  this.triggerAngle = tag.getFloat("tA");
   }
 
 @Override
@@ -159,7 +172,7 @@ public float getVar6()
 @Override
 public float getVar7()
   {
-  return 0;
+  return triggerAngle;
   }
 
 @Override

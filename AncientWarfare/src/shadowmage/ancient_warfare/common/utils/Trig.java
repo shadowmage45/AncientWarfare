@@ -24,10 +24,12 @@ package shadowmage.ancient_warfare.common.utils;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
+import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.missiles.AmmoRocket;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 
 /**
  * because I hate it so much...why not make the 
@@ -323,10 +325,13 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
   float testVelocity = 10.f;
   float gravityTick = 9.81f *0.05f*0.05f;
   int rocketBurnTime = 0;
+  float rocketTemp;
   float posX = 0;
   float posY = 0;
   float motX = 0;
   float motY = 0;
+  float motX0 = 0;
+  float motY0 = 0;
   float hitX = 0;
   float hitY = 0;
   boolean hitGround = true;
@@ -343,10 +348,12 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
     motX = Trig.sinDegrees(angle)*testVelocity*0.05f;
     motY = Trig.cosDegrees(angle)*testVelocity*0.05f;
     if(rocket)
-      {
-      rocketBurnTime = (int) MathHelper.sqrt_float(motX*motX+motY*motY)*20;
-      motX *= AmmoRocket.initalVelocityFactor;
-      motY *= AmmoRocket.initalVelocityFactor;
+      {     
+      rocketBurnTime = (int) (testVelocity*AmmoRocket.burnTimeFactor);     
+      motX0 = (motX/ (testVelocity*0.05f)) * AmmoRocket.accelerationFactor;
+      motY0 = (motY/ (testVelocity*0.05f)) * AmmoRocket.accelerationFactor;
+      motX = motX0;
+      motY = motY0;
       }
     while(motY>=0 || posY >= y)
       {
@@ -363,8 +370,8 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
       if(rocket && rocketBurnTime >0)
         {
         rocketBurnTime--;
-        motX*= AmmoRocket.accelerationFactor;
-        motY*= AmmoRocket.accelerationFactor;
+        motX+= motX0;
+        motY+= motY0;
         }
       else
         {

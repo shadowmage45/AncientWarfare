@@ -286,3 +286,45 @@
 * add catapult animation.
 * set catapult firing angle to 70'
 * hmm..whats this...added the ballista?
+/********** 03-12-13 **********/
+* clean up team stuff
+* set vehicles to not fire if their current ammo type is valid but empty (don't trigger/send firing animation start packet)
+* add armor types
+* add upgrade types
+* onHit client-side animation (can use the client-side health update method to trigger on - health updates)
+* move world-gen base config from AncientWarfare.cfg into /AWConfig/AWWorldGen.cfg
+* create a real turretYawUpdate algorithm instead of the hack that is currently in place
+/********** 03-13-13 **********/
+* create catapult and ballista vehicle types
+* rework vehicle registry to use a single vehicleBase class..... 
+* fix vehicle placement rotation
+* fix vehicle placement turret rotation (set to vehicle rotation, set pitch to nominal)
+* create basic GuiString element. has options for color, hover-color, callBackOnClick, drawShadow, drawCentered 
+* add String label to checkboxes (optional)
+* add catapult and ballista types
+* add catapult and ballista models and renders
+* fix catapult and ballista models--flags need to be seperate pieces, not attached to the base (so they can use custom textures)
+/********** 03-14-13 **********/
+* finish adding catapult and ballista types, models, and renders
+* add turret-lock upgrade code somewhere...
+* add yawSpeed smoothing updates to render for turret yaw/pitch changes for vehicles (will require a yaw/pitch speed var in vehicleBase)
+* update missile offset code to use turret position + missile offset
+/********** 03-15-13 **********/
+* prep layout for npcs
+/********** 03-16-13 **********/
+* fix trajectory finding for power-based vehicles
+* clean up stand/turret distinctions.
+    --non-turret versions should have fixed turret rotation but have slow whole-vehicle turning
+    --turreted versions should have limited turret rotation ability, still allow slow whole-vehicle turning  
+* fix vehicle to not turn player/camera in opposite direction...or rather fix it to update with vehicle rotation && turret rotation
+* ballista stand is too tall
+* fix ballista stand rider positioning
+* ballista textures....all of zhem
+* move player back more on ballista stand
+/********** 03-17-13 **********/
+* add catapult textures--all of them
+* also...battering ram, mostly complete.
+/********** 03-18-13 **********/
+* add some cannon types, not fully fleshed out.
+/********** 03-19-13 **********/
+* denada--work on catMod 1.5 update...

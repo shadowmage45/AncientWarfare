@@ -430,6 +430,11 @@ public void setCrankRotations(float angle)
   this.crankAxle.rotateAngleX = Trig.toRadians(angle);
   }
 
+public void setTriggerAngle(float angle)
+  {
+  this.trigger1.rotateAngleX = Trig.toRadians(angle);
+  }
+
 @Override
 public void renderFlag()
   {  

@@ -97,6 +97,7 @@ public void updateScreenContents()
     this.prevMemberCount = entry.memberNames.size();
     this.forceUpdate = true;
     }
+  area.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override

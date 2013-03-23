@@ -42,13 +42,17 @@ public BatteringRamVarHelper(VehicleBase vehicle)
 @Override
 public NBTTagCompound getNBTTag()
   {
-  return new NBTTagCompound();
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setFloat("lA", logAngle);
+  tag.setFloat("lS", logSpeed);
+  return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
+  logAngle = tag.getFloat("lA");
+  logSpeed = tag.getFloat("lS");
   }
 
 @Override
@@ -91,8 +95,8 @@ public void onLaunchingUpdate()
     }
   else
     {
-    logAngle--;
-    this.logSpeed = -1;
+    logAngle-=2;
+    this.logSpeed = -2;
     }
   }
 

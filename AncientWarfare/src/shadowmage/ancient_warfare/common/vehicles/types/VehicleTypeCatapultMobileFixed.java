@@ -34,6 +34,8 @@ public VehicleTypeCatapultMobileFixed(int typeNum)
   super(typeNum);
   this.width = 2;
   this.height = 2; 
+  this.baseStrafeSpeed = 1.7f;
+  this.baseForwardSpeed = 4.2f*0.05f;
   this.baseMissileVelocityMax = 32.f;  
   this.turretVerticalOffset = 15 * 0.0625f;
   this.missileVerticalOffset = 2.0f* Trig.sinDegrees(70);

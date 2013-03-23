@@ -43,6 +43,8 @@ public VehicleTypeCatapult(int typeNum)
   this.validAmmoTypes.add(Ammo.ammoStoneShot);  
   this.validAmmoTypes.add(Ammo.ammoRocket);
   this.validArmors.add(ArmorRegistry.armorStone);
+  this.validArmors.add(ArmorRegistry.armorObsidian);
+  this.validArmors.add(ArmorRegistry.armorIron);
   
   this.isMountable = true;  
   this.isCombatEngine = true;

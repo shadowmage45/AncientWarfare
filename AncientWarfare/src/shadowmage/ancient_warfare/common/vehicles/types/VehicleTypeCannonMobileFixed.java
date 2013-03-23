@@ -29,9 +29,12 @@ public class VehicleTypeCannonMobileFixed extends VehicleTypeCannon
 public VehicleTypeCannonMobileFixed(int typeNum)
   {
   super(typeNum);
-  this.baseForwardSpeed = 6*0.05f;
+  this.baseForwardSpeed = 3.5f*0.05f;
   this.baseStrafeSpeed = 1.5f;
   this.turretVerticalOffset = 14.5f*0.0625f;
+  this.shouldRiderSit = false;
+  this.riderVerticalOffset = 0.5f;
+  this.riderForwardsOffset = -2.45f;
   }
 
 }
