@@ -19,6 +19,8 @@ VEHICLES
 * no entity collision
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
 * rockets need adjusted to a set start velocity--will help with aim calculation greatly I think
+* current health is not reset to lower amount from materialType adjustment i.e. (100/75)
+* vehicle inventory render needs to come down 1/2 to 1 block
          
 NPCS
 * add save/load from NBT stuff

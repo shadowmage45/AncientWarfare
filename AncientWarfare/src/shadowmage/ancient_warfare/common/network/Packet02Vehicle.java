@@ -77,6 +77,11 @@ public void setAmmoUpdate(NBTTagCompound tag)
   this.packetData.setTag("ammoUpd", tag);
   }
 
+public void setPackCommand()
+  {
+  this.packetData.setBoolean("pack", true);
+  }
+
 @Override
 public int getPacketType()
   {  

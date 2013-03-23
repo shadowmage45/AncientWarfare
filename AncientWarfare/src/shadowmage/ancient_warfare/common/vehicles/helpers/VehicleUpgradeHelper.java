@@ -90,18 +90,18 @@ public void updateUpgrades()
   List<IVehicleArmorType> armors = vehicle.inventory.getInventoryArmor();
   for(IVehicleArmorType ar : armors)
     {
-    Config.logDebug("installed armor: "+ar.getDisplayName());
+//    Config.logDebug("installed armor: "+ar.getDisplayName());
     if(this.validArmorTypes.contains(ar))
       {
       this.installedArmor.add(ar);
       }
     else
       {
-      Config.logDebug("invalid armor! this vehicle has: "+this.validArmorTypes.size()+" valid armor types");
-      for(IVehicleArmorType type : this.validArmorTypes)
-        {
-        Config.logDebug(type.getDisplayName());
-        }
+//      Config.logDebug("invalid armor! this vehicle has: "+this.validArmorTypes.size()+" valid armor types");
+//      for(IVehicleArmorType type : this.validArmorTypes)
+//        {
+//        Config.logDebug(type.getDisplayName());
+//        }
       }
     }
   int [] arInts = new int[this.installedArmor.size()];
@@ -162,7 +162,7 @@ public void updateUpgradeStats()
     }
   for(IVehicleArmorType armor : this.installedArmor)
     {
-    Config.logDebug("updating armor stats");
+//    Config.logDebug("updating armor stats");
     vehicle.currentExplosionResist += armor.getExplosiveDamageReduction();
     vehicle.currentFireResist += armor.getFireDamageReduction();
     vehicle.currentGenericResist += armor.getGeneralDamageReduction();

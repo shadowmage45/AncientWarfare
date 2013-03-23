@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
@@ -78,6 +79,27 @@ public VehicleTypeHwacha(int typeNum)
   this.storageBaySize = 0;
   this.armorBaySize = 3;
   this.upgradeBaySize = 3;
+  }
+
+
+@Override
+public String getTextureForMaterialLevel(int level)
+  {
+  switch(level)
+    {
+    case 0:
+    return Config.texturePath + "models/hwacha1.png";
+    case 1:
+    return Config.texturePath + "models/hwacha2.png";
+    case 2:
+    return Config.texturePath + "models/hwacha3.png";
+    case 3:
+    return Config.texturePath + "models/hwacha4.png";
+    case 4:
+    return Config.texturePath + "models/hwacha5.png";
+    default:
+    return Config.texturePath + "models/hwacha1.png";
+    }
   }
 
 @Override

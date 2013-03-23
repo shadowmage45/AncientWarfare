@@ -21,10 +21,12 @@
 package shadowmage.ancient_warfare.client.gui.vehicle;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
+import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 
 public class GuiVehicleDebug extends GuiContainerAdvanced
 {
@@ -81,6 +83,13 @@ public void onElementActivated(IGuiElement element)
   case 1:
   mc.displayGuiScreen(new GuiVehicleStats(new ContainerDummy(), ((ContainerVehicle)this.inventorySlots).vehicle));
   break;
+  case 2:
+  Packet02Vehicle pkt = new Packet02Vehicle();
+  pkt.setParams( ((ContainerVehicle)this.inventorySlots).vehicle );
+  pkt.setPackCommand();
+  pkt.sendPacketToServer();
+  this.closeGUI();
+  break;
   default:
   break;
   }
@@ -89,8 +98,9 @@ public void onElementActivated(IGuiElement element)
 @Override
 public void setupControls()
   {
-  this.addGuiButton(0, 0, 0, 45, 16, "Done");
-  this.addGuiButton(1, 0, 16, 45, 16, "Stats");
+  this.addGuiButton(0, this.getXSize()-45-5, 5, 45, 16, "Done");
+  this.addGuiButton(1, this.getXSize()-45-5, 5+16+2, 45, 16, "Stats");
+  this.addGuiButton(2, this.getXSize()-45-5, 5+32+4,45,16, "Pack");
   }
 
 @Override

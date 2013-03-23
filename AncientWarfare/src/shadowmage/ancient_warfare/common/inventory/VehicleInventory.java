@@ -134,12 +134,10 @@ public List<IVehicleArmorType> getInventoryArmor()
   ArrayList<IVehicleArmorType> armors = new ArrayList<IVehicleArmorType>();
   for(int i = 0; i < this.armorInventory.getSizeInventory(); i++)
     {
-    Config.logDebug("getting armor inventory stack");
     ItemStack stack = this.armorInventory.getStackInSlot(i);
     IVehicleArmorType armor = ArmorRegistry.instance().getArmorForStack(stack);
     if(armor!=null)
       {
-      Config.logDebug("found armor of type: "+armor);
       armors.add(armor);
       }     
     }

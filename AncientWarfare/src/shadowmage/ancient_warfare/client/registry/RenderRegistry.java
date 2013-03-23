@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.client.model.ModelCatapultMobileFixed;
 import shadowmage.ancient_warfare.client.model.ModelCatapultMobileTurret;
 import shadowmage.ancient_warfare.client.model.ModelCatapultStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelCatapultStandTurret;
+import shadowmage.ancient_warfare.client.model.ModelHwacha;
 import shadowmage.ancient_warfare.client.model.ModelVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderArrow;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
@@ -52,7 +53,7 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileFixe
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileTurret;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandTurret;
-import shadowmage.ancient_warfare.common.config.Settings;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderHwacha;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
@@ -105,7 +106,7 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.CANNON_STAND_FIXED, new RenderCannonStandFixed(), new ModelCannonStandFixed());
   this.addVehicleRender(VehicleRegistry.CANNON_STAND_TURRET, new RenderCannonStandTurret(), new ModelCannonStandTurret());
   this.addVehicleRender(VehicleRegistry.CANNON_MOBILE_FIXED, new RenderCannonMobileFixed(), new ModelCannonMobileFixed());  
-  this.addVehicleRender(VehicleRegistry.HWACHA, new RenderCatapultStandFixed(), new ModelCatapultStandFixed());
+  this.addVehicleRender(VehicleRegistry.HWACHA, new RenderHwacha(), new ModelHwacha());
   
   /**
    * missiles...

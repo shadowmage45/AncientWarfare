@@ -196,7 +196,7 @@ public void onMovementTick()
   if(!vehicle.onGround)
     {
     vehicle.motionY -= (9.81f*0.05f*0.05f);
-    Config.logDebug("vehicle not on ground, falling!! server:"+!vehicle.worldObj.isRemote+"  pos: "+vehicle.posX+","+vehicle.posY+","+vehicle.posZ);
+//    Config.logDebug("vehicle not on ground, falling!! server:"+!vehicle.worldObj.isRemote+"  pos: "+vehicle.posX+","+vehicle.posY+","+vehicle.posZ);
     }
   else
     {

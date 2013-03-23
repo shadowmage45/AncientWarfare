@@ -23,7 +23,9 @@
 package shadowmage.ancient_warfare.common.vehicles;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -39,7 +41,6 @@ import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
-import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
@@ -210,7 +211,7 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
 
 public void updateBaseStats()
   {
-  Config.logDebug("updating base stats. server"+!worldObj.isRemote);
+//  Config.logDebug("updating base stats. server"+!worldObj.isRemote);
   IVehicleMaterial material = vehicleType.getMaterialType();
   int level = this.vehicleMaterialLevel;
   baseForwardSpeed = vehicleType.getBaseForwardSpeed() * material.getSpeedForwardFactor(level);
@@ -228,13 +229,24 @@ public void updateBaseStats()
   }
 
 /**
+ * return an itemStack tagged appropriately for this vehicle
+ * @return
+ */
+public ItemStack getItemForVehicle()
+  {
+  ItemStack stack = this.vehicleType.getStackForLevel(vehicleMaterialLevel);
+  stack.getTagCompound().getCompoundTag("AWVehSpawner").setFloat("health", localVehicleHealth);
+  return stack;
+  }
+
+/**
  * used by soldiers to determine if they should try and 'drive' the engine anywhere 
  * (so that they won't try and turn stand-fixed varieties of vehicles)
  * @return
  */
 public boolean isMoveable()
   {
-  return this.isDrivable() && this.baseForwardSpeed > 0;
+  return this.isDrivable() && this.currentForwardSpeedMax > 0;
   }
 
 public float getHorizontalMissileOffset()
@@ -339,22 +351,7 @@ public Pos3f getMissileOffset()
   y+=y1;
   off.x = x;
   off.y = y;
-  off.z = z;
-  //  Pos3f off = new Pos3f();  
-  //  float x = this.getHorizontalMissileOffset();
-  //  float y = this.getVerticalMissileOffset();
-  //  float z = this.getForwardsMissileOffset();
-  //  float x1 = this.vehicleType.getTurretPosX();
-  //  float y1 = this.vehicleType.getTurretPosY();
-  //  float z1 = this.vehicleType.getTurretPosZ();
-  //  float angle = Trig.toDegrees((float) Math.atan2(z, x));
-  //  float len = MathHelper.sqrt_float(x*x+z*z);
-  //  angle+= this.rotationYaw;   
-  //  x = Trig.cosDegrees(angle)*len;
-  //  z = -Trig.sinDegrees(angle)*len;
-  //  off.x = x;
-  //  off.y = y;
-  //  off.z = z;
+  off.z = z;  
   return off;
   }
 
@@ -388,7 +385,7 @@ public void onLaunchingUpdate()
  */
 public void resetCurrentStats()
   {
-  Config.logDebug("resetting upgrade stats. server"+!worldObj.isRemote);
+//  Config.logDebug("resetting upgrade stats. server"+!worldObj.isRemote);
   this.firingHelper.resetUpgradeStats();
   this.moveHelper.resetUpgradeStats();
   this.currentForwardSpeedMax = this.baseForwardSpeed;
@@ -403,7 +400,7 @@ public void resetCurrentStats()
   this.currentGenericResist = this.baseGenericResist;
   this.currentWeight = this.baseWeight;
   this.currentAccuracy = this.baseAccuracy;
-  Config.logDebug("lscm: "+this.currentLaunchSpeedPowerMax);
+//  Config.logDebug("lscm: "+this.currentLaunchSpeedPowerMax);
   }
 
 /**
@@ -417,22 +414,7 @@ public void setDead()
 
 @Override
 public void onUpdate()
-  { 
-  /***
-   * every tick bound turretRotation between home and home+-min/max
-    every tick bound pitch between min and max
-    every tick update rotation home point to vehicle rotation
-    every tick update rotation and pitch if rotating or pitching
-    every tick if not power-adjustable, bound power to 1<->maxPower
-
-    Client:
-    on keyboard input, if aimable, send input to server
-    on mouse input, if aimable, send input to server
-    update local client vars from input
-
-    Server:
-    on client input received, if valid and an update, send input update packet to all clients
-   */
+  {  
   super.onUpdate(); 
 
   if(this.worldObj.isRemote)
@@ -638,6 +620,10 @@ public void handlePacketUpdate(NBTTagCompound tag)
     {
     this.handleClientMoveData(tag.getCompoundTag("clientMove"));
     }
+  if(tag.hasKey("pack"))
+    {
+    this.packVehicle();
+    }
   }
 
 public void handleClientMoveData(NBTTagCompound tag)
@@ -677,6 +663,32 @@ public void handleInputData(NBTTagCompound tag)
 public void handleKeyboardMovement(byte forward, byte strafe)
   {
   this.moveHelper.handleKeyboardInput(forward, strafe);  
+  }
+
+/**
+ * spits out inventory into world, and packs the vehicle into an item, also spat into the world
+ */
+public void packVehicle()
+  {
+  if(!this.worldObj.isRemote)
+    {
+    this.dropInventory();
+    ItemStack stack = this.getItemForVehicle();
+    EntityItem entity = new EntityItem(this.worldObj, posX, posY+0.5d, posZ, stack);
+    worldObj.spawnEntityInWorld(entity);
+    this.setDead();
+    }
+  }
+
+/**
+ * called on death or when packed into an item
+ */
+public void dropInventory()
+  {
+  if(!this.worldObj.isRemote)
+    {
+    
+    }
   }
 
 @Override

@@ -27,6 +27,7 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -62,9 +63,14 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     }
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWVehSpawner"))
     {
-    int level = stack.getTagCompound().getCompoundTag("AWVehSpawner").getInteger("lev");    
+    NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWVehSpawner");
+    int level = tag.getInteger("lev");    
     hit = BlockTools.offsetForSide(hit, side);      
     VehicleBase vehicle = VehicleType.getVehicleForType(world, stack.getItemDamage(), level);
+    if(tag.hasKey("health"))
+      {
+      vehicle.localVehicleHealth = tag.getFloat("health");
+      }
     vehicle.teamNum = TeamTracker.instance().getTeamForPlayerServer(player.getEntityName());
     vehicle.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
     vehicle.prevRotationYaw = vehicle.rotationYaw = -player.rotationYaw + 180;
@@ -92,7 +98,12 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
     {
     if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWVehSpawner"))
       {
-      par3List.add("Material Level: "+stack.getTagCompound().getCompoundTag("AWVehSpawner").getInteger("lev"));
+      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWVehSpawner");
+      par3List.add("Material Level: "+tag.getInteger("lev"));
+      if(tag.hasKey("health"))
+        {
+        par3List.add("Vehicle Health: "+tag.getFloat("health"));
+        }
       }
     }  
   }
