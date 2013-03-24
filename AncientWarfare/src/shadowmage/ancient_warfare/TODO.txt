@@ -5,7 +5,7 @@ GENERAL
 * figure out a good way to index images for item subtypes--vehicles could use their own icons for each material level, not just vehicle type
         --might be made easier in 1.5 by the icon changes...maybe...also icon changes are a pain in the ass in general...
 * partially destroyable blocks ? (hold destruction status as meta-data?)
-* cache display stack list for vehicles/ammo/upgrades/armor/npcs/etc
+
 * create a way for tile entities to broadcast to nearby soldiers (to denote valuable target)(event bus?)
 
 VEHICLES    
@@ -154,6 +154,9 @@ TWEAKS/OPTIMIZATION
 * add hwacha textures
 * tons of work fleshing out vehicle types -- fix ballista animation (trigger), update speed of battering ram animation, lots of others...
 /********** 03-24-13 **********/
+* fix hwacha rockets colliding with hwacha client side
+* cache display stack list for vehicles/npcs (was already cached for normal items that don't override getSubItems)
+* add soundFx to cannon and hwacha
 /********** 03-25-13 **********/
 /********** 03-26-13 **********/
 /********** 03-27-13 **********/

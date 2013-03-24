@@ -317,15 +317,107 @@ public static float iterativeSpeedFinder(float x, float y, float z, float angle,
   return bruteForceSpeedFinder(MathHelper.sqrt_float(x*x+z*z), y, angle, maxIterations, rocket);
   }
 
+public static float bruteForceRocketFinder(float x, float y, float angle, int maxIterations)
+  {
+  float bestVelocity = 0.f;
+  float velocityIncrement = 5.29f;
+  float testVelocity = 1.f;
+  float gravityTick = 9.81f *0.05f*0.05f;
+  int rocketBurnTime = 0;
+  float posX = 0;
+  float posY = 0;
+  float motX = 0;
+  float motY = 0;
+  float motX0 = 0;
+  float motY0 = 0;
+  float hitX = 0;
+  float hitY = 0;
+  boolean hitGround = true;
+  float hitDiffX;
+  float hitDiffY;            
+  float hitPercent;
+//  maxIterations *= 4;
+  for(int iter = 0; iter < maxIterations; iter++)
+    {
+    //reset pos
+    //calc initial motion from input angle and current testVelocity
+    hitGround = true;
+    posX = 0.f;
+    posY = 0.f;
+    motX = Trig.sinDegrees(angle)*testVelocity*0.05f;
+    motY = Trig.cosDegrees(angle)*testVelocity*0.05f;
+        
+    rocketBurnTime = (int) (testVelocity*AmmoRocket.burnTimeFactor);     
+    motX0 = (motX/ (testVelocity*0.05f)) * AmmoRocket.accelerationFactor;
+    motY0 = (motY/ (testVelocity*0.05f)) * AmmoRocket.accelerationFactor;
+    motX = motX0;
+    motY = motY0;
+    while(motY>=0 || posY >= y)
+      {
+      
+      //move
+      //check hit
+      //apply gravity if not hit
+      posX+=motX;
+      posY+=motY;    
+      if(rocketBurnTime >0)
+        {
+        rocketBurnTime--;
+        motX+= motX0;
+        motY+= motY0;
+        }
+      else
+        {
+        motY-=gravityTick;
+        }
+      if(posX>x)
+        {
+        hitGround = false;
+        break;//missile went too far
+        }  
+      }    
+    if(hitGround)//if break was triggered by going negative on y axis, get a more precise hit vector
+      {
+      motY+=gravityTick;
+      hitDiffX = motX - posX;
+      hitDiffY = motY - posY;            
+      hitPercent = (y - posY) / hitDiffY;
+      hitX = posX + hitDiffX * hitPercent;
+      hitY = posY + + hitDiffY * hitPercent;
+      } 
+    if(hitGround && hitX < x)// hit was not far enough, increase power
+      {
+      bestVelocity = testVelocity;
+      testVelocity += velocityIncrement;        
+      }
+    else if(posX<x)//
+      {
+      bestVelocity = testVelocity;
+      testVelocity += velocityIncrement;
+      }
+    else//it was too far, go back to previous power, decrease increment, increase by new increment
+      {
+      bestVelocity = testVelocity;
+      testVelocity -= velocityIncrement;
+      velocityIncrement*=0.5f;
+      testVelocity+=velocityIncrement;      
+      } 
+    }
+    
+  return bestVelocity;  
+  }
+
 public static float bruteForceSpeedFinder(float x, float y, float angle, int maxIterations, boolean rocket)
   {  
   angle = 90-angle;
+  if(rocket)
+    {
+    return bruteForceRocketFinder(x, y, angle, maxIterations);
+    }
   float bestVelocity = 0.f;
   float velocityIncrement = 10.f;
   float testVelocity = 10.f;
   float gravityTick = 9.81f *0.05f*0.05f;
-  int rocketBurnTime = 0;
-  float rocketTemp;
   float posX = 0;
   float posY = 0;
   float motX = 0;
@@ -346,15 +438,7 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
     posX = 0.f;
     posY = 0.f;
     motX = Trig.sinDegrees(angle)*testVelocity*0.05f;
-    motY = Trig.cosDegrees(angle)*testVelocity*0.05f;
-    if(rocket)
-      {     
-      rocketBurnTime = (int) (testVelocity*AmmoRocket.burnTimeFactor);     
-      motX0 = (motX/ (testVelocity*0.05f)) * AmmoRocket.accelerationFactor;
-      motY0 = (motY/ (testVelocity*0.05f)) * AmmoRocket.accelerationFactor;
-      motX = motX0;
-      motY = motY0;
-      }
+    motY = Trig.cosDegrees(angle)*testVelocity*0.05f;   
     while(motY>=0 || posY >= y)
       {
       //move
@@ -366,17 +450,8 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
         {
         hitGround = false;
         break;//missile went too far
-        }
-      if(rocket && rocketBurnTime >0)
-        {
-        rocketBurnTime--;
-        motX+= motX0;
-        motY+= motY0;
-        }
-      else
-        {
-        motY-=gravityTick;
-        }
+        }     
+      motY-=gravityTick;        
       }    
     if(hitGround)//if break was triggered by going negative on y axis, get a more precise hit vector
       {
@@ -399,7 +474,7 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
       velocityIncrement *= 0.5f;
       testVelocity +=velocityIncrement;
       } 
-    }
+    } 
   return bestVelocity;
   }
 

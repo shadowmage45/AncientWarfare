@@ -29,8 +29,9 @@ public class VehicleTypeCannonStandFixed extends VehicleTypeCannon
 public VehicleTypeCannonStandFixed(int typeNum)
   {
   super(typeNum);
-  this.isDrivable = false;
-  
+  this.isDrivable = true;
+  this.displayName = "Cannon Stand Fixed";
+  this.displayTooltip = "A simple fixed cannon emplacement.";
   this.baseStrafeSpeed = 0.5f;
   this.baseForwardSpeed = 0.f;
   this.shouldRiderSit = false;

@@ -46,6 +46,7 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 public class VehicleFiringHelper implements INBTTaggable
 {
 
+protected static Random rng = new Random();
 /**
  * these values are updated when the client chooses an aim point, used by overlay rendering gui 
  */
@@ -102,6 +103,11 @@ public void spawnMissile(float ox, float oy, float oz)
   {
   if(!vehicle.worldObj.isRemote)
     {      
+    IAmmoType ammo = vehicle.ammoHelper.getCurrentAmmoType();
+    if(ammo==null)
+      {
+      return;
+      }
     if(vehicle.ammoHelper.getCurrentAmmoCount()>0)
       {
       vehicle.ammoHelper.decreaseCurrentAmmo(1);
@@ -115,19 +121,12 @@ public void spawnMissile(float ox, float oy, float oz)
       float yaw = vehicle.localTurretRotation;
       float pitch = vehicle.localTurretPitch; 
       if(Config.adjustMissilesForAccuracy)
-        {
-        //TODO fix all this crap up, make a dedicated random somewhere for this
-        //TODO check the variance on random, and if I am inverting properly
-        Config.logDebug("spawning missile");
-        Config.logDebug("orig params");
-        Config.logDebug("po: "+power+" y: "+yaw+" pi: "+pitch);
-        Random rnd = new Random();
-        float accuracy = getAccuracyAdjusted();
-        Config.logDebug("adj acc: "+accuracy);
-        yaw   += (float)rnd.nextGaussian() * (1.f - accuracy)*10.f;
-        if(vehicle.canAimPower())
+        {        
+        float accuracy = getAccuracyAdjusted();        
+        yaw   += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;
+        if(vehicle.canAimPower() && !ammo.isRocket())
           {
-          power += (float)rnd.nextGaussian() * (1.f - accuracy)*2.5f; 
+          power += (float)rng.nextGaussian() * (1.f - accuracy)*2.5f; 
           if(power<1.f)
             {
             power=1.f;
@@ -135,13 +134,13 @@ public void spawnMissile(float ox, float oy, float oz)
           }
         else if(vehicle.canAimPitch())
           {
-          pitch += (float)rnd.nextGaussian() * (1.f - accuracy)*10.f;
-          }        
-        
-        
-        Config.logDebug("new params");
-        Config.logDebug("po: "+power+" y: "+yaw+" pi: "+pitch);
-        
+          pitch += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;
+          }
+        else if(ammo!=null && ammo.isRocket())
+          {
+          power += power/vehicle.currentLaunchSpeedPowerMax;
+          pitch += (float)(rng.nextFloat()*2.f -1.f) * (1.f - accuracy)*50.f;
+          } 
         }
       
       MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, yaw, pitch, power);
@@ -489,8 +488,7 @@ public void handleAimMouseInput(Vec3 target)
     }
   else if(vehicle.canAimPower())
     {     
-    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch, Settings.getClientPowerIterations(), (vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));
-    float xLen = MathHelper.sqrt_float(tx*tx+tz*tz);
+    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch, Settings.getClientPowerIterations(), (vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));    
     if(this.clientLaunchSpeed!=power && power < getAdjustedMaxMissileVelocity())
       {
       this.clientLaunchSpeed = power;

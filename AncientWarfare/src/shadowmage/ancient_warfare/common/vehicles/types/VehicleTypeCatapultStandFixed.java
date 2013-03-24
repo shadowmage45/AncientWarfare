@@ -39,8 +39,6 @@ public VehicleTypeCatapultStandFixed(int typeNum)
   this.height = 1.8f; 
   this.baseMissileVelocityMax = 37.f;  
   this.turretVerticalOffset = 3*0.0625f;
-  this.missileVerticalOffset = 2.0f* Trig.sinDegrees(70);
-  this.missileForwardsOffset = -2.0f* Trig.cosDegrees(70);
   this.riderForwardsOffset = 1.2f;
   this.riderVerticalOffset = 0.0f;
   this.displayName = "Catapult Stand Fixed";

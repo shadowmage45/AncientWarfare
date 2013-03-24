@@ -72,11 +72,14 @@ public VehicleTypeHwacha(int typeNum)
 
   this.width = 2;
   this.height = 2; 
-  this.baseMissileVelocityMax = 42.f;  
-  this.missileVerticalOffset = 1.6f;
-  this.missileForwardsOffset = 0.8f;
+  this.baseMissileVelocityMax = 42.f;
+  
+  this.turretVerticalOffset = 8 * 0.0625f;
+//  this.missileVerticalOffset = 0.9375f;
+  this.missileForwardsOffset = -0.9375f;
+  
   this.riderForwardsOffset = -1.4f;
-  this.riderVerticalOffset = 0.5f;
+  this.riderVerticalOffset = 0.5f  + 2.0f;
   this.displayName = "Hwacha";
   this.displayTooltip = "OMGZ Rockets!";
   this.storageBaySize = 0;
@@ -113,6 +116,9 @@ public VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh)
 
 public class HwachaFiringVarsHelper extends VehicleFiringVarsHelper
 {
+
+int missileFired = 0;
+int delayTick = 0;
 /**
  * @param vehicle
  */
@@ -136,7 +142,7 @@ public void readFromNBT(NBTTagCompound tag)
 @Override
 public void onFiringUpdate()
   {
-
+  vehicle.firingHelper.startLaunching();
   }
 
 @Override
@@ -147,14 +153,30 @@ public void onReloadUpdate()
 
 @Override
 public void onLaunchingUpdate()
-  {
-
+  {  
+  delayTick++;
+  if(delayTick>=5)
+    {
+    delayTick = 0;
+    vehicle.firingHelper.spawnMissile(0, 0, 0);
+    if(!vehicle.worldObj.isRemote)
+      {
+      vehicle.worldObj.playSoundAtEntity(vehicle, "fireworks.launch", 1.0F, 0.5F);
+      } 
+    this.missileFired++;
+    if(missileFired>=36)
+      {
+      vehicle.firingHelper.setFinishedLaunching();
+      }
+    }
+  
   }
 
 @Override
 public void onReloadingFinished()
   {
-
+  this.missileFired = 0;
+  this.delayTick = 0;
   }
 
 @Override

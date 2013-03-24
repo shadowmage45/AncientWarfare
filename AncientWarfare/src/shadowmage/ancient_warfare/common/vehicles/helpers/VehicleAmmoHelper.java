@@ -272,6 +272,7 @@ public MissileBase getMissile2(float x, float y, float z, float yaw, float pitch
     MissileBase missile = new MissileBase(vehicle.worldObj);   
     missile.setMissileParams2(ammo, x, y, z, yaw, pitch, velocity);
     missile.setMissileCallback(vehicle);
+    missile.setLaunchingEntity(vehicle);
     return missile;
     }
   return null;

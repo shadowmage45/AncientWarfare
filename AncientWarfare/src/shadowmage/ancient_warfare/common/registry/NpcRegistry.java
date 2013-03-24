@@ -66,8 +66,14 @@ public void registerNPCs()
     } 
   }
 
+private List<ItemStack> displayItemCache = null;
+
 public List getCreativeDisplayItems()
   {
+  if(displayItemCache!=null)
+    {
+    return displayItemCache;
+    }
   List<ItemStack> stacks = new ArrayList<ItemStack>();
   ItemStack stack = null;  
   NBTTagCompound tag = null;
@@ -86,6 +92,7 @@ public List getCreativeDisplayItems()
       stacks.add(stack);
       }
     }  
+  displayItemCache = stacks;
   return stacks;
   }
 

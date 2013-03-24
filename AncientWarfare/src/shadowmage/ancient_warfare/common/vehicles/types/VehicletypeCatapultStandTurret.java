@@ -37,8 +37,6 @@ public VehicletypeCatapultStandTurret(int typeNum)
   this.height = 2.2f; 
   this.baseMissileVelocityMax = 32.f;  
   this.turretVerticalOffset = 13 * 0.0625f;
-  this.missileVerticalOffset = 2.0f* Trig.sinDegrees(70);
-  this.missileForwardsOffset = -2.0f* Trig.cosDegrees(70);
   this.turretVerticalOffset = 0.4f;
   this.riderForwardsOffset = 1.2f;
   this.riderVerticalOffset = 0.7f;

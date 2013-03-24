@@ -29,6 +29,8 @@ public class VehicleTypeCannonStandTurret extends VehicleTypeCannon
 public VehicleTypeCannonStandTurret(int typeNum)
   {
   super(typeNum);
+  this.displayName = "Cannon Stand Turret";
+  this.displayTooltip = "A turret mounted cannon mounted on a simple base.";
   this.turretRotationMax=45;
   this.moveRiderWithTurret = true;
   this.canAdjustYaw = true;

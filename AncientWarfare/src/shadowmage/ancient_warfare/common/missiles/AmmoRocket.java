@@ -26,8 +26,8 @@ import net.minecraft.world.World;
 public class AmmoRocket extends Ammo
 {
 
-public static float burnTimeFactor = 1.f;
-public static float accelerationFactor = 0.05f;
+public static float burnTimeFactor = 3.f;
+public static float accelerationFactor = 0.01f;
 
 /**
  * @param ammoType

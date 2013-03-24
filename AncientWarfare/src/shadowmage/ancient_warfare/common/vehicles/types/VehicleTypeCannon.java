@@ -132,18 +132,23 @@ public void readFromNBT(NBTTagCompound tag)
 @Override
 public void onFiringUpdate()
   {
-  if(firingTicks==0)
+  if(firingTicks==0 && !vehicle.worldObj.isRemote)
     {
-    //start playing sound
+    vehicle.worldObj.playSoundAtEntity(vehicle, "fireworks.launch", 0.50F, .25F);
+    vehicle.playSound("random.fuse", 1.0F, 0.5F);
     }
   firingTicks++;
   if(vehicle.worldObj.isRemote)
-    {
+    {    
     //TODO offset
     vehicle.worldObj.spawnParticle("smoke", vehicle.posX, vehicle.posY+1.2d, vehicle.posZ, 0.0D, 0.05D, 0.0D);
     }
   if(firingTicks>10)
     {
+    if(!vehicle.worldObj.isRemote)
+      {
+      vehicle.playSound("random.explode", 1.f, 1.f);
+      }
     this.vehicle.firingHelper.startLaunching();
     firingTicks=0;
     }

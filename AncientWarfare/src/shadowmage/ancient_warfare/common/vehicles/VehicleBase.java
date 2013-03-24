@@ -337,15 +337,15 @@ public Pos3f getMissileOffset()
   float x = this.getHorizontalMissileOffset();
   float y = this.getVerticalMissileOffset();
   float z = this.getForwardsMissileOffset();
-  if(x != 0 || z != 0)
-    {
+  if(x != 0 || z != 0 || y !=0)
+    {    
     angle = Trig.toDegrees((float) Math.atan2(z, x));
-    len = MathHelper.sqrt_float(x*x+z*z);
+    len = MathHelper.sqrt_float(x*x+z*z+y*y);
     angle+= this.localTurretRotation;   
-    x = Trig.cosDegrees(angle)*len;
-    z = -Trig.sinDegrees(angle)*len;
-    }
-
+    x = Trig.cosDegrees(angle)*Trig.sinDegrees(localTurretPitch)*len;
+    z = -Trig.sinDegrees(angle)*Trig.sinDegrees(localTurretPitch)*len;
+    y = Trig.cosDegrees(localTurretPitch)*len;
+    }    
   x+=x1;
   z+=z1;
   y+=y1;

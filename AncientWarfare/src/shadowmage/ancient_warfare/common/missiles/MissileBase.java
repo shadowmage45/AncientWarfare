@@ -29,6 +29,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
@@ -129,6 +130,12 @@ public void setMissileParams2(IAmmoType ammo, float x, float y, float z, float y
   this.setMissileParams(ammo, x, y, z, vX, vY, vZ);
   }
 
+public Entity launcher = null;
+public void setLaunchingEntity(Entity ent)
+  {
+  this.launcher = ent;
+  }
+
 public void setMissileCallback(IMissileHitCallback shooter)
   {
   this.shooter = shooter;
@@ -192,19 +199,33 @@ public void onMovementTick()
     positionVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
     moveVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ); 
     Entity hitEntity = null;
-    
-    if(this.ticksExisted>10)//TODO set a firingEntity...or two..
+    boolean testEntities = true;
+    if(this.ticksExisted<10)
+      {
+      testEntities = false;
+      }
+    if(this.worldObj.isRemote && this.ammoType.isRocket() && this.ticksExisted<40)
+      {
+      testEntities = false;
+      }
+    if(testEntities)
       {
       List nearbyEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
       double closestHit = 0.0D;
-      float borderSize;
-      
+      float borderSize;      
       
       for (int i = 0; i < nearbyEntities.size(); ++i)
         {
         Entity curEnt = (Entity)nearbyEntities.get(i);
         if (curEnt.canBeCollidedWith())
           {
+          if(this.launcher!=null)
+            {
+            if(curEnt==this.launcher || curEnt == this.launcher.riddenByEntity)
+              {
+              continue;
+              }
+            }
           borderSize = 0.3F;
           AxisAlignedBB var12 = curEnt.boundingBox.expand((double)borderSize, (double)borderSize, (double)borderSize);
           MovingObjectPosition checkHit = var12.calculateIntercept(positionVector, moveVector);
@@ -384,6 +405,11 @@ public void writeSpawnData(ByteArrayDataOutput data)
   data.writeInt(blockID);
   data.writeInt(blockMeta);
   data.writeInt(rocketBurnTime);
+  data.writeBoolean(this.launcher!=null);
+  if(this.launcher!=null)
+    {
+    data.writeInt(this.launcher.entityId);
+    }
   }
 
 @Override
@@ -400,5 +426,11 @@ public void readSpawnData(ByteArrayDataInput data)
   this.blockID = data.readInt();
   this.blockMeta = data.readInt();
   this.rocketBurnTime = data.readInt();
+  boolean hasLauncher = data.readBoolean();
+  if(hasLauncher)
+    {
+    Entity launcher = worldObj.getEntityByID(data.readInt());
+    Config.logDebug("launching entity set to: "+launcher);
+    }
   }
 }

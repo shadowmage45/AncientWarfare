@@ -410,8 +410,14 @@ public static VehicleBase getVehicleForType(World world, int type, int level)
   return null;
   }
 
+private static List<ItemStack> displayItemCache = null;
+
 public static List getCreativeDisplayItems()
   {
+  if(displayItemCache!=null)
+    {
+    return displayItemCache;
+    }
   List<ItemStack> stacks = new ArrayList<ItemStack>();
   ItemStack stack = null;
   for(IVehicleType type : vehicleTypes)
@@ -429,6 +435,7 @@ public static List getCreativeDisplayItems()
       stacks.add(stack);
       }
     } 
+  displayItemCache = stacks;
   return stacks;
   }
 
