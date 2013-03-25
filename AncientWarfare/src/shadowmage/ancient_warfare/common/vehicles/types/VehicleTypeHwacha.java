@@ -42,6 +42,8 @@ public VehicleTypeHwacha(int typeNum)
   {
   super(typeNum);
   this.vehicleMaterial = VehicleMaterial.materialWood;  
+  this.width = 1.5f;
+  this.height = 1.8f;
   
   this.validAmmoTypes.add(Ammo.ammoRocket);
   

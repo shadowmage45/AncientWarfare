@@ -5,7 +5,6 @@ GENERAL
 * figure out a good way to index images for item subtypes--vehicles could use their own icons for each material level, not just vehicle type
         --might be made easier in 1.5 by the icon changes...maybe...also icon changes are a pain in the ass in general...
 * partially destroyable blocks ? (hold destruction status as meta-data?)
-
 * create a way for tile entities to broadcast to nearby soldiers (to denote valuable target)(event bus?)
 
 VEHICLES    
@@ -13,12 +12,7 @@ VEHICLES
 * final vehicle gui will need slots that only accept stack size 1 and that validate against the vehicles valid<whatever type> list
 * remove old targetPos code...or use it for other things....
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
-* not on ground, falling!!! (and no hit-detection for vehicles while riding)--nothing to worry about on this one, it is consistent between client/server
-* entity collision detection and pushback/slowdown..
-* no entity collision
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
-* current health is not reset to lower amount from materialType adjustment i.e. (100/75)
-* vehicle inventory render needs to come down 1/2 to 1 block
          
 NPCS
 * add save/load from NBT stuff
@@ -157,6 +151,10 @@ TWEAKS/OPTIMIZATION
 * fix hwacha rockets colliding with hwacha client side
 * cache display stack list for vehicles/npcs (was already cached for normal items that don't override getSubItems)
 * add soundFx to cannon and hwacha
+* add trebuchet model/texture/types/stuff
+* add chest-cart model/textures/type/stuff...
+* current health is not reset to lower amount from materialType adjustment i.e. (100/75)
+* vehicle inventory drop on death/pack up
 /********** 03-25-13 **********/
 /********** 03-26-13 **********/
 /********** 03-27-13 **********/

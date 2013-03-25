@@ -42,8 +42,8 @@ public VehicleTypeBatteringRam(int typeNum)
   this.validArmors.add(ArmorRegistry.armorIron);
   this.validArmors.add(ArmorRegistry.armorObsidian);
   
-  this.width = 2;
-  this.height = 2; 
+  this.width = 2.7f;
+  this.height = 2.1f; 
   this.isMountable = true;  
   this.isDrivable = true;
   this.isCombatEngine = true;

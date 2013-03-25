@@ -31,6 +31,8 @@ public VehicleTypeCannonStandTurret(int typeNum)
   super(typeNum);
   this.displayName = "Cannon Stand Turret";
   this.displayTooltip = "A turret mounted cannon mounted on a simple base.";
+  this.width = 1.2f;
+  this.height = 1.6f;
   this.turretRotationMax=45;
   this.moveRiderWithTurret = true;
   this.canAdjustYaw = true;

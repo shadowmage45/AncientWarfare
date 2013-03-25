@@ -43,6 +43,7 @@ import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.DummyVehicleHelper;
@@ -220,12 +221,16 @@ public void updateBaseStats()
   basePitchMax = vehicleType.getBasePitchMax();
   baseTurretRotationMax = vehicleType.getBaseTurretRotationAmount();
   baseLaunchSpeedMax = vehicleType.getBaseMissileVelocityMax();
-  baseHealth = vehicleType.getBaseHealth() * material.getHPFactor(level);
+  baseHealth = vehicleType.getBaseHealth() * material.getHPFactor(level); 
   baseAccuracy = vehicleType.getBaseAccuracy() * material.getAccuracyFactor(level);
   baseWeight = vehicleType.getBaseWeight() * material.getWeightFactor(level); 
   baseExplosionResist = 0.f;
   baseFireResist = 0.f;
   baseGenericResist = 0.f;
+  if(this.localVehicleHealth>baseHealth)
+    {
+    localVehicleHealth = baseHealth;
+    }
   }
 
 /**
@@ -385,7 +390,6 @@ public void onLaunchingUpdate()
  */
 public void resetCurrentStats()
   {
-//  Config.logDebug("resetting upgrade stats. server"+!worldObj.isRemote);
   this.firingHelper.resetUpgradeStats();
   this.moveHelper.resetUpgradeStats();
   this.currentForwardSpeedMax = this.baseForwardSpeed;
@@ -400,15 +404,18 @@ public void resetCurrentStats()
   this.currentGenericResist = this.baseGenericResist;
   this.currentWeight = this.baseWeight;
   this.currentAccuracy = this.baseAccuracy;
-//  Config.logDebug("lscm: "+this.currentLaunchSpeedPowerMax);
   }
 
-/**
- * need to setup on-death item drops
- */
 @Override
 public void setDead()
   {
+  if(!this.worldObj.isRemote && !this.isDead)
+    {
+    InventoryTools.dropInventoryInWorld(worldObj, inventory.ammoInventory, posX, posY, posZ);
+    InventoryTools.dropInventoryInWorld(worldObj, inventory.armorInventory, posX, posY, posZ);
+    InventoryTools.dropInventoryInWorld(worldObj, inventory.upgradeInventory, posX, posY, posZ);
+    InventoryTools.dropInventoryInWorld(worldObj, inventory.storageInventory, posX, posY, posZ);
+    }
   super.setDead();
   }
 
@@ -713,7 +720,7 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
 @Override
 public void applyEntityCollision(Entity par1Entity)
   {
-  if (par1Entity.riddenByEntity != this && par1Entity.ridingEntity != this)
+  if( par1Entity != this.riddenByEntity)//skip if it if it is the rider 
     {
     double xDiff = par1Entity.posX - this.posX;
     double zDiff = par1Entity.posZ - this.posZ;
@@ -780,7 +787,7 @@ public void updateRiderPosition()
   posZ += Trig.cosDegrees(yaw)*-this.getRiderForwardOffset();
   posZ += Trig.cosDegrees(yaw+90)*this.getRiderHorizontalOffset();
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
-  this.riddenByEntity.rotationYaw -= this.moveHelper.strafeMotion*2;
+  this.riddenByEntity.rotationYaw -= this.moveHelper.strafeMotion*2;  
   }
 
 @Override
@@ -836,12 +843,14 @@ public boolean shouldRiderSit()
 @Override
 public AxisAlignedBB getBoundingBox()
   {
+//  return null;
   return this.boundingBox;
   }
 
 @Override
 public AxisAlignedBB getCollisionBox(Entity par1Entity)
   {
+//  return par1Entity.canBePushed() ? par1Entity.boundingBox : null;
   return par1Entity.getBoundingBox();
   }
 

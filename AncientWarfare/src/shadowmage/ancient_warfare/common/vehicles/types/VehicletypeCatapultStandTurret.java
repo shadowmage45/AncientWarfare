@@ -34,7 +34,7 @@ public VehicletypeCatapultStandTurret(int typeNum)
   super(typeNum);
   
   this.width = 2.7f;
-  this.height = 2.2f; 
+  this.height = 2.f; 
   this.baseMissileVelocityMax = 32.f;  
   this.turretVerticalOffset = 13 * 0.0625f;
   this.turretVerticalOffset = 0.4f;

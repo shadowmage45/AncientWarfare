@@ -20,7 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.helpers;
 
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -216,6 +221,10 @@ public void onMovementTick()
   else if(forwardMotion==0)
     {
     vehicle.wheelRotationPrev = vehicle.wheelRotation;
+    }
+  if(!vehicle.worldObj.isRemote || (vehicle.worldObj.isRemote && Config.clientVehicleMovement))
+    {
+    
     }
   }
 

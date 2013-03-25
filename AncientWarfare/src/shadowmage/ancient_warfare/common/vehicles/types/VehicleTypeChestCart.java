@@ -43,6 +43,8 @@ public VehicleTypeChestCart(int typeNum)
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorObsidian);
   this.validArmors.add(ArmorRegistry.armorIron);  
+  this.width = 2.7f;
+  this.height = 1.8f; 
   this.isMountable = true;
   this.isDrivable = true;
   this.isCombatEngine = false;

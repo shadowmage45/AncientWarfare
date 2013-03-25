@@ -32,7 +32,7 @@ public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
   public VehicleTypeCatapultMobileTurret(int typeNum)
     {
     super(typeNum);
-    this.width = 2;
+    this.width = 2.7f;
     this.height = 2; 
     this.baseStrafeSpeed = 1.5f;
     this.baseForwardSpeed = 4.0f*0.05f;  

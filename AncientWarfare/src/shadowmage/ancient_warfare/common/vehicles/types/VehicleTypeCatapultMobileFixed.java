@@ -32,7 +32,7 @@ public class VehicleTypeCatapultMobileFixed extends VehicleTypeCatapult
 public VehicleTypeCatapultMobileFixed(int typeNum)
   {
   super(typeNum);
-  this.width = 2;
+  this.width = 2.7f;
   this.height = 2; 
   this.baseStrafeSpeed = 1.7f;
   this.baseForwardSpeed = 4.2f*0.05f;

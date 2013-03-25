@@ -33,6 +33,8 @@ public VehicleTypeTrebuchetMobileFixed(int typeNum)
   super(typeNum);
   this.displayName = "Trebuchet Mobile Fixed";
   this.displayTooltip = "A wheeled version of the personal trebuchet.";  
+  this.width = 2.7f;
+  this.height = 2.7f; 
   this.baseForwardSpeed = 3.7f*0.05f;
   this.baseStrafeSpeed = 1.0f;
   this.shouldRiderSit = true;

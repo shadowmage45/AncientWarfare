@@ -20,11 +20,17 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
+import java.util.Random;
+
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class InventoryTools
 {
+
+static Random random = new Random();
 
 public static int getEmptySlots(IInventory inv)
   {
@@ -160,5 +166,34 @@ public static boolean hasStackOf(IInventory inv, int id, int dmg, int minQty)
   return false;
   }
 
-
+public static void dropInventoryInWorld(World world, IInventory localInventory, double x, double y, double z)
+  {
+  if(world.isRemote)
+    {
+    return;
+    }
+  double spawnPosX;
+  double spawnPosY;
+  double spawnPosZ;
+  int var3;
+  if (localInventory != null)
+    {
+    ItemStack stack;
+    EntityItem entityToSpawn;
+    ItemStack stackToSpawn;
+    for(int i = 0; i < localInventory.getSizeInventory(); i++)
+      {      
+      stack = localInventory.getStackInSlotOnClosing(i);      
+      if(stack==null)
+        {
+        continue;
+        }
+      spawnPosX = x + random.nextFloat() * 0.6f;
+      spawnPosY = y + random.nextFloat() * 0.6f + 1;
+      spawnPosZ = z + random.nextFloat() * 0.6f;
+      entityToSpawn = new EntityItem(world, spawnPosX, spawnPosY, spawnPosZ, stack);
+      world.spawnEntityInWorld(entityToSpawn);      
+      }
+    }
+  }
 }

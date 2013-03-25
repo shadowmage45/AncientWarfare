@@ -31,6 +31,8 @@ public class VehicleTypeTrebuchetLarge extends VehicleTypeTrebuchet
     super(typeNum);
     this.displayName = "Trebuchet Large";
     this.displayTooltip = "A large and powerful fixed emplacement trebuchet.";
+    this.width = 2 * 2.5f;
+    this.height = 2 * 2.5f;
     this.riderForwardsOffset = 1.425f * 2.5f;
     this.riderVerticalOffset = 0.5f;    
     this.baseMissileVelocityMax = 50.f;
