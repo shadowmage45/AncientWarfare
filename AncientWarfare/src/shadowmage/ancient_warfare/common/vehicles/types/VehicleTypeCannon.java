@@ -40,7 +40,7 @@ public VehicleTypeCannon(int typeNum)
   super(typeNum);
   this.vehicleMaterial = VehicleMaterial.materialIron;
 
-  this.validAmmoTypes.add(Ammo.ammoStoneShot);  
+  this.validAmmoTypes.add(Ammo.ammoStoneShot10);  
 
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);

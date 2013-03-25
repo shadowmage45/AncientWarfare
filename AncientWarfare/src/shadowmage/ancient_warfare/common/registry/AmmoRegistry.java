@@ -54,9 +54,18 @@ public void registerAmmoTypes()
   /**
    * debug..these will need to use the itemRegistry method..
    */
-  this.registerAmmoTypeWithItem(Ammo.ammoArrow);
-  this.registerAmmoTypeWithItem(Ammo.ammoStoneShot);
-  this.registerAmmoTypeWithItem(Ammo.ammoRocket);
+  for(Ammo ammo : Ammo.ammoTypes)
+    {
+    if(ammo!=null)
+      {
+      this.registerAmmoTypeWithItem(ammo);
+      }
+    }
+//  this.registerAmmoTypeWithItem(Ammo.ammoStoneShot10);
+//  this.registerAmmoTypeWithItem(Ammo.ammoStoneShot25);
+//  this.registerAmmoTypeWithItem(Ammo.ammoStoneShot50);
+//  this.registerAmmoTypeWithItem(Ammo.ammoArrow);
+//  this.registerAmmoTypeWithItem(Ammo.ammoRocket);
   }
 
 /**

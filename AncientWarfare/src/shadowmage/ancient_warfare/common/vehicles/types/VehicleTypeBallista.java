@@ -42,7 +42,7 @@ public VehicleTypeBallista(int typeNum)
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   
   this.validAmmoTypes.add(Ammo.ammoArrow);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot);
+  this.validAmmoTypes.add(Ammo.ammoStoneShot10);
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);

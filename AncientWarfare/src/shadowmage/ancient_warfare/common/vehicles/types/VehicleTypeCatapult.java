@@ -40,7 +40,7 @@ public VehicleTypeCatapult(int typeNum)
   super(typeNum);
   this.vehicleMaterial = VehicleMaterial.materialWood;
   this.validAmmoTypes.add(Ammo.ammoArrow);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot);  
+  this.validAmmoTypes.add(Ammo.ammoStoneShot10);  
   this.validAmmoTypes.add(Ammo.ammoRocket);
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorObsidian);

@@ -51,8 +51,10 @@ IAmmoType ammoType = null;
 IMissileHitCallback shooter = null;
 public int missileType = 0;
 int rocketBurnTime = 0;
+public int ticksImpacted = 0;
 
 public boolean inGround = false;
+public boolean hasImpacted = false;
 int blockX;
 int blockY;
 int blockZ;
@@ -143,7 +145,7 @@ public void setMissileCallback(IMissileHitCallback shooter)
 
 public void onImpactEntity(Entity ent, float x, float y, float z)
   {
-  this.ammoType.onImpactEntity(worldObj, ent, x, y, z);
+  this.ammoType.onImpactEntity(worldObj, ent, x, y, z, this);
   if(this.shooter!=null)
     {
     this.shooter.onMissileImpactEntity(worldObj, ent);
@@ -152,7 +154,7 @@ public void onImpactEntity(Entity ent, float x, float y, float z)
 
 public void onImpactWorld()
   {
-  this.ammoType.onImpactWorld(worldObj, (float)posX,(float)posY, (float)posZ);
+  this.ammoType.onImpactWorld(worldObj, (float)posX,(float)posY, (float)posZ, this);
   if(this.shooter!=null)
     {
     this.shooter.onMissileImpact(worldObj, (float)posX,(float)posY, (float)posZ);
@@ -250,11 +252,12 @@ public void onMovementTick()
       if (hitPosition.entityHit != null)
         {
         this.onImpactEntity(hitPosition.entityHit, (float)posX ,(float)posY, (float)posZ);
+        this.hasImpacted = true;
         if(!this.ammoType.isPersistent() && !this.worldObj.isRemote)
           {
           this.setDead();
           }
-        else if(this.ammoType.isPersistent())
+        else if(this.ammoType.isPersistent() && !this.ammoType.isPenetrating())
           {
           this.motionX *= - 0.25f;
           this.motionY *= - 0.25f;
@@ -264,27 +267,31 @@ public void onMovementTick()
       else
         {
         this.onImpactWorld();
-        this.motionX = (double)((float)(hitPosition.hitVec.xCoord - this.posX));
-        this.motionY = (double)((float)(hitPosition.hitVec.yCoord - this.posY));
-        this.motionZ = (double)((float)(hitPosition.hitVec.zCoord - this.posZ));
-        float var20 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-        this.posX -= this.motionX / (double)var20 * 0.05000000074505806D;
-        this.posY -= this.motionY / (double)var20 * 0.05000000074505806D;
-        this.posZ -= this.motionZ / (double)var20 * 0.05000000074505806D;
-        this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
-        this.inGround = true;
-        if(!this.ammoType.isPersistent() && !this.worldObj.isRemote)
+        this.hasImpacted = true;
+        if(!this.ammoType.isPenetrating())
           {
-          this.setDead();
-          }
-        else if(this.ammoType.isPersistent())
-          {
-          this.blockX = hitPosition.blockX;
-          this.blockY = hitPosition.blockY;
-          this.blockZ = hitPosition.blockZ;
-          this.blockID = this.worldObj.getBlockId(blockX, blockY, blockZ);
-          this.blockMeta = this.worldObj.getBlockMetadata(blockX, blockY, blockZ);
-          }          
+          this.motionX = (double)((float)(hitPosition.hitVec.xCoord - this.posX));
+          this.motionY = (double)((float)(hitPosition.hitVec.yCoord - this.posY));
+          this.motionZ = (double)((float)(hitPosition.hitVec.zCoord - this.posZ));
+          float var20 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+          this.posX -= this.motionX / (double)var20 * 0.05000000074505806D;
+          this.posY -= this.motionY / (double)var20 * 0.05000000074505806D;
+          this.posZ -= this.motionZ / (double)var20 * 0.05000000074505806D;
+          this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+          this.inGround = true;
+          if(!this.ammoType.isPersistent() && !this.worldObj.isRemote)
+            {
+            this.setDead();
+            }
+          else if(this.ammoType.isPersistent())
+            {
+            this.blockX = hitPosition.blockX;
+            this.blockY = hitPosition.blockY;
+            this.blockZ = hitPosition.blockZ;
+            this.blockID = this.worldObj.getBlockId(blockX, blockY, blockZ);
+            this.blockMeta = this.worldObj.getBlockMetadata(blockX, blockY, blockZ);
+            }
+          }                 
         }
       }
     

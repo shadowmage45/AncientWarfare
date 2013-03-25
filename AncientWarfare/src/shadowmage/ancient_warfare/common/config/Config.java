@@ -51,6 +51,9 @@ public static String texturePath = "/shadowmage/ancient_warfare/resources/";
 public static boolean invertShiftClickOnItems = false;
 public static String templateExtension = "aws";
 public static boolean adjustMissilesForAccuracy = false;
+public static boolean blockDestruction = true;
+public static boolean blockFires = true;
+
 public static int trajectoryIterationsServer = 20;
 public static int npcAITicks = 5;
 

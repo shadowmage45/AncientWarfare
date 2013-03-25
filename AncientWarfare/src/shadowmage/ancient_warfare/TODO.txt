@@ -13,18 +13,17 @@ VEHICLES
 * remove old targetPos code...or use it for other things....
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
-         
+
 NPCS
 * add save/load from NBT stuff
 * vars helper save/load stuff
 * inventory helper
 * attack/target helper
-* lots and lots of stuf....
+* lots and lots of stuff....
 * multiple target-priority trackers--hostile, friendly....
          
 GUI FRAMEWORK
 * add mouse-wheel interaction to scroll-bar
-* add tooltip functionality to elements (optional tooltip rendering, if enabled on the element)
 * rework all structure GUIs to include new bling!! (scroll areas, etc...)
 * put quaded texture rendering someplace central...
 * so...slots display position is client only...use that to move slots off screen (or use that in a scrollable area somehow?)
@@ -125,37 +124,9 @@ TWEAKS/OPTIMIZATION
         decrease overall network used from vanilla MC resending entire chunks..)
 
 
-********************* DONE STUFF *************************        
-
-
-/********** 03-20-13 **********/
-* add rockets, hwacha dummy class...
-* if logging out while on a vehicle it will continue to spin...
-* fix rockets up...mostly done'ish. need better range-finding capabilities...
-/********** 03-21-13 **********/
-* add vehicle inventory item render
-* fix flag rendering..need to figure out where it needs to go, and setup the colors part...
-* add cannon textures and models
-/********** 03-22-13 **********/
-* prep work on npc...they spawn in-game...
-* add many more options into config/settings
-* add villager spawner...
-* team tracker--add server update method and relay
-* hwacha model
-/********** 03-23-13 **********/
-* rockets need adjusted to a set start velocity--will help with aim calculation greatly I think
-* team gui does not scroll names...
-* add hwacha textures
-* tons of work fleshing out vehicle types -- fix ballista animation (trigger), update speed of battering ram animation, lots of others...
-/********** 03-24-13 **********/
-* fix hwacha rockets colliding with hwacha client side
-* cache display stack list for vehicles/npcs (was already cached for normal items that don't override getSubItems)
-* add soundFx to cannon and hwacha
-* add trebuchet model/texture/types/stuff
-* add chest-cart model/textures/type/stuff...
-* current health is not reset to lower amount from materialType adjustment i.e. (100/75)
-* vehicle inventory drop on death/pack up
+********************* DONE STUFF *************************  
 /********** 03-25-13 **********/
+* add tooltip functionality to elements (optional tooltip rendering, if enabled on the element)
 /********** 03-26-13 **********/
 /********** 03-27-13 **********/
 /********** 03-28-13 **********/

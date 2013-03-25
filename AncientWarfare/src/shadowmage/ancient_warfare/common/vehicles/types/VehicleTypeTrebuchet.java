@@ -40,7 +40,7 @@ public VehicleTypeTrebuchet(int typeNum)
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorIron);
   this.validArmors.add(ArmorRegistry.armorObsidian);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot);
+  this.validAmmoTypes.add(Ammo.ammoStoneShot10);
   
   this.displayName = "Trebuchet";
   this.displayTooltip = "Uses a large counterweight to accelerate projectiles.";

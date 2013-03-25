@@ -20,10 +20,15 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
+import java.util.List;
+
 public interface IGuiElement
 {
 
 public int getElementNumber();
+
+public void setTooltip(List<String> lines);
+public List<String> getTooltip();
 public void drawElement(int mouseX, int mouseY);
 public void updateGuiPos(int newX, int newY);
 public boolean isMouseOver(int x, int y);

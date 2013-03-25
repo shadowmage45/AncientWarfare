@@ -53,6 +53,8 @@ protected int mouseY;
 
 protected boolean shouldCloseOnVanillaKeys = false;
 
+protected int tooltipDelayTicks = 10;
+
 /**
  * gui controls...these are substitutes for the vanilla controlList...and allow for total control
  * over buttons and functions, while only overridding a minimal amount of vanilla code (and still allowing
@@ -79,12 +81,15 @@ public void drawStringGui(String string, int x, int y, int color)
   this.drawString(fontRenderer, string, guiLeft+x, guiTop+y, color);
   }
 
+protected GuiElement currentMouseElement;
+
 public boolean isMouseOverControl(int mouseX, int mouseY)
-  {
+  {  
   for(Integer i : this.guiElements.keySet())
     {
-    if(this.guiElements.get(i).isMouseOver(mouseX, mouseY))
-      {
+    GuiElement e = this.guiElements.get(i);
+    if(e.isMouseOver(mouseX, mouseY))
+      {         
       return true;
       }
     }  
@@ -309,7 +314,6 @@ public void updateScreen()
   guiLeft = (this.width - this.xSize) / 2;
   guiTop = (this.height - this.ySize) / 2;
   
-  
   if(this.forceUpdate)
     {
     this.updateControls();
@@ -317,6 +321,34 @@ public void updateScreen()
     }
   this.updateScreenContents();
   
+  if(this.currentMouseElement!=null && this.tooltipDelayTicks>0)
+    {
+    this.tooltipDelayTicks--;
+    } 
+    
+  GuiElement e;
+  GuiElement foundE = null;
+  for(Integer i : this.guiElements.keySet())
+    {
+    e = this.guiElements.get(i);
+    if(e.wasMouseOver())
+      {
+      foundE = e; 
+      break;         
+      }
+    }  
+  if(foundE!=null)
+    {
+    if(foundE!=currentMouseElement)
+      {
+      this.tooltipDelayTicks = 10;        
+      this.currentMouseElement = foundE;
+      }
+    }
+  else
+    {
+    this.currentMouseElement = null;
+    }  
   }
 
 @Override
@@ -347,6 +379,11 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     {
     this.guiElements.get(i).drawElement(mouseX, mouseY);
     } 
+  if(this.tooltipDelayTicks<=0 && this.currentMouseElement!=null && this.currentMouseElement.renderTooltip)
+    {
+    Config.logDebug("rendering tooltip");
+    this.renderTooltip(mouseX, mouseY, this.currentMouseElement.getTooltip());
+    }
   GL11.glPopMatrix();
   }
 
@@ -388,6 +425,10 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
  */
 protected void renderTooltip(int x, int y, List<String> info)
   {
+  if(info==null || info.isEmpty())
+    {
+    return;
+    }
   GL11.glDisable(GL12.GL_RESCALE_NORMAL);
   RenderHelper.disableStandardItemLighting();
   GL11.glDisable(GL11.GL_LIGHTING);
@@ -583,7 +624,7 @@ public void handleMouseInput()
     {
     Config.logDebug("button pressed");
     }
-  GuiElement el;
+  GuiElement el;  
   for(Integer i : this.guiElements.keySet())
     {
     el = this.guiElements.get(i);
@@ -603,6 +644,7 @@ public void handleMouseInput()
       {
       el.onMouseMoved(mouseX, mouseY, buttonNum);
       }
+    
     } 
   super.handleMouseInput();
   }

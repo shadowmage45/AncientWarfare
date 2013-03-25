@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.missiles;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
@@ -29,75 +30,45 @@ public class AmmoStoneShot extends Ammo
 /**
  * @param ammoType
  */
-public AmmoStoneShot(int ammoType)
+public AmmoStoneShot(int ammoType, int weight)
   {
   super(ammoType);
+  this.isPersistent = false;
+  this.isArrow = false;
+  this.isRocket = false;
+  this.ammoWeight = weight;
+  this.displayName = "Stone Shot "+weight+"kg";
+  this.displayTooltip = weight+"kg rough stone shot.";
   }
 
 @Override
-public String getEntityName()
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
   {
-  return "AW.StoneShot";
+  if(ammoWeight>=25 && !world.isRemote)
+    {
+    int bx = (int)x;
+    int by = (int)y;
+    int bz = (int)z;
+    this.breakBlockAndDrop(world, bx, by, bz);    
+    if(ammoWeight>=50)
+      {
+      this.breakBlockAndDrop(world, bx, by-1, bz);
+      this.breakBlockAndDrop(world, bx-1, by, bz);
+      this.breakBlockAndDrop(world, bx+1, by, bz);
+      this.breakBlockAndDrop(world, bx, by, bz-1);
+      this.breakBlockAndDrop(world, bx, by, bz+1);
+      }
+    }
   }
 
 @Override
-public String getDisplayName()
+public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  return "Stone Shot 10kg";
+  if(!world.isRemote)
+    {
+    ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
+    }
   }
 
-@Override
-public String getDisplayTooltip()
-  {
-  return "~10kg rough stone shot";
-  }
-
-@Override
-public String getModelTexture()
-  {
-  return "foo.png";
-  }
-
-@Override
-public boolean updateAsArrow()
-  {
-  return false;
-  }
-
-@Override
-public boolean isRocket()
-  {
-  return false;
-  }
-
-@Override
-public boolean isPersistent()
-  {
-  return false;
-  }
-
-@Override
-public float getDragFactor()
-  {
-  return 0;
-  }
-
-@Override
-public float getAmmoWeight()
-  {
-  return 0;
-  }
-
-@Override
-public void onImpactWorld(World world, float x, float y, float z)
-  {
-
-  }
-
-@Override
-public void onImpactEntity(World world, Entity ent, float x, float y, float z)
-  {
-
-  }
 
 }

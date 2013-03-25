@@ -29,74 +29,23 @@ public class AmmoArrow extends Ammo
 public AmmoArrow(int ammoType)
   {
   super(ammoType);
+  this.isArrow = true;
+  this.isRocket = false;
+  this.isPersistent = true;
+  this.displayName = "Arrow";
+  this.displayTooltip = "A well-built heavy-duty arrow.";  
   }
 
 @Override
-public String getEntityName()
-  {
-  return "AWArrow";
-  }
-
-@Override
-public String getDisplayName()
-  {
-  return "AW.Arrow";
-  }
-
-@Override
-public String getDisplayTooltip()
-  {
-  return "Arrow";
-  }
-
-@Override
-public String getModelTexture()
-  {
-  return "foo.png";
-  }
-
-@Override
-public boolean isRocket()
-  {
-  return false;
-  }
-
-@Override
-public boolean isPersistent()
-  {
-  return true;
-  }
-
-@Override
-public float getDragFactor()
-  {
-  // TODO Auto-generated method stub
-  return 0;
-  }
-
-@Override
-public float getAmmoWeight()
-  {
-  // TODO Auto-generated method stub
-  return 0;
-  }
-
-@Override
-public void onImpactWorld(World world, float x, float y, float z)
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
   {
   // TODO Auto-generated method stub
   }
 
 @Override
-public void onImpactEntity(World world, Entity ent, float x, float y, float z)
+public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
   // TODO Auto-generated method stub
-  }
-
-@Override
-public boolean updateAsArrow()
-  {
-  return true;
   }
 
 }

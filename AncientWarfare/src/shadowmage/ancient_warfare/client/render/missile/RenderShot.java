@@ -27,7 +27,7 @@ import org.lwjgl.opengl.GL11;
 import shadowmage.ancient_warfare.client.model.ModelShot;
 import shadowmage.ancient_warfare.client.render.RenderMissileBase;
 
-public class RenderStoneShotSmall extends RenderMissileBase
+public class RenderShot extends RenderMissileBase
 {
 
 public ModelShot shot = new ModelShot();

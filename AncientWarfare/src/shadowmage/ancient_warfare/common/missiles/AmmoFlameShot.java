@@ -23,35 +23,63 @@ package shadowmage.ancient_warfare.common.missiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class AmmoRocket extends Ammo
+public class AmmoFlameShot extends Ammo
 {
-
-public static float burnTimeFactor = 3.f;
-public static float accelerationFactor = 0.01f;
-
 /**
  * @param ammoType
+ * @param weight
  */
-public AmmoRocket(int ammoType)
+public AmmoFlameShot(int ammoType, int weight)
   {
   super(ammoType);
-  this.displayName = "Hwacha Rocket";
-  this.displayTooltip = "A small self-propelled arrow with variable burn-time.";
-  this.isArrow = true;
-  this.isPersistent = true;
-  this.isRocket = true;
+  this.isPersistent = false;
+  this.isArrow = false;
+  this.isRocket = false;
+  this.isFlaming = true;
+  this.ammoWeight = weight;
+  this.displayName = "Fire Shot "+weight+"kg";
+  this.displayTooltip = weight+"kg canister of flammable liquid.";  
   }
 
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
   {
-  
+  if(!world.isRemote)
+    {
+    int bx = (int)x;
+    int by = (int)y;
+    int bz = (int)z;
+    this.igniteBlock(world, bx, by, bz);
+    if(this.ammoWeight>=25)
+      {
+      this.igniteBlock(world, bx-1, by, bz);
+      this.igniteBlock(world, bx+1, by, bz);
+      this.igniteBlock(world, bx, by, bz-1);
+      this.igniteBlock(world, bx, by, bz+1);
+      }
+    if(ammoWeight>=50)
+      {
+      this.igniteBlock(world, bx-1, by, bz-1);
+      this.igniteBlock(world, bx-1, by, bz+1);
+      this.igniteBlock(world, bx+1, by, bz-1);
+      this.igniteBlock(world, bx+1, by, bz+1);      
+      this.igniteBlock(world, bx-2, by, bz);
+      this.igniteBlock(world, bx+2, by, bz);
+      this.igniteBlock(world, bx, by, bz-2);
+      this.igniteBlock(world, bx, by, bz+2);
+      }
+    }
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  
+  if(!world.isRemote)
+    {
+    ent.attackEntityFrom(DamageType.fireMissile, getEntityDamage());
+    ent.setFire(3);
+    onImpactWorld(world, x, y, z, missile);
+    }
   }
 
 }

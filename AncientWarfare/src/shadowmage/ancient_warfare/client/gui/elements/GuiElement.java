@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -69,14 +72,19 @@ protected boolean isMouseOver = false;
  * determines interaction status, render status for some elements
  */
 public boolean enabled = true;
+
 /**
  * if should render at all, and/or accept input
  */
 public boolean hidden = false;
+
 /**
  * if should render offset using guiLeft/guiTop (not fully implemented in all elements...mostly deprecated in favor of renderPos updating)
  */
 public boolean renderWithGuiOffset = true;
+
+public boolean renderTooltip = false;
+protected List<String> tooltipString = new ArrayList<String>();
 
 protected Minecraft mc;
 protected FontRenderer fr;
@@ -89,6 +97,26 @@ public GuiElement(int elementNum, IGuiElementCallback parent, int w, int h)
   this.height = h;
   this.mc = Minecraft.getMinecraft();
   this.fr = mc.fontRenderer;
+  }
+
+public GuiElement addToToolitp(String line)
+  {
+  this.tooltipString.add(line);
+  this.renderTooltip = true;
+  return this;
+  }
+
+@Override
+public void setTooltip(List<String> lines)
+  {
+  this.tooltipString = lines;
+  this.renderTooltip = true;
+  }
+
+@Override
+public List<String> getTooltip()
+  {  
+  return tooltipString;
   }
 
 @Override
@@ -146,7 +174,7 @@ public void onMouseReleased(int x, int y, int num)
 
 @Override
 public void onMouseMoved(int x, int y, int num)
-  {
+  {  
   this.isMouseOver = false;
   if(this.isMouseOver(x, y))
     {
@@ -209,6 +237,11 @@ protected void drawQuadedTexture(int x, int y, int w, int h, int tw, int th, Str
   this.drawTexturedModalRect(x + halfW, y, u1, v, halfW, halfH);
   this.drawTexturedModalRect(x, y + halfH, u, v1, halfW, halfH);
   this.drawTexturedModalRect(x + halfW, y + halfH, u1, v1, halfW, halfH);
+  }
+
+public boolean wasMouseOver()
+  {
+  return this.isMouseOver;
   }
 
 @Override
