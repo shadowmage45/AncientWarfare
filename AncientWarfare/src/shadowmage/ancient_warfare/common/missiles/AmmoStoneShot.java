@@ -43,7 +43,7 @@ public String getEntityName()
 @Override
 public String getDisplayName()
   {
-  return "Stone Shot 50kg";
+  return "Stone Shot 10kg";
   }
 
 @Override

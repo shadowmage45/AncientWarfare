@@ -18,28 +18,30 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.render;
+package shadowmage.ancient_warfare.client.render.missile;
 
 import net.minecraft.entity.Entity;
 
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_warfare.client.model.ModelArrow;
+import shadowmage.ancient_warfare.client.model.ModelShot;
+import shadowmage.ancient_warfare.client.render.RenderMissileBase;
 
-public class RenderArrow extends RenderMissileBase
+public class RenderStoneShotSmall extends RenderMissileBase
 {
 
-public ModelArrow arrow = new ModelArrow();
+public ModelShot shot = new ModelShot();
 
 @Override
-public void doRender(Entity var1, double var2, double var4, double var6,  float var8, float var9)
+public void doRender(Entity var1, double var2, double var4, double var6,   float var8, float var9)
   {
   GL11.glPushMatrix();
   GL11.glTranslated(var2, var4, var6);
   GL11.glRotatef(var8 - 90, 0, 1, 0);
   GL11.glRotatef(var1.rotationPitch - 90, 1, 0, 0);
   GL11.glScaled(-1, -1, 1);  
-  arrow.render(var1, 0, 0, 0, 0, 0, 0.0625f);
+  GL11.glScalef(0.6f, 0.6f, 0.6f);
+  shot.render(var1, 0, 0, 0, 0, 0, 0.0625f);
   GL11.glPopMatrix();
   }
 

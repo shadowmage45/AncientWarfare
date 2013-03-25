@@ -42,11 +42,11 @@ import shadowmage.ancient_warfare.client.model.ModelTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandTurret;
 import shadowmage.ancient_warfare.client.model.ModelVehicleBase;
-import shadowmage.ancient_warfare.client.render.RenderArrow;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
-import shadowmage.ancient_warfare.client.render.RenderShot;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
+import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
+import shadowmage.ancient_warfare.client.render.missile.RenderStoneShotSmall;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaMobile;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaStand;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBatteringRam;
@@ -127,7 +127,7 @@ public void loadRenders()
    */
   RenderingRegistry.registerEntityRenderingHandler(MissileBase.class, new RenderMissileHelper());
   this.addMissileRender(Ammo.ammoArrow.getAmmoType(), new RenderArrow());  
-  this.addMissileRender(Ammo.ammoStoneShot.getAmmoType(), new RenderShot());
+  this.addMissileRender(Ammo.ammoStoneShot.getAmmoType(), new RenderStoneShotSmall());
   this.addMissileRender(Ammo.ammoRocket.getAmmoType(), new RenderArrow());
   
   /**
