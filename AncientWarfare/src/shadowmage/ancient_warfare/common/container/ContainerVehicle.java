@@ -35,6 +35,8 @@ public class ContainerVehicle extends ContainerBase
 
 public VehicleBase vehicle;
 
+public Slot[] storageSlots;
+
 /**
  * @param openingPlayer
  * @param synch
@@ -106,7 +108,9 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
         }
       }
     }
-  for(y = 0; y < 3; y++)
+  
+  storageSlots = new Slot[vehicle.inventory.storageInventory.getSizeInventory()];
+  for(y = 0; y < vehicle.inventory.storageInventory.getSizeInventory()/9; y++)
     {
     for(x = 0; x < 9; x++)
       {
@@ -115,8 +119,88 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
         {
         xPos = 8 + x * 18;
         yPos = 84 + y * 18 - 5*18 - 2*5+28;
-        this.addSlotToContainer(new Slot(vehicle.inventory.storageInventory, slotNum, xPos, yPos));
+        if(slotNum>=27)
+          {
+          xPos = -1000;
+          yPos = -1000;
+          }
+        Slot slot = new Slot(vehicle.inventory.storageInventory, slotNum, xPos, yPos);
+        storageSlots[slotNum] = slot;
+        this.addSlotToContainer(slot);        
         }
+      }
+    }
+  
+//  for(y = 0; y < 3; y++)
+//    {
+//    for(x = 0; x < 9; x++)
+//      {
+//      slotNum = y*9 + x;
+//      if(slotNum<vehicle.inventory.storageInventory.getSizeInventory())
+//        {
+//        xPos = 8 + x * 18;
+//        yPos = 84 + y * 18 - 5*18 - 2*5+28;
+//        this.addSlotToContainer(new Slot(vehicle.inventory.storageInventory, slotNum, xPos, yPos));        
+//        }
+//      }
+//    }    
+  }
+
+int currentTopStorageRow = 0;
+
+public void nextRow()
+  {
+  this.setCurrentTopStorageRow(currentTopStorageRow+1);
+  }
+public void prevRow()
+  {
+  this.setCurrentTopStorageRow(currentTopStorageRow-1);
+  }
+
+public void setCurrentTopStorageRow(int row)
+  {
+  if(row<0 || row >= storageSlots.length/9)
+    {
+    return;
+    }
+  currentTopStorageRow = row;
+  int x;
+  int y;
+  int slotNum;
+  int xPos;
+  int yPos;
+  
+  int curRow = 0;
+  
+  for(y = 0; y < vehicle.inventory.storageInventory.getSizeInventory()/9; y++)
+    {
+    for(x = 0; x < 9; x++)
+      {
+      slotNum = y*9 + x;
+      if(slotNum<vehicle.inventory.storageInventory.getSizeInventory())
+        {
+        
+        if(y<row || y >= row+3)
+          {
+          xPos = -1000;
+          yPos = -1000;
+          }
+        else
+          {
+          xPos = 8 + x * 18;
+          yPos = 84 + curRow * 18 - 5*18 - 2*5+28;          
+          }
+        storageSlots[slotNum].xDisplayPosition = xPos;
+        storageSlots[slotNum].yDisplayPosition = yPos;
+//        Slot slot = new Slot(vehicle.inventory.storageInventory, slotNum, xPos, yPos);
+//        storageSlots[slotNum] = slot;
+//        this.addSlotToContainer(slot);   
+        
+        }
+      }
+    if(y>=row && y <row+3)
+      {
+      curRow++;
       }
     }
   }

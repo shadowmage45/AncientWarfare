@@ -37,6 +37,7 @@ public VehicleTypeCannonMobileFixed(int typeNum)
   this.shouldRiderSit = false;
   this.riderVerticalOffset = 0.5f;
   this.riderForwardsOffset = -2.45f;
+  this.baseMissileVelocityMax = 38.f;   
   }
 
 }

@@ -69,7 +69,7 @@ public float width = 2;
 public float height = 2;
 public float weight = 1000;//kg
 
-public int vehicleType = 0;
+private final int vehicleType;
 public IVehicleMaterial vehicleMaterial = null;
 public boolean isMountable = false;
 public boolean isDrivable = false;

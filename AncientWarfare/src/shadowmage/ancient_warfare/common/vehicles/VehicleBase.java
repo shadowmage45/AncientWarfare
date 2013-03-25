@@ -416,7 +416,6 @@ public void setDead()
 public void onUpdate()
   {  
   super.onUpdate(); 
-
   if(this.worldObj.isRemote)
     {
     this.onUpdateClient();
@@ -425,17 +424,16 @@ public void onUpdate()
     {    
     this.onUpdateServer();
     }
-
   this.updateTurretPitch();
   this.updateTurretRotation(); 
   this.moveHelper.onMovementTick();
-  this.firingHelper.onTick();  
+  this.firingHelper.onTick();
+  this.firingVarsHelper.onTick();
   if(this.hitAnimationTicks>0)
     {
     this.hitAnimationTicks--;
     }  
   }
-
 
 /**
  * client-side updates
@@ -788,16 +786,7 @@ public void updateRiderPosition()
 @Override
 public boolean interact(EntityPlayer player)
   {  
-  if(this.isMountable() && !player.worldObj.isRemote && !player.isSneaking() && (this.riddenByEntity==null || this.riddenByEntity==player))
-    {
-    player.mountEntity(this);
-    return true;
-    }
-  else if(!player.worldObj.isRemote && player.isSneaking())
-    {
-    GUIHandler.instance().openGUI(GUIHandler.VEHICLE_DEBUG, player, worldObj, this.entityId, 0, 0);
-    }
-  return true;
+  return this.firingVarsHelper.interact(player);
   }
 
 @Override

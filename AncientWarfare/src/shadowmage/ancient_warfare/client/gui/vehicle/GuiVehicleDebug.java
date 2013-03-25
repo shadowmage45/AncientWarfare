@@ -90,6 +90,15 @@ public void onElementActivated(IGuiElement element)
   pkt.sendPacketToServer();
   this.closeGUI();
   break;
+  
+  case 3:
+  ((ContainerVehicle)inventorySlots).prevRow();
+  break;
+  
+  case 4:
+  ((ContainerVehicle)inventorySlots).nextRow();
+  break; 
+  
   default:
   break;
   }
@@ -101,6 +110,9 @@ public void setupControls()
   this.addGuiButton(0, this.getXSize()-45-5, 5, 45, 16, "Done");
   this.addGuiButton(1, this.getXSize()-45-5, 5+16+2, 45, 16, "Stats");
   this.addGuiButton(2, this.getXSize()-45-5, 5+32+4,45,16, "Pack");
+  
+  this.addGuiButton(3, this.getXSize()-45-20-10-10, 5+6, 16, 16, "-");
+  this.addGuiButton(4, this.getXSize()-45-20-10-10, 5+18*3-16+6, 16, 16, "+");
   }
 
 @Override

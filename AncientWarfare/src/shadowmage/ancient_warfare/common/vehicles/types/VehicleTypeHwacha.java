@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
@@ -76,7 +77,7 @@ public VehicleTypeHwacha(int typeNum)
   
   this.turretVerticalOffset = 8 * 0.0625f;
 //  this.missileVerticalOffset = 0.9375f;
-  this.missileForwardsOffset = -0.9375f;
+  this.missileForwardsOffset = -0.9375f-0.0625f;
   
   this.riderForwardsOffset = -1.4f;
   this.riderVerticalOffset = 0.5f  + 2.0f;
@@ -158,18 +159,39 @@ public void onLaunchingUpdate()
   if(delayTick>=5)
     {
     delayTick = 0;
-    vehicle.firingHelper.spawnMissile(0, 0, 0);
-    if(!vehicle.worldObj.isRemote)
+    calcMissileOffset(missileFired);
+    if(!vehicle.worldObj.isRemote && vehicle.ammoHelper.getCurrentAmmoCount()>0)
       {
       vehicle.worldObj.playSoundAtEntity(vehicle, "fireworks.launch", 1.0F, 0.5F);
-      } 
+      }
+    vehicle.firingHelper.spawnMissile(missileOffsetX, missileOffsetY, missileOffsetZ);
     this.missileFired++;
     if(missileFired>=36)
       {
       vehicle.firingHelper.setFinishedLaunching();
       }
-    }
-  
+    }  
+  }
+
+float missileOffsetX;
+float missileOffsetY;
+float missileOffsetZ;
+
+private void calcMissileOffset(int missileNum)
+  {
+  int currentRow = missileNum / 9;
+  int currentCol = missileNum % 9;  
+  float targetX = ((float)currentCol) * 0.0625f * 2.f;
+  targetX -= 8.f*0.0625f;
+  float targetY = ((float)currentRow) * 0.0625f * 2.f;
+  float targetZ = 0.f;
+  float targetAngle = 0.f+vehicle.rotationYaw;
+  float len = MathHelper.sqrt_float(targetX*targetX+targetZ*targetZ);
+  missileOffsetX = Trig.cosDegrees(targetAngle)*len;
+  if(targetX<0){missileOffsetX *= -1;}
+  missileOffsetZ = -Trig.sinDegrees(targetAngle)*len;    
+  missileOffsetY = Trig.cosDegrees(vehicle.localTurretPitch)*targetY;
+  missileOffsetZ += Trig.sinDegrees(vehicle.localTurretPitch)*targetY;
   }
 
 @Override

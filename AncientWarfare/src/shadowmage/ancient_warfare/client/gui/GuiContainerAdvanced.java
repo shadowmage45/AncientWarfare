@@ -338,7 +338,15 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
       }    
     }  
   GL11.glPushMatrix();
-  this.renderExtraBackGround(mouseX, mouseY, var1);
+  this.renderExtraBackGround(mouseX, mouseY, var1);  
+  GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+  RenderHelper.disableStandardItemLighting();
+  GL11.glDisable(GL11.GL_LIGHTING);
+  GL11.glDisable(GL11.GL_DEPTH_TEST);
+  for(Integer i : this.guiElements.keySet())
+    {
+    this.guiElements.get(i).drawElement(mouseX, mouseY);
+    } 
   GL11.glPopMatrix();
   }
 
@@ -555,20 +563,6 @@ public void renderEntityLivingIntoInventory(Minecraft par0Minecraft, EntityLivin
 public void closeGUI()
   {
   this.player.closeScreen();
-  }
-
-@Override
-public void drawScreen(int par1, int par2, float par3)
-  {  
-  super.drawScreen(par1, par2, par3);
-  GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-  RenderHelper.disableStandardItemLighting();
-  GL11.glDisable(GL11.GL_LIGHTING);
-  GL11.glDisable(GL11.GL_DEPTH_TEST);
-  for(Integer i : this.guiElements.keySet())
-    {
-    this.guiElements.get(i).drawElement(par1, par2);
-    } 
   }
 
 @Override

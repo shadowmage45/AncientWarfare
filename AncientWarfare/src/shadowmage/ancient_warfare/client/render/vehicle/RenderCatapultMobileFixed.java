@@ -33,15 +33,15 @@ public class RenderCatapultMobileFixed extends RenderVehicleBase
 ModelCatapultMobileFixed model = new ModelCatapultMobileFixed();
 
 @Override
-public void renderVehicle(VehicleBase veh, double x, double y, double z, float yaw, float tick)
+public void renderVehicle(VehicleBase vehicle, double x, double y, double z, float yaw, float tick)
   {
-  VehicleFiringVarsHelper var = veh.firingVarsHelper;  
+  VehicleFiringVarsHelper var = vehicle.firingVarsHelper;  
      
   model.setArmRotation(var.getVar1() + (tick*var.getVar2()));
   model.setCrankRotations(var.getVar3() + (tick*var.getVar4()));
-  float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
+  float wheelAngle = vehicle.wheelRotation + (tick * (vehicle.wheelRotation-vehicle.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
-  model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
+  model.render(vehicle, 0, 0, 0, 0, 0, 0.0625f);
 
   }
 

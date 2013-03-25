@@ -37,7 +37,7 @@ public VehicleTypeCannonStandTurret(int typeNum)
   this.shouldRiderSit = true;
   this.baseStrafeSpeed = 0.5f;
   this.baseForwardSpeed = 0.f;
-  
+  this.baseMissileVelocityMax = 40.f;   
   this.turretVerticalOffset = 13.5f*0.0625f;
   this.riderVerticalOffset = 0.55f;
   this.riderForwardsOffset = -1.25f;

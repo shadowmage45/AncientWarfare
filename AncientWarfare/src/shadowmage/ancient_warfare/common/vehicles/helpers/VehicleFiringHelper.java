@@ -227,7 +227,7 @@ public float getAccuracyAdjusted()
 /**
  * if not already firing, this will initiate the launch sequence
  */
-public void startMissileLaunch()
+public void initiateLaunchSequence()
   {
   if(!this.isFiring && this.reloadingTicks <=0)
     {
@@ -305,7 +305,7 @@ public void handleFireUpdate(NBTTagCompound tag)
     pkt.setInputData(reply);
     pkt.sendPacketToAllTrackingClients(vehicle); 
     }
-  this.startMissileLaunch();
+  this.initiateLaunchSequence();
   }
 
 /**

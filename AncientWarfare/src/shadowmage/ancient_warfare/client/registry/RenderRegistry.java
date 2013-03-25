@@ -36,7 +36,11 @@ import shadowmage.ancient_warfare.client.model.ModelCatapultMobileFixed;
 import shadowmage.ancient_warfare.client.model.ModelCatapultMobileTurret;
 import shadowmage.ancient_warfare.client.model.ModelCatapultStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelCatapultStandTurret;
+import shadowmage.ancient_warfare.client.model.ModelChestCart;
 import shadowmage.ancient_warfare.client.model.ModelHwacha;
+import shadowmage.ancient_warfare.client.model.ModelTrebuchetMobileFixed;
+import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandFixed;
+import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandTurret;
 import shadowmage.ancient_warfare.client.model.ModelVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderArrow;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
@@ -53,7 +57,12 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileFixe
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultMobileTurret;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandTurret;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderChestCart;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderHwacha;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetLarge;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetMobileFixed;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandFixed;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandTurret;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.missiles.MissileBase;
@@ -107,6 +116,11 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.CANNON_STAND_TURRET, new RenderCannonStandTurret(), new ModelCannonStandTurret());
   this.addVehicleRender(VehicleRegistry.CANNON_MOBILE_FIXED, new RenderCannonMobileFixed(), new ModelCannonMobileFixed());  
   this.addVehicleRender(VehicleRegistry.HWACHA, new RenderHwacha(), new ModelHwacha());
+  this.addVehicleRender(VehicleRegistry.TREBUCHET_STAND_FIXED, new RenderTrebuchetStandFixed(), new ModelTrebuchetStandFixed());
+  this.addVehicleRender(VehicleRegistry.TREBUCHET_STAND_TURRET, new RenderTrebuchetStandTurret(), new ModelTrebuchetStandTurret());
+  this.addVehicleRender(VehicleRegistry.TREBUCHET_MOBILE_FIXED, new RenderTrebuchetMobileFixed(), new ModelTrebuchetMobileFixed());
+  this.addVehicleRender(VehicleRegistry.TREBUCHET_LARGE, new RenderTrebuchetLarge(), new ModelTrebuchetStandFixed());
+  this.addVehicleRender(VehicleRegistry.CHEST_CART, new RenderChestCart(), new ModelChestCart());
   
   /**
    * missiles...

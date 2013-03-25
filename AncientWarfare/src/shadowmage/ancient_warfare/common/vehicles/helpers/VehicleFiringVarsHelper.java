@@ -20,8 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.helpers;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.EntityPlayer;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 
@@ -53,6 +54,22 @@ public abstract void onReloadUpdate();
 public abstract void onLaunchingUpdate();
 
 public abstract void onReloadingFinished();
+
+public void onTick(){}
+
+public boolean interact(EntityPlayer player)
+  {
+  if(vehicle.isMountable() && !player.worldObj.isRemote && !player.isSneaking() && (vehicle.riddenByEntity==null || vehicle.riddenByEntity==player))
+    {
+    player.mountEntity(vehicle);
+    return true;
+    }
+  else if(!player.worldObj.isRemote && player.isSneaking())
+    {
+    GUIHandler.instance().openGUI(GUIHandler.VEHICLE_DEBUG, player, vehicle.worldObj, vehicle.entityId, 0, 0);
+    }
+  return true;
+  }
 
 public abstract float getVar1();
 public abstract float getVar2();

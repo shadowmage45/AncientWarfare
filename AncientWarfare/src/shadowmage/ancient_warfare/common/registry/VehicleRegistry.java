@@ -34,7 +34,12 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCannonStandTu
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultMobileFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultMobileTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultStandFixed;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeChestCart;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeHwacha;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetLarge;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetMobileFixed;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetStandFixed;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetStandTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicletypeCatapultStandTurret;
 
 public class VehicleRegistry
@@ -57,6 +62,13 @@ public static final IVehicleType CANNON_STAND_TURRET = new VehicleTypeCannonStan
 public static final IVehicleType CANNON_MOBILE_FIXED = new VehicleTypeCannonMobileFixed(11);
 
 public static final IVehicleType HWACHA = new VehicleTypeHwacha(12);
+
+public static final IVehicleType TREBUCHET_STAND_FIXED = new VehicleTypeTrebuchetStandFixed(13);
+public static final IVehicleType TREBUCHET_STAND_TURRET = new VehicleTypeTrebuchetStandTurret(14);
+public static final IVehicleType TREBUCHET_MOBILE_FIXED = new VehicleTypeTrebuchetMobileFixed(15);
+public static final IVehicleType TREBUCHET_LARGE = new VehicleTypeTrebuchetLarge(16);
+
+public static final IVehicleType CHEST_CART = new VehicleTypeChestCart(17);
 
 private VehicleRegistry(){}
 private static VehicleRegistry INSTANCE;
