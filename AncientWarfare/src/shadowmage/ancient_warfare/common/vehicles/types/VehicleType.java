@@ -100,7 +100,7 @@ public float turretRotationMax;
 public float baseMissileVelocityMax;
 public float baseHealth = 100;
 
-public float baseMissileMaxWeight = 10;
+public float maxMissileWeight = 10;
 
 public float accuracy = 1.f;
 
@@ -378,7 +378,7 @@ public int getUpgradeBaySize()
 @Override
 public float getMaxMissileWeight()
   {
-  return this.baseMissileMaxWeight;
+  return this.maxMissileWeight;
   }
 
 @Override

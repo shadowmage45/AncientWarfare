@@ -42,18 +42,22 @@ public static Ammo[] ammoTypes = new Ammo[64];//starting with 64 types...can/wil
  */
 
 public static Ammo ammoStoneShot10 = new AmmoStoneShot(0,10);
-public static Ammo ammoStoneShot25 = new AmmoStoneShot(1,25);
-public static Ammo ammoStoneShot50 = new AmmoStoneShot(2,50);
+public static Ammo ammoStoneShot15 = new AmmoStoneShot(1,15);
+public static Ammo ammoStoneShot30 = new AmmoStoneShot(2,30);
 public static Ammo ammoFireShot10 = new AmmoFlameShot(3,10);
-public static Ammo ammoFireShot25 = new AmmoFlameShot(4,25);
-public static Ammo ammoFireShot50 = new AmmoFlameShot(5,50);
+public static Ammo ammoFireShot15 = new AmmoFlameShot(4,15);
+public static Ammo ammoFireShot30 = new AmmoFlameShot(5,30);
 
 public static Ammo ammoArrow = new AmmoArrow(30);
 
 public static Ammo ammoRocket = new AmmoRocket(36);
 
+public static Ammo ammoBallShot = new AmmoBallShot(40);
+public static Ammo ammoStoneShot45 = new AmmoStoneShot(41, 45);
+public static Ammo ammoFireShot45 = new AmmoFlameShot(42,45);
+
 private ItemStack ammoStack;
-int ammoType;
+public final int ammoType;
 int entityDamage;
 int vehicleDamage;
 static final float gravityFactor = 9.81f*0.05f*0.05f;
@@ -67,11 +71,18 @@ boolean isFlaming = false;
 boolean isPenetrating = false;
 float ammoWeight = 10;
 float renderScale = 1.f;
+IAmmoType secondaryAmmoType = null;
+int secondaryAmmoCount = 0;
 
 public Ammo(int ammoType)
   {
-  this.ammoStack = new ItemStack(ItemLoader.ammoItem.itemID, 1, ammoType);
   this.ammoType = ammoType;
+  this.ammoStack = new ItemStack(ItemLoader.ammoItem.itemID, 1, ammoType);
+  if(ammoType>=0 && ammoType<ammoTypes.length)
+    {    
+    ammoTypes[ammoType]=this;
+    }
+  
   }
 
 @Override
@@ -179,6 +190,24 @@ public boolean isPenetrating()
   return isPenetrating;
   }
 
+@Override
+public IAmmoType getSecondaryAmmoType()
+  {
+  return secondaryAmmoType;
+  }
+
+@Override
+public int getSecondaryAmmoTypeCount()
+  {
+  return secondaryAmmoCount;
+  }
+
+@Override
+public boolean hasSecondaryAmmo()
+  {
+  return this.secondaryAmmoType!=null;
+  }
+
 protected void breakBlockAndDrop(World world, int x, int y, int z)
   {
   if(!Config.blockDestruction)
@@ -204,6 +233,7 @@ protected void breakBlockAndDrop(World world, int x, int y, int z)
  */
 protected void igniteBlock(World world, int x, int y, int z)
   {
+  //TODO...needs to uhh..check from bottom up...yah...
   if(!Config.blockFires)
     {
     return;

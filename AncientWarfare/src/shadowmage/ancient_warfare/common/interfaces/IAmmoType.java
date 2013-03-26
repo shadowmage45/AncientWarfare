@@ -47,7 +47,9 @@ String getDisplayTooltip();//the display tooltip for this ammo
 String getModelTexture();//get the display texture
 ItemStack getDisplayStack();//should be a persistent stack in the ammo instance, used to display ammo...
 ItemStack getAmmoStack(int qty);//used to create a stack of this ammo.  used in structure spawning
-
+IAmmoType getSecondaryAmmoType();//if this is just a 'container' ammo, get the contained type
+int getSecondaryAmmoTypeCount();//get the contained qty of what this ammo represents (used by cluster/grapeshot)
+boolean hasSecondaryAmmo();
 boolean isFlaming();//used by client-side rendering to render the missile on-fire, does nothing else
 boolean isAmmoValidFor(VehicleBase vehicle);//can be used for per-upgrade compatibility.  vehicle will check this before firing or adding ammo to the vehicle
 boolean updateAsArrow();//should update pitch like an arrow (relative to flight direction)

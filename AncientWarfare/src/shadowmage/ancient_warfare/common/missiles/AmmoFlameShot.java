@@ -50,14 +50,14 @@ public void onImpactWorld(World world, float x, float y, float z, MissileBase mi
     int by = (int)y;
     int bz = (int)z;
     this.igniteBlock(world, bx, by, bz);
-    if(this.ammoWeight>=25)
+    if(this.ammoWeight>=15)
       {
       this.igniteBlock(world, bx-1, by, bz);
       this.igniteBlock(world, bx+1, by, bz);
       this.igniteBlock(world, bx, by, bz-1);
       this.igniteBlock(world, bx, by, bz+1);
       }
-    if(ammoWeight>=50)
+    if(ammoWeight>=30)
       {
       this.igniteBlock(world, bx-1, by, bz-1);
       this.igniteBlock(world, bx-1, by, bz+1);

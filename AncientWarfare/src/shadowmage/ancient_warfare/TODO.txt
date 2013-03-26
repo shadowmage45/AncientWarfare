@@ -127,6 +127,9 @@ TWEAKS/OPTIMIZATION
 ********************* DONE STUFF *************************  
 /********** 03-25-13 **********/
 * add tooltip functionality to elements (optional tooltip rendering, if enabled on the element)
+* remove yawLock upgrade...it is no longer necessary
+* add weight/count missile spawning
+* add container-type missiles (spawns a secondary set of missiles when fired)
 /********** 03-26-13 **********/
 /********** 03-27-13 **********/
 /********** 03-28-13 **********/

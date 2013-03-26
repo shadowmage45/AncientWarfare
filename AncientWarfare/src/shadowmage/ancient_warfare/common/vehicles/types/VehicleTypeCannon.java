@@ -40,6 +40,8 @@ public VehicleTypeCannon(int typeNum)
   super(typeNum);
   this.vehicleMaterial = VehicleMaterial.materialIron;
 
+  this.maxMissileWeight = 10.f;
+  
   this.validAmmoTypes.add(Ammo.ammoStoneShot10);  
 
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);

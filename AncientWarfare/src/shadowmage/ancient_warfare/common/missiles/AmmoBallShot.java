@@ -18,26 +18,38 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles.types;
+package shadowmage.ancient_warfare.common.missiles;
 
-public class VehicleTypeTrebuchetLarge extends VehicleTypeTrebuchet
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
+
+public class AmmoBallShot extends Ammo
 {
 
-  /**
-   * @param typeNum
-   */
-  public VehicleTypeTrebuchetLarge(int typeNum)
-    {
-    super(typeNum);
-    this.displayName = "Trebuchet Large";
-    this.displayTooltip = "A large and powerful fixed emplacement trebuchet.";
-    this.maxMissileWeight = 30.f;
-    this.width = 2 * 2.5f;
-    this.height = 2 * 2.5f;
-    this.riderForwardsOffset = 1.425f * 2.5f;
-    this.riderVerticalOffset = 0.5f;    
-    this.baseMissileVelocityMax = 50.f;
-    this.turretVerticalOffset = (34.f + 67.5f + 24.0f)*0.0625f*2.5f;
-    }
+/**
+ * @param ammoType
+ */
+public AmmoBallShot(int ammoType)
+  {
+  super(ammoType);
+  this.displayName = "Small Shot";
+  this.displayTooltip = "Small iron ball-shot. Used in cluster-type ammunition.";
+  this.renderScale = 0.05f;
+  this.ammoWeight = 1.f;
+  this.entityDamage = 5;
+  this.vehicleDamage = 5;
+  }
+
+@Override
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
+  {
+  //NOOP
+  }
+
+@Override
+public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
+  {
+  ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
+  }
 
 }

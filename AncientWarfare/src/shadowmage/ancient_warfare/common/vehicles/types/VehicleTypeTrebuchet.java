@@ -37,6 +37,9 @@ public VehicleTypeTrebuchet(int typeNum)
   {
   super(typeNum);
   this.vehicleMaterial = VehicleMaterial.materialWood;
+  
+  this.maxMissileWeight = 10.f;
+  
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorIron);
   this.validArmors.add(ArmorRegistry.armorObsidian);
@@ -63,7 +66,7 @@ public VehicleTypeTrebuchet(int typeNum)
   this.basePitchMax=70.f;
   this.basePitchMin=70.f;
   this.turretVerticalOffset = (34.f + 67.5f + 24.0f)*0.0625f;
-  this.baseMissileMaxWeight = 50;
+  this.maxMissileWeight = 50;
   this.baseMissileVelocityMax = 40.f;
   }
 
@@ -169,7 +172,7 @@ public void onReloadUpdate()
 @Override
 public void onLaunchingUpdate()
   {
-  vehicle.firingHelper.spawnMissile(0, 0, 0);
+  vehicle.firingHelper.spawnMissilesByWeightCount(0, 0, 0);
   vehicle.firingHelper.setFinishedLaunching();
   }
 

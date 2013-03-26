@@ -27,6 +27,8 @@ import org.lwjgl.opengl.GL11;
 import shadowmage.ancient_warfare.client.model.ModelArrow;
 import shadowmage.ancient_warfare.client.model.ModelArrow2;
 import shadowmage.ancient_warfare.client.render.RenderMissileBase;
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.missiles.MissileBase;
 
 public class RenderArrow extends RenderMissileBase
 {
@@ -35,16 +37,9 @@ public ModelArrow arrow = new ModelArrow();
 public ModelArrow2 arrow2 = new ModelArrow2();
 
 @Override
-public void doRender(Entity var1, double var2, double var4, double var6,  float var8, float var9)
+public void renderMissile(MissileBase missile, IAmmoType ammo, double x,   double y, double z, float yaw, float tick)
   {
-  GL11.glPushMatrix();
-  GL11.glTranslated(var2, var4, var6);
-  GL11.glRotatef(var8 - 90, 0, 1, 0);
-  GL11.glRotatef(var1.rotationPitch - 90, 1, 0, 0);
-  GL11.glScaled(-1, -1, 1);
-  GL11.glScalef(0.2f, 0.2f, 0.2f);
-  arrow2.render(var1, 0, 0, 0, 0, 0, 0.0625f);
-  GL11.glPopMatrix();
+  arrow2.render(missile, 0, 0, 0, 0, 0, 0.0625f);
   }
 
 }

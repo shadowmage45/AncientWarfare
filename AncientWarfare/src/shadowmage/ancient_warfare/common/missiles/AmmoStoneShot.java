@@ -44,13 +44,13 @@ public AmmoStoneShot(int ammoType, int weight)
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
   {
-  if(ammoWeight>=25 && !world.isRemote)
+  if(ammoWeight>=15 && !world.isRemote)
     {
     int bx = (int)x;
     int by = (int)y;
     int bz = (int)z;
     this.breakBlockAndDrop(world, bx, by, bz);    
-    if(ammoWeight>=50)
+    if(ammoWeight>=30)
       {
       this.breakBlockAndDrop(world, bx, by-1, bz);
       this.breakBlockAndDrop(world, bx-1, by, bz);

@@ -41,6 +41,8 @@ public VehicleTypeBallista(int typeNum)
 
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   
+  this.maxMissileWeight = 1.f;
+  
   this.validAmmoTypes.add(Ammo.ammoArrow);
   this.validAmmoTypes.add(Ammo.ammoStoneShot10);
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
@@ -54,6 +56,7 @@ public VehicleTypeBallista(int typeNum)
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorObsidian);
   this.validArmors.add(ArmorRegistry.armorIron);
+  
   
   this.storageBaySize = 0;  
   this.accuracy = 0.98f;

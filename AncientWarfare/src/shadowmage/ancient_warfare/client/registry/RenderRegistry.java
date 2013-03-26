@@ -92,6 +92,10 @@ public static RenderRegistry instance()
  * dummy render to be used in case a vehicle render doesn't exist...
  */
 private RenderCatapultStandFixed dummyRender = new RenderCatapultStandFixed();
+private RenderShot dummyMissileRender = new RenderShot();
+
+private RenderArrow arrowRender = new RenderArrow();
+private RenderShot shotRender = new RenderShot();
 
 private HashMap<Integer, Render> missileRenders = new HashMap<Integer, Render>();
 private HashMap<Integer, RenderVehicleBase> vehicleRenders = new HashMap<Integer, RenderVehicleBase>();
@@ -126,14 +130,15 @@ public void loadRenders()
    * missiles...
    */
   RenderingRegistry.registerEntityRenderingHandler(MissileBase.class, new RenderMissileHelper());
-  this.addMissileRender(Ammo.ammoStoneShot10.getAmmoType(), new RenderShot());
-  this.addMissileRender(Ammo.ammoStoneShot25.getAmmoType(), new RenderShot());
-  this.addMissileRender(Ammo.ammoStoneShot50.getAmmoType(), new RenderShot());
-  this.addMissileRender(Ammo.ammoFireShot10.getAmmoType(), new RenderShot());
-  this.addMissileRender(Ammo.ammoFireShot25.getAmmoType(), new RenderShot());
-  this.addMissileRender(Ammo.ammoFireShot50.getAmmoType(), new RenderShot());  
-  this.addMissileRender(Ammo.ammoArrow.getAmmoType(), new RenderArrow());    
-  this.addMissileRender(Ammo.ammoRocket.getAmmoType(), new RenderArrow());
+  this.addMissileRender(Ammo.ammoStoneShot10.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoStoneShot15.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoStoneShot30.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoFireShot10.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoFireShot15.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoFireShot30.getAmmoType(), shotRender);  
+  this.addMissileRender(Ammo.ammoArrow.getAmmoType(), arrowRender);    
+  this.addMissileRender(Ammo.ammoRocket.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoBallShot.getAmmoType(), arrowRender);
   
   /**
    * load up the vehicle item renderer...
@@ -158,6 +163,10 @@ public void addMissileRender(int type, Render rend)
 
 public Render getRenderForMissile(int type)
   {
+  if(!this.missileRenders.containsKey(type))
+    {
+    return dummyMissileRender;
+    }
   return this.missileRenders.get(type);
   }
 

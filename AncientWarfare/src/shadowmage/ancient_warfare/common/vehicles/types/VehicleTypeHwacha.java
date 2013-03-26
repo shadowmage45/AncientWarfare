@@ -45,6 +45,8 @@ public VehicleTypeHwacha(int typeNum)
   this.width = 1.5f;
   this.height = 1.8f;
   
+  this.maxMissileWeight = 1.f;
+  
   this.validAmmoTypes.add(Ammo.ammoRocket);
   
   this.validArmors.add(ArmorRegistry.armorStone);

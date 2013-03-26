@@ -44,7 +44,7 @@ public class VehicleUpgradeRegistry
 public static final IVehicleUpgradeType speedUpgrade = new VehicleUpgradeSpeed(0);
 public static final IVehicleUpgradeType aimUpgrade = new VehicleUpgradeAim(1);
 public static final IVehicleUpgradeType reloadUpgrade = new VehicleUpgradeReload(2);
-public static final IVehicleUpgradeType turretLockUpgrade = new VehicleUpgradeTurretLock(3);
+
 public static final IVehicleUpgradeType powerUpgrade = new VehicleUpgradePower(4);
 public static final IVehicleUpgradeType pitchExtUpgrade = new VehicleUpgradeTurretPitch(5);
 public static final IVehicleUpgradeType pitchUpUpgrade = new VehicleUpgradePitchUp(6);
@@ -72,7 +72,7 @@ public void registerUpgrades()
   this.registerUpgrade(speedUpgrade);
   this.registerUpgrade(aimUpgrade);
   this.registerUpgrade(reloadUpgrade);
-  this.registerUpgrade(turretLockUpgrade);
+  
   this.registerUpgrade(powerUpgrade);
   this.registerUpgrade(pitchExtUpgrade);
   this.registerUpgrade(pitchUpUpgrade);

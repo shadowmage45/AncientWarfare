@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.missiles;
 
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
@@ -29,6 +30,10 @@ public class AmmoArrow extends Ammo
 public AmmoArrow(int ammoType)
   {
   super(ammoType);
+  this.ammoWeight = 1.f;
+  this.renderScale = 0.2f;
+  this.vehicleDamage = 8;
+  this.entityDamage = 8;
   this.isArrow = true;
   this.isRocket = false;
   this.isPersistent = true;
@@ -39,13 +44,13 @@ public AmmoArrow(int ammoType)
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
   {
-  // TODO Auto-generated method stub
+  //NOOP
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  // TODO Auto-generated method stub
+  ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
   }
 
 }

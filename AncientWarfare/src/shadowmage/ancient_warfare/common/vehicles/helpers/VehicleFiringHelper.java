@@ -94,6 +94,23 @@ public VehicleFiringHelper(VehicleBase vehicle)
   }
 
 /**
+ * spawns the number of missiles that this vehicle should fire by weight-count
+ * at the given offset from normal missile spawn position (offset is world
+ * coordinates, needs translating prior to being passed in)
+ * @param ox
+ * @param oy
+ * @param oz
+ */
+public void spawnMissilesByWeightCount(float ox, float oy, float oz)
+  {
+  int count = getMissileLaunchCount();
+  for(int i = 0; i < count; i++)
+    {
+    spawnMissile(ox,oy,oz);
+    }
+  }
+
+/**
  * spawn a missile of current missile type, with current firing paramaters, with additional raw x, y, z offsets
  * @param ox
  * @param oy
@@ -117,7 +134,8 @@ public void spawnMissile(float ox, float oy, float oz)
       float y = (float) vehicle.posY + off.y + oy;
       float z = (float) vehicle.posZ + off.z + oz;
       
-      float power = vehicle.localLaunchPower> getAdjustedMaxMissileVelocity() ? getAdjustedMaxMissileVelocity() : vehicle.localLaunchPower;      
+      float maxPower = getAdjustedMaxMissileVelocity();
+      float power = vehicle.localLaunchPower > maxPower ? maxPower : vehicle.localLaunchPower;      
       float yaw = vehicle.localTurretRotation;
       float pitch = vehicle.localTurretPitch; 
       if(Config.adjustMissilesForAccuracy)
@@ -141,12 +159,16 @@ public void spawnMissile(float ox, float oy, float oz)
           power += power/vehicle.currentLaunchSpeedPowerMax;
           pitch += (float)(rng.nextFloat()*2.f -1.f) * (1.f - accuracy)*50.f;
           } 
-        }
-      
-      MissileBase missile = vehicle.ammoHelper.getMissile2(x, y, z, yaw, pitch, power);
-      if(missile!=null)
+        }      
+      int count = ammo.hasSecondaryAmmo() ? ammo.getSecondaryAmmoTypeCount() : 1;
+      MissileBase missile = null;
+      for(int i = 0; i < count; i++)
         {
-        vehicle.worldObj.spawnEntityInWorld(missile);
+        missile = vehicle.ammoHelper.getMissile2(x, y, z, yaw, pitch, power);
+        if(missile!=null)
+          {
+          vehicle.worldObj.spawnEntityInWorld(missile);
+          }
         }
       }
     }
@@ -191,7 +213,7 @@ public void onTick()
     {
     vehicle.localLaunchPower = vehicle.currentLaunchSpeedPowerMax;
     }
-  if(vehicle.canAimRotate() && vehicle.upgradeHelper.hasUpgrade(VehicleUpgradeRegistry.turretLockUpgrade))
+  if(vehicle.canAimRotate())
     {
     float diff = vehicle.rotationYaw - vehicle.prevRotationYaw;
     vehicle.localTurretRotation +=diff;
@@ -199,6 +221,30 @@ public void onTick()
     }
   }
 
+/**
+ * get how many missiles can be fired at the current missileType and weight
+ * will return at least 1
+ * @return
+ */
+public int getMissileLaunchCount()
+  {
+  IAmmoType ammo = vehicle.ammoHelper.getCurrentAmmoType();
+  int missileCount = 1;
+  if(ammo!=null)
+    {
+    missileCount = (int)(vehicle.vehicleType.getMaxMissileWeight()/ammo.getAmmoWeight());
+    if(missileCount<1)
+      {
+      missileCount = 1;
+      }    
+    }
+  return missileCount;
+  }
+
+/**
+ * gets the adjusted max missile velocity--adjusted by missile weight percentage of vehicleMaxMissileWeight
+ * @return
+ */
 public float getAdjustedMaxMissileVelocity()
   {  
   float velocity = vehicle.currentLaunchSpeedPowerMax;
@@ -214,6 +260,10 @@ public float getAdjustedMaxMissileVelocity()
   return velocity;
   }
 
+/**
+ * get accuracy after adjusting for rider (soldier)
+ * @return
+ */
 public float getAccuracyAdjusted()
   {
   float accuracy = this.vehicle.currentAccuracy;
@@ -225,7 +275,9 @@ public float getAccuracyAdjusted()
   }
 
 /**
- * if not already firing, this will initiate the launch sequence
+ * if not already firing, this will initiate the launch sequence (phase 1 of 3).
+ * Called by this to start missileLaunch. (triggered from packet)
+ * in the future, will also be called by a soldier to fire a missile.
  */
 public void initiateLaunchSequence()
   {
@@ -237,7 +289,10 @@ public void initiateLaunchSequence()
     }
   }
 
-public void setFinishedReloading()
+/**
+ * setReloading to finished. private for a reason... (return to phase 0)
+ */
+private void setFinishedReloading()
   {
   this.isFiring = false;
   this.isReloading = false;
@@ -245,6 +300,9 @@ public void setFinishedReloading()
   this.reloadingTicks = 0;
   }
 
+/**
+ * initiate actual launching of missiles (phase 2 of 3)
+ */
 public void startLaunching()
   {
   this.isFiring = false;
@@ -252,6 +310,9 @@ public void startLaunching()
   this.isReloading = false;
   }
 
+/**
+ * finish the launching sequence, and begin reloading (phase 3 of 3)
+ */
 public void setFinishedLaunching()
   {
   this.isFiring = false;
@@ -375,7 +436,6 @@ public void handleFireInput(Vec3 target)
  */
 public void handleAimKeyInput(float pitch, float yaw)
   {
-  Config.logDebug("receiving key input. pitch: "+pitch+ " yaw: "+yaw);
   boolean pitchUpdated = false;
   boolean powerUpdated = false;
   boolean yawUpdated = false;
@@ -496,7 +556,7 @@ public void handleAimMouseInput(Vec3 target)
       updatePower = true;
       }
     }  
-  if(vehicle.canAimRotate() && !vehicle.upgradeHelper.hasUpgrade(VehicleUpgradeRegistry.turretLockUpgrade))
+  if(vehicle.canAimRotate())
     {
     float xAO = (float) (vehicle.posX + offset.x - target.xCoord);  
     float zAO = (float) (vehicle.posZ + offset.z - target.zCoord);

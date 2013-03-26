@@ -269,7 +269,11 @@ public MissileBase getMissile2(float x, float y, float z, float yaw, float pitch
   IAmmoType ammo = this.getCurrentAmmoType();
   if(ammo!=null)
     {
-    MissileBase missile = new MissileBase(vehicle.worldObj);   
+    MissileBase missile = new MissileBase(vehicle.worldObj); 
+    if(ammo.hasSecondaryAmmo())
+      {
+      ammo = ammo.getSecondaryAmmoType();
+      }
     missile.setMissileParams2(ammo, x, y, z, yaw, pitch, velocity);
     missile.setMissileCallback(vehicle);
     missile.setLaunchingEntity(vehicle);

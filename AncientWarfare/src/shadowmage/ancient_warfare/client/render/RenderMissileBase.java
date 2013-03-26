@@ -20,10 +20,36 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+
+import org.lwjgl.opengl.GL11;
+
+import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.missiles.MissileBase;
 
 public abstract class RenderMissileBase extends Render
 {
+static Minecraft mc = Minecraft.getMinecraft();
+
+@Override
+public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
+  {
+  GL11.glPushMatrix();
+  MissileBase missile = (MissileBase)var1;
+  GL11.glTranslated(var2, var4, var6);
+  GL11.glRotatef(var8 - 90, 0, 1, 0);
+  GL11.glRotatef(var1.rotationPitch - 90, 1, 0, 0);
+  GL11.glScaled(-1, -1, 1);
+  float scale = missile.ammoType.getRenderScale();
+  GL11.glScalef(scale, scale, scale);
+  mc.renderEngine.bindTexture(mc.renderEngine.getTexture(var1.getTexture()));
+  renderMissile(missile, missile.ammoType, var2, var4, var6, var8, var9);
+  GL11.glPopMatrix();
+  }
+
+public abstract void renderMissile(MissileBase missile, IAmmoType ammo, double x, double y, double z, float yaw, float tick);
 
 
 }

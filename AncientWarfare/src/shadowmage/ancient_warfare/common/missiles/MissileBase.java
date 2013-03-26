@@ -39,6 +39,8 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class MissileBase extends Entity implements IEntityAdditionalSpawnData
 {
@@ -47,9 +49,9 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData
  * Must be set after missile is constructed, but before spawned server side.  Client-side this will be set by the readSpawnData method.  This ammo type is responsible for many onTick qualities,
  * effects of impact, and model/render instance used.
  */
-IAmmoType ammoType = null;
+public IAmmoType ammoType = Ammo.ammoArrow;
 IMissileHitCallback shooter = null;
-public int missileType = 0;
+public int missileType = Ammo.ammoArrow.ammoType;
 int rocketBurnTime = 0;
 public int ticksImpacted = 0;
 
@@ -161,6 +163,16 @@ public void onImpactWorld()
     }
   }
 
+@SideOnly(Side.CLIENT)
+/**
+ * Return whether this entity should be rendered as on fire.
+ */
+@Override
+public boolean canRenderOnFire()
+  {
+  return this.ammoType.isFlaming();
+  }
+
 @Override
 public void applyEntityCollision(Entity par1Entity)
   {
@@ -169,7 +181,7 @@ public void applyEntityCollision(Entity par1Entity)
 
 @Override
 public void onUpdate()
-  {
+  {  
   this.ticksExisted++;
   super.onUpdate();
   this.onMovementTick();
@@ -376,6 +388,10 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.mX = tag.getFloat("mX");
   this.mY = tag.getFloat("mY");
   this.mZ = tag.getFloat("mZ");
+  if(this.ammoType==null)
+  {
+	  this.ammoType = Ammo.ammoArrow;
+  }
   }
 
 @Override
@@ -424,6 +440,10 @@ public void readSpawnData(ByteArrayDataInput data)
   {
   this.missileType =data.readInt();
   this.ammoType = AmmoRegistry.instance().getAmmoEntry(missileType);
+  if(this.ammoType==null)
+  {
+	  this.ammoType = Ammo.ammoArrow;
+  }
   this.prevRotationYaw = this.rotationYaw = data.readFloat();
   this.prevRotationPitch = this.rotationPitch = data.readFloat();
   this.inGround = data.readBoolean();
