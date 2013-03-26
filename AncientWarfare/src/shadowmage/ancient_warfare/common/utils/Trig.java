@@ -25,7 +25,7 @@ package shadowmage.ancient_warfare.common.utils;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.vehicles.missiles.AmmoRocket;
+import shadowmage.ancient_warfare.common.vehicles.missiles.AmmoHwachaRocket;
 
 /**
  * because I hate it so much...why not make the 
@@ -343,9 +343,9 @@ public static float bruteForceRocketFinder(float x, float y, float angle, int ma
     motX = Trig.sinDegrees(angle)*testVelocity*0.05f;
     motY = Trig.cosDegrees(angle)*testVelocity*0.05f;
         
-    rocketBurnTime = (int) (testVelocity*AmmoRocket.burnTimeFactor);     
-    motX0 = (motX/ (testVelocity*0.05f)) * AmmoRocket.accelerationFactor;
-    motY0 = (motY/ (testVelocity*0.05f)) * AmmoRocket.accelerationFactor;
+    rocketBurnTime = (int) (testVelocity*AmmoHwachaRocket.burnTimeFactor);     
+    motX0 = (motX/ (testVelocity*0.05f)) * AmmoHwachaRocket.accelerationFactor;
+    motY0 = (motY/ (testVelocity*0.05f)) * AmmoHwachaRocket.accelerationFactor;
     motX = motX0;
     motY = motY0;
     while(motY>=0 || posY >= y)

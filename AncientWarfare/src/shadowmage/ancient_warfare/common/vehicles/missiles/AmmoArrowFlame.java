@@ -23,35 +23,41 @@ package shadowmage.ancient_warfare.common.vehicles.missiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class AmmoRocket extends Ammo
+public class AmmoArrowFlame extends Ammo
 {
 
-public static float burnTimeFactor = 3.f;
-public static float accelerationFactor = 0.01f;
-
 /**
- * @param ammoType
- */
-public AmmoRocket(int ammoType)
+   * @param ammoType
+   */
+  public AmmoArrowFlame(int ammoType)
+    {
+    super(ammoType);
+    this.ammoWeight = 1.2f;
+    this.renderScale = 0.2f;
+    this.vehicleDamage = 6;
+    this.entityDamage = 6;
+    this.isArrow = true;
+    this.isRocket = false;
+    this.isPersistent = true;
+    this.isFlaming = true;
+    this.displayName = "Flame Arrow";  
+    this.displayTooltip = "A well-built heavy-duty arrow with a head soaked in flammable resin.";  
+    }
+
+@Override
+public void onImpactWorld(World world, float x, float y, float z,
+    MissileBase missile)
   {
-  super(ammoType);
-  this.displayName = "Hwacha Rocket";
-  this.displayTooltip = "A small self-propelled arrow with variable burn-time.";
-  this.isArrow = true;
-  this.isPersistent = true;
-  this.isRocket = true;
+  // TODO Auto-generated method stub
+
   }
 
 @Override
-public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
+public void onImpactEntity(World world, Entity ent, float x, float y, float z,
+    MissileBase missile)
   {
-  
-  }
+  // TODO Auto-generated method stub
 
-@Override
-public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
-  {
-  
   }
 
 }

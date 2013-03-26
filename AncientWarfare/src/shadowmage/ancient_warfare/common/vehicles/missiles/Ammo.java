@@ -41,6 +41,7 @@ public static Ammo[] ammoTypes = new Ammo[64];//starting with 64 types...can/wil
  */
 
 public static Ammo ammoBallShot = new AmmoBallShot(52);// has to be declared first, because others depend on it...
+public static Ammo ammoBallIronShot = new AmmoIronBallShot(53);
 
 public static Ammo ammoStoneShot10 = new AmmoStoneShot(0,10);
 public static Ammo ammoStoneShot15 = new AmmoStoneShot(1,15);
@@ -50,19 +51,59 @@ public static Ammo ammoFireShot10 = new AmmoFlameShot(4,10);
 public static Ammo ammoFireShot15 = new AmmoFlameShot(5,15);
 public static Ammo ammoFireShot30 = new AmmoFlameShot(6,30);
 public static Ammo ammoFireShot45 = new AmmoFlameShot(7,45);
-
+public static Ammo ammoExplosive10 = new AmmoExplosiveShot(8,10,false);
+public static Ammo ammoExplosive15 = new AmmoExplosiveShot(9,15,false);
+public static Ammo ammoExplosive30 = new AmmoExplosiveShot(10,30,false);
+public static Ammo ammoExplosive45 = new AmmoExplosiveShot(11,45,false);
+public static Ammo ammoHE10 = new AmmoExplosiveShot(12,10,true);
+public static Ammo ammoHE15 = new AmmoExplosiveShot(13,15,true);
+public static Ammo ammoHE30 = new AmmoExplosiveShot(14,30,true);
+public static Ammo ammoHE45 = new AmmoExplosiveShot(15,45,true);
+public static Ammo ammoNapalm10 = new AmmoNapalmShot(16,10);
+public static Ammo ammoNapalm15 = new AmmoNapalmShot(16,15);
+public static Ammo ammoNapalm30 = new AmmoNapalmShot(16,30);
+public static Ammo ammoNapalm45 = new AmmoNapalmShot(16,45);
+public static Ammo clusterShot10 = new AmmoClusterShot(20,10);
+public static Ammo clusterShot15 = new AmmoClusterShot(21,15);
+public static Ammo clusterShot30 = new AmmoClusterShot(22,30);
+public static Ammo clusterShot45 = new AmmoClusterShot(23,45);
 public static Ammo ammoPebbleShot10 = new AmmoPebbleShot(24, 10);
 public static Ammo ammoPebbleShot15 = new AmmoPebbleShot(25, 15);
-
+public static Ammo ammoPebbleShot30 = new AmmoPebbleShot(26, 30);
+public static Ammo ammoPebbleShot45 = new AmmoPebbleShot(27, 45);
+public static Ammo ammoIronShot5 = new AmmoIronShot(28,5,10);
+public static Ammo ammoIronShot10 = new AmmoIronShot(29,10,15);
+public static Ammo ammoIronShot15 = new AmmoIronShot(30,15,30);
+public static Ammo ammoIronShot25 = new AmmoIronShot(31,25,45);
+public static Ammo ammoCanisterShot5 = new AmmoCanisterShot(32,5);
+public static Ammo ammoCanisterShot10 = new AmmoCanisterShot(33,10);
+public static Ammo ammoCanisterShot15 = new AmmoCanisterShot(34,15);
+public static Ammo ammoCanisterShot25 = new AmmoCanisterShot(35,25);
+public static Ammo ammoGrapeShot5 = new AmmoGrapeShot(36,5);
+public static Ammo ammoGrapeShot10 = new AmmoGrapeShot(37,10);
+public static Ammo ammoGrapeShot15 = new AmmoGrapeShot(38,15);
+public static Ammo ammoGrapeShot25 = new AmmoGrapeShot(39,25);
 public static Ammo ammoArrow = new AmmoArrow(40);
+public static Ammo ammoArrowFlame = new AmmoArrowFlame(41);
+public static Ammo ammoArrowIron = new AmmoArrowIron(42);
+public static Ammo ammoArrowIronFlame = new AmmoArrowIronFlame(43);
+public static Ammo ammoBallistaBolt = new AmmoBallistaBolt(44);
+public static Ammo ammoBallistaBoltFlame = new AmmoBallistaBoltFlame(45);
+public static Ammo ammoBallistaBoltExplosive = new AmmoBallistaBoltExplosive(46);
+public static Ammo ammoBallistaBoltIron = new AmmoBallistaBoltIron(47);
+public static Ammo ammoRocket = new AmmoHwachaRocket(48);
+public static Ammo ammoHwachaRocketFlame = new AmmoHwachaRocketFlame(49);
+public static Ammo ammoHwachaRocketExplosive = new AmmoHwachaRocketExplosive(50);
+public static Ammo ammoHwachaRocketAirburst = new AmmoHwachaRocketAirburst(51);
+//52 stoneBallShot (decl. above)
+//53 ironBallShot (decl. above)
 
-public static Ammo ammoRocket = new AmmoRocket(48);
+//54-63 reserved for future ammo types
 
 
 
 
-
-private ItemStack ammoStack;
+private final ItemStack ammoStack;
 public final int ammoType;
 int entityDamage;
 int vehicleDamage;
@@ -87,8 +128,7 @@ public Ammo(int ammoType)
   if(ammoType>=0 && ammoType<ammoTypes.length)
     {    
     ammoTypes[ammoType]=this;
-    }
-  
+    }  
   }
 
 @Override

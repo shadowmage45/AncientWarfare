@@ -40,10 +40,8 @@ public VehicleTypeBallista(int typeNum)
 
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   
-  this.maxMissileWeight = 1.f;
+  this.maxMissileWeight = 2.f;  
   
-  this.validAmmoTypes.add(Ammo.ammoArrow);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot10);
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);

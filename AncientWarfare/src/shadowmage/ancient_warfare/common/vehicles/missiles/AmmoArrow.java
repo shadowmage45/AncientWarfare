@@ -36,7 +36,7 @@ public AmmoArrow(int ammoType)
   this.isArrow = true;
   this.isRocket = false;
   this.isPersistent = true;
-  this.displayName = "Arrow";
+  this.displayName = "Arrow";  
   this.displayTooltip = "A well-built heavy-duty arrow.";  
   }
 

@@ -18,36 +18,40 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.item;
+package shadowmage.ancient_warfare.common.vehicles.missiles;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 
-public class ItemAmmo extends AWItemBase
+public class AmmoIronShot extends Ammo
 {
 
 /**
- * @param itemID
- * @param hasSubTypes
+ * @param ammoType
  */
-public ItemAmmo(int itemID)
+public AmmoIronShot(int ammoType, int weight, int damage)
   {
-  super(itemID, true);
-  this.setCreativeTab(CreativeTabAW.ammoTab);
-  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/items.png");
-  this.setItemName("awAmmo");
+  super(ammoType);
+  this.ammoWeight = weight;
+  this.displayName = "Iron Shot "+weight+"kg";
+  this.displayTooltip = weight+"kg rough iron shot.";
+  this.entityDamage = damage;
+  this.vehicleDamage = damage;
   }
 
 @Override
-public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
   {
-  return stack.getItemDamage();
+  
   }
 
 @Override
-public String getItemNameIS(ItemStack par1ItemStack)
+public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  return "Ammo" + String.valueOf(par1ItemStack.getItemDamage()); 
+  if(!world.isRemote)
+    {
+    ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
+    }
   }
 
 }

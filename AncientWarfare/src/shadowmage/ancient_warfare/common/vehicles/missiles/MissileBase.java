@@ -114,11 +114,11 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
   if(this.ammoType.isRocket())//use launch power to determine rocket burn time...
     {
     float temp = MathHelper.sqrt_float(mx*mx+my*my+mz*mz);
-    this.rocketBurnTime = (int) (temp*20.f*AmmoRocket.burnTimeFactor);
+    this.rocketBurnTime = (int) (temp*20.f*AmmoHwachaRocket.burnTimeFactor);
     
-    this.mX = (float) (motionX/temp) *AmmoRocket.accelerationFactor;
-    this.mY = (float) (motionY/temp) *AmmoRocket.accelerationFactor;
-    this.mZ = (float) (motionZ/temp) *AmmoRocket.accelerationFactor;
+    this.mX = (float) (motionX/temp) *AmmoHwachaRocket.accelerationFactor;
+    this.mY = (float) (motionY/temp) *AmmoHwachaRocket.accelerationFactor;
+    this.mZ = (float) (motionZ/temp) *AmmoHwachaRocket.accelerationFactor;
     this.motionX = mX;
     this.motionY = mY;
     this.motionZ = mZ;    
@@ -146,6 +146,7 @@ public void setMissileCallback(IMissileHitCallback shooter)
 
 public void onImpactEntity(Entity ent, float x, float y, float z)
   {
+  Config.logDebug("Entity Impacted: "+ent+" by: "+this.ammoType.getDisplayName()+" :: "+this);
   this.ammoType.onImpactEntity(worldObj, ent, x, y, z, this);
   if(this.shooter!=null)
     {
@@ -155,6 +156,7 @@ public void onImpactEntity(Entity ent, float x, float y, float z)
 
 public void onImpactWorld()
   {
+  Config.logDebug("World Impacted by: "+this.ammoType.getDisplayName()+" :: "+this);
   this.ammoType.onImpactWorld(worldObj, (float)posX,(float)posY, (float)posZ, this);
   if(this.shooter!=null)
     {

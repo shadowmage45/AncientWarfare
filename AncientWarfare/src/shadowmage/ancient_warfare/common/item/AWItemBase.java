@@ -128,15 +128,7 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
         {
         par3List.add(toolTip);
         }
-      }
-    
-//    if(tooltipInfo!=null)
-//      {
-//      for(Object obj : tooltipInfo)
-//        {
-//        par3List.addAll(tooltipInfo);
-//        }
-//      }
+      }    
     }  
   }
 
@@ -151,6 +143,16 @@ public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, It
     return stack.getItemDamage();
     }
   return super.getIconIndex(stack, renderPass, player, usingItem, useRemaining);
+  }
+
+@Override
+public int getIconFromDamage(int par1)
+  {
+  if(this.getHasSubtypes())
+    {
+    return par1;
+    }
+  return this.iconIndex;
   }
 
 }

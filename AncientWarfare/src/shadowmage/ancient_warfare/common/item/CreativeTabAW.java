@@ -49,7 +49,15 @@ public static CreativeTabAW npcTab = new CreativeTabAW("Ancient Warfare Npcs")
     return new ItemStack(ItemLoader.npcSpawner);
     }
   };
-
+public static CreativeTabAW ammoTab = new CreativeTabAW("Ancient Warfare Ammunitions")
+  {
+  @Override
+  public ItemStack getIconItemStack()
+    {
+    return new ItemStack(ItemLoader.ammoItem);
+    }
+  };
+  
 public static CreativeTabAW instance()
   {
   return normal;

@@ -698,22 +698,26 @@ public void dropInventory()
 @Override
 public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   {  
-  super.attackEntityFrom(par1DamageSource, par2);
+  if(this.worldObj.isRemote)
+    {
+    return false;
+    }
+  super.attackEntityFrom(par1DamageSource, par2);  
   float adjDmg = upgradeHelper.getScaledDamage(par1DamageSource, par2);
-  this.localVehicleHealth -= adjDmg;  
+  this.localVehicleHealth -= adjDmg;
+  
+  Packet02Vehicle pkt = new Packet02Vehicle();
+  pkt.setParams(this);
+  pkt.setHealthUpdate(this.localVehicleHealth);
+  pkt.sendPacketToAllTrackingClients(this);
+    
+  Config.logDebug("Vehicle hit by attack.  New health: "+localVehicleHealth);
   if(this.localVehicleHealth<=0)
     {
     this.setDead();
-    return true;
+    return false;
     }
-  if(!this.worldObj.isRemote)
-    {
-    Packet02Vehicle pkt = new Packet02Vehicle();
-    pkt.setParams(this);
-    pkt.setHealthUpdate(this.localVehicleHealth);
-    pkt.sendPacketToAllTrackingClients(this);
-    }
-  return false;
+  return true;
   }
 
 @Override

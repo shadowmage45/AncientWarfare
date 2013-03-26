@@ -31,7 +31,7 @@ import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
-import shadowmage.ancient_warfare.common.vehicles.missiles.AmmoRocket;
+import shadowmage.ancient_warfare.common.vehicles.missiles.AmmoHwachaRocket;
 
 public class RenderOverlayAdvanced
 {
@@ -94,12 +94,12 @@ public static void renderRocketFlightPath(VehicleBase vehicle, EntityPlayer play
   double vY = Trig.cosDegrees((float) angle)*speed ;
   double vX = Trig.sinDegrees((float) yaw)*vH ;
   double vZ = Trig.cosDegrees((float) yaw)*vH ;
-  int rocketBurnTime = (int) (speed * 20.f*AmmoRocket.burnTimeFactor);
+  int rocketBurnTime = (int) (speed * 20.f*AmmoHwachaRocket.burnTimeFactor);
   
   
-  float xAcc = (float) (vX/speed) * AmmoRocket.accelerationFactor;;
-  float yAcc = (float) (vY/speed) * AmmoRocket.accelerationFactor;;
-  float zAcc = (float) (vZ/speed) * AmmoRocket.accelerationFactor;;
+  float xAcc = (float) (vX/speed) * AmmoHwachaRocket.accelerationFactor;;
+  float yAcc = (float) (vY/speed) * AmmoHwachaRocket.accelerationFactor;;
+  float zAcc = (float) (vZ/speed) * AmmoHwachaRocket.accelerationFactor;;
   vX = xAcc;
   vY = yAcc;
   vZ = zAcc;
