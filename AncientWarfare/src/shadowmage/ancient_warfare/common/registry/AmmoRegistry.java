@@ -25,11 +25,11 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.item.AWItemBase;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.missiles.Ammo;
-import shadowmage.ancient_warfare.common.missiles.MissileBase;
+import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
+import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
 
 public class AmmoRegistry
 {

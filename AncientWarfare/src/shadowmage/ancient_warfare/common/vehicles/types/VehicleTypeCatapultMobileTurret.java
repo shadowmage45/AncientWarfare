@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
 {

@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.missiles;
+package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import java.util.List;
 
@@ -30,7 +30,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -440,10 +439,10 @@ public void readSpawnData(ByteArrayDataInput data)
   {
   this.missileType =data.readInt();
   this.ammoType = AmmoRegistry.instance().getAmmoEntry(missileType);
-  if(this.ammoType==null)
-  {
+    if(this.ammoType==null)
+    {
 	  this.ammoType = Ammo.ammoArrow;
-  }
+    }
   this.prevRotationYaw = this.rotationYaw = data.readFloat();
   this.prevRotationPitch = this.rotationPitch = data.readFloat();
   this.inGround = data.readBoolean();
@@ -457,7 +456,6 @@ public void readSpawnData(ByteArrayDataInput data)
   if(hasLauncher)
     {
     Entity launcher = worldObj.getEntityByID(data.readInt());
-    Config.logDebug("launching entity set to: "+launcher);
     }
   }
 }

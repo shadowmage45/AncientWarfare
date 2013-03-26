@@ -18,57 +18,40 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.missiles;
+package shadowmage.ancient_warfare.common.vehicles.missiles;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class AmmoStoneShot extends Ammo
+public class AmmoRocket extends Ammo
 {
+
+public static float burnTimeFactor = 3.f;
+public static float accelerationFactor = 0.01f;
 
 /**
  * @param ammoType
  */
-public AmmoStoneShot(int ammoType, int weight)
+public AmmoRocket(int ammoType)
   {
   super(ammoType);
-  this.isPersistent = false;
-  this.isArrow = false;
-  this.isRocket = false;
-  this.ammoWeight = weight;
-  this.displayName = "Stone Shot "+weight+"kg";
-  this.displayTooltip = weight+"kg rough stone shot.";
+  this.displayName = "Hwacha Rocket";
+  this.displayTooltip = "A small self-propelled arrow with variable burn-time.";
+  this.isArrow = true;
+  this.isPersistent = true;
+  this.isRocket = true;
   }
 
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
   {
-  if(ammoWeight>=15 && !world.isRemote)
-    {
-    int bx = (int)x;
-    int by = (int)y;
-    int bz = (int)z;
-    this.breakBlockAndDrop(world, bx, by, bz);    
-    if(ammoWeight>=30)
-      {
-      this.breakBlockAndDrop(world, bx, by-1, bz);
-      this.breakBlockAndDrop(world, bx-1, by, bz);
-      this.breakBlockAndDrop(world, bx+1, by, bz);
-      this.breakBlockAndDrop(world, bx, by, bz-1);
-      this.breakBlockAndDrop(world, bx, by, bz+1);
-      }
-    }
+  
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  if(!world.isRemote)
-    {
-    ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
-    }
+  
   }
-
 
 }

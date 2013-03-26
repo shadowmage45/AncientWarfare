@@ -5,9 +5,9 @@
  
 package shadowmage.ancient_warfare.client.model;
 
-import shadowmage.ancient_warfare.common.utils.Trig;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.utils.Trig;
  
  
 public class ModelBatteringRam extends ModelVehicleBase

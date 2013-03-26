@@ -22,14 +22,10 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.config.Settings;
-import shadowmage.ancient_warfare.common.missiles.Ammo;
-import shadowmage.ancient_warfare.common.missiles.AmmoRocket;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.vehicles.missiles.AmmoRocket;
 
 /**
  * because I hate it so much...why not make the 

@@ -24,8 +24,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.soldiers.INpcAI;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 

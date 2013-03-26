@@ -27,16 +27,15 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
-import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.Pair;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
+import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
 
 
 /**
@@ -134,36 +133,42 @@ public void spawnMissile(float ox, float oy, float oz)
       float y = (float) vehicle.posY + off.y + oy;
       float z = (float) vehicle.posZ + off.z + oz;
       
-      float maxPower = getAdjustedMaxMissileVelocity();
-      float power = vehicle.localLaunchPower > maxPower ? maxPower : vehicle.localLaunchPower;      
-      float yaw = vehicle.localTurretRotation;
-      float pitch = vehicle.localTurretPitch; 
-      if(Config.adjustMissilesForAccuracy)
-        {        
-        float accuracy = getAccuracyAdjusted();        
-        yaw   += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;
-        if(vehicle.canAimPower() && !ammo.isRocket())
-          {
-          power += (float)rng.nextGaussian() * (1.f - accuracy)*2.5f; 
-          if(power<1.f)
-            {
-            power=1.f;
-            }
-          }
-        else if(vehicle.canAimPitch())
-          {
-          pitch += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;
-          }
-        else if(ammo!=null && ammo.isRocket())
-          {
-          power += power/vehicle.currentLaunchSpeedPowerMax;
-          pitch += (float)(rng.nextFloat()*2.f -1.f) * (1.f - accuracy)*50.f;
-          } 
-        }      
       int count = ammo.hasSecondaryAmmo() ? ammo.getSecondaryAmmoTypeCount() : 1;
+      Config.logDebug("type: "+ammo.getDisplayName()+" missile count to fire: "+count + " hasSecondaryAmmo: "+ammo.hasSecondaryAmmo() + " secType: "+ammo.getSecondaryAmmoType());
       MissileBase missile = null;
+      float maxPower;
+      float yaw;
+      float pitch;
+      float accuracy;
+      float power;
       for(int i = 0; i < count; i++)
         {
+        maxPower = getAdjustedMaxMissileVelocity();
+        power = vehicle.localLaunchPower > maxPower ? maxPower : vehicle.localLaunchPower;      
+        yaw = vehicle.localTurretRotation;
+        pitch = vehicle.localTurretPitch; 
+        if(Config.adjustMissilesForAccuracy)
+          {        
+          accuracy = getAccuracyAdjusted();        
+          yaw   += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;
+          if(vehicle.canAimPower() && !ammo.isRocket())
+            {
+            power += (float)rng.nextGaussian() * (1.f - accuracy)*2.5f; 
+            if(power<1.f)
+              {
+              power=1.f;
+              }
+            }
+          else if(vehicle.canAimPitch())
+            {
+            pitch += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;
+            }
+          else if(ammo!=null && ammo.isRocket())
+            {
+            power += power/vehicle.currentLaunchSpeedPowerMax;
+            pitch += (float)(rng.nextFloat()*2.f -1.f) * (1.f - accuracy)*50.f;
+            } 
+          }
         missile = vehicle.ammoHelper.getMissile2(x, y, z, yaw, pitch, power);
         if(missile!=null)
           {
@@ -252,11 +257,16 @@ public float getAdjustedMaxMissileVelocity()
   if(ammo!=null)
     {
     float missileWeight = ammo.getAmmoWeight();
-    if(missileWeight>vehicle.vehicleType.getMaxMissileWeight())
+    float maxWeight = vehicle.vehicleType.getMaxMissileWeight();
+    if(missileWeight>maxWeight)
       {
-      velocity *= vehicle.vehicleType.getMaxMissileWeight()/missileWeight;
+      float totalWeight = missileWeight + maxWeight;
+      float temp = maxWeight / totalWeight;
+      temp *=2;
+      velocity *= temp;
       }
     }
+  Config.logDebug("adj velocity: "+velocity);
   return velocity;
   }
 

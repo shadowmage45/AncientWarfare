@@ -13,6 +13,8 @@ VEHICLES
 * remove old targetPos code...or use it for other things....
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
+* vehicle max health is not set to greater than base starting health when first spawned (might need a method for it..)
+* ammo onHit for 15kg stone shot is not destroying blocks..
 
 NPCS
 * add save/load from NBT stuff
@@ -130,6 +132,7 @@ TWEAKS/OPTIMIZATION
 * remove yawLock upgrade...it is no longer necessary
 * add weight/count missile spawning
 * add container-type missiles (spawns a secondary set of missiles when fired)
+* more work on missileTypes.
 /********** 03-26-13 **********/
 /********** 03-27-13 **********/
 /********** 03-28-13 **********/

@@ -20,14 +20,10 @@
  */
 package shadowmage.ancient_warfare.client.render.missile;
 
-import net.minecraft.entity.Entity;
-
-import org.lwjgl.opengl.GL11;
-
 import shadowmage.ancient_warfare.client.model.ModelShot;
 import shadowmage.ancient_warfare.client.render.RenderMissileBase;
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
-import shadowmage.ancient_warfare.common.missiles.MissileBase;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
+import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
 
 public class RenderShot extends RenderMissileBase
 {

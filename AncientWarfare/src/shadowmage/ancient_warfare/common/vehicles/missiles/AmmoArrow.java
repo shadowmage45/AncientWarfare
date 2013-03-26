@@ -18,40 +18,38 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.missiles;
+package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class AmmoRocket extends Ammo
+public class AmmoArrow extends Ammo
 {
 
-public static float burnTimeFactor = 3.f;
-public static float accelerationFactor = 0.01f;
-
-/**
- * @param ammoType
- */
-public AmmoRocket(int ammoType)
+public AmmoArrow(int ammoType)
   {
   super(ammoType);
-  this.displayName = "Hwacha Rocket";
-  this.displayTooltip = "A small self-propelled arrow with variable burn-time.";
+  this.ammoWeight = 1.f;
+  this.renderScale = 0.2f;
+  this.vehicleDamage = 8;
+  this.entityDamage = 8;
   this.isArrow = true;
+  this.isRocket = false;
   this.isPersistent = true;
-  this.isRocket = true;
+  this.displayName = "Arrow";
+  this.displayTooltip = "A well-built heavy-duty arrow.";  
   }
 
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
   {
-  
+  //NOOP
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  
+  ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
   }
 
 }

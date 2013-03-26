@@ -22,20 +22,16 @@ package shadowmage.ancient_warfare.client.render;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.missiles.Ammo;
-import shadowmage.ancient_warfare.common.missiles.AmmoRocket;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
+import shadowmage.ancient_warfare.common.vehicles.missiles.AmmoRocket;
 
 public class RenderOverlayAdvanced
 {

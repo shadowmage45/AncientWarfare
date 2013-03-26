@@ -18,13 +18,12 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.missiles;
+package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -41,20 +40,27 @@ public static Ammo[] ammoTypes = new Ammo[64];//starting with 64 types...can/wil
  * add ammo to applicable vehicle type constructors 
  */
 
+public static Ammo ammoBallShot = new AmmoBallShot(52);// has to be declared first, because others depend on it...
+
 public static Ammo ammoStoneShot10 = new AmmoStoneShot(0,10);
 public static Ammo ammoStoneShot15 = new AmmoStoneShot(1,15);
 public static Ammo ammoStoneShot30 = new AmmoStoneShot(2,30);
-public static Ammo ammoFireShot10 = new AmmoFlameShot(3,10);
-public static Ammo ammoFireShot15 = new AmmoFlameShot(4,15);
-public static Ammo ammoFireShot30 = new AmmoFlameShot(5,30);
+public static Ammo ammoStoneShot45 = new AmmoStoneShot(3, 45);
+public static Ammo ammoFireShot10 = new AmmoFlameShot(4,10);
+public static Ammo ammoFireShot15 = new AmmoFlameShot(5,15);
+public static Ammo ammoFireShot30 = new AmmoFlameShot(6,30);
+public static Ammo ammoFireShot45 = new AmmoFlameShot(7,45);
 
-public static Ammo ammoArrow = new AmmoArrow(30);
+public static Ammo ammoPebbleShot10 = new AmmoPebbleShot(24, 10);
+public static Ammo ammoPebbleShot15 = new AmmoPebbleShot(25, 15);
 
-public static Ammo ammoRocket = new AmmoRocket(36);
+public static Ammo ammoArrow = new AmmoArrow(40);
 
-public static Ammo ammoBallShot = new AmmoBallShot(40);
-public static Ammo ammoStoneShot45 = new AmmoStoneShot(41, 45);
-public static Ammo ammoFireShot45 = new AmmoFlameShot(42,45);
+public static Ammo ammoRocket = new AmmoRocket(48);
+
+
+
+
 
 private ItemStack ammoStack;
 public final int ammoType;

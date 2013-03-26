@@ -20,14 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
-import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
-import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.CatapultVarHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
+import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 
 public class VehicleTypeCatapult extends VehicleType
 {
@@ -43,8 +42,10 @@ public VehicleTypeCatapult(int typeNum)
   this.maxMissileWeight = 10.f;
   
   this.validAmmoTypes.add(Ammo.ammoArrow);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot10);  
-  this.validAmmoTypes.add(Ammo.ammoRocket);
+  this.validAmmoTypes.add(Ammo.ammoStoneShot10);
+  this.validAmmoTypes.add(Ammo.ammoStoneShot15);
+  
+  this.validAmmoTypes.add(Ammo.ammoPebbleShot10);
   
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorObsidian);

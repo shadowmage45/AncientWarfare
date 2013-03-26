@@ -5,8 +5,6 @@
  
 package shadowmage.ancient_warfare.client.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import shadowmage.ancient_warfare.common.utils.Trig;

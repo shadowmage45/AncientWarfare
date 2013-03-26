@@ -18,39 +18,23 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.missiles;
+package shadowmage.ancient_warfare.common.vehicles.missiles;
 
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
-import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
+import net.minecraft.util.DamageSource;
 
-public class AmmoArrow extends Ammo
+public class DamageType extends DamageSource
 {
 
-public AmmoArrow(int ammoType)
-  {
-  super(ammoType);
-  this.ammoWeight = 1.f;
-  this.renderScale = 0.2f;
-  this.vehicleDamage = 8;
-  this.entityDamage = 8;
-  this.isArrow = true;
-  this.isRocket = false;
-  this.isPersistent = true;
-  this.displayName = "Arrow";
-  this.displayTooltip = "A well-built heavy-duty arrow.";  
-  }
+public static DamageType fireMissile = (DamageType) new DamageType("AWFireMissile").setFireDamage().setProjectile();
+public static DamageType explosiveMissile = (DamageType) new DamageType("AWExplMissile").setFireDamage().setProjectile();
+public static DamageType genericMissile = (DamageType) new DamageType("AWGenMissile").setProjectile();
+public static DamageType piercingMissile = (DamageType) new DamageType("AWPierceMissile").setDamageBypassesArmor().setProjectile();
 
-@Override
-public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
+/**
+ * @param par1Str
+ */
+protected DamageType(String par1Str)
   {
-  //NOOP
+  super(par1Str);
   }
-
-@Override
-public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
-  {
-  ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
-  }
-
 }

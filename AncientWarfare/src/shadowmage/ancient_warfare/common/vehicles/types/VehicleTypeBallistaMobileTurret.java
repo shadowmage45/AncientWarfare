@@ -21,11 +21,6 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.missiles.Ammo;
-import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
-import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
 public class VehicleTypeBallistaMobileTurret extends VehicleTypeBallista
 {

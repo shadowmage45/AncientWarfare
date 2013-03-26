@@ -34,7 +34,6 @@ import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradePitchUp
 import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradePower;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeReload;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeSpeed;
-import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeTurretLock;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeTurretPitch;
 
 public class VehicleUpgradeRegistry

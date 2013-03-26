@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.soldiers;
 
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
 public interface INpcAI
 {

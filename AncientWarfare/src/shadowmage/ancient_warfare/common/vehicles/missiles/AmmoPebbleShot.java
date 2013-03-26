@@ -18,23 +18,40 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.missiles;
+package shadowmage.ancient_warfare.common.vehicles.missiles;
 
-import net.minecraft.util.DamageSource;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 
-public class DamageType extends DamageSource
+public class AmmoPebbleShot extends Ammo
 {
 
-public static DamageType fireMissile = (DamageType) new DamageType("AWFireMissile").setFireDamage().setProjectile();
-public static DamageType explosiveMissile = (DamageType) new DamageType("AWExplMissile").setFireDamage().setProjectile();
-public static DamageType genericMissile = (DamageType) new DamageType("AWGenMissile").setProjectile();
-public static DamageType piercingMissile = (DamageType) new DamageType("AWPierceMissile").setDamageBypassesArmor().setProjectile();
-
 /**
- * @param par1Str
+ * @param ammoType
  */
-protected DamageType(String par1Str)
+public AmmoPebbleShot(int ammoType, int weight)
   {
-  super(par1Str);
+  super(ammoType);
+  this.isPersistent = false;
+  this.isArrow = false;
+  this.isRocket = false;
+  this.ammoWeight = weight;
+  this.displayName = "Pebble Shot "+weight+"kg";
+  this.displayTooltip = weight+"kg of pebbles and smaller ammunitions.";
+  this.secondaryAmmoCount = weight;
+  this.secondaryAmmoType = Ammo.ammoBallShot;
   }
+
+@Override
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
+  {
+
+  }
+
+@Override
+public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
+  {
+  
+  }
+
 }

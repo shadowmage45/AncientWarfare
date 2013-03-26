@@ -26,14 +26,13 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.missiles.MissileBase;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmoEntry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
+import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
 
 public class VehicleAmmoHelper  implements INBTTaggable
 {
@@ -101,10 +100,8 @@ public void addUseableAmmo(IAmmoType ammo)
 
 public void handleAmmoSelectInput(int delta)
   {
-//  Config.logDebug("handling ammo selection INPUT. server: "+!vehicle.worldObj.isRemote+" delta: "+delta);
   if(this.ammoEntries.size()>0)
     {
-    boolean updated = false;
     int test = this.currentAmmoType + delta;
     if(test<0)
       {
@@ -135,7 +132,6 @@ public void handleAmmoSelectInput(int delta)
 public void handleAmmoSelectPacket(NBTTagCompound tag)
   {  
   int num = tag.getInteger("num");
-//  Config.logDebug("handling ammo selection packet. server: "+!vehicle.worldObj.isRemote+" ammoNum: "+num);
   if(num>=0 && num < this.ammoEntries.size() && num != this.currentAmmoType)
     {
     this.currentAmmoType = num;
@@ -148,9 +144,18 @@ public void handleAmmoSelectPacket(NBTTagCompound tag)
       pkt.setAmmoSelect(innerTag);
       pkt.sendPacketToAllTrackingClients(vehicle);
       }
+    float maxPower = vehicle.firingHelper.getAdjustedMaxMissileVelocity();
     if(!vehicle.canAimPower())
       {
-      vehicle.localLaunchPower = vehicle.firingHelper.getAdjustedMaxMissileVelocity();
+      vehicle.localLaunchPower = maxPower;
+      }
+    else if(vehicle.localLaunchPower>maxPower)
+      {
+      vehicle.localLaunchPower = maxPower;
+      if(vehicle.worldObj.isRemote && vehicle.firingHelper.clientLaunchSpeed > maxPower)
+        {
+        vehicle.firingHelper.clientLaunchSpeed = maxPower;
+        }
       }
     } 
   }

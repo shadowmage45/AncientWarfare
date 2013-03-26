@@ -20,8 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 
 public class GuiButtonSimple extends GuiElement

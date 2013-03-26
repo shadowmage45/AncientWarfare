@@ -21,9 +21,6 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.utils.Trig;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
 
 public class VehicleTypeCatapultStandFixed extends VehicleTypeCatapult

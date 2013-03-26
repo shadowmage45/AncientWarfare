@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.soldiers.ai.AIWanderTest;
-import shadowmage.ancient_warfare.common.soldiers.types.NpcDummy;
 
 public abstract class NpcTypeBase implements INpcType
 {

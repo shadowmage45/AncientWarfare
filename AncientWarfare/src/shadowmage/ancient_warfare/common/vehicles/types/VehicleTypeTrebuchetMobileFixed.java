@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
-import shadowmage.ancient_warfare.common.config.Config;
 
 public class VehicleTypeTrebuchetMobileFixed extends VehicleTypeTrebuchet
 {

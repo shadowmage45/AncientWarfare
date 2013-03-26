@@ -20,7 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.registry.entry;
 
-import shadowmage.ancient_warfare.common.interfaces.IAmmoType;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public class VehicleAmmoEntry
 {

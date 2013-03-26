@@ -23,13 +23,13 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.missiles.Ammo;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
+import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 
 
 public class VehicleTypeHwacha extends VehicleType

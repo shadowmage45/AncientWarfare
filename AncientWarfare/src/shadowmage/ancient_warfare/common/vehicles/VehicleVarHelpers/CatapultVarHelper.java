@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers;
 
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
