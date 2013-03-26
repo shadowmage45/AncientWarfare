@@ -209,6 +209,11 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
     }
   }
 
+public void setInitialHealth()
+  {
+  this.localVehicleHealth = this.baseHealth;
+  }
+
 public void updateBaseStats()
   {
 //  Config.logDebug("updating base stats. server"+!worldObj.isRemote);

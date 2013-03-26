@@ -400,6 +400,7 @@ public static VehicleBase getVehicleForType(World world, int type, int level)
     IVehicleType vehType = getVehicleType(type);
     VehicleBase vehicle = new VehicleBase(world);
     vehicle.setVehicleType(vehType, level);
+    vehicle.setInitialHealth();
     return vehicle;
     }  
   return null;

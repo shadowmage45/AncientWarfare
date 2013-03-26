@@ -88,7 +88,8 @@ public boolean handleMouseMoved(int x, int y, int num)
 @Override
 public boolean handleMouseWheel(int x, int y, int wheel)
   {
-  return false;
+  this.updateHandleDisplayPos(-wheel*3);
+  return true;
   }
 
 @Override

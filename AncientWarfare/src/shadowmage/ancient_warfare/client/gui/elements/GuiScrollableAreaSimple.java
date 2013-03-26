@@ -250,6 +250,7 @@ public void updateScrollPos(int x, int y)
 @Override
 public boolean handleMousePressed(int x, int y, int num)
   {  
+  
   return false;
   }
 
@@ -276,6 +277,11 @@ public boolean handleMouseMoved(int x, int y, int num)
 @Override
 public boolean handleMouseWheel(int x, int y, int wheel)
   {
+  if(this.scrollBar!=null)
+    {
+    this.scrollBar.handleMouseWheel(x, y, wheel);
+    return true;
+    }
   return false;
   }
 

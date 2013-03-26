@@ -6,14 +6,13 @@ GENERAL
         --might be made easier in 1.5 by the icon changes...maybe...also icon changes are a pain in the ass in general...
 * partially destroyable blocks ? (hold destruction status as meta-data?)
 * create a way for tile entities to broadcast to nearby soldiers (to denote valuable target)(event bus?)
+* move upgrades/ammo/armor over to self-registering class with an underlying array instead of the map they currently use
 
 VEHICLES    
 * add ammo types
-* final vehicle gui will need slots that only accept stack size 1 and that validate against the vehicles valid<whatever type> list
 * remove old targetPos code...or use it for other things....
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
-* vehicle max health is not set to greater than base starting health when first spawned (might need a method for it..)
 * ammo onHit for 15kg stone shot is not destroying blocks..
 
 NPCS
@@ -25,7 +24,6 @@ NPCS
 * multiple target-priority trackers--hostile, friendly....
          
 GUI FRAMEWORK
-* add mouse-wheel interaction to scroll-bar
 * rework all structure GUIs to include new bling!! (scroll areas, etc...)
 * put quaded texture rendering someplace central...
 * so...slots display position is client only...use that to move slots off screen (or use that in a scrollable area somehow?)
@@ -36,17 +34,19 @@ TESTING
 * test structure underground buildings (dungeons)
 * test structure submerged code
 * test vehicle armor damage reduction
-* test vehicle missile weight factoring
-* test vehicle types/models/renders
 
 TEMPLATES
 * gates--each gate will have a SEPARATE gate rule pointing to the gate rule
         --gate rule will have orientation, position, w, h
-        --any blocks occupied by gate when scanned should be set to an invalid rule..or something...
+        --any blocks occupied by gate when scanned should be set to an invalid rule..or empty block...
 
 SCANNER
+* ability to scan entities
+        -- generic scan  (get class name) (will output to generic entityRule)
+        -- soldier/vehicle/gate specialized scan (will output to soldier/vehicle/gate rules)
 
 STRUCTURE BUILDING
+* npc placement
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -109,6 +109,10 @@ CRAFTING
                 will slowly add pieces over construction duration until finished constructing.
     NPC CRAFTING
     AMMO CRAFTING
+        --simple processing station with a overList on the far left, innerList on left, autoList in mid, 
+            and craft input grid on the right.  auto_list will fill with results based on what is in the grid
+            other lists are manual select.  will have a 'start' button, and take time to make ammo.  will continue
+            making same type until materials run out
     UPGRADE AND ARMOR CRAFTING
  
 TWEAKS/OPTIMIZATION
@@ -121,7 +125,6 @@ TWEAKS/OPTIMIZATION
 * remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
 * some ruins structures (one, jungle throne) appears offset -1Y
 * editor GUI has some really ugly code to render chars....
-* remove builder load/save from gameData...--it isn't used
 * custom block placement code for creative/survival builders (set server block, manually relay to client--should 
         decrease overall network used from vanilla MC resending entire chunks..)
 
@@ -134,6 +137,10 @@ TWEAKS/OPTIMIZATION
 * add container-type missiles (spawns a secondary set of missiles when fired)
 * more work on missileTypes.
 /********** 03-26-13 **********/
+* add the rest of the missileTypes--not fully fleshed out, they all need their on-hit stuff done still
+* final vehicle gui will need slots that only accept stack size 1 and that validate against the vehicles valid<whatever type> list
+* add mouse-wheel interaction to scroll-bar and scroll-area
+* vehicle max health is not set to greater than base starting health when first spawned (might need a method for it..)
 /********** 03-27-13 **********/
 /********** 03-28-13 **********/
 /********** 03-29-13 **********/

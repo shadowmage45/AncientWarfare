@@ -27,6 +27,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
+import shadowmage.ancient_warfare.common.inventory.SlotVehicleAmmo;
+import shadowmage.ancient_warfare.common.inventory.SlotVehicleArmor;
+import shadowmage.ancient_warfare.common.inventory.SlotVehicleUpgrade;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -76,7 +79,7 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
         {
         xPos = 8 + x * 18;
         yPos = 84 + y * 18 - 2*18 - 5+28;
-        this.addSlotToContainer(new Slot(vehicle.inventory.ammoInventory, slotNum, xPos, yPos));
+        this.addSlotToContainer(new SlotVehicleAmmo(vehicle.inventory.ammoInventory, vehicle, slotNum, xPos, yPos));
         }
       }
     }  
@@ -90,7 +93,7 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
         {
         xPos = 8 + x * 18 + 3*18 + 5;
         yPos = 84 + y * 18 - 2*18 - 5+28;
-        this.addSlotToContainer(new Slot(vehicle.inventory.upgradeInventory, slotNum, xPos, yPos));
+        this.addSlotToContainer(new SlotVehicleUpgrade(vehicle.inventory.upgradeInventory, vehicle, slotNum, xPos, yPos));
         }
       }
     }
@@ -104,7 +107,7 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
         {
         xPos = 8 + x * 18 + 6*18 + 2*5;
         yPos = 84 + y * 18 - 2*18 - 5+28;
-        this.addSlotToContainer(new Slot(vehicle.inventory.armorInventory, slotNum, xPos, yPos));
+        this.addSlotToContainer(new SlotVehicleArmor(vehicle.inventory.armorInventory, vehicle, slotNum, xPos, yPos));
         }
       }
     }
