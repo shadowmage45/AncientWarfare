@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public abstract class Ammo implements IAmmoType
@@ -121,6 +122,9 @@ boolean isArrow = false;
 boolean isPersistent = false;
 boolean isFlaming = false;
 boolean isPenetrating = false;
+boolean isProximityAmmo = false;
+float groundProximity = 0.f;
+float entityProximity = 0.f;
 float ammoWeight = 10;
 float renderScale = 1.f;
 IAmmoType secondaryAmmoType = null;
@@ -259,21 +263,27 @@ public boolean hasSecondaryAmmo()
   return this.secondaryAmmoType!=null;
   }
 
+@Override
+public boolean isProximityAmmo()
+  {
+  return isProximityAmmo;
+  }
+
+@Override
+public float entityProximity()
+  {
+  return entityProximity;
+  }
+
+@Override
+public float groundProximity()
+  {
+  return groundProximity;
+  }
+
 protected void breakBlockAndDrop(World world, int x, int y, int z)
   {
-  if(!Config.blockDestruction)
-    {
-    return;
-    }
-  int id = world.getBlockId(x, y , z);
-  int meta = world.getBlockMetadata(x, y , z);
-  Config.logDebug("attempting block break and drop for: "+id+":"+meta+ " at: "+x+","+y+","+z);
-  if(id!=0 && id!=Block.bedrock.blockID && Block.blocksList[id]!=null)
-    {      
-    Config.logDebug("setting block to air: "+x+","+y+","+z);
-    Block.blocksList[id].dropBlockAsItem(world, x, y , z, meta, 0);
-    world.setBlock(x, y , z, 0);
-    }
+  BlockTools.breakBlockAndDrop(world, x, y, z);
   }
 
 /**
@@ -308,13 +318,14 @@ protected void createExplosion(World world, MissileBase missile, float x, float 
   {
   boolean destroyBlocks = Config.blockDestruction;
   boolean fires = Config.blockFires;
-  Explosion e = world.newExplosion(null, x, y, z, power, fires, destroyBlocks);
+  Explosion e = world.newExplosion(missile, x, y, z, power, fires, destroyBlocks);
   }
 
 protected void spawnGroundBurst(World world, float x, float y, float z, float maxVelocity, IAmmoType type, int count, float minPitch, int sideHit)
   {
   if(type!=null && !world.isRemote)
     {
+    createExplosion(world, null, x, y, z, 1.f);
     MissileBase missile;
     float randRange = 90-minPitch;
     float randVelocity = 0;

@@ -56,6 +56,9 @@ boolean updateAsArrow();//should update pitch like an arrow (relative to flight 
 boolean isRocket();//determines flight characteristics
 boolean isPersistent();//should die on impact, or stay on ground(arrows)
 boolean isPenetrating();//if persistent, and penetrating==true, will not bounce off of stuff, but instead go through it (heavy projectiles)
+boolean isProximityAmmo();//should detonate when coming CLOSE to something? (range for entity/ground set below)
+float entityProximity();
+float groundProximity();
 float getGravityFactor();//statically set..should techincally be depricated in favor of a const
 float getAmmoWeight();//weight of the missile in KG
 float getRenderScale();//get relative render scale of the ammo compared to the model default scale...(varies per ammo/model)

@@ -221,25 +221,24 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
     int ammoSlots = vehicle.inventory.ammoInventory.getSizeInventory();
     int upgradeSlots = vehicle.inventory.upgradeInventory.getSizeInventory();
     int armorSlots = vehicle.inventory.armorInventory.getSizeInventory();
-    int storageSlots = vehicle.inventory.storageInventory.getSizeInventory();
+    int storageSlots = vehicle.inventory.storageInventory.getSizeInventory();    
     if (slotClickedIndex < 36)//player slots...
-      {
-      
-      if(slotStackCopy.itemID==ItemLoader.ammoItem.itemID)//is ammo item...
+      {      
+      if(slotStackCopy.itemID==ItemLoader.ammoItem.itemID && vehicle.inventory.isAmmoValid(slotStackCopy))//is ammo item...
         {
         if (!this.mergeItemStack(slotStack, 36, 36+ammoSlots, false))//merge into ammo inventory
           {
           return null;
           }
         }
-      else if(slotStackCopy.itemID==ItemLoader.vehicleUpgrade.itemID)//is upgrade item...
+      else if(slotStackCopy.itemID==ItemLoader.vehicleUpgrade.itemID && vehicle.inventory.isUpgradeValid(slotStackCopy))//is upgrade item...
         {
         if (!this.mergeItemStack(slotStack, 36+ammoSlots, 36+ammoSlots+upgradeSlots, false))//merge into upgrade inventory
           {
           return null;
           }
         }       
-      else if(slotStackCopy.itemID==ItemLoader.armorItem.itemID)
+      else if(slotStackCopy.itemID==ItemLoader.armorItem.itemID && vehicle.inventory.isArmorValid(slotStackCopy))
         {
         if (!this.mergeItemStack(slotStack, 36+ammoSlots+upgradeSlots, 36+ammoSlots+upgradeSlots+armorSlots, false))//merge into armor inventory
           {

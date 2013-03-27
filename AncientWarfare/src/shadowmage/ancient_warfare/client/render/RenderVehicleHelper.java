@@ -41,6 +41,7 @@ public class RenderVehicleHelper extends Render implements IItemRenderer
 
 private RenderVehicleHelper(){}
 private static RenderVehicleHelper INSTANCE;
+private static Minecraft mc = Minecraft.getMinecraft();
 public static RenderVehicleHelper instance()
   {
   if(INSTANCE==null)
@@ -53,9 +54,14 @@ public static RenderVehicleHelper instance()
 @Override
 public void doRender(Entity var1, double x, double y, double z, float yaw, float tick)
   {
+  if(!Settings.renderVehiclesInFirstPerson && var1.riddenByEntity == mc.thePlayer && mc.gameSettings.thirdPersonView==0)
+    {
+    return;
+    }
   VehicleBase vehicle = (VehicleBase) var1;
   GL11.glPushMatrix();
   GL11.glTranslated(x, y, z);
+  yaw = vehicle.rotationYaw - (tick * vehicle.moveHelper.strafeMotion);
   GL11.glRotatef(yaw, 0, 1, 0);
   GL11.glScalef(-1, -1, 1);    
   Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(var1.getTexture()));

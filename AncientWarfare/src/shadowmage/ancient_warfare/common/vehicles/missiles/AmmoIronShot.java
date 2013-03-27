@@ -43,7 +43,28 @@ public AmmoIronShot(int ammoType, int weight, int damage)
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
-  
+  if(ammoWeight>=10 && !world.isRemote)
+    {
+    int bx = (int)x;
+    int by = (int)y;
+    int bz = (int)z;
+    this.breakBlockAndDrop(world, bx, by, bz);    
+    if(ammoWeight>=15)
+      {
+      this.breakBlockAndDrop(world, bx, by-1, bz);
+      this.breakBlockAndDrop(world, bx-1, by, bz);
+      this.breakBlockAndDrop(world, bx+1, by, bz);
+      this.breakBlockAndDrop(world, bx, by, bz-1);
+      this.breakBlockAndDrop(world, bx, by, bz+1);
+      }
+    if(ammoWeight>=25)
+      {
+      this.breakBlockAndDrop(world, bx-1, by, bz-1);
+      this.breakBlockAndDrop(world, bx+1, by, bz-1);
+      this.breakBlockAndDrop(world, bx-1, by, bz+1);
+      this.breakBlockAndDrop(world, bx+1, by, bz+1);
+      }
+    }
   }
 
 @Override

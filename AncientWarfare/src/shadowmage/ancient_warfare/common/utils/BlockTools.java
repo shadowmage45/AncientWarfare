@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.config.Config;
+
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
@@ -533,6 +536,24 @@ public static BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPo
     realKey.z = min.x - key.x;
     }
   return realKey;
+  }
+
+
+public static void breakBlockAndDrop(World world, int x, int y, int z)
+  {
+  if(!Config.blockDestruction)
+    {
+    return;
+    }
+  int id = world.getBlockId(x, y , z);
+  int meta = world.getBlockMetadata(x, y , z);
+  Config.logDebug("attempting block break and drop for: "+id+":"+meta+ " at: "+x+","+y+","+z);
+  if(id!=0 && id!=Block.bedrock.blockID && Block.blocksList[id]!=null)
+    {      
+    Config.logDebug("setting block to air: "+x+","+y+","+z);
+    Block.blocksList[id].dropBlockAsItem(world, x, y , z, meta, 0);
+    world.setBlock(x, y , z, 0);
+    }
   }
 
 }

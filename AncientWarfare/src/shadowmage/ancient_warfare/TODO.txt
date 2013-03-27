@@ -2,21 +2,18 @@ TODO before first alpha release:
 
 GENERAL
 * change inventoryTools to manipulate containers as well
-* figure out a good way to index images for item subtypes--vehicles could use their own icons for each material level, not just vehicle type
-        --might be made easier in 1.5 by the icon changes...maybe...also icon changes are a pain in the ass in general...
 * partially destroyable blocks ? (hold destruction status as meta-data?)
-* create a way for tile entities to broadcast to nearby soldiers (to denote valuable target)(event bus?)
-* move upgrades/ammo/armor over to self-registering class with an underlying array instead of the map they currently use
+* create a way for tile entities to broadcast to nearby soldiers (to denote valuable target)(event bus?) 
+        --(probably just grab a BB of entities every X ticks, xmit to any that are AWNpcs)
+* move upgrades/ammo/armor over to self-registering class with an underlying array instead 
+        --of the map they currently use
+* grenades
+* land-mines
 
 VEHICLES    
-* add ammo types
 * remove old targetPos code...or use it for other things....
-* fix rotation yaw bounding (prev rotation not lining up with current rotation)
-* add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
-* vehicle GUI needs shift-click slot validation
-* put hwacha rider back where he belongs..on the ground....perhaps put a step-stool underneath him?
 * inventory container synch methods... (IEntityContainerSynch)
-* setup time when spawned from an item (short...longer depending upon material rank)
+* need to get rocked when onHit
 
 NPCS
 * add save/load from NBT stuff
@@ -143,9 +140,21 @@ TWEAKS/OPTIMIZATION
 * final vehicle gui will need slots that only accept stack size 1 and that validate against the vehicles valid<whatever type> list
 * add mouse-wheel interaction to scroll-bar and scroll-area
 * vehicle max health is not set to greater than base starting health when first spawned (might need a method for it..)
-* ammo onHit for 15kg stone shot is not destroying blocks.. (hitPos was incorrect)
+* ammo onHit for 15kg stone shot is not destroying blocks.. (hitPos was incorrect for all onImpactWorld methods)
 * test vehicle armor damage reduction
+* cluster/canister shot working
 /********** 03-27-13 **********/
+* finish up the rest of the ammos, except for airburst
+* missile proximity hit detection (airburst, land-mines, grenades)
+* finish hwacha air-burst rocket, needs testing (might try and explode while launching...lols...)
+* fix shift-click interact item-validation for vehicle inventory
+* fix rotation yaw bounding (prev rotation not lining up with current rotation)(moved over to using rotationYaw + strafeMotion)
+* setup time when spawned from an item (short...longer depending upon material rank)
+* non-mouse aim doesn't work when first mounting a vehicle (need to save/reload last client stats..or set client stats to vehicle current on first load)
+* put hwacha rider back where he belongs..on the ground....perhaps put a step-stool underneath him? (add setting to disable rendering of vehicles when in first-person view)
+* add Vehicle FPV render setting to config/options GUI (w/save)
+* add keybind save-code (just calls Config.saveConfig() when a keybind is changed)
+* add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
 /********** 03-28-13 **********/
 /********** 03-29-13 **********/
 /********** 03-30-13 **********/

@@ -38,20 +38,28 @@ public AmmoHwachaRocketExplosive(int ammoType)
   this.entityDamage = 4;
   this.vehicleDamage = 4;
   this.isArrow = true;
-  this.isPersistent = true;
+  this.isPersistent = false;
   this.isRocket = true;
   }
 
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
-
+  if(!world.isRemote)
+    {
+    createExplosion(world, missile, x, y, z, 1.2f);
+    }
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-
+  if(!world.isRemote)
+    {
+    ent.attackEntityFrom(DamageType.explosiveMissile, this.getEntityDamage());    
+    ent.setFire(3);
+    createExplosion(world, missile, x, y, z, 1.0f);
+    }
   }
 
 }

@@ -33,6 +33,7 @@ public class GuiClientSettings extends GuiContainerAdvanced
 GuiCheckBoxSimple enableOverlayBox;
 GuiCheckBoxSimple enableAdvancedOverlay;
 GuiCheckBoxSimple enableMouseAim;
+GuiCheckBoxSimple enableVehicleFPR;
 GuiButtonSimple keyBinds;
 
 /**
@@ -67,6 +68,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Render Overlay", guiLeft+10+16+2, guiTop+10+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Advanced Overlay", guiLeft+10+16+2, guiTop+30+4, 0xffffffff);
   this.drawString(fontRenderer, "Use Mouse Aim Input", guiLeft+10+16+2, guiTop+50+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Ridden Vehicle in First-person", guiLeft+10+16+2, guiTop+70+4, 0xffffffff);
   }
 
 @Override
@@ -95,6 +97,9 @@ public void onElementActivated(IGuiElement element)
     case 4:
     mc.displayGuiScreen(null);
     break;
+    case 5:
+    Settings.setRenderVehiclesInFirstPerson(this.enableVehicleFPR.checked());
+    break;
     default:
     break;
    
@@ -109,8 +114,7 @@ public void setupControls()
   this.enableMouseAim = this.addCheckBox(2, 10, 50, 16, 16).setChecked(Settings.getMouseAim());
   this.keyBinds = this.addGuiButton(3, this.getXSize()-55-10, 30, 55, 16, "Keybinds");
   this.addGuiButton(4, getXSize()-55-10, 10, 55, 16, "Done");
-  
-
+  this.enableVehicleFPR = this.addCheckBox(5, 10, 70, 16, 16).setChecked(Settings.renderVehiclesInFirstPerson);
   }
 
 @Override

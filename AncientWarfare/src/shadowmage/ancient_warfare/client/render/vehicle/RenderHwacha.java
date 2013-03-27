@@ -36,8 +36,7 @@ ModelHwacha model = new ModelHwacha();
 @Override
 public void renderVehicle(VehicleBase vehicle, double x, double y, double z, float yaw, float tick)
   {
-  VehicleFiringVarsHelper var = vehicle.firingVarsHelper;    
-//  model.setTurretRotation(yaw-vehicle.localTurretRotation - tick*vehicle.currentTurretYawSpeed, vehicle.localTurretPitch - tick*vehicle.currentTurretPitchSpeed);
+  VehicleFiringVarsHelper var = vehicle.firingVarsHelper;
   model.setModelPitch(MathHelper.abs(vehicle.moveHelper.forwardMotion)>0.02f ? -8 :-39);
   float wheelAngle = vehicle.wheelRotation + (tick * (vehicle.wheelRotation-vehicle.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);

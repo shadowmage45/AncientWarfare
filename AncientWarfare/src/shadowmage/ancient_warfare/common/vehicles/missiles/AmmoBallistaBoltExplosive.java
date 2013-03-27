@@ -39,7 +39,7 @@ public AmmoBallistaBoltExplosive(int ammoType)
   this.entityDamage = 15;
   this.isArrow = true;
   this.isRocket = false;
-  this.isPersistent = true;
+  this.isPersistent = false;
   this.displayName = "Explosive Ballista Bolt";  
   this.displayTooltip = "A large wooden bolt fixed with an explosive tip.";  
   }
@@ -47,13 +47,20 @@ public AmmoBallistaBoltExplosive(int ammoType)
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
-
+  if(!world.isRemote)
+    {
+    createExplosion(world, missile, x, y, z, 1.2f);
+    }
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-
+  if(!world.isRemote)
+    {
+    ent.attackEntityFrom(DamageType.explosiveMissile, this.getEntityDamage());    
+    ent.setFire(3);
+    createExplosion(world, missile, x, y, z, 1.2f);
+    }
   }
-
 }

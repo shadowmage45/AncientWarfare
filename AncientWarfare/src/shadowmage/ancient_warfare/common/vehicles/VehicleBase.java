@@ -129,6 +129,8 @@ public int teamNum = 0;
  */
 private boolean isRidden = false;
 
+private boolean isSettingUp = false;
+
 /**
  * set client-side when incoming damage is taken
  */
@@ -161,6 +163,7 @@ public VehicleBase(World par1World)
   this.inventory = new VehicleInventory(this);
   this.stepHeight = 1.12f;
   this.entityCollisionReduction = 0.9f;
+  this.onGround = false;
   }
 
 public void setVehicleType(IVehicleType vehicle, int materialLevel)
@@ -206,6 +209,20 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
   if(!this.canAimRotate())
     {
     this.localTurretRotation = this.rotationYaw;
+    }
+  }
+
+private int setupTicks = 0;
+public void setSetupState(boolean state, int ticks)
+  {
+  this.isSettingUp = state;
+  if(state)
+    {
+    setupTicks = ticks;
+    }
+  else
+    {
+    setupTicks = 0;
     }
   }
 
@@ -255,7 +272,7 @@ public ItemStack getItemForVehicle()
  */
 public boolean isMoveable()
   {
-  return this.isDrivable() && this.currentForwardSpeedMax > 0;
+  return !this.isSettingUp && this.isDrivable() && this.currentForwardSpeedMax > 0;
   }
 
 public float getHorizontalMissileOffset()
@@ -275,22 +292,22 @@ public float getForwardsMissileOffset()
 
 public boolean isAimable()
   {
-  return vehicleType.isCombatEngine();
+  return !this.isSettingUp && vehicleType.isCombatEngine();
   }
 
 public boolean canAimRotate()
   {
-  return vehicleType.canAdjustYaw();
+  return !this.isSettingUp && vehicleType.canAdjustYaw();
   }
 
 public boolean canAimPitch()
   {
-  return vehicleType.canAdjustPitch();
+  return !this.isSettingUp && vehicleType.canAdjustPitch();
   }
 
 public boolean canAimPower()
   {
-  return vehicleType.canAdjustPower();
+  return !this.isSettingUp && vehicleType.canAdjustPower();
   }
 
 /**
@@ -299,12 +316,12 @@ public boolean canAimPower()
  */
 public boolean isDrivable()
   {
-  return vehicleType.isDrivable();
+  return !this.isSettingUp && vehicleType.isDrivable();
   }
 
 public boolean isMountable()
   {
-  return vehicleType.isMountable();
+  return !this.isSettingUp && vehicleType.isMountable();
   }
 
 public float getRiderForwardOffset()
@@ -444,6 +461,14 @@ public void onUpdate()
     {
     this.hitAnimationTicks--;
     }  
+  if(this.isSettingUp)
+    {
+    this.setupTicks--;
+    if(this.setupTicks<=0)
+      {
+      this.isSettingUp = false;
+      }
+    }
   }
 
 /**
@@ -801,6 +826,14 @@ public void updateRiderPosition()
 @Override
 public boolean interact(EntityPlayer player)
   {  
+  if(this.isSettingUp)
+    {
+    if(!player.worldObj.isRemote)
+      {
+      player.addChatMessage("Vehicle is currently being set-up.  It has "+setupTicks+" ticks remaining.");
+      }
+    return false;
+    }
   return this.firingVarsHelper.interact(player);
   }
 
@@ -827,11 +860,9 @@ public void setPositionAndRotationNormalized(double par1, double par3, double pa
       float rot = this.rotationYaw;
       float rot2 = yaw;      
       if(Trig.getAbsDiff(rot, rot2)>2)
-        { 
-        //float diff = this.rotationYaw - this.prevRotationYaw;//pull diff of current rot and prev rot.  change rot. change prev rot to rot. apply diff to prev rot DONE
+        {        
         this.setRotation(yaw, par8);
-        this.prevRotationYaw = this.rotationYaw;//TODO hack to fix rendering...need to rebound prevRotataion..
-        //        this.prevRotationYaw = this.rotationYaw + diff;        
+        this.prevRotationYaw = this.rotationYaw;         
         }      
       return;
       }
@@ -891,6 +922,11 @@ public void writeSpawnData(ByteArrayDataOutput data)
   data.writeFloat(localTurretDestRot);
   data.writeInt(teamNum);
   data.writeFloat(localTurretRotationHome);
+  data.writeBoolean(this.isSettingUp);
+  if(this.isSettingUp)
+    {
+    data.writeInt(this.setupTicks);
+    }
   }
 
 @Override
@@ -909,9 +945,17 @@ public void readSpawnData(ByteArrayDataInput data)
   this.localTurretRotation = data.readFloat();
   this.localTurretDestPitch = data.readFloat();
   this.localTurretDestRot = data.readFloat();
+  this.firingHelper.clientLaunchSpeed = localLaunchPower;
+  this.firingHelper.clientTurretPitch = localTurretPitch;
+  this.firingHelper.clientTurretYaw = localTurretRotation;
   this.upgradeHelper.updateUpgradeStats();
   this.teamNum = data.readInt();
   this.localTurretRotationHome = data.readFloat();
+  this.isSettingUp = data.readBoolean();
+  if(this.isSettingUp)
+    {
+    this.setupTicks = data.readInt();
+    }  
   this.setPosition(posX, posY, posZ);//this is to reset the bounding box, because the size of the entity changed during vehicleType setup
   }
 
@@ -938,6 +982,11 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.ammoHelper.updateAmmoCounts();
   this.teamNum = tag.getInteger("team");
   this.isRidden = tag.getBoolean("ridden");
+  this.isSettingUp = tag.getBoolean("setup");
+  if(this.isSettingUp)
+    {
+    this.setupTicks = tag.getInteger("sTick");
+    }
   this.setPosition(posX, posY, posZ);//this is to reset the bounding box, because the size of the entity changed during vehicleType setup
   }
 
@@ -961,6 +1010,11 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setFloat("trd", localTurretDestRot);
   tag.setInteger("team", this.teamNum);
   tag.setBoolean("ridden", this.isRidden);
+  tag.setBoolean("setup", this.isSettingUp);
+  if(this.isSettingUp)
+    {
+    tag.setInteger("sTick", this.setupTicks);
+    }
   }
 
 /**

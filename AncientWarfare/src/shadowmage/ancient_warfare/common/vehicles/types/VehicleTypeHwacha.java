@@ -80,11 +80,10 @@ public VehicleTypeHwacha(int typeNum)
   this.baseMissileVelocityMax = 42.f;
   
   this.turretVerticalOffset = 8 * 0.0625f;
-//  this.missileVerticalOffset = 0.9375f;
   this.missileForwardsOffset = -0.9375f-0.0625f;
   
   this.riderForwardsOffset = -1.4f;
-  this.riderVerticalOffset = 0.5f  + 2.0f;
+  this.riderVerticalOffset = 0.5f;
   this.displayName = "Hwacha";
   this.displayTooltip = "OMGZ Rockets!";
   this.storageBaySize = 0;

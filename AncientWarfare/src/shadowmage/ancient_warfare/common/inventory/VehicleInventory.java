@@ -187,4 +187,22 @@ public List<VehicleAmmoEntry> getAmmoCounts()
   return counts;
   }
 
+public boolean isAmmoValid(ItemStack stack)
+  {
+  IAmmoType type = AmmoRegistry.instance().getAmmoForStack(stack);
+  return type != null && vehicle.vehicleType.isAmmoValidForInventory(type);
+  }
+
+public boolean isArmorValid(ItemStack stack)
+  {
+  IVehicleArmorType armor = ArmorRegistry.instance().getArmorForStack(stack);
+  return armor != null && vehicle.vehicleType.isArmorValid(armor);
+  }
+
+public boolean isUpgradeValid(ItemStack stack)
+  {
+  IVehicleUpgradeType upgrade = VehicleUpgradeRegistry.instance().getUpgrade(stack);
+  return upgrade !=null && vehicle.vehicleType.isUpgradeValid(upgrade);
+  }
+
 }

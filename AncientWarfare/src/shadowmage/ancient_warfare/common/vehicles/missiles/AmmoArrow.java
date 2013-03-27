@@ -45,15 +45,16 @@ public AmmoArrow(int ammoType)
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
-  //NOOP
-  Config.logDebug("arrow impact world");
+ 
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  Config.logDebug("arrow impact entity");
-  ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
+  if(!world.isRemote)
+    {
+    ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());  
+    }
   }
 
 }

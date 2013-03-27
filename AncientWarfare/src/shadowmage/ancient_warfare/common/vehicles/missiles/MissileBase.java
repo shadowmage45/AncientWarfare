@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -196,6 +197,61 @@ public void onUpdate()
     }
   }
 
+protected void checkProximity()
+  {
+  if(this.motionY>0)
+    {
+    return;//don't bother checking when travelling upwards, wait until the downward swing...
+    }
+//check ground.
+  float groundDiff = 0;
+  int id = 0;
+  int x = (int) posX;
+  int y = (int) posY;    
+  int z =  (int) posZ;
+  boolean impacted = false;
+  if(ammoType.groundProximity()>0)
+    {
+    while(id==0 && groundDiff <= ammoType.groundProximity())
+      {      
+      id = worldObj.getBlockId(x, y, z);
+      y--;
+      groundDiff++;
+      if(id!=0)
+        {
+        this.onImpactWorld(new MovingObjectPosition(x,y,z, 0, Vec3.createVectorHelper(x, y, z)));
+        impacted = true;
+        break;
+        }
+      }
+    } 
+  //check entities if not detonated by ground
+  if(!impacted && ammoType.entityProximity() > 0)
+    {
+    float entProx = ammoType.entityProximity();
+    float foundDist = 0;
+    List entities = worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getBoundingBox(posX-entProx, posY-entProx, posZ-entProx, posX+entProx, posY+entProx, posZ+entProx));
+    if(entities!=null && !entities.isEmpty())
+      {
+      Iterator it = entities.iterator();
+      Entity ent;
+      while(it.hasNext())
+        {
+        ent = (Entity)it.next();
+        if(ent!=null && ent.getClass() != MissileBase.class)//don't collide with missiles....
+          {
+          foundDist = this.getDistanceToEntity(ent);
+          if(foundDist<entProx)
+            {
+            this.onImpactEntity(ent, (float)posX, (float)posY, (float)posZ);
+            break;
+            }
+          }
+        }
+      }
+    }
+  }
+
 public void onMovementTick()
   {
   if(this.inGround)
@@ -209,8 +265,12 @@ public void onMovementTick()
       this.motionZ = 0;
       this.inGround = false;
       }
-    }  
-  if(!this.inGround)
+    }
+  if(this.ammoType.isProximityAmmo() && this.ticksExisted > 20)
+    {    
+    checkProximity();
+    }
+  else if(!this.inGround)
     {    
     Vec3 positionVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
     Vec3 moveVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);

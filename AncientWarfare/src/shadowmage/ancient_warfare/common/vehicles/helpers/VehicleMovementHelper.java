@@ -20,12 +20,14 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.helpers;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -191,12 +193,10 @@ public void onMovementTick()
   else if(absStr <= 0.2f && strafeInput == 0)
     {
     strafeMotion = 0;
-    }  
-  
+    }    
   if(!vehicle.onGround)
     {
-    vehicle.motionY -= (9.81f*0.05f*0.05f);
-//    Config.logDebug("vehicle not on ground, falling!! server:"+!vehicle.worldObj.isRemote+"  pos: "+vehicle.posX+","+vehicle.posY+","+vehicle.posZ);
+    vehicle.motionY -= (9.81f*0.05f*0.05f);//yes..vehicles will 'fall' whenever they are moving..it is what keeps them on the ground...
     }
   else
     {
@@ -212,6 +212,7 @@ public void onMovementTick()
     vehicle.rotationYaw += strafeMotion;  
     vehicle.wheelRotationPrev = vehicle.wheelRotation;
     vehicle.wheelRotation += forwardMotion*0.02f;
+    this.tearUpGrass();
     }
   else if(forwardMotion==0)
     {
@@ -224,8 +225,43 @@ public void onMovementTick()
   }
 
 /**
- * TODO clean this up...
+ * tears up grass, flowers, snow, drops them as blocks in the world.
  */
+public void tearUpGrass()
+  {
+  for(int var24 = 0; var24 < 4; ++var24)
+    {      
+    int x = MathHelper.floor_double(vehicle.posX + ((double)(var24 % 2) - 0.5D) * 0.8D);
+    int y = MathHelper.floor_double(vehicle.posY);
+    int z = MathHelper.floor_double(vehicle.posZ + ((double)(var24 / 2) - 0.5D) * 0.8D);
+    //check top/upper blocks(riding through)
+    int id = vehicle.worldObj.getBlockId(x, y, z);    
+    if(isPlant(id))
+      {
+      BlockTools.breakBlockAndDrop(vehicle.worldObj, x, y, z);      
+      }    
+    //check lower blocks (riding on)
+    if (vehicle.worldObj.getBlockId(x, y-1, z) == Block.grass.blockID)
+      {
+      vehicle.worldObj.setBlockAndMetadataWithNotify(x, y-1, z, Block.dirt.blockID,0);
+      }
+    }
+  }
+
+protected static int[] plantBlockIDs = new int[]{Block.snow.blockID, Block.deadBush.blockID, Block.tallGrass.blockID, Block.plantRed.blockID, Block.plantYellow.blockID, Block.mushroomBrown.blockID, Block.mushroomRed.blockID};
+
+protected boolean isPlant(int id)
+  {
+  for(int i =0; i < plantBlockIDs.length; i++)
+    {
+    if(id==plantBlockIDs[i])
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
 public void clearInputFromDismount()
   {
   this.setForwardInput((byte) 0);

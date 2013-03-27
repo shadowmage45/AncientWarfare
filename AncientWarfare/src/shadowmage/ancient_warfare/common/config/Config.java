@@ -54,6 +54,7 @@ public static boolean adjustMissilesForAccuracy = false;
 public static boolean blockDestruction = true;
 public static boolean blockFires = true;
 public static boolean addOversizeAmmo = true;
+public static boolean useVehicleSetupTime = true;
 
 public static int trajectoryIterationsServer = 20;
 public static int npcAITicks = 5;

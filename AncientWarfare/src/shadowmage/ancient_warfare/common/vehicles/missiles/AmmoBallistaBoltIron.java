@@ -47,13 +47,17 @@ public AmmoBallistaBoltIron(int ammoType)
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
-
+ 
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-
+  if(!world.isRemote)
+    {
+    ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage()); 
+    ent.setFire(4);
+    }
   }
 
 }
