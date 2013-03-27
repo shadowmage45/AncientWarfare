@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -41,11 +42,44 @@ public VehicleTypeCatapult(int typeNum)
   
   this.maxMissileWeight = 10.f;
   
-  this.validAmmoTypes.add(Ammo.ammoArrow);
   this.validAmmoTypes.add(Ammo.ammoStoneShot10);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot15);
-  
+  this.validAmmoTypes.add(Ammo.ammoStoneShot15); 
+  this.validAmmoTypes.add(Ammo.ammoFireShot10);
+  this.validAmmoTypes.add(Ammo.ammoFireShot15);
   this.validAmmoTypes.add(Ammo.ammoPebbleShot10);
+  this.validAmmoTypes.add(Ammo.ammoPebbleShot15);
+  this.validAmmoTypes.add(Ammo.ammoClusterShot10);
+  this.validAmmoTypes.add(Ammo.ammoClusterShot15);
+  this.validAmmoTypes.add(Ammo.ammoExplosive10);
+  this.validAmmoTypes.add(Ammo.ammoExplosive15);
+  this.validAmmoTypes.add(Ammo.ammoHE10);
+  this.validAmmoTypes.add(Ammo.ammoHE15);
+  this.validAmmoTypes.add(Ammo.ammoNapalm10);
+  this.validAmmoTypes.add(Ammo.ammoNapalm15);
+  
+  
+  this.validAmmoTypes.add(Ammo.ammoArrow);
+  this.validAmmoTypes.add(Ammo.ammoArrowFlame);
+  this.validAmmoTypes.add(Ammo.ammoArrowIron);
+  this.validAmmoTypes.add(Ammo.ammoArrowIronFlame);
+  
+  if(Config.addOversizeAmmo)
+    {
+    this.validAmmoTypes.add(Ammo.ammoStoneShot30);
+    this.validAmmoTypes.add(Ammo.ammoStoneShot45);
+    this.validAmmoTypes.add(Ammo.ammoFireShot30);
+    this.validAmmoTypes.add(Ammo.ammoFireShot45);
+    this.validAmmoTypes.add(Ammo.ammoPebbleShot30);
+    this.validAmmoTypes.add(Ammo.ammoPebbleShot45);
+    this.validAmmoTypes.add(Ammo.ammoClusterShot30);
+    this.validAmmoTypes.add(Ammo.ammoClusterShot45);
+    this.validAmmoTypes.add(Ammo.ammoExplosive30);
+    this.validAmmoTypes.add(Ammo.ammoExplosive45);
+    this.validAmmoTypes.add(Ammo.ammoHE30);
+    this.validAmmoTypes.add(Ammo.ammoHE45);
+    
+    }
+  
   
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorObsidian);
@@ -69,8 +103,8 @@ public VehicleTypeCatapult(int typeNum)
   this.width = 2;
   this.height = 2; 
   this.baseMissileVelocityMax = 32.f;  
-  this.missileVerticalOffset = 0;//2.0f* Trig.sinDegrees(70);
-  this.missileForwardsOffset = -2.0f;//* Trig.cosDegrees(70);
+  this.missileVerticalOffset = 0;
+  this.missileForwardsOffset = -2.0f;
   this.riderForwardsOffset = 1.2f;
   this.riderVerticalOffset = 0.7f;
   this.displayName = "Catapult";

@@ -123,6 +123,7 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
     this.motionY = mY;
     this.motionZ = mZ;    
     }
+  Config.logDebug("missile spawning. motY: "+this.motionY);
   }
 
 public void setMissileParams2(IAmmoType ammo, float x, float y, float z, float yaw, float angle, float velocity)
@@ -154,13 +155,16 @@ public void onImpactEntity(Entity ent, float x, float y, float z)
     }
   }
 
-public void onImpactWorld()
-  {
-  Config.logDebug("World Impacted by: "+this.ammoType.getDisplayName()+" :: "+this);
-  this.ammoType.onImpactWorld(worldObj, (float)posX,(float)posY, (float)posZ, this);
+public void onImpactWorld(MovingObjectPosition hit)
+  {  
+  if(!worldObj.isRemote)
+    {    
+    Config.logDebug("World Impacted by: "+this.ammoType.getDisplayName()+" :: "+this);
+    }  
+  this.ammoType.onImpactWorld(worldObj, hit.blockX,hit. blockY, hit.blockZ,  this, hit);
   if(this.shooter!=null)
     {
-    this.shooter.onMissileImpact(worldObj, (float)posX,(float)posY, (float)posZ);
+    this.shooter.onMissileImpact(worldObj, hit.blockX,hit. blockY, hit.blockZ);
     }
   }
 
@@ -279,7 +283,7 @@ public void onMovementTick()
         }
       else
         {
-        this.onImpactWorld();
+        this.onImpactWorld(hitPosition);
         this.hasImpacted = true;
         if(!this.ammoType.isPenetrating())
           {

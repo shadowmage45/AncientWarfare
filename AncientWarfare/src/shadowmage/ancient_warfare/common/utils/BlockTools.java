@@ -39,13 +39,6 @@ public class BlockTools
 
 public static BlockPosition offsetForSide(BlockPosition pos, int sideHit)
   {
-  int x = pos.x;
-  int y = pos.y;
-  int z = pos.z;
-  /**
-   * if should offset for side hit (block clicked IN)
-   */
-  
   switch (sideHit)
     {
     case 0:

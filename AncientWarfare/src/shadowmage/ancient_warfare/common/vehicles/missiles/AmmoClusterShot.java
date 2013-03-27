@@ -21,32 +21,36 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class AmmoClusterShot extends Ammo
 {
 
 /**
-   * @param ammoType
-   */
-  public AmmoClusterShot(int ammoType, int weight)
-    {
-    super(ammoType);    
-    this.displayName = "Cluster Shot " + weight +"kg";
-    this.displayTooltip = weight+"kg of small ammunitions with an explosive charge.";
-    this.ammoWeight = weight;
-    }
+ * @param ammoType
+ */
+public AmmoClusterShot(int ammoType, int weight)
+  {
+  super(ammoType);    
+  this.displayName = "Cluster Shot " + weight +"kg";
+  this.displayTooltip = weight+"kg of small ammunitions with an explosive charge.";
+  this.ammoWeight = weight;
+  }
 
 @Override
-public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
-  { 
-  
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
+  {   
+  double px = hit.hitVec.xCoord - missile.motionX;
+  double py = hit.hitVec.yCoord - missile.motionY;
+  double pz = hit.hitVec.zCoord - missile.motionZ;
+  spawnGroundBurst(world, (float)px, (float)py, (float)pz, 10, Ammo.ammoBallShot, (int)ammoWeight, 35, hit.sideHit);
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-
+  spawnAirBurst(world, (float)ent.posX, (float)ent.posY, (float)ent.posZ, 10, Ammo.ammoBallShot, (int)ammoWeight);
   }
 
 }

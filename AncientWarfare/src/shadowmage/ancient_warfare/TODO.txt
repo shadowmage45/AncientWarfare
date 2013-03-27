@@ -13,7 +13,10 @@ VEHICLES
 * remove old targetPos code...or use it for other things....
 * fix rotation yaw bounding (prev rotation not lining up with current rotation)
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
-* ammo onHit for 15kg stone shot is not destroying blocks..
+* vehicle GUI needs shift-click slot validation
+* put hwacha rider back where he belongs..on the ground....perhaps put a step-stool underneath him?
+* inventory container synch methods... (IEntityContainerSynch)
+* setup time when spawned from an item (short...longer depending upon material rank)
 
 NPCS
 * add save/load from NBT stuff
@@ -33,7 +36,6 @@ TESTING
 * test structure weighting
 * test structure underground buildings (dungeons)
 * test structure submerged code
-* test vehicle armor damage reduction
 
 TEMPLATES
 * gates--each gate will have a SEPARATE gate rule pointing to the gate rule
@@ -141,6 +143,8 @@ TWEAKS/OPTIMIZATION
 * final vehicle gui will need slots that only accept stack size 1 and that validate against the vehicles valid<whatever type> list
 * add mouse-wheel interaction to scroll-bar and scroll-area
 * vehicle max health is not set to greater than base starting health when first spawned (might need a method for it..)
+* ammo onHit for 15kg stone shot is not destroying blocks.. (hitPos was incorrect)
+* test vehicle armor damage reduction
 /********** 03-27-13 **********/
 /********** 03-28-13 **********/
 /********** 03-29-13 **********/

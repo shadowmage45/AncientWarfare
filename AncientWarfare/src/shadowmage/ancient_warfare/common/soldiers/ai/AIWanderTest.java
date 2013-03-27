@@ -21,9 +21,9 @@
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.meim.common.config.Config;
 
 public class AIWanderTest extends NpcAI
 {

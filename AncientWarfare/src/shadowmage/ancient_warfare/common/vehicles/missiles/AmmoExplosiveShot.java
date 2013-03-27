@@ -20,7 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class AmmoExplosiveShot extends Ammo
@@ -43,15 +45,29 @@ public AmmoExplosiveShot(int ammoType, int weight, boolean bigExplosion)
   }
 
 @Override
-public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
-  
+  if(!world.isRemote)
+    {
+    float maxPower = bigExplosion ? 7.f : 2.5f;
+    float powerPercent = ammoWeight / 45.f;
+    float power = maxPower * powerPercent;
+    Config.logDebug("big: "+bigExplosion+" adj pwr: "+power+ "pwer percent: "+powerPercent);
+    this.createExplosion(world, missile, x, y, z, power);
+    }
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  
+  if(!world.isRemote)
+    {
+    float maxPower = bigExplosion ? 2.5f : 7.f;
+    float powerPercent = ammoWeight / 45.f;
+    float power = maxPower * powerPercent;
+    Config.logDebug("big: "+bigExplosion+" adj pwr: "+power+ "pwer percent: "+powerPercent);
+    this.createExplosion(world, missile, x, y, z, power);
+    }
   }
 
 }

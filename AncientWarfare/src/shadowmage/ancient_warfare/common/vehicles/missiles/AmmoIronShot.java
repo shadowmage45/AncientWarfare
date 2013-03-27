@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class AmmoIronShot extends Ammo
@@ -40,7 +41,7 @@ public AmmoIronShot(int ammoType, int weight, int damage)
   }
 
 @Override
-public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
   
   }

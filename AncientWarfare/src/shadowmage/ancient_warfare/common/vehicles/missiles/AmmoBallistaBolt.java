@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class AmmoBallistaBolt extends Ammo
@@ -44,8 +45,7 @@ public AmmoBallistaBolt(int ammoType)
   }
 
 @Override
-public void onImpactWorld(World world, float x, float y, float z,
-    MissileBase missile)
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
   // TODO Auto-generated method stub
 

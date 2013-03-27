@@ -716,7 +716,7 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   pkt.setHealthUpdate(this.localVehicleHealth);
   pkt.sendPacketToAllTrackingClients(this);
     
-  Config.logDebug("Vehicle hit by attack.  New health: "+localVehicleHealth);
+  Config.logDebug("Vehicle hit by attack.  RawDamage: "+par2+" : adjustedDmg: "+adjDmg+"  New health: "+localVehicleHealth);
   if(this.localVehicleHealth<=0)
     {
     this.setDead();
@@ -912,6 +912,7 @@ public void readSpawnData(ByteArrayDataInput data)
   this.upgradeHelper.updateUpgradeStats();
   this.teamNum = data.readInt();
   this.localTurretRotationHome = data.readFloat();
+  this.setPosition(posX, posY, posZ);//this is to reset the bounding box, because the size of the entity changed during vehicleType setup
   }
 
 @Override
@@ -937,6 +938,7 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.ammoHelper.updateAmmoCounts();
   this.teamNum = tag.getInteger("team");
   this.isRidden = tag.getBoolean("ridden");
+  this.setPosition(posX, posY, posZ);//this is to reset the bounding box, because the size of the entity changed during vehicleType setup
   }
 
 @Override
@@ -946,7 +948,7 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setInteger("matLvl", this.vehicleMaterialLevel);
   tag.setFloat("health", this.localVehicleHealth);
   tag.setFloat("turHome", this.localTurretRotationHome);
-  this.inventory.writeToNBT(tag);
+  this.inventory.writeToNBT(tag);//yah..I wrote this one a long time ago, is why it is different.....
   tag.setCompoundTag("upgrades", this.upgradeHelper.getNBTTag());
   tag.setCompoundTag("ammo", this.ammoHelper.getNBTTag());
   tag.setCompoundTag("move", this.moveHelper.getNBTTag());
@@ -960,7 +962,6 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setInteger("team", this.teamNum);
   tag.setBoolean("ridden", this.isRidden);
   }
-
 
 /**
  * missile callback methods...

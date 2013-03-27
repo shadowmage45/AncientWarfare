@@ -21,7 +21,9 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class AmmoArrow extends Ammo
 {
@@ -41,14 +43,16 @@ public AmmoArrow(int ammoType)
   }
 
 @Override
-public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
   //NOOP
+  Config.logDebug("arrow impact world");
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
+  Config.logDebug("arrow impact entity");
   ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
   }
 

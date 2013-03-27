@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class AmmoFlameShot extends Ammo
@@ -42,31 +43,42 @@ public AmmoFlameShot(int ammoType, int weight)
   }
 
 @Override
-public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
   if(!world.isRemote)
     {
     int bx = (int)x;
-    int by = (int)y;
+    int by = (int)y+2;
     int bz = (int)z;
-    this.igniteBlock(world, bx, by, bz);
+    this.igniteBlock(world, bx, by, bz,5);
     if(this.ammoWeight>=15)
       {
-      this.igniteBlock(world, bx-1, by, bz);
-      this.igniteBlock(world, bx+1, by, bz);
-      this.igniteBlock(world, bx, by, bz-1);
-      this.igniteBlock(world, bx, by, bz+1);
+      this.igniteBlock(world, bx-1, by, bz,5);
+      this.igniteBlock(world, bx+1, by, bz,5);
+      this.igniteBlock(world, bx, by, bz-1,5);
+      this.igniteBlock(world, bx, by, bz+1,5);
       }
     if(ammoWeight>=30)
       {
-      this.igniteBlock(world, bx-1, by, bz-1);
-      this.igniteBlock(world, bx-1, by, bz+1);
-      this.igniteBlock(world, bx+1, by, bz-1);
-      this.igniteBlock(world, bx+1, by, bz+1);      
-      this.igniteBlock(world, bx-2, by, bz);
-      this.igniteBlock(world, bx+2, by, bz);
-      this.igniteBlock(world, bx, by, bz-2);
-      this.igniteBlock(world, bx, by, bz+2);
+      this.igniteBlock(world, bx-1, by, bz-1,5);
+      this.igniteBlock(world, bx-1, by, bz+1,5);
+      this.igniteBlock(world, bx+1, by, bz-1,5);
+      this.igniteBlock(world, bx+1, by, bz+1,5);      
+      this.igniteBlock(world, bx-2, by, bz,5);
+      this.igniteBlock(world, bx+2, by, bz,5);
+      this.igniteBlock(world, bx, by, bz-2,5);
+      this.igniteBlock(world, bx, by, bz+2,5);
+      }
+    if(ammoWeight>=45)
+      {      
+      this.igniteBlock(world, bx-1, by, bz-2, 5);
+      this.igniteBlock(world, bx+1, by, bz-2, 5);
+      this.igniteBlock(world, bx-1, by, bz+2, 5);
+      this.igniteBlock(world, bx+1, by, bz+2, 5);      
+      this.igniteBlock(world, bx-2, by, bz-1, 5);
+      this.igniteBlock(world, bx-2, by, bz+1, 5);
+      this.igniteBlock(world, bx+2, by, bz-1, 5);
+      this.igniteBlock(world, bx+2, by, bz+1, 5);
       }
     }
   }
@@ -78,7 +90,7 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z, M
     {
     ent.attackEntityFrom(DamageType.fireMissile, getEntityDamage());
     ent.setFire(3);
-    onImpactWorld(world, x, y, z, missile);
+    onImpactWorld(world, x, y, z, missile, null);
     }
   }
 

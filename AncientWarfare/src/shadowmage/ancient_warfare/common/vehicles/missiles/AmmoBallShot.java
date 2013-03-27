@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class AmmoBallShot extends Ammo
@@ -34,14 +35,15 @@ public AmmoBallShot(int ammoType)
   super(ammoType);
   this.displayName = "Stone Ball Shot";
   this.displayTooltip = "Small stone ball-shot. Used in cluster-type ammunition.";
-  this.renderScale = 0.05f;
+  this.renderScale = 0.15f;
   this.ammoWeight = 1.f;
   this.entityDamage = 5;
   this.vehicleDamage = 5;
+  this.isPersistent = false;
   }
 
 @Override
-public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
   //NOOP
   }

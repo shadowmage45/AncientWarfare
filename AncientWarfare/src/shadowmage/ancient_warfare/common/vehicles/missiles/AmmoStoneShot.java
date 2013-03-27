@@ -21,7 +21,9 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class AmmoStoneShot extends Ammo
 {
@@ -43,7 +45,7 @@ public AmmoStoneShot(int ammoType, int weight)
   }
 
 @Override
-public void onImpactWorld(World world, float x, float y, float z, MissileBase missile)
+public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
   if(ammoWeight>=15 && !world.isRemote)
     {
@@ -59,12 +61,19 @@ public void onImpactWorld(World world, float x, float y, float z, MissileBase mi
       this.breakBlockAndDrop(world, bx, by, bz-1);
       this.breakBlockAndDrop(world, bx, by, bz+1);
       }
+    if(ammoWeight>=45)
+      {
+      this.breakBlockAndDrop(world, bx-1, by, bz-1);
+      this.breakBlockAndDrop(world, bx+1, by, bz-1);
+      this.breakBlockAndDrop(world, bx-1, by, bz+1);
+      this.breakBlockAndDrop(world, bx+1, by, bz+1);
+      }
     }
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
-  {
+  {  
   if(!world.isRemote)
     {
     ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());

@@ -20,9 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -30,6 +34,7 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 public abstract class Ammo implements IAmmoType
 {
 
+private static Random rng = new Random();
 public static Ammo[] ammoTypes = new Ammo[64];//starting with 64 types...can/will expand as needed
 
 /**
@@ -63,10 +68,10 @@ public static Ammo ammoNapalm10 = new AmmoNapalmShot(16,10);
 public static Ammo ammoNapalm15 = new AmmoNapalmShot(16,15);
 public static Ammo ammoNapalm30 = new AmmoNapalmShot(16,30);
 public static Ammo ammoNapalm45 = new AmmoNapalmShot(16,45);
-public static Ammo clusterShot10 = new AmmoClusterShot(20,10);
-public static Ammo clusterShot15 = new AmmoClusterShot(21,15);
-public static Ammo clusterShot30 = new AmmoClusterShot(22,30);
-public static Ammo clusterShot45 = new AmmoClusterShot(23,45);
+public static Ammo ammoClusterShot10 = new AmmoClusterShot(20,10);
+public static Ammo ammoClusterShot15 = new AmmoClusterShot(21,15);
+public static Ammo ammoClusterShot30 = new AmmoClusterShot(22,30);
+public static Ammo ammoClusterShot45 = new AmmoClusterShot(23,45);
 public static Ammo ammoPebbleShot10 = new AmmoPebbleShot(24, 10);
 public static Ammo ammoPebbleShot15 = new AmmoPebbleShot(25, 15);
 public static Ammo ammoPebbleShot30 = new AmmoPebbleShot(26, 30);
@@ -262,45 +267,152 @@ protected void breakBlockAndDrop(World world, int x, int y, int z)
     }
   int id = world.getBlockId(x, y , z);
   int meta = world.getBlockMetadata(x, y , z);
+  Config.logDebug("attempting block break and drop for: "+id+":"+meta+ " at: "+x+","+y+","+z);
   if(id!=0 && id!=Block.bedrock.blockID && Block.blocksList[id]!=null)
     {      
+    Config.logDebug("setting block to air: "+x+","+y+","+z);
     Block.blocksList[id].dropBlockAsItem(world, x, y , z, meta, 0);
     world.setBlock(x, y , z, 0);
     }
   }
 
 /**
- * actually tries setting the block, block below, and block above
- * will grab the first success, top down.
+ * starts at y, works down to find the first solid block, and ignites the one above it (set to fire)
  * @param world
  * @param x
  * @param y
  * @param z
  */
-protected void igniteBlock(World world, int x, int y, int z)
-  {
-  //TODO...needs to uhh..check from bottom up...yah...
+protected void igniteBlock(World world, int x, int y, int z, int maxSearch)
+  { 
   if(!Config.blockFires)
     {
     return;
     }
-  int id = world.getBlockId(x, y+1, z);  
-  if(id==0)
-    {      
-    world.setBlockWithNotify(x, y+1, z, Block.fire.blockID);
-    return;
+  int id; 
+  for(int i = 0; i < maxSearch && y-i>=1; i++)
+    {
+    id = world.getBlockId(x, y-i, z);
+    if(id!=0)
+      {
+      if(world.getBlockId(x, y-i+1, z)==0)
+        {
+        world.setBlockWithNotify(x, y-i+1, z, Block.fire.blockID);        
+        }
+      break;
+      }
+    } 
+  }
+
+protected void createExplosion(World world, MissileBase missile, float x, float y, float z, float power)
+  {
+  boolean destroyBlocks = Config.blockDestruction;
+  boolean fires = Config.blockFires;
+  Explosion e = world.newExplosion(null, x, y, z, power, fires, destroyBlocks);
+  }
+
+protected void spawnGroundBurst(World world, float x, float y, float z, float maxVelocity, IAmmoType type, int count, float minPitch, int sideHit)
+  {
+  if(type!=null && !world.isRemote)
+    {
+    MissileBase missile;
+    float randRange = 90-minPitch;
+    float randVelocity = 0;
+    float pitch = 0;
+    float yaw = 0;
+    float velocity= 0;    
+    if(type.hasSecondaryAmmo())
+      {
+      count = type.getSecondaryAmmoTypeCount();
+      type = type.getSecondaryAmmoType();
+      }
+    for(int i = 0; i < count; i++)
+      {            
+      if(sideHit==1 || sideHit==0)
+        {
+        pitch = 90 - (rng.nextFloat() * randRange);
+        yaw = rng.nextFloat() * 360.f;
+        randVelocity = rng.nextFloat();
+        randVelocity = randVelocity < 0.5f ? 0.5f : randVelocity;
+        velocity = maxVelocity*randVelocity;
+        }
+      else
+        {
+        float minYaw = getMinYaw(sideHit);
+        float maxYaw = getMaxYaw(sideHit);
+        if(minYaw>maxYaw)
+          {
+          float tmp = maxYaw;          
+          maxYaw = minYaw;
+          minYaw = tmp;
+          }
+        float yawRange = maxYaw - minYaw;
+        pitch = 90 - (rng.nextFloat() * randRange);
+        yaw = minYaw + ( rng.nextFloat() * yawRange );
+        randVelocity = rng.nextFloat();
+        randVelocity = randVelocity < 0.5f ? 0.5f : randVelocity;
+        velocity = maxVelocity*randVelocity;
+        }      
+      Config.logDebug("y: "+yaw+" P: "+pitch+" v: "+velocity);
+      missile = getMissileByType(type, world, x, y, z, yaw, pitch, velocity);
+      if(missile!=null)
+        {
+        world.spawnEntityInWorld(missile);
+        }
+      }
     }
-  id = world.getBlockId(x, y, z);
-  if(id==0)
-    {      
-    world.setBlockWithNotify(x, y, z, Block.fire.blockID);
-    return;
+  }
+
+//n=0 :: 2
+//e=-90/270 :: 5
+//s=-180/180 :: 3
+//w=-270/90 :: 4
+private float getMinYaw(int side)
+  {
+  switch(side)
+    {
+    case 2://north
+    return 360-45;
+    case 3://south
+    return 180-45;
+    case 4://west
+    return 90-45;
+    case 5://east
+    return 270-45;
     }
-  id = world.getBlockId(x, y-1, z);
-  if(id==0)
-    {      
-    world.setBlockWithNotify(x, y-1, z, Block.fire.blockID);
+  return 0;
+  }
+
+private float getMaxYaw(int side)
+  {
+  switch(side)
+  {
+  case 2://north
+  return 360+45;
+  case 3://south
+  return 180+45;
+  case 4://west
+  return 90+45;
+  case 5://east
+  return 270+45;
+  }
+  return 0;
+  }
+
+protected void spawnAirBurst(World world, float x, float y, float z, float maxVelocity, IAmmoType type, int count)
+  {
+  spawnGroundBurst(world, x, y, z, maxVelocity, type, count, -90, 0);
+  }
+
+public MissileBase getMissileByType(IAmmoType type, World world, float x, float y, float z, float yaw, float pitch, float velocity) 
+  {
+  if(type==null)
+    {
+    return null;
     }
+  MissileBase missile = new MissileBase(world);
+  missile.setMissileParams2(type, x, y, z, yaw, pitch, velocity);
+  return missile;
   }
 
 }

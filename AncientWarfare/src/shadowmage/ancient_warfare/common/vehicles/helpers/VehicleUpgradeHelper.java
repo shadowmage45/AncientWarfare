@@ -205,15 +205,16 @@ public void addValidUpgrade(int type)
 
 public float getScaledDamage(DamageSource src, int amt)
   { 
+  float floatAmt = (float)amt;
   if(src==DamageType.explosiveMissile || src== DamageType.explosion || src==DamageType.explosion2)
     {
-    return (float) amt * vehicle.currentExplosionResist;
+    return floatAmt * (1-vehicle.currentExplosionResist);
     }
   else if(src==DamageType.fireMissile || src == DamageType.inFire || src== DamageType.lava || src== DamageType.onFire || src.isFireDamage())
     {
-    return (float) amt * vehicle.currentFireResist;
+    return floatAmt * (1-vehicle.currentFireResist);
     }  
-  return (float) amt * vehicle.currentGenericResist;
+  return floatAmt * (1-vehicle.currentGenericResist);
   }
 
 @Override
