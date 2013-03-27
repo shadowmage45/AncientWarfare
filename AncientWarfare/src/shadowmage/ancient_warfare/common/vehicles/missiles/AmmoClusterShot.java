@@ -50,7 +50,7 @@ public void onImpactWorld(World world, float x, float y, float z, MissileBase mi
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  spawnAirBurst(world, (float)ent.posX, (float)ent.posY, (float)ent.posZ, 10, Ammo.ammoBallShot, (int)ammoWeight);
+  spawnAirBurst(world, (float)ent.posX, (float)ent.posY+ent.height, (float)ent.posZ, 10, Ammo.ammoBallShot, (int)ammoWeight);
   }
 
 }
