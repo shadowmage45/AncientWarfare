@@ -25,6 +25,7 @@ import java.util.List;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
+import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
 public class NpcVillager extends NpcTypeBase
@@ -63,6 +64,13 @@ public NpcVillager(int type)
     {
     Config.logError("Could not access VillagerRegistry.instance()");
     }
+  }
+
+@Override
+public void addTargets(NpcTargetHelper helper)
+  {
+  // TODO Auto-generated method stub
+  
   }
 
 

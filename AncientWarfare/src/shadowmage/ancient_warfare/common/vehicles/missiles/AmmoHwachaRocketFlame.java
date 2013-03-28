@@ -41,6 +41,9 @@ public AmmoHwachaRocketFlame(int ammoType)
   this.isPersistent = true;
   this.isRocket = true;
   this.isFlaming = true;
+  this.ammoWeight = 1.1f;
+  this.renderScale = 0.2f;
+  this.renderScale = 0.2f;
   }
 
 @Override

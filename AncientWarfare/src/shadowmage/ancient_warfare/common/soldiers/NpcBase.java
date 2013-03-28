@@ -51,7 +51,9 @@ public ArrayList<INpcAI> executingTasks = new ArrayList<INpcAI>();
 
 public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
-public NpcTargetHelper targetHelper;
+public NpcTargetHelper attackTargetHelper;
+public NpcTargetHelper healingTargetHelper;
+public NpcTargetHelper objectivesHelper;
 
 private AIAggroEntry target = null;
 
@@ -62,7 +64,7 @@ public NpcBase(World par1World)
   {
   super(par1World);
   this.varsHelper = new NpcDummyVarHelper(this);  
-  this.targetHelper = new NpcTargetHelper(this);
+  this.attackTargetHelper = new NpcTargetHelper(this);
   this.moveSpeed = 0.3255f;
   this.setAIMoveSpeed(0.325f); 
   }
@@ -177,7 +179,7 @@ public void onUpdate()
   {
   super.onUpdate();
   this.varsHelper.onTick();
-  this.targetHelper.updateAggroEntries();
+  this.attackTargetHelper.updateAggroEntries();
   }
 
 @Override

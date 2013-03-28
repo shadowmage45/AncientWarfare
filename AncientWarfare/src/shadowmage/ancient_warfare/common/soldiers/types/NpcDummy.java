@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.common.soldiers.INpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.AIWanderTest;
+import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 
 public class NpcDummy extends NpcTypeBase
 {
@@ -50,6 +51,13 @@ public List<INpcAI> getAI(NpcBase npc, int level)
   ArrayList<INpcAI> aiEntries = new ArrayList<INpcAI>();
   aiEntries.add(new AIWanderTest(npc));
   return aiEntries;
+  }
+
+@Override
+public void addTargets(NpcTargetHelper helper)
+  {
+  // TODO Auto-generated method stub
+  
   }
 
 }

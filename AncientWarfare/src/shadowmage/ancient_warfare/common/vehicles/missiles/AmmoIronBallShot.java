@@ -44,16 +44,16 @@ public AmmoIronBallShot(int ammoType)
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
-  // TODO Auto-generated method stub
-
+  //NOOP
   }
 
 @Override
-public void onImpactEntity(World world, Entity ent, float x, float y,
-    float z, MissileBase missile)
+public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  // TODO Auto-generated method stub
-
+  if(!world.isRemote)
+    {
+    ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
+    }
   }
 
 }

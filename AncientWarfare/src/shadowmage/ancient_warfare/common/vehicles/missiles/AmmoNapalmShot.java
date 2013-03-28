@@ -38,12 +38,14 @@ public AmmoNapalmShot(int ammoType, int weight)
   this.ammoWeight = weight;
   this.entityDamage = weight;
   this.vehicleDamage = weight;
+  float scaleFactor = weight + 45.f;
+  this.renderScale = ( weight / scaleFactor ) * 2; 
   }
 
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
-  
+  //TODO
   }
 
 @Override

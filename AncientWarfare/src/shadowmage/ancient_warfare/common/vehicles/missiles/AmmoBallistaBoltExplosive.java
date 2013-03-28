@@ -49,7 +49,7 @@ public void onImpactWorld(World world, float x, float y, float z, MissileBase mi
   {
   if(!world.isRemote)
     {
-    createExplosion(world, missile, x, y, z, 1.2f);
+    createExplosion(world, missile, x, y, z, 0.8f);
     }
   }
 

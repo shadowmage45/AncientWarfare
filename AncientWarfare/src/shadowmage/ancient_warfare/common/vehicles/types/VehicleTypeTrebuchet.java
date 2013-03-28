@@ -40,10 +40,47 @@ public VehicleTypeTrebuchet(int typeNum)
   
   this.maxMissileWeight = 10.f;
   
+  this.validAmmoTypes.add(Ammo.ammoStoneShot10);
+  this.validAmmoTypes.add(Ammo.ammoStoneShot15); 
+  this.validAmmoTypes.add(Ammo.ammoFireShot10);
+  this.validAmmoTypes.add(Ammo.ammoFireShot15);
+  this.validAmmoTypes.add(Ammo.ammoPebbleShot10);
+  this.validAmmoTypes.add(Ammo.ammoPebbleShot15);
+  this.validAmmoTypes.add(Ammo.ammoClusterShot10);
+  this.validAmmoTypes.add(Ammo.ammoClusterShot15);
+  this.validAmmoTypes.add(Ammo.ammoExplosive10);
+  this.validAmmoTypes.add(Ammo.ammoExplosive15);
+  this.validAmmoTypes.add(Ammo.ammoHE10);
+  this.validAmmoTypes.add(Ammo.ammoHE15);
+  this.validAmmoTypes.add(Ammo.ammoNapalm10);
+  this.validAmmoTypes.add(Ammo.ammoNapalm15);
+  
+  
+  this.validAmmoTypes.add(Ammo.ammoArrow);
+  this.validAmmoTypes.add(Ammo.ammoArrowFlame);
+  this.validAmmoTypes.add(Ammo.ammoArrowIron);
+  this.validAmmoTypes.add(Ammo.ammoArrowIronFlame);
+  
+  if(Config.addOversizeAmmo)
+    {
+    this.validAmmoTypes.add(Ammo.ammoStoneShot30);
+    this.validAmmoTypes.add(Ammo.ammoStoneShot45);
+    this.validAmmoTypes.add(Ammo.ammoFireShot30);
+    this.validAmmoTypes.add(Ammo.ammoFireShot45);
+    this.validAmmoTypes.add(Ammo.ammoPebbleShot30);
+    this.validAmmoTypes.add(Ammo.ammoPebbleShot45);
+    this.validAmmoTypes.add(Ammo.ammoClusterShot30);
+    this.validAmmoTypes.add(Ammo.ammoClusterShot45);
+    this.validAmmoTypes.add(Ammo.ammoExplosive30);
+    this.validAmmoTypes.add(Ammo.ammoExplosive45);
+    this.validAmmoTypes.add(Ammo.ammoHE30);
+    this.validAmmoTypes.add(Ammo.ammoHE45);    
+    }
+  
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorIron);
   this.validArmors.add(ArmorRegistry.armorObsidian);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot10);
+ 
   
   this.displayName = "Trebuchet";
   this.displayTooltip = "Uses a large counterweight to accelerate projectiles.";
@@ -66,7 +103,6 @@ public VehicleTypeTrebuchet(int typeNum)
   this.basePitchMax=70.f;
   this.basePitchMin=70.f;
   this.turretVerticalOffset = (34.f + 67.5f + 24.0f)*0.0625f;
-  this.maxMissileWeight = 50;
   this.baseMissileVelocityMax = 40.f;
   }
 

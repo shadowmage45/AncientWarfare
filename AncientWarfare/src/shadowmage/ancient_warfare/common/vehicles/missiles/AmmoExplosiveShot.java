@@ -42,6 +42,8 @@ public AmmoExplosiveShot(int ammoType, int weight, boolean bigExplosion)
   this.bigExplosion = bigExplosion;
   this.entityDamage = weight;
   this.vehicleDamage = weight;
+  float scaleFactor = weight + 45.f;
+  this.renderScale = ( weight / scaleFactor ) * 2; 
   }
 
 @Override

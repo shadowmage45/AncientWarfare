@@ -42,8 +42,23 @@ public VehicleTypeCannon(int typeNum)
 
   this.maxMissileWeight = 10.f;
   
-  this.validAmmoTypes.add(Ammo.ammoStoneShot10);  
-
+  this.validAmmoTypes.add(Ammo.ammoIronShot5);
+  this.validAmmoTypes.add(Ammo.ammoIronShot10);
+  this.validAmmoTypes.add(Ammo.ammoGrapeShot5);
+  this.validAmmoTypes.add(Ammo.ammoGrapeShot10);
+  this.validAmmoTypes.add(Ammo.ammoCanisterShot5);
+  this.validAmmoTypes.add(Ammo.ammoCanisterShot10);
+  
+  if(Config.addOversizeAmmo)
+    {
+    this.validAmmoTypes.add(Ammo.ammoIronShot15);
+    this.validAmmoTypes.add(Ammo.ammoIronShot25);
+    this.validAmmoTypes.add(Ammo.ammoGrapeShot15);
+    this.validAmmoTypes.add(Ammo.ammoGrapeShot25);
+    this.validAmmoTypes.add(Ammo.ammoCanisterShot15);
+    this.validAmmoTypes.add(Ammo.ammoCanisterShot25);
+    }
+  
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchExtUpgrade);

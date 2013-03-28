@@ -38,6 +38,8 @@ public AmmoIronShot(int ammoType, int weight, int damage)
   this.displayTooltip = weight+"kg rough iron shot.";
   this.entityDamage = damage;
   this.vehicleDamage = damage;
+  float scaleFactor = weight + 45.f;
+  this.renderScale = ( weight / scaleFactor ) * 2; 
   }
 
 @Override

@@ -24,18 +24,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
-public class AIChooseTarget extends NpcAI
+public class AIChooseAttackTarget extends NpcAI
 {
 
 /**
  * @param npc
  */
-public AIChooseTarget(NpcBase npc)
+public AIChooseAttackTarget(NpcBase npc)
   {
   super(npc);
   this.failureTicks = 20;
   this.successTicks = 100;
-  this.taskName = "ChooseTarget";
+  this.taskName = "ChooseAttackTarget";
   }
 
 @Override

@@ -41,6 +41,8 @@ public AmmoPebbleShot(int ammoType, int weight)
   this.displayTooltip = weight+"kg of pebbles and smaller ammunitions.";
   this.secondaryAmmoCount = weight;
   this.secondaryAmmoType = Ammo.ammoBallShot;
+  float scaleFactor = weight + 45.f;
+  this.renderScale = ( weight / scaleFactor ) * 2; 
   }
 
 @Override

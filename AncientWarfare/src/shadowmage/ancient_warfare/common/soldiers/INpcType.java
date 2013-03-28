@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.soldiers;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 
 public interface INpcType
 {
@@ -44,6 +45,7 @@ public abstract List<ItemStack> getValidTools();
 public abstract List<ItemStack> getValidArmors();
 
 public abstract NpcVarsHelper getVarsHelper(NpcBase npc);
+public abstract void addTargets(NpcTargetHelper helper);
 
 
 public abstract class NpcVarsHelper

@@ -42,6 +42,11 @@ public VehicleTypeBallista(int typeNum)
   
   this.maxMissileWeight = 2.f;  
   
+  this.validAmmoTypes.add(Ammo.ammoBallistaBolt);
+  this.validAmmoTypes.add(Ammo.ammoBallistaBoltFlame);
+  this.validAmmoTypes.add(Ammo.ammoBallistaBoltExplosive);
+  this.validAmmoTypes.add(Ammo.ammoBallistaBoltIron);
+  
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);

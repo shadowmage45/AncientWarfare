@@ -325,6 +325,7 @@ protected void spawnGroundBurst(World world, float x, float y, float z, float ma
   {
   if(type!=null && !world.isRemote)
     {
+    world.newExplosion(null, x, y, z, 0.25f, false, true);
     createExplosion(world, null, x, y, z, 1.f);
     MissileBase missile;
     float randRange = 90-minPitch;
@@ -364,7 +365,6 @@ protected void spawnGroundBurst(World world, float x, float y, float z, float ma
         randVelocity = randVelocity < 0.5f ? 0.5f : randVelocity;
         velocity = maxVelocity*randVelocity;
         }      
-      Config.logDebug("y: "+yaw+" P: "+pitch+" v: "+velocity);
       missile = getMissileByType(type, world, x, y, z, yaw, pitch, velocity);
       if(missile!=null)
         {

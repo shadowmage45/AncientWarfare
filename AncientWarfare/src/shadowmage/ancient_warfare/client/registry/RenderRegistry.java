@@ -133,12 +133,60 @@ public void loadRenders()
   this.addMissileRender(Ammo.ammoStoneShot10.getAmmoType(), shotRender);
   this.addMissileRender(Ammo.ammoStoneShot15.getAmmoType(), shotRender);
   this.addMissileRender(Ammo.ammoStoneShot30.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoStoneShot45.getAmmoType(), shotRender);  
   this.addMissileRender(Ammo.ammoFireShot10.getAmmoType(), shotRender);
   this.addMissileRender(Ammo.ammoFireShot15.getAmmoType(), shotRender);
-  this.addMissileRender(Ammo.ammoFireShot30.getAmmoType(), shotRender);  
-  this.addMissileRender(Ammo.ammoArrow.getAmmoType(), arrowRender);    
+  this.addMissileRender(Ammo.ammoFireShot30.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoFireShot45.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoClusterShot10.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoClusterShot15.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoClusterShot30.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoClusterShot45.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoPebbleShot10.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoPebbleShot15.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoPebbleShot30.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoPebbleShot45.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoNapalm10.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoNapalm15.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoNapalm30.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoNapalm45.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoExplosive10.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoExplosive15.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoExplosive30.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoExplosive45.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoHE10.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoHE15.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoHE30.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoHE45.getAmmoType(), shotRender);
+  
+  this.addMissileRender(Ammo.ammoIronShot5.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoIronShot10.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoIronShot15.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoIronShot25.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoGrapeShot5.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoGrapeShot10.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoGrapeShot15.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoGrapeShot25.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoCanisterShot5.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoCanisterShot10.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoCanisterShot15.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoCanisterShot25.getAmmoType(), shotRender);
+  
+  this.addMissileRender(Ammo.ammoArrow.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoArrowIron.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoArrowFlame.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoArrowIronFlame.getAmmoType(), arrowRender);
   this.addMissileRender(Ammo.ammoRocket.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoHwachaRocketFlame.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoHwachaRocketExplosive.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoHwachaRocketAirburst.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoBallistaBolt.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoBallistaBoltExplosive.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoBallistaBoltFlame.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoBallistaBoltIron.getAmmoType(), arrowRender);  
+  
   this.addMissileRender(Ammo.ammoBallShot.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoBallIronShot.getAmmoType(), shotRender);
   
   /**
    * load up the vehicle item renderer...

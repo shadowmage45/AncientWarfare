@@ -77,6 +77,7 @@ public MissileBase(World par1World)
   {
   super(par1World);
   this.entityCollisionReduction = 1.f;
+  this.setSize(0.4f, 0.4f);
   }
 
 /**
@@ -204,18 +205,18 @@ protected void checkProximity()
     return;//don't bother checking when travelling upwards, wait until the downward swing...
     }
 //check ground.
-  float groundDiff = 0;
+  int groundDiff = 0;
   int id = 0;
   int x = (int) posX;
   int y = (int) posY;    
   int z =  (int) posZ;
   boolean impacted = false;
+  MovingObjectPosition hit;
   if(ammoType.groundProximity()>0)
-    {
+    {   
     while(id==0 && groundDiff <= ammoType.groundProximity())
       {      
-      id = worldObj.getBlockId(x, y, z);
-      y--;
+      id = worldObj.getBlockId(x, y-groundDiff, z);  
       groundDiff++;
       if(id!=0)
         {
@@ -238,7 +239,7 @@ protected void checkProximity()
       while(it.hasNext())
         {
         ent = (Entity)it.next();
-        if(ent!=null && ent.getClass() != MissileBase.class)//don't collide with missiles....
+        if(ent!=null && ent.getClass() != MissileBase.class)//don't collide with missiles
           {
           foundDist = this.getDistanceToEntity(ent);
           if(foundDist<entProx)
@@ -265,12 +266,8 @@ public void onMovementTick()
       this.motionZ = 0;
       this.inGround = false;
       }
-    }
-  if(this.ammoType.isProximityAmmo() && this.ticksExisted > 20)
-    {    
-    checkProximity();
-    }
-  else if(!this.inGround)
+    }  
+  if(!this.inGround)
     {    
     Vec3 positionVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
     Vec3 moveVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
@@ -369,6 +366,15 @@ public void onMovementTick()
             this.blockMeta = this.worldObj.getBlockMetadata(blockX, blockY, blockZ);
             }
           }                 
+        }
+      }
+    
+    if(this.ammoType.isProximityAmmo() && this.ticksExisted > 20)
+      {    
+      checkProximity();
+      if(this.isDead)
+        {
+        return;
         }
       }
     

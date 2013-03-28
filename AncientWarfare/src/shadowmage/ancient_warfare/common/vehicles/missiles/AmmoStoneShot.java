@@ -42,6 +42,8 @@ public AmmoStoneShot(int ammoType, int weight)
   this.displayTooltip = weight+"kg rough stone shot.";
   this.entityDamage = weight;
   this.vehicleDamage = weight;
+  float scaleFactor = weight + 45.f;
+  this.renderScale = ( weight / scaleFactor ) * 2; 
   }
 
 @Override

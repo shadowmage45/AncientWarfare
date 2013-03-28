@@ -43,6 +43,8 @@ protected boolean isVanillaVillager = false;
 protected List<ItemStack> validTools = new ArrayList<ItemStack>();
 protected List<ItemStack> validArmors = new ArrayList<ItemStack>();
 
+
+
 public NpcTypeBase(int type)
   {
   this.npcType = type;

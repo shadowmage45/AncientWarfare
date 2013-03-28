@@ -41,20 +41,30 @@ public AmmoHwachaRocketAirburst(int ammoType)
   this.isPersistent = false;
   this.isRocket = true;
   this.isProximityAmmo = true;
-  this.groundProximity = 7.f;
-  this.entityProximity = 7.f;
+  this.groundProximity = 12.f;
+  this.entityProximity = 10f;
+  this.ammoWeight = 1.4f;
+  this.renderScale = 0.2f;
   }
 
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
-  this.spawnAirBurst(world, x, y, z, 10, Ammo.ammoBallShot, 4);
+  if(!world.isRemote)
+    {
+    this.spawnAirBurst(world, x, y, z, 10, Ammo.ammoBallShot, 4);
+    missile.setDead();
+    }
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  this.spawnAirBurst(world, x, y, z, 10, Ammo.ammoBallShot, 4);
+  if(!world.isRemote)
+    {
+    this.spawnAirBurst(world, x, y, z, 10, Ammo.ammoBallShot, 4);
+    missile.setDead();
+    }
   }
 
 }

@@ -48,6 +48,10 @@ public VehicleTypeHwacha(int typeNum)
   this.maxMissileWeight = 1.f;
   
   this.validAmmoTypes.add(Ammo.ammoRocket);
+  this.validAmmoTypes.add(Ammo.ammoHwachaRocketFlame);
+  this.validAmmoTypes.add(Ammo.ammoHwachaRocketExplosive);
+  this.validAmmoTypes.add(Ammo.ammoHwachaRocketAirburst);
+  
   
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorIron);

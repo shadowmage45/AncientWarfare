@@ -36,21 +36,29 @@ public AmmoClusterShot(int ammoType, int weight)
   this.displayName = "Cluster Shot " + weight +"kg";
   this.displayTooltip = weight+"kg of small ammunitions with an explosive charge.";
   this.ammoWeight = weight;
+  float scaleFactor = weight + 45.f;
+  this.renderScale = ( weight / scaleFactor ) * 2; 
   }
 
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {   
-  double px = hit.hitVec.xCoord - missile.motionX;
-  double py = hit.hitVec.yCoord - missile.motionY;
-  double pz = hit.hitVec.zCoord - missile.motionZ;
-  spawnGroundBurst(world, (float)px, (float)py, (float)pz, 10, Ammo.ammoBallShot, (int)ammoWeight, 35, hit.sideHit);
+  if(!world.isRemote)
+    {
+    double px = hit.hitVec.xCoord - missile.motionX;
+    double py = hit.hitVec.yCoord - missile.motionY;
+    double pz = hit.hitVec.zCoord - missile.motionZ;
+    spawnGroundBurst(world, (float)px, (float)py, (float)pz, 10, Ammo.ammoBallShot, (int)ammoWeight, 35, hit.sideHit);
+    }
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  spawnAirBurst(world, (float)ent.posX, (float)ent.posY+ent.height, (float)ent.posZ, 10, Ammo.ammoBallShot, (int)ammoWeight);
+  if(!world.isRemote)
+    {
+    spawnAirBurst(world, (float)ent.posX, (float)ent.posY+ent.height, (float)ent.posZ, 10, Ammo.ammoBallShot, (int)ammoWeight);
+    }
   }
 
 }

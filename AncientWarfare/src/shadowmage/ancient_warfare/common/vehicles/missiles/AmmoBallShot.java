@@ -51,7 +51,10 @@ public void onImpactWorld(World world, float x, float y, float z, MissileBase mi
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-  ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
+  if(!world.isRemote)
+    {
+    ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
+    }
   }
 
 }

@@ -14,6 +14,9 @@ VEHICLES
 * remove old targetPos code...or use it for other things....
 * inventory container synch methods... (IEntityContainerSynch)
 * need to get rocked when onHit
+* napalm ammo
+* ammo textures
+* alpha blend vehicle if set to not render
 
 NPCS
 * add save/load from NBT stuff
@@ -155,6 +158,7 @@ TWEAKS/OPTIMIZATION
 * add Vehicle FPV render setting to config/options GUI (w/save)
 * add keybind save-code (just calls Config.saveConfig() when a keybind is changed)
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
+* airburst needs more investigation...
 /********** 03-28-13 **********/
 /********** 03-29-13 **********/
 /********** 03-30-13 **********/
