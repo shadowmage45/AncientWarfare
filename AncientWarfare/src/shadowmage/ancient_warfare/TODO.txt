@@ -9,6 +9,7 @@ GENERAL
         --of the map they currently use
 * grenades
 * land-mines
+* move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 
 VEHICLES    
 * remove old targetPos code...or use it for other things....
@@ -17,14 +18,13 @@ VEHICLES
 * napalm ammo
 * ammo textures
 * alpha blend vehicle if set to not render
+* ammo select GUI
 
 NPCS
 * add save/load from NBT stuff
 * vars helper save/load stuff
 * inventory helper
-* attack/target helper
 * lots and lots of stuff....
-* multiple target-priority trackers--hostile, friendly....
          
 GUI FRAMEWORK
 * rework all structure GUIs to include new bling!! (scroll areas, etc...)
@@ -160,6 +160,9 @@ TWEAKS/OPTIMIZATION
 * add grass/snow tearup code, and remove flowers/crap on top as well (pop them off into the world as an item)
 * airburst needs more investigation...
 /********** 03-28-13 **********/
+* soldier multiple target-priority trackers--hostile, friendly....
+* soldier attack/target helper
 /********** 03-29-13 **********/
 /********** 03-30-13 **********/
+/********** 03-31-13 **********/
 

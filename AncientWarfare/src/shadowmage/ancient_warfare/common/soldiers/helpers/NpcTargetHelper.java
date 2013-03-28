@@ -24,12 +24,16 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.utils.Pair;
 
 /**
  * tracks a list of priority target types by class, as well as maintaining a list
@@ -41,7 +45,6 @@ import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 public class NpcTargetHelper
 {
 
-
 Class entityClass = EntityPlayer.class;
 Class npcClass = NpcBase.class;
 
@@ -50,46 +53,55 @@ NpcBase npc;
 /**
  * list of all potential targets
  */
-HashMap<String, ArrayList<AITargetEntry>> targetEntries = new HashMap<String, ArrayList<AITargetEntry>>();
+HashMap<String, AITargetList> targetEntries = new HashMap<String, AITargetList>();
 
 /**
  * future/potential targets based on aggro priority
  */
 HashMap<String, ArrayList<AIAggroEntry>> aggroEntries = new HashMap<String, ArrayList<AIAggroEntry>>();
 
-int tickCount = 0;
-
 public NpcTargetHelper(NpcBase npc)
   {
   this.npc = npc;
+  }
+
+public void addTargetEntry(String type, Class <? extends Entity> clz, int priority, boolean same, boolean opp)
+  {  
+  if(!this.targetEntries.containsKey(type))
+    {
+    this.targetEntries.put(type, new AITargetList(type, same, opp));
+    }
+  this.targetEntries.get(type).addTarget(clz, priority, true);
   }
 
 public void addTargetEntry(String type, Class <? extends Entity> clz, int priority)
   {  
   if(!this.targetEntries.containsKey(type))
     {
-    this.targetEntries.put(type, new ArrayList<AITargetEntry>());
+    this.targetEntries.put(type, new AITargetList(type, false, false));
     }
-  this.targetEntries.get(type).add(new AITargetEntry(clz, priority));
+  this.targetEntries.get(type).addTarget(clz, priority, true);
+  }
+
+public void addTargetEntryTileEntity(String type, Class <? extends TileEntity> clz, int priority, boolean same, boolean opp)
+  {
+  if(!this.targetEntries.containsKey(type))
+    {
+    this.targetEntries.put(type, new AITargetList(type, same, opp));
+    }
+  this.targetEntries.get(type).addTarget(clz, priority, false);
   }
 
 public int getPriorityFor(String type, Entity ent)
   {
   if(this.targetEntries.containsKey(type))
     {
-    ArrayList<AITargetEntry> targets = this.targetEntries.get(type);
-    for(AITargetEntry entry : targets)
-      {
-      if(entry.isTarget(ent))
-        {
-        return entry.priority;
-        }
-      }
+    return this.targetEntries.get(type).getPriorityFor(ent);
     }
   return -1;
   }
 
-public void addOrUpdateAggroEntry(String type, int x, int y, int z, int aggroAmt)
+public void addOrUpdateAggroEntry(String type, int x, int y, int z, int aggroAmt, int priority)
   {
   boolean found = false;
  
@@ -108,11 +120,11 @@ public void addOrUpdateAggroEntry(String type, int x, int y, int z, int aggroAmt
     }
   if(!found)
     {
-    entries.add(new AIAggroEntry(x, y, z).setAggro(aggroAmt));
+    entries.add(new AIAggroEntry(x, y, z, priority).setAggro(aggroAmt).setType(type));
     }
   }
 
-public void addOrUpdateAggroEntry(String type, Entity entity, int aggroAmt)
+public void addOrUpdateAggroEntry(String type, Entity entity, int aggroAmt, int priority)
   {
   boolean found = false;
   
@@ -131,18 +143,42 @@ public void addOrUpdateAggroEntry(String type, Entity entity, int aggroAmt)
     }
   if(!found)
     {
-    entries.add(new AIAggroEntry(entity).setAggro(aggroAmt));
+    entries.add(new AIAggroEntry(entity, priority).setAggro(aggroAmt).setType(type));
+    }
+  }
+
+public void checkForTargets()
+  {    
+  float mr = (float)Config.npcAISearchRange;
+  float dist = 0;
+  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(npc.posX-mr, npc.posY-mr, npc.posZ-mr, npc.posX-mr, npc.posY-mr, npc.posZ-mr);
+  List<Entity> entityList = npc.worldObj.getEntitiesWithinAABBExcludingEntity(npc, bb);
+  if(entityList!=null && !entityList.isEmpty())
+    {
+    Iterator<Entity> it = entityList.iterator();
+    Entity ent;
+    while(it.hasNext())
+      {
+      ent = it.next();      
+      dist = npc.getDistanceToEntity(ent);
+      if(dist>mr)
+        {
+        continue;
+        }
+      for(String key : this.targetEntries.keySet())        
+        {
+        int pri = this.getPriorityFor(key, ent);
+        if(pri>=0)
+          {
+          this.addOrUpdateAggroEntry(key, ent, Config.npcAITicks, pri);
+          }
+        }     
+      }
     }
   }
 
 public void updateAggroEntries()
-  {
-  tickCount++;
-  if(tickCount < Config.npcAITicks)
-    {
-    return;
-    }
-  tickCount = 0;
+  {  
   Iterator<Entry<String, ArrayList<AIAggroEntry>>> it = this.aggroEntries.entrySet().iterator();
   Entry<String, ArrayList<AIAggroEntry>> mapEntry;
   Iterator<AIAggroEntry> listIt;
@@ -165,22 +201,102 @@ public void updateAggroEntries()
     }
   }
 
-public AIAggroEntry getHighestAggroTarget()
+public AIAggroEntry getHighestAggroTarget(String type)
   {
-
+  if(this.aggroEntries.containsKey(type))
+    {
+    List<AIAggroEntry> entries = this.aggroEntries.get(type);
+    int lowest = 9999;    
+    AIAggroEntry bestEntry = null;
+    for(AIAggroEntry ent : entries)
+      {
+      if(ent.targetPriority<lowest)
+        {        
+        bestEntry = ent;
+        }
+      else if(ent.targetPriority==lowest)
+        {
+        if(ent.getDistanceFrom(npc)<bestEntry.getDistanceFrom(npc))
+          {
+          bestEntry = ent;
+          }
+        }
+      }
+    return bestEntry;
+    }
   return null;
   }
+
+public class AITargetList
+{
+String type;
+boolean includeSameTeam = false;
+boolean includeOppositeTeam = false;
+ArrayList<AITargetEntry> targetEntries = new ArrayList<AITargetEntry>();
+
+public AITargetList(String name, boolean sameTeam, boolean oppositeTeam)
+  {
+  this.type = name;
+  this.includeSameTeam = sameTeam;
+  this.includeOppositeTeam = oppositeTeam;
+  }
+
+public void addTarget(Class clz, int priority, boolean isEntity)
+  {
+  this.targetEntries.add(new AITargetEntry(clz, priority, isEntity));
+  }
+
+public int getPriorityFor(Entity ent)
+  {
+  boolean agg;
+  if(ent instanceof NpcBase)
+    {
+    agg = npc.isAggroTowards((NpcBase)ent);
+    if(agg && !this.includeOppositeTeam)
+      {
+      return -1;
+      }
+    else if(!agg && !this.includeSameTeam)
+      {
+      return -1;
+      }
+    }
+  else if(ent instanceof EntityPlayer)
+    {
+    agg = npc.isAggroTowards((NpcBase)ent);
+    if(agg && !this.includeOppositeTeam)
+      {
+      return -1;
+      }
+    else if(!agg && !this.includeSameTeam)
+      {
+      return -1;
+      }
+    }
+  for(AITargetEntry entry : targetEntries)
+    {
+    if(entry.isTarget(ent))
+      {
+      return entry.priority;
+      }
+    }
+  return -1;
+  }
+
+}
 
 public class AITargetEntry
 {  
 Class entityClass = null;
 public int priority = 0;
 public boolean isEntityTarget = false;
-public AITargetEntry(Class <? extends Entity> clz, int priority)
+public boolean isTileTarget = false;
+
+public AITargetEntry(Class clz, int priority, boolean isEntityTarget)
   {
   this.entityClass = clz;
   this.priority = priority;
-  this.isEntityTarget = true;
+  this.isEntityTarget = isEntityTarget;
   }  
 
 public boolean isTarget(Entity ent)
@@ -192,22 +308,46 @@ public boolean isTarget(Entity ent)
 public class AIAggroEntry
 {
 private WeakReference<Entity> ent = new WeakReference<Entity>(null);
-public int blockX;
-public int blockY;
-public int blockZ;
+public String targetType = "";
+public int targetPriority;
+public float posX;
+public float posY;
+public float posZ;
 public int aggroLevel;
 public boolean isEntityEntry = false;
-public AIAggroEntry(Entity ent)
+
+public AIAggroEntry(Entity ent, int pri)
   {
   this.ent = new WeakReference<Entity>(ent);
   this.isEntityEntry = true;
+  this.targetPriority = pri;
   } 
 
-public AIAggroEntry(int x, int y, int z)
+public AIAggroEntry(int x, int y, int z, int pri)
   {
-  this.blockX = x;
-  this.blockY = y;
-  this.blockZ = z;
+  this.posX = x;
+  this.posY = y;
+  this.posZ = z;
+  this.targetPriority = pri;
+  }
+
+public float getDistanceFrom(NpcBase npc)
+  {
+  if(!this.isEntityEntry)
+    {
+    return (float) npc.getDistance(posX, posY, posZ);
+    }
+  if(this.ent.get()!=null)
+    {
+    return npc.getDistanceToEntity(this.ent.get());
+    }
+  return 0;
+  }
+
+public AIAggroEntry setType(String type)
+  {
+  this.targetType = type;
+  return this;
   }
 
 public AIAggroEntry setAggro(int aggro)
@@ -225,7 +365,7 @@ public boolean isValidEntry()
   {
   if(!this.isEntityEntry)
     {
-    if(npc.worldObj.getChunkProvider().chunkExists(blockX/16, blockZ/16))
+    if(npc.worldObj.getChunkProvider().chunkExists(((int)posX/16), ((int)posZ/16)))
       {
       //TODO check and see if the block at x,y,z is still a valid target block (enemy priority block)
       }
@@ -256,7 +396,7 @@ public boolean matches(Entity ent)
 
 public boolean matches(int x, int y, int z)
   {
-  return this.blockX == x && this.blockY == y && this.blockZ == z;
+  return this.posX == x && this.posY == y && this.posZ == z;
   }
 }
 }

@@ -28,6 +28,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.soldiers.INpcType.NpcVarsHelper;
@@ -46,14 +47,17 @@ public class NpcBase extends EntityCreature implements IEntityAdditionalSpawnDat
 public int teamNum = 0; 
 public int rank = 0;
 
+/**
+ * used to check for targets/update target entries
+ */
+int npcAITargetTick = 0;
+
 public ArrayList<INpcAI> npcAI = new ArrayList<INpcAI>();
 public ArrayList<INpcAI> executingTasks = new ArrayList<INpcAI>();
 
 public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
-public NpcTargetHelper attackTargetHelper;
-public NpcTargetHelper healingTargetHelper;
-public NpcTargetHelper objectivesHelper;
+public NpcTargetHelper targetHelper;
 
 private AIAggroEntry target = null;
 
@@ -64,19 +68,20 @@ public NpcBase(World par1World)
   {
   super(par1World);
   this.varsHelper = new NpcDummyVarHelper(this);  
-  this.attackTargetHelper = new NpcTargetHelper(this);
-  this.moveSpeed = 0.3255f;
+  this.targetHelper = new NpcTargetHelper(this);
+  this.moveSpeed = 0.325f;
   this.setAIMoveSpeed(0.325f); 
   }
 
 public void setNpcType(INpcType type, int level)
   {
-//  Config.logDebug("npc type being assinged: "+type.getDisplayName());
+//  Config.logDebug("npc type being assigned: "+type.getDisplayName());
   this.npcType = type;
   this.rank = level;
   this.npcAI.clear();
   this.executingTasks.clear();
   this.npcAI.addAll(type.getAI(this, level)); 
+  this.npcType.addTargets(targetHelper);
   }
 
 public boolean isAggroTowards(NpcBase npc)
@@ -97,6 +102,21 @@ public boolean isAggroTowards(int otherTeam)
 public Entity getTargetEntity()
   {
   return this.target!=null ? this.target.getEntity() : null;
+  }
+
+public AIAggroEntry getTarget()
+  {
+  return this.target;
+  }
+
+public String getTargetType()
+  {
+  return this.target == null? "No Target" : this.target.targetType;
+  }
+
+public void setTarget(AIAggroEntry entry)
+  {
+  this.target = entry;
   }
 
 @Override
@@ -174,12 +194,20 @@ public String getTexture()
   return this.npcType.getDisplayTexture(rank);
   }
 
+
 @Override
 public void onUpdate()
   {
   super.onUpdate();
   this.varsHelper.onTick();
-  this.attackTargetHelper.updateAggroEntries();
+  
+  this.npcAITargetTick++;
+  if(npcAITargetTick>=Config.npcAITicks)
+    {
+    npcAITargetTick = 0;
+    this.targetHelper.updateAggroEntries();
+    this.targetHelper.checkForTargets();
+    }  
   }
 
 @Override

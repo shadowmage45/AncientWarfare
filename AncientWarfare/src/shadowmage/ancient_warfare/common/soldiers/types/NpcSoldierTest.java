@@ -18,46 +18,36 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.ai;
+package shadowmage.ancient_warfare.common.soldiers.types;
 
-import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.soldiers.NpcAI;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
+import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 
-public class AIChooseAttackTarget extends NpcAI
+public class NpcSoldierTest extends NpcTypeBase
 {
 
 /**
- * @param npc
+ * @param type
  */
-public AIChooseAttackTarget(NpcBase npc)
+public NpcSoldierTest(int type)
   {
-  super(npc);
-  this.failureTicks = 20;
-  this.successTicks = 100;
-  this.taskName = "ChooseAttackTarget";
+  super(type);
+  this.displayName = "Soldier Test";
+  this.tooltip = "Test Soldier for Attack and Vehicle Interaction";
+  this.addLevel("Soldier Rank 0", "foo");
+  this.addLevel("Soldier Rank 1", "foo");
+  this.addLevel("Soldier Rank 2", "foo");
   }
 
 @Override
-public int exclusiveTasks()
+public void addTargets(NpcTargetHelper helper)
   {
-  return HEAL+REPAIR+HARVEST;//basically...all other target-oriented tasks...
-  }
-
-@Override
-public void onAiStarted()
-  {
-  
-  }
-
-@Override
-public void onTick()
-  {  
-  npc.setTarget(npc.targetHelper.getHighestAggroTarget("attack")); 
-  if(npc.getTarget()!=null)
-    {
-    this.success = true;
-    }
+  helper.addTargetEntry("attack", EntityPlayer.class, 0, false, true);
+  helper.addTargetEntry("attack", NpcBase.class, 1, false, true);
+  helper.addTargetEntry("attack", EntityMob.class, 2, false, true);
   }
 
 }

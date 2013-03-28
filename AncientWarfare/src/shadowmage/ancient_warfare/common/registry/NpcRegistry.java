@@ -33,6 +33,7 @@ import shadowmage.ancient_warfare.common.soldiers.INpcType;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
 import shadowmage.ancient_warfare.common.soldiers.types.NpcDummy;
+import shadowmage.ancient_warfare.common.soldiers.types.NpcSoldierTest;
 import shadowmage.ancient_warfare.common.soldiers.types.NpcVillager;
 
 
@@ -42,6 +43,7 @@ public class NpcRegistry
 
 public static INpcType npcDummy = new NpcDummy(0);
 public static INpcType npcVillager = new NpcVillager(1);
+public static INpcType npcSoldierTest = new NpcSoldierTest(2);
 
 private NpcRegistry(){}
 private static NpcRegistry INSTANCE;

@@ -264,6 +264,29 @@ public static float calcTrajectoryRange3D(float mx, float my, float mz, float gr
   return calcTrajectoryRange2D(distance, my, gravSecond);
   }
 
+/**
+ * get yaw direction towards target cooridanates.
+ * @param entityFrom
+ * @param x
+ * @param y
+ * @param z
+ * @return
+ */
+public static float getYawTowardsTarget(double xStart, double zStart, double x, double z)
+  {
+  float towerDirection =(float) Math.atan2(z - zStart, x - xStart);  
+  towerDirection = Trig.toDegrees(towerDirection);
+  while(towerDirection<0)
+    {
+    towerDirection+=360;
+    }
+  while(towerDirection>=360)
+    {
+    towerDirection-=360;
+    }
+  return towerDirection;
+  }
+
 public static float calcTrajectoryRange2D(float mx, float my, float gravSecond)
   {
   float seconds = (my * 20 * 2)/gravSecond;  

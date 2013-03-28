@@ -58,6 +58,7 @@ public static boolean useVehicleSetupTime = true;
 
 public static int trajectoryIterationsServer = 20;
 public static int npcAITicks = 5;
+public static int npcAISearchRange = 140;
 
 /**
  * the base (Server side) and current (client side) values...

@@ -24,40 +24,45 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
-public class AIChooseAttackTarget extends NpcAI
+public class AIAttackTarget extends NpcAI
 {
 
 /**
  * @param npc
  */
-public AIChooseAttackTarget(NpcBase npc)
+public AIAttackTarget(NpcBase npc)
   {
   super(npc);
-  this.failureTicks = 20;
-  this.successTicks = 100;
-  this.taskName = "ChooseAttackTarget";
   }
 
 @Override
 public int exclusiveTasks()
   {
-  return HEAL+REPAIR+HARVEST;//basically...all other target-oriented tasks...
+  return 0;
   }
 
 @Override
 public void onAiStarted()
   {
-  
+ 
   }
 
 @Override
 public void onTick()
-  {  
-  npc.setTarget(npc.targetHelper.getHighestAggroTarget("attack")); 
-  if(npc.getTarget()!=null)
-    {
-    this.success = true;
-    }
+  {
+  
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  return null;
   }
 
 }

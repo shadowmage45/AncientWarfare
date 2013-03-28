@@ -22,6 +22,8 @@ package shadowmage.ancient_warfare.common.soldiers;
 
 import java.util.Random;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 public abstract class NpcAI implements INpcAI
 {
 
@@ -140,6 +142,18 @@ public boolean wasSuccess()
     return true;
     }
   return false;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  return new NBTTagCompound();
   }
 
 }

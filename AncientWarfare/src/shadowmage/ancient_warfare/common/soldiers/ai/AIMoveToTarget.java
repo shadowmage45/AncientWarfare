@@ -20,28 +20,31 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
-import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.utils.Trig;
 
-public class AIChooseAttackTarget extends NpcAI
+public class AIMoveToTarget extends NpcAI
 {
+
+float prevDistance;
+float distance;
 
 /**
  * @param npc
  */
-public AIChooseAttackTarget(NpcBase npc)
+public AIMoveToTarget(NpcBase npc)
   {
-  super(npc);
+  super(npc);  
+  this.successTicks = 20;
   this.failureTicks = 20;
-  this.successTicks = 100;
-  this.taskName = "ChooseAttackTarget";
   }
 
 @Override
 public int exclusiveTasks()
-  {
-  return HEAL+REPAIR+HARVEST;//basically...all other target-oriented tasks...
+  {  
+  return 0;
   }
 
 @Override
@@ -52,12 +55,30 @@ public void onAiStarted()
 
 @Override
 public void onTick()
-  {  
-  npc.setTarget(npc.targetHelper.getHighestAggroTarget("attack")); 
-  if(npc.getTarget()!=null)
+  {
+  if(npc.getTarget()==null)
     {
+    this.finished = true;
     this.success = true;
+    return;
     }
+  float bX = npc.getTarget().posX;
+  float bY = npc.getTarget().posY;
+  float bZ = npc.getTarget().posZ;
+  this.prevDistance = this.distance;
+  this.distance = (float) npc.getDistance(bX, bY, bZ);
+  if(distance==prevDistance)
+    {
+    Config.logDebug("NPC could not move, or did not move between AIMoveToTarget ticks");
+    }
+  if(distance>12)
+    {
+    float angle = Trig.getYawTowardsTarget(npc.posX, npc.posZ, bX, bZ);
+    bX = Trig.sinDegrees(angle)*12;
+    bZ = Trig.cosDegrees(angle)*12;
+    }
+  npc.getNavigator().tryMoveToXYZ(bX, bY, bZ, npc.getAIMoveSpeed());
   }
+
 
 }
