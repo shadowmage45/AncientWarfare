@@ -366,7 +366,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     for(Object ob : this.inventorySlots.inventorySlots)    
       {      
       Slot slot = (Slot)ob;
-      this.drawTexturedModalRect(slot.xDisplayPosition-1+guiLeft, slot.yDisplayPosition-1+guiTop, 150, 120, 18, 18);      
+      this.drawTexturedModalRect(slot.xDisplayPosition-1+guiLeft, slot.yDisplayPosition-1+guiTop, 152, 120, 18, 18);      
       }    
     }  
   GL11.glPushMatrix();

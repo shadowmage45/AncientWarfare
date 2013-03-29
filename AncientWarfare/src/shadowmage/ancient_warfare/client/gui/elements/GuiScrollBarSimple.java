@@ -35,7 +35,7 @@ int handleHeight;
 public int handleTop;
 
 
-final int buffer = 5;
+final int buffer = 4;
 
 /**
  * @param elementNum
@@ -59,7 +59,7 @@ public void drawElement(int mouseX, int mouseY)
     {
     String tex = "/shadowmage/ancient_warfare/resources/gui/guiButtons.png";  
     this.drawQuadedTexture(renderPosX+guiLeft, renderPosY+guiTop, width, height, 40, 128, tex, 80, 120); 
-    this.drawQuadedTexture(renderPosX+guiLeft+buffer, renderPosY+guiTop+buffer+handleTop, width-buffer*2, handleHeight, 30, 128, tex, 120, 120);
+    this.drawQuadedTexture(renderPosX+guiLeft+buffer, renderPosY+guiTop+buffer+handleTop, width-buffer*2, handleHeight, 32, 128, tex, 120, 120);
     }
   }
 
