@@ -20,18 +20,24 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper.AIAggroEntry;
-import shadowmage.ancient_warfare.common.vehicles.missiles.DamageType;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AIAttackTarget extends NpcAI
 {
 
+int maxAttackDelayTicks = 35;//should set this from soldier somewhere..
+
 int attackDelayTicks = 0;
+int blockAttackHits = 0;
+
 /**
  * @param npc
  */
@@ -47,13 +53,14 @@ public AIAttackTarget(NpcBase npc)
 @Override
 public int exclusiveTasks()
   {
-  return MOVE_TO + HARVEST+ REPAIR + HEAL;
+  return MOVE_TO + HARVEST + REPAIR + HEAL;
   }
 
 @Override
 public void onAiStarted()
   {
- 
+  attackDelayTicks = 0;
+  blockAttackHits = 0;
   }
 
 @Override
@@ -62,15 +69,13 @@ public void onTick()
   AIAggroEntry target = npc.getTarget();
   if(target!=null && npc.getTargetType().equals("attack"))
     {
-    if(target.getDistanceFrom(npc) < 4)
-      {
-      
+    if(target.getDistanceFrom(npc) < npc.targetHelper.getAttackDistance(target))
+      {      
       if(attackDelayTicks>0)
         {
         attackDelayTicks--;
         return;
-        }
-      attackDelayTicks =  35;
+        }      
       Config.logDebug("Attacking target");
       this.attackTarget(target);
       if(this.checkIfTargetDead(target))
@@ -83,7 +88,7 @@ public void onTick()
       {
       this.success = false;
       this.finished = true;
-      Config.logDebug("not at target yet");
+      Config.logDebug("not at target yet, moving closer");
       } 
     }  
   else
@@ -96,9 +101,26 @@ public void onTick()
 
 protected void attackTarget(AIAggroEntry target)
   {
+  if(npc.isRidingVehicle())
+    {
+    attackTargetMounted(target);
+    return;
+    }
+  
+  attackDelayTicks =  maxAttackDelayTicks;
+  
   if(!target.isEntityEntry)
     {
-    //umm..no clue on npcs attacking targetBlocks -- maybe have internal HP values.... (or track HP value of the block somehow elsewhere for vanilla blocks...)
+    blockAttackHits++;    
+    int id = npc.worldObj.getBlockId((int)target.posX(), (int)target.posY(),(int)target.posZ());
+    Block block = Block.blocksList[id];
+    if(id!=0 && block!=null)
+      {
+      if(blockAttackHits>=(int)block.getBlockHardness(npc.worldObj, (int)target.posX(), (int)target.posY(),(int)target.posZ()))
+        {
+        BlockTools.breakBlockAndDrop(npc.worldObj, (int)target.posX(), (int)target.posY(),(int)target.posZ());
+        }
+      }
     }
   else
     {
@@ -108,6 +130,13 @@ protected void attackTarget(AIAggroEntry target)
       npc.attackEntityAsMob(ent);
       }
     }
+  
+  }
+
+protected void attackTargetMounted(AIAggroEntry target)
+  {
+  VehicleBase vehicle = (VehicleBase) npc.ridingEntity;
+  this.attackDelayTicks = vehicle.currentReloadTicks + 5;
   }
 
 protected boolean checkIfTargetDead(AIAggroEntry target)

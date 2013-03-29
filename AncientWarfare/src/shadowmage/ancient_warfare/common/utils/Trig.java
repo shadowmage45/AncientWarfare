@@ -327,9 +327,9 @@ public static Pair<Float, Float> getLaunchAngleToHit(float x, float y, float v)
  * @return
  */
 public static Pair<Float, Float> getLaunchAngleToHit(float x, float y, float z, float v)
-{
-return getLaunchAngleToHit(MathHelper.sqrt_float(x*x+z*z), y, v);
-}
+  {
+  return getLaunchAngleToHit(MathHelper.sqrt_float(x*x+z*z), y, v);
+  }
 
 public static float iterativeSpeedFinder(float x, float y, float z, float angle, int maxIterations, boolean rocket)
   {
@@ -495,6 +495,40 @@ public static float bruteForceSpeedFinder(float x, float y, float angle, int max
       } 
     } 
   return bestVelocity;
+  }
+
+public static float getEffectiveRange(float y, float angle, float velocity, int maxIterations, boolean rocket)
+  {
+  float motX = Trig.sinDegrees(angle)*velocity*0.05f;
+  float motY = Trig.cosDegrees(angle)*velocity*0.05f;
+  float rocketX = 0;
+  float rocketY = 0;
+  if(rocket)
+    {
+    int rocketBurnTime = (int) (velocity*AmmoHwachaRocket.burnTimeFactor);  
+    float motX0 = (motX/ (velocity*0.05f)) * AmmoHwachaRocket.accelerationFactor;
+    float motY0 = (motY/ (velocity*0.05f)) * AmmoHwachaRocket.accelerationFactor;
+    motX = motX0;
+    motY = motY0;
+    while(rocketBurnTime>0)
+      {
+      rocketX += motX;
+      rocketY += motY;
+      rocketBurnTime--;
+      motX+= motX0;
+      motY+= motY0;
+      }
+    y-=rocketY;
+    }
+  motX *= 20.f;
+  motY *= 20.f;
+  float gravity = 9.81f;  
+  float t = motY/gravity;  
+  float tQ = MathHelper.sqrt_float( ((motY*motY) / (gravity*gravity)) - ((2*y)/gravity));
+  float tPlus = t + tQ;
+  float tMinus = t - tQ; 
+  t = tPlus > tMinus? tPlus : tMinus;
+  return (motX * t) + rocketX;
   }
 
 }

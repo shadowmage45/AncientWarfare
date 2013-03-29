@@ -49,6 +49,7 @@ protected String tooltip = "";
 protected int successTicks = 20;
 protected int failureTicks = 20;
 protected int taskType = 0;
+protected int exclusiveTasks = 0;
 
 protected int currentTick = 0;
 protected int cooldownTicks = 0;
@@ -88,6 +89,13 @@ public int getFailureTicks()
 public boolean shouldExecute(NpcBase npc)
   {
   return this.cooldownTicks<=0 && !this.isFinished();
+  }
+
+
+@Override
+public int exclusiveTasks()
+  {
+  return this.exclusiveTasks;
   }
 
 @Override

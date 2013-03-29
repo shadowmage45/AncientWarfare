@@ -25,6 +25,7 @@ import java.util.Iterator;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -36,6 +37,7 @@ import shadowmage.ancient_warfare.common.soldiers.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper.AIAggroEntry;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -118,6 +120,15 @@ public String getTargetType()
 public void setTargetAW(AIAggroEntry entry)
   {
   this.target = entry;
+  }
+
+public boolean isRidingVehicle()
+  {
+  if(this.ridingEntity instanceof VehicleBase)
+    {
+    return true;
+    }
+  return false;
   }
 
 @Override
@@ -208,22 +219,39 @@ public String getTexture()
 @Override
 public void onUpdate()
   {
-  super.onUpdate();
   this.varsHelper.onTick();
 
+  if(target!=null && !target.isValidEntry())
+    {
+    this.setTargetAW(null);
+    }
   this.npcAITargetTick++;
   if(npcAITargetTick>=Config.npcAITicks && !worldObj.isRemote)
     {
     npcAITargetTick = 0;
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
-    }  
+    }
+  super.onUpdate();  
   }
 
 @Override
 protected void attackEntity(Entity par1Entity, float par2) 
   {
 
+  }
+
+@Override
+public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
+  {  
+  super.attackEntityFrom(par1DamageSource, par2);
+  if(par1DamageSource.getEntity() instanceof EntityLiving)
+    {    
+    this.targetHelper.addOrUpdateAggroEntry("attack", par1DamageSource.getEntity(), 5, 0);
+    Config.logDebug("adding entity to soldier aggro list for revenge: "+par1DamageSource.getEntity());
+    }
+  Config.logDebug("NPC hit by attack.  RawDamage: "+par2+" new health: "+getHealth());  
+  return true;
   }
 
 @Override

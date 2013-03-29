@@ -28,12 +28,13 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.utils.Pair;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 /**
  * tracks a list of priority target types by class, as well as maintaining a list
@@ -104,7 +105,7 @@ public int getPriorityFor(String type, Entity ent)
 public void addOrUpdateAggroEntry(String type, int x, int y, int z, int aggroAmt, int priority)
   {
   boolean found = false;
- 
+
   if(!this.aggroEntries.containsKey(type))
     {
     this.aggroEntries.put(type, new ArrayList<AIAggroEntry>());
@@ -127,7 +128,7 @@ public void addOrUpdateAggroEntry(String type, int x, int y, int z, int aggroAmt
 public void addOrUpdateAggroEntry(String type, Entity entity, int aggroAmt, int priority)
   {
   boolean found = false;
-  
+
   if(!this.aggroEntries.containsKey(type))
     {
     this.aggroEntries.put(type, new ArrayList<AIAggroEntry>());
@@ -149,12 +150,12 @@ public void addOrUpdateAggroEntry(String type, Entity entity, int aggroAmt, int 
 
 public void checkForTargets()
   {    
-//  Config.logDebug("checking for targets");
+  //  Config.logDebug("checking for targets");
   float mr = (float)Config.npcAISearchRange;
   float dist = 0;
   AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(npc.posX-mr, npc.posY-mr, npc.posZ-mr, npc.posX+mr, npc.posY+mr, npc.posZ+mr);
   List<Entity> entityList = npc.worldObj.getEntitiesWithinAABBExcludingEntity(npc, bb);
-//  Config.logDebug("entityList size: "+entityList.size());
+  //  Config.logDebug("entityList size: "+entityList.size());
   if(entityList!=null && !entityList.isEmpty())
     {
     Iterator<Entity> it = entityList.iterator();
@@ -163,25 +164,52 @@ public void checkForTargets()
       {
       ent = it.next();      
       dist = npc.getDistanceToEntity(ent);
-      if(dist>mr)
+      if(dist>mr || !npc.getEntitySenses().canSee(ent))
         {
         continue;
         }
-//      Config.logDebug("checking entity: "+ent);
+      //      Config.logDebug("checking entity: "+ent);
       for(String key : this.targetEntries.keySet())        
         {
-        
-//        Config.logDebug("checking targets of type: "+key);
+        AITargetList targetList = this.targetEntries.get(key);
+        if(dist>targetList.maxDistanceForTargets)
+          {
+          continue;
+          }
+        //        Config.logDebug("checking targets of type: "+key);
         int pri = this.getPriorityFor(key, ent);
-//        Config.logDebug("found priority for target: "+pri);
+        //        Config.logDebug("found priority for target: "+pri);
         if(pri>=0)
           {
-//          Config.logDebug("adding/updating entity aggro entry for target: "+ent);
-          this.addOrUpdateAggroEntry(key, ent, Config.npcAITicks, pri);
+          //          Config.logDebug("adding/updating entity aggro entry for target: "+ent);
+          float distPercent = 1.f - (dist / targetList.maxDistanceForTargets);
+          int aggroAmt = (int)(Config.npcAITicks + (distPercent * (float)Config.npcAITicks)); 
+          this.addOrUpdateAggroEntry(key, ent, aggroAmt , pri);
           }
         }     
       }
     }
+  }
+
+public float getAttackDistance(AIAggroEntry target)
+  {
+  if(npc.isRidingVehicle())
+    {
+    return ((VehicleBase)npc.ridingEntity).getEffectiveRange((float)npc.ridingEntity.posY - target.posY());
+    }
+  if(!target.isEntityEntry)//TODO should get yaw towards target, offset len by adj len of actual BB edge pos at that yaw
+    {
+    return 0.25f;
+    //    return 1.f + npc.width*0.5f;
+    }
+  else//is entity entry
+    {
+    if(target.getEntity()!=null)
+      {
+      return 1.2f * (npc.width*0.5f + target.getEntity().width*0.5f);
+      }
+    }
+  return 4f;//fallthrough for entity null
   }
 
 public void updateAggroEntries()
@@ -191,19 +219,23 @@ public void updateAggroEntries()
   Iterator<AIAggroEntry> listIt;
   ArrayList<AIAggroEntry> list;
   AIAggroEntry entry;
+  AITargetList targetList;
+  float maxRange;
   while(it.hasNext())
-    {
+    {   
     mapEntry = it.next();
+    targetList = this.targetEntries.get(mapEntry.getKey());
+    maxRange = targetList.maxDistanceForTargets;
     list = mapEntry.getValue();
     listIt = list.iterator();
     while(listIt.hasNext())
       {
       entry = listIt.next();
       entry.aggroLevel -= Config.npcAITicks;
-      if(!entry.isValidEntry() || entry.aggroLevel<=0)
+      if(!entry.isValidEntry() || entry.aggroLevel<=0 || npc.getDistance(entry.posX(), entry.posY(), entry.posZ())>maxRange)
         {
         listIt.remove();
-        }
+        }      
       } 
     }
   }
@@ -244,6 +276,7 @@ public AIAggroEntry getHighestAggroTarget(String type)
 
 public class AITargetList
 {
+float maxDistanceForTargets = Config.npcAISearchRange;
 String type;
 boolean includeSameTeam = false;
 boolean includeOppositeTeam = false;
@@ -259,6 +292,12 @@ public AITargetList(String name, boolean sameTeam, boolean oppositeTeam)
 public void addTarget(Class clz, int priority, boolean isEntity)
   {
   this.targetEntries.add(new AITargetEntry(clz, priority, isEntity));
+  }
+
+public AITargetList setSearchRange(float range)
+  {
+  this.maxDistanceForTargets = range;
+  return this;
   }
 
 public int getPriorityFor(Entity ent)
@@ -318,6 +357,33 @@ public boolean isTarget(Entity ent)
   {
   return entityClass.isAssignableFrom(ent.getClass());//ent.getClass().isAssignableFrom(entityClass);
   }    
+}
+
+public class AITargetEntryMountable extends AITargetEntry
+{
+public AITargetEntryMountable()
+  {
+  super(VehicleBase.class, 0, true);  
+  }
+
+public boolean isTarget(Entity ent)
+  {
+  return super.isTarget(ent) && ent.riddenByEntity == null;
+  } 
+}
+
+public class AITargetEntryHeal extends AITargetEntry
+{
+
+public AITargetEntryHeal(Class clz, int priority)
+  {
+  super(clz, priority, true);
+  }
+
+public boolean isTarget(Entity ent)
+  {
+  return super.isTarget(ent) && ent instanceof EntityLiving && ((EntityLiving)ent).getHealth() < ((EntityLiving)ent).getMaxHealth();
+  }
 }
 
 public class AIAggroEntry

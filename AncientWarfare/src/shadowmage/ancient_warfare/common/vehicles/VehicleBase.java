@@ -88,6 +88,11 @@ public float baseExplosionResist = 0.f;
  */
 public float currentForwardSpeedMax = 0.8f;
 public float currentStrafeSpeedMax = 2.0f;
+
+/**
+ * how many ticks is a reloadCycle, at current upgrade status?
+ * the currentReload status is stored in firingHelper
+ */
 public int currentReloadTicks = 100;
 public float currentTurretPitchMin = 0.f;
 public float currentTurretPitchMax = 90.f;
@@ -337,6 +342,35 @@ public float getRiderVerticalOffset()
 public float getRiderHorizontalOffset()
   {
   return vehicleType.getRiderHorizontalOffset();
+  }
+
+/**
+ * should return the maximum range allowed in order to hit a point at a given vertical offset
+ * will vary by vehicle type (power/angle/missile offset) and current ammo selection
+ * need to figure out....yah....
+ * @param verticalOffset
+ * @return
+ */
+public float getEffectiveRange(float verticalOffset)
+  {
+  if(vehicleType==VehicleRegistry.BATTERING_RAM)//TODO ugly hack...
+    {
+    return 5;
+    }
+  float angle;
+  if(currentTurretPitchMin< 45 && currentTurretPitchMax> 45)//if the angle stradles 45, return 45
+    {
+    angle = 45;
+    }
+  else if(currentTurretPitchMin<45 && currentTurretPitchMax < 45)//else if both are below 45, get the largest
+    {
+    angle = currentTurretPitchMax;
+    }
+  else 
+    {
+    angle = currentTurretPitchMin;//else get the lowest
+    }
+  return Trig.getEffectiveRange(verticalOffset, angle, firingHelper.getAdjustedMaxMissileVelocity(), 0, ammoHelper.getCurrentAmmoType()!=null && ammoHelper.getCurrentAmmoType().isRocket());  
   }
 
 /**

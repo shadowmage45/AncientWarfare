@@ -26,6 +26,7 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
@@ -37,9 +38,12 @@ public class GuiEditorSelect extends GuiContainerAdvanced
 {
 
 private final List<StructureClientInfo> clientStructures;
-int currentLowestViewed = 0;
-private static final int numberDisplayed = 8;
+
+GuiScrollableArea area;
+//int currentLowestViewed = 0;
+//private static final int numberDisplayed = 8;
 //private boolean shouldForceUpdate = false;
+
 String currentStructure = "";
 private ContainerEditor container;
 
@@ -89,24 +93,13 @@ public String getGuiBackGroundTexture()
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   this.drawString(fontRenderer, "Structure to Edit: "+currentStructure, guiLeft + 10, guiTop + 14, 0xffffffff);
-  this.fontRenderer.drawSplitString(errorMessage, guiLeft+10, guiTop+24, 190, 0xffff0000);
-  
-  this.drawString(fontRenderer, "Wid", guiLeft + 190, guiTop + 46+8, 0xffffffff);
-  this.drawString(fontRenderer, "Len", guiLeft + 210, guiTop + 46+8, 0xffffffff);
-  this.drawString(fontRenderer, "Hig", guiLeft + 230, guiTop + 46+8, 0xffffffff);
-
-  for(int i = 0; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++)
-    {
-    this.drawString(fontRenderer, String.valueOf(clientStructures.get(i+currentLowestViewed).xSize), guiLeft + 190, guiTop + 20 * i + 64+8, 0xffffffff);
-    this.drawString(fontRenderer, String.valueOf(clientStructures.get(i+currentLowestViewed).zSize), guiLeft + 210, guiTop + 20 * i + 64+8, 0xffffffff);
-    this.drawString(fontRenderer, String.valueOf(clientStructures.get(i+currentLowestViewed).ySize), guiLeft + 230, guiTop + 20 * i + 64+8, 0xffffffff);
-    }  
+  this.fontRenderer.drawSplitString(errorMessage, guiLeft+10, guiTop+24, 190, 0xffff0000);     
   }
 
 @Override
 public void updateScreenContents()
   {
- 
+  area.updateGuiPos(guiLeft, guiTop);
   }
 
 /**
@@ -135,46 +128,35 @@ public void setStructureName(String name)
   this.sendDataToServer(tag);
   }
 
-private List<GuiButtonSimple> structureButtons = new ArrayList<GuiButtonSimple>();
 
 @Override
 public void setupControls()
   {
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
-  this.addGuiButton(1, 10, 40+8, 35, 18, "Prev");
-  this.addGuiButton(2, 50, 40+8, 35, 18, "Next");
-
-  this.addGuiButton(20, 256-35-10, 30, 35, 18, "Edit");
   
-  for(int i = 0, buttonNum = 3; i< numberDisplayed; i++, buttonNum++)
+  this.addGuiButton(3, 256-35-10, 30, 35, 18, "Edit");
+  
+  int totalHeight = clientStructures.size()*14;
+  area = new GuiScrollableArea(4, this, 10, 50, this.getXSize()-20, this.getYSize()-60, totalHeight);
+  this.guiElements.put(4, area);
+  
+  int kX = 5;
+  int kY = 0;
+  int buttonHeight = 12;
+  int buffer = 2;
+  
+  for(int i = 0; i < clientStructures.size(); i++)
     {
-    structureButtons.add(this.addGuiButton(buttonNum, 10, 60 + (20*i) +8, 120, 14, ""));
-    }
-
-//  for(int i = 0, buttonNum = 3; i+currentLowestViewed < clientStructures.size() && i < numberDisplayed; i++, buttonNum++)
-//    {
-//    this.addGuiButton(buttonNum, 10, 60 + (20*i) +8, 120, 14, StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
-//    } 
+    String name = this.clientStructures.get(i).name;
+    kY = i * (buffer+buttonHeight);
+    area.addGuiElement(new GuiButtonSimple(i+20, area, this.getXSize()-20-16-10, buttonHeight, name).updateRenderPos(kX, kY));
+    } 
   }
 
 @Override
 public void updateControls()
   {
-  for(int i = 0; i <numberDisplayed; i++)
-    {
-    GuiButtonSimple button = this.structureButtons.get(i);
-    if(i+currentLowestViewed < clientStructures.size())
-      {
-      button.enabled = true;
-      button.hidden = false;
-      button.setButtonText(StringTools.subStringBeginning(clientStructures.get(this.currentLowestViewed + i).name, 14));
-      }
-    else
-      {
-      button.enabled = false;
-      button.hidden = true;
-      }
-    } 
+ 
   }
 
 @Override
@@ -186,24 +168,8 @@ public void onElementActivated(IGuiElement element)
   case 0:
   closeGUI();
   return;
-
-  case 1:
-  if(this.currentLowestViewed-8 >=0)
-    {
-    this.currentLowestViewed-=8;
-    forceUpdate = true;
-    }
-  return;
-
-  case 2:
-  if(this.currentLowestViewed+8 < this.clientStructures.size())
-    {
-    this.currentLowestViewed+=8;
-    forceUpdate = true;   
-    }
-  return;
-
-  case 20:
+ 
+  case 3:
   if(StructureManager.instance().getClientStructure(currentStructure)!=null)
     {
     this.selectStructureToEdit(currentStructure);    
@@ -211,16 +177,16 @@ public void onElementActivated(IGuiElement element)
   return;
   }
   
-  if(element.getElementNumber()>=3 && element.getElementNumber() < 11)
+  if(element.getElementNumber()>=20)
     {
-    int index = (this.currentLowestViewed + element.getElementNumber()) - 3;
-    if(index>=this.clientStructures.size())
-      {
+    int index = element.getElementNumber()-20;
+    if(index>=this.clientStructures.size() || index <0)
+      { 
       return;
       }
-    forceUpdate = true;
+    this.forceUpdate = true;
     this.setStructureName(this.clientStructures.get(index).name);
-    }
+    }  
   }
 
 }

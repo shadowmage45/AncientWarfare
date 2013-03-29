@@ -68,13 +68,18 @@ public void onTick()
   float bX = npc.getTarget().posX();
   float bY = npc.getTarget().posY();
   float bZ = npc.getTarget().posZ();
+  if(!npc.getTarget().isEntityEntry)
+    {
+    bY++;//move to the block ABOVE the target...or close..or..w/e..
+    }
   Config.logDebug("targetPos: "+bX+","+bY+","+bZ);
   this.prevDistance = this.distance;
-  this.distance = (float) npc.getDistance(bX, bY, bZ);
-  if(distance<4)
+  this.distance = (float) npc.getDistance(bX, bY, bZ);  
+  if(distance < npc.targetHelper.getAttackDistance(npc.getTarget()))
     {
     this.finished = true;
     this.success = true;
+    Config.logDebug("MoveToTarget finished");
     return;
     }  
   delayTicks--;

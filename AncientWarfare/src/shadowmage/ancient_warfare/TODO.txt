@@ -19,17 +19,20 @@ VEHICLES
 * ammo textures
 * alpha blend vehicle if set to not render
 * ammo select GUI
+* modelRender for inventory ammo
+* soldier ammo priority selection
 
 NPCS
 * add save/load from NBT stuff
 * vars helper save/load stuff
 * inventory helper
 * lots and lots of stuff....
+* attack target needs split into -attackMelee, attackRanged, attackVehicle
          
 GUI FRAMEWORK
-* rework all structure GUIs to include new bling!! (scroll areas, etc...)
 * put quaded texture rendering someplace central...
 * so...slots display position is client only...use that to move slots off screen (or use that in a scrollable area somehow?)
+* add an itemSlot element (not inventory slot...a client-side only slot that displays a static stack)
 
 TESTING
 * test structure loot weighting
@@ -163,6 +166,13 @@ TWEAKS/OPTIMIZATION
 * soldier multiple target-priority trackers--hostile, friendly....
 * soldier attack/target helper
 /********** 03-29-13 **********/
+* change check-box to green, expand checked area 1xpx on each side
+* expand scroll bar handle 2px width
+* bit of work on arrow/shot tex
+* rework all structure GUIs to include new bling!! (scroll areas, etc...)
+* aggro amt adj by range (so that further away targets get less aggro to begin with)
+* add method to Trig to return maximum distance for a siege-engine.  needs rework to include rockets
+* fix max-distance method to include rockets.
 /********** 03-30-13 **********/
 /********** 03-31-13 **********/
 
