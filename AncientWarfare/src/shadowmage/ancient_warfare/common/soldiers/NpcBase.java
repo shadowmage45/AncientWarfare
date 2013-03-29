@@ -27,6 +27,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
@@ -75,7 +76,7 @@ public NpcBase(World par1World)
 
 public void setNpcType(INpcType type, int level)
   {
-//  Config.logDebug("npc type being assigned: "+type.getDisplayName());
+  //  Config.logDebug("npc type being assigned: "+type.getDisplayName());
   this.npcType = type;
   this.rank = level;
   this.npcAI.clear();
@@ -122,7 +123,7 @@ public void setTargetAW(AIAggroEntry entry)
 @Override
 protected void updateAITick() 
   {
-//  Config.logDebug("AI Tick. currently executing tasks: "+this.executingTasks.size());  
+  //  Config.logDebug("AI Tick. currently executing tasks: "+this.executingTasks.size());  
   int mutexStack = 0;
   Iterator<INpcAI> it = this.executingTasks.iterator();
   INpcAI task;
@@ -150,16 +151,16 @@ protected void updateAITick()
     {  
     mutexStack += execTask.taskType();      
     }
-//  Config.logDebug("stack mutex: "+mutexStack);
+  //  Config.logDebug("stack mutex: "+mutexStack);
   for(INpcAI possibleTask : this.npcAI)
     {    
-//    Config.logDebug("examining possible AI task: "+possibleTask.getTaskName());
+    //    Config.logDebug("examining possible AI task: "+possibleTask.getTaskName());
     possibleTask.incrementTickCounts();
     if(this.executingTasks.contains(possibleTask))//if task is already present in executing list, do not add
       {
       continue;
       }
-//    Config.logDebug("exclusive task: "+possibleTask.exclusiveTasks());
+    //    Config.logDebug("exclusive task: "+possibleTask.exclusiveTasks());
     if((possibleTask.exclusiveTasks() & mutexStack) == 0)
       {
       if(possibleTask.shouldExecute(this))
@@ -170,12 +171,19 @@ protected void updateAITick()
       }
     else
       {
-//      Config.logDebug("skipping task due to exlusion: "+possibleTask.getTaskName() +"::"+ mutexStack);
+      //      Config.logDebug("skipping task due to exlusion: "+possibleTask.getTaskName() +"::"+ mutexStack);
       }
-    
+
     boolean found = false;
     int exclude = possibleTask.exclusiveTasks(); 
     }  
+  }
+
+@Override
+public boolean attackEntityAsMob(Entity ent)
+  {
+  ent.attackEntityFrom(DamageSource.causeMobDamage(this), 4);
+  return false;
   }
 
 @Override
@@ -202,7 +210,7 @@ public void onUpdate()
   {
   super.onUpdate();
   this.varsHelper.onTick();
-  
+
   this.npcAITargetTick++;
   if(npcAITargetTick>=Config.npcAITicks && !worldObj.isRemote)
     {
@@ -215,7 +223,7 @@ public void onUpdate()
 @Override
 protected void attackEntity(Entity par1Entity, float par2) 
   {
-  
+
   }
 
 @Override
@@ -255,21 +263,21 @@ public void readFromNBT(NBTTagCompound tag)
 public void handleClientInput(NBTTagCompound tag)
   {
   // TODO Auto-generated method stub
-  
+
   }
 
 @Override
 public void addPlayer(EntityPlayer player)
   {
   // TODO Auto-generated method stub
-  
+
   }
 
 @Override
 public void removePlayer(EntityPlayer player)
   {
   // TODO Auto-generated method stub
-  
+
   }
 
 @Override

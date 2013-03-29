@@ -20,8 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.event;
 
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -66,7 +69,8 @@ public void onWorldSave(WorldEvent.Save evt)
 @ForgeSubscribe
 public void onEntityInteract(EntityInteractEvent evt)
   {
-  Config.logDebug("interact event");
+//  Config.logDebug("interact event");
   }
+
 
 }

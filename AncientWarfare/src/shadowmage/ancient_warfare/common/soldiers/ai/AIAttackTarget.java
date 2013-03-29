@@ -106,7 +106,6 @@ protected void attackTarget(AIAggroEntry target)
     if(ent!=null)
       {
       npc.attackEntityAsMob(ent);
-      //ent.attackEntityFrom(DamageType.generic, 4);//TODO...setup target damage stuff...
       }
     }
   }
