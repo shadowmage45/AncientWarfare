@@ -38,6 +38,7 @@ public AIWanderTest(NpcBase npc)
   this.successTicks = 80;
   this.failureTicks = 10;
   this.taskName = "Wander.Basic";
+  this.taskType = MOVE_TO;
   }
 
 @Override

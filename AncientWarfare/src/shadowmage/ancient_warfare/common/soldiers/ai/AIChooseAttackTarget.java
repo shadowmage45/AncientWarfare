@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
@@ -36,6 +37,7 @@ public AIChooseAttackTarget(NpcBase npc)
   this.failureTicks = 20;
   this.successTicks = 100;
   this.taskName = "ChooseAttackTarget";
+  this.taskType = ATTACK;
   }
 
 @Override
@@ -53,11 +55,17 @@ public void onAiStarted()
 @Override
 public void onTick()
   {  
-  npc.setTarget(npc.targetHelper.getHighestAggroTarget("attack")); 
+  npc.setTargetAW(npc.targetHelper.getHighestAggroTarget("attack")); 
   if(npc.getTarget()!=null)
     {
     this.success = true;
     }
+  Config.logDebug("choosing target. new target type: "+npc.getTargetType());
+  if(npc.getTarget()!=null)
+    {
+    Config.logDebug("target: "+npc.getTarget().getEntity());
+    }
+  this.finished = true;
   }
 
 }

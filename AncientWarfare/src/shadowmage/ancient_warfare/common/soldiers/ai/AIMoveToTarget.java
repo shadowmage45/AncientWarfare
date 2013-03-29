@@ -31,6 +31,7 @@ public class AIMoveToTarget extends NpcAI
 float prevDistance;
 float distance;
 
+int delayTicks = 0;
 /**
  * @param npc
  */
@@ -39,12 +40,14 @@ public AIMoveToTarget(NpcBase npc)
   super(npc);  
   this.successTicks = 20;
   this.failureTicks = 20;
+  this.taskType = MOVE_TO;
+  this.taskName = "MoveToTarget";
   }
 
 @Override
 public int exclusiveTasks()
   {  
-  return 0;
+  return ATTACK +  REPAIR ;
   }
 
 @Override
@@ -62,11 +65,24 @@ public void onTick()
     this.success = true;
     return;
     }
-  float bX = npc.getTarget().posX;
-  float bY = npc.getTarget().posY;
-  float bZ = npc.getTarget().posZ;
+  float bX = npc.getTarget().posX();
+  float bY = npc.getTarget().posY();
+  float bZ = npc.getTarget().posZ();
+  Config.logDebug("targetPos: "+bX+","+bY+","+bZ);
   this.prevDistance = this.distance;
   this.distance = (float) npc.getDistance(bX, bY, bZ);
+  if(distance<4)
+    {
+    this.finished = true;
+    this.success = true;
+    return;
+    }  
+  delayTicks--;
+  if(delayTicks>0)
+    {
+    return;
+    }
+  delayTicks = 5;
   if(distance==prevDistance)
     {
     Config.logDebug("NPC could not move, or did not move between AIMoveToTarget ticks");
@@ -74,10 +90,16 @@ public void onTick()
   if(distance>12)
     {
     float angle = Trig.getYawTowardsTarget(npc.posX, npc.posZ, bX, bZ);
-    bX = Trig.sinDegrees(angle)*12;
-    bZ = Trig.cosDegrees(angle)*12;
+    bX = (float)npc.posX - Trig.sinDegrees(angle-90)*12;
+    bZ = (float)npc.posZ + Trig.cosDegrees(angle-90)*12;
+    Config.logDebug("adjustedMovePos: "+bX+","+bY+","+bZ);
     }
-  npc.getNavigator().tryMoveToXYZ(bX, bY, bZ, npc.getAIMoveSpeed());
+  if(!npc.getNavigator().tryMoveToXYZ(bX, bY, bZ, npc.getAIMoveSpeed()))
+    {
+    this.finished = true;
+    this.success = false;
+    }
+  Config.logDebug("setting moveToTarget: ");
   }
 
 

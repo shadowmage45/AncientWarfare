@@ -29,6 +29,7 @@ public abstract String getTaskName();//the name of the task..for debug/informati
 public abstract int getSuccessTicks();//how many ticks to check before executing again, if previous execution succeeded
 public abstract int getFailureTicks();//how many ticks to check before executing again, if previous execution failed
 public abstract boolean shouldExecute(NpcBase npc);//a quick pre-check to see if the task should execute this tick
+public abstract int taskType();//used for exclusion
 public abstract int exclusiveTasks();//tasks that cannot execute the same time as this, checked in first-come fist serve order
 
 public abstract void incrementTickCounts();

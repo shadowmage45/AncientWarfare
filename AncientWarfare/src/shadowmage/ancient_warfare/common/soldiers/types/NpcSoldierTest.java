@@ -20,10 +20,18 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.types;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import shadowmage.ancient_warfare.common.soldiers.INpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
+import shadowmage.ancient_warfare.common.soldiers.ai.AIAttackTarget;
+import shadowmage.ancient_warfare.common.soldiers.ai.AIChooseAttackTarget;
+import shadowmage.ancient_warfare.common.soldiers.ai.AIMoveToTarget;
+import shadowmage.ancient_warfare.common.soldiers.ai.AIWanderTest;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 
 public class NpcSoldierTest extends NpcTypeBase
@@ -50,4 +58,14 @@ public void addTargets(NpcTargetHelper helper)
   helper.addTargetEntry("attack", EntityMob.class, 2, false, true);
   }
 
+@Override
+public List<INpcAI> getAI(NpcBase npc, int level)
+  {
+  ArrayList<INpcAI> aiEntries = new ArrayList<INpcAI>();
+  aiEntries.add(new AIChooseAttackTarget(npc));
+  aiEntries.add(new AIMoveToTarget(npc));
+  aiEntries.add(new AIAttackTarget(npc));
+  aiEntries.add(new AIWanderTest(npc));
+  return aiEntries;
+  }
 }

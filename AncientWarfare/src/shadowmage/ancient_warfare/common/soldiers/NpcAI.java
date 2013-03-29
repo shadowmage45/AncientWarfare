@@ -48,6 +48,7 @@ protected String taskName = "";
 protected String tooltip = "";
 protected int successTicks = 20;
 protected int failureTicks = 20;
+protected int taskType = 0;
 
 protected int currentTick = 0;
 protected int cooldownTicks = 0;
@@ -154,6 +155,12 @@ public void readFromNBT(NBTTagCompound tag)
 public NBTTagCompound getNBTTag()
   {
   return new NBTTagCompound();
+  }
+
+@Override
+public int taskType()
+  {
+  return taskType;
   }
 
 }

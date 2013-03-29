@@ -149,10 +149,12 @@ public void addOrUpdateAggroEntry(String type, Entity entity, int aggroAmt, int 
 
 public void checkForTargets()
   {    
+//  Config.logDebug("checking for targets");
   float mr = (float)Config.npcAISearchRange;
   float dist = 0;
-  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(npc.posX-mr, npc.posY-mr, npc.posZ-mr, npc.posX-mr, npc.posY-mr, npc.posZ-mr);
+  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(npc.posX-mr, npc.posY-mr, npc.posZ-mr, npc.posX+mr, npc.posY+mr, npc.posZ+mr);
   List<Entity> entityList = npc.worldObj.getEntitiesWithinAABBExcludingEntity(npc, bb);
+//  Config.logDebug("entityList size: "+entityList.size());
   if(entityList!=null && !entityList.isEmpty())
     {
     Iterator<Entity> it = entityList.iterator();
@@ -165,11 +167,16 @@ public void checkForTargets()
         {
         continue;
         }
+//      Config.logDebug("checking entity: "+ent);
       for(String key : this.targetEntries.keySet())        
         {
+        
+//        Config.logDebug("checking targets of type: "+key);
         int pri = this.getPriorityFor(key, ent);
+//        Config.logDebug("found priority for target: "+pri);
         if(pri>=0)
           {
+//          Config.logDebug("adding/updating entity aggro entry for target: "+ent);
           this.addOrUpdateAggroEntry(key, ent, Config.npcAITicks, pri);
           }
         }     
@@ -195,7 +202,7 @@ public void updateAggroEntries()
       entry.aggroLevel -= Config.npcAITicks;
       if(!entry.isValidEntry() || entry.aggroLevel<=0)
         {
-        it.remove();
+        listIt.remove();
         }
       } 
     }
@@ -206,21 +213,29 @@ public AIAggroEntry getHighestAggroTarget(String type)
   if(this.aggroEntries.containsKey(type))
     {
     List<AIAggroEntry> entries = this.aggroEntries.get(type);
-    int lowest = 9999;    
+    int highest = 0;   
     AIAggroEntry bestEntry = null;
     for(AIAggroEntry ent : entries)
       {
-      if(ent.targetPriority<lowest)
-        {        
+      if(ent.aggroLevel>highest)
+        {
         bestEntry = ent;
         }
-      else if(ent.targetPriority==lowest)
+      else if(ent.aggroLevel==highest)
         {
-        if(ent.getDistanceFrom(npc)<bestEntry.getDistanceFrom(npc))
+        if(bestEntry!=null)
+          {
+          if(npc.getDistance(ent.posX(), ent.posY(), ent.posZ()) < npc.getDistance(bestEntry.posX(), bestEntry.posY(), bestEntry.posZ()))
+            {
+            bestEntry = ent;
+            }
+          }
+        else
           {
           bestEntry = ent;
           }
-        }
+        } 
+      highest = bestEntry!= null ? bestEntry.aggroLevel : 0;
       }
     return bestEntry;
     }
@@ -263,7 +278,7 @@ public int getPriorityFor(Entity ent)
     }
   else if(ent instanceof EntityPlayer)
     {
-    agg = npc.isAggroTowards((NpcBase)ent);
+    agg = npc.isAggroTowards((EntityPlayer)ent);
     if(agg && !this.includeOppositeTeam)
       {
       return -1;
@@ -310,9 +325,9 @@ public class AIAggroEntry
 private WeakReference<Entity> ent = new WeakReference<Entity>(null);
 public String targetType = "";
 public int targetPriority;
-public float posX;
-public float posY;
-public float posZ;
+protected float posX;
+protected float posY;
+protected float posZ;
 public int aggroLevel;
 public boolean isEntityEntry = false;
 
@@ -359,6 +374,42 @@ public AIAggroEntry setAggro(int aggro)
 public Entity getEntity()
   {
   return ent.get();
+  }
+
+public float posX()
+  {
+  if(this.isEntityEntry)
+    {
+    if(this.getEntity()!=null)
+      {
+      this.posX = (float) this.getEntity().posX;
+      }
+    }
+  return posX;
+  }
+
+public float posY()
+  {
+  if(this.isEntityEntry)
+    {
+    if(this.getEntity()!=null)
+      {
+      this.posY = (float) this.getEntity().posY;
+      }
+    }
+  return posY;
+  }
+
+public float posZ()
+  {
+  if(this.isEntityEntry)
+    {
+    if(this.getEntity()!=null)
+      {
+      this.posZ = (float) this.getEntity().posZ;
+      }
+    }
+  return posZ;
   }
 
 public boolean isValidEntry()

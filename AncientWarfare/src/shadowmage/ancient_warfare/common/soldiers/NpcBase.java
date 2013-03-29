@@ -114,7 +114,7 @@ public String getTargetType()
   return this.target == null? "No Target" : this.target.targetType;
   }
 
-public void setTarget(AIAggroEntry entry)
+public void setTargetAW(AIAggroEntry entry)
   {
   this.target = entry;
   }
@@ -123,6 +123,7 @@ public void setTarget(AIAggroEntry entry)
 protected void updateAITick() 
   {
 //  Config.logDebug("AI Tick. currently executing tasks: "+this.executingTasks.size());  
+  int mutexStack = 0;
   Iterator<INpcAI> it = this.executingTasks.iterator();
   INpcAI task;
   while(it.hasNext())
@@ -145,7 +146,11 @@ protected void updateAITick()
       it.remove();
       }    
     }
-  
+  for(INpcAI execTask : this.executingTasks)
+    {  
+    mutexStack += execTask.taskType();      
+    }
+//  Config.logDebug("stack mutex: "+mutexStack);
   for(INpcAI possibleTask : this.npcAI)
     {    
 //    Config.logDebug("examining possible AI task: "+possibleTask.getTaskName());
@@ -154,25 +159,22 @@ protected void updateAITick()
       {
       continue;
       }
-    boolean found = false;
-    int exclude = possibleTask.exclusiveTasks();   
-    for(INpcAI execTask : this.executingTasks)
-      {  
-      if((execTask.exclusiveTasks() & exclude )!= 0)
+//    Config.logDebug("exclusive task: "+possibleTask.exclusiveTasks());
+    if((possibleTask.exclusiveTasks() & mutexStack) == 0)
+      {
+      if(possibleTask.shouldExecute(this))
         {
-        found = true;
-//        Config.logDebug("mutex exception!! will not add to executing tasks");
-        break;
-        }      
+        this.executingTasks.add(possibleTask);
+        mutexStack+=possibleTask.taskType();
+        }
       }
-    if(!found && possibleTask.shouldExecute(this))
+    else
       {
-      this.executingTasks.add(possibleTask);
+//      Config.logDebug("skipping task due to exlusion: "+possibleTask.getTaskName() +"::"+ mutexStack);
       }
-    else if(!possibleTask.shouldExecute(this))
-      {
-//      Config.logDebug("task self-denied execution");
-      }
+    
+    boolean found = false;
+    int exclude = possibleTask.exclusiveTasks(); 
     }  
   }
 
@@ -202,7 +204,7 @@ public void onUpdate()
   this.varsHelper.onTick();
   
   this.npcAITargetTick++;
-  if(npcAITargetTick>=Config.npcAITicks)
+  if(npcAITargetTick>=Config.npcAITicks && !worldObj.isRemote)
     {
     npcAITargetTick = 0;
     this.targetHelper.updateAggroEntries();

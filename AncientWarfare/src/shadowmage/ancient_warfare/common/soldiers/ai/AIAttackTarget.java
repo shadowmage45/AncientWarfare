@@ -20,25 +20,34 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper.AIAggroEntry;
+import shadowmage.ancient_warfare.common.vehicles.missiles.DamageType;
 
 public class AIAttackTarget extends NpcAI
 {
 
+int attackDelayTicks = 0;
 /**
  * @param npc
  */
 public AIAttackTarget(NpcBase npc)
   {
   super(npc);
+  this.taskType = ATTACK;
+  this.successTicks = 1;
+  this.failureTicks = 1;
+  this.taskName = "AttackTarget";
   }
 
 @Override
 public int exclusiveTasks()
   {
-  return 0;
+  return MOVE_TO + HARVEST+ REPAIR + HEAL;
   }
 
 @Override
@@ -50,7 +59,77 @@ public void onAiStarted()
 @Override
 public void onTick()
   {
-  
+  AIAggroEntry target = npc.getTarget();
+  if(target!=null && npc.getTargetType().equals("attack"))
+    {
+    if(target.getDistanceFrom(npc) < 4)
+      {
+      
+      if(attackDelayTicks>0)
+        {
+        attackDelayTicks--;
+        return;
+        }
+      attackDelayTicks =  35;
+      Config.logDebug("Attacking target");
+      this.attackTarget(target);
+      if(this.checkIfTargetDead(target))
+        {
+        this.success= true;
+        this.finished = true;
+        }          
+      }
+    else
+      {
+      this.success = false;
+      this.finished = true;
+      Config.logDebug("not at target yet");
+      } 
+    }  
+  else
+    {
+    Config.logDebug("not attacking target... (no target)");
+    this.success = false;
+    this.finished = true;
+    }
+  }
+
+protected void attackTarget(AIAggroEntry target)
+  {
+  if(!target.isEntityEntry)
+    {
+    //umm..no clue on npcs attacking targetBlocks -- maybe have internal HP values.... (or track HP value of the block somehow elsewhere for vanilla blocks...)
+    }
+  else
+    {
+    Entity ent = target.getEntity();
+    if(ent!=null)
+      {
+      npc.attackEntityAsMob(ent);
+      //ent.attackEntityFrom(DamageType.generic, 4);//TODO...setup target damage stuff...
+      }
+    }
+  }
+
+protected boolean checkIfTargetDead(AIAggroEntry target)
+  {
+  if(target.getEntity()!=null && target.getEntity().isDead)
+    {
+    return true;
+    }
+  else if(!target.isEntityEntry)
+    {
+    if(npc.worldObj.getBlockId((int)target.posX(), (int)target.posY(),(int)target.posZ())==0)
+      {
+      return true;
+      }
+    }
+  else if(target.isEntityEntry && target.getEntity()==null)
+    {
+    npc.setTargetAW(null);
+    return true;
+    }  
+  return false;
   }
 
 @Override
