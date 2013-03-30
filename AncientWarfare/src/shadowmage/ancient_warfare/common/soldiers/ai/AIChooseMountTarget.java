@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.soldiers.ai;
 
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 
 public class AIChooseMountTarget extends NpcAI
 {
@@ -40,13 +41,23 @@ public AIChooseMountTarget(NpcBase npc)
 
 @Override
 public void onAiStarted()
-  {
+  {  
   // TODO Auto-generated method stub
   }
 
 @Override
 public void onTick()
-  {  
+  {
+  if(npc.getTarget()!=null)
+    {
+    finished = true;
+    return;
+    }
+  AIAggroEntry entry = npc.targetHelper.getHighestAggroTarget(NpcAI.TARGET_MOUNT);
+  if(entry!=null)
+    {
+    npc.setTargetAW(entry);
+    }
   //TODO find a mountable same/friendly team vehicle within X blocks (20?)
   //set npc current target to type "mount", with entity of the vehicle to mount
   }

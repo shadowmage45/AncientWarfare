@@ -32,6 +32,8 @@ float prevDistance;
 float distance;
 
 int delayTicks = 0;
+int stuckTicks = 0;
+
 /**
  * @param npc
  */
@@ -47,13 +49,14 @@ public AIMoveToTarget(NpcBase npc)
 @Override
 public int exclusiveTasks()
   {  
-  return ATTACK +  REPAIR ;
+  return ATTACK +  REPAIR + HEAL + HARVEST; //action tasks
   }
 
 @Override
 public void onAiStarted()
   {
-  
+  stuckTicks = 0;
+  delayTicks = 0;
   }
 
 @Override
@@ -70,16 +73,21 @@ public void onTick()
   float bZ = npc.getTarget().posZ();
   if(!npc.getTarget().isEntityEntry)
     {
-    bY++;//move to the block ABOVE the target...or close..or..w/e..
+    //bY++;//move to the block ABOVE the target...or close..or..w/e..
     }
-  Config.logDebug("targetPos: "+bX+","+bY+","+bZ);
+//  Config.logDebug("targetPos: "+bX+","+bY+","+bZ);
   this.prevDistance = this.distance;
   this.distance = (float) npc.getDistance(bX, bY, bZ);  
+//  Config.logDebug("calc targetDist: "+npc.targetHelper.getAttackDistance(npc.getTarget()));
   if(distance < npc.targetHelper.getAttackDistance(npc.getTarget()))
     {
     this.finished = true;
     this.success = true;
-    Config.logDebug("MoveToTarget finished");
+    if(npc.getTargetType().equals(TARGET_WANDER))
+      {
+      npc.setTargetAW(null);
+      }
+//    Config.logDebug("MoveToTarget finished");
     return;
     }  
   delayTicks--;
@@ -88,9 +96,15 @@ public void onTick()
     return;
     }
   delayTicks = 5;
-  if(distance==prevDistance)
+  if(Trig.getAbsDiff(distance, prevDistance)<0.05f)
     {
+    stuckTicks++;
     Config.logDebug("NPC could not move, or did not move between AIMoveToTarget ticks");
+    if(stuckTicks>20)
+      {
+      npc.setTargetAW(null);
+      stuckTicks = 0;
+      }
     }
   if(distance>12)
     {

@@ -18,46 +18,43 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.types;
+package shadowmage.ancient_warfare.common.soldiers.helpers.targeting;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import shadowmage.ancient_warfare.common.soldiers.INpcAI;
+import net.minecraft.entity.Entity;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
-import shadowmage.ancient_warfare.common.soldiers.ai.AIWanderTest;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class NpcDummy extends NpcTypeBase
+public class AITargetEntryMountableVehicle extends AITargetEntry
 {
 
-/**
- * @param type
- */
-public NpcDummy(int type)
+int vehicleType = -1;
+
+public AITargetEntryMountableVehicle(NpcBase npc, int vehicleType, int range)
   {
-  super(type);
-  this.displayName = "Dummy Test";
-  this.tooltip = "Dummy Test -- PlaceHolder tooltip";
-  this.addLevel("Dummy Test Level Name 1", "foo");
-  this.addLevel("Dummy Test Level Name 2", "foo");
-  this.isCombatUnit = true;
+  super(npc, "mount", VehicleBase.class, 0, true, range);
+  this.vehicleType = vehicleType;
   }
 
 @Override
-public List<INpcAI> getAI(NpcBase npc, int level)
+public boolean isTarget(Entity ent)
   {
-  ArrayList<INpcAI> aiEntries = new ArrayList<INpcAI>();
-  aiEntries.add(new AIWanderTest(npc,20));
-  return aiEntries;
+  if(ent instanceof VehicleBase)
+    {
+    VehicleBase vehicle = (VehicleBase)ent;
+    if(vehicle.isMountable() && vehicle.riddenByEntity==null)
+      {
+      if(this.vehicleType==-1)
+        {
+        return true;
+        }
+      else if(this.vehicleType == vehicle.vehicleType.getGlobalVehicleType())
+        {
+        return true;
+        }
+      }
+    }
+  return false;
   }
 
-@Override
-public void addTargets(NpcBase npc, NpcTargetHelper helper)
-  {
-  // TODO Auto-generated method stub
-  
-  }
 
 }

@@ -45,7 +45,7 @@ public abstract List<ItemStack> getValidTools();
 public abstract List<ItemStack> getValidArmors();
 
 public abstract NpcVarsHelper getVarsHelper(NpcBase npc);
-public abstract void addTargets(NpcTargetHelper helper);
+public abstract void addTargets(NpcBase npc, NpcTargetHelper helper);
 
 
 public abstract class NpcVarsHelper

@@ -20,49 +20,61 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
-import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class AIChooseAttackTarget extends NpcAI
+public class AIMountVehicle extends NpcAI
 {
 
 /**
  * @param npc
  */
-public AIChooseAttackTarget(NpcBase npc)
+public AIMountVehicle(NpcBase npc)
   {
   super(npc);
-  this.failureTicks = 20;
-  this.successTicks = 100;
-  this.taskName = "ChooseAttackTarget";
-  this.taskType = ATTACK;
-  }
-
-@Override
-public int exclusiveTasks()
-  {
-  return HEAL+REPAIR+HARVEST;//basically...all other target-oriented tasks...
+  this.successTicks = 200;
+  this.failureTicks = 10;
+  this.taskName = "MountVehicle";
+  this.taskType = MOUNT_VEHICLE;
+  this.exclusiveTasks = NONE;
   }
 
 @Override
 public void onAiStarted()
   {
-  
+  // TODO Auto-generated method stub
   }
 
 @Override
 public void onTick()
-  { 
-  npc.setTargetAW(npc.targetHelper.getHighestAggroTarget(TARGET_ATTACK)); 
-  if(npc.getTarget()!=null)
+  {
+  if(npc.ridingEntity!=null)
     {
-    Config.logDebug("choosing target. new target type: "+npc.getTargetType());
-    Config.logDebug("target: "+npc.getTarget().getEntity());
+    finished = true;
+    return;
+    }
+  if(npc.getTarget()==null || !npc.getTargetType().equals(NpcAI.TARGET_MOUNT))
+    {
+    finished = true;
+    return;
+    }
+  if(npc.getTarget().getDistanceFrom()>npc.targetHelper.getAttackDistance(npc.getTarget()))
+    {
+    finished = true;
+    return;
+    }
+  if(npc.getTarget().isValidEntry())
+    {
+    VehicleBase vehicle = (VehicleBase)npc.getTarget().getEntity();
+    npc.mountEntity(vehicle);
     this.success = true;
-    }  
-  this.finished = true;
+    this.finished = true;
+    }
+  else
+    {
+    finished = true;   
+    }
   }
 
 }

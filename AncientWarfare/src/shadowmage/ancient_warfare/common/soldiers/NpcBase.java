@@ -32,10 +32,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
+import shadowmage.ancient_warfare.common.pathfinding.PathFinder;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.soldiers.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper.AIAggroEntry;
+import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -64,6 +65,8 @@ public NpcTargetHelper targetHelper;
 
 private AIAggroEntry target = null;
 
+PathFinder pathTest = new PathFinder();
+
 /**
  * @param par1World
  */
@@ -84,7 +87,7 @@ public void setNpcType(INpcType type, int level)
   this.npcAI.clear();
   this.executingTasks.clear();
   this.npcAI.addAll(type.getAI(this, level)); 
-  this.npcType.addTargets(targetHelper);
+  this.npcType.addTargets(this, targetHelper);
   }
 
 public boolean isAggroTowards(NpcBase npc)
@@ -114,7 +117,7 @@ public AIAggroEntry getTarget()
 
 public String getTargetType()
   {
-  return this.target == null? "No Target" : this.target.targetType;
+  return this.target == null? NpcAI.TARGET_NONE : this.target.targetType.getTypeName();
   }
 
 public void setTargetAW(AIAggroEntry entry)
@@ -231,6 +234,7 @@ public void onUpdate()
     npcAITargetTick = 0;
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
+    //this.pathTest.findPath(worldObj, posX, posY, posZ, posX+10, posY, posZ, 40);
     }
   super.onUpdate();  
   }
@@ -246,8 +250,8 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   {  
   super.attackEntityFrom(par1DamageSource, par2);
   if(par1DamageSource.getEntity() instanceof EntityLiving)
-    {    
-    this.targetHelper.addOrUpdateAggroEntry("attack", par1DamageSource.getEntity(), 5, 0);
+    {
+    this.targetHelper.handleBeingAttacked((EntityLiving)par1DamageSource.getEntity());    
     Config.logDebug("adding entity to soldier aggro list for revenge: "+par1DamageSource.getEntity());
     }
   Config.logDebug("NPC hit by attack.  RawDamage: "+par2+" new health: "+getHealth());  

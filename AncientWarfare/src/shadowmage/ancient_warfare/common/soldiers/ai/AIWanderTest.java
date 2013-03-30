@@ -24,39 +24,53 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntry;
 
 public class AIWanderTest extends NpcAI
 {
+
+AITargetEntry wanderTarget;
+
+int range;
 
 /**
  * @param typeNum
  * @param npc
  */
-public AIWanderTest(NpcBase npc)
+public AIWanderTest(NpcBase npc, int wanderRange)
   {
   super(npc);
   this.successTicks = 80;
-  this.failureTicks = 10;
+  this.failureTicks = 20;
   this.taskName = "Wander.Basic";
-  this.taskType = MOVE_TO;
+  this.taskType = WANDER;
+  this.range = wanderRange;
+  this.wanderTarget = new AITargetEntry(npc, TARGET_WANDER, null, 0, false, range);
   }
-
 @Override
 public int exclusiveTasks()
   {
-  return ATTACK+MOVE_TO+MOUNT_VEHICLE+FOLLOW+REPAIR+HEAL+HARVEST;
+  return ATTACK+MOUNT_VEHICLE+FOLLOW+REPAIR+HEAL+HARVEST;
   }
 
 @Override
 public void onTick()
   {
+  if(npc.ridingEntity!=null || npc.getTarget()!=null)
+    {    
+    finished = true;
+    return;
+    }
   Config.logDebug("executing wander tick");
-  double bX = npc.posX + rng.nextInt(20)-10;
+  double bX = npc.posX + rng.nextInt(range*2)-range;
   double bY = npc.posY;
-  double bZ = npc.posZ + rng.nextInt(20)-10;
-  npc.getNavigator().tryMoveToXYZ(bX, bY, bZ, npc.getAIMoveSpeed());
-  //npc.getMoveHelper().setMoveTo(bX, bY, bZ, npc.getAIMoveSpeed());
+  double bZ = npc.posZ + rng.nextInt(range*2)-range;
+  
+  AIAggroEntry target = new AIAggroEntry(npc, wanderTarget, (int)bX, (int)bY, (int)bZ);
+  npc.setTargetAW(target);
   this.success = true;
+  this.successTicks = rng.nextInt(100)+80;
   this.finished = true; 
   }
 

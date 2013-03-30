@@ -26,7 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper.AIAggroEntry;
+import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -69,7 +69,7 @@ public void onTick()
   AIAggroEntry target = npc.getTarget();
   if(target!=null && npc.getTargetType().equals("attack"))
     {
-    if(target.getDistanceFrom(npc) < npc.targetHelper.getAttackDistance(target))
+    if(target.getDistanceFrom() < npc.targetHelper.getAttackDistance(target))
       {      
       if(attackDelayTicks>0)
         {
@@ -111,6 +111,7 @@ protected void attackTarget(AIAggroEntry target)
   
   if(!target.isEntityEntry)
     {
+    Config.logDebug("doing block attack");
     blockAttackHits++;    
     int id = npc.worldObj.getBlockId((int)target.posX(), (int)target.posY(),(int)target.posZ());
     Block block = Block.blocksList[id];
@@ -124,6 +125,7 @@ protected void attackTarget(AIAggroEntry target)
     }
   else
     {
+    Config.logDebug("doing entity attack");
     Entity ent = target.getEntity();
     if(ent!=null)
       {

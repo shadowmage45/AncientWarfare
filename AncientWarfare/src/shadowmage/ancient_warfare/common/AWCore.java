@@ -33,6 +33,9 @@ import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
+import shadowmage.ancient_warfare.common.pathfinding.PathFinder;
+import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
+import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessTest;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.registry.AWEntityRegistry;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
@@ -43,7 +46,6 @@ import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
-import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import cpw.mods.fml.common.Mod;
@@ -176,13 +178,18 @@ public void load(FMLPostInitializationEvent evt)
    * and finally, save the config in case there were any changes made during init
    */
   Config.saveConfig();
-  Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages.");  
-  Config.logDebug("0,45,30,false: "+Trig.getEffectiveRange(0, 45, 30, 0, false));
-  Config.logDebug("10,45,30,false: "+Trig.getEffectiveRange(10, 45, 30, 0, false));
-  Config.logDebug("-0,45,30,false: "+Trig.getEffectiveRange(-10, 45, 30, 0, false));
-  Config.logDebug("0,45,30,true: "+Trig.getEffectiveRange(0, 45, 30, 0, true));
-  Config.logDebug("10,45,30,true: "+Trig.getEffectiveRange(10, 45, 30, 0, true));
-  Config.logDebug("-0,45,30,true: "+Trig.getEffectiveRange(-10, 45, 30, 0, true));
+  Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
+  this.pathTest();
+  }
+
+public void pathTest()
+  {
+  PathFinder pather = new PathFinder();
+  PathWorldAccess world = new PathWorldAccessTest();
+  for(int i = 0; i < 10; i++)
+    {
+    pather.findPath(world, 1, 1, 1, 10, 1, 10, 50);
+    }
   }
 
 

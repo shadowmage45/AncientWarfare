@@ -18,46 +18,23 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.types;
+package shadowmage.ancient_warfare.common.soldiers.helpers.targeting;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import shadowmage.ancient_warfare.common.soldiers.INpcAI;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
-import shadowmage.ancient_warfare.common.soldiers.ai.AIWanderTest;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 
-public class NpcDummy extends NpcTypeBase
+public class AITargetEntryHealing extends AITargetEntry
 {
 
-/**
- * @param type
- */
-public NpcDummy(int type)
+public AITargetEntryHealing(NpcBase npc, String typeName, Class clz, int priority, float maxTargetRange)
   {
-  super(type);
-  this.displayName = "Dummy Test";
-  this.tooltip = "Dummy Test -- PlaceHolder tooltip";
-  this.addLevel("Dummy Test Level Name 1", "foo");
-  this.addLevel("Dummy Test Level Name 2", "foo");
-  this.isCombatUnit = true;
+  super(npc, typeName, clz, priority, true, maxTargetRange);
   }
 
 @Override
-public List<INpcAI> getAI(NpcBase npc, int level)
+public boolean isTarget(Entity ent)
   {
-  ArrayList<INpcAI> aiEntries = new ArrayList<INpcAI>();
-  aiEntries.add(new AIWanderTest(npc,20));
-  return aiEntries;
+  return ent instanceof EntityLiving && ((EntityLiving)ent).getHealth() < ((EntityLiving)ent).getMaxHealth();
   }
-
-@Override
-public void addTargets(NpcBase npc, NpcTargetHelper helper)
-  {
-  // TODO Auto-generated method stub
-  
-  }
-
 }

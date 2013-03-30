@@ -40,6 +40,14 @@ public static final int HARVEST = 32;
 public static final int MOVE_TO = 64;
 public static final int MOUNT_VEHICLE = 128;
 
+public static final String TARGET_MOUNT = "mount";
+public static final String TARGET_ATTACK = "attack";
+public static final String TARGET_HEAL = "heal";
+public static final String TARGET_FOLLOW = "follow";
+public static final String TARGET_WANDER = "wander";
+public static final String TARGET_NONE = "none";
+public static final String TARGET_ATTACK_MOUNTED = "vehicleAttack";
+
 protected NpcBase npc;
 
 protected static Random rng = new Random();

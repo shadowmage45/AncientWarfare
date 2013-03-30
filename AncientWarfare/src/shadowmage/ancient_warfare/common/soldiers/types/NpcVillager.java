@@ -24,6 +24,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import cpw.mods.fml.common.registry.VillagerRegistry;
@@ -67,7 +68,7 @@ public NpcVillager(int type)
   }
 
 @Override
-public void addTargets(NpcTargetHelper helper)
+public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
   // TODO Auto-generated method stub
   
