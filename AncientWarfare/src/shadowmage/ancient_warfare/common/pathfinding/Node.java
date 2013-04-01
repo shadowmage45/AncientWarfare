@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding;
 
+import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -30,6 +31,8 @@ public class Node implements Comparable
 public float goalLenght;
 public float travelCost = 10;
 
+public Node parentNode = null;
+public Node childNode = null;
 float g;
 float f;
 
@@ -37,7 +40,8 @@ public int x;
 public int y;
 public int z;
 public boolean obstacle = false;;
-
+public boolean closed = false;
+int LADDER = Block.ladder.blockID;
 /**
  * @param bX
  * @param i
@@ -59,44 +63,9 @@ public void calcTraveCost(PathWorldAccess world, Node parentNode)
     {
     return;
     }
+  this.obstacle = false;
   this.travelCost = 10;
-  if(parentNode!=null && this.x!=parentNode.x && this.z!=parentNode.z)//is a diagonal
-    {
-    if(!canCrossDiagonal(world, parentNode))
-      {
-      this.obstacle = true;
-      this.travelCost = 10000;
-      }
-    }  
-  if(world.getBlockId(x, y, z) != 0)//if solid...
-    {
-    if(world.getBlockId(x, y+1, z)==0 && world.getBlockId(x, y+2, z)==0)//check to see if target could jump up from this block
-      {
-      this.y++;
-      }
-    else
-      {
-      this.obstacle = true;
-      this.travelCost = 10000;
-      }
-    }
-  else if(world.getBlockId(x, y-1, z)==0)//or if air below
-    {    
-    if(world.getBlockId(x, y-2, z)==0)//if air is also below the one below that....
-      {
-      this.obstacle = true;
-      this.travelCost = 10000;
-      } 
-    else
-      {
-      this.y--;
-      }
-    }  
-  else if(world.getBlockId(x, y+1, z)!=0)//not enough room to fit through
-    {
-    this.obstacle = true;
-    this.travelCost = 10000;
-    }
+  this.obstacle = ! world.isWalkable(x, y, z, parentNode);
   }
 
 protected float getH(Node b)
@@ -140,26 +109,6 @@ protected boolean canCrossDiagonal(PathWorldAccess world, Node parentNode)
   return true;
   }
 
-///**
-// * get the cost of travel across this node
-// * @return
-// */
-//public float getNodeTravelCost(Node parentNode)
-//  {
-//  float parentCost = 0;
-//  if(parentNode!=null)
-//    {
-//    parentCost = parentNode.travelCost;
-//    }
-//  return this.travelCost + parentCost;
-//  }
-
-public Node parentNode = null;
-
-//public float getNodeValue()
-//  {  
-//  return this.goalLenght * 10 + getNodeTravelCost(parentNode);
-//  }
 
 @Override
 public int compareTo(Object o)
@@ -210,6 +159,17 @@ public float getDistanceFrom(Node node)
   float y = this.y - node.y;
   float z = this.z - node.z;
   return MathHelper.sqrt_float(x*x+y*y+z*z);  
+  }
+
+public float getPathLength()
+  {
+  float len = 0;
+  if(this.parentNode!=null)
+    {
+    len += this.getDistanceFrom(parentNode);
+    len += this.parentNode.getPathLength();
+    }
+  return len;
   }
 
 @Override

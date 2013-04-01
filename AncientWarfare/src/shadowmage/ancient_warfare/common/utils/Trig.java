@@ -220,6 +220,11 @@ public static float getVelocity(double x, double y, double z)
   return Trig.getVelocity((float)x,(float)y,(float)z);
   }
 
+public static float getDistance(double x, double y, double z, double x1, double y1, double z1)
+  {
+  return Math.abs(getVelocity(x1-x, y1-y, z1-z));
+  }
+
 /**
  * get velocity of a 2d vector
  * @param x

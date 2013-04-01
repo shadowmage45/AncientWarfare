@@ -32,7 +32,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
-import shadowmage.ancient_warfare.common.pathfinding.PathFinder;
+import shadowmage.ancient_warfare.common.pathfinding.EntityNavigator;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.soldiers.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
@@ -65,7 +65,7 @@ public NpcTargetHelper targetHelper;
 
 private AIAggroEntry target = null;
 
-PathFinder pathTest = new PathFinder();
+public EntityNavigator nav;
 
 /**
  * @param par1World
@@ -76,7 +76,9 @@ public NpcBase(World par1World)
   this.varsHelper = new NpcDummyVarHelper(this);  
   this.targetHelper = new NpcTargetHelper(this);
   this.moveSpeed = 0.325f;
-  this.setAIMoveSpeed(0.325f); 
+  this.setAIMoveSpeed(0.325f);
+  this.nav = new EntityNavigator(this);
+  this.stepHeight = 1.1f;
   }
 
 public void setNpcType(INpcType type, int level)
@@ -236,7 +238,18 @@ public void onUpdate()
     this.targetHelper.checkForTargets();
     //this.pathTest.findPath(worldObj, posX, posY, posZ, posX+10, posY, posZ, 40);
     }
+  this.nav.moveTowardsCurrentNode();
   super.onUpdate();  
+  }
+
+public void handlePacketUpdate(NBTTagCompound tag)
+  {
+  if(tag.hasKey("path") && this.worldObj.isRemote)
+    {
+    tag = tag.getCompoundTag("path");
+    this.nav.setMoveTo(tag.getInteger("tx"), tag.getInteger("ty"), tag.getInteger("tz"));
+//    Config.log("setting move target client side");
+    }
   }
 
 @Override

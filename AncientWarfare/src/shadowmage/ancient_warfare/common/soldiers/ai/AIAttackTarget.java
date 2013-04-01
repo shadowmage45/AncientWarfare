@@ -76,7 +76,7 @@ public void onTick()
         attackDelayTicks--;
         return;
         }      
-      Config.logDebug("Attacking target");
+//      Config.logDebug("Attacking target");
       this.attackTarget(target);
       if(this.checkIfTargetDead(target))
         {
@@ -88,12 +88,12 @@ public void onTick()
       {
       this.success = false;
       this.finished = true;
-      Config.logDebug("not at target yet, moving closer");
+//      Config.logDebug("not at target yet, moving closer");
       } 
     }  
   else
     {
-    Config.logDebug("not attacking target... (no target)");
+//    Config.logDebug("not attacking target... (no target)");
     this.success = false;
     this.finished = true;
     }

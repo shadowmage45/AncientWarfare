@@ -58,9 +58,9 @@ public NpcSoldierTest(int type)
 @Override
 public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
-//  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntityPlayer.class, 0, true, 40));
-  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntityMob.class, 0, true, 40));
-  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntitySlime.class, 0, true, 40));
+  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntityPlayer.class, 0, true, 40));
+//  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntityMob.class, 0, true, 40));
+//  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntitySlime.class, 0, true, 40));
   helper.addTargetEntry(new AITargetEntryMountableVehicle(npc, -1, 20));
   }
 
@@ -69,8 +69,8 @@ public List<INpcAI> getAI(NpcBase npc, int level)
   {
   ArrayList<INpcAI> aiEntries = new ArrayList<INpcAI>();
   aiEntries.add(new AIMoveToTarget(npc));
-  aiEntries.add(new AIChooseAttackTarget(npc));  
-  aiEntries.add(new AIAttackTarget(npc));
+//  aiEntries.add(new AIChooseAttackTarget(npc));  
+//  aiEntries.add(new AIAttackTarget(npc));
 //  aiEntries.add(new AIChooseMountTarget(npc));
 //  aiEntries.add(new AIMountVehicle(npc));
   aiEntries.add(new AIWanderTest(npc,20));

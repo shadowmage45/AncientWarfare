@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
+import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
@@ -31,6 +32,7 @@ public class AIMoveToTarget extends NpcAI
 float prevDistance;
 float distance;
 
+int delayTicksMax = 10;
 int delayTicks = 0;
 int stuckTicks = 0;
 
@@ -95,30 +97,31 @@ public void onTick()
     {
     return;
     }
-  delayTicks = 5;
+  delayTicks = delayTicksMax;
   if(Trig.getAbsDiff(distance, prevDistance)<0.05f)
     {
     stuckTicks++;
-    Config.logDebug("NPC could not move, or did not move between AIMoveToTarget ticks");
-    if(stuckTicks>20)
+//    Config.logDebug("NPC could not move, or did not move between AIMoveToTarget ticks");
+    if(stuckTicks>10)
       {
       npc.setTargetAW(null);
       stuckTicks = 0;
       }
     }
-  if(distance>12)
-    {
-    float angle = Trig.getYawTowardsTarget(npc.posX, npc.posZ, bX, bZ);
-    bX = (float)npc.posX - Trig.sinDegrees(angle-90)*12;
-    bZ = (float)npc.posZ + Trig.cosDegrees(angle-90)*12;
-    Config.logDebug("adjustedMovePos: "+bX+","+bY+","+bZ);
-    }
-  if(!npc.getNavigator().tryMoveToXYZ(bX, bY, bZ, npc.getAIMoveSpeed()))
-    {
-    this.finished = true;
-    this.success = false;
-    }
-  Config.logDebug("setting moveToTarget: ");
+//  if(distance>12)
+//    {
+//    float angle = Trig.getYawTowardsTarget(npc.posX, npc.posZ, bX, bZ);
+//    bX = (float)npc.posX - Trig.sinDegrees(angle-90)*12;
+//    bZ = (float)npc.posZ + Trig.cosDegrees(angle-90)*12;
+//    Config.logDebug("adjustedMovePos: "+bX+","+bY+","+bZ);
+//    }
+  npc.nav.setMoveTo(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
+//  if(!npc.getNavigator().tryMoveToXYZ(bX, bY, bZ, npc.getAIMoveSpeed()))
+//    {
+//    this.finished = true;
+//    this.success = false;
+//    }
+//  Config.logDebug("setting moveToTarget: ");
   }
 
 

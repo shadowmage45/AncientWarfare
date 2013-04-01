@@ -20,58 +20,40 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding;
 
-import net.minecraft.block.Block;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class PathWorldAccess
+/**
+ * a wrapper for a world-obj that will do additional validation of nodes to see if the entity can walk
+ * on the node, and fit in the area (used more for vehicles than soldiers)
+ * @author Shadowmage
+ *
+ */
+public class PathWorldAccessEntity extends PathWorldAccess
 {
 
-boolean openDoors;
-boolean canSwim;
-boolean canDrop;
 
-IBlockAccess world;
+World worldObj;//so there is no casting necessary to access world functions (getcolliding bb/etc)
+Entity entity;
 
-int LADDER = Block.ladder.blockID;
-int DOOR = Block.doorWood.blockID;
-
-public PathWorldAccess(IBlockAccess world)
+/**
+ * @param world
+ */
+public PathWorldAccessEntity(World world, Entity entity)
   {
-  this.world = world;
+  super(world);
+  worldObj = world;
+  this.entity = entity;
   }
 
-public int getBlockId(int x, int y, int z)
-  {
-  return world.getBlockId(x, y, z);
-  }
-
+@Override
 public boolean isWalkable(int x, int y, int z, Node src)
   {
-  int id = world.getBlockId(x, y, z);
-  boolean cube = world.isBlockNormalCube(x, y, z);
-  if(id==LADDER)
+  if(super.isWalkable(x, y, z, src))
     {
-    
+    return true;
     }
-  else if(cube || id==Block.waterMoving.blockID || id==Block.waterStill.blockID || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)//if solid and not a ladder//id!=0
-    {
-    return false;
-    }    
-  else if(!world.isBlockNormalCube(x, y-1, z) && id!=LADDER)//or if air below and not a ladder
-    {    //world.getBlockId(x, y-1, z)==0
-    return false;
-    }  
-  else 
-    {    
-    id = world.getBlockId(x, y+1, z);
-    if(world.isBlockNormalCube(x, y+1, z) && id !=LADDER) //id!=0
-      {
-      return false;
-      }
-    }
-  return true;
+  return false;  
   }
-
 
 }

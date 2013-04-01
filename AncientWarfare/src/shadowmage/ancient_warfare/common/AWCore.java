@@ -24,6 +24,8 @@ package shadowmage.ancient_warfare.common;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,6 +35,7 @@ import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
+import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinder;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessTest;
@@ -186,10 +189,44 @@ public void pathTest()
   {
   PathFinder pather = new PathFinder();
   PathWorldAccess world = new PathWorldAccessTest();
+  List<Node> path;
+  List<Node> pathPart;
+  long tStart;
+  long tCurrent;
+  long tTotal = 0;
+  Node n;
+  int x;
+  int y;
+  int z;
+  int searchRange = 10;
   for(int i = 0; i < 10; i++)
     {
-    pather.findPath(world, 1, 1, 1, 10, 1, 10, 50);
-    }
+    tTotal = 0;
+    Config.logDebug("Doing path run:");
+    tStart = System.nanoTime();
+    path = pather.findPath(world, 1, 1, 1, 10, 1, 10, searchRange);
+    tCurrent = System.nanoTime();
+    tTotal += tCurrent - tStart;
+    n = path.get(path.size()-1);
+    for(Node node : path)
+      {
+      Config.logDebug(node.toString());    
+      } 
+    while(n!=null && (n.x != 10 || n.y!=1 || n.z!=10))//if not null, and not the goal
+      {
+      tStart = System.nanoTime();
+      pathPart = pather.findPath(world, n.x, n.y, n.z, 10, 1, 10, searchRange);
+      tCurrent = System.nanoTime();
+      tTotal += tCurrent - tStart;
+      n = pathPart.get(pathPart.size()-1);
+      for(Node node : pathPart)
+        {
+        Config.logDebug(node.toString());    
+        } 
+      }
+    
+    Config.logDebug("Path run finished. path time : "+ tTotal/1000000L+"::"+tTotal);
+    } 
   }
 
 

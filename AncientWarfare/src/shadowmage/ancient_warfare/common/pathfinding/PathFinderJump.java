@@ -21,30 +21,24 @@
 package shadowmage.ancient_warfare.common.pathfinding;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 
-public class PathFinder
+public class PathFinderJump
 {
+
 
 boolean finished = false;
 boolean foundPath = true;
-boolean stoppedEarly = false;
 PathWorldAccess world;
 
 Node startNode;
 Node goalNode;
 Node currentNode;
-
-Node bestFoundEndNode;
-float bestFoundDistance;
-float bestPathLength;
-
-float searchLength;
 
 PriorityQueue<Node> qNodes = new PriorityQueue<Node>();
 //List<Node> closedNodes = new ArrayList<Node>();
@@ -52,22 +46,23 @@ List<Node> allNodes = new ArrayList<Node>();
 
 private LinkedList<Node> nodeCache = new LinkedList<Node>();
 
-NodeMap nodeMap = new NodeMap();
 
-public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int searchRange)
+public List<Node> findPath(PathWorldAccess world, double x, double y, double z, double x1, double y1, double z1, int searchRange)
   {
+  long t1 = System.nanoTime();
   this.world = world;
-  searchLength = searchRange;
-  setupInitialNodes(x, y, z, x1, y1, z1, searchRange); 
+  setupInitialNodes(x, y, z, x1, y1, z1, searchRange);
+ 
   search();
+    
+  //useJump ? jumpSearch() : search();
+//  search();
   this.world = null;  
+  long t2 = System.nanoTime();
+  Config.logDebug("pathGen time nanos: "+ (t2-t1));
   if(!foundPath)
     {
     Config.logDebug("could not find path!!!");
-    }  
-  if(stoppedEarly)
-    {
-    Config.logDebug("stopped early");
     }
   LinkedList<Node> path = new LinkedList<Node>();
   Node n = goalNode;  
@@ -75,12 +70,11 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, i
     {    
     path.push(n);
     n = n.parentNode;
-    }  
-  this.goalNode = null;
-  this.currentNode = null;
-  this.bestFoundEndNode = null;
-  this.bestFoundDistance = 0;
-  this.bestPathLength = 0;
+    }
+  for(Node node : path)
+    {
+    Config.logDebug(node.toString());
+    }
   return path;
   }
 
@@ -88,26 +82,26 @@ public void setupInitialNodes(double x, double y, double z, double x1, double y1
   {
   this.qNodes.clear();
   this.flushNodes();
-  this.nodeMap.clear();  
+  
   this.startNode = findOrMakeNode((int)x, (int)y, (int)z);
   this.goalNode = findOrMakeNode((int)x1, (int)y1, (int)z1);
   startNode.g = 0;
   startNode.f = startNode.getH(goalNode);
   this.qNodes.add(startNode);
   this.currentNode = startNode;
-  this.bestFoundEndNode = currentNode;
-  this.bestFoundDistance = this.bestFoundEndNode.getDistanceFrom(goalNode);
-  this.bestPathLength = 0;
   this.finished = false;
   foundPath = true;
-  this.stoppedEarly = false;
   }
 
 public void search()
   {
   while(!qNodes.isEmpty())
     {
+//    Config.logDebug("MOVING----------------------");
+//    Config.logDebug("from: "+currentNode.toString());
     currentNode = qNodes.poll();
+//    Config.logDebug("to: "+currentNode.toString());
+//    Config.logDebug("STOPPED----------------------");
     if(currentNode.equals(goalNode))
       {
       Config.logDebug("hit GOAL NODE");
@@ -116,10 +110,6 @@ public void search()
       }    
     currentNode.closed = true;
     searchNeighbors();
-    if(this.stoppedEarly)
-      {
-      break;
-      }
     }
   foundPath = false;
   finished = true;
@@ -128,23 +118,7 @@ public void search()
 List<Node> searchingNodes = new ArrayList<Node>();
 
 public void searchNeighbors()
-  {   
-  float dist = this.currentNode.getDistanceFrom(goalNode);
-  float len = this.currentNode.getPathLength();
-  if(dist < bestFoundDistance || len > bestPathLength)
-    {
-    this.bestFoundEndNode = this.currentNode;
-    this.bestFoundDistance = dist;
-    this.bestPathLength = len;
-//    Config.logDebug("found new best end point. pathLen: "+this.bestFoundEndNode.getPathLength() + "rawDist: "+dist+ " ND: "+bestFoundEndNode.toString());
-    if(len>searchLength)
-      {
-      Config.logDebug("search length exceeded, terminating search");
-      this.goalNode = this.currentNode;
-      this.stoppedEarly = true;
-      }
-    }
-  
+  { 
   searchingNodes.clear(); 
   /**
    * search n,e,s,w
@@ -180,10 +154,13 @@ public void searchNeighbors()
   searchingNodes.add( findOrMakeNode( currentNode.x+1, currentNode.y-1, currentNode.z));
   searchingNodes.add( findOrMakeNode( currentNode.x, currentNode.y-1, currentNode.z-1));
   searchingNodes.add( findOrMakeNode( currentNode.x, currentNode.y-1, currentNode.z+1));
-    
+  
+  cullNeighbors();
+  
   float tent;
   for(Node node : searchingNodes)
-    {     
+    { 
+    node.calcTraveCost(world, currentNode);
     if(node.obstacle)
       {
       node.closed = true;
@@ -211,6 +188,57 @@ public void searchNeighbors()
     } 
   }
 
+private void cullNeighbors()
+  {
+  Iterator<Node> it = searchingNodes.iterator();
+  Node n;
+  int dx;
+  int dz;  
+  int gx;
+  int gz;
+  boolean directPathBlocked = false;
+  while(it.hasNext())
+    {
+    n = it.next();
+    if(!world.isWalkable(n.x, n.y, n.z, currentNode))
+      {
+      n.obstacle = true;
+      n.closed = true;
+      it.remove();
+      continue;
+      }
+    dx = currentNode.x-n.x;
+    dz = currentNode.z-n.z;
+    gx = currentNode.x - goalNode.x;
+    gz = currentNode.z - goalNode.z;
+    gx = gx>1 ? 1 : gx < -1 ? -1 : 0;
+    gz = gz>1 ? 1 : gz < -1 ? -1 : 0;
+    directPathBlocked = world.isWalkable(gx, currentNode.y, gz, currentNode);
+    
+    if(directPathBlocked)//allow more nodes
+      {
+//      Config.logDebug("direct path blocked, allowing all nodes");
+      }
+    else
+      {
+//      Config.logDebug("attempting cull of: "+n.toString());
+//      Config.logDebug("moving from: "+currentNode.toString());
+//      Config.logDebug("x,z: "+dx+","+dz+"  gx, gz: "+gx+","+gz);
+      if(dx!=gx && dz!=gz)
+        {
+       
+        //it.remove();
+        continue;
+        }
+      else
+        {
+        //n.closed = false;
+//        Config.logDebug("keeping node");
+        }
+      }
+    }
+  }
+
 private void flushNodes()
   {
   this.nodeCache.addAll(allNodes);
@@ -230,20 +258,17 @@ private Node findOrMakeNode(int x, int y, int z)
   if(nodeCache.isEmpty())
     {
     n = new Node(x,y,z);
-    n.calcTraveCost(world, currentNode);
     }
   else
     {
     n = nodeCache.pop();   
     n.obstacle = false;
     n.closed = false;
-    n.parentNode = null;
     n.x = x;
     n.y = y;
     n.z = z;
     n.g = 0;
     n.f = 0;
-    n.calcTraveCost(world, currentNode);
     }  
   allNodes.add(n);
   return n;

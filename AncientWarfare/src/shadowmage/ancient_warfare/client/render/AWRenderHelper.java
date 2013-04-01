@@ -29,6 +29,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.item.ItemBuilderBase;
@@ -207,7 +208,10 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     return;
     }
-
+  if(Config.DEBUG)
+    {
+    RenderDebugPath.renderPaths(player.worldObj, player, evt.partialTicks);
+    }
   if(Settings.getRenderAdvOverlay() && player.ridingEntity instanceof VehicleBase && mc.currentScreen==null)
     {
     RenderOverlayAdvanced.renderAdvancedVehicleOverlay((VehicleBase)player.ridingEntity, player, evt.partialTicks);
