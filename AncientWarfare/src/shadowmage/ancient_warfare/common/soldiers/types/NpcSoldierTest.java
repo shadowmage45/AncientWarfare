@@ -69,8 +69,8 @@ public List<INpcAI> getAI(NpcBase npc, int level)
   {
   ArrayList<INpcAI> aiEntries = new ArrayList<INpcAI>();
   aiEntries.add(new AIMoveToTarget(npc));
-//  aiEntries.add(new AIChooseAttackTarget(npc));  
-//  aiEntries.add(new AIAttackTarget(npc));
+  aiEntries.add(new AIChooseAttackTarget(npc));  
+  aiEntries.add(new AIAttackTarget(npc));
 //  aiEntries.add(new AIChooseMountTarget(npc));
 //  aiEntries.add(new AIMountVehicle(npc));
   aiEntries.add(new AIWanderTest(npc,20));

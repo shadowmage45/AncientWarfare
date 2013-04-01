@@ -43,11 +43,12 @@ double x;
 double y;
 double z;
 
-float maxPathLength = 16;
+float maxPathLength = 10;
 
 Node targetNode = null;
 
 boolean addedPreviously = false;
+boolean continuePath = false;
 
 public EntityNavigator(NpcBase owner)
   {
@@ -191,7 +192,7 @@ private boolean checkBlocks(int x0, int y0, int z0, int x1, int y1, int z1)
  * @param tz
  */
 public void setMoveTo(int tx, int ty, int tz)
-  {
+  {  
   //if can see target on eye X and foot X (no obstacles in straight path)
   //  {
   //  check all blocks in a line beneath that path to see if they are walkable
@@ -200,26 +201,45 @@ public void setMoveTo(int tx, int ty, int tz)
   int ex = MathHelper.floor_double(entity.posX);
   int ey = MathHelper.floor_double(entity.posY);
   int ez = MathHelper.floor_double(entity.posZ);
+  float dist = Math.abs(Trig.getVelocity(tx-x, ty-y, tz-z));
+  float targetDiff = dist;
+  Node n = path.getEndNode();
+  if(targetNode!=null)
+    {
+    targetDiff = Trig.getDistance(x, y, z, tx, ty, tz);
+    }  
   boolean calcPath = false;
   if(tx==x && ty==y && tz==z)//we're already pathing there, check to see how many nodes are left in the current path, recalc if getting low
-    {
-    Node n = path.getEndNode();
+    {    
     if(n==null || (n.x!= (int)tx || n.y != (int)ty || n.z != (int)tz))//close, but goal node is not the current target
       {
-      if(path.getPathNodeLength()<maxPathLength/4)
+      if(path.getPathNodeLength()<3)
         {
-//        Config.logDebug("same target, but node length is low, recalculating");
-        calcPath = true;
+        Config.logDebug("same target, but node length is low, recalculating");
+        Config.logDebug("adding to path");
+        if(n!=null)
+          {
+          path.addPath(pather.findPath(worldAccess, n.x, n.y, n.z, tx, ty, tz, (int)maxPathLength));
+          x = tx;
+          y = ty;
+          z = tz;
+          }
+        else
+          {
+          calcPath = true;
+          }
         }
       }
     }
-  else
+  else if(n!=null && n.x==tx &&n.y==ty &&n.z==tz)
     {
-    float dist = Math.abs(Trig.getVelocity(tx-x, ty-y, tz-z));
-    float targetDiff = Trig.getDistance(x, y, z, tx, ty, tz);
-    if(dist > maxPathLength && targetDiff<dist*0.1f)//its so close to our current target, don't bother changing path
+    Config.logDebug("already had perfect path, not recalcing");
+    }
+  else
+    {    
+    if(dist > maxPathLength && targetDiff<dist*0.3f)//its so close to our current target, don't bother changing path
       {
-//      Config.logDebug("far away target with little difference, skipping recalc");
+      Config.logDebug("far away target with little difference, skipping recalc");
       }
     else if(dist<maxPathLength && targetDiff<dist*0.1f && targetDiff>1.f)//else add new nodes from current goal to new goal, reseat current target 
       {
@@ -227,15 +247,21 @@ public void setMoveTo(int tx, int ty, int tz)
         {
         addedPreviously = true;
         Config.logDebug("adding to path");
-        Node n = path.getEndNode();
-        path.addPath(pather.findPath(worldAccess, n.x, n.y, n.z, tx, ty, tz, (int)maxPathLength));
-        x = tx;
-        y = ty;
-        z = tz;
+        if(n!=null)
+          {
+          path.addPath(pather.findPath(worldAccess, n.x, n.y, n.z, tx, ty, tz, (int)maxPathLength));
+          x = tx;
+          y = ty;
+          z = tz;
+          }
+        else
+          {
+          calcPath = true;
+          }
         }
       else
         {
-//        Config.log("already added, recalc");
+        Config.log("already added, recalc");
         calcPath = true;
         addedPreviously = false;
         }      
@@ -243,20 +269,27 @@ public void setMoveTo(int tx, int ty, int tz)
       }
     else//paths could vary wildy, probably best to recalculate....try and preserve some of old?
       {
-//      Config.logDebug("new target, recalculating");
+      Config.logDebug("new target, recalculating");
       calcPath = true;
       }
     }
   if(targetNode!=null)
     {
-    if(Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)>3)//has fallen, been pushed, some other crap..recalc;
+    if(Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)>5)//has fallen, been pushed, some other crap..recalc;
       {
+      Config.logDebug("recalc due to falling/pushed/other stuff...");
       calcPath = true;
       }
     }
   if(calcPath)
     {
+    if(targetDiff<3 && this.targetNode!=null)
+      {
+      Config.logDebug("setting previous target node for trimming of new path");
+      pather.setPreviousPathEndNode(targetNode);
+      }
     path.setPath(pather.findPath(worldAccess, ex, ey, ez, tx, ty, tz, (int) maxPathLength));
+    
     this.x = tx;
     this.y = ty;
     this.z = tz;

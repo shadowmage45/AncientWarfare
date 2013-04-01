@@ -32,7 +32,6 @@ public class PathFinder
 {
 
 boolean finished = false;
-boolean foundPath = true;
 boolean stoppedEarly = false;
 PathWorldAccess world;
 
@@ -49,7 +48,7 @@ float searchLength;
 PriorityQueue<Node> qNodes = new PriorityQueue<Node>();
 //List<Node> closedNodes = new ArrayList<Node>();
 List<Node> allNodes = new ArrayList<Node>();
-
+List<Node> searchingNodes = new ArrayList<Node>();
 private LinkedList<Node> nodeCache = new LinkedList<Node>();
 
 NodeMap nodeMap = new NodeMap();
@@ -60,14 +59,14 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, i
   searchLength = searchRange;
   setupInitialNodes(x, y, z, x1, y1, z1, searchRange); 
   search();
-  this.world = null;  
-  if(!foundPath)
-    {
-    Config.logDebug("could not find path!!!");
-    }  
+  this.world = null; 
   if(stoppedEarly)
     {
     Config.logDebug("stopped early");
+    }
+  if(finished)
+    {
+    Config.logDebug("found complete path");
     }
   LinkedList<Node> path = new LinkedList<Node>();
   Node n = goalNode;  
@@ -80,8 +79,15 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, i
   this.currentNode = null;
   this.bestFoundEndNode = null;
   this.bestFoundDistance = 0;
-  this.bestPathLength = 0;
+  this.bestPathLength = 0;  
   return path;
+  }
+
+public void setPreviousPathEndNode(Node n)
+  {
+  this.bestFoundEndNode = n;
+  this.bestFoundDistance = this.bestFoundEndNode.getDistanceFrom(goalNode);
+  this.bestPathLength = n.getPathLength();
   }
 
 public void setupInitialNodes(double x, double y, double z, double x1, double y1, double z1, int searchRange)
@@ -95,11 +101,13 @@ public void setupInitialNodes(double x, double y, double z, double x1, double y1
   startNode.f = startNode.getH(goalNode);
   this.qNodes.add(startNode);
   this.currentNode = startNode;
-  this.bestFoundEndNode = currentNode;
-  this.bestFoundDistance = this.bestFoundEndNode.getDistanceFrom(goalNode);
-  this.bestPathLength = 0;
+  if(this.bestFoundEndNode==null)
+    {
+    this.bestFoundEndNode = currentNode;
+    this.bestFoundDistance = this.bestFoundEndNode.getDistanceFrom(goalNode);
+    this.bestPathLength = 0;
+    }
   this.finished = false;
-  foundPath = true;
   this.stoppedEarly = false;
   }
 
@@ -121,28 +129,34 @@ public void search()
       break;
       }
     }
-  foundPath = false;
-  finished = true;
   }
 
-List<Node> searchingNodes = new ArrayList<Node>();
-
-public void searchNeighbors()
-  {   
+private boolean shouldTerminateEarly()  
+  {
   float dist = this.currentNode.getDistanceFrom(goalNode);
   float len = this.currentNode.getPathLength();
-  if(dist < bestFoundDistance || len > bestPathLength)
-    {
+  if((dist < bestFoundDistance || len > bestPathLength ))
+    {//
     this.bestFoundEndNode = this.currentNode;
     this.bestFoundDistance = dist;
     this.bestPathLength = len;
 //    Config.logDebug("found new best end point. pathLen: "+this.bestFoundEndNode.getPathLength() + "rawDist: "+dist+ " ND: "+bestFoundEndNode.toString());
     if(len>searchLength)
       {
-      Config.logDebug("search length exceeded, terminating search");
-      this.goalNode = this.currentNode;
-      this.stoppedEarly = true;
+//      Config.logDebug("search length exceeded, terminating search");      
+      return true;
       }
+    }
+  return false;
+  }
+
+public void searchNeighbors()
+  {
+  if(this.shouldTerminateEarly())
+    {
+    this.stoppedEarly = true;
+    this.goalNode = this.currentNode;
+    return;
     }
   
   searchingNodes.clear(); 
@@ -153,7 +167,7 @@ public void searchNeighbors()
   searchingNodes.add( findOrMakeNode(currentNode.x+1, currentNode.y, currentNode.z));
   searchingNodes.add( findOrMakeNode(currentNode.x, currentNode.y, currentNode.z-1));
   searchingNodes.add( findOrMakeNode(currentNode.x, currentNode.y, currentNode.z+1));
-  
+
   /**
    * diagonals
    */    
@@ -161,13 +175,13 @@ public void searchNeighbors()
   searchingNodes.add( findOrMakeNode( currentNode.x-1, currentNode.y, currentNode.z-1));
   searchingNodes.add( findOrMakeNode( currentNode.x+1, currentNode.y, currentNode.z+1));
   searchingNodes.add( findOrMakeNode( currentNode.x+1, currentNode.y, currentNode.z-1));
-    
+
   /**
    * up/down (in case of ladder/water)
    */
   searchingNodes.add( findOrMakeNode( currentNode.x, currentNode.y+1, currentNode.z));
   searchingNodes.add( findOrMakeNode( currentNode.x, currentNode.y-1, currentNode.z));
-  
+
   /**
    * and the NSEW +/- 1 jumpable blocks..
    */
@@ -175,12 +189,12 @@ public void searchNeighbors()
   searchingNodes.add( findOrMakeNode( currentNode.x+1, currentNode.y+1, currentNode.z));
   searchingNodes.add( findOrMakeNode( currentNode.x, currentNode.y+1, currentNode.z-1));
   searchingNodes.add( findOrMakeNode( currentNode.x, currentNode.y+1, currentNode.z+1));
-  
+
   searchingNodes.add( findOrMakeNode( currentNode.x-1, currentNode.y-1, currentNode.z));
   searchingNodes.add( findOrMakeNode( currentNode.x+1, currentNode.y-1, currentNode.z));
   searchingNodes.add( findOrMakeNode( currentNode.x, currentNode.y-1, currentNode.z-1));
   searchingNodes.add( findOrMakeNode( currentNode.x, currentNode.y-1, currentNode.z+1));
-    
+
   float tent;
   for(Node node : searchingNodes)
     {     

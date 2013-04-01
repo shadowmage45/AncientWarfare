@@ -36,6 +36,7 @@ public EntityPath()
 public void setPath(List<Node> pathNodes)
   {
   this.path.clear();
+  this.addPath(pathNodes);
   Node prev = null;
   Node current = null;
   for(Node n : pathNodes)
@@ -59,20 +60,12 @@ public void setPath(List<Node> pathNodes)
  * @param pathNodes
  */
 public void addPath(List<Node> pathNodes)
-  {
+  {    
   Node prev = null;
   Node current = null;
   for(Node n : pathNodes)
     {
-    if(n.equals(getEndNode()))
-      {
-      continue;
-      }
     prev = current;
-    if(prev==null)
-      {
-      prev = getEndNode();
-      }
     current = new Node(n.x, n.y, n.z);
     current.f = n.f;
     current.g = n.g;
@@ -83,7 +76,19 @@ public void addPath(List<Node> pathNodes)
       prev.childNode = current;
       }
     this.path.add(current);
+    } 
+  }
+
+public boolean containsPoint(int x, int y, int z)
+  {
+  for(Node n : this.path)
+    {
+    if(n.equals(x, y, z))
+      {
+      return true;
+      }
     }
+  return false;
   }
 
 public Node getEndNode()
