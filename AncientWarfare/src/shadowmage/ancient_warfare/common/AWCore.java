@@ -24,7 +24,6 @@ package shadowmage.ancient_warfare.common;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraftforge.common.ForgeChunkManager;
@@ -37,6 +36,7 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinder;
+import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessTest;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
@@ -49,6 +49,7 @@ import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
+import shadowmage.ancient_warfare.common.utils.ServerTickTimer;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import cpw.mods.fml.common.Mod;
@@ -63,6 +64,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 
 @Mod( modid = "AncientWarfare", name="Ancient Warfare", version="MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+"-"+Config.CORE_BUILD_STATUS)
@@ -181,8 +184,13 @@ public void load(FMLPostInitializationEvent evt)
    * and finally, save the config in case there were any changes made during init
    */
   Config.saveConfig();
+  
+  TickRegistry.registerTickHandler(new ServerTickTimer(), Side.SERVER);
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
-  this.pathTest();
+//  this.pathTest();
+//  PathUtils.getPositionsBetween(-10, 0, 0, 10, 0, 5);
+//  PathUtils.getPositionsBetween2(-10, 0, 10, 5);
+//  PathUtils.traceRay(0.5f, 0.25f, 10f, 12, 10, 15.5f);
   }
 
 public void pathTest()
