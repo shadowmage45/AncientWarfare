@@ -58,6 +58,7 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {  
   tickTimes[index] = System.nanoTime() - startTime;
+  Config.logDebug("t: "+tickTimes[index]);
   index++;
   }
 

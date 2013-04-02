@@ -24,8 +24,6 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.Packet04Npc;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
@@ -37,7 +35,7 @@ public class EntityNavigator
 NpcBase entity;
 EntityPath path = new EntityPath();
 PathWorldAccessEntity worldAccess;
-PathFinder pather;
+PathFinderIncremental pather;
 
 double x;
 double y;
@@ -54,7 +52,7 @@ public EntityNavigator(NpcBase owner)
   {
   this.entity = owner;
   this.worldAccess = new PathWorldAccessEntity(entity.worldObj, entity);
-  pather = new PathFinder();  
+  pather = new PathFinderIncremental();  
   this.x = entity.posX;
   this.y = entity.posY;
   this.z = entity.posZ;
@@ -161,7 +159,7 @@ public void setMoveTo(int tx, int ty, int tz)
     if(targetDiff<3 && this.targetNode!=null)
       {
       Config.logDebug("setting previous target node for trimming of new path");
-      pather.setPreviousPathEndNode(targetNode);
+      //pather.setPreviousPathEndNode(targetNode);
       }
     path.setPath(pather.findPath(worldAccess, ex, ey, ez, tx, ty, tz, (int) maxPathLength));
     

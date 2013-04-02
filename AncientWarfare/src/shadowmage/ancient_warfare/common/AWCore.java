@@ -36,7 +36,8 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinder;
-import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
+import shadowmage.ancient_warfare.common.pathfinding.PathFinderIncremental;
+import shadowmage.ancient_warfare.common.pathfinding.PathFinderJPS;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessTest;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
@@ -187,55 +188,99 @@ public void load(FMLPostInitializationEvent evt)
   
   TickRegistry.registerTickHandler(new ServerTickTimer(), Side.SERVER);
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
-//  this.pathTest();
-//  PathUtils.getPositionsBetween(-10, 0, 0, 10, 0, 5);
-//  PathUtils.getPositionsBetween2(-10, 0, 10, 5);
-//  PathUtils.traceRay(0.5f, 0.25f, 10f, 12, 10, 15.5f);
-  PathUtils.traceRay2(0, 0.5f, 0.f, 10, 0.0f, 15.0f);
+  this.pathTest();
+  //PathUtils.traceRay2(0, 0.5f, 0.f, 10, 0.0f, 15.0f);
   }
 
 public void pathTest()
   {
-  PathFinder pather = new PathFinder();
+  PathFinderIncremental pather = new PathFinderIncremental();
   PathWorldAccess world = new PathWorldAccessTest();
+  PathFinderJPS jps = new PathFinderJPS();  
   List<Node> path;
   List<Node> pathPart;
   long tStart;
   long tCurrent;
   long tTotal = 0;
+  Config.logDebug("starting JPS run");
+  for(int i = 0; i < 10 ; i++)
+    {
+    tStart = System.nanoTime();
+    path = jps.findPath(world, 1, 1, 1, 10, 1, 10, 25);
+    tCurrent = System.nanoTime() - tStart;
+    Config.logDebug("jps time: "+tCurrent);
+    tTotal+=tCurrent;
+    }  
+  
+  Config.logDebug("JPS run finished 10xTime: "+tTotal/1000000L+"ms  ::  "+tTotal);
+  tTotal = 0;
   Node n;
   int x;
   int y;
   int z;
   int searchRange = 10;
+  Config.logDebug("Doing A* path run:");
   for(int i = 0; i < 10; i++)
-    {
-    tTotal = 0;
-    Config.logDebug("Doing path run:");
+    {  
     tStart = System.nanoTime();
     path = pather.findPath(world, 1, 1, 1, 10, 1, 10, searchRange);
     tCurrent = System.nanoTime();
     tTotal += tCurrent - tStart;
-    n = path.get(path.size()-1);
     for(Node node : path)
       {
       Config.logDebug(node.toString());    
       } 
-    while(n!=null && (n.x != 10 || n.y!=1 || n.z!=10))//if not null, and not the goal
+    n = path.get(path.size()-1);
+//    while(n!=null && (n.x != 10 || n.y!=1 || n.z!=10))      
+//      {
+//      path = pather.findPath(world, 1, 1, 1, 10, 1, 10, searchRange);
+//      }
+    if(n!=null && (n.x != 10 || n.y!=1 || n.z!=10))
       {
-      tStart = System.nanoTime();
-      pathPart = pather.findPath(world, n.x, n.y, n.z, 10, 1, 10, searchRange);
-      tCurrent = System.nanoTime();
-      tTotal += tCurrent - tStart;
-      n = pathPart.get(pathPart.size()-1);
-      for(Node node : pathPart)
+      path = pather.findPath(world, 1, 1, 1, 10, 1, 10, searchRange);
+      n = path.get(path.size()-1);
+      for(Node node : path)
         {
         Config.logDebug(node.toString());    
         } 
+      if(n!=null && (n.x != 10 || n.y!=1 || n.z!=10))
+        {
+        path = pather.findPath(world, 1, 1, 1, 10, 1, 10, searchRange);
+        n = path.get(path.size()-1);
+        for(Node node : path)
+          {
+          Config.logDebug(node.toString());    
+          } 
+        if(n!=null && (n.x != 10 || n.y!=1 || n.z!=10))
+          {
+          path = pather.findPath(world, 1, 1, 1, 10, 1, 10, searchRange);
+          n = path.get(path.size()-1);
+          for(Node node : path)
+            {
+            Config.logDebug(node.toString());    
+            } 
+          }
+        }
       }
     
-    Config.logDebug("Path run finished. path time : "+ tTotal/1000000L+"::"+tTotal);
+    
+    
+   
+//    while(n!=null && (n.x != 10 || n.y!=1 || n.z!=10))//if not null, and not the goal
+//      {
+//      tStart = System.nanoTime();
+//      pathPart = pather.findPath(world, n.x, n.y, n.z, 10, 1, 10, searchRange);
+//      tCurrent = System.nanoTime();
+//      tTotal += tCurrent - tStart;
+//      n = pathPart.get(pathPart.size()-1);
+////      for(Node node : pathPart)
+////        {
+////        Config.logDebug(node.toString());    
+////        } 
+//      }    
+    
     } 
+  Config.logDebug("Path run finished. path time : "+ tTotal/1000000L+"ms  ::  "+tTotal);
   }
 
 

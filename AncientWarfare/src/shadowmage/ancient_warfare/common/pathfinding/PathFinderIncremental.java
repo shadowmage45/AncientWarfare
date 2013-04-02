@@ -25,10 +25,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 
-public class PathFinder
+public class PathFinderIncremental
 {
 
 boolean finished = false;
@@ -44,6 +43,7 @@ float bestFoundDistance;
 float bestPathLength;
 
 float searchLength;
+float searchIncrement;
 
 PriorityQueue<Node> qNodes = new PriorityQueue<Node>();
 //List<Node> closedNodes = new ArrayList<Node>();
@@ -56,8 +56,16 @@ NodeMap nodeMap = new NodeMap();
 public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int searchRange)
   {
   this.world = world;
-  searchLength = searchRange;
-  setupInitialNodes(x, y, z, x1, y1, z1, searchRange); 
+  searchIncrement = searchRange;
+  if(isNewPath(x, y, z, x1, y1, z1))
+    {
+    this.searchLength = searchRange;
+    setupInitialNodes(x, y, z, x1, y1, z1, searchRange);
+    }
+  else
+    {
+    this.setupRestartNodes(x, y, z, x1, y1, z1);
+    }   
   search();
   this.world = null; 
   if(stoppedEarly)
@@ -74,13 +82,19 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, i
     {    
     path.push(n);
     n = n.parentNode;
-    }  
-  this.goalNode = null;
-  this.currentNode = null;
-  this.bestFoundEndNode = null;
-  this.bestFoundDistance = 0;
-  this.bestPathLength = 0;  
+    }
   return path;
+  }
+
+boolean debug = true;
+private boolean isNewPath(int x, int y, int z, int x1, int y1, int z1)
+  {
+  if(debug)
+    {
+    debug = false;
+    return true;
+    }
+  return false;
   }
 
 public void setPreviousPathEndNode(Node n)
@@ -90,11 +104,21 @@ public void setPreviousPathEndNode(Node n)
   this.bestPathLength = n.getPathLength();
   }
 
+private void setupRestartNodes(int x, int y, int z, int x1, int y1, int z1)  
+  {  
+  this.startNode = findOrMakeNode(x, y, z);
+  this.goalNode = findOrMakeNode(x1, y1, z1);
+  this.currentNode = this.qNodes.poll();
+  if(this.currentNode==null)
+    {
+    Config.logDebug("null current node");
+    }
+  }
+
 public void setupInitialNodes(double x, double y, double z, double x1, double y1, double z1, int searchRange)
   {
   this.qNodes.clear();
-  this.flushNodes();
-  this.nodeMap.clear();  
+  this.flushNodes(); 
   this.startNode = findOrMakeNode((int)x, (int)y, (int)z);
   this.goalNode = findOrMakeNode((int)x1, (int)y1, (int)z1);
   startNode.g = 0;
@@ -118,8 +142,9 @@ public void search()
     currentNode = qNodes.poll();
     if(currentNode.equals(goalNode))
       {
-//      Config.logDebug("hit GOAL NODE");
+      Config.logDebug("hit GOAL NODE");
       finished = true;
+      debug = true;
       return;
       }    
     currentNode.closed = true;

@@ -53,6 +53,15 @@ public Node(int bX, int bY, int bZ)
   this.z = bZ; 
   }
 
+public Node(int x, int y, int z, Node parent, Node goal, float g)
+  {
+  this(x,y,z);
+  this.parentNode = parent;  
+  this.g = g;
+  this.f = this.getH(goal)+this.g;
+  }
+
+
 /**
  * calc travel cost of this node, and set to obstacle if completely unpathable (solid)
  * @param world
