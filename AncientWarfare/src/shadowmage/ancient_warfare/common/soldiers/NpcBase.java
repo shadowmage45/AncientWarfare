@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.pathfinding.EntityNavigator;
+import shadowmage.ancient_warfare.common.pathfinding.EntityNavigatorThreaded;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.soldiers.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
@@ -65,7 +66,8 @@ public NpcTargetHelper targetHelper;
 
 private AIAggroEntry target = null;
 
-public EntityNavigator nav;
+//public EntityNavigator nav;
+public EntityNavigatorThreaded nav;
 
 /**
  * @param par1World
@@ -77,7 +79,8 @@ public NpcBase(World par1World)
   this.targetHelper = new NpcTargetHelper(this);
   this.moveSpeed = 0.325f;
   this.setAIMoveSpeed(0.325f);
-  this.nav = new EntityNavigator(this);
+//  this.nav = new EntityNavigator(this);
+  this.nav = new EntityNavigatorThreaded(this);
   this.stepHeight = 1.1f;
   }
 

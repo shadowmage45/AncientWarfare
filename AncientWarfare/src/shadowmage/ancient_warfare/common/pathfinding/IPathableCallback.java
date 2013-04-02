@@ -20,43 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
+import java.util.List;
 
-/**
- * a wrapper for a world-obj that will do additional validation of nodes to see if the entity can walk
- * on the node, and fit in the area (used more for vehicles than soldiers)
- * @author Shadowmage
- *
- */
-public class PathWorldAccessEntity extends PathWorldAccess
+public interface IPathableCallback
 {
 
 
-World worldObj;//so there is no casting necessary to access world functions (getcolliding bb/etc)
-Entity entity;
-
-/**
- * @param world
- */
-public PathWorldAccessEntity(World world, Entity entity)
-  {
-  super(world);
-  worldObj = world;
-  this.entity = entity;
-  }
-
-@Override
-public boolean isWalkable(int x, int y, int z, Node src)
-  {
-  if(super.isWalkable(x, y, z, src))
-    {
-    
-    //check to see that entity can fit completely on the block provided.  Should also check to make sure that
-    //entity can path from src to this block (diagonals not obstructed)
-    return true;
-    }
-  return false;  
-  }
+public void onPathFound(List<Node> pathNodes);
 
 }

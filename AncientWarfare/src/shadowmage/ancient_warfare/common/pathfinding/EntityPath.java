@@ -36,23 +36,7 @@ public EntityPath()
 public void setPath(List<Node> pathNodes)
   {
   this.path.clear();
-  this.addPath(pathNodes);
-  Node prev = null;
-  Node current = null;
-  for(Node n : pathNodes)
-    {
-    prev = current;
-    current = new Node(n.x, n.y, n.z);
-    current.f = n.f;
-    current.g = n.g;
-    current.travelCost = n. travelCost;
-    current.parentNode = prev;
-    if(prev!=null)
-      {
-      prev.childNode = current;
-      }
-    this.path.add(current);
-    }
+  this.addPath(pathNodes); 
   }
 
 /**

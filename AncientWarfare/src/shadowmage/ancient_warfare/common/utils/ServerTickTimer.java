@@ -58,7 +58,7 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {  
   tickTimes[index] = System.nanoTime() - startTime;
-  Config.logDebug("t: "+tickTimes[index]);
+//  Config.logDebug("t: "+tickTimes[index]);
   index++;
   }
 
@@ -76,7 +76,7 @@ public void count()
   long avgInterval = totalInterval/this.tickIntervals.length;
   long tms = (avg/1000000)+1;
   long tmsI = (avgInterval/1000000)+1;
-  Config.logDebug("avg: " + avg + "  TPS: "+ (1000/tms)+" avgI: "+avgInterval);  
+//  Config.logDebug("avg: " + avg + "  TPS: "+ (1000/tms)+" avgI: "+avgInterval);  
   }
 
 @Override

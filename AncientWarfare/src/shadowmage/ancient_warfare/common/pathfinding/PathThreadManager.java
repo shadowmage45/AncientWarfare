@@ -1,0 +1,196 @@
+/**
+   Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+   This software is distributed under the terms of the GNU General Public Licence.
+   Please see COPYING for precise license information.
+
+   This file is part of Ancient Warfare.
+
+   Ancient Warfare is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Ancient Warfare is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package shadowmage.ancient_warfare.common.pathfinding;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import shadowmage.ancient_warfare.common.config.Config;
+
+/**
+ * pathfinding thread-pool manager. determines how many threads to start and run
+ * depending upon current server tick-times.  Threads all call yield() in their main
+ * looped method for hopefully improved time-slicing and overall performance
+ * @author Shadowmage
+ *
+ */
+public class PathThreadManager
+{
+
+private PathThreadManager(){}
+private static PathThreadManager INSTANCE = new PathThreadManager();
+public static PathThreadManager instance(){return INSTANCE;}
+
+private static final int MAX_THREAD_COUNT = 4;
+
+LinkedList<PathFinderThread> threadPool = new LinkedList<PathFinderThread>();
+List<PathFinderThread> runningThreads = new ArrayList<PathFinderThread>();
+LinkedList<PathRequestEntry> queuedRequests = new LinkedList<PathRequestEntry>();
+
+/**
+ * onServerTick method to cull stale path requests, or start up extra threads
+ * @param extraTime (extra time between server tick and interval for last tick)
+ */
+public void onServerTick(long extraTime)
+  {
+  
+  }
+
+public void onThreadFinished(PathFinderThread thread)
+  {
+  if(this.runningThreads.contains(thread))
+    {
+    this.runningThreads.remove(thread);
+    }
+  this.threadPool.add(thread);
+  this.tryStartThread();
+  }
+
+public boolean tryInterruptingPath(IPathableCallback caller)
+  {
+  Iterator<PathFinderThread> it = this.runningThreads.iterator();
+  PathFinderThread thd;
+  while(it.hasNext())
+    {
+    thd = it.next();
+    if(thd.caller==caller)
+      {
+      thd.shouldInterrupt = true;
+      return true;
+      }
+    }
+  return false;
+  }
+
+public boolean tryUpdatingPathEntry(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
+  {
+  if(this.containsPatherInQueue(caller))
+    {
+    Iterator<PathRequestEntry> it = this.queuedRequests.iterator();
+    PathRequestEntry entry;
+    while(it.hasNext())
+      {
+      entry = it.next();
+      if(entry.caller == caller)
+        {
+        entry.x = x;
+        entry.y = y;
+        entry.z = z;
+        entry.tx = tx;
+        entry.ty = ty;
+        entry.tz = tz;
+        entry.maxRange = maxRange;
+        }
+      }
+    return true;
+    }
+  else
+    {
+    return false;
+    }
+  }
+
+public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
+  { 
+  this.queuedRequests.add(new PathRequestEntry(caller, world, x, y, z, tx, ty, tz, maxRange));
+  this.tryStartThread();
+  }
+
+public boolean containsPatherInQueue(IPathableCallback caller)
+  {
+  for(PathRequestEntry entry : this.queuedRequests)
+    {
+    if(entry.caller == caller)
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
+public boolean containsPatherInWorkers(IPathableCallback caller)
+  {
+  for(PathFinderThread th : this.runningThreads)
+    {
+    if(th.caller == caller)
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
+public boolean containsPather(IPathableCallback caller)
+  {
+  return containsPatherInQueue(caller) || containsPatherInWorkers(caller);  
+  }
+  
+public void tryStartThread()
+  {
+  if(!this.queuedRequests.isEmpty() && !this.threadPool.isEmpty() && this.runningThreads.size()< this.MAX_THREAD_COUNT)
+    {
+    PathFinderThread t = this.threadPool.pop();
+    PathRequestEntry entry = this.queuedRequests.pop();
+    t.caller = entry.caller;
+    t.findPath(entry.world, entry.x, entry.y, entry.z, entry.tx, entry.ty, entry.tz, entry.maxRange);
+    Thread thread = new Thread(t,"AWPathThread");
+    Config.logDebug("starting thread from pool");
+    thread.start();
+    Config.logDebug("thread started");
+    }
+  }
+
+/**
+ * manages an entry for a single requester/requested path. may be updated before path is ran (if somehow still in the queue).
+ * @author Shadowmage
+ *
+ */
+private class PathRequestEntry
+{
+long ts;
+IPathableCallback caller;
+PathWorldAccess world;
+int maxRange;
+int x;
+int y;
+int z;
+int tx;
+int ty;
+int tz;
+public PathRequestEntry(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
+  {
+  ts = System.nanoTime();
+  this.caller = caller;
+  this.world = world;
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  this.tx = tx;
+  this.ty = ty;
+  this.tz = tz;
+  this.maxRange = maxRange;
+  }
+}
+
+
+}
