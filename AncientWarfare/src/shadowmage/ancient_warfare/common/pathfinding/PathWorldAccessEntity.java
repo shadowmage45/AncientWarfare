@@ -59,4 +59,9 @@ public boolean isWalkable(int x, int y, int z, Node src)
   return false;  
   }
 
+@Override
+public boolean isRemote()
+  {
+  return this.worldObj.isRemote;
+  }
 }

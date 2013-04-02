@@ -87,7 +87,7 @@ public void run()
     {
     this.caller.onPathFound(foundPath);
     }
-  PathThreadManager.instance().onThreadFinished(this);
+  PathThreadManager.instance(!this.world.isRemote()).onThreadFinished(this);
   this.working = false;
   this.caller = null;
   }

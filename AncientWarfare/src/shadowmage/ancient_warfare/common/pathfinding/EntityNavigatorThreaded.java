@@ -133,15 +133,15 @@ public void setMoveTo(int tx, int ty, int tz)
     this.x = tx;
     this.y = ty;
     this.z = tz; 
-    if(!PathThreadManager.instance().containsPather(this))
+    if(!PathThreadManager.instance(!this.entity.worldObj.isRemote).containsPather(this))
       {
       Config.logDebug("starting path request");
-      PathThreadManager.instance().requestPath(this, worldAccess, ex, ey, ez, tx, ty, tz, (int)this.maxPathLength);      
+      PathThreadManager.instance(!this.entity.worldObj.isRemote).requestPath(this, worldAccess, ex, ey, ez, tx, ty, tz, (int)this.maxPathLength);      
       }
     else//path request already queued
       {
       Config.logDebug("attempting update of path");
-      if(!PathThreadManager.instance().tryUpdatingPathEntry(this, worldAccess, ex, ey, ez, tx, ty, tz, (int)this.maxPathLength))
+      if(!PathThreadManager.instance(!this.entity.worldObj.isRemote).tryUpdatingPathEntry(this, worldAccess, ex, ey, ez, tx, ty, tz, (int)this.maxPathLength))
         {
         
         //check if target of path is same as current target (or close)

@@ -73,5 +73,10 @@ public boolean isWalkable(int x, int y, int z, Node src)
   return true;
   }
 
+public boolean isRemote()
+  {
+  return false;
+  }
+
 
 }

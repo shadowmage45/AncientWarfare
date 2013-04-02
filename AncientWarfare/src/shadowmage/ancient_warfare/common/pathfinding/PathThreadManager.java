@@ -39,7 +39,18 @@ public class PathThreadManager
 
 private PathThreadManager(){}
 private static PathThreadManager INSTANCE = new PathThreadManager();
-public static PathThreadManager instance(){return INSTANCE;}
+private static PathThreadManager INSTANCECLIENT = new PathThreadManager();
+public static PathThreadManager instance(boolean server)
+  {
+  if(server)
+    {
+    return INSTANCE;
+    }
+  else
+    {
+    return INSTANCECLIENT;
+    }
+  }
 
 private static final int MAX_THREAD_COUNT = 4;
 
