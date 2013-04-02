@@ -75,7 +75,7 @@ public void count()
   long avgInterval = totalInterval/this.tickIntervals.length;
   long tms = (avg/1000000)+1;
   long tmsI = (avgInterval/1000000)+1;
-  //Config.logDebug("avg: " + avg + "  TPS: "+ (1000/tms)+" avgI: "+avgInterval);  
+  Config.logDebug("avg: " + avg + "  TPS: "+ (1000/tms)+" avgI: "+avgInterval);  
   }
 
 @Override

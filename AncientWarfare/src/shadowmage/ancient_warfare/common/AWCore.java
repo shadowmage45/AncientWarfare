@@ -191,6 +191,7 @@ public void load(FMLPostInitializationEvent evt)
 //  PathUtils.getPositionsBetween(-10, 0, 0, 10, 0, 5);
 //  PathUtils.getPositionsBetween2(-10, 0, 10, 5);
 //  PathUtils.traceRay(0.5f, 0.25f, 10f, 12, 10, 15.5f);
+  PathUtils.traceRay2(0, 0.5f, 0.f, 10, 0.0f, 15.0f);
   }
 
 public void pathTest()
