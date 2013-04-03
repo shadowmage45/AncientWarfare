@@ -78,6 +78,7 @@ public void findPath(PathWorldAccess world, int x, int y, int z, int x1, int y1,
   this.world = world;
   this.startNode = getOrMakeNode(x, y, z, null);  
   this.goalNode = getOrMakeNode(x1, y1, z1, null);
+  startNode.parentNode = null;
   startNode.g = 0;
   startNode.f = startNode.getH(goalNode);
   goalNode.g = goalNode.getDistanceFrom(startNode);
@@ -107,10 +108,15 @@ public void findPath(PathWorldAccess world, int x, int y, int z, int x1, int y1,
   this.oldNodes.clear();  
   }
 
+
+int searchCount = 0;
 private void search()
   {
+  searchCount = 0;
   while(!this.qNodes.isEmpty())
     {    
+    searchCount++;
+    Config.logDebug("searching. iteration: "+searchCount);
     this.currentNode = this.qNodes.poll();
     this.oldNodes.add(currentNode);
     if(this.currentNode.equals(goalNode))
@@ -131,6 +137,7 @@ private void identifySuccessors(Node n)
   {
   this.searchingNodes.clear();
   this.findNeighbors(n);
+  Config.logDebug("found "+searchingNodes.size()+" neighbors to : "+n.toString());
   int dx;
   int dy;
   int dz;
@@ -142,6 +149,7 @@ private void identifySuccessors(Node n)
     dx = dx <= -1 ? -1 : dx >= 1 ? 1 : 0;
     dy = dy <= -1 ? -1 : dy >= 1 ? 1 : 0;
     dz = dz <= -1 ? -1 : dz >= 1 ? 1 : 0;
+    jumpCount = 0;
     Node jp = this.jump(nb.x, nb.y, nb.z, dx, dy, dz, n);
     if(!oldNodes.contains(jp))
       {
@@ -150,9 +158,25 @@ private void identifySuccessors(Node n)
     }
   }
 
+int jumpCount = 0;
 private Node jump(int x, int y, int z, int dx, int dy, int dz, Node p)
   {
-  if(!isWalkable(x+dx, y+dy, z+dz))
+  jumpCount++;
+  Config.logDebug("jumping: "+x+","+y+","+z+" :: "+dx+","+dy+","+dz+" JC: "+jumpCount);
+  if(world.getBlockId(x, y, z)==world.LADDER)
+    {
+    Config.logDebug("HIT LADDER WHILE JUMPING");
+    return getOrMakeNode(x, y, z, p);
+    }
+  if(isWalkable(x,y-1,z) || isWalkable(x,y+1,z))
+    {
+    return getOrMakeNode(x, y, z, p);
+    }
+  else if(isWalkable(x+dx,y-1,z+dz) || isWalkable(x+dz, y+z,z+dz))
+    {
+    return getOrMakeNode(x, y, z, p);
+    }
+  else if(!isWalkable(x+dx, y+dy, z+dz))
     {
     return getOrMakeNode(x, y, z, p);
     }
@@ -162,8 +186,8 @@ private Node jump(int x, int y, int z, int dx, int dy, int dz, Node p)
     goalNode.g = p.g + p.getDistanceFrom(goalNode);
     return goalNode;
     }
-  else if(p.getDistanceFrom(x, y, z)>MAX_JUMP)
-    {
+  else if(jumpCount> 20 || p.getDistanceFrom(x+dx, y+dy, z+dz)>MAX_JUMP)
+    {    
     return getOrMakeNode(x, y, z, p);
     }
   if(dy!=0)//if we're moving vertical, default to A* and only search one node at a time at any given 'jump'
@@ -207,7 +231,7 @@ private Node jump(int x, int y, int z, int dx, int dy, int dz, Node p)
       return getOrMakeNode(x, y, z, p); 
       }
     }
-  return jump(x,y,z,dx,dy,dz,p);
+  return jump(x+dx,y+dy,z+dz,dx,dy,dz,p);
   }
 
 /**
@@ -230,6 +254,7 @@ private void findNeighbors(Node n)
     }
   else
     {
+    Config.logDebug("parent null, getting all horizontal and vertical neighbors");
     findAllHorizontalNeighbors(n.x, n.y, n.z, 0, 0, 0, n);
     findVerticalNeighbors(n.x, n.y, n.z, 0, 0, 0, n);
     }  
@@ -299,26 +324,37 @@ private boolean zStopCheck(int x, int y, int z, int dx, int dy, int dz, Node n)
   return false;
   }
 
+private boolean verticalStopCheck(int x, int y, int z, int dx, int dy, int dz)
+  {
+  
+  return false;
+  }
+
 private void findDiagonalForcedNeighbors(int x, int y, int z, int dx, int dy, int dz, Node n)
   {  
   if(isWalkable(x+dx, y, z+dz))//the continuation of diagonal path
     {
     searchingNodes.add(getOrMakeNode(x+dx, y, z+dz, n));
+    Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
     }
   if(isWalkable(x+dx, y, z))//add L/R neighbors
     {
     searchingNodes.add(getOrMakeNode(x+dx, y, z, n));
+    Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
     if(isWalkable(x+dx, y, z-dz))//diagonal cut-corner check
       {
       searchingNodes.add(getOrMakeNode(x+dx, y, z-dz, n));
+      Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
       }
     }
   if(isWalkable(x, y, z+dz))//add NS neighbors
     {
     searchingNodes.add(getOrMakeNode(x, y, z+dz, n));
+    Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
     if(isWalkable(x-dx, y, z+dz))//diagonal corner forced check
       {
       searchingNodes.add(getOrMakeNode(x-dx, y, z+dz, n));
+      Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
       }
     }
   }
@@ -328,13 +364,16 @@ private void findXNeighbors(int x, int y, int z, int dx, int dy, int dz, Node n)
   if(isWalkable(x+dx, y, z))
     {
     searchingNodes.add(getOrMakeNode(x+dx, y, z, n));
+    Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
     if(!isWalkable(x, y, z-1) && isWalkable(x+dx,y,z-1))
       {
       searchingNodes.add(getOrMakeNode(x+dx, y, z-1, n));
+      Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
       }
     if(!isWalkable(x, y, z+1) && isWalkable(x+dx,y,z+1))
       {
       searchingNodes.add(getOrMakeNode(x+dx, y, z-1, n));
+      Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
       }
     }
   }
@@ -344,13 +383,16 @@ private void findZNeighbors(int x, int y, int z, int dx, int dy, int dz, Node n)
   if(isWalkable(x, y, z+dz))
     {
     searchingNodes.add(getOrMakeNode(x,y,z+dz, n));
+    Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
     if(!isWalkable(x-1, y, z) && isWalkable(x-1, y, z+dz))
       {
       searchingNodes.add(getOrMakeNode(x-1, y, z+dz, n));
+      Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
       }
     if(!isWalkable(x+1, y, z) && isWalkable(x+1, y, z+dz))
       {
       searchingNodes.add(getOrMakeNode(x+1, y, z+dz, n));
+      Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
       }
     }    
   }
@@ -360,10 +402,12 @@ private void findVerticalNeighbors(int x, int y, int z, int dx, int dy, int dz, 
   if(isWalkable(x, y+1, z))//U
     {
     searchingNodes.add(getOrMakeNode(x, y+1, z, n));
+    Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
     }
   if(isWalkable(x, y-1, z))//D
     {
     searchingNodes.add(getOrMakeNode(x, y+1, z, n));
+    Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
     }
   
   //up diagonals
@@ -391,17 +435,30 @@ private void findVerticalNeighbors(int x, int y, int z, int dx, int dy, int dz, 
  */
 private void findAllHorizontalNeighbors(int x, int y, int z, int dx, int dy, int dz, Node n)
   {
-  for(int bx = x-1; bx>=x+1;bx++)
+  Config.logDebug("checking horizontals");
+  for(int bx = x-1; bx <= x+1 ; bx++)
     {
-    for(int bz = z-1; bz>=z+1; bz++)
+    for(int bz = z-1; bz <= z+1; bz++)
       {
-      if(bx==x && bz==z){}
-      else if(bx==x+dx && bz==z+dz){}
+      Config.logDebug("checking horizontal: "+bx+","+y+","+bz);
+      if(bx==x && bz==z)
+        {
+        Config.logDebug("horiz skip1");        
+        }
+      else if(bx==x+dx && bz==z+dz)
+        {
+        Config.logDebug("horiz skip2");
+        }
       else
         {
         if(isWalkable(bx, y, bz))
           {
           searchingNodes.add(getOrMakeNode(bx, y, bz, n));
+          Config.logDebug("added: "+this.searchingNodes.get(this.searchingNodes.size()-1).toString());
+          }
+        else
+          {
+          Config.logDebug("NOT WALKABLE: "+bx+","+y+","+bz);
           }
         }      
       }
