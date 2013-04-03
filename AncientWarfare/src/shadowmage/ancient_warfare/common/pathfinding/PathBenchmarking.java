@@ -42,7 +42,7 @@ public void doTestNormal(float maxLength)
   for(int i = 0; i <100; i++)
     {
     t = System.nanoTime();
-    pather.findPath(world, 1, 1, 1, 10, 1, 10, (int)maxLength);
+    pather.findPath(world, 1, 1, 1, 40, 1, 40, (int)maxLength);
     total += System.nanoTime()-t;
     }
   Config.logDebug("100 x A* pathfinding runs: "+total/1000000+"ms   "+ total);
@@ -54,7 +54,7 @@ public void doTestJPS(float maxLength)
   for(int i = 0; i <100; i++)
     {
     t = System.nanoTime();
-    patherJPS.findPath(world, 1, 1, 1, 10, 1, 10, (int)maxLength);
+    patherJPS.findPath(world, 1, 1, 1, 40, 1, 40, (int)maxLength);
     total += System.nanoTime()-t;
     }
   Config.logDebug("100 x JPS pathfinding runs: "+total/1000000+"ms   "+ total);

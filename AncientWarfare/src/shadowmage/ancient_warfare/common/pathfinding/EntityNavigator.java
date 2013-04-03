@@ -41,7 +41,7 @@ double x;
 double y;
 double z;
 
-float maxPathLength = 10;
+float maxPathLength = 60;
 
 Node targetNode = null;
 
@@ -193,7 +193,7 @@ public void moveTowardsCurrentNode()
     int ex = MathHelper.floor_double(entity.posX);
     int ey = MathHelper.floor_double(entity.posY);
     int ez = MathHelper.floor_double(entity.posZ);
-    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<1.0f)
+    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<1.20f)
       {
 //      Config.logDebug("claiming node from completion LATE "+this.targetNode+"::"+entity);
       this.targetNode = path.claimNode();

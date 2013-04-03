@@ -79,6 +79,29 @@ public WorldTestChunk()
     worldChunk[farWall][2][z] = 1;
     }
   worldChunk[farWall-2][1][farWall] = 0;
+  worldChunk[farWall-2][2][farWall] = 0;   
+  
+  closeWall = 33;
+  farWall = 45;
+  for(int x = closeWall; x<=farWall ; x++)
+    {
+    worldChunk[x][1][closeWall] = 1;
+    worldChunk[x][2][closeWall] = 1;
+    worldChunk[x][1][farWall] = 1;
+    worldChunk[x][2][farWall] = 1;
+    }  
+    worldChunk[closeWall-1][1][farWall-5] = LADDER;
+    worldChunk[closeWall-1][2][farWall-5] = LADDER;
+    worldChunk[closeWall+1][1][farWall-5] = LADDER;
+    worldChunk[closeWall+1][2][farWall-5] = LADDER;
+  for(int z = closeWall; z<=farWall ; z++)
+    {
+    worldChunk[closeWall][1][z] = 1;
+    worldChunk[closeWall][2][z] = 1;
+    worldChunk[farWall][1][z] = 1;
+    worldChunk[farWall][2][z] = 1;
+    }
+  worldChunk[farWall-2][1][farWall] = 0;
   worldChunk[farWall-2][2][farWall] = 0;    
   }
 
