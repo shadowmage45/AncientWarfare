@@ -20,11 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.Trig;
+import shadowmage.meim.common.config.Config;
 
 public class AIMoveToTarget extends NpcAI
 {
@@ -73,9 +75,32 @@ public void onTick()
   float bX = npc.getTarget().posX();
   float bY = npc.getTarget().posY();
   float bZ = npc.getTarget().posZ();
-  if(!npc.getTarget().isEntityEntry)
+  if(npc.getTarget().isEntityEntry)
     {
-    //bY++;//move to the block ABOVE the target...or close..or..w/e..
+    Entity ent = npc.getTarget().getEntity();
+    if(ent!=null && !ent.onGround)
+      {
+      Config.logDebug("setting new target height for flying target");
+      int x = MathHelper.floor_float(bX);
+      int y = MathHelper.floor_float(bY);
+      int z = MathHelper.floor_float(bZ);
+      if(npc.worldObj.getBlockId(x, y, z)==Block.ladder.blockID)
+        {
+        Config.logDebug("target on ladder, not adjusting");
+        }
+      else
+        {
+        while(y>1)
+          {
+          if(npc.worldObj.isBlockNormalCube(x, y, z))
+            {
+            break;
+            }
+          y--;
+          }
+        bY = y+1;
+        }      
+      }
     }
 //  Config.logDebug("targetPos: "+bX+","+bY+","+bZ);
   this.prevDistance = this.distance;

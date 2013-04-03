@@ -66,8 +66,8 @@ public NpcTargetHelper targetHelper;
 
 private AIAggroEntry target = null;
 
-//public EntityNavigator nav;
-public EntityNavigatorThreaded nav;
+public EntityNavigator nav;
+//public EntityNavigatorThreaded nav;
 
 /**
  * @param par1World
@@ -79,8 +79,8 @@ public NpcBase(World par1World)
   this.targetHelper = new NpcTargetHelper(this);
   this.moveSpeed = 0.325f;
   this.setAIMoveSpeed(0.325f);
-//  this.nav = new EntityNavigator(this);
-  this.nav = new EntityNavigatorThreaded(this);
+  this.nav = new EntityNavigator(this);
+//  this.nav = new EntityNavigatorThreaded(this);
   this.stepHeight = 1.1f;
   }
 
@@ -241,7 +241,10 @@ public void onUpdate()
     this.targetHelper.checkForTargets();
     //this.pathTest.findPath(worldObj, posX, posY, posZ, posX+10, posY, posZ, 40);
     }
-  this.nav.moveTowardsCurrentNode();
+  if(!this.worldObj.isRemote)
+    {
+    this.nav.moveTowardsCurrentNode();
+    }
   super.onUpdate();  
   }
 
