@@ -62,11 +62,23 @@ public class PathFinderJPS
 {
 
 private static final float MAX_JUMP = 25.f;
+private static final long interruptTime = 15000000;//15ms
+
+private volatile boolean shouldInterrupt = false;
+public boolean threaded = false;
+
+private long runStart = 0;
+
+private int maxPathLength;
+private static final int maxSearchIterations = 2000;
 
 private PathWorldAccess world;
 private Node startNode;
 private Node goalNode;
 private Node currentNode;
+
+private Node bestFoundEndNode;//the end node of the best-guess found path
+private float bestFoundPathLength;//the path-length of the current best-guess path
 
 PriorityQueue<Node> qNodes = new PriorityQueue<Node>();
 private ArrayList<Node> oldNodes = new ArrayList<Node>();//closed nodes....
@@ -74,9 +86,11 @@ private LinkedList<Node> nodeCache = new LinkedList<Node>();//just a cache of un
 
 private ArrayList<Node> searchingNodes = new ArrayList<Node>();
 
-
 public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int maxLength)
-  {
+  {  
+  this.runStart = System.nanoTime();
+  this.maxPathLength = maxLength;
+  this.shouldInterrupt = false;
   this.world = world;
   this.startNode = getOrMakeNode(x, y, z, null);  
   this.goalNode = getOrMakeNode(x1, y1, z1, null);
@@ -85,6 +99,8 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, i
   startNode.f = startNode.getH(goalNode);
   goalNode.g = goalNode.getDistanceFrom(startNode);
   goalNode.f = goalNode.g;
+  this.bestFoundEndNode = this.startNode;
+  this.bestFoundPathLength = 0;
   this.qNodes.add(startNode);
   LinkedList<Node> pathNodes = new LinkedList<Node>();
   this.search();  
@@ -113,20 +129,21 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, i
   return pathNodes;
   }
 
+synchronized public void setInterrupted()
+  {
+  this.shouldInterrupt = true;
+  }
 
 int searchCount = 0;
 private void search()
   {
   searchCount = 0;
   while(!this.qNodes.isEmpty())
-    {    
-    searchCount++;
-//    Config.logDebug("searching. iteration: "+searchCount);
-    if(searchCount>=1750)
+    {
+    if(threaded)
       {
-      Config.logDebug("breaking due to 750+ search");      
-      break;
-      }
+      //Thread.yield();
+      }    
     this.currentNode = this.qNodes.poll();
     if(this.oldNodes.contains(currentNode))
       {
@@ -136,8 +153,26 @@ private void search()
     else
       {
       this.oldNodes.add(currentNode);
-      } 
-    if(this.currentNode.equals(goalNode))
+      }
+    //this.checkBestPath();
+    searchCount++;
+//  Config.logDebug("searching. iteration: "+searchCount);
+    if(searchCount>=maxSearchIterations )
+      {
+      Config.logDebug("breaking due to hitting max iteration limit of: "+maxSearchIterations);      
+      break;
+      }
+    if(System.nanoTime()- runStart >= interruptTime)
+      {
+      Config.logDebug("breaking due to hitting max iteration time of: "+interruptTime);
+      break;
+      }
+    if(this.shouldInterrupt )
+      {
+      Config.logDebug("breaking due interrupt requested.  due to path length: " + (this.bestFoundPathLength >= this.maxPathLength) );
+      break;
+      }
+    if(this.currentNode.equals(goalNode) && !shouldInterrupt)
       {
       this.currentNode = this.goalNode;
       Config.logDebug("goal hit!");
@@ -145,6 +180,22 @@ private void search()
       }
     identifySuccessors(currentNode);
     }
+  }
+
+private void checkBestPath()
+  {
+  float len = this.currentNode.getPathLength();
+  if(this.currentNode.f < this.bestFoundEndNode.f || len > this.bestFoundPathLength)
+    {
+    this.bestFoundPathLength = len;
+    this.bestFoundEndNode = this.currentNode;
+    if(this.bestFoundPathLength>=this.maxPathLength)
+      {
+      this.shouldInterrupt = true;
+      this.goalNode = this.bestFoundEndNode;
+      }
+    }
+  
   }
 
 /**
@@ -157,7 +208,6 @@ private void identifySuccessors(Node n)
   this.findNeighbors(n);
   Iterator<Node> it = this.searchingNodes.iterator();
   Node trim;  
-//  Config.logDebug("found "+searchingNodes.size()+" neighbors to : "+n.toString());
   int dx;
   int dy;
   int dz;
@@ -182,13 +232,6 @@ private void identifySuccessors(Node n)
 
 private Node jump(int x, int y, int z, int dx, int dy, int dz, Node p)
   {
-//  Config.logDebug("jumping: "+x+","+y+","+z+" :: "+dx+","+dy+","+dz);  
-//  if(isWalkable(x,y+dy-1,z) || isWalkable(x,y+dy+1,z))
-//    {
-//    Config.logDebug("HIT LADDER WHILE JUMPING");
-//    return getOrMakeNode(x, y, z, p);
-//    }
-  //else
   if(x == goalNode.x && y == goalNode.y && z == goalNode.z)
     {
     goalNode.parentNode = p;
@@ -197,12 +240,10 @@ private Node jump(int x, int y, int z, int dx, int dy, int dz, Node p)
     }  
   else if(isWalkable(x,y-1,z) || isWalkable(x, y+1,z))
     {
-//    Config.logDebug("HIT LADDER WHILE JUMPING");
     return getOrMakeNode(x, y, z, p);
     }
   else if(isWalkable(x+dx, y-1,z+dz) || isWalkable(x+dx, y+1,z+dz))
     {
-//    Config.logDebug("HIT STAIRS WHILE JUMPING");
     return getOrMakeNode(x, y, z, p);
     }  
   else if(!isWalkable(x+dx, y+dy, z+dz))
@@ -338,7 +379,6 @@ private boolean xStopCheck(int x, int y, int z, int dx, int dy, int dz, Node n)
     {
     return true;
     }
-//  return x==goalNode.x;
   return false;
   }
 

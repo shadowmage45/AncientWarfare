@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import shadowmage.ancient_warfare.common.config.Config;
 
 public class PathBenchmarking
@@ -29,7 +32,6 @@ public class PathBenchmarking
 private static PathBenchmarking INSTANCE = new PathBenchmarking();
 public static PathBenchmarking instance(){return INSTANCE;} 
 
-
 private PathWorldAccessTest world = new PathWorldAccessTest();
 private PathFinderJPS patherJPS = new PathFinderJPS();
 private PathFinder pather = new PathFinder();
@@ -37,8 +39,40 @@ private PathFinder pather = new PathFinder();
 long t;
 long total;
 
+List<PathThreadTestCaller> openCallers = new ArrayList<PathThreadTestCaller>();
+
+public void doThreadedTests(float maxLength)
+  {
+  total = 0;
+  t = System.nanoTime();
+  PathThreadTestCaller caller;
+  for(int i = 0; i < 100; i++)
+    {
+    caller = new PathThreadTestCaller(this);
+    this.openCallers.add(caller);
+    }
+  for(PathThreadTestCaller call : this.openCallers)
+    {
+    PathManager.instance().requestPath(call, world, 1, 1, 1, 40, 1, 40, (int)maxLength);
+    }
+//  PathManager.instance().requestPath(new PathThreadTestCaller(this), world, 1, 1, 1, 40, 1, 40, (int)maxLength);
+  }
+
+private void onRunnerFinished(PathThreadTestCaller runner)
+  {
+  if(this.openCallers.contains(runner))
+    {
+    this.openCallers.remove(runner);
+    }
+  total += System.nanoTime() - t;
+  t = System.nanoTime();
+  Config.logDebug("runner returned, still have open runner count: "+this.openCallers.size());
+  Config.logDebug("running time: "+total);
+  }
+
 public void doTestNormal(float maxLength)
   {
+  total = 0;
   for(int i = 0; i <100; i++)
     {
     t = System.nanoTime();
@@ -51,6 +85,7 @@ public void doTestNormal(float maxLength)
 
 public void doTestJPS(float maxLength)
   {
+  total = 0;
   for(int i = 0; i <100; i++)
     {
     t = System.nanoTime();
@@ -61,5 +96,18 @@ public void doTestJPS(float maxLength)
   total = 0;
   }
 
+private class PathThreadTestCaller implements IPathableCallback
+{
+private PathBenchmarking parent;
+public PathThreadTestCaller(PathBenchmarking parent)
+  {
+  this.parent = parent;
+  }
+@Override
+public void onPathFound(List<Node> pathNodes)
+  {
+  this.parent.onRunnerFinished(this);
+  }
+}
 
 }

@@ -11,6 +11,14 @@ GENERAL
 * land-mines
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 
+PATHFINDING
+* get a quick path out to range X (8) using regular A* with early-terminate.
+* request a full-path from PathManager.  It will dispatch a thread into the queue which will return a finished
+        path when completed
+* if entity completes their 'short' path && either request is not finished || request returned null
+        recalc a new 'quick' path, and resubmit request to queue
+* when PathManager returns a                
+
 VEHICLES    
 * remove old targetPos code...or use it for other things....
 * inventory container synch methods... (IEntityContainerSynch)

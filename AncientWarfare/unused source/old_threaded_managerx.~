@@ -54,8 +54,8 @@ public static PathThreadManager instance(boolean server)
 
 private static final int MAX_THREAD_COUNT = 4;
 
-LinkedList<PathFinderThread> threadPool = new LinkedList<PathFinderThread>();
-List<PathFinderThread> runningThreads = new ArrayList<PathFinderThread>();
+//LinkedList<PathFinderThread> threadPool = new LinkedList<PathFinderThread>();
+//List<PathFinderThread> runningThreads = new ArrayList<PathFinderThread>();
 LinkedList<PathRequestEntry> queuedRequests = new LinkedList<PathRequestEntry>();
 
 /**
