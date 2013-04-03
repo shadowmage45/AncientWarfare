@@ -36,7 +36,6 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinder;
-import shadowmage.ancient_warfare.common.pathfinding.PathFinderIncremental;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinderJPS;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessTest;
@@ -188,31 +187,35 @@ public void load(FMLPostInitializationEvent evt)
   
   TickRegistry.registerTickHandler(new ServerTickTimer(), Side.SERVER);
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
-  this.pathTest();
+//  this.pathTest();
+  
+  PathWorldAccess world = new PathWorldAccessTest();
+  PathFinderJPS newJPS = new PathFinderJPS();
+  newJPS.findPath(world, 1, 1, 1, 10, 1, 10);
   //PathUtils.traceRay2(0, 0.5f, 0.f, 10, 0.0f, 15.0f);
   }
 
 public void pathTest()
   {
-  PathFinderIncremental pather = new PathFinderIncremental();
+  PathFinder pather = new PathFinder();
   PathWorldAccess world = new PathWorldAccessTest();
-  PathFinderJPS jps = new PathFinderJPS();  
+//  PathFinderJPS jps = new PathFinderJPS();  
   List<Node> path;
   List<Node> pathPart;
   long tStart;
   long tCurrent;
   long tTotal = 0;
-  Config.logDebug("starting JPS run");
-  for(int i = 0; i < 10 ; i++)
-    {
-    tStart = System.nanoTime();
-    path = jps.findPath(world, 1, 1, 1, 10, 1, 10, 25);
-    tCurrent = System.nanoTime() - tStart;
-    Config.logDebug("jps time: "+tCurrent);
-    tTotal+=tCurrent;
-    }  
+//  Config.logDebug("starting JPS run");
+//  for(int i = 0; i < 10 ; i++)
+//    {
+//    tStart = System.nanoTime();
+//    path = jps.findPath(world, 1, 1, 1, 10, 1, 10, 25);
+//    tCurrent = System.nanoTime() - tStart;
+//    Config.logDebug("jps time: "+tCurrent);
+//    tTotal+=tCurrent;
+//    }  
   
-  Config.logDebug("JPS run finished 10xTime: "+tTotal/1000000L+"ms  ::  "+tTotal);
+//  Config.logDebug("JPS run finished 10xTime: "+tTotal/1000000L+"ms  ::  "+tTotal);
   tTotal = 0;
   Node n;
   int x;

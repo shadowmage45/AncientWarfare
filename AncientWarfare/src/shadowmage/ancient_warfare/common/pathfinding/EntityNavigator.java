@@ -35,7 +35,7 @@ public class EntityNavigator
 NpcBase entity;
 EntityPath path = new EntityPath();
 PathWorldAccessEntity worldAccess;
-PathFinderIncremental pather;
+PathFinder pather;
 
 double x;
 double y;
@@ -52,7 +52,7 @@ public EntityNavigator(NpcBase owner)
   {
   this.entity = owner;
   this.worldAccess = new PathWorldAccessEntity(entity.worldObj, entity);
-  pather = new PathFinderIncremental();  
+  pather = new PathFinder();  
   this.x = entity.posX;
   this.y = entity.posY;
   this.z = entity.posZ;

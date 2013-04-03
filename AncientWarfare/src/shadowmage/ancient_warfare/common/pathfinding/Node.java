@@ -170,6 +170,14 @@ public float getDistanceFrom(Node node)
   return MathHelper.sqrt_float(x*x+y*y+z*z);  
   }
 
+public float getDistanceFrom(int x, int y, int z)
+  {
+  float x1 = this.x - x;
+  float y1 = this.y - y;
+  float z1 = this.z - z;
+  return MathHelper.sqrt_float(x1*x1+y1*y1+z1*z1);
+  }
+
 public float getPathLength()
   {
   float len = 0;

@@ -46,21 +46,28 @@ public int getBlockId(int x, int y, int z)
   return world.getBlockId(x, y, z);
   }
 
-public boolean isWalkable(int x, int y, int z, Node src)
+public boolean isWalkable(int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);
   boolean cube = world.isBlockNormalCube(x, y, z);
   if(id==LADDER)
     {
-    
+    id = world.getBlockId(x, y+1, z);
+    if(world.isBlockNormalCube(x, y+1, z) && id !=LADDER) //id!=0
+      {
+      return false;
+      }
     }
   else if(cube || id==Block.waterMoving.blockID || id==Block.waterStill.blockID || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)//if solid and not a ladder//id!=0
     {
     return false;
     }    
   else if(!world.isBlockNormalCube(x, y-1, z) && id!=LADDER)//or if air below and not a ladder
-    {    //world.getBlockId(x, y-1, z)==0
-    return false;
+    {
+    if(world.getBlockId(x, y-1, z)!=LADDER)
+      {
+      return false;
+      }
     }  
   else 
     {    
@@ -71,6 +78,11 @@ public boolean isWalkable(int x, int y, int z, Node src)
       }
     }
   return true;
+  }
+
+public boolean isWalkable(int x, int y, int z, Node src)
+  {
+  return this.isWalkable(x, y, z);
   }
 
 public boolean isRemote()
