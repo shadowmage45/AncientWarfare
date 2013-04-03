@@ -262,10 +262,10 @@ private void findNeighbors(Node n)
 
 private void findForcedNeighbors(int x, int y, int z, int dx, int dy, int dz, Node n)
   {  
+  findVerticalNeighbors(n.x, n.y, n.z, 0, 0, 0, n);
   if(dy!=0)//moving vertically
     {
-    findAllHorizontalNeighbors(n.x, n.y, n.z, 0, 0, 0, n);
-    findVerticalNeighbors(n.x, n.y, n.z, 0, 0, 0, n);
+    findAllHorizontalNeighbors(n.x, n.y, n.z, 0, 0, 0, n);    
     }
   else if(dx!=0 && dz!=0)//diagonal
     {
