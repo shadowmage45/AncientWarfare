@@ -122,7 +122,7 @@ private void search()
     {    
     searchCount++;
 //    Config.logDebug("searching. iteration: "+searchCount);
-    if(searchCount>=750)
+    if(searchCount>=1750)
       {
       Config.logDebug("breaking due to 750+ search");      
       break;
@@ -170,9 +170,12 @@ private void identifySuccessors(Node n)
     dy = dy <= -1 ? -1 : dy >= 1 ? 1 : 0;
     dz = dz <= -1 ? -1 : dz >= 1 ? 1 : 0;
     Node jp = this.jump(nb.x, nb.y, nb.z, dx, dy, dz, n);
-    if(!oldNodes.contains(jp))
+    if(jp!=null)
       {
-      this.addOrUpdateNode(jp);
+      if(!oldNodes.contains(jp))
+        {
+        this.addOrUpdateNode(jp);
+        }
       }
     }
   }
@@ -233,12 +236,20 @@ private Node jump(int x, int y, int z, int dx, int dy, int dz, Node p)
         {
         return getOrMakeNode(x, y, z, p);
         }
+      if(!isWalkable(x+dx, y, z+dz))
+        {
+        return null;
+        }
       }
     else
       {
       if(xStopCheck(x, y, z, dx, dy, dz, p))
         {
         return getOrMakeNode(x, y, z, p);
+        }
+      if(!isWalkable(x+dx, y, z+dz))
+        {
+        return null;
         }
       }
     }
@@ -306,14 +317,6 @@ private void findForcedNeighbors(int x, int y, int z, int dx, int dy, int dz, No
  */
 private boolean diagonalStopCheck(int x, int y, int z, int dx, int dy, int dz, Node n)
   {
-//  if(isWalkable(x, y, z+dz) && !isWalkable(x-dx, y, z+dz))
-//    {
-//    return true;
-//    }
-//  if(isWalkable(x+dz, y, z) && !isWalkable(x+dx, y, z-dz))
-//    {
-//    return true;
-//    }
   if(isWalkable(x+dx,y,z) && !isWalkable(x,y,z-dz))
     {
     return true;
@@ -335,6 +338,7 @@ private boolean xStopCheck(int x, int y, int z, int dx, int dy, int dz, Node n)
     {
     return true;
     }
+//  return x==goalNode.x;
   return false;
   }
 
@@ -348,14 +352,10 @@ private boolean zStopCheck(int x, int y, int z, int dx, int dy, int dz, Node n)
     {
     return true;
     }  
+//  return z == goalNode.z;
   return false;
   }
 
-private boolean verticalStopCheck(int x, int y, int z, int dx, int dy, int dz)
-  {
-  
-  return false;
-  }
 
 private void findDiagonalForcedNeighbors(int x, int y, int z, int dx, int dy, int dz, Node n)
   {  
