@@ -19,6 +19,130 @@ PATHFINDING
         recalc a new 'quick' path, and resubmit request to queue
 * when PathManager returns a                
 
+THREADING
+*
+
+
+    developerWorks®
+
+    Technical topics
+    Evaluation software
+    Community
+    Events
+
+Search developerWorks
+
+    developerWorks
+    Technical topics
+    Java technology
+    Technical library
+
+Java theory and practice: Thread pools and work queues
+
+Thread pools help achieve optimum resource utilization
+Brian Goetz (brian@quiotix.com), Principal Consultant, Quiotix Corp
+
+Summary:  One of the most common questions posted on our Multithreaded Java programming discussion forum is some version of "How do I create a thread pool?" In nearly every server application, the question of thread pools and work queues comes up. In this article, Brian Goetz explores the motivations for thread pools, some basic implementation and tuning techniques, and some common hazards to avoid.
+
+View more content in this series
+
+Date:  01 Jul 2002
+Level:  Intermediate
+Also available in:   Russian  Japanese
+
+Activity:  57525 views
+Comments:   4 (View | Add comment - Sign in)
+Average rating 4 stars based on 417 votes Average rating (417 votes)
+Rate this article
+
+Why thread pools?
+
+Many server applications, such as Web servers, database servers, file servers, or mail servers, are oriented around processing a large number of short tasks that arrive from some remote source. A request arrives at the server in some manner, which might be through a network protocol (such as HTTP, FTP, or POP), through a JMS queue, or perhaps by polling a database. Regardless of how the request arrives, it is often the case in server applications that the processing of each individual task is short-lived and the number of requests is large.
+
+One simplistic model for building a server application would be to create a new thread each time a request arrives and service the request in the new thread. This approach actually works fine for prototyping, but has significant disadvantages that would become apparent if you tried to deploy a server application that worked this way. One of the disadvantages of the thread-per-request approach is that the overhead of creating a new thread for each request is significant; a server that created a new thread for each request would spend more time and consume more system resources creating and destroying threads than it would processing actual user requests.
+
+In addition to the overhead of creating and destroying threads, active threads consume system resources. Creating too many threads in one JVM can cause the system to run out of memory or thrash due to excessive memory consumption. To prevent resource thrashing, server applications need some means of limiting how many requests are being processed at any given time.
+
+A thread pool offers a solution to both the problem of thread life-cycle overhead and the problem of resource thrashing. By reusing threads for multiple tasks, the thread-creation overhead is spread over many tasks. As a bonus, because the thread already exists when a request arrives, the delay introduced by thread creation is eliminated. Thus, the request can be serviced immediately, rendering the application more responsive. Furthermore, by properly tuning the number of threads in the thread pool, you can prevent resource thrashing by forcing any requests in excess of a certain threshold to wait until a thread is available to process it.
+
+Back to top
+
+Alternatives to thread pools
+
+Thread pools are far from the only way to use multiple threads within a server application. As mentioned above, sometimes it is perfectly sensible to spawn a new thread for each new task. However, if the frequency of task creation is high and the mean task duration is low, spawning a new thread for each task will lead to performance problems.
+
+Another common threading model is to have a single background thread and task queue for tasks of a certain type. AWT and Swing use this model, in which there is a GUI event thread, and all work that causes changes in the user interface must execute in that thread. However, because there is only one AWT thread, it is undesirable to execute tasks in the AWT thread that may take a perceptible amount of time to complete. As a result, Swing applications often require additional worker threads for long-running UI-related tasks.
+
+Both the thread-per-task and the single-background-thread approaches can work perfectly well in certain situations. The thread-per-task approach works quite well with a small number of long-running tasks. The single-background-thread approach works quite well so long as scheduling predictability is not important, as is the case with low-priority background tasks. However, most server applications are oriented around processing large numbers of short-lived tasks or subtasks, and it is desirable to have a mechanism for efficiently processing these tasks with low overhead, as well as some measure of resource management and timing predictability. Thread pools offer these advantages.
+
+Back to top
+
+Work queues
+
+In terms of how thread pools are actually implemented, the term "thread pool" is somewhat misleading, in that the "obvious" implementation of a thread pool doesn't exactly yield the result we want in most cases. The term "thread pool" predates the Java platform, and is probably an artifact from a less object-oriented approach. Still, the term continues to be widely used.
+
+While we could easily implement a thread pool class in which a client class would wait for an available thread, pass the task to that thread for execution, and then return the thread to the pool when it is finished, this approach has several potentially undesirable effects. What happens, for instance, when the pool is empty? Any caller that attempted to pass a task to a pool thread would find the pool empty, and its thread would block while it waited for an available pool thread. Often, one of the reasons we would want to use background threads is to prevent the submitting thread from blocking. Pushing the blocking all the way to the caller, as is the case in the "obvious" implementation of a thread pool, can end up causing the same problem we were trying to solve.
+
+What we usually want is a work queue combined with a fixed group of worker threads, which uses wait() and notify() to signal waiting threads that new work has arrived. The work queue is generally implemented as some sort of linked list with an associated monitor object. Listing 1 shows an example of a simple pooled work queue. This pattern, using a queue of Runnable objects, is a common convention for schedulers and work queues, although there is no particular need imposed by the Thread API to use the Runnable interface.
+http://www.ibm.com/developerworks/library/j-jtp0730/index.html
+public class WorkQueue
+{
+    private final int nThreads;
+    private final PoolWorker[] threads;
+    private final LinkedList queue;
+
+    public WorkQueue(int nThreads)
+    {
+        this.nThreads = nThreads;
+        queue = new LinkedList();
+        threads = new PoolWorker[nThreads];
+
+        for (int i=0; i<nThreads; i++) {
+            threads[i] = new PoolWorker();
+            threads[i].start();
+        }
+    }
+
+    public void execute(Runnable r) {
+        synchronized(queue) {
+            queue.addLast(r);
+            queue.notify();
+        }
+    }
+
+    private class PoolWorker extends Thread {
+        public void run() {
+            Runnable r;
+
+            while (true) {
+                synchronized(queue) {
+                    while (queue.isEmpty()) {
+                        try
+                        {
+                            queue.wait();
+                        }
+                        catch (InterruptedException ignored)
+                        {
+                        }
+                    }
+
+                    r = (Runnable) queue.removeFirst();
+                }
+
+                // If we don't catch RuntimeException, 
+                // the pool could leak threads
+                try {
+                    r.run();
+                }
+                catch (RuntimeException e) {
+                    // You might want to log something here
+                }
+            }
+        }
+    }
+}
+
+
 VEHICLES    
 * remove old targetPos code...or use it for other things....
 * inventory container synch methods... (IEntityContainerSynch)
