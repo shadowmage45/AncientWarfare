@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -47,10 +49,6 @@ public static PathManager instance(){return INSTANCE;}
 private PathFinder quickPather = new PathFinder();
 
 
-public List<Node> findStarterPath(PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int maxRange)
-  {
-  return quickPather.findPath(world, x, y, z, x1, y1, z1, maxRange);
-  }
 
 /**
  * open/unused thread instances, ready to be pulled out and put to work
@@ -72,7 +70,9 @@ private volatile List<PathResult> finishedThreads = new ArrayList<PathResult>();
 
 private LinkedList<PathRequestEntry> qRequests = new LinkedList<PathRequestEntry>();
 
+
 private static final int MAX_THREADS = 8;
+private Executor threadPool = Executors.newFixedThreadPool(MAX_THREADS);
 
 private PathManager()
   {
@@ -82,6 +82,11 @@ private PathManager()
     worker.startThread();
     this.idleThreads.add(worker);
     }
+  }
+
+public List<Node> findStarterPath(PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int maxRange)
+  {
+  return quickPather.findPath(world, x, y, z, x1, y1, z1, maxRange);
   }
 
 public synchronized void requestPath(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int maxRange)
@@ -124,6 +129,7 @@ public synchronized void requestPath(IPathableCallback caller, PathWorldAccess w
 
 synchronized public void onThreadFinished(PathThreadWorker worker)
   {
+  //threadPool.ex
   this.workingThreads.remove(worker);
 //  finishedLock.lock();
   this.finishedThreads.add(worker.getPathResult());
