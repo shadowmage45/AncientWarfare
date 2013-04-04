@@ -21,10 +21,18 @@
 package shadowmage.ancient_warfare.common.pathfinding;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 import net.minecraft.util.MathHelper;
-
+import shadowmage.ancient_warfare.common.config.Config;
+/**
+ * a classic, slow-as-hell implimentation of A* pathfinding w/ euclidian distance
+ * does zero node-caching..
+ * @author Shadowmage
+ *
+ */
 public class PathFinderAStarClassic
 {
 
@@ -34,9 +42,10 @@ private PriorityQueue<Node> openList = new PriorityQueue<Node>();
 private ArrayList<Node> closedNodes = new ArrayList<Node>();
 private ArrayList<Node> searchNodes = new ArrayList<Node>();
 
-private void findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
+public LinkedList<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
   {
-  Node current;
+  this.world = world;
+  Node current = null;
   Node start = new Node(x,y,z);
   start.g = 0;
   start.f = start.getDistanceFrom(tx, ty, tz);
@@ -45,11 +54,66 @@ private void findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty
     {
     current = openList.poll();
     closedNodes.add(current);
+    if(current.equals(tx, ty, tz))
+      {
+//      Config.logDebug("goal hit");
+      break;
+      }
+    List<Node> neighbors = findNeighbors(current);
+    for(Node n : neighbors)
+      {
+      if(closedNodes.contains(n))
+        {
+        continue;
+        }
+      if(!openList.contains(n))
+        {
+        n.g = current.g + n.getDistanceFrom(current);
+        n.f = n.g + n.getH(tx, ty, tz);
+        n.parentNode = current;
+        openList.offer(n);
+        }
+      else//already in open list, check score
+        {
+        float g = current.g + current.getDistanceFrom(n);
+        float f = g + n.getH(tx, ty, tz);
+        if(f<n.f)
+          {
+          for(Node c : openList)
+            {
+            if(c.equals(n))
+              {
+              c.parentNode = current;
+              c.g = g;
+              c.f = f;
+              break;
+              }
+            }
+          }
+        }
+      }
+    } 
+  LinkedList<Node> path = new LinkedList<Node>();
+  Node n = current;
+  Node c = null;
+  Node p = null;
+  while(n!=null)
+    {
+    p = c;
+    c = new Node(n.x, n.y, n.z);
+    c.parentNode = p;
+    path.push(c);
+//    Config.logDebug(c.toString());
+    n = n.parentNode;
     }
+  openList.clear();
+  closedNodes.clear();
+  searchNodes.clear();
+  this.world = null;
+  return path;
   }
 
-
-private void findNeighbors(Node n)
+private List<Node> findNeighbors(Node n)
   {
   this.searchNodes.clear();  
   tryAddSearchNode(n.x-1, n.y, n.z, n);
@@ -83,22 +147,17 @@ private void findNeighbors(Node n)
   tryAddSearchNode( n.x+1, n.y-1, n.z, n);
   tryAddSearchNode( n.x, n.y-1, n.z-1, n);
   tryAddSearchNode( n.x, n.y-1, n.z+1, n);  
+  return this.searchNodes;
   }
 
 private void tryAddSearchNode(int x, int y, int z, Node p)
   {
   if(world.isWalkable(x, y, z))
     {
+    searchNodes.add(new Node(x,y,z));
     //searchNodes.add(getOrMakeNode(x, y, z, p));
     }
   }
-
-
-
-
-
-
-
 
 private class Node implements Comparable
 {
@@ -124,12 +183,12 @@ public Node(int bX, int bY, int bZ)
 
 protected float getH(Node b)
   {
-  return getDistanceFrom(b);
+  return getDistanceFrom(b) + travelCost * 10;
   }
 
 protected float getH(int tx, int ty, int tz)
   {
-  return getDistanceFrom(tx, ty, tz);      
+  return getDistanceFrom(tx, ty, tz) + travelCost * 10;      
   }
 
 @Override

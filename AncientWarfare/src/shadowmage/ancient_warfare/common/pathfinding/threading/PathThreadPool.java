@@ -32,7 +32,7 @@ public class PathThreadPool
 {
 
 static int threadNum = 0;
-private static final int MAX_THREADS = 8;
+private static final int MAX_THREADS = 4;
 private static PathThreadPool INSTANCE = new PathThreadPool();
 public static PathThreadPool instance(){return INSTANCE;}
 private LinkedList<PathThreadWorker> workQueue = new LinkedList<PathThreadWorker>();
@@ -57,6 +57,8 @@ public List<Node> findStarterPath(PathWorldAccess world, int x, int y, int z, in
 
 public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int maxRange)
   {
+  synchronized(idleWorkers)
+  {
   PathThreadWorker worker;
   if(this.idleWorkers.isEmpty())
     {
@@ -69,6 +71,19 @@ public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, 
   worker.setupPathParams(caller, world, x, y, z, x1, y1, z1, maxRange);
   addTaskToQueue(worker);
   }
+  }
+
+private void tryDispatchResults()
+  {
+  synchronized(results)
+  {
+  for(PathResult r : this.results)
+    {
+    r.caller.onPathFound(r.path);
+    }
+  this.results.clear();
+  }
+  }
 
 private void onTaskCompleted(PathThreadWorker worker)
   {
@@ -80,6 +95,7 @@ private void onTaskCompleted(PathThreadWorker worker)
     {
     this.idleWorkers.add(worker);
     }
+  tryDispatchResults();
   }
 
 private void addTaskToQueue(PathThreadWorker worker) 

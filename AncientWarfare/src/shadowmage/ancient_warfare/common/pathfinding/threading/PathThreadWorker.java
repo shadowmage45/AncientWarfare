@@ -59,7 +59,7 @@ public void setupPathParams(IPathableCallback caller, PathWorldAccess world, int
   this.x1 = x1;
   this.y1 = y1;
   this.z1 = z1;  
-  Config.logDebug("setting worker hasWork:"+this.toString());
+//  Config.logDebug("setting worker hasWork:"+this.toString());
   this.interruped = false;
   }
 
@@ -73,7 +73,7 @@ public void interruptWorker()
 public void run()
   { 
   path = this.pather.findPath(world, x, y, z, x1, y1, z1, maxRange);
-  Config.logDebug("thread finishing");
+//  Config.logDebug("thread finishing");
   }
 
 public PathResult getPathResult()

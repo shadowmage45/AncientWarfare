@@ -21,22 +21,16 @@
 package shadowmage.ancient_warfare.common.pathfinding;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 
-import shadowmage.ancient_warfare.common.config.Config;
-
 /**
- * going to be a theta-Star implementation
- * (pre-smoothed ASTAR paths), using line-of sight checks
- * at every node-link to recalc optimal g-costs from start-current
- * so that it uses straight-line from A->B directly
- * instead of doing all diagonal moves then all horizontal moves
+ * Optimized A* Using node-caching for all current in-play nodes, to try and limit object creation and recalculation of variables
  * @author Shadowmage
  *
  */
-public class PathFinderThetaStar
+public class PathFinderAStar
 {
 /**
  * A STAR PSUEDOCODE ********************************************************************
@@ -95,7 +89,7 @@ int ty;
 int tz;
 PathWorldAccess world;
 
-public void findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
+public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
   {
   this.world = world;
   this.sx = x;
@@ -123,13 +117,11 @@ public void findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty,
     n = n.parentNode;
     }
   this.currentNode = null;
-  this.world = null;  
-  
-  this.nodeCache.clear();
-//  this.nodeCache.addAll(allNodes);
+  this.world = null;    
   this.allNodes.clear();
   this.qNodes.clear();
   this.searchNodes.clear();
+  return path;
   }
 
 private void searchLoop()
@@ -146,6 +138,18 @@ private void searchLoop()
     currentNode.closed = true;    
     this.findNeighbors(currentNode);
     float tent;
+    /**
+     * *        IF N.CLOSED && C.G + DIST(C,N) > N.G (new path to neighbor is longer than the neighbors current path)
+ *          CONTINUE
+ *        ELSE IF FRESH NODE OR C.G + DIST(C,N) < N.G (better path found to already-examined node)
+ *          N.G = C.G + DIST(C,N)
+ *          N.P = C
+ *          N.F = N.G + N.H(GOAL)
+ *          IF N.CLOSED
+ *            REMOVE N FROM CLOSED LIST
+ *          IF N NOT IN OPEN SET
+ *            ADD TO OPEN SET  
+     */
     for(Node n : this.searchNodes)
       {  
       tent = currentNode.g + currentNode.getDistanceFrom(n);
@@ -222,6 +226,7 @@ private Node getOrMakeNode(int x, int y, int z, Node p)
     {
     if(c.equals(x, y, z))
       {
+//      Config.logDebug("getting node from allNodes "+c.toString());
       return c;
       }
     }
@@ -232,6 +237,7 @@ private Node getOrMakeNode(int x, int y, int z, Node p)
     n.g = p.g + n.getDistanceFrom(p);
     n.f = n.g + n.getDistanceFrom(tx, ty, tz);
     }  
+//  Config.logDebug("adding new/cached node to allNodes "+n.toString());
   allNodes.add(n);
   return n;
   }

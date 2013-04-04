@@ -272,7 +272,7 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     this.targetHelper.handleBeingAttacked((EntityLiving)par1DamageSource.getEntity());    
     Config.logDebug("adding entity to soldier aggro list for revenge: "+par1DamageSource.getEntity());
     }
-  Config.logDebug("NPC hit by attack.  RawDamage: "+par2+" new health: "+getHealth());  
+//  Config.logDebug("NPC hit by attack.  RawDamage: "+par2+" new health: "+getHealth());  
   return true;
   }
 

@@ -189,10 +189,14 @@ public void load(FMLPostInitializationEvent evt)
   PathBenchmarking.instance().doTestNormal(80);
   PathBenchmarking.instance().doTestJPS(80);
   PathBenchmarking.instance().doTestTheta(80);
+  PathBenchmarking.instance().doTestClassic(80);
   PathBenchmarking.instance().doTestNormal(80);
   PathBenchmarking.instance().doTestJPS(80);
   PathBenchmarking.instance().doTestTheta(80);
-//  PathBenchmarking.instance().doThreadedTests(80);
+  PathBenchmarking.instance().doTestClassic(80);
+  
+  
+  PathBenchmarking.instance().doThreadedTests(80);
   }
 
 

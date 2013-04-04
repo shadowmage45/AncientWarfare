@@ -34,7 +34,9 @@ import shadowmage.ancient_warfare.common.config.Config;
  * some aspects loosely based off of AtomicStryker's MagicYarn code
  * (such as some of the node internals, and open-list handling)
  * working towards a hybrid system that uses JPS for level-path-lines, but
- * defaults to regular A* type for anything vertical
+ * defaults to regular A* type for anything vertical.  Works.  Who knows how
+ * fast it is compared to a an implementation by someone who knows wtf they 
+ * are doing...
  * 
  * JPS Algorithm breakdown:
  * 1. Set start node, goal node.  Start node g = 0, h = distance to goal; f=g+h;

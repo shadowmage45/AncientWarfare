@@ -62,7 +62,7 @@ public void onTick()
     finished = true;
     return;
     }
-  Config.logDebug("executing wander tick");
+//  Config.logDebug("executing wander tick");
   double bX = npc.posX + rng.nextInt(range*2)-range;
   double bY = npc.posY;
   double bZ = npc.posZ + rng.nextInt(range*2)-range;

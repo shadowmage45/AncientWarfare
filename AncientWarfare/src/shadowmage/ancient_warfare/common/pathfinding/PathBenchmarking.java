@@ -38,6 +38,7 @@ private PathWorldAccessTest world = new PathWorldAccessTest();
 private PathFinderJPS patherJPS = new PathFinderJPS();
 private PathFinder pather = new PathFinder();
 private PathFinderThetaStar patherTheta = new PathFinderThetaStar();
+private PathFinderAStarClassic patherClassic = new PathFinderAStarClassic();
 
 long t;
 long total;
@@ -82,6 +83,20 @@ public void doTestNormal(float maxLength)
   Config.logDebug("100 x A* pathfinding runs: "+total/1000000+"ms   "+ total);
   total = 0;
   }
+
+public void doTestClassic(float maxLength)
+  {
+  total = 0;
+  for(int i = 0; i <100; i++)
+    {
+    t = System.nanoTime();
+    patherClassic.findPath(world, 1, 1, 1, 40, 1, 40, (int)maxLength);
+    total += System.nanoTime()-t;
+    }
+  Config.logDebug("100 x A* CLASSIC pathfinding runs: "+total/1000000+"ms   "+ total);
+  total = 0;
+  }
+
 
 public void doTestJPS(float maxLength)
   {

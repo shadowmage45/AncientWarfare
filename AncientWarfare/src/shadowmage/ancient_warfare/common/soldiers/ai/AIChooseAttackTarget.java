@@ -58,8 +58,8 @@ public void onTick()
   npc.setTargetAW(npc.targetHelper.getHighestAggroTarget(TARGET_ATTACK)); 
   if(npc.getTarget()!=null)
     {
-    Config.logDebug("choosing target. new target type: "+npc.getTargetType());
-    Config.logDebug("target: "+npc.getTarget().getEntity());
+//    Config.logDebug("choosing target. new target type: "+npc.getTargetType());
+//    Config.logDebug("target: "+npc.getTarget().getEntity());
     this.success = true;
     }  
   this.finished = true;

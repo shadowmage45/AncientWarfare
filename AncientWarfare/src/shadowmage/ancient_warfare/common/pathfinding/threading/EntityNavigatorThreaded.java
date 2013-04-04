@@ -65,7 +65,7 @@ public EntityNavigatorThreaded(NpcBase owner)
  */
 public void setMoveTo(int tx, int ty, int tz)
   {  
-  if(false)
+  if(true)
     {
     return;
     }
