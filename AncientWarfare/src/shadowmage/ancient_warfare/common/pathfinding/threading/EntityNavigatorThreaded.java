@@ -100,12 +100,12 @@ public void setMoveTo(int tx, int ty, int tz)
     this.targetZ = tz;
     this.targetNode = null;
 //    Config.logDebug("getting starter path");
-    this.path.setPath(PathManager.instance().findStarterPath(worldAccess, ex, ey, ez, tx, ty, tz, maxFastPathLength));
+    this.path.setPath(PathThreadPool.instance().findStarterPath(worldAccess, ex, ey, ez, tx, ty, tz, maxFastPathLength));
     this.targetNode = this.path.claimNode();
     if(this.targetNode!=null)
       {
 //      Config.logDebug("starter path was valid, requesting full path find");
-      PathManager.instance().requestPath(this, worldAccess, targetNode.x, targetNode.y, targetNode.z, tx, ty, tz, maxPathLength);
+      PathThreadPool.instance().requestPath(this, worldAccess, targetNode.x, targetNode.y, targetNode.z, tx, ty, tz, maxPathLength);
       }
     } 
 //  if(!entity.worldObj.isRemote)
@@ -121,14 +121,10 @@ public void setMoveTo(int tx, int ty, int tz)
 //    }
   }
 
-boolean wasOnLadder = false;
-
 public void moveTowardsCurrentNode()
   {
   if(this.targetNode!=null)
-    {
-    //entity.getNavigator().tryMoveToXYZ(targetNode.x+0.5d, targetNode.y, targetNode.z+0.5d, entity.getAIMoveSpeed());
-    
+    {    
     int ex = MathHelper.floor_double(entity.posX);
     int ey = MathHelper.floor_double(entity.posY);
     int ez = MathHelper.floor_double(entity.posZ);
@@ -152,17 +148,8 @@ public void moveTowardsCurrentNode()
       else if(targetNode.y>ey)
         {
         entity.motionY = 0.125f;
-        }
-      else
-        {
-        
-        }
-      wasOnLadder = true;
-      }
-    else if(wasOnLadder)
-      {
-      wasOnLadder = false;
-      }      
+        }    
+      }        
     entity.getMoveHelper().setMoveTo(targetNode.x+0.5d, targetNode.y, targetNode.z+0.5d, entity.getAIMoveSpeed());
     } 
   }

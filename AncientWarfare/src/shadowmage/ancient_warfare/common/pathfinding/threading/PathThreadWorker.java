@@ -32,23 +32,17 @@ public class PathThreadWorker implements Runnable
 {
 
 private PathFinderJPS pather = new PathFinderJPS();
-private Thread th;
 List<Node> path = new ArrayList<Node>();
 IPathableCallback caller;
 int x, y, z, x1, y1, z1, maxRange;
 PathWorldAccess world;
-PathManager parent;
 
-private boolean working = false;
-public boolean hasWork = false;
-public boolean finishedWork = false;
 private boolean interruped = false;
 private int num;
 private static int threadNum = 0;
 
-public PathThreadWorker(PathManager parent)
+public PathThreadWorker()
   {
-  this.parent = parent;
   this.num = threadNum;  
   this.pather.threaded = true;
   threadNum++;
@@ -66,37 +60,7 @@ public void setupPathParams(IPathableCallback caller, PathWorldAccess world, int
   this.y1 = y1;
   this.z1 = z1;  
   Config.logDebug("setting worker hasWork:"+this.toString());
-  this.hasWork(true, true);
   this.interruped = false;
-  }
-
-/**
- * returns the value of hasWork 
- * @param setting if you are setting the value, or merely examining
- * @param value
- * @return
- */
-public synchronized boolean hasWork(boolean setting, boolean value)
-  {  
-  if(setting)
-    {
-    if(hasWork!=value)
-      {
-      Config.logDebug("setting value of "+this.toString()+" hasWork to: "+value);
-//      Exception e = new Exception();
-//      e.printStackTrace();
-      hasWork = value;
-      return hasWork;
-      }
-    }  
-  return hasWork;  
-  }
-
-public void startThread()
-  {  
-  this.th = new Thread(this, "AW.PathThread:"+num);
-  Config.logDebug("starting thread "+this.th.getName());
-  this.th.start();
   }
 
 public void interruptWorker()
@@ -108,40 +72,7 @@ public void interruptWorker()
 @Override
 public void run()
   { 
-  this.working = true;
-  while(working)
-    {
-//    Config.logDebug("thread running");
-    if(hasWork)
-      {
-      Config.logDebug("thread has work, checking path");
-      this.hasWork = false; 
-      this.finishedWork = false;
-      path = this.pather.findPath(world, x, y, z, x1, y1, z1, maxRange);      
-      
-      Config.logDebug("setting finished working and calling parent");
-      
-      if(!interruped)
-        {
-        this.parent.onThreadFinished(this);
-        }
-      this.clearRefs();
-      this.finishedWork = true;
-      continue;
-      }
-    else
-      {
-      try
-        {
-//        Config.logDebug("sleeping worker:"+this.toString());
-        Thread.sleep(1);
-//        Config.logDebug("worker awoke");
-        } catch (InterruptedException e)
-        {        
-        e.printStackTrace();
-        }
-      }
-    }
+  path = this.pather.findPath(world, x, y, z, x1, y1, z1, maxRange);
   Config.logDebug("thread finishing");
   }
 
@@ -157,10 +88,10 @@ public PathResult getPathResult()
 @Override
 public String toString()
   {
-  return th.getName();
+  return "AWPathThread:"+num;
   }
 
-private void clearRefs()
+public void clearRefs()
   {
   this.interruped = false;
   this.world = null;

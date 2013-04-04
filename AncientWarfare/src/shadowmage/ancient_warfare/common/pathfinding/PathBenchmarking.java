@@ -25,7 +25,7 @@ import java.util.List;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
-import shadowmage.ancient_warfare.common.pathfinding.threading.PathManager;
+import shadowmage.ancient_warfare.common.pathfinding.threading.PathThreadPool;
 
 public class PathBenchmarking
 {
@@ -37,6 +37,7 @@ public static PathBenchmarking instance(){return INSTANCE;}
 private PathWorldAccessTest world = new PathWorldAccessTest();
 private PathFinderJPS patherJPS = new PathFinderJPS();
 private PathFinder pather = new PathFinder();
+private PathFinderThetaStar patherTheta = new PathFinderThetaStar();
 
 long t;
 long total;
@@ -52,7 +53,7 @@ public void doThreadedTests(float maxLength)
     {
     caller = new PathThreadTestCaller(this);
     this.openCallers.add(caller);
-    PathManager.instance().requestPath(caller, world, 1, 1, 1, 40, 1, 40, (int)maxLength);
+    PathThreadPool.instance().requestPath(caller, world, 1, 1, 1, 40, 1, 40, (int)maxLength);
     }  
 //  PathManager.instance().requestPath(new PathThreadTestCaller(this), world, 1, 1, 1, 40, 1, 40, (int)maxLength);
   }
@@ -92,6 +93,19 @@ public void doTestJPS(float maxLength)
     total += System.nanoTime()-t;
     }
   Config.logDebug("100 x JPS pathfinding runs: "+total/1000000+"ms   "+ total);
+  total = 0;
+  }
+
+public void doTestTheta(int maxLength)
+  {
+  total = 0;
+  for(int i = 0; i <100; i++)
+    {
+    t = System.nanoTime();
+    patherTheta.findPath(world, 1, 1, 1, 40, 1, 40, maxLength);
+    total += System.nanoTime()-t;
+    }
+  Config.logDebug("100 x THETA pathfinding runs: "+total/1000000+"ms   "+ total);
   total = 0;
   }
 

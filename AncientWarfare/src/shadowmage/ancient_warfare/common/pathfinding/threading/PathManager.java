@@ -40,6 +40,7 @@ import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
  * @author Shadowmage
  *
  */
+@Deprecated
 public class PathManager
 {
 
@@ -78,8 +79,7 @@ private PathManager()
   {
   for(int i = 0; i < MAX_THREADS; i++)
     {
-    PathThreadWorker worker = new PathThreadWorker(this);
-    worker.startThread();
+    PathThreadWorker worker = new PathThreadWorker();    
     this.idleThreads.add(worker);
     }
   }
@@ -91,6 +91,7 @@ public List<Node> findStarterPath(PathWorldAccess world, int x, int y, int z, in
 
 public synchronized void requestPath(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int maxRange)
   {
+  
   boolean found = false;
   for(PathRequestEntry entry : this.qRequests)
     {
@@ -136,7 +137,6 @@ synchronized public void onThreadFinished(PathThreadWorker worker)
 //  Config.logDebug("finished results waiting for owners: "+this.finishedThreads.size());
   finishedLock.unlock();
   this.idleLock.lock();
-  worker.hasWork(true, false);
   this.idleThreads.add(worker);  
   this.idleLock.unlock();
   Config.logDebug("thread finished: "+worker.toString()+". threads still working: "+this.workingThreads.size()+" still in q: "+this.qRequests.size()+ " idle pool: "+this.idleThreads.size());

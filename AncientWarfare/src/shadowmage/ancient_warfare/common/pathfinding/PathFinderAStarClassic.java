@@ -20,28 +20,97 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding;
 
-import net.minecraft.block.Block;
+import java.util.ArrayList;
+import java.util.PriorityQueue;
+
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 
-
-public class Node implements Comparable
+public class PathFinderAStarClassic
 {
 
+private PathWorldAccess world;
+int tx, ty, tz;
+private PriorityQueue<Node> openList = new PriorityQueue<Node>();
+private ArrayList<Node> closedNodes = new ArrayList<Node>();
+private ArrayList<Node> searchNodes = new ArrayList<Node>();
+
+private void findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
+  {
+  Node current;
+  Node start = new Node(x,y,z);
+  start.g = 0;
+  start.f = start.getDistanceFrom(tx, ty, tz);
+  openList.offer(start);
+  while(!openList.isEmpty())
+    {
+    current = openList.poll();
+    closedNodes.add(current);
+    }
+  }
+
+
+private void findNeighbors(Node n)
+  {
+  this.searchNodes.clear();  
+  tryAddSearchNode(n.x-1, n.y, n.z, n);
+  tryAddSearchNode(n.x+1, n.y, n.z, n);
+  tryAddSearchNode(n.x, n.y, n.z-1, n);
+  tryAddSearchNode(n.x, n.y, n.z+1, n);
+
+  /**
+   * diagonals
+   */    
+  tryAddSearchNode( n.x-1, n.y, n.z+1, n);
+  tryAddSearchNode( n.x-1, n.y, n.z-1, n);
+  tryAddSearchNode( n.x+1, n.y, n.z+1, n);
+  tryAddSearchNode( n.x+1, n.y, n.z-1, n);
+
+  /**
+   * up/down (in case of ladder/water)
+   */
+  tryAddSearchNode( n.x, n.y+1, n.z, n);
+  tryAddSearchNode( n.x, n.y-1, n.z, n);
+
+  /**
+   * and the NSEW +/- 1 jumpable blocks..
+   */
+  tryAddSearchNode( n.x-1, n.y+1, n.z, n);
+  tryAddSearchNode( n.x+1, n.y+1, n.z, n);
+  tryAddSearchNode( n.x, n.y+1, n.z-1, n);
+  tryAddSearchNode( n.x, n.y+1, n.z+1, n);
+
+  tryAddSearchNode( n.x-1, n.y-1, n.z, n);
+  tryAddSearchNode( n.x+1, n.y-1, n.z, n);
+  tryAddSearchNode( n.x, n.y-1, n.z-1, n);
+  tryAddSearchNode( n.x, n.y-1, n.z+1, n);  
+  }
+
+private void tryAddSearchNode(int x, int y, int z, Node p)
+  {
+  if(world.isWalkable(x, y, z))
+    {
+    //searchNodes.add(getOrMakeNode(x, y, z, p));
+    }
+  }
+
+
+
+
+
+
+
+
+private class Node implements Comparable
+{
 public float goalLenght;
 public float travelCost = 10;
-
 public Node parentNode = null;
-public Node childNode = null;
 public float g = Float.POSITIVE_INFINITY;
 public float f;
-
 public int x;
 public int y;
 public int z;
-public boolean obstacle = false;;
 public boolean closed = false;
-int LADDER = Block.ladder.blockID;
 /**
  * @param bX
  * @param i
@@ -53,76 +122,15 @@ public Node(int bX, int bY, int bZ)
   this.z = bZ; 
   }
 
-public Node(int x, int y, int z, Node parent, Node goal, float g)
-  {
-  this(x,y,z);
-  this.parentNode = parent;  
-  this.g = g;
-  this.f = this.getH(goal)+this.g;
-  }
-
-
-/**
- * calc travel cost of this node, and set to obstacle if completely unpathable (solid)
- * @param world
- */
-public void calcTraveCost(PathWorldAccess world, Node parentNode)
-  {
-  if(world==null)
-    {
-    return;
-    }
-  this.obstacle = false;
-  this.travelCost = 10;
-  this.obstacle = ! world.isWalkable(x, y, z, parentNode);
-  }
-
 protected float getH(Node b)
   {
-  return getDistanceFrom(b)*10 + travelCost;
+  return getDistanceFrom(b);
   }
 
 protected float getH(int tx, int ty, int tz)
   {
-  return getDistanceFrom(tx, ty, tz)*10 + travelCost;      
+  return getDistanceFrom(tx, ty, tz);      
   }
-
-protected boolean canCrossDiagonal(PathWorldAccess world, Node parentNode)
-  {
-  if(parentNode!=null)
-    {
-    if(this.x < parentNode.x && this.z < parentNode.z)
-      {
-      if(world.getBlockId(x, y, z+1)!=0 || world.getBlockId(x+1, y, z)!=0)
-        {
-        return false;
-        }
-      }
-    else if(this.x < parentNode.x && this.z > parentNode.z)
-      {
-      if(world.getBlockId(x, y, z-1)!=0 || world.getBlockId(x+1, y, z)!=0)
-        {
-        return false;
-        }
-      }
-    else if(this.x > parentNode.x && this.z > parentNode.z)
-      {
-      if(world.getBlockId(x, y, z-1)!=0 || world.getBlockId(x-1, y, z)!=0)
-        {
-        return false;
-        }
-      }
-    else if(this.x > parentNode.x && this.z < parentNode.z)
-      {
-      if(world.getBlockId(x, y, z+1)!=0 || world.getBlockId(x-1, y, z)!=0)
-        {
-        return false;
-        }
-      }
-    }
-  return true;
-  }
-
 
 @Override
 public int compareTo(Object o)
@@ -183,17 +191,6 @@ public float getDistanceFrom(int x, int y, int z)
   return MathHelper.sqrt_float(x1*x1+y1*y1+z1*z1);
   }
 
-public float getPathLength()
-  {
-  float len = 0;
-  if(this.parentNode!=null)
-    {
-    len += this.getDistanceFrom(parentNode);
-    len += this.parentNode.getPathLength();
-    }
-  return len;
-  }
-
 @Override
 public int hashCode()
   {
@@ -205,5 +202,5 @@ public String toString()
   {
   return "Node: "+x+","+y+","+z+" TC: "+travelCost+ " F: "+f;
   }
-
+}
 }

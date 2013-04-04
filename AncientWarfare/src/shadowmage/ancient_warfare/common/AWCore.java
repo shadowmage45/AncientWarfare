@@ -186,9 +186,13 @@ public void load(FMLPostInitializationEvent evt)
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
 
   //DEBUG //TODO -- remove
-//  PathBenchmarking.instance().doTestNormal(80);
-//  PathBenchmarking.instance().doTestJPS(80);
-  PathBenchmarking.instance().doThreadedTests(80);
+  PathBenchmarking.instance().doTestNormal(80);
+  PathBenchmarking.instance().doTestJPS(80);
+  PathBenchmarking.instance().doTestTheta(80);
+  PathBenchmarking.instance().doTestNormal(80);
+  PathBenchmarking.instance().doTestJPS(80);
+  PathBenchmarking.instance().doTestTheta(80);
+//  PathBenchmarking.instance().doThreadedTests(80);
   }
 
 
