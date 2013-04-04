@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
+import shadowmage.ancient_warfare.common.pathfinding.threading.PathManager;
 
 public class PathBenchmarking
 {
@@ -50,11 +52,8 @@ public void doThreadedTests(float maxLength)
     {
     caller = new PathThreadTestCaller(this);
     this.openCallers.add(caller);
-    }
-  for(PathThreadTestCaller call : this.openCallers)
-    {
-    PathManager.instance().requestPath(call, world, 1, 1, 1, 40, 1, 40, (int)maxLength);
-    }
+    PathManager.instance().requestPath(caller, world, 1, 1, 1, 40, 1, 40, (int)maxLength);
+    }  
 //  PathManager.instance().requestPath(new PathThreadTestCaller(this), world, 1, 1, 1, 40, 1, 40, (int)maxLength);
   }
 

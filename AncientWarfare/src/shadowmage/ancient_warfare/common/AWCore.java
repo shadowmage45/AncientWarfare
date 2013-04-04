@@ -24,7 +24,6 @@ package shadowmage.ancient_warfare.common;
 
 
 import java.io.IOException;
-import java.util.List;
 
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,12 +33,8 @@ import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
-import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathBenchmarking;
-import shadowmage.ancient_warfare.common.pathfinding.PathFinder;
-import shadowmage.ancient_warfare.common.pathfinding.PathFinderJPS;
-import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
-import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessTest;
+import shadowmage.ancient_warfare.common.pathfinding.threading.ServerTicker;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.registry.AWEntityRegistry;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
@@ -187,11 +182,12 @@ public void load(FMLPostInitializationEvent evt)
   Config.saveConfig();
   
   TickRegistry.registerTickHandler(new ServerTickTimer(), Side.SERVER);
+  TickRegistry.registerTickHandler(new ServerTicker(), Side.SERVER);
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
 
   //DEBUG //TODO -- remove
-  PathBenchmarking.instance().doTestNormal(80);
-  PathBenchmarking.instance().doTestJPS(80);
+//  PathBenchmarking.instance().doTestNormal(80);
+//  PathBenchmarking.instance().doTestJPS(80);
   PathBenchmarking.instance().doThreadedTests(80);
   }
 

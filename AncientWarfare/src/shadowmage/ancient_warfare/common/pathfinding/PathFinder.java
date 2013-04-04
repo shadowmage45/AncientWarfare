@@ -51,8 +51,6 @@ List<Node> allNodes = new ArrayList<Node>();
 List<Node> searchingNodes = new ArrayList<Node>();
 private LinkedList<Node> nodeCache = new LinkedList<Node>();
 
-NodeMap nodeMap = new NodeMap();
-
 public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int searchRange)
   {
   this.world = world;
@@ -70,10 +68,15 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, i
     }
   LinkedList<Node> path = new LinkedList<Node>();
   Node n = goalNode;  
-  while(n!=null)
-    {    
-    path.push(n);
-    n = n.parentNode;
+  Node c = null;
+  Node p;
+  while(n!=null)//work backwards from the goal node, grabbing its parent at every pass, but we are setting the parents of the new nodes in reverse order (first->goal)
+    {
+    p = c;
+    c = new Node(n.x, n.y, n.z);
+    c.parentNode = p;
+    path.push(c);
+    n = n.parentNode;    
     }  
   this.goalNode = null;
   this.currentNode = null;
@@ -94,7 +97,6 @@ public void setupInitialNodes(double x, double y, double z, double x1, double y1
   {
   this.qNodes.clear();
   this.flushNodes();
-  this.nodeMap.clear();  
   this.startNode = findOrMakeNode((int)x, (int)y, (int)z);
   this.goalNode = findOrMakeNode((int)x1, (int)y1, (int)z1);
   startNode.g = 0;

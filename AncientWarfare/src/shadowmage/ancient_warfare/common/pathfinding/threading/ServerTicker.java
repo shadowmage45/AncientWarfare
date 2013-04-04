@@ -18,14 +18,38 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.pathfinding;
+package shadowmage.ancient_warfare.common.pathfinding.threading;
 
-import java.util.List;
+import java.util.EnumSet;
 
-public interface IPathableCallback
+import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.TickType;
+
+public class ServerTicker implements ITickHandler
 {
 
+@Override
+public void tickStart(EnumSet<TickType> type, Object... tickData)
+  {
+  // TODO Auto-generated method stub
+  }
 
-public void onPathFound(List<Node> pathNodes);
+@Override
+public void tickEnd(EnumSet<TickType> type, Object... tickData)
+  {
+  PathManager.instance().onTickServer();
+  }
+
+@Override
+public EnumSet<TickType> ticks()
+  {
+  return EnumSet.of(TickType.SERVER);
+  }
+
+@Override
+public String getLabel()
+  {
+  return "AW.Server.PathfindTicker";
+  }
 
 }

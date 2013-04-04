@@ -88,6 +88,7 @@ private ArrayList<Node> searchingNodes = new ArrayList<Node>();
 
 public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int maxLength)
   {  
+//  Config.logDebug("JPS search: "+x+","+y+","+z+" ::TO:: "+x1+","+y1+","+z1+" ML"+maxLength);
   this.runStart = System.nanoTime();
   this.maxPathLength = maxLength;
   this.shouldInterrupt = false;
@@ -105,14 +106,19 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int x1, i
   LinkedList<Node> pathNodes = new LinkedList<Node>();
   this.search();  
   if(this.currentNode.equals(goalNode))
-    {    
+    {
     Node n = this.currentNode;    
-    while(n!=null)
+    Node c = null;
+    Node p;
+    while(n!=null)//work backwards from the goal node, grabbing its parent at every pass, but we are setting the parents of the new nodes in reverse order (first->goal)
       {
-      pathNodes.push(n);
-//      Config.logDebug(n.toString());
-      n = n.parentNode;
-      }
+      p = c;
+      c = new Node(n.x, n.y, n.z);
+      c.parentNode = p;
+      pathNodes.push(c);
+//      Config.logDebug(c.toString());
+      n = n.parentNode;    
+      }  
     }
   else
     {
@@ -159,7 +165,7 @@ private void search()
 //  Config.logDebug("searching. iteration: "+searchCount);
     if(searchCount>=maxSearchIterations )
       {
-      Config.logDebug("breaking due to hitting max iteration limit of: "+maxSearchIterations);      
+      Config.logDebug("breaking due to hitting max node iteration limit of: "+maxSearchIterations);      
       break;
       }
     if(System.nanoTime()- runStart >= interruptTime)
@@ -175,7 +181,7 @@ private void search()
     if(this.currentNode.equals(goalNode) && !shouldInterrupt)
       {
       this.currentNode = this.goalNode;
-      Config.logDebug("goal hit!");
+//      Config.logDebug("goal hit!");
       break;
       }
     identifySuccessors(currentNode);

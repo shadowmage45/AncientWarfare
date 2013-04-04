@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.pathfinding;
+package shadowmage.ancient_warfare.common.pathfinding.threading;
 
 import java.util.List;
 
@@ -26,36 +26,35 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.Packet04Npc;
+import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
+import shadowmage.ancient_warfare.common.pathfinding.Node;
+import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
-public class EntityNavigator
+public class EntityNavigatorThreaded implements IPathableCallback
 {
 
 NpcBase entity;
 EntityPath path = new EntityPath();
 PathWorldAccessEntity worldAccess;
-PathFinderJPS pather;
 
-double x;
-double y;
-double z;
+int targetX;
+int targetY;
+int targetZ;
 
-float maxPathLength = 60;
+int maxPathLength = 60;
+int maxFastPathLength = 8;
 
 Node targetNode = null;
 
-boolean addedPreviously = false;
-boolean continuePath = false;
-
-public EntityNavigator(NpcBase owner)
+public EntityNavigatorThreaded(NpcBase owner)
   {
   this.entity = owner;
   this.worldAccess = new PathWorldAccessEntity(entity.worldObj, entity);
-  pather = new PathFinderJPS();  
-  this.x = entity.posX;
-  this.y = entity.posY;
-  this.z = entity.posZ;
+  this.targetX = MathHelper.floor_double(entity.posX);
+  this.targetY = MathHelper.floor_double(entity.posY);
+  this.targetZ = MathHelper.floor_double(entity.posZ);
   }
 
 /**
@@ -66,6 +65,10 @@ public EntityNavigator(NpcBase owner)
  */
 public void setMoveTo(int tx, int ty, int tz)
   {  
+  if(false)
+    {
+    return;
+    }
   //if can see target on eye X and foot X (no obstacles in straight path)
   //  {
   //  check all blocks in a line beneath that path to see if they are walkable
@@ -74,111 +77,48 @@ public void setMoveTo(int tx, int ty, int tz)
   int ex = MathHelper.floor_double(entity.posX);
   int ey = MathHelper.floor_double(entity.posY);
   int ez = MathHelper.floor_double(entity.posZ);
-  float dist = Math.abs(Trig.getVelocity(tx-x, ty-y, tz-z));
+  float dist = Math.abs(Trig.getVelocity(tx-this.targetX, ty-this.targetY, tz-this.targetZ));
   float targetDiff = dist;
   Node n = path.getEndNode();
-  if(targetNode!=null)
+  if(n!=null)
     {
-    targetDiff = Trig.getDistance(x, y, z, tx, ty, tz);
+    targetDiff = Trig.getDistance(n.x, n.y, n.z, tx, ty, tz);
     }  
   boolean calcPath = false;
-  if(tx==x && ty==y && tz==z)//we're already pathing there, check to see how many nodes are left in the current path, recalc if getting low
-    {    
-    if(n==null || (n.x!= (int)tx || n.y != (int)ty || n.z != (int)tz))//close, but goal node is not the current target
-      {
-      if(path.getPathNodeLength()<3)
-        {
-        Config.logDebug("same target, but node length is low, recalculating");
-        Config.logDebug("adding to path");
-        if(n!=null)
-          {
-          path.addPath(pather.findPath(worldAccess, n.x, n.y, n.z, tx, ty, tz, (int)maxPathLength));
-          x = tx;
-          y = ty;
-          z = tz;
-          }
-        else
-          {
-          calcPath = true;
-          }
-        }
-      }
-    }
-  else if(n!=null && n.x==tx &&n.y==ty &&n.z==tz)
+  if(targetDiff < dist * 0.1f)
     {
-    Config.logDebug("already had perfect path, not recalcing");
+    Config.logDebug("diff/dist ratio below threshold, skipping recalc");
     }
   else
-    {    
-    if(dist > maxPathLength && targetDiff<dist*0.3f)//its so close to our current target, don't bother changing path
-      {
-      Config.logDebug("far away target with little difference, skipping recalc");
-      }
-    else if(dist<maxPathLength && targetDiff<dist*0.1f && targetDiff>1.f)//else add new nodes from current goal to new goal, reseat current target 
-      {
-      if(!addedPreviously)
-        {
-        addedPreviously = true;
-        Config.logDebug("adding to path");
-        if(n!=null)
-          {
-          path.addPath(pather.findPath(worldAccess, n.x, n.y, n.z, tx, ty, tz, (int)maxPathLength));
-          x = tx;
-          y = ty;
-          z = tz;
-          }
-        else
-          {
-          calcPath = true;
-          }
-        }
-      else
-        {
-        Config.log("already added, recalc");
-        calcPath = true;
-        addedPreviously = false;
-        }      
-      
-      }
-    else//paths could vary wildy, probably best to recalculate....try and preserve some of old?
-      {
-      Config.logDebug("new target, recalculating");
-      calcPath = true;
-      }
-    }
-  if(targetNode!=null)
     {
-    if(Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)>5)//has fallen, been pushed, some other crap..recalc;
-      {
-      Config.logDebug("recalc due to falling/pushed/other stuff...");
-      calcPath = true;
-      }
+    calcPath = true;
     }
   if(calcPath)
-    {
-    if(targetDiff<3 && this.targetNode!=null)
-      {
-      Config.logDebug("setting previous target node for trimming of new path");
-      //pather.setPreviousPathEndNode(targetNode);
-      }
-    path.setPath(pather.findPath(worldAccess, ex, ey, ez, tx, ty, tz, (int) maxPathLength));    
-    this.x = tx;
-    this.y = ty;
-    this.z = tz;
+    {   
+    this.targetX = tx;
+    this.targetY = ty;
+    this.targetZ = tz;
     this.targetNode = null;
-    this.targetNode = path.claimNode();
+//    Config.logDebug("getting starter path");
+    this.path.setPath(PathManager.instance().findStarterPath(worldAccess, ex, ey, ez, tx, ty, tz, maxFastPathLength));
+    this.targetNode = this.path.claimNode();
+    if(this.targetNode!=null)
+      {
+//      Config.logDebug("starter path was valid, requesting full path find");
+      PathManager.instance().requestPath(this, worldAccess, targetNode.x, targetNode.y, targetNode.z, tx, ty, tz, maxPathLength);
+      }
     } 
-  if(!entity.worldObj.isRemote)
-    {
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setInteger("tx", tx);
-    tag.setInteger("ty", ty);
-    tag.setInteger("tz", tz);
-    Packet04Npc pkt = new Packet04Npc();
-    pkt.setParams(entity);
-    pkt.setPathTarget(tag);
-    pkt.sendPacketToAllTrackingClients(entity);
-    }
+//  if(!entity.worldObj.isRemote)
+//    {
+//    NBTTagCompound tag = new NBTTagCompound();
+//    tag.setInteger("tx", tx);
+//    tag.setInteger("ty", ty);
+//    tag.setInteger("tz", tz);
+//    Packet04Npc pkt = new Packet04Npc();
+//    pkt.setParams(entity);
+//    pkt.setPathTarget(tag);
+//    pkt.sendPacketToAllTrackingClients(entity);
+//    }
   }
 
 boolean wasOnLadder = false;
@@ -222,8 +162,7 @@ public void moveTowardsCurrentNode()
     else if(wasOnLadder)
       {
       wasOnLadder = false;
-      }   
-    
+      }      
     entity.getMoveHelper().setMoveTo(targetNode.x+0.5d, targetNode.y, targetNode.z+0.5d, entity.getAIMoveSpeed());
     } 
   }
@@ -231,6 +170,12 @@ public void moveTowardsCurrentNode()
 public List<Node> getCurrentPath()
   {
   return path.getPath();
+  }
+
+@Override
+public void onPathFound(List<Node> pathNodes)
+  {
+  Config.logDebug("thread returned path");
   }
 
 }

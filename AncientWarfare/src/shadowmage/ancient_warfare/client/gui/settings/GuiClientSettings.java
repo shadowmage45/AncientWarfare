@@ -25,6 +25,7 @@ import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Settings;
 
 public class GuiClientSettings extends GuiContainerAdvanced
@@ -69,6 +70,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Render Advanced Overlay", guiLeft+10+16+2, guiTop+30+4, 0xffffffff);
   this.drawString(fontRenderer, "Use Mouse Aim Input", guiLeft+10+16+2, guiTop+50+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Ridden Vehicle in First-person", guiLeft+10+16+2, guiTop+70+4, 0xffffffff);
+  this.drawString(fontRenderer, "TPS: "+AWCore.proxy.serverTPS+ " AVG TICK: "+AWCore.proxy.serverTickTime, guiLeft+5, guiTop+getYSize()-15, 0xffffffff);
   }
 
 @Override

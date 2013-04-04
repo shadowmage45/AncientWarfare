@@ -33,8 +33,8 @@ public float travelCost = 10;
 
 public Node parentNode = null;
 public Node childNode = null;
-float g;
-float f;
+public float g;
+public float f;
 
 public int x;
 public int y;

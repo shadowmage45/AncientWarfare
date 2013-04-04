@@ -32,6 +32,12 @@ import cpw.mods.fml.common.network.Player;
 public class CommonProxy
 {
 
+/**
+ * client-side vars used by debug TPS counter
+ */
+public long serverTickTime;
+public int serverTPS;
+
 public EntityPlayer getClientPlayer()
   {
   return null;

@@ -23,6 +23,7 @@
 package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
@@ -70,23 +71,30 @@ public void setTeamUpdate(NBTTagCompound tag)
   this.packetData.setCompoundTag("team", packetData);
   }
 
+public void setTickTimes(long time, int tps)
+  {
+  this.packetData.setBoolean("tickTime", true);
+  this.packetData.setLong("tick", time);
+  this.packetData.setInteger("tps", tps);
+  }
+
 @Override
 public void writeDataToStream(ByteArrayDataOutput data)
   {
-  
+
   }
 
 @Override
 public void readDataStream(ByteArrayDataInput data)
   {
-  
+
   }
 
 @Override
 public void execute()
   {
   NBTTagCompound tag;
-  
+
   /***
    * init data, should break out to player entry, team entry, pass to client-trackers
    */
@@ -106,7 +114,7 @@ public void execute()
       Config.instance().handleClientInit(tag.getCompoundTag("configData"));
       }
     }  
-  
+
   /**
    * structure information, completely handled in structManager
    */
@@ -121,7 +129,7 @@ public void execute()
       StructureManager.instance().handlePacketDataServer(packetData.getCompoundTag("struct"));
       }
     }
-    
+
   /**
    * team update tag..
    */
@@ -137,11 +145,14 @@ public void execute()
       TeamTracker.instance().handleServerUpdate(tag);
       }    
     }  
-  
+
+  if(this.packetData.hasKey("tickTime"))
+    {
+    AWCore.proxy.serverTickTime = packetData.getLong("tick");
+    AWCore.proxy.serverTPS = packetData.getInteger("tps");
+    }
+
   }
-  
-    
-    
 
 
 }
