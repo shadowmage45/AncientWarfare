@@ -54,19 +54,19 @@ private PathFinder quickPather = new PathFinder();
  * open/unused thread instances, ready to be pulled out and put to work
  */
 private volatile LinkedList<PathThreadWorker> idleThreads = new LinkedList<PathThreadWorker>();
-//private Lock idleLock = new ReentrantLock();
+private Lock idleLock = new ReentrantLock();
 
 /**
  * threads currently/actively working
  */
 private volatile List<PathThreadWorker> workingThreads = new ArrayList<PathThreadWorker>();
-//private Lock workersLock = new ReentrantLock();
+private Lock workersLock = new ReentrantLock();
 
 /**
  * threads which are finished.  the caclulated paths from these will be dispatched to their entities on every server tick
  */
 private volatile List<PathResult> finishedThreads = new ArrayList<PathResult>();
-//private Lock finishedLock = new ReentrantLock();
+private Lock finishedLock = new ReentrantLock();
 
 private LinkedList<PathRequestEntry> qRequests = new LinkedList<PathRequestEntry>();
 
@@ -109,7 +109,7 @@ public synchronized void requestPath(IPathableCallback caller, PathWorldAccess w
     }
   if(!found)
     {
-//    workersLock.lock();
+    workersLock.lock();
     for(PathThreadWorker worker : this.workingThreads)
       {
       if(worker.caller==caller)
@@ -119,7 +119,7 @@ public synchronized void requestPath(IPathableCallback caller, PathWorldAccess w
         break;
         }
       }
-//    workersLock.unlock();
+    workersLock.unlock();
     PathRequestEntry entry = new PathRequestEntry(caller, world, x, y, z, x1, y1, z1, maxRange);
 //    Config.logDebug("creating new entry: "+entry.toString());
     this.qRequests.add(entry);      
@@ -131,21 +131,21 @@ synchronized public void onThreadFinished(PathThreadWorker worker)
   {
   //threadPool.ex
   this.workingThreads.remove(worker);
-//  finishedLock.lock();
+  finishedLock.lock();
   this.finishedThreads.add(worker.getPathResult());
 //  Config.logDebug("finished results waiting for owners: "+this.finishedThreads.size());
-//  finishedLock.unlock();
-//  this.idleLock.lock();
+  finishedLock.unlock();
+  this.idleLock.lock();
   worker.hasWork(true, false);
   this.idleThreads.add(worker);  
-//  this.idleLock.unlock();
+  this.idleLock.unlock();
   Config.logDebug("thread finished: "+worker.toString()+". threads still working: "+this.workingThreads.size()+" still in q: "+this.qRequests.size()+ " idle pool: "+this.idleThreads.size());
   this.tryStartThreads();
   }
 
 private synchronized void tryStartThreads()
   {  
-//  idleLock.lock();
+  idleLock.lock();
   while(!this.idleThreads.isEmpty() && !this.qRequests.isEmpty())
     {    
     PathThreadWorker worker = this.idleThreads.pop();
@@ -155,7 +155,7 @@ private synchronized void tryStartThreads()
     Config.logDebug("new req caller: "+worker.caller);
     this.workingThreads.add(worker);
     }
-//  idleLock.unlock();  
+  idleLock.unlock();  
   }
 
 /**
@@ -164,7 +164,7 @@ private synchronized void tryStartThreads()
 synchronized public void onTickServer()
   {
   this.tryStartThreads();
-//  finishedLock.lock();
+  finishedLock.lock();
 //  Config.logDebug("ticking server side");
   Iterator<PathResult> it = this.finishedThreads.iterator();
   PathResult worker;
@@ -178,7 +178,7 @@ synchronized public void onTickServer()
       }
     it.remove();
     }
-//  finishedLock.unlock();
+  finishedLock.unlock();
   }
 
 private class PathRequestEntry

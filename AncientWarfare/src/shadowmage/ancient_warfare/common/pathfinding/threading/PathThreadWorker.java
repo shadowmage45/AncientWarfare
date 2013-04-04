@@ -112,7 +112,7 @@ public void run()
   while(working)
     {
 //    Config.logDebug("thread running");
-    if(hasWork && !this.finishedWork)
+    if(hasWork)
       {
       Config.logDebug("thread has work, checking path");
       this.hasWork = false; 
