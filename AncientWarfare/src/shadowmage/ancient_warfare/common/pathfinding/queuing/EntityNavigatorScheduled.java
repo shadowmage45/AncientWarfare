@@ -18,43 +18,48 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.pathfinding.threading;
+package shadowmage.ancient_warfare.common.pathfinding.queuing;
 
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.Packet04Npc;
 import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
+import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
-public class EntityNavigatorThreaded implements IPathableCallback
+public class EntityNavigatorScheduled implements IPathableCallback
 {
 
 NpcBase entity;
 EntityPath path = new EntityPath();
 PathWorldAccessEntity worldAccess;
-
+PathScheduler scheduler;
 int targetX;
 int targetY;
 int targetZ;
 
-int maxPathLength = 60;
-int maxFastPathLength = 8;
-
 Node targetNode = null;
 
-public EntityNavigatorThreaded(NpcBase owner)
+public EntityNavigatorScheduled(NpcBase owner)
   {
   this.entity = owner;
   this.worldAccess = new PathWorldAccessEntity(entity.worldObj, entity);
   this.targetX = MathHelper.floor_double(entity.posX);
   this.targetY = MathHelper.floor_double(entity.posY);
   this.targetZ = MathHelper.floor_double(entity.posZ);
+  if(owner.worldObj.isRemote)
+    {
+    this.scheduler = PathScheduler.clientInstance();
+    }
+  else
+    {
+    this.scheduler = PathScheduler.serverInstance();
+    }
   }
 
 /**
@@ -94,31 +99,27 @@ public void setMoveTo(int tx, int ty, int tz)
     this.targetY = ty;
     this.targetZ = tz;
     this.targetNode = null;
-//    Config.logDebug("getting starter path");
-    this.path.setPath(PathThreadPool.instance().findStarterPath(worldAccess, ex, ey, ez, tx, ty, tz, maxFastPathLength));
-    this.targetNode = this.path.claimNode();
-    Node b = this.path.getEndNode();
-    if(b!=null && (b.x!=tx || b.y!=ty || b.z!=tz))
-      {     
-//      Config.logDebug("starter path was valid, requesting full path find");
-      PathThreadPool.instance().requestPath(this, worldAccess, b.x, b.y, b.z, tx, ty, tz, maxPathLength);
+    this.scheduler.requestPath(this, worldAccess, ex, ey, ez, targetX, targetY, targetZ);
+    if(!entity.worldObj.isRemote)
+      {
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setInteger("tx", tx);
+      tag.setInteger("ty", ty);
+      tag.setInteger("tz", tz);
+      Packet04Npc pkt = new Packet04Npc();
+      pkt.setParams(entity);
+      pkt.setPathTarget(tag);
+      pkt.sendPacketToAllTrackingClients(entity);
       }
-    } 
-//  if(!entity.worldObj.isRemote)
-//    {
-//    NBTTagCompound tag = new NBTTagCompound();
-//    tag.setInteger("tx", tx);
-//    tag.setInteger("ty", ty);
-//    tag.setInteger("tz", tz);
-//    Packet04Npc pkt = new Packet04Npc();
-//    pkt.setParams(entity);
-//    pkt.setPathTarget(tag);
-//    pkt.sendPacketToAllTrackingClients(entity);
-//    }
+    }
   }
 
 public void moveTowardsCurrentNode()
   {
+  if(this.targetNode==null && this.path.getPathNodeLength()>0)
+    {
+    this.targetNode = this.path.claimNode();
+    }
   if(this.targetNode!=null)
     {    
     int ex = MathHelper.floor_double(entity.posX);
@@ -130,7 +131,7 @@ public void moveTowardsCurrentNode()
       this.targetNode = path.claimNode();
 //      Config.logDebug("new :: "+this.targetNode);
       if(targetNode==null)
-        {
+        {        
         entity.getMoveHelper().setMoveTo(entity.posX, entity.posY, entity.posZ, entity.getAIMoveSpeed());
         return;
         }
@@ -145,7 +146,7 @@ public void moveTowardsCurrentNode()
         {
         entity.motionY = 0.125f;
         }    
-      }        
+      }
     entity.getMoveHelper().setMoveTo(targetNode.x+0.5d, targetNode.y, targetNode.z+0.5d, entity.getAIMoveSpeed());
     } 
   }
@@ -158,9 +159,9 @@ public List<Node> getCurrentPath()
 @Override
 public void onPathFound(List<Node> pathNodes)
   {
-//  Config.logDebug("thread returned path");
-  this.path.addPath(pathNodes);
+  this.targetNode = null;
+  this.path.setPath(pathNodes);
+  this.targetNode = this.path.claimNode();
 //  Config.logDebug("added: "+pathNodes.size()+ " nodes from thread pathfind");
   }
-
 }

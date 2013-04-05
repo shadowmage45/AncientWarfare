@@ -58,8 +58,8 @@ public boolean isWalkable(int x, int y, int z)
       return false;
       }
     }
-  else if(cube || id==Block.waterMoving.blockID || id==Block.waterStill.blockID || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)//if solid and not a ladder//id!=0
-    {
+  else if(cube || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)//if solid and not a ladder//id!=0
+    {//|| id==Block.waterMoving.blockID || id==Block.waterStill.blockID 
     return false;
     }    
   else if(!world.isBlockNormalCube(x, y-1, z) && id!=LADDER)//or if air below and not a ladder

@@ -53,7 +53,10 @@ public void addPath(List<Node> pathNodes)
 //      this.path.removeLast();
 //      }
 //    }
-  this.path.addAll(pathNodes);
+//  synchronized(path)
+//  {
+  this.path.addAll(pathNodes);  
+//  }
   }
 
 public boolean containsPoint(int x, int y, int z)

@@ -34,7 +34,7 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.pathfinding.PathBenchmarking;
-import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
+import shadowmage.ancient_warfare.common.pathfinding.threading.ClientTicker;
 import shadowmage.ancient_warfare.common.pathfinding.threading.ServerTicker;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.registry.AWEntityRegistry;
@@ -184,6 +184,7 @@ public void load(FMLPostInitializationEvent evt)
   
   TickRegistry.registerTickHandler(new ServerTickTimer(), Side.SERVER);
   TickRegistry.registerTickHandler(new ServerTicker(), Side.SERVER);
+  TickRegistry.registerTickHandler(new ClientTicker(), Side.CLIENT);
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
 
   //DEBUG //TODO -- remove
@@ -192,17 +193,16 @@ public void load(FMLPostInitializationEvent evt)
 //  PathUtils.getPositionsBetween(10, 0, 31, 1, 0, 1);
 //  PathUtils.getPositionsBetween2(10, 31, 1, 1);
 //  PathUtils.traceRay(10, 0.5f, 31, 1, 0.5f, 1);
-  PathBenchmarking.instance().doTestNormal(80);
-  PathBenchmarking.instance().doTestJPS(80);
-  PathBenchmarking.instance().doTestTheta(80);
-  PathBenchmarking.instance().doTestClassic(80);
-  PathBenchmarking.instance().doTestNormal(80);
-  PathBenchmarking.instance().doTestJPS(80);
-  PathBenchmarking.instance().doTestTheta(80);
-  PathBenchmarking.instance().doTestClassic(80);
-  
-  
-  PathBenchmarking.instance().doThreadedTests(120);
+//  PathBenchmarking.instance().doTestNormal(80);
+//  PathBenchmarking.instance().doTestJPS(80);
+//  PathBenchmarking.instance().doTestTheta(80);
+//  PathBenchmarking.instance().doTestClassic(80);
+//  PathBenchmarking.instance().doTestNormal(80);
+//  PathBenchmarking.instance().doTestJPS(80);
+//  PathBenchmarking.instance().doTestTheta(80);
+//  PathBenchmarking.instance().doTestClassic(80);  
+//  
+//  PathBenchmarking.instance().doThreadedTests(120);
   }
 
 

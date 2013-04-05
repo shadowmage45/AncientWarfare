@@ -146,18 +146,6 @@ public void setMoveTo(int tx, int ty, int tz)
       calcPath = true;
       }
     }
-  if(false)//can see target node check...not sure
-    {
-    
-    }
-//  if(targetNode!=null)
-//    {
-//    if(Math.abs(entity.posY - (double)this.targetNode.y)>2.5d)//has fallen, been pushed, some other crap..recalc;
-//      {
-//      Config.logDebug("recalc due to falling/pushed/other stuff...");
-//      calcPath = true;
-//      }
-//    }
   if(calcPath)
     {
     if(targetDiff<3 && this.targetNode!=null)

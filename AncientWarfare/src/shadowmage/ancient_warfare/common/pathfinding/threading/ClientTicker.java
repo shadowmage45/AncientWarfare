@@ -27,32 +27,31 @@ import shadowmage.ancient_warfare.common.pathfinding.queuing.PathScheduler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
-public class ServerTicker implements ITickHandler
+public class ClientTicker implements ITickHandler
 {
 
 @Override
 public void tickStart(EnumSet<TickType> type, Object... tickData)
   {
-  PathScheduler.serverInstance().onTickStart();
+  PathScheduler.clientInstance().onTickStart();
   }
 
 @Override
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {
-  PathThreadPool.instance().tryDispatchResults();
-  PathScheduler.serverInstance().onTickEnd();
+  PathScheduler.clientInstance().onTickEnd();
   }
 
 @Override
 public EnumSet<TickType> ticks()
   {
-  return EnumSet.of(TickType.SERVER);
+  return EnumSet.of(TickType.CLIENT);
   }
 
 @Override
 public String getLabel()
   {
-  return "AW.Server.PathfindTicker";
+  return "AW.Client.PathfindTicker";
   }
 
 }

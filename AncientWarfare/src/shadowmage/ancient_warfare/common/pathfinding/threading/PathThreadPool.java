@@ -26,7 +26,7 @@ import java.util.List;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinderThetaStar;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
-import shadowmage.meim.common.config.Config;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class PathThreadPool
 {
@@ -70,6 +70,11 @@ public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, 
     }
   worker.setupPathParams(caller, world, x, y, z, x1, y1, z1, maxRange);
   addTaskToQueue(worker);
+  Config.logDebug("work queue size: "+this.workQueue.size());
+  while(this.workQueue.size()>300)
+    {
+    this.workQueue.pop();
+    }
   }
   }
 
@@ -90,6 +95,7 @@ private void onTaskCompleted(PathThreadWorker worker)
   synchronized(results)
     {
     this.results.addLast(worker.getPathResult());
+//    Config.logDebug("results size:"+this.results.size());
     }
   synchronized(idleWorkers)
     {
