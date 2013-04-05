@@ -93,6 +93,9 @@ int ty;
 int tz;
 int maxRange = 80;
 PathWorldAccess world;
+long startTime;
+public long maxRunTime = 15000000l;//15ms
+public long maxSearchIterations = 1500;
 
 public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
   {  
@@ -103,6 +106,7 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
   this.tx = tx;
   this.ty = ty;
   this.tz = tz;
+  this.startTime = System.nanoTime();
   this.maxRange = maxRange;
   this.currentNode = getOrMakeNode(sx, sy, sz, null);
   this.currentNode.g = 0;
@@ -137,9 +141,11 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
 private Node bestEndNode = null;
 private float bestPathLength = 0.f;
 private float bestPathDist = Float.POSITIVE_INFINITY;
+private int searchIteration;
 
 private void searchLoop()
   {
+  this.searchIteration++;
   while(!qNodes.isEmpty())
     {
     this.currentNode = this.qNodes.poll();
@@ -165,13 +171,15 @@ private void searchLoop()
         }
       if(!qNodes.contains(n) || tent < n.g)//if we haven't seen n before, or if we have but the path through current to n is less than n's best known path
         {//update n's stats to path through current -> n
+        //this is where it deviates from A*, we will check to see if n can see the parent of current.  if so
+        //we calculate the path to n as if it went through the parent of current, skipping current completely.
         if(canSeeParent(n, currentNode.parentNode))
           {
           n.parentNode = currentNode.parentNode;
           n.g = n.parentNode.g + n.getDistanceFrom(n.parentNode);
           n.f = n.g + n.getH(tx, ty, tz);
           }
-        else
+        else//else if we cannot skip nodes, link n to current and calc path length
           {
           n.parentNode = currentNode;
           n.g = tent;
@@ -189,23 +197,31 @@ private void searchLoop()
 
 private boolean shouldTerminateEarly()  
   {
+  long runtime = System.nanoTime() - startTime;
+  if(runtime>maxRunTime)
+    {
+    Config.logDebug("search time exceeded max of: "+(this.maxRunTime/1000000)+"ms, terminating search.");
+    return true;
+    }
+  if(this.searchIteration>this.maxSearchIterations)
+    {
+    Config.logDebug("search iterations exceeded max of: "+this.maxSearchIterations+ " terminating search.");
+    }
   float dist = this.currentNode.getDistanceFrom(tx,ty,tz);
   float len = this.currentNode.getPathLength();
-  if((dist < bestPathDist || len > bestPathLength ))
-    {//
+  if( dist < bestPathDist || len > bestPathLength )
+    {
     this.bestEndNode = this.currentNode;
     this.bestPathDist = dist;
     this.bestPathLength = len;
-//    Config.logDebug("found new best end point. pathLen: "+this.bestFoundEndNode.getPathLength() + "rawDist: "+dist+ " ND: "+bestFoundEndNode.toString());
     if(len>maxRange)
       {
-//      Config.logDebug("search length exceeded, terminating search");      
+      Config.logDebug("search length exceeded max of: "+this.maxRange+", terminating search.");      
       return true;
       }
     }
   return false;
   }
-
 
 private boolean canSeeParent(Node n, Node p)
   {
@@ -225,27 +241,6 @@ private boolean canSeeParent(Node n, Node p)
       return false;
       }
     }
-//  List<Pos3f> hits = PathUtils.traceRay2(n.x+0.5f, n.y, n.z+0.5f, p.x+0.5f, p.y, p.z+0.5f);
-//  int x;
-//  int y;
-//  int z;
-//  Config.logDebug("tracing for: "+n.toString()+" to: "+p.toString());
-//  for(Pos3f pos : hits)
-//    {
-//    x = (int)pos.x;//MathHelper.floor_float(pos.x);
-//    y = (int)pos.y;//MathHelper.floor_float(pos.y);
-//    z = (int)pos.z;//MathHelper.floor_float(pos.z);
-//    if(!Trig.isBetween(x, n.x, p.x) || !Trig.isBetween(y, n.y, p.y) || !Trig.isBetween(z, n.z, p.z))//because my ray-tracer is sloppy...
-//      {
-//      continue;
-//      }
-////    Config.logDebug(x+","+y+","+z);
-//    if(!world.isWalkable(x, y, z))
-//      {
-//      Config.logDebug("not walkable!!!");
-//      return false;
-//      }
-//    }
   return true;
   }
 
@@ -258,12 +253,29 @@ private void findNeighbors(Node n)
   tryAddSearchNode(n.x, n.y, n.z+1, n);
 
   /**
-   * diagonals
-   */    
-  tryAddSearchNode( n.x-1, n.y, n.z+1, n);
-  tryAddSearchNode( n.x-1, n.y, n.z-1, n);
-  tryAddSearchNode( n.x+1, n.y, n.z+1, n);
-  tryAddSearchNode( n.x+1, n.y, n.z-1, n);
+   * diagonals -- check to make sure the path on the crossing blocks is clear
+   */
+//  tryAddSearchNode( n.x-1, n.y, n.z+1, n);
+//  tryAddSearchNode( n.x-1, n.y, n.z-1, n);
+//  tryAddSearchNode( n.x+1, n.y, n.z+1, n);
+//  tryAddSearchNode( n.x+1, n.y, n.z-1, n);    
+  
+  if(world.isWalkable(n.x, n.y, n.z+1) && world.isWalkable(n.x-1, n.y, n.z))
+    {
+    tryAddSearchNode(n.x-1, n.y, n.z+1, n);
+    }
+  if(world.isWalkable(n.x, n.y, n.z+1)&&world.isWalkable(n.x+1, n.y, n.z))
+    {
+    tryAddSearchNode(n.x+1, n.y, n.z+1, n);
+    }
+  if(world.isWalkable(n.x+1, n.y, n.z) && world.isWalkable(n.x, n.y, n.z-1))
+    {
+    tryAddSearchNode(n.x+1, n.y, n.z-1, n);
+    }
+  if(world.isWalkable(n.x-1, n.y, n.z) && world.isWalkable(n.x, n.y, n.z-1))
+    {
+    tryAddSearchNode(n.x-1, n.y, n.z-1, n);
+    }
 
   /**
    * up/down (in case of ladder/water)
@@ -272,7 +284,7 @@ private void findNeighbors(Node n)
   tryAddSearchNode( n.x, n.y-1, n.z, n);
 
   /**
-   * and the NSEW +/- 1 jumpable blocks..
+   * and the NSEW Y+1/Y-1 jumpable blocks..(not diagonal jumps)
    */
   tryAddSearchNode( n.x-1, n.y+1, n.z, n);
   tryAddSearchNode( n.x+1, n.y+1, n.z, n);
