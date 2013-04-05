@@ -61,7 +61,7 @@ public LinkedList<Node> findPath(PathWorldAccess world, int x, int y, int z, int
       }
     List<Node> neighbors = findNeighbors(current);
     for(Node n : neighbors)
-      {
+      {      
       if(closedNodes.contains(n))
         {
         continue;

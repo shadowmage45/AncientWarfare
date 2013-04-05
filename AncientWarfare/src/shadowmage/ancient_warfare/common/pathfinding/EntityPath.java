@@ -44,24 +44,16 @@ public void setPath(List<Node> pathNodes)
  * @param pathNodes
  */
 public void addPath(List<Node> pathNodes)
-  {  
-  this.path.addAll(pathNodes);
-//  Node prev = null;
-//  Node current = null;
-//  for(Node n : pathNodes)
+  {
+//  Node n = this.path.peekLast();
+//  if(n!=null && !pathNodes.isEmpty())
 //    {
-//    prev = current;
-//    current = new Node(n.x, n.y, n.z);
-//    current.f = n.f;
-//    current.g = n.g;
-//    current.travelCost = n. travelCost;
-//    current.parentNode = prev;
-//    if(prev!=null)
+//    if(n.equals(pathNodes.get(0)))
 //      {
-//      prev.childNode = current;
+//      this.path.removeLast();
 //      }
-//    this.path.add(current);
-//    } 
+//    }
+  this.path.addAll(pathNodes);
   }
 
 public boolean containsPoint(int x, int y, int z)

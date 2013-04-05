@@ -23,15 +23,14 @@ package shadowmage.ancient_warfare.common.pathfinding.threading;
 import java.util.ArrayList;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
-import shadowmage.ancient_warfare.common.pathfinding.PathFinderJPS;
+import shadowmage.ancient_warfare.common.pathfinding.PathFinderThetaStar;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 
 public class PathThreadWorker implements Runnable
 {
 
-private PathFinderJPS pather = new PathFinderJPS();
+private PathFinderThetaStar pather = new PathFinderThetaStar();
 List<Node> path = new ArrayList<Node>();
 IPathableCallback caller;
 int x, y, z, x1, y1, z1, maxRange;
@@ -44,7 +43,7 @@ private static int threadNum = 0;
 public PathThreadWorker()
   {
   this.num = threadNum;  
-  this.pather.threaded = true;
+  //this.pather.threaded = true;
   threadNum++;
   }
 
@@ -53,6 +52,7 @@ public void setupPathParams(IPathableCallback caller, PathWorldAccess world, int
   this.path.clear();
   this.caller = caller;
   this.world = world;
+  this.maxRange = maxRange;
   this.x = x;
   this.y = y;
   this.z = z;
@@ -66,7 +66,7 @@ public void setupPathParams(IPathableCallback caller, PathWorldAccess world, int
 public void interruptWorker()
   {
   this.interruped = true;
-  this.pather.setInterrupted();
+  //this.pather.setInterrupted();
   }
 
 @Override

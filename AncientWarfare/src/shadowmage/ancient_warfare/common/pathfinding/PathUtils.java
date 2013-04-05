@@ -55,11 +55,13 @@ public static List<Pos3f> traceRay2(float x0, float y0, float z0, float x1, floa
   List<Pos3f> hits = new ArrayList<Pos3f>();
   
   float travel = 0;
-  float distance = Trig.getDistance(x0, y0, z0, x1, y1, z1);
-  
+  float distance = Trig.getDistance(x0, y0, z0, x1, y1, z1);  
   float mx = x1-x0;
   float my = y1-y0;
   float mz = z1-z0;  
+  boolean invertX = x0<x1;
+  boolean invertY = y0<y1;
+  boolean invertZ = z0<z1;
   float dx;
   float dy;
   float dz;
@@ -78,6 +80,9 @@ public static List<Pos3f> traceRay2(float x0, float y0, float z0, float x1, floa
     dx = 1 - (x % 1.f);
     dy = 1 - (y % 1.f);
     dz = 1 - (z % 1.f);
+//    if(invertX){dx = 1-dx;}
+//    if(invertY){dy = 1-dy;}
+//    if(invertZ){dz = 1-dz;}
     px = Math.abs(mx== 0 ? 1.f : dx / mx);
     py = Math.abs(my== 0 ? 1.f : dy / my);
     pz = Math.abs(mz== 0 ? 1.f : dz / mz);
@@ -156,217 +161,6 @@ public static List<Pos3f> traceRay(float x0, float y0, float z0, float x1, float
   return hitPositions;
   }
 
-public static void mcRayTraceRehash()
-  {
-  /**
-   * if (!Double.isNaN(par1Vec3.xCoord) && !Double.isNaN(par1Vec3.yCoord) && !Double.isNaN(par1Vec3.zCoord))
-        {
-            if (!Double.isNaN(par2Vec3.xCoord) && !Double.isNaN(par2Vec3.yCoord) && !Double.isNaN(par2Vec3.zCoord))
-            {
-                int var5 = MathHelper.floor_double(par2Vec3.xCoord);
-                int var6 = MathHelper.floor_double(par2Vec3.yCoord);
-                int var7 = MathHelper.floor_double(par2Vec3.zCoord);
-                int var8 = MathHelper.floor_double(par1Vec3.xCoord);
-                int var9 = MathHelper.floor_double(par1Vec3.yCoord);
-                int var10 = MathHelper.floor_double(par1Vec3.zCoord);
-                int var11 = this.getBlockId(var8, var9, var10);
-                int var12 = this.getBlockMetadata(var8, var9, var10);
-                Block var13 = Block.blocksList[var11];
-
-                if (var13 != null && (!par4 || var13 == null || var13.getCollisionBoundingBoxFromPool(this, var8, var9, var10) != null) && var11 > 0 && var13.canCollideCheck(var12, par3))
-                {
-                    MovingObjectPosition var14 = var13.collisionRayTrace(this, var8, var9, var10, par1Vec3, par2Vec3);
-
-                    if (var14 != null)
-                    {
-                        return var14;
-                    }
-                }
-
-                var11 = 200;
-
-                while (var11-- >= 0)
-                {
-                    if (Double.isNaN(par1Vec3.xCoord) || Double.isNaN(par1Vec3.yCoord) || Double.isNaN(par1Vec3.zCoord))
-                    {
-                        return null;
-                    }
-
-                    if (var8 == var5 && var9 == var6 && var10 == var7)
-                    {
-                        return null;
-                    }
-
-                    boolean var39 = true;
-                    boolean var40 = true;
-                    boolean var41 = true;
-                    double var15 = 999.0D;
-                    double var17 = 999.0D;
-                    double var19 = 999.0D;
-
-                    if (var5 > var8)
-                    {
-                        var15 = (double)var8 + 1.0D;
-                    }
-                    else if (var5 < var8)
-                    {
-                        var15 = (double)var8 + 0.0D;
-                    }
-                    else
-                    {
-                        var39 = false;
-                    }
-
-                    if (var6 > var9)
-                    {
-                        var17 = (double)var9 + 1.0D;
-                    }
-                    else if (var6 < var9)
-                    {
-                        var17 = (double)var9 + 0.0D;
-                    }
-                    else
-                    {
-                        var40 = false;
-                    }
-
-                    if (var7 > var10)
-                    {
-                        var19 = (double)var10 + 1.0D;
-                    }
-                    else if (var7 < var10)
-                    {
-                        var19 = (double)var10 + 0.0D;
-                    }
-                    else
-                    {
-                        var41 = false;
-                    }
-
-                    double var21 = 999.0D;
-                    double var23 = 999.0D;
-                    double var25 = 999.0D;
-                    double var27 = par2Vec3.xCoord - par1Vec3.xCoord;
-                    double var29 = par2Vec3.yCoord - par1Vec3.yCoord;
-                    double var31 = par2Vec3.zCoord - par1Vec3.zCoord;
-
-                    if (var39)
-                    {
-                        var21 = (var15 - par1Vec3.xCoord) / var27;
-                    }
-
-                    if (var40)
-                    {
-                        var23 = (var17 - par1Vec3.yCoord) / var29;
-                    }
-
-                    if (var41)
-                    {
-                        var25 = (var19 - par1Vec3.zCoord) / var31;
-                    }
-
-                    boolean var33 = false;
-                    byte var42;
-
-                    if (var21 < var23 && var21 < var25)
-                    {
-                        if (var5 > var8)
-                        {
-                            var42 = 4;
-                        }
-                        else
-                        {
-                            var42 = 5;
-                        }
-
-                        par1Vec3.xCoord = var15;
-                        par1Vec3.yCoord += var29 * var21;
-                        par1Vec3.zCoord += var31 * var21;
-                    }
-                    else if (var23 < var25)
-                    {
-                        if (var6 > var9)
-                        {
-                            var42 = 0;
-                        }
-                        else
-                        {
-                            var42 = 1;
-                        }
-
-                        par1Vec3.xCoord += var27 * var23;
-                        par1Vec3.yCoord = var17;
-                        par1Vec3.zCoord += var31 * var23;
-                    }
-                    else
-                    {
-                        if (var7 > var10)
-                        {
-                            var42 = 2;
-                        }
-                        else
-                        {
-                            var42 = 3;
-                        }
-
-                        par1Vec3.xCoord += var27 * var25;
-                        par1Vec3.yCoord += var29 * var25;
-                        par1Vec3.zCoord = var19;
-                    }
-
-                    Vec3 var34 = this.getWorldVec3Pool().getVecFromPool(par1Vec3.xCoord, par1Vec3.yCoord, par1Vec3.zCoord);
-                    var8 = (int)(var34.xCoord = (double)MathHelper.floor_double(par1Vec3.xCoord));
-
-                    if (var42 == 5)
-                    {
-                        --var8;
-                        ++var34.xCoord;
-                    }
-
-                    var9 = (int)(var34.yCoord = (double)MathHelper.floor_double(par1Vec3.yCoord));
-
-                    if (var42 == 1)
-                    {
-                        --var9;
-                        ++var34.yCoord;
-                    }
-
-                    var10 = (int)(var34.zCoord = (double)MathHelper.floor_double(par1Vec3.zCoord));
-
-                    if (var42 == 3)
-                    {
-                        --var10;
-                        ++var34.zCoord;
-                    }
-
-                    int var35 = this.getBlockId(var8, var9, var10);
-                    int var36 = this.getBlockMetadata(var8, var9, var10);
-                    Block var37 = Block.blocksList[var35];
-
-                    if ((!par4 || var37 == null || var37.getCollisionBoundingBoxFromPool(this, var8, var9, var10) != null) && var35 > 0 && var37.canCollideCheck(var36, par3))
-                    {
-                        MovingObjectPosition var38 = var37.collisionRayTrace(this, var8, var9, var10, par1Vec3, par2Vec3);
-
-                        if (var38 != null)
-                        {
-                            return var38;
-                        }
-                    }
-                }
-
-                return null;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        else
-        {
-            return null;
-        }
-   */
-  }
 
 public static List<BlockPosition> getPositionsBetween2(float x0, float z0, float x1, float z1)
   {
@@ -404,7 +198,7 @@ public static List<BlockPosition> getPositionsBetween2(float x0, float z0, float
   for(int i = 0; i < dx+dz; i++)
     {
     blocks.add(new BlockPosition(x0,0,z0));
-    Config.logDebug("hit: "+x0+","+z0);
+//    Config.logDebug("hit: "+x0+","+z0);
     if(x0==x1 && z0==z1)
       {
       break;//finished
@@ -459,7 +253,7 @@ public static List<BlockPosition> getPositionsBetween(float x0, float y0, float 
   for(int i = 0; i < dx+dz; i++)
     {
     blocks.add(new BlockPosition(x0,y0,z0));
-    Config.logDebug("hit: "+x0+","+y0+","+z0);
+//    Config.logDebug("hit: "+x0+","+y0+","+z0);
     e1 = e+dz;
     e2 = e-dx;
     if(Math.abs(e1)<Math.abs(e2))
@@ -473,7 +267,8 @@ public static List<BlockPosition> getPositionsBetween(float x0, float y0, float 
       e = e2;
       }
     }  
-  Config.logDebug("hit: "+x0+","+y0+","+z0);
+  blocks.add(new BlockPosition(x0,y0,z0));
+//  Config.logDebug("hit: "+x0+","+y0+","+z0);
   return blocks;
   }
 

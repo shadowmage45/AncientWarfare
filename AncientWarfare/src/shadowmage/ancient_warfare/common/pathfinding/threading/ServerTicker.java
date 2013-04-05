@@ -37,7 +37,8 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
 @Override
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {
-  PathManager.instance().onTickServer();
+  PathThreadPool.instance().tryDispatchResults();
+//  PathManager.instance().onTickServer();
   }
 
 @Override

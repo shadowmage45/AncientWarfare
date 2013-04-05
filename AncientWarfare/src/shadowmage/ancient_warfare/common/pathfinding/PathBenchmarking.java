@@ -45,7 +45,7 @@ long total;
 
 List<PathThreadTestCaller> openCallers = new ArrayList<PathThreadTestCaller>();
 
-public void doThreadedTests(float maxLength)
+public void doThreadedTests(int maxLength)
   {
   total = 0;
   t = System.nanoTime();
@@ -54,7 +54,7 @@ public void doThreadedTests(float maxLength)
     {
     caller = new PathThreadTestCaller(this);
     this.openCallers.add(caller);
-    PathThreadPool.instance().requestPath(caller, world, 1, 1, 1, 40, 1, 40, (int)maxLength);
+    PathThreadPool.instance().requestPath(caller, world, 1, 1, 1, 40, 1, 40, maxLength);
     }  
 //  PathManager.instance().requestPath(new PathThreadTestCaller(this), world, 1, 1, 1, 40, 1, 40, (int)maxLength);
   }

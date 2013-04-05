@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import shadowmage.ancient_warfare.common.pathfinding.Node;
-import shadowmage.ancient_warfare.common.pathfinding.PathFinder;
+import shadowmage.ancient_warfare.common.pathfinding.PathFinderThetaStar;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.meim.common.config.Config;
 
@@ -32,14 +32,14 @@ public class PathThreadPool
 {
 
 static int threadNum = 0;
-private static final int MAX_THREADS = 4;
+private static final int MAX_THREADS = 2;
 private static PathThreadPool INSTANCE = new PathThreadPool();
 public static PathThreadPool instance(){return INSTANCE;}
 private LinkedList<PathThreadWorker> workQueue = new LinkedList<PathThreadWorker>();
 private PoolWorker[] workerThreads = new PoolWorker[MAX_THREADS];
 private LinkedList<PathResult> results = new LinkedList<PathResult>();
 private LinkedList<PathThreadWorker> idleWorkers = new LinkedList<PathThreadWorker>();
-private PathFinder quickPather = new PathFinder();
+private PathFinderThetaStar quickPather = new PathFinderThetaStar();
 
 private PathThreadPool()
   {
@@ -73,7 +73,7 @@ public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, 
   }
   }
 
-private void tryDispatchResults()
+public void tryDispatchResults()
   {
   synchronized(results)
   {
@@ -95,7 +95,7 @@ private void onTaskCompleted(PathThreadWorker worker)
     {
     this.idleWorkers.add(worker);
     }
-  tryDispatchResults();
+//  tryDispatchResults();
   }
 
 private void addTaskToQueue(PathThreadWorker worker) 

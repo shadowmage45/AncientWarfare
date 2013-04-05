@@ -65,15 +65,10 @@ public EntityNavigatorThreaded(NpcBase owner)
  */
 public void setMoveTo(int tx, int ty, int tz)
   {  
-  if(true)
+  if(false)
     {
     return;
-    }
-  //if can see target on eye X and foot X (no obstacles in straight path)
-  //  {
-  //  check all blocks in a line beneath that path to see if they are walkable
-  //    if true, set targetNode to target, move in a straight line towards that path
-  //  }
+    }  
   int ex = MathHelper.floor_double(entity.posX);
   int ey = MathHelper.floor_double(entity.posY);
   int ez = MathHelper.floor_double(entity.posZ);
@@ -85,9 +80,9 @@ public void setMoveTo(int tx, int ty, int tz)
     targetDiff = Trig.getDistance(n.x, n.y, n.z, tx, ty, tz);
     }  
   boolean calcPath = false;
-  if(targetDiff < dist * 0.1f)
+  if(targetDiff < dist * 0.1f || (n!=null && n.x==tx && n.y==ty && n.z==tz))
     {
-    Config.logDebug("diff/dist ratio below threshold, skipping recalc");
+//    Config.logDebug("diff/dist ratio below threshold, skipping recalc");
     }
   else
     {
@@ -102,10 +97,11 @@ public void setMoveTo(int tx, int ty, int tz)
 //    Config.logDebug("getting starter path");
     this.path.setPath(PathThreadPool.instance().findStarterPath(worldAccess, ex, ey, ez, tx, ty, tz, maxFastPathLength));
     this.targetNode = this.path.claimNode();
-    if(this.targetNode!=null)
+    Node b = this.path.getEndNode();
+    if(b!=null)
       {
 //      Config.logDebug("starter path was valid, requesting full path find");
-      PathThreadPool.instance().requestPath(this, worldAccess, targetNode.x, targetNode.y, targetNode.z, tx, ty, tz, maxPathLength);
+      PathThreadPool.instance().requestPath(this, worldAccess, b.x, b.y, b.z, tx, ty, tz, maxPathLength);
       }
     } 
 //  if(!entity.worldObj.isRemote)
@@ -128,7 +124,7 @@ public void moveTowardsCurrentNode()
     int ex = MathHelper.floor_double(entity.posX);
     int ey = MathHelper.floor_double(entity.posY);
     int ez = MathHelper.floor_double(entity.posZ);
-    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<1.20f)
+    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<1.0f)
       {
 //      Config.logDebug("claiming node from completion LATE "+this.targetNode+"::"+entity);
       this.targetNode = path.claimNode();
@@ -162,7 +158,9 @@ public List<Node> getCurrentPath()
 @Override
 public void onPathFound(List<Node> pathNodes)
   {
-  Config.logDebug("thread returned path");
+//  Config.logDebug("thread returned path");
+  this.path.addPath(pathNodes);
+//  Config.logDebug("added: "+pathNodes.size()+ " nodes from thread pathfind");
   }
 
 }

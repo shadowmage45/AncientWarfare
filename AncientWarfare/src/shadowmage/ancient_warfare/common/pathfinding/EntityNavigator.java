@@ -35,7 +35,7 @@ public class EntityNavigator
 NpcBase entity;
 EntityPath path = new EntityPath();
 PathWorldAccessEntity worldAccess;
-PathFinderJPS pather;
+PathFinderThetaStar pather;
 
 double x;
 double y;
@@ -52,7 +52,7 @@ public EntityNavigator(NpcBase owner)
   {
   this.entity = owner;
   this.worldAccess = new PathWorldAccessEntity(entity.worldObj, entity);
-  pather = new PathFinderJPS();  
+  pather = new PathFinderThetaStar();  
   this.x = entity.posX;
   this.y = entity.posY;
   this.z = entity.posZ;
@@ -92,7 +92,7 @@ public void setMoveTo(int tx, int ty, int tz)
         Config.logDebug("adding to path");
         if(n!=null)
           {
-          path.addPath(pather.findPath(worldAccess, n.x, n.y, n.z, tx, ty, tz, (int)maxPathLength));
+//          path.addPath(pather.findPath(worldAccess, n.x, n.y, n.z, tx, ty, tz, (int)maxPathLength));
           x = tx;
           y = ty;
           z = tz;
@@ -122,7 +122,7 @@ public void setMoveTo(int tx, int ty, int tz)
         Config.logDebug("adding to path");
         if(n!=null)
           {
-          path.addPath(pather.findPath(worldAccess, n.x, n.y, n.z, tx, ty, tz, (int)maxPathLength));
+//          path.addPath(pather.findPath(worldAccess, n.x, n.y, n.z, tx, ty, tz, (int)maxPathLength));
           x = tx;
           y = ty;
           z = tz;
@@ -146,14 +146,18 @@ public void setMoveTo(int tx, int ty, int tz)
       calcPath = true;
       }
     }
-  if(targetNode!=null)
+  if(false)//can see target node check...not sure
     {
-    if(Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)>5)//has fallen, been pushed, some other crap..recalc;
-      {
-      Config.logDebug("recalc due to falling/pushed/other stuff...");
-      calcPath = true;
-      }
+    
     }
+//  if(targetNode!=null)
+//    {
+//    if(Math.abs(entity.posY - (double)this.targetNode.y)>2.5d)//has fallen, been pushed, some other crap..recalc;
+//      {
+//      Config.logDebug("recalc due to falling/pushed/other stuff...");
+//      calcPath = true;
+//      }
+//    }
   if(calcPath)
     {
     if(targetDiff<3 && this.targetNode!=null)
@@ -192,7 +196,7 @@ public void moveTowardsCurrentNode()
     int ex = MathHelper.floor_double(entity.posX);
     int ey = MathHelper.floor_double(entity.posY);
     int ez = MathHelper.floor_double(entity.posZ);
-    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<1.20f)
+    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || (Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<1.00f && ey==targetNode.y))
       {
 //      Config.logDebug("claiming node from completion LATE "+this.targetNode+"::"+entity);
       this.targetNode = path.claimNode();

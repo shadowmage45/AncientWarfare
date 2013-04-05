@@ -129,6 +129,20 @@ public static double getAbsDiff(double a, double b)
   }
 
 /**
+ * tests if _test_ is >=min && <=max
+ * @param test
+ * @param min
+ * @param max
+ * @return
+ */
+public static boolean isBetween(int test, int a, int b)
+  {
+  int min = a < b? a : b;
+  int max = a < b? b : a;
+  return test >= min && test <=max;
+  }
+
+/**
  * is the angle between min and max (inclusive e.g. test <= max && test>=min) 
  * @param test
  * @param min
