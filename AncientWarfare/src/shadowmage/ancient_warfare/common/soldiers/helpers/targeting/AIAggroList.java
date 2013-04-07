@@ -34,10 +34,10 @@ public class AIAggroList
 
 public float maxDistanceForTargets = Config.npcAISearchRange;
 protected NpcBase npc;
-public final String targetType;
+public final int targetType;
 ArrayList<AIAggroEntry> targetEntries = new ArrayList<AIAggroEntry>();
 
-public AIAggroList(NpcBase owner, String targetType)
+public AIAggroList(NpcBase owner, int targetType)
   {
   this.npc = owner;
   this.targetType = targetType;

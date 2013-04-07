@@ -18,45 +18,50 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.types;
+package shadowmage.ancient_warfare.common.soldiers.ai;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
-import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 
-public class NpcDummy extends NpcTypeBase
+public abstract class NpcAIObjective
 {
 
+protected NpcBase npc;
+protected int maxPriority;
+public int currentPriority;
+public int minObjectiveTicks = 40;
+public boolean isFinished = false;
+
+protected AIAggroEntry objectiveTarget;
+
+
+
 /**
- * @param type
+ * the tasks, in order, necessary to complete this objective
+ * e.g. find target, move to target, attack target.
  */
-public NpcDummy(int type)
+protected List aiTasks = new ArrayList();
+
+public abstract void updateObjectivePriority();
+public abstract void addTasks();
+
+public NpcAIObjective(NpcBase npc, int maxPriority)
   {
-  super(type);
-  this.displayName = "Dummy Test";
-  this.tooltip = "Dummy Test -- PlaceHolder tooltip";
-  this.addLevel("Dummy Test Level Name 1", "foo");
-  this.addLevel("Dummy Test Level Name 2", "foo");
-  this.isCombatUnit = true;
+  this.npc = npc;
+  this.maxPriority = maxPriority;
   }
 
-
-@Override
-public List<NpcAIObjective> getAI(NpcBase npc, int level)
+public void onTick()
   {
-  ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
-  return aiEntries;
-  }
-
-@Override
-public void addTargets(NpcBase npc, NpcTargetHelper helper)
-  {
-  // TODO Auto-generated method stub
   
+  }
+
+public void startObjective()
+  {
+  this.isFinished = false;
   }
 
 }

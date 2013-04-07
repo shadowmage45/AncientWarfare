@@ -37,7 +37,7 @@ boolean oppositeTeam;
  * @param isEntityTarget
  * @param maxTargetRange
  */
-public AITargetEntryNpc(NpcBase npc, String typeName, int priority, float maxTargetRange, boolean sameTeam, boolean oppositeTeam)
+public AITargetEntryNpc(NpcBase npc, int typeName, int priority, float maxTargetRange, boolean sameTeam, boolean oppositeTeam)
   {
   super(npc, typeName, NpcBase.class, priority, true, maxTargetRange);
   this.sameTeam = sameTeam;

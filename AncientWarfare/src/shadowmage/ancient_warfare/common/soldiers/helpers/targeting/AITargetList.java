@@ -30,11 +30,11 @@ import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntr
 
 public class AITargetList
 {	
-String type;
+int type;
 ArrayList<AITargetEntry> targetEntries = new ArrayList<AITargetEntry>();
 protected NpcBase npc;
 
-public AITargetList(NpcBase owner, String name)
+public AITargetList(NpcBase owner, int name)
   {
   this.npc = owner;
   this.type = name;

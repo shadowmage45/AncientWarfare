@@ -60,7 +60,7 @@ public VehicleTypeBatteringRam(int typeNum)
   this.turretForwardsOffset = 2.6f;
   this.turretVerticalOffset = 1.8f;
   this.turretHorizontalOffset = -.3f;
-  
+  this.minAttackDistance = 1.f;
   this.riderForwardsOffset = 0.f;
   this.riderVerticalOffset = 0.65f;
   this.riderHorizontalOffset = 0.325f;

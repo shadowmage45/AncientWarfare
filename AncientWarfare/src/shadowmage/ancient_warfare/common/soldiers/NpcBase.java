@@ -57,14 +57,12 @@ public int rank = 0;
  */
 int npcAITargetTick = 0;
 
-public ArrayList<INpcAI> npcAI = new ArrayList<INpcAI>();
-public ArrayList<INpcAI> executingTasks = new ArrayList<INpcAI>();
-
 public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
 public NpcTargetHelper targetHelper;
 
 private AIAggroEntry target = null;
+private NpcAIObjectiveManager aiManager;
 
 //public EntityNavigator nav;
 //public EntityNavigatorThreaded nav;
@@ -78,6 +76,7 @@ public NpcBase(World par1World)
   super(par1World);
   this.varsHelper = new NpcDummyVarHelper(this);  
   this.targetHelper = new NpcTargetHelper(this);
+  this.aiManager = new NpcAIObjectiveManager(this);
   this.moveSpeed = 0.325f;
   this.setAIMoveSpeed(0.325f);
 //  this.nav = new EntityNavigator(this);
@@ -89,12 +88,10 @@ public NpcBase(World par1World)
 
 public void setNpcType(INpcType type, int level)
   {
-  //  Config.logDebug("npc type being assigned: "+type.getDisplayName());
+  //  Config.logDebug("npc type being assigned: "+type.getDisplayName());  
   this.npcType = type;
   this.rank = level;
-  this.npcAI.clear();
-  this.executingTasks.clear();
-  this.npcAI.addAll(type.getAI(this, level)); 
+  this.aiManager.addObjectives(type.getAI(this, level));
   this.npcType.addTargets(this, targetHelper);
   }
 
@@ -123,9 +120,9 @@ public AIAggroEntry getTarget()
   return this.target;
   }
 
-public String getTargetType()
+public int getTargetType()
   {
-  return this.target == null? NpcAI.TARGET_NONE : this.target.targetType.getTypeName();
+  return this.target == null? -1 : this.target.targetType.getTypeName();
   }
 
 public void setTargetAW(AIAggroEntry entry)
@@ -145,60 +142,60 @@ public boolean isRidingVehicle()
 @Override
 protected void updateAITick() 
   {
-  //  Config.logDebug("AI Tick. currently executing tasks: "+this.executingTasks.size());  
-  int mutexStack = 0;
-  Iterator<INpcAI> it = this.executingTasks.iterator();
-  INpcAI task;
-  while(it.hasNext())
-    {    
-    task = it.next();
-    if(task.shouldExecute(this))
-      {
-      if(!task.hasStarted())
-        {
-        task.startAI();
-        }
-      task.onTick();
-      if(task.isFinished())
-        {
-        it.remove();
-        }
-      }
-    else
-      {
-      it.remove();
-      }    
-    }
-  for(INpcAI execTask : this.executingTasks)
-    {  
-    mutexStack += execTask.taskType();      
-    }
-  //  Config.logDebug("stack mutex: "+mutexStack);
-  for(INpcAI possibleTask : this.npcAI)
-    {    
-    //    Config.logDebug("examining possible AI task: "+possibleTask.getTaskName());
-    possibleTask.incrementTickCounts();
-    if(this.executingTasks.contains(possibleTask))//if task is already present in executing list, do not add
-      {
-      continue;
-      }
-    //    Config.logDebug("exclusive task: "+possibleTask.exclusiveTasks());
-    if((possibleTask.exclusiveTasks() & mutexStack) == 0)
-      {
-      if(possibleTask.shouldExecute(this))
-        {
-        this.executingTasks.add(possibleTask);
-        mutexStack+=possibleTask.taskType();
-        }
-      }
-    else
-      {
-      //      Config.logDebug("skipping task due to exlusion: "+possibleTask.getTaskName() +"::"+ mutexStack);
-      }
-
-    boolean found = false;
-    int exclude = possibleTask.exclusiveTasks(); 
-    }  
+//  //  Config.logDebug("AI Tick. currently executing tasks: "+this.executingTasks.size());  
+//  int mutexStack = 0;
+//  Iterator<INpcAI> it = this.executingTasks.iterator();
+//  INpcAI task;
+//  while(it.hasNext())
+//    {    
+//    task = it.next();
+//    if(task.shouldExecute(this))
+//      {
+//      if(!task.hasStarted())
+//        {
+//        task.startAI();
+//        }
+//      task.onTick();
+//      if(task.isFinished())
+//        {
+//        it.remove();
+//        }
+//      }
+//    else
+//      {
+//      it.remove();
+//      }    
+//    }
+//  for(INpcAI execTask : this.executingTasks)
+//    {  
+//    mutexStack += execTask.taskType();      
+//    }
+//  //  Config.logDebug("stack mutex: "+mutexStack);
+//  for(INpcAI possibleTask : this.npcAI)
+//    {    
+//    //    Config.logDebug("examining possible AI task: "+possibleTask.getTaskName());
+//    possibleTask.incrementTickCounts();
+//    if(this.executingTasks.contains(possibleTask))//if task is already present in executing list, do not add
+//      {
+//      continue;
+//      }
+//    //    Config.logDebug("exclusive task: "+possibleTask.exclusiveTasks());
+//    if((possibleTask.exclusiveTasks() & mutexStack) == 0)
+//      {
+//      if(possibleTask.shouldExecute(this))
+//        {
+//        this.executingTasks.add(possibleTask);
+//        mutexStack+=possibleTask.taskType();
+//        }
+//      }
+//    else
+//      {
+//      //      Config.logDebug("skipping task due to exlusion: "+possibleTask.getTaskName() +"::"+ mutexStack);
+//      }
+//
+//    boolean found = false;
+//    int exclude = possibleTask.exclusiveTasks(); 
+//    }  
   }
 
 @Override

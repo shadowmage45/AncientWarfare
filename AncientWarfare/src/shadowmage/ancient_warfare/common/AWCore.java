@@ -193,14 +193,14 @@ public void load(FMLPostInitializationEvent evt)
 //  PathUtils.getPositionsBetween(10, 0, 31, 1, 0, 1);
 //  PathUtils.getPositionsBetween2(10, 31, 1, 1);
 //  PathUtils.traceRay(10, 0.5f, 31, 1, 0.5f, 1);
-  PathBenchmarking.instance().doTestNormal(80);
-  PathBenchmarking.instance().doTestJPS(80);
-  PathBenchmarking.instance().doTestTheta(100);
-  PathBenchmarking.instance().doTestClassic(80);
-  PathBenchmarking.instance().doTestNormal(80);
-  PathBenchmarking.instance().doTestJPS(80);
-  PathBenchmarking.instance().doTestTheta(100);
-  PathBenchmarking.instance().doTestClassic(80);  
+//  PathBenchmarking.instance().doTestNormal(80);
+//  PathBenchmarking.instance().doTestJPS(80);
+//  PathBenchmarking.instance().doTestTheta(100);
+//  PathBenchmarking.instance().doTestClassic(80);
+//  PathBenchmarking.instance().doTestNormal(80);
+//  PathBenchmarking.instance().doTestJPS(80);
+//  PathBenchmarking.instance().doTestTheta(100);
+//  PathBenchmarking.instance().doTestClassic(80);  
 //  
 //  PathBenchmarking.instance().doThreadedTests(120);
   }

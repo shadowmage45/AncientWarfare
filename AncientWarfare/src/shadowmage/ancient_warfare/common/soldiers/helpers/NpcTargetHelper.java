@@ -45,17 +45,22 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 public class NpcTargetHelper
 {
 
+public static final int TARGET_ATTACK = 0;
+public static final int TARGET_MOUNT = 1;
+public static final int TARGET_HARVEST = 2;
+public static final int TARGET_HEAL = 3;
+
 NpcBase npc;
 
 /**
  * list of all potential targets
  */
-HashMap<String, AITargetList> targetEntries = new HashMap<String, AITargetList>();
+HashMap<Integer, AITargetList> targetEntries = new HashMap<Integer, AITargetList>();
 
 /**
  * future/potential targets based on aggro priority
  */
-HashMap<String, AIAggroList> aggroEntries = new HashMap<String, AIAggroList>();
+HashMap<Integer, AIAggroList> aggroEntries = new HashMap<Integer, AIAggroList>();
 
 public NpcTargetHelper(NpcBase npc)
   {
@@ -120,7 +125,7 @@ public void checkForTargets()
         continue;
         }
 //      Config.logDebug("checking entity: "+ent);
-      for(String key : this.targetEntries.keySet())        
+      for(Integer key : this.targetEntries.keySet())        
         {
         AITargetList targetList = this.targetEntries.get(key);
         targetEntry = targetList.getEntryFor(ent);
@@ -132,11 +137,11 @@ public void checkForTargets()
           {
           continue;
           }        
-//        Config.logDebug("checking targets of type: "+key);
+        Config.logDebug("checking targets of type: "+key);
         int pri = targetEntry.priority;
         if(pri>=0)
           {
-//                    Config.logDebug("adding/updating entity aggro entry for target: "+ent);
+                    Config.logDebug("adding/updating entity aggro entry for target: "+ent);
           float distPercent = 1.f - (dist / targetEntry.maxTargetRange);
           int aggroAmt = (int)(Config.npcAITicks + (distPercent * (float)Config.npcAITicks)); 
           this.addOrUpdateAggroEntry(targetEntry, ent, aggroAmt);
@@ -169,7 +174,7 @@ public float getAttackDistance(AIAggroEntry target)
 
 public void updateAggroEntries()
   {  
-  for(String key : this.aggroEntries.keySet())
+  for(Integer key : this.aggroEntries.keySet())
     {
     this.aggroEntries.get(key).updateAggroEntries();
     }  
@@ -180,7 +185,7 @@ public void handleBeingAttacked(EntityLiving damager)
   
   }
 
-public AIAggroEntry getHighestAggroTarget(String type)
+public AIAggroEntry getHighestAggroTarget(int type)
   {
   if(this.aggroEntries.containsKey(type))
     {

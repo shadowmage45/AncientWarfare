@@ -21,8 +21,8 @@
 package shadowmage.ancient_warfare.common.soldiers.helpers.targeting;
 
 import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AITargetEntryMountableVehicle extends AITargetEntry
@@ -32,7 +32,7 @@ int vehicleType = -1;
 
 public AITargetEntryMountableVehicle(NpcBase npc, int vehicleType, int range)
   {
-  super(npc, NpcAI.TARGET_MOUNT, VehicleBase.class, 0, true, range);
+  super(npc, NpcTargetHelper.TARGET_MOUNT, VehicleBase.class, 0, true, range);
   this.vehicleType = vehicleType;
   }
 

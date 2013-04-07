@@ -23,18 +23,10 @@ package shadowmage.ancient_warfare.common.soldiers.types;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
-import shadowmage.ancient_warfare.common.soldiers.INpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
-import shadowmage.ancient_warfare.common.soldiers.ai.AIAttackTarget;
-import shadowmage.ancient_warfare.common.soldiers.ai.AIChooseAttackTarget;
-import shadowmage.ancient_warfare.common.soldiers.ai.AIChooseMountTarget;
-import shadowmage.ancient_warfare.common.soldiers.ai.AIMountVehicle;
-import shadowmage.ancient_warfare.common.soldiers.ai.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.soldiers.ai.AIWanderTest;
+import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntryMountableVehicle;
@@ -58,23 +50,16 @@ public NpcSoldierTest(int type)
 @Override
 public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
-  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntityPlayer.class, 0, true, 40));
+  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntityPlayer.class, 0, true, 40));
 //  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntityMob.class, 0, true, 40));
 //  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntitySlime.class, 0, true, 40));
   helper.addTargetEntry(new AITargetEntryMountableVehicle(npc, -1, 20));
   }
 
 @Override
-public List<INpcAI> getAI(NpcBase npc, int level)
+public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
-  ArrayList<INpcAI> aiEntries = new ArrayList<INpcAI>();
-  aiEntries.add(new AIMoveToTarget(npc));
-  aiEntries.add(new AIChooseMountTarget(npc));
-  aiEntries.add(new AIChooseAttackTarget(npc));  
-  aiEntries.add(new AIAttackTarget(npc));
-  
-  aiEntries.add(new AIMountVehicle(npc));
-//  aiEntries.add(new AIWanderTest(npc,20));
+  ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
   return aiEntries;
   }
 }

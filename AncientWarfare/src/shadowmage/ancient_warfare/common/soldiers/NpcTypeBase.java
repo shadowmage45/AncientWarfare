@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 
 public abstract class NpcTypeBase implements INpcType
 {
@@ -162,9 +163,9 @@ public static INpcType[] getNpcTypes()
   }
 
 @Override
-public List<INpcAI> getAI(NpcBase npc, int level)
+public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
-  ArrayList<INpcAI> aiEntries = new ArrayList<INpcAI>(); 
+  ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
   return aiEntries;
   }
 

@@ -18,45 +18,46 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.types;
-
-import java.util.ArrayList;
-import java.util.List;
+package shadowmage.ancient_warfare.common.soldiers.ai.objectives;
 
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 
-public class NpcDummy extends NpcTypeBase
+public class NpcAIAttackTargets extends NpcAIObjective
 {
 
 /**
- * @param type
+ * @param npc
+ * @param maxPriority
  */
-public NpcDummy(int type)
+public NpcAIAttackTargets(NpcBase npc, int maxPriority)
   {
-  super(type);
-  this.displayName = "Dummy Test";
-  this.tooltip = "Dummy Test -- PlaceHolder tooltip";
-  this.addLevel("Dummy Test Level Name 1", "foo");
-  this.addLevel("Dummy Test Level Name 2", "foo");
-  this.isCombatUnit = true;
-  }
-
-
-@Override
-public List<NpcAIObjective> getAI(NpcBase npc, int level)
-  {
-  ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
-  return aiEntries;
+  super(npc, maxPriority);
   }
 
 @Override
-public void addTargets(NpcBase npc, NpcTargetHelper helper)
+public void updateObjectivePriority()
   {
-  // TODO Auto-generated method stub
-  
+  AIAggroEntry target = npc.targetHelper.getHighestAggroTarget(NpcTargetHelper.TARGET_ATTACK);
+  if(target!=null)
+    {
+    this.objectiveTarget = target;
+    this.currentPriority = this.maxPriority;
+    }
+  else
+    {
+    this.currentPriority = 0;
+    }
   }
+
+@Override
+public void addTasks()
+  {
+//  this.aiTasks.add(new AIMoveToTarget(npc));  
+//  this.aiTasks.add(new AIAttackTarget(npc));
+  }
+
 
 }

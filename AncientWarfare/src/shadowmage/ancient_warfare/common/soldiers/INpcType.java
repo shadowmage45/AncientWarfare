@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.soldiers;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 
 public interface INpcType
@@ -37,7 +38,7 @@ public abstract int getNumOfLevels();
 public abstract int getMaxHealth(int level);
 public abstract int getInventorySize(int level);
 
-public abstract List<INpcAI> getAI(NpcBase npc, int level);
+public abstract List<NpcAIObjective> getAI(NpcBase npc, int level);
 
 public abstract boolean isCombatUnit();
 public abstract boolean isVanillaVillager();

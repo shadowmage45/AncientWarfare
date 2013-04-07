@@ -34,11 +34,11 @@ public class AITargetEntry
 Class targetClass = null;
 public int priority = 0;
 boolean isEntityTarget = false;
-String typeName = "";
+int typeName = 0;
 public float maxTargetRange = Config.npcAISearchRange;
 protected NpcBase npc;
 
-public AITargetEntry(NpcBase owner, String typeName, Class clz, int priority, boolean isEntityTarget, float maxTargetRange)
+public AITargetEntry(NpcBase owner, int typeName, Class clz, int priority, boolean isEntityTarget, float maxTargetRange)
   {
   this.typeName = typeName;
   this.targetClass = clz;
@@ -48,7 +48,7 @@ public AITargetEntry(NpcBase owner, String typeName, Class clz, int priority, bo
   this.npc = owner;
   }  
 
-public String getTypeName()
+public int getTypeName()
   {
   return this.typeName;
   }

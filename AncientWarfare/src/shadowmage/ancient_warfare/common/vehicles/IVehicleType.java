@@ -63,6 +63,8 @@ public abstract float getRiderForwardsOffset();//the offset from 0,0 or turretPo
 public abstract float getRiderHorizontalOffset();//the offset from 0,0 or turretPos of the rider
 public abstract float getRiderVerticalOffest();//the offset from 0,0 or turretPos of the rider
 
+public abstract float getMinAttackDistance();//used by soldiers to determine when to get off a vehicle
+
 public abstract boolean shouldRiderSit();//should rider be seated while riding?
 public abstract boolean moveRiderWithTurret();//should position of rider update with the position of the turret, rather than vehicle?
 

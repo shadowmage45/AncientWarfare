@@ -85,6 +85,8 @@ public float riderVerticalOffset= 0.f;
 public boolean shouldRiderSit = true;
 public boolean moveRiderWithTurret = false;
 
+public float minAttackDistance = 10.f;
+
 public float baseForwardSpeed;
 public float baseStrafeSpeed;
 
@@ -184,6 +186,12 @@ public float getRiderHorizontalOffset()
 public float getRiderVerticalOffest()
   {
   return this.riderVerticalOffset;
+  }
+
+@Override
+public float getMinAttackDistance()
+  {
+  return this.minAttackDistance;
   }
 
 @Override
