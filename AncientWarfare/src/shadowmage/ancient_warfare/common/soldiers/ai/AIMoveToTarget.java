@@ -20,13 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
+import org.bouncycastle.asn1.x509.Target;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.Trig;
-import shadowmage.meim.common.config.Config;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class AIMoveToTarget extends NpcAI
 {
@@ -80,13 +83,13 @@ public void onTick()
     Entity ent = npc.getTarget().getEntity();
     if(ent!=null && !ent.onGround)
       {
-      Config.logDebug("setting new target height for flying target");
+      //Config.logDebug("setting new target height for flying target");
       int x = MathHelper.floor_float(bX);
       int y = MathHelper.floor_float(bY);
       int z = MathHelper.floor_float(bZ);
       if(npc.worldObj.getBlockId(x, y, z)==Block.ladder.blockID)
         {
-        Config.logDebug("target on ladder, not adjusting");
+        //Config.logDebug("target on ladder, not adjusting");
         }
       else
         {
@@ -102,11 +105,12 @@ public void onTick()
         }      
       }
     }
-//  Config.logDebug("targetPos: "+bX+","+bY+","+bZ);
+  //Config.logDebug("targetPos: "+bX+","+bY+","+bZ);
   this.prevDistance = this.distance;
   this.distance = (float) npc.getDistance(bX, bY, bZ);  
+  float attackDistance = npc.targetHelper.getAttackDistance(npc.getTarget());
 //  Config.logDebug("calc targetDist: "+npc.targetHelper.getAttackDistance(npc.getTarget()));
-  if(distance < npc.targetHelper.getAttackDistance(npc.getTarget()))
+  if(distance < attackDistance)
     {
     this.finished = true;
     this.success = true;
@@ -126,27 +130,31 @@ public void onTick()
   if(Trig.getAbsDiff(distance, prevDistance)<0.05f)
     {
     stuckTicks++;
-//    Config.logDebug("NPC could not move, or did not move between AIMoveToTarget ticks");
     if(stuckTicks>10)
       {
       npc.setTargetAW(null);
       stuckTicks = 0;
       }
     }
-//  if(distance>12)
+//  if(npc.getTargetType().equals(NpcAI.TARGET_ATTACK))
 //    {
-//    float angle = Trig.getYawTowardsTarget(npc.posX, npc.posZ, bX, bZ);
-//    bX = (float)npc.posX - Trig.sinDegrees(angle-90)*12;
-//    bZ = (float)npc.posZ + Trig.cosDegrees(angle-90)*12;
-//    Config.logDebug("adjustedMovePos: "+bX+","+bY+","+bZ);
+//    float xAO = (float) (npc.posX - bX);  
+//    float zAO = (float) (npc.posZ - bZ);
+//    float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
+//    float newLen = distance - (attackDistance * 1.2f);//move slightly inside min effective range attack distance
+//    bX = (float)npc.posX + Trig.sinDegrees(yaw)*newLen;
+//    bZ = (float)npc.posZ + Trig.cosDegrees(yaw)*newLen;
 //    }
-  npc.nav.setMoveTo(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
-//  if(!npc.getNavigator().tryMoveToXYZ(bX, bY, bZ, npc.getAIMoveSpeed()))
-//    {
-//    this.finished = true;
-//    this.success = false;
-//    }
-//  Config.logDebug("setting moveToTarget: ");
+  //find new coordinate at x (attack distance) from target
+  
+  if(npc.isRidingVehicle())
+    {
+    ((VehicleBase)npc.ridingEntity).nav.setMoveTo(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
+    }
+  else
+    {
+    npc.nav.setMoveTo(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
+    }
   }
 
 

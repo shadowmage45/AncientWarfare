@@ -163,4 +163,11 @@ public void onPathFound(List<Node> pathNodes)
 //  Config.logDebug("added: "+pathNodes.size()+ " nodes from thread pathfind");
   }
 
+@Override
+public void onPathFailed(List<Node> partialPathNodes)
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
 }

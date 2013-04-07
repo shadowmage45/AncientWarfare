@@ -91,6 +91,11 @@ public int getCurrentAmmoCount()
   return 0;
   }
 
+public boolean hasNoAmmo()
+  {
+  return this.ammoEntries.size()==0;
+  }
+
 public void addUseableAmmo(IAmmoType ammo)
   {
   VehicleAmmoEntry ent = new VehicleAmmoEntry(ammo);

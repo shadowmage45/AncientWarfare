@@ -154,7 +154,7 @@ public static boolean isAngleBetween(float test, float min, float max)
   test = Trig.wrapTo360(test);
   min = Trig.wrapTo360(min);
   max = Trig.wrapTo360(max);
-  Config.logDebug(test+","+min+","+max);
+//  Config.logDebug(test+","+min+","+max);
   if(min > max)
     {
     return test>=min || test <= max;
@@ -164,57 +164,6 @@ public static boolean isAngleBetween(float test, float min, float max)
     return true;
     }      
   return false;
-  }
-
-/**
- * will return a NEW Pos3f containing the translated coordinate
- * ONLY translates on the x/z axis'
- * @param pos
- * @param originYaw
- * @param transYaw
- * @param transLength
- * @return a NEW vector (old is untouched) with the new position
- */
-public static Pos3f translatePos(Pos3f pos, float originYaw, float transYaw, float transLength)
-  {
-  float newX = pos.x + sinDegrees(-originYaw -90 - transYaw) * transLength;
-  float newZ = pos.z + cosDegrees(-originYaw -90 - transYaw) * transLength;
-  return new Pos3f(newX, pos.y, newZ);
-  }
-
-/**
- * translates a position given a pitch and yaw
- * (to translate relative, add current pitch + pitchChange before calling, same for yaw)
- * @param pos
- * @param yaw
- * @param pitch
- * @param transLength
- * @return a NEW vector (old is untouched) with the new position
- */
-public static Pos3f translatePosPitch(Pos3f pos, float yaw, float pitch, float transLength)
-  {
-  float newX = pos.x + sinDegrees(yaw) * sinDegrees(pitch) * transLength;
-  float newY = pos.y + cosDegrees(pitch)  * transLength;
-  float newZ = pos.z + cosDegrees(yaw) * sinDegrees(pitch) * transLength;  
-  return new Pos3f(newX,newY,newZ);
-  }
-
-/**
- * 
- * @param test
- * @param target
- * @return
- */
-public static float getHorizontalDistance(Entity test, Entity target)
-  {  
-  double x = test.posX>target.posX? test.posX-target.posX : target.posX-test.posX;
-  double z = test.posZ>target.posZ? test.posZ-target.posZ : target.posZ-test.posZ;
-  return MathHelper.sqrt_double(z*z+x*x);
-  }
-
-public static float getHeightDifference(Entity test, Entity target)
-  {
-  return (float)test.posY - (float)target.posY;
   }
 
 /**
@@ -268,49 +217,65 @@ public static float getAngle(float x, float y)
   }
 
 /**
- * calcs the range of the shot, no drag..
- * @param x
- * @param y
- * @param z
- * @param mx
- * @param my
- * @param mz
- * @return
- */
-public static float calcTrajectoryRange3D(float mx, float my, float mz, float gravSecond)
-  {
-  float distance = MathHelper.sqrt_float(mx*mx + mz*mz);
-  return calcTrajectoryRange2D(distance, my, gravSecond);
-  }
-
-/**
- * get yaw direction towards target cooridanates.
+ * get yaw change direction towards target from input yaw
  * @param entityFrom
  * @param x
  * @param y
  * @param z
  * @return
  */
-public static float getYawTowardsTarget(double xStart, double zStart, double x, double z)
+public static float getYawTowardsTarget(double xStart, double zStart, double x, double z, float originYaw)
   {
-  float towerDirection =(float) Math.atan2(z - zStart, x - xStart);  
-  towerDirection = Trig.toDegrees(towerDirection);
-  while(towerDirection<0)
+  float xAO = (float) (xStart - x);  
+  float zAO = (float) (zStart - z);
+  float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
+  float vehYaw = originYaw;
+  while(vehYaw < 0.f)
     {
-    towerDirection+=360;
+    vehYaw +=360;
     }
-  while(towerDirection>=360)
+  while(vehYaw >= 360.f)
     {
-    towerDirection-=360;
+    vehYaw-=360;
     }
-  return towerDirection;
+  float yawDiff = yaw - vehYaw;
+  while(yawDiff<-180.f)
+    {
+    yawDiff +=360.f;
+    }
+  while(yawDiff>=180.f)
+    {
+    yawDiff-=360.f;
+    }
+  return yawDiff;
   }
 
-public static float calcTrajectoryRange2D(float mx, float my, float gravSecond)
+public static float getYawDifference(float yaw, float dest)
   {
-  float seconds = (my * 20 * 2)/gravSecond;  
-  float distance = mx * seconds;
-  return distance;
+  float diff = Trig.getAbsDiff(yaw, dest);
+  while(diff < -180)
+    {
+    diff+=360.f;
+    }
+  while(diff>=180)
+    {
+    diff-=360.f;
+    }
+  return diff;
+  }
+
+public static byte getTurnDirection(float yaw, float dest)
+  {
+  float diff = Trig.getAbsDiff(yaw, dest);
+  while(diff<-180)
+    {
+    diff+=360.f;
+    }
+  while(diff>=180)
+    {
+    diff-=360.f;
+    }
+  return (byte) (diff < 0 ? -1 : 1);
   }
 
 /**
@@ -385,7 +350,7 @@ public static float bruteForceRocketFinder(float x, float y, float angle, int ma
     motX = Trig.sinDegrees(angle)*testVelocity*0.05f;
     motY = Trig.cosDegrees(angle)*testVelocity*0.05f;
         
-    rocketBurnTime = (int) (testVelocity*AmmoHwachaRocket.burnTimeFactor);     
+    rocketBurnTime = (int) (testVelocity * AmmoHwachaRocket.burnTimeFactor);     
     motX0 = (motX/ (testVelocity*0.05f)) * AmmoHwachaRocket.accelerationFactor;
     motY0 = (motY/ (testVelocity*0.05f)) * AmmoHwachaRocket.accelerationFactor;
     motX = motX0;

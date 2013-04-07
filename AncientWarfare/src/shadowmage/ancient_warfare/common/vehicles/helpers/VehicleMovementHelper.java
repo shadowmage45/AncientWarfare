@@ -125,10 +125,77 @@ public void handleInputData(NBTTagCompound tag)
   }
 
 /**
+ * called by navigator to move towards a current node, or current position
+ * @param x
+ * @param y
+ * @param z
+ */
+public void setMoveTo(double x, double y, double z)
+  {
+//  float xAO = (float) (vehicle.posX - x);  
+//  float zAO = (float) (vehicle.posZ - z);
+//  float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
+//  float vehYaw = vehicle.rotationYaw;
+//  while(vehYaw < 0.f)
+//    {
+//    vehYaw +=360;
+//    }
+//  while(vehYaw >= 360.f)
+//    {
+//    vehYaw-=360;
+//    }
+//float yawDiff = yaw - vehicle.rotationYaw;
+//  while(yawDiff<-180.f)
+//    {
+//    yawDiff +=360.f;
+//    }
+//  while(yawDiff>=180.f)
+//    {
+//    yawDiff-=360.f;
+//    }
+  float yawDiff = Trig.getYawTowardsTarget(vehicle.posX, vehicle.posZ, x, z, vehicle.rotationYaw);  
+  byte fMot = 0;
+  byte sMot = 0;  
+  if(Math.abs(yawDiff)>5)//more than 5 degrees off, correct yaw first, then move forwards
+    {
+    if(yawDiff<0)
+      {
+      sMot = 1;//left
+      }
+    else
+      {
+      sMot = -1;//right
+      }
+    }
+  if(Math.abs(yawDiff)<10 && Trig.getVelocity(x-vehicle.posX, y-vehicle.posY, z-vehicle.posZ)>=1.f)//further away than 1 block, move towards it
+    {
+    fMot = 1;
+    }
+  handleMotionInput(fMot, sMot);
+  }
+
+/**
+ * server side method to handle input and relay packet if necessary
+ * @param f
+ * @param s
+ */
+public void handleMotionInput(byte f, byte s)
+  {
+  if(!vehicle.worldObj.isRemote && (s!= strafeInput || f != forwardInput))
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setByte("f", f);
+    tag.setByte("s", s);
+    this.handleInputData(tag);
+    }
+  }
+
+/**
  * called every tick from vehicle onUpdate
  */
 public void onMovementTick()
   {
+  this.vehicle.nav.moveTowardsCurrentNode();//vehicle navigator will provide input and other vehicle settings, if it has a node...
   float weightAdjust = 1.f;
   if(vehicle.currentWeight > vehicle.baseWeight)
     {

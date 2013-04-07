@@ -28,6 +28,7 @@ import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AIAttackTarget extends NpcAI
@@ -65,24 +66,30 @@ public void onAiStarted()
 
 @Override
 public void onTick()
-  {
-  AIAggroEntry target = npc.getTarget();
+  {  
+  AIAggroEntry target = npc.getTarget();  
   if(target!=null && npc.getTargetType().equals("attack"))
     {
+    if(this.checkIfTargetDead(target))
+      {
+      this.success= true;
+      this.finished = true;
+      return;
+      }    
     if(target.getDistanceFrom() < npc.targetHelper.getAttackDistance(target))
       {      
+      if(npc.isRidingVehicle())
+        {
+        attackTargetMounted(target);
+        return;
+        }
       if(attackDelayTicks>0)
         {
         attackDelayTicks--;
         return;
         }      
 //      Config.logDebug("Attacking target");
-      this.attackTarget(target);
-      if(this.checkIfTargetDead(target))
-        {
-        this.success= true;
-        this.finished = true;
-        }          
+      this.attackTarget(target);            
       }
     else
       {
@@ -100,13 +107,7 @@ public void onTick()
   }
 
 protected void attackTarget(AIAggroEntry target)
-  {
-  if(npc.isRidingVehicle())
-    {
-    attackTargetMounted(target);
-    return;
-    }
-  
+  { 
   attackDelayTicks =  maxAttackDelayTicks;
   
   if(!target.isEntityEntry)
@@ -131,14 +132,55 @@ protected void attackTarget(AIAggroEntry target)
       {
       npc.attackEntityAsMob(ent);
       }
-    }
-  
+    }  
   }
 
 protected void attackTargetMounted(AIAggroEntry target)
   {
   VehicleBase vehicle = (VehicleBase) npc.ridingEntity;
-  this.attackDelayTicks = vehicle.currentReloadTicks + 5;
+  
+  //check to see if yaw to target is within the range reachable by just turret rotation
+  float yaw = Trig.getYawTowardsTarget(vehicle.posX, vehicle.posZ, target.posX(), target.posZ(), vehicle.rotationYaw);  
+  byte s = 0;
+  boolean turning = false;
+  if(!Trig.isAngleBetween(vehicle.rotationYaw+yaw, vehicle.localTurretRotationHome-vehicle.currentTurretRotationMax-1.5f, vehicle.localTurretRotationHome+vehicle.currentTurretRotationMax+1.5f))//expand the bounds a bit
+    {    
+    //if not reachable by turret only find what direction to turn   
+    if(yaw<0)
+      {
+      s = 1;//left
+      }
+    else
+      {
+      s = -1;//right
+      }
+    turning = true;
+//    Config.logDebug("y: "+yaw+" d: "+yaw+ " s: "+s);
+    //turn towards target
+    }
+  vehicle.moveHelper.handleMotionInput((byte) 0, s);
+  vehicle.firingHelper.handleSoldierTargetInput(target.posX(), target.posY(), target.posZ());
+  if(turning)
+    {
+    return;
+    }
+  if(vehicle.firingHelper.isAtTarget())
+    {
+    if(attackDelayTicks<=0)
+      {
+//      Config.logDebug("attacking target from vehicle");
+      vehicle.firingHelper.handleFireUpdate();
+      this.attackDelayTicks = vehicle.currentReloadTicks + 20;
+      }    
+    }
+  else//delay a bit to line up to target 
+    {
+    this.attackDelayTicks = 5;
+    }
+  if(attackDelayTicks>0)
+    {
+    attackDelayTicks--;
+    } 
   }
 
 protected boolean checkIfTargetDead(AIAggroEntry target)

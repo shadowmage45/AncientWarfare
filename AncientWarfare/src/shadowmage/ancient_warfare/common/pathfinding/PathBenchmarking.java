@@ -136,6 +136,12 @@ public void onPathFound(List<Node> pathNodes)
   {
   this.parent.onRunnerFinished(this);
   }
+@Override
+public void onPathFailed(List<Node> partialPathNodes)
+  {
+  // TODO Auto-generated method stub
+  
+  }
 }
 
 }

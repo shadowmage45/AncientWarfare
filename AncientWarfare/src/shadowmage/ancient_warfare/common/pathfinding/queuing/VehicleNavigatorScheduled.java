@@ -1,0 +1,204 @@
+/**
+   Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+   This software is distributed under the terms of the GNU General Public Licence.
+   Please see COPYING for precise license information.
+
+   This file is part of Ancient Warfare.
+
+   Ancient Warfare is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Ancient Warfare is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package shadowmage.ancient_warfare.common.pathfinding.queuing;
+
+import java.util.List;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
+import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
+import shadowmage.ancient_warfare.common.pathfinding.Node;
+import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
+import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.utils.Trig;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+
+public class VehicleNavigatorScheduled implements IPathableCallback
+{
+private static float boidSearchRange = 4.f;
+VehicleBase entity;
+EntityPath path = new EntityPath();
+PathWorldAccessEntity worldAccess;
+PathScheduler scheduler;
+int targetX;
+int targetY;
+int targetZ;
+
+Node targetNode = null;
+
+public VehicleNavigatorScheduled(VehicleBase owner)
+  {
+  this.entity = owner;
+  this.worldAccess = new PathWorldAccessEntity(entity.worldObj, entity);
+  this.targetX = MathHelper.floor_double(entity.posX);
+  this.targetY = MathHelper.floor_double(entity.posY);
+  this.targetZ = MathHelper.floor_double(entity.posZ);
+  if(owner.worldObj.isRemote)
+    {
+    this.scheduler = PathScheduler.clientInstance();
+    }
+  else
+    {
+    this.scheduler = PathScheduler.serverInstance();
+    }
+  }
+
+public void setCanSwim(boolean swim)
+  {
+  this.worldAccess.canSwim = swim;
+  }
+
+public void setCanOpenDoors(boolean doors)
+  {
+  this.worldAccess.canOpenDoors = doors;
+  }
+
+public void setCanUseLadders(boolean ladders)
+  {
+  this.worldAccess.canUseLaders = ladders;
+  }
+
+/**
+ * called frequently, every x ticks (5) from aiTasks
+ * @param tx
+ * @param ty
+ * @param tz
+ */
+public void setMoveTo(int tx, int ty, int tz)
+  {  
+  int ex = MathHelper.floor_double(entity.posX);
+  int ey = MathHelper.floor_double(entity.posY);
+  int ez = MathHelper.floor_double(entity.posZ);
+  boolean calcPath = false;    
+  Node endNode = this.path.getEndNode();    
+  if(endNode==null && ex!=tx || ez!=tz || ey != ty)//we have no path and not already there, request a starter, and full if necessary
+    {
+    calcPath = true;    
+    //    Config.logDebug("new target and had no path, recalculating path");
+    }
+  else//we have a path already...
+    {
+    float dist = Trig.getVelocity(tx-this.targetX, ty-this.targetY, tz-this.targetZ);
+    float length = Trig.getVelocity(ex-tx, ey-ty, ez-tz);
+    if(dist > 4 && dist > length * 0.2f)//quite a bit of difference between current target/path and new target path
+      {
+      float endDist = Trig.getVelocity(tx-endNode.x, ty-endNode.y, tz-endNode.z);
+      if(endDist < 4 || endDist < length * 0.2f)//try and re-use entire old path
+        {
+        targetX = tx;
+        targetY = ty;
+        targetZ = tz;
+        this.scheduler.requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, tx, ty, tz);
+        //        Config.logDebug("attempting re-use of entire old path with addition");
+        }
+      else
+        {
+        //try and see if target is anywhere near a point on old path, and recalc/reqeuest addition from that point
+        //else request full new path
+        //        Config.logDebug("new target and had path, large diff from old end-node, recalculating path");
+        calcPath = true;
+        }      
+      }
+    else
+      {
+      //      Config.logDebug("skipping recalc due to little difference");
+      }
+    }
+  if(calcPath)
+    {   
+    this.path.setPath(this.scheduler.requestStartPath(worldAccess, ex, ey, ez, tx, ty, tz));//grab a quick path if just to start moving
+    endNode = this.path.getEndNode();
+    if(endNode!=null)
+      {
+      if(endNode.x!=tx || endNode.y!=ty || endNode.z != tz)//if we didn't find the target, request a full pathfind from end of starter path to the target.
+        {
+        //        Config.logDebug("starter path did not complete, requesting full");
+        this.scheduler.requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, targetX, targetY, targetZ);
+        }      
+      }
+    this.targetX = tx;
+    this.targetY = ty;
+    this.targetZ = tz;
+    this.targetNode = this.path.claimNode();
+    //    if(!entity.worldObj.isRemote)
+    //      {
+    //      NBTTagCompound tag = new NBTTagCompound();
+    //      tag.setInteger("tx", tx);
+    //      tag.setInteger("ty", ty);
+    //      tag.setInteger("tz", tz);
+    //      Packet04Npc pkt = new Packet04Npc();
+    //      pkt.setParams(entity);
+    //      pkt.setPathTarget(tag);
+    //      pkt.sendPacketToAllTrackingClients(entity);
+    //      }
+    }
+  }
+
+public void moveTowardsCurrentNode()
+  {
+  if(this.targetNode==null && this.path.getPathNodeLength()>0)
+    {
+    this.targetNode = this.path.claimNode();
+    }
+  if(this.targetNode!=null)
+    {   
+    int ex = MathHelper.floor_double(entity.posX);
+    int ey = MathHelper.floor_double(entity.posY);
+    int ez = MathHelper.floor_double(entity.posZ);
+    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<2.0f)
+      {
+      //  Config.logDebug("claiming node from completion LATE "+this.targetNode+"::"+entity);
+      this.targetNode = path.claimNode();
+      //  Config.logDebug("new :: "+this.targetNode);
+      if(targetNode==null)
+        {         
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setByte("f", (byte)0);
+        tag.setByte("s", (byte)0);
+        entity.moveHelper.handleInputData(tag);        
+        //for vehicle, do nothing...
+        //entity.moveHelper.setMoveTo(entity.posX, entity.posY, entity.posZ);        
+        return;
+        }
+      } 
+    entity.moveHelper.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);    
+    } 
+  }
+
+public List<Node> getCurrentPath()
+{
+return path.getPath();
+}
+
+@Override
+public void onPathFound(List<Node> pathNodes)
+  {  
+  this.path.addPath(pathNodes);
+  }
+
+@Override
+public void onPathFailed(List<Node> partialPathNodes)
+  {
+
+  }
+}

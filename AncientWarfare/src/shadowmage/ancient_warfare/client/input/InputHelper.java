@@ -135,12 +135,12 @@ public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boo
     {    
     if(kb==options)
       {
-      Config.logDebug("sending client settings openGUI request");
+//      Config.logDebug("sending client settings openGUI request");
       GUIHandler.instance().openGUI((byte)GUIHandler.SETTINGS, mc.thePlayer, mc.theWorld, 0, 0, 0);
       }
     else if(kb==teamControl)
       {
-      Config.logDebug("sending teamControl openGUI request");
+//      Config.logDebug("sending teamControl openGUI request");
       GUIHandler.instance().openGUI((byte)GUIHandler.TEAM_CONTROL, mc.thePlayer, mc.theWorld, 0, 0, 0);
       }    
     }
@@ -270,7 +270,7 @@ public void handleMouseAimUpdate()
   MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, 140, mc.thePlayer.ridingEntity);  
   if(pos!=null)
     {
-    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimMouseInput(pos.hitVec);
+    ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimInput(pos.hitVec);
     }
   }
 
@@ -361,7 +361,7 @@ public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float
     }
   if(hitEntity!=null)
     {
-    Config.logDebug("entity hit!!");
+//    Config.logDebug("entity hit!!");
     blockHit = new MovingObjectPosition(hitEntity);
     }
   return blockHit;

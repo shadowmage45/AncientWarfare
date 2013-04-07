@@ -38,7 +38,9 @@ import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
+import shadowmage.ancient_warfare.common.pathfinding.queuing.VehicleNavigatorScheduled;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -152,6 +154,7 @@ public VehicleFiringHelper firingHelper;
 public VehicleFiringVarsHelper firingVarsHelper;
 public VehicleInventory inventory;
 public EntityPathfinder navigator;
+public VehicleNavigatorScheduled nav;
 
 public IVehicleType vehicleType = VehicleRegistry.CATAPULT_STAND_FIXED;//set to dummy vehicle so it is never null...
 public int vehicleMaterialLevel = 0;//the current material level of this vehicle. should be read/set prior to calling updateBaseStats
@@ -166,9 +169,14 @@ public VehicleBase(World par1World)
   this.firingHelper = new VehicleFiringHelper(this);
   this.firingVarsHelper = new DummyVehicleHelper(this);
   this.inventory = new VehicleInventory(this);
+  this.nav = new VehicleNavigatorScheduled(this);
+//  nav.setCanOpenDoors(false);
+//  nav.setCanSwim(false);
+//  nav.setCanUseLadders(false);
   this.stepHeight = 1.12f;
   this.entityCollisionReduction = 0.9f;
   this.onGround = false;
+  
   }
 
 public void setVehicleType(IVehicleType vehicle, int materialLevel)
@@ -642,14 +650,12 @@ public void updateTurretRotation()
     }
   else
     {
-
+    localTurretRotation = localTurretDestRot;
+    }  
+  if(Trig.getAbsDiff(localTurretDestRot, localTurretRotation) < localTurretRotInc)
+    {
     localTurretRotation = localTurretDestRot;
     }
-  if(localTurretRotation!=localTurretDestRot)
-    {   
-
-
-    }  
   this.currentTurretYawSpeed = this.localTurretRotation - prevYaw;
   }
 
@@ -839,15 +845,19 @@ public String getTexture()
 @Override
 public void updateRiderPosition()
   {
-  if(!(this.riddenByEntity instanceof EntityPlayer) || !((EntityPlayer)this.riddenByEntity).func_71066_bF())
-    {
-    this.riddenByEntity.lastTickPosX = this.lastTickPosX;
-    this.riddenByEntity.lastTickPosY = this.lastTickPosY + this.getRiderVerticalOffset() + this.riddenByEntity.getYOffset();
-    this.riddenByEntity.lastTickPosZ = this.lastTickPosZ;
-    }
+//  if(!(this.riddenByEntity instanceof EntityPlayer) || !((EntityPlayer)this.riddenByEntity).func_71066_bF())
+//    {
+//    this.riddenByEntity.lastTickPosX = this.lastTickPosX;
+//    this.riddenByEntity.lastTickPosY = this.lastTickPosY + this.getRiderVerticalOffset() + this.riddenByEntity.getYOffset();
+//    this.riddenByEntity.lastTickPosZ = this.lastTickPosZ;
+//    }
   double posX = this.posX;
   double posY = this.posY + this.getRiderVerticalOffset();
   double posZ = this.posZ;
+  if(this.riddenByEntity instanceof NpcBase)
+    {
+    posY -= 0.5f;
+    }
   float yaw = this.vehicleType.moveRiderWithTurret() ? localTurretRotation : rotationYaw;
   posX += Trig.sinDegrees(yaw)*-this.getRiderForwardOffset();
   posX += Trig.sinDegrees(yaw+90)*this.getRiderHorizontalOffset();
@@ -855,6 +865,7 @@ public void updateRiderPosition()
   posZ += Trig.cosDegrees(yaw+90)*this.getRiderHorizontalOffset();
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
   this.riddenByEntity.rotationYaw -= this.moveHelper.strafeMotion*2;  
+//  Config.logDebug("adjusting rider position:"+this.riddenByEntity);  
   }
 
 @Override

@@ -92,7 +92,7 @@ public static List<Pos3f> traceRay2(float x0, float y0, float z0, float x1, floa
     y += my*pUse;
     z += mz*pUse;
     hits.add(new Pos3f(x,y,z));
-    Config.logDebug("hit: "+hits.get(hits.size()-1).toString());
+//    Config.logDebug("hit: "+hits.get(hits.size()-1).toString());
     travel += distance * pUse;
     }  
   return hits;
@@ -137,7 +137,7 @@ public static List<Pos3f> traceRay(float x0, float y0, float z0, float x1, float
   for(int i = 0; i < maxDepth; i++)
     {    
     hitPositions.add(new Pos3f(x,y,z));
-    Config.logDebug("block: "+x+","+y+","+z);
+//    Config.logDebug("block: "+x+","+y+","+z);
     if(Trig.getDistance(x0, y0, z0, x, y, z)>=len)
       {
       break;//

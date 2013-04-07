@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
@@ -48,10 +49,9 @@ public PathWorldAccessEntity(World world, Entity entity)
 
 @Override
 public boolean isWalkable(int x, int y, int z, Node src)
-  {
+  { 
   if(super.isWalkable(x, y, z, src))
     {
-    
     //check to see that entity can fit completely on the block provided.  Should also check to make sure that
     //entity can path from src to this block (diagonals not obstructed)
     return true;

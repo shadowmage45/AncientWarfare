@@ -54,7 +54,12 @@ public void onAiStarted()
 
 @Override
 public void onTick()
-  { 
+  {
+  if(npc.getAITarget()!=null && !npc.getTargetType().equals(NpcAI.TARGET_ATTACK))
+    {
+    this.finished = true;
+    return;
+    }
   npc.setTargetAW(npc.targetHelper.getHighestAggroTarget(TARGET_ATTACK)); 
   if(npc.getTarget()!=null)
     {

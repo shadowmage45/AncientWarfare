@@ -64,7 +64,7 @@ public void readFromNBT(NBTTagCompound par1nbtTagCompound)
   super.readFromNBT(par1nbtTagCompound);
   if(par1nbtTagCompound.hasKey("builder"))
     {
-    Config.logDebug("reading builder data");
+//    Config.logDebug("reading builder data");
     NBTTagCompound builder = par1nbtTagCompound.getCompoundTag("builder");
     this.builder = Builder.readTickedBuilderFromNBT(builder);
     if(this.builder==null)

@@ -29,5 +29,6 @@ public interface IPathableCallback
 
 
 public void onPathFound(List<Node> pathNodes);
+public void onPathFailed(List<Node> partialPathNodes);
 
 }

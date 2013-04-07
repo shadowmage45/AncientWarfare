@@ -27,13 +27,13 @@ import net.minecraft.world.World;
 public class PathWorldAccess
 {
 
-boolean openDoors;
-boolean canSwim;
-boolean canDrop;
+public boolean canOpenDoors;
+public boolean canSwim;
+public boolean canDrop;
+public boolean canUseLaders;
 
 IBlockAccess world;
 
-int LADDER = Block.ladder.blockID;
 int DOOR = Block.doorWood.blockID;
 
 public PathWorldAccess(IBlockAccess world)
@@ -49,22 +49,26 @@ public int getBlockId(int x, int y, int z)
 public boolean isWalkable(int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);
-  boolean cube = world.isBlockNormalCube(x, y, z);
-  if(id==LADDER)
+  boolean cube = isCube(x, y, z);
+  boolean ladder;  
+  if((id==Block.waterMoving.blockID || id==Block.waterStill.blockID)&&!canSwim)//can't swim check
     {
-    id = world.getBlockId(x, y+1, z);
-    if(world.isBlockNormalCube(x, y+1, z) && id !=LADDER) //id!=0
+    return false;
+    }  
+  else if(!canUseLaders && isLadder(id))//ladder use check -- if block is a ladder with air below it
+    {
+    if(!isCube(x,y-1,z))//air/ladder/non-solid block below
       {
       return false;
-      }
+      }        
     }
-  else if(cube || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)//if solid and not a ladder//id!=0
-    {//|| id==Block.waterMoving.blockID || id==Block.waterStill.blockID 
+  else if(cube || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)//solid unpassable block, or lava
+    { 
     return false;
-    }    
-  else if(!world.isBlockNormalCube(x, y-1, z) && id!=LADDER)//or if air below and not a ladder
+    }
+  else if(!isCube(x, y-1, z) && !isLadder(id))//or if air below and not a ladder
     {
-    if(world.getBlockId(x, y-1, z)!=LADDER)
+    if(!isLadder(world.getBlockId(x, y-1, z)))
       {
       return false;
       }
@@ -72,12 +76,27 @@ public boolean isWalkable(int x, int y, int z)
   else 
     {    
     id = world.getBlockId(x, y+1, z);
-    if(world.isBlockNormalCube(x, y+1, z) && id !=LADDER) //id!=0
+    if(isCube(x, y+1, z) && !isLadder(id)) //id!=0
       {
       return false;
       }
     }
   return true;
+  }
+
+protected boolean isCube(int x, int y, int z)
+  {
+  return world.isBlockNormalCube(x, y, z) || world.getBlockId(x, y, z) == Block.leaves.blockID; 
+  }
+
+protected boolean isLadder(int id)
+  {
+  return id == Block.ladder.blockID || id == Block.vine.blockID;
+  }  
+
+protected boolean isLadder(int x, int y, int z)
+  {
+  return this.isLadder(world.getBlockId(x, y, z));
   }
 
 public boolean isWalkable(int x, int y, int z, Node src)

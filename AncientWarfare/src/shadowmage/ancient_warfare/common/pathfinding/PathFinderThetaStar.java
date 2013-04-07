@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.pathfinding;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -76,7 +77,7 @@ private PriorityQueue<Node> qNodes = new PriorityQueue<Node>();
 private ArrayList<Node> allNodes = new ArrayList<Node>();
 
 /**
- * current-node neighbors
+ * current-node neighbors, just a cached list..
  */
 private ArrayList<Node> searchNodes = new ArrayList<Node>();
 
@@ -94,8 +95,8 @@ int tz;
 int maxRange = 80;
 PathWorldAccess world;
 long startTime;
-public long maxRunTime = 15000000l;//15ms
-public long maxSearchIterations = 1500;
+public long maxRunTime = 15000000l;//15ms, default time..public so may be overriden at run-time...must be reset between runs
+public long maxSearchIterations = 600;
 
 public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
   {  
@@ -145,9 +146,10 @@ private int searchIteration;
 
 private void searchLoop()
   {
-  this.searchIteration++;
+  this.searchIteration = 0;
   while(!qNodes.isEmpty())
     {
+    this.searchIteration++;  
     this.currentNode = this.qNodes.poll();
     this.allNodes.add(currentNode);
     if(currentNode.equals(tx, ty, tz))
@@ -163,7 +165,8 @@ private void searchLoop()
     this.findNeighbors(currentNode);
     float tent;
     for(Node n : this.searchNodes)
-      {  
+      {     
+      //could test for goal here, and if found, set n.f =0, insert to priority q (force to head of line)
       tent = currentNode.g + currentNode.getDistanceFrom(n);
       if(n.closed && tent > n.g)//new path from current node to n (already examined node) is longer than n's current path, disregard
         {
@@ -190,9 +193,10 @@ private void searchLoop()
           qNodes.offer(n);
           }
         n.closed = false;//go ahead and set n to open again...I don't think this really matters....
-        }      
+        }     
       }
     }
+//  Config.logDebug("nodes searched: "+searchIteration+" path length found: "+this.currentNode.getPathLength());
   }
 
 private boolean shouldTerminateEarly()  
@@ -200,12 +204,12 @@ private boolean shouldTerminateEarly()
   long runtime = System.nanoTime() - startTime;
   if(runtime>maxRunTime)
     {
-    Config.logDebug("search time exceeded max of: "+(this.maxRunTime/1000000)+"ms, terminating search.");
+//    Config.logDebug("search time exceeded max of: "+(this.maxRunTime/1000000)+"ms, terminating search.");
     return true;
     }
   if(this.searchIteration>this.maxSearchIterations)
     {
-    Config.logDebug("search iterations exceeded max of: "+this.maxSearchIterations+ " terminating search.");
+//    Config.logDebug("search iterations exceeded max of: "+this.maxSearchIterations+ " terminating search.");
     }
   float dist = this.currentNode.getDistanceFrom(tx,ty,tz);
   float len = this.currentNode.getPathLength();
@@ -216,7 +220,7 @@ private boolean shouldTerminateEarly()
     this.bestPathLength = len;
     if(len>maxRange)
       {
-      Config.logDebug("search length exceeded max of: "+this.maxRange+", terminating search.");      
+//      Config.logDebug("search length exceeded max of: "+this.maxRange+", terminating search.");      
       return true;
       }
     }

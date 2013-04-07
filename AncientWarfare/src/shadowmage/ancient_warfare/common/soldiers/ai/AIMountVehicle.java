@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -48,7 +49,7 @@ public void onAiStarted()
 
 @Override
 public void onTick()
-  {
+  {  
   if(npc.ridingEntity!=null)
     {
     finished = true;
@@ -66,6 +67,7 @@ public void onTick()
     }
   if(npc.getTarget().isValidEntry())
     {
+    Config.logDebug("ai mount tick");
     VehicleBase vehicle = (VehicleBase)npc.getTarget().getEntity();
     npc.mountEntity(vehicle);
     this.success = true;
@@ -75,6 +77,12 @@ public void onTick()
     {
     finished = true;   
     }
+  }
+
+@Override
+public boolean shouldExecute(NpcBase npc)
+  {
+  return npc.getTargetType().equals(NpcAI.TARGET_MOUNT) && npc.ridingEntity==null;
   }
 
 }

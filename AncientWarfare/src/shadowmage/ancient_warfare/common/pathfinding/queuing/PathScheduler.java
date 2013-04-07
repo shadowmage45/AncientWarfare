@@ -21,8 +21,10 @@
 package shadowmage.ancient_warfare.common.pathfinding.queuing;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinderThetaStar;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
@@ -48,7 +50,7 @@ public static final int IMMEDIATE_PATH_CUTOFF = 6;
 
 public static final int PATH_CUTOFF_LENGTH = 60;
 
-public static final int PATH_CUTOFF_TIME = 4000000;//4ms
+public static final long PATH_CUTOFF_TIME = 4000000;//4ms
 
 
 private PathFinderThetaStar pather = new PathFinderThetaStar();
@@ -63,6 +65,21 @@ private static PathScheduler clientScheduler = new PathScheduler();
 public static PathScheduler serverInstance(){return serverScheduler;}
 public static PathScheduler clientInstance(){return clientScheduler;}
 private PathScheduler(){}
+
+/**
+ * called when an entity firsts requests a path. uses special params on the pathfinder to ensure a quick/short path is found, just to get the entity going somewhere
+ * @param world
+ * @param x
+ * @param y
+ * @param z
+ * @param tx
+ * @param ty
+ * @param tz
+ */
+public List<Node> requestStartPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
+  {
+  return this.pather.findPath(world, x, y, z, tx, ty, tz, 4);
+  }
 
 public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
   {
@@ -91,6 +108,11 @@ public void onTickEnd()
   this.startProcessingPaths();
   }
 
+private void veritfyTargetAndStart(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
+  {
+  //check all blocks around target and start and make sure they have at least one pathable neighbor
+  }
+
 private void startProcessingPaths()
   {
   int totalProcessed = 0;
@@ -102,11 +124,23 @@ private void startProcessingPaths()
     jobStart = System.nanoTime();
     totalProcessed++;
     req = this.pathRequests.pop();
+    if(this.pathingMaxTime - processingTime < PATH_CUTOFF_TIME)
+      {
+      if(this.pathingMaxTime - processingTime < PATH_CUTOFF_TIME / 2)
+        {
+        break;//probably not enough time to do anything usefull
+        }
+      pather.maxRunTime = this.pathingMaxTime - processingTime;
+      }
+    else
+      {
+      pather.maxRunTime = PATH_CUTOFF_TIME;
+      }
 //    Config.logDebug("processing path job");
     //run the request
     //dispatch result to entity
     float len = Trig.getDistance(req.x, req.y, req.z, req.tx, req.ty, req.tz);
-    int length = 2*(int)len;
+    int length = 4*(int)len;
     length = length < PATH_CUTOFF_LENGTH ? length : PATH_CUTOFF_LENGTH;
     length = length < req.maxRange ? length : req.maxRange;
     req.caller.onPathFound(pather.findPath(req.world, req.x, req.y, req.z, req.tx, req.ty, req.tz, length));

@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.soldiers.helpers.targeting;
 import java.lang.ref.WeakReference;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 
@@ -88,7 +89,7 @@ public float posX()
     {
     if(this.getEntity()!=null)
       {
-      this.posX = (float) this.getEntity().posX;
+      this.posX = MathHelper.floor_double(this.getEntity().posX)+0.5f;
       }
     }
   return posX;
@@ -100,7 +101,7 @@ public float posY()
     {
     if(this.getEntity()!=null)
       {
-      this.posY = (float) this.getEntity().posY;
+      this.posY = MathHelper.floor_double(this.getEntity().posY) + this.getEntity().height*0.5f;
       }
     }
   return posY;
@@ -112,7 +113,7 @@ public float posZ()
     {
     if(this.getEntity()!=null)
       {
-      this.posZ = (float) this.getEntity().posZ;
+      this.posZ = MathHelper.floor_double(this.getEntity().posZ)+0.5f;
       }
     }
   return posZ;

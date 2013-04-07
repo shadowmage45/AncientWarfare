@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
@@ -47,15 +48,24 @@ public void onAiStarted()
 
 @Override
 public void onTick()
-  {
+  { 
   if(npc.getTarget()!=null)
     {
     finished = true;
     return;
     }
+  if(npc.isRidingVehicle())
+    {
+    Config.logDebug("soldier is riding something");
+    success = true;
+    finished = true;
+    return;
+    }
+  Config.logDebug("choosing mount target");
   AIAggroEntry entry = npc.targetHelper.getHighestAggroTarget(NpcAI.TARGET_MOUNT);
   if(entry!=null)
     {
+    Config.logDebug("setting target: "+entry);
     npc.setTargetAW(entry);
     }
   //TODO find a mountable same/friendly team vehicle within X blocks (20?)
