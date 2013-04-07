@@ -48,24 +48,12 @@ public void onAiStarted()
 
 @Override
 public void onTick()
-  { 
-  if(npc.getTarget()!=null)
-    {
-    finished = true;
-    return;
-    }
-  if(npc.isRidingVehicle())
-    {
-    Config.logDebug("soldier is riding something");
-    success = true;
-    finished = true;
-    return;
-    }
-  Config.logDebug("choosing mount target");
+  {   
+//  Config.logDebug("trying to choosing mount target");
   AIAggroEntry entry = npc.targetHelper.getHighestAggroTarget(NpcAI.TARGET_MOUNT);
   if(entry!=null)
     {
-    Config.logDebug("setting target: "+entry);
+//    Config.logDebug("setting target: "+entry);
     npc.setTargetAW(entry);
     }
   //TODO find a mountable same/friendly team vehicle within X blocks (20?)
@@ -75,6 +63,8 @@ public void onTick()
 @Override
 public boolean shouldExecute(NpcBase npc)
   {
+  boolean exec = super.shouldExecute(npc) && npc.getTarget()==null && npc.ridingEntity==null;
+//  Config.logDebug("should choose mount target: "+exec);
   return super.shouldExecute(npc) && npc.getTarget()==null && npc.ridingEntity==null;
   }
 

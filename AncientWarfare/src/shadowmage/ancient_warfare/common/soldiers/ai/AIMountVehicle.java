@@ -70,6 +70,7 @@ public void onTick()
     Config.logDebug("ai mount tick");
     VehicleBase vehicle = (VehicleBase)npc.getTarget().getEntity();
     npc.mountEntity(vehicle);
+    npc.setTargetAW(null);
     this.success = true;
     this.finished = true;
     }

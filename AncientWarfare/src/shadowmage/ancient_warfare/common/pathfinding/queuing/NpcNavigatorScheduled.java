@@ -22,10 +22,11 @@ package shadowmage.ancient_warfare.common.pathfinding.queuing;
 
 import java.util.List;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.network.Packet04Npc;
 import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
@@ -63,6 +64,8 @@ public class NpcNavigatorScheduled implements IPathableCallback
 {
 
 private static float boidSearchRange = 4.f;
+private float distanceToNode = Float.POSITIVE_INFINITY;
+private float prevDistanceToNode = Float.POSITIVE_INFINITY;
 NpcBase entity;
 EntityPath path = new EntityPath();
 PathWorldAccessEntity worldAccess;
@@ -77,6 +80,9 @@ public NpcNavigatorScheduled(NpcBase owner)
   {
   this.entity = owner;
   this.worldAccess = new PathWorldAccessEntity(entity.worldObj, entity);
+  this.worldAccess.canOpenDoors = true;
+  this.worldAccess.canUseLaders = true;
+  this.worldAccess.canSwim = true;
   this.targetX = MathHelper.floor_double(entity.posX);
   this.targetY = MathHelper.floor_double(entity.posY);
   this.targetZ = MathHelper.floor_double(entity.posZ);
@@ -103,10 +109,13 @@ public void setMoveTo(int tx, int ty, int tz)
   int ez = MathHelper.floor_double(entity.posZ);
   boolean calcPath = false;    
   Node endNode = this.path.getEndNode();    
-  if(endNode==null && ex!=tx || ez!=tz || ey != ty)//we have no path, request a starter, and full if necessary
+  if(endNode==null)//we have no path, request a starter, and full if necessary
     {
-    calcPath = true;    
-    //    Config.logDebug("new target and had no path, recalculating path");
+    if(targetNode==null)
+      {
+      Config.logDebug("new target and had no path, recalculating path");
+      calcPath = true;
+      } 
     }
   else//we have a path already...
     {
@@ -115,25 +124,25 @@ public void setMoveTo(int tx, int ty, int tz)
     if(dist > 4 && dist > length * 0.2f)//quite a bit of difference between current target/path and new target path
       {
       float endDist = Trig.getVelocity(tx-endNode.x, ty-endNode.y, tz-endNode.z);
-      if(endDist < 4 || endDist < length * 0.2f)//try and re-use entire old path
+      if((endDist < 3 && endNode.y==ty) || endDist < length * 0.2f)//try and re-use entire old path
         {
         targetX = tx;
         targetY = ty;
         targetZ = tz;
         this.scheduler.requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, tx, ty, tz);
-        //        Config.logDebug("attempting re-use of entire old path with addition");
+                Config.logDebug("attempting re-use of entire old path with addition");
         }
       else
         {
         //try and see if target is anywhere near a point on old path, and recalc/reqeuest addition from that point
         //else request full new path
-        //        Config.logDebug("new target and had path, large diff from old end-node, recalculating path");
+                Config.logDebug("new target and had path, large diff from old end-node, recalculating path");
         calcPath = true;
         }      
       }
     else
       {
-      //      Config.logDebug("skipping recalc due to little difference");
+            Config.logDebug("skipping recalc due to little difference");
       }
     }
   if(calcPath)
@@ -144,7 +153,7 @@ public void setMoveTo(int tx, int ty, int tz)
       {
       if(endNode.x!=tx || endNode.y!=ty || endNode.z != tz)//if we didn't find the target, request a full pathfind from end of starter path to the target.
         {
-        //        Config.logDebug("starter path did not complete, requesting full");
+        Config.logDebug("starter path did not complete, requesting full");
         this.scheduler.requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, targetX, targetY, targetZ);
         }      
       }
@@ -152,17 +161,50 @@ public void setMoveTo(int tx, int ty, int tz)
     this.targetY = ty;
     this.targetZ = tz;
     this.targetNode = this.path.claimNode();
-    //    if(!entity.worldObj.isRemote)
-    //      {
-    //      NBTTagCompound tag = new NBTTagCompound();
-    //      tag.setInteger("tx", tx);
-    //      tag.setInteger("ty", ty);
-    //      tag.setInteger("tz", tz);
-    //      Packet04Npc pkt = new Packet04Npc();
-    //      pkt.setParams(entity);
-    //      pkt.setPathTarget(tag);
-    //      pkt.sendPacketToAllTrackingClients(entity);
-    //      }
+//    if(!entity.worldObj.isRemote)
+//      {
+//      NBTTagCompound tag = new NBTTagCompound();
+//      tag.setInteger("tx", tx);
+//      tag.setInteger("ty", ty);
+//      tag.setInteger("tz", tz);
+//      Packet04Npc pkt = new Packet04Npc();
+//      pkt.setParams(entity);
+//      pkt.setPathTarget(tag);
+//      pkt.sendPacketToAllTrackingClients(entity);
+//      }
+    }
+  }
+
+private void claimNode()
+  {
+  Config.logDebug("claiming node: "+this.entity);
+  for(Node n : this.path.getPath())
+    {
+    Config.logDebug("pathNode: "+n);
+    }
+  this.targetNode = this.path.claimNode();
+  if(targetNode!=null)
+    {
+    Node p = path.getFirstNode();
+    if(p!=null && p.equals(targetNode))
+      {
+      targetNode = this.path.claimNode();
+      p = this.path.getFirstNode();
+      }
+    if(p!=null && targetNode!=null)
+      {
+//      Config.logDebug("examining next node in path:"+p);
+      float yaw1 = Trig.getYawTowardsTarget(entity.posX, entity.posZ, targetNode.x+0.5d, targetNode.z+0.5d, entity.rotationYaw);
+      float yaw2 = Trig.getYawTowardsTarget(entity.posX, entity.posZ, p.x+0.5d, p.z+0.5d, entity.rotationYaw);
+//      float dist1 = Trig.getDistance(entity.posX, entity.posY, entity.posZ, targetNode.x+0.5d, targetNode.y, targetNode.z+0.5d);
+//      float dist2 = Trig.getDistance(entity.posX, entity.posY, entity.posZ, p.x+0.5d, p.y, p.z+0.5d);
+//      Config.logDebug(yaw1+","+yaw2+" :: "+dist1+","+dist2);
+      if(Math.abs(yaw2)<Math.abs(yaw1))
+        {
+        Config.logDebug("skipping first node due to it being behind..");
+        this.targetNode = path.claimNode();
+        }
+      }
     }
   }
 
@@ -170,21 +212,24 @@ public void moveTowardsCurrentNode()
   {
   if(this.targetNode==null && this.path.getPathNodeLength()>0)
     {
+//    this.claimNode();
     this.targetNode = this.path.claimNode();
     }
   if(this.targetNode!=null)
-    {   
+    {
     int ex = MathHelper.floor_double(entity.posX);
     int ey = MathHelper.floor_double(entity.posY);
     int ez = MathHelper.floor_double(entity.posZ);
     if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<1.0f)
       {
-      //  Config.logDebug("claiming node from completion LATE "+this.targetNode+"::"+entity);
+       Config.logDebug("claiming node from completion LATE "+this.targetNode);
       this.targetNode = path.claimNode();
-      //  Config.logDebug("new :: "+this.targetNode);
+//       this.claimNode();
+        Config.logDebug("new :: "+this.targetNode);
       if(targetNode==null)
-        {        
-        entity.getMoveHelper().setMoveTo(entity.posX, entity.posY, entity.posZ, entity.getAIMoveSpeed());
+        {   
+        
+//        entity.getMoveHelper().setMoveTo(entity.posX, entity.posY, entity.posZ, entity.getAIMoveSpeed());
         return;
         }
       }    
@@ -199,40 +244,13 @@ public void moveTowardsCurrentNode()
         entity.motionY = 0.125f;
         }    
       }
-    float[] movePos = this.getAdjustedMovePosition(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
-    entity.getMoveHelper().setMoveTo(movePos[0], movePos[1], movePos[2], entity.getAIMoveSpeed());
+    entity.getMoveHelper().setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f, entity.getAIMoveSpeed());
     } 
-  }
-
-private float[] getAdjustedMovePosition(float tx, float ty, float tz)
-  {
-  return new float[]{tx,ty,tz};
-//  float len = Trig.getVelocity(tx-entity.posX, ty-entity.posY, tz-entity.posZ);
-//  List<NpcBase> neighbors = this.getNearbyNPCs();
-//  //just try and stay X distance from nearby soldiers...
-//  float ax = 0;
-//  float ay = 0;
-//  float az = 0;
-//  Entity target = entity.getTargetEntity();
-//  for(Entity n : neighbors)
-//    {
-//    if(n!=target && n!=entity && (int)n.posY==(int)entity.posY && n.getDistanceToEntity(entity)<((n.width+entity.width)*1.41f)+entity.width*2)
-//      {
-//      ax = ax - (float)(entity.posX - n.posX);
-//      //ay = ay - (float)(entity.posY - n.posY);
-//      az = az - (float)(entity.posZ - n.posZ);
-//      }
-//    }
-//  ax*=0.2f;
-//  ay*=0.2f;
-//  az*=0.2f;
-////  Config.logDebug("A's:: "+ax+","+ay+","+az);
-//  //
-//  //if one is in front of you, hold a certain distance from it
-//  //    repeat until clear
-//  //check new target block after avoidance check to make sure it is a valid destination block
-//  
-//  return new float[]{tx-ax, ty-ay, tz-az};
+  else
+    {
+    this.distanceToNode = 0.f;
+    this.prevDistanceToNode = 0.f;
+    }
   }
 
 private List<NpcBase> getNearbyNPCs()
@@ -243,13 +261,14 @@ private List<NpcBase> getNearbyNPCs()
   }
 
 public List<Node> getCurrentPath()
-{
-return path.getPath();
-}
+  {
+  return path.getPath();
+  }
 
 @Override
 public void onPathFound(List<Node> pathNodes)
   {  
+  pathNodes.remove(0);
   this.path.addPath(pathNodes);
   }
 

@@ -84,10 +84,13 @@ public AIAggroEntry getEntryFor(Entity ent)
 public AIAggroEntry getHighestAggroTarget()
   {
   AIAggroEntry bestEntry = null;
+//  Config.logDebug("getting highest aggro target for: "+this.targetType);
   for(AIAggroEntry entry : this.targetEntries)
     {
+//    Config.logDebug("examining entry: "+entry.toString());
     if(entry.isValidEntry() && (bestEntry==null || entry.aggroLevel > bestEntry.aggroLevel))
       {
+//      Config.logDebug("new best found:");
       bestEntry = entry;
       }
     }
@@ -97,13 +100,16 @@ public AIAggroEntry getHighestAggroTarget()
 public void updateAggroEntries()
   {
   Iterator<AIAggroEntry> it = this.targetEntries.iterator();
+//  Config.logDebug("updating target entries for: "+this.targetType);
   AIAggroEntry entry;
   float maxRange;
   while(it.hasNext())
     {
     entry = it.next();
-    if(!entry.isValidEntry() || entry.getDistanceFrom()>entry.targetType.maxTargetRange || entry.aggroLevel<0)
+//    Config.logDebug("examining entry: "+entry.toString());
+    if(!entry.isValidEntry() || entry.getDistanceFrom()>entry.targetType.maxTargetRange || entry.aggroLevel <= 0)
       {
+//      Config.logDebug("removing entry:");
       it.remove();
       return;
       }   

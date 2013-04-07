@@ -32,7 +32,6 @@ public float goalLenght;
 public float travelCost = 10;
 
 public Node parentNode = null;
-public Node childNode = null;
 public float g = Float.POSITIVE_INFINITY;
 public float f;
 

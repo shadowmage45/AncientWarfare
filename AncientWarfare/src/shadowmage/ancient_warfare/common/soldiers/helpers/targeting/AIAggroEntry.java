@@ -156,4 +156,10 @@ public boolean matches(int x, int y, int z)
   {
   return this.posX == x && this.posY == y && this.posZ == z;
   }
+
+@Override
+public String toString()
+  {
+  return "AIAggroEntry: "+this.targetType+" :: "+this.getEntity();
+  }
 }

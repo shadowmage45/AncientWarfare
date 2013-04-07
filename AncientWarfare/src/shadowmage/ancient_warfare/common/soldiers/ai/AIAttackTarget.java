@@ -108,8 +108,7 @@ public void onTick()
 
 protected void attackTarget(AIAggroEntry target)
   { 
-  attackDelayTicks =  maxAttackDelayTicks;
-  
+  attackDelayTicks =  maxAttackDelayTicks;  
   if(!target.isEntityEntry)
     {
     Config.logDebug("doing block attack");
@@ -202,6 +201,12 @@ protected boolean checkIfTargetDead(AIAggroEntry target)
     return true;
     }  
   return false;
+  }
+
+@Override
+public boolean shouldExecute(NpcBase npc)
+  {
+  return super.shouldExecute(npc) && npc.getTargetType().equals(NpcAI.TARGET_ATTACK);
   }
 
 @Override

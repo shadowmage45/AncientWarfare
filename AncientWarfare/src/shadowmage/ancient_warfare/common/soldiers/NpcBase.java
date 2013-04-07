@@ -83,6 +83,7 @@ public NpcBase(World par1World)
 //  this.nav = new EntityNavigator(this);
 //  this.nav = new EntityNavigatorThreaded(this);
   this.nav = new NpcNavigatorScheduled(this);
+  
   this.stepHeight = 1.1f;
   }
 

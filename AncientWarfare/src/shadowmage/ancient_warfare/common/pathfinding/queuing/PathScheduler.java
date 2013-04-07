@@ -83,16 +83,17 @@ public List<Node> requestStartPath(PathWorldAccess world, int x, int y, int z, i
 
 public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
   {
-  float dist = Trig.getDistance(x, y, z, tx, ty, tz);
-  if(dist<=MAX_IMMEDIATE_PATH_LENGTH)    
-    {
-    caller.onPathFound(pather.findPath(world, x, y, z, tx, ty, tz, IMMEDIATE_PATH_CUTOFF));
-    }
-  else
-    {
-//    Config.logDebug("submitting job server: "+!world.isRemote());
-    this.pathRequests.add(new PathRequest(caller, world, x, y, z, tx, ty, tz, PATH_CUTOFF_LENGTH));
-    }
+  this.pathRequests.add(new PathRequest(caller, world, x, y, z, tx, ty, tz, PATH_CUTOFF_LENGTH));
+//  float dist = Trig.getDistance(x, y, z, tx, ty, tz);
+//  if(dist<=MAX_IMMEDIATE_PATH_LENGTH)    
+//    {
+//    caller.onPathFound(pather.findPath(world, x, y, z, tx, ty, tz, IMMEDIATE_PATH_CUTOFF));
+//    }
+//  else
+//    {
+////    Config.logDebug("submitting job server: "+!world.isRemote());
+//    this.pathRequests.add(new PathRequest(caller, world, x, y, z, tx, ty, tz, PATH_CUTOFF_LENGTH));
+//    }
   }
 
 public void onTickStart()
@@ -139,11 +140,11 @@ private void startProcessingPaths()
 //    Config.logDebug("processing path job");
     //run the request
     //dispatch result to entity
-    float len = Trig.getDistance(req.x, req.y, req.z, req.tx, req.ty, req.tz);
-    int length = 4*(int)len;
-    length = length < PATH_CUTOFF_LENGTH ? length : PATH_CUTOFF_LENGTH;
-    length = length < req.maxRange ? length : req.maxRange;
-    req.caller.onPathFound(pather.findPath(req.world, req.x, req.y, req.z, req.tx, req.ty, req.tz, length));
+    //float len = Trig.getDistance(req.x, req.y, req.z, req.tx, req.ty, req.tz);
+    //int length = 4*(int)len;
+    //length = length < PATH_CUTOFF_LENGTH ? length : PATH_CUTOFF_LENGTH;
+    //length = length < req.maxRange ? length : req.maxRange;
+    req.caller.onPathFound(pather.findPath(req.world, req.x, req.y, req.z, req.tx, req.ty, req.tz, PATH_CUTOFF_LENGTH));
     processingTime += System.nanoTime()-jobStart;
     }
   if(totalProcessed>0 && this == serverScheduler)

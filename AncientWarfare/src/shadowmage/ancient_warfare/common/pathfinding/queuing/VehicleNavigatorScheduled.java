@@ -23,13 +23,13 @@ package shadowmage.ancient_warfare.common.pathfinding.queuing;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.network.Packet04Npc;
 import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -140,17 +140,18 @@ public void setMoveTo(int tx, int ty, int tz)
     this.targetY = ty;
     this.targetZ = tz;
     this.targetNode = this.path.claimNode();
-    //    if(!entity.worldObj.isRemote)
-    //      {
-    //      NBTTagCompound tag = new NBTTagCompound();
-    //      tag.setInteger("tx", tx);
-    //      tag.setInteger("ty", ty);
-    //      tag.setInteger("tz", tz);
-    //      Packet04Npc pkt = new Packet04Npc();
-    //      pkt.setParams(entity);
-    //      pkt.setPathTarget(tag);
-    //      pkt.sendPacketToAllTrackingClients(entity);
-    //      }
+//    if(!entity.worldObj.isRemote)
+//      {
+//      Config.logDebug("sending path request packet");
+//      NBTTagCompound tag = new NBTTagCompound();
+//      tag.setInteger("tx", tx);
+//      tag.setInteger("ty", ty);
+//      tag.setInteger("tz", tz);
+//      Packet04Npc pkt = new Packet04Npc();
+//      pkt.setParams(entity);
+//      pkt.setPathTarget(tag);
+//      pkt.sendPacketToAllTrackingClients(entity);
+//      }
     }
   }
 

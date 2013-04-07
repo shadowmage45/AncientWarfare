@@ -54,13 +54,9 @@ public void onAiStarted()
 
 @Override
 public void onTick()
-  {
-  if(npc.getAITarget()!=null && !npc.getTargetType().equals(NpcAI.TARGET_ATTACK))
-    {
-    this.finished = true;
-    return;
-    }
-  npc.setTargetAW(npc.targetHelper.getHighestAggroTarget(TARGET_ATTACK)); 
+  {  
+//  Config.logDebug("choosing attack target");
+  npc.setTargetAW(npc.targetHelper.getHighestAggroTarget(TARGET_ATTACK));   
   if(npc.getTarget()!=null)
     {
 //    Config.logDebug("choosing target. new target type: "+npc.getTargetType());
@@ -68,6 +64,14 @@ public void onTick()
     this.success = true;
     }  
   this.finished = true;
+  }
+
+@Override
+public boolean shouldExecute(NpcBase npc)
+  {
+  boolean exec = super.shouldExecute(npc) && (npc.getTargetType().equals(NpcAI.TARGET_ATTACK) || npc.getTarget()==null); 
+//  Config.logDebug("should choose attack target "+exec);
+  return super.shouldExecute(npc) && (npc.getTargetType().equals(NpcAI.TARGET_ATTACK) || npc.getTarget()==null);
   }
 
 }

@@ -58,8 +58,8 @@ public NpcSoldierTest(int type)
 @Override
 public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
-//  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntityPlayer.class, 0, true, 40));
-  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntityMob.class, 0, true, 40));
+  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntityPlayer.class, 0, true, 40));
+//  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntityMob.class, 0, true, 40));
 //  helper.addTargetEntry(new AITargetEntry(npc, "attack", EntitySlime.class, 0, true, 40));
   helper.addTargetEntry(new AITargetEntryMountableVehicle(npc, -1, 20));
   }
