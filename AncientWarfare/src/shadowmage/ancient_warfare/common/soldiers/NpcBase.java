@@ -173,61 +173,7 @@ protected void updateAITick()
     return;
     }
   aiTick = 0;
-  this.aiManager.updateObjectives();
-//  //  Config.logDebug("AI Tick. currently executing tasks: "+this.executingTasks.size());  
-//  int mutexStack = 0;
-//  Iterator<INpcAI> it = this.executingTasks.iterator();
-//  INpcAI task;
-//  while(it.hasNext())
-//    {    
-//    task = it.next();
-//    if(task.shouldExecute(this))
-//      {
-//      if(!task.hasStarted())
-//        {
-//        task.startAI();
-//        }
-//      task.onTick();
-//      if(task.isFinished())
-//        {
-//        it.remove();
-//        }
-//      }
-//    else
-//      {
-//      it.remove();
-//      }    
-//    }
-//  for(INpcAI execTask : this.executingTasks)
-//    {  
-//    mutexStack += execTask.taskType();      
-//    }
-//  //  Config.logDebug("stack mutex: "+mutexStack);
-//  for(INpcAI possibleTask : this.npcAI)
-//    {    
-//    //    Config.logDebug("examining possible AI task: "+possibleTask.getTaskName());
-//    possibleTask.incrementTickCounts();
-//    if(this.executingTasks.contains(possibleTask))//if task is already present in executing list, do not add
-//      {
-//      continue;
-//      }
-//    //    Config.logDebug("exclusive task: "+possibleTask.exclusiveTasks());
-//    if((possibleTask.exclusiveTasks() & mutexStack) == 0)
-//      {
-//      if(possibleTask.shouldExecute(this))
-//        {
-//        this.executingTasks.add(possibleTask);
-//        mutexStack+=possibleTask.taskType();
-//        }
-//      }
-//    else
-//      {
-//      //      Config.logDebug("skipping task due to exlusion: "+possibleTask.getTaskName() +"::"+ mutexStack);
-//      }
-//
-//    boolean found = false;
-//    int exclude = possibleTask.exclusiveTasks(); 
-//    }  
+  this.aiManager.updateObjectives(); 
   }
 
 @Override
