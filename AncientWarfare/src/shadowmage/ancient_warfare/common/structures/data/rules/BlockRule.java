@@ -60,13 +60,10 @@ public byte conditional = 0;
 
 public byte swapGroup = -1;
 
-byte team = 0;
-
 /**
- * in 45 degrees....
+ * for team-oriented blocks
  */
-public byte orientation = 0;
-
+byte team = 0;
 
 /**
  * blockData array for each block ID/meta for this blockRule, may contain duplicates for weighting
@@ -76,24 +73,11 @@ public BlockData[] blockData;
  * ruins special block data (chests, spawners)
  */
 public String[] ruinsSpecialData;
-/**
- * int array of vehicle rules which may be used here
- */
-public int[] vehicles;
-/**
- * int array of npc rules which may be used here
- */
-public int[] npcs;
 
 /**
  * possible entity names for spawners
  */
 public String[] spawnerTypes;
-
-/**
- * single gate type, if this is set to >= 0, no other blocks will be checked.
- */
-public int gateNum = -1;
 
 /**
  * should preserve water/lava/plants when attempting to place this rule?
@@ -324,11 +308,7 @@ public static BlockRule parseRule(List<String> ruleLines)
     if(line.toLowerCase().startsWith("percent"))
       {
       rule.baseChance = StringTools.safeParseByte("=", line);
-      }
-    if(line.toLowerCase().startsWith("orientation"))
-      {
-      rule.orientation = StringTools.safeParseByte("=", line);
-      }
+      }    
     if(line.toLowerCase().startsWith("order"))
       {
       rule.order = StringTools.safeParseByte("=", line);
@@ -360,15 +340,7 @@ public static BlockRule parseRule(List<String> ruleLines)
     if(line.toLowerCase().startsWith("blocks"))
       {
       rule.blockData = parseBlocks(line.split("=")[1]);
-      }
-    if(line.toLowerCase().startsWith("vehicles"))
-      {
-      rule.vehicles = StringTools.safeParseIntArray("=", line);
-      }
-    if(line.toLowerCase().startsWith("npcs"))
-      {
-      rule.npcs = StringTools.safeParseIntArray("=", line);
-      }
+      }    
     if(line.toLowerCase().startsWith("ruinsspecialdata"))
       {
       rule.ruinsSpecialData = StringTools.safeParseStringArray("=", line);
@@ -376,13 +348,9 @@ public static BlockRule parseRule(List<String> ruleLines)
     if(line.toLowerCase().startsWith("spawner"))
       {
       rule.spawnerTypes = StringTools.safeParseStringArray("=", line);
-      }
-    if(line.toLowerCase().startsWith("gate"))
-      {
-      rule.gateNum = StringTools.safeParseInt("=", line);
-      }
+      }    
     }
-  if((rule.blockData !=null || rule.vehicles !=null ||rule.npcs!=null || rule.ruinsSpecialData !=null || rule.spawnerTypes != null || rule.gateNum > -1)&& rule.ruleNumber>=0)
+  if((rule.blockData !=null || rule.ruinsSpecialData !=null || rule.spawnerTypes != null )&& rule.ruleNumber>=0)
     {
     return rule;
     }  

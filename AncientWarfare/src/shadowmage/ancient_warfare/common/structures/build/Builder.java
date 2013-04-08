@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
@@ -40,6 +41,7 @@ import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -333,15 +335,7 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
     return;
     }
  
-  /**
-   * if the blockRule represents a gate, place it.  That is all.
-   */
-  if(rule.gateNum>-1)
-    {
-    this.placeGate(world, x, y, z, rule.gateNum, overrideGate, overrideRank, overrideTeam);
-    return;
-    }
-    
+     
   /**
    * else check to see whether should use
    * 
@@ -350,8 +344,6 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
   int checkLen = 0;
   boolean validBlocks = false;
   boolean validSpecials = false;
-  boolean validVehicles = false;
-  boolean validNPCs = false;  
   boolean validSpawner = false;
   if(rule.blockData!=null)
     {
@@ -362,17 +354,7 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
     {
     validSpecials = true;
     checkLen += rule.ruinsSpecialData.length;
-    }
-  if(rule.vehicles!=null)
-    {
-    validVehicles = true;
-    checkLen += rule.vehicles.length;
-    }
-  if(rule.npcs!=null)
-    {
-    validNPCs = true;
-    checkLen += rule.npcs.length;
-    }  
+    }   
   if(rule.spawnerTypes!=null)
     {
     validSpawner = true;
@@ -410,31 +392,7 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
       placeSpecials(world, x, y, z, rule.ruinsSpecialData[rnd]);     
       return;
       }
-    }  
-  if(validVehicles)
-    {
-    if(rnd>=rule.vehicles.length)
-      {
-      rnd -= rule.vehicles.length;      
-      }
-    else
-      {
-      placeVehicle(world, x, y, z, rule, rule.vehicles[rnd], overrideVehicle, overrideRank, overrideTeam);    
-      return;
-      }    
-    }
-  if(validNPCs)
-    {
-    if(rnd>=rule.npcs.length)
-      {
-      rnd -= rule.npcs.length;
-      }
-    else
-      {
-      placeNPC(world, x, y, z, rule.npcs[rnd], overrideNPC, overrideRank, overrideTeam);
-      return;
-      }
-    }
+    } 
   if(validSpawner)
     {
     if(rnd>=rule.spawnerTypes.length)
@@ -461,7 +419,7 @@ protected void placeBlockData(World world, int x, int y, int z, BlockData data, 
     }   
   }
 
-protected void placeVehicle(World world, int x, int y, int z, BlockRule parentRule, int vehicleType, int overrideType, int overrideRank, int overrideTeam)
+protected void placeVehicle(World world, int x, int y, int z, int vehicleType, int overrideType, int overrideRank, int overrideTeam)
   {
   VehicleRule vehRule = struct.vehicleRules.get(vehicleType);
   if(vehRule==null)
@@ -507,7 +465,7 @@ protected void placeVehicle(World world, int x, int y, int z, BlockRule parentRu
       vehicle.inventory.armorInventory.setInventorySlotContents(i, upgradeStack);
       }    
     vehicle.setPosition(x+0.5d, y, z+0.5d);
-    float rotation = (float)parentRule.orientation * -45.f;
+    float rotation = 0.f;
     rotation -= 90 * this.getRotationAmt(facing);
     vehicle.rotationYaw = vehicle.prevRotationYaw = rotation;
     world.spawnEntityInWorld(vehicle);
@@ -527,8 +485,24 @@ protected void placeGate(World world, int x, int y, int z, int gateType, int ove
   //use gateType if override.  If gate # does not exist, create.
   //add piece to gate
   //at end of build, construct gates
-  //TODO how to store gate stuff---scan building upon reload?
-  
+  //TODO how to store gate stuff---scan building upon reload?  
+  }
+
+/**
+ * called to start placing entities from the EntityRule list, first -> last
+ * @param world
+ */
+protected void placeEntities(World world)
+  {
+  Entity entity;
+  for(EntityRule rule : this.struct.entityRules)
+    {
+    entity = rule.getEntityToSpawn(world, facing, struct, buildPos);
+    if(entity!=null)
+      {
+      world.spawnEntityInWorld(entity);
+      }
+    }
   }
 
 protected void placeSpecials(World world, int x, int y, int z, String name)
@@ -590,13 +564,11 @@ protected void handleNamedSpawner(World world, int x, int y, int z, String name)
   {
   world.setBlockAndMetadata(x, y, z, Block.mobSpawner.blockID, 0);
   TileEntityMobSpawner ent = (TileEntityMobSpawner) world.getBlockTileEntity(x, y, z);  
-  if(ent==null)
+  if(ent!=null)
     {
-    return;
+    ent.setMobID(name);
     }
-  ent.setMobID(name);
   }
-
 
 protected boolean isAirBlock(World world, int x, int y, int z)
   {

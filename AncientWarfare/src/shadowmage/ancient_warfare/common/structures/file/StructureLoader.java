@@ -37,6 +37,7 @@ import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
@@ -417,6 +418,11 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
       {
       this.parseSwap(struct, it);
       }
+    
+    else if(line.toLowerCase().startsWith("entity:"))
+      {
+      this.parseEntity(struct, it);
+      }
     /**
      * parse out layers
      */
@@ -584,6 +590,43 @@ private void parseResources(ProcessedStructure struct, Iterator<String> it)
     }  
   }
 
+private void parseEntity(ProcessedStructure struct, Iterator<String> it)
+  {
+  if(!it.hasNext())
+    {
+    struct.isValid = false;
+    return;
+    }
+  ArrayList<String> ruleLines = new ArrayList<String>();  
+  String line;  
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("entity:"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith(":endentity"))
+      {
+      break;      
+      }
+    else
+      {
+      ruleLines.add(line);      
+      }    
+    }     
+  EntityRule rule = EntityRule.parseRule(ruleLines);
+  if(rule!=null)
+    {    
+    struct.entityRules.add(rule);    
+    }
+  else
+    {
+    Config.logError("Error parsing entity rule for structure!");
+    struct.isValid = false;
+    }
+  }
+
 private void parseLayer(ProcessedStructure struct, Iterator<String> it)
   {
   if(!it.hasNext())
@@ -710,7 +753,7 @@ private void parseVehicle(ProcessedStructure struct, Iterator<String> it)
   VehicleRule rule = VehicleRule.parseRule(ruleLines);
   if(rule!=null)
     {    
-    struct.vehicleRules.put(Integer.valueOf((int) rule.ruleNumber), rule);     
+    struct.vehicleRules.add(rule);     
     }
   else
     {

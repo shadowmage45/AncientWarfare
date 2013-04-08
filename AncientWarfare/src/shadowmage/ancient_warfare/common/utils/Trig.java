@@ -220,7 +220,7 @@ public static float getAngle(float x, float y)
  * get yaw change direction towards target from input yaw
  * @param entityFrom
  * @param x
- * @param y
+ * @param oY
  * @param z
  * @return
  */

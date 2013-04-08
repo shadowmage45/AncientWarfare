@@ -51,7 +51,7 @@ public static VehicleRule parseRule(List<String> ruleLines)
       }
     if(line.toLowerCase().startsWith("type"))
       {
-      rule.ruleNumber = StringTools.safeParseShort("=", line);     
+      rule.vehicleType = StringTools.safeParseShort("=", line);     
       }
     if(line.toLowerCase().startsWith("armorfront"))
       {

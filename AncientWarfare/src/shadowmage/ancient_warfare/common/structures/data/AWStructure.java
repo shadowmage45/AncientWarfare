@@ -33,6 +33,7 @@ import net.minecraft.server.MinecraftServer;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NPCRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
@@ -94,9 +95,10 @@ public boolean preserveBlocks = false;
  * (incl advanced feature not supported by Ruins--per block preserve info)
  */
 public Map<Integer, BlockRule> blockRules = new HashMap<Integer, BlockRule>();
-public Map<Integer, VehicleRule> vehicleRules = new HashMap<Integer, VehicleRule>();
-public Map<Integer, NPCRule> NPCRules = new HashMap<Integer, NPCRule>();
+public ArrayList<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
+public ArrayList<NPCRule> NPCRules = new ArrayList<NPCRule>();
 public Map<Integer, SwapRule> swapRules = new HashMap<Integer, SwapRule>();
+public ArrayList<EntityRule> entityRules = new ArrayList<EntityRule>();
 
 /**
  * only set to false for bad values during parsing, struct is then discarded and not loaded into structures map

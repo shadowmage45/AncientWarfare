@@ -613,9 +613,9 @@ public boolean isAtTarget()
 
 /**
  * used by soldiers to attempt to target a position. range should have already been validated by getEffectiveRange at some point
- * @param x
- * @param y
- * @param z
+ * @param o
+ * @param oY
+ * @param oZ
  */
 public void handleSoldierTargetInput(double targetX, double targetY, double targetZ)
   {

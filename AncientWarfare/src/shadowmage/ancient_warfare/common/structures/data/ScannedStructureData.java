@@ -24,11 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.meim.common.config.Config;
 
 public class ScannedStructureData
 {
@@ -42,6 +47,7 @@ public int ySize;
 public int zSize;
 public BlockData[][][] allBlocks;
 public ArrayList<BlockData> blockIDs = new ArrayList<BlockData>();
+private List<ScannedEntityEntry> includedEntities = new ArrayList<ScannedEntityEntry>();
 
 /**
  * set by structure scanner GUI prior to export
@@ -111,9 +117,27 @@ public void scan(World world)
         allBlocks[indexX][indexY][indexZ] = new BlockData(id, meta);        
         }      
       }    
-    }  
-  
+    }    
+  this.scanForEntities(world);
   this.normalizeForNorthFacing();
+  }
+
+protected void scanForEntities(World world)
+  {  
+  this.includedEntities.clear();
+  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(pos1.x, pos1.y, pos1.z, pos2.x+1, pos2.y+1, pos2.z+1);
+  List<Entity> scannedEntities = world.getEntitiesWithinAABBExcludingEntity(null, bb);
+  Config.logDebug("scanning for entities in bb: "+bb);
+  float x;
+  float y;
+  float z;  
+  for(Entity e : scannedEntities)
+    {
+    x = (float) (e.posX - pos1.x);
+    y = (float) (e.posY - pos1.y);
+    z = (float) (e.posZ - pos1.z);
+    this.includedEntities.add(new ScannedEntityEntry(e, x, y, z, e.rotationYaw, e.rotationPitch));
+    }
   }
 
 protected void addToBlocksList(BlockData data)
@@ -189,10 +213,39 @@ private void normalizeForNorthFacing()
   this.ySize = newYSize;
   this.zSize = newZSize;
   this.allBlocks = newBlocks;
+  int x;
+  int y;
+  int z;
+  float xOff;
+  float yOff;
+  float zOff;
+  float newXOff;
+  float newZOff;
+  BlockPosition pos;// = new BlockPosition(0,0,0);
+  for(ScannedEntityEntry entry : this.includedEntities)
+    {
+    x = MathHelper.floor_float(entry.x);
+    y = MathHelper.floor_float(entry.y);
+    z = MathHelper.floor_float(entry.z);
+    xOff = entry.x % 1.f;
+    zOff = entry.z % 1.f;
+    yOff = entry.y % 1.f;
+    pos = getNorthRotatedPosition(x, y, z, this.originFacing, newXSize, newZSize);
+    newXOff = getRotatedOffsetX(this.originFacing, xOff, zOff);
+    newZOff = getRotatedOffsetZ(this.originFacing, xOff, zOff);
+    entry.bx = pos.x;
+    entry.by = pos.y;
+    entry.bz = pos.z;
+    entry.xO = newXOff;
+    entry.yO = yOff;
+    entry.zO = newZOff;
+    entry.x = pos.x+newXOff;
+    entry.y = pos.y+yOff;
+    entry.z = pos.z+newZOff;
+    }
   }
 
-
-private BlockPosition getNorthRotatedPosition(int x, int y, int z, int rotation, int xSize, int zSize)
+public static BlockPosition getNorthRotatedPosition(int x, int y, int z, int rotation, int xSize, int zSize)
   {
   if(rotation==0)//south, invert x,z
     {
@@ -213,7 +266,7 @@ private BlockPosition getNorthRotatedPosition(int x, int y, int z, int rotation,
   return null;
   }
 
-private int getRotationAmount(int start, int destination)
+public static int getRotationAmount(int start, int destination)
   {
   if(start==destination)
     {
@@ -227,6 +280,55 @@ private int getRotationAmount(int start, int destination)
   return turn;
   }
 
+private float getRotatedOffsetX(int rotation, float xOff, float zOff)
+  {
+  if(rotation==0)//south, invert x,z
+    {
+    return 1 - xOff;//new BlockPosition(xSize - x - 1 , y, zSize - z - 1 );
+    }
+  if(rotation==1)//west
+    {
+    return zOff;//new BlockPosition(xSize - z - 1, y, x);
+    }
+  if(rotation==2)//north, no change
+    {
+    return xOff;//new BlockPosition(x,y,z);
+    }
+  if(rotation==3)//east
+    {
+    return 1 - zOff;//new BlockPosition(z, y, zSize - x - 1);
+    }
+  return xOff;
+  }
+
+private float getRotatedOffsetZ(int rotation, float xOff, float zOff)
+  {
+  if(rotation==0)//south, invert x,z
+    {
+    return 1 - zOff;//new BlockPosition(xSize - x - 1 , y, zSize - z - 1 );
+    }
+  if(rotation==1)//west
+    {
+    return xOff;//new BlockPosition(xSize - z - 1, y, x);
+    }
+  if(rotation==2)//north, no change
+    {
+    return zOff;//new BlockPosition(x,y,z);
+    }
+  if(rotation==3)//east
+    {
+    return 1 - xOff;//new BlockPosition(z, y, zSize - x - 1);
+    }
+  return zOff;
+  }
+
+private float getRotatedRotationYaw(int originRotation, float originYaw)
+  {
+  int rotAmt = this.getRotationAmount(originRotation, 2);
+  originYaw+= rotAmt * 90;
+  return originYaw;
+  }
+  
 /*********************************************  CONVERSION  ***********************************************/
 
 /**
@@ -266,6 +368,7 @@ public ProcessedStructure convertToProcessedStructure()
         }
       }
     }
+  this.addEntitiesToStructure(struct, includedEntities);
   List<String> lines = StructureExporter.getExportLinesFor(struct);
   struct.setTemplateLines(lines);
   return struct;
@@ -279,6 +382,19 @@ public BlockData[] getAllBlockTypes()
     datas[i]=this.blockIDs.get(i);
     }
   return datas;
+  }
+
+private void addEntitiesToStructure(ProcessedStructure struct, List<ScannedEntityEntry> entities)
+  {
+  EntityRule rule;
+  for(int i = 0; i < entities.size(); i++)
+    {
+    rule = EntityRule.populateRule(entities.get(i));
+    if(rule!=null)
+      {
+      struct.entityRules.add(rule);
+      }    
+    }
   }
 
 }

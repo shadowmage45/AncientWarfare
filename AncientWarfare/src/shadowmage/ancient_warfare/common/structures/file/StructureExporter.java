@@ -33,6 +33,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
@@ -157,8 +158,11 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
   lines.add("####NPC RULES####");
   lines.add("");  
   lines.add("####GATE RULES####");
-  lines.add("");    
+  lines.add("");
   //END TODO
+  lines.add("####ENTITY RULES####");
+  addEntityRules(lines, struct);
+  lines.add("");
   lines.add("####RESOURCE LIST####");
   addResourceList(lines, struct);
   lines.add("");
@@ -166,6 +170,18 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
   addLayers(lines, struct);    
   lines.add("");
   return lines;
+  }
+
+private static void addEntityRules(List<String> lines, ProcessedStructure struct)
+  {
+  List<String> ruleLines;
+  for(EntityRule rule : struct.entityRules)
+    {
+    ruleLines = rule.getRuleLines();
+    lines.add("");
+    lines.addAll(ruleLines);
+    lines.add("");
+    }
   }
 
 private static void addTargetBlocks(List<String> lines, ProcessedStructure struct)
@@ -227,11 +243,7 @@ private static void addBlockRules(List<String> lines, ProcessedStructure struct)
     lines.add("number="+String.valueOf(rule.ruleNumber));
     lines.add("order="+String.valueOf(rule.order));
     lines.add("conditional="+String.valueOf(rule.conditional));
-    lines.add("percent="+String.valueOf(rule.baseChance)); 
-    if(rule.gateNum>-1)
-      {
-      lines.add("gate="+String.valueOf(rule.gateNum)+"\n");
-      }
+    lines.add("percent="+String.valueOf(rule.baseChance));
     if(rule.blockData!=null)
       {
       String blockLine = "blocks=";
@@ -271,23 +283,7 @@ private static void addBlockRules(List<String> lines, ProcessedStructure struct)
     if(rule.preserveWater)
       {
       lines.add("preserveWater=true");
-      }
-    if(rule.orientation!=0)
-      {
-      lines.add("orientation="+String.valueOf(rule.orientation));
-      }
-    if(rule.vehicles!=null)
-      {
-      String vehLine = "vehicles=";
-      vehLine = vehLine + getIntArrayString(rule.vehicles);
-      lines.add(vehLine);
-      }
-    if(rule.npcs!=null)
-      {
-      String npcLine = "npcs=";
-      npcLine = npcLine + getIntArrayString(rule.npcs);
-      lines.add(npcLine);
-      }
+      }    
     lines.add(":endrule");
     lines.add("");
     } 
