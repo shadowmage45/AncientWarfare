@@ -18,40 +18,35 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.ai;
+package shadowmage.ancient_warfare.common.soldiers.ai.tasks;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.soldiers.ai.NpcAITask;
 
-public abstract class NpcAITask
+public class AIDismountVehicle extends NpcAITask
 {
 
-public static final int NONE = 0;
-public static final int WANDER = 1;
-public static final int FOLLOW = 2;
-public static final int ATTACK = 4;
-public static final int HEAL = 8;
-public static final int REPAIR = 16;
-public static final int HARVEST = 32;
-public static final int MOVE_TO = 64;
-public static final int MOUNT_VEHICLE = 128;
-
-protected NpcBase npc;
-protected int taskType = 0;
-protected int exclusiveTasks = 0;
-
-public NpcAITask(NpcBase npc)
+/**
+ * @param npc
+ */
+public AIDismountVehicle(NpcBase npc)
   {
-  this.npc = npc;
+  super(npc);
+  this.exclusiveTasks = MOVE_TO + ATTACK + REPAIR + HARVEST + HEAL + MOUNT_VEHICLE + FOLLOW + WANDER;
   }
 
-public abstract void onTick();
-
-public abstract boolean shouldExecute();
-
-public boolean canExecute(int mutex)
+@Override
+public void onTick()
   {
-  return (this.exclusiveTasks & mutex) == 0;
+  Config.logDebug("ticking dismount");
+  npc.mountEntity(npc.ridingEntity);
   }
 
+@Override
+public boolean shouldExecute()
+  {
+  return npc.isRidingVehicle();
+  }
 
 }

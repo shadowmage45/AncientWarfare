@@ -18,63 +18,41 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.ai;
-
-import org.bouncycastle.asn1.x509.Target;
+package shadowmage.ancient_warfare.common.soldiers.ai.tasks;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
-import shadowmage.ancient_warfare.common.soldiers.NpcAI;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.soldiers.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.config.Config;
 
-public class AIMoveToTarget extends NpcAI
+public class AIMoveToTarget extends NpcAITask
 {
 
 float prevDistance;
 float distance;
+boolean useAttackDistance = false;
+float stopDistance = 1.f;
 
-int delayTicksMax = 10;
-int delayTicks = 0;
 int stuckTicks = 0;
 
 /**
  * @param npc
  */
-public AIMoveToTarget(NpcBase npc)
+public AIMoveToTarget(NpcBase npc, float stopDistance, boolean useAttackDistance)
   {
   super(npc);  
-  this.successTicks = 20;
-  this.failureTicks = 20;
+  this.useAttackDistance = useAttackDistance;
+  this.stopDistance = stopDistance;
   this.taskType = MOVE_TO;
-  this.taskName = "MoveToTarget";
-  }
-
-@Override
-public int exclusiveTasks()
-  {  
-  return ATTACK +  REPAIR + HEAL + HARVEST; //action tasks
-  }
-
-@Override
-public void onAiStarted()
-  {
-  stuckTicks = 0;
-  delayTicks = 0;
+  this.exclusiveTasks = ATTACK + FOLLOW + MOUNT_VEHICLE + REPAIR + HARVEST + HEAL;
   }
 
 @Override
 public void onTick()
-  {
-  if(npc.getTarget()==null)
-    {
-    this.finished = true;
-    this.success = true;
-    return;
-    }
+  { 
   float bX = npc.getTarget().posX();
   float bY = npc.getTarget().posY();
   float bZ = npc.getTarget().posZ();
@@ -108,40 +86,21 @@ public void onTick()
   //Config.logDebug("targetPos: "+bX+","+bY+","+bZ);
   this.prevDistance = this.distance;
   this.distance = (float) npc.getDistance(bX, bY, bZ);  
-  float attackDistance = npc.targetHelper.getAttackDistance(npc.getTarget());
-//  Config.logDebug("calc targetDist: "+npc.targetHelper.getAttackDistance(npc.getTarget()));
-  if(distance < attackDistance)
-    {
-    this.finished = true;
-    this.success = true;
-    if(npc.getTargetType().equals(TARGET_WANDER))
-      {
-      npc.setTargetAW(null);
-      }
-//    Config.logDebug("MoveToTarget finished");
-    return;
-    }  
-  delayTicks--;
-  if(delayTicks>0)
-    {
-    return;
-    }
-  delayTicks = delayTicksMax;
   if(Trig.getAbsDiff(distance, prevDistance)<0.05f)
     {
     stuckTicks++;
-    if(stuckTicks>10)
+    if(stuckTicks>2)
       {
       npc.setTargetAW(null);
       stuckTicks = 0;
       }
-    }
-//  if(npc.getTargetType().equals(NpcAI.TARGET_ATTACK))
+    }  
+//  if(useAttackDistance)
 //    {
 //    float xAO = (float) (npc.posX - bX);  
 //    float zAO = (float) (npc.posZ - bZ);
 //    float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
-//    float newLen = distance - (attackDistance * 1.2f);//move slightly inside min effective range attack distance
+//    float newLen = distance - (npc.targetHelper.getAttackDistance(npc.getTarget()) * 1.2f);//move slightly inside min effective range attack distance
 //    bX = (float)npc.posX + Trig.sinDegrees(yaw)*newLen;
 //    bZ = (float)npc.posZ + Trig.cosDegrees(yaw)*newLen;
 //    }
@@ -157,5 +116,11 @@ public void onTick()
     }
   }
 
+@Override
+public boolean shouldExecute()
+  {
+  float minDist = useAttackDistance ? npc.targetHelper.getAttackDistance(npc.getTarget()) : stopDistance;
+  return npc.getTarget()!=null && npc.getDistanceFromTarget(npc.getTarget()) > minDist;
+  }
 
 }

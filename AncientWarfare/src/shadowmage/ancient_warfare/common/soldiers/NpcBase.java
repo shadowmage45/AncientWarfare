@@ -38,7 +38,9 @@ import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.soldiers.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -48,6 +50,22 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class NpcBase extends EntityCreature implements IEntityAdditionalSpawnData, IEntityContainerSynch
 {
+
+/**
+   * @return the playerTarget
+   */
+  public AIAggroEntry getPlayerTarget()
+    {
+    return playerTarget;
+    }
+
+  /**
+   * @param playerTarget the playerTarget to set
+   */
+  public void setPlayerTarget(AIAggroEntry playerTarget)
+    {
+    this.playerTarget = playerTarget;
+    }
 
 public int teamNum = 0; 
 public int rank = 0;
@@ -61,6 +79,7 @@ public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
 public NpcTargetHelper targetHelper;
 
+public AIAggroEntry playerTarget = null;
 private AIAggroEntry target = null;
 private NpcAIObjectiveManager aiManager;
 
@@ -132,16 +151,29 @@ public void setTargetAW(AIAggroEntry entry)
 
 public boolean isRidingVehicle()
   {
-  if(this.ridingEntity instanceof VehicleBase)
-    {
-    return true;
-    }
-  return false;
+  return this.ridingEntity!=null && this.ridingEntity instanceof VehicleBase;
   }
 
+public float getDistanceFromTarget(AIAggroEntry target)
+  {
+  if(target!=null)
+    {
+    return Trig.getDistance(posX, posY, posZ, target.posX(), target.posY(), target.posZ());
+    }
+  return 0;
+  }
+
+int aiTick = 0;
 @Override
 protected void updateAITick() 
   {
+  if(aiTick<Config.npcAITicks)
+    {
+    aiTick++;
+    return;
+    }
+  aiTick = 0;
+  this.aiManager.updateObjectives();
 //  //  Config.logDebug("AI Tick. currently executing tasks: "+this.executingTasks.size());  
 //  int mutexStack = 0;
 //  Iterator<INpcAI> it = this.executingTasks.iterator();
@@ -199,6 +231,26 @@ protected void updateAITick()
   }
 
 @Override
+public boolean interact(EntityPlayer player)
+  {
+  if(!this.isAggroTowards(player))
+    {
+    AIAggroEntry target = this.playerTarget;
+    if(target==null || target.getEntity()!=player)
+      {
+      Config.logDebug("setting player to follow to: "+player.getEntityName());
+      this.playerTarget = new AIAggroEntry(this, this.targetHelper.playerTargetEntry, player);
+      }
+    else if(target!=null && target.getEntity()==player)
+      {
+      Config.log("clearing player to follow");
+      this.playerTarget = null;
+      }
+    }
+  return super.interact(player);
+  }
+
+@Override
 public boolean attackEntityAsMob(Entity ent)
   {
   ent.attackEntityFrom(DamageSource.causeMobDamage(this), 4);
@@ -223,6 +275,11 @@ public String getTexture()
   return this.npcType.getDisplayTexture(rank);
   }
 
+@Override
+protected boolean canDespawn()
+  {
+  return false;
+  }
 
 @Override
 public void onUpdate()

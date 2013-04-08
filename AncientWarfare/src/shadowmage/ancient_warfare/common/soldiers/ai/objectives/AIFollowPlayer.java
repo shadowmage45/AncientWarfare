@@ -22,32 +22,32 @@ package shadowmage.ancient_warfare.common.soldiers.ai.objectives;
 
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
-import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
 
-public class NpcAIAttackTargets extends NpcAIObjective
+public class AIFollowPlayer extends NpcAIObjective
 {
 
 /**
  * @param npc
  * @param maxPriority
  */
-public NpcAIAttackTargets(NpcBase npc, int maxPriority)
+public AIFollowPlayer(NpcBase npc, int maxPriority)
   {
   super(npc, maxPriority);
+  // TODO Auto-generated constructor stub
   }
 
 @Override
 public void updateObjectivePriority()
   {
-  AIAggroEntry target = npc.targetHelper.getHighestAggroTarget(NpcTargetHelper.TARGET_ATTACK);
-  if(target!=null)
+  if(npc.getPlayerTarget()!=null)
     {
-    this.objectiveTarget = target;
+    this.objectiveTarget = npc.getPlayerTarget();
     this.currentPriority = this.maxPriority;
-    }
+    }  
   else
     {
+    this.objectiveTarget = null;
     this.currentPriority = 0;
     }
   }
@@ -55,9 +55,7 @@ public void updateObjectivePriority()
 @Override
 public void addTasks()
   {
-//  this.aiTasks.add(new AIMoveToTarget(npc));  
-//  this.aiTasks.add(new AIAttackTarget(npc));
+  this.aiTasks.add(new AIMoveToTarget(npc, 4, false));
   }
-
 
 }

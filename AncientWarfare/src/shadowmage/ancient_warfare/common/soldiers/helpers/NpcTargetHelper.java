@@ -26,6 +26,7 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
@@ -49,6 +50,8 @@ public static final int TARGET_ATTACK = 0;
 public static final int TARGET_MOUNT = 1;
 public static final int TARGET_HARVEST = 2;
 public static final int TARGET_HEAL = 3;
+public static final int TARGET_FOLLOW = 3;
+public AITargetEntry playerTargetEntry;
 
 NpcBase npc;
 
@@ -65,6 +68,7 @@ HashMap<Integer, AIAggroList> aggroEntries = new HashMap<Integer, AIAggroList>()
 public NpcTargetHelper(NpcBase npc)
   {
   this.npc = npc;
+  this.playerTargetEntry = new AITargetEntry(npc, TARGET_FOLLOW, EntityPlayer.class, 1, true, 40);
   }
 
 public void addTargetEntry(AITargetEntry entry)
@@ -137,11 +141,11 @@ public void checkForTargets()
           {
           continue;
           }        
-        Config.logDebug("checking targets of type: "+key);
+//        Config.logDebug("checking targets of type: "+key);
         int pri = targetEntry.priority;
         if(pri>=0)
           {
-                    Config.logDebug("adding/updating entity aggro entry for target: "+ent);
+//                    Config.logDebug("adding/updating entity aggro entry for target: "+ent);
           float distPercent = 1.f - (dist / targetEntry.maxTargetRange);
           int aggroAmt = (int)(Config.npcAITicks + (distPercent * (float)Config.npcAITicks)); 
           this.addOrUpdateAggroEntry(targetEntry, ent, aggroAmt);
@@ -153,6 +157,10 @@ public void checkForTargets()
 
 public float getAttackDistance(AIAggroEntry target)
   {
+	if(target==null)
+	{
+		return 4.f;
+	}
   if(npc.isRidingVehicle())
     {
     return ((VehicleBase)npc.ridingEntity).getEffectiveRange((float)npc.ridingEntity.posY - target.posY());
@@ -183,6 +191,15 @@ public void updateAggroEntries()
 public void handleBeingAttacked(EntityLiving damager)
   {
   
+  }
+
+public AIAggroEntry getHighestAggroTargetInRange(int type, float range)
+  {
+  if(this.aggroEntries.containsKey(type))
+    {
+    return this.aggroEntries.get(type).getHighestAggroTargetInRange(range);
+    }
+  return null;
   }
 
 public AIAggroEntry getHighestAggroTarget(int type)

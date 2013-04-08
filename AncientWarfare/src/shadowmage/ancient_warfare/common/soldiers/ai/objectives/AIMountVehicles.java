@@ -18,67 +18,53 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.ai;
-
-import java.util.ArrayList;
-import java.util.List;
+package shadowmage.ancient_warfare.common.soldiers.ai.objectives;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
+import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMountVehicle;
+import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
+import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 
-public abstract class NpcAIObjective
+public class AIMountVehicles extends NpcAIObjective
 {
 
-protected NpcBase npc;
-protected int maxPriority;
-public int currentPriority;
-public int minObjectiveTicks = 40/Config.npcAITicks;
-public boolean isFinished = false;
-
-protected AIAggroEntry objectiveTarget;
-
-
-
+int maxRange;
 /**
- * the tasks, in order, necessary to complete this objective
- * e.g. find target, move to target, attack target.
+ * @param npc
+ * @param maxPriority
  */
-protected List<NpcAITask> aiTasks = new ArrayList<NpcAITask>();
-
-public abstract void updateObjectivePriority();
-public abstract void addTasks();
-
-public NpcAIObjective(NpcBase npc, int maxPriority)
+public AIMountVehicles(NpcBase npc, int maxPriority, int maxRange)
   {
-  this.npc = npc;
-  this.maxPriority = maxPriority;
-  this.addTasks();
+  super(npc, maxPriority);
+  this.maxRange = maxRange;
   }
 
-public void onTick()
+@Override
+public void updateObjectivePriority()
   {
-  boolean hasWork = false;
-  int mutex = 0;
-  for(NpcAITask task : this.aiTasks)
+  AIAggroEntry target = npc.targetHelper.getHighestAggroTargetInRange(NpcTargetHelper.TARGET_MOUNT, maxRange);  
+  if(target!=null)
     {
-    if(task.canExecute(mutex) && task.shouldExecute())
-      {
-      hasWork = true;
-      task.onTick();
-      mutex += task.taskType;
-      }
+//    Config.logDebug("updating mount targets "+target.toString());
+    this.objectiveTarget = target;
+    this.currentPriority = this.maxPriority;
     }
-  if(!hasWork)
+  else
     {
-    this.isFinished = true;
+//    Config.logDebug("updating mount targets : no target");
+    this.objectiveTarget = null;
+    this.currentPriority = 0;
     }
   }
 
-public void startObjective()
+@Override
+public void addTasks()
   {
-  this.isFinished = false;
-  npc.setTargetAW(objectiveTarget);
+  this.aiTasks.add(new AIMoveToTarget(npc, 1.f, true));
+  this.aiTasks.add(new AIMountVehicle(npc));
   }
 
 }

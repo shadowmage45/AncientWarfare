@@ -20,8 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.soldiers;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 
 
@@ -33,7 +35,7 @@ NpcBase npc;
 NpcAIObjective currentObjective;
 int currentObjectiveTicks = 0;
 
-List<NpcAIObjective> allObjectives;
+List<NpcAIObjective> allObjectives = new ArrayList<NpcAIObjective>();
 
 public NpcAIObjectiveManager(NpcBase npc)
   {
@@ -54,6 +56,7 @@ public void updateObjectives()
     {
     this.currentObjectiveTicks--;
     }  
+//  Config.logDebug("updating priorities for objectives. : "+this.allObjectives.size());
   for(NpcAIObjective objective : this.allObjectives)
     {
     objective.updateObjectivePriority();
@@ -64,12 +67,13 @@ public void updateObjectives()
 
 private void selectObjective()
   {
-  if( this.currentObjectiveTicks<0 || this.currentObjective.isFinished )
+  if(this.currentObjective==null || this.currentObjectiveTicks<=0 || this.currentObjective.isFinished )
     {    
     NpcAIObjective highestObj = null;
     int bestPriority = 0;
     for(NpcAIObjective obj : this.allObjectives)
       {
+//      Config.logDebug(obj+ " p: "+obj.currentPriority);
       if(obj.currentPriority>bestPriority)
         {
         bestPriority = obj.currentPriority;
@@ -89,7 +93,10 @@ private void setObjective(NpcAIObjective objective)
     }
   else
     {
-    this.currentObjectiveTicks = objective.minObjectiveTicks;
+    if(objective != this.currentObjective)
+      {
+      this.currentObjectiveTicks = objective.minObjectiveTicks;
+      }
     this.currentObjective = objective;
     this.currentObjective.startObjective();
     }
@@ -99,7 +106,7 @@ private void tickObjective()
   {
   if(this.currentObjective!=null)
     {
-    this.tickObjective();
+    this.currentObjective.onTick();
     }
   }
 

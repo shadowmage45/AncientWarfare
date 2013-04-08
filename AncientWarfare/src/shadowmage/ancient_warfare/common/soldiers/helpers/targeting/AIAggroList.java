@@ -32,7 +32,6 @@ import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry
 public class AIAggroList
 {
 
-public float maxDistanceForTargets = Config.npcAISearchRange;
 protected NpcBase npc;
 public final int targetType;
 ArrayList<AIAggroEntry> targetEntries = new ArrayList<AIAggroEntry>();
@@ -81,8 +80,25 @@ public AIAggroEntry getEntryFor(Entity ent)
   return null;
   }
 
-public AIAggroEntry getHighestAggroTarget()
+public AIAggroEntry getHighestAggroTargetInRange(float range)
   {
+  AIAggroEntry bestEntry = null;
+  for(AIAggroEntry entry : this.targetEntries)
+    {
+    if(npc.getDistanceFromTarget(entry)>range)
+      {
+      continue;
+      }
+    if(entry.isValidEntry() && (bestEntry==null || entry.aggroLevel > bestEntry.aggroLevel))
+      {
+      bestEntry = entry;
+      }
+    }
+  return bestEntry;
+  }
+
+public AIAggroEntry getHighestAggroTarget()
+  {  
   AIAggroEntry bestEntry = null;
 //  Config.logDebug("getting highest aggro target for: "+this.targetType);
   for(AIAggroEntry entry : this.targetEntries)
