@@ -25,9 +25,23 @@ package shadowmage.ancient_warfare.common.utils;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagByte;
+import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagIntArray;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.nbt.NBTTagShort;
+import net.minecraft.nbt.NBTTagString;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -121,6 +135,178 @@ public static void writeTagToStream(NBTTagCompound tag, ByteArrayDataOutput data
       }
     }
   
+  }
+
+/**
+ * return an NBTTagCompound as a list of strings, for human editing/etc.  WILL make for larger file-sizes...
+ * @param tag
+ * @return
+ */
+public static List<String> writeNBTToStrings(NBTTagCompound tag)
+  {
+  ArrayList<String> lines = new ArrayList<String>();
+  writeCompoundTag(tag, lines);
+  return lines;
+  }
+
+/**
+ * 0-END
+ * 1-BYTE
+ * 2-SHORT
+ * 3-INT
+ * 4-LONG
+ * 5-FLOAT
+ * 6-DOUBLE
+ * 7-BYTE-ARRAY
+ * 8-STRING
+ * 9-TAG-LIST
+ * 10-TAG-COMPOUND
+ * 11-INT-ARRAY
+ */
+/**
+ * 
+ * @param tag
+ * @param lines
+ */
+private static void writeCompoundTag(NBTTagCompound tag, List<String> lines)
+  {
+  writeTagLeader(tag, lines);
+  Collection<NBTBase> cl = tag.getTags();
+  for(NBTBase bit : cl)
+    {
+    writeTag(bit, lines);
+    }
+  writeTagExit(tag, lines);
+  }
+
+private static void writeTag(NBTBase bit, List<String> lines)
+  {
+  switch(bit.getId())
+  {
+  case 0:
+  //END TAG...
+  break;
+  case 1:
+  writeByteTag(bit, lines);
+  break;
+  case 2:
+  writeShortTag(bit, lines);
+  break;
+  case 3:
+  writeIntTag(bit, lines);
+  break;
+  case 4:
+  writeLongTag(bit, lines);
+  break;
+  case 5:
+  writeFloatTag(bit, lines);
+  break;
+  case 6:
+  writeDoubleTag(bit, lines);
+  break;
+  case 7:
+  writeByteArrayTag(bit, lines);
+  break;
+  case 8:
+  writeStringTag(bit, lines);
+  break;
+  case 9:
+  writeListTag(bit, lines);
+  break;
+  case 10:
+  writeCompoundTag((NBTTagCompound)bit, lines);
+  break;
+  case 11:
+  writeIntArrayTag(bit, lines);
+  break;
+  default:
+  break;
+  }
+  }
+
+private static void writeStringTag(NBTBase tag, List<String> lines)
+  {
+  writeTagLeader(tag, lines);
+  lines.add(((NBTTagString)tag).data);
+  writeTagExit(tag, lines);
+  }
+
+private static void writeShortTag(NBTBase tag, List<String> lines)
+  {
+  writeTagLeader(tag, lines);
+  lines.add(String.valueOf( ((NBTTagShort)tag).data ));
+  writeTagExit(tag, lines);
+  }
+
+private static void writeLongTag(NBTBase tag, List<String> lines)
+  {
+  writeTagLeader(tag, lines);
+  lines.add(String.valueOf( ((NBTTagLong)tag).data ));
+  writeTagExit(tag, lines);
+  }
+
+private static void writeListTag(NBTBase tag, List<String> lines)
+  {
+  writeTagLeader(tag, lines);
+  NBTTagList list = (NBTTagList)tag;
+  for(int i = 0; i < list.tagCount(); i++)
+    {
+    writeTag(list.tagAt(i), lines);
+    }
+  writeTagExit(tag, lines);
+  }
+
+private static void writeIntArrayTag(NBTBase tag, List<String> lines)
+  {
+  writeTagLeader(tag, lines);
+  lines.add(StringTools.getCSVStringForArray(  ((NBTTagIntArray)tag).intArray  ));
+  writeTagExit(tag, lines);
+  }
+
+private static void writeIntTag(NBTBase tag, List<String> lines)
+  {
+  writeTagLeader(tag, lines);
+  lines.add(String.valueOf( ((NBTTagInt)tag).data ));
+  writeTagExit(tag, lines);
+  }
+
+private static void writeFloatTag(NBTBase tag, List<String> lines)
+  {
+  writeTagLeader(tag, lines);
+  lines.add(String.valueOf( ((NBTTagFloat)tag).data ));
+  writeTagExit(tag, lines);
+  }
+
+private static void writeDoubleTag(NBTBase tag, List<String> lines)
+  {
+  writeTagLeader(tag, lines);
+  lines.add(String.valueOf( ((NBTTagDouble)tag).data ));
+  writeTagExit(tag, lines);
+  }
+
+private static void writeByteArrayTag(NBTBase tag, List<String> lines)
+  {
+  writeTagLeader(tag, lines);
+  lines.add(StringTools.getCSVStringForArray(  ((NBTTagByteArray)tag).byteArray  ));
+  writeTagExit(tag, lines);
+  }
+
+private static void writeByteTag(NBTBase tag, List<String> lines)
+  {
+  writeTagLeader(tag, lines);
+  lines.add(String.valueOf( ((NBTTagByte)tag).data ));
+  writeTagExit(tag, lines);
+  }
+
+private static void writeTagLeader(NBTBase tag, List<String> lines)
+  {
+  lines.add("TAG="+tag.getId()+"="+tag.getName());
+  lines.add("{");
+  }
+
+private static void writeTagExit(NBTBase tag, List<String> lines)
+  {
+  lines.add("}");
   }
 
 }

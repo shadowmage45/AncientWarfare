@@ -175,6 +175,7 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
 private static void addEntityRules(List<String> lines, ProcessedStructure struct)
   {
   List<String> ruleLines;
+  Config.logDebug("adding lines for: "+struct.entityRules.size()+ " entity rules.");
   for(EntityRule rule : struct.entityRules)
     {
     ruleLines = rule.getRuleLines();

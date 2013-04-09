@@ -31,6 +31,19 @@ import java.util.Scanner;
 public class StringTools
 {
 
+public static String getCSVStringForArray(byte[] values)
+  {
+  String line = "";
+  for(int i = 0; i < values.length; i++)
+    {
+    if(i >=1 )
+      {
+      line = line + ",";
+      }
+    line = line + values[i];    
+    }
+  return line;
+  }
 
 public static String getCSVStringForArray(int[] values)
   {
@@ -214,6 +227,45 @@ public static int safeParseInt(String num)
   try
     {
     return Integer.parseInt(num.trim());
+    }
+  catch(NumberFormatException e)
+    {
+    
+    }
+  return 0;
+  }
+
+public static double safeParseDouble(String num)
+  {  
+  try
+    {
+    return Double.parseDouble(num.trim());
+    }
+  catch(NumberFormatException e)
+    {
+    
+    }
+  return 0;
+  }
+
+public static long safeParseLong(String num)
+  {  
+  try
+    {
+    return Long.parseLong(num.trim());
+    }
+  catch(NumberFormatException e)
+    {
+    
+    }
+  return 0;
+  }
+
+public static byte safeParseByte(String num)
+  {
+  try
+    {
+    return Byte.parseByte(num.trim());
     }
   catch(NumberFormatException e)
     {

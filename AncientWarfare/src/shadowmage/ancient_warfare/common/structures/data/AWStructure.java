@@ -54,7 +54,6 @@ private Set<Builder> openBuilders = new HashSet<Builder>();
 /**
  * if it is being edited....
  */
-//public boolean lockedForEdit = false;
 private List<String> openEditors = new ArrayList<String>();
 
 private WorldGenStructureEntry worldGen;

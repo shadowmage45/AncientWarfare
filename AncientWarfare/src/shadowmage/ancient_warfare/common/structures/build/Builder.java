@@ -201,6 +201,7 @@ public boolean isFinished()
 
 public void setFinished()
   {
+  this.placeEntities(world);
   this.isFinished = true;
   this.clearBuilderFromStructure();
   }

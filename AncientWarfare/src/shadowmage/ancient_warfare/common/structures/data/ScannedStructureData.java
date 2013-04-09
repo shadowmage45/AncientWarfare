@@ -25,15 +25,18 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.AWStructureModule;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import shadowmage.meim.common.config.Config;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class ScannedStructureData
 {
@@ -127,16 +130,18 @@ protected void scanForEntities(World world)
   this.includedEntities.clear();
   AxisAlignedBB bb = AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(pos1.x, pos1.y, pos1.z, pos2.x+1, pos2.y+1, pos2.z+1);
   List<Entity> scannedEntities = world.getEntitiesWithinAABBExcludingEntity(null, bb);
-  Config.logDebug("scanning for entities in bb: "+bb);
   float x;
   float y;
   float z;  
   for(Entity e : scannedEntities)
     {
-    x = (float) (e.posX - pos1.x);
-    y = (float) (e.posY - pos1.y);
-    z = (float) (e.posZ - pos1.z);
-    this.includedEntities.add(new ScannedEntityEntry(e, x, y, z, e.rotationYaw, e.rotationPitch));
+    if(AWStructureModule.instance().isScannableEntity(e.getClass()))
+      {
+      x = (float) (e.posX - pos1.x);
+      y = (float) (e.posY - pos1.y);
+      z = (float) (e.posZ - pos1.z);
+      this.includedEntities.add(new ScannedEntityEntry(e, x, y, z, e.rotationYaw, e.rotationPitch));
+      }
     }
   }
 
@@ -387,14 +392,53 @@ public BlockData[] getAllBlockTypes()
 private void addEntitiesToStructure(ProcessedStructure struct, List<ScannedEntityEntry> entities)
   {
   EntityRule rule;
+  ScannedEntityEntry entry;
+  Class clz;
   for(int i = 0; i < entities.size(); i++)
     {
-    rule = EntityRule.populateRule(entities.get(i));
-    if(rule!=null)
+    entry = entities.get(i);
+    clz = entry.ent.getClass();
+    if(clz==NpcBase.class)
       {
-      struct.entityRules.add(rule);
-      }    
+      addNpcToStructure(struct, entry, (NpcBase)entry.ent);
+      }
+    else if(clz==VehicleBase.class)
+      {
+      addVehicleToStructure(struct, entry, (VehicleBase)entry.ent);
+      }
+    else if(clz==EntityVillager.class)
+      {
+      addVillagerToStructure(struct, entry, (EntityVillager)entry.ent);
+      }
+    else
+      {
+      rule = EntityRule.populateRule(entities.get(i));
+      if(rule!=null)
+        {
+        struct.entityRules.add(rule);
+        }
+      } 
     }
+  }
+
+private void addNpcToStructure(ProcessedStructure struct, ScannedEntityEntry entry, NpcBase npc)
+  {
+  
+  }
+
+private void addVehicleToStructure(ProcessedStructure struct, ScannedEntityEntry entry, VehicleBase vehicle)
+  {
+  
+  }
+
+private void addGateToStructure(ProcessedStructure struct, ScannedEntityEntry entry, Entity gate)
+  {
+  
+  }
+
+private void addVillagerToStructure(ProcessedStructure struct, ScannedEntityEntry entry, EntityVillager villager)
+  {
+  
   }
 
 }

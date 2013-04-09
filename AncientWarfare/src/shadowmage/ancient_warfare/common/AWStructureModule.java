@@ -25,9 +25,15 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
@@ -36,8 +42,10 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.file.StructureLoader;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 
@@ -84,10 +92,14 @@ private boolean shouldExportDefaults = false;
  */
 private static List<Builder> builders = new ArrayList<Builder>();
 
+/**
+ * list of valid entities for structure scanning
+ */
+private Set<Class> validEntitiesToScan = new HashSet<Class>();
 
 private static StructureLoader loader;
 
-private AWStructureModule(){ }
+private AWStructureModule(){}
 private static AWStructureModule INSTANCE;
 public static AWStructureModule instance()
   {
@@ -110,6 +122,7 @@ public void load(String directory)
   includeDirectory = directory+"/AWConfig/structures/included/";
   convertDirectory = directory+"/AWConfig/structures/convert/";
   configBaseDirectory = directory+"/AWConfig/";
+  this.setValidScannableEntities();
   
   TickRegistry.registerTickHandler(this, Side.SERVER);
   BlockDataManager.instance().loadBlockList();
@@ -162,6 +175,21 @@ private void setDefaultStructureNames()
   this.defaultExportStructures.add("villageSmith.aws");
   this.defaultExportStructures.add("villageTorch.aws");
   this.defaultExportStructures.add("villageWell.aws");
+  }
+
+private void setValidScannableEntities()
+  {
+  this.validEntitiesToScan.add(VehicleBase.class);
+  this.validEntitiesToScan.add(NpcBase.class);
+  this.validEntitiesToScan.add(EntityVillager.class);
+  this.validEntitiesToScan.add(EntityPig.class);
+  this.validEntitiesToScan.add(EntitySheep.class);
+  this.validEntitiesToScan.add(EntityCow.class);
+  }
+
+public boolean isScannableEntity(Class clz)
+  {
+  return this.validEntitiesToScan.contains(clz);
   }
 
 private void copyDefaultStructures(String pathName)

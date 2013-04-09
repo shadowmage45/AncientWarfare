@@ -223,6 +223,10 @@ private ProcessedStructure processFile(File file)
     Config.logError("INVALID STRUCTURE: There was an error while parsing template file: "+file.getName()); 
     return null;
     }  
+  if(struct==null)
+    {
+    return null;
+    }
   struct.filePath = file.getAbsolutePath();
 
   String name = file.getName();

@@ -28,11 +28,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.ScannedEntityEntry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
+import shadowmage.ancient_warfare.common.utils.NBTReader;
+import shadowmage.ancient_warfare.common.utils.NBTWriter;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -60,27 +63,29 @@ float oZ;
 
 float rot;
 float pitch;
-NBTTagCompound entityNBT;
+//NBTTagCompound entityNBT;
 
 public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struct, BlockPosition buildPos)
   {
   Entity ent = EntityList.createEntityByName(entityClassName, world);
   if(ent!=null)
     {
-    if(entityNBT!=null)
-      {
-      entityNBT.removeTag("PersistentIDMSB");//remove UUID from tag, we need a fresh one...
-      entityNBT.removeTag("PersistentIDLSB");
-      ent.readFromNBT(entityNBT);//load the entity from the tag
-      }
-    ent.generatePersistentID();//tell entity to generate fresh UUID
+//    if(entityNBT!=null)
+//      {
+//      entityNBT.removeTag("PersistentIDMSB");//remove UUID from tag, we need a fresh one...
+//      entityNBT.removeTag("PersistentIDLSB");
+//      ent.readFromNBT(entityNBT);//load the entity from the tag
+//      }
+//    ent.generatePersistentID();//tell entity to generate fresh UUID
     int rotAmt = getRotationAmt(facing);
     BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(bx-struct.xOffset,by-struct.verticalOffset, bz-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
     float ax = target.x+getRotatedXOffset(oX, oZ, facing);
     float ay = target.y+oY;
-    float az = target.z+getRotatedZOffset(oX, oZ, facing);
+    float az = target.z+getRotatedZOffset(oX, oZ, facing);    
     float ar = rot + 90*rotAmt;    
-    ent.setPositionAndRotation(ax, ay, az, ar, pitch); 
+    Config.logDebug("initial rot: "+rot+" new rot: "+ar);    
+    ent.setLocationAndAngles(ax, ay, az, ar, pitch);
+    ent.prevRotationYaw = ent.rotationYaw = ar;
     }
   return ent;
   }
@@ -108,11 +113,33 @@ protected int getRotationAmt(int facing)
 
 protected float getRotatedXOffset(float xOff, float zOff, int face)
   {
+  switch(face)
+  {
+  case 0:
+  return 1-xOff;
+  case 1:
+  return zOff;
+  case 2:
+  return xOff;
+  case 3:
+  return 1-zOff;
+  }  
   return xOff;
   }
 
 protected float getRotatedZOffset(float xOff, float zOff, int face)
   {
+  switch(face)
+  {
+  case 0:
+  return 1-zOff;
+  case 1:
+  return xOff;
+  case 2:
+  return zOff;
+  case 3:
+  return 1-xOff;
+  }  
   return zOff;
   }
 
@@ -126,9 +153,11 @@ public static EntityRule populateRule(ScannedEntityEntry entry)
   rule.oY = entry.yO;
   rule.oZ = entry.zO;
   rule.entityClassName = EntityList.getEntityString(entry.ent);
+//  rule.entityNBT = new NBTTagCompound();
+//  entry.ent.writeToNBT(rule.entityNBT);
   rule.pitch = entry.p;
   rule.rot = entry.r;
-  return null;
+  return rule;
   }
 
 public static EntityRule parseRule(List<String> ruleLines)
@@ -175,17 +204,22 @@ public static EntityRule parseRule(List<String> ruleLines)
       {
       rule.pitch = StringTools.safeParseFloat("=", line);
       }
-    else if(line.toLowerCase().startsWith("datas"))
-      {
-      String datas = StringTools.safeParseString("=", line);
-      byte[] stringDatas = datas.getBytes();
-      ByteArrayDataInput badi = ByteStreams.newDataInput(stringDatas);
-      NBTTagCompound tag = ByteTools.readNBTTagCompound(badi);
-      if(tag!=null)
-        {
-        rule.entityNBT = tag;
-        }
-      } 
+//    else if(line.toLowerCase().startsWith("datas"))
+//      {
+//      List<String>tagLines = new ArrayList<String>();
+//      String tagLine;
+//      while(it.hasNext())
+//        {
+//        tagLine = it.next();
+//        if(tagLine.equals(":enddatas"))
+//          {
+//          break;
+//          }
+//        tagLines.add(tagLine);
+//        }      
+//      rule.entityNBT = NBTReader.readTagFromLines(tagLines);
+//      List<String> testLines = NBTWriter.writeNBTToStrings(rule.entityNBT);     
+//      } 
     }
   if(rule.entityClassName.equals(""))
     {
@@ -207,24 +241,20 @@ public List<String> getRuleLines()
   lines.add("oz="+oZ);
   lines.add("rot="+rot);
   lines.add("pitch="+pitch);
-  if(entityNBT!=null)
-    {
-    lines.add("datas="+getStringForNBT(entityNBT));
-    }
+//  if(entityNBT!=null)
+//    {
+//    lines.add("datas:");
+//    lines.addAll(getLinesForNBT(entityNBT));
+//    lines.add(":enddatas");
+//    }
   lines.add(":endentity");
   return lines;
   }
 
-private String getStringForNBT(NBTTagCompound tag)
+private List<String> getLinesForNBT(NBTTagCompound tag)
   {
-  if(tag!=null)
-    {
-    ByteArrayDataOutput bado = ByteStreams.newDataOutput();
-    ByteTools.writeNBTTagCompound(tag, bado);
-    byte[] bytes = bado.toByteArray();
-    return new String(bytes);
-    }
-  return "";
+  return NBTWriter.writeNBTToStrings(tag);
   }
+
 
 }
