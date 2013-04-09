@@ -31,10 +31,15 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
@@ -186,7 +191,12 @@ private void setValidScannableEntities()
   this.validEntitiesToScan.add(EntityPig.class);
   this.validEntitiesToScan.add(EntitySheep.class);
   this.validEntitiesToScan.add(EntityCow.class);
+  this.validEntitiesToScan.add(EntityWolf.class);
+  this.validEntitiesToScan.add(EntityOcelot.class);
   this.validEntitiesToScan.add(EntityBoat.class);
+  this.validEntitiesToScan.add(EntityItemFrame.class);
+  this.validEntitiesToScan.add(EntityPainting.class);
+  this.validEntitiesToScan.add(EntityMinecart.class);
   }
 
 public boolean isScannableEntity(Class clz)
