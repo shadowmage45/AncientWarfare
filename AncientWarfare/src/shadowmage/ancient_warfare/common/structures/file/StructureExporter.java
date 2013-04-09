@@ -34,7 +34,9 @@ import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
 public class StructureExporter
@@ -151,12 +153,14 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
   lines.add("");
   lines.add("####SWAP RULESS####");
   addSwapRules(lines, struct);
-  lines.add("");
-  //TODO
+  lines.add("");  
   lines.add("####VEHICLE RULES####");
+  addVehicleRules(lines, struct);
   lines.add("");
   lines.add("####NPC RULES####");
-  lines.add("");  
+  addNpcRules(lines, struct);
+  lines.add("");
+  //TODO
   lines.add("####GATE RULES####");
   lines.add("");
   //END TODO
@@ -172,10 +176,33 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
   return lines;
   }
 
+private static void addVehicleRules(List<String> lines, ProcessedStructure struct)
+  {
+  List<String> ruleLines;
+  for(VehicleRule rule : struct.vehicleRules)
+    {
+    ruleLines = rule.getRuleLines();
+    lines.add("");
+    lines.addAll(ruleLines);
+    lines.add("");
+    }
+  }
+
+private static void addNpcRules(List<String> lines, ProcessedStructure struct)
+  {
+  List<String> ruleLines;
+  for(NpcRule rule : struct.NPCRules)
+    {
+    ruleLines = rule.getRuleLines();
+    lines.add("");
+    lines.addAll(ruleLines);
+    lines.add("");
+    }
+  }
+
 private static void addEntityRules(List<String> lines, ProcessedStructure struct)
   {
   List<String> ruleLines;
-  Config.logDebug("adding lines for: "+struct.entityRules.size()+ " entity rules.");
   for(EntityRule rule : struct.entityRules)
     {
     ruleLines = rule.getRuleLines();

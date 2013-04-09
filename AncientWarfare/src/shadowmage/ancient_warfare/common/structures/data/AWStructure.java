@@ -34,7 +34,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
-import shadowmage.ancient_warfare.common.structures.data.rules.NPCRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -95,7 +95,7 @@ public boolean preserveBlocks = false;
  */
 public Map<Integer, BlockRule> blockRules = new HashMap<Integer, BlockRule>();
 public ArrayList<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
-public ArrayList<NPCRule> NPCRules = new ArrayList<NPCRule>();
+public ArrayList<NpcRule> NPCRules = new ArrayList<NpcRule>();
 public Map<Integer, SwapRule> swapRules = new HashMap<Integer, SwapRule>();
 public ArrayList<EntityRule> entityRules = new ArrayList<EntityRule>();
 

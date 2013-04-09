@@ -22,6 +22,9 @@ VEHICLES
 * soldier ammo priority selection
 
 NPCS
+* add save/load from NBT stuff
+* vars helper save/load stuff
+* inventory helper
 * lots and lots of stuff....
          
 GUI FRAMEWORK
@@ -39,7 +42,6 @@ TEMPLATES
 * gates--each gate will have a SEPARATE gate rule pointing to the gate rule
         --gate rule will have orientation, position, w, h
         --any blocks occupied by gate when scanned should be set to an invalid rule..or empty block...
-        --as these blocks will be zeroed when the gate is spawned...
 * entities--each unique entity in the building area will have an entityRule
 * rework vehicle and NPC rules to be a one/per static rule.  Perhaps include
         randomization percentage in the rule to replace the randomization from blockRules

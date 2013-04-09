@@ -66,6 +66,68 @@ public static BlockPosition offsetForSide(BlockPosition pos, int sideHit)
   }
 
 /**
+ * 
+ * @param start original as-scanned orientation
+ * @param destination the rotation destination (2 for normalize to template, other #s for template->build)
+ * @return the number of right-turns necessary to arrive at the new normalized facing
+ */
+public static int getRotationAmount(int start, int destination)
+  {
+  if(start==destination)
+    {
+    return 0;
+    }
+  int turn = destination-start;
+  if(turn<0)
+    {
+    turn += 4;
+    }  
+  return turn;
+  }
+
+public static int getRotationAmt(int facing)
+  {
+  if(facing==2)
+    {
+    return 0;
+    }
+  else if(facing==3)
+    {
+    return 1;
+    }
+  else if(facing==0)
+    {
+    return 2;
+    }
+  else if(facing==1)
+    {
+    return 3;
+    }
+  return 0;
+  }
+
+public static BlockPosition getNorthRotatedPosition(int x, int y, int z, int rotation, int xSize, int zSize)
+  {
+  if(rotation==0)//south, invert x,z
+    {
+    return new BlockPosition(xSize - x - 1 , y, zSize - z - 1 );
+    }
+  if(rotation==1)//west
+    {
+    return new BlockPosition(xSize - z - 1, y, x);
+    }
+  if(rotation==2)//north, no change
+    {
+    return new BlockPosition(x,y,z);
+    }
+  if(rotation==3)//east
+    {
+    return new BlockPosition(z, y, zSize - x - 1);
+    }
+  return null;
+  }
+
+/**
  * will return null if nothing is in range
  * @param player
  * @param world

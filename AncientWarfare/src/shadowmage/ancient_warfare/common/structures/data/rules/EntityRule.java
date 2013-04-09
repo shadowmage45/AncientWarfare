@@ -26,7 +26,12 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumArt;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
@@ -63,52 +68,66 @@ float oZ;
 
 float rot;
 float pitch;
-//NBTTagCompound entityNBT;
+
+/**
+ * if a minecart entity, this will be set to >=0
+ */
+public boolean isMinecart = false;
+public boolean isPainting = false;
+public boolean isItemFrame = false;
+public int mineCartType = -1;
+public int paintingType = -1;
+public int hangingDirection = -1;
+public int itemFrameItemID = 0;
+public int itemFrameItemDamage = 0;
+NBTTagCompound itemFrameItemTag = null;
 
 public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struct, BlockPosition buildPos)
   {
-  Entity ent = EntityList.createEntityByName(entityClassName, world);
-  if(ent!=null)
+  Entity ent = null;
+  int rotAmt = BlockTools.getRotationAmt(facing);
+  BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(bx-struct.xOffset,by-struct.verticalOffset, bz-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
+  float ax = target.x;
+  float ay = target.y;
+  float az = target.z;    
+  float ar = rot + 90*rotAmt;    
+  if(this.isMinecart)
     {
-//    if(entityNBT!=null)
-//      {
-//      entityNBT.removeTag("PersistentIDMSB");//remove UUID from tag, we need a fresh one...
-//      entityNBT.removeTag("PersistentIDLSB");
-//      ent.readFromNBT(entityNBT);//load the entity from the tag
-//      }
-//    ent.generatePersistentID();//tell entity to generate fresh UUID
-    int rotAmt = getRotationAmt(facing);
-    BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(bx-struct.xOffset,by-struct.verticalOffset, bz-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
-    float ax = target.x+getRotatedXOffset(oX, oZ, facing);
-    float ay = target.y+oY;
-    float az = target.z+getRotatedZOffset(oX, oZ, facing);    
-    float ar = rot + 90*rotAmt;    
+    ent = new EntityMinecart(world, mineCartType);
+    ax+= getRotatedXOffset(oX, oZ, facing);
+    az+= getRotatedZOffset(oX, oZ, facing);
+    }
+  else if(this.isPainting)
+    {
+    ent = new EntityPainting(world, (int)ax, (int)ay, (int)az, (BlockTools.getRotationAmount(hangingDirection, facing)+hangingDirection)%4);
+    ((EntityPainting)ent).art = EnumArt.values()[paintingType];
+    }
+  else if(this.isItemFrame)
+    {
+    ent = new EntityItemFrame(world, (int)ax, (int)ay, (int)az, (BlockTools.getRotationAmount(hangingDirection, facing)+hangingDirection)%4);
+    ItemStack stack = new ItemStack(itemFrameItemID, 1, itemFrameItemDamage);
+    if(itemFrameItemTag!=null)
+      {
+      stack.setTagCompound(itemFrameItemTag);
+      }
+    ((EntityItemFrame)ent).setDisplayedItem(stack);
+    }
+  else
+    {
+    ent = EntityList.createEntityByName(entityClassName, world);
+    ax+= getRotatedXOffset(oX, oZ, facing);
+    az+= getRotatedZOffset(oX, oZ, facing);
+    }  
+  if(ent!=null)
+    {    
     Config.logDebug("initial rot: "+rot+" new rot: "+ar);    
     ent.setLocationAndAngles(ax, ay, az, ar, pitch);
+    ent.prevPosX = ax;
+    ent.prevPosY = ay;
+    ent.prevPosZ = az;
     ent.prevRotationYaw = ent.rotationYaw = ar;
     }
   return ent;
-  }
-
-protected int getRotationAmt(int facing)
-  {
-  if(facing==2)
-    {
-    return 0;
-    }
-  else if(facing==3)
-    {
-    return 1;
-    }
-  else if(facing==0)
-    {
-    return 2;
-    }
-  else if(facing==1)
-    {
-    return 3;
-    }
-  return 0;
   }
 
 protected float getRotatedXOffset(float xOff, float zOff, int face)
@@ -149,14 +168,40 @@ public static EntityRule populateRule(ScannedEntityEntry entry)
   rule.bx = entry.bx;
   rule.by = entry.by;
   rule.bz = entry.bz;
-  rule.oX = entry.xO;
-  rule.oY = entry.yO;
-  rule.oZ = entry.zO;
+  rule.oX = entry.ox;
+  rule.oY = entry.oy;
+  rule.oZ = entry.oz;
   rule.entityClassName = EntityList.getEntityString(entry.ent);
-//  rule.entityNBT = new NBTTagCompound();
-//  entry.ent.writeToNBT(rule.entityNBT);
   rule.pitch = entry.p;
   rule.rot = entry.r;
+  Class clz = entry.ent.getClass();
+  if(clz==EntityPainting.class)
+    {
+    rule.isPainting = true;
+    rule.hangingDirection = ((EntityPainting)entry.ent).hangingDirection;
+    rule.paintingType = ((EntityPainting)entry.ent).art.ordinal();
+    }
+  else if(clz==EntityMinecart.class)
+    {
+    rule.isMinecart = true;
+    rule.mineCartType = ((EntityMinecart)entry.ent).minecartType;
+    }
+  else if(clz==EntityItemFrame.class)
+    {
+    EntityItemFrame frame = (EntityItemFrame)entry.ent;
+    rule.isItemFrame = true;
+    rule.hangingDirection = frame.hangingDirection;
+    if(frame.getDisplayedItem()!=null)
+      {
+      rule.itemFrameItemID = frame.getDisplayedItem().itemID;
+      rule.itemFrameItemDamage = frame.getDisplayedItem().getItemDamage();
+      if(frame.getDisplayedItem().hasTagCompound())
+        {
+        rule.itemFrameItemTag = frame.getDisplayedItem().getTagCompound();
+        }
+      }
+    
+    }
   return rule;
   }
 
@@ -196,7 +241,7 @@ public static EntityRule parseRule(List<String> ruleLines)
       {
       rule.oZ = StringTools.safeParseFloat("=", line);
       }
-    else if(line.toLowerCase().startsWith("rot"))
+    else if(line.toLowerCase().startsWith("rotation"))
       {
       rule.rot = StringTools.safeParseFloat("=", line);
       }
@@ -204,22 +249,52 @@ public static EntityRule parseRule(List<String> ruleLines)
       {
       rule.pitch = StringTools.safeParseFloat("=", line);
       }
-//    else if(line.toLowerCase().startsWith("datas"))
-//      {
-//      List<String>tagLines = new ArrayList<String>();
-//      String tagLine;
-//      while(it.hasNext())
-//        {
-//        tagLine = it.next();
-//        if(tagLine.equals(":enddatas"))
-//          {
-//          break;
-//          }
-//        tagLines.add(tagLine);
-//        }      
-//      rule.entityNBT = NBTReader.readTagFromLines(tagLines);
-//      List<String> testLines = NBTWriter.writeNBTToStrings(rule.entityNBT);     
-//      } 
+    else if(line.toLowerCase().startsWith("hangdir"))
+      {
+      rule.hangingDirection = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("isminecart"))
+      {
+      rule.isMinecart = StringTools.safeParseBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("ispainting"))
+      {
+      rule.isPainting = StringTools.safeParseBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("isitemframe"))
+      {
+      rule.isItemFrame = StringTools.safeParseBoolean("=", line);
+      }
+    else if(line.toLowerCase().startsWith("minecarttype"))
+      {
+      rule.mineCartType = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("paintingtype"))
+      {
+      rule.paintingType = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("itemframeitemid"))
+      {
+      rule.itemFrameItemID = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("itemframeitemdamage"))
+      {
+      rule.itemFrameItemDamage = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("datas:"))
+      {
+      ArrayList<String> tagLines = new ArrayList<String>();
+      while(it.hasNext())
+        {
+        line = it.next();
+        if(line.startsWith(":enddatas"))
+          {
+          break;
+          }
+        tagLines.add(line);
+        }
+      rule.itemFrameItemTag = NBTReader.readTagFromLines(tagLines);
+      }
     }
   if(rule.entityClassName.equals(""))
     {
@@ -239,21 +314,40 @@ public List<String> getRuleLines()
   lines.add("ox="+oX);
   lines.add("oy="+oY);
   lines.add("oz="+oZ);
-  lines.add("rot="+rot);
+  lines.add("rotation="+rot);
   lines.add("pitch="+pitch);
-//  if(entityNBT!=null)
-//    {
-//    lines.add("datas:");
-//    lines.addAll(getLinesForNBT(entityNBT));
-//    lines.add(":enddatas");
-//    }
+  if(this.isItemFrame)
+    {
+    lines.add("isitemframe=true");
+    lines.add("itemframeitemid="+itemFrameItemID);
+    lines.add("itemframeitemdamage="+itemFrameItemDamage);
+    lines.add("hangdir="+hangingDirection);
+    if(this.itemFrameItemTag!=null)
+      {
+      lines.add("datas:");
+      lines.addAll(NBTWriter.writeNBTToStrings(itemFrameItemTag));
+      lines.add(":enddatas");
+      }
+    }
+  else if(this.isMinecart)
+    {
+    lines.add("isminecart=true");
+    lines.add("minecarttype="+this.mineCartType);
+    if(this.itemFrameItemTag!=null)//minecart chest NBT datas...
+      {
+      lines.add("datas:");
+      lines.addAll(NBTWriter.writeNBTToStrings(itemFrameItemTag));
+      lines.add(":enddatas");
+      }
+    }
+  else if(this.isPainting)
+    {
+    lines.add("ispainting=true");
+    lines.add("hangdir="+hangingDirection);
+    lines.add("paintingtype="+this.paintingType);
+    }
   lines.add(":endentity");
   return lines;
-  }
-
-private List<String> getLinesForNBT(NBTTagCompound tag)
-  {
-  return NBTWriter.writeNBTToStrings(tag);
   }
 
 

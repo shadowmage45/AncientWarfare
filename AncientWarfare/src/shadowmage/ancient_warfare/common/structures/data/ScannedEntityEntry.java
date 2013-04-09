@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.structures.data;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityHanging;
 
 public class ScannedEntityEntry
 {
@@ -33,14 +34,14 @@ public float z;
 public int bx;
 public int by;
 public int bz;
-public float xO;
-public float yO;
-public float zO;
+public float ox;
+public float oy;
+public float oz;
 
-public ScannedEntityEntry()
-  {
-  
-  }
+/**
+ * set by paintings/itemFrames
+ */
+public int hangingDirection = -1;
 
 public ScannedEntityEntry(Entity ent, float x, float y, float z, float r, float p)
   {
@@ -50,6 +51,10 @@ public ScannedEntityEntry(Entity ent, float x, float y, float z, float r, float 
   this.z = z;
   this.r = r;
   this.p = p;
+  if(EntityHanging.class.isAssignableFrom(ent.getClass()))
+    {
+    hangingDirection = ((EntityHanging)ent).hangingDirection;
+    }
   }
 
 

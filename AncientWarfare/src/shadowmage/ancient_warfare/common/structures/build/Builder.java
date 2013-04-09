@@ -455,9 +455,9 @@ protected void placeVehicle(World world, int x, int y, int z, int vehicleType, i
       vehicle.inventory.upgradeInventory.setInventorySlotContents(i, upgradeStack);
       }
     List<IVehicleArmorType> vehicleArmors = vehicle.vehicleType.getValidArmors();
-    for(int i = 0; i < vehRule.armorFrontTypes.length && i < vehicle.inventory.armorInventory.getSizeInventory(); i++)
+    for(int i = 0; i < vehRule.armorTypes.length && i < vehicle.inventory.armorInventory.getSizeInventory(); i++)
       {
-      int armorType = vehRule.armorFrontTypes[i];
+      int armorType = vehRule.armorTypes[i];
       if(armorType>=vehicleArmors.size())
         {
         armorType = this.random.nextInt(vehicleArmors.size());

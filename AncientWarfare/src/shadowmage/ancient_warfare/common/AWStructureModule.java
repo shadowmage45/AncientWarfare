@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
@@ -185,6 +186,7 @@ private void setValidScannableEntities()
   this.validEntitiesToScan.add(EntityPig.class);
   this.validEntitiesToScan.add(EntitySheep.class);
   this.validEntitiesToScan.add(EntityCow.class);
+  this.validEntitiesToScan.add(EntityBoat.class);
   }
 
 public boolean isScannableEntity(Class clz)

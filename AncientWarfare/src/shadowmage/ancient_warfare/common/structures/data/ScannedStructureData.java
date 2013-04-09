@@ -25,6 +25,9 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -33,10 +36,13 @@ import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.meim.common.config.Config;
 
 public class ScannedStructureData
 {
@@ -196,14 +202,14 @@ private void normalizeForNorthFacing()
   
   this.blockIDs.clear();
   this.addToBlocksList(new BlockData(0,0));
-  int rotationAmount = this.getRotationAmount(originFacing, 2);
+  int rotationAmount = BlockTools.getRotationAmount(originFacing, 2);
   for(int x = 0; x<this.xSize; x++)
     {
     for(int y = 0; y < this.ySize; y++)
       {
       for(int z = 0; z< this.zSize; z++)
         {
-        BlockPosition pos = getNorthRotatedPosition(x,y,z, this.originFacing, newXSize, newZSize);      
+        BlockPosition pos = BlockTools.getNorthRotatedPosition(x,y,z, this.originFacing, newXSize, newZSize);      
         BlockData data = this.allBlocks[x][y][z];
         data.rotateRight(rotationAmount);
         newBlocks[pos.x][pos.y][pos.z] = data;
@@ -235,55 +241,27 @@ private void normalizeForNorthFacing()
     xOff = entry.x % 1.f;
     zOff = entry.z % 1.f;
     yOff = entry.y % 1.f;
-    pos = getNorthRotatedPosition(x, y, z, this.originFacing, newXSize, newZSize);
+    pos = BlockTools.getNorthRotatedPosition(x, y, z, this.originFacing, newXSize, newZSize);
     newXOff = getRotatedOffsetX(this.originFacing, xOff, zOff);
     newZOff = getRotatedOffsetZ(this.originFacing, xOff, zOff);
     entry.bx = pos.x;
     entry.by = pos.y;
     entry.bz = pos.z;
-    entry.xO = newXOff;
-    entry.yO = yOff;
-    entry.zO = newZOff;
+    entry.ox = newXOff;
+    entry.oy = yOff;
+    entry.oz = newZOff;
     entry.x = pos.x+newXOff;
     entry.y = pos.y+yOff;
     entry.z = pos.z+newZOff;
+    if(entry.hangingDirection>=0)//is painting or item frame, adjust internal rotation info...
+      {
+      Config.logDebug("original hangDir"+entry.hangingDirection);
+      entry.hangingDirection = (BlockTools.getRotationAmount(this.originFacing, 2)+entry.hangingDirection)%4;
+      Config.logDebug("new hangDir"+entry.hangingDirection);
+      }
     }
   }
 
-public static BlockPosition getNorthRotatedPosition(int x, int y, int z, int rotation, int xSize, int zSize)
-  {
-  if(rotation==0)//south, invert x,z
-    {
-    return new BlockPosition(xSize - x - 1 , y, zSize - z - 1 );
-    }
-  if(rotation==1)//west
-    {
-    return new BlockPosition(xSize - z - 1, y, x);
-    }
-  if(rotation==2)//north, no change
-    {
-    return new BlockPosition(x,y,z);
-    }
-  if(rotation==3)//east
-    {
-    return new BlockPosition(z, y, zSize - x - 1);
-    }
-  return null;
-  }
-
-public static int getRotationAmount(int start, int destination)
-  {
-  if(start==destination)
-    {
-    return 0;
-    }
-  int turn = destination-start;
-  if(turn<0)
-    {
-    turn += 4;
-    }  
-  return turn;
-  }
 
 private float getRotatedOffsetX(int rotation, float xOff, float zOff)
   {
@@ -329,7 +307,7 @@ private float getRotatedOffsetZ(int rotation, float xOff, float zOff)
 
 private float getRotatedRotationYaw(int originRotation, float originYaw)
   {
-  int rotAmt = this.getRotationAmount(originRotation, 2);
+  int rotAmt = BlockTools.getRotationAmount(originRotation, 2);
   originYaw+= rotAmt * 90;
   return originYaw;
   }
@@ -412,7 +390,7 @@ private void addEntitiesToStructure(ProcessedStructure struct, List<ScannedEntit
       }
     else
       {
-      rule = EntityRule.populateRule(entities.get(i));
+      rule = EntityRule.populateRule(entities.get(i));      
       if(rule!=null)
         {
         struct.entityRules.add(rule);
@@ -423,12 +401,20 @@ private void addEntitiesToStructure(ProcessedStructure struct, List<ScannedEntit
 
 private void addNpcToStructure(ProcessedStructure struct, ScannedEntityEntry entry, NpcBase npc)
   {
-  
+  NpcRule rule = NpcRule.populateRule(entry, npc);
+  if(rule!=null)
+    {
+    struct.NPCRules.add(rule);
+    }
   }
 
 private void addVehicleToStructure(ProcessedStructure struct, ScannedEntityEntry entry, VehicleBase vehicle)
   {
-  
+  VehicleRule rule = VehicleRule.populateRule(entry, vehicle);
+  if(rule!=null)
+    {
+    struct.vehicleRules.add(rule);
+    }
   }
 
 private void addGateToStructure(ProcessedStructure struct, ScannedEntityEntry entry, Entity gate)
@@ -438,7 +424,11 @@ private void addGateToStructure(ProcessedStructure struct, ScannedEntityEntry en
 
 private void addVillagerToStructure(ProcessedStructure struct, ScannedEntityEntry entry, EntityVillager villager)
   {
-  
+  NpcRule rule = NpcRule.populateRule(entry, villager);
+  if(rule!=null)
+    {
+    struct.NPCRules.add(rule);
+    }
   }
 
 }
