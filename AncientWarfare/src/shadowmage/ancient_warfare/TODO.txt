@@ -20,13 +20,19 @@ VEHICLES
 * ammo select GUI
 * modelRender for inventory ammo
 * soldier ammo priority selection
+* nameplates and health bars (client-config toggle)
+
+SOLDIERS
+* create definitive soldier, archer types
+* create officer types (lt, com, gen)
+* add ai 'slots' to higher level soldiers? (for patrol/guard duties)
 
 NPCS
-* lots and lots of stuff....
+* nameplates and health-bars (client-config toggle)
+* figure out how to set bounds around town-based
          
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
-* so...slots display position is client only...use that to move slots off screen (or use that in a scrollable area somehow?)
 * add an itemSlot element (not inventory slot...a client-side only slot that displays a static stack)
 
 TESTING
@@ -36,20 +42,10 @@ TESTING
 * test structure submerged code
 
 TEMPLATES
-* gates--each gate will have a SEPARATE gate rule pointing to the gate rule
-        --gate rule will have orientation, position, w, h
-        --any blocks occupied by gate when scanned should be set to an invalid rule..or empty block...
-        --as these blocks will be zeroed when the gate is spawned...
-* entities--each unique entity in the building area will have an entityRule
-* rework vehicle and NPC rules to be a one/per static rule.  Perhaps include
-        randomization percentage in the rule to replace the randomization from blockRules
-        
 
 SCANNER
-* need to auto-convert entityRules into gate/vehicle/npc rules during conversion for appropriate entities (including scanning of inventory)
 
 STRUCTURE BUILDING
-* npc placement
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
