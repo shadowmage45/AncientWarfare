@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.structures.data.rules;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -70,8 +71,11 @@ public static VehicleRule populateRule(ScannedEntityEntry entry, VehicleBase veh
   rule.vehicleType = (short) vehicle.vehicleType.getGlobalVehicleType();
   rule.vehicleRank = (short) vehicle.vehicleMaterialLevel;
   rule.armorTypes = new byte[vehicle.inventory.armorInventory.getSizeInventory()];
+  Arrays.fill(rule.armorTypes, (byte)-1);
   rule.upgradeTypes = new byte[vehicle.inventory.upgradeInventory.getSizeInventory()];
+  Arrays.fill(rule.upgradeTypes, (byte)-1);
   rule.ammoTypes = new byte[vehicle.inventory.upgradeInventory.getSizeInventory()];
+  Arrays.fill(rule.ammoTypes, (byte)-1);
   ItemStack stack;
   IVehicleArmorType armor;
   IVehicleUpgradeType upgrade;

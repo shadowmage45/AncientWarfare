@@ -96,15 +96,23 @@ public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struc
     ent = new EntityMinecart(world, mineCartType);
     ax+= getRotatedXOffset(oX, oZ, facing);
     az+= getRotatedZOffset(oX, oZ, facing);
+    Config.logDebug("initial rot: "+rot+" new rot: "+ar);    
+    ent.setLocationAndAngles(ax, ay, az, ar, pitch);
+    ent.prevPosX = ax;
+    ent.prevPosY = ay;
+    ent.prevPosZ = az;
+    ent.prevRotationYaw = ent.rotationYaw = ar;
     }
   else if(this.isPainting)
     {
-    ent = new EntityPainting(world, (int)ax, (int)ay, (int)az, (BlockTools.getRotationAmount(hangingDirection, facing)+hangingDirection)%4);
+    int ox;
+    int oz;
+    ent = new EntityPainting(world, (int)ax+getPaintingXOffset(facing), (int)ay, (int)az+getPaintingZOffset(facing), (BlockTools.getRotationAmount(hangingDirection, facing)+hangingDirection+2)%4);
     ((EntityPainting)ent).art = EnumArt.values()[paintingType];
     }
   else if(this.isItemFrame)
-    {
-    ent = new EntityItemFrame(world, (int)ax, (int)ay, (int)az, (BlockTools.getRotationAmount(hangingDirection, facing)+hangingDirection)%4);
+    {    
+    ent = new EntityItemFrame(world, (int)ax+getPaintingXOffset(facing), (int)ay, (int)az+getPaintingZOffset(facing), (BlockTools.getRotationAmount(hangingDirection, facing)+hangingDirection+2)%4);
     ItemStack stack = new ItemStack(itemFrameItemID, 1, itemFrameItemDamage);
     if(itemFrameItemTag!=null)
       {
@@ -117,17 +125,52 @@ public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struc
     ent = EntityList.createEntityByName(entityClassName, world);
     ax+= getRotatedXOffset(oX, oZ, facing);
     az+= getRotatedZOffset(oX, oZ, facing);
-    }  
-  if(ent!=null)
-    {    
     Config.logDebug("initial rot: "+rot+" new rot: "+ar);    
     ent.setLocationAndAngles(ax, ay, az, ar, pitch);
     ent.prevPosX = ax;
     ent.prevPosY = ay;
     ent.prevPosZ = az;
     ent.prevRotationYaw = ent.rotationYaw = ar;
+    }  
+  if(ent!=null)
+    {    
+   
     }
   return ent;
+  }
+
+private int getPaintingXOffset(int facing)
+  {
+  switch(facing)
+  {
+  case 0:
+  return 0;
+  case 1:
+  return -1;
+  case 2:
+  return 0;
+  case 3:
+  return 1;
+  default:
+  return facing;
+  }
+  }
+
+private int getPaintingZOffset(int facing)
+  {
+  switch(facing)
+  {
+  case 0:
+  return 1;
+  case 1:
+  return 0;
+  case 2:
+  return -1;
+  case 3:
+  return 0;
+  default:
+  return facing;
+  }
   }
 
 protected float getRotatedXOffset(float xOff, float zOff, int face)
@@ -178,7 +221,7 @@ public static EntityRule populateRule(ScannedEntityEntry entry)
   if(clz==EntityPainting.class)
     {
     rule.isPainting = true;
-    rule.hangingDirection = ((EntityPainting)entry.ent).hangingDirection;
+    rule.hangingDirection = entry.hangingDirection;
     rule.paintingType = ((EntityPainting)entry.ent).art.ordinal();
     }
   else if(clz==EntityMinecart.class)
@@ -190,7 +233,7 @@ public static EntityRule populateRule(ScannedEntityEntry entry)
     {
     EntityItemFrame frame = (EntityItemFrame)entry.ent;
     rule.isItemFrame = true;
-    rule.hangingDirection = frame.hangingDirection;
+    rule.hangingDirection = entry.hangingDirection;
     if(frame.getDisplayedItem()!=null)
       {
       rule.itemFrameItemID = frame.getDisplayedItem().itemID;

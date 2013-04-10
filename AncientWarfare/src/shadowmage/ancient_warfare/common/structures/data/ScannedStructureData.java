@@ -42,7 +42,7 @@ import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.meim.common.config.Config;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class ScannedStructureData
 {
