@@ -176,18 +176,13 @@ public BlockPosition offsetForWorldRender(BlockPosition hit, int face)
   return hit;
   }
 
-protected void renderScanningBB()
-  {
-
-  }
-
 /**
  * @param bb
  * @param player
  * @param partialTick
  * @return
  */
-public AxisAlignedBB adjustBBForPlayerPos(AxisAlignedBB bb, EntityPlayer player, float partialTick)
+public static AxisAlignedBB adjustBBForPlayerPos(AxisAlignedBB bb, EntityPlayer player, float partialTick)
   {
   double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTick;
   double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTick;
@@ -216,7 +211,6 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     RenderOverlayAdvanced.renderAdvancedVehicleOverlay((VehicleBase)player.ridingEntity, player, evt.partialTicks);
     }
-
   ItemStack stack = player.inventory.getCurrentItem();
   if(stack==null || stack.getItem()==null)
     {

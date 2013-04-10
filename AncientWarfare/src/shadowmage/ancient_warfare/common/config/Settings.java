@@ -96,6 +96,16 @@ public static boolean getRenderAdvOverlay()
   return renderAdvancedOverlay;
   }
 
+public static boolean getRenderNpcNameplates()
+  {
+  return false;
+  }
+
+public static boolean getRenderVehicleNameplates()
+  {
+  return false;
+  }
+
 public static int getClientPowerIterations()
   {
   return trajectoryIterationsClient;
