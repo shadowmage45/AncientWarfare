@@ -98,12 +98,12 @@ public static boolean getRenderAdvOverlay()
 
 public static boolean getRenderNpcNameplates()
   {
-  return false;
+  return true;
   }
 
 public static boolean getRenderVehicleNameplates()
   {
-  return false;
+  return true;
   }
 
 public static int getClientPowerIterations()
