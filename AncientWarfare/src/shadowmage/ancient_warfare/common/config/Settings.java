@@ -40,6 +40,8 @@ public static Property mouseRangeProp;
 public static Property trajectoryIterationsProp;
 public static Property npcAITicksProp;
 public static Property renderVehiclesInFirstPersonProp;
+public static Property renderVehicleNameplates;
+public static Property renderNpcNameplates;
 
 public static boolean renderVehiclesInFirstPerson = true;
 private static boolean renderOverlay = true;
@@ -62,7 +64,6 @@ public static Settings instance()
  return INSTANCE;
  }
 
-
 public void loadSettings()
   {
   this.config = Config.getConfig();
@@ -73,7 +74,8 @@ public void loadSettings()
   this.mouseRangeProp = config.get("client-settings", "mouse_aim_look_range", 140, "The distance to which a ray-trace will be performed when calculating auto-aim.  Lower settings may improve performance at the cost of being unable to auto-aim past that distance.");
   this.trajectoryIterationsProp = config.get("client-settings", "power_calculation_accuracy", 20, "How many iterations should be done for calculating power settings for mouse-aim.  Higher settings may cause lag on slower computers.  Lower settings WILL reduce accuracy of auto-aim.");
   this.renderVehiclesInFirstPersonProp = config.get("client-settings", "render_vehicles_first_person", true, "Should render the vehicle you are riding, while in first person view?");
-  
+  this.renderVehicleNameplates = config.get("client-settings", "vehicle_nameplats", true, "Should render vehicle nameplates?");
+  this.renderNpcNameplates = config.get("client-settings", "npc_nameplates", true, "Should render npc nameplates?");  
   this.renderVehiclesInFirstPerson = renderVehiclesInFirstPersonProp.getBoolean(true);
   this.renderOverlay = overlayProp.getBoolean(true);
   this.renderAdvancedOverlay = advOverlayProp.getBoolean(true);
@@ -98,12 +100,32 @@ public static boolean getRenderAdvOverlay()
 
 public static boolean getRenderNpcNameplates()
   {
-  return true;
+  return renderNpcNameplates.getBoolean(true);
   }
 
 public static boolean getRenderVehicleNameplates()
   {
-  return true;
+  return renderVehicleNameplates.getBoolean(true);
+  }
+
+public static void setRenderNpcNameplates(boolean val)
+  {
+  boolean current = renderNpcNameplates.getBoolean(true);
+  if(val!=current)
+    {
+    renderNpcNameplates.value = String.valueOf(val);
+    config.save();
+    }
+  }
+
+public static void setRenderVehicleNameplates(boolean val)
+  {
+  boolean current = renderVehicleNameplates.getBoolean(true);
+  if(val!=current)
+    {
+    renderVehicleNameplates.value = String.valueOf(val);
+    config.save();
+    }
   }
 
 public static int getClientPowerIterations()

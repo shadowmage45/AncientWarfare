@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import java.text.DecimalFormat;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -56,9 +58,13 @@ public static RenderVehicleHelper instance()
 @Override
 public void doRender(Entity var1, double x, double y, double z, float yaw, float tick)
   {
+  boolean useAlpha = false;
   if(!Settings.renderVehiclesInFirstPerson && var1.riddenByEntity == mc.thePlayer && mc.gameSettings.thirdPersonView==0)
     {
-    return;
+    useAlpha = true;
+    GL11.glColor4f(1.f, 1.f, 1.f, 0.2f);
+    GL11.glEnable(GL11.GL_BLEND);
+    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     }
   VehicleBase vehicle = (VehicleBase) var1;
   GL11.glPushMatrix();
@@ -73,17 +79,23 @@ public void doRender(Entity var1, double x, double y, double z, float yaw, float
   render.renderVehicleFlag();
   GL11.glColor4f(1.f, 1.f, 1.f, 1.f);  
   GL11.glPopMatrix();
+  if(useAlpha)
+    {
+    GL11.glDisable(GL11.GL_BLEND);
+    }
   if(Settings.getRenderVehicleNameplates())
     {
     renderNamePlate(vehicle, x, y, z, yaw, tick);
     }
   }
 
+private DecimalFormat formatter1d = new DecimalFormat("#.#");
+
 private void renderNamePlate(VehicleBase vehicle, double par3, double par5, double par7, float yaw, float tick)
   {
   double var10 = vehicle.getDistanceSqToEntity(this.renderManager.livingPlayer);
   int par9 = 64;
-  String par2Str = "VehicleNamePlateTest";
+  String par2Str = vehicle.vehicleType.getDisplayName()+" "+formatter1d.format(vehicle.localVehicleHealth)+"/"+formatter1d.format(vehicle.baseHealth);
   if (var10 <= (double)(par9 * par9))
     {
     FontRenderer var12 = this.getFontRendererFromRenderManager();

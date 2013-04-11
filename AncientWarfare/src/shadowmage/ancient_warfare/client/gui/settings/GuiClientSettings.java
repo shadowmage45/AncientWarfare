@@ -35,6 +35,8 @@ GuiCheckBoxSimple enableOverlayBox;
 GuiCheckBoxSimple enableAdvancedOverlay;
 GuiCheckBoxSimple enableMouseAim;
 GuiCheckBoxSimple enableVehicleFPR;
+GuiCheckBoxSimple enableVehicleNameplates;
+GuiCheckBoxSimple enableNpcNameplates;
 GuiButtonSimple keyBinds;
 
 /**
@@ -70,6 +72,8 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Render Advanced Overlay", guiLeft+10+16+2, guiTop+30+4, 0xffffffff);
   this.drawString(fontRenderer, "Use Mouse Aim Input", guiLeft+10+16+2, guiTop+50+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Ridden Vehicle in First-person", guiLeft+10+16+2, guiTop+70+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Vehicle Nameplates", guiLeft+10+16+2, guiTop+90+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Npc Nameplates", guiLeft+10+16+2, guiTop+110+4, 0xffffffff);
   this.drawString(fontRenderer, "TPS: "+AWCore.proxy.serverTPS+ " AVG TICK: "+AWCore.proxy.serverTickTime, guiLeft+5, guiTop+getYSize()-15, 0xffffffff);
   }
 
@@ -102,6 +106,12 @@ public void onElementActivated(IGuiElement element)
     case 5:
     Settings.setRenderVehiclesInFirstPerson(this.enableVehicleFPR.checked());
     break;
+    case 6:
+    Settings.setRenderVehicleNameplates(this.enableVehicleNameplates.checked());
+    break;
+    case 7:
+    Settings.setRenderNpcNameplates(this.enableNpcNameplates.checked());
+    break;
     default:
     break;
    
@@ -117,6 +127,8 @@ public void setupControls()
   this.keyBinds = this.addGuiButton(3, this.getXSize()-55-10, 30, 55, 16, "Keybinds");
   this.addGuiButton(4, getXSize()-55-10, 10, 55, 16, "Done");
   this.enableVehicleFPR = this.addCheckBox(5, 10, 70, 16, 16).setChecked(Settings.renderVehiclesInFirstPerson);
+  this.enableVehicleNameplates = this.addCheckBox(6, 10, 90, 16, 16).setChecked(Settings.getRenderVehicleNameplates());
+  this.enableNpcNameplates = this.addCheckBox(7, 10, 110, 16, 16).setChecked(Settings.getRenderNpcNameplates());
   }
 
 @Override

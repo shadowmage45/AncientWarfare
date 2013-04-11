@@ -21,6 +21,7 @@ VEHICLES
 * modelRender for inventory ammo
 * soldier ammo priority selection
 * nameplates and health bars (client-config toggle)
+* iron armor ADDS hp when hit... (-dmg)
 
 SOLDIERS
 * create definitive soldier, archer types
