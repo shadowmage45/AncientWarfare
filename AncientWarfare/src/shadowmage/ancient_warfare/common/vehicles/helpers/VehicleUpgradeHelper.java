@@ -57,6 +57,48 @@ public VehicleUpgradeHelper(VehicleBase vehicle)
   this.vehicle = vehicle;
   }
 
+public int getLocalUpgradeType(IVehicleUpgradeType upgrade)
+  {
+  for(int i = 0; i < validUpgrades.size(); i++)
+    {
+    if(validUpgrades.get(i)==upgrade)
+      {
+      return i;
+      }
+    }
+  return -1;
+  }
+
+public IVehicleUpgradeType getUpgradeFromLocal(int local)
+  {
+  if(local>=0 && local< this.validUpgrades.size())
+    {
+    return this.validUpgrades.get(local);
+    }
+  return null;
+  }
+
+public int getLocalArmorType(IVehicleArmorType armor)
+  {
+  for(int i = 0; i < validArmorTypes.size(); i++)
+    {
+    if(validArmorTypes.get(i)==armor)
+      {
+      return i;
+      }
+    }
+  return -1;
+  }
+
+public IVehicleArmorType getArmorFromLocal(int local)
+  {
+  if(local>=0 && local< this.validArmorTypes.size())
+    {
+    return this.validArmorTypes.get(local);
+    }
+  return null;
+  }
+
 /**
  * SERVER ONLY
  */
@@ -208,13 +250,13 @@ public float getScaledDamage(DamageSource src, int amt)
   float floatAmt = (float)amt;
   if(src==DamageType.explosiveMissile || src== DamageType.explosion || src==DamageType.explosion2)
     {
-    return floatAmt * (1-vehicle.currentExplosionResist);
+    return floatAmt * (1-(vehicle.currentExplosionResist*0.01f));
     }
   else if(src==DamageType.fireMissile || src == DamageType.inFire || src== DamageType.lava || src== DamageType.onFire || src.isFireDamage())
     {
-    return floatAmt * (1-vehicle.currentFireResist);
+    return floatAmt * (1-(vehicle.currentFireResist*0.01f));
     }  
-  return floatAmt * (1-vehicle.currentGenericResist);
+  return floatAmt * (1-(vehicle.currentGenericResist*0.01f));
   }
 
 @Override

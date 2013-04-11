@@ -95,8 +95,7 @@ public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struc
     {
     ent = new EntityMinecart(world, mineCartType);
     ax+= getRotatedXOffset(oX, oZ, facing);
-    az+= getRotatedZOffset(oX, oZ, facing);
-    Config.logDebug("initial rot: "+rot+" new rot: "+ar);    
+    az+= getRotatedZOffset(oX, oZ, facing);  
     ent.setLocationAndAngles(ax, ay, az, ar, pitch);
     ent.prevPosX = ax;
     ent.prevPosY = ay;
@@ -125,17 +124,12 @@ public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struc
     ent = EntityList.createEntityByName(entityClassName, world);
     ax+= getRotatedXOffset(oX, oZ, facing);
     az+= getRotatedZOffset(oX, oZ, facing);
-    Config.logDebug("initial rot: "+rot+" new rot: "+ar);    
     ent.setLocationAndAngles(ax, ay, az, ar, pitch);
     ent.prevPosX = ax;
     ent.prevPosY = ay;
     ent.prevPosZ = az;
     ent.prevRotationYaw = ent.rotationYaw = ar;
     }  
-  if(ent!=null)
-    {    
-   
-    }
   return ent;
   }
 

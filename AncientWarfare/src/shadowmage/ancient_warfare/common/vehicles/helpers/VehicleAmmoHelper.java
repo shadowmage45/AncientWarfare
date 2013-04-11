@@ -49,6 +49,27 @@ public VehicleAmmoHelper(VehicleBase vehicle)
   this.vehicle = vehicle;
   }
 
+public int getLocalAmmoType(IAmmoType type)
+  {
+  for(int i = 0; i < ammoEntries.size(); i++)
+    {
+    if( this.ammoEntries.get(i).baseAmmoType == type )
+      {
+      return i;
+      }
+    }
+  return -1;
+  }
+
+public IAmmoType getAmmoTypeForLocal(int type)
+  {
+  if(this.ammoTypes.containsKey(type))
+    {
+    return this.ammoTypes.get(type).baseAmmoType;
+    }
+  return null;
+  }
+
 /**
  * SERVER ONLY relays changes to clients to update a single ammo type, also handles updating underlying inventory...
  * @param num

@@ -20,17 +20,24 @@ VEHICLES
 * ammo select GUI
 * modelRender for inventory ammo
 * soldier ammo priority selection
-* nameplates and health bars (client-config toggle)
-* iron armor ADDS hp when hit... (-dmg)
 
 SOLDIERS
-* create definitive soldier, archer types
+* create definitive soldier, archer, engineer, medic types
 * create officer types (lt, com, gen)
 * add ai 'slots' to higher level soldiers? (for patrol/guard duties)
+* some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)
+* inter-soldier comms (more commanders yelling orders to soldiers)
 
 NPCS
-* nameplates and health-bars (client-config toggle)
-* figure out how to set bounds around town-based
+* figure out how to set bounds around town-based goal things...
+* resource search/seeking incremental algorithm (djk?)
+* need home-point set (changeable by player with move/follow command)
+* create AI objectives
+    Stay Near Home
+    Seek Shelter At Night
+    Stay Near Commander
+    Select Commander (constantly-run objective?)
+    Attack Targets Ranged (archers)
          
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -130,10 +137,10 @@ TWEAKS/OPTIMIZATION
 
 
 ********************* DONE STUFF *************************  
-/********** 04-08-13 **********/
-/********** 04-09-13 **********/
-/********** 04-10-13 **********/
 /********** 04-11-13 **********/
+* fix armor giving +HP when hit
+* npc/vehicle nameplates
+
 /********** 04-12-13 **********/
 /********** 04-13-13 **********/
 /********** 04-14-13 **********/

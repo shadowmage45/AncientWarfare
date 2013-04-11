@@ -31,11 +31,13 @@ boolean sameTeam;
 boolean oppositeTeam;
 
 /**
+ * 
+ * @param npc
  * @param typeName
- * @param clz
  * @param priority
- * @param isEntityTarget
  * @param maxTargetRange
+ * @param sameTeam
+ * @param oppositeTeam
  */
 public AITargetEntryNpc(NpcBase npc, int typeName, int priority, float maxTargetRange, boolean sameTeam, boolean oppositeTeam)
   {

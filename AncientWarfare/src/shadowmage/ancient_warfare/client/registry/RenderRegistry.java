@@ -24,7 +24,6 @@ import java.util.HashMap;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraftforge.client.MinecraftForgeClient;
 import shadowmage.ancient_warfare.client.model.ModelBallistaMobile;
 import shadowmage.ancient_warfare.client.model.ModelBallistaStand;
@@ -43,6 +42,7 @@ import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandTurret;
 import shadowmage.ancient_warfare.client.model.ModelVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
+import shadowmage.ancient_warfare.client.render.RenderNpcHelper;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
 import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
@@ -195,7 +195,7 @@ public void loadRenders()
   /**
    * npcs...
    */
-  RenderingRegistry.registerEntityRenderingHandler(NpcBase.class, new RenderBiped(new ModelBiped(), 1.0f));
+  RenderingRegistry.registerEntityRenderingHandler(NpcBase.class, new RenderNpcHelper(new ModelBiped(), 1.0f));
   }
 
 public void addVehicleRender(IVehicleType type, RenderVehicleBase rend, ModelVehicleBase model)

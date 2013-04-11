@@ -25,15 +25,27 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumArt;
+import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.ScannedEntityEntry;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 public class VehicleRule
@@ -47,6 +59,7 @@ float oy;
 float oz;
 float rotation;
 float pitch;
+byte teamNum;
 public short vehicleType;
 public short vehicleRank;
 public byte[] armorTypes;
@@ -87,7 +100,7 @@ public static VehicleRule populateRule(ScannedEntityEntry entry, VehicleBase veh
     armor = ArmorRegistry.instance().getArmorForStack(stack);
     if(armor!=null)
       {
-      rule.armorTypes[i] = (byte) armor.getGlobalArmorType();
+      rule.armorTypes[i] = (byte) armor.getGlobalArmorType();//(byte) vehicle.upgradeHelper.getLocalArmorType(armor);
       }
     }
   for(i = 0; i < vehicle.inventory.upgradeInventory.getSizeInventory(); i++)
@@ -96,7 +109,7 @@ public static VehicleRule populateRule(ScannedEntityEntry entry, VehicleBase veh
     upgrade = VehicleUpgradeRegistry.instance().getUpgrade(stack);
     if(upgrade!=null)
       {
-      rule.upgradeTypes[i] = (byte)upgrade.getUpgradeGlobalTypeNum();
+      rule.upgradeTypes[i] = (byte) upgrade.getUpgradeGlobalTypeNum();//vehicle.upgradeHelper.getLocalUpgradeType(upgrade);
       }
     }
   for(i = 0; i < vehicle.inventory.ammoInventory.getSizeInventory(); i++)
@@ -104,8 +117,8 @@ public static VehicleRule populateRule(ScannedEntityEntry entry, VehicleBase veh
     stack = vehicle.inventory.ammoInventory.getStackInSlot(i);
     ammo = AmmoRegistry.instance().getAmmoForStack(stack);
     if(stack!=null)
-      {
-      rule.ammoTypes[i] = (byte) ammo.getAmmoType();
+      {      
+      rule.ammoTypes[i] = (byte)vehicle.ammoHelper.getLocalAmmoType( ammo );
       }
     }
   return rule;
@@ -173,6 +186,108 @@ public static VehicleRule parseRule(List<String> ruleLines)
       }
     } 
   return rule;
+  }
+
+
+public VehicleBase getVehicleToSpawn(World world, int facing, ProcessedStructure struct, BlockPosition buildPos,  int teamOverride, int typeOverride, int rankOverride)
+  {
+  int team = teamOverride >= 0? teamOverride : teamNum;
+  int type = typeOverride >= 0? typeOverride : vehicleType;
+  int rank = rankOverride >= 0? rankOverride : vehicleRank;
+  VehicleBase vehicle = getVehicleForRule(world, team, type, rank, armorTypes, ammoTypes, upgradeTypes);
+  int rotAmt = BlockTools.getRotationAmt(facing);
+  BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(bx-struct.xOffset,by-struct.verticalOffset, bz-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
+  float ax = target.x;
+  float ay = target.y;
+  float az = target.z;    
+  float ar = rotation + 90*rotAmt;   
+  
+  ax+= getRotatedXOffset(ox, oz, facing);
+  az+= getRotatedZOffset(ox, oz, facing); 
+  vehicle.setLocationAndAngles(ax, ay, az, ar, pitch);
+  vehicle.prevPosX = ax;
+  vehicle.prevPosY = ay;
+  vehicle.prevPosZ = az;
+  vehicle.prevRotationYaw = vehicle.rotationYaw = ar;
+  return vehicle;
+  }
+
+
+protected float getRotatedXOffset(float xOff, float zOff, int face)
+  {
+  switch(face)
+  {
+  case 0:
+  return 1-xOff;
+  case 1:
+  return zOff;
+  case 2:
+  return xOff;
+  case 3:
+  return 1-zOff;
+  }  
+  return xOff;
+  }
+
+protected float getRotatedZOffset(float xOff, float zOff, int face)
+  {
+  switch(face)
+  {
+  case 0:
+  return 1-zOff;
+  case 1:
+  return xOff;
+  case 2:
+  return zOff;
+  case 3:
+  return 1-xOff;
+  }  
+  return zOff;
+  }
+
+public static VehicleBase getVehicleForRule(World world, int teamNum, int vehicleType, int vehicleRank, byte[] armorTypes, byte[] ammoTypes, byte[] upgradeTypes)
+  {
+  VehicleBase vehicle = VehicleType.getVehicleForType(world, vehicleType, vehicleRank);
+  vehicle.teamNum = teamNum;  
+  byte type = (byte) 0;
+  int i;
+  IAmmoType ammo;
+  IVehicleUpgradeType upgrade;
+  IVehicleArmorType armor;
+  for(i = 0; i < armorTypes.length; i++)
+    {
+    if(i<vehicle.inventory.armorInventory.getSizeInventory())
+      {
+      type = (byte) (armorTypes[i]);
+      armor = ArmorRegistry.instance().getArmorType(type);//vehicle.upgradeHelper.getArmorFromLocal(type);
+      if(vehicle.vehicleType.isArmorValid(armor))
+        {
+        vehicle.inventory.armorInventory.setInventorySlotContents(i, armor.getArmorStack(1));
+        }
+      }
+    }
+  for(i = 0; i < upgradeTypes.length; i++)
+    {
+    if(i < vehicle.inventory.upgradeInventory.getSizeInventory())
+      {
+      type = (byte)(upgradeTypes[i]);
+      upgrade = VehicleUpgradeRegistry.instance().getUpgrade(type);//vehicle.upgradeHelper.getUpgradeFromLocal(type);
+      if(vehicle.vehicleType.isUpgradeValid(upgrade))
+        {
+        vehicle.inventory.upgradeInventory.setInventorySlotContents(i, upgrade.getUpgradeStack(1));
+        }
+      }
+    }
+  for(i = 0; i < ammoTypes.length; i++)
+    {
+    if(i< vehicle.inventory.ammoInventory.getSizeInventory())
+      {
+      type = (byte) (ammoTypes[i] % vehicle.vehicleType.getValidAmmoTypes().size());
+      ammo = vehicle.ammoHelper.getAmmoTypeForLocal(type);
+      vehicle.inventory.ammoInventory.setInventorySlotContents(i, ammo.getAmmoStack(64));
+      }
+    }
+  return vehicle;
   }
 
 public List<String> getRuleLines()

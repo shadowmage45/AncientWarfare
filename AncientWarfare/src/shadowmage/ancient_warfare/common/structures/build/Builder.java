@@ -422,71 +422,17 @@ protected void placeBlockData(World world, int x, int y, int z, BlockData data, 
 
 protected void placeVehicle(World world, int x, int y, int z, int vehicleType, int overrideType, int overrideRank, int overrideTeam)
   {
-  VehicleRule vehRule = struct.vehicleRules.get(vehicleType);
-  if(vehRule==null)
-    {
-    return;
-    }
-  int type = overrideType>=0 ? overrideType : vehRule.vehicleType;
-  int rank = overrideRank;
-  VehicleBase vehicle = VehicleType.getVehicleForType(world, type, rank);
-  if(vehicle!=null)
-    {
-    List<IAmmoType> vehicleAmmoTypes = vehicle.vehicleType.getValidAmmoTypes();
-    for(int i = 0; i < vehRule.ammoTypes.length && i <vehicle.inventory.ammoInventory.getSizeInventory(); i++)
-      {
-      int ammoType = vehRule.ammoTypes[i];
-      if(ammoType>vehicleAmmoTypes.size())
-        {
-        ammoType = this.random.nextInt(vehicleAmmoTypes.size());
-        }
-      ItemStack ammoStack = vehicleAmmoTypes.get(ammoType).getAmmoStack(64);
-      vehicle.inventory.ammoInventory.setInventorySlotContents(i, ammoStack);
-      }
-    List<IVehicleUpgradeType> vehicleUpgradeTypes = vehicle.vehicleType.getValidUpgrades();
-    for(int i = 0; i < vehRule.upgradeTypes.length && i < vehicle.inventory.upgradeInventory.getSizeInventory(); i++)
-      {
-      int upgradeType = vehRule.upgradeTypes[i];
-      if(upgradeType>=vehicleUpgradeTypes.size())
-        {
-        upgradeType = this.random.nextInt(vehicleUpgradeTypes.size());
-        }
-      ItemStack upgradeStack = vehicleUpgradeTypes.get(upgradeType).getUpgradeStack(1);
-      vehicle.inventory.upgradeInventory.setInventorySlotContents(i, upgradeStack);
-      }
-    List<IVehicleArmorType> vehicleArmors = vehicle.vehicleType.getValidArmors();
-    for(int i = 0; i < vehRule.armorTypes.length && i < vehicle.inventory.armorInventory.getSizeInventory(); i++)
-      {
-      int armorType = vehRule.armorTypes[i];
-      if(armorType>=vehicleArmors.size())
-        {
-        armorType = this.random.nextInt(vehicleArmors.size());
-        }
-      ItemStack upgradeStack = vehicleArmors.get(armorType).getArmorStack(1);
-      vehicle.inventory.armorInventory.setInventorySlotContents(i, upgradeStack);
-      }    
-    vehicle.setPosition(x+0.5d, y, z+0.5d);
-    float rotation = 0.f;
-    rotation -= 90 * this.getRotationAmt(facing);
-    vehicle.rotationYaw = vehicle.prevRotationYaw = rotation;
-    world.spawnEntityInWorld(vehicle);
-    }
+  
   }
 
 protected void placeNPC(World world, int x, int y, int z, int npcType, int overrideType, int overrideRank, int overrideTeam)
   {
-  //get npc rule from struct, apply overrides, get npc from registry, apply upgrades
-  //spawn npc
+  
   }
 
 protected void placeGate(World world, int x, int y, int z, int gateType, int overrideType, int overrideRank, int overrideTeam)
   {
-  //TODO re-do templates to include a gate reference number, to know what 'blocks' belong to what gate.  these will become a type of
-  //    gate 'rule', if a simple one
-  //use gateType if override.  If gate # does not exist, create.
-  //add piece to gate
-  //at end of build, construct gates
-  //TODO how to store gate stuff---scan building upon reload?  
+  
   }
 
 /**

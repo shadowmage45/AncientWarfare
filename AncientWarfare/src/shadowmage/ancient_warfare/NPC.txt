@@ -28,3 +28,19 @@ Civillians:
     Builder ?
     Researcher ?
     Recruiter ? 
+  
+  
+Civilian Buildings:
+    Will have bounds set by the player up to x X z.  
+    Sites will have a single block on the external edge of their bounds that acts as a 'control' block
+        it maintains a relative x,y,z size/positioning of the site (relative to world bounds)        
+    Player is responsible for cordoning off the area (fences/building around it/whatever)
+    Player must also assign workers to the site (by having them follow, and 'attaching' to the site-block)
+    Sites will maintain a list of their valid workable blocks.
+        For a mine, the mine will scan the area down to y depth (set by mine rank/quality), constructing a map
+            of the resources in the mine, as well as constructing a path to the major nodes from a central mine-shaft
+            both maps will be stored in NBT (a mine will know it is invalid/moved when it has no NBT)
+        For farms, will do an initial scan of 'farmable' blocks on the surface area of the 'farm', as well as occasional
+            re-scans (every 1-5 minutes) to update new blocks/harvest targets for workers
+        Smiths -- will maintain a list of the furnaces and crafting tables in the area, and the 'site' block will
+            have slots to set the crafting as well as temporary storage room.
