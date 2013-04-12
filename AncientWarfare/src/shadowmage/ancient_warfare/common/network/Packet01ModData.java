@@ -68,7 +68,7 @@ public void setStructData(NBTTagCompound tag)
 
 public void setTeamUpdate(NBTTagCompound tag)
   {
-  this.packetData.setCompoundTag("team", packetData);
+  this.packetData.setCompoundTag("team", tag);
   }
 
 public void setTickTimes(long time, int tps)
@@ -138,11 +138,11 @@ public void execute()
     tag = packetData.getCompoundTag("team");
     if(world.isRemote)
       {      
-      TeamTracker.instance().handleClientUpdate(tag);
+      TeamTracker.instance().handleClientUpdate(tag, player);
       }
     else
       {
-      TeamTracker.instance().handleServerUpdate(tag);
+      TeamTracker.instance().handleServerUpdate(tag, player);
       }    
     }  
 

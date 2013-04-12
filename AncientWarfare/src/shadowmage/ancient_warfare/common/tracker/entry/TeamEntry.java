@@ -38,6 +38,7 @@ public class TeamEntry implements INBTTaggable
 
 public int teamNum;
 public List<TeamMemberEntry> memberNames = new ArrayList<TeamMemberEntry>();
+private List<String> applicants = new ArrayList<String>();
 
 public List<Integer> nonHostileTeams = new ArrayList<Integer>();
 
@@ -76,6 +77,30 @@ public byte getPlayerRank(String name)
 public boolean containsPlayer(String name)
   {
   return this.getPlayerRank(name)>=0;
+  }
+
+public void addApplicant(String name)
+  {  
+  if(!this.applicants.contains(name))
+    {
+    this.applicants.add(name);
+    }
+  }
+
+public void removeApplicant(String name)
+  {
+  this.applicants.remove(name);
+  }
+
+public List<String> getApplicantList()
+  {
+  return this.applicants;
+  }
+
+public void approveApplicant(String name)
+  {
+  this.removeApplicant(name);
+  this.addNewPlayer(name, (byte) 0);
   }
 
 @Override

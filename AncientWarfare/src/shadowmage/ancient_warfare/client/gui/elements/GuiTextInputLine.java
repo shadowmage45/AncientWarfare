@@ -51,6 +51,8 @@ int cursorColor = 0xffff0000;
  */
 boolean selected;
 
+int maxChars = 1;
+
 /**
  * @param elementNum
  * @param parent
@@ -63,6 +65,7 @@ boolean selected;
 public GuiTextInputLine(int elementNum, IGuiElementCallback parent, int w, int h, int maxChars, String defaultText)
   {
   super(elementNum, parent, w, h);
+  this.maxChars = maxChars;
   }
 
 @Override

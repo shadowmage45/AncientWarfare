@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
@@ -56,6 +57,36 @@ public static TeamTracker instance()
   }
 private static TeamTracker INSTANCE;
 
+public void handleClientApplyToTeam(EntityPlayer player, byte num)
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("pName", player.getEntityName());
+  tag.setByte("num", num);  
+  tag.setBoolean("apply", true);
+  Config.logDebug("sending app packet to server");
+  Packet01ModData pkt = new Packet01ModData();
+  pkt.setTeamUpdate(tag);
+  pkt.sendPacketToServer();
+  }
+
+public void handleClientAppAction(byte num, String name, boolean accept)
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("pName", name);
+  tag.setByte("num", num);  
+  if(accept)
+    {
+    tag.setBoolean("accept", true);
+    }
+  else    
+    {
+    tag.setBoolean("deny", true);
+    }
+  Packet01ModData pkt = new Packet01ModData();
+  pkt.setTeamUpdate(tag);
+  pkt.sendPacketToServer();
+  }
+
 public void handleNewPlayerLogin(EntityPlayer player)
   {
   if(this.serverTeamEntries[0]==null)
@@ -66,7 +97,7 @@ public void handleNewPlayerLogin(EntityPlayer player)
   this.serverTeamEntries[0].addNewPlayer(player.getEntityName(), (byte)0);//.memberNames.add(player.getEntityName());
       
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setInteger("num", 0);
+  tag.setByte("num", (byte) 0);
   tag.setString("pName", player.getEntityName());
   tag.setBoolean("new", true);
   Packet01ModData pkt = new Packet01ModData();
@@ -82,23 +113,70 @@ public void handleNewPlayerLogin(EntityPlayer player)
     }    
   }
 
-public void handleClientUpdate(NBTTagCompound tag)
+public void handleClientUpdate(NBTTagCompound tag, EntityPlayer player)
   {
-  if(tag.hasKey("new"))
+  byte num = tag.getByte("num");
+  String name = tag.getString("pName");
+  if(clientTeamEntries[num]==null)
     {
-    int num = tag.getInteger("num");
-    byte rank = tag.getByte("rank");
-    String name = tag.getString("pName");
-    this.clientTeamEntries[num].addNewPlayer(name, rank);//.memberNames.add(new Team).add(tag.getString("pName"));
+    clientTeamEntries[num]= new TeamEntry();
+    }
+  TeamEntry tagTeam = clientTeamEntries[num];
+  if(tag.hasKey("new"))
+    {    
+    byte rank = tag.getByte("rank");    
+    tagTeam.addNewPlayer(name, rank);
     }
   else if(tag.hasKey("change"))
     {
-    int num = tag.getInteger("num");
-    String name = tag.getString("pName");
     byte rank = tag.getByte("rank");
     int oldTeam = this.getTeamForPlayerClient(name);
-    this.clientTeamEntries[oldTeam].removePlayer(name);//.memberNames.remove(name);
-    this.clientTeamEntries[num].addNewPlayer(name, rank);//.memberNames.add(name);
+    this.clientTeamEntries[oldTeam].removePlayer(name);
+    tagTeam.addNewPlayer(name, rank);
+    }
+  else if(tag.hasKey("apply"))
+    {
+    Config.logDebug("receiving apply packet client side");
+    if(tagTeam.memberNames.size()==0)
+      {
+      int oldTeam = this.getTeamForPlayerClient(name);
+      this.clientTeamEntries[oldTeam].removePlayer(name);
+      if(tagTeam.teamNum==0)
+        {
+        tagTeam.addNewPlayer(name, (byte) 0);
+        }
+      else
+        {
+        tagTeam.addNewPlayer(name, (byte) 10);
+        }
+      }
+    else
+      {
+      if(tagTeam.teamNum==0)
+        {
+        int oldTeam = this.getTeamForPlayerClient(name);
+        this.clientTeamEntries[oldTeam].removePlayer(name);
+        tagTeam.addNewPlayer(name, (byte) 0);
+        }
+      else
+        {
+        tagTeam.addApplicant(name);
+        }
+      }
+    }
+  else if(tag.hasKey("accept"))
+    {
+    int oldTeam = this.getTeamForPlayerServer(name);
+    this.clientTeamEntries[oldTeam].removePlayer(name);
+    tagTeam.addNewPlayer(name, (byte) 0);
+    }
+  else if(tag.hasKey("deny"))
+    {
+    tagTeam.removeApplicant(name);
+    }
+  if(player.openContainer instanceof ContainerTeamControl)
+    {
+    ((ContainerTeamControl) player.openContainer).rebuildTeamList();
     }
   }
 
@@ -140,17 +218,73 @@ public NBTTagCompound getClientInitData()
   return tag;
   }
 
-public void handleServerUpdate(NBTTagCompound tag)
+public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
   { 
-  if(tag.hasKey("change"))
+  Config.logDebug("receiving team update server side");
+  byte num = tag.getByte("num");
+  String name = tag.getString("pName");
+  if(serverTeamEntries[num]==null)
     {
-    int num = tag.getInteger("num");
-    String name = tag.getString("pName");
+    serverTeamEntries[num] = new TeamEntry();    
+    }
+  TeamEntry tagTeam = serverTeamEntries[num];
+  Packet01ModData pkt = new Packet01ModData(); 
+  if(tag.hasKey("change"))
+    { 
     byte rank = tag.getByte("rank");
-    int oldTeam = this.getTeamForPlayerClient(name);
-    this.serverTeamEntries[oldTeam].removePlayer(name);//.memberNames.remove(name);
-    this.serverTeamEntries[num].addNewPlayer(name, rank);//.memberNames.add(name);
-    Packet01ModData pkt = new Packet01ModData();    
+    int oldTeam = this.getTeamForPlayerServer(name);
+    this.serverTeamEntries[oldTeam].removePlayer(name);
+    tagTeam.addNewPlayer(name, rank);  
+    pkt.setTeamUpdate(tag);
+    pkt.sendPacketToAllPlayers();
+    }
+  else if(tag.hasKey("apply"))
+    {  
+    if(tagTeam==null)
+      {
+      
+      }
+    Config.logDebug("receiving apply packet server side");
+    if(tagTeam.memberNames.size()==0)
+      {
+      int oldTeam = this.getTeamForPlayerServer(name);
+      this.serverTeamEntries[oldTeam].removePlayer(name);
+      if(tagTeam.teamNum==0)
+        {
+        tagTeam.addNewPlayer(name, (byte) 0);
+        }
+      else
+        {
+        tagTeam.addNewPlayer(name, (byte) 10);
+        }
+      }
+    else
+      {
+      if(tagTeam.teamNum==0)
+        {
+        tagTeam.addNewPlayer(name, (byte) 0);
+        int oldTeam = this.getTeamForPlayerServer(name);
+        this.serverTeamEntries[oldTeam].removePlayer(name);
+        }
+      else
+        {
+        tagTeam.addApplicant(name);
+        }
+      }
+    pkt.setTeamUpdate(tag);
+    pkt.sendPacketToAllPlayers();
+    }
+  else if(tag.hasKey("accept"))
+    {
+    int oldTeam = this.getTeamForPlayerServer(name);
+    this.serverTeamEntries[oldTeam].removePlayer(name);
+    tagTeam.addNewPlayer(name, (byte) 0);
+    pkt.setTeamUpdate(tag);
+    pkt.sendPacketToAllPlayers();
+    }
+  else if(tag.hasKey("deny"))
+    {
+    tagTeam.removeApplicant(name);
     pkt.setTeamUpdate(tag);
     pkt.sendPacketToAllPlayers();
     }

@@ -11,12 +11,24 @@ GENERAL
 * land-mines
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 
+TEAM CONTROL GUI
+* needs 'applicant' list
+* needs adv control button to be dependent upon member rank (rank8+)
+* team selection buttons need to appear AFTER 'change team' is pressed
+* need a button below team selection that will be either 'Create Team' or 'Apply to Team' depending
+        if the team already is created/has members or not
+* team 0 needs to be a special case for all of these, and not allow any ranks higher than 0, and auto-approve
+        all applicants 
+* adv control will allow higher ranks to approve/deny applicants, as well as adjust ranks of (lower ranked) team
+        members.  It will also allow higher ranks to set the hostile/friendly status of other teams (one-sided war
+        declarations).               
+
 VEHICLES    
 * inventory container synch methods... (IEntityContainerSynch)
 * need to get rocked when onHit
 * napalm ammo
-* ammo textures
-* alpha blend vehicle if set to not render
+* ammo textures for all, and scaling on the arrow model?
+* alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
 * ammo select GUI
 * modelRender for inventory ammo
 * soldier ammo priority selection

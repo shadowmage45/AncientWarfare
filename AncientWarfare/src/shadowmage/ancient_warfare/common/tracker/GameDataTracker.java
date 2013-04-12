@@ -71,13 +71,6 @@ public void handleWorldLoad(World world)
     {
     return;
     }
-//  Config.logDebug("attempting to retrieve generated structures map for dimension: "+world.getWorldInfo().getDimension());
-//  WorldGenStructureMap map = (WorldGenStructureMap)world.perWorldStorage.loadData(WorldGenStructureMap.class, "AWstructMap"+world.getWorldInfo().getDimension());
-//  if(map!=null)
-//    {
-//    Config.logDebug("adding loaded world map data");
-//    WorldGenManager.instance().addStructureMapForDimension(world.getWorldInfo().getDimension(), map);
-//    }
   /**
    * load stats file, populate globalTag
    */  

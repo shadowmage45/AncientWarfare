@@ -29,7 +29,12 @@ public class GuiNumberInputLine extends GuiTextInputLine
 
 public DecimalFormat formatterThreeDec = new DecimalFormat("#.###");
 public DecimalFormat formatterOneDec = new DecimalFormat("#.#");
+public DecimalFormat formatterNoDec = new DecimalFormat("#");
+
 float floatVal;
+float minVal = Float.NEGATIVE_INFINITY;
+float maxVal = Float.POSITIVE_INFINITY;
+
 /**
  * @param elementNum
  * @param parent
@@ -43,6 +48,23 @@ float floatVal;
 public GuiNumberInputLine(int elementNum, IGuiElementCallback parent,  int w, int h, int maxChars, String defaultText)
   {
   super(elementNum, parent, w, h, maxChars, defaultText);
+  formatterNoDec.setDecimalSeparatorAlwaysShown(false);
+  this.floatVal = StringTools.safeParseFloat(defaultText);
+  if(this.maxChars==1)
+    {
+    this.text = formatterNoDec.format(this.floatVal);
+    }
+  else
+    {
+    this.text = formatterThreeDec.format(this.floatVal);
+    }
+  }
+
+public GuiNumberInputLine setMinMax(float min, float max)
+  {
+  this.minVal = min;
+  this.maxVal = max;
+  return this;
   }
 
 @Override
@@ -72,10 +94,21 @@ protected boolean isValidNumber(char ch)
 @Override
 public boolean handleMouseWheel(int x, int y, int wheel)
   {
-  this.floatVal += wheel;
-  this.text = String.valueOf(floatVal);
-  this.parent.onElementActivated(this);
-  return true;
+  if(floatVal + wheel >= this.minVal && floatVal +wheel <= maxVal)
+    {
+    floatVal += wheel;
+    if(this.maxChars==1)
+      {
+      this.text = formatterNoDec.format(floatVal);
+      }
+    else
+      {
+      this.text = formatterThreeDec.format(floatVal);
+      }
+    this.parent.onElementActivated(this);
+    return true;
+    }
+  return false;
   }
 
 @Override
@@ -107,6 +140,10 @@ public void setText(String text)
     {
     this.text = "";
     this.floatVal = 0.f;
+    }
+  if(this.maxChars==1)
+    {
+    this.text = this.formatterOneDec.format(floatVal);
     }
   }
 

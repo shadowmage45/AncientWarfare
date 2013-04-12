@@ -21,10 +21,13 @@
 package shadowmage.ancient_warfare.client.gui.teams;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
@@ -35,6 +38,8 @@ public class GuiTeamControl extends GuiContainerAdvanced
 TeamEntry entry = null;
 GuiScrollableArea area;
 int prevMemberCount = 0;
+private ContainerTeamControl container;
+private GuiNumberInputLine teamSelectNumber;
 
 /**
  * @param container
@@ -42,6 +47,7 @@ int prevMemberCount = 0;
 public GuiTeamControl(Container container)
   {
   super(container);
+  this.container = (ContainerTeamControl)container;
   this.shouldCloseOnVanillaKeys = true;
   entry = TeamTracker.instance().getTeamEntryFor(player);
   this.prevMemberCount = entry.memberNames.size();
@@ -68,7 +74,8 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  
+  this.drawCenteredString(fontRenderer, "Current Team: "+entry.teamNum, guiLeft+(getXSize()/2), 5, 0xffffffff);  
+  this.drawCenteredString(fontRenderer, "Current Rank: "+entry.getPlayerRank(player.getEntityName()), guiLeft+(getXSize()/2), 15, 0xffffffff);
   }
 
 @Override
@@ -82,6 +89,12 @@ public void updateScreenContents()
   area.updateGuiPos(guiLeft, guiTop);
   }
 
+
+public void createOrApplyToTeam(int num)
+  {
+  
+  }
+
 @Override
 public void onElementActivated(IGuiElement element)
   {
@@ -90,6 +103,12 @@ public void onElementActivated(IGuiElement element)
   case 0:
   this.closeGUI();
   break;
+  
+  
+  case 10://apply
+  TeamTracker.instance().handleClientApplyToTeam(player, (byte) teamSelectNumber.getIntVal());
+  break;
+  
   
   default:
   break;
@@ -103,9 +122,10 @@ public void setupControls()
   this.addGuiButton(5, getXSize()-75-5, 20, 75, 12, "Adv Controls");
   this.addGuiButton(6, 5, 5, 85, 12, "Change Team");
   this.addGuiButton(7, 5, 20, 12, 12, "-");
-  this.addNumberField(8, 45, 12, 1, "0").updateRenderPos(5+12+2, 20);
+  this.teamSelectNumber = (GuiNumberInputLine) this.addNumberField(8, 45, 12, 1, "0").setMinMax(0, 15).updateRenderPos(5+12+2, 20);
   this.addGuiButton(9, 5+12+45+4, 20, 12, 12, "+");
-  
+  this.addGuiButton(10, 5, 40, 85, 12, "Apply To Team");
+    
   int buffer = 2;
   int buttonSize = 8;
   int keyBindCount = this.entry.memberNames.size();
@@ -142,6 +162,22 @@ public void updateControls()
     entry = this.entry.memberNames.get(i);
     area.addGuiElement(new GuiString(i+20, area, this.getXSize()-30, buttonSize, entry.getMemberName() + "  Rank: "+entry.getMemberRank()).updateRenderPos(kX, kY));
     }
+  }
+
+@Override
+public void handleDataFromContainer(NBTTagCompound tag)
+  {  
+  if(tag.hasKey("rebuild"))
+    {
+    this.rebuildTeamInfo();
+    this.forceUpdate = true;    
+    }  
+  }
+
+private void rebuildTeamInfo()
+  {
+  this.entry = TeamTracker.instance().getTeamEntryFor(player);
+  this.forceUpdate = true;
   }
 
 }

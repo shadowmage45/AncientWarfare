@@ -39,6 +39,7 @@ import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
+import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
@@ -97,7 +98,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   return new ContainerDummy();
   
   case TEAM_CONTROL:
-  return new ContainerDummy();
+  return new ContainerTeamControl(player);
   
   case 7:
   return null;
@@ -142,7 +143,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   return new GuiClientSettings(new ContainerDummy());
   
   case TEAM_CONTROL:
-  return new GuiTeamControl(new ContainerDummy());
+  return new GuiTeamControl(new ContainerTeamControl(player));
   
   case 7:
   return null;
