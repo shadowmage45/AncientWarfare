@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.structures.data.StructureBuildSettings;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
@@ -76,7 +77,7 @@ public static boolean hasScanBB(int id)
  * @param facing
  * @return
  */
-public abstract boolean attemptConstruction(World world, ProcessedStructure struct, BlockPosition hit, int facing);
+public abstract boolean attemptConstruction(World world, ProcessedStructure struct, BlockPosition hit, int facing, StructureBuildSettings settings);
   
 
 

@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.structures.build.BuilderInstant;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureBB;
+import shadowmage.ancient_warfare.common.structures.data.StructureBuildSettings;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -62,6 +63,7 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
     {
     NBTTagCompound tag;
     int test;
+    boolean val;
     if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("structData"))
       {
       tag = par1ItemStack.getTagCompound().getCompoundTag("structData");
@@ -78,7 +80,7 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
       {
       par3List.add("Structure Name: "+ "No Selection");
       }
-    if(tag.hasKey("team"))
+    if(tag.hasKey("oteam"))
       {
       test = tag.getInteger("team");
       if(test>=0)
@@ -86,29 +88,20 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
         par3List.add("Forced Team Num: "+test);
         }      
       }
-    if(tag.hasKey("veh"))
+    if(tag.hasKey("sveh"))
       {
-      test = tag.getInteger("veh");
-      if(test>=-1)
-        {
-        par3List.add("Forced Vehicle Type: "+test);
-        }      
+      val = tag.getBoolean("sveh");
+      par3List.add("Spawn Vehicles: "+val);     
       }
-    if(tag.hasKey("npc"))
+    if(tag.hasKey("snpc"))
       {
-      test = tag.getInteger("npc");
-      if(test>-1)
-        {
-        par3List.add("Forced NPC Type: "+test);
-        }      
+      val = tag.getBoolean("snpc");
+      par3List.add("Spawn Npcs: "+val);      
       }
-    if(tag.hasKey("gate"))
+    if(tag.hasKey("sgate"))
       {
-      test = tag.getInteger("gate");
-      if(test>-1)
-        {
-        par3List.add("Forced Gate Type: "+test);
-        }  
+      val = tag.getBoolean("sgate");
+      par3List.add("Spawn Gates: "+val);      
       }
     }  
   }
@@ -117,10 +110,10 @@ private NBTTagCompound getDefaultTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
   tag.setString("name", "");
-  tag.setInteger("veh", -2);
-  tag.setInteger("npc", -2);
-  tag.setInteger("gate", -2);
-  tag.setInteger("team", -2);
+  tag.setBoolean("sveh", true);
+  tag.setBoolean("snpc", true);
+  tag.setBoolean("sgate", true);
+  tag.setInteger("oteam", -1);
   return tag;
   }
 
@@ -157,6 +150,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     }
   if(tag.hasKey("name") && hit !=null)
     {    
+    StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
     ProcessedStructure struct = StructureManager.instance().getStructureServer(tag.getString("name"));
     if(struct==null)
       {
@@ -165,20 +159,13 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       stack.setTagInfo("structData", tag);
       return true;
       }
-    if(!this.attemptConstruction(world, struct, hit, BlockTools.getPlayerFacingFromYaw(player.rotationYaw)))
+    if(!this.attemptConstruction(world, struct, hit, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), settings))
       {
       player.addChatMessage("Structure is currently locked for editing!!");
       }
     }
   return true;
   }
-
-//protected void attemptConstruction(World world, ProcessedStructure struct, int face, BlockPosition hit)
-//  {
-//  
-//  BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
-//  builder.startConstruction();
-//  } 
 
 @Override
 public StructureClientInfo getStructureForStack(ItemStack stack)
@@ -211,22 +198,13 @@ public boolean renderBuilderBlockBB()
   return false;
   }
 
-
 @Override
-public boolean attemptConstruction(World world, ProcessedStructure struct,   BlockPosition hit, int facing)
+public boolean attemptConstruction(World world, ProcessedStructure struct,   BlockPosition hit, int facing, StructureBuildSettings settings)
   {
   if(!struct.isLocked())
     {
-    
-    //DEBUG...
-    StructureBB levelingBB = struct.getLevelingBoundingBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, struct.getLevelingMax(), struct.getLevelingBuffer());
-    if(!struct.isValidLevelingTarget(world, levelingBB, struct.validTargetBlocks, struct.getLevelingBuffer()))
-      {
-      Config.logDebug("invalid leveling target!!");
-      }
-    //END DEBUG....   
-    
     BuilderInstant builder = new BuilderInstant(world, struct, facing, hit);
+    builder.setOverrides(settings.teamOverride, settings.spawnVehicle, settings.spawnNpc, settings.spawnGate);
     builder.startConstruction();
     return true;
     }

@@ -20,11 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-
-import shadowmage.ancient_warfare.common.config.Config;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
@@ -38,35 +36,26 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class NBTReader
 {
 
 public static NBTTagCompound readTagFromLines(List<String> lines)
   {  
-  NBTTagCompound tag = null; 
-  if(lines.size()>=2)
-    {
-    lines.remove(lines.size()-1);
-    }
+  NBTTagCompound tag = null;
   Iterator<String> it = lines.iterator();
+  List<String> tagLines;
   if(it.hasNext())
     {
-    String headerLine = it.next();
-    String[] headerBits = headerLine.split("=");
-    if(headerBits[0].equals("TAG"))
+    tagLines = getLinesForNextTag(it);
+    byte type = getTagType(tagLines);
+    if(type==10)
       {
-      it.remove();
-      it.next();
-      it.remove();
-      byte tagType = StringTools.safeParseByte(headerBits[1]);      
-      String name = "";
-      if(headerBits.length>=3)
-        {
-        name = headerBits[2];
-        }      
-      tag = (NBTTagCompound)parseTag(name, (byte)10, lines);
-      }    
+      String name = getTagName(tagLines);
+      scrubShell(tagLines);
+      tag = (NBTTagCompound)parseTag(name, type, tagLines);
+      }      
     }
   return tag;
   }
@@ -125,32 +114,17 @@ private static NBTTagList parseTagList(String name, List<String> lines)
   tag.setName(name); 
   Iterator<String> it = lines.iterator();
   String line;
+  String tagname;
   while(it.hasNext())
     {
-    List<String> tagLines = getLinesForNextTag(it);  
-    if(tagLines.size()>=2)
+    List<String> tagLines = getLinesForNextTag(it);
+    byte type = getTagType(tagLines);
+    if(type>0)
       {
-      tagLines.remove(tagLines.size()-1);
-      }
-    Iterator<String> tagIt = tagLines.iterator();
-    if(tagIt.hasNext())
-      {
-      line = tagIt.next();
-      if(line.startsWith("TAG"))
-        {
-        tagIt.remove();
-        tagIt.next();
-        tagIt.remove();
-        String[] headerBits = line.split("=");
-        String tagName = "";
-        if(headerBits.length>=3)
-          {
-          tagName = headerBits[2];
-          }
-        byte tagType = StringTools.safeParseByte(headerBits[1]);
-        tag.appendTag(parseTag(tagName, tagType, tagLines));
-        }
-      }    
+      tagname = getTagName(tagLines);
+      scrubShell(tagLines);
+      tag.appendTag(parseTag(tagname, type, tagLines));
+      } 
     }
   return tag;
   }
@@ -159,7 +133,6 @@ private static NBTTagString parseTagString(String name, List<String> lines)
   {
   NBTTagString tag = new NBTTagString(name);
   tag.data = lines.get(0);
-  Config.logDebug("creating tag :"+tag+" datas: "+tag.data);
   return tag;
   }
 
@@ -167,7 +140,6 @@ private static NBTTagIntArray parseTagIntArray(String name, List<String> lines)
   {
   NBTTagIntArray tag = new NBTTagIntArray(name);
   tag.intArray = StringTools.parseIntArray(lines.get(0));
-  Config.logDebug("creating tag :"+tag+" datas: "+tag.intArray);
   return tag;
   }
 
@@ -175,7 +147,6 @@ private static NBTTagByteArray parseTagByteArray(String name, List<String> lines
   {
   NBTTagByteArray tag = new NBTTagByteArray(name);
   tag.byteArray = StringTools.parseByteArray(lines.get(0));
-  Config.logDebug("creating tag :"+tag+" datas: "+tag.byteArray);
   return tag;
   }
 
@@ -183,7 +154,6 @@ private static NBTTagDouble parseTagDouble(String name, List<String> lines)
   {
   NBTTagDouble tag = new NBTTagDouble(name);
   tag.data = StringTools.safeParseDouble(lines.get(0));
-  Config.logDebug("creating tag :"+tag+" datas: "+tag.data);
   return tag;
   }
 
@@ -209,7 +179,7 @@ private static NBTTagInt parseTagInt(String name, List<String> lines)
   }
 
 private static NBTTagShort parseTagShort(String name, List<String> lines)
-  {
+  { 
   NBTTagShort tag = new NBTTagShort(name);
   tag.data = (short)StringTools.safeParseInt(lines.get(0));
   return tag;
@@ -228,74 +198,63 @@ private static NBTTagCompound parseTagCompound(String name, List<String> lines)
   tag.setName(name); 
   Iterator<String> it = lines.iterator();
   String line;
+  String tagname;
   while(it.hasNext())
     {
     List<String> tagLines = getLinesForNextTag(it);
-    if(tagLines.size()>=2)
+    byte type = getTagType(tagLines);
+    if(type>0)
       {
-      tagLines.remove(tagLines.size()-1);
-      }
-    Iterator<String> tagIt = tagLines.iterator();
-    if(tagIt.hasNext())
-      {
-      line = tagIt.next();
-      if(line.startsWith("TAG"))
-        {
-        tagIt.remove();
-        tagIt.next();
-        tagIt.remove();
-        String[] headerBits = line.split("=");
-        String tagName = "";
-        if(headerBits.length>=3)
-          {
-          tagName = headerBits[2];
-          }
-        byte tagType = StringTools.safeParseByte(headerBits[1]);
-        NBTBase newTag = parseTag(tagName, tagType, tagLines);
-        tag.setTag(newTag.getName(), newTag);        
-        }
-      }    
+      tagname = getTagName(tagLines);
+      scrubShell(tagLines);
+      tag.setTag(tagname, parseTag(tagname, type, tagLines));
+      }   
     }
   return tag;
   }
 
+/**
+ * scans until it finds a line with TAG.
+ * opens on the next open brace, closes on that tags closing brace
+ * returns all lines, including the TAG line
+ * @param it
+ * @return
+ */
 private static List<String> getLinesForNextTag(Iterator<String> it)
   {
-  LinkedList<String> tagLines = new LinkedList<String>();
+  List<String> tagLines = new ArrayList<String>();
   String line;
-  boolean foundOpen = false;
-  boolean closeNext = false;
+  boolean started = false;//have we found the TAG line
+  int openCount = 0;
+  int closeCount = 0;
+  boolean foundOpen = false;//have we found the opening brace of the TAG
+  boolean closeNext = false;//should we close on the next close brace?
   while(it.hasNext())
     {
     line = it.next();
     it.remove();
     tagLines.add(line);
-    if(line.equals("{"))
-      {      
-      if(!foundOpen)
-        {
-        foundOpen = true;
-        closeNext = true;
-        }
-      else
-        {
-        closeNext = false;
-        }
-      }
-    if(line.equals("}"))
+    if(line.startsWith("TAG"))
       {
-      if(closeNext)
+      started = true;
+      continue;
+      }
+    if(started)
+      {
+      if(line.equals("{"))
+        {        
+        openCount++;
+        }      
+      else if(line.equals("}"))
+        {
+        closeCount++;
+        }
+      if(openCount==closeCount && openCount>0 && closeCount>0)
         {
         break;
         }
-      else
-        {
-        closeNext = true;
-        }
-      }    
+      }     
     }
-//  tagLines.removeFirst();
-//  tagLines.removeLast();
 //  Config.logDebug("found tag lines----------------------------------------------");
 //  for(String st : tagLines)
 //    {
@@ -303,6 +262,76 @@ private static List<String> getLinesForNextTag(Iterator<String> it)
 //    }
 //  Config.logDebug("END tag lines----------------------------------------------");
   return tagLines;
+  }
+
+/**
+ * peeks at the first line of TAGLINES and examines the tag type
+ * @param tagLines
+ * @return
+ */
+private static  byte getTagType(List<String> tagLines)
+  {
+  String line;
+  if(tagLines.size()>=1)
+    {
+    line = tagLines.get(0);
+    String[] sp = line.split("=");
+    if(sp.length>=2)
+      {
+      return StringTools.safeParseByte(sp[1]);
+      }
+    }
+  return 0;
+  }
+
+/**
+ * peeks at the first line of TAGLINES and examines the tag name, if any
+ * @param tagLines
+ * @return
+ */
+private static String getTagName(List<String> tagLines)
+  {
+  String line = "";
+  if(tagLines.size()>=1)
+    {
+    line = tagLines.get(0);
+    String[] sp = line.split("=");
+    if(sp.length>=3)
+      {
+      line = sp[2];
+      }
+    }
+  return line;
+  }
+
+/**
+ * scrubs the TAG, open, and close brace lines off of a TAGLINES array
+ */
+private static  void scrubShell(List<String> tagLines)
+  {
+//  Config.logDebug("scrubbing lines");
+  Iterator<String> it = tagLines.iterator();
+  String line;
+  if(it.hasNext())
+    {
+    line = it.next();    
+    it.remove();
+    if(it.hasNext())
+      {
+      line = it.next();
+      it.remove();
+      if(tagLines.size()>0)
+        {
+        tagLines.remove(tagLines.size()-1);
+        }
+      }    
+    }  
+//  Config.logDebug("post scrub tag lines----------------------------------------------");
+//  for(String st : tagLines)
+//    {
+//    Config.logDebug(st);
+//    }
+//  Config.logDebug("END post scrub tag lines----------------------------------------------");
   }
 
 }

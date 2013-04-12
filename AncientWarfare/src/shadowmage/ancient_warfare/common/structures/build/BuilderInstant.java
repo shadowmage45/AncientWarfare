@@ -68,7 +68,7 @@ public void startConstruction()
     Config.logDebug("const: "+(t3-t2));
     Config.logDebug("Struct gen time: "+(t3-t1));
     }
-  this.placeEntities(world);
+  this.placeNonBlocks(world);
   }
 
 @Override

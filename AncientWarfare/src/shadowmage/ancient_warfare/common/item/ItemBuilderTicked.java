@@ -29,6 +29,7 @@ import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.block.TEBuilder;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.structures.data.StructureBuildSettings;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -46,7 +47,7 @@ public ItemBuilderTicked(int itemID)
   }
 
 @Override
-public boolean attemptConstruction(World world, ProcessedStructure struct, BlockPosition hit, int face)
+public boolean attemptConstruction(World world, ProcessedStructure struct, BlockPosition hit, int face, StructureBuildSettings settings)
   {
   if(struct.isLocked())
     {
@@ -60,6 +61,7 @@ public boolean attemptConstruction(World world, ProcessedStructure struct, Block
     { 
     BuilderTicked builder = new BuilderTicked(world, struct, face, offsetHit);
     builder.startConstruction();
+    builder.setOverrides(settings.teamOverride, settings.spawnVehicle, settings.spawnNpc, settings.spawnGate);
     te.setBuilder(builder);
     Ticket tk = ForgeChunkManager.requestTicket(AWCore.instance, world, Type.NORMAL);
     if(tk!=null)

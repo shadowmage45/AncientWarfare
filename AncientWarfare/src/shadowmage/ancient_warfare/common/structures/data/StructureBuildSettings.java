@@ -27,26 +27,31 @@ public class StructureBuildSettings implements INBTTaggable
 {
 
 public String name = "No Selection!";
+//
+///**
+// * overrides
+// */
+//public int vehicle;
+//public int npc = -1;
+//public int gate = -1;
+//public int team = -1;
 
-/**
- * overrides
- */
-public int vehicle;
-public int npc;
-public int gate;
-public int team;
+public boolean spawnVehicle = true;
+public boolean spawnNpc = true;
+public boolean spawnGate = true;
+public int teamOverride = -1;//no override
 
 private StructureBuildSettings(){}
 
 @Override
 public NBTTagCompound getNBTTag()
   {
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setString("name", name);
-  tag.setInteger("veh", vehicle);
-  tag.setInteger("team", team);
-  tag.setInteger("gate", gate);
-  tag.setInteger("npc", npc);
+  NBTTagCompound tag = new NBTTagCompound();  
+  tag.setString("name", this.name);
+  tag.setBoolean("sveh", spawnVehicle);
+  tag.setBoolean("snpc", spawnNpc);
+  tag.setBoolean("sgate", spawnGate);
+  tag.setInteger("oteam", teamOverride);
   return tag;
   }
 
@@ -57,22 +62,10 @@ public void readFromNBT(NBTTagCompound tag)
     {
     this.name = tag.getString("name");
     }
-  if(tag.hasKey("veh"))
-    {
-    this.vehicle = tag.getInteger("veh");
-    }
-  if(tag.hasKey("npc"))
-    {
-    this.npc = tag.getInteger("npc");
-    }
-  if(tag.hasKey("team"))
-    {
-    this.team = tag.getInteger("team");
-    }
-  if(tag.hasKey("gate"))
-    {
-    this.gate = tag.getInteger("gate");
-    }
+  if(tag.hasKey("sveh"))this.spawnVehicle = tag.getBoolean("sveh");
+  if(tag.hasKey("snpc"))this.spawnNpc = tag.getBoolean("snpc");
+  if(tag.hasKey("sgate"))this.spawnGate = tag.getBoolean("sgate");
+  if(tag.hasKey("oteam"))this.teamOverride = tag.getInteger("oteam");
   }
 
 public static StructureBuildSettings constructFromNBT(NBTTagCompound tag)

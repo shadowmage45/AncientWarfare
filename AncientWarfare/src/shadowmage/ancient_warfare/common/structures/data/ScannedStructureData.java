@@ -253,6 +253,7 @@ private void normalizeForNorthFacing()
     entry.x = pos.x+newXOff;
     entry.y = pos.y+yOff;
     entry.z = pos.z+newZOff;
+    entry.r += BlockTools.getRotationAmt(originFacing) * 90;
     if(entry.hangingDirection>=0)//is painting or item frame, adjust internal rotation info...
       {
       Config.logDebug("original hangDir"+entry.hangingDirection);
@@ -303,13 +304,6 @@ private float getRotatedOffsetZ(int rotation, float xOff, float zOff)
     return 1 - xOff;//new BlockPosition(z, y, zSize - x - 1);
     }
   return zOff;
-  }
-
-private float getRotatedRotationYaw(int originRotation, float originYaw)
-  {
-  int rotAmt = BlockTools.getRotationAmount(originRotation, 2);
-  originYaw+= rotAmt * 90;
-  return originYaw;
   }
   
 /*********************************************  CONVERSION  ***********************************************/

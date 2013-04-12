@@ -90,7 +90,6 @@ SURVIVAL MODE STRUCTURE BUILDING
 * create drafting workstation
 * single-use item scanner--cannot add to world gen, only add to survival/creative mode
 * make sure survival ticked builder will not clear or level.  struct BB needs validated for clear before being built
-* builder item will carry an md5 of original structure, compare before starting construction..?
 * use survival flag for survival drafting table structureSelection...(from structureClientInfo in client store)
 
 BASIC DRAFTING STATION
@@ -140,6 +139,9 @@ TWEAKS/OPTIMIZATION
 /********** 04-11-13 **********/
 * fix armor giving +HP when hit
 * npc/vehicle nameplates
+* rework structure override rules to only be true/false  + teamNum override
+* rework builder items to include new override stuff and pass it to builders
+* rework builders to pass override info to rules (teamNum)
 
 /********** 04-12-13 **********/
 /********** 04-13-13 **********/

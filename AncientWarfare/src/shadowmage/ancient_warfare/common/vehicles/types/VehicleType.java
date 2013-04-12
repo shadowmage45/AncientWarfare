@@ -403,7 +403,7 @@ public static IVehicleType getVehicleType(int num)
 
 public static VehicleBase getVehicleForType(World world, int type, int level)
   {
-  if(vehicleTypes[type]!=null)
+  if(type>=0 && type < vehicleTypes.length && vehicleTypes[type]!=null)
     {
     IVehicleType vehType = getVehicleType(type);
     VehicleBase vehicle = new VehicleBase(world);

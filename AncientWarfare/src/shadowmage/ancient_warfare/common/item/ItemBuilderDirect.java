@@ -37,6 +37,7 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.ScannedStructureData;
+import shadowmage.ancient_warfare.common.structures.data.StructureBuildSettings;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -243,6 +244,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       {
       hit = BlockTools.offsetForSide(hit, side);
       int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+      StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
+      settings.spawnGate = false;
+      settings.spawnNpc = false;
+      settings.spawnVehicle = false;
       ProcessedStructure struct = StructureManager.instance().getTempStructure(player.getEntityName());
       if(struct==null)
         {
@@ -250,7 +255,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         }
       else
         {
-        this.attemptConstruction(world, player, hit, face, struct);
+        this.attemptConstruction(world, player, hit, face, struct, settings);
         }      
       }
     } 
@@ -275,7 +280,7 @@ private ProcessedStructure scanAndProcess(World world, EntityPlayer player, Bloc
   return raw.convertToProcessedStructure();  
   }
 
-private boolean attemptConstruction(World world, EntityPlayer player, BlockPosition hit, int face, ProcessedStructure struct)
+private boolean attemptConstruction(World world, EntityPlayer player, BlockPosition hit, int face, ProcessedStructure struct, StructureBuildSettings settings)
   {
   List<IDPairCount> counts = struct.getResourceList();
   
@@ -303,7 +308,7 @@ private boolean attemptConstruction(World world, EntityPlayer player, BlockPosit
     }  
   if(shouldConstruct)
     {
-    return this.attemptConstruction(world, struct, hit, face);
+    return this.attemptConstruction(world, struct, hit, face, settings);
 //    BuilderTicked builder = new BuilderTicked(world, struct, face, hit);
 //    builder.setWorld(world);
 //    builder.startConstruction();
@@ -314,13 +319,14 @@ private boolean attemptConstruction(World world, EntityPlayer player, BlockPosit
   }
 
 @Override
-public boolean attemptConstruction(World world, ProcessedStructure struct,   BlockPosition hit, int facing)
+public boolean attemptConstruction(World world, ProcessedStructure struct,   BlockPosition hit, int facing, StructureBuildSettings settings)
   {
   if(!struct.isLocked())
     {
     BuilderTicked builder = new BuilderTicked(world, struct, facing, hit);
     builder.setWorld(world);
     builder.startConstruction();
+    builder.setOverrides(settings.teamOverride, settings.spawnVehicle, settings.spawnNpc, settings.spawnGate);
     AWStructureModule.instance().addBuilder(builder);
 //    BuilderInstant builder = new BuilderInstant(world, struct, facing, hit);
 //    builder.startConstruction();

@@ -25,18 +25,21 @@ import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
 
+/**
+ * advanced structure overrides (manually override 
+ * @author Shadowmage
+ *
+ */
 public class GuiCSBAdvancedSelection extends   GuiContainerAdvanced
 {
 
 private GuiScreen parent;
 private ContainerCSB container;
 
-String vehicleString = "Not Forced";
-String npcString = "Not Forced";
-String gateString = "Not Forced";
 String teamString = "Not Forced";
 
 /**
@@ -72,12 +75,11 @@ public String getGuiBackGroundTexture()
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   this.drawString(fontRenderer, "These settings override default", guiLeft+10, guiTop+8, 0xffffffff);
-  this.drawString(fontRenderer, "template settings", guiLeft+10, guiTop+18, 0xffffffff);
-  
-  this.drawString(fontRenderer, "Forced Vehicle:", guiLeft+10, guiTop + 30+3, 0xffffffff);
-  this.drawString(fontRenderer, "Forced NPC    :", guiLeft+10, guiTop + 50+3, 0xffffffff);
-  this.drawString(fontRenderer, "Forced Gate   :", guiLeft+10, guiTop + 70+3, 0xffffffff);
-  this.drawString(fontRenderer, "Forced Team   :", guiLeft+10, guiTop + 90+3, 0xffffffff);
+  this.drawString(fontRenderer, "template settings", guiLeft+10, guiTop+18, 0xffffffff);  
+  this.drawString(fontRenderer, "Spawn Vehicles", guiLeft+30, guiTop + 30+4, 0xffffffff);
+  this.drawString(fontRenderer, "Spawn NPCs", guiLeft+30, guiTop + 50+4, 0xffffffff);
+  this.drawString(fontRenderer, "Spawn Gates", guiLeft+30, guiTop + 70+4, 0xffffffff);
+  this.drawString(fontRenderer, "Forced Team", guiLeft+10, guiTop + 90+3, 0xffffffff);
   }
 
 @Override
@@ -86,18 +88,14 @@ public void updateScreenContents()
   
   if(this.container.clientSettings!=null)
     {
-    if(container.clientSettings.team>=0)
+    if(container.clientSettings.teamOverride>=0)
       {
-      this.teamString = String.valueOf(container.clientSettings.team);
+      this.teamString = String.valueOf(container.clientSettings.teamOverride);
       }
     else
       {
       this.teamString = "Not Forced";
       }  
-    //TODO
-    /**
-     * handle the other overrides, update local display string from container
-     */
     }
   }
 
@@ -106,15 +104,30 @@ boolean updateOnClose = false;
 
 public void adjustTeam(int adj)
   {
-  container.clientSettings.team += adj;
-  if(container.clientSettings.team<-1)
+  container.clientSettings.teamOverride += adj;
+  if(container.clientSettings.teamOverride<-1)
     {
-    container.clientSettings.team=-1;
+    container.clientSettings.teamOverride=-1;
     }
-  if(container.clientSettings.team>15)
+  if(container.clientSettings.teamOverride>15)
     {
-    container.clientSettings.team=15;
+    container.clientSettings.teamOverride=15;
     }
+  }
+
+private void setVehicle(boolean val)
+  {
+  this.container.clientSettings.spawnVehicle = val;
+  }
+
+private void setNpc(boolean val)
+  {
+  this.container.clientSettings.spawnNpc = val;
+  }
+
+private void setGate(boolean val)
+  {
+  this.container.clientSettings.spawnGate = val;
   }
 
 public void switchBackToParent()
@@ -149,30 +162,24 @@ public void setupControls()
   int leftCol = 95;
   int midCol = leftCol + merchWidth + buffer;
   int rightCol = midCol + labelWidth + buffer;
-
-  this.addGuiButton(1, leftCol, 30, 12, 16, "<");
-  this.addGuiButton(2, midCol, 30, 80, 16, this.vehicleString);
-  this.addGuiButton(3, rightCol, 30, 12, 16, ">");
-
-  this.addGuiButton(4, leftCol, 50, 12, 16, "<");
-  this.addGuiButton(5, midCol, 50, 80, 16, this.npcString);
-  this.addGuiButton(6, rightCol, 50, 12, 16, ">");
     
-  this.addGuiButton(7, leftCol, 70, 12, 16, "<");
-  this.addGuiButton(8, midCol, 70, 80, 16, this.gateString);
-  this.addGuiButton(9, rightCol, 70, 12, 16, ">");
-    
+  vehicles = this.addCheckBox(1, 10, 30, 16, 16).setChecked(this.container.clientSettings.spawnVehicle);
+  npcs = this.addCheckBox(2, 10, 50, 16, 16).setChecked(this.container.clientSettings.spawnNpc);
+  gates = this.addCheckBox(3, 10, 70, 16, 16).setChecked(this.container.clientSettings.spawnGate);
+  
   this.addGuiButton(10, leftCol, 90, 12, 16, "<");
   this.addGuiButton(11, midCol, 90, 80, 16, this.teamString);
   this.addGuiButton(12, rightCol, 90, 12, 16, ">");
   }
 
+GuiCheckBoxSimple vehicles;
+GuiCheckBoxSimple npcs;
+GuiCheckBoxSimple gates;
+
 @Override
 public void updateControls()
-  {
-  
-  // TODO Auto-generated method stub
-  
+  {  
+  // TODO Auto-generated method stub  
   }
 
 @Override
@@ -185,12 +192,20 @@ public void onElementActivated(IGuiElement element)
   break;
   
   case 1:
+  this.setVehicle(vehicles.checked());
+  updateOnClose = true;
   break;
   
   case 2:
+  this.setNpc(npcs.checked());
+  updateOnClose = true;
   break;
   
   case 3:
+  this.setGate(gates.checked());
+  updateOnClose = true;
+  break;
+  
   case 4:
   case 5:
   case 6:

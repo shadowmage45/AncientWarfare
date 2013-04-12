@@ -27,6 +27,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
@@ -36,20 +37,18 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.structures.data.AWStructure;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
-import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
-import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 import shadowmage.ancient_warfare.common.world_gen.LootGenerator;
 
 public abstract class Builder implements INBTTaggable
@@ -116,11 +115,10 @@ public int dimension = 0;
 
 
 /************************************************************ OVERRIDE VALUES ************************************************************/
-int overrideVehicle=-2;
-int overrideNPC=-2;
-int overrideGate=-2;
+boolean spawnVehicles = true;
+boolean spawnNpcs = true;
+boolean spawnGates = true;
 int overrideTeam=-1;
-int overrideRank=-1;
 
 
 /**
@@ -170,6 +168,14 @@ public void setWorld(World world)
     }
   }
 
+public void setOverrides(int team, boolean vehicle, boolean npc, boolean gate)
+  {
+  this.setTeamOverride(team);
+  this.setVehicleOverride(vehicle);
+  this.setNPCOverride(npc);
+  this.setGateOverride(gate);
+  }
+
 public void clearBuilderFromStructure()
   {
   this.struct.removeBuilder(this);
@@ -200,25 +206,25 @@ public boolean isFinished()
   }
 
 public void setFinished()
-  {
-  this.placeEntities(world);
+  {  
+  this.placeNonBlocks(world);
   this.isFinished = true;
   this.clearBuilderFromStructure();
   }
 
-public void setVehicleOverride(int type)
+public void setVehicleOverride(boolean val)
   {
-  this.overrideVehicle =type;
+  this.spawnVehicles = val;
   }
 
-public void setNPCOverride(int type)
+public void setNPCOverride(boolean val)
   {
-  this.overrideNPC = type;
+  this.spawnNpcs = val;
   }
 
-public void setGateOverride(int type)
+public void setGateOverride(boolean val)
   {
-  this.overrideGate = type;
+  this.spawnGates = val;
   }
 
 public void setTeamOverride(int type)
@@ -335,8 +341,6 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
     {
     return;
     }
- 
-     
   /**
    * else check to see whether should use
    * 
@@ -420,17 +424,33 @@ protected void placeBlockData(World world, int x, int y, int z, BlockData data, 
     }   
   }
 
-protected void placeVehicle(World world, int x, int y, int z, int vehicleType, int overrideType, int overrideRank, int overrideTeam)
+private void placeVehicles(World world)
   {
-  
+  VehicleBase vehicle;
+  for(VehicleRule rule : this.struct.vehicleRules)
+    {
+    vehicle = rule.getVehicleToSpawn(world, facing, struct, buildPos, this.overrideTeam);
+    if(vehicle!=null)
+      {
+      world.spawnEntityInWorld(vehicle);
+      }
+    }
   }
 
-protected void placeNPC(World world, int x, int y, int z, int npcType, int overrideType, int overrideRank, int overrideTeam)
+private void placeNpcs(World world)
   {
-  
+  Entity npc = null;
+  for(NpcRule rule : this.struct.NPCRules)
+    {
+    //npc = rule.getNpcToSpawn(world, facing, struct, buildPos, this.overrideTeam);
+    if(npc!=null)
+      {
+      world.spawnEntityInWorld(npc);
+      }
+    }
   }
 
-protected void placeGate(World world, int x, int y, int z, int gateType, int overrideType, int overrideRank, int overrideTeam)
+private void placeGates(World world)
   {
   
   }
@@ -439,7 +459,7 @@ protected void placeGate(World world, int x, int y, int z, int gateType, int ove
  * called to start placing entities from the EntityRule list, first -> last
  * @param world
  */
-protected void placeEntities(World world)
+private void placeEntities(World world)
   {
   Entity entity;
   for(EntityRule rule : this.struct.entityRules)
@@ -449,6 +469,23 @@ protected void placeEntities(World world)
       {
       world.spawnEntityInWorld(entity);
       }
+    }
+  }
+
+protected void placeNonBlocks(World world)
+  {
+  this.placeEntities(world);
+  if(spawnVehicles)
+    {
+    this.placeVehicles(world);
+    }
+  if(spawnNpcs)
+    {
+    this.placeNpcs(world);
+    }
+  if(spawnGates)
+    {
+    this.placeGates(world);
     }
   }
 
@@ -763,10 +800,9 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("bY", this.buildPos.y);
   tag.setInteger("bZ", this.buildPos.z);
   tag.setInteger("ovT", this.overrideTeam);
-  tag.setInteger("ovV", this.overrideVehicle);
-  tag.setInteger("ovN", this.overrideNPC);
-  tag.setInteger("ovG", this.overrideGate);
-  tag.setInteger("ovR", this.overrideRank);
+  tag.setBoolean("sV", this.spawnVehicles);
+  tag.setBoolean("sN", this.spawnNpcs);
+  tag.setBoolean("sG", this.spawnGates);
   tag.setString("md5", this.md5);
   return tag;
   }
@@ -781,10 +817,9 @@ public void readFromNBT(NBTTagCompound tag)
   this.maxPriority = tag.getInteger("mP");
   this.dimension = tag.getInteger("dim");  
   this.overrideTeam = tag.getInteger("ovT");
-  this.overrideVehicle = tag.getInteger("ovV");
-  this.overrideNPC = tag.getInteger("ovN");
-  this.overrideGate = tag.getInteger("ovG");
-  this.overrideRank = tag.getInteger("ovR");
+  this.spawnVehicles = tag.getBoolean("sV");
+  this.spawnNpcs = tag.getBoolean("sN");
+  this.spawnGates = tag.getBoolean("sG");  
   }
 
 public static BuilderTicked readTickedBuilderFromNBT(NBTTagCompound tag)
@@ -798,7 +833,7 @@ public static BuilderTicked readTickedBuilderFromNBT(NBTTagCompound tag)
     }
   if(!struct.md5.equals(md5))
     {
-    Config.logError("Severe error loading ticked builder from disc.  The structure it was building has been changed.  The builder will be invalidated.");
+    Config.logError("Severe error loading ticked builder from disc (MD5 Failure).  The structure it was building has been changed.  The builder will be invalidated.");
     return null;
     }
   BlockPosition hit = new BlockPosition(tag.getInteger("bX"), tag.getInteger("bY"), tag.getInteger("bZ"));
