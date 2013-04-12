@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
+import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
 
 public class GuiTeamControl extends GuiContainerAdvanced
 {
@@ -44,20 +45,6 @@ public GuiTeamControl(Container container)
   this.shouldCloseOnVanillaKeys = true;
   entry = TeamTracker.instance().getTeamEntryFor(player);
   this.prevMemberCount = entry.memberNames.size();
-  }
-
-@Override
-public void onElementActivated(IGuiElement element)
-  {
-  switch(element.getElementNumber())
-  {
-  case 0:
-  this.closeGUI();
-  break;
-  
-  default:
-  break;
-  }
   }
 
 @Override
@@ -96,23 +83,44 @@ public void updateScreenContents()
   }
 
 @Override
+public void onElementActivated(IGuiElement element)
+  {
+  switch(element.getElementNumber())
+  {
+  case 0:
+  this.closeGUI();
+  break;
+  
+  default:
+  break;
+  }
+  }
+
+@Override
 public void setupControls()
   {
   this.addGuiButton(0, 45, 12, "Done").updateRenderPos(getXSize()-45-5, 5);
+  this.addGuiButton(5, getXSize()-75-5, 20, 75, 12, "Adv Controls");
+  this.addGuiButton(6, 5, 5, 85, 12, "Change Team");
+  this.addGuiButton(7, 5, 20, 12, 12, "-");
+  this.addNumberField(8, 45, 12, 1, "0").updateRenderPos(5+12+2, 20);
+  this.addGuiButton(9, 5+12+45+4, 20, 12, 12, "+");
   
   int buffer = 2;
   int buttonSize = 8;
   int keyBindCount = this.entry.memberNames.size();
   int totalHeight = keyBindCount * (buffer+buttonSize);  
-  area = new GuiScrollableArea(1, this, 10, 30, this.getXSize()-20, this.getYSize()-40, totalHeight);
+  area = new GuiScrollableArea(1, this, 10, 70, this.getXSize()-20, this.getYSize()-80, totalHeight);
   this.guiElements.put(1, area);
   
   int kX = 5;
   int kY = 0;
+  TeamMemberEntry entry;
   for(int i = 0; i < keyBindCount; i++)
     {
     kY = i * (buffer+buttonSize);
-    area.addGuiElement(new GuiString(i+2, area, this.getXSize()-30, 8, this.entry.memberNames.get(i)).updateRenderPos(kX, kY));
+    entry = this.entry.memberNames.get(i);
+    area.addGuiElement(new GuiString(i+2, area, this.getXSize()-30, buttonSize, entry.getMemberName() + "  Rank: "+entry.getMemberRank()).updateRenderPos(kX, kY));
     }
   }
 
@@ -121,16 +129,18 @@ public void updateControls()
   {
   area.elements.clear();  
   int buffer = 2;
-  int buttonSize = 10;
+  int buttonSize = 8;
   int keyBindCount = this.entry.memberNames.size();
   int totalHeight = keyBindCount * (buffer+buttonSize); 
   area.updateTotalHeight(totalHeight);
   int kX = 5;
   int kY = 0;
+  TeamMemberEntry entry;
   for(int i = 0; i < keyBindCount; i++)
     {
     kY = i * (buffer+buttonSize);
-    area.addGuiElement(new GuiString(i+2, area, this.getXSize()-30, buttonSize, this.entry.memberNames.get(i)).updateRenderPos(kX, kY));
+    entry = this.entry.memberNames.get(i);
+    area.addGuiElement(new GuiString(i+20, area, this.getXSize()-30, buttonSize, entry.getMemberName() + "  Rank: "+entry.getMemberRank()).updateRenderPos(kX, kY));
     }
   }
 

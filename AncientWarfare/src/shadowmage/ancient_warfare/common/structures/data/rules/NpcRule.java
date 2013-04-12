@@ -24,10 +24,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumArt;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.ScannedEntityEntry;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class NpcRule
@@ -40,6 +51,7 @@ float oy;
 float oz;
 float rotation;
 float pitch;
+byte teamNum = 0;
 public short npcType;
 public short npcRank;
 
@@ -58,6 +70,7 @@ public static NpcRule populateRule(ScannedEntityEntry entry, NpcBase npc)
   populateBasics(rule, entry);
   rule.npcType = (short) npc.npcType.getGlobalNpcType();
   rule.npcRank = (short) npc.rank;
+  rule.teamNum = (byte) npc.teamNum;
   return rule;
   }
 
@@ -76,6 +89,10 @@ public static NpcRule parseRule(List<String> ruleLines)
     else if(line.toLowerCase().startsWith("rank"))
       {
       rule.npcRank = StringTools.safeParseShort("=", line);  
+      }
+    else if(line.toLowerCase().startsWith("team"))
+      {
+      rule.teamNum = StringTools.safeParseByte("=", line);
       }
     else if(line.toLowerCase().startsWith("bx"))
       {
@@ -132,6 +149,7 @@ public List<String> getRuleLines()
   lines.add("npc:");
   lines.add("type="+this.npcType);
   lines.add("rank="+this.npcRank);
+  lines.add("team="+this.teamNum);
   lines.add("bx="+bx);
   lines.add("by="+by);
   lines.add("bz="+bz);
@@ -144,4 +162,60 @@ public List<String> getRuleLines()
   return lines;
   }
 
+public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struct, BlockPosition buildPos, int teamOverride)
+  {
+  int rotAmt = BlockTools.getRotationAmt(facing);
+  int teamNum = teamOverride >=0 ? teamOverride : this.teamNum;
+  BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(bx-struct.xOffset,by-struct.verticalOffset, bz-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
+  float ax = target.x;
+  float ay = target.y;
+  float az = target.z;    
+  float ar = rotation - 90*rotAmt;  
+  
+  Entity ent = null;
+  ent = NpcRegistry.getNpcForType(npcType, world, npcRank, teamNum);
+  if(ent!=null)
+    {
+    ax+= getRotatedXOffset(ox, oz, facing);
+    az+= getRotatedZOffset(ox, oz, facing);
+    ent.setLocationAndAngles(ax, ay, az, ar, pitch);
+    ent.prevPosX = ax;
+    ent.prevPosY = ay;
+    ent.prevPosZ = az;
+    ent.prevRotationYaw = ent.rotationYaw = ar;
+    }   
+  return ent;
+  }
+
+protected float getRotatedXOffset(float xOff, float zOff, int face)
+  {
+  switch(face)
+  {
+  case 0:
+  return 1-xOff;
+  case 1:
+  return zOff;
+  case 2:
+  return xOff;
+  case 3:
+  return 1-zOff;
+  }  
+  return xOff;
+  }
+
+protected float getRotatedZOffset(float xOff, float zOff, int face)
+  {
+  switch(face)
+  {
+  case 0:
+  return 1-zOff;
+  case 1:
+  return xOff;
+  case 2:
+  return zOff;
+  case 3:
+  return 1-xOff;
+  }  
+  return zOff;
+  }
 }

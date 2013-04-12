@@ -28,6 +28,7 @@ public class GuiNumberInputLine extends GuiTextInputLine
 {
 
 public DecimalFormat formatterThreeDec = new DecimalFormat("#.###");
+public DecimalFormat formatterOneDec = new DecimalFormat("#.#");
 float floatVal;
 /**
  * @param elementNum

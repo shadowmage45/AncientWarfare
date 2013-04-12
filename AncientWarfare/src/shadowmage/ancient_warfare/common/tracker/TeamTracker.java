@@ -63,7 +63,7 @@ public void handleNewPlayerLogin(EntityPlayer player)
     this.serverTeamEntries[0] = new TeamEntry();
     this.serverTeamEntries[0].teamNum = 0;    
     }
-  this.serverTeamEntries[0].memberNames.add(player.getEntityName());
+  this.serverTeamEntries[0].addNewPlayer(player.getEntityName(), (byte)0);//.memberNames.add(player.getEntityName());
       
   NBTTagCompound tag = new NBTTagCompound();
   tag.setInteger("num", 0);
@@ -87,15 +87,18 @@ public void handleClientUpdate(NBTTagCompound tag)
   if(tag.hasKey("new"))
     {
     int num = tag.getInteger("num");
-    this.clientTeamEntries[num].memberNames.add(tag.getString("pName"));
+    byte rank = tag.getByte("rank");
+    String name = tag.getString("pName");
+    this.clientTeamEntries[num].addNewPlayer(name, rank);//.memberNames.add(new Team).add(tag.getString("pName"));
     }
   else if(tag.hasKey("change"))
     {
     int num = tag.getInteger("num");
     String name = tag.getString("pName");
+    byte rank = tag.getByte("rank");
     int oldTeam = this.getTeamForPlayerClient(name);
-    this.clientTeamEntries[oldTeam].memberNames.remove(name);
-    this.clientTeamEntries[num].memberNames.add(name);
+    this.clientTeamEntries[oldTeam].removePlayer(name);//.memberNames.remove(name);
+    this.clientTeamEntries[num].addNewPlayer(name, rank);//.memberNames.add(name);
     }
   }
 
@@ -143,9 +146,10 @@ public void handleServerUpdate(NBTTagCompound tag)
     {
     int num = tag.getInteger("num");
     String name = tag.getString("pName");
+    byte rank = tag.getByte("rank");
     int oldTeam = this.getTeamForPlayerClient(name);
-    this.serverTeamEntries[oldTeam].memberNames.remove(name);
-    this.serverTeamEntries[num].memberNames.add(name);
+    this.serverTeamEntries[oldTeam].removePlayer(name);//.memberNames.remove(name);
+    this.serverTeamEntries[num].addNewPlayer(name, rank);//.memberNames.add(name);
     Packet01ModData pkt = new Packet01ModData();    
     pkt.setTeamUpdate(tag);
     pkt.sendPacketToAllPlayers();
@@ -162,7 +166,7 @@ public int getTeamForPlayerServer(String name)
   {
   for(TeamEntry ent : this.serverTeamEntries)
     {
-    if(ent.memberNames.contains(name))
+    if(ent.containsPlayer(name))
       {
       return ent.teamNum;
       }
@@ -186,7 +190,7 @@ public int getTeamForPlayerClient(String name)
   {
   for(TeamEntry ent : this.clientTeamEntries)
     {
-    if(ent.memberNames.contains(name))
+    if(ent.containsPlayer(name))
       {
       return ent.teamNum;
       }

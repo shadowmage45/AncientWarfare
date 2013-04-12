@@ -90,6 +90,7 @@ public void drawElement(int mouseX, int mouseY)
 
 public void setupViewport()
   {
+  GL11.glPushMatrix();
   ScaledResolution scaledRes = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
   int guiScale = scaledRes.getScaleFactor();
   float vAspect = (float)this.mc.displayWidth/(float)this.mc.displayHeight;
@@ -106,6 +107,7 @@ public void setupViewport()
 public void resetViewPort()
   {
   GL11.glViewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
+  GL11.glPopMatrix();
   }
 
 @Override

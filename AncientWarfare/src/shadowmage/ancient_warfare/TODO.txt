@@ -142,6 +142,7 @@ TWEAKS/OPTIMIZATION
 * rework structure override rules to only be true/false  + teamNum override
 * rework builder items to include new override stuff and pass it to builders
 * rework builders to pass override info to rules (teamNum)
+* add npc spawning to scan/build
 
 /********** 04-12-13 **********/
 /********** 04-13-13 **********/

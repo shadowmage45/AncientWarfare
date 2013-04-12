@@ -442,7 +442,7 @@ private void placeNpcs(World world)
   Entity npc = null;
   for(NpcRule rule : this.struct.NPCRules)
     {
-    //npc = rule.getNpcToSpawn(world, facing, struct, buildPos, this.overrideTeam);
+    npc = rule.getEntityToSpawn(world, facing, struct, buildPos, this.overrideTeam);
     if(npc!=null)
       {
       world.spawnEntityInWorld(npc);
