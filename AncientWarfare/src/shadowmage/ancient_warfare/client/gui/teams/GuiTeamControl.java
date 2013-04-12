@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
@@ -74,8 +75,8 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawCenteredString(fontRenderer, "Current Team: "+entry.teamNum, guiLeft+(getXSize()/2), 5, 0xffffffff);  
-  this.drawCenteredString(fontRenderer, "Current Rank: "+entry.getPlayerRank(player.getEntityName()), guiLeft+(getXSize()/2), 15, 0xffffffff);
+  this.drawCenteredString(fontRenderer, "Current Team: "+entry.teamNum, guiLeft+(getXSize()/2), guiTop+5, 0xffffffff);  
+  this.drawCenteredString(fontRenderer, "Current Rank: "+entry.getPlayerRank(player.getEntityName()), guiLeft+(getXSize()/2), guiTop+15, 0xffffffff);
   }
 
 @Override
@@ -89,12 +90,6 @@ public void updateScreenContents()
   area.updateGuiPos(guiLeft, guiTop);
   }
 
-
-public void createOrApplyToTeam(int num)
-  {
-  
-  }
-
 @Override
 public void onElementActivated(IGuiElement element)
   {
@@ -106,7 +101,9 @@ public void onElementActivated(IGuiElement element)
   
   
   case 10://apply
-  TeamTracker.instance().handleClientApplyToTeam(player, (byte) teamSelectNumber.getIntVal());
+  byte num = (byte) teamSelectNumber.getIntVal();
+  Config.logDebug("sending application packet, newteam: "+num);
+  TeamTracker.instance().handleClientApplyToTeam(player, num);
   break;
   
   
