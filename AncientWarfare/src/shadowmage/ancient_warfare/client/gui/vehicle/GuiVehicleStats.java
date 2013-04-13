@@ -88,7 +88,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawStringGui("Yaw Min: "+(vehicle.localTurretRotationHome - vehicle.currentTurretRotationMax), 10, 174, color);
   this.drawStringGui("Yaw Max: "+(vehicle.localTurretRotationHome + vehicle.currentTurretRotationMax), 10, 184, color);
   this.drawStringGui("", 10, 194, color);
-  this.drawStringGui("", 10, 204, color);
+  this.drawStringGui("TeamNum: "+vehicle.teamNum, 10, 204, color);
   this.drawStringGui("", 10, 214, color);
   this.drawStringGui("", 10, 224, color);
   }

@@ -25,7 +25,9 @@ import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
 
@@ -39,8 +41,6 @@ public class GuiCSBAdvancedSelection extends   GuiContainerAdvanced
 
 private GuiScreen parent;
 private ContainerCSB container;
-
-String teamString = "Not Forced";
 
 /**
  * @param container
@@ -84,34 +84,17 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 
 @Override
 public void updateScreenContents()
-  {  
-  
-  if(this.container.clientSettings!=null)
-    {
-    if(container.clientSettings.teamOverride>=0)
-      {
-      this.teamString = String.valueOf(container.clientSettings.teamOverride);
-      }
-    else
-      {
-      this.teamString = "Not Forced";
-      }  
-    }
+  {    
+  teamSelect.setValue((int)container.clientSettings.teamOverride);
   }
-
 
 boolean updateOnClose = false;
 
-public void adjustTeam(int adj)
+public void setTeamNum(int num)
   {
-  container.clientSettings.teamOverride += adj;
-  if(container.clientSettings.teamOverride<-1)
+  if(num>=-1 && num<=15)
     {
-    container.clientSettings.teamOverride=-1;
-    }
-  if(container.clientSettings.teamOverride>15)
-    {
-    container.clientSettings.teamOverride=15;
+    container.clientSettings.teamOverride = num;    
     }
   }
 
@@ -168,18 +151,20 @@ public void setupControls()
   gates = this.addCheckBox(3, 10, 70, 16, 16).setChecked(this.container.clientSettings.spawnGate);
   
   this.addGuiButton(10, leftCol, 90, 12, 16, "<");
-  this.addGuiButton(11, midCol, 90, 80, 16, this.teamString);
+  this.teamSelect = this.addNumberField(11, 80, 16, 2, String.valueOf(this.container.clientSettings.teamOverride));
   this.addGuiButton(12, rightCol, 90, 12, 16, ">");
+  this.teamSelect.setIntegerValue().setMinMax(-1, 15).updateRenderPos(midCol, 90);  
   }
 
 GuiCheckBoxSimple vehicles;
 GuiCheckBoxSimple npcs;
 GuiCheckBoxSimple gates;
+GuiNumberInputLine teamSelect;
 
 @Override
 public void updateControls()
   {  
-  // TODO Auto-generated method stub  
+    
   }
 
 @Override
@@ -216,29 +201,19 @@ public void onElementActivated(IGuiElement element)
   
   
   case 10://team --
-  this.adjustTeam(-1);
+  this.setTeamNum(container.clientSettings.teamOverride-1);
   updateOnClose = true;
   this.forceUpdate = true;
   break;
   
   case 11://team button  
-  int buttonNum = Mouse.getEventButton();  
-  if(buttonNum==1)
-    {
-    this.adjustTeam(-1);
-    updateOnClose = true;
-    this.forceUpdate = true;
-    }
-  else if(buttonNum==0)
-    {
-    this.adjustTeam(1);
-    updateOnClose = true;
-    this.forceUpdate = true;
-    }
+  this.setTeamNum(this.teamSelect.getIntVal());
+  updateOnClose = true;
+  this.forceUpdate = true;
   break;
   
   case 12://team ++
-  this.adjustTeam(1);
+  this.setTeamNum(container.clientSettings.teamOverride+1);
   updateOnClose = true;
   this.forceUpdate = true;
   break;

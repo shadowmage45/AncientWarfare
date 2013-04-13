@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
 
@@ -42,6 +43,7 @@ public ContainerTeamControl(EntityPlayer openingPlayer)
 
 public void rebuildTeamList()
   {
+  Config.logDebug("sending rebuild to gui");
   NBTTagCompound tag = new NBTTagCompound();
   tag.setBoolean("rebuild", true);
   this.gui.handleDataFromContainer(tag);

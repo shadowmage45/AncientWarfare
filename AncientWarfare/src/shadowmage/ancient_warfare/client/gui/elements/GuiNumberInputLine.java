@@ -35,6 +35,8 @@ float floatVal;
 float minVal = Float.NEGATIVE_INFINITY;
 float maxVal = Float.POSITIVE_INFINITY;
 
+boolean integerValue = false;
+
 /**
  * @param elementNum
  * @param parent
@@ -48,7 +50,7 @@ float maxVal = Float.POSITIVE_INFINITY;
 public GuiNumberInputLine(int elementNum, IGuiElementCallback parent,  int w, int h, int maxChars, String defaultText)
   {
   super(elementNum, parent, w, h, maxChars, defaultText);
-  formatterNoDec.setDecimalSeparatorAlwaysShown(false);
+  formatterNoDec.setDecimalSeparatorAlwaysShown(false);  
   this.floatVal = StringTools.safeParseFloat(defaultText);
   if(this.maxChars==1)
     {
@@ -58,6 +60,12 @@ public GuiNumberInputLine(int elementNum, IGuiElementCallback parent,  int w, in
     {
     this.text = formatterThreeDec.format(this.floatVal);
     }
+  }
+
+public GuiNumberInputLine setIntegerValue()
+  {
+  this.integerValue = true;
+  return this;
   }
 
 public GuiNumberInputLine setMinMax(float min, float max)
@@ -97,9 +105,9 @@ public boolean handleMouseWheel(int x, int y, int wheel)
   if(floatVal + wheel >= this.minVal && floatVal +wheel <= maxVal)
     {
     floatVal += wheel;
-    if(this.maxChars==1)
+    if(integerValue)
       {
-      this.text = formatterNoDec.format(floatVal);
+      this.text = formatterNoDec.format((int)floatVal);
       }
     else
       {
@@ -141,9 +149,13 @@ public void setText(String text)
     this.text = "";
     this.floatVal = 0.f;
     }
-  if(this.maxChars==1)
+  if(integerValue)
     {
-    this.text = this.formatterOneDec.format(floatVal);
+    this.text = formatterNoDec.format((int)floatVal);
+    }
+  else
+    {
+    this.text = formatterThreeDec.format(floatVal);
     }
   }
 

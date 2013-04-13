@@ -65,7 +65,6 @@ public void handleClientRankChange(String name, byte num, byte newRank)
   tag.setByte("num", num);  
   tag.setByte("rank", newRank);
   tag.setBoolean("rankChange", true);
-  Config.logDebug("sending rank packet to server");
   Packet01ModData pkt = new Packet01ModData();
   pkt.setTeamUpdate(tag);
   pkt.sendPacketToServer();
@@ -77,7 +76,6 @@ public void handleClientApplyToTeam(String name, byte num)
   tag.setString("pName", name);
   tag.setByte("num", num);  
   tag.setBoolean("apply", true);
-  Config.logDebug("sending app packet to server");
   Packet01ModData pkt = new Packet01ModData();
   pkt.setTeamUpdate(tag);
   pkt.sendPacketToServer();
@@ -151,10 +149,8 @@ public void handleClientUpdate(NBTTagCompound tag, EntityPlayer player)
     }
   else if(tag.hasKey("apply"))
     {
-    Config.logDebug("receiving apply packet client side "+name+"  "+tagTeam.teamNum);
     if(tagTeam.memberNames.size()==0)
       {
-      Config.logDebug("adding new team member, skipping apply: "+name+" "+tagTeam.teamNum);
       int oldTeam = this.getTeamForPlayerClient(name);
       this.clientTeamEntries[oldTeam].removePlayer(name);
       if(tagTeam.teamNum==0)
@@ -198,6 +194,7 @@ public void handleClientUpdate(NBTTagCompound tag, EntityPlayer player)
     }
   if(player.openContainer instanceof ContainerTeamControl)
     {
+    tag.setBoolean("rebuild", true);
     ((ContainerTeamControl) player.openContainer).rebuildTeamList();
     }
   }
@@ -242,7 +239,6 @@ public NBTTagCompound getClientInitData()
 
 public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
   { 
-  Config.logDebug("receiving team update server side");
   byte num = tag.getByte("num");
   String name = tag.getString("pName");
   if(serverTeamEntries[num]==null)
@@ -263,19 +259,16 @@ public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
     }
   else if(tag.hasKey("apply"))
     {    
-    Config.logDebug("receiving apply packet server side");
     if(tagTeam.memberNames.size()==0)
       {
       int oldTeam = this.getTeamForPlayerServer(name);
       this.serverTeamEntries[oldTeam].removePlayer(name);
       if(tagTeam.teamNum==0)
         {
-        Config.logDebug("adding player to new team: "+tagTeam.teamNum + " "+name);
         tagTeam.addNewPlayer(name, (byte) 0);
         }
       else
         {
-        Config.logDebug("adding player to new team: "+tagTeam.teamNum + " "+name);
         tagTeam.addNewPlayer(name, (byte) 10);
         }
       }
@@ -283,17 +276,14 @@ public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
       {
       if(tagTeam.teamNum==0)
         {
-        Config.logDebug("adding player to new team: "+tagTeam.teamNum + " "+name);
         tagTeam.addNewPlayer(name, (byte) 0);
         int oldTeam = this.getTeamForPlayerServer(name);
         this.serverTeamEntries[oldTeam].removePlayer(name);
         }
       else
         {
-        Config.logDebug("adding applicant to team: "+tagTeam.teamNum + " "+name);
         tagTeam.addApplicant(name);
-        }
-      
+        }      
       }
     pkt.setTeamUpdate(tag);
     pkt.sendPacketToAllPlayers();

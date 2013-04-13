@@ -82,11 +82,15 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
       }
     if(tag.hasKey("oteam"))
       {
-      test = tag.getInteger("team");
-      if(test>=0)
+      test = tag.getInteger("oteam");
+      if(test>=-0)
         {
         par3List.add("Forced Team Num: "+test);
         }      
+      else
+        {
+        par3List.add("Forced Team Num: Not Forced");
+        }
       }
     if(tag.hasKey("sveh"))
       {

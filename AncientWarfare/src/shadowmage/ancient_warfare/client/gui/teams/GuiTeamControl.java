@@ -41,6 +41,7 @@ GuiScrollableArea area;
 int prevMemberCount = 0;
 private ContainerTeamControl container;
 private GuiNumberInputLine teamSelectNumber;
+private GuiTeamControlAdvanced childGui;
 
 /**
  * @param container
@@ -52,6 +53,8 @@ public GuiTeamControl(Container container)
   this.shouldCloseOnVanillaKeys = true;
   entry = TeamTracker.instance().getTeamEntryFor(player);
   this.prevMemberCount = entry.memberNames.size();
+  this.childGui = new GuiTeamControlAdvanced(this, container);
+  this.container.setGui(this);
   }
 
 @Override
@@ -100,12 +103,11 @@ public void onElementActivated(IGuiElement element)
   break;
   
   case 5:
-  mc.displayGuiScreen(new GuiTeamControlAdvanced(this, inventorySlots));
+  mc.displayGuiScreen(childGui);
   break;
   
   case 10://apply
   byte num = (byte) teamSelectNumber.getIntVal();
-  Config.logDebug("sending application packet, newteam: "+num);
   TeamTracker.instance().handleClientApplyToTeam(player.getEntityName(), num);
   break;
   
@@ -166,12 +168,14 @@ public void updateControls()
 
 @Override
 public void handleDataFromContainer(NBTTagCompound tag)
-  {  
+  {   
   if(tag.hasKey("rebuild"))
     {
+    Config.logDebug("receiving rebuild key");
     this.rebuildTeamInfo();
     this.forceUpdate = true;    
     }  
+  childGui.handleDataFromContainer(tag);
   }
 
 private void rebuildTeamInfo()
