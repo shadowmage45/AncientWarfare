@@ -99,11 +99,14 @@ public void onElementActivated(IGuiElement element)
   this.closeGUI();
   break;
   
+  case 5:
+  mc.displayGuiScreen(new GuiTeamControlAdvanced(this, inventorySlots));
+  break;
   
   case 10://apply
   byte num = (byte) teamSelectNumber.getIntVal();
   Config.logDebug("sending application packet, newteam: "+num);
-  TeamTracker.instance().handleClientApplyToTeam(player, num);
+  TeamTracker.instance().handleClientApplyToTeam(player.getEntityName(), num);
   break;
   
   
@@ -117,7 +120,7 @@ public void setupControls()
   {
   this.addGuiButton(0, 45, 12, "Done").updateRenderPos(getXSize()-45-5, 5);
   this.addGuiButton(5, getXSize()-75-5, 20, 75, 12, "Adv Controls");
-  this.addGuiButton(6, 5, 5, 85, 12, "Change Team");
+  this.addGuiButton(6, 5, 5, 65, 12, "Change Team");
   this.addGuiButton(7, 5, 20, 12, 12, "-");
   this.teamSelectNumber = (GuiNumberInputLine) this.addNumberField(8, 45, 12, 1, "0").setMinMax(0, 15).updateRenderPos(5+12+2, 20);
   this.addGuiButton(9, 5+12+45+4, 20, 12, 12, "+");
@@ -125,19 +128,19 @@ public void setupControls()
     
   int buffer = 2;
   int buttonSize = 8;
-  int keyBindCount = this.entry.memberNames.size();
-  int totalHeight = keyBindCount * (buffer+buttonSize);  
+  int entryCount = this.entry.memberNames.size();
+  int totalHeight = entryCount * (buffer+buttonSize);  
   area = new GuiScrollableArea(1, this, 10, 70, this.getXSize()-20, this.getYSize()-80, totalHeight);
   this.guiElements.put(1, area);
   
   int kX = 5;
   int kY = 0;
   TeamMemberEntry entry;
-  for(int i = 0; i < keyBindCount; i++)
+  for(int i = 0; i < entryCount; i++)
     {
     kY = i * (buffer+buttonSize);
     entry = this.entry.memberNames.get(i);
-    area.addGuiElement(new GuiString(i+2, area, this.getXSize()-30, buttonSize, entry.getMemberName() + "  Rank: "+entry.getMemberRank()).updateRenderPos(kX, kY));
+    area.addGuiElement(new GuiString(i+20, area, this.getXSize()-30, buttonSize, entry.getMemberName() + "  Rank: "+entry.getMemberRank()).updateRenderPos(kX, kY));
     }
   }
 
@@ -147,13 +150,13 @@ public void updateControls()
   area.elements.clear();  
   int buffer = 2;
   int buttonSize = 8;
-  int keyBindCount = this.entry.memberNames.size();
-  int totalHeight = keyBindCount * (buffer+buttonSize); 
+  int entryCount = this.entry.memberNames.size();
+  int totalHeight = entryCount * (buffer+buttonSize); 
   area.updateTotalHeight(totalHeight);
   int kX = 5;
   int kY = 0;
   TeamMemberEntry entry;
-  for(int i = 0; i < keyBindCount; i++)
+  for(int i = 0; i < entryCount; i++)
     {
     kY = i * (buffer+buttonSize);
     entry = this.entry.memberNames.get(i);
@@ -174,7 +177,6 @@ public void handleDataFromContainer(NBTTagCompound tag)
 private void rebuildTeamInfo()
   {
   this.entry = TeamTracker.instance().getTeamEntryFor(player);
-  this.forceUpdate = true;
   }
 
 }

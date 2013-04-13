@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
+import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
 
 /**
  * client/server team data tracker
@@ -57,10 +58,23 @@ public static TeamTracker instance()
   }
 private static TeamTracker INSTANCE;
 
-public void handleClientApplyToTeam(EntityPlayer player, byte num)
+public void handleClientRankChange(String name, byte num, byte newRank)
   {
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setString("pName", player.getEntityName());
+  tag.setString("pName", name);
+  tag.setByte("num", num);  
+  tag.setByte("rank", newRank);
+  tag.setBoolean("rankChange", true);
+  Config.logDebug("sending rank packet to server");
+  Packet01ModData pkt = new Packet01ModData();
+  pkt.setTeamUpdate(tag);
+  pkt.sendPacketToServer();
+  }
+
+public void handleClientApplyToTeam(String name, byte num)
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("pName", name);
   tag.setByte("num", num);  
   tag.setBoolean("apply", true);
   Config.logDebug("sending app packet to server");
@@ -171,10 +185,16 @@ public void handleClientUpdate(NBTTagCompound tag, EntityPlayer player)
     int oldTeam = this.getTeamForPlayerServer(name);
     this.clientTeamEntries[oldTeam].removePlayer(name);
     tagTeam.addNewPlayer(name, (byte) 0);
+    tagTeam.removeApplicant(name);
     }
   else if(tag.hasKey("deny"))
     {
     tagTeam.removeApplicant(name);
+    }
+  else if(tag.hasKey("rankChange"))
+    {
+    TeamMemberEntry entry = tagTeam.getEntryFor(name);
+    entry.setMemberRank(tag.getByte("rank"));
     }
   if(player.openContainer instanceof ContainerTeamControl)
     {
@@ -273,6 +293,7 @@ public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
         Config.logDebug("adding applicant to team: "+tagTeam.teamNum + " "+name);
         tagTeam.addApplicant(name);
         }
+      
       }
     pkt.setTeamUpdate(tag);
     pkt.sendPacketToAllPlayers();
@@ -282,12 +303,20 @@ public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
     int oldTeam = this.getTeamForPlayerServer(name);
     this.serverTeamEntries[oldTeam].removePlayer(name);
     tagTeam.addNewPlayer(name, (byte) 0);
+    tagTeam.removeApplicant(name);
     pkt.setTeamUpdate(tag);
     pkt.sendPacketToAllPlayers();
     }
   else if(tag.hasKey("deny"))
     {
     tagTeam.removeApplicant(name);
+    pkt.setTeamUpdate(tag);
+    pkt.sendPacketToAllPlayers();
+    }
+  else if(tag.hasKey("rankChange"))
+    {
+    TeamMemberEntry entry = tagTeam.getEntryFor(name);
+    entry.setMemberRank(tag.getByte("rank"));
     pkt.setTeamUpdate(tag);
     pkt.sendPacketToAllPlayers();
     }
