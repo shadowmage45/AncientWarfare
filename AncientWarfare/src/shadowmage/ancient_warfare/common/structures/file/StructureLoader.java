@@ -38,6 +38,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
@@ -772,7 +773,39 @@ private void parseVehicle(ProcessedStructure struct, Iterator<String> it)
  */
 private void parseNPC(ProcessedStructure struct, Iterator<String> it)
   {
-
+  if(!it.hasNext())
+    {
+    struct.isValid = false;
+    return;
+    }
+  ArrayList<String> ruleLines = new ArrayList<String>();  
+  String line;  
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("npc:"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith(":endnpc"))
+      {
+      break;      
+      }
+    else
+      {
+      ruleLines.add(line);      
+      }    
+    }     
+  NpcRule rule = NpcRule.parseRule(ruleLines);
+  if(rule!=null)
+    {    
+    struct.NPCRules.add(rule);     
+    }
+  else
+    {
+    Config.logError("Error parsing npc rule for structure!");
+    struct.isValid = false;
+    }
   }
 
 

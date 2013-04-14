@@ -39,8 +39,8 @@ public NpcDummy(int type)
   super(type);
   this.displayName = "Dummy Test";
   this.tooltip = "Dummy Test -- PlaceHolder tooltip";
-  this.addLevel("Dummy Test Level Name 1", "foo");
-  this.addLevel("Dummy Test Level Name 2", "foo");
+  this.addLevel("Dummy Test Level Name 1", "foo", null, null);
+  this.addLevel("Dummy Test Level Name 2", "foo", null, null);
   this.isCombatUnit = true;
   }
 

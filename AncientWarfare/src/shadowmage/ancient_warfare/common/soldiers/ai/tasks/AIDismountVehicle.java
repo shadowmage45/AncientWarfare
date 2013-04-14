@@ -39,7 +39,6 @@ public AIDismountVehicle(NpcBase npc)
 @Override
 public void onTick()
   {
-  Config.logDebug("ticking dismount");
   npc.mountEntity(npc.ridingEntity);
   }
 
@@ -47,6 +46,11 @@ public void onTick()
 public boolean shouldExecute()
   {
   return npc.isRidingVehicle();
+  }
+
+@Override
+public void updateTimers()
+  {
   }
 
 }

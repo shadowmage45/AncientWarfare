@@ -26,6 +26,8 @@ import java.util.Iterator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.ai.EntityAIOpenDoor;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -101,7 +103,10 @@ public NpcBase(World par1World)
 //  this.nav = new EntityNavigator(this);
 //  this.nav = new EntityNavigatorThreaded(this);
   this.nav = new NpcNavigatorScheduled(this);
-  
+
+  this.getNavigator().setBreakDoors(true);
+  this.tasks.addTask(0, new EntityAISwimming(this));
+  this.tasks.addTask(1, new EntityAIOpenDoor(this, true));
   this.stepHeight = 1.1f;
   }
 

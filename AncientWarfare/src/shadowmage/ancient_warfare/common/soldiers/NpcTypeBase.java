@@ -41,10 +41,10 @@ protected int maxHealth = 20;
 protected int inventorySize = 0;
 protected boolean isCombatUnit = false;
 protected boolean isVanillaVillager = false;
-protected List<ItemStack> validTools = new ArrayList<ItemStack>();
-protected List<ItemStack> validArmors = new ArrayList<ItemStack>();
+protected float rangedAttackDistance = 0.f;
 
-
+protected List<ItemStack> toolStacks = new ArrayList<ItemStack>();
+protected List<ItemStack[]> armorStacks = new ArrayList<ItemStack[]>();
 
 public NpcTypeBase(int type)
   {
@@ -74,6 +74,12 @@ public String getDisplayName()
   }
 
 @Override
+public float getRangedAttackDistance(int level)
+  {
+  return rangedAttackDistance;
+  }
+
+@Override
 public String getLevelName(int level)
   {
   if(level<0 && level >=this.levelNames.size())
@@ -99,11 +105,17 @@ public String getDisplayTexture(int level)
   return "foo.png";
   }
 
-public void addLevel(String name, String tex)
+public void addLevel(String name, String tex, ItemStack toolStack, ItemStack[] armorStacks)
   {
   this.levelNames.add(name);
   this.displayTexture.add(tex);
-  this.numOfLevels++;
+  this.toolStacks.add(toolStack);
+  if(armorStacks==null)
+    {
+    armorStacks = new ItemStack[4];
+    }
+  this.armorStacks.add(armorStacks);
+  this.numOfLevels++;  
   }
 
 @Override
@@ -125,15 +137,44 @@ public int getInventorySize(int level)
   }
 
 @Override
-public List<ItemStack> getValidTools()
+public ItemStack getTool(int level)
   {
-  return validTools;
+  if(level>=0 && level<this.toolStacks.size())
+    {
+    return this.toolStacks.get(level);
+    }
+  return null;
   }
 
 @Override
-public List<ItemStack> getValidArmors()
+public ItemStack[] getArmor(int level)
   {
-  return validArmors;
+  if(level>=0 && level<this.toolStacks.size())
+    {    
+    return this.armorStacks.get(level);
+    }
+  return new ItemStack[4];
+  }
+
+/**
+ * overridable helper method to be used during setting of npc constructor info
+ * @param level
+ * @return
+ */
+protected ItemStack getToolStack(int level)
+  {
+  return null;
+  }
+
+/**
+ * overridable helper method to be used during setting of npc constructor info
+ * @param level
+ * @return
+ */
+protected ItemStack[] getArmorStack(int level)
+  {
+  ItemStack[] stacks = new ItemStack[4];  
+  return stacks;
   }
 
 @Override

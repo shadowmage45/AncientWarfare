@@ -46,6 +46,16 @@ public int getBlockId(int x, int y, int z)
   return world.getBlockId(x, y, z);
   }
 
+public int getTravelCost(int x, int y, int z)
+  {
+  int id = world.getBlockId(x, y, z);
+  if((id==Block.waterMoving.blockID || id==Block.waterStill.blockID))//can't swim check
+    {
+    return 30;
+    }  
+  return 10;
+  }
+
 public boolean isWalkable(int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);

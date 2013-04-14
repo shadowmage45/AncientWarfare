@@ -32,8 +32,10 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.soldiers.INpcType;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
+import shadowmage.ancient_warfare.common.soldiers.types.NpcArcher;
 import shadowmage.ancient_warfare.common.soldiers.types.NpcDummy;
-import shadowmage.ancient_warfare.common.soldiers.types.NpcSoldierTest;
+import shadowmage.ancient_warfare.common.soldiers.types.NpcFootsoldier;
+import shadowmage.ancient_warfare.common.soldiers.types.NpcSiegeEngineer;
 import shadowmage.ancient_warfare.common.soldiers.types.NpcVillager;
 
 
@@ -43,7 +45,9 @@ public class NpcRegistry
 
 public static INpcType npcDummy = new NpcDummy(0);
 public static INpcType npcVillager = new NpcVillager(1);
-public static INpcType npcSoldierTest = new NpcSoldierTest(2);
+public static INpcType npcFootSoldier = new NpcFootsoldier(2);
+public static INpcType npcArcher = new NpcArcher(3);
+public static INpcType npcSiegeEngineer = new NpcSiegeEngineer(4);
 
 private NpcRegistry(){}
 private static NpcRegistry INSTANCE;
@@ -57,7 +61,7 @@ public static NpcRegistry instance()
 public void registerNPCs()
   {
   //DEBUG
-  ItemLoader.instance().addSubtypeToItem(ItemLoader.npcSpawner, npcDummy.getGlobalNpcType(), npcDummy.getDisplayName(), npcDummy.getDisplayTooltip());
+  //ItemLoader.instance().addSubtypeToItem(ItemLoader.npcSpawner, npcDummy.getGlobalNpcType(), npcDummy.getDisplayName(), npcDummy.getDisplayTooltip());
   //END DEBUG...
   
   INpcType[] types = NpcTypeBase.getNpcTypes();
@@ -83,7 +87,7 @@ public List getCreativeDisplayItems()
   for(INpcType type : types)
     {
     //DEBUG//|| type.getGlobalNpcType()==0
-    if(type==null ){continue;}//if null or dummy type, don't register....
+    if(type==null || type.getGlobalNpcType()==0){continue;}//if null or dummy type, don't register....
     for(int i = 0; i < type.getNumOfLevels(); i++)
       {
       stack = new ItemStack(ItemLoader.npcSpawner,1,type.getGlobalNpcType());
@@ -114,6 +118,19 @@ public static Entity getNpcForType(int num, World world, int level, int team)
     {
     NpcBase npc = new NpcBase(world);
     npc.setNpcType(type, level);  
+    ItemStack tool = type.getTool(level);
+    if(tool!=null)
+      {
+      npc.setCurrentItemOrArmor(0, tool.copy());
+      }        
+    ItemStack[] armorStacks = type.getArmor(level);
+    for(int i = 0; i <armorStacks.length && i < 4; i++)
+      {
+      if(armorStacks[i]!=null)
+        {
+        npc.setCurrentItemOrArmor(i+1, armorStacks[i].copy());
+        }
+      }
     npc.teamNum = team;
     return npc;
     }

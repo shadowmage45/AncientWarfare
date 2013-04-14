@@ -41,11 +41,11 @@ public NpcVillager(int type)
   this.displayName = "Villager";
   this.tooltip = "Spawns a Villager when used.";
   this.isVanillaVillager = true;
-  this.addLevel("Farmer", "");
-  this.addLevel("Librarian", "");
-  this.addLevel("Priest", "");
-  this.addLevel("Smith", "");
-  this.addLevel("Butcher", "");
+  this.addLevel("Farmer", "", null, null);
+  this.addLevel("Librarian", "", null, null);
+  this.addLevel("Priest", "", null, null);
+  this.addLevel("Smith", "", null, null);
+  this.addLevel("Butcher", "", null, null);
   
   /**
    * reaaaaaaaaallllyyyy ugly reflection to get at cpw's villager registry to pull extra villager types..
@@ -58,7 +58,7 @@ public NpcVillager(int type)
     for(Object ob : theList)
       {
       Integer entry = (Integer)ob;
-      this.addLevel("ModVillager:"+entry, "");
+      this.addLevel("ModVillager:"+entry, "", null, null);
       }
     }
   catch(Exception e)

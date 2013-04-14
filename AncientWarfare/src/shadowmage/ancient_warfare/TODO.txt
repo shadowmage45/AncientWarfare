@@ -34,7 +34,7 @@ VEHICLES
 * soldier ammo priority selection
 
 SOLDIERS
-* create definitive soldier, archer, engineer, medic types
+* create definitive soldier medic type
 * create officer types (lt, com, gen)
 * add ai 'slots' to higher level soldiers? (for patrol/guard duties)
 * some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)
@@ -49,7 +49,9 @@ NPCS
     Seek Shelter At Night
     Stay Near Commander
     Select Commander (constantly-run objective?)
-    Attack Targets Ranged (archers)
+* pathfinding needs a 'wander', as well as look commands
+* pathfinding needs a 'find nearest valid block' for times when passed an invalid position (in the air, underground, etc)
+* archers need to check LOS to target, (not hit friendlies) (do basic yaw vector check)    
          
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...

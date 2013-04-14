@@ -75,6 +75,14 @@ public void onTick()
     }
   }
 
+public void updateTaskTimers()
+  {
+  for(NpcAITask task : this.aiTasks)
+    {
+    task.updateTimers();
+    }
+  }
+
 public void startObjective()
   {
   this.isFinished = false;

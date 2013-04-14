@@ -348,7 +348,7 @@ public void handleInputData(NBTTagCompound tag)
   }
 
 /**
- * handle fire updates, may be passed a null tag...
+ * handle fire updates
  * @param tag
  */
 public void handleFireUpdate()

@@ -42,7 +42,6 @@ public AIMountVehicle(NpcBase npc)
 @Override
 public void onTick()
   {   
-  Config.logDebug("ai mount tick");
   VehicleBase vehicle = (VehicleBase)npc.getTarget().getEntity();
   npc.mountEntity(vehicle);
   npc.setTargetAW(null);
@@ -58,4 +57,9 @@ public boolean shouldExecute()
   return true;
   }
 
+@Override
+public void updateTimers()
+  {
+  
+  }
 }

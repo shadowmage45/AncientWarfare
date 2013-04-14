@@ -188,6 +188,11 @@ public void loadRenders()
   this.addMissileRender(Ammo.ammoBallShot.getAmmoType(), shotRender);
   this.addMissileRender(Ammo.ammoBallIronShot.getAmmoType(), shotRender);
   
+  this.addMissileRender(Ammo.ammoSoldierArrowWood.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoSoldierArrowIron.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoSoldierArrowWoodFlame.getAmmoType(), arrowRender);
+  this.addMissileRender(Ammo.ammoSoldierArrowIronFlame.getAmmoType(), arrowRender);
+  
   /**
    * load up the vehicle item renderer...
    */

@@ -110,9 +110,10 @@ public void addOrUpdateAggroEntry(AITargetEntry type, Entity entity, int aggroAm
 public void checkForTargets()
   {    
 //    Config.logDebug("checking for targets");
+//  long t = System.nanoTime();
   float mr = (float)Config.npcAISearchRange;
   float dist = 0;
-  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(npc.posX-mr, npc.posY-mr, npc.posZ-mr, npc.posX+mr, npc.posY+mr, npc.posZ+mr);
+  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(npc.posX-mr, npc.posY-mr*0.5f, npc.posZ-mr, npc.posX+mr, npc.posY+mr*0.5f, npc.posZ+mr);
   List<Entity> entityList = npc.worldObj.getEntitiesWithinAABBExcludingEntity(npc, bb);
 //    Config.logDebug("entityList size: "+entityList.size());
   if(entityList!=null && !entityList.isEmpty())
@@ -124,7 +125,7 @@ public void checkForTargets()
       {
       ent = it.next();      
       dist = npc.getDistanceToEntity(ent);
-      if(dist>mr || !npc.getEntitySenses().canSee(ent))
+      if(dist>mr )//
         {
         continue;
         }
@@ -137,7 +138,7 @@ public void checkForTargets()
           {
           continue;
           }
-        if(dist>targetEntry.maxTargetRange)
+        if(dist>targetEntry.maxTargetRange || !npc.getEntitySenses().canSee(ent))
           {
           continue;
           }        
@@ -153,6 +154,8 @@ public void checkForTargets()
         }     
       }
     }
+//  long t2 = System.nanoTime();
+//  Config.logDebug("entity search took: "+(t2-t)+"ns");
   }
 
 public float getAttackDistance(AIAggroEntry target)
@@ -174,6 +177,11 @@ public float getAttackDistance(AIAggroEntry target)
     {
     if(target.getEntity()!=null)
       {
+      float rangedDistance = npc.npcType.getRangedAttackDistance(npc.rank);
+      if(rangedDistance>0)
+        {
+        return rangedDistance;
+        }
       return 2.5f * (npc.width*0.5f + target.getEntity().width*0.5f);
       }
     }

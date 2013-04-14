@@ -60,6 +60,7 @@ public void updateObjectives()
   for(NpcAIObjective objective : this.allObjectives)
     {
     objective.updateObjectivePriority();
+    objective.updateTaskTimers();
     }
   this.selectObjective();
   this.tickObjective();

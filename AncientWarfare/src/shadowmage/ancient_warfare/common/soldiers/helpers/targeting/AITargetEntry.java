@@ -71,11 +71,6 @@ public boolean isTarget(World world, int x, int y, int z)
   return !isEntityTarget;
   }
 
-//public boolean isTarget(Class clz)
-//  {
-//  return targetClass.isAssignableFrom(clz);//clz.isAssignableFrom(entityClass);
-//  }
-
 public boolean isEntityTarget()
   {
   return this.isEntityTarget;

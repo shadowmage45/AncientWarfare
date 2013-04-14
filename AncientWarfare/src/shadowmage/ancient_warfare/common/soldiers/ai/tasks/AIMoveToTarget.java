@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.soldiers.ai.tasks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -95,16 +96,16 @@ public void onTick()
       stuckTicks = 0;
       }
     }  
-//  if(useAttackDistance)
-//    {
-//    float xAO = (float) (npc.posX - bX);  
-//    float zAO = (float) (npc.posZ - bZ);
-//    float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
-//    float newLen = distance - (npc.targetHelper.getAttackDistance(npc.getTarget()) * 1.2f);//move slightly inside min effective range attack distance
-//    bX = (float)npc.posX + Trig.sinDegrees(yaw)*newLen;
-//    bZ = (float)npc.posZ + Trig.cosDegrees(yaw)*newLen;
-//    }
-  //find new coordinate at x (attack distance) from target
+  
+  if(useAttackDistance && distance > npc.targetHelper.getAttackDistance(npc.getTarget())) //find new coordinate at x (attack distance) from target
+    {
+    float xAO = (float) (bX - npc.posX);  
+    float zAO = (float) (bZ - npc.posZ);
+    float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
+    float newLen = distance - (npc.targetHelper.getAttackDistance(npc.getTarget()) *.85f);//try to move slightly inside min effective range attack distance
+    bX = (float)npc.posX + Trig.sinDegrees(yaw)*newLen;
+    bZ = (float)npc.posZ + Trig.cosDegrees(yaw)*newLen;    
+    }
   
   if(npc.isRidingVehicle())
     {
@@ -123,4 +124,8 @@ public boolean shouldExecute()
   return npc.getTarget()!=null && npc.getDistanceFromTarget(npc.getTarget()) > minDist;
   }
 
+@Override
+public void updateTimers()
+  {
+  }
 }

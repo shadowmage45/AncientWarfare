@@ -58,14 +58,10 @@ public void onTick()
     }
   else
     {
-    if(attackDelayTicks>0)
+    if(attackDelayTicks<=0)
       {
-      attackDelayTicks--;      
-      }
-    else
-      {
-      this.attackTarget(target);
-      }
+      this.attackTarget(target); 
+      }   
     }  
   if(this.checkIfTargetDead(target))
     {
@@ -75,7 +71,7 @@ public void onTick()
 
 protected void attackTarget(AIAggroEntry target)
   { 
-  attackDelayTicks =  maxAttackDelayTicks/Config.npcAITicks;  
+  attackDelayTicks =  maxAttackDelayTicks / Config.npcAITicks;  
   if(!target.isEntityEntry)
     {
     Config.logDebug("doing block attack");
@@ -110,8 +106,7 @@ protected void attackTargetMounted(AIAggroEntry target)
   byte s = 0;
   boolean turning = false;
   if(!Trig.isAngleBetween(vehicle.rotationYaw+yaw, vehicle.localTurretRotationHome-vehicle.currentTurretRotationMax-1.5f, vehicle.localTurretRotationHome+vehicle.currentTurretRotationMax+1.5f))//expand the bounds a bit
-    {    
-    //if not reachable by turret only find what direction to turn   
+    {      
     if(yaw<0)
       {
       s = 1;//left
@@ -121,8 +116,6 @@ protected void attackTargetMounted(AIAggroEntry target)
       s = -1;//right
       }
     turning = true;
-//    Config.logDebug("y: "+yaw+" d: "+yaw+ " s: "+s);
-    //turn towards target
     }
   vehicle.moveHelper.handleMotionInput((byte) 0, s);
   vehicle.firingHelper.handleSoldierTargetInput(target.posX(), target.posY(), target.posZ());
@@ -134,18 +127,13 @@ protected void attackTargetMounted(AIAggroEntry target)
     {
     if(attackDelayTicks<=0)
       {
-//      Config.logDebug("attacking target from vehicle");
       vehicle.firingHelper.handleFireUpdate();
       this.attackDelayTicks = (vehicle.currentReloadTicks + 20)/Config.npcAITicks;
       }    
     }
   else//delay a bit to line up to target 
     {
-    this.attackDelayTicks = 5;
-    }
-  if(attackDelayTicks>0)
-    {
-    attackDelayTicks--;
+    this.attackDelayTicks = 1;
     } 
   }
 
@@ -172,8 +160,17 @@ protected boolean checkIfTargetDead(AIAggroEntry target)
 
 @Override
 public boolean shouldExecute()
-  {
+  {  
   return npc.getTargetType()==NpcTargetHelper.TARGET_ATTACK && npc.getTarget().getDistanceFrom() <= npc.targetHelper.getAttackDistance(npc.getTarget());
+  }
+
+@Override
+public void updateTimers()
+  {
+  if(attackDelayTicks>0)
+    {
+    attackDelayTicks--;
+    } 
   }
 
 }

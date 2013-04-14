@@ -46,9 +46,9 @@ public NpcSoldierTest(int type)
   super(type);
   this.displayName = "Soldier Test";
   this.tooltip = "Test Soldier for Attack and Vehicle Interaction";
-  this.addLevel("Soldier Rank 0", "foo");
-  this.addLevel("Soldier Rank 1", "foo");
-  this.addLevel("Soldier Rank 2", "foo");
+  this.addLevel("Soldier Rank 0", "foo", null, null);
+  this.addLevel("Soldier Rank 1", "foo", null, null);
+  this.addLevel("Soldier Rank 2", "foo", null, null);
   }
 
 @Override

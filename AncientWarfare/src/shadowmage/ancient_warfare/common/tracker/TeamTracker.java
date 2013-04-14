@@ -47,7 +47,16 @@ public class TeamTracker implements INBTTaggable
 private TeamEntry[] serverTeamEntries = new TeamEntry[16];
 private TeamEntry[] clientTeamEntries = new TeamEntry[16];
 
-private TeamTracker(){}
+private TeamTracker()
+  {
+  for(int i= 0; i < 16; i++)
+    {
+    serverTeamEntries[i] = new TeamEntry();
+    clientTeamEntries[i] = new TeamEntry();
+    serverTeamEntries[i].teamNum = i;
+    clientTeamEntries[i].teamNum = i;
+    }
+  }
 public static TeamTracker instance()
   {
   if(INSTANCE==null)
@@ -356,7 +365,12 @@ public int getTeamForPlayerClient(String name)
 
 public boolean isHostileTowards(World world, int aggressor, int defender)
   {
-  return this.getTeamEntry(world, aggressor).isHostileTowards(defender);
+  TeamEntry entry = this.getTeamEntry(world, aggressor);
+  if(entry!=null)
+    {
+    return entry.isHostileTowards(defender);
+    }
+  return true;
   }
 
 /**
@@ -441,8 +455,15 @@ public void readFromNBT(NBTTagCompound tag)
 
 public void clearAllData()
   {
-  this.serverTeamEntries = new TeamEntry[16];
+  this.serverTeamEntries = new TeamEntry[16];  
   this.clientTeamEntries = new TeamEntry[16];
+  for(int i= 0; i < 16; i++)
+    {
+    serverTeamEntries[i] = new TeamEntry();
+    clientTeamEntries[i] = new TeamEntry();
+    serverTeamEntries[i].teamNum = i;
+    clientTeamEntries[i].teamNum = i;
+    }
   }
 
 }

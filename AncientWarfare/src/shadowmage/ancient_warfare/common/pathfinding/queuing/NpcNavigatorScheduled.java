@@ -22,16 +22,16 @@ package shadowmage.ancient_warfare.common.pathfinding.queuing;
 
 import java.util.List;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.network.Packet04Npc;
 import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
+import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
 /**
@@ -96,6 +96,44 @@ public NpcNavigatorScheduled(NpcBase owner)
     }
   }
 
+protected boolean canPathStraightToTarget(int ex, int ey, int ez, int tx, int ty, int tz)
+  {
+  int yOffset = ty-ey;
+  int currentY = ey;
+  if(Math.abs(yOffset)>1)
+    {
+    return false;
+    }
+  //do a trace of blocks to get the x,z coords
+  List<BlockPosition> blockHits = PathUtils.getPositionsBetween2(ex, ez, tx, tz);
+  for(BlockPosition hit : blockHits)
+    {
+    if(worldAccess.isWalkable(hit.x, currentY-1, hit.z))
+      {
+      currentY--;
+      }
+    else if(worldAccess.isWalkable(hit.x, currentY, hit.z))
+      {
+      
+      }
+    else if(worldAccess.isWalkable(hit.x, currentY+1, hit.z))
+      {
+      currentY++;
+      }
+    else
+      {
+//      Config.logDebug("impassible block, no staight path: "+hit.x+","+currentY+","+hit.z);
+      return false;
+      }
+    if(Math.abs(currentY-ty)>1)
+      {
+//      Config.logDebug("large y diff, no staight path");
+      return false;
+      }
+    }
+  return true;
+  }
+
 /**
  * called frequently, every x ticks (5) from aiTasks
  * @param tx
@@ -107,13 +145,26 @@ public void setMoveTo(int tx, int ty, int tz)
   int ex = MathHelper.floor_double(entity.posX);
   int ey = MathHelper.floor_double(entity.posY);
   int ez = MathHelper.floor_double(entity.posZ);
+  if(canPathStraightToTarget(ex, ey, ez, tx, ty, tz))
+    {
+//    Config.logDebug("skipping straight to target");
+    this.targetNode = new Node(tx,ty,tz);
+    this.targetX = tx;
+    this.targetY = ty;
+    this.targetZ = tz;
+    return;
+    }
+  else
+    {
+//    Config.logDebug("NO STRAIGHT PATH AVAILABLE, FINDING PATH");
+    }
   boolean calcPath = false;    
   Node endNode = this.path.getEndNode();    
   if(endNode==null)//we have no path, request a starter, and full if necessary
     {
     if(targetNode==null)
       {
-      Config.logDebug("new target and had no path, recalculating path");
+//      Config.logDebug("new target and had no path, recalculating path");
       calcPath = true;
       } 
     }
@@ -130,19 +181,19 @@ public void setMoveTo(int tx, int ty, int tz)
         targetY = ty;
         targetZ = tz;
         this.scheduler.requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, tx, ty, tz);
-                Config.logDebug("attempting re-use of entire old path with addition");
+//                Config.logDebug("attempting re-use of entire old path with addition");
         }
       else
         {
         //try and see if target is anywhere near a point on old path, and recalc/reqeuest addition from that point
         //else request full new path
-                Config.logDebug("new target and had path, large diff from old end-node, recalculating path");
+//                Config.logDebug("new target and had path, large diff from old end-node, recalculating path");
         calcPath = true;
         }      
       }
     else
       {
-            Config.logDebug("skipping recalc due to little difference");
+//            Config.logDebug("skipping recalc due to little difference");
       }
     }
   if(calcPath)
@@ -153,7 +204,7 @@ public void setMoveTo(int tx, int ty, int tz)
       {
       if(endNode.x!=tx || endNode.y!=ty || endNode.z != tz)//if we didn't find the target, request a full pathfind from end of starter path to the target.
         {
-        Config.logDebug("starter path did not complete, requesting full");
+//        Config.logDebug("starter path did not complete, requesting full");
         this.scheduler.requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, targetX, targetY, targetZ);
         }      
       }
@@ -161,50 +212,6 @@ public void setMoveTo(int tx, int ty, int tz)
     this.targetY = ty;
     this.targetZ = tz;
     this.targetNode = this.path.claimNode();
-//    if(!entity.worldObj.isRemote)
-//      {
-//      NBTTagCompound tag = new NBTTagCompound();
-//      tag.setInteger("tx", tx);
-//      tag.setInteger("ty", ty);
-//      tag.setInteger("tz", tz);
-//      Packet04Npc pkt = new Packet04Npc();
-//      pkt.setParams(entity);
-//      pkt.setPathTarget(tag);
-//      pkt.sendPacketToAllTrackingClients(entity);
-//      }
-    }
-  }
-
-private void claimNode()
-  {
-  Config.logDebug("claiming node: "+this.entity);
-  for(Node n : this.path.getPath())
-    {
-    Config.logDebug("pathNode: "+n);
-    }
-  this.targetNode = this.path.claimNode();
-  if(targetNode!=null)
-    {
-    Node p = path.getFirstNode();
-    if(p!=null && p.equals(targetNode))
-      {
-      targetNode = this.path.claimNode();
-      p = this.path.getFirstNode();
-      }
-    if(p!=null && targetNode!=null)
-      {
-//      Config.logDebug("examining next node in path:"+p);
-      float yaw1 = Trig.getYawTowardsTarget(entity.posX, entity.posZ, targetNode.x+0.5d, targetNode.z+0.5d, entity.rotationYaw);
-      float yaw2 = Trig.getYawTowardsTarget(entity.posX, entity.posZ, p.x+0.5d, p.z+0.5d, entity.rotationYaw);
-//      float dist1 = Trig.getDistance(entity.posX, entity.posY, entity.posZ, targetNode.x+0.5d, targetNode.y, targetNode.z+0.5d);
-//      float dist2 = Trig.getDistance(entity.posX, entity.posY, entity.posZ, p.x+0.5d, p.y, p.z+0.5d);
-//      Config.logDebug(yaw1+","+yaw2+" :: "+dist1+","+dist2);
-      if(Math.abs(yaw2)<Math.abs(yaw1))
-        {
-        Config.logDebug("skipping first node due to it being behind..");
-        this.targetNode = path.claimNode();
-        }
-      }
     }
   }
 
@@ -222,10 +229,10 @@ public void moveTowardsCurrentNode()
     int ez = MathHelper.floor_double(entity.posZ);
     if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<1.0f)
       {
-       Config.logDebug("claiming node from completion LATE "+this.targetNode);
+//       Config.logDebug("claiming node from completion LATE "+this.targetNode);
       this.targetNode = path.claimNode();
 //       this.claimNode();
-        Config.logDebug("new :: "+this.targetNode);
+//        Config.logDebug("new :: "+this.targetNode);
       if(targetNode==null)
         {   
         

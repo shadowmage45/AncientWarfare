@@ -37,13 +37,14 @@ public abstract String getLevelName(int level);
 public abstract int getNumOfLevels();
 public abstract int getMaxHealth(int level);
 public abstract int getInventorySize(int level);
+public abstract float getRangedAttackDistance(int level);
 
 public abstract List<NpcAIObjective> getAI(NpcBase npc, int level);
 
 public abstract boolean isCombatUnit();
 public abstract boolean isVanillaVillager();
-public abstract List<ItemStack> getValidTools();
-public abstract List<ItemStack> getValidArmors();
+public abstract ItemStack getTool(int level);
+public abstract ItemStack[] getArmor(int level);
 
 public abstract NpcVarsHelper getVarsHelper(NpcBase npc);
 public abstract void addTargets(NpcBase npc, NpcTargetHelper helper);

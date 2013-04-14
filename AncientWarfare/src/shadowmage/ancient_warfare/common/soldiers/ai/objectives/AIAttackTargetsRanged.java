@@ -18,48 +18,34 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.ai;
-
-import java.util.Random;
+package shadowmage.ancient_warfare.common.soldiers.ai.objectives;
 
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
+import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIAttackTargetBow;
+import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
+import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 
-public abstract class NpcAITask
+public class AIAttackTargetsRanged extends AIAttackTargets
 {
 
-public static final int NONE = 0;
-public static final int WANDER = 1;
-public static final int FOLLOW = 2;
-public static final int ATTACK = 4;
-public static final int HEAL = 8;
-public static final int REPAIR = 16;
-public static final int HARVEST = 32;
-public static final int MOVE_TO = 64;
-public static final int MOUNT_VEHICLE = 128;
-
-protected NpcBase npc;
-protected int taskType = 0;
-protected int exclusiveTasks = 0;
-protected final Random rng = new Random();
-
-public NpcAITask(NpcBase npc)
-  {
-  this.npc = npc;
-  }
-
-public abstract void onTick();
-
-public abstract boolean shouldExecute();
-
 /**
- * fired regardless of shouldExecute or not
+ * @param npc
+ * @param maxPriority
+ * @param minRange
+ * @param maxRange
  */
-public abstract void updateTimers();
-
-public boolean canExecute(int mutex)
+public AIAttackTargetsRanged(NpcBase npc, int maxPriority, int minRange,    int maxRange)
   {
-  return (this.exclusiveTasks & mutex) == 0;
+  super(npc, maxPriority, minRange, maxRange);
   }
 
+@Override
+public void addTasks()
+  {
+  this.aiTasks.add(new AIMoveToTarget(npc, 1.f, true));
+  this.aiTasks.add(new AIAttackTargetBow(npc));
+  }
 
 }

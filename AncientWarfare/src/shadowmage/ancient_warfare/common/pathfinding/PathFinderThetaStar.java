@@ -141,6 +141,7 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
 
 private Node bestEndNode = null;
 private float bestPathLength = 0.f;
+private float longestPathFound = 0.f;
 private float bestPathDist = Float.POSITIVE_INFINITY;
 private int searchIteration;
 
@@ -209,20 +210,21 @@ private boolean shouldTerminateEarly()
     }
   if(this.searchIteration>this.maxSearchIterations)
     {
+    return true;
 //    Config.logDebug("search iterations exceeded max of: "+this.maxSearchIterations+ " terminating search.");
     }
   float dist = this.currentNode.getDistanceFrom(tx,ty,tz);
-  float len = this.currentNode.getPathLength();
-  if( dist < bestPathDist || len > bestPathLength )
+  float len = this.currentNode.g;
+  if( dist < bestPathDist )//|| len > bestPathLength
     {
     this.bestEndNode = this.currentNode;
     this.bestPathDist = dist;
-    this.bestPathLength = len;
-    if(len>maxRange)
-      {
-//      Config.logDebug("search length exceeded max of: "+this.maxRange+", terminating search.");      
-      return true;
-      }
+    this.bestPathLength = len;    
+    }
+  if(len>maxRange)
+    {
+//    Config.logDebug("search length exceeded max of: "+this.maxRange+", terminating search.");      
+    return true;
     }
   return false;
   }
@@ -322,9 +324,10 @@ private Node getOrMakeNode(int x, int y, int z, Node p)
   n = new Node(x,y,z);
   if(p!=null)
     {
+    n.travelCost = world.getTravelCost(x, y, z);
     n.parentNode = p;
-    n.g = p.g + n.getDistanceFrom(p);
-    n.f = n.g + n.getDistanceFrom(tx, ty, tz);
+    n.g = p.g + n.getDistanceFrom(p)+n.travelCost;
+    n.f = n.g + n.getDistanceFrom(tx, ty, tz);//n.getH(tx, ty, tz);//.getDistanceFrom(tx, ty, tz)+n.travelCost;
     }  
   allNodes.add(n);
   return n;
