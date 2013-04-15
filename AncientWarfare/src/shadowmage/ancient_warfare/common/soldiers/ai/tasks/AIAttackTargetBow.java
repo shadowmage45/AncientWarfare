@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai.tasks;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,6 +35,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.RayTraceUtils;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -136,6 +138,18 @@ protected void doBowAttack(Entity target)
 
 protected boolean isLineOfSightClear(AIAggroEntry target)
   {
+  HashSet<Entity> excluded = new HashSet<Entity>();
+  excluded.add(npc);
+  MovingObjectPosition hit = RayTraceUtils.tracePath(npc.worldObj, (float)npc.posX, (float)npc.posY+npc.getEyeHeight(), (float)npc.posZ, target.posX(), target.posY(), target.posZ(), 0.3f, excluded);
+  if(hit!=null && hit.entityHit!=null)
+    {
+    Config.logDebug("hit entity "+hit.entityHit);
+    if(hit.entityHit!=target.getEntity())
+      {
+      Config.logDebug("was not target, aborting");
+      return false;
+      }
+    }
 //  Vec3 sourcePos = Vec3.vec3dPool.getVecFromPool(npc.posX, npc.posY+npc.getEyeHeight(), npc.posZ);
 //  float rx = (float) (target.posX()-npc.posX);
 //  float ry = (float) (target.posY()-npc.posY);

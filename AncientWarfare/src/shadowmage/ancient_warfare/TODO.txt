@@ -3,8 +3,6 @@ TODO before first alpha release:
 GENERAL
 * change inventoryTools to manipulate containers as well
 * partially destroyable blocks ? (hold destruction status as meta-data?)
-* create a way for tile entities to broadcast to nearby soldiers (to denote valuable target)(event bus?) 
-        --(probably just grab a BB of entities every X ticks, xmit to any that are AWNpcs)
 * move upgrades/ammo/armor over to self-registering class with an underlying array instead 
         --of the map they currently use
 * grenades
@@ -16,9 +14,9 @@ TEAM CONTROL GUI
 * adv control will allow higher ranks to approve/deny applicants, as well as adjust ranks of (lower ranked) team
         members.  It will also allow higher ranks to set the hostile/friendly status of other teams (one-sided war
         declarations).          
+* seems to not re-set properly (if changed and then changed BACK)        
         
 PATHFINDING
-* artificially bound path-finder, by disallowing nodes outside of a certain area     
 * entities should re-check the nodes in their path to make sure they are still viable nodes
 * onMovementTick -- check to see if either A:target is within Y diff && 1 x/z diff, or target is visible with LOS check -- else calc path back to target node, append to START of path
 * if entity is in air (only partially on block), get from block below
@@ -31,7 +29,6 @@ VEHICLES
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
 * ammo select GUI
 * modelRender for inventory ammo
-* soldier ammo priority selection/soldiers don't use ammo? 
 
 SOLDIERS
 * create definitive soldier medic type
@@ -39,7 +36,6 @@ SOLDIERS
 * add ai 'slots' to higher level soldiers? (for patrol/guard duties)
 * some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)
 * inter-soldier comms (more commanders yelling orders to soldiers)
-* archer needs more ammo types/damage by rank
 * need to set damage done by rank
 * archer needs to test LOS on target (probably do ray trace against entities in the BB)
 
@@ -51,10 +47,7 @@ NPCS
     Stay Near Home
     Seek Shelter At Night
     Stay Near Commander
-    Select Commander (constantly-run objective?)
-* pathfinding needs a 'wander', as well as look commands
-* pathfinding needs a 'find nearest valid block' for times when passed an invalid position (in the air, underground, etc)
-* archers need to check LOS to target, (not hit friendlies) (do basic yaw vector check)    
+    Select Commander (constantly-run objective?)  
          
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...

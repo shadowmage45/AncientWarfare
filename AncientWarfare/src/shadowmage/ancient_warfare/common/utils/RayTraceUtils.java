@@ -23,6 +23,8 @@ package shadowmage.ancient_warfare.common.utils;
 import java.util.HashSet;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.config.Config;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -45,8 +47,14 @@ public static MovingObjectPosition tracePath(World world, float x, float y, floa
   Vec3 startVec = Vec3.vec3dPool.getVecFromPool(x, y, z);
   Vec3 lookVec = Vec3.vec3dPool.getVecFromPool(tx-x, ty-y, tz-z);
   Vec3 endVec = Vec3.vec3dPool.getVecFromPool(tx, ty, tz);
-  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(x, y, z, tx, ty, tz).expand(borderSize, borderSize, borderSize);
-  List<Entity> allEntities = world.getEntitiesWithinAABBExcludingEntity(null, bb);
+  float minX = x < tx ? x : tx;
+  float minY = y < ty ? y : ty;
+  float minZ = z < tz ? z : tz;
+  float maxX = x > tx ? x : tx;
+  float maxY = y > ty ? y : ty; 
+  float maxZ = z > tz ? z : tz;
+  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(minX, minY, minZ, maxX, maxY, maxZ).expand(borderSize, borderSize, borderSize);
+  List<Entity> allEntities = world.getEntitiesWithinAABBExcludingEntity(null, bb);  
   MovingObjectPosition blockHit = world.rayTraceBlocks(startVec, endVec);
   startVec = Vec3.vec3dPool.getVecFromPool(x, y, z);
   endVec = Vec3.vec3dPool.getVecFromPool(tx, ty, tz);
@@ -64,16 +72,21 @@ public static MovingObjectPosition tracePath(World world, float x, float y, floa
     {    
     if(ent.canBeCollidedWith() && !excluded.contains(ent))
       {
-      entityBb = ent.getBoundingBox().expand(borderSize, borderSize, borderSize);
-      intercept = entityBb.calculateIntercept(startVec, endVec);
-      if(intercept!=null)
+      float entBorder =  ent.getCollisionBorderSize();
+      entityBb = ent.boundingBox;
+      if(entityBb!=null)
         {
-        currentHit = (float) intercept.hitVec.distanceTo(startVec);
-        if(currentHit<closestHit || currentHit==0)
+        entityBb = entityBb.expand(entBorder, entBorder, entBorder);
+        intercept = entityBb.calculateIntercept(startVec, endVec);
+        if(intercept!=null)
           {
-          closestHit = currentHit;
-          closestHitEntity = ent;
-          }
+          currentHit = (float) intercept.hitVec.distanceTo(startVec);
+          if(currentHit < closestHit || currentHit==0)
+            {            
+            closestHit = currentHit;
+            closestHitEntity = ent;
+            }
+          } 
         }
       }
     }  

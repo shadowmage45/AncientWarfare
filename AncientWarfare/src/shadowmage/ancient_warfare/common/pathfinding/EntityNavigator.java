@@ -50,6 +50,7 @@ Node targetNode = null;
 
 public EntityNavigator(IPathableEntity owner)
   {
+	this.owner = owner;
   this.entity = owner.getEntity();
   this.worldAccess = new PathWorldAccessEntity(entity.worldObj, entity);
   this.worldAccess.canOpenDoors = true;
