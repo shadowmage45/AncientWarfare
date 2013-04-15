@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class IDPairCount extends IDPair
 {
 
+public int count = 1;
 /**
  * @param id
  * @param meta
@@ -60,7 +61,6 @@ public IDPairCount copy()
   return new IDPairCount(id, meta, count);
   }
 
-public int count = 1;
 
 public String toString()
   {

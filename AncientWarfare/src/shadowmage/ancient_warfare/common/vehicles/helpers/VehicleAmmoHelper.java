@@ -26,10 +26,12 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmoEntry;
+import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
@@ -103,8 +105,17 @@ public void decreaseCurrentAmmo(int num)
     }
   }
 
+/**
+ * get the current EFFECTIVE ammo count (not actual).  Soldiers use this to fool
+ * the vehicle into firing infinite rounds.
+ * @return
+ */
 public int getCurrentAmmoCount()
   {
+  if(!Config.soldiersUseAmmo && vehicle.riddenByEntity instanceof NpcBase)
+    {
+    return 64;
+    }
   if(this.ammoEntries.size()>0 && this.currentAmmoType < this.ammoEntries.size())
     {
     return this.ammoEntries.get(currentAmmoType).ammoCount;
@@ -271,6 +282,11 @@ public void handleAmmoUpdatePacket(NBTTagCompound tag)
 
 public IAmmoType getCurrentAmmoType()
   {  
+  if(!Config.soldiersUseAmmo && vehicle.riddenByEntity instanceof NpcBase)
+    {
+    NpcBase npc = (NpcBase)vehicle.riddenByEntity;
+    return vehicle.vehicleType.getAmmoForSoldierRank(npc.rank);     
+    }
   if(currentAmmoType<this.ammoEntries.size() && currentAmmoType>=0)
     {
     VehicleAmmoEntry entry = this.ammoEntries.get(currentAmmoType);

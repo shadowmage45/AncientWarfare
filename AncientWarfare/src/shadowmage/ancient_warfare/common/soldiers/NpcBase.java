@@ -20,9 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.soldiers;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -34,13 +31,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
-import shadowmage.ancient_warfare.common.pathfinding.queuing.NpcNavigatorScheduled;
-import shadowmage.ancient_warfare.common.pathfinding.threading.EntityNavigatorThreaded;
+import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
+import shadowmage.ancient_warfare.common.pathfinding.EntityNavigator;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.soldiers.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
-import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -50,7 +46,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class NpcBase extends EntityCreature implements IEntityAdditionalSpawnData, IEntityContainerSynch
+public class NpcBase extends EntityCreature implements IEntityAdditionalSpawnData, IEntityContainerSynch, IPathableEntity
 {
 
 /**
@@ -87,8 +83,8 @@ private NpcAIObjectiveManager aiManager;
 
 //public EntityNavigator nav;
 //public EntityNavigatorThreaded nav;
-public NpcNavigatorScheduled nav;
-
+//public NpcNavigatorScheduled nav;
+public EntityNavigator nav;
 /**
  * @param par1World
  */
@@ -102,7 +98,8 @@ public NpcBase(World par1World)
   this.setAIMoveSpeed(0.325f);
 //  this.nav = new EntityNavigator(this);
 //  this.nav = new EntityNavigatorThreaded(this);
-  this.nav = new NpcNavigatorScheduled(this);
+//  this.nav = new NpcNavigatorScheduled(this);
+  this.nav = new EntityNavigator(this);
 
   this.getNavigator().setBreakDoors(true);
   this.tasks.addTask(0, new EntityAISwimming(this));
@@ -247,13 +244,11 @@ public void onUpdate()
     npcAITargetTick = 0;
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
-    //this.pathTest.findPath(worldObj, posX, posY, posZ, posX+10, posY, posZ, 40);
     }
   if(!this.worldObj.isRemote)
     {
     this.nav.moveTowardsCurrentNode();
     }
-  super.onUpdate(); 
   if(target!=null)
     {
     this.getLookHelper().setLookPosition(target.posX(), target.posY(), target.posZ(), 10.0F, (float)this.getVerticalFaceSpeed());
@@ -261,8 +256,8 @@ public void onUpdate()
   else
     {
     this.getLookHelper().setLookPosition(posX+motionX, posY+motionY+getEyeHeight(), posZ+motionZ, 10.f, (float)this.getVerticalFaceSpeed());
-    }
-  
+    } 
+  super.onUpdate();    
   }
 
 public void handlePacketUpdate(NBTTagCompound tag)
@@ -330,29 +325,43 @@ public void readFromNBT(NBTTagCompound tag)
 @Override
 public void handleClientInput(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-
+ 
   }
 
 @Override
 public void addPlayer(EntityPlayer player)
   {
-  // TODO Auto-generated method stub
-
+  
   }
 
 @Override
 public void removePlayer(EntityPlayer player)
   {
-  // TODO Auto-generated method stub
-
+  
   }
 
 @Override
 public boolean canInteract(EntityPlayer player)
   {
-  // TODO Auto-generated method stub
   return false;
+  }
+
+@Override
+public void setMoveTo(double x, double y, double z)
+  {
+  this.getMoveHelper().setMoveTo(x, y, z, this.getAIMoveSpeed());
+  }
+
+@Override
+public Entity getEntity()
+  {
+  return this;
+  }
+
+@Override
+public boolean isPathableEntityOnLadder()
+  {
+  return this.isOnLadder();
   }
 
 }

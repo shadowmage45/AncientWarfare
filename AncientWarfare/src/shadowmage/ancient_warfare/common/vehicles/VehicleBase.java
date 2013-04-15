@@ -35,14 +35,14 @@ import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
+import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
-import shadowmage.ancient_warfare.common.pathfinding.queuing.VehicleNavigatorScheduled;
+import shadowmage.ancient_warfare.common.pathfinding.EntityNavigator;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
-import shadowmage.ancient_warfare.common.utils.EntityPathfinder;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -63,7 +63,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IEntityContainerSynch
+public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IEntityContainerSynch, IPathableEntity
 {
 /**
  * these are the current max stats.  set from setVehicleType().  
@@ -136,12 +136,19 @@ public int teamNum = 0;
  */
 private boolean isRidden = false;
 
+/**
+ * used to determine if it should allow interaction (setup time on vehicle placement)
+ */
 private boolean isSettingUp = false;
 
 /**
  * set client-side when incoming damage is taken
  */
 public int hitAnimationTicks = 0;
+
+/**
+ * how many ticks until next move packet should be sent? Used when Client-side movement is enabled.
+ */
 public int moveUpdateTicks = 0;
 
 /**
@@ -153,8 +160,7 @@ public VehicleMovementHelper moveHelper;
 public VehicleFiringHelper firingHelper;
 public VehicleFiringVarsHelper firingVarsHelper;
 public VehicleInventory inventory;
-public EntityPathfinder navigator;
-public VehicleNavigatorScheduled nav;
+public EntityNavigator nav;
 
 public IVehicleType vehicleType = VehicleRegistry.CATAPULT_STAND_FIXED;//set to dummy vehicle so it is never null...
 public int vehicleMaterialLevel = 0;//the current material level of this vehicle. should be read/set prior to calling updateBaseStats
@@ -162,21 +168,16 @@ public int vehicleMaterialLevel = 0;//the current material level of this vehicle
 public VehicleBase(World par1World)
   {
   super(par1World);
-  this.navigator = new EntityPathfinder(this, worldObj, 16);  
   this.upgradeHelper = new VehicleUpgradeHelper(this);
   this.moveHelper = new VehicleMovementHelper(this);
   this.ammoHelper = new VehicleAmmoHelper(this);
   this.firingHelper = new VehicleFiringHelper(this);
   this.firingVarsHelper = new DummyVehicleHelper(this);
   this.inventory = new VehicleInventory(this);
-  this.nav = new VehicleNavigatorScheduled(this);
-//  nav.setCanOpenDoors(false);
-//  nav.setCanSwim(false);
-//  nav.setCanUseLadders(false);
+  this.nav = new EntityNavigator(this);
   this.stepHeight = 1.12f;
   this.entityCollisionReduction = 0.9f;
-  this.onGround = false;
-  
+  this.onGround = false;  
   }
 
 public void setVehicleType(IVehicleType vehicle, int materialLevel)
@@ -1101,12 +1102,31 @@ public void addPlayer(EntityPlayer player)
 @Override
 public void removePlayer(EntityPlayer player)
   {
+  
   }
 
 @Override
 public boolean canInteract(EntityPlayer player)
   {
   return true;
+  }
+
+@Override
+public void setMoveTo(double x, double y, double z)
+  {
+  this.moveHelper.setMoveTo(x, y, z);
+  }
+
+@Override
+public boolean isPathableEntityOnLadder()
+  {
+  return false;
+  }
+
+@Override
+public Entity getEntity()
+  {
+  return this;
   }
 
 }

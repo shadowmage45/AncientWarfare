@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public interface INpcType
 {
@@ -43,6 +44,8 @@ public abstract List<NpcAIObjective> getAI(NpcBase npc, int level);
 
 public abstract boolean isCombatUnit();
 public abstract boolean isVanillaVillager();
+public abstract IAmmoType getAmmoType(int level);
+public abstract float getAccuracy(int level);
 public abstract ItemStack getTool(int level);
 public abstract ItemStack[] getArmor(int level);
 

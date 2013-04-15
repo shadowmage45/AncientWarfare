@@ -116,18 +116,21 @@ protected void doBowAttack(Entity target)
   float ty = (float) (target.posY+target.height*0.5f - y);
   float tz = (float) (target.posZ - z);
   float angle = Trig.getLaunchAngleToHit(tx, ty, tz, 20.f).value();
-  float accuracy = 0.85f;
-  IAmmoType ammo = Ammo.ammoSoldierArrowWood;
-  if(Config.adjustMissilesForAccuracy)
-    {       
-    yaw   += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;
-    angle += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;    
-    }  
-  MissileBase missile = getMissile(ammo, x, y, z, yaw, angle, 20.f);
-  npc.playSound("random.bow", 1.0F, 1.0F / (rng.nextFloat() * 0.4F + 0.8F));
-  if(missile!=null)
+  float accuracy = npc.npcType.getAccuracy(npc.rank);
+  IAmmoType ammo = npc.npcType.getAmmoType(npc.rank);
+  if(ammo!=null)
     {
-    npc.worldObj.spawnEntityInWorld(missile);
+    if(Config.adjustMissilesForAccuracy)
+      {       
+      yaw   += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;
+      angle += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;    
+      }  
+    MissileBase missile = getMissile(ammo, x, y, z, yaw, angle, 20.f);
+    npc.playSound("random.bow", 1.0F, 1.0F / (rng.nextFloat() * 0.4F + 0.8F));
+    if(missile!=null)
+      {
+      npc.worldObj.spawnEntityInWorld(missile);
+      }
     }
   }
 

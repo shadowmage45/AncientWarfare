@@ -21,7 +21,9 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -107,6 +109,7 @@ public String displayTooltip = "AWVehicleBase";
 public List<IAmmoType> validAmmoTypes = new ArrayList<IAmmoType>();
 public List<IVehicleUpgradeType> validUpgrades = new ArrayList<IVehicleUpgradeType>();
 public List<IVehicleArmorType> validArmors = new ArrayList<IVehicleArmorType>();
+public Map<Integer, IAmmoType> ammoBySoldierRank = new HashMap<Integer, IAmmoType>();
 
 int storageBaySize = 0;
 int ammoBaySize = 6;
@@ -120,6 +123,12 @@ public VehicleType(int typeNum)
   {
   this.vehicleType = typeNum; 
   vehicleTypes[typeNum] = this;
+  }
+
+@Override
+public IAmmoType getAmmoForSoldierRank(int rank)
+  {
+  return this.ammoBySoldierRank.get(rank);
   }
 
 @Override

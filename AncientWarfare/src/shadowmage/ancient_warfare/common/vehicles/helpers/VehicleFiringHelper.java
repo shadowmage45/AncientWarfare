@@ -279,7 +279,8 @@ public float getAccuracyAdjusted()
   float accuracy = this.vehicle.currentAccuracy;
   if(vehicle.riddenByEntity!=null && vehicle.riddenByEntity instanceof NpcBase)
     {
-    //TODO adjust accuracy by soldier accuracy offset amount...
+    NpcBase npc = (NpcBase)vehicle.riddenByEntity;
+    return accuracy *= npc.npcType.getAccuracy(npc.rank);
     }  
   return accuracy;
   }
@@ -287,7 +288,6 @@ public float getAccuracyAdjusted()
 /**
  * if not already firing, this will initiate the launch sequence (phase 1 of 3).
  * Called by this to start missileLaunch. (triggered from packet)
- * in the future, will also be called by a soldier to fire a missile.
  */
 public void initiateLaunchSequence()
   {
@@ -337,7 +337,7 @@ public void setFinishedLaunching()
  */
 public void handleInputData(NBTTagCompound tag)
   {  
-  if(tag.hasKey("fm") && (!this.isFiring || vehicle.worldObj.isRemote))//if fire command and not already firing (or is client)...
+  if(tag.hasKey("fm") && (this.reloadingTicks<=0 || vehicle.worldObj.isRemote))//if fire command and not already firing (or is client)...
     { 
     this.handleFireUpdate();    
     } 
@@ -352,19 +352,23 @@ public void handleInputData(NBTTagCompound tag)
  * @param tag
  */
 public void handleFireUpdate()
-  {
-  if(reloadingTicks<=0 && (vehicle.ammoHelper.getCurrentAmmoCount()>0 || vehicle.ammoHelper.hasNoAmmo()))//relay info to tracking clients..
+  {    
+  if(reloadingTicks<=0 || vehicle.worldObj.isRemote)//if not already firing, or client, accept packet
     {
-    if(!vehicle.worldObj.isRemote )
+    boolean shouldFire = vehicle.ammoHelper.getCurrentAmmoCount()>0 || vehicle.ammoHelper.hasNoAmmo();
+    if(shouldFire)//if should fire...do so.  if server, relay should-fire to clients
       {
-      Packet02Vehicle pkt = new Packet02Vehicle();
-      pkt.setParams(vehicle);
-      NBTTagCompound reply = new NBTTagCompound();
-      reply.setBoolean("fm", true);
-      pkt.setInputData(reply);
-      pkt.sendPacketToAllTrackingClients(vehicle);
+      if(!vehicle.worldObj.isRemote )
+        {
+        Packet02Vehicle pkt = new Packet02Vehicle();
+        pkt.setParams(vehicle);
+        NBTTagCompound reply = new NBTTagCompound();
+        reply.setBoolean("fm", true);
+        pkt.setInputData(reply);
+        pkt.sendPacketToAllTrackingClients(vehicle);
+        }
+      this.initiateLaunchSequence();
       }
-    this.initiateLaunchSequence();
     }
   }
 

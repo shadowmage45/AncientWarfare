@@ -98,5 +98,7 @@ public abstract List<ItemStack> getAdditionalMaterials();//get a list of additio
 
 public abstract ItemStack getStackForLevel(int level);
 
+public abstract IAmmoType getAmmoForSoldierRank(int rank);//what ammo type should soldiers use if !Config.soldiersUseAmmo
+
 public abstract VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh);
 }

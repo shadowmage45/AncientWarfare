@@ -107,10 +107,7 @@ public static Ammo ammoSoldierArrowWood = new AmmoSoldierArrow(54, 5, false);
 public static Ammo ammoSoldierArrowIron = new AmmoSoldierArrow(55, 7, false);
 public static Ammo ammoSoldierArrowWoodFlame = new AmmoSoldierArrow(56, 5, true);
 public static Ammo ammoSoldierArrowIronFlame = new AmmoSoldierArrow(57, 7, true);
-//54-63 reserved for future ammo types
-
-
-
+//58-63 reserved for future ammo types
 
 private final ItemStack ammoStack;
 public final int ammoType;

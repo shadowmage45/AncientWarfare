@@ -22,7 +22,13 @@
  */
 package shadowmage.ancient_warfare.common.interfaces;
 
+import net.minecraft.entity.Entity;
+
 public interface IPathableEntity
 {
+
+public void setMoveTo(double x, double y, double z);
+public boolean isPathableEntityOnLadder();
+public Entity getEntity();
 
 }

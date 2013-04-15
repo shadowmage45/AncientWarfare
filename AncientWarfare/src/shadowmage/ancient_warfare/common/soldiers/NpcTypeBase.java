@@ -25,6 +25,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public abstract class NpcTypeBase implements INpcType
 {
@@ -175,6 +176,18 @@ protected ItemStack[] getArmorStack(int level)
   {
   ItemStack[] stacks = new ItemStack[4];  
   return stacks;
+  }
+
+@Override
+public IAmmoType getAmmoType(int level)
+  {
+  return null;
+  }
+
+@Override
+public float getAccuracy(int level)
+  {
+  return 1.f;
   }
 
 @Override

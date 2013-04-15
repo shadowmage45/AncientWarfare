@@ -146,7 +146,7 @@ public void setMoveTo(int tx, int ty, int tz)
   int ey = MathHelper.floor_double(entity.posY);
   int ez = MathHelper.floor_double(entity.posZ);
   boolean calcPath = false;    
-  if(ex==prevEx && ez==prevEz && !entity.isOnLadder())
+  if(ex==prevEx && ez==prevEz && !entity.isPathableEntityOnLadder())
     {
     stuckTicks++;
     if(stuckTicks > 20/Config.npcAITicks)
@@ -272,7 +272,7 @@ public void moveTowardsCurrentNode()
         return;
         }
       }    
-    if(entity.isOnLadder())
+    if(entity.isPathableEntityOnLadder())
       {
       if(targetNode.y<ey)
         {

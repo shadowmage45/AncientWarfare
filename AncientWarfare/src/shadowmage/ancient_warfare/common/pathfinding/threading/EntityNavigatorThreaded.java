@@ -135,7 +135,7 @@ public void moveTowardsCurrentNode()
         return;
         }
       }    
-    if(entity.isOnLadder())
+    if(entity.isPathableEntityOnLadder())
       {
       if(targetNode.y<ey)
         {

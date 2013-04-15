@@ -41,6 +41,8 @@ import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntryNpc;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntryPlayer;
+import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public class NpcArcher extends NpcTypeBase
 {
@@ -99,6 +101,40 @@ protected ItemStack[] getArmorStack(int level)
 //  case 2:
 //  }
   return stacks;
+  }
+
+@Override
+public IAmmoType getAmmoType(int level)
+  {
+  switch(level)
+  {
+  case 0:
+  return Ammo.ammoSoldierArrowWood;
+  case 1:
+  return Ammo.ammoSoldierArrowIron;
+  case 2:
+  return Ammo.ammoSoldierArrowWoodFlame;
+  case 3:
+  return Ammo.ammoSoldierArrowIronFlame;  
+  }
+  return null;
+  }
+
+@Override
+public float getAccuracy(int level)
+  {
+  switch(level)
+    {
+    case 0:
+    return 0.85f;
+    case 1:
+    return 0.875f;
+    case 2:
+    return 0.925f;
+    case 3:
+    return 0.95f;
+    }
+  return 0.85f;
   }
 
 @Override

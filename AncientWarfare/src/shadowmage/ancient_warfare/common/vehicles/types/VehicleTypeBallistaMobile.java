@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public class VehicleTypeBallistaMobile extends VehicleTypeBallista
 {
@@ -53,7 +54,6 @@ public class VehicleTypeBallistaMobile extends VehicleTypeBallista
     this.displayTooltip = "A ballista mounted on a wheeled frame.";
     }
   
-
 @Override
 public String getTextureForMaterialLevel(int level)
   {

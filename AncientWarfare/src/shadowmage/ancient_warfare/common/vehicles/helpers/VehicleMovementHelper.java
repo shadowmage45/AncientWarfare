@@ -132,27 +132,6 @@ public void handleInputData(NBTTagCompound tag)
  */
 public void setMoveTo(double x, double y, double z)
   {
-//  float xAO = (float) (vehicle.posX - x);  
-//  float zAO = (float) (vehicle.posZ - z);
-//  float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
-//  float vehYaw = vehicle.rotationYaw;
-//  while(vehYaw < 0.f)
-//    {
-//    vehYaw +=360;
-//    }
-//  while(vehYaw >= 360.f)
-//    {
-//    vehYaw-=360;
-//    }
-//float yawDiff = yaw - vehicle.rotationYaw;
-//  while(yawDiff<-180.f)
-//    {
-//    yawDiff +=360.f;
-//    }
-//  while(yawDiff>=180.f)
-//    {
-//    yawDiff-=360.f;
-//    }
   float yawDiff = Trig.getYawTowardsTarget(vehicle.posX, vehicle.posZ, x, z, vehicle.rotationYaw);  
   byte fMot = 0;
   byte sMot = 0;  
@@ -284,11 +263,7 @@ public void onMovementTick()
   else if(forwardMotion==0)
     {
     vehicle.wheelRotationPrev = vehicle.wheelRotation;
-    }
-  if(!vehicle.worldObj.isRemote || (vehicle.worldObj.isRemote && Config.clientVehicleMovement))
-    {
-    
-    }
+    }  
   }
 
 /**
