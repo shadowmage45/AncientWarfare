@@ -253,7 +253,16 @@ public void onUpdate()
     {
     this.nav.moveTowardsCurrentNode();
     }
-  super.onUpdate();  
+  super.onUpdate(); 
+  if(target!=null)
+    {
+    this.getLookHelper().setLookPosition(target.posX(), target.posY(), target.posZ(), 10.0F, (float)this.getVerticalFaceSpeed());
+    }
+  else
+    {
+    this.getLookHelper().setLookPosition(posX+motionX, posY+motionY+getEyeHeight(), posZ+motionZ, 10.f, (float)this.getVerticalFaceSpeed());
+    }
+  
   }
 
 public void handlePacketUpdate(NBTTagCompound tag)

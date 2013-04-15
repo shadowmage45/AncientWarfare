@@ -97,9 +97,9 @@ private void setObjective(NpcAIObjective objective)
     if(objective != this.currentObjective)
       {
       this.currentObjectiveTicks = objective.minObjectiveTicks;
+      objective.startObjective();
       }
-    this.currentObjective = objective;
-    this.currentObjective.startObjective();
+    this.currentObjective = objective;    
     }
   }
 

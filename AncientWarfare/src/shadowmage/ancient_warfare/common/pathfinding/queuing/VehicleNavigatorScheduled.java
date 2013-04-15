@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding.queuing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -61,6 +62,15 @@ public VehicleNavigatorScheduled(VehicleBase owner)
     {
     this.scheduler = PathScheduler.serverInstance();
     }
+  }
+
+public void clearPath()
+  {
+  this.targetNode = null;
+  this.targetX = MathHelper.floor_double(entity.posX);
+  this.targetY = MathHelper.floor_double(entity.posY);
+  this.targetZ = MathHelper.floor_double(entity.posZ);
+  this.path.setPath(new ArrayList<Node>());
   }
 
 public void setCanSwim(boolean swim)

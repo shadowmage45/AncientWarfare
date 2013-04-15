@@ -50,7 +50,7 @@ public static final int IMMEDIATE_PATH_CUTOFF = 6;
 
 public static final int PATH_CUTOFF_LENGTH = 60;
 
-public static final long PATH_CUTOFF_TIME = 4000000;//4ms
+public static final long PATH_CUTOFF_TIME = 2000000;//4ms
 
 
 private PathFinderThetaStar pather = new PathFinderThetaStar();
@@ -84,17 +84,15 @@ public List<Node> requestStartPath(PathWorldAccess world, int x, int y, int z, i
 public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
   {
   this.pathRequests.add(new PathRequest(caller, world, x, y, z, tx, ty, tz, PATH_CUTOFF_LENGTH));
-//  float dist = Trig.getDistance(x, y, z, tx, ty, tz);
-//  if(dist<=MAX_IMMEDIATE_PATH_LENGTH)    
-//    {
-//    caller.onPathFound(pather.findPath(world, x, y, z, tx, ty, tz, IMMEDIATE_PATH_CUTOFF));
-//    }
-//  else
-//    {
-////    Config.logDebug("submitting job server: "+!world.isRemote());
-//    this.pathRequests.add(new PathRequest(caller, world, x, y, z, tx, ty, tz, PATH_CUTOFF_LENGTH));
-//    }
   }
+
+public List<Node> getQuickPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
+  {
+  this.pather.quickStop = true;
+  List<Node> nodes = this.pather.findPath(world, x, y, z, tx, ty, tz, maxRange);      
+  this.pather.quickStop = false;
+  return nodes;
+  } 
 
 public void onTickStart()
   {

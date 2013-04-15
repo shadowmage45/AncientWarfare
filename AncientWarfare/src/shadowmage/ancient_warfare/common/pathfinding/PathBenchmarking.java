@@ -39,6 +39,7 @@ private PathFinderJPS patherJPS = new PathFinderJPS();
 private PathFinder pather = new PathFinder();
 private PathFinderThetaStar patherTheta = new PathFinderThetaStar();
 private PathFinderAStarClassic patherClassic = new PathFinderAStarClassic();
+private PathFinderAStar patherOptimized = new PathFinderAStar();
 
 long t;
 long total;
@@ -121,6 +122,19 @@ public void doTestTheta(int maxLength)
     total += System.nanoTime()-t;
     }
   Config.logDebug("100 x THETA pathfinding runs: "+total/1000000+"ms   "+ total);
+  total = 0;
+  }
+
+public void doOptiTests(int maxLength)
+  {
+  total = 0;
+  for(int i = 0; i <100; i++)
+    {
+    t = System.nanoTime();
+    patherOptimized.findPath(world, 1, 1, 1, 40, 1, 40, maxLength);
+    total += System.nanoTime()-t;
+    }
+  Config.logDebug("100 x OPTI pathfinding runs: "+total/1000000+"ms   "+ total);
   total = 0;
   }
 

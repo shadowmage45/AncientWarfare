@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.pathfinding.PathBenchmarking;
+import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
 import shadowmage.ancient_warfare.common.pathfinding.threading.ClientTicker;
 import shadowmage.ancient_warfare.common.pathfinding.threading.ServerTicker;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
@@ -193,10 +194,12 @@ public void load(FMLPostInitializationEvent evt)
   PathBenchmarking.instance().doTestJPS(80);
   PathBenchmarking.instance().doTestTheta(100);
   PathBenchmarking.instance().doTestClassic(80);
+  PathBenchmarking.instance().doOptiTests(80);
   PathBenchmarking.instance().doTestNormal(80);
   PathBenchmarking.instance().doTestJPS(80);
   PathBenchmarking.instance().doTestTheta(100);
-  PathBenchmarking.instance().doTestClassic(80);  
+  PathBenchmarking.instance().doTestClassic(80);
+  PathBenchmarking.instance().doOptiTests(80);
 //  
 //  PathBenchmarking.instance().doThreadedTests(120);
   }

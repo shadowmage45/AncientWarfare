@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.ai.objectives.AIAttackTargetsRanged;
 import shadowmage.ancient_warfare.common.soldiers.ai.objectives.AIFollowPlayer;
+import shadowmage.ancient_warfare.common.soldiers.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntryNpc;
@@ -116,6 +117,7 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AIAttackTargetsRanged(npc, 9, 20, 20));
   aiEntries.add(new AIFollowPlayer(npc, 8));
   aiEntries.add(new AIAttackTargetsRanged(npc, 6, 40, 40));  
+  aiEntries.add(new AIWander(npc, 4));
   return aiEntries;
   }
 

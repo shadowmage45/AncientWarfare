@@ -125,7 +125,7 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
     this.motionY = mY;
     this.motionZ = mZ;    
     }
-  Config.logDebug("missile spawning. motY: "+this.motionY);
+//  Config.logDebug("missile spawning. motY: "+this.motionY);
   }
 
 public void setMissileParams2(IAmmoType ammo, float x, float y, float z, float yaw, float angle, float velocity)
@@ -149,7 +149,7 @@ public void setMissileCallback(IMissileHitCallback shooter)
 
 public void onImpactEntity(Entity ent, float x, float y, float z)
   {
-  Config.logDebug("Entity Impacted: "+ent+" by: "+this.ammoType.getDisplayName()+" :: "+this);
+//  Config.logDebug("Entity Impacted: "+ent+" by: "+this.ammoType.getDisplayName()+" :: "+this);
   this.ammoType.onImpactEntity(worldObj, ent, x, y, z, this);
   if(this.shooter!=null)
     {
@@ -161,7 +161,7 @@ public void onImpactWorld(MovingObjectPosition hit)
   {  
   if(!worldObj.isRemote)
     {    
-    Config.logDebug("World Impacted by: "+this.ammoType.getDisplayName()+" :: "+this);
+//    Config.logDebug("World Impacted by: "+this.ammoType.getDisplayName()+" :: "+this);
     }  
   this.ammoType.onImpactWorld(worldObj, hit.blockX,hit. blockY, hit.blockZ,  this, hit);
   if(this.shooter!=null)

@@ -367,24 +367,26 @@ private static BlockData[] parseBlocks(String csv)
   {  
   String[] csvValues = csv.split(",");
   BlockData[] datas = new BlockData[csvValues.length];
-  String[] csvBlock;
   String blockData;
-  String bID;
-  String mID;
   for(int i = 0; i < csvValues.length; i++)
     {
     blockData = csvValues[i];
-    csvBlock = blockData.split("-");
-    bID = csvBlock[0].trim();
-    if(csvBlock.length>1)
+    int id = 0;
+    int meta = 0;
+    String[] ruleSplit = blockData.split("-");
+    if(StringTools.isNumber(ruleSplit[0]))
       {
-      mID = csvBlock[1].trim();
+      id = Integer.parseInt(ruleSplit[0].trim());
       }
     else
       {
-      mID = "0";
-      }    
-    datas[i] = new BlockData(Integer.parseInt(bID), Integer.parseInt(mID));
+      id = findBlockByName(ruleSplit[0].trim());
+      }
+    if(ruleSplit.length>1)
+      {
+      meta = Integer.parseInt(ruleSplit[1].trim());
+      }
+    datas[i] = new BlockData(id, meta);
     }
   return datas;
   }

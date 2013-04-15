@@ -20,16 +20,18 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai.tasks;
 
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -51,7 +53,15 @@ public AIAttackTargetBow(NpcBase npc)
 @Override
 protected void attackTarget(AIAggroEntry target)
   { 
-  attackDelayTicks =  maxAttackDelayTicks / Config.npcAITicks;  
+  if(!isLineOfSightClear(target))
+    {
+    attackDelayTicks = 2;
+    return;
+    }
+  else
+    {
+    attackDelayTicks =  maxAttackDelayTicks / Config.npcAITicks;
+    }
   if(!target.isEntityEntry)
     {
     Config.logDebug("doing block attack");
@@ -99,11 +109,11 @@ protected void doBowAttack(Entity target)
   float xAO = (float) (npc.posX  - target.posX);  
   float zAO = (float) (npc.posZ - target.posZ);
   float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
-  float x = (float) npc.posX+npc.getEyeHeight();
-  float y = (float) npc.posY;
+  float x = (float) npc.posX;
+  float y = (float) npc.posY+npc.getEyeHeight();
   float z = (float) npc.posZ;
   float tx = (float) (target.posX - x);
-  float ty = (float) (target.posY - y)+0.5f;
+  float ty = (float) (target.posY+target.height*0.5f - y);
   float tz = (float) (target.posZ - z);
   float angle = Trig.getLaunchAngleToHit(tx, ty, tz, 20.f).value();
   float accuracy = 0.85f;
@@ -112,52 +122,100 @@ protected void doBowAttack(Entity target)
     {       
     yaw   += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;
     angle += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;    
-    }
-  
-  MissileBase missile = getMissile(ammo, (float)npc.posX, (float)npc.posY+npc.getEyeHeight(), (float)npc.posZ, yaw, angle, 20.f);
-
-//  EntityArrow var2 = new EntityArrow(npc.worldObj, npc, 1.0F);  
-//  var2.posY = npc.posY + (double)npc.getEyeHeight() - 0.10000000149011612D;
-//  double var6 = target.posX - npc.posX;
-//  double var8 = target.posY + (double)target.height - 0.699999988079071D - var2.posY;
-//  double var10 = target.posZ - npc.posZ;
-//  double var12 = (double)MathHelper.sqrt_double(var6 * var6 + var10 * var10);
-//
-//  if (var12 >= 1.0E-7D)
-//    {
-//    float var14 = (float)(Math.atan2(var10, var6) * 180.0D / Math.PI) - 90.0F;
-//    float var15 = (float)(-(Math.atan2(var8, var12) * 180.0D / Math.PI));
-//    double var16 = var6 / var12;
-//    double var18 = var10 / var12;
-//    var2.setLocationAndAngles(npc.posX + var16, var2.posY, npc.posZ + var18, var14, var15);
-//    var2.yOffset = 0.0F;
-//    float var20 = (float)var12 * 0.2F;
-//    var2.setThrowableHeading(var6, var8 + (double)var20, var10, 1.6f, 12.f);
-//    }
-//  
-//  int var3 = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, npc.getHeldItem());
-//  int var4 = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, npc.getHeldItem());
-//
-//  if (var3 > 0)
-//    {
-//    var2.setDamage(var2.getDamage() + (double)var3 * 0.5D + 0.5D);
-//    }
-//
-//  if (var4 > 0)
-//    {
-//    var2.setKnockbackStrength(var4);
-//    }
-//
-//  if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, npc.getHeldItem()) > 0)
-//    {
-//    var2.setFire(100);
-//    }
-//  npc.worldObj.spawnEntityInWorld(var2);
+    }  
+  MissileBase missile = getMissile(ammo, x, y, z, yaw, angle, 20.f);
   npc.playSound("random.bow", 1.0F, 1.0F / (rng.nextFloat() * 0.4F + 0.8F));
   if(missile!=null)
     {
     npc.worldObj.spawnEntityInWorld(missile);
     }
+  }
+
+protected boolean isLineOfSightClear(AIAggroEntry target)
+  {
+//  Vec3 sourcePos = Vec3.vec3dPool.getVecFromPool(npc.posX, npc.posY+npc.getEyeHeight(), npc.posZ);
+//  float rx = (float) (target.posX()-npc.posX);
+//  float ry = (float) (target.posY()-npc.posY);
+//  float rz = (float) (target.posZ()-npc.posZ);
+//  float len = MathHelper.sqrt_float(rx*rx+ry*ry+rz*rz);
+//  Vec3 lookVector = Vec3.vec3dPool.getVecFromPool(rx/len, ry/len, rz/len);
+//  MovingObjectPosition hit = getEntityHit(npc.worldObj, sourcePos, lookVector, npc, 20, npc, 2.f);
+//  Config.logDebug("target: "+target.posX()+","+target.posY()+","+target.posZ());
+//  if(hit!=null && hit.entityHit!=null)
+//    {
+//    if(hit.entityHit!=target.getEntity())
+//      {
+//      Config.logDebug("hit entity!! "+hit.entityHit);      
+//      return false;
+//      }
+//    }
+  return true;
+  }
+
+public MovingObjectPosition getEntityHit(World world, Vec3 sourcePos, Vec3 lookVector, Entity sourceEntity, float range, Entity excludedEntity, float borderSize)
+  {  
+  Vec3 originalSource = Vec3.vec3dPool.getVecFromPool(sourcePos.xCoord, sourcePos.yCoord, sourcePos.zCoord);
+  Vec3 originalLook = Vec3.vec3dPool.getVecFromPool(lookVector.xCoord, lookVector.yCoord, lookVector.zCoord);  
+  Vec3 endVector = sourcePos.addVector(lookVector.xCoord * range, lookVector.yCoord * range, lookVector.zCoord * range);
+  Config.logDebug("source: "+sourcePos);
+  Config.logDebug("look: "+lookVector);
+  Config.logDebug("end: "+endVector);
+  MovingObjectPosition blockHit = world.rayTraceBlocks(sourcePos, endVector);
+  
+  /**
+   * reseat vectors, as they get fucked with in the rayTrace...
+   */
+  sourcePos = originalSource;;
+  lookVector = originalLook;
+  
+  float var9 = 1.f;
+  
+  float closestFound = 0.f;
+  if(blockHit!=null)
+    {
+    closestFound = (float) blockHit.hitVec.distanceTo(sourcePos);
+    }
+  List possibleHitEntities = world.getEntitiesWithinAABBExcludingEntity(excludedEntity, sourceEntity.boundingBox.addCoord(lookVector.xCoord * range, lookVector.yCoord * range, lookVector.zCoord * range).expand((double)var9, (double)var9, (double)var9));
+  Iterator<Entity> it = possibleHitEntities.iterator();
+  Entity hitEntity = null;
+  Entity currentExaminingEntity = null;
+  while(it.hasNext())
+    {
+    currentExaminingEntity = it.next();
+    if(currentExaminingEntity == excludedEntity)
+      {
+      continue;
+      }
+    if(currentExaminingEntity.canBeCollidedWith())
+      {
+      borderSize = currentExaminingEntity.getCollisionBorderSize();
+      AxisAlignedBB entBB = currentExaminingEntity.boundingBox.expand((double)borderSize, (double)borderSize, (double)borderSize);
+      MovingObjectPosition var17 = entBB.calculateIntercept(sourcePos, endVector);
+      if (entBB.isVecInside(sourcePos))
+        {
+        if (0.0D < closestFound || closestFound == 0.0D)
+          {
+          hitEntity = currentExaminingEntity;
+          closestFound = 0.0f;
+          }
+        }
+      else if (var17 != null)
+        {
+        double var18 = sourcePos.distanceTo(var17.hitVec);
+        if (var18 < closestFound || closestFound == 0.0D)
+          {
+          hitEntity = currentExaminingEntity;
+          closestFound = (float) var18;
+          }
+        }
+      }   
+    }
+  if(hitEntity!=null)
+    {
+//    Config.logDebug("entity hit!!");
+    blockHit = new MovingObjectPosition(hitEntity);
+    }
+  return blockHit;
   }
 
 }

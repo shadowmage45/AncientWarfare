@@ -20,9 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding.queuing;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
@@ -63,17 +63,17 @@ import shadowmage.ancient_warfare.common.utils.Trig;
 public class NpcNavigatorScheduled implements IPathableCallback
 {
 
-private static float boidSearchRange = 4.f;
-private float distanceToNode = Float.POSITIVE_INFINITY;
-private float prevDistanceToNode = Float.POSITIVE_INFINITY;
 NpcBase entity;
 EntityPath path = new EntityPath();
-PathWorldAccessEntity worldAccess;
-PathScheduler scheduler;
+public PathWorldAccessEntity worldAccess;
+public PathScheduler scheduler;
 int targetX;
 int targetY;
 int targetZ;
-
+int prevEx;
+int prevEy;
+int prevEz;
+int stuckTicks = 0;
 Node targetNode = null;
 
 public NpcNavigatorScheduled(NpcBase owner)
@@ -86,6 +86,9 @@ public NpcNavigatorScheduled(NpcBase owner)
   this.targetX = MathHelper.floor_double(entity.posX);
   this.targetY = MathHelper.floor_double(entity.posY);
   this.targetZ = MathHelper.floor_double(entity.posZ);
+  this.prevEx = targetX;
+  this.prevEy = targetY;
+  this.prevEz = targetZ;
   if(owner.worldObj.isRemote)
     {
     this.scheduler = PathScheduler.clientInstance();
@@ -104,7 +107,6 @@ protected boolean canPathStraightToTarget(int ex, int ey, int ez, int tx, int ty
     {
     return false;
     }
-  //do a trace of blocks to get the x,z coords
   List<BlockPosition> blockHits = PathUtils.getPositionsBetween2(ex, ez, tx, tz);
   for(BlockPosition hit : blockHits)
     {
@@ -122,12 +124,10 @@ protected boolean canPathStraightToTarget(int ex, int ey, int ez, int tx, int ty
       }
     else
       {
-//      Config.logDebug("impassible block, no staight path: "+hit.x+","+currentY+","+hit.z);
       return false;
       }
     if(Math.abs(currentY-ty)>1)
       {
-//      Config.logDebug("large y diff, no staight path");
       return false;
       }
     }
@@ -145,30 +145,41 @@ public void setMoveTo(int tx, int ty, int tz)
   int ex = MathHelper.floor_double(entity.posX);
   int ey = MathHelper.floor_double(entity.posY);
   int ez = MathHelper.floor_double(entity.posZ);
+  boolean calcPath = false;    
+  if(ex==prevEx && ez==prevEz && !entity.isOnLadder())
+    {
+    stuckTicks++;
+    if(stuckTicks > 20/Config.npcAITicks)
+      {
+      calcPath = true;
+      stuckTicks = 0;
+      this.clearPath();
+      Config.logDebug("detecting stuck, recalcing path");
+      }
+    }
+  else
+    {
+    stuckTicks = 0;
+    }
+  prevEx = ex;
+  prevEy = ey;
+  prevEz = ez;
   if(canPathStraightToTarget(ex, ey, ez, tx, ty, tz))
     {
-//    Config.logDebug("skipping straight to target");
     this.targetNode = new Node(tx,ty,tz);
     this.targetX = tx;
     this.targetY = ty;
     this.targetZ = tz;
     return;
     }
-  else
-    {
-//    Config.logDebug("NO STRAIGHT PATH AVAILABLE, FINDING PATH");
-    }
-  boolean calcPath = false;    
+ 
   Node endNode = this.path.getEndNode();    
-  if(endNode==null)//we have no path, request a starter, and full if necessary
+  if(endNode==null && targetNode==null)//we have no path, request a starter, and full if necessary
     {
-    if(targetNode==null)
-      {
-//      Config.logDebug("new target and had no path, recalculating path");
-      calcPath = true;
-      } 
+//  Config.logDebug("new target and had no path, recalculating path");
+    calcPath = true;    
     }
-  else//we have a path already...
+  else if(endNode!=null)//we have a path already...
     {
     float dist = Trig.getVelocity(tx-this.targetX, ty-this.targetY, tz-this.targetZ);
     float length = Trig.getVelocity(ex-tx, ey-ty, ez-tz);
@@ -181,38 +192,64 @@ public void setMoveTo(int tx, int ty, int tz)
         targetY = ty;
         targetZ = tz;
         this.scheduler.requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, tx, ty, tz);
-//                Config.logDebug("attempting re-use of entire old path with addition");
         }
       else
         {
         //try and see if target is anywhere near a point on old path, and recalc/reqeuest addition from that point
         //else request full new path
-//                Config.logDebug("new target and had path, large diff from old end-node, recalculating path");
         calcPath = true;
         }      
-      }
-    else
-      {
-//            Config.logDebug("skipping recalc due to little difference");
-      }
+      }    
     }
   if(calcPath)
-    {   
-    this.path.setPath(this.scheduler.requestStartPath(worldAccess, ex, ey, ez, tx, ty, tz));//grab a quick path if just to start moving
-    endNode = this.path.getEndNode();
-    if(endNode!=null)
-      {
-      if(endNode.x!=tx || endNode.y!=ty || endNode.z != tz)//if we didn't find the target, request a full pathfind from end of starter path to the target.
-        {
-//        Config.logDebug("starter path did not complete, requesting full");
-        this.scheduler.requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, targetX, targetY, targetZ);
-        }      
-      }
-    this.targetX = tx;
-    this.targetY = ty;
-    this.targetZ = tz;
-    this.targetNode = this.path.claimNode();
+    { 
+    this.calcPath(ex, ey, ez, tx, ty, tz);
     }
+  }
+
+public void clearPath()
+  {
+  this.targetNode = null;
+  this.targetX = MathHelper.floor_double(entity.posX);
+  this.targetY = MathHelper.floor_double(entity.posY);
+  this.targetZ = MathHelper.floor_double(entity.posZ);
+  this.path.setPath(new ArrayList<Node>());
+  }
+
+protected void calcPath(int ex, int ey, int ez, int tx, int ty, int tz)
+  {
+  this.path.setPath(this.scheduler.requestStartPath(worldAccess, ex, ey, ez, tx, ty, tz));//grab a quick path if just to start moving
+  Node endNode = this.path.getEndNode();
+  if(endNode!=null)
+    {
+    if(endNode.x!=tx || endNode.y!=ty || endNode.z != tz)//if we didn't find the target, request a full pathfind from end of starter path to the target.
+      {
+      this.scheduler.requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, targetX, targetY, targetZ);
+      }      
+    }
+  this.targetX = tx;
+  this.targetY = ty;
+  this.targetZ = tz;
+  this.claimNode();
+  }
+
+protected void claimNode()
+  {
+  this.targetNode = this.path.claimNode();  
+  }
+
+/**
+ * used to force-set a path..via wander, pre-calculated, etc..
+ * @param pathNodes
+ */
+public void setPath(List<Node> pathNodes)
+  {      
+  Node end = pathNodes.get(pathNodes.size()-1);
+  this.targetX = end.x;
+  this.targetY = end.y;
+  this.targetZ = end.z;
+  this.path.setPath(pathNodes);
+  this.claimNode();
   }
 
 public void moveTowardsCurrentNode()
@@ -220,23 +257,18 @@ public void moveTowardsCurrentNode()
   if(this.targetNode==null && this.path.getPathNodeLength()>0)
     {
 //    this.claimNode();
-    this.targetNode = this.path.claimNode();
+    this.claimNode();
     }
   if(this.targetNode!=null)
-    {
+    {     
     int ex = MathHelper.floor_double(entity.posX);
     int ey = MathHelper.floor_double(entity.posY);
     int ez = MathHelper.floor_double(entity.posZ);
-    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<1.0f)
+    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<0.8f)
       {
-//       Config.logDebug("claiming node from completion LATE "+this.targetNode);
-      this.targetNode = path.claimNode();
-//       this.claimNode();
-//        Config.logDebug("new :: "+this.targetNode);
+      this.claimNode();
       if(targetNode==null)
         {   
-        
-//        entity.getMoveHelper().setMoveTo(entity.posX, entity.posY, entity.posZ, entity.getAIMoveSpeed());
         return;
         }
       }    
@@ -252,19 +284,7 @@ public void moveTowardsCurrentNode()
         }    
       }
     entity.getMoveHelper().setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f, entity.getAIMoveSpeed());
-    } 
-  else
-    {
-    this.distanceToNode = 0.f;
-    this.prevDistanceToNode = 0.f;
-    }
-  }
-
-private List<NpcBase> getNearbyNPCs()
-  {
-  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(entity.posX-boidSearchRange, entity.posY-boidSearchRange, entity.posZ-boidSearchRange, entity.posX+boidSearchRange, entity.posY+boidSearchRange, entity.posZ+boidSearchRange);
-  List<NpcBase> entityList = entity.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);  
-  return entityList;
+    }  
   }
 
 public List<Node> getCurrentPath()

@@ -22,19 +22,118 @@ package shadowmage.ancient_warfare.common.pathfinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class PathUtils
 {
+
+public static List<Node> findRandomPath(PathWorldAccess world, int ex, int ey, int ez, int mx, int my, int maxNodes, Random rng)
+  {
+  List<Node> nodes = new ArrayList<Node>(); 
+  int dx = rng.nextInt(3)-1;
+  int dz = rng.nextInt(3)-1;
+  int cx = ex;
+  int cy = ey;
+  int cz = ez;
+  int tries = 0;
+  while((dx==0 && dz==0) ||!world.isWalkable(cx+dx, cy, cz+dz) && tries<10)
+    {
+    dx = rng.nextInt(3)-1;
+    dz = rng.nextInt(3)-1;
+    tries++;
+    }
+  nodes.add(new Node(cx, cy, cz));
+  if(dx==0 && dz==0)
+    {
+    return nodes;
+    }
+  while(world.isWalkable(cx, cy, cz) && nodes.size()<maxNodes)
+    { 
+    nodes.add(new Node(cx, cy, cz));
+    cx+=dx;
+    cz+=dz;
+    if(world.isWalkable(cx+dx, cy, cz+dz))
+      {      
+            
+      }
+    if(world.isWalkable(cx+dx, cy-1, cz+dz))
+      {      
+      cy--;      
+      }
+    else if(world.isWalkable(cx+dx, cy+1, cz+dz))
+      {      
+      cy++;
+      }        
+    }
+  return nodes;
+  } 
+
+public static int[] findClosestValidBlockTo(PathWorldAccess world, int x, int y, int z, int sy)
+  {
+  if(world.isWalkable(x, y, z))
+    {
+    return new int[]{x,y,z};
+    }
+  int ty = findClosestYTo(world, x, y, z);
+  if(ty>0)
+    {
+    return new int[]{x,ty,z};
+    }
+  ty = findClosestYTo(world, x-1, y, z);
+  if(ty>0)
+    {
+    return new int[]{x-1,ty,z};
+    }
+  ty = findClosestYTo(world, x+1, y, z);
+  if(ty>0)
+    {
+    return new int[]{x+1,ty,z};
+    }
+  ty = findClosestYTo(world, x, y, z-1);
+  if(ty>0)
+    {
+    return new int[]{x,ty,z-1};
+    }
+  ty = findClosestYTo(world, x, y, z+1);
+  if(ty>0)
+    {
+    return new int[]{x,ty,z+1};
+    }
+  return new int[]{x,y,z};
+  }
+
+public static int findClosestYTo(PathWorldAccess world, int x, int y, int z)
+  {
+  if(world.isWalkable(x, y, z))
+    {
+    return y;
+    }
+  else
+    {
+    for(int ty = y; ty < 255; ty++)
+      {
+      if(world.isWalkable(x, ty, z))
+        {
+        return ty;
+        }
+      }
+    for(int ty = y; ty>0 ; ty--)
+      {
+      if(world.isWalkable(x, ty, z))
+        {
+        return ty;
+        }
+      }
+    }
+  return -1;
+  }
+
 //http://playtechs.blogspot.com/2007/03/raytracing-on-grid.html
 //http://xnawiki.com/index.php/Voxel_traversal
 //http://www.cse.yorku.ca/~amana/research/grid.pdf

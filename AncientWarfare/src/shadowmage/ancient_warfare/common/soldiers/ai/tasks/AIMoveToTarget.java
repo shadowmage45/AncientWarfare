@@ -24,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -32,12 +33,13 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 public class AIMoveToTarget extends NpcAITask
 {
 
-float prevDistance;
-float distance;
 boolean useAttackDistance = false;
 float stopDistance = 1.f;
 
 int stuckTicks = 0;
+
+int x;
+int z;
 
 /**
  * @param npc
@@ -57,6 +59,9 @@ public void onTick()
   float bX = npc.getTarget().posX();
   float bY = npc.getTarget().posY();
   float bZ = npc.getTarget().posZ();
+  int ex = MathHelper.floor_double(npc.posX);
+  int ey = MathHelper.floor_double(npc.posY);
+  int ez = MathHelper.floor_double(npc.posZ);
   if(npc.getTarget().isEntityEntry)
     {
     Entity ent = npc.getTarget().getEntity();
@@ -66,47 +71,17 @@ public void onTick()
       int x = MathHelper.floor_float(bX);
       int y = MathHelper.floor_float(bY);
       int z = MathHelper.floor_float(bZ);
-      if(npc.worldObj.getBlockId(x, y, z)==Block.ladder.blockID)
+      if(npc.nav.worldAccess.isWalkable(x, y, z))//
         {
         //Config.logDebug("target on ladder, not adjusting");
         }
       else
         {
-        while(y>1)
-          {
-          if(npc.worldObj.isBlockNormalCube(x, y, z))
-            {
-            break;
-            }
-          y--;
-          }
-        bY = y+1;
+        y = PathUtils.findClosestYTo(npc.nav.worldAccess, x, y, z); 
+        bY = y;
         }      
       }
     }
-  //Config.logDebug("targetPos: "+bX+","+bY+","+bZ);
-  this.prevDistance = this.distance;
-  this.distance = (float) npc.getDistance(bX, bY, bZ);  
-  if(Trig.getAbsDiff(distance, prevDistance)<0.05f)
-    {
-    stuckTicks++;
-    if(stuckTicks>2)
-      {
-      npc.setTargetAW(null);
-      stuckTicks = 0;
-      }
-    }  
-  
-  if(useAttackDistance && distance > npc.targetHelper.getAttackDistance(npc.getTarget())) //find new coordinate at x (attack distance) from target
-    {
-    float xAO = (float) (bX - npc.posX);  
-    float zAO = (float) (bZ - npc.posZ);
-    float yaw = Trig.toDegrees((float) Math.atan2(xAO, zAO));
-    float newLen = distance - (npc.targetHelper.getAttackDistance(npc.getTarget()) *.85f);//try to move slightly inside min effective range attack distance
-    bX = (float)npc.posX + Trig.sinDegrees(yaw)*newLen;
-    bZ = (float)npc.posZ + Trig.cosDegrees(yaw)*newLen;    
-    }
-  
   if(npc.isRidingVehicle())
     {
     ((VehicleBase)npc.ridingEntity).nav.setMoveTo(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
@@ -120,8 +95,29 @@ public void onTick()
 @Override
 public boolean shouldExecute()
   {
+  if(npc.getTarget()==null)
+    {
+    return false;
+    }
   float minDist = useAttackDistance ? npc.targetHelper.getAttackDistance(npc.getTarget()) : stopDistance;
-  return npc.getTarget()!=null && npc.getDistanceFromTarget(npc.getTarget()) > minDist;
+  float dist = npc.getDistanceFromTarget(npc.getTarget());
+  if(dist>minDist)
+    {
+    return true;
+    }
+  else
+    {
+    if(npc.isRidingVehicle())
+      {
+      ((VehicleBase)npc.ridingEntity).nav.clearPath();
+      }
+    else
+      {    
+      npc.nav.clearPath();      
+      }
+    return false;
+    }
+//  return npc.getTarget()!=null && npc.getDistanceFromTarget(npc.getTarget()) > minDist;
   }
 
 @Override

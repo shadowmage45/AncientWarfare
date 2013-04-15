@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.soldiers.ai;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
@@ -37,7 +38,7 @@ public int minObjectiveTicks = 40/Config.npcAITicks;
 public boolean isFinished = false;
 
 protected AIAggroEntry objectiveTarget;
-
+protected static Random rng = new Random();
 
 
 /**
@@ -58,6 +59,10 @@ public NpcAIObjective(NpcBase npc, int maxPriority)
 
 public void onTick()
   {
+  if(npc.getTarget()==null)
+    {
+    npc.setTargetAW(objectiveTarget);
+    }
   boolean hasWork = false;
   int mutex = 0;
   for(NpcAITask task : this.aiTasks)
@@ -85,7 +90,7 @@ public void updateTaskTimers()
 
 public void startObjective()
   {
-  this.isFinished = false;
+  this.isFinished = false;  
   npc.setTargetAW(objectiveTarget);
   }
 

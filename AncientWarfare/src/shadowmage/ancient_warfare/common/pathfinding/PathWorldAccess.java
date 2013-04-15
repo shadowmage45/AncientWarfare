@@ -21,6 +21,8 @@
 package shadowmage.ancient_warfare.common.pathfinding;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -59,44 +61,61 @@ public int getTravelCost(int x, int y, int z)
 public boolean isWalkable(int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);
-  boolean cube = isCube(x, y, z);
-  boolean ladder;  
-  if((id==Block.waterMoving.blockID || id==Block.waterStill.blockID)&&!canSwim)//can't swim check
-    {
-    return false;
-    }  
-  else if(!canUseLaders && isLadder(id))//ladder use check -- if block is a ladder with air below it
-    {
-    if(!isCube(x,y-1,z))//air/ladder/non-solid block below
-      {
-      return false;
-      }        
-    }
-  else if(cube || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)//solid unpassable block, or lava
+  int id2 = world.getBlockId(x, y-1, z);
+  int id3 = world.getBlockId(x, y+1, z);
+  boolean cube = isSolidBlock(id);
+  boolean cube2 = isSolidBlock(id2);
+  boolean cube3 = isSolidBlock(id3);
+  boolean ladder;
+  if(cube || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)//solid unpassable block, or lava
     { 
     return false;
     }
-  else if(!isCube(x, y-1, z) && !isLadder(id))//or if air below and not a ladder
+  else if(cube3)//no room to move
     {
-    if(!isLadder(world.getBlockId(x, y-1, z)))
-      {
-      return false;
-      }
-    }  
-  else 
-    {    
-    id = world.getBlockId(x, y+1, z);
-    if(isCube(x, y+1, z) && !isLadder(id)) //id!=0
-      {
-      return false;
-      }
+    return false;
     }
+  else if((id==Block.waterMoving.blockID || id==Block.waterStill.blockID) && !canSwim)//can't swim check
+    {
+    return false;
+    }  
+  else if(!canUseLaders && isLadder(id) && !cube2)//ladder use check -- if block is a ladder with air below it
+    {    
+    return false;            
+    }  
+  else if(!cube2 && !isLadder(id2) && !isLadder(id))//or if air below and not a ladder
+    {    
+    return false;    
+    } 
   return true;
   }
 
 protected boolean isCube(int x, int y, int z)
   {
-  return world.isBlockNormalCube(x, y, z) || world.getBlockId(x, y, z) == Block.leaves.blockID; 
+  int id = world.getBlockId(x, y, z);
+  return isSolidBlock(id); 
+  }
+
+protected boolean isSolidBlock(int id)
+  {  
+  Block block = Block.blocksList[id];
+  if(block==null)
+    {
+    return false;
+    }
+  if(block.isOpaqueCube() || block.renderAsNormalBlock())
+    {
+    return true;
+    }
+  else if(id == block.fence.blockID || id == block.fenceIron.blockID || id == block.cobblestoneWall.blockID)
+    {
+    return true;
+    }
+  else if(block instanceof BlockStairs || block instanceof BlockLeaves)
+    {
+    return true;
+    } 
+  return false;
   }
 
 protected boolean isLadder(int id)

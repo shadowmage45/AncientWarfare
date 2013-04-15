@@ -31,7 +31,7 @@ public class AITargetEntry
 /**
  * kind of sloppy, but allows for both TileEntity and Entity targets to share the same underlying targeting system
  */
-Class targetClass = null;
+private Class targetClass = null;
 public int priority = 0;
 boolean isEntityTarget = false;
 int typeName = 0;
@@ -55,7 +55,7 @@ public int getTypeName()
 
 public boolean isTarget(Entity ent)
   {
-  return targetClass.isAssignableFrom(ent.getClass());//ent.getClass().isAssignableFrom(entityClass);
+  return targetClass!=null && targetClass.isAssignableFrom(ent.getClass());//ent.getClass().isAssignableFrom(entityClass);
   }
 
 /**

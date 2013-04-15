@@ -101,7 +101,7 @@ public float posY()
     {
     if(this.getEntity()!=null)
       {
-      this.posY = MathHelper.floor_double(this.getEntity().posY) + this.getEntity().height*0.5f;
+      this.posY = MathHelper.floor_double(this.getEntity().posY) + this.getEntity().height*0.75f;
       }
     }
   return posY;

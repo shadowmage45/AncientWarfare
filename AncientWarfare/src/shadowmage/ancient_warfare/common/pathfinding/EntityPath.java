@@ -39,6 +39,14 @@ public void setPath(List<Node> pathNodes)
   this.addPath(pathNodes); 
   }
 
+public void addToBeginning(List<Node> pathNodes)
+  {
+  List<Node> oldNodes = this.path;
+  this.path = new LinkedList<Node>();
+  this.path.addAll(pathNodes);
+  this.path.addAll(oldNodes);
+  }
+
 /**
  * adds nodes onto a path, towards a new/updated target
  * @param pathNodes

@@ -310,7 +310,7 @@ public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float
   MovingObjectPosition blockHit = player.worldObj.rayTraceBlocks(playerPos, endVector);
   
   /**
-   * reseat vectors, as they get fucked with in the rayTrace...
+   * reseat vectors, as they get messed with in the rayTrace...
    */
   playerPos = player.getPosition(0);
   lookVector = player.getLook(0);

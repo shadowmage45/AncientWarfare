@@ -92,11 +92,19 @@ int sz;
 int tx;
 int ty;
 int tz;
+int minx;
+int miny;
+int minz;
+int maxx;
+int maxy;
+int maxz;
+int searchBufferRange = 10;
 int maxRange = 80;
 PathWorldAccess world;
 long startTime;
 public long maxRunTime = 15000000l;//15ms, default time..public so may be overriden at run-time...must be reset between runs
 public long maxSearchIterations = 600;
+public boolean quickStop = false;
 
 public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
   {  
@@ -107,8 +115,20 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
   this.tx = tx;
   this.ty = ty;
   this.tz = tz;
-  this.startTime = System.nanoTime();
-  this.maxRange = maxRange;
+  this.maxRange = maxRange;  
+  minx = x < tx? x : tx;
+  maxx = x < tx? tx : x;
+  miny = y < ty? y : ty;
+  maxy = y < ty? ty : y;
+  minz = z < tz? z : tz;
+  maxz = z < tz? tz : z;
+  minx-=searchBufferRange;
+  maxx+=searchBufferRange;
+  miny-=searchBufferRange;
+  maxy+=searchBufferRange;
+  minz-=searchBufferRange;
+  maxz+=searchBufferRange;
+  this.startTime = System.nanoTime();  
   this.currentNode = getOrMakeNode(sx, sy, sz, null);
   this.currentNode.g = 0;
   this.currentNode.f = this.currentNode.getH(tx, ty, tz);
@@ -141,7 +161,6 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
 
 private Node bestEndNode = null;
 private float bestPathLength = 0.f;
-private float longestPathFound = 0.f;
 private float bestPathDist = Float.POSITIVE_INFINITY;
 private int searchIteration;
 
@@ -210,8 +229,8 @@ private boolean shouldTerminateEarly()
     }
   if(this.searchIteration>this.maxSearchIterations)
     {
-    return true;
 //    Config.logDebug("search iterations exceeded max of: "+this.maxSearchIterations+ " terminating search.");
+    return true;    
     }
   float dist = this.currentNode.getDistanceFrom(tx,ty,tz);
   float len = this.currentNode.g;
@@ -221,7 +240,7 @@ private boolean shouldTerminateEarly()
     this.bestPathDist = dist;
     this.bestPathLength = len;    
     }
-  if(len>maxRange)
+  if(len>maxRange || (quickStop && dist > bestPathDist+2))
     {
 //    Config.logDebug("search length exceeded max of: "+this.maxRange+", terminating search.");      
     return true;
@@ -260,12 +279,7 @@ private void findNeighbors(Node n)
 
   /**
    * diagonals -- check to make sure the path on the crossing blocks is clear
-   */
-//  tryAddSearchNode( n.x-1, n.y, n.z+1, n);
-//  tryAddSearchNode( n.x-1, n.y, n.z-1, n);
-//  tryAddSearchNode( n.x+1, n.y, n.z+1, n);
-//  tryAddSearchNode( n.x+1, n.y, n.z-1, n);    
-  
+   */  
   if(world.isWalkable(n.x, n.y, n.z+1) && world.isWalkable(n.x-1, n.y, n.z))
     {
     tryAddSearchNode(n.x-1, n.y, n.z+1, n);
@@ -305,8 +319,29 @@ private void findNeighbors(Node n)
 
 private void tryAddSearchNode(int x, int y, int z, Node p)
   {
+  if(x<minx || x>maxx || y<miny || y>maxy ||z<minz || z>maxz)
+    {
+    return;
+    }  
   if(world.isWalkable(x, y, z))
     {
+    if(p!=null && p.y != y && (p.z!=z ||p.x!=x))//moving from a different height, but not directly up/down
+      {
+      if(p.y > y)//moving down from parent, check y -> y +2
+        {
+        if(world.isCube(x, y+2, z))
+          {
+          return;
+          }
+        }
+      else if(p.y<y)//moving up from parent, check parent.y ->parent.y+2
+        {
+        if(world.isCube(p.x, p.y+2, p.z))
+          {
+          return;
+          }
+        }
+      }
     searchNodes.add(getOrMakeNode(x, y, z, p));
     }
   }
@@ -327,7 +362,7 @@ private Node getOrMakeNode(int x, int y, int z, Node p)
     n.travelCost = world.getTravelCost(x, y, z);
     n.parentNode = p;
     n.g = p.g + n.getDistanceFrom(p)+n.travelCost;
-    n.f = n.g + n.getDistanceFrom(tx, ty, tz);//n.getH(tx, ty, tz);//.getDistanceFrom(tx, ty, tz)+n.travelCost;
+    n.f = n.g + n.getDistanceFrom(tx, ty, tz);
     }  
   allNodes.add(n);
   return n;
