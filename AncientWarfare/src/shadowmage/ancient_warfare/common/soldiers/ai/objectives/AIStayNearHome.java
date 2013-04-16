@@ -20,77 +20,66 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai.objectives;
 
-import java.util.List;
-
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.pathfinding.Node;
-import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
+import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 
-public class AIWander extends NpcAIObjective
+public class AIStayNearHome extends NpcAIObjective
 {
 
-int tps = 20/Config.npcAITicks;
-int wanderTick = 0;
-
+int leashRange;
+int chokeRange;
 
 /**
  * @param npc
  * @param maxPriority
  */
-public AIWander(NpcBase npc, int maxPriority)
+public AIStayNearHome(NpcBase npc, int maxPriority, int range, int chokeRange)
   {
-  super(npc, maxPriority);  
-  this.currentPriority = this.maxPriority;
+  super(npc, maxPriority);
+  this.leashRange = range;
+  this.chokeRange = chokeRange;
   }
 
-int nextWander = tps;
 @Override
 public void updateObjectivePriority()
-  {  
-  
+  {
+  if(!npc.wayNav.hasHomePoint())
+    {
+    this.currentPriority = 0;
+    }
+  else
+    {    
+    WayPoint home = npc.wayNav.getHomePoint();
+    float range = (float) npc.getDistance(home.x+0.5d, home.y, home.z+0.5d);
+    if(range>leashRange)
+      {
+      if(this.currentPriority<this.maxPriority)
+        {
+        this.currentPriority++;
+        }
+      if(this.objectiveTarget==null)
+        {
+        Config.logDebug("setting home point");
+        this.objectiveTarget = npc.targetHelper.getTargetFor(home.x, home.y, home.z, npc.targetHelper.TARGET_MOVE);
+        }
+      }
+    else
+      {
+      if(this.currentPriority>0)
+        {
+        this.currentPriority--;
+        }
+      }
+    }
   }
 
 @Override
 public void addTasks()
   {
-  this.aiTasks.add(new AIMoveToTarget(npc, 1, false));
-  }
-
-@Override
-public void startObjective()
-  {  
-  this.setWanderTarget();
-  wanderTick = 0;
-  nextWander = (rng.nextInt(8)*tps) + 1; 
-  super.startObjective();
-  }
-
-@Override
-public void onTick()
-  {
-  super.onTick();
-  wanderTick++;
-  if(wanderTick >= nextWander)
-    {      
-    this.setWanderTarget();
-    wanderTick = 0;
-    nextWander = (rng.nextInt(8)*tps) + 1;  
-    }  
-  }
-
-private void setWanderTarget()
-  {
-  int x = MathHelper.floor_double(npc.posX);
-  int y = MathHelper.floor_double(npc.posY);
-  int z = MathHelper.floor_double(npc.posZ);
-  npc.nav.setPath(PathUtils.findRandomPath(npc.nav.worldAccess, x, y, z, 10, 4, rng.nextInt(10), rng));
+  this.aiTasks.add(new AIMoveToTarget(npc, chokeRange, false));
   }
 
 }

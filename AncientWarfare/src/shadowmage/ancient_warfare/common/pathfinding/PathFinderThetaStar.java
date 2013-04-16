@@ -21,12 +21,10 @@
 package shadowmage.ancient_warfare.common.pathfinding;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 /**
@@ -212,7 +210,7 @@ private void searchLoop()
           {
           qNodes.offer(n);
           }
-        n.closed = false;//go ahead and set n to open again...I don't think this really matters....
+//        n.closed = false;//go ahead and set n to open again...I don't think this really matters....
         }     
       }
     }

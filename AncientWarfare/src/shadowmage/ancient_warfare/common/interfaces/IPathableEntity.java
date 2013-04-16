@@ -22,13 +22,19 @@
  */
 package shadowmage.ancient_warfare.common.interfaces;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.pathfinding.Node;
+import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 
 public interface IPathableEntity
 {
 
+public void setPath(List<Node> path);
 public void setMoveTo(double x, double y, double z);
 public boolean isPathableEntityOnLadder();
 public Entity getEntity();
+public PathWorldAccess getWorldAccess();
 
 }

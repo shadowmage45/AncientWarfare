@@ -39,18 +39,13 @@ public class PathScheduler
 {
 
 /**
- * if requested path length (direct) is less than this, it will be processed immediately
- */
-public static final int MAX_IMMEDIATE_PATH_LENGTH = 4;
-
-/**
  * for immediately processed paths, what is the 'maxRange' that should be passed as the cutoff parameter?
  */
 public static final int IMMEDIATE_PATH_CUTOFF = 6;
 
 public static final int PATH_CUTOFF_LENGTH = 60;
 
-public static final long PATH_CUTOFF_TIME = 2000000;//4ms
+public static final long PATH_CUTOFF_TIME = 2000000;//2ms
 
 
 private PathFinderThetaStar pather = new PathFinderThetaStar();
@@ -107,11 +102,6 @@ public void onTickEnd()
   this.startProcessingPaths();
   }
 
-private void veritfyTargetAndStart(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
-  {
-  //check all blocks around target and start and make sure they have at least one pathable neighbor
-  }
-
 private void startProcessingPaths()
   {
   int totalProcessed = 0;
@@ -135,13 +125,6 @@ private void startProcessingPaths()
       {
       pather.maxRunTime = PATH_CUTOFF_TIME;
       }
-//    Config.logDebug("processing path job");
-    //run the request
-    //dispatch result to entity
-    //float len = Trig.getDistance(req.x, req.y, req.z, req.tx, req.ty, req.tz);
-    //int length = 4*(int)len;
-    //length = length < PATH_CUTOFF_LENGTH ? length : PATH_CUTOFF_LENGTH;
-    //length = length < req.maxRange ? length : req.maxRange;
     req.caller.onPathFound(pather.findPath(req.world, req.x, req.y, req.z, req.tx, req.ty, req.tz, PATH_CUTOFF_LENGTH));
     processingTime += System.nanoTime()-jobStart;
     }

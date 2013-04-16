@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.soldiers;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -28,11 +30,16 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.pathfinding.EntityNavigator;
+import shadowmage.ancient_warfare.common.pathfinding.Node;
+import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
+import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
+import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPointNavigator;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.soldiers.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
@@ -80,11 +87,9 @@ public NpcTargetHelper targetHelper;
 public AIAggroEntry playerTarget = null;
 private AIAggroEntry target = null;
 private NpcAIObjectiveManager aiManager;
-
-//public EntityNavigator nav;
-//public EntityNavigatorThreaded nav;
-//public NpcNavigatorScheduled nav;
+private PathWorldAccessEntity worldAccess;
 public EntityNavigator nav;
+public WayPointNavigator wayNav;
 /**
  * @param par1World
  */
@@ -96,10 +101,12 @@ public NpcBase(World par1World)
   this.aiManager = new NpcAIObjectiveManager(this);
   this.moveSpeed = 0.325f;
   this.setAIMoveSpeed(0.325f);
-//  this.nav = new EntityNavigator(this);
-//  this.nav = new EntityNavigatorThreaded(this);
-//  this.nav = new NpcNavigatorScheduled(this);
+  this.worldAccess = new PathWorldAccessEntity(par1World, this);  
+  this.worldAccess.canOpenDoors = true;
+  this.worldAccess.canUseLaders = true;
+  this.worldAccess.canSwim = true;
   this.nav = new EntityNavigator(this);
+  this.wayNav = new WayPointNavigator(this);
 
   this.getNavigator().setBreakDoors(true);
   this.tasks.addTask(0, new EntityAISwimming(this));
@@ -186,6 +193,7 @@ public boolean interact(EntityPlayer player)
     AIAggroEntry target = this.playerTarget;
     if(target==null || target.getEntity()!=player)
       {
+      this.wayNav.clearHomePoint();
       Config.logDebug("setting player to follow to: "+player.getEntityName());
       this.playerTarget = new AIAggroEntry(this, this.targetHelper.playerTargetEntry, player);
       }
@@ -193,6 +201,7 @@ public boolean interact(EntityPlayer player)
       {
       Config.log("clearing player to follow");
       this.playerTarget = null;
+      this.wayNav.setHomePoint(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
       }
     }
   return super.interact(player);
@@ -283,9 +292,7 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   if(par1DamageSource.getEntity() instanceof EntityLiving)
     {
     this.targetHelper.handleBeingAttacked((EntityLiving)par1DamageSource.getEntity());    
-//    Config.logDebug("adding entity to soldier aggro list for revenge: "+par1DamageSource.getEntity());
     }
-//  Config.logDebug("NPC hit by attack.  RawDamage: "+par2+" new health: "+getHealth());  
   return true;
   }
 
@@ -301,6 +308,10 @@ public void readSpawnData(ByteArrayDataInput data)
   {
   this.teamNum = data.readInt();
   this.rank = data.readInt();
+//  this.motionX = this.motionY = this.motionZ = 0.d;
+//  this.lastTickPosX = this.prevPosX = this.posX;
+//  this.lastTickPosY = this.prevPosY = this.posY;
+//  this.lastTickPosZ = this.prevPosZ = this.posZ;
   }
 
 @Override
@@ -362,6 +373,18 @@ public Entity getEntity()
 public boolean isPathableEntityOnLadder()
   {
   return this.isOnLadder();
+  }
+
+@Override
+public void setPath(List<Node> path)
+  {
+  this.nav.setPath(path);
+  }
+
+@Override
+public PathWorldAccess getWorldAccess()
+  {
+  return worldAccess;
   }
 
 }

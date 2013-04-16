@@ -18,13 +18,40 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.interfaces;
+package shadowmage.ancient_warfare.common.pathfinding.waypoints;
 
+import net.minecraft.world.World;
 
-public interface ITeamable
+public class WayPoint
 {
-public int getTeamNumber();
-public boolean isHostileTowards(int teamNum);
 
+int type;
+String name = "";
+public int x;
+public int y;
+public int z;
+
+public WayPoint(int x, int y, int z, int type)
+  {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  }
+
+public WayPoint(int x, int y, int z, int type, String name)
+  {
+  this(x,y,z,type);
+  this.name = name;
+  }
+
+public boolean isValidWayPoint(World world)
+  {
+  return true;
+  }
+
+public boolean areWayPointsEqual(WayPoint point)
+  {
+  return false;
+  }
 
 }

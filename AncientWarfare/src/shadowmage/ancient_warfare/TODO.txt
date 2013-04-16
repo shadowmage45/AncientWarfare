@@ -14,12 +14,11 @@ TEAM CONTROL GUI
 * adv control will allow higher ranks to approve/deny applicants, as well as adjust ranks of (lower ranked) team
         members.  It will also allow higher ranks to set the hostile/friendly status of other teams (one-sided war
         declarations).          
-* seems to not re-set properly (if changed and then changed BACK)        
+* needs hostile-teams setting area/buttons/whatnot        
         
 PATHFINDING
 * entities should re-check the nodes in their path to make sure they are still viable nodes
 * onMovementTick -- check to see if either A:target is within Y diff && 1 x/z diff, or target is visible with LOS check -- else calc path back to target node, append to START of path
-* if entity is in air (only partially on block), get from block below
 
 VEHICLES    
 * inventory container synch methods... (IEntityContainerSynch)
@@ -31,23 +30,26 @@ VEHICLES
 * modelRender for inventory ammo
 
 SOLDIERS
-* create definitive soldier medic type
+* create definitive medic and combat engineer types (healer/repair vehicles)
 * create officer types (lt, com, gen)
 * add ai 'slots' to higher level soldiers? (for patrol/guard duties)
 * some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)
 * inter-soldier comms (more commanders yelling orders to soldiers)
 * need to set damage done by rank
-* archer needs to test LOS on target (probably do ray trace against entities in the BB)
 
 NPCS
+* waypoint-setting...
+* need to add getNpcDamage(int level)..
 * figure out how to set bounds around town-based goal things...
 * resource search/seeking incremental algorithm (djk?)
-* need home-point set (changeable by player with move/follow command)
+* need home-point set (changeable by player with move/follow command)(just another waypoint...)
 * create AI objectives
     Stay Near Home
     Seek Shelter At Night
     Stay Near Commander
     Select Commander (constantly-run objective?)  
+* default look target is...at their feet. if looking at a node, need to look at eye-height
+* sliding when spawned (something up with motion?)    
          
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -161,6 +163,13 @@ TWEAKS/OPTIMIZATION
 * pathfinding/ai/scanning
 * fix vertical pathing, check currenty+ when moving y+, check targety+ when moving y- 
 /********** 04-15-13 **********/
+* fix archer LOS check
+* unify entity navigator into single class        
+* fix team control--was removing player from the wrong entry server-side
+* clean up old pathfinding classes, some of them.
+* pahtfinding: if entity is in air (only partially on block), get from block below
+* clean up move-to code where it would 'jump' at the final target (entity targets)
+* unify pathfinders, all pathing goes through PathManager. allows for easy config-setting for swapping between inline, scheduled, and threaded
 /********** 04-16-13 **********/
 /********** 04-17-13 **********/
 /********** 04-18-13 **********/

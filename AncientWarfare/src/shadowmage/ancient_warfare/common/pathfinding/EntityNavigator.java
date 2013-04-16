@@ -27,7 +27,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
-import shadowmage.ancient_warfare.common.pathfinding.queuing.PathScheduler;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -37,8 +36,8 @@ public class EntityNavigator implements IPathableCallback
 IPathableEntity owner;
 Entity entity;
 EntityPath path = new EntityPath();
-public PathWorldAccessEntity worldAccess;
-public PathScheduler scheduler;
+public PathWorldAccess worldAccess;
+//public PathScheduler scheduler;
 int targetX;
 int targetY;
 int targetZ;
@@ -52,24 +51,21 @@ public EntityNavigator(IPathableEntity owner)
   {
 	this.owner = owner;
   this.entity = owner.getEntity();
-  this.worldAccess = new PathWorldAccessEntity(entity.worldObj, entity);
-  this.worldAccess.canOpenDoors = true;
-  this.worldAccess.canUseLaders = true;
-  this.worldAccess.canSwim = true;
+  this.worldAccess = owner.getWorldAccess();
   this.targetX = MathHelper.floor_double(entity.posX);
   this.targetY = MathHelper.floor_double(entity.posY);
   this.targetZ = MathHelper.floor_double(entity.posZ);
   this.prevEx = targetX;
   this.prevEy = targetY;
   this.prevEz = targetZ;
-  if(entity.worldObj.isRemote)
-    {
-    this.scheduler = PathScheduler.clientInstance();
-    }
-  else
-    {
-    this.scheduler = PathScheduler.serverInstance();
-    }
+//  if(entity.worldObj.isRemote)
+//    {
+//    this.scheduler = PathScheduler.clientInstance();
+//    }
+//  else
+//    {
+//    this.scheduler = PathScheduler.serverInstance();
+//    }
   }
 
 protected boolean canPathStraightToTarget(int ex, int ey, int ez, int tx, int ty, int tz)
@@ -164,7 +160,7 @@ public void setMoveTo(int tx, int ty, int tz)
         targetX = tx;
         targetY = ty;
         targetZ = tz;
-        this.scheduler.requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, tx, ty, tz);
+        PathManager.instance().requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, tx, ty, tz, 60);
         }
       else
         {
@@ -176,6 +172,7 @@ public void setMoveTo(int tx, int ty, int tz)
     }
   if(calcPath)
     { 
+    ey = PathUtils.findClosestYTo(worldAccess, ex, ey, ez);
     this.calcPath(ex, ey, ez, tx, ty, tz);
     }
   }
@@ -191,13 +188,13 @@ public void clearPath()
 
 protected void calcPath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
-  this.path.setPath(this.scheduler.requestStartPath(worldAccess, ex, ey, ez, tx, ty, tz));//grab a quick path if just to start moving
+  this.path.setPath(PathManager.instance().findStartPath(worldAccess, ex, ey, ez, tx, ty, tz, tz));//grab a quick path if just to start moving
   Node endNode = this.path.getEndNode();
   if(endNode!=null)
     {
     if(endNode.x!=tx || endNode.y!=ty || endNode.z != tz)//if we didn't find the target, request a full pathfind from end of starter path to the target.
       {
-      this.scheduler.requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, targetX, targetY, targetZ);
+      PathManager.instance().requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, targetX, targetY, targetZ, 60);
       }      
     }
   this.targetX = tx;
@@ -217,12 +214,15 @@ protected void claimNode()
  */
 public void setPath(List<Node> pathNodes)
   {      
-  Node end = pathNodes.get(pathNodes.size()-1);
-  this.targetX = end.x;
-  this.targetY = end.y;
-  this.targetZ = end.z;
-  this.path.setPath(pathNodes);
-  this.claimNode();
+  if(pathNodes!=null && pathNodes.size()>=1)
+    {
+    Node end = pathNodes.get(pathNodes.size()-1);
+    this.targetX = end.x;
+    this.targetY = end.y;
+    this.targetZ = end.z; 
+    this.path.setPath(pathNodes);
+    this.claimNode();
+    }
   }
 
 public void moveTowardsCurrentNode()

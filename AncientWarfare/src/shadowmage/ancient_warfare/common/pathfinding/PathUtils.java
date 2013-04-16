@@ -48,7 +48,6 @@ public static List<Node> findRandomPath(PathWorldAccess world, int ex, int ey, i
     dz = rng.nextInt(3)-1;
     tries++;
     }
-  nodes.add(new Node(cx, cy, cz));
   if(dx==0 && dz==0)
     {
     return nodes;

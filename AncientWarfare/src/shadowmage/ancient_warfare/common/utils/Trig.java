@@ -216,8 +216,25 @@ public static float getAngle(float x, float y)
   return toDegrees((float) Math.atan2(y, x));
   }
 
+public static float getYawTowards(double x, double z, double tx, double tz)
+  {
+  float xAO = (float) (tx - x);  
+  float zAO = (float) (tz - z);
+  float yaw = Trig.toDegrees((float) Math.atan2(zAO, xAO));
+  yaw = -yaw;
+  while(yaw<-180.f)
+    {
+    yaw+=360.f;
+    }
+  while (yaw>=180.f)
+    {
+    yaw-=360.f;
+    }
+  return yaw;
+  }
+
 /**
- * get yaw change direction towards target from input yaw
+ * get relative yaw change direction towards target from input yaw
  * @param entityFrom
  * @param x
  * @param oY

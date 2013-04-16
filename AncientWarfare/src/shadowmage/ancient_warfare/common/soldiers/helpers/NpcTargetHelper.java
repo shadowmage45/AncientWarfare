@@ -52,8 +52,10 @@ public static final int TARGET_HARVEST = 2;
 public static final int TARGET_HEAL = 3;
 public static final int TARGET_FOLLOW = 4;
 public static final int TARGET_WANDER = 5;
+public static final int TARGET_MOVE = 6;
 public AITargetEntry playerTargetEntry;
 public AITargetEntry wanderTargetEntry;
+public AITargetEntry moveTargetEntry;
 
 NpcBase npc;
 
@@ -72,6 +74,19 @@ public NpcTargetHelper(NpcBase npc)
   this.npc = npc;
   this.playerTargetEntry = new AITargetEntry(npc, TARGET_FOLLOW, EntityPlayer.class, 1, true, 40);
   this.wanderTargetEntry = new AITargetEntry(npc, TARGET_WANDER, null, 0, false, 40);
+  this.moveTargetEntry = new AITargetEntry(npc, TARGET_MOVE, null, 0, false, 40);
+  }
+
+public AIAggroEntry getTargetFor(int x, int y, int z, int type)
+  {
+  switch(type)
+  {
+  case TARGET_WANDER:
+  return new AIAggroEntry(npc, wanderTargetEntry, x, y, z);
+  case TARGET_MOVE:  
+  return new AIAggroEntry(npc, moveTargetEntry, x, y, z);
+  }
+  return null;
   }
 
 public void addTargetEntry(AITargetEntry entry)

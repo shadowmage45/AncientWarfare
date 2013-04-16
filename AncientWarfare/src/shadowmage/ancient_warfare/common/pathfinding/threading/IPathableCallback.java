@@ -27,7 +27,6 @@ import shadowmage.ancient_warfare.common.pathfinding.Node;
 public interface IPathableCallback
 {
 
-
 public void onPathFound(List<Node> pathNodes);
 public void onPathFailed(List<Node> partialPathNodes);
 

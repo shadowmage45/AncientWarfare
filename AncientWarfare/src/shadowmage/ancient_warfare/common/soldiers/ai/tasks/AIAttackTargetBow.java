@@ -105,7 +105,6 @@ public MissileBase getMissile(IAmmoType ammo, float x, float y, float z, float y
   return null;
   }
 
-
 protected void doBowAttack(Entity target)
   {
   float xAO = (float) (npc.posX  - target.posX);  
@@ -127,10 +126,11 @@ protected void doBowAttack(Entity target)
       yaw   += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;
       angle += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;    
       }  
-    MissileBase missile = getMissile(ammo, x, y, z, yaw, angle, 20.f);
-    npc.playSound("random.bow", 1.0F, 1.0F / (rng.nextFloat() * 0.4F + 0.8F));
+    MissileBase missile = getMissile(ammo, x, y, z, yaw, angle, 20.f);    
     if(missile!=null)
       {
+      npc.playSound("random.bow", 1.0F, 1.0F / (rng.nextFloat() * 0.4F + 0.8F));
+      npc.swingItem();
       npc.worldObj.spawnEntityInWorld(missile);
       }
     }
@@ -143,96 +143,12 @@ protected boolean isLineOfSightClear(AIAggroEntry target)
   MovingObjectPosition hit = RayTraceUtils.tracePath(npc.worldObj, (float)npc.posX, (float)npc.posY+npc.getEyeHeight(), (float)npc.posZ, target.posX(), target.posY(), target.posZ(), 0.3f, excluded);
   if(hit!=null && hit.entityHit!=null)
     {
-    Config.logDebug("hit entity "+hit.entityHit);
     if(hit.entityHit!=target.getEntity())
       {
-      Config.logDebug("was not target, aborting");
       return false;
       }
     }
-//  Vec3 sourcePos = Vec3.vec3dPool.getVecFromPool(npc.posX, npc.posY+npc.getEyeHeight(), npc.posZ);
-//  float rx = (float) (target.posX()-npc.posX);
-//  float ry = (float) (target.posY()-npc.posY);
-//  float rz = (float) (target.posZ()-npc.posZ);
-//  float len = MathHelper.sqrt_float(rx*rx+ry*ry+rz*rz);
-//  Vec3 lookVector = Vec3.vec3dPool.getVecFromPool(rx/len, ry/len, rz/len);
-//  MovingObjectPosition hit = getEntityHit(npc.worldObj, sourcePos, lookVector, npc, 20, npc, 2.f);
-//  Config.logDebug("target: "+target.posX()+","+target.posY()+","+target.posZ());
-//  if(hit!=null && hit.entityHit!=null)
-//    {
-//    if(hit.entityHit!=target.getEntity())
-//      {
-//      Config.logDebug("hit entity!! "+hit.entityHit);      
-//      return false;
-//      }
-//    }
   return true;
-  }
-
-public MovingObjectPosition getEntityHit(World world, Vec3 sourcePos, Vec3 lookVector, Entity sourceEntity, float range, Entity excludedEntity, float borderSize)
-  {  
-  Vec3 originalSource = Vec3.vec3dPool.getVecFromPool(sourcePos.xCoord, sourcePos.yCoord, sourcePos.zCoord);
-  Vec3 originalLook = Vec3.vec3dPool.getVecFromPool(lookVector.xCoord, lookVector.yCoord, lookVector.zCoord);  
-  Vec3 endVector = sourcePos.addVector(lookVector.xCoord * range, lookVector.yCoord * range, lookVector.zCoord * range);
-  Config.logDebug("source: "+sourcePos);
-  Config.logDebug("look: "+lookVector);
-  Config.logDebug("end: "+endVector);
-  MovingObjectPosition blockHit = world.rayTraceBlocks(sourcePos, endVector);
-  
-  /**
-   * reseat vectors, as they get fucked with in the rayTrace...
-   */
-  sourcePos = originalSource;;
-  lookVector = originalLook;
-  
-  float var9 = 1.f;
-  
-  float closestFound = 0.f;
-  if(blockHit!=null)
-    {
-    closestFound = (float) blockHit.hitVec.distanceTo(sourcePos);
-    }
-  List possibleHitEntities = world.getEntitiesWithinAABBExcludingEntity(excludedEntity, sourceEntity.boundingBox.addCoord(lookVector.xCoord * range, lookVector.yCoord * range, lookVector.zCoord * range).expand((double)var9, (double)var9, (double)var9));
-  Iterator<Entity> it = possibleHitEntities.iterator();
-  Entity hitEntity = null;
-  Entity currentExaminingEntity = null;
-  while(it.hasNext())
-    {
-    currentExaminingEntity = it.next();
-    if(currentExaminingEntity == excludedEntity)
-      {
-      continue;
-      }
-    if(currentExaminingEntity.canBeCollidedWith())
-      {
-      borderSize = currentExaminingEntity.getCollisionBorderSize();
-      AxisAlignedBB entBB = currentExaminingEntity.boundingBox.expand((double)borderSize, (double)borderSize, (double)borderSize);
-      MovingObjectPosition var17 = entBB.calculateIntercept(sourcePos, endVector);
-      if (entBB.isVecInside(sourcePos))
-        {
-        if (0.0D < closestFound || closestFound == 0.0D)
-          {
-          hitEntity = currentExaminingEntity;
-          closestFound = 0.0f;
-          }
-        }
-      else if (var17 != null)
-        {
-        double var18 = sourcePos.distanceTo(var17.hitVec);
-        if (var18 < closestFound || closestFound == 0.0D)
-          {
-          hitEntity = currentExaminingEntity;
-          closestFound = (float) var18;
-          }
-        }
-      }   
-    }
-  if(hitEntity!=null)
-    {
-//    Config.logDebug("entity hit!!");
-    blockHit = new MovingObjectPosition(hitEntity);
-    }
-  return blockHit;
   }
 
 }

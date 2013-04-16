@@ -22,6 +22,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,6 +42,9 @@ import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.pathfinding.EntityNavigator;
+import shadowmage.ancient_warfare.common.pathfinding.Node;
+import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
+import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
@@ -161,7 +166,7 @@ public VehicleFiringHelper firingHelper;
 public VehicleFiringVarsHelper firingVarsHelper;
 public VehicleInventory inventory;
 public EntityNavigator nav;
-
+private PathWorldAccessEntity worldAccess;
 public IVehicleType vehicleType = VehicleRegistry.CATAPULT_STAND_FIXED;//set to dummy vehicle so it is never null...
 public int vehicleMaterialLevel = 0;//the current material level of this vehicle. should be read/set prior to calling updateBaseStats
 
@@ -174,6 +179,7 @@ public VehicleBase(World par1World)
   this.firingHelper = new VehicleFiringHelper(this);
   this.firingVarsHelper = new DummyVehicleHelper(this);
   this.inventory = new VehicleInventory(this);
+  this.worldAccess = new PathWorldAccessEntity(par1World, this);  
   this.nav = new EntityNavigator(this);
   this.stepHeight = 1.12f;
   this.entityCollisionReduction = 0.9f;
@@ -1129,4 +1135,15 @@ public Entity getEntity()
   return this;
   }
 
+@Override
+public void setPath(List<Node> path)
+  {
+  this.nav.setPath(path);
+  }
+
+@Override
+public PathWorldAccess getWorldAccess()
+  {
+  return worldAccess;
+  }
 }

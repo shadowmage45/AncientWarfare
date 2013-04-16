@@ -58,7 +58,8 @@ public NpcArcher(int type)
   ItemStack bow = new ItemStack(Item.bow,1);  
   this.addLevel("Archer Novice", "foo", getToolStack(0), getArmorStack(0));
   this.addLevel("Archer Adept", "foo", getToolStack(1), getArmorStack(1));
-  this.addLevel("Archer Master", "foo", getToolStack(2), getArmorStack(2));
+  this.addLevel("Archer Expert", "foo", getToolStack(2), getArmorStack(2));
+  this.addLevel("Archer Master", "foo", getToolStack(3), getArmorStack(3));
   this.rangedAttackDistance = 20.f;
   }
 
@@ -66,24 +67,26 @@ public NpcArcher(int type)
 protected ItemStack getToolStack(int level)
   {
   ItemStack bowStack = new ItemStack(Item.bow,1);
-  Map enchMap = new HashMap();
-  switch(level)
-  {
-  case 0:
   return bowStack;
-  
-  case 1:
-  enchMap.put(Enchantment.power.effectId, 1);
-  EnchantmentHelper.setEnchantments(enchMap, bowStack);
-  return bowStack;
-  
-  case 2:  
-  enchMap.put(Enchantment.flame.effectId, 1);
-  enchMap.put(Enchantment.power.effectId, 2);
-  EnchantmentHelper.setEnchantments(enchMap, bowStack);
-  return bowStack;
-  }
-  return null;
+//  Map enchMap = new HashMap();
+//  switch(level)
+//  {
+//  case 0:
+//  return bowStack;
+//  
+//  case 1:
+//  enchMap.put(Enchantment.power.effectId, 1);
+//  EnchantmentHelper.setEnchantments(enchMap, bowStack);
+//  return bowStack;
+//  
+//  case 2:  
+//  enchMap.put(Enchantment.flame.effectId, 1);
+//  enchMap.put(Enchantment.power.effectId, 2);
+//  EnchantmentHelper.setEnchantments(enchMap, bowStack);
+//  return bowStack;
+//  
+//  }
+//  return null;
   }
 
 @Override

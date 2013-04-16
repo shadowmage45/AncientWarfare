@@ -60,6 +60,7 @@ public static boolean soldiersUseAmmo = false;
 public static int trajectoryIterationsServer = 20;
 public static int npcAITicks = 5;
 public static int npcAISearchRange = 140;
+public static int npcPathfinderType = 1;//0-inline, 1-scheduled, 2-threaded
 
 /**
  * the base (Server side) and current (client side) values...

@@ -59,27 +59,24 @@ public void onTick()
   float bX = npc.getTarget().posX();
   float bY = npc.getTarget().posY();
   float bZ = npc.getTarget().posZ();
+  if(npc.getTarget().getEntity()!=null)
+    {
+    bY = (float) npc.getTarget().getEntity().posY;
+    }
   int ex = MathHelper.floor_double(npc.posX);
   int ey = MathHelper.floor_double(npc.posY);
   int ez = MathHelper.floor_double(npc.posZ);
   if(npc.getTarget().isEntityEntry)
     {
     Entity ent = npc.getTarget().getEntity();
-    if(ent!=null && !ent.onGround)
+    if(ent!=null && (!ent.onGround || ent.isAirBorne))
       {
       //Config.logDebug("setting new target height for flying target");
       int x = MathHelper.floor_float(bX);
       int y = MathHelper.floor_float(bY);
       int z = MathHelper.floor_float(bZ);
-      if(npc.nav.worldAccess.isWalkable(x, y, z))//
-        {
-        //Config.logDebug("target on ladder, not adjusting");
-        }
-      else
-        {
-        y = PathUtils.findClosestYTo(npc.nav.worldAccess, x, y, z); 
-        bY = y;
-        }      
+      y = PathUtils.findClosestYTo(npc.nav.worldAccess, x, y, z); 
+      bY = y;   
       }
     }
   if(npc.isRidingVehicle())
@@ -117,7 +114,6 @@ public boolean shouldExecute()
       }
     return false;
     }
-//  return npc.getTarget()!=null && npc.getDistanceFromTarget(npc.getTarget()) > minDist;
   }
 
 @Override

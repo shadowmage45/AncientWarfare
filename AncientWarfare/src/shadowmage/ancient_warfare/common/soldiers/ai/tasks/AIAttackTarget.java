@@ -76,6 +76,7 @@ protected void attackTarget(AIAggroEntry target)
     {
     Config.logDebug("doing block attack");
     blockAttackHits++;    
+    npc.swingItem();
     int id = npc.worldObj.getBlockId((int)target.posX(), (int)target.posY(),(int)target.posZ());
     Block block = Block.blocksList[id];
     if(id!=0 && block!=null)
@@ -92,6 +93,7 @@ protected void attackTarget(AIAggroEntry target)
     Entity ent = target.getEntity();
     if(ent!=null)
       {
+      npc.swingItem();
       npc.attackEntityAsMob(ent);
       }
     }  

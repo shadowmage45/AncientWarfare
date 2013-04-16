@@ -268,7 +268,7 @@ public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
     }
   else if(tag.hasKey("apply"))
     {    
-    if(tagTeam.memberNames.size()==0)
+    if(tagTeam.memberNames.size()==0)//new team is empty, create new team
       {
       int oldTeam = this.getTeamForPlayerServer(name);
       this.serverTeamEntries[oldTeam].removePlayer(name);
@@ -285,8 +285,8 @@ public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
       {
       if(tagTeam.teamNum==0)
         {
-        tagTeam.addNewPlayer(name, (byte) 0);
         int oldTeam = this.getTeamForPlayerServer(name);
+        tagTeam.addNewPlayer(name, (byte) 0);
         this.serverTeamEntries[oldTeam].removePlayer(name);
         }
       else
