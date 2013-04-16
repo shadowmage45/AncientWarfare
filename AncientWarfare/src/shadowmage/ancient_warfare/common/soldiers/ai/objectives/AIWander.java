@@ -38,7 +38,7 @@ public class AIWander extends NpcAIObjective
 
 int tps = 20/Config.npcAITicks;
 int wanderTick = 0;
-
+int nextWander = tps;
 
 /**
  * @param npc
@@ -50,47 +50,42 @@ public AIWander(NpcBase npc, int maxPriority)
   this.currentPriority = this.maxPriority;
   }
 
-int nextWander = tps;
-@Override
-public void updateObjectivePriority()
-  {  
-  
-  }
-
 @Override
 public void addTasks()
   {
   this.aiTasks.add(new AIMoveToTarget(npc, 1, false));
   }
 
-@Override
-public void startObjective()
-  {  
-  this.setWanderTarget();
-  wanderTick = 0;
-  nextWander = (rng.nextInt(8)*tps) + 1; 
-  super.startObjective();
-  }
-
-@Override
-public void onTick()
-  {
-  super.onTick();
-  wanderTick++;
-  if(wanderTick >= nextWander)
-    {      
-    this.setWanderTarget();
-    wanderTick = 0;
-    nextWander = (rng.nextInt(8)*tps) + 1;  
-    }  
-  }
-
 private void setWanderTarget()
   {
+  wanderTick = 0;
+  nextWander = (rng.nextInt(8)*tps) + 1;  
   int x = MathHelper.floor_double(npc.posX);
   int y = MathHelper.floor_double(npc.posY);
   int z = MathHelper.floor_double(npc.posZ);
   npc.nav.setPath(PathUtils.findRandomPath(npc.nav.worldAccess, x, y, z, 10, 4, rng.nextInt(10), rng));
   }
+
+@Override
+public void updatePriorityTick()
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void onRunningTick()
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void onObjectiveStart()
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
 
 }

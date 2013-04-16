@@ -56,10 +56,9 @@ public void updateObjectives()
     {
     this.currentObjectiveTicks--;
     }  
-//  Config.logDebug("updating priorities for objectives. : "+this.allObjectives.size());
   for(NpcAIObjective objective : this.allObjectives)
     {
-    objective.updateObjectivePriority();
+    objective.updatePriorityTick();
     objective.updateTaskTimers();
     }
   this.selectObjective();
@@ -68,13 +67,12 @@ public void updateObjectives()
 
 private void selectObjective()
   {
-  if(this.currentObjective==null || this.currentObjectiveTicks<=0 || this.currentObjective.isFinished )
+  if(this.currentObjective==null || this.currentObjectiveTicks<=0)
     {    
     NpcAIObjective highestObj = null;
     int bestPriority = 0;
     for(NpcAIObjective obj : this.allObjectives)
       {
-//      Config.logDebug(obj+ " p: "+obj.currentPriority);
       if(obj.currentPriority>bestPriority)
         {
         bestPriority = obj.currentPriority;
@@ -96,8 +94,8 @@ private void setObjective(NpcAIObjective objective)
     {
     if(objective != this.currentObjective)
       {
-      this.currentObjectiveTicks = objective.minObjectiveTicks;
-      objective.startObjective();
+      this.currentObjectiveTicks = objective.otherInterruptTicks;
+      objective.onObjectiveStart();
       }
     this.currentObjective = objective;    
     }
@@ -108,6 +106,7 @@ private void tickObjective()
   if(this.currentObjective!=null)
     {
     this.currentObjective.onTick();
+    this.currentObjective.onRunningTick();
     }
   }
 

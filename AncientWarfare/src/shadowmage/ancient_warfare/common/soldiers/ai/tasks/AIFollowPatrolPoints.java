@@ -18,65 +18,47 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.ai.objectives;
+package shadowmage.ancient_warfare.common.soldiers.ai.tasks;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
-import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIDismountVehicle;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.soldiers.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class AIDismountVehicles extends NpcAIObjective
+public class AIFollowPatrolPoints extends NpcAITask
 {
+
+public WayPoint currentPoint;
+public AIAggroEntry currentTarget;
 
 /**
  * @param npc
- * @param maxPriority
  */
-public AIDismountVehicles(NpcBase npc, int maxPriority)
+public AIFollowPatrolPoints(NpcBase npc)
   {
-  super(npc, maxPriority);
+  super(npc);
   }
 
 @Override
-public void addTasks()
+public void onTick()
   {
-  this.aiTasks.add(new AIDismountVehicle(npc));
+  Config.logDebug("choosing patrol point");
+  this.currentPoint = npc.wayNav.getNextPatrolPoint();
+  this.currentTarget = npc.targetHelper.getTargetFor(currentPoint.x, currentPoint.y, currentPoint.z, npc.targetHelper.TARGET_MOVE);
+  npc.setTargetAW(currentTarget);  
   }
 
 @Override
-public void updatePriorityTick()
+public boolean shouldExecute()
   {
-  if(!npc.isRidingVehicle())
-    {
-    this.currentPriority = 0;
-    }
-  else if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_ATTACK, ((VehicleBase)npc.ridingEntity).vehicleType.getMinAttackDistance()))
-    {
-    if(this.currentPriority<this.maxPriority)
-      {
-      this.currentPriority++;
-      }   
-    }
-  else
-    {
-    this.currentPriority = 0;
-    }
+  return npc.wayNav.getPatrolSize()>0 && (this.currentPoint==null || npc.getDistance(currentPoint.x, currentPoint.y, currentPoint.z)<3);
   }
 
 @Override
-public void onRunningTick()
+public void updateTimers()
   {
-  // TODO Auto-generated method stub  
-  }
 
-@Override
-public void onObjectiveStart()
-  {
-  // TODO Auto-generated method stub
-  
   }
 
 

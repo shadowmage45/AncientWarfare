@@ -44,7 +44,13 @@ public AIStayNearHome(NpcBase npc, int maxPriority, int range, int chokeRange)
   }
 
 @Override
-public void updateObjectivePriority()
+public void addTasks()
+  {
+  this.aiTasks.add(new AIMoveToTarget(npc, chokeRange, false));
+  }
+
+@Override
+public void updatePriorityTick()
   {
   if(!npc.wayNav.hasHomePoint())
     {
@@ -60,11 +66,11 @@ public void updateObjectivePriority()
         {
         this.currentPriority++;
         }
-      if(this.objectiveTarget==null)
-        {
-        Config.logDebug("setting home point");
-        this.objectiveTarget = npc.targetHelper.getTargetFor(home.x, home.y, home.z, npc.targetHelper.TARGET_MOVE);
-        }
+//      if(this.objectiveTarget==null)
+//        {
+//        Config.logDebug("setting home point");
+//        this.objectiveTarget = npc.targetHelper.getTargetFor(home.x, home.y, home.z, npc.targetHelper.TARGET_MOVE);
+//        }
       }
     else
       {
@@ -77,9 +83,18 @@ public void updateObjectivePriority()
   }
 
 @Override
-public void addTasks()
+public void onRunningTick()
   {
-  this.aiTasks.add(new AIMoveToTarget(npc, chokeRange, false));
+  // TODO Auto-generated method stub
+  
   }
+
+@Override
+public void onObjectiveStart()
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
 
 }

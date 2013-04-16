@@ -39,6 +39,8 @@ IPathableEntity owner;
 WayPoint homePoint = null;
 List<WayPointPath> wayPaths = new ArrayList<WayPointPath>();
 List<WayPoint> wayPoints = new ArrayList<WayPoint>();
+List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
+int currentPatrolPoint = 0;
 
 WayPoint searchPointA;
 WayPoint searchPointB;
@@ -46,6 +48,35 @@ WayPoint searchPointB;
 public WayPointNavigator(IPathableEntity owner)
   {
   this.owner = owner;
+  }
+
+public void addPatrolPoint(int x, int y, int z)
+  {
+  this.patrolPoints.add(new WayPoint(x,y,z,0));
+  }
+
+public WayPoint getNextPatrolPoint()
+  {
+  this.currentPatrolPoint++;
+  if(this.currentPatrolPoint>=this.patrolPoints.size())
+    {
+    this.currentPatrolPoint = 0;
+    }
+  if(this.patrolPoints.size()>0)
+    {
+    return this.patrolPoints.get(this.currentPatrolPoint);
+    }
+  return null;
+  }
+
+public int getPatrolSize()
+  {
+  return this.patrolPoints.size();
+  }
+
+public void clearPatrolPoints()
+  {
+  this.patrolPoints.clear();
   }
 
 public void addWayPoint(WayPoint p)

@@ -43,28 +43,38 @@ public AIMountVehicles(NpcBase npc, int maxPriority, int maxRange)
   }
 
 @Override
-public void updateObjectivePriority()
-  {
-  AIAggroEntry target = npc.targetHelper.getHighestAggroTargetInRange(NpcTargetHelper.TARGET_MOUNT, maxRange);  
-  if(target!=null)
-    {
-//    Config.logDebug("updating mount targets "+target.toString());
-    this.objectiveTarget = target;
-    this.currentPriority = this.maxPriority;
-    }
-  else
-    {
-//    Config.logDebug("updating mount targets : no target");
-    this.objectiveTarget = null;
-    this.currentPriority = 0;
-    }
-  }
-
-@Override
 public void addTasks()
   {
   this.aiTasks.add(new AIMoveToTarget(npc, 1.f, true));
   this.aiTasks.add(new AIMountVehicle(npc));
+  }
+
+@Override
+public void updatePriorityTick()
+  {
+  if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_MOUNT, maxRange))
+    {
+    if(this.currentPriority<this.maxPriority)
+      {
+      this.currentPriority++;
+      }
+    }
+  else
+    {
+    this.currentPriority = 0;
+    }  
+  }
+
+@Override
+public void onRunningTick()
+  {
+  
+  }
+
+@Override
+public void onObjectiveStart()
+  {
+  npc.setTargetAW(npc.targetHelper.getHighestAggroTargetInRange(NpcTargetHelper.TARGET_MOUNT, maxRange)); 
   }
 
 }

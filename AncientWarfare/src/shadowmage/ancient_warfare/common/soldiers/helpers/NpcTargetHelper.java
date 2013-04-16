@@ -219,6 +219,15 @@ public void handleBeingAttacked(EntityLiving damager)
   
   }
 
+public boolean areTargetsInRange(int type, float range)
+  {
+  if(this.aggroEntries.containsKey(type))
+    {
+    return this.aggroEntries.get(type).areTargetsInRange(range);
+    }
+  return false;
+  }
+
 public AIAggroEntry getHighestAggroTargetInRange(int type, float range)
   {
   if(this.aggroEntries.containsKey(type))

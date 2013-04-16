@@ -37,6 +37,7 @@ import shadowmage.ancient_warfare.common.soldiers.ai.objectives.AIMountVehicles;
 import shadowmage.ancient_warfare.common.soldiers.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntry;
+import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntryMountableVehicle;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntryNpc;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntryPlayer;
 
@@ -74,6 +75,7 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
   helper.addTargetEntry(new AITargetEntryNpc(npc, NpcTargetHelper.TARGET_ATTACK, 0, 40, false, true));
   helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntityMob.class, 0, true, 40));
   helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntitySlime.class, 0, true, 40));
+  helper.addTargetEntry(new AITargetEntryMountableVehicle(npc, -1, 20));
   }
 
 @Override

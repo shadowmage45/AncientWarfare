@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.soldiers.ai.objectives;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
@@ -34,28 +35,42 @@ public class AIFollowPlayer extends NpcAIObjective
 public AIFollowPlayer(NpcBase npc, int maxPriority)
   {
   super(npc, maxPriority);
-  // TODO Auto-generated constructor stub
-  }
-
-@Override
-public void updateObjectivePriority()
-  {
-  if(npc.getPlayerTarget()!=null)
-    {
-    this.objectiveTarget = npc.getPlayerTarget();
-    this.currentPriority = this.maxPriority;
-    }  
-  else
-    {
-    this.objectiveTarget = null;
-    this.currentPriority = 0;
-    }
   }
 
 @Override
 public void addTasks()
   {
   this.aiTasks.add(new AIMoveToTarget(npc, 1, false));
+  }
+
+@Override
+public void updatePriorityTick()
+  {
+  if(npc.getPlayerTarget()!=null)
+    {
+    this.currentPriority = this.maxPriority;
+    }  
+  else
+    {
+    this.currentPriority = 0;
+    }
+  }
+
+@Override
+public void onRunningTick()
+  {
+  Config.logDebug("exec follow player objective");
+  if(npc.getTarget()!=npc.getPlayerTarget())
+    {
+    npc.setTargetAW(npc.getPlayerTarget());
+    }  
+  }
+
+@Override
+public void onObjectiveStart()
+  {
+  Config.logDebug("starting follow player objective");
+  npc.setTargetAW(npc.getPlayerTarget());
   }
 
 }

@@ -198,10 +198,18 @@ public boolean interact(EntityPlayer player)
       this.playerTarget = new AIAggroEntry(this, this.targetHelper.playerTargetEntry, player);
       }
     else if(target!=null && target.getEntity()==player)
-      {
-      Config.log("clearing player to follow");
-      this.playerTarget = null;
-      this.wayNav.setHomePoint(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
+      {      
+      if(player.isSneaking())
+        {
+        Config.logDebug("adding patrol point");
+        this.wayNav.addPatrolPoint(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
+        }
+      else
+        {
+        this.playerTarget = null;
+        this.wayNav.setHomePoint(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
+        Config.log("clearing player to follow and setting home");
+        }      
       }
     }
   return super.interact(player);

@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.soldiers.ai.objectives;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIAttackTarget;
+import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIChooseAttackTarget;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
@@ -45,28 +46,40 @@ public AIAttackTargets(NpcBase npc, int maxPriority, int minRange, int maxRange)
   }
 
 @Override
-public void updateObjectivePriority()
+public void addTasks()
+  {
+  this.aiTasks.add(new AIChooseAttackTarget(npc, maxRange));
+  this.aiTasks.add(new AIMoveToTarget(npc, 1.f, true));  
+  this.aiTasks.add(new AIAttackTarget(npc));
+  }
+
+@Override
+public void updatePriorityTick()
   {  
-  AIAggroEntry target = npc.targetHelper.getHighestAggroTargetInRange(NpcTargetHelper.TARGET_ATTACK, maxRange);  
-  if(target!=null)
+  if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_ATTACK, maxRange))
     {
-//    Config.logDebug("updating attack targets "+target.toString());
-    this.objectiveTarget = target;
-    this.currentPriority = this.maxPriority;
+    if(this.currentPriority<this.maxPriority)
+      {
+      this.currentPriority++;
+      }
     }
   else
     {
-//    Config.logDebug("updating attack targets : no target");
-    this.objectiveTarget = null;
     this.currentPriority = 0;
     }
   }
 
 @Override
-public void addTasks()
+public void onRunningTick()
   {
-  this.aiTasks.add(new AIMoveToTarget(npc, 1.f, true));  
-  this.aiTasks.add(new AIAttackTarget(npc));
+  
   }
+
+@Override
+public void onObjectiveStart()
+  {
+  
+  }
+
 
 }

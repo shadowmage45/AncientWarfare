@@ -80,6 +80,19 @@ public AIAggroEntry getEntryFor(Entity ent)
   return null;
   }
 
+public boolean areTargetsInRange(float range)
+  {
+  AIAggroEntry bestEntry = null;
+  for(AIAggroEntry entry : this.targetEntries)
+    {
+    if(npc.getDistanceFromTarget(entry)<range)
+      {
+      return true;
+      }    
+    }
+  return false;
+  }
+
 public AIAggroEntry getHighestAggroTargetInRange(float range)
   {
   AIAggroEntry bestEntry = null;

@@ -21,63 +21,56 @@
 package shadowmage.ancient_warfare.common.soldiers.ai.objectives;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
-import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIDismountVehicle;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
-import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIFollowPatrolPoints;
+import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
 
-public class AIDismountVehicles extends NpcAIObjective
+public class AIPatrolPoints extends NpcAIObjective
 {
 
 /**
  * @param npc
  * @param maxPriority
  */
-public AIDismountVehicles(NpcBase npc, int maxPriority)
+public AIPatrolPoints(NpcBase npc, int maxPriority)
   {
   super(npc, maxPriority);
   }
 
 @Override
-public void addTasks()
-  {
-  this.aiTasks.add(new AIDismountVehicle(npc));
-  }
-
-@Override
 public void updatePriorityTick()
   {
-  if(!npc.isRidingVehicle())
+  if(npc.wayNav.getPatrolSize()<=0)
     {
     this.currentPriority = 0;
-    }
-  else if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_ATTACK, ((VehicleBase)npc.ridingEntity).vehicleType.getMinAttackDistance()))
-    {
-    if(this.currentPriority<this.maxPriority)
-      {
-      this.currentPriority++;
-      }   
     }
   else
     {
-    this.currentPriority = 0;
+    this.currentPriority = this.maxPriority;     
     }
+  }
+
+AIFollowPatrolPoints task;
+@Override
+public void addTasks()
+  {
+  task = new AIFollowPatrolPoints(npc);
+  this.aiTasks.add(task);
+  this.aiTasks.add(new AIMoveToTarget(npc, 1, false));
   }
 
 @Override
 public void onRunningTick()
   {
-  // TODO Auto-generated method stub  
+  
   }
 
 @Override
 public void onObjectiveStart()
   {
-  // TODO Auto-generated method stub
   
   }
-
 
 }

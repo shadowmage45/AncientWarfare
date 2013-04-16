@@ -34,12 +34,10 @@ public abstract class NpcAIObjective
 protected NpcBase npc;
 protected int maxPriority;
 public int currentPriority;
-public int minObjectiveTicks = 40/Config.npcAITicks;
-public boolean isFinished = false;
+public int selfInterruptTicks = 40;
+public int otherInterruptTicks = 40;
 
-protected AIAggroEntry objectiveTarget;
 protected static Random rng = new Random();
-
 
 /**
  * the tasks, in order, necessary to complete this objective
@@ -47,8 +45,13 @@ protected static Random rng = new Random();
  */
 protected List<NpcAITask> aiTasks = new ArrayList<NpcAITask>();
 
-public abstract void updateObjectivePriority();
+//public abstract void updateObjectivePriority();
 public abstract void addTasks();
+
+public abstract void updatePriorityTick();
+public abstract void onRunningTick();
+public abstract void onObjectiveStart();
+//public abstract boolean canStart();
 
 public NpcAIObjective(NpcBase npc, int maxPriority)
   {
@@ -58,11 +61,7 @@ public NpcAIObjective(NpcBase npc, int maxPriority)
   }
 
 public void onTick()
-  {
-  if(npc.getTarget()==null)
-    {
-    npc.setTargetAW(objectiveTarget);
-    }
+  { 
   boolean hasWork = false;
   int mutex = 0;
   for(NpcAITask task : this.aiTasks)
@@ -73,11 +72,7 @@ public void onTick()
       task.onTick();
       mutex += task.taskType;
       }
-    }
-  if(!hasWork)
-    {
-    this.isFinished = true;
-    }
+    }  
   }
 
 public void updateTaskTimers()
@@ -86,12 +81,6 @@ public void updateTaskTimers()
     {
     task.updateTimers();
     }
-  }
-
-public void startObjective()
-  {
-  this.isFinished = false;  
-  npc.setTargetAW(objectiveTarget);
   }
 
 }

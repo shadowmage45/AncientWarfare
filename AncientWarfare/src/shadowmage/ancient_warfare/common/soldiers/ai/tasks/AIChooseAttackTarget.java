@@ -18,36 +18,40 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.ai.objectives;
+package shadowmage.ancient_warfare.common.soldiers.ai.tasks;
 
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
-import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIAttackTargetBow;
-import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIChooseAttackTarget;
-import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
-import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.soldiers.ai.NpcAITask;
 
-public class AIAttackTargetsRanged extends AIAttackTargets
+public class AIChooseAttackTarget extends NpcAITask
 {
 
+int maxRange;
 /**
  * @param npc
- * @param maxPriority
- * @param minRange
- * @param maxRange
  */
-public AIAttackTargetsRanged(NpcBase npc, int maxPriority, int minRange,    int maxRange)
+public AIChooseAttackTarget(NpcBase npc, int maxRange)
   {
-  super(npc, maxPriority, minRange, maxRange);
+  super(npc);
+  this.maxRange = maxRange;
   }
 
 @Override
-public void addTasks()
+public void onTick()
   {
-  this.aiTasks.add(new AIChooseAttackTarget(npc, maxRange));
-  this.aiTasks.add(new AIMoveToTarget(npc, 1.f, true));
-  this.aiTasks.add(new AIAttackTargetBow(npc));
+  npc.setTargetAW(npc.targetHelper.getHighestAggroTargetInRange(npc.targetHelper.TARGET_ATTACK, maxRange));
+  }
+
+@Override
+public boolean shouldExecute()
+  {
+  return npc.getTarget()==null;
+  }
+
+@Override
+public void updateTimers()
+  {
+  
   }
 
 }
