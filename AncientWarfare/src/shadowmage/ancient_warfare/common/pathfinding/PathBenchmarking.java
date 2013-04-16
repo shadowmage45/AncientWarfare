@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.pathfinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
@@ -70,6 +71,16 @@ private void onRunnerFinished(PathThreadTestCaller runner)
   t = System.nanoTime();
   Config.logDebug("runner returned, still have open runner count: "+this.openCallers.size());
   Config.logDebug("running time: "+total);
+  }
+
+public void doWanderTest(int maxNodes)
+  {
+  Config.logDebug("random crawl test::");
+  List<Node> nodes = PathUtils.randomCrawl(world, 1, 1, 1, 10, 2, 10, 40, new Random());
+  for(Node n : nodes)
+    {
+    Config.logDebug(n.toString());
+    }    
   }
 
 public void doTestNormal(float maxLength)

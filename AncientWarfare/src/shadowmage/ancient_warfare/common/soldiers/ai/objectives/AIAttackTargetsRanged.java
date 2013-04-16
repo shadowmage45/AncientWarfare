@@ -21,12 +21,8 @@
 package shadowmage.ancient_warfare.common.soldiers.ai.objectives;
 
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIAttackTargetBow;
-import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIChooseAttackTarget;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
-import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 
 public class AIAttackTargetsRanged extends AIAttackTargets
 {
@@ -45,7 +41,6 @@ public AIAttackTargetsRanged(NpcBase npc, int maxPriority, int minRange,    int 
 @Override
 public void addTasks()
   {
-  this.aiTasks.add(new AIChooseAttackTarget(npc, maxRange));
   this.aiTasks.add(new AIMoveToTarget(npc, 1.f, true));
   this.aiTasks.add(new AIAttackTargetBow(npc));
   }

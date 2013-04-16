@@ -53,9 +53,11 @@ public static final int TARGET_HEAL = 3;
 public static final int TARGET_FOLLOW = 4;
 public static final int TARGET_WANDER = 5;
 public static final int TARGET_MOVE = 6;
+public static final int TARGET_PATROL = 7;
 public AITargetEntry playerTargetEntry;
 public AITargetEntry wanderTargetEntry;
 public AITargetEntry moveTargetEntry;
+public AITargetEntry patrolTargetEntry;
 
 NpcBase npc;
 
@@ -75,6 +77,7 @@ public NpcTargetHelper(NpcBase npc)
   this.playerTargetEntry = new AITargetEntry(npc, TARGET_FOLLOW, EntityPlayer.class, 1, true, 40);
   this.wanderTargetEntry = new AITargetEntry(npc, TARGET_WANDER, null, 0, false, 40);
   this.moveTargetEntry = new AITargetEntry(npc, TARGET_MOVE, null, 0, false, 40);
+  this.moveTargetEntry = new AITargetEntry(npc, TARGET_PATROL, null, 0, false, 40);
   }
 
 public AIAggroEntry getTargetFor(int x, int y, int z, int type)
@@ -85,6 +88,8 @@ public AIAggroEntry getTargetFor(int x, int y, int z, int type)
   return new AIAggroEntry(npc, wanderTargetEntry, x, y, z);
   case TARGET_MOVE:  
   return new AIAggroEntry(npc, moveTargetEntry, x, y, z);
+  case TARGET_PATROL:
+  return new AIAggroEntry(npc, patrolTargetEntry, x,y,z);
   }
   return null;
   }

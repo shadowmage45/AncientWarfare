@@ -51,11 +51,6 @@ public abstract void onTick();
 
 public abstract boolean shouldExecute();
 
-/**
- * fired regardless of shouldExecute or not
- */
-public abstract void updateTimers();
-
 public boolean canExecute(int mutex)
   {
   return (this.exclusiveTasks & mutex) == 0;

@@ -50,7 +50,7 @@ public void addTasks()
   }
 
 @Override
-public void updatePriorityTick()
+public void updatePriority()
   {
   if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_MOUNT, maxRange))
     {
@@ -68,13 +68,36 @@ public void updatePriorityTick()
 @Override
 public void onRunningTick()
   {
-  
+  if(npc.getTarget()==null)
+    {
+    if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_MOUNT, maxRange))
+      {
+      setMountTarget();      
+      }
+    else
+      {
+      this.currentPriority = 0;
+      this.isFinished = true;
+      }
+    }
   }
 
 @Override
 public void onObjectiveStart()
   {
-  npc.setTargetAW(npc.targetHelper.getHighestAggroTargetInRange(NpcTargetHelper.TARGET_MOUNT, maxRange)); 
+  Config.logDebug("setting mount target");
+  setMountTarget();
+  }
+
+@Override
+public void stopObjective()
+  {
+  npc.setTargetAW(null);  
+  }
+
+protected void setMountTarget()
+  {
+  npc.setTargetAW(npc.targetHelper.getHighestAggroTargetInRange(NpcTargetHelper.TARGET_MOUNT, maxRange));
   }
 
 }

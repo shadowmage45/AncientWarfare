@@ -55,11 +55,5 @@ public boolean shouldExecute()
   return npc.wayNav.getPatrolSize()>0 && (this.currentPoint==null || npc.getDistance(currentPoint.x, currentPoint.y, currentPoint.z)<3);
   }
 
-@Override
-public void updateTimers()
-  {
-
-  }
-
 
 }

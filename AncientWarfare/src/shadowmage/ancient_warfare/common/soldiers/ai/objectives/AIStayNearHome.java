@@ -50,7 +50,7 @@ public void addTasks()
   }
 
 @Override
-public void updatePriorityTick()
+public void updatePriority()
   {
   if(!npc.wayNav.hasHomePoint())
     {
@@ -59,18 +59,10 @@ public void updatePriorityTick()
   else
     {    
     WayPoint home = npc.wayNav.getHomePoint();
-    float range = (float) npc.getDistance(home.x+0.5d, home.y, home.z+0.5d);
+    float range = (float) npc.getDistance(home.x, home.y, home.z);
     if(range>leashRange)
       {
-      if(this.currentPriority<this.maxPriority)
-        {
-        this.currentPriority++;
-        }
-//      if(this.objectiveTarget==null)
-//        {
-//        Config.logDebug("setting home point");
-//        this.objectiveTarget = npc.targetHelper.getTargetFor(home.x, home.y, home.z, npc.targetHelper.TARGET_MOVE);
-//        }
+      this.currentPriority = this.maxPriority; 
       }
     else
       {
@@ -85,15 +77,48 @@ public void updatePriorityTick()
 @Override
 public void onRunningTick()
   {
-  // TODO Auto-generated method stub
-  
+  WayPoint home = npc.wayNav.getHomePoint();
+  if(home==null)
+    {
+    Config.logDebug("ai stay near home: sensing no home point: setting finished");
+    this.isFinished = true;
+    this.cooldownTicks = this.maxCooldownticks;
+    }
+  else
+    {
+    float range = (float) npc.getDistance(home.x, home.y, home.z);
+    if(range<chokeRange)
+      {
+      Config.logDebug("ai stay near home: sensing entity is within choke range: setting finished");
+      this.isFinished = true;
+      this.cooldownTicks = this.maxCooldownticks;
+      }
+    }  
   }
 
 @Override
 public void onObjectiveStart()
   {
-  // TODO Auto-generated method stub
-  
+  WayPoint home = npc.wayNav.getHomePoint();
+  if(home!=null)
+    {
+    Config.logDebug("ai stay near home: setting move target");
+    npc.setTargetAW(npc.targetHelper.getTargetFor(home.x, home.y, home.z, npc.targetHelper.TARGET_MOVE));
+    }
+  else
+    {
+    Config.logDebug("ai stay near home: no home point: setting finished: clearing path and target");
+    this.isFinished = true;
+    this.cooldownTicks = this.maxCooldownticks;
+    }  
+  }
+
+@Override
+public void stopObjective()
+  {
+  Config.logDebug("ai stay near home: setting finished: clearing path and target");  
+  npc.setTargetAW(null);
+  npc.clearPath();
   }
 
 

@@ -135,7 +135,7 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
   aiEntries.add(new AIAttackTargets(npc, 9, 20, 20));
   aiEntries.add(new AIFollowPlayer(npc, 8));
-  aiEntries.add(new AIPatrolPoints(npc, 7));
+  aiEntries.add(new AIPatrolPoints(npc, 7, 20));
 //  aiEntries.add(new AIStayNearHome(npc, 7, 20, 5));
   aiEntries.add(new AIAttackTargets(npc, 6, 40, 40));  
 //  aiEntries.add(new AIWander(npc, 1));

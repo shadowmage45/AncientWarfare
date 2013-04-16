@@ -67,7 +67,7 @@ private void setWanderTarget()
   }
 
 @Override
-public void updatePriorityTick()
+public void updatePriority()
   {
   // TODO Auto-generated method stub
   
@@ -82,6 +82,13 @@ public void onRunningTick()
 
 @Override
 public void onObjectiveStart()
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void stopObjective()
   {
   // TODO Auto-generated method stub
   

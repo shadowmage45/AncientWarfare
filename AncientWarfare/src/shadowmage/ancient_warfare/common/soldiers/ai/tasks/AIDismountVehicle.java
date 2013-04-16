@@ -48,9 +48,5 @@ public boolean shouldExecute()
   return npc.isRidingVehicle();
   }
 
-@Override
-public void updateTimers()
-  {
-  }
 
 }

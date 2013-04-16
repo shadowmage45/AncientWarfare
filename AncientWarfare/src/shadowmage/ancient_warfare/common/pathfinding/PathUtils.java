@@ -26,12 +26,230 @@ import java.util.Random;
 
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class PathUtils
 {
+
+public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int ez, int tx, int ty, int tz, int numOfNodes, Random rng)
+  {
+  List<Node> nodes = new ArrayList<Node>();
+  /**
+   * get initial move direction towards target.
+   * add start node to path
+   * for i < nodes
+   *   find next move direction from current move direction, based on prev. move and dir to target
+   *   add move vector to current
+   *   add new node
+   */
+  int cx = ex;
+  int cy = ey;
+  int cz = ez;
+  int mx = tx - ex;
+  int mz = tz - ez;
+  mx = mx< 0 ? -1 : mx > 1? 1 : mx;
+  mz = mz< 0 ? -1 : mz > 1? 1 : mz;
+  int moveDir = 8;
+  int my = 0;  
+  int dx = mx;
+  int dz = mz;
+  int dy = my;
+  nodes.add(new Node(cx,cy,cz));
+  for(int i = 0; i < numOfNodes; i++)
+    {
+    if(world.isWalkable(cx+mx, cy+dy, cz+mz))
+      {
+      dx = mx;
+      dz = mz;
+      cx+=dx;
+      cy+=dy;
+      cz+=dz;
+      nodes.add(new Node(cx, cy, cz));
+      Config.logDebug("adding forwards/target node"+" "+ nodes.get(nodes.size()-1).toString());      
+      }
+    else if(world.isWalkable(cx+dx, cy+dy, cz+dz))
+      {
+      cx+=dx;
+      cy+=dy;
+      cz+=dz;
+      nodes.add(new Node(cx, cy, cz));
+      Config.logDebug("adding forwards/continue node"+" "+ nodes.get(nodes.size()-1).toString());      
+      }
+    else if(world.isWalkable(cx+dx, cy, cz+dz))
+      {
+      dy = 0;
+      cx+=dx;
+      cy+=dy;
+      cz+=dz;
+      nodes.add(new Node(cx, cy, cz));
+      Config.logDebug("adding forwards/level node"+" "+ nodes.get(nodes.size()-1).toString());      
+      }
+    else if(world.isWalkable(cx+dx, cy-1, cz+dz))
+      {
+      dy = -1;
+      cx+=dx;
+      cy+=dy;
+      cz+=dz;
+      nodes.add(new Node(cx, cy, cz));
+      Config.logDebug("adding forwards/down node"+" "+ nodes.get(nodes.size()-1).toString());      
+      }
+    else if(world.isWalkable(cx+dx, cy+1, cz+dz))
+      {
+      dy = 1;
+      cx+=dx;
+      cy+=dy;
+      cz+=dz;
+      nodes.add(new Node(cx, cy, cz));
+      Config.logDebug("adding forwards/up node"+" "+ nodes.get(nodes.size()-1).toString());      
+      }
+    else
+      {
+      int turn = getRotationTowardTarget(dx, dz, mx, mz);
+      int offset[];
+      if(turn<=0)
+        {
+        offset = getRotatedMoveDelta(dx, dz, -1);
+        }
+      else
+        {
+        offset = getRotatedMoveDelta(dx, dz, 1);
+        }
+      if(world.isWalkable(cx+offset[0], cy, cz+offset[1]))
+        {
+        dx = offset[0];
+        dz = offset[1];
+        dy = 0;
+        cx+=dx;
+        cz+=dz;
+        cy+=dy;
+        nodes.add(new Node(cx, cy, cz));
+        Config.logDebug("adding turn/level node. turn: "+turn +" "+ nodes.get(nodes.size()-1).toString());
+        }
+      else if(world.isWalkable(cx+offset[0], cy-1, cz+offset[1]))
+        {
+        dx = offset[0];
+        dz = offset[1];
+        dy = -1;
+        cx+=dx;
+        cz+=dz;
+        cy+=dy;
+        nodes.add(new Node(cx, cy, cz));
+        Config.logDebug("adding turn/down node. turn: "+turn+" "+ nodes.get(nodes.size()-1).toString());
+        }
+      else if(world.isWalkable(cx+offset[0], cy+1, cz+offset[1]))
+        {
+        dx = offset[0];
+        dz = offset[1];
+        dy = 1;
+        cx+=dx;
+        cz+=dz;
+        cy+=dy;   
+        nodes.add(new Node(cx, cy, cz));
+        Config.logDebug("adding turn/up node. turn: "+turn +" "+ nodes.get(nodes.size()-1).toString());
+        }
+      }    
+    mx = tx - cx;
+    mz = tz - cz;
+    mx = mx< 0 ? -1 : mx > 1? 1 : mx;
+    mz = mz< 0 ? -1 : mz > 1? 1 : mz;
+    if(cx==tx && cy==ty && cz==tz)
+      {
+      break;
+      }
+    }  
+  return nodes;
+  }
+
+private static int getRotationAmount(int amt, int base)
+  {
+  if(amt<0)
+    {
+    amt+=8;
+    }
+  return amt;
+  }
+
+private static int getRotationTowardTarget(int dx, int dz, int mx, int mz)
+  {
+  boolean foundCurrent = false;
+  boolean foundBase = false;
+  int currentOffset = 0;
+  int baseOffset = 0;
+  int offset[];
+  for(int i = 0; i < offsets.length; i++)
+    {
+    offset = offsets[i];
+    if(offset[0]==dx && offset[1]==dz)
+      {
+      currentOffset = i;
+      foundCurrent = true;
+      }
+    if(offset[0]==mx && offset[1]==mz)
+      {
+      baseOffset = i;
+      foundBase = true;
+      }
+    if(foundBase && foundCurrent)
+      {
+      break;
+      }
+    }
+  return currentOffset-baseOffset;
+  }
+
+private static int[] getRotatedMoveDelta(int dx, int dz, int turnAmt)
+  {
+  while(turnAmt<0)
+    {
+    turnAmt+=8;
+    }
+  int rightTurns = turnAmt;
+  int offsetNum = 0;
+  int[] offset; 
+  for(int i = 0; i < offsets.length; i++)
+    {
+    offset = offsets[i];
+    if(offset[0]==dx && offset[1]==dz)
+      {
+      offsetNum = i;
+      break;
+      }
+    }
+  for(int i = 0; i < rightTurns; i++)
+    {
+    offsetNum++;
+    if(offsetNum>=offsets.length)
+      {
+      offsetNum = 0;
+      }
+    }
+  if(offsetNum<0)
+    {
+    offsetNum = 0;
+    }
+  else if(offsetNum>=offsets.length)
+    {
+    offsetNum = 0;
+    }
+  return offsets[offsetNum];
+  }
+
+private static int[][] offsets = new int[8][2];
+
+static
+{
+offsets[0] = new int[]{0,1};
+offsets[1] = new int[]{-1,1};
+offsets[2] = new int[]{-1,0};
+offsets[3] = new int[]{-1,-1};
+offsets[4] = new int[]{0,-1};
+offsets[5] = new int[]{1,-1};
+offsets[6] = new int[]{1,0};
+offsets[7] = new int[]{1,1};
+}
 
 public static List<Node> findRandomPath(PathWorldAccess world, int ex, int ey, int ez, int mx, int my, int maxNodes, Random rng)
   {

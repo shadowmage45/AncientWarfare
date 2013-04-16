@@ -43,6 +43,11 @@ public PathWorldAccessTest()
   this.world = new WorldTestChunk();
   }
 
+@Override
+public boolean isWalkable(int x, int y, int z)
+  {  
+  return world.getBlockId(x, y, z)==0;
+  }
 
 public class WorldTestChunk implements IBlockAccess
 {

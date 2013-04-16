@@ -166,13 +166,4 @@ public boolean shouldExecute()
   return npc.getTargetType()==NpcTargetHelper.TARGET_ATTACK && npc.getTarget().getDistanceFrom() <= npc.targetHelper.getAttackDistance(npc.getTarget());
   }
 
-@Override
-public void updateTimers()
-  {
-  if(attackDelayTicks>0)
-    {
-    attackDelayTicks--;
-    } 
-  }
-
 }

@@ -26,21 +26,26 @@ import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIFollowPatrolPoints;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
+import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 
 public class AIPatrolPoints extends NpcAIObjective
 {
 
+WayPoint patrolPoint;
+int enemyRange = 20;
 /**
  * @param npc
  * @param maxPriority
  */
-public AIPatrolPoints(NpcBase npc, int maxPriority)
+public AIPatrolPoints(NpcBase npc, int maxPriority, int enemyRange)
   {
   super(npc, maxPriority);
+  this.enemyRange = enemyRange;
   }
 
 @Override
-public void updatePriorityTick()
+public void updatePriority()
   {
   if(npc.wayNav.getPatrolSize()<=0)
     {
@@ -52,25 +57,65 @@ public void updatePriorityTick()
     }
   }
 
-AIFollowPatrolPoints task;
 @Override
 public void addTasks()
   {
-  task = new AIFollowPatrolPoints(npc);
-  this.aiTasks.add(task);
-  this.aiTasks.add(new AIMoveToTarget(npc, 1, false));
+  this.aiTasks.add(new AIMoveToTarget(npc, 2, false));
   }
 
 @Override
 public void onRunningTick()
   {
-  
+  //check to see if enemies are within range
+  if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_ATTACK, enemyRange))
+    {
+    this.isFinished = true;
+    }
+  else//check to see if we just completed a node, if so, pause.
+    {
+    AIAggroEntry entry = npc.getTarget();
+    if(entry==null)
+      {
+      Config.logDebug("entity has no target, setting patrol to finished");
+      this.isFinished = true;
+      this.patrolPoint = null;
+      }
+    else
+      {
+      if(entry.targetType.getTypeName() == NpcTargetHelper.TARGET_PATROL)
+        {
+        if(npc.getDistanceFromTarget(entry) < 3)
+          {
+          Config.logDebug("sensing completed patrol point, setting finished");
+          this.cooldownTicks = this.maxCooldownticks;
+          this.isFinished = true;
+          this.patrolPoint = null;
+          }
+        }
+      else
+        {
+        Config.logDebug("inconsistent target, not patrol target, setting finished");
+        //what? somehow a diff target was set, force-finished
+        this.isFinished = true;
+        this.patrolPoint = null;
+        }
+      }
+    }
   }
 
 @Override
 public void onObjectiveStart()
   {
-  
+  Config.logDebug("starting patrol ai, choosing next patrol point, setting target");
+  patrolPoint = npc.wayNav.getNextPatrolPoint();
+  npc.setTargetAW(npc.targetHelper.getTargetFor(patrolPoint.x, patrolPoint.y, patrolPoint.z, npc.targetHelper.TARGET_PATROL));
+  }
+
+@Override
+public void stopObjective()
+  {
+  Config.logDebug("stopping patrol ai, clearing target");
+  npc.setTargetAW(null);  
   }
 
 }

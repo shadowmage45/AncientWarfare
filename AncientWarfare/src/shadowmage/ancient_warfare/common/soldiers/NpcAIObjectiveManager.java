@@ -30,6 +30,19 @@ import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 public class NpcAIObjectiveManager
 {
 
+/**OBJECTIVE MANAGER
+ * start:
+ * 
+ * if current==null || current.isFinished() || changeTicks<=0 
+ *    updatePriorities() 
+ *    new = selectHighest()
+ *    setObjective(new)
+ * if(current!=null)
+ *  {
+ *  current.tickObjective()
+ *  }  
+ */
+
 NpcBase npc;
 
 NpcAIObjective currentObjective;
@@ -50,54 +63,75 @@ public void addObjectives(List<NpcAIObjective> objectives)
   this.allObjectives.addAll(objectives);
   }
 
+/**
+ * called from NpcBase updateAITick every X ticks(Config.aiTicks)
+ */
 public void updateObjectives()
-  {
-  if(this.currentObjectiveTicks>0)
+  {  
+  if(this.currentObjective==null || this.currentObjective.isFinished() || currentObjectiveTicks<=0)
     {
-    this.currentObjectiveTicks--;
-    }  
-  for(NpcAIObjective objective : this.allObjectives)
-    {
-    objective.updatePriorityTick();
-    objective.updateTaskTimers();
+    this.updatePriorities();
+    this.selectObjective();
     }
-  this.selectObjective();
-  this.tickObjective();
+  if(this.currentObjective!=null)
+    {
+    this.currentObjective.onTick();
+    }
+  for(NpcAIObjective obj : this.allObjectives)
+    {
+    obj.updateCooldownTicks();
+    }
+  if(currentObjectiveTicks>0)
+    {
+    currentObjectiveTicks--;
+    }
+  }
+
+private void updatePriorities()
+  {
+  for(NpcAIObjective obj : this.allObjectives)
+    {
+    if(obj!=null)
+      {
+      obj.updatePriority();
+      }
+    }
   }
 
 private void selectObjective()
   {
-  if(this.currentObjective==null || this.currentObjectiveTicks<=0)
-    {    
-    NpcAIObjective highestObj = null;
-    int bestPriority = 0;
-    for(NpcAIObjective obj : this.allObjectives)
+  NpcAIObjective highestObj = null;
+  int bestPriority = 0;
+  for(NpcAIObjective obj : this.allObjectives)
+    {
+    if(obj.currentPriority > bestPriority && obj.cooldownTicks<=0)
       {
-      if(obj.currentPriority>bestPriority)
-        {
-        bestPriority = obj.currentPriority;
-        highestObj = obj;
-        }
+      bestPriority = obj.currentPriority;
+      highestObj = obj;
       }
-    this.setObjective(highestObj);
     }
+  this.setObjective(highestObj);
   }
 
 private void setObjective(NpcAIObjective objective)
   {
   if(objective==null)
     {
-    this.currentObjectiveTicks = 0;
+    this.currentObjectiveTicks = 2;
     this.currentObjective = null;
     }
   else
     {
-    if(objective != this.currentObjective)
+    if(this.currentObjective==null || this.currentObjective != objective)
       {
-      this.currentObjectiveTicks = objective.otherInterruptTicks;
-      objective.onObjectiveStart();
-      }
-    this.currentObjective = objective;    
+      if(this.currentObjective!=null)
+        {
+        this.currentObjective.stopObjective();
+        }
+      objective.startObjective();
+      } 
+    this.currentObjective = objective;
+    this.currentObjectiveTicks = this.currentObjective.otherInterruptTicks;
     }
   }
 

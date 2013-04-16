@@ -56,21 +56,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 public class NpcBase extends EntityCreature implements IEntityAdditionalSpawnData, IEntityContainerSynch, IPathableEntity
 {
 
-/**
-   * @return the playerTarget
-   */
-  public AIAggroEntry getPlayerTarget()
-    {
-    return playerTarget;
-    }
 
-  /**
-   * @param playerTarget the playerTarget to set
-   */
-  public void setPlayerTarget(AIAggroEntry playerTarget)
-    {
-    this.playerTarget = playerTarget;
-    }
 
 public int teamNum = 0; 
 public int rank = 0;
@@ -79,6 +65,11 @@ public int rank = 0;
  * used to check for targets/update target entries
  */
 int npcAITargetTick = 0;
+/**
+ * cooldown for attacking/shooting/harvesting.  set by ai on actions dependant upon action type.
+ * updated EVERY TICK from NpcBase.onUpdate()
+ */
+int npcActionTick = 0;
 
 public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
@@ -114,6 +105,7 @@ public NpcBase(World par1World)
   this.stepHeight = 1.1f;
   }
 
+
 public void setNpcType(INpcType type, int level)
   {
   //  Config.logDebug("npc type being assigned: "+type.getDisplayName());  
@@ -146,6 +138,22 @@ public Entity getTargetEntity()
 public AIAggroEntry getTarget()
   {
   return this.target;
+  }
+
+/**
+ * @return the playerTarget
+ */
+public AIAggroEntry getPlayerTarget()
+  {
+  return playerTarget;
+  }
+
+/**
+ * @param playerTarget the playerTarget to set
+ */
+public void setPlayerTarget(AIAggroEntry playerTarget)
+  {
+  this.playerTarget = playerTarget;
   }
 
 public int getTargetType()
@@ -262,6 +270,10 @@ public void onUpdate()
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
     }
+  if(npcAITargetTick>0)
+    {
+    npcAITargetTick--;
+    }
   if(!this.worldObj.isRemote)
     {
     this.nav.moveTowardsCurrentNode();
@@ -272,10 +284,23 @@ public void onUpdate()
     }
   else
     {
-    this.getLookHelper().setLookPosition(posX+motionX, posY+motionY+getEyeHeight(), posZ+motionZ, 10.f, (float)this.getVerticalFaceSpeed());
+    if(idleLookTicks <= 0)
+      {
+      idleLookTicks = 20;
+      double var1 = (Math.PI * 2D) * this.getRNG().nextDouble();
+      double lookX = Math.cos(var1);
+      double lookZ = Math.sin(var1);
+      this.getLookHelper().setLookPosition(posX+lookX, posY+getEyeHeight(), posZ+lookZ, 10.f, (float)this.getVerticalFaceSpeed());
+      }
+    else if(idleLookTicks>0)
+      {
+      idleLookTicks--;
+      }
     } 
   super.onUpdate();    
   }
+
+int idleLookTicks = 0;
 
 public void handlePacketUpdate(NBTTagCompound tag)
   {
@@ -393,6 +418,11 @@ public void setPath(List<Node> path)
 public PathWorldAccess getWorldAccess()
   {
   return worldAccess;
+  }
+
+public void clearPath()
+  {
+  this.nav.clearPath();
   }
 
 }

@@ -40,11 +40,11 @@ public AIFollowPlayer(NpcBase npc, int maxPriority)
 @Override
 public void addTasks()
   {
-  this.aiTasks.add(new AIMoveToTarget(npc, 1, false));
+  this.aiTasks.add(new AIMoveToTarget(npc, 3, false));
   }
 
 @Override
-public void updatePriorityTick()
+public void updatePriority()
   {
   if(npc.getPlayerTarget()!=null)
     {
@@ -71,6 +71,12 @@ public void onObjectiveStart()
   {
   Config.logDebug("starting follow player objective");
   npc.setTargetAW(npc.getPlayerTarget());
+  }
+
+@Override
+public void stopObjective()
+  {
+  npc.setTargetAW(null);
   }
 
 }

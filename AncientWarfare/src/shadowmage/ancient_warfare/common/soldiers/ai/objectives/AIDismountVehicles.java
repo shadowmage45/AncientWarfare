@@ -47,7 +47,7 @@ public void addTasks()
   }
 
 @Override
-public void updatePriorityTick()
+public void updatePriority()
   {
   if(!npc.isRidingVehicle())
     {
@@ -74,6 +74,13 @@ public void onRunningTick()
 
 @Override
 public void onObjectiveStart()
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void stopObjective()
   {
   // TODO Auto-generated method stub
   
