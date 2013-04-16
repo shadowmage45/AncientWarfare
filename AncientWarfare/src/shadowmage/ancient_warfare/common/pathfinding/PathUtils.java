@@ -68,7 +68,7 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
       cy+=dy;
       cz+=dz;
       nodes.add(new Node(cx, cy, cz));
-      Config.logDebug("adding forwards/target node"+" "+ nodes.get(nodes.size()-1).toString());      
+//      Config.logDebug("adding forwards/target node"+" "+ nodes.get(nodes.size()-1).toString());      
       }
     else if(world.isWalkable(cx+dx, cy+dy, cz+dz))
       {
@@ -76,7 +76,7 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
       cy+=dy;
       cz+=dz;
       nodes.add(new Node(cx, cy, cz));
-      Config.logDebug("adding forwards/continue node"+" "+ nodes.get(nodes.size()-1).toString());      
+//      Config.logDebug("adding forwards/continue node"+" "+ nodes.get(nodes.size()-1).toString());      
       }
     else if(world.isWalkable(cx+dx, cy, cz+dz))
       {
@@ -85,7 +85,7 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
       cy+=dy;
       cz+=dz;
       nodes.add(new Node(cx, cy, cz));
-      Config.logDebug("adding forwards/level node"+" "+ nodes.get(nodes.size()-1).toString());      
+//      Config.logDebug("adding forwards/level node"+" "+ nodes.get(nodes.size()-1).toString());      
       }
     else if(world.isWalkable(cx+dx, cy-1, cz+dz))
       {
@@ -94,7 +94,7 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
       cy+=dy;
       cz+=dz;
       nodes.add(new Node(cx, cy, cz));
-      Config.logDebug("adding forwards/down node"+" "+ nodes.get(nodes.size()-1).toString());      
+//      Config.logDebug("adding forwards/down node"+" "+ nodes.get(nodes.size()-1).toString());      
       }
     else if(world.isWalkable(cx+dx, cy+1, cz+dz))
       {
@@ -103,7 +103,7 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
       cy+=dy;
       cz+=dz;
       nodes.add(new Node(cx, cy, cz));
-      Config.logDebug("adding forwards/up node"+" "+ nodes.get(nodes.size()-1).toString());      
+//      Config.logDebug("adding forwards/up node"+" "+ nodes.get(nodes.size()-1).toString());      
       }
     else
       {
@@ -126,7 +126,7 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
         cz+=dz;
         cy+=dy;
         nodes.add(new Node(cx, cy, cz));
-        Config.logDebug("adding turn/level node. turn: "+turn +" "+ nodes.get(nodes.size()-1).toString());
+//        Config.logDebug("adding turn/level node. turn: "+turn +" "+ nodes.get(nodes.size()-1).toString());
         }
       else if(world.isWalkable(cx+offset[0], cy-1, cz+offset[1]))
         {
@@ -137,7 +137,7 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
         cz+=dz;
         cy+=dy;
         nodes.add(new Node(cx, cy, cz));
-        Config.logDebug("adding turn/down node. turn: "+turn+" "+ nodes.get(nodes.size()-1).toString());
+//        Config.logDebug("adding turn/down node. turn: "+turn+" "+ nodes.get(nodes.size()-1).toString());
         }
       else if(world.isWalkable(cx+offset[0], cy+1, cz+offset[1]))
         {
@@ -148,7 +148,7 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
         cz+=dz;
         cy+=dy;   
         nodes.add(new Node(cx, cy, cz));
-        Config.logDebug("adding turn/up node. turn: "+turn +" "+ nodes.get(nodes.size()-1).toString());
+//        Config.logDebug("adding turn/up node. turn: "+turn +" "+ nodes.get(nodes.size()-1).toString());
         }
       }    
     mx = tx - cx;

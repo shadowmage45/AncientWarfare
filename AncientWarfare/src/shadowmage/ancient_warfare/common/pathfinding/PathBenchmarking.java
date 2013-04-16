@@ -75,12 +75,16 @@ private void onRunnerFinished(PathThreadTestCaller runner)
 
 public void doWanderTest(int maxNodes)
   {
-  Config.logDebug("random crawl test::");
-  List<Node> nodes = PathUtils.randomCrawl(world, 1, 1, 1, 10, 2, 10, 40, new Random());
-  for(Node n : nodes)
+  Config.logDebug("GUIDED CRAWL test::");
+  total = 0;
+  for(int i = 0; i < 100; i++)
     {
-    Config.logDebug(n.toString());
-    }    
+    t = System.nanoTime();
+    PathUtils.randomCrawl(world, 1, 1, 1, 10, 2, 10, 40, new Random());
+    total += System.nanoTime()-t;
+    }
+  Config.logDebug("100 x GUIDED CRAWL runs: "+total/1000000+"ms   "+ total);
+  total = 0;   
   }
 
 public void doTestNormal(float maxLength)
