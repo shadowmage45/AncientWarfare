@@ -72,6 +72,8 @@ int npcAITargetTick = 0;
  */
 public int actionTick = 0;
 
+public int villageUpdateTick = 0;
+
 public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
 public NpcTargetHelper targetHelper;
@@ -305,6 +307,20 @@ public void onUpdate()
       idleLookTicks--;
       }
     } 
+  if(!this.npcType.isCombatUnit())
+    {
+    Config.logDebug("non-combat NPC detected, doing villager stuffs");
+    if(this.villageUpdateTick>0)
+      {
+      villageUpdateTick--;
+      }
+    else if(this.villageUpdateTick<=0)
+      {
+      Config.logDebug("adding npc to village collection queue");
+      this.villageUpdateTick = 100+this.getRNG().nextInt(100);
+      this.worldObj.villageCollectionObj.addVillagerPosition(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+      }
+    }
   super.onUpdate();    
   }
 
