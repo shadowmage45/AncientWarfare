@@ -194,7 +194,7 @@ private void searchLoop()
         {//update n's stats to path through current -> n
         //this is where it deviates from A*, we will check to see if n can see the parent of current.  if so
         //we calculate the path to n as if it went through the parent of current, skipping current completely.
-        if(canSeeParent(n, currentNode.parentNode))
+        if(!world.isDoor(currentNode.x, currentNode.y, currentNode.z) && !world.isDoor(n.x, n.y, n.z) && canSeeParent(n, currentNode.parentNode))//don't skip doors...
           {
           n.parentNode = currentNode.parentNode;
           n.g = n.parentNode.g + n.getDistanceFrom(n.parentNode);
@@ -258,7 +258,7 @@ private boolean canSeeParent(Node n, Node p)
     }  
   List<BlockPosition> hits = PathUtils.getPositionsBetween2(n.x, n.z, p.x, p.z);
   for(BlockPosition pos : hits)
-    {
+    {   
     if(!world.isWalkable(pos.x, n.y, pos.z))
       {
       return false;

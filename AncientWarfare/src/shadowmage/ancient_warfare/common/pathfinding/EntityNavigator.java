@@ -243,8 +243,8 @@ public void moveTowardsCurrentNode()
     int ex = MathHelper.floor_double(entity.posX);
     int ey = MathHelper.floor_double(entity.posY);
     int ez = MathHelper.floor_double(entity.posZ);
-    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(entity.posX, entity.posY, entity.posZ, targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f)<0.5f)
-      {
+    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z )
+      {//|| Trig.getDistance(entity.posX, entity.posY, entity.posZ, targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f)<0.2f
       this.claimNode();
       if(targetNode==null)
         {   

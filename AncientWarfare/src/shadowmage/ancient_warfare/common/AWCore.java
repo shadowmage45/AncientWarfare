@@ -191,16 +191,16 @@ public void load(FMLPostInitializationEvent evt)
   //DEBUG //TODO -- remove
   PathBenchmarking.instance().doWanderTest(10);
   
-//  PathBenchmarking.instance().doTestNormal(80);
-//  PathBenchmarking.instance().doTestJPS(80);
-//  PathBenchmarking.instance().doTestTheta(100);
+  PathBenchmarking.instance().doTestNormal(80);
+  PathBenchmarking.instance().doTestJPS(80);
+  PathBenchmarking.instance().doTestTheta(100);
 //  PathBenchmarking.instance().doTestClassic(80);
-//  PathBenchmarking.instance().doOptiTests(80);
-//  PathBenchmarking.instance().doTestNormal(80);
-//  PathBenchmarking.instance().doTestJPS(80);
-//  PathBenchmarking.instance().doTestTheta(100);
+  PathBenchmarking.instance().doOptiTests(80);
+  PathBenchmarking.instance().doTestNormal(80);
+  PathBenchmarking.instance().doTestJPS(80);
+  PathBenchmarking.instance().doTestTheta(100);
 //  PathBenchmarking.instance().doTestClassic(80);
-//  PathBenchmarking.instance().doOptiTests(80);
+  PathBenchmarking.instance().doOptiTests(80);
 //  
 //  PathBenchmarking.instance().doThreadedTests(120);
   }

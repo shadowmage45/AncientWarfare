@@ -90,6 +90,11 @@ public boolean isWalkable(int x, int y, int z)
   return true;
   }
 
+public boolean isDoor(int x, int y, int z)
+  {
+  return world.getBlockId(x, y, z)==Block.doorWood.blockID;
+  }
+
 protected boolean isCube(int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);
