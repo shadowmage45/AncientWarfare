@@ -25,6 +25,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class ItemNpcCommandBaton extends AWItemClickable
@@ -45,6 +46,9 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   return false;
   }
 
+/**
+ * right click on an entity
+ */
 @Override
 public boolean itemInteractionForEntity(ItemStack par1ItemStack,   EntityLiving par2EntityLiving)
   {
@@ -66,6 +70,10 @@ public boolean hitEntity(ItemStack par1ItemStack, EntityLiving par2EntityLiving,
 @Override
 public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player,   Entity entity)
   {
+  if(!player.worldObj.isRemote)
+    {
+    Config.logDebug("player hit entity with command baton : "+entity);
+    }
   return super.onLeftClickEntity(stack, player, entity);
   }
 

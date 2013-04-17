@@ -24,7 +24,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 public class PathWorldAccess
 {

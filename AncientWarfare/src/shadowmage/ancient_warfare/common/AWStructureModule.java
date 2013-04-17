@@ -48,7 +48,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.file.StructureLoader;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;

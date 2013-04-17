@@ -64,8 +64,8 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetMobileFix
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandTurret;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;

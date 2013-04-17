@@ -22,14 +22,11 @@ package shadowmage.ancient_warfare.common.pathfinding.threading;
 
 import java.util.List;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.network.Packet04Npc;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class EntityNavigatorThreaded implements IPathableCallback

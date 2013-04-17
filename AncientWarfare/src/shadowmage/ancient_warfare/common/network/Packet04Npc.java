@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;

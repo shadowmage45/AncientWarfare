@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.gui.structure;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,7 +31,6 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class GuiEditorSelect extends GuiContainerAdvanced
 {

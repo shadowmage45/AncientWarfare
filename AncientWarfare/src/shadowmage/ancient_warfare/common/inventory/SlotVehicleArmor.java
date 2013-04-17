@@ -23,12 +23,9 @@ package shadowmage.ancient_warfare.common.inventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
-import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
-import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public class SlotVehicleArmor extends Slot
 {

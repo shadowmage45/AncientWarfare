@@ -21,11 +21,7 @@
 package shadowmage.ancient_warfare.client.gui.structure;
 
 import net.minecraft.client.gui.GuiScreen;
-
-import org.lwjgl.input.Mouse;
-
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;

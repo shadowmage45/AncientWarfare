@@ -30,7 +30,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.utils.Trig;

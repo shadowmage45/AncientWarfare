@@ -25,15 +25,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumArt;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;

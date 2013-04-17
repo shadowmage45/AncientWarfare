@@ -24,7 +24,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.EntityLiving;
 import shadowmage.ancient_warfare.common.config.Settings;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 public class RenderNpcHelper extends RenderBiped
 {

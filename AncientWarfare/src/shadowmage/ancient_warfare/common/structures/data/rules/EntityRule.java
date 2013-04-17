@@ -33,19 +33,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumArt;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.ScannedEntityEntry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.NBTReader;
 import shadowmage.ancient_warfare.common.utils.NBTWriter;
 import shadowmage.ancient_warfare.common.utils.StringTools;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 
 public class EntityRule
 {

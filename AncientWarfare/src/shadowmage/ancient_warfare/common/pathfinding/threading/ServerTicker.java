@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.common.pathfinding.threading;
 import java.util.EnumSet;
 
 import shadowmage.ancient_warfare.common.pathfinding.queuing.PathScheduler;
-
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 

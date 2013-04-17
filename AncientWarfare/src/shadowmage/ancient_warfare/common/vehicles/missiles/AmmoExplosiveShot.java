@@ -20,10 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
-import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class AmmoExplosiveShot extends Ammo
 {

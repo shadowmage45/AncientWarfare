@@ -23,8 +23,6 @@ package shadowmage.ancient_warfare.common.utils;
 import java.util.HashSet;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.config.Config;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;

@@ -29,14 +29,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.soldiers.INpcType;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.NpcTypeBase;
-import shadowmage.ancient_warfare.common.soldiers.types.NpcArcher;
-import shadowmage.ancient_warfare.common.soldiers.types.NpcDummy;
-import shadowmage.ancient_warfare.common.soldiers.types.NpcFootsoldier;
-import shadowmage.ancient_warfare.common.soldiers.types.NpcSiegeEngineer;
-import shadowmage.ancient_warfare.common.soldiers.types.NpcVillager;
+import shadowmage.ancient_warfare.common.npcs.INpcType;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
+import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
+import shadowmage.ancient_warfare.common.npcs.types.NpcDummy;
+import shadowmage.ancient_warfare.common.npcs.types.NpcFootsoldier;
+import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
+import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
 
 
 public class NpcRegistry

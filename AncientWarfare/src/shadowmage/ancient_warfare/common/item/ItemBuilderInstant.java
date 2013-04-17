@@ -31,7 +31,6 @@ import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.structures.build.BuilderInstant;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.structures.data.StructureBuildSettings;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;

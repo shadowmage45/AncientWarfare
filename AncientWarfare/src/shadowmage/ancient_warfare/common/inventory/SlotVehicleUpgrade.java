@@ -20,14 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.inventory;
 
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
-import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
-import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 public class SlotVehicleUpgrade extends Slot
 {

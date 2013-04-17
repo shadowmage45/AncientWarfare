@@ -27,7 +27,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
@@ -37,7 +36,6 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.structures.data.AWStructure;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;

@@ -20,10 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;

@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import shadowmage.ancient_warfare.common.pathfinding.Node;
-import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 
 public class PathResult
 {

@@ -25,9 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.config.Config;
-
 /**
  * my first successful attempt at an A* implimentation. slow, but works faster than classic, while still allowing 3D movment
  * also incorporates an early-exit mechanism for paths, if you wan't to try and terminate the search early for possibly long

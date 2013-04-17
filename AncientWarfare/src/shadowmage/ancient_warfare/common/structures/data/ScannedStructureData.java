@@ -25,15 +25,13 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
@@ -42,7 +40,6 @@ import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.config.Config;
 
 public class ScannedStructureData
 {

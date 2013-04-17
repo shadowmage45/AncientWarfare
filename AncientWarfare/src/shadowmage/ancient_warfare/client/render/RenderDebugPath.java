@@ -26,8 +26,8 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 
 public class RenderDebugPath
 {

@@ -243,7 +243,8 @@ public void moveTowardsCurrentNode()
     int ex = MathHelper.floor_double(entity.posX);
     int ey = MathHelper.floor_double(entity.posY);
     int ez = MathHelper.floor_double(entity.posZ);
-    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z )
+    boolean isDoor = isCurrentNodeADoor() || isNextNodeADoor();
+    if((!isDoor && isAtNode(ex, ey, ez, targetNode)) || (isDoor && getDistanceFromNode(targetNode)<0.1f)) 
       {//|| Trig.getDistance(entity.posX, entity.posY, entity.posZ, targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f)<0.2f
       this.claimNode();
       if(targetNode==null)
@@ -269,8 +270,18 @@ public void moveTowardsCurrentNode()
     if(this.canOpenDoors)
       {
       this.doorInteraction(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z); 
-      } 
+      }
     owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
+//    if(isNextNodeADoor())
+//      {
+//      Node next = path.getFirstNode();
+//      owner.setMoveTo(next.x+0.5f, next.y, next.z+0.5f);
+//      }
+//    else
+//      {
+//      owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
+//      }
+    
 //    if(this.hasDoor && !this.isPassedDoor)
 //      {
 //      Config.logDebug("forcing move towards doorway");
@@ -281,6 +292,27 @@ public void moveTowardsCurrentNode()
 //      owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
 //      }
     }  
+  }
+
+protected float getDistanceFromNode(Node n)
+  {
+  return (float) entity.getDistance(n.x+0.5d, n.y, n.z+0.5d);
+  }
+
+protected boolean isAtNode(int ex, int ey, int ez, Node n)
+  {
+  return ex==n.x && ez==n.z && ey==n.y;
+  }
+
+protected boolean isCurrentNodeADoor()
+  {
+  return this.targetNode!=null && this.worldAccess.isDoor(this.targetNode.x, this.targetNode.y, this.targetNode.z);
+  }
+
+protected boolean isNextNodeADoor()
+  {
+  Node n = path.getFirstNode();
+  return n != null && this.worldAccess.isDoor(n.x, n.y, n.z);
   }
 
 protected void updateMoveHelper()
@@ -316,7 +348,7 @@ protected void doorInteraction(int ex, int ey, int ez, int tx, int ty, int tz)
       {
       if(doorPos!=null)
         {
-        Config.logDebug("opening door");
+        Config.logDebug("opening door"+ " entPos: "+entity);
         this.interactWithDoor(doorPos, true);
         this.doorOpenTicks = this.doorOpenMax;
         }
@@ -347,7 +379,7 @@ protected boolean checkForDoors(int ex, int ey, int ez, int tx, int ty, int tz)
     doorPos.y = ey;
     doorPos.z = ez;
     hasDoor = true;
-    Config.logDebug("found door at: "+doorPos);
+    Config.logDebug("found door at: "+doorPos + " entPos: "+entity);
     return true;
     }
   float yaw = entity.rotationYaw;

@@ -25,16 +25,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumArt;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.ScannedEntityEntry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;

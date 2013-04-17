@@ -22,7 +22,6 @@ package shadowmage.ancient_warfare.common.pathfinding;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 
 
 public class Node implements Comparable

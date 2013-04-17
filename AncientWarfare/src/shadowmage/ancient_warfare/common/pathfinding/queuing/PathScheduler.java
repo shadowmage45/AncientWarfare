@@ -28,7 +28,6 @@ import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinderThetaStar;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
-import shadowmage.ancient_warfare.common.utils.Trig;
 
 /**
  * attempted alternative to

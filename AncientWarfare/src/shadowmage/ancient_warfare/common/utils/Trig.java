@@ -22,9 +22,7 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.missiles.AmmoHwachaRocket;
 
 /**

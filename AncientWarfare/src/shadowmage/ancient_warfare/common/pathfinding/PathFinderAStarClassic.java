@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import net.minecraft.util.MathHelper;
-import shadowmage.ancient_warfare.common.config.Config;
 /**
  * a classic, slow-as-hell implimentation of A* pathfinding w/ euclidian distance
  * does zero node-caching..also uses some wierd way of telling what nodes to add
