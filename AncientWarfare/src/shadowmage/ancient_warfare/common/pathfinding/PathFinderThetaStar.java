@@ -165,6 +165,8 @@ private int searchIteration;
 private void searchLoop()
   {
   this.searchIteration = 0;
+  boolean isDoor = false;
+  boolean isPDoor = false;
   while(!qNodes.isEmpty())
     {
     this.searchIteration++;  
@@ -182,6 +184,8 @@ private void searchLoop()
     currentNode.closed = true;//close the node immediately (equivalent of adding to closed list)  
     this.findNeighbors(currentNode);
     float tent;
+    isDoor = world.isDoor(currentNode.x, currentNode.y, currentNode.z);
+    isPDoor = currentNode.parentNode!= null && world.isDoor(currentNode.parentNode.x, currentNode.parentNode.y, currentNode.parentNode.z);   
     for(Node n : this.searchNodes)
       {     
       //could test for goal here, and if found, set n.f =0, insert to priority q (force to head of line)
@@ -194,8 +198,9 @@ private void searchLoop()
         {//update n's stats to path through current -> n
         //this is where it deviates from A*, we will check to see if n can see the parent of current.  if so
         //we calculate the path to n as if it went through the parent of current, skipping current completely.
-        if(canSeeParent(n, currentNode.parentNode))//don't skip doors...
-          {//!world.isDoor(currentNode.x, currentNode.y, currentNode.z) && !world.isDoor(n.x, n.y, n.z) && 
+        
+        if(!isPDoor && !isDoor && canSeeParent(n, currentNode.parentNode))//don't skip doors...
+          { 
           n.parentNode = currentNode.parentNode;
           n.g = n.parentNode.g + n.getDistanceFrom(n.parentNode);
           n.f = n.g + n.getH(tx, ty, tz);
@@ -248,6 +253,7 @@ private boolean shouldTerminateEarly()
 
 private boolean canSeeParent(Node n, Node p)
   {
+//  return false;
   if(p==null)
     {
     return false;

@@ -168,6 +168,8 @@ TWEAKS/OPTIMIZATION
 * clean up move-to code where it would 'jump' at the final target (entity targets)
 * unify pathfinders, all pathing goes through PathManager. allows for easy config-setting for swapping between inline, scheduled, and threaded
 /********** 04-16-13 **********/
+* hey soldiers can use doors now! (WIP, needs...help..)
+* ohh, and they can wander without killing the CPU!
 /********** 04-17-13 **********/
 /********** 04-18-13 **********/
 /********** 04-19-13 **********/

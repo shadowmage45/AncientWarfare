@@ -152,7 +152,7 @@ public void moveTowardsCurrentNode()
 
 public List<Node> getCurrentPath()
   {
-  return path.getPath();
+  return path.getActivePath();
   }
 
 @Override

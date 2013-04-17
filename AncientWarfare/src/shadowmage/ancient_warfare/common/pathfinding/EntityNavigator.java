@@ -234,7 +234,7 @@ public void setPath(List<Node> pathNodes)
 public void moveTowardsCurrentNode()
   {
   this.updateMoveHelper();
-  if(this.targetNode==null && this.path.getPathNodeLength()>0)
+  if(this.targetNode==null && this.path.getActivePathSize()>0)
     {
     this.claimNode();
     }
@@ -268,17 +268,18 @@ public void moveTowardsCurrentNode()
       }
     if(this.canOpenDoors)
       {
-      this.checkDoors(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z); 
+      this.doorInteraction(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z); 
       } 
-    if(this.hasDoor && !this.isPassedDoor)
-      {
-      Config.logDebug("forcing move towards doorway");
-      owner.setMoveTo(doorPos.x+0.5f, doorPos.y, doorPos.z+0.5f);
-      }
-    else
-      {
-      owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
-      }
+    owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
+//    if(this.hasDoor && !this.isPassedDoor)
+//      {
+//      Config.logDebug("forcing move towards doorway");
+//      owner.setMoveTo(doorPos.x+0.5f, doorPos.y, doorPos.z+0.5f);
+//      }
+//    else
+//      {
+//      owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
+//      }
     }  
   }
 
@@ -294,29 +295,29 @@ protected void updateMoveHelper()
       {
       Config.logDebug("closing door");
       this.hasDoor = false;
-      this.onDoorInteraction(doorPos, false);
+      this.interactWithDoor(doorPos, false);
       }
-    else if(!this.isPassedDoor)
-      {
-      if(entity.getDistanceSq(doorPos.x+0.5d, doorPos.y, doorPos.z+0.5d)<0.2d)
-        {
-        this.isPassedDoor = true;
-        }
-      }    
+//    else if(!this.isPassedDoor)
+//      {
+//      if(entity.getDistanceSq(doorPos.x+0.5d, doorPos.y, doorPos.z+0.5d)<0.2d)
+//        {
+//        this.isPassedDoor = true;
+//        }
+//      }    
     }
   }
 
-protected void checkDoors(int ex, int ey, int ez, int tx, int ty, int tz)
+protected void doorInteraction(int ex, int ey, int ez, int tx, int ty, int tz)
   {
   if(this.doorCheckTicks<=0)
     {
     this.doorCheckTicks = this.doorCheckTicksMax;
-    if(this.entity.isCollidedHorizontally && checkDoorInteraction(ex, ey, ez,tx, ty, tz))
+    if(this.entity.isCollidedHorizontally && checkForDoors(ex, ey, ez,tx, ty, tz))
       {
       if(doorPos!=null)
         {
         Config.logDebug("opening door");
-        this.onDoorInteraction(doorPos, true);
+        this.interactWithDoor(doorPos, true);
         this.doorOpenTicks = this.doorOpenMax;
         }
       }        
@@ -335,7 +336,7 @@ protected int doorCheckTicks = 0;
 protected int doorOpenMax = 15;
 protected int doorCheckTicksMax = 5;
 
-protected boolean checkDoorInteraction(int ex, int ey, int ez, int tx, int ty, int tz)
+protected boolean checkForDoors(int ex, int ey, int ez, int tx, int ty, int tz)
   {
   int doorId = Block.doorWood.blockID;
   int id;
@@ -386,34 +387,11 @@ protected boolean checkDoorInteraction(int ex, int ey, int ez, int tx, int ty, i
     hasDoor = true;
     Config.logDebug("found door at: "+doorPos);
     return true;
-    }
-  
-//  int dx = tx-ex;
-//  int dz = tz-ez;  
-//  dx = dx < 0 ? -1 : dx > 0 ? 1 : dx;
-//  dz = dz < 0 ? -1 : dz > 0 ? 1 : dz;
-//  for(int x = ex, ix= 0; x != tx && ix<2 ; x+=dx, ix++)
-//    {
-//    for(int z = ez, iz = 0; z != tz && iz<2; z+=dz, iz++)
-//      {      
-//      id = entity.worldObj.getBlockId(x, ey, z);
-//      if(id==doorId)
-//        {
-//        doorPos.x = x;
-//        doorPos.y = ey;
-//        doorPos.z = z;
-//        hasDoor = true;
-//        Config.logDebug("found door at: "+doorPos);
-//        return true;
-//        }
-//      }
-//    }  
-//  
-  
+    }  
   return false;
   }
 
-protected void onDoorInteraction(BlockPosition doorPos, boolean open)
+protected void interactWithDoor(BlockPosition doorPos, boolean open)
   {
   Block block = Block.blocksList[entity.worldObj.getBlockId(doorPos.x, doorPos.y, doorPos.z)];
   if(block.blockID==Block.doorWood.blockID)
@@ -424,7 +402,7 @@ protected void onDoorInteraction(BlockPosition doorPos, boolean open)
 
 public List<Node> getCurrentPath()
   {
-  return path.getPath();
+  return path.getActivePath();
   }
 
 @Override

@@ -33,6 +33,7 @@ public class PathWorldAccessTest extends PathWorldAccess
 
 
 int LADDER = Block.ladder.blockID;
+int DOOR = Block.doorWood.blockID;
 
 /**
  * @param world
@@ -77,8 +78,8 @@ public WorldTestChunk()
     worldChunk[farWall][1][z] = 1;
     worldChunk[farWall][2][z] = 1;
     }
-  worldChunk[farWall-2][1][farWall] = 0;
-  worldChunk[farWall-2][2][farWall] = 0;   
+  worldChunk[farWall-2][1][farWall] = DOOR;
+  worldChunk[farWall-2][2][farWall] = DOOR;   
   
   closeWall = 33;
   farWall = 45;
@@ -100,8 +101,8 @@ public WorldTestChunk()
     worldChunk[farWall][1][z] = 1;
     worldChunk[farWall][2][z] = 1;
     }
-  worldChunk[farWall-2][1][farWall] = 0;
-  worldChunk[farWall-2][2][farWall] = 0;    
+  worldChunk[farWall-2][1][farWall] = DOOR;
+  worldChunk[farWall-2][2][farWall] = DOOR;    
   }
 
 @Override

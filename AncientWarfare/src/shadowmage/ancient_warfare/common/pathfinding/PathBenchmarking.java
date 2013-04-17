@@ -129,14 +129,22 @@ public void doTestJPS(float maxLength)
 
 public void doTestTheta(int maxLength)
   {
+  List<Node> path = null;
   total = 0;
-  for(int i = 0; i <100; i++)
+  for(int i = 0; i <10; i++)
     {
     t = System.nanoTime();
-    patherTheta.findPath(world, 1, 1, 1, 40, 1, 40, maxLength);
+    path = patherTheta.findPath(world, 1, 1, 1, 40, 1, 40, maxLength);
     total += System.nanoTime()-t;
     }
   Config.logDebug("100 x THETA pathfinding runs: "+total/1000000+"ms   "+ total);
+  if(path!= null)
+    {
+    for(Node n : path)
+      {
+      Config.logDebug(n.toString() + " door: "+ world.isDoor(n.x, n.y, n.z));      
+      }
+    }
   total = 0;
   }
 

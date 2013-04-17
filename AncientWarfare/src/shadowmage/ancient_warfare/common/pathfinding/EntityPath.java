@@ -27,6 +27,8 @@ public class EntityPath
 {
 
 private LinkedList<Node> path = new LinkedList<Node>();
+private LinkedList<Node> fullPath = new LinkedList<Node>();
+private int currentPathIndex = 0;
 
 public EntityPath()
   {
@@ -35,16 +37,10 @@ public EntityPath()
 
 public void setPath(List<Node> pathNodes)
   {
+  this.currentPathIndex = 0;
   this.path.clear();
+  this.fullPath.clear();
   this.addPath(pathNodes); 
-  }
-
-public void addToBeginning(List<Node> pathNodes)
-  {
-  List<Node> oldNodes = this.path;
-  this.path = new LinkedList<Node>();
-  this.path.addAll(pathNodes);
-  this.path.addAll(oldNodes);
   }
 
 /**
@@ -53,18 +49,8 @@ public void addToBeginning(List<Node> pathNodes)
  */
 public void addPath(List<Node> pathNodes)
   {
-//  Node n = this.path.peekLast();
-//  if(n!=null && !pathNodes.isEmpty())
-//    {
-//    if(n.equals(pathNodes.get(0)))
-//      {
-//      this.path.removeLast();
-//      }
-//    }
-//  synchronized(path)
-//  {
-  this.path.addAll(pathNodes);  
-//  }
+  this.path.addAll(pathNodes); 
+  this.fullPath.addAll(pathNodes);
   }
 
 public boolean containsPoint(int x, int y, int z)
@@ -98,16 +84,41 @@ public Node getFirstNode()
  * @return
  */
 public Node claimNode()
-  {
+  {  
+  this.currentPathIndex++;
   return this.path.poll();
   }
 
-public int getPathNodeLength()
+public int getActivePathIndex()
+  {
+  return this.currentPathIndex;
+  }
+
+public int getFullPathSize()
+  {
+  return this.fullPath.size();
+  }
+
+public List<Node> getFullPath()
+  {
+  return this.fullPath;
+  }
+
+public float getFullPathLength()
+  {
+  if(this.path.isEmpty())
+    {
+    return 0;
+    }
+  return this.path.peekLast().getPathLength();
+  }
+
+public int getActivePathSize()
   {
   return this.path.size();
   }
 
-public float getPathLength()
+public float getActivePathLength()
   {
   if(this.path.isEmpty())
     {
@@ -116,7 +127,7 @@ public float getPathLength()
   return this.path.get(path.size()-1).getPathLength();
   }
 
-public List<Node> getPath()
+public List<Node> getActivePath()
   {
   return path;
   }
