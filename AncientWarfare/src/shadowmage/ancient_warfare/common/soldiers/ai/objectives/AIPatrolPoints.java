@@ -28,6 +28,7 @@ import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIFollowPatrolPoints;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AIPatrolPoints extends NpcAIObjective
 {
@@ -67,7 +68,7 @@ public void addTasks()
 public void onRunningTick()
   {
   //check to see if enemies are within range
-  if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_ATTACK, enemyRange))
+  if(npc.targetHelper.areTargetsInRange(TargetType.ATTACK, enemyRange))
     {
     this.isFinished = true;
     }
@@ -82,7 +83,7 @@ public void onRunningTick()
       }
     else
       {
-      if(entry.targetType.getTypeName() == NpcTargetHelper.TARGET_PATROL)
+      if(entry.targetType.getTypeName() == TargetType.PATROL)
         {
         if(npc.getDistanceFromTarget(entry) < 3)
           {
@@ -110,7 +111,7 @@ public void onObjectiveStart()
   patrolPoint = npc.wayNav.getNextPatrolPoint();
   if(patrolPoint!=null)
     {
-    npc.setTargetAW(npc.targetHelper.getTargetFor(patrolPoint.x, patrolPoint.y, patrolPoint.z, npc.targetHelper.TARGET_PATROL));
+    npc.setTargetAW(npc.targetHelper.getTargetFor(patrolPoint.x, patrolPoint.y, patrolPoint.z, TargetType.PATROL));
     }
   else
     {

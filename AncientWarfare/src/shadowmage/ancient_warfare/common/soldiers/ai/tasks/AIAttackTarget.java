@@ -25,9 +25,9 @@ import net.minecraft.entity.Entity;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAITask;
-import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -163,7 +163,7 @@ protected boolean checkIfTargetDead(AIAggroEntry target)
 @Override
 public boolean shouldExecute()
   {  
-  return npc.getTargetType()==NpcTargetHelper.TARGET_ATTACK && npc.getTarget().getDistanceFrom() <= npc.targetHelper.getAttackDistance(npc.getTarget());
+  return npc.getTargetType()==TargetType.ATTACK && npc.getTarget().getDistanceFrom() <= npc.targetHelper.getAttackDistance(npc.getTarget());
   }
 
 }

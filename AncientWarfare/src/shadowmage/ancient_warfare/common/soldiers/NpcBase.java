@@ -45,6 +45,7 @@ import shadowmage.ancient_warfare.common.soldiers.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -156,9 +157,9 @@ public void setPlayerTarget(AIAggroEntry playerTarget)
   this.playerTarget = playerTarget;
   }
 
-public int getTargetType()
+public TargetType getTargetType()
   {
-  return this.target == null? -1 : this.target.targetType.getTypeName();
+  return this.target == null? TargetType.NONE : this.target.targetType.getTypeName();
   }
 
 public void setTargetAW(AIAggroEntry entry)
@@ -258,7 +259,6 @@ protected boolean canDespawn()
 public void onUpdate()
   {
   this.varsHelper.onTick();
-
   if(target!=null && !target.isValidEntry())
     {
     this.setTargetAW(null);
@@ -274,19 +274,27 @@ public void onUpdate()
     {
     actionTick--;
     }
+  this.updateArmSwingProgress();
   if(!this.worldObj.isRemote)
     {
     this.nav.moveTowardsCurrentNode();    
     }
   if(target!=null)
     {
-    this.getLookHelper().setLookPosition(target.posX(), target.posY(), target.posZ(), 10.0F, (float)this.getVerticalFaceSpeed());
+    if(target.isEntityEntry)
+      {
+      this.getLookHelper().setLookPosition(target.posX(), target.posY(), target.posZ(), 10.0F, (float)this.getVerticalFaceSpeed());
+      }
+    else
+      {
+      this.getLookHelper().setLookPosition(target.posX(), posY+getEyeHeight(), target.posZ(), 10.0F, (float)this.getVerticalFaceSpeed());
+      }
     }
   else
     {
     if(idleLookTicks <= 0)
       {
-      idleLookTicks = 20;
+      idleLookTicks = this.getRNG().nextInt(20) + 20;
       double var1 = (Math.PI * 2D) * this.getRNG().nextDouble();
       double lookX = Math.cos(var1);
       double lookZ = Math.sin(var1);
@@ -354,6 +362,7 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("team", this.teamNum);
   tag.setInteger("rank", this.rank);
   tag.setInteger("type", this.npcType.getGlobalNpcType());
+  tag.setCompoundTag("waypoints", wayNav.getNBTTag());
   }
 
 @Override
@@ -364,6 +373,7 @@ public void readFromNBT(NBTTagCompound tag)
   this.rank = tag.getInteger("rank");
   int type = tag.getInteger("type");
   this.setNpcType(NpcTypeBase.getNpcType(type), this.rank);
+  this.wayNav.readFromNBT(tag.getCompoundTag("waypoints"));
   }
 
 @Override

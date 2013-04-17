@@ -24,6 +24,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AIMountVehicle extends NpcAITask
@@ -50,7 +51,7 @@ public void onTick()
 @Override
 public boolean shouldExecute()
   {
-  if(npc.ridingEntity!=null || npc.getTarget()==null || !npc.getTarget().isValidEntry() || npc.getTargetType() != NpcTargetHelper.TARGET_MOUNT || npc.getDistanceFromTarget(npc.getTarget()) > npc.targetHelper.getAttackDistance(npc.getTarget()))
+  if(npc.ridingEntity!=null || npc.getTarget()==null || npc.getTargetType() != TargetType.MOUNT || npc.getDistanceFromTarget(npc.getTarget()) > npc.targetHelper.getAttackDistance(npc.getTarget()))
     {
     return false;
     }

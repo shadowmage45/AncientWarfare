@@ -24,6 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AITargetEntryPlayer extends AITargetEntry
 {
@@ -39,7 +40,7 @@ boolean oppositeTeam;
  * @param isEntityTarget
  * @param maxTargetRange
  */
-public AITargetEntryPlayer(NpcBase owner, int typeName, float maxTargetRange, boolean sameTeam, boolean oppositeTeam)
+public AITargetEntryPlayer(NpcBase owner, TargetType typeName, float maxTargetRange, boolean sameTeam, boolean oppositeTeam)
   {
   super(owner, typeName, EntityPlayer.class, 0, true, maxTargetRange);  
   this.sameTeam = sameTeam;

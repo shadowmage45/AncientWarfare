@@ -18,24 +18,25 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.soldiers.helpers.targeting;
+package shadowmage.ancient_warfare.common.utils;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.utils.TargetType;
-
-public class AITargetEntryHealing extends AITargetEntry
-{
-
-public AITargetEntryHealing(NpcBase npc, TargetType typeName, Class clz, int priority, float maxTargetRange)
-  {
-  super(npc, typeName, clz, priority, true, maxTargetRange);
+/**
+ * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
+ * @author Shadowmage
+ *
+ */
+public enum TargetType
+  { 
+  ATTACK,
+  MOUNT,
+  REPAIR,
+  HARVEST,
+  HEAL,
+  FOLLOW,
+  WANDER,
+  PATROL,
+  MOVE,
+  SHELTER,
+  FLEE,
+  NONE;
   }
-
-@Override
-public boolean isTarget(Entity ent)
-  {
-  return ent instanceof EntityLiving && ((EntityLiving)ent).getHealth() < ((EntityLiving)ent).getMaxHealth();
-  }
-}

@@ -26,6 +26,7 @@ import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIDismountVehicle;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AIDismountVehicles extends NpcAIObjective
@@ -53,7 +54,7 @@ public void updatePriority()
     {
     this.currentPriority = 0;
     }
-  else if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_ATTACK, ((VehicleBase)npc.ridingEntity).vehicleType.getMinAttackDistance()))
+  else if(npc.targetHelper.areTargetsInRange(TargetType.ATTACK, ((VehicleBase)npc.ridingEntity).vehicleType.getMinAttackDistance()))
     {
     if(this.currentPriority<this.maxPriority)
       {

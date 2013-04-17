@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.soldiers.helpers.targeting;
 import net.minecraft.entity.Entity;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AITargetEntryNpc extends AITargetEntry
 {
@@ -39,7 +40,7 @@ boolean oppositeTeam;
  * @param sameTeam
  * @param oppositeTeam
  */
-public AITargetEntryNpc(NpcBase npc, int typeName, int priority, float maxTargetRange, boolean sameTeam, boolean oppositeTeam)
+public AITargetEntryNpc(NpcBase npc, TargetType typeName, int priority, float maxTargetRange, boolean sameTeam, boolean oppositeTeam)
   {
   super(npc, typeName, NpcBase.class, priority, true, maxTargetRange);
   this.sameTeam = sameTeam;

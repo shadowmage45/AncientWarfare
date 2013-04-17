@@ -24,6 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AITargetEntry
 {
@@ -34,11 +35,11 @@ public class AITargetEntry
 private Class targetClass = null;
 public int priority = 0;
 boolean isEntityTarget = false;
-int typeName = 0;
+TargetType typeName;
 public float maxTargetRange = Config.npcAISearchRange;
 protected NpcBase npc;
 
-public AITargetEntry(NpcBase owner, int typeName, Class clz, int priority, boolean isEntityTarget, float maxTargetRange)
+public AITargetEntry(NpcBase owner, TargetType typeName, Class clz, int priority, boolean isEntityTarget, float maxTargetRange)
   {
   this.typeName = typeName;
   this.targetClass = clz;
@@ -48,7 +49,7 @@ public AITargetEntry(NpcBase owner, int typeName, Class clz, int priority, boole
   this.npc = owner;
   }  
 
-public int getTypeName()
+public TargetType getTypeName()
   {
   return this.typeName;
   }

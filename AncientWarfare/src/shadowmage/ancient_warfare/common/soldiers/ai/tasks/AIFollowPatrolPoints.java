@@ -25,6 +25,7 @@ import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AIFollowPatrolPoints extends NpcAITask
 {
@@ -45,7 +46,7 @@ public void onTick()
   {
   Config.logDebug("choosing patrol point");
   this.currentPoint = npc.wayNav.getNextPatrolPoint();
-  this.currentTarget = npc.targetHelper.getTargetFor(currentPoint.x, currentPoint.y, currentPoint.z, npc.targetHelper.TARGET_MOVE);
+  this.currentTarget = npc.targetHelper.getTargetFor(currentPoint.x, currentPoint.y, currentPoint.z, TargetType.MOVE);
   npc.setTargetAW(currentTarget);  
   }
 

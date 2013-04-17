@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AIWander extends NpcAIObjective
 {
@@ -66,7 +67,7 @@ public void updatePriority()
 public void onRunningTick()
   {
   this.wanderTick++;
-  if(npc.getTarget()==null || npc.getDistanceFromTarget(npc.getTarget())<2 || wanderTick > 20 || npc.targetHelper.areTargetsInRange(npc.targetHelper.TARGET_ATTACK, 20))
+  if(npc.getTarget()==null || npc.getDistanceFromTarget(npc.getTarget())<2 || wanderTick > 20 || npc.targetHelper.areTargetsInRange(TargetType.ATTACK, 20))
     {
     this.isFinished = true;
     this.cooldownTicks = 10;
@@ -86,7 +87,7 @@ public void onObjectiveStart()
   int ty = PathUtils.findClosestYTo(npc.nav.worldAccess, tx, y, tz);
   List<Node> path = PathUtils.randomCrawl(npc.nav.worldAccess, x, y, z, tx, ty, tz, 12, rng);
   npc.setPath(path);
-  npc.setTargetAW(npc.targetHelper.getTargetFor(tx, ty, tz, npc.targetHelper.TARGET_WANDER));
+  npc.setTargetAW(npc.targetHelper.getTargetFor(tx, ty, tz, TargetType.WANDER));
   }
 
 @Override

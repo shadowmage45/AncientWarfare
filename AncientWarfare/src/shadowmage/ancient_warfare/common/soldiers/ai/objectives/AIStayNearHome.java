@@ -25,6 +25,7 @@ import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
 import shadowmage.ancient_warfare.common.soldiers.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AIStayNearHome extends NpcAIObjective
 {
@@ -103,7 +104,7 @@ public void onObjectiveStart()
   if(home!=null)
     {
     Config.logDebug("ai stay near home: setting move target");
-    npc.setTargetAW(npc.targetHelper.getTargetFor(home.x, home.y, home.z, npc.targetHelper.TARGET_MOVE));
+    npc.setTargetAW(npc.targetHelper.getTargetFor(home.x, home.y, home.z, TargetType.MOVE));
     }
   else
     {

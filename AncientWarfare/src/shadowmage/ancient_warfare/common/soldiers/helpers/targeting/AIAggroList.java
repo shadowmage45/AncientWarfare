@@ -22,21 +22,19 @@ package shadowmage.ancient_warfare.common.soldiers.helpers.targeting;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map.Entry;
 
 import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AIAggroList
 {
 
 protected NpcBase npc;
-public final int targetType;
+public final TargetType targetType;
 public ArrayList<AIAggroEntry> targetEntries = new ArrayList<AIAggroEntry>();
 
-public AIAggroList(NpcBase owner, int targetType)
+public AIAggroList(NpcBase owner, TargetType targetType)
   {
   this.npc = owner;
   this.targetType = targetType;

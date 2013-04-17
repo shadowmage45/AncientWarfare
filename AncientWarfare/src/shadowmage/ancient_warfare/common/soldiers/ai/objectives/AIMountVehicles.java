@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMountVehicle;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AIMountVehicles extends NpcAIObjective
 {
@@ -52,7 +53,7 @@ public void addTasks()
 @Override
 public void updatePriority()
   {
-  if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_MOUNT, maxRange))
+  if(npc.targetHelper.areTargetsInRange(TargetType.MOUNT, maxRange))
     {
     if(this.currentPriority<this.maxPriority)
       {
@@ -70,7 +71,7 @@ public void onRunningTick()
   {
   if(npc.getTarget()==null)
     {
-    if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_MOUNT, maxRange))
+    if(npc.targetHelper.areTargetsInRange(TargetType.MOUNT, maxRange))
       {
       setMountTarget();      
       }
@@ -97,7 +98,7 @@ public void stopObjective()
 
 protected void setMountTarget()
   {
-  npc.setTargetAW(npc.targetHelper.getHighestAggroTargetInRange(NpcTargetHelper.TARGET_MOUNT, maxRange));
+  npc.setTargetAW(npc.targetHelper.getHighestAggroTargetInRange(TargetType.MOUNT, maxRange));
   }
 
 }

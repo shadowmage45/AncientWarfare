@@ -269,8 +269,16 @@ public void moveTowardsCurrentNode()
     if(this.canOpenDoors)
       {
       this.checkDoors(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z); 
-      }   
-    owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
+      } 
+    if(this.hasDoor && !this.isPassedDoor)
+      {
+      Config.logDebug("forcing move towards doorway");
+      owner.setMoveTo(doorPos.x+0.5f, doorPos.y, doorPos.z+0.5f);
+      }
+    else
+      {
+      owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
+      }
     }  
   }
 
@@ -280,11 +288,21 @@ protected void updateMoveHelper()
     {
     this.doorOpenTicks--;        
     }      
-  if(this.hasDoor && this.doorOpenTicks<=0)
+  if(this.hasDoor)
     {
-    Config.logDebug("closing door");
-    this.hasDoor = false;
-    this.onDoorInteraction(doorPos, false);
+    if(this.doorOpenTicks<=0)
+      {
+      Config.logDebug("closing door");
+      this.hasDoor = false;
+      this.onDoorInteraction(doorPos, false);
+      }
+    else if(!this.isPassedDoor)
+      {
+      if(entity.getDistanceSq(doorPos.x+0.5d, doorPos.y, doorPos.z+0.5d)<0.2d)
+        {
+        this.isPassedDoor = true;
+        }
+      }    
     }
   }
 
@@ -309,6 +327,7 @@ protected void checkDoors(int ex, int ey, int ez, int tx, int ty, int tz)
     }  
   }
 
+protected boolean isPassedDoor = false;
 protected boolean hasDoor = false;
 protected BlockPosition doorPos = new BlockPosition(0,0,0);
 protected int doorOpenTicks = 0;

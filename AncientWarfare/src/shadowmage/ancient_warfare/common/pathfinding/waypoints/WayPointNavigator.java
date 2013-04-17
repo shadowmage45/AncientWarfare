@@ -25,11 +25,13 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathManager;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class WayPointNavigator implements IPathableCallback, INBTTaggable
@@ -52,7 +54,7 @@ public WayPointNavigator(IPathableEntity owner)
 
 public void addPatrolPoint(int x, int y, int z)
   {
-  this.patrolPoints.add(new WayPoint(x,y,z,0));
+  this.patrolPoints.add(new WayPoint(x,y,z, TargetType.PATROL));
   }
 
 public WayPoint getNextPatrolPoint()
@@ -84,7 +86,7 @@ public void addWayPoint(WayPoint p)
   this.wayPoints.add(p);
   }
 
-public WayPoint getClosestWayPointOfType(int type)
+public WayPoint getClosestWayPointOfType(TargetType type)
   {
   WayPoint bestFound = null;
   float bestDist = Float.POSITIVE_INFINITY;
@@ -115,7 +117,7 @@ public void clearWayPoints()
 
 public void setHomePoint(int x, int y, int z)
   {
-  this.homePoint = new WayPoint(x,y,z,0);
+  this.homePoint = new WayPoint(x,y,z, TargetType.SHELTER);
   }
 
 public boolean hasHomePoint()
@@ -177,14 +179,37 @@ public void onPathFailed(List<Node> partialPathNodes)
 @Override
 public NBTTagCompound getNBTTag()
   {
-  // TODO Auto-generated method stub
-  return null;
+  NBTTagCompound tag = new NBTTagCompound();
+  NBTTagList list = new NBTTagList();
+  for(WayPoint p : this.patrolPoints)
+    {
+    list.appendTag(p.getNBTTag());
+    }
+  tag.setTag("patrol", list);  
+  list = new NBTTagList();
+  for(WayPoint p : this.wayPoints)
+    {
+    list.appendTag(p.getNBTTag());
+    }
+  tag.setTag("points", list);
+  return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub  
+  this.patrolPoints.clear();
+  this.wayPoints.clear();  
+  NBTTagList patrol = tag.getTagList("patrol");
+  for(int i = 0; i < patrol.tagCount(); i++)
+    {
+    this.patrolPoints.add(new WayPoint((NBTTagCompound) patrol.tagAt(i)));
+    }
+  NBTTagList points = tag.getTagList("points");
+  for(int i = 0; i < points.tagCount(); i++)
+    {
+    this.wayPoints.add(new WayPoint((NBTTagCompound) points.tagAt(i)));
+    }
   }
 
 private class WayPointPath

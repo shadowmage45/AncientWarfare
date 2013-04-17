@@ -194,8 +194,8 @@ private void searchLoop()
         {//update n's stats to path through current -> n
         //this is where it deviates from A*, we will check to see if n can see the parent of current.  if so
         //we calculate the path to n as if it went through the parent of current, skipping current completely.
-        if(!world.isDoor(currentNode.x, currentNode.y, currentNode.z) && !world.isDoor(n.x, n.y, n.z) && canSeeParent(n, currentNode.parentNode))//don't skip doors...
-          {
+        if(canSeeParent(n, currentNode.parentNode))//don't skip doors...
+          {//!world.isDoor(currentNode.x, currentNode.y, currentNode.z) && !world.isDoor(n.x, n.y, n.z) && 
           n.parentNode = currentNode.parentNode;
           n.g = n.parentNode.g + n.getDistanceFrom(n.parentNode);
           n.f = n.g + n.getH(tx, ty, tz);

@@ -20,28 +20,37 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding.waypoints;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
-public class WayPoint
+public class WayPoint implements INBTTaggable
 {
 
-int type;
+TargetType type;
 String name = "";
 public int x;
 public int y;
 public int z;
 
-public WayPoint(int x, int y, int z, int type)
+public WayPoint(int x, int y, int z, TargetType type)
   {
   this.x = x;
   this.y = y;
   this.z = z;
+  this.type = type;
   }
 
-public WayPoint(int x, int y, int z, int type, String name)
+public WayPoint(int x, int y, int z, TargetType type, String name)
   {
   this(x,y,z,type);
   this.name = name;
+  }
+
+public WayPoint(NBTTagCompound tag)
+  {
+  this.readFromNBT(tag);
   }
 
 public boolean isValidWayPoint(World world)
@@ -51,7 +60,31 @@ public boolean isValidWayPoint(World world)
 
 public boolean areWayPointsEqual(WayPoint point)
   {
-  return false;
+  return point.x==this.x && point.y==this.y && point.z==this.z;
   }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setInteger("t", this.type.ordinal());
+  tag.setString("n", this.name);
+  tag.setIntArray("pos", new int[]{x,y,z});
+  return tag;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  this.name = tag.getString("n");
+  this.type = TargetType.values()[tag.getInteger("t")];
+  int[] pos = tag.getIntArray("pos");
+  this.x = pos[0];
+  this.y = pos[1];
+  this.z = pos[2];
+  }
+
+
+
 
 }

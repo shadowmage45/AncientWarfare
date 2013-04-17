@@ -23,18 +23,16 @@ package shadowmage.ancient_warfare.common.soldiers.helpers.targeting;
 import java.util.ArrayList;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.soldiers.NpcBase;
-import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntry;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AITargetList
 {	
-int type;
+TargetType type;
 ArrayList<AITargetEntry> targetEntries = new ArrayList<AITargetEntry>();
 protected NpcBase npc;
 
-public AITargetList(NpcBase owner, int name)
+public AITargetList(NpcBase owner, TargetType name)
   {
   this.npc = owner;
   this.type = name;

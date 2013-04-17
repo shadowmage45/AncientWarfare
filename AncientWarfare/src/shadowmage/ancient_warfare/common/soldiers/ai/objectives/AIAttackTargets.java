@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIAttackTarget;
 import shadowmage.ancient_warfare.common.soldiers.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AIAttackTargets extends NpcAIObjective
 {
@@ -55,7 +56,7 @@ public void addTasks()
 public void updatePriority()
   {  
 //  Config.logDebug("checking if targets are in range: ");
-  if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_ATTACK, maxRange))
+  if(npc.targetHelper.areTargetsInRange(TargetType.ATTACK, maxRange))
     {
 //    Config.logDebug("setting attack priority to max: "+this.maxPriority);
     this.currentPriority = this.maxPriority;    
@@ -72,7 +73,7 @@ public void onRunningTick()
   if(npc.getTarget()==null)
     {
     Config.logDebug("attack ai, target==null, finding new");
-    AIAggroEntry target = npc.targetHelper.getHighestAggroTargetInRange(NpcTargetHelper.TARGET_ATTACK, maxRange);
+    AIAggroEntry target = npc.targetHelper.getHighestAggroTargetInRange(TargetType.ATTACK, maxRange);
     if(target==null)
       {
       Config.logDebug("attack ai, new target==null, setting finished");
@@ -90,7 +91,7 @@ public void onRunningTick()
 public void onObjectiveStart()
   {
   Config.logDebug("starting attack ai, setting target");
-  npc.setTargetAW(npc.targetHelper.getHighestAggroTargetInRange(NpcTargetHelper.TARGET_ATTACK, maxRange));
+  npc.setTargetAW(npc.targetHelper.getHighestAggroTargetInRange(TargetType.ATTACK, maxRange));
   }
 
 @Override

@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroEntry
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AIAggroList;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetList;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 /**
@@ -46,14 +47,14 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 public class NpcTargetHelper
 {
 
-public static final int TARGET_ATTACK = 0;
-public static final int TARGET_MOUNT = 1;
-public static final int TARGET_HARVEST = 2;
-public static final int TARGET_HEAL = 3;
-public static final int TARGET_FOLLOW = 4;
-public static final int TARGET_WANDER = 5;
-public static final int TARGET_MOVE = 6;
-public static final int TARGET_PATROL = 7;
+//public static final int TARGET_ATTACK = 0;
+//public static final int TARGET_MOUNT = 1;
+//public static final int TARGET_HARVEST = 2;
+//public static final int TARGET_HEAL = 3;
+//public static final int TARGET_FOLLOW = 4;
+//public static final int TARGET_WANDER = 5;
+//public static final int TARGET_MOVE = 6;
+//public static final int TARGET_PATROL = 7;
 public AITargetEntry playerTargetEntry;
 public AITargetEntry wanderTargetEntry;
 public AITargetEntry moveTargetEntry;
@@ -64,34 +65,34 @@ NpcBase npc;
 /**
  * list of all potential targets
  */
-HashMap<Integer, AITargetList> targetEntries = new HashMap<Integer, AITargetList>();
+HashMap<TargetType, AITargetList> targetEntries = new HashMap<TargetType, AITargetList>();
 
 /**
  * future/potential targets based on aggro priority
  */
-HashMap<Integer, AIAggroList> aggroEntries = new HashMap<Integer, AIAggroList>();
+HashMap<TargetType, AIAggroList> aggroEntries = new HashMap<TargetType, AIAggroList>();
 
 public NpcTargetHelper(NpcBase npc)
   {
   this.npc = npc;
-  this.playerTargetEntry = new AITargetEntry(npc, TARGET_FOLLOW, EntityPlayer.class, 1, true, 40);
-  this.wanderTargetEntry = new AITargetEntry(npc, TARGET_WANDER, null, 0, false, 40);
-  this.moveTargetEntry = new AITargetEntry(npc, TARGET_MOVE, null, 0, false, 40);
-  this.patrolTargetEntry = new AITargetEntry(npc, TARGET_PATROL, null, 0, false, 40);
+  this.playerTargetEntry = new AITargetEntry(npc, TargetType.FOLLOW, EntityPlayer.class, 1, true, 40);
+  this.wanderTargetEntry = new AITargetEntry(npc, TargetType.WANDER, null, 0, false, 40);
+  this.moveTargetEntry = new AITargetEntry(npc, TargetType.MOVE, null, 0, false, 40);
+  this.patrolTargetEntry = new AITargetEntry(npc, TargetType.PATROL, null, 0, false, 40);
   }
 
-public AIAggroEntry getTargetFor(int x, int y, int z, int type)
+public AIAggroEntry getTargetFor(int x, int y, int z, TargetType type)
   {
   switch(type)
   {
-  case TARGET_WANDER:
+  case WANDER:
   return new AIAggroEntry(npc, wanderTargetEntry, x, y, z);
-  case TARGET_MOVE:  
+  case MOVE:  
   return new AIAggroEntry(npc, moveTargetEntry, x, y, z);
-  case TARGET_PATROL:
+  case PATROL:
   return new AIAggroEntry(npc, patrolTargetEntry, x,y,z);
   }
-  return null;
+  return new AIAggroEntry(npc, moveTargetEntry, x, y, z);
   }
 
 public void addTargetEntry(AITargetEntry entry)
@@ -153,7 +154,7 @@ public void checkForTargets()
         continue;
         }
 //      Config.logDebug("checking entity: "+ent);
-      for(Integer key : this.targetEntries.keySet())        
+      for(TargetType key : this.targetEntries.keySet())        
         {
         AITargetList targetList = this.targetEntries.get(key);
         targetEntry = targetList.getEntryFor(ent);
@@ -213,7 +214,7 @@ public float getAttackDistance(AIAggroEntry target)
 
 public void updateAggroEntries()
   {  
-  for(Integer key : this.aggroEntries.keySet())
+  for(TargetType key : this.aggroEntries.keySet())
     {
     this.aggroEntries.get(key).updateAggroEntries();
     }  
@@ -224,7 +225,7 @@ public void handleBeingAttacked(EntityLiving damager)
   
   }
 
-public boolean areTargetsInRange(int type, float range)
+public boolean areTargetsInRange(TargetType type, float range)
   {
 //  Config.logDebug("checking for targets in range from targetHelper");
   if(this.aggroEntries.containsKey(type))
@@ -244,7 +245,7 @@ public boolean areTargetsInRange(int type, float range)
   return false;
   }
 
-public AIAggroEntry getHighestAggroTargetInRange(int type, float range)
+public AIAggroEntry getHighestAggroTargetInRange(TargetType type, float range)
   {
   if(this.aggroEntries.containsKey(type))
     {
@@ -253,7 +254,7 @@ public AIAggroEntry getHighestAggroTargetInRange(int type, float range)
   return null;
   }
 
-public AIAggroEntry getHighestAggroTarget(int type)
+public AIAggroEntry getHighestAggroTarget(TargetType type)
   {
   if(this.aggroEntries.containsKey(type))
     {

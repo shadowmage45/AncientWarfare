@@ -43,6 +43,7 @@ import shadowmage.ancient_warfare.common.soldiers.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntryNpc;
 import shadowmage.ancient_warfare.common.soldiers.helpers.targeting.AITargetEntryPlayer;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class NpcFootsoldier extends NpcTypeBase
 {
@@ -123,10 +124,10 @@ protected ItemStack[] getArmorStack(int level)
 @Override
 public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
-  helper.addTargetEntry(new AITargetEntryPlayer(npc, NpcTargetHelper.TARGET_ATTACK,  40, false, true));
-  helper.addTargetEntry(new AITargetEntryNpc(npc, NpcTargetHelper.TARGET_ATTACK, 0, 40, false, true));
-  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntityMob.class, 0, true, 40));
-  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntitySlime.class, 0, true, 40));
+  helper.addTargetEntry(new AITargetEntryPlayer(npc, TargetType.ATTACK,  40, false, true));
+  helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.ATTACK, 0, 40, false, true));
+  helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntityMob.class, 0, true, 40));
+  helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntitySlime.class, 0, true, 40));
   }
 
 @Override
