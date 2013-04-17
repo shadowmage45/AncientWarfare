@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.item;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
@@ -88,7 +89,7 @@ private boolean onActivated(World world, EntityPlayer player, ItemStack stack, B
   int rotation = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
   String facing = rotation==0 ? "South": rotation==1? "West": rotation==2?"North":rotation==3?"East":"huh?";  
   player.addChatMessage("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation);
-  System.out.println("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation);
+  Config.logDebug("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation+" player yaw: "+player.rotationYaw);
   return true;
   }
 

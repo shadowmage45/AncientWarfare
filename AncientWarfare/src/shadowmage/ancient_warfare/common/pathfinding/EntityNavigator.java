@@ -23,6 +23,8 @@ package shadowmage.ancient_warfare.common.pathfinding;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoor;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -33,6 +35,8 @@ import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class EntityNavigator implements IPathableCallback
 {
+
+
 IPathableEntity owner;
 Entity entity;
 EntityPath path = new EntityPath();
@@ -174,7 +178,7 @@ public void setMoveTo(int tx, int ty, int tz)
     }
   if(calcPath)
     { 
-    ey = PathUtils.findClosestYTo(worldAccess, ex, ey, ez);
+    ey = PathUtils.findClosestYTo(worldAccess, ex, ey, ez);//set entity start-block to a valid block..hopefully
     this.calcPath(ex, ey, ez, tx, ty, tz);
     }
   }
@@ -229,6 +233,7 @@ public void setPath(List<Node> pathNodes)
 
 public void moveTowardsCurrentNode()
   {
+  this.updateMoveHelper();
   if(this.targetNode==null && this.path.getPathNodeLength()>0)
     {
     this.claimNode();
@@ -238,7 +243,7 @@ public void moveTowardsCurrentNode()
     int ex = MathHelper.floor_double(entity.posX);
     int ey = MathHelper.floor_double(entity.posY);
     int ez = MathHelper.floor_double(entity.posZ);
-    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z)<0.8f)
+    if(ex==targetNode.x && ey==targetNode.y && ez == targetNode.z || Trig.getDistance(entity.posX, entity.posY, entity.posZ, targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f)<0.5f)
       {
       this.claimNode();
       if(targetNode==null)
@@ -251,14 +256,151 @@ public void moveTowardsCurrentNode()
       if(targetNode.y<ey)
         {
         entity.motionY = -0.125f;
+        entity.motionX *= 0.5f;
+        entity.motionZ *= 0.5f;
         }
       else if(targetNode.y>ey)
         {
         entity.motionY = 0.125f;
+        entity.motionX *= 0.5f;
+        entity.motionZ *= 0.5f;
         }    
       }
+    if(this.canOpenDoors)
+      {
+      this.checkDoors(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z); 
+      }   
     owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
     }  
+  }
+
+protected void updateMoveHelper()
+  {
+  if(this.doorOpenTicks>0)
+    {
+    this.doorOpenTicks--;        
+    }      
+  if(this.hasDoor && this.doorOpenTicks<=0)
+    {
+    Config.logDebug("closing door");
+    this.hasDoor = false;
+    this.onDoorInteraction(doorPos, false);
+    }
+  }
+
+protected void checkDoors(int ex, int ey, int ez, int tx, int ty, int tz)
+  {
+  if(this.doorCheckTicks<=0)
+    {
+    this.doorCheckTicks = this.doorCheckTicksMax;
+    if(this.entity.isCollidedHorizontally && checkDoorInteraction(ex, ey, ez,tx, ty, tz))
+      {
+      if(doorPos!=null)
+        {
+        Config.logDebug("opening door");
+        this.onDoorInteraction(doorPos, true);
+        this.doorOpenTicks = this.doorOpenMax;
+        }
+      }        
+    }
+  else
+    {
+    this.doorCheckTicks--;
+    }  
+  }
+
+protected boolean hasDoor = false;
+protected BlockPosition doorPos = new BlockPosition(0,0,0);
+protected int doorOpenTicks = 0;
+protected int doorCheckTicks = 0;
+protected int doorOpenMax = 15;
+protected int doorCheckTicksMax = 5;
+
+protected boolean checkDoorInteraction(int ex, int ey, int ez, int tx, int ty, int tz)
+  {
+  int doorId = Block.doorWood.blockID;
+  int id;
+  id = entity.worldObj.getBlockId(ex, ey, ez);
+  if(id==doorId)
+    {
+    doorPos.x = ex;
+    doorPos.y = ey;
+    doorPos.z = ez;
+    hasDoor = true;
+    Config.logDebug("found door at: "+doorPos);
+    return true;
+    }
+  float yaw = entity.rotationYaw;
+  while(yaw<0)
+    {
+    yaw+=360.f;
+    }
+  while(yaw>=360.f)
+    {
+    yaw-=360.f;
+    }
+  int x = ex;
+  int y = ey;
+  int z = ez;
+  if(yaw>=360-45 || yaw<45)//south, check z+
+    {
+    z++;
+    }
+  else if(yaw>=45&& yaw<45+90)//west, check x+
+    {
+    x--;
+    }
+  else if(yaw>=180-45 && yaw<180+45)//north
+    {
+    z--;
+    }
+  else//east
+    {
+    x++;
+    }
+  id = entity.worldObj.getBlockId(x, y, z);
+  if(id==doorId)
+    {
+    doorPos.x = x;
+    doorPos.y = y;
+    doorPos.z = z;
+    hasDoor = true;
+    Config.logDebug("found door at: "+doorPos);
+    return true;
+    }
+  
+//  int dx = tx-ex;
+//  int dz = tz-ez;  
+//  dx = dx < 0 ? -1 : dx > 0 ? 1 : dx;
+//  dz = dz < 0 ? -1 : dz > 0 ? 1 : dz;
+//  for(int x = ex, ix= 0; x != tx && ix<2 ; x+=dx, ix++)
+//    {
+//    for(int z = ez, iz = 0; z != tz && iz<2; z+=dz, iz++)
+//      {      
+//      id = entity.worldObj.getBlockId(x, ey, z);
+//      if(id==doorId)
+//        {
+//        doorPos.x = x;
+//        doorPos.y = ey;
+//        doorPos.z = z;
+//        hasDoor = true;
+//        Config.logDebug("found door at: "+doorPos);
+//        return true;
+//        }
+//      }
+//    }  
+//  
+  
+  return false;
+  }
+
+protected void onDoorInteraction(BlockPosition doorPos, boolean open)
+  {
+  Block block = Block.blocksList[entity.worldObj.getBlockId(doorPos.x, doorPos.y, doorPos.z)];
+  if(block.blockID==Block.doorWood.blockID)
+    {
+    ((BlockDoor)block).onPoweredBlockChange(entity.worldObj, doorPos.x, doorPos.y, doorPos.z, open);
+    }
   }
 
 public List<Node> getCurrentPath()
@@ -272,6 +414,7 @@ public void onPathFound(List<Node> pathNodes)
   pathNodes.remove(0);
   this.path.addPath(pathNodes);
   }
+
 @Override
 public void onPathFailed(List<Node> partialPathNodes)
   {

@@ -92,6 +92,7 @@ public NpcBase(World par1World)
   this.aiManager = new NpcAIObjectiveManager(this);
   this.moveSpeed = 0.325f;
   this.setAIMoveSpeed(0.325f);
+  this.setMoveForward(0);
   this.worldAccess = new PathWorldAccessEntity(par1World, this);  
   this.worldAccess.canOpenDoors = true;
   this.worldAccess.canUseLaders = true;
@@ -275,7 +276,7 @@ public void onUpdate()
     }
   if(!this.worldObj.isRemote)
     {
-    this.nav.moveTowardsCurrentNode();
+    this.nav.moveTowardsCurrentNode();    
     }
   if(target!=null)
     {

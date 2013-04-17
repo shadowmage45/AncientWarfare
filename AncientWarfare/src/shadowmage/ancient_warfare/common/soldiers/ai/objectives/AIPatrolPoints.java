@@ -76,7 +76,7 @@ public void onRunningTick()
     AIAggroEntry entry = npc.getTarget();
     if(entry==null)
       {
-      Config.logDebug("entity has no target, setting patrol to finished");
+//      Config.logDebug("entity has no target, setting patrol to finished");
       this.isFinished = true;
       this.patrolPoint = null;
       }
@@ -86,7 +86,7 @@ public void onRunningTick()
         {
         if(npc.getDistanceFromTarget(entry) < 3)
           {
-          Config.logDebug("sensing completed patrol point, setting finished");
+//          Config.logDebug("sensing completed patrol point, setting finished");
           this.cooldownTicks = this.maxCooldownticks;
           this.isFinished = true;
           this.patrolPoint = null;
@@ -94,7 +94,7 @@ public void onRunningTick()
         }
       else
         {
-        Config.logDebug("inconsistent target, not patrol target, setting finished");
+//        Config.logDebug("inconsistent target, not patrol target, setting finished");
         //what? somehow a diff target was set, force-finished
         this.isFinished = true;
         this.patrolPoint = null;
@@ -106,7 +106,7 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
-  Config.logDebug("starting patrol ai, choosing next patrol point, setting target");
+//  Config.logDebug("starting patrol ai, choosing next patrol point, setting target");
   patrolPoint = npc.wayNav.getNextPatrolPoint();
   if(patrolPoint!=null)
     {
@@ -115,7 +115,7 @@ public void onObjectiveStart()
   else
     {
     this.isFinished = true;
-    this.cooldownTicks = 10;
+    this.cooldownTicks = maxCooldownticks;
     }
   }
 

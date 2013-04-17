@@ -80,7 +80,7 @@ public void doWanderTest(int maxNodes)
   for(int i = 0; i < 100; i++)
     {
     t = System.nanoTime();
-    PathUtils.randomCrawl(world, 1, 1, 1, 10, 2, 10, 40, new Random());
+    PathUtils.randomCrawl(world, 1, 1, 1, 40, 1, 40, 90, new Random());
     total += System.nanoTime()-t;
     }
   Config.logDebug("100 x GUIDED CRAWL runs: "+total/1000000+"ms   "+ total);
