@@ -69,7 +69,7 @@ int npcAITargetTick = 0;
  * cooldown for attacking/shooting/harvesting.  set by ai on actions dependant upon action type.
  * updated EVERY TICK from NpcBase.onUpdate()
  */
-int npcActionTick = 0;
+public int actionTick = 0;
 
 public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
@@ -97,11 +97,10 @@ public NpcBase(World par1World)
   this.worldAccess.canUseLaders = true;
   this.worldAccess.canSwim = true;
   this.nav = new EntityNavigator(this);
+  this.nav.canOpenDoors = true;
   this.wayNav = new WayPointNavigator(this);
 
-  this.getNavigator().setBreakDoors(true);
-  this.tasks.addTask(0, new EntityAISwimming(this));
-  this.tasks.addTask(1, new EntityAIOpenDoor(this, true));
+  this.tasks.addTask(1, new EntityAISwimming(this));
   this.stepHeight = 1.1f;
   }
 
@@ -270,9 +269,9 @@ public void onUpdate()
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
     }
-  if(npcAITargetTick>0)
+  if(actionTick>0)
     {
-    npcAITargetTick--;
+    actionTick--;
     }
   if(!this.worldObj.isRemote)
     {

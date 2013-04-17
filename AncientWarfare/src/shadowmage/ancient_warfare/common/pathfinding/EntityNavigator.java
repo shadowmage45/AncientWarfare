@@ -47,6 +47,8 @@ int prevEz;
 int stuckTicks = 0;
 Node targetNode = null;
 
+public boolean canOpenDoors = false;
+
 public EntityNavigator(IPathableEntity owner)
   {
 	this.owner = owner;

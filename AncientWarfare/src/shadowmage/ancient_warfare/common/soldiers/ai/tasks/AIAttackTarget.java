@@ -36,7 +36,7 @@ public class AIAttackTarget extends NpcAITask
 
 int maxAttackDelayTicks = 35;//should set this from soldier somewhere..
 
-int attackDelayTicks = 0;
+//int attackDelayTicks = 0;
 int blockAttackHits = 0;
 
 /**
@@ -58,7 +58,7 @@ public void onTick()
     }
   else
     {
-    if(attackDelayTicks<=0)
+    if(npc.actionTick<=0)
       {
       this.attackTarget(target); 
       }   
@@ -71,7 +71,7 @@ public void onTick()
 
 protected void attackTarget(AIAggroEntry target)
   { 
-  attackDelayTicks =  maxAttackDelayTicks / Config.npcAITicks;  
+  npc.actionTick =  maxAttackDelayTicks;  
   if(!target.isEntityEntry)
     {
     Config.logDebug("doing block attack");
@@ -127,15 +127,15 @@ protected void attackTargetMounted(AIAggroEntry target)
     }
   if(vehicle.firingHelper.isAtTarget())
     {
-    if(attackDelayTicks<=0)
+    if(npc.actionTick<=0)
       {
       vehicle.firingHelper.handleFireUpdate();
-      this.attackDelayTicks = (vehicle.currentReloadTicks + 20)/Config.npcAITicks;
+      this.npc.actionTick = (vehicle.currentReloadTicks + 20);
       }    
     }
   else//delay a bit to line up to target 
     {
-    this.attackDelayTicks = 1;
+    this.npc.actionTick = 1;
     } 
   }
 

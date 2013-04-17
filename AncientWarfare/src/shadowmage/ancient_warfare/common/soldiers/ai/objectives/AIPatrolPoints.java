@@ -108,7 +108,15 @@ public void onObjectiveStart()
   {
   Config.logDebug("starting patrol ai, choosing next patrol point, setting target");
   patrolPoint = npc.wayNav.getNextPatrolPoint();
-  npc.setTargetAW(npc.targetHelper.getTargetFor(patrolPoint.x, patrolPoint.y, patrolPoint.z, npc.targetHelper.TARGET_PATROL));
+  if(patrolPoint!=null)
+    {
+    npc.setTargetAW(npc.targetHelper.getTargetFor(patrolPoint.x, patrolPoint.y, patrolPoint.z, npc.targetHelper.TARGET_PATROL));
+    }
+  else
+    {
+    this.isFinished = true;
+    this.cooldownTicks = 10;
+    }
   }
 
 @Override

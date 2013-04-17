@@ -34,7 +34,7 @@ public class AIAggroList
 
 protected NpcBase npc;
 public final int targetType;
-ArrayList<AIAggroEntry> targetEntries = new ArrayList<AIAggroEntry>();
+public ArrayList<AIAggroEntry> targetEntries = new ArrayList<AIAggroEntry>();
 
 public AIAggroList(NpcBase owner, int targetType)
   {
@@ -82,10 +82,13 @@ public AIAggroEntry getEntryFor(Entity ent)
 
 public boolean areTargetsInRange(float range)
   {
-  AIAggroEntry bestEntry = null;
+//  Config.logDebug("checking for targets in range: "+range+" type: "+this.targetType);
   for(AIAggroEntry entry : this.targetEntries)
     {
-    if(npc.getDistanceFromTarget(entry)<range)
+    
+//    float dist = npc.getDistanceFromTarget(entry);
+//    Config.logDebug("testing :"+entry+" at range: "+dist);
+    if(npc.getDistanceFromTarget(entry) < range)
       {
       return true;
       }    

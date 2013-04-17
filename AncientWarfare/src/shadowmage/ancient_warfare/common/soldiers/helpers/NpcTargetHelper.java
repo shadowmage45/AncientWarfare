@@ -77,7 +77,7 @@ public NpcTargetHelper(NpcBase npc)
   this.playerTargetEntry = new AITargetEntry(npc, TARGET_FOLLOW, EntityPlayer.class, 1, true, 40);
   this.wanderTargetEntry = new AITargetEntry(npc, TARGET_WANDER, null, 0, false, 40);
   this.moveTargetEntry = new AITargetEntry(npc, TARGET_MOVE, null, 0, false, 40);
-  this.moveTargetEntry = new AITargetEntry(npc, TARGET_PATROL, null, 0, false, 40);
+  this.patrolTargetEntry = new AITargetEntry(npc, TARGET_PATROL, null, 0, false, 40);
   }
 
 public AIAggroEntry getTargetFor(int x, int y, int z, int type)
@@ -226,10 +226,21 @@ public void handleBeingAttacked(EntityLiving damager)
 
 public boolean areTargetsInRange(int type, float range)
   {
+//  Config.logDebug("checking for targets in range from targetHelper");
   if(this.aggroEntries.containsKey(type))
     {
     return this.aggroEntries.get(type).areTargetsInRange(range);
     }
+//  Config.logDebug("did not have targets of type");
+//  Config.logDebug("aggro entries size: "+this.aggroEntries.size() + " contents: ");
+//  for(AIAggroList list : this.aggroEntries.values())
+//    {
+//    Config.logDebug("listing values for "+list.targetType);
+//    for(AIAggroEntry entry : list.targetEntries)
+//      {
+//      Config.logDebug("contains entry: "+entry);
+//      }
+//    }
   return false;
   }
 

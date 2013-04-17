@@ -54,8 +54,10 @@ public void addTasks()
 @Override
 public void updatePriority()
   {  
+//  Config.logDebug("checking if targets are in range: ");
   if(npc.targetHelper.areTargetsInRange(NpcTargetHelper.TARGET_ATTACK, maxRange))
     {
+//    Config.logDebug("setting attack priority to max: "+this.maxPriority);
     this.currentPriority = this.maxPriority;    
     }
   else

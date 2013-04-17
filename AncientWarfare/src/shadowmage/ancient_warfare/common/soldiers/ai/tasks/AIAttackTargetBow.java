@@ -57,12 +57,12 @@ protected void attackTarget(AIAggroEntry target)
   { 
   if(!isLineOfSightClear(target))
     {
-    attackDelayTicks = 2;
+    npc.actionTick = 2;
     return;
     }
   else
     {
-    attackDelayTicks =  maxAttackDelayTicks / Config.npcAITicks;
+    npc.actionTick =  maxAttackDelayTicks / Config.npcAITicks;
     }
   if(!target.isEntityEntry)
     {

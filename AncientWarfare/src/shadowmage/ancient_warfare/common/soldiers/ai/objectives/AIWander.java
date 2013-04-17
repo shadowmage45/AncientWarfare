@@ -53,45 +53,46 @@ public AIWander(NpcBase npc, int maxPriority)
 @Override
 public void addTasks()
   {
-  this.aiTasks.add(new AIMoveToTarget(npc, 1, false));
-  }
-
-private void setWanderTarget()
-  {
-  wanderTick = 0;
-  nextWander = (rng.nextInt(8)*tps) + 1;  
-  int x = MathHelper.floor_double(npc.posX);
-  int y = MathHelper.floor_double(npc.posY);
-  int z = MathHelper.floor_double(npc.posZ);
-  npc.nav.setPath(PathUtils.findRandomPath(npc.nav.worldAccess, x, y, z, 10, 4, rng.nextInt(10), rng));
+//  this.aiTasks.add(new AIMoveToTarget(npc, 1, false));
   }
 
 @Override
 public void updatePriority()
   {
-  // TODO Auto-generated method stub
   
   }
 
 @Override
 public void onRunningTick()
   {
-  // TODO Auto-generated method stub
-  
+  this.wanderTick++;
+  if(npc.getTarget()==null || npc.getDistanceFromTarget(npc.getTarget())<2 || wanderTick > 20 || npc.targetHelper.areTargetsInRange(npc.targetHelper.TARGET_ATTACK, 20))
+    {
+    this.isFinished = true;
+    this.cooldownTicks = 10;
+    }
   }
 
 @Override
 public void onObjectiveStart()
   {
-  // TODO Auto-generated method stub
-  
+  //get random target
+  int range = 10;
+  int x = MathHelper.floor_double(npc.posX);
+  int y = MathHelper.floor_double(npc.posY);
+  int z = MathHelper.floor_double(npc.posZ);  
+  int tx = x + rng.nextInt(range*2)-range;
+  int tz = z + rng.nextInt(range*2)-range;
+  int ty = PathUtils.findClosestYTo(npc.nav.worldAccess, tx, y, tz);
+  List<Node> path = PathUtils.randomCrawl(npc.nav.worldAccess, x, y, z, tx, ty, tz, 12, rng);
+  npc.setPath(path);
+  npc.setTargetAW(npc.targetHelper.getTargetFor(tx, ty, tz, npc.targetHelper.TARGET_WANDER));
   }
 
 @Override
 public void stopObjective()
   {
-  // TODO Auto-generated method stub
-  
+  this.wanderTick = 0;
   }
 
 

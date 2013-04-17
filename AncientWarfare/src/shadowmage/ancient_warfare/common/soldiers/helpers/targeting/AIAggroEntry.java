@@ -124,8 +124,7 @@ public boolean isValidEntry()
   if(!this.isEntityEntry)
     {
     if(npc.worldObj.getChunkProvider().chunkExists(((int)posX/16), ((int)posZ/16)))
-      {
-      
+      {      
       //TODO check and see if the block at x,y,z is still a valid target block (enemy priority block)
       }
     else
