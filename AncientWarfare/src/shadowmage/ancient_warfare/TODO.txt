@@ -49,9 +49,10 @@ NPCS
 * sliding when spawned (something up with motion?)    
          
 COMMAND BATON
-* needs ability to leash an npc to a point
+* needs ability to set npc home/patrol/work/deposit points
 * needs ability to clear npc home/patrol/work/deposit points
 * needs GUI to set command and command range (adv. batons)
+* needs ability to give commands to all npcs of a given TYPE in a given RANGE
          
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -176,7 +177,13 @@ TWEAKS/OPTIMIZATION
 * hey soldiers can use doors now! (WIP, needs...help..)
 * ohh, and they can wander without killing the CPU!
 /********** 04-17-13 **********/
+* fix npc door use.
+* add npc village interaction (add to village index occasionally)
+* add npc seek shelter at night objective
+* more cleanup work on soldiers and doors--sometimes they're fucking dumb still
 /********** 04-18-13 **********/
+* yet more door/pathfinder work
+* also, work on NPC command stuff
 /********** 04-19-13 **********/
 /********** 04-20-13 **********/
 

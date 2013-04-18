@@ -135,7 +135,7 @@ public void setMoveTo(int tx, int ty, int tz)
       List<Node> fullPath = this.path.getFullPath();
       float dist = Float.MAX_VALUE;
       int closestNodeIndex = 0;
-      Node n;
+      Node n = null;
       for(int i = 0; i < fullPath.size(); i++)
         {
         n = fullPath.get(i); 
@@ -149,19 +149,27 @@ public void setMoveTo(int tx, int ty, int tz)
           break;
           }        
         }
-      List<Node> newPath = new ArrayList<Node>();
-      for(int i = 0; i < fullPath.size(); i++)
+      if(n!=null && dist<2 && ey==n.y)
         {
-        if(i<closestNodeIndex)
+        List<Node> newPath = new ArrayList<Node>();
+        for(int i = 0; i < fullPath.size(); i++)
           {
-          continue;
+          if(i<closestNodeIndex)
+            {
+            continue;
+            }
+          newPath.add(fullPath.get(i));
           }
-        newPath.add(fullPath.get(i));
+        this.path.setPath(newPath);      
+//        this.clearPath();
+        Config.logDebug("detecting stuck, reseating path");
+        this.claimNode();
         }
-      this.path.setPath(newPath);      
-//      this.clearPath();
-      Config.logDebug("detecting stuck, reseating path");
-      this.claimNode();
+      else
+        {
+        Config.logDebug("detecting stuck, recalculating path");
+        calcPath = true;
+        }      
       }
     }
   else

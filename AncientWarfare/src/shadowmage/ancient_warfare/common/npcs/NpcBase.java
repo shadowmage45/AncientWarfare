@@ -34,8 +34,8 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
-import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton.Command;
 import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
+import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.pathfinding.EntityNavigator;
@@ -108,9 +108,36 @@ public NpcBase(World par1World)
   this.stepHeight = 1.1f;
   }
 
-public void handleBatonCommand(Command cmd)
+public void handleBatonCommand(NpcCommand cmd, int x, int y, int z)
   {
   Config.logDebug("receiving baton command");
+  switch(cmd)
+  {
+  case HOME:
+  wayNav.setHomePoint(x, y, z);
+  break;
+  case WORK:
+  wayNav.setWorkPoint(x, y, z);
+  break;
+  case PATROL:
+  wayNav.addPatrolPoint(x, y, z);
+  break;
+  case DEPOSIT:
+  wayNav.setDepositPoint(x, y, z);
+  break;
+  case CLEAR_HOME:
+  wayNav.clearHomePoint();
+  break;
+  case CLEAR_WORK:
+  wayNav.clearWorkPoint();
+  break;
+  case CLEAR_PATROL:
+  wayNav.clearPatrolPoints();
+  break;
+  case CLEAR_DEPOSIT:
+  wayNav.clearDepositPoint();
+  break;
+  }
   }
 
 public void setNpcType(INpcType type, int level)

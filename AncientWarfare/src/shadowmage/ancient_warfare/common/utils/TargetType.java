@@ -38,5 +38,8 @@ public enum TargetType
   MOVE,
   SHELTER,
   FLEE,
-  NONE;
+  NONE,
+  WORK,
+  DEPOSIT;
+  
   }

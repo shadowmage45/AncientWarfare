@@ -20,9 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.gui.npc;
 
-import java.util.EnumSet;
-import java.util.Iterator;
-
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
@@ -31,13 +28,13 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton;
-import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton.Command;
+import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 
 public class GuiCommandBaton extends GuiContainerAdvanced
 {
 
 ContainerCommandBaton container;
-Command[] batonCommands;
+NpcCommand[] batonCommands;
 GuiNumberInputLine rangeBox;
 
 GuiScrollableArea controlArea;
@@ -103,7 +100,7 @@ public void onElementActivated(IGuiElement element)
 //    }
   else if(id >= 10 && id < this.batonCommands.length+10)
     {
-    Command cmd = this.batonCommands[element.getElementNumber()-10];
+    NpcCommand cmd = this.batonCommands[element.getElementNumber()-10];
     this.container.settings.command = cmd;
     this.container.saveSettings();
     }  

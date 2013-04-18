@@ -39,6 +39,8 @@ public class WayPointNavigator implements IPathableCallback, INBTTaggable
 
 IPathableEntity owner;
 WayPoint homePoint = null;
+WayPoint workPoint = null;
+WayPoint depositPoint = null;
 List<WayPointPath> wayPaths = new ArrayList<WayPointPath>();
 List<WayPoint> wayPoints = new ArrayList<WayPoint>();
 List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
@@ -135,6 +137,46 @@ public void clearHomePoint()
   this.homePoint = null;
   }
 
+public void setWorkPoint(int x, int y, int z)
+  {
+  this.workPoint = new WayPoint(x,y,z, TargetType.WORK);
+  }
+
+public void clearWorkPoint()
+  {
+  this.workPoint = null;
+  }
+
+public boolean hasWorkPoint()
+  {
+  return this.workPoint!=null;
+  }
+
+public WayPoint getWorkPoint()
+  {
+  return this.workPoint;
+  }
+
+public void setDepositPoint(int x, int y, int z)
+  {
+  this.depositPoint = new WayPoint(x,y,z, TargetType.DEPOSIT);  
+  }
+
+public void clearDepositPoint()
+  {
+  this.depositPoint = null;
+  }
+
+public boolean hasDepositPoint()
+  {
+  return this.depositPoint!=null;
+  }
+
+public WayPoint getDepositPoint()
+  {
+  return this.depositPoint;
+  }
+
 private void findPathFor(WayPoint a, WayPoint b)
   {
   this.searchPointA = a;
@@ -192,6 +234,18 @@ public NBTTagCompound getNBTTag()
     list.appendTag(p.getNBTTag());
     }
   tag.setTag("points", list);
+  if(this.homePoint!=null)
+    {
+    tag.setCompoundTag("home", this.homePoint.getNBTTag());
+    }  
+  if(this.workPoint!=null)
+    {
+    tag.setCompoundTag("work", this.workPoint.getNBTTag());    
+    }
+  if(this.depositPoint!=null)
+    {
+    tag.setCompoundTag("deposit", this.depositPoint.getNBTTag());
+    }
   return tag;
   }
 
@@ -209,6 +263,18 @@ public void readFromNBT(NBTTagCompound tag)
   for(int i = 0; i < points.tagCount(); i++)
     {
     this.wayPoints.add(new WayPoint((NBTTagCompound) points.tagAt(i)));
+    }
+  if(tag.hasKey("home"))
+    {
+    this.homePoint = new WayPoint(tag.getCompoundTag("home"));
+    }
+  if(tag.hasKey("work"))
+    {
+    this.workPoint = new WayPoint(tag.getCompoundTag("work"));
+    }
+  if(tag.hasKey("deposit"))
+    {
+    this.depositPoint = new WayPoint(tag.getCompoundTag("deposit"));
     }
   }
 

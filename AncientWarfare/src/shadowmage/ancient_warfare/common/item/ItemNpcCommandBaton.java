@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +28,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.EntityTools;
 
@@ -81,7 +82,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
       }
     if(tag.hasKey("com"))
       {
-      list.add("Current command: "+Command.values()[tag.getInteger("com")]);
+      list.add("Current command: "+NpcCommand.values()[tag.getInteger("com")]);
       }
     if(tag.hasKey("rng"))
       {
@@ -156,23 +157,58 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
   if(!player.worldObj.isRemote)
     {
     BatonSettings settings = getBatonSettings(stack);
-    Command cmd = settings.command;
-    if(cmd.isMassEffect())
+    NpcCommand cmd = settings.command;
+    if(cmd==NpcCommand.NONE)
       {
-      
+      return true;
       }
+    NpcBase npc = null;
     if(settings.hasEntity())
       {
       Entity entity = settings.getEntity(player.worldObj);
       if(entity instanceof NpcBase)
         {
-        NpcBase npc = (NpcBase)entity;
-        Config.logDebug("commanding entity from settings");
+        npc = (NpcBase)entity;
+        Config.logDebug("Baton has local/single entity");
         } 
       else
         {
+        Config.logDebug("Baton has invalid entity!!");
         settings.setEntity(null);
+        setBatonSettings(stack, settings);
+        player.openContainer.detectAndSendChanges();
         }
+      }    
+    if(settings.range>0)
+      {      
+      AxisAlignedBB bb = AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(player.posX-settings.range, player.posY-settings.range, player.posZ-settings.range, player.posX+settings.range, player.posY+settings.range, player.posZ+settings.range);
+      List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
+      int npcType = -1;
+      if(npc!=null)
+        {
+        Config.logDebug("commanding direct entity");
+        npc.handleBatonCommand(settings.command, X, Y, Z);
+        npcType = npc.npcType.getGlobalNpcType();
+        }
+      for(NpcBase testNpc : npcs)
+        {
+        if(testNpc==null || (npc!=null && testNpc == npc) || player.getDistanceToEntity(testNpc)>settings.range || testNpc.isAggroTowards(player))
+          {
+          continue;
+          }
+        if(npcType==-1 || testNpc.npcType.getGlobalNpcType()==npcType)
+          {
+          Config.logDebug("commanding remote entity");
+          testNpc.handleBatonCommand(settings.command, X, Y, Z);
+          }        
+        }
+      }
+    else
+      {
+      if(npc!=null)
+        {
+        npc.handleBatonCommand(settings.command, X, Y, Z);
+        }      
       }
     }   
   return true;
@@ -214,23 +250,23 @@ public static void setBatonSettings(ItemStack stack, BatonSettings settings)
     }
   }
 
-public static Command[] getApplicableCommands(ItemStack stack)
+public static NpcCommand[] getApplicableCommands(ItemStack stack)
   {
   if(stack!=null && stack.itemID == ItemLoader.instance().npcCommandBaton.itemID)
     {
     switch(stack.getItemDamage())
     {
     case 0:
-    return new Command[]{Command.WORK, Command.PATROL, Command.HOME, Command.DEPOSIT, Command.CLEAR_DEPOSIT, Command.CLEAR_HOME, Command.CLEAR_PATROL, Command.CLEAR_WORK};
+    return new NpcCommand[]{NpcCommand.WORK, NpcCommand.PATROL, NpcCommand.HOME, NpcCommand.DEPOSIT, NpcCommand.CLEAR_DEPOSIT, NpcCommand.CLEAR_HOME, NpcCommand.CLEAR_PATROL, NpcCommand.CLEAR_WORK};
     case 1:
-    return new Command[]{Command.WORK, Command.PATROL, Command.HOME, Command.DEPOSIT, Command.CLEAR_DEPOSIT, Command.CLEAR_HOME, Command.CLEAR_PATROL, Command.CLEAR_WORK,
-        Command.MASS_HOME, Command.MASS_CLEAR_HOME};
+    return new NpcCommand[]{NpcCommand.WORK, NpcCommand.PATROL, NpcCommand.HOME, NpcCommand.DEPOSIT, NpcCommand.CLEAR_DEPOSIT, NpcCommand.CLEAR_HOME, NpcCommand.CLEAR_PATROL, NpcCommand.CLEAR_WORK,
+        NpcCommand.MASS_HOME, NpcCommand.MASS_CLEAR_HOME};
     case 2:
-    return new Command[]{Command.WORK, Command.PATROL, Command.HOME, Command.DEPOSIT, Command.CLEAR_DEPOSIT, Command.CLEAR_HOME, Command.CLEAR_PATROL, Command.CLEAR_WORK,
-        Command.MASS_HOME, Command.MASS_CLEAR_HOME, Command.MASS_CLEAR_WORK, Command.MASS_WORK};
+    return new NpcCommand[]{NpcCommand.WORK, NpcCommand.PATROL, NpcCommand.HOME, NpcCommand.DEPOSIT, NpcCommand.CLEAR_DEPOSIT, NpcCommand.CLEAR_HOME, NpcCommand.CLEAR_PATROL, NpcCommand.CLEAR_WORK,
+        NpcCommand.MASS_HOME, NpcCommand.MASS_CLEAR_HOME, NpcCommand.MASS_CLEAR_WORK, NpcCommand.MASS_WORK};
     case 3:
-    return new Command[]{Command.WORK, Command.PATROL, Command.HOME, Command.DEPOSIT, Command.CLEAR_DEPOSIT, Command.CLEAR_HOME, Command.CLEAR_PATROL, Command.CLEAR_WORK,
-        Command.MASS_HOME, Command.MASS_CLEAR_HOME, Command.MASS_CLEAR_WORK, Command.MASS_WORK, Command.MASS_PATROL, Command.MASS_CLEAR_PATROL};    
+    return new NpcCommand[]{NpcCommand.WORK, NpcCommand.PATROL, NpcCommand.HOME, NpcCommand.DEPOSIT, NpcCommand.CLEAR_DEPOSIT, NpcCommand.CLEAR_HOME, NpcCommand.CLEAR_PATROL, NpcCommand.CLEAR_WORK,
+        NpcCommand.MASS_HOME, NpcCommand.MASS_CLEAR_HOME, NpcCommand.MASS_CLEAR_WORK, NpcCommand.MASS_WORK, NpcCommand.MASS_PATROL, NpcCommand.MASS_CLEAR_PATROL};    
     }
     }
   return null;
@@ -247,12 +283,12 @@ int x;
 int y;
 int z;
 public int range = 0;
-public Command command;
+public NpcCommand command;
 UUID entID;
 
 private BatonSettings()
   {
-  command = Command.NONE;
+  command = NpcCommand.NONE;
   }
 
 private BatonSettings(NBTTagCompound tag)
@@ -335,55 +371,16 @@ public void readFromNBT(NBTTagCompound tag)
     }
   if(tag.hasKey("com"))
     {
-    command = Command.values()[tag.getInteger("com")];
+    command = NpcCommand.values()[tag.getInteger("com")];
     }
   else 
     {
-    command = Command.NONE;
+    command = NpcCommand.NONE;
     }
   if(tag.hasKey("rng"))
     {
     range = tag.getInteger("rng");
     }
-  }
-}
-
-public enum Command
-{
-NONE ("None", false),
-WORK ("Work At Site", false),
-PATROL ("Patrol Point", false),
-HOME ("Set Home Point", false),
-DEPOSIT ("Set Depository", false),
-CLEAR_PATROL ("Clear Patrol Path", false),
-CLEAR_HOME ("Clear Home Point", false),
-CLEAR_WORK ("Clear Work Site", false),
-CLEAR_DEPOSIT ("Clear Depository", false),
-MASS_PATROL ("Area Set Patrol Point", true),
-MASS_HOME ("Area Set Home Point", true),
-MASS_WORK ("Area Set Work Point", true),
-MASS_DEPOSIT ("Area Set Depository", true),
-MASS_CLEAR_PATROL ("Area Clear Patrol Path", true),
-MASS_CLEAR_HOME ("Area Clear Home Point", true),
-MASS_CLEAR_WORK ("Area Clear Work Site", true),
-MASS_CLEAR_DEPOSIT ("Area Clear Depository", true);
-
-String name;
-boolean massEffect = false;
-private Command(String name, boolean mass)
-  {
-  this.name = name;
-  this.massEffect = mass;
-  }
-
-public String getCommandName()
-  {
-  return name;
-  }
-
-public boolean isMassEffect()
-  {
-  return this.massEffect;
   }
 }
 
