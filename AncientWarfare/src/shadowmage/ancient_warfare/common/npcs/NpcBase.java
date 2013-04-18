@@ -34,6 +34,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
+import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton.Command;
 import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroEntry;
@@ -107,6 +108,10 @@ public NpcBase(World par1World)
   this.stepHeight = 1.1f;
   }
 
+public void handleBatonCommand(Command cmd)
+  {
+  Config.logDebug("receiving baton command");
+  }
 
 public void setNpcType(INpcType type, int level)
   {

@@ -25,6 +25,9 @@ import java.util.Iterator;
 
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
+import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton;
@@ -35,7 +38,9 @@ public class GuiCommandBaton extends GuiContainerAdvanced
 
 ContainerCommandBaton container;
 Command[] batonCommands;
+GuiNumberInputLine rangeBox;
 
+GuiScrollableArea controlArea;
 /**
  * @param container
  */
@@ -71,15 +76,17 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   this.drawStringGui("Has Entity Assigned "+container.settings.hasEntity(), 10, 10, 0xffffffff);
   this.drawStringGui("Current Command: "+container.settings.command.getCommandName(), 10, 20, 0xffffffff);
+  if(container.batonRank>0)
+    {
+    this.drawStringGui("Range:", 10, 30, 0xffffffff);
+    }
   }
 
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
-
+  this.controlArea.updateGuiPos(guiLeft, guiTop);
   }
-
 
 @Override
 public void onElementActivated(IGuiElement element)
@@ -89,6 +96,11 @@ public void onElementActivated(IGuiElement element)
     {
     this.closeGUI();
     }
+//  else if (id==1)
+//    {
+//    this.container.settings.range = rangeBox.getIntVal();
+//    this.container.saveSettings();
+//    }
   else if(id >= 10 && id < this.batonCommands.length+10)
     {
     Command cmd = this.batonCommands[element.getElementNumber()-10];
@@ -101,9 +113,16 @@ public void onElementActivated(IGuiElement element)
 public void setupControls()
   {
   this.addGuiButton(0, 45, 12, "Done").updateRenderPos(getXSize()-45-5, 5);
+//  if(container.batonRank>0)
+//    {
+//    rangeBox = (GuiNumberInputLine) this.addNumberField(1, 35, 12, 3, "0").setIntegerValue().setMinMax(0, 140).updateRenderPos(50, 30);
+//    }
+  this.controlArea = new GuiScrollableArea(1, this, 5, 50, 256-10, 240-55, this.batonCommands.length*14);
+  this.guiElements.put(1, controlArea);
   for(int i = 0; i < this.batonCommands.length; i ++)
     {
-    this.addGuiButton(i+10, 10, 40 + i*14, 140, 12, this.batonCommands[i].getCommandName());
+    controlArea.addGuiElement(new GuiButtonSimple(i+10, controlArea, 140, 12, this.batonCommands[i].getCommandName()).updateRenderPos(5, i * 14));
+//    this.addGuiButton(i+10, 10, 40 + i*14, 140, 12, this.batonCommands[i].getCommandName());
     }  
   }
 

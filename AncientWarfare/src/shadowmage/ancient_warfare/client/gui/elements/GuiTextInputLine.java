@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.util.ChatAllowedCharacters;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
@@ -75,6 +77,7 @@ public void drawElement(int mouseX, int mouseY)
     {
     return;
     }
+  GL11.glPushMatrix();
   int xPos = this.renderPosX + guiLeft;
   int yPos = this.renderPosY + guiTop;
   int syPos = yPos + ((this.height-8)/2);
@@ -87,6 +90,7 @@ public void drawElement(int mouseX, int mouseY)
     this.updateCursorOffset();
     this.fr.drawString("_", xPos+2+cursorOffset, syPos, cursorColor, false);
     }
+  GL11.glPopMatrix();
   }
 
 @Override

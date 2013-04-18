@@ -50,6 +50,7 @@ public ItemNpcCommandBaton(int itemID)
   {
   super(itemID, true);
   this.setItemName("npcCommandBaton");  
+  this.maxStackSize = 1;
   }
 
 @Override
@@ -81,6 +82,10 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
     if(tag.hasKey("com"))
       {
       list.add("Current command: "+Command.values()[tag.getInteger("com")]);
+      }
+    if(tag.hasKey("rng"))
+      {
+      list.add("Range: "+tag.getInteger("rng"));
       }
 //    BatonSettings settings = getBatonSettings(stack);
 //    if(settings.hasEntity())
@@ -148,26 +153,30 @@ public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player,   Entity 
 @Override
 public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPlayer player)
   { 
-  BatonSettings settings = getBatonSettings(stack);
-  if(settings.hasEntity())
+  if(!player.worldObj.isRemote)
     {
-    Entity entity = settings.getEntity(player.worldObj);
-    if(entity instanceof NpcBase)
+    BatonSettings settings = getBatonSettings(stack);
+    Command cmd = settings.command;
+    if(cmd.isMassEffect())
       {
-      NpcBase npc = (NpcBase)entity;
-      Config.logDebug("commanding entity from settings");
-      return true;
-      } 
-    else
-      {
-      settings.setEntity(null);
+      
       }
-    }  
-  if(player.worldObj.isRemote)
-    {
-    return true;
-    }
-  return super.onBlockStartBreak(stack, X, Y, Z, player);
+    if(settings.hasEntity())
+      {
+      Entity entity = settings.getEntity(player.worldObj);
+      if(entity instanceof NpcBase)
+        {
+        NpcBase npc = (NpcBase)entity;
+        Config.logDebug("commanding entity from settings");
+        } 
+      else
+        {
+        settings.setEntity(null);
+        }
+      }
+    }   
+  return true;
+//  return super.onBlockStartBreak(stack, X, Y, Z, player);
   }
 
 @Override
@@ -237,6 +246,7 @@ boolean hasBlock = false;
 int x;
 int y;
 int z;
+public int range = 0;
 public Command command;
 UUID entID;
 
@@ -304,6 +314,7 @@ public NBTTagCompound getNBTTag()
     {
     tag.setInteger("com", command.ordinal());
     }
+  tag.setInteger("rng", range);
   return tag;
   }
 
@@ -330,37 +341,49 @@ public void readFromNBT(NBTTagCompound tag)
     {
     command = Command.NONE;
     }
+  if(tag.hasKey("rng"))
+    {
+    range = tag.getInteger("rng");
+    }
   }
 }
 
 public enum Command
 {
-NONE ("None"),
-WORK ("Work At Site"),
-PATROL ("Patrol Point"),
-HOME ("Set Home Point"),
-DEPOSIT ("Set Depository"),
-CLEAR_PATROL ("Clear Patrol Path"),
-CLEAR_HOME ("Clear Home Point"),
-CLEAR_WORK ("Clear Work Site"),
-CLEAR_DEPOSIT ("Clear Depository"),
-MASS_PATROL ("Area Set Patrol Point"),
-MASS_HOME ("Area Set Home Point"),
-MASS_WORK ("Area Set Work Point"),
-MASS_CLEAR_PATROL ("Area Clear Patrol Path"),
-MASS_CLEAR_HOME ("Area Clear Home Point"),
-MASS_CLEAR_WORK ("Area Clear Work Site"),
-MASS_CLEAR_DEPOSIT ("Area Clear Depository");
+NONE ("None", false),
+WORK ("Work At Site", false),
+PATROL ("Patrol Point", false),
+HOME ("Set Home Point", false),
+DEPOSIT ("Set Depository", false),
+CLEAR_PATROL ("Clear Patrol Path", false),
+CLEAR_HOME ("Clear Home Point", false),
+CLEAR_WORK ("Clear Work Site", false),
+CLEAR_DEPOSIT ("Clear Depository", false),
+MASS_PATROL ("Area Set Patrol Point", true),
+MASS_HOME ("Area Set Home Point", true),
+MASS_WORK ("Area Set Work Point", true),
+MASS_DEPOSIT ("Area Set Depository", true),
+MASS_CLEAR_PATROL ("Area Clear Patrol Path", true),
+MASS_CLEAR_HOME ("Area Clear Home Point", true),
+MASS_CLEAR_WORK ("Area Clear Work Site", true),
+MASS_CLEAR_DEPOSIT ("Area Clear Depository", true);
 
 String name;
-private Command(String name)
+boolean massEffect = false;
+private Command(String name, boolean mass)
   {
   this.name = name;
+  this.massEffect = mass;
   }
 
 public String getCommandName()
   {
   return name;
+  }
+
+public boolean isMassEffect()
+  {
+  return this.massEffect;
   }
 }
 

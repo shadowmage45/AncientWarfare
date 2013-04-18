@@ -35,7 +35,7 @@ public class ContainerCommandBaton extends ContainerBase
 {
 
 public BatonSettings settings;
-
+public int batonRank = 0;
 /**
  * @param openingPlayer
  * @param synch
@@ -47,6 +47,7 @@ public ContainerCommandBaton(EntityPlayer openingPlayer)
   if(stack!=null)
     {
     settings = ItemNpcCommandBaton.getBatonSettingsStatic(stack);
+    batonRank = stack.getItemDamage();
     }  
   }
 
