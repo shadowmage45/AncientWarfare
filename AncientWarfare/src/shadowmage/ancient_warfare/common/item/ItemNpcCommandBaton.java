@@ -275,13 +275,6 @@ public static NpcCommand[] getApplicableCommands(ItemStack stack)
 public class BatonSettings implements INBTTaggable
 {
 
-/**
- * work block/patrol position
- */
-boolean hasBlock = false;
-int x;
-int y;
-int z;
 public int range = 0;
 public NpcCommand command;
 UUID entID;
@@ -336,11 +329,7 @@ public void setEntity(Entity entity)
 @Override
 public NBTTagCompound getNBTTag()
   {
-  NBTTagCompound tag = new NBTTagCompound();  
-  if(hasBlock)
-    {
-    tag.setIntArray("pos", new int[]{x,y,z});
-    }
+  NBTTagCompound tag = new NBTTagCompound();   
   if(entID!=null)
     {
     tag.setLong("uidlsb", entID.getLeastSignificantBits());
@@ -356,15 +345,7 @@ public NBTTagCompound getNBTTag()
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
-  {
-  if(tag.hasKey("pos"))
-    {
-    hasBlock = true;
-    int[] pos = tag.getIntArray("pos");
-    x = pos[0];
-    y = pos[1];
-    z = pos[2];
-    }
+  {  
   if(tag.hasKey("uidlsb") && tag.hasKey("uidmsb"))
     {
     entID = new UUID(tag.getLong("uidmsb"), tag.getLong("uidlsb"));

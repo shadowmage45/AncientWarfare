@@ -71,7 +71,7 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawStringGui("Has Entity Assigned "+container.settings.hasEntity(), 10, 10, 0xffffffff);
+  this.drawStringGui("Has Npc Assigned "+container.settings.hasEntity(), 10, 10, 0xffffffff);
   this.drawStringGui("Current Command: "+container.settings.command.getCommandName(), 10, 20, 0xffffffff);
   if(container.batonRank>0)
     {
@@ -93,11 +93,16 @@ public void onElementActivated(IGuiElement element)
     {
     this.closeGUI();
     }
-//  else if (id==1)
-//    {
-//    this.container.settings.range = rangeBox.getIntVal();
-//    this.container.saveSettings();
-//    }
+  else if (id==1)
+    {
+    this.container.settings.range = rangeBox.getIntVal();
+    this.container.saveSettings();
+    }
+  else if (id==3)
+    {
+    this.container.settings.setEntity(null);
+    this.container.saveSettings();
+    }
   else if(id >= 10 && id < this.batonCommands.length+10)
     {
     NpcCommand cmd = this.batonCommands[element.getElementNumber()-10];
@@ -110,16 +115,16 @@ public void onElementActivated(IGuiElement element)
 public void setupControls()
   {
   this.addGuiButton(0, 45, 12, "Done").updateRenderPos(getXSize()-45-5, 5);
-//  if(container.batonRank>0)
-//    {
-//    rangeBox = (GuiNumberInputLine) this.addNumberField(1, 35, 12, 3, "0").setIntegerValue().setMinMax(0, 140).updateRenderPos(50, 30);
-//    }
-  this.controlArea = new GuiScrollableArea(1, this, 5, 50, 256-10, 240-55, this.batonCommands.length*14);
-  this.guiElements.put(1, controlArea);
+  if(container.batonRank>0)
+    {
+    rangeBox = (GuiNumberInputLine) this.addNumberField(1, 35, 12, 3, "0").setIntegerValue().setMinMax(0, 140).updateRenderPos(50, 30);
+    }
+  this.controlArea = new GuiScrollableArea(2, this, 5, 50, 256-10, 240-55, this.batonCommands.length*14);
+  this.guiElements.put(2, controlArea);
+  this.addGuiButton(3, getXSize()-75-5, 5+12+2, 75, 12, "Clear Npc");
   for(int i = 0; i < this.batonCommands.length; i ++)
     {
     controlArea.addGuiElement(new GuiButtonSimple(i+10, controlArea, 140, 12, this.batonCommands[i].getCommandName()).updateRenderPos(5, i * 14));
-//    this.addGuiButton(i+10, 10, 40 + i*14, 140, 12, this.batonCommands[i].getCommandName());
     }  
   }
 
