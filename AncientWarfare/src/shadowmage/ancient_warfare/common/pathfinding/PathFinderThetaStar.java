@@ -170,6 +170,7 @@ private void searchLoop()
   this.searchIteration = 0;
   boolean isDoor = false;
   boolean isPDoor = false;
+  Node goalCache = new Node(tx, ty, tz);
   while(!qNodes.isEmpty())
     {
     this.searchIteration++;  
@@ -184,7 +185,18 @@ private void searchLoop()
 //      Config.logDebug("break from path length");
       break;
       }
-    currentNode.closed = true;//close the node immediately (equivalent of adding to closed list)  
+    currentNode.closed = true;//close the node immediately (equivalent of adding to closed list)
+    if(canSeeParent(currentNode, goalCache))
+      {
+//      Config.logDebug("hit goal cache, yeah..early out");
+      goalCache.parentNode = currentNode;
+      goalCache.g = currentNode.g + goalCache.getDistanceFrom(currentNode);
+      goalCache.f = goalCache.g + 0;//its the goal;
+      currentNode = goalCache;
+      break;
+//      n.g = n.parentNode.g + n.getDistanceFrom(n.parentNode);
+//      n.f = n.g + n.getH(tx, ty, tz);
+      }
     this.findNeighbors(currentNode);
     float tent;
     isDoor = world.isDoor(currentNode.x, currentNode.y, currentNode.z);
