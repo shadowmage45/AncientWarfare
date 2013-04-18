@@ -18,57 +18,58 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.block;
+package shadowmage.ancient_warfare.common.civics;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.item.CreativeTabAW;
 import shadowmage.ancient_warfare.common.utils.BlockContainerSimpleSided;
 
-public class BlockBuilder extends BlockContainerSimpleSided
+public abstract class BlockStructureControl extends BlockContainerSimpleSided
 {
+
 /**
-   * @param par1
-   * @param par2Material
-   */
-public BlockBuilder(int par1)
+ * @param par1
+ * @param par2
+ * @param par3Material
+ */
+protected BlockStructureControl(int par1)
   {
   super(par1, Material.rock);
-  this.setCreativeTab(null);
-  this.setBlockName("Structure Builder Block");
+  this.setTextureFile("/shadowmage/ancient_warfare/resources/block/blocks.png");
+  this.isDefaultTexture = false;
+  this.blockIndexInTexture = 0;
+  this.setCreativeTab(CreativeTabAW.instance());
+  this.setHardness(3.f);
+  }
+
+public int getBlockTeam(World world, int x, int y, int z)
+  {
+  TileEntity te = world.getBlockTileEntity(x, y, z);
+  if(te!=null)
+    {
+    return ((TEStructureControl)te).getTeamNum();
+    }
+  return 0;
   }
 
 @Override
-public boolean onBlockClicked(World world, int posX, int posY, int posZ,  EntityPlayer player, int sideHit, float hitVecX, float hitVecY,   float hitVecZ)
+public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player, int sideHit, float hitVecX, float hitVecY,    float hitVecZ)
   {
-  //NOOP
+  TileEntity te = world.getBlockTileEntity(x, y, z);
+  if(te!=null)
+    {
+    return ((TEStructureControl)te).onInteract(world, player);
+    }
   return false;
   }
 
 @Override
-public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z,  int par5, int par6)
+public TileEntity createTileEntity(World world, int metadata)
   {
-  //NOOP
   return null;
   }
-
-@Override
-public void breakBlock(World world, int x, int y, int z, int par5, int par6)
-  {
-  TEBuilder builder = (TEBuilder) world.getBlockTileEntity(x, y, z);
-  if(builder!=null)
-    {
-    builder.removeBuilder();
-    }
-  super.breakBlock(world, x, y, z, par5, par6);
-  }
-
-@Override
-public TileEntity getNewTileEntity(World world, int meta)
-  {
-  return new TEBuilder();
-  }
-
 }

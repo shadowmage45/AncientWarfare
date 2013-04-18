@@ -171,6 +171,63 @@ public void setInventorySlotContents(int stackIndex, ItemStack newContents)
     }
   }
 
+public int getEmptySlotCount()
+  {
+  int emptySlots = 0;
+  for(int i = 0; i < this.getSizeInventory(); i ++)
+    {
+    if(this.getStackInSlot(i)==null)
+      {
+      emptySlots++;
+      }
+    }
+  return emptySlots;
+  }
+
+public int canHoldMore(ItemStack item)
+  {
+  if(item==null)
+    {
+    return 0;
+    }
+  int emptySlots = this.getEmptySlotCount();
+  if(emptySlots>0)
+    {
+    return item.getMaxStackSize();
+    }
+  else if(item.getMaxStackSize()>1)
+    {
+    int availCount = 0;
+    ItemStack fromSlot;
+    for(int i = 0; i < this.getSizeInventory(); i++)
+      {
+      fromSlot = this.getStackInSlot(i);
+      if(fromSlot!=null)
+        {
+        if(fromSlot.itemID==item.itemID && fromSlot.getItemDamage()==item.getItemDamage() && ItemStack.areItemStackTagsEqual(item, fromSlot))
+          {
+          availCount += item.getMaxStackSize() - fromSlot.stackSize;
+          }
+        }
+      }
+    return availCount;
+    }
+  return 0;
+  }
+
+/**
+ * percentage full by slot count
+ * @return
+ */
+public float getPercentFull()
+  {
+  if(this.getSizeInventory()==0)
+    {
+    return 1.f;
+    }
+  return (float)((float)this.getEmptySlotCount()/(float)this.getSizeInventory());
+  }
+
 @Override
 public String getInvName()
   {  
@@ -186,39 +243,41 @@ public int getInventoryStackLimit()
 @Override
 public void onInventoryChanged()
   {
-  boolean changed = false;  
-  ArrayList<Integer> changedSlots = null;
-  for(int i = 0; i < this.prevContents.length; i++)
+  if(!this.callBacks.isEmpty())
     {
-    if(!ItemStack.areItemStacksEqual(prevContents[i], inventorySlots[i]))
-      {      
-      if(changedSlots==null)
-        {
-        changedSlots = new ArrayList<Integer>();
-        }
-      changedSlots.add(i);
-      changed = true;
-      if(inventorySlots[i]!=null)
-        {
-        prevContents[i] = inventorySlots[i].copy();
-        }
-      else
-        {
-        prevContents[i] = null;
-        }
-      break;
-      }
-    }
-  if(changed)
-    {
-    for(IInventoryCallback cb : this.callBacks)
+    boolean changed = false;  
+    ArrayList<Integer> changedSlots = null;
+    for(int i = 0; i < this.prevContents.length; i++)
       {
-      if(cb!=null)
-        {
-        cb.onInventoryChanged(this, changedSlots);
+      if(!ItemStack.areItemStacksEqual(prevContents[i], inventorySlots[i]))
+        {      
+        if(changedSlots==null)
+          {
+          changedSlots = new ArrayList<Integer>();
+          }
+        changedSlots.add(i);
+        changed = true;
+        if(inventorySlots[i]!=null)
+          {
+          prevContents[i] = inventorySlots[i].copy();
+          }
+        else
+          {
+          prevContents[i] = null;
+          }
         }
       }
-    }
+    if(changed)
+      {
+      for(IInventoryCallback cb : this.callBacks)
+        {
+        if(cb!=null)
+          {
+          cb.onInventoryChanged(this, changedSlots);
+          }
+        }
+      }
+    }  
   }
 
 @Override

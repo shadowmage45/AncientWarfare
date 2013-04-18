@@ -43,9 +43,10 @@ protected int inventorySize = 0;
 protected boolean isCombatUnit = false;
 protected boolean isVanillaVillager = false;
 protected float rangedAttackDistance = 0.f;
+protected int attackDamage = 4;
 
-protected List<ItemStack> toolStacks = new ArrayList<ItemStack>();
-protected List<ItemStack[]> armorStacks = new ArrayList<ItemStack[]>();
+private List<ItemStack> toolStacks = new ArrayList<ItemStack>();
+private List<ItemStack[]> armorStacks = new ArrayList<ItemStack[]>();
 
 public NpcTypeBase(int type)
   {
@@ -54,6 +55,12 @@ public NpcTypeBase(int type)
     {
     npcTypes[type] = this;
     }
+  }
+
+@Override
+public int getAttackDamage(int level)
+  {
+  return this.attackDamage;
   }
 
 @Override

@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.item.CreativeTabAW;
@@ -183,7 +184,6 @@ public void breakBlock(World world, int x, int y, int z, int par5, int par6)
   super.breakBlock(world, x, y, z, par5, par6);
   }
 
-
 public void dropItems(World world, int x, int y, int z, int par5, int par6, IInventory inventory)
   {
   if (inventory != null)
@@ -224,5 +224,9 @@ public void dropItems(World world, int x, int y, int z, int par5, int par6, IInv
     }
   }
 
-
+public TileEntity createNewTileEntity(World world)
+  {
+  return getNewTileEntity(world, 0);
+  }
+public abstract TileEntity getNewTileEntity(World world, int meta);
 }

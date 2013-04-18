@@ -18,27 +18,42 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.civics.worksite.te;
 
-/**
- * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
- * @author Shadowmage
- *
- */
-public enum TargetType
-  { 
-  ATTACK,
-  MOUNT,
-  REPAIR,
-  HARVEST,
-  HEAL,
-  FOLLOW,
-  WANDER,
-  PATROL,
-  MOVE,
-  SHELTER,
-  FLEE,
-  NONE,
-  WORK,
-  DEPOSIT;  
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
+
+public class TEWorkSiteFarm extends TEWorkSite
+{
+
+@Override
+public boolean onInteract(World world, EntityPlayer player)
+  {
+  return false;
   }
+
+@Override
+protected void updateWorkPoints()
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void doWork(NpcBase npc, WorkPoint workEntry)
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void onWorkFinished(WorkPoint entry)
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+}

@@ -18,9 +18,8 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.block;
+package shadowmage.ancient_warfare.common.civics;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,27 +29,29 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public abstract class TEStructureControl extends TileEntity
 {
 
+
+public int structureRank = 0;
 int updateTicks = 0;
 int teamNum = 0;
-int minX;
-int minY;
-int minZ;
-int maxX;
-int maxY;
-int maxZ;
-List<BlockPosition> waypoints = new ArrayList<BlockPosition>();
+public int minX;
+public int minY;
+public int minZ;
+public int maxX;
+public int maxY;
+public int maxZ;
+public TargetType workType;
+boolean isWorkSite = false;
 
 @Override
 public void updateEntity()
   {
   if(updateTicks<=0)
-    {
-    this.updateWaypoints();
+    {    
     this.broadCastToSoldiers(Config.npcAISearchRange);
     this.updateTicks = Config.npcAITicks;
     }
@@ -71,8 +72,6 @@ public int getTeamNum()
   {
   return teamNum;
   }
-
-public abstract void updateWaypoints();
 
 public boolean isHostile(int sourceTeam)
   {

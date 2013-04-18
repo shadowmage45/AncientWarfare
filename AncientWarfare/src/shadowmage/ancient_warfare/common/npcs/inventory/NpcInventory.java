@@ -18,27 +18,25 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.npcs.inventory;
+
+import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
+
+public class NpcInventory extends AWInventoryBasic
+{
+
+protected NpcBase npc;
 
 /**
- * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
- * @author Shadowmage
- *
+ * @param size
  */
-public enum TargetType
-  { 
-  ATTACK,
-  MOUNT,
-  REPAIR,
-  HARVEST,
-  HEAL,
-  FOLLOW,
-  WANDER,
-  PATROL,
-  MOVE,
-  SHELTER,
-  FLEE,
-  NONE,
-  WORK,
-  DEPOSIT;  
+public NpcInventory(NpcBase npc, int size)
+  {
+  super(size);
+  this.npc = npc; 
   }
+
+
+
+}

@@ -18,27 +18,52 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.civics.worksite;
 
-/**
- * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
- * @author Shadowmage
- *
- */
-public enum TargetType
-  { 
-  ATTACK,
-  MOUNT,
-  REPAIR,
-  HARVEST,
-  HEAL,
-  FOLLOW,
-  WANDER,
-  PATROL,
-  MOVE,
-  SHELTER,
-  FLEE,
-  NONE,
-  WORK,
-  DEPOSIT;  
+import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.utils.TargetType;
+
+public class WorkPoint
+{
+
+TargetType type;
+protected Entity ent;
+protected int x;
+protected int y; 
+protected int z;
+
+public WorkPoint(int x, int y, int z, TargetType type)
+  {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  this.type = type;
   }
+
+public WorkPoint(Entity ent, TargetType type)
+  {
+  this.ent = ent;
+  this.type = type;
+  }
+
+public float posX()
+  {
+  return (float) (this.ent!=null ? ent.posX : x);
+  }
+
+public float posY()
+  {
+  return (float) (this.ent!=null ? ent.posY : y);
+  }
+
+public float posZ()
+  {
+  return (float) (this.ent!=null ? ent.posZ : z);
+  }
+
+public boolean isEqual(WorkPoint b)
+  {
+  return type==b.type && ((ent!=null && ent==b.ent) || (x==b.x && y==b.y && z==b.z));
+  }
+
+}

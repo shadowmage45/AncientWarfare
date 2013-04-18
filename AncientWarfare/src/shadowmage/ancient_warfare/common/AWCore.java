@@ -68,12 +68,12 @@ import cpw.mods.fml.relauncher.Side;
 @Mod( modid = "AncientWarfare", name="Ancient Warfare", version="MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+"-"+Config.CORE_BUILD_STATUS)
 @NetworkMod
 (
-    clientSideRequired = true,
-    serverSideRequired = true,
-    packetHandler = PacketHandler.class,
-    channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
-    versionBounds="["+"MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+",)"
-    )
+clientSideRequired = true,
+serverSideRequired = true,
+packetHandler = PacketHandler.class,
+channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
+versionBounds="["+"MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_MINOR+"."+Config.CORE_VERSION_BUILD+",)"
+)
 
 public class AWCore 
 {	
@@ -188,7 +188,6 @@ public void load(FMLPostInitializationEvent evt)
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
 
   //DEBUG //TODO -- remove
-//  
   PathBenchmarking.instance().doTestJPS(80);
   PathBenchmarking.instance().doTestJPS(80);
   PathBenchmarking.instance().doOptiTests(80);
@@ -197,14 +196,7 @@ public void load(FMLPostInitializationEvent evt)
   PathBenchmarking.instance().doTestTheta(100);
   PathBenchmarking.instance().doWanderTest(10);
   PathBenchmarking.instance().doWanderTest(10);
-  
-//  PathBenchmarking.instance().doTestNormal(80);
-//  PathBenchmarking.instance().doTestClassic(80);
-  
-//  PathBenchmarking.instance().doTestNormal(80);
-//  PathBenchmarking.instance().doTestClassic(80);
-//  
-//  PathBenchmarking.instance().doThreadedTests(120);
+  //PathBenchmarking.instance().doThreadedTests(120);
   }
 
 

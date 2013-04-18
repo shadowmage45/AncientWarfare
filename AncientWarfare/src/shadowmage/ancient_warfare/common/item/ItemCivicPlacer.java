@@ -18,27 +18,35 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.item;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+
+public class ItemCivicPlacer extends AWItemClickable
+{
 
 /**
- * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
- * @author Shadowmage
- *
+ * @param itemID
+ * @param hasSubTypes
  */
-public enum TargetType
-  { 
-  ATTACK,
-  MOUNT,
-  REPAIR,
-  HARVEST,
-  HEAL,
-  FOLLOW,
-  WANDER,
-  PATROL,
-  MOVE,
-  SHELTER,
-  FLEE,
-  NONE,
-  WORK,
-  DEPOSIT;  
+public ItemCivicPlacer(int itemID)
+  {
+  super(itemID, true);
   }
+
+@Override
+public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+  {
+  return false;
+  }
+
+//needs addInfo
+
+//NBT will have a Pos1 and Pos2 (BlockPosition)
+//NBT will have type and rank (store type as dmg)
+//might want left-click to set positions normal, shift-left click to set position w/offset, shift-right click to clear current pos1/2
+
+}

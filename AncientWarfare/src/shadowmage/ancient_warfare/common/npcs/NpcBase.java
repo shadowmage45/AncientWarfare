@@ -38,6 +38,7 @@ import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.npcs.inventory.NpcInventory;
 import shadowmage.ancient_warfare.common.pathfinding.EntityNavigator;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
@@ -65,7 +66,7 @@ public int rank = 0;
 /**
  * used to check for targets/update target entries
  */
-int npcAITargetTick = 0;
+protected int npcAITargetTick = 0;
 /**
  * cooldown for attacking/shooting/harvesting.  set by ai on actions dependant upon action type.
  * updated EVERY TICK from NpcBase.onUpdate()
@@ -73,6 +74,8 @@ int npcAITargetTick = 0;
 public int actionTick = 0;
 
 public int villageUpdateTick = 0;
+
+protected int idleLookTicks = 0;
 
 public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
@@ -84,6 +87,8 @@ private NpcAIObjectiveManager aiManager;
 private PathWorldAccessEntity worldAccess;
 public EntityNavigator nav;
 public WayPointNavigator wayNav;
+public NpcInventory inventory;
+
 /**
  * @param par1World
  */
@@ -103,7 +108,7 @@ public NpcBase(World par1World)
   this.nav = new EntityNavigator(this);
   this.nav.canOpenDoors = true;
   this.wayNav = new WayPointNavigator(this);
-
+  this.inventory = new NpcInventory(this, 0);
   this.tasks.addTask(1, new EntityAISwimming(this));
   this.stepHeight = 1.1f;
   }
@@ -147,16 +152,17 @@ public void setNpcType(INpcType type, int level)
   this.rank = level;
   this.aiManager.addObjectives(type.getAI(this, level));
   this.npcType.addTargets(this, targetHelper);
+  this.inventory = new NpcInventory(this, type.getInventorySize(level));
   }
 
 public boolean isAggroTowards(NpcBase npc)
   {
-  return npc.npcType.isCombatUnit() && isAggroTowards(npc.teamNum);
+  return this.npcType.isCombatUnit() && npc.npcType.isCombatUnit() && isAggroTowards(npc.teamNum);
   }
 
 public boolean isAggroTowards(EntityPlayer player)
   {
-  return isAggroTowards(TeamTracker.instance().getTeamForPlayer(player));
+  return this.npcType.isCombatUnit() && isAggroTowards(TeamTracker.instance().getTeamForPlayer(player));
   }
 
 public boolean isAggroTowards(int otherTeam)
@@ -260,7 +266,7 @@ public boolean interact(EntityPlayer player)
 @Override
 public boolean attackEntityAsMob(Entity ent)
   {
-  ent.attackEntityFrom(DamageSource.causeMobDamage(this), 4);
+  ent.attackEntityFrom(DamageSource.causeMobDamage(this), this.npcType.getAttackDamage(rank));
   return false;
   }
 
@@ -273,7 +279,7 @@ protected boolean isAIEnabled()
 @Override
 public int getMaxHealth()
   {
-  return 20;
+  return this.npcType.getMaxHealth(rank);
   }
 
 @Override
@@ -347,7 +353,7 @@ public void onUpdate()
       }
     else if(this.villageUpdateTick<=0)
       {
-//      Config.logDebug("adding npc to village collection queue");
+      Config.logDebug("adding npc to village collection queue");
       this.villageUpdateTick = 100+this.getRNG().nextInt(100);
       this.worldObj.villageCollectionObj.addVillagerPosition(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
       }
@@ -355,7 +361,6 @@ public void onUpdate()
   super.onUpdate();    
   }
 
-int idleLookTicks = 0;
 
 public void handlePacketUpdate(NBTTagCompound tag)
   {

@@ -39,6 +39,7 @@ public abstract int getNumOfLevels();
 public abstract int getMaxHealth(int level);
 public abstract int getInventorySize(int level);
 public abstract float getRangedAttackDistance(int level);
+public abstract int getAttackDamage(int level);
 
 public abstract List<NpcAIObjective> getAI(NpcBase npc, int level);
 

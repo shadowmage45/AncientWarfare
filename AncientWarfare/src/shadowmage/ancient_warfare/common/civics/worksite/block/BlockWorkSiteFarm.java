@@ -18,46 +18,38 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.block;
+package shadowmage.ancient_warfare.common.civics.worksite.block;
 
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.BlockStructureControl;
+import shadowmage.ancient_warfare.common.civics.worksite.te.TEWorkSiteFarm;
 
-public abstract class BlockStructureControl extends BlockContainer
+public class BlockWorkSiteFarm extends BlockStructureControl
 {
 
 /**
  * @param par1
- * @param par2
- * @param par3Material
  */
-protected BlockStructureControl(int par1, int par2, Material par3Material)
+public BlockWorkSiteFarm(int par1)
   {
-  super(par1, par2, par3Material);
-  }
-
-public int getBlockTeam(World world, int x, int y, int z)
-  {
-  TileEntity te = world.getBlockTileEntity(x, y, z);
-  if(te!=null)
-    {
-    return ((TEStructureControl)te).getTeamNum();
-    }
-  return 0;
+  super(par1);
   }
 
 @Override
-public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
+public IInventory[] getInventoryToDropOnBreak(World world, int x, int y,    int z, int par5, int par6)
   {
-  TileEntity te = world.getBlockTileEntity(x, y, z);
-  if(te!=null)
-    {
-    return ((TEStructureControl)te).onInteract(world, player);
-    }
-  return super.onBlockActivated(world, x, y, z, player, par6, par7, par8, par9);
+  return null;
+  }
+
+@Override
+public TileEntity getNewTileEntity(World world, int meta)
+  {
+  TEWorkSiteFarm farmSite = new TEWorkSiteFarm();
+  farmSite.worldObj = world;
+  farmSite.structureRank = meta;
+  return null;
   }
 
 }

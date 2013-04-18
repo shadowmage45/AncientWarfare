@@ -16,6 +16,16 @@ TEAM CONTROL GUI
         declarations).          
 * needs hostile-teams setting area/buttons/whatnot        
         
+WORKSITES
+* each 'type' (farm/mine/arbor/barn/build) of worksite has a seperate block/ID.
+    subtypes will be blockID's.  Blocks will have no rotation values.
+* each 'subtype' will have its own seperate TE(WorkSite) (wheat, melon, pumpkin, etc for farms--pig/cow/sheep for barn)
+* WorkSite maintains refs to 'workable' points.
+    when requested, WorkSite will provide highest-priority work point(s) to an npc
+    these points are for NPC movement -- may be an aggro-entry or waypoint -- WIP
+* WorkSite will maintain actions for 'do work'.  Npc will request 'do work' on current target from WorkSite
+    and WorkSite will process the work (remove world-blocks, add stuff to npc inventory    
+        
 PATHFINDING
 * entities should re-check the nodes in their path to make sure they are still viable nodes
 * onMovementTick -- check to see if either A:target is within Y diff && 1 x/z diff, or target is visible with LOS check -- else calc path back to target node, append to START of path
@@ -47,16 +57,11 @@ NPCS
     Select Commander (constantly-run objective?)  
 * default look target is...at their feet. if looking at a node, need to look at eye-height
 * sliding when spawned (something up with motion?)    
-         
-COMMAND BATON
-* needs ability to set npc home/patrol/work/deposit points
-* needs ability to clear npc home/patrol/work/deposit points
-* needs GUI to set command and command range (adv. batons)
-* needs ability to give commands to all npcs of a given TYPE in a given RANGE
-         
+        
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
 * add an itemSlot element (not inventory slot...a client-side only slot that displays a static stack)
+* add tooltips to GUIs
 
 TESTING
 * test structure loot weighting
@@ -180,10 +185,12 @@ TWEAKS/OPTIMIZATION
 * fix npc door use.
 * add npc village interaction (add to village index occasionally)
 * add npc seek shelter at night objective
-* more cleanup work on soldiers and doors--sometimes they're fucking dumb still
+* more cleanup work on soldiers and doors--sometimes they're $%#$&# dumb still
 /********** 04-18-13 **********/
 * yet more door/pathfinder work
 * also, work on NPC command stuff
+* also, finish command baton stuff
+* and more work on door/pathfinder (this is my @#%^@! 10% problem...)
 /********** 04-19-13 **********/
 /********** 04-20-13 **********/
 

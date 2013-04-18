@@ -18,27 +18,48 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.registry;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 
 /**
- * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
+ * map civic Blocks and TEs to the item damage/rank for the spawner item
  * @author Shadowmage
  *
  */
-public enum TargetType
-  { 
-  ATTACK,
-  MOUNT,
-  REPAIR,
-  HARVEST,
-  HEAL,
-  FOLLOW,
-  WANDER,
-  PATROL,
-  MOVE,
-  SHELTER,
-  FLEE,
-  NONE,
-  WORK,
-  DEPOSIT;  
+public class CivicRegistry
+{
+
+private HashMap<Integer, CivicEntry> civicMap = new HashMap<Integer, CivicEntry>();
+
+public Block getCivicBlockFor(int type, int rank)
+  {
+  return null;
   }
+
+public TileEntity getTEFor(int type, int rank)
+  {
+  return null;
+  }
+
+public void registerBlock(Block block, int globalID)
+  {
+  
+  }
+
+public void registerTE(int globalID, Class <? extends TileEntity> clz)
+  {
+  
+  }
+
+private class CivicEntry
+{
+int globalID;
+Map<Integer, Class<? extends TileEntity>> workSiteMap = new HashMap<Integer, Class<? extends TileEntity>>();
+}
+
+}
