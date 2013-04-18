@@ -48,6 +48,11 @@ NPCS
 * default look target is...at their feet. if looking at a node, need to look at eye-height
 * sliding when spawned (something up with motion?)    
          
+COMMAND BATON
+* needs ability to leash an npc to a point
+* needs ability to clear npc home/patrol/work/deposit points
+* needs GUI to set command and command range (adv. batons)
+         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
 * add an itemSlot element (not inventory slot...a client-side only slot that displays a static stack)

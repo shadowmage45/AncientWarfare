@@ -43,7 +43,8 @@ public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Co
 public static final AWItemBase structureCreativeBuilderTicked = new ItemBuilderTicked(Config.getItemID("itemSingle.structureBuilderCreativeTicked", 13008, "Creative-mode slow (ticked) builder"));
 public static final AWItemBase structureEditor = new ItemCreativeEditor(Config.getItemID("itemSingle.templateEditor", 13009, "Creative-mode template editor"));
 public static final AWItemBase armorItem = new ItemVehicleArmor(Config.getItemID("itemMulti.vehicleArmor", 13010, "Vehicle Armor Component"));
-public static final AWItemBase npcSpawner = new ItemNpcSpawner(Config.getItemID("itemMulti.npcSpawner", 13010, "Npc Spawning Item"));
+public static final AWItemBase npcSpawner = new ItemNpcSpawner(Config.getItemID("itemMulti.npcSpawner", 13011, "Npc Spawning Item"));
+public static final AWItemBase npcCommandBaton = new ItemNpcCommandBaton(Config.getItemID("itemMulti.commandBaton", 13012, "Npc Command Batons"));
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -87,6 +88,11 @@ private void loadItems()
   this.registerItemWithSubtypes(vehicleUpgrade);
   this.registerItemWithSubtypes(armorItem);
   this.registerItemWithSubtypes(npcSpawner);
+  this.registerItemWithSubtypes(npcCommandBaton);
+  this.addSubtypeToItem(npcCommandBaton, 0, "Simple Command Baton", "Issues simple commands to a single npc");
+  this.addSubtypeToItem(npcCommandBaton, 1, "Adept Command Baton", "Issues advanced commands to a single npc");
+  this.addSubtypeToItem(npcCommandBaton, 2, "Expert Command Baton", "Issues simple commands to several npcs, or advanced commands to a single npc");
+  this.addSubtypeToItem(npcCommandBaton, 3, "Master Command Baton", "Issues advanced commands to several npcs");
   }
 
 private void loadRecipes()

@@ -23,39 +23,62 @@ package shadowmage.ancient_warfare.common.container;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton;
+import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton.BatonSettings;
 
 public class ContainerCommandBaton extends ContainerBase
 {
+
+public BatonSettings settings;
 
 /**
  * @param openingPlayer
  * @param synch
  */
-public ContainerCommandBaton(EntityPlayer openingPlayer, IEntityContainerSynch synch)
+public ContainerCommandBaton(EntityPlayer openingPlayer)
   {
-  super(openingPlayer, synch);
+  super(openingPlayer, null);
+  ItemStack stack = openingPlayer.getCurrentEquippedItem();
+  if(stack!=null)
+    {
+    settings = ItemNpcCommandBaton.getBatonSettingsStatic(stack);
+    }  
+  }
+
+/**
+ * client side-method to send changes to server
+ */
+public void saveSettings()
+  {
+  ItemStack stack = player.getCurrentEquippedItem();
+  if(stack!=null && stack.itemID == ItemLoader.instance().npcCommandBaton.itemID)
+    {
+    ItemNpcCommandBaton.setBatonSettings(stack, settings);
+    player.openContainer.detectAndSendChanges();
+    Config.logDebug("sending changes to server!!");
+    }
   }
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-
+  
   }
 
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
   // TODO Auto-generated method stub
-
   }
 
 @Override
 public List<NBTTagCompound> getInitData()
   {
-  // TODO Auto-generated method stub
   return null;
   }
 

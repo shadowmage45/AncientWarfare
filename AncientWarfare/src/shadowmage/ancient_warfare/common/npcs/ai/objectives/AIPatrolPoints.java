@@ -76,6 +76,8 @@ public void onRunningTick()
     if(entry==null)
       {
 //      Config.logDebug("entity has no target, setting patrol to finished");
+
+      this.cooldownTicks = this.maxCooldownticks;
       this.isFinished = true;
       this.patrolPoint = null;
       }
@@ -95,6 +97,7 @@ public void onRunningTick()
         {
 //        Config.logDebug("inconsistent target, not patrol target, setting finished");
         //what? somehow a diff target was set, force-finished
+        this.cooldownTicks = this.maxCooldownticks;
         this.isFinished = true;
         this.patrolPoint = null;
         }
@@ -121,8 +124,9 @@ public void onObjectiveStart()
 @Override
 public void stopObjective()
   {
-  Config.logDebug("stopping patrol ai, clearing target");
+//  Config.logDebug("stopping patrol ai, clearing target");
   npc.setTargetAW(null);  
+  npc.clearPath();
   }
 
 }

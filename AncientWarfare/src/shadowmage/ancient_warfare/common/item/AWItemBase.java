@@ -117,16 +117,16 @@ public void addSubType(ItemStack stack)
   }
 
 @Override
-public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
-  if(par1ItemStack!=null)
+  if(stack!=null)
     {
-    if(DescriptionRegistry.instance().contains(par1ItemStack))
+    if(DescriptionRegistry.instance().contains(stack))
       {
-      String toolTip = DescriptionRegistry.instance().getEntryFor(par1ItemStack.itemID).getTooltip(par1ItemStack.getItemDamage());
+      String toolTip = DescriptionRegistry.instance().getEntryFor(stack.itemID).getTooltip(stack.getItemDamage());
       if(toolTip!=null)
         {
-        par3List.add(toolTip);
+        list.add(toolTip);
         }
       }    
     }  

@@ -59,7 +59,7 @@ public void updatePriority()
 @Override
 public void onRunningTick()
   {
-  Config.logDebug("exec follow player objective");
+//  Config.logDebug("exec follow player objective");
   if(npc.getTarget()!=npc.getPlayerTarget())
     {
     npc.setTargetAW(npc.getPlayerTarget());
@@ -69,7 +69,7 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
-  Config.logDebug("starting follow player objective");
+//  Config.logDebug("starting follow player objective");
   npc.setTargetAW(npc.getPlayerTarget());
   }
 
@@ -77,6 +77,7 @@ public void onObjectiveStart()
 public void stopObjective()
   {
   npc.setTargetAW(null);
+  npc.clearPath();
   }
 
 }

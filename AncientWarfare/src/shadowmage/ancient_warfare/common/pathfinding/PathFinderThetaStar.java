@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 /**
@@ -139,6 +140,7 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
   Node n = this.currentNode;
   Node c = null;
   Node p = null;
+//  Config.logDebug("theta path:");
   while(n!=null)
     {
     p = c;
@@ -148,6 +150,7 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
 //    Config.logDebug(c.toString());
     n = n.parentNode;
     }
+//  Config.logDebug("end-theta path:");
   this.currentNode = null;
   this.world = null; 
   this.bestEndNode = null;
@@ -186,8 +189,10 @@ private void searchLoop()
     float tent;
     isDoor = world.isDoor(currentNode.x, currentNode.y, currentNode.z);
     isPDoor = currentNode.parentNode!= null && world.isDoor(currentNode.parentNode.x, currentNode.parentNode.y, currentNode.parentNode.z);   
+    boolean isNDoor = false;
     for(Node n : this.searchNodes)
       {     
+      isNDoor = world.isDoor(n.x, n.y, n.z);
       //could test for goal here, and if found, set n.f =0, insert to priority q (force to head of line)
       tent = currentNode.g + currentNode.getDistanceFrom(n);
       if(n.closed && tent > n.g)//new path from current node to n (already examined node) is longer than n's current path, disregard
@@ -199,7 +204,7 @@ private void searchLoop()
         //this is where it deviates from A*, we will check to see if n can see the parent of current.  if so
         //we calculate the path to n as if it went through the parent of current, skipping current completely.
         
-        if(!isPDoor && !isDoor && canSeeParent(n, currentNode.parentNode))//don't skip doors...
+        if(!isPDoor && !isDoor && !isNDoor && canSeeParent(n, currentNode.parentNode))//don't skip doors...
           { 
           n.parentNode = currentNode.parentNode;
           n.g = n.parentNode.g + n.getDistanceFrom(n.parentNode);
@@ -265,6 +270,10 @@ private boolean canSeeParent(Node n, Node p)
   List<BlockPosition> hits = PathUtils.getPositionsBetween2(n.x, n.z, p.x, p.z);
   for(BlockPosition pos : hits)
     {   
+    if(world.isDoor(pos.x, pos.y, pos.z))
+      {
+      return false;
+      }
     if(!world.isWalkable(pos.x, n.y, pos.z))
       {
       return false;

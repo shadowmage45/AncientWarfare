@@ -38,9 +38,14 @@ public EntityPath()
 public void setPath(List<Node> pathNodes)
   {
   this.currentPathIndex = 0;
+  this.clearPath();
+  this.addPath(pathNodes); 
+  }
+
+public void clearPath()
+  {
   this.path.clear();
   this.fullPath.clear();
-  this.addPath(pathNodes); 
   }
 
 /**

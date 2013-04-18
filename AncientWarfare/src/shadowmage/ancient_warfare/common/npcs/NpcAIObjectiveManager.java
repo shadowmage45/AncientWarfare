@@ -117,7 +117,11 @@ private void setObjective(NpcAIObjective objective)
   if(objective==null)
     {
     this.currentObjectiveTicks = 2;
-    this.currentObjective = null;
+    if(this.currentObjective!=null)
+      {
+      this.currentObjective.stopObjective();
+      }
+    this.currentObjective = null;    
     }
   else
     {

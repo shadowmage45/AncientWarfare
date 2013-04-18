@@ -20,12 +20,21 @@
  */
 package shadowmage.ancient_warfare.client.gui.npc;
 
+import java.util.EnumSet;
+import java.util.Iterator;
+
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
+import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton;
+import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton.Command;
 
 public class GuiCommandBaton extends GuiContainerAdvanced
 {
+
+ContainerCommandBaton container;
+Command[] batonCommands;
 
 /**
  * @param container
@@ -33,15 +42,11 @@ public class GuiCommandBaton extends GuiContainerAdvanced
 public GuiCommandBaton(Container container)
   {
   super(container);
-  // TODO Auto-generated constructor stub
+  this.container = (ContainerCommandBaton)container;  
+  this.shouldCloseOnVanillaKeys = true;
+  this.batonCommands = ItemNpcCommandBaton.getApplicableCommands(player.getCurrentEquippedItem());
   }
 
-@Override
-public void onElementActivated(IGuiElement element)
-  {
-  // TODO Auto-generated method stub
-
-  }
 
 @Override
 public int getXSize()
@@ -64,8 +69,8 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  // TODO Auto-generated method stub
-
+  this.drawStringGui("Has Entity Assigned "+container.settings.hasEntity(), 10, 10, 0xffffffff);
+  this.drawStringGui("Current Command: "+container.settings.command.getCommandName(), 10, 20, 0xffffffff);
   }
 
 @Override
@@ -75,11 +80,31 @@ public void updateScreenContents()
 
   }
 
+
+@Override
+public void onElementActivated(IGuiElement element)
+  {
+  int id = element.getElementNumber();
+  if(id==0)
+    {
+    this.closeGUI();
+    }
+  else if(id >= 10 && id < this.batonCommands.length+10)
+    {
+    Command cmd = this.batonCommands[element.getElementNumber()-10];
+    this.container.settings.command = cmd;
+    this.container.saveSettings();
+    }  
+  }
+
 @Override
 public void setupControls()
   {
-  // TODO Auto-generated method stub
-
+  this.addGuiButton(0, 45, 12, "Done").updateRenderPos(getXSize()-45-5, 5);
+  for(int i = 0; i < this.batonCommands.length; i ++)
+    {
+    this.addGuiButton(i+10, 10, 40 + i*14, 140, 12, this.batonCommands[i].getCommandName());
+    }  
   }
 
 @Override

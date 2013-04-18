@@ -85,6 +85,10 @@ protected boolean canPathStraightToTarget(int ex, int ey, int ez, int tx, int ty
   List<BlockPosition> blockHits = PathUtils.getPositionsBetween2(ex, ez, tx, tz);
   for(BlockPosition hit : blockHits)
     {
+    if(worldAccess.isDoor(hit.x, hit.y, hit.z))
+      {
+      return false;
+      }
     if(worldAccess.isWalkable(hit.x, currentY-1, hit.z))
       {
       currentY--;
@@ -126,10 +130,38 @@ public void setMoveTo(int tx, int ty, int tz)
     stuckTicks++;
     if(stuckTicks > 20/Config.npcAITicks)
       {
-      calcPath = true;
+//      calcPath = true;
       stuckTicks = 0;
-      this.clearPath();
-      Config.logDebug("detecting stuck, recalcing path");
+      List<Node> fullPath = this.path.getFullPath();
+      float dist = Float.MAX_VALUE;
+      int closestNodeIndex = 0;
+      Node n;
+      for(int i = 0; i < fullPath.size(); i++)
+        {
+        n = fullPath.get(i); 
+        if(getDistanceFromNode(n)<dist)
+          {
+          closestNodeIndex = i;
+          dist = getDistanceFromNode(n);
+          }
+        else
+          {
+          break;
+          }        
+        }
+      List<Node> newPath = new ArrayList<Node>();
+      for(int i = 0; i < fullPath.size(); i++)
+        {
+        if(i<closestNodeIndex)
+          {
+          continue;
+          }
+        newPath.add(fullPath.get(i));
+        }
+      this.path.setPath(newPath);      
+//      this.clearPath();
+      Config.logDebug("detecting stuck, reseating path");
+      this.claimNode();
       }
     }
   else
@@ -189,7 +221,7 @@ public void clearPath()
   this.targetX = MathHelper.floor_double(entity.posX);
   this.targetY = MathHelper.floor_double(entity.posY);
   this.targetZ = MathHelper.floor_double(entity.posZ);
-  this.path.setPath(new ArrayList<Node>());
+  this.path.clearPath();
   }
 
 protected void calcPath(int ex, int ey, int ez, int tx, int ty, int tz)
@@ -200,7 +232,8 @@ protected void calcPath(int ex, int ey, int ez, int tx, int ty, int tz)
     {
     if(endNode.x!=tx || endNode.y!=ty || endNode.z != tz)//if we didn't find the target, request a full pathfind from end of starter path to the target.
       {
-      PathManager.instance().requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, targetX, targetY, targetZ, 60);
+      Config.logDebug("requesting full path");
+      PathManager.instance().requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, tx, ty, tz, 60);
       }      
     }
   this.targetX = tx;
@@ -211,7 +244,21 @@ protected void calcPath(int ex, int ey, int ez, int tx, int ty, int tz)
 
 protected void claimNode()
   {
+//  Config.logDebug("claiming node. current node: "+this.targetNode+" dist: "+this.getDistanceFromNode(targetNode)+ " ent: " + entity);
   this.targetNode = this.path.claimNode();  
+  while(this.getDistanceFromNode(targetNode)<0.3f && this.targetNode!=null)
+    {
+    this.targetNode = this.path.claimNode();  
+    }
+  boolean door = targetNode!=null && worldAccess.isDoor(targetNode.x, targetNode.y, targetNode.z);
+//  Config.logDebug("new node: "+this.targetNode + " dist: " + this.getDistanceFromNode(targetNode) +" isDoor: "+door);
+//  Config.logDebug("fullpath:::::");
+
+//  List<Node> fullPath = this.path.getFullPath();
+//  for(Node n : fullPath)
+//    {
+//    Config.logDebug(n.toString() + " isDoor: "+worldAccess.isDoor(n.x, n.y, n.z));
+//    }
   }
 
 /**
@@ -234,6 +281,7 @@ public void setPath(List<Node> pathNodes)
 public void moveTowardsCurrentNode()
   {
   this.updateMoveHelper();
+  
   if(this.targetNode==null && this.path.getActivePathSize()>0)
     {
     this.claimNode();
@@ -244,7 +292,7 @@ public void moveTowardsCurrentNode()
     int ey = MathHelper.floor_double(entity.posY);
     int ez = MathHelper.floor_double(entity.posZ);
     boolean isDoor = isCurrentNodeADoor() || isNextNodeADoor();
-    if((!isDoor && isAtNode(ex, ey, ez, targetNode)) || (isDoor && getDistanceFromNode(targetNode)<0.1f)) 
+    if((!isDoor && isAtNode(ex, ey, ez, targetNode) || getDistanceFromNode(targetNode)<0.5f) || (isDoor && getDistanceFromNode(targetNode)<0.1f)) 
       {//|| Trig.getDistance(entity.posX, entity.posY, entity.posZ, targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f)<0.2f
       this.claimNode();
       if(targetNode==null)
@@ -272,31 +320,12 @@ public void moveTowardsCurrentNode()
       this.doorInteraction(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z); 
       }
     owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
-//    if(isNextNodeADoor())
-//      {
-//      Node next = path.getFirstNode();
-//      owner.setMoveTo(next.x+0.5f, next.y, next.z+0.5f);
-//      }
-//    else
-//      {
-//      owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
-//      }
-    
-//    if(this.hasDoor && !this.isPassedDoor)
-//      {
-//      Config.logDebug("forcing move towards doorway");
-//      owner.setMoveTo(doorPos.x+0.5f, doorPos.y, doorPos.z+0.5f);
-//      }
-//    else
-//      {
-//      owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
-//      }
     }  
   }
 
 protected float getDistanceFromNode(Node n)
   {
-  return (float) entity.getDistance(n.x+0.5d, n.y, n.z+0.5d);
+  return n==null? 0.f : (float) entity.getDistance(n.x+0.5d, n.y, n.z+0.5d);
   }
 
 protected boolean isAtNode(int ex, int ey, int ez, Node n)
@@ -325,7 +354,7 @@ protected void updateMoveHelper()
     {
     if(this.doorOpenTicks<=0)
       {
-      Config.logDebug("closing door");
+//      Config.logDebug("closing door");
       this.hasDoor = false;
       this.interactWithDoor(doorPos, false);
       }
@@ -348,7 +377,7 @@ protected void doorInteraction(int ex, int ey, int ez, int tx, int ty, int tz)
       {
       if(doorPos!=null)
         {
-        Config.logDebug("opening door"+ " entPos: "+entity);
+//        Config.logDebug("opening door"+ " entPos: "+entity);
         this.interactWithDoor(doorPos, true);
         this.doorOpenTicks = this.doorOpenMax;
         }
@@ -379,7 +408,7 @@ protected boolean checkForDoors(int ex, int ey, int ez, int tx, int ty, int tz)
     doorPos.y = ey;
     doorPos.z = ez;
     hasDoor = true;
-    Config.logDebug("found door at: "+doorPos + " entPos: "+entity);
+//    Config.logDebug("found door at: "+doorPos + " entPos: "+entity);
     return true;
     }
   float yaw = entity.rotationYaw;
@@ -417,7 +446,7 @@ protected boolean checkForDoors(int ex, int ey, int ez, int tx, int ty, int tz)
     doorPos.y = y;
     doorPos.z = z;
     hasDoor = true;
-    Config.logDebug("found door at: "+doorPos);
+//    Config.logDebug("found door at: "+doorPos);
     return true;
     }  
   return false;

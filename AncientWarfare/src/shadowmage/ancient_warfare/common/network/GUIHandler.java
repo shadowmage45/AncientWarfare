@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.client.gui.npc.GuiCommandBaton;
 import shadowmage.ancient_warfare.client.gui.settings.GuiClientSettings;
 import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
 import shadowmage.ancient_warfare.client.gui.structure.GuiEditorSelect;
@@ -35,6 +36,7 @@ import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleDebug;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
+import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
@@ -58,9 +60,8 @@ public static final int STRUCTURE_EDITOR = 3;
 public static final int STRUCTURE_SCAN_EDIT = 4;
 public static final int SETTINGS = 5;
 public static final int TEAM_CONTROL = 6;
+public static final int NPC_COMMAND_BATON = 7;
 public static final int VEHICLE_DEBUG = 99;
-
-
 
 private static GUIHandler INSTANCE;
 private GUIHandler(){}
@@ -100,8 +101,9 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   case TEAM_CONTROL:
   return new ContainerTeamControl(player);
   
-  case 7:
-  return null;
+  case NPC_COMMAND_BATON:
+  return new ContainerCommandBaton(player);
+  
   case 8:
   return null;
   case 9:
@@ -145,9 +147,10 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   case TEAM_CONTROL:
   return new GuiTeamControl(new ContainerTeamControl(player));
   
-  case 7:
-  return null;
-  case 8:
+  case NPC_COMMAND_BATON:
+  return new GuiCommandBaton(new ContainerCommandBaton(player));
+  
+  case 8:  
   return null;
   case 9:
   return null;
