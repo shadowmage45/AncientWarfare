@@ -22,7 +22,10 @@ package shadowmage.ancient_warfare.common.civics;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -58,13 +61,17 @@ public int maxX;
 public int maxY;
 public int maxZ;
 public TargetType workType;
-boolean isWorkSite = false;
-boolean broadcastWork = false;//user toggle...spawned NPC buildings will auto-broadcast
-AWInventoryBasic inventory = new AWInventoryBasic(0);
+protected boolean isWorkSite = false;
+protected boolean broadcastWork = false;//user toggle...spawned NPC buildings will auto-broadcast
+protected AWInventoryBasic inventory = new AWInventoryBasic(0);
 protected Civic civic;
 protected int structureRank = 0;
-List<WorkPoint> workPoints = new ArrayList<WorkPoint>();//all points
-Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
+protected List<WorkPoint> fallowWorkPoints = new ArrayList<WorkPoint>();//points on cooldown for some reason
+protected List<WorkPoint> workedPoints = new ArrayList<WorkPoint>();//points being worked currently
+protected LinkedList<WorkPoint> workQueue = new LinkedList<WorkPoint>();//points open for assignement to a worker
+protected Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
+protected Random rng = new Random();
+
 
 /***************************************************SETUP/INIT**************************************************************/
 public void setCivic(Civic civ, int rank)
@@ -146,14 +153,17 @@ public void broadCastToSoldiers(int maxRange)
     {
     if(isHostile(npc.teamNum))      
       {
+      //add attack entry
       //TODO      
       }
     else
       {
-      //TODO
+      if(broadcastWork)
+        {
+        //add 'work' entry
+        //TODO
+        }
       }
-    //transmit to NPC, he should add to list (defend/targets)
-    //check broadcast flag for friendly targets
     }
   }
 
@@ -186,9 +196,20 @@ public boolean isInsideOrNearWorkBounds(int x, int y, int z, int border)
   return x >=minX-border && x <=maxX+border && y >=minY-border && y<=maxY+border && z>=minZ-border && z<= maxZ+border;
   }
 
+/**
+ * get a random position within the work bounds of this work-block
+ * @param border
+ * @return
+ */
 public BlockPosition getPositionInBounds(int border)
   {
-  return null;//TODO
+  int sx = this.maxX-this.minX+border;
+  int sy = this.maxY-this.minY+border;
+  int sz = this.maxZ-this.minZ+border;
+  int x = minX-border + rng.nextInt(sx);
+  int y = minY-border + rng.nextInt(sy);
+  int z = minZ-border + rng.nextInt(sz);
+  return new BlockPosition(x,y,z);
   }
 
 public void addWorker(NpcBase npc)
@@ -198,6 +219,10 @@ public void addWorker(NpcBase npc)
 
 public WorkPoint getWorkPoint(NpcBase npc)
   {
+  if(this.workQueue.size()>0)
+    {
+    return this.workQueue.pop();
+    }   
   return null;
   }
 
@@ -205,14 +230,18 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
   {
   if(point!=null)
     {    
-    point.setWorker(null);
-    if(point.isSingleUse())
+    point.setFinished();
+    this.workedPoints.remove(point);
+    if(point.pointHasWork(worldObj))
       {
-      this.workPoints.remove(point);
+      this.workQueue.add(point);
       }
     else
-      {
-      point.setFinished();
+      {      
+      if(!point.isSingleUse())
+        {
+        this.fallowWorkPoints.add(point);
+        }
       }
     }
   }
@@ -229,7 +258,33 @@ public void onWorkNoPath(NpcBase npc, WorkPoint point)
 
 public void updateWorkPoints()
   {
-  
+  /**
+   * check through current active queue, remove any entries that are invalid
+   */
+  Iterator<WorkPoint> it = this.workQueue.iterator();
+  WorkPoint p;
+  while(it.hasNext())
+    {
+    p = it.next();
+    if(!p.pointHasWork(worldObj))
+      {
+      it.remove();
+      }
+    }
+  it = this.fallowWorkPoints.iterator();
+  while(it.hasNext())
+    {
+    p = it.next();
+    }
+  }
+
+public void doWork(NpcBase npc, WorkPoint p)
+  {
+  p.incrementHarvestHits();  
+  if(!p.isValidEntry(worldObj))
+    {
+    p.setHarvestHitToMax();
+    }
   }
 
 /*****************************************************NBT/PACKETS*********************************************************/

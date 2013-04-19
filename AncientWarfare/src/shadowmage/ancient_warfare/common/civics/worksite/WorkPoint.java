@@ -24,6 +24,7 @@ import java.lang.ref.WeakReference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.WorkType;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
@@ -38,8 +39,6 @@ protected int z;
 private WeakReference<NpcBase> worker = new WeakReference<NpcBase>(null);
 protected int totalHarvestHits = 1;
 protected int currentHarvestHits = 0;
-protected int cooldownTicks = 0;
-protected int maxCooldownTicks = 40;
 protected boolean singleUse = false;
 
 public WorkPoint(int x, int y, int z, WorkType type)
@@ -56,9 +55,29 @@ public WorkPoint(Entity ent, WorkType type)
   this.type = type;
   }
 
+/**
+ * overridable method to determine if a point has work
+ * resets internal canStart flag dependant upon if work is available at this point
+ * @return
+ */
+public boolean pointHasWork(World world)
+  {
+  return true;
+  }
+
+public boolean canStart()
+  {
+  return this.worker==null;
+  }
+
 public void incrementHarvestHits()
   {
   this.currentHarvestHits++;
+  }
+
+public void setHarvestHitToMax()
+  {
+  this.currentHarvestHits = this.totalHarvestHits;
   }
 
 /**
@@ -70,18 +89,38 @@ public boolean shouldFinish()
   return this.currentHarvestHits>=this.totalHarvestHits;
   }
 
+/**
+ * used for single-use stuff, such as clearing/placing blocks (building/mining mostly)
+ * @return
+ */
 public boolean isSingleUse()
   {
   return this.singleUse;
   }
 
-public void setFinished()
+/**
+ * to be defined by subtypes, basic implimenataion only checks entity
+ * @param world
+ * @return
+ */
+public boolean isValidEntry(World world)
   {
-  this.cooldownTicks = this.maxCooldownTicks;
-  this.worker = null;
+  if(this.isEntityEntry())
+    {
+    return this.ent!=null;
+    }
+  return true;
   }
 
-public void setWorker(NpcBase npc)
+/**
+ * clears worker * 
+ */
+public void setFinished()
+  {
+  this.setWorked(null);
+  }
+
+public void setWorked(NpcBase npc)
   {
   this.worker = new WeakReference<NpcBase>(npc);
   }
@@ -136,9 +175,39 @@ public boolean isEntityEntry()
   return this.ent!=null;
   }
 
-public boolean isEqual(WorkPoint b)
+@Override
+public int hashCode()
   {
-  return type==b.type && ((ent!=null && ent==b.ent) || (x==b.x && y==b.y && z==b.z));
+  final int prime = 31;
+  int result = 1;
+  result = prime * result + ((type == null) ? 0 : type.hashCode());
+  result = prime * result + x;
+  result = prime * result + y;
+  result = prime * result + z;
+  return result;
   }
+
+@Override
+public boolean equals(Object obj)
+  {
+  if (this == obj)
+    return true;
+  if (obj == null)
+    return false;
+  if (getClass() != obj.getClass())
+    return false;
+  WorkPoint other = (WorkPoint) obj;
+  if (type != other.type)
+    return false;
+  if (x != other.x)
+    return false;
+  if (y != other.y)
+    return false;
+  if (z != other.z)
+    return false;
+  return true;
+  }
+
+
 
 }

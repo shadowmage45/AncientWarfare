@@ -26,6 +26,7 @@ import java.util.Random;
 
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -33,7 +34,7 @@ import shadowmage.ancient_warfare.common.utils.Trig;
 public class PathUtils
 {
 
-public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int ez, int tx, int ty, int tz, int numOfNodes, Random rng)
+public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int ez, int tx, int ty, int tz, int numOfNodes, Random rng)
   {
   List<Node> nodes = new ArrayList<Node>();
   /**
@@ -59,7 +60,58 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
   nodes.add(new Node(cx,cy,cz));
   for(int i = 0; i < numOfNodes; i++)
     {
-    if(world.isWalkable(cx+mx, cy+dy, cz+mz))
+    if(tx<cy && world.isWalkable(cx, cy-1, cz))
+      {
+      cy--;
+      nodes.add(new Node(cx,cy,cz));
+      }
+    else if( tx> cy && world.isWalkable(cx, cy+1, cz))
+      {      
+      cy++;
+      nodes.add(new Node(cx,cy,cz));
+      }
+    else if (mx!=0 && mz!=0 && world.isWalkable(cx+mx, cy+dy, cz+mz))
+      {
+      boolean add = false;
+      if(mx==1 && mz==1)
+        {
+        if(world.isWalkable(cx, cy, cz+1)&&world.isWalkable(cx+1, cy, cz))
+          {
+          add = true;
+          }
+        }
+      else if(mx==-1 && mz==1)
+        {
+        if(world.isWalkable(cx, cy, cz+1) && world.isWalkable(cx-1, cy, cz))
+          {
+          add = true;
+          }
+        }
+      else if(mx==1 && mz==-1)
+        {
+        if(world.isWalkable(cx+1, cy, cz) && world.isWalkable(cx, cy, cz-1))
+          {
+          add = true;
+          }
+        }
+      else if(mx==-1 && mz==-1)
+        {
+        if(world.isWalkable(cx-1, cy, cz) && world.isWalkable(cx, cy, cz-1))
+          {
+          add = true;
+          }
+        }
+      if(add)
+        {
+        dx = mx;
+        dz = mz;
+        cx+=dx;
+        cy+=dy;
+        cz+=dz;
+        nodes.add(new Node(cx, cy, cz));
+        }
+      }
+    else if(world.isWalkable(cx+mx, cy+dy, cz+mz))
       {
       dx = mx;
       dz = mz;
@@ -68,6 +120,45 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
       cz+=dz;
       nodes.add(new Node(cx, cy, cz));
 //      Config.logDebug("adding forwards/target node"+" "+ nodes.get(nodes.size()-1).toString());      
+      }
+    else if(dx!=0 && dz!=0 && world.isWalkable(cx+dx, cy+dy, cz+dz))
+      {
+      boolean add = false;
+      if(dx==1 && dz==1)
+        {
+        if(world.isWalkable(cx, cy, cz+1)&&world.isWalkable(cx+1, cy, cz))
+          {
+          add = true;
+          }
+        }
+      else if(dx==-1 && dz==1)
+        {
+        if(world.isWalkable(cx, cy, cz+1) && world.isWalkable(cx-1, cy, cz))
+          {
+          add = true;
+          }
+        }
+      else if(dx==1 && dz==-1)
+        {
+        if(world.isWalkable(cx+1, cy, cz) && world.isWalkable(cx, cy, cz-1))
+          {
+          add = true;
+          }
+        }
+      else if(dx==-1 && dz==-1)
+        {
+        if(world.isWalkable(cx-1, cy, cz) && world.isWalkable(cx, cy, cz-1))
+          {
+          add = true;
+          }
+        }
+      if(add)
+        {        
+        cx+=dx;
+        cy+=dy;
+        cz+=dz;
+        nodes.add(new Node(cx, cy, cz));
+        }
       }
     else if(world.isWalkable(cx+dx, cy+dy, cz+dz))
       {
@@ -156,6 +247,7 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
     mz = mz< 0 ? -1 : mz > 1? 1 : mz;
     if(cx==tx && cy==ty && cz==tz)
       {
+      Config.logDebug("crawl hit goal");
       break;
       }
     }  
@@ -164,7 +256,7 @@ public static List<Node> randomCrawl(PathWorldAccess world, int ex, int ey, int 
 
 private static int getRotationAmount(int amt, int base)
   {
-  if(amt<0)
+  while(amt<0)
     {
     amt+=8;
     }

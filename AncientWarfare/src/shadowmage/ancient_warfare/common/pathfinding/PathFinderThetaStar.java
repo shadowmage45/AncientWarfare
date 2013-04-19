@@ -105,6 +105,12 @@ public long maxRunTime = 15000000l;//15ms, default time..public so may be overri
 public long maxSearchIterations = 600;
 public boolean quickStop = false;
 
+private Node bestEndNode = null;
+private float bestPathLength = 0.f;
+private float bestPathDist = Float.POSITIVE_INFINITY;
+private int searchIteration;
+
+
 public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
   {  
   this.world = world;
@@ -160,11 +166,6 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
   return path;
   }
 
-private Node bestEndNode = null;
-private float bestPathLength = 0.f;
-private float bestPathDist = Float.POSITIVE_INFINITY;
-private int searchIteration;
-
 private void searchLoop()
   {
   this.searchIteration = 0;
@@ -186,25 +187,23 @@ private void searchLoop()
       break;
       }
     currentNode.closed = true;//close the node immediately (equivalent of adding to closed list)
-//    if(canSeeParent(currentNode, goalCache))
-//      {
-////      Config.logDebug("hit goal cache, yeah..early out");
-//      goalCache.parentNode = currentNode;
-//      goalCache.g = currentNode.g + goalCache.getDistanceFrom(currentNode);
-//      goalCache.f = goalCache.g + 0;//its the goal;
-//      currentNode = goalCache;
-//      break;
-////      n.g = n.parentNode.g + n.getDistanceFrom(n.parentNode);
-////      n.f = n.g + n.getH(tx, ty, tz);
-//      }
+    if(canSeeParent(currentNode, goalCache))
+      {
+//      Config.logDebug("hit goal cache, yeah..early out");
+      goalCache.parentNode = currentNode;
+      goalCache.g = currentNode.g + goalCache.getDistanceFrom(currentNode);
+      goalCache.f = goalCache.g + 0;//its the goal;
+      currentNode = goalCache;
+      break;
+      }
     this.findNeighbors(currentNode);
     float tent;
-    isDoor = world.isDoor(currentNode.x, currentNode.y, currentNode.z);
-    isPDoor = currentNode.parentNode!= null && world.isDoor(currentNode.parentNode.x, currentNode.parentNode.y, currentNode.parentNode.z);   
+//    isDoor = world.isDoor(currentNode.x, currentNode.y, currentNode.z);
+//    isPDoor = currentNode.parentNode!= null && world.isDoor(currentNode.parentNode.x, currentNode.parentNode.y, currentNode.parentNode.z);   
     boolean isNDoor = false;
     for(Node n : this.searchNodes)
       {     
-      isNDoor = world.isDoor(n.x, n.y, n.z);
+//      isNDoor = world.isDoor(n.x, n.y, n.z);
       //could test for goal here, and if found, set n.f =0, insert to priority q (force to head of line)
       tent = currentNode.g + currentNode.getDistanceFrom(n);
       if(n.closed && tent > n.g)//new path from current node to n (already examined node) is longer than n's current path, disregard
@@ -232,7 +231,7 @@ private void searchLoop()
           {
           qNodes.offer(n);
           }
-//        n.closed = false;//go ahead and set n to open again...I don't think this really matters....
+        n.closed = false;//go ahead and set n to open again...I don't think this really matters....
         }     
       }
     }
@@ -253,7 +252,7 @@ private boolean shouldTerminateEarly()
     return true;    
     }
   float dist = this.currentNode.getDistanceFrom(tx,ty,tz);
-  float len = this.currentNode.g;
+  float len = this.currentNode.getPathLength();
   if( dist < bestPathDist )//|| len > bestPathLength
     {
     this.bestEndNode = this.currentNode;
@@ -282,10 +281,10 @@ private boolean canSeeParent(Node n, Node p)
   List<BlockPosition> hits = PathUtils.getPositionsBetween2(n.x, n.z, p.x, p.z);
   for(BlockPosition pos : hits)
     {   
-    if(world.isDoor(pos.x, pos.y, pos.z))
-      {
-      return false;
-      }
+//    if(world.isDoor(pos.x, pos.y, pos.z))
+//      {
+//      return false;
+//      }
     if(!world.isWalkable(pos.x, n.y, pos.z))
       {
       return false;

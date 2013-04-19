@@ -36,7 +36,6 @@ import shadowmage.ancient_warfare.common.utils.Trig;
 public class EntityNavigator implements IPathableCallback
 {
 
-
 IPathableEntity owner;
 Entity entity;
 EntityPath path = new EntityPath();
@@ -64,14 +63,6 @@ public EntityNavigator(IPathableEntity owner)
   this.prevEx = targetX;
   this.prevEy = targetY;
   this.prevEz = targetZ;
-//  if(entity.worldObj.isRemote)
-//    {
-//    this.scheduler = PathScheduler.clientInstance();
-//    }
-//  else
-//    {
-//    this.scheduler = PathScheduler.serverInstance();
-//    }
   }
 
 protected boolean canPathStraightToTarget(int ex, int ey, int ez, int tx, int ty, int tz)
@@ -178,16 +169,7 @@ public void setMoveTo(int tx, int ty, int tz)
     }
   prevEx = ex;
   prevEy = ey;
-  prevEz = ez;
-  if(canPathStraightToTarget(ex, ey, ez, tx, ty, tz))
-    {
-    this.targetNode = new Node(tx,ty,tz);
-    this.targetX = tx;
-    this.targetY = ty;
-    this.targetZ = tz;
-    return;
-    }
- 
+  prevEz = ez; 
   Node endNode = this.path.getEndNode();    
   if(endNode==null && targetNode==null)//we have no path, request a starter, and full if necessary
     {
@@ -215,6 +197,24 @@ public void setMoveTo(int tx, int ty, int tz)
         calcPath = true;
         }      
       }    
+    }
+  else//target is not null, but end node is
+    {
+    if(targetNode.x != tx || targetNode.y != ty || targetNode.z != tz)
+      {
+      if(canPathStraightToTarget(ex, ey, ez, tx, ty, tz))
+        {
+        this.targetNode = new Node(tx,ty,tz);
+        this.targetX = tx;
+        this.targetY = ty;
+        this.targetZ = tz;
+        return;
+        }
+      else
+        {
+        PathManager.instance().requestPath(this, worldAccess, targetNode.x, targetNode.y, targetNode.z, tx, ty, tz, 60);
+        }
+      }
     }
   if(calcPath)
     { 
@@ -252,21 +252,7 @@ protected void calcPath(int ex, int ey, int ez, int tx, int ty, int tz)
 
 protected void claimNode()
   {
-//  Config.logDebug("claiming node. current node: "+this.targetNode+" dist: "+this.getDistanceFromNode(targetNode)+ " ent: " + entity);
-  this.targetNode = this.path.claimNode();  
-  while(this.getDistanceFromNode(targetNode)<0.3f && this.targetNode!=null)
-    {
-    this.targetNode = this.path.claimNode();  
-    }
-  boolean door = targetNode!=null && worldAccess.isDoor(targetNode.x, targetNode.y, targetNode.z);
-//  Config.logDebug("new node: "+this.targetNode + " dist: " + this.getDistanceFromNode(targetNode) +" isDoor: "+door);
-//  Config.logDebug("fullpath:::::");
-
-//  List<Node> fullPath = this.path.getFullPath();
-//  for(Node n : fullPath)
-//    {
-//    Config.logDebug(n.toString() + " isDoor: "+worldAccess.isDoor(n.x, n.y, n.z));
-//    }
+  this.targetNode = this.path.claimNode();
   }
 
 /**
@@ -282,32 +268,27 @@ public void setPath(List<Node> pathNodes)
     this.targetY = end.y;
     this.targetZ = end.z; 
     this.path.setPath(pathNodes);
-    this.claimNode();
     }
+  this.claimNode();
+  }
+
+protected boolean shouldClaimNextNode()
+  {
+  return this.path.getActivePathSize()>0 && this.targetNode==null || getDistanceFromNode(targetNode)<entity.width;
   }
 
 public void moveTowardsCurrentNode()
   {
   this.updateMoveHelper();
-  
-  if(this.targetNode==null && this.path.getActivePathSize()>0)
+  while(this.shouldClaimNextNode())
     {
     this.claimNode();
-    }
+    }  
   if(this.targetNode!=null)
     {     
     int ex = MathHelper.floor_double(entity.posX);
     int ey = MathHelper.floor_double(entity.posY);
-    int ez = MathHelper.floor_double(entity.posZ);
-    boolean isDoor = isCurrentNodeADoor() || isNextNodeADoor();
-    if((!isDoor && isAtNode(ex, ey, ez, targetNode) || getDistanceFromNode(targetNode)<0.5f) || (isDoor && getDistanceFromNode(targetNode)<0.1f)) 
-      {//|| Trig.getDistance(entity.posX, entity.posY, entity.posZ, targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f)<0.2f
-      this.claimNode();
-      if(targetNode==null)
-        {   
-        return;
-        }
-      }    
+    int ez = MathHelper.floor_double(entity.posZ);      
     if(owner.isPathableEntityOnLadder())
       {
       if(targetNode.y<ey)
@@ -327,7 +308,7 @@ public void moveTowardsCurrentNode()
       {
       this.doorInteraction(ex, ey, ez, targetNode.x, targetNode.y, targetNode.z); 
       }
-    owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f);
+    owner.setMoveTo(targetNode.x+0.5f, targetNode.y, targetNode.z+0.5f, owner.getDefaultMoveSpeed());
     }  
   }
 
@@ -362,17 +343,9 @@ protected void updateMoveHelper()
     {
     if(this.doorOpenTicks<=0)
       {
-//      Config.logDebug("closing door");
       this.hasDoor = false;
       this.interactWithDoor(doorPos, false);
-      }
-//    else if(!this.isPassedDoor)
-//      {
-//      if(entity.getDistanceSq(doorPos.x+0.5d, doorPos.y, doorPos.z+0.5d)<0.2d)
-//        {
-//        this.isPassedDoor = true;
-//        }
-//      }    
+      } 
     }
   }
 
@@ -385,7 +358,6 @@ protected void doorInteraction(int ex, int ey, int ez, int tx, int ty, int tz)
       {
       if(doorPos!=null)
         {
-//        Config.logDebug("opening door"+ " entPos: "+entity);
         this.interactWithDoor(doorPos, true);
         this.doorOpenTicks = this.doorOpenMax;
         }
@@ -397,7 +369,6 @@ protected void doorInteraction(int ex, int ey, int ez, int tx, int ty, int tz)
     }  
   }
 
-protected boolean isPassedDoor = false;
 protected boolean hasDoor = false;
 protected BlockPosition doorPos = new BlockPosition(0,0,0);
 protected int doorOpenTicks = 0;

@@ -20,7 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
-import shadowmage.ancient_warfare.common.civics.worksite.te.TEWorkSiteFarm;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
 
 public class CivicFarm extends Civic
 {
@@ -28,14 +28,14 @@ public class CivicFarm extends Civic
 /**
  * @param id
  */
-public CivicFarm(int id, String name, String tooltip)
+public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSiteFarm> teClass)
   {
   super(id);
   this.isWorkSite = true;
   this.name = name;
   this.tooltip = tooltip;
   this.ranks = 3;
-  this.teClass = TEWorkSiteFarm.class;
+  this.teClass = teClass;
   }
 
 }

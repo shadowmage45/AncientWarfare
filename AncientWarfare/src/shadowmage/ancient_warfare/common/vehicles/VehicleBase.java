@@ -1118,7 +1118,7 @@ public boolean canInteract(EntityPlayer player)
   }
 
 @Override
-public void setMoveTo(double x, double y, double z)
+public void setMoveTo(double x, double y, double z, float moveSpeed)
   {
   this.moveHelper.setMoveTo(x, y, z);
   }
@@ -1145,5 +1145,11 @@ public void setPath(List<Node> path)
 public PathWorldAccess getWorldAccess()
   {
   return worldAccess;
+  }
+
+@Override
+public float getDefaultMoveSpeed()
+  {
+  return this.currentForwardSpeedMax;
   }
 }

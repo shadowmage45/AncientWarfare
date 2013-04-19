@@ -17,16 +17,19 @@ TEAM CONTROL GUI
 * needs hostile-teams setting area/buttons/whatnot        
         
 WORKSITES
-* each 'type' (farm/mine/arbor/barn/build) of worksite has a seperate block/ID.
-    subtypes will be blockID's.  Blocks will have no rotation values.
-* each 'subtype' will have its own seperate TE(WorkSite) (wheat, melon, pumpkin, etc for farms--pig/cow/sheep for barn)
-* WorkSite maintains refs to 'workable' points.
-    when requested, WorkSite will provide highest-priority work point(s) to an npc
-    these points are for NPC movement -- may be an aggro-entry or waypoint -- WIP
-* WorkSite will maintain actions for 'do work'.  Npc will request 'do work' on current target from WorkSite
-    and WorkSite will process the work (remove world-blocks, add stuff to npc inventory    
+* mapped to blocks statically / by id%16
+* each type will have its own TE that defines ALL logic for the site
+        e.g. farm will maintain ids of what block(s) it works on.
+* TE will maintain/update refs to WorkPoints
+* TE will dispense work-points to workers when requested -- work points can be a block or an entity
+* Worker will contact TE to 'doWork' when it has arrived at the work-point
+        TE will update work-point status (num of hits/finished/invalid)
+            worker will query work-point status, set finished/failed if appropriate
+* needs a 'complete rescan divider', to know when to do a complete rescan, or just update nodes
+    (scan a couple ticks after first load, and rescan every minute or two after that)    
         
 PATHFINDING
+* still a POS--needs heavy rework/rewrite (perhaps convert into an entityPath?)
 * entities should re-check the nodes in their path to make sure they are still viable nodes
 * onMovementTick -- check to see if either A:target is within Y diff && 1 x/z diff, or target is visible with LOS check -- else calc path back to target node, append to START of path
 
@@ -41,22 +44,16 @@ VEHICLES
 
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
-* create officer types (lt, com, gen)
-* add ai 'slots' to higher level soldiers? (for patrol/guard duties)
+* create officer types (lt, com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
 * some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)
 * inter-soldier comms (more commanders yelling orders to soldiers)
 * need to set damage done by rank
 
 NPCS
-* need to add getNpcDamage(int level)..
-* figure out how to set bounds around town-based goal things...
 * resource search/seeking incremental algorithm (djk?)
 * create AI objectives
-    Seek Shelter At Night
     Stay Near Commander
     Select Commander (constantly-run objective?)  
-* default look target is...at their feet. if looking at a node, need to look at eye-height
-* sliding when spawned (something up with motion?)    
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -191,6 +188,8 @@ TWEAKS/OPTIMIZATION
 * also, work on NPC command stuff
 * also, finish command baton stuff
 * and more work on door/pathfinder (this is my @#%^@! 10% problem...)
+* tons of layout/prep work on civics
 /********** 04-19-13 **********/
+* need to add dynamic speed-setting to entities (faster if attacking/following, slower when patrol/wander/work)
 /********** 04-20-13 **********/
 

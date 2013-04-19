@@ -24,7 +24,7 @@ import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.block.BlockBuilder;
 import shadowmage.ancient_warfare.common.block.TEBuilder;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
-import shadowmage.ancient_warfare.common.civics.worksite.te.TEWorkSiteFarm;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
 import shadowmage.ancient_warfare.common.config.Config;
 import cpw.mods.fml.common.registry.GameRegistry;
 

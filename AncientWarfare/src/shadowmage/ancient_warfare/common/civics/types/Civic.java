@@ -20,12 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarmWheat;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 
@@ -34,11 +32,12 @@ public class Civic implements ICivicType
 
 public static final Civic[] civicList = new Civic[64];
 
-public static ICivicType wheatFarm = new CivicFarm(0, "Wheat Farm", "A place for workers to tend and harvest Wheat");
-public static ICivicType melonFarm = new CivicFarm(1, "Melon Farm", "A place for workers to tend and harvest Melons");
-public static ICivicType pumpkinFarm = new CivicFarm(2, "Pumpkin Farm", "A place for workers to tend and harvest Pumpkins");
-public static ICivicType cactusFarm = new CivicFarm(3, "Cactus Farm", "A place for workers to tend and harvest Cacti");
-public static ICivicType reedFarm = new CivicFarm(4, "Reed Farm", "A place for workers to tend and harvest Reeds");
+public static ICivicType wheatFarm = new CivicFarm(0, "Wheat Farm", "A place for workers to tend and harvest Wheat", TEWorkSiteFarmWheat.class);
+//public static ICivicType melonFarm = new CivicFarm(1, "Melon Farm", "A place for workers to tend and harvest Melons");
+//public static ICivicType pumpkinFarm = new CivicFarm(2, "Pumpkin Farm", "A place for workers to tend and harvest Pumpkins");
+//public static ICivicType cactusFarm = new CivicFarm(3, "Cactus Farm", "A place for workers to tend and harvest Cacti");
+//public static ICivicType reedFarm = new CivicFarm(4, "Reed Farm", "A place for workers to tend and harvest Reeds");
+//also need carrot and potato farms
 
 protected int globalID = 0;
 protected String name = "";

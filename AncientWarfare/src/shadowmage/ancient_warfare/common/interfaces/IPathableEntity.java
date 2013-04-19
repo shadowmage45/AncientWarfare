@@ -32,7 +32,8 @@ public interface IPathableEntity
 {
 
 public void setPath(List<Node> path);
-public void setMoveTo(double x, double y, double z);
+public void setMoveTo(double x, double y, double z, float moveSpeed);
+public float getDefaultMoveSpeed();
 public boolean isPathableEntityOnLadder();
 public Entity getEntity();
 public PathWorldAccess getWorldAccess();

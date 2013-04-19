@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
@@ -59,6 +60,7 @@ public void updatePriority()
   {
   if(!npc.wayNav.hasWorkPoint())
     {
+    Config.logDebug("update work priority, has no work point, setting finished");
     //TODO check targetHelper for workSite targets that have broadcast, take highest priority/aggro target
     this.currentPriority = 0;
     return;
@@ -69,31 +71,37 @@ public void updatePriority()
     TileEntity te = npc.worldObj.getBlockTileEntity(workPoint.x, workPoint.y, workPoint.z);
     if(te instanceof TECivic)
       {
+      Config.logDebug("had no work site, but had work point and valid, setting work site");
       this.workSite = (TECivic)te;
       }
     else
       {
+      Config.logDebug("had no work site, but had work point, it was invalid--setting finished");
       this.workSite = null;
       }
     }
   else
     {
+    Config.logDebug("had work site, validating");
     WayPoint workPoint = npc.wayNav.getWorkPoint();
     if(workPoint.x!=workSite.xCoord || workPoint.y!=workSite.yCoord || workPoint.z!=workSite.zCoord)
       {
       TileEntity te = npc.worldObj.getBlockTileEntity(workPoint.x, workPoint.y, workPoint.z);
       if(te instanceof TECivic)
         {
+        Config.logDebug("work site is valid");
         this.workSite = (TECivic)te;
         }
       else
         {
+        Config.logDebug("work site was not valid!");
         this.workSite = null;
         }
       }
     }
   if(this.workSite==null)
     {
+    Config.logDebug("setting min priority and exit, work will not run");
     this.isFinished = true;
     this.npc.wayNav.clearWorkPoint();
     this.cooldownTicks = this.maxCooldownticks;
@@ -102,10 +110,15 @@ public void updatePriority()
     }
   if(this.workSite.canHaveMoreWorkers(npc))
     {    
+    Config.logDebug("work site has room for more workers, adding and doing work");
     this.currentPriority = this.maxPriority;
     }
   else
     {
+    Config.logDebug("no room for more workers, setting min priority and exit, work will not run");
+    this.isFinished = true;
+    this.npc.wayNav.clearWorkPoint();
+    this.cooldownTicks = this.maxCooldownticks;
     this.currentPriority = 0;
     }  
   }
@@ -116,37 +129,45 @@ public void onRunningTick()
   if(this.workSite!=null)
     {
     if(workPoint!=null)
-      {      
+      { 
+      Config.logDebug("has work point, attempint to work");
       //check distance to work point
       //move to work point or 'work' on point
       //TODO check 'stuck' ticks to see if need to turn in work early/noPath
+      Config.logDebug("incrementing work ticks");
       this.currentWorkTicks++;
       if(npc.getDistance(workPoint.posX()+0.5f, workPoint.posY(), workPoint.posZ()+0.5f) > 3)
         {
+        Config.logDebug("outside work range, heading towards point");
         this.setMoveToWork(workPoint);
         }
       else
         {
+        Config.logDebug("within work range, working on point");
         this.workOnPoint(workPoint);
         }
       }
     else
       {
+      Config.logDebug("has no work point, moving to work or claiming point");
       int ex = npc.floorX();
       int ey = npc.floorY();
       int ez = npc.floorZ();
       if(!workSite.isInsideOrNearWorkBounds(ex, ey, ez, 5))
         {
+        Config.logDebug("outside work boundaries, heading to work");
         this.setMoveToWorkSite();
         }
       else
         {
+        Config.logDebug("inside work boundaries, claiming point");
         this.claimWorkPoint();
         }
       }    
     }
   else
     {
+    Config.logDebug("no work site in run tick, setting finished");
     this.workPoint = null;
     this.workSite = null;
     this.currentPriority = 0;
@@ -159,22 +180,27 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
+  Config.logDebug("starting aiWork");
   if(this.workSite!=null)
     {
+    Config.logDebug("validating current work site");
     int ex = npc.floorX();
     int ey = npc.floorY();
     int ez = npc.floorZ();
     if(!workSite.isInsideOrNearWorkBounds(ex, ey, ez, 5))
       {
+      Config.logDebug("outside of work bounds, heading to work");
       this.setMoveToWorkSite();
       }
     else
       {
+      Config.logDebug("inside of work bounds getting work point");
       this.claimWorkPoint();
       }
     }
   else
     {
+    Config.logDebug("could not start, work site was null--setting finished and exiting");
     this.workPoint = null;
     this.workSite = null;
     this.currentPriority = 0;
@@ -191,10 +217,9 @@ protected void workOnPoint(WorkPoint p)
     if(npc.actionTick<=0)
       {
       npc.actionTick = 35;//TODO add action delay to npctype - by rank
-      p.incrementHarvestHits();
+      this.workSite.doWork(npc, p);      
       if(p.shouldFinish())
         {
-        p.setFinished();
         this.setWorkFinished(p);
         }
       }
@@ -206,8 +231,8 @@ protected void setWorkFinished(WorkPoint p)
   if(workSite!=null && p!=null)
     {
     workSite.onWorkFinished(npc, p);
-    this.workPoint = null;
     }
+  this.workPoint = null;
   }
 
 protected void setMoveToWorkSite()

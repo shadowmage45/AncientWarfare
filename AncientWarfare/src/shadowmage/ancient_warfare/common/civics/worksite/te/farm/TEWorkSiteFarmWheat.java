@@ -18,23 +18,20 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.civics.worksite.te;
+package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import net.minecraft.block.Block;
 
-public class TEWorkSiteFarm extends TECivic
+public class TEWorkSiteFarmWheat extends TEWorkSiteFarm
 {
 
-@Override
-public boolean onInteract(World world, EntityPlayer player)
+/**
+ * 
+ */
+public TEWorkSiteFarmWheat()
   {
-  return false;
+  this.mainBlockID = Block.crops.blockID;
+  this.mainBlockMatureMeta = 7;
   }
-
-
 
 }
