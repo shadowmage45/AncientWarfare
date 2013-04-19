@@ -27,7 +27,10 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIGoToWork;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIPatrolPoints;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AISeekShelter;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 
 public class NpcSoldierTest extends NpcTypeBase
@@ -39,11 +42,13 @@ public class NpcSoldierTest extends NpcTypeBase
 public NpcSoldierTest(int type)
   {
   super(type);
-  this.displayName = "Soldier Test";
-  this.tooltip = "Test Soldier for Attack and Vehicle Interaction";
+  this.displayName = "Npc Test";
+  this.tooltip = "Test Npc for Worker Functions";
   this.addLevel("Soldier Rank 0", "foo", null, null);
   this.addLevel("Soldier Rank 1", "foo", null, null);
   this.addLevel("Soldier Rank 2", "foo", null, null);
+  this.isCombatUnit = false;
+  this.inventorySize = 9;
   }
 
 @Override
@@ -59,12 +64,10 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>();  
-//  aiEntries.add(new AIDismountVehicles(npc, 10));
-//  aiEntries.add(new AIAttackTargets(npc, 9, 20, 10));  
-  aiEntries.add(new AIFollowPlayer(npc, 8));
-  aiEntries.add(new AIPatrolPoints(npc, 7, 20));
-//  aiEntries.add(new AIMountVehicles(npc, 7, 20));  
-//  aiEntries.add(new AIAttackTargets(npc, 6, 40, 40));  
+  aiEntries.add(new AIFollowPlayer(npc, 90));
+  aiEntries.add(new AIGoToWork(npc, 80));
+  aiEntries.add(new AISeekShelter(npc, 75));
+  aiEntries.add(new AIWander(npc, 1));
   return aiEntries;
   }
 }

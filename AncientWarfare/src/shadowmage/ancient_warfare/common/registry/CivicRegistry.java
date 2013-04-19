@@ -20,11 +20,18 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.types.Civic;
+import shadowmage.ancient_warfare.common.utils.BlockLoader;
 
 /**
  * map civic Blocks and TEs to the item damage/rank for the spawner item
@@ -34,32 +41,136 @@ import net.minecraft.tileentity.TileEntity;
 public class CivicRegistry
 {
 
-private HashMap<Integer, CivicEntry> civicMap = new HashMap<Integer, CivicEntry>();
+private static CivicRegistry INSTANCE;
+private CivicRegistry(){}
 
-public Block getCivicBlockFor(int type, int rank)
+private List<ItemStack> displayStackCache;
+
+public static CivicRegistry instance()
   {
+  if(INSTANCE==null)
+    {
+    INSTANCE = new CivicRegistry();    
+    }
+  return INSTANCE;
+  }
+
+/**
+ * called from AWCore to register item descriptions, etc
+ */
+public void registerCivics()
+  {  
+  ItemStack regStack = null;
+  for(Civic civ : Civic.civicList)
+    {
+    if(civ!=null)
+      {
+      for(int i = 0; i < civ.getNumOfRanks(); i++)
+        {
+        regStack = civ.getDisplayItem(i);
+        LanguageRegistry.instance().addName(regStack, civ.getDisplayName(i));
+        }
+      }
+    }
+  }
+
+public void setCivicBlock(World world, int x, int y, int z, int type, int rank)
+  {
+  Block block = getBlockFor(type);
+  if(block!=null)
+    {
+    world.setBlockAndMetadata(x, y, z, block.blockID, type%16);
+    TECivic te = (TECivic) world.getBlockTileEntity(x, y, z);
+    if(te!=null)
+      {
+      te.setCivic(getCivicFor(type), rank);      
+      }
+    }
+  }
+
+public Civic getCivicFor(int type)
+  {
+  if(type>=0 && type < Civic.civicList.length)
+    {
+    return Civic.civicList[type];
+    }
   return null;
   }
 
-public TileEntity getTEFor(int type, int rank)
+protected Block getBlockFor(int type)
   {
+  int block = type/16;
+  switch(block)
+  {
+  case 0:
+  return BlockLoader.civicBlock1;
+  case 1:
+  return BlockLoader.civicBlock2;
+  case 2:
+  return BlockLoader.civicBlock3;
+  case 3:
+  return BlockLoader.civicBlock4;
+  }
   return null;
   }
 
-public void registerBlock(Block block, int globalID)
+/**
+ * called from CivicBlock to determine which TileEntity is for it.
+ * TE is determined by blockID and meta (4 blockIDs used for 64 Civic types @ 16/block)
+ * (uses blockNum*4+meta to determine type)
+ * must ensure order is not changed between updates, or bad things will occur...
+ * @param world
+ * @param type
+ * @return
+ */
+public TileEntity getTEFor(World world, int type)
   {
-  
+  TECivic te = null;
+  if(Civic.civicList[type]!=null)
+    {    
+    try
+      {
+      Civic civ = getCivicFor(type);
+      if(civ!=null && civ.getTileEntityClass()!=null)
+        {
+        te = civ.getTileEntityClass().newInstance();
+        }      
+      if(te!=null)      
+        {
+        te.worldObj = world;
+        }
+      } 
+    catch (InstantiationException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (IllegalAccessException e)
+      {
+      e.printStackTrace();
+      }
+    }
+  return te;
   }
 
-public void registerTE(int globalID, Class <? extends TileEntity> clz)
+public List<ItemStack> getDisplayStacks()
   {
-  
+  if(displayStackCache!=null)
+    {
+    return displayStackCache;
+    }
+  List<ItemStack> displayStacks = new ArrayList<ItemStack>();
+  for(Civic civ : Civic.civicList)
+    {
+    if(civ!=null)
+      {
+      for(int i = 0; i < civ.getNumOfRanks(); i++)
+        {
+        displayStacks.add(civ.getDisplayItem(i));
+        }
+      }
+    }
+  displayStackCache = displayStacks;
+  return displayStacks;
   }
-
-private class CivicEntry
-{
-int globalID;
-Map<Integer, Class<? extends TileEntity>> workSiteMap = new HashMap<Integer, Class<? extends TileEntity>>();
-}
 
 }

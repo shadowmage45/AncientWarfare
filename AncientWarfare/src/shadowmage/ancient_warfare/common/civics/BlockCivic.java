@@ -26,32 +26,36 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.item.CreativeTabAW;
+import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.utils.BlockContainerSimpleSided;
 
-public abstract class BlockStructureControl extends BlockContainerSimpleSided
+public class BlockCivic extends BlockContainerSimpleSided
 {
 
+int blockNum;
 /**
  * @param par1
  * @param par2
  * @param par3Material
  */
-protected BlockStructureControl(int par1)
+public BlockCivic(int par1, String name, int blockNum)
   {
   super(par1, Material.rock);
   this.setTextureFile("/shadowmage/ancient_warfare/resources/block/blocks.png");
   this.isDefaultTexture = false;
   this.blockIndexInTexture = 0;
   this.setCreativeTab(CreativeTabAW.instance());
-  this.setHardness(3.f);
+  this.setHardness(3.f);  
+  this.setBlockName(name);
+  this.blockNum = blockNum;
   }
 
-public int getBlockTeam(World world, int x, int y, int z)
+public static int getBlockTeam(World world, int x, int y, int z)
   {
   TileEntity te = world.getBlockTileEntity(x, y, z);
   if(te!=null)
     {
-    return ((TEStructureControl)te).getTeamNum();
+    return ((TECivic)te).getTeamNum();
     }
   return 0;
   }
@@ -62,14 +66,26 @@ public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer pla
   TileEntity te = world.getBlockTileEntity(x, y, z);
   if(te!=null)
     {
-    return ((TEStructureControl)te).onInteract(world, player);
+    return ((TECivic)te).onInteract(world, player);
     }
   return false;
   }
 
 @Override
-public TileEntity createTileEntity(World world, int metadata)
+public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, int par5, int par6)
   {
+  TECivic te = (TECivic) world.getBlockTileEntity(x, y, z);
+  if(te!=null)
+    {
+    return new IInventory[]{te};
+    }
   return null;
   }
+
+@Override
+public TileEntity getNewTileEntity(World world, int meta)
+  {
+  return CivicRegistry.instance().getTEFor(world, blockNum*4+meta);
+  }
+
 }

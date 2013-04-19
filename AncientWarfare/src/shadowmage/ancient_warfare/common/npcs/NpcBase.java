@@ -279,7 +279,7 @@ protected boolean isAIEnabled()
 @Override
 public int getMaxHealth()
   {
-  return this.npcType.getMaxHealth(rank);
+  return this.npcType== null? 20 : this.npcType.getMaxHealth(rank);
   }
 
 @Override
@@ -401,10 +401,21 @@ public void readSpawnData(ByteArrayDataInput data)
   {
   this.teamNum = data.readInt();
   this.rank = data.readInt();
-//  this.motionX = this.motionY = this.motionZ = 0.d;
-//  this.lastTickPosX = this.prevPosX = this.posX;
-//  this.lastTickPosY = this.prevPosY = this.posY;
-//  this.lastTickPosZ = this.prevPosZ = this.posZ;
+  }
+
+public int floorX()
+  {
+  return MathHelper.floor_double(posX);
+  }
+
+public int floorY()
+  {
+  return MathHelper.floor_double(posY);
+  }
+
+public int floorZ()
+  {
+  return MathHelper.floor_double(posZ);
   }
 
 @Override
@@ -415,6 +426,7 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("rank", this.rank);
   tag.setInteger("type", this.npcType.getGlobalNpcType());
   tag.setCompoundTag("waypoints", wayNav.getNBTTag());
+  tag.setInteger("health", this.getHealth());
   }
 
 @Override
@@ -426,6 +438,7 @@ public void readFromNBT(NBTTagCompound tag)
   int type = tag.getInteger("type");
   this.setNpcType(NpcTypeBase.getNpcType(type), this.rank);
   this.wayNav.readFromNBT(tag.getCompoundTag("waypoints"));
+  this.health = tag.getInteger("health");
   }
 
 @Override

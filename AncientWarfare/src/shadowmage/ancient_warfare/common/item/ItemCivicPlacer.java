@@ -20,12 +20,21 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.types.Civic;
+import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
+import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 
-public class ItemCivicPlacer extends AWItemClickable
+public class ItemCivicPlacer extends AWItemClickable implements IScannerItem
 {
 
 /**
@@ -38,13 +47,181 @@ public ItemCivicPlacer(int itemID)
   }
 
 @Override
-public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+public String getItemNameIS(ItemStack par1ItemStack)
   {
+  if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("civicInfo"))
+    {
+    Civic civ = CivicRegistry.instance().getCivicFor(par1ItemStack.getTagCompound().getCompoundTag("civicInfo").getInteger("type"));
+    if(civ!=null)
+      {
+      return civ.getDisplayName(par1ItemStack.getTagCompound().getCompoundTag("civicInfo").getInteger("rank"));
+      }
+    }
+  return "Civic" + String.valueOf(par1ItemStack.getItemDamage()); 
+  }
+
+@Override
+public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
+  {
+  //super.addInformation(stack, player, list, par4);
+  if(stack!=null)
+    {
+    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
+      {
+      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
+      if(tag.hasKey("type") && tag.hasKey("rank"))
+        {
+        int type = tag.getInteger("type");
+        int rank = tag.getInteger("rank");
+        Civic civ = CivicRegistry.instance().getCivicFor(type);        
+        if(civ!=null)          
+          {
+          list.add(civ.getDisplayTooltip(rank));
+          list.add(("Structure Rank: "+rank));  
+          if(tag.hasKey("pos2"))
+            {
+            list.add("Has first and second bounds positions set");
+            }
+          else if(tag.hasKey("pos1"))
+            {
+            list.add("Has first bounds position set");
+            }  
+          }
+        else
+          {
+          list.add("Invalid Civic Placer--Something has corrupted or removed the itemStack NBT data.");
+          }
+        }  
+      else
+        {
+        list.add("Invalid Civic Placer--Something has corrupted or removed the itemStack NBT data.");
+        }
+          
+      }
+    else
+      {
+      list.add("Invalid Civic Placer--Something has corrupted or removed the itemStack NBT data.");
+      }
+    }  
+  }
+
+public static boolean hasScanBB(ItemStack stack)
+  {
+  if(stack!=null)
+    {
+    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
+      {
+      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
+      
+      }
+    }
   return false;
   }
 
-//needs addInfo
+@Override
+public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
+  {
+  par3List.addAll(CivicRegistry.instance().getDisplayStacks());
+  }
 
+@Override
+public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+  {
+  if(world.isRemote)
+    {
+    return true;
+    }
+  if(hit!=null && stack!=null && stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
+    {
+    NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
+    if(tag.hasKey("pos2") && tag.hasKey("pos1") && tag.hasKey("rank") && tag.hasKey("type"))
+      {
+      hit.offsetForMCSide(side);
+      placeCivicBlock(world, hit, new BlockPosition(tag.getCompoundTag("pos1")), new BlockPosition(tag.getCompoundTag("pos2")),  tag.getInteger("type"), tag.getInteger("rank"));
+      ItemStack item = player.getCurrentEquippedItem();
+      if(item!=null && item.itemID == ItemLoader.civicPlacer.itemID)
+        {
+        if(!player.capabilities.isCreativeMode)
+          {
+          stack.stackSize--;
+          if(stack.stackSize<=0)
+            {
+            player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+            }
+          }
+        else
+          {
+          NBTTagCompound newtag = new NBTTagCompound();
+          newtag.setInteger("type", tag.getInteger("type"));
+          newtag.setInteger("rank", tag.getInteger("rank"));
+          stack.setTagInfo("civicInfo", newtag);
+          player.openContainer.detectAndSendChanges();
+          }        
+        }      
+      }
+    else if(tag.hasKey("pos1"))
+      {
+      if(player.isSneaking())
+        {
+        hit.offsetForMCSide(side);
+        }
+      tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
+      }
+    else
+      {      
+      if(player.isSneaking())
+        {
+        hit.offsetForMCSide(side);
+        }
+      tag.setCompoundTag("pos1", hit.writeToNBT(new NBTTagCompound()));
+      }
+    }
+  return true;
+  }
+
+public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1, BlockPosition pos2, int type, int rank)
+  {
+  if(hit==null || pos1==null || pos2==null || world==null)
+    {
+    return;
+    }
+  BlockPosition min = BlockTools.getMin(pos1, pos2);
+  BlockPosition max = BlockTools.getMax(pos1, pos2);
+  CivicRegistry.instance().setCivicBlock(world, hit.x, hit.y, hit.z, type, rank);
+  TECivic te = (TECivic) world.getBlockTileEntity(hit.x, hit.y, hit.z);
+  te.setBounds(min.x, min.y, min.z, max.x, max.y, max.z);
+  world.markBlockForUpdate(hit.x, hit.y, hit.z);
+  }
+
+@Override
+public BlockPosition getScanPos1(ItemStack stack)
+  {
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
+    {
+    NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
+    if(tag.hasKey("pos1"))
+      {
+      return new BlockPosition(tag.getCompoundTag("pos1"));
+      }
+    }
+  return null;
+  }
+
+@Override
+public BlockPosition getScanPos2(ItemStack stack)
+  {
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
+    {
+    NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
+    if(tag.hasKey("pos2"))
+      {
+      return new BlockPosition(tag.getCompoundTag("pos2"));
+      }
+    }
+  return null;
+  }
+
+//needs addInfo
 //NBT will have a Pos1 and Pos2 (BlockPosition)
 //NBT will have type and rank (store type as dmg)
 //might want left-click to set positions normal, shift-left click to set position w/offset, shift-right click to clear current pos1/2

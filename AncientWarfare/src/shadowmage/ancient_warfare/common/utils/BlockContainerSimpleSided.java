@@ -228,5 +228,12 @@ public TileEntity createNewTileEntity(World world)
   {
   return getNewTileEntity(world, 0);
   }
+
 public abstract TileEntity getNewTileEntity(World world, int meta);
+
+@Override
+public TileEntity createTileEntity(World world, int meta)
+  {
+  return getNewTileEntity(world, meta);
+  }
 }

@@ -59,16 +59,32 @@ public void saveSettings()
   ItemStack stack = player.getCurrentEquippedItem();
   if(stack!=null && stack.itemID == ItemLoader.instance().npcCommandBaton.itemID)
     {
+    NBTTagCompound tag = settings.getNBTTag();
+    tag.setBoolean("save", true);
+    this.sendDataToServer(tag);
     ItemNpcCommandBaton.setBatonSettings(stack, settings);
-    player.openContainer.detectAndSendChanges();
+//    player.openContainer.detectAndSendChanges();
     Config.logDebug("sending changes to server!!");
+    }
+  }
+
+protected void handleSaveServer(NBTTagCompound tag)
+  {
+  this.settings.readFromNBT(tag);
+  ItemStack stack = player.getCurrentEquippedItem();
+  if(stack!=null && stack.itemID == ItemLoader.instance().npcCommandBaton.itemID)
+    {
+    ItemNpcCommandBaton.setBatonSettings(stack, settings);
     }
   }
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  
+  if(tag.hasKey("save"))
+    {
+    this.handleSaveServer(tag);
+    }
   }
 
 @Override

@@ -45,6 +45,7 @@ public static final AWItemBase structureEditor = new ItemCreativeEditor(Config.g
 public static final AWItemBase armorItem = new ItemVehicleArmor(Config.getItemID("itemMulti.vehicleArmor", 13010, "Vehicle Armor Component"));
 public static final AWItemBase npcSpawner = new ItemNpcSpawner(Config.getItemID("itemMulti.npcSpawner", 13011, "Npc Spawning Item"));
 public static final AWItemBase npcCommandBaton = new ItemNpcCommandBaton(Config.getItemID("itemMulti.commandBaton", 13012, "Npc Command Batons"));
+public static final AWItemBase civicPlacer = new ItemCivicPlacer(Config.getItemID("itemMulti.civiPlacer", 13013, "Constructs Civic Buildings/Sites"));
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -93,6 +94,7 @@ private void loadItems()
   this.addSubtypeToItem(npcCommandBaton, 1, "Adept Command Baton", "Issues advanced commands to a single npc");
   this.addSubtypeToItem(npcCommandBaton, 2, "Expert Command Baton", "Issues simple commands to several npcs, or advanced commands to a single npc");
   this.addSubtypeToItem(npcCommandBaton, 3, "Master Command Baton", "Issues advanced commands to several npcs");
+  this.registerItemWithSubtypes(civicPlacer);
   }
 
 private void loadRecipes()

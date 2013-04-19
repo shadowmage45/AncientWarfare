@@ -18,38 +18,24 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.civics.worksite.block;
+package shadowmage.ancient_warfare.common.civics.types;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.civics.BlockStructureControl;
 import shadowmage.ancient_warfare.common.civics.worksite.te.TEWorkSiteFarm;
 
-public class BlockWorkSiteFarm extends BlockStructureControl
+public class CivicFarm extends Civic
 {
 
 /**
- * @param par1
+ * @param id
  */
-public BlockWorkSiteFarm(int par1)
+public CivicFarm(int id, String name, String tooltip)
   {
-  super(par1);
-  }
-
-@Override
-public IInventory[] getInventoryToDropOnBreak(World world, int x, int y,    int z, int par5, int par6)
-  {
-  return null;
-  }
-
-@Override
-public TileEntity getNewTileEntity(World world, int meta)
-  {
-  TEWorkSiteFarm farmSite = new TEWorkSiteFarm();
-  farmSite.worldObj = world;
-  farmSite.structureRank = meta;
-  return null;
+  super(id);
+  this.isWorkSite = true;
+  this.name = name;
+  this.tooltip = tooltip;
+  this.ranks = 3;
+  this.teClass = TEWorkSiteFarm.class;
   }
 
 }

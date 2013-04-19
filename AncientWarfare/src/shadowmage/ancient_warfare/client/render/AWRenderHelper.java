@@ -34,6 +34,8 @@ import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.item.ItemBuilderBase;
 import shadowmage.ancient_warfare.common.item.ItemBuilderDirect;
+import shadowmage.ancient_warfare.common.item.ItemCivicPlacer;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -222,13 +224,17 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
     }  
-  if(ItemBuilderBase.hasScanBB(id))
+  else if(ItemBuilderBase.hasScanBB(id))
     {
     this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks);
     }
-  if(ItemStructureScanner.isScannerItem(id))
+  else if(ItemStructureScanner.isScannerItem(id))
     {
     this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks);
+    }
+  else if(id==ItemLoader.civicPlacer.itemID)
+    {
+    this.renderScannerBB(player, stack, (ItemCivicPlacer)stack.getItem(), evt.partialTicks);
     }
   }
 

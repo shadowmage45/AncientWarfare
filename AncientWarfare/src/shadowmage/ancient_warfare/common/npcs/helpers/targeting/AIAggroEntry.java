@@ -118,6 +118,21 @@ public float posZ()
   return posZ;
   }
 
+public int floorX()
+  {
+  return this.ent==null? MathHelper.floor_double(posX) : MathHelper.floor_double(posX());
+  }
+
+public int floorY()
+  {
+  return this.ent==null? MathHelper.floor_double(posY) : MathHelper.floor_double(posY());
+  }
+
+public int floorZ()
+  {
+  return this.ent==null? MathHelper.floor_double(posZ) : MathHelper.floor_double(posZ());
+  }
+
 public boolean isValidEntry()
   {
   if(!this.isEntityEntry)

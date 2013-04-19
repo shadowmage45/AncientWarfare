@@ -53,7 +53,7 @@ public void addTasks()
 @Override
 public void updatePriority()
   {
-  if(!npc.wayNav.hasHomePoint())
+  if(!npc.wayNav.hasHomePoint() || npc.wayNav.getPatrolSize()>0)
     {
     this.currentPriority = 0;
     }

@@ -20,19 +20,29 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite;
 
+import java.lang.ref.WeakReference;
+
 import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import net.minecraft.util.MathHelper;
+import shadowmage.ancient_warfare.common.civics.WorkType;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 public class WorkPoint
 {
 
-TargetType type;
-protected Entity ent;
+WorkType type;
+protected Entity ent;//target entity
 protected int x;
 protected int y; 
 protected int z;
+private WeakReference<NpcBase> worker = new WeakReference<NpcBase>(null);
+protected int totalHarvestHits = 1;
+protected int currentHarvestHits = 0;
+protected int cooldownTicks = 0;
+protected int maxCooldownTicks = 40;
+protected boolean singleUse = false;
 
-public WorkPoint(int x, int y, int z, TargetType type)
+public WorkPoint(int x, int y, int z, WorkType type)
   {
   this.x = x;
   this.y = y;
@@ -40,10 +50,50 @@ public WorkPoint(int x, int y, int z, TargetType type)
   this.type = type;
   }
 
-public WorkPoint(Entity ent, TargetType type)
+public WorkPoint(Entity ent, WorkType type)
   {
   this.ent = ent;
   this.type = type;
+  }
+
+public void incrementHarvestHits()
+  {
+  this.currentHarvestHits++;
+  }
+
+/**
+ * return if this goal is done (by action/hit count)
+ * @return
+ */
+public boolean shouldFinish()
+  {
+  return this.currentHarvestHits>=this.totalHarvestHits;
+  }
+
+public boolean isSingleUse()
+  {
+  return this.singleUse;
+  }
+
+public void setFinished()
+  {
+  this.cooldownTicks = this.maxCooldownTicks;
+  this.worker = null;
+  }
+
+public void setWorker(NpcBase npc)
+  {
+  this.worker = new WeakReference<NpcBase>(npc);
+  }
+
+public boolean hasWorker()
+  {
+  return this.worker.get()!=null;
+  }
+
+public NpcBase getWorker()
+  {
+  return this.worker.get();
   }
 
 public float posX()
@@ -59,6 +109,31 @@ public float posY()
 public float posZ()
   {
   return (float) (this.ent!=null ? ent.posZ : z);
+  }
+
+public int floorX()
+  {
+  return this.ent==null? x : MathHelper.floor_double(posX());
+  }
+
+public int floorY()
+  {
+  return this.ent==null? y : MathHelper.floor_double(posY());
+  }
+
+public int floorZ()
+  {
+  return this.ent==null? z : MathHelper.floor_double(posZ());
+  }
+
+public Entity getEntityTarget()
+  {
+  return this.ent;
+  }
+
+public boolean isEntityEntry()
+  {
+  return this.ent!=null;
   }
 
 public boolean isEqual(WorkPoint b)

@@ -26,6 +26,9 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
@@ -80,7 +83,9 @@ public int getPatrolSize()
 
 public void clearPatrolPoints()
   {
+  Config.logDebug("clearing patrol points");
   this.patrolPoints.clear();
+  this.currentPatrolPoint = 0;
   }
 
 public void addWayPoint(WayPoint p)
@@ -139,7 +144,23 @@ public void clearHomePoint()
 
 public void setWorkPoint(int x, int y, int z)
   {
-  this.workPoint = new WayPoint(x,y,z, TargetType.WORK);
+  TileEntity te = this.owner.getEntity().worldObj.getBlockTileEntity(x, y, z);
+  if(te instanceof TECivic)
+    {
+    TECivic tec = (TECivic)te;
+    if(tec.getCivic()!=null && tec.getCivic().isWorkSite())
+      {
+      this.workPoint = new WayPoint(x,y,z, TargetType.WORK);
+      }
+    else
+      {
+      this.workPoint = null;
+      }
+    }
+  else
+    {
+    this.workPoint = null;
+    }  
   }
 
 public void clearWorkPoint()
@@ -159,7 +180,23 @@ public WayPoint getWorkPoint()
 
 public void setDepositPoint(int x, int y, int z)
   {
-  this.depositPoint = new WayPoint(x,y,z, TargetType.DEPOSIT);  
+  TileEntity te = this.owner.getEntity().worldObj.getBlockTileEntity(x, y, z);
+  if(te instanceof TECivic)
+    {
+    TECivic tec = (TECivic)te;
+    if(tec.getCivic()!=null && tec.getCivic().isDepository())
+      {
+      this.depositPoint = new WayPoint(x,y,z, TargetType.DEPOSIT);
+      }
+    else
+      {
+      this.depositPoint = null;
+      }
+    }
+  else
+    {
+    this.depositPoint = null;
+    }  
   }
 
 public void clearDepositPoint()
