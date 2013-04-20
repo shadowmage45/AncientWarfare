@@ -70,47 +70,47 @@ public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int 
       cy++;
       nodes.add(new Node(cx,cy,cz));
       }
-    else if (mx!=0 && mz!=0 && world.isWalkable(cx+mx, cy+dy, cz+mz))
-      {
-      boolean add = false;
-      if(mx==1 && mz==1)
-        {
-        if(world.isWalkable(cx, cy, cz+1)&&world.isWalkable(cx+1, cy, cz))
-          {
-          add = true;
-          }
-        }
-      else if(mx==-1 && mz==1)
-        {
-        if(world.isWalkable(cx, cy, cz+1) && world.isWalkable(cx-1, cy, cz))
-          {
-          add = true;
-          }
-        }
-      else if(mx==1 && mz==-1)
-        {
-        if(world.isWalkable(cx+1, cy, cz) && world.isWalkable(cx, cy, cz-1))
-          {
-          add = true;
-          }
-        }
-      else if(mx==-1 && mz==-1)
-        {
-        if(world.isWalkable(cx-1, cy, cz) && world.isWalkable(cx, cy, cz-1))
-          {
-          add = true;
-          }
-        }
-      if(add)
-        {
-        dx = mx;
-        dz = mz;
-        cx+=dx;
-        cy+=dy;
-        cz+=dz;
-        nodes.add(new Node(cx, cy, cz));
-        }
-      }
+//    else if (mx!=0 && mz!=0 && world.isWalkable(cx+mx, cy+dy, cz+mz))
+//      {
+//      boolean add = false;
+//      if(mx==1 && mz==1)
+//        {
+//        if(world.isWalkable(cx, cy, cz+1)&&world.isWalkable(cx+1, cy, cz))
+//          {
+//          add = true;
+//          }
+//        }
+//      else if(mx==-1 && mz==1)
+//        {
+//        if(world.isWalkable(cx, cy, cz+1) && world.isWalkable(cx-1, cy, cz))
+//          {
+//          add = true;
+//          }
+//        }
+//      else if(mx==1 && mz==-1)
+//        {
+//        if(world.isWalkable(cx+1, cy, cz) && world.isWalkable(cx, cy, cz-1))
+//          {
+//          add = true;
+//          }
+//        }
+//      else if(mx==-1 && mz==-1)
+//        {
+//        if(world.isWalkable(cx-1, cy, cz) && world.isWalkable(cx, cy, cz-1))
+//          {
+//          add = true;
+//          }
+//        }
+//      if(add)
+//        {
+//        dx = mx;
+//        dz = mz;
+//        cx+=dx;
+//        cy+=dy;
+//        cz+=dz;
+//        nodes.add(new Node(cx, cy, cz));
+//        }
+//      }
     else if(world.isWalkable(cx+mx, cy+dy, cz+mz))
       {
       dx = mx;
@@ -121,45 +121,45 @@ public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int 
       nodes.add(new Node(cx, cy, cz));
 //      Config.logDebug("adding forwards/target node"+" "+ nodes.get(nodes.size()-1).toString());      
       }
-    else if(dx!=0 && dz!=0 && world.isWalkable(cx+dx, cy+dy, cz+dz))
-      {
-      boolean add = false;
-      if(dx==1 && dz==1)
-        {
-        if(world.isWalkable(cx, cy, cz+1)&&world.isWalkable(cx+1, cy, cz))
-          {
-          add = true;
-          }
-        }
-      else if(dx==-1 && dz==1)
-        {
-        if(world.isWalkable(cx, cy, cz+1) && world.isWalkable(cx-1, cy, cz))
-          {
-          add = true;
-          }
-        }
-      else if(dx==1 && dz==-1)
-        {
-        if(world.isWalkable(cx+1, cy, cz) && world.isWalkable(cx, cy, cz-1))
-          {
-          add = true;
-          }
-        }
-      else if(dx==-1 && dz==-1)
-        {
-        if(world.isWalkable(cx-1, cy, cz) && world.isWalkable(cx, cy, cz-1))
-          {
-          add = true;
-          }
-        }
-      if(add)
-        {        
-        cx+=dx;
-        cy+=dy;
-        cz+=dz;
-        nodes.add(new Node(cx, cy, cz));
-        }
-      }
+//    else if(dx!=0 && dz!=0 && world.isWalkable(cx+dx, cy+dy, cz+dz))
+//      {
+//      boolean add = false;
+//      if(dx==1 && dz==1)
+//        {
+//        if(world.isWalkable(cx, cy, cz+1)&&world.isWalkable(cx+1, cy, cz))
+//          {
+//          add = true;
+//          }
+//        }
+//      else if(dx==-1 && dz==1)
+//        {
+//        if(world.isWalkable(cx, cy, cz+1) && world.isWalkable(cx-1, cy, cz))
+//          {
+//          add = true;
+//          }
+//        }
+//      else if(dx==1 && dz==-1)
+//        {
+//        if(world.isWalkable(cx+1, cy, cz) && world.isWalkable(cx, cy, cz-1))
+//          {
+//          add = true;
+//          }
+//        }
+//      else if(dx==-1 && dz==-1)
+//        {
+//        if(world.isWalkable(cx-1, cy, cz) && world.isWalkable(cx, cy, cz-1))
+//          {
+//          add = true;
+//          }
+//        }
+//      if(add)
+//        {        
+//        cx+=dx;
+//        cy+=dy;
+//        cz+=dz;
+//        nodes.add(new Node(cx, cy, cz));
+//        }
+//      }
     else if(world.isWalkable(cx+dx, cy+dy, cz+dz))
       {
       cx+=dx;

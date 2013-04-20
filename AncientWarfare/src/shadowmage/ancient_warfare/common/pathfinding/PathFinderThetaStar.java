@@ -198,12 +198,12 @@ private void searchLoop()
       }
     this.findNeighbors(currentNode);
     float tent;
-//    isDoor = world.isDoor(currentNode.x, currentNode.y, currentNode.z);
-//    isPDoor = currentNode.parentNode!= null && world.isDoor(currentNode.parentNode.x, currentNode.parentNode.y, currentNode.parentNode.z);   
+    isDoor = world.isDoor(currentNode.x, currentNode.y, currentNode.z);
+    isPDoor = currentNode.parentNode!= null && world.isDoor(currentNode.parentNode.x, currentNode.parentNode.y, currentNode.parentNode.z);   
     boolean isNDoor = false;
     for(Node n : this.searchNodes)
       {     
-//      isNDoor = world.isDoor(n.x, n.y, n.z);
+      isNDoor = world.isDoor(n.x, n.y, n.z);
       //could test for goal here, and if found, set n.f =0, insert to priority q (force to head of line)
       tent = currentNode.g + currentNode.getDistanceFrom(n);
       if(n.closed && tent > n.g)//new path from current node to n (already examined node) is longer than n's current path, disregard
@@ -281,10 +281,10 @@ private boolean canSeeParent(Node n, Node p)
   List<BlockPosition> hits = PathUtils.getPositionsBetween2(n.x, n.z, p.x, p.z);
   for(BlockPosition pos : hits)
     {   
-//    if(world.isDoor(pos.x, pos.y, pos.z))
-//      {
-//      return false;
-//      }
+    if(world.isDoor(pos.x, pos.y, pos.z))
+      {
+      return false;
+      }
     if(!world.isWalkable(pos.x, n.y, pos.z))
       {
       return false;

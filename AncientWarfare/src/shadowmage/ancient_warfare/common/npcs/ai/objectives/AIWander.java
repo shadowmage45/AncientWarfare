@@ -80,8 +80,8 @@ public void onObjectiveStart()
   int z = MathHelper.floor_double(npc.posZ);  
   int tx = x + rng.nextInt(range*2)-range;
   int tz = z + rng.nextInt(range*2)-range;
-  int ty = PathUtils.findClosestYTo(npc.nav.worldAccess, tx, y, tz);
-  List<Node> path = PathUtils.guidedCrawl(npc.nav.worldAccess, x, y, z, tx, ty, tz, 12, rng);
+  int ty = PathUtils.findClosestYTo(npc.getWorldAccess(), tx, y, tz);
+  List<Node> path = PathUtils.guidedCrawl(npc.getWorldAccess(), x, y, z, tx, ty, tz, 12, rng);
   npc.setPath(path);
   if(path.size()>0)
     {

@@ -18,15 +18,29 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.pathfinding.threading;
+package shadowmage.ancient_warfare.common.interfaces;
 
 import java.util.List;
 
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 
-public interface IPathableCallback
+/**
+ * interface for the object responsible for moving an entity from point A -> point B
+ * including path finding/planning
+ * @author Shadowmage
+ *
+ */
+public interface IEntityNavigator
 {
 
-public void onPathFound(List<Node> pathNodes);
+void setMoveToTarget(int x, int y, int z);
+void setCanSwim(boolean swim);
+void setCanOpenDoors(boolean doors);
+void setCanUseLadders(boolean ladders);
+void onMovementUpdate();
+void clearPath();
+void forcePath(List<Node> n);
+List<Node> getCurrentPath();  
+
 
 }

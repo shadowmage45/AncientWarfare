@@ -72,7 +72,7 @@ public void onTick()
       int x = MathHelper.floor_float(bX);
       int y = MathHelper.floor_float(bY);
       int z = MathHelper.floor_float(bZ);
-      y = PathUtils.findClosestYTo(npc.nav.worldAccess, x, y, z); 
+      y = PathUtils.findClosestYTo(npc.getWorldAccess(), x, y, z); 
       bY = y;   
       }
     }
@@ -82,7 +82,7 @@ public void onTick()
     }
   else
     {
-    npc.nav.setMoveTo(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
+    npc.nav.setMoveToTarget(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
     }
   }
 

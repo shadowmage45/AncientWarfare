@@ -40,7 +40,6 @@ IPathableEntity owner;
 Entity entity;
 EntityPath path = new EntityPath();
 public PathWorldAccess worldAccess;
-//public PathScheduler scheduler;
 int targetX;
 int targetY;
 int targetZ;
@@ -273,16 +272,17 @@ public void setPath(List<Node> pathNodes)
   }
 
 protected boolean shouldClaimNextNode()
-  {
-  return this.path.getActivePathSize()>0 && this.targetNode==null || getDistanceFromNode(targetNode)<entity.width;
+  {  
+  return this.path.getActivePathSize()>0 && this.path.getFirstNode()!=null && (this.targetNode==null || getDistanceFromNode(targetNode)<entity.width);
   }
 
 public void moveTowardsCurrentNode()
   {
   this.updateMoveHelper();
   while(this.shouldClaimNextNode())
-    {
+    {    
     this.claimNode();
+    Config.logDebug("claimiing node " + this.targetNode);
     }  
   if(this.targetNode!=null)
     {     
@@ -452,10 +452,5 @@ public void onPathFound(List<Node> pathNodes)
   this.path.addPath(pathNodes);
   }
 
-@Override
-public void onPathFailed(List<Node> partialPathNodes)
-  {
-
-  }
 
 }

@@ -31,6 +31,7 @@ public class PathManager
 {
 
 PathFinderThetaStar staticPather = new PathFinderThetaStar();
+PathFinderThetaStar staticPatherClient = new PathFinderThetaStar();
 
 private PathManager(){}
 private static PathManager instance = new PathManager();
@@ -66,6 +67,15 @@ public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, 
   caller.onPathFound(staticPather.findPath(world, x, y, z, tx, ty, tz, maxRange));
   break;
   }
+  }
+
+public List<Node> findImmediatePath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
+  {
+  if(world.isRemote())
+    {
+    return staticPatherClient.findPath(world, x, y, z, tx, ty, tz, 60);
+    }
+  return staticPather.findPath(world, x, y, z, tx, ty, tz, 60);
   }
 
 public List<Node> findStartPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)

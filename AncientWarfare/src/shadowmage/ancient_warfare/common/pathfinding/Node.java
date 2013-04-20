@@ -59,6 +59,14 @@ public Node(int x, int y, int z, Node parent, Node goal, float g)
   this.f = this.getH(goal)+this.g;
   }
 
+public Node reassign(int x, int y, int z)
+  {
+  this.x = x;
+  this.y = y; 
+  this.z = z;
+  return this;
+  }
+
 
 /**
  * calc travel cost of this node, and set to obstacle if completely unpathable (solid)

@@ -250,12 +250,6 @@ public void onPathFound(List<Node> pathNodes)
   }
 
 @Override
-public void onPathFailed(List<Node> partialPathNodes)
-  {
-  
-  }
-
-@Override
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();

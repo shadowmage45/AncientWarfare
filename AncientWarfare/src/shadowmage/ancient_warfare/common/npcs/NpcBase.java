@@ -43,6 +43,7 @@ import shadowmage.ancient_warfare.common.pathfinding.EntityNavigator;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
+import shadowmage.ancient_warfare.common.pathfinding.navigator.Navigator;
 import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPointNavigator;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -85,7 +86,8 @@ public AIAggroEntry playerTarget = null;
 private AIAggroEntry target = null;
 private NpcAIObjectiveManager aiManager;
 private PathWorldAccessEntity worldAccess;
-public EntityNavigator nav;
+//public EntityNavigator nav;
+public Navigator nav;
 public WayPointNavigator wayNav;
 public NpcInventory inventory;
 
@@ -95,6 +97,8 @@ public NpcInventory inventory;
 public NpcBase(World par1World)
   {
   super(par1World);
+//  this.width = 0.8f;
+//  this.height = 1.8f;
   this.varsHelper = new NpcDummyVarHelper(this);  
   this.targetHelper = new NpcTargetHelper(this);
   this.aiManager = new NpcAIObjectiveManager(this);
@@ -105,8 +109,11 @@ public NpcBase(World par1World)
   this.worldAccess.canOpenDoors = true;
   this.worldAccess.canUseLaders = true;
   this.worldAccess.canSwim = true;
-  this.nav = new EntityNavigator(this);
-  this.nav.canOpenDoors = true;
+  this.nav = new Navigator(this);
+  this.nav.setCanOpenDoors(true);
+  this.nav.setCanSwim(true);
+//  this.nav = new EntityNavigator(this);
+//  this.nav.canOpenDoors = true;
   this.wayNav = new WayPointNavigator(this);
   this.inventory = new NpcInventory(this, 0);
   this.tasks.addTask(1, new EntityAISwimming(this));
@@ -316,7 +323,7 @@ public void onUpdate()
   this.updateArmSwingProgress();
   if(!this.worldObj.isRemote)
     {
-    this.nav.moveTowardsCurrentNode();    
+    this.nav.onMovementUpdate();
     }
   if(target!=null)
     {
@@ -367,7 +374,7 @@ public void handlePacketUpdate(NBTTagCompound tag)
   if(tag.hasKey("path") && this.worldObj.isRemote)
     {
     tag = tag.getCompoundTag("path");
-    this.nav.setMoveTo(tag.getInteger("tx"), tag.getInteger("ty"), tag.getInteger("tz"));
+    this.nav.setMoveToTarget(tag.getInteger("tx"), tag.getInteger("ty"), tag.getInteger("tz"));
 //    Config.log("setting move target client side");
     }
   }
@@ -486,7 +493,7 @@ public boolean isPathableEntityOnLadder()
 @Override
 public void setPath(List<Node> path)
   {
-  this.nav.setPath(path);
+  this.nav.forcePath(path);
   }
 
 @Override
