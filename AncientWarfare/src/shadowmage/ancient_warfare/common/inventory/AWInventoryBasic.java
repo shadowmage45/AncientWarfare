@@ -238,12 +238,12 @@ public boolean canHoldItem(ItemStack filter, int qty)
 
 /**
  * returns the remainder of the items not merged, or null if completely successful 
- * @param filter
+ * @param toMerge
  * @return
  */
-public ItemStack tryMergeItem(ItemStack filter)
+public ItemStack tryMergeItem(ItemStack toMerge)
   {
-  if(filter==null){return null;}
+  if(toMerge==null){return null;}
   ItemStack fromSlot = null;
   for(int i = 0; i < this.getSizeInventory(); i++)
     {
@@ -252,14 +252,14 @@ public ItemStack tryMergeItem(ItemStack filter)
       {
       continue;
       }
-    else if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, filter))
+    else if(fromSlot.itemID==toMerge.itemID && fromSlot.getItemDamage()==toMerge.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, toMerge))
       {
       int decrAmt = fromSlot.getMaxStackSize() - fromSlot.stackSize;
-      decrAmt = decrAmt > filter.stackSize ? filter.stackSize : decrAmt;
-      filter.stackSize -= decrAmt;
+      decrAmt = decrAmt > toMerge.stackSize ? toMerge.stackSize : decrAmt;
+      toMerge.stackSize -= decrAmt;
       fromSlot.stackSize +=decrAmt;
       }
-    if(filter.stackSize<=0)
+    if(toMerge.stackSize<=0)
       {  
       return null;
       }
@@ -269,16 +269,16 @@ public ItemStack tryMergeItem(ItemStack filter)
     fromSlot = this.getStackInSlot(i);
     if(fromSlot==null)//place in slot
       {      
-      this.setInventorySlotContents(i, filter);
-      filter = null;
+      this.setInventorySlotContents(i, toMerge);
+      toMerge = null;
       return null;
       }
     }
-  if(filter!=null && filter.stackSize<=0)
+  if(toMerge!=null && toMerge.stackSize<=0)
     {  
     return null;
     }
-  return filter;
+  return toMerge;
   }
 
 public boolean containsAtLeast(ItemStack filter, int qty)
@@ -327,14 +327,14 @@ public int canHoldMore(ItemStack item)
     {
     return 0;
     }
+  int availCount = 0;
   int emptySlots = this.getEmptySlotCount();
   if(emptySlots>0)
     {
-    return item.getMaxStackSize();
+    availCount = item.getMaxStackSize() * emptySlots;
     }
-  else if(item.getMaxStackSize()>1)
+  if(item.getMaxStackSize()>1)
     {
-    int availCount = 0;
     ItemStack fromSlot;
     for(int i = 0; i < this.getSizeInventory(); i++)
       {
@@ -347,9 +347,8 @@ public int canHoldMore(ItemStack item)
           }
         }
       }
-    return availCount;
     }
-  return 0;
+  return availCount;
   }
 
 /**

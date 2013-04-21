@@ -441,6 +441,7 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("type", this.npcType.getGlobalNpcType());
   tag.setCompoundTag("waypoints", wayNav.getNBTTag());
   tag.setInteger("health", this.getHealth());
+  tag.setCompoundTag("inv", this.inventory.getNBTTag());
   }
 
 @Override
@@ -453,6 +454,10 @@ public void readFromNBT(NBTTagCompound tag)
   this.setNpcType(NpcTypeBase.getNpcType(type), this.rank);
   this.wayNav.readFromNBT(tag.getCompoundTag("waypoints"));
   this.health = tag.getInteger("health");
+  if(tag.hasKey("inv"))
+    {
+    this.inventory.readFromNBT(tag.getCompoundTag("inv"));
+    }
   }
 
 @Override

@@ -86,6 +86,10 @@ public boolean isWalkable(int x, int y, int z)
     {    
     return false;    
     } 
+  else if(id2==Block.fence.blockID || id2 == Block.fenceGate.blockID || id2 == Block.cobblestoneWall.blockID)
+    {
+    return false;
+    }
   return true;
   }
 
@@ -111,10 +115,14 @@ protected boolean isSolidBlock(int id)
     {
     return true;
     }
-  else if(id == block.fence.blockID || id == block.fenceIron.blockID || id == block.cobblestoneWall.blockID || id == block.tilledField.blockID || id == Block.glass.blockID || id== Block.thinGlass.blockID)
+  else if(id == Block.fence.blockID || id == Block.fenceIron.blockID || id == Block.cobblestoneWall.blockID || id == Block.tilledField.blockID || id == Block.glass.blockID || id== Block.thinGlass.blockID)
     {
     return true;
     }  
+  else if(id== Block.woodSingleSlab.blockID || id == Block.stoneSingleSlab.blockID)
+    {
+    return true;
+    }
   else if(block instanceof BlockStairs || block instanceof BlockLeaves)
     {
     return true;
@@ -126,11 +134,6 @@ protected boolean isLadder(int id)
   {
   return id == Block.ladder.blockID || id == Block.vine.blockID;
   }  
-
-protected boolean isLadder(int x, int y, int z)
-  {
-  return this.isLadder(world.getBlockId(x, y, z));
-  }
 
 public boolean isWalkable(int x, int y, int z, Node src)
   {
