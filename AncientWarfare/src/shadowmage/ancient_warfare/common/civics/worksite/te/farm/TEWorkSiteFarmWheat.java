@@ -54,7 +54,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
       worldObj.setBlockWithNotify(point.floorX(), point.floorY(), point.floorZ(), 0);
       ItemStack wheat = ItemStack.copyItemStack(wheatFilter);
       wheat.stackSize = 3;
-      Config.logDebug("adding wheat to inventory!");
+//      Config.logDebug("adding wheat to inventory!");
       wheat = npc.inventory.tryMergeItem(wheat);
       if(wheat!=null)
         {
@@ -62,7 +62,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
         //TODO drop extra on the ground...
         }
       ItemStack seedStack = ItemStack.copyItemStack(seedFilter);
-      Config.logDebug("adding seeds to te inventory");
+//      Config.logDebug("adding seeds to te inventory");
       seedStack = this.inventory.tryMergeItem(seedStack);
       if(seedStack!=null)
         {
