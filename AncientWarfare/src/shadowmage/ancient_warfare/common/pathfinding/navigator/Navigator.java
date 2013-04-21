@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.network.Packet04Npc;
 import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
+import shadowmage.ancient_warfare.common.pathfinding.PathFinderCrawler;
 import shadowmage.ancient_warfare.common.pathfinding.PathManager;
 import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
@@ -61,10 +62,14 @@ protected final Pos3f stuckCheckPosition = new Pos3f(0,0,0);
 protected int stuckCheckTicks = 40;
 protected final int stuckCheckTicksMax = 40;
 
+
+private PathFinderCrawler testCrawler;
 /**
- * TODO stuck timing/detection
  * TODO fallen detection
- * TODO fix when path is set, goes backwards
+ * TODO better handling of when can't find path
+ *    (remember last request(s), if same request/similar and no path, try what??)
+ * TODO crawler needs to test for vertical clearance when moving up/down (see theta)
+ * 
  */
 public Navigator(IPathableEntity owner)
   {
@@ -74,6 +79,7 @@ public Navigator(IPathableEntity owner)
   this.path = new EntityPath();
   finalTarget.reassign(MathHelper.floor_double(entity.posX),MathHelper.floor_double(entity.posY),MathHelper.floor_double(entity.posZ));
   this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
+  this.testCrawler = new PathFinderCrawler();
   }
 
 @Override
@@ -95,26 +101,14 @@ public void setMoveToTarget(int x, int y, int z)
 @Override
 public void onMovementUpdate()
   {  
-//  Config.logDebug("onMovementUpdate");
   this.updateMoveHelper();
   this.detectStuck();
   this.claimNode();
   if(this.currentTarget!=null)
     {
-    if(owner.isPathableEntityOnLadder())
+    if(this.world.canUseLaders)
       {
-      if(currentTarget.y<(int)entity.posY)
-        {
-        entity.motionY = -0.125f;
-        entity.motionX *= 0.5f;
-        entity.motionZ *= 0.5f;
-        }
-      else if(currentTarget.y>(int)entity.posY)
-        {
-        entity.motionY = 0.125f;
-        entity.motionX *= 0.5f;
-        entity.motionZ *= 0.5f;
-        }    
+      this.handleLadderMovement();
       }
     if(this.world.canOpenDoors)
       {
@@ -122,6 +116,25 @@ public void onMovementUpdate()
       }
     float speed = getEntityDistance(currentTarget)<0.5f? owner.getDefaultMoveSpeed() *0.5f : owner.getDefaultMoveSpeed();
     owner.setMoveTo(currentTarget.x+0.5d, currentTarget.y, currentTarget.z+0.5d, speed);
+    }
+  }
+
+protected void handleLadderMovement()
+  {
+  if(owner.isPathableEntityOnLadder())
+    {
+    if(currentTarget.y<(int)entity.posY)
+      {
+      entity.motionY = -0.125f;
+      entity.motionX *= 0.5f;
+      entity.motionZ *= 0.5f;
+      }
+    else if(currentTarget.y>(int)entity.posY)
+      {
+      entity.motionY = 0.125f;
+      entity.motionX *= 0.5f;
+      entity.motionZ *= 0.5f;
+      }    
     }
   }
 
@@ -146,11 +159,14 @@ protected void detectStuck()
   if(this.stuckCheckTicks<=0)
     {
     this.stuckCheckTicks = this.stuckCheckTicksMax;
-    if(entity.getDistance(stuckCheckPosition.x, stuckCheckPosition.y, stuckCheckPosition.z)<1.5d)
+    if(this.currentTarget!=null)
       {
-      Config.logDebug("detecting stuck, clearing path");
-      this.clearPath();
-      this.currentTarget = null;      
+      if(entity.getDistance(stuckCheckPosition.x, stuckCheckPosition.y, stuckCheckPosition.z)<1.5d)
+        {
+//        Config.logDebug("detecting stuck, clearing path");
+        this.clearPath();
+        this.currentTarget = null;      
+        }
       }
     this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
     }
@@ -182,23 +198,31 @@ protected boolean shouldCalculatePath(int ex, int ey, int ez, int tx, int ty, in
 
 protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
-  Config.logDebug("requesting starter path");
-  this.path.setPath(PathUtils.guidedCrawl(world, ex, ey, ez, tx, ty, tz, 60, rng));    
-  Node end = this.path.getEndNode();
-  if(end!=null && (end.x!=tx || end.y!=ty || end.z!=tz))
+ if(PathUtils.canPathStraightToTarget(world, ex, ey, ez, tx, ty, tz))
     {
-    Config.logDebug("requesting full path");
-    this.path.addPath(PathManager.instance().findImmediatePath(world, end.x, end.y, end.z, tx, ty, tz));
+    this.currentTarget = new Node(tx, ty, tz);
+//    Config.logDebug("straight path hit goal");
+    }
+  else
+    {
+//    Config.logDebug("requesting starter path");
+    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 60));    
+    Node end = this.path.getEndNode();
+    if(end!=null && (end.x!=tx || end.y!=ty || end.z!=tz))
+      {
+//      Config.logDebug("requesting full path");
+      PathManager.instance().requestPath(this, world, end.x, end.y, end.z, tx, ty, tz, 60);
+//      this.path.addPath(PathManager.instance().findImmediatePath(world, end.x, end.y, end.z, tx, ty, tz));
+      }  
     }  
   this.stuckCheckTicks = this.stuckCheckTicksMax;
   this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
   Node start = this.path.getFirstNode();
   if(start!=null && getEntityDistance(start)<0.8f && start.y==ey)
     {
-    this.path.claimNode();
-    //skip start node, go directly to second
+    this.path.claimNode();//skip the first node because it is probably behind you, move onto next
     }
-  this.claimNode();
+  this.claimNode();   
   }
 
 protected void doorInteraction()
@@ -231,11 +255,14 @@ protected boolean checkForDoors(int ex, int ey, int ez)
   id = entity.worldObj.getBlockId(ex, ey, ez);
   if(id==doorId)
     {
+    if(hasDoor && (doorPos.x!=ex || doorPos.y!=ey || doorPos.z!=ez))
+      {
+      this.interactWithDoor(doorPos, false);
+      }
     doorPos.x = ex;
     doorPos.y = ey;
-    doorPos.z = ez;
+    doorPos.z = ez;    
     hasDoor = true;
-//    Config.logDebug("found door at: "+doorPos + " entPos: "+entity);
     return true;
     }
   float yaw = entity.rotationYaw;
@@ -269,11 +296,14 @@ protected boolean checkForDoors(int ex, int ey, int ez)
   id = entity.worldObj.getBlockId(x, y, z);
   if(id==doorId)
     {
+    if(hasDoor && (doorPos.x!=x || doorPos.y!=y || doorPos.z!=z))
+      {
+      this.interactWithDoor(doorPos, false);
+      }
     doorPos.x = x;
     doorPos.y = y;
-    doorPos.z = z;
+    doorPos.z = z;    
     hasDoor = true;
-//    Config.logDebug("found door at: "+doorPos);
     return true;
     }  
   return false;
@@ -290,15 +320,16 @@ protected void interactWithDoor(BlockPosition doorPos, boolean open)
 
 protected void claimNode()
   {
-  while((this.currentTarget==null && !isPathEmpty()) || getEntityDistance(currentTarget)<entity.width)
+  if(this.currentTarget==null || this.getEntityDistance(currentTarget)<entity.width)
     {
     this.currentTarget = this.path.claimNode();
-//    Config.logDebug("claimed node "+this.currentTarget+ " left in path: "+path.getActivePathSize());
-    if(this.currentTarget==null)
+    while(this.currentTarget!=null && this.getEntityDistance(currentTarget)<entity.width)
       {
-      break;
+      this.currentTarget = this.path.claimNode();
       }
-    } 
+    this.stuckCheckTicks = this.stuckCheckTicksMax;
+    this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
+    }  
   }
 
 protected float getEntityDistance(Node n)
@@ -351,7 +382,8 @@ public void setCanUseLadders(boolean ladders)
 @Override
 public void onPathFound(List<Node> pathNodes)
   {
-  this.path.addPath(pathNodes);
+//  Config.logDebug("full path request returned");
+  this.path.addPath(world, pathNodes);
   }
 
 @Override
@@ -371,7 +403,7 @@ public void forcePath(List<Node> n)
 @Override
 public List<Node> getCurrentPath()
   {
-  return path.getFullPath();
+  return path.getActivePath();
   }
 
 }

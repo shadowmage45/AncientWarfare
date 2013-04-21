@@ -36,6 +36,7 @@ public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite
   this.tooltip = tooltip;
   this.ranks = 3;
   this.teClass = teClass;
+  this.inventorySize = 9;
   }
 
 }

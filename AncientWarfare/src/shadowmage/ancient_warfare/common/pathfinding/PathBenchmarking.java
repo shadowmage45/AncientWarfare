@@ -41,11 +41,27 @@ private PathFinder pather = new PathFinder();
 private PathFinderThetaStar patherTheta = new PathFinderThetaStar();
 private PathFinderAStarClassic patherClassic = new PathFinderAStarClassic();
 private PathFinderAStar patherOptimized = new PathFinderAStar();
+private PathFinderCrawler crawler = new PathFinderCrawler();
 
 long t;
 long total;
 
 List<PathThreadTestCaller> openCallers = new ArrayList<PathThreadTestCaller>();
+
+public void doBenchmarkRuns()
+  {
+  this.doOptiTests(100);
+  this.doTestJPS(100);
+  this.doTestTheta(100);
+  this.doCrawlerTest(100);
+  this.doWanderTest(100);
+  
+  this.doOptiTests(100);
+  this.doTestJPS(100);
+  this.doTestTheta(100);
+  this.doCrawlerTest(100);
+  this.doWanderTest(100);
+  }
 
 public void doThreadedTests(int maxLength)
   {
@@ -93,6 +109,28 @@ public void doWanderTest(int maxNodes)
       }
     }
   total = 0;   
+  }
+
+public void doCrawlerTest(int maxNodes)
+  {
+    List<Node> path = null;
+  //Config.logDebug("GUIDED CRAWL test::");
+  total = 0;
+  for(int i = 0; i < 100; i++)
+    {
+    t = System.nanoTime();
+    crawler.findPath(world, 1, 1, 1, 40, 1, 40, maxNodes);
+    total += System.nanoTime()-t;
+    }
+  Config.logDebug("100 x NEW GUIDED CRAWL runs: "+total/1000000+"ms   "+ total);
+  if(path!= null)
+    {
+    for(Node n : path)
+      {
+      Config.logDebug(n.toString() + " door: "+ world.isDoor(n.x, n.y, n.z));      
+      }
+    }
+  total = 0;
   }
 
 public void doTestNormal(float maxLength)

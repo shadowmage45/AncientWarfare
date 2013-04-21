@@ -25,6 +25,7 @@ import shadowmage.ancient_warfare.common.block.BlockBuilder;
 import shadowmage.ancient_warfare.common.block.TEBuilder;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarmWheat;
 import shadowmage.ancient_warfare.common.config.Config;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -52,7 +53,7 @@ public void load()
   {
   GameRegistry.registerBlock(builder, "Builder");
   GameRegistry.registerTileEntity(TEBuilder.class, "AWBuilderTE");
-  
+  GameRegistry.registerTileEntity(TEWorkSiteFarmWheat.class, "Wheat Farm");
   GameRegistry.registerTileEntity(TEWorkSiteFarm.class, "AWFarmSiteTE");  
   }
 

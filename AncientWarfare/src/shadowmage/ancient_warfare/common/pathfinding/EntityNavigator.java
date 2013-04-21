@@ -122,7 +122,7 @@ public void setMoveTo(int tx, int ty, int tz)
       {
 //      calcPath = true;
       stuckTicks = 0;
-      List<Node> fullPath = this.path.getFullPath();
+      List<Node> fullPath = this.path.getActivePath();
       float dist = Float.MAX_VALUE;
       int closestNodeIndex = 0;
       Node n = null;
@@ -449,7 +449,7 @@ public List<Node> getCurrentPath()
 public void onPathFound(List<Node> pathNodes)
   {  
   pathNodes.remove(0);
-  this.path.addPath(pathNodes);
+  this.path.addPath(worldAccess, pathNodes);
   }
 
 

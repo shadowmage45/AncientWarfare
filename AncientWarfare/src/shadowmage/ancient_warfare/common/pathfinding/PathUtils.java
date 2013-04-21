@@ -34,6 +34,24 @@ import shadowmage.ancient_warfare.common.utils.Trig;
 public class PathUtils
 {
 
+//sources of a few line-plotting algorithms...most..are..weird
+//http://playtechs.blogspot.com/2007/03/raytracing-on-grid.html
+//http://xnawiki.com/index.php/Voxel_traversal
+//http://www.cse.yorku.ca/~amana/research/grid.pdf
+
+/**
+ * uhh..yah...its freaky...but it finds paths (most of the time), FAST (all of the time)
+ * @param world
+ * @param ex
+ * @param ey
+ * @param ez
+ * @param tx
+ * @param ty
+ * @param tz
+ * @param numOfNodes
+ * @param rng
+ * @return
+ */
 public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int ez, int tx, int ty, int tz, int numOfNodes, Random rng)
   {
   List<Node> nodes = new ArrayList<Node>();
@@ -70,47 +88,6 @@ public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int 
       cy++;
       nodes.add(new Node(cx,cy,cz));
       }
-//    else if (mx!=0 && mz!=0 && world.isWalkable(cx+mx, cy+dy, cz+mz))
-//      {
-//      boolean add = false;
-//      if(mx==1 && mz==1)
-//        {
-//        if(world.isWalkable(cx, cy, cz+1)&&world.isWalkable(cx+1, cy, cz))
-//          {
-//          add = true;
-//          }
-//        }
-//      else if(mx==-1 && mz==1)
-//        {
-//        if(world.isWalkable(cx, cy, cz+1) && world.isWalkable(cx-1, cy, cz))
-//          {
-//          add = true;
-//          }
-//        }
-//      else if(mx==1 && mz==-1)
-//        {
-//        if(world.isWalkable(cx+1, cy, cz) && world.isWalkable(cx, cy, cz-1))
-//          {
-//          add = true;
-//          }
-//        }
-//      else if(mx==-1 && mz==-1)
-//        {
-//        if(world.isWalkable(cx-1, cy, cz) && world.isWalkable(cx, cy, cz-1))
-//          {
-//          add = true;
-//          }
-//        }
-//      if(add)
-//        {
-//        dx = mx;
-//        dz = mz;
-//        cx+=dx;
-//        cy+=dy;
-//        cz+=dz;
-//        nodes.add(new Node(cx, cy, cz));
-//        }
-//      }
     else if(world.isWalkable(cx+mx, cy+dy, cz+mz))
       {
       dx = mx;
@@ -118,55 +95,14 @@ public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int 
       cx+=dx;
       cy+=dy;
       cz+=dz;
-      nodes.add(new Node(cx, cy, cz));
-//      Config.logDebug("adding forwards/target node"+" "+ nodes.get(nodes.size()-1).toString());      
+      nodes.add(new Node(cx, cy, cz)); 
       }
-//    else if(dx!=0 && dz!=0 && world.isWalkable(cx+dx, cy+dy, cz+dz))
-//      {
-//      boolean add = false;
-//      if(dx==1 && dz==1)
-//        {
-//        if(world.isWalkable(cx, cy, cz+1)&&world.isWalkable(cx+1, cy, cz))
-//          {
-//          add = true;
-//          }
-//        }
-//      else if(dx==-1 && dz==1)
-//        {
-//        if(world.isWalkable(cx, cy, cz+1) && world.isWalkable(cx-1, cy, cz))
-//          {
-//          add = true;
-//          }
-//        }
-//      else if(dx==1 && dz==-1)
-//        {
-//        if(world.isWalkable(cx+1, cy, cz) && world.isWalkable(cx, cy, cz-1))
-//          {
-//          add = true;
-//          }
-//        }
-//      else if(dx==-1 && dz==-1)
-//        {
-//        if(world.isWalkable(cx-1, cy, cz) && world.isWalkable(cx, cy, cz-1))
-//          {
-//          add = true;
-//          }
-//        }
-//      if(add)
-//        {        
-//        cx+=dx;
-//        cy+=dy;
-//        cz+=dz;
-//        nodes.add(new Node(cx, cy, cz));
-//        }
-//      }
     else if(world.isWalkable(cx+dx, cy+dy, cz+dz))
       {
       cx+=dx;
       cy+=dy;
       cz+=dz;
-      nodes.add(new Node(cx, cy, cz));
-//      Config.logDebug("adding forwards/continue node"+" "+ nodes.get(nodes.size()-1).toString());      
+      nodes.add(new Node(cx, cy, cz)); 
       }
     else if(world.isWalkable(cx+dx, cy, cz+dz))
       {
@@ -174,8 +110,7 @@ public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int 
       cx+=dx;
       cy+=dy;
       cz+=dz;
-      nodes.add(new Node(cx, cy, cz));
-//      Config.logDebug("adding forwards/level node"+" "+ nodes.get(nodes.size()-1).toString());      
+      nodes.add(new Node(cx, cy, cz));   
       }
     else if(world.isWalkable(cx+dx, cy-1, cz+dz))
       {
@@ -183,8 +118,7 @@ public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int 
       cx+=dx;
       cy+=dy;
       cz+=dz;
-      nodes.add(new Node(cx, cy, cz));
-//      Config.logDebug("adding forwards/down node"+" "+ nodes.get(nodes.size()-1).toString());      
+      nodes.add(new Node(cx, cy, cz));    
       }
     else if(world.isWalkable(cx+dx, cy+1, cz+dz))
       {
@@ -192,8 +126,7 @@ public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int 
       cx+=dx;
       cy+=dy;
       cz+=dz;
-      nodes.add(new Node(cx, cy, cz));
-//      Config.logDebug("adding forwards/up node"+" "+ nodes.get(nodes.size()-1).toString());      
+      nodes.add(new Node(cx, cy, cz));   
       }
     else
       {
@@ -216,7 +149,6 @@ public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int 
         cz+=dz;
         cy+=dy;
         nodes.add(new Node(cx, cy, cz));
-//        Config.logDebug("adding turn/level node. turn: "+turn +" "+ nodes.get(nodes.size()-1).toString());
         }
       else if(world.isWalkable(cx+offset[0], cy-1, cz+offset[1]))
         {
@@ -227,7 +159,6 @@ public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int 
         cz+=dz;
         cy+=dy;
         nodes.add(new Node(cx, cy, cz));
-//        Config.logDebug("adding turn/down node. turn: "+turn+" "+ nodes.get(nodes.size()-1).toString());
         }
       else if(world.isWalkable(cx+offset[0], cy+1, cz+offset[1]))
         {
@@ -238,7 +169,6 @@ public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int 
         cz+=dz;
         cy+=dy;   
         nodes.add(new Node(cx, cy, cz));
-//        Config.logDebug("adding turn/up node. turn: "+turn +" "+ nodes.get(nodes.size()-1).toString());
         }
       }    
     mx = tx - cx;
@@ -247,7 +177,7 @@ public static List<Node> guidedCrawl(PathWorldAccess world, int ex, int ey, int 
     mz = mz< 0 ? -1 : mz > 1? 1 : mz;
     if(cx==tx && cy==ty && cz==tz)
       {
-      Config.logDebug("crawl hit goal");
+//      Config.logDebug("crawl hit goal");
       break;
       }
     }  
@@ -342,45 +272,107 @@ offsets[6] = new int[]{1,0};
 offsets[7] = new int[]{1,1};
 }
 
-public static List<Node> findRandomPath(PathWorldAccess world, int ex, int ey, int ez, int mx, int my, int maxNodes, Random rng)
+public static boolean canPathStraightToTargetLevel(PathWorldAccess worldAccess, int x0, int ey, int z0, int x1, int ty, int z1)
   {
-  List<Node> nodes = new ArrayList<Node>(); 
-  int dx = rng.nextInt(3)-1;
-  int dz = rng.nextInt(3)-1;
-  int cx = ex;
+  if(ey!=ty)
+    {
+    return false;
+    }
+  int dx = (int) Math.abs(x1-x0);
+  int dz = (int) Math.abs(z1-z0);
+  int sx = x0< x1 ? 1 : -1;
+  int sz = z0< z1 ? 1 : -1;
+  int err = dx-dz;
+  int e2;  
+  for(int i = 0; i < dx+dz; i++)
+    {     
+    if(worldAccess.isDoor(x0, ey, z0))
+      {
+      return false;
+      }    
+    else if(!worldAccess.isWalkable(x0, ey, z0))
+      {
+      return false;
+      }  
+    if(x0==x1 && z0==z1)
+      {
+      break;//finished
+      }
+    e2 = 2*err;
+    if(e2>-dz)
+      {
+      err = err-dz;
+      x0 = x0 +sx;
+      }
+    if(e2<dx)
+      {
+      err = err +dx;
+      z0 = z0+sz;
+      }
+    }    
+  return true;
+  }
+
+public static boolean canPathStraightToTarget(PathWorldAccess worldAccess, int ex, int ey, int ez, int tx, int ty, int tz)
+  {
+  int yOffset = ty-ey;
+  int currentY = ey;
+  if(Math.abs(yOffset)>1)
+    {
+    return false;
+    }  
+  int dx = (int) Math.abs(tx-ex);
+  int dz = (int) Math.abs(tz-ez);
+  int sx = ex< tx ? 1 : -1;
+  int sz = ez< tz ? 1 : -1;
+  int err = dx-dz;
+  int e2;  
   int cy = ey;
-  int cz = ez;
-  int tries = 0;
-  while((dx==0 && dz==0) ||!world.isWalkable(cx+dx, cy, cz+dz) && tries<10)
-    {
-    dx = rng.nextInt(3)-1;
-    dz = rng.nextInt(3)-1;
-    tries++;
-    }
-  if(dx==0 && dz==0)
-    {
-    return nodes;
-    }
-  while(world.isWalkable(cx, cy, cz) && nodes.size()<maxNodes)
-    { 
-    nodes.add(new Node(cx, cy, cz));
-    cx+=dx;
-    cz+=dz;
-    if(world.isWalkable(cx+dx, cy, cz+dz))
-      {      
-            
+  for(int i = 0; i < dx+dz; i++)
+    {  
+    //test hit here..., break/return false    
+    if(worldAccess.isDoor(ex, cy, ez))
+      {
+      return false;
       }
-    if(world.isWalkable(cx+dx, cy-1, cz+dz))
-      {      
-      cy--;      
+    if(worldAccess.isWalkable(ex, cy-1, ez))
+      {
+      cy--;
       }
-    else if(world.isWalkable(cx+dx, cy+1, cz+dz))
-      {      
+    else if(worldAccess.isWalkable(ex, cy, ez))
+      {
+      
+      }
+    else if(worldAccess.isWalkable(ex, cy+1, ez))
+      {
       cy++;
-      }        
-    }
-  return nodes;
-  } 
+      }
+    else
+      {
+      return false;
+      }
+    if(Math.abs(cy-ty)>1)
+      {
+      return false;
+      }     
+    if(ex==tx && ez==tz)
+      {
+      break;//finished
+      }
+    e2 = 2*err;
+    if(e2>-dz)
+      {
+      err = err-dz;
+      ex = ex +sx;
+      }
+    if(e2<dx)
+      {
+      err = err +dx;
+      ez = ez+sz;
+      }
+    }    
+  return true;
+  }
 
 public static int[] findClosestValidBlockTo(PathWorldAccess world, int x, int y, int z, int sy)
   {
@@ -442,136 +434,16 @@ public static int findClosestYTo(PathWorldAccess world, int x, int y, int z)
   return -1;
   }
 
-//http://playtechs.blogspot.com/2007/03/raytracing-on-grid.html
-//http://xnawiki.com/index.php/Voxel_traversal
-//http://www.cse.yorku.ca/~amana/research/grid.pdf
-
 /**
- * wewt...only took like....8 tries and a whole day of thinking...but custom written from the ground up.
- * returns all hits (sometimes+1) between vectors 0 and 1 (x0, x1, etc...).  finds exact position hit on the block side as it is crossing into that block (does not maintain side information)
+ * works....converted to pure integer math up above..not sure on the speedup/lack of
  * @param x0
- * @param y0
  * @param z0
  * @param x1
- * @param y1
  * @param z1
  * @return
  */
-public static List<Pos3f> traceRay2(float x0, float y0, float z0, float x1, float y1, float z1)
-  {
-  List<Pos3f> hits = new ArrayList<Pos3f>();
-  
-  float travel = 0;
-  float distance = Trig.getDistance(x0, y0, z0, x1, y1, z1);  
-  float mx = x1-x0;
-  float my = y1-y0;
-  float mz = z1-z0;  
-  boolean invertX = x0<x1;
-  boolean invertY = y0<y1;
-  boolean invertZ = z0<z1;
-  float dx;
-  float dy;
-  float dz;
-  float px;
-  float py;
-  float pz;
-  
-  float pUse;
-  
-  float x = x0;
-  float y = y0;
-  float z = z0;
-  hits.add(new Pos3f(x,y,z));
-  while(travel<distance)
-    {    
-    dx = 1 - (x % 1.f);
-    dy = 1 - (y % 1.f);
-    dz = 1 - (z % 1.f);
-//    if(invertX){dx = 1-dx;}
-//    if(invertY){dy = 1-dy;}
-//    if(invertZ){dz = 1-dz;}
-    px = Math.abs(mx== 0 ? 1.f : dx / mx);
-    py = Math.abs(my== 0 ? 1.f : dy / my);
-    pz = Math.abs(mz== 0 ? 1.f : dz / mz);
-    pUse = px < py ? px : py;
-    pUse = pUse < pz ? pUse : pz;
-    x += mx*pUse;
-    y += my*pUse;
-    z += mz*pUse;
-    hits.add(new Pos3f(x,y,z));
-//    Config.logDebug("hit: "+hits.get(hits.size()-1).toString());
-    travel += distance * pUse;
-    }  
-  return hits;
-  }
-
-public static List<Pos3f> traceRay(float x0, float y0, float z0, float x1, float y1, float z1)
-  {//http://xnawiki.com/index.php/Voxel_traversal
-  
-  /**
-   * ??? on the next 5 lines..
-   */
-  int maxDepth = 60;
-  float len = Trig.getDistance(x0, y0, z0, x1, y1, z1);
-  Vec3 tmp = Vec3.createVectorHelper(x1, y1, z1);
-  tmp =  tmp.normalize();
-  x1 = (float) tmp.xCoord;
-  y1 = (float) tmp.yCoord;
-  z1 = (float) tmp.zCoord;
-  
-  List<Pos3f> hitPositions = new ArrayList<Pos3f>();
-  int x = MathHelper.floor_float(x0);
-  int y = MathHelper.floor_float(y0);
-  int z = MathHelper.floor_float(z0);
-  int stepX = x1 ==0 ? 0 : x1> 0 ? 1 : -1;
-  int stepY = y1 ==0 ? 0 : y1> 0 ? 1 : -1;
-  int stepZ = z1 ==0 ? 0 : z1> 0 ? 1 : -1;
-  Node cellBoundary = new Node(stepX>0? 1 : 0, stepY>0 ? 1 : 0, stepZ>0? 1: 0);
-  float tMaxX = (cellBoundary.x - x0) / x1;
-  float tMaxY = (cellBoundary.y - y0) / y1;
-  float tMaxZ = (cellBoundary.z - z0) / z1;
-  if(Float.isNaN(tMaxX)){tMaxX = Float.POSITIVE_INFINITY;}
-  if(Float.isNaN(tMaxY)){tMaxY = Float.POSITIVE_INFINITY;}
-  if(Float.isNaN(tMaxZ)){tMaxZ = Float.POSITIVE_INFINITY;}
-  
-  float tDeltaX = stepX / x1;
-  float tDeltaY = stepY / y1;
-  float tDeltaZ = stepZ / z1;
-  if(Float.isNaN(tDeltaX)){tDeltaX = Float.POSITIVE_INFINITY;}
-  if(Float.isNaN(tDeltaY)){tDeltaY = Float.POSITIVE_INFINITY;}
-  if(Float.isNaN(tDeltaZ)){tDeltaZ = Float.POSITIVE_INFINITY;}
-  
-  for(int i = 0; i < maxDepth; i++)
-    {    
-    hitPositions.add(new Pos3f(x,y,z));
-//    Config.logDebug("block: "+x+","+y+","+z);
-    if(Trig.getDistance(x0, y0, z0, x, y, z)>=len)
-      {
-      break;//
-      }
-    if(tMaxX < tMaxY && tMaxX <tMaxZ)
-      {
-      x+=stepX;
-      tMaxX += tDeltaX;
-      }
-    else if(tMaxY < tMaxZ)
-      {
-      y += stepY;
-      tMaxY += tDeltaY;
-      }
-    else
-      {
-      z += stepZ;
-      tMaxZ += tDeltaZ;
-      }
-    }  
-  return hitPositions;
-  }
-
-
 public static List<BlockPosition> getPositionsBetween2(float x0, float z0, float x1, float z1)
-  {
-  
+  {  
   //http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
   /**
    * function line(x0, y0, x1, y1)
@@ -626,6 +498,16 @@ public static List<BlockPosition> getPositionsBetween2(float x0, float z0, float
   return blocks;
   }
 
+/**
+ * mostly works, returns a few 'odd' hits...
+ * @param x0
+ * @param y0
+ * @param z0
+ * @param x1
+ * @param y1
+ * @param z1
+ * @return
+ */
 public static List<BlockPosition> getPositionsBetween(float x0, float y0, float z0, float x1, float y1, float z1)
   {//4-connected line alg...from..somewhere online (stack overflow post)
 /**

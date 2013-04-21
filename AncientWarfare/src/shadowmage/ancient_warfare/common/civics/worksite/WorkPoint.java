@@ -31,7 +31,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 public class WorkPoint
 {
 
-WorkType type;
+protected WorkType type;
 protected Entity ent;//target entity
 protected int x;
 protected int y; 
@@ -55,12 +55,17 @@ public WorkPoint(Entity ent, WorkType type)
   this.type = type;
   }
 
+public WorkType getWorkType()
+  {
+  return this.type;
+  }
+
 /**
  * overridable method to determine if a point has work
  * resets internal canStart flag dependant upon if work is available at this point
  * @return
  */
-public boolean pointHasWork(World world)
+public boolean hasWork(World world)
   {
   return true;
   }
@@ -75,6 +80,9 @@ public void incrementHarvestHits()
   this.currentHarvestHits++;
   }
 
+/**
+ * pretty much a hack to exit early from working a node
+ */
 public void setHarvestHitToMax()
   {
   this.currentHarvestHits = this.totalHarvestHits;
@@ -194,7 +202,7 @@ public boolean equals(Object obj)
     return true;
   if (obj == null)
     return false;
-  if (getClass() != obj.getClass())
+  if (!(obj instanceof WorkPoint))
     return false;
   WorkPoint other = (WorkPoint) obj;
   if (type != other.type)
@@ -207,7 +215,5 @@ public boolean equals(Object obj)
     return false;
   return true;
   }
-
-
 
 }

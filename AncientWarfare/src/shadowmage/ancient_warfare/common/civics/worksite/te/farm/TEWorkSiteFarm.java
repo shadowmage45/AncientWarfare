@@ -29,6 +29,8 @@ import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.WorkType;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPointFarm;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 public abstract class TEWorkSiteFarm extends TECivic
@@ -46,29 +48,18 @@ public TEWorkSiteFarm()
 @Override
 public boolean onInteract(World world, EntityPlayer player)
   {
+  if(!world.isRemote)
+    {
+    GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);
+    }
   //TODO set a control GUI
-  return false;
+  return true;
   }
 
+@Override
 public void updateWorkPoints()
   {
-  Iterator<WorkPoint> it = this.workedPoints.iterator();  
-  WorkPointFarm p;
-  WorkType t = null;
-  it = this.fallowWorkPoints.iterator();
-  while(it.hasNext())
-    {
-    p = (WorkPointFarm) it.next();
-    if(p==null || !p.isValidEntry(worldObj))
-      {
-      it.remove();
-      }
-    else if(p.pointHasWork(worldObj))
-      {
-      it.remove();
-      this.workQueue.add(p);
-      }
-    }
+  super.updateWorkPoints();
   for(int x = this.minX; x<=this.maxX; x++)
     {
     for(int y = this.minY; y<=this.maxY; y++)
@@ -98,17 +89,9 @@ protected void updateOrAddWorkPoint(int x, int y, int z)
     return;
     }
   p = new WorkPointFarm(x,y,z, t, mainBlockID, mainBlockMatureMeta);
-  if(!p.isValidEntry(worldObj) || this.workedPoints.contains(p)||this.fallowWorkPoints.contains(p)||this.workQueue.contains(p))
-    {
-    return;
-    }
-  if(p.pointHasWork(worldObj))
-    {
-    this.workQueue.add(p);
-    }
-  else
-    {
-    this.fallowWorkPoints.add(p);
+  if(!this.workPoints.contains(p))
+    {    
+    this.workPoints.add(p);
     }
   }
 

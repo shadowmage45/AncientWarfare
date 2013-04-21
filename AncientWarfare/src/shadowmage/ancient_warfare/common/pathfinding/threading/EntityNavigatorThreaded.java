@@ -156,7 +156,7 @@ public List<Node> getCurrentPath()
 public void onPathFound(List<Node> pathNodes)
   {
 //  Config.logDebug("thread returned path");
-  this.path.addPath(pathNodes);
+  this.path.addPath(worldAccess, pathNodes);
 //  Config.logDebug("added: "+pathNodes.size()+ " nodes from thread pathfind");
   }
 

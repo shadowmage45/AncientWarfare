@@ -187,15 +187,15 @@ private void searchLoop()
       break;
       }
     currentNode.closed = true;//close the node immediately (equivalent of adding to closed list)
-    if(canSeeParent(currentNode, goalCache))
-      {
-//      Config.logDebug("hit goal cache, yeah..early out");
-      goalCache.parentNode = currentNode;
-      goalCache.g = currentNode.g + goalCache.getDistanceFrom(currentNode);
-      goalCache.f = goalCache.g + 0;//its the goal;
-      currentNode = goalCache;
-      break;
-      }
+//    if(canSeeParent(currentNode, goalCache))
+//      {
+////      Config.logDebug("hit goal cache, yeah..early out");
+//      goalCache.parentNode = currentNode;
+//      goalCache.g = currentNode.g + goalCache.getDistanceFrom(currentNode);
+//      goalCache.f = goalCache.g + 0;//its the goal;
+//      currentNode = goalCache;
+//      break;
+//      }
     this.findNeighbors(currentNode);
     float tent;
     isDoor = world.isDoor(currentNode.x, currentNode.y, currentNode.z);
@@ -269,28 +269,11 @@ private boolean shouldTerminateEarly()
 
 private boolean canSeeParent(Node n, Node p)
   {
-//  return false;
-  if(p==null)
+  if(p==null || n==null)
     {
     return false;
     }
-  if(n.y!=p.y)
-    {
-    return false;
-    }  
-  List<BlockPosition> hits = PathUtils.getPositionsBetween2(n.x, n.z, p.x, p.z);
-  for(BlockPosition pos : hits)
-    {   
-    if(world.isDoor(pos.x, pos.y, pos.z))
-      {
-      return false;
-      }
-    if(!world.isWalkable(pos.x, n.y, pos.z))
-      {
-      return false;
-      }
-    }
-  return true;
+  return PathUtils.canPathStraightToTargetLevel(world, n.x, n.y, n.z, p.x, p.y, p.z);
   }
 
 private void findNeighbors(Node n)

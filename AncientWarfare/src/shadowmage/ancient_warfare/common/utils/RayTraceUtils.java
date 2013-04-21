@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -95,5 +96,65 @@ public static MovingObjectPosition tracePath(World world, float x, float y, floa
   return blockHit;
   }
 
+
+/**
+ * wewt...only took like....8 tries and a whole day of thinking...but custom written from the ground up.
+ * returns all hits (sometimes+1) between vectors 0 and 1 (x0, x1, etc...).  finds exact position hit on the block side as it is crossing into that block (does not maintain side information)
+ * (only it doesn't work if any _1 coord is < the corresponding _0 coord (e.g. x1 < x0))
+ * @param x0
+ * @param y0
+ * @param z0
+ * @param x1
+ * @param y1
+ * @param z1
+ * @return
+ */
+public static List<Pos3f> traceRay2(float x0, float y0, float z0, float x1, float y1, float z1)
+  {
+  List<Pos3f> hits = new ArrayList<Pos3f>();
+  
+  float travel = 0;
+  float distance = Trig.getDistance(x0, y0, z0, x1, y1, z1);  
+  float mx = x1-x0;
+  float my = y1-y0;
+  float mz = z1-z0;  
+  boolean invertX = x0<x1;
+  boolean invertY = y0<y1;
+  boolean invertZ = z0<z1;
+  float dx;
+  float dy;
+  float dz;
+  float px;
+  float py;
+  float pz;
+  
+  float pUse;
+  
+  float x = x0;
+  float y = y0;
+  float z = z0;
+  hits.add(new Pos3f(x,y,z));
+  while(travel<distance)
+    {    
+    dx = 1 - (x % 1.f);
+    dy = 1 - (y % 1.f);
+    dz = 1 - (z % 1.f);
+//    if(invertX){dx = 1-dx;}
+//    if(invertY){dy = 1-dy;}
+//    if(invertZ){dz = 1-dz;}
+    px = Math.abs(mx== 0 ? 1.f : dx / mx);
+    py = Math.abs(my== 0 ? 1.f : dy / my);
+    pz = Math.abs(mz== 0 ? 1.f : dz / mz);
+    pUse = px < py ? px : py;
+    pUse = pUse < pz ? pUse : pz;
+    x += mx*pUse;
+    y += my*pUse;
+    z += mz*pUse;
+    hits.add(new Pos3f(x,y,z));
+//    Config.logDebug("hit: "+hits.get(hits.size()-1).toString());
+    travel += distance * pUse;
+    }  
+  return hits;
+  }
 
 }

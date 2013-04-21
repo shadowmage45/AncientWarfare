@@ -28,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
@@ -42,8 +43,9 @@ public class WayPointNavigator implements IPathableCallback, INBTTaggable
 
 IPathableEntity owner;
 WayPoint homePoint = null;
-WayPoint workPoint = null;
+WayPoint workSitePoint = null;
 WayPoint depositPoint = null;
+WorkPoint workPoint;
 List<WayPointPath> wayPaths = new ArrayList<WayPointPath>();
 List<WayPoint> wayPoints = new ArrayList<WayPoint>();
 List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
@@ -122,6 +124,16 @@ public void clearWayPoints()
   this.searchPointB = null;
   }
 
+public WorkPoint getWorkPoint()
+  {
+  return this.workPoint;
+  }
+
+public void setWorkPoint(WorkPoint point)
+  {
+  this.workPoint = point;
+  }
+
 public void setHomePoint(int x, int y, int z)
   {
   this.homePoint = new WayPoint(x,y,z, TargetType.SHELTER);
@@ -142,7 +154,7 @@ public void clearHomePoint()
   this.homePoint = null;
   }
 
-public void setWorkPoint(int x, int y, int z)
+public void setWorkSitePoint(int x, int y, int z)
   {
   TileEntity te = this.owner.getEntity().worldObj.getBlockTileEntity(x, y, z);
   if(te instanceof TECivic)
@@ -150,32 +162,32 @@ public void setWorkPoint(int x, int y, int z)
     TECivic tec = (TECivic)te;
     if(tec.getCivic()!=null && tec.getCivic().isWorkSite())
       {
-      this.workPoint = new WayPoint(x,y,z, TargetType.WORK);
+      this.workSitePoint = new WayPoint(x,y,z, TargetType.WORK);
       }
     else
       {
-      this.workPoint = null;
+      this.workSitePoint = null;
       }
     }
   else
     {
-    this.workPoint = null;
+    this.workSitePoint = null;
     }  
   }
 
-public void clearWorkPoint()
+public void clearWorkSitePoint()
   {
-  this.workPoint = null;
+  this.workSitePoint = null;
   }
 
-public boolean hasWorkPoint()
+public boolean hasWorkSitePoint()
   {
-  return this.workPoint!=null;
+  return this.workSitePoint!=null;
   }
 
-public WayPoint getWorkPoint()
+public WayPoint getWorkSitePoint()
   {
-  return this.workPoint;
+  return this.workSitePoint;
   }
 
 public void setDepositPoint(int x, int y, int z)
@@ -269,9 +281,9 @@ public NBTTagCompound getNBTTag()
     {
     tag.setCompoundTag("home", this.homePoint.getNBTTag());
     }  
-  if(this.workPoint!=null)
+  if(this.workSitePoint!=null)
     {
-    tag.setCompoundTag("work", this.workPoint.getNBTTag());    
+    tag.setCompoundTag("work", this.workSitePoint.getNBTTag());    
     }
   if(this.depositPoint!=null)
     {
@@ -301,7 +313,7 @@ public void readFromNBT(NBTTagCompound tag)
     }
   if(tag.hasKey("work"))
     {
-    this.workPoint = new WayPoint(tag.getCompoundTag("work"));
+    this.workSitePoint = new WayPoint(tag.getCompoundTag("work"));
     }
   if(tag.hasKey("deposit"))
     {

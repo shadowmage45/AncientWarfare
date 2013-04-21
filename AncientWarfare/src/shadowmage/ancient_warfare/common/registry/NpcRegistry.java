@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
 import shadowmage.ancient_warfare.common.npcs.types.NpcDummy;
 import shadowmage.ancient_warfare.common.npcs.types.NpcFootsoldier;
 import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
+import shadowmage.ancient_warfare.common.npcs.types.NpcSoldierTest;
 import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
 
 
@@ -48,6 +49,7 @@ public static INpcType npcVillager = new NpcVillager(1);
 public static INpcType npcFootSoldier = new NpcFootsoldier(2);
 public static INpcType npcArcher = new NpcArcher(3);
 public static INpcType npcSiegeEngineer = new NpcSiegeEngineer(4);
+public static INpcType npcTest = new NpcSoldierTest(5);
 
 private NpcRegistry(){}
 private static NpcRegistry INSTANCE;

@@ -26,28 +26,21 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import shadowmage.ancient_warfare.common.config.Config;
+
 public class PathFinderCrawler
 {
-
-/**
- * OPEN-LIST
- */
-private PriorityQueue<Node> qNodes = new PriorityQueue<Node>();
 
 /**
  * a list of all working-set nodes, both open and closed.  used to prevent spurious object creation
  * as well as keep already visited but closed nodes scores valid and cached, as well as for pulling
  * live nodes from the 'open-list' without having to manually synch them back in/update values
  */
-private ArrayList<Node> allNodes = new ArrayList<Node>();
+private ArrayList<CrawlNode> allNodes = new ArrayList<CrawlNode>();
 
-/**
- * current-node neighbors, just a cached list..
- */
-private ArrayList<Node> searchNodes = new ArrayList<Node>();
+private CrawlNode currentNode;
 
-private Node currentNode;
-
+LinkedList<Node> path = new LinkedList<Node>();
 /**
  * start and target points
  */
@@ -57,112 +50,448 @@ int sz;
 int tx;
 int ty;
 int tz;
-int minx;
-int miny;
-int minz;
-int maxx;
-int maxy;
-int maxz;
-int searchBufferRange = 10;
-int maxRange = 80;
+int maxRange;
 PathWorldAccess world;
-long startTime;
-public long maxRunTime = 15000000l;//15ms, default time..public so may be overriden at run-time...must be reset between runs
-public long maxSearchIterations = 600;
-public boolean quickStop = false;
-private Node bestEndNode = null;
-private float bestPathLength = 0.f;
-private float bestPathDist = Float.POSITIVE_INFINITY;
-private int searchIteration;
 
 public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
   {  
   this.world = world;
-  this.sx = x;
-  this.sy = y;
-  this.sz = z;
+  this.sx = this.cx = x;
+  this.sy = this.cy = y;
+  this.sz = this.cz = z;
   this.tx = tx;
   this.ty = ty;
   this.tz = tz;
   this.maxRange = maxRange;  
-  minx = x < tx? x : tx;
-  maxx = x < tx? tx : x;
-  miny = y < ty? y : ty;
-  maxy = y < ty? ty : y;
-  minz = z < tz? z : tz;
-  maxz = z < tz? tz : z;
-  minx-=searchBufferRange;
-  maxx+=searchBufferRange;
-  miny-=searchBufferRange;
-  maxy+=searchBufferRange;
-  minz-=searchBufferRange;
-  maxz+=searchBufferRange;
-  this.startTime = System.nanoTime();  
   this.currentNode = getOrMakeNode(sx, sy, sz, null);
-  this.currentNode.g = 0;
-  this.currentNode.f = this.currentNode.getH(tx, ty, tz);
-  this.qNodes.offer(this.currentNode);
-  this.bestEndNode = this.currentNode;
-  this.bestPathLength = 0;
-  this.bestPathDist = Float.POSITIVE_INFINITY;
+  this.path.clear();
   this.searchLoop();
-  LinkedList<Node> path = new LinkedList<Node>();
-  Node n = this.currentNode;
-  Node c = null;
+  LinkedList<Node> foundPath = new LinkedList<Node>();
   Node p = null;
-//  Config.logDebug("theta path:");
-  while(n!=null)
+  Node n = null;  
+  boolean skip = false;
+  for(int i = 0; i < this.path.size(); i++)
     {
-    p = c;
-    c = new Node(n.x, n.y, n.z);
-    c.parentNode = p;
-    path.push(c);
-//    Config.logDebug(c.toString());
-    n = n.parentNode;
+    //loop through from the beginning to end
+    //  loop through from end to current in outer loop
+    //    if current in inner loop can see current in outer loop
+    //      skip everything inbetween
+    //    else add current node in outer loop to returned path
+    n = this.path.get(i);
+    for(int k = this.path.size()-1; k > i; k--)
+      {
+      p = this.path.get(k);
+      if(PathUtils.canPathStraightToTarget(world, n.x, n.y, n.z, p.x, p.y, p.z))
+        {
+        i = k-1;//set it so next i run starts at where we found
+        break;
+        }
+      }
+    foundPath.add(new Node(n.x, n.y, n.z));
+//    Config.logDebug(n.toString());
     }
-//  Config.logDebug("end-theta path:");
+  if(cx==tx && cy==ty && cz==tz)
+    {
+    foundPath.add(new Node(tx, ty, tz));
+//    Config.logDebug(foundPath.get(foundPath.size()-1).toString());
+    }
   this.currentNode = null;
   this.world = null; 
-  this.bestEndNode = null;
   this.allNodes.clear();
-  this.qNodes.clear();
-  this.searchNodes.clear();
-  return path;
+  this.path.clear();
+  return foundPath;
+  }
+
+
+int cx;
+int cy;
+int cz;
+int dx;//current move test x
+int dy;//current move test y
+int dz;//current move test z
+int pdx;
+int pdy;
+int pdz;
+int pcx;
+int pcy;
+int pcz;
+int gx;//goal direction x
+int gy;//goal direction y
+int gz;//goal direction z
+int xDiff;
+int yDiff;
+int zDiff;
+boolean followingWall = false;
+int turnDir = 1;//right turn, may toggle to left in the future
+/**
+ * needs to be integer based, only keeping a list of path found (for reference of breaking purposes)
+ *    (doing it list-based is far too slow (e.g. lookups when creating nodes, etc))
+ * 
+ * if can see goal node, set found, add goal to path, link 
+ *    break;/return;
+ * else if can move towards goal in one axis or another, not crossing path, and turn direction to move towards goal is not opposite preferred direction
+ *    if already moving in an axis, continue
+ *    else set direction to largest axis difference
+ *  else if was following a wall and there is now a break in that direction, turn in that direction and move (opposite preferred direction), set following wall to false
+ *    if would cross path -- call findLastTurnablePoint
+ *  else if can continue in current direction, do so    
+ *    if would cross path -- call findLastTurnablePoint
+ *  else if can't move forward, turn in preferred direction, set following wall to true
+ *    if would cross path -- call findLastTurnablePoint
+ *  else
+ *    call findLastTurnablePoint
+ *  
+ *  if newPos==oldPos, break;
+ *  else can move = true
+ *  
+ *  if can move  
+ *    if move direction is not the only direction possible open direction, set hadTurns to true/add turn directions
+ *    move
+ *    link previous node to new node
+ *  
+ *  findLastTurnablePoint:
+ *    look at nodes in path, see which ones had 'turns' in them
+ *      find most recent set next preferred turn to false if it is not already explored
+ *        return new position and move direction, currentPosition for none;
+ *  
+ */
+
+
+protected void setInitialDirection()
+  {
+  if(Math.abs(xDiff)>Math.abs(zDiff))//pick a single direction to move, no diagonals
+    {
+    dx = gx;
+    dz = 0;
+    if(!world.isWalkable(cx+dx, cy, cz) && !world.isWalkable(cx+dx, cy+1, cz) && !world.isWalkable(cx, cy-1, cz))
+      {
+      dx = 0;
+      dz = gz;
+      }
+    }
+  else
+    {
+    dz = gz;
+    dx = 0;
+    if(!world.isWalkable(cx, cy, cz+dz) && !world.isWalkable(cx, cy+1, cz+dz) && !world.isWalkable(cx, cy-1, cz+dz) )
+      {
+      dz = 0;
+      dx = gx;
+      }    
+    }  
   }
 
 protected void searchLoop()
   {
-  while (currentNode.x!=tx || currentNode.y!=ty || currentNode.z !=tz)
+  calcTargetDirection();
+  this.setInitialDirection();  
+  dy = 0; 
+  if(dx==0 && dz==0)
     {
-    
-    
+    this.path.add(currentNode);
+    return;
+    }
+  Node newNode = null;
+  for(int i = 0; i < this.maxRange && (cx!=tx || cy!=ty || cz !=tz); i++)
+    {    
+    this.path.add(currentNode);
+    pdx = dx;
+    pdy = dy;
+    pdz = dz;
+    pcx = cx;
+    pcy = cy;
+    pcz = cz;
+    if(tryPathDirectlyToTarget())
+      {
+      break;
+      }
+    if(tryMoveTowardsGoal())
+      {
+      continue;
+      }    
+    if(tryFollowWall())
+      {
+      continue;
+      }
+    dx = pdx;
+    dz = pdz;
+    dy = pdy;
+    if(tryMoveStraight())
+      {
+      continue;
+      }
+    if(tryTurn())
+      {
+      continue;      
+      }
+    if(!tryFindLastTurn())
+      {
+      break;
+      }
+    if(dx==0 && dy==0 && dz ==0)//could not move/tried moving nowhere
+      {
+      break;
+      }
+    if(pcx==cx &&pcy==cy && pcz==cz)//did not move
+      {
+      break;
+      }
+    } 
+  if(cx==tx && cy==ty && cz==tz)
+    {    
+    path.add(new Node(tx, ty, tz));
+//    Config.logDebug("hit goal");
     }
   }
 
-protected boolean canMoveDiagonal(Node c, int dx, int dz)
-  {
-  return true;
+protected boolean tryMoveTowardsGoal()
+  {  
+  this.calcTargetDirection();
+  if(Math.abs(xDiff)>Math.abs(zDiff))//pick a single direction to move, no diagonals
+    {
+    dx = gx;
+    dz = 0;
+    if(dx!=0)
+      {
+      if(tryMoveStraight())
+        {
+        return true;
+        }
+      }
+    }
+  else
+    {
+    dz = gz;
+    dx = 0;
+    if(dz!=0)
+      {
+      if(tryMoveStraight())
+        {
+        return true;
+        }
+      }
+    }  
+  return false;
   }
 
-private Node getOrMakeNode(int x, int y, int z, Node p)
+/**
+ * if following wall, try and turn opposite of preferred turn direction
+ * @return
+ */
+protected boolean tryFollowWall()
   {
-  Node n = null;
-  for(Node c : this.allNodes)
+//  if(followingWall)
+//    {
+////    Config.logDebug("following wall");
+//    dx = pdx;
+//    dz = pdz;
+//    if(dx!=0)//collided on x, set x to 0, find z
+//      {
+//      dx = 0;
+//      dz = -getZforTurn(dz);
+//      if(tryMoveStraight())
+//        {
+//        followingWall = false;
+//        return true;
+//        }
+//      }
+//    else if(dz!=0)//collided on z, set z to 0, find x
+//      {
+//      dz = 0;
+//      dx = -getXforTurn(dx);
+//      if(tryMoveStraight())
+//        {
+//        followingWall = false;
+//        return true;
+//        }
+//      } 
+//    }
+  return false;
+  }
+
+protected boolean tryMoveStraight()
+  {
+  //  Config.logDebug("trying straight - level");
+  if(world.isWalkable(cx, cy+1, cz) && ty>cy)
+    {
+    dy = 1;
+    cy+=dy;
+    this.currentNode = getOrMakeNode(cx, cy, cz, currentNode);
+    return true;
+    }
+  if(world.isWalkable(cx, cy-1, cz) && ty<cy)
+    {
+    dy = -1;
+    cy+=dy;
+    this.currentNode = getOrMakeNode(cx, cy, cz, currentNode);
+    return true;
+    }
+  if(world.isWalkable(cx+dx, cy, cz+dz))
+    {
+    dy = 0;
+    cx+=dx;
+    cz+=dz;
+    cy+=dy;
+    this.currentNode = getOrMakeNode(cx, cy, cz, currentNode);
+    return true;
+    }
+  //  Config.logDebug("trying straight - up");
+  if(world.isWalkable(cx+dx, cy+1, cz+dz))
+    {
+    dy = 1;
+    cx+=dx;
+    cz+=dz;
+    cy+=dy;
+    this.currentNode = getOrMakeNode(cx, cy, cz, currentNode);
+    return true;
+    }
+  //  Config.logDebug("trying straight - down");
+  if(world.isWalkable(cx+dx, cy-1, cz+dz))
+    {
+    dy = -1;
+    cx+=dx;
+    cz+=dz;
+    cy+=dy;
+    this.currentNode = getOrMakeNode(cx, cy, cz, currentNode);
+    return true;
+    }
+  return false;
+  }
+
+protected boolean tryTurn()
+  {
+  dx = pdx;
+  dz = pdz;
+  if(dx!=0)//collided on x, set x to 0, find z
+    {
+    dx = 0;
+    dz = getZforTurn(dz);
+    if(tryMoveStraight())
+      {
+//      Config.logDebug("turning z");
+      followingWall = true;
+      return true;
+      }
+    }
+  else if(dz!=0)//collided on z, set z to 0, find x
+    {
+    dz = 0;
+    dx = getXforTurn(dx);
+    if(tryMoveStraight())
+      {
+//      Config.logDebug("turning x");
+      followingWall = true;
+      return true;
+      }
+    }  
+  return false;
+  }
+
+/**
+ * called when moving in Z direction to turn left/right
+ * @param dx
+ * @return
+ */
+protected int getXforTurn(int dx)
+  {
+  if(pcz<cz)
+    {
+    dx = turnDir;
+    }
+  else if(pcz>cz)
+    {
+    dx = -turnDir;
+    }
+  else
+    {
+    dx = 0;
+    }  
+  return dx;
+  }
+
+protected int getZforTurn(int dz)
+  {
+  if(pcx<cx)
+    {
+    dz = turnDir;
+    }
+  else if(pcx>cx)
+    {
+    dz = -turnDir;
+    }
+  else
+    {
+    dz = 0;
+    }  
+  return dz;
+  }
+
+protected boolean tryFindLastTurn()
+  {
+  return false;
+  }
+
+protected boolean tryPathDirectlyToTarget()
+  {
+  //TODO post-path smoothing..or something..as it is too costly to check node -> goal at every move (3ms->11ms for 100x runs)
+//  if(PathUtils.canPathStraightToTarget(world, cx, cy, cz, tx, ty, tz))
+//    {
+//    currentNode = getOrMakeNode(tx, ty, tz, currentNode);//new Node(tx, ty, tz);
+//    return true;
+//    }
+  return false;
+  }
+
+protected void calcTargetDirection()
+  {
+  gx = tx-cx;
+  gy = ty-cy;
+  gz = tz-cz;
+  xDiff = gx;
+  yDiff = gy;
+  zDiff = gz;
+  gx = gx < 0 ? -1 : gx > 0 ? 1 : 0;
+  gy = gy < 0 ? -1 : gy > 0 ? 1 : 0;
+  gz = gz < 0 ? -1 : gz > 0 ? 1 : 0;
+  }
+
+private CrawlNode getOrMakeNode(int x, int y, int z, Node p)
+  {
+  CrawlNode n = null;
+  for(CrawlNode c : this.allNodes)
     {
     if(c.equals(x, y, z))
       {
       return c;
       }
     }
-  n = new Node(x,y,z);
-  if(p!=null)
-    {
-    n.travelCost = world.getTravelCost(x, y, z);
-    n.parentNode = p;
-    n.g = p.g + n.getDistanceFrom(p)+n.travelCost;
-    n.f = n.g + n.getDistanceFrom(tx, ty, tz);
-    }  
+  n = new CrawlNode(x,y,z);
+//  if(p!=null)
+//    {
+//    n.travelCost = world.getTravelCost(x, y, z);
+//    n.parentNode = p;
+//    n.g = p.g + n.getDistanceFrom(p)+n.travelCost;
+//    n.f = n.g + n.getDistanceFrom(tx, ty, tz);
+//    }  
   allNodes.add(n);
   return n;
   }
+
+private class CrawlNode extends Node
+{
+/**
+ * @param bX
+ * @param bY
+ * @param bZ
+ */
+public CrawlNode(int bX, int bY, int bZ)
+  {
+  super(bX, bY, bZ);
+  // TODO Auto-generated constructor stub
+  }
+
+
+}
+
+
 }

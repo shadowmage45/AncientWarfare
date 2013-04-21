@@ -32,7 +32,7 @@ import shadowmage.ancient_warfare.common.pathfinding.Node;
 public class RenderDebugPath
 {
 
-static float range = 30;
+static float range = 90;
 public static void renderPaths(World world, EntityPlayer player, float partialTick)
   {  
   AxisAlignedBB bb = AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(player.posX-range, player.posY-range, player.posZ-range, player.posX+range, player.posY+range, player.posZ+range);

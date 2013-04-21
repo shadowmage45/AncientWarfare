@@ -171,6 +171,143 @@ public void setInventorySlotContents(int stackIndex, ItemStack newContents)
     }
   }
 
+public ItemStack getItems(ItemStack filter, int max)
+  {
+  if(filter==null){ return null;}
+  ItemStack toReturn = null;
+  ItemStack fromSlot = null;
+  ItemStack tempCopy = null;
+  max = max> filter.getMaxStackSize()? filter.getMaxStackSize() : max;
+  for(int i = 0; i < this.getSizeInventory(); i ++)
+    {
+    fromSlot = this.getStackInSlot(i);
+    if(fromSlot!=null)
+      {
+      if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, filter))
+        {
+        if(toReturn==null)
+          {
+          toReturn = ItemStack.copyItemStack(fromSlot);
+          toReturn.stackSize = 0;
+          }
+        int howMany = max-toReturn.stackSize;
+        howMany = toReturn.stackSize + howMany > toReturn.getMaxStackSize() ? toReturn.getMaxStackSize()-toReturn.stackSize : howMany;
+        howMany = howMany > fromSlot.stackSize? fromSlot.stackSize : howMany;
+        if(howMany==0)
+          {
+          continue;
+          }
+        fromSlot.stackSize-=howMany;
+        toReturn.stackSize+=howMany;        
+        }
+      }
+    if(toReturn!=null && (toReturn.stackSize>=max || toReturn.stackSize>=toReturn.getMaxStackSize()))//found 'enough', return
+      {
+      break;
+      }
+    }
+  return toReturn;
+  }
+
+public boolean canHoldItem(ItemStack filter, int qty)
+  {
+  if(filter==null){return false;}
+  int qtyLeft = qty;
+  ItemStack fromSlot = null;
+  for(int i = 0 ; i < this.getSizeInventory(); i ++)
+    {
+    fromSlot = this.getStackInSlot(i);
+    if(fromSlot==null)//emtpy slot, decr by entire stack size
+      {
+      qtyLeft -= filter.getMaxStackSize();
+      }
+    else
+      {
+      if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, filter))
+        {
+        qtyLeft -= fromSlot.getMaxStackSize()-fromSlot.stackSize;
+        }
+      }
+    if(qtyLeft<=0)
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
+/**
+ * returns the remainder of the items not merged, or null if completely successful 
+ * @param filter
+ * @return
+ */
+public ItemStack tryMergeItem(ItemStack filter)
+  {
+  if(filter==null){return null;}
+  ItemStack fromSlot = null;
+  for(int i = 0; i < this.getSizeInventory(); i++)
+    {
+    fromSlot = this.getStackInSlot(i);
+    if(fromSlot==null)//skip emtpy slots this pass, we're trying to merge partial stacks first
+      {
+      continue;
+      }
+    else if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, filter))
+      {
+      int decrAmt = fromSlot.getMaxStackSize() - fromSlot.stackSize;
+      decrAmt = decrAmt > filter.stackSize ? filter.stackSize : decrAmt;
+      filter.stackSize -= decrAmt;
+      fromSlot.stackSize +=decrAmt;
+      }
+    if(filter.stackSize<=0)
+      {  
+      return null;
+      }
+    }
+  for(int i = 0; i < this.getSizeInventory(); i++)
+    {
+    fromSlot = this.getStackInSlot(i);
+    if(fromSlot==null)//place in slot
+      {      
+      this.setInventorySlotContents(i, filter);
+      filter = null;
+      return null;
+      }
+    }
+  if(filter!=null && filter.stackSize<=0)
+    {  
+    return null;
+    }
+  return filter;
+  }
+
+public boolean containsAtLeast(ItemStack filter, int qty)
+  {
+  if(filter==null)
+    {
+    return false;
+    }
+  ItemStack fromSlot = null;
+  int foundQty = 0;
+  for(int i = 0; i < this.getSizeInventory(); i++)
+    {
+    fromSlot = this.getStackInSlot(i);
+    if(fromSlot==null)
+      {
+      continue;
+      }
+    if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(filter, fromSlot))
+      {
+      foundQty += fromSlot.stackSize;
+      if(foundQty>=qty)
+        {
+        return true;
+        }
+      }
+    }
+  return false;
+  }
+
 public int getEmptySlotCount()
   {
   int emptySlots = 0;

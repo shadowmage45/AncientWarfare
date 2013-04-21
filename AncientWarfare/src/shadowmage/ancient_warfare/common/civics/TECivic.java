@@ -23,12 +23,12 @@ package shadowmage.ancient_warfare.common.civics;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -66,9 +66,7 @@ protected boolean broadcastWork = false;//user toggle...spawned NPC buildings wi
 protected AWInventoryBasic inventory = new AWInventoryBasic(0);
 protected Civic civic;
 protected int structureRank = 0;
-protected List<WorkPoint> fallowWorkPoints = new ArrayList<WorkPoint>();//points on cooldown for some reason
-protected List<WorkPoint> workedPoints = new ArrayList<WorkPoint>();//points being worked currently
-protected LinkedList<WorkPoint> workQueue = new LinkedList<WorkPoint>();//points open for assignement to a worker
+protected List<WorkPoint> workPoints = new ArrayList<WorkPoint>();//points being worked currently
 protected Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
 protected Random rng = new Random();
 
@@ -99,7 +97,7 @@ public void setBounds(int minX, int minY, int minZ, int maxX, int maxY, int maxZ
 @Override
 public void updateEntity()
   {
-  if(updateTicks<=0)
+  if(updateTicks<=0 && this.worldObj!=null && !this.worldObj.isRemote)
     {    
     this.broadCastToSoldiers(Config.npcAISearchRange);
     this.updateWorkPoints();
@@ -219,11 +217,27 @@ public void addWorker(NpcBase npc)
 
 public WorkPoint getWorkPoint(NpcBase npc)
   {
-  if(this.workQueue.size()>0)
+  if(!this.workers.contains(npc))
     {
-    return this.workQueue.pop();
+    return null;
+    }
+  Iterator<WorkPoint> it = this.workPoints.iterator();
+  WorkPoint p = null;
+  while(it.hasNext())
+    {
+    p = it.next();
+    if(!p.hasWorker() && p.hasWork(worldObj) && canAssignWorkPoint(npc, p))
+      {
+      p.setWorked(npc);
+      return p;
+      }    
     }   
   return null;
+  }
+
+public boolean canAssignWorkPoint(NpcBase npc, WorkPoint p)
+  {
+  return true;
   }
 
 public void onWorkFinished(NpcBase npc, WorkPoint point)
@@ -231,18 +245,18 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
   if(point!=null)
     {    
     point.setFinished();
-    this.workedPoints.remove(point);
-    if(point.pointHasWork(worldObj))
-      {
-      this.workQueue.add(point);
-      }
-    else
-      {      
-      if(!point.isSingleUse())
-        {
-        this.fallowWorkPoints.add(point);
-        }
-      }
+    this.workPoints.remove(point);
+//    if(point.hasWork(worldObj))
+//      {
+//      this.workQueue.add(point);
+//      }
+//    else
+//      {      
+//      if(!point.isSingleUse())
+//        {
+//        this.fallowWorkPoints.add(point);
+//        }
+//      }
     }
   }
 
@@ -261,27 +275,31 @@ public void updateWorkPoints()
   /**
    * check through current active queue, remove any entries that are invalid
    */
-  Iterator<WorkPoint> it = this.workQueue.iterator();
+  Iterator<WorkPoint> it = this.workPoints.iterator();
   WorkPoint p;
   while(it.hasNext())
     {
     p = it.next();
-    if(!p.pointHasWork(worldObj))
+    if(!p.isValidEntry(worldObj))
       {
       it.remove();
+      continue;
+      }
+    if(p.hasWorker())
+      {
+      if(p.getWorker().wayNav.getWorkPoint()!=p)
+        {
+        p.setWorked(null);
+        }
       }
     }
-  it = this.fallowWorkPoints.iterator();
-  while(it.hasNext())
-    {
-    p = it.next();
-    }
+  Iterator<NpcBase> workIt = this.workers.iterator();
   }
 
 public void doWork(NpcBase npc, WorkPoint p)
   {
   p.incrementHarvestHits();  
-  if(!p.isValidEntry(worldObj))
+  if(!p.hasWork(worldObj))
     {
     p.setHarvestHitToMax();
     }

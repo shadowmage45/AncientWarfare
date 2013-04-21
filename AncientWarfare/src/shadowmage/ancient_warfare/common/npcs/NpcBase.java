@@ -34,6 +34,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
@@ -129,7 +130,7 @@ public void handleBatonCommand(NpcCommand cmd, int x, int y, int z)
   wayNav.setHomePoint(x, y, z);
   break;
   case WORK:
-  wayNav.setWorkPoint(x, y, z);
+  wayNav.setWorkSitePoint(x, y, z);
   break;
   case PATROL:
   wayNav.addPatrolPoint(x, y, z);
@@ -141,7 +142,7 @@ public void handleBatonCommand(NpcCommand cmd, int x, int y, int z)
   wayNav.clearHomePoint();
   break;
   case CLEAR_WORK:
-  wayNav.clearWorkPoint();
+  wayNav.clearWorkSitePoint();
   break;
   case CLEAR_PATROL:
   wayNav.clearPatrolPoints();
@@ -243,31 +244,34 @@ protected void updateAITick()
 @Override
 public boolean interact(EntityPlayer player)
   {
+  if(player.worldObj.isRemote)
+    {
+    return true;
+    }
   if(!this.isAggroTowards(player))
     {
-    AIAggroEntry target = this.playerTarget;
-    if(target==null || target.getEntity()!=player)
+    if(player.isSneaking())
       {
-      this.wayNav.clearHomePoint();
-      Config.logDebug("setting player to follow to: "+player.getEntityName());
-      this.playerTarget = new AIAggroEntry(this, this.targetHelper.playerTargetEntry, player);
+      GUIHandler.instance().openGUI(GUIHandler.NPC_BASE, player, worldObj, entityId, 0, 0);
+      //opengui
       }
-    else if(target!=null && target.getEntity()==player)
-      {      
-      if(player.isSneaking())
+    else
+      {
+      AIAggroEntry target = this.playerTarget;
+      if(target==null || target.getEntity()!=player)
         {
-        Config.logDebug("adding patrol point");
-        this.wayNav.addPatrolPoint(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
+        this.wayNav.clearHomePoint();
+        Config.logDebug("setting player to follow to: "+player.getEntityName());
+        this.playerTarget = new AIAggroEntry(this, this.targetHelper.playerTargetEntry, player);
         }
-      else
+      else if(target!=null && target.getEntity()==player)
         {
-        this.playerTarget = null;
-        this.wayNav.setHomePoint(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
-        Config.log("clearing player to follow and setting home");
-        }      
+        Config.logDebug("clearing player to follow");
+        this.playerTarget = null;            
+        }
       }
     }
-  return super.interact(player);
+  return true;
   }
 
 @Override
@@ -401,6 +405,7 @@ public void writeSpawnData(ByteArrayDataOutput data)
   {
   data.writeInt(teamNum);
   data.writeInt(rank);
+  data.writeInt(this.npcType.getGlobalNpcType());
   }
 
 @Override
@@ -408,6 +413,8 @@ public void readSpawnData(ByteArrayDataInput data)
   {
   this.teamNum = data.readInt();
   this.rank = data.readInt();
+  INpcType t = NpcTypeBase.getNpcType(data.readInt());
+  this.setNpcType(t, rank);
   }
 
 public int floorX()

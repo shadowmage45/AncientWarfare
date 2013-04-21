@@ -63,7 +63,7 @@ public void updatePriority()
     this.theVillage = npc.worldObj.villageCollectionObj.findNearestVillage(x, y, z, Config.npcAISearchRange);
     if(theVillage!=null)
       {
-      Config.logDebug("setting seek shelter priority to max!");
+//      Config.logDebug("setting seek shelter priority to max!");
       this.currentPriority = this.maxPriority;
       }
     else
@@ -111,7 +111,7 @@ public void onObjectiveStart()
         }
       else
         {
-        Config.logDebug("setting move target for seek shelter");
+//        Config.logDebug("setting move target for seek shelter");
         npc.setTargetAW(npc.targetHelper.getTargetFor(theDoor.getInsidePosX(), theDoor.getInsidePosY(), theDoor.getInsidePosZ(), TargetType.MOVE));
         }
       }

@@ -74,7 +74,7 @@ protected void attackTarget(AIAggroEntry target)
   npc.actionTick =  maxAttackDelayTicks;  
   if(!target.isEntityEntry)
     {
-    Config.logDebug("doing block attack");
+//    Config.logDebug("doing block attack");
     blockAttackHits++;    
     npc.swingItem();
     int id = npc.worldObj.getBlockId((int)target.posX(), (int)target.posY(),(int)target.posZ());
@@ -89,7 +89,7 @@ protected void attackTarget(AIAggroEntry target)
     }
   else
     {
-    Config.logDebug("doing entity attack");
+//    Config.logDebug("doing entity attack");
     Entity ent = target.getEntity();
     if(ent!=null)
       {

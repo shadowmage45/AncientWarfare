@@ -41,27 +41,28 @@ int tilledEarthID = Block.tilledField.blockID;
 public WorkPointFarm(int x, int y, int z, WorkType type, int plantID, int plantMeta)
   {
   super(x, y, z, type);
+  this.plantID = plantID;
+  this.plantFullGrownMeta = plantMeta;
   }
 
 @Override
-public boolean pointHasWork(World world)
+public boolean hasWork(World world)
   {
-  boolean canStart = false;
   if(this.type == WorkType.FARM_PLANT)
     {
     if(world.getBlockId(x, y, z)==tilledEarthID && world.getBlockId(x, y+1, z)==0)
       {
-      canStart = true;    
+      return true;  
       }
     }
   else if(this.type==WorkType.FARM_HARVEST && world.getBlockId(x, y-1, z)==tilledEarthID && world.getBlockId(x, y, z)==plantID)
     {
     if(world.getBlockMetadata(x, y, z)==this.plantFullGrownMeta)
       {
-      canStart = true;
+      return true;
       }
     } 
-  return canStart;
+  return false;
   }
 
 public boolean isValidEntry(World world)

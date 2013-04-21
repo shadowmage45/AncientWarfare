@@ -20,15 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class EntityPath
 {
 
 private LinkedList<Node> path = new LinkedList<Node>();
-private LinkedList<Node> fullPath = new LinkedList<Node>();
-private int currentPathIndex = 0;
 
 public EntityPath()
   {
@@ -37,25 +38,51 @@ public EntityPath()
 
 public void setPath(List<Node> pathNodes)
   {
-  this.currentPathIndex = 0;
   this.clearPath();
-  this.addPath(pathNodes); 
+  this.path.addAll(pathNodes);
   }
 
 public void clearPath()
   {
   this.path.clear();
-  this.fullPath.clear();
   }
 
 /**
- * adds nodes onto a path, towards a new/updated target
+ * adds nodes onto a path, towards a new/updated target, checks new path vs old path and removes un-needed nodes
  * @param pathNodes
  */
-public void addPath(List<Node> pathNodes)
+public void addPath(PathWorldAccess world, List<Node> pathNodes)
   {
+  //check current path from the (current) start, try to 'see' the start node in new path, if so, remove the rest of current path
+  Node n = null;
+  Node start = null;
+  if(pathNodes.size()>0)
+    {
+    start = pathNodes.get(0);
+    }
+  if(start==null)
+    {
+    return;
+    }
+  Iterator<Node> it = this.path.iterator();
+  boolean couldSee = false;
+  while(it.hasNext())
+    {
+    n = it.next();
+    if(!couldSee)
+      {
+      if(PathUtils.canPathStraightToTarget(world, n.x, n.y, n.z, start.x, start.y, start.z))
+        {
+        couldSee = true;
+        }
+      }
+    else
+      {
+      it.remove();
+//      Config.logDebug("removing uneeded node: "+n);
+      }
+    }  
   this.path.addAll(pathNodes); 
-  this.fullPath.addAll(pathNodes);
   }
 
 public boolean containsPoint(int x, int y, int z)
@@ -90,32 +117,7 @@ public Node getFirstNode()
  */
 public Node claimNode()
   {  
-  this.currentPathIndex++;
   return this.path.poll();
-  }
-
-public int getActivePathIndex()
-  {
-  return this.currentPathIndex;
-  }
-
-public int getFullPathSize()
-  {
-  return this.fullPath.size();
-  }
-
-public List<Node> getFullPath()
-  {
-  return this.fullPath;
-  }
-
-public float getFullPathLength()
-  {
-  if(this.path.isEmpty())
-    {
-    return 0;
-    }
-  return this.path.peekLast().getPathLength();
   }
 
 public int getActivePathSize()

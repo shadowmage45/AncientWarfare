@@ -132,21 +132,7 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
         this.addSlotToContainer(slot);        
         }
       }
-    }
-  
-//  for(y = 0; y < 3; y++)
-//    {
-//    for(x = 0; x < 9; x++)
-//      {
-//      slotNum = y*9 + x;
-//      if(slotNum<vehicle.inventory.storageInventory.getSizeInventory())
-//        {
-//        xPos = 8 + x * 18;
-//        yPos = 84 + y * 18 - 5*18 - 2*5+28;
-//        this.addSlotToContainer(new Slot(vehicle.inventory.storageInventory, slotNum, xPos, yPos));        
-//        }
-//      }
-//    }    
+    }  
   }
 
 int currentTopStorageRow = 0;
@@ -195,10 +181,6 @@ public void setCurrentTopStorageRow(int row)
           }
         storageSlots[slotNum].xDisplayPosition = xPos;
         storageSlots[slotNum].yDisplayPosition = yPos;
-//        Slot slot = new Slot(vehicle.inventory.storageInventory, slotNum, xPos, yPos);
-//        storageSlots[slotNum] = slot;
-//        this.addSlotToContainer(slot);   
-        
         }
       }
     if(y>=row && y <row+3)

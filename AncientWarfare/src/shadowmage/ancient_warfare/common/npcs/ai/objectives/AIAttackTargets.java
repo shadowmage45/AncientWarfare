@@ -71,16 +71,16 @@ public void onRunningTick()
   {
   if(npc.getTarget()==null)
     {
-    Config.logDebug("attack ai, target==null, finding new");
+//    Config.logDebug("attack ai, target==null, finding new");
     AIAggroEntry target = npc.targetHelper.getHighestAggroTargetInRange(TargetType.ATTACK, maxRange);
     if(target==null)
       {
-      Config.logDebug("attack ai, new target==null, setting finished");
+//      Config.logDebug("attack ai, new target==null, setting finished");
       this.isFinished = true;
       }
     else
       {
-      Config.logDebug("attack ai, new target found, setting new target");
+//      Config.logDebug("attack ai, new target found, setting new target");
       npc.setTargetAW(target);
       }
     }
@@ -89,7 +89,7 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
-  Config.logDebug("starting attack ai, setting target");
+//  Config.logDebug("starting attack ai, setting target");
   npc.setTargetAW(npc.targetHelper.getHighestAggroTargetInRange(TargetType.ATTACK, maxRange));
   }
 

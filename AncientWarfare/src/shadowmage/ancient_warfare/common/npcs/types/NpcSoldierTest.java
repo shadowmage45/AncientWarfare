@@ -65,9 +65,9 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>();  
   aiEntries.add(new AIFollowPlayer(npc, 90));
-  aiEntries.add(new AIGoToWork(npc, 80));
-  aiEntries.add(new AISeekShelter(npc, 75));
-  aiEntries.add(new AIWander(npc, 1));
+  aiEntries.add(new AISeekShelter(npc, 85));
+  aiEntries.add(new AIGoToWork(npc, 80));  
+  aiEntries.add(new AIWander(npc, 10));
   return aiEntries;
   }
 }

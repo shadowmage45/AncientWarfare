@@ -62,20 +62,7 @@ public void onTick()
     }
   int ex = MathHelper.floor_double(npc.posX);
   int ey = MathHelper.floor_double(npc.posY);
-  int ez = MathHelper.floor_double(npc.posZ);
-  if(npc.getTarget().isEntityEntry)
-    {
-    Entity ent = npc.getTarget().getEntity();
-    if(ent!=null && (!ent.onGround || ent.isAirBorne))
-      {
-      //Config.logDebug("setting new target height for flying target");
-      int x = MathHelper.floor_float(bX);
-      int y = MathHelper.floor_float(bY);
-      int z = MathHelper.floor_float(bZ);
-      y = PathUtils.findClosestYTo(npc.getWorldAccess(), x, y, z); 
-      bY = y;   
-      }
-    }
+  int ez = MathHelper.floor_double(npc.posZ);  
   if(npc.isRidingVehicle())
     {
     ((VehicleBase)npc.ridingEntity).nav.setMoveTo(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));

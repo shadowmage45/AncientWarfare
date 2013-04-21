@@ -44,7 +44,7 @@ public static final int IMMEDIATE_PATH_CUTOFF = 6;
 
 public static final int PATH_CUTOFF_LENGTH = 60;
 
-public static final long PATH_CUTOFF_TIME = 2000000;//2ms
+public static final long PATH_CUTOFF_TIME = 1000000;//2ms
 
 
 private PathFinderThetaStar pather = new PathFinderThetaStar();
@@ -104,6 +104,7 @@ public void onTickEnd()
 private void startProcessingPaths()
   {
   int totalProcessed = 0;
+  int totalDropped = 0;
   long processingTime = 0;
   long jobStart;
   PathRequest req = null;
@@ -127,9 +128,14 @@ private void startProcessingPaths()
     req.caller.onPathFound(pather.findPath(req.world, req.x, req.y, req.z, req.tx, req.ty, req.tz, PATH_CUTOFF_LENGTH));
     processingTime += System.nanoTime()-jobStart;
     }
+  while(this.pathRequests.size() > totalProcessed*10 )//num of paths you can process in one tick*10
+    {
+    totalDropped++;
+    this.pathRequests.pop();
+    }
   if(totalProcessed>0 && this == serverScheduler)
     {
-    Config.logDebug("processed: "+totalProcessed+" paths this tick. left in q: "+this.pathRequests.size()+".  Processing time: "+processingTime+" had: "+pathingMaxTime);
+    Config.logDebug("processed: "+totalProcessed+" paths this tick. left in q: "+this.pathRequests.size()+" dropped: "+totalDropped+"  Processing time: "+processingTime+" had: "+pathingMaxTime);
     }
   }
 

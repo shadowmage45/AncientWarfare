@@ -111,14 +111,14 @@ protected boolean isSolidBlock(int id)
     {
     return true;
     }
-  else if(id == block.fence.blockID || id == block.fenceIron.blockID || id == block.cobblestoneWall.blockID)
+  else if(id == block.fence.blockID || id == block.fenceIron.blockID || id == block.cobblestoneWall.blockID || id == block.tilledField.blockID || id == Block.glass.blockID || id== Block.thinGlass.blockID)
     {
     return true;
-    }
+    }  
   else if(block instanceof BlockStairs || block instanceof BlockLeaves)
     {
     return true;
-    } 
+    }
   return false;
   }
 
