@@ -112,7 +112,7 @@ public void onObjectiveStart()
   patrolPoint = npc.wayNav.getNextPatrolPoint();
   if(patrolPoint!=null)
     {
-    npc.setTargetAW(npc.targetHelper.getTargetFor(patrolPoint.x, patrolPoint.y, patrolPoint.z, TargetType.PATROL));
+    npc.setTargetAW(npc.targetHelper.getTargetFor(patrolPoint.floorX(), patrolPoint.floorY(), patrolPoint.floorZ(), TargetType.PATROL));
     }
   else
     {

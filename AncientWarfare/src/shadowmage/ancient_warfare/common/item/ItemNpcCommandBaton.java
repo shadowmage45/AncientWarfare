@@ -156,6 +156,11 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
   { 
   if(!player.worldObj.isRemote)
     {
+    MovingObjectPosition hit = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
+    if(hit==null)
+      {
+      return true;
+      }
     BatonSettings settings = getBatonSettings(stack);
     NpcCommand cmd = settings.command;
     if(cmd==NpcCommand.NONE)
@@ -187,7 +192,7 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
       if(npc!=null)
         {
         Config.logDebug("commanding direct entity");
-        npc.handleBatonCommand(settings.command, X, Y, Z);
+        npc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
         npcType = npc.npcType.getGlobalNpcType();
         }
       for(NpcBase testNpc : npcs)
@@ -199,7 +204,7 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
         if(npcType==-1 || testNpc.npcType.getGlobalNpcType()==npcType)
           {
           Config.logDebug("commanding remote entity");
-          testNpc.handleBatonCommand(settings.command, X, Y, Z);
+          testNpc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
           }        
         }
       }
@@ -207,7 +212,7 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
       {
       if(npc!=null)
         {
-        npc.handleBatonCommand(settings.command, X, Y, Z);
+        npc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
         }      
       }
     }   

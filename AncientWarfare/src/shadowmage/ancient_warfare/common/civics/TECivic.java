@@ -229,10 +229,16 @@ public WorkPoint getWorkPoint(NpcBase npc)
     if(!p.hasWorker() && p.hasWork(worldObj) && canAssignWorkPoint(npc, p))
       {
       p.setWorked(npc);
+      p.resetHarvestTicks();
       return p;
       }    
     }   
   return null;
+  }
+
+public void removeWorker(NpcBase npc)
+  {
+  this.workers.remove(npc);
   }
 
 public boolean canAssignWorkPoint(NpcBase npc, WorkPoint p)
@@ -246,17 +252,6 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
     {    
     point.setFinished();
     this.workPoints.remove(point);
-//    if(point.hasWork(worldObj))
-//      {
-//      this.workQueue.add(point);
-//      }
-//    else
-//      {      
-//      if(!point.isSingleUse())
-//        {
-//        this.fallowWorkPoints.add(point);
-//        }
-//      }
     }
   }
 
@@ -294,15 +289,42 @@ public void updateWorkPoints()
       }
     }
   Iterator<NpcBase> workIt = this.workers.iterator();
+  NpcBase npc = null;
+  while(workIt.hasNext())
+    {
+    npc = workIt.next();
+    if(npc==null || npc.isDead || npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
+      {
+      workIt.remove();
+      }
+    }
   }
 
-public void doWork(NpcBase npc, WorkPoint p)
+public WorkPoint doWork(NpcBase npc, WorkPoint p)
   {
   p.incrementHarvestHits();  
   if(!p.hasWork(worldObj))
     {
     p.setHarvestHitToMax();
     }
+  if(p.shouldFinish())
+    {
+    this.onWorkFinished(npc, p);
+    return null;
+    }
+  return p;
+  }
+
+public boolean hasWork(NpcBase npc)
+  {
+  for(WorkPoint p : this.workPoints)
+    {
+    if(p.getWorker()==null && p.hasWork(worldObj) && canAssignWorkPoint(npc, p))
+      {
+      return true;
+      }
+    }
+  return false;
   }
 
 /*****************************************************NBT/PACKETS*********************************************************/

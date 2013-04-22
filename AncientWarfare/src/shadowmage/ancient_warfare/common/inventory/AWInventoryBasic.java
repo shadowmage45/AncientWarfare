@@ -31,6 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.interfaces.IInventoryCallback;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class AWInventoryBasic implements IInventory
 {
@@ -66,7 +67,9 @@ public void addCallback(IInventoryCallback ent)
 
 /**
  * return qty left that could not be removed from inventory
- * does not call onInventoryChanged
+ * does not call onInventoryChanged...only used by vehicle ammo helper
+ * to decrease ammo counts (only known by itemID/damage) should deprecate
+ * and create itemStack filters for ammo (might be available from registry registered stack cache)
  * @param id
  * @param dmg
  * @param qty
@@ -146,6 +149,7 @@ public ItemStack decrStackSize(int slotNum, int decreaseBy)
     }
   }
 
+
 @Override
 public ItemStack getStackInSlotOnClosing(int var1)
   {
@@ -171,69 +175,19 @@ public void setInventorySlotContents(int stackIndex, ItemStack newContents)
     }
   }
 
+public int tryRemoveItems(ItemStack filter, int qty)
+  {
+  return InventoryTools.tryRemoveItems(this, filter, qty, 0, this.getSizeInventory()-1);
+  }
+
 public ItemStack getItems(ItemStack filter, int max)
   {
-  if(filter==null){ return null;}
-  ItemStack toReturn = null;
-  ItemStack fromSlot = null;
-  ItemStack tempCopy = null;
-  max = max> filter.getMaxStackSize()? filter.getMaxStackSize() : max;
-  for(int i = 0; i < this.getSizeInventory(); i ++)
-    {
-    fromSlot = this.getStackInSlot(i);
-    if(fromSlot!=null)
-      {
-      if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, filter))
-        {
-        if(toReturn==null)
-          {
-          toReturn = ItemStack.copyItemStack(fromSlot);
-          toReturn.stackSize = 0;
-          }
-        int howMany = max-toReturn.stackSize;
-        howMany = toReturn.stackSize + howMany > toReturn.getMaxStackSize() ? toReturn.getMaxStackSize()-toReturn.stackSize : howMany;
-        howMany = howMany > fromSlot.stackSize? fromSlot.stackSize : howMany;
-        if(howMany==0)
-          {
-          continue;
-          }
-        fromSlot.stackSize-=howMany;
-        toReturn.stackSize+=howMany;        
-        }
-      }
-    if(toReturn!=null && (toReturn.stackSize>=max || toReturn.stackSize>=toReturn.getMaxStackSize()))//found 'enough', return
-      {
-      break;
-      }
-    }
-  return toReturn;
+  return InventoryTools.getItems(this, filter, max, 0, this.getSizeInventory()-1);
   }
 
 public boolean canHoldItem(ItemStack filter, int qty)
   {
-  if(filter==null){return false;}
-  int qtyLeft = qty;
-  ItemStack fromSlot = null;
-  for(int i = 0 ; i < this.getSizeInventory(); i ++)
-    {
-    fromSlot = this.getStackInSlot(i);
-    if(fromSlot==null)//emtpy slot, decr by entire stack size
-      {
-      qtyLeft -= filter.getMaxStackSize();
-      }
-    else
-      {
-      if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, filter))
-        {
-        qtyLeft -= fromSlot.getMaxStackSize()-fromSlot.stackSize;
-        }
-      }
-    if(qtyLeft<=0)
-      {
-      return true;
-      }
-    }
-  return false;
+  return InventoryTools.canHoldItem(this, filter, qty, 0, this.getSizeInventory()-1);
   }
 
 /**
@@ -243,69 +197,12 @@ public boolean canHoldItem(ItemStack filter, int qty)
  */
 public ItemStack tryMergeItem(ItemStack toMerge)
   {
-  if(toMerge==null){return null;}
-  ItemStack fromSlot = null;
-  for(int i = 0; i < this.getSizeInventory(); i++)
-    {
-    fromSlot = this.getStackInSlot(i);
-    if(fromSlot==null)//skip emtpy slots this pass, we're trying to merge partial stacks first
-      {
-      continue;
-      }
-    else if(fromSlot.itemID==toMerge.itemID && fromSlot.getItemDamage()==toMerge.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, toMerge))
-      {
-      int decrAmt = fromSlot.getMaxStackSize() - fromSlot.stackSize;
-      decrAmt = decrAmt > toMerge.stackSize ? toMerge.stackSize : decrAmt;
-      toMerge.stackSize -= decrAmt;
-      fromSlot.stackSize +=decrAmt;
-      }
-    if(toMerge.stackSize<=0)
-      {  
-      return null;
-      }
-    }
-  for(int i = 0; i < this.getSizeInventory(); i++)
-    {
-    fromSlot = this.getStackInSlot(i);
-    if(fromSlot==null)//place in slot
-      {      
-      this.setInventorySlotContents(i, toMerge);
-      toMerge = null;
-      return null;
-      }
-    }
-  if(toMerge!=null && toMerge.stackSize<=0)
-    {  
-    return null;
-    }
-  return toMerge;
+  return InventoryTools.tryMergeStack(this, toMerge, 0, this.getSizeInventory()-1);
   }
 
 public boolean containsAtLeast(ItemStack filter, int qty)
   {
-  if(filter==null)
-    {
-    return false;
-    }
-  ItemStack fromSlot = null;
-  int foundQty = 0;
-  for(int i = 0; i < this.getSizeInventory(); i++)
-    {
-    fromSlot = this.getStackInSlot(i);
-    if(fromSlot==null)
-      {
-      continue;
-      }
-    if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(filter, fromSlot))
-      {
-      foundQty += fromSlot.stackSize;
-      if(foundQty>=qty)
-        {
-        return true;
-        }
-      }
-    }
-  return false;
+  return InventoryTools.containsAtLeast(this, filter, qty, 0, this.getSizeInventory()-1);
   }
 
 public int getEmptySlotCount()
@@ -323,39 +220,14 @@ public int getEmptySlotCount()
 
 public int canHoldMore(ItemStack item)
   {
-  if(item==null)
-    {
-    return 0;
-    }
-  int availCount = 0;
-  int emptySlots = this.getEmptySlotCount();
-  if(emptySlots>0)
-    {
-    availCount = item.getMaxStackSize() * emptySlots;
-    }
-  if(item.getMaxStackSize()>1)
-    {
-    ItemStack fromSlot;
-    for(int i = 0; i < this.getSizeInventory(); i++)
-      {
-      fromSlot = this.getStackInSlot(i);
-      if(fromSlot!=null)
-        {
-        if(fromSlot.itemID==item.itemID && fromSlot.getItemDamage()==item.getItemDamage() && ItemStack.areItemStackTagsEqual(item, fromSlot))
-          {
-          availCount += item.getMaxStackSize() - fromSlot.stackSize;
-          }
-        }
-      }
-    }
-  return availCount;
+  return InventoryTools.canHoldMore(this, item, 0, this.getSizeInventory()-1);
   }
 
 /**
  * percentage full by slot count
  * @return
  */
-public float getPercentFull()
+public float getPercentEmpty()
   {
   if(this.getSizeInventory()==0)
     {

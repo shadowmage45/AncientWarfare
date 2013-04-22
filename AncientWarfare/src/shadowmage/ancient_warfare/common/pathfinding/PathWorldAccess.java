@@ -119,7 +119,7 @@ protected boolean isSolidBlock(int id)
     {
     return true;
     }  
-  else if(id== Block.woodSingleSlab.blockID || id == Block.stoneSingleSlab.blockID)
+  else if(id== Block.woodSingleSlab.blockID || id == Block.stoneSingleSlab.blockID || id == Block.chest.blockID)
     {
     return true;
     }

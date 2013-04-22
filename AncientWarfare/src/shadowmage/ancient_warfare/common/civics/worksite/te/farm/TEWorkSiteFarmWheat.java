@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,6 +29,7 @@ import shadowmage.ancient_warfare.common.civics.WorkType;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TEWorkSiteFarmWheat extends TEWorkSiteFarm
 {
@@ -50,6 +53,16 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
     {
     if(point.getWorkType()==WorkType.FARM_HARVEST)
       {
+      List<ItemStack> blockDrops = Block.crops.getBlockDropped(npc.worldObj, point.floorX(), point.floorY(), point.floorZ(), 7, 0);
+      boolean gotSeedBack = false;
+      for(ItemStack item : blockDrops)
+        {
+        if(!gotSeedBack && InventoryTools.doItemsMatch(item, seedFilter))
+          {
+          gotSeedBack = true;
+          //place item into inventory
+          }
+        }
       Config.logDebug("harvesting wheat!!");
       worldObj.setBlockWithNotify(point.floorX(), point.floorY(), point.floorZ(), 0);
       ItemStack wheat = ItemStack.copyItemStack(wheatFilter);
@@ -75,12 +88,12 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
       if(npc.inventory.containsAtLeast(seedFilter, 1))
         {
         Config.logDebug("planting wheat!!");
-        npc.inventory.decreaseCountOf(seedFilter.itemID, seedFilter.getItemDamage(), 1);
+        npc.inventory.tryRemoveItems(seedFilter, 1);
         worldObj.setBlockAndMetadataWithNotify(point.floorX(), point.floorY()+1, point.floorZ(), mainBlockID, 0);
         }
       else
         {
-        Config.logDebug("had plant job by no seeds!!");
+        Config.logDebug("had plant job but no seeds!!");
         }
       }
     }
@@ -108,7 +121,8 @@ public WorkPoint getWorkPoint(NpcBase npc)
     {
     if(this.inventory.containsAtLeast(seedFilter, 1) && npc.inventory.canHoldItem(seedFilter, 1))
       {
-      this.inventory.decreaseCountOf(seedFilter.itemID, seedFilter.getItemDamage(), 1);
+      Config.logDebug("removing 1 seed");
+      this.inventory.tryRemoveItems(seedFilter, 1);
       npc.inventory.tryMergeItem(ItemStack.copyItemStack(seedFilter));
       }
     else

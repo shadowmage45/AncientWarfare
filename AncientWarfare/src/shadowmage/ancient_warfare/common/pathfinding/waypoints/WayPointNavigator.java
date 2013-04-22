@@ -24,10 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.WorkType;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
@@ -38,14 +40,22 @@ import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback
 import shadowmage.ancient_warfare.common.utils.TargetType;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
+/**
+ * far more closely tied to Npcs than I would have liked...., more of a waypoint helper. needs moved into npcs/helper folder and renamed
+ * need to create a separate class to manage player designated waypoints on vehicles/etc. (self driving vehicles could be fun)
+ * @author Shadowmage
+ *
+ */
 public class WayPointNavigator implements IPathableCallback, INBTTaggable
 {
 
 IPathableEntity owner;
 WayPoint homePoint = null;
 WayPoint workSitePoint = null;
-WayPoint depositPoint = null;
-WorkPoint workPoint;
+WorkPoint depositPoint = null;
+WorkPoint workPoint = null;
+TECivic workSite = null;
+TileEntity depositSite = null;
 List<WayPointPath> wayPaths = new ArrayList<WayPointPath>();
 List<WayPoint> wayPoints = new ArrayList<WayPoint>();
 List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
@@ -85,7 +95,6 @@ public int getPatrolSize()
 
 public void clearPatrolPoints()
   {
-  Config.logDebug("clearing patrol points");
   this.patrolPoints.clear();
   this.currentPatrolPoint = 0;
   }
@@ -103,7 +112,7 @@ public WayPoint getClosestWayPointOfType(TargetType type)
   Entity ent = owner.getEntity();
   for(WayPoint p : this.wayPoints)
     {
-    if(p!=null && p.type==type &&p.isValidWayPoint(ent.worldObj))
+    if(p!=null && p.targetType==type &&p.isValidWayPoint(ent.worldObj))
       {
       dist =Trig.getDistance(ent.posX, ent.posY, ent.posZ, p.x, p.y, p.z); 
       if(dist<bestDist)
@@ -114,6 +123,81 @@ public WayPoint getClosestWayPointOfType(TargetType type)
       }
     }
   return bestFound;
+  }
+
+
+public void validateSites()
+  {
+  this.validateWorkSite();
+  this.validateDepositSite();
+  }
+
+protected void validateWorkSite()
+  {
+  if(this.workSitePoint!=null)
+    {
+    if(this.workSite==null || workSite.xCoord != workSitePoint.floorX() || workSite.yCoord != workSitePoint.floorY() || workSite.zCoord!=workSitePoint.floorZ())
+      {
+      //different sites, try and re-acquire      
+      if(isPointLoaded(workSitePoint.floorX(), workSitePoint.floorY(), workSitePoint.floorZ()))
+        {
+        //if can acqurire, set, else clear
+        TileEntity te = owner.getEntity().worldObj.getBlockTileEntity(workSitePoint.floorX(), workSitePoint.floorY(), workSitePoint.floorZ());
+        if(te instanceof TECivic)
+          {
+          this.workSite = (TECivic) te;
+          }
+        else
+          {
+          this.workSite = null;
+          this.workSitePoint = null;
+          }
+        }
+      //else chunk not loaded, check again later....
+      }
+    //else was valid site
+    }
+  else
+    {
+    this.workSite = null;
+    }
+  }
+
+
+protected void validateDepositSite()
+  {
+  if(this.depositPoint!=null)
+    {
+    if(this.depositSite==null || depositSite.xCoord != depositPoint.floorX() || depositSite.yCoord != depositPoint.floorY() || depositSite.zCoord!=depositPoint.floorZ())
+      {
+      //different sites, try and re-acquire      
+      if(isPointLoaded(depositPoint.floorX(), depositPoint.floorY(), depositPoint.floorZ()))
+        {
+        //if can acqurire, set, else clear
+        TileEntity te = owner.getEntity().worldObj.getBlockTileEntity(depositPoint.floorX(), depositPoint.floorY(), depositPoint.floorZ());
+        if(te instanceof IInventory)
+          {
+          this.depositSite = te;
+          }
+        else
+          {
+          this.depositSite = null;
+          this.depositPoint = null;
+          }
+        }
+      //else chunk not loaded, check again later....
+      }
+    //else was valid site
+    }
+  else//was had no point, clear site just in case
+    {
+    this.workSite = null;
+    }
+  }
+
+protected boolean isPointLoaded(int x, int y, int z)
+  {
+  return true;
   }
 
 public void clearWayPoints()
@@ -154,7 +238,7 @@ public void clearHomePoint()
   this.homePoint = null;
   }
 
-public void setWorkSitePoint(int x, int y, int z)
+public void setWorkSitePoint(int x, int y, int z, int side)
   {
   TileEntity te = this.owner.getEntity().worldObj.getBlockTileEntity(x, y, z);
   if(te instanceof TECivic)
@@ -163,20 +247,25 @@ public void setWorkSitePoint(int x, int y, int z)
     if(tec.getCivic()!=null && tec.getCivic().isWorkSite())
       {
       this.workSitePoint = new WayPoint(x,y,z, TargetType.WORK);
+      this.workSite = tec;      
       }
     else
       {
+      this.workSite = null;
       this.workSitePoint = null;
       }
     }
   else
     {
+    this.workSite = null;
     this.workSitePoint = null;
     }  
   }
 
 public void clearWorkSitePoint()
   {
+  this.workSite = null;
+  this.workPoint = null;
   this.workSitePoint = null;
   }
 
@@ -190,24 +279,55 @@ public WayPoint getWorkSitePoint()
   return this.workSitePoint;
   }
 
-public void setDepositPoint(int x, int y, int z)
+public void setWorkSite(TECivic work)
   {
+  this.workSite = work;
+  }
+
+public TECivic getWorkSite()
+  {
+  return this.workSite;
+  }
+
+public boolean hasWorkSite()
+  {
+  return this.workSite!=null;
+  }
+
+public void clearWorkSite()
+  {
+  this.workSite = null;
+  this.workPoint = null;
+  this.workSitePoint = null;
+  }
+
+public void setDepositPoint(int x, int y, int z, int side)
+  {
+  Config.logDebug(String.format("setting deposit point to: %s, %s, %s : %s", x,y,z,side));
   TileEntity te = this.owner.getEntity().worldObj.getBlockTileEntity(x, y, z);
   if(te instanceof TECivic)
     {
     TECivic tec = (TECivic)te;
     if(tec.getCivic()!=null && tec.getCivic().isDepository())
       {
-      this.depositPoint = new WayPoint(x,y,z, TargetType.DEPOSIT);
+      this.depositPoint = new WorkPoint(x,y,z, WorkType.DELIVER);
+      this.depositSite = tec;
       }
     else
       {
       this.depositPoint = null;
+      this.depositSite = null;
       }
+    }
+  else if(te instanceof IInventory)
+    {
+    this.depositPoint = new WorkPoint(x,y,z, side, WorkType.DELIVER);
+    this.depositSite = te;
     }
   else
     {
     this.depositPoint = null;
+    this.depositSite = null;
     }  
   }
 
@@ -221,7 +341,7 @@ public boolean hasDepositPoint()
   return this.depositPoint!=null;
   }
 
-public WayPoint getDepositPoint()
+public WorkPoint getDepositPoint()
   {
   return this.depositPoint;
   }
@@ -289,6 +409,10 @@ public NBTTagCompound getNBTTag()
     {
     tag.setCompoundTag("deposit", this.depositPoint.getNBTTag());
     }
+  if(this.workPoint!=null)
+    {
+    tag.setCompoundTag("work2", this.workPoint.getNBTTag());    
+    }
   return tag;
   }
 
@@ -317,7 +441,11 @@ public void readFromNBT(NBTTagCompound tag)
     }
   if(tag.hasKey("deposit"))
     {
-    this.depositPoint = new WayPoint(tag.getCompoundTag("deposit"));
+    this.depositPoint = new WorkPoint(tag.getCompoundTag("deposit"));
+    }
+  if(tag.hasKey("work2"))
+    {
+    this.workPoint = new WorkPoint(tag.getCompoundTag("work2"));
     }
   }
 

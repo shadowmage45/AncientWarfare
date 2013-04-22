@@ -48,6 +48,7 @@ import shadowmage.ancient_warfare.common.pathfinding.navigator.Navigator;
 import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPointNavigator;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.TargetType;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -121,7 +122,7 @@ public NpcBase(World par1World)
   this.stepHeight = 1.1f;
   }
 
-public void handleBatonCommand(NpcCommand cmd, int x, int y, int z)
+public void handleBatonCommand(NpcCommand cmd, int x, int y, int z, int side)
   {
   Config.logDebug("receiving baton command");
   switch(cmd)
@@ -130,13 +131,13 @@ public void handleBatonCommand(NpcCommand cmd, int x, int y, int z)
   wayNav.setHomePoint(x, y, z);
   break;
   case WORK:
-  wayNav.setWorkSitePoint(x, y, z);
+  wayNav.setWorkSitePoint(x, y, z, side);
   break;
   case PATROL:
   wayNav.addPatrolPoint(x, y, z);
   break;
   case DEPOSIT:
-  wayNav.setDepositPoint(x, y, z);
+  wayNav.setDepositPoint(x, y, z, side);
   break;
   case CLEAR_HOME:
   wayNav.clearHomePoint();
@@ -306,6 +307,16 @@ protected boolean canDespawn()
   }
 
 @Override
+public void setDead()
+  {
+  super.setDead();
+  if(this.worldObj!=null && !this.worldObj.isRemote && this.inventory.getSizeInventory()>0)
+    {
+    InventoryTools.dropInventoryInWorld(worldObj, inventory, posX, posY, posZ);
+    }
+  }
+
+@Override
 public void onUpdate()
   {
   this.varsHelper.onTick();
@@ -328,6 +339,7 @@ public void onUpdate()
   if(!this.worldObj.isRemote)
     {
     this.nav.onMovementUpdate();
+    this.wayNav.validateSites();
     }
   if(target!=null)
     {

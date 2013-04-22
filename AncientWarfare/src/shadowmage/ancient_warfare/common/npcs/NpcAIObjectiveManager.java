@@ -90,7 +90,7 @@ private void updatePriorities()
   {
   for(NpcAIObjective obj : this.allObjectives)
     {
-    if(obj!=null)
+    if(obj!=null && obj.cooldownTicks<=0)
       {
       obj.updatePriority();
       }

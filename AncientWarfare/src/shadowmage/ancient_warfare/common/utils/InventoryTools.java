@@ -32,10 +32,99 @@ public class InventoryTools
 
 static Random random = new Random();
 
-public static int getEmptySlots(IInventory inv)
+public static int tryRemoveItems(IInventory inv, ItemStack filter, int qty, int firstSlot, int lastSlot)
+  {
+  if(inv.getSizeInventory()==0)
+    {
+    return 0;
+    }
+  ItemStack fromSlot = null;
+  int qtyLeft = qty;
+  firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
+  lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
+  for(int i = firstSlot; i <= lastSlot; i++)
+    {
+    fromSlot = inv.getStackInSlot(i);
+    if(fromSlot==null){continue;}
+    if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, filter))
+      {
+      int howMany = fromSlot.stackSize > qty? qty : fromSlot.stackSize;
+      qtyLeft -= howMany;
+      fromSlot.stackSize-= howMany;
+      if(fromSlot.stackSize<=0)
+        {
+        inv.setInventorySlotContents(i, null);
+        }
+      if(qtyLeft<=0)
+        {
+        return 0;
+        }
+      }    
+    }  
+  return qtyLeft;
+  }
+
+public static ItemStack getItems(IInventory inv, ItemStack filter, int max, int firstSlot, int lastSlot)
+  {
+  if(filter==null|| inv.getSizeInventory()==0){ return null;}
+  ItemStack toReturn = null;
+  ItemStack fromSlot = null;
+  ItemStack tempCopy = null;
+  max = max> filter.getMaxStackSize()? filter.getMaxStackSize() : max;
+  firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
+  lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
+  for(int i = firstSlot; i <= lastSlot; i ++)
+    {
+    fromSlot = inv.getStackInSlot(i);
+    if(fromSlot!=null)
+      {
+      if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, filter))
+        {
+        if(toReturn==null)
+          {
+          toReturn = ItemStack.copyItemStack(fromSlot);
+          toReturn.stackSize = 0;
+          }
+        int howMany = max-toReturn.stackSize;
+        howMany = toReturn.stackSize + howMany > toReturn.getMaxStackSize() ? toReturn.getMaxStackSize()-toReturn.stackSize : howMany;
+        howMany = howMany > fromSlot.stackSize? fromSlot.stackSize : howMany;
+        if(howMany==0)
+          {
+          continue;
+          }
+        fromSlot.stackSize-=howMany;
+        toReturn.stackSize+=howMany;        
+        }
+      }
+    if(toReturn!=null && (toReturn.stackSize>=max || toReturn.stackSize>=toReturn.getMaxStackSize()))//found 'enough', return
+      {
+      break;
+      }
+    }
+  return toReturn;
+  }
+
+public static int getOccupiedSlots(IInventory inv, int firstSlot, int lastSlot)  
   {
   int count = 0;
-  for(int i = 0; i < inv.getSizeInventory(); i++)
+  firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
+  lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
+  for(int i = firstSlot; i <=lastSlot; i++)
+    {
+    if(inv.getStackInSlot(i)!=null)
+      {
+      count++;
+      }
+    }
+  return count;
+  }
+
+public static int getEmptySlots(IInventory inv, int firstSlot, int lastSlot)
+  {
+  int count = 0;
+  firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
+  lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
+  for(int i = firstSlot; i <= lastSlot; i++)
     {
     if(inv.getStackInSlot(i)==null)
       {
@@ -45,125 +134,164 @@ public static int getEmptySlots(IInventory inv)
   return count;
   }
 
-public static ItemStack putInFirstOpenSlot(IInventory inv, ItemStack in)
+public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int firstSlot, int lastSlot)
   {
-  return putInFirstOpenSlotBetween(inv, in, 0, inv.getSizeInventory());
-  }
-
-/**
- * puts between start/end indexes (0-18 is slots 0-17)
- * @param in
- * @param start
- * @param stopBefore
- * @return
- */
-public static ItemStack putInFirstOpenSlotBetween(IInventory inv, ItemStack in, int start, int stopBefore)
-  {
-  return mergeItemStack(inv, in, start, stopBefore);
-  }
-
-/**
- * merges provided ItemStack with the first avaliable one in the container/player inventory, returns extra, if any;
- */
-private static ItemStack mergeItemStack(IInventory inv, ItemStack in, int startIndex, int stopIndex)
-  {
-  if(in == null)
+  if(toMerge==null|| inv.getSizeInventory()==0){return null;}
+  ItemStack fromSlot = null;
+  firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
+  lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
+  for(int i = firstSlot; i <= lastSlot; i++)
     {
-    return in;
-    }
-  int iteratorIndex = startIndex;
-  if(startIndex<0)
-    {
-    startIndex = 0;
-    } 
-  if(stopIndex>inv.getSizeInventory())
-    {
-    stopIndex = inv.getSizeInventory();
-    }
-  ItemStack tempStack;  
-  if (in.isStackable())
-    {
-    while (in.stackSize > 0 && iteratorIndex < stopIndex)
-      {      
-      tempStack = inv.getStackInSlot(iteratorIndex);
-      if (tempStack != null && tempStack.itemID == in.itemID && (!in.getHasSubtypes() || in.getItemDamage() == tempStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(in, tempStack))
-        {
-        int tempTotal = tempStack.stackSize + in.stackSize;
-        if (tempTotal <= in.getMaxStackSize())
-          {          
-          tempStack.stackSize = tempTotal;
-          inv.onInventoryChanged();
-          return null;
-          }
-        else if (tempStack.stackSize < in.getMaxStackSize())
-          {
-          in.stackSize -= in.getMaxStackSize() - tempStack.stackSize;
-          inv.onInventoryChanged();
-          tempStack.stackSize = in.getMaxStackSize();
-          }
-        }
-      ++iteratorIndex;
-      }
-    }
-  if (in.stackSize > 0)
-    {  
-    iteratorIndex = startIndex;
-    while (iteratorIndex < stopIndex)
-      {      
-      tempStack = inv.getStackInSlot(iteratorIndex);
-      if (tempStack == null)
-        {
-        inv.setInventorySlotContents(iteratorIndex, in);
-        inv.onInventoryChanged();
-        return null;
-        }     
-      ++iteratorIndex;        
-      }
-    }
-  return in;
-  }
-
-public static ItemStack getStackOf(IInventory inv, int id, int dmg, int minQty, int maxQty)
-  {  
-  ItemStack stack = null;
-  for(int i = 0; i < inv.getSizeInventory(); i++)
-    {
-    stack = inv.getStackInSlot(i);
-    if(stack!=null && stack.itemID==id && stack.getItemDamage()==dmg && stack.stackSize>=minQty)
+    fromSlot = inv.getStackInSlot(i);
+    if(fromSlot==null)//skip emtpy slots this pass, we're trying to merge partial stacks first
       {
-      ItemStack temp = stack.copy();
-      if(stack.stackSize>maxQty)
-        {
-        temp.stackSize=maxQty;
-        stack.stackSize-=temp.stackSize;
-        inv.setInventorySlotContents(i, stack);
-        if(stack.stackSize<=0)
-          {
-          inv.setInventorySlotContents(i, null);
-          }
-        }
-      else
-        {
-        inv.setInventorySlotContents(i, null);
-        }      
-      return temp;
+      continue;
+      }
+    else if(fromSlot.itemID==toMerge.itemID && fromSlot.getItemDamage()==toMerge.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, toMerge))
+      {
+      int decrAmt = fromSlot.getMaxStackSize() - fromSlot.stackSize;
+      decrAmt = decrAmt > toMerge.stackSize ? toMerge.stackSize : decrAmt;
+      toMerge.stackSize -= decrAmt;
+      fromSlot.stackSize +=decrAmt;
+      }
+    if(toMerge.stackSize<=0)
+      {  
+      return null;
       }
     }
-  return null;
+  for(int i = firstSlot; i <= lastSlot; i++)
+    {
+    fromSlot = inv.getStackInSlot(i);
+    if(fromSlot==null)//place in slot
+      {      
+      inv.setInventorySlotContents(i, toMerge);
+      toMerge = null;
+      return null;
+      }
+    }
+  if(toMerge!=null && toMerge.stackSize<=0)
+    {  
+    return null;
+    }
+  return toMerge;
   }
 
-public static boolean hasStackOf(IInventory inv, int id, int dmg, int minQty)
+public static boolean canHoldItem(IInventory inv, ItemStack filter, int qty, int firstSlot, int lastSlot)
   {
-  ItemStack stack;
-  for(int i = 0; i < inv.getSizeInventory(); i ++)
+  if(filter==null){return false;}
+  int qtyLeft = qty;
+  ItemStack fromSlot = null;
+  firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
+  lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
+  for(int i = firstSlot ; i <= lastSlot; i ++)
     {
-    stack = inv.getStackInSlot(i);
-    if(stack!=null && stack.itemID==id && stack.getItemDamage()==dmg && stack.stackSize>=minQty)
+    fromSlot = inv.getStackInSlot(i);
+    if(fromSlot==null)//emtpy slot, decr by entire stack size
+      {
+      qtyLeft -= filter.getMaxStackSize();
+      }
+    else
+      {
+      if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, filter))
+        {
+        qtyLeft -= fromSlot.getMaxStackSize()-fromSlot.stackSize;
+        }
+      }
+    if(qtyLeft<=0)
       {
       return true;
       }
     }
   return false;
+  }
+
+public static boolean containsAtLeast(IInventory inv, ItemStack filter, int qty, int firstSlot, int lastSlot)
+  {
+  if(filter==null|| inv.getSizeInventory()==0)
+    {
+    return false;
+    }
+  ItemStack fromSlot = null;
+  int foundQty = 0;
+  firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
+  lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
+  for(int i = firstSlot; i <= lastSlot; i++)
+    {
+    fromSlot = inv.getStackInSlot(i);
+    if(fromSlot==null)
+      {
+      continue;
+      }
+    if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(filter, fromSlot))
+      {
+      foundQty += fromSlot.stackSize;
+      if(foundQty>=qty)
+        {
+        return true;
+        }
+      }
+    }
+  return false;
+  }
+
+public static int canHoldMore(IInventory inv, ItemStack filter, int firstSlot, int lastSlot)
+  {
+  if(filter==null || inv.getSizeInventory()==0)
+    {
+    return 0;
+    }
+  firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
+  lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
+  int availCount = 0;
+  int emptySlots = getEmptySlots(inv, firstSlot, lastSlot);
+  if(emptySlots>0)
+    {
+    availCount = filter.getMaxStackSize() * emptySlots;
+    }
+  if(filter.getMaxStackSize()>1)
+    {
+    ItemStack fromSlot;
+    for(int i = firstSlot; i <= lastSlot; i++)
+      {
+      fromSlot = inv.getStackInSlot(i);
+      if(fromSlot!=null)
+        {
+        if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(filter, fromSlot))
+          {
+          availCount += filter.getMaxStackSize() - fromSlot.stackSize;
+          }
+        }
+      }
+    }
+  return availCount;
+  }
+
+public static boolean doItemsMatch(ItemStack a, ItemStack b)
+  {
+  if(a==null || b == null)
+    {
+    return false;
+    }
+  if(a.itemID==b.itemID && a.getItemDamage()==b.getItemDamage() && ItemStack.areItemStacksEqual(a, b))
+    {
+    return true;
+    }  
+  return false;
+  }
+
+public static void dropItemInWorld(World world, ItemStack item, double x, double y, double z)
+  {
+  if(item==null || world==null )
+    {
+    return;
+    }
+  EntityItem entityToSpawn;
+  x += random.nextFloat() * 0.6f - 0.3f;
+  y += random.nextFloat() * 0.6f + 1 - 0.3f;
+  z += random.nextFloat() * 0.6f - 0.3f;
+  entityToSpawn = new EntityItem(world, x, y, z, item);
+  entityToSpawn.setPosition(x, y, z);
+  world.spawnEntityInWorld(entityToSpawn);      
   }
 
 public static void dropInventoryInWorld(World world, IInventory localInventory, double x, double y, double z)
@@ -172,15 +300,9 @@ public static void dropInventoryInWorld(World world, IInventory localInventory, 
     {
     return;
     }
-  double spawnPosX;
-  double spawnPosY;
-  double spawnPosZ;
-  int var3;
   if (localInventory != null)
     {
     ItemStack stack;
-    EntityItem entityToSpawn;
-    ItemStack stackToSpawn;
     for(int i = 0; i < localInventory.getSizeInventory(); i++)
       {      
       stack = localInventory.getStackInSlotOnClosing(i);      
@@ -188,11 +310,7 @@ public static void dropInventoryInWorld(World world, IInventory localInventory, 
         {
         continue;
         }
-      spawnPosX = x + random.nextFloat() * 0.6f;
-      spawnPosY = y + random.nextFloat() * 0.6f + 1;
-      spawnPosZ = z + random.nextFloat() * 0.6f;
-      entityToSpawn = new EntityItem(world, spawnPosX, spawnPosY, spawnPosZ, stack);
-      world.spawnEntityInWorld(entityToSpawn);      
+      dropItemInWorld(world, stack, x, y, z);      
       }
     }
   }

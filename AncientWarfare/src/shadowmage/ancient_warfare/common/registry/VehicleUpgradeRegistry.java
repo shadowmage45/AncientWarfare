@@ -80,7 +80,7 @@ public void registerUpgrades()
 
 /**
  * @param dmg
- * @param type
+ * @param targetType
  * @param upgrade
  */
 public void registerUpgrade(IVehicleUpgradeType upgrade)

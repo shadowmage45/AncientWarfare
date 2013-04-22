@@ -46,14 +46,14 @@ public void onTick()
   {
   Config.logDebug("choosing patrol point");
   this.currentPoint = npc.wayNav.getNextPatrolPoint();
-  this.currentTarget = npc.targetHelper.getTargetFor(currentPoint.x, currentPoint.y, currentPoint.z, TargetType.MOVE);
+  this.currentTarget = npc.targetHelper.getTargetFor(currentPoint.floorX(), currentPoint.floorY(), currentPoint.floorZ(), TargetType.MOVE);
   npc.setTargetAW(currentTarget);  
   }
 
 @Override
 public boolean shouldExecute()
   {
-  return npc.wayNav.getPatrolSize()>0 && (this.currentPoint==null || npc.getDistance(currentPoint.x, currentPoint.y, currentPoint.z)<3);
+  return npc.wayNav.getPatrolSize()>0 && (this.currentPoint==null || npc.getDistance(currentPoint.floorX(), currentPoint.floorY(), currentPoint.floorZ())<3);
   }
 
 

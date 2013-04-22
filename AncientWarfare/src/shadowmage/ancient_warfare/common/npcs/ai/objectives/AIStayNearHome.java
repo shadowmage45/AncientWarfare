@@ -60,7 +60,7 @@ public void updatePriority()
   else
     {    
     WayPoint home = npc.wayNav.getHomePoint();
-    float range = (float) npc.getDistance(home.x, home.y, home.z);
+    float range = (float) npc.getDistance(home.floorX(), home.floorY(), home.floorZ());
     if(range>leashRange)
       {
       this.currentPriority = this.maxPriority; 
@@ -87,7 +87,7 @@ public void onRunningTick()
     }
   else
     {
-    float range = (float) npc.getDistance(home.x, home.y, home.z);
+    float range = (float) npc.getDistance(home.floorX(), home.floorY(), home.floorZ());
     if(range<chokeRange)
       {
       Config.logDebug("ai stay near home: sensing entity is within choke range: setting finished");
@@ -104,7 +104,7 @@ public void onObjectiveStart()
   if(home!=null)
     {
     Config.logDebug("ai stay near home: setting move target");
-    npc.setTargetAW(npc.targetHelper.getTargetFor(home.x, home.y, home.z, TargetType.MOVE));
+    npc.setTargetAW(npc.targetHelper.getTargetFor(home.floorX(), home.floorY(), home.floorZ(), TargetType.MOVE));
     }
   else
     {
