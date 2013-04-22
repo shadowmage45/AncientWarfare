@@ -52,7 +52,6 @@ public boolean onInteract(World world, EntityPlayer player)
     {
     GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);
     }
-  //TODO set a control GUI
   return true;
   }
 

@@ -51,6 +51,8 @@ protected String name = "";
 protected String tooltip = "";
 protected int ranks = 1;
 protected int maxWorkers = 1;
+protected int workSizeMaxHorizontal = 10;
+protected int workSizeMaxHeight = 2;
 protected boolean isWorkSite = false;
 protected boolean isDepository = false;
 protected boolean isDwelling = false;
@@ -163,6 +165,24 @@ public ItemStack getDisplayItem(int rank)
 public int getInventorySize(int level)
   {
   return inventorySize;
+  }
+
+@Override
+public int getMaxWorkSizeWidth(int level)
+  {
+  return this.workSizeMaxHorizontal;
+  }
+
+@Override
+public int getMaxWorkSizeHeight(int level)
+  {
+  return this.workSizeMaxHeight;
+  }
+
+@Override
+public int getMaxWorkAreaCube(int level)
+  {
+  return this.getMaxWorkSizeWidth(level)*this.getMaxWorkSizeWidth(level)*this.getMaxWorkSizeHeight(level);
   }
 
 }

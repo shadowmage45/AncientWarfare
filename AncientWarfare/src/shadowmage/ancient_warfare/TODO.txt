@@ -27,6 +27,7 @@ WORKSITES
             worker will query work-point status, set finished/failed if appropriate
 * needs a 'complete rescan divider', to know when to do a complete rescan, or just update nodes
     (scan a couple ticks after first load, and rescan every minute or two after that)    
+* most civics probably need chunk-loaders to prevent them from trying to access unloaded areas.
         
 PATHFINDING
 * still a POS--needs heavy rework/rewrite (perhaps convert into an entityPath?)
@@ -53,7 +54,9 @@ NPCS
 * resource search/seeking incremental algorithm (djk?)
 * create AI objectives
     Stay Near Commander
-    Select Commander (constantly-run objective?)  
+    Select Commander (constantly-run objective, e.g. does the 'run' in the 'update priority' tick?)  
+* NPC type needs to keep track of applicable work-types for that NPC
+    e.g. farm_plant/farm_harvest -- mine -- tree_plant/tree_harvest -- breed/cull -- etc...    
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -61,10 +64,7 @@ GUI FRAMEWORK
 * add tooltips to GUIs
 
 TESTING
-* test structure loot weighting
-* test structure weighting
-* test structure underground buildings (dungeons)
-* test structure submerged code
+* test structure stuff extensively
 
 TEMPLATES
 
@@ -192,4 +192,17 @@ TWEAKS/OPTIMIZATION
 /********** 04-19-13 **********/
 * need to add dynamic speed-setting to entities (faster if attacking/following, slower when patrol/wander/work)
 /********** 04-20-13 **********/
+* rewrite of navigator, work on farm civics
+/********** 04-21-13 **********/
+* more work on farm civics, depository functions for npcs
+/********** 04-22-13 **********/
+* add potato/carrot farms
+/********** 04-23-13 **********/
+/********** 04-24-13 **********/
+/********** 04-25-13 **********/
+/********** 04-26-13 **********/
+/********** 04-27-13 **********/
+/********** 04-28-13 **********/
+/********** 04-29-13 **********/
+/********** 04-30-13 **********/
 

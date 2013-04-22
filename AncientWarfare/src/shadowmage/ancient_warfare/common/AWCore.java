@@ -24,10 +24,12 @@ package shadowmage.ancient_warfare.common;
 
 
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.common.chunkloading.ChunkLoader;
+import shadowmage.ancient_warfare.common.civics.worksite.te.mine.MineLevel;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -191,8 +193,18 @@ public void load(FMLPostInitializationEvent evt)
 
   //DEBUG //TODO -- remove
   PathBenchmarking.instance().doBenchmarkRuns();
+  mineTest();
   }
 
-
+private void mineTest()
+  {
+  MineLevel level = new MineLevel(0,0,0, 16, 4, 16);
+  level.initializeLevel(null, 7, 7);
+  List<String> lines = level.getMineExportMap();
+  for(String l : lines)
+    {
+    Config.logDebug(l);
+    }
+  }
 
 }

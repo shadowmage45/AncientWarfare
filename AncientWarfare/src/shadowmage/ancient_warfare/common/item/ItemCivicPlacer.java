@@ -105,19 +105,6 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
     }  
   }
 
-public static boolean hasScanBB(ItemStack stack)
-  {
-  if(stack!=null)
-    {
-    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
-      {
-      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
-      
-      }
-    }
-  return false;
-  }
-
 @Override
 public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {
@@ -136,36 +123,66 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
     if(tag.hasKey("pos2") && tag.hasKey("pos1") && tag.hasKey("rank") && tag.hasKey("type"))
       {
+      BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
+      BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
       hit.offsetForMCSide(side);
-      placeCivicBlock(world, hit, new BlockPosition(tag.getCompoundTag("pos1")), new BlockPosition(tag.getCompoundTag("pos2")),  tag.getInteger("type"), tag.getInteger("rank"));
-      ItemStack item = player.getCurrentEquippedItem();
-      if(item!=null && item.itemID == ItemLoader.civicPlacer.itemID)
+      //TODO//make sure that the control block position is adjacent/inside work bounds.
+      if(true)
         {
-        if(!player.capabilities.isCreativeMode)
+        placeCivicBlock(world, hit, pos1, pos2,  tag.getInteger("type"), tag.getInteger("rank"));
+        ItemStack item = player.getCurrentEquippedItem();
+        if(item!=null && item.itemID == ItemLoader.civicPlacer.itemID)
           {
-          stack.stackSize--;
-          if(stack.stackSize<=0)
+          if(!player.capabilities.isCreativeMode)
             {
-            player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+            stack.stackSize--;
+            if(stack.stackSize<=0)
+              {
+              player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+              }
             }
+          else
+            {
+            NBTTagCompound newtag = new NBTTagCompound();
+            newtag.setInteger("type", tag.getInteger("type"));
+            newtag.setInteger("rank", tag.getInteger("rank"));
+            stack.setTagInfo("civicInfo", newtag);
+            player.openContainer.detectAndSendChanges();
+            }        
           }
-        else
-          {
-          NBTTagCompound newtag = new NBTTagCompound();
-          newtag.setInteger("type", tag.getInteger("type"));
-          newtag.setInteger("rank", tag.getInteger("rank"));
-          stack.setTagInfo("civicInfo", newtag);
-          player.openContainer.detectAndSendChanges();
-          }        
+        }
+      else
+        {
+        player.addChatMessage("Please choose a position inside or adjacent to the work bounds!");
         }      
       }
     else if(tag.hasKey("pos1"))
       {
-      if(player.isSneaking())
+      BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
+      Civic civ = CivicRegistry.instance().getCivicFor(tag.getInteger("type"));
+      int rank = tag.getInteger("rank");
+      if(civ!=null)
         {
-        hit.offsetForMCSide(side);
+        int maxWidth = civ.getMaxWorkSizeWidth(rank);
+        int maxHeight = civ.getMaxWorkSizeHeight(rank);
+        int maxArea = civ.getMaxWorkAreaCube(rank);
+        if(player.isSneaking())
+          {
+          hit.offsetForMCSide(side);
+          }
+        int width1 = Math.abs(hit.z-pos1.z);
+        int width2 = Math.abs(hit.x-pos1.x);
+        int height = Math.abs(hit.y-pos1.y);
+        int totalArea = width1*width2*height;
+        if(width1<=maxWidth && width2<=maxWidth && height <=maxHeight && totalArea <= maxArea)//
+          {          
+          tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
+          }
+        else
+          {
+          player.addChatMessage("Too large of an area, try a smaller area!");
+          }        
         }
-      tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
       }
     else
       {      

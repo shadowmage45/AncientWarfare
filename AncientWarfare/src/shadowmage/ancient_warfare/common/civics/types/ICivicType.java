@@ -72,6 +72,10 @@ ItemStack getItemToConstruct(int level);
  */
 ItemStack getDisplayItem(int rank);
 
+int getMaxWorkSizeWidth(int level);
+int getMaxWorkSizeHeight(int level);
+int getMaxWorkAreaCube(int level);
+
 boolean isWorkSite();
 boolean isDepository();
 boolean isDwelling();
