@@ -251,7 +251,10 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
   if(point!=null)
     {    
     point.setFinished();
-    this.workPoints.remove(point);
+//    if(!point.hasWork(worldObj))
+//      {
+//      this.workPoints.remove(point);
+//      }
     }
   }
 

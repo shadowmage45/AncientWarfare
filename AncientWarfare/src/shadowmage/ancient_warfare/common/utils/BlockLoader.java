@@ -24,8 +24,10 @@ import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.block.BlockBuilder;
 import shadowmage.ancient_warfare.common.block.TEBuilder;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCarrot;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPotato;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmWheat;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
-import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarmWheat;
 import shadowmage.ancient_warfare.common.config.Config;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -52,9 +54,11 @@ public static BlockLoader instance()
 public void load()
   {
   GameRegistry.registerBlock(builder, "Builder");
-  GameRegistry.registerTileEntity(TEBuilder.class, "AWBuilderTE");
-  GameRegistry.registerTileEntity(TEWorkSiteFarmWheat.class, "Wheat Farm");
-  GameRegistry.registerTileEntity(TEWorkSiteFarm.class, "AWFarmSiteTE");  
+  GameRegistry.registerTileEntity(TEBuilder.class, "AWBuilderTE");  
+  GameRegistry.registerTileEntity(TEWorkSiteFarm.class, "AWFarmSiteTE");
+  GameRegistry.registerTileEntity(TEFarmWheat.class, "Wheat Farm");
+  GameRegistry.registerTileEntity(TEFarmCarrot.class, "Carrot Farm");
+  GameRegistry.registerTileEntity(TEFarmPotato.class, "Potato Farm");
   }
 
 }

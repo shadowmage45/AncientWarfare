@@ -31,7 +31,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public class TEWorkSiteFarmWheat extends TEWorkSiteFarm
+public class TEFarmWheat extends TEWorkSiteFarm
 {
 
 ItemStack seedFilter = new ItemStack(Item.seeds,1);
@@ -40,7 +40,7 @@ ItemStack wheatFilter = new ItemStack(Item.wheat,1);
 /**
  * 
  */
-public TEWorkSiteFarmWheat()
+public TEFarmWheat()
   {
   this.mainBlockID = Block.crops.blockID;
   this.mainBlockMatureMeta = 7;
@@ -53,42 +53,36 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
     {
     if(point.getWorkType()==WorkType.FARM_HARVEST)
       {
+      Config.logDebug("harvesting wheat!!");
       List<ItemStack> blockDrops = Block.crops.getBlockDropped(npc.worldObj, point.floorX(), point.floorY(), point.floorZ(), 7, 0);
-      boolean gotSeedBack = false;
+      worldObj.setBlockWithNotify(point.floorX(), point.floorY(), point.floorZ(), 0);
       for(ItemStack item : blockDrops)
         {
-        if(!gotSeedBack && InventoryTools.doItemsMatch(item, seedFilter))
+        if(item==null){continue;}
+        if(InventoryTools.doItemsMatch(item, seedFilter) && inventory.canHoldItem(seedFilter, item.stackSize))
           {
-          gotSeedBack = true;
-          //place item into inventory
+          item = inventory.tryMergeItem(item);
+          if(item!=null)
+            {
+            InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
+            }
           }
-        }
-      Config.logDebug("harvesting wheat!!");
-      worldObj.setBlockWithNotify(point.floorX(), point.floorY(), point.floorZ(), 0);
-      ItemStack wheat = ItemStack.copyItemStack(wheatFilter);
-      wheat.stackSize = 3;
-//      Config.logDebug("adding wheat to inventory!");
-      wheat = npc.inventory.tryMergeItem(wheat);
-      if(wheat!=null)
-        {
-        Config.logDebug("should drop extra wheat!!");
-        //TODO drop extra on the ground...
-        }
-      ItemStack seedStack = ItemStack.copyItemStack(seedFilter);
-//      Config.logDebug("adding seeds to te inventory");
-      seedStack = this.inventory.tryMergeItem(seedStack);
-      if(seedStack!=null)
-        {
-        Config.logDebug("should drop extra seeds!!");
-        //TODO drop extra on the ground...
+        else
+          {
+          item = npc.inventory.tryMergeItem(item);
+          if(item!=null)
+            {
+            InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
+            }
+          }
         }
       }
     else if(point.getWorkType()==WorkType.FARM_PLANT)
       {
-      if(npc.inventory.containsAtLeast(seedFilter, 1))
+      if(inventory.containsAtLeast(seedFilter, 1))
         {
         Config.logDebug("planting wheat!!");
-        npc.inventory.tryRemoveItems(seedFilter, 1);
+        inventory.tryRemoveItems(seedFilter, 1);
         worldObj.setBlockAndMetadataWithNotify(point.floorX(), point.floorY()+1, point.floorZ(), mainBlockID, 0);
         }
       else
@@ -97,7 +91,6 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
         }
       }
     }
-  Config.logDebug("wheat farm work finished. wkred: "+ this.workPoints.size());
   super.onWorkFinished(npc, point);
   Config.logDebug("wheat farm work finished POST SUPER.  wkred: "+ this.workPoints.size());
   }
@@ -111,26 +104,6 @@ public boolean canAssignWorkPoint(NpcBase npc, WorkPoint p)
     }
   Config.logDebug("farm did not contain seeds");
   return false;
-  }
-
-@Override
-public WorkPoint getWorkPoint(NpcBase npc)
-  {
-  WorkPoint p = super.getWorkPoint(npc);
-  if(p!=null && p.getWorkType()==WorkType.FARM_PLANT)
-    {
-    if(this.inventory.containsAtLeast(seedFilter, 1) && npc.inventory.canHoldItem(seedFilter, 1))
-      {
-      Config.logDebug("removing 1 seed");
-      this.inventory.tryRemoveItems(seedFilter, 1);
-      npc.inventory.tryMergeItem(ItemStack.copyItemStack(seedFilter));
-      }
-    else
-      {
-      return null;
-      }
-    }
-  return p;
   }
 
 }
