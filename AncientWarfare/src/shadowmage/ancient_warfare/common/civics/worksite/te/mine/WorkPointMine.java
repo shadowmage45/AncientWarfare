@@ -26,7 +26,7 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 public class WorkPointMine extends WorkPoint
 {
 
-MinePointEntry workPoint;
+MinePoint minePoint;
 /**
  * @param x
  * @param y
@@ -34,9 +34,10 @@ MinePointEntry workPoint;
  * @param side
  * @param type
  */
-public WorkPointMine(int x, int y, int z, TargetType type)
+public WorkPointMine(MinePoint point)
   {
-  super(x, y, z,  type);
+  super(point.x, point.y, point.z,  point.currentAction);
+  this.minePoint = point;
   }
 
 }

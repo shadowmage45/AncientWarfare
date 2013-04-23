@@ -20,19 +20,19 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
-import shadowmage.ancient_warfare.common.civics.worksite.te.mine.MineLevel.MineActionType;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class MinePointEntry implements Comparable<MinePointEntry>
+public class MinePoint implements Comparable<MinePoint>
 {
 
 int x;
 int y;
 int z;
 int order = 0;
-MineActionType action = MineActionType.NONE;//original action as designated when scanned
-MineActionType currentAction = MineActionType.NONE;//current action needed, as designated by worked on/rescanned
+TargetType action = TargetType.NONE;//original action as designated when scanned
+TargetType currentAction = TargetType.NONE;//current action needed, as designated by worked on/rescanned
 
-protected MinePointEntry(int x, int y, int z, int order, MineActionType type)
+protected MinePoint(int x, int y, int z, int order, TargetType type)
   {
   this.order = order;
   this.action = type;
@@ -40,7 +40,7 @@ protected MinePointEntry(int x, int y, int z, int order, MineActionType type)
   }
 
 @Override
-public int compareTo(MinePointEntry o)
+public int compareTo(MinePoint o)
   {
   if(o==null)
     {
@@ -76,9 +76,9 @@ public boolean equals(Object obj)
     return true;
   if (obj == null)
     return false;
-  if (!(obj instanceof MinePointEntry))
+  if (!(obj instanceof MinePoint))
     return false;
-  MinePointEntry other = (MinePointEntry) obj;  
+  MinePoint other = (MinePoint) obj;  
   if (order != other.order)
     return false;
   if (x != other.x)

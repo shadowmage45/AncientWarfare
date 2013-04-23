@@ -45,9 +45,11 @@ public enum TargetType
   BARN_CULL,
   BUILD_CLEAR,
   BUILD_PLACE,
-  MINE_SHAFT,
-  MINE_TUNNEL,
-  MINE_HARVEST,
+  MINE_CLEAR_TUNNEL,//for e/w tunnels
+  MINE_CLEAR_BRANCH,//for n/s branches from tunnels
+  MINE_CLEAR_THEN_LADDER,//for the central vertical shaft
+  MINE_CLEAR_THEN_FILL,//for resources in the wall/roof/floor
+  MINE_FILL,//for holes in the wall/roof/floor
   TREE_CHOP,
   TREE_PLANT,
   PICKUP,

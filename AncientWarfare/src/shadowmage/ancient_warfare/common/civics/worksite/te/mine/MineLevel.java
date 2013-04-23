@@ -21,10 +21,13 @@
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class MineLevel
 {
@@ -36,9 +39,9 @@ private final int xSize;
 private final int ySize;
 private final int zSize;
 
-private final MinePointEntry[] mineArray;
-private PriorityQueue<MinePointEntry> pointQueue = new PriorityQueue<MinePointEntry>();
-private ArrayList<MinePointEntry> finishedPoints = new ArrayList<MinePointEntry>();
+private final MinePoint[] mineArray;
+private PriorityQueue<MinePoint> pointQueue = new PriorityQueue<MinePoint>();
+private ArrayList<MinePoint> finishedPoints = new ArrayList<MinePoint>();
 
 /**
  * position is minX, minY, minZ of the structure boundinb box
@@ -55,7 +58,7 @@ public MineLevel(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize)
   this.xSize = xSize;
   this.ySize = ySize;
   this.zSize = zSize;
-  this.mineArray = new MinePointEntry[xSize*ySize*zSize];
+  this.mineArray = new MinePoint[xSize*ySize*zSize];
   this.minX = xPos;
   this.minY = yPos;
   this.minZ = zPos;
@@ -66,7 +69,7 @@ public boolean hasWork()
   return !this.pointQueue.isEmpty();
   }
 
-public MinePointEntry getNextWorkPoint()
+public MinePoint getNextWorkPoint()
   {
   return this.pointQueue.poll();
   }
@@ -75,17 +78,17 @@ public MinePointEntry getNextWorkPoint()
  * called by onFailed to return a node to work-queue
  * @param ent
  */
-public void addMinePointEntry(MinePointEntry ent)
+public void addMinePointEntry(MinePoint ent)
   {
   this.pointQueue.offer(ent);
   }
 
-public void onPointFinished(MinePointEntry ent)
+public void onPointFinished(MinePoint ent)
   {
   this.finishedPoints.add(ent);
   }
 
-public MinePointEntry getDataWorldIndex(int x, int y, int z)
+public MinePoint getDataWorldIndex(int x, int y, int z)
   {
 //  int yIndex = xSize * zSize * y;
 //  int zIndex = xSize * z;
@@ -93,17 +96,17 @@ public MinePointEntry getDataWorldIndex(int x, int y, int z)
   return mineArray[getWorldAdjustedIndex(x,y,z)];
   }
 
-protected MinePointEntry getDataLocalIndex(int x, int y, int z)
+protected MinePoint getDataLocalIndex(int x, int y, int z)
   {
   return this.mineArray[getIndex(x, y, z)];
   }
 
-protected void setDataLocalIndex(int x, int y, int z, MinePointEntry data)
+protected void setDataLocalIndex(int x, int y, int z, MinePoint data)
   {
   this.mineArray[getIndex(x, y, z)]= data;
   }
 
-public void setDataWorldIndex(int x, int y, int z, MinePointEntry data)
+public void setDataWorldIndex(int x, int y, int z, MinePoint data)
   {  
   this.mineArray[getWorldAdjustedIndex(x,y,z)]=data;
   }
@@ -149,14 +152,14 @@ public void initializeLevel(World world, int shaftX, int shaftZ)
 
 protected int mapShaft(World world, int order, int shaftX, int shaftZ)
   {  
-  MinePointEntry entry;
+  MinePoint entry;
   for(int y = minY + ySize-1; y >= minY; y--, order++)//start at the top...
     {
     for(int x = shaftX; x<=shaftX+1; x++)
       {
       for(int z = shaftZ; z<=shaftZ+1; z++)
         {
-        this.addPointToQueueAndMap(x, y, z, order, MineActionType.CLEAR_THEN_LADDER);
+        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_THEN_LADDER);
         }
       }    
     }
@@ -171,9 +174,9 @@ protected int mapShaft(World world, int order, int shaftX, int shaftZ)
  * @param order
  * @param type
  */
-protected void addPointToQueueAndMap(int x, int y, int z, int order, MineActionType type)
+protected void addPointToQueueAndMap(int x, int y, int z, int order, TargetType type)
   {
-  MinePointEntry entry = new MinePointEntry(x,y,z, order, type);
+  MinePoint entry = new MinePoint(x,y,z, order, type);
   this.setDataWorldIndex(x, y, z, entry);
   this.pointQueue.offer(entry);
   }
@@ -187,7 +190,7 @@ protected int mapTunnels(World world, int order, int shaftX, int shaftZ)
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, MineActionType.CLEAR_TUNNEL);
+        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
         }
       }
     }
@@ -198,7 +201,7 @@ protected int mapTunnels(World world, int order, int shaftX, int shaftZ)
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, MineActionType.CLEAR_TUNNEL);
+        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
         }
       }
     }
@@ -216,7 +219,7 @@ protected int mapBranches(World world, int startOrder, int shaftX, int shaftZ)
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, MineActionType.CLEAR_BRANCH);
+        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
         }
       }
     order = branchStartOrder;
@@ -224,7 +227,7 @@ protected int mapBranches(World world, int startOrder, int shaftX, int shaftZ)
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, MineActionType.CLEAR_BRANCH);
+        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
         }
       }
     }
@@ -235,7 +238,7 @@ protected int mapBranches(World world, int startOrder, int shaftX, int shaftZ)
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, MineActionType.CLEAR_BRANCH);
+        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
         }
       }
     order = branchStartOrder;
@@ -243,7 +246,7 @@ protected int mapBranches(World world, int startOrder, int shaftX, int shaftZ)
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, MineActionType.CLEAR_BRANCH);
+        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
         }
       }
     }
@@ -259,7 +262,7 @@ public List<String> getMineExportMap()
   {
   List<String> map = new ArrayList<String>();
   String currentLine;
-  MinePointEntry entry;
+  MinePoint entry;
   for(int y = this.ySize-1; y >=0; y--)
     {
     map.add("Level: "+y);    
@@ -292,16 +295,22 @@ public List<String> getMineExportMap()
   return map;
   }
 
-
-public enum MineActionType
-{
-NONE,
-CLEAR_TUNNEL,//for e/w tunnels
-CLEAR_BRANCH,//for n/s branches from tunnels
-CLEAR_THEN_LADDER,//for the central vertical shaft
-CLEAR_THEN_FILL,//for resources in the wall/roof/floor
-FILL;//for holes in the wall/roof/floor
-}
-
+/**
+ * called from TE to validate 'cleared' points list
+ */
+public void validatePoints(World world)
+  {
+  Iterator<MinePoint> it = this.finishedPoints.iterator();
+  MinePoint p = null;
+  while(it.hasNext())
+    {
+    p = it.next();
+    if((p.action == TargetType.MINE_CLEAR_THEN_LADDER && world.getBlockId(p.x, p.y, p.z)!=Block.ladder.blockID) || (p.action!=TargetType.MINE_CLEAR_THEN_LADDER && world.getBlockId(p.x, p.y, p.z)!=0))
+      {
+      it.remove();
+      this.pointQueue.offer(p);
+      }
+    }
+  }
 
 }

@@ -93,9 +93,9 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
 @Override
 public void onWorkFailed(NpcBase npc, WorkPoint point)
   {
-  if(point instanceof WorkPointMine)
+  if(this.currentLevel!=null && point instanceof WorkPointMine)
     {
-    
+    this.currentLevel.addMinePointEntry(((WorkPointMine)point).minePoint);
     }
   super.onWorkFailed(npc, point);
   }
@@ -104,12 +104,14 @@ public void onWorkFailed(NpcBase npc, WorkPoint point)
 public void updateWorkPoints()
   {
   super.updateWorkPoints();
-  if(this.workPoints.size()<this.civic.getMaxWorkers(structureRank))
+  if(this.currentLevel!=null)
     {
-    while(this.workPoints.size()<this.civic.getMaxWorkers(structureRank) && this.currentLevel!=null && this.currentLevel.hasWork())
-      {
-      MinePointEntry minePoint = this.currentLevel.getNextWorkPoint();
-      }
+    this.currentLevel.validatePoints(worldObj);
+    }
+  while(this.workPoints.size()<this.civic.getMaxWorkers(structureRank) && this.currentLevel!=null && this.currentLevel.hasWork())
+    {
+    MinePoint minePoint = this.currentLevel.getNextWorkPoint();
+    this.workPoints.add(new WorkPointMine(minePoint));    
     }
   }
 
@@ -123,8 +125,7 @@ public WorkPoint doWork(NpcBase npc, WorkPoint p)
 @Override
 public boolean hasWork(NpcBase npc)
   {
-  // TODO Auto-generated method stub
-  return super.hasWork(npc);
+  return super.hasWork(npc) || (currentLevel!=null && currentLevel.hasWork());
   }
 
 @Override
