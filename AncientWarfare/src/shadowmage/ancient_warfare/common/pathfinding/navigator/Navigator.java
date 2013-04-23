@@ -89,7 +89,6 @@ public void setMoveToTarget(int x, int y, int z)
   int ey = MathHelper.floor_double(entity.posY);
   int ez = MathHelper.floor_double(entity.posZ);
   ey = PathUtils.findClosestYTo(world, ex, ey, ez);
-  y = PathUtils.findClosestYTo(world, x, y, z);
   if(this.shouldCalculatePath(ex, ey, ez, x, y, z))
     {
     this.finalTarget.reassign(x, y, z);

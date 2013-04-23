@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
+import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AIMoveToTarget extends NpcAITask
@@ -30,11 +31,6 @@ public class AIMoveToTarget extends NpcAITask
 
 boolean useAttackDistance = false;
 float stopDistance = 1.f;
-
-int stuckTicks = 0;
-
-int x;
-int z;
 
 /**
  * @param npc
@@ -56,7 +52,7 @@ public void onTick()
   float bZ = npc.getTarget().posZ();
   if(npc.getTarget().getEntity()!=null)
     {
-    bY = (float) npc.getTarget().getEntity().posY;
+    bY = PathUtils.findClosestYTo(npc.getWorldAccess(), npc.getTarget().floorX(), npc.getTarget().floorY(), npc.getTarget().floorZ());
     }
   int ex = MathHelper.floor_double(npc.posX);
   int ey = MathHelper.floor_double(npc.posY);

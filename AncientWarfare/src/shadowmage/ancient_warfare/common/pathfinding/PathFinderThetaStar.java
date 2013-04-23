@@ -25,6 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import shadowmage.ancient_warfare.common.config.Config;
+
 /**
  * going to be a theta-Star implementation
  * (pre-smoothed ASTAR paths), using line-of sight checks
@@ -178,6 +180,12 @@ private void searchLoop()
       {
       break;//goal was hit, found the right path
       }    
+    else if(currentNode.getDistanceFrom(tx, ty, tz)<1.5d)//TODO hack to get around un-pathable target positions
+      {
+      goalCache.parentNode = currentNode;
+      currentNode = goalCache;
+      break;
+      }
     if(shouldTerminateEarly())
       {
 //      Config.logDebug("break from path length");
