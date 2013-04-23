@@ -24,7 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AITargetEntry
 {
@@ -82,7 +82,7 @@ public boolean isTileTarget()
   return !this.isEntityTarget;
   }
 
-public int getAggroAdjustment(AIAggroEntry target)
+public int getAggroAdjustment(AIAggroTargetWrapper target)
   {
   return Config.npcAITicks;
   }

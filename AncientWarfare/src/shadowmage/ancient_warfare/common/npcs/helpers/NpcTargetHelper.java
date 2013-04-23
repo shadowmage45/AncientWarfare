@@ -26,15 +26,15 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroList;
+import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroTargetWrapper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetList;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 /**
@@ -46,19 +46,6 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
  */
 public class NpcTargetHelper
 {
-
-//public static final int TARGET_ATTACK = 0;
-//public static final int TARGET_MOUNT = 1;
-//public static final int TARGET_HARVEST = 2;
-//public static final int TARGET_HEAL = 3;
-//public static final int TARGET_FOLLOW = 4;
-//public static final int TARGET_WANDER = 5;
-//public static final int TARGET_MOVE = 6;
-//public static final int TARGET_PATROL = 7;
-public AITargetEntry playerTargetEntry;
-public AITargetEntry wanderTargetEntry;
-public AITargetEntry moveTargetEntry;
-public AITargetEntry patrolTargetEntry;
 
 NpcBase npc;
 
@@ -75,24 +62,18 @@ HashMap<TargetType, AIAggroList> aggroEntries = new HashMap<TargetType, AIAggroL
 public NpcTargetHelper(NpcBase npc)
   {
   this.npc = npc;
-  this.playerTargetEntry = new AITargetEntry(npc, TargetType.FOLLOW, EntityPlayer.class, 1, true, 40);
-  this.wanderTargetEntry = new AITargetEntry(npc, TargetType.WANDER, null, 0, false, 40);
-  this.moveTargetEntry = new AITargetEntry(npc, TargetType.MOVE, null, 0, false, 40);
-  this.patrolTargetEntry = new AITargetEntry(npc, TargetType.PATROL, null, 0, false, 40);
   }
 
-public AIAggroEntry getTargetFor(int x, int y, int z, TargetType type)
+public int getAggroAdjustmentFor(AIAggroTargetWrapper taget)
   {
-  switch(type)
-  {
-  case WANDER:
-  return new AIAggroEntry(npc, wanderTargetEntry, x, y, z);
-  case MOVE:  
-  return new AIAggroEntry(npc, moveTargetEntry, x, y, z);
-  case PATROL:
-  return new AIAggroEntry(npc, patrolTargetEntry, x,y,z);
+  //TODO
+  return Config.npcAITicks;
   }
-  return new AIAggroEntry(npc, moveTargetEntry, x, y, z);
+
+public float getMaxRangeFor(AIAggroTargetWrapper target)
+  {
+  //TODO //entry.targetEntry.maxTargetRange
+  return Config.npcAISearchRange;
   }
 
 public void addTargetEntry(AITargetEntry entry)
@@ -182,7 +163,7 @@ public void checkForTargets()
 //  Config.logDebug("entity search took: "+(t2-t)+"ns");
   }
 
-public float getAttackDistance(AIAggroEntry target)
+public float getAttackDistance(ITargetEntry target)
   {
 	if(target==null)
 	{
@@ -192,7 +173,7 @@ public float getAttackDistance(AIAggroEntry target)
     {
     return ((VehicleBase)npc.ridingEntity).getEffectiveRange((float)npc.ridingEntity.posY - target.posY());
     }
-  if(!target.isEntityEntry)//TODO should get yaw towards target, offset len by adj len of actual BB edge pos at that yaw
+  if(target.getEntity()==null)//TODO should get yaw towards target, offset len by adj len of actual BB edge pos at that yaw
     {
     //return 0.25f;
     return 1.f + npc.width*0.5f;
@@ -227,25 +208,14 @@ public void handleBeingAttacked(EntityLiving damager)
 
 public boolean areTargetsInRange(TargetType type, float range)
   {
-//  Config.logDebug("checking for targets in range from targetHelper");
   if(this.aggroEntries.containsKey(type))
     {
     return this.aggroEntries.get(type).areTargetsInRange(range);
     }
-//  Config.logDebug("did not have targets of type");
-//  Config.logDebug("aggro entries size: "+this.aggroEntries.size() + " contents: ");
-//  for(AIAggroList list : this.aggroEntries.values())
-//    {
-//    Config.logDebug("listing values for "+list.targetType);
-//    for(AIAggroEntry entry : list.targetEntries)
-//      {
-//      Config.logDebug("contains entry: "+entry);
-//      }
-//    }
   return false;
   }
 
-public AIAggroEntry getHighestAggroTargetInRange(TargetType type, float range)
+public ITargetEntry getHighestAggroTargetInRange(TargetType type, float range)
   {
   if(this.aggroEntries.containsKey(type))
     {
@@ -254,7 +224,7 @@ public AIAggroEntry getHighestAggroTargetInRange(TargetType type, float range)
   return null;
   }
 
-public AIAggroEntry getHighestAggroTarget(TargetType type)
+public ITargetEntry getHighestAggroTarget(TargetType type)
   {
   if(this.aggroEntries.containsKey(type))
     {

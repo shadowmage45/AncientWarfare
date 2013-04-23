@@ -18,27 +18,24 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.pathfinding.waypoints;
+package shadowmage.ancient_warfare.common.npcs.waypoints;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.civics.WorkType;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
-import shadowmage.ancient_warfare.common.pathfinding.PathManager;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
-import shadowmage.ancient_warfare.common.utils.TargetType;
-import shadowmage.ancient_warfare.common.utils.Trig;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 /**
  * far more closely tied to Npcs than I would have liked...., more of a waypoint helper. needs moved into npcs/helper folder and renamed
@@ -50,23 +47,42 @@ public class WayPointNavigator implements IPathableCallback, INBTTaggable
 {
 
 IPathableEntity owner;
+ITargetEntry currentTarget = null;
+ITargetEntry playerTarget = null;
 WayPoint homePoint = null;
 WayPoint workSitePoint = null;
 WorkPoint depositPoint = null;
 WorkPoint workPoint = null;
 TECivic workSite = null;
 TileEntity depositSite = null;
-List<WayPointPath> wayPaths = new ArrayList<WayPointPath>();
 List<WayPoint> wayPoints = new ArrayList<WayPoint>();
 List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
 int currentPatrolPoint = 0;
 
-WayPoint searchPointA;
-WayPoint searchPointB;
 
 public WayPointNavigator(IPathableEntity owner)
   {
   this.owner = owner;
+  }
+
+public ITargetEntry getTarget()
+  {
+  return this.currentTarget;
+  }
+
+public void setTarget(ITargetEntry target)
+  {
+  this.currentTarget = target;
+  }
+
+public ITargetEntry getPlayerTarget()
+  {
+  return this.playerTarget;
+  }
+
+public void setPlayerTarget(ITargetEntry target)
+  {
+  this.playerTarget = target;
   }
 
 public void addPatrolPoint(int x, int y, int z)
@@ -104,28 +120,6 @@ public void addWayPoint(WayPoint p)
   this.wayPoints.add(p);
   }
 
-public WayPoint getClosestWayPointOfType(TargetType type)
-  {
-  WayPoint bestFound = null;
-  float bestDist = Float.POSITIVE_INFINITY;
-  float dist = Float.POSITIVE_INFINITY;
-  Entity ent = owner.getEntity();
-  for(WayPoint p : this.wayPoints)
-    {
-    if(p!=null && p.targetType==type &&p.isValidWayPoint(ent.worldObj))
-      {
-      dist =Trig.getDistance(ent.posX, ent.posY, ent.posZ, p.x, p.y, p.z); 
-      if(dist<bestDist)
-        {
-        bestFound = p;
-        bestDist = dist;        
-        }
-      }
-    }
-  return bestFound;
-  }
-
-
 public void validateSites()
   {
   this.validateWorkSite();
@@ -162,7 +156,6 @@ protected void validateWorkSite()
     this.workSite = null;
     }
   }
-
 
 protected void validateDepositSite()
   {
@@ -203,9 +196,6 @@ protected boolean isPointLoaded(int x, int y, int z)
 public void clearWayPoints()
   {
   this.wayPoints.clear();
-  this.wayPaths.clear();
-  this.searchPointA = null;
-  this.searchPointB = null;
   }
 
 public WorkPoint getWorkPoint()
@@ -310,7 +300,7 @@ public void setDepositPoint(int x, int y, int z, int side)
     TECivic tec = (TECivic)te;
     if(tec.getCivic()!=null && tec.getCivic().isDepository())
       {
-      this.depositPoint = new WorkPoint(x,y,z, WorkType.DELIVER);
+      this.depositPoint = new WorkPoint(x,y,z, TargetType.DELIVER);
       this.depositSite = tec;
       }
     else
@@ -321,7 +311,7 @@ public void setDepositPoint(int x, int y, int z, int side)
     }
   else if(te instanceof IInventory)
     {
-    this.depositPoint = new WorkPoint(x,y,z, side, WorkType.DELIVER);
+    this.depositPoint = new WorkPoint(x,y,z, side, TargetType.DELIVER);
     this.depositSite = te;
     }
   else
@@ -346,39 +336,11 @@ public WorkPoint getDepositPoint()
   return this.depositPoint;
   }
 
-private void findPathFor(WayPoint a, WayPoint b)
-  {
-  this.searchPointA = a;
-  this.searchPointB = b;
-  PathManager.instance().requestPath(this, owner.getWorldAccess(), a.x, a.y, a.z, b.x, b.y, b.z, 60);
-  }
-
-private WayPointPath getPathFor(WayPoint a, WayPoint b)
-  {
-  for(WayPointPath path : wayPaths)    
-    {
-    if(path.isPathFor(a, b))
-      {
-      return path;
-      }
-    }
-  return null;
-  }
-
-private void setPathFor(WayPoint a, WayPoint b, List<Node> path)
-  {
-  this.wayPaths.add(new WayPointPath(a, b, path));
-  }
 
 @Override
 public void onPathFound(List<Node> pathNodes)
   {  
-  if(this.searchPointA!=null && this.searchPointB!=null)
-    {
-    this.setPathFor(searchPointA, searchPointB, pathNodes);
-    this.searchPointA = null;
-    this.searchPointB = null;
-    }
+ 
   }
 
 @Override
@@ -449,37 +411,6 @@ public void readFromNBT(NBTTagCompound tag)
     }
   }
 
-private class WayPointPath
-{
-WayPoint pointA;
-WayPoint pointB;
-List<Node> pathNodes;
-private WayPointPath(WayPoint a, WayPoint b, List<Node> path)
-  {
-  this.pointA = a;
-  this.pointB = b;
-  this.pathNodes = path;
-  }
-
-private boolean isPathFor(WayPoint a, WayPoint b)
-  {
-  return (pointA.areWayPointsEqual(a) && pointB.areWayPointsEqual(b)) || (pointA.areWayPointsEqual(b) && pointB.areWayPointsEqual(a));
-  }
-
-private List<Node> getPath()
-  {
-  List<Node> pathNodes = new ArrayList<Node>();
-  if(this.pathNodes!=null)
-    {
-    for(Node n : this.pathNodes)
-      {
-      pathNodes.add(new Node(n.x, n.y, n.z));
-      }
-    }
-  return pathNodes;
-  }
-
-}
 
 
 }

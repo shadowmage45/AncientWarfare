@@ -36,11 +36,9 @@ private final int xSize;
 private final int ySize;
 private final int zSize;
 
-private int shaftX;
-private int shaftZ;
-
 private final MinePointEntry[] mineArray;
 private PriorityQueue<MinePointEntry> pointQueue = new PriorityQueue<MinePointEntry>();
+private ArrayList<MinePointEntry> finishedPoints = new ArrayList<MinePointEntry>();
 
 /**
  * position is minX, minY, minZ of the structure boundinb box
@@ -61,6 +59,30 @@ public MineLevel(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize)
   this.minX = xPos;
   this.minY = yPos;
   this.minZ = zPos;
+  }
+
+public boolean hasWork()
+  {
+  return !this.pointQueue.isEmpty();
+  }
+
+public MinePointEntry getNextWorkPoint()
+  {
+  return this.pointQueue.poll();
+  }
+
+/**
+ * called by onFailed to return a node to work-queue
+ * @param ent
+ */
+public void addMinePointEntry(MinePointEntry ent)
+  {
+  this.pointQueue.offer(ent);
+  }
+
+public void onPointFinished(MinePointEntry ent)
+  {
+  this.finishedPoints.add(ent);
   }
 
 public MinePointEntry getDataWorldIndex(int x, int y, int z)
@@ -233,12 +255,6 @@ protected int mapExtras(World world, int startOrder, int shaftX, int shaftZ)
   return startOrder;
   }
 
-public void getNextWorkPoint(World world)
-  {
-  MinePointEntry entry = this.pointQueue.poll();
-  entry.worked = true;
-  }
-
 public List<String> getMineExportMap()
   {
   List<String> map = new ArrayList<String>();
@@ -276,83 +292,6 @@ public List<String> getMineExportMap()
   return map;
   }
 
-private class MinePointEntry implements Comparable<MinePointEntry>
-{
-int x;
-int y;
-int z;
-int order = 0;
-boolean worked = false;
-MineActionType action = MineActionType.NONE;//original action as designated when scanned
-MineActionType currentAction = MineActionType.NONE;//current action needed, as designated by worked on/rescanned
-
-protected MinePointEntry(int x, int y, int z, int order, MineActionType type)
-  {
-  this.order = order;
-  this.action = type;
-  this.currentAction = type;
-  }
-
-@Override
-public int compareTo(MinePointEntry o)
-  {
-  if(o==null)
-    {
-    return -1;
-    }
-  if(order<o.order)
-    {
-    return -1;
-    }
-  if(order>o.order)
-    {
-    return 1;
-    }
-  return 0;
-  }
-
-@Override
-public int hashCode()
-  {
-  final int prime = 31;
-  int result = 1;
-  result = prime * result + getOuterType().hashCode();
-  result = prime * result + order;
-  result = prime * result + x;
-  result = prime * result + y;
-  result = prime * result + z;
-  return result;
-  }
-
-@Override
-public boolean equals(Object obj)
-  {
-  if (this == obj)
-    return true;
-  if (obj == null)
-    return false;
-  if (!(obj instanceof MinePointEntry))
-    return false;
-  MinePointEntry other = (MinePointEntry) obj;
-  if (!getOuterType().equals(other.getOuterType()))
-    return false;
-  if (order != other.order)
-    return false;
-  if (x != other.x)
-    return false;
-  if (y != other.y)
-    return false;
-  if (z != other.z)
-    return false;
-  return true;
-  }
-
-private MineLevel getOuterType()
-  {
-  return MineLevel.this;
-  }
-
-}
 
 public enum MineActionType
 {

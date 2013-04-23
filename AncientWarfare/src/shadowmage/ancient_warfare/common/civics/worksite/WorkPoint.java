@@ -21,43 +21,37 @@
 package shadowmage.ancient_warfare.common.civics.worksite;
 
 import java.lang.ref.WeakReference;
-import java.util.UUID;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.civics.WorkType;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPoint;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class WorkPoint extends WayPoint
 {
 
-protected WorkType type;
 protected Entity ent;//target entity
 private WeakReference<NpcBase> worker = new WeakReference<NpcBase>(null);
 protected int totalHarvestHits = 1;
 protected int currentHarvestHits = 0;
 protected boolean singleUse = false;
 
-
-public WorkPoint(int x, int y, int z, WorkType type)
+public WorkPoint(int x, int y, int z, TargetType type)
   {
-  super(x,y,z, TargetType.WORK);
-  this.type = type;
+  super(x,y,z, type);
   }
 
-public WorkPoint(int x, int y, int z, int side, WorkType type)
+public WorkPoint(int x, int y, int z, int side, TargetType type)
   {
-  super(x,y,z,side,TargetType.WORK);
-  this.type = type;
+  super(x,y,z,side, type);
   }
 
-public WorkPoint(Entity ent, WorkType type)
+public WorkPoint(Entity ent, TargetType type)
   {
-  super(MathHelper.floor_double(ent.posX), MathHelper.floor_double(ent.posY), MathHelper.floor_double(ent.posZ), TargetType.WORK);
+  super(type);
   this.ent = ent;
   this.type = type;
   }
@@ -68,11 +62,6 @@ public WorkPoint(Entity ent, WorkType type)
 public WorkPoint(NBTTagCompound compoundTag)
   {
   super(compoundTag);
-  }
-
-public WorkType getWorkType()
-  {
-  return this.type;
   }
 
 /**
@@ -161,101 +150,6 @@ public boolean hasWorker()
 public NpcBase getWorker()
   {
   return this.worker.get();
-  }
-
-public float posX()
-  {
-  return (float) (this.ent!=null ? ent.posX : x+0.5f);
-  }
-
-public float posY()
-  {
-  return (float) (this.ent!=null ? ent.posY : y+0.5f);
-  }
-
-public float posZ()
-  {
-  return (float) (this.ent!=null ? ent.posZ : z+0.5f);
-  }
-
-@Override
-public int floorX()
-  {
-  return this.ent==null? x : MathHelper.floor_double(posX());
-  }
-
-@Override
-public int floorY()
-  {
-  return this.ent==null? y : MathHelper.floor_double(posY());
-  }
-
-@Override
-public int floorZ()
-  {
-  return this.ent==null? z : MathHelper.floor_double(posZ());
-  }
-
-public Entity getEntityTarget()
-  {
-  return this.ent;
-  }
-
-public boolean isEntityEntry()
-  {
-  return this.ent!=null;
-  }
-
-@Override
-public int hashCode()
-  {
-  final int prime = 31;
-  int result = super.hashCode();
-  result = prime * result + ((type == null) ? 0 : type.hashCode());
-  return result;
-  }
-
-@Override
-public boolean equals(Object obj)
-  {
-  if (this == obj)
-    return true;
-  if (!super.equals(obj))
-    return false;
-  if (!(obj instanceof WorkPoint))
-    return false;
-  WorkPoint other = (WorkPoint) obj;
-  if (type != other.type)
-    return false;
-  return true;
-  }
-
-@Override
-public NBTTagCompound getNBTTag()
-  {
-  NBTTagCompound tag = super.getNBTTag();
-  tag.setInteger("wt", this.type.ordinal());
-  return tag;
-  }
-
-@Override
-public void readFromNBT(NBTTagCompound tag)
-  {
-  super.readFromNBT(tag);
-  if(tag.hasKey("wt"))
-    {
-    this.type = WorkType.values()[tag.getInteger("wt")];
-    }
-  else
-    {
-    this.type = WorkType.NONE;
-    }  
-  }
-
-@Override
-public String toString()
-  {
-  return String.format("WayPoint: %d, %d, %d :: %s :: %s", x, y, z , targetType, type);
   }
 
 }

@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
 
 import net.minecraft.entity.Entity;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AITargetEntryMountableVehicle extends AITargetEntry

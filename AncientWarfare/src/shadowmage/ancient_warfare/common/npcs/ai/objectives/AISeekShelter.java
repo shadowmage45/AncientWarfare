@@ -27,7 +27,8 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.targeting.TargetPosition;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AISeekShelter extends NpcAIObjective
 {
@@ -112,7 +113,7 @@ public void onObjectiveStart()
       else
         {
 //        Config.logDebug("setting move target for seek shelter");
-        npc.setTargetAW(npc.targetHelper.getTargetFor(theDoor.getInsidePosX(), theDoor.getInsidePosY(), theDoor.getInsidePosZ(), TargetType.MOVE));
+        npc.setTargetAW(TargetPosition.getNewTarget(theDoor.getInsidePosX(), theDoor.getInsidePosY(), theDoor.getInsidePosZ(), TargetType.MOVE));
         }
       }
     }

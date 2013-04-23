@@ -20,18 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 
-import java.util.Iterator;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.civics.WorkType;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPointFarm;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public abstract class TEWorkSiteFarm extends TECivic
 {
@@ -74,14 +69,14 @@ public void updateWorkPoints()
 protected void updateOrAddWorkPoint(int x, int y, int z)
   {
   WorkPointFarm p;
-  WorkType t = null;
+  TargetType t = null;
   if(worldObj.getBlockId(x, y, z)==tilledEarthID)
     {
-    t = WorkType.FARM_PLANT;
+    t = TargetType.FARM_PLANT;
     }
   else if(worldObj.getBlockId(x, y-1, z)==tilledEarthID)
     {
-    t = WorkType.FARM_HARVEST;
+    t = TargetType.FARM_HARVEST;
     }
   else
     {

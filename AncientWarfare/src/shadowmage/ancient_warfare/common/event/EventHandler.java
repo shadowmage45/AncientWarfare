@@ -20,12 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.event;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 
 public class EventHandler

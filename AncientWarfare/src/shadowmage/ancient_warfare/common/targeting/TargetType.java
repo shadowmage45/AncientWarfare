@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.targeting;
 
 /**
  * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
@@ -30,7 +30,6 @@ public enum TargetType
   ATTACK,
   MOUNT,
   REPAIR,
-  HARVEST,
   HEAL,
   FOLLOW,
   WANDER,
@@ -40,5 +39,17 @@ public enum TargetType
   FLEE,
   NONE,
   WORK,
-  DEPOSIT;  
+  FARM_PLANT,
+  FARM_HARVEST,
+  BARN_BREED,
+  BARN_CULL,
+  BUILD_CLEAR,
+  BUILD_PLACE,
+  MINE_SHAFT,
+  MINE_TUNNEL,
+  MINE_HARVEST,
+  TREE_CHOP,
+  TREE_PLANT,
+  PICKUP,
+  DELIVER;  
   }

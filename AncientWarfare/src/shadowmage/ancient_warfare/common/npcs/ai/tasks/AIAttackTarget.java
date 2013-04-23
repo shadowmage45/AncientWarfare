@@ -22,12 +22,11 @@ package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
-import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroEntry;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import shadowmage.ancient_warfare.common.utils.TargetType;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -51,7 +50,7 @@ public AIAttackTarget(NpcBase npc)
 @Override
 public void onTick()
   {
-  AIAggroEntry target = npc.getTarget();
+  ITargetEntry target = npc.getTarget();
   if(npc.isRidingVehicle())
     {
     attackTargetMounted(target);
@@ -69,10 +68,10 @@ public void onTick()
     } 
   }
 
-protected void attackTarget(AIAggroEntry target)
+protected void attackTarget(ITargetEntry target)
   { 
   npc.actionTick =  maxAttackDelayTicks;  
-  if(!target.isEntityEntry)
+  if(!target.isEntityEntry())
     {
 //    Config.logDebug("doing block attack");
     blockAttackHits++;    
@@ -99,7 +98,7 @@ protected void attackTarget(AIAggroEntry target)
     }  
   }
 
-protected void attackTargetMounted(AIAggroEntry target)
+protected void attackTargetMounted(ITargetEntry target)
   {
   VehicleBase vehicle = (VehicleBase) npc.ridingEntity;
   
@@ -139,31 +138,26 @@ protected void attackTargetMounted(AIAggroEntry target)
     } 
   }
 
-protected boolean checkIfTargetDead(AIAggroEntry target)
+protected boolean checkIfTargetDead(ITargetEntry target)
   {
   if(target.getEntity()!=null && target.getEntity().isDead)
     {
     return true;
     }
-  else if(!target.isEntityEntry)
+  else if(target.getEntity()==null)
     {
     if(npc.worldObj.getBlockId((int)target.posX(), (int)target.posY(),(int)target.posZ())==0)
       {
       return true;
       }
-    }
-  else if(target.isEntityEntry && target.getEntity()==null)
-    {
-    npc.setTargetAW(null);
-    return true;
-    }  
+    } 
   return false;
   }
 
 @Override
 public boolean shouldExecute()
   {  
-  return npc.getTargetType()==TargetType.ATTACK && npc.getTarget().getDistanceFrom() <= npc.targetHelper.getAttackDistance(npc.getTarget());
+  return npc.getTargetType()==TargetType.ATTACK && npc.getDistanceFromTarget(npc.getTarget()) <= npc.targetHelper.getAttackDistance(npc.getTarget());
   }
 
 }

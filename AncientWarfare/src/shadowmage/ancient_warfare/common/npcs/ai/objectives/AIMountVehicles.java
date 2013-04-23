@@ -25,7 +25,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMountVehicle;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AIMountVehicles extends NpcAIObjective
 {

@@ -23,8 +23,8 @@ package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
-import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AITargetEntryPlayer extends AITargetEntry
 {

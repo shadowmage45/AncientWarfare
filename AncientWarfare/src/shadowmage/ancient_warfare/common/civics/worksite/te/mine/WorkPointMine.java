@@ -20,14 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
-import shadowmage.ancient_warfare.common.civics.WorkType;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class WorkPointMine extends WorkPoint
 {
 
-WorkPointMine minePoint;
-
+MinePointEntry workPoint;
 /**
  * @param x
  * @param y
@@ -35,9 +34,9 @@ WorkPointMine minePoint;
  * @param side
  * @param type
  */
-public WorkPointMine(int x, int y, int z, int side, WorkType type)
+public WorkPointMine(int x, int y, int z, TargetType type)
   {
-  super(x, y, z, side, type);
+  super(x, y, z,  type);
   }
 
 }

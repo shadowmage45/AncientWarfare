@@ -20,18 +20,14 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
-import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
-import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPoint;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.targeting.TargetPosition;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AIGoToWork extends NpcAIObjective
 {
@@ -196,7 +192,7 @@ protected void workOnPoint(WorkPoint p)
 
 protected void setMoveToPoint(int x, int y, int z)
   {
-  npc.setTargetAW(npc.targetHelper.getTargetFor(x, y, z, TargetType.MOVE));
+  npc.setTargetAW(TargetPosition.getNewTarget(x, y, z, TargetType.WORK));
   }
 
 protected void setMoveToWork(WorkPoint p)

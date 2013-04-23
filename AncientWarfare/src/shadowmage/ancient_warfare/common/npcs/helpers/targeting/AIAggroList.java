@@ -24,15 +24,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.targeting.TargetPosition;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AIAggroList
 {
 
 protected NpcBase npc;
 public final TargetType targetType;
-public ArrayList<AIAggroEntry> targetEntries = new ArrayList<AIAggroEntry>();
+public ArrayList<AIAggroTargetWrapper> targetEntries = new ArrayList<AIAggroTargetWrapper>();
 
 public AIAggroList(NpcBase owner, TargetType targetType)
   {
@@ -42,7 +44,7 @@ public AIAggroList(NpcBase owner, TargetType targetType)
 
 public void addOrUpdateEntry(Entity ent, int aggroAmt, AITargetEntry type)
   {  
-  for(AIAggroEntry entry : this.targetEntries)
+  for(AIAggroTargetWrapper entry : this.targetEntries)
     {
     if(entry.matches(ent))
       {      
@@ -50,12 +52,14 @@ public void addOrUpdateEntry(Entity ent, int aggroAmt, AITargetEntry type)
       return;
       }
     }
-  this.targetEntries.add(new AIAggroEntry(npc, type, ent).setAggro(aggroAmt));
+  TargetPosition target = TargetPosition.getNewTarget(ent, type.getTypeName());
+  AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target).setAggro(aggroAmt);
+  this.targetEntries.add(wrap);
   }
 
 public void addOrUpdateEntry(int x, int y, int z, int aggroAmt, AITargetEntry type)
   {
-  for(AIAggroEntry entry : this.targetEntries)
+  for(AIAggroTargetWrapper entry : this.targetEntries)
     {
     if(entry.matches(x,y,z))
       {      
@@ -63,12 +67,14 @@ public void addOrUpdateEntry(int x, int y, int z, int aggroAmt, AITargetEntry ty
       return;
       }
     }
-  this.targetEntries.add(new AIAggroEntry(npc, type, x, y, z).setAggro(aggroAmt));
+  TargetPosition target = TargetPosition.getNewTarget(x,y,z, type.getTypeName());
+  AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target).setAggro(aggroAmt);
+  this.targetEntries.add(wrap);
   }
 
-public AIAggroEntry getEntryFor(Entity ent)
+public AIAggroTargetWrapper getEntryFor(Entity ent)
   {
-  for(AIAggroEntry entry : this.targetEntries)
+  for(AIAggroTargetWrapper entry : this.targetEntries)
     {
     if(entry.matches(ent))
       {
@@ -81,12 +87,12 @@ public AIAggroEntry getEntryFor(Entity ent)
 public boolean areTargetsInRange(float range)
   {
 //  Config.logDebug("checking for targets in range: "+range+" type: "+this.targetType);
-  for(AIAggroEntry entry : this.targetEntries)
+  for(AIAggroTargetWrapper entry : this.targetEntries)
     {
     
 //    float dist = npc.getDistanceFromTarget(entry);
 //    Config.logDebug("testing :"+entry+" at range: "+dist);
-    if(npc.getDistanceFromTarget(entry) < range)
+    if(npc.getDistanceFromTarget(entry.target) < range)
       {
       return true;
       }    
@@ -94,12 +100,12 @@ public boolean areTargetsInRange(float range)
   return false;
   }
 
-public AIAggroEntry getHighestAggroTargetInRange(float range)
+public ITargetEntry getHighestAggroTargetInRange(float range)
   {
-  AIAggroEntry bestEntry = null;
-  for(AIAggroEntry entry : this.targetEntries)
+  AIAggroTargetWrapper bestEntry = null;
+  for(AIAggroTargetWrapper entry : this.targetEntries)
     {
-    if(npc.getDistanceFromTarget(entry)>range)
+    if(npc.getDistanceFromTarget(entry.target)>range)
       {
       continue;
       }
@@ -108,42 +114,36 @@ public AIAggroEntry getHighestAggroTargetInRange(float range)
       bestEntry = entry;
       }
     }
-  return bestEntry;
+  return bestEntry.target;
   }
 
-public AIAggroEntry getHighestAggroTarget()
+public ITargetEntry getHighestAggroTarget()
   {  
-  AIAggroEntry bestEntry = null;
-//  Config.logDebug("getting highest aggro target for: "+this.targetType);
-  for(AIAggroEntry entry : this.targetEntries)
+  AIAggroTargetWrapper bestEntry = null;
+  for(AIAggroTargetWrapper entry : this.targetEntries)
     {
-//    Config.logDebug("examining entry: "+entry.toString());
     if(entry.isValidEntry() && (bestEntry==null || entry.aggroLevel > bestEntry.aggroLevel))
       {
-//      Config.logDebug("new best found:");
       bestEntry = entry;
       }
     }
-  return bestEntry;
+  return bestEntry.target;
   }
 
 public void updateAggroEntries()
   {
-  Iterator<AIAggroEntry> it = this.targetEntries.iterator();
-//  Config.logDebug("updating target entries for: "+this.targetType);
-  AIAggroEntry entry;
+  Iterator<AIAggroTargetWrapper> it = this.targetEntries.iterator();
+  AIAggroTargetWrapper entry;
   float maxRange;
   while(it.hasNext())
     {
     entry = it.next();
-//    Config.logDebug("examining entry: "+entry.toString());
-    if(!entry.isValidEntry() || entry.getDistanceFrom()>entry.targetType.maxTargetRange || entry.aggroLevel <= 0)
+    if(!entry.isValidEntry() || npc.getDistanceFromTarget(entry.target) > npc.targetHelper.getMaxRangeFor(entry) || entry.aggroLevel <= 0)
       {
-//      Config.logDebug("removing entry:");
       it.remove();
       return;
       }   
-    entry.aggroLevel -= entry.targetType.getAggroAdjustment(entry);
+    entry.aggroLevel -= npc.targetHelper.getAggroAdjustmentFor(entry);//entry.targetEntry.getAggroAdjustment(entry);
     } 
   }
 

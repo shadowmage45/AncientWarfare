@@ -28,7 +28,8 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.targeting.TargetPosition;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AIWander extends NpcAIObjective
 {
@@ -86,11 +87,11 @@ public void onObjectiveStart()
   if(path.size()>0)
     {
     Node end = path.get(path.size()-1);
-    npc.setTargetAW(npc.targetHelper.getTargetFor(end.x, end.y, end.z, TargetType.WANDER));
+    npc.setTargetAW(TargetPosition.getNewTarget(end.x, end.y, end.z, TargetType.WANDER));
     }
   else
     {
-    npc.setTargetAW(npc.targetHelper.getTargetFor(tx, ty, tz, TargetType.WANDER));
+    npc.setTargetAW(TargetPosition.getNewTarget(tx, ty, tz, TargetType.WANDER));
     }
   }
 

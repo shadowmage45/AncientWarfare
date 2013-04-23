@@ -23,7 +23,9 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 public abstract class TEWorkSiteMine extends TECivic
 {
@@ -56,6 +58,9 @@ public abstract class TEWorkSiteMine extends TECivic
  *    
  */
 
+int currentLevelNum;
+int currentLevelMinY;
+MineLevel currentLevel;
 
 /**
  * 
@@ -65,6 +70,62 @@ public TEWorkSiteMine()
   // TODO Auto-generated constructor stub
   }
 
+@Override
+public WorkPoint getWorkPoint(NpcBase npc)
+  {
+  return super.getWorkPoint(npc);
+  }
+
+@Override
+public boolean canAssignWorkPoint(NpcBase npc, WorkPoint p)
+  {
+  // TODO Auto-generated method stub
+  return super.canAssignWorkPoint(npc, p);
+  }
+
+@Override
+public void onWorkFinished(NpcBase npc, WorkPoint point)
+  {
+  // TODO Auto-generated method stub
+  super.onWorkFinished(npc, point);
+  }
+
+@Override
+public void onWorkFailed(NpcBase npc, WorkPoint point)
+  {
+  if(point instanceof WorkPointMine)
+    {
+    
+    }
+  super.onWorkFailed(npc, point);
+  }
+
+@Override
+public void updateWorkPoints()
+  {
+  super.updateWorkPoints();
+  if(this.workPoints.size()<this.civic.getMaxWorkers(structureRank))
+    {
+    while(this.workPoints.size()<this.civic.getMaxWorkers(structureRank) && this.currentLevel!=null && this.currentLevel.hasWork())
+      {
+      MinePointEntry minePoint = this.currentLevel.getNextWorkPoint();
+      }
+    }
+  }
+
+@Override
+public WorkPoint doWork(NpcBase npc, WorkPoint p)
+  {
+  // TODO Auto-generated method stub
+  return super.doWork(npc, p);
+  }
+
+@Override
+public boolean hasWork(NpcBase npc)
+  {
+  // TODO Auto-generated method stub
+  return super.hasWork(npc);
+  }
 
 @Override
 public boolean onInteract(World world, EntityPlayer player)
@@ -75,7 +136,6 @@ public boolean onInteract(World world, EntityPlayer player)
     }
   return true;
   }
-
 
 
 }

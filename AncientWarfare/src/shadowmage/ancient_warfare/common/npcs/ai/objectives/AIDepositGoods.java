@@ -28,8 +28,8 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
-import shadowmage.ancient_warfare.common.utils.TargetType;
 
 public class AIDepositGoods extends NpcAIObjective
 {
@@ -164,7 +164,7 @@ public void onObjectiveStart()
     TileEntity te = npc.worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ());
     if(te instanceof IInventory)
       {
-      npc.setTargetAW(npc.targetHelper.getTargetFor(p.floorX(), p.floorY(), p.floorZ(), TargetType.WORK));
+      npc.setTargetAW(p);
       this.targetInventory = (IInventory)te;
       }
     else

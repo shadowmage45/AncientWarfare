@@ -25,10 +25,10 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.civics.WorkType;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TEFarmWheat extends TEWorkSiteFarm
@@ -51,7 +51,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
   {
   if(point.hasWork(worldObj))
     {
-    if(point.getWorkType()==WorkType.FARM_HARVEST)
+    if(point.getTargetType()==TargetType.FARM_HARVEST)
       {
       Config.logDebug("harvesting wheat!!");
       List<ItemStack> blockDrops = Block.crops.getBlockDropped(npc.worldObj, point.floorX(), point.floorY(), point.floorZ(), 7, 0);
@@ -77,7 +77,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
           }
         }
       }
-    else if(point.getWorkType()==WorkType.FARM_PLANT)
+    else if(point.getTargetType()==TargetType.FARM_PLANT)
       {
       if(inventory.containsAtLeast(seedFilter, 1))
         {
@@ -98,7 +98,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
 @Override
 public boolean canAssignWorkPoint(NpcBase npc, WorkPoint p)
   {
-  if(p.getWorkType()== WorkType.FARM_HARVEST || (p.getWorkType()== WorkType.FARM_PLANT && this.inventory.containsAtLeast(seedFilter, 1)))
+  if(p.getTargetType()== TargetType.FARM_HARVEST || (p.getTargetType()== TargetType.FARM_PLANT && this.inventory.containsAtLeast(seedFilter, 1)))
     {
     return true;
     }

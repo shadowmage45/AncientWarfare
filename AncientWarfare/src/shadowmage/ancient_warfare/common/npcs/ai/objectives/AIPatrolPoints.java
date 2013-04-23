@@ -20,13 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroEntry;
-import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPoint;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AIPatrolPoints extends NpcAIObjective
 {
@@ -72,7 +71,7 @@ public void onRunningTick()
     }
   else//check to see if we just completed a node, if so, pause.
     {
-    AIAggroEntry entry = npc.getTarget();
+    ITargetEntry entry = npc.getTarget();
     if(entry==null)
       {
 //      Config.logDebug("entity has no target, setting patrol to finished");
@@ -83,7 +82,7 @@ public void onRunningTick()
       }
     else
       {
-      if(entry.targetType.getTypeName() == TargetType.PATROL)
+      if(entry.getTargetType() == TargetType.PATROL)
         {
         if(npc.getDistanceFromTarget(entry) < 3)
           {
@@ -111,8 +110,8 @@ public void onObjectiveStart()
 //  Config.logDebug("starting patrol ai, choosing next patrol point, setting target");
   patrolPoint = npc.wayNav.getNextPatrolPoint();
   if(patrolPoint!=null)
-    {
-    npc.setTargetAW(npc.targetHelper.getTargetFor(patrolPoint.floorX(), patrolPoint.floorY(), patrolPoint.floorZ(), TargetType.PATROL));
+    {    
+    npc.setTargetAW(patrolPoint);
     }
   else
     {

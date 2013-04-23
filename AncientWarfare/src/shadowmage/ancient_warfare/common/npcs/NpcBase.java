@@ -34,22 +34,22 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
-import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.npcs.inventory.NpcInventory;
-import shadowmage.ancient_warfare.common.pathfinding.EntityNavigator;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointNavigator;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
 import shadowmage.ancient_warfare.common.pathfinding.navigator.Navigator;
-import shadowmage.ancient_warfare.common.pathfinding.waypoints.WayPointNavigator;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
+import shadowmage.ancient_warfare.common.targeting.TargetPosition;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
-import shadowmage.ancient_warfare.common.utils.TargetType;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -84,8 +84,6 @@ public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
 public NpcTargetHelper targetHelper;
 
-public AIAggroEntry playerTarget = null;
-private AIAggroEntry target = null;
 private NpcAIObjectiveManager aiManager;
 private PathWorldAccessEntity worldAccess;
 //public EntityNavigator nav;
@@ -179,40 +177,35 @@ public boolean isAggroTowards(int otherTeam)
   return TeamTracker.instance().isHostileTowards(worldObj, teamNum, otherTeam);
   }
 
-public Entity getTargetEntity()
+public ITargetEntry getTarget()
   {
-  return this.target!=null ? this.target.getEntity() : null;
-  }
-
-public AIAggroEntry getTarget()
-  {
-  return this.target;
+  return this.wayNav.getTarget();
   }
 
 /**
  * @return the playerTarget
  */
-public AIAggroEntry getPlayerTarget()
+public ITargetEntry getPlayerTarget()
   {
-  return playerTarget;
+  return this.wayNav.getPlayerTarget();
   }
 
 /**
  * @param playerTarget the playerTarget to set
  */
-public void setPlayerTarget(AIAggroEntry playerTarget)
+public void setPlayerTarget(ITargetEntry playerTarget)
   {
-  this.playerTarget = playerTarget;
+  this.wayNav.setPlayerTarget(playerTarget);
   }
 
 public TargetType getTargetType()
   {
-  return this.target == null? TargetType.NONE : this.target.targetType.getTypeName();
+  return this.wayNav.getTarget()==null ? TargetType.NONE : this.wayNav.getTarget().getTargetType();
   }
 
-public void setTargetAW(AIAggroEntry entry)
+public void setTargetAW(ITargetEntry entry)
   {
-  this.target = entry;
+  this.wayNav.setTarget(entry);
   }
 
 public boolean isRidingVehicle()
@@ -220,7 +213,7 @@ public boolean isRidingVehicle()
   return this.ridingEntity!=null && this.ridingEntity instanceof VehicleBase;
   }
 
-public float getDistanceFromTarget(AIAggroEntry target)
+public float getDistanceFromTarget(ITargetEntry target)
   {
   if(target!=null)
     {
@@ -258,17 +251,16 @@ public boolean interact(EntityPlayer player)
       }
     else
       {
-      AIAggroEntry target = this.playerTarget;
+      ITargetEntry target = this.wayNav.getPlayerTarget();
       if(target==null || target.getEntity()!=player)
         {
-        this.wayNav.clearHomePoint();
         Config.logDebug("setting player to follow to: "+player.getEntityName());
-        this.playerTarget = new AIAggroEntry(this, this.targetHelper.playerTargetEntry, player);
+        this.wayNav.setPlayerTarget(TargetPosition.getNewTarget(player, TargetType.FOLLOW));
         }
       else if(target!=null && target.getEntity()==player)
         {
         Config.logDebug("clearing player to follow");
-        this.playerTarget = null;            
+        this.wayNav.setPlayerTarget(null);
         }
       }
     }
@@ -319,11 +311,7 @@ public void setDead()
 @Override
 public void onUpdate()
   {
-  this.varsHelper.onTick();
-  if(target!=null && !target.isValidEntry())
-    {
-    this.setTargetAW(null);
-    }
+  this.varsHelper.onTick(); 
   this.npcAITargetTick++;
   if(npcAITargetTick>=Config.npcAITicks && !worldObj.isRemote)
     {
@@ -341,9 +329,10 @@ public void onUpdate()
     this.nav.onMovementUpdate();
     this.wayNav.validateSites();
     }
+  ITargetEntry target = this.wayNav.getTarget();
   if(target!=null)
     {
-    if(target.isEntityEntry)
+    if(target.getEntity()!=null)
       {
       this.getLookHelper().setLookPosition(target.posX(), target.posY(), target.posZ(), 10.0F, (float)this.getVerticalFaceSpeed());
       }

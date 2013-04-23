@@ -23,8 +23,6 @@ package shadowmage.ancient_warfare.common.registry;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.registry.LanguageRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -32,6 +30,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 /**
  * map civic Blocks and TEs to the item damage/rank for the spawner item

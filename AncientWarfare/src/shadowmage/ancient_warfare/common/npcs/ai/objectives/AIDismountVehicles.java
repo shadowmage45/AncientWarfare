@@ -23,7 +23,7 @@ package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIDismountVehicle;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AIDismountVehicles extends NpcAIObjective

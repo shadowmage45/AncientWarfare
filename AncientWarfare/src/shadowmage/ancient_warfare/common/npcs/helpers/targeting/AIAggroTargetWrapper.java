@@ -20,48 +20,44 @@
  */
 package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
 
-import java.util.ArrayList;
-
 import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 
-public class AITargetList
-{	
-TargetType type;
-ArrayList<AITargetEntry> targetEntries = new ArrayList<AITargetEntry>();
-protected NpcBase npc;
+public class AIAggroTargetWrapper
+{
 
-public AITargetList(NpcBase owner, TargetType name)
+public int aggroLevel;
+protected ITargetEntry target;
+
+public AIAggroTargetWrapper(ITargetEntry target)
   {
-  this.npc = owner;
-  this.type = name;
+  this.target = target;
   }
 
-public void addTarget(AITargetEntry entry)
+public ITargetEntry getTarget()
   {
-  this.targetEntries.add(entry);
+  return this.target;
   }
 
-public AITargetEntry getEntryFor(Entity ent)
-  {  
-  for(AITargetEntry entry : targetEntries)
-    {
-    if(entry.isTarget(ent))
-      {
-      return entry;
-      }
-    }
-  return null;
-  }
-
-public int getPriorityFor(Entity ent)
+public boolean matches(Entity ent)
   {
-  AITargetEntry entry = getEntryFor(ent);
-  if(entry!=null)
-    {
-    return entry.priority;
-    }
-  return -1;
+  return this.target.getEntity() == ent;
   }
+
+public AIAggroTargetWrapper setAggro(int level)
+  {
+  this.aggroLevel = level;
+  return this;      
+  }
+
+public boolean matches(int x, int y, int z)
+  {
+  return this.target.floorX()==x && this.target.floorY()==y && this.target.floorZ()==z;
+  }
+
+public boolean isValidEntry()
+  {
+  return this.target.getEntity()!=null || this.target.getTileEntity()!=null;
+  }
+
 }

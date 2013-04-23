@@ -20,13 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIAttackTarget;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroEntry;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AIAttackTargets extends NpcAIObjective
 {
@@ -72,7 +71,7 @@ public void onRunningTick()
   if(npc.getTarget()==null)
     {
 //    Config.logDebug("attack ai, target==null, finding new");
-    AIAggroEntry target = npc.targetHelper.getHighestAggroTargetInRange(TargetType.ATTACK, maxRange);
+    ITargetEntry target = npc.targetHelper.getHighestAggroTargetInRange(TargetType.ATTACK, maxRange);
     if(target==null)
       {
 //      Config.logDebug("attack ai, new target==null, setting finished");

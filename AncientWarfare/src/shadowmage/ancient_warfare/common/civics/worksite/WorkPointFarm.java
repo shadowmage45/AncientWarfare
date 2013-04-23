@@ -21,9 +21,8 @@
 package shadowmage.ancient_warfare.common.civics.worksite;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.civics.WorkType;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class WorkPointFarm extends WorkPoint
 {
@@ -38,7 +37,7 @@ int tilledEarthID = Block.tilledField.blockID;
  * @param z
  * @param type
  */
-public WorkPointFarm(int x, int y, int z, WorkType type, int plantID, int plantMeta)
+public WorkPointFarm(int x, int y, int z, TargetType type, int plantID, int plantMeta)
   {
   super(x, y, z, type);
   this.plantID = plantID;
@@ -48,14 +47,14 @@ public WorkPointFarm(int x, int y, int z, WorkType type, int plantID, int plantM
 @Override
 public boolean hasWork(World world)
   {
-  if(this.type == WorkType.FARM_PLANT)
+  if(this.type == TargetType.FARM_PLANT)
     {
     if(world.getBlockId(x, y, z)==tilledEarthID && world.getBlockId(x, y+1, z)==0)
       {
       return true;  
       }
     }
-  else if(this.type==WorkType.FARM_HARVEST && world.getBlockId(x, y-1, z)==tilledEarthID && world.getBlockId(x, y, z)==plantID)
+  else if(this.type==TargetType.FARM_HARVEST && world.getBlockId(x, y-1, z)==tilledEarthID && world.getBlockId(x, y, z)==plantID)
     {
     if(world.getBlockMetadata(x, y, z)==this.plantFullGrownMeta)
       {
@@ -67,14 +66,14 @@ public boolean hasWork(World world)
 
 public boolean isValidEntry(World world)
   {
-  if(this.type == WorkType.FARM_PLANT)
+  if(this.type == TargetType.FARM_PLANT)
     {
     if(world.getBlockId(x, y, z)==tilledEarthID)
       {
       return true;
       }
     }
-  else if(this.type==WorkType.FARM_HARVEST && world.getBlockId(x, y-1, z)==tilledEarthID)
+  else if(this.type==TargetType.FARM_HARVEST && world.getBlockId(x, y-1, z)==tilledEarthID)
     {
     return true;
     } 

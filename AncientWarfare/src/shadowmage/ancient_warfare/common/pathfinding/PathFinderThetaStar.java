@@ -25,9 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
-
 /**
  * going to be a theta-Star implementation
  * (pre-smoothed ASTAR paths), using line-of sight checks

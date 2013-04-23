@@ -37,7 +37,7 @@ import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryNpc;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryPlayer;
-import shadowmage.ancient_warfare.common.utils.TargetType;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 

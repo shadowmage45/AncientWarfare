@@ -26,8 +26,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroEntry;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.RayTraceUtils;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -46,7 +46,7 @@ public AIAttackTargetBow(NpcBase npc)
   }
 
 @Override
-protected void attackTarget(AIAggroEntry target)
+protected void attackTarget(ITargetEntry target)
   { 
   if(!isLineOfSightClear(target))
     {
@@ -57,7 +57,7 @@ protected void attackTarget(AIAggroEntry target)
     {
     npc.actionTick =  maxAttackDelayTicks / Config.npcAITicks;
     }
-  if(!target.isEntityEntry)
+  if(!target.isEntityEntry())
     {
     Config.logDebug("doing block attack");
     blockAttackHits++;    
@@ -129,7 +129,7 @@ protected void doBowAttack(Entity target)
     }
   }
 
-protected boolean isLineOfSightClear(AIAggroEntry target)
+protected boolean isLineOfSightClear(ITargetEntry target)
   {
   HashSet<Entity> excluded = new HashSet<Entity>();
   excluded.add(npc);

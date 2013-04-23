@@ -22,8 +22,6 @@ package shadowmage.ancient_warfare.common.pathfinding;
 
 import java.util.Random;
 
-import net.minecraft.util.MathHelper;
-
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 

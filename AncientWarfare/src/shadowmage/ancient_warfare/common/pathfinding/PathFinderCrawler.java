@@ -23,10 +23,6 @@ package shadowmage.ancient_warfare.common.pathfinding;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Random;
-
-import shadowmage.ancient_warfare.common.config.Config;
 
 public class PathFinderCrawler
 {

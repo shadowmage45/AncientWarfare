@@ -18,42 +18,26 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.npcs.ai.tasks;
+package shadowmage.ancient_warfare.common.interfaces;
 
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
+import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class AIMountVehicle extends NpcAITask
+public interface ITargetEntry
 {
 
-/**
- * @param npc
- */
-public AIMountVehicle(NpcBase npc)
-  {
-  super(npc);
-  this.taskType = MOUNT_VEHICLE;
-  this.exclusiveTasks = MOVE_TO + ATTACK + HEAL+ REPAIR + HARVEST + FOLLOW + WANDER;
-  }
+boolean isEntityEntry();
+boolean isTileEntry();
+int floorX();
+int floorY();
+int floorZ();
+float posX();
+float posY();
+float posZ();
 
-@Override
-public void onTick()
-  {   
-  VehicleBase vehicle = (VehicleBase)npc.getTarget().getEntity();
-  npc.mountEntity(vehicle);
-  npc.setTargetAW(null);
-  }
-
-@Override
-public boolean shouldExecute()
-  {
-  if(npc.ridingEntity!=null || npc.getTarget()==null || npc.getTargetType() != TargetType.MOUNT || npc.getDistanceFromTarget(npc.getTarget()) > npc.targetHelper.getAttackDistance(npc.getTarget()))
-    {
-    return false;
-    }
-  return true;
-  }
+Entity getEntity();
+TileEntity getTileEntity();
+TargetType getTargetType();
 
 }
