@@ -28,9 +28,16 @@ WORKSITES
 * needs a 'complete rescan divider', to know when to do a complete rescan, or just update nodes
     (scan a couple ticks after first load, and rescan every minute or two after that)    
 * most civics probably need chunk-loaders to prevent them from trying to access unloaded areas.
+
+FARMS
+* needs potato/carrot tested
+* needs cactus/melon/reed/mushroom types made
+* needs tree farm(s) created
+
+MINE
+* needs level restructured in a way to allow for multiple NPCs to work at once without interfering with eachother
         
 PATHFINDING
-* still a POS--needs heavy rework/rewrite (perhaps convert into an entityPath?)
 * entities should re-check the nodes in their path to make sure they are still viable nodes
 * onMovementTick -- check to see if either A:target is within Y diff && 1 x/z diff, or target is visible with LOS check -- else calc path back to target node, append to START of path
 
@@ -56,7 +63,8 @@ NPCS
     Stay Near Commander
     Select Commander (constantly-run objective, e.g. does the 'run' in the 'update priority' tick?)  
 * NPC type needs to keep track of applicable work-types for that NPC
-    e.g. farm_plant/farm_harvest -- mine -- tree_plant/tree_harvest -- breed/cull -- etc...    
+    e.g. farm_plant/farm_harvest -- mine -- tree_plant/tree_harvest -- breed/cull -- etc...  
+*      
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
