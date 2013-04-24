@@ -29,6 +29,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -132,6 +133,7 @@ public TileEntity getTEFor(World world, int type)
       Civic civ = getCivicFor(type);
       if(civ!=null && civ.getTileEntityClass()!=null)
         {
+    	  Config.logDebug(civ.getDisplayName(0) + " -- " +civ.getTileEntityClass());
         te = civ.getTileEntityClass().newInstance();
         }      
       if(te!=null)      

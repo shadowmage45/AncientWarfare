@@ -20,14 +20,21 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public abstract class TEWorkSiteMine extends TECivic
+public class TEWorkSiteMine extends TECivic
 {
 
 /**
@@ -58,36 +65,224 @@ public abstract class TEWorkSiteMine extends TECivic
  *    
  */
 
-int currentLevelNum;
-int currentLevelMinY;
-MineLevel currentLevel;
+int currentLevelNum = -1;
+int minYLevel = 36;//the lowest
+int levelHeight = 4;
+boolean initialized = false;
+boolean mineFinished = false;
+MineLevel currentLevel = null;
 
-/**
- * 
- */
+ItemStack fillerFilter = new ItemStack(Block.cobblestone,1);
+ItemStack ladderFilter = new ItemStack(Block.ladder, 1);
+
 public TEWorkSiteMine()
   {
-  // TODO Auto-generated constructor stub
+  }
+
+@Override
+public void updateEntity()
+  {
+  if(worldObj!=null && !worldObj.isRemote)
+    {
+    if(!initialized)
+      {
+      Config.logDebug("initializing mine!");
+      this.initialized = true;
+      this.loadLevel(0);      
+      }
+    if(this.currentLevel!=null && !mineFinished && !this.currentLevel.hasWork())
+      {
+      Config.logDebug("loading next level");
+      int adjTopY = this.minY - (4 * (currentLevelNum+1));//the top of the level
+      if(adjTopY-3>=this.minYLevel)
+        {
+        this.loadLevel(currentLevelNum+1);
+        }
+      else
+        {
+        this.mineFinished = true;
+        }
+      }
+    else if(this.currentLevel==null)
+      {
+      Config.logDebug("current level was null!!");
+      //uhh..maybe check if finished and re-init the level or something
+      }
+    } 
+  super.updateEntity();
   }
 
 @Override
 public WorkPoint getWorkPoint(NpcBase npc)
   {
-  return super.getWorkPoint(npc);
+  Config.logDebug("npc requesting work: "+npc);
+  if(this.currentLevel!=null && this.currentLevel.hasWork())
+    {
+    MinePoint p = this.currentLevel.getNextMinePoint();
+    if(p!=null)
+      {
+      return new WorkPointMine(p);
+      }
+    }
+  return null;
   }
 
 @Override
 public boolean canAssignWorkPoint(NpcBase npc, WorkPoint p)
   {
-  // TODO Auto-generated method stub
-  return super.canAssignWorkPoint(npc, p);
+  Config.logDebug("can assign work:");
+  // TODO NOOP
+  return true;
   }
 
 @Override
 public void onWorkFinished(NpcBase npc, WorkPoint point)
   {
-  // TODO Auto-generated method stub
+  if(this.currentLevel!=null && point instanceof WorkPointMine)
+    {
+    WorkPointMine p = (WorkPointMine)point;
+    MinePoint m = p.minePoint;   
+    this.currentLevel.onPointFinished(p.minePoint);
+    }
   super.onWorkFinished(npc, point);
+  }
+
+@Override
+public WorkPoint doWork(NpcBase npc, WorkPoint p)
+  {
+  p.incrementHarvestHits();
+  if(p.shouldFinish())//hits were enough to trigger 'finish'
+    {
+    WorkPointMine m = (WorkPointMine)p;
+    MinePoint mp = m.minePoint;
+    switch(mp.currentAction)
+      {
+      case MINE_CLEAR_THEN_LADDER:
+      return handleLadderBlock(npc, m, mp);
+      case MINE_CLEAR_BRANCH:
+      return handleTunnelOrBranch(npc, m, mp);
+      case MINE_CLEAR_TUNNEL:
+      return handleTunnelOrBranch(npc, m, mp);
+      case MINE_CLEAR_THEN_FILL:
+      return handleClearThenFill(npc, m, mp);
+      default:
+      return null;
+      }
+    }
+  return p;
+  }
+
+protected WorkPointMine handleLadderBlock(NpcBase npc, WorkPointMine p, MinePoint m)
+  {
+  int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
+  if(id==0)
+    {
+    //TODO figure out ladder meta...
+    npc.worldObj.setBlock(m.x, m.y, m.z, Block.ladder.blockID);
+    inventory.tryRemoveItems(ladderFilter, 1);
+    }
+  else if(id!=Block.ladder.blockID)
+    {
+    //clear block
+    handleBlockBreak(npc, p, m);
+    p.resetHarvestTicks();
+    return p;
+    }
+  //if block not cleared
+  //  clear block
+  //  reset hit count on workpoint
+  //  add block to TE/NPC inventory
+  //  return work point
+  //else if ladder not placed
+  //  place ladder
+  //  remove ladder from TE inventory
+  //  call onFinished(npc, p)
+  //  return null
+  return null;
+  }
+
+protected WorkPointMine handleClearThenFill(NpcBase npc, WorkPointMine p, MinePoint m)
+  {
+  int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
+  if(id==0)
+    {    
+    //fill block
+    npc.worldObj.setBlock(m.x, m.y, m.z, Block.cobblestone.blockID);
+    if(npc.inventory.containsAtLeast(fillerFilter, 1))
+      {
+      npc.inventory.tryRemoveItems(fillerFilter, 1);
+      }
+    else if(inventory.containsAtLeast(fillerFilter, 1))
+      {
+      inventory.tryRemoveItems(fillerFilter, 1);
+      }
+    else
+      {
+      //NFC
+      }    
+    }
+  else if(id != Block.cobblestone.blockID)
+    {
+    //clear block
+    handleBlockBreak(npc, p, m);
+    p.resetHarvestTicks();
+    return p;
+    }
+  //if not cleared
+  //  clear block
+  //  reset hit counter
+  //  add block to TE/NPC inventory
+  //  return work point
+  //else if block not filled
+  //  fill block
+  //  remove fill from NPC/TE inventory
+  //  call onFinished
+  //  return null
+  return null;
+  }
+
+protected WorkPointMine handleTunnelOrBranch(NpcBase npc, WorkPointMine p, MinePoint m)
+  {
+  if(handleBlockBreak(npc, p, m))
+    {
+    return null;
+    }
+  return null;
+  }
+
+protected boolean handleBlockBreak(NpcBase npc, WorkPointMine p, MinePoint m)
+  {
+  int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
+  Block block = Block.blocksList[id];
+  if(id!=0 && id!= Block.bedrock.blockID && block!=null)
+    {
+    ArrayList<ItemStack> drops = block.getBlockDropped(npc.worldObj, m.x, m.y, m.z, npc.worldObj.getBlockMetadata(m.x, m.y, m.z), 0);
+    for(ItemStack drop : drops)
+      {
+      //  if filler block (cobble) && TE can hold more filler (keep room for ladders)
+      //  else add to NPC inventory
+      //check and see if te has space, else drop on ground
+      if(InventoryTools.doItemsMatch(drop, fillerFilter) && inventory.getCountOf(fillerFilter)<128 && inventory.canHoldItem(drop, drop.stackSize))
+        {
+        drop = inventory.tryMergeItem(drop);
+        if(drop!=null)
+          {
+          InventoryTools.dropItemInWorld(npc.worldObj, drop, xCoord, yCoord, zCoord);
+          }
+        }
+      else
+        {
+        drop = npc.inventory.tryMergeItem(drop);
+        if(drop!=null)
+          {
+          InventoryTools.dropItemInWorld(npc.worldObj, drop, xCoord, yCoord, zCoord);
+          }
+        }
+      }   
+    npc.worldObj.setBlock(m.x, m.y, m.z, 0);
+    return true;
+    }
+  return false;
   }
 
 @Override
@@ -103,29 +298,17 @@ public void onWorkFailed(NpcBase npc, WorkPoint point)
 @Override
 public void updateWorkPoints()
   {
-  super.updateWorkPoints();
   if(this.currentLevel!=null)
     {
     this.currentLevel.validatePoints(worldObj);
-    }
-  while(this.workPoints.size()<this.civic.getMaxWorkers(structureRank) && this.currentLevel!=null && this.currentLevel.hasWork())
-    {
-    MinePoint minePoint = this.currentLevel.getNextWorkPoint();
-    this.workPoints.add(new WorkPointMine(minePoint));    
-    }
-  }
-
-@Override
-public WorkPoint doWork(NpcBase npc, WorkPoint p)
-  {
-  // TODO Auto-generated method stub
-  return super.doWork(npc, p);
+    } 
   }
 
 @Override
 public boolean hasWork(NpcBase npc)
   {
-  return super.hasWork(npc) || (currentLevel!=null && currentLevel.hasWork());
+  Config.logDebug("hasWork: " + (currentLevel!=null && currentLevel.hasWork()));
+  return (currentLevel!=null && currentLevel.hasWork());
   }
 
 @Override
@@ -136,6 +319,49 @@ public boolean onInteract(World world, EntityPlayer player)
     GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);
     }
   return true;
+  }
+
+protected void loadLevel(int level)
+  { 
+  Config.logDebug("loading level: "+level);
+  if(level<0)
+    {
+    return;
+    }
+  this.currentLevelNum = level;
+  int adjTopY = this.minY - 4 * level;//the top of the level
+  int adjMinY = adjTopY-3;  
+  this.currentLevel = new MineLevel(minX, adjMinY, minZ, maxX - minX + 1, 4, maxZ - minZ + 1);
+  this.currentLevel.initializeLevel(worldObj);
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  super.readFromNBT(tag);
+  this.currentLevelNum = tag.getInteger("mineLevel");
+  if(tag.hasKey("mineLevelData"))
+    {
+    this.currentLevel = new MineLevel(tag.getCompoundTag("mineLevelData"));
+    }
+  else
+    {
+    this.loadLevel(currentLevelNum);
+    }
+  }
+
+@Override
+public void writeToNBT(NBTTagCompound tag)
+  {
+  super.writeToNBT(tag);
+  tag.setBoolean("mineInit", this.initialized);
+  tag.setBoolean("mineDone", this.mineFinished);
+  tag.setInteger("mineLevel", this.currentLevelNum);
+  if(this.currentLevel!=null)
+    {
+    tag.setCompoundTag("mineLevelData", this.currentLevel.getNBTTag());
+    }
+  
   }
 
 

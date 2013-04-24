@@ -26,25 +26,29 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class MineLevel
+public class MineLevel implements INBTTaggable
 {
 
-private final int minX;
-private final int minY;
-private final int minZ;
-private final int xSize;
-private final int ySize;
-private final int zSize;
+private int minX;
+private int minY;
+private int minZ;
+private int xSize;
+private int ySize;
+private int zSize;
 
-private final MinePoint[] mineArray;
+private MinePoint[] mineArray;
 private PriorityQueue<MinePoint> pointQueue = new PriorityQueue<MinePoint>();
 private ArrayList<MinePoint> finishedPoints = new ArrayList<MinePoint>();
 
 /**
- * position is minX, minY, minZ of the structure boundinb box
+ * position is minX, minY, minZ of the structure boundinb box(world coords)
  * size is the absolute size in blocks of the structure
  * @param xPos 
  * @param yPos
@@ -62,6 +66,12 @@ public MineLevel(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize)
   this.minX = xPos;
   this.minY = yPos;
   this.minZ = zPos;
+  Config.logDebug(String.format("creating mineLevel pos: %d,%d,%d  size:  %d, %d, %d", minX, minY, minZ, xSize, ySize, zSize));
+  }
+
+public MineLevel(NBTTagCompound tag)
+  {
+  this.readFromNBT(tag);
   }
 
 public boolean hasWork()
@@ -69,7 +79,7 @@ public boolean hasWork()
   return !this.pointQueue.isEmpty();
   }
 
-public MinePoint getNextWorkPoint()
+public MinePoint getNextMinePoint()
   {
   return this.pointQueue.poll();
   }
@@ -90,9 +100,6 @@ public void onPointFinished(MinePoint ent)
 
 public MinePoint getDataWorldIndex(int x, int y, int z)
   {
-//  int yIndex = xSize * zSize * y;
-//  int zIndex = xSize * z;
-//  int xIndex = x;
   return mineArray[getWorldAdjustedIndex(x,y,z)];
   }
 
@@ -108,14 +115,17 @@ protected void setDataLocalIndex(int x, int y, int z, MinePoint data)
 
 public void setDataWorldIndex(int x, int y, int z, MinePoint data)
   {  
+//	Config.logDebug(String.format("setting info: %d, %d, %d -- arraySize %d", x,y,z,this.mineArray.length));
   this.mineArray[getWorldAdjustedIndex(x,y,z)]=data;
   }
 
 private int getWorldAdjustedIndex(int x, int y, int z)
   {
+//	Config.logDebug(String.format("World coord: %d, %d, %d :: adj coord: %d, %d, %d", x,y,z, x-minX, y-minY, z-minZ));
   x-= minX;
   y-= minY;
   z-= minZ;
+  
   return (xSize*zSize*y)+(xSize*z)+x;
   }
 
@@ -128,17 +138,23 @@ private int getIndex(int x, int y, int z)
  * called to map out the nodes for this level
  * @param world
  */
-public void initializeLevel(World world, int shaftX, int shaftZ)
+public void initializeLevel(World world)
   { 
-//  int shaftX = minX -1 + xSize/2;
-//  int shaftZ = minZ -1 + zSize/2;
+  long t1 = System.nanoTime();
+  int shaftX = minX -1 + xSize/2;
+  int shaftZ = minZ -1 + zSize/2;
   int order = 0;
   order = this.mapShaft(world, order, shaftX, shaftZ);
   order = this.mapTunnels(world, order, shaftX, shaftZ);
   order = this.mapBranches(world, order, shaftX, shaftZ);
   order = this.mapExtras(world, order, shaftX, shaftZ);
-  
-  
+  long t2 = System.nanoTime();
+  Config.logDebug("mine level init time nanos: "+(t2-t1));
+  List<String> lines = getMineExportMap();
+  for(String l : lines)
+    {
+    Config.logDebug(l);
+    }
   //find center of work area
   //construct center shaft set to CLEAR_THEN_LADDER
   //construct main E/W tunnels set to CLEAR_TUNNEL
@@ -159,7 +175,14 @@ protected int mapShaft(World world, int order, int shaftX, int shaftZ)
       {
       for(int z = shaftZ; z<=shaftZ+1; z++)
         {
-        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_THEN_LADDER);
+        if(world.getBlockId(x, y, z)==Block.ladder.blockID)
+          {
+          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_THEN_LADDER);
+          }
+        else
+          {
+          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_THEN_LADDER);
+          }
         }
       }    
     }
@@ -181,27 +204,52 @@ protected void addPointToQueueAndMap(int x, int y, int z, int order, TargetType 
   this.pointQueue.offer(entry);
   }
 
+protected void addPointToFinishedAndMap(int x, int y, int z, int order, TargetType type)
+  {
+  MinePoint entry = new MinePoint(x,y,z, order, type);
+  entry.currentAction = TargetType.NONE;
+  this.setDataWorldIndex(x, y, z, entry);
+  this.finishedPoints.add(entry);
+  }
+
 protected int mapTunnels(World world, int order, int shaftX, int shaftZ)
   {
-  int tunnelStartOrder = order;
+//  int tunnelStartOrder = order;
+  int id = 0;
   for(int x = shaftX-1; x>= minX ; x--, order++)//add west tunnel
     {
     for(int z = shaftZ; z<= shaftZ+1; z++)      
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+        id = world.getBlockId(x, y, z);
+        if(id==0 || id== Block.torchWood.blockID)
+          {
+          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+          }
+        else
+          {
+          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+          }
         }
       }
     }
-  order = tunnelStartOrder;
+//  order = tunnelStartOrder;
   for(int x = shaftX+2; x <= minX + xSize-1; x++, order++)//add west tunnel
     {
     for(int z = shaftZ; z<= shaftZ+1; z++)      
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+        id = world.getBlockId(x, y, z);
+        if(id==0 || id== Block.torchWood.blockID)
+          {
+          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+          }
+        else
+          {
+          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+          }
         }
       }
     }
@@ -212,41 +260,74 @@ protected int mapBranches(World world, int startOrder, int shaftX, int shaftZ)
   {
   int branchStartOrder = startOrder;
   int order = branchStartOrder;
+  int id = 0;
   for(int x = shaftX-1; x>=minX; x-=3)
     {
-    order = branchStartOrder;
+//    order = branchStartOrder;
     for(int z = shaftZ+2; z <=minZ+zSize-1; z++, order++)//do n/w side branches
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+        id = world.getBlockId(x, y, z);
+        if(id==0 || id== Block.torchWood.blockID)
+          {
+          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
+        else
+          {
+          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
         }
       }
-    order = branchStartOrder;
+//    order = branchStartOrder;
     for(int z = shaftZ-1; z >=minZ; z--, order++)//do s/w side branches
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+        id = world.getBlockId(x, y, z);
+        if(id==0 || id== Block.torchWood.blockID)
+          {
+          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
+        else
+          {
+          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
         }
       }
     }
   for(int x = shaftX+2; x <= minX+xSize-1; x+=3)
     {
-    order = branchStartOrder;
+//    order = branchStartOrder;
     for(int z = shaftZ+2; z <=minZ+zSize-1; z++, order++)//do n/e side branches
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+        id = world.getBlockId(x, y, z);
+        if(id==0 || id== Block.torchWood.blockID)
+          {
+          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
+        else
+          {
+          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
         }
       }
-    order = branchStartOrder;
+//    order = branchStartOrder;
     for(int z = shaftZ-1; z >=minZ; z--, order++)//do s/e side branches
       {
       for(int y = minY+2; y>= minY+1; y--)
         {
-        this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+        id = world.getBlockId(x, y, z);
+        if(id==0 || id== Block.torchWood.blockID)
+          {
+          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
+        else
+          {
+          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
         }
       }
     }
@@ -309,6 +390,55 @@ public void validatePoints(World world)
       {
       it.remove();
       this.pointQueue.offer(p);
+      }
+    }
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  NBTTagCompound outerTag = new NBTTagCompound();
+  outerTag.setIntArray("bounds", new int[]{minX, minY, minZ, xSize, ySize, zSize});
+  NBTTagList minePointList = new NBTTagList();
+  MinePoint a;
+  for(int i = 0; i < this.mineArray.length; i++)
+    {
+    a = this.mineArray[i];
+    if(a!=null)
+      {
+      minePointList.appendTag(a.getNBTTag());
+      }
+    }
+  outerTag.setTag("minePointList", minePointList);
+  return outerTag;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  int[] bounds = tag.getIntArray("bounds");
+  this.minX = bounds[0];
+  this.minY = bounds[1];
+  this.minZ = bounds[2];
+  this.xSize = bounds[3];
+  this.ySize = bounds[4];
+  this.zSize = bounds[5];
+  this.mineArray = new MinePoint[xSize*ySize*zSize];
+  NBTTagList minePointList = tag.getTagList("minePointList");
+  NBTTagCompound pointTag = null;
+  MinePoint point = null;
+  for(int i = 0; i < minePointList.tagCount(); i++)
+    {
+    pointTag = (NBTTagCompound) minePointList.tagAt(i);
+    point = new MinePoint(pointTag);
+    this.setDataWorldIndex(point.x, point.y, point.z, point);
+    if(point.currentAction==TargetType.NONE)
+      {
+      this.finishedPoints.add(point);
+      }
+    else
+      {
+      this.pointQueue.offer(point);
       }
     }
   }

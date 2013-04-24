@@ -124,14 +124,14 @@ protected void handleLadderMovement()
     if(currentTarget.y<(int)entity.posY)
       {
       entity.motionY = -0.125f;
-      entity.motionX *= 0.5f;
-      entity.motionZ *= 0.5f;
+//      entity.motionX *= 0.5f;
+//      entity.motionZ *= 0.5f;
       }
-    else if(currentTarget.y>(int)entity.posY)
+    else if(currentTarget.y > (int)entity.posY )
       {
       entity.motionY = 0.125f;
-      entity.motionX *= 0.5f;
-      entity.motionZ *= 0.5f;
+//      entity.motionX *= 0.5f;
+//      entity.motionZ *= 0.5f;
       }    
     }
   }
@@ -203,8 +203,9 @@ protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
     }
   else
     {
+    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 4));
 //    Config.logDebug("requesting starter path");
-    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 60));    
+//    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 60));    
     Node end = this.path.getEndNode();
     if(end!=null && (end.x!=tx || end.y!=ty || end.z!=tz))
       {

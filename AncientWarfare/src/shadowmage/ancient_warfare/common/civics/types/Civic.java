@@ -26,6 +26,7 @@ import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCarrot;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPotato;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmWheat;
+import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEWorkSiteMine;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 
@@ -44,6 +45,7 @@ public static ICivicType potatoFarm = new CivicFarm(2, "Potato Farm", "A place f
 //need brown mushroom
 //need red mushroom
 //need netherstalk
+public static ICivicType mineBasic = new CivicMine(10, "Basic Layout Mine", "A mine with a basic but less than perfectly efficient layout", TEWorkSiteMine.class);
 
 
 protected int globalID = 0;

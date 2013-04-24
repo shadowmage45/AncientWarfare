@@ -100,6 +100,7 @@ public void updateEntity()
     {    
     this.broadCastToSoldiers(Config.npcAISearchRange);
     this.updateWorkPoints();
+    this.validateWorkers();
     this.updateTicks = Config.npcAITicks;
     }
   else
@@ -250,6 +251,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
   if(point!=null)
     {    
     point.setFinished();
+    this.workPoints.remove(point);
 //    if(!point.hasWork(worldObj))
 //      {
 //      this.workPoints.remove(point);
@@ -290,6 +292,10 @@ public void updateWorkPoints()
         }
       }
     }
+  }
+
+protected void validateWorkers()
+  {
   Iterator<NpcBase> workIt = this.workers.iterator();
   NpcBase npc = null;
   while(workIt.hasNext())

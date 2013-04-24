@@ -53,7 +53,7 @@ WayPoint homePoint = null;
 WayPoint workSitePoint = null;
 WorkPoint depositPoint = null;
 WorkPoint workPoint = null;
-TECivic workSite = null;
+private TECivic workSite = null;
 TileEntity depositSite = null;
 List<WayPoint> wayPoints = new ArrayList<WayPoint>();
 List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
@@ -130,8 +130,10 @@ protected void validateWorkSite()
   {
   if(this.workSitePoint!=null)
     {
-    if(this.workSite==null || workSite.xCoord != workSitePoint.floorX() || workSite.yCoord != workSitePoint.floorY() || workSite.zCoord!=workSitePoint.floorZ())
+    TECivic workSite = this.getWorkSite();
+    if(workSite==null || workSite.xCoord != workSitePoint.floorX() || workSite.yCoord != workSitePoint.floorY() || workSite.zCoord!=workSitePoint.floorZ())
       {
+      Config.logDebug("work site is null or not equal to work point "+this.getWorkSite());      
       //different sites, try and re-acquire      
       if(isPointLoaded(workSitePoint.floorX(), workSitePoint.floorY(), workSitePoint.floorZ()))
         {
@@ -139,11 +141,10 @@ protected void validateWorkSite()
         TileEntity te = owner.getEntity().worldObj.getBlockTileEntity(workSitePoint.floorX(), workSitePoint.floorY(), workSitePoint.floorZ());
         if(te instanceof TECivic)
           {
-          this.workSite = (TECivic) te;
+          this.setWorkSite((TECivic) te);
           }
         else
-          {
-          this.workSite = null;
+          {this.setWorkSite(null);
           this.workSitePoint = null;
           }
         }
@@ -153,7 +154,7 @@ protected void validateWorkSite()
     }
   else
     {
-    this.workSite = null;
+    this.setWorkSite(null);
     }
   }
 
@@ -184,7 +185,7 @@ protected void validateDepositSite()
     }
   else//was had no point, clear site just in case
     {
-    this.workSite = null;
+    this.clearDepositPoint();
     }
   }
 
@@ -205,6 +206,7 @@ public WorkPoint getWorkPoint()
 
 public void setWorkPoint(WorkPoint point)
   {
+  Config.logDebug("settign work point");
   this.workPoint = point;
   }
 
@@ -230,31 +232,36 @@ public void clearHomePoint()
 
 public void setWorkSitePoint(int x, int y, int z, int side)
   {
+  Config.logDebug(String.format("setting  work site point to: %s, %s, %s : %s", x,y,z,side));
   TileEntity te = this.owner.getEntity().worldObj.getBlockTileEntity(x, y, z);
   if(te instanceof TECivic)
     {
     TECivic tec = (TECivic)te;
     if(tec.getCivic()!=null && tec.getCivic().isWorkSite())
       {
+      Config.logDebug("setting work-site : " + tec);
       this.workSitePoint = new WayPoint(x,y,z, TargetType.WORK);
-      this.workSite = tec;      
+      this.setWorkSite(tec);    
       }
     else
       {
-      this.workSite = null;
+      Config.logDebug("civic present but not a work site");
+      this.setWorkSite(null);
       this.workSitePoint = null;
       }
     }
   else
     {
-    this.workSite = null;
+    Config.logDebug("no civic present, cannot designate work site");
+    this.setWorkSite(null);
     this.workSitePoint = null;
     }  
   }
 
-public void clearWorkSitePoint()
-  {
-  this.workSite = null;
+public void clearWorkInfo()
+  {  
+  Config.logDebug("clearing work info");
+  this.setWorkSite(null);
   this.workPoint = null;
   this.workSitePoint = null;
   }
@@ -271,6 +278,7 @@ public WayPoint getWorkSitePoint()
 
 public void setWorkSite(TECivic work)
   {
+  Config.logDebug("setting work site : "+work);
   this.workSite = work;
   }
 
@@ -281,15 +289,9 @@ public TECivic getWorkSite()
 
 public boolean hasWorkSite()
   {
-  return this.workSite!=null;
+  return this.getWorkSite()!=null;
   }
 
-public void clearWorkSite()
-  {
-  this.workSite = null;
-  this.workPoint = null;
-  this.workSitePoint = null;
-  }
 
 public void setDepositPoint(int x, int y, int z, int side)
   {

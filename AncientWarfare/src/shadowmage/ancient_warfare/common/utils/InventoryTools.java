@@ -32,6 +32,28 @@ public class InventoryTools
 
 static Random random = new Random();
 
+public static int getCountOf(IInventory inv, ItemStack filter, int firstSlot, int lastSlot)
+  {
+  if(inv.getSizeInventory()==0)
+    {
+    return 0;
+    }
+  ItemStack fromSlot = null;
+  int qtyFound = 0;
+  firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
+  lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
+  for(int i = firstSlot; i <= lastSlot; i++)
+    {
+    fromSlot = inv.getStackInSlot(i);
+    if(fromSlot==null){continue;}
+    if(doItemsMatch(fromSlot, filter))
+      {
+      qtyFound += fromSlot.stackSize;
+      }
+    }
+  return qtyFound;
+  }
+
 public static int tryRemoveItems(IInventory inv, ItemStack filter, int qty, int firstSlot, int lastSlot)
   {
   if(inv.getSizeInventory()==0)

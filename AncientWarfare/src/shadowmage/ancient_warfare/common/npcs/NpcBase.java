@@ -98,7 +98,7 @@ public NpcBase(World par1World)
   {
   super(par1World);
 //  this.width = 0.8f;
-//  this.height = 1.8f;
+  this.height = 1.6f;
   this.varsHelper = new NpcDummyVarHelper(this);  
   this.targetHelper = new NpcTargetHelper(this);
   this.aiManager = new NpcAIObjectiveManager(this);
@@ -141,7 +141,7 @@ public void handleBatonCommand(NpcCommand cmd, int x, int y, int z, int side)
   wayNav.clearHomePoint();
   break;
   case CLEAR_WORK:
-  wayNav.clearWorkSitePoint();
+  wayNav.clearWorkInfo();
   break;
   case CLEAR_PATROL:
   wayNav.clearPatrolPoints();

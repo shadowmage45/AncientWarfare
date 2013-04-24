@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
@@ -60,19 +61,23 @@ public void updatePriority()
   boolean work = true;
   if(npc.inventory.getEmptySlotCount()<=1)
     {
+    Config.logDebug("inventory full");
     work = false;
     }
   else if(!npc.wayNav.hasWorkSitePoint())
     {
+    Config.logDebug("has no work site point");
     //TODO check target-lists for broadcasting work-sites
     work = false;
     }
   else if(!npc.wayNav.hasWorkSite())
     {
+    Config.logDebug("has no work site");
     work = false;
     }
   else if(!isWorkSiteWorkable())
     {
+    Config.logDebug("site not workable");
     work = false;
     }  
   if(work)
@@ -197,8 +202,7 @@ protected void setMoveToPoint(int x, int y, int z)
 
 protected void setMoveToWork(WorkPoint p)
   {
-  int y = PathUtils.findClosestYTo(npc.getWorldAccess(), p.floorX(), p.floorY(), p.floorZ());
-  setMoveToPoint(p.floorX(), y, p.floorZ());
+  setMoveToPoint(p.floorX(), p.floorY(), p.floorZ());
   }
 
 protected void setWorkPoint(WorkPoint p)

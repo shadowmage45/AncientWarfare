@@ -20,9 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
+import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class MinePoint implements Comparable<MinePoint>
+public class MinePoint implements Comparable<MinePoint>, INBTTaggable
 {
 
 int x;
@@ -34,9 +36,20 @@ TargetType currentAction = TargetType.NONE;//current action needed, as designate
 
 protected MinePoint(int x, int y, int z, int order, TargetType type)
   {
+  this.x = x;
+  this.y = y;
+  this.z = z;
   this.order = order;
   this.action = type;
   this.currentAction = type;
+  }
+
+/**
+ * @param tag
+ */
+public MinePoint(NBTTagCompound tag)
+  {
+  this.readFromNBT(tag);
   }
 
 @Override
@@ -88,6 +101,28 @@ public boolean equals(Object obj)
   if (z != other.z)
     return false;
   return true;
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setInteger("x", x);
+  tag.setInteger("y", y);
+  tag.setInteger("z", z);
+  tag.setInteger("oA", this.action.ordinal());
+  tag.setInteger("oC", this.currentAction.ordinal());
+  return tag;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  this.x = tag.getInteger("x");
+  this.y = tag.getInteger("y");
+  this.z = tag.getInteger("z");  
+  this.action = TargetType.values()[tag.getInteger("oA")];
+  this.currentAction = TargetType.values()[tag.getInteger("oC")];  
   }
 
 }

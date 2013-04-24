@@ -150,7 +150,7 @@ public void preInit(FMLPreInitializationEvent evt)
   AWEntityRegistry.registerEntity(VehicleBase.class, "Vehicle.VehicleBase", 130, 3, false);
   VehicleRegistry.instance().registerVehicles();
   AWEntityRegistry.registerEntity(NpcBase.class, "Npc.NpcBase", 130, 3, true);
-  Config.log("Ancient Warfare Pre-Init finished");
+  Config.log("Ancient Warfare Pre-Init finished.");
   }
 
 /**
@@ -160,7 +160,7 @@ public void preInit(FMLPreInitializationEvent evt)
 @Init
 public void init(FMLInitializationEvent evt)
   {
-  Config.log("Ancient Warfare Init started");
+  Config.log("Ancient Warfare Init started.");
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
   proxy.registerClientData();
 
@@ -168,7 +168,7 @@ public void init(FMLInitializationEvent evt)
    * process loaded structures
    */
   AWStructureModule.instance().process();
-  Config.log("Ancient Warfare Init completed");
+  Config.log("Ancient Warfare Init completed.");
   }
 
 /**
@@ -193,18 +193,8 @@ public void load(FMLPostInitializationEvent evt)
 
   //DEBUG //TODO -- remove
   PathBenchmarking.instance().doBenchmarkRuns();
-  mineTest();
+  Config.logDebug("Ancient Warfare Post-Load Debug Complete.");
   }
 
-private void mineTest()
-  {
-  MineLevel level = new MineLevel(0,0,0, 16, 4, 16);
-  level.initializeLevel(null, 7, 7);
-  List<String> lines = level.getMineExportMap();
-  for(String l : lines)
-    {
-    Config.logDebug(l);
-    }
-  }
 
 }

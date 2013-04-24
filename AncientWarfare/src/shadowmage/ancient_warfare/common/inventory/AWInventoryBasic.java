@@ -175,6 +175,11 @@ public void setInventorySlotContents(int stackIndex, ItemStack newContents)
     }
   }
 
+public int getCountOf(ItemStack filter)
+  {
+  return InventoryTools.getCountOf(this, filter, 0, getSizeInventory()-1);
+  }
+
 public int tryRemoveItems(ItemStack filter, int qty)
   {
   return InventoryTools.tryRemoveItems(this, filter, qty, 0, this.getSizeInventory()-1);
