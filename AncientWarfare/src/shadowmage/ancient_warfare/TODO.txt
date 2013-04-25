@@ -42,6 +42,12 @@ MINE
         internal lists for each branch, when asking for next point, include worker# to calc what branch to pull from
 * needs torches placed!!
 * add mapExtras
+* RESTRUCTURE
+        remove array, it is uneeded
+        allow for multiple points of same coord in lists (with diff priority)
+        when scanning, check floor before adding torches, add floor then torch if necessary(same for ladders)
+        figure out a way to split into multiple concurrent branches (add branch# to point?)
+            break into components, ea stored in a priority queue
         
 PATHFINDING
 * entities should re-check the nodes in their path to make sure they are still viable nodes

@@ -44,7 +44,10 @@ private int xSize;
 private int ySize;
 private int zSize;
 
-private MinePoint[] mineArray;
+private List<MineComponent> components = new ArrayList<MineComponent>();
+private List<MineComponent> finishedComponents = new ArrayList<MineComponent>();
+private MineComponent currentComponent = null;
+
 private PriorityQueue<MinePoint> pointQueue = new PriorityQueue<MinePoint>();
 private ArrayList<MinePoint> finishedPoints = new ArrayList<MinePoint>();
 
@@ -64,7 +67,7 @@ public MineLevel(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize)
   this.xSize = xSize;
   this.ySize = ySize;
   this.zSize = zSize;
-  this.mineArray = new MinePoint[xSize*ySize*zSize];
+//  this.mineArray = new MinePoint[xSize*ySize*zSize];
   this.minX = xPos;
   this.minY = yPos;
   this.minZ = zPos;
@@ -100,26 +103,26 @@ public void onPointFinished(MinePoint ent)
   this.finishedPoints.add(ent);
   }
 
-public MinePoint getDataWorldIndex(int x, int y, int z)
-  {
-  return mineArray[getWorldAdjustedIndex(x,y,z)];
-  }
-
-protected MinePoint getDataLocalIndex(int x, int y, int z)
-  {
-  return this.mineArray[getIndex(x, y, z)];
-  }
-
-protected void setDataLocalIndex(int x, int y, int z, MinePoint data)
-  {
-  this.mineArray[getIndex(x, y, z)]= data;
-  }
-
-public void setDataWorldIndex(int x, int y, int z, MinePoint data)
-  {  
-//	Config.logDebug(String.format("setting info: %d, %d, %d -- arraySize %d", x,y,z,this.mineArray.length));
-  this.mineArray[getWorldAdjustedIndex(x,y,z)]=data;
-  }
+//public MinePoint getDataWorldIndex(int x, int y, int z)
+//  {
+//  return mineArray[getWorldAdjustedIndex(x,y,z)];
+//  }
+//
+//protected MinePoint getDataLocalIndex(int x, int y, int z)
+//  {
+//  return this.mineArray[getIndex(x, y, z)];
+//  }
+//
+//protected void setDataLocalIndex(int x, int y, int z, MinePoint data)
+//  {
+//  this.mineArray[getIndex(x, y, z)]= data;
+//  }
+//
+//public void setDataWorldIndex(int x, int y, int z, MinePoint data)
+//  {  
+////	Config.logDebug(String.format("setting info: %d, %d, %d -- arraySize %d", x,y,z,this.mineArray.length));
+//  this.mineArray[getWorldAdjustedIndex(x,y,z)]=data;
+//  }
 
 private int getWorldAdjustedIndex(int x, int y, int z)
   {
@@ -201,7 +204,7 @@ protected int mapShaft(World world, int order, int shaftX, int shaftZ)
 protected void addPointToQueueAndMap(int x, int y, int z, int order, TargetType type)
   {
   MinePoint entry = new MinePoint(x,y,z, order, type);
-  this.setDataWorldIndex(x, y, z, entry);  
+//  this.setDataWorldIndex(x, y, z, entry);  
   this.pointQueue.offer(entry);
   }
 
@@ -209,14 +212,14 @@ protected void addPointToFinishedAndMap(int x, int y, int z, int order, TargetTy
   {
   MinePoint entry = new MinePoint(x,y,z, order, type);
   entry.currentAction = TargetType.NONE;
-  this.setDataWorldIndex(x, y, z, entry);
+//  this.setDataWorldIndex(x, y, z, entry);
   this.finishedPoints.add(entry);
   }
 
 protected void addToMap(World world, int x, int y, int z, int order, TargetType type)
   {
   MinePoint entry = new MinePoint(x,y,z, order, type);
-  this.setDataWorldIndex(x, y, z, entry);
+//  this.setDataWorldIndex(x, y, z, entry);
   if(!entry.hasWork(world))
     {
 //    Config.logDebug("entry had no work: "+entry);
@@ -345,63 +348,63 @@ protected int mapBranches(World world, int startOrder, int shaftX, int shaftZ)
 
 protected int mapExtras(World world, int order, int shaftX, int shaftZ)
   {
-  int index;
-  int id;
-  boolean filled;
-  boolean resource;
-  MinePoint p;
-  for(int y = 0; y < this.ySize; y++ )
-    {
-    for(int z = 0; z < this.zSize; z++)
-      {
-      for(int x = 0; x < this.xSize; x++)
-        {
-        if(getDataLocalIndex(x, y, z)==null)
-          {
-          id = world.getBlockId(x+minX, y+minY, z+minZ);
-          filled = false;
-          resource = false;
-          if(needsFilled(id))
-            {
-            filled = true;
-            }
-          else if(isValidResource(id))
-            {
-            resource = true;
-            }
-          if(filled||resource)
-            {
-            order++;
-            for(BlockPosition o : blockOffsets)
-              {
-              index = getIndex(x+o.x, y+o.y, z+o.z);
-              if(index>=0 && index<this.mineArray.length && mineArray[index]!=null)
-                {
-                if(filled)
-                  {
-                  p = new MinePoint(x+minX,y+minY,z+minZ, order, TargetType.MINE_FILL);
-                  this.setDataLocalIndex(x, y, z, p);
-                  this.pointQueue.offer(p);
-                  //set to fill
-                  }
-                else if(resource)
-                  {
-                  p = new MinePoint(x+minX,y+minY,z+minZ, order, TargetType.MINE_CLEAR_THEN_FILL);
-                  this.setDataLocalIndex(x, y, z, p);
-                  this.pointQueue.offer(p);
-                  }
-                break;
-                }
-              } 
-            }          
-          }
-               
-        //if getdatalocal==null
-        //  if there is a non-null node in any of the 6 directions (and not out of mine bounds)
-        //    add as a clear_then_fill node
-        }
-      }
-    }
+//  int index;
+//  int id;
+//  boolean filled;
+//  boolean resource;
+//  MinePoint p;
+//  for(int y = 0; y < this.ySize; y++ )
+//    {
+//    for(int z = 0; z < this.zSize; z++)
+//      {
+//      for(int x = 0; x < this.xSize; x++)
+//        {
+//        if(getDataLocalIndex(x, y, z)==null)
+//          {
+//          id = world.getBlockId(x+minX, y+minY, z+minZ);
+//          filled = false;
+//          resource = false;
+//          if(needsFilled(id))
+//            {
+//            filled = true;
+//            }
+//          else if(isValidResource(id))
+//            {
+//            resource = true;
+//            }
+//          if(filled||resource)
+//            {
+//            order++;
+//            for(BlockPosition o : blockOffsets)
+//              {
+//              index = getIndex(x+o.x, y+o.y, z+o.z);
+//              if(index>=0 && index<this.mineArray.length && mineArray[index]!=null)
+//                {
+//                if(filled)
+//                  {
+//                  p = new MinePoint(x+minX,y+minY,z+minZ, order, TargetType.MINE_FILL);
+//                  this.setDataLocalIndex(x, y, z, p);
+//                  this.pointQueue.offer(p);
+//                  //set to fill
+//                  }
+//                else if(resource)
+//                  {
+//                  p = new MinePoint(x+minX,y+minY,z+minZ, order, TargetType.MINE_CLEAR_THEN_FILL);
+//                  this.setDataLocalIndex(x, y, z, p);
+//                  this.pointQueue.offer(p);
+//                  }
+//                break;
+//                }
+//              } 
+//            }          
+//          }
+//               
+//        //if getdatalocal==null
+//        //  if there is a non-null node in any of the 6 directions (and not out of mine bounds)
+//        //    add as a clear_then_fill node
+//        }
+//      }
+//    }
   return order;
   }
 
@@ -434,37 +437,6 @@ blockOffsets[5] = new BlockPosition(0,0,1);
 public List<String> getMineExportMap()
   {
   List<String> map = new ArrayList<String>();
-  String currentLine;
-  MinePoint entry;
-  for(int y = this.ySize-1; y >=0; y--)
-    {
-    map.add("Level: "+y);    
-    for(int z = 0; z < this.zSize; z++)
-      {
-      currentLine = "";
-      for(int x = 0; x < this.xSize; x++)
-        {        
-        if(x>0)
-          {
-          currentLine = currentLine + ",";
-          }
-        entry = getDataLocalIndex(x, y, z);
-        if(entry==null)
-          {
-          currentLine = currentLine + "XX";
-          }
-        else if(entry.order<10)
-          {
-          currentLine = currentLine + "0" + String.valueOf(entry.order);
-          }
-        else
-          {
-          currentLine = currentLine + String.valueOf(entry.order);
-          }
-        }
-      map.add(currentLine);
-      }    
-    }
   return map;
   }
 
@@ -483,11 +455,6 @@ public void validatePoints(World world)
       it.remove();
       this.pointQueue.offer(p);
       }
-//    if((p.action == TargetType.MINE_CLEAR_THEN_LADDER && world.getBlockId(p.x, p.y, p.z)!=Block.ladder.blockID) || (p.action!=TargetType.MINE_CLEAR_THEN_LADDER && world.getBlockId(p.x, p.y, p.z)!=0))
-//      {
-//      it.remove();
-//      this.pointQueue.offer(p);
-//      }
     }
   }
 
@@ -498,14 +465,14 @@ public NBTTagCompound getNBTTag()
   outerTag.setIntArray("bounds", new int[]{minX, minY, minZ, xSize, ySize, zSize});
   NBTTagList minePointList = new NBTTagList();
   MinePoint a;
-  for(int i = 0; i < this.mineArray.length; i++)
-    {
-    a = this.mineArray[i];
-    if(a!=null)
-      {
-      minePointList.appendTag(a.getNBTTag());
-      }
-    }
+//  for(int i = 0; i < this.mineArray.length; i++)
+//    {
+//    a = this.mineArray[i];
+//    if(a!=null)
+//      {
+//      minePointList.appendTag(a.getNBTTag());
+//      }
+//    }
   outerTag.setTag("minePointList", minePointList);
   return outerTag;
   }
@@ -520,7 +487,6 @@ public void readFromNBT(NBTTagCompound tag)
   this.xSize = bounds[3];
   this.ySize = bounds[4];
   this.zSize = bounds[5];
-  this.mineArray = new MinePoint[xSize*ySize*zSize];
   NBTTagList minePointList = tag.getTagList("minePointList");
   NBTTagCompound pointTag = null;
   MinePoint point = null;
@@ -528,7 +494,6 @@ public void readFromNBT(NBTTagCompound tag)
     {
     pointTag = (NBTTagCompound) minePointList.tagAt(i);
     point = new MinePoint(pointTag);
-    this.setDataWorldIndex(point.x, point.y, point.z, point);
     if(point.currentAction==TargetType.NONE)
       {
       this.finishedPoints.add(point);
@@ -539,5 +504,6 @@ public void readFromNBT(NBTTagCompound tag)
       }
     }
   }
+
 
 }

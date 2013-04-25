@@ -33,6 +33,7 @@ int x;
 int y;
 int z;
 int order = 0;
+int branchNum = 0;
 TargetType action = TargetType.NONE;//original action as designated when scanned
 TargetType currentAction = TargetType.NONE;//current action needed, as designated by worked on/rescanned
 
@@ -137,6 +138,7 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("z", z);
   tag.setInteger("oA", this.action.ordinal());
   tag.setInteger("oC", this.currentAction.ordinal());
+  tag.setInteger("bN", branchNum);
   return tag;
   }
 
@@ -147,7 +149,8 @@ public void readFromNBT(NBTTagCompound tag)
   this.y = tag.getInteger("y");
   this.z = tag.getInteger("z");  
   this.action = TargetType.values()[tag.getInteger("oA")];
-  this.currentAction = TargetType.values()[tag.getInteger("oC")];  
+  this.currentAction = TargetType.values()[tag.getInteger("oC")];
+  this.branchNum = tag.getInteger("bN");
   }
 
 }
