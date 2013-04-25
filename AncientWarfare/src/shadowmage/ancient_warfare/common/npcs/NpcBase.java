@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.network.Packet04Npc;
 import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
@@ -97,7 +98,6 @@ public NpcInventory inventory;
 public NpcBase(World par1World)
   {
   super(par1World);
-//  this.width = 0.8f;
   this.height = 1.6f;
   this.varsHelper = new NpcDummyVarHelper(this);  
   this.targetHelper = new NpcTargetHelper(this);
@@ -112,8 +112,6 @@ public NpcBase(World par1World)
   this.nav = new Navigator(this);
   this.nav.setCanOpenDoors(true);
   this.nav.setCanSwim(true);
-//  this.nav = new EntityNavigator(this);
-//  this.nav.canOpenDoors = true;
   this.wayNav = new WayPointNavigator(this);
   this.inventory = new NpcInventory(this, 0);
   this.tasks.addTask(1, new EntityAISwimming(this));
@@ -382,6 +380,10 @@ public void handlePacketUpdate(NBTTagCompound tag)
     this.nav.setMoveToTarget(tag.getInteger("tx"), tag.getInteger("ty"), tag.getInteger("tz"));
 //    Config.log("setting move target client side");
     }
+  if(tag.hasKey("health") && worldObj.isRemote)
+    {
+    this.health = (int)tag.getByte("health");
+    }
   }
 
 @Override
@@ -397,6 +399,13 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   if(par1DamageSource.getEntity() instanceof EntityLiving)
     {
     this.targetHelper.handleBeingAttacked((EntityLiving)par1DamageSource.getEntity());    
+    if(!worldObj.isRemote)
+      {
+      Packet04Npc pkt = new Packet04Npc();
+      pkt.setParams(this);
+      pkt.setHealthUpdate((byte) this.getHealth());
+      pkt.sendPacketToAllTrackingClients(this);
+      }
     }
   return true;
   }
@@ -407,6 +416,7 @@ public void writeSpawnData(ByteArrayDataOutput data)
   data.writeInt(teamNum);
   data.writeInt(rank);
   data.writeInt(this.npcType.getGlobalNpcType());
+  data.writeByte((byte)health);
   }
 
 @Override
@@ -416,6 +426,7 @@ public void readSpawnData(ByteArrayDataInput data)
   this.rank = data.readInt();
   INpcType t = NpcTypeBase.getNpcType(data.readInt());
   this.setNpcType(t, rank);
+  this.health = (int)data.readByte();
   }
 
 public int floorX()
@@ -482,15 +493,22 @@ public void removePlayer(EntityPlayer player)
 @Override
 public boolean canInteract(EntityPlayer player)
   {
-  return false;
+  //TODO ??? WTF is this even called?
+  return true;
   }
 
+/**
+ * IPathableEntity method...
+ */
 @Override
 public void setMoveTo(double x, double y, double z, float moveSpeed)
   {
   this.getMoveHelper().setMoveTo(x, y, z, moveSpeed);
   }
 
+/**
+ * IPathableEntity method...
+ */
 @Override
 public Entity getEntity()
   {

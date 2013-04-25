@@ -52,7 +52,7 @@ public NpcArcher(int type)
   super(type);
   this.displayName = "Archer";
   this.tooltip = "An archer, adept at bow-use.";
-  ItemStack bow = new ItemStack(Item.bow,1);  
+  this.isCombatUnit = true;
   this.addLevel("Archer Novice", "foo", getToolStack(0), getArmorStack(0));
   this.addLevel("Archer Adept", "foo", getToolStack(1), getArmorStack(1));
   this.addLevel("Archer Expert", "foo", getToolStack(2), getArmorStack(2));

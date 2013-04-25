@@ -39,6 +39,11 @@ public void setPathTarget(NBTTagCompound tag)
   this.packetData.setCompoundTag("path", tag);
   }
 
+public void setHealthUpdate(byte health)
+  {
+  this.packetData.setByte("health", health);
+  }
+
 public void setParams(Entity ent)
   {  
   this.entityID = ent.entityId;

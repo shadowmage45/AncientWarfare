@@ -9,15 +9,12 @@ Create the NPCType
         set any per-entity special crap in NPCVarsHelper onTick methods...
     it will self register for item creation
 
-
-
 NPC types:
 
 Soldiers:
     Footsoldier
     Medic
     Engineer
-    Lieutenant
     Commander
     General
 
@@ -26,8 +23,142 @@ Civillians:
     Breeder (internal subtypes for dif. animals)
     Miner
     Builder ?
-    Researcher ?
-    Recruiter ? 
+    Researcher ? 
+    
+Overview:
+
+    Npcs will provide the cornerstone of the 'work' for Ancient Warfare.  Instead of relying upon blocks alone to 
+accomplish goals, players may now recruit NPC's to aid them.  NPC's will be available to, in combination, allow for
+near-complete automation of entire resource gathering and processing systems.  Combat-oriented  NPC's will also 
+be available (Soldiers), allowing for faction-vs-faction warfare (player-vs-player, player-vs-npc, and npc-vs-npc).
+
+    Interaction with NPC's will be kept simple, with each NPC having at _most_ ONE Gui for advanced interaction.
+Advanced commands will be issued to NPC's with the aid of Command Batons.  These items will allow for a player to
+command individual NPC's, as well as (at higher tiers) all friendly NPC's in the vicinity that are of the same type
+as the main Baton target or specified NPC Type (in the Baton Gui).  The Command Baton will be used to 'link' an NPC
+to his place of employment, town center (for food upkeep), and depository (for workers to deposit goods).  A Baton
+may also be used to set the 'Home' of an NPC (an NPC will only wander a specified distance from their Home point),
+and issue Patrol commands/add Patrol points to an existing Patrol path (Patrol ability is for Combat NPC's only).
+
+    All NPC's will require occasional 'Upkeep' costs, which may differ depending upon the type and rank of the NPC.
+Civilian NPC's (Civilians) will require less Upkeep than Soldiers, and higher ranks of either tye will also increase the Upkeep
+costs.  For most NPC's Upkeep will consist of the NPC needing to occasionally visit the town hall to acquire food, 
+though some advanced NPCs may have additional Upkeep requirements as well.
+
+    Civilians may be designated with one work site, one deposit site, and one town-hall.  The type of NPC will
+determine what work and deposit sites are acceptable, such as certain Civilians may accept 'deposit' sites as a work site
+for transferrence of goods, other NPCs can only work at particular types of worksite (farmers on farms, miners in
+mines).  Most Civilian NPC's will have an interaction GUI with a simple inventory, providing player access to whatever
+goods the NPC may be working but not deposited.  The NPC inventory size may be linked to NPC rank.  Civilian work
+time will vary depending upon rank -- higher quality workers will get more work done in a given period of time than 
+lower quality workers.  Some VERY advanced work sites may require high-ranked workers in order to even function (low
+ranked wokers will not be attachable).
+
+    Civilians hook into the exising MC Village mechanics, allowing for nearby doors to be added to Village lists, as
+well as seeking shelter in the nearest available village dwelling at night/in the rain.
+
+    Goods-Transportation based Civilians will be made available -- these Civilians may have an IInventory (Tile entity
+or Entity) assigned for their 'work-site'.  These NPCs will have item-stack based filters available in their interface
+to designate what goods to pick-up in what quantities, or how much of a good to keep stocked in the depository (allowing
+for the automation of things consuming resources).  Higher ranks will have more filter slots and more configurable
+options available.  These NPCs are meant to take the place of the often-laggy (but awesome!) transport pipes and tubes 
+provided by many mods (The theory being that one NPC carrying many STACKS of items is better than thousands of single
+items running through tubes && the tube-block update-ticks necessary to support/route them). Advanced NPCs may be
+available which provide multi-pickup/multi-destination abilities, allowing for a single NPC to manage more significant
+portions of an automation system, and cutting down on the total number needed to accomplish automation.
+
+    All Civilians must be linked to a Town-Hall Civic, or they will do nothing but wander around.  The reasoning for
+this is two-fold.  Primarily to allow for NPCs to have a known place where they may take their Upkeep, and secondly to 
+allow for a central place for a player to query the status and effectiveness of an NPC.  Stats will be kept about the
+NPCs lifetime, nodes worked, product deposited, upkeep withdrawn, and times attacked/fled.  Higher-ranked Town-Halls will
+allow for more workers to be assigned simultaneously (though there will be nothing from stopping the player from making
+additional town halls--aside from the complexity and inefficiency of it).
+
+    Combat NPC's (Soldiers) will have a substantially different feature set than Civilians.  Soldiers will come in
+several varieties, and ranks in those varieties.  Soldier types will be available for basic melee combat (Foot-Soldier),
+basic ranged combat (Archer), and even one trained in the use of Siege Engines (the aptly named Siege Engineer).  A few
+combat-oriented utility types will also be provided, such as field-medics (Medic) and vehicle-repair services (Combat 
+Engineer).  Command-Oriented Soldiers will also be available, in the form of the Commander and General.  Both provide
+advanced abilities and cohesion to the Soldiers under their command, to different degrees.  These bonuses may include
+aggregated/coordinated targeting abilities as well as conveying attack and defensive bonuses upon the troops under their
+command.
+
+    Melee oriented Combat NPCs will come in a variety of ranks, higher tiers being equipped with better equipment.
+Higher ranks may also have better target selection abilities, and will be less prone to flee when at low health.  Higher
+ranks may also come with special AI to allow for 'safe' combat with Creepers or other specialized mob types.
+
+    Combat NPC's on vehicles will have limited ammo selection per-vehicle, however they will not consume vehicle
+ammunition of these types when fired.  Players may optionally provide the specific NPC with ammo to use -- the soldier
+will 'randomly' pick from the applicable ammo types in his inventory for the vehicle he is riding.  Higher ranks will
+have greater proficiency on whatever vehicle they ride, while some vehicles may only be available to higher ranked (or
+even specialized) Siege Engineers.
+
+    Combat NPC's may be issued orders in several different ways.  The simplest of these would be merely having the
+soldier follow you around -- while following a player, their 'aggro' range is reduced significantly (but still present),
+enabling a player to 'lead' a soldier to a target.  Additionally, if a player has Command Baton equipped and attacks
+a hostile or neutral target, the commanded soldier (and nearby--dep. on baton rank) will attack players' attack target.
+And finally, the Commanders Flare Gun provides the ability for a Player commander to designate a single target, through
+a launched 'flare', to ALL combat NPCs which can see the target -- NPCs will first attack any 'hostiles' in the designated
+area before moving on to the surrounding structure and blocks.
+
+    Recruitment costs for NPCs will vary depending upon type, but will generally consist of at least an initial food/upkeep
+amount and whatever equipment the NPC will use in his line of work (soldiers need sword/armor, archers need bows, miners
+will need pickaxes, etc...).  An NPC will not change ranks in his lifetime, though upgrade abilities are being considered 
+(would require one-time upgrade cost of the new tier equipement, the old tier equiment would be returned).
+
+    Upon death, all NPCs will drop their entire inventory, including the equipment given to them as a recruiting cost. If
+slain by a Player, they will also provide an amount of experience relative to their rank/rarity.
+
+    It is currently undecided if all NPCs will have an inventory, but it may well come to that--if nothing else than to 
+allow a soldier to pick up the armor of a vanquished foe or fallen comrade.  At this point, soldiers would be enabled
+to have a deposit site set in their AI -- this site may be a traditional block or a chest-cart (to enable mobile armies).
+
+
+
+
+
+
+Civics System Overview:
+    The Civics System will provide the interface layer between the Entity based NPCs and the Block based world around
+them.  The Civics System will be provide Blocks and the means for players to designate an 'area' in which the block
+will have control.  These blocks may be little more than storage areas, or complex control centers managing dozens of
+workers and thousands of blocks of space.  Configuration of most Civic buildings will be controllable by the player--
+so they may set custom bounds for their work area.  
+
+    The Civics System is NOT a construction system -- It does not provide the structures or blocks the NPCs will need, 
+it merely sets the bounding area that they will work in.  It may however be  employed IN the construction of buildings
+(A Building-Site Civic will be made available, to facilitate the construction of Ancient Warfare Structures while in 
+Survival Mode).
+
+    A Town-Hall Civic will be available to players that can serve as a central depository if desired, but more
+importantly allows for all NPCs in a given area to  have a place to withdraw their Upkeep costs.  Players will be
+responsible for ensuring the Town-Hall has the goods needed by his NPCs, but many of the NPCs will have functions
+geared towards helping on this goal (such as the ability for a Farmer to deposit his wheat directly to the Town-Hall).
+The Town-Hall will likely be available in several different tiers, most likely with increased storage capcity and
+worker support capacity.
+
+    Civic types will be available to provide logic for at least the following functions:
+* town hall, central depository/upkeep withdrawal area    
+* plant farms (wheat, carrot, potato, reed, cactus, melon, pumpkin, mushrooms, and netherstalk, plugins for mods such as corn, flax?, etc)
+* animal farms (cow, sheep, chicken, pig, horses?)
+* tree farms (probably one per vanilla tree types with plugins for mods) 
+* mining facilities -- a few different patterns, types, and ranks (determines max depth)
+* ore processing facility -- must have furnaces (plugin for mod furnace extendsions), workers process ores to ingots/etc
+* lumber processing facility -- concept WIP -- probably needs special? crafting bench to process wood to planks/sticks for other civics (at a bonus)
+* basic crafting facility -- automate normal crafting table recipes with NPCs who will withraw the required goods from the town-hall/designated area, and deposit results into their deposit site
+* research facility -- help automate the research process with workers (may require special research workers)
+
+    Non logic-based civics will also provide designated areas for some advanced functions:
+* dwellings -- provide a designated home building to specific Civilians.  They will not seek random shelter, but
+        instead prefer their designated building.
+* advanced depositories -- provide specialzed holding and routing functions for items (such as an armory,..concept WIP)            
+
+    Many of the logic based blocks will funcion by occasionally scanning their designated area for blocks/entities 
+that they consider important (will vary by Civic).  The maximum size of the area will often be determined by the rank of
+the specific Civic -- higher ranks are often allowed to work larger areas.  
+
+
+
   
   
 Civilian Buildings:

@@ -20,11 +20,17 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.EntityLiving;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 
 public class RenderNpcHelper extends RenderBiped
 {
@@ -50,6 +56,62 @@ public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double pa
     }
   }
 
+/**
+ * shamelessly copied to enable color-differentiation per-entity
+ */
+@Override
+protected void renderLivingLabel(EntityLiving par1EntityLiving, String par2Str, double renderX, double renderY, double renderZ, int renderDistance)
+  {
+  double var10 = par1EntityLiving.getDistanceSqToEntity(this.renderManager.livingPlayer);
 
+  
+  if (var10 <= (double)(renderDistance * renderDistance))
+    {
+    NpcBase npc = (NpcBase)par1EntityLiving;
+    boolean hostile = TeamTracker.instance().isHostileTowards(npc.worldObj, npc.teamNum, TeamTracker.instance().getTeamForPlayer(Minecraft.getMinecraft().thePlayer));
+    FontRenderer fontRenderer = this.getFontRendererFromRenderManager();
+    float var13 = 1.6F;
+    float var14 = 0.016666668F * var13;
+    GL11.glPushMatrix();
+    GL11.glTranslatef((float)renderX + 0.0F, (float)renderY + 2.3F, (float)renderZ);
+    GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+    GL11.glRotatef(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+    GL11.glRotatef(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+    GL11.glScalef(-var14, -var14, var14);
+    GL11.glDisable(GL11.GL_LIGHTING);
+    GL11.glDepthMask(false);
+    GL11.glDisable(GL11.GL_DEPTH_TEST);
+    GL11.glEnable(GL11.GL_BLEND);
+    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+    Tessellator tessellator = Tessellator.instance;
+    byte yOffset = 0;// Y offset
+   
+    GL11.glDisable(GL11.GL_TEXTURE_2D);
+    tessellator.startDrawingQuads();
+    int xOffset = fontRenderer.getStringWidth(par2Str) / 2;// 
+    tessellator.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
+    tessellator.addVertex((double)(-xOffset - 1), (double)(-1 + yOffset), 0.0D);
+    tessellator.addVertex((double)(-xOffset - 1), (double)(8 + yOffset), 0.0D);
+    tessellator.addVertex((double)(xOffset + 1), (double)(8 + yOffset), 0.0D);
+    tessellator.addVertex((double)(xOffset + 1), (double)(-1 + yOffset), 0.0D);
+    tessellator.draw();
+    GL11.glEnable(GL11.GL_TEXTURE_2D);
+    int color = 553648127;
+    int color2 = -1;
+    if(hostile)
+      {
+      color = 0xffff0000;
+      color2 = 0xffff0000;
+      }
+    fontRenderer.drawString(par2Str, -fontRenderer.getStringWidth(par2Str) / 2, yOffset, color);
+    GL11.glEnable(GL11.GL_DEPTH_TEST);
+    GL11.glDepthMask(true);
+    fontRenderer.drawString(par2Str, -fontRenderer.getStringWidth(par2Str) / 2, yOffset, color2);//was-1
+    GL11.glEnable(GL11.GL_LIGHTING);
+    GL11.glDisable(GL11.GL_BLEND);
+    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+    GL11.glPopMatrix();
+    }
+  }
 
 }

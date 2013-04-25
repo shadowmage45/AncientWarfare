@@ -56,6 +56,7 @@ public NpcFootsoldier(int type)
   super(type);
   this.displayName = "Footsoldier";
   this.tooltip = "A footsoldier, adept at melee combat.";
+  this.isCombatUnit = true;
   this.addLevel("Novice Footsoldier", "foo", getToolStack(0), getArmorStack(0));
   this.addLevel("Adept Footsoldier", "foo", getToolStack(1), getArmorStack(1));
   this.addLevel("Master Footsoldier", "foo", getToolStack(2), getArmorStack(2));  
