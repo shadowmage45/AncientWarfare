@@ -30,6 +30,8 @@ WORKSITES
 * most civics probably need chunk-loaders to prevent them from trying to access unloaded areas.
 * work times are still inconsistent at best, need a solid way to set work time when NPC has started
         working (simple boolean isWorking flag, toggled false when moving, examined when working?)
+* need to invalidate work-site AND work-point (f'n all of it) from npc when it is destroyed         
+        
 FARMS
 * needs potato/carrot tested
 * needs cactus/melon/reed/mushroom types made
@@ -37,6 +39,9 @@ FARMS
 
 MINE
 * needs level restructured in a way to allow for multiple NPCs to work at once without interfering with eachother
+        internal lists for each branch, when asking for next point, include worker# to calc what branch to pull from
+* needs torches placed!!
+* add mapExtras
         
 PATHFINDING
 * entities should re-check the nodes in their path to make sure they are still viable nodes

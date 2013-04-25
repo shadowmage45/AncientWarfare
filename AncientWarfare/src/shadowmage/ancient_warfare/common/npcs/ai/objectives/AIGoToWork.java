@@ -82,8 +82,9 @@ public void updatePriority()
     }  
   if(work)
     {
+    Config.logDebug("setting work priority to max!!");
     this.currentPriority = this.maxPriority;
-    this.cooldownTicks = this.maxCooldownticks;
+//    this.cooldownTicks = this.maxCooldownticks;
     }
   else
     {
@@ -142,13 +143,14 @@ public void onRunningTick()
     this.setWorkPoint(p);
     if(p==null)
       {
+      Config.logDebug("work site returned null point, setting finished");
       this.setFinished();
       return;
       }
     }
   else
     {
-    if(npc.getDistance(workPoint.posX(), workPoint.posY(), workPoint.posZ())>3)
+    if(npc.getDistance(workPoint.posX(), workPoint.posY(), workPoint.posZ())>2.1)
       {
       npc.actionTick = 35;
       //wait for ai to move to target

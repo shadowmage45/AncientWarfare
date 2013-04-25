@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class MineLevel implements INBTTaggable
 {
@@ -218,6 +219,7 @@ protected void addToMap(World world, int x, int y, int z, int order, TargetType 
   this.setDataWorldIndex(x, y, z, entry);
   if(!entry.hasWork(world))
     {
+//    Config.logDebug("entry had no work: "+entry);
     entry.currentAction = TargetType.NONE;
     this.finishedPoints.add(entry);
     }
@@ -237,16 +239,14 @@ protected int mapTunnels(World world, int order, int shaftX, int shaftZ)
       {
       for(int y = minY+1; y>= minY; y--)
         {
-        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
-//        id = world.getBlockId(x, y, z);
-//        if(id==0 || id== Block.torchWood.blockID)
-//          {
-//          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
-//          }
-//        else
-//          {
-//          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
-//          }
+        if(x%4==0 && y ==minY)
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_THEN_TORCH);
+          }
+        else
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+          }
         }
       }
     }
@@ -257,7 +257,14 @@ protected int mapTunnels(World world, int order, int shaftX, int shaftZ)
       {
       for(int y = minY+1; y>= minY; y--)
         {
-        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+        if(x%4==0 && y ==minY)
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_THEN_TORCH);
+          }
+        else
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+          }
         }
       }
     }
@@ -271,47 +278,158 @@ protected int mapBranches(World world, int startOrder, int shaftX, int shaftZ)
   int id = 0;
   for(int x = shaftX-1; x>=minX; x-=3)
     {
-//    order = branchStartOrder;
     for(int z = shaftZ+2; z <=minZ+zSize-1; z++, order++)//do n/w side branches
       {
       for(int y = minY+1; y>= minY; y--)
         {
-        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+        if(z%4==0 && y ==minY)
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_THEN_TORCH);
+          }
+        else
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
         }
       }
     for(int z = shaftZ-1; z >=minZ; z--, order++)//do s/w side branches
       {
-      for(int y = minY+1; y>= minY+2; y--)
+      for(int y = minY+1; y>= minY; y--)
         {
-        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+        if(z%4==0 && y ==minY)
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_THEN_TORCH);
+          }
+        else
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
         }
       }
-    }
-  
+    }  
   for(int x = shaftX+2; x <= minX+xSize-1; x+=3)
     {
     for(int z = shaftZ+2; z <=minZ+zSize-1; z++, order++)//do n/e side branches
       {
       for(int y = minY+1; y>= minY; y--)
         {
-        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+        if(z%4==0 && y ==minY)
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_THEN_TORCH);
+          }
+        else
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
         }
       }
     for(int z = shaftZ-1; z >=minZ; z--, order++)//do s/e side branches
       {
       for(int y = minY+1; y>= minY; y--)
         {
-        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+        if(z%4==0 && y == minY)
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_THEN_TORCH);
+          }
+        else
+          {
+          this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
+          }
         }
       }
     }
   return order;
   }
 
-protected int mapExtras(World world, int startOrder, int shaftX, int shaftZ)
+
+
+protected int mapExtras(World world, int order, int shaftX, int shaftZ)
   {
-  return startOrder;
+  int index;
+  int id;
+  boolean filled;
+  boolean resource;
+  MinePoint p;
+  for(int y = 0; y < this.ySize; y++ )
+    {
+    for(int z = 0; z < this.zSize; z++)
+      {
+      for(int x = 0; x < this.xSize; x++)
+        {
+        if(getDataLocalIndex(x, y, z)==null)
+          {
+          id = world.getBlockId(x+minX, y+minY, z+minZ);
+          filled = false;
+          resource = false;
+          if(needsFilled(id))
+            {
+            filled = true;
+            }
+          else if(isValidResource(id))
+            {
+            resource = true;
+            }
+          if(filled||resource)
+            {
+            order++;
+            for(BlockPosition o : blockOffsets)
+              {
+              index = getIndex(x+o.x, y+o.y, z+o.z);
+              if(index>=0 && index<this.mineArray.length && mineArray[index]!=null)
+                {
+                if(filled)
+                  {
+                  p = new MinePoint(x+minX,y+minY,z+minZ, order, TargetType.MINE_FILL);
+                  this.setDataLocalIndex(x, y, z, p);
+                  this.pointQueue.offer(p);
+                  //set to fill
+                  }
+                else if(resource)
+                  {
+                  p = new MinePoint(x+minX,y+minY,z+minZ, order, TargetType.MINE_CLEAR_THEN_FILL);
+                  this.setDataLocalIndex(x, y, z, p);
+                  this.pointQueue.offer(p);
+                  }
+                break;
+                }
+              } 
+            }          
+          }
+               
+        //if getdatalocal==null
+        //  if there is a non-null node in any of the 6 directions (and not out of mine bounds)
+        //    add as a clear_then_fill node
+        }
+      }
+    }
+  return order;
   }
+
+protected boolean needsFilled(int id)
+  {
+  return id==0 || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID || id==Block.waterMoving.blockID || id==Block.waterStill.blockID;
+  }
+
+protected boolean isValidResource(int id)
+  {
+  if(id==0 || id==Block.stone.blockID || id==Block.cobblestone.blockID || id== Block.bedrock.blockID || id== Block.dirt.blockID || id==Block.grass.blockID)
+    {
+    return false;
+    }
+  return true;
+  }
+
+protected static BlockPosition[] blockOffsets = new BlockPosition[6];
+
+static
+{
+blockOffsets[0] = new BlockPosition(-1,0,0);
+blockOffsets[1] = new BlockPosition(0,-1,0);
+blockOffsets[2] = new BlockPosition(0,0,-1);
+blockOffsets[3] = new BlockPosition(1,0,0);
+blockOffsets[4] = new BlockPosition(0,1,0);
+blockOffsets[5] = new BlockPosition(0,0,1);
+}
 
 public List<String> getMineExportMap()
   {

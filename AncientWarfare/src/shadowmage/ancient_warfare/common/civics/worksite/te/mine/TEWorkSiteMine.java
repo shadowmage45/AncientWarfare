@@ -175,6 +175,8 @@ public WorkPoint doWork(NpcBase npc, WorkPoint p)
       return handleTunnelOrBranch(npc, m, mp);
       case MINE_CLEAR_THEN_FILL:
       return handleClearThenFill(npc, m, mp);
+      case MINE_CLEAR_THEN_TORCH:
+      return handleClearThenTorch(npc, m, mp);
       default:
       return null;
       }
@@ -219,8 +221,8 @@ protected WorkPointMine handleClearThenTorch(NpcBase npc, WorkPointMine p, MineP
     //TODO figure out ladder meta...
     //z+ = 2
     //z- = 3
-    npc.worldObj.setBlockAndMetadata(m.x, m.y, m.z, Block.ladder.blockID, 5);
-    inventory.tryRemoveItems(ladderFilter, 1);
+    npc.worldObj.setBlockAndMetadata(m.x, m.y, m.z, Block.torchWood.blockID, 5);
+    inventory.tryRemoveItems(torchFilter, 1);
     }
   else if(id!=Block.torchWood.blockID)
     {
@@ -338,7 +340,7 @@ public void updateWorkPoints()
 @Override
 public boolean hasWork(NpcBase npc)
   {
-//  Config.logDebug("hasWork: " + (currentLevel!=null && currentLevel.hasWork()));
+  Config.logDebug("hasWork: " + (currentLevel!=null && currentLevel.hasWork()));
   return (currentLevel!=null && currentLevel.hasWork());
   }
 
