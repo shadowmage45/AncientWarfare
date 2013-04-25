@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.npcs.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -39,8 +40,8 @@ public NpcDummy(int type)
   super(type);
   this.displayName = "Dummy Test";
   this.tooltip = "Dummy Test -- PlaceHolder tooltip";
-  this.addLevel("Dummy Test Level Name 1", "foo", null, null);
-  this.addLevel("Dummy Test Level Name 2", "foo", null, null);
+  this.addLevel("Dummy Test Level Name 1", Config.texturePath + "models/npcDefault.png", null, null);
+  this.addLevel("Dummy Test Level Name 2", Config.texturePath + "models/npcDefault.png", null, null);
   this.isCombatUnit = true;
   }
 

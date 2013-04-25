@@ -27,6 +27,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -53,11 +54,12 @@ public NpcArcher(int type)
   this.displayName = "Archer";
   this.tooltip = "An archer, adept at bow-use.";
   this.isCombatUnit = true;
-  this.addLevel("Archer Novice", "foo", getToolStack(0), getArmorStack(0));
-  this.addLevel("Archer Adept", "foo", getToolStack(1), getArmorStack(1));
-  this.addLevel("Archer Expert", "foo", getToolStack(2), getArmorStack(2));
-  this.addLevel("Archer Master", "foo", getToolStack(3), getArmorStack(3));
+  this.addLevel("Archer Novice", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0));
+  this.addLevel("Archer Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1));
+  this.addLevel("Archer Expert", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2));
+  this.addLevel("Archer Master", Config.texturePath + "models/npcDefault.png", getToolStack(3), getArmorStack(3));
   this.rangedAttackDistance = 20.f;
+  //return Config.texturePath + "models/ballistaMobile1.png";
   }
 
 @Override

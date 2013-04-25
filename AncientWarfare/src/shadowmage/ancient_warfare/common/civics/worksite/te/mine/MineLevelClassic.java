@@ -18,41 +18,42 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.targeting;
+package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
+
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
+ * slightly different layout of mine-level, more like the vanilla mine-shafts (for both main shaft and branches)
  * @author Shadowmage
  *
  */
-public enum TargetType
-  { 
-  ATTACK,
-  MOUNT,
-  REPAIR,
-  HEAL,
-  FOLLOW,
-  WANDER,
-  PATROL,
-  MOVE,
-  SHELTER,
-  FLEE,
-  NONE,
-  WORK,
-  FARM_PLANT,
-  FARM_HARVEST,
-  BARN_BREED,
-  BARN_CULL,
-  BUILD_CLEAR,
-  BUILD_PLACE,
-  MINE_CLEAR_TUNNEL,//for e/w tunnels
-  MINE_CLEAR_BRANCH,//for n/s branches from tunnels
-  MINE_CLEAR_THEN_LADDER,//for the central vertical shaft
-  MINE_CLEAR_THEN_FILL,//for resources in the wall/roof/floor
-  MINE_FILL,//for holes in the wall/roof/floor
-  MINE_CLEAR_THEN_TORCH,//for some tunnel/branch lines
-  TREE_CHOP,
-  TREE_PLANT,
-  PICKUP,
-  DELIVER;  
+public class MineLevelClassic extends MineLevel
+{
+
+/**
+ * @param xPos
+ * @param yPos
+ * @param zPos
+ * @param xSize
+ * @param ySize
+ * @param zSize
+ */
+public MineLevelClassic(int xPos, int yPos, int zPos, int xSize, int ySize,    int zSize)
+  {
+  super(xPos, yPos, zPos, xSize, ySize, zSize);
+  this.levelSize = 5;
   }
+
+/**
+ * @param tag
+ */
+public MineLevelClassic(NBTTagCompound tag)
+  {
+  super(tag);
+  }
+
+
+
+
+
+}

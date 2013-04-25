@@ -47,6 +47,7 @@ private MinePoint[] mineArray;
 private PriorityQueue<MinePoint> pointQueue = new PriorityQueue<MinePoint>();
 private ArrayList<MinePoint> finishedPoints = new ArrayList<MinePoint>();
 
+public int levelSize = 4;//the height of the level in blocks
 /**
  * position is minX, minY, minZ of the structure boundinb box(world coords)
  * size is the absolute size in blocks of the structure
@@ -124,8 +125,7 @@ private int getWorldAdjustedIndex(int x, int y, int z)
 //	Config.logDebug(String.format("World coord: %d, %d, %d :: adj coord: %d, %d, %d", x,y,z, x-minX, y-minY, z-minZ));
   x-= minX;
   y-= minY;
-  z-= minZ;
-  
+  z-= minZ;  
   return (xSize*zSize*y)+(xSize*z)+x;
   }
 
@@ -200,7 +200,7 @@ protected int mapShaft(World world, int order, int shaftX, int shaftZ)
 protected void addPointToQueueAndMap(int x, int y, int z, int order, TargetType type)
   {
   MinePoint entry = new MinePoint(x,y,z, order, type);
-  this.setDataWorldIndex(x, y, z, entry);
+  this.setDataWorldIndex(x, y, z, entry);  
   this.pointQueue.offer(entry);
   }
 
@@ -212,6 +212,21 @@ protected void addPointToFinishedAndMap(int x, int y, int z, int order, TargetTy
   this.finishedPoints.add(entry);
   }
 
+protected void addToMap(World world, int x, int y, int z, int order, TargetType type)
+  {
+  MinePoint entry = new MinePoint(x,y,z, order, type);
+  this.setDataWorldIndex(x, y, z, entry);
+  if(!entry.hasWork(world))
+    {
+    entry.currentAction = TargetType.NONE;
+    this.finishedPoints.add(entry);
+    }
+  else
+    {
+    this.pointQueue.offer(entry);
+    }
+  }
+
 protected int mapTunnels(World world, int order, int shaftX, int shaftZ)
   {
 //  int tunnelStartOrder = order;
@@ -220,17 +235,18 @@ protected int mapTunnels(World world, int order, int shaftX, int shaftZ)
     {
     for(int z = shaftZ; z<= shaftZ+1; z++)      
       {
-      for(int y = minY+2; y>= minY+1; y--)
+      for(int y = minY+1; y>= minY; y--)
         {
-        id = world.getBlockId(x, y, z);
-        if(id==0 || id== Block.torchWood.blockID)
-          {
-          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
-          }
-        else
-          {
-          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
-          }
+        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+//        id = world.getBlockId(x, y, z);
+//        if(id==0 || id== Block.torchWood.blockID)
+//          {
+//          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+//          }
+//        else
+//          {
+//          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
+//          }
         }
       }
     }
@@ -239,17 +255,9 @@ protected int mapTunnels(World world, int order, int shaftX, int shaftZ)
     {
     for(int z = shaftZ; z<= shaftZ+1; z++)      
       {
-      for(int y = minY+2; y>= minY+1; y--)
+      for(int y = minY+1; y>= minY; y--)
         {
-        id = world.getBlockId(x, y, z);
-        if(id==0 || id== Block.torchWood.blockID)
-          {
-          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
-          }
-        else
-          {
-          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
-          }
+        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_TUNNEL);
         }
       }
     }
@@ -266,68 +274,34 @@ protected int mapBranches(World world, int startOrder, int shaftX, int shaftZ)
 //    order = branchStartOrder;
     for(int z = shaftZ+2; z <=minZ+zSize-1; z++, order++)//do n/w side branches
       {
-      for(int y = minY+2; y>= minY+1; y--)
+      for(int y = minY+1; y>= minY; y--)
         {
-        id = world.getBlockId(x, y, z);
-        if(id==0 || id== Block.torchWood.blockID)
-          {
-          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
-          }
-        else
-          {
-          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
-          }
+        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
         }
       }
-//    order = branchStartOrder;
     for(int z = shaftZ-1; z >=minZ; z--, order++)//do s/w side branches
       {
-      for(int y = minY+2; y>= minY+1; y--)
+      for(int y = minY+1; y>= minY+2; y--)
         {
-        id = world.getBlockId(x, y, z);
-        if(id==0 || id== Block.torchWood.blockID)
-          {
-          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
-          }
-        else
-          {
-          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
-          }
+        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
         }
       }
     }
+  
   for(int x = shaftX+2; x <= minX+xSize-1; x+=3)
     {
-//    order = branchStartOrder;
     for(int z = shaftZ+2; z <=minZ+zSize-1; z++, order++)//do n/e side branches
       {
-      for(int y = minY+2; y>= minY+1; y--)
+      for(int y = minY+1; y>= minY; y--)
         {
-        id = world.getBlockId(x, y, z);
-        if(id==0 || id== Block.torchWood.blockID)
-          {
-          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
-          }
-        else
-          {
-          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
-          }
+        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
         }
       }
-//    order = branchStartOrder;
     for(int z = shaftZ-1; z >=minZ; z--, order++)//do s/e side branches
       {
-      for(int y = minY+2; y>= minY+1; y--)
+      for(int y = minY+1; y>= minY; y--)
         {
-        id = world.getBlockId(x, y, z);
-        if(id==0 || id== Block.torchWood.blockID)
-          {
-          this.addPointToFinishedAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
-          }
-        else
-          {
-          this.addPointToQueueAndMap(x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
-          }
+        this.addToMap(world, x, y, z, order, TargetType.MINE_CLEAR_BRANCH);
         }
       }
     }
@@ -386,11 +360,16 @@ public void validatePoints(World world)
   while(it.hasNext())
     {
     p = it.next();
-    if((p.action == TargetType.MINE_CLEAR_THEN_LADDER && world.getBlockId(p.x, p.y, p.z)!=Block.ladder.blockID) || (p.action!=TargetType.MINE_CLEAR_THEN_LADDER && world.getBlockId(p.x, p.y, p.z)!=0))
+    if(p!=null && p.hasWork(world))
       {
       it.remove();
       this.pointQueue.offer(p);
       }
+//    if((p.action == TargetType.MINE_CLEAR_THEN_LADDER && world.getBlockId(p.x, p.y, p.z)!=Block.ladder.blockID) || (p.action!=TargetType.MINE_CLEAR_THEN_LADDER && world.getBlockId(p.x, p.y, p.z)!=0))
+//      {
+//      it.remove();
+//      this.pointQueue.offer(p);
+//      }
     }
   }
 

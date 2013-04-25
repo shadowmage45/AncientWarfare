@@ -28,7 +28,8 @@ WORKSITES
 * needs a 'complete rescan divider', to know when to do a complete rescan, or just update nodes
     (scan a couple ticks after first load, and rescan every minute or two after that)    
 * most civics probably need chunk-loaders to prevent them from trying to access unloaded areas.
-
+* work times are still inconsistent at best, need a solid way to set work time when NPC has started
+        working (simple boolean isWorking flag, toggled false when moving, examined when working?)
 FARMS
 * needs potato/carrot tested
 * needs cactus/melon/reed/mushroom types made
@@ -52,7 +53,7 @@ VEHICLES
 
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
-* create officer types (lt, com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
+* create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
 * some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)
 * inter-soldier comms (more commanders yelling orders to soldiers)
 * need to set damage done by rank
@@ -63,8 +64,8 @@ NPCS
     Stay Near Commander
     Select Commander (constantly-run objective, e.g. does the 'run' in the 'update priority' tick?)  
 * NPC type needs to keep track of applicable work-types for that NPC
-    e.g. farm_plant/farm_harvest -- mine -- tree_plant/tree_harvest -- breed/cull -- etc...  
-*      
+    e.g. farm_plant/farm_harvest -- mine -- tree_plant/tree_harvest -- breed/cull -- etc... 
+* ladder movement handling needs some attention (they get stuck moving across ladders)    
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -201,12 +202,20 @@ TWEAKS/OPTIMIZATION
 * need to add dynamic speed-setting to entities (faster if attacking/following, slower when patrol/wander/work)
 /********** 04-20-13 **********/
 * rewrite of navigator, work on farm civics
+* no more door issues, navigation is much cleaner. (still needs path replanning cleanup)
 /********** 04-21-13 **********/
 * more work on farm civics, depository functions for npcs
 /********** 04-22-13 **********/
 * add potato/carrot farms
 /********** 04-23-13 **********/
-/********** 04-24-13 **********/
+* hmm...npcs mining things?
+/********** 04-24-13 **********/ 
+* add npc nameplate color
+* add npc health update relay
+* set npc default texture.. (old blue tex)   
+* MINE -- set ladder orientation -- will need shaft Pos set/saved/loaded        
+* MINE -- move the second 'shaft' to be on top--so the bottom layer is flat (will eliminate many ladder issues), but give a 2x buffer on the first-floor roof
+   
 /********** 04-25-13 **********/
 /********** 04-26-13 **********/
 /********** 04-27-13 **********/

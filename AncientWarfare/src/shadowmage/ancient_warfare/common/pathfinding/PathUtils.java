@@ -285,6 +285,10 @@ public static boolean canPathStraightToTargetLevel(PathWorldAccess worldAccess, 
       {
       return false;
       }    
+    else if(worldAccess.isLadder(worldAccess.getBlockId(x0, ey, z0)))
+      {
+      return false;
+      }
     else if(!worldAccess.isWalkable(x0, ey, z0))
       {
       return false;
@@ -327,6 +331,10 @@ public static boolean canPathStraightToTarget(PathWorldAccess worldAccess, int e
     {  
     //test hit here..., break/return false    
     if(worldAccess.isDoor(ex, cy, ez))
+      {
+      return false;
+      }
+    else if(worldAccess.isLadder(worldAccess.getBlockId(ex, cy, ey)))
       {
       return false;
       }

@@ -68,12 +68,15 @@ public class TEWorkSiteMine extends TECivic
 int currentLevelNum = -1;
 int minYLevel = 36;//the lowest
 int levelHeight = 4;
+int shaftX;//used to determine ladder-meta for shafts..
+int shaftZ;
 boolean initialized = false;
 boolean mineFinished = false;
 MineLevel currentLevel = null;
 
 ItemStack fillerFilter = new ItemStack(Block.cobblestone,1);
 ItemStack ladderFilter = new ItemStack(Block.ladder, 1);
+ItemStack torchFilter = new ItemStack(Block.torchWood, 1);
 
 public TEWorkSiteMine()
   {
@@ -87,14 +90,17 @@ public void updateEntity()
     if(!initialized)
       {
       Config.logDebug("initializing mine!");
+      
       this.initialized = true;
+      shaftX = minX -1 + (maxX-minX+1)/2;
+      shaftZ = minZ -1 + (maxZ-minZ+1)/2;
       this.loadLevel(0);      
       }
     if(this.currentLevel!=null && !mineFinished && !this.currentLevel.hasWork())
       {
       Config.logDebug("loading next level");
-      int adjTopY = this.minY - (4 * (currentLevelNum+1));//the top of the level
-      if(adjTopY-3>=this.minYLevel)
+      int adjTopY = this.minY - (currentLevel.levelSize * (currentLevelNum+1));//the top of the level
+      if(adjTopY-currentLevel.levelSize-1 >= this.minYLevel)
         {
         this.loadLevel(currentLevelNum+1);
         }
@@ -107,6 +113,10 @@ public void updateEntity()
       {
       Config.logDebug("current level was null!!");
       //uhh..maybe check if finished and re-init the level or something
+      }
+    else if(mineFinished)
+      {
+      Config.logDebug("mine is finished");
       }
     } 
   super.updateEntity();
@@ -178,8 +188,18 @@ protected WorkPointMine handleLadderBlock(NpcBase npc, WorkPointMine p, MinePoin
   if(id==0)
     {
     //TODO figure out ladder meta...
-    npc.worldObj.setBlock(m.x, m.y, m.z, Block.ladder.blockID);
-    inventory.tryRemoveItems(ladderFilter, 1);
+    //z+ = 2
+    //z- = 3
+//    npc.worldObj.setBlock(m.x, m.y, m.z, Block.ladder.blockID);
+    if(m.z<=shaftZ)
+      {
+      npc.worldObj.setBlockAndMetadata(m.x, m.y, m.z, Block.ladder.blockID, 3);
+      }
+    else
+      {
+      npc.worldObj.setBlockAndMetadata(m.x, m.y, m.z, Block.ladder.blockID, 2);
+      }
+    inventory.tryRemoveItems(torchFilter, 1);
     }
   else if(id!=Block.ladder.blockID)
     {
@@ -188,16 +208,27 @@ protected WorkPointMine handleLadderBlock(NpcBase npc, WorkPointMine p, MinePoin
     p.resetHarvestTicks();
     return p;
     }
-  //if block not cleared
-  //  clear block
-  //  reset hit count on workpoint
-  //  add block to TE/NPC inventory
-  //  return work point
-  //else if ladder not placed
-  //  place ladder
-  //  remove ladder from TE inventory
-  //  call onFinished(npc, p)
-  //  return null
+  return null;
+  }
+
+protected WorkPointMine handleClearThenTorch(NpcBase npc, WorkPointMine p, MinePoint m)
+  {
+  int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
+  if(id==0)
+    {
+    //TODO figure out ladder meta...
+    //z+ = 2
+    //z- = 3
+    npc.worldObj.setBlockAndMetadata(m.x, m.y, m.z, Block.ladder.blockID, 5);
+    inventory.tryRemoveItems(ladderFilter, 1);
+    }
+  else if(id!=Block.torchWood.blockID)
+    {
+    //clear block
+    handleBlockBreak(npc, p, m);
+    p.resetHarvestTicks();
+    return p;
+    }
   return null;
   }
 
@@ -307,7 +338,7 @@ public void updateWorkPoints()
 @Override
 public boolean hasWork(NpcBase npc)
   {
-  Config.logDebug("hasWork: " + (currentLevel!=null && currentLevel.hasWork()));
+//  Config.logDebug("hasWork: " + (currentLevel!=null && currentLevel.hasWork()));
   return (currentLevel!=null && currentLevel.hasWork());
   }
 
@@ -357,6 +388,8 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setBoolean("mineInit", this.initialized);
   tag.setBoolean("mineDone", this.mineFinished);
   tag.setInteger("mineLevel", this.currentLevelNum);
+  tag.setInteger("shaftX", shaftX);
+  tag.setInteger("shaftZ", shaftZ);
   if(this.currentLevel!=null)
     {
     tag.setCompoundTag("mineLevelData", this.currentLevel.getNBTTag());

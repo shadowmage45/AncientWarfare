@@ -83,6 +83,7 @@ public void updatePriority()
   if(work)
     {
     this.currentPriority = this.maxPriority;
+    this.cooldownTicks = this.maxCooldownticks;
     }
   else
     {

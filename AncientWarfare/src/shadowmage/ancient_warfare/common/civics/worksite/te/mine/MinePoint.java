@@ -20,7 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
@@ -50,6 +52,29 @@ protected MinePoint(int x, int y, int z, int order, TargetType type)
 public MinePoint(NBTTagCompound tag)
   {
   this.readFromNBT(tag);
+  }
+
+public boolean hasWork(World world)
+  {
+  //TODO set this up to swtich by action type, determine if has work.
+  //should only be called on initial setup and 'finished list validation'
+  //replaces a big mess of logic in minelevel with a simple 'hasWork' call
+  switch(action)
+  {
+  case MINE_CLEAR_THEN_LADDER:
+  return world.getBlockId(x, y, z)!=Block.ladder.blockID;
+  case MINE_CLEAR_THEN_TORCH:
+  return world.getBlockId(x, y, z)!=Block.torchWood.blockID;
+  case MINE_CLEAR_THEN_FILL:
+  return world.getBlockId(x, y, z)!=Block.cobblestone.blockID;
+  case MINE_CLEAR_BRANCH:
+  return world.getBlockId(x, y, z)!=0;
+  case MINE_CLEAR_TUNNEL:
+  return world.getBlockId(x, y, z)!=0;
+  case MINE_FILL:
+  return world.getBlockId(x, y, z)!=Block.cobblestone.blockID;
+  }
+  return true;
   }
 
 @Override

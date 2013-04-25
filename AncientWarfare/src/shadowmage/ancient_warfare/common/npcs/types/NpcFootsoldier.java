@@ -31,6 +31,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -57,9 +58,9 @@ public NpcFootsoldier(int type)
   this.displayName = "Footsoldier";
   this.tooltip = "A footsoldier, adept at melee combat.";
   this.isCombatUnit = true;
-  this.addLevel("Novice Footsoldier", "foo", getToolStack(0), getArmorStack(0));
-  this.addLevel("Adept Footsoldier", "foo", getToolStack(1), getArmorStack(1));
-  this.addLevel("Master Footsoldier", "foo", getToolStack(2), getArmorStack(2));  
+  this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0));
+  this.addLevel("Adept Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1));
+  this.addLevel("Master Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2));  
   }
 
 @Override
