@@ -171,6 +171,7 @@ private void searchLoop()
   boolean isDoor = false;
   boolean isPDoor = false;
   Node goalCache = new Node(tx, ty, tz);
+  boolean goalWalkable = world.isWalkable(tx, ty, tz);
   while(!qNodes.isEmpty())
     {
     this.searchIteration++;  
@@ -180,15 +181,26 @@ private void searchLoop()
       {
       break;//goal was hit, found the right path
       }    
-    else if(currentNode.getDistanceFrom(tx, ty, tz)<1.5d)//TODO hack to get around un-pathable target positions
+    else if(!goalWalkable)//TODO hack to get around un-pathable target positions
       {
-      goalCache.parentNode = currentNode;
-      currentNode = goalCache;
-      break;
+      if(currentNode.getDistanceFrom(tx, ty, tz)<=2.d)
+        {
+        Config.logDebug("non-walkable goal early exit 1");
+        goalCache.parentNode = currentNode;
+        currentNode = goalCache;
+        break;
+        }
+      if(currentNode.x==tx && currentNode.z==tz && Math.abs(ty-currentNode.y)<=3)//directly above/below it...close enough
+        {
+        Config.logDebug("non-walkable goal early exit 2");
+        goalCache.parentNode = currentNode;
+        currentNode = goalCache;
+        break;
+        }      
       }
     if(shouldTerminateEarly())
       {
-//      Config.logDebug("break from path length");
+//      Config.logDebug("break from early terminate");
       break;
       }
     currentNode.closed = true;//close the node immediately (equivalent of adding to closed list)
@@ -264,7 +276,7 @@ private boolean shouldTerminateEarly()
     this.bestPathDist = dist;
     this.bestPathLength = len;    
     }
-  if(len>maxRange || (quickStop && dist > bestPathDist+2))
+  if(len>maxRange)
     {
 //    Config.logDebug("search length exceeded max of: "+this.maxRange+", terminating search.");      
     return true;

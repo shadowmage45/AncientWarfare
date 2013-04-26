@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -30,7 +31,7 @@ int maxWorkers;//how many concurrent workers in the same component
 
 public abstract MinePoint getWorkFor(NpcBase worker);
 
-public abstract boolean isComponentFinished();
+public abstract boolean hasWork();
 
 public abstract void onWorkFinished(NpcBase npc, MinePoint p);//return the point to its 'finished' list
 
@@ -40,4 +41,17 @@ public abstract int scanComponent(World world, int minX, int minY, int minZ, int
 
 public abstract void verifyCompletedNodes(World world);
 
+protected boolean needsFilled(int id)
+  {
+  return id==0 || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID || id==Block.waterMoving.blockID || id==Block.waterStill.blockID;
+  }
+
+protected boolean isValidResource(int id)
+  {
+  if(id==0 || id==Block.stone.blockID || id==Block.cobblestone.blockID || id== Block.bedrock.blockID || id== Block.dirt.blockID || id==Block.grass.blockID || id==Block.ladder.blockID || id==Block.torchWood.blockID)
+    {
+    return false;
+    }
+  return true;
+  }
 }

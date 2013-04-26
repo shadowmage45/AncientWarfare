@@ -33,11 +33,12 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 public class MineComponentShaft extends MineComponent
 { 
 
-MineSubComponent shaft = new MineSubComponent();
+MineSubComponent shaft;
 
 public MineComponentShaft()
   {
-  this.maxWorkers = 2;
+  this.maxWorkers = 1;
+  this.shaft = new MineSubComponent(this);
   }
 
 @Override
@@ -47,14 +48,14 @@ public MinePoint getWorkFor(NpcBase worker)
   }
 
 @Override
-public boolean isComponentFinished()
+public boolean hasWork()
   {
-  return !shaft.hasWork();
+  return shaft.hasWork();
   }
 
 @Override
 public int scanComponent(World world, int minX, int minY, int minZ, int xSize, int ySize, int zSize, int order, int shaftX, int shaftZ)
-  {
+  {  
   MinePoint entry;
   for(int y = minY + ySize-1; y >= minY; y--, order++)//start at the top...
     {
@@ -62,16 +63,81 @@ public int scanComponent(World world, int minX, int minY, int minZ, int xSize, i
       {
       for(int z = shaftZ; z<=shaftZ+1; z++)
         {
-        if(world.getBlockId(x, y, z)==Block.ladder.blockID)
+        if(z==shaftZ)
           {
-          shaft.addNewPointFinished(new MinePoint(x,y,z,order, TargetType.MINE_CLEAR_THEN_LADDER));
+          order = this.addSouthShaft(world, x,y,z, order);
+          //check shaftZ-1 for resources
           }
         else
           {
-          shaft.addNewPoint(new MinePoint(x,y,z,order, TargetType.MINE_CLEAR_THEN_LADDER));
-          }
+          order = this.addNorthShaft(world, x, y, z, order);
+          //check shaftZ+2 for resources
+          }        
         }
       }    
+    }
+  return order;
+  }
+
+protected int addNorthShaft(World world, int x, int y, int z, int order)
+  {
+  int id = world.getBlockId(x, y, z);
+  int id2 = world.getBlockId(x, y, z+1);
+  if(id!=Block.ladder.blockID)//not clear or ladder, set to clear
+    {
+    shaft.addNewPoint(x, y, z, order, TargetType.MINE_CLEAR, false);
+    order++;
+    }
+  //scan N block, add clear/fill if needed
+  if(isValidResource(id2))
+    {
+  //add north block clear
+    shaft.addNewPoint(x, y, z+1, order, TargetType.MINE_CLEAR, false);    
+    order++;
+    //add north block fill
+    shaft.addNewPoint(x, y, z+1, order, TargetType.MINE_FILL, true);
+    order++;
+    }  
+  else if(needsFilled(id2))
+    {
+    shaft.addNewPoint(x, y, z+1, order, TargetType.MINE_FILL, true);
+    order++;
+    }
+  if(id!=Block.ladder.blockID)
+    {
+    shaft.addNewPoint(x, y, z, order, (byte)2, TargetType.MINE_LADDER, true);
+    order++;
+    }
+  return order;
+  }
+
+protected int addSouthShaft(World world, int x, int y, int z, int order)
+  {
+  int id = world.getBlockId(x, y, z);
+  int id2 = world.getBlockId(x, y, z-1);
+  if(id!=Block.ladder.blockID && id!=0)//not clear or ladder, set to clear
+    {
+    shaft.addNewPoint(x, y, z, order, TargetType.MINE_CLEAR, false);
+    order++;
+    }
+  if(isValidResource(id2))
+    {
+  //add north block clear
+    shaft.addNewPoint(x, y, z-1, order, TargetType.MINE_CLEAR, false);    
+    order++;
+    //add north block fill
+    shaft.addNewPoint(x, y, z-1, order, TargetType.MINE_FILL, true);
+    order++;
+    }  
+  else if(needsFilled(id2))
+    {
+    shaft.addNewPoint(x, y, z-1, order, TargetType.MINE_FILL, true);
+    order++;
+    }
+  if(id!=Block.ladder.blockID)
+    {
+    shaft.addNewPoint(x, y, z, order, (byte)3, TargetType.MINE_LADDER, false);
+    order++;
     }
   return order;
   }
@@ -93,8 +159,7 @@ public NBTTagCompound getNBTTag()
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  this.shaft.readFromNBT(tag.getCompoundTag("shaft"));
-  
+  this.shaft.readFromNBT(tag.getCompoundTag("shaft"));  
   }
 
 @Override

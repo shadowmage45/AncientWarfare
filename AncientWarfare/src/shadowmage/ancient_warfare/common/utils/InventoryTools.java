@@ -294,7 +294,7 @@ public static boolean doItemsMatch(ItemStack a, ItemStack b)
     {
     return false;
     }
-  if(a.itemID==b.itemID && a.getItemDamage()==b.getItemDamage() && ItemStack.areItemStacksEqual(a, b))
+  if(a.itemID==b.itemID && a.getItemDamage()==b.getItemDamage() && ItemStack.areItemStackTagsEqual(a, b))
     {
     return true;
     }  

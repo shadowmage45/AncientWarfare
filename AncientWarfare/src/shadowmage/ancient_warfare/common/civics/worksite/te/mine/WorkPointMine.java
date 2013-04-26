@@ -36,7 +36,7 @@ MinePoint minePoint;
  */
 public WorkPointMine(MinePoint point)
   {
-  super(point.x, point.y, point.z,  point.currentAction);
+  super(point.x, point.y, point.z,  point.action);
   this.minePoint = point;
   }
 

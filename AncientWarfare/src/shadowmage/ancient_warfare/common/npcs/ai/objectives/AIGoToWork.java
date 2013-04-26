@@ -29,6 +29,7 @@ import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
 import shadowmage.ancient_warfare.common.targeting.TargetPosition;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class AIGoToWork extends NpcAIObjective
 {
@@ -45,7 +46,7 @@ public AIGoToWork(NpcBase npc, int maxPriority)
 @Override
 public void addTasks()
   {
-  this.aiTasks.add(new AIMoveToTarget(npc, 2, false));
+  this.aiTasks.add(new AIMoveToTarget(npc, 1.8f, false));
   }
 
 @Override
@@ -82,7 +83,8 @@ public void updatePriority()
     }  
   if(work)
     {
-    Config.logDebug("setting work priority to max!!");
+//    Config.logDebug("setting work priority to max!! "+npc.wayNav.getWorkPoint());
+    
     this.currentPriority = this.maxPriority;
 //    this.cooldownTicks = this.maxCooldownticks;
     }
@@ -143,14 +145,14 @@ public void onRunningTick()
     this.setWorkPoint(p);
     if(p==null)
       {
-      Config.logDebug("work site returned null point, setting finished");
+//      Config.logDebug("work site returned null point, setting finished");
       this.setFinished();
       return;
       }
     }
   else
     {
-    if(npc.getDistance(workPoint.posX(), workPoint.posY(), workPoint.posZ())>2.1)
+    if(npc.getDistance(workPoint.posX(), workPoint.posY(), workPoint.posZ())>2.4)
       {
       npc.actionTick = 35;
       //wait for ai to move to target
@@ -206,13 +208,45 @@ protected void setMoveToPoint(int x, int y, int z)
 protected void setMoveToWork(WorkPoint p)
   {
   setMoveToPoint(p.floorX(), p.floorY(), p.floorZ());
+//  if(npc.getWorldAccess().isWalkable(p.floorX(), p.floorY(), p.floorZ()))
+//    {
+//    setMoveToPoint(p.floorX(), p.floorY(), p.floorZ());
+//    }
+//  else
+//    {
+//    int x = p.floorX();
+//    int z = p.floorZ();
+//    for(int y = p.floorY()+1; y>=p.floorY()-2; y--)
+//      {
+//      if(npc.getWorldAccess().isWalkable(x, y, z))
+//        {
+//        setMoveToPoint(x, y, z);
+//        }
+//      else if(npc.getWorldAccess().isWalkable(x-1, y, z))
+//        {
+//        setMoveToPoint(x-1, y, z);
+//        }
+//      else if(npc.getWorldAccess().isWalkable(x+1, y, z))
+//        {
+//        setMoveToPoint(x+1, y, z);
+//        }
+//      else if(npc.getWorldAccess().isWalkable(x, y, z-1))
+//        {
+//        setMoveToPoint(x, y, z-1);
+//        }
+//      else if(npc.getWorldAccess().isWalkable(x, y, z+1))
+//        {
+//        setMoveToPoint(x, y, z+1);
+//        }
+//      }
+//    } 
   }
 
 protected void setWorkPoint(WorkPoint p)
   {
   npc.actionTick = 35;
   if(p!=null)
-    {
+    {   
     npc.wayNav.setWorkPoint(p);
     this.setMoveToWork(p);
     }

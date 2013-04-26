@@ -27,8 +27,10 @@ import java.util.PriorityQueue;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class MineSubComponent implements INBTTaggable
 {
@@ -36,20 +38,39 @@ public class MineSubComponent implements INBTTaggable
 private PriorityQueue<MinePoint> pointQueue = new PriorityQueue<MinePoint>();
 private ArrayList<MinePoint> finishedPoints = new ArrayList<MinePoint>();
 private NpcBase worker;
+protected MineComponent parent;
+
+public MineSubComponent(MineComponent parent)
+  {
+  this.parent = parent;
+  }
 
 public void validatePoints(World world)
   {
+//  Config.logDebug("validating points for: "+this);
   Iterator<MinePoint> it = this.finishedPoints.iterator();
   MinePoint p = null;
   while(it.hasNext())
-    {
+    {    
     p = it.next();
-    if(p!=null && p.hasWork(world))
+//    Config.logDebug("validating point: "+p);
+    if(p.hasWork(world))
       {
+      Config.logDebug("MINE VALIDATION: ADDING POINT BACK TO POINT QUEUE:");
       it.remove();
       this.pointQueue.offer(p);
       }
     }
+  }
+
+public void addNewPoint(int x, int y, int z, int order, byte special, TargetType type, boolean singleAction)
+  {
+  this.pointQueue.offer(new MinePoint(x,y,z,order, special, type).setOwner(this).setSingleAction(singleAction));
+  }
+
+public void addNewPoint(int x, int y, int z, int order, TargetType type, boolean singleAction)
+  {
+  this.pointQueue.offer(new MinePoint(x,y,z,order, type).setOwner(this).setSingleAction(singleAction));
   }
 
 public void addNewPoint(MinePoint p)
@@ -63,8 +84,16 @@ public void addNewPointFinished(MinePoint p)
   }
 
 public void onPointFinished(NpcBase npc, MinePoint p)
-  {
-  this.finishedPoints.add(p);
+  {   
+  if(p.singleAction)
+    {
+    Config.logDebug("adding single action point to finished list: "+p);
+    this.finishedPoints.add(p);
+    }
+  else
+    {
+    Config.logDebug("skipping adding point to finished list: ");
+    }
   }
 
 public void onPointFailed(NpcBase npc, MinePoint p)
@@ -117,12 +146,12 @@ public void readFromNBT(NBTTagCompound tag)
   NBTTagList list = tag.getTagList("queue");
   for(int i = 0; i < list.tagCount(); i++)
     {
-    this.pointQueue.offer(new MinePoint((NBTTagCompound) list.tagAt(i)));
+    this.pointQueue.offer(new MinePoint((NBTTagCompound) list.tagAt(i)).setOwner(this));
     }
   list = tag.getTagList("finished");
   for(int i = 0; i < list.tagCount(); i++)
     {
-    this.finishedPoints.add(new MinePoint((NBTTagCompound) list.tagAt(i)));
+    this.finishedPoints.add(new MinePoint((NBTTagCompound) list.tagAt(i)).setOwner(this));
     }
   }
 

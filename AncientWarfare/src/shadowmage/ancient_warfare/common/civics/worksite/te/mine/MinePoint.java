@@ -33,9 +33,13 @@ int x;
 int y;
 int z;
 int order = 0;
-int branchNum = 0;
-TargetType action = TargetType.NONE;//original action as designated when scanned
-TargetType currentAction = TargetType.NONE;//current action needed, as designated by worked on/rescanned
+byte special;//used for meta...
+boolean singleAction = true;
+MineSubComponent owner;
+
+TargetType action = TargetType.NONE;
+//TargetType action = TargetType.NONE;//original action as designated when scanned
+//TargetType currentAction = TargetType.NONE;//current action needed, as designated by worked on/rescanned
 
 protected MinePoint(int x, int y, int z, int order, TargetType type)
   {
@@ -44,7 +48,24 @@ protected MinePoint(int x, int y, int z, int order, TargetType type)
   this.z = z;
   this.order = order;
   this.action = type;
-  this.currentAction = type;
+  }
+
+protected MinePoint(int x, int y, int z, int order, byte special, TargetType type)
+  {
+  this(x,y,z, order, type);
+  this.special = special;
+  }
+
+protected MinePoint setOwner(MineSubComponent owner)
+  {
+  this.owner = owner;
+  return this;
+  }
+
+protected MinePoint setSingleAction(boolean action)
+  {
+  this.singleAction = action;
+  return this;
   }
 
 /**
@@ -62,20 +83,16 @@ public boolean hasWork(World world)
   //replaces a big mess of logic in minelevel with a simple 'hasWork' call
   switch(action)
   {
-  case MINE_CLEAR_THEN_LADDER:
+  case MINE_LADDER:
   return world.getBlockId(x, y, z)!=Block.ladder.blockID;
-  case MINE_CLEAR_THEN_TORCH:
+  case MINE_TORCH:
   return world.getBlockId(x, y, z)!=Block.torchWood.blockID;
-  case MINE_CLEAR_THEN_FILL:
-  return world.getBlockId(x, y, z)!=Block.cobblestone.blockID;
-  case MINE_CLEAR_BRANCH:
-  return world.getBlockId(x, y, z)!=0;
-  case MINE_CLEAR_TUNNEL:
-  return world.getBlockId(x, y, z)!=0;
   case MINE_FILL:
   return world.getBlockId(x, y, z)!=Block.cobblestone.blockID;
+  case MINE_CLEAR:
+  return world.getBlockId(x, y, z)!=0;
   }
-  return true;
+  return false;
   }
 
 @Override
@@ -136,9 +153,8 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("x", x);
   tag.setInteger("y", y);
   tag.setInteger("z", z);
-  tag.setInteger("oA", this.action.ordinal());
-  tag.setInteger("oC", this.currentAction.ordinal());
-  tag.setInteger("bN", branchNum);
+  tag.setInteger("act", this.action.ordinal());
+  tag.setByte("sp", special);
   return tag;
   }
 
@@ -147,10 +163,15 @@ public void readFromNBT(NBTTagCompound tag)
   {
   this.x = tag.getInteger("x");
   this.y = tag.getInteger("y");
-  this.z = tag.getInteger("z");  
-  this.action = TargetType.values()[tag.getInteger("oA")];
-  this.currentAction = TargetType.values()[tag.getInteger("oC")];
-  this.branchNum = tag.getInteger("bN");
+  this.z = tag.getInteger("z");
+  this.special = tag.getByte("sp");
+  this.action = TargetType.values()[tag.getInteger("act")];
+  }
+
+@Override
+public String toString()
+  {
+  return String.format("MinePoint: %d, %d, %d, : %s", x,y,z, action);
   }
 
 }
