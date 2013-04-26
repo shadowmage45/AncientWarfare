@@ -276,7 +276,7 @@ private static int findBlockByName(String name)
       {
       continue;
       }
-    if(block!= null && name.equals(block.getBlockName()));
+    if(block!= null && block.getLocalizedName().equals(name+".name"));
       {
       return block.blockID;
       }

@@ -366,7 +366,7 @@ public List<IDPairCount> getResourceList()
 
 private boolean isDoorTop(int id, int meta)
   {  
-  return meta==8 && (id == Block.doorWood.blockID || id == Block.doorSteel.blockID );
+  return meta==8 && (id == Block.doorWood.blockID || id == Block.doorIron.blockID );
   }
 
 private boolean isBedTop(int id, int meta)

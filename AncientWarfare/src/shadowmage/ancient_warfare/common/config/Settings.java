@@ -113,7 +113,7 @@ public static void setRenderNpcNameplates(boolean val)
   boolean current = renderNpcNameplates.getBoolean(true);
   if(val!=current)
     {
-    renderNpcNameplates.value = String.valueOf(val);
+    renderNpcNameplates.set(val);
     config.save();
     }
   }
@@ -123,7 +123,7 @@ public static void setRenderVehicleNameplates(boolean val)
   boolean current = renderVehicleNameplates.getBoolean(true);
   if(val!=current)
     {
-    renderVehicleNameplates.value = String.valueOf(val);
+    renderVehicleNameplates.set(val);
     config.save();
     }
   }
@@ -138,7 +138,7 @@ public static void setMouseAim(boolean aim)
   if(aim!=enableMouseAim)
     {
     enableMouseAim = aim;
-    mouseAimProp.value = String.valueOf(aim);
+    mouseAimProp.set(aim);
     config.save();
     }  
   }
@@ -148,7 +148,7 @@ public static void setRenderOverlay(boolean rend)
   if(rend!=renderOverlay)
     {
     renderOverlay = rend;
-    overlayProp.value = String.valueOf(rend);
+    overlayProp.set(rend);
     config.save();
     }
   }
@@ -158,7 +158,7 @@ public static void setRenderAdvOverlay(boolean rend)
   if(rend!=renderAdvancedOverlay)
     {
     renderAdvancedOverlay = rend;
-    advOverlayProp.value = String.valueOf(rend);
+    advOverlayProp.set(rend);
     config.save();
     }
   }
@@ -168,7 +168,7 @@ public static void setRenderVehiclesInFirstPerson(boolean rend)
   if(rend!=renderVehiclesInFirstPerson)
     {
     renderVehiclesInFirstPerson = rend;
-    renderVehiclesInFirstPersonProp.value = String.valueOf(rend);
+    renderVehiclesInFirstPersonProp.set(rend);
     config.save();
     }
   }

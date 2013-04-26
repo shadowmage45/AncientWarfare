@@ -273,7 +273,7 @@ public void loadStaticLootTables()
 //  this.addLootEntry(GENERIC, 2, Item.gunpowder, 1, 10, 4);
   this.addLootEntry(VALUABLES, 0, Item.coal, 1, 10, 1);
   this.addLootEntry(VALUABLES, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(VALUABLES, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(VALUABLES, 2, Item.swordIron, 1, 10, 5);
   this.addLootEntry(VALUABLES, 3, Item.goldNugget, 1, 10, 1);
   this.addLootEntry(VALUABLES, 4, Item.ingotIron, 5, 10, 15);
   this.addLootEntry(VALUABLES, 5, Item.ingotGold, 1, 10, 10);
@@ -284,7 +284,7 @@ public void loadStaticLootTables()
   
   this.addLootEntry(GENERIC, 0, Item.coal, 1, 10, 1);
   this.addLootEntry(GENERIC, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(GENERIC, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(GENERIC, 2, Item.swordIron, 1, 10, 5);
   this.addLootEntry(GENERIC, 3, Item.goldNugget, 1, 10, 1);
   this.addLootEntry(GENERIC, 4, Item.ingotIron, 5, 10, 15);
   this.addLootEntry(GENERIC, 5, Item.ingotGold, 1, 10, 10);
@@ -295,7 +295,7 @@ public void loadStaticLootTables()
   
   this.addLootEntry(RESEARCH, 0, Item.coal, 1, 10, 1);
   this.addLootEntry(RESEARCH, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(RESEARCH, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(RESEARCH, 2, Item.swordIron, 1, 10, 5);
   this.addLootEntry(RESEARCH, 3, Item.goldNugget, 1, 10, 1);
   this.addLootEntry(RESEARCH, 4, Item.ingotIron, 5, 10, 15);
   this.addLootEntry(RESEARCH, 5, Item.ingotGold, 1, 10, 10);
@@ -306,7 +306,7 @@ public void loadStaticLootTables()
   
   this.addLootEntry(COMPONENTS, 0, Item.coal, 1, 10, 1);
   this.addLootEntry(COMPONENTS, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(COMPONENTS, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(COMPONENTS, 2, Item.swordIron, 1, 10, 5);
   this.addLootEntry(COMPONENTS, 3, Item.goldNugget, 1, 10, 1);
   this.addLootEntry(COMPONENTS, 4, Item.ingotIron, 5, 10, 15);
   this.addLootEntry(COMPONENTS, 5, Item.ingotGold, 1, 10, 10);
@@ -317,7 +317,7 @@ public void loadStaticLootTables()
   
   this.addLootEntry(FOOD, 0, Item.coal, 1, 10, 1);
   this.addLootEntry(FOOD, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(FOOD, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(FOOD, 2, Item.swordIron, 1, 10, 5);
   this.addLootEntry(FOOD, 3, Item.goldNugget, 1, 10, 1);
   this.addLootEntry(FOOD, 4, Item.ingotIron, 5, 10, 15);
   this.addLootEntry(FOOD, 5, Item.ingotGold, 1, 10, 10);
@@ -328,7 +328,7 @@ public void loadStaticLootTables()
   
   this.addLootEntry(AMMO, 0, Item.coal, 1, 10, 1);
   this.addLootEntry(AMMO, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(AMMO, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(AMMO, 2, Item.swordIron, 1, 10, 5);
   this.addLootEntry(AMMO, 3, Item.goldNugget, 1, 10, 1);
   this.addLootEntry(AMMO, 4, Item.ingotIron, 5, 10, 15);
   this.addLootEntry(AMMO, 5, Item.ingotGold, 1, 10, 10);
@@ -339,7 +339,7 @@ public void loadStaticLootTables()
   
   this.addLootEntry(WEAPONS, 0, Item.coal, 1, 10, 1);
   this.addLootEntry(WEAPONS, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(WEAPONS, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(WEAPONS, 2, Item.swordIron, 1, 10, 5);
   this.addLootEntry(WEAPONS, 3, Item.goldNugget, 1, 10, 1);
   this.addLootEntry(WEAPONS, 4, Item.ingotIron, 5, 10, 15);
   this.addLootEntry(WEAPONS, 5, Item.ingotGold, 1, 10, 10);
@@ -350,7 +350,7 @@ public void loadStaticLootTables()
   
   this.addLootEntry(VEHICLES, 0, Item.coal, 1, 10, 1);
   this.addLootEntry(VEHICLES, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(VEHICLES, 2, Item.swordSteel, 1, 10, 5);
+  this.addLootEntry(VEHICLES, 2, Item.swordIron, 1, 10, 5);
   this.addLootEntry(VEHICLES, 3, Item.goldNugget, 1, 10, 1);
   this.addLootEntry(VEHICLES, 4, Item.ingotIron, 5, 10, 15);
   this.addLootEntry(VEHICLES, 5, Item.ingotGold, 1, 10, 10);

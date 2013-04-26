@@ -88,7 +88,7 @@ public void onTick()
   for(BlockPosition pos : this.deferredBlocks.keySet())
     {
     BlockData data = this.deferredBlocks.get(pos);
-    world.setBlockAndMetadataWithUpdate(pos.x, pos.y, pos.z, data.id, data.meta, true);
+    world.setBlock(pos.x, pos.y, pos.z, data.id, data.meta, 3);
     }
   this.isFinished = true;
   }

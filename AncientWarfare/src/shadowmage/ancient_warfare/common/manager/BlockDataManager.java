@@ -84,8 +84,8 @@ public static void loadBlockList()
   /************************************ ROTATABLE/METADATA BLOCKS ************************************/
   addBlock(Block.dispenser).setRotatable().setMeta(0, 2, 5, 3, 4);
   addBlock(Block.chest).setRotatable().setMeta(0, 2, 5, 3, 4);  
-  addBlock(Block.stoneOvenIdle).setRotatable().setMeta(0, 2, 5, 3, 4);
-  addBlock(Block.stoneOvenActive).setRotatable().setMeta(0, 2, 5, 3, 4).setBasicInventoryItem(Block.stoneOvenIdle.blockID, 0, 1);
+  addBlock(Block.furnaceIdle).setRotatable().setMeta(0, 2, 5, 3, 4);
+  addBlock(Block.furnaceBurning).setRotatable().setMeta(0, 2, 5, 3, 4).setBasicInventoryItem(Block.furnaceIdle.blockID, 0, 1);
   addBlock(Block.ladder).setPriority(1).setRotatable().setMeta(0, 2, 5, 3, 4);
   addBlock(Block.signWall).setPriority(1).setRotatable().setMeta(0, 2, 5, 3, 4).setBasicInventoryItem(Item.sign.itemID, 0, 1);
   addBlock(Block.enderChest).setRotatable().setMeta(0, 2, 5, 3, 4);
@@ -114,13 +114,13 @@ public static void loadBlockList()
   addBlock(Block.torchRedstoneActive).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);  
    
   addBlock(Block.doorWood).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4).setMeta(2, 8, 8, 8, 8).setBasicInventoryItem(Item.doorWood.itemID, 0, 1);
-  addBlock(Block.doorSteel).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4).setMeta(2, 8, 8, 8, 8).setBasicInventoryItem(Item.doorSteel.itemID, 0, 1);
+  addBlock(Block.doorIron).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4).setMeta(2, 8, 8, 8, 8).setBasicInventoryItem(Item.doorIron.itemID, 0, 1);
   addBlock(Block.fenceGate).setRotatable().setMeta(0, 0, 1, 2, 3).setMeta(1, 4, 5, 6, 7);//HUH? rotated one block from door data?
   
-  addBlock(Block.stairCompactPlanks).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
-  addBlock(Block.stairCompactCobblestone).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
+  addBlock(Block.stairsWoodOak).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
+  addBlock(Block.stairsCobblestone).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
   addBlock(Block.stairsBrick).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
-  addBlock(Block.stairsStoneBrickSmooth).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4); 
+  addBlock(Block.stairsStoneBrick).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4); 
   addBlock(Block.stairsSandStone).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
   addBlock(Block.stairsWoodSpruce).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
   addBlock(Block.stairsWoodBirch).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);

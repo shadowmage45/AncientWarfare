@@ -71,11 +71,11 @@ protected ItemStack getToolStack(int level)
   switch(level)
   {
   case 0:
-  sword1 = new ItemStack(Item.swordSteel,1);
+  sword1 = new ItemStack(Item.swordIron,1);
   return sword1;
   
   case 1:
-  sword1 = new ItemStack(Item.swordSteel,1);
+  sword1 = new ItemStack(Item.swordIron,1);
   enchMap = new HashMap();
   enchMap.put(Enchantment.sharpness.effectId, 2);
   EnchantmentHelper.setEnchantments(enchMap, sword1);
@@ -114,10 +114,10 @@ protected ItemStack[] getArmorStack(int level)
   break;
   
   case 2:
-  stacks[0] = new ItemStack(Item.helmetSteel, 1);
-  stacks[1] = new ItemStack(Item.plateSteel, 1);
-  stacks[2] = new ItemStack(Item.legsSteel, 1);
-  stacks[3] = new ItemStack(Item.bootsSteel, 1);
+  stacks[0] = new ItemStack(Item.helmetIron, 1);
+  stacks[1] = new ItemStack(Item.plateIron, 1);
+  stacks[2] = new ItemStack(Item.legsIron, 1);
+  stacks[3] = new ItemStack(Item.bootsIron, 1);
   break;
   }
   return stacks;

@@ -192,7 +192,7 @@ protected void handleLadderAction(NpcBase npc, WorkPointMine p, MinePoint m)
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
   if(id==0)
     {
-    npc.worldObj.setBlockAndMetadataWithNotify(m.x, m.y, m.z, Block.ladder.blockID, (int)m.special);
+    npc.worldObj.setBlock(m.x, m.y, m.z, Block.ladder.blockID, (int)m.special, 3);
     inventory.tryRemoveItems(ladderFilter, 1);
     }
   }
@@ -202,7 +202,7 @@ protected void handleTorchAction(NpcBase npc, WorkPointMine p, MinePoint m)
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
   if(id==0)
     {
-    npc.worldObj.setBlockAndMetadataWithNotify(m.x, m.y, m.z, Block.torchWood.blockID, 5);
+    npc.worldObj.setBlock(m.x, m.y, m.z, Block.torchWood.blockID, 5, 3);
     inventory.tryRemoveItems(torchFilter, 1);
     }
   }
@@ -217,7 +217,7 @@ protected void handleFillAction(NpcBase npc, WorkPointMine p, MinePoint m)
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
   if(id==0)
     {
-    npc.worldObj.setBlockAndMetadataWithNotify(m.x, m.y, m.z, Block.cobblestone.blockID, 0);
+    npc.worldObj.setBlock(m.x, m.y, m.z, Block.cobblestone.blockID, 0,3);
     inventory.tryRemoveItems(fillerFilter, 1);
     }
   }
@@ -341,6 +341,5 @@ public void writeToNBT(NBTTagCompound tag)
 //    tag.setCompoundTag("mineLevelData", this.currentLevel.getNBTTag());
 //    }  
   }
-
 
 }

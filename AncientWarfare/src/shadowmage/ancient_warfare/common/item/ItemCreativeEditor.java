@@ -36,7 +36,7 @@ public class ItemCreativeEditor extends AWItemClickable
 public ItemCreativeEditor(int itemID)
   {
   super(itemID, false);
-  this.setIconIndex(10);
+//  this.setIconIndex(10);
   }
 
 @Override

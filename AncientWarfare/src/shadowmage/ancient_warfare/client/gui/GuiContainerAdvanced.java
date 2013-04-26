@@ -362,7 +362,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   if(this.inventorySlots.inventorySlots.size()>0)
     {
     tex = "/shadowmage/ancient_warfare/resources/gui/guiButtons.png";
-    this.mc.renderEngine.bindTexture(this.mc.renderEngine.getTexture(tex));
+    this.mc.renderEngine.bindTexture(tex);
     for(Object ob : this.inventorySlots.inventorySlots)    
       {      
       Slot slot = (Slot)ob;
@@ -522,9 +522,8 @@ protected boolean isMouseInAdjustedArea(int slotX, int slotY, int slotWidth, int
  */
 public void render50pxStatusBar(int x, int y, int length)
   { 
-  int var4 = this.mc.renderEngine.getTexture("/Catapult_Mod/gui/statusBar.png");
   GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-  this.mc.renderEngine.bindTexture(var4);
+  this.mc.renderEngine.bindTexture("/Catapult_Mod/gui/statusBar.png");
   this.drawTexturedModalRect(guiLeft+x, guiTop+y, 0, 0, length, 10);
   }
 

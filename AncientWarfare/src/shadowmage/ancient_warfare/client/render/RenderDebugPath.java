@@ -35,7 +35,7 @@ public class RenderDebugPath
 static float range = 90;
 public static void renderPaths(World world, EntityPlayer player, float partialTick)
   {  
-  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(player.posX-range, player.posY-range, player.posZ-range, player.posX+range, player.posY+range, player.posZ+range);
+  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-range, player.posY-range, player.posZ-range, player.posX+range, player.posY+range, player.posZ+range);
   List<NpcBase> entList = world.getEntitiesWithinAABB(NpcBase.class, bb);
   List<Node> path;
   NpcBase npc;
@@ -48,7 +48,7 @@ public static void renderPaths(World world, EntityPlayer player, float partialTi
       path = npc.nav.getCurrentPath();
       for(Node nd : path)
         {
-        bb = AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(nd.x, nd.y, nd.z, nd.x+1, nd.y+1, nd.z+1);
+        bb = AxisAlignedBB.getAABBPool().getAABB(nd.x, nd.y, nd.z, nd.x+1, nd.y+1, nd.z+1);
         bb = AWRenderHelper.instance().adjustBBForPlayerPos(bb, player, partialTick);
         BoundingBoxRender.drawOutlinedBoundingBox(bb, 1.0f, 0.2f, 1.f);
         }

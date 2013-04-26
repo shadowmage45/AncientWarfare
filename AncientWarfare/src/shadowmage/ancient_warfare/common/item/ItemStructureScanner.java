@@ -50,7 +50,7 @@ public ItemStructureScanner(int itemID)
   {
   super(itemID, false);
   this.setMaxStackSize(1);  
-  this.setIconIndex(0);
+//  this.setIconIndex(0);
   }
 
 @Override
@@ -111,14 +111,14 @@ public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par
   return false;
   }
 
-/**
- * Gets an icon index based on an item's damage value
- */
-@Override
-public int getIconFromDamage(int par1)
-  {
-  return this.iconIndex;
-  }
+///**
+// * Gets an icon index based on an item's damage value
+// */
+//@Override
+//public int getIconFromDamage(int par1)
+//  {
+//  return this.iconIndex;
+//  }
 
 public boolean onUsed(World world, EntityPlayer player, ItemStack stack)
   {

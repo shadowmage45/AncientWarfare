@@ -222,10 +222,10 @@ public Vec3Pool getWorldVec3Pool()
   }
 
 @Override
-public boolean isBlockProvidingPowerTo(int var1, int var2, int var3, int var4)
+public int isBlockProvidingPowerTo(int var1, int var2, int var3, int var4)
   {
   // TODO Auto-generated method stub
-  return false;
+  return 0;
   }
 }
 }

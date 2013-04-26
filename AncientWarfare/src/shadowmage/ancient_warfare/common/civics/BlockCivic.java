@@ -43,12 +43,12 @@ int blockNum;
 public BlockCivic(int par1, String name, int blockNum)
   {
   super(par1, Material.rock);
-  this.setTextureFile("/shadowmage/ancient_warfare/resources/block/blocks.png");
-  this.isDefaultTexture = false;
-  this.blockIndexInTexture = 0;
+//  this.setTextureFile("/shadowmage/ancient_warfare/resources/block/blocks.png");
+//  this.isDefaultTexture = false;
+//  this.blockIndexInTexture = 0;
   this.setCreativeTab(CreativeTabAW.instance());
   this.setHardness(3.f);  
-  this.setBlockName(name);
+//  this.setBlockName(name);
   this.blockNum = blockNum;
   }
 
@@ -62,11 +62,11 @@ public static int getBlockTeam(World world, int x, int y, int z)
   return 0;
   }
 
-@Override
-public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
-  {
-
-  }
+//@Override
+//public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
+//  {
+//
+//  }
 
 @Override
 public void onBlockAdded(World par1World, int par2, int par3, int par4)

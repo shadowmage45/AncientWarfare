@@ -26,51 +26,51 @@ private Random RNG = new Random();
 public BlockContainerSimpleSided(int par1, Material par2Material)
   {
   super(par1, par2Material); 
-  this.setTextureFile("/shadowmage/ancient_warfare/resources/block/blocks.png");
-  this.isDefaultTexture = false;
-  this.blockIndexInTexture = 0;
+//  this.setTextureFile("/shadowmage/ancient_warfare/resources/block/blocks.png");
+//  this.isDefaultTexture = false;
+//  this.blockIndexInTexture = 0;
   this.setCreativeTab(CreativeTabAW.instance());
   this.setHardness(3.f);
-  this.setBlockName("abstractBlock1");
+//  this.setBlockName("abstractBlock1");
   }
+//
+///**called by renderStandardBlock**/
+//@SideOnly(Side.CLIENT)
+///**
+// * Retrieves the block texture to use based on the display side. Args: iBlockAccess, x, y, z, side
+// */
+//public int getBlockTexture(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
+//  {
+//  if (par5 == 1)//up
+//    {
+//    return this.blockIndexInTexture + 2;//return top
+//    }
+//  else if (par5 == 0)//down
+//    {
+//    return 3;//return bottom
+//    }
+//  else
+//    {
+//    int var6 = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
+//    if(par5==var6)
+//      {
+//      return this.blockIndexInTexture;//return front
+//      }
+//    }
+//  return this.blockIndexInTexture + 1;//return side texture
+//  }
 
-/**called by renderStandardBlock**/
-@SideOnly(Side.CLIENT)
-/**
- * Retrieves the block texture to use based on the display side. Args: iBlockAccess, x, y, z, side
- */
-public int getBlockTexture(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
-  {
-  if (par5 == 1)//up
-    {
-    return this.blockIndexInTexture + 2;//return top
-    }
-  else if (par5 == 0)//down
-    {
-    return 3;//return bottom
-    }
-  else
-    {
-    int var6 = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
-    if(par5==var6)
-      {
-      return this.blockIndexInTexture;//return front
-      }
-    }
-  return this.blockIndexInTexture + 1;//return side texture
-  }
-
-/**
- * Returns the block texture based on the side being looked at.  Args: side
- * Called by RenderBlocks.renderBlockAsItem
- */
-public int getBlockTextureFromSide(int par1)
-  {
-  if(par1==0){return 3;}
-  else if(par1==1){return this.blockIndexInTexture+2;}
-  else if(par1==4){return this.blockIndexInTexture;}  
-  return this.blockIndexInTexture+1; 
-  }
+///**
+// * Returns the block texture based on the side being looked at.  Args: side
+// * Called by RenderBlocks.renderBlockAsItem
+// */
+//public int getBlockTextureFromSide(int par1)
+//  {
+//  if(par1==0){return 3;}
+//  else if(par1==1){return this.blockIndexInTexture+2;}
+//  else if(par1==4){return this.blockIndexInTexture;}  
+//  return this.blockIndexInTexture+1; 
+//  }
 
 /**
  * equivalent of onBlockActivated, used to activate a TE/open a gui/toggle a lever/etc
@@ -105,19 +105,19 @@ public boolean onBlockActivated(World world, int posX, int posY, int posZ, Entit
   return this.onBlockClicked(world, posX, posY, posZ, player, sideHit, hitVecX, hitVecY, hitVecZ);
   }
 
-/**
- * Called when the block is placed in the world.
- */
-@Override
-public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
-  {
-  int blockFacing = 0;
-  if(par5EntityLiving!=null)
-    {
-    blockFacing = BlockTools.getBlockFacingMetaFromPlayerYaw(par5EntityLiving.rotationYaw);
-    }  
-  par1World.setBlockMetadataWithNotify(x, y, z, blockFacing); 
-  }
+///**
+// * Called when the block is placed in the world.
+// */
+//@Override
+//public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
+//  {
+//  int blockFacing = 0;
+//  if(par5EntityLiving!=null)
+//    {
+//    blockFacing = BlockTools.getBlockFacingMetaFromPlayerYaw(par5EntityLiving.rotationYaw);
+//    }  
+//  par1World.setBlockMetadataWithNotify(x, y, z, blockFacing); 
+//  }
 
 @Override
 public boolean canProvidePower()
@@ -163,7 +163,7 @@ private void setDefaultDirection(World par1World, int par2, int par3, int par4)
       {
       var9 = 4;
       }
-    par1World.setBlockMetadataWithNotify(par2, par3, par4, var9);
+    par1World.setBlockMetadataWithNotify(par2, par3, par4, var9, 3);
     }
   }
 
@@ -211,7 +211,7 @@ public void dropItems(World world, int x, int y, int z, int par5, int par6, IInv
 
           if (currentStack.hasTagCompound())
             {
-            var14.func_92014_d().setTagCompound((NBTTagCompound)currentStack.getTagCompound().copy());
+            var14.getEntityItem().setTagCompound((NBTTagCompound)currentStack.getTagCompound().copy());
             }
           float var15 = 0.05F;
           var14.motionX = (double)((float)this.RNG.nextGaussian() * var15);

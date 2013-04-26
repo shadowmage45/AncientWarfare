@@ -295,7 +295,8 @@ protected void doClearing()
 
 protected void placeBlock(World world, int x, int y, int z, int id, int meta)
   { 
-  world.setBlockAndMetadata(x, y, z, id, meta);
+  world.setBlock(x, y, z, id, meta, 3);
+//  world.setBlockAndMetadata(x, y, z, id, meta);
   }
 
 /**
@@ -314,7 +315,9 @@ protected void placeBlockWithDefer(World world, int x, int y, int z, int id, int
     }
   else
     {   
-    world.setBlockAndMetadata(x, y, z, id, meta);
+
+    world.setBlock(x, y, z, id, meta, 3);
+//    world.setBlockAndMetadata(x, y, z, id, meta);
     }  
   }
 
@@ -530,7 +533,8 @@ protected void placeSpecials(World world, int x, int y, int z, String name)
 
 protected void createChestAt(World world, int x, int y, int z, int meta)
   {
-  world.setBlockAndMetadataWithUpdate(x, y, z, 54, 0, true);
+  world.setBlock(x, y, z, 54, meta, 3);
+//  world.setBlockAndMetadataWithUpdate(x, y, z, 54, 0, true);
   }
 
 protected void setChestLoot(World world, int x, int y, int z, List<ItemStack> items)
@@ -544,11 +548,11 @@ protected void setChestLoot(World world, int x, int y, int z, List<ItemStack> it
 
 protected void handleNamedSpawner(World world, int x, int y, int z, String name)
   {
-  world.setBlockAndMetadata(x, y, z, Block.mobSpawner.blockID, 0);
+  world.setBlock(x, y, z, Block.mobSpawner.blockID, 0, 3);
   TileEntityMobSpawner ent = (TileEntityMobSpawner) world.getBlockTileEntity(x, y, z);  
   if(ent!=null)
     {
-    ent.setMobID(name);
+    ent.func_98049_a().setMobID(name);//t.setMobID(name);
     }
   }
 

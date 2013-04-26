@@ -55,7 +55,7 @@ public boolean attemptConstruction(World world, ProcessedStructure struct, Block
     }
   BlockPosition offsetHit = hit.copy();
   offsetHit.moveForward(face, -struct.zOffset + 1 + struct.getClearingBuffer());
-  world.setBlockAndMetadata(hit.x, hit.y, hit.z, BlockLoader.instance().builder.blockID, BlockTools.getBlockMetaFromPlayerFace(face));    
+  world.setBlock(hit.x, hit.y, hit.z, BlockLoader.instance().builder.blockID, BlockTools.getBlockMetaFromPlayerFace(face),3);    
   TEBuilder te = (TEBuilder) world.getBlockTileEntity(hit.x, hit.y, hit.z);
   if(te!=null)
     { 

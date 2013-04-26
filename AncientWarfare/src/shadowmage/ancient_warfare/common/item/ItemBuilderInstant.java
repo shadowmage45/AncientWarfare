@@ -46,7 +46,7 @@ public class ItemBuilderInstant extends ItemBuilderBase
 public ItemBuilderInstant(int itemID)
   {
   super(itemID);
-  this.setIconIndex(3);
+//  this.setIconIndex(3);
   }
 
 public void openGUI(EntityPlayer player)

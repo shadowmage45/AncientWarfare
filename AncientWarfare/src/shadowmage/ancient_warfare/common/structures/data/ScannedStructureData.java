@@ -112,10 +112,10 @@ public void scan(World world)
         {       
         id = world.getBlockId(x, y, z);
         meta = world.getBlockMetadata(x, y, z);
-        if(id==Block.doorWood.blockID || id==Block.doorSteel.blockID)
+        if(id==Block.doorWood.blockID || id==Block.doorIron.blockID)
           {
           int lowerID = world.getBlockId(x, y-1, z);
-          if(lowerID==Block.doorWood.blockID || lowerID==Block.doorSteel.blockID)
+          if(lowerID==Block.doorWood.blockID || lowerID==Block.doorIron.blockID)
             {
             meta = 8;
             }
@@ -131,7 +131,7 @@ public void scan(World world)
 protected void scanForEntities(World world)
   {  
   this.includedEntities.clear();
-  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(pos1.x, pos1.y, pos1.z, pos2.x+1, pos2.y+1, pos2.z+1);
+  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(pos1.x, pos1.y, pos1.z, pos2.x+1, pos2.y+1, pos2.z+1);
   List<Entity> scannedEntities = world.getEntitiesWithinAABBExcludingEntity(null, bb);
   float x;
   float y;

@@ -248,7 +248,7 @@ public void addValidUpgrade(int type)
 public float getScaledDamage(DamageSource src, int amt)
   { 
   float floatAmt = (float)amt;
-  if(src==DamageType.explosiveMissile || src== DamageType.explosion || src==DamageType.explosion2)
+  if(src==DamageType.explosiveMissile || src.isExplosion())
     {
     return floatAmt * (1-(vehicle.currentExplosionResist*0.01f));
     }

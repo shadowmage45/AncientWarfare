@@ -50,7 +50,7 @@ public class ItemNpcCommandBaton extends AWItemClickable
 public ItemNpcCommandBaton(int itemID)
   {
   super(itemID, true);
-  this.setItemName("npcCommandBaton");  
+//  this.setItemName("npcCommandBaton");  
   this.maxStackSize = 1;
   }
 
@@ -186,7 +186,7 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
       }    
     if(settings.range>0)
       {      
-      AxisAlignedBB bb = AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(player.posX-settings.range, player.posY-settings.range, player.posZ-settings.range, player.posX+settings.range, player.posY+settings.range, player.posZ+settings.range);
+      AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-settings.range, player.posY-settings.range, player.posZ-settings.range, player.posX+settings.range, player.posY+settings.range, player.posZ+settings.range);
       List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
       int npcType = -1;
       if(npc!=null)
@@ -226,11 +226,11 @@ public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world,
   return super.onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
   }
 
-@Override
-public String getItemNameIS(ItemStack par1ItemStack)
-  {
-  return "Baton" + String.valueOf(par1ItemStack.getItemDamage()); 
-  }
+//@Override
+//public String getItemNameIS(ItemStack par1ItemStack)
+//  {
+//  return "Baton" + String.valueOf(par1ItemStack.getItemDamage()); 
+//  }
 
 public BatonSettings getBatonSettings(ItemStack stack)
   {

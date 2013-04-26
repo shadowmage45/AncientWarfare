@@ -57,7 +57,6 @@ public void registerItemSingle(Item item, String displayName)
 
 public void registerItemSingle(Item item, String displayName, String description)
   {
-  item.setItemName(displayName);
   this.descriptions.put(item.itemID, new ItemDescription(item.itemID, displayName, description));
   LanguageRegistry.instance().addName(item, displayName);
   }

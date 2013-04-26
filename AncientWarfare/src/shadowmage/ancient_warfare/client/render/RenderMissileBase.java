@@ -44,7 +44,7 @@ public void doRender(Entity var1, double var2, double var4, double var6, float v
   GL11.glScaled(-1, -1, 1);
   float scale = missile.ammoType.getRenderScale();
   GL11.glScalef(scale, scale, scale);
-  mc.renderEngine.bindTexture(mc.renderEngine.getTexture(var1.getTexture()));
+  mc.renderEngine.bindTexture(var1.getTexture());
   renderMissile(missile, missile.ammoType, var2, var4, var6, var8, var9);
   GL11.glPopMatrix();
   }

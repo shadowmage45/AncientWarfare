@@ -178,7 +178,7 @@ public void setCoreInfo()
   /**
    * general options
    */
-  this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").value;
+  this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").getString();
   this.clientVehicleMovementBase = config.get("a-general-options", "client_movement", true, "If true, movement is calculated and authenticated client-side (smoother motion for clients)").getBoolean(true);
   this.adjustMissilesForAccuracy = config.get("a-general-options", "missile_accuracy", true, "If true, missiles will be adjusted for vehicle and rider accuracy when launched.").getBoolean(true);
   
@@ -210,7 +210,7 @@ private void setStructureInfo()
   boolean exportDefaults = config.get("structure-management", "exportdefaults", true, "Re-export default included structures, in case they have been changed in any way, or need files regenerated").getBoolean(true);
   if(exportDefaults)
     {
-    config.get("structure-management", "exportdefaults", false).value = "false";
+    config.get("structure-management", "exportdefaults", false).set(false);//.value = "false";
     AWStructureModule.instance().setExportDefaults();
     }  
   }

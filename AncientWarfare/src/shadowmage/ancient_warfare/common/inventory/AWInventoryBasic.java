@@ -351,4 +351,16 @@ public void readFromNBT(NBTTagCompound tag)
     }
   }
 
+@Override
+public boolean isInvNameLocalized()
+  {
+  return true;
+  }
+
+@Override
+public boolean isStackValidForSlot(int i, ItemStack itemstack)
+  {
+  return true;
+  }
+
 }

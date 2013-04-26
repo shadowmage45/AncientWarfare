@@ -306,7 +306,7 @@ protected void igniteBlock(World world, int x, int y, int z, int maxSearch)
       {
       if(world.getBlockId(x, y-i+1, z)==0)
         {
-        world.setBlockWithNotify(x, y-i+1, z, Block.fire.blockID);        
+        world.setBlock(x, y-i+1, z, Block.fire.blockID, 0, 3);        
         }
       break;
       }

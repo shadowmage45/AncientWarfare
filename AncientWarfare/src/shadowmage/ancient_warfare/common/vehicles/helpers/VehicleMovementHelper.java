@@ -285,7 +285,7 @@ public void tearUpGrass()
     //check lower blocks (riding on)
     if (vehicle.worldObj.getBlockId(x, y-1, z) == Block.grass.blockID)
       {
-      vehicle.worldObj.setBlockAndMetadataWithNotify(x, y-1, z, Block.dirt.blockID,0);
+      vehicle.worldObj.setBlock(x, y-1, z, Block.dirt.blockID,0,3);
       }
     }
   }

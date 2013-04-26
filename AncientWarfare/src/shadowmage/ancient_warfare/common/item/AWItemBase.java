@@ -44,7 +44,7 @@ public AWItemBase(int itemID, boolean hasSubTypes)
   super(itemID);  
   this.setHasSubtypes(hasSubTypes);
   this.setCreativeTab(CreativeTabAW.instance());
-  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/items.png");
+//  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/items.png");
   }
 
 /**
@@ -132,27 +132,27 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
     }  
   }
 
-/**
- * the first/top call for iconIndex
- */
-@Override
-public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
-  {
-  if(stack.getItem().getHasSubtypes())
-    {
-    return stack.getItemDamage();
-    }
-  return super.getIconIndex(stack, renderPass, player, usingItem, useRemaining);
-  }
-
-@Override
-public int getIconFromDamage(int par1)
-  {
-  if(this.getHasSubtypes())
-    {
-    return par1;
-    }
-  return this.iconIndex;
-  }
+///**
+// * the first/top call for iconIndex
+// */
+//@Override
+//public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
+//  {
+//  if(stack.getItem().getHasSubtypes())
+//    {
+//    return stack.getItemDamage();
+//    }
+//  return super.getIconIndex(stack, renderPass, player, usingItem, useRemaining);
+//  }
+//
+//@Override
+//public int getIconFromDamage(int par1)
+//  {
+//  if(this.getHasSubtypes())
+//    {
+//    return par1;
+//    }
+//  return this.iconIndex;
+//  }
 
 }

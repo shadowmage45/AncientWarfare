@@ -79,7 +79,7 @@ public void setCivicBlock(World world, int x, int y, int z, int type, int rank)
   Block block = getBlockFor(type);
   if(block!=null)
     {
-    world.setBlockAndMetadata(x, y, z, block.blockID, type%16);
+    world.setBlock(x, y, z, block.blockID, type%16,3);
     TECivic te = (TECivic) world.getBlockTileEntity(x, y, z);
     if(te!=null)
       {

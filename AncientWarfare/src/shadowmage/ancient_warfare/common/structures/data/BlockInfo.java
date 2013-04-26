@@ -97,11 +97,6 @@ public BlockInfo(int id, String name)
   blockList[id]=this;
   }
 
-public BlockInfo(Block block)
-  {
-  this(block.blockID,block.getBlockName());
-  }
-
 public BlockInfo setMeta(int set, int a, int b, int c, int d)
   {
   if(set>=0 && set<metaRotations.length)
@@ -236,7 +231,7 @@ public BlockInfo setBasicInventoryItem(int id, int meta, int count)
  */
 public static BlockInfo createEntryFor(Block block)
   {
-  return createEntryFor(block.blockID, block.getBlockName());
+  return createEntryFor(block.blockID, block.getLocalizedName());
   }
 
 public static BlockInfo createEntryFor(int id, String name)

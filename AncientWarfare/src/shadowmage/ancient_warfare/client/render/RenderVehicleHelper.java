@@ -72,7 +72,7 @@ public void doRender(Entity var1, double x, double y, double z, float yaw, float
   yaw = vehicle.rotationYaw - (tick * vehicle.moveHelper.strafeMotion);
   GL11.glRotatef(yaw, 0, 1, 0);
   GL11.glScalef(-1, -1, 1);    
-  Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(var1.getTexture()));
+  Minecraft.getMinecraft().renderEngine.bindTexture(var1.getTexture());
   RenderVehicleBase render = RenderRegistry.instance().getRenderForVehicle(vehicle.vehicleType.getGlobalVehicleType());
   render.renderVehicle(vehicle, x, y, z, yaw, tick);
   AWRenderHelper.instance().setTeamRenderColor(vehicle.teamNum);
@@ -144,7 +144,7 @@ public static void renderVehicleModel(int typeNum, int level)
     {
     GL11.glPushMatrix();
     GL11.glScalef(-1, -1, 1);    
-    Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(type.getTextureForMaterialLevel(level)));    
+    Minecraft.getMinecraft().renderEngine.bindTexture(type.getTextureForMaterialLevel(level));    
     model.render(null, 0, 0, 0, 0, 0, 0.0625f);
     model.renderFlag();
     GL11.glPopMatrix();

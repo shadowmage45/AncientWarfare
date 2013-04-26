@@ -53,7 +53,7 @@ public class ItemBuilderDirect extends ItemBuilderBase implements IScannerItem
 public ItemBuilderDirect(int itemID)
   {
   super(itemID);
-  this.setIconIndex(4);
+//  this.setIconIndex(4);
   this.setMaxStackSize(1);
   }
 
@@ -139,11 +139,11 @@ public void onUpdate(ItemStack stack, World world, Entity entity, int par4, bool
 /**
  * Gets an icon index based on an item's damage value
  */
-@Override
-public int getIconFromDamage(int par1)
-  {
-  return this.iconIndex;
-  }
+//@Override
+//public int getIconFromDamage(int par1)
+//  {
+//  return this.iconIndex;
+//  }
 
 /**
  * 

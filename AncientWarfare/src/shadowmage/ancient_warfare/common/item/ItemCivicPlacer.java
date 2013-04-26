@@ -46,19 +46,19 @@ public ItemCivicPlacer(int itemID)
   super(itemID, true);
   }
 
-@Override
-public String getItemNameIS(ItemStack par1ItemStack)
-  {
-  if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("civicInfo"))
-    {
-    Civic civ = CivicRegistry.instance().getCivicFor(par1ItemStack.getTagCompound().getCompoundTag("civicInfo").getInteger("type"));
-    if(civ!=null)
-      {
-      return civ.getDisplayName(par1ItemStack.getTagCompound().getCompoundTag("civicInfo").getInteger("rank"));
-      }
-    }
-  return "Civic" + String.valueOf(par1ItemStack.getItemDamage()); 
-  }
+//@Override
+//public String getItemNameIS(ItemStack par1ItemStack)
+//  {
+//  if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("civicInfo"))
+//    {
+//    Civic civ = CivicRegistry.instance().getCivicFor(par1ItemStack.getTagCompound().getCompoundTag("civicInfo").getInteger("type"));
+//    if(civ!=null)
+//      {
+//      return civ.getDisplayName(par1ItemStack.getTagCompound().getCompoundTag("civicInfo").getInteger("rank"));
+//      }
+//    }
+//  return "Civic" + String.valueOf(par1ItemStack.getItemDamage()); 
+//  }
 
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)

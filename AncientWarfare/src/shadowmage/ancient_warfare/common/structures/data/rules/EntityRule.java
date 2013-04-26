@@ -87,7 +87,8 @@ public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struc
   float ar = rot + 90*rotAmt;    
   if(this.isMinecart)
     {
-    ent = new EntityMinecart(world, mineCartType);
+    ent = EntityMinecart.createMinecart(world, ax, ay, az, mineCartType);
+//    ent = new EntityMinecart(world, mineCartType);
     ax+= getRotatedXOffset(oX, oZ, facing);
     az+= getRotatedZOffset(oX, oZ, facing);  
     ent.setLocationAndAngles(ax, ay, az, ar, pitch);
@@ -215,7 +216,7 @@ public static EntityRule populateRule(ScannedEntityEntry entry)
   else if(clz==EntityMinecart.class)
     {
     rule.isMinecart = true;
-    rule.mineCartType = ((EntityMinecart)entry.ent).minecartType;
+    rule.mineCartType = ((EntityMinecart)entry.ent).getMinecartType();
     }
   else if(clz==EntityItemFrame.class)
     {

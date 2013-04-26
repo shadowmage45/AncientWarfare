@@ -53,7 +53,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
       {
       Config.logDebug("harvesting carrot!!");
       List<ItemStack> blockDrops = Block.carrot.getBlockDropped(npc.worldObj, point.floorX(), point.floorY(), point.floorZ(), 7, 0);
-      worldObj.setBlockWithNotify(point.floorX(), point.floorY(), point.floorZ(), 0);
+      worldObj.setBlockToAir(point.floorX(), point.floorY(), point.floorZ());
       for(ItemStack item : blockDrops)
         {
         if(item==null){continue;}
@@ -81,7 +81,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
         {
         Config.logDebug("planting carrot!!");
         inventory.tryRemoveItems(carrotFilter, 1);
-        worldObj.setBlockAndMetadataWithNotify(point.floorX(), point.floorY()+1, point.floorZ(), mainBlockID, 0);
+        worldObj.setBlock(point.floorX(), point.floorY()+1, point.floorZ(), mainBlockID, 0,3);
         }
       else
         {

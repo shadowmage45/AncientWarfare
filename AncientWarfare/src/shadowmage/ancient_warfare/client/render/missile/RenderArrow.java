@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.render.missile;
 
-import shadowmage.ancient_warfare.client.model.ModelArrow;
 import shadowmage.ancient_warfare.client.model.ModelArrow2;
 import shadowmage.ancient_warfare.client.render.RenderMissileBase;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -29,7 +28,6 @@ import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
 public class RenderArrow extends RenderMissileBase
 {
 
-public ModelArrow arrow = new ModelArrow();
 public ModelArrow2 arrow2 = new ModelArrow2();
 
 @Override
