@@ -25,6 +25,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public abstract class NpcTypeBase implements INpcType
@@ -33,20 +34,12 @@ public abstract class NpcTypeBase implements INpcType
 public static NpcTypeBase [] npcTypes = new NpcTypeBase[256];
 
 protected int npcType;
-private int numOfLevels = 0;
 protected String displayName = "AW.Npc";
-private List<String> levelNames = new ArrayList<String>();
 protected String tooltip = "AW.Npc.Tooltip";
-private List<String> displayTexture = new ArrayList<String>();
-protected int maxHealth = 20;
-protected int inventorySize = 0;
 protected boolean isCombatUnit = false;
 protected boolean isVanillaVillager = false;
-protected float rangedAttackDistance = 0.f;
-protected int attackDamage = 4;
 
-private List<ItemStack> toolStacks = new ArrayList<ItemStack>();
-private List<ItemStack[]> armorStacks = new ArrayList<ItemStack[]>();
+protected List<NpcLevelEntry> levelEntries = new ArrayList<NpcLevelEntry>();
 
 public NpcTypeBase(int type)
   {
@@ -60,7 +53,11 @@ public NpcTypeBase(int type)
 @Override
 public int getAttackDamage(int level)
   {
-  return this.attackDamage;
+  if(level>=0 && level<= this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).attackDamage;
+    }
+  return 4;
   }
 
 @Override
@@ -72,7 +69,7 @@ public int getGlobalNpcType()
 @Override
 public int getNumOfLevels()
   {
-  return numOfLevels;
+  return this.levelEntries.size();
   }
 
 @Override
@@ -84,17 +81,21 @@ public String getDisplayName()
 @Override
 public float getRangedAttackDistance(int level)
   {
-  return rangedAttackDistance;
+  if(level>=0 && level<= this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).rangedAttackDistance;
+    }
+  return 16;
   }
 
 @Override
 public String getLevelName(int level)
   {
-  if(level<0 && level >=this.levelNames.size())
+  if(level>=0 && level<= this.levelEntries.size())
     {
-    return "no level name";
+    return this.levelEntries.get(level).name;
     }
-  return this.levelNames.get(level);
+  return "No level Name";
   }
 
 @Override
@@ -106,62 +107,39 @@ public String getDisplayTooltip()
 @Override
 public String getDisplayTexture(int level)
   {
-  if(level>=0 && level< this.displayTexture.size())
+  if(level>=0 && level<= this.levelEntries.size())
     {
-    return displayTexture.get(level);
+    return this.levelEntries.get(level).texture;
     }
   return "foo.png";
   }
 
-public void addLevel(String name, String tex, ItemStack toolStack, ItemStack[] armorStacks)
+protected NpcLevelEntry addLevel(String name, String tex)
   {
-  this.levelNames.add(name);
-  this.displayTexture.add(tex);
-  this.toolStacks.add(toolStack);
-  if(armorStacks==null)
-    {
-    armorStacks = new ItemStack[4];
-    }
-  this.armorStacks.add(armorStacks);
-  this.numOfLevels++;  
+  NpcLevelEntry entry = null;
+  
+  return entry;
   }
 
-@Override
-public int getMaxHealth(int level)
+protected void addLevel(NpcLevelEntry entry)
   {
-  return maxHealth;
+  this.levelEntries.add(entry);
   }
 
-@Override
-public boolean isCombatUnit()
+public NpcLevelEntry addLevel(String name, String tex, ItemStack toolStack, ItemStack[] armorStacks)
   {
-  return isCombatUnit;
-  }
-
-@Override
-public int getInventorySize(int level)
-  {
-  return inventorySize;
-  }
-
-@Override
-public ItemStack getTool(int level)
-  {
-  if(level>=0 && level<this.toolStacks.size())
-    {
-    return this.toolStacks.get(level);
-    }
-  return null;
-  }
-
-@Override
-public ItemStack[] getArmor(int level)
-  {
-  if(level>=0 && level<this.toolStacks.size())
-    {    
-    return this.armorStacks.get(level);
-    }
-  return new ItemStack[4];
+  NpcLevelEntry entry = new NpcLevelEntry(name, tex, toolStack, armorStacks);
+  this.levelEntries.add(entry);
+  return entry;
+//  this.levelNames.add(name);
+//  this.displayTexture.add(tex);
+//  this.toolStacks.add(toolStack);
+//  if(armorStacks==null)
+//    {
+//    armorStacks = new ItemStack[4];
+//    }
+//  this.armorStacks.add(armorStacks);
+//  this.numOfLevels++;  
   }
 
 /**
@@ -170,7 +148,7 @@ public ItemStack[] getArmor(int level)
  * @return
  */
 protected ItemStack getToolStack(int level)
-  {
+  {  
   return null;
   }
 
@@ -186,14 +164,68 @@ protected ItemStack[] getArmorStack(int level)
   }
 
 @Override
+public int getMaxHealth(int level)
+  {
+  if(level>=0 && level<= this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).health;
+    }
+  return 20;
+  }
+
+@Override
+public boolean isCombatUnit()
+  {
+  return isCombatUnit;
+  }
+
+@Override
+public int getInventorySize(int level)
+  {
+  if(level>=0 && level<= this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).inventorySize;
+    }
+  return 9;
+  }
+
+@Override
+public ItemStack getTool(int level)
+  {
+  if(level>=0 && level<= this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).toolStack;
+    }
+  return null;
+  }
+
+@Override
+public ItemStack[] getArmor(int level)
+  {
+  if(level>=0 && level<= this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).armorStacks;
+    }
+  return new ItemStack[4];
+  }
+
+@Override
 public IAmmoType getAmmoType(int level)
   {
+  if(level>=0 && level<= this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).ammo;
+    }
   return null;
   }
 
 @Override
 public float getAccuracy(int level)
   {
+  if(level>=0 && level<= this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).accuracy;
+    }
   return 1.f;
   }
 
@@ -229,6 +261,18 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
   return aiEntries;
   }
+
+
+@Override
+public List<TargetType> getValidTargetTypes(int level)
+  {
+  if(level>=0 && level<= this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).validTargetTypes;
+    }
+  return null;
+  }
+
 
 public class NpcVarHelperDummy extends NpcVarsHelper
 {

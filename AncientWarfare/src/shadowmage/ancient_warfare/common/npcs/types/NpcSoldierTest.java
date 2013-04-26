@@ -49,7 +49,6 @@ public NpcSoldierTest(int type)
   this.addLevel("Soldier Rank 1", Config.texturePath + "models/npcDefault.png", null, null);
   this.addLevel("Soldier Rank 2", Config.texturePath + "models/npcDefault.png", null, null);
   this.isCombatUnit = false;
-  this.inventorySize = 9;
   }
 
 @Override

@@ -23,7 +23,8 @@ Civillians:
     Breeder (internal subtypes for dif. animals)
     Miner
     Builder ?
-    Researcher ? 
+    Researcher ?
+    Courier
     
 Overview:
 
@@ -33,7 +34,7 @@ near-complete automation of entire resource gathering and processing systems.  C
 be available (Soldiers), allowing for faction-vs-faction warfare (player-vs-player, player-vs-npc, and npc-vs-npc).
 
     Interaction with NPC's will be kept simple, with each NPC having at _most_ ONE Gui for advanced interaction.
-Advanced commands will be issued to NPC's with the aid of Command Batons.  These items will allow for a player to
+More advanced commands will be issued to NPC's with the aid of Command Batons.  These items will allow for a player to
 command individual NPC's, as well as (at higher tiers) all friendly NPC's in the vicinity that are of the same type
 as the main Baton target or specified NPC Type (in the Baton Gui).  The Command Baton will be used to 'link' an NPC
 to his place of employment, town center (for food upkeep), and depository (for workers to deposit goods).  A Baton
@@ -147,6 +148,7 @@ worker support capacity.
 * lumber processing facility -- concept WIP -- probably needs special? crafting bench to process wood to planks/sticks for other civics (at a bonus)
 * basic crafting facility -- automate normal crafting table recipes with NPCs who will withraw the required goods from the town-hall/designated area, and deposit results into their deposit site
 * research facility -- help automate the research process with workers (may require special research workers)
+* siege engine crafting facilities -- engines/ammo/upgrades/other AW items, w/ automation
 
     Non logic-based civics will also provide designated areas for some advanced functions:
 * dwellings -- provide a designated home building to specific Civilians.  They will not seek random shelter, but

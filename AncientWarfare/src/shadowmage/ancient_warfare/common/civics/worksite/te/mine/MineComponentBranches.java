@@ -95,7 +95,7 @@ protected int addNodeToBranch(World world, MineSubComponent branch, int x, int y
   int id4 = world.getBlockId(x-1, y, z);
   int y1 = top? y+1 : y-1; 
   boolean last = z%4!=0;
-  if(id1!=Block.torchWood.blockID)//current block needs cleared before can process sides/etc
+  if(id1!=0 && id1!=Block.torchWood.blockID)//current block needs cleared before can process sides/etc
     {
     branch.addNewPoint(x, y, z, order, TargetType.MINE_CLEAR, last);
     order++;

@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.utils.BlockPosition;
 public class AIGoToWork extends NpcAIObjective
 {
 
+boolean working = false;
 /**
  * @param npc
  * @param maxPriority
@@ -149,17 +150,23 @@ public void onRunningTick()
       this.setFinished();
       return;
       }
+    working = false;
     }
   else
     {
     if(npc.getDistance(workPoint.posX(), workPoint.posY(), workPoint.posZ())>2.4)
       {
-      npc.actionTick = 35;
+      working = false;
       //wait for ai to move to target
       //move to point
       }
     else
       {      
+      if(!working)
+        {
+        working = true;
+        npc.actionTick = 35;
+        }
       this.workOnPoint(workPoint);
       }
     }
@@ -177,7 +184,8 @@ public void onObjectiveStart()
   else
     {
     this.setFinished();
-    }  
+    }
+  working = false;
   }
 
 protected void workOnPoint(WorkPoint p)
@@ -269,6 +277,7 @@ public void stopObjective()
     npc.wayNav.getWorkSite().removeWorker(npc);
     }
   npc.wayNav.setWorkPoint(null);
+  working = false;
   }
 
 }

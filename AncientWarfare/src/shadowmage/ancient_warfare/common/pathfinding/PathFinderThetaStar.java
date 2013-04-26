@@ -186,15 +186,15 @@ private void searchLoop()
       if(currentNode.getDistanceFrom(tx, ty, tz)<=2.d)
         {
         Config.logDebug("non-walkable goal early exit 1");
-        goalCache.parentNode = currentNode;
-        currentNode = goalCache;
+//        goalCache.parentNode = currentNode;
+//        currentNode = goalCache;
         break;
         }
       if(currentNode.x==tx && currentNode.z==tz && Math.abs(ty-currentNode.y)<=3)//directly above/below it...close enough
         {
         Config.logDebug("non-walkable goal early exit 2");
-        goalCache.parentNode = currentNode;
-        currentNode = goalCache;
+//        goalCache.parentNode = currentNode;
+//        currentNode = goalCache;
         break;
         }      
       }

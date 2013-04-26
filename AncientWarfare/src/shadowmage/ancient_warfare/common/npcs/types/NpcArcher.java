@@ -53,13 +53,11 @@ public NpcArcher(int type)
   super(type);
   this.displayName = "Archer";
   this.tooltip = "An archer, adept at bow-use.";
-  this.isCombatUnit = true;
+  this.isCombatUnit = true;  
   this.addLevel("Archer Novice", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0));
   this.addLevel("Archer Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1));
   this.addLevel("Archer Expert", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2));
   this.addLevel("Archer Master", Config.texturePath + "models/npcDefault.png", getToolStack(3), getArmorStack(3));
-  this.rangedAttackDistance = 20.f;
-  //return Config.texturePath + "models/ballistaMobile1.png";
   }
 
 @Override
@@ -96,12 +94,6 @@ protected ItemStack[] getArmorStack(int level)
   stacks[1] = new ItemStack(Item.plateLeather, 1);
   stacks[2] = new ItemStack(Item.legsLeather, 1);
   stacks[3] = new ItemStack(Item.bootsLeather, 1);
-//  switch(level)
-//  {
-//  case 0:
-//  case 1:
-//  case 2:
-//  }
   return stacks;
   }
 
@@ -158,5 +150,6 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AIWander(npc, 4));
   return aiEntries;
   }
+
 
 }

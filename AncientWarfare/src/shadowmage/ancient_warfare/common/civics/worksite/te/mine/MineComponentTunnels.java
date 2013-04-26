@@ -92,7 +92,7 @@ protected int addTunnelPiece(World world, int x, int y, int z, int order, boolea
   {  
   int id1 = world.getBlockId(x, y, z);
   boolean addTorch = !top && x%4==0;
-  if(id1 != Block.torchWood.blockID)
+  if(id1!=0 && id1 != Block.torchWood.blockID)
     {
     if(left)
       {
