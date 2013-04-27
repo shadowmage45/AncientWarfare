@@ -73,7 +73,10 @@ public class VehicleTypeTrebuchetLarge extends VehicleType
     this.validAmmoTypes.add(Ammo.ammoExplosive45);
     this.validAmmoTypes.add(Ammo.ammoHE30);
     this.validAmmoTypes.add(Ammo.ammoHE45);    
-      
+    
+    this.ammoBySoldierRank.put(0, Ammo.ammoStoneShot30);
+    this.ammoBySoldierRank.put(1, Ammo.ammoStoneShot30);
+    this.ammoBySoldierRank.put(2, Ammo.ammoStoneShot30);
     
     this.validArmors.add(ArmorRegistry.armorStone);
     this.validArmors.add(ArmorRegistry.armorIron);

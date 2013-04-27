@@ -77,6 +77,10 @@ public VehicleTypeTrebuchet(int typeNum)
     this.validAmmoTypes.add(Ammo.ammoHE45);    
     }
   
+  this.ammoBySoldierRank.put(0, Ammo.ammoStoneShot10);
+  this.ammoBySoldierRank.put(1, Ammo.ammoStoneShot10);
+  this.ammoBySoldierRank.put(2, Ammo.ammoStoneShot10);
+  
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorIron);
   this.validArmors.add(ArmorRegistry.armorObsidian);

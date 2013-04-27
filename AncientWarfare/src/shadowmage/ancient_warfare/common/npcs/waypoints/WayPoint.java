@@ -29,8 +29,6 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 public class WayPoint extends TargetPosition implements INBTTaggable
 {
 
-protected String name = "";
-
 /**
  * @param type
  */
@@ -52,22 +50,6 @@ public WayPoint(int x, int y, int z, TargetType type)
 public WayPoint(int x, int y, int z, int side, TargetType type)
   {
   super(x,y,z, side, type);
-  }
-
-public WayPoint(int x, int y, int z, TargetType type, String name)
-  {
-  super(x,y,z,type);
-  this.name = name;
-  }
-
-public boolean isValidWayPoint(World world)
-  {
-  return true;
-  }
-
-public boolean areWayPointsEqual(WayPoint point)
-  {
-  return point.x==this.x && point.y==this.y && point.z==this.z;
   }
 
 @Override
@@ -102,6 +84,5 @@ public boolean equals(Object obj)
     return false;
   return true;
   }
-
 
 }

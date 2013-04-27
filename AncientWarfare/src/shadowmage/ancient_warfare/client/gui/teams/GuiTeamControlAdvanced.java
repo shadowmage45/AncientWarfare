@@ -45,6 +45,7 @@ int prevMemberCount = 0;
 private GuiNumberInputLine teamSelectNumber;
 private GuiScrollableArea area;
 private GuiScrollableArea area2;
+private GuiScrollableArea area3;
 
 /**
  * @param container
@@ -86,6 +87,11 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void updateScreenContents()
   {
+  if(entry.getPlayerRank(player.getEntityName())<7)
+    {
+    mc.displayGuiScreen(parent);
+    return;
+    }
   if(entry.memberNames.size()!=prevMemberCount)
     {
     this.prevMemberCount = entry.memberNames.size();
@@ -93,6 +99,7 @@ public void updateScreenContents()
     }
   area.updateGuiPos(guiLeft, guiTop);
   area2.updateGuiPos(guiLeft,  guiTop);
+  area3.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override
@@ -103,7 +110,13 @@ public void onElementActivated(IGuiElement element)
   case 0:
   mc.displayGuiScreen(parent);
   return;
-    
+  
+  case 5://add
+  TeamTracker.instance().handleClientHostileTeamChange(player.getEntityName(), (byte) this.entry.teamNum, (byte)numLine.getIntVal(), false);
+  break;
+  case 6://rem
+  TeamTracker.instance().handleClientHostileTeamChange(player.getEntityName(), (byte) this.entry.teamNum, (byte)numLine.getIntVal(), true);
+  break;
   default:
   break;
   }
@@ -140,11 +153,14 @@ public void onElementActivated(IGuiElement element)
     }
   }
 
+GuiNumberInputLine numLine;
 @Override
 public void setupControls()
   {
   this.addGuiButton(0, 45, 12, "Done").updateRenderPos(getXSize()-45-5, 5);
-  this.addNumberField(2, 35, 12, 1, String.valueOf(entry.teamNum)).setMinMax(0, 15).updateRenderPos(5, 5+12+2);
+  numLine = (GuiNumberInputLine) this.addNumberField(4, 40, 12, 1, String.valueOf(entry.teamNum)).setMinMax(0, 15).updateRenderPos(20, 10+20);
+  this.addGuiButton(5, 35, 12, "Add").updateRenderPos(10, 10+12+2+20);
+  this.addGuiButton(6, 35, 12, "Rem").updateRenderPos(10+35+2, 10+12+2+20);
   
   int buffer = 2;
   int buttonSize = 12;
@@ -153,10 +169,15 @@ public void setupControls()
   int totalHeight = entryCount * (buffer+buttonSize);
   
   int totalHeight2 = this.entry.applicants.size() * (buffer+buttonSize);
-  area = new GuiScrollableArea(1, this, 10, 65, this.getXSize()-20, this.getYSize()-80-80, totalHeight);
-  area2 = new GuiScrollableArea(2, this, 10, 70+80, this.getXSize()-20, this.getYSize()-80-80, totalHeight2);
+  int totalHeight3 = this.entry.nonHostileTeams.size() * (buffer + 8);
+  int areaHeight = this.getYSize()-80-80-10;
+  int topAreaHeight = 55;
+  area = new GuiScrollableArea(1, this, 10, 65+20, this.getXSize()-20, areaHeight, totalHeight);
+  area2 = new GuiScrollableArea(2, this, 10, 70+80+10, this.getXSize()-20, areaHeight, totalHeight2);
+  area3 = new GuiScrollableArea(3, this, this.getXSize()/2, 25, this.getXSize()/2 -10, topAreaHeight, totalHeight3);
   this.guiElements.put(1, area);
   this.guiElements.put(2, area2);
+  this.guiElements.put(3, area3);
   
   TeamMemberEntry entry;
   for(int i = 0; i < entryCount; i++)
@@ -168,6 +189,11 @@ public void setupControls()
     {
     this.addTeamApplicantButtons(i);
     }
+  for(int i = 0; i < this.entry.nonHostileTeams.size(); i++)
+    {
+    area3.addGuiElement(new GuiString(10000+i, area3, this.getXSize()/2-40, 8, "Team Num "+this.entry.nonHostileTeams.get(i)).updateRenderPos(5, 8*i));
+    }
+  
   }
 
 private void addTeamControlButtons(int index, TeamMemberEntry entry)
@@ -209,7 +235,9 @@ HashSet<GuiButtonSimple> denyButtons = new HashSet<GuiButtonSimple>();
 @Override
 public void updateControls()
   {
-  area.elements.clear();
+  area.elements.clear(); 
+  area2.elements.clear();
+  area3.elements.clear();
   rankMinusButtons.clear();
   rankPlusButtons.clear();
   kickMemberButtons.clear(); 
@@ -219,8 +247,10 @@ public void updateControls()
   int buttonSize = 12;
   int entryCount = this.entry.memberNames.size();
   int totalHeight = entryCount * (buffer+buttonSize); 
+  int totalHeight3 = this.entry.nonHostileTeams.size() * (buffer + 8);
   area.updateTotalHeight(totalHeight);
   area2.updateTotalHeight((buffer+buttonSize)*this.entry.applicants.size());
+  area3.updateTotalHeight(totalHeight3);
   TeamMemberEntry entry;
   for(int i = 0; i < entryCount; i++)
     {
@@ -230,6 +260,10 @@ public void updateControls()
   for(int i = 0; i < this.entry.applicants.size(); i++)
     {
     this.addTeamApplicantButtons(i);
+    }
+  for(int i = 0; i < this.entry.nonHostileTeams.size(); i++)
+    {
+    area3.addGuiElement(new GuiString(10000+i, area3, this.getXSize()/2-40, 8, "Team Num "+this.entry.nonHostileTeams.get(i)).updateRenderPos(5, 8*i));
     }
   }
 

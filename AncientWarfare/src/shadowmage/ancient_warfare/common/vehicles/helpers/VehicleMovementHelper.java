@@ -38,8 +38,6 @@ private VehicleBase vehicle;
 private byte forwardInput = 0;
 private byte strafeInput = 0;
 
-
-
 private float forwardAccel = 0;
 private float strafeAccel = 0;
 public float forwardMotion = 0;

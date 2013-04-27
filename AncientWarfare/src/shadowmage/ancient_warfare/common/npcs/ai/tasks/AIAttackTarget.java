@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
@@ -106,7 +107,7 @@ protected void attackTargetMounted(ITargetEntry target)
   float yaw = Trig.getYawTowardsTarget(vehicle.posX, vehicle.posZ, target.posX(), target.posZ(), vehicle.rotationYaw);  
   byte s = 0;
   boolean turning = false;
-  if(!Trig.isAngleBetween(vehicle.rotationYaw+yaw, vehicle.localTurretRotationHome-vehicle.currentTurretRotationMax-1.5f, vehicle.localTurretRotationHome+vehicle.currentTurretRotationMax+1.5f))//expand the bounds a bit
+  if(!Trig.isAngleBetween(vehicle.rotationYaw+yaw, vehicle.localTurretRotationHome-vehicle.currentTurretRotationMax-3.f, vehicle.localTurretRotationHome+vehicle.currentTurretRotationMax+3.f))//expand the bounds a bit
     {      
     if(yaw<0)
       {
@@ -117,6 +118,7 @@ protected void attackTargetMounted(ITargetEntry target)
       s = -1;//right
       }
     turning = true;
+    Config.logDebug("yaw diff to target: "+yaw);
     }
   vehicle.moveHelper.handleMotionInput((byte) 0, s);
   vehicle.firingHelper.handleSoldierTargetInput(target.posX(), target.posY(), target.posZ());
@@ -130,6 +132,7 @@ protected void attackTargetMounted(ITargetEntry target)
       {
       vehicle.firingHelper.handleFireUpdate();
       this.npc.actionTick = (vehicle.currentReloadTicks + 20);
+      vehicle.moveHelper.handleMotionInput((byte)0, (byte)0);
       }    
     }
   else//delay a bit to line up to target 

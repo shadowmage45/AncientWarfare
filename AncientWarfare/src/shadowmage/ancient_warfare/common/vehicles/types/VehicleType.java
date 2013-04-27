@@ -132,7 +132,19 @@ public VehicleType(int typeNum)
 @Override
 public IAmmoType getAmmoForSoldierRank(int rank)
   {
-  return this.ammoBySoldierRank.get(rank);
+  if(this.ammoBySoldierRank.containsKey(rank))
+    {
+    return this.ammoBySoldierRank.get(rank);
+    }
+  else
+    {
+    List<IAmmoType> ammos = this.getValidAmmoTypes();
+    if(!ammos.isEmpty())
+      {
+      return ammos.get(0);
+      }
+    }
+  return null;
   }
 
 @Override

@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.client.gui.teams;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
@@ -117,11 +118,12 @@ public void onElementActivated(IGuiElement element)
   }
   }
 
+GuiButtonSimple advControls;
 @Override
 public void setupControls()
   {
   this.addGuiButton(0, 45, 12, "Done").updateRenderPos(getXSize()-45-5, 5);
-  this.addGuiButton(5, getXSize()-75-5, 20, 75, 12, "Adv Controls");
+  advControls = this.addGuiButton(5, getXSize()-75-5, 20, 75, 12, "Adv Controls");
   this.addGuiButton(6, 5, 5, 65, 12, "Change Team");
   this.addGuiButton(7, 5, 20, 12, 12, "-");
   this.teamSelectNumber = (GuiNumberInputLine) this.addNumberField(8, 45, 12, 1, "0").setMinMax(0, 15).updateRenderPos(5+12+2, 20);
@@ -144,6 +146,14 @@ public void setupControls()
     entry = this.entry.memberNames.get(i);
     area.addGuiElement(new GuiString(i+20, area, this.getXSize()-30, buttonSize, entry.getMemberName() + "  Rank: "+entry.getMemberRank()).updateRenderPos(kX, kY));
     }
+  if(this.entry.getPlayerRank(player.getEntityName())<7)
+    {
+    advControls.enabled = false;
+    }
+  else
+    {
+    advControls.enabled = true;
+    }
   }
 
 @Override
@@ -163,6 +173,14 @@ public void updateControls()
     kY = i * (buffer+buttonSize);
     entry = this.entry.memberNames.get(i);
     area.addGuiElement(new GuiString(i+20, area, this.getXSize()-30, buttonSize, entry.getMemberName() + "  Rank: "+entry.getMemberRank()).updateRenderPos(kX, kY));
+    }
+  if(this.entry.getPlayerRank(player.getEntityName())<7)
+    {
+    advControls.enabled = false;
+    }
+  else
+    {
+    advControls.enabled = true;
     }
   }
 

@@ -170,6 +170,32 @@ public boolean isHostileTowards(int num)
   return num !=this.teamNum && !this.nonHostileTeams.contains(num);
   }
 
+/**
+ * 
+ * @param team being updated
+ * @param status if hostile
+ */
+public void handleHostileStatusChange(byte team, boolean status)
+  {
+  if(team!=(byte)this.teamNum)
+    {
+    if(status)//adding to hostile list/removing from non-hostile list
+      {
+      if(this.nonHostileTeams.contains(Integer.valueOf(team)))
+        {
+        this.nonHostileTeams.remove(Integer.valueOf(team));
+        }
+      }
+    else
+      {
+      if(!this.nonHostileTeams.contains(Integer.valueOf(team)))
+        {
+        this.nonHostileTeams.add(Integer.valueOf(team));
+        }
+      }
+    }
+  }
+
 public class TeamMemberEntry implements INBTTaggable
 {
 String memberName = "";
@@ -200,6 +226,7 @@ public void setMemberRank(byte rank)
     this.memberRank = rank;
     }
   }
+
 
 @Override
 public NBTTagCompound getNBTTag()

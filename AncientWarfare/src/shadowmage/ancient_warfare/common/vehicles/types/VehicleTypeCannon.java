@@ -59,6 +59,10 @@ public VehicleTypeCannon(int typeNum)
     this.validAmmoTypes.add(Ammo.ammoCanisterShot25);
     }
   
+  this.ammoBySoldierRank.put(0, Ammo.ammoIronShot5);
+  this.ammoBySoldierRank.put(1, Ammo.ammoIronShot5);
+  this.ammoBySoldierRank.put(2, Ammo.ammoIronShot5);
+  
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchExtUpgrade);

@@ -52,6 +52,9 @@ public VehicleTypeHwacha(int typeNum)
   this.validAmmoTypes.add(Ammo.ammoHwachaRocketExplosive);
   this.validAmmoTypes.add(Ammo.ammoHwachaRocketAirburst);
   
+  this.ammoBySoldierRank.put(0, Ammo.ammoRocket);
+  this.ammoBySoldierRank.put(1, Ammo.ammoRocket);
+  this.ammoBySoldierRank.put(2, Ammo.ammoRocket);
   
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorIron);

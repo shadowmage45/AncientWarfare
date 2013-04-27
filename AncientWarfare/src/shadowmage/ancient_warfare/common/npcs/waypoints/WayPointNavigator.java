@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.npcs.waypoints;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.inventory.IInventory;
@@ -29,7 +30,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
@@ -55,8 +55,10 @@ WorkPoint depositPoint = null;
 WorkPoint workPoint = null;
 private TECivic workSite = null;
 TileEntity depositSite = null;
-List<WayPoint> wayPoints = new ArrayList<WayPoint>();
 List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
+
+HashMap<String, WayPoint> wayPoints = new HashMap<String, WayPoint>();//used for single-point waypoints, such as home, town hall, targets, etc.
+HashMap<String, ArrayList<WayPoint>> wayPointLists = new HashMap<String, ArrayList<WayPoint>>();//used for waypoint lists such as patrol points or advanced courier functionalities
 int currentPatrolPoint = 0;
 
 
@@ -113,11 +115,6 @@ public void clearPatrolPoints()
   {
   this.patrolPoints.clear();
   this.currentPatrolPoint = 0;
-  }
-
-public void addWayPoint(WayPoint p)
-  {
-  this.wayPoints.add(p);
   }
 
 public void validateSites()
@@ -192,11 +189,6 @@ protected void validateDepositSite()
 protected boolean isPointLoaded(int x, int y, int z)
   {
   return true;
-  }
-
-public void clearWayPoints()
-  {
-  this.wayPoints.clear();
   }
 
 public WorkPoint getWorkPoint()
@@ -355,12 +347,7 @@ public NBTTagCompound getNBTTag()
     list.appendTag(p.getNBTTag());
     }
   tag.setTag("patrol", list);  
-  list = new NBTTagList();
-  for(WayPoint p : this.wayPoints)
-    {
-    list.appendTag(p.getNBTTag());
-    }
-  tag.setTag("points", list);
+  list = new NBTTagList(); 
   if(this.homePoint!=null)
     {
     tag.setCompoundTag("home", this.homePoint.getNBTTag());
@@ -384,17 +371,11 @@ public NBTTagCompound getNBTTag()
 public void readFromNBT(NBTTagCompound tag)
   {
   this.patrolPoints.clear();
-  this.wayPoints.clear();  
   NBTTagList patrol = tag.getTagList("patrol");
   for(int i = 0; i < patrol.tagCount(); i++)
     {
     this.patrolPoints.add(new WayPoint((NBTTagCompound) patrol.tagAt(i)));
-    }
-  NBTTagList points = tag.getTagList("points");
-  for(int i = 0; i < points.tagCount(); i++)
-    {
-    this.wayPoints.add(new WayPoint((NBTTagCompound) points.tagAt(i)));
-    }
+    } 
   if(tag.hasKey("home"))
     {
     this.homePoint = new WayPoint(tag.getCompoundTag("home"));

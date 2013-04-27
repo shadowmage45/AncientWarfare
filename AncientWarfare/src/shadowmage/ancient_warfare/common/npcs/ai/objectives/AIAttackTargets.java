@@ -26,6 +26,7 @@ import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIAttackTarget;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AIAttackTargets extends NpcAIObjective
 {
@@ -96,6 +97,11 @@ public void onObjectiveStart()
 public void stopObjective()
   {
   npc.setTargetAW(null);
+  if(npc.isRidingVehicle())
+    {
+    VehicleBase vehicle = (VehicleBase) npc.ridingEntity;
+    vehicle.moveHelper.clearInputFromDismount();
+    }
   }
 
 

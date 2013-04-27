@@ -80,6 +80,9 @@ public VehicleTypeCatapult(int typeNum)
     
     }
   
+  this.ammoBySoldierRank.put(0, Ammo.ammoStoneShot10);
+  this.ammoBySoldierRank.put(1, Ammo.ammoStoneShot10);
+  this.ammoBySoldierRank.put(2, Ammo.ammoStoneShot10);
   
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorObsidian);

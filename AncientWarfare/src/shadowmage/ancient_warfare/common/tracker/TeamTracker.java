@@ -67,6 +67,19 @@ public static TeamTracker instance()
   }
 private static TeamTracker INSTANCE;
 
+public void handleClientHostileTeamChange(String name, byte team, byte oTeam, boolean newStatus)
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("pName", name);
+  tag.setByte("num", team);  
+  tag.setByte("oTeam", oTeam);
+  tag.setBoolean("status", newStatus);
+  tag.setBoolean("hostChange", true);
+  Packet01ModData pkt = new Packet01ModData();
+  pkt.setTeamUpdate(tag);
+  pkt.sendPacketToServer();
+  }
+
 public void handleClientRankChange(String name, byte num, byte newRank)
   {
   NBTTagCompound tag = new NBTTagCompound();
@@ -201,6 +214,11 @@ public void handleClientUpdate(NBTTagCompound tag, EntityPlayer player)
     TeamMemberEntry entry = tagTeam.getEntryFor(name);
     entry.setMemberRank(tag.getByte("rank"));
     }
+  else if(tag.hasKey("hostChange"))
+    {
+    tagTeam.handleHostileStatusChange(tag.getByte("oTeam"), tag.getBoolean("status"));
+    Config.logDebug("updating team non-hostile status and relaying!!");
+    }
   if(player.openContainer instanceof ContainerTeamControl)
     {
     tag.setBoolean("rebuild", true);
@@ -318,6 +336,13 @@ public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
     entry.setMemberRank(tag.getByte("rank"));
     pkt.setTeamUpdate(tag);
     pkt.sendPacketToAllPlayers();
+    }
+  else if(tag.hasKey("hostChange"))
+    {
+    tagTeam.handleHostileStatusChange(tag.getByte("oTeam"), tag.getBoolean("status"));
+    pkt.setTeamUpdate(tag);
+    pkt.sendPacketToAllPlayers();
+    Config.logDebug("updating team non-hostile status and relaying!!");
     }
   }
 
