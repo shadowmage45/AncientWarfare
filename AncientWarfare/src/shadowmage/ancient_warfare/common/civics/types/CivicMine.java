@@ -40,6 +40,7 @@ public CivicMine(int id, String name, String tooltip, Class <?extends TECivic> t
   this.workSizeMaxHeight = 2;
   this.workSizeMaxHorizontal = 16;
   this.maxWorkers = 4;
+  this.iconTexture = "civicMine1";
   }
 
 

@@ -33,12 +33,12 @@ public VehicleUpgradeAim(int num)
   super(num);
   this.displayName = "Basic Trajectory Calculator";
   this.tooltip = "Increases Accuracy by a relative 3%";
+  this.iconTexture = "upgradeAim1";
   }
 
 @Override
 public void applyVehicleEffects(VehicleBase vehicle)
-  {
-  
+  {  
   float adj = 1-vehicle.currentAccuracy;
   vehicle.currentAccuracy += adj * .5f;
   if(vehicle.currentAccuracy>1)

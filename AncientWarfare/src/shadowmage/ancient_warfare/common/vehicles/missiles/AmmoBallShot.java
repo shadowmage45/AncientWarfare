@@ -40,6 +40,7 @@ public AmmoBallShot(int ammoType)
   this.entityDamage = 5;
   this.vehicleDamage = 5;
   this.isPersistent = false;
+  this.iconTexture = "ammoStone1";
   }
 
 @Override

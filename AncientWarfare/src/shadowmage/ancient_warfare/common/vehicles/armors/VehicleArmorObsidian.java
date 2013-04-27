@@ -34,6 +34,7 @@ public VehicleArmorObsidian(int armorType)
   this.general = 2.5f;
   this.explosive = 7.f;
   this.fire = 2.5f;
+  this.iconTexture = "armorObsidian1";
   }
 
 }

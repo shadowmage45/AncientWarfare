@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 public abstract class VehicleUpgradeBase implements IVehicleUpgradeType
@@ -29,7 +30,7 @@ public abstract class VehicleUpgradeBase implements IVehicleUpgradeType
 int typeNum = 0;
 String displayName = "";
 String tooltip = "";
-
+String iconTexture = "foo";
 
 public VehicleUpgradeBase(int num)
   {
@@ -58,5 +59,11 @@ public String getDisplayTooltip()
 public ItemStack getUpgradeStack(int qty)
   {
   return new ItemStack(ItemLoader.vehicleUpgrade.itemID, qty, this.typeNum);
+  }
+
+@Override
+public String getIconTexture()
+  {
+  return "ancientwarfare:upgrade/"+iconTexture;
   }
 }

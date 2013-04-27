@@ -44,15 +44,7 @@ public ItemVehicleSpawner(int itemID)
   {
   super(itemID,true);
   this.setCreativeTab(CreativeTabAW.vehicleTab);
-//  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/vehicles.png");
-//  this.setItemName("awVehicleItem");
   }
-
-//@Override
-//public String getItemNameIS(ItemStack par1ItemStack)
-//  {
-//  return "Vehicle" + String.valueOf(par1ItemStack.getItemDamage()); 
-//  }
 
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)

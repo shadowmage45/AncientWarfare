@@ -45,6 +45,7 @@ int getVehicleDamage();
 String getDisplayName();//the displayed item-name/ammo name for this ammo
 String getDisplayTooltip();//the display tooltip for this ammo
 String getModelTexture();//get the display texture
+String getIconTexture();
 ItemStack getDisplayStack();//should be a persistent stack in the ammo instance, used to display ammo...
 ItemStack getAmmoStack(int qty);//used to create a stack of this ammo.  used in structure spawning
 IAmmoType getSecondaryAmmoType();//if this is just a 'container' ammo, get the contained type

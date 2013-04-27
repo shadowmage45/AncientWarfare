@@ -40,6 +40,7 @@ public AmmoNapalmShot(int ammoType, int weight)
   this.vehicleDamage = weight;
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
+  this.iconTexture = "ammoNapalm1";
   }
 
 @Override

@@ -39,6 +39,7 @@ public AmmoIronBallShot(int ammoType)
   this.ammoWeight = 1.f;
   this.entityDamage = 8;
   this.vehicleDamage = 8;
+  this.iconTexture = "ammoStone1";
   }
 
 @Override

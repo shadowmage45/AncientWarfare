@@ -38,7 +38,7 @@ protected String displayName = "AW.Npc";
 protected String tooltip = "AW.Npc.Tooltip";
 protected boolean isCombatUnit = false;
 protected boolean isVanillaVillager = false;
-
+protected String iconTexture = "foo";
 protected List<NpcLevelEntry> levelEntries = new ArrayList<NpcLevelEntry>();
 
 public NpcTypeBase(int type)
@@ -271,6 +271,12 @@ public List<TargetType> getValidTargetTypes(int level)
     return this.levelEntries.get(level).validTargetTypes;
     }
   return null;
+  }
+
+@Override
+public String getIconTexture()
+  {
+  return "ancientwarfare:npc/"+iconTexture;
   }
 
 

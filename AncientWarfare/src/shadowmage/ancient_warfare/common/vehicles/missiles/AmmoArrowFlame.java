@@ -43,6 +43,7 @@ public class AmmoArrowFlame extends Ammo
     this.isFlaming = true;
     this.displayName = "Flame Arrow";  
     this.displayTooltip = "A well-built heavy-duty arrow with a head soaked in flammable resin.";  
+    this.iconTexture = "ammoArrowFlame1";
     }
 
 @Override

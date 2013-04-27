@@ -40,6 +40,7 @@ public class AmmoGrapeShot extends Ammo
     this.secondaryAmmoCount = weight;
     float scaleFactor = weight + 45.f;
     this.renderScale = ( weight / scaleFactor ) * 2; 
+    this.iconTexture = "ammoCluster1";
     }
 
 @Override

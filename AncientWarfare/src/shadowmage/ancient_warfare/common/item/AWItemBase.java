@@ -25,26 +25,26 @@ package shadowmage.ancient_warfare.common.item;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.DescriptionRegistry;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class AWItemBase extends Item
+public abstract class AWItemBase extends Item
 {
-
-protected List<ItemStack> subTypes = new ArrayList<ItemStack>();
 
 public AWItemBase(int itemID, boolean hasSubTypes)
   {
   super(itemID);  
   this.setHasSubtypes(hasSubTypes);
   this.setCreativeTab(CreativeTabAW.instance());
-//  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/items.png");
   }
 
 /**
@@ -54,20 +54,15 @@ public AWItemBase(int itemID, boolean hasSubTypes)
 @Override
 public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {
-  if(this.hasSubtypes)
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  if(d!=null)
     {
-    for(ItemStack stack : this.subTypes)
-      {      
-      if(stack!=null)
-        {
-        par3List.add(stack);
-        }
-      }
+    par3List.addAll(d.getDisplayStackCache());
     }
   else
     {
     super.getSubItems(par1, par2CreativeTabs, par3List);
-    }
+    } 
   }
 
 public boolean isShiftClick(EntityPlayer player)
@@ -83,76 +78,100 @@ public boolean isShiftClick(EntityPlayer player)
     }
   }
 
-/**
- * add a subtype to this Item, to be displayed in creative inventories
- * @param stack
- */
-public void addSubType(ItemStack stack)
-  {
-  if(stack==null)
-    {
-    return;
-    }
-  /**
-   * if it does not obviously contain the stack
-   */
-  if(!this.subTypes.contains(stack))
-    {
-    /**
-     * test to see if it contains a matching stack for itemID/DMG
-     */
-    for(Object obj : this.subTypes)
-      {
-      ItemStack test = (ItemStack)obj;
-      if(test!=null)
-        {
-        if(ItemStack.areItemStacksEqual(stack, test))
-          {
-          return;
-          }        
-        }
-      }
-    this.subTypes.add(stack);
-    }  
-  }
-
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
   if(stack!=null)
     {
-    if(DescriptionRegistry.instance().contains(stack))
+    Description d = DescriptionRegistry2.instance().getDescriptionFor(stack.itemID);
+    if(d!=null)
       {
-      String toolTip = DescriptionRegistry.instance().getEntryFor(stack.itemID).getTooltip(stack.getItemDamage());
-      if(toolTip!=null)
+      String tip = d.getDisplayTooltip(stack.getItemDamage());
+      if(tip!=null && !tip.equals(""))
         {
-        list.add(toolTip);
+        list.add(tip);
         }
-      }    
+      }     
     }  
   }
 
-///**
-// * the first/top call for iconIndex
-// */
-//@Override
-//public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
-//  {
-//  if(stack.getItem().getHasSubtypes())
-//    {
-//    return stack.getItemDamage();
-//    }
-//  return super.getIconIndex(stack, renderPass, player, usingItem, useRemaining);
-//  }
-//
-//@Override
-//public int getIconFromDamage(int par1)
-//  {
-//  if(this.getHasSubtypes())
-//    {
-//    return par1;
-//    }
-//  return this.iconIndex;
-//  }
+@Override
+public String getLocalizedName(ItemStack par1ItemStack)
+  {
+  return getItemDisplayName(par1ItemStack);
+  }
+
+@Override
+public String getUnlocalizedName()
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  if(d!=null)
+    {
+    return d.getDisplayName(0);
+    }
+  return "Unregistered Item : "+itemID;
+  }
+
+@Override
+public String getUnlocalizedName(ItemStack par1ItemStack)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  if(d!=null)
+    {
+    return d.getDisplayName(par1ItemStack.getItemDamage());
+    }
+  return "Unregistered Item : "+itemID+":"+par1ItemStack.getItemDamage();
+  }
+
+@Override
+public String getItemDisplayName(ItemStack par1ItemStack)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  if(d!=null)
+    {
+    return d.getDisplayName(par1ItemStack.getItemDamage());
+    }
+  return "Unregistered Item : "+itemID+":"+par1ItemStack.getItemDamage();
+  }
+
+@Override
+public void registerIcons(IconRegister par1IconRegister)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  if(d!=null)
+    {
+    Config.logDebug("registering icons for : "+itemID +":: "+d.getDisplayName(0));
+    d.registerIcons(par1IconRegister);
+    }
+  }
+
+@Override
+public Icon getIconFromDamage(int par1)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  if(d!=null)
+    {
+    return d.getIconFor(par1);
+    }
+  return super.getIconFromDamage(par1);
+  }
+
+@Override
+public Icon getIconFromDamageForRenderPass(int par1, int par2)
+  {
+  return getIconFromDamage(par1);
+  }
+
+@Override
+public Icon getIcon(ItemStack stack, int renderPass, EntityPlayer player,  ItemStack usingItem, int useRemaining)
+  {
+  return getIconFromDamage(stack.getItemDamage());
+  }
+
+@Override
+public Icon getIcon(ItemStack stack, int pass)
+  {
+  return getIconFromDamage(stack.getItemDamage());
+  }
 
 }

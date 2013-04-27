@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
@@ -72,7 +73,7 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  return "/shadowmage/ancient_warfare/resources/gui/guiBackgroundLarge.png";
+  return Config.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override

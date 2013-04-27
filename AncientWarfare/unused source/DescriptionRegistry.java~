@@ -35,6 +35,8 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
  */
 public class DescriptionRegistry
 {
+
+
 private static DescriptionRegistry INSTANCE;
 private DescriptionRegistry(){}
 
@@ -48,7 +50,6 @@ public static DescriptionRegistry instance()
   }
 
 private static HashMap<Integer, ItemDescription> descriptions = new HashMap<Integer, ItemDescription>();
-
 
 public void registerItemSingle(Item item, String displayName)
   {

@@ -42,6 +42,15 @@ public AmmoSoldierArrow(int ammoType, int damage, boolean flaming)
   String suffix = damage <= 5? "Wooden Arrow" : "Iron Arrow";
   this.displayName = prefix+suffix;  
   this.displayTooltip = "A well-built arrow designed for use in bows.";  
+  
+  if(flaming)
+    {
+    this.iconTexture = "ammoArrowFlame1";
+    }
+  else
+    {
+    this.iconTexture = "ammoArrow1";
+    }  
   }
 
 @Override

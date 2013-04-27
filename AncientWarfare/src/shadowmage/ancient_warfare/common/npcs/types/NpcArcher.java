@@ -54,6 +54,7 @@ public NpcArcher(int type)
   this.displayName = "Archer";
   this.tooltip = "An archer, adept at bow-use.";
   this.isCombatUnit = true;  
+  this.iconTexture = "npcArcher1";
   this.addLevel("Archer Novice", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0));
   this.addLevel("Archer Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1));
   this.addLevel("Archer Expert", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2));
@@ -150,6 +151,7 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AIWander(npc, 4));
   return aiEntries;
   }
+
 
 
 }

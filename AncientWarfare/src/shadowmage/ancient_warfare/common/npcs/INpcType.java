@@ -35,6 +35,7 @@ public abstract int getGlobalNpcType();
 public abstract String getDisplayName();
 public abstract String getDisplayTooltip();
 public abstract String getDisplayTexture(int level);
+public abstract String getIconTexture();
 public abstract String getLevelName(int level);
 public abstract int getNumOfLevels();
 public abstract int getMaxHealth(int level);

@@ -32,13 +32,6 @@ public class ItemVehicleArmor extends AWItemBase
 public ItemVehicleArmor(int itemID)
   {
   super(itemID, true);
-//  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/armor.png");
-//  this.setItemName("awArmor");
   }
 
-//@Override
-//public String getItemNameIS(ItemStack par1ItemStack)
-//  {
-//  return "Armor" + String.valueOf(par1ItemStack.getItemDamage()); 
-//  }
 }

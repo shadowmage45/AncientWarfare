@@ -34,6 +34,7 @@ public VehicleArmorIron(int armorType)
   this.general = 7.0f;
   this.explosive = 2.5f;
   this.fire = 2.5f;
+  this.iconTexture = "armorIron1";
   }
 
 }

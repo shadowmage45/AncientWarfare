@@ -33,6 +33,7 @@ public VehicleUpgradeReload(int num)
   super(num);
   this.displayName = "Spring-Fed Reloader";
   this.tooltip = "Reduces Reload time by 10%";
+  this.iconTexture = "upgradeReload1";
   }
 
 @Override

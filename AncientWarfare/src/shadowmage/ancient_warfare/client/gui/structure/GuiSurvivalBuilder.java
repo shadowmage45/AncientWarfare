@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
@@ -62,7 +63,7 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  return "/shadowmage/ancient_warfare/resources/gui/guiBackgroundLarge.png";
+  return Config.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override

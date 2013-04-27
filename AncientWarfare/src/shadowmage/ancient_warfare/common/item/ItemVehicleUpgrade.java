@@ -31,13 +31,6 @@ public class ItemVehicleUpgrade extends AWItemBase
 public ItemVehicleUpgrade(int itemID)
   {
   super(itemID,true);
-//  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/upgrade.png");
-//  this.setItemName("awUpgrade");
   }
 
-//@Override
-//public String getItemNameIS(ItemStack par1ItemStack)
-//  {
-//  return "Upgrade" + String.valueOf(par1ItemStack.getItemDamage()); 
-//  }
 }

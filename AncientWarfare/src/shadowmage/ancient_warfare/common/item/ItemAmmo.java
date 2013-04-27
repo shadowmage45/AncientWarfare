@@ -20,8 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.texture.IconRegister;
+import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public class ItemAmmo extends AWItemBase
 {
@@ -34,20 +37,6 @@ public ItemAmmo(int itemID)
   {
   super(itemID, true);
   this.setCreativeTab(CreativeTabAW.ammoTab);
-//  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/items.png");
-//  this.setItemName("awAmmo");
   }
-
-//@Override
-//public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
-//  {
-//  return stack.getItemDamage();
-//  }
-//
-//@Override
-//public String getItemNameIS(ItemStack par1ItemStack)
-//  {
-//  return "Ammo" + String.valueOf(par1ItemStack.getItemDamage()); 
-//  }
 
 }

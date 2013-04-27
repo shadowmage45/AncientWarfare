@@ -29,6 +29,7 @@ public abstract int getGlobalArmorType();
 
 public abstract String getDisplayName();
 public abstract String getDisplayTooltip();
+public abstract String getIconTexture();
 
 public abstract float getGeneralDamageReduction();
 public abstract float getExplosiveDamageReduction();

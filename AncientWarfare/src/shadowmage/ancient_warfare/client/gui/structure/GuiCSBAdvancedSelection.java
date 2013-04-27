@@ -25,6 +25,7 @@ import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
 
 /**
@@ -64,7 +65,7 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  return "/shadowmage/ancient_warfare/resources/gui/guiBackgroundLarge.png";
+  return Config.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override

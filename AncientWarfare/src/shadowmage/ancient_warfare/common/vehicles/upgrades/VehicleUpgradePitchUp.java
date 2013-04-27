@@ -33,6 +33,7 @@ public VehicleUpgradePitchUp(int num)
   super(num);
   this.displayName = "Turret Wedge: +3";
   this.tooltip = "Increase pitch of vehicle turret by 3 degrees.";
+  this.iconTexture = "upgradePitchUp1";
   }
 
 @Override

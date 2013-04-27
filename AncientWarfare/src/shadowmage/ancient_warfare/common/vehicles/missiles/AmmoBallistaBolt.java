@@ -42,6 +42,7 @@ public AmmoBallistaBolt(int ammoType)
   this.isPersistent = true;
   this.displayName = "Ballista Bolt";  
   this.displayTooltip = "A large iron tipped wooden bolt.";  
+  this.iconTexture = "ammoArrow1";
   }
 
 @Override

@@ -44,15 +44,7 @@ public ItemNpcSpawner(int itemID)
   {
   super(itemID, true);
   this.setCreativeTab(CreativeTabAW.npcTab);
-//  this.setTextureFile("/shadowmage/ancient_warfare/resources/item/npcs.png");
-//  this.setItemName("awNpcItem");
   }
-
-//@Override
-//public String getItemNameIS(ItemStack par1ItemStack)
-//  {
-//  return "Npc" + String.valueOf(par1ItemStack.getItemDamage()); 
-//  }
 
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,    BlockPosition hit, int side)

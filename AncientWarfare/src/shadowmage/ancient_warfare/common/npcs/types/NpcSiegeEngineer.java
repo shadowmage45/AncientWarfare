@@ -55,6 +55,7 @@ public NpcSiegeEngineer(int type)
   this.displayName = "Siege Engineer";
   this.tooltip = "A siege-engineer, adept at using siege engines.";
   this.isCombatUnit = true;
+  this.iconTexture = "npcSiegeEngineer1";
   this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0));
   this.addLevel("Adept Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1));
   this.addLevel("Master Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2));  

@@ -50,14 +50,15 @@ int getInventorySize(int level);
  * @param level
  * @return
  */
-String getDisplayName(int level);
+String getDisplayName();
 
 /**
- * get the default itemTooltip to be used with this civic
- * @param level
+ * get the default itemTooltip to be used with this civic * 
  * @return
  */
-String getDisplayTooltip(int level);
+String getDisplayTooltip();
+
+String getIconTexture();
 
 /**
  * return a NEW itemstack for this civic

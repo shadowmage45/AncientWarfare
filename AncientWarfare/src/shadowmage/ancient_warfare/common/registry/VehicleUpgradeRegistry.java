@@ -27,6 +27,7 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeAim;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradePitchDown;
@@ -70,8 +71,7 @@ public void registerUpgrades()
   {
   this.registerUpgrade(speedUpgrade);
   this.registerUpgrade(aimUpgrade);
-  this.registerUpgrade(reloadUpgrade);
-  
+  this.registerUpgrade(reloadUpgrade);  
   this.registerUpgrade(powerUpgrade);
   this.registerUpgrade(pitchExtUpgrade);
   this.registerUpgrade(pitchUpUpgrade);
@@ -86,7 +86,9 @@ public void registerUpgrades()
 public void registerUpgrade(IVehicleUpgradeType upgrade)
   {  
   this.upgradeTypeMap.put(upgrade.getUpgradeGlobalTypeNum(), upgrade);
-  ItemLoader.instance().addSubtypeToItem(ItemLoader.vehicleUpgrade, upgrade.getUpgradeGlobalTypeNum(), upgrade.getDisplayName(), upgrade.getDisplayTooltip());
+  Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.vehicleUpgrade, upgrade.getUpgradeGlobalTypeNum(), upgrade.getDisplayName(), "", upgrade.getDisplayTooltip());
+  d.setIconTexture(upgrade.getIconTexture(), upgrade.getUpgradeGlobalTypeNum());
+  d.addDisplayStack(new ItemStack(ItemLoader.vehicleUpgrade,1,upgrade.getUpgradeGlobalTypeNum()));
   }
 
 public IVehicleUpgradeType getUpgrade(int type)

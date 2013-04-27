@@ -231,7 +231,7 @@ protected void drawQuadedTexture(int x, int y, int w, int h, int tw, int th, Str
   int halfH = h/2;  
   int u1 = u + tw - halfW;
   int v1 = v + th - halfH;
-  GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture(tex));
+  Minecraft.getMinecraft().renderEngine.bindTexture(tex);
   GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
   this.drawTexturedModalRect(x, y, u, v, halfW, halfH);
   this.drawTexturedModalRect(x + halfW, y, u1, v, halfW, halfH);

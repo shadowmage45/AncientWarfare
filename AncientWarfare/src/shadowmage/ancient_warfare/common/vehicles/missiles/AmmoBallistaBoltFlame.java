@@ -42,7 +42,8 @@ public AmmoBallistaBoltFlame(int ammoType)
   this.isPersistent = true;
   this.isFlaming = true;
   this.displayName = "Flame Ballista Bolt";  
-  this.displayTooltip = "A large iron tipped wooden bolt soaked in flammable resin.";  
+  this.displayTooltip = "A large iron tipped wooden bolt soaked in flammable resin."; 
+  this.iconTexture = "ammoArrowFlame1";
   }
 
 @Override

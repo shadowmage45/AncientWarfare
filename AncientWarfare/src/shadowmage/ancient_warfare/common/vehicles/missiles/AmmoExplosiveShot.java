@@ -43,7 +43,16 @@ public AmmoExplosiveShot(int ammoType, int weight, boolean bigExplosion)
   this.entityDamage = weight;
   this.vehicleDamage = weight;
   float scaleFactor = weight + 45.f;
-  this.renderScale = ( weight / scaleFactor ) * 2; 
+  this.renderScale = ( weight / scaleFactor ) * 2;
+  
+  if(bigExplosion)
+    {
+    this.iconTexture = "ammoHE1";
+    }
+  else
+    {
+    this.iconTexture = "ammoExplosive1";
+    }
   }
 
 @Override

@@ -17,42 +17,20 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
-package shadowmage.ancient_warfare.common.registry.entry;
+package shadowmage.ancient_warfare.common.item;
 
-import net.minecraft.item.ItemStack;
-
-/**
- * @author Shadowmage
- * lightweight wrapper for the base information to make up an item
- */
-public class ItemIDPair
+public class ItemComponent extends AWItemBase
 {
 
-public ItemIDPair(int id, int dmg, boolean subType)
+/**
+ * @param itemID
+ * @param hasSubTypes
+ */
+public ItemComponent(int itemID, boolean hasSubTypes)
   {
-  this.itemID = id;
-  this.dmg = dmg;  
-  this.hasSubTypes = subType;
-  }
-public int itemID;
-public int dmg;
-public boolean hasSubTypes = false;
-
-public boolean equals (ItemStack stack)
-  {
-  return itemID==stack.itemID && dmg==stack.getItemDamage();
+  super(itemID, hasSubTypes);
+  // TODO Auto-generated constructor stub
   }
 
-public boolean equals (ItemIDPair pair)
-  {
-  return pair.itemID==this.itemID && pair.dmg ==this.dmg;
-  }
-
-public boolean equals (int id, int dmg)
-  {
-  return this.itemID==id && this.dmg==dmg;
-  }
 }

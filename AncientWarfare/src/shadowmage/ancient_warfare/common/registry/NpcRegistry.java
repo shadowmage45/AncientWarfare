@@ -38,6 +38,7 @@ import shadowmage.ancient_warfare.common.npcs.types.NpcFootsoldier;
 import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcSoldierTest;
 import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 
 
 public class NpcRegistry
@@ -70,7 +71,8 @@ public void registerNPCs()
   for(INpcType type : types)
     {
     if(type==null || type.getGlobalNpcType()==0){continue;}//if null or dummy type, don't register....
-    ItemLoader.instance().addSubtypeToItem(ItemLoader.npcSpawner, type.getGlobalNpcType(), type.getDisplayName(), type.getDisplayTooltip());
+    Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.npcSpawner, type.getGlobalNpcType(), type.getDisplayName(), "", type.getDisplayTooltip());
+    d.setIconTexture(type.getIconTexture(), type.getGlobalNpcType());
     } 
   }
 

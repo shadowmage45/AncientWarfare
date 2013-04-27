@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.armors;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 
@@ -30,6 +31,7 @@ public abstract class VehicleArmorBase implements IVehicleArmorType
 int armorType = 0;
 String displayName = "";
 String tooltip = "";
+String iconTexture = "foo.png";
 float general = 0.f;
 float explosive = 0.f;
 float fire = 0.f;
@@ -86,5 +88,11 @@ public float getArmorWeight()
 public ItemStack getArmorStack(int qty)
   {
   return new ItemStack(ItemLoader.armorItem.itemID, qty, armorType);
+  }
+
+@Override
+public String getIconTexture()
+  {
+  return "ancientwarfare:armor/"+iconTexture;
   }
 }

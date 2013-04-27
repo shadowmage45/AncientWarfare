@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import net.minecraft.util.Icon;
 import shadowmage.ancient_warfare.common.config.Config;
 
 public class VehicleTypeBallistaMobile extends VehicleTypeBallista
@@ -72,5 +73,6 @@ public String getTextureForMaterialLevel(int level)
     return Config.texturePath + "models/ballistaMobile1.png";
     }
   }
+
 
 }

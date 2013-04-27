@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
@@ -99,6 +100,8 @@ public abstract List<ItemStack> getAdditionalMaterials();//get a list of additio
 public abstract ItemStack getStackForLevel(int level);
 
 public abstract IAmmoType getAmmoForSoldierRank(int rank);//what ammo type should soldiers use if !Config.soldiersUseAmmo
+
+public abstract String getIconTexture();  
 
 public abstract VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh);
 }

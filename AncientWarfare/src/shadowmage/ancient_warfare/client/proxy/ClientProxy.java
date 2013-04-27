@@ -78,8 +78,6 @@ public void registerClientData()
    */
   MinecraftForge.EVENT_BUS.register(AWRenderHelper.instance());
   
-  MinecraftForgeClient.preloadTexture("/shadowmage/ancient_warfare/resources/block/blocks.png");
-  //TODO preload all textures...pass off to rendermanager...
   }
 
 }

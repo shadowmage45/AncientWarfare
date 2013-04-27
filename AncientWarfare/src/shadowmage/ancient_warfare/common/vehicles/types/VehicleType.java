@@ -27,7 +27,9 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -118,6 +120,8 @@ int armorBaySize = 3;
 
 public int materialCount = 1;
 public List<ItemStack> additionalMaterials = new ArrayList<ItemStack>();
+
+String iconTexture = "foo.png";
 
 public VehicleType(int typeNum)
   {
@@ -476,4 +480,9 @@ public float getTurretPosZ()
   return turretForwardsOffset;
   }
 
+@Override
+public String getIconTexture()
+  {
+  return "ancientwarfare:vehicle/"+iconTexture;
+  }
 }

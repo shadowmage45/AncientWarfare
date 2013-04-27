@@ -34,6 +34,7 @@ public VehicleArmorStone(int armorType)
   this.general = 2.5f;
   this.explosive = 2.5f;
   this.fire = 7;
+  this.iconTexture = "armorStone1";
   }
 
 

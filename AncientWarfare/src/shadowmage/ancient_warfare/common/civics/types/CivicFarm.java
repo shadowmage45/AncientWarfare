@@ -28,7 +28,7 @@ public class CivicFarm extends Civic
 /**
  * @param id
  */
-public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSiteFarm> teClass)
+public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSiteFarm> teClass, String iconTex)
   {
   super(id);
   this.isWorkSite = true;
@@ -37,6 +37,7 @@ public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite
   this.ranks = 3;
   this.teClass = teClass;
   this.inventorySize = 9;
+  this.iconTexture = iconTex;
   }
 
 }

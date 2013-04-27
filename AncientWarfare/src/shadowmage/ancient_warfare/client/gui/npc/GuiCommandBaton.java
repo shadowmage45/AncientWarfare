@@ -26,6 +26,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
@@ -65,7 +66,7 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  return "/shadowmage/ancient_warfare/resources/gui/guiBackgroundLarge.png";
+  return Config.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override

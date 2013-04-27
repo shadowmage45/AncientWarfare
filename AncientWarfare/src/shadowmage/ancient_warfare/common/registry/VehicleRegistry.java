@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.registry;
 
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobile;
@@ -81,11 +82,12 @@ public static VehicleRegistry instance()
 
 public void registerVehicles()
   {
+  Description d = null;
   for(IVehicleType vehicle : VehicleType.vehicleTypes)
     {
     if(vehicle!=null)
       {
-      ItemLoader.instance().addSubtypeToItem(ItemLoader.vehicleSpawner, vehicle.getGlobalVehicleType(), vehicle.getDisplayName(), vehicle.getDisplayTooltip());
+      d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.vehicleSpawner, vehicle.getGlobalVehicleType(), vehicle.getDisplayName(), "",vehicle.getDisplayTooltip());
       }
     }  
   }

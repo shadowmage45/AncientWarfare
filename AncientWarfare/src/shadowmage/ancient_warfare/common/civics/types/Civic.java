@@ -35,9 +35,9 @@ public class Civic implements ICivicType
 
 public static final Civic[] civicList = new Civic[64];
 
-public static ICivicType wheatFarm = new CivicFarm(0, "Wheat Farm", "A place for workers to tend and harvest Wheat", TEFarmWheat.class);
-public static ICivicType carrotFarm = new CivicFarm(1, "Carrot Farm", "A place for workers to tend and harvest Carrot", TEFarmCarrot.class);
-public static ICivicType potatoFarm = new CivicFarm(2, "Potato Farm", "A place for workers to tend and harvest Potato", TEFarmPotato.class);
+public static ICivicType wheatFarm = new CivicFarm(0, "Wheat Farm", "A place for workers to tend and harvest Wheat", TEFarmWheat.class, "civicFarmWheat1");
+public static ICivicType carrotFarm = new CivicFarm(1, "Carrot Farm", "A place for workers to tend and harvest Carrot", TEFarmCarrot.class, "civicFarmCarrot1");
+public static ICivicType potatoFarm = new CivicFarm(2, "Potato Farm", "A place for workers to tend and harvest Potato", TEFarmPotato.class, "civicFarmPotato1");
 //need melon
 //need pumpkin
 //need cactus
@@ -51,6 +51,7 @@ public static ICivicType mineBasic = new CivicMine(10, "Basic Layout Mine", "A m
 protected int globalID = 0;
 protected String name = "";
 protected String tooltip = "";
+protected String iconTexture = "";
 protected int ranks = 1;
 protected int maxWorkers = 1;
 protected int workSizeMaxHorizontal = 10;
@@ -83,13 +84,19 @@ public int getGlobalID()
   }
 
 @Override
-public String getDisplayName(int level)
+public String getIconTexture()
+  {
+  return "ancientwarfare:civic/"+iconTexture;
+  }
+
+@Override
+public String getDisplayName()
   {
   return name;
   }
 
 @Override
-public String getDisplayTooltip(int level)
+public String getDisplayTooltip()
   {
   return tooltip;
   }
@@ -136,7 +143,6 @@ public ItemStack getItemToConstruct(int rank)
   {
   ItemStack item = new ItemStack(ItemLoader.civicPlacer,1);
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setInteger("type", getGlobalID());
   tag.setInteger("rank", rank);
   item.setTagInfo("civicInfo", tag);
   return item;

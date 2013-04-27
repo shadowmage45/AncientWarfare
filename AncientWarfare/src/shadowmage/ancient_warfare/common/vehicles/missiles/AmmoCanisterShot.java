@@ -38,6 +38,7 @@ public AmmoCanisterShot(int ammoType, int weight)
   this.displayTooltip = weight+"kg of small ammunition in a canister with an explosive charge.";
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
+  this.iconTexture = "ammoCluster1";
   }
 
 @Override

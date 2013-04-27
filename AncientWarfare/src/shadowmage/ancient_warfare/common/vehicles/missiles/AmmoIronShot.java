@@ -40,6 +40,7 @@ public AmmoIronShot(int ammoType, int weight, int damage)
   this.vehicleDamage = damage;
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
+  this.iconTexture = "ammoStone1";
   }
 
 @Override

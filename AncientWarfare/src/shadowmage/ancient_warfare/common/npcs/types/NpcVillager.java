@@ -41,6 +41,7 @@ public NpcVillager(int type)
   this.displayName = "Villager";
   this.tooltip = "Spawns a Villager when used.";
   this.isVanillaVillager = true;
+  this.iconTexture = "npcVillager";
   this.addLevel("Farmer", "", null, null);
   this.addLevel("Librarian", "", null, null);
   this.addLevel("Priest", "", null, null);

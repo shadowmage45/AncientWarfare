@@ -20,13 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.AWItemBase;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
@@ -68,6 +71,20 @@ public void registerAmmoTypes()
 //  this.registerAmmoTypeWithItem(Ammo.ammoRocket);
   }
 
+public List<IAmmoType> getAmmoTypes()
+  {
+  List<IAmmoType> ammosList = new ArrayList<IAmmoType>();
+  for(Integer key : this.ammoInstances.keySet())
+    {
+    IAmmoType t = this.ammoInstances.get(key);
+    if(t!=null)
+      {
+      ammosList.add(t);
+      }
+    }
+  return ammosList;
+  } 
+
 /**
  * used by structure gen to fill get ammo types to fill vehicles with
  * @param type
@@ -81,7 +98,9 @@ public IAmmoType getAmmoEntry(int type)
 public void registerAmmoTypeWithItem(IAmmoType ammo)
   {
   AWItemBase item = ItemLoader.ammoItem; 
-  ItemLoader.instance().addSubtypeToItem(item, ammo.getAmmoType(), ammo.getDisplayName(), ammo.getDisplayTooltip()); 
+  Description d = ItemLoader.instance().addSubtypeInfoToItem(item, ammo.getAmmoType(), ammo.getDisplayName(), "", ammo.getDisplayTooltip());
+  d.addDisplayStack(ammo.getDisplayStack());
+  d.setIconTexture(ammo.getIconTexture(), ammo.getAmmoType());
   this.registerAmmoType(ammo);
   }
 

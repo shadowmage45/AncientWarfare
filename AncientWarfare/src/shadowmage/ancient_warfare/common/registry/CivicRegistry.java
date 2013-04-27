@@ -25,13 +25,15 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.utils.BlockLoader;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 /**
  * map civic Blocks and TEs to the item damage/rank for the spawner item
@@ -60,17 +62,11 @@ public static CivicRegistry instance()
  */
 public void registerCivics()
   {  
-  ItemStack regStack = null;
   for(Civic civ : Civic.civicList)
     {
-    if(civ!=null)
-      {
-      for(int i = 0; i < civ.getNumOfRanks(); i++)
-        {
-        regStack = civ.getDisplayItem(i);
-        LanguageRegistry.instance().addName(regStack, civ.getDisplayName(i));
-        }
-      }
+	  if(civ==null){continue;}
+    Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.civicPlacer, civ.getGlobalID(), civ.getDisplayName(), "", civ.getDisplayTooltip());
+    d.setIconTexture(civ.getIconTexture(), civ.getGlobalID());    
     }
   }
 
@@ -133,7 +129,7 @@ public TileEntity getTEFor(World world, int type)
       Civic civ = getCivicFor(type);
       if(civ!=null && civ.getTileEntityClass()!=null)
         {
-    	  Config.logDebug(civ.getDisplayName(0) + " -- " +civ.getTileEntityClass());
+    	  Config.logDebug(civ.getDisplayName() + " -- " +civ.getDisplayTooltip());
         te = civ.getTileEntityClass().newInstance();
         }      
       if(te!=null)      
@@ -166,7 +162,12 @@ public List<ItemStack> getDisplayStacks()
       {
       for(int i = 0; i < civ.getNumOfRanks(); i++)
         {
-        displayStacks.add(civ.getDisplayItem(i));
+        ItemStack displayStack = new ItemStack(ItemLoader.civicPlacer,1,civ.getGlobalID());
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setInteger("rank", i);
+        displayStack.setTagInfo("civicInfo", tag);
+        displayStacks.add(displayStack);
+//        displayStacks.add(civ.getDisplayItem(i));
         }
       }
     }

@@ -46,37 +46,22 @@ public ItemCivicPlacer(int itemID)
   super(itemID, true);
   }
 
-//@Override
-//public String getItemNameIS(ItemStack par1ItemStack)
-//  {
-//  if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("civicInfo"))
-//    {
-//    Civic civ = CivicRegistry.instance().getCivicFor(par1ItemStack.getTagCompound().getCompoundTag("civicInfo").getInteger("type"));
-//    if(civ!=null)
-//      {
-//      return civ.getDisplayName(par1ItemStack.getTagCompound().getCompoundTag("civicInfo").getInteger("rank"));
-//      }
-//    }
-//  return "Civic" + String.valueOf(par1ItemStack.getItemDamage()); 
-//  }
-
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
-  //super.addInformation(stack, player, list, par4);
+  super.addInformation(stack, player, list, par4);
   if(stack!=null)
     {
     if(stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
       {
       NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
-      if(tag.hasKey("type") && tag.hasKey("rank"))
+      if(tag.hasKey("rank"))
         {
-        int type = tag.getInteger("type");
+        int type = stack.getItemDamage();
         int rank = tag.getInteger("rank");
         Civic civ = CivicRegistry.instance().getCivicFor(type);        
         if(civ!=null)          
           {
-          list.add(civ.getDisplayTooltip(rank));
           list.add(("Structure Rank: "+rank));  
           if(tag.hasKey("pos2"))
             {
@@ -121,7 +106,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   if(hit!=null && stack!=null && stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
     {
     NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
-    if(tag.hasKey("pos2") && tag.hasKey("pos1") && tag.hasKey("rank") && tag.hasKey("type"))
+    if(tag.hasKey("pos2") && tag.hasKey("pos1") && tag.hasKey("rank"))
       {
       BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
       BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
@@ -129,7 +114,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       //TODO//make sure that the control block position is adjacent/inside work bounds.
       if(true)
         {
-        placeCivicBlock(world, hit, pos1, pos2,  tag.getInteger("type"), tag.getInteger("rank"));
+        placeCivicBlock(world, hit, pos1, pos2,  stack.getItemDamage(), tag.getInteger("rank"));
         ItemStack item = player.getCurrentEquippedItem();
         if(item!=null && item.itemID == ItemLoader.civicPlacer.itemID)
           {
@@ -144,7 +129,6 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
           else
             {
             NBTTagCompound newtag = new NBTTagCompound();
-            newtag.setInteger("type", tag.getInteger("type"));
             newtag.setInteger("rank", tag.getInteger("rank"));
             stack.setTagInfo("civicInfo", newtag);
             player.openContainer.detectAndSendChanges();
@@ -159,7 +143,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     else if(tag.hasKey("pos1"))
       {
       BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
-      Civic civ = CivicRegistry.instance().getCivicFor(tag.getInteger("type"));
+      Civic civ = CivicRegistry.instance().getCivicFor(stack.getItemDamage());
       int rank = tag.getInteger("rank");
       if(civ!=null)
         {

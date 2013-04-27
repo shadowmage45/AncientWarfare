@@ -20,11 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
@@ -40,7 +42,6 @@ public ItemBlockScanner(int itemID)
   super(itemID, false);
   this.setMaxStackSize(1);
   this.setMaxDamage(0);
-//  this.setIconIndex(1);
   }
 
 @Override
@@ -61,15 +62,6 @@ public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par
   {
   return false;
   }
-
-///**
-// * Gets an icon index based on an item's damage value
-// */
-//@Override
-//public Icon getIconFromDamage(int par1)
-//  {
-//  return this.iconIndex;
-//  }
 
 /**
  * the actual onActivated call, all rightclick/onUsed/onUse functions funnel through to here.
@@ -93,5 +85,6 @@ private boolean onActivated(World world, EntityPlayer player, ItemStack stack, B
   Config.logDebug("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation+" player yaw: "+player.rotationYaw);
   return true;
   }
+
 
 }

@@ -33,6 +33,7 @@ public VehicleUpgradeTurretPitch(int num)
   super(num);
   this.displayName = "Turret Pitch Range Extender";
   this.tooltip = "Expands the available pitch range on a pitch-adjustable vehicle by 3 degrees";
+  this.iconTexture = "upgradePitch1";
   }
 
 @Override

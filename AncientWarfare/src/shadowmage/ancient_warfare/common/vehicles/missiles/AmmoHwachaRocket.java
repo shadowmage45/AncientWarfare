@@ -45,6 +45,7 @@ public AmmoHwachaRocket(int ammoType)
   this.isRocket = true;
   this.ammoWeight = 1.f;
   this.renderScale = 0.2f;
+  this.iconTexture = "ammoRocket1";
   }
 
 @Override

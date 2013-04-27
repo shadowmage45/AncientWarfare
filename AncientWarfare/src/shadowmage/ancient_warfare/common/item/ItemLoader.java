@@ -22,10 +22,9 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.DescriptionRegistry;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 
 public class ItemLoader
 {
@@ -36,7 +35,7 @@ public class ItemLoader
 public static final AWItemBase vehicleUpgrade = new ItemVehicleUpgrade(Config.getItemID("itemMulti.vehicleUpgrade", 13001, "Base item for all vehicle upgrades"));
 public static final AWItemBase ammoItem = new ItemAmmo(Config.getItemID("itemMulti.vehicleAmmo", 13002, "Base item for all vehicle ammunition types"));
 public static final AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 13003, "Base item for all vehicle-spawning items"));
-public static final AWItemBase componentItem = new AWItemBase(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
+public static final AWItemBase componentItem = new ItemComponent(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
 public static final AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 13005, "Item used to scan structures"));
 public static final AWItemBase structureCreativeBuilder = new ItemBuilderInstant(Config.getItemID("itemSingle.structureBuilderCreative", 13006, "Creative-Mode Selectable Structure Builder"));
 public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Config.getItemID("itemSingle.builderDirect", 13007, "Survival mode builder, uses blocks from inventory"));
@@ -78,23 +77,23 @@ public void load()
 
 private void loadItems()
   {  
-  this.registerItemSingle(structureCreativeBuilderTicked, "Creative Builder Ticked", "Creative Mode Building Tool with Builder Block", "Right-Click to Use, Sneak+Right-Click to open GUI");
-  this.registerItemSingle(structureScanner, "Structure Scanner", "Structure Scanner", "Structure Scanning Item, Right-Click to Use");
-  this.registerItemSingle(structureCreativeBuilder, "Creative Builder", "Creative Mode Building Tool", "Right-Click to Build, Sneak+Right-Click to open GUI");
-  this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Right-Click to Scan, and then Build");
-  this.registerItemSingle(structureEditor, "Structure Editor", "Structure Template Editor", "Right-Click to open editor selection GUI");
-  this.registerItemWithSubtypes(componentItem);
-  this.registerItemWithSubtypes(ammoItem);
-  this.registerItemWithSubtypes(vehicleSpawner);
-  this.registerItemWithSubtypes(vehicleUpgrade);
-  this.registerItemWithSubtypes(armorItem);
-  this.registerItemWithSubtypes(npcSpawner);
-  this.registerItemWithSubtypes(npcCommandBaton);
-  this.addSubtypeToItem(npcCommandBaton, 0, "Simple Command Baton", "Issues simple commands to a single npc");
-  this.addSubtypeToItem(npcCommandBaton, 1, "Adept Command Baton", "Issues advanced commands to a single npc");
-  this.addSubtypeToItem(npcCommandBaton, 2, "Expert Command Baton", "Issues simple commands to several npcs, or advanced commands to a single npc");
-  this.addSubtypeToItem(npcCommandBaton, 3, "Master Command Baton", "Issues advanced commands to several npcs");
-  this.registerItemWithSubtypes(civicPlacer);
+  this.registerItemSingle(structureCreativeBuilderTicked, "Creative Builder Ticked", "Creative Mode Building Tool with Builder Block", "Right-Click to Use, Sneak+Right-Click to open GUI").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  this.registerItemSingle(structureScanner, "Structure Scanner", "Structure Scanner", "Structure Scanning Item, Right-Click to Use").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
+  this.registerItemSingle(structureCreativeBuilder, "Creative Builder", "Creative Mode Building Tool", "Right-Click to Build, Sneak+Right-Click to open GUI").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Right-Click to Scan, and then Build").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
+  this.registerItemSingle(structureEditor, "Structure Editor", "Structure Template Editor", "Right-Click to open editor selection GUI").setIconTexture("ancientwarfare:builder/testIcon1", 0);
+  this.registerItemSubtyped(componentItem);
+  this.registerItemSubtyped(ammoItem);
+  this.registerItemSubtyped(vehicleSpawner);
+  this.registerItemSubtyped(vehicleUpgrade);
+  this.registerItemSubtyped(armorItem);
+  this.registerItemSubtyped(npcSpawner);
+  this.registerItemSubtyped(npcCommandBaton);
+  this.addSubtypeInfoToItem(npcCommandBaton, 0, "Simple Command Baton", "","Issues simple commands to a single npc");
+  this.addSubtypeInfoToItem(npcCommandBaton, 1, "Adept Command Baton", "","Issues advanced commands to a single npc");
+  this.addSubtypeInfoToItem(npcCommandBaton, 2, "Expert Command Baton", "","Issues simple commands to several npcs, or advanced commands to a single npc");
+  this.addSubtypeInfoToItem(npcCommandBaton, 3, "Master Command Baton", "","Issues advanced commands to several npcs");
+  this.registerItemSubtyped(civicPlacer);
   }
 
 private void loadRecipes()
@@ -109,46 +108,31 @@ private void loadDebugItems()
     return;
     }  
   blockScanner = new ItemBlockScanner(Config.getItemID("debug.blockScanner", 9000));
-  this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block");
+  this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block").setIconTexture("ancientwarfare:testIcon1", 0);
   }
 
-private ItemStack createItemSubtype(AWItemBase item, int dmg, String name)
+public Description registerItemSubtyped(AWItemBase item)
   {
-  this.addSubtypeToItem(item, dmg, name);
-  return new ItemStack(item.itemID,1,dmg);
+  Description d = DescriptionRegistry2.instance().registerItem(item, false);
+  return d;
   }
 
-private void registerItemSingle(Item item, String name)
+public Description registerItemSingle(AWItemBase item, String name, String desc, String tip)
   {
-  this.registerItemSingle(item, name, "");
+  Description d = DescriptionRegistry2.instance().registerItem(item, true);
+  d.setName(name, 0);
+  d.setDescription(desc, 0);
+  d.setTooltip(tip, 0);  
+  return d;
   }
 
-private void registerItemSingle(Item item, String name, String description)
+public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name, String desc, String tooltip)
   {
-  DescriptionRegistry.instance().registerItemSingle(item, name, description);
-  }
-
-private void registerItemSingle(Item item, String name, String description, String tooltip)
-  {
-  this.registerItemSingle(item, name, description);
-  DescriptionRegistry.instance().setToolTip(item.itemID, tooltip);
-  }
-
-private void registerItemWithSubtypes(Item item)
-  {
-  DescriptionRegistry.instance().registerItemWithSubtypes(item.itemID);
-  }
-
-private void addSubtypeToItem(AWItemBase item, int dmg, String name)
-  {
-  item.addSubType(new ItemStack(item.itemID,1,dmg));
-  DescriptionRegistry.instance().addSubtypeToItem(item.itemID, dmg, name);
-  }
-
-public void addSubtypeToItem(AWItemBase item, int dmg, String name, String tooltip)
-  {
-  this.addSubtypeToItem(item, dmg, name);
-  DescriptionRegistry.instance().setTooltip(item.itemID, dmg, tooltip);
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(item.itemID);
+  d.setName(name, damage);
+  d.setDescription(desc, damage);
+  d.setTooltip(tooltip, damage);  
+  return d;
   }
 
 }

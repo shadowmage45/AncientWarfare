@@ -29,7 +29,7 @@ public interface IVehicleUpgradeType
 public abstract int getUpgradeGlobalTypeNum();
 public abstract String getDisplayName();
 public abstract String getDisplayTooltip();
-
+public abstract String getIconTexture();
 public abstract void applyVehicleEffects(VehicleBase vehicle);
 
 public abstract ItemStack getUpgradeStack(int qty);

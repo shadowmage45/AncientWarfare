@@ -45,6 +45,7 @@ public NpcSoldierTest(int type)
   super(type);
   this.displayName = "Npc Test";
   this.tooltip = "Test Npc for Worker Functions";
+  this.iconTexture = "npcWorker1";
   this.addLevel("Soldier Rank 0", Config.texturePath + "models/npcDefault.png", null, null);
   this.addLevel("Soldier Rank 1", Config.texturePath + "models/npcDefault.png", null, null);
   this.addLevel("Soldier Rank 2", Config.texturePath + "models/npcDefault.png", null, null);

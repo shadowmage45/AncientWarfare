@@ -361,7 +361,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     }
   if(this.inventorySlots.inventorySlots.size()>0)
     {
-    tex = "/shadowmage/ancient_warfare/resources/gui/guiButtons.png";
+    tex = Config.texturePath+"gui/guiButtons.png";
     this.mc.renderEngine.bindTexture(tex);
     for(Object ob : this.inventorySlots.inventorySlots)    
       {      
@@ -679,7 +679,8 @@ protected void drawQuadedTexture(int x, int y, int w, int h, int tw, int th, Str
   int halfH = h/2;  
   int u1 = u + tw - halfW;
   int v1 = v + th - halfH;
-  GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture(tex));
+  Minecraft.getMinecraft().renderEngine.bindTexture(tex);
+//  GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture(tex));
   GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
   this.drawTexturedModalRect(x, y, u, v, halfW, halfH);
   this.drawTexturedModalRect(x + halfW, y, u1, v, halfW, halfH);

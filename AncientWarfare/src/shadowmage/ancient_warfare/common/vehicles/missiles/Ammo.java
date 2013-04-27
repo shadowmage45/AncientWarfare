@@ -65,9 +65,9 @@ public static Ammo ammoHE15 = new AmmoExplosiveShot(13,15,true);
 public static Ammo ammoHE30 = new AmmoExplosiveShot(14,30,true);
 public static Ammo ammoHE45 = new AmmoExplosiveShot(15,45,true);
 public static Ammo ammoNapalm10 = new AmmoNapalmShot(16,10);
-public static Ammo ammoNapalm15 = new AmmoNapalmShot(16,15);
-public static Ammo ammoNapalm30 = new AmmoNapalmShot(16,30);
-public static Ammo ammoNapalm45 = new AmmoNapalmShot(16,45);
+public static Ammo ammoNapalm15 = new AmmoNapalmShot(17,15);
+public static Ammo ammoNapalm30 = new AmmoNapalmShot(18,30);
+public static Ammo ammoNapalm45 = new AmmoNapalmShot(19,45);
 public static Ammo ammoClusterShot10 = new AmmoClusterShot(20,10);
 public static Ammo ammoClusterShot15 = new AmmoClusterShot(21,15);
 public static Ammo ammoClusterShot30 = new AmmoClusterShot(22,30);
@@ -128,6 +128,7 @@ float ammoWeight = 10;
 float renderScale = 1.f;
 IAmmoType secondaryAmmoType = null;
 int secondaryAmmoCount = 0;
+String iconTexture = "foo.png";
 
 public Ammo(int ammoType)
   {
@@ -425,4 +426,9 @@ public MissileBase getMissileByType(IAmmoType type, World world, float x, float 
   return missile;
   }
 
+@Override
+public String getIconTexture()
+  {  
+  return "ancientwarfare:ammo/"+iconTexture;
+  }
 }

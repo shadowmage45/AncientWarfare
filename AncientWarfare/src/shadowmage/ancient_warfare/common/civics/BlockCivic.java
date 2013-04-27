@@ -43,12 +43,8 @@ int blockNum;
 public BlockCivic(int par1, String name, int blockNum)
   {
   super(par1, Material.rock);
-//  this.setTextureFile("/shadowmage/ancient_warfare/resources/block/blocks.png");
-//  this.isDefaultTexture = false;
-//  this.blockIndexInTexture = 0;
   this.setCreativeTab(CreativeTabAW.instance());
   this.setHardness(3.f);  
-//  this.setBlockName(name);
   this.blockNum = blockNum;
   }
 

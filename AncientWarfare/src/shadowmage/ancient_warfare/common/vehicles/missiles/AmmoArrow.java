@@ -39,6 +39,7 @@ public AmmoArrow(int ammoType)
   this.isPersistent = true;
   this.displayName = "Arrow";  
   this.displayTooltip = "A well-built heavy-duty arrow.";  
+  this.iconTexture = "ammoArrow1";
   }
 
 @Override
@@ -55,5 +56,6 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z, M
     ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());  
     }
   }
+
 
 }

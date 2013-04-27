@@ -34,6 +34,7 @@ public VehicleUpgradeSpeed(int num)
   super(num);
   this.displayName = "Iron Bearings";
   this.tooltip = "Increases Vehicle Max Speed by 0.25m/s";
+  this.iconTexture = "upgradeSpeed1";
   }
 
 @Override
