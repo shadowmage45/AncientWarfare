@@ -97,7 +97,6 @@ public Description setName(String name, int damage)
       {
       LanguageRegistry.addName(new ItemStack(block,1,damage), name);
       }   
-    LanguageRegistry.addName(new ItemStack(item,1,damage), name);
     }
   this.names.put(damage, name);
   return this;
@@ -198,7 +197,7 @@ public String getIconTexture(int damage)
     {
     return this.iconTextures.get(damage);
     }
-  return "foo.png";
+  return "foo";
   }
 
 public String getDisplayName(ItemStack stack)
@@ -223,7 +222,7 @@ public Icon getIconFor(ItemStack stack)
 
 public String getIconTextureFor(ItemStack stack)
   {
-  return stack== null ? "foo.png" : this.getIconTexture(stack.getItemDamage());
+  return stack== null ? "foo" : this.getIconTexture(stack.getItemDamage());
   }
 
 public Description addDisplayStack(ItemStack stack)
@@ -234,6 +233,7 @@ public Description addDisplayStack(ItemStack stack)
 
 public List<ItemStack> getDisplayStackCache()
   {
+  Config.logDebug("returning display stack cache for : " +this.getDisplayName(0));
   return this.displayStackCache;
   }
 

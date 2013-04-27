@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -53,7 +54,7 @@ public NpcTypeBase(int type)
 @Override
 public int getAttackDamage(int level)
   {
-  if(level>=0 && level<= this.levelEntries.size())
+  if(level>=0 && level< this.levelEntries.size())
     {
     return this.levelEntries.get(level).attackDamage;
     }
@@ -81,7 +82,7 @@ public String getDisplayName()
 @Override
 public float getRangedAttackDistance(int level)
   {
-  if(level>=0 && level<= this.levelEntries.size())
+  if(level>=0 && level< this.levelEntries.size())
     {
     return this.levelEntries.get(level).rangedAttackDistance;
     }
@@ -91,7 +92,7 @@ public float getRangedAttackDistance(int level)
 @Override
 public String getLevelName(int level)
   {
-  if(level>=0 && level<= this.levelEntries.size())
+  if(level>=0 && level< this.levelEntries.size())
     {
     return this.levelEntries.get(level).name;
     }
@@ -107,7 +108,7 @@ public String getDisplayTooltip()
 @Override
 public String getDisplayTexture(int level)
   {
-  if(level>=0 && level<= this.levelEntries.size())
+  if(level>=0 && level< this.levelEntries.size())
     {
     return this.levelEntries.get(level).texture;
     }
@@ -166,7 +167,7 @@ protected ItemStack[] getArmorStack(int level)
 @Override
 public int getMaxHealth(int level)
   {
-  if(level>=0 && level<= this.levelEntries.size())
+  if(level>=0 && level< this.levelEntries.size())
     {
     return this.levelEntries.get(level).health;
     }
@@ -182,7 +183,7 @@ public boolean isCombatUnit()
 @Override
 public int getInventorySize(int level)
   {
-  if(level>=0 && level<= this.levelEntries.size())
+  if(level>=0 && level< this.levelEntries.size())
     {
     return this.levelEntries.get(level).inventorySize;
     }
@@ -192,7 +193,7 @@ public int getInventorySize(int level)
 @Override
 public ItemStack getTool(int level)
   {
-  if(level>=0 && level<= this.levelEntries.size())
+  if(level>=0 && level< this.levelEntries.size())
     {
     return this.levelEntries.get(level).toolStack;
     }
@@ -202,9 +203,10 @@ public ItemStack getTool(int level)
 @Override
 public ItemStack[] getArmor(int level)
   {
-  if(level>=0 && level<= this.levelEntries.size())
+  if(level>=0 && level< this.levelEntries.size())
     {
-    return this.levelEntries.get(level).armorStacks;
+    Config.logDebug("returning armor from level entry");
+    return this.levelEntries.get(level).getArmorStacks();
     }
   return new ItemStack[4];
   }
@@ -212,7 +214,7 @@ public ItemStack[] getArmor(int level)
 @Override
 public IAmmoType getAmmoType(int level)
   {
-  if(level>=0 && level<= this.levelEntries.size())
+  if(level>=0 && level< this.levelEntries.size())
     {
     return this.levelEntries.get(level).ammo;
     }
@@ -222,7 +224,7 @@ public IAmmoType getAmmoType(int level)
 @Override
 public float getAccuracy(int level)
   {
-  if(level>=0 && level<= this.levelEntries.size())
+  if(level>=0 && level< this.levelEntries.size())
     {
     return this.levelEntries.get(level).accuracy;
     }

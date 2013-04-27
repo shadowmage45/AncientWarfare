@@ -50,7 +50,6 @@ public class ItemNpcCommandBaton extends AWItemClickable
 public ItemNpcCommandBaton(int itemID)
   {
   super(itemID, true);
-//  this.setItemName("npcCommandBaton");  
   this.maxStackSize = 1;
   }
 
@@ -88,15 +87,6 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
       {
       list.add("Range: "+tag.getInteger("rng"));
       }
-//    BatonSettings settings = getBatonSettings(stack);
-//    if(settings.hasEntity())
-//      {
-//      
-//      }
-//    if(settings.hasBlock)
-//      {
-//      list.add("Has target position");
-//      }    
     }
   else
     {
@@ -225,12 +215,6 @@ public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world,
   {
   return super.onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
   }
-
-//@Override
-//public String getItemNameIS(ItemStack par1ItemStack)
-//  {
-//  return "Baton" + String.valueOf(par1ItemStack.getItemDamage()); 
-//  }
 
 public BatonSettings getBatonSettings(ItemStack stack)
   {

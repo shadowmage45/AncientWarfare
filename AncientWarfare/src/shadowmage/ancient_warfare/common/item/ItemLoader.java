@@ -22,6 +22,7 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
@@ -89,10 +90,10 @@ private void loadItems()
   this.registerItemSubtyped(armorItem);
   this.registerItemSubtyped(npcSpawner);
   this.registerItemSubtyped(npcCommandBaton);
-  this.addSubtypeInfoToItem(npcCommandBaton, 0, "Simple Command Baton", "","Issues simple commands to a single npc");
-  this.addSubtypeInfoToItem(npcCommandBaton, 1, "Adept Command Baton", "","Issues advanced commands to a single npc");
-  this.addSubtypeInfoToItem(npcCommandBaton, 2, "Expert Command Baton", "","Issues simple commands to several npcs, or advanced commands to a single npc");
-  this.addSubtypeInfoToItem(npcCommandBaton, 3, "Master Command Baton", "","Issues advanced commands to several npcs");
+  this.addSubtypeInfoToItem(npcCommandBaton, 0, "Simple Command Baton", "","Issues simple commands to a single npc").addDisplayStack(new ItemStack(npcCommandBaton,1,0)).setIconTexture("ancientwarfare:npc/baton1", 0);
+  this.addSubtypeInfoToItem(npcCommandBaton, 1, "Adept Command Baton", "","Issues advanced commands to a single npc").addDisplayStack(new ItemStack(npcCommandBaton,1,1)).setIconTexture("ancientwarfare:npc/baton2", 1);
+  this.addSubtypeInfoToItem(npcCommandBaton, 2, "Expert Command Baton", "","Issues simple commands to several npcs, or advanced commands to a single npc").addDisplayStack(new ItemStack(npcCommandBaton,1,2)).setIconTexture("ancientwarfare:npc/baton3", 2);
+  this.addSubtypeInfoToItem(npcCommandBaton, 3, "Master Command Baton", "","Issues advanced commands to several npcs").addDisplayStack(new ItemStack(npcCommandBaton,1,3)).setIconTexture("ancientwarfare:npc/baton4", 3);
   this.registerItemSubtyped(civicPlacer);
   }
 

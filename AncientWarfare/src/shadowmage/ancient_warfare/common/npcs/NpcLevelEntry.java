@@ -24,22 +24,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public class NpcLevelEntry
 {
-ItemStack toolStack;
-ItemStack[] armorStacks = new ItemStack[4];
-String name;
-String texture;
-int attackDamage = 4;
-int rangedAttackDistance = 20;
-int health = 20;
-int inventorySize = 9;
-float accuracy = 1.f;
-IAmmoType ammo;//used for archers
-List<TargetType> validTargetTypes = new ArrayList<TargetType>();
+protected ItemStack toolStack;
+private ItemStack[] armorStacks = new ItemStack[4];
+protected String name;
+protected String texture;
+protected int attackDamage = 4;
+protected int rangedAttackDistance = 20;
+protected int health = 20;
+protected int inventorySize = 9;
+protected float accuracy = 1.f;
+protected IAmmoType ammo;//used for archers
+protected List<TargetType> validTargetTypes = new ArrayList<TargetType>();
 
 public NpcLevelEntry(String name, String tex)
   {
@@ -49,8 +50,9 @@ public NpcLevelEntry(String name, String tex)
 
 public NpcLevelEntry(String name, String tex, ItemStack tool, ItemStack[] armor)
   {
-  this(name, tex);
-  this.setTool(tool).setArmor(armor);
+  this(name, tex);  
+  this.setTool(tool);  
+  this.setArmor(armor);    
   }
 
 public NpcLevelEntry(String name, String tex, int damage, int health, float accuracy)
@@ -69,7 +71,10 @@ public NpcLevelEntry setTool(ItemStack tool)
 
 public NpcLevelEntry setArmor(ItemStack[] armor)
   {
-  this.armorStacks = armor;
+  if(armor!=null)
+    {
+    this.armorStacks = armor;
+    }
   return this;
   }
 
@@ -128,6 +133,15 @@ public NpcLevelEntry addTargetType(List<TargetType> l)
       }
     }
   return this;
+  }
+
+/**
+ * @return the armorStacks
+ */
+public ItemStack[] getArmorStacks()
+  {
+  Config.logDebug("returning level armor stacks : "+this.armorStacks);
+  return armorStacks;
   }
 
 }
