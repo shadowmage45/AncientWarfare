@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -51,6 +52,14 @@ public AmmoSoldierArrow(int ammoType, int damage, boolean flaming)
     {
     this.iconTexture = "ammoArrow1";
     }  
+  if(damage<=5)
+    {
+    this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
+    }
+  else
+    {
+    this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";    
+    }
   }
 
 @Override

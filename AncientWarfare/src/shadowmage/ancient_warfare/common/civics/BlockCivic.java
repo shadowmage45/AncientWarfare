@@ -21,17 +21,21 @@
 package shadowmage.ancient_warfare.common.civics;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.block.AWBlockContainer;
+import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.CreativeTabAW;
 import shadowmage.ancient_warfare.common.registry.CivicRegistry;
-import shadowmage.ancient_warfare.common.utils.BlockContainerSimpleSided;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 
-public class BlockCivic extends BlockContainerSimpleSided
+public class BlockCivic extends AWBlockContainer
 {
 
 int blockNum;
@@ -40,10 +44,10 @@ int blockNum;
  * @param par2
  * @param par3Material
  */
-public BlockCivic(int par1, String name, int blockNum)
+public BlockCivic(int par1, String baseName, int blockNum)
   {
-  super(par1, Material.rock);
-  this.setCreativeTab(CreativeTabAW.instance());
+  super(par1, Material.rock, baseName);
+  this.setCreativeTab(null);
   this.setHardness(3.f);  
   this.blockNum = blockNum;
   }
@@ -59,16 +63,11 @@ public static int getBlockTeam(World world, int x, int y, int z)
   }
 
 //@Override
-//public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
+//public void onBlockAdded(World par1World, int par2, int par3, int par4)
 //  {
-//
+//  Config.logDebug("setting te to block from onAdded:");
+//  par1World.setBlockTileEntity(par2, par3, par4, this.createTileEntity(par1World, par1World.getBlockMetadata(par2, par3, par4)));
 //  }
-
-@Override
-public void onBlockAdded(World par1World, int par2, int par3, int par4)
-  {
-  par1World.setBlockTileEntity(par2, par3, par4, this.createTileEntity(par1World, par1World.getBlockMetadata(par2, par3, par4)));
-  }
 
 @Override
 public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player, int sideHit, float hitVecX, float hitVecY,    float hitVecZ)
@@ -95,9 +94,54 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
 @Override
 public TileEntity getNewTileEntity(World world, int meta)
   {
-  TileEntity te = CivicRegistry.instance().getTEFor(world, blockNum*4+meta);
+  TileEntity te = CivicRegistry.instance().getTEFor(world, blockNum*4 + meta);
   Config.logDebug("civic block getting te for: "+blockNum+":"+meta+" calc: "+(blockNum*4+meta) + " client: "+world.isRemote);
   return te;
+  }
+
+@Override
+public void registerIcons(IconRegister reg, Description d)
+  {
+  Civic civ;
+  int civNum;
+  String iconNames[];
+  int iconID;
+  for(int i = 0; i < 16; i++)
+    {
+    civNum = this.blockNum*4 + i;
+    civ = CivicRegistry.instance().getCivicFor(i);    
+    if(civ!=null)
+      {
+      iconNames = civ.getIconNames();
+      iconID = i*3;//bottomID
+      d.setIcon(reg.registerIcon(iconNames[0]), iconID);
+      d.setIcon(reg.registerIcon(iconNames[1]), iconID+1);
+      d.setIcon(reg.registerIcon(iconNames[2]), iconID+2);
+      }
+    }
+  }
+
+@Override
+public Icon getIcon(int side, int meta)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
+  if(d!=null)
+    {
+    int iconID = meta*3;//bottomID
+    if(side==0)
+      {
+      return d.getIconFor(iconID);
+      }
+    else if(side==1)
+      {
+      return d.getIconFor(iconID+1);
+      }
+    else
+      {
+      return d.getIconFor(iconID+2);
+      }
+    }
+  return super.getIcon(side, meta);
   }
 
 }

@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -46,6 +47,7 @@ public AmmoHwachaRocketAirburst(int ammoType)
   this.ammoWeight = 1.4f;
   this.renderScale = 0.2f;
   this.iconTexture = "ammoRocketFlame1";
+  this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
   }
 
 @Override

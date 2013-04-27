@@ -24,12 +24,11 @@ package shadowmage.ancient_warfare.common;
 
 
 import java.io.IOException;
-import java.util.List;
 
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.chunkloading.ChunkLoader;
-import shadowmage.ancient_warfare.common.civics.worksite.te.mine.MineLevel;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -48,7 +47,6 @@ import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
-import shadowmage.ancient_warfare.common.utils.BlockLoader;
 import shadowmage.ancient_warfare.common.utils.ServerTickTimer;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;

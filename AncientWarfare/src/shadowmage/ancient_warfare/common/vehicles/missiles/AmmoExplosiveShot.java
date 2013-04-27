@@ -53,6 +53,7 @@ public AmmoExplosiveShot(int ammoType, int weight, boolean bigExplosion)
     {
     this.iconTexture = "ammoExplosive1";
     }
+  this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
   }
 
 @Override

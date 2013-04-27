@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -40,6 +41,7 @@ public AmmoArrow(int ammoType)
   this.displayName = "Arrow";  
   this.displayTooltip = "A well-built heavy-duty arrow.";  
   this.iconTexture = "ammoArrow1";
+  this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
   }
 
 @Override

@@ -28,12 +28,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
-import shadowmage.ancient_warfare.common.utils.BlockLoader;
 
 /**
  * map civic Blocks and TEs to the item damage/rank for the spawner item
@@ -75,12 +75,9 @@ public void setCivicBlock(World world, int x, int y, int z, int type, int rank)
   Block block = getBlockFor(type);
   if(block!=null)
     {
-    world.setBlock(x, y, z, block.blockID, type%16,3);
-    TECivic te = (TECivic) world.getBlockTileEntity(x, y, z);
-    if(te!=null)
-      {
-      te.setCivic(getCivicFor(type), rank);      
-      }
+    world.setBlock(x, y, z, block.blockID, type%16, 3);
+    TECivic te = (TECivic) world.getBlockTileEntity(x, y, z);    
+    te.setCivic(getCivicFor(type), rank);      
     }
   }
 

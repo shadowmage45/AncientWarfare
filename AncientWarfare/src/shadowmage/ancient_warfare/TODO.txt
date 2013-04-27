@@ -4,7 +4,7 @@ GENERAL
 * change inventoryTools to manipulate containers as well
 * partially destroyable blocks ? (hold destruction status as meta-data?)
 * move upgrades/ammo/armor over to self-registering class with an underlying array instead 
-        --of the map they currently use
+        --of the map they currently use        
 * grenades
 * land-mines
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
@@ -20,7 +20,8 @@ WORKSITES
 * work times are still inconsistent at best, need a solid way to set work time when NPC has started
         working (simple boolean isWorking flag, toggled false when moving, examined when working?)
 * need to invalidate work-site AND work-point (f'n all of it) from npc when it is destroyed
-* need toggle for rendering of bounding box         
+* need toggle for rendering of bounding box   
+* teleport worker to position if he can't path appropriately?      
         
 FARMS
 * needs cactus/melon/reed/mushroom types made
@@ -30,11 +31,12 @@ MINE
 * alternative mine-patterns
 * occasional complete rescan. will need to query workers for peices and remove duplicates from new pieces
     as well as transfer workers to  the same branch/piece that they left
+* clean up inventory handling/block use/etc
         
 PATHFINDING
 * entities should re-check the nodes in their path to make sure they are still viable nodes
 * onMovementTick -- check to see if either A:target is within Y diff && 1 x/z diff, or target is visible with LOS check -- else calc path back to target node, append to START of path
-* still need better handling of when target is intentionally a non-pathable block (such as many work-points)
+* still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
 
 VEHICLES    
 * need to get rocked when onHit
@@ -42,7 +44,7 @@ VEHICLES
 * ammo textures for all, and scaling on the arrow model?
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
 * ammo select GUI
-* modelRender for inventory ammo/icons
+* npc ammo selection
 
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
@@ -50,6 +52,8 @@ SOLDIERS
 * some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)
 * inter-soldier comms (more commanders yelling orders to soldiers)
 * need to set damage done by rank
+* vehicle riders need some work (turning)
+* need vehicle ammo set properly for riders (it seems to want to fire, but not actually fire anything)
 
 NPCS
 * resource search/seeking incremental algorithm (djk?)

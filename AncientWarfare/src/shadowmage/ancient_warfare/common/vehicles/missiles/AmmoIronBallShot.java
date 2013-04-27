@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -40,6 +41,7 @@ public AmmoIronBallShot(int ammoType)
   this.entityDamage = 8;
   this.vehicleDamage = 8;
   this.iconTexture = "ammoStone1";
+  this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
   }
 
 @Override

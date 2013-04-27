@@ -62,7 +62,7 @@ protected boolean isDwelling = false;
 protected Class<? extends TECivic> teClass;
 protected ItemStack[] displayStackCache = null;
 protected int inventorySize = 0;
-
+protected String[] iconNames = new String[]{"","",""};
 
 public Civic(int id)
   {
@@ -191,6 +191,12 @@ public int getMaxWorkSizeHeight(int level)
 public int getMaxWorkAreaCube(int level)
   {
   return this.getMaxWorkSizeWidth(level)*this.getMaxWorkSizeWidth(level)*this.getMaxWorkSizeHeight(level);
+  }
+
+@Override
+public String[] getIconNames()
+  {
+  return iconNames;
   }
 
 }

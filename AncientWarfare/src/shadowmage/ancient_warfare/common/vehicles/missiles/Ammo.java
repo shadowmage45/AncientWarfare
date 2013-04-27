@@ -128,7 +128,7 @@ float ammoWeight = 10;
 float renderScale = 1.f;
 IAmmoType secondaryAmmoType = null;
 int secondaryAmmoCount = 0;
-String iconTexture = "foo.png";
+String iconTexture = "foo";
 
 public Ammo(int ammoType)
   {

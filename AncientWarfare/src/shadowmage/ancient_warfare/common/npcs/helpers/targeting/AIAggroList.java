@@ -114,7 +114,7 @@ public ITargetEntry getHighestAggroTargetInRange(float range)
       bestEntry = entry;
       }
     }
-  return bestEntry.target;
+  return bestEntry==null ? null : bestEntry.target;
   }
 
 public ITargetEntry getHighestAggroTarget()

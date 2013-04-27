@@ -21,13 +21,16 @@
 package shadowmage.ancient_warfare.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.utils.BlockContainerSimpleSided;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 
-public class BlockBuilder extends BlockContainerSimpleSided
+public class BlockBuilder extends AWBlockContainer
 {
 /**
    * @param par1
@@ -35,9 +38,8 @@ public class BlockBuilder extends BlockContainerSimpleSided
    */
 public BlockBuilder(int par1)
   {
-  super(par1, Material.rock);
+  super(par1, Material.rock, "AWBuilderBlock");
   this.setCreativeTab(null);
-//  this.setBlockName("Structure Builder Block");
   }
 
 @Override
@@ -70,5 +72,41 @@ public TileEntity getNewTileEntity(World world, int meta)
   {
   return new TEBuilder();
   }
+
+@Override
+public void registerIcons(IconRegister reg, Description d)
+  {
+  d.setIcon(reg.registerIcon("ancientwarfare:builder/builderBottom"), 0);
+  d.setIcon(reg.registerIcon("ancientwarfare:builder/builderTop"), 1);
+  d.setIcon(reg.registerIcon("ancientwarfare:builder/builderFront"), 2);
+  d.setIcon(reg.registerIcon("ancientwarfare:builder/builderSides"), 3);
+  }
+
+@Override
+public Icon getIcon(int side, int meta)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
+  if(d!=null)
+    {
+    if(side==0)
+      {
+      return d.getIconFor(0);
+      }
+    else if (side==1)
+      {
+      return d.getIconFor(1);
+      }
+    else if(side==meta)
+      {
+      return d.getIconFor(2);
+      }
+    else
+      {
+      return d.getIconFor(3);
+      }
+    }
+  return super.getIcon(side, meta);
+  }
+
 
 }

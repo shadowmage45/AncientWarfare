@@ -38,6 +38,9 @@ public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite
   this.teClass = teClass;
   this.inventorySize = 9;
   this.iconTexture = iconTex;
+  this.iconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
+  this.iconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
+  this.iconNames[2] = "ancientwarfare:civic/civicFarmWheatSide";  
   }
 
 }

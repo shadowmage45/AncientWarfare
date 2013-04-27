@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -44,6 +45,7 @@ public class AmmoArrowFlame extends Ammo
     this.displayName = "Flame Arrow";  
     this.displayTooltip = "A well-built heavy-duty arrow with a head soaked in flammable resin.";  
     this.iconTexture = "ammoArrowFlame1";
+    this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
     }
 
 @Override

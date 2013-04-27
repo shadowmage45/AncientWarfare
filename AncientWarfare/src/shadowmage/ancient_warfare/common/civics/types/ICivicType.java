@@ -60,6 +60,8 @@ String getDisplayTooltip();
 
 String getIconTexture();
 
+String[] getIconNames();
+
 /**
  * return a NEW itemstack for this civic
  * @param level
