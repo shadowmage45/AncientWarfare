@@ -38,8 +38,6 @@ boolean singleAction = true;
 MineSubComponent owner;
 
 TargetType action = TargetType.NONE;
-//TargetType action = TargetType.NONE;//original action as designated when scanned
-//TargetType currentAction = TargetType.NONE;//current action needed, as designated by worked on/rescanned
 
 protected MinePoint(int x, int y, int z, int order, TargetType type)
   {
@@ -88,7 +86,8 @@ public boolean hasWork(World world)
   case MINE_TORCH:
   return world.getBlockId(x, y, z)!=Block.torchWood.blockID;
   case MINE_FILL:
-  return world.getBlockId(x, y, z)!=Block.cobblestone.blockID;
+  int id = world.getBlockId(x, y, z);
+  return id==0 || id==Block.waterMoving.blockID || id==Block.waterStill.blockID || id == Block.lavaMoving.blockID || id==Block.lavaStill.blockID;
   case MINE_CLEAR:
   return world.getBlockId(x, y, z)!=0;
   }

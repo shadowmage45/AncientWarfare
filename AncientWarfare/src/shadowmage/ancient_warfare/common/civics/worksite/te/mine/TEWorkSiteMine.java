@@ -93,11 +93,11 @@ public void updateEntity()
       this.initialized = true;
       this.loadLevel(0);      
       }
-//    if(!mineFinished && this.mineRescanTicks > Config.npcAITicks * 50)//250 ticks, 12 1/2 seconds...
-//      {
-//      Config.logDebug("INITIATING FULL MINE RESCAN");
-//      this.loadLevel(currentLevelNum);
-//      }
+    if(!mineFinished && this.mineRescanTicks > Config.npcAITicks * 50)//250 ticks, 12 1/2 seconds...
+      {
+      Config.logDebug("INITIATING FULL MINE RESCAN");
+      this.loadLevel(currentLevelNum);
+      }
     if(this.currentLevel!=null && !mineFinished && !this.currentLevel.hasWork())//load next level
       {
       Config.logDebug("loading next level");
@@ -134,7 +134,7 @@ public WorkPoint getWorkPoint(NpcBase npc)
     MinePoint p = this.currentLevel.getNextMinePoint(npc);
     if(p!=null)
       {
-      return new WorkPointMine(p);
+      return new WorkPointMine(xCoord, yCoord, zCoord, p);
       }
     }
   return null;

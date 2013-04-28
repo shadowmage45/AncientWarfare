@@ -127,25 +127,25 @@ public void handleBatonCommand(NpcCommand cmd, int x, int y, int z, int side)
   wayNav.setHomePoint(x, y, z);
   break;
   case WORK:
-  wayNav.setWorkSitePoint(x, y, z, side);
+  wayNav.setWorkSite(x, y, z);
   break;
   case PATROL:
   wayNav.addPatrolPoint(x, y, z);
   break;
   case DEPOSIT:
-  wayNav.setDepositPoint(x, y, z, side);
+  wayNav.setDepositSite(x, y, z, side);
   break;
   case CLEAR_HOME:
   wayNav.clearHomePoint();
   break;
   case CLEAR_WORK:
-  wayNav.clearWorkInfo();
+  wayNav.clearWorkSite();
   break;
   case CLEAR_PATROL:
   wayNav.clearPatrolPoints();
   break;
   case CLEAR_DEPOSIT:
-  wayNav.clearDepositPoint();
+  wayNav.clearDepositSite();
   break;
   }
   }
@@ -325,7 +325,6 @@ public void onUpdate()
   if(!this.worldObj.isRemote)
     {
     this.nav.onMovementUpdate();
-    this.wayNav.validateSites();
     }
   ITargetEntry target = this.wayNav.getTarget();
   if(target!=null)

@@ -40,4 +40,10 @@ public WorkPointMine(MinePoint point)
   this.minePoint = point;
   }
 
+public WorkPointMine(int x, int y, int z, MinePoint p)
+  {
+  super(x,y,z, p.action);
+  this.minePoint = p;
+  }
+
 }

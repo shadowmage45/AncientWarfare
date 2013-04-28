@@ -263,7 +263,7 @@ public void updateControls()
     }
   for(int i = 0; i < this.entry.nonHostileTeams.size(); i++)
     {
-    area3.addGuiElement(new GuiString(10000+i, area3, this.getXSize()/2-40, 8, "Team Num "+this.entry.nonHostileTeams.get(i)).updateRenderPos(5, 8*i));
+    area3.addGuiElement(new GuiString(10000+i, area3, this.getXSize()/2-40, 8, "Team Num "+this.entry.nonHostileTeams.get(i)).updateRenderPos(5, (2+8)*i));
     }
   }
 

@@ -8,9 +8,6 @@ GENERAL
 * land-mines
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 
-TEAM CONTROL GUI
-* needs hostile-teams setting area/buttons/whatnot     
-
 PATHFINDING
 * entities should re-check the nodes in their path to make sure they are still viable nodes
 * onMovementTick -- check to see if either A:target is within Y diff && 1 x/z diff, or target is visible with LOS check -- else calc path back to target node, append to START of path
@@ -20,7 +17,7 @@ VEHICLES
 * need to get rocked when onHit
 * napalm ammo
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
-* ammo select GUI
+* ammo select GUI (basic gui with scrollable of cols/rows of ammo choices -- display icon/name/count -- click to select)
 * switch over to new navigator
 
 SOLDIERS
@@ -49,6 +46,8 @@ GUI FRAMEWORK
 * put quaded texture rendering someplace central...
 * add an itemSlot element (not inventory slot...a client-side only slot that displays a static stack)
 * add tooltips to GUIs
+
+
 
 TESTING
 * test structure stuff extensively
@@ -148,6 +147,9 @@ CRAFTING
             making same type until materials run out
     UPGRADE AND ARMOR CRAFTING
  
+TEAM CONTROL GUI
+* DONE
+ 
 TWEAKS/OPTIMIZATION
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
 * optimize clearing code to not include inside bounds of structure
@@ -228,6 +230,7 @@ TWEAKS/OPTIMIZATION
 /********** 04-27-13 **********/
 * many more textures/icons/fixing of things from the port, probably many still unfound
 * needs adv control button to be dependent upon member rank (rank8+)
+* needs hostile-teams setting area/buttons/whatnot     
 /********** 04-28-13 **********/
 /********** 04-29-13 **********/
 /********** 04-30-13 **********/

@@ -28,7 +28,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class AIDepositGoods extends NpcAIObjective
@@ -55,7 +55,7 @@ public void addTasks()
 @Override
 public void updatePriority()
   {
-  if(npc.wayNav.getDepositPoint()==null)
+  if(npc.wayNav.getDepositSite()==null)
     {
     this.currentPriority = 0;
     this.cooldownTicks = this.maxCooldownticks;
@@ -64,12 +64,11 @@ public void updatePriority()
   else
     {
 //    Config.logDebug("had deposit site, validating");
-    WorkPoint p = npc.wayNav.getDepositPoint();
+    WayPoint p = npc.wayNav.getDepositSite();
     TileEntity te = npc.worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ());
     if(te==null)
       {
 //      Config.logDebug("no te at deposit site!");
-      this.npc.wayNav.clearDepositPoint();
       this.currentPriority = 0;
       this.cooldownTicks = this.maxCooldownticks;
       return;
@@ -90,7 +89,7 @@ public void updatePriority()
     else
       {
 //      Config.logDebug("was a TE but not inventory!");
-      this.npc.wayNav.clearDepositPoint();
+      this.npc.wayNav.clearDepositSite();
       this.currentPriority = 0;
       this.cooldownTicks = this.maxCooldownticks;
       return;
@@ -121,14 +120,14 @@ public void updatePriority()
 @Override
 public void onRunningTick()
   {
-  if(npc.wayNav.getDepositPoint()==null)
+  if(npc.wayNav.getDepositSite()==null)
     {
     this.isFinished = true;
     this.currentPriority = 0;
     this.cooldownTicks = this.maxCooldownticks;
     return;
     }
-  WorkPoint p = npc.wayNav.getDepositPoint();
+  WayPoint p = npc.wayNav.getDepositSite();
   if(npc.getDistance(p.floorX(), p.floorY(), p.floorZ())>3)
     {
 //    Config.logDebug("moving to deposit target");
@@ -158,9 +157,9 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
-  if(npc.wayNav.getDepositPoint()!=null)
+  if(npc.wayNav.getDepositSite()!=null)
     {
-    WorkPoint p = npc.wayNav.getDepositPoint();    
+    WayPoint p = npc.wayNav.getDepositSite();    
     TileEntity te = npc.worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ());
     if(te instanceof IInventory)
       {
@@ -169,7 +168,7 @@ public void onObjectiveStart()
       }
     else
       {
-      npc.wayNav.clearDepositPoint();
+      npc.wayNav.clearDepositSite();
       this.isFinished = true;
       this.currentPriority = 0;
       this.cooldownTicks = this.maxCooldownticks;

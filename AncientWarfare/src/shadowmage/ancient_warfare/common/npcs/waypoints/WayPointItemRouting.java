@@ -21,65 +21,50 @@
 package shadowmage.ancient_warfare.common.npcs.waypoints;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.targeting.TargetPosition;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class WayPoint extends TargetPosition
+public class WayPointItemRouting extends WayPoint
 {
 
-protected WayPoint(TargetType type)
+/**
+ * needs info on routing stuff...
+ *  item filters
+ *  routing type 
+ */
+
+
+
+
+public WayPointItemRouting(TargetType type)
   {
   super(type);
   }
 
-public WayPoint(NBTTagCompound tag)
+public WayPointItemRouting(NBTTagCompound tag)
   {
   super(tag);
   }
 
-public WayPoint(int x, int y, int z, TargetType type)
+public WayPointItemRouting(int x, int y, int z, TargetType type)
   {
-  super(x,y,z, type);
+  super(x, y, z, type);
   }
 
-public WayPoint(int x, int y, int z, int side, TargetType type)
+public WayPointItemRouting(int x, int y, int z, int side, TargetType type)
   {
-  super(x,y,z, side, type);
-  }
-
-@Override
-public int hashCode()
-  {
-  final int prime = 31;
-  int result = 1;
-  result = prime * result + ((type == null) ? 0 : type.hashCode());
-  result = prime * result + x;
-  result = prime * result + y;
-  result = prime * result + z;
-  return result;
+  super(x, y, z, side, type);
   }
 
 @Override
-public boolean equals(Object obj)
+public NBTTagCompound getNBTTag()
   {
-  if (this == obj)
-    return true;
-  if (obj == null)
-    return false;
-  if (!(obj instanceof WayPoint))
-    return false;
-  WayPoint other = (WayPoint) obj;
-  if (type != other.type)
-    return false;
-  if (x != other.x)
-    return false;
-  if (y != other.y)
-    return false;
-  if (z != other.z)
-    return false;
-  return true;
+  return super.getNBTTag();
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  super.readFromNBT(tag);
   }
 
 }

@@ -113,7 +113,6 @@ public TargetType getTargetType()
   return type;
   }
 
-
 @Override
 public NBTTagCompound getNBTTag()
   {
@@ -128,11 +127,8 @@ public NBTTagCompound getNBTTag()
 public void readFromNBT(NBTTagCompound tag)
   {
   this.type = TargetType.values()[tag.getInteger("t")];
-  int[] pos = tag.getIntArray("pos");
-  if(tag.hasKey("s"))
-    {
-    this.side = tag.getInteger("s");
-    }
+  int[] pos = tag.getIntArray("pos");  
+  this.side = tag.getInteger("s");  
   this.x = pos[0];
   this.y = pos[1];
   this.z = pos[2];

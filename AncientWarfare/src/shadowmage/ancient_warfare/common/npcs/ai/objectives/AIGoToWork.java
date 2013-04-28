@@ -20,21 +20,24 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
+import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetPosition;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class AIGoToWork extends NpcAIObjective
 {
 
 boolean working = false;
+TECivic workSite = null;
+
+
 /**
  * @param npc
  * @param maxPriority
@@ -66,13 +69,7 @@ public void updatePriority()
     Config.logDebug("inventory full");
     work = false;
     }
-  else if(!npc.wayNav.hasWorkSitePoint())
-    {
-    Config.logDebug("has no work site point");
-    //TODO check target-lists for broadcasting work-sites
-    work = false;
-    }
-  else if(!npc.wayNav.hasWorkSite())
+  else if(npc.wayNav.getWorkSite()==null)
     {
     Config.logDebug("has no work site");
     work = false;
@@ -84,8 +81,7 @@ public void updatePriority()
     }  
   if(work)
     {
-//    Config.logDebug("setting work priority to max!! "+npc.wayNav.getWorkPoint());
-    
+//    Config.logDebug("setting work priority to max!! "+npc.wayNav.getWorkPoint());    
     this.currentPriority = this.maxPriority;
 //    this.cooldownTicks = this.maxCooldownticks;
     }
@@ -103,7 +99,26 @@ public void updatePriority()
  */
 protected boolean isWorkSiteWorkable()
   {
-  TECivic work = npc.wayNav.getWorkSite();
+  TECivic work = workSite;
+  WayPoint p = npc.wayNav.getWorkSite();
+  if(work!=null && p!=null)//make sure current work reference lines up with wayNav work-site
+    {
+    if(p.floorX()!=work.xCoord || p.floorY()!= work.yCoord || p.floorZ()!=work.zCoord)
+      {
+      workSite.onWorkFailed(npc, npc.wayNav.getWorkPoint());
+      workSite = null;
+      work = null;
+      }
+    } 
+  if(work==null && p!=null)
+    {
+    TileEntity te = npc.worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ());
+    if(te instanceof TECivic)
+      {
+      workSite = (TECivic)te;
+      work = workSite;
+      }
+    }
   if(work==null)
     {
     return false;
@@ -132,13 +147,14 @@ public void onRunningTick()
    * else
    *  try to claim work point---
    */  
-  TECivic workSite = npc.wayNav.getWorkSite();
+  TECivic workSite = this.workSite;
+  WorkPoint workPoint = npc.wayNav.getWorkPoint();
   if(workSite==null)
     {
     this.setFinished();
     return;
     }
-  WorkPoint workPoint = npc.wayNav.getWorkPoint();
+  //WorkPoint workPoint = npc.wayNav.getWorkPoint();
   
   if(workPoint==null)//try to claim a work point
     {
@@ -175,11 +191,10 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
-  if(npc.wayNav.hasWorkSite())
+  if(workSite!=null)
     {
-    TECivic work = npc.wayNav.getWorkSite();
-    work.addWorker(npc);
-    this.setWorkPoint(work.getWorkPoint(npc));
+    workSite.addWorker(npc);
+    this.setWorkPoint(workSite.getWorkPoint(npc));
     }
   else
     {
@@ -192,13 +207,13 @@ protected void workOnPoint(WorkPoint p)
   {
   if(p!=null)
     {
-    if(npc.wayNav.hasWorkSite())
+    if(workSite!=null)
       {
       npc.swingItem();
       if(npc.actionTick<=0)
         {        
         npc.actionTick = 35;//TODO add action delay to npctype - by rank  
-        WorkPoint returned = npc.wayNav.getWorkSite().doWork(npc, p);
+        WorkPoint returned = workSite.doWork(npc, p);
         if(p!=returned)
           {
           this.setWorkPoint(returned);
@@ -253,6 +268,7 @@ protected void setMoveToWork(WorkPoint p)
 protected void setWorkPoint(WorkPoint p)
   {
   npc.actionTick = 35;
+  working = false;
   if(p!=null)
     {   
     npc.wayNav.setWorkPoint(p);
@@ -260,7 +276,7 @@ protected void setWorkPoint(WorkPoint p)
     }
   else
     {
-    npc.wayNav.setWorkPoint(null);  
+    npc.wayNav.setWorkPoint(p);
     npc.setTargetAW(null);
     }
   }
@@ -268,13 +284,14 @@ protected void setWorkPoint(WorkPoint p)
 @Override
 public void stopObjective()
   {
-  if(npc.wayNav.hasWorkSite())
+  if(workSite!=null)
     {
-    if(npc.wayNav.getWorkPoint()!=null)
+    WorkPoint p = npc.wayNav.getWorkPoint();
+    if(p!=null)
       {
-      npc.wayNav.getWorkSite().onWorkFailed(npc, npc.wayNav.getWorkPoint());
+      workSite.onWorkFailed(npc, p);
       }
-    npc.wayNav.getWorkSite().removeWorker(npc);
+    workSite.removeWorker(npc);
     }
   npc.wayNav.setWorkPoint(null);
   working = false;
