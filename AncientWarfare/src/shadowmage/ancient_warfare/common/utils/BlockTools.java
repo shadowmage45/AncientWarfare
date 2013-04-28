@@ -29,6 +29,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -608,13 +609,28 @@ public static void breakBlockAndDrop(World world, int x, int y, int z)
     }
   int id = world.getBlockId(x, y , z);
   int meta = world.getBlockMetadata(x, y , z);
-  Config.logDebug("attempting block break and drop for: "+id+":"+meta+ " at: "+x+","+y+","+z);
   if(id!=0 && id!=Block.bedrock.blockID && Block.blocksList[id]!=null)
     {      
     Config.logDebug("setting block to air: "+x+","+y+","+z);
     Block.blocksList[id].dropBlockAsItem(world, x, y , z, meta, 0);
     world.setBlock(x, y , z, 0);
     }
+  }
+
+public static ArrayList<ItemStack> breakBlock(World world, int x, int y, int z, int fortune)
+  {
+  int id = world.getBlockId(x,y,z);
+  Block block = Block.blocksList[id];
+  if(id!=0 && id!= Block.bedrock.blockID && block!=null)
+    {
+    ArrayList<ItemStack> drops = block.getBlockDropped(world, x,y,z, world.getBlockMetadata(x,y,z), fortune);       
+    world.setBlock(x,y,z, 0);
+    if(drops!=null)
+      {
+      return drops;
+      }
+    }  
+  return null;
   }
 
 }

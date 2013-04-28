@@ -20,21 +20,27 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.tree;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPointFarm;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public class TETreeFarm extends TECivic
 {
 
 Block woodBlock = Block.wood;
 int logMeta = 0;
+int saplingID;
+int saplingMeta;
 
 /**
  * 
@@ -91,6 +97,7 @@ protected void updateOrAddWorkPoint(int x, int y, int z)
   p = new WorkPoint(x,y,z, t, this);
   if(!this.workPoints.contains(p))
     {    
+    Config.logDebug("adding new work point to tree farm: "+p);
     this.workPoints.add(p);
     }
   }
@@ -101,13 +108,26 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
   super.onWorkFinished(npc, point);
   if(point.getTargetType()==TargetType.TREE_CHOP)
     {
+    Config.logDebug("chopping tree!!");
+    
     int id = worldObj.getBlockId(point.floorX(), point.floorY()-1, point.floorZ());
     if(id==Block.dirt.blockID || id==Block.grass.blockID)
       {
       this.workPoints.add(new WorkPoint(point.floorX(), point.floorY(), point.floorZ(), TargetType.TREE_PLANT, this));
       }
+    ArrayList<ItemStack> drops = BlockTools.breakBlock(worldObj, point.floorX(), point.floorY(), point.floorZ(), 0);
+    
+    }  
+  else if(point.getTargetType()==TargetType.TREE_PLANT)
+    {
+    Config.logDebug("planting sapling");
+    int id = worldObj.getBlockId(point.floorX(), point.floorY()-1, point.floorZ());
+    if(id==Block.dirt.blockID || id==Block.grass.blockID)
+      {
+      worldObj.setBlock(point.floorX(), point.floorY(), point.floorZ(), saplingID, saplingMeta, 3);
+//      this.workPoints.add(new WorkPoint(point.floorX(), point.floorY(), point.floorZ(), TargetType.TREE_PLANT, this));
+      }    
     }
-  
   }
 
 

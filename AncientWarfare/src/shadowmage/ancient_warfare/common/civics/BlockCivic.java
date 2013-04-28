@@ -62,13 +62,6 @@ public static int getBlockTeam(World world, int x, int y, int z)
   return 0;
   }
 
-//@Override
-//public void onBlockAdded(World par1World, int par2, int par3, int par4)
-//  {
-//  Config.logDebug("setting te to block from onAdded:");
-//  par1World.setBlockTileEntity(par2, par3, par4, this.createTileEntity(par1World, par1World.getBlockMetadata(par2, par3, par4)));
-//  }
-
 @Override
 public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player, int sideHit, float hitVecX, float hitVecY,    float hitVecZ)
   {
@@ -94,8 +87,8 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
 @Override
 public TileEntity getNewTileEntity(World world, int meta)
   {
-  TileEntity te = CivicRegistry.instance().getTEFor(world, blockNum*4 + meta);
-  Config.logDebug("civic block getting te for: "+blockNum+":"+meta+" calc: "+(blockNum*4+meta) + " client: "+world.isRemote);
+  TileEntity te = CivicRegistry.instance().getTEFor(world, blockNum*16 + meta);
+  Config.logDebug("civic block getting te for: "+blockNum+":"+meta+" calc: "+(blockNum*16+meta) + " client: "+world.isRemote);
   return te;
   }
 

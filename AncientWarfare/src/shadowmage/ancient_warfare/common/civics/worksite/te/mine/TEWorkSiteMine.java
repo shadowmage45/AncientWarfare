@@ -33,6 +33,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TEWorkSiteMine extends TECivic
@@ -188,7 +189,7 @@ public void handleTorchAction(NpcBase npc,  MinePoint m)
 
 public void handleClearAction(NpcBase npc, MinePoint m)
   {
-  this.handleBlockBreak(npc, m);
+  this.handleBlockBreak(npc, m.x, m.y, m.z);
   }
 
 public void handleFillAction(NpcBase npc, MinePoint m)
@@ -201,13 +202,11 @@ public void handleFillAction(NpcBase npc, MinePoint m)
     }
   }
 
-public boolean handleBlockBreak(NpcBase npc, MinePoint m)
+public boolean handleBlockBreak(NpcBase npc, int x, int y, int z)
   {
-  int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
-  Block block = Block.blocksList[id];
-  if(id!=0 && id!= Block.bedrock.blockID && block!=null)
+  ArrayList<ItemStack> drops = BlockTools.breakBlock(npc.worldObj, x, y, z, 0);
+  if(drops!=null)
     {
-    ArrayList<ItemStack> drops = block.getBlockDropped(npc.worldObj, m.x, m.y, m.z, npc.worldObj.getBlockMetadata(m.x, m.y, m.z), 0);
     for(ItemStack drop : drops)
       {
       //  if filler block (cobble) && TE can hold more filler (keep room for ladders)
@@ -229,8 +228,7 @@ public boolean handleBlockBreak(NpcBase npc, MinePoint m)
           InventoryTools.dropItemInWorld(npc.worldObj, drop, xCoord, yCoord, zCoord);
           }
         }
-      }   
-    npc.worldObj.setBlock(m.x, m.y, m.z, 0);
+      }
     return true;
     }
   return false;

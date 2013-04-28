@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPotato;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmWheat;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
 import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEWorkSiteMine;
+import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmOak;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -65,6 +66,8 @@ public void load()
   GameRegistry.registerTileEntity(TEFarmCarrot.class, "Carrot Farm");
   GameRegistry.registerTileEntity(TEFarmPotato.class, "Potato Farm");
   GameRegistry.registerTileEntity(TEWorkSiteMine.class, "Basic Mine");
+  
+  GameRegistry.registerTileEntity(TETreeFarmOak.class, "Tree Farm Oak");
   }
 
 public void registerBlock(Block block, String name)
