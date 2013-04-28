@@ -48,19 +48,19 @@ public MineSubComponent(MineComponent parent)
 public void validatePoints(World world)
   {
 //  Config.logDebug("validating points for: "+this);
-  Iterator<MinePoint> it = this.finishedPoints.iterator();
-  MinePoint p = null;
-  while(it.hasNext())
-    {    
-    p = it.next();
-//    Config.logDebug("validating point: "+p);
-    if(p.hasWork(world))
-      {
-      Config.logDebug("MINE VALIDATION: ADDING POINT BACK TO POINT QUEUE:");
-      it.remove();
-      this.pointQueue.offer(p);
-      }
-    }
+//  Iterator<MinePoint> it = this.finishedPoints.iterator();
+//  MinePoint p = null;
+//  while(it.hasNext())
+//    {    
+//    p = it.next();
+////    Config.logDebug("validating point: "+p);
+//    if(p.hasWork(world))
+//      {
+//      Config.logDebug("MINE VALIDATION: ADDING POINT BACK TO POINT QUEUE:");
+//      it.remove();
+//      this.pointQueue.offer(p);
+//      }
+//    }
   }
 
 public void addNewPoint(int x, int y, int z, int order, byte special, TargetType type, boolean singleAction)
@@ -87,12 +87,12 @@ public void onPointFinished(NpcBase npc, MinePoint p)
   {   
   if(p.singleAction)
     {
-    Config.logDebug("adding single action point to finished list: "+p);
+//    Config.logDebug("adding single action point to finished list: "+p);
     this.finishedPoints.add(p);
     }
   else
     {
-    Config.logDebug("skipping adding point to finished list: ");
+//    Config.logDebug("skipping adding point to finished list: ");
     }
   }
 

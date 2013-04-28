@@ -20,33 +20,32 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
+import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 
-public class CivicMine extends Civic
+public class CivicTreeFarm extends Civic
 {
- 
 /**
  * @param id
  */
-public CivicMine(int id, String name, String tooltip, Class <?extends TECivic> teClass)
+public CivicTreeFarm(int id, String name, String tooltip, Class<? extends TECivic> teClass)
   {
   super(id);
   this.isWorkSite = true;
   this.name = name;
   this.tooltip = tooltip;
-  this.ranks = 1;
   this.teClass = teClass;
-  this.inventorySize = 9;
-  this.workSizeMaxHeight = 2;
+  this.maxWorkers = 2;
+  this.workSizeMaxHeight = 18;
   this.workSizeMaxHorizontal = 16;
-  this.maxWorkers = 4;
+  this.ranks = 1;
+  this.inventorySize = 9;
+  this.workType = CivicWorkType.TREE;
   this.iconTexture = "civicMine1";
   this.iconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
   this.iconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
-  this.iconNames[2] = "ancientwarfare:civic/civicFarmWheatSide";  
-  this.workType = CivicWorkType.MINE;
+  this.iconNames[2] = "ancientwarfare:civic/civicFarmWheatSide"; 
   }
-
 
 }

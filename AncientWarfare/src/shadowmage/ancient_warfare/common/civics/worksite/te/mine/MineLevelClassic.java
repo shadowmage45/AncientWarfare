@@ -20,7 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 /**
  * slightly different layout of mine-level, more like the vanilla mine-shafts (for both main shaft and branches)
@@ -38,22 +42,291 @@ public class MineLevelClassic extends MineLevel
  * @param ySize
  * @param zSize
  */
-public MineLevelClassic(int xPos, int yPos, int zPos, int xSize, int ySize,    int zSize)
+public MineLevelClassic(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize)
   {
   super(xPos, yPos, zPos, xSize, ySize, zSize);
-  this.levelSize = 5;
+  this.levelSize = 4;
   }
 
-/**
- * @param tag
- */
-public MineLevelClassic(NBTTagCompound tag)
+@Override
+protected void scanLevel(World world)
   {
-  super(tag);
+  this.scanShaft(world);
+  this.scanTunnels(world);
+  this.scanBranches(world);
   }
 
+/************************************************SHAFT*************************************************/
 
+protected void scanShaft(World world)
+  {
+  for(int y = minY + ySize-1; y >= minY; y--)//start at the top...
+    {
+    for(int x = shaftX; x<=shaftX+1; x++)
+      {
+      for(int z = shaftZ; z<=shaftZ+1; z++)
+        {
+        if(z==shaftZ)
+          {
+          this.addSouthShaft(world, x,y,z);
+          //check shaftZ-1 for resources
+          }
+        else
+          {
+          this.addNorthShaft(world, x, y, z);
+          }        
+        }
+      }    
+    }
+  }
 
+protected void addNorthShaft(World world, int x, int y, int z)
+  {
+  int id = world.getBlockId(x, y, z);
+  int id2 = world.getBlockId(x, y, z+1);
+  if(id!=Block.ladder.blockID)//not clear or ladder, set to clear
+    {
+    addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
+    }
+  //scan N block, add clear/fill if needed
+  if(isValidResource(id2))
+    {
+  //add north block clear
+    addNewPoint(x, y, z+1,  TargetType.MINE_CLEAR);  
+    //add north block fill
+    addNewPoint(x, y, z+1,  TargetType.MINE_FILL);
+    }  
+  else if(needsFilled(id2))
+    {
+    addNewPoint(x, y, z+1,  TargetType.MINE_FILL);
+    }
+  if(id!=Block.ladder.blockID)
+    {
+    addNewPoint(x, y, z,  (byte)2, TargetType.MINE_LADDER);
+    }
+  }
 
+protected void addSouthShaft(World world, int x, int y, int z)
+  {
+  int id = world.getBlockId(x, y, z);
+  int id2 = world.getBlockId(x, y, z-1);
+  if(id!=Block.ladder.blockID && id!=0)//not clear or ladder, set to clear
+    {
+    addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
+    }
+  if(isValidResource(id2))
+    {
+  //add north block clear
+    addNewPoint(x, y, z-1,  TargetType.MINE_CLEAR); 
+    //add north block fill
+    addNewPoint(x, y, z-1,  TargetType.MINE_FILL);
+    }  
+  else if(needsFilled(id2))
+    {
+    addNewPoint(x, y, z-1,  TargetType.MINE_FILL);
+    }
+  if(id!=Block.ladder.blockID)
+    {
+    addNewPoint(x, y, z, (byte)3, TargetType.MINE_LADDER);
+    }
+  }
+
+/************************************************TUNNELS*************************************************/
+protected void scanTunnels(World world)
+  {
+  int id = 0;
+  for(int x = shaftX-1; x>= minX ; x--)//add west tunnel
+    {
+    for(int z = shaftZ; z<= shaftZ+1; z++)      
+      {
+      for(int y = minY; y<= minY+1; y++)
+        {
+        if(y==minY)
+          {
+          //add left/bottom
+          this.addTunnelPiece(world, x, y, z,  true, false);
+          }
+        else
+          {
+          this.addTunnelPiece(world, x, y, z,  true, true);
+          //add left/top
+          }
+        }
+      }
+    }
+  for(int x = shaftX+2; x <= minX + xSize-1; x++)//add west tunnel
+    {
+    for(int z = shaftZ; z<= shaftZ+1; z++)      
+      {
+      for(int y = minY; y<= minY+1; y++)
+        {
+        if(y==minY)
+          {
+          //add right/bottom
+          this.addTunnelPiece(world, x, y, z, false, false);
+          }
+        else
+          {
+          this.addTunnelPiece(world, x, y, z, false, true);
+          //add right/top
+          }
+        }
+      }
+    }
+  }
+
+protected void addTunnelPiece(World world, int x, int y, int z, boolean left, boolean top)
+  {  
+  int id1 = world.getBlockId(x, y, z);
+  boolean addTorch = !top && x%4==0;
+  if(id1!=0 && id1 != Block.torchWood.blockID)
+    {
+    if(left)
+      {
+      addNewPoint(x, y, z,  TargetType.MINE_CLEAR);      
+      }
+    else
+      {
+      addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
+      }
+    }
+  int id = top? world.getBlockId(x, y+1, z) : world.getBlockId(x, y-1, z);
+  int y1 = top? y+1 : y-1;
+  if(isValidResource(id))
+    {
+    if(left)
+      {
+      addNewPoint(x, y1, z,  TargetType.MINE_CLEAR);      
+      }
+    else
+      {
+      addNewPoint(x, y1, z,  TargetType.MINE_CLEAR);
+      }
+    if(left)
+      {
+      addNewPoint(x, y1, z,  TargetType.MINE_FILL);      
+      }
+    else
+      {
+      addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+      }
+    }
+  else if(needsFilled(id))
+    {
+    if(left)
+      {
+      addNewPoint(x, y1, z,  TargetType.MINE_FILL);      
+      }
+    else
+      {
+      addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+      }
+    }  
+  if(addTorch && id1!= Block.torchWood.blockID)
+    {
+    if(left)
+      {
+      addNewPoint(x, y, z,  TargetType.MINE_TORCH);      
+      }
+    else
+      {
+      addNewPoint(x, y, z,  TargetType.MINE_TORCH);
+      }
+    }
+  }
+/************************************************BRANCHES*************************************************/
+protected void scanBranches(World world)
+  {
+  for(int x = shaftX-1; x>=minX; x-=3)
+    {
+    for(int z = shaftZ+2; z <=minZ+zSize-1; z++)//do n/w side branches
+      {
+      for(int y = minY; y<= minY+1; y++)
+        {
+        this.addNodeToBranch(world,  x, y, z, y!=minY);
+        }
+      }
+    for(int z = shaftZ-1; z >=minZ; z--)//do s/w side branches
+      {
+      for(int y = minY; y<= minY+1; y++)
+        {
+        this.addNodeToBranch(world,  x, y, z, y!=minY);
+        }
+      }
+    }  
+  for(int x = shaftX+2; x <= minX+xSize-1; x+=3)
+    {
+    for(int z = shaftZ+2; z <=minZ+zSize-1; z++)//do n/e side branches
+      {
+      for(int y = minY; y<= minY+1; y++)
+        {
+         this.addNodeToBranch(world,  x, y, z, y!=minY);
+        }
+      }
+    for(int z = shaftZ-1; z >=minZ; z--)//do s/e side branches
+      {
+      for(int y = minY; y<= minY+1; y++)
+        {
+         this.addNodeToBranch(world,  x, y, z, y!=minY);
+        }
+      }
+    }
+  }
+
+protected void addNodeToBranch(World world, int x, int y, int z, boolean top)
+  {
+  int id1 = world.getBlockId(x, y, z);
+  int id2 = top? world.getBlockId(x, y+1, z) : world.getBlockId(x, y-1, z);
+  int id3 = world.getBlockId(x+1, y, z);
+  int id4 = world.getBlockId(x-1, y, z);
+  int y1 = top? y+1 : y-1; 
+  boolean last = z%4!=0;
+  if(id1!=0 && id1!=Block.torchWood.blockID)//current block needs cleared before can process sides/etc
+    {
+    addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
+    }
+  if(isValidResource(id2))
+    {
+    addNewPoint(x, y1, z,  TargetType.MINE_CLEAR);
+    addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+    }
+  else if(needsFilled(id2))
+    {
+    addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+    }
+  if(isValidResource(id3))
+    {
+    addNewPoint(x+1, y, z,  TargetType.MINE_CLEAR);
+    addNewPoint(x+1, y, z,  TargetType.MINE_FILL);
+    }
+  else if(needsFilled(id3))
+    {
+    addNewPoint(x+1, y, z,  TargetType.MINE_FILL);
+    }
+  if(isValidResource(id4))
+    {
+    addNewPoint(x-1, y, z,  TargetType.MINE_CLEAR);
+    addNewPoint(x-1, y, z,  TargetType.MINE_FILL);
+    }
+  else if(needsFilled(id4))
+    {
+    addNewPoint(x-1, y, z,  TargetType.MINE_FILL);
+    }
+  if(!top && z%4==0 && id1 != Block.torchWood.blockID)
+    {
+    addNewPoint(x,y,z, TargetType.MINE_TORCH);
+    }
+  }
+
+/************************************************UTILITY*************************************************/
+protected void addNewPoint(int x, int y, int z, byte meta, TargetType type)
+  {
+  this.workList.add(new MinePoint(x,y,z,0, meta,type));
+  }
+
+protected void addNewPoint(int x, int y, int z, TargetType type)
+  {
+  this.addNewPoint(x, y, z, (byte)0, type);
+  }
 
 }

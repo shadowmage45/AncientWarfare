@@ -18,32 +18,21 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
+package shadowmage.ancient_warfare.common.civics.worksite.te.tree;
 
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
+import net.minecraft.block.Block;
 
-public class WorkPointMine extends WorkPoint
+public class TETreeFarmOak extends TETreeFarm
 {
 
-MinePoint minePoint;
 /**
- * @param x
- * @param y
- * @param z
- * @param side
- * @param type
+ * 
  */
-public WorkPointMine(MinePoint point)
+public TETreeFarmOak()
   {
-  super(point.x, point.y, point.z,  point.action);
-  this.minePoint = point;
+  this.logMeta = 0;
   }
 
-public WorkPointMine(int x, int y, int z, MinePoint p)
-  {
-  super(x,y,z, p.action);
-  this.minePoint = p;
-  }
+
 
 }

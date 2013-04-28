@@ -42,6 +42,7 @@ import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_warfare.common.network.Packet05TE;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -61,7 +62,7 @@ public int maxY;
 public int maxZ;
 public TargetType workType;
 protected boolean isWorkSite = false;
-protected boolean broadcastWork = false;//user toggle...spawned NPC buildings will auto-broadcast
+protected boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
 protected AWInventoryBasic inventory = new AWInventoryBasic(0);
 protected Civic civic;
 protected int structureRank = 0;
@@ -141,7 +142,7 @@ public boolean canTeamInteract(int sourceTeam)
 
 public void broadCastToSoldiers(int maxRange)
   {
-  if(this.worldObj==null)
+  if(this.worldObj==null || this.worldObj.isRemote)
     {
     return;
     }
@@ -151,15 +152,27 @@ public void broadCastToSoldiers(int maxRange)
     {
     if(isHostile(npc.teamNum))      
       {
-      //add attack entry
-      //TODO      
+      Config.log("found hostile npc!");
+      if(npc.npcType.isCombatUnit())
+        {
+        //add attack entry
+        //TODO
+        }      
       }
     else
       {
       if(broadcastWork)
-        {
-        //add 'work' entry
-        //TODO
+        {        
+//        Config.logDebug("broadcasting to npcs!!");
+        if(npc.wayNav.getWorkSite()==null && hasWork(npc) && canHaveMoreWorkers(npc))
+          {
+//          Config.logDebug("Entity had no work site, checking if valid!");
+          if(npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
+            {
+//            Config.logDebug("SETTING NPC WORK SITE THROUGH BROADCAST THROUGH TE");
+            npc.wayNav.setWorkSite(xCoord, yCoord, zCoord);
+            }
+          }
         }
       }
     }
@@ -252,10 +265,6 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
     {    
     point.setFinished();
     this.workPoints.remove(point);
-//    if(!point.hasWork(worldObj))
-//      {
-//      this.workPoints.remove(point);
-//      }
     }
   }
 
@@ -332,6 +341,7 @@ public boolean hasWork(NpcBase npc)
       return true;
       }
     }
+//  Config.logDebug("work site has no work!!");
   return false;
   }
 
@@ -383,7 +393,11 @@ protected void readCivicDataFromNBT(NBTTagCompound tag)
   if(tag.hasKey("inventory"))
     {
     this.inventory.readFromNBT(tag.getCompoundTag("inventory"));
-    } 
+    }  
+  if(tag.hasKey("broad"))
+    {
+    this.broadcastWork = tag.getBoolean("broad");
+    }
   }
 
 @Override
@@ -395,6 +409,7 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setIntArray("bounds", new int[]{minX, minY, minZ, maxX, maxY, maxZ});
   tag.setCompoundTag("inventory", this.inventory.getNBTTag());
   tag.setInteger("team", this.teamNum);
+  tag.setBoolean("broad", broadcastWork);
   }
 
 @Override
@@ -404,15 +419,30 @@ public Packet getDescriptionPacket()
   tag.setIntArray("bounds", new int[]{minX, minY, minZ, maxX, maxY, maxZ});
   tag.setInteger("civType", this.civic.getGlobalID());
   tag.setInteger("rank", this.structureRank);
-  tag.setInteger("team", this.teamNum);  
+  tag.setInteger("team", this.teamNum); 
+  tag.setBoolean("broad", broadcastWork);
   return new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);
   }
+
 
 @Override
 public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
   {
   super.onDataPacket(net, pkt);
   this.readCivicDataFromNBT(pkt.customParam1);
+  }
+
+/**
+ * called from AW packets on client-interaction/events
+ * @param tag
+ */
+public void handlePacketData(NBTTagCompound tag)
+  {  
+  if(worldObj!=null && !worldObj.isRemote)
+    {
+    Packet05TE pkt = new Packet05TE();
+    pkt.packetData = tag;
+    }
   }
 
 /******************************************************************INVENTORY METHODS***********************************************************************************/

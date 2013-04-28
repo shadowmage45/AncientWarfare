@@ -87,7 +87,7 @@ public void startObjective()
 
 public boolean isFinished()
   {
-  return !this.hadWork || this.isFinished;
+  return this.isFinished;
   }
 
 public void updateCooldownTicks()

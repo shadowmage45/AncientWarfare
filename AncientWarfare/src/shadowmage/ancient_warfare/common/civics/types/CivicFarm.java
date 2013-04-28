@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
 
 public class CivicFarm extends Civic
@@ -34,13 +35,13 @@ public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite
   this.isWorkSite = true;
   this.name = name;
   this.tooltip = tooltip;
-  this.ranks = 3;
   this.teClass = teClass;
   this.inventorySize = 9;
   this.iconTexture = iconTex;
   this.iconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
   this.iconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
   this.iconNames[2] = "ancientwarfare:civic/civicFarmWheatSide";  
+  this.workType = CivicWorkType.FARM;
   }
 
 }

@@ -33,10 +33,8 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AIGoToWork extends NpcAIObjective
 {
-
-boolean working = false;
 TECivic workSite = null;
-
+boolean working = false;
 
 /**
  * @param npc
@@ -45,6 +43,7 @@ TECivic workSite = null;
 public AIGoToWork(NpcBase npc, int maxPriority)
   {
   super(npc, maxPriority);
+  this.maxCooldownticks = 40;
   }
 
 @Override
@@ -76,7 +75,9 @@ public void updatePriority()
     }
   else if(!isWorkSiteWorkable())
     {
-    Config.logDebug("site not workable");
+    Config.logDebug("site not workable -- clearing work site");
+    npc.wayNav.clearWorkSite();
+    npc.wayNav.setWorkPoint(null);    
     work = false;
     }  
   if(work)
@@ -88,6 +89,7 @@ public void updatePriority()
   else
     {
     this.currentPriority = 0;
+    Config.logDebug("setting cooldown ticks to max");
     this.cooldownTicks = this.maxCooldownticks;
     }
   }
@@ -99,38 +101,65 @@ public void updatePriority()
  */
 protected boolean isWorkSiteWorkable()
   {
-  TECivic work = workSite;
   WayPoint p = npc.wayNav.getWorkSite();
-  if(work!=null && p!=null)//make sure current work reference lines up with wayNav work-site
+  WorkPoint wp = npc.wayNav.getWorkPoint();
+  if(workSite!=null && p!=null)//make sure current work reference lines up with wayNav work-site
     {
-    if(p.floorX()!=work.xCoord || p.floorY()!= work.yCoord || p.floorZ()!=work.zCoord)
+    if(p.floorX()!=workSite.xCoord || p.floorY()!= workSite.yCoord || p.floorZ()!=workSite.zCoord)
       {
-      workSite.onWorkFailed(npc, npc.wayNav.getWorkPoint());
+    	if(npc.wayNav.getWorkPoint()!=null)
+    	{
+    		
+    		workSite.onWorkFailed(npc, npc.wayNav.getWorkPoint());
+    	}
+      
       workSite = null;
-      work = null;
       }
     } 
-  if(work==null && p!=null)
+  if(workSite==null && p!=null)
     {
     TileEntity te = npc.worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ());
     if(te instanceof TECivic)
       {
       workSite = (TECivic)te;
-      work = workSite;
+      }
+    else
+      {
+      p = null;
       }
     }
-  if(work==null)
+  if(workSite==null)
     {
+//    Config.logDebug("not workable--no site");
     return false;
     }
   else
     {
-    if(work.canHaveMoreWorkers(npc) && work.hasWork(npc))
+    if(wp!=null)
+      {
+//      Config.logDebug("work point owner: "+wp.owner);
+      if(wp.owner==workSite)
+        {
+//        Config.logDebug("work point belongs to work-site--already has work--");
+        return true;
+        }
+      else
+        {
+//        Config.logDebug("work point does not match work-site");
+        npc.wayNav.setWorkPoint(null);
+        return false;
+        }
+      }
+    else if(workSite.canHaveMoreWorkers(npc) && workSite.hasWork(npc))
       {
       return true;
       }
+    else
+      {
+//      Config.logDebug("no workers or no work rejection");
+      return false;
+      }
     }
-  return false;
   }
 
 @Override
@@ -231,38 +260,6 @@ protected void setMoveToPoint(int x, int y, int z)
 protected void setMoveToWork(WorkPoint p)
   {
   setMoveToPoint(p.floorX(), p.floorY(), p.floorZ());
-//  if(npc.getWorldAccess().isWalkable(p.floorX(), p.floorY(), p.floorZ()))
-//    {
-//    setMoveToPoint(p.floorX(), p.floorY(), p.floorZ());
-//    }
-//  else
-//    {
-//    int x = p.floorX();
-//    int z = p.floorZ();
-//    for(int y = p.floorY()+1; y>=p.floorY()-2; y--)
-//      {
-//      if(npc.getWorldAccess().isWalkable(x, y, z))
-//        {
-//        setMoveToPoint(x, y, z);
-//        }
-//      else if(npc.getWorldAccess().isWalkable(x-1, y, z))
-//        {
-//        setMoveToPoint(x-1, y, z);
-//        }
-//      else if(npc.getWorldAccess().isWalkable(x+1, y, z))
-//        {
-//        setMoveToPoint(x+1, y, z);
-//        }
-//      else if(npc.getWorldAccess().isWalkable(x, y, z-1))
-//        {
-//        setMoveToPoint(x, y, z-1);
-//        }
-//      else if(npc.getWorldAccess().isWalkable(x, y, z+1))
-//        {
-//        setMoveToPoint(x, y, z+1);
-//        }
-//      }
-//    } 
   }
 
 protected void setWorkPoint(WorkPoint p)

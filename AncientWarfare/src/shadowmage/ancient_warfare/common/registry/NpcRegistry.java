@@ -34,9 +34,10 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
 import shadowmage.ancient_warfare.common.npcs.types.NpcDummy;
+import shadowmage.ancient_warfare.common.npcs.types.NpcFarmer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcFootsoldier;
+import shadowmage.ancient_warfare.common.npcs.types.NpcMiner;
 import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
-import shadowmage.ancient_warfare.common.npcs.types.NpcSoldierTest;
 import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 
@@ -50,7 +51,12 @@ public static INpcType npcVillager = new NpcVillager(1);
 public static INpcType npcFootSoldier = new NpcFootsoldier(2);
 public static INpcType npcArcher = new NpcArcher(3);
 public static INpcType npcSiegeEngineer = new NpcSiegeEngineer(4);
-public static INpcType npcTest = new NpcSoldierTest(5);
+//medic 5
+//engineer 6
+//com 7
+//gen 8
+public static INpcType npcMiner = new NpcMiner(10);
+public static INpcType npcFarmer = new NpcFarmer(11);
 
 private NpcRegistry(){}
 private static NpcRegistry INSTANCE;

@@ -47,8 +47,6 @@ GUI FRAMEWORK
 * add an itemSlot element (not inventory slot...a client-side only slot that displays a static stack)
 * add tooltips to GUIs
 
-
-
 TESTING
 * test structure stuff extensively
 
@@ -230,7 +228,8 @@ TWEAKS/OPTIMIZATION
 /********** 04-27-13 **********/
 * many more textures/icons/fixing of things from the port, probably many still unfound
 * needs adv control button to be dependent upon member rank (rank8+)
-* needs hostile-teams setting area/buttons/whatnot     
+* needs hostile-teams setting area/buttons/whatnot   
+* npc--set home point when first spawned    
 /********** 04-28-13 **********/
 /********** 04-29-13 **********/
 /********** 04-30-13 **********/

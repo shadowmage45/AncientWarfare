@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.civics.types;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 
 public interface ICivicType
@@ -74,6 +75,8 @@ ItemStack getItemToConstruct(int level);
  * @return
  */
 ItemStack getDisplayItem(int rank);
+
+CivicWorkType getWorkType();
 
 int getMaxWorkSizeWidth(int level);
 int getMaxWorkSizeHeight(int level);

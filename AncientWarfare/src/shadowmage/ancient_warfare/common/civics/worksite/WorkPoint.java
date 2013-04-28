@@ -24,8 +24,8 @@ import java.lang.ref.WeakReference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -38,15 +38,18 @@ private WeakReference<NpcBase> worker = new WeakReference<NpcBase>(null);
 protected int totalHarvestHits = 1;
 protected int currentHarvestHits = 0;
 protected boolean singleUse = false;
+public TECivic owner;
 
-public WorkPoint(int x, int y, int z, TargetType type)
+public WorkPoint(int x, int y, int z, TargetType type, TECivic owner)
   {
   super(x,y,z, type);
+  this.owner = owner;
   }
 
-public WorkPoint(int x, int y, int z, int side, TargetType type)
+public WorkPoint(int x, int y, int z, int side, TargetType type, TECivic owner)
   {
   super(x,y,z,side, type);
+  this.owner = owner;
   }
 
 public WorkPoint(Entity ent, TargetType type)

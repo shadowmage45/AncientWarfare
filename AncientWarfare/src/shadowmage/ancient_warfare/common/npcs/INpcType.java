@@ -23,9 +23,9 @@ package shadowmage.ancient_warfare.common.npcs;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public interface INpcType
@@ -55,7 +55,7 @@ public abstract ItemStack[] getArmor(int level);
 public abstract NpcVarsHelper getVarsHelper(NpcBase npc);
 public abstract void addTargets(NpcBase npc, NpcTargetHelper helper);
 
-public abstract List<TargetType> getValidTargetTypes(int level);
+public abstract List<CivicWorkType> getWorkTypes(int level);
 
 public abstract class NpcVarsHelper
 {

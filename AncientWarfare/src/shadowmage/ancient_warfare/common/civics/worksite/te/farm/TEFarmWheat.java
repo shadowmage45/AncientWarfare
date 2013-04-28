@@ -49,6 +49,10 @@ public TEFarmWheat()
 @Override
 public void onWorkFinished(NpcBase npc, WorkPoint point)
   {
+	if(npc==null || point==null)
+	{
+		return;
+	}
   if(point.hasWork(worldObj))
     {
     if(point.getTargetType()==TargetType.FARM_HARVEST)

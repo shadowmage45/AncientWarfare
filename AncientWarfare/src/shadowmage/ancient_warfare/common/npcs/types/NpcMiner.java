@@ -23,6 +23,10 @@ package shadowmage.ancient_warfare.common.npcs.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
@@ -34,22 +38,43 @@ import shadowmage.ancient_warfare.common.npcs.ai.objectives.AISeekShelter;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 
-public class NpcSoldierTest extends NpcTypeBase
+public class NpcMiner extends NpcTypeBase
 {
 
 /**
  * @param type
  */
-public NpcSoldierTest(int type)
+public NpcMiner(int type)
   {
   super(type);
-  this.displayName = "Npc Test";
-  this.tooltip = "Test Npc for Worker Functions";
+  this.displayName = "Miner";
+  this.tooltip = "Basic Miner, mining speed varies with rank.";
   this.iconTexture = "npcWorker1";
-  this.addLevel("Soldier Rank 0", Config.texturePath + "models/npcDefault.png", null, null);
-  this.addLevel("Soldier Rank 1", Config.texturePath + "models/npcDefault.png", null, null);
-  this.addLevel("Soldier Rank 2", Config.texturePath + "models/npcDefault.png", null, null);
+  this.addLevel("Miner Rank 0", Config.texturePath + "models/npcDefault.png", getToolStack(0), null).addTargetType(CivicWorkType.MINE);
+  this.addLevel("Miner Rank 1", Config.texturePath + "models/npcDefault.png", getToolStack(1), null).addTargetType(CivicWorkType.MINE);
+  this.addLevel("Miner Rank 2", Config.texturePath + "models/npcDefault.png", getToolStack(2), null).addTargetType(CivicWorkType.MINE);
   this.isCombatUnit = false;
+  }
+
+@Override
+protected ItemStack getToolStack(int level)
+  {
+  ItemStack sword1 = null;// = new ItemStack(Item.swordSteel,1);
+  switch(level)
+  {
+  case 0:
+  sword1 = new ItemStack(Item.pickaxeStone,1);
+  return sword1;
+  
+  case 1:
+  sword1 = new ItemStack(Item.pickaxeIron,1);
+  return sword1;
+  
+  case 2:  
+  sword1 = new ItemStack(Item.pickaxeDiamond,1);
+  return sword1;
+  }
+  return null;
   }
 
 @Override

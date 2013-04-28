@@ -29,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -59,6 +60,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,   
     hit = BlockTools.offsetForSide(hit, side);  
     Entity npc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, TeamTracker.instance().getTeamForPlayerServer(player.getEntityName()));
     npc.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
+    if(npc instanceof NpcBase)
+      {
+      ((NpcBase)npc).wayNav.setHomePoint(hit.x, hit.y, hit.z);
+      }    
     npc.prevRotationYaw = npc.rotationYaw = player.rotationYaw;
     world.spawnEntityInWorld(npc);
     if(!player.capabilities.isCreativeMode)

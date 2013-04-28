@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.civics.worksite;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class WorkPointFarm extends WorkPoint
@@ -37,9 +38,9 @@ int tilledEarthID = Block.tilledField.blockID;
  * @param z
  * @param type
  */
-public WorkPointFarm(int x, int y, int z, TargetType type, int plantID, int plantMeta)
+public WorkPointFarm(int x, int y, int z, TargetType type, int plantID, int plantMeta, TECivic owner)
   {
-  super(x, y, z, type);
+  super(x, y, z, type, owner);
   this.plantID = plantID;
   this.plantFullGrownMeta = plantMeta;
   }

@@ -170,6 +170,7 @@ public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struc
   ent = NpcRegistry.getNpcForType(npcType, world, npcRank, teamNum);
   if(ent!=null)
     {
+     
     ax+= getRotatedXOffset(ox, oz, facing);
     az+= getRotatedZOffset(ox, oz, facing);
     ent.setLocationAndAngles(ax, ay, az, ar, pitch);
@@ -177,6 +178,10 @@ public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struc
     ent.prevPosY = ay;
     ent.prevPosZ = az;
     ent.prevRotationYaw = ent.rotationYaw = ar;
+    if(ent instanceof NpcBase)
+      {
+      ((NpcBase)ent).wayNav.setHomePoint(target.x, target.y, target.z);
+      } 
     }   
   return ent;
   }

@@ -18,24 +18,28 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
+package shadowmage.ancient_warfare.common.civics.worksite.te.tree;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPointFarm;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public abstract class TEWorkSiteFarm extends TECivic
+public class TETreeFarm extends TECivic
 {
 
-int mainBlockID;//the blockID that this civic looks for within its work bounds
-int tilledEarthID = Block.tilledField.blockID;//the 'plantable' block. these are the 'plant' points, if y+1 is not mainBlockID
-int mainBlockMatureMeta;
+Block woodBlock = Block.wood;
+int logMeta = 0;
 
-public TEWorkSiteFarm()
+/**
+ * 
+ */
+public TETreeFarm()
   {
   
   }
@@ -54,9 +58,13 @@ public boolean onInteract(World world, EntityPlayer player)
 public void updateWorkPoints()
   {
   super.updateWorkPoints();
-  for(int x = this.minX; x<=this.maxX; x++)
+  if(woodBlock==null)
     {
-    for(int y = this.minY; y<=this.maxY; y++)
+    return;
+    }
+  for(int y = this.minY; y<=this.maxY; y++)
+    {
+    for(int x = this.minX; x<=this.maxX; x++)
       {
       for(int z = this.minZ; z<=this.maxZ; z++)
         {        
@@ -67,26 +75,41 @@ public void updateWorkPoints()
   }
 
 protected void updateOrAddWorkPoint(int x, int y, int z)
-  {
-  WorkPointFarm p;
+  {  
+  WorkPoint p;
   TargetType t = null;
-  if(worldObj.getBlockId(x, y, z)==tilledEarthID)
+  int id = worldObj.getBlockId(x, y, z);
+  int meta = worldObj.getBlockMetadata(x, y, z);
+  if( id==woodBlock.blockID && (meta &3) == this.logMeta )
     {
-    t = TargetType.FARM_PLANT;
-    }
-  else if(worldObj.getBlockId(x, y-1, z)==tilledEarthID)
-    {
-    t = TargetType.FARM_HARVEST;
+    t = TargetType.TREE_CHOP;
     }
   else
     {
     return;
     }
-  p = new WorkPointFarm(x,y,z, t, mainBlockID, mainBlockMatureMeta, this);
+  p = new WorkPoint(x,y,z, t, this);
   if(!this.workPoints.contains(p))
     {    
     this.workPoints.add(p);
     }
   }
+
+@Override
+public void onWorkFinished(NpcBase npc, WorkPoint point)
+  {
+  super.onWorkFinished(npc, point);
+  if(point.getTargetType()==TargetType.TREE_CHOP)
+    {
+    int id = worldObj.getBlockId(point.floorX(), point.floorY()-1, point.floorZ());
+    if(id==Block.dirt.blockID || id==Block.grass.blockID)
+      {
+      this.workPoints.add(new WorkPoint(point.floorX(), point.floorY(), point.floorZ(), TargetType.TREE_PLANT, this));
+      }
+    }
+  
+  }
+
+
 
 }

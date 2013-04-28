@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TEWorkSiteMine extends TECivic
@@ -129,13 +130,9 @@ public WorkPoint getWorkPoint(NpcBase npc)
   {
   Config.logDebug("npc requesting work: "+npc);
   if(this.currentLevel!=null && this.currentLevel.hasWork())
-    {
+    {    
     Config.logDebug("getting point from mine!");
-    MinePoint p = this.currentLevel.getNextMinePoint(npc);
-    if(p!=null)
-      {
-      return new WorkPointMine(xCoord, yCoord, zCoord, p);
-      }
+    return new WorkPoint(xCoord, yCoord, zCoord, TargetType.WORK, this);    
     }
   return null;
   }
@@ -151,28 +148,10 @@ public boolean canAssignWorkPoint(NpcBase npc, WorkPoint p)
 @Override
 public void onWorkFinished(NpcBase npc, WorkPoint p)
   {
-  WorkPointMine m = (WorkPointMine)p;
-  MinePoint mp = m.minePoint;
-  switch(mp.action)
-    {
-    case MINE_CLEAR:
-    this.handleClearAction(npc, m, mp);
-    break;
-    case MINE_FILL:
-    this.handleFillAction(npc, m, mp);
-    break;
-    case MINE_LADDER:
-    this.handleLadderAction(npc, m, mp);
-    break;
-    case MINE_TORCH:   
-    this.handleTorchAction(npc, m, mp);
-    break;
-    }
   if(this.currentLevel!=null)
     {
-    this.currentLevel.onPointFinished(npc, mp);
-    }
-  super.onWorkFinished(npc, p);
+    this.currentLevel.onWorkCompleted(this, npc);
+    }  
   }
 
 @Override
@@ -187,7 +166,7 @@ public WorkPoint doWork(NpcBase npc, WorkPoint p)
   return p;
   }
 
-protected void handleLadderAction(NpcBase npc, WorkPointMine p, MinePoint m)
+public void handleLadderAction(NpcBase npc,  MinePoint m)
   {
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
   if(id==0)
@@ -197,7 +176,7 @@ protected void handleLadderAction(NpcBase npc, WorkPointMine p, MinePoint m)
     }
   }
 
-protected void handleTorchAction(NpcBase npc, WorkPointMine p, MinePoint m)
+public void handleTorchAction(NpcBase npc,  MinePoint m)
   {
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
   if(id==0)
@@ -207,12 +186,12 @@ protected void handleTorchAction(NpcBase npc, WorkPointMine p, MinePoint m)
     }
   }
 
-protected void handleClearAction(NpcBase npc, WorkPointMine p, MinePoint m)
+public void handleClearAction(NpcBase npc, MinePoint m)
   {
-  this.handleBlockBreak(npc, p, m);
+  this.handleBlockBreak(npc, m);
   }
 
-protected void handleFillAction(NpcBase npc, WorkPointMine p, MinePoint m)
+public void handleFillAction(NpcBase npc, MinePoint m)
   {
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
   if(id==0)
@@ -222,7 +201,7 @@ protected void handleFillAction(NpcBase npc, WorkPointMine p, MinePoint m)
     }
   }
 
-protected boolean handleBlockBreak(NpcBase npc, WorkPointMine p, MinePoint m)
+public boolean handleBlockBreak(NpcBase npc, MinePoint m)
   {
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
   Block block = Block.blocksList[id];
@@ -260,20 +239,13 @@ protected boolean handleBlockBreak(NpcBase npc, WorkPointMine p, MinePoint m)
 @Override
 public void onWorkFailed(NpcBase npc, WorkPoint point)
   {
-  if(this.currentLevel!=null && point instanceof WorkPointMine)
-    {
-    this.currentLevel.onPointFailed(npc, ((WorkPointMine)point).minePoint);
-    }
-  super.onWorkFailed(npc, point);
+ 
   }
 
 @Override
 public void updateWorkPoints()
   {
-  if(this.currentLevel!=null)
-    {
-    this.currentLevel.validatePoints(worldObj);
-    } 
+  
   }
 
 @Override
@@ -304,7 +276,7 @@ protected void loadLevel(int level)
   this.currentLevelNum = level;
   int adjTopY = this.minY - 4 * level;//the top of the level
   int adjMinY = adjTopY-3;  
-  this.currentLevel = new MineLevel(minX, adjMinY, minZ, maxX - minX + 1, 4, maxZ - minZ + 1);
+  this.currentLevel = new MineLevelClassic(minX, adjMinY, minZ, maxX - minX + 1, 4, maxZ - minZ + 1);
   this.currentLevel.initializeLevel(worldObj);
   }
 

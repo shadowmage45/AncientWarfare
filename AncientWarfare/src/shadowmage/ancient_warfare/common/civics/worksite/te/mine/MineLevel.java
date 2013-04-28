@@ -20,35 +20,31 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.LinkedList;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
-public class MineLevel implements INBTTaggable
+public abstract class MineLevel
 {
 
-private int minX;
-private int minY;
-private int minZ;
-private int xSize;
-private int ySize;
-private int zSize;
-
-protected MineComponent shaft = new MineComponentShaft();
-protected MineComponent tunnels = new MineComponentTunnels();
-protected MineComponent branches = new MineComponentBranches();
-
+protected int minX;
+protected int minY;
+protected int minZ;
+protected int xSize;
+protected int ySize;
+protected int zSize;
+protected int shaftX;
+protected int shaftZ;
 public int levelSize = 4;//the height of the level in blocks
+
+protected LinkedList<MinePoint> workList = new LinkedList<MinePoint>();
+protected MinePoint nextPoint = null;
+
 /**
  * position is minX, minY, minZ of the structure boundinb box(world coords)
  * size is the absolute size in blocks of the structure
@@ -70,67 +66,33 @@ public MineLevel(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize)
   Config.logDebug(String.format("creating mineLevel pos: %d,%d,%d  size:  %d, %d, %d", minX, minY, minZ, xSize, ySize, zSize));
   }
 
-public MineLevel(NBTTagCompound tag)
-  {
-  this.readFromNBT(tag);
-  }
-
 public boolean hasWork()
   {
-  return this.shaft.hasWork() || this.tunnels.hasWork() || this.branches.hasWork();
+  return !workList.isEmpty();
   }
 
-public MinePoint getNextMinePoint(NpcBase npc)
+public void onWorkCompleted(TEWorkSiteMine mine, NpcBase npc)
   {
-  if(this.shaft.hasWork())
+  MinePoint mp = this.workList.poll();
+  if(mp==null)
     {
-    return this.shaft.getWorkFor(npc);
+    return;
     }
-  else if(this.tunnels.hasWork())
-    {
-    return this.tunnels.getWorkFor(npc);
-    }
-  else if(this.branches.hasWork())
-    {
-    return this.branches.getWorkFor(npc);
-    }
-  return null;
+  switch(mp.action)
+  {
+  case MINE_CLEAR:
+  mine.handleClearAction(npc, mp);
+  break;
+  case MINE_FILL:
+  mine.handleFillAction(npc, mp);
+  break;
+  case MINE_LADDER:
+  mine.handleLadderAction(npc, mp);
+  break;
+  case MINE_TORCH:   
+  mine.handleTorchAction(npc, mp);
+  break;
   }
-
-public void onPointFailed(NpcBase npc, MinePoint ent)
-  {
-  if(ent.owner.parent==shaft)
-    {
-    shaft.onWorkFailed(npc, ent);
-    }
-  else if(ent.owner.parent==tunnels)
-    {
-    tunnels.onWorkFailed(npc, ent);
-    }
-  else if(ent.owner.parent==branches)
-    {
-    branches.onWorkFailed(npc, ent);
-    }  
-  }
-
-public void onPointFinished(NpcBase npc, MinePoint ent)
-  {
-  Config.logDebug("point finished!! "+ent.owner + ent.owner.parent);
-  if(ent.owner.parent==shaft)
-    {
-    Config.logDebug("shaft piece finished");
-    shaft.onWorkFinished(npc, ent);
-    }
-  else if(ent.owner.parent==tunnels)
-    {
-    Config.logDebug("tunnel piece finished");
-    tunnels.onWorkFinished(npc, ent);
-    }
-  else if(ent.owner.parent==branches)
-    {
-    Config.logDebug("branch piece finished");
-    branches.onWorkFinished(npc, ent);
-    }  
   }
 
 /**
@@ -140,12 +102,9 @@ public void onPointFinished(NpcBase npc, MinePoint ent)
 public void initializeLevel(World world)
   { 
   long t1 = System.nanoTime();
-  int shaftX = minX -1 + xSize/2;
-  int shaftZ = minZ -1 + zSize/2;
-  int order = 0;
-  order = this.mapShaft(world, order, shaftX, shaftZ);
-  order = this.mapTunnels(world, order, shaftX, shaftZ);
-  order = this.mapBranches(world, order, shaftX, shaftZ);
+  shaftX = minX -1 + xSize/2;
+  shaftZ = minZ -1 + zSize/2;
+  scanLevel(world);  
   long t2 = System.nanoTime();
   Config.logDebug("mine level init time nanos: "+(t2-t1)); 
   //find center of work area
@@ -159,65 +118,19 @@ public void initializeLevel(World world)
   //    set to FILL
   }
 
-protected int mapShaft(World world, int order, int shaftX, int shaftZ)
-  {  
-  order = shaft.scanComponent(world, minX, minY, minZ, xSize, ySize, zSize, order, shaftX, shaftZ);
-  return order;
-  }
+protected abstract void scanLevel(World world);
 
-protected int mapTunnels(World world, int order, int shaftX, int shaftZ)
-  {  
-  order = tunnels.scanComponent(world, minX, minY, minZ, xSize, ySize, zSize, order, shaftX, shaftZ);
-  return order;
-  }
-
-protected int mapBranches(World world, int order, int shaftX, int shaftZ)
+protected boolean needsFilled(int id)
   {
-  order = branches.scanComponent(world, minX, minY, minZ, xSize, ySize, zSize, order, shaftX, shaftZ);
-  return order;
+  return id==0 || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID || id==Block.waterMoving.blockID || id==Block.waterStill.blockID;
   }
 
-public List<String> getMapExport()
+protected boolean isValidResource(int id)
   {
-  ArrayList<String> lines = new ArrayList<String>(); 
-  return lines;
+  if(id==0 || id==Block.stone.blockID || id==Block.cobblestone.blockID || id== Block.bedrock.blockID || id== Block.dirt.blockID || id==Block.grass.blockID || id==Block.ladder.blockID || id==Block.torchWood.blockID || id==Block.gravel.blockID)
+    {
+    return false;
+    }
+  return true;
   }
-
-/**
- * called from TE to validate 'cleared' points list
- */
-public void validatePoints(World world)
-  {
-  this.shaft.verifyCompletedNodes(world);
-  this.tunnels.verifyCompletedNodes(world);
-  this.branches.verifyCompletedNodes(world);
-  }
-
-@Override
-public NBTTagCompound getNBTTag()
-  {
-  NBTTagCompound outerTag = new NBTTagCompound();
-  outerTag.setIntArray("bounds", new int[]{minX, minY, minZ, xSize, ySize, zSize});
-  outerTag.setTag("shaft", shaft.getNBTTag());
-  outerTag.setTag("tunnels", tunnels.getNBTTag());
-  outerTag.setTag("branches", branches.getNBTTag());  
-  return outerTag;
-  }
-
-@Override
-public void readFromNBT(NBTTagCompound tag)
-  {
-  int[] bounds = tag.getIntArray("bounds");
-  this.minX = bounds[0];
-  this.minY = bounds[1];
-  this.minZ = bounds[2];
-  this.xSize = bounds[3];
-  this.ySize = bounds[4];
-  this.zSize = bounds[5];
-  this.shaft.readFromNBT(tag.getCompoundTag("shaft"));
-  this.tunnels.readFromNBT(tag.getCompoundTag("tunnels"));
-  this.branches.readFromNBT(tag.getCompoundTag("branches"));
-  }
-
-
 }

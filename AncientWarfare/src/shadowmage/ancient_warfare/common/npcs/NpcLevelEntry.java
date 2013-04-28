@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -40,7 +41,8 @@ protected int health = 20;
 protected int inventorySize = 9;
 protected float accuracy = 1.f;
 protected IAmmoType ammo;//used for archers
-protected List<TargetType> validTargetTypes = new ArrayList<TargetType>();
+//protected List<TargetType> validTargetTypes = new ArrayList<TargetType>();
+protected List<CivicWorkType> workTypes = new ArrayList<CivicWorkType>();
 
 public NpcLevelEntry(String name, String tex)
   {
@@ -114,22 +116,13 @@ public NpcLevelEntry setAmmoType(IAmmoType ammo)
   return this;
   }
 
-public NpcLevelEntry addTargetType(TargetType t)
+public NpcLevelEntry addTargetType(CivicWorkType... l)
   {
-  if(!this.validTargetTypes.contains(t))
+  for(CivicWorkType t : l)
     {
-    this.validTargetTypes.add(t);
-    }
-  return this;
-  }
-
-public NpcLevelEntry addTargetType(List<TargetType> l)
-  {
-  for(TargetType t : l)
-    {
-    if(!this.validTargetTypes.contains(t))
+    if(t!=null && !this.workTypes.contains(t))
       {
-      this.validTargetTypes.add(t);
+      this.workTypes.add(t);
       }
     }
   return this;

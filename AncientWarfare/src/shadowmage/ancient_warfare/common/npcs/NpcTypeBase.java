@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -132,15 +133,6 @@ public NpcLevelEntry addLevel(String name, String tex, ItemStack toolStack, Item
   NpcLevelEntry entry = new NpcLevelEntry(name, tex, toolStack, armorStacks);
   this.levelEntries.add(entry);
   return entry;
-//  this.levelNames.add(name);
-//  this.displayTexture.add(tex);
-//  this.toolStacks.add(toolStack);
-//  if(armorStacks==null)
-//    {
-//    armorStacks = new ItemStack[4];
-//    }
-//  this.armorStacks.add(armorStacks);
-//  this.numOfLevels++;  
   }
 
 /**
@@ -264,13 +256,12 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   return aiEntries;
   }
 
-
 @Override
-public List<TargetType> getValidTargetTypes(int level)
+public List<CivicWorkType> getWorkTypes(int level)
   {
-  if(level>=0 && level<= this.levelEntries.size())
+  if(level>=0 && level< this.levelEntries.size())
     {
-    return this.levelEntries.get(level).validTargetTypes;
+    return this.levelEntries.get(level).workTypes;
     }
   return null;
   }
@@ -280,7 +271,6 @@ public String getIconTexture()
   {
   return "ancientwarfare:npc/"+iconTexture;
   }
-
 
 public class NpcVarHelperDummy extends NpcVarsHelper
 {

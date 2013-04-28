@@ -24,6 +24,7 @@ import java.util.HashMap;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import shadowmage.ancient_warfare.client.model.ModelBallistaMobile;
 import shadowmage.ancient_warfare.client.model.ModelBallistaStand;
@@ -45,6 +46,7 @@ import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
 import shadowmage.ancient_warfare.client.render.RenderNpcHelper;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
+import shadowmage.ancient_warfare.client.render.civic.TESRCivic;
 import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
 import shadowmage.ancient_warfare.client.render.missile.RenderShot;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaMobile;
@@ -63,6 +65,7 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetLarge;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandTurret;
+import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
@@ -70,6 +73,7 @@ import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 /**
@@ -197,10 +201,16 @@ public void loadRenders()
    * load up the vehicle item renderer...
    */
   MinecraftForgeClient.registerItemRenderer(ItemLoader.vehicleSpawner.itemID, RenderVehicleHelper.instance());
+  
   /**
    * npcs...
    */
   RenderingRegistry.registerEntityRenderingHandler(NpcBase.class, new RenderNpcHelper(new ModelBiped(), 1.0f));
+  
+  /**
+   * civic bounds rendering tesr
+   */
+  ClientRegistry.bindTileEntitySpecialRenderer(TECivic.class, new TESRCivic());
   }
 
 public void addVehicleRender(IVehicleType type, RenderVehicleBase rend, ModelVehicleBase model)

@@ -124,13 +124,12 @@ public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player,   Entity 
   {
   if(!player.worldObj.isRemote)
     {
-    Config.logDebug("player left click entity with command baton : "+entity);
     if(entity instanceof NpcBase)
       {
       BatonSettings settings = getBatonSettings(stack);
       if(!settings.hasEntity(entity))
         {
-        Config.logDebug("setting baton entity");
+        player.addChatMessage("Setting Baton Main Target");
         settings.setEntity(entity);
         setBatonSettings(stack, settings);
         player.openContainer.detectAndSendChanges();
@@ -164,7 +163,6 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
       if(entity instanceof NpcBase)
         {
         npc = (NpcBase)entity;
-        Config.logDebug("Baton has local/single entity");
         } 
       else
         {
@@ -175,13 +173,13 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
         }
       }    
     if(settings.range>0)
-      {      
+      {   
+      player.addChatMessage("Executing Baton Command on Area");
       AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-settings.range, player.posY-settings.range, player.posZ-settings.range, player.posX+settings.range, player.posY+settings.range, player.posZ+settings.range);
       List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
       int npcType = -1;
       if(npc!=null)
         {
-        Config.logDebug("commanding direct entity");
         npc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
         npcType = npc.npcType.getGlobalNpcType();
         }
@@ -193,7 +191,6 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
           }
         if(npcType==-1 || testNpc.npcType.getGlobalNpcType()==npcType)
           {
-          Config.logDebug("commanding remote entity");
           testNpc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
           }        
         }
@@ -202,6 +199,7 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
       {
       if(npc!=null)
         {
+        player.addChatMessage("Executing Baton Command on Single Target");
         npc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
         }      
       }
