@@ -63,6 +63,18 @@ public int getLocalAmmoType(IAmmoType type)
   return -1;
   }
 
+public int getCountOf(IAmmoType type)
+  {
+  for(VehicleAmmoEntry entry : this.ammoEntries)
+    {
+    if(entry.baseAmmoType == type)
+      {
+      return entry.ammoCount;
+      }
+    }
+  return 0;
+  }
+
 public IAmmoType getAmmoTypeForLocal(int type)
   {
   if(this.ammoTypes.containsKey(type))
@@ -135,37 +147,74 @@ public void addUseableAmmo(IAmmoType ammo)
   this.ammoTypes.put(ammo.getAmmoType(), ent);
   }
 
+/**
+ * client-side ammo selection by ammo type
+ * @param type
+ */
+public void handleClientAmmoSelection(IAmmoType type)
+  {
+  int foundIndex = -1;
+  VehicleAmmoEntry entry;
+  for(int i = 0; i < this.ammoEntries.size(); i++)
+    {
+    entry = this.ammoEntries.get(i);
+    if(entry!=null && entry.baseAmmoType==type)
+      {
+      foundIndex = i;
+      break;
+      }
+    }
+  if(foundIndex>=0)
+    {
+    this.handleClientAmmoSelection(foundIndex);
+    }
+  }
+
+/**
+ * client-side ammo selection by number
+ * @param type
+ */
+public void handleClientAmmoSelection(int type)
+  {
+  if(type>=0 && type<=this.ammoEntries.size() && type != this.currentAmmoType)
+    {
+    NBTTagCompound innerTag = new NBTTagCompound();
+    innerTag.setInteger("num", type);    
+    Packet02Vehicle pkt = new Packet02Vehicle();
+    pkt.setParams(vehicle);
+    pkt.setAmmoSelect(innerTag);
+    pkt.sendPacketToServer();
+    }
+  }
+
+/**
+ * client-side input from delta (used by keybind to change)
+ * @param delta
+ */
 public void handleAmmoSelectInput(int delta)
   {
   if(this.ammoEntries.size()>0)
     {
     int test = this.currentAmmoType + delta;
-    if(test<0)
+    while(test<0)
       {
-      while(test<0)
-        {
-        test += this.ammoEntries.size();
-        }    
+      test += this.ammoEntries.size();
       }
-    else if(test>=this.ammoEntries.size())
+    while(test>=this.ammoEntries.size())
       {
-      while(test>=this.ammoEntries.size())
-        {
-        test -= this.ammoEntries.size();
-        }
-      }
-    if(test>=0 && test <this.ammoEntries.size() && test !=this.currentAmmoType)
+      test -= this.ammoEntries.size();
+      }    
+    if(test>=0)
       {
-      NBTTagCompound innerTag = new NBTTagCompound();
-      innerTag.setInteger("num", test);    
-      Packet02Vehicle pkt = new Packet02Vehicle();
-      pkt.setParams(vehicle);
-      pkt.setAmmoSelect(innerTag);
-      pkt.sendPacketToServer();
+      this.handleClientAmmoSelection(test);      
       }   
     }
   }
 
+/**
+ * client AND server method to process valid ammo-type change packets. * 
+ * @param tag
+ */
 public void handleAmmoSelectPacket(NBTTagCompound tag)
   {  
   int num = tag.getInteger("num");
@@ -310,7 +359,6 @@ public MissileBase getMissile(float x, float y, float z, float mx, float my, flo
     }
   return null;  
   }
-
 
 public MissileBase getMissile2(float x, float y, float z, float yaw, float pitch, float velocity)
   {

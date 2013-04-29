@@ -35,6 +35,7 @@ import shadowmage.ancient_warfare.client.gui.structure.GuiEditorSelect;
 import shadowmage.ancient_warfare.client.gui.structure.GuiStructureScanner;
 import shadowmage.ancient_warfare.client.gui.structure.GuiSurvivalBuilder;
 import shadowmage.ancient_warfare.client.gui.teams.GuiTeamControl;
+import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleAmmoSelection;
 import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleDebug;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.civics.TECivic;
@@ -71,6 +72,7 @@ public static final int TEAM_CONTROL = 6;
 public static final int NPC_COMMAND_BATON = 7;
 public static final int CIVIC_BASE = 8;
 public static final int NPC_BASE = 9;
+public static final int VEHICLE_AMMO_SELECT = 98;
 public static final int VEHICLE_DEBUG = 99;
 
 private static GUIHandler INSTANCE;
@@ -87,6 +89,7 @@ public static GUIHandler instance()
 @Override
 public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
   {
+  VehicleBase vehicle;
   switch(ID)
   {
   case STRUCTURE_SELECT:
@@ -134,13 +137,19 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   case 10:
   return null;  
   
+  
+  case VEHICLE_AMMO_SELECT:
+  Config.logDebug("returning server container for vehicle ammo select");
+  return new ContainerDummy();
+  
   case VEHICLE_DEBUG:
-  VehicleBase vehicle = (VehicleBase)world.getEntityByID(x);
+  vehicle = (VehicleBase)world.getEntityByID(x);
   if(vehicle!=null)
     {
     return new ContainerVehicle(player, vehicle, vehicle);
     }
-  return null;//TODO make/set gui & container..
+  return null;
+  
   } 
   return null;
   }
@@ -148,6 +157,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
 @Override
 public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
   {  
+  VehicleBase vehicle;
   switch(ID)
   {
   case STRUCTURE_SELECT:
@@ -193,9 +203,19 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   return null;
   
   case 10:
-  return null;  
+  return null; 
+  
+  case VEHICLE_AMMO_SELECT:
+  Config.logDebug("returning client gui for vehicle ammo select");
+  vehicle = (VehicleBase)world.getEntityByID(x);
+  if(vehicle!=null)
+    {
+    return new GuiVehicleAmmoSelection(new ContainerDummy(), vehicle);
+    }
+  return null;
+  
   case VEHICLE_DEBUG:
-  VehicleBase vehicle = (VehicleBase)world.getEntityByID(x);
+  vehicle = (VehicleBase)world.getEntityByID(x);
   if(vehicle!=null)
     {
     return new GuiVehicleDebug(new ContainerVehicle(player, vehicle, vehicle));

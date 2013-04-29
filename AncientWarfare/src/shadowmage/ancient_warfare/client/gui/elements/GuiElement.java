@@ -34,34 +34,34 @@ public abstract class GuiElement extends Gui implements IGuiElement
 
 protected final IGuiElementCallback parent;
 
-final int elementNum;
-int renderPosX;
-int renderPosY;
-int width;
-int height;
+protected final int elementNum;
+protected int renderPosX;
+protected int renderPosY;
+protected int width;
+protected int height;
 
 /**
  * the most recently pressed button on this element, -1 for none
  */
-int mouseButton = -1;
+protected int mouseButton = -1;
 
 /**
  * the X,Y of where the mouse button was pressed or moved to
  */
-int mouseDownX;
-int mouseDownY;
+protected int mouseDownX;
+protected int mouseDownY;
 
 /**
  * the X,Y of where the mouse button was pressed or moved from (used with mouseDown to calc move delta)
  */
-int mouseLastX;
-int mouseLastY;
+protected int mouseLastX;
+protected int mouseLastY;
 
 /**
  * set by parent GUI to update render pos & mouse interaction relative to scaled screen size/etc. scrollable area uses this to offset render & mousePos relative to the scroll area
  */
-int guiLeft;
-int guiTop;
+protected int guiLeft;
+protected int guiTop;
 
 /**
  * cached variable of isMouseOver(x,y). updated onMouseMoved

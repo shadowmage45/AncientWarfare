@@ -26,7 +26,7 @@ import net.minecraft.client.Minecraft;
 public class GuiButtonSimple extends GuiElement
 {
 
-String displayString = "";
+protected String displayString = "";
 
 /**
  * @param elementNum

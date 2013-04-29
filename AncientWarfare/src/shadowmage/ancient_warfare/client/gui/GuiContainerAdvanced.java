@@ -219,21 +219,21 @@ public int getGuiTop()
  * @param id
  * @param x
  * @param y
- * @param len
+ * @param width
  * @param wid
  * @param name
  * @return
  */
-public GuiButtonSimple addGuiButton(int id, int x, int y, int len, int high, String name)
+public GuiButtonSimple addGuiButton(int id, int x, int y, int width, int high, String name)
   {
-  GuiButtonSimple button = this.addGuiButton(id, len, high, name);
+  GuiButtonSimple button = this.addGuiButton(id, width, high, name);
   button.updateRenderPos(x, y);
   return button;
   }
 
-public GuiButtonSimple addGuiButton(int id, int len, int high, String name)
+public GuiButtonSimple addGuiButton(int id, int width, int high, String name)
   {
-  GuiButtonSimple button = new GuiButtonSimple(id, this, len, high, name);
+  GuiButtonSimple button = new GuiButtonSimple(id, this, width, high, name);
   this.guiElements.put(id, button);
   return button;
   }

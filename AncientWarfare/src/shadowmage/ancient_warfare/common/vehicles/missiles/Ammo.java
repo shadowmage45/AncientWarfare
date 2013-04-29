@@ -24,10 +24,13 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -408,6 +411,17 @@ private float getMaxYaw(int side)
   return 270+45;
   }
   return 0;
+  }
+
+@Override
+public Icon getDisplayIcon()
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(ItemLoader.ammoItem.itemID);
+  if(d!=null)
+    {
+    return d.getIconFor(getAmmoType());
+    }
+  return null;
   }
 
 protected void spawnAirBurst(World world, float x, float y, float z, float maxVelocity, IAmmoType type, int count)

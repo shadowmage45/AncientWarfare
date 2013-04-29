@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -49,6 +50,7 @@ String getIconTexture();
 ItemStack getDisplayStack();//should be a persistent stack in the ammo instance, used to display ammo...
 ItemStack getAmmoStack(int qty);//used to create a stack of this ammo.  used in structure spawning
 IAmmoType getSecondaryAmmoType();//if this is just a 'container' ammo, get the contained type
+Icon getDisplayIcon();//pull the icon for this item from..wherever (desc. registry).
 int getSecondaryAmmoTypeCount();//get the contained qty of what this ammo represents (used by cluster/grapeshot)
 boolean hasSecondaryAmmo();
 boolean isFlaming();//used by client-side rendering to render the missile on-fire, does nothing else

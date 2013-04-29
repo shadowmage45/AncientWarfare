@@ -34,8 +34,10 @@ import net.minecraft.util.Vec3;
 
 import org.lwjgl.input.Keyboard;
 
+import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleAmmoSelection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
+import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
@@ -85,6 +87,7 @@ public static Keybind pitchDown;
 public static Keybind turretLeft;
 public static Keybind turretRight;
 public static Keybind mouseAim;
+public static Keybind ammoSelect;
 
 public void loadKeysFromConfig()
   {
@@ -113,6 +116,8 @@ public void loadKeysFromConfig()
   KeybindManager.addKeybind(turretRight);  
   mouseAim = new Keybind(Config.getKeyBindID("keybind.mouseAim", Keyboard.KEY_C, "Enable/Disable Mouse Aim"), "Mouse Aim");
   KeybindManager.addKeybind(mouseAim);
+  ammoSelect = new Keybind(Config.getKeyBindID("keybind.ammoSelect", Keyboard.KEY_V, "Open ammo Select GUI"), "Ammo Select");
+  KeybindManager.addKeybind(ammoSelect);
   }
 
 @Override
@@ -179,21 +184,26 @@ public void onKeyPressed(Keybind kb)
       {
       Settings.setMouseAim(!Settings.getMouseAim());
       }
-    if(kb==forward || kb==left || kb==right || kb==reverse)
+    else if(kb==forward || kb==left || kb==right || kb==reverse)
       {
       hasMoveInput = true;
       }
-    if(kb==fire)
+    else if(kb==fire)
       {
       this.handleFireAction();    
       }
-    if(kb==pitchUp || kb == pitchDown || kb == turretLeft || kb==turretRight)
+    else if(kb==pitchUp || kb == pitchDown || kb == turretLeft || kb==turretRight)
       {
       this.handleAimAction(kb);
       }
-    if(kb==ammoPrev || kb== ammoNext)
+    else if(kb==ammoPrev || kb== ammoNext)
       {
       this.handleAmmoKeyAction(kb);
+      }
+    else if(kb==ammoSelect)
+      {
+      Config.logDebug("ammo select key pressed!!");
+      this.handleAmmoSelectGui();
       }
     }
   }
@@ -214,6 +224,19 @@ public void onTickEnd()
   if(Settings.getMouseAim() && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
     {
     this.handleMouseAimUpdate();
+    }
+  }
+
+private void handleAmmoSelectGui()
+  {
+  if(mc.currentScreen==null && mc.thePlayer!=null && mc.theWorld!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
+    {
+    VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
+    if(vehicle.vehicleType.getValidAmmoTypes().size()>=1)
+      {
+      Config.logDebug("requesting open ammo select gui");
+      GUIHandler.instance().openGUI(GUIHandler.VEHICLE_AMMO_SELECT, mc.thePlayer, mc.theWorld, vehicle.entityId, 0, 0);
+      } 
     }
   }
 

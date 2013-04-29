@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -58,6 +59,5 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z, M
     ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());  
     }
   }
-
 
 }

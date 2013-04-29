@@ -7,6 +7,7 @@ GENERAL
 * grenades
 * land-mines
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
+* change tooltip over to a LIST of tooltips, allow items to add multiple lines.
 
 PATHFINDING
 * still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
