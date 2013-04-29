@@ -4,7 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Minecraft"/>
 	<classpathentry kind="lib" path="/Minecraft/jars/bin/lwjgl.jar"/>
-	<classpathentry kind="lib" path="D:/forge-675/mcp/lib/argo-3.2-src.jar"/>
-	<classpathentry kind="lib" path="D:/forge-675/mcp/lib/guava-14.0-rc3.jar"/>
+	<classpathentry kind="lib" path="/Minecraft/lib/argo-3.2-src.jar" sourcepath="/Minecraft/lib/argo-3.2-src.jar"/>
+	<classpathentry kind="lib" path="/Minecraft/lib/guava-14.0-rc3.jar" sourcepath="/Minecraft/lib/guava-14.0-rc3-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
