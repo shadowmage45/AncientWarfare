@@ -35,7 +35,7 @@ public AmmoHwachaRocketFlame(int ammoType)
   {
   super(ammoType);
   this.displayName = "Flame Hwacha Rocket";
-  this.displayTooltip = "A small self-propelled arrow soaked in flammable resin.";
+  this.addTooltip("A small self-propelled arrow soaked in flammable resin.");
   this.entityDamage = 5;
   this.vehicleDamage = 5;
   this.isArrow = true;

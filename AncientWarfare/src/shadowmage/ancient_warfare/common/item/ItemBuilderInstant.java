@@ -134,7 +134,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     }  
   if(isShiftClick(player))
     {
-    openGUI(player);
+    if(player.capabilities.isCreativeMode)
+      {
+      openGUI(player);
+      }
     return true;
     }
   if(hit==null)

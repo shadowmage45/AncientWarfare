@@ -40,7 +40,7 @@ public AmmoFlameShot(int ammoType, int weight)
   this.isFlaming = true;
   this.ammoWeight = weight;
   this.displayName = "Fire Shot "+weight+"kg";
-  this.displayTooltip = weight+"kg canister of flammable liquid.";  
+  this.addTooltip(weight+"kg canister of flammable liquid.");  
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoFlame1";

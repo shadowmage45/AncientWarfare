@@ -54,6 +54,11 @@ public static ICivicType mineBasic = new CivicMine(10, "Basic Layout Mine", "A m
 //mine altr2
 //mine altr3
 public static ICivicType treeFarmOak = new CivicTreeFarm(16, "Oak Tree Farm", "Tend to and harvest oak trees", TETreeFarmOak.class);
+//spruce
+//birch
+//jungle
+public static ICivicType builder = new CivicBuilder(20);
+
 
 protected int globalID = 0;
 protected String name = "";

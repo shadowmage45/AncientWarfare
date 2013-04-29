@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -117,7 +119,7 @@ int entityDamage;
 int vehicleDamage;
 static final float gravityFactor = 9.81f*0.05f*0.05f;
 String displayName = "AW.Ammo";
-String displayTooltip = "AW.AmmoTooltip";
+List<String> displayTooltip = new ArrayList<String>();
 String modelTexture = "foo.png";
 boolean isRocket = false;
 boolean isArrow = false;
@@ -141,6 +143,11 @@ public Ammo(int ammoType)
     {    
     ammoTypes[ammoType]=this;
     }  
+  }
+
+public void addTooltip(String tip)
+  {
+  this.displayTooltip.add(tip);
   }
 
 @Override
@@ -168,7 +175,7 @@ public String getDisplayName()
   }
 
 @Override
-public String getDisplayTooltip()
+public List<String> getDisplayTooltip()
   {
   return displayTooltip;
   }

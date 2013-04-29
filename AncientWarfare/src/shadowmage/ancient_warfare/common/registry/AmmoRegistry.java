@@ -98,7 +98,34 @@ public IAmmoType getAmmoEntry(int type)
 public void registerAmmoTypeWithItem(IAmmoType ammo)
   {
   AWItemBase item = ItemLoader.ammoItem; 
-  Description d = ItemLoader.instance().addSubtypeInfoToItem(item, ammo.getAmmoType(), ammo.getDisplayName(), "", ammo.getDisplayTooltip());
+  List<String> tips = ammo.getDisplayTooltip();  
+  Description d = ItemLoader.instance().addSubtypeInfoToItem(item, ammo.getAmmoType(), ammo.getDisplayName());
+  for(String tip : tips)
+    {
+    d.addTooltip(tip, ammo.getAmmoType());
+    }
+  d.addTooltip("Weight: "+ammo.getAmmoWeight(), ammo.getAmmoType());
+  d.addTooltip("Entity Damage: "+ammo.getEntityDamage(), ammo.getAmmoType());
+  d.addTooltip("Vehicle Damage: "+ammo.getVehicleDamage(), ammo.getAmmoType());
+  if(ammo.isFlaming())
+    {
+    d.addTooltip("Flaming ammunition, ignites targets when hit", ammo.getAmmoType());
+    }
+  if(ammo.isProximityAmmo())
+    {
+    d.addTooltip("Proximity ammunition, detonates in proximity to targets", ammo.getAmmoType());
+    }
+  if(ammo.isPenetrating())
+    {
+    d.addTooltip("Penetrating ammunition, does not stop on impact", ammo.getAmmoType());
+    }
+  if(ammo.getSecondaryAmmoType() != null && ammo.getSecondaryAmmoTypeCount()>0)
+    {
+    d.addTooltip("Cluster ammunition, spawns "+ammo.getSecondaryAmmoTypeCount()+" submunitions", ammo.getAmmoType());
+    IAmmoType t = ammo.getSecondaryAmmoType();
+    d.addTooltip("Submunition Entity Damage: "+t.getEntityDamage(), ammo.getAmmoType());
+    d.addTooltip("Submunition Vehicle Damage: "+t.getVehicleDamage(), ammo.getAmmoType());
+    }
   d.addDisplayStack(ammo.getDisplayStack());
   d.setIconTexture(ammo.getIconTexture(), ammo.getAmmoType());
   this.registerAmmoType(ammo);

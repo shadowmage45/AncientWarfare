@@ -35,7 +35,7 @@ public AmmoNapalmShot(int ammoType, int weight)
   {
   super(ammoType);
   this.displayName = "Napalm Shot " + weight +"kg";
-  this.displayTooltip = weight+"kg of flammable semi-liquid gel.";
+  this.addTooltip(weight+"kg of flammable semi-liquid gel.");
   this.ammoWeight = weight;
   this.entityDamage = weight;
   this.vehicleDamage = weight;

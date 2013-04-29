@@ -86,10 +86,13 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
     Description d = DescriptionRegistry2.instance().getDescriptionFor(stack.itemID);
     if(d!=null)
       {
-      String tip = d.getDisplayTooltip(stack.getItemDamage());
-      if(tip!=null && !tip.equals(""))
+      List<String> tips = d.getDisplayTooltips(stack.getItemDamage());
+      if(tips!=null && !tips.isEmpty())
         {
-        list.add(tip);
+        for(String tip : tips)
+          {
+          list.add(tip);
+          }        
         }
       }     
     }  

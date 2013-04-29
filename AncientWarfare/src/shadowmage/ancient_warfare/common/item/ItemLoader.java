@@ -46,6 +46,7 @@ public static final AWItemBase armorItem = new ItemVehicleArmor(Config.getItemID
 public static final AWItemBase npcSpawner = new ItemNpcSpawner(Config.getItemID("itemMulti.npcSpawner", 13011, "Npc Spawning Item"));
 public static final AWItemBase npcCommandBaton = new ItemNpcCommandBaton(Config.getItemID("itemMulti.commandBaton", 13012, "Npc Command Batons"));
 public static final AWItemBase civicPlacer = new ItemCivicPlacer(Config.getItemID("itemMulti.civiPlacer", 13013, "Constructs Civic Buildings/Sites"));
+public static final AWItemBase civicBuilder = new ItemCivicBuilder(Config.getItemID("itemMulti.civicBuilder", 13014, "Constructs Structures using Civics"));
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -95,6 +96,7 @@ private void loadItems()
   this.addSubtypeInfoToItem(npcCommandBaton, 2, "Expert Command Baton", "","Issues simple commands to several npcs, or advanced commands to a single npc").addDisplayStack(new ItemStack(npcCommandBaton,1,2)).setIconTexture("ancientwarfare:npc/baton3", 2);
   this.addSubtypeInfoToItem(npcCommandBaton, 3, "Master Command Baton", "","Issues advanced commands to several npcs").addDisplayStack(new ItemStack(npcCommandBaton,1,3)).setIconTexture("ancientwarfare:npc/baton4", 3);
   this.registerItemSubtyped(civicPlacer);
+  this.registerItemSingle(civicBuilder, "Civic Structure Builder", "", "Constructs Structures using the Civics System");
   }
 
 private void loadRecipes()
@@ -123,17 +125,29 @@ public Description registerItemSingle(AWItemBase item, String name, String desc,
   Description d = DescriptionRegistry2.instance().registerItem(item, true);
   d.setName(name, 0);
   d.setDescription(desc, 0);
-  d.setTooltip(tip, 0);  
+  d.addTooltip(tip, 0);  
   return d;
   }
 
 public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name, String desc, String tooltip)
   {
   Description d = DescriptionRegistry2.instance().getDescriptionFor(item.itemID);
-  d.setName(name, damage);
-  d.setDescription(desc, damage);
-  d.setTooltip(tooltip, damage);  
+  if(d!=null)
+    {
+    d.setName(name, damage);
+    d.setDescription(desc, damage);
+    d.addTooltip(tooltip, damage);  
+    }  
   return d;
   }
 
+public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(item.itemID);
+  if(d!=null)
+    {
+    d.setName(name, damage);   
+    }  
+  return d;
+  }
 }

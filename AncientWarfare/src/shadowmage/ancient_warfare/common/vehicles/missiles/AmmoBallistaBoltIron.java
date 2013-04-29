@@ -42,7 +42,7 @@ public AmmoBallistaBoltIron(int ammoType)
   this.isRocket = false;
   this.isPersistent = true;
   this.displayName = "Iron Ballista Bolt";  
-  this.displayTooltip = "A large iron tipped iron shafted bolt.";  
+  this.addTooltip("A large iron tipped iron shafted bolt.");  
   this.iconTexture = "ammoArrow1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
   }

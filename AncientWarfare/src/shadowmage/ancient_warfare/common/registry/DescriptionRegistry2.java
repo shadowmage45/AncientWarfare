@@ -64,5 +64,17 @@ public Description getDescriptionFor(int id)
   return this.descriptionsByID.get(id);
   }
 
+public void addTooltipTo(int id, int dmg, String tip)
+  {
+  if(this.descriptionsByID.containsKey(id))
+    {
+    Description d = this.descriptionsByID.get(id);
+    if(d!=null)
+      {
+      d.addTooltip(tip, dmg);
+      }
+    }
+  }
+
 
 }

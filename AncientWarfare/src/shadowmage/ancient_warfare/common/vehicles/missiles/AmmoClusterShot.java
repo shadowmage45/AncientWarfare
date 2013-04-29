@@ -35,7 +35,7 @@ public AmmoClusterShot(int ammoType, int weight)
   {
   super(ammoType);    
   this.displayName = "Cluster Shot " + weight +"kg";
-  this.displayTooltip = weight+"kg of small ammunitions with an explosive charge.";
+  this.addTooltip(weight+"kg of small ammunitions with an explosive charge.");
   this.ammoWeight = weight;
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 

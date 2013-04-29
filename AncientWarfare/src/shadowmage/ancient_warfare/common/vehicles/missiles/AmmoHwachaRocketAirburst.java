@@ -35,7 +35,7 @@ public AmmoHwachaRocketAirburst(int ammoType)
   {
   super(ammoType);
   this.displayName = "Hwacha Airburst Rocket";
-  this.displayTooltip = "Delivers a burst of Stone Ball Shot over the heads of the enemy.";
+  this.addTooltip("Delivers a burst of Stone Ball Shot over the heads of the enemy.");
   this.entityDamage = 0;
   this.vehicleDamage = 0;
   this.isArrow = true;

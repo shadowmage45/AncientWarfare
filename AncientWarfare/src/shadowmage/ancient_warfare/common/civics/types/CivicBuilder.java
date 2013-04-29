@@ -18,27 +18,17 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.item;
+package shadowmage.ancient_warfare.common.civics.types;
 
-import net.minecraft.client.renderer.texture.IconRegister;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
-import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
-import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
-
-public class ItemAmmo extends AWItemBase
+public class CivicBuilder extends Civic
 {
 
 /**
- * @param itemID
- * @param hasSubTypes
+ * @param id
  */
-public ItemAmmo(int itemID)
+public CivicBuilder(int id)
   {
-  super(itemID, true);
-  this.setCreativeTab(CreativeTabAW.ammoTab);
+  super(id);
   }
-
-
 
 }

@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.registry.entry;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,7 +48,7 @@ boolean normalItem = true;//one name/tooltip, no subtypes, damage is used for ot
 
 private final HashMap<Integer, String> names = new HashMap<Integer, String>();
 private final HashMap<Integer, String> descriptions = new HashMap<Integer, String>();
-private final HashMap<Integer, String> tooltips = new HashMap<Integer, String>();
+private final HashMap<Integer, List<String>> tooltips = new HashMap<Integer, List<String>>();
 private final HashMap<Integer, Icon> icons = new HashMap<Integer, Icon>();
 private final HashMap<Integer, String> iconTextures = new HashMap<Integer, String>();
 
@@ -112,14 +113,21 @@ public Description setDescription(String desc, int damage)
   return this;
   }
 
-public Description setTooltip(String tooltip, int damage)
+public Description addTooltip(String tooltip, int damage)
   {
-  Config.logDebug("setting tooltip for : "+item.itemID +"::"+damage+ " tip:: "+tooltip);
+  if(this.item!=null)
+    {
+    Config.logDebug("setting tooltip for : "+item.itemID +"::"+damage+ " tip:: "+tooltip);
+    }
   if(this.normalItem)
     {
     damage = 0;
     }
-  this.tooltips.put(damage, tooltip);
+  if(!this.tooltips.containsKey(damage))
+    {
+    this.tooltips.put(damage, new ArrayList<String>());
+    }
+  this.tooltips.get(damage).add(tooltip);
   return this;
   }
 
@@ -165,7 +173,7 @@ public String getDescription(int damage)
   return "";
   }
 
-public String getDisplayTooltip(int damage)
+public List<String> getDisplayTooltips(int damage)
   {
   if(this.normalItem && tooltips.containsKey(0))
     {
@@ -175,7 +183,7 @@ public String getDisplayTooltip(int damage)
     {
     return this.tooltips.get(damage);
     }
-  return "";
+  return Collections.emptyList();
   }
 
 public Icon getIconFor(int damage)
@@ -210,9 +218,9 @@ public String getDescription(ItemStack stack)
   return stack==null ? "" : this.getDescription(stack.getItemDamage());
   }
 
-public String getDisplayTooltip(ItemStack stack)
+public List<String> getDisplayTooltip(ItemStack stack)
   {
-  return stack==null ? "" : this.getDisplayTooltip(stack.getItemDamage());
+  return (List<String>) (stack==null ? Collections.emptyList() : this.getDisplayTooltips(stack.getItemDamage()));
   }
 
 public Icon getIconFor(ItemStack stack)

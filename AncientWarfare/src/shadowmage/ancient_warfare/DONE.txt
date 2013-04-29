@@ -394,3 +394,67 @@
 * add method to Trig to return maximum distance for a siege-engine.  needs rework to include rockets
 * fix max-distance method to include rockets.
 /********** 03-30-13 **********/
+
+/********** 04-01-13 **********/ TO /********** 04-10-13 **********/
+* pathfinding
+
+/********** 04-11-13 **********/
+* fix armor giving +HP when hit
+* npc/vehicle nameplates
+* rework structure override rules to only be true/false  + teamNum override
+* rework builder items to include new override stuff and pass it to builders
+* rework builders to pass override info to rules (teamNum)
+* add npc spawning to scan/build
+/********** 04-12-13 **********/
+* pathfinding/ai/scanning
+/********** 04-13-13 **********/
+* pathfinding/ai/scanning
+/********** 04-14-13 **********/
+* pathfinding/ai/scanning
+* fix vertical pathing, check currenty+ when moving y+, check targety+ when moving y- 
+/********** 04-15-13 **********/
+* fix archer LOS check
+* unify entity navigator into single class        
+* fix team control--was removing player from the wrong entry server-side
+* clean up old pathfinding classes, some of them.
+* pahtfinding: if entity is in air (only partially on block), get from block below
+* clean up move-to code where it would 'jump' at the final target (entity targets)
+* unify pathfinders, all pathing goes through PathManager. allows for easy config-setting for swapping between inline, scheduled, and threaded
+/********** 04-16-13 **********/
+* hey soldiers can use doors now! (WIP, needs...help..)
+* ohh, and they can wander without killing the CPU!
+/********** 04-17-13 **********/
+* fix npc door use.
+* add npc village interaction (add to village index occasionally)
+* add npc seek shelter at night objective
+* more cleanup work on soldiers and doors--sometimes they're $%#$&# dumb still
+/********** 04-18-13 **********/
+* yet more door/pathfinder work
+* also, work on NPC command stuff
+* also, finish command baton stuff
+* and more work on door/pathfinder (this is my @#%^@! 10% problem...)
+* tons of layout/prep work on civics
+/********** 04-19-13 **********/
+* need to add dynamic speed-setting to entities (faster if attacking/following, slower when patrol/wander/work)
+/********** 04-20-13 **********/
+* rewrite of navigator, work on farm civics
+* no more door issues, navigation is much cleaner. (still needs path replanning cleanup)
+/********** 04-21-13 **********/
+* more work on farm civics, depository functions for npcs
+/********** 04-22-13 **********/
+* add potato/carrot farms
+/********** 04-23-13 **********/
+* hmm...npcs mining things?
+/********** 04-24-13 **********/ 
+* add npc nameplate color
+* add npc health update relay
+* set npc default texture.. (old blue tex)   
+* MINE -- set ladder orientation -- will need shaft Pos set/saved/loaded        
+* MINE -- move the second 'shaft' to be on top--so the bottom layer is flat (will eliminate many ladder issues), but give a 2x buffer on the first-floor roof   
+/********** 04-25-13 **********/
+* RESTRUCTURE
+        remove array, it is uneeded
+        allow for multiple points of same coord in lists (with diff priority)
+        when scanning, check floor before adding torches, add floor then torch if necessary(same for ladders)
+        figure out a way to split into multiple concurrent branches (add branch# to point?)
+            break into components, ea stored in a priority queue

@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
@@ -44,7 +46,7 @@ int getEntityDamage();
 int getVehicleDamage();
 
 String getDisplayName();//the displayed item-name/ammo name for this ammo
-String getDisplayTooltip();//the display tooltip for this ammo
+List<String> getDisplayTooltip();//the display tooltip for this ammo
 String getModelTexture();//get the display texture
 String getIconTexture();
 ItemStack getDisplayStack();//should be a persistent stack in the ammo instance, used to display ammo...

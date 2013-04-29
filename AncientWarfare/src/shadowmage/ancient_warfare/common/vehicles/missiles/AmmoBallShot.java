@@ -35,7 +35,7 @@ public AmmoBallShot(int ammoType)
   {
   super(ammoType);
   this.displayName = "Stone Ball Shot";
-  this.displayTooltip = "Small stone ball-shot. Used in cluster-type ammunition.";
+  this.addTooltip("Small stone ball-shot. Used in cluster-type ammunition.");
   this.renderScale = 0.15f;
   this.ammoWeight = 1.f;
   this.entityDamage = 5;
