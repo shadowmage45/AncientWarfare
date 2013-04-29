@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
 import java.util.ArrayList;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
@@ -48,6 +49,18 @@ public AITargetEntry getEntryFor(Entity ent)
   for(AITargetEntry entry : targetEntries)
     {
     if(entry.isTarget(ent))
+      {
+      return entry;
+      }
+    }
+  return null;
+  }
+
+public AITargetEntry getEntryFor(TileEntity te)
+  {
+  for(AITargetEntry entry : this.targetEntries)
+    {
+    if(entry.isTarget(te))
       {
       return entry;
       }

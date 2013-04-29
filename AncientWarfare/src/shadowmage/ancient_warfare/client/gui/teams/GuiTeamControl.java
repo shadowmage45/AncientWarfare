@@ -81,6 +81,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   this.drawCenteredString(fontRenderer, "Current Team: "+entry.teamNum, guiLeft+(getXSize()/2), guiTop+5, 0xffffffff);  
   this.drawCenteredString(fontRenderer, "Current Rank: "+entry.getPlayerRank(player.getEntityName()), guiLeft+(getXSize()/2), guiTop+15, 0xffffffff);
+  this.drawStringGui("Change Team:", 5, 5, 0xffffffff);
   }
 
 @Override
@@ -124,7 +125,7 @@ public void setupControls()
   {
   this.addGuiButton(0, 45, 12, "Done").updateRenderPos(getXSize()-45-5, 5);
   advControls = this.addGuiButton(5, getXSize()-75-5, 20, 75, 12, "Adv Controls");
-  this.addGuiButton(6, 5, 5, 65, 12, "Change Team");
+  //6 unused
   this.addGuiButton(7, 5, 20, 12, 12, "-");
   this.teamSelectNumber = (GuiNumberInputLine) this.addNumberField(8, 45, 12, 1, "0").setMinMax(0, 15).updateRenderPos(5+12+2, 20);
   this.addGuiButton(9, 5+12+45+4, 20, 12, 12, "+");

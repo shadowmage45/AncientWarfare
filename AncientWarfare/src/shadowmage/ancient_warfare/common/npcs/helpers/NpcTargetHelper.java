@@ -26,7 +26,9 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -101,6 +103,31 @@ public void addOrUpdateAggroEntry(AITargetEntry type, int x, int y, int z, int a
     this.aggroEntries.put(type.getTypeName(), new AIAggroList(npc, type.getTypeName()));
     }
   this.aggroEntries.get(type.getTypeName()).addOrUpdateEntry(x,y,z, aggroAmt, type);    
+  }
+
+public void handleTileEntityTargetBroadcast(TileEntity te, TargetType t, int aggroAmt)
+  { 
+  if(this.targetEntries.containsKey(t))
+    {    
+    AITargetList list = this.targetEntries.get(t);
+    if(list!=null)
+      {
+      AITargetEntry entry = list.getEntryFor(te);
+      if(entry!=null)
+        {
+        this.addOrUpdateAggroEntry(entry, te, aggroAmt);
+        }
+      }
+    }
+  }
+
+public void addOrUpdateAggroEntry(AITargetEntry type, TileEntity te, int aggroAmt)
+  {
+  if(!this.aggroEntries.containsKey(type.getTypeName()))
+    {
+    this.aggroEntries.put(type.getTypeName(), new AIAggroList(npc, type.getTypeName()));
+    }
+  this.aggroEntries.get(type.getTypeName()).addOrUpdateEntry(te, aggroAmt, type);  
   }
 
 public void addOrUpdateAggroEntry(AITargetEntry type, Entity entity, int aggroAmt)

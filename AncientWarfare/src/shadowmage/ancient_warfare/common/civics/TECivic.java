@@ -106,7 +106,7 @@ public void updateEntity()
     this.broadCastToSoldiers(Config.npcAISearchRange);
     this.updateWorkPoints();
     this.validateWorkers();    
-    this.updateTicks = Config.npcAITicks;
+    this.updateTicks = Config.npcAITicks * 10;
     }
   else
     {
@@ -161,12 +161,18 @@ public void broadCastToSoldiers(int maxRange)
         {
         //add attack entry
         //TODO
+        npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.ATTACK, Config.npcAITicks*10);
         }      
       }
     else
       {
       if(broadcastWork)
-        {        
+        {    
+        if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
+          {
+          Config.logDebug("broadcasting aggro update to npc!!!");
+          npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*40);
+          }
 //        Config.logDebug("broadcasting to npcs!!");
         if(npc.wayNav.getWorkSite()==null && hasWork() && canHaveMoreWorkers(npc))
           {

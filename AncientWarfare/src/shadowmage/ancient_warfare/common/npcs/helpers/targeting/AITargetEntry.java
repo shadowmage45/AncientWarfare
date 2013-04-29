@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -56,9 +57,13 @@ public TargetType getTypeName()
 
 public boolean isTarget(Entity ent)
   {
-  return targetClass!=null && targetClass.isAssignableFrom(ent.getClass());//ent.getClass().isAssignableFrom(entityClass);
+  return ent!=null && targetClass!=null && targetClass.isAssignableFrom(ent.getClass());
   }
 
+public boolean isTarget(TileEntity te)
+  {
+  return te!=null && targetClass!=null && targetClass.isAssignableFrom(te.getClass());
+  }
 /**
  * TODO
  * @param world

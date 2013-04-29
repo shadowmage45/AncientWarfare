@@ -210,7 +210,7 @@ public void loadRenders()
   /**
    * civic bounds rendering tesr
    */
-  ClientRegistry.bindTileEntitySpecialRenderer(TECivic.class, new TESRCivic());
+//  ClientRegistry.bindTileEntitySpecialRenderer(TECivic.class, new TESRCivic());
   }
 
 public void addVehicleRender(IVehicleType type, RenderVehicleBase rend, ModelVehicleBase model)

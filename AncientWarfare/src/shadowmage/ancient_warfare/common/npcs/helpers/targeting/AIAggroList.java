@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetPosition;
@@ -69,6 +71,24 @@ public void addOrUpdateEntry(int x, int y, int z, int aggroAmt, AITargetEntry ty
     }
   TargetPosition target = TargetPosition.getNewTarget(x,y,z, type.getTypeName());
   AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target).setAggro(aggroAmt);
+  this.targetEntries.add(wrap);
+  }
+
+public void addOrUpdateEntry(TileEntity te, int aggroAmt, AITargetEntry type)
+  {
+  Config.logDebug("adding/updating TE target of type: "+type.getTypeName());
+  for(AIAggroTargetWrapper entry : this.targetEntries)
+    {
+    if(entry.matches(te))
+      {
+      entry.aggroLevel+=aggroAmt;
+      Config.logDebug("found existing te work target, new aggro: "+entry.aggroLevel);
+      return;
+      }
+    }
+  TargetPosition target = TargetPosition.getNewTarget(te, type.getTypeName());
+  AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target).setAggro(aggroAmt);
+  Config.logDebug("made new te work target, aggro: "+wrap.aggroLevel+ " target list size: "+this.targetEntries.size());
   this.targetEntries.add(wrap);
   }
 

@@ -8,9 +8,6 @@ GENERAL
 * land-mines
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 
-TEAM CONTROL GUI
-* Need remove 'change team' button, replace with simple text
-
 PATHFINDING
 * still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
 * for non-attack targets, hook in the 'teleport' system.
@@ -142,6 +139,7 @@ CRAFTING
             making same type until materials run out
     UPGRADE AND ARMOR CRAFTING
  
+TEAM CONTROL GUI
  
 TWEAKS/OPTIMIZATION
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
@@ -234,6 +232,7 @@ TWEAKS/OPTIMIZATION
 * add tree farm...
 * add civics to templates -- use advanced rules such as npc/etc
         needs bounds setting/rotation crap
+* Need remove 'change team' button, replace with simple text
 /********** 04-29-13 **********/
 /********** 04-30-13 **********/
 

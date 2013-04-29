@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 
 public class AIAggroTargetWrapper
@@ -42,6 +43,11 @@ public ITargetEntry getTarget()
 public boolean matches(Entity ent)
   {
   return this.target.getEntity() == ent;
+  }
+
+public boolean matches(TileEntity te)
+  {
+  return this.target.getTileEntity() == te;
   }
 
 public AIAggroTargetWrapper setAggro(int level)
