@@ -84,12 +84,10 @@ public void normalizeForNorthFacing(int currentFacing, int xSize, int zSize)
 //  BlockPosition corner3 = BlockTools.getNorthRotatedPosition(x+xMin, yMin, z+zMin+this.zSize, currentFacing, xSize, zSize);
 //  BlockPosition corner4 = BlockTools.getNorthRotatedPosition(x+xMin+this.xSize, yMin, z+zMin+this.zSize, currentFacing, xSize, zSize);
   
-  Config.logDebug("c1: "+c1);
   x = pos.x;
   z = pos.z;   
   
   BlockPosition c2 = null;
-  Config.logDebug("corner pos: "+c1);
   switch(currentFacing)
   {
   case 0:
@@ -120,7 +118,6 @@ public void normalizeForNorthFacing(int currentFacing, int xSize, int zSize)
     this.xSize = this.zSize;
     this.zSize = swap;
     }
-  Config.logDebug("2nd corner pos: "+c2);
   BlockPosition min = BlockTools.getMin(c1, c2);
   xMin = min.x-x;
   zMin = min.z-z;
@@ -133,9 +130,6 @@ public void handleWorldPlacement(World world, int facing, ProcessedStructure str
   
   BlockPosition c1 = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x+xMin-struct.xOffset, y+yMin-struct.verticalOffset, z+zMin-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
   BlockPosition c2 = null;
-  Config.logDebug("corner pos: "+c1);
-  
-  Config.logDebug("size: "+this.xSize+","+this.zSize);
   switch(facing)
   {
   case 0:
@@ -160,7 +154,6 @@ public void handleWorldPlacement(World world, int facing, ProcessedStructure str
   //z++   xsize
   break;
   }
-  Config.logDebug("2nd corner pos: "+c2);
   BlockPosition min = BlockTools.getMin(c1, c2);
   BlockPosition max = BlockTools.getMax(c1, c2);
   max.y += (ySize-1);

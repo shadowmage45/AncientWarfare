@@ -458,7 +458,6 @@ private void placeCivics(World world)
     {
     Config.logDebug("handling civic placement");
     civ.handleWorldPlacement(world, facing, struct, buildPos);
-//    civ.handleWorldPlacement(world, x, y, z, newFacing)
     }
   }
 
