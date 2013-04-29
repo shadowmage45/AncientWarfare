@@ -34,17 +34,11 @@ public interface ICivicType
 int getGlobalID();
 
 /**
- * how many ranks does this structure have (e.g. more efficient tiers), actual logic will be defined in the TE
- * @return
- */
-int getNumOfRanks();
-
-/**
  * get the size of the inventory, may be 0
  * @param level
  * @return
  */
-int getInventorySize(int level);
+int getInventorySize();
 
 /**
  * get item/gui display name for this civic
@@ -65,22 +59,21 @@ String[] getIconNames();
 
 /**
  * return a NEW itemstack for this civic
- * @param level
  * @return
  */
-ItemStack getItemToConstruct(int level);
+ItemStack getItemToConstruct();
 
 /**
  * return a new/cached itemStack for display purposes
  * @return
  */
-ItemStack getDisplayItem(int rank);
+ItemStack getDisplayItem();
 
 CivicWorkType getWorkType();
 
-int getMaxWorkSizeWidth(int level);
-int getMaxWorkSizeHeight(int level);
-int getMaxWorkAreaCube(int level);
+int getMaxWorkSizeWidth();
+int getMaxWorkSizeHeight();
+int getMaxWorkAreaCube();
 
 boolean isWorkSite();
 boolean isDepository();
@@ -92,7 +85,7 @@ boolean isDwelling();
  * @param rank
  * @return
  */
-int getMaxWorkers(int rank);
+int getMaxWorkers();
 
 /**
  * return a refernece to the TE class this civic will use, to aid in dynamic construction/placement of tile entity

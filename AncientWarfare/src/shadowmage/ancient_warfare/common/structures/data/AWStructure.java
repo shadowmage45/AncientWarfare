@@ -33,6 +33,7 @@ import net.minecraft.server.MinecraftServer;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
@@ -98,6 +99,7 @@ public ArrayList<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
 public ArrayList<NpcRule> NPCRules = new ArrayList<NpcRule>();
 public Map<Integer, SwapRule> swapRules = new HashMap<Integer, SwapRule>();
 public ArrayList<EntityRule> entityRules = new ArrayList<EntityRule>();
+public ArrayList<CivicRule> civicRules = new ArrayList<CivicRule>();
 
 /**
  * only set to false for bad values during parsing, struct is then discarded and not loaded into structures map

@@ -99,15 +99,4 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
   Config.logDebug("wheat farm work finished POST SUPER.  wkred: "+ this.workPoints.size());
   }
 
-@Override
-public boolean canAssignWorkPoint(NpcBase npc, WorkPoint p)
-  {
-  if(p.getTargetType()== TargetType.FARM_HARVEST || (p.getTargetType()== TargetType.FARM_PLANT && this.inventory.containsAtLeast(seedFilter, 1)))
-    {
-    return true;
-    }
-  Config.logDebug("farm did not contain seeds");
-  return false;
-  }
-
 }

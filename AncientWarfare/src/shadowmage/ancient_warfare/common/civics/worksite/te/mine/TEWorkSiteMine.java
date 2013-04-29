@@ -68,7 +68,7 @@ public class TEWorkSiteMine extends TECivic
  */
 
 int currentLevelNum = -1;
-int minYLevel = 36;//the lowest
+int minYLevel = 5;//the lowest
 int levelHeight = 4;
 int mineRescanTicks = 0;
 boolean initialized = false;
@@ -136,14 +136,6 @@ public WorkPoint getWorkPoint(NpcBase npc)
     return new WorkPoint(xCoord, yCoord, zCoord, TargetType.WORK, this);    
     }
   return null;
-  }
-
-@Override
-public boolean canAssignWorkPoint(NpcBase npc, WorkPoint p)
-  {
-  Config.logDebug("can assign work:");
-  // NOOP
-  return true;
   }
 
 @Override
@@ -247,10 +239,13 @@ public void updateWorkPoints()
   }
 
 @Override
-public boolean hasWork(NpcBase npc)
+protected void updateHasWork()
   {
-//  Config.logDebug("hasWork: " + (currentLevel!=null && currentLevel.hasWork()));
-  return (currentLevel!=null && currentLevel.hasWork());
+  hasWork = false;
+  if(currentLevel!=null && currentLevel.hasWork())
+    {
+    hasWork = true;
+    }
   }
 
 @Override

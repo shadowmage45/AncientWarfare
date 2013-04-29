@@ -37,6 +37,7 @@ import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
@@ -413,6 +414,11 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
       {      
       this.parseNPC(struct, it);
       }
+    
+    else if(line.toLowerCase().startsWith("civic:"))
+      {
+      this.parseCivic(struct, it);
+      }
 
     else if(line.toLowerCase().startsWith("resources:"))
       {
@@ -450,7 +456,6 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
   struct.setTemplateLines(lines);
   return struct;
   }
-
 
 public ProcessedStructure loadStructureRuins(List<String> lines)
   {
@@ -538,7 +543,6 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
   struct.setTemplateLines(lines);
   return struct;
   }
-
 
 private void parseResources(ProcessedStructure struct, Iterator<String> it)
   {
@@ -763,6 +767,43 @@ private void parseVehicle(ProcessedStructure struct, Iterator<String> it)
   else
     {
     Config.logError("Error parsing vehicle rule for structure!");
+    struct.isValid = false;
+    }
+  }
+
+private void parseCivic(ProcessedStructure struct, Iterator<String> it)
+  {
+  if(!it.hasNext())
+    {
+    struct.isValid = false;
+    return;
+    }
+  ArrayList<String> ruleLines = new ArrayList<String>();  
+  String line;  
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("civic:"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith(":endcivic"))
+      {
+      break;      
+      }
+    else
+      {
+      ruleLines.add(line);      
+      }    
+    }     
+  CivicRule rule = CivicRule.parseLines(ruleLines);
+  if(rule!=null)
+    {    
+    struct.civicRules.add(rule);     
+    }
+  else
+    {
+    Config.logError("Error parsing civic rule for structure!");
     struct.isValid = false;
     }
   }

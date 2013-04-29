@@ -22,10 +22,17 @@ package shadowmage.ancient_warfare.client.render;
 
 import java.util.EnumSet;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Settings;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import cpw.mods.fml.common.ITickHandler;
@@ -54,37 +61,90 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
 @Override
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {
-  if(Settings.getRenderOverlay() && mc.currentScreen==null && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
+  if(Settings.getRenderOverlay() && mc.currentScreen==null && mc.thePlayer!=null)
     {
-    VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
-    this.drawString(fontRenderer, "Range: "+vehicle.firingHelper.clientHitRange, 10, 10, 0xffffffff);
-    this.drawString(fontRenderer, "Pitch: "+vehicle.firingHelper.clientTurretPitch, 10, 20, 0xffffffff);
-    this.drawString(fontRenderer, "Yaw: "+vehicle.firingHelper.clientTurretYaw, 10, 30, 0xffffffff);
-    this.drawString(fontRenderer, "Velocity: "+vehicle.firingHelper.clientLaunchSpeed, 10, 40, 0xffffffff);
-    IAmmoType ammo = vehicle.ammoHelper.getCurrentAmmoType();
-    if(ammo!=null)
+    if(mc.thePlayer.ridingEntity instanceof VehicleBase)
       {
-      int count = vehicle.ammoHelper.getCurrentAmmoCount();
-      this.drawString(fontRenderer, "Ammo: "+ammo.getDisplayName(), 10, 50, 0xffffffff);
-      this.drawString(fontRenderer, "Count: "+count, 10, 60, 0xffffffff);
+      VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
+      this.drawString(fontRenderer, "Range: "+vehicle.firingHelper.clientHitRange, 10, 10, 0xffffffff);
+      this.drawString(fontRenderer, "Pitch: "+vehicle.firingHelper.clientTurretPitch, 10, 20, 0xffffffff);
+      this.drawString(fontRenderer, "Yaw: "+vehicle.firingHelper.clientTurretYaw, 10, 30, 0xffffffff);
+      this.drawString(fontRenderer, "Velocity: "+vehicle.firingHelper.clientLaunchSpeed, 10, 40, 0xffffffff);
+      IAmmoType ammo = vehicle.ammoHelper.getCurrentAmmoType();
+      if(ammo!=null)
+        {
+        int count = vehicle.ammoHelper.getCurrentAmmoCount();
+        this.drawString(fontRenderer, "Ammo: "+ammo.getDisplayName(), 10, 50, 0xffffffff);
+        this.drawString(fontRenderer, "Count: "+count, 10, 60, 0xffffffff);
+        }
+      else
+        {
+        this.drawString(fontRenderer, "No Ammo Selected", 10, 50, 0xffffffff);
+        }    
+      if(Settings.getRenderAdvOverlay())
+        {
+        this.drawString(fontRenderer, "FSp: "+vehicle.moveHelper.forwardMotion*20.f, 10, 70, 0xffffffff);
+        this.drawString(fontRenderer, "SSp: "+vehicle.moveHelper.strafeMotion*20.f, 10, 80, 0xffffffff);
+        this.drawString(fontRenderer, "Wgt: "+vehicle.currentWeight+ " base: "+vehicle.baseWeight, 10, 90, 0xffffffff);
+        this.drawString(fontRenderer, "Speed: "+vehicle.currentForwardSpeedMax*20.f+ " base: "+vehicle.baseForwardSpeed*20.f + " root: "+vehicle.vehicleType.getBaseForwardSpeed()*20.f, 10, 100, 0xffffffff);    
+        float weightAdjust = 1.f;
+        if(vehicle.currentWeight > vehicle.baseWeight)
+          {
+          weightAdjust = vehicle.baseWeight  / vehicle.currentWeight;
+          }
+        this.drawString(fontRenderer, "WeightAdjusted max Speed: "+vehicle.currentForwardSpeedMax*weightAdjust*20.f, 10, 110, 0xffffffff);
+        } 
       }
     else
       {
-      this.drawString(fontRenderer, "No Ammo Selected", 10, 50, 0xffffffff);
-      }    
-    if(Settings.getRenderAdvOverlay())
-      {
-      this.drawString(fontRenderer, "FSp: "+vehicle.moveHelper.forwardMotion*20.f, 10, 70, 0xffffffff);
-      this.drawString(fontRenderer, "SSp: "+vehicle.moveHelper.strafeMotion*20.f, 10, 80, 0xffffffff);
-      this.drawString(fontRenderer, "Wgt: "+vehicle.currentWeight+ " base: "+vehicle.baseWeight, 10, 90, 0xffffffff);
-      this.drawString(fontRenderer, "Speed: "+vehicle.currentForwardSpeedMax*20.f+ " base: "+vehicle.baseForwardSpeed*20.f + " root: "+vehicle.vehicleType.getBaseForwardSpeed()*20.f, 10, 100, 0xffffffff);    
-      float weightAdjust = 1.f;
-      if(vehicle.currentWeight > vehicle.baseWeight)
+      ItemStack stack = mc.thePlayer.getCurrentEquippedItem();
+      if(stack!=null && stack.getItem()==ItemLoader.civicPlacer)
         {
-        weightAdjust = vehicle.baseWeight  / vehicle.currentWeight;
+        int xSize = 0;
+        int ySize = 0;
+        int zSize = 0;
+        int cube = 0;
+        BlockPosition p1;
+        BlockPosition p2;
+        if(stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
+          {
+          NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
+          if(tag.hasKey("pos1"))
+            {
+            p1 = new BlockPosition(tag.getCompoundTag("pos1"));
+            }
+          else
+            {
+            p1 = BlockTools.getBlockClickedOn(mc.thePlayer, mc.theWorld, mc.thePlayer.isSneaking());
+            if(p1==null)
+              {
+              p1 = new BlockPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
+              }
+            }
+          if(tag.hasKey("pos2"))
+            {
+            p2 = new BlockPosition(tag.getCompoundTag("pos2"));
+            }
+          else
+            {
+            p2 = BlockTools.getBlockClickedOn(mc.thePlayer, mc.theWorld, mc.thePlayer.isSneaking());
+            if(p2==null)
+              {
+              p2 = new BlockPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
+              }
+            }
+          xSize = Math.abs(p2.x-p1.x)+1;
+          ySize = Math.abs(p2.y-p1.y)+1;
+          zSize = Math.abs(p2.z-p1.z)+1;
+          cube = xSize*ySize*zSize;
+          }
+
+        this.drawString(fontRenderer, "X-Size: "+xSize, 10, 10, 0xffffffff);
+        this.drawString(fontRenderer, "Y-Size: "+ySize, 10, 20, 0xffffffff);
+        this.drawString(fontRenderer, "Z-Size: "+zSize, 10, 30, 0xffffffff);
+        this.drawString(fontRenderer, "Cube  : "+cube, 10, 40, 0xffffffff);
         }
-      this.drawString(fontRenderer, "WeightAdjusted max Speed: "+vehicle.currentForwardSpeedMax*weightAdjust*20.f, 10, 110, 0xffffffff);
-      }    
+      }
     }   
   }
 

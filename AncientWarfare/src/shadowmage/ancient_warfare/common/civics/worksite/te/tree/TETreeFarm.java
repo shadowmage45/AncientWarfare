@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
@@ -41,7 +42,7 @@ Block woodBlock = Block.wood;
 int logMeta = 0;
 int saplingID;
 int saplingMeta;
-
+int maxSearchHeight = 16;
 /**
  * 
  */
@@ -68,7 +69,7 @@ public void updateWorkPoints()
     {
     return;
     }
-  for(int y = this.minY; y<=this.maxY; y++)
+  for(int y = this.minY; y<=this.maxY+this.maxSearchHeight; y++)
     {
     for(int x = this.minX; x<=this.maxX; x++)
       {
@@ -82,7 +83,8 @@ public void updateWorkPoints()
 
 protected void updateOrAddWorkPoint(int x, int y, int z)
   {  
-  WorkPoint p;
+  WorkPointTree p;
+  TreePoint tp = null;
   TargetType t = null;
   int id = worldObj.getBlockId(x, y, z);
   int meta = worldObj.getBlockMetadata(x, y, z);
@@ -90,14 +92,35 @@ protected void updateOrAddWorkPoint(int x, int y, int z)
     {
     t = TargetType.TREE_CHOP;
     }
+  else if(id==0)
+    {
+    if(x%4==0 && z%4==0)
+      {
+      id = worldObj.getBlockId(x, y-1, z);
+      if(id==Block.dirt.blockID || id==Block.grass.blockID)
+        {
+        t = TargetType.TREE_PLANT;
+//        Config.logDebug("adding sapling replant!!");
+        }
+      else
+        {
+        return;
+        }
+      } 
+    else
+      {
+      return;
+      }
+    }
   else
     {
     return;
     }
-  p = new WorkPoint(x,y,z, t, this);
+  tp = new TreePoint(x,y,z);
+  p = new WorkPointTree(xCoord,yCoord,zCoord, t, this, tp);
   if(!this.workPoints.contains(p))
-    {    
-    Config.logDebug("adding new work point to tree farm: "+p);
+    {
+    Config.logDebug("adding new work point to tree farm: "+p+","+tp);
     this.workPoints.add(p);
     }
   }
@@ -106,30 +129,26 @@ protected void updateOrAddWorkPoint(int x, int y, int z)
 public void onWorkFinished(NpcBase npc, WorkPoint point)
   {
   super.onWorkFinished(npc, point);
+  WorkPointTree tree = (WorkPointTree)point;
+  TreePoint tp = tree.tp;
   if(point.getTargetType()==TargetType.TREE_CHOP)
     {
-    Config.logDebug("chopping tree!!");
-    
-    int id = worldObj.getBlockId(point.floorX(), point.floorY()-1, point.floorZ());
-    if(id==Block.dirt.blockID || id==Block.grass.blockID)
-      {
-      this.workPoints.add(new WorkPoint(point.floorX(), point.floorY(), point.floorZ(), TargetType.TREE_PLANT, this));
-      }
-    ArrayList<ItemStack> drops = BlockTools.breakBlock(worldObj, point.floorX(), point.floorY(), point.floorZ(), 0);
-    
+    Config.logDebug("chopping tree!!"); 
+    ArrayList<ItemStack> drops = BlockTools.breakBlock(worldObj, tp.x, tp.y, tp.z, 0);
     }  
   else if(point.getTargetType()==TargetType.TREE_PLANT)
     {
     Config.logDebug("planting sapling");
-    int id = worldObj.getBlockId(point.floorX(), point.floorY()-1, point.floorZ());
+    int id = worldObj.getBlockId(tp.x, tp.y-1, tp.z);
     if(id==Block.dirt.blockID || id==Block.grass.blockID)
       {
-      worldObj.setBlock(point.floorX(), point.floorY(), point.floorZ(), saplingID, saplingMeta, 3);
-//      this.workPoints.add(new WorkPoint(point.floorX(), point.floorY(), point.floorZ(), TargetType.TREE_PLANT, this));
+      worldObj.setBlock(tp.x, tp.y, tp.z, saplingID, saplingMeta, 3);
       }    
     }
   }
 
-
-
+public AxisAlignedBB getSecondaryRenderBounds()
+  {
+  return AxisAlignedBB.getAABBPool().getAABB(minX, maxY+1, minZ, maxX+1, maxY+1+maxSearchHeight, maxZ+1);
+  }
 }

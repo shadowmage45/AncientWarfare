@@ -18,33 +18,29 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.civics.types;
+package shadowmage.ancient_warfare.common.civics.worksite.te.tree;
 
-import net.minecraft.block.Block;
-import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.civics.TECivic;
-
-public class CivicTreeFarm extends Civic
+public class TreePoint
 {
-/**
- * @param id
- */
-public CivicTreeFarm(int id, String name, String tooltip, Class<? extends TECivic> teClass)
+
+int x;
+int y;
+int z;
+boolean requiresReplant;
+
+public TreePoint(int x, int y, int z)
   {
-  super(id);
-  this.isWorkSite = true;
-  this.name = name;
-  this.tooltip = tooltip;
-  this.teClass = teClass;
-  this.maxWorkers = 2;
-  this.workSizeMaxHeight = 2;
-  this.workSizeMaxHorizontal = 16;
-  this.inventorySize = 9;
-  this.workType = CivicWorkType.TREE;
-  this.iconTexture = "civicMine1";
-  this.iconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
-  this.iconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
-  this.iconNames[2] = "ancientwarfare:civic/civicFarmWheatSide"; 
+  this.x = x;
+  this.y = y;
+  this.z = z;
   }
+
+
+@Override
+public String toString()
+  {
+  return String.format("MinePoint: %s, %s, %s, %s", x,y,z, requiresReplant);
+  }
+
 
 }

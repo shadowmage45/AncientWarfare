@@ -26,13 +26,17 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
@@ -54,7 +58,7 @@ public int zSize;
 public BlockData[][][] allBlocks;
 public ArrayList<BlockData> blockIDs = new ArrayList<BlockData>();
 private List<ScannedEntityEntry> includedEntities = new ArrayList<ScannedEntityEntry>();
-
+protected List<CivicRule> scannedCivics = new ArrayList<CivicRule>();
 /**
  * set by structure scanner GUI prior to export
  *  
@@ -120,12 +124,30 @@ public void scan(World world)
             meta = 8;
             }
           }
-        allBlocks[indexX][indexY][indexZ] = new BlockData(id, meta);        
+        if(id==BlockLoader.civicBlock1.blockID || id==BlockLoader.civicBlock2.blockID || id==BlockLoader.civicBlock3.blockID || id==BlockLoader.civicBlock4.blockID)
+          {
+          handleCivicRule(world, x,y,z, indexX, indexY, indexZ);
+          }
+        else
+          {
+          allBlocks[indexX][indexY][indexZ] = new BlockData(id, meta);
+          }     
         }      
       }    
     }    
   this.scanForEntities(world);
   this.normalizeForNorthFacing();
+  }
+
+protected void handleCivicRule(World world, int x, int y, int z, int ix, int iy, int iz)
+  {
+  TileEntity te = world.getBlockTileEntity(x, y, z);
+  if(te!=null)
+    {
+    Config.logDebug("adding civic rule to scanned structure data");
+    this.scannedCivics.add(CivicRule.populateRule(ix, iy, iz, (TECivic)te));
+    }
+  allBlocks[ix][iy][iz] = new BlockData(0,0);
   }
 
 protected void scanForEntities(World world)
@@ -253,13 +275,14 @@ private void normalizeForNorthFacing()
     entry.r += BlockTools.getRotationAmt(originFacing) * 90;
     if(entry.hangingDirection>=0)//is painting or item frame, adjust internal rotation info...
       {
-      Config.logDebug("original hangDir"+entry.hangingDirection);
       entry.hangingDirection = (BlockTools.getRotationAmount(this.originFacing, 2)+entry.hangingDirection)%4;
-      Config.logDebug("new hangDir"+entry.hangingDirection);
       }
     }
+  for(CivicRule rule : this.scannedCivics)
+    {
+    rule.normalizeForNorthFacing(originFacing, newXSize, newZSize);
+    }
   }
-
 
 private float getRotatedOffsetX(int rotation, float xOff, float zOff)
   {
@@ -343,6 +366,7 @@ public ProcessedStructure convertToProcessedStructure()
       }
     }
   this.addEntitiesToStructure(struct, includedEntities);
+  this.addCivicsToStructrure(struct);
   List<String> lines = StructureExporter.getExportLinesFor(struct);
   struct.setTemplateLines(lines);
   return struct;
@@ -356,6 +380,15 @@ public BlockData[] getAllBlockTypes()
     datas[i]=this.blockIDs.get(i);
     }
   return datas;
+  }
+
+private void addCivicsToStructrure(ProcessedStructure struct)
+  {
+  Config.logDebug("adding civic info to processed structure");  
+  for(CivicRule civ : this.scannedCivics)
+    {
+    struct.civicRules.add(civ);
+    }
   }
 
 private void addEntitiesToStructure(ProcessedStructure struct, List<ScannedEntityEntry> entities)

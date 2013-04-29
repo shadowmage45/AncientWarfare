@@ -20,15 +20,20 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
@@ -213,6 +218,10 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     RenderOverlayAdvanced.renderAdvancedVehicleOverlay((VehicleBase)player.ridingEntity, player, evt.partialTicks);
     }
+  
+  //TODO
+  this.renderCivicBoundingBoxes(player.worldObj, player, evt.partialTicks);
+  
   ItemStack stack = player.inventory.getCurrentItem();
   if(stack==null || stack.getItem()==null)
     {
@@ -238,6 +247,29 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     }
   }
 
+public static void renderCivicBoundingBoxes(World world, EntityPlayer player, float partialTick)
+  {
+  List<TileEntity> tes = world.loadedTileEntityList;
+  for(TileEntity te : tes)
+    {
+    if(TECivic.class.isAssignableFrom(te.getClass()))
+      {
+      TECivic tec = (TECivic)te;
+      AxisAlignedBB bb = tec.getBoundsForRender(); 
+      if(bb!=null)
+        {
+        BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick), 1.f, 1.f, 1.f);
+        }
+      bb = tec.getSecondaryRenderBounds();
+      if(bb!=null)
+        {
+        BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick), 1.f, 0.6f, 0.6f);
+        }
+      //offset by player coords
+      
+      }
+    }
+  }
 
 public static void setTeamRenderColor(int teamNum)
   {

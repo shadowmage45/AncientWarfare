@@ -65,18 +65,20 @@ protected boolean isWorkSite = false;
 protected boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
 protected AWInventoryBasic inventory = new AWInventoryBasic(0);
 protected Civic civic;
-protected int structureRank = 0;
+//protected int structureRank = 0;
 protected List<WorkPoint> workPoints = new ArrayList<WorkPoint>();//points being worked currently
 protected Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
 protected Random rng = new Random();
+AxisAlignedBB primaryBounds;
+
+protected boolean hasWork = false;
 
 
 /***************************************************SETUP/INIT**************************************************************/
-public void setCivic(Civic civ, int rank)
+public void setCivic(Civic civ)
   {
   this.civic = civ;
-  this.structureRank = rank;
-  inventory = new AWInventoryBasic(civ.getInventorySize(rank));
+  inventory = new AWInventoryBasic(civ.getInventorySize());
   }
 
 public Civic getCivic()
@@ -92,16 +94,18 @@ public void setBounds(int minX, int minY, int minZ, int maxX, int maxY, int maxZ
   this.maxX = maxX;
   this.maxY = maxY;
   this.maxZ = maxZ;
+  primaryBounds = AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX+1, maxY+1, maxZ+1);
   }
 
 @Override
 public void updateEntity()
   {
   if(updateTicks<=0 && this.worldObj!=null && !this.worldObj.isRemote)
-    {    
+    {
+    this.updateHasWork();
     this.broadCastToSoldiers(Config.npcAISearchRange);
     this.updateWorkPoints();
-    this.validateWorkers();
+    this.validateWorkers();    
     this.updateTicks = Config.npcAITicks;
     }
   else
@@ -164,7 +168,7 @@ public void broadCastToSoldiers(int maxRange)
       if(broadcastWork)
         {        
 //        Config.logDebug("broadcasting to npcs!!");
-        if(npc.wayNav.getWorkSite()==null && hasWork(npc) && canHaveMoreWorkers(npc))
+        if(npc.wayNav.getWorkSite()==null && hasWork() && canHaveMoreWorkers(npc))
           {
 //          Config.logDebug("Entity had no work site, checking if valid!");
           if(npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
@@ -187,7 +191,7 @@ public boolean canHaveMoreWorkers(NpcBase worker)
     {
     return true;
     }
-  if(this.workers.size()+1 <= this.civic.getMaxWorkers(structureRank))
+  if(this.workers.size()+1 <= this.civic.getMaxWorkers())
     {
     return true;
     }
@@ -239,7 +243,7 @@ public WorkPoint getWorkPoint(NpcBase npc)
   while(it.hasNext())
     {
     p = it.next();
-    if(!p.hasWorker() && p.hasWork(worldObj) && canAssignWorkPoint(npc, p))
+    if(!p.hasWorker() && p.hasWork(worldObj))
       {
       p.setWorked(npc);
       p.resetHarvestTicks();
@@ -252,11 +256,6 @@ public WorkPoint getWorkPoint(NpcBase npc)
 public void removeWorker(NpcBase npc)
   {
   this.workers.remove(npc);
-  }
-
-public boolean canAssignWorkPoint(NpcBase npc, WorkPoint p)
-  {
-  return true;
   }
 
 public void onWorkFinished(NpcBase npc, WorkPoint point)
@@ -332,17 +331,37 @@ public WorkPoint doWork(NpcBase npc, WorkPoint p)
   return p;
   }
 
-public boolean hasWork(NpcBase npc)
+public boolean hasWork()
   {
+  return hasWork;
+  }
+
+protected void updateHasWork()
+  {
+  hasWork = false;
   for(WorkPoint p : this.workPoints)
     {
-    if(p.getWorker()==null && p.hasWork(worldObj) && canAssignWorkPoint(npc, p))
+    if(p.getWorker()==null && p.hasWork(worldObj))
       {
-      return true;
+      hasWork = true;
+      break;
       }
-    }
-//  Config.logDebug("work site has no work!!");
-  return false;
+    }  
+  }
+
+/**
+ * return a WORLD COORD bb for render
+ * @return
+ */
+public AxisAlignedBB getBoundsForRender()
+  { 
+  primaryBounds = AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX+1, maxY+1, maxZ+1);
+  return primaryBounds;
+  }
+
+public AxisAlignedBB getSecondaryRenderBounds()
+  {
+  return null;
   }
 
 /*****************************************************NBT/PACKETS*********************************************************/
@@ -359,12 +378,11 @@ protected void readCivicDataFromNBT(NBTTagCompound tag)
   if(tag.hasKey("civType"))
     {
     Civic civ = CivicRegistry.instance().getCivicFor(tag.getInteger("civType"));
-    this.structureRank = tag.getInteger("rank");
-    this.setCivic(civ, structureRank);
+    this.setCivic(civ);
     }
   else
     {
-    this.setCivic(CivicRegistry.instance().getCivicFor(0), 0);
+    this.setCivic(CivicRegistry.instance().getCivicFor(0));
     this.invalidate();
     }  
   if(tag.hasKey("bounds"))
@@ -405,7 +423,6 @@ public void writeToNBT(NBTTagCompound tag)
   {
   super.writeToNBT(tag);
   tag.setInteger("civType", civic.getGlobalID());
-  tag.setInteger("rank", structureRank);
   tag.setIntArray("bounds", new int[]{minX, minY, minZ, maxX, maxY, maxZ});
   tag.setCompoundTag("inventory", this.inventory.getNBTTag());
   tag.setInteger("team", this.teamNum);
@@ -418,7 +435,6 @@ public Packet getDescriptionPacket()
   NBTTagCompound tag = new NBTTagCompound();
   tag.setIntArray("bounds", new int[]{minX, minY, minZ, maxX, maxY, maxZ});
   tag.setInteger("civType", this.civic.getGlobalID());
-  tag.setInteger("rank", this.structureRank);
   tag.setInteger("team", this.teamNum); 
   tag.setBoolean("broad", broadcastWork);
   return new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);

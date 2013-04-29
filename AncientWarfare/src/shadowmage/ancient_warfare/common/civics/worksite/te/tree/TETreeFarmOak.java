@@ -31,6 +31,8 @@ public class TETreeFarmOak extends TETreeFarm
 public TETreeFarmOak()
   {
   this.logMeta = 0;
+  saplingID = Block.sapling.blockID;
+  saplingMeta = 0;
   }
 
 

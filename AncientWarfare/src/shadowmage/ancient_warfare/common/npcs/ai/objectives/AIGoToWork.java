@@ -150,7 +150,7 @@ protected boolean isWorkSiteWorkable()
         return false;
         }
       }
-    else if(workSite.canHaveMoreWorkers(npc) && workSite.hasWork(npc))
+    else if(workSite.canHaveMoreWorkers(npc) && workSite.hasWork())
       {
       return true;
       }

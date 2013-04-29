@@ -70,14 +70,14 @@ public void registerCivics()
     }
   }
 
-public void setCivicBlock(World world, int x, int y, int z, int type, int rank)
+public void setCivicBlock(World world, int x, int y, int z, int type)
   {
   Block block = getBlockFor(type);
   if(block!=null)
     {
     world.setBlock(x, y, z, block.blockID, type%16, 3);
     TECivic te = (TECivic) world.getBlockTileEntity(x, y, z);    
-    te.setCivic(getCivicFor(type), rank);      
+    te.setCivic(getCivicFor(type));      
     }
   }
 
@@ -157,15 +157,10 @@ public List<ItemStack> getDisplayStacks()
     {
     if(civ!=null)
       {
-      for(int i = 0; i < civ.getNumOfRanks(); i++)
-        {
-        ItemStack displayStack = new ItemStack(ItemLoader.civicPlacer,1,civ.getGlobalID());
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setInteger("rank", i);
-        displayStack.setTagInfo("civicInfo", tag);
-        displayStacks.add(displayStack);
-//        displayStacks.add(civ.getDisplayItem(i));
-        }
+      ItemStack displayStack = new ItemStack(ItemLoader.civicPlacer,1,civ.getGlobalID());
+      NBTTagCompound tag = new NBTTagCompound();
+      displayStack.setTagInfo("civicInfo", tag);
+      displayStacks.add(displayStack); 
       }
     }
   displayStackCache = displayStacks;

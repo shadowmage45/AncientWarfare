@@ -18,33 +18,51 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.civics.types;
+package shadowmage.ancient_warfare.common.civics.worksite.te.tree;
 
-import net.minecraft.block.Block;
-import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class CivicTreeFarm extends Civic
+public class WorkPointTree extends WorkPoint
 {
+
+public TreePoint tp;
 /**
- * @param id
+ * @param x
+ * @param y
+ * @param z
+ * @param type
+ * @param owner
  */
-public CivicTreeFarm(int id, String name, String tooltip, Class<? extends TECivic> teClass)
+public WorkPointTree(int x, int y, int z, TargetType type, TECivic owner, TreePoint tp)
   {
-  super(id);
-  this.isWorkSite = true;
-  this.name = name;
-  this.tooltip = tooltip;
-  this.teClass = teClass;
-  this.maxWorkers = 2;
-  this.workSizeMaxHeight = 2;
-  this.workSizeMaxHorizontal = 16;
-  this.inventorySize = 9;
-  this.workType = CivicWorkType.TREE;
-  this.iconTexture = "civicMine1";
-  this.iconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
-  this.iconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
-  this.iconNames[2] = "ancientwarfare:civic/civicFarmWheatSide"; 
+  super(x, y, z, type, owner);
+  this.tp = tp;  
+  }
+
+/**
+ * @param x
+ * @param y
+ * @param z
+ * @param side
+ * @param type
+ * @param owner
+ */
+public WorkPointTree(int x, int y, int z, int side, TargetType type, TECivic owner, TreePoint tp)
+  {
+  super(x, y, z, side, type, owner);
+  this.tp = tp;  
+  }
+
+/**
+ * @param compoundTag
+ */
+public WorkPointTree(NBTTagCompound compoundTag)
+  {
+  super(compoundTag);
   }
 
 }

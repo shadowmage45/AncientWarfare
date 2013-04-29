@@ -41,6 +41,7 @@ import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
@@ -451,6 +452,16 @@ private void placeNpcs(World world)
     }
   }
 
+private void placeCivics(World world)
+  {
+  for(CivicRule civ : struct.civicRules)
+    {
+    Config.logDebug("handling civic placement");
+    civ.handleWorldPlacement(world, facing, struct, buildPos);
+//    civ.handleWorldPlacement(world, x, y, z, newFacing)
+    }
+  }
+
 private void placeGates(World world)
   {
   
@@ -488,6 +499,7 @@ protected void placeNonBlocks(World world)
     {
     this.placeGates(world);
     }
+  this.placeCivics(world);
   }
 
 protected void placeSpecials(World world, int x, int y, int z, String name)

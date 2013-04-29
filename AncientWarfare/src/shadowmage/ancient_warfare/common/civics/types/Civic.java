@@ -59,7 +59,6 @@ protected int globalID = 0;
 protected String name = "";
 protected String tooltip = "";
 protected String iconTexture = "";
-protected int ranks = 1;
 protected int maxWorkers = 1;
 protected int workSizeMaxHorizontal = 10;
 protected int workSizeMaxHeight = 2;
@@ -67,7 +66,7 @@ protected boolean isWorkSite = false;
 protected boolean isDepository = false;
 protected boolean isDwelling = false;
 protected Class<? extends TECivic> teClass;
-protected ItemStack[] displayStackCache = null;
+protected ItemStack displayStackCache = null;
 protected int inventorySize = 0;
 protected String[] iconNames = new String[]{"","",""};
 protected CivicWorkType workType = CivicWorkType.NONE;
@@ -110,12 +109,6 @@ public String getDisplayTooltip()
   }
 
 @Override
-public int getNumOfRanks()
-  {
-  return ranks;
-  }
-
-@Override
 public boolean isWorkSite()
   {
   return isWorkSite;
@@ -134,7 +127,7 @@ public boolean isDwelling()
   }
 
 @Override
-public int getMaxWorkers(int rank)
+public int getMaxWorkers()
   {
   return maxWorkers;
   }
@@ -147,58 +140,46 @@ public Class<? extends TECivic> getTileEntityClass()
 
 
 @Override
-public ItemStack getItemToConstruct(int rank)
+public ItemStack getItemToConstruct()
   {
   ItemStack item = new ItemStack(ItemLoader.civicPlacer,1);
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setInteger("rank", rank);
   item.setTagInfo("civicInfo", tag);
   return item;
   }
 
 @Override
-public ItemStack getDisplayItem(int rank)
+public ItemStack getDisplayItem()
   {
   if(this.displayStackCache==null)
-    {
-    this.displayStackCache = new ItemStack[this.getNumOfRanks()];
-    for(int i = 0; i < this.getNumOfRanks();i++)
-      {
-      this.displayStackCache[i] = this.getItemToConstruct(i);
-      }
+    {    
+    this.displayStackCache = this.getItemToConstruct();
     }  
-	if(rank>=0 && rank< this.displayStackCache.length)
-	  {
-	  return this.displayStackCache[rank];
-	  }
-	else
-	  {
-	  return getItemToConstruct(rank);
-	  }  
+	return this.displayStackCache;  
   }
 
 @Override
-public int getInventorySize(int level)
+public int getInventorySize()
   {
   return inventorySize;
   }
 
 @Override
-public int getMaxWorkSizeWidth(int level)
+public int getMaxWorkSizeWidth()
   {
   return this.workSizeMaxHorizontal;
   }
 
 @Override
-public int getMaxWorkSizeHeight(int level)
+public int getMaxWorkSizeHeight()
   {
   return this.workSizeMaxHeight;
   }
 
 @Override
-public int getMaxWorkAreaCube(int level)
+public int getMaxWorkAreaCube()
   {
-  return this.getMaxWorkSizeWidth(level)*this.getMaxWorkSizeWidth(level)*this.getMaxWorkSizeHeight(level);
+  return this.getMaxWorkSizeWidth()*this.getMaxWorkSizeWidth()*this.getMaxWorkSizeHeight();
   }
 
 @Override

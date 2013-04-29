@@ -41,55 +41,19 @@ public class TESRCivic extends TileEntitySpecialRenderer
 public TESRCivic()
   {
   // TODO Auto-generated constructor stub
+  
   }
 
 @Override
 public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f)
   {
-  TECivic te = (TECivic)tileentity;
-  if(te.getCivic()==null || !te.getCivic().isWorkSite())
-    {
-    return;
-    }
-//  Config.logDebug("rendering at: "+d0+","+d1+","+d2);
-  double minX = d0 + te.minX - te.xCoord;
-  double minY = d1 + te.minY - te.yCoord;
-  double minZ = d2 + te.minZ - te.zCoord;
-  
-  double maxX = d0 + te.maxX - te.xCoord + 1;
-  double maxY = d1 + te.maxY - te.yCoord + 1;
-  double maxZ = d2 + te.maxZ - te.zCoord + 1;
-  
-  double xSize = te.maxX - te.minX + 1;
-  double ySize = te.maxY - te.minY + 1;
-  double zSize = te.maxZ - te.minZ + 1;
-  
-  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
-  BoundingBoxRender.drawOutlinedBoundingBox(bb.expand(0.03d, 0.03d, 0.03d), 1.f, 0.f, 0.f);
-  BoundingBoxRender.drawOutlinedBoundingBox(bb.expand(-0.03d, -0.03d, -0.03d), 1.f, 0.f, 0.f);
-  
-//  
-//  GL11.glPushMatrix();
-//  GL11.glEnable(GL11.GL_BLEND);
-//  GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-//  GL11.glDisable(GL11.GL_TEXTURE_2D);
-//  GL11.glColor4d(1, 1, 1, 0.6d);
-//  
-//  /**
-//   * draw a straight line on the ground
-//   */
-//  GL11.glLineWidth(3f);
-//  GL11.glBegin(GL11.GL_LINES);    
-//  GL11.glVertex3d(minX, minY, minZ);
-//  GL11.glVertex3d(minX, minY, minZ+zSize);  
-//  GL11.glVertex3d(minX, minY, minZ+zSize);
-//  GL11.glVertex3d(maxX, maxY, maxZ);  
-//  GL11.glEnd();
-//    
-//  GL11.glPopMatrix();
-//  GL11.glDisable(GL11.GL_BLEND);
-//  GL11.glEnable(GL11.GL_TEXTURE_2D);
-  
+//  TECivic te = (TECivic)tileentity;
+//  if(te.getCivic()==null || !te.getCivic().isWorkSite())
+//    {
+//    return;
+//    }
+  //TODO add rendering for if has work/etc...
+    
   }
 
 

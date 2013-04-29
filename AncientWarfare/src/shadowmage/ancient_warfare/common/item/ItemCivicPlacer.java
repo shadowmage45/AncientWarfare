@@ -54,34 +54,24 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
     {
     if(stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
       {
-      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
-      if(tag.hasKey("rank"))
+      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");     
+      int type = stack.getItemDamage();
+      Civic civ = CivicRegistry.instance().getCivicFor(type);        
+      if(civ!=null)          
         {
-        int type = stack.getItemDamage();
-        int rank = tag.getInteger("rank");
-        Civic civ = CivicRegistry.instance().getCivicFor(type);        
-        if(civ!=null)          
+        if(tag.hasKey("pos2"))
           {
-          list.add(("Structure Rank: "+rank));  
-          if(tag.hasKey("pos2"))
-            {
-            list.add("Has first and second bounds positions set");
-            }
-          else if(tag.hasKey("pos1"))
-            {
-            list.add("Has first bounds position set");
-            }  
+          list.add("Has first and second bounds positions set");
           }
-        else
+        else if(tag.hasKey("pos1"))
           {
-          list.add("Invalid Civic Placer--Something has corrupted or removed the itemStack NBT data.");
-          }
-        }  
+          list.add("Has first bounds position set");
+          }  
+        }
       else
         {
         list.add("Invalid Civic Placer--Something has corrupted or removed the itemStack NBT data.");
-        }
-          
+        } 
       }
     else
       {
@@ -106,15 +96,15 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   if(hit!=null && stack!=null && stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
     {
     NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
-    if(tag.hasKey("pos2") && tag.hasKey("pos1") && tag.hasKey("rank"))
+    if(tag.hasKey("pos2") && tag.hasKey("pos1"))
       {
       BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
       BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
       hit.offsetForMCSide(side);
       //TODO//make sure that the control block position is adjacent/inside work bounds.
       if(true)
-        {
-        placeCivicBlock(world, hit, pos1, pos2,  stack.getItemDamage(), tag.getInteger("rank"));
+        {  
+        placeCivicBlock(world, hit, pos1, pos2,  stack.getItemDamage());
         ItemStack item = player.getCurrentEquippedItem();
         if(item!=null && item.itemID == ItemLoader.civicPlacer.itemID)
           {
@@ -129,7 +119,6 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
           else
             {
             NBTTagCompound newtag = new NBTTagCompound();
-            newtag.setInteger("rank", tag.getInteger("rank"));
             stack.setTagInfo("civicInfo", newtag);
             player.openContainer.detectAndSendChanges();
             }        
@@ -144,12 +133,11 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       {
       BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
       Civic civ = CivicRegistry.instance().getCivicFor(stack.getItemDamage());
-      int rank = tag.getInteger("rank");
       if(civ!=null)
         {
-        int maxWidth = civ.getMaxWorkSizeWidth(rank);
-        int maxHeight = civ.getMaxWorkSizeHeight(rank);
-        int maxArea = civ.getMaxWorkAreaCube(rank);
+        int maxWidth = civ.getMaxWorkSizeWidth();
+        int maxHeight = civ.getMaxWorkSizeHeight();
+        int maxArea = civ.getMaxWorkAreaCube();
         if(player.isSneaking())
           {
           hit.offsetForMCSide(side);
@@ -180,7 +168,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   return true;
   }
 
-public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1, BlockPosition pos2, int type, int rank)
+public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1, BlockPosition pos2, int type)
   {
   if(hit==null || pos1==null || pos2==null || world==null)
     {
@@ -188,7 +176,7 @@ public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1,
     }
   BlockPosition min = BlockTools.getMin(pos1, pos2);
   BlockPosition max = BlockTools.getMax(pos1, pos2);
-  CivicRegistry.instance().setCivicBlock(world, hit.x, hit.y, hit.z, type, rank);
+  CivicRegistry.instance().setCivicBlock(world, hit.x, hit.y, hit.z, type);
   TECivic te = (TECivic) world.getBlockTileEntity(hit.x, hit.y, hit.z);
   te.setBounds(min.x, min.y, min.z, max.x, max.y, max.z);
   world.markBlockForUpdate(hit.x, hit.y, hit.z);
