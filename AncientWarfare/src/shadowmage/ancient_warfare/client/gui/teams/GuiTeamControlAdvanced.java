@@ -159,8 +159,12 @@ public void setupControls()
   {
   this.addGuiButton(0, 45, 12, "Done").updateRenderPos(getXSize()-45-5, 5);
   numLine = (GuiNumberInputLine) this.addNumberField(4, 40, 12, 1, String.valueOf(entry.teamNum)).setMinMax(0, 15).updateRenderPos(20, 10+20);
-  this.addGuiButton(5, 35, 12, "Add").updateRenderPos(10, 10+12+2+20);
-  this.addGuiButton(6, 35, 12, "Rem").updateRenderPos(10+35+2, 10+12+2+20);
+  GuiButtonSimple button = (GuiButtonSimple) this.addGuiButton(5, 35, 12, "Add").updateRenderPos(10, 10+12+2+20);
+  button.renderTooltip = true;
+  button.addToToolitp("Add a team to the non-hostile list");
+  button = (GuiButtonSimple)this.addGuiButton(6, 35, 12, "Rem").updateRenderPos(10+35+2, 10+12+2+20);
+  button.renderTooltip = true;
+  button.addToToolitp("Remove a team from the non-hostile list");
   
   int buffer = 2;
   int buttonSize = 12;

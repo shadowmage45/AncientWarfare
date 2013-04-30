@@ -63,7 +63,6 @@ GuiTextInputLine nameBox;
 public GuiStructureScanner(Container container)
   {
   super(container);
-  // TODO Auto-generated constructor stub
   }
 
 @Override

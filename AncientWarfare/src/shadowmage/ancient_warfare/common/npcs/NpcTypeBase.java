@@ -53,6 +53,17 @@ public NpcTypeBase(int type)
   }
 
 @Override
+public int getActionTicks(int level)
+  {
+  if(level>=0 && level< this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).actionTicks;
+    }
+  return 35;
+  }
+
+
+@Override
 public int getAttackDamage(int level)
   {
   if(level>=0 && level< this.levelEntries.size())

@@ -26,8 +26,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -81,6 +84,8 @@ public int villageUpdateTick = 0;
 
 protected int idleLookTicks = 0;
 
+protected int lootCheckTicks = 0;
+
 public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
 public NpcTargetHelper targetHelper;
@@ -116,6 +121,11 @@ public NpcBase(World par1World)
   this.inventory = new NpcInventory(this, 0);
   this.tasks.addTask(1, new EntityAISwimming(this));
   this.stepHeight = 1.1f;
+  for (int i = 0; i < this.equipmentDropChances.length; ++i)
+    {
+    this.equipmentDropChances[i] = 1.f;
+    }
+  this.experienceValue = 10;
   }
 
 public void handleBatonCommand(NpcCommand cmd, int x, int y, int z, int side)
@@ -157,6 +167,7 @@ public void setNpcType(INpcType type, int level)
   this.aiManager.addObjectives(type.getAI(this, level));
   this.npcType.addTargets(this, targetHelper);
   this.inventory = new NpcInventory(this, type.getInventorySize(level));
+  this.experienceValue = 10 + 10*level;
   }
 
 public boolean isAggroTowards(NpcBase npc)
@@ -305,6 +316,11 @@ public void setDead()
     }
   }
 
+public void setActionTicksToMax()
+  {
+  this.actionTick = this.npcType.getActionTicks(rank);
+  }
+
 @Override
 public void onUpdate()
   {
@@ -365,9 +381,38 @@ public void onUpdate()
       this.worldObj.villageCollectionObj.addVillagerPosition(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
       }
     }
+  if(this.lootCheckTicks<=0)
+    {
+    List<EntityItem> worldItems = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(posX-2, posY-1, posZ-2, posY+1, posX+2, posZ+2));
+    if(worldItems!=null)
+      {
+      ItemStack item;
+      for(EntityItem ent : worldItems)
+        {
+        item = ent.getEntityItem();
+        item = inventory.tryMergeItem(item);
+        if(item!=null)
+          {
+          ent.setEntityItemStack(item);
+          }
+        else
+          {
+          ent.setDead();
+          }
+        }
+      }
+    }
+  else
+    {
+    this.lootCheckTicks--;
+    }
   super.onUpdate();    
   }
 
+public void handleLootPickup()
+  {
+  
+  }
 
 public void handlePacketUpdate(NBTTagCompound tag)
   {

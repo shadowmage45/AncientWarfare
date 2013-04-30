@@ -125,11 +125,14 @@ public void setupControls()
   {
   this.addGuiButton(0, 45, 12, "Done").updateRenderPos(getXSize()-45-5, 5);
   advControls = this.addGuiButton(5, getXSize()-75-5, 20, 75, 12, "Adv Controls");
+  advControls.addToToolitp("Access Applications, Rank, and Kick controls");
   //6 unused
   this.addGuiButton(7, 5, 20, 12, 12, "-");
   this.teamSelectNumber = (GuiNumberInputLine) this.addNumberField(8, 45, 12, 1, "0").setMinMax(0, 15).updateRenderPos(5+12+2, 20);
   this.addGuiButton(9, 5+12+45+4, 20, 12, 12, "+");
-  this.addGuiButton(10, 5, 40, 85, 12, "Apply To Team");
+  GuiButtonSimple button = this.addGuiButton(10, 5, 40, 85, 12, "Apply To Team");
+  button.renderTooltip = true;
+  button.addToToolitp("Apply to the selected team");
     
   int buffer = 2;
   int buttonSize = 8;
@@ -150,10 +153,12 @@ public void setupControls()
   if(this.entry.getPlayerRank(player.getEntityName())<7)
     {
     advControls.enabled = false;
+    advControls.renderTooltip = false;
     }
   else
     {
     advControls.enabled = true;
+    advControls.renderTooltip = true;
     }
   }
 
@@ -178,10 +183,12 @@ public void updateControls()
   if(this.entry.getPlayerRank(player.getEntityName())<7)
     {
     advControls.enabled = false;
+    advControls.renderTooltip = false;
     }
   else
     {
     advControls.enabled = true;
+    advControls.renderTooltip = true;
     }
   }
 

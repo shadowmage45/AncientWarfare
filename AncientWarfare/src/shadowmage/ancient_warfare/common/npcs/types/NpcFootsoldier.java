@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIAttackTargets;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDepositGoods;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIPatrolPoints;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
@@ -59,9 +60,9 @@ public NpcFootsoldier(int type)
   this.tooltip = "A footsoldier, adept at melee combat.";
   this.isCombatUnit = true;
   this.iconTexture = "npcSoldier1";
-  this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0));
-  this.addLevel("Adept Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1));
-  this.addLevel("Master Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2));  
+  this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4);
+  this.addLevel("Adept Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6);
+  this.addLevel("Master Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8);  
   }
 
 @Override
@@ -137,8 +138,9 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
-  aiEntries.add(new AIAttackTargets(npc, 9, 20, 20));
-  aiEntries.add(new AIFollowPlayer(npc, 8));
+  aiEntries.add(new AIAttackTargets(npc, 10, 20, 20));
+  aiEntries.add(new AIFollowPlayer(npc, 9));
+  aiEntries.add(new AIDepositGoods(npc, 8));
   aiEntries.add(new AIPatrolPoints(npc, 7, 20));
   aiEntries.add(new AIStayNearHome(npc, 6, 20, 5));
   aiEntries.add(new AIAttackTargets(npc, 5, 40, 40));  

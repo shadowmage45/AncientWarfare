@@ -237,7 +237,7 @@ public void onRunningTick()
       if(!working)
         {
         working = true;
-        npc.actionTick = 35;
+        npc.setActionTicksToMax();
         }
       this.workOnPoint(workPoint);
       }
@@ -267,8 +267,8 @@ protected void workOnPoint(WorkPoint p)
       {
       npc.swingItem();
       if(npc.actionTick<=0)
-        {        
-        npc.actionTick = 35;//TODO add action delay to npctype - by rank  
+        {  
+        npc.setActionTicksToMax();
         WorkPoint returned = workSite.doWork(npc, p);
         if(p!=returned)
           {
@@ -291,7 +291,7 @@ protected void setMoveToWork(WorkPoint p)
 
 protected void setWorkPoint(WorkPoint p)
   {
-  npc.actionTick = 35;
+	npc.setActionTicksToMax();
   working = false;
   if(p!=null)
     {   

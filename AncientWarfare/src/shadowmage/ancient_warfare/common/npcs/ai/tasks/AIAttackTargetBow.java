@@ -55,7 +55,7 @@ protected void attackTarget(ITargetEntry target)
     }
   else
     {
-    npc.actionTick =  maxAttackDelayTicks / Config.npcAITicks;
+    npc.setActionTicksToMax();
     }
   if(!target.isEntityEntry())
     {

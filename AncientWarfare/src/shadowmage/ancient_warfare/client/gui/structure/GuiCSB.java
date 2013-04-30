@@ -124,7 +124,10 @@ GuiScrollableArea area;
 public void setupControls()
   {
   this.addGuiButton(0, 35, 18, "Done").updateRenderPos(256-35-10, 10); 
-  this.addGuiButton(3, 85, 16, "Advanced Setup").updateRenderPos(256-85-10, 30); 
+  GuiButtonSimple button = (GuiButtonSimple)this.addGuiButton(3, 85, 16, "Advanced Setup").updateRenderPos(256-85-10, 30);
+  button.renderTooltip = true;
+  button.addToToolitp("Access advanced controls for spawning");
+  button.addToToolitp("vehicles/npcs/gates, and team overrides");
   
   int totalHeight = clientStructures.size()*14;
   area = new GuiScrollableArea(4, this, 10, 50, this.getXSize()-20, this.getYSize()-60, totalHeight);

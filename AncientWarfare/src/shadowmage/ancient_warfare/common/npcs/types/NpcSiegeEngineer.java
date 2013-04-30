@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIAttackTargets;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDepositGoods;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDismountVehicles;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIMountVehicles;
@@ -57,9 +58,9 @@ public NpcSiegeEngineer(int type)
   this.tooltip = "A siege-engineer, adept at using siege engines.";
   this.isCombatUnit = true;
   this.iconTexture = "npcSiegeEngineer1";
-  this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0));
-  this.addLevel("Adept Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1));
-  this.addLevel("Master Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2));  
+  this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3);
+  this.addLevel("Adept Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4);
+  this.addLevel("Master Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(6);  
   }
 
 @Override
@@ -87,9 +88,10 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>();  
-  aiEntries.add(new AIDismountVehicles(npc, 10));
-  aiEntries.add(new AIAttackTargets(npc, 9, 10, 10));
-  aiEntries.add(new AIFollowPlayer(npc, 8));
+  aiEntries.add(new AIDismountVehicles(npc, 11));
+  aiEntries.add(new AIAttackTargets(npc, 10, 10, 10));
+  aiEntries.add(new AIFollowPlayer(npc, 9));
+  aiEntries.add(new AIDepositGoods(npc, 8));
   aiEntries.add(new AIMountVehicles(npc, 7, 20));  
   aiEntries.add(new AIStayNearHome(npc, 6, 20, 5));
   aiEntries.add(new AIAttackTargets(npc, 5, 40, 40));  

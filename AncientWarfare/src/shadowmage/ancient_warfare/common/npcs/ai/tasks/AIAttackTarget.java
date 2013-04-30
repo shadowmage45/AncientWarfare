@@ -34,8 +34,6 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 public class AIAttackTarget extends NpcAITask
 {
 
-int maxAttackDelayTicks = 35;//should set this from soldier somewhere..
-
 //int attackDelayTicks = 0;
 int blockAttackHits = 0;
 
@@ -71,7 +69,7 @@ public void onTick()
 
 protected void attackTarget(ITargetEntry target)
   { 
-  npc.actionTick =  maxAttackDelayTicks;  
+  npc.setActionTicksToMax(); 
   if(!target.isEntityEntry())
     {
 //    Config.logDebug("doing block attack");

@@ -11,6 +11,7 @@ GENERAL
 PRE-TEST RELEASE
 * double check all npc ai is present, as far as is-done
 * builder direct has no scan BB .. --- should be fixed....
+* siege-engineer is not dismounting properly
 
 PATHFINDING
 * still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
@@ -23,22 +24,17 @@ SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
 * create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
 * inter-soldier comms (more commanders yelling orders to soldiers)
-* need to set damage done by rank
-* siege-engineer is not dismounting properly
 * vehicle riders need some work (turning)
 
 NPCS
 * create AI objectives
     Stay Near Commander
     Select Commander (constantly-run objective, e.g. does the 'run' in the 'update priority' tick?)  
-* ladder movement handling needs some attention (they get stuck moving across ladders)(related to target blockY being greater than  
-* add loot-on-ground pickup ability to all NPCs
-* add deposit ability to all NPCs
+* ladder movement handling needs some attention (they get stuck moving across ladders)(related to target blockY being greater than
 * expand waypoint navigator with the following functions:
     town-hall/vault -- for npc upkeep
     depository must be able to be a chest-cart, or mine-cart with chest (or other entity with IInventory?)
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
-* need to set/adjust work time/'actionTicks' from npcType    
 * add objective icon rendering to npcs (toggle via Settings) -- .... NFC on this, would require server->client sync on stuff
 * random tick time divider
         
@@ -193,4 +189,8 @@ TWEAKS/OPTIMIZATION
 * napalm ammo....
 * add vehicle on-hit color rendering (dmg effects)
 * some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)
+* soldiers need to set damage done by rank  
+* add loot-on-ground pickup ability to all NPCs
+* add deposit ability to all NPCs
+* need to set/adjust work time/'actionTicks' from npcType    
 

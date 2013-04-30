@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import org.lwjgl.input.Keyboard;
 
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextBox;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -179,9 +180,12 @@ public void onGuiClosed()
 @Override
 public void setupControls()
   {
-  this.addGuiButton(0, 128-50-2, 240-18-4, 50, 18, "Discard");
-  this.addGuiButton(1, 128 + 2, 240-18-4, 50, 18, "Save");
-  
+  GuiButtonSimple button = this.addGuiButton(0, 128-50-2, 240-18-4, 50, 18, "Discard");
+  button.renderTooltip = true;
+  button.addToToolitp("Discard any changes and exit");
+  button = this.addGuiButton(1, 128 + 2, 240-18-4, 50, 18, "Save");
+  button.renderTooltip = true;
+  button.addToToolitp("Save any changes and exit");
   }
 
 @Override

@@ -101,6 +101,7 @@ public void updateCooldownTicks()
 public void setFinished()
   {
   this.npc.setTargetAW(null);
+  this.npc.clearPath();
   this.isFinished = true;
   this.currentPriority = 0;
   this.cooldownTicks = this.maxCooldownticks;

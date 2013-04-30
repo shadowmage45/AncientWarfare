@@ -53,10 +53,7 @@ public void updatePriority()
     }
   else if(npc.targetHelper.areTargetsInRange(TargetType.ATTACK, ((VehicleBase)npc.ridingEntity).vehicleType.getMinAttackDistance()))
     {
-    if(this.currentPriority<this.maxPriority)
-      {
-      this.currentPriority++;
-      }   
+    this.currentPriority = this.maxPriority;   
     }
   else
     {
@@ -67,21 +64,23 @@ public void updatePriority()
 @Override
 public void onRunningTick()
   {
-  // TODO Auto-generated method stub  
+  if(!npc.isRidingVehicle())
+    {
+    this.setFinished();
+    return;
+    }
   }
 
 @Override
 public void onObjectiveStart()
   {
-  // TODO Auto-generated method stub
-  
+  // TODO Auto-generated method stub  
   }
 
 @Override
 public void stopObjective()
   {
-  // TODO Auto-generated method stub
-  
+  // TODO Auto-generated method stub  
   }
 
 

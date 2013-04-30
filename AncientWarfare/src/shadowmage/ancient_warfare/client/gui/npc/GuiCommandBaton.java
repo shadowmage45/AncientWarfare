@@ -122,7 +122,9 @@ public void setupControls()
     }
   this.controlArea = new GuiScrollableArea(2, this, 5, 50, 256-10, 240-55, this.batonCommands.length*14);
   this.guiElements.put(2, controlArea);
-  this.addGuiButton(3, getXSize()-75-5, 5+12+2, 75, 12, "Clear Npc");
+  GuiButtonSimple button = this.addGuiButton(3, getXSize()-75-5, 5+12+2, 75, 12, "Clear Npc");
+  button.renderTooltip = true;
+  button.addToToolitp("Clear the current main-target Npc");
   for(int i = 0; i < this.batonCommands.length; i ++)
     {
     controlArea.addGuiElement(new GuiButtonSimple(i+10, controlArea, 140, 12, this.batonCommands[i].getCommandName()).updateRenderPos(5, i * 14));

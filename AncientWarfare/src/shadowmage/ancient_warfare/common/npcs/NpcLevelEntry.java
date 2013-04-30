@@ -39,9 +39,9 @@ protected int attackDamage = 4;
 protected int rangedAttackDistance = 20;
 protected int health = 20;
 protected int inventorySize = 9;
+protected int actionTicks = 35;
 protected float accuracy = 1.f;
 protected IAmmoType ammo;//used for archers
-//protected List<TargetType> validTargetTypes = new ArrayList<TargetType>();
 protected List<CivicWorkType> workTypes = new ArrayList<CivicWorkType>();
 
 public NpcLevelEntry(String name, String tex)
@@ -83,6 +83,12 @@ public NpcLevelEntry setArmor(ItemStack[] armor)
 public NpcLevelEntry setAttackDamage(int damage)
   {
   this.attackDamage = damage;
+  return this;
+  }
+
+public NpcLevelEntry setActionTicks(int ticks)
+  {
+  this.actionTicks = ticks;
   return this;
   }
 
