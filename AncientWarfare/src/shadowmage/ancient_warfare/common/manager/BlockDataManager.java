@@ -82,8 +82,9 @@ public static void loadBlockList()
   addBlock(Block.mushroomCapRed).setPriority(1);
   
   /************************************ ROTATABLE/METADATA BLOCKS ************************************/
-  addBlock(Block.dispenser).setRotatable().setMeta(0, 2, 5, 3, 4);
+  addBlock(Block.dispenser).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0);
   addBlock(Block.chest).setRotatable().setMeta(0, 2, 5, 3, 4);  
+  addBlock(Block.chestTrapped).setRotatable().setMeta(0, 2, 5, 3, 4);
   addBlock(Block.furnaceIdle).setRotatable().setMeta(0, 2, 5, 3, 4);
   addBlock(Block.furnaceBurning).setRotatable().setMeta(0, 2, 5, 3, 4).setBasicInventoryItem(Block.furnaceIdle.blockID, 0, 1);
   addBlock(Block.ladder).setPriority(1).setRotatable().setMeta(0, 2, 5, 3, 4);
@@ -95,6 +96,7 @@ public static void loadBlockList()
   addBlock(Block.rail).setPriority(1).setRotatable().setMeta(0, 0, 1, 0, 1).setMeta(1, 7, 8, 9, 6).setMeta(2, 5, 3, 4, 2);
   addBlock(Block.railPowered).setPriority(1).setRotatable().setMeta(0, 5, 3, 4, 2).setMeta(1, 0, 1, 0, 1).setMeta(2, 13, 11, 12, 10).setMeta(3, 8, 9, 8, 9);
   addBlock(Block.railDetector).setPriority(1).setRotatable().setMeta(0, 5, 3, 4, 2).setMeta(1, 0, 1, 0, 1).setMeta(2, 13, 11, 12, 10).setMeta(3, 8, 9, 8, 9);
+  addBlock(Block.railActivator).setPriority(1).setRotatable().setMeta(0, 5, 3, 4, 2).setMeta(1, 0, 1, 0, 1).setMeta(2, 13, 11, 12, 10).setMeta(3, 8, 9, 8, 9);
   
   addBlock(Block.pistonStickyBase).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0).setMeta(3, 10, 13, 11, 12).setMeta(4, 9, 9, 9, 9).setMeta(5, 8, 8, 8, 8);; 
   addBlock(Block.pistonBase).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0).setMeta(3, 10, 13, 11, 12).setMeta(4, 9, 9, 9, 9).setMeta(5, 8, 8, 8, 8);
@@ -125,13 +127,20 @@ public static void loadBlockList()
   addBlock(Block.stairsWoodSpruce).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
   addBlock(Block.stairsWoodBirch).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
   addBlock(Block.stairsWoodJungle).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
-    
+  addBlock(Block.stairsNetherQuartz).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
+  
   addBlock(Block.vine).setPriority(1).setRotatable().setMeta(0, 1, 2, 4, 8);
     
   addBlock(Block.anvil).setPriority(1).setRotatable().setMeta(0, 3, 0, 1, 2).setMeta(1, 7, 4, 5, 6).setMeta(2, 11, 8, 9, 10);
    
   addBlock(Block.cocoaPlant).setRotatable().setMeta(0, 0, 1, 2, 3).setMeta(1, 4, 5, 6, 7).setMeta(2, 8, 9, 10, 11).setMeta(3, 12, 13, 14, 15);//TODO set dye for itemID...whatever taht is
-    
+  
+  addBlock(Block.blockNetherQuartz).setRotatable().setMeta(0, 0, 0, 0, 0).setMeta(1, 1, 1, 1, 1).setMeta(2, 2, 2, 2, 2).setMeta(3, 4, 3, 4, 3);
+  
+  addBlock(Block.dropper).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0);
+  addBlock(Block.redstoneComparatorIdle).setPriority(1).setRotatable().setMeta(0, 2, 3, 0, 1);
+  addBlock(Block.redstoneComparatorActive).setPriority(1).setRotatable().setMeta(0, 2, 3, 0, 1).setBasicInventoryItem(Block.redstoneComparatorIdle.blockID, 0, 1);
+  
   /**
    * add single slabs, and double slabs for stone
    */

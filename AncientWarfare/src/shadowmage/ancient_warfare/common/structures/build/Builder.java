@@ -297,7 +297,7 @@ protected void doClearing()
 protected void placeBlock(World world, int x, int y, int z, int id, int meta)
   { 
   world.setBlock(x, y, z, id, meta, 3);
-//  world.setBlockAndMetadata(x, y, z, id, meta);
+  world.setBlockMetadataWithNotify(x, y, z, meta, 3);
   }
 
 /**

@@ -14,6 +14,8 @@ PRE-TEST RELEASE
 * add mass_set_depository to command batons (and mass-clear)
 * move vehicle over to new pathfinder, and test...
 * remove old pathfinder code (archive)
+* add cocoa-bean/block inventory item(dye, meta??)
+* builder direct has no scan BB ..
 
 PATHFINDING
 * still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
