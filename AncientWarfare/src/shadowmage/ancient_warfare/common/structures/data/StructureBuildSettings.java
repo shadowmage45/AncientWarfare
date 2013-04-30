@@ -27,15 +27,6 @@ public class StructureBuildSettings implements INBTTaggable
 {
 
 public String name = "No Selection!";
-//
-///**
-// * overrides
-// */
-//public int vehicle;
-//public int npc = -1;
-//public int gate = -1;
-//public int team = -1;
-
 public boolean spawnVehicle = true;
 public boolean spawnNpc = true;
 public boolean spawnGate = true;

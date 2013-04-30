@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
+import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
+
 public class CivicBuilder extends Civic
 {
 
@@ -29,6 +31,10 @@ public class CivicBuilder extends Civic
 public CivicBuilder(int id)
   {
   super(id);
+  this.addToCreative = false;
+  this.name = "Civic Structure Builder";
+  this.tooltip = "Work site for building of structures.";
+  this.teClass = TECivicBuilder.class;
   }
 
 }

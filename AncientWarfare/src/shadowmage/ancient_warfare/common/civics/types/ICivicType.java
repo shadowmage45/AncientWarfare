@@ -79,6 +79,8 @@ boolean isWorkSite();
 boolean isDepository();
 boolean isDwelling();
 
+boolean addToCreativeMenu();
+
 /**
  * if work site, get the maximum number of workers for this structure
  * if dwelling, get the max number of residents inside structure bounds

@@ -69,7 +69,6 @@ public void doRender(Entity var1, double x, double y, double z, float yaw, float
   VehicleBase vehicle = (VehicleBase) var1;
   GL11.glPushMatrix();
   GL11.glTranslated(x, y, z);
-  yaw = vehicle.rotationYaw - (tick * vehicle.moveHelper.strafeMotion);
   GL11.glRotatef(yaw, 0, 1, 0);
   GL11.glScalef(-1, -1, 1);    
   Minecraft.getMinecraft().renderEngine.bindTexture(var1.getTexture());

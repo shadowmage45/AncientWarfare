@@ -50,8 +50,6 @@ public ItemCivicBuilder(int itemID)
   this.setHasSubtypes(true);
   }
 
-
-
 /**
  * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
  */
@@ -68,8 +66,8 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     tag = new NBTTagCompound();
     tag.setString("name", c.name);
     stack.setTagInfo("structData", tag);
+    par3List.add(stack);
     }
-  super.getSubItems(par1, par2CreativeTabs, par3List);
   }
 
 @Override
@@ -88,7 +86,7 @@ public boolean attemptConstruction(World world, ProcessedStructure struct, Block
     { 
     BuilderTicked builder = new BuilderTicked(world, struct, face, offsetHit);
     builder.startConstruction();
-    builder.setOverrides(settings.teamOverride, settings.spawnVehicle, settings.spawnNpc, settings.spawnGate);
+    builder.setOverrides(-1, false, false, true);//TODO handle gate stuff...
     te.setBuilder(builder);
 //    Ticket tk = ForgeChunkManager.requestTicket(AWCore.instance, world, Type.NORMAL);
 //    if(tk!=null)

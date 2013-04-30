@@ -70,6 +70,7 @@ protected int workSizeMaxHeight = 2;
 protected boolean isWorkSite = false;
 protected boolean isDepository = false;
 protected boolean isDwelling = false;
+protected boolean addToCreative = true;
 protected Class<? extends TECivic> teClass;
 protected ItemStack displayStackCache = null;
 protected int inventorySize = 0;
@@ -197,6 +198,12 @@ public String[] getIconNames()
 public CivicWorkType getWorkType()
   {
   return workType;
+  }
+
+@Override
+public boolean addToCreativeMenu()
+  {
+  return addToCreative;
   }
 
 }

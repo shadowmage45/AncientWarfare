@@ -84,7 +84,8 @@ public void onElementActivated(IGuiElement element)
   else if(element.getElementNumber()>=10)//ammo select buttons
     {
     int ammoIndex = element.getElementNumber()-10;
-    vehicle.ammoHelper.handleClientAmmoSelection(ammoIndex);    
+    vehicle.ammoHelper.handleClientAmmoSelection(ammoIndex);  
+    this.closeGUI();
     }
   }
 

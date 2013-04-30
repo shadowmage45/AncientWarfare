@@ -44,23 +44,11 @@ private VehicleBase vehicle;
 public int currentAmmoType = 0;
 
 private List<VehicleAmmoEntry> ammoEntries = new ArrayList<VehicleAmmoEntry>();
-private HashMap<Integer, VehicleAmmoEntry> ammoTypes = new HashMap<Integer, VehicleAmmoEntry>();//local ammo type to global entry
+//private HashMap<Integer, VehicleAmmoEntry> ammoTypes = new HashMap<Integer, VehicleAmmoEntry>();//local ammo type to global entry
 
 public VehicleAmmoHelper(VehicleBase vehicle)
   {
   this.vehicle = vehicle;
-  }
-
-public int getLocalAmmoType(IAmmoType type)
-  {
-  for(int i = 0; i < ammoEntries.size(); i++)
-    {
-    if( this.ammoEntries.get(i).baseAmmoType == type )
-      {
-      return i;
-      }
-    }
-  return -1;
   }
 
 public int getCountOf(IAmmoType type)
@@ -73,15 +61,6 @@ public int getCountOf(IAmmoType type)
       }
     }
   return 0;
-  }
-
-public IAmmoType getAmmoTypeForLocal(int type)
-  {
-  if(this.ammoTypes.containsKey(type))
-    {
-    return this.ammoTypes.get(type).baseAmmoType;
-    }
-  return null;
   }
 
 /**
@@ -144,7 +123,6 @@ public void addUseableAmmo(IAmmoType ammo)
   {
   VehicleAmmoEntry ent = new VehicleAmmoEntry(ammo);
   this.ammoEntries.add(ent);
-  this.ammoTypes.put(ammo.getAmmoType(), ent);
   }
 
 /**
@@ -381,14 +359,12 @@ public MissileBase getMissile2(float x, float y, float z, float yaw, float pitch
 @Override
 public NBTTagCompound getNBTTag()
   {
-  NBTTagCompound tag = new NBTTagCompound();
-  
-  tag.setInteger("am", currentAmmoType);
-  
+  NBTTagCompound tag = new NBTTagCompound();  
+  tag.setInteger("am", currentAmmoType);  
   NBTTagList tagList = new NBTTagList();
   for(VehicleAmmoEntry ent : this.ammoEntries)
     {
-    NBTTagCompound entryTag = new NBTTagCompound();
+    NBTTagCompound entryTag = new NBTTagCompound();    
     entryTag.setInteger("num", ent.baseAmmoType.getAmmoType());
     entryTag.setInteger("cnt", ent.ammoCount);
 //    Config.logDebug("writing ammo count "+entryTag.getInteger("num")+","+entryTag.getInteger("cnt"));
@@ -412,10 +388,13 @@ public void readFromNBT(NBTTagCompound tag)
     NBTTagCompound entryTag = (NBTTagCompound) tagList.tagAt(i);
     int num = entryTag.getInteger("num");
     int cnt = entryTag.getInteger("cnt");    
-    if(this.ammoTypes.containsKey(num))
+    for(VehicleAmmoEntry ent : this.ammoEntries)
       {
-//      Config.logDebug("reading ammo count "+num+","+cnt);
-      this.ammoTypes.get(num).ammoCount = cnt;
+      if(ent.baseAmmoType.getAmmoType()==num)
+        {
+        ent.ammoCount = cnt;
+        break;
+        }
       }
     }
   }

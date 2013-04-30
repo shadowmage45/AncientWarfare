@@ -74,7 +74,7 @@ public void drawElement(int mouseX, int mouseY)
     if(this.ammo!=null)
       {
       mc.renderEngine.bindTexture("/gui/items.png");
-      vehicle.ammoHelper.getCountOf(ammo);
+      qty = vehicle.ammoHelper.getCountOf(ammo);
       this.renderItemIcon(guiLeftOffset+2+this.renderPosX, guiTopOffset+2+this.renderPosY, ammo.getDisplayIcon(), 16, 16);
       }
     String qtyString = String.valueOf(qty);

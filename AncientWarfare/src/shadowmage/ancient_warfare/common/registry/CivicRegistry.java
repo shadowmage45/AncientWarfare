@@ -64,7 +64,7 @@ public void registerCivics()
   {  
   for(Civic civ : Civic.civicList)
     {
-	  if(civ==null){continue;}
+	  if(civ==null || !civ.addToCreativeMenu()){continue;}
     Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.civicPlacer, civ.getGlobalID(), civ.getDisplayName(), "", civ.getDisplayTooltip());
     d.setIconTexture(civ.getIconTexture(), civ.getGlobalID());    
     }
@@ -155,7 +155,7 @@ public List<ItemStack> getDisplayStacks()
   List<ItemStack> displayStacks = new ArrayList<ItemStack>();
   for(Civic civ : Civic.civicList)
     {
-    if(civ!=null)
+    if(civ!=null && civ.addToCreativeMenu())
       {
       ItemStack displayStack = new ItemStack(ItemLoader.civicPlacer,1,civ.getGlobalID());
       NBTTagCompound tag = new NBTTagCompound();
