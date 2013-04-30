@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.helpers;
 
 import net.minecraft.entity.player.EntityPlayer;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -60,18 +61,28 @@ public void onTick(){}
 
 public boolean interact(EntityPlayer player)
   {
-  if(vehicle.isMountable() && !player.worldObj.isRemote && !player.isSneaking() && (vehicle.riddenByEntity==null || vehicle.riddenByEntity==player))
+  if(player.worldObj.isRemote)
+    {
+    return true;
+    }
+  if(vehicle.isMountable() && !player.isSneaking() && (vehicle.riddenByEntity==null || vehicle.riddenByEntity==player))
     {
     player.mountEntity(vehicle);
     return true;
-    }
-  else if(vehicle.isMountable() && vehicle.riddenByEntity instanceof NpcBase)
-    {
-    vehicle.riddenByEntity.mountEntity(vehicle);//force dismount of those sneaky soldiers...
-    }
+    }  
   else if(!player.worldObj.isRemote && player.isSneaking())
     {
     GUIHandler.instance().openGUI(GUIHandler.VEHICLE_DEBUG, player, vehicle.worldObj, vehicle.entityId, 0, 0);
+    }
+  else if(vehicle.isMountable() && vehicle.riddenByEntity instanceof NpcBase)
+    {
+    NpcBase npc = (NpcBase)vehicle.riddenByEntity;
+    npc.ridingEntity = null;
+    vehicle.riddenByEntity = null;
+    npc.unmountEntity(vehicle);
+//    npc.mountEntity(vehicle);
+    Config.logDebug("forcing dismount!!");
+//    vehicle.riddenByEntity.mountEntity(vehicle);//force dismount of those sneaky soldiers...
     }
   return true;
   }

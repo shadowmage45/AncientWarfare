@@ -82,6 +82,8 @@ protected int idleLookTicks = 0;
 
 protected int lootCheckTicks = 0;
 
+protected int npcTicksExisted = 0;
+
 public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
 public NpcTargetHelper targetHelper;
@@ -210,6 +212,11 @@ public TargetType getTargetType()
 public void setTargetAW(ITargetEntry entry)
   {
   this.wayNav.setTarget(entry);
+  if(entry==null && this.isRidingVehicle())
+    {
+    VehicleBase vehicle = (VehicleBase)ridingEntity;
+    vehicle.moveHelper.handleMotionInput((byte)0, (byte)0);
+    }
   }
 
 public boolean isRidingVehicle()
@@ -320,8 +327,9 @@ public void setActionTicksToMax()
 @Override
 public void onUpdate()
   {
-  this.varsHelper.onTick(); 
-  if(!worldObj.isRemote && (ticksExisted + this.entityId) % Config.npcAITicks == 0)
+  this.varsHelper.onTick();
+  npcTicksExisted++;
+  if(!worldObj.isRemote && (npcTicksExisted + this.entityId) % Config.npcAITicks == 0)
     {
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
@@ -400,7 +408,7 @@ public void onUpdate()
   else
     {
     this.lootCheckTicks--;
-    }
+    }   
   super.onUpdate();    
   }
 

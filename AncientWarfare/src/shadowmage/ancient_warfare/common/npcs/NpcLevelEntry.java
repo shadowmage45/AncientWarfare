@@ -36,7 +36,7 @@ private ItemStack[] armorStacks = new ItemStack[4];
 protected String name;
 protected String texture;
 protected int attackDamage = 4;
-protected int rangedAttackDistance = 20;
+protected int rangedAttackDistance = 0;
 protected int health = 20;
 protected int inventorySize = 9;
 protected int actionTicks = 35;

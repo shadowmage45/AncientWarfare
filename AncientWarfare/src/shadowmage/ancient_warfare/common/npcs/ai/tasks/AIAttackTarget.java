@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -34,7 +35,6 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 public class AIAttackTarget extends NpcAITask
 {
 
-//int attackDelayTicks = 0;
 int blockAttackHits = 0;
 
 /**
@@ -52,19 +52,38 @@ public void onTick()
   ITargetEntry target = npc.getTarget();
   if(npc.isRidingVehicle())
     {
-    attackTargetMounted(target);
+    if(this.checkIfTargetDead(target))
+      {
+      npc.targetHelper.removeTarget(target);
+      npc.setTargetAW(null);
+      } 
+    else
+      {
+      attackTargetMounted(target);
+      if(this.checkIfTargetDead(target))
+        {
+        npc.targetHelper.removeTarget(target);
+        npc.setTargetAW(null);
+        } 
+      }
     }
   else
     {
-    if(npc.actionTick<=0)
+    if(this.checkIfTargetDead(target))
+      {
+      npc.targetHelper.removeTarget(target);
+      npc.setTargetAW(null);
+      } 
+    else if(npc.actionTick<=0)
       {
       this.attackTarget(target); 
+      if(this.checkIfTargetDead(target))
+        {
+        npc.targetHelper.removeTarget(target);
+        npc.setTargetAW(null);
+        } 
       }   
-    }  
-  if(this.checkIfTargetDead(target))
-    {
-    npc.setTargetAW(null);
-    } 
+    }    
   }
 
 protected void attackTarget(ITargetEntry target)
@@ -87,7 +106,7 @@ protected void attackTarget(ITargetEntry target)
     }
   else
     {
-//    Config.logDebug("doing entity attack");
+//    Config.logDebug("doing entity atack: "+npc.getTarget());
     Entity ent = target.getEntity();
     if(ent!=null)
       {
@@ -105,7 +124,7 @@ protected void attackTargetMounted(ITargetEntry target)
   float yaw = Trig.getYawTowardsTarget(vehicle.posX, vehicle.posZ, target.posX(), target.posZ(), vehicle.rotationYaw);  
   byte s = 0;
   boolean turning = false;
-  if(!Trig.isAngleBetween(vehicle.rotationYaw+yaw, vehicle.localTurretRotationHome-vehicle.currentTurretRotationMax-3.f, vehicle.localTurretRotationHome+vehicle.currentTurretRotationMax+3.f))//expand the bounds a bit
+  if(!Trig.isAngleBetween(vehicle.rotationYaw+yaw, vehicle.localTurretRotationHome-vehicle.currentTurretRotationMax-2.f, vehicle.localTurretRotationHome+vehicle.currentTurretRotationMax+2.f))//expand the bounds a bit
     {      
     if(yaw<0)
       {
@@ -116,7 +135,7 @@ protected void attackTargetMounted(ITargetEntry target)
       s = -1;//right
       }
     turning = true;
-    Config.logDebug("yaw diff to target: "+yaw);
+//    Config.logDebug("yaw diff to target: "+yaw);
     }
   vehicle.moveHelper.handleMotionInput((byte) 0, s);
   vehicle.firingHelper.handleSoldierTargetInput(target.posX(), target.posY(), target.posZ());
@@ -141,9 +160,28 @@ protected void attackTargetMounted(ITargetEntry target)
 
 protected boolean checkIfTargetDead(ITargetEntry target)
   {
-  if(target.getEntity()!=null && target.getEntity().isDead)
+  if(target==null)
     {
     return true;
+    }
+  if(target.getEntity()!=null)
+    {
+    if(target.getEntity().isDead)
+      {
+//      Config.logDebug("target is dead!!");
+      return true;
+      }
+    if(target.getEntity() instanceof EntityLiving)
+      {
+      EntityLiving liv = (EntityLiving)target.getEntity();
+      if(liv.getHealth()<=0)
+        {
+//        Config.logDebug("target had no health, counting as dead!!");
+        return true;
+        }
+      }
+//    Config.logDebug("target not dead!!");
+    return false;
     }
   else if(target.getEntity()==null)
     {
@@ -158,7 +196,7 @@ protected boolean checkIfTargetDead(ITargetEntry target)
 @Override
 public boolean shouldExecute()
   {  
-  return npc.getTargetType()==TargetType.ATTACK && npc.getDistanceFromTarget(npc.getTarget()) <= npc.targetHelper.getAttackDistance(npc.getTarget());
+  return npc.getTarget()!=null && npc.getTargetType()==TargetType.ATTACK && npc.getDistanceFromTarget(npc.getTarget()) <= npc.targetHelper.getAttackDistance(npc.getTarget());
   }
 
 }

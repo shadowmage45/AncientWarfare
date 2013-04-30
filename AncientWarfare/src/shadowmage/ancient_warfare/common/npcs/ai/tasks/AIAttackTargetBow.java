@@ -59,7 +59,7 @@ protected void attackTarget(ITargetEntry target)
     }
   if(!target.isEntityEntry())
     {
-    Config.logDebug("doing block attack");
+//    Config.logDebug("doing block attack");
     blockAttackHits++;    
     int id = npc.worldObj.getBlockId((int)target.posX(), (int)target.posY(),(int)target.posZ());
     Block block = Block.blocksList[id];
@@ -72,9 +72,9 @@ protected void attackTarget(ITargetEntry target)
       }
     }
   else
-    {
-    Config.logDebug("doing entity attack with bow");
+    {    
     Entity ent = target.getEntity();
+//    Config.logDebug("doing entity attack with bow target: "+ent);
     if(ent!=null)
       {
       doBowAttack(ent);

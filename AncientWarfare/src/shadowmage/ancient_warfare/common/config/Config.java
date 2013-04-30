@@ -173,7 +173,7 @@ public void setCoreInfo()
   {
   config.addCustomCategoryComment("a-general-options", "Global options that effect the entire mod");
   config.addCustomCategoryComment("b-performance", "Global options that may effect performance in some way");
-  config.addCustomCategoryComment("c-vehicle", "Global options that effect vehicles in some fashion");
+  config.addCustomCategoryComment("c-vehicle-options", "Global options that effect vehicles in some fashion");
   config.addCustomCategoryComment("structure-management", "Global World Generation options, effect every save/world.  Check AWWorldGen.cfg for advanced options");
   
   /**
@@ -199,7 +199,7 @@ public void setCoreInfo()
 public void setVehicleInfo()
   {
   this.addOversizeAmmo = config.get("c-vehicle-options", "add_oversize_ammo", true, "If true, ALL ammo types for a vehicle will be available regardless of weight/being useless.").getBoolean(true);
-  this.soldiersUseAmmo = config.get("c-vehicle-options", "soldiers_use_ammo", true, "If true, Soldiers will consume ammo from vehicles but the type must be selected before hand, and kept stocked. If false, soldiers are limited to a default ammo type for the vehicle.").getBoolean(true);
+  this.soldiersUseAmmo = config.get("c-vehicle-options", "soldiers_use_ammo", false, "If true, Soldiers will consume ammo from vehicles but the type must be selected before hand, and kept stocked. If false, soldiers are limited to a default ammo type for the vehicle.").getBoolean(false);
   this.useVehicleSetupTime = config.get("c-vehicle-options", "use_setup_time", true, "If true, vehicles will be un-useable for the first 5 seconds after placement.").getBoolean(true);
   }
 

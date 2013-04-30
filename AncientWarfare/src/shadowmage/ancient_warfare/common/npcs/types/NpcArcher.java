@@ -60,10 +60,10 @@ public NpcArcher(int type)
   this.tooltip = "An archer, adept at bow-use.";
   this.isCombatUnit = true;  
   this.iconTexture = "npcArcher1";
-  this.addLevel("Archer Novice", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0));
-  this.addLevel("Archer Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1));
-  this.addLevel("Archer Expert", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2));
-  this.addLevel("Archer Master", Config.texturePath + "models/npcDefault.png", getToolStack(3), getArmorStack(3));
+  this.addLevel("Archer Novice", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setRange(20);
+  this.addLevel("Archer Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setRange(20);
+  this.addLevel("Archer Expert", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setRange(20);
+  this.addLevel("Archer Master", Config.texturePath + "models/npcDefault.png", getToolStack(3), getArmorStack(3)).setRange(20);
   }
 
 @Override

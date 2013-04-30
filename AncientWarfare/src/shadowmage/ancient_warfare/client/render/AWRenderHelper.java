@@ -233,20 +233,13 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
 
   if(ItemBuilderBase.isBuilderItem(id))
     {
-    Config.logDebug("builder item equipped");
     this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
     }  
   if(id==ItemLoader.structureBuilderDirect.itemID)
     {
-    Config.logDebug("builder direct equipped");
     if(ItemBuilderDirect.isScanning(stack))
       {
-      Config.logDebug("rendering scan area");
       this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks);      
-      }
-    else
-      {
-      Config.logDebug("has no scan area");
       }
     }
   else if(ItemStructureScanner.isScannerItem(id))

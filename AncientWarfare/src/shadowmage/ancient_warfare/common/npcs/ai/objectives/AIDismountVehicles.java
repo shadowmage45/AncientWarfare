@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIDismountVehicle;
@@ -50,9 +51,11 @@ public void updatePriority()
   if(!npc.isRidingVehicle())
     {
     this.currentPriority = 0;
+    return;
     }
-  else if(npc.targetHelper.areTargetsInRange(TargetType.ATTACK, ((VehicleBase)npc.ridingEntity).vehicleType.getMinAttackDistance()))
+  if(npc.targetHelper.areTargetsInRange(TargetType.ATTACK, ((VehicleBase)npc.ridingEntity).vehicleType.getMinAttackDistance()))
     {
+    Config.logDebug("dismount targets in range!!");
     this.currentPriority = this.maxPriority;   
     }
   else

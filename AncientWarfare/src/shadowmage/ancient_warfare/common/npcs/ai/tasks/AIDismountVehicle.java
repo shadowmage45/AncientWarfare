@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
+import net.minecraft.entity.Entity;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
 
@@ -37,8 +38,12 @@ public AIDismountVehicle(NpcBase npc)
 
 @Override
 public void onTick()
-  {
-  npc.mountEntity(npc.ridingEntity);
+  {  
+//  npc.mountEntity(npc.ridingEntity);
+  Entity et = npc.ridingEntity;
+  npc.ridingEntity = null;
+  et.riddenByEntity = null;
+  npc.unmountEntity(et);
   }
 
 @Override

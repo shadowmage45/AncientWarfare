@@ -10,6 +10,7 @@ GENERAL
 
 PRE-TEST RELEASE
 * siege-engineer is not dismounting properly
+* add npc tab default icon
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...

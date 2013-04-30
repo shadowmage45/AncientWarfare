@@ -304,18 +304,21 @@ protected boolean isPlant(int id)
 
 public void clearInputFromDismount()
   {
-  this.setForwardInput((byte) 0);
-  this.setStrafeInput((byte) 0);  
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setByte("f", (byte) 0);
-  tag.setByte("s", (byte) 0);
-  Packet02Vehicle pkt = new Packet02Vehicle();
-  pkt.setParams(this.vehicle);
-  pkt.setInputData(tag);
-  if(!this.vehicle.worldObj.isRemote)
+  if(this.forwardInput !=0 || this.strafeInput!=0)
     {
-    AWCore.proxy.sendPacketToAllClientsTracking(this.vehicle, pkt);
-    }
+    this.setForwardInput((byte) 0);
+    this.setStrafeInput((byte) 0);  
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setByte("f", (byte) 0);
+    tag.setByte("s", (byte) 0);
+    Packet02Vehicle pkt = new Packet02Vehicle();
+    pkt.setParams(this.vehicle);
+    pkt.setInputData(tag);
+    if(!this.vehicle.worldObj.isRemote)
+      {
+      AWCore.proxy.sendPacketToAllClientsTracking(this.vehicle, pkt);
+      }
+    }  
   }
 
 public void resetUpgradeStats()

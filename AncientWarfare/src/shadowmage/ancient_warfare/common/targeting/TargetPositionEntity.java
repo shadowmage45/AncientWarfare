@@ -47,6 +47,7 @@ public boolean isEntityEntry()
   return true;
   }
 
+@Override
 public int floorX()
   {
   return MathHelper.floor_float(posX());
@@ -81,6 +82,8 @@ public float posZ()
   {
   return target.get()!=null ? (float) target.get().posZ : Float.MAX_VALUE;
   }
+
+
 
 
 }

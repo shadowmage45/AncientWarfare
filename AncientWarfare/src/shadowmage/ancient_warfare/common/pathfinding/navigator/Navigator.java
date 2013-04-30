@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityNavigator;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.network.Packet04Npc;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinderCrawler;
@@ -339,7 +340,7 @@ protected float getEntityDistance(Node n)
 
 protected void sendToClients(int x, int y, int z)  
   {
-  if(Config.DEBUG && !world.isRemote())//relay to client, force client-side to find path as well (debug rendering of path)
+  if(Config.DEBUG && !world.isRemote() && owner.getEntity() instanceof NpcBase)//relay to client, force client-side to find path as well (debug rendering of path)
     {
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("tx", x);

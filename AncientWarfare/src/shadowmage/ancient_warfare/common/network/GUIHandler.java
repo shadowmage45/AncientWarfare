@@ -138,7 +138,6 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   
   
   case VEHICLE_AMMO_SELECT:
-  Config.logDebug("returning server container for vehicle ammo select");
   return new ContainerDummy();
   
   case VEHICLE_DEBUG:
@@ -195,7 +194,6 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   NpcBase npc = (NpcBase)world.getEntityByID(x);
   if(npc!=null)
     {
-    Config.logDebug("returning new npc gui");
     return new GuiNpcBase(new ContainerNpcBase(player, npc),npc);
     }
   return null;
@@ -204,7 +202,6 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   return null; 
   
   case VEHICLE_AMMO_SELECT:
-  Config.logDebug("returning client gui for vehicle ammo select");
   vehicle = (VehicleBase)world.getEntityByID(x);
   if(vehicle!=null)
     {

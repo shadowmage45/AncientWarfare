@@ -46,6 +46,7 @@ public AIAggroList(NpcBase owner, TargetType targetType)
 
 public void addOrUpdateEntry(Entity ent, int aggroAmt, AITargetEntry type)
   {  
+//  Config.logDebug("add/update entry for : "+ent + " amt: "+aggroAmt);
   for(AIAggroTargetWrapper entry : this.targetEntries)
     {
     if(entry.matches(ent))

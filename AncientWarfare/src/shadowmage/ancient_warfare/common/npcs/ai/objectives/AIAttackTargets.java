@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -57,7 +58,7 @@ public void updatePriority()
 //  Config.logDebug("checking if targets are in range: ");
   if(npc.targetHelper.areTargetsInRange(TargetType.ATTACK, maxRange))
     {
-//    Config.logDebug("setting attack priority to max: "+this.maxPriority);
+//    Config.logDebug("attack targets in range: setting attack priority to max: "+this.maxPriority);
     this.currentPriority = this.maxPriority;    
     }
   else
@@ -80,7 +81,7 @@ public void onRunningTick()
       }
     else
       {
-//      Config.logDebug("attack ai, new target found, setting new target");
+//      Config.logDebug("attack ai, new target found, setting new target " + target);
       npc.setTargetAW(target);
       }
     }
