@@ -57,6 +57,7 @@ private HashMap<String, WorldGenBiomeStructList> biomesStructureMap = new HashMa
 private int[] validDimensions;
 private int[] invalidDimensions;
 public static int structureGenMinDistance=2;
+public static int structureGenSpawnProtection = 12;
 public static int structureGenMaxCheckRange=16;
 public static int structureGenRandomChance=10;
 public static int structureGenRandomRange=1000;
@@ -530,7 +531,11 @@ private void parseConfig(Iterator<String> it)
     if(line.toLowerCase().startsWith("invaliddimensions"))
       {
       this.invalidDimensions = StringTools.safeParseIntArray("=", line);
-      }  
+      }
+    if(line.toLowerCase().startsWith("structuregenspawnprotection"))
+      {
+      this.structureGenSpawnProtection = StringTools.safeParseInt("=", line);
+      }
     if(line.toLowerCase().startsWith("structuregenmindistance"))
       {
       this.structureGenMinDistance = StringTools.safeParseInt("=", line);

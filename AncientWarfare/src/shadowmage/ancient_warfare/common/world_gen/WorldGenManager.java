@@ -27,6 +27,8 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -37,6 +39,7 @@ import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.Pair;
+import shadowmage.ancient_warfare.common.utils.Trig;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenManager implements IWorldGenerator, INBTTaggable
@@ -171,7 +174,14 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
    * select structure from those available to the current available value....
    */
   int x = chunkX*16 + random.nextInt(16);
-  int z = chunkZ*16 + random.nextInt(16);  
+  int z = chunkZ*16 + random.nextInt(16); 
+  ChunkCoordinates spawnPos = world.getSpawnPoint();
+  float spawnDist = Trig.getDistance(x, spawnPos.posY, z, spawnPos.posX, spawnPos.posY, spawnPos.posZ);
+  if(spawnDist< 12 *16 )
+    {    
+    Config.logDebug("structure gen exit for too close to spawnPos");
+    return;
+    }
   String biomeName = world.provider.getBiomeGenForCoords(x, z).biomeName;
   int maxValue = WorldGenStructureManager.structureGenMaxClusterValue - foundValue;
   maxValue = maxValue < 0 ? 0 : maxValue;

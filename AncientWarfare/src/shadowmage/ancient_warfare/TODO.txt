@@ -9,13 +9,8 @@ GENERAL
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 
 PRE-TEST RELEASE
-* double check all npc ai is present, as far as is-done
 * builder direct has no scan BB .. --- should be fixed....
 * siege-engineer is not dismounting properly
-
-PATHFINDING
-* still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
-* for non-attack targets, hook in the 'teleport' system.
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
@@ -41,7 +36,6 @@ NPCS
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
 * add an itemSlot element (not inventory slot...a client-side only slot that displays a static stack)
-* add tooltips to GUIs
 
 TESTING
 * test structure stuff extensively
@@ -54,27 +48,25 @@ STRUCTURE BUILDING
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
-* don't spawn stuff in X blocks of spawn (config setting)
 
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
 
 WORKSITES
-* needs a 'complete rescan divider', to know when to do a complete rescan, or just update nodes
-    (scan a couple ticks after first load, and rescan every minute or two after that)    
 * most civics probably need chunk-loaders to prevent them from trying to access unloaded areas.
 * need to invalidate work-site AND work-point (f'n all of it) from npc when it is destroyed
-* need toggle for rendering of bounding box   
 * teleport worker to position if he can't path appropriately?      
         
 FARMS
 * needs cactus/melon/reed/mushroom types made
-* needs tree farm(s) created
+* need rest of tree farms created
 
 MINE
 * alternative mine-patterns
-* occasional complete rescan. will need to query workers for peices and remove duplicates from new pieces
-    as well as transfer workers to  the same branch/piece that they left
+* restructure mine into an 'internal' template.
+    each node ONLY needs action and order.  Can do 'extras' after main.
+    each template is a 1-chunk-sized piece. can use the same template multiple times for larger
+    mine areas--stopping at edge of mine
 * clean up inventory handling/block use/etc
 
 COMPLEXES
@@ -136,8 +128,16 @@ CRAFTING
             making same type until materials run out
     UPGRADE AND ARMOR CRAFTING
  
+ 
+/************************************************DONE/OPTI*************************************************/
+ 
 TEAM CONTROL GUI
  
+PATHFINDING
+* still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
+* for non-attack targets, hook in the 'teleport' system.
+* recalc of path towards moving target is still too aggressive
+
 TWEAKS/OPTIMIZATION
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
 * optimize clearing code to not include inside bounds of structure
@@ -193,4 +193,8 @@ TWEAKS/OPTIMIZATION
 * add loot-on-ground pickup ability to all NPCs
 * add deposit ability to all NPCs
 * need to set/adjust work time/'actionTicks' from npcType    
+* add tooltips to GUIs
+* add experience value to NPCs
+* don't spawn stuff in X blocks of spawn (config setting)
+* double check all npc ai is present, as far as is-done
 
