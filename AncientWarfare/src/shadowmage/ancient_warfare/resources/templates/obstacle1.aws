@@ -1,0 +1,83 @@
+# Ancient Warfare Structure Template File
+# auto-generated structure file. created on: 3/14/2013 at: 16:45:47
+# Lines beginning with # denote comments
+
+survival=false
+validTargetblocks=1,2,3,12,13
+
+underground=false
+undergroundMinLevel=1
+undergroundMaxLevel=253
+undergroundMaxAirAbove=0
+minSubmergedDepth=0
+maxWaterDepth=0
+maxLavaDepth=0
+
+xSize=4
+ySize=2
+zSize=4
+
+verticalOffset=0
+xOffset=0
+zOffset=0
+
+maxOverhang=0
+maxLeveling=0
+levelingBuffer=0
+maxVerticalClear=0
+clearingBuffer=0
+preserveWater=false
+preserveLava=false
+preservePlants=false
+preserveBlocks=false
+
+####BLOCK RULES####
+rule:
+number=0
+order=0
+conditional=0
+percent=100
+blocks=0-0
+:endrule
+
+rule:
+number=1
+order=0
+conditional=0
+percent=100
+blocks=7-0
+:endrule
+
+
+####SWAP RULESS####
+
+####VEHICLE RULES####
+
+####NPC RULES####
+
+####GATE RULES####
+
+####ENTITY RULES####
+
+####RESOURCE LIST####
+resources:
+7-0,16
+:endresources
+
+####LAYERS####
+
+layer:
+0,1,1,0
+1,1,1,1
+1,1,1,1
+0,1,1,0
+:endlayer
+
+layer:
+0,0,0,0
+0,1,1,0
+0,1,1,0
+0,0,0,0
+:endlayer
+
+

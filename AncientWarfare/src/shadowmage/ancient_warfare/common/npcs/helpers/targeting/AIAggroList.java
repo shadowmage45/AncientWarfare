@@ -76,19 +76,19 @@ public void addOrUpdateEntry(int x, int y, int z, int aggroAmt, AITargetEntry ty
 
 public void addOrUpdateEntry(TileEntity te, int aggroAmt, AITargetEntry type)
   {
-  Config.logDebug("adding/updating TE target of type: "+type.getTypeName());
+//  Config.logDebug("adding/updating TE target of type: "+type.getTypeName());
   for(AIAggroTargetWrapper entry : this.targetEntries)
     {
     if(entry.matches(te))
       {
       entry.aggroLevel+=aggroAmt;
-      Config.logDebug("found existing te work target, new aggro: "+entry.aggroLevel);
+//      Config.logDebug("found existing te work target, new aggro: "+entry.aggroLevel);
       return;
       }
     }
   TargetPosition target = TargetPosition.getNewTarget(te, type.getTypeName());
   AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target).setAggro(aggroAmt);
-  Config.logDebug("made new te work target, aggro: "+wrap.aggroLevel+ " target list size: "+this.targetEntries.size());
+//  Config.logDebug("made new te work target, aggro: "+wrap.aggroLevel+ " target list size: "+this.targetEntries.size());
   this.targetEntries.add(wrap);
   }
 
@@ -150,20 +150,41 @@ public ITargetEntry getHighestAggroTarget()
   return bestEntry.target;
   }
 
+public void removeEntry(ITargetEntry target)
+  {
+  Iterator<AIAggroTargetWrapper> it = this.targetEntries.iterator();
+  AIAggroTargetWrapper entry;
+  while(it.hasNext())
+    {
+    entry = it.next();
+    if(target==entry.getTarget())
+      {
+      it.remove();
+      break;
+      }
+    }
+  }
+
 public void updateAggroEntries()
   {
+//  Config.logDebug("has targets: "+this.targetEntries.size());
   Iterator<AIAggroTargetWrapper> it = this.targetEntries.iterator();
   AIAggroTargetWrapper entry;
   float maxRange;
   while(it.hasNext())
     {
     entry = it.next();
+//    Config.logDebug("examining entry: "+entry+" aggroLevel: "+entry.aggroLevel);
     if(!entry.isValidEntry() || npc.getDistanceFromTarget(entry.target) > npc.targetHelper.getMaxRangeFor(entry) || entry.aggroLevel <= 0)
       {
       it.remove();
       return;
       }   
     entry.aggroLevel -= npc.targetHelper.getAggroAdjustmentFor(entry);//entry.targetEntry.getAggroAdjustment(entry);
+    if(entry.aggroLevel>1000)
+      {
+      entry.aggroLevel = 1000;
+      }
     } 
   }
 

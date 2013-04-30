@@ -45,7 +45,6 @@ public List<Integer> nonHostileTeams = new ArrayList<Integer>();
 
 public void addNewPlayer(String name, byte rank)
   {
-  Config.logDebug("adding entry for : "+name+" from team: "+teamNum);
   this.memberNames.add(new TeamMemberEntry(name, rank));
   }
 
@@ -70,7 +69,6 @@ public void removePlayer(String name)
     entry = it.next();
     if(entry.memberName.equals(name))
       {
-      Config.logDebug("removing entry for : "+name+" from team: "+teamNum);
       it.remove();
       break;
       }

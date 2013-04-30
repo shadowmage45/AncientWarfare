@@ -64,7 +64,6 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       vehicle.localVehicleHealth = tag.getFloat("health");
       }
     vehicle.teamNum = TeamTracker.instance().getTeamForPlayerServer(player.getEntityName());
-    Config.logDebug("setting vehicle team to: "+vehicle.teamNum);
     vehicle.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
     vehicle.prevRotationYaw = vehicle.rotationYaw = -player.rotationYaw + 180;
     vehicle.localTurretDestRot = vehicle.localTurretRotation = vehicle.localTurretRotationHome = vehicle.rotationYaw;

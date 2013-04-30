@@ -129,7 +129,6 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   NpcBase npc = (NpcBase)world.getEntityByID(x);
   if(npc!=null)
     {
-    Config.logDebug("returning new npc container");
     return new ContainerNpcBase(player, npc);
     }
   return null;
@@ -186,7 +185,6 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   
   case CIVIC_BASE:  
   TileEntity te = world.getBlockTileEntity(x, y, z);
-  Config.logDebug("client TE: "+te);
   if(te instanceof TECivic)
     {
     return new GuiCivicBase(new ContainerCivicTE(player, (TECivic)te), (TECivic)te);

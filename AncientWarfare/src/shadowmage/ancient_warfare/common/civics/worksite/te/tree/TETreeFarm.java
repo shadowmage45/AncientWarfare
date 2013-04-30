@@ -20,10 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.tree;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -34,6 +36,7 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TETreeFarm extends TECivic
 {
@@ -43,6 +46,7 @@ int logMeta = 0;
 int saplingID;
 int saplingMeta;
 int maxSearchHeight = 16;
+ItemStack saplingFilter;
 /**
  * 
  */
@@ -69,6 +73,7 @@ public void updateWorkPoints()
     {
     return;
     }
+  this.workPoints.clear();
   for(int y = this.minY; y<=this.maxY+this.maxSearchHeight; y++)
     {
     for(int x = this.minX; x<=this.maxX; x++)
@@ -76,6 +81,33 @@ public void updateWorkPoints()
       for(int z = this.minZ; z<=this.maxZ; z++)
         {        
         this.updateOrAddWorkPoint(x, y, z);
+        }
+      }
+    }
+  List<EntityItem> entities = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(minX-1, minY-1, minZ-1, maxX+2, maxY+2, maxZ+2));
+  ItemStack stack;
+  if(entities!=null)
+    {
+    for(EntityItem ent : entities)
+      {
+      if(ent!=null && ent.getEntityItem()!=null)
+        {
+        stack = ent.getEntityItem();
+        if((stack.itemID==saplingID && stack.getItemDamage()==saplingMeta) || stack.itemID==Item.appleRed.itemID)
+          {
+          if(inventory.canHoldItem(stack, stack.stackSize))
+            {
+            stack = inventory.tryMergeItem(stack);
+            if(stack!=null)
+              {
+              ent.setEntityItemStack(stack);
+              }
+            else//stack is null/merged sucessfully
+              {
+              ent.setDead();
+              }
+            }
+          }
         }
       }
     }
@@ -97,7 +129,7 @@ protected void updateOrAddWorkPoint(int x, int y, int z)
     if(x%4==0 && z%4==0)
       {
       id = worldObj.getBlockId(x, y-1, z);
-      if(id==Block.dirt.blockID || id==Block.grass.blockID)
+      if((id==Block.dirt.blockID || id==Block.grass.blockID) && inventory.containsAtLeast(saplingFilter, 1))
         {
         t = TargetType.TREE_PLANT;
 //        Config.logDebug("adding sapling replant!!");
@@ -118,11 +150,8 @@ protected void updateOrAddWorkPoint(int x, int y, int z)
     }
   tp = new TreePoint(x,y,z);
   p = new WorkPointTree(xCoord,yCoord,zCoord, t, this, tp);
-  if(!this.workPoints.contains(p))
-    {
-    Config.logDebug("adding new work point to tree farm: "+p+","+tp);
-    this.workPoints.add(p);
-    }
+//  Config.logDebug("adding new work point to tree farm: "+p+","+tp);
+  this.workPoints.add(p);
   }
 
 @Override
@@ -134,7 +163,19 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
   if(point.getTargetType()==TargetType.TREE_CHOP)
     {
     Config.logDebug("chopping tree!!"); 
-    ArrayList<ItemStack> drops = BlockTools.breakBlock(worldObj, tp.x, tp.y, tp.z, 0);
+    List<ItemStack> drops = BlockTools.breakBlock(worldObj, tp.x, tp.y, tp.z, 0);   
+    for(ItemStack item : drops)
+      {
+      item = npc.inventory.tryMergeItem(item);
+      if(item!=null)
+        {
+        item = this.inventory.tryMergeItem(item);
+        if(item!=null)
+          {
+          InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
+          }
+        }
+      }
     }  
   else if(point.getTargetType()==TargetType.TREE_PLANT)
     {
@@ -144,7 +185,14 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
       {
       worldObj.setBlock(tp.x, tp.y, tp.z, saplingID, saplingMeta, 3);
       }    
+    inventory.tryRemoveItems(saplingFilter, 1);
     }
+  }
+
+@Override
+protected void updateHasWork()
+  {
+  hasWork = !this.workPoints.isEmpty();  
   }
 
 public AxisAlignedBB getSecondaryRenderBounds()

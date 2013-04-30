@@ -120,7 +120,6 @@ public NpcBase(World par1World)
 
 public void handleBatonCommand(NpcCommand cmd, int x, int y, int z, int side)
   {
-  Config.logDebug("receiving baton command");
   switch(cmd)
   {
   case HOME:
@@ -252,12 +251,12 @@ public boolean interact(EntityPlayer player)
       ITargetEntry target = this.wayNav.getPlayerTarget();
       if(target==null || target.getEntity()!=player)
         {
-        Config.logDebug("setting player to follow to: "+player.getEntityName());
+        player.addChatMessage("Commanding Npc to follow!");
         this.wayNav.setPlayerTarget(TargetPosition.getNewTarget(player, TargetType.FOLLOW));
         }
       else if(target!=null && target.getEntity()==player)
         {
-        Config.logDebug("clearing player to follow");
+        player.addChatMessage("Commanding Npc to stop following!");
         this.wayNav.setPlayerTarget(null);
         }
       }
@@ -362,7 +361,6 @@ public void onUpdate()
       }
     else if(this.villageUpdateTick<=0)
       {
-      Config.logDebug("adding npc to village collection queue");
       this.villageUpdateTick = 100+this.getRNG().nextInt(100);
       this.worldObj.villageCollectionObj.addVillagerPosition(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
       }

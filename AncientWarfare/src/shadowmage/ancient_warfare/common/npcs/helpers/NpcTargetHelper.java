@@ -68,7 +68,7 @@ public NpcTargetHelper(NpcBase npc)
 
 public int getAggroAdjustmentFor(AIAggroTargetWrapper taget)
   {
-  //TODO
+  //TODO  
   return Config.npcAITicks;
   }
 
@@ -103,6 +103,23 @@ public void addOrUpdateAggroEntry(AITargetEntry type, int x, int y, int z, int a
     this.aggroEntries.put(type.getTypeName(), new AIAggroList(npc, type.getTypeName()));
     }
   this.aggroEntries.get(type.getTypeName()).addOrUpdateEntry(x,y,z, aggroAmt, type);    
+  }
+
+public void removeTarget(ITargetEntry target)
+  {
+  if(target!=null && this.aggroEntries.containsKey(target.getTargetType()))
+    {
+    this.aggroEntries.get(target.getTargetType()).removeEntry(target);
+    }
+  }
+
+public boolean hasTargetsOfType(TargetType p)
+  {
+  if(this.aggroEntries.containsKey(p))
+    {
+    return this.aggroEntries.get(p).targetEntries.size()>0;
+    }
+  return false;
   }
 
 public void handleTileEntityTargetBroadcast(TileEntity te, TargetType t, int aggroAmt)
@@ -230,7 +247,7 @@ public void updateAggroEntries()
 
 public void handleBeingAttacked(EntityLiving damager)
   {
-  
+  //TODO
   }
 
 public boolean areTargetsInRange(TargetType type, float range)

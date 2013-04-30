@@ -22,7 +22,9 @@ package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AIAggroTargetWrapper
 {
@@ -62,8 +64,14 @@ public boolean matches(int x, int y, int z)
   }
 
 public boolean isValidEntry()
-  {
+  { 
   return this.target.getEntity()!=null || this.target.getTileEntity()!=null;
+  }
+
+@Override
+public String toString()
+  {
+  return "TargetWrapper: "+this.target;
   }
 
 }

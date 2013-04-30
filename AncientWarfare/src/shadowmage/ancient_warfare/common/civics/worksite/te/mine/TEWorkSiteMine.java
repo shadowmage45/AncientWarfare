@@ -20,7 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -91,7 +91,7 @@ public void updateEntity()
     this.mineRescanTicks++;
     if(!initialized)
       {
-      Config.logDebug("initializing mine!");      
+      Config.logDebug("initializing mine");      
       this.initialized = true;
       this.loadLevel(0);      
       }
@@ -120,7 +120,7 @@ public void updateEntity()
       }
     else if(mineFinished)
       {
-      Config.logDebug("mine is finished");
+//      Config.logDebug("mine is finished");
       }
     } 
   super.updateEntity();
@@ -129,10 +129,8 @@ public void updateEntity()
 @Override
 public WorkPoint getWorkPoint(NpcBase npc)
   {
-  Config.logDebug("npc requesting work: "+npc);
   if(this.currentLevel!=null && this.currentLevel.hasWork())
     {    
-    Config.logDebug("getting point from mine!");
     return new WorkPoint(xCoord, yCoord, zCoord, TargetType.WORK, this);    
     }
   return null;
@@ -196,7 +194,7 @@ public void handleFillAction(NpcBase npc, MinePoint m)
 
 public boolean handleBlockBreak(NpcBase npc, int x, int y, int z)
   {
-  ArrayList<ItemStack> drops = BlockTools.breakBlock(npc.worldObj, x, y, z, 0);
+  List<ItemStack> drops = BlockTools.breakBlock(npc.worldObj, x, y, z, 0);
   if(drops!=null)
     {
     for(ItemStack drop : drops)
@@ -260,7 +258,6 @@ public boolean onInteract(World world, EntityPlayer player)
 
 protected void loadLevel(int level)
   { 
-  Config.logDebug("loading level: "+level);
   if(level<0)
     {
     return;

@@ -32,6 +32,9 @@ public TargetPositionTile(TileEntity ent, TargetType type)
   {
   super(type);
   this.target = new WeakReference<TileEntity>(ent);
+  this.x = ent.xCoord;
+  this.y = ent.yCoord;
+  this.z = ent.zCoord;
   }
 
 @Override
@@ -45,4 +48,6 @@ public boolean isTileEntry()
   {
   return true;
   }
+
+
 }

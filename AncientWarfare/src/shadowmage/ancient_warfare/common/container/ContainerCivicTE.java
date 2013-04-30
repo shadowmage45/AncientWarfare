@@ -40,7 +40,7 @@ TECivic teBase;
 public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
   {
   super(openingPlayer, null);
-  Config.logDebug("opening te container..client: "+openingPlayer.worldObj.isRemote);
+//  Config.logDebug("opening te container..client: "+openingPlayer.worldObj.isRemote);
   this.teBase = te;
   //add player slots
   //add te slots

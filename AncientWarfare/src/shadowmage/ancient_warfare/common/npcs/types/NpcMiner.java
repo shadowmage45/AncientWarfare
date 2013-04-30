@@ -49,7 +49,7 @@ public NpcMiner(int type)
   {
   super(type);
   this.displayName = "Miner";
-  this.tooltip = "Basic Miner, mining speed varies with rank.";
+  this.tooltip = "Basic Miner for working in Mines";
   this.iconTexture = "npcWorker1";
   this.addLevel("Miner Rank 0", Config.texturePath + "models/npcDefault.png", getToolStack(0), null).addTargetType(CivicWorkType.MINE);
   this.addLevel("Miner Rank 1", Config.texturePath + "models/npcDefault.png", getToolStack(1), null).addTargetType(CivicWorkType.MINE);

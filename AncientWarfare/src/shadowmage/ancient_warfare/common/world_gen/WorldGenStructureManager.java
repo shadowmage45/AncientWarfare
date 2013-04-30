@@ -227,7 +227,7 @@ private void loadBiomesList()
     {
     if(bio!=null && bio.biomeName!= null && !bio.biomeName.equals(""))
       {
-      Config.logDebug("Adding to biome list: "+bio.biomeName);
+//      Config.logDebug("Adding to biome list: "+bio.biomeName);
       this.biomesStructureMap.put(String.valueOf(bio.biomeName.toLowerCase()), new WorldGenBiomeStructList());
       }
     }
@@ -254,7 +254,7 @@ private void addStructureEntry(WorldGenStructureEntry ent)
     {
     return;
     }
-  Config.logDebug("Attempting to add world gen entry for structure: "+ent.name);
+//  Config.logDebug("Attempting to add world gen entry for structure: "+ent.name);
   ProcessedStructure struct = StructureManager.instance().getStructureServer(ent.name);
   String[] biomesNotIn = null;
   String[] biomesOnlyIn = null;
@@ -318,7 +318,7 @@ private void addToOnlyBiomes(WorldGenStructureEntry ent, String[] only)
         {
         if(this.biomesStructureMap.containsKey(k))
           {
-          Config.logDebug("Adding: "+ent.name+"  to biome: "+k);
+//          Config.logDebug("Adding: "+ent.name+"  to biome: "+k);
           this.biomesStructureMap.get(k).addEntry(ent);
           }
         }

@@ -52,7 +52,6 @@ public class StructureExporter
 public static boolean writeStructureToFile(ProcessedStructure struct, String name, boolean canOverwrite)
   {
   File outputFile = new File(name);
-  Config.logDebug("exporting struct to:"+name);
   if(!outputFile.exists())
     {
     try

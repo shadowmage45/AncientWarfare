@@ -102,11 +102,13 @@ public void updateEntity()
   {
   if(updateTicks<=0 && this.worldObj!=null && !this.worldObj.isRemote)
     {
+    long t1 = System.nanoTime();
     this.updateHasWork();
     this.broadCastToSoldiers(Config.npcAISearchRange);
     this.updateWorkPoints();
     this.validateWorkers();    
     this.updateTicks = Config.npcAITicks * 10;
+    Config.logDebug("TE tick time: "+(System.nanoTime()-t1) + " for: "+this.getCivic().getDisplayName());
     }
   else
     {
@@ -156,12 +158,12 @@ public void broadCastToSoldiers(int maxRange)
     {
     if(isHostile(npc.teamNum))      
       {
-      Config.log("found hostile npc!");
+//      Config.log("found hostile npc!");
       if(npc.npcType.isCombatUnit())
         {
         //add attack entry
         //TODO
-        npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.ATTACK, Config.npcAITicks*10);
+        npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, Config.npcAITicks*11);
         }      
       }
     else
@@ -170,19 +172,19 @@ public void broadCastToSoldiers(int maxRange)
         {    
         if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
           {
-          Config.logDebug("broadcasting aggro update to npc!!!");
-          npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*40);
+//          Config.logDebug("broadcasting aggro update to npc!!!");
+          npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
           }
 //        Config.logDebug("broadcasting to npcs!!");
-        if(npc.wayNav.getWorkSite()==null && hasWork() && canHaveMoreWorkers(npc))
-          {
-//          Config.logDebug("Entity had no work site, checking if valid!");
-          if(npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
-            {
-//            Config.logDebug("SETTING NPC WORK SITE THROUGH BROADCAST THROUGH TE");
-            npc.wayNav.setWorkSite(xCoord, yCoord, zCoord);
-            }
-          }
+//        if(npc.wayNav.getWorkSite()==null && hasWork() && canHaveMoreWorkers(npc))
+//          {
+////          Config.logDebug("Entity had no work site, checking if valid!");
+//          if(npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
+//            {
+////            Config.logDebug("SETTING NPC WORK SITE THROUGH BROADCAST THROUGH TE");
+//            npc.wayNav.setWorkSite(xCoord, yCoord, zCoord);
+//            }
+//          }
         }
       }
     }

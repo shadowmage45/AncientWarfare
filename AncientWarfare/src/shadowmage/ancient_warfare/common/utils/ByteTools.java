@@ -36,29 +36,10 @@ import com.google.common.io.ByteArrayDataOutput;
 public class ByteTools
 {
 
-//public static List<byte[]> getByteChunks(byte[] allBytes, int packetSize)
-//  {
-//  int numOfChunks = (allBytes.length/packetSize)+1;  
-//  List<byte[]> byteChunks = new ArrayList<byte[]>(numOfChunks);  
-//  for(int i = 0; i < numOfChunks; i++)
-//    {
-//    byte[] chunk = new byte[packetSize];
-//    for(int k = 0; k < packetSize ; k++)
-//      {
-//      if(k + i*packetSize < allBytes.length)
-//        {
-//        chunk[k] = allBytes[k+i*packetSize];
-//        }
-//      }
-//    byteChunks.add(chunk);
-//    }
-//  return byteChunks;
-//  }
-
 public static List<byte[]> getByteChunks(byte[] allBytes, int packetSize)
   {
   int numOfChunks = (allBytes.length/packetSize)+1;
-  Config.logDebug("bytesLength: "+allBytes.length+"  numOfCunks: "+numOfChunks);
+//  Config.logDebug("bytesLength: "+allBytes.length+"  numOfCunks: "+numOfChunks);
   List<byte[]> byteChunks = new ArrayList<byte[]>(numOfChunks);  
   int totalToWrite = allBytes.length;
   for(int i = 0; i < numOfChunks; i++)

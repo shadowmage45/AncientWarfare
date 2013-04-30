@@ -64,7 +64,7 @@ public void onImpactWorld(World world, float x, float y, float z, MissileBase mi
     float maxPower = bigExplosion ? 7.f : 2.5f;
     float powerPercent = ammoWeight / 45.f;
     float power = maxPower * powerPercent;
-    Config.logDebug("big: "+bigExplosion+" adj pwr: "+power+ "pwer percent: "+powerPercent);
+//    Config.logDebug("big: "+bigExplosion+" adj pwr: "+power+ "pwer percent: "+powerPercent);
     this.createExplosion(world, missile, x, y, z, power);
     }
   }
@@ -77,7 +77,7 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z, M
     float maxPower = bigExplosion ? 2.5f : 7.f;
     float powerPercent = ammoWeight / 45.f;
     float power = maxPower * powerPercent;
-    Config.logDebug("big: "+bigExplosion+" adj pwr: "+power+ "pwer percent: "+powerPercent);
+//    Config.logDebug("big: "+bigExplosion+" adj pwr: "+power+ "pwer percent: "+powerPercent);
     this.createExplosion(world, missile, x, y, z, power);
     }
   }

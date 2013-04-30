@@ -24,6 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
@@ -65,31 +66,51 @@ public void updatePriority()
   boolean work = true;
   if(npc.inventory.getEmptySlotCount()<=1)
     {
-    Config.logDebug("inventory full");
+//    Config.logDebug("inventory full");
     work = false;
     }
   else if(npc.wayNav.getWorkSite()==null)
     {
-    Config.logDebug("has no work site");
     work = false;
+//    Config.logDebug("has no work site, checking targetHelper");
+    while(npc.targetHelper.hasTargetsOfType(TargetType.WORK))
+      {
+      ITargetEntry entry = npc.targetHelper.getHighestAggroTarget(TargetType.WORK);
+      if(entry.isTileEntry())
+        {
+        if(entry.getTileEntity() instanceof TECivic)
+          {
+          TECivic tec = (TECivic) entry.getTileEntity();
+          if(tec.hasWork() && tec.canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(tec.getCivic().getWorkType()))
+            {
+//            Config.logDebug("assigning te from aggro list!!");
+            npc.wayNav.setWorkSite(entry.floorX(), entry.floorY(), entry.floorZ());
+            workSite = tec;
+            work = true;
+            break;
+            }
+          else
+            {
+            npc.targetHelper.removeTarget(entry);
+            }
+          }
+        }
+      }    
     }
   else if(!isWorkSiteWorkable())
     {
-    Config.logDebug("site not workable -- clearing work site");
+//    Config.logDebug("site not workable -- clearing work site");
     npc.wayNav.clearWorkSite();
     npc.wayNav.setWorkPoint(null);    
     work = false;
     }  
   if(work)
     {
-//    Config.logDebug("setting work priority to max!! "+npc.wayNav.getWorkPoint());    
     this.currentPriority = this.maxPriority;
-//    this.cooldownTicks = this.maxCooldownticks;
     }
   else
     {
     this.currentPriority = 0;
-    Config.logDebug("setting cooldown ticks to max");
     this.cooldownTicks = this.maxCooldownticks;
     }
   }
@@ -107,15 +128,21 @@ protected boolean isWorkSiteWorkable()
     {
     if(p.floorX()!=workSite.xCoord || p.floorY()!= workSite.yCoord || p.floorZ()!=workSite.zCoord)
       {
-    	if(npc.wayNav.getWorkPoint()!=null)
-    	{
-    		
-    		workSite.onWorkFailed(npc, npc.wayNav.getWorkPoint());
-    	}
-      
+      if(npc.wayNav.getWorkPoint()!=null)
+        {    		
+        workSite.onWorkFailed(npc, npc.wayNav.getWorkPoint());
+        }      
       workSite = null;
       }
-    } 
+    }
+  if(workSite!=null)//check to make sure te is still valid
+    {
+    if(npc.worldObj.getBlockTileEntity(workSite.xCoord, workSite.yCoord, workSite.zCoord)!=workSite)
+      {
+//      Config.logDebug("world te did not match workSite");
+      workSite = null;      
+      }
+    }
   if(workSite==null && p!=null)
     {
     TileEntity te = npc.worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ());
@@ -125,27 +152,27 @@ protected boolean isWorkSiteWorkable()
       }
     else
       {
-      p = null;
+      workSite = null;
       }
     }
   if(workSite==null)
     {
-//    Config.logDebug("not workable--no site");
+//        Config.logDebug("not workable--no site");
     return false;
     }
   else
     {
     if(wp!=null)
       {
-//      Config.logDebug("work point owner: "+wp.owner);
+      //      Config.logDebug("work point owner: "+wp.owner);
       if(wp.owner==workSite)
         {
-//        Config.logDebug("work point belongs to work-site--already has work--");
+        //        Config.logDebug("work point belongs to work-site--already has work--");
         return true;
         }
       else
         {
-//        Config.logDebug("work point does not match work-site");
+//                Config.logDebug("work point does not match work-site");
         npc.wayNav.setWorkPoint(null);
         return false;
         }
@@ -156,7 +183,7 @@ protected boolean isWorkSiteWorkable()
       }
     else
       {
-//      Config.logDebug("no workers or no work rejection");
+//            Config.logDebug("no workers or no work rejection");
       return false;
       }
     }
@@ -184,14 +211,14 @@ public void onRunningTick()
     return;
     }
   //WorkPoint workPoint = npc.wayNav.getWorkPoint();
-  
+
   if(workPoint==null)//try to claim a work point
     {
     WorkPoint p = workSite.getWorkPoint(npc);
     this.setWorkPoint(p);
     if(p==null)
       {
-//      Config.logDebug("work site returned null point, setting finished");
+      //      Config.logDebug("work site returned null point, setting finished");
       this.setFinished();
       return;
       }

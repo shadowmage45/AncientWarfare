@@ -232,7 +232,6 @@ public boolean onKeyTyped(char charValue, int keyCode)
   }
   if(validChar)
     {
-    Config.logDebug("keyTyped: " + charValue + " : " + keyCode);
     this.handleCharAction(charValue);
     }  
   /**
@@ -475,8 +474,7 @@ private void moveCursorUp()
   if(cursorRawY <= 0)
     {
     return;
-    }
-  Config.logDebug("moving cursor up");  
+    } 
   cursorRawY--;
   if(cursorRawY<lines.size())//if this line is a valid line...
     {
@@ -495,7 +493,6 @@ private void moveCursorUp()
     }
   if(cursorRawY < viewY)
     {
-    Config.logDebug("scrolling view down");
     viewY--;    
     }
   if(hasViewChanged())
@@ -511,7 +508,6 @@ private void moveCursorDown()
     {
     return;
     }
-  Config.logDebug("moving cursor down");
   cursorRawY++;
   if(cursorRawY<lines.size())//if this line is a valid line...
     {
@@ -530,7 +526,6 @@ private void moveCursorDown()
     }
   if(cursorRawY - displayLines >= viewY)
     {
-    Config.logDebug("scrolling down");
     viewY++;
     }
   if(hasViewChanged())
@@ -546,11 +541,9 @@ private void moveCursorLeft()
     {
     return;
     }
-  Config.logDebug("moving cursor left");
   cursorRawX--;
   if(cursorRawX < viewX)
     {
-    Config.logDebug("scrolling left");
     viewX--;
     this.setDirty();
     }
@@ -567,12 +560,10 @@ private void moveCursorRight()
     {
     return;
     }
-  Config.logDebug("moving cursor right");
   cursorRawX++;  
   if(cursorRawX - lineLength > viewX)
     {    
     viewX++;
-    Config.logDebug("scrolling right");
     this.setDirty();
     }
   updateLocalCursorPos();
@@ -651,10 +642,8 @@ public boolean onMouseClicked(int buttonNum, int x, int y)
       }
     this.updateLocalCursorPos();
     this.setDirty();
-    Config.logDebug("set cursor pos from mouse input");
     return true;
     }  
-  Config.logDebug("cursor not in bounds");
   return false;
   }
 

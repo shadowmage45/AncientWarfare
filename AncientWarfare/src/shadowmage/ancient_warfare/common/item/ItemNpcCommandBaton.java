@@ -55,12 +55,7 @@ public ItemNpcCommandBaton(int itemID)
 
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
-  {
-  MovingObjectPosition hitPos = this.getMovingObjectPositionFromPlayer(world, player, true);
-  if(hitPos!=null && hitPos.typeOfHit == EnumMovingObjectType.ENTITY)
-    {
-    Config.logDebug("onUsedFinal hit entity: "+hitPos.entityHit);
-    }  
+  { 
   if(!world.isRemote)
     {
     GUIHandler.instance().openGUI(GUIHandler.instance().NPC_COMMAND_BATON, player, world, 0, 0, 0);
@@ -101,19 +96,6 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
 public boolean itemInteractionForEntity(ItemStack par1ItemStack,   EntityLiving par2EntityLiving)
   {  
   return super.itemInteractionForEntity(par1ItemStack, par2EntityLiving);
-  }
-
-/**
- * left-click attack, when hit an entity-living
- */
-@Override
-public boolean hitEntity(ItemStack par1ItemStack, EntityLiving par2EntityLiving, EntityLiving par3EntityLiving)
-  {
-  if(!par3EntityLiving.worldObj.isRemote)
-    {
-    Config.logDebug("player hit entityLiving with command baton : "+par2EntityLiving);
-    }
-  return super.hitEntity(par1ItemStack, par2EntityLiving, par3EntityLiving);
   }
 
 /**
@@ -166,7 +148,7 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
         } 
       else
         {
-        Config.logDebug("Baton has invalid entity!!");
+//        Config.logDebug("Baton has invalid entity!!");
         settings.setEntity(null);
         setBatonSettings(stack, settings);
         player.openContainer.detectAndSendChanges();

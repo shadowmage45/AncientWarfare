@@ -39,7 +39,7 @@ public TreePoint(int x, int y, int z)
 @Override
 public String toString()
   {
-  return String.format("MinePoint: %s, %s, %s, %s", x,y,z, requiresReplant);
+  return String.format("TreePoint: %s, %s, %s, %s", x,y,z, requiresReplant);
   }
 
 

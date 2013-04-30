@@ -788,7 +788,7 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   pkt.setHealthUpdate(this.localVehicleHealth);
   pkt.sendPacketToAllTrackingClients(this);
     
-  Config.logDebug("Vehicle hit by attack.  RawDamage: "+par2+" : adjustedDmg: "+adjDmg+"  New health: "+localVehicleHealth);
+//  Config.logDebug("Vehicle hit by attack.  RawDamage: "+par2+" : adjustedDmg: "+adjDmg+"  New health: "+localVehicleHealth);
   if(this.localVehicleHealth<=0)
     {
     this.setDead();
@@ -918,7 +918,6 @@ public void setPositionAndRotationNormalized(double par1, double par3, double pa
         }      
       return;
       }
-    Config.logDebug("crazy synch error!!");
     } 
   super.setPositionAndRotation(par1, par3, par5, yaw, par8);
   }

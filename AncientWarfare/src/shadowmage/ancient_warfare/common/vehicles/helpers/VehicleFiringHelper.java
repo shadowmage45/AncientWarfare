@@ -134,7 +134,7 @@ public void spawnMissile(float ox, float oy, float oz)
       float z = (float) vehicle.posZ + off.z + oz;
 
       int count = ammo.hasSecondaryAmmo() ? ammo.getSecondaryAmmoTypeCount() : 1;
-      Config.logDebug("type: "+ammo.getDisplayName()+" missile count to fire: "+count + " hasSecondaryAmmo: "+ammo.hasSecondaryAmmo() + " secType: "+ammo.getSecondaryAmmoType());
+//      Config.logDebug("type: "+ammo.getDisplayName()+" missile count to fire: "+count + " hasSecondaryAmmo: "+ammo.hasSecondaryAmmo() + " secType: "+ammo.getSecondaryAmmoType());
       MissileBase missile = null;
       float maxPower;
       float yaw;
@@ -385,7 +385,7 @@ public void handleAimUpdate(NBTTagCompound tag)
     sendReply = true;
     vehicle.localTurretDestPitch = tag.getFloat("aimPitch");
     reply.setFloat("aimPitch", vehicle.localTurretDestPitch);
-    Config.logDebug("setting desired turret pitch to: "+vehicle.localTurretDestPitch);
+//    Config.logDebug("setting desired turret pitch to: "+vehicle.localTurretDestPitch);
     } 
   if(tag.hasKey("aimYaw"))
     {

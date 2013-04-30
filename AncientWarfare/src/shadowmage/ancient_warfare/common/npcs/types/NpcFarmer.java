@@ -56,7 +56,7 @@ public NpcFarmer(int type)
   {
   super(type);
   this.displayName = "Farmer";
-  this.tooltip = "Farmer for working basic crops, working speed varies with rank.";
+  this.tooltip = "Farmer for working basic crops";
   this.iconTexture = "npcWorker1";  
   this.addLevel("Farmer Rank 0", Config.texturePath + "models/npcDefault.png", getToolStack(0), null).addTargetType(CivicWorkType.FARM);
   this.addLevel("Farmer Rank 1", Config.texturePath + "models/npcDefault.png", getToolStack(1), null).addTargetType(CivicWorkType.FARM);

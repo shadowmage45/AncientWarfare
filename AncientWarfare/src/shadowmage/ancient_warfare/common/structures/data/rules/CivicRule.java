@@ -121,7 +121,6 @@ public void normalizeForNorthFacing(int currentFacing, int xSize, int zSize)
   BlockPosition min = BlockTools.getMin(c1, c2);
   xMin = min.x-x;
   zMin = min.z-z;
-  Config.logDebug("new mx,mz: "+xMin+","+zMin);
   }
 
 public void handleWorldPlacement(World world, int facing, ProcessedStructure struct, BlockPosition buildPos)

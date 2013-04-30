@@ -42,7 +42,6 @@ public GuiVehicleAmmoSelection(Container container, VehicleBase vehicle)
   super(container);
   this.vehicle = vehicle;
   this.shouldCloseOnVanillaKeys = true;
-  Config.logDebug("opening vehicle gui!!");
   }
 
 @Override

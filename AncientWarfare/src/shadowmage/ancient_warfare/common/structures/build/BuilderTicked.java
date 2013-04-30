@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.common.utils.BlockTools;
 public class BuilderTicked extends Builder
 {
 
+public int tickTimer = 10;
 
 public BuilderTicked(World world, ProcessedStructure struct, int facing, BlockPosition hit)
   {
@@ -78,7 +79,7 @@ public void onTick()
    * timer/counter, only place a block every half-second
    */
   tickNum++;
-  if(tickNum<10)
+  if(tickNum<tickTimer)
     {
     return;
     }

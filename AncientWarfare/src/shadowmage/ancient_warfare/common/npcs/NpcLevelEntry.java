@@ -133,7 +133,6 @@ public NpcLevelEntry addTargetType(CivicWorkType... l)
  */
 public ItemStack[] getArmorStacks()
   {
-  Config.logDebug("returning level armor stacks : "+this.armorStacks);
   return armorStacks;
   }
 

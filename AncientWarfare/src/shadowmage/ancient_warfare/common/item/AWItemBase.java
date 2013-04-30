@@ -143,7 +143,7 @@ public void registerIcons(IconRegister par1IconRegister)
   Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
   if(d!=null)
     {
-    Config.logDebug("registering icons for : "+itemID +":: "+d.getDisplayName(0));
+//    Config.logDebug("registering icons for : "+itemID +":: "+d.getDisplayName(0));
     d.registerIcons(par1IconRegister);
     }
   }

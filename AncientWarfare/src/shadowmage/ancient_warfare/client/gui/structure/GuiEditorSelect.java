@@ -66,7 +66,7 @@ public void handleDataFromContainer(NBTTagCompound tag)
     }
   else if(tag.hasKey("badSel"))
     {
-    Config.logDebug("received bad sel packet on editor select GUI");
+    Config.logError("received bad selection packet on editor select GUI(locked or invalid structure)");
     this.errorMessage = "Structure is not currently available for editing";
     }
   }

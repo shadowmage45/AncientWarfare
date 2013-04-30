@@ -117,7 +117,7 @@ public Description addTooltip(String tooltip, int damage)
   {
   if(this.item!=null)
     {
-    Config.logDebug("setting tooltip for : "+item.itemID +"::"+damage+ " tip:: "+tooltip);
+//    Config.logDebug("setting tooltip for : "+item.itemID +"::"+damage+ " tip:: "+tooltip);
     }
   if(this.normalItem)
     {
@@ -241,7 +241,7 @@ public Description addDisplayStack(ItemStack stack)
 
 public List<ItemStack> getDisplayStackCache()
   {
-  Config.logDebug("returning display stack cache for : " +this.getDisplayName(0));
+//  Config.logDebug("returning display stack cache for : " +this.getDisplayName(0));
   return this.displayStackCache;
   }
 

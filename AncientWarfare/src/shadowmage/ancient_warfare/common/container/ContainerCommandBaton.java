@@ -63,7 +63,7 @@ public void saveSettings()
     this.sendDataToServer(tag);
     ItemNpcCommandBaton.setBatonSettings(stack, settings);
 //    player.openContainer.detectAndSendChanges();
-    Config.logDebug("sending changes to server!!");
+//    Config.logDebug("sending changes to server!!");
     }
   }
 

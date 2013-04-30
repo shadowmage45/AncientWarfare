@@ -95,7 +95,7 @@ public void handlePacketData(NBTTagCompound tag)
 
 private void handlePartialTemplateClient(NBTTagCompound tag)
   {
-  Config.logDebug("receiving partial template packet");
+//  Config.logDebug("receiving partial template packet");
   /**
    * composite recieved packetData into full byte array
    */
@@ -132,12 +132,12 @@ private void handlePartialTemplateClient(NBTTagCompound tag)
 
 private void sendTemplateToClient(ProcessedStructure struct) throws UnsupportedEncodingException, IOException
   {
-  Config.logDebug("sending template to client....");
+//  Config.logDebug("sending template to client....");
   int packetSize = 8192;
   List<byte[]> chunks = struct.getTemplate().getPacketBytes(packetSize);
   for(int i = 0; i < chunks.size(); i++)
     {
-    Config.logDebug("sending template chunk to client");
+//    Config.logDebug("sending template chunk to client");
     NBTTagCompound outerTag = new NBTTagCompound();
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("num", i);
@@ -154,7 +154,7 @@ private void sendTemplateToClient(ProcessedStructure struct) throws UnsupportedE
 
 public void setStructureServer(NBTTagCompound tag)
   {
-  Config.logDebug("Setting structure to edit");
+//  Config.logDebug("Setting structure to edit");
   this.currentEditingStructure = tag.getString("setStructure");
   this.currentSelectedStructure = this.currentEditingStructure;
   this.serverStructure = StructureManager.instance().getStructureServer(currentEditingStructure);
@@ -196,12 +196,12 @@ public void setStructureServer(NBTTagCompound tag)
  */
 public void saveTemplate()
   {
-  Config.logDebug("sending template to server....");
-  Config.logDebug("validating structure client side...");
+//  Config.logDebug("sending template to server....");
+//  Config.logDebug("validating structure client side...");
   ProcessedStructure struct = StructureLoader.instance().loadStructureAW(clientLines, "0");
   if(struct==null)
     {
-    Config.logDebug("Invalid structure client-side, cannot send to server");
+//    Config.logDebug("Invalid structure client-side, cannot send to server");
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("badSave", true);
     this.gui.handleDataFromContainer(tag);
@@ -212,7 +212,7 @@ public void saveTemplate()
     tag.setBoolean("goodSave", true);
     this.gui.handleDataFromContainer(tag);
     }
-  Config.logDebug("structure is valid, sending to server...");
+//  Config.logDebug("structure is valid, sending to server...");
   byte[] allBytes;
   try
     {
@@ -232,7 +232,7 @@ public void saveTemplate()
   List<byte[]> chunks = ByteTools.getByteChunks(allBytes, packetSize);
   for(int i = 0; i < chunks.size(); i++)
     {
-    Config.logDebug("sending template chunk to server");
+//    Config.logDebug("sending template chunk to server");
     NBTTagCompound outerTag = new NBTTagCompound();
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("num", i);
@@ -267,7 +267,7 @@ private void handlePartialTemplateServer(NBTTagCompound tag)
     ProcessedStructure struct = StructureLoader.instance().loadStructureAW(lines, md5);
     if(struct!=null)
       {      
-      Config.logDebug("returned valid structure on server");
+//      Config.logDebug("returned valid structure on server");
       this.saveTemplateServer(struct);
       }
     }
@@ -279,7 +279,7 @@ private void saveTemplateServer(ProcessedStructure newStruct)
   newStruct.name = serverStructure.name;
   if(!StructureExporter.writeStructureToFile(newStruct, newStruct.filePath, true))
     {
-    Config.logDebug("Error exporting structure: "+newStruct.name);
+    Config.logError("Error exporting structure: "+newStruct.name);
     }
   StructureManager.instance().addStructure(newStruct, true);
   serverStructure = newStruct;

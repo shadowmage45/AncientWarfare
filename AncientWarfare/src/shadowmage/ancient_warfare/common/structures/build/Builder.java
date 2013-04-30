@@ -278,7 +278,7 @@ protected void doClearing()
   StructureBB bounds = struct.getStructureBB(buildPos, facing);
   BlockPosition minBounds = BlockTools.getMin(bounds.pos1, bounds.pos2);
   BlockPosition maxBounds = BlockTools.getMax(bounds.pos1, bounds.pos2);  
-  Config.logDebug("Clearing Bounds: "+bb.pos1.toString() +"---"+bb.pos2.toString());    
+//  Config.logDebug("Clearing Bounds: "+bb.pos1.toString() +"---"+bb.pos2.toString());    
   List<BlockPosition> blocksToClear = BlockTools.getAllBlockPositionsBetween(bb.pos1, bb.pos2);  
   for(BlockPosition pos : blocksToClear)
     {
@@ -456,7 +456,6 @@ private void placeCivics(World world)
   {
   for(CivicRule civ : struct.civicRules)
     {
-    Config.logDebug("handling civic placement");
     civ.handleWorldPlacement(world, facing, struct, buildPos);
     }
   }

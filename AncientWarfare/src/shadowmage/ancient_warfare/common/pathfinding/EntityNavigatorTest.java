@@ -52,7 +52,7 @@ protected void calcPath(int ex, int ey, int ez, int tx, int ty, int tz)
     {
     if(endNode.x!=tx || endNode.y!=ty || endNode.z != tz)//if we didn't find the target, request a full pathfind from end of starter path to the target.
       {
-      Config.logDebug("crawl did not find target, requesting full path");
+//      Config.logDebug("crawl did not find target, requesting full path");
       PathManager.instance().requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, tx, ty, tz, 60);
       }      
     }

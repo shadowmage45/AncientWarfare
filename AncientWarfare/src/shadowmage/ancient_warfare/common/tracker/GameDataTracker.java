@@ -185,7 +185,7 @@ public void handleWorldSave(World world)
       }
     if(tag==null || rawFile==null)
       {
-      Config.logDebug("null tag or rawFile detected on WorldSave");
+//      Config.logDebug("null tag or rawFile detected on WorldSave");
       return;
       }
     CompressedStreamTools.write(tag, rawFile);

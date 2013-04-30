@@ -24,10 +24,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
-import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class TECivicBuilder extends TECivic
 {
@@ -38,6 +40,101 @@ private boolean shouldRemove = false;
 public boolean onInteract(World world, EntityPlayer player)
   {
   return false;
+  }
+
+@Override
+public void updateEntity()
+  {  
+  super.updateEntity();
+  if(worldObj==null || this.worldObj.isRemote)
+    {
+    return;
+    }  
+  if(builder==null)
+    {
+    Config.logError("Invalid builder in TE detected in builder block");
+    return;
+    }  
+  if(this.shouldRemove)
+    {    
+    this.removeBuilder();
+    this.worldObj.setBlock(xCoord, yCoord, zCoord, 0);
+    return;
+    }
+  if(builder.world==null)
+    {
+    builder.world=this.worldObj;
+    }
+  
+  if(builder.isFinished())
+    {
+    this.removeBuilder();
+    this.worldObj.setBlock(xCoord, yCoord, zCoord, 0);
+    }
+  }
+
+/************************************************WORK SITE*************************************************/
+
+
+@Override
+public WorkPoint getWorkPoint(NpcBase npc)
+  {
+  if(builder!=null && !builder.isFinished())
+    {
+    return new WorkPoint(xCoord, yCoord, zCoord, TargetType.BUILD_PLACE, this);
+    }
+  return null;
+  }
+
+@Override
+public void updateWorkPoints()
+  {
+  //NOOP--no 'work points'
+  }
+
+@Override
+protected void updateHasWork()
+  {
+  this.hasWork = false;
+  if(this.builder!=null && !this.builder.isFinished())
+    {
+    this.hasWork =true;
+    }
+  }
+
+@Override
+public void onWorkFinished(NpcBase npc, WorkPoint point)
+  {
+  super.onWorkFinished(npc, point);
+  this.tickBuilder();
+  
+  }
+
+/************************************************BUILDER*************************************************/
+
+public void setBuilder(BuilderTicked builder)
+  {
+  if(this.builder==null)
+    {
+    this.builder = builder;
+    if(builder!=null)
+      {
+      builder.tickTimer = 1;
+      }
+    }
+  }
+
+public void removeBuilder()
+  {
+  this.invalidate();  
+  }
+
+protected void tickBuilder()
+  {
+  if(builder!=null && !builder.isFinished())
+    {
+    builder.onTick();    
+    }
   }
 
 @Override
@@ -53,6 +150,10 @@ public void readFromNBT(NBTTagCompound par1nbtTagCompound)
       {
       this.shouldRemove = true;
       }
+    else
+      {
+      this.builder.tickTimer = 1;
+      }
     }  
   }
 
@@ -65,51 +166,4 @@ public void writeToNBT(NBTTagCompound par1nbtTagCompound)
     par1nbtTagCompound.setCompoundTag("builder", this.builder.getNBTTag());
     }
   }
-
-public void removeBuilder()
-  {
-  this.invalidate();  
-  }
-
-@Override
-public void updateEntity()
-  {
-  super.updateEntity();
-  if(worldObj==null || this.worldObj.isRemote)
-    {
-    return;
-    }
-  if(this.shouldRemove)
-    {    
-    this.removeBuilder();
-    this.worldObj.setBlock(xCoord, yCoord, zCoord, 0);
-    return;
-    }  
-  if(builder==null)
-    {
-    Config.logError("Invalid builder in TE detected in builder block");
-    return;
-    }
-  if(builder.world==null)
-    {
-    builder.world=this.worldObj;
-    }
-  builder.onTick();
-  
-  if(builder.isFinished())
-    {
-    this.removeBuilder();
-    this.worldObj.setBlock(xCoord, yCoord, zCoord, 0);
-    }
-  }
-
-public void setBuilder(BuilderTicked builder)
-  {
-  if(this.builder==null)
-    {
-    this.builder = builder;
-    }
-  }
-
-
 }

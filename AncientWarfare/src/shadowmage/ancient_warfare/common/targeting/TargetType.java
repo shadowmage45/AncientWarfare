@@ -52,5 +52,6 @@ public enum TargetType
   TREE_CHOP,
   TREE_PLANT,
   PICKUP,
-  DELIVER;  
+  DELIVER,
+  ATTACK_TILE,
   }

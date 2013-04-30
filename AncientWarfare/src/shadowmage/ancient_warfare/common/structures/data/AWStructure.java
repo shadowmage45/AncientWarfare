@@ -267,13 +267,13 @@ public int openEditorcount()
 
 public void addEditor(String name)
   {
-  Config.logDebug("adding editor name: "+name);
+//  Config.logDebug("adding editor name: "+name);
   this.openEditors.add(name);
   }
 
 public void removeEditor(String name)
   {
-  Config.logDebug("removing editor name: "+name);
+//  Config.logDebug("removing editor name: "+name);
   this.openEditors.remove(name);
   }
 
@@ -284,13 +284,13 @@ public int openBuilderCount()
 
 public void addBuilder(Builder build)
   {
-  Config.logDebug("adding builder");
+//  Config.logDebug("adding builder");
   this.openBuilders.add(build);
   }
 
 public void removeBuilder(Builder build)
   {
-  Config.logDebug("removing builder");
+//  Config.logDebug("removing builder");
   this.openBuilders.remove(build);
   }
 

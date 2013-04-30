@@ -217,7 +217,7 @@ public void handleClientUpdate(NBTTagCompound tag, EntityPlayer player)
   else if(tag.hasKey("hostChange"))
     {
     tagTeam.handleHostileStatusChange(tag.getByte("oTeam"), tag.getBoolean("status"));
-    Config.logDebug("updating team non-hostile status and relaying!!");
+//    Config.logDebug("updating team non-hostile status and relaying!!");
     }
   if(player.openContainer instanceof ContainerTeamControl)
     {
@@ -342,7 +342,7 @@ public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
     tagTeam.handleHostileStatusChange(tag.getByte("oTeam"), tag.getBoolean("status"));
     pkt.setTeamUpdate(tag);
     pkt.sendPacketToAllPlayers();
-    Config.logDebug("updating team non-hostile status and relaying!!");
+//    Config.logDebug("updating team non-hostile status and relaying!!");
     }
   }
 

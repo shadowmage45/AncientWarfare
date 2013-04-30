@@ -84,7 +84,6 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
-  Config.logDebug("setting mount target");
   setMountTarget();
   }
 

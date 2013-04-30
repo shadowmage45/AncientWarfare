@@ -167,17 +167,17 @@ private void search()
 //  Config.logDebug("searching. iteration: "+searchCount);
     if(searchCount>=maxSearchIterations )
       {
-      Config.logDebug("breaking due to hitting max node iteration limit of: "+maxSearchIterations);      
+//      Config.logDebug("breaking due to hitting max node iteration limit of: "+maxSearchIterations);      
       break;
       }
     if(System.nanoTime()- runStart >= interruptTime)
       {
-      Config.logDebug("breaking due to hitting max iteration time of: "+interruptTime);
+//      Config.logDebug("breaking due to hitting max iteration time of: "+interruptTime);
       break;
       }
     if(this.shouldInterrupt )
       {
-      Config.logDebug("breaking due interrupt requested.  due to path length: " + (this.bestFoundPathLength >= this.maxPathLength) );
+//      Config.logDebug("breaking due interrupt requested.  due to path length: " + (this.bestFoundPathLength >= this.maxPathLength) );
       break;
       }
     if(this.currentNode.equals(goalNode) && !shouldInterrupt)

@@ -23,6 +23,7 @@
 package shadowmage.ancient_warfare.common.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -611,13 +612,13 @@ public static void breakBlockAndDrop(World world, int x, int y, int z)
   int meta = world.getBlockMetadata(x, y , z);
   if(id!=0 && id!=Block.bedrock.blockID && Block.blocksList[id]!=null)
     {      
-    Config.logDebug("setting block to air: "+x+","+y+","+z);
+//    Config.logDebug("setting block to air: "+x+","+y+","+z);
     Block.blocksList[id].dropBlockAsItem(world, x, y , z, meta, 0);
     world.setBlock(x, y , z, 0);
     }
   }
 
-public static ArrayList<ItemStack> breakBlock(World world, int x, int y, int z, int fortune)
+public static List<ItemStack> breakBlock(World world, int x, int y, int z, int fortune)
   {
   int id = world.getBlockId(x,y,z);
   Block block = Block.blocksList[id];
@@ -630,7 +631,7 @@ public static ArrayList<ItemStack> breakBlock(World world, int x, int y, int z, 
       return drops;
       }
     }  
-  return null;
+  return Collections.emptyList();
   }
 
 }

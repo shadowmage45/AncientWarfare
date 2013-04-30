@@ -202,7 +202,6 @@ public void onKeyPressed(Keybind kb)
       }
     else if(kb==ammoSelect)
       {
-      Config.logDebug("ammo select key pressed!!");
       this.handleAmmoSelectGui();
       }
     }
@@ -234,7 +233,6 @@ private void handleAmmoSelectGui()
     VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
     if(vehicle.vehicleType.getValidAmmoTypes().size()>=1)
       {
-      Config.logDebug("requesting open ammo select gui");
       GUIHandler.instance().openGUI(GUIHandler.VEHICLE_AMMO_SELECT, mc.thePlayer, mc.theWorld, vehicle.entityId, 0, 0);
       } 
     }

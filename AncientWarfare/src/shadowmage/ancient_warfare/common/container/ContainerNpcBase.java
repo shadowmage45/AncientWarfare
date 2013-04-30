@@ -64,7 +64,7 @@ public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
       }
     }
   IInventory te = npc.inventory;
-  Config.logDebug("setting npc inventory. size: "+te.getSizeInventory());
+//  Config.logDebug("setting npc inventory. size: "+te.getSizeInventory());
   for(y = 0; y < te.getSizeInventory()/9; y++)
     {
     for(x = 0; x < 9; x++)

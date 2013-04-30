@@ -152,12 +152,12 @@ public void setMoveTo(int tx, int ty, int tz)
           }
         this.path.setPath(newPath);      
 //        this.clearPath();
-        Config.logDebug("detecting stuck, reseating path");
+//        Config.logDebug("detecting stuck, reseating path");
         this.claimNode();
         }
       else
         {
-        Config.logDebug("detecting stuck, recalculating path");
+//        Config.logDebug("detecting stuck, recalculating path");
         calcPath = true;
         }      
       }
@@ -239,7 +239,7 @@ protected void calcPath(int ex, int ey, int ez, int tx, int ty, int tz)
     {
     if(endNode.x!=tx || endNode.y!=ty || endNode.z != tz)//if we didn't find the target, request a full pathfind from end of starter path to the target.
       {
-      Config.logDebug("requesting full path");
+//      Config.logDebug("requesting full path");
       PathManager.instance().requestPath(this, worldAccess, endNode.x, endNode.y, endNode.z, tx, ty, tz, 60);
       }      
     }
@@ -282,7 +282,7 @@ public void moveTowardsCurrentNode()
   while(this.shouldClaimNextNode())
     {    
     this.claimNode();
-    Config.logDebug("claimiing node " + this.targetNode);
+//    Config.logDebug("claimiing node " + this.targetNode);
     }  
   if(this.targetNode!=null)
     {     

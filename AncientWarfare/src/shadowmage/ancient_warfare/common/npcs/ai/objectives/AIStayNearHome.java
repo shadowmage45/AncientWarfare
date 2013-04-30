@@ -82,7 +82,7 @@ public void onRunningTick()
   WayPoint home = npc.wayNav.getHomePoint();
   if(home==null)
     {
-    Config.logDebug("ai stay near home: sensing no home point: setting finished");
+//    Config.logDebug("ai stay near home: sensing no home point: setting finished");
     this.isFinished = true;
     this.cooldownTicks = this.maxCooldownticks;
     }
@@ -91,7 +91,7 @@ public void onRunningTick()
     float range = (float) npc.getDistance(home.floorX(), home.floorY(), home.floorZ());
     if(range<chokeRange)
       {
-      Config.logDebug("ai stay near home: sensing entity is within choke range: setting finished");
+//      Config.logDebug("ai stay near home: sensing entity is within choke range: setting finished");
       this.isFinished = true;
       this.cooldownTicks = this.maxCooldownticks;
       }
@@ -104,12 +104,12 @@ public void onObjectiveStart()
   WayPoint home = npc.wayNav.getHomePoint();
   if(home!=null)
     {
-    Config.logDebug("ai stay near home: setting move target");
+//    Config.logDebug("ai stay near home: setting move target");
     npc.setTargetAW(TargetPosition.getNewTarget(home.floorX(), home.floorY(), home.floorZ(), TargetType.MOVE));
     }
   else
     {
-    Config.logDebug("ai stay near home: no home point: setting finished: clearing path and target");
+//    Config.logDebug("ai stay near home: no home point: setting finished: clearing path and target");
     this.isFinished = true;
     this.cooldownTicks = this.maxCooldownticks;
     }  
@@ -118,7 +118,7 @@ public void onObjectiveStart()
 @Override
 public void stopObjective()
   {
-  Config.logDebug("ai stay near home: setting finished: clearing path and target");  
+//  Config.logDebug("ai stay near home: setting finished: clearing path and target");  
   npc.setTargetAW(null);
   npc.clearPath();
   }

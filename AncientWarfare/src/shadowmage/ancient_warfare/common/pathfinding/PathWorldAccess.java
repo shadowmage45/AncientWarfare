@@ -66,7 +66,7 @@ public boolean isWalkable(int x, int y, int z)
   boolean cube2 = isSolidBlock(id2);
   boolean cube3 = isSolidBlock(id3);
   boolean ladder;
-  if(cube || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)//solid unpassable block, or lava
+  if(cube || !isPathable(id))//solid unpassable block, or lava
     { 
     return false;
     }
@@ -128,6 +128,15 @@ protected boolean isSolidBlock(int id)
     return true;
     }
   return false;
+  }
+
+protected boolean isPathable(int id)
+  {
+  if(id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID || id==Block.fence.blockID || id==Block.fenceGate.blockID || id==Block.fenceIron.blockID|| id == Block.cobblestoneWall.blockID || id==Block.thinGlass.blockID)
+    {
+    return false;
+    }
+  return true;
   }
 
 protected boolean isLadder(int id)

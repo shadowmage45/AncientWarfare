@@ -190,8 +190,10 @@ public void load(FMLPostInitializationEvent evt)
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
 
   //DEBUG //TODO -- remove
-  PathBenchmarking.instance().doBenchmarkRuns();
-  Config.logDebug("Ancient Warfare Post-Load Debug Complete.");
+  if(Config.DEBUG)
+    {
+    PathBenchmarking.instance().doBenchmarkRuns();
+    }
   }
 
 

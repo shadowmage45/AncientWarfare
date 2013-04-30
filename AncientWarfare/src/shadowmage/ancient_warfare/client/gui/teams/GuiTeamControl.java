@@ -190,7 +190,6 @@ public void handleDataFromContainer(NBTTagCompound tag)
   {   
   if(tag.hasKey("rebuild"))
     {
-    Config.logDebug("receiving rebuild key");
     this.rebuildTeamInfo();
     this.forceUpdate = true;    
     }  

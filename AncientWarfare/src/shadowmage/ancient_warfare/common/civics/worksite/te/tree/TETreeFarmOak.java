@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.civics.worksite.te.tree;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public class TETreeFarmOak extends TETreeFarm
 {
@@ -33,6 +34,7 @@ public TETreeFarmOak()
   this.logMeta = 0;
   saplingID = Block.sapling.blockID;
   saplingMeta = 0;
+  this.saplingFilter = new ItemStack(saplingID, 1, saplingMeta);
   }
 
 

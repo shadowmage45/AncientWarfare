@@ -156,11 +156,11 @@ public List<ItemStack> getRandomLoot(int maxValue, int maxLvl, int numOfStacks, 
     if(entry!=null)
       {
       loot.add(new ItemStack(entry.id, entry.count, entry.meta));
-      Config.logDebug("adding stack "+entry.id+","+entry.meta);
+//      Config.logDebug("adding stack "+entry.id+","+entry.meta);
       }
     else//if nothing at that level, keep checking levels until 0...      
       {
-      Config.logDebug("null stack, retrying");
+//      Config.logDebug("null stack, retrying");
       while(entry==null && retryCount >=0)
         {
         retryCount--;
@@ -169,7 +169,7 @@ public List<ItemStack> getRandomLoot(int maxValue, int maxLvl, int numOfStacks, 
       if(entry!=null)
         {
         loot.add(new ItemStack(entry.id, entry.count, entry.meta));
-        Config.logDebug("adding stack "+entry.id+","+entry.meta+"   from retry");
+//        Config.logDebug("adding stack "+entry.id+","+entry.meta+"   from retry");
         }
       }
     }    

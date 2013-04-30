@@ -88,14 +88,14 @@ public boolean attemptPlacementSubsurface(World world, int x, int y, int z, int 
   {  
   if(y==-1)
     {
-    Config.logDebug("underground structure--invalid topBlock");
+//    Config.logDebug("underground structure--invalid topBlock");
     return false;
     }
   BlockPosition hit = new BlockPosition(x,y,z);    
   hit.y++;
   if(!struct.canGenerateAtSubSurface(world, hit, face, struct))
     {
-    Config.logDebug("underground structure rejected build site");
+//    Config.logDebug("underground structure rejected build site");
     return false;
     }  
   if(this.checkBBCollisions(world, struct, hit, face, x/16, z/16))
@@ -111,7 +111,7 @@ public boolean attemptPlacementSurface(World world, int x, int y, int z, int fac
   {  
   if(y==-1)
     {
-    Config.logDebug("invalid topBlock");
+//    Config.logDebug("invalid topBlock");
     return false;
     }
   BlockPosition hit = new BlockPosition(x,y,z);
@@ -143,7 +143,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   
   if(random.nextInt(WorldGenStructureManager.structureGenRandomRange)>WorldGenStructureManager.structureGenRandomChance)
     {
-    Config.logDebug("Exit for early random chance check");
+//    Config.logDebug("Exit for early random chance check");
     return;
     }
   

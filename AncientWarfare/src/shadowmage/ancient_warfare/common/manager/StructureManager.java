@@ -106,7 +106,6 @@ public void addTempStructure(EntityPlayer player, ProcessedStructure struct)
  */
 public void addStructure(ProcessedStructure struct, boolean sendPacket)
   {
-  Config.logDebug("adding structure(server): "+struct.name);
   this.structures.put(struct.name, struct);
   if(sendPacket)
     {
@@ -127,8 +126,7 @@ public void addStructures(List<ProcessedStructure> structs)
   for(ProcessedStructure struct : structs)
     {
     this.addStructure(struct, false);
-    } 
-  Config.logDebug("Sucessfully loaded: "+structures.size()+" structures!");  
+    }  
   }
 
 public void handlePlayerLogin(EntityPlayer player)
@@ -168,7 +166,6 @@ public void handlePacketDataClient(NBTTagCompound tag)
   {
   if(tag.hasKey("structInit"))
     {
-    Config.logDebug("Receiving client struct init list");
     this.handleInitClient(tag.getTagList("structInit"));
     }
   if(tag.hasKey("add"))
@@ -187,7 +184,6 @@ public void handlePacketDataClient(NBTTagCompound tag)
 
 public void addTempClientInfo(NBTTagCompound tag)
   {
-  Config.logDebug("Setting client side temp structure");
   this.tempBuilderClientInfo = new StructureClientInfo(tag);
   }
 
@@ -210,7 +206,6 @@ private void handleInitClient(NBTTagList list)
     StructureClientInfo info = new StructureClientInfo(tag);
     this.clientStructures.put(info.name, info);
     }
-  Config.logDebug("Added "+this.clientStructures.size()+" structures to client map");
   }
 
 private void addClientStructureFromNBT(NBTTagCompound tag)

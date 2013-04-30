@@ -26,6 +26,7 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
@@ -37,6 +38,8 @@ import shadowmage.ancient_warfare.common.npcs.ai.objectives.AISeekShelter;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class NpcLumberjack extends NpcTypeBase
 {
@@ -48,17 +51,18 @@ public NpcLumberjack(int type)
   {
   super(type);
   this.displayName = "Lumberjack";
-  this.tooltip = "Lumberjack for working tree farms, working speed varies with rank.";
+  this.tooltip = "Lumberjack for working tree farms";
   this.iconTexture = "npcWorker1";  
-  this.addLevel("Lumberjack Rank 0", Config.texturePath + "models/npcDefault.png", getToolStack(0), null).addTargetType(CivicWorkType.TREE);
-  this.addLevel("Lumberjack Rank 1", Config.texturePath + "models/npcDefault.png", getToolStack(1), null).addTargetType(CivicWorkType.TREE);
-  this.addLevel("Lumberjack Rank 2", Config.texturePath + "models/npcDefault.png", getToolStack(2), null).addTargetType(CivicWorkType.TREE);
+  this.addLevel("Lumberjack Novice", Config.texturePath + "models/npcDefault.png", getToolStack(0), null).addTargetType(CivicWorkType.TREE);
+  this.addLevel("Lumberjack Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), null).addTargetType(CivicWorkType.TREE);
+  this.addLevel("Lumberjack Master", Config.texturePath + "models/npcDefault.png", getToolStack(2), null).addTargetType(CivicWorkType.TREE);
   this.isCombatUnit = false;
   }
 
 @Override
 public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
+  helper.addTargetEntry(new AITargetEntry(npc, TargetType.WORK, TECivic.class, 0, false, 140));
 //  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntityPlayer.class, 0, true, 40));
 //  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntityMob.class, 0, true, 40));
 //  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntitySlime.class, 0, true, 40));

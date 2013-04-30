@@ -86,7 +86,7 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
         }
       if(missingBlocks > struct.getOverhangMax())
         {
-        Config.logDebug("Rejected due to overhang");
+//        Config.logDebug("Rejected due to overhang");
         return false;
         }    
       }
@@ -95,7 +95,7 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
     { 
     if(!isValidLevelingTarget(world, levelingBB, struct.validTargetBlocks, struct.getLevelingBuffer()))
       {
-      Config.logDebug("rejected for improper leveling");
+//      Config.logDebug("rejected for improper leveling");
       return false;
       }   
     }
@@ -106,15 +106,15 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
 //    Config.logDebug("skipping clearing check");
 //    return true;
 //    }
-  Config.logDebug("hitPos"+hit);
+//  Config.logDebug("hitPos"+hit);
   StructureBB bb = getClearingValidationBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, struct.getClearingMax()); 
-  Config.logDebug("clearance validation bb: "+bb);
+//  Config.logDebug("clearance validation bb: "+bb);
   List<BlockPosition> nonClearedBlocks = BlockTools.getAllBlockPositionsBetween(bb.pos1, bb.pos2);
   for(BlockPosition pos : nonClearedBlocks)
     {
     if(world.getBlockId(pos.x, pos.y, pos.z)!=0)
       {
-      Config.logDebug("rejected due to clearance");
+//      Config.logDebug("rejected due to clearance");
       return false;
       }
     }
@@ -146,7 +146,7 @@ public static boolean canGenerateAtSubSurface(World world, BlockPosition hit, in
         }
       if(missingBlocks>struct.getOverhangMax())
         {
-        Config.logDebug("Rejected due to overhang");
+//        Config.logDebug("Rejected due to overhang");
         return false;
         }    
       }
@@ -159,7 +159,7 @@ public static boolean canGenerateAtSubSurface(World world, BlockPosition hit, in
     StructureBB levelingBB = getLevelingBoundingBox(hit.copy(), facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.zSize, struct.ySize, struct.zSize, struct.getLevelingMax(), struct.getLevelingBuffer());    
     if(!isValidLevelingTarget(world, levelingBB, struct.validTargetBlocks, struct.getLevelingBuffer()))
       {
-      Config.logDebug("rejected for improper leveling");
+//      Config.logDebug("rejected for improper leveling");
       return false;
       }   
     }

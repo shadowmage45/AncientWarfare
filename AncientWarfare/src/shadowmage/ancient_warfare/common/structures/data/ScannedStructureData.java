@@ -144,7 +144,6 @@ protected void handleCivicRule(World world, int x, int y, int z, int ix, int iy,
   TileEntity te = world.getBlockTileEntity(x, y, z);
   if(te!=null)
     {
-    Config.logDebug("adding civic rule to scanned structure data");
     this.scannedCivics.add(CivicRule.populateRule(ix, iy, iz, (TECivic)te));
     }
   allBlocks[ix][iy][iz] = new BlockData(0,0);
@@ -384,7 +383,7 @@ public BlockData[] getAllBlockTypes()
 
 private void addCivicsToStructrure(ProcessedStructure struct)
   {
-  Config.logDebug("adding civic info to processed structure");  
+//  Config.logDebug("adding civic info to processed structure");  
   for(CivicRule civ : this.scannedCivics)
     {
     struct.civicRules.add(civ);

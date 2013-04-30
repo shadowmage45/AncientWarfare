@@ -381,7 +381,6 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     } 
   if(this.tooltipDelayTicks<=0 && this.currentMouseElement!=null && this.currentMouseElement.renderTooltip)
     {
-    Config.logDebug("rendering tooltip");
     this.renderTooltip(mouseX, mouseY, this.currentMouseElement.getTooltip());
     }
   GL11.glPopMatrix();
@@ -619,10 +618,6 @@ public void handleMouseInput()
   boolean buttonPressed = Mouse.getEventButtonState();
   boolean wheelActivated = wheel!= 0;
   
-  if(buttonActivated && buttonPressed)
-    {
-    Config.logDebug("button pressed");
-    }
   GuiElement el;  
   for(Integer i : this.guiElements.keySet())
     {

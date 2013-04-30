@@ -40,7 +40,7 @@ public ContainerTeamControl(EntityPlayer openingPlayer)
 
 public void rebuildTeamList()
   {
-  Config.logDebug("sending rebuild to gui");
+//  Config.logDebug("sending rebuild to gui");
   NBTTagCompound tag = new NBTTagCompound();
   tag.setBoolean("rebuild", true);
   this.gui.handleDataFromContainer(tag);

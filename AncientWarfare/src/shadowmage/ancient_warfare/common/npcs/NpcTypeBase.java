@@ -197,7 +197,6 @@ public ItemStack[] getArmor(int level)
   {
   if(level>=0 && level< this.levelEntries.size())
     {
-    Config.logDebug("returning armor from level entry");
     return this.levelEntries.get(level).getArmorStacks();
     }
   return new ItemStack[4];

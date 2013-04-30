@@ -56,7 +56,7 @@ public static int getCountOf(IInventory inv, ItemStack filter, int firstSlot, in
 
 public static int tryRemoveItems(IInventory inv, ItemStack filter, int qty, int firstSlot, int lastSlot)
   {
-  if(inv.getSizeInventory()==0)
+  if(filter==null || inv.getSizeInventory()==0)
     {
     return 0;
     }

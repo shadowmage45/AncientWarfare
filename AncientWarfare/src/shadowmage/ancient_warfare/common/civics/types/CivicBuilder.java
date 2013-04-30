@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
 
 public class CivicBuilder extends Civic
@@ -35,6 +36,9 @@ public CivicBuilder(int id)
   this.name = "Civic Structure Builder";
   this.tooltip = "Work site for building of structures.";
   this.teClass = TECivicBuilder.class;
+  this.workType = CivicWorkType.MINE;
+  this.maxWorkers = 4;
+  this.isWorkSite = true;
   }
 
 }
