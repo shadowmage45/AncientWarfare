@@ -31,7 +31,7 @@ NPCS
         dynamically scan area.. worldServer has a getTEsInInBox method, also check chest-carts/mine-carts
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
 * add objective icon rendering to npcs (toggle via Settings) -- .... NFC on this, would require server->client sync on stuff
-* random tick time divider
+* clear all waypoints on dimension change
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -63,9 +63,8 @@ FARMS
 MINE
 * alternative mine-patterns
 * restructure mine into an 'internal' template.
-    each node ONLY needs action and order.  Can do 'extras' after main.
-    each template is a 1-chunk-sized piece. can use the same template multiple times for larger
-    mine areas--stopping at edge of mine
+    internal map will be 64*64 (max mine size)
+        smaller mines will work outwards from the center of the template.
 * clean up inventory handling/block use/etc
 
 COMPLEXES
