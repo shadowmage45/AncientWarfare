@@ -172,7 +172,7 @@ public void handleMotionInput(byte f, byte s)
  */
 public void onMovementTick()
   {
-  this.vehicle.nav.moveTowardsCurrentNode();//vehicle navigator will provide input and other vehicle settings, if it has a node...
+  this.vehicle.nav.onMovementUpdate();//vehicle navigator will provide input and other vehicle settings, if it has a node...
   float weightAdjust = 1.f;
   if(vehicle.currentWeight > vehicle.baseWeight)
     {

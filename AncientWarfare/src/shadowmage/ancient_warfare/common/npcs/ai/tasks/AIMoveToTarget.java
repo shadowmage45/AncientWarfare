@@ -59,7 +59,7 @@ public void onTick()
   int ez = MathHelper.floor_double(npc.posZ);  
   if(npc.isRidingVehicle())
     {
-    ((VehicleBase)npc.ridingEntity).nav.setMoveTo(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
+    ((VehicleBase)npc.ridingEntity).nav.setMoveToTarget(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
     }
   else
     {
