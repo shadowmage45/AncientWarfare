@@ -108,8 +108,12 @@ public static boolean getRenderCivicBounds()
 
 public static void setRenderCivicbounds(Boolean val)
   {
-  renderCivicBoundsProp.set(val);
-  config.save();
+  if(val!=renderCivicBounds)
+    {
+    renderCivicBounds = val;
+    renderCivicBoundsProp.set(val);
+    config.save();
+    }
   }
 
 public static boolean getRenderNpcNameplates()
