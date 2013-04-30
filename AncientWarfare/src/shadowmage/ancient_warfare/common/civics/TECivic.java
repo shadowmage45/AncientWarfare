@@ -52,7 +52,8 @@ import shadowmage.ancient_warfare.common.utils.BlockPosition;
 public abstract class TECivic extends TileEntity implements IInventory
 {
 
-int updateTicks = 0;
+int ticksExisted = 0;
+//int updateTicks = 0;
 int teamNum = 0;
 public int minX;
 public int minY;
@@ -73,6 +74,17 @@ AxisAlignedBB primaryBounds;
 
 protected boolean hasWork = false;
 
+protected int teID = 0;
+
+static int teInstanceIDNext = 0;
+
+protected int tickDivider = Config.npcAITicks * 10;
+
+public TECivic()
+  {
+  teID = teInstanceIDNext;
+  this.teInstanceIDNext++;
+  }
 
 /***************************************************SETUP/INIT**************************************************************/
 public void setCivic(Civic civ)
@@ -100,20 +112,16 @@ public void setBounds(int minX, int minY, int minZ, int maxX, int maxY, int maxZ
 @Override
 public void updateEntity()
   {
-  if(updateTicks<=0 && this.worldObj!=null && !this.worldObj.isRemote)
+  ticksExisted++;
+  if(this.worldObj!=null && !this.worldObj.isRemote && (this.ticksExisted+this.teID)% tickDivider == 0 )
     {
     long t1 = System.nanoTime();
     this.updateHasWork();
     this.broadCastToSoldiers(Config.npcAISearchRange);
     this.updateWorkPoints();
-    this.validateWorkers();    
-    this.updateTicks = Config.npcAITicks * 10;
+    this.validateWorkers(); 
     Config.logDebug("TE tick time: "+(System.nanoTime()-t1) + " for: "+this.getCivic().getDisplayName());
-    }
-  else
-    {
-    updateTicks--;
-    }
+    }   
   super.updateEntity();
   }
 

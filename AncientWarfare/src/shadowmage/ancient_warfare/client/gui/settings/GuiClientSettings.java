@@ -38,6 +38,7 @@ GuiCheckBoxSimple enableMouseAim;
 GuiCheckBoxSimple enableVehicleFPR;
 GuiCheckBoxSimple enableVehicleNameplates;
 GuiCheckBoxSimple enableNpcNameplates;
+GuiCheckBoxSimple enableCivicBounds;
 GuiButtonSimple keyBinds;
 
 /**
@@ -69,13 +70,18 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawString(fontRenderer, "Render Overlay", guiLeft+10+16+2, guiTop+10+4, 0xffffffff);
-  this.drawString(fontRenderer, "Render Advanced Overlay", guiLeft+10+16+2, guiTop+30+4, 0xffffffff);
-  this.drawString(fontRenderer, "Use Mouse Aim Input", guiLeft+10+16+2, guiTop+50+4, 0xffffffff);
-  this.drawString(fontRenderer, "Render Ridden Vehicle in First-person", guiLeft+10+16+2, guiTop+70+4, 0xffffffff);
-  this.drawString(fontRenderer, "Render Vehicle Nameplates", guiLeft+10+16+2, guiTop+90+4, 0xffffffff);
-  this.drawString(fontRenderer, "Render Npc Nameplates", guiLeft+10+16+2, guiTop+110+4, 0xffffffff);
-  this.drawString(fontRenderer, "TPS: "+AWCore.proxy.serverTPS+ " AVG TICK: "+AWCore.proxy.serverTickTime, guiLeft+5, guiTop+getYSize()-15, 0xffffffff);
+  int left = guiLeft+10+16+2;
+  this.drawString(fontRenderer, "Render Overlay", left, guiTop+10+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Advanced Overlay", left, guiTop+30+4, 0xffffffff);
+  this.drawString(fontRenderer, "Use Mouse Aim Input", left, guiTop+50+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Ridden Vehicle in First-person", left, guiTop+70+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Vehicle Nameplates", left, guiTop+90+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Npc Nameplates", left, guiTop+110+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Civic Work Bounds", left, guiTop+130+4, 0xffffffff);    
+  if(Config.DEBUG)
+    {
+    this.drawString(fontRenderer, "TPS: "+AWCore.proxy.serverTPS+ " AVG TICK: "+AWCore.proxy.serverTickTime, guiLeft+5, guiTop+getYSize()-15, 0xffffffff);
+    }
   }
 
 @Override
@@ -90,8 +96,7 @@ public void onElementActivated(IGuiElement element)
     {
     case 0:
     Settings.setRenderOverlay(this.enableOverlayBox.checked());
-    break;
-    
+    break;    
     case 1:
     Settings.setRenderAdvOverlay(this.enableAdvancedOverlay.checked());
     break;
@@ -102,7 +107,7 @@ public void onElementActivated(IGuiElement element)
     mc.displayGuiScreen(new GuiKeybinds(inventorySlots, this));
     break;
     case 4:
-    mc.displayGuiScreen(null);
+    this.closeGUI();
     break;
     case 5:
     Settings.setRenderVehiclesInFirstPerson(this.enableVehicleFPR.checked());
@@ -113,9 +118,11 @@ public void onElementActivated(IGuiElement element)
     case 7:
     Settings.setRenderNpcNameplates(this.enableNpcNameplates.checked());
     break;
-    default:
+    case 8:
+    Settings.setRenderCivicbounds(this.enableCivicBounds.checked());
     break;
-   
+    default:
+    break;   
     }
   }
 
@@ -130,6 +137,7 @@ public void setupControls()
   this.enableVehicleFPR = this.addCheckBox(5, 10, 70, 16, 16).setChecked(Settings.renderVehiclesInFirstPerson);
   this.enableVehicleNameplates = this.addCheckBox(6, 10, 90, 16, 16).setChecked(Settings.getRenderVehicleNameplates());
   this.enableNpcNameplates = this.addCheckBox(7, 10, 110, 16, 16).setChecked(Settings.getRenderNpcNameplates());
+  this.enableCivicBounds = this.addCheckBox(8, 10, 130, 16, 16).setChecked(Settings.getRenderCivicBounds());
   }
 
 @Override

@@ -218,9 +218,11 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     RenderOverlayAdvanced.renderAdvancedVehicleOverlay((VehicleBase)player.ridingEntity, player, evt.partialTicks);
     }
-  
-  //TODO
-  this.renderCivicBoundingBoxes(player.worldObj, player, evt.partialTicks);
+    
+  if(Settings.getRenderCivicBounds())
+    {
+    this.renderCivicBoundingBoxes(player.worldObj, player, evt.partialTicks);
+    }
   
   ItemStack stack = player.inventory.getCurrentItem();
   if(stack==null || stack.getItem()==null)

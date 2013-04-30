@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.utils;
 
 import java.util.EnumSet;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -78,9 +79,12 @@ public void count()
   
   
   int tps = (int)(1000/tms);  
-  Packet01ModData pkt = new Packet01ModData();
-  pkt.setTickTimes(avg, tps);
-  pkt.sendPacketToAllPlayers();
+  if(Config.DEBUG)
+    {
+    Packet01ModData pkt = new Packet01ModData();
+    pkt.setTickTimes(avg, tps);
+    pkt.sendPacketToAllPlayers();
+    }
   
 //  Config.logDebug("avg: " + avg + "  TPS: "+ (1000/tms)+" avgI: "+avgInterval);  
   }

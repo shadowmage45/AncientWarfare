@@ -42,12 +42,13 @@ public static Property npcAITicksProp;
 public static Property renderVehiclesInFirstPersonProp;
 public static Property renderVehicleNameplates;
 public static Property renderNpcNameplates;
+public static Property renderCivicBoundsProp;
 
 public static boolean renderVehiclesInFirstPerson = true;
 private static boolean renderOverlay = true;
 private static boolean renderAdvancedOverlay = true;
-
 private static boolean enableMouseAim = true;
+private static boolean renderCivicBounds = true;
 private static int mouseLookRange = 140;
 private static int trajectoryIterationsClient = 20;
 
@@ -81,6 +82,8 @@ public void loadSettings()
   this.renderAdvancedOverlay = advOverlayProp.getBoolean(true);
   this.enableMouseAim = mouseAimProp.getBoolean(true);
   this.useVehicleInventoryModels = config.get("client-settings", "vehicle_inventory_models", true, "Use vehicle models instead of icons for rendering of vehicle items?").getBoolean(true);
+  this.renderCivicBoundsProp = config.get("client-settings", "render_civic_bounds", true, "Should render the work-bounds on Civics?");
+  this.renderCivicBounds = renderCivicBoundsProp.getBoolean(true);
   }
 
 public static boolean getMouseAim()
@@ -96,6 +99,17 @@ public static boolean getRenderOverlay()
 public static boolean getRenderAdvOverlay()
   {
   return renderAdvancedOverlay;
+  }
+
+public static boolean getRenderCivicBounds()
+  {
+  return renderCivicBounds;
+  }
+
+public static void setRenderCivicbounds(Boolean val)
+  {
+  renderCivicBoundsProp.set(val);
+  config.save();
   }
 
 public static boolean getRenderNpcNameplates()

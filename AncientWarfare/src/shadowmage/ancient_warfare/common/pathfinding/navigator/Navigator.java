@@ -28,6 +28,7 @@ import net.minecraft.block.BlockDoor;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityNavigator;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.network.Packet04Npc;
@@ -338,7 +339,7 @@ protected float getEntityDistance(Node n)
 
 protected void sendToClients(int x, int y, int z)  
   {
-  if(!world.isRemote())//relay to client, force client-side to find path as well (debug rendering of path)
+  if(Config.DEBUG && !world.isRemote())//relay to client, force client-side to find path as well (debug rendering of path)
     {
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("tx", x);

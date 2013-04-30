@@ -1,6 +1,4 @@
-You are free to use Ancient Warfare / CatapultMod in mod packs 
-
-Under the following conditions:
+You are free to use Ancient Warfare / CatapultMod in mod packs under the following conditions:
 1.  Ancient Warfare / CatapultMod is a Work in Progress, as such, no guarantees can be made about compatability between updates.
 2.  Technical support will not be provided for the mod as part of a mod pack.  Don't bother reporting issues unless you can duplicate them on a solo installation.
 3.  If redistributing, files must be redistributed as-is, without modification of the mod package or its contents (.zip/.jar) (an exception will be made for texture-packs or texture alterations, and renaming of the zip/jar files)
