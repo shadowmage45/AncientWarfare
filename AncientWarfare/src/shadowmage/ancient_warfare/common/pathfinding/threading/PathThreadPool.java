@@ -32,7 +32,7 @@ public class PathThreadPool
 {
 
 static int threadNum = 0;
-private static final int MAX_THREADS = 2;
+private static int MAX_THREADS = Config.npcPathfinderThreads;
 private static PathThreadPool INSTANCE = new PathThreadPool();
 public static PathThreadPool instance(){return INSTANCE;}
 private LinkedList<PathThreadWorker> workQueue = new LinkedList<PathThreadWorker>();

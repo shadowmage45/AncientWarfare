@@ -71,10 +71,6 @@ public int teamNum = 0;
 public int rank = 0;
 
 /**
- * used to check for targets/update target entries
- */
-protected int npcAITargetTick = 0;
-/**
  * cooldown for attacking/shooting/harvesting.  set by ai on actions dependant upon action type.
  * updated EVERY TICK from NpcBase.onUpdate()
  */
@@ -325,13 +321,11 @@ public void setActionTicksToMax()
 public void onUpdate()
   {
   this.varsHelper.onTick(); 
-  this.npcAITargetTick++;
-  if(npcAITargetTick>=Config.npcAITicks && !worldObj.isRemote)
+  if(!worldObj.isRemote && (ticksExisted + this.entityId) % Config.npcAITicks == 0)
     {
-    npcAITargetTick = 0;
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
-    }
+    }  
   if(actionTick>0)
     {
     actionTick--;
@@ -383,6 +377,7 @@ public void onUpdate()
     }
   if(this.lootCheckTicks<=0)
     {
+    this.lootCheckTicks = Config.npcAITicks;
     List<EntityItem> worldItems = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(posX-2, posY-1, posZ-2, posY+1, posX+2, posZ+2));
     if(worldItems!=null)
       {
@@ -420,7 +415,6 @@ public void handlePacketUpdate(NBTTagCompound tag)
     {
     tag = tag.getCompoundTag("path");
     this.nav.setMoveToTarget(tag.getInteger("tx"), tag.getInteger("ty"), tag.getInteger("tz"));
-//    Config.log("setting move target client side");
     }
   if(tag.hasKey("health") && worldObj.isRemote)
     {

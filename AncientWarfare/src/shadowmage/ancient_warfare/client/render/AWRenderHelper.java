@@ -213,6 +213,7 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     RenderDebugPath.renderPaths(player.worldObj, player, evt.partialTicks);
     }
+  
   if(Settings.getRenderAdvOverlay() && player.ridingEntity instanceof VehicleBase && mc.currentScreen==null)
     {
     RenderOverlayAdvanced.renderAdvancedVehicleOverlay((VehicleBase)player.ridingEntity, player, evt.partialTicks);
@@ -232,11 +233,21 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
 
   if(ItemBuilderBase.isBuilderItem(id))
     {
+    Config.logDebug("builder item equipped");
     this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
     }  
-  else if(id==ItemLoader.structureBuilderDirect.itemID && ItemBuilderDirect.isScanning(stack))
+  if(id==ItemLoader.structureBuilderDirect.itemID)
     {
-    this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks);
+    Config.logDebug("builder direct equipped");
+    if(ItemBuilderDirect.isScanning(stack))
+      {
+      Config.logDebug("rendering scan area");
+      this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks);      
+      }
+    else
+      {
+      Config.logDebug("has no scan area");
+      }
     }
   else if(ItemStructureScanner.isScannerItem(id))
     {

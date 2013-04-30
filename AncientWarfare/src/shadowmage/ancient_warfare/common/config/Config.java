@@ -34,10 +34,9 @@ public class Config
 //*******************************************************FIELDS**********************************************//
 
 public static final String CORE_VERSION_MAJOR = "0.1.0";
-public static final String CORE_VERSION_MINOR = "0";
-public static final String CORE_VERSION_BUILD = "003";
+public static final String CORE_VERSION_BUILD = "004";
 public static final String CORE_BUILD_STATUS = "dev";
-public static final String MC_VERSION = "1.4.7";
+public static final String MC_VERSION = "1.5.1";
 
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
@@ -61,6 +60,7 @@ public static int trajectoryIterationsServer = 20;
 public static int npcAITicks = 5;
 public static int npcAISearchRange = 140;
 public static int npcPathfinderType = 1;//0-inline, 1-scheduled, 2-threaded
+public static int npcPathfinderThreads = 2;
 
 /**
  * the base (Server side) and current (client side) values...
@@ -173,7 +173,8 @@ public void setCoreInfo()
   {
   config.addCustomCategoryComment("a-general-options", "Global options that effect the entire mod");
   config.addCustomCategoryComment("b-performance", "Global options that may effect performance in some way");
-  config.addCustomCategoryComment("structure-management", "Global World Generation options, effect every save/world");
+  config.addCustomCategoryComment("c-vehicle", "Global options that effect vehicles in some fashion");
+  config.addCustomCategoryComment("structure-management", "Global World Generation options, effect every save/world.  Check AWWorldGen.cfg for advanced options");
   
   /**
    * general options
@@ -181,18 +182,25 @@ public void setCoreInfo()
   this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").getString();
   this.clientVehicleMovementBase = config.get("a-general-options", "client_movement", true, "If true, movement is calculated and authenticated client-side (smoother motion for clients)").getBoolean(true);
   this.adjustMissilesForAccuracy = config.get("a-general-options", "missile_accuracy", true, "If true, missiles will be adjusted for vehicle and rider accuracy when launched.").getBoolean(true);
+  this.blockDestruction = config.get("a-general-options", "missile_destroy_blocks", true, "If true, missiles will be capable of destroying blocks.").getBoolean(true);
+  this.blockFires = config.get("a-general-options", "missile_start_fires", true, "If true, missiles will be capable of lighting fires and placing lava blocks.").getBoolean(true);
   
   /**
    * performance options
    */
   this.npcAITicks = config.get("b-performance", "npc_aiticks", 5, "How many ticks should pass between updating passive ai tasks for NPCs?").getInt(5);
-  this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory", 5, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);
+  this.npcAISearchRange = config.get("b-performance", "npc_search_radius", 140, "How many blocks of radius should entities search for targets and work? (MAX range, some AI limits this further)").getInt(140);
+  this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory", 20, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);
   this.clientMoveUpdateTicksBase = config.get("b-performance", "client_movement_ticks", 3, "How many ticks between client movement update packets if client movement is enabled? (setting is sent and synched to clients on login)").getInt(3);
+  this.npcPathfinderType = config.get("b-performance", "pathfinder_type", 1, "0--Immediate. 1--Scheduled. 2--Threaded").getInt(1);
+  this.npcPathfinderThreads = config.get("b-performance", "pathfinder_threaded_thread_count", 2, "How many threads to use? (spare cores is a good starting number)").getInt(2);
   }
 
 public void setVehicleInfo()
   {
-  
+  this.addOversizeAmmo = config.get("c-vehicle-options", "add_oversize_ammo", true, "If true, ALL ammo types for a vehicle will be available regardless of weight/being useless.").getBoolean(true);
+  this.soldiersUseAmmo = config.get("c-vehicle-options", "soldiers_use_ammo", true, "If true, Soldiers will consume ammo from vehicles but the type must be selected before hand, and kept stocked. If false, soldiers are limited to a default ammo type for the vehicle.").getBoolean(true);
+  this.useVehicleSetupTime = config.get("c-vehicle-options", "use_setup_time", true, "If true, vehicles will be un-useable for the first 5 seconds after placement.").getBoolean(true);
   }
 
 public void setKingdomInfo()

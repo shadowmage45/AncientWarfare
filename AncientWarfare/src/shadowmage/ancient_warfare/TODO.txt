@@ -9,7 +9,6 @@ GENERAL
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 
 PRE-TEST RELEASE
-* builder direct has no scan BB .. --- should be fixed....
 * siege-engineer is not dismounting properly
 
 VEHICLES    
@@ -29,6 +28,7 @@ NPCS
 * expand waypoint navigator with the following functions:
     town-hall/vault -- for npc upkeep
     depository must be able to be a chest-cart, or mine-cart with chest (or other entity with IInventory?)
+        dynamically scan area.. worldServer has a getTEsInInBox method, also check chest-carts/mine-carts
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
 * add objective icon rendering to npcs (toggle via Settings) -- .... NFC on this, would require server->client sync on stuff
 * random tick time divider
@@ -54,7 +54,6 @@ STRUCTURE EDITOR
 
 WORKSITES
 * most civics probably need chunk-loaders to prevent them from trying to access unloaded areas.
-* need to invalidate work-site AND work-point (f'n all of it) from npc when it is destroyed
 * teleport worker to position if he can't path appropriately?      
         
 FARMS
@@ -197,4 +196,5 @@ TWEAKS/OPTIMIZATION
 * add experience value to NPCs
 * don't spawn stuff in X blocks of spawn (config setting)
 * double check all npc ai is present, as far as is-done
+* builder direct has no scan BB .. --- should be fixed....
 

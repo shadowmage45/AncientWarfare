@@ -137,15 +137,6 @@ public void onUpdate(ItemStack stack, World world, Entity entity, int par4, bool
   }
 
 /**
- * Gets an icon index based on an item's damage value
- */
-//@Override
-//public int getIconFromDamage(int par1)
-//  {
-//  return this.iconIndex;
-//  }
-
-/**
  * 
  * @param world
  * @param player
@@ -171,7 +162,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     tag = new NBTTagCompound();
     } 
-  if(hit != null && ( !tag.hasKey("scanning") || tag.getBoolean("scanning")==true ))
+  if(hit != null && !tag.hasKey("name"))//hit was not null, and has no current structure
     {    
     if(player.isSneaking())
       {
@@ -190,7 +181,6 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       BlockPosition key = new BlockPosition(tag.getCompoundTag("buildKey"));
       int face = tag.getCompoundTag("buildKey").getInteger("face");
       player.addChatMessage("Initiating Scan and clearing Position Data");
-      tag.setString("name", player.getEntityName());
       ProcessedStructure struct = scanAndProcess(world, player, pos1, pos2, key, face);
       
       StructureManager.instance().addTempStructure(player, struct);         
@@ -208,14 +198,9 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         countTag.setInteger("ct", ct.count);
         blocks.appendTag(countTag);       
         }
+      tag = new NBTTagCompound();
       tag.setTag("blockList", blocks);
-               
-      tag.setBoolean("scanning", false);
-      tag.setBoolean("building", true);
-      tag.removeTag("pos1");
-      tag.removeTag("pos2");
-      tag.removeTag("buildKey");
-      tag.removeTag("face");
+      tag.setString("name", player.getEntityName());               
       }        
     else if(!tag.hasKey("pos1"))
       {
@@ -234,7 +219,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       player.addChatMessage("Setting Scan Build Position and Facing");
       }
     }
-  else if(tag.hasKey("building") && tag.getBoolean("building")==true)
+  else if(tag.hasKey("name"))
     {
     if(isShiftClick(player))
       {
@@ -262,8 +247,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   /**
    * apply any changes to the itemStackTag
    */
-  stack.setTagInfo("structData", tag);
-  
+  stack.setTagInfo("structData", tag);  
   if(openGUI)
     {
     GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_BUILD_DIRECT, player, world, 0, 0, 0);
@@ -309,11 +293,6 @@ private boolean attemptConstruction(World world, EntityPlayer player, BlockPosit
   if(shouldConstruct)
     {
     return this.attemptConstruction(world, struct, hit, face, settings);
-//    BuilderTicked builder = new BuilderTicked(world, struct, face, hit);
-//    builder.setWorld(world);
-//    builder.startConstruction();
-//    AWStructureModule.instance().addBuilder(builder);
-//    return true;
     }
   return false;
   }
@@ -326,7 +305,7 @@ public boolean attemptConstruction(World world, ProcessedStructure struct,   Blo
     BuilderTicked builder = new BuilderTicked(world, struct, facing, hit);
     builder.setWorld(world);
     builder.startConstruction();
-    builder.setOverrides(settings.teamOverride, settings.spawnVehicle, settings.spawnNpc, settings.spawnGate);
+    builder.setOverrides(-1, false, false, true);
     AWStructureModule.instance().addBuilder(builder);
 //    BuilderInstant builder = new BuilderInstant(world, struct, facing, hit);
 //    builder.startConstruction();
@@ -421,7 +400,6 @@ private boolean decrementItems(EntityPlayer player, List<IDPairCount> counts)
   return false;
   }
 
-
 @Override
 public StructureClientInfo getStructureForStack(ItemStack stack)
   {
@@ -438,7 +416,7 @@ public static boolean isScanning(ItemStack stack)
   {
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
     {
-    return stack.getTagCompound().getCompoundTag("structData").getBoolean("scanning")==true;
+    return !stack.getTagCompound().getCompoundTag("structData").hasKey("name");//.getBoolean("scanning")==true;
     }
   return false;
   }
