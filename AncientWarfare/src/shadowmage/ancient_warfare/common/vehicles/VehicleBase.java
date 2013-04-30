@@ -46,6 +46,7 @@ import shadowmage.ancient_warfare.common.pathfinding.EntityNavigator;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccessEntity;
+import shadowmage.ancient_warfare.common.pathfinding.navigator.Navigator;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -165,7 +166,7 @@ public VehicleMovementHelper moveHelper;
 public VehicleFiringHelper firingHelper;
 public VehicleFiringVarsHelper firingVarsHelper;
 public VehicleInventory inventory;
-public EntityNavigator nav;
+public Navigator nav;
 private PathWorldAccessEntity worldAccess;
 public IVehicleType vehicleType = VehicleRegistry.CATAPULT_STAND_FIXED;//set to dummy vehicle so it is never null...
 public int vehicleMaterialLevel = 0;//the current material level of this vehicle. should be read/set prior to calling updateBaseStats
@@ -180,7 +181,7 @@ public VehicleBase(World par1World)
   this.firingVarsHelper = new DummyVehicleHelper(this);
   this.inventory = new VehicleInventory(this);
   this.worldAccess = new PathWorldAccessEntity(par1World, this);  
-  this.nav = new EntityNavigator(this);
+  this.nav = new Navigator(this);
   this.stepHeight = 1.12f;
   this.entityCollisionReduction = 0.9f;
   this.onGround = false;  
@@ -1137,7 +1138,7 @@ public Entity getEntity()
 @Override
 public void setPath(List<Node> path)
   {
-  this.nav.setPath(path);
+  this.nav.forcePath(path);//.setPath(path);
   }
 
 @Override
