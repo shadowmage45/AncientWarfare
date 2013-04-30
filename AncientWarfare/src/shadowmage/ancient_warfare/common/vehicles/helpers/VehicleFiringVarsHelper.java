@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.helpers;
 import net.minecraft.entity.player.EntityPlayer;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 
@@ -63,6 +64,10 @@ public boolean interact(EntityPlayer player)
     {
     player.mountEntity(vehicle);
     return true;
+    }
+  else if(vehicle.isMountable() && vehicle.riddenByEntity instanceof NpcBase)
+    {
+    vehicle.riddenByEntity.mountEntity(vehicle);//force dismount of those sneaky soldiers...
     }
   else if(!player.worldObj.isRemote && player.isSneaking())
     {

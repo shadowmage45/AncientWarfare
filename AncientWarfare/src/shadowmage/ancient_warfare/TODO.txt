@@ -10,27 +10,18 @@ GENERAL
 
 PRE-TEST RELEASE
 * double check all npc ai is present, as far as is-done
-* add mass_set_depository to command batons (and mass-clear)
-* move vehicle over to new pathfinder, and test...
-* remove old pathfinder code (archive)
-* add cocoa-bean/block inventory item(dye, meta??)
-* builder direct has no scan BB ..
-* shift-clicking in temp inventories (soldier/civics)
+* builder direct has no scan BB .. --- should be fixed....
 
 PATHFINDING
 * still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
 * for non-attack targets, hook in the 'teleport' system.
 
 VEHICLES    
-* need to get rocked when onHit
-* napalm ammo
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
-* switch over to new navigator
 
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
 * create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
-* some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)
 * inter-soldier comms (more commanders yelling orders to soldiers)
 * need to set damage done by rank
 * siege-engineer is not dismounting properly
@@ -194,4 +185,12 @@ TWEAKS/OPTIMIZATION
 * add 1.5.1 blocks to block entries
 * fix old dispenser derpiness
 /********** 04-30-13 **********/
+* move vehicle over to new pathfinder
+* remove old pathfinder code (archive)
+* add mass_set_depository to command batons (and mass-clear)
+* add cocoa-bean/block inventory item(dye, meta??)
+* shift-clicking in temp inventories (soldier/civics)
+* napalm ammo....
+* add vehicle on-hit color rendering (dmg effects)
+* some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)
 

@@ -235,7 +235,7 @@ public static NpcCommand[] getApplicableCommands(ItemStack stack)
         NpcCommand.MASS_HOME, NpcCommand.MASS_CLEAR_HOME, NpcCommand.MASS_CLEAR_WORK, NpcCommand.MASS_WORK};
     case 3:
     return new NpcCommand[]{NpcCommand.WORK, NpcCommand.PATROL, NpcCommand.HOME, NpcCommand.DEPOSIT, NpcCommand.CLEAR_DEPOSIT, NpcCommand.CLEAR_HOME, NpcCommand.CLEAR_PATROL, NpcCommand.CLEAR_WORK,
-        NpcCommand.MASS_HOME, NpcCommand.MASS_CLEAR_HOME, NpcCommand.MASS_CLEAR_WORK, NpcCommand.MASS_WORK, NpcCommand.MASS_PATROL, NpcCommand.MASS_CLEAR_PATROL};    
+        NpcCommand.MASS_HOME, NpcCommand.MASS_CLEAR_HOME, NpcCommand.MASS_DEPOSIT, NpcCommand.MASS_CLEAR_DEPOSIT, NpcCommand.MASS_CLEAR_WORK, NpcCommand.MASS_WORK, NpcCommand.MASS_PATROL, NpcCommand.MASS_CLEAR_PATROL};    
     }
     }
   return null;

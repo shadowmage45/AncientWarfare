@@ -324,6 +324,34 @@ protected void igniteBlock(World world, int x, int y, int z, int maxSearch)
     } 
   }
 
+/**
+ * starts at y, works down to find the first solid block, and ignites the one above it (set to fire)
+ * @param world
+ * @param x
+ * @param y
+ * @param z
+ */
+protected void setBlockToLava(World world, int x, int y, int z, int maxSearch)
+  { 
+  if(!Config.blockFires)
+    {
+    return;
+    }
+  int id; 
+  for(int i = 0; i < maxSearch && y-i>=1; i++)
+    {
+    id = world.getBlockId(x, y-i, z);
+    if(id!=0)
+      {
+      if(world.getBlockId(x, y-i+1, z)==0)
+        {
+        world.setBlock(x, y-i+1, z, Block.lavaStill.blockID, 0, 3);        
+        }
+      break;
+      }
+    } 
+  }
+
 protected void createExplosion(World world, MissileBase missile, float x, float y, float z, float power)
   {
   boolean destroyBlocks = Config.blockDestruction;

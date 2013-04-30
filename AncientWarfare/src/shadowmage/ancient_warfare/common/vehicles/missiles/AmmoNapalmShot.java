@@ -20,10 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
-import shadowmage.ancient_warfare.common.config.Config;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class AmmoNapalmShot extends Ammo
 {
@@ -43,18 +45,60 @@ public AmmoNapalmShot(int ammoType, int weight)
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoNapalm1";
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
+  this.isFlaming = true;
   }
 
 @Override
 public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit)
   {
-  //TODO
+  int bx = MathHelper.floor_float(x);
+  int by = MathHelper.floor_float(y);  
+  int bz = MathHelper.floor_float(z);  
+  setBlockToLava(world, bx, by, bz, 5);
+  double dx = missile.motionX;
+  double dz = missile.motionZ;  
+  if(Math.abs(dx)>Math.abs(dz))
+    {
+    dz = 0;
+    }
+  else
+    {
+    dx = 0;
+    }
+  dx = dx<0 ? -1 : dx > 0 ? 1 : dx;
+  dz = dz<0 ? -1 : dz > 0 ? 1 : dz;
+  if(ammoWeight>=15)//set the 'forward' block to lava as well
+    {
+    setBlockToLava(world, bx+ (int)dx, by, bz+(int)dz, 5);
+    }
+  if(ammoWeight>=30)//set the 'rear' block to lava as well
+    {
+    setBlockToLava(world, bx-(int)dx, by, bz-(int)dz, 5);
+    }
+  if(ammoWeight>=45)
+    {
+    if(dx==0)//have already done Z's
+      {
+      setBlockToLava(world, bx+1, by, bz, 5);
+      setBlockToLava(world, bx-1, by, bz, 5);
+      }
+    else
+      {
+      setBlockToLava(world, bx, by, bz+1, 5);
+      setBlockToLava(world, bx, by, bz-1, 5);
+      }
+    }
   }
 
 @Override
 public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile)
   {
-
+  if(!world.isRemote)
+    {
+    ent.attackEntityFrom(DamageType.fireMissile, getEntityDamage());
+    ent.setFire(3);
+    onImpactWorld(world, x, (float)ent.posY, z, missile, null);
+    }
   }
 
 }

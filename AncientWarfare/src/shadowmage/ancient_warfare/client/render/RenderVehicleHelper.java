@@ -70,7 +70,12 @@ public void doRender(Entity var1, double x, double y, double z, float yaw, float
   GL11.glPushMatrix();
   GL11.glTranslated(x, y, z);
   GL11.glRotatef(yaw, 0, 1, 0);
-  GL11.glScalef(-1, -1, 1);    
+  GL11.glScalef(-1, -1, 1);   
+  if(vehicle.hitAnimationTicks>0)
+    {
+    float percent = ((float)vehicle.hitAnimationTicks / 20.f);
+    GL11.glColor4f(1.f, 1.f-percent, 1.f-percent, 1.f);
+    }
   Minecraft.getMinecraft().renderEngine.bindTexture(var1.getTexture());
   RenderVehicleBase render = RenderRegistry.instance().getRenderForVehicle(vehicle.vehicleType.getGlobalVehicleType());
   render.renderVehicle(vehicle, x, y, z, yaw, tick);

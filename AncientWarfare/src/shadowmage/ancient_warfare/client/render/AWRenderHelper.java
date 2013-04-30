@@ -63,7 +63,6 @@ public static AWRenderHelper instance()
   return INSTANCE;
   }
 
-
 private void renderScannerBB(EntityPlayer player, ItemStack stack, IScannerItem item, float partialTick)
   {
   if(player==null || stack==null || item== null)
@@ -235,7 +234,7 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
     }  
-  else if(ItemBuilderBase.hasScanBB(id))
+  else if(id==ItemLoader.structureBuilderDirect.itemID && ItemBuilderDirect.isScanning(stack))
     {
     this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks);
     }
@@ -257,18 +256,19 @@ public static void renderCivicBoundingBoxes(World world, EntityPlayer player, fl
     if(TECivic.class.isAssignableFrom(te.getClass()))
       {
       TECivic tec = (TECivic)te;
-      AxisAlignedBB bb = tec.getBoundsForRender(); 
-      if(bb!=null)
+      if(tec.getCivic().isWorkSite())
         {
-        BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick), 1.f, 1.f, 1.f);
+        AxisAlignedBB bb = tec.getBoundsForRender(); 
+        if(bb!=null)
+          {
+          BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick), 1.f, 1.f, 1.f);
+          }
+        bb = tec.getSecondaryRenderBounds();
+        if(bb!=null)
+          {
+          BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick), 1.f, 0.6f, 0.6f);
+          }
         }
-      bb = tec.getSecondaryRenderBounds();
-      if(bb!=null)
-        {
-        BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick), 1.f, 0.6f, 0.6f);
-        }
-      //offset by player coords
-      
       }
     }
   }
