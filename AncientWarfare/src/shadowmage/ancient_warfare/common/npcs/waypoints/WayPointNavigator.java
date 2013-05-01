@@ -65,6 +65,17 @@ public WayPointNavigator(IPathableEntity owner)
   this.owner = owner;
   }
 
+public void handleDimensionChange(int dim)
+  {
+  this.clearDepositSite();
+  this.clearHomePoint();
+  this.clearPatrolPoints();
+  this.clearUpkeepSite();
+  this.clearWorkSite();
+  this.currentTarget = null;
+  this.playerTarget = null;
+  }
+
 /************************************************CURRENT TARGET*************************************************/
 public ITargetEntry getTarget()
   {
@@ -119,7 +130,7 @@ public void clearPatrolPoints()
   }
 
 /************************************************WORK SITE*************************************************/
-public ITargetEntry getWorkSite()
+public WayPoint getWorkSite()
   {
   return work;
   }

@@ -42,8 +42,8 @@ public static ICivicType carrotFarm = new CivicFarm(1, "Carrot Farm", "A place f
 public static ICivicType potatoFarm = new CivicFarm(2, "Potato Farm", "A place for workers to tend and harvest Potato", TEFarmPotato.class, "civicFarmPotato1");
 //need melon
 //need pumpkin
-//need cactus
-//need reeds
+public static ICivicType cactusFarm = new CivicCactusFarm(5);
+public static ICivicType reedFarm = new CivicReedFarm(6);
 //need brown mushroom
 //need red mushroom
 //need netherstalk
@@ -58,12 +58,16 @@ public static ICivicType treeFarmOak = new CivicTreeFarm(16, "Oak Tree Farm", "T
 //birch
 //jungle
 public static ICivicType builder = new CivicBuilder(20);
+//town-hall r1
+//town-hall r2
+//town-hall r3
+
 
 
 protected int globalID = 0;
 protected String name = "";
 protected String tooltip = "";
-protected String iconTexture = "";
+protected String itemIconTexture = "";
 protected int maxWorkers = 1;
 protected int workSizeMaxHorizontal = 10;
 protected int workSizeMaxHeight = 2;
@@ -74,7 +78,7 @@ protected boolean addToCreative = true;
 protected Class<? extends TECivic> teClass;
 protected ItemStack displayStackCache = null;
 protected int inventorySize = 0;
-protected String[] iconNames = new String[]{"","",""};
+protected String[] blockIconNames = new String[]{"","",""};
 protected CivicWorkType workType = CivicWorkType.NONE;
 
 public Civic(int id)
@@ -99,7 +103,7 @@ public int getGlobalID()
 @Override
 public String getIconTexture()
   {
-  return "ancientwarfare:civic/"+iconTexture;
+  return "ancientwarfare:civic/"+itemIconTexture;
   }
 
 @Override
@@ -143,7 +147,6 @@ public Class<? extends TECivic> getTileEntityClass()
   {
   return teClass;
   }
-
 
 @Override
 public ItemStack getItemToConstruct()
@@ -191,7 +194,7 @@ public int getMaxWorkAreaCube()
 @Override
 public String[] getIconNames()
   {
-  return iconNames;
+  return blockIconNames;
   }
 
 @Override

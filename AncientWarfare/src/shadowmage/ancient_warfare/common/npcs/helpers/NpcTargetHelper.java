@@ -61,9 +61,12 @@ HashMap<TargetType, AITargetList> targetEntries = new HashMap<TargetType, AITarg
  */
 HashMap<TargetType, AIAggroList> aggroEntries = new HashMap<TargetType, AIAggroList>();
 
+AITargetEntry revengeEntry;
+
 public NpcTargetHelper(NpcBase npc)
   {
   this.npc = npc;
+  revengeEntry = new AITargetEntry(npc, TargetType.ATTACK, Entity.class, 0, true, 140);
   }
 
 public int getAggroAdjustmentFor(AIAggroTargetWrapper taget)
@@ -247,7 +250,28 @@ public void updateAggroEntries()
 
 public void handleBeingAttacked(EntityLiving damager)
   {
-  //TODO
+  if(this.targetEntries.containsKey(TargetType.ATTACK))
+    {
+    this.addOrUpdateAggroEntry(revengeEntry, damager, Config.npcAITicks);
+    }
+  }
+
+public void handleBroadcastTarget(Entity ent, TargetType type)
+  {
+  if(this.targetEntries.containsKey(type))
+    {
+    AITargetList list = this.targetEntries.get(type);
+    AITargetEntry entry = list.getEntryFor(ent);
+    if(entry!=null)
+      {
+      this.addOrUpdateAggroEntry(entry, ent, Config.npcAITicks);
+      }
+    }
+  }
+
+public boolean isValidTarget(Class clz)
+  {
+  return false;
   }
 
 public boolean areTargetsInRange(TargetType type, float range)

@@ -95,11 +95,12 @@ public void updateWorkPoints()
 @Override
 protected void updateHasWork()
   {
-  this.hasWork = false;
+  boolean hasWork = false;
   if(this.builder!=null && !this.builder.isFinished())
     {
-    this.hasWork =true;
+    hasWork =true;
     }
+  this.setHasWork(hasWork);
   }
 
 @Override

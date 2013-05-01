@@ -35,7 +35,6 @@ int z;
 int order = 0;
 byte special;//used for meta...
 boolean singleAction = true;
-MineSubComponent owner;
 
 TargetType action = TargetType.NONE;
 
@@ -54,11 +53,6 @@ protected MinePoint(int x, int y, int z, int order, byte special, TargetType typ
   this.special = special;
   }
 
-protected MinePoint setOwner(MineSubComponent owner)
-  {
-  this.owner = owner;
-  return this;
-  }
 
 protected MinePoint setSingleAction(boolean action)
   {

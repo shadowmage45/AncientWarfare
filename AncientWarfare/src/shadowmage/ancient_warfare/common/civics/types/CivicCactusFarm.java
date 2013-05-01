@@ -21,23 +21,23 @@
 package shadowmage.ancient_warfare.common.civics.types;
 
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCactus;
 
-public class CivicFarm extends Civic
+public class CivicCactusFarm extends Civic
 {
 
 /**
  * @param id
  */
-public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSiteFarm> teClass, String iconTex)
+public CivicCactusFarm(int id)
   {
   super(id);
   this.isWorkSite = true;
-  this.name = name;
-  this.tooltip = tooltip;
-  this.teClass = teClass;
+  this.name = "Cactus Farm";
+  this.tooltip = "Harvest Mature Cactus";
+  this.teClass = TEFarmCactus.class;
   this.inventorySize = 9;
-  this.itemIconTexture = iconTex;
+  this.itemIconTexture = "civicFarmWheat1";
   this.blockIconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
   this.blockIconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
   this.blockIconNames[2] = "ancientwarfare:civic/civicFarmWheatSide";  

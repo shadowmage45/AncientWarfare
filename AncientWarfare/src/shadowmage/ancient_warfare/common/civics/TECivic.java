@@ -42,8 +42,10 @@ import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.Packet05TE;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -53,8 +55,10 @@ public abstract class TECivic extends TileEntity implements IInventory
 {
 
 int ticksExisted = 0;
-//int updateTicks = 0;
 int teamNum = 0;
+/**
+ * work-site bounds, may be un-set for non work-site civics
+ */
 public int minX;
 public int minY;
 public int minZ;
@@ -65,20 +69,22 @@ public TargetType workType;
 protected boolean isWorkSite = false;
 protected boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
 protected AWInventoryBasic inventory = new AWInventoryBasic(0);
-protected Civic civic;
-//protected int structureRank = 0;
+protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
 protected List<WorkPoint> workPoints = new ArrayList<WorkPoint>();//points being worked currently
 protected Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
 protected Random rng = new Random();
-AxisAlignedBB primaryBounds;
 
-protected boolean hasWork = false;
+private boolean hasWork = false;
 
 protected int teID = 0;
 
 static int teInstanceIDNext = 0;
 
 protected int tickDivider = Config.npcAITicks * 10;
+
+protected int clientWorkStatus = 0;
+protected int clientInventoryStatus = 0;
+protected int clientWorkerStatus = 0;
 
 public TECivic()
   {
@@ -106,7 +112,6 @@ public void setBounds(int minX, int minY, int minZ, int maxX, int maxY, int maxZ
   this.maxX = maxX;
   this.maxY = maxY;
   this.maxZ = maxZ;
-  primaryBounds = AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX+1, maxY+1, maxZ+1);
   }
 
 @Override
@@ -120,6 +125,7 @@ public void updateEntity()
     this.broadCastToSoldiers(Config.npcAISearchRange);
     this.updateWorkPoints();
     this.validateWorkers(); 
+    this.updateInventoryStatus();
     Config.logDebug("TE tick time: "+(System.nanoTime()-t1) + " for: "+this.getCivic().getDisplayName());
     }   
   super.updateEntity();
@@ -166,11 +172,8 @@ public void broadCastToSoldiers(int maxRange)
     {
     if(isHostile(npc.teamNum))      
       {
-//      Config.log("found hostile npc!");
       if(npc.npcType.isCombatUnit())
         {
-        //add attack entry
-        //TODO
         npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, Config.npcAITicks*11);
         }      
       }
@@ -180,25 +183,42 @@ public void broadCastToSoldiers(int maxRange)
         {    
         if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
           {
-//          Config.logDebug("broadcasting aggro update to npc!!!");
           npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
           }
-//        Config.logDebug("broadcasting to npcs!!");
-//        if(npc.wayNav.getWorkSite()==null && hasWork() && canHaveMoreWorkers(npc))
-//          {
-////          Config.logDebug("Entity had no work site, checking if valid!");
-//          if(npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
-//            {
-////            Config.logDebug("SETTING NPC WORK SITE THROUGH BROADCAST THROUGH TE");
-//            npc.wayNav.setWorkSite(xCoord, yCoord, zCoord);
-//            }
-//          }
         }
       }
     }
   }
 
-public abstract boolean onInteract(World world, EntityPlayer player);
+protected void updateInventoryStatus()
+  {
+  if(this.inventory.getSizeInventory()>0)
+    {
+    int empty = this.inventory.getEmptySlotCount();
+    int prevStatus = this.clientInventoryStatus;
+    if(empty<=0)
+      {
+      this.clientInventoryStatus = 0;
+      }
+    else
+      {
+      this.clientInventoryStatus = 1;
+      }
+    if(prevStatus != this.clientInventoryStatus)
+      {
+      this.sendInventoryStatusUpdate(clientInventoryStatus);
+      }
+    }
+  }
+
+public boolean onInteract(World world, EntityPlayer player)
+  {
+  if(!world.isRemote && inventory.getSizeInventory()>0)
+    {
+    GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);
+    }
+  return true;
+  }
 
 /******************************************************WORK-SITE*********************************************************/
 public boolean canHaveMoreWorkers(NpcBase worker)
@@ -245,7 +265,14 @@ public BlockPosition getPositionInBounds(int border)
 
 public void addWorker(NpcBase npc)
   {
-  this.workers.add(npc);
+  if(npc!=null)
+    {
+    if(this.workers.isEmpty())
+      {
+      this.sendWorkerStatusUpdate(1);
+      }
+    this.workers.add(npc);
+    }  
   }
 
 public WorkPoint getWorkPoint(NpcBase npc)
@@ -271,6 +298,10 @@ public WorkPoint getWorkPoint(NpcBase npc)
 public void removeWorker(NpcBase npc)
   {
   this.workers.remove(npc);
+  if(this.workers.isEmpty())
+    {
+    this.sendWorkerStatusUpdate(0);
+    }
   }
 
 public void onWorkFinished(NpcBase npc, WorkPoint point)
@@ -291,6 +322,10 @@ public void onWorkNoPath(NpcBase npc, WorkPoint point)
   this.onWorkFinished(npc, point);
   }
 
+/**
+ * overridable method to update work-points. called from main onUpdate every X ticks
+ * X=Config.npcAITicks * 10
+ */
 public void updateWorkPoints()
   {
  
@@ -306,6 +341,13 @@ protected void validateWorkers()
     if(npc==null || npc.isDead || npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
       {
       workIt.remove();
+      continue;
+      }
+    WayPoint p = npc.wayNav.getWorkSite();
+    if(p==null || p.floorX()!= xCoord || p.floorY()!=yCoord || p.floorZ()!=zCoord)
+      {
+      workIt.remove();
+      continue;
       }
     }
   }
@@ -325,14 +367,23 @@ public WorkPoint doWork(NpcBase npc, WorkPoint p)
   return p;
   }
 
+/**
+ * return cached hasWork value
+ * @return
+ */
 public boolean hasWork()
   {
   return hasWork;
   }
 
+/**
+ * update cached hasWork value...
+ * only called from main onUpdate every X ticks
+ * X = Config.npcAITicks*10
+ */
 protected void updateHasWork()
   {
-  hasWork = false;
+  boolean hasWork = false;
   for(WorkPoint p : this.workPoints)
     {
     if(p.hasWork(worldObj))
@@ -341,6 +392,28 @@ protected void updateHasWork()
       break;
       }
     }  
+  this.setHasWork(hasWork);
+  }
+
+/**
+ * set hasWork value, and send event to client
+ * if it is a changed value
+ * @param newVal
+ */
+protected void setHasWork(boolean newVal)
+  {
+  if(newVal!=this.hasWork)
+    {
+    if(newVal==true)
+      {
+      this.sendWorkStatusUpdate(1);
+      }
+    else
+      {
+      this.sendWorkStatusUpdate(0);
+      }    
+    }
+  this.hasWork = newVal;
   }
 
 /**
@@ -349,8 +422,7 @@ protected void updateHasWork()
  */
 public AxisAlignedBB getBoundsForRender()
   { 
-  primaryBounds = AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX+1, maxY+1, maxZ+1);
-  return primaryBounds;
+  return AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX+1, maxY+1, maxZ+1);
   }
 
 public AxisAlignedBB getSecondaryRenderBounds()
@@ -453,6 +525,64 @@ public void handlePacketData(NBTTagCompound tag)
     Packet05TE pkt = new Packet05TE();
     pkt.packetData = tag;
     }
+  }
+/******************************************************************EVENT HANDLING***********************************************************************************/
+
+
+protected void sendWorkStatusUpdate(int val)
+  {
+  sendClientEvent(0, val);
+  }
+
+protected void sendInventoryStatusUpdate(int val)
+  {
+  sendClientEvent(1, val);
+  }
+
+protected void sendWorkerStatusUpdate(int val)
+  {
+  sendClientEvent(2, val);
+  }
+
+protected void sendClientEvent(int id, int val)
+  {
+  if(!worldObj.isRemote)
+    {
+    worldObj.addBlockEvent(xCoord, yCoord, zCoord, blockType.blockID, id, val);
+    }
+  }
+
+@Override
+public boolean receiveClientEvent(int par1, int par2)
+  {
+  switch(par1)
+  {
+  case 0://work status
+  handleWorkStatusUpdate(par2);
+  break;  
+  case 1://inventory status
+  handleInventoryStatusUpdate(par2);
+  break;
+  case 2://worker status
+  handleWorkerStatusUpdate(par2);
+  break;
+  }
+  return super.receiveClientEvent(par1, par2);
+  }
+
+public void handleInventoryStatusUpdate(int val)
+  {
+  clientInventoryStatus = val;
+  }
+
+public void handleWorkStatusUpdate(int val)
+  {
+  clientWorkStatus = val;
+  }
+
+public void handleWorkerStatusUpdate(int val)
+  {
+  clientWorkerStatus = val;
   }
 
 /******************************************************************INVENTORY METHODS***********************************************************************************/

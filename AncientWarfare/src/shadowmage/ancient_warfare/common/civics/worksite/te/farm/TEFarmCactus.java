@@ -34,27 +34,17 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public abstract class TEWorkSiteFarm extends TECivic
+public class TEFarmCactus extends TECivic
 {
 
-int mainBlockID;//the blockID that this civic looks for within its work bounds
-int tilledEarthID = Block.tilledField.blockID;//the 'plantable' block. these are the 'plant' points, if y+1 is not mainBlockID
-int mainBlockMatureMeta;
-ItemStack plantableFilter;
+ItemStack plantableFilter = new ItemStack(Block.cactus);
+int mainBlockID = Block.cactus.blockID;
 
-public TEWorkSiteFarm()
+/**
+ * 
+ */
+public TEFarmCactus()
   {
-  
-  }
-
-@Override
-public boolean onInteract(World world, EntityPlayer player)
-  {
-  if(!world.isRemote)
-    {
-    GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);
-    }
-  return true;
   }
 
 @Override
@@ -75,31 +65,29 @@ public void updateWorkPoints()
 
 protected void updateOrAddWorkPoint(int x, int y, int z)
   {  
-  WorkPoint p;
-  TargetType t = null;
+  TargetType t = TargetType.NONE;
+  boolean addPoint = false;
   int id = worldObj.getBlockId(x, y, z);  
-  if(id==tilledEarthID && worldObj.getBlockId(x, y+1, z)==0 && inventory.containsAtLeast(plantableFilter, 1))
+  if(x%4==0 && z%4==0 && worldObj.getBlockId(x, y-1, z)==Block.sand.blockID && inventory.containsAtLeast(plantableFilter, 1))
     {
-    t = TargetType.FARM_PLANT;
+    if(worldObj.getBlockId(x-1, y, z)==0 && worldObj.getBlockId(x+1, y, z)==0 && worldObj.getBlockId(x, y, z-1)==0 && worldObj.getBlockId(x, y, z+1)==0)
+      {
+      t = TargetType.FARM_PLANT;
+      addPoint = true;
+      }    
     }
-  else if(id==this.mainBlockID)
+  else if(id==this.mainBlockID && inventory.canHoldItem(plantableFilter, 1))
     {
-    int meta = worldObj.getBlockMetadata(x, y, z);
-    if(meta==this.mainBlockMatureMeta)
+    if(worldObj.getBlockId(x, y-1, z)==mainBlockID && worldObj.getBlockId(x, y-2, z)==mainBlockID)
       {
       t = TargetType.FARM_HARVEST;
-      }
-    else
-      {
-      return;
+      addPoint = true;
       }
     }
-  else
+  if(addPoint)
     {
-    return;
-    }
-  p = new WorkPoint(this, x,y,z, 1, t);
-  this.workPoints.add(p);
+    this.workPoints.add(new WorkPoint(this, x,y,z, 1, t));
+    }  
   }
 
 @Override
@@ -114,7 +102,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
     if(point.getTargetType()==TargetType.FARM_HARVEST)
       {
       Config.logDebug("harvesting crops!!");
-      List<ItemStack> blockDrops = Block.crops.getBlockDropped(npc.worldObj, point.x(), point.y(), point.z(), worldObj.getBlockMetadata(point.x(), point.y(), point.z()), 0);
+      List<ItemStack> blockDrops = Block.crops.getBlockDropped(npc.worldObj, point.x(), point.y(), point.z(), 7, 0);
       worldObj.setBlockToAir(point.x(), point.y(), point.z());
       for(ItemStack item : blockDrops)
         {
@@ -128,7 +116,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
             if(item!=null)
               {
               InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
-              }            
+              }
             }
           }
         else

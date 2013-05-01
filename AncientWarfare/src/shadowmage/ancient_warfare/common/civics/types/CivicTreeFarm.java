@@ -41,10 +41,10 @@ public CivicTreeFarm(int id, String name, String tooltip, Class<? extends TECivi
   this.workSizeMaxHorizontal = 16;
   this.inventorySize = 9;
   this.workType = CivicWorkType.TREE;
-  this.iconTexture = "civicMine1";
-  this.iconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
-  this.iconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
-  this.iconNames[2] = "ancientwarfare:civic/civicFarmWheatSide"; 
+  this.itemIconTexture = "civicMine1";
+  this.blockIconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
+  this.blockIconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
+  this.blockIconNames[2] = "ancientwarfare:civic/civicFarmWheatSide"; 
   }
 
 }

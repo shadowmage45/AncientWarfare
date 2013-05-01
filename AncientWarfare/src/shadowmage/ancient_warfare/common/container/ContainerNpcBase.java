@@ -87,7 +87,6 @@ public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
     }  
   }
 
-
 @Override
 public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClickedIndex)
   {

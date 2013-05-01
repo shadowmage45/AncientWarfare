@@ -189,7 +189,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
 @Override
 protected void updateHasWork()
   {
-  hasWork = !this.workPoints.isEmpty();  
+  this.setHasWork(!this.workPoints.isEmpty());
   }
 
 public AxisAlignedBB getSecondaryRenderBounds()

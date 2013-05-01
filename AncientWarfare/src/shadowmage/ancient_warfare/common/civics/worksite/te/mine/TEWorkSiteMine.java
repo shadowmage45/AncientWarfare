@@ -239,11 +239,12 @@ public void updateWorkPoints()
 @Override
 protected void updateHasWork()
   {
-  hasWork = false;
+  boolean hasWork = false;
   if(currentLevel!=null && currentLevel.hasWork())
     {
     hasWork = true;
     }
+  this.setHasWork(hasWork);
   }
 
 @Override

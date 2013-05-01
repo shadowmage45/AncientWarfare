@@ -20,10 +20,15 @@
  */
 package shadowmage.ancient_warfare.common.event;
 
+import java.util.List;
+
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 
 public class EventHandler
@@ -68,5 +73,28 @@ public void onEntityInteract(EntityInteractEvent evt)
   
   }
 
+@ForgeSubscribe
+public void onPlayerAttack(AttackEntityEvent evt)
+  {
+  if(evt.entityPlayer==null || evt.target==null || evt.entityPlayer.worldObj.isRemote)
+    {
+    return;
+    }
+  List<NpcBase> npcs = evt.entityPlayer.worldObj.getEntitiesWithinAABB(NpcBase.class, AxisAlignedBB.getBoundingBox(evt.entityPlayer.posX-20, evt.entityPlayer.posY-10, evt.entityPlayer.posZ-20, evt.entityPlayer.posX+20, evt.entityPlayer.posY+10, evt.entityPlayer.posZ+20));
+  if(npcs!=null && !npcs.isEmpty())
+    {
+    for(NpcBase npc : npcs)
+      {
+      if(npc == evt.target || npc.isAggroTowards(evt.entityPlayer))
+        {
+        continue;
+        }
+      if(npc.getPlayerTarget().getEntity(evt.entityPlayer.worldObj)==evt.entityPlayer)
+        {
+        npc.handleBroadcastAttackTarget(evt.target);
+        }
+      }
+    }
+  }
 
 }

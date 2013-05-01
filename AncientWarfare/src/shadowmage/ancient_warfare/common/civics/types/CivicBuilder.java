@@ -20,8 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 public class CivicBuilder extends Civic
 {
@@ -39,6 +42,15 @@ public CivicBuilder(int id)
   this.workType = CivicWorkType.MINE;
   this.maxWorkers = 4;
   this.isWorkSite = true;
+  }
+
+@Override
+public ItemStack getItemToConstruct()
+  {
+  ItemStack item = new ItemStack(ItemLoader.civicBuilder,1);
+  NBTTagCompound tag = new NBTTagCompound();
+  item.setTagInfo("structData", tag);
+  return item;
   }
 
 }

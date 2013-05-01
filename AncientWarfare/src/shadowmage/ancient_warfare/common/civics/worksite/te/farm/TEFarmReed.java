@@ -23,38 +23,27 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public abstract class TEWorkSiteFarm extends TECivic
+public class TEFarmReed extends TECivic
 {
 
-int mainBlockID;//the blockID that this civic looks for within its work bounds
-int tilledEarthID = Block.tilledField.blockID;//the 'plantable' block. these are the 'plant' points, if y+1 is not mainBlockID
-int mainBlockMatureMeta;
-ItemStack plantableFilter;
 
-public TEWorkSiteFarm()
-  {
-  
-  }
+ItemStack plantableFilter = new ItemStack(Item.reed);
+int mainBlockID = Block.reed.blockID;
 
-@Override
-public boolean onInteract(World world, EntityPlayer player)
+/**
+ * 
+ */
+public TEFarmReed()
   {
-  if(!world.isRemote)
-    {
-    GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);
-    }
-  return true;
   }
 
 @Override
@@ -73,33 +62,38 @@ public void updateWorkPoints()
     }
   }
 
+protected boolean isWater(int x, int y, int z)
+  {
+  int id = worldObj.getBlockId(x, y, z);
+  return id==Block.waterMoving.blockID || id==Block.waterStill.blockID;
+  }
+
 protected void updateOrAddWorkPoint(int x, int y, int z)
   {  
-  WorkPoint p;
-  TargetType t = null;
-  int id = worldObj.getBlockId(x, y, z);  
-  if(id==tilledEarthID && worldObj.getBlockId(x, y+1, z)==0 && inventory.containsAtLeast(plantableFilter, 1))
+  TargetType t = TargetType.NONE;
+  boolean addPoint = false;
+  boolean foundWater =false;
+  int id = worldObj.getBlockId(x, y, z);
+  int id2 = worldObj.getBlockId(x, y-1, z);
+  if(id==Block.reed.blockID)
     {
-    t = TargetType.FARM_PLANT;
-    }
-  else if(id==this.mainBlockID)
-    {
-    int meta = worldObj.getBlockMetadata(x, y, z);
-    if(meta==this.mainBlockMatureMeta)
+    if(id2==Block.reed.blockID && worldObj.getBlockId(x, y-2, z)==Block.reed.blockID)
       {
+      addPoint = true;
       t = TargetType.FARM_HARVEST;
-      }
-    else
-      {
-      return;
-      }
+      }    
     }
-  else
+  else if(id==0 && id2==Block.dirt.blockID || id2==Block.grass.blockID || id2==Block.sand.blockID)
     {
-    return;
+    if(isWater(x-1, y-1, z) || isWater(x+1,y-1,z) || isWater(x,y-1,z-1) || isWater(x,y-1,z+1))
+      {
+      t = TargetType.FARM_PLANT;
+      }       
     }
-  p = new WorkPoint(this, x,y,z, 1, t);
-  this.workPoints.add(p);
+  if(addPoint)
+    {
+    this.workPoints.add(new WorkPoint(this, x,y,z, 1, t));
+    }  
   }
 
 @Override
@@ -114,7 +108,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
     if(point.getTargetType()==TargetType.FARM_HARVEST)
       {
       Config.logDebug("harvesting crops!!");
-      List<ItemStack> blockDrops = Block.crops.getBlockDropped(npc.worldObj, point.x(), point.y(), point.z(), worldObj.getBlockMetadata(point.x(), point.y(), point.z()), 0);
+      List<ItemStack> blockDrops = Block.crops.getBlockDropped(npc.worldObj, point.x(), point.y(), point.z(), 7, 0);
       worldObj.setBlockToAir(point.x(), point.y(), point.z());
       for(ItemStack item : blockDrops)
         {
@@ -128,7 +122,7 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
             if(item!=null)
               {
               InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
-              }            
+              }
             }
           }
         else
@@ -156,6 +150,5 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
     }
   super.onWorkFinished(npc, point);
   }
-
 
 }

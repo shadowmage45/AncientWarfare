@@ -1,12 +1,12 @@
 TODO before first alpha release:
 
 GENERAL
-* change inventoryTools to manipulate containers as well
 * partially destroyable blocks ? (hold destruction status as meta-data?)
 * move upgrades/ammo/armor over to self-registering class with an underlying array instead of the map they currently use        
-* grenades
-* land-mines
+* grenades ?
+* land-mines ?
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
+* add logs to block-data manager (for rotation values...currently unmapped)
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
@@ -14,20 +14,22 @@ VEHICLES
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
 * create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
-* inter-soldier comms (more commanders yelling orders to soldiers)
-* vehicle riders need some work (turning)
+* inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)
+* vehicle riders need some work (turning the vehicle base towards targets)
 
 NPCS
 * create AI objectives
     Stay Near Commander
     Select Commander (constantly-run objective, e.g. does the 'run' in the 'update priority' tick?)  
-* ladder movement handling needs some attention (they get stuck moving across ladders)(related to target blockY being greater than
+* ladder movement handling needs some attention (they get stuck moving across ladders)
 * expand waypoint navigator with the following functions:
     town-hall/vault -- for npc upkeep
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
 * add objective icon rendering to npcs (toggle via Settings) -- .... NFC on this, would require server->client sync on stuff
-* clear all waypoints on dimension change
-* add loot-on-ground pickup ability to all NPCs
+* add loot-on-ground pickup ability to all NPCs -- not working, needs investigation.
+* decide on method for NPC upkeep
+* add NPC upkeep costs to INpcType/NpcTypeBase/indiv. types
+* clear target trackers on dimension change
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -36,11 +38,10 @@ GUI FRAMEWORK
 TESTING
 * test structure stuff extensively
 
-TEMPLATES
-
-SCANNER
-
-STRUCTURE BUILDING
+PATHFINDING
+* still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
+* for non-attack targets, hook in the 'teleport' system.
+* recalc of path towards moving target is still too aggressive
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -48,12 +49,17 @@ WORLD GEN STUFF
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
 
+CIVICS
+* need objective icons and rendering
+* need inventory status bar
+* need work status bar
+
 WORKSITES
 * most civics probably need chunk-loaders to prevent them from trying to access unloaded areas.
 * teleport worker to position if he can't path appropriately?      
         
 FARMS
-* needs cactus/melon/reed/mushroom types made
+* needs melon/mushroom types made
 * need rest of tree farms created
 
 MINE
@@ -127,10 +133,11 @@ CRAFTING
  
 TEAM CONTROL GUI
  
-PATHFINDING
-* still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
-* for non-attack targets, hook in the 'teleport' system.
-* recalc of path towards moving target is still too aggressive
+TEMPLATES
+
+SCANNER
+
+STRUCTURE BUILDING
 
 TWEAKS/OPTIMIZATION
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
@@ -151,4 +158,6 @@ TWEAKS/OPTIMIZATION
 /********** 05-01-13 **********/
 * npc depository must be able to be a chest-cart, or mine-cart with chest (or other entity with IInventory?)
         dynamically scan area.. worldServer has a getTEsInInBox method, also check chest-carts/mine-carts
-
+* remove inner-points from tree/mine, replace with global inner-work-point tracking
+* add player-target broadcasting to npcs
+* add on-dimension change code to npcs to clear waypoints on transport

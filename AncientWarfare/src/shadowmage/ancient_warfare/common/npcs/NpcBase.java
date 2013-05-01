@@ -22,6 +22,8 @@ package shadowmage.ancient_warfare.common.npcs;
 
 import java.util.List;
 
+import javax.management.remote.TargetedNotification;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -31,6 +33,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -76,6 +79,8 @@ public int rank = 0;
  * updated EVERY TICK from NpcBase.onUpdate()
  */
 public int actionTick = 0;
+
+protected int aiTick = 0;
 
 public int villageUpdateTick = 0;
 
@@ -127,35 +132,20 @@ public NpcBase(World par1World)
   this.experienceValue = 10;
   }
 
-public void handleBatonCommand(NpcCommand cmd, int x, int y, int z, int side)
+@Override
+public void travelToDimension(int par1)
   {
-  switch(cmd)
-  {
-  case HOME:
-  wayNav.setHomePoint(new WayPoint(x,y,z, TargetType.SHELTER));
-  break;
-  case WORK:
-  wayNav.setWorkSite(new WayPoint(x,y,z, TargetType.WORK));
-  break;
-  case PATROL:
-  wayNav.addPatrolPoint(new WayPoint(x,y,z, TargetType.PATROL));
-  break;
-  case DEPOSIT:
-  wayNav.setDepositSite(new WayPoint(x,y,z,side,TargetType.DELIVER));
-  break;
-  case CLEAR_HOME:
-  wayNav.clearHomePoint();
-  break;
-  case CLEAR_WORK:
-  wayNav.clearWorkSite();
-  break;
-  case CLEAR_PATROL:
-  wayNav.clearPatrolPoints();
-  break;
-  case CLEAR_DEPOSIT:
-  wayNav.clearDepositSite();
-  break;
+  wayNav.handleDimensionChange(par1);
+  super.travelToDimension(par1);
   }
+
+/**
+ * called from player-attack event, and commander broadcast
+ * @param ent
+ */
+public void handleBroadcastAttackTarget(Entity ent)
+  {
+  targetHelper.handleBroadcastTarget(ent, TargetType.ATTACK);
   }
 
 public void handleBatonCommand(NpcCommand cmd, WayPoint p)
@@ -163,16 +153,16 @@ public void handleBatonCommand(NpcCommand cmd, WayPoint p)
   switch(cmd)
   {
   case HOME:
-//  wayNav.setHomePoint(x, y, z);
+  wayNav.setHomePoint(p);
   break;
   case WORK:
-//  wayNav.setWorkSite(x, y, z);
+  wayNav.setWorkSite(p);
   break;
   case PATROL:
-//  wayNav.addPatrolPoint(x, y, z);
+  wayNav.addPatrolPoint(p);
   break;
   case DEPOSIT:
-//  wayNav.setDepositSite(x, y, z, side);
+  wayNav.setDepositSite(p);
   break;
   case CLEAR_HOME:
   wayNav.clearHomePoint();
@@ -191,7 +181,6 @@ public void handleBatonCommand(NpcCommand cmd, WayPoint p)
 
 public void setNpcType(INpcType type, int level)
   {
-  //  Config.logDebug("npc type being assigned: "+type.getDisplayName());  
   this.npcType = type;
   this.rank = level;
   this.aiManager.addObjectives(type.getAI(this, level));
@@ -202,17 +191,17 @@ public void setNpcType(INpcType type, int level)
 
 public boolean isAggroTowards(NpcBase npc)
   {
-  return this.npcType.isCombatUnit() && npc.npcType.isCombatUnit() && isAggroTowards(npc.teamNum);
+  return npc.npcType.isCombatUnit() && isAggroTowards(npc.teamNum);
   }
 
 public boolean isAggroTowards(EntityPlayer player)
   {
-  return this.npcType.isCombatUnit() && isAggroTowards(TeamTracker.instance().getTeamForPlayer(player));
+  return isAggroTowards(TeamTracker.instance().getTeamForPlayer(player));
   }
 
 public boolean isAggroTowards(int otherTeam)
   {
-  return TeamTracker.instance().isHostileTowards(worldObj, teamNum, otherTeam);
+  return this.npcType.isCombatUnit() && TeamTracker.instance().isHostileTowards(worldObj, teamNum, otherTeam);
   }
 
 public ITargetEntry getTarget()
@@ -265,11 +254,10 @@ public float getDistanceFromTarget(ITargetEntry target)
   return 0;
   }
 
-int aiTick = 0;
 @Override
 protected void updateAITick() 
   {
-  if(aiTick<Config.npcAITicks)
+  if(aiTick < Config.npcAITicks)
     {
     aiTick++;
     return;
@@ -290,7 +278,6 @@ public boolean interact(EntityPlayer player)
     if(player.isSneaking())
       {
       GUIHandler.instance().openGUI(GUIHandler.NPC_BASE, player, worldObj, entityId, 0, 0);
-      //opengui
       }
     else
       {
@@ -427,24 +414,7 @@ public void onUpdate()
   if(this.lootCheckTicks<=0)
     {
     this.lootCheckTicks = Config.npcAITicks;
-    List<EntityItem> worldItems = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(posX-2, posY-1, posZ-2, posY+1, posX+2, posZ+2));
-    if(worldItems!=null)
-      {
-      ItemStack item;
-      for(EntityItem ent : worldItems)
-        {
-        item = ent.getEntityItem();
-        item = inventory.tryMergeItem(item);
-        if(item!=null)
-          {
-          ent.setEntityItemStack(item);
-          }
-        else
-          {
-          ent.setDead();
-          }
-        }
-      }
+    this.handleLootPickup();
     }
   else
     {
@@ -455,7 +425,25 @@ public void onUpdate()
 
 public void handleLootPickup()
   {
-  
+  List<EntityItem> worldItems = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(posX-2, posY-1, posZ-2, posY+1, posX+2, posZ+2));
+  if(worldItems!=null)
+    {
+    ItemStack item;
+    for(EntityItem ent : worldItems)
+      {
+      item = ent.getEntityItem();
+      if(item==null){continue;}
+      item = inventory.tryMergeItem(item);
+      if(item!=null)
+        {
+        ent.setEntityItemStack(item);
+        }
+      else
+        {
+        ent.setDead();
+        }
+      }
+    }
   }
 
 public void handlePacketUpdate(NBTTagCompound tag)

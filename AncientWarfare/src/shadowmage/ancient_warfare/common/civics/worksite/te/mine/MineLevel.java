@@ -43,7 +43,6 @@ protected int shaftZ;
 public int levelSize = 4;//the height of the level in blocks
 
 protected LinkedList<MinePoint> workList = new LinkedList<MinePoint>();
-protected MinePoint nextPoint = null;
 
 /**
  * position is minX, minY, minZ of the structure boundinb box(world coords)
@@ -63,7 +62,6 @@ public MineLevel(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize)
   this.minX = xPos;
   this.minY = yPos;
   this.minZ = zPos;
-//  Config.logDebug(String.format("creating mineLevel pos: %d,%d,%d  size:  %d, %d, %d", minX, minY, minZ, xSize, ySize, zSize));
   }
 
 public boolean hasWork()
@@ -107,15 +105,6 @@ public void initializeLevel(World world)
   scanLevel(world);  
   long t2 = System.nanoTime();
   Config.logDebug("mine level init time nanos: "+(t2-t1)); 
-  //find center of work area
-  //construct center shaft set to CLEAR_THEN_LADDER
-  //construct main E/W tunnels set to CLEAR_TUNNEL
-  //construct N/S branches set to CLEAR_BRANCH
-  //scan the entire structure for resources or empty spots
-  //  if resource next to an existing tunnel/shaft/brach position
-  //    set to CLEAR_THEN_FILL
-  //  if empty spot next to existing tunnel/shaft/branch
-  //    set to FILL
   }
 
 protected abstract void scanLevel(World world);
