@@ -38,7 +38,7 @@ Team Control GUI
         ranks on other members of lower ranks than your own.         
 
 Vehicles:
-    They are all in, and should be completely functional.  Many need balancing.
+    They are all in, and should be mostly functional.  Many need balancing.
     Mount by right-clicking.  Dismount by right-clicking.
     Open the inventory/control GUI by shift-right clicking.
         Inventory GUI has slots for storage, ammo, upgrades, and armor.
@@ -52,6 +52,8 @@ Vehicles:
     Advanced overlay to show advanced stats AND render a predicted trajectory line (prediction should be 100% accurate before
         the application of accuracy calculations)   
     Overlays are toggle-able through the Options GUI (default 'F7')     
+    New upgrade system -- THEY STACK...keep this in mind if the 'bonuses' seem small -- you can now put the same type of upgrade in multiple slots to recieve (most of the time) LINEAR bonuses
+    Battering ram is...non-functional currently.  (you can see the rendering bounds for what it _will_ hit, but it does neither entity nor block damage at the moment)
 
 Npcs:
     Basic types partially implemented.  Soldier, archer, siege-engine driver, farmer, miner, lumberjack.
@@ -180,6 +182,7 @@ Structures/scanning:
 * test misc. NPC scanning -- item frames, paintings, mine-carts of all types, and passive mobs (sheep/cow/chicken/pig/dog/cat)            
 * test civic scanning -- it should maintain type and bounds information for the civics scanned (it does not query internal state, such as for a Civic Builder block that is halfway done)
 * test advanced template rules -- swap rules, biome exclusion, special-rule-datas (chests, preserve blocks)
+* check out the advancedVillageLibrary template that was included, it shows use of swap-rules.
 
 Structure/building:
 * test that the overrides work as they are supposed to.

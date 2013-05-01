@@ -46,7 +46,7 @@ public static CreativeTabAW npcTab = new CreativeTabAW("Ancient Warfare Npcs")
   @Override
   public ItemStack getIconItemStack()
     {
-    return new ItemStack(ItemLoader.npcSpawner);
+    return new ItemStack(ItemLoader.npcSpawner,1,2);
     }
   };
 public static CreativeTabAW ammoTab = new CreativeTabAW("Ancient Warfare Ammunitions")
@@ -76,7 +76,7 @@ private CreativeTabAW(String label)
 @Override
 public ItemStack getIconItemStack()
   {
-  return new ItemStack(Item.stick,1);
+  return new ItemStack(ItemLoader.civicPlacer);
   }
 
 /**

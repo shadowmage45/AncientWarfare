@@ -22,14 +22,18 @@ package shadowmage.ancient_warfare.common.item;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.registry.CivicRegistry;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureBuildSettings;
@@ -40,7 +44,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCivicBuilder extends ItemBuilderInstant
 {
-
+private Icon icon;
 /**
  * @param itemID
  */
@@ -48,6 +52,18 @@ public ItemCivicBuilder(int itemID)
   {
   super(itemID);
   this.setHasSubtypes(true);
+  }
+
+@Override
+public Icon getIconFromDamage(int par1)
+  {
+  return icon;
+  }
+
+@Override
+public void registerIcons(IconRegister par1IconRegister)
+  {
+  icon = par1IconRegister.registerIcon("ancientwarfare:castle");
   }
 
 /**

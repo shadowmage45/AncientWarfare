@@ -56,6 +56,8 @@ public VehicleTypeChestCart(int typeNum)
   this.upgradeBaySize = 6;
   this.armorBaySize = 6;
   this.storageBaySize = 54*4;
+  this.displayName = "Chest Cart" ;
+  this.displayTooltip = "Transport your loot";
   }
 
 @Override

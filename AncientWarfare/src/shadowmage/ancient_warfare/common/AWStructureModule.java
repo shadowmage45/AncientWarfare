@@ -181,6 +181,7 @@ private void setDefaultStructureNames()
   this.defaultExportStructures.add("villageSmith.aws");
   this.defaultExportStructures.add("villageTorch.aws");
   this.defaultExportStructures.add("villageWell.aws");
+  this.defaultExportStructures.add("advancedVillageLibrary.aws");
   }
 
 private void setValidScannableEntities()

@@ -111,7 +111,7 @@ private void loadDebugItems()
     return;
     }  
   blockScanner = new ItemBlockScanner(Config.getItemID("debug.blockScanner", 9000));
-  this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Sneak-Right-Click to get BlockID/Meta from clicked-on block").setIconTexture("ancientwarfare:testIcon1", 0);
+  this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Display id/meta from block clicked.").setIconTexture("ancientwarfare:testIcon1", 0);
   }
 
 public Description registerItemSubtyped(AWItemBase item)

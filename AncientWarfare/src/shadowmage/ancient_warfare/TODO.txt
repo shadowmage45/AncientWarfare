@@ -9,7 +9,6 @@ GENERAL
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 
 PRE-TEST RELEASE
-* siege-engineer is not dismounting properly
 * add npc tab default icon
 
 VEHICLES    
@@ -33,6 +32,7 @@ NPCS
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
 * add objective icon rendering to npcs (toggle via Settings) -- .... NFC on this, would require server->client sync on stuff
 * clear all waypoints on dimension change
+* add loot-on-ground pickup ability to all NPCs
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -184,17 +184,17 @@ TWEAKS/OPTIMIZATION
 * remove old pathfinder code (archive)
 * add mass_set_depository to command batons (and mass-clear)
 * add cocoa-bean/block inventory item(dye, meta??)
-* shift-clicking in temp inventories (soldier/civics)
+* shift-clicking in temp inventories (soldier/civics)-X
 * napalm ammo....
-* add vehicle on-hit color rendering (dmg effects)
-* some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)
-* soldiers need to set damage done by rank  
-* add loot-on-ground pickup ability to all NPCs
-* add deposit ability to all NPCs
+* add vehicle on-hit color rendering (dmg effects)-X
+* some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)-X
+* soldiers need to set damage done by rank-X
+* add deposit ability to all NPCs-X
 * need to set/adjust work time/'actionTicks' from npcType    
-* add tooltips to GUIs
-* add experience value to NPCs
-* don't spawn stuff in X blocks of spawn (config setting)
+* add tooltips to GUIs-x
+* add experience value to NPCs-x
+* don't spawn stuff in X blocks of spawn (config setting)-X
 * double check all npc ai is present, as far as is-done
-* builder direct has no scan BB .. --- should be fixed....
+* builder direct has no scan BB .. --- should be fixed....-x
+* siege-engineer is not dismounting properly-x
 
