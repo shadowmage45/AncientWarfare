@@ -52,36 +52,13 @@ public void onTick()
   ITargetEntry target = npc.getTarget();
   if(npc.isRidingVehicle())
     {
-    if(this.checkIfTargetDead(target))
-      {
-      npc.targetHelper.removeTarget(target);
-      npc.setTargetAW(null);
-      } 
-    else
-      {
-      attackTargetMounted(target);
-      if(this.checkIfTargetDead(target))
-        {
-        npc.targetHelper.removeTarget(target);
-        npc.setTargetAW(null);
-        } 
-      }
+    attackTargetMounted(target);      
     }
   else
     {
-    if(this.checkIfTargetDead(target))
+     if(npc.actionTick<=0)
       {
-      npc.targetHelper.removeTarget(target);
-      npc.setTargetAW(null);
-      } 
-    else if(npc.actionTick<=0)
-      {
-      this.attackTarget(target); 
-      if(this.checkIfTargetDead(target))
-        {
-        npc.targetHelper.removeTarget(target);
-        npc.setTargetAW(null);
-        } 
+      this.attackTarget(target);       
       }   
     }    
   }
@@ -124,19 +101,22 @@ protected void attackTargetMounted(ITargetEntry target)
   float yaw = Trig.getYawTowardsTarget(vehicle.posX, vehicle.posZ, target.posX(), target.posZ(), vehicle.rotationYaw);  
   byte s = 0;
   boolean turning = false;
-  if(!Trig.isAngleBetween(vehicle.rotationYaw+yaw, vehicle.localTurretRotationHome-vehicle.currentTurretRotationMax-2.f, vehicle.localTurretRotationHome+vehicle.currentTurretRotationMax+2.f))//expand the bounds a bit
-    {      
-    if(yaw<0)
-      {
-      s = 1;//left
+  if(vehicle.vehicleType.getBaseTurretRotationAmount()<180 || Math.abs(yaw)>120)//if turret cannot rotate fully around, or if it can but yaw diff is great, turn towards target
+    {
+    if(!Trig.isAngleBetween(vehicle.rotationYaw+yaw, vehicle.localTurretRotationHome-vehicle.currentTurretRotationMax-2.f, vehicle.localTurretRotationHome+vehicle.currentTurretRotationMax+2.f))//expand the bounds a bit
+      {      
+      if(yaw<0)
+        {
+        s = 1;//left
+        }
+      else
+        {
+        s = -1;//right
+        }
+      turning = true;
+//      Config.logDebug("yaw diff to target: "+yaw);
       }
-    else
-      {
-      s = -1;//right
-      }
-    turning = true;
-//    Config.logDebug("yaw diff to target: "+yaw);
-    }
+    } 
   vehicle.moveHelper.handleMotionInput((byte) 0, s);
   vehicle.firingHelper.handleSoldierTargetInput(target.posX(), target.posY(), target.posZ());
   if(turning)
@@ -156,41 +136,6 @@ protected void attackTargetMounted(ITargetEntry target)
     {
     this.npc.actionTick = 1;
     } 
-  }
-
-protected boolean checkIfTargetDead(ITargetEntry target)
-  {
-  if(target==null)
-    {
-    return true;
-    }
-  if(target.getEntity()!=null)
-    {
-    if(target.getEntity().isDead)
-      {
-//      Config.logDebug("target is dead!!");
-      return true;
-      }
-    if(target.getEntity() instanceof EntityLiving)
-      {
-      EntityLiving liv = (EntityLiving)target.getEntity();
-      if(liv.getHealth()<=0)
-        {
-//        Config.logDebug("target had no health, counting as dead!!");
-        return true;
-        }
-      }
-//    Config.logDebug("target not dead!!");
-    return false;
-    }
-  else if(target.getEntity()==null)
-    {
-    if(npc.worldObj.getBlockId((int)target.posX(), (int)target.posY(),(int)target.posZ())==0)
-      {
-      return true;
-      }
-    } 
-  return false;
   }
 
 @Override

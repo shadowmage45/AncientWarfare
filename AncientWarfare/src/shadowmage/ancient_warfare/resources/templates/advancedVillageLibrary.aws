@@ -155,10 +155,12 @@ blocks=67-3
 
 ####SWAP RULESS####
 
-#this swap rule swaps cobblestone->sandstone if spawned in a desert (not desert edge/etc)
+#this swap rule swaps cobblestone->sandstone if spawned in a desert (not desert edge/etc--need separate entries)
+#if in plains, it swaps cobblestone->stone brick
 swap:
 number=0
 biome=desert,4-0,24-0
+biome=plains,4-0,98-0
 :endswap
 
 ####VEHICLE RULES####

@@ -334,6 +334,15 @@ public void onUpdate()
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
     }  
+  if(this.getTarget()!=null && this.getTarget().isEntityEntry())
+    {
+    ITargetEntry target = this.getTarget();
+    Entity ent = target.getEntity();
+    if(ent==null || ent.isDead)
+      {
+      this.setTargetAW(null);
+      }
+    }
   if(actionTick>0)
     {
     actionTick--;
