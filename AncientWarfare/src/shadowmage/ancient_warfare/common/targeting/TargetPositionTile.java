@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.targeting;
 import java.lang.ref.WeakReference;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class TargetPositionTile extends TargetPosition
 {
@@ -38,7 +39,7 @@ public TargetPositionTile(TileEntity ent, TargetType type)
   }
 
 @Override
-public TileEntity getTileEntity()
+public TileEntity getTileEntity(World world)
   {
   return this.target.get();
   }

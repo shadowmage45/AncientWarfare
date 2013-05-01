@@ -24,6 +24,7 @@ import java.lang.ref.WeakReference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
 public class TargetPositionEntity extends TargetPosition
 {
@@ -36,7 +37,7 @@ public TargetPositionEntity(Entity ent, TargetType type)
   }
 
 @Override
-public Entity getEntity()
+public Entity getEntity(World world)
   {
   return this.target.get();
   }

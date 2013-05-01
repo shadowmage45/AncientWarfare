@@ -30,7 +30,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -62,7 +64,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,   
     npc.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
     if(npc instanceof NpcBase)
       {
-      ((NpcBase)npc).wayNav.setHomePoint(hit.x, hit.y, hit.z);
+      ((NpcBase)npc).wayNav.setHomePoint(new WayPoint(hit.x, hit.y, hit.z, TargetType.SHELTER));
       }    
     npc.prevRotationYaw = npc.rotationYaw = player.rotationYaw;
     world.spawnEntityInWorld(npc);

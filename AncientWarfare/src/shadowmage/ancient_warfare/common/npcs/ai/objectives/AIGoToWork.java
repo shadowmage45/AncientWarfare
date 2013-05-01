@@ -78,13 +78,13 @@ public void updatePriority()
       ITargetEntry entry = npc.targetHelper.getHighestAggroTarget(TargetType.WORK);
       if(entry.isTileEntry())
         {
-        if(entry.getTileEntity() instanceof TECivic)
+        if(entry.getTileEntity(npc.worldObj) instanceof TECivic)
           {
-          TECivic tec = (TECivic) entry.getTileEntity();
+          TECivic tec = (TECivic) entry.getTileEntity(npc.worldObj);
           if(tec.hasWork() && tec.canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(tec.getCivic().getWorkType()))
             {
 //            Config.logDebug("assigning te from aggro list!!");
-            npc.wayNav.setWorkSite(entry.floorX(), entry.floorY(), entry.floorZ());
+            npc.wayNav.setWorkSite(new WayPoint(entry.floorX(), entry.floorY(), entry.floorZ(), entry.getTargetType()));
             workSite = tec;
             work = true;
             break;
@@ -122,7 +122,7 @@ public void updatePriority()
  */
 protected boolean isWorkSiteWorkable()
   {
-  WayPoint p = npc.wayNav.getWorkSite();
+  ITargetEntry p = npc.wayNav.getWorkSite();
   WorkPoint wp = npc.wayNav.getWorkPoint();
   if(workSite!=null && p!=null)//make sure current work reference lines up with wayNav work-site
     {

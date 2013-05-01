@@ -22,9 +22,10 @@ package shadowmage.ancient_warfare.common.interfaces;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public interface ITargetEntry
+public interface ITargetEntry extends INBTTaggable
 {
 
 boolean isEntityEntry();
@@ -36,8 +37,8 @@ float posX();
 float posY();
 float posZ();
 
-Entity getEntity();
-TileEntity getTileEntity();
+Entity getEntity(World world);
+TileEntity getTileEntity(World world);
 TargetType getTargetType();
 
 }

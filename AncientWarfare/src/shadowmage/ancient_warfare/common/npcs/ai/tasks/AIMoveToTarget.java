@@ -50,7 +50,7 @@ public void onTick()
   float bX = npc.getTarget().posX();
   float bY = npc.getTarget().posY();
   float bZ = npc.getTarget().posZ();
-  if(npc.getTarget().getEntity()!=null)
+  if(npc.getTarget().getEntity(npc.worldObj)!=null)
     {
     bY = PathUtils.findClosestYTo(npc.getWorldAccess(), npc.getTarget().floorX(), npc.getTarget().floorY(), npc.getTarget().floorZ());
     }

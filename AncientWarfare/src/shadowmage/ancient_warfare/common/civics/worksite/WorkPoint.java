@@ -24,8 +24,10 @@ import java.lang.ref.WeakReference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -34,11 +36,12 @@ public class WorkPoint extends WayPoint
 {
 
 protected Entity ent;//target entity
-private WeakReference<NpcBase> worker = new WeakReference<NpcBase>(null);
 protected int totalHarvestHits = 1;
 protected int currentHarvestHits = 0;
-protected boolean singleUse = false;
 public TECivic owner;
+
+protected ITargetEntry workPoint = null;
+
 
 public WorkPoint(int x, int y, int z, TargetType type, TECivic owner)
   {
@@ -77,11 +80,6 @@ public boolean hasWork(World world)
   return true;
   }
 
-public boolean canStart()
-  {
-  return this.worker==null;
-  }
-
 public void incrementHarvestHits()
   {
   this.currentHarvestHits++;
@@ -110,16 +108,7 @@ public boolean shouldFinish()
   }
 
 /**
- * used for single-use stuff, such as clearing/placing blocks (building/mining mostly)
- * @return
- */
-public boolean isSingleUse()
-  {
-  return this.singleUse;
-  }
-
-/**
- * to be defined by subtypes, basic implimenataion only checks entity
+ * to be defined by subtypes, basic implemenataion only checks entity
  * @param world
  * @return
  */
@@ -128,31 +117,8 @@ public boolean isValidEntry(World world)
   if(this.isEntityEntry())
     {
     return this.ent!=null;
-    }
+    }  
   return true;
-  }
-
-/**
- * clears worker * 
- */
-public void setFinished()
-  {
-  this.setWorked(null);
-  }
-
-public void setWorked(NpcBase npc)
-  {
-  this.worker = new WeakReference<NpcBase>(npc);
-  }
-
-public boolean hasWorker()
-  {
-  return this.worker.get()!=null;
-  }
-
-public NpcBase getWorker()
-  {
-  return this.worker.get();
   }
 
 }

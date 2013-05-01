@@ -259,9 +259,8 @@ public WorkPoint getWorkPoint(NpcBase npc)
   while(it.hasNext())
     {
     p = it.next();
-    if(!p.hasWorker() && p.hasWork(worldObj))
+    if(p.hasWork(worldObj))
       {
-      p.setWorked(npc);
       p.resetHarvestTicks();
       return p;
       }    
@@ -277,8 +276,7 @@ public void removeWorker(NpcBase npc)
 public void onWorkFinished(NpcBase npc, WorkPoint point)
   {
   if(point!=null)
-    {    
-    point.setFinished();
+    {       
     this.workPoints.remove(point);
     }
   }
@@ -295,27 +293,7 @@ public void onWorkNoPath(NpcBase npc, WorkPoint point)
 
 public void updateWorkPoints()
   {
-  /**
-   * check through current active queue, remove any entries that are invalid
-   */
-  Iterator<WorkPoint> it = this.workPoints.iterator();
-  WorkPoint p;
-  while(it.hasNext())
-    {
-    p = it.next();
-    if(!p.isValidEntry(worldObj))
-      {
-      it.remove();
-      continue;
-      }
-    if(p.hasWorker())
-      {
-      if(p.getWorker().wayNav.getWorkPoint()!=p)
-        {
-        p.setWorked(null);
-        }
-      }
-    }
+ 
   }
 
 protected void validateWorkers()
@@ -357,7 +335,7 @@ protected void updateHasWork()
   hasWork = false;
   for(WorkPoint p : this.workPoints)
     {
-    if(p.getWorker()==null && p.hasWork(worldObj))
+    if(p.hasWork(worldObj))
       {
       hasWork = true;
       break;

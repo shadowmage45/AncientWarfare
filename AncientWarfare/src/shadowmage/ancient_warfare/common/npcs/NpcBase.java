@@ -44,6 +44,7 @@ import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.inventory.NpcInventory;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointNavigator;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
@@ -131,16 +132,47 @@ public void handleBatonCommand(NpcCommand cmd, int x, int y, int z, int side)
   switch(cmd)
   {
   case HOME:
-  wayNav.setHomePoint(x, y, z);
+  wayNav.setHomePoint(new WayPoint(x,y,z, TargetType.SHELTER));
   break;
   case WORK:
-  wayNav.setWorkSite(x, y, z);
+  wayNav.setWorkSite(new WayPoint(x,y,z, TargetType.WORK));
   break;
   case PATROL:
-  wayNav.addPatrolPoint(x, y, z);
+  wayNav.addPatrolPoint(new WayPoint(x,y,z, TargetType.PATROL));
   break;
   case DEPOSIT:
-  wayNav.setDepositSite(x, y, z, side);
+  wayNav.setDepositSite(new WayPoint(x,y,z,side,TargetType.DELIVER));
+  break;
+  case CLEAR_HOME:
+  wayNav.clearHomePoint();
+  break;
+  case CLEAR_WORK:
+  wayNav.clearWorkSite();
+  break;
+  case CLEAR_PATROL:
+  wayNav.clearPatrolPoints();
+  break;
+  case CLEAR_DEPOSIT:
+  wayNav.clearDepositSite();
+  break;
+  }
+  }
+
+public void handleBatonCommand(NpcCommand cmd, WayPoint p)
+  {
+  switch(cmd)
+  {
+  case HOME:
+//  wayNav.setHomePoint(x, y, z);
+  break;
+  case WORK:
+//  wayNav.setWorkSite(x, y, z);
+  break;
+  case PATROL:
+//  wayNav.addPatrolPoint(x, y, z);
+  break;
+  case DEPOSIT:
+//  wayNav.setDepositSite(x, y, z, side);
   break;
   case CLEAR_HOME:
   wayNav.clearHomePoint();
@@ -263,12 +295,12 @@ public boolean interact(EntityPlayer player)
     else
       {
       ITargetEntry target = this.wayNav.getPlayerTarget();
-      if(target==null || target.getEntity()!=player)
+      if(target==null || target.getEntity(worldObj)!=player)
         {
         player.addChatMessage("Commanding Npc to follow!");
         this.wayNav.setPlayerTarget(TargetPosition.getNewTarget(player, TargetType.FOLLOW));
         }
-      else if(target!=null && target.getEntity()==player)
+      else if(target!=null && target.getEntity(worldObj)==player)
         {
         player.addChatMessage("Commanding Npc to stop following!");
         this.wayNav.setPlayerTarget(null);
@@ -337,7 +369,7 @@ public void onUpdate()
   if(this.getTarget()!=null && this.getTarget().isEntityEntry())
     {
     ITargetEntry target = this.getTarget();
-    Entity ent = target.getEntity();
+    Entity ent = target.getEntity(worldObj);
     if(ent==null || ent.isDead)
       {
       this.setTargetAW(null);
@@ -355,7 +387,7 @@ public void onUpdate()
   ITargetEntry target = this.wayNav.getTarget();
   if(target!=null)
     {
-    if(target.getEntity()!=null)
+    if(target.isEntityEntry() && target.getEntity(worldObj)!=null)
       {
       this.getLookHelper().setLookPosition(target.posX(), target.posY(), target.posZ(), 10.0F, (float)this.getVerticalFaceSpeed());
       }

@@ -20,14 +20,39 @@
  */
 package shadowmage.ancient_warfare.common.npcs.waypoints;
 
+import java.util.UUID;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.targeting.TargetPosition;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.EntityTools;
 
 public class WayPoint extends TargetPosition
 {
+
+protected TileEntity teTarget = null;
+protected Entity entTarget = null;
+UUID entityID;
+protected boolean isTile = false;
+protected boolean isEnt = false;
+
+public WayPoint(WayPoint p)
+  {
+  super(p.getTargetType());
+  this.x = p.x;
+  this.y = p.y;
+  this.z = p.z;
+  this.side = p.side;
+  this.teTarget = p.teTarget;
+  this.entTarget = p.entTarget;
+  this.entityID = p.entityID;
+  this.isTile = p.isTile;
+  this.isEnt = p.isEnt;
+  }
 
 protected WayPoint(TargetType type)
   {
@@ -49,37 +74,149 @@ public WayPoint(int x, int y, int z, int side, TargetType type)
   super(x,y,z, side, type);
   }
 
-@Override
-public int hashCode()
+public WayPoint(Entity ent, TargetType type)
+  { 
+  super(type);
+  this.isEnt = true;
+  this.entTarget = ent;
+  this.entityID = ent.getPersistentID();
+  }
+
+public WayPoint(TileEntity te, int side, TargetType type)
   {
-  final int prime = 31;
-  int result = 1;
-  result = prime * result + ((type == null) ? 0 : type.hashCode());
-  result = prime * result + x;
-  result = prime * result + y;
-  result = prime * result + z;
-  return result;
+  super(type);
+  this.isTile = true;
+  this.side = side;
+  this.teTarget = te;
+  this.x = te.xCoord;
+  this.y = te.yCoord;
+  this.z = te.zCoord;
   }
 
 @Override
-public boolean equals(Object obj)
+public TileEntity getTileEntity(World world)
   {
-  if (this == obj)
-    return true;
-  if (obj == null)
-    return false;
-  if (!(obj instanceof WayPoint))
-    return false;
-  WayPoint other = (WayPoint) obj;
-  if (type != other.type)
-    return false;
-  if (x != other.x)
-    return false;
-  if (y != other.y)
-    return false;
-  if (z != other.z)
-    return false;
-  return true;
+  if(this.teTarget==null)
+    {
+    this.teTarget = world.getBlockTileEntity(x, y, z);
+    }
+  return this.teTarget;
   }
 
+@Override
+public boolean isEntityEntry()
+  {
+  return this.isEnt;
+  }
+
+@Override
+public boolean isTileEntry()
+  {
+  return isTile;
+  }
+
+@Override
+public int floorX()
+  {
+  if(isEnt && entTarget!=null)
+    {
+    return MathHelper.floor_double(entTarget.posX);
+    }
+  return super.floorX();
+  }
+
+@Override
+public int floorY()
+  {
+  if(isEnt && entTarget!=null)
+    {
+    return MathHelper.floor_double(entTarget.posY);
+    }
+  return super.floorY();
+  }
+
+@Override
+public int floorZ()
+  {
+  if(isEnt && entTarget!=null)
+    {
+    return MathHelper.floor_double(entTarget.posZ);
+    }
+  return super.floorZ();
+  }
+
+@Override
+public float posX()
+  {
+  if(isEnt && entTarget!=null)
+    {
+    return (float) entTarget.posX;
+    }
+  return super.posX();
+  }
+
+@Override
+public float posY()
+  {
+  if(isEnt && entTarget!=null)
+    {
+    return (float) entTarget.posY;
+    }
+  return super.posY();
+  }
+
+@Override
+public float posZ()
+  {
+  if(isEnt && entTarget!=null)
+    {
+    return (float) entTarget.posZ;
+    }
+  return super.posZ();
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  NBTTagCompound tag = super.getNBTTag();
+  if(isEnt && entTarget!=null)
+    {
+    tag.setLong("idmsb", entTarget.getPersistentID().getMostSignificantBits());
+    tag.setLong("idlsb", entTarget.getPersistentID().getLeastSignificantBits());
+    }
+  else if(entityID!=null)
+    {
+    tag.setLong("idmsb", entityID.getMostSignificantBits());
+    tag.setLong("idlsb", entityID.getLeastSignificantBits());
+    }
+  return tag;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {  
+  super.readFromNBT(tag);
+  if(tag.hasKey("idmsb") && tag.hasKey("idlsb"))
+    {
+    entityID = new UUID(tag.getLong("idmsb"), tag.getLong("idlsb"));
+    }  
+  }
+
+@Override
+public Entity getEntity(World world)
+  {
+  if(isEnt)
+    {
+    if(this.entTarget!=null)
+      {
+      return this.entTarget;
+      }
+    else if(this.entityID!=null)
+      {
+      this.entTarget = EntityTools.getEntityByUUID(world, entityID.getMostSignificantBits(), entityID.getLeastSignificantBits());
+      return this.entTarget;
+      }
+    }
+  return null;
+  }
 }

@@ -88,9 +88,9 @@ public void setPlayerTarget(ITargetEntry target)
   }
 
 /************************************************PATROL POINTS*************************************************/
-public void addPatrolPoint(int x, int y, int z)
+public void addPatrolPoint(WayPoint p)
   {
-  this.patrolPoints.add(new WayPoint(x,y,z, TargetType.PATROL));
+  this.patrolPoints.add(p);
   }
 
 public WayPoint getNextPatrolPoint()
@@ -119,21 +119,14 @@ public void clearPatrolPoints()
   }
 
 /************************************************WORK SITE*************************************************/
-public WayPoint getWorkSite()
+public ITargetEntry getWorkSite()
   {
   return work;
   }
 
-public void setWorkSite(int x, int y, int z)
+public void setWorkSite(WayPoint p)
   {
-  if(owner.getEntity().worldObj.getBlockTileEntity(x, y, z) instanceof TECivic)
-    {
-    this.work = new WayPoint(x,y,z,TargetType.WORK);
-    }
-  else
-    {
-    this.work = null;    
-    }
+  this.work = p;  
   }
 
 public void clearWorkSite()
@@ -143,21 +136,14 @@ public void clearWorkSite()
   }
 
 /************************************************DEPOSIT SITE*************************************************/
+public void setDepositSite(WayPoint p)
+  {
+  this.deposit = p;
+  }
+
 public WayPoint getDepositSite()
   {
   return deposit;
-  }
-
-public void setDepositSite(int x, int y, int z, int side)
-  {
-  if(owner.getEntity().worldObj.getBlockTileEntity(x, y, z) instanceof IInventory)
-    {
-    this.deposit = new WayPoint(x,y,z,side,TargetType.WORK);
-    }
-  else
-    {
-    this.deposit = null;    
-    }
   }
 
 public void clearDepositSite()
@@ -171,16 +157,9 @@ public WayPoint getUpkeepSite()
   return upkeep;
   }
 
-public void setUpkeepSite(int x, int y, int z)
+public void setUpkeepSite(WayPoint p)
   {
-  if(owner.getEntity().worldObj.getBlockTileEntity(x, y, z) instanceof TECivic)
-    {
-    this.work = new WayPoint(x,y,z,TargetType.WORK);
-    }
-  else
-    {
-    this.work = null;    
-    }
+  this.upkeep = p;
   }
 
 public void clearUpkeepSite()
@@ -200,9 +179,9 @@ public void setWorkPoint(WorkPoint p)
   }
 
 /************************************************HOME POINT*************************************************/
-public void setHomePoint(int x, int y, int z)
+public void setHomePoint(WayPoint p)
   {
-  this.homePoint = new WayPoint(x,y,z, TargetType.SHELTER);
+  this.homePoint = p;
   }
 
 public void clearHomePoint()

@@ -73,7 +73,7 @@ protected void attackTarget(ITargetEntry target)
     }
   else
     {    
-    Entity ent = target.getEntity();
+    Entity ent = target.getEntity(npc.worldObj);
 //    Config.logDebug("doing entity attack with bow target: "+ent);
     if(ent!=null)
       {
@@ -136,7 +136,7 @@ protected boolean isLineOfSightClear(ITargetEntry target)
   MovingObjectPosition hit = RayTraceUtils.tracePath(npc.worldObj, (float)npc.posX, (float)npc.posY+npc.getEyeHeight(), (float)npc.posZ, target.posX(), target.posY(), target.posZ(), 0.3f, excluded);
   if(hit!=null && hit.entityHit!=null)
     {
-    if(hit.entityHit!=target.getEntity())
+    if(hit.entityHit!=target.getEntity(npc.worldObj))
       {
       return false;
       }

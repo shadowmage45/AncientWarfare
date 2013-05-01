@@ -8,9 +8,6 @@ GENERAL
 * land-mines
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 
-PRE-TEST RELEASE
-* add npc tab default icon
-
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
 
@@ -27,8 +24,6 @@ NPCS
 * ladder movement handling needs some attention (they get stuck moving across ladders)(related to target blockY being greater than
 * expand waypoint navigator with the following functions:
     town-hall/vault -- for npc upkeep
-    depository must be able to be a chest-cart, or mine-cart with chest (or other entity with IInventory?)
-        dynamically scan area.. worldServer has a getTEsInInBox method, also check chest-carts/mine-carts
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
 * add objective icon rendering to npcs (toggle via Settings) -- .... NFC on this, would require server->client sync on stuff
 * clear all waypoints on dimension change
@@ -153,48 +148,7 @@ TWEAKS/OPTIMIZATION
 
 ********************* DONE STUFF *************************  
 
-/********** 04-26-13 **********/
-* 1.5.1 porting!!
-/********** 04-27-13 **********/
-* many more textures/icons/fixing of things from the port, probably many still unfound
-* needs adv control button to be dependent upon member rank (rank7+)
-* needs hostile-teams setting area/buttons/whatnot   
-* npc--set home point when first spawned  
-* NPC type needs to keep track of applicable work-types for that NPC
-    e.g. farm_plant/farm_harvest -- mine -- tree_plant/tree_harvest -- breed/cull -- etc... 
-* mostly fixed--work times are still inconsistent at best, need a solid way to set work time when NPC has started
-        working (simple boolean isWorking flag, toggled false when moving, examined when working?)  
-/********** 04-28-13 **********/
-* add stay near home ai to most npcs
-* add tree farm...
-* add civics to templates -- use advanced rules such as npc/etc
-        needs bounds setting/rotation crap
-* Need remove 'change team' button, replace with simple text
-/********** 04-29-13 **********/
-* add vehicle ammo-select GUI.
-* change tooltip over to a LIST of tooltips, allow items to add multiple lines.
-* much cleanup of civics
-* much cleanup of resources
-* add random tick divider to civics
-* add civic bounds rendering setting to Settings
-* add 1.5.1 blocks to block entries
-* fix old dispenser derpiness
-/********** 04-30-13 **********/
-* move vehicle over to new pathfinder
-* remove old pathfinder code (archive)
-* add mass_set_depository to command batons (and mass-clear)
-* add cocoa-bean/block inventory item(dye, meta??)
-* shift-clicking in temp inventories (soldier/civics)-X
-* napalm ammo....
-* add vehicle on-hit color rendering (dmg effects)-X
-* some way to kick soldiers off of a vehicle (force-dismount when a player attempts mount?)-X
-* soldiers need to set damage done by rank-X
-* add deposit ability to all NPCs-X
-* need to set/adjust work time/'actionTicks' from npcType    
-* add tooltips to GUIs-x
-* add experience value to NPCs-x
-* don't spawn stuff in X blocks of spawn (config setting)-X
-* double check all npc ai is present, as far as is-done
-* builder direct has no scan BB .. --- should be fixed....-x
-* siege-engineer is not dismounting properly-x
+/********** 05-01-13 **********/
+* npc depository must be able to be a chest-cart, or mine-cart with chest (or other entity with IInventory?)
+        dynamically scan area.. worldServer has a getTEsInInBox method, also check chest-carts/mine-carts
 

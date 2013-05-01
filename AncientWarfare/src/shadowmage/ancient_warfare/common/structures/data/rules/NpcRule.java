@@ -28,9 +28,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.ScannedEntityEntry;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.StringTools;
@@ -180,7 +182,7 @@ public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struc
     ent.prevRotationYaw = ent.rotationYaw = ar;
     if(ent instanceof NpcBase)
       {
-      ((NpcBase)ent).wayNav.setHomePoint(target.x, target.y, target.z);
+      ((NpcBase)ent).wayNav.setHomePoint(new WayPoint(target.x, target.y, target.z, TargetType.SHELTER));
       } 
     }   
   return ent;

@@ -84,7 +84,7 @@ protected void attackTarget(ITargetEntry target)
   else
     {
 //    Config.logDebug("doing entity atack: "+npc.getTarget());
-    Entity ent = target.getEntity();
+    Entity ent = target.getEntity(npc.worldObj);
     if(ent!=null)
       {
       npc.swingItem();

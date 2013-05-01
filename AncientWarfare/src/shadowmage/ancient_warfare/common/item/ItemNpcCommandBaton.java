@@ -25,11 +25,11 @@ import java.util.UUID;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityMinecartChest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -37,8 +37,11 @@ import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.EntityTools;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class ItemNpcCommandBaton extends AWItemClickable
 {
@@ -103,12 +106,13 @@ public boolean itemInteractionForEntity(ItemStack par1ItemStack,   EntityLiving 
  */
 @Override
 public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player,   Entity entity)
-  {
+  {  
   if(!player.worldObj.isRemote)
     {
+    MovingObjectPosition hit = new MovingObjectPosition(entity);
+    BatonSettings settings = getBatonSettings(stack);
     if(entity instanceof NpcBase)
       {
-      BatonSettings settings = getBatonSettings(stack);
       if(!settings.hasEntity(entity))
         {
         player.addChatMessage("Setting Baton Main Target");
@@ -118,8 +122,108 @@ public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player,   Entity 
         }
       return true;
       }
+    else
+      {
+      if(settings.command == NpcCommand.DEPOSIT || settings.command==NpcCommand.MASS_DEPOSIT)
+        {
+        Config.logDebug("testing execution of entity-target deposit site");
+        boolean transmit = false;
+        if(entity instanceof EntityMinecartChest)
+          {
+          Config.logDebug("target was a mine-cart chest");
+          this.handleNpcCommand(player, stack, settings, hit);
+          }   
+        else if( entity instanceof VehicleBase)
+          {
+          VehicleBase veh = (VehicleBase)entity;
+          if(veh.inventory.storageInventory.getSizeInventory()>0)
+            {
+            Config.logDebug("target was a vehicle chest cart, or vehicle with storage");
+            this.handleNpcCommand(player, stack, settings, hit);
+            }
+          } 
+        }        
+      return true;
+      }
     }  
   return super.onLeftClickEntity(stack, player, entity);
+  }
+
+protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSettings settings, MovingObjectPosition hit)
+  {
+  NpcBase npc = null;
+  NpcCommand cmd = settings.command;
+  
+  if(hit==null)
+    {
+    return;
+    }
+  if(cmd==NpcCommand.NONE)
+    {
+    return;
+    }
+  WayPoint p = null;
+  if(hit.entityHit!=null)
+    {
+    p = new WayPoint(hit.entityHit, cmd.getTargetType());
+    }
+  else if(player.worldObj.getBlockTileEntity(hit.blockX, hit.blockY, hit.blockZ)!=null)
+    {
+    p = new WayPoint(player.worldObj.getBlockTileEntity(hit.blockX, hit.blockY, hit.blockZ), hit.sideHit, cmd.getTargetType());
+    }
+  else
+    {
+    p = new WayPoint(hit.blockX, hit.blockY, hit.blockZ, hit.sideHit, cmd.getTargetType());
+    }
+  if(settings.hasEntity())
+    {
+    Entity entity = settings.getEntity(player.worldObj);
+    if(entity instanceof NpcBase)
+      {
+      npc = (NpcBase)entity;      
+      npc.handleBatonCommand(settings.command, p);
+      } 
+    else
+      {
+      settings.setEntity(null);
+      setBatonSettings(stack, settings);
+      player.openContainer.detectAndSendChanges();
+      }
+    }
+  if(settings.range>0)
+    {   
+    player.addChatMessage("Executing Baton Command on Area");
+    AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-settings.range, player.posY-settings.range, player.posZ-settings.range, player.posX+settings.range, player.posY+settings.range, player.posZ+settings.range);
+    List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
+    int npcType = -1;
+    if(npc!=null)
+      {
+      npc.handleBatonCommand(cmd, p);
+      npcType = npc.npcType.getGlobalNpcType();
+      }
+    WayPoint pt;
+    for(NpcBase testNpc : npcs)
+      {
+      pt = new WayPoint(p);
+      if(testNpc==null || (npc!=null && testNpc == npc) || player.getDistanceToEntity(testNpc)>settings.range || testNpc.isAggroTowards(player))
+        {
+        continue;
+        }
+      if(npcType==-1 || testNpc.npcType.getGlobalNpcType()==npcType)
+        {
+        testNpc.handleBatonCommand(cmd, p);
+//        testNpc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
+        }        
+      }
+    }
+  else
+    {
+    if(npc!=null)
+      {
+      player.addChatMessage("Executing Baton Command on Single Target");
+      npc.handleBatonCommand(cmd, p);
+      }      
+    }
   }
 
 @Override
@@ -128,63 +232,61 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
   if(!player.worldObj.isRemote)
     {
     MovingObjectPosition hit = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
-    if(hit==null)
-      {
-      return true;
-      }
     BatonSettings settings = getBatonSettings(stack);
-    NpcCommand cmd = settings.command;
-    if(cmd==NpcCommand.NONE)
-      {
-      return true;
-      }
-    NpcBase npc = null;
-    if(settings.hasEntity())
-      {
-      Entity entity = settings.getEntity(player.worldObj);
-      if(entity instanceof NpcBase)
-        {
-        npc = (NpcBase)entity;
-        } 
-      else
-        {
-//        Config.logDebug("Baton has invalid entity!!");
-        settings.setEntity(null);
-        setBatonSettings(stack, settings);
-        player.openContainer.detectAndSendChanges();
-        }
-      }    
-    if(settings.range>0)
-      {   
-      player.addChatMessage("Executing Baton Command on Area");
-      AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-settings.range, player.posY-settings.range, player.posZ-settings.range, player.posX+settings.range, player.posY+settings.range, player.posZ+settings.range);
-      List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
-      int npcType = -1;
-      if(npc!=null)
-        {
-        npc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
-        npcType = npc.npcType.getGlobalNpcType();
-        }
-      for(NpcBase testNpc : npcs)
-        {
-        if(testNpc==null || (npc!=null && testNpc == npc) || player.getDistanceToEntity(testNpc)>settings.range || testNpc.isAggroTowards(player))
-          {
-          continue;
-          }
-        if(npcType==-1 || testNpc.npcType.getGlobalNpcType()==npcType)
-          {
-          testNpc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
-          }        
-        }
-      }
-    else
-      {
-      if(npc!=null)
-        {
-        player.addChatMessage("Executing Baton Command on Single Target");
-        npc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
-        }      
-      }
+    this.handleNpcCommand(player, stack, settings, hit);
+//    
+//    NpcCommand cmd = settings.command;
+//    if(cmd==NpcCommand.NONE)
+//      {
+//      return true;
+//      }
+//    NpcBase npc = null;
+//    if(settings.hasEntity())
+//      {
+//      Entity entity = settings.getEntity(player.worldObj);
+//      if(entity instanceof NpcBase)
+//        {
+//        npc = (NpcBase)entity;
+//        } 
+//      else
+//        {
+////        Config.logDebug("Baton has invalid entity!!");
+//        settings.setEntity(null);
+//        setBatonSettings(stack, settings);
+//        player.openContainer.detectAndSendChanges();
+//        }
+//      }    
+//    if(settings.range>0)
+//      {   
+//      player.addChatMessage("Executing Baton Command on Area");
+//      AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-settings.range, player.posY-settings.range, player.posZ-settings.range, player.posX+settings.range, player.posY+settings.range, player.posZ+settings.range);
+//      List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
+//      int npcType = -1;
+//      if(npc!=null)
+//        {
+//        npc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
+//        npcType = npc.npcType.getGlobalNpcType();
+//        }
+//      for(NpcBase testNpc : npcs)
+//        {
+//        if(testNpc==null || (npc!=null && testNpc == npc) || player.getDistanceToEntity(testNpc)>settings.range || testNpc.isAggroTowards(player))
+//          {
+//          continue;
+//          }
+//        if(npcType==-1 || testNpc.npcType.getGlobalNpcType()==npcType)
+//          {
+//          testNpc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
+//          }        
+//        }
+//      }
+//    else
+//      {
+//      if(npc!=null)
+//        {
+//        player.addChatMessage("Executing Baton Command on Single Target");
+//        npc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
+//        }      
+//      }
     }   
   return true;
 //  return super.onBlockStartBreak(stack, X, Y, Z, player);

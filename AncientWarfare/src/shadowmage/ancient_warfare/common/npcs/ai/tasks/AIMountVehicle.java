@@ -41,7 +41,7 @@ public AIMountVehicle(NpcBase npc)
 @Override
 public void onTick()
   {   
-  VehicleBase vehicle = (VehicleBase)npc.getTarget().getEntity();
+  VehicleBase vehicle = (VehicleBase)npc.getTarget().getEntity(npc.worldObj);
   npc.mountEntity(vehicle);
   npc.setTargetAW(null);
   }

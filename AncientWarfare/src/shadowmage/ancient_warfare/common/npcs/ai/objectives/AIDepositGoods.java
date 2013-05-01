@@ -20,16 +20,18 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityMinecartChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AIDepositGoods extends NpcAIObjective
 {
@@ -55,79 +57,108 @@ public void addTasks()
 @Override
 public void updatePriority()
   {
-  if(npc.wayNav.getDepositSite()==null)
+  targetInventory = null;
+  WayPoint p = npc.wayNav.getDepositSite();
+  boolean deposit = true;
+  if(p==null)
     {
-    this.currentPriority = 0;
-    this.cooldownTicks = this.maxCooldownticks;
-    return;
+    deposit = false;
     } 
   else
-    {
-//    Config.logDebug("had deposit site, validating");
-    WayPoint p = npc.wayNav.getDepositSite();
-    TileEntity te = npc.worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ());
-    if(te==null)
+    {    
+    if(p.isTileEntry())
       {
-//      Config.logDebug("no te at deposit site!");
-      this.currentPriority = 0;
-      this.cooldownTicks = this.maxCooldownticks;
-      return;
+      TileEntity te = p.getTileEntity(npc.worldObj);
+      if(te==null || !(te instanceof IInventory))
+        {
+        deposit = false;
+        npc.wayNav.clearDepositSite();
+        }
+      else
+        {
+        targetInventory = (IInventory)te;
+        }
       }
-    else if (te instanceof IInventory)
+    else if(p.isEntityEntry())
       {
-//      Config.logDebug("te found at deposit site that impliments inventory");
-//      int availSlots = InventoryTools.getEmptySlots(targetInventory, 0, targetInventory.getSizeInventory()-1);
-//      if(availSlots <= 0)
-//        {
-//        Config.logDebug("te did not have any open slots");
-//        this.currentPriority = 0;
-//        this.cooldownTicks = 40;
-//        this.isFinished = true;
-//        return;
-//        }
+      Entity ent = p.getEntity(npc.worldObj);
+      if(ent==null)
+        {
+        deposit = false;
+        npc.wayNav.clearDepositSite();
+        }
+      else if(EntityMinecartChest.class.isAssignableFrom(ent.getClass()))
+        {
+        targetInventory = (IInventory)ent;
+        }
+      else if(ent instanceof VehicleBase)
+        {
+        VehicleBase veh = (VehicleBase)ent;
+        if(veh.inventory.storageInventory.getSizeInventory()>0)
+          {
+          targetInventory = veh.inventory.storageInventory;
+          }
+        }
+      }
+    else//wtf is this invalid target??
+      {
+      this.npc.wayNav.clearDepositSite();
+      deposit = false;
+      }
+    }  
+  if(deposit)
+    {
+    float percent = 1-npc.inventory.getPercentEmpty();
+    int empty = npc.inventory.getEmptySlotCount();
+    int full = npc.inventory.getSizeInventory() - empty;
+    if(empty<=1)
+      {
+      deposit = true;
+//      Config.logDebug(String.format("full inventory. E:%d, P:%.2f,  CP:%d", empty, percent, this.currentPriority));
+      }
+    else if(full<=2 && npc.inventory.getSizeInventory()>3)
+      {
+      deposit = false;
+//      Config.logDebug(String.format("Mostly empty inventory. E:%d, P:%.2f,  CP:%d", empty, percent, this.currentPriority));
       }
     else
       {
-//      Config.logDebug("was a TE but not inventory!");
-      this.npc.wayNav.clearDepositSite();
-      this.currentPriority = 0;
-      this.cooldownTicks = this.maxCooldownticks;
-      return;
+      deposit = true;
+      float pF = (float)this.maxPriority * percent;
+      this.currentPriority = (int)pF;
+//      Config.logDebug(String.format("Less than full inventory. E:%d, P:%.2f, PF:%.2f, CP:%d", empty, percent, pF, this.currentPriority));
+      }    
+    } 
+  if(targetInventory==null)
+    {
+    deposit = false;
+    }
+  if(deposit)
+    {
+    if(this.currentPriority==0)
+      {
+      this.currentPriority = this.maxPriority;
       }
-//    Config.logDebug("site was valid inventory");
-    }
-  float percent = 1-npc.inventory.getPercentEmpty();
-  int empty = npc.inventory.getEmptySlotCount();
-  int full = npc.inventory.getSizeInventory() - empty;
-  if(empty<=1)
-    {
-    this.currentPriority = this.maxPriority;
-//    Config.logDebug(String.format("full inventory. E:%d, P:%.2f,  CP:%d", empty, percent, this.currentPriority));
-    }
-  else if(full<=2 && npc.inventory.getSizeInventory()>3)
-    {
-    this.currentPriority = 0;
-//    Config.logDebug(String.format("Mostly empty inventory. E:%d, P:%.2f,  CP:%d", empty, percent, this.currentPriority));
     }
   else
     {
-    float pF = (float)this.maxPriority * percent;
-    this.currentPriority = (int)pF;
-//    Config.logDebug(String.format("Less than full inventory. E:%d, P:%.2f, PF:%.2f, CP:%d", empty, percent, pF, this.currentPriority));
+    this.currentPriority = 0;
+    this.cooldownTicks = this.maxCooldownticks;
     }
   }
+
 
 @Override
 public void onRunningTick()
   {
-  if(npc.wayNav.getDepositSite()==null)
+  WayPoint p = npc.wayNav.getDepositSite();
+  if(targetInventory == null || p==null)
     {
     this.isFinished = true;
     this.currentPriority = 0;
     this.cooldownTicks = this.maxCooldownticks;
     return;
     }
-  WayPoint p = npc.wayNav.getDepositSite();
   if(npc.getDistance(p.floorX(), p.floorY(), p.floorZ())>3)
     {
 //    Config.logDebug("moving to deposit target");
@@ -160,19 +191,7 @@ public void onObjectiveStart()
   if(npc.wayNav.getDepositSite()!=null)
     {
     WayPoint p = npc.wayNav.getDepositSite();    
-    TileEntity te = npc.worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ());
-    if(te instanceof IInventory)
-      {
-      npc.setTargetAW(p);
-      this.targetInventory = (IInventory)te;
-      }
-    else
-      {
-      npc.wayNav.clearDepositSite();
-      this.isFinished = true;
-      this.currentPriority = 0;
-      this.cooldownTicks = this.maxCooldownticks;
-      }    
+    npc.setTargetAW(p);   
     }
   else
     {

@@ -20,34 +20,36 @@
  */
 package shadowmage.ancient_warfare.common.npcs.commands;
 
+import shadowmage.ancient_warfare.common.targeting.TargetType;
+
 public enum NpcCommand
 {
-NONE ("None", false),
-WORK ("Work At Site", false),
-PATROL ("Patrol Point", false),
-HOME ("Set Home Point", false),
-DEPOSIT ("Set Depository", false),
-CLEAR_PATROL ("Clear Patrol Path", false),
-CLEAR_HOME ("Clear Home Point", false),
-CLEAR_WORK ("Clear Work Site", false),
-CLEAR_DEPOSIT ("Clear Depository", false),
-MASS_PATROL ("Area Set Patrol Point", true),
-MASS_HOME ("Area Set Home Point", true),
-MASS_WORK ("Area Set Work Point", true),
-MASS_DEPOSIT ("Area Set Depository", true),
-MASS_CLEAR_PATROL ("Area Clear Patrol Path", true),
-MASS_CLEAR_HOME ("Area Clear Home Point", true),
-MASS_CLEAR_WORK ("Area Clear Work Site", true),
-MASS_CLEAR_DEPOSIT ("Area Clear Depository", true);
+NONE ("None", TargetType.NONE),
+WORK ("Work At Site", TargetType.WORK),
+PATROL ("Patrol Point", TargetType.PATROL),
+HOME ("Set Home Point", TargetType.SHELTER),
+DEPOSIT ("Set Depository", TargetType.DELIVER),
+CLEAR_PATROL ("Clear Patrol Path", TargetType.NONE),
+CLEAR_HOME ("Clear Home Point", TargetType.NONE),
+CLEAR_WORK ("Clear Work Site", TargetType.NONE),
+CLEAR_DEPOSIT ("Clear Depository", TargetType.NONE),
+MASS_PATROL ("Area Set Patrol Point", TargetType.PATROL),
+MASS_HOME ("Area Set Home Point", TargetType.SHELTER),
+MASS_WORK ("Area Set Work Point", TargetType.WORK),
+MASS_DEPOSIT ("Area Set Depository", TargetType.DELIVER),
+MASS_CLEAR_PATROL ("Area Clear Patrol Path", TargetType.NONE),
+MASS_CLEAR_HOME ("Area Clear Home Point", TargetType.NONE),
+MASS_CLEAR_WORK ("Area Clear Work Site", TargetType.NONE),
+MASS_CLEAR_DEPOSIT ("Area Clear Depository", TargetType.NONE);
 //due to using ordinal to store command, any new commands must be added to the END of the list
 //also, don't EVER change ordering, or it will have some undesired effects in-game
 
 String name;
-boolean massEffect = false;
-private NpcCommand(String name, boolean mass)
+TargetType type;
+private NpcCommand(String name, TargetType type)
   {
   this.name = name;
-  this.massEffect = mass;
+  this.type = type;
   }
 
 public String getCommandName()
@@ -55,8 +57,9 @@ public String getCommandName()
   return name;
   }
 
-public boolean isMassEffect()
+public TargetType getTargetType()
   {
-  return this.massEffect;
+  return type;
   }
+
 }

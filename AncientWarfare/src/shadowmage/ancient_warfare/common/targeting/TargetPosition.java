@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.targeting;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 
@@ -96,13 +97,13 @@ public float posZ()
   }
 
 @Override
-public Entity getEntity()
+public Entity getEntity(World world)
   {
   return null;
   }
 
 @Override
-public TileEntity getTileEntity()
+public TileEntity getTileEntity(World world)
   {
   return null;
   }

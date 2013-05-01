@@ -44,12 +44,12 @@ public ITargetEntry getTarget()
 
 public boolean matches(Entity ent)
   {
-  return this.target.getEntity() == ent;
+  return ent!=null ? this.target.getEntity(ent.worldObj)==ent : false;
   }
 
 public boolean matches(TileEntity te)
   {
-  return this.target.getTileEntity() == te;
+  return te!=null ? this.target.getTileEntity(te.worldObj)==te : false;
   }
 
 public AIAggroTargetWrapper setAggro(int level)
@@ -64,8 +64,8 @@ public boolean matches(int x, int y, int z)
   }
 
 public boolean isValidEntry()
-  { 
-  return this.target.getEntity()!=null || this.target.getTileEntity()!=null;
+  {
+  return true;
   }
 
 @Override

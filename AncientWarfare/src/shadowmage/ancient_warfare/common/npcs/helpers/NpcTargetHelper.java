@@ -217,21 +217,21 @@ public float getAttackDistance(ITargetEntry target)
     {
     return ((VehicleBase)npc.ridingEntity).getEffectiveRange((float)npc.ridingEntity.posY - target.posY());
     }
-  if(target.getEntity()==null)//TODO should get yaw towards target, offset len by adj len of actual BB edge pos at that yaw
+  if(target.getEntity(npc.worldObj)==null)//TODO should get yaw towards target, offset len by adj len of actual BB edge pos at that yaw
     {
     //return 0.25f;
     return 1.f + npc.width*0.5f;
     }
   else//is entity entry
     {
-    if(target.getEntity()!=null)
+    if(target.getEntity(npc.worldObj)!=null)
       {
       float rangedDistance = npc.npcType.getRangedAttackDistance(npc.rank);
       if(rangedDistance>0)
         {
         return rangedDistance;
         }
-      return 2.5f * (npc.width*0.5f + target.getEntity().width*0.5f);
+      return 2.5f * (npc.width*0.5f + target.getEntity(npc.worldObj).width*0.5f);
       }
     }
   return 4f;//fallthrough for entity null
