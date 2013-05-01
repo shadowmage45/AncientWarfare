@@ -34,7 +34,6 @@ import shadowmage.ancient_warfare.common.utils.InventoryTools;
 public class TEFarmCarrot extends TEWorkSiteFarm
 {
 
-ItemStack carrotFilter = new ItemStack(Item.carrot,1);
 /**
  * 
  */
@@ -42,57 +41,8 @@ public TEFarmCarrot()
   {
   this.mainBlockID = Block.carrot.blockID;
   this.mainBlockMatureMeta = 7;
+  this.plantableFilter = new ItemStack(Item.carrot);
   }
-
-@Override
-public void onWorkFinished(NpcBase npc, WorkPoint point)
-  {
-  if(point.hasWork(worldObj))
-    {
-    if(point.getTargetType()==TargetType.FARM_HARVEST)
-      {
-      Config.logDebug("harvesting carrot!!");
-      List<ItemStack> blockDrops = Block.carrot.getBlockDropped(npc.worldObj, point.floorX(), point.floorY(), point.floorZ(), 7, 0);
-      worldObj.setBlockToAir(point.floorX(), point.floorY(), point.floorZ());
-      for(ItemStack item : blockDrops)
-        {
-        if(item==null){continue;}
-        if(InventoryTools.doItemsMatch(item, carrotFilter) && inventory.canHoldItem(carrotFilter, item.stackSize))
-          {
-          item = inventory.tryMergeItem(item);
-          if(item!=null)
-            {
-            InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
-            }
-          }
-        else
-          {
-          item = npc.inventory.tryMergeItem(item);
-          if(item!=null)
-            {
-            InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
-            }
-          }
-        }
-      }
-    else if(point.getTargetType()==TargetType.FARM_PLANT)
-      {
-      if(inventory.containsAtLeast(carrotFilter, 1))
-        {
-        Config.logDebug("planting carrot!!");
-        inventory.tryRemoveItems(carrotFilter, 1);
-        worldObj.setBlock(point.floorX(), point.floorY()+1, point.floorZ(), mainBlockID, 0,3);
-        }
-      else
-        {
-        Config.logDebug("had plant job but no carrots!!");
-        }
-      }
-    }
-  super.onWorkFinished(npc, point);
-  Config.logDebug("wheat farm work finished POST SUPER.  wkred: "+ this.workPoints.size());
-  }
-
 
 
 }

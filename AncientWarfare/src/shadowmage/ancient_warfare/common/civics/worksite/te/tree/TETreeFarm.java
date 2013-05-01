@@ -115,8 +115,7 @@ public void updateWorkPoints()
 
 protected void updateOrAddWorkPoint(int x, int y, int z)
   {  
-  WorkPointTree p;
-  TreePoint tp = null;
+  WorkPoint p;
   TargetType t = null;
   int id = worldObj.getBlockId(x, y, z);
   int meta = worldObj.getBlockMetadata(x, y, z);
@@ -148,8 +147,7 @@ protected void updateOrAddWorkPoint(int x, int y, int z)
     {
     return;
     }
-  tp = new TreePoint(x,y,z);
-  p = new WorkPointTree(xCoord,yCoord,zCoord, t, this, tp);
+  p = new WorkPoint(this, xCoord, yCoord, zCoord, 1, t);
 //  Config.logDebug("adding new work point to tree farm: "+p+","+tp);
   this.workPoints.add(p);
   }
@@ -158,12 +156,11 @@ protected void updateOrAddWorkPoint(int x, int y, int z)
 public void onWorkFinished(NpcBase npc, WorkPoint point)
   {
   super.onWorkFinished(npc, point);
-  WorkPointTree tree = (WorkPointTree)point;
-  TreePoint tp = tree.tp;
+  
   if(point.getTargetType()==TargetType.TREE_CHOP)
     {
     Config.logDebug("chopping tree!!"); 
-    List<ItemStack> drops = BlockTools.breakBlock(worldObj, tp.x, tp.y, tp.z, 0);   
+    List<ItemStack> drops = BlockTools.breakBlock(worldObj, point.x(), point.y(), point.z(), 0);   
     for(ItemStack item : drops)
       {
       item = npc.inventory.tryMergeItem(item);
@@ -177,13 +174,13 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
         }
       }
     }  
-  else if(point.getTargetType()==TargetType.TREE_PLANT)
+  else if(point.getTargetType()==TargetType.TREE_PLANT && inventory.containsAtLeast(saplingFilter, 1))
     {
     Config.logDebug("planting sapling");
-    int id = worldObj.getBlockId(tp.x, tp.y-1, tp.z);
+    int id = worldObj.getBlockId(point.x(), point.y()-1, point.z());
     if(id==Block.dirt.blockID || id==Block.grass.blockID)
       {
-      worldObj.setBlock(tp.x, tp.y, tp.z, saplingID, saplingMeta, 3);
+      worldObj.setBlock(point.x(), point.y(), point.z(), saplingID, saplingMeta, 3);
       }    
     inventory.tryRemoveItems(saplingFilter, 1);
     }

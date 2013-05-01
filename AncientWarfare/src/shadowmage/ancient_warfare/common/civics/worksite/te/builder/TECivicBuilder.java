@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.builder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -75,13 +76,12 @@ public void updateEntity()
 
 /************************************************WORK SITE*************************************************/
 
-
 @Override
 public WorkPoint getWorkPoint(NpcBase npc)
   {
   if(builder!=null && !builder.isFinished())
     {
-    return new WorkPoint(xCoord, yCoord, zCoord, TargetType.BUILD_PLACE, this);
+    return new WorkPoint(this, xCoord, yCoord, zCoord, 1, TargetType.BUILD_PLACE);
     }
   return null;
   }

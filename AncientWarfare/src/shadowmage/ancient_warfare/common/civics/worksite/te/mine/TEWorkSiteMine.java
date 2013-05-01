@@ -131,7 +131,7 @@ public WorkPoint getWorkPoint(NpcBase npc)
   {
   if(this.currentLevel!=null && this.currentLevel.hasWork())
     {    
-    return new WorkPoint(xCoord, yCoord, zCoord, TargetType.WORK, this);    
+    return new WorkPoint(this, xCoord, yCoord, zCoord, 1, TargetType.WORK);    
     }
   return null;
   }

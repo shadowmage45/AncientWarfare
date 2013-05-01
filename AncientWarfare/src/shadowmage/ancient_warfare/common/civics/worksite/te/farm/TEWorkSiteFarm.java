@@ -20,13 +20,19 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPointFarm;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public abstract class TEWorkSiteFarm extends TECivic
 {
@@ -34,6 +40,7 @@ public abstract class TEWorkSiteFarm extends TECivic
 int mainBlockID;//the blockID that this civic looks for within its work bounds
 int tilledEarthID = Block.tilledField.blockID;//the 'plantable' block. these are the 'plant' points, if y+1 is not mainBlockID
 int mainBlockMatureMeta;
+ItemStack plantableFilter;
 
 public TEWorkSiteFarm()
   {
@@ -67,26 +74,87 @@ public void updateWorkPoints()
   }
 
 protected void updateOrAddWorkPoint(int x, int y, int z)
-  {
-  WorkPointFarm p;
+  {  
+  WorkPoint p;
   TargetType t = null;
+  int id = worldObj.getBlockId(x, y, z);  
   if(worldObj.getBlockId(x, y, z)==tilledEarthID)
     {
     t = TargetType.FARM_PLANT;
     }
-  else if(worldObj.getBlockId(x, y-1, z)==tilledEarthID)
+  else if(id==this.mainBlockID)
     {
-    t = TargetType.FARM_HARVEST;
+    int meta = worldObj.getBlockMetadata(x, y, z);
+    if(meta==this.mainBlockMatureMeta && inventory.containsAtLeast(plantableFilter, 1))
+      {
+      t = TargetType.FARM_HARVEST;
+      }
+    else
+      {
+      return;
+      }
     }
   else
     {
     return;
     }
-  p = new WorkPointFarm(x,y,z, t, mainBlockID, mainBlockMatureMeta, this);
-  if(!this.workPoints.contains(p))
-    {    
-    this.workPoints.add(p);
-    }
+  p = new WorkPoint(this, x,y,z, 1, t);
+  this.workPoints.add(p);
   }
+
+
+
+@Override
+public void onWorkFinished(NpcBase npc, WorkPoint point)
+  {
+  if(npc==null || point==null)
+    {
+    return;
+    }
+  if(point.hasWork(worldObj))
+    {
+    if(point.getTargetType()==TargetType.FARM_HARVEST)
+      {
+      Config.logDebug("harvesting crops!!");
+      List<ItemStack> blockDrops = Block.crops.getBlockDropped(npc.worldObj, point.x(), point.y(), point.z(), 7, 0);
+      worldObj.setBlockToAir(point.x(), point.y(), point.z());
+      boolean returnedPlantable = false;
+      for(ItemStack item : blockDrops)
+        {
+        if(item==null){continue;}
+        if(InventoryTools.doItemsMatch(item, plantableFilter) && inventory.canHoldItem(plantableFilter, item.stackSize))
+          {
+          item = inventory.tryMergeItem(item);
+          if(item!=null)
+            {
+            InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
+            }
+          }
+        else
+          {
+          item = npc.inventory.tryMergeItem(item);
+          if(item!=null)
+            {
+            InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
+            }
+          }
+        }
+      }
+    else if(point.getTargetType()==TargetType.FARM_PLANT)
+      {
+      if(inventory.containsAtLeast(plantableFilter, 1))
+        {
+        inventory.tryRemoveItems(plantableFilter, 1);
+        worldObj.setBlock(point.x(), point.y()+1, point.z(), mainBlockID, 0, 3);
+        }
+      else
+        {
+        Config.logDebug("had plant job but no plantables!!");
+        }
+      }
+    }
+  super.onWorkFinished(npc, point);
+  }
+
 
 }

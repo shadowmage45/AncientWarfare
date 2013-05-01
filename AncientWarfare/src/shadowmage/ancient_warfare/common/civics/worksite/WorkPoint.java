@@ -25,7 +25,9 @@ import java.lang.ref.WeakReference;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -34,32 +36,23 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class WorkPoint extends WayPoint
 {
-
-protected Entity ent;//target entity
 protected int totalHarvestHits = 1;
 protected int currentHarvestHits = 0;
 public TECivic owner;
+WorkPointInner workData;
 
-protected ITargetEntry workPoint = null;
-
-
-public WorkPoint(int x, int y, int z, TargetType type, TECivic owner)
+public WorkPoint(TECivic owner, int tx, int ty, int tz, int ts, TargetType work)
   {
-  super(x,y,z, type);
+  super(owner.xCoord, owner.yCoord, owner.zCoord, TargetType.WORK);
   this.owner = owner;
+  workData = new WorkPointInner(tx, ty, tz, ts, work);
   }
 
-public WorkPoint(int x, int y, int z, int side, TargetType type, TECivic owner)
+public WorkPoint(TECivic owner, Entity ent, TargetType work)
   {
-  super(x,y,z,side, type);
+  super(owner.xCoord, owner.yCoord, owner.zCoord, TargetType.WORK);
   this.owner = owner;
-  }
-
-public WorkPoint(Entity ent, TargetType type)
-  {
-  super(type);
-  this.ent = ent;
-  this.type = type;
+  workData = new WorkPointInner(ent, work);
   }
 
 /**
@@ -107,18 +100,46 @@ public boolean shouldFinish()
   return this.currentHarvestHits>=this.totalHarvestHits;
   }
 
-/**
- * to be defined by subtypes, basic implemenataion only checks entity
- * @param world
- * @return
- */
-public boolean isValidEntry(World world)
+public int x()
   {
-  if(this.isEntityEntry())
-    {
-    return this.ent!=null;
-    }  
-  return true;
+  return this.entTarget!=null ? MathHelper.floor_double(this.entTarget.posX) : this.teTarget!=null ? this.teTarget.xCoord : x;
   }
+
+public int y()
+  {
+  return this.entTarget!=null ? MathHelper.floor_double(this.entTarget.posY) : this.teTarget!=null ? this.teTarget.yCoord : y;
+  }
+
+public int z()
+  {
+  return this.entTarget!=null ? MathHelper.floor_double(this.entTarget.posZ) : this.teTarget!=null ? this.teTarget.zCoord : z;
+  }
+
+protected class WorkPointInner
+{
+int x;
+int y;
+int z;
+int side;
+Entity target;
+TileEntity teTarget;
+TargetType work;
+
+public WorkPointInner(int x, int y, int z, int side, TargetType work)
+  {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  this.side = side;
+  this.work = work;
+  }
+
+public WorkPointInner(Entity target, TargetType work)
+  {
+  this.target = target;
+  this.work = work;
+  }
+
+}
 
 }
