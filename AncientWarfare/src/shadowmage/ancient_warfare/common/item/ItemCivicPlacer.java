@@ -59,14 +59,24 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
       Civic civ = CivicRegistry.instance().getCivicFor(type);        
       if(civ!=null)          
         {
-        if(tag.hasKey("pos2"))
+        if(civ.isDepository())
           {
-          list.add("Has first and second bounds positions set");
+          list.add("Block-Only civic: right click to place");
+          }
+        else if(tag.hasKey("pos2"))
+          {
+          list.add("Has both bounds positions set");
+          list.add("Right click to place Civic Block");
           }
         else if(tag.hasKey("pos1"))
           {
           list.add("Has first bounds position set");
-          }  
+          list.add("Right click to set second bound position");
+          }
+        else
+          {
+          list.add("Right click to set first bound position");
+          }
         }
       else
         {
@@ -95,14 +105,42 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     }
   if(hit!=null && stack!=null && stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
     {
+    Civic civ = CivicRegistry.instance().getCivicFor(stack.getItemDamage());
     NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
-    if(tag.hasKey("pos2") && tag.hasKey("pos1"))
+    if(civ.isDepository())
+      {
+      hit.offsetForMCSide(side);
+      placeCivicBlock(world, hit, stack.getItemDamage());
+      ItemStack item = player.getCurrentEquippedItem();
+      if(item!=null && item.itemID == ItemLoader.civicPlacer.itemID)
+        {
+        if(!player.capabilities.isCreativeMode)
+          {
+          stack.stackSize--;
+          if(stack.stackSize<=0)
+            {
+            player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+            }
+          }             
+        }
+      }
+    else if(tag.hasKey("pos2") && tag.hasKey("pos1"))
       {
       BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
       BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
+      BlockPosition min = BlockTools.getMin(pos1, pos2);
+      BlockPosition max = BlockTools.getMax(pos1, pos2);
       hit.offsetForMCSide(side);
-      //TODO//make sure that the control block position is adjacent/inside work bounds.
-      if(true)
+      boolean placeBlock = true;
+      if(hit.x >= min.x && hit.x <= max.x && hit.y >= min.y && hit.y <=max.y && hit.z>=min.z && hit.z <=max.z)
+        {//if block is inside bounds, reject
+        placeBlock = false;
+        }
+      else if(hit.x<min.x-1 || hit.x>max.x+1 || hit.y<min.y-1 || hit.y>max.y+1 || hit.z< min.z-1 || hit.z>max.z+1)
+        {//if not adjacent to work bounds, reject
+        placeBlock = false;
+        }
+      if(placeBlock)
         {  
         placeCivicBlock(world, hit, pos1, pos2,  stack.getItemDamage());
         ItemStack item = player.getCurrentEquippedItem();
@@ -126,13 +164,13 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         }
       else
         {
-        player.addChatMessage("Please choose a position inside or adjacent to the work bounds!");
+        player.addChatMessage("Please choose a position directly adjacent to the work bounds!");
         }      
       }
     else if(tag.hasKey("pos1"))
       {
       BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
-      Civic civ = CivicRegistry.instance().getCivicFor(stack.getItemDamage());
+      
       if(civ!=null)
         {
         int maxWidth = civ.getMaxWorkSizeWidth();
@@ -153,6 +191,22 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         else
           {
           player.addChatMessage("Too large of an area, try a smaller area!");
+          if(width1 >maxWidth)
+            {
+            player.addChatMessage("Z axis is too large by: "+(width1-maxWidth)+" blocks");
+            }
+          if(width2 >maxWidth)
+            {
+            player.addChatMessage("X axis is too large by: "+(width2-maxWidth)+" blocks");
+            }
+          if(height> maxHeight)
+            {
+            player.addChatMessage("Y axis is too large by: "+(height-maxHeight)+" blocks");
+            }
+          if(totalArea > maxArea)
+            {
+            player.addChatMessage("Cubed area is too large by: "+(totalArea-maxArea)+" blocks");
+            }
           }        
         }
       }
@@ -179,6 +233,20 @@ public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1,
   CivicRegistry.instance().setCivicBlock(world, hit.x, hit.y, hit.z, type);
   TECivic te = (TECivic) world.getBlockTileEntity(hit.x, hit.y, hit.z);
   te.setBounds(min.x, min.y, min.z, max.x, max.y, max.z);
+  world.markBlockForUpdate(hit.x, hit.y, hit.z);
+  }
+
+/**
+ * place a no-bounds civic (depository...)
+ * @param world
+ * @param hit
+ * @param type
+ */
+public void placeCivicBlock(World world, BlockPosition hit, int type)
+  {
+  CivicRegistry.instance().setCivicBlock(world, hit.x, hit.y, hit.z, type);
+  TECivic te = (TECivic) world.getBlockTileEntity(hit.x, hit.y, hit.z);
+  te.setBounds(hit.x, hit.y, hit.z, hit.x, hit.y, hit.z);
   world.markBlockForUpdate(hit.x, hit.y, hit.z);
   }
 

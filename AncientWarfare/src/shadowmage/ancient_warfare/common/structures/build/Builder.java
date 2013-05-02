@@ -333,7 +333,6 @@ protected void placeBlockWithDefer(World world, int x, int y, int z, int id, int
  */
 protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockRule rule, boolean defer, boolean worldGen)
   {   
- 
   /**
    * check to see if block should be placed by rule percent chance
    */

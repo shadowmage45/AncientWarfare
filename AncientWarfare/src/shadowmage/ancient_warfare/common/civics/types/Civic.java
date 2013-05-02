@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnChicken;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnCow;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnPig;
@@ -39,7 +40,10 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPumpkin;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmReed;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmWheat;
 import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEWorkSiteMine;
+import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmBirch;
+import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmJungle;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmOak;
+import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmSpruce;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 
@@ -65,18 +69,21 @@ public static ICivicType mineBasic = new CivicMine(10, "Basic Layout Mine", "A m
 //mine altr2
 //mine altr3
 public static ICivicType treeFarmOak = new CivicTreeFarm(16, "Oak Tree Farm", "Tend to and harvest oak trees", TETreeFarmOak.class);
-//spruce
-//birch
-//jungle
+public static ICivicType treeFarmSpruce = new CivicTreeFarm(17, "Spruce Tree Farm", "Tend to and harvest spruce trees", TETreeFarmSpruce.class);
+public static ICivicType treeFarmBirch = new CivicTreeFarm(18, "Birch Tree Farm", "Tend to and harvest birch trees", TETreeFarmBirch.class);
+public static ICivicType treeFarmJungle = new CivicTreeFarm(19, "Jungle Tree Farm", "Tend to and harvest jungle trees", TETreeFarmJungle.class);
 public static ICivicType builder = new CivicBuilder(20);
-//town-hall r1
-//town-hall r2
-//town-hall r3
+public static ICivicType townHallSmall = new CivicTownHall(21, "Town Hall Small", "Small Upkeep center for NPCs", 9, TECivicTownHall.class);
+public static ICivicType townHallMedium = new CivicTownHall(22, "Town Hall Medium", "Medium Upkeep center for NPCs", 9, TECivicTownHall.class);
+public static ICivicType townHallLarge = new CivicTownHall(23, "Town Hall Large", "Large Upkeep center for NPCs", 9, TECivicTownHall.class);
 public static ICivicType pigFarm = new CivicFarm(24, "Pig Farm", "A place for workers to breed and cull Pigs", TEBarnPig.class, "civicFarmWheat1");
 public static ICivicType cowFarm = new CivicFarm(25, "Cow Farm", "A place for workers to breed and cull Cows", TEBarnCow.class, "civicFarmWheat1");
 public static ICivicType chickenFarm = new CivicFarm(26, "Chicken Farm", "A place for workers to breed and cull Chickens", TEBarnChicken.class, "civicFarmWheat1");
 public static ICivicType sheepFarm = new CivicFarm(27, "Sheep Farm", "A place for workers to breed and shear Sheep", TEBarnSheep.class, "civicFarmWheat1");
-
+//smithy (process ores -> ingots)
+//lumber yard (process logs -> planks/charcoal)
+//factory (single block)(use provided resources to craft player-set recipes)
+//dwellings (player designated shelter sites....)
 
 protected int globalID = 0;
 protected String name = "";

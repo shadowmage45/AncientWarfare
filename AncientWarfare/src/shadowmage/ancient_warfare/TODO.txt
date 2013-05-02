@@ -62,7 +62,8 @@ WORKSITES
 * teleport worker to position if he can't path appropriately?      
         
 FARMS
-* need rest of tree farms created
+* need rest of tree farms created (spruce, birch, jungle)
+* chicken farm needs to occasionally collect eggs on the ground
 
 MINE
 * alternative mine-patterns
@@ -166,3 +167,17 @@ TWEAKS/OPTIMIZATION
 * add player-target broadcasting to npcs
 * add on-dimension change code to npcs to clear waypoints on transport
 * add more farm types -- cactus/reed/mushrooms
+/********** 05-02-13 **********/
+* fix a few bugs reported -- hopefully
+    furnace/deployer/dropper not rotating properly in templates
+    vehicles ammo type not carried over properly in templates
+    vehicle armor/upgrade slots > 1 qty
+* add animal-farm civic types.  need testing. need mooshroom and cow-milking farms
+    
+    
+/********** 05-03-13 **********/
+/********** 05-04-13 **********/
+/********** 05-05-13 **********/
+/********** 05-06-13 **********/
+/********** 05-07-13 **********/
+/********** 05-08-13 **********/
