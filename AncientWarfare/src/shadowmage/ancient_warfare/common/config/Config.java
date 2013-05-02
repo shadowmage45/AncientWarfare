@@ -41,7 +41,7 @@ public static final String MC_VERSION = "1.5.1";
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
-public static final boolean DEBUG = false;
+public static final boolean DEBUG = true;
 
 
 //***************************************************LOADED CONFIGS******************************************//

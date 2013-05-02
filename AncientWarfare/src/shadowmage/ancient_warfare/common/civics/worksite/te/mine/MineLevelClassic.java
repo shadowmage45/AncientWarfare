@@ -20,11 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkSitePoint;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 /**
  * slightly different layout of mine-level, more like the vanilla mine-shafts (for both main shaft and branches)
@@ -84,20 +83,9 @@ protected void addNorthShaft(World world, int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);
   int id2 = world.getBlockId(x, y, z+1);
-  if(id!=Block.ladder.blockID)//not clear or ladder, set to clear
-    {
-    addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
-    }
   //scan N block, add clear/fill if needed
-  if(isValidResource(id2))
-    {
-  //add north block clear
-    addNewPoint(x, y, z+1,  TargetType.MINE_CLEAR);  
-    //add north block fill
-    addNewPoint(x, y, z+1,  TargetType.MINE_FILL);
-    }  
-  else if(needsFilled(id2))
-    {
+  if(isValidResource(id2) || needsFilledFloor(id2))
+    {  
     addNewPoint(x, y, z+1,  TargetType.MINE_FILL);
     }
   if(id!=Block.ladder.blockID)
@@ -109,25 +97,14 @@ protected void addNorthShaft(World world, int x, int y, int z)
 protected void addSouthShaft(World world, int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);
-  int id2 = world.getBlockId(x, y, z-1);
-  if(id!=Block.ladder.blockID && id!=0)//not clear or ladder, set to clear
-    {
-    addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
-    }
-  if(isValidResource(id2))
-    {
-  //add north block clear
-    addNewPoint(x, y, z-1,  TargetType.MINE_CLEAR); 
-    //add north block fill
-    addNewPoint(x, y, z-1,  TargetType.MINE_FILL);
-    }  
-  else if(needsFilled(id2))
-    {
-    addNewPoint(x, y, z-1,  TargetType.MINE_FILL);
+  int id2 = world.getBlockId(x, y, z-1);  
+  if(isValidResource(id2) || needsFilledFloor(id2))
+    {  
+    addNewPoint(x, y, z+1,  TargetType.MINE_FILL);
     }
   if(id!=Block.ladder.blockID)
     {
-    addNewPoint(x, y, z, (byte)3, TargetType.MINE_LADDER);
+    addNewPoint(x, y, z,  (byte)3, TargetType.MINE_LADDER);
     }
   }
 
@@ -179,59 +156,33 @@ protected void addTunnelPiece(World world, int x, int y, int z, boolean left, bo
   {  
   int id1 = world.getBlockId(x, y, z);
   boolean addTorch = !top && x%4==0;
-  if(id1!=0 && id1 != Block.torchWood.blockID)
+  if(addTorch)
     {
-    if(left)
+    if(id1!=Block.torchWood.blockID)
       {
-      addNewPoint(x, y, z,  TargetType.MINE_CLEAR);      
+      addNewPoint(x,y,z, TargetType.MINE_TORCH);
       }
-    else
-      {
-      addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
-      }
+    }
+  else if(id1!=0)
+    {
+    addNewPoint(x, y, z,  TargetType.MINE_CLEAR);      
     }
   int id = top? world.getBlockId(x, y+1, z) : world.getBlockId(x, y-1, z);
   int y1 = top? y+1 : y-1;
   if(isValidResource(id))
-    {
-    if(left)
+    {     
+    if(!top)
       {
-      addNewPoint(x, y1, z,  TargetType.MINE_CLEAR);      
-      }
+      addNewPoint(x, y1, z,  TargetType.MINE_FILL);   
+      } 
     else
       {
       addNewPoint(x, y1, z,  TargetType.MINE_CLEAR);
       }
-    if(left)
-      {
-      addNewPoint(x, y1, z,  TargetType.MINE_FILL);      
-      }
-    else
-      {
-      addNewPoint(x, y1, z,  TargetType.MINE_FILL);
-      }
     }
-  else if(needsFilled(id))
+  else if((top && needsFilled(id)) || (!top && needsFilledFloor(id)) )
     {
-    if(left)
-      {
-      addNewPoint(x, y1, z,  TargetType.MINE_FILL);      
-      }
-    else
-      {
-      addNewPoint(x, y1, z,  TargetType.MINE_FILL);
-      }
-    }  
-  if(addTorch && id1!= Block.torchWood.blockID)
-    {
-    if(left)
-      {
-      addNewPoint(x, y, z,  TargetType.MINE_TORCH);      
-      }
-    else
-      {
-      addNewPoint(x, y, z,  TargetType.MINE_TORCH);
-      }
+    addNewPoint(x, y1, z,  TargetType.MINE_FILL);
     }
   }
 /************************************************BRANCHES*************************************************/
@@ -281,23 +232,33 @@ protected void addNodeToBranch(World world, int x, int y, int z, boolean top)
   int id4 = world.getBlockId(x-1, y, z);
   int y1 = top? y+1 : y-1; 
   boolean last = z%4!=0;
-  if(id1!=0 && id1!=Block.torchWood.blockID)//current block needs cleared before can process sides/etc
+  boolean addTorch = !top && z%4==0;
+  if(addTorch && id1 != Block.torchWood.blockID)
+    {
+    addNewPoint(x,y,z, TargetType.MINE_TORCH);
+    }
+  else if(id1!=0)
     {
     addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
     }
   if(isValidResource(id2))
     {
-    addNewPoint(x, y1, z,  TargetType.MINE_CLEAR);
-    addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+    if(top)
+      {
+      addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+      }
+    else
+      {
+      addNewPoint(x, y1, z,  TargetType.MINE_CLEAR);
+      }
     }
-  else if(needsFilled(id2))
+  else if((top && needsFilled(id2)) || (!top && needsFilledFloor(id2)))//only fill water/lava above, or missing floor blocks
     {
     addNewPoint(x, y1, z,  TargetType.MINE_FILL);
     }
   if(isValidResource(id3))
     {
     addNewPoint(x+1, y, z,  TargetType.MINE_CLEAR);
-    addNewPoint(x+1, y, z,  TargetType.MINE_FILL);
     }
   else if(needsFilled(id3))
     {
@@ -306,22 +267,17 @@ protected void addNodeToBranch(World world, int x, int y, int z, boolean top)
   if(isValidResource(id4))
     {
     addNewPoint(x-1, y, z,  TargetType.MINE_CLEAR);
-    addNewPoint(x-1, y, z,  TargetType.MINE_FILL);
     }
   else if(needsFilled(id4))
     {
     addNewPoint(x-1, y, z,  TargetType.MINE_FILL);
-    }
-  if(!top && z%4==0 && id1 != Block.torchWood.blockID)
-    {
-    addNewPoint(x,y,z, TargetType.MINE_TORCH);
-    }
+    }  
   }
 
 /************************************************UTILITY*************************************************/
 protected void addNewPoint(int x, int y, int z, byte meta, TargetType type)
   {
-  this.workList.add(new MinePoint(x,y,z,0, meta,type));
+  this.workList.add(new WorkSitePoint(x,y,z, meta,type));
   }
 
 protected void addNewPoint(int x, int y, int z, TargetType type)

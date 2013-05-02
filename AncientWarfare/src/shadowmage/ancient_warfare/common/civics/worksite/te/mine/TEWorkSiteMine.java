@@ -27,8 +27,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkSitePoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -36,7 +36,7 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public class TEWorkSiteMine extends TECivic
+public class TEWorkSiteMine extends TEWorkSite
 {
 
 /**
@@ -71,6 +71,7 @@ int currentLevelNum = -1;
 int minYLevel = 5;//the lowest
 int levelHeight = 4;
 int mineRescanTicks = 0;
+int mineRescanMax = (20/Config.npcAITicks) * 10;
 boolean initialized = false;
 boolean mineFinished = false;
 MineLevel currentLevel = null;
@@ -81,111 +82,62 @@ ItemStack torchFilter = new ItemStack(Block.torchWood, 1);
 
 public TEWorkSiteMine()
   {
+  
   }
 
 @Override
-public void updateEntity()
+protected void onCivicUpdate()
   {
-  if(worldObj!=null && !worldObj.isRemote)
-    {    
-    this.mineRescanTicks++;
-    if(!initialized)
-      {
-      Config.logDebug("initializing mine");      
-      this.initialized = true;
-      this.loadLevel(0);      
-      }
-    if(!mineFinished && this.mineRescanTicks > Config.npcAITicks * 50)//250 ticks, 12 1/2 seconds...
-      {
-      Config.logDebug("INITIATING FULL MINE RESCAN");
-      this.loadLevel(currentLevelNum);
-      }
-    if(this.currentLevel!=null && !mineFinished && !this.currentLevel.hasWork())//load next level
-      {
-      Config.logDebug("loading next level");
-      int adjTopY = this.minY - (currentLevel.levelSize * (currentLevelNum+1));//the top of the level
-      if(adjTopY-currentLevel.levelSize-1 >= this.minYLevel)
-        {
-        this.loadLevel(currentLevelNum+1);
-        }
-      else
-        {
-        this.mineFinished = true;
-        }
-      }
-    else if(this.currentLevel==null)
-      {
-      Config.logDebug("current level was null!!");
-      //uhh..maybe check if finished and re-init the level or something
-      }
-    else if(mineFinished)
-      {
-//      Config.logDebug("mine is finished");
-      }
-    } 
-  super.updateEntity();
-  }
-
-@Override
-public WorkPoint getWorkPoint(NpcBase npc)
-  {
-  if(this.currentLevel!=null && this.currentLevel.hasWork())
-    {    
-    return new WorkPoint(this, xCoord, yCoord, zCoord, 1, TargetType.WORK);    
-    }
-  return null;
-  }
-
-@Override
-public void onWorkFinished(NpcBase npc, WorkPoint p)
-  {
-  if(this.currentLevel!=null)
+  mineRescanTicks++;
+  if(!mineFinished && initialized && mineRescanTicks>=mineRescanMax)
     {
-    this.currentLevel.onWorkCompleted(this, npc);
-    }  
-  }
-
-@Override
-public WorkPoint doWork(NpcBase npc, WorkPoint p)
-  {
-  p.incrementHarvestHits();
-  if(p.shouldFinish())//hits were enough to trigger 'finish'
-    {
-    this.onWorkFinished(npc, p);
-    return null;
+    mineRescanTicks = 0;
+    this.loadLevel(currentLevelNum);
     }
-  return p;
+  super.onCivicUpdate(); 
   }
 
-public void handleLadderAction(NpcBase npc,  MinePoint m)
+public void handleLadderAction(NpcBase npc,  WorkSitePoint m)
   {
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
-  if(id==0)
+  if(id!=0)
+    {
+    handleClearAction(npc, m);
+    }
+  if(inventory.containsAtLeast(ladderFilter, 1))
     {
     npc.worldObj.setBlock(m.x, m.y, m.z, Block.ladder.blockID, (int)m.special, 3);
     inventory.tryRemoveItems(ladderFilter, 1);
     }
   }
 
-public void handleTorchAction(NpcBase npc,  MinePoint m)
+public void handleTorchAction(NpcBase npc, WorkSitePoint m)
   {
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
-  if(id==0)
+  if(id!=0)    
     {
-    npc.worldObj.setBlock(m.x, m.y, m.z, Block.torchWood.blockID, 5, 3);
+    handleClearAction(npc, m);
+    }
+  if(inventory.containsAtLeast(torchFilter, 1))
+    {
+    npc.worldObj.setBlock(m.x, m.y, m.z, Block.torchWood.blockID, 5, 3);  
     inventory.tryRemoveItems(torchFilter, 1);
     }
   }
 
-public void handleClearAction(NpcBase npc, MinePoint m)
+public void handleClearAction(NpcBase npc, WorkSitePoint m)
   {
   this.handleBlockBreak(npc, m.x, m.y, m.z);
   }
 
-public void handleFillAction(NpcBase npc, MinePoint m)
-  {
+public void handleFillAction(NpcBase npc, WorkSitePoint m)
+  {  
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
-  if(id==0)
+  if(id!=0)
+    {
+    this.handleBlockBreak(npc, m.x, m.y, m.z);
+    }
+  if(inventory.containsAtLeast(fillerFilter, 1))
     {
     npc.worldObj.setBlock(m.x, m.y, m.z, Block.cobblestone.blockID, 0,3);
     inventory.tryRemoveItems(fillerFilter, 1);
@@ -224,74 +176,30 @@ public boolean handleBlockBreak(NpcBase npc, int x, int y, int z)
   return false;
   }
 
-@Override
-public void onWorkFailed(NpcBase npc, WorkPoint point)
-  {
- 
-  }
-
-@Override
-public void updateWorkPoints()
-  {
-  
-  }
-
-@Override
-protected void updateHasWork()
-  {
-  boolean hasWork = false;
-  if(currentLevel!=null && currentLevel.hasWork())
-    {
-    hasWork = true;
-    }
-  this.setHasWork(hasWork);
-  }
-
-@Override
-public boolean onInteract(World world, EntityPlayer player)
-  {
-  if(!world.isRemote)
-    {
-    GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);
-    }
-  return true;
-  }
-
 protected void loadLevel(int level)
   { 
   if(level<0)
     {
     return;
     }
-  this.mineRescanTicks = 0;
   this.currentLevelNum = level;
   int adjTopY = this.minY - 4 * level;//the top of the level
   int adjMinY = adjTopY-3;  
   this.currentLevel = new MineLevelClassic(minX, adjMinY, minZ, maxX - minX + 1, 4, maxZ - minZ + 1);
   this.currentLevel.initializeLevel(worldObj);
+  this.workPoints.addAll(this.currentLevel.workList);
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
   super.readFromNBT(tag);
-//  this.initialized = tag.getBoolean("mineInit");
   this.mineFinished = tag.getBoolean("mineDone");
   if(!mineFinished)
     {
     this.currentLevelNum = -1;
     initialized = false;
     }
-//  if(tag.hasKey("mineLevelData"))
-//    {
-//    this.currentLevel = new MineLevel(tag.getCompoundTag("mineLevelData"));
-//    }
-//  else
-//    {
-//    this.initialized = false;
-//    this.mineFinished = false;
-//    //force re-init...
-//    }
   }
 
 @Override
@@ -299,10 +207,98 @@ public void writeToNBT(NBTTagCompound tag)
   {
   super.writeToNBT(tag);
   tag.setBoolean("mineDone", this.mineFinished);
-//  if(this.currentLevel!=null)
-//    {
-//    tag.setCompoundTag("mineLevelData", this.currentLevel.getNBTTag());
-//    }  
+  }
+
+@Override
+protected void scan()
+  {
+  if(!initialized)
+    {      
+    this.initialized = true;
+    this.loadLevel(0);      
+    }  
+  if(this.currentLevel!=null && !mineFinished && !this.currentLevel.hasWork())//load next level
+    {
+    int adjTopY = this.minY - (currentLevel.levelSize * (currentLevelNum+1));//the top of the level
+    if(adjTopY-currentLevel.levelSize-1 >= this.minYLevel)
+      {
+      this.loadLevel(currentLevelNum+1);
+      }
+    else
+      {
+      this.mineFinished = true;
+      }
+    }  
+  }
+
+@Override
+protected void doWork(NpcBase npc, WorkSitePoint p)
+  {
+  switch(p.work)
+    {
+    case MINE_CLEAR:
+    handleClearAction(npc, p);
+    break;
+    case MINE_FILL:
+    handleFillAction(npc, p);
+    break;
+    case MINE_LADDER:
+    handleLadderAction(npc, p);
+    break;
+    case MINE_TORCH:   
+    handleTorchAction(npc, p);
+    break;
+    }
+  }
+
+@Override
+protected TargetType validateWorkPoint(WorkSitePoint p)
+  {
+  return p==null ? TargetType.NONE : validateWorkPoint(p.x, p.y, p.z, p.work);
+  }
+
+protected TargetType validateWorkPoint(int x, int y, int z, TargetType t)
+  {
+  switch(t)
+  {
+  case MINE_CLEAR:
+  if(worldObj.getBlockId(x, y, z)!=0)
+    {
+    return t;
+    }
+  break;
+  
+  case MINE_LADDER:
+  if(worldObj.getBlockId(x, y, z)!=Block.ladder.blockID)
+    {
+    if(inventory.containsAtLeast(ladderFilter, 1))
+      {
+      return t;
+      }
+    }
+  break;
+  
+  case MINE_TORCH:
+  if(worldObj.getBlockId(x, y, z)!=Block.torchWood.blockID)
+    {
+    if(inventory.containsAtLeast(torchFilter, 1))
+      {
+      return t;
+      }    
+    }
+  break;
+  
+  case MINE_FILL:  
+  if(worldObj.getBlockId(x, y, z)!=Block.cobblestone.blockID)
+    {
+    if(inventory.containsAtLeast(fillerFilter, 1))
+      {
+      return t;
+      }
+    }
+  break;
+  }  
+  return TargetType.NONE;
   }
 
 }

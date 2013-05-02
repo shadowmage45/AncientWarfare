@@ -23,127 +23,45 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public class TEFarmCactus extends TECivic
+public class TEFarmCactus extends TEWorkSiteFarm
 {
-
-ItemStack plantableFilter = new ItemStack(Block.cactus);
-int mainBlockID = Block.cactus.blockID;
 
 /**
  * 
  */
 public TEFarmCactus()
   {
+  this.mainBlockID = Block.cactus.blockID;
+  plantableFilter = new ItemStack(Block.cactus);
   }
 
 @Override
-public void updateWorkPoints()
+protected TargetType validateWorkPoint(int x, int y, int z)
   {
-  super.updateWorkPoints();
-  for(int x = this.minX; x<=this.maxX; x++)
-    {
-    for(int y = this.minY; y<=this.maxY; y++)
-      {
-      for(int z = this.minZ; z<=this.maxZ; z++)
-        {        
-        this.updateOrAddWorkPoint(x, y, z);
-        }
-      }
-    }
-  }
-
-protected void updateOrAddWorkPoint(int x, int y, int z)
-  {  
-  TargetType t = TargetType.NONE;
-  boolean addPoint = false;
   int id = worldObj.getBlockId(x, y, z);  
   if(x%4==0 && z%4==0 && worldObj.getBlockId(x, y-1, z)==Block.sand.blockID && inventory.containsAtLeast(plantableFilter, 1))
     {
     if(worldObj.getBlockId(x-1, y, z)==0 && worldObj.getBlockId(x+1, y, z)==0 && worldObj.getBlockId(x, y, z-1)==0 && worldObj.getBlockId(x, y, z+1)==0)
       {
-      t = TargetType.FARM_PLANT;
-      addPoint = true;
+      return TargetType.FARM_PLANT;
       }    
     }
   else if(id==this.mainBlockID && inventory.canHoldItem(plantableFilter, 1))
     {
     if(worldObj.getBlockId(x, y-1, z)==mainBlockID && worldObj.getBlockId(x, y-2, z)==mainBlockID)
       {
-      t = TargetType.FARM_HARVEST;
-      addPoint = true;
+      return TargetType.FARM_HARVEST;
       }
     }
-  if(addPoint)
-    {
-    this.workPoints.add(new WorkPoint(this, x,y,z, 1, t));
-    }  
+  return TargetType.NONE;
   }
 
-@Override
-public void onWorkFinished(NpcBase npc, WorkPoint point)
-  {
-  if(npc==null || point==null)
-    {
-    return;
-    }
-  if(point.hasWork(worldObj))
-    {
-    if(point.getTargetType()==TargetType.FARM_HARVEST)
-      {
-      Config.logDebug("harvesting crops!!");
-      List<ItemStack> blockDrops = Block.crops.getBlockDropped(npc.worldObj, point.x(), point.y(), point.z(), 7, 0);
-      worldObj.setBlockToAir(point.x(), point.y(), point.z());
-      for(ItemStack item : blockDrops)
-        {
-        if(item==null){continue;}
-        if(InventoryTools.doItemsMatch(item, plantableFilter) && inventory.canHoldItem(plantableFilter, item.stackSize))
-          {
-          item = inventory.tryMergeItem(item);
-          if(item!=null)
-            {
-            item = npc.inventory.tryMergeItem(item);
-            if(item!=null)
-              {
-              InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
-              }
-            }
-          }
-        else
-          {
-          item = npc.inventory.tryMergeItem(item);
-          if(item!=null)
-            {
-            InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
-            }
-          }
-        }
-      }
-    else if(point.getTargetType()==TargetType.FARM_PLANT)
-      {
-      if(inventory.containsAtLeast(plantableFilter, 1))
-        {
-        inventory.tryRemoveItems(plantableFilter, 1);
-        worldObj.setBlock(point.x(), point.y(), point.z(), mainBlockID, 0, 3);
-        }
-      else
-        {
-        Config.logDebug("had plant job but no plantables!!");
-        }
-      }
-    }
-  super.onWorkFinished(npc, point);
-  }
 
 
 }

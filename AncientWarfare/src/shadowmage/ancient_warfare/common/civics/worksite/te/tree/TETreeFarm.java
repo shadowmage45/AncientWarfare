@@ -29,8 +29,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkSitePoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -38,15 +38,16 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public class TETreeFarm extends TECivic
+public abstract class TETreeFarm extends TEWorkSite
 {
 
-Block woodBlock = Block.wood;
+int logID = Block.wood.blockID;
 int logMeta = 0;
-int saplingID;
-int saplingMeta;
+int saplingID = Block.sapling.blockID;
+int saplingMeta = 0;
 int maxSearchHeight = 16;
 ItemStack saplingFilter;
+
 /**
  * 
  */
@@ -56,34 +57,9 @@ public TETreeFarm()
   }
 
 @Override
-public boolean onInteract(World world, EntityPlayer player)
+protected void onCivicUpdate()
   {
-  if(!world.isRemote)
-    {
-    GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);
-    }
-  return true;
-  }
-
-@Override
-public void updateWorkPoints()
-  {
-  super.updateWorkPoints();
-  if(woodBlock==null)
-    {
-    return;
-    }
-  this.workPoints.clear();
-  for(int y = this.minY; y<=this.maxY+this.maxSearchHeight; y++)
-    {
-    for(int x = this.minX; x<=this.maxX; x++)
-      {
-      for(int z = this.minZ; z<=this.maxZ; z++)
-        {        
-        this.updateOrAddWorkPoint(x, y, z);
-        }
-      }
-    }
+  super.onCivicUpdate();
   List<EntityItem> entities = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(minX-1, minY-1, minZ-1, maxX+2, maxY+2, maxZ+2));
   ItemStack stack;
   if(entities!=null)
@@ -113,54 +89,39 @@ public void updateWorkPoints()
     }
   }
 
-protected void updateOrAddWorkPoint(int x, int y, int z)
-  {  
-  WorkPoint p;
-  TargetType t = null;
-  int id = worldObj.getBlockId(x, y, z);
-  int meta = worldObj.getBlockMetadata(x, y, z);
-  if( id==woodBlock.blockID && (meta &3) == this.logMeta )
-    {
-    t = TargetType.TREE_CHOP;
-    }
-  else if(id==0)
-    {
-    if(x%4==0 && z%4==0)
-      {
-      id = worldObj.getBlockId(x, y-1, z);
-      if((id==Block.dirt.blockID || id==Block.grass.blockID) && inventory.containsAtLeast(saplingFilter, 1))
-        {
-        t = TargetType.TREE_PLANT;
-//        Config.logDebug("adding sapling replant!!");
-        }
-      else
-        {
-        return;
-        }
-      } 
-    else
-      {
-      return;
-      }
-    }
-  else
-    {
-    return;
-    }
-  p = new WorkPoint(this, xCoord, yCoord, zCoord, 1, t);
-//  Config.logDebug("adding new work point to tree farm: "+p+","+tp);
-  this.workPoints.add(p);
+@Override
+public AxisAlignedBB getSecondaryRenderBounds()
+  {
+  return AxisAlignedBB.getAABBPool().getAABB(minX, maxY+1, minZ, maxX+1, maxY+1+maxSearchHeight, maxZ+1);
   }
 
 @Override
-public void onWorkFinished(NpcBase npc, WorkPoint point)
+protected void scan()
   {
-  super.onWorkFinished(npc, point);
-  
-  if(point.getTargetType()==TargetType.TREE_CHOP)
+  TargetType t;
+  for(int y = this.minY; y<=this.maxY+this.maxSearchHeight; y++)
+    {
+    for(int x = this.minX; x<=this.maxX; x++)
+      {
+      for(int z = this.minZ; z<=this.maxZ; z++)
+        {        
+        t = this.validateWorkPoint(x, y, z);
+        if(t!=TargetType.NONE)
+          {
+          this.addWorkPoint(x, y, z, t);
+          }
+        }
+      }
+    }
+  }
+
+@Override
+protected void doWork(NpcBase npc, WorkSitePoint p)
+  {
+  if(p.work==TargetType.TREE_CHOP)
     {
     Config.logDebug("chopping tree!!"); 
-    List<ItemStack> drops = BlockTools.breakBlock(worldObj, point.x(), point.y(), point.z(), 0);   
+    List<ItemStack> drops = BlockTools.breakBlock(worldObj, p.x, p.y, p.z, 0);   
     for(ItemStack item : drops)
       {
       item = npc.inventory.tryMergeItem(item);
@@ -174,26 +135,39 @@ public void onWorkFinished(NpcBase npc, WorkPoint point)
         }
       }
     }  
-  else if(point.getTargetType()==TargetType.TREE_PLANT && inventory.containsAtLeast(saplingFilter, 1))
-    {
-    Config.logDebug("planting sapling");
-    int id = worldObj.getBlockId(point.x(), point.y()-1, point.z());
-    if(id==Block.dirt.blockID || id==Block.grass.blockID)
-      {
-      worldObj.setBlock(point.x(), point.y(), point.z(), saplingID, saplingMeta, 3);
-      }    
-    inventory.tryRemoveItems(saplingFilter, 1);
+  else if(p.work==TargetType.TREE_PLANT && inventory.containsAtLeast(saplingFilter, 1))
+    { 
+    Config.logDebug("planting sapling ");
+    worldObj.setBlock(p.x, p.y, p.z, saplingID, saplingMeta, 3);      
+    inventory.tryRemoveItems(saplingFilter, 1);    
     }
   }
 
 @Override
-protected void updateHasWork()
+protected TargetType validateWorkPoint(WorkSitePoint p)
   {
-  this.setHasWork(!this.workPoints.isEmpty());
+  return p==null ? TargetType.NONE : validateWorkPoint(p.x, p.y, p.z);
   }
 
-public AxisAlignedBB getSecondaryRenderBounds()
+protected TargetType validateWorkPoint(int x, int y, int z)
   {
-  return AxisAlignedBB.getAABBPool().getAABB(minX, maxY+1, minZ, maxX+1, maxY+1+maxSearchHeight, maxZ+1);
+  int id = worldObj.getBlockId(x, y, z);
+  int meta = worldObj.getBlockMetadata(x, y, z);
+  if( id==logID && (meta &3) == this.logMeta )
+    {
+    return TargetType.TREE_CHOP;
+    }
+  else if(id==0)
+    {
+    if(x%4==0 && z%4==0)
+      {
+      id = worldObj.getBlockId(x, y-1, z);
+      if((id==Block.dirt.blockID || id==Block.grass.blockID) && inventory.containsAtLeast(saplingFilter, 1))
+        {
+        return TargetType.TREE_PLANT;
+        }
+      } 
+    }
+  return TargetType.NONE;
   }
 }

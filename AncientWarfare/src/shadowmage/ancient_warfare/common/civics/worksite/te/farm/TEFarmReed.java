@@ -25,41 +25,18 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public class TEFarmReed extends TECivic
+public class TEFarmReed extends TEWorkSiteFarm
 {
 
-
-ItemStack plantableFilter = new ItemStack(Item.reed);
-int mainBlockID = Block.reed.blockID;
-
-/**
- * 
- */
 public TEFarmReed()
   {
-  }
-
-@Override
-public void updateWorkPoints()
-  {
-  super.updateWorkPoints();
-  for(int x = this.minX; x<=this.maxX; x++)
-    {
-    for(int y = this.minY; y<=this.maxY; y++)
-      {
-      for(int z = this.minZ; z<=this.maxZ; z++)
-        {        
-        this.updateOrAddWorkPoint(x, y, z);
-        }
-      }
-    }
+  plantableFilter = new ItemStack(Item.reed);
+  mainBlockID = Block.reed.blockID;
   }
 
 protected boolean isWater(int x, int y, int z)
@@ -68,8 +45,9 @@ protected boolean isWater(int x, int y, int z)
   return id==Block.waterMoving.blockID || id==Block.waterStill.blockID;
   }
 
-protected void updateOrAddWorkPoint(int x, int y, int z)
-  {  
+@Override
+protected TargetType validateWorkPoint(int x, int y, int z)
+  {
   TargetType t = TargetType.NONE;
   boolean addPoint = false;
   boolean foundWater =false;
@@ -79,76 +57,17 @@ protected void updateOrAddWorkPoint(int x, int y, int z)
     {
     if(id2==Block.reed.blockID && worldObj.getBlockId(x, y-2, z)==Block.reed.blockID)
       {
-      addPoint = true;
-      t = TargetType.FARM_HARVEST;
+      return TargetType.FARM_HARVEST;
       }    
     }
   else if(id==0 && id2==Block.dirt.blockID || id2==Block.grass.blockID || id2==Block.sand.blockID)
     {
     if(isWater(x-1, y-1, z) || isWater(x+1,y-1,z) || isWater(x,y-1,z-1) || isWater(x,y-1,z+1))
       {
-      t = TargetType.FARM_PLANT;
+      return TargetType.FARM_PLANT;
       }       
-    }
-  if(addPoint)
-    {
-    this.workPoints.add(new WorkPoint(this, x,y,z, 1, t));
-    }  
-  }
-
-@Override
-public void onWorkFinished(NpcBase npc, WorkPoint point)
-  {
-  if(npc==null || point==null)
-    {
-    return;
-    }
-  if(point.hasWork(worldObj))
-    {
-    if(point.getTargetType()==TargetType.FARM_HARVEST)
-      {
-      Config.logDebug("harvesting crops!!");
-      List<ItemStack> blockDrops = Block.crops.getBlockDropped(npc.worldObj, point.x(), point.y(), point.z(), 7, 0);
-      worldObj.setBlockToAir(point.x(), point.y(), point.z());
-      for(ItemStack item : blockDrops)
-        {
-        if(item==null){continue;}
-        if(InventoryTools.doItemsMatch(item, plantableFilter) && inventory.canHoldItem(plantableFilter, item.stackSize))
-          {
-          item = inventory.tryMergeItem(item);
-          if(item!=null)
-            {
-            item = npc.inventory.tryMergeItem(item);
-            if(item!=null)
-              {
-              InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
-              }
-            }
-          }
-        else
-          {
-          item = npc.inventory.tryMergeItem(item);
-          if(item!=null)
-            {
-            InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
-            }
-          }
-        }
-      }
-    else if(point.getTargetType()==TargetType.FARM_PLANT)
-      {
-      if(inventory.containsAtLeast(plantableFilter, 1))
-        {
-        inventory.tryRemoveItems(plantableFilter, 1);
-        worldObj.setBlock(point.x(), point.y(), point.z(), mainBlockID, 0, 3);
-        }
-      else
-        {
-        Config.logDebug("had plant job but no plantables!!");
-        }
-      }
-    }
-  super.onWorkFinished(npc, point);
+    } 
+  return TargetType.NONE;
   }
 
 }

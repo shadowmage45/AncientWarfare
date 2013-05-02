@@ -89,7 +89,7 @@ public void onPlayerAttack(AttackEntityEvent evt)
         {
         continue;
         }
-      if(npc.getPlayerTarget().getEntity(evt.entityPlayer.worldObj)==evt.entityPlayer)
+      if(npc.getPlayerTarget()!=null && npc.getPlayerTarget().getEntity(evt.entityPlayer.worldObj)==evt.entityPlayer)
         {
         npc.handleBroadcastAttackTarget(evt.target);
         }

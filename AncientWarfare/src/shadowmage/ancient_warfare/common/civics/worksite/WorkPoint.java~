@@ -102,17 +102,28 @@ public boolean shouldFinish()
 
 public int x()
   {
-  return this.entTarget!=null ? MathHelper.floor_double(this.entTarget.posX) : this.teTarget!=null ? this.teTarget.xCoord : x;
+  return this.workData.target!=null ? MathHelper.floor_double(this.workData.target.posX) : this.workData.teTarget!=null ? this.workData.teTarget.xCoord : workData.x;
   }
 
 public int y()
   {
-  return this.entTarget!=null ? MathHelper.floor_double(this.entTarget.posY) : this.teTarget!=null ? this.teTarget.yCoord : y;
+  return this.workData.target!=null ? MathHelper.floor_double(this.workData.target.posY) : this.workData.teTarget!=null ? this.workData.teTarget.yCoord : workData.y;
   }
 
 public int z()
   {
-  return this.entTarget!=null ? MathHelper.floor_double(this.entTarget.posZ) : this.teTarget!=null ? this.teTarget.zCoord : z;
+  return this.workData.target!=null ? MathHelper.floor_double(this.workData.target.posZ) : this.workData.teTarget!=null ? this.workData.teTarget.zCoord : workData.z;
+  }
+
+@Override
+public String toString()
+  {  
+  return String.format("WorkPoint--owner:%s, %s, %s  -- work: %s,%s,%s::%s ", x,y,z, workData.x, workData.y, workData.z, workData.work);
+  }
+
+public TargetType getWorkType()
+  {
+  return this.workData== null ? TargetType.NONE : this.workData.work;
   }
 
 protected class WorkPointInner

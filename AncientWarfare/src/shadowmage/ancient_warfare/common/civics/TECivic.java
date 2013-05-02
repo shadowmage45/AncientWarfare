@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.civics;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -39,7 +38,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
@@ -54,8 +52,13 @@ import shadowmage.ancient_warfare.common.utils.BlockPosition;
 public abstract class TECivic extends TileEntity implements IInventory
 {
 
-int ticksExisted = 0;
-int teamNum = 0;
+protected static Random rng = new Random();
+private static int teInstanceIDNext = 0;
+
+protected int ticksExisted = 0;
+protected int teID = 0;
+protected int tickDivider = Config.npcAITicks * 10;
+
 /**
  * work-site bounds, may be un-set for non work-site civics
  */
@@ -65,23 +68,15 @@ public int minZ;
 public int maxX;
 public int maxY;
 public int maxZ;
-public TargetType workType;
+protected int teamNum = 0;
 protected boolean isWorkSite = false;
 protected boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
 protected AWInventoryBasic inventory = new AWInventoryBasic(0);
 protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
-protected List<WorkPoint> workPoints = new ArrayList<WorkPoint>();//points being worked currently
+//protected List<WorkPoint> workPoints = new ArrayList<WorkPoint>();//points being worked currently
+
 protected Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
-protected Random rng = new Random();
-
 private boolean hasWork = false;
-
-protected int teID = 0;
-
-static int teInstanceIDNext = 0;
-
-protected int tickDivider = Config.npcAITicks * 10;
-
 protected int clientWorkStatus = 0;
 protected int clientInventoryStatus = 0;
 protected int clientWorkerStatus = 0;
@@ -121,14 +116,18 @@ public void updateEntity()
   if(this.worldObj!=null && !this.worldObj.isRemote && (this.ticksExisted+this.teID)% tickDivider == 0 )
     {
     long t1 = System.nanoTime();
-    this.updateHasWork();
-    this.broadCastToSoldiers(Config.npcAISearchRange);
-    this.updateWorkPoints();
-    this.validateWorkers(); 
-    this.updateInventoryStatus();
+    this.onCivicUpdate();
     Config.logDebug("TE tick time: "+(System.nanoTime()-t1) + " for: "+this.getCivic().getDisplayName());
     }   
   super.updateEntity();
+  }
+
+protected void onCivicUpdate()
+  {
+  this.validateWorkers();
+  this.updateHasWork();
+  this.updateInventoryStatus();
+  this.broadCastToSoldiers(Config.npcAISearchRange);
   }
 
 @Override
@@ -275,25 +274,30 @@ public void addWorker(NpcBase npc)
     }  
   }
 
-public WorkPoint getWorkPoint(NpcBase npc)
+public void doWork(NpcBase npc)
   {
-  if(!this.workers.contains(npc))
-    {
-    return null;
-    }
-  Iterator<WorkPoint> it = this.workPoints.iterator();
-  WorkPoint p = null;
-  while(it.hasNext())
-    {
-    p = it.next();
-    if(p.hasWork(worldObj))
-      {
-      p.resetHarvestTicks();
-      return p;
-      }    
-    }   
-  return null;
+  
   }
+
+//public WorkPoint getWorkPoint(NpcBase npc)
+//  {
+//  if(!this.workers.contains(npc))
+//    {
+//    return null;
+//    }
+//  Iterator<WorkPoint> it = this.workPoints.iterator();
+//  WorkPoint p = null;
+//  while(it.hasNext())
+//    {
+//    p = it.next();
+//    if(p.hasWork(worldObj))
+//      {
+//      p.resetHarvestTicks();
+//      return p;
+//      }    
+//    }   
+//  return null;
+//  }
 
 public void removeWorker(NpcBase npc)
   {
@@ -304,32 +308,23 @@ public void removeWorker(NpcBase npc)
     }
   }
 
-public void onWorkFinished(NpcBase npc, WorkPoint point)
-  {
-  if(point!=null)
-    {       
-    this.workPoints.remove(point);
-    }
-  }
-
-public void onWorkFailed(NpcBase npc, WorkPoint point)
-  {
-  this.onWorkFinished(npc, point);
-  }
-
-public void onWorkNoPath(NpcBase npc, WorkPoint point)
-  {
-  this.onWorkFinished(npc, point);
-  }
-
-/**
- * overridable method to update work-points. called from main onUpdate every X ticks
- * X=Config.npcAITicks * 10
- */
-public void updateWorkPoints()
-  {
- 
-  }
+//public void onWorkFinished(NpcBase npc, WorkPoint point)
+//  {
+//  if(point!=null)
+//    {       
+//    this.workPoints.remove(point);
+//    }
+//  }
+//
+//public void onWorkFailed(NpcBase npc, WorkPoint point)
+//  {
+//  this.onWorkFinished(npc, point);
+//  }
+//
+//public void onWorkNoPath(NpcBase npc, WorkPoint point)
+//  {
+//  this.onWorkFinished(npc, point);
+//  }
 
 protected void validateWorkers()
   {
@@ -339,7 +334,7 @@ protected void validateWorkers()
     {
     npc = workIt.next();
     if(npc==null || npc.isDead || npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
-      {
+      {      
       workIt.remove();
       continue;
       }
@@ -352,20 +347,20 @@ protected void validateWorkers()
     }
   }
 
-public WorkPoint doWork(NpcBase npc, WorkPoint p)
-  {
-  p.incrementHarvestHits();  
-  if(!p.hasWork(worldObj))
-    {
-    p.setHarvestHitToMax();
-    }
-  if(p.shouldFinish())
-    {
-    this.onWorkFinished(npc, p);
-    return null;
-    }
-  return p;
-  }
+//public WorkPoint doWork(NpcBase npc, WorkPoint p)
+//  {
+//  p.incrementHarvestHits();  
+//  if(!p.hasWork(worldObj))
+//    {
+//    p.setHarvestHitToMax();
+//    }
+//  if(p.shouldFinish())
+//    {
+//    this.onWorkFinished(npc, p);
+//    return null;
+//    }
+//  return p;
+//  }
 
 /**
  * return cached hasWork value
@@ -382,17 +377,8 @@ public boolean hasWork()
  * X = Config.npcAITicks*10
  */
 protected void updateHasWork()
-  {
-  boolean hasWork = false;
-  for(WorkPoint p : this.workPoints)
-    {
-    if(p.hasWork(worldObj))
-      {
-      hasWork = true;
-      break;
-      }
-    }  
-  this.setHasWork(hasWork);
+  {  
+  this.setHasWork(false);
   }
 
 /**
@@ -548,7 +534,7 @@ protected void sendClientEvent(int id, int val)
   {
   if(!worldObj.isRemote)
     {
-    worldObj.addBlockEvent(xCoord, yCoord, zCoord, blockType.blockID, id, val);
+    worldObj.addBlockEvent(xCoord, yCoord, zCoord, worldObj.getBlockId(xCoord, yCoord, zCoord), id, val);
     }
   }
 

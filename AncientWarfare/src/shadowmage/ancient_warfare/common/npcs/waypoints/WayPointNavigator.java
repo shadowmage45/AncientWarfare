@@ -23,15 +23,11 @@ package shadowmage.ancient_warfare.common.npcs.waypoints;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 
 /**
@@ -55,8 +51,6 @@ int currentPatrolPoint = 0;
 WayPoint work = null;
 WayPoint deposit = null;
 WayPoint upkeep = null;
-
-WorkPoint workPoint = null;
 
 //TODO add special item routing waypoints for couriers
 
@@ -143,7 +137,6 @@ public void setWorkSite(WayPoint p)
 public void clearWorkSite()
   {
   this.work = null;
-  this.workPoint = null;
   }
 
 /************************************************DEPOSIT SITE*************************************************/
@@ -176,17 +169,6 @@ public void setUpkeepSite(WayPoint p)
 public void clearUpkeepSite()
   {
   this.upkeep = null;
-  }
-
-/************************************************WORK POINT (YES IT NEEDS TO BE HERE)*************************************************/
-public WorkPoint getWorkPoint()
-  {
-  return workPoint;
-  }
-
-public void setWorkPoint(WorkPoint p)
-  {
-  this.workPoint = p;
   }
 
 /************************************************HOME POINT*************************************************/

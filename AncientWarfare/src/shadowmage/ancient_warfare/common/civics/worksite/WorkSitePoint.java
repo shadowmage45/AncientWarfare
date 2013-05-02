@@ -18,25 +18,49 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
+package shadowmage.ancient_warfare.common.civics.worksite;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class TEFarmWheat extends TEWorkSiteFarm
+public class WorkSitePoint
 {
 
-/**
- * 
- */
-public TEFarmWheat()
+public final Entity target;
+public final int x;
+public final int y;
+public final int z;
+public final byte special;
+public final TargetType work;
+
+public WorkSitePoint(int x, int y, int z, TargetType type)
   {
-  this.mainBlockID = Block.crops.blockID;
-  this.mainBlockMatureMeta = 7;
-  this.plantableFilter = new ItemStack(Item.seeds);
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  this.work = type;
+  target = null;
+  special = 0;
   }
 
+public WorkSitePoint(int x, int y, int z, byte special, TargetType t)
+  {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  this.work = t;
+  target = null;
+  this.special = special;
+  }
 
+public WorkSitePoint(Entity ent, TargetType type)
+  {
+  x = 0;
+  y = 0;
+  z = 0;
+  this.target = ent;
+  this.work = type;
+  special = 0;
+  }
 
 }

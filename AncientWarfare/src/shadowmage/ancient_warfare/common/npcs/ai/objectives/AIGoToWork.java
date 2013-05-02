@@ -22,8 +22,6 @@ package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -101,7 +99,6 @@ public void updatePriority()
     {
 //    Config.logDebug("site not workable -- clearing work site");
     npc.wayNav.clearWorkSite();
-    npc.wayNav.setWorkPoint(null);    
     work = false;
     }  
   if(work)
@@ -123,15 +120,10 @@ public void updatePriority()
 protected boolean isWorkSiteWorkable()
   {
   ITargetEntry p = npc.wayNav.getWorkSite();
-  WorkPoint wp = npc.wayNav.getWorkPoint();
   if(workSite!=null && p!=null)//make sure current work reference lines up with wayNav work-site
     {
     if(p.floorX()!=workSite.xCoord || p.floorY()!= workSite.yCoord || p.floorZ()!=workSite.zCoord)
-      {
-      if(npc.wayNav.getWorkPoint()!=null)
-        {    		
-        workSite.onWorkFailed(npc, npc.wayNav.getWorkPoint());
-        }      
+      {         
       workSite = null;
       }
     }
@@ -162,22 +154,7 @@ protected boolean isWorkSiteWorkable()
     }
   else
     {
-    if(wp!=null)
-      {
-      //      Config.logDebug("work point owner: "+wp.owner);
-      if(wp.owner==workSite)
-        {
-        //        Config.logDebug("work point belongs to work-site--already has work--");
-        return true;
-        }
-      else
-        {
-//                Config.logDebug("work point does not match work-site");
-        npc.wayNav.setWorkPoint(null);
-        return false;
-        }
-      }
-    else if(workSite.canHaveMoreWorkers(npc) && workSite.hasWork())
+    if(workSite.canHaveMoreWorkers(npc) && workSite.hasWork())
       {
       return true;
       }
@@ -192,56 +169,25 @@ protected boolean isWorkSiteWorkable()
 @Override
 public void onRunningTick()
   {
-  /**
-   * if has work point
-   *  if in range of work point
-   *    work on point
-   *    if point finished
-   *      turn in
-   *  else
-   *    try to move towards work point
-   * else
-   *  try to claim work point---
-   */  
-  TECivic workSite = this.workSite;
-  WorkPoint workPoint = npc.wayNav.getWorkPoint();
-  if(workSite==null)
+  if(workSite==null || !workSite.hasWork())
     {
     this.setFinished();
     return;
     }
-  //WorkPoint workPoint = npc.wayNav.getWorkPoint();
-
-  if(workPoint==null)//try to claim a work point
+  if(npc.getDistance(workSite.xCoord+0.d, workSite.yCoord, workSite.zCoord+0.5d)>2.4)
     {
-    WorkPoint p = workSite.getWorkPoint(npc);
-    this.setWorkPoint(p);
-    if(p==null)
-      {
-      //      Config.logDebug("work site returned null point, setting finished");
-      this.setFinished();
-      return;
-      }
     working = false;
+    //wait for ai to move to target
     }
   else
-    {
-    if(npc.getDistance(workPoint.posX(), workPoint.posY(), workPoint.posZ())>2.4)
+    {      
+    if(!working)
       {
-      working = false;
-      //wait for ai to move to target
-      //move to point
+      working = true;
+      npc.setActionTicksToMax();
       }
-    else
-      {      
-      if(!working)
-        {
-        working = true;
-        npc.setActionTicksToMax();
-        }
-      this.workOnPoint(workPoint);
-      }
-    }
+    this.doWork();
+    }   
   }
 
 @Override
@@ -250,7 +196,7 @@ public void onObjectiveStart()
   if(workSite!=null)
     {
     workSite.addWorker(npc);
-    this.setWorkPoint(workSite.getWorkPoint(npc));
+    this.setMoveToWork();
     }
   else
     {
@@ -259,66 +205,28 @@ public void onObjectiveStart()
   working = false;
   }
 
-protected void workOnPoint(WorkPoint p)
+protected void doWork()
   {
-  if(p!=null)
-    {
-    if(workSite!=null)
-      {
-      npc.swingItem();
-      if(npc.actionTick<=0)
-        {  
-        npc.setActionTicksToMax();
-        WorkPoint returned = workSite.doWork(npc, p);
-        if(p!=returned)
-          {
-          this.setWorkPoint(returned);
-          } 
-        }
-      }    
+  npc.swingItem();
+  if(npc.actionTick<=0)
+    {  
+    workSite.doWork(npc);
+    npc.setActionTicksToMax();    
     }
   }
 
-protected void setMoveToPoint(int x, int y, int z)
+protected void setMoveToWork()
   {
-  npc.setTargetAW(TargetPosition.getNewTarget(x, y, z, TargetType.WORK));
-  }
-
-protected void setMoveToWork(WorkPoint p)
-  {
-  setMoveToPoint(p.floorX(), p.floorY(), p.floorZ());
-  }
-
-protected void setWorkPoint(WorkPoint p)
-  {
-	npc.setActionTicksToMax();
-  working = false;
-  if(p!=null)
-    {   
-    npc.wayNav.setWorkPoint(p);
-    this.setMoveToWork(p);
-    }
-  else
-    {
-    npc.wayNav.setWorkPoint(p);
-    npc.setTargetAW(null);
-    }
+  npc.setTargetAW(npc.wayNav.getWorkSite());
   }
 
 @Override
 public void stopObjective()
   {
   if(workSite!=null)
-    {
-    WorkPoint p = npc.wayNav.getWorkPoint();
-    if(p!=null)
-      {
-      workSite.onWorkFailed(npc, p);
-      }
+    {    
     workSite.removeWorker(npc);
     }
-  npc.wayNav.setWorkPoint(null);
-  working = false;
   }
 
 }

@@ -23,10 +23,9 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 import java.util.LinkedList;
 
 import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkSitePoint;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 public abstract class MineLevel
@@ -42,7 +41,7 @@ protected int shaftX;
 protected int shaftZ;
 public int levelSize = 4;//the height of the level in blocks
 
-protected LinkedList<MinePoint> workList = new LinkedList<MinePoint>();
+public LinkedList<WorkSitePoint> workList = new LinkedList<WorkSitePoint>();
 
 /**
  * position is minX, minY, minZ of the structure boundinb box(world coords)
@@ -69,30 +68,6 @@ public boolean hasWork()
   return !workList.isEmpty();
   }
 
-public void onWorkCompleted(TEWorkSiteMine mine, NpcBase npc)
-  {
-  MinePoint mp = this.workList.poll();
-  if(mp==null)
-    {
-    return;
-    }
-  switch(mp.action)
-  {
-  case MINE_CLEAR:
-  mine.handleClearAction(npc, mp);
-  break;
-  case MINE_FILL:
-  mine.handleFillAction(npc, mp);
-  break;
-  case MINE_LADDER:
-  mine.handleLadderAction(npc, mp);
-  break;
-  case MINE_TORCH:   
-  mine.handleTorchAction(npc, mp);
-  break;
-  }
-  }
-
 /**
  * called to map out the nodes for this level
  * @param world
@@ -111,7 +86,12 @@ protected abstract void scanLevel(World world);
 
 protected boolean needsFilled(int id)
   {
-  return id==0 || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID || id==Block.waterMoving.blockID || id==Block.waterStill.blockID;
+  return id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID || id==Block.waterMoving.blockID || id==Block.waterStill.blockID;
+  }
+
+protected boolean needsFilledFloor(int id)
+  {
+  return id== 0 || needsFilled(id);
   }
 
 protected boolean isValidResource(int id)
