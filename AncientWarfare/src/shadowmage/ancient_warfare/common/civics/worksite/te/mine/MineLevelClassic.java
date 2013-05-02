@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkSitePoint;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 /**
@@ -352,7 +352,7 @@ protected void addNodeToBranch(TEWorkSiteMine mine, int x, int y, int z, boolean
 /************************************************UTILITY*************************************************/
 protected void addNewPoint(int x, int y, int z, byte meta, TargetType type)
   {
-  this.workList.add(new WorkSitePoint(x,y,z, meta,type));
+  this.workList.add(new WorkPoint(x,y,z, meta,type));
   }
 
 protected void addNewPoint(int x, int y, int z, TargetType type)

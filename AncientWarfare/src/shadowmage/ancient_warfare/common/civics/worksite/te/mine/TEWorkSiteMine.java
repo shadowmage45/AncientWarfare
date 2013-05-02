@@ -28,7 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkSitePoint;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -98,7 +98,7 @@ protected void onCivicUpdate()
   super.onCivicUpdate(); 
   }
 
-public void handleLadderAction(NpcBase npc,  WorkSitePoint m)
+public void handleLadderAction(NpcBase npc,  WorkPoint m)
   {
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
   if(id!=0)
@@ -112,7 +112,7 @@ public void handleLadderAction(NpcBase npc,  WorkSitePoint m)
     }
   }
 
-public void handleTorchAction(NpcBase npc, WorkSitePoint m)
+public void handleTorchAction(NpcBase npc, WorkPoint m)
   {
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
   if(id!=0)    
@@ -126,12 +126,12 @@ public void handleTorchAction(NpcBase npc, WorkSitePoint m)
     }
   }
 
-public void handleClearAction(NpcBase npc, WorkSitePoint m)
+public void handleClearAction(NpcBase npc, WorkPoint m)
   {
   this.handleBlockBreak(npc, m.x, m.y, m.z);
   }
 
-public void handleFillAction(NpcBase npc, WorkSitePoint m)
+public void handleFillAction(NpcBase npc, WorkPoint m)
   {  
   int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
   if(id!=0)
@@ -243,7 +243,7 @@ protected void scan()
   }
 
 @Override
-protected void doWork(NpcBase npc, WorkSitePoint p)
+protected void doWork(NpcBase npc, WorkPoint p)
   {
   switch(p.work)
     {
@@ -263,7 +263,7 @@ protected void doWork(NpcBase npc, WorkSitePoint p)
   }
 
 @Override
-protected TargetType validateWorkPoint(WorkSitePoint p)
+protected TargetType validateWorkPoint(WorkPoint p)
   {
   return p==null ? TargetType.NONE : validateWorkPoint(p.x, p.y, p.z, p.work);
   }

@@ -24,7 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkSitePoint;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
@@ -93,13 +93,13 @@ protected void scan()
   }
 
 @Override
-protected void doWork(NpcBase npc, WorkSitePoint p)
+protected void doWork(NpcBase npc, WorkPoint p)
   {
   this.tickBuilder();
   }
 
 @Override
-protected TargetType validateWorkPoint(WorkSitePoint p)
+protected TargetType validateWorkPoint(WorkPoint p)
   {
   return TargetType.NONE;
   }

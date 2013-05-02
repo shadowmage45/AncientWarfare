@@ -30,7 +30,7 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkSitePoint;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -53,7 +53,7 @@ public TEWorkSiteAnimalFarm()
 @Override
 protected void scan()
   { 
-  List<WorkSitePoint> potentialPoints = new ArrayList<WorkSitePoint>();
+  List<WorkPoint> potentialPoints = new ArrayList<WorkPoint>();
   List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(entityClass, getWorkBounds());
   List<EntityAnimal> breedable = new ArrayList<EntityAnimal>();
   List<EntityAnimal> cullable = new ArrayList<EntityAnimal>();
@@ -93,11 +93,11 @@ protected void scan()
   }
 
 @Override
-protected void doWork(NpcBase npc, WorkSitePoint p)
+protected void doWork(NpcBase npc, WorkPoint p)
   {
   if(p.work==TargetType.BARN_BREED && p.target!=null && inventory.containsAtLeast(breedingItem, 2))
     {
-    WorkSitePoint otherP = workPoints.poll();
+    WorkPoint otherP = workPoints.poll();
     if(otherP!=null && otherP.target!=null)
       {
       ((EntityAnimal)p.target).inLove = 600;//.setTarget(otherP.target);
@@ -133,7 +133,7 @@ protected void doWork(NpcBase npc, WorkSitePoint p)
   }
 
 @Override
-protected TargetType validateWorkPoint(WorkSitePoint p)
+protected TargetType validateWorkPoint(WorkPoint p)
   {
   EntityAnimal ent = (EntityAnimal) p.target;
   if(ent==null || ent.isDead)

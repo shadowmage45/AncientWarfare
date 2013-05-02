@@ -18,15 +18,33 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.npcs.waypoints;
+package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
-public enum ItemRoutingType
+import net.minecraft.world.World;
+
+public class MineLevelTemplated extends MineLevel
+{
+
+/**
+ * @param xPos
+ * @param yPos
+ * @param zPos
+ * @param xSize
+ * @param ySize
+ * @param zSize
+ */
+public MineLevelTemplated(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize)
   {
-  NONE,//no action
-  KEEP_STOCKED,//keep the specified item stocked in the specified amount
-  KEEP_EMPTIED,//keep the specified item removed from the inventory
-  EMTPY_MORE_THAN,//if more than the specified amount, remove extras
-  ALLOW_WITHDRAWAL,//FOR KEEP STOCKED, ALLOW WITHDRAWAL OF THIS ITEM FROM THIS POINT
-  WITHDRAW_ALL,//remove all items from the specified inventory
-  DEFAULT_DEPOSIT,
+  super(xPos, yPos, zPos, xSize, ySize, zSize);
   }
+
+@Override
+protected void scanLevel(TEWorkSiteMine mine, World world)
+  {
+  // TODO Auto-generated method stub
+  }
+
+
+
+
+}

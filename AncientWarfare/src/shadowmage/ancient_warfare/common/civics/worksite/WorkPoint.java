@@ -23,7 +23,7 @@ package shadowmage.ancient_warfare.common.civics.worksite;
 import net.minecraft.entity.Entity;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class WorkSitePoint
+public class WorkPoint
 {
 
 public final Entity target;
@@ -33,7 +33,7 @@ public final int z;
 public final byte special;
 public final TargetType work;
 
-public WorkSitePoint(int x, int y, int z, TargetType type)
+public WorkPoint(int x, int y, int z, TargetType type)
   {
   this.x = x;
   this.y = y;
@@ -43,7 +43,7 @@ public WorkSitePoint(int x, int y, int z, TargetType type)
   special = 0;
   }
 
-public WorkSitePoint(int x, int y, int z, byte special, TargetType t)
+public WorkPoint(int x, int y, int z, byte special, TargetType t)
   {
   this.x = x;
   this.y = y;
@@ -53,7 +53,7 @@ public WorkSitePoint(int x, int y, int z, byte special, TargetType t)
   this.special = special;
   }
 
-public WorkSitePoint(Entity ent, TargetType type)
+public WorkPoint(Entity ent, TargetType type)
   {
   x = 0;
   y = 0;

@@ -27,11 +27,29 @@ public class WayPointItemRouting extends WayPoint
 {
 
 /**
- * needs info on routing stuff...
- *  item filters
- *  routing type 
+ * similar to logistics pipes
+ *    item filter for the location
+ *    toggle for command type (stock/withdraw)
+ *    toggle for default include or default exclude
+ *    toggle for allow partial (ignores stack quantities)(per-slot toggle)
+ *      for 'keep stocked' it will pull even singles...
+ *      for 'keep emptied' it will pull ALL items, even if less than qty specified
+ * 
+ * npcs will check their list of routing locations when they have no work
+ *    for every keep stocked command
+ *      if needs stocked
+ *        if a withdraw point has items
+ *          add stock command to queue, with pointer to origin, destination,  and items
+ *    for every withdraw command
+ *      if needs emptied
+ *        if a stock point accepts items and has space
+ *          add withdraw command to queue, with pointer to destination and items
+ *
+ * will need a GUI with specialized buttons/slots to accomodate filters and toggles
+ *    each button will have an item-filter
  */
-ItemRoutingType routingType = ItemRoutingType.NONE;
+boolean withdraw = true;
+boolean includeFilter = true;//is filter inclusion or exclusion type?
 
 public WayPointItemRouting(TargetType type)
   {

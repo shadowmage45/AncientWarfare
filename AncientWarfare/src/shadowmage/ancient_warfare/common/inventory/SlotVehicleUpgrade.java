@@ -55,5 +55,10 @@ public boolean isItemValid(ItemStack par1ItemStack)
   return false;
   }
 
+@Override
+public int getSlotStackLimit()
+  {
+  return 1;
+  }
 
 }

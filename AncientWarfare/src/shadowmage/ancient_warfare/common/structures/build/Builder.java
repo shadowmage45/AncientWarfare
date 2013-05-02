@@ -296,7 +296,7 @@ protected void doClearing()
 
 protected void placeBlock(World world, int x, int y, int z, int id, int meta)
   { 
-  world.setBlock(x, y, z, id, meta, 3);
+  world.setBlock(x, y, z, id);
   world.setBlockMetadataWithNotify(x, y, z, meta, 3);
   }
 
@@ -315,10 +315,9 @@ protected void placeBlockWithDefer(World world, int x, int y, int z, int id, int
     this.deferredBlocks.put(new BlockPosition(x,y,z), new BlockData(id, meta));  
     }
   else
-    {   
-
-    world.setBlock(x, y, z, id, meta, 3);
-//    world.setBlockAndMetadata(x, y, z, id, meta);
+    { 
+    world.setBlock(x, y, z, id);
+    world.setBlockMetadataWithNotify(x, y, z, meta, 3);
     }  
   }
 
@@ -543,8 +542,8 @@ protected void placeSpecials(World world, int x, int y, int z, String name)
 
 protected void createChestAt(World world, int x, int y, int z, int meta)
   {
-  world.setBlock(x, y, z, 54, meta, 3);
-//  world.setBlockAndMetadataWithUpdate(x, y, z, 54, 0, true);
+  world.setBlock(x, y, z, 54);
+  world.setBlockMetadataWithNotify(x, y, z, meta, 3);
   }
 
 protected void setChestLoot(World world, int x, int y, int z, List<ItemStack> items)

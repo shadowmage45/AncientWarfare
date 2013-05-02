@@ -28,7 +28,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkSitePoint;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -87,7 +87,7 @@ protected void scan()
   }
 
 @Override
-protected void doWork(NpcBase npc, WorkSitePoint p)
+protected void doWork(NpcBase npc, WorkPoint p)
   {
   if(npc==null || p==null)
     {
@@ -139,7 +139,7 @@ protected void doWork(NpcBase npc, WorkSitePoint p)
   }
 
 @Override
-protected TargetType validateWorkPoint(WorkSitePoint p)
+protected TargetType validateWorkPoint(WorkPoint p)
   {
   return p==null ? TargetType.NONE : validateWorkPoint(p.x, p.y, p.z);
   }

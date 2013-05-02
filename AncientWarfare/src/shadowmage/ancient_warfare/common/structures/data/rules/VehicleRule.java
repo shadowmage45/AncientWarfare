@@ -120,9 +120,9 @@ public static VehicleRule populateRule(ScannedEntityEntry entry, VehicleBase veh
       {
       stack = vehicle.inventory.ammoInventory.getStackInSlot(i);
       ammo = AmmoRegistry.instance().getAmmoForStack(stack);
-      if(stack!=null)
+      if(ammo!=null)
         {      
-        rule.ammoTypes[i] = (byte)ammo.getAmmoType();//vehicle.ammoHelper.getLocalAmmoType( ammo );
+        rule.ammoTypes[i] = (byte)ammo.getAmmoType();
         }
       }   
     }
@@ -279,7 +279,7 @@ private VehicleBase getVehicleForRule(World world, int teamNum, int vehicleType,
     if(i < vehicle.inventory.upgradeInventory.getSizeInventory())
       {
       type = (byte)(upgradeTypes[i]);      
-      if(type>-1)
+      if(type>=0)
         {
         upgrade = VehicleUpgradeRegistry.instance().getUpgrade(type);//vehicle.upgradeHelper.getUpgradeFromLocal(type);
         if(vehicle.vehicleType.isUpgradeValid(upgrade))
@@ -293,10 +293,10 @@ private VehicleBase getVehicleForRule(World world, int teamNum, int vehicleType,
     {
     if(i< vehicle.inventory.ammoInventory.getSizeInventory())
       {
-      type = (byte) (ammoTypes[i] % vehicle.vehicleType.getValidAmmoTypes().size());
-      if(type>-1)
+      type = (byte) ammoTypes[i];      
+      ammo = AmmoRegistry.instance().getAmmoEntry(type);
+      if(ammo!=null && vehicle.vehicleType.isAmmoValidForInventory(ammo))
         {
-        ammo = AmmoRegistry.instance().getAmmoEntry(type);
         vehicle.inventory.ammoInventory.setInventorySlotContents(i, ammo.getAmmoStack(64));
         }
       }

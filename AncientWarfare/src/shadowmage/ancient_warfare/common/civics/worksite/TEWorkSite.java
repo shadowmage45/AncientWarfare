@@ -31,7 +31,7 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 public abstract class TEWorkSite extends TECivic
 {
 
-protected LinkedList<WorkSitePoint> workPoints = new LinkedList<WorkSitePoint>();
+protected LinkedList<WorkPoint> workPoints = new LinkedList<WorkPoint>();
 
 public TEWorkSite()
   {
@@ -40,9 +40,9 @@ public TEWorkSite()
 
 protected abstract void scan();
 
-protected abstract void doWork(NpcBase npc, WorkSitePoint p);
+protected abstract void doWork(NpcBase npc, WorkPoint p);
 
-protected abstract TargetType validateWorkPoint(WorkSitePoint p);
+protected abstract TargetType validateWorkPoint(WorkPoint p);
 
 @Override
 protected void onCivicUpdate()
@@ -64,8 +64,8 @@ protected void updateHasWork()
 @Override
 public void doWork(NpcBase npc)
   {
-  Iterator<WorkSitePoint> it = this.workPoints.iterator();
-  WorkSitePoint p;
+  Iterator<WorkPoint> it = this.workPoints.iterator();
+  WorkPoint p;
   while(it.hasNext())
     {
     p = it.next();
@@ -84,8 +84,8 @@ public void doWork(NpcBase npc)
 
 protected void validateWorkPoints()
   {
-  Iterator<WorkSitePoint> it = this.workPoints.iterator();
-  WorkSitePoint p;
+  Iterator<WorkPoint> it = this.workPoints.iterator();
+  WorkPoint p;
   while(it.hasNext())
     {
     p = it.next();
@@ -99,12 +99,12 @@ protected void validateWorkPoints()
 
 protected void addWorkPoint(int x, int y, int z, TargetType work)
   {
-  this.workPoints.add(new WorkSitePoint(x, y, z, work));
+  this.workPoints.add(new WorkPoint(x, y, z, work));
   }
 
 protected void addWorkPoint(Entity ent, TargetType work)
   {
-  this.workPoints.add(new WorkSitePoint(ent, work));
+  this.workPoints.add(new WorkPoint(ent, work));
   }
 
 }

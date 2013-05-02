@@ -23,7 +23,7 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.barn;
 import java.util.ArrayList;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.civics.worksite.WorkSitePoint;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -54,7 +54,7 @@ public TEBarnSheep()
 @Override
 protected void scan()
   { 
-  List<WorkSitePoint> potentialPoints = new ArrayList<WorkSitePoint>();
+  List<WorkPoint> potentialPoints = new ArrayList<WorkPoint>();
   List<EntitySheep> entities = worldObj.getEntitiesWithinAABB(entityClass, getWorkBounds());
   List<EntitySheep> breedable = new ArrayList<EntitySheep>();
   List<EntitySheep> cullable = new ArrayList<EntitySheep>();
@@ -97,11 +97,11 @@ protected void scan()
     }
   }
 @Override
-protected void doWork(NpcBase npc, WorkSitePoint p)
+protected void doWork(NpcBase npc, WorkPoint p)
   {
   if(p.work==TargetType.BARN_BREED && p.target!=null && inventory.containsAtLeast(breedingItem, 2))
     {
-    WorkSitePoint otherP = workPoints.poll();
+    WorkPoint otherP = workPoints.poll();
     if(otherP!=null && otherP.target!=null)
       {
       ((EntityAnimal)p.target).inLove = 600;//.setTarget(otherP.target);

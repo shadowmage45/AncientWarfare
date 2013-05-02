@@ -10,6 +10,7 @@ GENERAL
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
+* test vehicle spawning stuff with structures -- apparently there are ammo issues
 
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
@@ -68,6 +69,9 @@ MINE
 * restructure mine into an 'internal' template.
     internal map will be 64*64 (max mine size)
         smaller mines will work outwards from the center of the template.
+* it tries to harvest water..need a isClearable(id, top) check...
+* need isFillable(id, top)
+* need isResource(id, top)
 
 COMPLEXES
 * features--

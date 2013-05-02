@@ -24,7 +24,7 @@ import java.util.LinkedList;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkSitePoint;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
@@ -41,7 +41,7 @@ protected int shaftX;
 protected int shaftZ;
 public int levelSize = 4;//the height of the level in blocks
 
-public LinkedList<WorkSitePoint> workList = new LinkedList<WorkSitePoint>();
+public LinkedList<WorkPoint> workList = new LinkedList<WorkPoint>();
 
 /**
  * position is minX, minY, minZ of the structure boundinb box(world coords)

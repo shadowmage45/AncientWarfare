@@ -109,15 +109,15 @@ public void registerAmmoTypeWithItem(IAmmoType ammo)
   d.addTooltip("Vehicle Damage: "+ammo.getVehicleDamage(), ammo.getAmmoType());
   if(ammo.isFlaming())
     {
-    d.addTooltip("Flaming ammunition, ignites targets when hit", ammo.getAmmoType());
+    d.addTooltip("Flaming -- ignites targets when hit", ammo.getAmmoType());
     }
   if(ammo.isProximityAmmo())
     {
-    d.addTooltip("Proximity ammunition, detonates in proximity to targets", ammo.getAmmoType());
+    d.addTooltip("Proximity -- detonates in proximity to targets", ammo.getAmmoType());
     }
   if(ammo.isPenetrating())
     {
-    d.addTooltip("Penetrating ammunition, does not stop on impact", ammo.getAmmoType());
+    d.addTooltip("Penetrating -- does not stop on impact", ammo.getAmmoType());
     }
   if(ammo.getSecondaryAmmoType() != null && ammo.getSecondaryAmmoTypeCount()>0)
     {
