@@ -98,7 +98,7 @@ public void updatePriority()
   else if(!isWorkSiteWorkable())
     {
 //    Config.logDebug("site not workable -- clearing work site");
-    npc.wayNav.clearWorkSite();
+    npc.wayNav.setWorkSite(null);
     work = false;
     }  
   if(work)

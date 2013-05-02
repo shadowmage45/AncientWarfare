@@ -45,12 +45,12 @@ IPathableEntity owner;
 ITargetEntry currentTarget = null;
 ITargetEntry playerTarget = null;
 WayPoint homePoint = null;
-List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
-int currentPatrolPoint = 0;
-
 WayPoint work = null;
 WayPoint deposit = null;
 WayPoint upkeep = null;
+List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
+int currentPatrolPoint = 0;
+
 
 //TODO add special item routing waypoints for couriers
 
@@ -61,11 +61,11 @@ public WayPointNavigator(IPathableEntity owner)
 
 public void handleDimensionChange(int dim)
   {
-  this.clearDepositSite();
-  this.clearHomePoint();
+  this.setDepositSite(null);
+  this.setHomePoint(null);
+  this.setUpkeepSite(null);
+  this.setWorkSite(null);
   this.clearPatrolPoints();
-  this.clearUpkeepSite();
-  this.clearWorkSite();
   this.currentTarget = null;
   this.playerTarget = null;
   }
@@ -134,11 +134,6 @@ public void setWorkSite(WayPoint p)
   this.work = p;  
   }
 
-public void clearWorkSite()
-  {
-  this.work = null;
-  }
-
 /************************************************DEPOSIT SITE*************************************************/
 public void setDepositSite(WayPoint p)
   {
@@ -148,11 +143,6 @@ public void setDepositSite(WayPoint p)
 public WayPoint getDepositSite()
   {
   return deposit;
-  }
-
-public void clearDepositSite()
-  {
-  this.deposit = null;
   }
 
 /************************************************UPKEEP SITE*************************************************/
@@ -166,20 +156,10 @@ public void setUpkeepSite(WayPoint p)
   this.upkeep = p;
   }
 
-public void clearUpkeepSite()
-  {
-  this.upkeep = null;
-  }
-
 /************************************************HOME POINT*************************************************/
 public void setHomePoint(WayPoint p)
   {
   this.homePoint = p;
-  }
-
-public void clearHomePoint()
-  {
-  this.homePoint = null;
   }
 
 public WayPoint getHomePoint()

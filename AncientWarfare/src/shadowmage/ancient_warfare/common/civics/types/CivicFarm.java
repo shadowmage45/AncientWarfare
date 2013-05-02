@@ -21,7 +21,7 @@
 package shadowmage.ancient_warfare.common.civics.types;
 
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
+import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 
 public class CivicFarm extends Civic
 {
@@ -29,7 +29,7 @@ public class CivicFarm extends Civic
 /**
  * @param id
  */
-public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSiteFarm> teClass, String iconTex)
+public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite> teClass, String iconTex)
   {
   super(id);
   this.isWorkSite = true;

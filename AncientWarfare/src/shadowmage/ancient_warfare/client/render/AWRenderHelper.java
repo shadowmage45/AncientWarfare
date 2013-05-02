@@ -262,7 +262,7 @@ public static void renderCivicBoundingBoxes(World world, EntityPlayer player, fl
       TECivic tec = (TECivic)te;      
       if(tec.getCivic()!=null && tec.getCivic().isWorkSite())
         {
-        AxisAlignedBB bb = tec.getBoundsForRender(); 
+        AxisAlignedBB bb = tec.getWorkBounds(); 
         if(bb!=null)
           {
           BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick), 1.f, 1.f, 1.f);

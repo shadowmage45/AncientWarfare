@@ -403,10 +403,10 @@ protected void setHasWork(boolean newVal)
   }
 
 /**
- * return a WORLD COORD bb for render
+ * return a WORLD COORD bb for render, or entity BB selection
  * @return
  */
-public AxisAlignedBB getBoundsForRender()
+public AxisAlignedBB getWorkBounds()
   { 
   return AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX+1, maxY+1, maxZ+1);
   }

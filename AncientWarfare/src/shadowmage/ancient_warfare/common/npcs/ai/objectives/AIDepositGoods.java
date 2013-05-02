@@ -72,7 +72,7 @@ public void updatePriority()
       if(te==null || !(te instanceof IInventory))
         {
         deposit = false;
-        npc.wayNav.clearDepositSite();
+        npc.wayNav.setDepositSite(null);
         }
       else
         {
@@ -85,7 +85,7 @@ public void updatePriority()
       if(ent==null)
         {
         deposit = false;
-        npc.wayNav.clearDepositSite();
+        npc.wayNav.setDepositSite(null);
         }
       else if(EntityMinecartChest.class.isAssignableFrom(ent.getClass()))
         {
@@ -102,7 +102,7 @@ public void updatePriority()
       }
     else//wtf is this invalid target??
       {
-      this.npc.wayNav.clearDepositSite();
+      this.npc.wayNav.setDepositSite(null);
       deposit = false;
       }
     }  

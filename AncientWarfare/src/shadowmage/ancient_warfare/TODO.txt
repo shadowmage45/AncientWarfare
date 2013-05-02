@@ -42,6 +42,8 @@ PATHFINDING
 * still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
 * for non-attack targets, hook in the 'teleport' system.
 * recalc of path towards moving target is still too aggressive
+* add fence-gate use to soldiers/pathfinding (hook into canUseDoors system)
+* pathfinding involving fences is still fucked (need to instead of denying blocks, set them to extremely high move-costs)
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -161,3 +163,4 @@ TWEAKS/OPTIMIZATION
 * remove inner-points from tree/mine, replace with global inner-work-point tracking
 * add player-target broadcasting to npcs
 * add on-dimension change code to npcs to clear waypoints on transport
+* add more farm types -- cactus/reed/mushrooms

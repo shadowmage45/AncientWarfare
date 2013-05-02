@@ -20,49 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.npcs.waypoints;
 
-import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
-
-public class WayPointItemRouting extends WayPoint
-{
-
-/**
- * needs info on routing stuff...
- *  item filters
- *  routing type 
- */
-ItemRoutingType routingType = ItemRoutingType.NONE;
-
-public WayPointItemRouting(TargetType type)
+public enum ItemRoutingType
   {
-  super(type);
+  NONE,//no action
+  KEEP_STOCKED,//keep the specified item stocked in the specified amount
+  KEEP_EMPTIED,//keep the specified item removed from the inventory
+  EMTPY_MORE_THAN,//if more than the specified amount, remove extras
+  ALLOW_WITHDRAWAL,//FOR KEEP STOCKED, ALLOW WITHDRAWAL OF THIS ITEM FROM THIS POINT
+  WITHDRAW_ALL,//remove all items from the specified inventory
+  DEFAULT_DEPOSIT,
   }
-
-public WayPointItemRouting(NBTTagCompound tag)
-  {
-  super(tag);
-  }
-
-public WayPointItemRouting(int x, int y, int z, TargetType type)
-  {
-  super(x, y, z, type);
-  }
-
-public WayPointItemRouting(int x, int y, int z, int side, TargetType type)
-  {
-  super(x, y, z, side, type);
-  }
-
-@Override
-public NBTTagCompound getNBTTag()
-  {
-  return super.getNBTTag();
-  }
-
-@Override
-public void readFromNBT(NBTTagCompound tag)
-  {
-  super.readFromNBT(tag);
-  }
-
-}

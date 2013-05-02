@@ -24,6 +24,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnChicken;
+import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnCow;
+import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnPig;
+import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnSheep;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCactus;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCarrot;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmMelon;
@@ -68,7 +72,10 @@ public static ICivicType builder = new CivicBuilder(20);
 //town-hall r1
 //town-hall r2
 //town-hall r3
-
+public static ICivicType pigFarm = new CivicFarm(24, "Pig Farm", "A place for workers to breed and cull Pigs", TEBarnPig.class, "civicFarmWheat1");
+public static ICivicType cowFarm = new CivicFarm(24, "Cow Farm", "A place for workers to breed and cull Cows", TEBarnCow.class, "civicFarmWheat1");
+public static ICivicType chickenFarm = new CivicFarm(24, "Chicken Farm", "A place for workers to breed and cull Chickens", TEBarnChicken.class, "civicFarmWheat1");
+public static ICivicType sheepFarm = new CivicFarm(24, "Sheep Farm", "A place for workers to breed and shear Sheep", TEBarnSheep.class, "civicFarmWheat1");
 
 
 protected int globalID = 0;

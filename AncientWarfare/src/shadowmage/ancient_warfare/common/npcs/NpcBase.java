@@ -165,16 +165,16 @@ public void handleBatonCommand(NpcCommand cmd, WayPoint p)
   wayNav.setDepositSite(p);
   break;
   case CLEAR_HOME:
-  wayNav.clearHomePoint();
+  wayNav.setHomePoint(null);
   break;
   case CLEAR_WORK:
-  wayNav.clearWorkSite();
+  wayNav.setWorkSite(null);
   break;
   case CLEAR_PATROL:
   wayNav.clearPatrolPoints();
   break;
   case CLEAR_DEPOSIT:
-  wayNav.clearDepositSite();
+  wayNav.setDepositSite(null);
   break;
   }
   }

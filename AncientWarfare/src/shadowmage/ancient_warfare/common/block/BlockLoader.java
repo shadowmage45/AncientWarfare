@@ -22,6 +22,10 @@ package shadowmage.ancient_warfare.common.block;
 
 import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
+import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnChicken;
+import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnCow;
+import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnPig;
+import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnSheep;
 import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCactus;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCarrot;
@@ -85,6 +89,11 @@ public void load()
   GameRegistry.registerTileEntity(TETreeFarmOak.class, "Tree Farm Oak");
   
   GameRegistry.registerTileEntity(TECivicBuilder.class, "Civic Builder");
+  
+  GameRegistry.registerTileEntity(TEBarnPig.class, "Pig Farm");
+  GameRegistry.registerTileEntity(TEBarnCow.class, "Cow Farm");
+  GameRegistry.registerTileEntity(TEBarnChicken.class, "Chicken Farm");
+  GameRegistry.registerTileEntity(TEBarnSheep.class, "Sheep Farm");
   }
 
 public void registerBlock(Block block, String name)

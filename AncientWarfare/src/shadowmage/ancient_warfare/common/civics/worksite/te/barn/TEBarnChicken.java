@@ -18,51 +18,22 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.npcs.waypoints;
+package shadowmage.ancient_warfare.common.civics.worksite.te.barn;
 
-import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-public class WayPointItemRouting extends WayPoint
+public class TEBarnChicken extends TEWorkSiteAnimalFarm
 {
 
 /**
- * needs info on routing stuff...
- *  item filters
- *  routing type 
+ * 
  */
-ItemRoutingType routingType = ItemRoutingType.NONE;
-
-public WayPointItemRouting(TargetType type)
+public TEBarnChicken()
   {
-  super(type);
-  }
-
-public WayPointItemRouting(NBTTagCompound tag)
-  {
-  super(tag);
-  }
-
-public WayPointItemRouting(int x, int y, int z, TargetType type)
-  {
-  super(x, y, z, type);
-  }
-
-public WayPointItemRouting(int x, int y, int z, int side, TargetType type)
-  {
-  super(x, y, z, side, type);
-  }
-
-@Override
-public NBTTagCompound getNBTTag()
-  {
-  return super.getNBTTag();
-  }
-
-@Override
-public void readFromNBT(NBTTagCompound tag)
-  {
-  super.readFromNBT(tag);
+  this.entityClass = EntityChicken.class;
+  this.breedingItem = new ItemStack(Item.seeds);
   }
 
 }
