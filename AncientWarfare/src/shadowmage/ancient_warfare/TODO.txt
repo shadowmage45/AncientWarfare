@@ -61,7 +61,6 @@ WORKSITES
 * teleport worker to position if he can't path appropriately?      
         
 FARMS
-* needs melon/mushroom types made
 * need rest of tree farms created
 
 MINE
@@ -69,7 +68,6 @@ MINE
 * restructure mine into an 'internal' template.
     internal map will be 64*64 (max mine size)
         smaller mines will work outwards from the center of the template.
-* clean up inventory handling/block use/etc
 
 COMPLEXES
 * features--

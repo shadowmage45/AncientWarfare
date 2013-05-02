@@ -73,9 +73,9 @@ public static ICivicType builder = new CivicBuilder(20);
 //town-hall r2
 //town-hall r3
 public static ICivicType pigFarm = new CivicFarm(24, "Pig Farm", "A place for workers to breed and cull Pigs", TEBarnPig.class, "civicFarmWheat1");
-public static ICivicType cowFarm = new CivicFarm(24, "Cow Farm", "A place for workers to breed and cull Cows", TEBarnCow.class, "civicFarmWheat1");
-public static ICivicType chickenFarm = new CivicFarm(24, "Chicken Farm", "A place for workers to breed and cull Chickens", TEBarnChicken.class, "civicFarmWheat1");
-public static ICivicType sheepFarm = new CivicFarm(24, "Sheep Farm", "A place for workers to breed and shear Sheep", TEBarnSheep.class, "civicFarmWheat1");
+public static ICivicType cowFarm = new CivicFarm(25, "Cow Farm", "A place for workers to breed and cull Cows", TEBarnCow.class, "civicFarmWheat1");
+public static ICivicType chickenFarm = new CivicFarm(26, "Chicken Farm", "A place for workers to breed and cull Chickens", TEBarnChicken.class, "civicFarmWheat1");
+public static ICivicType sheepFarm = new CivicFarm(27, "Sheep Farm", "A place for workers to breed and shear Sheep", TEBarnSheep.class, "civicFarmWheat1");
 
 
 protected int globalID = 0;
