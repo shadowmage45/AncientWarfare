@@ -24,8 +24,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCactus;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCarrot;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmMelon;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmMushroomBrown;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmMushroomRed;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmNetherStalk;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPotato;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPumpkin;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmReed;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmWheat;
 import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEWorkSiteMine;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmOak;
@@ -40,13 +47,13 @@ public static final Civic[] civicList = new Civic[64];
 public static ICivicType wheatFarm = new CivicFarm(0, "Wheat Farm", "A place for workers to tend and harvest Wheat", TEFarmWheat.class, "civicFarmWheat1");
 public static ICivicType carrotFarm = new CivicFarm(1, "Carrot Farm", "A place for workers to tend and harvest Carrot", TEFarmCarrot.class, "civicFarmCarrot1");
 public static ICivicType potatoFarm = new CivicFarm(2, "Potato Farm", "A place for workers to tend and harvest Potato", TEFarmPotato.class, "civicFarmPotato1");
-//need melon
-//need pumpkin
-public static ICivicType cactusFarm = new CivicCactusFarm(5);
-public static ICivicType reedFarm = new CivicReedFarm(6);
-//need brown mushroom
-//need red mushroom
-//need netherstalk
+public static ICivicType melonFarm = new CivicFarm(3, "Melon Farm", "A place for workers to tend and harvest Melon", TEFarmMelon.class, "civicFarmWheat1");
+public static ICivicType pumpkinFarm = new CivicFarm(4, "Pumpkin Farm", "A place for workers to tend and harvest Pumpkin", TEFarmPumpkin.class, "civicFarmWheat1");
+public static ICivicType cactusFarm = new CivicFarm(5, "Cactus Farm", "A place for workers to tend and harvest Cactus", TEFarmCactus.class, "civicFarmWheat1");
+public static ICivicType reedFarm = new CivicFarm(6, "Reed Farm", "A place for workers to tend and harvest Reed", TEFarmReed.class, "civicFarmWheat1");
+public static ICivicType mushroomRedFarm = new CivicFarm(7, "Red Mushroom Farm", "A place for workers to tend and harvest Red Mushroom", TEFarmMushroomRed.class, "civicFarmWheat1");
+public static ICivicType mushroomBrownFarm = new CivicFarm(8, "Brown Mushroom Farm", "A place for workers to tend and harvest Brown Mushroom", TEFarmMushroomBrown.class, "civicFarmWheat1");
+public static ICivicType netherstalkFarm = new CivicFarm(9, "Netherstalk Farm", "A place for workers to tend and harvest Netherstalk", TEFarmNetherStalk.class, "civicFarmWheat1");
 public static ICivicType mineBasic = new CivicMine(10, "Basic Layout Mine", "A mine with a basic but less than perfectly efficient layout", TEWorkSiteMine.class);
 //mine r2
 //mine r3

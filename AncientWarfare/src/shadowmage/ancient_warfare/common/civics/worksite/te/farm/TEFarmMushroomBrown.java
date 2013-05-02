@@ -18,30 +18,44 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.civics.types;
+package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 
-import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmReed;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class CivicReedFarm extends Civic
+public class TEFarmMushroomBrown extends TEWorkSiteFarm
 {
 
 /**
- * @param id
+ * 
  */
-public CivicReedFarm(int id)
+public TEFarmMushroomBrown()
   {
-  super(id);
-  this.isWorkSite = true;
-  this.name = "Reed Farm";
-  this.tooltip = "Harvest Mature Reeds";
-  this.teClass = TEFarmReed.class;
-  this.inventorySize = 9;
-  this.itemIconTexture = "civicFarmWheat1";
-  this.blockIconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
-  this.blockIconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
-  this.blockIconNames[2] = "ancientwarfare:civic/civicFarmWheatSide";  
-  this.workType = CivicWorkType.FARM;
+  this.mainBlockID = Block.mushroomBrown.blockID;
+  this.mainBlockMatureMeta = 0;
+  this.plantableFilter = new ItemStack(Block.mushroomBrown);
   }
 
+@Override
+protected TargetType validateWorkPoint(int x, int y, int z)
+  {
+  int id = worldObj.getBlockId(x, y, z);
+  if(x%4==0 && z%4 ==0)
+    {
+    if(id==0 && Block.mushroomBrown.canBlockStay(worldObj, x, y, z) && inventory.containsAtLeast(plantableFilter, 1))
+      {      
+      return TargetType.FARM_PLANT;
+      }
+    }
+  else
+    {
+    if(id==this.mainBlockID)
+      {
+      return TargetType.FARM_HARVEST;
+      }
+    //try harvesting
+    }
+  return TargetType.NONE;
+  }
 }

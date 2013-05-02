@@ -18,30 +18,36 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.civics.types;
+package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 
-import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCactus;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-public class CivicCactusFarm extends Civic
+public class TEFarmMelon extends TEWorkSiteFarm
 {
 
-/**
- * @param id
- */
-public CivicCactusFarm(int id)
+public TEFarmMelon()
   {
-  super(id);
-  this.isWorkSite = true;
-  this.name = "Cactus Farm";
-  this.tooltip = "Harvest Mature Cactus";
-  this.teClass = TEFarmCactus.class;
-  this.inventorySize = 9;
-  this.itemIconTexture = "civicFarmWheat1";
-  this.blockIconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
-  this.blockIconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
-  this.blockIconNames[2] = "ancientwarfare:civic/civicFarmWheatSide";  
-  this.workType = CivicWorkType.FARM;
+  this.mainBlockID = Block.melonStem.blockID;
+  this.mainBlockMatureMeta = 0;
+  this.plantableFilter = new ItemStack(Item.melonSeeds);
+  }
+
+@Override
+protected TargetType validateWorkPoint(int x, int y, int z)
+  {
+  int id = worldObj.getBlockId(x, y, z);  
+  if(id==0 && worldObj.getBlockId(x, y-1, z)==tilledEarthID && inventory.containsAtLeast(plantableFilter, 1))
+    {    
+    return TargetType.FARM_PLANT;
+    }
+  else if(id==Block.melon.blockID)
+    {
+    return TargetType.FARM_HARVEST;
+    }
+  return TargetType.NONE;
   }
 
 }

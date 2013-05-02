@@ -39,7 +39,7 @@ public abstract class TEWorkSiteFarm extends TEWorkSite
 {
 
 int mainBlockID;//the blockID that this civic looks for within its work bounds
-int tilledEarthID = Block.tilledField.blockID;//the 'plantable' block. these are the 'plant' points, if y+1 is not mainBlockID
+int tilledEarthID = Block.tilledField.blockID;//the 'plantable' block. these are the 'plant' points, if y+1==0
 int mainBlockMatureMeta;
 ItemStack plantableFilter;
 
@@ -51,7 +51,7 @@ public TEWorkSiteFarm()
 protected TargetType validateWorkPoint(int x, int y, int z)
   {
   int id = worldObj.getBlockId(x, y, z);  
-  if(id==tilledEarthID && worldObj.getBlockId(x, y+1, z)==0 && inventory.containsAtLeast(plantableFilter, 1))
+  if(id==0 && worldObj.getBlockId(x, y-1, z)==tilledEarthID && inventory.containsAtLeast(plantableFilter, 1))
     {    
     return TargetType.FARM_PLANT;
     }

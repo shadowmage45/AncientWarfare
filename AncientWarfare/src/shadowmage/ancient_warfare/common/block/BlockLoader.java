@@ -25,7 +25,12 @@ import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCactus;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCarrot;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmMelon;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmMushroomBrown;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmMushroomRed;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmNetherStalk;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPotato;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPumpkin;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmReed;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmWheat;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
@@ -70,6 +75,11 @@ public void load()
   GameRegistry.registerTileEntity(TEFarmPotato.class, "Potato Farm");
   GameRegistry.registerTileEntity(TEFarmReed.class, "Reed Farm");
   GameRegistry.registerTileEntity(TEFarmCactus.class, "Cactus Farm");
+  GameRegistry.registerTileEntity(TEFarmMelon.class, "Melon Farm");
+  GameRegistry.registerTileEntity(TEFarmPumpkin.class, "Pumpkin Farm");
+  GameRegistry.registerTileEntity(TEFarmNetherStalk.class, "Netherstalk Farm");
+  GameRegistry.registerTileEntity(TEFarmMushroomRed.class, "Red Mushroom Farm");
+  GameRegistry.registerTileEntity(TEFarmMushroomBrown.class, "Brown Mushroom Farm");
   GameRegistry.registerTileEntity(TEWorkSiteMine.class, "Basic Mine");
   
   GameRegistry.registerTileEntity(TETreeFarmOak.class, "Tree Farm Oak");

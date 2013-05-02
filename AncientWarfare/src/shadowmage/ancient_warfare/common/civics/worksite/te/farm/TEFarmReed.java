@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -33,6 +34,7 @@ import shadowmage.ancient_warfare.common.utils.InventoryTools;
 public class TEFarmReed extends TEWorkSiteFarm
 {
 
+int maxSearchHeight = 4;
 public TEFarmReed()
   {
   plantableFilter = new ItemStack(Item.reed);
@@ -55,7 +57,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
   int id2 = worldObj.getBlockId(x, y-1, z);
   if(id==Block.reed.blockID)
     {
-    if(id2==Block.reed.blockID && worldObj.getBlockId(x, y-2, z)==Block.reed.blockID)
+    if(id2==Block.reed.blockID && worldObj.getBlockId(x, y-2, z)==Block.reed.blockID && inventory.canHoldItem(plantableFilter, 1))
       {
       return TargetType.FARM_HARVEST;
       }    
@@ -64,10 +66,38 @@ protected TargetType validateWorkPoint(int x, int y, int z)
     {
     if(isWater(x-1, y-1, z) || isWater(x+1,y-1,z) || isWater(x,y-1,z-1) || isWater(x,y-1,z+1))
       {
-      return TargetType.FARM_PLANT;
+      if(inventory.containsAtLeast(plantableFilter, 1))
+        {
+        return TargetType.FARM_PLANT;
+        }
       }       
     } 
   return TargetType.NONE;
   }
 
+@Override
+protected void scan()
+  {
+  TargetType t;
+  for(int y = this.minY; y<=this.maxY+this.maxSearchHeight; y++)
+    {
+    for(int x = this.minX; x<=this.maxX; x++)
+      {
+      for(int z = this.minZ; z<=this.maxZ; z++)
+        {        
+        t = this.validateWorkPoint(x, y, z);
+        if(t!=TargetType.NONE)
+          {
+          this.addWorkPoint(x, y, z, t);
+          }
+        }
+      }
+    }
+  }
+
+@Override
+public AxisAlignedBB getSecondaryRenderBounds()
+  {
+  return AxisAlignedBB.getAABBPool().getAABB(minX, maxY+1, minZ, maxX+1, maxY+1+maxSearchHeight, maxZ+1);
+  }
 }

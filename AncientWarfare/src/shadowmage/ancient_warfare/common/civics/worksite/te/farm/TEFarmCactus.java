@@ -24,6 +24,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -31,7 +32,7 @@ import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TEFarmCactus extends TEWorkSiteFarm
 {
-
+int maxSearchHeight = 4;
 /**
  * 
  */
@@ -44,13 +45,11 @@ public TEFarmCactus()
 @Override
 protected TargetType validateWorkPoint(int x, int y, int z)
   {
-  int id = worldObj.getBlockId(x, y, z);  
-  if(x%4==0 && z%4==0 && worldObj.getBlockId(x, y-1, z)==Block.sand.blockID && inventory.containsAtLeast(plantableFilter, 1))
+  int id = worldObj.getBlockId(x, y, z);
+  int id2 = worldObj.getBlockId(x, y-1, z);
+  if(id==0 && x%2==0 && z%2==0 && id2==Block.sand.blockID && Block.cactus.canBlockStay(worldObj, x, y, z) && inventory.containsAtLeast(plantableFilter, 1))
     {
-    if(worldObj.getBlockId(x-1, y, z)==0 && worldObj.getBlockId(x+1, y, z)==0 && worldObj.getBlockId(x, y, z-1)==0 && worldObj.getBlockId(x, y, z+1)==0)
-      {
-      return TargetType.FARM_PLANT;
-      }    
+    return TargetType.FARM_PLANT;
     }
   else if(id==this.mainBlockID && inventory.canHoldItem(plantableFilter, 1))
     {
@@ -62,6 +61,29 @@ protected TargetType validateWorkPoint(int x, int y, int z)
   return TargetType.NONE;
   }
 
+@Override
+protected void scan()
+  {
+  TargetType t;
+  for(int y = this.minY; y<=this.maxY+this.maxSearchHeight; y++)
+    {
+    for(int x = this.minX; x<=this.maxX; x++)
+      {
+      for(int z = this.minZ; z<=this.maxZ; z++)
+        {        
+        t = this.validateWorkPoint(x, y, z);
+        if(t!=TargetType.NONE)
+          {
+          this.addWorkPoint(x, y, z, t);
+          }
+        }
+      }
+    }
+  }
 
-
+@Override
+public AxisAlignedBB getSecondaryRenderBounds()
+  {
+  return AxisAlignedBB.getAABBPool().getAABB(minX, maxY+1, minZ, maxX+1, maxY+1+maxSearchHeight, maxZ+1);
+  }
 }
