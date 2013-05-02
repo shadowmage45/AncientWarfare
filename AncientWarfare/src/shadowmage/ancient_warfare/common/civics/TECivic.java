@@ -71,7 +71,7 @@ public int maxZ;
 protected int teamNum = 0;
 protected boolean isWorkSite = false;
 protected boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
-protected AWInventoryBasic inventory = new AWInventoryBasic(0);
+public AWInventoryBasic inventory = new AWInventoryBasic(0);
 protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
 //protected List<WorkPoint> workPoints = new ArrayList<WorkPoint>();//points being worked currently
 

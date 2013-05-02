@@ -48,16 +48,16 @@ public MineLevelClassic(int xPos, int yPos, int zPos, int xSize, int ySize, int 
   }
 
 @Override
-protected void scanLevel(World world)
+protected void scanLevel(TEWorkSiteMine mine, World world)
   {
-  this.scanShaft(world);
-  this.scanTunnels(world);
-  this.scanBranches(world);
+  this.scanShaft(mine, world);
+  this.scanTunnels(mine, world);
+  this.scanBranches(mine, world);
   }
 
 /************************************************SHAFT*************************************************/
 
-protected void scanShaft(World world)
+protected void scanShaft(TEWorkSiteMine mine, World world)
   {
   for(int y = minY + ySize-1; y >= minY; y--)//start at the top...
     {
@@ -67,49 +67,69 @@ protected void scanShaft(World world)
         {
         if(z==shaftZ)
           {
-          this.addSouthShaft(world, x,y,z);
+          this.addSouthShaft(mine, world, x,y,z);
           //check shaftZ-1 for resources
           }
         else
           {
-          this.addNorthShaft(world, x, y, z);
+          this.addNorthShaft(mine, world, x, y, z);
           }        
         }
       }    
     }
   }
 
-protected void addNorthShaft(World world, int x, int y, int z)
+protected void addNorthShaft(TEWorkSiteMine mine, World world, int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);
   int id2 = world.getBlockId(x, y, z+1);
   //scan N block, add clear/fill if needed
   if(isValidResource(id2) || needsFilledFloor(id2))
     {  
-    addNewPoint(x, y, z+1,  TargetType.MINE_FILL);
+    if(mine.inventory.containsAtLeast(mine.fillerFilter, 1))
+      {
+      addNewPoint(x, y, z+1,  TargetType.MINE_FILL);
+      }
     }
-  if(id!=Block.ladder.blockID)
+  if(id!=Block.ladder.blockID )
     {
-    addNewPoint(x, y, z,  (byte)2, TargetType.MINE_LADDER);
+    if(mine.inventory.containsAtLeast(mine.ladderFilter, 1))
+      {
+      addNewPoint(x, y, z,  (byte)2, TargetType.MINE_LADDER);
+      }
+    else
+      {
+      addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
+      }    
     }
   }
 
-protected void addSouthShaft(World world, int x, int y, int z)
+protected void addSouthShaft(TEWorkSiteMine mine, World world, int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);
   int id2 = world.getBlockId(x, y, z-1);  
   if(isValidResource(id2) || needsFilledFloor(id2))
     {  
-    addNewPoint(x, y, z+1,  TargetType.MINE_FILL);
+    if(mine.inventory.containsAtLeast(mine.fillerFilter, 1))
+      {
+      addNewPoint(x, y, z-1,  TargetType.MINE_FILL);
+      }
     }
-  if(id!=Block.ladder.blockID)
+  if(id!=Block.ladder.blockID )
     {
-    addNewPoint(x, y, z,  (byte)3, TargetType.MINE_LADDER);
+    if(mine.inventory.containsAtLeast(mine.ladderFilter, 1))
+      {
+      addNewPoint(x, y, z,  (byte)3, TargetType.MINE_LADDER);
+      }
+    else
+      {
+      addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
+      }    
     }
   }
 
 /************************************************TUNNELS*************************************************/
-protected void scanTunnels(World world)
+protected void scanTunnels(TEWorkSiteMine mine, World world)
   {
   int id = 0;
   for(int x = shaftX-1; x>= minX ; x--)//add west tunnel
@@ -121,11 +141,11 @@ protected void scanTunnels(World world)
         if(y==minY)
           {
           //add left/bottom
-          this.addTunnelPiece(world, x, y, z,  true, false);
+          this.addTunnelPiece(mine, x, y, z,  true, false);
           }
         else
           {
-          this.addTunnelPiece(world, x, y, z,  true, true);
+          this.addTunnelPiece(mine, x, y, z,  true, true);
           //add left/top
           }
         }
@@ -140,11 +160,11 @@ protected void scanTunnels(World world)
         if(y==minY)
           {
           //add right/bottom
-          this.addTunnelPiece(world, x, y, z, false, false);
+          this.addTunnelPiece(mine, x, y, z, false, false);
           }
         else
           {
-          this.addTunnelPiece(world, x, y, z, false, true);
+          this.addTunnelPiece(mine, x, y, z, false, true);
           //add right/top
           }
         }
@@ -152,28 +172,42 @@ protected void scanTunnels(World world)
     }
   }
 
-protected void addTunnelPiece(World world, int x, int y, int z, boolean left, boolean top)
+protected void addTunnelPiece(TEWorkSiteMine mine, int x, int y, int z, boolean left, boolean top)
   {  
-  int id1 = world.getBlockId(x, y, z);
+  int id1 = mine.worldObj.getBlockId(x, y, z);
   boolean addTorch = !top && x%4==0;
   if(addTorch)
     {
     if(id1!=Block.torchWood.blockID)
       {
-      addNewPoint(x,y,z, TargetType.MINE_TORCH);
+      if(mine.hasTorch())
+        {
+        addNewPoint(x,y,z, TargetType.MINE_TORCH);
+        }
+      else
+        {
+        addNewPoint(x, y, z, TargetType.MINE_CLEAR);
+        }      
       }
     }
   else if(id1!=0)
     {
     addNewPoint(x, y, z,  TargetType.MINE_CLEAR);      
     }
-  int id = top? world.getBlockId(x, y+1, z) : world.getBlockId(x, y-1, z);
+  int id = top? mine.worldObj.getBlockId(x, y+1, z) : mine.worldObj.getBlockId(x, y-1, z);
   int y1 = top? y+1 : y-1;
   if(isValidResource(id))
     {     
     if(!top)
       {
-      addNewPoint(x, y1, z,  TargetType.MINE_FILL);   
+      if(mine.hasFiller())
+        {
+        addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+        }
+      else
+        {
+        addNewPoint(x, y1, z,  TargetType.MINE_CLEAR);
+        }         
       } 
     else
       {
@@ -182,11 +216,14 @@ protected void addTunnelPiece(World world, int x, int y, int z, boolean left, bo
     }
   else if((top && needsFilled(id)) || (!top && needsFilledFloor(id)) )
     {
-    addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+    if(mine.hasFiller())
+      {
+      addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+      }
     }
   }
 /************************************************BRANCHES*************************************************/
-protected void scanBranches(World world)
+protected void scanBranches(TEWorkSiteMine mine, World world)
   {
   for(int x = shaftX-1; x>=minX; x-=3)
     {
@@ -194,14 +231,14 @@ protected void scanBranches(World world)
       {
       for(int y = minY; y<= minY+1; y++)
         {
-        this.addNodeToBranch(world,  x, y, z, y!=minY);
+        this.addNodeToBranch(mine, x, y, z, y!=minY);
         }
       }
     for(int z = shaftZ-1; z >=minZ; z--)//do s/w side branches
       {
       for(int y = minY; y<= minY+1; y++)
         {
-        this.addNodeToBranch(world,  x, y, z, y!=minY);
+        this.addNodeToBranch(mine, x, y, z, y!=minY);
         }
       }
     }  
@@ -211,41 +248,64 @@ protected void scanBranches(World world)
       {
       for(int y = minY; y<= minY+1; y++)
         {
-         this.addNodeToBranch(world,  x, y, z, y!=minY);
+         this.addNodeToBranch(mine, x, y, z, y!=minY);
         }
       }
     for(int z = shaftZ-1; z >=minZ; z--)//do s/e side branches
       {
       for(int y = minY; y<= minY+1; y++)
         {
-         this.addNodeToBranch(world,  x, y, z, y!=minY);
+         this.addNodeToBranch(mine, x, y, z, y!=minY);
         }
       }
     }
   }
 
-protected void addNodeToBranch(World world, int x, int y, int z, boolean top)
+protected void addNodeToBranch(TEWorkSiteMine mine, int x, int y, int z, boolean top)
   {
-  int id1 = world.getBlockId(x, y, z);
-  int id2 = top? world.getBlockId(x, y+1, z) : world.getBlockId(x, y-1, z);
-  int id3 = world.getBlockId(x+1, y, z);
-  int id4 = world.getBlockId(x-1, y, z);
+  int id1 = mine.worldObj.getBlockId(x, y, z);
+  int id2 = top? mine.worldObj.getBlockId(x, y+1, z) : mine.worldObj.getBlockId(x, y-1, z);
+  int id3 = mine.worldObj.getBlockId(x+1, y, z);
+  int id4 = mine.worldObj.getBlockId(x-1, y, z);
   int y1 = top? y+1 : y-1; 
   boolean last = z%4!=0;
   boolean addTorch = !top && z%4==0;
-  if(addTorch && id1 != Block.torchWood.blockID)
+  /**
+   * check main block
+   */
+  if(addTorch)
     {
-    addNewPoint(x,y,z, TargetType.MINE_TORCH);
+    if(id1 != Block.torchWood.blockID)
+      {
+      if(mine.hasTorch())
+        {
+        addNewPoint(x,y,z, TargetType.MINE_TORCH);
+        }
+      else
+        {
+        addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
+        }
+      }
     }
   else if(id1!=0)
     {
     addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
     }
+  /**
+   * check top or bottom block
+   */
   if(isValidResource(id2))
     {
-    if(top)
+    if(!top)//fill floor
       {
-      addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+      if(mine.hasFiller())
+        {
+        addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+        }
+      else
+        {
+        addNewPoint(x, y1, z,  TargetType.MINE_CLEAR);
+        }
       }
     else
       {
@@ -254,23 +314,38 @@ protected void addNodeToBranch(World world, int x, int y, int z, boolean top)
     }
   else if((top && needsFilled(id2)) || (!top && needsFilledFloor(id2)))//only fill water/lava above, or missing floor blocks
     {
-    addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+    if(mine.hasFiller())
+      {
+      addNewPoint(x, y1, z,  TargetType.MINE_FILL);
+      }
     }
+  /**
+   * check wall x+1
+   */
   if(isValidResource(id3))
     {
     addNewPoint(x+1, y, z,  TargetType.MINE_CLEAR);
     }
   else if(needsFilled(id3))
     {
-    addNewPoint(x+1, y, z,  TargetType.MINE_FILL);
+    if(mine.hasFiller())
+      {
+      addNewPoint(x+1, y, z,  TargetType.MINE_FILL);
+      }    
     }
+  /**
+   * check wall x-1
+   */
   if(isValidResource(id4))
     {
     addNewPoint(x-1, y, z,  TargetType.MINE_CLEAR);
     }
   else if(needsFilled(id4))
     {
-    addNewPoint(x-1, y, z,  TargetType.MINE_FILL);
+    if(mine.hasFiller())
+      {
+      addNewPoint(x-1, y, z,  TargetType.MINE_FILL);
+      }
     }  
   }
 

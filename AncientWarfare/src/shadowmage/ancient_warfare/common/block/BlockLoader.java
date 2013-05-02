@@ -23,8 +23,10 @@ package shadowmage.ancient_warfare.common.block;
 import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCactus;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCarrot;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPotato;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmReed;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmWheat;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
 import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEWorkSiteMine;
@@ -66,6 +68,8 @@ public void load()
   GameRegistry.registerTileEntity(TEFarmWheat.class, "Wheat Farm");
   GameRegistry.registerTileEntity(TEFarmCarrot.class, "Carrot Farm");
   GameRegistry.registerTileEntity(TEFarmPotato.class, "Potato Farm");
+  GameRegistry.registerTileEntity(TEFarmReed.class, "Reed Farm");
+  GameRegistry.registerTileEntity(TEFarmCactus.class, "Cactus Farm");
   GameRegistry.registerTileEntity(TEWorkSiteMine.class, "Basic Mine");
   
   GameRegistry.registerTileEntity(TETreeFarmOak.class, "Tree Farm Oak");

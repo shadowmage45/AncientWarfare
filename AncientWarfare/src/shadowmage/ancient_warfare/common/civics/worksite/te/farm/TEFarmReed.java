@@ -60,7 +60,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
       return TargetType.FARM_HARVEST;
       }    
     }
-  else if(id==0 && id2==Block.dirt.blockID || id2==Block.grass.blockID || id2==Block.sand.blockID)
+  else if(id==0 && (id2==Block.dirt.blockID || id2==Block.grass.blockID || id2==Block.sand.blockID))
     {
     if(isWater(x-1, y-1, z) || isWater(x+1,y-1,z) || isWater(x,y-1,z-1) || isWater(x,y-1,z+1))
       {

@@ -92,6 +92,7 @@ protected void onCivicUpdate()
   if(!mineFinished && initialized && mineRescanTicks>=mineRescanMax)
     {
     mineRescanTicks = 0;
+    this.workPoints.clear();
     this.loadLevel(currentLevelNum);
     }
   super.onCivicUpdate(); 
@@ -186,8 +187,18 @@ protected void loadLevel(int level)
   int adjTopY = this.minY - 4 * level;//the top of the level
   int adjMinY = adjTopY-3;  
   this.currentLevel = new MineLevelClassic(minX, adjMinY, minZ, maxX - minX + 1, 4, maxZ - minZ + 1);
-  this.currentLevel.initializeLevel(worldObj);
+  this.currentLevel.initializeLevel(this, worldObj);
   this.workPoints.addAll(this.currentLevel.workList);
+  }
+
+public boolean hasTorch()
+  {
+  return inventory.containsAtLeast(torchFilter, 1);
+  }
+
+public boolean hasFiller()
+  {
+  return inventory.containsAtLeast(fillerFilter, 1);
   }
 
 @Override
@@ -217,7 +228,7 @@ protected void scan()
     this.initialized = true;
     this.loadLevel(0);      
     }  
-  if(this.currentLevel!=null && !mineFinished && !this.currentLevel.hasWork())//load next level
+  if(this.currentLevel!=null && !mineFinished && this.workPoints.isEmpty())//load next level
     {
     int adjTopY = this.minY - (currentLevel.levelSize * (currentLevelNum+1));//the top of the level
     if(adjTopY-currentLevel.levelSize-1 >= this.minYLevel)

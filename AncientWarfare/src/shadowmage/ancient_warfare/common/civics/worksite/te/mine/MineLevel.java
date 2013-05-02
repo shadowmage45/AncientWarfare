@@ -72,17 +72,17 @@ public boolean hasWork()
  * called to map out the nodes for this level
  * @param world
  */
-public void initializeLevel(World world)
+public void initializeLevel(TEWorkSiteMine mine, World world)
   { 
   long t1 = System.nanoTime();
   shaftX = minX -1 + xSize/2;
   shaftZ = minZ -1 + zSize/2;
-  scanLevel(world);  
+  scanLevel(mine, world);  
   long t2 = System.nanoTime();
   Config.logDebug("mine level init time nanos: "+(t2-t1)); 
   }
 
-protected abstract void scanLevel(World world);
+protected abstract void scanLevel(TEWorkSiteMine mine, World world);
 
 protected boolean needsFilled(int id)
   {
@@ -91,7 +91,7 @@ protected boolean needsFilled(int id)
 
 protected boolean needsFilledFloor(int id)
   {
-  return id== 0 || needsFilled(id);
+  return id== 0 || id==Block.gravel.blockID || needsFilled(id);
   }
 
 protected boolean isValidResource(int id)
