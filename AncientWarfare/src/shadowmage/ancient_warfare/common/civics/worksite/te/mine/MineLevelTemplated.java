@@ -20,10 +20,21 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
+import java.util.Collections;
+import java.util.PriorityQueue;
+
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class MineLevelTemplated extends MineLevel
 {
+
+protected PriorityQueue<MinePointPlaced> queue = new PriorityQueue<MinePointPlaced>();
+protected MineTemplate template;
+protected boolean hasTorches = false;
+protected boolean hasFiller = false;
+protected boolean hasLadders = false;
 
 /**
  * @param xPos
@@ -41,10 +52,88 @@ public MineLevelTemplated(int xPos, int yPos, int zPos, int xSize, int ySize, in
 @Override
 protected void scanLevel(TEWorkSiteMine mine, World world)
   {
-  // TODO Auto-generated method stub
+  this.hasFiller = mine.hasFiller();
+  this.hasTorches = mine.hasTorch();
+  this.hasLadders = mine.inventory.containsAtLeast(mine.ladderFilter, 1);
+  /**
+   * scan area, x,y,z.
+   * translate world x,y,z into template x,y,z
+   *  templateX = 
+   */
+  int xDiff = template.xSize-this.xSize;
+  int zDiff = template.zSize-this.zSize;  
+  MineAction a;
+  TargetType actualAction;
+  int wx;//world coordinates
+  int wy;
+  int wz;
+  int tx;
+  int ty;
+  int tz;
+  for(int x = 0; x< this.xSize; x++)
+    {
+    wx = this.minX + x;
+    tx = x + (xDiff/2);
+    for(int y = 0; y < this.ySize; y++)
+      {
+      wy = this.minY + y;
+      ty = y;
+      for(int z = 0; z< this.zSize; z++)
+        {
+        wz = this.minZ + z;
+        tz = z +(zDiff/2);
+        a = template.getAction(tx, ty, tz);
+        actualAction = getAdjustedAction(a, mine, world);
+        if(actualAction!=TargetType.NONE)
+          {
+          this.queue.offer(new MinePointPlaced(wx, wy, wz, (byte)a.meta, actualAction, a.order));
+          }
+        }
+      }
+    }
+  while(!queue.isEmpty())
+    {
+    this.workList.add(queue.poll());    
+    }
   }
 
+protected TargetType getAdjustedAction(MineAction a, TEWorkSiteMine m, World world)
+  {
+  return TargetType.NONE;
+  }
 
+protected class MinePointPlaced extends WorkPoint implements Comparable<MinePointPlaced>
+{
+int order;
+/**
+ * @param x
+ * @param y
+ * @param z
+ * @param special
+ * @param t
+ */
+public MinePointPlaced(int x, int y, int z, byte special, TargetType t, int order)
+  {
+  super(x, y, z, special, t);
+  this.order = order;
+  }
 
+@Override
+public int compareTo(MinePointPlaced arg0)
+  {
+  if(arg0!=null)
+    {
+    if(this.order<arg0.order)
+      {
+      return -1;
+      }
+    else if(this.order>arg0.order)
+      {
+      return 1;
+      }
+    }
+  return 0;
+  }
 
+}
 }

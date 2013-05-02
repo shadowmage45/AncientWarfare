@@ -40,6 +40,9 @@ public TETreeFarmJungle()
 
 protected TargetType validateWorkPoint(int x, int y, int z)
   {
+  /**
+   * NFC how to make these use 2x2 areas....probably a bad idea anyway because of the height..
+   */
   int id = worldObj.getBlockId(x, y, z);
   int meta = worldObj.getBlockMetadata(x, y, z);
   if( id==logID && (meta &3) == this.logMeta )

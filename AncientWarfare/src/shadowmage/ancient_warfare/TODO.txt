@@ -62,7 +62,7 @@ WORKSITES
 * teleport worker to position if he can't path appropriately?      
         
 FARMS
-* need rest of tree farms created (spruce, birch, jungle)
+* jungle tree farm needs to check for cocoa blocks?
 * chicken farm needs to occasionally collect eggs on the ground
 
 MINE
@@ -73,6 +73,7 @@ MINE
 * it tries to harvest water..need a isClearable(id, top) check...
 * need isFillable(id, top)
 * need isResource(id, top)
+* need to stop workers from wandering during level-changes (rework level change code to not flag as noWork unless really has noWork)
 
 COMPLEXES
 * features--

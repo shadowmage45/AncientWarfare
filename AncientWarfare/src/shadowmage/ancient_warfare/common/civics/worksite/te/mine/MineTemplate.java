@@ -24,13 +24,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class MineTemplate
 {
-
-
 int xSize;
 int ySize;
 int zSize;
@@ -45,10 +44,15 @@ public MineTemplate(int xSize, int ySize, int zSize)
   actionTemplate = new MineAction[xSize*ySize*zSize];
   }
 
+public MineTemplate(List<String> templateLines)
+  {
+  this.parseMineTemplate(templateLines);
+  }
+
 public MineAction getAction(int x, int y, int z)
   {
   int index = zSize*xSize*y + xSize*z +x;
-  if(index>=0 && index<this.actionTemplate.length)
+  if(actionTemplate!=null && index>=0 && index<this.actionTemplate.length)
     {
     return actionTemplate[index];
     }
@@ -58,7 +62,7 @@ public MineAction getAction(int x, int y, int z)
 public void setAction(int x, int y, int z, MineAction action)
   {
   int index = zSize*xSize*y + xSize*z +x;
-  if(index>=0 && index<this.actionTemplate.length)
+  if(this.actionTemplate!=null && index>=0 && index<this.actionTemplate.length)
     {
     actionTemplate[index] = action;
     }
@@ -75,28 +79,36 @@ public void parseMineTemplate(List<String> lines)
     if(line.toLowerCase().startsWith("size"))
       {
       int[] size = StringTools.safeParseIntArray("=", line);
-      if(size.length>=2)
+      if(size.length>=3)
         {
         xSize = size[0];
         ySize = size[1];
         zSize = size[2];
+        this.actionTemplate = new MineAction[xSize*ySize*zSize];
         }
       }
     else if(line.toLowerCase().startsWith("layer:"))
       {
-      int layerNum = StringTools.safeParseInt(":", line);
-      layerLines.clear();
-      layerLines.add(line);
-      while(it.hasNext())
+      if(this.actionTemplate!=null)
         {
-        line = it.next();
+        int layerNum = StringTools.safeParseInt(":", line);
+        layerLines.clear();
         layerLines.add(line);
-        if(line.toLowerCase().startsWith("endlayer:"))
+        while(it.hasNext())
           {
-          break;
-          }        
+          line = it.next();
+          layerLines.add(line);
+          if(line.toLowerCase().startsWith("endlayer:"))
+            {
+            break;
+            }        
+          }
+        parseLevel(layerLines, layerNum);
         }
-      parseLevel(layerLines, layerNum);
+      else
+        {
+        Config.logError("Error parsing mine template -- size was not set before levels");
+        }
       }    
     }
   }
@@ -105,6 +117,7 @@ public void parseLevel(List<String> lines, int levelNum)
   {
   Iterator<String> it = lines.iterator();
   String line;
+  int zIndex = 0;
   while(it.hasNext())
     {
     line = it.next();
@@ -119,21 +132,31 @@ public void parseLevel(List<String> lines, int levelNum)
     /**
      * split the line into its triplet-parts
      */
-    String[] splits = StringTools.parseStringArray(line);
+    this.parseLayerLine(StringTools.parseStringArray(line), levelNum, zIndex);    
+    zIndex++;
     }
   }
 
-private class MineAction
-{
-int order;
-int meta;
-TargetType action;
-private MineAction(TargetType t, int o, int m)
+protected void parseLayerLine(String[] splits, int y, int z)
   {
-  this.action = t;
-  this.meta = m;
-  this.order = o;
+  String l;
+  String subSplit[];
+  int id;
+  int meta;
+  int actionOrdinal;
+  for(int x = 0; x<splits.length; x++)
+    {
+    l = splits[x];
+    subSplit = l.split("-");
+    if(subSplit.length>=3)
+      {
+      id = StringTools.safeParseInt(subSplit[0]);
+      meta = StringTools.safeParseInt(subSplit[1]);
+      actionOrdinal = StringTools.safeParseInt(subSplit[2]);
+      TargetType t = TargetType.values()[actionOrdinal];
+      this.setAction(x, y, z, new MineAction(id,meta,t));
+      }
+    }
   }
-}
 
 }
