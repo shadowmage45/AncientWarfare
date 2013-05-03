@@ -54,4 +54,5 @@ public enum TargetType
   PICKUP,
   DELIVER,
   ATTACK_TILE,
+  UPKEEP,
   }

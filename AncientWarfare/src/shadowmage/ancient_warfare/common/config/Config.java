@@ -57,9 +57,11 @@ public static boolean useVehicleSetupTime = true;
 public static boolean soldiersUseAmmo = false;
 
 public static int trajectoryIterationsServer = 20;
+public static int civicBroadcastRange = 80;
+public static int npcUpkeepTicks = 20*60*5;//five minute base timer..  -1 to disable upkeep
+public static int npcHealingTicks = 20*10;//ten second base timer  -1 to disable healing
 public static int npcAITicks = 5;
 public static int npcAISearchRange = 80;
-public static int civicBroadcastRange = 80;
 public static int npcPathfinderType = 1;//0-inline, 1-scheduled, 2-threaded
 public static int npcPathfinderThreads = 2;
 

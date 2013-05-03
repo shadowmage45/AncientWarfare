@@ -62,6 +62,25 @@ public int getActionTicks(int level)
   return 35;
   }
 
+@Override
+public ItemStack getUpkeepAdditionalItem(int level)
+  {
+  if(level>=0 && level< this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).upkeepAdditionalItem;
+    }  
+  return null;
+  }
+
+@Override
+public int getUpkeepCost(int level)
+  {
+  if(level>=0 && level< this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).upkeepCost;
+    }
+  return 8;
+  }
 
 @Override
 public int getAttackDamage(int level)

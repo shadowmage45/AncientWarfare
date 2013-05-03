@@ -141,7 +141,7 @@ protected void parseLayerLine(String[] splits, int y, int z)
   {
   String l;
   String subSplit[];
-  int id;
+  int order;
   int meta;
   int actionOrdinal;
   for(int x = 0; x<splits.length; x++)
@@ -150,11 +150,11 @@ protected void parseLayerLine(String[] splits, int y, int z)
     subSplit = l.split("-");
     if(subSplit.length>=3)
       {
-      id = StringTools.safeParseInt(subSplit[0]);
+      order = StringTools.safeParseInt(subSplit[0]);
       meta = StringTools.safeParseInt(subSplit[1]);
       actionOrdinal = StringTools.safeParseInt(subSplit[2]);
       TargetType t = TargetType.values()[actionOrdinal];
-      this.setAction(x, y, z, new MineAction(id,meta,t));
+      this.setAction(x, y, z, new MineAction(order,meta,t));
       }
     }
   }

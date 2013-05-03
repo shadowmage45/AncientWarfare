@@ -27,6 +27,7 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -68,7 +69,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IEntityContainerSynch, IPathableEntity
+public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IEntityContainerSynch, IPathableEntity, IInventory
 {
 /**
  * these are the current max stats.  set from setVehicleType().  
@@ -1150,5 +1151,83 @@ public PathWorldAccess getWorldAccess()
 public float getDefaultMoveSpeed()
   {
   return this.currentForwardSpeedMax;
+  }
+
+@Override
+public int getSizeInventory()
+  {
+  return inventory.storageInventory.getSizeInventory();
+  }
+
+@Override
+public ItemStack getStackInSlot(int i)
+  {
+  return inventory.storageInventory.getStackInSlot(i);
+  }
+
+@Override
+public ItemStack decrStackSize(int i, int j)
+  {
+  return inventory.storageInventory.decrStackSize(i, j);
+  }
+
+@Override
+public ItemStack getStackInSlotOnClosing(int i)
+  {
+  return inventory.storageInventory.getStackInSlotOnClosing(i);
+  }
+
+@Override
+public void setInventorySlotContents(int i, ItemStack itemstack)
+  {
+  inventory.storageInventory.setInventorySlotContents(i, itemstack);
+  }
+
+@Override
+public String getInvName()
+  {
+  return inventory.storageInventory.getInvName();
+  }
+
+@Override
+public boolean isInvNameLocalized()
+  {
+  return inventory.storageInventory.isInvNameLocalized();
+  }
+
+@Override
+public int getInventoryStackLimit()
+  {
+  return inventory.storageInventory.getInventoryStackLimit();
+  }
+
+@Override
+public void onInventoryChanged()
+  {
+  inventory.storageInventory.onInventoryChanged();
+  }
+
+@Override
+public boolean isUseableByPlayer(EntityPlayer entityplayer)
+  {
+  return inventory.storageInventory.isUseableByPlayer(entityplayer);
+  }
+
+@Override
+public void openChest()
+  {
+  
+  }
+
+@Override
+public void closeChest()
+  {
+  
+  }
+
+@Override
+public boolean isStackValidForSlot(int i, ItemStack itemstack)
+  {
+  return inventory.storageInventory.isStackValidForSlot(i, itemstack);
   }
 }

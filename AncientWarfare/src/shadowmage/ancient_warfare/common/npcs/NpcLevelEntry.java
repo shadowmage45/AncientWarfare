@@ -31,6 +31,8 @@ import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public class NpcLevelEntry
 {
+
+protected ItemStack upkeepAdditionalItem;
 protected ItemStack toolStack;
 private ItemStack[] armorStacks = new ItemStack[4];
 protected String name;
@@ -40,6 +42,7 @@ protected int rangedAttackDistance = 0;
 protected int health = 20;
 protected int inventorySize = 9;
 protected int actionTicks = 35;
+protected int upkeepCost = 8;//default one pork chop/ two apples
 protected float accuracy = 1.f;
 protected IAmmoType ammo;//used for archers
 protected List<CivicWorkType> workTypes = new ArrayList<CivicWorkType>();
@@ -63,6 +66,18 @@ public NpcLevelEntry(String name, String tex, int damage, int health, float accu
   this.setAttackDamage(damage);
   this.setHealth(health);
   this.setAccuracy(accuracy);
+  }
+
+public NpcLevelEntry setUpkeepAdditionalItem(ItemStack item)
+  {
+  this.upkeepAdditionalItem = item;
+  return this;
+  }
+
+public NpcLevelEntry setUpkeep(int upkeep)
+  {
+  this.upkeepCost = upkeep;
+  return this;
   }
 
 public NpcLevelEntry setTool(ItemStack tool)

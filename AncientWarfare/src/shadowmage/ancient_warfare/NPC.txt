@@ -111,6 +111,20 @@ slain by a Player, they will also provide an amount of experience relative to th
 allow a soldier to pick up the armor of a vanquished foe or fallen comrade.  At this point, soldiers would be enabled
 to have a deposit site set in their AI -- this site may be a traditional block or a chest-cart (to enable mobile armies).
 
+* npcs will keep an 'upkeep timer' -- essentially a hunger timer.
+    when depleted, npcs will seek their designated upkeep site to restock (if it has supplies)
+        if site has food
+            decrement food, reset upkeep timer to value relative to value of the food consumed
+    if depleted, do not do work or seek attack targets, only defend self
+        (can be achieved by setting an 'upkeep' objective as  max priority, that will not
+        stop until it has been satisfied)
+    npcs will slowly heal when their upkeep is satisfied
+* npc upkeep need will be set by npc type
+    if entire food cost is available npc 
+        withdraw enough food to satisfy his entire upkeep cost
+        reset upkeep timer to base (variable via-config)        
+    else he will withdraw nothing    
+
 
 
 

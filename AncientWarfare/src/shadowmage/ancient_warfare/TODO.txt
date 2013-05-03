@@ -1,11 +1,11 @@
 THIS WEEKEND
-* upkeep system
+* upkeep system (mostly implemented.....need per-npc-rank upkeep set)
 * town-hall block will have slots to store food items
 * town-hall gui will show information on how many (loaded/active)NPCs are currently assigned to draw upkeep from it
-* npcs will keep an 'upkeep timer' -- essentially a hunger timer.
-    when depleted, npcs will seek their designated upkeep site to restock (if it has supplies)
-        if site has food
-            decrement food, reset upkeep timer to value relative to value of the food consumed
+* find and fix pathfinding fence issues
+* figure out way to correct tooltip display crap (split into multi-line...)
+* change batons over to not HAVE a target -- scan 20 block area and command any npcs that are following
+    the player
 
 GENERAL
 * partially destroyable blocks ? (hold destruction status as meta-data?)
@@ -187,6 +187,9 @@ TWEAKS/OPTIMIZATION
 /********** 05-03-13 **********/
 * clear target trackers on dimension change
 * remove tooltips...they're fucked anyway
+* vehicles now implement IInventory wrapped to their storageInventory -- should now work with hoppers
+* prep work on npc upkeep setup -- needs full testing
+* clean up some of the command baton stuff to be more dynamic and easier to expand in the future...
 
 /********** 05-04-13 **********/
 /********** 05-05-13 **********/

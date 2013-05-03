@@ -43,6 +43,8 @@ public abstract int getInventorySize(int level);
 public abstract float getRangedAttackDistance(int level);
 public abstract int getAttackDamage(int level);
 public abstract int getActionTicks(int level);
+public abstract int getUpkeepCost(int level);
+public abstract ItemStack getUpkeepAdditionalItem(int level);
 
 public abstract List<NpcAIObjective> getAI(NpcBase npc, int level);
 

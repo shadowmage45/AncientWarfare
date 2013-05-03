@@ -20,36 +20,37 @@
  */
 package shadowmage.ancient_warfare.common.npcs.commands;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public enum NpcCommand
 {
-NONE ("None", TargetType.NONE),
-WORK ("Work At Site", TargetType.WORK),
-PATROL ("Patrol Point", TargetType.PATROL),
-HOME ("Set Home Point", TargetType.SHELTER),
-DEPOSIT ("Set Depository", TargetType.DELIVER),
-CLEAR_PATROL ("Clear Patrol Path", TargetType.NONE),
-CLEAR_HOME ("Clear Home Point", TargetType.NONE),
-CLEAR_WORK ("Clear Work Site", TargetType.NONE),
-CLEAR_DEPOSIT ("Clear Depository", TargetType.NONE),
-MASS_PATROL ("Area Set Patrol Point", TargetType.PATROL),
-MASS_HOME ("Area Set Home Point", TargetType.SHELTER),
-MASS_WORK ("Area Set Work Point", TargetType.WORK),
-MASS_DEPOSIT ("Area Set Depository", TargetType.DELIVER),
-MASS_CLEAR_PATROL ("Area Clear Patrol Path", TargetType.NONE),
-MASS_CLEAR_HOME ("Area Clear Home Point", TargetType.NONE),
-MASS_CLEAR_WORK ("Area Clear Work Site", TargetType.NONE),
-MASS_CLEAR_DEPOSIT ("Area Clear Depository", TargetType.NONE);
+NONE ("None", TargetType.NONE, 0),
+WORK ("Work At Site", TargetType.WORK, 0),
+PATROL ("Patrol Point", TargetType.PATROL, 0),
+HOME ("Set Home Point", TargetType.SHELTER, 0),
+DEPOSIT ("Set Depository", TargetType.DELIVER, 0),
+CLEAR_PATROL ("Clear Patrol Path", TargetType.NONE, 0),
+CLEAR_HOME ("Clear Home Point", TargetType.NONE, 0),
+CLEAR_WORK ("Clear Work Site", TargetType.NONE, 0),
+CLEAR_DEPOSIT ("Clear Depository", TargetType.NONE, 0),
+UPKEEP("Set Upkeep Target", TargetType.UPKEEP, 0),
+CLEAR_UPKEEP("Clear Upkeep Target", TargetType.NONE, 0);
 //due to using ordinal to store command, any new commands must be added to the END of the list
-//also, don't EVER change ordering, or it will have some undesired effects in-game
+//also, don't EVER change ordering, or it will have some undesired effects in an already started game
 
 String name;
 TargetType type;
-private NpcCommand(String name, TargetType type)
+int batonRank = 0;
+private NpcCommand(String name, TargetType type, int minBatonRank)
   {
   this.name = name;
   this.type = type;
+  this.batonRank = minBatonRank;
   }
 
 public String getCommandName()
@@ -60,6 +61,31 @@ public String getCommandName()
 public TargetType getTargetType()
   {
   return type;
+  }
+
+public static List<NpcCommand> getCommandsForItem(ItemStack item)
+  {
+  if(item==null)
+    {
+    return Collections.emptyList();
+    }
+  else
+    {
+    return getCommandsForRank(item.getItemDamage());
+    }
+  }
+
+public static ArrayList<NpcCommand> getCommandsForRank(int rank)
+  {
+  ArrayList<NpcCommand> commands = new ArrayList<NpcCommand>();
+  for(NpcCommand com : values())
+    {
+    if(com.batonRank<=rank)
+      {
+      commands.add(com);
+      }
+    }
+  return commands;
   }
 
 }

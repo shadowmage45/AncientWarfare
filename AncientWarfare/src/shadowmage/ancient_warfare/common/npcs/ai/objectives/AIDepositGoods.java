@@ -51,7 +51,7 @@ public AIDepositGoods(NpcBase npc, int maxPriority)
 @Override
 public void addTasks()
   {
-  this.aiTasks.add(new AIMoveToTarget(npc, 2, false));
+  this.aiTasks.add(new AIMoveToTarget(npc, 3, false));
   }
 
 @Override
@@ -159,7 +159,7 @@ public void onRunningTick()
     this.cooldownTicks = this.maxCooldownticks;
     return;
     }
-  if(npc.getDistance(p.floorX(), p.floorY(), p.floorZ())>3)
+  if(npc.getDistance(p.floorX(), p.floorY(), p.floorZ())>3.5)
     {
 //    Config.logDebug("moving to deposit target");
     //continue moving to target
@@ -205,6 +205,7 @@ public void onObjectiveStart()
 public void stopObjective()
   {
   npc.setTargetAW(null);
+  npc.clearPath();
   this.targetInventory = null;
   }
 

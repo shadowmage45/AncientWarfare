@@ -34,7 +34,6 @@ import shadowmage.ancient_warfare.common.utils.EntityTools;
 public class WayPoint extends TargetPosition
 {
 
-protected TileEntity teTarget = null;
 protected Entity entTarget = null;
 UUID entityID;
 protected boolean isTile = false;
@@ -47,7 +46,6 @@ public WayPoint(WayPoint p)
   this.y = p.y;
   this.z = p.z;
   this.side = p.side;
-  this.teTarget = p.teTarget;
   this.entTarget = p.entTarget;
   this.entityID = p.entityID;
   this.isTile = p.isTile;
@@ -90,7 +88,6 @@ public WayPoint(TileEntity te, int side, TargetType type)
   super(type);
   this.isTile = true;
   this.side = side;
-  this.teTarget = te;
   this.x = te.xCoord;
   this.y = te.yCoord;
   this.z = te.zCoord;
@@ -99,11 +96,7 @@ public WayPoint(TileEntity te, int side, TargetType type)
 @Override
 public TileEntity getTileEntity(World world)
   {
-  if(this.teTarget==null)
-    {
-    this.teTarget = world.getBlockTileEntity(x, y, z);
-    }
-  return this.teTarget;
+  return world.getBlockTileEntity(x, y, z);
   }
 
 @Override

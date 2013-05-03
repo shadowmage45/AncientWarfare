@@ -90,6 +90,10 @@ protected int lootCheckTicks = 0;
 
 protected int npcTicksExisted = 0;
 
+public int npcUpkeepTicks = Config.npcUpkeepTicks;//how many upkeep ticks worth of food are remaining?
+
+protected int npcHealingTicks = Config.npcHealingTicks;//
+
 public INpcType npcType = NpcRegistry.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
 public NpcTargetHelper targetHelper;
@@ -176,6 +180,12 @@ public void handleBatonCommand(NpcCommand cmd, WayPoint p)
   break;
   case CLEAR_DEPOSIT:
   wayNav.setDepositSite(null);
+  break;
+  case UPKEEP:
+  wayNav.setUpkeepSite(p);
+  break;
+  case CLEAR_UPKEEP:
+  wayNav.setUpkeepSite(null);
   break;
   }
   }
@@ -354,11 +364,34 @@ public void onUpdate()
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
     }  
-  
+  if(this.npcUpkeepTicks>0)
+    {
+    this.npcUpkeepTicks--;
+    }  
+  if(this.npcUpkeepTicks!=0)
+    {
+    if(npcHealingTicks==0)
+      {
+      this.handleHealingUpdate();
+      }
+    else if(npcHealingTicks>0)
+      {
+      npcHealingTicks--;
+      }
+    }
   if(actionTick>0)
     {
     actionTick--;
     }
+  if(this.lootCheckTicks<=0)
+    {
+    this.lootCheckTicks = Config.npcAITicks;
+    this.handleLootPickup();
+    }
+  else
+    {
+    this.lootCheckTicks--;
+    }   
   this.updateArmSwingProgress();
   if(!this.worldObj.isRemote)
     {
@@ -412,16 +445,13 @@ public void onUpdate()
       this.worldObj.villageCollectionObj.addVillagerPosition(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
       }
     }
-  if(this.lootCheckTicks<=0)
-    {
-    this.lootCheckTicks = Config.npcAITicks;
-    this.handleLootPickup();
-    }
-  else
-    {
-    this.lootCheckTicks--;
-    }   
+  
   super.onUpdate();    
+  }
+
+protected void handleHealingUpdate()
+  {
+  
   }
 
 public void handleLootPickup()
@@ -528,6 +558,8 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setCompoundTag("waypoints", wayNav.getNBTTag());
   tag.setInteger("health", this.getHealth());
   tag.setCompoundTag("inv", this.inventory.getNBTTag());
+  tag.setInteger("upkeep", this.npcUpkeepTicks);
+  tag.setInteger("healing", this.npcHealingTicks);
   }
 
 @Override
@@ -544,6 +576,8 @@ public void readFromNBT(NBTTagCompound tag)
     {
     this.inventory.readFromNBT(tag.getCompoundTag("inv"));
     }
+  this.npcUpkeepTicks = tag.getInteger("upkeep");
+  this.npcHealingTicks = tag.getInteger("healing");
   }
 
 @Override

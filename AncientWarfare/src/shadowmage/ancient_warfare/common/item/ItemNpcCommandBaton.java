@@ -25,8 +25,8 @@ import java.util.UUID;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityMinecartChest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -38,7 +38,6 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.EntityTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -124,25 +123,16 @@ public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player,   Entity 
       }
     else
       {
-      if(settings.command == NpcCommand.DEPOSIT || settings.command==NpcCommand.MASS_DEPOSIT)
+      if(settings.command == NpcCommand.DEPOSIT || settings.command==NpcCommand.UPKEEP)
         {
         Config.logDebug("testing execution of entity-target deposit site");
         boolean transmit = false;
-        if(entity instanceof EntityMinecartChest)
+        if(entity instanceof IInventory && ((IInventory)entity).getSizeInventory()>0)
           {
-          Config.logDebug("target was a mine-cart chest");
+          Config.logDebug("target was an IInventory Entity with inventory size >0");
           this.handleNpcCommand(player, stack, settings, hit);
-          }   
-        else if( entity instanceof VehicleBase)
-          {
-          VehicleBase veh = (VehicleBase)entity;
-          if(veh.inventory.storageInventory.getSizeInventory()>0)
-            {
-            Config.logDebug("target was a vehicle chest cart, or vehicle with storage");
-            this.handleNpcCommand(player, stack, settings, hit);
-            }
-          } 
-        }        
+          }  
+        }       
       return true;
       }
     }  
@@ -318,28 +308,6 @@ public static void setBatonSettings(ItemStack stack, BatonSettings settings)
     {
     stack.setTagInfo("batonSettings", settings.getNBTTag());
     }
-  }
-
-public static NpcCommand[] getApplicableCommands(ItemStack stack)
-  {
-  if(stack!=null && stack.itemID == ItemLoader.instance().npcCommandBaton.itemID)
-    {
-    switch(stack.getItemDamage())
-    {
-    case 0:
-    return new NpcCommand[]{NpcCommand.WORK, NpcCommand.PATROL, NpcCommand.HOME, NpcCommand.DEPOSIT, NpcCommand.CLEAR_DEPOSIT, NpcCommand.CLEAR_HOME, NpcCommand.CLEAR_PATROL, NpcCommand.CLEAR_WORK};
-    case 1:
-    return new NpcCommand[]{NpcCommand.WORK, NpcCommand.PATROL, NpcCommand.HOME, NpcCommand.DEPOSIT, NpcCommand.CLEAR_DEPOSIT, NpcCommand.CLEAR_HOME, NpcCommand.CLEAR_PATROL, NpcCommand.CLEAR_WORK,
-        NpcCommand.MASS_HOME, NpcCommand.MASS_CLEAR_HOME};
-    case 2:
-    return new NpcCommand[]{NpcCommand.WORK, NpcCommand.PATROL, NpcCommand.HOME, NpcCommand.DEPOSIT, NpcCommand.CLEAR_DEPOSIT, NpcCommand.CLEAR_HOME, NpcCommand.CLEAR_PATROL, NpcCommand.CLEAR_WORK,
-        NpcCommand.MASS_HOME, NpcCommand.MASS_CLEAR_HOME, NpcCommand.MASS_CLEAR_WORK, NpcCommand.MASS_WORK};
-    case 3:
-    return new NpcCommand[]{NpcCommand.WORK, NpcCommand.PATROL, NpcCommand.HOME, NpcCommand.DEPOSIT, NpcCommand.CLEAR_DEPOSIT, NpcCommand.CLEAR_HOME, NpcCommand.CLEAR_PATROL, NpcCommand.CLEAR_WORK,
-        NpcCommand.MASS_HOME, NpcCommand.MASS_CLEAR_HOME, NpcCommand.MASS_DEPOSIT, NpcCommand.MASS_CLEAR_DEPOSIT, NpcCommand.MASS_CLEAR_WORK, NpcCommand.MASS_WORK, NpcCommand.MASS_PATROL, NpcCommand.MASS_CLEAR_PATROL};    
-    }
-    }
-  return null;
   }
 
 public class BatonSettings implements INBTTaggable
