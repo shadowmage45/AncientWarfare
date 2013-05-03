@@ -89,19 +89,19 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 @Override
 public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
   {
-  super.addInformation(stack, par2EntityPlayer, par3List, par4);  
-  if(stack!=null)
-    {
-    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWVehSpawner"))
-      {
-      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWVehSpawner");
-      par3List.add("Material Level: "+tag.getInteger("lev"));
-      if(tag.hasKey("health"))
-        {
-        par3List.add("Vehicle Health: "+tag.getFloat("health"));
-        }
-      }
-    }  
+//  super.addInformation(stack, par2EntityPlayer, par3List, par4);  
+//  if(stack!=null)
+//    {
+//    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWVehSpawner"))
+//      {
+//      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWVehSpawner");
+//      par3List.add("Material Level: "+tag.getInteger("lev"));
+//      if(tag.hasKey("health"))
+//        {
+//        par3List.add("Vehicle Health: "+tag.getFloat("health"));
+//        }
+//      }
+//    }  
   }
 
 @Override

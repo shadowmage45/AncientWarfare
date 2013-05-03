@@ -85,20 +85,20 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,   
 @Override
 public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
   {
-  super.addInformation(stack, par2EntityPlayer, par3List, par4); 
-  if(stack!=null)
-    {
-    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
-      {
-      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
-      par3List.add("NPC Type: "+tag.getString("name"));
-      par3List.add("NPC Rank: "+tag.getInteger("lev"));      
-      }
-    else
-      {
-      par3List.add("Invalid NPC Spawner--Something has corrupted or removed the itemStack NBT data.");
-      }
-    }  
+//  super.addInformation(stack, par2EntityPlayer, par3List, par4); 
+//  if(stack!=null)
+//    {
+//    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
+//      {
+//      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
+//      par3List.add("NPC Type: "+tag.getString("name"));
+//      par3List.add("NPC Rank: "+tag.getInteger("lev"));      
+//      }
+//    else
+//      {
+//      par3List.add("Invalid NPC Spawner--Something has corrupted or removed the itemStack NBT data.");
+//      }
+//    }  
   }
 
 @Override

@@ -67,35 +67,35 @@ public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int 
 @Override
 public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
   {
-  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);  
-  if(par1ItemStack!=null)
-    {
-    NBTTagCompound tag;
-    if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("structData"))
-      {
-      tag = par1ItemStack.getTagCompound().getCompoundTag("structData");
-      }
-    else
-      {
-      tag = new NBTTagCompound();
-      }
-    if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
-      {
-      par3List.add("scan area set, right click to process (4/4)");
-      }        
-    else if(!tag.hasKey("pos1"))
-      {
-      par3List.add("item cleared, right click to begin scanning (1/4)");
-      }
-    else if(!tag.hasKey("pos2"))
-      {
-      par3List.add("pos1 set, right click to set pos2 (2/4)");
-      }
-    else if(!tag.hasKey("buildKey"))
-      {
-      par3List.add("pos2 set, right click to set buildkey and facing (3/4)");
-      }    
-    }  
+//  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);  
+//  if(par1ItemStack!=null)
+//    {
+//    NBTTagCompound tag;
+//    if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("structData"))
+//      {
+//      tag = par1ItemStack.getTagCompound().getCompoundTag("structData");
+//      }
+//    else
+//      {
+//      tag = new NBTTagCompound();
+//      }
+//    if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
+//      {
+//      par3List.add("scan area set, right click to process (4/4)");
+//      }        
+//    else if(!tag.hasKey("pos1"))
+//      {
+//      par3List.add("item cleared, right click to begin scanning (1/4)");
+//      }
+//    else if(!tag.hasKey("pos2"))
+//      {
+//      par3List.add("pos1 set, right click to set pos2 (2/4)");
+//      }
+//    else if(!tag.hasKey("buildKey"))
+//      {
+//      par3List.add("pos2 set, right click to set buildkey and facing (3/4)");
+//      }    
+//    }  
   }
 
 @Override

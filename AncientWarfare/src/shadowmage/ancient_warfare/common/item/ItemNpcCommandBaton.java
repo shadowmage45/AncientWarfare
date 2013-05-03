@@ -69,27 +69,27 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
-  super.addInformation(stack, player, list, par4);
-  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("batonSettings"))
-    {
-    NBTTagCompound tag = stack.getTagCompound().getCompoundTag("batonSettings");
-    if(tag.hasKey("uidlsb") && tag.hasKey("uidmsb"))
-      {
-      list.add("Has Npc to command, left click a block to execute current command");
-      }
-    if(tag.hasKey("com"))
-      {
-      list.add("Current command: "+NpcCommand.values()[tag.getInteger("com")]);
-      }
-    if(tag.hasKey("rng"))
-      {
-      list.add("Range: "+tag.getInteger("rng"));
-      }
-    }
-  else
-    {
-    list.add("Un-initialized Baton, right click to open GUI");
-    }    
+//  super.addInformation(stack, player, list, par4);
+//  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("batonSettings"))
+//    {
+//    NBTTagCompound tag = stack.getTagCompound().getCompoundTag("batonSettings");
+//    if(tag.hasKey("uidlsb") && tag.hasKey("uidmsb"))
+//      {
+//      list.add("Has Npc to command, left click a block to execute current command");
+//      }
+//    if(tag.hasKey("com"))
+//      {
+//      list.add("Current command: "+NpcCommand.values()[tag.getInteger("com")]);
+//      }
+//    if(tag.hasKey("rng"))
+//      {
+//      list.add("Range: "+tag.getInteger("rng"));
+//      }
+//    }
+//  else
+//    {
+//    list.add("Un-initialized Baton, right click to open GUI");
+//    }    
   }
 
 /**

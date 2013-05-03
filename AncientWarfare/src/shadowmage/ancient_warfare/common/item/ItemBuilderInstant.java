@@ -57,56 +57,56 @@ public void openGUI(EntityPlayer player)
 @Override
 public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
   {
-  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);  
-  if(par1ItemStack!=null)
-    {
-    NBTTagCompound tag;
-    int test;
-    boolean val;
-    if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("structData"))
-      {
-      tag = par1ItemStack.getTagCompound().getCompoundTag("structData");
-      }
-    else
-      {      
-      tag = new NBTTagCompound();
-      }
-    if(tag.hasKey("name"))
-      {
-      par3List.add("Structure Name: "+ tag.getString("name"));
-      }   
-    else
-      {
-      par3List.add("Structure Name: "+ "No Selection");
-      }
-    if(tag.hasKey("oteam"))
-      {
-      test = tag.getInteger("oteam");
-      if(test>=-0)
-        {
-        par3List.add("Forced Team Num: "+test);
-        }      
-      else
-        {
-        par3List.add("Forced Team Num: Not Forced");
-        }
-      }
-    if(tag.hasKey("sveh"))
-      {
-      val = tag.getBoolean("sveh");
-      par3List.add("Spawn Vehicles: "+val);     
-      }
-    if(tag.hasKey("snpc"))
-      {
-      val = tag.getBoolean("snpc");
-      par3List.add("Spawn Npcs: "+val);      
-      }
-    if(tag.hasKey("sgate"))
-      {
-      val = tag.getBoolean("sgate");
-      par3List.add("Spawn Gates: "+val);      
-      }
-    }  
+//  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);  
+//  if(par1ItemStack!=null)
+//    {
+//    NBTTagCompound tag;
+//    int test;
+//    boolean val;
+//    if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("structData"))
+//      {
+//      tag = par1ItemStack.getTagCompound().getCompoundTag("structData");
+//      }
+//    else
+//      {      
+//      tag = new NBTTagCompound();
+//      }
+//    if(tag.hasKey("name"))
+//      {
+//      par3List.add("Structure Name: "+ tag.getString("name"));
+//      }   
+//    else
+//      {
+//      par3List.add("Structure Name: "+ "No Selection");
+//      }
+//    if(tag.hasKey("oteam"))
+//      {
+//      test = tag.getInteger("oteam");
+//      if(test>=-0)
+//        {
+//        par3List.add("Forced Team Num: "+test);
+//        }      
+//      else
+//        {
+//        par3List.add("Forced Team Num: Not Forced");
+//        }
+//      }
+//    if(tag.hasKey("sveh"))
+//      {
+//      val = tag.getBoolean("sveh");
+//      par3List.add("Spawn Vehicles: "+val);     
+//      }
+//    if(tag.hasKey("snpc"))
+//      {
+//      val = tag.getBoolean("snpc");
+//      par3List.add("Spawn Npcs: "+val);      
+//      }
+//    if(tag.hasKey("sgate"))
+//      {
+//      val = tag.getBoolean("sgate");
+//      par3List.add("Spawn Gates: "+val);      
+//      }
+//    }  
   }
 
 private NBTTagCompound getDefaultTag()
