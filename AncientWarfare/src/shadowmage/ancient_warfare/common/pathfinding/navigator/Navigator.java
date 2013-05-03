@@ -27,6 +27,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -127,14 +128,10 @@ protected void handleLadderMovement()
     if(currentTarget.y<(int)entity.posY)
       {
       entity.motionY = -0.125f;
-//      entity.motionX *= 0.5f;
-//      entity.motionZ *= 0.5f;
       }
     else if(currentTarget.y > (int)entity.posY )
       {
       entity.motionY = 0.125f;
-//      entity.motionX *= 0.5f;
-//      entity.motionZ *= 0.5f;
       }    
     }
   }
@@ -164,7 +161,6 @@ protected void detectStuck()
       {
       if(entity.getDistance(stuckCheckPosition.x, stuckCheckPosition.y, stuckCheckPosition.z)<1.5d)
         {
-//        Config.logDebug("detecting stuck, clearing path");
         this.clearPath();
         this.currentTarget = null;      
         }
@@ -199,22 +195,22 @@ protected boolean shouldCalculatePath(int ex, int ey, int ez, int tx, int ty, in
 
 protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
- if(PathUtils.canPathStraightToTarget(world, ex, ey, ez, tx, ty, tz))
+  if(PathUtils.canPathStraightToTarget(world, ex, ey, ez, tx, ty, tz))
     {
     this.currentTarget = new Node(tx, ty, tz);
-//    Config.logDebug("straight path hit goal");
+    //    Config.logDebug("straight path hit goal");
     }
   else
     {
     this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 4));
-//    Config.logDebug("requesting starter path");
-//    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 60));    
+    //    Config.logDebug("requesting starter path");
+    //    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 60));    
     Node end = this.path.getEndNode();
     if(end!=null && (end.x!=tx || end.y!=ty || end.z!=tz))
       {
-//      Config.logDebug("requesting full path");
+      //      Config.logDebug("requesting full path");
       PathManager.instance().requestPath(this, world, end.x, end.y, end.z, tx, ty, tz, 60);
-//      this.path.addPath(PathManager.instance().findImmediatePath(world, end.x, end.y, end.z, tx, ty, tz));
+      //      this.path.addPath(PathManager.instance().findImmediatePath(world, end.x, end.y, end.z, tx, ty, tz));
       }  
     }  
   this.stuckCheckTicks = this.stuckCheckTicksMax;
@@ -329,7 +325,19 @@ protected void interactWithDoor(BlockPosition doorPos, boolean open)
     boolean gateopen = BlockFenceGate.isFenceGateOpen(meta);
     if(open!=gateopen)
       {
-      foo
+      int x = doorPos.x;
+      int y = doorPos.y;
+      int z = doorPos.z;
+      if (open && !BlockFenceGate.isFenceGateOpen(meta))
+        {
+        entity.worldObj.setBlockMetadataWithNotify(x, y, z, meta | 4, 2);
+        entity.worldObj.playAuxSFXAtEntity((EntityPlayer)null, 1003, x, y, z, 0);
+        }
+      else if (!open && BlockFenceGate.isFenceGateOpen(meta))
+        {
+        entity.worldObj.setBlockMetadataWithNotify(x, y, z, meta & -5, 2);
+        entity.worldObj.playAuxSFXAtEntity((EntityPlayer)null, 1003, x, y, z, 0);
+        }
       }
     }
   }
@@ -398,7 +406,7 @@ public void setCanUseLadders(boolean ladders)
 @Override
 public void onPathFound(List<Node> pathNodes)
   {
-//  Config.logDebug("full path request returned");
+  //  Config.logDebug("full path request returned");
   this.path.addPath(world, pathNodes);
   }
 
@@ -418,8 +426,8 @@ public void forcePath(List<Node> n)
 
 @Override
 public List<Node> getCurrentPath()
-  {
-  return path.getActivePath();
-  }
+{
+return path.getActivePath();
+}
 
 }
