@@ -141,6 +141,11 @@ public void handleTileEntityTargetBroadcast(TileEntity te, TargetType t, int agg
     }
   }
 
+public void handleDimensionChange(int dim)
+  {
+  this.aggroEntries.clear();
+  }
+
 public void addOrUpdateAggroEntry(AITargetEntry type, TileEntity te, int aggroAmt)
   {
   if(!this.aggroEntries.containsKey(type.getTypeName()))

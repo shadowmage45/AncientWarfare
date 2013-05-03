@@ -136,6 +136,7 @@ public NpcBase(World par1World)
 public void travelToDimension(int par1)
   {
   wayNav.handleDimensionChange(par1);
+  targetHelper.handleDimensionChange(par1);
   super.travelToDimension(par1);
   }
 
@@ -353,15 +354,7 @@ public void onUpdate()
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
     }  
-  if(this.getTarget()!=null && this.getTarget().isEntityEntry())
-    {
-    ITargetEntry target = this.getTarget();
-    Entity ent = target.getEntity(worldObj);
-    if(ent==null || ent.isDead)
-      {
-      this.setTargetAW(null);
-      }
-    }
+  
   if(actionTick>0)
     {
     actionTick--;
@@ -372,6 +365,14 @@ public void onUpdate()
     this.nav.onMovementUpdate();
     }
   ITargetEntry target = this.wayNav.getTarget();
+  if(target!=null && target.isEntityEntry())
+    {
+    Entity ent = target.getEntity(worldObj);
+    if(ent==null || ent.isDead)
+      {
+      this.setTargetAW(null);
+      }
+    }
   if(target!=null)
     {
     if(target.isEntityEntry() && target.getEntity(worldObj)!=null)

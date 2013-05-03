@@ -78,6 +78,9 @@ public WayPoint(Entity ent, TargetType type)
   { 
   super(type);
   this.isEnt = true;
+  this.x =MathHelper.floor_double(ent.posX);
+  this.y =MathHelper.floor_double(ent.posY);
+  this.z =MathHelper.floor_double(ent.posZ);
   this.entTarget = ent;
   this.entityID = ent.getPersistentID();
   }
@@ -184,7 +187,7 @@ public NBTTagCompound getNBTTag()
     tag.setLong("idmsb", entTarget.getPersistentID().getMostSignificantBits());
     tag.setLong("idlsb", entTarget.getPersistentID().getLeastSignificantBits());
     }
-  else if(entityID!=null)
+  else if(isEnt && entityID!=null)
     {
     tag.setLong("idmsb", entityID.getMostSignificantBits());
     tag.setLong("idlsb", entityID.getLeastSignificantBits());
@@ -198,25 +201,22 @@ public void readFromNBT(NBTTagCompound tag)
   super.readFromNBT(tag);
   if(tag.hasKey("idmsb") && tag.hasKey("idlsb"))
     {
+    this.isEnt = true;
     entityID = new UUID(tag.getLong("idmsb"), tag.getLong("idlsb"));
-    }  
+    }
+  if(tag.hasKey("tile"))
+    {
+    this.isTile = true;
+    }
   }
 
 @Override
 public Entity getEntity(World world)
   {
-  if(isEnt)
+  if(isEnt && this.entTarget==null)
     {
-    if(this.entTarget!=null)
-      {
-      return this.entTarget;
-      }
-    else if(this.entityID!=null)
-      {
-      this.entTarget = EntityTools.getEntityByUUID(world, entityID.getMostSignificantBits(), entityID.getLeastSignificantBits());
-      return this.entTarget;
-      }
+    this.entTarget = EntityTools.getEntityByUUID(world, entityID.getMostSignificantBits(), entityID.getLeastSignificantBits());    
     }
-  return null;
+  return this.entTarget;
   }
 }

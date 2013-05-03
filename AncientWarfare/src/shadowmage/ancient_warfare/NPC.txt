@@ -19,11 +19,10 @@ Soldiers:
     General
 
 Civillians:
-    Farmer (internal subtypes for dif. plants)
-    Breeder (internal subtypes for dif. animals)
+    Farmer 
+    Lumberjack
+    Breeder
     Miner
-    Builder ?
-    Researcher ?
     Courier
     
 Overview:
@@ -52,17 +51,15 @@ for transferrence of goods, other NPCs can only work at particular types of work
 mines).  Most Civilian NPC's will have an interaction GUI with a simple inventory, providing player access to whatever
 goods the NPC may be working but not deposited.  The NPC inventory size may be linked to NPC rank.  Civilian work
 time will vary depending upon rank -- higher quality workers will get more work done in a given period of time than 
-lower quality workers.  Some VERY advanced work sites may require high-ranked workers in order to even function (low
-ranked wokers will not be attachable).
+lower quality workers.  Some VERY advanced work sites may require specialized workers in order to even function.
 
     Civilians hook into the exising MC Village mechanics, allowing for nearby doors to be added to Village lists, as
 well as seeking shelter in the nearest available village dwelling at night/in the rain.
 
-    Goods-Transportation based Civilians will be made available -- these Civilians may have an IInventory (Tile entity
-or Entity) assigned for their 'work-site'.  These NPCs will have item-stack based filters available in their interface
+    Goods-Transportation based Civilians will be made available (Couriers).  These NPCs will have item-stack based filters available in their interface
 to designate what goods to pick-up in what quantities, or how much of a good to keep stocked in the depository (allowing
 for the automation of things consuming resources).  Higher ranks will have more filter slots and more configurable
-options available.  These NPCs are meant to take the place of the often-laggy (but awesome!) transport pipes and tubes 
+options available.  These NPCs are meant to take the place of the often-laggy/item dropping (but awesome!) transport pipes and tubes 
 provided by many mods (The theory being that one NPC carrying many STACKS of items is better than thousands of single
 items running through tubes && the tube-block update-ticks necessary to support/route them). Advanced NPCs may be
 available which provide multi-pickup/multi-destination abilities, allowing for a single NPC to manage more significant
@@ -144,7 +141,7 @@ worker support capacity.
 * animal farms (cow, sheep, chicken, pig, horses?)
 * tree farms (probably one per vanilla tree types with plugins for mods) 
 * mining facilities -- a few different patterns, types, and ranks (determines max depth)
-* ore processing facility -- must have furnaces (plugin for mod furnace extendsions), workers process ores to ingots/etc
+* ore processing facility -- must have furnaces (plugin for mod furnace extensions), workers process ores to ingots/etc
 * lumber processing facility -- concept WIP -- probably needs special? crafting bench to process wood to planks/sticks for other civics (at a bonus)
 * basic crafting facility -- automate normal crafting table recipes with NPCs who will withraw the required goods from the town-hall/designated area, and deposit results into their deposit site
 * research facility -- help automate the research process with workers (may require special research workers)
@@ -153,8 +150,7 @@ worker support capacity.
     Non logic-based civics will also provide designated areas for some advanced functions:
 * dwellings -- provide a designated home building to specific Civilians.  They will not seek random shelter, but
         instead prefer their designated building.
-* advanced depositories -- provide specialzed holding and routing functions for items (such as an armory,..concept WIP)            
-
+        
     Many of the logic based blocks will funcion by occasionally scanning their designated area for blocks/entities 
 that they consider important (will vary by Civic).  The maximum size of the area will often be determined by the rank of
 the specific Civic -- higher ranks are often allowed to work larger areas.  

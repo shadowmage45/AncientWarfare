@@ -1,4 +1,11 @@
-TODO before first alpha release:
+THIS WEEKEND
+* upkeep system
+* town-hall block will have slots to store food items
+* town-hall gui will show information on how many (loaded/active)NPCs are currently assigned to draw upkeep from it
+* npcs will keep an 'upkeep timer' -- essentially a hunger timer.
+    when depleted, npcs will seek their designated upkeep site to restock (if it has supplies)
+        if site has food
+            decrement food, reset upkeep timer to value relative to value of the food consumed
 
 GENERAL
 * partially destroyable blocks ? (hold destruction status as meta-data?)
@@ -29,7 +36,6 @@ NPCS
 * add objective icon rendering to npcs (toggle via Settings) -- .... NFC on this, would require server->client sync on stuff
 * decide on method for NPC upkeep
 * add NPC upkeep costs to INpcType/NpcTypeBase/indiv. types
-* clear target trackers on dimension change
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -177,10 +183,11 @@ TWEAKS/OPTIMIZATION
     vehicles ammo type not carried over properly in templates
     vehicle armor/upgrade slots > 1 qty
 * add animal-farm civic types.  need testing. need mooshroom and cow-milking farms
-* add loot-on-ground pickup ability to all NPCs -- not working, needs investigation.
-    
-    
+* add loot-on-ground pickup ability to all NPCs -- not working, needs investigation. 
 /********** 05-03-13 **********/
+* clear target trackers on dimension change
+* remove tooltips...they're fucked anyway
+
 /********** 05-04-13 **********/
 /********** 05-05-13 **********/
 /********** 05-06-13 **********/

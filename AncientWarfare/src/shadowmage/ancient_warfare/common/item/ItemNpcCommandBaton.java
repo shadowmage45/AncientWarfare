@@ -212,7 +212,6 @@ protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSetti
       if(npcType==-1 || testNpc.npcType.getGlobalNpcType()==npcType)
         {
         testNpc.handleBatonCommand(cmd, p);
-//        testNpc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
         }        
       }
     }
