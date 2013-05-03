@@ -425,7 +425,7 @@ public void onUpdate()
 
 public void handleLootPickup()
   {
-  List<EntityItem> worldItems = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(posX-2, posY-1, posZ-2, posY+1, posX+2, posZ+2));
+  List<EntityItem> worldItems = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().getAABB(posX-1.5, posY-1, posZ-1.5, posX+1.5, posY+1, posZ+1.5));
   if(worldItems!=null)
     {
     ItemStack item;

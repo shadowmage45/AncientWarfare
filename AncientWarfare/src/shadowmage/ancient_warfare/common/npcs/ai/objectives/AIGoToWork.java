@@ -79,7 +79,7 @@ public void updatePriority()
         if(entry.getTileEntity(npc.worldObj) instanceof TECivic)
           {
           TECivic tec = (TECivic) entry.getTileEntity(npc.worldObj);
-          if(tec.hasWork() && tec.canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(tec.getCivic().getWorkType()))
+          if(tec.hasWork() && tec.canHaveMoreWorkers() && npc.npcType.getWorkTypes(npc.rank).contains(tec.getCivic().getWorkType()))
             {
 //            Config.logDebug("assigning te from aggro list!!");
             npc.wayNav.setWorkSite(new WayPoint(entry.floorX(), entry.floorY(), entry.floorZ(), entry.getTargetType()));
@@ -154,7 +154,7 @@ protected boolean isWorkSiteWorkable()
     }
   else
     {
-    if(workSite.canHaveMoreWorkers(npc) && workSite.hasWork())
+    if(workSite.canHaveMoreWorkers() && workSite.hasWork())
       {
       return true;
       }

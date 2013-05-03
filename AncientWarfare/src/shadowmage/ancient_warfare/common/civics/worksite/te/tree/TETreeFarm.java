@@ -104,7 +104,7 @@ protected void scan()
     for(int x = this.minX; x<=this.maxX; x++)
       {
       for(int z = this.minZ; z<=this.maxZ; z++)
-        {        
+        { 
         t = this.validateWorkPoint(x, y, z);
         if(t!=TargetType.NONE)
           {
@@ -153,6 +153,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
   {
   int id = worldObj.getBlockId(x, y, z);
   int meta = worldObj.getBlockMetadata(x, y, z);
+  boolean hasSapling = inventory.containsAtLeast(saplingFilter, 1);  
   if( id==logID && (meta &3) == this.logMeta )
     {
     return TargetType.TREE_CHOP;
@@ -162,7 +163,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
     if(x%4==0 && z%4==0)
       {
       id = worldObj.getBlockId(x, y-1, z);
-      if((id==Block.dirt.blockID || id==Block.grass.blockID) && inventory.containsAtLeast(saplingFilter, 1))
+      if((id==Block.dirt.blockID || id==Block.grass.blockID) && hasSapling)
         {
         return TargetType.TREE_PLANT;
         }

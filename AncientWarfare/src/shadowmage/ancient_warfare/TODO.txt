@@ -11,6 +11,7 @@ GENERAL
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
 * test vehicle spawning stuff with structures -- apparently there are ammo issues
+* vehicle container needs stack limiting on shift-click
 
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
@@ -27,7 +28,6 @@ NPCS
     town-hall/vault -- for npc upkeep
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
 * add objective icon rendering to npcs (toggle via Settings) -- .... NFC on this, would require server->client sync on stuff
-* add loot-on-ground pickup ability to all NPCs -- not working, needs investigation.
 * decide on method for NPC upkeep
 * add NPC upkeep costs to INpcType/NpcTypeBase/indiv. types
 * clear target trackers on dimension change
@@ -56,6 +56,7 @@ CIVICS
 * need objective icons and rendering
 * need inventory status bar
 * need work status bar
+* bounds size testing on placement is one off (display is correct, test is wrong)
 
 WORKSITES
 * most civics probably need chunk-loaders to prevent them from trying to access unloaded areas.
@@ -64,6 +65,8 @@ WORKSITES
 FARMS
 * jungle tree farm needs to check for cocoa blocks?
 * chicken farm needs to occasionally collect eggs on the ground
+* netherstalk farm needs testing
+* tree farms need testing
 
 MINE
 * alternative mine-patterns
@@ -174,6 +177,7 @@ TWEAKS/OPTIMIZATION
     vehicles ammo type not carried over properly in templates
     vehicle armor/upgrade slots > 1 qty
 * add animal-farm civic types.  need testing. need mooshroom and cow-milking farms
+* add loot-on-ground pickup ability to all NPCs -- not working, needs investigation.
     
     
 /********** 05-03-13 **********/

@@ -40,8 +40,6 @@ public class TEBarnSheep extends TEWorkSiteAnimalFarm
 
 ItemStack shearsStack = new ItemStack(Item.shears);
 
-int maxSheep = 20;
-
 /**
  * 
  */
@@ -54,10 +52,9 @@ public TEBarnSheep()
 @Override
 protected void scan()
   { 
-  List<WorkPoint> potentialPoints = new ArrayList<WorkPoint>();
   List<EntitySheep> entities = worldObj.getEntitiesWithinAABB(entityClass, getWorkBounds());
-  List<EntitySheep> breedable = new ArrayList<EntitySheep>();
-  List<EntitySheep> cullable = new ArrayList<EntitySheep>();
+  breedingList.clear();
+  cullableList.clear();
   if(entities!=null && !entities.isEmpty())
     {
     for(EntitySheep ent : entities)
@@ -66,33 +63,34 @@ protected void scan()
         {
         if(ent.getGrowingAge()==0)
           {
-          breedable.add(ent);
+          breedingList.add(ent);
           }
         if(!ent.getSheared())
           {
-          cullable.add(ent);
+          cullableList.add(ent);
           }        
         }
       }
     }  
   EntitySheep first;
   EntitySheep second;
-  int breedableCount = this.maxSheep - entities.size();
-  if(entities.size()< this.maxSheep && breedableCount>0)
+  if(entities.size() < this.maxAnimalCount)
     {
-    while(breedable.size()>=2 && inventory.containsAtLeast(breedingItem, 2) && breedableCount > 0)
+    boolean hasFood = this.inventory.containsAtLeast(breedingItem, 2);
+    int bredCount = 0;
+    while(breedingList.size()>=2 && hasFood && entities.size() + bredCount <=this.maxAnimalCount)
       {
-      breedableCount--;
+      bredCount++;
       //do two animals at once...
-      first = breedable.remove(0);
-      second = breedable.remove(0);
+      first = (EntitySheep) breedingList.poll();
+      second = (EntitySheep) breedingList.poll();
       this.addWorkPoint(first, TargetType.BARN_BREED);
       this.addWorkPoint(second, TargetType.BARN_BREED);
       }
     }  
-  for(int i = 0; i < cullable.size(); i++)
+  for(int i = 0; i < cullableList.size(); i++)
     {
-    first = cullable.remove(0);
+    first = (EntitySheep) cullableList.poll();
     this.addWorkPoint(first, TargetType.BARN_CULL);
     }
   }

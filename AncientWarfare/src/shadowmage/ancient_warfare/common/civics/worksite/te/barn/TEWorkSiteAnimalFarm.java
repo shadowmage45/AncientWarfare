@@ -21,16 +21,18 @@
 package shadowmage.ancient_warfare.common.civics.worksite.te.barn;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -40,7 +42,9 @@ public class TEWorkSiteAnimalFarm extends TEWorkSite
 
 protected Class<? extends EntityAnimal> entityClass = EntityPig.class;
 protected int maxAnimalCount = 6;
-protected ItemStack breedingItem = new ItemStack(Block.carrot);
+protected ItemStack breedingItem = new ItemStack(Item.carrot);
+LinkedList<EntityAnimal>breedingList = new LinkedList<EntityAnimal>();
+LinkedList<EntityAnimal>cullableList = new LinkedList<EntityAnimal>();
 
 /**
  * 
@@ -53,43 +57,64 @@ public TEWorkSiteAnimalFarm()
 @Override
 protected void scan()
   { 
-  List<WorkPoint> potentialPoints = new ArrayList<WorkPoint>();
+  long t1 = System.nanoTime();
+  long t2;  
+  long t3;
+  long s1;
+  long s2;
+  long s3;
+  long s4;
   List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(entityClass, getWorkBounds());
-  List<EntityAnimal> breedable = new ArrayList<EntityAnimal>();
-  List<EntityAnimal> cullable = new ArrayList<EntityAnimal>();
+  t2 = System.nanoTime();
+  s1 = t2-t1;
+  breedingList.clear();
+  cullableList.clear();
+  t3 = System.nanoTime();
+  s2 = t3-t2; 
+  t2=t3;
   if(entities!=null && !entities.isEmpty())
     {
+    int age;
     for(EntityAnimal ent : entities)
       {
-      if(ent!=null && ent.getClass()==entityClass)
+      age = ent.getGrowingAge();
+      if(age==0)
         {
-        if(ent.getGrowingAge()==0)
-          {
-          breedable.add(ent);
-          }
-        if(ent.getGrowingAge()>=0)
-          {
-          cullable.add(ent);
-          }        
+        breedingList.add(ent);
         }
+      if(age>=0)
+        {
+        cullableList.add(ent);
+        }   
       }
-    }  
+    }
+  t3 = System.nanoTime();
+  s3 = t3-t2;
+  t2=t3;
   EntityAnimal first;
   EntityAnimal second;
-  while(breedable.size()>=2 && inventory.containsAtLeast(breedingItem, 2))
+  boolean hasFood = inventory.containsAtLeast(breedingItem, 2);
+  while(breedingList.size()>=2 && hasFood)
     {
     //do two animals at once...
-    first = breedable.remove(0);
-    second = breedable.remove(0);
+    first = breedingList.poll();//.remove(0);
+    second = breedingList.poll();//.remove(0);
     this.addWorkPoint(first, TargetType.BARN_BREED);
     this.addWorkPoint(second, TargetType.BARN_BREED);
     }
-  int cullCount = cullable.size() - this.maxAnimalCount;
-  for(int i = 0; i < cullCount && cullable.size()>0 ; i++)
+  int cullCount = cullableList.size() - this.maxAnimalCount;
+  for(int i = 0; i < cullCount && cullableList.size()>0 ; i++)
     {
-    first = cullable.remove(0);
+    first = cullableList.poll();//.remove(0);
     this.addWorkPoint(first, TargetType.BARN_CULL);
-    }
+    }  
+  t3 = System.nanoTime();
+  s4 = t3-t2;
+//  Config.logDebug("world entity seek time: "+s1);
+//  Config.logDebug("list clearing time: "+s2);
+//  Config.logDebug("first pass time: "+s3);
+//  Config.logDebug("second pass time: "+s4);
+//  Config.logDebug("total entity seek time: "+(s1+s2+s3+s4));
   }
 
 @Override

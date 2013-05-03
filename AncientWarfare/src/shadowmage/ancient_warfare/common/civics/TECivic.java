@@ -124,10 +124,35 @@ public void updateEntity()
 
 protected void onCivicUpdate()
   {
+  long t1;
+  long t2;  
+  long s1;
+  long s2;
+  long s3;
+  long s4;
+  t1 = System.nanoTime();
   this.validateWorkers();
+  t2 = System.nanoTime();
+  s1 = t2-t1;
+  t1 = t2;
   this.updateHasWork();
+  t2 = System.nanoTime();
+  s2 = t2-t1;
+  t1 = t2;
   this.updateInventoryStatus();
-  this.broadCastToSoldiers(Config.npcAISearchRange);
+  t2 = System.nanoTime();
+  s3 = t2-t1;
+  t1 = t2;
+  this.broadCastToSoldiers(Config.civicBroadcastRange);
+  t2 = System.nanoTime();
+  s4 = t2-t1;
+  t1 = t2;
+//  Config.logDebug("updating civic for type : "+this.getCivic().getDisplayName());
+//  Config.logDebug("worker validation time: "+s1);
+//  Config.logDebug("update has work time: "+s2);
+//  Config.logDebug("update inventory status time: "+s3);
+//  Config.logDebug("broadcast to soldier time: "+s4);
+//  Config.logDebug("total normal update time: "+(s1+s2+s3+s4));
   }
 
 @Override
@@ -165,7 +190,7 @@ public void broadCastToSoldiers(int maxRange)
     {
     return;
     }
-  AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord).expand(maxRange, maxRange, maxRange);
+  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(maxRange, maxRange/2, maxRange);
   List<NpcBase> npcList = worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
   for(NpcBase npc : npcList)
     {
@@ -180,7 +205,7 @@ public void broadCastToSoldiers(int maxRange)
       {
       if(broadcastWork)
         {    
-        if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
+        if(hasWork() && canHaveMoreWorkers() && npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
           {
           npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
           }
@@ -220,12 +245,8 @@ public boolean onInteract(World world, EntityPlayer player)
   }
 
 /******************************************************WORK-SITE*********************************************************/
-public boolean canHaveMoreWorkers(NpcBase worker)
-  {
-  if(this.workers.contains(worker))
-    {
-    return true;
-    }
+public boolean canHaveMoreWorkers()
+  {  
   if(this.workers.size()+1 <= this.civic.getMaxWorkers())
     {
     return true;
