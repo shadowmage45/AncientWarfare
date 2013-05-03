@@ -10,7 +10,6 @@ GENERAL
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
-* test vehicle spawning stuff with structures -- apparently there are ammo issues
 * vehicle container needs stack limiting on shift-click
 
 SOLDIERS
@@ -49,8 +48,6 @@ PATHFINDING
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
 
-STRUCTURE EDITOR
-* add selection ability (clipboard/copy/paste)
 
 CIVICS
 * need objective icons and rendering
@@ -147,6 +144,9 @@ TEMPLATES
 SCANNER
 
 STRUCTURE BUILDING
+
+STRUCTURE EDITOR
+* add selection ability (clipboard/copy/paste)
 
 TWEAKS/OPTIMIZATION
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)

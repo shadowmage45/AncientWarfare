@@ -74,7 +74,7 @@ public boolean isWalkable(int x, int y, int z)
     {
     return false;
     }
-  else if((id==Block.waterMoving.blockID || id==Block.waterStill.blockID) && !canSwim)//can't swim check
+  else if(isWater(id) && !canSwim)//can't swim check
     {
     return false;
     }  
@@ -91,6 +91,11 @@ public boolean isWalkable(int x, int y, int z)
     return false;
     }
   return true;
+  }
+
+public boolean isWater(int id)
+  {
+  return id==Block.waterMoving.blockID || id==Block.waterStill.blockID;
   }
 
 public boolean isDoor(int x, int y, int z)

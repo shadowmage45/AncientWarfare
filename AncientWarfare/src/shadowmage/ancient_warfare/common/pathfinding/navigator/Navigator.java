@@ -25,6 +25,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockFenceGate;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
@@ -252,9 +253,10 @@ protected void doorInteraction()
 protected boolean checkForDoors(int ex, int ey, int ez)
   {
   int doorId = Block.doorWood.blockID;
+  int gateId = Block.fenceGate.blockID;
   int id;
   id = entity.worldObj.getBlockId(ex, ey, ez);
-  if(id==doorId)
+  if(id==doorId || id == gateId)
     {
     if(hasDoor && (doorPos.x!=ex || doorPos.y!=ey || doorPos.z!=ez))
       {
@@ -295,7 +297,7 @@ protected boolean checkForDoors(int ex, int ey, int ez)
     x++;
     }
   id = entity.worldObj.getBlockId(x, y, z);
-  if(id==doorId)
+  if(id==doorId || id==gateId)
     {
     if(hasDoor && (doorPos.x!=x || doorPos.y!=y || doorPos.z!=z))
       {
@@ -313,9 +315,22 @@ protected boolean checkForDoors(int ex, int ey, int ez)
 protected void interactWithDoor(BlockPosition doorPos, boolean open)
   {
   Block block = Block.blocksList[entity.worldObj.getBlockId(doorPos.x, doorPos.y, doorPos.z)];
-  if(block.blockID==Block.doorWood.blockID)
+  if(block==null)
+    {
+    return;
+    }
+  else if(block.blockID==Block.doorWood.blockID)
     {
     ((BlockDoor)block).onPoweredBlockChange(entity.worldObj, doorPos.x, doorPos.y, doorPos.z, open);
+    }
+  else if(block.blockID==Block.fenceGate.blockID)
+    {
+    int meta = entity.worldObj.getBlockMetadata(doorPos.x, doorPos.y, doorPos.z);
+    boolean gateopen = BlockFenceGate.isFenceGateOpen(meta);
+    if(open!=gateopen)
+      {
+      foo
+      }
     }
   }
 

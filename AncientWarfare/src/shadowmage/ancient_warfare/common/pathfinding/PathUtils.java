@@ -279,19 +279,25 @@ public static boolean canPathStraightToTargetLevel(PathWorldAccess worldAccess, 
   int sz = z0< z1 ? 1 : -1;
   int err = dx-dz;
   int e2;  
+  boolean swim = worldAccess.canSwim;
+  worldAccess.canSwim = false;
+  boolean canPath = true;
   for(int i = 0; i < dx+dz; i++)
     {     
     if(worldAccess.isDoor(x0, ey, z0))
       {
-      return false;
+      canPath = false;
+      break;
       }    
     else if(worldAccess.isLadder(worldAccess.getBlockId(x0, ey, z0)))
       {
-      return false;
+      canPath = false;
+      break;
       }
     else if(!worldAccess.isWalkable(x0, ey, z0))
       {
-      return false;
+      canPath = false;
+      break;
       }  
     if(x0==x1 && z0==z1)
       {
@@ -309,7 +315,8 @@ public static boolean canPathStraightToTargetLevel(PathWorldAccess worldAccess, 
       z0 = z0+sz;
       }
     }    
-  return true;
+  worldAccess.canSwim = swim;
+  return canPath;
   }
 
 public static boolean canPathStraightToTarget(PathWorldAccess worldAccess, int ex, int ey, int ez, int tx, int ty, int tz)
@@ -327,16 +334,21 @@ public static boolean canPathStraightToTarget(PathWorldAccess worldAccess, int e
   int err = dx-dz;
   int e2;  
   int cy = ey;
+  boolean swim = worldAccess.canSwim;
+  worldAccess.canSwim = false;
+  boolean canPath = true;
   for(int i = 0; i < dx+dz; i++)
     {  
     //test hit here..., break/return false    
     if(worldAccess.isDoor(ex, cy, ez))
       {
-      return false;
+      canPath = false;
+      break;
       }
     else if(worldAccess.isLadder(worldAccess.getBlockId(ex, cy, ey)))
       {
-      return false;
+      canPath = false;
+      break;
       }
     if(worldAccess.isWalkable(ex, cy-1, ez))
       {
@@ -352,11 +364,13 @@ public static boolean canPathStraightToTarget(PathWorldAccess worldAccess, int e
       }
     else
       {
-      return false;
+      canPath = false;
+      break;
       }
     if(Math.abs(cy-ty)>1)
       {
-      return false;
+      canPath = false;
+      break;
       }     
     if(ex==tx && ez==tz)
       {
@@ -373,8 +387,9 @@ public static boolean canPathStraightToTarget(PathWorldAccess worldAccess, int e
       err = err +dx;
       ez = ez+sz;
       }
-    }    
-  return true;
+    }   
+  worldAccess.canSwim = swim; 
+  return canPath;
   }
 
 public static int[] findClosestValidBlockTo(PathWorldAccess world, int x, int y, int z, int sy)
