@@ -1,8 +1,9 @@
 THIS WEEKEND
-* upkeep system (mostly implemented.....need per-npc-rank upkeep set)
 * figure out way to correct tooltip display crap (split into multi-line...)
 * change batons over to not HAVE a target -- scan 20 block area and command any npcs that are following
     the player
+* npc health is not updating properly
+* npc health does not regen yet
 
 GENERAL
 * partially destroyable blocks ? (hold destruction status as meta-data?)
@@ -11,10 +12,12 @@ GENERAL
 * land-mines ?
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 * add logs to block-data manager (for rotation values...currently unmapped)
+* civic block ID picked stuff..
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
 * vehicle container needs stack limiting on shift-click
+* when soldiers dismount, they need to clear vehicle input status
 
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
@@ -30,8 +33,9 @@ NPCS
 * expand waypoint navigator with the following functions:
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
 * add objective icon rendering to npcs (toggle via Settings) -- .... NFC on this, would require server->client sync on stuff
-* decide on method for NPC upkeep
-* add NPC upkeep costs to INpcType/NpcTypeBase/indiv. types
+* work out indiv costs for upkeep -- add specialized items where applicable
+* apparently pathfinding for 'patrol' does not work while mounted...
+* if interrupted on a patrol point, will 'skip' the point it was heading towards
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -185,8 +189,12 @@ TWEAKS/OPTIMIZATION
 * clean up some of the command baton stuff to be more dynamic and easier to expand in the future...
 * find and fix pathfinding fence issues
 * add fence-gate use to soldiers/pathfinding (hook into canUseDoors system)
+* add NPC upkeep costs to INpcType/NpcTypeBase/indiv. types
 * add upkeep functions... _working_ -- need upkeep amounts set in npc types
 /********** 05-04-13 **********/
+* cleanup on fence-/partially walkable block handling -- still needs attention
+* fix civic farms that weren't picking up the proper blocks
+
 /********** 05-05-13 **********/
 /********** 05-06-13 **********/
 /********** 05-07-13 **********/

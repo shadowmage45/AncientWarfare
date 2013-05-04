@@ -69,6 +69,18 @@ public BlockPosition(BlockPosition pos)
   this.z = pos.z;
   }
 
+/**
+ * return the distance of the CENTER of this block from the input position
+ * @param x
+ * @param y
+ * @param z
+ * @return
+ */
+public float getCenterDistanceFrom(double x, double y, double z)
+  {
+  return Trig.getDistance(x, y, z, this.x+0.5d, this.y, this.z+0.5d);
+  }
+
 public NBTTagCompound writeToNBT(NBTTagCompound tag)
   {
   tag.setInteger("x", x);

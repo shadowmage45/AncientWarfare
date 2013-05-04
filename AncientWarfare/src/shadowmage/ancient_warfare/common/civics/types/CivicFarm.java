@@ -29,7 +29,7 @@ public class CivicFarm extends Civic
 /**
  * @param id
  */
-public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite> teClass, String iconTex)
+public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite> teClass, String iconTex, int workHorizSize, int workVertSize)
   {
   super(id);
   this.isWorkSite = true;
@@ -42,6 +42,8 @@ public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite
   this.blockIconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
   this.blockIconNames[2] = "ancientwarfare:civic/civicFarmWheatSide";  
   this.workType = CivicWorkType.FARM;
+  this.workSizeMaxHorizontal = workHorizSize;
+  this.workSizeMaxHeight = workVertSize;
   }
 
 }

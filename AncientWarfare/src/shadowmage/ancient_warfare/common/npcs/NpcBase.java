@@ -446,7 +446,7 @@ public void onUpdate()
       this.worldObj.villageCollectionObj.addVillagerPosition(floorX, floorY, floorZ);
       }
     }
-  if(!this.worldObj.isRemote && !this.worldAccess.isWalkable(floorX, floorY, floorZ) && !this.worldAccess.isWalkable(floorX, floorY-1, floorZ))
+  if(!this.worldObj.isRemote && !this.worldAccess.isWalkable(floorX, floorY, floorZ))
     {
     this.pushOutOfBlocks();
     }
@@ -455,64 +455,90 @@ public void onUpdate()
 
 protected void pushOutOfBlocks()
   {
-
   int x = MathHelper.floor_double(posX);
   int y = MathHelper.floor_double(posY);
   int z = MathHelper.floor_double(posZ);
-  BlockPosition p1 = new BlockPosition(x+1, y, z);
-  BlockPosition closest = null;
   float dist = Float.POSITIVE_INFINITY;
-  if(worldAccess.isWalkable(p1.x, p1.y, p1.z))
+  float testDist;
+  BlockPosition closest = new BlockPosition(x,y,z);
+  for(int x1 = x-1; x1 <=x+1; x1++)
     {
-    closest = p1;
-    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
+    for(int z1 = z-1; z1<=z+1; z1++)
+      {
+      if(x1==x &&z1==z){continue;}
+      if(worldAccess.isWalkable(x1, y, z1) || worldAccess.isWalkable(x1, y-1, z1))
+        {
+        testDist = (float) getDistance(x1+0.5d, y, z1+0.5d);
+        if(testDist<dist)
+          {
+          closest.x = x1;
+          closest.y = y;
+          closest.z = z1;
+          dist = testDist;
+          }
+        }           
+      }
     }
-  p1 = new BlockPosition(x-1, y, z);
-  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
-    {
-    closest = p1;
-    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
-    }
-  p1 = new BlockPosition(x, y, z+1);
-  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
-    {
-    closest = p1;
-    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
-    }
-  p1 = new BlockPosition(x, y, z-1);
-  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
-    {
-    closest = p1;
-    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
-    }
-  p1 = new BlockPosition(x+1, y, z+1);
-  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
-    {
-    closest = p1;
-    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
-    }
-  p1 = new BlockPosition(x+1, y, z-1);
-  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
-    {
-    closest = p1;
-    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
-    }
-  p1 = new BlockPosition(x-1, y, z-1);
-  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
-    {
-    closest = p1;
-    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
-    }
-  p1 = new BlockPosition(x-1, y, z+1);
-  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
-    {
-    closest = p1;
-    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
-    }
-  if(closest!=null)
+  if(closest.x!=x || closest.z!=z)
     {
     this.setMoveTo(closest.x+0.5d, closest.y, closest.z+0.5d, this.moveSpeed);
     }
+  
+//  BlockPosition pos = new BlockPosition(x+1, y, z);
+//  BlockPosition closest = null;
+//  testDist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);  
+//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) || worldAccess.isWalkable(pos.x, pos.y-1, pos.z))
+//    {
+//    closest = pos;
+//    dist = testDist;
+//    }
+//  pos = new BlockPosition(x-1, y, z);
+//  testDist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
+//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
+//    {
+//    closest = pos;
+//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
+//    }
+//  pos = new BlockPosition(x, y, z+1);
+//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
+//    {
+//    closest = pos;
+//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
+//    }
+//  pos = new BlockPosition(x, y, z-1);
+//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
+//    {
+//    closest = pos;
+//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
+//    }
+//  pos = new BlockPosition(x+1, y, z+1);
+//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
+//    {
+//    closest = pos;
+//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
+//    }
+//  pos = new BlockPosition(x+1, y, z-1);
+//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
+//    {
+//    closest = pos;
+//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
+//    }
+//  pos = new BlockPosition(x-1, y, z-1);
+//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
+//    {
+//    closest = pos;
+//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
+//    }
+//  pos = new BlockPosition(x-1, y, z+1);
+//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
+//    {
+//    closest = pos;
+//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
+//    }
+//  if(closest!=null)
+//    {
+//    this.setMoveTo(closest.x+0.5d, closest.y, closest.z+0.5d, this.moveSpeed);
+//    }
   }
 
 protected void handleHealingUpdate()

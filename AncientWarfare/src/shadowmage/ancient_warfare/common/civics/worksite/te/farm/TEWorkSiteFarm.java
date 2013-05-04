@@ -108,7 +108,11 @@ protected void doWork(NpcBase npc, WorkPoint p)
       if(item==null){continue;}
       if(InventoryTools.doItemsMatch(item, plantableFilter) && inventory.canHoldItem(plantableFilter, item.stackSize))
         {
-        item = inventory.tryMergeItem(item);
+        int count = inventory.getCountOf(plantableFilter);
+        if(count<128)
+          {
+          item = inventory.tryMergeItem(item);
+          }
         if(item!=null)
           {
           item = npc.inventory.tryMergeItem(item);

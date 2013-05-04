@@ -54,9 +54,6 @@ public void onTick()
     {
     bY = PathUtils.findClosestYTo(npc.getWorldAccess(), npc.getTarget().floorX(), npc.getTarget().floorY(), npc.getTarget().floorZ());
     }
-  int ex = MathHelper.floor_double(npc.posX);
-  int ey = MathHelper.floor_double(npc.posY);
-  int ez = MathHelper.floor_double(npc.posZ);  
   if(npc.isRidingVehicle())
     {
     ((VehicleBase)npc.ridingEntity).nav.setMoveToTarget(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));

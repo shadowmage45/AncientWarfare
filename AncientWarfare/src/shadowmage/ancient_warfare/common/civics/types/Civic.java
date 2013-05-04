@@ -52,16 +52,16 @@ public class Civic implements ICivicType
 
 public static final Civic[] civicList = new Civic[64];
 
-public static ICivicType wheatFarm = new CivicFarm(0, "Wheat Farm", "A place for workers to tend and harvest Wheat", TEFarmWheat.class, "civicFarmWheat1");
-public static ICivicType carrotFarm = new CivicFarm(1, "Carrot Farm", "A place for workers to tend and harvest Carrot", TEFarmCarrot.class, "civicFarmCarrot1");
-public static ICivicType potatoFarm = new CivicFarm(2, "Potato Farm", "A place for workers to tend and harvest Potato", TEFarmPotato.class, "civicFarmPotato1");
-public static ICivicType melonFarm = new CivicFarm(3, "Melon Farm", "A place for workers to tend and harvest Melon", TEFarmMelon.class, "civicFarmWheat1");
-public static ICivicType pumpkinFarm = new CivicFarm(4, "Pumpkin Farm", "A place for workers to tend and harvest Pumpkin", TEFarmPumpkin.class, "civicFarmWheat1");
-public static ICivicType cactusFarm = new CivicFarm(5, "Cactus Farm", "A place for workers to tend and harvest Cactus", TEFarmCactus.class, "civicFarmWheat1");
-public static ICivicType reedFarm = new CivicFarm(6, "Reed Farm", "A place for workers to tend and harvest Reed", TEFarmReed.class, "civicFarmWheat1");
-public static ICivicType mushroomRedFarm = new CivicFarm(7, "Red Mushroom Farm", "A place for workers to tend and harvest Red Mushroom", TEFarmMushroomRed.class, "civicFarmWheat1");
-public static ICivicType mushroomBrownFarm = new CivicFarm(8, "Brown Mushroom Farm", "A place for workers to tend and harvest Brown Mushroom", TEFarmMushroomBrown.class, "civicFarmWheat1");
-public static ICivicType netherstalkFarm = new CivicFarm(9, "Netherstalk Farm", "A place for workers to tend and harvest Netherstalk", TEFarmNetherStalk.class, "civicFarmWheat1");
+public static ICivicType wheatFarm = new CivicFarm(0, "Wheat Farm", "A place for workers to tend and harvest Wheat", TEFarmWheat.class, "civicFarmWheat1", 10, 2);
+public static ICivicType carrotFarm = new CivicFarm(1, "Carrot Farm", "A place for workers to tend and harvest Carrot", TEFarmCarrot.class, "civicFarmCarrot1", 10, 2);
+public static ICivicType potatoFarm = new CivicFarm(2, "Potato Farm", "A place for workers to tend and harvest Potato", TEFarmPotato.class, "civicFarmPotato1", 10, 2);
+public static ICivicType melonFarm = new CivicFarm(3, "Melon Farm", "A place for workers to tend and harvest Melon", TEFarmMelon.class, "civicFarmWheat1", 10, 2);
+public static ICivicType pumpkinFarm = new CivicFarm(4, "Pumpkin Farm", "A place for workers to tend and harvest Pumpkin", TEFarmPumpkin.class, "civicFarmWheat1", 10, 2);
+public static ICivicType cactusFarm = new CivicFarm(5, "Cactus Farm", "A place for workers to tend and harvest Cactus", TEFarmCactus.class, "civicFarmWheat1", 10, 2);
+public static ICivicType reedFarm = new CivicFarm(6, "Reed Farm", "A place for workers to tend and harvest Reed", TEFarmReed.class, "civicFarmWheat1", 10, 2);
+public static ICivicType mushroomRedFarm = new CivicFarm(7, "Red Mushroom Farm", "A place for workers to tend and harvest Red Mushroom", TEFarmMushroomRed.class, "civicFarmWheat1", 10, 2);
+public static ICivicType mushroomBrownFarm = new CivicFarm(8, "Brown Mushroom Farm", "A place for workers to tend and harvest Brown Mushroom", TEFarmMushroomBrown.class, "civicFarmWheat1", 10, 2);
+public static ICivicType netherstalkFarm = new CivicFarm(9, "Netherstalk Farm", "A place for workers to tend and harvest Netherstalk", TEFarmNetherStalk.class, "civicFarmWheat1", 10, 2);
 public static ICivicType mineBasic = new CivicMine(10, "Basic Layout Mine", "A mine with a basic but less than perfectly efficient layout", TEWorkSiteMine.class);
 //mine r2
 //mine r3
@@ -76,10 +76,10 @@ public static ICivicType builder = new CivicBuilder(20);//survival mode ticked b
 public static ICivicType townHallSmall = new CivicTownHall(21, "Town Hall Small", "Small Upkeep center for NPCs", 9, TECivicTownHall.class);
 public static ICivicType townHallMedium = new CivicTownHall(22, "Town Hall Medium", "Medium Upkeep center for NPCs", 9, TECivicTownHall.class);
 public static ICivicType townHallLarge = new CivicTownHall(23, "Town Hall Large", "Large Upkeep center for NPCs", 9, TECivicTownHall.class);
-public static ICivicType pigFarm = new CivicFarm(24, "Pig Farm", "A place for workers to breed and cull Pigs", TEBarnPig.class, "civicFarmWheat1");
-public static ICivicType cowFarm = new CivicFarm(25, "Cow Farm", "A place for workers to breed and cull Cows", TEBarnCow.class, "civicFarmWheat1");
-public static ICivicType chickenFarm = new CivicFarm(26, "Chicken Farm", "A place for workers to breed and cull Chickens", TEBarnChicken.class, "civicFarmWheat1");
-public static ICivicType sheepFarm = new CivicFarm(27, "Sheep Farm", "A place for workers to breed and shear Sheep", TEBarnSheep.class, "civicFarmWheat1");
+public static ICivicType pigFarm = new CivicFarm(24, "Pig Farm", "A place for workers to breed and cull Pigs", TEBarnPig.class, "civicFarmWheat1", 16, 2);
+public static ICivicType cowFarm = new CivicFarm(25, "Cow Farm", "A place for workers to breed and cull Cows", TEBarnCow.class, "civicFarmWheat1", 16, 2);
+public static ICivicType chickenFarm = new CivicFarm(26, "Chicken Farm", "A place for workers to breed and cull Chickens", TEBarnChicken.class, "civicFarmWheat1", 16, 2);
+public static ICivicType sheepFarm = new CivicFarm(27, "Sheep Farm", "A place for workers to breed and shear Sheep", TEBarnSheep.class, "civicFarmWheat1", 16, 2);
 //smithy (process ores -> ingots)
 //lumber yard (process logs -> planks/charcoal)
 //factory (single block)(use provided resources to craft player-set recipes)
