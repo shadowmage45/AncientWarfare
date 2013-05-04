@@ -25,6 +25,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
@@ -56,7 +57,8 @@ public void addTasks()
 public void updatePriority()
   {
   if(npc.npcUpkeepTicks==0)
-    {
+    {    
+    Config.logDebug("setting upkeep priority to max!");
     this.currentPriority = this.maxPriority;
     }
   else
@@ -93,6 +95,7 @@ public void onRunningTick()
 
 protected void attemptUpkeepWithdrawal()
   {
+  Config.logDebug("attempting upkeep withdrawal");
   int foundValue = 0;
   int neededValue = npc.npcType.getUpkeepCost(npc.rank);
   boolean doWithdrawal = false;
@@ -115,9 +118,14 @@ protected void attemptUpkeepWithdrawal()
           InventoryTools.tryRemoveItems(upkeepTarget, extra, extra.stackSize, 0, upkeepTarget.getSizeInventory()-1);
           }
         }
+      else
+        {
+        doWithdrawal = true;
+        }
       break;
       }
     }
+  Config.logDebug("found food value in target: "+foundValue);
   if(doWithdrawal)
     {
     int withdrawnAmount = 0;
@@ -127,6 +135,7 @@ protected void attemptUpkeepWithdrawal()
       if(stack!=null && stack.getItem() instanceof ItemFood)
         {
         int perItem = ((ItemFood)stack.getItem()).getHealAmount();
+        Config.logDebug("examining item: "+stack.getItem() + " perItem: "+perItem);
         while(withdrawnAmount<npc.npcType.getUpkeepCost(npc.rank) && stack.stackSize>0)
           {
           withdrawnAmount += perItem;
@@ -142,6 +151,7 @@ protected void attemptUpkeepWithdrawal()
           }
         }
       }    
+    npc.npcUpkeepTicks = Config.npcUpkeepTicks;
     this.setFinished();
     }
   }

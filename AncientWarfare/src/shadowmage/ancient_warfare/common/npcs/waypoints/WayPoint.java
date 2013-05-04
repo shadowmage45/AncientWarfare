@@ -36,7 +36,6 @@ public class WayPoint extends TargetPosition
 
 protected Entity entTarget = null;
 UUID entityID;
-protected boolean isTile = false;
 protected boolean isEnt = false;
 
 public WayPoint(WayPoint p)
@@ -48,8 +47,16 @@ public WayPoint(WayPoint p)
   this.side = p.side;
   this.entTarget = p.entTarget;
   this.entityID = p.entityID;
-  this.isTile = p.isTile;
   this.isEnt = p.isEnt;
+  }
+
+public WayPoint(TileEntity te, int side, TargetType t)
+  {
+  super(t);
+  this.x = te.xCoord;
+  this.y = te.yCoord;
+  this.z = te.zCoord;
+  this.side = side;  
   }
 
 protected WayPoint(TargetType type)
@@ -83,17 +90,6 @@ public WayPoint(Entity ent, TargetType type)
   this.entityID = ent.getPersistentID();
   }
 
-public WayPoint(TileEntity te, int side, TargetType type)
-  {
-  super(type);
-  this.isTile = true;
-  this.side = side;
-  this.x = te.xCoord;
-  this.y = te.yCoord;
-  this.z = te.zCoord;
-  }
-
-@Override
 public TileEntity getTileEntity(World world)
   {
   return world.getBlockTileEntity(x, y, z);
@@ -103,12 +99,6 @@ public TileEntity getTileEntity(World world)
 public boolean isEntityEntry()
   {
   return this.isEnt;
-  }
-
-@Override
-public boolean isTileEntry()
-  {
-  return isTile;
   }
 
 @Override
@@ -196,11 +186,7 @@ public void readFromNBT(NBTTagCompound tag)
     {
     this.isEnt = true;
     entityID = new UUID(tag.getLong("idmsb"), tag.getLong("idlsb"));
-    }
-  if(tag.hasKey("tile"))
-    {
-    this.isTile = true;
-    }
+    } 
   }
 
 @Override

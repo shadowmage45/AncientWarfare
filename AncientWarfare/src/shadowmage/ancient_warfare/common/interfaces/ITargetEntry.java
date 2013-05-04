@@ -29,7 +29,6 @@ public interface ITargetEntry extends INBTTaggable
 {
 
 boolean isEntityEntry();
-boolean isTileEntry();
 int floorX();
 int floorY();
 int floorZ();
@@ -38,7 +37,6 @@ float posY();
 float posZ();
 
 Entity getEntity(World world);
-TileEntity getTileEntity(World world);
 TargetType getTargetType();
 
 }

@@ -25,6 +25,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
@@ -216,8 +217,9 @@ public void readFromNBT(NBTTagCompound tag)
     this.work = new WayPoint(tag.getCompoundTag("work"));
     }
   if(tag.hasKey("deposit"))
-    {
+    {    
     this.deposit = new WayPoint(tag.getCompoundTag("deposit"));
+    Config.logDebug("loading deposit tag "+deposit);
     }
   if(tag.hasKey("upkeep"))
     {

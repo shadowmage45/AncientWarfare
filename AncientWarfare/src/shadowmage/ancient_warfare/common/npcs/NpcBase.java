@@ -22,8 +22,6 @@ package shadowmage.ancient_warfare.common.npcs;
 
 import java.util.List;
 
-import javax.management.remote.TargetedNotification;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -33,7 +31,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -57,6 +54,7 @@ import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.targeting.TargetPosition;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -445,8 +443,73 @@ public void onUpdate()
       this.worldObj.villageCollectionObj.addVillagerPosition(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
       }
     }
-  
+  if(!this.worldObj.isRemote && !this.worldAccess.isWalkable(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)))
+    {
+    this.pushOutOfBlocks();
+    }
   super.onUpdate();    
+  }
+
+protected void pushOutOfBlocks()
+  {
+
+  int x = MathHelper.floor_double(posX);
+  int y = MathHelper.floor_double(posY);
+  int z = MathHelper.floor_double(posZ);
+  BlockPosition p1 = new BlockPosition(x+1, y, z);
+  BlockPosition closest = null;
+  float dist = Float.POSITIVE_INFINITY;
+  if(worldAccess.isWalkable(p1.x, p1.y, p1.z))
+    {
+    closest = p1;
+    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
+    }
+  p1 = new BlockPosition(x-1, y, z);
+  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
+    {
+    closest = p1;
+    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
+    }
+  p1 = new BlockPosition(x, y, z+1);
+  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
+    {
+    closest = p1;
+    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
+    }
+  p1 = new BlockPosition(x, y, z-1);
+  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
+    {
+    closest = p1;
+    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
+    }
+  p1 = new BlockPosition(x+1, y, z+1);
+  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
+    {
+    closest = p1;
+    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
+    }
+  p1 = new BlockPosition(x+1, y, z-1);
+  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
+    {
+    closest = p1;
+    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
+    }
+  p1 = new BlockPosition(x-1, y, z-1);
+  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
+    {
+    closest = p1;
+    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
+    }
+  p1 = new BlockPosition(x-1, y, z+1);
+  if(worldAccess.isWalkable(p1.x, p1.y, p1.z) && getDistance(p1.x+0.5d, p1.y, p1.z+0.5d)<dist)
+    {
+    closest = p1;
+    dist = (float) getDistance(p1.x+0.5d, p1.y, p1.z+0.5d);
+    }
+  if(closest!=null)
+    {
+    this.setMoveTo(closest.x+0.5d, closest.y, closest.z+0.5d, this.moveSpeed);
+    }
   }
 
 protected void handleHealingUpdate()

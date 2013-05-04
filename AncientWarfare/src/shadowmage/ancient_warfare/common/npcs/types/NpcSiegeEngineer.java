@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDepositGoods;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDismountVehicles;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIMountVehicles;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
@@ -76,7 +77,7 @@ protected ItemStack[] getArmorStack(int level)
 
 @Override
 public void addTargets(NpcBase npc, NpcTargetHelper helper)
-  {
+  {  
   helper.addTargetEntry(new AITargetEntryPlayer(npc, TargetType.ATTACK,  40, false, true));
   helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.ATTACK, 0, 40, false, true));
   helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntityMob.class, 0, true, 40));
@@ -87,7 +88,8 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
 @Override
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
-  ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>();  
+  ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>();
+  aiEntries.add(new AINpcUpkeepObjective(npc, 12));
   aiEntries.add(new AIDismountVehicles(npc, 11));
   aiEntries.add(new AIAttackTargets(npc, 10, 10, 10));
   aiEntries.add(new AIFollowPlayer(npc, 9));

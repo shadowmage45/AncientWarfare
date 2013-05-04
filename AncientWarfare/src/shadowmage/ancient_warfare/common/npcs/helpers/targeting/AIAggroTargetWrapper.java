@@ -47,11 +47,6 @@ public boolean matches(Entity ent)
   return ent!=null ? this.target.getEntity(ent.worldObj)==ent : false;
   }
 
-public boolean matches(TileEntity te)
-  {
-  return te!=null ? this.target.getTileEntity(te.worldObj)==te : false;
-  }
-
 public AIAggroTargetWrapper setAggro(int level)
   {
   this.aggroLevel = level;

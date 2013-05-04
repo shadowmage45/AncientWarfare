@@ -77,19 +77,20 @@ public void addOrUpdateEntry(int x, int y, int z, int aggroAmt, AITargetEntry ty
 
 public void addOrUpdateEntry(TileEntity te, int aggroAmt, AITargetEntry type)
   {
-//  Config.logDebug("adding/updating TE target of type: "+type.getTypeName());
+  if(te==null)
+    {
+    return;
+    }
   for(AIAggroTargetWrapper entry : this.targetEntries)
     {
-    if(entry.matches(te))
+    if(!entry.target.isEntityEntry() && entry.target.floorX()==te.xCoord && entry.target.floorY()==te.yCoord && entry.target.floorZ()==te.zCoord)
       {
       entry.aggroLevel+=aggroAmt;
-//      Config.logDebug("found existing te work target, new aggro: "+entry.aggroLevel);
       return;
       }
     }
-  TargetPosition target = TargetPosition.getNewTarget(te, type.getTypeName());
+  TargetPosition target = TargetPosition.getNewTarget(te.xCoord, te.yCoord, te.zCoord, type.getTypeName());
   AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target).setAggro(aggroAmt);
-//  Config.logDebug("made new te work target, aggro: "+wrap.aggroLevel+ " target list size: "+this.targetEntries.size());
   this.targetEntries.add(wrap);
   }
 

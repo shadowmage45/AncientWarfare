@@ -35,6 +35,7 @@ import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDepositGoods;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIGoToWork;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AISeekShelter;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
@@ -95,6 +96,7 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>();  
+  aiEntries.add(new AINpcUpkeepObjective(npc, 100));  
   aiEntries.add(new AIFollowPlayer(npc, 90));
   aiEntries.add(new AISeekShelter(npc, 85));
   aiEntries.add(new AIGoToWork(npc, 80));  

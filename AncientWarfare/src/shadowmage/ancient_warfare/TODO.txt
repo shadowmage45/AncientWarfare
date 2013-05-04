@@ -2,7 +2,6 @@ THIS WEEKEND
 * upkeep system (mostly implemented.....need per-npc-rank upkeep set)
 * town-hall block will have slots to store food items
 * town-hall gui will show information on how many (loaded/active)NPCs are currently assigned to draw upkeep from it
-* find and fix pathfinding fence issues
 * figure out way to correct tooltip display crap (split into multi-line...)
 * change batons over to not HAVE a target -- scan 20 block area and command any npcs that are following
     the player
@@ -31,7 +30,6 @@ NPCS
     Select Commander (constantly-run objective, e.g. does the 'run' in the 'update priority' tick?)  
 * ladder movement handling needs some attention (they get stuck moving across ladders)
 * expand waypoint navigator with the following functions:
-    town-hall/vault -- for npc upkeep
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
 * add objective icon rendering to npcs (toggle via Settings) -- .... NFC on this, would require server->client sync on stuff
 * decide on method for NPC upkeep
@@ -48,12 +46,9 @@ PATHFINDING
 * still need better handling of when target is intentionally a non-pathable block (such as many work-points)(teleport npc?)
 * for non-attack targets, hook in the 'teleport' system.
 * recalc of path towards moving target is still too aggressive
-* add fence-gate use to soldiers/pathfinding (hook into canUseDoors system)
-* pathfinding involving fences is still fucked (need to instead of denying blocks, set them to extremely high move-costs)
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
-
 
 CIVICS
 * need objective icons and rendering
@@ -190,7 +185,9 @@ TWEAKS/OPTIMIZATION
 * vehicles now implement IInventory wrapped to their storageInventory -- should now work with hoppers
 * prep work on npc upkeep setup -- needs full testing
 * clean up some of the command baton stuff to be more dynamic and easier to expand in the future...
-
+* find and fix pathfinding fence issues
+* add fence-gate use to soldiers/pathfinding (hook into canUseDoors system)
+* add upkeep functions... _working_ -- need upkeep amounts set in npc types
 /********** 05-04-13 **********/
 /********** 05-05-13 **********/
 /********** 05-06-13 **********/

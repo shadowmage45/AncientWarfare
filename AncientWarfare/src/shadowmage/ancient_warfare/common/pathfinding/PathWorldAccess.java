@@ -35,8 +35,6 @@ public boolean canUseLaders;
 
 IBlockAccess world;
 
-int DOOR = Block.doorWood.blockID;
-
 public PathWorldAccess(IBlockAccess world)
   {
   this.world = world;
@@ -100,7 +98,8 @@ public boolean isWater(int id)
 
 public boolean isDoor(int x, int y, int z)
   {
-  return world.getBlockId(x, y, z)==Block.doorWood.blockID;
+  int id = world.getBlockId(x, y, z);
+  return id==Block.doorWood.blockID || id==Block.fenceGate.blockID;
   }
 
 protected boolean isCube(int x, int y, int z)
@@ -137,7 +136,7 @@ protected boolean isSolidBlock(int id)
 
 protected boolean isPathable(int id)
   {
-  if(id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID || id==Block.fence.blockID || id==Block.fenceGate.blockID || id==Block.fenceIron.blockID|| id == Block.cobblestoneWall.blockID || id==Block.thinGlass.blockID)
+  if(id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID || id==Block.fence.blockID || id==Block.fenceIron.blockID|| id == Block.cobblestoneWall.blockID || id==Block.thinGlass.blockID)
     {
     return false;
     }

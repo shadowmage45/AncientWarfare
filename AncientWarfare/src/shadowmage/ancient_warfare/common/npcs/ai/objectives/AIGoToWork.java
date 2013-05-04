@@ -74,25 +74,25 @@ public void updatePriority()
     while(npc.targetHelper.hasTargetsOfType(TargetType.WORK))
       {
       ITargetEntry entry = npc.targetHelper.getHighestAggroTarget(TargetType.WORK);
-      if(entry.isTileEntry())
+      TileEntity te = npc.worldObj.getBlockTileEntity(entry.floorX(), entry.floorY(), entry.floorZ());
+    
+      if(te instanceof TECivic)
         {
-        if(entry.getTileEntity(npc.worldObj) instanceof TECivic)
+        TECivic tec = (TECivic) te;
+        if(tec.hasWork() && tec.canHaveMoreWorkers() && npc.npcType.getWorkTypes(npc.rank).contains(tec.getCivic().getWorkType()))
           {
-          TECivic tec = (TECivic) entry.getTileEntity(npc.worldObj);
-          if(tec.hasWork() && tec.canHaveMoreWorkers() && npc.npcType.getWorkTypes(npc.rank).contains(tec.getCivic().getWorkType()))
-            {
 //            Config.logDebug("assigning te from aggro list!!");
-            npc.wayNav.setWorkSite(new WayPoint(entry.floorX(), entry.floorY(), entry.floorZ(), entry.getTargetType()));
-            workSite = tec;
-            work = true;
-            break;
-            }
-          else
-            {
-            npc.targetHelper.removeTarget(entry);
-            }
+          npc.wayNav.setWorkSite(new WayPoint(entry.floorX(), entry.floorY(), entry.floorZ(), entry.getTargetType()));
+          workSite = tec;
+          work = true;
+          break;
+          }
+        else
+          {
+          npc.targetHelper.removeTarget(entry);
           }
         }
+        
       }    
     }
   else if(!isWorkSiteWorkable())

@@ -66,7 +66,7 @@ public void updatePriority()
     } 
   else
     {    
-    if(p.isTileEntry())
+    if(!p.isEntityEntry())
       {
       TileEntity te = p.getTileEntity(npc.worldObj);
       if(te==null || !(te instanceof IInventory))
@@ -99,12 +99,7 @@ public void updatePriority()
           targetInventory = veh.inventory.storageInventory;
           }
         }
-      }
-    else//wtf is this invalid target??
-      {
-      this.npc.wayNav.setDepositSite(null);
-      deposit = false;
-      }
+      }    
     }  
   if(deposit)
     {

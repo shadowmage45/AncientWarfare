@@ -22,7 +22,6 @@ package shadowmage.ancient_warfare.common.targeting;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
@@ -103,12 +102,6 @@ public Entity getEntity(World world)
   }
 
 @Override
-public TileEntity getTileEntity(World world)
-  {
-  return null;
-  }
-
-@Override
 public TargetType getTargetType()
   {
   return type;
@@ -142,12 +135,6 @@ public boolean isEntityEntry()
   }
 
 @Override
-public boolean isTileEntry()
-  {
-  return false;
-  }
-
-@Override
 public String toString()
   {
   return String.format("WayPoint: %d, %d, %d :: %s", x,y,z,type);
@@ -156,11 +143,6 @@ public String toString()
 public static TargetPosition getNewTarget(Entity ent, TargetType type)
   {
   return new TargetPositionEntity(ent, type);
-  }
-
-public static TargetPosition getNewTarget(TileEntity ent, TargetType type)
-  {
-  return new TargetPositionTile(ent, type);
   }
 
 public static TargetPosition getNewTarget(int x, int y, int z, TargetType type)
