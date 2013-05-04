@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -69,28 +71,67 @@ public void updatePriority()
 
 @Override
 public void onRunningTick()
-  {
-  if(npc.getTarget()==null)
+  {  
+  if(checkIfTargetDead())
     {
-//    Config.logDebug("attack ai, target==null, finding new");
-    ITargetEntry target = npc.targetHelper.getHighestAggroTargetInRange(TargetType.ATTACK, maxRange);
-    if(target==null)
+    if(!findTarget())
       {
-//      Config.logDebug("attack ai, new target==null, setting finished");
-      this.isFinished = true;
+      this.setFinished();
       }
-    else
+    } 
+  }
+
+protected boolean checkIfTargetDead()
+  {
+  ITargetEntry target = npc.getTarget();
+  if(target!=null)
+    {
+    if(target.isEntityEntry())
       {
-//      Config.logDebug("attack ai, new target found, setting new target " + target);
-      npc.setTargetAW(target);
+      Entity ent = target.getEntity(npc.worldObj);
+      if(ent!=null)
+        {
+        if(ent.isDead)
+          {
+          return true;
+          }
+        if(ent instanceof EntityLiving)
+          {
+          EntityLiving liv = (EntityLiving)ent;
+          if(liv.getHealth()<=0)
+            {
+            return true;
+            }
+          }
+        return false;
+        }
+      else
+        {
+        return true;
+        }
+      }
+    else if(npc.worldObj.getBlockId(target.floorX(), target.floorY(), target.floorZ())!=0)
+      {
+      return false;
       }
     }
+  return true;
+  }
+
+protected boolean findTarget()
+  {
+  ITargetEntry target = npc.targetHelper.getHighestAggroTargetInRange(TargetType.ATTACK, maxRange);
+  if(target!=null)
+    {
+    npc.setTargetAW(target);
+    return true;
+    }
+  return false;
   }
 
 @Override
 public void onObjectiveStart()
   {
-//  Config.logDebug("starting attack ai, setting target");
   npc.setTargetAW(npc.targetHelper.getHighestAggroTargetInRange(TargetType.ATTACK, maxRange));
   }
 

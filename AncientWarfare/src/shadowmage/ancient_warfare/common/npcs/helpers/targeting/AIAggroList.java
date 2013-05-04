@@ -131,7 +131,7 @@ public ITargetEntry getHighestAggroTargetInRange(float range)
       {
       continue;
       }
-    if(entry.isValidEntry() && (bestEntry==null || entry.aggroLevel > bestEntry.aggroLevel))
+    if(entry.isValidEntry(npc.worldObj) && (bestEntry==null || entry.aggroLevel > bestEntry.aggroLevel))
       {
       bestEntry = entry;
       }
@@ -144,7 +144,7 @@ public ITargetEntry getHighestAggroTarget()
   AIAggroTargetWrapper bestEntry = null;
   for(AIAggroTargetWrapper entry : this.targetEntries)
     {
-    if(entry.isValidEntry() && (bestEntry==null || entry.aggroLevel > bestEntry.aggroLevel))
+    if(entry.isValidEntry(npc.worldObj) && (bestEntry==null || entry.aggroLevel > bestEntry.aggroLevel))
       {
       bestEntry = entry;
       }
@@ -161,6 +161,7 @@ public void removeEntry(ITargetEntry target)
     entry = it.next();
     if(target==entry.getTarget())
       {
+      Config.logDebug("removing entry :"+target);
       it.remove();
       break;
       }
@@ -177,7 +178,7 @@ public void updateAggroEntries()
     {
     entry = it.next();
 //    Config.logDebug("examining entry: "+entry+" aggroLevel: "+entry.aggroLevel);
-    if(!entry.isValidEntry() || npc.getDistanceFromTarget(entry.target) > npc.targetHelper.getMaxRangeFor(entry) || entry.aggroLevel <= 0)
+    if(!entry.isValidEntry(npc.worldObj) || npc.getDistanceFromTarget(entry.target) > npc.targetHelper.getMaxRangeFor(entry) || entry.aggroLevel <= 0)
       {
       it.remove();
       return;

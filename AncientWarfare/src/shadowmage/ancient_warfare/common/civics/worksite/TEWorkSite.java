@@ -63,9 +63,9 @@ protected void onCivicUpdate()
     }
   t2 = System.nanoTime();
   s2=t2-t1;
-  Config.logDebug("work site point validation time: "+s1);
-  Config.logDebug("work site scan time: "+s2);
-  Config.logDebug("work site total update time: "+(s2+s1)+" for type "+this.getCivic().getDisplayName());
+//  Config.logDebug("work site point validation time: "+s1);
+//  Config.logDebug("work site scan time: "+s2);
+//  Config.logDebug("work site total update time: "+(s2+s1)+" for type "+this.getCivic().getDisplayName());
   super.onCivicUpdate();
   }
 

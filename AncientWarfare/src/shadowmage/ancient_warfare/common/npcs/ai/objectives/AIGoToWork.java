@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -79,7 +80,7 @@ public void updatePriority()
       if(te instanceof TECivic)
         {
         TECivic tec = (TECivic) te;
-        if(tec.hasWork() && tec.canHaveMoreWorkers() && npc.npcType.getWorkTypes(npc.rank).contains(tec.getCivic().getWorkType()))
+        if(tec.hasWork() && tec.canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(tec.getCivic().getWorkType()))
           {
 //            Config.logDebug("assigning te from aggro list!!");
           npc.wayNav.setWorkSite(new WayPoint(entry.floorX(), entry.floorY(), entry.floorZ(), entry.getTargetType()));
@@ -154,7 +155,7 @@ protected boolean isWorkSiteWorkable()
     }
   else
     {
-    if(workSite.canHaveMoreWorkers() && workSite.hasWork())
+    if(workSite.hasWork() && workSite.canHaveMoreWorkers(npc))
       {
       return true;
       }
@@ -171,11 +172,13 @@ public void onRunningTick()
   {
   if(workSite==null || !workSite.hasWork())
     {
+//    Config.logDebug("work site null or had no work, setting finished");
     this.setFinished();
     return;
     }
   if(npc.getDistance(workSite.xCoord+0.d, workSite.yCoord, workSite.zCoord+0.5d)>2.4)
     {
+//    Config.logDebug("heading to work!!");
     working = false;
     //wait for ai to move to target
     }
@@ -186,6 +189,7 @@ public void onRunningTick()
       working = true;
       npc.setActionTicksToMax();
       }
+//    Config.logDebug("doing work!");
     this.doWork();
     }   
   }
@@ -193,13 +197,13 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
-  if(workSite!=null)
+  if(workSite!=null)  
     {
     workSite.addWorker(npc);
     this.setMoveToWork();
     }
   else
-    {
+    {    
     this.setFinished();
     }
   working = false;

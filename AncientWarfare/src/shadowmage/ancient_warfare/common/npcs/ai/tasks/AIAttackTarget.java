@@ -37,6 +37,7 @@ public class AIAttackTarget extends NpcAITask
 
 int blockAttackHits = 0;
 
+
 /**
  * @param npc
  */
@@ -60,7 +61,8 @@ public void onTick()
       {
       this.attackTarget(target);       
       }   
-    }    
+    }  
+ 
   }
 
 protected void attackTarget(ITargetEntry target)
@@ -90,7 +92,7 @@ protected void attackTarget(ITargetEntry target)
       npc.swingItem();
       npc.attackEntityAsMob(ent);
       }
-    }  
+    } 
   }
 
 protected void attackTargetMounted(ITargetEntry target)

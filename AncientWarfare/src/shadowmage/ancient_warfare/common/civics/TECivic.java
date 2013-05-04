@@ -109,15 +109,20 @@ public void setBounds(int minX, int minY, int minZ, int maxX, int maxY, int maxZ
   this.maxZ = maxZ;
   }
 
+public boolean isWorker(NpcBase worker)
+  {
+  return this.workers.contains(worker);
+  }
+
 @Override
 public void updateEntity()
   {
   ticksExisted++;
   if(this.worldObj!=null && !this.worldObj.isRemote && (this.ticksExisted+this.teID)% tickDivider == 0 )
     {
-    long t1 = System.nanoTime();
+//    long t1 = System.nanoTime();
     this.onCivicUpdate();
-    Config.logDebug("TE tick time: "+(System.nanoTime()-t1) + " for: "+this.getCivic().getDisplayName());
+//    Config.logDebug("TE tick time: "+(System.nanoTime()-t1) + " for: "+this.getCivic().getDisplayName());
     }   
   super.updateEntity();
   }
@@ -205,7 +210,7 @@ public void broadCastToSoldiers(int maxRange)
       {
       if(broadcastWork)
         {    
-        if(hasWork() && canHaveMoreWorkers() && npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
+        if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()))
           {
           npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
           }
@@ -245,9 +250,13 @@ public boolean onInteract(World world, EntityPlayer player)
   }
 
 /******************************************************WORK-SITE*********************************************************/
-public boolean canHaveMoreWorkers()
+public boolean canHaveMoreWorkers(NpcBase npc)
   {  
-  if(this.workers.size()+1 <= this.civic.getMaxWorkers())
+  if(this.workers.contains(npc) && this.workers.size() <= this.civic.getMaxWorkers())
+    {
+    return true;
+    }
+  else if(this.workers.size()+1 <= this.civic.getMaxWorkers())
     {
     return true;
     }
@@ -300,26 +309,6 @@ public void doWork(NpcBase npc)
   
   }
 
-//public WorkPoint getWorkPoint(NpcBase npc)
-//  {
-//  if(!this.workers.contains(npc))
-//    {
-//    return null;
-//    }
-//  Iterator<WorkPoint> it = this.workPoints.iterator();
-//  WorkPoint p = null;
-//  while(it.hasNext())
-//    {
-//    p = it.next();
-//    if(p.hasWork(worldObj))
-//      {
-//      p.resetHarvestTicks();
-//      return p;
-//      }    
-//    }   
-//  return null;
-//  }
-
 public void removeWorker(NpcBase npc)
   {
   this.workers.remove(npc);
@@ -328,24 +317,6 @@ public void removeWorker(NpcBase npc)
     this.sendWorkerStatusUpdate(0);
     }
   }
-
-//public void onWorkFinished(NpcBase npc, WorkPoint point)
-//  {
-//  if(point!=null)
-//    {       
-//    this.workPoints.remove(point);
-//    }
-//  }
-//
-//public void onWorkFailed(NpcBase npc, WorkPoint point)
-//  {
-//  this.onWorkFinished(npc, point);
-//  }
-//
-//public void onWorkNoPath(NpcBase npc, WorkPoint point)
-//  {
-//  this.onWorkFinished(npc, point);
-//  }
 
 protected void validateWorkers()
   {
@@ -367,21 +338,6 @@ protected void validateWorkers()
       }
     }
   }
-
-//public WorkPoint doWork(NpcBase npc, WorkPoint p)
-//  {
-//  p.incrementHarvestHits();  
-//  if(!p.hasWork(worldObj))
-//    {
-//    p.setHarvestHitToMax();
-//    }
-//  if(p.shouldFinish())
-//    {
-//    this.onWorkFinished(npc, p);
-//    return null;
-//    }
-//  return p;
-//  }
 
 /**
  * return cached hasWork value

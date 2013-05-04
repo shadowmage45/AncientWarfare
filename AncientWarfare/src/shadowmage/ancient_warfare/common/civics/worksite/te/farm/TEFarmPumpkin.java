@@ -33,7 +33,7 @@ public class TEFarmPumpkin extends TEWorkSiteFarm
  */
 public TEFarmPumpkin()
   {
-  this.mainBlockID = Block.pumpkinStem.blockID;
+  this.mainBlockID = Block.pumpkin.blockID;
   this.mainBlockMatureMeta = 0;
   this.plantableFilter = new ItemStack(Item.pumpkinSeeds);
   }

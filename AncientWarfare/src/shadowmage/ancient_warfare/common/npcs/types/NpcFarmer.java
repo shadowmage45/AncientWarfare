@@ -100,9 +100,9 @@ protected ItemStack getToolStack(int level)
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>();  
-  aiEntries.add(new AINpcUpkeepObjective(npc, 100));
   aiEntries.add(new AIFollowPlayer(npc, 90));
   aiEntries.add(new AISeekShelter(npc, 85));
+  aiEntries.add(new AINpcUpkeepObjective(npc, 82));
   aiEntries.add(new AIGoToWork(npc, 80));  
   aiEntries.add(new AIDepositGoods(npc, 80));
   aiEntries.add(new AIStayNearHome(npc, 70, 20, 5));

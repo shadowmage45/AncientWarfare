@@ -430,6 +430,9 @@ public void onUpdate()
       idleLookTicks--;
       }
     } 
+  int floorX = MathHelper.floor_double(posX);
+  int floorY = MathHelper.floor_double(posY);
+  int floorZ = MathHelper.floor_double(posZ);
   if(!this.npcType.isCombatUnit())
     {
 //    Config.logDebug("non-combat NPC detected, doing villager stuffs");
@@ -440,10 +443,10 @@ public void onUpdate()
     else if(this.villageUpdateTick<=0)
       {
       this.villageUpdateTick = 100+this.getRNG().nextInt(100);
-      this.worldObj.villageCollectionObj.addVillagerPosition(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+      this.worldObj.villageCollectionObj.addVillagerPosition(floorX, floorY, floorZ);
       }
     }
-  if(!this.worldObj.isRemote && !this.worldAccess.isWalkable(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)))
+  if(!this.worldObj.isRemote && !this.worldAccess.isWalkable(floorX, floorY, floorZ) && !this.worldAccess.isWalkable(floorX, floorY-1, floorZ))
     {
     this.pushOutOfBlocks();
     }

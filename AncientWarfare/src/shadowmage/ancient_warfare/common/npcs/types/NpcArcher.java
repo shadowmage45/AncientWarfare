@@ -151,9 +151,9 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
-  aiEntries.add(new AINpcUpkeepObjective(npc, 11));
   aiEntries.add(new AIAttackTargetsRanged(npc, 10, 20, 20));
   aiEntries.add(new AIFollowPlayer(npc, 9));
+  aiEntries.add(new AINpcUpkeepObjective(npc, 8));
   aiEntries.add(new AIDepositGoods(npc, 8));
   aiEntries.add(new AIPatrolPoints(npc, 7, 20));
   aiEntries.add(new AIStayNearHome(npc, 6, 20, 5));

@@ -33,7 +33,7 @@ public class AIAttackTargetsRanged extends AIAttackTargets
  * @param minRange
  * @param maxRange
  */
-public AIAttackTargetsRanged(NpcBase npc, int maxPriority, int minRange,    int maxRange)
+public AIAttackTargetsRanged(NpcBase npc, int maxPriority, int minRange, int maxRange)
   {
   super(npc, maxPriority, minRange, maxRange);
   }

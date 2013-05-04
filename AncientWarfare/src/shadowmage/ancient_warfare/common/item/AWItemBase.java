@@ -81,21 +81,21 @@ public boolean isShiftClick(EntityPlayer player)
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
-//  if(stack!=null)
-//    {
-//    Description d = DescriptionRegistry2.instance().getDescriptionFor(stack.itemID);
-//    if(d!=null)
-//      {
-//      List<String> tips = d.getDisplayTooltips(stack.getItemDamage());
-//      if(tips!=null && !tips.isEmpty())
-//        {
-//        for(String tip : tips)
-//          {
-//          list.add(tip);
-//          }        
-//        }
-//      }     
-//    }  
+  if(stack!=null)
+    {
+    Description d = DescriptionRegistry2.instance().getDescriptionFor(stack.itemID);
+    if(d!=null)
+      {
+      List<String> tips = d.getDisplayTooltips(stack.getItemDamage());
+      if(tips!=null && !tips.isEmpty())
+        {
+        for(String tip : tips)
+          {
+          list.add(tip);
+          }        
+        }
+      }     
+    }  
   }
 
 @Override

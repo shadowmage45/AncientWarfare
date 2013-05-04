@@ -30,7 +30,7 @@ public class TEFarmMelon extends TEWorkSiteFarm
 
 public TEFarmMelon()
   {
-  this.mainBlockID = Block.melonStem.blockID;
+  this.mainBlockID = Block.melon.blockID;
   this.mainBlockMatureMeta = 0;
   this.plantableFilter = new ItemStack(Item.melonSeeds);
   }

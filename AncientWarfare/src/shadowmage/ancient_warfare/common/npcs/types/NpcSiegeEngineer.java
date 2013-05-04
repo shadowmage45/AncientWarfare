@@ -89,10 +89,10 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>();
-  aiEntries.add(new AINpcUpkeepObjective(npc, 12));
   aiEntries.add(new AIDismountVehicles(npc, 11));
   aiEntries.add(new AIAttackTargets(npc, 10, 10, 10));
   aiEntries.add(new AIFollowPlayer(npc, 9));
+  aiEntries.add(new AINpcUpkeepObjective(npc, 8));
   aiEntries.add(new AIDepositGoods(npc, 8));
   aiEntries.add(new AIMountVehicles(npc, 7, 20));  
   aiEntries.add(new AIStayNearHome(npc, 6, 20, 5));

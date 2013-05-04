@@ -38,10 +38,14 @@ import shadowmage.ancient_warfare.common.utils.InventoryTools;
 public abstract class TEWorkSiteFarm extends TEWorkSite
 {
 
-int mainBlockID;//the blockID that this civic looks for within its work bounds
+int mainBlockID = Block.crops.blockID;//the blockID that this civic looks for within its work bounds
 int tilledEarthID = Block.tilledField.blockID;//the 'plantable' block. these are the 'plant' points, if y+1==0
 int mainBlockMatureMeta;
 ItemStack plantableFilter;
+
+//id / meta of plantable block (-1 meta for all)
+//id / meta of harvest block
+
 
 public TEWorkSiteFarm()
   {
@@ -96,7 +100,8 @@ protected void doWork(NpcBase npc, WorkPoint p)
   if(p.work==TargetType.FARM_HARVEST)
     {
     Config.logDebug("harvesting crops!!");
-    List<ItemStack> blockDrops = Block.crops.getBlockDropped(npc.worldObj, p.x, p.y, p.z, worldObj.getBlockMetadata(p.x, p.y, p.z), 0);
+    Block cropsBlock = Block.blocksList[mainBlockID];
+    List<ItemStack> blockDrops = cropsBlock.getBlockDropped(npc.worldObj, p.x, p.y, p.z, worldObj.getBlockMetadata(p.x, p.y, p.z), 0);
     worldObj.setBlockToAir(p.x, p.y, p.z);
     for(ItemStack item : blockDrops)
       {

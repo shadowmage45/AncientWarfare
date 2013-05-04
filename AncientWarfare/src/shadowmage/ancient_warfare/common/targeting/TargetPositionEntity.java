@@ -84,7 +84,11 @@ public float posZ()
   return target.get()!=null ? (float) target.get().posZ : Float.MAX_VALUE;
   }
 
-
+@Override
+public String toString()
+  {
+  return "entity target: "+posX()+","+posY()+","+posZ()+" :: "+getTargetType();
+  }
 
 
 }

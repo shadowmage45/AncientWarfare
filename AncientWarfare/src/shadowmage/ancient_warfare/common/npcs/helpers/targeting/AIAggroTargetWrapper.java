@@ -21,10 +21,9 @@
 package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_warfare.common.civics.TECivic;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AIAggroTargetWrapper
 {
@@ -58,8 +57,23 @@ public boolean matches(int x, int y, int z)
   return this.target.floorX()==x && this.target.floorY()==y && this.target.floorZ()==z;
   }
 
-public boolean isValidEntry()
+public boolean isValidEntry(World world)
   {
+  if(target!=null && target.isEntityEntry())
+    {
+    Entity ent = target.getEntity(world);    
+    if(ent==null || ent.isDead)
+      {
+      return false;
+      }
+    if(ent instanceof EntityLiving)
+      {
+      if(((EntityLiving)ent).getHealth()<=0)
+        {
+        return false;
+        }
+      }
+    }
   return true;
   }
 

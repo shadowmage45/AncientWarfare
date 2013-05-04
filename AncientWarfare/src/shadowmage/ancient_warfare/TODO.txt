@@ -1,7 +1,5 @@
 THIS WEEKEND
 * upkeep system (mostly implemented.....need per-npc-rank upkeep set)
-* town-hall block will have slots to store food items
-* town-hall gui will show information on how many (loaded/active)NPCs are currently assigned to draw upkeep from it
 * figure out way to correct tooltip display crap (split into multi-line...)
 * change batons over to not HAVE a target -- scan 20 block area and command any npcs that are following
     the player

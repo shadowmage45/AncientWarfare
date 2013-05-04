@@ -218,16 +218,15 @@ public void checkForTargets()
 public float getAttackDistance(ITargetEntry target)
   {
 	if(target==null)
-	{
-		return 4.f;
-	}
+    {
+    return 4.f;
+    }
   if(npc.isRidingVehicle())
     {
     return ((VehicleBase)npc.ridingEntity).getEffectiveRange((float)npc.ridingEntity.posY - target.posY());
     }
-  if(target.getEntity(npc.worldObj)==null)//TODO should get yaw towards target, offset len by adj len of actual BB edge pos at that yaw
+  if(target.getEntity(npc.worldObj)==null)
     {
-    //return 0.25f;
     return 1.f + npc.width*0.5f;
     }
   else//is entity entry
