@@ -2,8 +2,6 @@ THIS WEEKEND
 * figure out way to correct tooltip display crap (split into multi-line...)
 * change batons over to not HAVE a target -- scan 20 block area and command any npcs that are following
     the player
-* npc health is not updating properly
-* npc health does not regen yet
 
 GENERAL
 * partially destroyable blocks ? (hold destruction status as meta-data?)
@@ -194,6 +192,8 @@ TWEAKS/OPTIMIZATION
 /********** 05-04-13 **********/
 * cleanup on fence-/partially walkable block handling -- still needs attention
 * fix civic farms that weren't picking up the proper blocks
+* npc health is not updating properly
+* npc health does not regen yet
 
 /********** 05-05-13 **********/
 /********** 05-06-13 **********/

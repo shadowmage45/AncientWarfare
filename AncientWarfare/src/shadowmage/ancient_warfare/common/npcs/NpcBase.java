@@ -370,6 +370,7 @@ public void onUpdate()
     {
     if(npcHealingTicks==0)
       {
+      npcHealingTicks = Config.npcHealingTicks;
       this.handleHealingUpdate();
       }
     else if(npcHealingTicks>0)
@@ -435,7 +436,7 @@ public void onUpdate()
   int floorZ = MathHelper.floor_double(posZ);
   if(!this.npcType.isCombatUnit())
     {
-//    Config.logDebug("non-combat NPC detected, doing villager stuffs");
+    //    Config.logDebug("non-combat NPC detected, doing villager stuffs");
     if(this.villageUpdateTick>0)
       {
       villageUpdateTick--;
@@ -450,7 +451,37 @@ public void onUpdate()
     {
     this.pushOutOfBlocks();
     }
+  this.handleHealthUpdate();
   super.onUpdate();    
+  }
+
+@Override
+protected void entityInit()
+  {
+  super.entityInit();
+  this.dataWatcher.addObject(31, new Integer(this.health));
+  }
+
+protected void handleHealthUpdate()
+  {
+  if(this.worldObj.isRemote)
+    {
+    int newHealth = this.dataWatcher.getWatchableObjectInt(31);
+    if(newHealth!=this.health)
+      {
+      Config.logDebug("setting client health from watched data");
+      this.setEntityHealth(newHealth);
+      }    
+    }
+  else
+    {
+    int watchedHealth = this.dataWatcher.getWatchableObjectInt(31);
+    if(watchedHealth!=this.health)
+      {
+      Config.logDebug("updating watched health");
+      this.dataWatcher.updateObject(31, Integer.valueOf(health));
+      }
+    }
   }
 
 protected void pushOutOfBlocks()
@@ -483,67 +514,15 @@ protected void pushOutOfBlocks()
     {
     this.setMoveTo(closest.x+0.5d, closest.y, closest.z+0.5d, this.moveSpeed);
     }
-  
-//  BlockPosition pos = new BlockPosition(x+1, y, z);
-//  BlockPosition closest = null;
-//  testDist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);  
-//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) || worldAccess.isWalkable(pos.x, pos.y-1, pos.z))
-//    {
-//    closest = pos;
-//    dist = testDist;
-//    }
-//  pos = new BlockPosition(x-1, y, z);
-//  testDist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
-//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
-//    {
-//    closest = pos;
-//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
-//    }
-//  pos = new BlockPosition(x, y, z+1);
-//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
-//    {
-//    closest = pos;
-//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
-//    }
-//  pos = new BlockPosition(x, y, z-1);
-//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
-//    {
-//    closest = pos;
-//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
-//    }
-//  pos = new BlockPosition(x+1, y, z+1);
-//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
-//    {
-//    closest = pos;
-//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
-//    }
-//  pos = new BlockPosition(x+1, y, z-1);
-//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
-//    {
-//    closest = pos;
-//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
-//    }
-//  pos = new BlockPosition(x-1, y, z-1);
-//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
-//    {
-//    closest = pos;
-//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
-//    }
-//  pos = new BlockPosition(x-1, y, z+1);
-//  if(worldAccess.isWalkable(pos.x, pos.y, pos.z) && getDistance(pos.x+0.5d, pos.y, pos.z+0.5d)<dist)
-//    {
-//    closest = pos;
-//    dist = (float) getDistance(pos.x+0.5d, pos.y, pos.z+0.5d);
-//    }
-//  if(closest!=null)
-//    {
-//    this.setMoveTo(closest.x+0.5d, closest.y, closest.z+0.5d, this.moveSpeed);
-//    }
   }
 
 protected void handleHealingUpdate()
   {
-  
+  Config.logDebug("healing through healing/upkeep update");
+  if(this.health<this.getMaxHealth())
+    {
+    this.health++;
+    }
   }
 
 public void handleLootPickup()
@@ -595,13 +574,13 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   if(par1DamageSource.getEntity() instanceof EntityLiving)
     {
     this.targetHelper.handleBeingAttacked((EntityLiving)par1DamageSource.getEntity());    
-    if(!worldObj.isRemote)
-      {
-      Packet04Npc pkt = new Packet04Npc();
-      pkt.setParams(this);
-      pkt.setHealthUpdate((byte) this.getHealth());
-      pkt.sendPacketToAllTrackingClients(this);
-      }
+//    if(!worldObj.isRemote)
+//      {
+//      Packet04Npc pkt = new Packet04Npc();
+//      pkt.setParams(this);
+//      pkt.setHealthUpdate((byte) this.getHealth());
+//      pkt.sendPacketToAllTrackingClients(this);
+//      }
     }
   return true;
   }
@@ -675,19 +654,19 @@ public void readFromNBT(NBTTagCompound tag)
 @Override
 public void handleClientInput(NBTTagCompound tag)
   {
- 
+
   }
 
 @Override
 public void addPlayer(EntityPlayer player)
   {
-  
+
   }
 
 @Override
 public void removePlayer(EntityPlayer player)
   {
-  
+
   }
 
 @Override
