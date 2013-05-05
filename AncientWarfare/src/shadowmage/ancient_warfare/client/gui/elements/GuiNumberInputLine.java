@@ -62,10 +62,16 @@ public GuiNumberInputLine(int elementNum, IGuiElementCallback parent,  int w, in
     }
   }
 
-public GuiNumberInputLine setIntegerValue()
+public GuiNumberInputLine setAsIntegerValue()
   {
   this.integerValue = true;
   return this;
+  }
+
+public void setIntegerValue(int value)
+  {
+  this.floatVal = value;
+  this.text = formatterNoDec.format(floatVal);
   }
 
 public GuiNumberInputLine setMinMax(float min, float max)

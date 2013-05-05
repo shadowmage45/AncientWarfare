@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -110,31 +111,17 @@ public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player,   Entity 
     {
     MovingObjectPosition hit = new MovingObjectPosition(entity);
     BatonSettings settings = getBatonSettings(stack);
-    if(entity instanceof NpcBase)
+    if(settings.command == NpcCommand.DEPOSIT || settings.command==NpcCommand.UPKEEP)
       {
-      if(!settings.hasEntity(entity))
+      Config.logDebug("testing execution of entity-target deposit site");
+      boolean transmit = false;
+      if(entity instanceof IInventory && ((IInventory)entity).getSizeInventory()>0)
         {
-        player.addChatMessage("Setting Baton Main Target");
-        settings.setEntity(entity);
-        setBatonSettings(stack, settings);
-        player.openContainer.detectAndSendChanges();
-        }
-      return true;
-      }
-    else
-      {
-      if(settings.command == NpcCommand.DEPOSIT || settings.command==NpcCommand.UPKEEP)
-        {
-        Config.logDebug("testing execution of entity-target deposit site");
-        boolean transmit = false;
-        if(entity instanceof IInventory && ((IInventory)entity).getSizeInventory()>0)
-          {
-          Config.logDebug("target was an IInventory Entity with inventory size >0");
-          this.handleNpcCommand(player, stack, settings, hit);
-          }  
-        }       
-      return true;
-      }
+        Config.logDebug("target was an IInventory Entity with inventory size >0");
+        this.handleNpcCommand(player, stack, settings, hit);
+        }  
+      }       
+    return true;
     }  
   return super.onLeftClickEntity(stack, player, entity);
   }
@@ -165,53 +152,18 @@ protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSetti
     {
     p = new WayPoint(hit.blockX, hit.blockY, hit.blockZ, hit.sideHit, cmd.getTargetType());
     }
-  if(settings.hasEntity())
+  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-settings.range, player.posY-settings.range, player.posZ-settings.range, player.posX+settings.range, player.posY+settings.range, player.posZ+settings.range);
+  List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
+  WayPoint pt;
+  Iterator<NpcBase> it = npcs.iterator();
+  while(it.hasNext())
     {
-    Entity entity = settings.getEntity(player.worldObj);
-    if(entity instanceof NpcBase)
-      {
-      npc = (NpcBase)entity;      
-      npc.handleBatonCommand(settings.command, p);
-      } 
-    else
-      {
-      settings.setEntity(null);
-      setBatonSettings(stack, settings);
-      player.openContainer.detectAndSendChanges();
-      }
-    }
-  if(settings.range>0)
-    {   
-    player.addChatMessage("Executing Baton Command on Area");
-    AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-settings.range, player.posY-settings.range, player.posZ-settings.range, player.posX+settings.range, player.posY+settings.range, player.posZ+settings.range);
-    List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
-    int npcType = -1;
-    if(npc!=null)
-      {
-      npc.handleBatonCommand(cmd, p);
-      npcType = npc.npcType.getGlobalNpcType();
-      }
-    WayPoint pt;
-    for(NpcBase testNpc : npcs)
+    npc = it.next();
+    if(npc.getPlayerTarget()==player || player.getDistanceSqToEntity(npc) < settings.range)
       {
       pt = new WayPoint(p);
-      if(testNpc==null || (npc!=null && testNpc == npc) || player.getDistanceToEntity(testNpc)>settings.range || testNpc.isAggroTowards(player))
-        {
-        continue;
-        }
-      if(npcType==-1 || testNpc.npcType.getGlobalNpcType()==npcType)
-        {
-        testNpc.handleBatonCommand(cmd, p);
-        }        
-      }
-    }
-  else
-    {
-    if(npc!=null)
-      {
-      player.addChatMessage("Executing Baton Command on Single Target");
       npc.handleBatonCommand(cmd, p);
-      }      
+      }
     }
   }
 
@@ -223,62 +175,8 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
     MovingObjectPosition hit = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
     BatonSettings settings = getBatonSettings(stack);
     this.handleNpcCommand(player, stack, settings, hit);
-//    
-//    NpcCommand cmd = settings.command;
-//    if(cmd==NpcCommand.NONE)
-//      {
-//      return true;
-//      }
-//    NpcBase npc = null;
-//    if(settings.hasEntity())
-//      {
-//      Entity entity = settings.getEntity(player.worldObj);
-//      if(entity instanceof NpcBase)
-//        {
-//        npc = (NpcBase)entity;
-//        } 
-//      else
-//        {
-////        Config.logDebug("Baton has invalid entity!!");
-//        settings.setEntity(null);
-//        setBatonSettings(stack, settings);
-//        player.openContainer.detectAndSendChanges();
-//        }
-//      }    
-//    if(settings.range>0)
-//      {   
-//      player.addChatMessage("Executing Baton Command on Area");
-//      AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-settings.range, player.posY-settings.range, player.posZ-settings.range, player.posX+settings.range, player.posY+settings.range, player.posZ+settings.range);
-//      List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
-//      int npcType = -1;
-//      if(npc!=null)
-//        {
-//        npc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
-//        npcType = npc.npcType.getGlobalNpcType();
-//        }
-//      for(NpcBase testNpc : npcs)
-//        {
-//        if(testNpc==null || (npc!=null && testNpc == npc) || player.getDistanceToEntity(testNpc)>settings.range || testNpc.isAggroTowards(player))
-//          {
-//          continue;
-//          }
-//        if(npcType==-1 || testNpc.npcType.getGlobalNpcType()==npcType)
-//          {
-//          testNpc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
-//          }        
-//        }
-//      }
-//    else
-//      {
-//      if(npc!=null)
-//        {
-//        player.addChatMessage("Executing Baton Command on Single Target");
-//        npc.handleBatonCommand(settings.command, X, Y, Z, hit.sideHit);
-//        }      
-//      }
     }   
   return true;
-//  return super.onBlockStartBreak(stack, X, Y, Z, player);
   }
 
 @Override
@@ -314,8 +212,7 @@ public class BatonSettings implements INBTTaggable
 {
 
 public int range = 0;
-public NpcCommand command;
-UUID entID;
+public NpcCommand command = NpcCommand.NONE;
 
 private BatonSettings()
   {
@@ -327,52 +224,10 @@ private BatonSettings(NBTTagCompound tag)
   this.readFromNBT(tag);
   }
 
-public boolean hasEntity()
-  {
-  return this.entID!=null;
-  }
-
-public Entity getEntity(World world)
-  {
-  return entID==null ? null : EntityTools.getEntityByUUID(world, entID.getMostSignificantBits(), entID.getLeastSignificantBits());
-  }
-
-public boolean hasEntity(Entity entity)
-  {
-  UUID id = entity.getPersistentID();
-  return entID!=null && id!=null && entID.getMostSignificantBits() == id.getMostSignificantBits() && entID.getLeastSignificantBits() == id.getLeastSignificantBits();
-  }
-
-public UUID getEntityID()
-  {
-  return this.entID;
-  }
-
-public void setEntity(Entity entity)
-  {
-  if(entity!=null)
-    {
-    UUID id = entity.getPersistentID();
-    if(id!=null)
-      {
-      this.entID = new UUID(id.getMostSignificantBits(), id.getLeastSignificantBits());
-      }
-    }
-  else
-    {
-    this.entID = null;
-    }
-  }
-
 @Override
 public NBTTagCompound getNBTTag()
   {
-  NBTTagCompound tag = new NBTTagCompound();   
-  if(entID!=null)
-    {
-    tag.setLong("uidlsb", entID.getLeastSignificantBits());
-    tag.setLong("uidmsb", entID.getMostSignificantBits());
-    }
+  NBTTagCompound tag = new NBTTagCompound(); 
   if(command!=null)
     {
     tag.setInteger("com", command.ordinal());
@@ -384,10 +239,6 @@ public NBTTagCompound getNBTTag()
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {  
-  if(tag.hasKey("uidlsb") && tag.hasKey("uidmsb"))
-    {
-    entID = new UUID(tag.getLong("uidmsb"), tag.getLong("uidlsb"));
-    }
   if(tag.hasKey("com"))
     {
     command = NpcCommand.values()[tag.getInteger("com")];

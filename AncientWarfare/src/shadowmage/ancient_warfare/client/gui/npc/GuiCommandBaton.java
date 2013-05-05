@@ -72,8 +72,7 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawStringGui("Has Npc Assigned "+container.settings.hasEntity(), 10, 10, 0xffffffff);
-  this.drawStringGui("Current Command: "+container.settings.command.getCommandName(), 10, 20, 0xffffffff);
+  this.drawStringGui("Current Command: "+container.settings.command.getCommandName(), 10, 10, 0xffffffff);
   if(container.batonRank>0)
     {
     this.drawStringGui("Range:", 10, 30, 0xffffffff);
@@ -101,7 +100,6 @@ public void onElementActivated(IGuiElement element)
     }
   else if (id==3)
     {
-    this.container.settings.setEntity(null);
     this.container.saveSettings();
     }
   else if(id >= 10 && id < this.batonCommands.size()+10)
@@ -118,13 +116,11 @@ public void setupControls()
   this.addGuiButton(0, 45, 12, "Done").updateRenderPos(getXSize()-45-5, 5);
   if(container.batonRank>0)
     {
-    rangeBox = (GuiNumberInputLine) this.addNumberField(1, 35, 12, 3, "0").setIntegerValue().setMinMax(0, 140).updateRenderPos(50, 30);
+    rangeBox = (GuiNumberInputLine) this.addNumberField(1, 35, 12, 3, "0").setAsIntegerValue().setMinMax(0, 140).updateRenderPos(50, 30);
+    rangeBox.setIntegerValue(container.settings.range);
     }
   this.controlArea = new GuiScrollableArea(2, this, 5, 50, 256-10, 240-55, this.batonCommands.size()*14);
   this.guiElements.put(2, controlArea);
-  GuiButtonSimple button = this.addGuiButton(3, getXSize()-75-5, 5+12+2, 75, 12, "Clear Npc");
-  button.renderTooltip = true;
-  button.addToToolitp("Clear the current main-target Npc");
   for(int i = 0; i < this.batonCommands.size(); i ++)
     {
     controlArea.addGuiElement(new GuiButtonSimple(i+10, controlArea, 140, 12, this.batonCommands.get(i).getCommandName()).updateRenderPos(5, i * 14));
@@ -134,7 +130,6 @@ public void setupControls()
 @Override
 public void updateControls()
   {
-  // TODO Auto-generated method stub
 
   }
 

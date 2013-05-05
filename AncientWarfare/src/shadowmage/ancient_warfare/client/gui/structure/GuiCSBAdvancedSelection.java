@@ -150,7 +150,7 @@ public void setupControls()
   this.addGuiButton(10, leftCol, 90, 12, 16, "<");
   this.teamSelect = this.addNumberField(11, 80, 16, 2, String.valueOf(this.container.clientSettings.teamOverride));
   this.addGuiButton(12, rightCol, 90, 12, 16, ">");
-  this.teamSelect.setIntegerValue().setMinMax(-1, 15).updateRenderPos(midCol, 90);  
+  this.teamSelect.setAsIntegerValue().setMinMax(-1, 15).updateRenderPos(midCol, 90);  
   }
 
 GuiCheckBoxSimple vehicles;
