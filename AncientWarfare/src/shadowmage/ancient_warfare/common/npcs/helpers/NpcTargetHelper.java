@@ -224,24 +224,21 @@ public float getAttackDistance(ITargetEntry target)
   if(npc.isRidingVehicle())
     {
     return ((VehicleBase)npc.ridingEntity).getEffectiveRange((float)npc.ridingEntity.posY - target.posY());
-    }
-  if(target.getEntity(npc.worldObj)==null)
+    }  
+  Entity ent = target.getEntity(npc.worldObj);
+  if(ent==null)
     {
     return 1.f + npc.width*0.5f;
     }
   else//is entity entry
     {
-    if(target.getEntity(npc.worldObj)!=null)
+    float rangedDistance = npc.npcType.getRangedAttackDistance(npc.rank);
+    if(rangedDistance>0)
       {
-      float rangedDistance = npc.npcType.getRangedAttackDistance(npc.rank);
-      if(rangedDistance>0)
-        {
-        return rangedDistance;
-        }
-      return 2.5f * (npc.width*0.5f + target.getEntity(npc.worldObj).width*0.5f);
+      return rangedDistance;
       }
+    return 2.5f * (npc.width*0.5f + target.getEntity(npc.worldObj).width*0.5f);
     }
-  return 4f;//fallthrough for entity null
   }
 
 public void updateAggroEntries()

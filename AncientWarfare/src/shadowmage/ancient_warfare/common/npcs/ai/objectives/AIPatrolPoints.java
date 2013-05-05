@@ -32,6 +32,7 @@ public class AIPatrolPoints extends NpcAIObjective
 
 WayPoint patrolPoint;
 int enemyRange = 20;
+
 /**
  * @param npc
  * @param maxPriority
@@ -107,8 +108,12 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
+  if(patrolPoint==null)
+    {
+    patrolPoint = npc.wayNav.getNextPatrolPoint();
+    }
 //  Config.logDebug("starting patrol ai, choosing next patrol point, setting target");
-  patrolPoint = npc.wayNav.getNextPatrolPoint();
+  
   if(patrolPoint!=null)
     {    
     npc.setTargetAW(patrolPoint);

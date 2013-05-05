@@ -1,7 +1,11 @@
-THIS WEEKEND
-* figure out way to correct tooltip display crap (split into multi-line...)
-* add npc objective rendering (render an icon for the objective, and for the task in the objective)
-* fix waypoint skipping when interrupted
+THIS WEEK
+* clean up vehicle input handling.  Move over to a data-watcher field (no reply packet, just set server side, read client-side from data-watcher)
+* clean up npc vehicle turning/dismount coding
+* add npc objective fields to data-watcher
+* figure out rendering for npc objective icons
+
+THIS(next) WEEKEND
+
 
 GENERAL
 * partially destroyable blocks ? (hold destruction status as meta-data?)
@@ -11,18 +15,19 @@ GENERAL
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 * add logs to block-data manager (for rotation values...currently unmapped)
 * civic block ID picked stuff..
+* create custom adv. datawatcher for npc/vehicle -- use for input/motion
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
 * vehicle container needs stack limiting on shift-click
 * when soldiers dismount, they need to clear vehicle input status
+* pathfinding on vehicles needs to check for clearance around blocks (if size>1 for x,z->size)
 
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
 * create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
 * inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)
 * vehicle riders need some work (turning the vehicle base towards targets)
-* fix siege-engineer waypoint navigation/patrol abililty
 
 NPCS
 * create AI objectives
@@ -31,11 +36,9 @@ NPCS
 * ladder movement handling needs some attention (they get stuck moving across ladders)
 * expand waypoint navigator with the following functions:
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
-* add objective icon rendering to npcs (toggle via Settings) -- .... NFC on this, would require server->client sync on stuff
 * work out indiv costs for upkeep -- add specialized items where applicable
-* apparently pathfinding for 'patrol' does not work while mounted...
-* if interrupted on a patrol point, will 'skip' the point it was heading towards
 * figure out how to handle upkeep for npcs mounted on vehicles
+* add npc objective rendering (render an icon for the objective, and for the task in the objective)(use datawatcher)
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -215,6 +218,13 @@ TWEAKS/OPTIMIZATION
 * clean up civics naming/tooltips
 * clean up npc names/tooltips
 * clean up ammo tooltips
+
+* fix waypoint skipping when interrupted
+* fix siege-engineer waypoint navigation/patrol abililty
+* apparently pathfinding for 'patrol' does not work while mounted...
+* if interrupted on a patrol point, will 'skip' the point it was heading towards
+
+
 /********** 05-06-13 **********/
 /********** 05-07-13 **********/
 /********** 05-08-13 **********/

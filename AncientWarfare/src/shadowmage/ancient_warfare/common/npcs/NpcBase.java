@@ -472,7 +472,7 @@ protected void handleHealthUpdate()
     int newHealth = this.dataWatcher.getWatchableObjectInt(31);
     if(newHealth!=this.health)
       {
-      Config.logDebug("setting client health from watched data");
+//      Config.logDebug("setting client health from watched data");
       this.setEntityHealth(newHealth);
       }    
     }
@@ -481,7 +481,7 @@ protected void handleHealthUpdate()
     int watchedHealth = this.dataWatcher.getWatchableObjectInt(31);
     if(watchedHealth!=this.health)
       {
-      Config.logDebug("updating watched health");
+//      Config.logDebug("updating watched health");
       this.dataWatcher.updateObject(31, Integer.valueOf(health));
       }
     }

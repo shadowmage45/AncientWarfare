@@ -62,7 +62,6 @@ public void onTick()
     {
     npc.nav.setMoveToTarget(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
     }
-  npc.setActionTicksToMax();
   }
 
 @Override

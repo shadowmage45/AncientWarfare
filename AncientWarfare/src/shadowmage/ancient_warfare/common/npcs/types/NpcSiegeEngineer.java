@@ -37,6 +37,7 @@ import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDismountVehicles;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIMountVehicles;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIPatrolPoints;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
@@ -94,7 +95,8 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AIFollowPlayer(npc, 9));
   aiEntries.add(new AINpcUpkeepObjective(npc, 8));
   aiEntries.add(new AIDepositGoods(npc, 8));
-  aiEntries.add(new AIMountVehicles(npc, 7, 20));  
+  aiEntries.add(new AIMountVehicles(npc, 7, 20)); 
+  aiEntries.add(new AIPatrolPoints(npc, 7, 20)); 
   aiEntries.add(new AIStayNearHome(npc, 6,  40, 15));
   aiEntries.add(new AIAttackTargets(npc, 5, 40, 40));  
   aiEntries.add(new AIWander(npc, 4));

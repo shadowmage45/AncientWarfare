@@ -57,12 +57,17 @@ public void onTick()
     }
   else
     {
-     if(npc.actionTick<=0)
+    Config.logDebug("action ticks: "+npc.actionTick);
+    if(npc.actionTick<=0)
       {
       this.attackTarget(target);       
-      }   
+      } 
+    else
+      {
+      Config.logDebug("pausing for action time");
+      }
     }  
- 
+
   }
 
 protected void attackTarget(ITargetEntry target)
@@ -70,7 +75,7 @@ protected void attackTarget(ITargetEntry target)
   npc.setActionTicksToMax(); 
   if(!target.isEntityEntry())
     {
-//    Config.logDebug("doing block attack");
+    //    Config.logDebug("doing block attack");
     blockAttackHits++;    
     npc.swingItem();
     int id = npc.worldObj.getBlockId((int)target.posX(), (int)target.posY(),(int)target.posZ());
@@ -85,7 +90,7 @@ protected void attackTarget(ITargetEntry target)
     }
   else
     {
-//    Config.logDebug("doing entity atack: "+npc.getTarget());
+    Config.logDebug("doing entity atack: "+npc.getTarget());
     Entity ent = target.getEntity(npc.worldObj);
     if(ent!=null)
       {
@@ -98,7 +103,7 @@ protected void attackTarget(ITargetEntry target)
 protected void attackTargetMounted(ITargetEntry target)
   {
   VehicleBase vehicle = (VehicleBase) npc.ridingEntity;
-  
+
   //check to see if yaw to target is within the range reachable by just turret rotation
   float yaw = Trig.getYawTowardsTarget(vehicle.posX, vehicle.posZ, target.posX(), target.posZ(), vehicle.rotationYaw);  
   byte s = 0;
@@ -116,7 +121,7 @@ protected void attackTargetMounted(ITargetEntry target)
         s = -1;//right
         }
       turning = true;
-//      Config.logDebug("yaw diff to target: "+yaw);
+      //      Config.logDebug("yaw diff to target: "+yaw);
       }
     } 
   vehicle.moveHelper.handleMotionInput((byte) 0, s);

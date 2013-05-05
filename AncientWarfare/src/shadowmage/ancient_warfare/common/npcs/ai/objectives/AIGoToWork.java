@@ -136,6 +136,10 @@ public void onRunningTick()
       }
     this.updateWorkSiteWorkerStatus();
     }
+  if(npc.getDistanceFromTarget(npc.getTarget())>3.5)
+    {
+    npc.setActionTicksToMax();
+    }
   }
 
 protected void updateWorkSiteWorkerStatus()
