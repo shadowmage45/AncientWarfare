@@ -201,7 +201,6 @@ TWEAKS/OPTIMIZATION
 * npc health does not regen yet
 * change batons over to not HAVE a target -- scan 20 block area and command any npcs that are following
     the player
-
 /********** 05-05-13 **********/
 * workers will now much more aggressively seek work (no more long coffee breaks between jobs)
 * fix delay in work for workers (half is the work-sites not updating properly, half is workers not seeking a new site immediately when the old is finished)
@@ -218,12 +217,10 @@ TWEAKS/OPTIMIZATION
 * clean up civics naming/tooltips
 * clean up npc names/tooltips
 * clean up ammo tooltips
-
 * fix waypoint skipping when interrupted
 * fix siege-engineer waypoint navigation/patrol abililty
 * apparently pathfinding for 'patrol' does not work while mounted...
 * if interrupted on a patrol point, will 'skip' the point it was heading towards
-
 
 /********** 05-06-13 **********/
 /********** 05-07-13 **********/
