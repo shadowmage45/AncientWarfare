@@ -27,6 +27,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.targeting.TargetPosition;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.EntityTools;
@@ -36,7 +37,6 @@ public class WayPoint extends TargetPosition
 
 protected Entity entTarget = null;
 UUID entityID;
-protected boolean isEnt = false;
 
 public WayPoint(WayPoint p)
   {
@@ -47,7 +47,6 @@ public WayPoint(WayPoint p)
   this.side = p.side;
   this.entTarget = p.entTarget;
   this.entityID = p.entityID;
-  this.isEnt = p.isEnt;
   }
 
 public WayPoint(TileEntity te, int side, TargetType t)
@@ -82,7 +81,6 @@ public WayPoint(int x, int y, int z, int side, TargetType type)
 public WayPoint(Entity ent, TargetType type)
   { 
   super(type);
-  this.isEnt = true;
   this.x =MathHelper.floor_double(ent.posX);
   this.y =MathHelper.floor_double(ent.posY);
   this.z =MathHelper.floor_double(ent.posZ);
@@ -98,13 +96,13 @@ public TileEntity getTileEntity(World world)
 @Override
 public boolean isEntityEntry()
   {
-  return this.isEnt;
+  return this.entityID!=null || this.entTarget!=null;
   }
 
 @Override
 public int floorX()
   {
-  if(isEnt && entTarget!=null)
+  if(entTarget!=null)
     {
     return MathHelper.floor_double(entTarget.posX);
     }
@@ -114,7 +112,7 @@ public int floorX()
 @Override
 public int floorY()
   {
-  if(isEnt && entTarget!=null)
+  if(entTarget!=null)
     {
     return MathHelper.floor_double(entTarget.posY);
     }
@@ -124,7 +122,7 @@ public int floorY()
 @Override
 public int floorZ()
   {
-  if(isEnt && entTarget!=null)
+  if(entTarget!=null)
     {
     return MathHelper.floor_double(entTarget.posZ);
     }
@@ -134,7 +132,7 @@ public int floorZ()
 @Override
 public float posX()
   {
-  if(isEnt && entTarget!=null)
+  if(entTarget!=null)
     {
     return (float) entTarget.posX;
     }
@@ -144,7 +142,7 @@ public float posX()
 @Override
 public float posY()
   {
-  if(isEnt && entTarget!=null)
+  if(entTarget!=null)
     {
     return (float) entTarget.posY;
     }
@@ -154,7 +152,7 @@ public float posY()
 @Override
 public float posZ()
   {
-  if(isEnt && entTarget!=null)
+  if(entTarget!=null)
     {
     return (float) entTarget.posZ;
     }
@@ -165,12 +163,12 @@ public float posZ()
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = super.getNBTTag();
-  if(isEnt && entTarget!=null)
+  if(entTarget!=null)
     {
     tag.setLong("idmsb", entTarget.getPersistentID().getMostSignificantBits());
     tag.setLong("idlsb", entTarget.getPersistentID().getLeastSignificantBits());
     }
-  else if(isEnt && entityID!=null)
+  else if(entityID!=null)
     {
     tag.setLong("idmsb", entityID.getMostSignificantBits());
     tag.setLong("idlsb", entityID.getLeastSignificantBits());
@@ -184,7 +182,6 @@ public void readFromNBT(NBTTagCompound tag)
   super.readFromNBT(tag);
   if(tag.hasKey("idmsb") && tag.hasKey("idlsb"))
     {
-    this.isEnt = true;
     entityID = new UUID(tag.getLong("idmsb"), tag.getLong("idlsb"));
     } 
   }
@@ -192,9 +189,9 @@ public void readFromNBT(NBTTagCompound tag)
 @Override
 public Entity getEntity(World world)
   {
-  if(isEnt && this.entTarget==null)
+  if(this.entTarget==null && this.entityID!=null)
     {
-    this.entTarget = EntityTools.getEntityByUUID(world, entityID.getMostSignificantBits(), entityID.getLeastSignificantBits());    
+    this.entTarget = EntityTools.getEntityByUUID(world, entityID.getMostSignificantBits(), entityID.getLeastSignificantBits());
     }
   return this.entTarget;
   }

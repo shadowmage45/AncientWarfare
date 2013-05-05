@@ -60,49 +60,50 @@ public ItemBuilderDirect(int itemID)
 @Override
 public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
   {
-//  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);  
-//  if(par1ItemStack!=null)
-//    {
-//    NBTTagCompound tag;
-//    if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("structData"))
-//      {
-//      tag = par1ItemStack.getTagCompound().getCompoundTag("structData");
-//      }
-//    else
-//      {
-//      tag = new NBTTagCompound();
-//      }
-//    if(!tag.hasKey("scanning") || tag.getBoolean("scanning")==true)
-//      {     
-//      if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
-//        {
-//        par3List.add("ready to scan and process");
-//        }        
-//      else if(!tag.hasKey("pos1"))
-//        {
-//        par3List.add("item cleared");
-//        }
-//      else if(!tag.hasKey("pos2"))
-//        {
-//        par3List.add("pos1 set");
-//        }
-//      else if(!tag.hasKey("buildKey"))
-//        {
-//        par3List.add("pos2 set");
-//        }
-//      }
-//    else if(tag.hasKey("building"))
-//      {
-//      par3List.add("Ready to Build.  Needed Blocks: ");
-//      NBTTagList blockList = tag.getTagList("blockList");
-//      for(int i = 0; i < blockList.tagCount(); i++)
-//        {
-//        NBTTagCompound blockTag = (NBTTagCompound) blockList.tagAt(i);
-//        par3List.add(String.valueOf("ID: "+blockTag.getInteger("id")+" meta: "+blockTag.getInteger("mt")+" count: "+blockTag.getInteger("ct")));
-//        }
-//      }
-//
-//    }  
+  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);  
+  if(par1ItemStack!=null)
+    {
+    NBTTagCompound tag;
+    if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("structData"))
+      {
+      tag = par1ItemStack.getTagCompound().getCompoundTag("structData");
+      }
+    else
+      {
+      tag = new NBTTagCompound();
+      }
+    if(!tag.hasKey("scanning") || tag.getBoolean("scanning")==true)
+      {     
+      if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
+        {
+        par3List.add("Has All Bounds set:");
+        par3List.add("Ready to scan and process");
+        }        
+      else if(!tag.hasKey("pos1"))
+        {
+        par3List.add("Scan Info Cleared");
+        }
+      else if(!tag.hasKey("pos2"))
+        {
+        par3List.add("First Position Set");
+        }
+      else if(!tag.hasKey("buildKey"))
+        {
+        par3List.add("Second Position Set");
+        }
+      }
+    else if(tag.hasKey("building"))
+      {
+      par3List.add("Ready to Build.  Needed Blocks: ");
+      NBTTagList blockList = tag.getTagList("blockList");
+      for(int i = 0; i < blockList.tagCount(); i++)
+        {
+        NBTTagCompound blockTag = (NBTTagCompound) blockList.tagAt(i);
+        par3List.add(String.valueOf("ID: "+blockTag.getInteger("id")+" meta: "+blockTag.getInteger("mt")+" count: "+blockTag.getInteger("ct")));
+        }
+      }
+
+    }  
   }
 
 @Override

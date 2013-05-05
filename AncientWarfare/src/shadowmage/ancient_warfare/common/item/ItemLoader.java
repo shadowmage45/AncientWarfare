@@ -79,11 +79,11 @@ public void load()
 
 private void loadItems()
   {  
-  this.registerItemSingle(structureCreativeBuilderTicked, "Creative Builder Ticked", "Creative Mode Building Tool with Builder Block", "Right-Click to Use, Sneak+Right-Click to open GUI").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
-  this.registerItemSingle(structureScanner, "Structure Scanner", "Structure Scanner", "Structure Scanning Item, Right-Click to Use").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
-  this.registerItemSingle(structureCreativeBuilder, "Creative Builder", "Creative Mode Building Tool", "Right-Click to Build, Sneak+Right-Click to open GUI").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
-  this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Right-Click to Scan, and then Build").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
-  this.registerItemSingle(structureEditor, "Structure Editor", "Structure Template Editor", "Right-Click to open editor selection GUI").setIconTexture("ancientwarfare:builder/testIcon1", 0);
+  this.registerItemSingle(structureCreativeBuilderTicked, "Creative Builder Ticked", "Creative Mode Building Tool with Builder Block", "Sneak-Right-click to set structure").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  this.registerItemSingle(structureScanner, "Structure Scanner", "Structure Scanner", "Right-Click to Use").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
+  this.registerItemSingle(structureCreativeBuilder, "Creative Builder", "Creative Mode Building Tool", "Sneak+Right-Click to set structure").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Right-Click to Use").setIconTexture("ancientwarfare:builder/structureScanner1", 0).addTooltip("Sneak-Right-Click to Open GUI", 0);
+  this.registerItemSingle(structureEditor, "Structure Editor", "Structure Template Editor", "Right-Click to open editor GUI").setIconTexture("ancientwarfare:builder/testIcon1", 0);
   this.registerItemSubtyped(componentItem);
   this.registerItemSubtyped(ammoItem);
   this.registerItemSubtyped(vehicleSpawner);
@@ -91,12 +91,10 @@ private void loadItems()
   this.registerItemSubtyped(armorItem);
   this.registerItemSubtyped(npcSpawner);
   this.registerItemSubtyped(npcCommandBaton);
-  this.addSubtypeInfoToItem(npcCommandBaton, 0, "Simple Command Baton", "","Issues simple commands to a single npc").addDisplayStack(new ItemStack(npcCommandBaton,1,0)).setIconTexture("ancientwarfare:npc/baton1", 0);
-  this.addSubtypeInfoToItem(npcCommandBaton, 1, "Adept Command Baton", "","Issues advanced commands to a single npc").addDisplayStack(new ItemStack(npcCommandBaton,1,1)).setIconTexture("ancientwarfare:npc/baton2", 1);
-  this.addSubtypeInfoToItem(npcCommandBaton, 2, "Expert Command Baton", "","Issues simple commands to several npcs, or advanced commands to a single npc").addDisplayStack(new ItemStack(npcCommandBaton,1,2)).setIconTexture("ancientwarfare:npc/baton3", 2);
-  this.addSubtypeInfoToItem(npcCommandBaton, 3, "Master Command Baton", "","Issues advanced commands to several npcs").addDisplayStack(new ItemStack(npcCommandBaton,1,3)).setIconTexture("ancientwarfare:npc/baton4", 3);
+  this.addSubtypeInfoToItem(npcCommandBaton, 0, "Simple Command Baton", "","Command following NPCs").addDisplayStack(new ItemStack(npcCommandBaton,1,0)).setIconTexture("ancientwarfare:npc/baton1", 0);
+  this.addSubtypeInfoToItem(npcCommandBaton, 1, "Master Command Baton", "","Command NPCs in area").addDisplayStack(new ItemStack(npcCommandBaton,1,1)).setIconTexture("ancientwarfare:npc/baton3", 1);
   this.registerItemSubtyped(civicPlacer);
-  this.registerItemSingle(civicBuilder, "Civic Structure Builder", "", "Constructs Structures using the Civics System");
+  this.registerItemSingle(civicBuilder, "Civic Structure Builder", "", "Construction Site");
   }
 
 private void loadRecipes()

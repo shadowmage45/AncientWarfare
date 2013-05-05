@@ -49,45 +49,45 @@ public ItemCivicPlacer(int itemID)
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
-//  super.addInformation(stack, player, list, par4);
-//  if(stack!=null)
-//    {
-//    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
-//      {
-//      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");     
-//      int type = stack.getItemDamage();
-//      Civic civ = CivicRegistry.instance().getCivicFor(type);        
-//      if(civ!=null)          
-//        {
-//        if(civ.isDepository())
-//          {
-//          list.add("Block-Only civic: right click to place");
-//          }
-//        else if(tag.hasKey("pos2"))
-//          {
-//          list.add("Has both bounds positions set");
-//          list.add("Right click to place Civic Block");
-//          }
-//        else if(tag.hasKey("pos1"))
-//          {
-//          list.add("Has first bounds position set");
-//          list.add("Right click to set second bound position");
-//          }
-//        else
-//          {
-//          list.add("Right click to set first bound position");
-//          }
-//        }
-//      else
-//        {
-//        list.add("Invalid Civic Placer--Something has corrupted or removed the itemStack NBT data.");
-//        } 
-//      }
-//    else
-//      {
-//      list.add("Invalid Civic Placer--Something has corrupted or removed the itemStack NBT data.");
-//      }
-//    }  
+  super.addInformation(stack, player, list, par4);
+  if(stack!=null)
+    {
+    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
+      {
+      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");     
+      int type = stack.getItemDamage();
+      Civic civ = CivicRegistry.instance().getCivicFor(type);        
+      if(civ!=null)          
+        {
+        if(civ.isDepository())
+          {
+          list.add("Block-Only: right click to place");
+          }
+        else if(tag.hasKey("pos2"))
+          {
+          list.add("Has both bounds positions set");
+          list.add("Click to Place Civic Block");
+          }
+        else if(tag.hasKey("pos1"))
+          {
+          list.add("Has first bounds position set");
+          list.add("Click to Set Second Position");
+          }
+        else
+          {
+          list.add("Click to Set First Position");
+          }
+        }
+      else
+        {
+        list.add("Invalid or Corrupt Item NBT");
+        } 
+      }
+    else
+      {
+      list.add("Invalid or Corrupt Item NBT");
+      }
+    }  
   }
 
 @Override

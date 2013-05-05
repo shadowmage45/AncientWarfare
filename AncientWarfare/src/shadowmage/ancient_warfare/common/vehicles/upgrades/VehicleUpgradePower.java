@@ -32,7 +32,7 @@ public VehicleUpgradePower(int num)
   {
   super(num);
   this.displayName = "Power Upgrade";
-  this.tooltip = "Increases max launch power by 2m/s";
+  this.tooltip = "Missile Speed + 2m/s";
   this.iconTexture = "upgradePower1";
   }
 

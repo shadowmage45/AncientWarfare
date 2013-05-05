@@ -57,7 +57,7 @@ public NpcFarmer(int type)
   {
   super(type);
   this.displayName = "Farmer";
-  this.tooltip = "Farmer for working basic crops";
+  this.tooltip = "For working basic crops";
   this.iconTexture = "npcWorker1";  
   this.addLevel("Farmer Rank 0", Config.texturePath + "models/npcDefault.png", getToolStack(0), null).addTargetType(CivicWorkType.FARM);
   this.addLevel("Farmer Rank 1", Config.texturePath + "models/npcDefault.png", getToolStack(1), null).addTargetType(CivicWorkType.FARM);
@@ -105,7 +105,7 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AINpcUpkeepObjective(npc, 82));
   aiEntries.add(new AIGoToWork(npc, 80));  
   aiEntries.add(new AIDepositGoods(npc, 80));
-  aiEntries.add(new AIStayNearHome(npc, 70, 20, 5));
+  aiEntries.add(new AIStayNearHome(npc, 70, 40, 15));
   aiEntries.add(new AIWander(npc, 10));
   return aiEntries;
   }

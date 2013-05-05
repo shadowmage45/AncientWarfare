@@ -39,7 +39,7 @@ public NpcVillager(int type)
   {
   super(type);
   this.displayName = "Villager";
-  this.tooltip = "Spawns a Villager when used.";
+  this.tooltip = "Spawns a Villager";
   this.isVanillaVillager = true;
   this.iconTexture = "npcVillager";
   this.addLevel("Farmer", "", null, null);

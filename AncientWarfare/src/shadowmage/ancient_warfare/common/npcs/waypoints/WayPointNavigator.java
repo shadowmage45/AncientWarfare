@@ -25,6 +25,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
@@ -49,6 +50,7 @@ WayPoint homePoint = null;
 WayPoint work = null;
 WayPoint deposit = null;
 WayPoint upkeep = null;
+TECivic workSite = null;
 List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
 int currentPatrolPoint = 0;
 
@@ -135,6 +137,16 @@ public void setWorkSite(WayPoint p)
   this.work = p;  
   }
 
+public TECivic getWorkSiteTile()
+  {
+  return this.workSite;
+  }
+
+public void setWorkSiteTile(TECivic te)
+  {
+  this.workSite = te;
+  }
+
 /************************************************DEPOSIT SITE*************************************************/
 public void setDepositSite(WayPoint p)
   {
@@ -219,7 +231,6 @@ public void readFromNBT(NBTTagCompound tag)
   if(tag.hasKey("deposit"))
     {    
     this.deposit = new WayPoint(tag.getCompoundTag("deposit"));
-    Config.logDebug("loading deposit tag "+deposit);
     }
   if(tag.hasKey("upkeep"))
     {

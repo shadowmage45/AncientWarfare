@@ -32,7 +32,9 @@ public VehicleTypeTrebuchetStandTurret(int typeNum)
   {
   super(typeNum);
   this.displayName = "Trebuchet Stand Turret";
-  this.displayTooltip = "A turret-mounted version of the personal trebuchet.";  
+  this.displayTooltip.add("Trebuchet Firing Mechanism");
+  this.displayTooltip.add("Fixed-Emplacement");
+  this.displayTooltip.add("45' Turret");
   this.width = 2.7f;
   this.height = 2.7f; 
   this.canAdjustYaw = true;

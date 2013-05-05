@@ -57,7 +57,10 @@ public VehicleTypeChestCart(int typeNum)
   this.armorBaySize = 6;
   this.storageBaySize = 54*4;
   this.displayName = "Chest Cart" ;
-  this.displayTooltip = "Transport your loot";
+  this.displayTooltip.add("No Firing Mechanism");
+  this.displayTooltip.add("Wheeled");
+  this.displayTooltip.add("No Turret");
+  this.displayTooltip.add("Special: Storage Area");
   }
 
 @Override

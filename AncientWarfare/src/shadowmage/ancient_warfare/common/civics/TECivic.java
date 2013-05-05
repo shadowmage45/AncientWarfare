@@ -294,7 +294,7 @@ public BlockPosition getPositionInBounds(int border)
 
 public void addWorker(NpcBase npc)
   {
-  if(npc!=null)
+  if(npc!=null && !this.workers.contains(npc))
     {
     if(this.workers.isEmpty())
       {
@@ -332,6 +332,12 @@ protected void validateWorkers()
       }
     WayPoint p = npc.wayNav.getWorkSite();
     if(p==null || p.floorX()!= xCoord || p.floorY()!=yCoord || p.floorZ()!=zCoord)
+      {
+      workIt.remove();
+      continue;
+      }
+    TECivic te = npc.wayNav.getWorkSiteTile();
+    if(te!=this)
       {
       workIt.remove();
       continue;

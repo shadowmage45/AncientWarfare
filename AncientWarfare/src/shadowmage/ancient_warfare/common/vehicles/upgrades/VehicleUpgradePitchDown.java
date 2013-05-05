@@ -32,7 +32,7 @@ public VehicleUpgradePitchDown(int num)
   {
   super(num);
   this.displayName = "Turret Wedge: -3";
-  this.tooltip = "Decreases turret pitch by 3 degrees.";
+  this.tooltip = "Aim Pitch - 3'";
   this.iconTexture = "upgradePitchDown1";
   }
 

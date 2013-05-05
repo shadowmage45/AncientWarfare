@@ -92,7 +92,9 @@ public VehicleTypeHwacha(int typeNum)
   this.riderForwardsOffset = -1.4f;
   this.riderVerticalOffset = 0.5f;
   this.displayName = "Hwacha";
-  this.displayTooltip = "OMGZ Rockets!";
+  this.displayTooltip.add("Hwacha Firing Mechanism");
+  this.displayTooltip.add("Wheeled");
+  this.displayTooltip.add("No Turret");
   this.storageBaySize = 0;
   this.armorBaySize = 3;
   this.ammoBaySize = 6;

@@ -52,7 +52,7 @@ public NpcLumberjack(int type)
   {
   super(type);
   this.displayName = "Lumberjack";
-  this.tooltip = "Lumberjack for working tree farms";
+  this.tooltip = "For working tree farms";
   this.iconTexture = "npcWorker1";  
   this.addLevel("Lumberjack Novice", Config.texturePath + "models/npcDefault.png", getToolStack(0), null).addTargetType(CivicWorkType.TREE);
   this.addLevel("Lumberjack Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), null).addTargetType(CivicWorkType.TREE);
@@ -100,7 +100,7 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AINpcUpkeepObjective(npc, 82)); 
   aiEntries.add(new AIGoToWork(npc, 80));  
   aiEntries.add(new AIDepositGoods(npc, 80));
-  aiEntries.add(new AIStayNearHome(npc, 70, 20, 5));
+  aiEntries.add(new AIStayNearHome(npc, 70, 40, 15));
   aiEntries.add(new AIWander(npc, 10));
   return aiEntries;
   }

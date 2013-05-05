@@ -30,7 +30,7 @@ public VehicleArmorStone(int armorType)
   {
   super(armorType);
   this.displayName = "Stone Armor Tier 1";
-  this.tooltip = "Reduces fire damage by ~7%";
+  this.tooltip = "Fire damage - 7%";
   this.general = 2.5f;
   this.explosive = 2.5f;
   this.fire = 7;

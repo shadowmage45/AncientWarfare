@@ -40,7 +40,7 @@ public abstract float getBaseHealth();//base max health, before any materials ad
 
 public abstract String getTextureForMaterialLevel(int level);//get the texture for the input material quality level
 public abstract String getDisplayName();
-public abstract String getDisplayTooltip();
+public abstract List<String> getDisplayTooltip();
 
 public abstract int getGlobalVehicleType();//by number, registry num...
 public abstract IVehicleMaterial getMaterialType();//wood, iron...?? material type will apply adjustments to base stats, before upgrades/etc are applied

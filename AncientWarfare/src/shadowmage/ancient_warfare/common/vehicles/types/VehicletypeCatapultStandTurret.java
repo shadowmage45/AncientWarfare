@@ -40,7 +40,9 @@ public VehicletypeCatapultStandTurret(int typeNum)
   this.riderForwardsOffset = 1.2f;
   this.riderVerticalOffset = 0.7f;
   this.displayName = "Catapult Stand Turret";
-  this.displayTooltip = "An immobile catapult mounted on a swiveling turret.";
+  this.displayTooltip.add("Catapult Firing Mechanism");
+  this.displayTooltip.add("Fixed-Emplacement");
+  this.displayTooltip.add("45' Turret");
   this.storageBaySize = 0;
   this.armorBaySize = 4;
   this.upgradeBaySize = 4;

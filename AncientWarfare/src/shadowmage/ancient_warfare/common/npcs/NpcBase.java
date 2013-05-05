@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.npcs;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -132,6 +133,7 @@ public NpcBase(World par1World)
     this.equipmentDropChances[i] = 1.f;
     }
   this.experienceValue = 10;
+  this.health = 20;
   }
 
 @Override
@@ -447,7 +449,8 @@ public void onUpdate()
       this.worldObj.villageCollectionObj.addVillagerPosition(floorX, floorY, floorZ);
       }
     }
-  if(!this.worldObj.isRemote && !this.worldAccess.isWalkable(floorX, floorY, floorZ))
+  int id = worldObj.getBlockId(floorX, floorY, floorZ);
+  if(!this.worldObj.isRemote && (id==Block.fence.blockID || id==Block.thinGlass.blockID))
     {
     this.pushOutOfBlocks();
     }
@@ -459,7 +462,7 @@ public void onUpdate()
 protected void entityInit()
   {
   super.entityInit();
-  this.dataWatcher.addObject(31, new Integer(this.health));
+  this.dataWatcher.addObject(31, new Integer(20));
   }
 
 protected void handleHealthUpdate()
@@ -518,7 +521,6 @@ protected void pushOutOfBlocks()
 
 protected void handleHealingUpdate()
   {
-  Config.logDebug("healing through healing/upkeep update");
   if(this.health<this.getMaxHealth())
     {
     this.health++;

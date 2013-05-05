@@ -40,7 +40,9 @@ public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
     this.riderForwardsOffset = 1.2f;
     this.riderVerticalOffset = 0.8f;
     this.displayName = "Catapult Mobile Turret";
-    this.displayTooltip = "A turret-mounted catapult on a wheeled frame.";
+    this.displayTooltip.add("Catapult Firing Mechanism");
+    this.displayTooltip.add("Wheeled");
+    this.displayTooltip.add("360' Turret");
     this.storageBaySize = 0;
     this.armorBaySize = 3;
     this.upgradeBaySize = 3;

@@ -36,11 +36,13 @@ public AmmoCanisterShot(int ammoType, int weight)
   super(ammoType);
   this.ammoWeight = weight;
   this.displayName = "Canister Shot "+weight+"kg";
-  this.addTooltip(weight+"kg of small ammunition in a canister with an explosive charge.");
+  this.addTooltip("Spawns "+weight+" submunitions on impact");
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoCluster1";
-  this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png"; 
+  this.entityDamage = 8;
+  this.vehicleDamage = 8;
   }
 
 @Override

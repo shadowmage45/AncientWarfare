@@ -48,7 +48,9 @@ public VehicleTypeBallistaStand(int typeNum)
   this.canAdjustYaw = false;//adjust based on hasTurret or not
   this.turretRotationMax=0.f;//adjust based on mobile/stand fixed (0), stand fixed(90'), or mobile or stand turret (360) 
   this.displayName = "Ballista Stand";
-  this.displayTooltip = "A ballista mounted on a partially rotatable stand.";
+  this.displayTooltip.add("Ballista Firing Mechanism");
+  this.displayTooltip.add("Stand-Based");
+  this.displayTooltip.add("No Turret");
   }
 
 @Override

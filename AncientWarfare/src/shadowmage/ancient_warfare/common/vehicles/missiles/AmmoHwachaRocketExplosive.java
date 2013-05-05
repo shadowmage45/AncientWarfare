@@ -35,7 +35,7 @@ public AmmoHwachaRocketExplosive(int ammoType)
   {
   super(ammoType);
   this.displayName = "Explosive Hwacha Rocket";
-  this.addTooltip("A small self-propelled arrow fitted with an explosive tip.");
+  this.addTooltip("Self-propelled, explosive-tipped");
   this.entityDamage = 4;
   this.vehicleDamage = 4;
   this.isArrow = true;

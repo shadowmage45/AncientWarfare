@@ -36,7 +36,7 @@ public class AmmoGrapeShot extends Ammo
     super(ammoType);
     this.ammoWeight = weight;
     this.displayName = "Grape Shot "+weight+"kg";
-    this.addTooltip(weight+"kg of small ammunition designed to scatter when fired."); 
+    this.addTooltip("Delivers a shotgun-like blast"); 
     this.secondaryAmmoType = Ammo.ammoBallIronShot;
     this.secondaryAmmoCount = weight;
     float scaleFactor = weight + 45.f;

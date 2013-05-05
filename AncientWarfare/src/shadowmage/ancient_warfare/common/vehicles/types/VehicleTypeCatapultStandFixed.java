@@ -39,7 +39,9 @@ public VehicleTypeCatapultStandFixed(int typeNum)
   this.riderForwardsOffset = 1.2f;
   this.riderVerticalOffset = 0.0f;
   this.displayName = "Catapult Stand Fixed";
-  this.displayTooltip = "A fixed-placement catapult with limited aim capability.";
+  this.displayTooltip.add("Catapult Firing Mechanism");
+  this.displayTooltip.add("Fixed-Emplacement");
+  this.displayTooltip.add("No Turret");
   this.storageBaySize = 0;
   this.armorBaySize = 4;
   this.upgradeBaySize = 4;

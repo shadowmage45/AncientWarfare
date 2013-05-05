@@ -32,7 +32,7 @@ public VehicleUpgradeAim(int num)
   {
   super(num);
   this.displayName = "Basic Trajectory Calculator";
-  this.tooltip = "Increases Accuracy by a relative 3%";
+  this.tooltip = "Acc + 3%";
   this.iconTexture = "upgradeAim1";
   }
 

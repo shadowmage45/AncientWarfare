@@ -42,7 +42,7 @@ public AmmoArrowIron(int ammoType)
   this.isRocket = false;
   this.isPersistent = true;
   this.displayName = "Iron Arrow";  
-  this.addTooltip("A well-built heavy-duty iron arrow."); 
+  this.addTooltip("Well-built, with iron shaft"); 
   this.iconTexture = "ammoArrow1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
   }

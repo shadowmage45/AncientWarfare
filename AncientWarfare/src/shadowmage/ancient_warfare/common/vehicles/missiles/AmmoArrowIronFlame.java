@@ -43,7 +43,7 @@ public class AmmoArrowIronFlame extends Ammo
     this.isPersistent = true;
     this.isFlaming = true;
     this.displayName = "Iron Flame Arrow";  
-    this.addTooltip("A well-built heavy-duty iron arrow with a head soaked in flammable resin.");  
+    this.addTooltip("Iron shaft, with head soaked in oil");  
     this.iconTexture = "ammoArrowFlame1";
     this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
     }

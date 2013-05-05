@@ -65,7 +65,10 @@ public VehicleTypeBatteringRam(int typeNum)
   this.riderVerticalOffset = 0.65f;
   this.riderHorizontalOffset = 0.325f;
   this.displayName = "Battering Ram";
-  this.displayTooltip = "Get up close and personal!";
+  this.displayTooltip.add("Battering-Ram Firing Mechanism");
+  this.displayTooltip.add("Wheeled");
+  this.displayTooltip.add("No Turret");
+  this.displayTooltip.add("Special: Close Range Damage");
   this.storageBaySize = 0;
   this.armorBaySize = 6;
   this.upgradeBaySize = 3;

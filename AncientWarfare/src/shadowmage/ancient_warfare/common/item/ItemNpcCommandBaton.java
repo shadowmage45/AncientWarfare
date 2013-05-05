@@ -69,27 +69,25 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
-//  super.addInformation(stack, player, list, par4);
-//  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("batonSettings"))
-//    {
-//    NBTTagCompound tag = stack.getTagCompound().getCompoundTag("batonSettings");
-//    if(tag.hasKey("uidlsb") && tag.hasKey("uidmsb"))
-//      {
-//      list.add("Has Npc to command, left click a block to execute current command");
-//      }
-//    if(tag.hasKey("com"))
-//      {
-//      list.add("Current command: "+NpcCommand.values()[tag.getInteger("com")]);
-//      }
-//    if(tag.hasKey("rng"))
-//      {
-//      list.add("Range: "+tag.getInteger("rng"));
-//      }
-//    }
-//  else
-//    {
-//    list.add("Un-initialized Baton, right click to open GUI");
-//    }    
+  super.addInformation(stack, player, list, par4);
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("batonSettings"))
+    {
+    NBTTagCompound tag = stack.getTagCompound().getCompoundTag("batonSettings");   
+    list.add("Left-Click a block or entity");
+    list.add("to execute current command.");
+    if(tag.hasKey("com"))
+      {
+      list.add("Current command: "+NpcCommand.values()[tag.getInteger("com")]);
+      }
+    if(tag.hasKey("rng"))
+      {
+      list.add("Range: "+tag.getInteger("rng"));
+      }
+    }
+  else
+    {
+    list.add("No command-right click to set");
+    }    
   }
 
 /**
@@ -152,20 +150,30 @@ protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSetti
     {
     p = new WayPoint(hit.blockX, hit.blockY, hit.blockZ, hit.sideHit, cmd.getTargetType());
     }
-  int range = settings.range<=20 ? 20 : settings.range;
+  int range = settings.range < 20 ? 20 : settings.range;
   AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-range, player.posY-range, player.posZ-range, player.posX+range, player.posY+range, player.posZ+range);
   List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
   WayPoint pt;
   Iterator<NpcBase> it = npcs.iterator();
+  int commanded = 0;
+  int followCommanded = 0;
   while(it.hasNext())
     {
     npc = it.next();
-    if(npc.getPlayerTarget()==player || player.getDistanceSqToEntity(npc) < settings.range)
+    if(npc.getPlayerTarget()!=null && npc.getPlayerTarget().getEntity(npc.worldObj)==player)
       {
+      followCommanded++;
+      pt = new WayPoint(p);
+      npc.handleBatonCommand(cmd, p);
+      }    
+    else if(player.getDistanceToEntity(npc)<settings.range)
+      {
+      commanded++;
       pt = new WayPoint(p);
       npc.handleBatonCommand(cmd, p);
       }
-    }
+    }  
+  player.addChatMessage("Commanding "+(commanded + followCommanded)+ " Npcs!");
   }
 
 @Override

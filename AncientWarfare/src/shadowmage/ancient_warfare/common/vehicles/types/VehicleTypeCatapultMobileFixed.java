@@ -40,7 +40,9 @@ public VehicleTypeCatapultMobileFixed(int typeNum)
   this.riderForwardsOffset = 1.2f;
   this.riderVerticalOffset = 0.7f;
   this.displayName = "Catapult Mobile Fixed";
-  this.displayTooltip = "A catpult mounted on a wheeled frame.";
+  this.displayTooltip.add("Catapult Firing Mechanism");
+  this.displayTooltip.add("Wheeled");
+  this.displayTooltip.add("No Turret");
   this.storageBaySize = 0;
   this.armorBaySize = 3;
   this.upgradeBaySize = 3;

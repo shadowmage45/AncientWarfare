@@ -58,7 +58,6 @@ public void updatePriority()
   {
   if(npc.npcUpkeepTicks==0)
     {    
-    Config.logDebug("setting upkeep priority to max!");
     this.currentPriority = this.maxPriority;
     }
   else
@@ -76,21 +75,18 @@ public void onRunningTick()
     this.currentPriority = 0;
     return;
     }
-  if(npc.getTargetType()==TargetType.UPKEEP)
-    {
-    if(npc.getDistanceFromTarget(npc.getTarget())<3.5)
-      {
-      this.attemptUpkeepWithdrawal();
-      }
-    else
-      {
-      //too far away, keep moving closer
-      }
-    }
-  else
+  if(this.upkeepTarget==null || npc.getTargetType()!=TargetType.UPKEEP)
     {
     this.checkForUpkeepTarget();
+    if(this.upkeepTarget==null || npc.getTargetType()!=TargetType.UPKEEP)
+      {
+      return;
+      }
     }
+  if(npc.getDistanceFromTarget(npc.getTarget()) < 4)
+    {
+    this.attemptUpkeepWithdrawal();
+    } 
   }
 
 protected void attemptUpkeepWithdrawal()
@@ -161,9 +157,7 @@ protected void checkForUpkeepTarget()
   WayPoint p = npc.wayNav.getUpkeepSite();
   if(p==null)
     {
-    this.upkeepTarget = null;    
-    //check from aggro broadcast list?
-    
+    this.upkeepTarget = null; 
     }
   else
     {
@@ -174,7 +168,7 @@ protected void checkForUpkeepTarget()
       if(ent instanceof IInventory)
         {
         upkeepTarget = (IInventory)ent;
-        }
+        }     
       }
     else
       {

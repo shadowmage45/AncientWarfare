@@ -38,7 +38,7 @@ public AmmoHwachaRocket(int ammoType)
   {
   super(ammoType);
   this.displayName = "Hwacha Rocket";
-  this.addTooltip("A small self-propelled arrow with variable burn-time.");
+  this.addTooltip("Self-propelled, variable burn-time.");
   this.entityDamage = 6;
   this.vehicleDamage = 6;
   this.isArrow = true;

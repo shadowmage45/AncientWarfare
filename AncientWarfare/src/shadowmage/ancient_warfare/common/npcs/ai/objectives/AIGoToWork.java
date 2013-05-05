@@ -22,20 +22,16 @@ package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
+import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIDoWork;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
-import shadowmage.ancient_warfare.common.targeting.TargetPosition;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AIGoToWork extends NpcAIObjective
 {
-TECivic workSite = null;
-boolean working = false;
-
 /**
  * @param npc
  * @param maxPriority
@@ -43,179 +39,125 @@ boolean working = false;
 public AIGoToWork(NpcBase npc, int maxPriority)
   {
   super(npc, maxPriority);
-  this.maxCooldownticks = 40;
+//  this.maxCooldownticks = 40;
   }
 
 @Override
 public void addTasks()
   {
   this.aiTasks.add(new AIMoveToTarget(npc, 1.8f, false));
+  this.aiTasks.add(new AIDoWork(npc));
   }
 
 @Override
 public void updatePriority()
   {
-  /**
-   *  if no space, no site, no room for workers, or no work
-   *    set priority to 0
-   *    set cooldown to max
-   *  else if has space, has site, has room for workers and has work
-   *    set priority to max     
-   */  
-  boolean work = true;
-  if(npc.inventory.getEmptySlotCount()<=1)
+  this.currentPriority =  0;
+  if(this.canStartWork())
     {
-//    Config.logDebug("inventory full");
-    work = false;
-    }
-  else if(npc.wayNav.getWorkSite()==null)
-    {
-    work = false;
-//    Config.logDebug("has no work site, checking targetHelper");
-    while(npc.targetHelper.hasTargetsOfType(TargetType.WORK))
+    if(this.findWorkSite())
       {
-      ITargetEntry entry = npc.targetHelper.getHighestAggroTarget(TargetType.WORK);
-      TileEntity te = npc.worldObj.getBlockTileEntity(entry.floorX(), entry.floorY(), entry.floorZ());
-    
-      if(te instanceof TECivic)
-        {
-        TECivic tec = (TECivic) te;
-        if(tec.hasWork() && tec.canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(tec.getCivic().getWorkType()))
-          {
-//            Config.logDebug("assigning te from aggro list!!");
-          npc.wayNav.setWorkSite(new WayPoint(entry.floorX(), entry.floorY(), entry.floorZ(), entry.getTargetType()));
-          workSite = tec;
-          work = true;
-          break;
-          }
-        else
-          {
-          npc.targetHelper.removeTarget(entry);
-          }
-        }
-        
+      this.currentPriority = this.maxPriority;
       }    
-    }
-  else if(!isWorkSiteWorkable())
-    {
-//    Config.logDebug("site not workable -- clearing work site");
-    npc.wayNav.setWorkSite(null);
-    work = false;
-    }  
-  if(work)
-    {
-    this.currentPriority = this.maxPriority;
-    }
-  else
-    {
-    this.currentPriority = 0;
-    this.cooldownTicks = this.maxCooldownticks;
-    }
+    } 
   }
 
-/**
- * checks work site from wayNav to see if it has work
- * and can take on more workers at the moment
- * @return
- */
-protected boolean isWorkSiteWorkable()
+protected boolean isWorkFinished()
   {
-  ITargetEntry p = npc.wayNav.getWorkSite();
-  if(workSite!=null && p!=null)//make sure current work reference lines up with wayNav work-site
+  if(npc.wayNav.getWorkSiteTile()!=null)
     {
-    if(p.floorX()!=workSite.xCoord || p.floorY()!= workSite.yCoord || p.floorZ()!=workSite.zCoord)
-      {         
-      workSite = null;
-      }
+    return !npc.wayNav.getWorkSiteTile().hasWork();
     }
-  if(workSite!=null)//check to make sure te is still valid
+  return true;
+  }
+
+protected boolean findWorkSite()
+  {
+  WayPoint p = npc.wayNav.getWorkSite();
+  if(p!=null && isValidWorkSite(p.getTileEntity(npc.worldObj)))
     {
-    if(npc.worldObj.getBlockTileEntity(workSite.xCoord, workSite.yCoord, workSite.zCoord)!=workSite)
-      {
-//      Config.logDebug("world te did not match workSite");
-      workSite = null;      
-      }
+    npc.wayNav.setWorkSiteTile((TECivic)p.getTileEntity(npc.worldObj));
+    return true;
     }
-  if(workSite==null && p!=null)
+  npc.wayNav.setWorkSiteTile(null);
+  npc.wayNav.setWorkSite(null);
+  ITargetEntry entry;
+  TileEntity te;
+  while(npc.targetHelper.hasTargetsOfType(TargetType.WORK))
     {
-    TileEntity te = npc.worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ());
-    if(te instanceof TECivic)
+    entry = npc.targetHelper.getHighestAggroTarget(TargetType.WORK);
+    te = npc.worldObj.getBlockTileEntity(entry.floorX(), entry.floorY(), entry.floorZ());
+    if(isValidWorkSite(te))
       {
-      workSite = (TECivic)te;
-      }
-    else
-      {
-      workSite = null;
-      }
-    }
-  if(workSite==null)
-    {
-//        Config.logDebug("not workable--no site");
-    return false;
-    }
-  else
-    {
-    if(workSite.hasWork() && workSite.canHaveMoreWorkers(npc))
-      {
+      npc.wayNav.setWorkSite(new WayPoint(entry.floorX(), entry.floorY(), entry.floorZ(), entry.getTargetType()));
+      npc.wayNav.setWorkSiteTile((TECivic)te);
       return true;
       }
     else
       {
-//            Config.logDebug("no workers or no work rejection");
-      return false;
+      npc.targetHelper.removeTarget(entry);
+      }   
+    }  
+  return false;
+  }
+
+protected boolean isValidWorkSite(TileEntity te)
+  {
+  if(te instanceof TECivic)
+    {
+    TECivic tec = (TECivic)te;
+    if(tec.getCivic().isWorkSite() && tec.hasWork() && tec.canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(tec.getCivic().getWorkType()))
+      {
+      return true;
       }
     }
+  return false;
+  }
+
+protected boolean canStartWork()
+  {
+  return npc.inventory.getEmptySlotCount() > 1;
+  }
+
+protected boolean canWork()
+  {
+  return npc.wayNav.getWorkSiteTile()!=null && npc.wayNav.getWorkSiteTile().hasWork() && canStartWork();
   }
 
 @Override
 public void onRunningTick()
-  {
-  if(workSite==null || !workSite.hasWork())
+  { 
+  setMoveToWork();
+  if(isWorkFinished())
     {
-//    Config.logDebug("work site null or had no work, setting finished");
-    this.setFinished();
-    return;
-    }
-  if(npc.getDistance(workSite.xCoord+0.d, workSite.yCoord, workSite.zCoord+0.5d)>2.4)
-    {
-//    Config.logDebug("heading to work!!");
-    working = false;
-    //wait for ai to move to target
-    }
-  else
-    {      
-    if(!working)
+    if(!findWorkSite())
       {
-      working = true;
-      npc.setActionTicksToMax();
+      this.setFinished();
       }
-//    Config.logDebug("doing work!");
-    this.doWork();
-    }   
+    this.updateWorkSiteWorkerStatus();
+    }
+  }
+
+protected void updateWorkSiteWorkerStatus()
+  {
+  TECivic te = npc.wayNav.getWorkSiteTile();
+  if(te!=null)
+    {
+    te.addWorker(npc);
+    }
   }
 
 @Override
 public void onObjectiveStart()
   {
-  if(workSite!=null)  
+  if(npc.wayNav.getWorkSiteTile()!=null)  
     {
-    workSite.addWorker(npc);
+    npc.wayNav.getWorkSiteTile().addWorker(npc);
     this.setMoveToWork();
     }
   else
     {    
     this.setFinished();
-    }
-  working = false;
-  }
-
-protected void doWork()
-  {
-  npc.swingItem();
-  if(npc.actionTick<=0)
-    {  
-    workSite.doWork(npc);
-    npc.setActionTicksToMax();    
     }
   }
 
@@ -227,10 +169,11 @@ protected void setMoveToWork()
 @Override
 public void stopObjective()
   {
-  if(workSite!=null)
+  if(npc.wayNav.getWorkSiteTile()!=null)
     {    
-    workSite.removeWorker(npc);
+    npc.wayNav.getWorkSiteTile().removeWorker(npc);
     }
+  npc.wayNav.setWorkSiteTile(null);
   }
 
 }

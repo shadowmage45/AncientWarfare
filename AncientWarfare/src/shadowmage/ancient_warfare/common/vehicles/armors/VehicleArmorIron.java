@@ -30,7 +30,7 @@ public VehicleArmorIron(int armorType)
   {
   super(armorType);
   this.displayName = "Iron Armor Tier 1";
-  this.tooltip = "Reduces most damage by ~7%";
+  this.tooltip = "Most damage - 7%";
   this.general = 7.0f;
   this.explosive = 2.5f;
   this.fire = 2.5f;

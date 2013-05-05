@@ -31,7 +31,9 @@ public VehicleTypeCannonStandFixed(int typeNum)
   super(typeNum);
   this.isDrivable = true;
   this.displayName = "Cannon Stand Fixed";
-  this.displayTooltip = "A simple fixed cannon emplacement.";
+  this.displayTooltip.add("Cannon Firing Mechanism");
+  this.displayTooltip.add("Fixed-Emplacement");
+  this.displayTooltip.add("No Turret");
   this.width = 1.2f;
   this.height = 1.4f;
   this.baseStrafeSpeed = 0.5f;

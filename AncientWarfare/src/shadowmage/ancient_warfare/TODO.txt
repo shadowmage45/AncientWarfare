@@ -1,5 +1,7 @@
 THIS WEEKEND
 * figure out way to correct tooltip display crap (split into multi-line...)
+* add npc objective rendering (render an icon for the objective, and for the task in the objective)
+* fix waypoint skipping when interrupted
 
 GENERAL
 * partially destroyable blocks ? (hold destruction status as meta-data?)
@@ -20,6 +22,7 @@ SOLDIERS
 * create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
 * inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)
 * vehicle riders need some work (turning the vehicle base towards targets)
+* fix siege-engineer waypoint navigation/patrol abililty
 
 NPCS
 * create AI objectives
@@ -32,6 +35,7 @@ NPCS
 * work out indiv costs for upkeep -- add specialized items where applicable
 * apparently pathfinding for 'patrol' does not work while mounted...
 * if interrupted on a patrol point, will 'skip' the point it was heading towards
+* figure out how to handle upkeep for npcs mounted on vehicles
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -196,6 +200,21 @@ TWEAKS/OPTIMIZATION
     the player
 
 /********** 05-05-13 **********/
+* workers will now much more aggressively seek work (no more long coffee breaks between jobs)
+* fix delay in work for workers (half is the work-sites not updating properly, half is workers not seeking a new site immediately when the old is finished)
+* fix command baton stuff...
+* chest cart hopper interaction working
+* fix npc setting chest cart/entity based IInventory as waypoints for upkeep/deposit
+* fix entity based waypoint reloading
+* adjust npc stay near home params (40/15)
+* rework builder-direct tooltip to multi-line
+* rework vehicle upgrade tooltips for brevity
+* clean up civic-placer default tooltip
+* clean up vehicle armor tooltips
+* clean up vehicle spawner item tooltips
+* clean up civics naming/tooltips
+* clean up npc names/tooltips
+* clean up ammo tooltips
 /********** 05-06-13 **********/
 /********** 05-07-13 **********/
 /********** 05-08-13 **********/

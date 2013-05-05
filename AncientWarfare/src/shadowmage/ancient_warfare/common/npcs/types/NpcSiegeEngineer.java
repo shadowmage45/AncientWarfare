@@ -56,7 +56,7 @@ public NpcSiegeEngineer(int type)
   {
   super(type);
   this.displayName = "Siege Engineer";
-  this.tooltip = "A siege-engineer, adept at using siege engines.";
+  this.tooltip = "Adept at using siege engines";
   this.isCombatUnit = true;
   this.iconTexture = "npcSiegeEngineer1";
   this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3);
@@ -95,7 +95,7 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AINpcUpkeepObjective(npc, 8));
   aiEntries.add(new AIDepositGoods(npc, 8));
   aiEntries.add(new AIMountVehicles(npc, 7, 20));  
-  aiEntries.add(new AIStayNearHome(npc, 6, 20, 5));
+  aiEntries.add(new AIStayNearHome(npc, 6,  40, 15));
   aiEntries.add(new AIAttackTargets(npc, 5, 40, 40));  
   aiEntries.add(new AIWander(npc, 4));
   return aiEntries;

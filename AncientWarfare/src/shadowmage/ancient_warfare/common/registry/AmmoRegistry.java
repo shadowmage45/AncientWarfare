@@ -113,7 +113,7 @@ public void registerAmmoTypeWithItem(IAmmoType ammo)
     }
   if(ammo.isProximityAmmo())
     {
-    d.addTooltip("Proximity -- detonates in proximity to targets", ammo.getAmmoType());
+    d.addTooltip("Proximity -- detonates near targets", ammo.getAmmoType());
     }
   if(ammo.isPenetrating())
     {

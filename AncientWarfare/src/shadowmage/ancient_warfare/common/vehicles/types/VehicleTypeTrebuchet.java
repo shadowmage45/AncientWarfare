@@ -87,7 +87,9 @@ public VehicleTypeTrebuchet(int typeNum)
  
   
   this.displayName = "Trebuchet";
-  this.displayTooltip = "Uses a large counterweight to accelerate projectiles.";
+//  this.displayTooltip.add("Trebuchet Firing Mechanism");
+//  this.displayTooltip.add("Fixed-Emplacement");
+//  this.displayTooltip.add("No Turret");
   this.canAdjustPitch = false;
   this.canAdjustPower = true;
   this.canAdjustYaw = false;

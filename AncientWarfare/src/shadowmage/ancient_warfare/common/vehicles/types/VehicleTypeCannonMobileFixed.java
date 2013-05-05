@@ -30,7 +30,9 @@ public VehicleTypeCannonMobileFixed(int typeNum)
   {
   super(typeNum);
   this.displayName = "Cannon Mobile Fixed";
-  this.displayTooltip = "A cannon mounted on a simple wheel assembly.";
+  this.displayTooltip.add("Cannon Firing Mechanism");
+  this.displayTooltip.add("Wheeled");
+  this.displayTooltip.add("No Turret");
   this.width = 1.9f;
   this.height = 1.5f;
   this.baseForwardSpeed = 3.5f*0.05f;

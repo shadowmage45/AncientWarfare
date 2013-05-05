@@ -30,7 +30,7 @@ public VehicleArmorObsidian(int armorType)
   {
   super(armorType);
   this.displayName = "Obsidian Armor Tier 1";
-  this.tooltip = "Reduces explosive damage by ~7%";
+  this.tooltip = "Explosive damage - 7%";
   this.general = 2.5f;
   this.explosive = 7.f;
   this.fire = 2.5f;

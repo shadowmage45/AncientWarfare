@@ -31,7 +31,9 @@ public class VehicleTypeTrebuchetStandFixed extends VehicleTypeTrebuchet
     {
     super(typeNum);
     this.displayName = "Trebuchet Stand Fixed";
-    this.displayTooltip = "A small fixed emplacement trebuchet.";
+    this.displayTooltip.add("Trebuchet Firing Mechanism");
+    this.displayTooltip.add("Fixed-Emplacement");
+    this.displayTooltip.add("No Turret");
     this.riderForwardsOffset = 1.425f;
     this.riderVerticalOffset = 0.5f;
     this.armorBaySize = 4;

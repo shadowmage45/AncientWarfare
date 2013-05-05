@@ -106,7 +106,7 @@ public float maxMissileWeight = 10;
 public float accuracy = 1.f;
 
 public String displayName = "AWVehicleBase";
-public String displayTooltip = "AWVehicleBase";
+public List<String> displayTooltip = new ArrayList<String>();
 
 public List<IAmmoType> validAmmoTypes = new ArrayList<IAmmoType>();
 public List<IVehicleUpgradeType> validUpgrades = new ArrayList<IVehicleUpgradeType>();
@@ -364,7 +364,7 @@ public String getDisplayName()
   }
 
 @Override
-public String getDisplayTooltip()
+public List<String> getDisplayTooltip()
   {
   return displayTooltip;
   }

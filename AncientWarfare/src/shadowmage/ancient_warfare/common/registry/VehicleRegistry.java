@@ -87,7 +87,11 @@ public void registerVehicles()
     {
     if(vehicle!=null)
       {
-      d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.vehicleSpawner, vehicle.getGlobalVehicleType(), vehicle.getDisplayName(), "",vehicle.getDisplayTooltip());
+      d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.vehicleSpawner, vehicle.getGlobalVehicleType(), vehicle.getDisplayName());
+      for(String tip : vehicle.getDisplayTooltip())
+        {
+        d.addTooltip(tip, vehicle.getGlobalVehicleType());
+        }
       }
     }  
   }

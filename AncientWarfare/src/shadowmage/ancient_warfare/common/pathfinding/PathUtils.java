@@ -434,18 +434,38 @@ public static int findClosestYTo(PathWorldAccess world, int x, int y, int z)
     }
   else
     {
-    for(int ty = y; ty < 255; ty++)
+    if(world.getBlockId(x, y, z)==0)//was air, search down
       {
-      if(world.isWalkable(x, ty, z))
+      for(int ty = y; ty>0 ; ty--)
         {
-        return ty;
+        if(world.isWalkable(x, ty, z))
+          {
+          return ty;
+          }
+        }
+      for(int ty = y; ty < 255; ty++)
+        {
+        if(world.isWalkable(x, ty, z))
+          {
+          return ty;
+          }
         }
       }
-    for(int ty = y; ty>0 ; ty--)
+    else
       {
-      if(world.isWalkable(x, ty, z))
+      for(int ty = y; ty < 255; ty++)
         {
-        return ty;
+        if(world.isWalkable(x, ty, z))
+          {
+          return ty;
+          }
+        }
+      for(int ty = y; ty>0 ; ty--)
+        {
+        if(world.isWalkable(x, ty, z))
+          {
+          return ty;
+          }
         }
       }
     }

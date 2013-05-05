@@ -58,7 +58,7 @@ public NpcFootsoldier(int type)
   {
   super(type);
   this.displayName = "Footsoldier";
-  this.tooltip = "A footsoldier, adept at melee combat.";
+  this.tooltip = "Adept at melee combat.";
   this.isCombatUnit = true;
   this.iconTexture = "npcSoldier1";
   this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4);
@@ -144,7 +144,7 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AINpcUpkeepObjective(npc, 8));
   aiEntries.add(new AIDepositGoods(npc, 8));
   aiEntries.add(new AIPatrolPoints(npc, 7, 20));
-  aiEntries.add(new AIStayNearHome(npc, 6, 20, 5));
+  aiEntries.add(new AIStayNearHome(npc, 6, 40, 15));
   aiEntries.add(new AIAttackTargets(npc, 5, 40, 40));  
   aiEntries.add(new AIWander(npc, 1));
   return aiEntries;

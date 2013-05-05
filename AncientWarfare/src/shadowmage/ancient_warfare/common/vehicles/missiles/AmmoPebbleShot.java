@@ -39,7 +39,7 @@ public AmmoPebbleShot(int ammoType, int weight)
   this.isRocket = false;
   this.ammoWeight = weight;
   this.displayName = "Pebble Shot "+weight+"kg";
-  this.addTooltip(weight+"kg of pebbles and smaller ammunitions.");
+  this.addTooltip("Delivers a shotgun-like blast"); 
   this.secondaryAmmoCount = weight;
   this.secondaryAmmoType = Ammo.ammoBallShot;
   float scaleFactor = weight + 45.f;

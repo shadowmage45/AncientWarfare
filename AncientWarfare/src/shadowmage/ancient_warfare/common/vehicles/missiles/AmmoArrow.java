@@ -40,7 +40,7 @@ public AmmoArrow(int ammoType)
   this.isRocket = false;
   this.isPersistent = true;
   this.displayName = "Arrow";  
-  this.addTooltip("A well-built heavy-duty arrow.");  
+  this.addTooltip("Well-built, heavy-duty");  
   this.iconTexture = "ammoArrow1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
   }
