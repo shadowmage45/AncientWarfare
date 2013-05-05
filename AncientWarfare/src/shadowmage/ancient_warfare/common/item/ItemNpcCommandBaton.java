@@ -152,7 +152,8 @@ protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSetti
     {
     p = new WayPoint(hit.blockX, hit.blockY, hit.blockZ, hit.sideHit, cmd.getTargetType());
     }
-  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-settings.range, player.posY-settings.range, player.posZ-settings.range, player.posX+settings.range, player.posY+settings.range, player.posZ+settings.range);
+  int range = settings.range<=20 ? 20 : settings.range;
+  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-range, player.posY-range, player.posZ-range, player.posX+range, player.posY+range, player.posZ+range);
   List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
   WayPoint pt;
   Iterator<NpcBase> it = npcs.iterator();
