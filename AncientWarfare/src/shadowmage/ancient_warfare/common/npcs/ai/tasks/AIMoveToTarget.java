@@ -46,22 +46,15 @@ public AIMoveToTarget(NpcBase npc, float stopDistance, boolean useAttackDistance
 
 @Override
 public void onTick()
-  { 
+  {   
   float bX = npc.getTarget().posX();
   float bY = npc.getTarget().posY();
   float bZ = npc.getTarget().posZ();
   if(npc.getTarget().getEntity(npc.worldObj)!=null)
     {
     bY = PathUtils.findClosestYTo(npc.getWorldAccess(), npc.getTarget().floorX(), npc.getTarget().floorY(), npc.getTarget().floorZ());
-    }
-  if(npc.isRidingVehicle())
-    {
-    ((VehicleBase)npc.ridingEntity).nav.setMoveToTarget(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
-    }
-  else
-    {
-    npc.nav.setMoveToTarget(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));
-    }
+    }  
+  npc.setMoveTo(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ), npc.getMoveSpeed());    
   }
 
 @Override
@@ -79,15 +72,8 @@ public boolean shouldExecute()
     }
   else
     {
-    if(npc.isRidingVehicle())
-      {
-      ((VehicleBase)npc.ridingEntity).nav.clearPath();
-      }
-    else
-      {    
-      npc.nav.clearPath();      
-      }
-    return false;
+    npc.clearPath();
+    return false; 
     }
   }
   

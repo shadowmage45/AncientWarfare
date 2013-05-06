@@ -184,7 +184,34 @@ public VehicleBase(World par1World)
   this.nav = new Navigator(this);
   this.stepHeight = 1.12f;
   this.entityCollisionReduction = 0.9f;
-  this.onGround = false;  
+  this.onGround = false;
+  }
+
+@Override
+protected void entityInit()
+  {
+  this.dataWatcher.addObject(5, new Byte((byte) 0));//f in
+  this.dataWatcher.addObject(6, new Byte((byte) 0));//s in  
+  }
+
+public byte getForwardInput()
+  {
+  return (byte) this.dataWatcher.getWatchableObjectByte(5);
+  }
+
+public byte getStrafeInput()
+  {
+  return (byte) this.dataWatcher.getWatchableObjectByte(6);
+  }
+
+public void setForwardInput(byte in)
+  {  
+  this.dataWatcher.updateObject(5, Byte.valueOf(in));
+  }
+
+public void setStrafeInput(byte in)
+  {
+  this.dataWatcher.updateObject(6, Byte.valueOf(in));
   }
 
 public void setVehicleType(IVehicleType vehicle, int materialLevel)
@@ -538,7 +565,9 @@ public void onUpdateClient()
       tag.setFloat("pz", (float)this.posZ);
       tag.setFloat("ry", (float)this.rotationYaw);
       tag.setFloat("fm", this.moveHelper.forwardMotion);
-      tag.setFloat("sm", this.moveHelper.strafeMotion);      
+      tag.setFloat("sm", this.moveHelper.strafeMotion);  
+      tag.setByte("s", this.getStrafeInput());
+      tag.setByte("f", this.getForwardInput());
       Packet02Vehicle pkt = new Packet02Vehicle();
       pkt.setParams(this);
       pkt.setClientMoveData(tag);
@@ -554,7 +583,6 @@ public void onUpdateServer()
   {
   if(this.isRidden && this.riddenByEntity==null)
     {
-    this.isRidden = false;
     this.moveHelper.clearInputFromDismount();
     }
   this.isRidden = this.riddenByEntity != null;
@@ -744,7 +772,7 @@ public void handleInputData(NBTTagCompound tag)
  */
 public void handleKeyboardMovement(byte forward, byte strafe)
   {
-  this.moveHelper.handleKeyboardInput(forward, strafe);  
+  this.moveHelper.setInput(forward, strafe);  
   }
 
 /**
@@ -951,10 +979,6 @@ public boolean canBeCollidedWith()
   return true;
   }
 
-@Override
-protected void entityInit()
-  {
-  }
 
 @Override
 public void writeSpawnData(ByteArrayDataOutput data)
@@ -1138,7 +1162,12 @@ public Entity getEntity()
 @Override
 public void setPath(List<Node> path)
   {
-  this.nav.forcePath(path);//.setPath(path);
+  this.nav.forcePath(path);
+  }
+
+public void clearPath()
+  {
+  this.nav.clearPath();
   }
 
 @Override

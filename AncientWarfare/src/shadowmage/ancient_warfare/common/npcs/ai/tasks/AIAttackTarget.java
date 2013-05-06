@@ -124,7 +124,7 @@ protected void attackTargetMounted(ITargetEntry target)
       //      Config.logDebug("yaw diff to target: "+yaw);
       }
     } 
-  vehicle.moveHelper.handleMotionInput((byte) 0, s);
+  vehicle.moveHelper.setInput((byte)0, s);//
   vehicle.firingHelper.handleSoldierTargetInput(target.posX(), target.posY(), target.posZ());
   if(turning)
     {
@@ -136,7 +136,7 @@ protected void attackTargetMounted(ITargetEntry target)
       {
       vehicle.firingHelper.handleFireUpdate();
       this.npc.actionTick = (vehicle.currentReloadTicks + 20);
-      vehicle.moveHelper.handleMotionInput((byte)0, (byte)0);
+      vehicle.moveHelper.setInput((byte)0, (byte)0);
       }    
     }
   else//delay a bit to line up to target 

@@ -57,7 +57,14 @@ public void addTasks()
 @Override
 public void updatePriority()
   {
-  
+  if(npc.isRidingVehicle())
+    {
+    this.currentPriority = 0;
+    }
+  else
+    {
+    this.currentPriority = this.maxPriority;
+    }
   }
 
 @Override

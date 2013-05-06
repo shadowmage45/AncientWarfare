@@ -243,12 +243,7 @@ public TargetType getTargetType()
 
 public void setTargetAW(ITargetEntry entry)
   {
-  this.wayNav.setTarget(entry);
-  if(entry==null && this.isRidingVehicle())
-    {
-    VehicleBase vehicle = (VehicleBase)ridingEntity;
-    vehicle.moveHelper.handleMotionInput((byte)0, (byte)0);
-    }
+  this.wayNav.setTarget(entry);  
   }
 
 public boolean isRidingVehicle()
@@ -684,7 +679,20 @@ public boolean canInteract(EntityPlayer player)
 @Override
 public void setMoveTo(double x, double y, double z, float moveSpeed)
   {
-  this.getMoveHelper().setMoveTo(x, y, z, moveSpeed);
+  VehicleBase vehicle = this.getRidingVehicle();
+  if(vehicle!=null)
+    {
+    vehicle.setMoveTo(x, y, z, moveSpeed);    
+    }
+  else
+    {
+    this.getMoveHelper().setMoveTo(x, y, z, moveSpeed);
+    }
+  }
+
+public float getMoveSpeed()
+  {
+  return this.moveSpeed;
   }
 
 /**
@@ -706,6 +714,11 @@ public boolean isPathableEntityOnLadder()
 public void setPath(List<Node> path)
   {
   this.nav.forcePath(path);
+  VehicleBase vehicle = this.getRidingVehicle();
+  if(vehicle!=null)
+    {
+    vehicle.nav.forcePath(path);
+    }
   }
 
 @Override
@@ -716,7 +729,22 @@ public PathWorldAccess getWorldAccess()
 
 public void clearPath()
   {
-  this.nav.clearPath();
+  this.nav.clearPath();  
+  VehicleBase vehicle = this.getRidingVehicle();
+  if(vehicle!=null)
+    {
+    vehicle.clearPath();
+    vehicle.moveHelper.clearInputFromDismount();
+    }  
+  }
+
+public VehicleBase getRidingVehicle()
+  {
+  if(this.isRidingVehicle())
+    {
+    return (VehicleBase)this.ridingEntity;
+    }
+  return null;
   }
 
 @Override

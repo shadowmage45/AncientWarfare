@@ -35,8 +35,6 @@ public class VehicleMovementHelper implements INBTTaggable
 {
 
 private VehicleBase vehicle;
-private byte forwardInput = 0;
-private byte strafeInput = 0;
 
 private float forwardAccel = 0;
 private float strafeAccel = 0;
@@ -48,39 +46,43 @@ public VehicleMovementHelper (VehicleBase veh)
   this.vehicle = veh;
   }
 
-public void setForwardInput(byte in)
-  {
-  this.forwardInput = in;
-  }
-
-public void setStrafeInput(byte in)
-  {
-  this.strafeInput = in;
-  }
-
-public void handleKeyboardInput(byte forward, byte strafe)
+/**
+ * the one, the only, the setInput call....
+ * @param forward
+ * @param strafe
+ */
+public void setInput(byte forward, byte strafe)
   {
   if(!vehicle.isDrivable())
     {
     return;
     }
-  NBTTagCompound tag = new NBTTagCompound();  
-  tag.setByte("f", forward);
-  tag.setByte("s", strafe);
-  Packet02Vehicle pkt = new Packet02Vehicle();
-  pkt.setParams(this.vehicle);
-  pkt.setInputData(tag);
-  pkt.sendPacketToServer();
-  if(Config.clientVehicleMovement)
+  if(vehicle.worldObj.isRemote)
     {
-    this.setForwardInput(forward);
-    this.setStrafeInput(strafe);
+    if(Config.clientVehicleMovement)
+      {
+      vehicle.setForwardInput(forward);
+      vehicle.setStrafeInput(strafe);      
+      }    
+    NBTTagCompound tag = new NBTTagCompound();  
+    tag.setByte("f", forward);
+    tag.setByte("s", strafe);
+    tag.setFloat("fMot", forwardMotion);
+    tag.setFloat("sMot", strafeMotion);
+    Packet02Vehicle pkt = new Packet02Vehicle();
+    pkt.setParams(this.vehicle);
+    pkt.setInputData(tag);
+    pkt.sendPacketToServer();
+    }
+  else
+    {
+    vehicle.setForwardInput(forward);
+    vehicle.setStrafeInput(strafe);
     }
   }
 
 /**
- * handles input data from packets, updates local input state, and relays changes to clients (server only)
- * only relays data if move input has been received and changed from current state 
+ * recieve a input packet (input from client, or update data from server)
  * @param tag
  */
 public void handleInputData(NBTTagCompound tag)
@@ -89,17 +91,12 @@ public void handleInputData(NBTTagCompound tag)
     {
     return;
     }
-  boolean inputChanged = false;
-  if(tag.hasKey("f"))
+  boolean sendReply = false;
+  if(tag.hasKey("f") && tag.hasKey("s"))
     {
-    this.setForwardInput(tag.getByte("f"));
-    inputChanged = true;
-    }
-  if(tag.hasKey("s"))
-    {
-    this.setStrafeInput(tag.getByte("s"));
-    inputChanged = true;
-    }
+    this.setInput(tag.getByte("f"), tag.getByte("s"));
+    sendReply = true;
+    } 
   if(tag.hasKey("fMot"))
     {
     this.forwardMotion = tag.getFloat("fMot");
@@ -108,11 +105,9 @@ public void handleInputData(NBTTagCompound tag)
     {
     this.strafeMotion = tag.getFloat("sMot");
     }
-  if(inputChanged && !this.vehicle.worldObj.isRemote)
+  if(sendReply && !this.vehicle.worldObj.isRemote)
     {
     tag = new NBTTagCompound();
-    tag.setByte("f", forwardInput);
-    tag.setByte("s", this.strafeInput);
     tag.setFloat("fMot", forwardMotion);
     tag.setFloat("sMot", strafeMotion);
     Packet02Vehicle pkt = new Packet02Vehicle();
@@ -148,23 +143,7 @@ public void setMoveTo(double x, double y, double z)
     {
     fMot = 1;
     }
-  handleMotionInput(fMot, sMot);
-  }
-
-/**
- * server side method to handle input and relay packet if necessary
- * @param f
- * @param s
- */
-public void handleMotionInput(byte f, byte s)
-  {
-  if(!vehicle.worldObj.isRemote && (s!= strafeInput || f != forwardInput))
-    {
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setByte("f", f);
-    tag.setByte("s", s);
-    this.handleInputData(tag);
-    }
+  setInput(fMot, sMot);
   }
 
 /**
@@ -172,6 +151,8 @@ public void handleMotionInput(byte f, byte s)
  */
 public void onMovementTick()
   {
+  byte forwardInput = vehicle.getForwardInput();
+  byte strafeInput = vehicle.getStrafeInput();
   this.vehicle.nav.onMovementUpdate();//vehicle navigator will provide input and other vehicle settings, if it has a node...
   float weightAdjust = 1.f;
   if(vehicle.currentWeight > vehicle.baseWeight)
@@ -304,21 +285,7 @@ protected boolean isPlant(int id)
 
 public void clearInputFromDismount()
   {
-  if(this.forwardInput !=0 || this.strafeInput!=0)
-    {
-    this.setForwardInput((byte) 0);
-    this.setStrafeInput((byte) 0);  
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setByte("f", (byte) 0);
-    tag.setByte("s", (byte) 0);
-    Packet02Vehicle pkt = new Packet02Vehicle();
-    pkt.setParams(this.vehicle);
-    pkt.setInputData(tag);
-    if(!this.vehicle.worldObj.isRemote)
-      {
-      AWCore.proxy.sendPacketToAllClientsTracking(this.vehicle, pkt);
-      }
-    }  
+  setInput((byte)0, (byte)0);
   }
 
 public void resetUpgradeStats()
@@ -330,8 +297,8 @@ public void resetUpgradeStats()
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setByte("s", strafeInput);
-  tag.setByte("f", forwardInput);
+  tag.setByte("s", vehicle.getStrafeInput());
+  tag.setByte("f", vehicle.getForwardInput());
   tag.setFloat("ms", strafeMotion);
   tag.setFloat("sa", strafeAccel);
   tag.setFloat("mf", forwardMotion);
@@ -342,8 +309,8 @@ public NBTTagCompound getNBTTag()
 @Override
 public void readFromNBT(NBTTagCompound tag)
   { 
-  this.strafeInput = tag.getByte("s");
-  this.forwardInput = tag.getByte("f");
+  vehicle.setForwardInput(tag.getByte("f"));
+  vehicle.setStrafeInput(tag.getByte("s"));  
   this.strafeMotion = tag.getFloat("ms");
   this.strafeAccel = tag.getFloat("sa");
   this.forwardMotion = tag.getFloat("mf");
