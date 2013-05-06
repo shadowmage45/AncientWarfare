@@ -1,6 +1,4 @@
 TONIGHT
-* double check vehicle movement stuff still works/fix whatever I messed up
-* check vehicle health stuff still works..
 * get npc objective icons rendering properly
 
 THIS WEEK
@@ -189,6 +187,8 @@ TWEAKS/OPTIMIZATION
 * rework vehicle packet stuff, should be more precise, but may use more bandwidth
 * fix npcs trampling crops
 * move vehicle health over to data-tracker instead of custom packets
+* double check vehicle movement stuff still works/fix whatever I messed up (works, seems to be good for npcs now)
+* check vehicle health stuff still works..(looks good)
 
 /********** 05-07-13 **********/
 /********** 05-08-13 **********/

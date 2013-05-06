@@ -685,25 +685,31 @@ public boolean canInteract(EntityPlayer player)
   }
 
 /**
- * IPathableEntity method...
+ * Set MOVEHELPER (current node) move-to-target
  */
 @Override
 public void setMoveTo(double x, double y, double z, float moveSpeed)
   {
+  this.getMoveHelper().setMoveTo(x, y, z, moveSpeed);
+  }
+
+/**
+ * set NAVIGATOR moveto target
+ * @param x
+ * @param y
+ * @param z
+ */
+public void setMoveToTarget(int x, int y, int z)
+  {
   VehicleBase vehicle = this.getRidingVehicle();
   if(vehicle!=null)
     {
-    vehicle.setMoveTo(x, y, z, moveSpeed);    
+    vehicle.nav.setMoveToTarget(x, y, z);    
     }
   else
     {
-    this.getMoveHelper().setMoveTo(x, y, z, moveSpeed);
+    this.nav.setMoveToTarget(x, y, z);    
     }
-  }
-
-public float getMoveSpeed()
-  {
-  return this.moveSpeed;
   }
 
 /**
@@ -723,12 +729,15 @@ public boolean isPathableEntityOnLadder()
 
 @Override
 public void setPath(List<Node> path)
-  {
-  this.nav.forcePath(path);
+  {  
   VehicleBase vehicle = this.getRidingVehicle();
   if(vehicle!=null)
     {
     vehicle.nav.forcePath(path);
+    }
+  else
+    {
+    this.nav.forcePath(path);
     }
   }
 
@@ -739,14 +748,17 @@ public PathWorldAccess getWorldAccess()
   }
 
 public void clearPath()
-  {
-  this.nav.clearPath();  
+  {    
   VehicleBase vehicle = this.getRidingVehicle();
   if(vehicle!=null)
     {
     vehicle.clearPath();
     vehicle.moveHelper.clearInputFromDismount();
     }  
+  else
+    {
+    this.nav.clearPath();
+    }
   }
 
 public VehicleBase getRidingVehicle()

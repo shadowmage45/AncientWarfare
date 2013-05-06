@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
 import net.minecraft.util.MathHelper;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
@@ -60,7 +61,7 @@ public void onTick()
     {
     bY = PathUtils.findClosestYTo(npc.getWorldAccess(), npc.getTarget().floorX(), npc.getTarget().floorY(), npc.getTarget().floorZ());
     }  
-  npc.setMoveTo(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ), npc.getMoveSpeed());    
+  npc.setMoveToTarget(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));    
   }
 
 @Override
