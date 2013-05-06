@@ -39,6 +39,7 @@ GuiCheckBoxSimple enableVehicleFPR;
 GuiCheckBoxSimple enableVehicleNameplates;
 GuiCheckBoxSimple enableNpcNameplates;
 GuiCheckBoxSimple enableCivicBounds;
+GuiCheckBoxSimple enableNpcObjective;
 GuiButtonSimple keyBinds;
 
 /**
@@ -77,7 +78,8 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Render Ridden Vehicle in First-person", left, guiTop+70+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Vehicle Nameplates", left, guiTop+90+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Npc Nameplates", left, guiTop+110+4, 0xffffffff);
-  this.drawString(fontRenderer, "Render Civic Work Bounds", left, guiTop+130+4, 0xffffffff);    
+  this.drawString(fontRenderer, "Render Civic Work Bounds", left, guiTop+130+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Npc Objectives", left, guiTop+130+4, 0xffffffff);
   if(Config.DEBUG)
     {
     this.drawString(fontRenderer, "TPS: "+AWCore.proxy.serverTPS+ " AVG TICK: "+AWCore.proxy.serverTickTime, guiLeft+5, guiTop+getYSize()-15, 0xffffffff);
@@ -121,6 +123,9 @@ public void onElementActivated(IGuiElement element)
     case 8:
     Settings.setRenderCivicbounds(this.enableCivicBounds.checked());
     break;
+    case 9:
+    Settings.setRenderNpcObjectives(this.enableNpcObjective.checked());
+    break;
     default:
     break;   
     }
@@ -138,6 +143,7 @@ public void setupControls()
   this.enableVehicleNameplates = this.addCheckBox(6, 10, 90, 16, 16).setChecked(Settings.getRenderVehicleNameplates());
   this.enableNpcNameplates = this.addCheckBox(7, 10, 110, 16, 16).setChecked(Settings.getRenderNpcNameplates());
   this.enableCivicBounds = this.addCheckBox(8, 10, 130, 16, 16).setChecked(Settings.getRenderCivicBounds());
+  this.enableNpcObjective = this.addCheckBox(9, 10, 150, 16, 16).setChecked(Settings.getRenderNpcObjectives());
   }
 
 @Override

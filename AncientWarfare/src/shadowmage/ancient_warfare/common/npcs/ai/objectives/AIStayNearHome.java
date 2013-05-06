@@ -46,6 +46,12 @@ public AIStayNearHome(NpcBase npc, int maxPriority, int range, int chokeRange)
   }
 
 @Override
+public byte getObjectiveNum()
+  {
+  return home;
+  }
+
+@Override
 public void addTasks()
   {
   this.aiTasks.add(new AIMoveToTarget(npc, chokeRange, false));

@@ -29,6 +29,19 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 public abstract class NpcAIObjective
 {
 
+public static final int attack = 0;
+public static final int attack_ranged = 1;
+public static final int deposit_goods = 2;
+public static final int dismount = 3;
+public static final int follow_player = 4;
+public static final int work = 5;
+public static final int mount = 6;
+public static final int upkeep = 7;
+public static final int patrol = 8;
+public static final int shelter = 9;
+public static final int home = 10;
+public static final int wander = 11;
+
 protected NpcBase npc;
 protected int maxPriority;
 public int currentPriority;
@@ -53,6 +66,7 @@ public abstract void updatePriority();
 public abstract void onRunningTick();
 public abstract void onObjectiveStart();
 public abstract void stopObjective();
+public abstract byte getObjectiveNum();
 
 public NpcAIObjective(NpcBase npc, int maxPriority)
   {
@@ -66,6 +80,7 @@ public void onTick()
   { 
   hadWork = false;
   int mutex = 0;
+  NpcAITask last = null;
   for(NpcAITask task : this.aiTasks)
     {
     if(task.canExecute(mutex) && task.shouldExecute())
@@ -73,7 +88,16 @@ public void onTick()
       hadWork = true;
       task.onTick();
       mutex += task.taskType;
+      last = task;      
       }
+    }
+  if(last!=null)
+    {
+    npc.setTaskID(last.getTaskType());
+    }
+  else
+    {
+    npc.setTaskID((byte)-1);
     }
   this.onRunningTick();
   }

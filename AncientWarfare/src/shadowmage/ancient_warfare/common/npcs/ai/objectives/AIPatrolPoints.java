@@ -44,6 +44,12 @@ public AIPatrolPoints(NpcBase npc, int maxPriority, int enemyRange)
   }
 
 @Override
+public byte getObjectiveNum()
+  {
+  return patrol;
+  }
+
+@Override
 public void updatePriority()
   {
   if(npc.wayNav.getPatrolSize()<=0)

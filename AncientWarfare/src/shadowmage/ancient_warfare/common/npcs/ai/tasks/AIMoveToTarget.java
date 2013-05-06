@@ -45,6 +45,12 @@ public AIMoveToTarget(NpcBase npc, float stopDistance, boolean useAttackDistance
   }
 
 @Override
+public byte getTaskType()
+  {
+  return task_move;
+  }
+
+@Override
 public void onTick()
   {   
   float bX = npc.getTarget().posX();

@@ -124,11 +124,15 @@ protected void attackTargetMounted(ITargetEntry target)
       //      Config.logDebug("yaw diff to target: "+yaw);
       }
     } 
-  vehicle.moveHelper.setInput((byte)0, s);//
+  vehicle.moveHelper.setInput((byte)0, s); 
   vehicle.firingHelper.handleSoldierTargetInput(target.posX(), target.posY(), target.posZ());
   if(turning)
     {
     return;
+    }
+  else
+    {
+    vehicle.moveHelper.stopMotion();
     }
   if(vehicle.firingHelper.isAtTarget())
     {
@@ -149,6 +153,12 @@ protected void attackTargetMounted(ITargetEntry target)
 public boolean shouldExecute()
   {  
   return npc.getTarget()!=null && npc.getTargetType()==TargetType.ATTACK && npc.getDistanceFromTarget(npc.getTarget()) <= npc.targetHelper.getAttackDistance(npc.getTarget());
+  }
+
+@Override
+public byte getTaskType()
+  {
+  return task_attack;
   }
 
 }

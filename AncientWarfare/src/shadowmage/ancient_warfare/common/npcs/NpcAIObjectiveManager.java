@@ -117,6 +117,7 @@ private void setObjective(NpcAIObjective objective)
   {
   if(objective==null)
     {
+    npc.setObjectiveID((byte)-1);
     this.currentObjectiveTicks = 2;
     if(this.currentObjective!=null)
       {
@@ -126,6 +127,7 @@ private void setObjective(NpcAIObjective objective)
     }
   else
     {
+    npc.setObjectiveID((byte)objective.getObjectiveNum());
     if(this.currentObjective==null || this.currentObjective != objective)
       {
       if(this.currentObjective!=null)

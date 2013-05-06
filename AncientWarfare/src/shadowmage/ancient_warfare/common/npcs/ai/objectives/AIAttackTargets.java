@@ -146,5 +146,10 @@ public void stopObjective()
     }
   }
 
+@Override
+public byte getObjectiveNum()
+  {
+  return attack;
+  }
 
 }

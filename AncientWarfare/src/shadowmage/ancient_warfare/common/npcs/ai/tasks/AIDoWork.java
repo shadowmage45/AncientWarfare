@@ -36,6 +36,12 @@ public AIDoWork(NpcBase npc)
   }
 
 @Override
+public byte getTaskType()
+  {
+  return task_work;
+  }
+
+@Override
 public void onTick()
   {
   TECivic te = npc.wayNav.getWorkSiteTile();   

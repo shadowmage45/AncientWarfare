@@ -50,6 +50,12 @@ public void addTasks()
   }
 
 @Override
+public byte getObjectiveNum()
+  {
+  return work;
+  }
+
+@Override
 public void updatePriority()
   {
   this.currentPriority =  0;

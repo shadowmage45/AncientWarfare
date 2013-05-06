@@ -28,6 +28,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.EntityLiving;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -62,9 +63,7 @@ public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double pa
 @Override
 protected void renderLivingLabel(EntityLiving par1EntityLiving, String par2Str, double renderX, double renderY, double renderZ, int renderDistance)
   {
-  double var10 = par1EntityLiving.getDistanceSqToEntity(this.renderManager.livingPlayer);
-
-  
+  double var10 = par1EntityLiving.getDistanceSqToEntity(this.renderManager.livingPlayer);  
   if (var10 <= (double)(renderDistance * renderDistance))
     {
     NpcBase npc = (NpcBase)par1EntityLiving;
@@ -73,7 +72,7 @@ protected void renderLivingLabel(EntityLiving par1EntityLiving, String par2Str, 
     float var13 = 1.6F;
     float var14 = 0.016666668F * var13;
     GL11.glPushMatrix();
-    GL11.glTranslatef((float)renderX + 0.0F, (float)renderY + 2.3F, (float)renderZ);
+    GL11.glTranslatef((float)renderX, (float)renderY + 2.3F, (float)renderZ);
     GL11.glNormal3f(0.0F, 1.0F, 0.0F);
     GL11.glRotatef(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
     GL11.glRotatef(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
@@ -107,10 +106,43 @@ protected void renderLivingLabel(EntityLiving par1EntityLiving, String par2Str, 
     GL11.glEnable(GL11.GL_DEPTH_TEST);
     GL11.glDepthMask(true);
     fontRenderer.drawString(par2Str, -fontRenderer.getStringWidth(par2Str) / 2, yOffset, color2);//was-1
+    if(Settings.getRenderNpcObjectives())
+      {
+      GL11.glTranslatef(-0.5F, 1.F, 0.0f);
+      renderObjectiveIcon(npc.getAIObjectiveID());
+      GL11.glTranslatef(0.5F, 0, 0.0f);
+      renderTaskIcon(npc.getAITaskID());
+      GL11.glTranslatef(0.5F, 0, 0.0f);
+      renderErrorIcon(npc.getAIErrorID());
+      }
     GL11.glEnable(GL11.GL_LIGHTING);
     GL11.glDisable(GL11.GL_BLEND);
     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     GL11.glPopMatrix();
+    }
+  }
+
+public void renderObjectiveIcon(byte obj)
+  {
+  if(obj>=0)
+    {
+    RenderTools.renderIcon(Config.texturePath+"items/testIcon1.png", 16, 16);
+    }  
+  }
+
+public void renderTaskIcon(byte task)
+  {
+  if(task>=0)
+    {
+    RenderTools.renderIcon(Config.texturePath+"items/testIcon1.png", 16, 16);
+    }
+  }
+
+public void renderErrorIcon(byte error)
+  {
+  if(error>=0)
+    {
+    RenderTools.renderIcon(Config.texturePath+"items/testIcon1.png", 16, 16);
     }
   }
 

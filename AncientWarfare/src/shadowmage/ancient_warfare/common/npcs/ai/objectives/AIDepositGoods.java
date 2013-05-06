@@ -49,6 +49,12 @@ public AIDepositGoods(NpcBase npc, int maxPriority)
   }
 
 @Override
+public byte getObjectiveNum()
+  {
+  return deposit_goods;
+  }
+
+@Override
 public void addTasks()
   {
   this.aiTasks.add(new AIMoveToTarget(npc, 3, false));

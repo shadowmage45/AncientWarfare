@@ -20,7 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.helpers;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.AWCore;
@@ -33,6 +36,31 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleMovementHelper implements INBTTaggable
 {
+/**
+ * vehicle input flow (onInput)
+ * 
+ * if client
+ *  if client move
+ *    set local info to input
+ *    send FULL input packet to server
+ *  else
+ *    send partial input to server 
+ * else
+ *    set local info to input
+ */
+
+/**
+ * vehicle movement update flow
+ * 
+ * if client
+ *  if client move
+ *    every X ticks, send FULL input packet to server
+ * else
+ *  every X ticks send FULL motion packet to clients
+ *    if client move
+ *      do not send to riding player
+ * update local motion params (client AND server)
+ */
 
 private VehicleBase vehicle;
 
@@ -59,25 +87,105 @@ public void setInput(byte forward, byte strafe)
     }
   if(vehicle.worldObj.isRemote)
     {
-    if(Config.clientVehicleMovement)
+    if(Config.clientVehicleMovement && vehicle.riddenByEntity!=null && vehicle.riddenByEntity==AWCore.proxy.getClientPlayer())
       {
       vehicle.setForwardInput(forward);
       vehicle.setStrafeInput(strafe);      
-      }    
-    NBTTagCompound tag = new NBTTagCompound();  
-    tag.setByte("f", forward);
-    tag.setByte("s", strafe);
-    tag.setFloat("fMot", forwardMotion);
-    tag.setFloat("sMot", strafeMotion);
-    Packet02Vehicle pkt = new Packet02Vehicle();
-    pkt.setParams(this.vehicle);
-    pkt.setInputData(tag);
-    pkt.sendPacketToServer();
+      }
+    sendInputToServer(forward, strafe, false);
     }
   else
     {
     vehicle.setForwardInput(forward);
     vehicle.setStrafeInput(strafe);
+    }
+  }
+
+/**
+ * send input to server. at the very least, send forward/strafe input
+ * if fullPacket -- send pos/motion/accel as well
+ * @param forward
+ * @param strafe
+ * @param fullPacket
+ */
+public void sendInputToServer(byte forward, byte strafe, boolean fullPacket)
+  {
+  if(!vehicle.worldObj.isRemote)
+    {
+    return;
+    }
+  NBTTagCompound tag = new NBTTagCompound();  
+  tag.setByte("f", forward);
+  tag.setByte("s", strafe);
+  if(fullPacket)
+    {
+    tag.setFloat("fMot", forwardMotion);
+    tag.setFloat("sMot", strafeMotion);    
+    tag.setFloat("px", (float)vehicle.posX);
+    tag.setFloat("py", (float)vehicle.posY);
+    tag.setFloat("pz", (float)vehicle.posZ);
+    tag.setFloat("ry", (float)vehicle.rotationYaw);
+    tag.setFloat("fAcc", forwardAccel);
+    tag.setFloat("sAcc", strafeAccel);
+    }
+  Packet02Vehicle pkt = new Packet02Vehicle();
+  pkt.setParams(this.vehicle);
+  pkt.setInputData(tag);
+  pkt.sendPacketToServer(); 
+  }
+
+/**
+ * send a motion update packet to clients tracking this entity
+ * checks for clientVehicleMovement, and will ignore the riding player
+ * if clientMovement is true (wont even send a packet)
+ */
+public void sendUpdateToClients()
+  {  
+  if(vehicle.worldObj.isRemote)
+    {
+    return;
+    }
+  NBTTagCompound tag = new NBTTagCompound();  
+  tag.setFloat("fMot", forwardMotion);
+  tag.setFloat("sMot", strafeMotion);    
+  tag.setFloat("px", (float)vehicle.posX);
+  tag.setFloat("py", (float)vehicle.posY);
+  tag.setFloat("pz", (float)vehicle.posZ);
+  tag.setFloat("ry", (float)vehicle.rotationYaw);
+  tag.setFloat("fAcc", forwardAccel);
+  tag.setFloat("sAcc", strafeAccel);
+  Packet02Vehicle pkt = new Packet02Vehicle();
+  pkt.setParams(this.vehicle);
+  pkt.setInputData(tag);  
+  if(Config.clientVehicleMovementBase && vehicle.riddenByEntity instanceof EntityPlayer)
+    {
+    EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
+    List<EntityPlayer> allPlayers = vehicle.worldObj.playerEntities;
+    for(EntityPlayer serverPlayer : allPlayers)
+      {
+      if(serverPlayer!=player)
+        {
+        pkt.sendPacketToPlayer(serverPlayer);
+        }
+      }
+    }
+  else
+    {
+    pkt.sendPacketToAllTrackingClients(vehicle);
+    }
+  }
+
+public void stopMotion()
+  {  
+  if(!vehicle.worldObj.isRemote)
+    {
+    this.forwardAccel = 0;
+    this.forwardMotion = 0;
+    this.strafeAccel = 0;
+    this.strafeMotion = 0;
+    vehicle.clearPath();
+    this.setInput((byte)0, (byte)0);
+    this.sendUpdateToClients();
     }
   }
 
@@ -91,11 +199,9 @@ public void handleInputData(NBTTagCompound tag)
     {
     return;
     }
-  boolean sendReply = false;
-  if(tag.hasKey("f") && tag.hasKey("s"))
+  if(tag.hasKey("f") || tag.hasKey("s"))
     {
     this.setInput(tag.getByte("f"), tag.getByte("s"));
-    sendReply = true;
     } 
   if(tag.hasKey("fMot"))
     {
@@ -105,15 +211,29 @@ public void handleInputData(NBTTagCompound tag)
     {
     this.strafeMotion = tag.getFloat("sMot");
     }
-  if(sendReply && !this.vehicle.worldObj.isRemote)
+  if(tag.hasKey("fAcc"))
     {
-    tag = new NBTTagCompound();
-    tag.setFloat("fMot", forwardMotion);
-    tag.setFloat("sMot", strafeMotion);
-    Packet02Vehicle pkt = new Packet02Vehicle();
-    pkt.setParams(this.vehicle);
-    pkt.setInputData(tag);
-    AWCore.proxy.sendPacketToAllClientsTracking(this.vehicle, pkt);
+    this.forwardAccel = tag.getFloat("fAcc");
+    }
+  if(tag.hasKey("sAcc"))
+    {
+    this.strafeAccel = tag.getFloat("sAcc");
+    }
+  if(tag.hasKey("px"))
+    {
+    vehicle.posX = (float)tag.getFloat("px");
+    }
+  if(tag.hasKey("py"))
+    {
+    vehicle.posY = (float)tag.getFloat("py");
+    }
+  if(tag.hasKey("pz"))
+    {
+    vehicle.posZ = (float)tag.getFloat("pz");
+    }
+  if(tag.hasKey("ry"))
+    {
+    vehicle.rotationYaw = tag.getFloat("ry");
     }
   }
 

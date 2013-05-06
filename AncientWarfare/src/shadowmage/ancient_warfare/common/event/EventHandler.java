@@ -22,12 +22,18 @@ package shadowmage.ancient_warfare.common.event;
 
 import java.util.List;
 
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 
@@ -68,12 +74,6 @@ public void onWorldSave(WorldEvent.Save evt)
   }
 
 @ForgeSubscribe
-public void onEntityInteract(EntityInteractEvent evt)
-  {
-  
-  }
-
-@ForgeSubscribe
 public void onPlayerAttack(AttackEntityEvent evt)
   {
   if(evt.entityPlayer==null || evt.target==null || evt.entityPlayer.worldObj.isRemote)
@@ -96,5 +96,18 @@ public void onPlayerAttack(AttackEntityEvent evt)
       }
     }
   }
+
+@ForgeSubscribe
+public void onEntitySpawn(EntityJoinWorldEvent evt)
+  {
+  if(evt.entity instanceof EntityMob)
+    {
+    EntityMob zomb = (EntityMob)evt.entity;
+    Config.logDebug("setting entity attack tasks for: "+zomb);
+    zomb.tasks.addTask(3, new EntityAIAttackOnCollide(zomb, NpcBase.class, zomb.getMoveHelper().getSpeed(), true));
+    zomb.targetTasks.addTask(2, new EntityAINearestAttackableTarget(zomb, NpcBase.class, 16.0F, 0, true));
+    }
+  }
+
 
 }

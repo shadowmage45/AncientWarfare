@@ -180,26 +180,26 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
           {
           hit.offsetForMCSide(side);
           }
-        int width1 = Math.abs(hit.z-pos1.z);
-        int width2 = Math.abs(hit.x-pos1.x);
-        int height = Math.abs(hit.y-pos1.y);
+        int width1 = Math.abs(hit.z-pos1.z)+1;
+        int width2 = Math.abs(hit.x-pos1.x)+1;
+        int height = Math.abs(hit.y-pos1.y)+1;
         int totalArea = width1*width2*height;
-        if(width1<=maxWidth && width2<=maxWidth && height <=maxHeight && totalArea <= maxArea)//
+        if(width1 <= maxWidth && width2<=maxWidth && height <=maxHeight && totalArea <= maxArea)//
           {          
           tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
           }
         else
           {
           player.addChatMessage("Too large of an area, try a smaller area!");
-          if(width1 >maxWidth)
+          if(width1 > maxWidth)
             {
             player.addChatMessage("Z axis is too large by: "+(width1-maxWidth)+" blocks");
             }
-          if(width2 >maxWidth)
+          if(width2 > maxWidth)
             {
             player.addChatMessage("X axis is too large by: "+(width2-maxWidth)+" blocks");
             }
-          if(height> maxHeight)
+          if(height > maxHeight)
             {
             player.addChatMessage("Y axis is too large by: "+(height-maxHeight)+" blocks");
             }

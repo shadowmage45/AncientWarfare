@@ -42,6 +42,12 @@ public AIMountVehicles(NpcBase npc, int maxPriority, int maxRange)
   }
 
 @Override
+public byte getObjectiveNum()
+  {
+  return mount;
+  }
+
+@Override
 public void addTasks()
   {
   this.aiTasks.add(new AIMoveToTarget(npc, 1.f, true));

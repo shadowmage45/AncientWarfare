@@ -61,7 +61,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     VehicleBase vehicle = VehicleType.getVehicleForType(world, stack.getItemDamage(), level);
     if(tag.hasKey("health"))
       {
-      vehicle.localVehicleHealth = tag.getFloat("health");
+      vehicle.setHealth(tag.getFloat("health"));
       }
     vehicle.teamNum = TeamTracker.instance().getTeamForPlayerServer(player.getEntityName());
     vehicle.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);

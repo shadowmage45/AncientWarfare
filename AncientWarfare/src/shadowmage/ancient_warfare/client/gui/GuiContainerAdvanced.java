@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiScrollBarSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElementCallback;
+import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.interfaces.IContainerGuiCallback;
@@ -357,7 +358,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   String tex = this.getGuiBackGroundTexture();
   if(tex!=null)
     {
-    this.drawQuadedTexture(guiLeft, guiTop, this.xSize, this.ySize, 256, 240, tex, 0, 0);
+    RenderTools.drawQuadedTexture(guiLeft, guiTop, this.xSize, this.ySize, 256, 240, tex, 0, 0);
     }
   if(this.inventorySlots.inventorySlots.size()>0)
     {
@@ -654,33 +655,6 @@ public FontRenderer getFontRenderer()
 public GuiElement getElementByNumber(int num)
   {
   return this.guiElements.get(num);
-  }
-
-/**
- * renders the four corners of a texture, from the corner inward (e.g. for size-adaptable elements)
- * @param x renderPosX
- * @param y renderPosY
- * @param w renderWidth
- * @param h renderHeight
- * @param tw textureUsedWidth
- * @param th textureUsedHeight
- * @param tex theTexture
- * @param u textureStartX
- * @param v textureStartY
- */
-protected void drawQuadedTexture(int x, int y, int w, int h, int tw, int th, String tex, int u, int v)
-  {  
-  int halfW = w/2;
-  int halfH = h/2;  
-  int u1 = u + tw - halfW;
-  int v1 = v + th - halfH;
-  Minecraft.getMinecraft().renderEngine.bindTexture(tex);
-//  GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture(tex));
-  GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-  this.drawTexturedModalRect(x, y, u, v, halfW, halfH);
-  this.drawTexturedModalRect(x + halfW, y, u1, v, halfW, halfH);
-  this.drawTexturedModalRect(x, y + halfH, u, v1, halfW, halfH);
-  this.drawTexturedModalRect(x + halfW, y + halfH, u1, v1, halfW, halfH);
   }
 
 }

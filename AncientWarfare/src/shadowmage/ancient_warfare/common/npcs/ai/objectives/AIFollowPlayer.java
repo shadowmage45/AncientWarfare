@@ -43,6 +43,12 @@ public void addTasks()
   }
 
 @Override
+public byte getObjectiveNum()
+  {
+  return follow_player;
+  }
+
+@Override
 public void updatePriority()
   {
   if(npc.getPlayerTarget()!=null)

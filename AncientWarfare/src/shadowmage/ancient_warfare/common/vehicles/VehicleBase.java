@@ -117,7 +117,7 @@ public float currentTurretRotationMax = 45.f;
 /**
  * local variables, may be altered by input/etc...
  */
-public float localVehicleHealth = 100;
+private float localVehicleHealth = 100;
 public float localTurretRotationHome = 0.f;
 public float localTurretRotation = 0.f;
 public float localTurretDestRot = 0.f;
@@ -190,8 +190,40 @@ public VehicleBase(World par1World)
 @Override
 protected void entityInit()
   {
-  this.dataWatcher.addObject(5, new Byte((byte) 0));//f in
-  this.dataWatcher.addObject(6, new Byte((byte) 0));//s in  
+  this.dataWatcher.addObject(5, Byte.valueOf((byte) 0));//f in
+  this.dataWatcher.addObject(6, Byte.valueOf((byte) 0));//s in  
+  this.dataWatcher.addObject(7, Integer.valueOf(100));  
+  }
+
+private int getHealthClient()
+  {
+  return this.dataWatcher.getWatchableObjectInt(7);
+  }
+
+public void setHealth(float health)
+  {
+  this.localVehicleHealth = health;
+  if(!worldObj.isRemote)
+    {
+    this.dataWatcher.updateObject(7, Integer.valueOf((int)health));
+    }
+  }
+
+private float getHealthServer()
+  {
+  return this.localVehicleHealth;
+  }
+
+public float getHealth()
+  {
+  if(this.worldObj.isRemote)
+    {
+    return this.getHealthClient();
+    }
+  else
+    {
+    return this.getHealthServer();
+    }
   }
 
 public byte getForwardInput()
@@ -276,7 +308,7 @@ public void setSetupState(boolean state, int ticks)
 
 public void setInitialHealth()
   {
-  this.localVehicleHealth = this.baseHealth;
+  this.setHealth(this.baseHealth);
   }
 
 public void updateBaseStats()
@@ -296,9 +328,9 @@ public void updateBaseStats()
   baseExplosionResist = 0.f;
   baseFireResist = 0.f;
   baseGenericResist = 0.f;
-  if(this.localVehicleHealth>baseHealth)
+  if(getHealth()>baseHealth)
     {
-    localVehicleHealth = baseHealth;
+    this.setHealth(baseHealth);
     }
   }
 
@@ -309,7 +341,7 @@ public void updateBaseStats()
 public ItemStack getItemForVehicle()
   {
   ItemStack stack = this.vehicleType.getStackForLevel(vehicleMaterialLevel);
-  stack.getTagCompound().getCompoundTag("AWVehSpawner").setFloat("health", localVehicleHealth);
+  stack.getTagCompound().getCompoundTag("AWVehSpawner").setFloat("health", getHealth());
   return stack;
   }
 
@@ -559,20 +591,13 @@ public void onUpdateClient()
     if(moveUpdateTicks>=Config.clientMoveUpdateTicks)
       {
       moveUpdateTicks=0;
-      NBTTagCompound tag = new NBTTagCompound();
-      tag.setFloat("px", (float)this.posX);
-      tag.setFloat("py", (float)this.posY);
-      tag.setFloat("pz", (float)this.posZ);
-      tag.setFloat("ry", (float)this.rotationYaw);
-      tag.setFloat("fm", this.moveHelper.forwardMotion);
-      tag.setFloat("sm", this.moveHelper.strafeMotion);  
-      tag.setByte("s", this.getStrafeInput());
-      tag.setByte("f", this.getForwardInput());
-      Packet02Vehicle pkt = new Packet02Vehicle();
-      pkt.setParams(this);
-      pkt.setClientMoveData(tag);
-      pkt.sendPacketToServer();
+      moveHelper.sendInputToServer(getForwardInput(), getStrafeInput(), true);      
       }
+    }
+  if(this.localVehicleHealth!=this.getHealth())
+    {
+    this.localVehicleHealth = this.getHealth();
+    this.hitAnimationTicks = 20;
     }
   }
 
@@ -586,6 +611,10 @@ public void onUpdateServer()
     this.moveHelper.clearInputFromDismount();
     }
   this.isRidden = this.riddenByEntity != null;
+//  if(this.ticksExisted % Config.clientMoveUpdateTicksBase==0)
+//    {
+//    this.moveHelper.sendUpdateToClients();
+//    }
   }
 
 public void updateTurretPitch()
@@ -705,11 +734,7 @@ public void handlePacketUpdate(NBTTagCompound tag)
   if(tag.hasKey("input"))
     {
     this.handleInputData(tag.getCompoundTag("input"));
-    }
-  if(tag.hasKey("health"))
-    {    
-    this.handleHealthUpdateData(tag.getFloat("health"));
-    }
+    }  
   if(tag.hasKey("upgrade"))
     {
     this.upgradeHelper.handleUpgradePacketData(tag.getCompoundTag("upgrade"));
@@ -725,38 +750,11 @@ public void handlePacketUpdate(NBTTagCompound tag)
   if(tag.hasKey("ammoUpd"))
     {
     this.ammoHelper.handleAmmoCountUpdate(tag.getCompoundTag("ammoUpd"));
-    }
-  if(tag.hasKey("clientMove"))
-    {
-    this.handleClientMoveData(tag.getCompoundTag("clientMove"));
-    }
+    }  
   if(tag.hasKey("pack"))
     {
     this.packVehicle();
     }
-  }
-
-public void handleClientMoveData(NBTTagCompound tag)
-  { 
-  float x = tag.getFloat("px");
-  float y = tag.getFloat("py");
-  float z = tag.getFloat("pz");
-  float ry = tag.getFloat("ry");
-  float fm = tag.getFloat("fm");
-  float sm = tag.getFloat("sm");
-  this.setPositionAndRotationNormalized(x, y, z, ry, 0.f, 0);
-  this.moveHelper.forwardMotion = fm;
-  this.moveHelper.strafeMotion = sm;
-  }
-
-/**
- * called client-side to
- * @param health
- */
-public void handleHealthUpdateData(float health)
-  {
-  this.localVehicleHealth = health;
-  this.hitAnimationTicks = 20;
   }
 
 public void handleInputData(NBTTagCompound tag)
@@ -766,38 +764,14 @@ public void handleInputData(NBTTagCompound tag)
   }
 
 /**
- * handle movement input, sent from inputHelper when vehicle is ridden
- * @param forward
- * @param strafe
- */
-public void handleKeyboardMovement(byte forward, byte strafe)
-  {
-  this.moveHelper.setInput(forward, strafe);  
-  }
-
-/**
  * spits out inventory into world, and packs the vehicle into an item, also spat into the world
  */
 public void packVehicle()
   {
   if(!this.worldObj.isRemote)
-    {
-    this.dropInventory();
-    ItemStack stack = this.getItemForVehicle();
-    EntityItem entity = new EntityItem(this.worldObj, posX, posY+0.5d, posZ, stack);
-    worldObj.spawnEntityInWorld(entity);
+    { 
+    worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, posX, posY+0.5d, posZ, this.getItemForVehicle()));
     this.setDead();
-    }
-  }
-
-/**
- * called on death or when packed into an item
- */
-public void dropInventory()
-  {
-  if(!this.worldObj.isRemote)
-    {
-    
     }
   }
 
@@ -810,15 +784,9 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     }
   super.attackEntityFrom(par1DamageSource, par2);  
   float adjDmg = upgradeHelper.getScaledDamage(par1DamageSource, par2);
-  this.localVehicleHealth -= adjDmg;
-  
-  Packet02Vehicle pkt = new Packet02Vehicle();
-  pkt.setParams(this);
-  pkt.setHealthUpdate(this.localVehicleHealth);
-  pkt.sendPacketToAllTrackingClients(this);
-    
+  this.setHealth(getHealth() - adjDmg); 
 //  Config.logDebug("Vehicle hit by attack.  RawDamage: "+par2+" : adjustedDmg: "+adjDmg+"  New health: "+localVehicleHealth);
-  if(this.localVehicleHealth<=0)
+  if(this.getHealth()<=0)
     {
     this.setDead();
     return false;
@@ -983,7 +951,7 @@ public boolean canBeCollidedWith()
 @Override
 public void writeSpawnData(ByteArrayDataOutput data)
   {
-  data.writeFloat(this.localVehicleHealth);  
+  data.writeFloat(this.getHealth());  
   data.writeInt(this.vehicleType.getGlobalVehicleType());
   data.writeInt(this.vehicleMaterialLevel);
   ByteTools.writeNBTTagCompound(upgradeHelper.getNBTTag(), data);
@@ -1008,7 +976,7 @@ public void writeSpawnData(ByteArrayDataOutput data)
 @Override
 public void readSpawnData(ByteArrayDataInput data)
   {
-  this.localVehicleHealth = data.readFloat();
+  this.setHealth(data.readFloat());
   IVehicleType type = VehicleType.getVehicleType(data.readInt());
   this.setVehicleType(type, data.readInt());
   this.upgradeHelper.readFromNBT(ByteTools.readNBTTagCompound(data));
@@ -1041,7 +1009,7 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   IVehicleType vehType = VehicleType.getVehicleType(tag.getInteger("vehType"));
   int level = tag.getInteger("matLvl");
   this.setVehicleType(vehType, level);
-  this.localVehicleHealth = tag.getFloat("health");
+  this.setHealth(tag.getFloat("health"));
   this.localTurretRotationHome = tag.getFloat("turHome");
   this.inventory.readFromNBT(tag);
   this.upgradeHelper.readFromNBT(tag.getCompoundTag("upgrades"));
@@ -1071,7 +1039,7 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   {
   tag.setInteger("vehType", this.vehicleType.getGlobalVehicleType());
   tag.setInteger("matLvl", this.vehicleMaterialLevel);
-  tag.setFloat("health", this.localVehicleHealth);
+  tag.setFloat("health", this.getHealth());
   tag.setFloat("turHome", this.localTurretRotationHome);
   this.inventory.writeToNBT(tag);//yah..I wrote this one a long time ago, is why it is different.....
   tag.setCompoundTag("upgrades", this.upgradeHelper.getNBTTag());

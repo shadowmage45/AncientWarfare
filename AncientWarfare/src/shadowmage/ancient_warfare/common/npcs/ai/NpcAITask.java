@@ -27,6 +27,14 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 public abstract class NpcAITask
 {
 
+public static final int task_attack = 0;
+public static final int task_attack_ranged = 1;
+public static final int task_dismount = 2;
+public static final int task_work = 3;
+public static final int task_patrol = 4;
+public static final int task_mount = 5;
+public static final int task_move = 6;
+
 public static final int NONE = 0;
 public static final int WANDER = 1;
 public static final int FOLLOW = 2;
@@ -50,6 +58,7 @@ public NpcAITask(NpcBase npc)
 public abstract void onTick();
 
 public abstract boolean shouldExecute();
+public abstract byte getTaskType();
 
 public boolean canExecute(int mutex)
   {

@@ -46,6 +46,12 @@ public AIAttackTargetBow(NpcBase npc)
   }
 
 @Override
+public byte getTaskType()
+  {
+  return task_attack_ranged;
+  }
+
+@Override
 protected void attackTarget(ITargetEntry target)
   { 
   if(!isLineOfSightClear(target))

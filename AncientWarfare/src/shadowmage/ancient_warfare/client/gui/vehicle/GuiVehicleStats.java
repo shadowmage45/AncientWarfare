@@ -71,7 +71,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   int color = 0xffffffff;
   this.drawStringGui("Vehicle Type: " + vehicle.vehicleType.getDisplayName(), 10, 4, color);
   this.drawStringGui("Material Level: "+vehicle.vehicleMaterialLevel, 10, 14, color);
-  this.drawStringGui("Health: "+vehicle.localVehicleHealth + "/"+vehicle.baseHealth, 10, 24, color);
+  this.drawStringGui("Health: "+vehicle.getHealth() + "/"+vehicle.baseHealth, 10, 24, color);
   this.drawStringGui("Weight: "+vehicle.currentWeight + "/"+vehicle.baseWeight, 10, 34, color);
   this.drawStringGui("Speed: "+(vehicle.moveHelper.forwardMotion*20) + "/"+(vehicle.currentForwardSpeedMax*20), 10, 44, color);
   this.drawStringGui("Missile Velocity: "+vehicle.localLaunchPower + "/" +vehicle.currentLaunchSpeedPowerMax, 10, 54, color);

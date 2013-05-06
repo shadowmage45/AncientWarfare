@@ -45,4 +45,9 @@ public void addTasks()
   this.aiTasks.add(new AIAttackTargetBow(npc));
   }
 
+@Override
+public byte getObjectiveNum()
+  {
+  return attack_ranged;
+  }
 }

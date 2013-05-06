@@ -39,6 +39,12 @@ public AIFollowPatrolPoints(NpcBase npc)
   }
 
 @Override
+public byte getTaskType()
+  {
+  return task_patrol;
+  }
+
+@Override
 public void onTick()
   {
   Config.logDebug("choosing patrol point");

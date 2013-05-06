@@ -39,6 +39,13 @@ public AIMountVehicle(NpcBase npc)
   }
 
 @Override
+public byte getTaskType()
+  {
+  return task_mount;
+  }
+
+
+@Override
 public void onTick()
   {   
   VehicleBase vehicle = (VehicleBase)npc.getTarget().getEntity(npc.worldObj);

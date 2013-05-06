@@ -43,7 +43,12 @@ VillageDoorInfo theDoor;
 public AISeekShelter(NpcBase npc, int maxPriority)
   {
   super(npc, maxPriority);
-  // TODO Auto-generated constructor stub
+  }
+
+@Override
+public byte getObjectiveNum()
+  {
+  return shelter;
   }
 
 @Override

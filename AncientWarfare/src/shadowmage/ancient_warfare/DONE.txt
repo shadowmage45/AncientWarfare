@@ -87,7 +87,10 @@
 * test biome inclusion/exclusion
 * add default templates, and add them to export list
 * add BB render to scanner
+
+/********************************************************************************/
 /****************************************FIRST TEST RELEASE****************************************/
+/********************************************************************************/
 * store template lines in structure
 * break template lines into byte chunks to send to client
 * send template byte chunks to client for entire structure
@@ -177,6 +180,10 @@
 /********** 02-20-13 **********/
 * rework all GUIs to enable new IGuiElement code and style...rewrite
             GuiTextFieldAdvanced, from the ground up... (yes, painful)  
+            
+/********************************************************************************/
+/****************************************SECOND TEST RELEASE****************************************/
+/********************************************************************************/
 /********** 02-25-13 **********/
 * prep vehicle work
 /********** 02-26-13 **********/
@@ -502,4 +509,62 @@
 * don't spawn stuff in X blocks of spawn (config setting)-X
 * double check all npc ai is present, as far as is-done
 * builder direct has no scan BB .. --- should be fixed....-x
-* siege-engineer is not dismounting properly-x            
+* siege-engineer is not dismounting properly-x     
+
+
+/********************************************************************************/
+/****************************************THIRD TEST RELEASE****************************************/
+/********************************************************************************/
+     
+/********** 05-01-13 **********/
+* npc depository must be able to be a chest-cart, or mine-cart with chest (or other entity with IInventory?)
+        dynamically scan area.. worldServer has a getTEsInInBox method, also check chest-carts/mine-carts
+* remove inner-points from tree/mine, replace with global inner-work-point tracking
+* add player-target broadcasting to npcs
+* add on-dimension change code to npcs to clear waypoints on transport
+* add more farm types -- cactus/reed/mushrooms
+/********** 05-02-13 **********/
+* fix a few bugs reported -- hopefully
+    furnace/deployer/dropper not rotating properly in templates
+    vehicles ammo type not carried over properly in templates
+    vehicle armor/upgrade slots > 1 qty
+* add animal-farm civic types.  need testing. need mooshroom and cow-milking farms
+* add loot-on-ground pickup ability to all NPCs -- not working, needs investigation. 
+/********** 05-03-13 **********/
+* clear target trackers on dimension change
+* remove tooltips...they're fucked anyway
+* vehicles now implement IInventory wrapped to their storageInventory -- should now work with hoppers
+* prep work on npc upkeep setup -- needs full testing
+* clean up some of the command baton stuff to be more dynamic and easier to expand in the future...
+* find and fix pathfinding fence issues
+* add fence-gate use to soldiers/pathfinding (hook into canUseDoors system)
+* add NPC upkeep costs to INpcType/NpcTypeBase/indiv. types
+* add upkeep functions... _working_ -- need upkeep amounts set in npc types
+/********** 05-04-13 **********/
+* cleanup on fence-/partially walkable block handling -- still needs attention
+* fix civic farms that weren't picking up the proper blocks
+* npc health is not updating properly
+* npc health does not regen yet
+* change batons over to not HAVE a target -- scan 20 block area and command any npcs that are following
+    the player
+/********** 05-05-13 **********/
+* workers will now much more aggressively seek work (no more long coffee breaks between jobs)
+* fix delay in work for workers (half is the work-sites not updating properly, half is workers not seeking a new site immediately when the old is finished)
+* fix command baton stuff...
+* chest cart hopper interaction working
+* fix npc setting chest cart/entity based IInventory as waypoints for upkeep/deposit
+* fix entity based waypoint reloading
+* adjust npc stay near home params (40/15)
+* rework builder-direct tooltip to multi-line
+* rework vehicle upgrade tooltips for brevity
+* clean up civic-placer default tooltip
+* clean up vehicle armor tooltips
+* clean up vehicle spawner item tooltips
+* clean up civics naming/tooltips
+* clean up npc names/tooltips
+* clean up ammo tooltips
+* fix waypoint skipping when interrupted
+* fix siege-engineer waypoint navigation/patrol abililty
+* apparently pathfinding for 'patrol' does not work while mounted...
+* if interrupted on a patrol point, will 'skip' the point it was heading towards
+     

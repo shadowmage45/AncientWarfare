@@ -456,8 +456,41 @@ public void onUpdate()
 @Override
 protected void entityInit()
   {
-  super.entityInit();
-  this.dataWatcher.addObject(31, new Integer(20));
+  super.entityInit();  
+  this.dataWatcher.addObject(28, Byte.valueOf((byte) -1));//objective
+  this.dataWatcher.addObject(29, Byte.valueOf((byte) -1));//task
+  this.dataWatcher.addObject(30, Byte.valueOf((byte) -1));//other/error (no food/no deposit)
+  this.dataWatcher.addObject(31, new Integer(20));//health  
+  }
+
+public byte getAIObjectiveID()
+  {
+  return this.dataWatcher.getWatchableObjectByte(28);
+  }
+
+public byte getAITaskID()
+  {
+  return this.dataWatcher.getWatchableObjectByte(29);
+  }
+  
+public byte getAIErrorID()
+  {
+  return this.dataWatcher.getWatchableObjectByte(30);
+  }
+
+public void setTaskID(byte b)
+  {
+  this.dataWatcher.updateObject(29, Byte.valueOf(b));
+  }
+
+public void setObjectiveID(byte b)
+  {
+  this.dataWatcher.updateObject(28, Byte.valueOf(b));
+  }
+
+public void setErrorID(byte b)
+  {
+  this.dataWatcher.updateObject(30, Byte.valueOf(b));
   }
 
 protected void handleHealthUpdate()
@@ -559,27 +592,20 @@ public void handlePacketUpdate(NBTTagCompound tag)
   }
 
 @Override
-protected void attackEntity(Entity par1Entity, float par2) 
-  {
-
-  }
-
-@Override
 public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   {  
   super.attackEntityFrom(par1DamageSource, par2);
   if(par1DamageSource.getEntity() instanceof EntityLiving)
     {
-    this.targetHelper.handleBeingAttacked((EntityLiving)par1DamageSource.getEntity());    
-//    if(!worldObj.isRemote)
-//      {
-//      Packet04Npc pkt = new Packet04Npc();
-//      pkt.setParams(this);
-//      pkt.setHealthUpdate((byte) this.getHealth());
-//      pkt.sendPacketToAllTrackingClients(this);
-//      }
+    this.targetHelper.handleBeingAttacked((EntityLiving)par1DamageSource.getEntity()); 
     }
   return true;
+  }
+
+@Override
+protected boolean canTriggerWalking()
+  {
+  return false;
   }
 
 @Override
@@ -599,21 +625,6 @@ public void readSpawnData(ByteArrayDataInput data)
   INpcType t = NpcTypeBase.getNpcType(data.readInt());
   this.setNpcType(t, rank);
   this.health = (int)data.readByte();
-  }
-
-public int floorX()
-  {
-  return MathHelper.floor_double(posX);
-  }
-
-public int floorY()
-  {
-  return MathHelper.floor_double(posY);
-  }
-
-public int floorZ()
-  {
-  return MathHelper.floor_double(posZ);
   }
 
 @Override

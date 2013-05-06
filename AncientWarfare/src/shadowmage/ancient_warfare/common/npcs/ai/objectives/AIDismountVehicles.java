@@ -86,5 +86,10 @@ public void stopObjective()
   // TODO Auto-generated method stub  
   }
 
+@Override
+public byte getObjectiveNum()
+  {
+  return dismount;
+  }
 
 }

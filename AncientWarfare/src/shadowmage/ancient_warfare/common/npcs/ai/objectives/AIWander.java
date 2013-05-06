@@ -49,6 +49,12 @@ public AIWander(NpcBase npc, int maxPriority)
   }
 
 @Override
+public byte getObjectiveNum()
+  {
+  return wander;
+  }
+
+@Override
 public void addTasks()
   {
 //  this.aiTasks.add(new AIMoveToTarget(npc, 1, false));
@@ -107,6 +113,5 @@ public void stopObjective()
   {
   this.wanderTick = 0;
   }
-
 
 }
