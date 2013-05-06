@@ -36,7 +36,7 @@ public class RenderTools
 
 static float zLevel = -100;
 /** Missing texture image */
-static TextureMap texMap = new TextureMap(1, "items", "textures/items/", new BufferedImage(64, 64, 2));
+static TextureMap texMap = new TextureMap(1, "items", "textures/custom_icons/", new BufferedImage(64, 64, 2));
 
 private static Map<String, Icon> iconMap = new HashMap<String, Icon>();
 
