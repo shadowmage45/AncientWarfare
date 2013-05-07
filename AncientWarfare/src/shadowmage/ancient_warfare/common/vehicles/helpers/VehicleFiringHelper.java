@@ -699,7 +699,7 @@ public void handleSoldierTargetInput(double targetX, double targetY, double targ
       tag.setFloat("aimPow", this.vehicle.localLaunchPower);
       }
     if(!vehicle.worldObj.isRemote) 
-      { 
+      {
       Packet02Vehicle pkt = new Packet02Vehicle();
       pkt.setParams(vehicle);
       pkt.setInputData(tag);

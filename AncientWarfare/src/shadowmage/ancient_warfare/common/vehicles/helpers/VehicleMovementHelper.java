@@ -131,7 +131,8 @@ public void sendInputToServer(byte forward, byte strafe, boolean fullPacket)
   Packet02Vehicle pkt = new Packet02Vehicle();
   pkt.setParams(this.vehicle);
   pkt.setInputData(tag);
-  pkt.sendPacketToServer(); 
+  pkt.sendPacketToServer();
+  Config.logDebug("sending input to server from moveHelper sendInputToServer");
   }
 
 /**
@@ -145,6 +146,7 @@ public void sendUpdateToClients()
     {
     return;
     }
+  Config.logDebug("sending update to clients");
   NBTTagCompound tag = new NBTTagCompound();  
   tag.setFloat("fMot", forwardMotion);
   tag.setFloat("sMot", strafeMotion);    
@@ -178,14 +180,17 @@ public void sendUpdateToClients()
 public void stopMotion()
   {  
   if(!vehicle.worldObj.isRemote)
-    {
-    this.forwardAccel = 0;
-    this.forwardMotion = 0;
-    this.strafeAccel = 0;
-    this.strafeMotion = 0;
+    {    
     vehicle.clearPath();
     this.setInput((byte)0, (byte)0);
-    this.sendUpdateToClients();
+    if(forwardAccel!=0 || strafeAccel!=0 || strafeMotion!=0 || forwardMotion!=0)
+      {
+      this.forwardAccel = 0;
+      this.forwardMotion = 0;
+      this.strafeAccel = 0;
+      this.strafeMotion = 0;
+      this.sendUpdateToClients();  
+      }    
     }
   }
 
@@ -201,7 +206,8 @@ public void handleInputData(NBTTagCompound tag)
     }
   if(tag.hasKey("f") || tag.hasKey("s"))
     {
-    this.setInput(tag.getByte("f"), tag.getByte("s"));
+    vehicle.setForwardInput(tag.getByte("f"));
+    vehicle.setStrafeInput(tag.getByte("s"));
     } 
   if(tag.hasKey("fMot"))
     {
@@ -239,6 +245,10 @@ public void handleInputData(NBTTagCompound tag)
     while(newRot - 360 >=vehRot) {newRot-=360.f;}
     vehicle.rotationYaw = newRot;
     }
+  if(vehicle.riddenByEntity!=null)
+    {
+    vehicle.updateRiderPosition();
+    }
   }
 
 /**
@@ -263,7 +273,7 @@ public void setMoveTo(double x, double y, double z)
       sMot = -1;//right
       }
     }
-  if(Math.abs(yawDiff)<10 && Trig.getVelocity(x-vehicle.posX, y-vehicle.posY, z-vehicle.posZ)>=1.f)//further away than 1 block, move towards it
+  if(Math.abs(yawDiff)<10 && Trig.getVelocity(x-vehicle.posX, y-vehicle.posY, z-vehicle.posZ)>=0.25f)//further away than 1 block, move towards it
     {
     fMot = 1;
     }

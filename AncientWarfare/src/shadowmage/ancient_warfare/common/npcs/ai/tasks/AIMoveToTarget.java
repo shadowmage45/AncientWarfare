@@ -69,6 +69,7 @@ public boolean shouldExecute()
   {
   if(npc.getTarget()==null)
     {
+    npc.clearPath();
     return false;
     }
   float minDist = useAttackDistance ? npc.targetHelper.getAttackDistance(npc.getTarget()) : stopDistance;

@@ -23,6 +23,8 @@ package shadowmage.ancient_warfare.common.pathfinding.navigator;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.common.WorldAccessContainer;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
@@ -92,12 +94,12 @@ public void setMoveToTarget(int x, int y, int z)
   int ex = MathHelper.floor_double(entity.posX);
   int ey = MathHelper.floor_double(entity.posY);
   int ez = MathHelper.floor_double(entity.posZ);
-  ey = PathUtils.findClosestYTo(world, ex, ey, ez);
+
   if(this.shouldCalculatePath(ex, ey, ez, x, y, z))
     {
     this.finalTarget.reassign(x, y, z);
     this.calculatePath(ex, ey, ez, x, y, z);
-    }
+    } 
   }
 
 @Override
@@ -116,8 +118,7 @@ public void onMovementUpdate()
       {
       this.doorInteraction(); 
       }
-    float speed = getEntityDistance(currentTarget)<0.5f? owner.getDefaultMoveSpeed() *0.5f : owner.getDefaultMoveSpeed();
-    owner.setMoveTo(currentTarget.x+0.5d, currentTarget.y, currentTarget.z+0.5d, speed);
+    owner.setMoveTo(currentTarget.x+0.5d, currentTarget.y, currentTarget.z+0.5d, owner.getDefaultMoveSpeed());
     }
   }
 
@@ -195,32 +196,60 @@ protected boolean shouldCalculatePath(int ex, int ey, int ez, int tx, int ty, in
 
 protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
-  if(PathUtils.canPathStraightToTarget(world, ex, ey, ez, tx, ty, tz))
+  if(!world.isWalkable(ex, ey, ez))
     {
-    this.currentTarget = new Node(tx, ty, tz);
-    //    Config.logDebug("straight path hit goal");
+    Config.logDebug("current position unwalkable");
+    Node n = PathUtils.getClosestPathableTo(world, ex, ey, ez, (int)(entity.width*2.f), 2, ex, ey, ez);
+    if(world.isWalkable(n.x, n.y, n.z))
+      {
+      Config.logDebug("found nearby walkable position to move towards "+ n);
+      this.currentTarget = n; 
+      owner.setMoveTo(n.x+0.5d, n.y, n.z+0.5d, owner.getDefaultMoveSpeed());
+      }
+    this.stuckCheckTicks = this.stuckCheckTicksMax;
+    this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
     }
   else
     {
-    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 4));
-    //    Config.logDebug("requesting starter path");
-    //    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 60));    
-    Node end = this.path.getEndNode();
-    if(end!=null && (end.x!=tx || end.y!=ty || end.z!=tz))
+//    if(!world.isWalkable(tx, ty, tz))
+//      {
+//      Node n = PathUtils.getClosestPathableTo(world, tx, ty, tz, 10, 3, ex, ey, ez);
+//      if(world.isWalkable(n.x, n.y, n.z))
+//        {
+//        tx = n.x;
+//        ty = n.y;
+//        tz = n.z;
+////        this.finalTarget.reassign(tx, ty, tz);
+//        }
+//      }
+    if(PathUtils.canPathStraightToTarget(world, ex, ey, ez, tx, ty, tz))
       {
-      //      Config.logDebug("requesting full path");
-      PathManager.instance().requestPath(this, world, end.x, end.y, end.z, tx, ty, tz, 60);
-      //      this.path.addPath(PathManager.instance().findImmediatePath(world, end.x, end.y, end.z, tx, ty, tz));
-      }  
-    }  
-  this.stuckCheckTicks = this.stuckCheckTicksMax;
-  this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
-  Node start = this.path.getFirstNode();
-  if(start!=null && getEntityDistance(start)<0.8f && start.y==ey)
-    {
-    this.path.claimNode();//skip the first node because it is probably behind you, move onto next
+      this.currentTarget = new Node(tx, ty, tz);
+      //    Config.logDebug("straight path hit goal");
+      }
+    else
+      {
+      this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 4));
+      //    Config.logDebug("requesting starter path");
+      //    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 60));    
+      Node end = this.path.getEndNode();
+      if(end!=null && (end.x!=tx || end.y!=ty || end.z!=tz))
+        {
+        //      Config.logDebug("requesting full path");
+        PathManager.instance().requestPath(this, world, end.x, end.y, end.z, tx, ty, tz, 60);
+        //      this.path.addPath(PathManager.instance().findImmediatePath(world, end.x, end.y, end.z, tx, ty, tz));
+        }  
+      } 
+    this.stuckCheckTicks = this.stuckCheckTicksMax;
+    this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
+    Node start = this.path.getFirstNode();
+    if(start!=null && getEntityDistance(start)<0.8f && start.y==ey)
+      {
+      this.path.claimNode();//skip the first node because it is probably behind you, move onto next
+      }
+    this.claimNode();   
     }
-  this.claimNode();   
+  
   }
 
 protected void doorInteraction()
@@ -344,8 +373,12 @@ protected void interactWithDoor(BlockPosition doorPos, boolean open)
 
 protected void claimNode()
   {
-  if(this.currentTarget==null || this.getEntityDistance(currentTarget)<entity.width)
+  if(this.currentTarget!=null && !world.isWalkable(floorX(), floorY(), floorZ()) && world.isWalkable(currentTarget.x, currentTarget.y, currentTarget.z))
     {
+//    Config.logDebug("skipping claim node due to unwalkable current");
+    }    
+  if(this.currentTarget==null || this.getEntityDistance(currentTarget)<entity.width)
+    {    
     this.currentTarget = this.path.claimNode();
     while(this.currentTarget!=null && this.getEntityDistance(currentTarget)<entity.width)
       {
@@ -354,6 +387,22 @@ protected void claimNode()
     this.stuckCheckTicks = this.stuckCheckTicksMax;
     this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
     }  
+ 
+  }
+
+protected int floorX()
+  {
+  return MathHelper.floor_double(entity.posX);
+  }
+
+protected int floorY()
+  {
+  return MathHelper.floor_double(entity.posX);
+  }
+
+protected int floorZ()
+  {
+  return MathHelper.floor_double(entity.posX);
   }
 
 protected float getEntityDistance(Node n)

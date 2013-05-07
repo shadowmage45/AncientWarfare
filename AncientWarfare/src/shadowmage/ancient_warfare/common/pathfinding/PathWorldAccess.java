@@ -72,9 +72,16 @@ public boolean isWalkable(int x, int y, int z)
     {
     return false;
     }
-  else if(isWater(id) && !canSwim)//can't swim check
+  else if(isWater(id))//can't swim check
     {
-    return false;
+    if(!canSwim)
+      {
+      return false;
+      }
+    else if(id3!=0)
+      {
+      return false;
+      }    
     }  
   else if(!canUseLaders && isLadder(id) && !cube2)//ladder use check -- if block is a ladder with air below it
     {    

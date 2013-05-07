@@ -1,5 +1,4 @@
 TONIGHT
-* vehicle pathfinding
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -189,6 +188,9 @@ TWEAKS/OPTIMIZATION
 * clean up vehicle input stuff (needs rotatation bounded on packet recieved)
 * vehicle riders need some work (turning the vehicle base towards targets)
     add an internal vehicle yaw direction param, if vehicle is at/near yaw, stop
+* fix vehicle water derpiness
+* add cleaner un-pathable block handling to navigator (mostly for vehicles)
+* clean up some packet spaminess for npcs on vehicles. its still not pretty...but..not much else to do other than synch all the values through data watchers
 
 /********** 05-07-13 **********/
 /********** 05-08-13 **********/

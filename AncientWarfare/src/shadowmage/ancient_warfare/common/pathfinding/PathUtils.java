@@ -24,7 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class PathUtils
 {
@@ -33,6 +35,63 @@ public class PathUtils
 //http://playtechs.blogspot.com/2007/03/raytracing-on-grid.html
 //http://xnawiki.com/index.php/Voxel_traversal
 //http://www.cse.yorku.ca/~amana/research/grid.pdf
+
+public static Node getClosestPathableTo(PathWorldAccess world, int x, int y, int z, int maxH, int maxV, int ox, int oy, int oz)
+  {
+  Node closest = new Node(x,y,z);
+  float closeDist = Float.POSITIVE_INFINITY;
+  float tcloseDist = Float.POSITIVE_INFINITY;
+  float dist;
+  float tdist;
+  for(int y1 =y-maxV; y1<=y+maxV; y1++)
+    {
+    for(int x1 = x-maxH; x1<=x+maxH;x1++)
+      {
+      for(int z1 = z-maxH; z1<=z+maxH;z1++)
+        { 
+        if(world.isWalkable(x1, y1, z1))
+          {
+          dist = Trig.getDistance(x, y, z, x1, y1, z1);
+          tdist = Trig.getDistance(ox, oy, oz, x1, y1, z1);
+          if(dist<closeDist && tdist<tcloseDist)
+            {
+            closeDist = dist;
+            tcloseDist=tdist;
+            closest.reassign(x1, y1, z1);
+            }
+          }        
+        }
+      }
+    }
+  return closest;
+  
+//  for(int xo = 0; xo <= maxH; xo++)
+//    {
+//    for(int zo = 0; zo <=maxH; zo++)
+//      {
+//      for(int yo = 0; yo <=maxV; yo++)
+//        {
+//        int x1 = x+xo;
+//        int y1 = y+yo;
+//        int z1 = z+zo;
+//        int x2 = x-xo;
+//        int y2 = y-yo;
+//        int z2 = z-zo;
+////        Config.logDebug(String.format("checking: %s,%s,%s", x1,y1,z1));
+////        Config.logDebug(String.format("checking: %s,%s,%s", x2,y2,z2));
+//        if(world.isWalkable(x+xo, y+yo, z+zo))
+//          {
+//          return new Node(x+xo, y+yo, z+zo);
+//          }
+//        else if(world.isWalkable(x-xo, y-yo, z-zo))
+//          {
+//          return new Node(x-xo, y-yo, z-zo);
+//          } 
+//        }
+//      }
+//    }  
+//  return new Node(x,y,z);
+  }
 
 /**
  * uhh..yah...its freaky...but it finds paths (most of the time), FAST (all of the time)

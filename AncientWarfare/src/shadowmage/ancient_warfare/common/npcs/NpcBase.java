@@ -450,6 +450,11 @@ public void onUpdate()
     this.pushOutOfBlocks();
     }
   this.handleHealthUpdate();
+  if(!this.worldObj.isRemote && this.getTarget()==null && this.isRidingVehicle())
+    {
+    VehicleBase vehicle = (VehicleBase)this.ridingEntity;
+    vehicle.moveHelper.clearInputFromDismount();
+    }
   super.onUpdate();    
   }
 
@@ -517,6 +522,7 @@ protected void handleHealthUpdate()
 
 protected void pushOutOfBlocks()
   {
+  Config.logDebug("setting push out of blocks");
   int x = MathHelper.floor_double(posX);
   int y = MathHelper.floor_double(posY);
   int z = MathHelper.floor_double(posZ);

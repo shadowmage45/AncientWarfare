@@ -110,7 +110,7 @@ protected void attackTargetMounted(ITargetEntry target)
   boolean turning = false;
   if(vehicle.vehicleType.getBaseTurretRotationAmount()<180 || Math.abs(yaw)>120)//if turret cannot rotate fully around, or if it can but yaw diff is great, turn towards target
     {
-    if(!Trig.isAngleBetween(vehicle.rotationYaw+yaw, vehicle.localTurretRotationHome-vehicle.currentTurretRotationMax-2.f, vehicle.localTurretRotationHome+vehicle.currentTurretRotationMax+2.f))//expand the bounds a bit
+    if(!Trig.isAngleBetween(vehicle.rotationYaw+yaw, vehicle.localTurretRotationHome-vehicle.currentTurretRotationMax-1.5f, vehicle.localTurretRotationHome+vehicle.currentTurretRotationMax+1.5f))//expand the bounds a bit
       {      
       if(yaw<0)
         {
@@ -132,6 +132,7 @@ protected void attackTargetMounted(ITargetEntry target)
     }
   else
     {
+    vehicle.rotationYaw = vehicle.rotationYaw+yaw;
     vehicle.moveHelper.stopMotion();
     }
   if(vehicle.firingHelper.isAtTarget())

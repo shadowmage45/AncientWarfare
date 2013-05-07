@@ -591,6 +591,7 @@ public void onUpdateClient()
     if(moveUpdateTicks>=Config.clientMoveUpdateTicks)
       {
       moveUpdateTicks=0;
+      Config.logDebug("sending client move packet");
       moveHelper.sendInputToServer(getForwardInput(), getStrafeInput(), true);      
       }
     }
@@ -862,6 +863,9 @@ public void updateRiderPosition()
     {
     posY -= 0.5f;
     }
+  this.riddenByEntity.motionX=0.d;
+  this.riddenByEntity.motionY=0.d;
+  this.riddenByEntity.motionZ=0.d;
   float yaw = this.vehicleType.moveRiderWithTurret() ? localTurretRotation : rotationYaw;
   posX += Trig.sinDegrees(yaw)*-this.getRiderForwardOffset();
   posX += Trig.sinDegrees(yaw+90)*this.getRiderHorizontalOffset();
