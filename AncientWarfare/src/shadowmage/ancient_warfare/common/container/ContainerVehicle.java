@@ -100,8 +100,7 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
   for (y = 0; y < 2; y++)
     {
     for(x = 0; x <3 ;x++)
-      {
-      
+      {      
       slotNum = y*3 + x;
       if(slotNum<vehicle.inventory.armorInventory.getSizeInventory())
         {
@@ -215,7 +214,7 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
         }
       else if(slotStackCopy.itemID==ItemLoader.vehicleUpgrade.itemID && vehicle.inventory.isUpgradeValid(slotStackCopy))//is upgrade item...
         {
-        if (!this.mergeItemStack(slotStack, 36+ammoSlots, 36+ammoSlots+upgradeSlots, false))//merge into upgrade inventory
+        if(!this.mergeItemStack(slotStack, 36+ammoSlots, 36+ammoSlots+upgradeSlots, false))//merge into upgrade inventory
           {
           return null;
           }

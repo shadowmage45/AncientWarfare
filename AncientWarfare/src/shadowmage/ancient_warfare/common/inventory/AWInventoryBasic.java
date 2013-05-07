@@ -51,10 +51,21 @@ public AWInventoryBasic(int size)
   this.prevContents = new ItemStack[size];
   }
 
+public AWInventoryBasic(int size, int maxStackSize)
+  {
+  this(size);
+  }
+
 public AWInventoryBasic(int size, IInventoryCallback caller)
   {
   this(size);
   this.addCallback(caller);
+  }
+
+public AWInventoryBasic(int size, IInventoryCallback caller, int maxStackSize)
+  {
+  this(size, caller);
+  this.maxStackSize = maxStackSize;
   }
 
 public void addCallback(IInventoryCallback ent)
@@ -247,10 +258,12 @@ public String getInvName()
   return "DefaultInventory";
   }
 
+protected int maxStackSize = 64;
+
 @Override
 public int getInventoryStackLimit()
   {  
-  return 64;
+  return maxStackSize;
   }
 
 @Override

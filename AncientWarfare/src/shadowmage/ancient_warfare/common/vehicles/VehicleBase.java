@@ -271,10 +271,10 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
     {
     this.upgradeHelper.addValidArmor(armor);
     }
-  this.inventory.ammoInventory = new AWInventoryBasic(vehicle.getAmmoBaySize(), this.inventory);
-  this.inventory.armorInventory = new AWInventoryBasic(vehicle.getArmorBaySize(), this.inventory);
-  this.inventory.storageInventory = new AWInventoryBasic(vehicle.getStorageBaySize(), this.inventory);
-  this.inventory.upgradeInventory = new AWInventoryBasic(vehicle.getUpgradeBaySize(), this.inventory);
+  this.inventory.ammoInventory = new AWInventoryBasic(vehicle.getAmmoBaySize(), this.inventory, 64);
+  this.inventory.armorInventory = new AWInventoryBasic(vehicle.getArmorBaySize(), this.inventory, 1);
+  this.inventory.storageInventory = new AWInventoryBasic(vehicle.getStorageBaySize(), this.inventory, 64);
+  this.inventory.upgradeInventory = new AWInventoryBasic(vehicle.getUpgradeBaySize(), this.inventory, 1);
   this.updateBaseStats();
   this.resetCurrentStats();
 
@@ -673,7 +673,7 @@ public void updateTurretRotation()
   this.localTurretRotationHome = Trig.wrapTo360(this.rotationYaw);
   if(!canAimRotate())
     {
-    localTurretRotation = this.rotationYaw;
+    localTurretRotation = Trig.wrapTo360(this.rotationYaw);
     localTurretDestRot = localTurretRotation;
     }
   else

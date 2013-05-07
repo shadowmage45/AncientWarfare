@@ -6,25 +6,16 @@ THIS WEEK
 THIS(next) WEEKEND
 
 GENERAL
-* partially destroyable blocks ? (hold destruction status as meta-data?)
-* move upgrades/ammo/armor over to self-registering class with an underlying array instead of the map they currently use        
-* grenades ?
-* land-mines ?
-* move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 * add logs to block-data manager (for rotation values...currently unmapped)
 * civic block ID picked stuff..
-* investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
-* vehicle container needs stack limiting on shift-click
-* vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation
 
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
 * create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
 * inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)
-* footsoldiers need to NOT attack creepers
 * add advanced configurable aggro options (load to config at world load/sometime after all load/init stages are done)
 
 NPCS
@@ -34,6 +25,15 @@ NPCS
 * expand waypoint navigator with the following functions:
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
 * work out indiv costs for upkeep -- add specialized items where applicable
+* add mount-target to command baton   
+* investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)     
+        
+ITEM ROUTING
+* make it into an abstract network
+* courier post stations for pickup/deposit of items.
+    adv courier posts will have settings to push/pull items from nearby inventories (automation aid)
+    posts will have slot filter settings for
+    when a courier requests a job from a post, place couriers items into 'escrow'
         
 GUI FRAMEWORK
 * put quaded texture rendering someplace central...
@@ -135,6 +135,13 @@ CRAFTING
  
 /************************************************DONE/OPTI*************************************************/
  
+OPTIONAL
+* partially destroyable blocks ? (hold destruction status as meta-data?)
+* move upgrades/ammo/armor over to self-registering class with an underlying array instead of the map they currently use        
+* grenades ?
+* land-mines ?
+* move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
+ 
 TEAM CONTROL GUI
  
 TEMPLATES
@@ -189,7 +196,10 @@ TWEAKS/OPTIMIZATION
     keep a record of vehicle ridden
     dismount vehicle
     get upkeep
-    go back to vehicle/remount
+    go back to vehicle/remount    
+* vehicle container needs stack limiting on shift-click
+    code actually added to containerBase mergeItem coding...
+* vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation
 /********** 05-08-13 **********/
 /********** 05-09-13 **********/
 /********** 05-10-13 **********/

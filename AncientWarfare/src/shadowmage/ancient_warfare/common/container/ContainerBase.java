@@ -33,6 +33,7 @@ import shadowmage.ancient_warfare.common.interfaces.IContainerGuiCallback;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IHandlePacketData;
 import shadowmage.ancient_warfare.common.network.Packet03GuiComs;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 
 
@@ -135,5 +136,64 @@ public void sendDataToPlayer(NBTTagCompound tag)
   }
 
 public abstract List<NBTTagCompound> getInitData();
+
+@Override
+protected boolean mergeItemStack(ItemStack inputStack, int startSlot, int stopSlot, boolean iterateBackwards)
+  {
+  boolean returnFlag = false;
+  int k = startSlot;
+  if(stopSlot<startSlot)//if some nubtard tried reversing indices//because who the fuck iterates backwards...
+    {
+    startSlot = stopSlot;
+    stopSlot = k;
+    }
+  Slot slot;
+  ItemStack stackFromSlot;
+  if (inputStack.isStackable())
+    {
+    int numToMerge;
+    for(int i =startSlot; i < stopSlot && inputStack.stackSize > 0 ; i++)
+      {
+      slot = (Slot)this.inventorySlots.get(k);
+      if(slot==null)
+        {
+        continue;
+        }      
+      stackFromSlot = slot.getStack();
+      if(InventoryTools.doItemsMatch(inputStack, stackFromSlot))
+        {
+        numToMerge = slot.getSlotStackLimit() - stackFromSlot.stackSize;
+        numToMerge = numToMerge > inputStack.stackSize ? inputStack.stackSize : numToMerge;
+        numToMerge = numToMerge + stackFromSlot.stackSize > stackFromSlot.getMaxStackSize() ? stackFromSlot.getMaxStackSize() - stackFromSlot.stackSize : numToMerge;       
+        
+        if(numToMerge>0)
+          {
+          inputStack.stackSize -= numToMerge;
+          stackFromSlot.stackSize += numToMerge;
+          slot.onSlotChanged();
+          returnFlag = true;
+          }
+        }
+      }
+    }
+  if (inputStack.stackSize > 0)
+    {
+    int numToMerge;
+    for(int i =startSlot; i < stopSlot && inputStack.stackSize > 0 ; i++)
+      {
+      slot = (Slot)this.inventorySlots.get(k);
+      stackFromSlot = slot.getStack();
+      if(stackFromSlot==null)
+        {
+        slot.putStack(inputStack.copy());
+        slot.onSlotChanged();
+        inputStack.stackSize = 0;
+        returnFlag = true;
+        break;       
+        }
+      }
+    }
+  return returnFlag;
+  }
 
 }
