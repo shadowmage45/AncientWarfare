@@ -1,10 +1,14 @@
 TONIGHT
-* templated mine
+* add log rotation data
+* npc commanders
+* add mount target to baton
 
 THIS WEEK
 * get stuff ready for a preview video
+* courier post blocks
 
 THIS(next) WEEKEND
+* preview video..it better be cool!
 
 GENERAL
 * add logs to block-data manager (for rotation values...currently unmapped)
@@ -31,10 +35,10 @@ NPCS
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)     
         
 ITEM ROUTING
-* make it into an abstract network
+* courier post block (civic type?)(ranks for more filter slots/inventory slots?)
 * courier post stations for pickup/deposit of items.
     adv courier posts will have settings to push/pull items from nearby inventories (automation aid)
-    posts will have slot filter settings for
+    posts will have slot filter settings (give/take/quantities/default (include/exclude)
     when a courier requests a job from a post, place couriers items into 'escrow'
         
 GUI FRAMEWORK
