@@ -34,14 +34,14 @@ int xSize;
 int ySize;
 int zSize;
 
-MineAction[] actionTemplate;
+MineActionPoint[] actionTemplate;
 
 public MineTemplate(int xSize, int ySize, int zSize)
   {
   this.xSize = xSize;
   this.ySize = ySize;
   this.zSize = zSize;
-  actionTemplate = new MineAction[xSize*ySize*zSize];
+  actionTemplate = new MineActionPoint[xSize*ySize*zSize];
   }
 
 public MineTemplate(List<String> templateLines)
@@ -49,7 +49,7 @@ public MineTemplate(List<String> templateLines)
   this.parseMineTemplate(templateLines);
   }
 
-public MineAction getAction(int x, int y, int z)
+public MineActionPoint getAction(int x, int y, int z)
   {
   int index = zSize*xSize*y + xSize*z +x;
   if(actionTemplate!=null && index>=0 && index<this.actionTemplate.length)
@@ -59,7 +59,7 @@ public MineAction getAction(int x, int y, int z)
   return null;
   }
 
-public void setAction(int x, int y, int z, MineAction action)
+public void setAction(int x, int y, int z, MineActionPoint action)
   {
   int index = zSize*xSize*y + xSize*z +x;
   if(this.actionTemplate!=null && index>=0 && index<this.actionTemplate.length)
@@ -84,7 +84,7 @@ public void parseMineTemplate(List<String> lines)
         xSize = size[0];
         ySize = size[1];
         zSize = size[2];
-        this.actionTemplate = new MineAction[xSize*ySize*zSize];
+        this.actionTemplate = new MineActionPoint[xSize*ySize*zSize];
         }
       }
     else if(line.toLowerCase().startsWith("layer:"))
@@ -154,7 +154,7 @@ protected void parseLayerLine(String[] splits, int y, int z)
       meta = StringTools.safeParseInt(subSplit[1]);
       actionOrdinal = StringTools.safeParseInt(subSplit[2]);
       TargetType t = TargetType.values()[actionOrdinal];
-      this.setAction(x, y, z, new MineAction(order,meta,t));
+      this.setAction(x, y, z, new MineActionPoint(order,meta,t));
       }
     }
   }

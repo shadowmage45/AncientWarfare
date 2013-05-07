@@ -20,17 +20,17 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
-import shadowmage.ancient_warfare.common.targeting.TargetType;
-
-public class MineAction
+public class TEMineQuarry extends TEMine
 {
-int order;
-int meta;
-TargetType action;
-public MineAction(int o, int m, TargetType t)
+
+public TEMineQuarry()
   {
-  this.order = o;
-  this.meta = m;
-  this.action = t;
+  this.levelHeight = 1;
   }
+
+protected MineLevel getNewLevel(int x, int y, int z, int xSize, int ySize, int zSize)
+  {
+  return new MineLevelClassic(x, y, z, xSize, ySize, zSize);
+  }
+
 }

@@ -50,7 +50,7 @@ public MineLevelTemplated(int xPos, int yPos, int zPos, int xSize, int ySize, in
   }
 
 @Override
-protected void scanLevel(TEWorkSiteMine mine, World world)
+protected void scanLevel(TEMine mine, World world)
   {
   this.hasFiller = mine.hasFiller();
   this.hasTorches = mine.hasTorch();
@@ -62,7 +62,7 @@ protected void scanLevel(TEWorkSiteMine mine, World world)
    */
   int xDiff = template.xSize-this.xSize;
   int zDiff = template.zSize-this.zSize;  
-  MineAction a;
+  MineActionPoint a;
   TargetType actualAction;
   int wx;//world coordinates
   int wy;
@@ -97,7 +97,7 @@ protected void scanLevel(TEWorkSiteMine mine, World world)
     }
   }
 
-protected TargetType getAdjustedAction(MineAction a, TEWorkSiteMine m, World world)
+protected TargetType getAdjustedAction(MineActionPoint a, TEMine m, World world)
   {
   return TargetType.NONE;
   }

@@ -29,7 +29,7 @@ public class CivicMine extends Civic
 /**
  * @param id
  */
-public CivicMine(int id, String name, String tooltip, Class <?extends TECivic> teClass)
+public CivicMine(int id, String name, String tooltip, Class <?extends TECivic> teClass, int hSize)
   {
   super(id);
   this.isWorkSite = true;
@@ -38,7 +38,7 @@ public CivicMine(int id, String name, String tooltip, Class <?extends TECivic> t
   this.teClass = teClass;
   this.inventorySize = 9;
   this.workSizeMaxHeight = 2;
-  this.workSizeMaxHorizontal = 16;
+  this.workSizeMaxHorizontal = hSize;
   this.maxWorkers = 4;
   this.itemIconTexture = "civicMine1";
   this.blockIconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";

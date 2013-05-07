@@ -18,42 +18,42 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.targeting;
+package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
+
+import shadowmage.ancient_warfare.common.targeting.TargetType;
+import net.minecraft.world.World;
+
+public class MineLevelQuarry extends MineLevel
+{
 
 /**
- * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
- * @author Shadowmage
- *
+ * @param xPos
+ * @param yPos
+ * @param zPos
+ * @param xSize
+ * @param ySize
+ * @param zSize
  */
-public enum TargetType
-  { 
-  ATTACK,
-  MOUNT,
-  REPAIR,
-  HEAL,
-  FOLLOW,
-  WANDER,
-  PATROL,
-  MOVE,
-  SHELTER,
-  FLEE,
-  NONE,
-  WORK,
-  FARM_PLANT,
-  FARM_HARVEST,
-  BARN_BREED,
-  BARN_CULL,
-  BUILD_CLEAR,
-  BUILD_PLACE,
-  MINE_CLEAR,//
-  MINE_LADDER,//for the central vertical shaft
-  MINE_FILL,//for holes in the wall/roof/floor
-  MINE_TORCH,//for some tunnel/branch lines
-  MINE_CLEAR_RESOURCE,
-  TREE_CHOP,
-  TREE_PLANT,
-  PICKUP,
-  DELIVER,
-  ATTACK_TILE,
-  UPKEEP,
+public MineLevelQuarry(int xPos, int yPos, int zPos, int xSize, int ySize, int zSize)
+  {
+  super(xPos, yPos, zPos, xSize, ySize, zSize);
+  this.levelSize = 1;
   }
+
+@Override
+protected void scanLevel(TEMine mine, World world)
+  {
+  int id;
+  for(int x = this.minX; x < this.minX + this.xSize; x++)
+    {
+    for(int z = this.minZ; z < this.minZ + this.zSize; z++)
+      {
+      if(shouldClear(world.getBlockId(x, minY, z)))
+        {
+        this.addNewPoint(x, minY, z, TargetType.MINE_CLEAR);
+        }
+      }
+    }
+  }
+
+}

@@ -39,7 +39,8 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPotato;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPumpkin;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmReed;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmWheat;
-import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEWorkSiteMine;
+import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEMine;
+import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEMineQuarry;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmBirch;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmJungle;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmOak;
@@ -62,10 +63,10 @@ public static ICivicType reedFarm = new CivicFarm(6, "Small Reed Farm", "10x10 M
 public static ICivicType mushroomRedFarm = new CivicFarm(7, "Small Red Mushroom Farm", "10x10 Max Width", TEFarmMushroomRed.class, "civicFarmWheat1", 10, 2);
 public static ICivicType mushroomBrownFarm = new CivicFarm(8, "Small Brown Mushroom Farm", "10x10 Max Width", TEFarmMushroomBrown.class, "civicFarmWheat1", 10, 2);
 public static ICivicType netherstalkFarm = new CivicFarm(9, "Small Netherstalk Farm", "10x10 Max Width", TEFarmNetherStalk.class, "civicFarmWheat1", 10, 2);
-public static ICivicType mineBasic = new CivicMine(10, "Basic Layout Mine", "16x16 Max Width", TEWorkSiteMine.class);
+public static ICivicType mineBasic = new CivicMine(10, "Basic Layout Mine", "16x16 Max Width", TEMine.class,16);
 //mine r2
 //mine r3
-//mine altr1
+public static ICivicType mineQuarry = new CivicMine(13, "Quarry Layout Mine", "64x64 Max Width", TEMineQuarry.class,64);
 //mine altr2
 //mine altr3
 public static ICivicType treeFarmOak = new CivicTreeFarm(16, "Oak Tree Farm", "16x16 Max Width", TETreeFarmOak.class);
@@ -74,8 +75,8 @@ public static ICivicType treeFarmBirch = new CivicTreeFarm(18, "Birch Tree Farm"
 public static ICivicType treeFarmJungle = new CivicTreeFarm(19, "Jungle Tree Farm", "16x16 Max Width", TETreeFarmJungle.class);
 public static ICivicType builder = new CivicBuilder(20);//survival mode ticked builder....
 public static ICivicType townHallSmall = new CivicTownHall(21, "Town Hall Small", "Small Upkeep center for NPCs", 9, TECivicTownHall.class);
-public static ICivicType townHallMedium = new CivicTownHall(22, "Town Hall Medium", "Medium Upkeep center for NPCs", 9, TECivicTownHall.class);
-public static ICivicType townHallLarge = new CivicTownHall(23, "Town Hall Large", "Large Upkeep center for NPCs", 9, TECivicTownHall.class);
+public static ICivicType townHallMedium = new CivicTownHall(22, "Town Hall Medium", "Medium Upkeep center for NPCs", 18, TECivicTownHall.class);
+public static ICivicType townHallLarge = new CivicTownHall(23, "Town Hall Large", "Large Upkeep center for NPCs", 27, TECivicTownHall.class);
 public static ICivicType pigFarm = new CivicFarm(24, "Pig Farm", "16x16 Max Width, 6 animals", TEBarnPig.class, "civicFarmWheat1", 16, 2);
 public static ICivicType cowFarm = new CivicFarm(25, "Cow Farm", "16x16 Max Width, 6 animals", TEBarnCow.class, "civicFarmWheat1", 16, 2);
 public static ICivicType chickenFarm = new CivicFarm(26, "Chicken Farm", "16x16 Max Width, 6 animals", TEBarnChicken.class, "civicFarmWheat1", 16, 2);

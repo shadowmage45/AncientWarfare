@@ -36,7 +36,7 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public class TEWorkSiteMine extends TEWorkSite
+public class TEMine extends TEWorkSite
 {
 
 /**
@@ -80,7 +80,7 @@ ItemStack fillerFilter = new ItemStack(Block.cobblestone,1);
 ItemStack ladderFilter = new ItemStack(Block.ladder, 1);
 ItemStack torchFilter = new ItemStack(Block.torchWood, 1);
 
-public TEWorkSiteMine()
+public TEMine()
   {
   
   }
@@ -184,11 +184,16 @@ protected void loadLevel(int level)
     return;
     }
   this.currentLevelNum = level;
-  int adjTopY = this.minY - 4 * level;//the top of the level
-  int adjMinY = adjTopY-3;  
-  this.currentLevel = new MineLevelClassic(minX, adjMinY, minZ, maxX - minX + 1, 4, maxZ - minZ + 1);
+  int adjTopY = this.minY - (levelHeight * level);//the top of the level
+  int adjMinY = adjTopY-(levelHeight-1);  
+  this.currentLevel = getNewLevel(minX, adjMinY, minZ, maxX - minX + 1, levelHeight, maxZ - minZ + 1);
   this.currentLevel.initializeLevel(this, worldObj);
   this.workPoints.addAll(this.currentLevel.workList);
+  }
+
+protected MineLevel getNewLevel(int x, int y, int z, int xSize, int ySize, int zSize)
+  {
+  return new MineLevelClassic(x, y, z, xSize, ySize, zSize);
   }
 
 public boolean hasTorch()

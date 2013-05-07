@@ -1,4 +1,5 @@
 TONIGHT
+* templated mine
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -8,6 +9,7 @@ THIS(next) WEEKEND
 GENERAL
 * add logs to block-data manager (for rotation values...currently unmapped)
 * civic block ID picked stuff..
+* find better method of registering Civic TE's (manual is..ughh.)
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
@@ -69,7 +71,6 @@ MINE
 * restructure mine into an 'internal' template.
     internal map will be 64*64 (max mine size)
         smaller mines will work outwards from the center of the template.
-* it tries to harvest water..need a isClearable(id, top) check...
 * need isFillable(id, top)
 * need isResource(id, top)
 
@@ -200,6 +201,7 @@ TWEAKS/OPTIMIZATION
 * vehicle container needs stack limiting on shift-click
     code actually added to containerBase mergeItem coding...
 * vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation
+* mine tries to harvest water..need a isClearable(id, top) check...
 /********** 05-08-13 **********/
 /********** 05-09-13 **********/
 /********** 05-10-13 **********/

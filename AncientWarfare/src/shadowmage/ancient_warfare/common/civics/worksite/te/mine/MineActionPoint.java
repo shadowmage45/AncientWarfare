@@ -18,42 +18,24 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.targeting;
+package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
-/**
- * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
- * @author Shadowmage
- *
- */
-public enum TargetType
-  { 
-  ATTACK,
-  MOUNT,
-  REPAIR,
-  HEAL,
-  FOLLOW,
-  WANDER,
-  PATROL,
-  MOVE,
-  SHELTER,
-  FLEE,
-  NONE,
-  WORK,
-  FARM_PLANT,
-  FARM_HARVEST,
-  BARN_BREED,
-  BARN_CULL,
-  BUILD_CLEAR,
-  BUILD_PLACE,
-  MINE_CLEAR,//
-  MINE_LADDER,//for the central vertical shaft
-  MINE_FILL,//for holes in the wall/roof/floor
-  MINE_TORCH,//for some tunnel/branch lines
-  MINE_CLEAR_RESOURCE,
-  TREE_CHOP,
-  TREE_PLANT,
-  PICKUP,
-  DELIVER,
-  ATTACK_TILE,
-  UPKEEP,
+import shadowmage.ancient_warfare.common.targeting.TargetType;
+
+public class MineActionPoint
+{
+
+
+int order;
+int meta;
+TargetType action;
+public MineActionPoint(int o, int m, TargetType t)
+  {
+  this.order = o;
+  this.meta = m;
+  this.action = t;
   }
+
+
+
+}

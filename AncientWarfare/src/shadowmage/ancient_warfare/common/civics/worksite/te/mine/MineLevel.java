@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public abstract class MineLevel
 {
@@ -72,7 +73,7 @@ public boolean hasWork()
  * called to map out the nodes for this level
  * @param world
  */
-public void initializeLevel(TEWorkSiteMine mine, World world)
+public void initializeLevel(TEMine mine, World world)
   { 
   long t1 = System.nanoTime();
   shaftX = minX -1 + xSize/2;
@@ -82,7 +83,7 @@ public void initializeLevel(TEWorkSiteMine mine, World world)
   Config.logDebug("mine level init time nanos: "+(t2-t1)); 
   }
 
-protected abstract void scanLevel(TEWorkSiteMine mine, World world);
+protected abstract void scanLevel(TEMine mine, World world);
 
 protected boolean needsFilled(int id)
   {
@@ -102,4 +103,26 @@ protected boolean isValidResource(int id)
     }
   return true;
   }
+
+protected boolean shouldClear(int id)
+  {
+  if(id==0 || id==Block.waterMoving.blockID || id==Block.waterStill.blockID || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)
+    {
+    return false;
+    }
+  return true;
+  }
+
+protected void addNewPoint(int x, int y, int z, byte meta, TargetType type)
+  {
+  this.workList.add(new WorkPoint(x,y,z, meta,type));
+  }
+
+protected void addNewPoint(int x, int y, int z, TargetType type)
+  {
+  this.addNewPoint(x, y, z, (byte)0, type);
+  }
+
+
+
 }

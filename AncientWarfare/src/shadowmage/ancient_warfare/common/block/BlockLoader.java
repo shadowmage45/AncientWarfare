@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.block;
 
 import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
+import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnChicken;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnCow;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnPig;
@@ -38,7 +39,8 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPumpkin;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmReed;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmWheat;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
-import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEWorkSiteMine;
+import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEMine;
+import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEMineQuarry;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmBirch;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmJungle;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmOak;
@@ -87,14 +89,15 @@ public void load()
   GameRegistry.registerTileEntity(TEFarmNetherStalk.class, "Netherstalk Farm");
   GameRegistry.registerTileEntity(TEFarmMushroomRed.class, "Red Mushroom Farm");
   GameRegistry.registerTileEntity(TEFarmMushroomBrown.class, "Brown Mushroom Farm");
-  GameRegistry.registerTileEntity(TEWorkSiteMine.class, "Basic Mine");
+  GameRegistry.registerTileEntity(TEMine.class, "Basic Mine");
+  GameRegistry.registerTileEntity(TEMineQuarry.class, "Quarry Mine");
   
   GameRegistry.registerTileEntity(TETreeFarmOak.class, "Tree Farm Oak");
   GameRegistry.registerTileEntity(TETreeFarmSpruce.class, "Tree Farm Spruce");
   GameRegistry.registerTileEntity(TETreeFarmBirch.class, "Tree Farm Birch");
   GameRegistry.registerTileEntity(TETreeFarmJungle.class, "Tree Farm Jungle");
   GameRegistry.registerTileEntity(TECivicBuilder.class, "Civic Builder");
-  
+  GameRegistry.registerTileEntity(TECivicTownHall.class, "Town Hall");
   GameRegistry.registerTileEntity(TEBarnPig.class, "Pig Farm");
   GameRegistry.registerTileEntity(TEBarnCow.class, "Cow Farm");
   GameRegistry.registerTileEntity(TEBarnChicken.class, "Chicken Farm");

@@ -48,7 +48,7 @@ public MineLevelClassic(int xPos, int yPos, int zPos, int xSize, int ySize, int 
   }
 
 @Override
-protected void scanLevel(TEWorkSiteMine mine, World world)
+protected void scanLevel(TEMine mine, World world)
   {
   this.scanShaft(mine, world);
   this.scanTunnels(mine, world);
@@ -57,7 +57,7 @@ protected void scanLevel(TEWorkSiteMine mine, World world)
 
 /************************************************SHAFT*************************************************/
 
-protected void scanShaft(TEWorkSiteMine mine, World world)
+protected void scanShaft(TEMine mine, World world)
   {
   for(int y = minY + ySize-1; y >= minY; y--)//start at the top...
     {
@@ -79,7 +79,7 @@ protected void scanShaft(TEWorkSiteMine mine, World world)
     }
   }
 
-protected void addNorthShaft(TEWorkSiteMine mine, World world, int x, int y, int z)
+protected void addNorthShaft(TEMine mine, World world, int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);
   int id2 = world.getBlockId(x, y, z+1);
@@ -104,7 +104,7 @@ protected void addNorthShaft(TEWorkSiteMine mine, World world, int x, int y, int
     }
   }
 
-protected void addSouthShaft(TEWorkSiteMine mine, World world, int x, int y, int z)
+protected void addSouthShaft(TEMine mine, World world, int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);
   int id2 = world.getBlockId(x, y, z-1);  
@@ -129,7 +129,7 @@ protected void addSouthShaft(TEWorkSiteMine mine, World world, int x, int y, int
   }
 
 /************************************************TUNNELS*************************************************/
-protected void scanTunnels(TEWorkSiteMine mine, World world)
+protected void scanTunnels(TEMine mine, World world)
   {
   int id = 0;
   for(int x = shaftX-1; x>= minX ; x--)//add west tunnel
@@ -172,7 +172,7 @@ protected void scanTunnels(TEWorkSiteMine mine, World world)
     }
   }
 
-protected void addTunnelPiece(TEWorkSiteMine mine, int x, int y, int z, boolean left, boolean top)
+protected void addTunnelPiece(TEMine mine, int x, int y, int z, boolean left, boolean top)
   {  
   int id1 = mine.worldObj.getBlockId(x, y, z);
   boolean addTorch = !top && x%4==0;
@@ -184,13 +184,13 @@ protected void addTunnelPiece(TEWorkSiteMine mine, int x, int y, int z, boolean 
         {
         addNewPoint(x,y,z, TargetType.MINE_TORCH);
         }
-      else
+      else if(shouldClear(id1))
         {
         addNewPoint(x, y, z, TargetType.MINE_CLEAR);
         }      
       }
     }
-  else if(id1!=0)
+  else if(shouldClear(id1))
     {
     addNewPoint(x, y, z,  TargetType.MINE_CLEAR);      
     }
@@ -223,7 +223,7 @@ protected void addTunnelPiece(TEWorkSiteMine mine, int x, int y, int z, boolean 
     }
   }
 /************************************************BRANCHES*************************************************/
-protected void scanBranches(TEWorkSiteMine mine, World world)
+protected void scanBranches(TEMine mine, World world)
   {
   for(int x = shaftX-1; x>=minX; x-=3)
     {
@@ -261,7 +261,7 @@ protected void scanBranches(TEWorkSiteMine mine, World world)
     }
   }
 
-protected void addNodeToBranch(TEWorkSiteMine mine, int x, int y, int z, boolean top)
+protected void addNodeToBranch(TEMine mine, int x, int y, int z, boolean top)
   {
   int id1 = mine.worldObj.getBlockId(x, y, z);
   int id2 = top? mine.worldObj.getBlockId(x, y+1, z) : mine.worldObj.getBlockId(x, y-1, z);
@@ -281,7 +281,7 @@ protected void addNodeToBranch(TEWorkSiteMine mine, int x, int y, int z, boolean
         {
         addNewPoint(x,y,z, TargetType.MINE_TORCH);
         }
-      else
+      else if(shouldClear(id1))
         {
         addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
         }
@@ -289,7 +289,10 @@ protected void addNodeToBranch(TEWorkSiteMine mine, int x, int y, int z, boolean
     }
   else if(id1!=0)
     {
-    addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
+    if(shouldClear(id1))
+      {
+      addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
+      }
     }
   /**
    * check top or bottom block
@@ -350,14 +353,6 @@ protected void addNodeToBranch(TEWorkSiteMine mine, int x, int y, int z, boolean
   }
 
 /************************************************UTILITY*************************************************/
-protected void addNewPoint(int x, int y, int z, byte meta, TargetType type)
-  {
-  this.workList.add(new WorkPoint(x,y,z, meta,type));
-  }
 
-protected void addNewPoint(int x, int y, int z, TargetType type)
-  {
-  this.addNewPoint(x, y, z, (byte)0, type);
-  }
 
 }
