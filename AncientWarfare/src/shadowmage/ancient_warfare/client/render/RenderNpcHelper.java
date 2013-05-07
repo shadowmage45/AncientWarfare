@@ -108,12 +108,9 @@ protected void renderLivingLabel(EntityLiving par1EntityLiving, String par2Str, 
     fontRenderer.drawString(par2Str, -fontRenderer.getStringWidth(par2Str) / 2, yOffset, color2);//was-1
     if(Settings.getRenderNpcObjectives())
       {
-      GL11.glTranslatef(-0.5F, 1.F, 0.0f);
       renderObjectiveIcon(npc.getAIObjectiveID());
-      GL11.glTranslatef(0.5F, 0, 0.0f);
       renderTaskIcon(npc.getAITaskID());
-      GL11.glTranslatef(0.5F, 0, 0.0f);
-      renderErrorIcon(npc.getAIErrorID());
+//      renderErrorIcon(npc.getAIErrorID());
       }
     GL11.glEnable(GL11.GL_LIGHTING);
     GL11.glDisable(GL11.GL_BLEND);
@@ -126,7 +123,7 @@ public void renderObjectiveIcon(byte obj)
   {
   if(obj>=0)
     {
-    RenderTools.renderIcon(Config.texturePath+"items/testIcon1.png", 16, 16);
+    RenderTools.renderIcon(getObjectiveTexture(obj), 16, 16, -10, -16);
     }  
   }
 
@@ -134,7 +131,7 @@ public void renderTaskIcon(byte task)
   {
   if(task>=0)
     {
-    RenderTools.renderIcon(Config.texturePath+"items/testIcon1.png", 16, 16);
+    RenderTools.renderIcon(getTaskTexture(task), 16, 16, 10,-16);
     }
   }
 
@@ -142,8 +139,68 @@ public void renderErrorIcon(byte error)
   {
   if(error>=0)
     {
-    RenderTools.renderIcon(Config.texturePath+"items/testIcon1.png", 16, 16);
+    RenderTools.renderIcon(Config.texturePath+"items/testIcon1.png", 16, 16,20,-16);
     }
   }
 
+public String getObjectiveTexture(byte objective)
+  {
+  String base = Config.texturePath+"custom_icons/npc_status/";
+  switch(objective)
+  {
+  case 0:
+  return base + "objective_attack.png";//
+  case 1:
+  return base + "objective_attack_ranged.png";//
+  case 2:
+  return base + "objective_deposit.png";//
+  case 3:
+  return base + "objective_dismount.png";//
+  case 4:
+  return base + "objective_follow_player.png";//
+  case 5:
+  return base + "objective_work.png";//
+  case 6:
+  return base + "objective_mount.png";//
+  case 7:
+  return base + "objective_upkeep.png";//
+  case 8:
+  return base + "objective_patrol.png";//
+  case 9:
+  return base + "objective_shelter.png";//
+  case 10:
+  return base + "objective_home.png";//
+  case 11:
+  return base + "objective_wander.png";//
+  case 12:
+  case 13:
+  default:
+  return base + "objective_home.png";
+  }  
+  }
+
+
+public String getTaskTexture(byte task)
+  {
+  String base = Config.texturePath+"custom_icons/npc_status/";
+  switch(task)
+  {
+  case 0:
+  return base + "task_attack.png";//
+  case 1:
+  return base + "task_attack_ranged.png";//
+  case 2:
+  return base + "task_dismount.png";//
+  case 3:
+  return base + "task_work.png";//
+  case 4:
+  return base + "task_patrol.png";//
+  case 5:
+  return base + "task_mount.png";//
+  case 6:
+  return base + "task_move_to.png";//
+  default:
+  return base + "objective_home.png";
+  }  
+  }
 }

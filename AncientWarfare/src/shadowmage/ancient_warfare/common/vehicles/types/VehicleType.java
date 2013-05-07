@@ -89,7 +89,7 @@ public float riderVerticalOffset= 0.f;
 public boolean shouldRiderSit = true;
 public boolean moveRiderWithTurret = false;
 
-public float minAttackDistance = 10.f;
+public float minAttackDistance = 5.f;
 
 public float baseForwardSpeed;
 public float baseStrafeSpeed;

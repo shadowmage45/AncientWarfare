@@ -34,7 +34,7 @@ import org.lwjgl.opengl.GL11;
 public class RenderTools
 {
 
-static float zLevel = -100;
+static float zLevel = 0;
 /** Missing texture image */
 static TextureMap texMap = new TextureMap(1, "items", "textures/custom_icons/", new BufferedImage(64, 64, 2));
 
@@ -64,18 +64,17 @@ public static Icon getIcon(String tex)
  * @param width
  * @param height
  */
-public static void renderIcon(String tex, int width, int height)
+public static void renderIcon(String tex, int width, int height, int x, int y)
   {
   Tessellator tess = Tessellator.instance;
   Minecraft.getMinecraft().renderEngine.bindTexture(tex);
   int halfW = width/2;
   int halfH = height/2;
-  tess.setTextureUV(0.d, 0.d);
   tess.startDrawingQuads();
-  tess.addVertexWithUV(-halfW, -halfH, 0, 0, 0); 
-  tess.addVertexWithUV(-halfW, halfH, 0, 0, height);
-  tess.addVertexWithUV(halfW, halfH, 0, width, height);
-  tess.addVertexWithUV(halfW, -halfH, 0, width, 0);
+  tess.addVertexWithUV(x-halfW, y-halfH, 0, 0, 0); 
+  tess.addVertexWithUV(x-halfW, y+halfH, 0, 0, 1);
+  tess.addVertexWithUV(x+halfW, y+halfH, 0, 1, 1);
+  tess.addVertexWithUV(x+halfW, y+-halfH, 0, 1, 0);
   tess.draw();
   }
 

@@ -1,13 +1,8 @@
 TONIGHT
-* get npc objective icons rendering properly
+* vehicle pathfinding
 
 THIS WEEK
-* figure out rendering for npc objective icons
-* clean up npc vehicle turning/dismount coding
 * get stuff ready for a preview video
-* move vehicle health over to data-watcher
-    que vehicle hit animation to trigger client-side when health has changed
-    (see NpcBase, use similar onTick methods)
 
 THIS(next) WEEKEND
 
@@ -24,13 +19,13 @@ GENERAL
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
 * vehicle container needs stack limiting on shift-click
+* vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation
+* pathfinding needs some attention (gets stuck?)
 
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
 * create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
 * inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)
-* vehicle riders need some work (turning the vehicle base towards targets)
-    add an internal vehicle yaw direction param, if vehicle is at/near yaw, stop
 * footsoldiers need to NOT attack creepers
 
 NPCS
@@ -189,6 +184,11 @@ TWEAKS/OPTIMIZATION
 * move vehicle health over to data-tracker instead of custom packets
 * double check vehicle movement stuff still works/fix whatever I messed up (works, seems to be good for npcs now)
 * check vehicle health stuff still works..(looks good)
+* get npc objective icons rendering properly
+* fix gui background quaded texture rendering (z-level in renderTools was incorrect...)
+* clean up vehicle input stuff (needs rotatation bounded on packet recieved)
+* vehicle riders need some work (turning the vehicle base towards targets)
+    add an internal vehicle yaw direction param, if vehicle is at/near yaw, stop
 
 /********** 05-07-13 **********/
 /********** 05-08-13 **********/

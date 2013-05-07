@@ -118,6 +118,7 @@ private void setObjective(NpcAIObjective objective)
   if(objective==null)
     {
     npc.setObjectiveID((byte)-1);
+    npc.setTaskID((byte)-1);
     this.currentObjectiveTicks = 2;
     if(this.currentObjective!=null)
       {

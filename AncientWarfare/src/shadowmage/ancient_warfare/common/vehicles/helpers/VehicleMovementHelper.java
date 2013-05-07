@@ -148,9 +148,9 @@ public void sendUpdateToClients()
   NBTTagCompound tag = new NBTTagCompound();  
   tag.setFloat("fMot", forwardMotion);
   tag.setFloat("sMot", strafeMotion);    
-  tag.setFloat("px", (float)vehicle.posX);
-  tag.setFloat("py", (float)vehicle.posY);
-  tag.setFloat("pz", (float)vehicle.posZ);
+//  tag.setFloat("px", (float)vehicle.posX);
+//  tag.setFloat("py", (float)vehicle.posY);
+//  tag.setFloat("pz", (float)vehicle.posZ);
   tag.setFloat("ry", (float)vehicle.rotationYaw);
   tag.setFloat("fAcc", forwardAccel);
   tag.setFloat("sAcc", strafeAccel);
@@ -233,7 +233,11 @@ public void handleInputData(NBTTagCompound tag)
     }
   if(tag.hasKey("ry"))
     {
-    vehicle.rotationYaw = tag.getFloat("ry");
+    float vehRot = vehicle.rotationYaw;
+    float newRot = tag.getFloat("ry");
+    while(newRot + 360 <=vehRot) {newRot+=360.f;}
+    while(newRot - 360 >=vehRot) {newRot-=360.f;}
+    vehicle.rotationYaw = newRot;
     }
   }
 
