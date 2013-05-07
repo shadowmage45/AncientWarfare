@@ -41,7 +41,6 @@ import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
-import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
@@ -156,6 +155,8 @@ public int hitAnimationTicks = 0;
  * how many ticks until next move packet should be sent? Used when Client-side movement is enabled.
  */
 public int moveUpdateTicks = 0;
+
+public NpcBase assignedRider = null;
 
 /**
  * complex stat tracking helpers, move, ammo, upgrades, general stats
@@ -576,6 +577,13 @@ public void onUpdate()
     if(this.setupTicks<=0)
       {
       this.isSettingUp = false;
+      }
+    }
+  if(this.assignedRider!=null)
+    {
+    if(this.getDistanceToEntity(assignedRider)>Config.npcAISearchRange || this.assignedRider.isDead || this.assignedRider.wayNav.getMountTarget()!=this || this.assignedRider.ridingEntity!=this)
+      {
+      this.assignedRider=null;
       }
     }
   }

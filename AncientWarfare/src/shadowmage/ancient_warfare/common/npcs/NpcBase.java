@@ -303,6 +303,19 @@ public boolean interact(EntityPlayer player)
   return true;
   }
 
+public void dismountVehicle()
+  {
+  if(this.isRidingVehicle())
+    {
+    Entity et = ridingEntity;
+    this.ridingEntity = null;
+    et.riddenByEntity = null;
+    this.unmountEntity(et);
+    VehicleBase vehicle = (VehicleBase)et;
+    vehicle.moveHelper.clearInputFromDismount();    
+    }
+  }
+
 @Override
 public boolean attackEntityAsMob(Entity ent)
   {
@@ -450,11 +463,11 @@ public void onUpdate()
     this.pushOutOfBlocks();
     }
   this.handleHealthUpdate();
-  if(!this.worldObj.isRemote && this.getTarget()==null && this.isRidingVehicle())
+  if(!this.worldObj.isRemote && (this.getTarget()==null || this.nav.currentTarget==null)&& this.isRidingVehicle())
     {
     VehicleBase vehicle = (VehicleBase)this.ridingEntity;
     vehicle.moveHelper.clearInputFromDismount();
-    }
+    }  
   super.onUpdate();    
   }
 

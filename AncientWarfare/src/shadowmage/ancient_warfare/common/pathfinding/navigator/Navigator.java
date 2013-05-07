@@ -55,7 +55,7 @@ protected Entity entity;
 protected PathWorldAccess world;
 protected EntityPath path;
 protected final Node finalTarget = new Node(0,0,0);
-protected Node currentTarget;
+public Node currentTarget;
 protected Random rng = new Random();
 protected boolean hasDoor = false;
 protected BlockPosition doorPos = new BlockPosition(0,0,0);
@@ -386,8 +386,7 @@ protected void claimNode()
       }
     this.stuckCheckTicks = this.stuckCheckTicksMax;
     this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
-    }  
- 
+    }   
   }
 
 protected int floorX()
@@ -475,8 +474,8 @@ public void forcePath(List<Node> n)
 
 @Override
 public List<Node> getCurrentPath()
-{
-return path.getActivePath();
-}
+  {
+  return path.getActivePath();
+  }
 
 }

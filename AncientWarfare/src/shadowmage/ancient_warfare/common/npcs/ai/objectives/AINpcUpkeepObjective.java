@@ -28,6 +28,7 @@ import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
+import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIDismountVehicle;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -56,6 +57,7 @@ public byte getObjectiveNum()
 @Override
 public void addTasks()
   {
+  this.aiTasks.add(new AIDismountVehicle(npc));
   this.aiTasks.add(new AIMoveToTarget(npc, 3, false));
   }
 
@@ -97,7 +99,6 @@ public void onRunningTick()
 
 protected void attemptUpkeepWithdrawal()
   {
-  Config.logDebug("attempting upkeep withdrawal");
   int foundValue = 0;
   int neededValue = npc.npcType.getUpkeepCost(npc.rank);
   boolean doWithdrawal = false;
@@ -127,7 +128,6 @@ protected void attemptUpkeepWithdrawal()
       break;
       }
     }
-  Config.logDebug("found food value in target: "+foundValue);
   if(doWithdrawal)
     {
     int withdrawnAmount = 0;
@@ -137,7 +137,6 @@ protected void attemptUpkeepWithdrawal()
       if(stack!=null && stack.getItem() instanceof ItemFood)
         {
         int perItem = ((ItemFood)stack.getItem()).getHealAmount();
-        Config.logDebug("examining item: "+stack.getItem() + " perItem: "+perItem);
         while(withdrawnAmount<npc.npcType.getUpkeepCost(npc.rank) && stack.stackSize>0)
           {
           withdrawnAmount += perItem;

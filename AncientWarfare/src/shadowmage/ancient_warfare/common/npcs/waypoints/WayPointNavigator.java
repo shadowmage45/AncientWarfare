@@ -26,10 +26,11 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 
 /**
@@ -51,6 +52,8 @@ WayPoint work = null;
 WayPoint deposit = null;
 WayPoint upkeep = null;
 TECivic workSite = null;
+VehicleBase vehicle = null;
+NpcBase commander = null;
 List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
 int currentPatrolPoint = 0;
 
@@ -71,6 +74,16 @@ public void handleDimensionChange(int dim)
   this.clearPatrolPoints();
   this.currentTarget = null;
   this.playerTarget = null;
+  }
+/************************************************MOUNT TARGET*************************************************/
+public VehicleBase getMountTarget()
+  {
+  return this.vehicle;
+  }
+
+public void setMountTarget(VehicleBase vehicle)
+  {
+  this.vehicle = vehicle;
   }
 
 /************************************************CURRENT TARGET*************************************************/

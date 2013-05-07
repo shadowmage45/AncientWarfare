@@ -20,12 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMountVehicle;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AIMountVehicles extends NpcAIObjective
 {
@@ -57,12 +58,17 @@ public void addTasks()
 @Override
 public void updatePriority()
   {
-  if(npc.targetHelper.areTargetsInRange(TargetType.MOUNT, maxRange))
+  if(npc.ridingEntity!=null)
     {
-    if(this.currentPriority<this.maxPriority)
-      {
-      this.currentPriority++;
-      }
+    this.currentPriority = 0;
+    }
+  else if(npc.wayNav.getMountTarget()!=null && !npc.wayNav.getMountTarget().isDead && npc.wayNav.getMountTarget().riddenByEntity==null && npc.wayNav.getMountTarget().assignedRider==npc)
+    {
+    this.currentPriority = this.maxPriority;
+    }
+  else if(npc.targetHelper.areTargetsInRange(TargetType.MOUNT, maxRange))
+    {
+    this.currentPriority = this.maxPriority;
     }
   else
     {
@@ -74,7 +80,7 @@ public void updatePriority()
 public void onRunningTick()
   {
   if(npc.getTarget()==null)
-    {
+    {    
     if(npc.targetHelper.areTargetsInRange(TargetType.MOUNT, maxRange))
       {
       setMountTarget();      
@@ -96,12 +102,24 @@ public void onObjectiveStart()
 @Override
 public void stopObjective()
   {
+  npc.clearPath();
   npc.setTargetAW(null);  
   }
 
 protected void setMountTarget()
   {
-  npc.setTargetAW(npc.targetHelper.getHighestAggroTargetInRange(TargetType.MOUNT, maxRange));
+  ITargetEntry vehicleEntry  = npc.targetHelper.getHighestAggroTargetInRange(TargetType.MOUNT, maxRange);
+  if(vehicleEntry.getEntity(npc.worldObj) instanceof VehicleBase)
+    {
+    VehicleBase vehicle = (VehicleBase)vehicleEntry.getEntity(npc.worldObj);
+    npc.setTargetAW(vehicleEntry);
+    npc.wayNav.setMountTarget(vehicle);
+    vehicle.assignedRider = npc;
+    }
+  else
+    {
+    this.setFinished();
+    }
   }
 
 }

@@ -237,7 +237,7 @@ public float getAttackDistance(ITargetEntry target)
       {
       return rangedDistance;
       }
-    return 2.5f * (npc.width*0.5f + target.getEntity(npc.worldObj).width*0.5f);
+    return 2.8f * (npc.width*0.5f + target.getEntity(npc.worldObj).width*0.5f);
     }
   }
 

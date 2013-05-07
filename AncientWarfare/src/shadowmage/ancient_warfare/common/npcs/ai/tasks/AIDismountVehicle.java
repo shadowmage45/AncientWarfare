@@ -46,12 +46,7 @@ public byte getTaskType()
 @Override
 public void onTick()
   {  
-  Entity et = npc.ridingEntity;
-  npc.ridingEntity = null;
-  et.riddenByEntity = null;
-  npc.unmountEntity(et);
-  VehicleBase vehicle = (VehicleBase)et;
-  vehicle.moveHelper.clearInputFromDismount();
+  npc.dismountVehicle();
   }
 
 @Override

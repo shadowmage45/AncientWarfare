@@ -55,7 +55,6 @@ public void updatePriority()
     }
   if(npc.targetHelper.areTargetsInRange(TargetType.ATTACK, ((VehicleBase)npc.ridingEntity).vehicleType.getMinAttackDistance()))
     {
-    Config.logDebug("dismount targets in range!!");
     this.currentPriority = this.maxPriority;   
     }
   else
@@ -77,13 +76,12 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
-  // TODO Auto-generated method stub  
   }
 
 @Override
 public void stopObjective()
   {
-  // TODO Auto-generated method stub  
+  npc.setTargetAW(null);
   }
 
 @Override

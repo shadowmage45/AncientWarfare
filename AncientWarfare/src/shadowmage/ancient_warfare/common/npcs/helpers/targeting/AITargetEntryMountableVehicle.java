@@ -42,7 +42,7 @@ public boolean isTarget(Entity ent)
   if(ent instanceof VehicleBase)
     {
     VehicleBase vehicle = (VehicleBase)ent;
-    if(vehicle.isMountable() && vehicle.riddenByEntity==null)
+    if(vehicle.isMountable() && vehicle.riddenByEntity==null && (vehicle.assignedRider==npc || vehicle.assignedRider==null))
       {
       if(this.vehicleType==-1)
         {

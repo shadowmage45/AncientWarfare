@@ -74,15 +74,10 @@ public boolean interact(EntityPlayer player)
     {
     GUIHandler.instance().openGUI(GUIHandler.VEHICLE_DEBUG, player, vehicle.worldObj, vehicle.entityId, 0, 0);
     }
-  else if(vehicle.isMountable() && vehicle.riddenByEntity instanceof NpcBase)
+  else if(vehicle.riddenByEntity instanceof NpcBase)
     {
     NpcBase npc = (NpcBase)vehicle.riddenByEntity;
-    npc.ridingEntity = null;
-    vehicle.riddenByEntity = null;
-    npc.unmountEntity(vehicle);
-//    npc.mountEntity(vehicle);
-    Config.logDebug("forcing dismount!!");
-//    vehicle.riddenByEntity.mountEntity(vehicle);//force dismount of those sneaky soldiers...
+    npc.dismountVehicle();
     }
   return true;
   }
