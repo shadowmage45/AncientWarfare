@@ -46,6 +46,7 @@ import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
+import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class Navigator implements IEntityNavigator, IPathableCallback
 {
@@ -182,9 +183,21 @@ protected void detectStuck()
     }
   }
 
+protected boolean isNewTargetClose(int tx, int ty, int tz)
+  {
+  float dist = (float) entity.getDistance(finalTarget.x, finalTarget.y, finalTarget.z);
+  float tDist = Trig.getDistance(finalTarget.x, finalTarget.y, finalTarget.z, tx, ty, tz);
+  if(tDist < dist*0.1f)
+    {
+    Config.logDebug("returning target was close enough to not recalc");
+    return true;
+    }
+  return false;
+  }
+
 protected boolean isNewTarget(int tx, int ty, int tz)
   {
-  return !this.finalTarget.equals(tx, ty, tz);
+  return !isNewTargetClose(tx, ty, tz) && !this.finalTarget.equals(tx, ty, tz);
   }
 
 protected boolean isAtTarget(int x, int y, int z)
@@ -199,7 +212,7 @@ protected boolean isPathEmpty()
 
 protected boolean shouldCalculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
-  return isNewTarget(tx, ty, tz) || (isPathEmpty() && !isAtTarget(tx, ty, tz) && currentTarget==null);
+  return !isNewTarget(tx, ty, tz) || (isPathEmpty() && !isAtTarget(tx, ty, tz) && currentTarget==null);
   }
 
 protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
