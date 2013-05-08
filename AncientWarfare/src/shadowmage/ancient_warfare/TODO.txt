@@ -1,9 +1,11 @@
 TONIGHT
 * add log rotation data
+* tree farm testing
 
 THIS WEEK
 * get stuff ready for a preview video
 * courier post blocks (or other better routing for items)
+* npc textures (bleh..)
 
 THIS(next) WEEKEND
 * preview video..it better be cool!
@@ -17,7 +19,7 @@ VEHICLES
 * vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation
 
 SOLDIERS
-* melee units need to NOT target creepers
+* more fully implement commander bonuses (give bonus to accuracy as well?)
 
 NPCS
 * expand waypoint navigator with the following functions:
@@ -26,17 +28,19 @@ NPCS
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
-* add icons for new tasks (commander/heal tasks)     
+* add icons for new tasks (commander/heal/repair tasks)     
         
 ITEM ROUTING
-* courier post block (civic type?)(ranks for more filter slots/inventory slots?)
+* courier post block (civic type?)
 * courier post stations for pickup/deposit of items.
     adv courier posts will have settings to push/pull items from nearby inventories (automation aid)
     posts will have slot filter settings (give/take/quantities/default (include/exclude)
-    when a courier requests a job from a post, place couriers items into 'escrow'
+    when a courier requests a job from a post, place couriers items into 'escrow'    
 * courier post stations will need to be linked to a town-hall (use an item to link)
     town hall will become the central routing authority.
     (meaning the system will go offline when the town-hall is unloaded)
+* will need client-server container synch info for displaying item routing filters
+* gui will use NSEWUD for determining containers to interact with.    
         
 GUI FRAMEWORK
 * add an itemSlot element (not inventory slot...a client-side only slot that displays a static stack)
@@ -46,8 +50,6 @@ PATHFINDING
 * need to check if a block has blocking entities in it during iswalkable check
 * pathfinding for vehicles is still...off...
 
-WORLD GEN STUFF
-* handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
 
 CIVICS
 * need objective icons and rendering
@@ -56,6 +58,9 @@ CIVICS
 * need a clearer way of designating where bounds on a civic SHOULD be.  videos/screenshots?
 
 WORKSITES
+* don't give product to workers that don't have room
+* set hasWork==false when inventory < 1 free spot
+* need clear seperate tick dividers for full rescan and only validatePoints
         
 FARMS
 * jungle tree farm needs to check for cocoa blocks?
@@ -66,13 +71,8 @@ FARMS
 * need more work on cow/milk and mooshroom/soup farms
 * need to test sheep/wool farm
 
-MINE
-* alternative mine-patterns
-* restructure mine into an 'internal' template.
-    internal map will be 64*64 (max mine size)
-        smaller mines will work outwards from the center of the template.
-* need isFillable(id, top)
-* need isResource(id, top)
+WORLD GEN STUFF
+* handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
 
 COMPLEXES
 * features--
@@ -143,6 +143,8 @@ OPTIONAL
 * land-mines ?
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 * advanced soldier types 
+ 
+MINE
  
 TEAM CONTROL GUI
  
@@ -216,10 +218,11 @@ TWEAKS/OPTIMIZATION
 * create vehicle repair target entry
 * create vehicle repair ai task and objective
 * create combat engineer npc type to repair vehicles
-
 * one more attempt at turret rotation yaw bounding correction
 * add advanced configurable aggro options (load to config at world load/sometime after all load/init stages are done)
 * move all default targets over to advanced target options (players can edit default attack targets)
+* melee units need to NOT target creepers
+
 
 /********** 05-09-13 **********/
 /********** 05-10-13 **********/
