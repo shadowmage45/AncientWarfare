@@ -28,6 +28,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
@@ -55,7 +56,7 @@ public static NpcRule populateRule(ScannedEntityEntry entry, EntityVillager vill
   {  
   NpcRule rule = new NpcRule();
   populateBasics(rule, entry);
-  rule.npcType = (short) NpcRegistry.npcVillager.getGlobalNpcType();
+  rule.npcType = (short) NpcTypeBase.npcVillager.getGlobalNpcType();
   rule.npcRank = (short) villager.getProfession();
   return rule;
   }

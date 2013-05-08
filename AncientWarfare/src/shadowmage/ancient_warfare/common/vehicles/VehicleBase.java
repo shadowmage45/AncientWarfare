@@ -869,12 +869,6 @@ public String getTexture()
 @Override
 public void updateRiderPosition()
   {
-//  if(!(this.riddenByEntity instanceof EntityPlayer) || !((EntityPlayer)this.riddenByEntity).func_71066_bF())
-//    {
-//    this.riddenByEntity.lastTickPosX = this.lastTickPosX;
-//    this.riddenByEntity.lastTickPosY = this.lastTickPosY + this.getRiderVerticalOffset() + this.riddenByEntity.getYOffset();
-//    this.riddenByEntity.lastTickPosZ = this.lastTickPosZ;
-//    }
   double posX = this.posX;
   double posY = this.posY + this.getRiderVerticalOffset();
   double posZ = this.posZ;
@@ -882,9 +876,6 @@ public void updateRiderPosition()
     {
     posY -= 0.5f;
     }
-  this.riddenByEntity.motionX=0.d;
-  this.riddenByEntity.motionY=0.d;
-  this.riddenByEntity.motionZ=0.d;
   float yaw = this.vehicleType.moveRiderWithTurret() ? localTurretRotation : rotationYaw;
   posX += Trig.sinDegrees(yaw)*-this.getRiderForwardOffset();
   posX += Trig.sinDegrees(yaw+90)*this.getRiderHorizontalOffset();
@@ -892,7 +883,6 @@ public void updateRiderPosition()
   posZ += Trig.cosDegrees(yaw+90)*this.getRiderHorizontalOffset();
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
   this.riddenByEntity.rotationYaw -= this.moveHelper.strafeMotion*2;  
-//  Config.logDebug("adjusting rider position:"+this.riddenByEntity);  
   }
 
 @Override

@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityItem;
@@ -44,6 +45,7 @@ import shadowmage.ancient_warfare.common.network.Packet04Npc;
 import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.inventory.NpcInventory;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointNavigator;
@@ -93,7 +95,7 @@ public int npcUpkeepTicks = Config.npcUpkeepTicks;//how many upkeep ticks worth 
 
 protected int npcHealingTicks = Config.npcHealingTicks;//
 
-public INpcType npcType = NpcRegistry.npcDummy;
+public INpcType npcType = NpcTypeBase.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
 public NpcTargetHelper targetHelper;
 
@@ -133,7 +135,42 @@ public NpcBase(World par1World)
     this.equipmentDropChances[i] = 1.f;
     }
   this.experienceValue = 10;
-  this.health = 20;
+  this.health = 20;  
+  }
+
+/**
+ * add extra forced targets from config file. happens at entity instantiation to prevent issues
+ * of people not registering their entities until post-post init...etc....
+ */
+public void addConfigTargets()
+  {
+  String[] targets = null;//Config.getConfig().get("npc_aggro_settings", "footsoldier", new String[]{}, "Forced targets for footsoldiers").getStringList();
+  String targetType = null;
+  if(npcType.isCombatUnit() && !npcType.getConfigName().equals(""))
+    {
+    targets = Config.getConfig().get("npc_aggro_settings", npcType.getConfigName(), new String[]{}).getStringList();
+    if(targets!=null && targets.length>0)
+      {
+      Class clz;
+      for(String name : targets)
+        {
+        clz = (Class) EntityList.stringToClassMapping.get(name);
+        if(clz!=null)
+          {
+          targetHelper.addTargetEntry(new AITargetEntry(this, TargetType.ATTACK, clz, 0, true, Config.npcAISearchRange));
+          }
+        }
+      }
+    }
+  }
+
+@Override
+public void updateRidden()
+  {
+  super.updateRidden();
+  this.motionX = 0;
+  this.motionY = 0;
+  this.motionZ = 0;
   }
 
 @Override
@@ -207,6 +244,7 @@ public void setNpcType(INpcType type, int level)
   this.npcType.addTargets(this, targetHelper);
   this.inventory = new NpcInventory(this, type.getInventorySize(level));
   this.experienceValue = 10 + 10*level;
+  this.addConfigTargets();
   }
 
 public boolean isAggroTowards(NpcBase npc)
@@ -385,6 +423,10 @@ public void onUpdate()
     {
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
+    if(this.wayNav.getCommander()!=null && this.wayNav.getCommander().getTargetType()==TargetType.ATTACK)
+      {
+      this.handleBroadcastAttackTarget(this.wayNav.getCommander().getTarget().getEntity(worldObj));
+      }
     }  
   if(this.npcUpkeepTicks>0)
     {
@@ -482,7 +524,14 @@ public void onUpdate()
     VehicleBase vehicle = (VehicleBase)this.ridingEntity;
     vehicle.moveHelper.clearInputFromDismount();    
     }  
-  super.onUpdate();    
+  super.onUpdate();  
+  if(this.ridingEntity!=null)
+    {
+    this.motionX = 0;
+    this.motionY = 0;
+    this.motionZ = 0;
+    }
+  
   }
 
 @Override

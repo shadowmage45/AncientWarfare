@@ -17,8 +17,7 @@ VEHICLES
 * vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation
 
 SOLDIERS
-* create definitive medic and combat engineer types (healer/repair vehicles)
-* add advanced configurable aggro options (load to config at world load/sometime after all load/init stages are done)
+* melee units need to NOT target creepers
 
 NPCS
 * expand waypoint navigator with the following functions:
@@ -26,7 +25,8 @@ NPCS
 * work out indiv costs for upkeep -- add specialized items where applicable
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
-* method to disable upkeep for 'NPC' villages (test if team has any players present?)     
+* method to disable upkeep for 'NPC' villages (test if team has any players present?)
+* add icons for new tasks (commander/heal tasks)     
         
 ITEM ROUTING
 * courier post block (civic type?)(ranks for more filter slots/inventory slots?)
@@ -53,7 +53,7 @@ CIVICS
 * need objective icons and rendering
 * need inventory status bar
 * need work status bar
-* bounds size testing on placement is one off (display is correct, test is wrong)
+* need a clearer way of designating where bounds on a civic SHOULD be.  videos/screenshots?
 
 WORKSITES
         
@@ -65,7 +65,6 @@ FARMS
 * alternative tree farms need testing
 * need more work on cow/milk and mooshroom/soup farms
 * need to test sheep/wool farm
-* need a clearer way of designating where bounds on a farm SHOULD be.  videos/screenshots?
 
 MINE
 * alternative mine-patterns
@@ -143,6 +142,7 @@ OPTIONAL
 * grenades ?
 * land-mines ?
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
+* advanced soldier types 
  
 TEAM CONTROL GUI
  
@@ -206,6 +206,7 @@ TWEAKS/OPTIMIZATION
 * npc commanders
 * add quarry-pattern mine
 * put quaded texture rendering someplace central...
+* bounds size testing on placement is one off (display is correct, test is wrong)
 /********** 05-08-13 **********/
 * create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
 * inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)
@@ -215,7 +216,10 @@ TWEAKS/OPTIMIZATION
 * create vehicle repair target entry
 * create vehicle repair ai task and objective
 * create combat engineer npc type to repair vehicles
+
 * one more attempt at turret rotation yaw bounding correction
+* add advanced configurable aggro options (load to config at world load/sometime after all load/init stages are done)
+* move all default targets over to advanced target options (players can edit default attack targets)
 
 /********** 05-09-13 **********/
 /********** 05-10-13 **********/

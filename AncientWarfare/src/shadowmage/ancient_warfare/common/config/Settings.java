@@ -77,7 +77,7 @@ public void loadSettings()
   this.mouseRangeProp = config.get("client-settings", "mouse_aim_look_range", 140, "The distance to which a ray-trace will be performed when calculating auto-aim.  Lower settings may improve performance at the cost of being unable to auto-aim past that distance.");
   this.trajectoryIterationsProp = config.get("client-settings", "power_calculation_accuracy", 20, "How many iterations should be done for calculating power settings for mouse-aim.  Higher settings may cause lag on slower computers.  Lower settings WILL reduce accuracy of auto-aim.");
   this.renderVehiclesInFirstPersonProp = config.get("client-settings", "render_vehicles_first_person", true, "Should render the vehicle you are riding, while in first person view?");
-  this.renderVehicleNameplates = config.get("client-settings", "vehicle_nameplats", true, "Should render vehicle nameplates?");
+  this.renderVehicleNameplates = config.get("client-settings", "vehicle_nameplates", true, "Should render vehicle nameplates?");
   this.renderNpcNameplates = config.get("client-settings", "npc_nameplates", true, "Should render npc nameplates?");  
   this.renderVehiclesInFirstPerson = renderVehiclesInFirstPersonProp.getBoolean(true);
   this.renderOverlay = overlayProp.getBoolean(true);

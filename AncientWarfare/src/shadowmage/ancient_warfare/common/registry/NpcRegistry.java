@@ -23,15 +23,21 @@ package shadowmage.ancient_warfare.common.registry;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.registry.EntityRegistry;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityTracker;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
+import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCombatEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCommander;
@@ -44,26 +50,12 @@ import shadowmage.ancient_warfare.common.npcs.types.NpcMiner;
 import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 
 public class NpcRegistry
 {
 
-
-public static INpcType npcDummy = new NpcDummy(0);
-public static INpcType npcVillager = new NpcVillager(1);
-public static INpcType npcFootSoldier = new NpcFootsoldier(2);
-public static INpcType npcArcher = new NpcArcher(3);
-public static INpcType npcSiegeEngineer = new NpcSiegeEngineer(4);
-public static INpcType npcMedic = new NpcMedic(5);
-public static INpcType npcCombatEngineer = new NpcCombatEngineer(6);
-public static INpcType npcCommander = new NpcCommander(7);
-//builder/construction worker? 8
-//craftsman ? 9
-public static INpcType npcMiner = new NpcMiner(10);
-public static INpcType npcFarmer = new NpcFarmer(11);
-public static INpcType npcLumberjack = new NpcLumberjack(12);
-//courier 13
 
 
 private NpcRegistry(){}
@@ -163,4 +155,7 @@ public static ItemStack getStackFor(INpcType type, int level)
   stack.setTagInfo("AWNpcSpawner", tag);
   return null;
   }
+
+
+
 }

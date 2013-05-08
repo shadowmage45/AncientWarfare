@@ -37,6 +37,8 @@ public abstract String getDisplayTooltip();
 public abstract String getDisplayTexture(int level);
 public abstract String getIconTexture();
 public abstract String getLevelName(int level);
+public abstract String getConfigName();
+public abstract String[] getDefaultTargets();
 public abstract int getNumOfLevels();
 public abstract int getMaxHealth(int level);
 public abstract int getInventorySize(int level);

@@ -59,6 +59,7 @@ public NpcArcher(int type)
   {
   super(type);
   this.displayName = "Archer";
+  this.configName = "archer";
   this.tooltip = "Adept at bow-use";
   this.isCombatUnit = true;  
   this.iconTexture = "npcArcher1";
@@ -66,6 +67,8 @@ public NpcArcher(int type)
   this.addLevel("Archer Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setRange(20);
   this.addLevel("Archer Expert", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setRange(20);
   this.addLevel("Archer Master", Config.texturePath + "models/npcDefault.png", getToolStack(3), getArmorStack(3)).setRange(20);
+  this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
+      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
   }
 
 @Override
@@ -144,8 +147,6 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
   helper.addTargetEntry(new AITargetEntryPlayer(npc, TargetType.ATTACK,  40, false, true));
   helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.ATTACK, 0, 40, false, true));
-  helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntityMob.class, 0, true, 40));
-  helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntitySlime.class, 0, true, 40));
   }
 
 @Override

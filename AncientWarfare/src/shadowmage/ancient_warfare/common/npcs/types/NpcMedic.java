@@ -60,9 +60,12 @@ public NpcMedic(int type)
   {
   super(type);
   this.displayName = "Medic";
+  this.configName = "medic";
   this.tooltip = "Heals nearby troops";
   this.isCombatUnit = true;
   this.iconTexture = "npcSoldier1";
+  this.defaultTargets = new String[]{"Zombie", "Spider", "CaveSpider", "Blaze", 
+      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
   this.addLevel("Medic Novice", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3);
   this.addLevel("Medic Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4);
   this.addLevel("Medic Expert", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(5);
@@ -93,9 +96,7 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
   helper.addTargetEntry(new AITargetEntryPlayer(npc, TargetType.ATTACK,  40, false, true));
   helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.ATTACK, 0, 40, false, true));
-  helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.COMMANDER, 0, 40, true, false, NpcRegistry.npcCommander.getGlobalNpcType()));
-  helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntityMob.class, 0, true, 40));
-  helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntitySlime.class, 0, true, 40));
+  helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.COMMANDER, 0, 40, true, false, NpcTypeBase.npcCommander.getGlobalNpcType()));
   helper.addTargetEntry(new AITargetEntryTeamHealing(npc, TargetType.HEAL, EntityLiving.class, 0, 40));
   }
 

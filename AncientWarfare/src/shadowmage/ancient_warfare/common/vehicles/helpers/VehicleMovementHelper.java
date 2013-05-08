@@ -244,11 +244,7 @@ public void handleInputData(NBTTagCompound tag)
     while(newRot + 360 <=vehRot) {newRot+=360.f;}
     while(newRot - 360 >=vehRot) {newRot-=360.f;}
     vehicle.rotationYaw = newRot;
-    }
-  if(vehicle.riddenByEntity!=null)
-    {
-    vehicle.updateRiderPosition();
-    }
+    }  
   }
 
 /**

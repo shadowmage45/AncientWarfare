@@ -28,6 +28,8 @@ import java.util.logging.Logger;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_warfare.common.AWStructureModule;
+import shadowmage.ancient_warfare.common.npcs.INpcType;
+import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 
 public class Config
 {
@@ -178,6 +180,7 @@ public void setCoreInfo()
   config.addCustomCategoryComment("b-performance", "Global options that may effect performance in some way");
   config.addCustomCategoryComment("c-vehicle-options", "Global options that effect vehicles in some fashion");
   config.addCustomCategoryComment("structure-management", "Global World Generation options, effect every save/world.  Check AWWorldGen.cfg for advanced options");
+  config.addCustomCategoryComment("d-npc_target_settings", "Forced NPC Targets.  Place target names between the < > braces, each value on its own line. \nInvalid values or improperly spelled names will be silently ignored.\nNeeds the full name as registered in game (ask the mod author!)");
   
   /**
    * general options
@@ -193,7 +196,7 @@ public void setCoreInfo()
    */
   this.npcAITicks = config.get("b-performance", "npc_aiticks", 5, "How many ticks should pass between updating passive ai tasks for NPCs?").getInt(5);
   this.npcAISearchRange = config.get("b-performance", "npc_search_radius", 140, "How many blocks of radius should entities search for targets and work? (MAX range, some AI limits this further)").getInt(140);
-  this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory", 20, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);
+  this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory_iterations", 20, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);
   this.clientMoveUpdateTicksBase = config.get("b-performance", "client_movement_ticks", 3, "How many ticks between client movement update packets if client movement is enabled? (setting is sent and synched to clients on login)").getInt(3);
   this.npcPathfinderType = config.get("b-performance", "pathfinder_type", 1, "0--Immediate. 1--Scheduled. 2--Threaded").getInt(1);
   this.npcPathfinderThreads = config.get("b-performance", "pathfinder_threaded_thread_count", 2, "How many threads to use? (spare cores is a good starting number)").getInt(2);
@@ -208,7 +211,21 @@ public void setVehicleInfo()
 
 public void setKingdomInfo()
   {
-  
+  INpcType[] types = NpcTypeBase.getNpcTypes();
+  String[] defaults;
+  for(INpcType t : types)
+    {    
+    if(t==null){continue;}    
+    String name = t.getConfigName();
+    if(t.isCombatUnit() && !name.equals(""))
+      {
+      defaults = t.getDefaultTargets();
+      if(defaults!=null && defaults.length>0)
+        {
+        config.get("d-npc_target_settings", name, defaults, "Forced targets for npc type: "+t.getDisplayName());
+        }
+      }
+    }
   }
 
 public void setWorldGenInfo()

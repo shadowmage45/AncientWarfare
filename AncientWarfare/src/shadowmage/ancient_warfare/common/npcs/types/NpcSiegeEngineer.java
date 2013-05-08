@@ -59,9 +59,12 @@ public NpcSiegeEngineer(int type)
   {
   super(type);
   this.displayName = "Siege Engineer";
+  this.configName = "siege_engineer";
   this.tooltip = "Adept at using siege engines";
   this.isCombatUnit = true;
   this.iconTexture = "npcSiegeEngineer1";
+  this.defaultTargets = new String[]{"Zombie", "Spider", "CaveSpider", "Blaze", 
+      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
   this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3);
   this.addLevel("Adept Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4);
   this.addLevel("Master Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(6);  
@@ -83,8 +86,6 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {  
   helper.addTargetEntry(new AITargetEntryPlayer(npc, TargetType.ATTACK,  40, false, true));
   helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.ATTACK, 0, 40, false, true));
-  helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntityMob.class, 0, true, 40));
-  helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntitySlime.class, 0, true, 40));
   helper.addTargetEntry(new AITargetEntryMountableVehicle(npc, -1, 20));
   }
 
