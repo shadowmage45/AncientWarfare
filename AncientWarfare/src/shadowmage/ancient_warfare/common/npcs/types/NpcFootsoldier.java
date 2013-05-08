@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIAttackTargets;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIChooseCommander;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDepositGoods;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
@@ -46,6 +47,7 @@ import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryNpc;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryPlayer;
+import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class NpcFootsoldier extends NpcTypeBase
@@ -123,6 +125,7 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
   helper.addTargetEntry(new AITargetEntryPlayer(npc, TargetType.ATTACK,  40, false, true));
   helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.ATTACK, 0, 40, false, true));
+  helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.COMMANDER, 0, 40, true, false, NpcRegistry.npcCommander.getGlobalNpcType()));
   helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntityMob.class, 0, true, 40));
   helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntitySlime.class, 0, true, 40));
   }
@@ -139,6 +142,7 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AIStayNearHome(npc, 6, 40, 15));
   aiEntries.add(new AIAttackTargets(npc, 5, 40, 40));  
   aiEntries.add(new AIWander(npc, 1));
+  aiEntries.add(new AIChooseCommander(npc, 1));
   return aiEntries;
   }
 }

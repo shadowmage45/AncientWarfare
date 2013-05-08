@@ -334,7 +334,12 @@ public void dismountVehicle()
 @Override
 public boolean attackEntityAsMob(Entity ent)
   {
-  ent.attackEntityFrom(DamageSource.causeMobDamage(this), this.npcType.getAttackDamage(rank));
+  int commanderBonus = 0;
+  if(wayNav.getCommander()!=null)
+    {
+    commanderBonus = 1 + wayNav.getCommander().rank;
+    }
+  ent.attackEntityFrom(DamageSource.causeMobDamage(this), this.npcType.getAttackDamage(rank) + commanderBonus);
   return false;
   }
 
@@ -619,15 +624,19 @@ public void handlePacketUpdate(NBTTagCompound tag)
     tag = tag.getCompoundTag("path");
     this.nav.setMoveToTarget(tag.getInteger("tx"), tag.getInteger("ty"), tag.getInteger("tz"));
     }
-  if(tag.hasKey("health") && worldObj.isRemote)
-    {
-    this.health = (int)tag.getByte("health");
-    }
   }
 
 @Override
 public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   {  
+  if(wayNav.getCommander()!=null)
+    {
+    par2 -= (2 + wayNav.getCommander().rank)/2;
+    if(par2<1)
+      {
+      par2 = 1;
+      }
+    }
   super.attackEntityFrom(par1DamageSource, par2);
   if(par1DamageSource.getEntity() instanceof EntityLiving)
     {
@@ -724,7 +733,10 @@ public boolean canInteract(EntityPlayer player)
 @Override
 public void setMoveTo(double x, double y, double z, float moveSpeed)
   {
-  this.getMoveHelper().setMoveTo(x, y, z, moveSpeed);
+  if(this.ridingEntity==null)
+    {
+    this.getMoveHelper().setMoveTo(x, y, z, moveSpeed);
+    }
   }
 
 /**

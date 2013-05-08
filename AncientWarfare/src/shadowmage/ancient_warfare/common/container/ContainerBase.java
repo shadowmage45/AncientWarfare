@@ -142,7 +142,7 @@ protected boolean mergeItemStack(ItemStack inputStack, int startSlot, int stopSl
   {
   boolean returnFlag = false;
   int k = startSlot;
-  if(stopSlot<startSlot)//if some nubtard tried reversing indices//because who the fuck iterates backwards...
+  if(stopSlot < startSlot)//if some nubtard tried reversing indices//because who the fuck iterates backwards...
     {
     startSlot = stopSlot;
     stopSlot = k;
@@ -154,7 +154,7 @@ protected boolean mergeItemStack(ItemStack inputStack, int startSlot, int stopSl
     int numToMerge;
     for(int i =startSlot; i < stopSlot && inputStack.stackSize > 0 ; i++)
       {
-      slot = (Slot)this.inventorySlots.get(k);
+      slot = (Slot)this.inventorySlots.get(i);
       if(slot==null)
         {
         continue;
@@ -163,36 +163,52 @@ protected boolean mergeItemStack(ItemStack inputStack, int startSlot, int stopSl
       if(InventoryTools.doItemsMatch(inputStack, stackFromSlot))
         {
         numToMerge = slot.getSlotStackLimit() - stackFromSlot.stackSize;
+        Config.logDebug("1removing "+numToMerge+ " from stack");
         numToMerge = numToMerge > inputStack.stackSize ? inputStack.stackSize : numToMerge;
+        Config.logDebug("2removing "+numToMerge+ " from stack");
         numToMerge = numToMerge + stackFromSlot.stackSize > stackFromSlot.getMaxStackSize() ? stackFromSlot.getMaxStackSize() - stackFromSlot.stackSize : numToMerge;       
-        
+        Config.logDebug("3removing "+numToMerge+ " from stack");
         if(numToMerge>0)
           {
           inputStack.stackSize -= numToMerge;
           stackFromSlot.stackSize += numToMerge;
           slot.onSlotChanged();
-          returnFlag = true;
+          returnFlag = true;          
           }
         }
       }
     }
-  if (inputStack.stackSize > 0)
+
+  for(int i = startSlot; i < stopSlot && inputStack.stackSize > 0 ; i++)
     {
-    int numToMerge;
-    for(int i =startSlot; i < stopSlot && inputStack.stackSize > 0 ; i++)
+    Config.logDebug("attempting direct place into slot: "+i);
+    slot = (Slot)this.inventorySlots.get(i);
+    stackFromSlot = slot.getStack();
+    if(stackFromSlot==null)
       {
-      slot = (Slot)this.inventorySlots.get(k);
-      stackFromSlot = slot.getStack();
-      if(stackFromSlot==null)
+      stackFromSlot = inputStack.copy();
+      if(inputStack.stackSize <= slot.getSlotStackLimit())
         {
-        slot.putStack(inputStack.copy());
-        slot.onSlotChanged();
+        stackFromSlot.stackSize = inputStack.stackSize;
         inputStack.stackSize = 0;
-        returnFlag = true;
-        break;       
+        slot.putStack(stackFromSlot);
+        }
+      else
+        {
+        inputStack.stackSize -= slot.getSlotStackLimit();
+        stackFromSlot.stackSize = slot.getSlotStackLimit();
+        slot.putStack(stackFromSlot);
+        }
+      slot.onSlotChanged();
+      returnFlag = true;
+      if(inputStack.stackSize<=0)
+        {
+        Config.logDebug("input stack size == 0, breaking from merge-place loop");
+        break;
         }
       }
     }
+    
   return returnFlag;
   }
 

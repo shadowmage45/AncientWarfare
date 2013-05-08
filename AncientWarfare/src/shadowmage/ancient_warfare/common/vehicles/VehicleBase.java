@@ -183,6 +183,7 @@ public VehicleBase(World par1World)
   this.inventory = new VehicleInventory(this);
   this.worldAccess = new PathWorldAccessEntity(par1World, this);  
   this.nav = new Navigator(this);
+  this.nav.setStuckCheckTicks(100);
   this.stepHeight = 1.12f;
   this.entityCollisionReduction = 0.9f;
   this.onGround = false;

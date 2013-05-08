@@ -30,7 +30,7 @@ public class AITargetEntryNpc extends AITargetEntry
 
 boolean sameTeam;
 boolean oppositeTeam;
-
+int targetType = -1;
 /**
  * 
  * @param npc
@@ -47,12 +47,22 @@ public AITargetEntryNpc(NpcBase npc, TargetType typeName, int priority, float ma
   this.oppositeTeam = oppositeTeam;
   }
 
+public AITargetEntryNpc(NpcBase npc, TargetType typeName, int priority, float maxTargetRange, boolean sameTeam, boolean oppositeTeam, int targetType)
+  {
+  this(npc, typeName, priority, maxTargetRange, sameTeam, oppositeTeam);
+  this.targetType = targetType;  
+  }
+
 @Override
 public boolean isTarget(Entity ent)
   {   
   if(ent instanceof NpcBase)
     {
     NpcBase npc = (NpcBase)ent;
+    if(targetType>=0 && npc.npcType.getGlobalNpcType()!=targetType)
+      {
+      return false;
+      }
     int thisTeam = this.npc.teamNum;
     int otherTeam = npc.teamNum;
     boolean hostile = TeamTracker.instance().isHostileTowards(npc.worldObj, thisTeam, otherTeam);

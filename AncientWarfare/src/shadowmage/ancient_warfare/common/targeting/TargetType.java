@@ -56,4 +56,5 @@ public enum TargetType
   DELIVER,
   ATTACK_TILE,
   UPKEEP,
+  COMMANDER,
   }

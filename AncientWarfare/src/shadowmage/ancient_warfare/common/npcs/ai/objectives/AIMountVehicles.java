@@ -25,6 +25,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMountVehicle;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
+import shadowmage.ancient_warfare.common.targeting.TargetPositionEntity;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -81,14 +82,13 @@ public void onRunningTick()
   {
   if(npc.getTarget()==null)
     {    
-    if(npc.targetHelper.areTargetsInRange(TargetType.MOUNT, maxRange))
+    if(npc.wayNav.getMountTarget()!=null || npc.targetHelper.areTargetsInRange(TargetType.MOUNT, maxRange))
       {
       setMountTarget();      
       }
     else
       {
-      this.currentPriority = 0;
-      this.isFinished = true;
+      this.setFinished();
       }
     }
   }
@@ -108,18 +108,21 @@ public void stopObjective()
 
 protected void setMountTarget()
   {
-  ITargetEntry vehicleEntry  = npc.targetHelper.getHighestAggroTargetInRange(TargetType.MOUNT, maxRange);
-  if(vehicleEntry.getEntity(npc.worldObj) instanceof VehicleBase)
+  if(npc.wayNav.getMountTarget()!=null)
     {
-    VehicleBase vehicle = (VehicleBase)vehicleEntry.getEntity(npc.worldObj);
-    npc.setTargetAW(vehicleEntry);
-    npc.wayNav.setMountTarget(vehicle);
-    vehicle.assignedRider = npc;
+    npc.setTargetAW(new TargetPositionEntity(npc.wayNav.getMountTarget(), TargetType.MOUNT));
     }
   else
     {
-    this.setFinished();
-    }
+    ITargetEntry vehicleEntry  = npc.targetHelper.getHighestAggroTargetInRange(TargetType.MOUNT, maxRange);
+    if(vehicleEntry.getEntity(npc.worldObj) instanceof VehicleBase)
+      {
+      VehicleBase vehicle = (VehicleBase)vehicleEntry.getEntity(npc.worldObj);
+      npc.setTargetAW(vehicleEntry);
+      npc.wayNav.setMountTarget(vehicle);
+      vehicle.assignedRider = npc;
+      }
+    }  
   }
 
 }

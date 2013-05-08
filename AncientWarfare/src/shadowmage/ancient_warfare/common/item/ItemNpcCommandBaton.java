@@ -103,7 +103,7 @@ public boolean itemInteractionForEntity(ItemStack par1ItemStack,   EntityLiving 
  * left-click attack, prior to processing..
  */
 @Override
-public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player,   Entity entity)
+public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
   {  
   if(!player.worldObj.isRemote)
     {
@@ -111,14 +111,19 @@ public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player,   Entity 
     BatonSettings settings = getBatonSettings(stack);
     if(settings.command == NpcCommand.DEPOSIT || settings.command==NpcCommand.UPKEEP)
       {
-      Config.logDebug("testing execution of entity-target deposit site");
       boolean transmit = false;
       if(entity instanceof IInventory && ((IInventory)entity).getSizeInventory()>0)
         {
-        Config.logDebug("target was an IInventory Entity with inventory size >0");
         this.handleNpcCommand(player, stack, settings, hit);
         }  
-      }       
+      } 
+    else if(settings.command == NpcCommand.MOUNT)
+      {
+      if(entity instanceof VehicleBase && entity.riddenByEntity==null)
+        {
+        this.handleNpcCommand(player, stack, settings, hit);
+        }
+      }
     return true;
     }  
   return super.onLeftClickEntity(stack, player, entity);

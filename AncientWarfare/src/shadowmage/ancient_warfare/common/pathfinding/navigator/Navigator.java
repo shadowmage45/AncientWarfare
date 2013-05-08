@@ -65,7 +65,7 @@ protected int doorOpenMax = 15;
 protected int doorCheckTicksMax = 5;
 protected final Pos3f stuckCheckPosition = new Pos3f(0,0,0);
 protected int stuckCheckTicks = 40;
-protected final int stuckCheckTicksMax = 40;
+protected int stuckCheckTicksMax = 40;
 
 
 private PathFinderCrawler testCrawler;
@@ -85,6 +85,14 @@ public Navigator(IPathableEntity owner)
   finalTarget.reassign(MathHelper.floor_double(entity.posX),MathHelper.floor_double(entity.posY),MathHelper.floor_double(entity.posZ));
   this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
   this.testCrawler = new PathFinderCrawler();
+  }
+
+public void setStuckCheckTicks(int ticks)
+  {
+  if(ticks>0)
+    {
+    this.stuckCheckTicksMax = ticks;
+    }
   }
 
 @Override

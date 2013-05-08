@@ -41,6 +41,7 @@ public static final int patrol = 8;
 public static final int shelter = 9;
 public static final int home = 10;
 public static final int wander = 11;
+public static final int commander = 12;
 
 protected NpcBase npc;
 protected int maxPriority;

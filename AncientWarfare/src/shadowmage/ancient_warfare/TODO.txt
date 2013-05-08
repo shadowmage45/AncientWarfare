@@ -1,11 +1,10 @@
 TONIGHT
 * add log rotation data
 * npc commanders
-* add mount target to baton
 
 THIS WEEK
 * get stuff ready for a preview video
-* courier post blocks
+* courier post blocks (or other better routing for items)
 
 THIS(next) WEEKEND
 * preview video..it better be cool!
@@ -206,6 +205,7 @@ TWEAKS/OPTIMIZATION
     code actually added to containerBase mergeItem coding...
 * vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation
 * mine tries to harvest water..need a isClearable(id, top) check...
+* add mount target to baton
 /********** 05-08-13 **********/
 /********** 05-09-13 **********/
 /********** 05-10-13 **********/
