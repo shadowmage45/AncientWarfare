@@ -581,8 +581,8 @@ public void onUpdate()
       }
     }
   if(this.assignedRider!=null)
-    {
-    if(this.getDistanceToEntity(assignedRider)>Config.npcAISearchRange || this.assignedRider.isDead || this.assignedRider.wayNav.getMountTarget()!=this || this.assignedRider.ridingEntity!=this)
+    {    
+    if(this.assignedRider.isDead || this.assignedRider.ridingEntity!=this || this.assignedRider.wayNav.getMountTarget()==null || this.assignedRider.wayNav.getMountTarget()!=this || this.getDistanceToEntity(assignedRider)>Config.npcAISearchRange)
       {
       this.assignedRider=null;
       }

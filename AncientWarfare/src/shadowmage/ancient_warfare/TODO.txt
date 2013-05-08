@@ -1,6 +1,5 @@
 TONIGHT
 * add log rotation data
-* npc commanders
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -13,6 +12,7 @@ GENERAL
 * add logs to block-data manager (for rotation values...currently unmapped)
 * civic block ID picked stuff..
 * find better method of registering Civic TE's (manual is..ughh.)
+* clear/remove old invalid targets
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
@@ -206,6 +206,7 @@ TWEAKS/OPTIMIZATION
 * vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation
 * mine tries to harvest water..need a isClearable(id, top) check...
 * add mount target to baton
+* npc commanders
 /********** 05-08-13 **********/
 /********** 05-09-13 **********/
 /********** 05-10-13 **********/

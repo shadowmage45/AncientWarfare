@@ -28,9 +28,10 @@ public TEMineQuarry()
   this.levelHeight = 1;
   }
 
+@Override
 protected MineLevel getNewLevel(int x, int y, int z, int xSize, int ySize, int zSize)
   {
-  return new MineLevelClassic(x, y, z, xSize, ySize, zSize);
+  return new MineLevelQuarry(x, y, z, xSize, ySize, zSize);
   }
 
 }

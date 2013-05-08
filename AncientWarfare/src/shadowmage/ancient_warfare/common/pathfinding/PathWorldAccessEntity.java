@@ -54,6 +54,7 @@ public boolean isWalkable(int x, int y, int z)
     {
     //check blocks in the x/z +/- 1/2 width
     int size = MathHelper.ceiling_double_int(entity.width/2);
+//    int size = 1;
     for(int dx = x-size; dx<= x+size; dx++)
       {
       for(int dz = z-size; dz<= z+size; dz++)

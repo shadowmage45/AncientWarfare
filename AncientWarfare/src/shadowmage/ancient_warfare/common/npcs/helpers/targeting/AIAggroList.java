@@ -108,12 +108,8 @@ public AIAggroTargetWrapper getEntryFor(Entity ent)
 
 public boolean areTargetsInRange(float range)
   {
-//  Config.logDebug("checking for targets in range: "+range+" type: "+this.targetType);
   for(AIAggroTargetWrapper entry : this.targetEntries)
     {
-    
-//    float dist = npc.getDistanceFromTarget(entry);
-//    Config.logDebug("testing :"+entry+" at range: "+dist);
     if(npc.getDistanceFromTarget(entry.target) < range)
       {
       return true;
@@ -170,20 +166,17 @@ public void removeEntry(ITargetEntry target)
 
 public void updateAggroEntries()
   {
-//  Config.logDebug("has targets: "+this.targetEntries.size());
   Iterator<AIAggroTargetWrapper> it = this.targetEntries.iterator();
   AIAggroTargetWrapper entry;
-  float maxRange;
   while(it.hasNext())
     {
     entry = it.next();
-//    Config.logDebug("examining entry: "+entry+" aggroLevel: "+entry.aggroLevel);
     if(!entry.isValidEntry(npc.worldObj) || npc.getDistanceFromTarget(entry.target) > npc.targetHelper.getMaxRangeFor(entry) || entry.aggroLevel <= 0)
       {
       it.remove();
       return;
       }   
-    entry.aggroLevel -= npc.targetHelper.getAggroAdjustmentFor(entry);//entry.targetEntry.getAggroAdjustment(entry);
+    entry.aggroLevel -= npc.targetHelper.getAggroAdjustmentFor(entry);
     if(entry.aggroLevel>1000)
       {
       entry.aggroLevel = 1000;

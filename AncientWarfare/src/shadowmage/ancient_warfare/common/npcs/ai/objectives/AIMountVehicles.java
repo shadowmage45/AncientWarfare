@@ -20,11 +20,14 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
+import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMountVehicle;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetPositionEntity;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -60,21 +63,41 @@ public void addTasks()
 public void updatePriority()
   {
   if(npc.ridingEntity!=null)
-    {
+    {    
     this.currentPriority = 0;
+    this.cooldownTicks = this.maxCooldownticks;
+    if(npc.wayNav.getMountTarget()!=npc.ridingEntity)
+      {
+      if(npc.isRidingVehicle())
+        {
+        VehicleBase v = (VehicleBase) npc.ridingEntity;
+        npc.wayNav.setMountTarget(v);
+        v.assignedRider = npc;        
+        }
+      }
     }
-  else if(npc.wayNav.getMountTarget()!=null && !npc.wayNav.getMountTarget().isDead && npc.wayNav.getMountTarget().riddenByEntity==null && npc.wayNav.getMountTarget().assignedRider==npc)
+  else if(npc.wayNav.getMountTarget()!=null)
     {
-    this.currentPriority = this.maxPriority;
+    if(npc.wayNav.getMountTarget().assignedRider==npc || npc.wayNav.getMountTarget().assignedRider==null)
+      {
+      this.currentPriority = this.maxPriority;
+      }
+    else
+      {
+      npc.wayNav.setMountTarget(null);
+      this.currentPriority = 0;      
+      }
     }
   else if(npc.targetHelper.areTargetsInRange(TargetType.MOUNT, maxRange))
     {
+    Config.logDebug("has vehicle targets in range");
     this.currentPriority = this.maxPriority;
     }
   else
     {
     this.currentPriority = 0;
-    }  
+    this.cooldownTicks = this.maxCooldownticks;
+    }
   }
 
 @Override
@@ -110,7 +133,7 @@ protected void setMountTarget()
   {
   if(npc.wayNav.getMountTarget()!=null)
     {
-    npc.setTargetAW(new TargetPositionEntity(npc.wayNav.getMountTarget(), TargetType.MOUNT));
+    npc.setTargetAW(new WayPoint(npc.wayNav.getMountTarget(), TargetType.MOUNT));
     }
   else
     {

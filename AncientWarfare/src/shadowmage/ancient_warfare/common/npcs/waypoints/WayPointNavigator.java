@@ -232,7 +232,7 @@ public NBTTagCompound getNBTTag()
   if(upkeep!=null)
     {
     tag.setCompoundTag("upkeep", this.upkeep.getNBTTag());
-    }
+    } 
   return tag;
   }
 
@@ -260,7 +260,7 @@ public void readFromNBT(NBTTagCompound tag)
   if(tag.hasKey("upkeep"))
     {
     this.upkeep = new WayPoint(tag.getCompoundTag("upkeep"));
-    }
+    } 
   }
 
 }
