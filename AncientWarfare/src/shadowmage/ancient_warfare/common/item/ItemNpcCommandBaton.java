@@ -172,6 +172,10 @@ protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSetti
       pt = new WayPoint(p);
       npc.handleBatonCommand(cmd, p);
       }
+    if(cmd.isSingleTargetOnly(cmd) && commanded+followCommanded>=1)
+      {
+      break;
+      }
     }  
   player.addChatMessage("Commanding "+(commanded + followCommanded)+ " Npcs!");
   }

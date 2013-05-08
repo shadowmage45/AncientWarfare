@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public enum NpcCommand
@@ -39,7 +40,9 @@ CLEAR_HOME ("Clear Home Point", TargetType.NONE, 0),
 CLEAR_WORK ("Clear Work Site", TargetType.NONE, 0),
 CLEAR_DEPOSIT ("Clear Depository", TargetType.NONE, 0),
 UPKEEP("Set Upkeep Target", TargetType.UPKEEP, 0),
-CLEAR_UPKEEP("Clear Upkeep Target", TargetType.NONE, 0);
+CLEAR_UPKEEP("Clear Upkeep Target", TargetType.NONE, 0),
+MOUNT("Set Vehicle to Pilot", TargetType.MOUNT, 0),
+CLEAR_MOUNT("Clear Vehicle Target", TargetType.NONE, 0);
 //due to using ordinal to store command, any new commands must be added to the END of the list
 //also, don't EVER change ordering, or it will have some undesired effects in an already started game
 
@@ -73,6 +76,11 @@ public static List<NpcCommand> getCommandsForItem(ItemStack item)
     {
     return getCommandsForRank(item.getItemDamage());
     }
+  }
+
+public static boolean isSingleTargetOnly(NpcCommand command)
+  {
+  return command==MOUNT;
   }
 
 public static ArrayList<NpcCommand> getCommandsForRank(int rank)

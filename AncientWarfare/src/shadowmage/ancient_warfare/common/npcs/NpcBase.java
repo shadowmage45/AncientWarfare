@@ -187,6 +187,21 @@ public void handleBatonCommand(NpcCommand cmd, WayPoint p)
   case CLEAR_UPKEEP:
   wayNav.setUpkeepSite(null);
   break;
+  case MOUNT:
+  if(p.getEntity(worldObj) instanceof VehicleBase)
+    {
+    VehicleBase vehicle = (VehicleBase)p.getEntity(worldObj);
+    wayNav.setMountTarget(vehicle);
+    if(vehicle.assignedRider!=null)
+      {
+      vehicle.assignedRider.wayNav.setMountTarget(null);
+      }
+    vehicle.assignedRider = this;
+    }
+  break;
+  case CLEAR_MOUNT:
+  wayNav.setMountTarget(null);
+  break;
   }
   }
 
@@ -463,7 +478,7 @@ public void onUpdate()
     this.pushOutOfBlocks();
     }
   this.handleHealthUpdate();
-  if(!this.worldObj.isRemote && (this.getTarget()==null || this.nav.currentTarget==null)&& this.isRidingVehicle())
+  if(!this.worldObj.isRemote && this.getTarget()==null && this.isRidingVehicle())
     {
     VehicleBase vehicle = (VehicleBase)this.ridingEntity;
     vehicle.moveHelper.clearInputFromDismount();

@@ -75,6 +75,18 @@ public void handleDimensionChange(int dim)
   this.currentTarget = null;
   this.playerTarget = null;
   }
+
+/************************************************COMMANDER TARGET*************************************************/
+public NpcBase getCommander()
+  {
+  return this.commander;
+  }
+
+public void setCommander(NpcBase com)
+  {
+  this.commander = com;
+  }
+
 /************************************************MOUNT TARGET*************************************************/
 public VehicleBase getMountTarget()
   {

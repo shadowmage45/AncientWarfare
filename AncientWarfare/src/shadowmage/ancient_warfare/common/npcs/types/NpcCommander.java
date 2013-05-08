@@ -48,22 +48,22 @@ import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryNpc
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryPlayer;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class NpcFootsoldier extends NpcTypeBase
+public class NpcCommander extends NpcTypeBase
 {
 
 /**
  * @param type
  */
-public NpcFootsoldier(int type)
+public NpcCommander(int type)
   {
   super(type);
-  this.displayName = "Footsoldier";
-  this.tooltip = "Adept at melee combat.";
+  this.displayName = "Commander";
+  this.tooltip = "Provides bonuses to troops";
   this.isCombatUnit = true;
   this.iconTexture = "npcSoldier1";
-  this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4);
-  this.addLevel("Adept Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6);
-  this.addLevel("Master Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8);  
+  this.addLevel("Leiutenant", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4);
+  this.addLevel("Colonel", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6);
+  this.addLevel("General", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8);  
   }
 
 @Override

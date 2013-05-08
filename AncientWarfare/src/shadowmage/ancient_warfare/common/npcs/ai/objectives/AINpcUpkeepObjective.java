@@ -94,7 +94,7 @@ public void onRunningTick()
   if(npc.getDistanceFromTarget(npc.getTarget()) < 4)
     {
     this.attemptUpkeepWithdrawal();
-    } 
+    }   
   }
 
 protected void attemptUpkeepWithdrawal()
