@@ -27,7 +27,6 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
@@ -39,6 +38,7 @@ import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDepositGoods;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIPatrolPoints;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearCommander;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
@@ -152,15 +152,16 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
-  aiEntries.add(new AIAttackTargetsRanged(npc, 10, 20, 20));
-  aiEntries.add(new AIFollowPlayer(npc, 9));
-  aiEntries.add(new AINpcUpkeepObjective(npc, 8));
-  aiEntries.add(new AIDepositGoods(npc, 8));
-  aiEntries.add(new AIPatrolPoints(npc, 7, 20));
-  aiEntries.add(new AIStayNearHome(npc, 6, 40, 15));
-  aiEntries.add(new AIAttackTargets(npc, 5, 40, 40));  
-  aiEntries.add(new AIWander(npc, 1));
-  aiEntries.add(new AIChooseCommander(npc, 1));
+  aiEntries.add(new AIAttackTargetsRanged(npc, 100, 20, 20));
+  aiEntries.add(new AIFollowPlayer(npc, 90));
+  aiEntries.add(new AINpcUpkeepObjective(npc, 85));
+  aiEntries.add(new AIDepositGoods(npc, 80));
+  aiEntries.add(new AIPatrolPoints(npc, 70, 20));
+  aiEntries.add(new AIStayNearHome(npc, 60, 40, 15));
+  aiEntries.add(new AIStayNearCommander(npc, 55, 20, 10));
+  aiEntries.add(new AIAttackTargets(npc, 50, 40, 40));  
+  aiEntries.add(new AIWander(npc, 10));
+  aiEntries.add(new AIChooseCommander(npc, 8));
   return aiEntries;
   }
 

@@ -21,46 +21,42 @@
 package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 
-public class AITargetEntryPlayer extends AITargetEntry
+public class AITargetEntryTeamHealing extends AITargetEntry
 {
 
-boolean sameTeam;
-boolean oppositeTeam;
-
-/**
- * 
- * @param owner
- * @param typeName
- * @param maxTargetRange
- * @param sameTeam
- * @param oppositeTeam
- */
-public AITargetEntryPlayer(NpcBase owner, TargetType typeName, float maxTargetRange, boolean sameTeam, boolean oppositeTeam)
+public AITargetEntryTeamHealing(NpcBase npc, TargetType typeName, Class clz, int priority, float maxTargetRange)
   {
-  super(owner, typeName, EntityPlayer.class, 0, true, maxTargetRange);  
-  this.sameTeam = sameTeam;
-  this.oppositeTeam = oppositeTeam;
+  super(npc, typeName, clz, priority, true, maxTargetRange);
   }
 
 @Override
 public boolean isTarget(Entity ent)
-  {   
+  {
   if(ent instanceof EntityPlayer)
     {
-    EntityPlayer player = (EntityPlayer)ent;
-    int thisTeam = this.npc.teamNum;
-    int otherTeam = TeamTracker.instance().getTeamForPlayer(player);//.teamNum;
-    boolean hostile = TeamTracker.instance().isHostileTowards(player.worldObj, thisTeam, otherTeam);
-    if(hostile && oppositeTeam || !hostile && sameTeam)
+    EntityPlayer player = (EntityPlayer)ent;    
+    int pTeam = TeamTracker.instance().getTeamForPlayer(player);
+    if(player.getHealth()< player.getMaxHealth() && !TeamTracker.instance().isHostileTowards(npc.worldObj, npc.teamNum, pTeam) && !TeamTracker.instance().isHostileTowards(npc.worldObj, pTeam, npc.teamNum))
       {
       return true;
-      }    
+      }       
+    }
+  else if(ent instanceof NpcBase)
+    {
+    NpcBase otherNpc = (NpcBase)ent;
+    if(otherNpc.getHealth()< otherNpc.getMaxHealth() && !TeamTracker.instance().isHostileTowards(npc.worldObj, npc.teamNum, otherNpc.teamNum) && !TeamTracker.instance().isHostileTowards(npc.worldObj, otherNpc.teamNum, npc.teamNum))
+      {
+      return true;
+      } 
     }
   return false;
   }
+
+
 }

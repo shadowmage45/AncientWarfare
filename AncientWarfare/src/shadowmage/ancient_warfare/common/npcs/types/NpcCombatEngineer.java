@@ -21,12 +21,8 @@
 package shadowmage.ancient_warfare.common.npcs.types;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.Item;
@@ -41,6 +37,7 @@ import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDepositGoods;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIPatrolPoints;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIRepairTargets;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearCommander;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
@@ -48,76 +45,44 @@ import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryNpc;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryPlayer;
+import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryRepairableVehicle;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class NpcFootsoldier extends NpcTypeBase
+public class NpcCombatEngineer extends NpcTypeBase
 {
 
 /**
  * @param type
  */
-public NpcFootsoldier(int type)
+public NpcCombatEngineer(int type)
   {
   super(type);
-  this.displayName = "Footsoldier";
-  this.tooltip = "Adept at melee combat.";
+  this.displayName = "Combat Engineer";
+  this.tooltip = "Repairs nearby Vehicles";
   this.isCombatUnit = true;
   this.iconTexture = "npcSoldier1";
-  this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4);
-  this.addLevel("Adept Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6);
-  this.addLevel("Master Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8);  
+  this.addLevel("Engineer Novice", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3);
+  this.addLevel("Engineer Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4);
+  this.addLevel("Engineer Expert", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(5);
   }
 
 @Override
 protected ItemStack getToolStack(int level)
   {
   ItemStack sword1 = null;
-  switch(level)
-  {
-  case 0:
-  sword1 = new ItemStack(Item.swordIron,1);
+  sword1 = new ItemStack(Item.axeIron,1);
   return sword1;
-  
-  case 1:
-  sword1 = new ItemStack(Item.swordIron,1);
-  return sword1;
-  
-  case 2:  
-  sword1 = new ItemStack(Item.swordDiamond,1);
-  return sword1;
-  }
-  return null;
   }
 
 @Override
 protected ItemStack[] getArmorStack(int level)
   {
-  ItemStack[] stacks = new ItemStack[4];
-  
-  switch(level)
-  {
-  case 0:
+  ItemStack[] stacks = new ItemStack[4];  
   stacks[0] = new ItemStack(Item.helmetLeather, 1);
   stacks[1] = new ItemStack(Item.plateLeather, 1);
   stacks[2] = new ItemStack(Item.legsLeather, 1);
   stacks[3] = new ItemStack(Item.bootsLeather, 1);
-  break;
-  
-  case 1:
-  stacks[0] = new ItemStack(Item.helmetChain, 1);
-  stacks[1] = new ItemStack(Item.plateChain, 1);
-  stacks[2] = new ItemStack(Item.legsChain, 1);
-  stacks[3] = new ItemStack(Item.bootsChain, 1);
-  break;
-  
-  case 2:
-  stacks[0] = new ItemStack(Item.helmetIron, 1);
-  stacks[1] = new ItemStack(Item.plateIron, 1);
-  stacks[2] = new ItemStack(Item.legsIron, 1);
-  stacks[3] = new ItemStack(Item.bootsIron, 1);
-  break;
-  }
   return stacks;
   }
 
@@ -129,16 +94,18 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
   helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.COMMANDER, 0, 40, true, false, NpcRegistry.npcCommander.getGlobalNpcType()));
   helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntityMob.class, 0, true, 40));
   helper.addTargetEntry(new AITargetEntry(npc, TargetType.ATTACK, EntitySlime.class, 0, true, 40));
+  helper.addTargetEntry(new AITargetEntryRepairableVehicle(npc, 20));
   }
 
 @Override
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
-  aiEntries.add(new AIAttackTargets(npc, 100, 20, 20));
+//  aiEntries.add(new AIAttackTargets(npc, 100, 20, 20));
   aiEntries.add(new AIFollowPlayer(npc, 90));
   aiEntries.add(new AINpcUpkeepObjective(npc, 85));
   aiEntries.add(new AIDepositGoods(npc, 80));
+  aiEntries.add(new AIRepairTargets(npc, 75));
   aiEntries.add(new AIPatrolPoints(npc, 70, 20));
   aiEntries.add(new AIStayNearHome(npc, 60, 40, 15));
   aiEntries.add(new AIStayNearCommander(npc, 55, 20, 10));
@@ -147,4 +114,5 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AIChooseCommander(npc, 10));
   return aiEntries;
   }
+
 }

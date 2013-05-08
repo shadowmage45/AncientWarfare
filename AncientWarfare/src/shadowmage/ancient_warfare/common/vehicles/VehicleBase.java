@@ -204,6 +204,10 @@ private int getHealthClient()
 
 public void setHealth(float health)
   {
+  if(health>this.baseHealth)
+    {
+    health = this.baseHealth;
+    }
   this.localVehicleHealth = health;
   if(!worldObj.isRemote)
     {
@@ -600,14 +604,16 @@ public void onUpdateClient()
     if(moveUpdateTicks>=Config.clientMoveUpdateTicks)
       {
       moveUpdateTicks=0;
-      Config.logDebug("sending client move packet");
       moveHelper.sendInputToServer(getForwardInput(), getStrafeInput(), true);      
       }
     }
   if(this.localVehicleHealth!=this.getHealth())
     {
-    this.localVehicleHealth = this.getHealth();
-    this.hitAnimationTicks = 20;
+    if(localVehicleHealth>this.getHealth())//only play hit animation when attacked
+      {
+      this.hitAnimationTicks = 20;
+      }
+    this.localVehicleHealth = this.getHealth();    
     }
   }
 
@@ -621,10 +627,6 @@ public void onUpdateServer()
     this.moveHelper.clearInputFromDismount();
     }
   this.isRidden = this.riddenByEntity != null;
-//  if(this.ticksExisted % Config.clientMoveUpdateTicksBase==0)
-//    {
-//    this.moveHelper.sendUpdateToClients();
-//    }
   }
 
 public void updateTurretPitch()
@@ -730,6 +732,14 @@ public void updateTurretRotation()
   if(Trig.getAbsDiff(localTurretDestRot, localTurretRotation) < localTurretRotInc)
     {
     localTurretRotation = localTurretDestRot;
+    }
+  while(prevYaw-360.f > localTurretRotation)
+    {
+    prevYaw-=360.f;    
+    }
+  while(prevYaw+360.f <= localTurretRotation)
+    {
+    prevYaw+=360.f;
     }
   this.currentTurretYawSpeed = this.localTurretRotation - prevYaw;
   }

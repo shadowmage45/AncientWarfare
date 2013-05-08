@@ -76,7 +76,7 @@ public void updatePriority()
         }
       }
     }
-  else if(npc.wayNav.getMountTarget()!=null)
+  else if(npc.wayNav.getMountTarget()!=null && !npc.wayNav.getMountTarget().isDead)
     {
     if(npc.wayNav.getMountTarget().assignedRider==npc || npc.wayNav.getMountTarget().assignedRider==null)
       {

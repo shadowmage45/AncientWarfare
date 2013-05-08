@@ -11,27 +11,22 @@ THIS(next) WEEKEND
 GENERAL
 * add logs to block-data manager (for rotation values...currently unmapped)
 * civic block ID picked stuff..
-* find better method of registering Civic TE's (manual is..ughh.)
-* clear/remove old invalid targets
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
+* vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation
 
 SOLDIERS
 * create definitive medic and combat engineer types (healer/repair vehicles)
-* create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
-* inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)
 * add advanced configurable aggro options (load to config at world load/sometime after all load/init stages are done)
 
 NPCS
-* create AI objectives
-    Stay Near Commander
-    Select Commander (constantly-run objective, e.g. does the 'run' in the 'update priority' tick?)
 * expand waypoint navigator with the following functions:
     advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
 * work out indiv costs for upkeep -- add specialized items where applicable
-* add mount-target to command baton   
-* investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)     
+* investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
+    or other method to set NPC types as aggro for other Mob type entities
+* method to disable upkeep for 'NPC' villages (test if team has any players present?)     
         
 ITEM ROUTING
 * courier post block (civic type?)(ranks for more filter slots/inventory slots?)
@@ -39,14 +34,17 @@ ITEM ROUTING
     adv courier posts will have settings to push/pull items from nearby inventories (automation aid)
     posts will have slot filter settings (give/take/quantities/default (include/exclude)
     when a courier requests a job from a post, place couriers items into 'escrow'
+* courier post stations will need to be linked to a town-hall (use an item to link)
+    town hall will become the central routing authority.
+    (meaning the system will go offline when the town-hall is unloaded)
         
 GUI FRAMEWORK
-* put quaded texture rendering someplace central...
 * add an itemSlot element (not inventory slot...a client-side only slot that displays a static stack)
 
 PATHFINDING
 * recalc of path towards moving target is still too aggressive
 * need to check if a block has blocking entities in it during iswalkable check
+* pathfinding for vehicles is still...off...
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -203,11 +201,22 @@ TWEAKS/OPTIMIZATION
     go back to vehicle/remount    
 * vehicle container needs stack limiting on shift-click
     code actually added to containerBase mergeItem coding...
-* vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation
 * mine tries to harvest water..need a isClearable(id, top) check...
 * add mount target to baton
 * npc commanders
+* add quarry-pattern mine
+* put quaded texture rendering someplace central...
 /********** 05-08-13 **********/
+* create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
+* inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)
+* create AI objective Stay Near Commander
+* create medic NPC type
+* create heal targets task and objective
+* create vehicle repair target entry
+* create vehicle repair ai task and objective
+* create combat engineer npc type to repair vehicles
+* one more attempt at turret rotation yaw bounding correction
+
 /********** 05-09-13 **********/
 /********** 05-10-13 **********/
 /********** 05-11-13 **********/

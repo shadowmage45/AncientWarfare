@@ -18,24 +18,64 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
+package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class AITargetEntryHealing extends AITargetEntry
+public class AIHealTarget extends NpcAITask
 {
 
-public AITargetEntryHealing(NpcBase npc, TargetType typeName, Class clz, int priority, float maxTargetRange)
+/**
+ * @param npc
+ */
+public AIHealTarget(NpcBase npc)
   {
-  super(npc, typeName, clz, priority, true, maxTargetRange);
+  super(npc);
+  this.exclusiveTasks = MOVE_TO + ATTACK + FOLLOW + HARVEST;
   }
 
 @Override
-public boolean isTarget(Entity ent)
+public void onTick()
   {
-  return ent instanceof EntityLiving && ((EntityLiving)ent).getHealth() < ((EntityLiving)ent).getMaxHealth();
+  if(npc.actionTick<=0)
+    {
+    Entity ent = npc.getTarget().getEntity(npc.worldObj);
+    if(ent instanceof EntityLiving)
+      {
+      EntityLiving liv = (EntityLiving)ent;
+      if(liv.getHealth()< liv.getMaxHealth())
+        {
+        liv.heal(npc.rank + 2);
+        npc.setActionTicksToMax();
+        }
+      else
+        {
+        npc.targetHelper.removeTarget(npc.getTarget());
+        npc.setTargetAW(null);
+        }
+      }
+    else
+      {
+      npc.targetHelper.removeTarget(npc.getTarget());
+      npc.setTargetAW(null);
+      }
+    }
   }
+
+@Override
+public boolean shouldExecute()
+  {
+  return npc.getTargetType()==TargetType.HEAL && npc.getDistanceFromTarget(npc.getTarget())< npc.targetHelper.getAttackDistance(npc.getTarget());
+  }
+
+@Override
+public byte getTaskType()
+  {
+  return task_heal;
+  }
+
 }

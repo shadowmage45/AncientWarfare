@@ -34,6 +34,8 @@ public static final int task_work = 3;
 public static final int task_patrol = 4;
 public static final int task_mount = 5;
 public static final int task_move = 6;
+public static final int task_heal = 7;
+public static final int task_repair = 8;
 
 public static final int NONE = 0;
 public static final int WANDER = 1;

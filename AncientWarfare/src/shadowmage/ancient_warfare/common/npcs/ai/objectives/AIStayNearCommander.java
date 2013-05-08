@@ -20,15 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetPosition;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public class AIStayNearHome extends NpcAIObjective
+public class AIStayNearCommander extends NpcAIObjective
 {
 
 int leashRange;
@@ -38,17 +36,11 @@ int chokeRange;
  * @param npc
  * @param maxPriority
  */
-public AIStayNearHome(NpcBase npc, int maxPriority, int range, int chokeRange)
+public AIStayNearCommander(NpcBase npc, int maxPriority, int range, int chokeRange)
   {
   super(npc, maxPriority);
   this.leashRange = range;
   this.chokeRange = chokeRange;
-  }
-
-@Override
-public byte getObjectiveNum()
-  {
-  return home;
   }
 
 @Override
@@ -60,73 +52,58 @@ public void addTasks()
 @Override
 public void updatePriority()
   {
-  if(npc.wayNav.getHomePoint()==null || npc.wayNav.getPatrolSize()>0 || npc.wayNav.getCommander()!=null)
+  if(npc.wayNav.getCommander()==null)
     {
     this.currentPriority = 0;
     }
-  else
-    {    
-    WayPoint home = npc.wayNav.getHomePoint();
-    float range = (float) npc.getDistance(home.floorX(), home.floorY(), home.floorZ());
-    if(range>leashRange)
-      {
-      this.currentPriority = this.maxPriority; 
-      }
-    else
-      {
-      if(this.currentPriority>0)
-        {
-        this.currentPriority--;
-        }
-      }
+  else if(npc.wayNav.getCommander().isDead)
+    {
+    npc.wayNav.setCommander(null);
+    this.currentPriority = 0;    
+    }
+  else if(npc.wayNav.getCommander().getDistanceToEntity(npc) > leashRange)
+    {
+    this.currentPriority = this.maxPriority;
     }
   }
 
 @Override
 public void onRunningTick()
   {
-  WayPoint home = npc.wayNav.getHomePoint();
-  if(home==null)
+  if(npc.wayNav.getCommander()==null || npc.wayNav.getCommander().getDistanceToEntity(npc) < chokeRange)
     {
-//    Config.logDebug("ai stay near home: sensing no home point: setting finished");
-    this.isFinished = true;
-    this.cooldownTicks = this.maxCooldownticks;
+    this.setFinished();
     }
   else
     {
-    float range = (float) npc.getDistance(home.floorX(), home.floorY(), home.floorZ());
-    if(range<chokeRange)
+    if(npc.getTargetType()!=TargetType.COMMANDER)
       {
-//      Config.logDebug("ai stay near home: sensing entity is within choke range: setting finished");
-      this.isFinished = true;
-      this.cooldownTicks = this.maxCooldownticks;
+      setTarget();
       }
     }  
+  }
+
+protected void setTarget()
+  {
+  npc.setTargetAW(TargetPosition.getNewTarget(npc.wayNav.getCommander(), TargetType.COMMANDER));
   }
 
 @Override
 public void onObjectiveStart()
   {
-  WayPoint home = npc.wayNav.getHomePoint();
-  if(home!=null)
-    {
-//    Config.logDebug("ai stay near home: setting move target");
-    npc.setTargetAW(TargetPosition.getNewTarget(home.floorX(), home.floorY(), home.floorZ(), TargetType.MOVE));
-    }
-  else
-    {
-//    Config.logDebug("ai stay near home: no home point: setting finished: clearing path and target");
-    this.isFinished = true;
-    this.cooldownTicks = this.maxCooldownticks;
-    }  
+  setTarget();
   }
 
 @Override
 public void stopObjective()
   {
-//  Config.logDebug("ai stay near home: setting finished: clearing path and target");  
-  npc.setTargetAW(null);
-  npc.clearPath();
+  this.setFinished();
+  }
+
+@Override
+public byte getObjectiveNum()
+  {
+  return commander_follow;
   }
 
 }

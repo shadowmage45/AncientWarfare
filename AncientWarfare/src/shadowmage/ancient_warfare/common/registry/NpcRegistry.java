@@ -33,11 +33,13 @@ import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
+import shadowmage.ancient_warfare.common.npcs.types.NpcCombatEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCommander;
 import shadowmage.ancient_warfare.common.npcs.types.NpcDummy;
 import shadowmage.ancient_warfare.common.npcs.types.NpcFarmer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcFootsoldier;
 import shadowmage.ancient_warfare.common.npcs.types.NpcLumberjack;
+import shadowmage.ancient_warfare.common.npcs.types.NpcMedic;
 import shadowmage.ancient_warfare.common.npcs.types.NpcMiner;
 import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
@@ -53,10 +55,10 @@ public static INpcType npcVillager = new NpcVillager(1);
 public static INpcType npcFootSoldier = new NpcFootsoldier(2);
 public static INpcType npcArcher = new NpcArcher(3);
 public static INpcType npcSiegeEngineer = new NpcSiegeEngineer(4);
-//medic 5
-//engineer 6
+public static INpcType npcMedic = new NpcMedic(5);
+public static INpcType npcCombatEngineer = new NpcCombatEngineer(6);
 public static INpcType npcCommander = new NpcCommander(7);
-//builder? 8
+//builder/construction worker? 8
 //craftsman ? 9
 public static INpcType npcMiner = new NpcMiner(10);
 public static INpcType npcFarmer = new NpcFarmer(11);

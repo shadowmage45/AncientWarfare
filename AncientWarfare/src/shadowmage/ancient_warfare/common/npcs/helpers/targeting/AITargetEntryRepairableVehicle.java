@@ -25,42 +25,36 @@ import net.minecraft.entity.player.EntityPlayer;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class AITargetEntryPlayer extends AITargetEntry
+public class AITargetEntryRepairableVehicle extends AITargetEntry
 {
 
-boolean sameTeam;
-boolean oppositeTeam;
-
 /**
- * 
  * @param owner
  * @param typeName
+ * @param clz
+ * @param priority
+ * @param isEntityTarget
  * @param maxTargetRange
- * @param sameTeam
- * @param oppositeTeam
  */
-public AITargetEntryPlayer(NpcBase owner, TargetType typeName, float maxTargetRange, boolean sameTeam, boolean oppositeTeam)
+public AITargetEntryRepairableVehicle(NpcBase owner,  float maxTargetRange)
   {
-  super(owner, typeName, EntityPlayer.class, 0, true, maxTargetRange);  
-  this.sameTeam = sameTeam;
-  this.oppositeTeam = oppositeTeam;
+  super(owner, TargetType.REPAIR, VehicleBase.class, 0, true, maxTargetRange);
   }
 
 @Override
 public boolean isTarget(Entity ent)
-  {   
-  if(ent instanceof EntityPlayer)
+  {
+  if(ent instanceof VehicleBase)
     {
-    EntityPlayer player = (EntityPlayer)ent;
-    int thisTeam = this.npc.teamNum;
-    int otherTeam = TeamTracker.instance().getTeamForPlayer(player);//.teamNum;
-    boolean hostile = TeamTracker.instance().isHostileTowards(player.worldObj, thisTeam, otherTeam);
-    if(hostile && oppositeTeam || !hostile && sameTeam)
+    VehicleBase v = (VehicleBase)ent;
+    if(v.getHealth()< v.baseHealth && !TeamTracker.instance().isHostileTowards(npc.worldObj, npc.teamNum, v.teamNum) && !TeamTracker.instance().isHostileTowards(npc.worldObj, v.teamNum, npc.teamNum))
       {
       return true;
-      }    
-    }
+      } 
+    }  
   return false;
   }
+
 }

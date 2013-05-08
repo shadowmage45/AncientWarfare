@@ -39,6 +39,7 @@ import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIMountVehicles;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIPatrolPoints;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearCommander;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
@@ -92,16 +93,17 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>();
   aiEntries.add(new AIDismountVehicles(npc, 11));
-  aiEntries.add(new AIAttackTargets(npc, 10, 10, 10));
-  aiEntries.add(new AIFollowPlayer(npc, 9));
-  aiEntries.add(new AINpcUpkeepObjective(npc, 8));
-  aiEntries.add(new AIDepositGoods(npc, 8));
-  aiEntries.add(new AIMountVehicles(npc, 7, 20)); 
-  aiEntries.add(new AIPatrolPoints(npc, 7, 20)); 
-  aiEntries.add(new AIStayNearHome(npc, 6,  40, 15));
-  aiEntries.add(new AIAttackTargets(npc, 5, 40, 40));  
-  aiEntries.add(new AIWander(npc, 4));
-  aiEntries.add(new AIChooseCommander(npc, 1));
+  aiEntries.add(new AIAttackTargets(npc, 100, 10, 10));
+  aiEntries.add(new AIFollowPlayer(npc, 90));
+  aiEntries.add(new AINpcUpkeepObjective(npc, 85));
+  aiEntries.add(new AIDepositGoods(npc, 80));
+  aiEntries.add(new AIMountVehicles(npc, 75, 20)); 
+  aiEntries.add(new AIPatrolPoints(npc, 70, 20)); 
+  aiEntries.add(new AIStayNearHome(npc, 60,  40, 15));
+  aiEntries.add(new AIStayNearCommander(npc, 55, 20, 10));
+  aiEntries.add(new AIAttackTargets(npc, 50, 40, 40));  
+  aiEntries.add(new AIWander(npc, 40));
+  aiEntries.add(new AIChooseCommander(npc, 10));
   return aiEntries;
   }
 
