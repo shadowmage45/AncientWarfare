@@ -20,12 +20,18 @@
  */
 package shadowmage.ancient_warfare.common.civics;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.AWBlockContainer;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
@@ -120,7 +126,7 @@ public Icon getIcon(int side, int meta)
   Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
   if(d!=null)
     {
-    int iconID = meta*3;//bottomID
+    int iconID = meta*4;//bottomID
     if(side==0)
       {
       return d.getIconFor(iconID);
@@ -135,6 +141,32 @@ public Icon getIcon(int side, int meta)
       }
     }
   return super.getIcon(side, meta);
+  }
+
+@Override
+public int quantityDropped(Random par1Random)
+  {
+  return 1;
+  }
+
+@Override
+protected ItemStack createStackedBlock(int par1)
+  {
+  return CivicRegistry.instance().getItemFor(blockNum, par1);
+  }
+
+@Override
+public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+  {
+  ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+  ret.add(createStackedBlock(metadata));
+  return ret;
+  }
+
+@Override
+public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+  {
+  return CivicRegistry.instance().getItemFor(blockNum, world.getBlockMetadata(x, y, z));
   }
 
 }

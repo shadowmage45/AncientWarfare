@@ -81,6 +81,20 @@ public void setCivicBlock(World world, int x, int y, int z, int type)
     }
   }
 
+public ItemStack getItemFor(int blockNum, int meta)
+  {
+  return this.getItemForCivic(blockNum*16 + meta);
+  }
+
+public ItemStack getItemForCivic(int type)
+  {
+  if(type>=0 && type<Civic.civicList.length && Civic.civicList[type]!=null)
+    {
+    return Civic.civicList[type].getItemToConstruct();
+    }
+  return null;
+  }
+
 public Civic getCivicFor(int type)
   {
   if(type>=0 && type < Civic.civicList.length)

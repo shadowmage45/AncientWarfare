@@ -6,7 +6,6 @@ TONIGHT
 THIS WEEK
 * get stuff ready for a preview video
 * courier post blocks (or other better routing for items)
-* npc textures (bleh..)
 
 THIS(next) WEEKEND
 * preview video..it better be cool!
@@ -26,8 +25,9 @@ SOLDIERS
     footsoldier -- damage increase, armor increase
     combat-engineer-- ??, armor increase
     medic -- ??, armor increase
-* investigate revenge-target designation (when something attacks a soldier)
-* investigate player-attack target setting (when a player with soldiers following attacks an entity)    
+* investigate revenge-target designation (when something attacks a soldier)(seems to work, perhaps needs aggro set to higher)
+* investigate player-attack target setting (when a player with soldiers following attacks an entity) 
+* need to set npc accuracy by rank for archer/siege engineer   
 
 NPCS
 * expand waypoint navigator with the following functions:
@@ -36,7 +36,7 @@ NPCS
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
-* add icons for new tasks (commander/heal/repair/courier tasks) 
+* fisherman        
         
 ITEM ROUTING
 * courier post block (civic type?)
@@ -72,11 +72,14 @@ CIVICS
 * need inventory status bar
 * need work status bar
 * need a clearer way of designating where bounds on a civic SHOULD be.  videos/screenshots?
+* fishery (catches fish randomly based on number of water blocks present in area)
+* move over to using block-based items (ItemBlock...)(probably just need custom renderer...pull block and render that using renderBlocks instance in custom render)
 
 WORKSITES
 * don't give product to workers that don't have room
 * set hasWork==false when inventory < 1 free spot
 * need clear seperate tick dividers for full rescan and only validatePoints
+* change over to store all harvested materials in work block, use couriers to remove goods (?)
         
 FARMS
 * jungle tree farm needs to check for cocoa blocks?
@@ -214,6 +217,10 @@ TWEAKS/OPTIMIZATION
 * change NPC nameplate name over to level name (easier to tell ranks apart for non-combat units)
 * adjust entity-item vehicle item rendering +1Y (should fix bobbing in-ground), probably needs adjusted
 
+* add miner texture
+* add objective and task icons for new AI (commander, repair, heal)
+* clean up civic-block id-picked and drop on harvest (should return civic items)
+* prep tex work on civic blocks
 /********** 05-10-13 **********/
 /********** 05-11-13 **********/
 /********** 05-12-13 **********/

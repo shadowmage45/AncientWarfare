@@ -66,9 +66,9 @@ public NpcMedic(int type)
   this.iconTexture = "npcSoldier1";
   this.defaultTargets = new String[]{"Zombie", "Spider", "CaveSpider", "Blaze", 
       "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
-  this.addLevel("Medic Novice", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3);
-  this.addLevel("Medic Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4);
-  this.addLevel("Medic Expert", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(5);
+  this.addLevel("Novice Medic", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3);
+  this.addLevel("Adept Medic", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4);
+  this.addLevel("Expert Medic", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(5);
   }
 
 
@@ -104,7 +104,6 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
-//  aiEntries.add(new AIAttackTargets(npc, 100, 20, 20));
   aiEntries.add(new AIFollowPlayer(npc, 90));
   aiEntries.add(new AINpcUpkeepObjective(npc, 85));
   aiEntries.add(new AIDepositGoods(npc, 80));

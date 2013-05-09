@@ -65,9 +65,9 @@ public NpcCombatEngineer(int type)
   this.iconTexture = "npcSoldier1";
   this.defaultTargets = new String[]{"Zombie", "Spider", "CaveSpider", "Blaze", 
       "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
-  this.addLevel("Engineer Novice", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3);
-  this.addLevel("Engineer Adept", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4);
-  this.addLevel("Engineer Expert", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(5);
+  this.addLevel("Novice Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3);
+  this.addLevel("Adept Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4);
+  this.addLevel("Expert Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(5);
   }
 
 @Override
