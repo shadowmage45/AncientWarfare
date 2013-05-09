@@ -50,6 +50,10 @@ public AITargetEntryPlayer(NpcBase owner, TargetType typeName, float maxTargetRa
 @Override
 public boolean isTarget(Entity ent)
   {   
+  if(ent==null || ent.isDead)
+    {
+    return false;
+    }
   if(ent instanceof EntityPlayer)
     {
     EntityPlayer player = (EntityPlayer)ent;

@@ -56,6 +56,10 @@ public AITargetEntryNpc(NpcBase npc, TargetType typeName, int priority, float ma
 @Override
 public boolean isTarget(Entity ent)
   {   
+  if(ent==null || ent.isDead)
+    {
+    return false;
+    }
   if(ent instanceof NpcBase)
     {
     NpcBase npc = (NpcBase)ent;

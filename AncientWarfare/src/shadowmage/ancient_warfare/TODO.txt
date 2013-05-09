@@ -16,10 +16,15 @@ GENERAL
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
-* vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation
+* clientMovement--only send packets if moving/ everyX seconds
 
 SOLDIERS
-* more fully implement commander bonuses (give bonus to accuracy as well?)
+* more fully implement commander bonuses
+    archer -- accuracy, armor increase
+    siege-engineer -- accuracy, armor increase
+    footsoldier -- damage increase, armor increase
+    combat-engineer-- ??, armor increase
+    medic -- ??, armor increase
 
 NPCS
 * expand waypoint navigator with the following functions:
@@ -28,7 +33,7 @@ NPCS
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
-* add icons for new tasks (commander/heal/repair tasks)     
+* add icons for new tasks (commander/heal/repair/courier tasks)     
         
 ITEM ROUTING
 * courier post block (civic type?)
@@ -49,7 +54,8 @@ PATHFINDING
 * recalc of path towards moving target is still too aggressive
 * need to check if a block has blocking entities in it during iswalkable check
 * pathfinding for vehicles is still...off...
-
+    it works well, but may not find paths in many areas.
+    its also slow as &&^@ because of all of the block checks
 
 CIVICS
 * need objective icons and rendering
@@ -196,33 +202,34 @@ TWEAKS/OPTIMIZATION
 * clean up some packet spaminess for npcs on vehicles. its still not pretty...but..not much else to do other than synch all the values through data watchers
 
 /********** 05-07-13 **********/
-* figure out how to handle upkeep for npcs mounted on vehicles
+* figure out how to handle upkeep for npcs mounted on vehicles--works
     keep a record of vehicle ridden
     dismount vehicle
     get upkeep
     go back to vehicle/remount    
-* vehicle container needs stack limiting on shift-click
+* vehicle container needs stack limiting on shift-click--works
     code actually added to containerBase mergeItem coding...
 * mine tries to harvest water..need a isClearable(id, top) check...
-* add mount target to baton
-* npc commanders
-* add quarry-pattern mine
-* put quaded texture rendering someplace central...
-* bounds size testing on placement is one off (display is correct, test is wrong)
+* add mount target to baton--works
+* npc commanders--works
+* add quarry-pattern mine--works
+* put quaded texture rendering someplace central...--moved
+* bounds size testing on placement is one off (display is correct, test is wrong)--fixed
 /********** 05-08-13 **********/
-* create officer types (com, gen)(can fight/drive--higher hp/dmg/accuracy, better equip, MUCH more expensive)
-* inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)
-* create AI objective Stay Near Commander
-* create medic NPC type
-* create heal targets task and objective
-* create vehicle repair target entry
-* create vehicle repair ai task and objective
-* create combat engineer npc type to repair vehicles
-* one more attempt at turret rotation yaw bounding correction
-* add advanced configurable aggro options (load to config at world load/sometime after all load/init stages are done)
-* move all default targets over to advanced target options (players can edit default attack targets)
-* melee units need to NOT target creepers
-
+* create officer type--works
+* inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)--if npc has commander, it will add aggro to commanders target
+* create AI objective Stay Near Commander--works
+* create medic NPC type--works
+* create heal targets task and objective--works
+* create vehicle repair target entry--works
+* create vehicle repair ai task and objective--works 
+* create combat engineer npc type to repair vehicles--works
+* one more attempt at turret rotation yaw bounding correction--didn't work...
+* add advanced configurable aggro options (load to config at world load/sometime after all load/init stages are done)--see below..
+* move all default targets over to advanced target options (players can edit default attack targets)--NFC if it loads
+* melee units need to NOT target creepers--works
+* fix npc canSee check for vehicles -- adj vehicle eyeHeight--works
+* vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation--works, finally fixed...
 
 /********** 05-09-13 **********/
 /********** 05-10-13 **********/

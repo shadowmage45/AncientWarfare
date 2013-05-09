@@ -217,7 +217,7 @@ protected boolean shouldCalculatePath(int ex, int ey, int ez, int tx, int ty, in
 
 protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
-  if(!world.isWalkable(ex, ey, ez))
+  if(!world.isWalkable(ex, ey, ez) && (currentTarget==null || !world.isWalkable(currentTarget.x, currentTarget.y, currentTarget.z)))
     {
     Config.logDebug("current position unwalkable");
     Node n = PathUtils.getClosestPathableTo(world, ex, ey, ez, (int)(entity.width*2.f), 2, ex, ey, ez);

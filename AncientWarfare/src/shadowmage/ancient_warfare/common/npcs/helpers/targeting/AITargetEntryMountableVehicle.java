@@ -39,6 +39,10 @@ public AITargetEntryMountableVehicle(NpcBase npc, int vehicleType, int range)
 @Override
 public boolean isTarget(Entity ent)
   {
+  if(ent==null || ent.isDead)
+    {
+    return false;
+    }
   if(ent instanceof VehicleBase)
     {
     VehicleBase vehicle = (VehicleBase)ent;
