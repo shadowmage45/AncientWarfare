@@ -41,6 +41,7 @@ public AIHealTarget(NpcBase npc)
 @Override
 public void onTick()
   {
+  npc.swingItem();
   if(npc.actionTick<=0)
     {
     Entity ent = npc.getTarget().getEntity(npc.worldObj);

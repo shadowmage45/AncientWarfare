@@ -148,15 +148,20 @@ public void addConfigTargets()
   String targetType = null;
   if(npcType.isCombatUnit() && !npcType.getConfigName().equals(""))
     {
-    targets = Config.getConfig().get("npc_aggro_settings", npcType.getConfigName(), new String[]{}).getStringList();
+//    Config.logDebug("adding targets to combat unit");
+    targets = Config.getConfig().get("npc_aggro_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
+//    Config.logDebug("targetsToString: "+targets);
     if(targets!=null && targets.length>0)
       {
+//      Config.logDebug("found: "+targets.length+ " targets from config");
       Class clz;
       for(String name : targets)
         {
+//        Config.logDebug("attempting to get class for name: "+name);
         clz = (Class) EntityList.stringToClassMapping.get(name);
         if(clz!=null)
           {
+//          Config.logDebug("adding "+clz+" to targets");
           targetHelper.addTargetEntry(new AITargetEntry(this, TargetType.ATTACK, clz, 0, true, Config.npcAISearchRange));
           }
         }

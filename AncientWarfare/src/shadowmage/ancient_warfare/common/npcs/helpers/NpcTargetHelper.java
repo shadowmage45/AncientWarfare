@@ -189,17 +189,20 @@ public void checkForTargets()
 //      Config.logDebug("checking entity: "+ent);
       for(TargetType key : this.targetEntries.keySet())        
         {
+//        Config.logDebug("checking targets of type: "+key);
         AITargetList targetList = this.targetEntries.get(key);
+//        Config.logDebug("target list "+targetList );
         targetEntry = targetList.getEntryFor(ent);
+//        Config.logDebug("target entry" + targetEntry);
         if(targetEntry==null)
           {
           continue;
           }
         if(dist>targetEntry.maxTargetRange || !npc.getEntitySenses().canSee(ent))
           {
+//        	Config.logDebug("skipping due to vision or range "+targetEntry.maxTargetRange +" v: "+npc.getEntitySenses().canSee(ent));
           continue;
           }        
-//        Config.logDebug("checking targets of type: "+key);
         int pri = targetEntry.priority;
         if(pri>=0)
           {
@@ -279,6 +282,7 @@ public boolean areTargetsInRange(TargetType type, float range)
   {
   if(this.aggroEntries.containsKey(type))
     {
+//    Config.logDebug("target helper has list of type: "+type+" checking if targets in range from list");
     return this.aggroEntries.get(type).areTargetsInRange(range);
     }
   return false;

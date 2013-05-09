@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -46,14 +47,23 @@ public AITargetEntryRepairableVehicle(NpcBase owner,  float maxTargetRange)
 @Override
 public boolean isTarget(Entity ent)
   {
+//  Config.logDebug("checking entity: "+ent + " for vehicle repairability");
+  if(ent==null || ent.isDead)
+    {
+    return false;
+    }
   if(ent instanceof VehicleBase)
     {
     VehicleBase v = (VehicleBase)ent;
-    if(v.getHealth()< v.baseHealth && !TeamTracker.instance().isHostileTowards(npc.worldObj, npc.teamNum, v.teamNum) && !TeamTracker.instance().isHostileTowards(npc.worldObj, v.teamNum, npc.teamNum))
+//    Config.logDebug("found vehicle. range: "+npc.getDistanceToEntity(v) + " health: "+v.getHealth() + "/"+v.baseHealth);    
+    if(v.getHealth() < v.baseHealth && !TeamTracker.instance().isHostileTowards(npc.worldObj, npc.teamNum, v.teamNum) && !TeamTracker.instance().isHostileTowards(npc.worldObj, v.teamNum, npc.teamNum))
       {
+//      Config.logDebug("returning target is valid" );
+//      new Exception().printStackTrace();
       return true;
       } 
     }  
+//  Config.logDebug("returning invalid repair target "+ent);
   return false;
   }
 

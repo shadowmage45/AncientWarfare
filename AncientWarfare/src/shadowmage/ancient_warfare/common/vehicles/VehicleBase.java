@@ -197,6 +197,15 @@ protected void entityInit()
   this.dataWatcher.addObject(7, Integer.valueOf(100));  
   }
 
+/**
+ * overriden to help with vision checks for vehicles
+ */
+@Override
+public float getEyeHeight()
+  {
+  return 1.6F;
+  }
+
 private int getHealthClient()
   {
   return this.dataWatcher.getWatchableObjectInt(7);
@@ -732,16 +741,16 @@ public void updateTurretRotation()
   if(Trig.getAbsDiff(localTurretDestRot, localTurretRotation) < localTurretRotInc)
     {
     localTurretRotation = localTurretDestRot;
-    }
-  while(prevYaw-360.f > localTurretRotation)
-    {
-    prevYaw-=360.f;    
-    }
-  while(prevYaw+360.f <= localTurretRotation)
-    {
-    prevYaw+=360.f;
-    }
+    }  
   this.currentTurretYawSpeed = this.localTurretRotation - prevYaw;
+  if(this.currentTurretYawSpeed>180)
+    {
+    this.currentTurretYawSpeed-=360.f;
+    }
+  if(this.currentTurretYawSpeed<-180)
+    {
+    this.currentTurretYawSpeed+=360.f;
+    }
   }
 
 /**

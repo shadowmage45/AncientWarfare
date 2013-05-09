@@ -38,6 +38,10 @@ public AITargetEntryTeamHealing(NpcBase npc, TargetType typeName, Class clz, int
 @Override
 public boolean isTarget(Entity ent)
   {
+  if(ent==null || ent.isDead)
+    {
+    return false;
+    }
   if(ent instanceof EntityPlayer)
     {
     EntityPlayer player = (EntityPlayer)ent;    

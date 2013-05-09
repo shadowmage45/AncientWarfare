@@ -88,6 +88,7 @@ protected boolean isTargetValid()
         }
       }
     }
+  npc.targetHelper.removeTarget(target);
   return false;  
   }
 

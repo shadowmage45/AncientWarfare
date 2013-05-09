@@ -30,10 +30,12 @@ public class AIAggroTargetWrapper
 
 public int aggroLevel;
 protected ITargetEntry target;
+protected AITargetEntry entry;
 
-public AIAggroTargetWrapper(ITargetEntry target)
+public AIAggroTargetWrapper(ITargetEntry target, AITargetEntry entry)
   {
   this.target = target;
+  this.entry = entry;
   }
 
 public ITargetEntry getTarget()
@@ -62,7 +64,7 @@ public boolean isValidEntry(World world)
   if(target!=null && target.isEntityEntry())
     {
     Entity ent = target.getEntity(world);    
-    if(ent==null || ent.isDead)
+    if(entry!=null && !entry.isTarget(ent))
       {
       return false;
       }
@@ -72,8 +74,9 @@ public boolean isValidEntry(World world)
         {
         return false;
         }
-      }
+      }   
     }
+  //TODO handle block/tile entries
   return true;
   }
 

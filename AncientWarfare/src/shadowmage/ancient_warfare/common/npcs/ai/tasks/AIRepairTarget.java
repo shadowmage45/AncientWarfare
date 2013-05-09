@@ -41,6 +41,7 @@ public AIRepairTarget(NpcBase npc)
 @Override
 public void onTick()
   {
+  npc.swingItem();
   if(npc.actionTick>0)
     {
     return;
@@ -61,7 +62,7 @@ public void onTick()
           {
           healAmt = (int) (vehicle.baseHealth - vehicle.getHealth());
           }
-        vehicle.setHealth(vehicle.getHealth() + healAmt);
+        vehicle.setHealth(vehicle.getHealth() + healAmt);        
         }      
       }
     }

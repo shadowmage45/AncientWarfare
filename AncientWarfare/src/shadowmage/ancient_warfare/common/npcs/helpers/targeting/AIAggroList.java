@@ -46,7 +46,7 @@ public AIAggroList(NpcBase owner, TargetType targetType)
 
 public void addOrUpdateEntry(Entity ent, int aggroAmt, AITargetEntry type)
   {  
-//  Config.logDebug("add/update entry for : "+ent + " amt: "+aggroAmt);
+//  Config.logDebug("add/update entry for : "+ent + " amt: "+aggroAmt + " type: "+type);
   for(AIAggroTargetWrapper entry : this.targetEntries)
     {
     if(entry.matches(ent))
@@ -56,7 +56,7 @@ public void addOrUpdateEntry(Entity ent, int aggroAmt, AITargetEntry type)
       }
     }
   TargetPosition target = TargetPosition.getNewTarget(ent, type.getTypeName());
-  AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target).setAggro(aggroAmt);
+  AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target, type).setAggro(aggroAmt);
   this.targetEntries.add(wrap);
   }
 
@@ -71,7 +71,7 @@ public void addOrUpdateEntry(int x, int y, int z, int aggroAmt, AITargetEntry ty
       }
     }
   TargetPosition target = TargetPosition.getNewTarget(x,y,z, type.getTypeName());
-  AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target).setAggro(aggroAmt);
+  AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target, type).setAggro(aggroAmt);
   this.targetEntries.add(wrap);
   }
 
@@ -90,7 +90,7 @@ public void addOrUpdateEntry(TileEntity te, int aggroAmt, AITargetEntry type)
       }
     }
   TargetPosition target = TargetPosition.getNewTarget(te.xCoord, te.yCoord, te.zCoord, type.getTypeName());
-  AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target).setAggro(aggroAmt);
+  AIAggroTargetWrapper wrap = new AIAggroTargetWrapper(target, type).setAggro(aggroAmt);
   this.targetEntries.add(wrap);
   }
 
@@ -108,6 +108,7 @@ public AIAggroTargetWrapper getEntryFor(Entity ent)
 
 public boolean areTargetsInRange(float range)
   {
+//  Config.logDebug("checking targets in range of type: "+this.targetType+" has: "+this.targetEntries.size()+" entries");
   for(AIAggroTargetWrapper entry : this.targetEntries)
     {
     if(npc.getDistanceFromTarget(entry.target) < range)
@@ -168,6 +169,7 @@ public void updateAggroEntries()
   {
   Iterator<AIAggroTargetWrapper> it = this.targetEntries.iterator();
   AIAggroTargetWrapper entry;
+  AITargetEntry targetEntry;
   while(it.hasNext())
     {
     entry = it.next();
