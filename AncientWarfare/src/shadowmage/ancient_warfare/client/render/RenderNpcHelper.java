@@ -52,7 +52,7 @@ public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double pa
   if(Settings.getRenderNpcNameplates())
     {
     NpcBase npc = (NpcBase) par1EntityLiving;
-    String displayLabel = npc.npcType.getDisplayName()+" "+npc.getHealth()+"/"+npc.getMaxHealth();
+    String displayLabel = npc.npcType.getLevelName(npc.rank)+" "+npc.getHealth()+"/"+npc.getMaxHealth();
     this.renderLivingLabel(par1EntityLiving, displayLabel, par2, par4, par6, 64);
     }
   }

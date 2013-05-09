@@ -1,6 +1,7 @@
 TONIGHT
 * add log rotation data
 * tree farm testing
+* jungle tree 2x2??
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -25,6 +26,8 @@ SOLDIERS
     footsoldier -- damage increase, armor increase
     combat-engineer-- ??, armor increase
     medic -- ??, armor increase
+* investigate revenge-target designation (when something attacks a soldier)
+* investigate player-attack target setting (when a player with soldiers following attacks an entity)    
 
 NPCS
 * expand waypoint navigator with the following functions:
@@ -33,7 +36,7 @@ NPCS
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
-* add icons for new tasks (commander/heal/repair/courier tasks)     
+* add icons for new tasks (commander/heal/repair/courier tasks) 
         
 ITEM ROUTING
 * courier post block (civic type?)
@@ -45,7 +48,14 @@ ITEM ROUTING
     town hall will become the central routing authority.
     (meaning the system will go offline when the town-hall is unloaded)
 * will need client-server container synch info for displaying item routing filters
-* gui will use NSEWUD for determining containers to interact with.    
+* gui will use NSEWUD for determining containers/sides to interact with. 
+* filters need setting for 'can supply', 'demand', 'passive demand', 'active request'   
+
+WAREHOUSE ??
+* scan chests in area.  Keep inventory count/avail slot count.
+* has two inventory areas, deposit and request
+* has 'request' button to pull items from managed inventory into local inventory
+* items will be taken from 'deposit' slot and moved into managed inventory at a pre-set rate, if room exists
         
 GUI FRAMEWORK
 * add an itemSlot element (not inventory slot...a client-side only slot that displays a static stack)
@@ -179,42 +189,6 @@ TWEAKS/OPTIMIZATION
 
 ********************* DONE STUFF *************************  
 
-/********** 05-06-13 **********/
-* add objective type numbers to ai objectives/tasks
-* clean up vehicle input handling.  Move over to a data-watcher field (no reply packet, just set server side, read client-side from data-watcher)
-* add npc objective fields to data-watcher
-* update pathfinder to check around the target block if pathing entity is >1.f width
-* when soldiers dismount, they need to clear vehicle input status
-* move a few things over to a RenderTools class
-* add test code for forcing vanilla mobs to target Npcs....we'll see...
-* rework vehicle packet stuff, should be more precise, but may use more bandwidth
-* fix npcs trampling crops
-* move vehicle health over to data-tracker instead of custom packets
-* double check vehicle movement stuff still works/fix whatever I messed up (works, seems to be good for npcs now)
-* check vehicle health stuff still works..(looks good)
-* get npc objective icons rendering properly
-* fix gui background quaded texture rendering (z-level in renderTools was incorrect...)
-* clean up vehicle input stuff (needs rotatation bounded on packet recieved)
-* vehicle riders need some work (turning the vehicle base towards targets)
-    add an internal vehicle yaw direction param, if vehicle is at/near yaw, stop
-* fix vehicle water derpiness
-* add cleaner un-pathable block handling to navigator (mostly for vehicles)
-* clean up some packet spaminess for npcs on vehicles. its still not pretty...but..not much else to do other than synch all the values through data watchers
-
-/********** 05-07-13 **********/
-* figure out how to handle upkeep for npcs mounted on vehicles--works
-    keep a record of vehicle ridden
-    dismount vehicle
-    get upkeep
-    go back to vehicle/remount    
-* vehicle container needs stack limiting on shift-click--works
-    code actually added to containerBase mergeItem coding...
-* mine tries to harvest water..need a isClearable(id, top) check...
-* add mount target to baton--works
-* npc commanders--works
-* add quarry-pattern mine--works
-* put quaded texture rendering someplace central...--moved
-* bounds size testing on placement is one off (display is correct, test is wrong)--fixed
 /********** 05-08-13 **********/
 * create officer type--works
 * inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)--if npc has commander, it will add aggro to commanders target
@@ -230,8 +204,16 @@ TWEAKS/OPTIMIZATION
 * melee units need to NOT target creepers--works
 * fix npc canSee check for vehicles -- adj vehicle eyeHeight--works
 * vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation--works, finally fixed...
+* fix NPCs jittery motion on vehicles (hack, set motion to 0 during update -- need investigation of actual cause/solution)
 
-/********** 05-09-13 **********/
+/********** 05-09-13 **********/ 
+* add npc creative mode id-picked 
+* add vehicle creative mode id-picked  
+* add farmer texture
+* add lumberjack texture
+* change NPC nameplate name over to level name (easier to tell ranks apart for non-combat units)
+* adjust entity-item vehicle item rendering +1Y (should fix bobbing in-ground), probably needs adjusted
+
 /********** 05-10-13 **********/
 /********** 05-11-13 **********/
 /********** 05-12-13 **********/

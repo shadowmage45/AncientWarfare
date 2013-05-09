@@ -59,20 +59,16 @@ public NpcFarmer(int type)
   this.displayName = "Farmer";
   this.tooltip = "For working basic crops";
   this.iconTexture = "npcWorker1";  
-  this.addLevel("Farmer Rank 0", Config.texturePath + "models/npcDefault.png", getToolStack(0), null).addTargetType(CivicWorkType.FARM);
-  this.addLevel("Farmer Rank 1", Config.texturePath + "models/npcDefault.png", getToolStack(1), null).addTargetType(CivicWorkType.FARM);
-  this.addLevel("Farmer Rank 2", Config.texturePath + "models/npcDefault.png", getToolStack(2), null).addTargetType(CivicWorkType.FARM);
+  this.addLevel("Novice Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(0), null).addTargetType(CivicWorkType.FARM);
+  this.addLevel("Adept Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(1), null).addTargetType(CivicWorkType.FARM);
+  this.addLevel("Expert Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(2), null).addTargetType(CivicWorkType.FARM);
   this.isCombatUnit = false;
   }
 
 @Override
 public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
-  helper.addTargetEntry(new AITargetEntry(npc, TargetType.WORK, TECivic.class, 0, false, 140));
-//  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntityPlayer.class, 0, true, 40));
-//  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntityMob.class, 0, true, 40));
-//  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntitySlime.class, 0, true, 40));
-//  helper.addTargetEntry(new AITargetEntryMountableVehicle(npc, -1, 20));
+  helper.addTargetEntry(new AITargetEntry(npc, TargetType.WORK, TECivic.class, 0, false, Config.npcAISearchRange));
   }
 
 @Override

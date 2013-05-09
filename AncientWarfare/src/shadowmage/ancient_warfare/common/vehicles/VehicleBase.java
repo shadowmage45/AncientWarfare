@@ -33,6 +33,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -195,6 +196,12 @@ protected void entityInit()
   this.dataWatcher.addObject(5, Byte.valueOf((byte) 0));//f in
   this.dataWatcher.addObject(6, Byte.valueOf((byte) 0));//s in  
   this.dataWatcher.addObject(7, Integer.valueOf(100));  
+  }
+
+@Override
+public ItemStack getPickedResult(MovingObjectPosition target)
+  {
+  return this.vehicleType.getStackForLevel(vehicleMaterialLevel);
   }
 
 /**

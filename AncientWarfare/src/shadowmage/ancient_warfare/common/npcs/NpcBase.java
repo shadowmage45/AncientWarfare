@@ -35,6 +35,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
@@ -167,6 +168,12 @@ public void addConfigTargets()
         }
       }
     }
+  }
+
+@Override
+public ItemStack getPickedResult(MovingObjectPosition target)
+  {
+  return NpcRegistry.getStackFor(npcType, rank);
   }
 
 @Override

@@ -567,4 +567,38 @@
 * fix siege-engineer waypoint navigation/patrol abililty
 * apparently pathfinding for 'patrol' does not work while mounted...
 * if interrupted on a patrol point, will 'skip' the point it was heading towards
-     
+/********** 05-06-13 **********/
+* add objective type numbers to ai objectives/tasks
+* clean up vehicle input handling.  Move over to a data-watcher field (no reply packet, just set server side, read client-side from data-watcher)
+* add npc objective fields to data-watcher
+* update pathfinder to check around the target block if pathing entity is >1.f width
+* when soldiers dismount, they need to clear vehicle input status
+* move a few things over to a RenderTools class
+* add test code for forcing vanilla mobs to target Npcs....we'll see...
+* rework vehicle packet stuff, should be more precise, but may use more bandwidth
+* fix npcs trampling crops
+* move vehicle health over to data-tracker instead of custom packets
+* double check vehicle movement stuff still works/fix whatever I messed up (works, seems to be good for npcs now)
+* check vehicle health stuff still works..(looks good)
+* get npc objective icons rendering properly
+* fix gui background quaded texture rendering (z-level in renderTools was incorrect...)
+* clean up vehicle input stuff (needs rotatation bounded on packet recieved)
+* vehicle riders need some work (turning the vehicle base towards targets)
+    add an internal vehicle yaw direction param, if vehicle is at/near yaw, stop
+* fix vehicle water derpiness
+* add cleaner un-pathable block handling to navigator (mostly for vehicles)
+* clean up some packet spaminess for npcs on vehicles. its still not pretty...but..not much else to do other than synch all the values through data watchers
+/********** 05-07-13 **********/
+* figure out how to handle upkeep for npcs mounted on vehicles--works
+    keep a record of vehicle ridden
+    dismount vehicle
+    get upkeep
+    go back to vehicle/remount    
+* vehicle container needs stack limiting on shift-click--works
+    code actually added to containerBase mergeItem coding...
+* mine tries to harvest water..need a isClearable(id, top) check...
+* add mount target to baton--works
+* npc commanders--works
+* add quarry-pattern mine--works
+* put quaded texture rendering someplace central...--moved
+* bounds size testing on placement is one off (display is correct, test is wrong)--fixed  
