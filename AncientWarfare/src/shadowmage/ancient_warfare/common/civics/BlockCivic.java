@@ -37,6 +37,7 @@ import shadowmage.ancient_warfare.common.block.AWBlockContainer;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.CreativeTabAW;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
@@ -142,6 +143,25 @@ public Icon getIcon(int side, int meta)
       }
     }
   return super.getIcon(side, meta);
+  }
+
+/**
+ * Returns the ID of the items to drop on destruction.
+ */
+@Override
+public int idDropped(int par1, Random par2Random, int par3)
+  {
+  if(blockNum*16 + par1==Civic.builder.getGlobalID())
+    {
+    return 0;
+    }
+  return ItemLoader.civicPlacer.itemID;
+  }
+
+@Override
+public int damageDropped(int par1)
+  {
+  return par1;
   }
 
 @Override
