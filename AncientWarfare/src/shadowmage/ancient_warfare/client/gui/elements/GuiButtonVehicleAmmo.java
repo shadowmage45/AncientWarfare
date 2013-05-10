@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.gui.vehicle;
+package shadowmage.ancient_warfare.client.gui.elements;
 
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.util.Icon;
