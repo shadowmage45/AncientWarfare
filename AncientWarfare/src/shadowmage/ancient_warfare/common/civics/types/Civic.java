@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnChicken;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnCow;
+import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnMooshroom;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnPig;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnSheep;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCactus;
@@ -81,7 +82,8 @@ public static ICivicType pigFarm = new CivicFarm(24, "Pig Farm", "16x16 Max Widt
 public static ICivicType cowFarm = new CivicFarm(25, "Cow Farm", "16x16 Max Width, 6 animals", TEBarnCow.class, "civicFarmWheat1", 16, 2);
 public static ICivicType chickenFarm = new CivicFarm(26, "Chicken Farm", "16x16 Max Width, 6 animals", TEBarnChicken.class, "civicFarmWheat1", 16, 2);
 public static ICivicType sheepFarm = new CivicFarm(27, "Sheep (wool) Farm", "16x16 Max Width, 6 animals", TEBarnSheep.class, "civicFarmWheat1", 16, 2);
-public static ICivicType courierPost = new CivicCourierPost(28);
+public static ICivicType mooshroomFarm = new CivicFarm(28, "Mooshroom Farm", "16x16 Max Width, 6 animals", TEBarnMooshroom.class, "civicFarmWheat1", 16 ,2);
+public static ICivicType courierPost = new CivicCourierPost(29);
 //smithy (process ores -> ingots)
 //lumber yard (process logs -> planks/charcoal)
 //factory (single block)(use provided resources to craft player-set recipes)

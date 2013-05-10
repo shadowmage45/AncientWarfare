@@ -45,7 +45,6 @@ int nextWander = tps;
 public AIWander(NpcBase npc, int maxPriority)
   {
   super(npc, maxPriority);  
-  this.currentPriority = this.maxPriority;
   }
 
 @Override
@@ -57,13 +56,13 @@ public byte getObjectiveNum()
 @Override
 public void addTasks()
   {
-//  this.aiTasks.add(new AIMoveToTarget(npc, 1, false));
+  
   }
 
 @Override
 public void updatePriority()
   {
-  if(npc.isRidingVehicle())
+  if(npc.isRidingVehicle() || npc.wayNav.getPatrolSize()>0)
     {
     this.currentPriority = 0;
     }

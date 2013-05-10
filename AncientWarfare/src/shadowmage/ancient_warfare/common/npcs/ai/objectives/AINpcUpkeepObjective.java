@@ -25,7 +25,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIDismountVehicle;
@@ -162,7 +164,15 @@ protected void checkForUpkeepTarget()
   WayPoint p = npc.wayNav.getUpkeepSite();
   if(p==null)
     {
-    this.upkeepTarget = null; 
+    this.upkeepTarget = null;
+    ITargetEntry t = npc.targetHelper.getHighestAggroTargetInRange(TargetType.UPKEEP, Config.npcAISearchRange);
+    if(t!=null && npc.worldObj.getBlockTileEntity(t.floorX(), t.floorY(), t.floorZ()) instanceof TECivicTownHall)
+      {
+      TECivicTownHall civ = (TECivicTownHall)npc.worldObj.getBlockTileEntity(t.floorX(), t.floorY(), t.floorZ());
+      npc.wayNav.setUpkeepSite(new WayPoint(t.floorX(), t.floorY(), t.floorZ(), TargetType.UPKEEP));
+      this.upkeepTarget = civ;
+      npc.setTargetAW(npc.wayNav.getUpkeepSite());
+      } 
     }
   else
     {

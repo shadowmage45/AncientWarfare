@@ -74,10 +74,7 @@ public void updatePriority()
       }
     else
       {
-      if(this.currentPriority>0)
-        {
-        this.currentPriority--;
-        }
+      this.currentPriority = 0;
       }
     }
   }
@@ -124,7 +121,6 @@ public void onObjectiveStart()
 @Override
 public void stopObjective()
   {
-//  Config.logDebug("ai stay near home: setting finished: clearing path and target");  
   npc.setTargetAW(null);
   npc.clearPath();
   }

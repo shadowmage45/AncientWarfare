@@ -73,10 +73,9 @@ protected boolean isWorkSite = false;
 protected boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
 public AWInventoryBasic inventory = new AWInventoryBasic(0);
 protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
-//protected List<WorkPoint> workPoints = new ArrayList<WorkPoint>();//points being worked currently
 
 protected Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
-private boolean hasWork = false;
+protected boolean hasWork = false;
 protected int clientWorkStatus = 0;
 protected int clientInventoryStatus = 0;
 protected int clientWorkerStatus = 0;

@@ -25,6 +25,7 @@ import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnChicken;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnCow;
+import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnMooshroom;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnPig;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnSheep;
 import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
@@ -103,6 +104,7 @@ public void load()
   GameRegistry.registerTileEntity(TEBarnCow.class, "Cow Farm");
   GameRegistry.registerTileEntity(TEBarnChicken.class, "Chicken Farm");
   GameRegistry.registerTileEntity(TEBarnSheep.class, "Sheep Farm");
+  GameRegistry.registerTileEntity(TEBarnMooshroom.class, "Mooshroom Farm");
   GameRegistry.registerTileEntity(TECivicCourier.class, "Courier Post");
   }
 

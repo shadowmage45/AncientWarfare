@@ -36,6 +36,7 @@ import net.minecraft.util.DamageSource;
 
 public class TEBarnCow extends TEWorkSiteAnimalFarm
 {
+
 protected ItemStack bucketFilter = new ItemStack(Item.bucketEmpty);
 /**
  * 
@@ -85,14 +86,17 @@ protected void scan()
   for(int i = 0; i < cullableList.size(); i++)
     {
     first = cullableList.poll();//.remove(0);
-    if(i<cullCount)
+    if(i>=bucketCount && i>=cullCount)
       {
-      this.addWorkPoint(first, TargetType.BARN_CULL);
+      break;
       }
-    if(bucketCount>0)
+    if(i<bucketCount)
       {
-      bucketCount--;
       this.addWorkPoint(first, TargetType.BARN_MILK);
+      }
+    if(i<cullCount)
+      {      
+      this.addWorkPoint(first, TargetType.BARN_CULL);
       }    
     }  
   }

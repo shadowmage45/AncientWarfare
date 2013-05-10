@@ -1,13 +1,12 @@
 TONIGHT
-* mooshroom farm
+* inventory size validation (make sure there is room to input new items into civics when validating work points)
+* test netherstalk farm
+* test mooshroom farm
 
 THIS WEEK
 * get stuff ready for a preview video
 * upkeep site auto broadcast handling (in objective and site)
-* remove courier post blocks (or other better routing for items)
-* sheep farm missing texture
-* add cow (milk) farm
-* add mooshroom (soup/mushroom) farm
+* disable courier post blocks
 
 THIS(next) WEEKEND
 * preview video..it better be cool!
@@ -243,6 +242,12 @@ TWEAKS/OPTIMIZATION
 * add milking ability to cow farm -- just input buckets
 
 /********** 05-10-13 **********/
+* can now disable NPC wandering by assigning any npc a patrol point.
+* adjust stay-near-home AI priority setting so it should trigger more logically
+* adjust seek shelter objective to clear path when stopping.
+* mooshroom farm (breed/cull/soup)
+* add Town-Hall block broadcasting of upkeep point
+
 /********** 05-11-13 **********/
 /********** 05-12-13 **********/
 /********** 05-13-13 **********/

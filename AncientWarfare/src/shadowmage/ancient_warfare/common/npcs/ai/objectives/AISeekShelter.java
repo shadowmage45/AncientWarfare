@@ -128,6 +128,7 @@ public void onObjectiveStart()
 public void stopObjective()
   {
   this.theDoor = null;
+  this.npc.clearPath();
   }
 
 }
