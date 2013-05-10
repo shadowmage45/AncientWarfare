@@ -90,24 +90,39 @@ protected void scan()
     }  
   for(int i = 0; i < cullableList.size(); i++)
     {
-    first = (EntitySheep) cullableList.poll();
-    this.addWorkPoint(first, TargetType.BARN_CULL);
+    first = (EntitySheep) cullableList.get(i);
+    if(!first.getSheared())
+      {
+      this.addWorkPoint(first, TargetType.BARN_SHEAR);
+      }
     }
   }
+
 @Override
 protected void doWork(NpcBase npc, WorkPoint p)
   {
+  this.workPoints.remove(p);
   if(p.work==TargetType.BARN_BREED && p.target!=null && inventory.containsAtLeast(breedingItem, 2))
     {
-    WorkPoint otherP = workPoints.poll();
-    if(otherP!=null && otherP.target!=null)
+    WorkPoint otherP = null;
+    for(int i = 0; i < this.workPoints.size(); i++)
       {
-      ((EntityAnimal)p.target).inLove = 600;//.setTarget(otherP.target);
-      ((EntityAnimal)otherP.target).inLove = 600;//setTarget(p.target);
-      inventory.tryRemoveItems(breedingItem, 2);
-      }
+      /**
+       * really, the NEXT point should be a breeding point, as they are put in in pairs, so this loop should stop
+       * after a single iteration
+       */
+      otherP = workPoints.get(i);
+      if(otherP!=null && otherP.target!=null && otherP.work==TargetType.BARN_BREED)
+        {
+        ((EntityAnimal)p.target).inLove = 600;//.setTarget(otherP.target);
+        ((EntityAnimal)otherP.target).inLove = 600;//setTarget(p.target);
+        inventory.tryRemoveItems(breedingItem, 2);
+        workPoints.remove(otherP);
+        break;
+        }
+      }    
     }
-  else if(p.work==TargetType.BARN_CULL && p.target!=null)
+  else if(p.work==TargetType.BARN_SHEAR && p.target!=null)
     {
     EntitySheep ent = (EntitySheep)p.target;
     if(ent!=null)
@@ -127,8 +142,30 @@ protected void doWork(NpcBase npc, WorkPoint p)
               }
             }          
           }
-        }      
+        }
+      ent.setSheared(true);
       }
     }
   }
+
+@Override
+protected TargetType validateWorkPoint(WorkPoint p)
+  {    
+  if(!(p.target instanceof EntitySheep)){return TargetType.NONE;}
+  EntitySheep ent = (EntitySheep) p.target;
+  if(ent==null || ent.isDead)
+    {
+    return TargetType.NONE;
+    }
+  if(p.work==TargetType.BARN_BREED && ent.getGrowingAge()>0)
+    {
+    return TargetType.NONE;
+    }    
+  if(p.work==TargetType.BARN_SHEAR && ent.getSheared())
+    {
+    return TargetType.NONE;
+    }
+  return p.work;
+  }
+
 }

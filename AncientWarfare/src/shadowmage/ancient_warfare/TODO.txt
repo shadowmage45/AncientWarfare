@@ -1,18 +1,22 @@
 TONIGHT
-* add log rotation data
-* tree farm testing
-* jungle tree 2x2??
+* mooshroom farm
 
 THIS WEEK
 * get stuff ready for a preview video
-* courier post blocks (or other better routing for items)
+* upkeep site auto broadcast handling (in objective and site)
+* remove courier post blocks (or other better routing for items)
+* sheep farm missing texture
+* add cow (milk) farm
+* add mooshroom (soup/mushroom) farm
 
 THIS(next) WEEKEND
 * preview video..it better be cool!
 
 GENERAL
 * add logs to block-data manager (for rotation values...currently unmapped)
-* civic block ID picked stuff..
+* civic block ID picked stuff.. (needs fixed)
+* npc id picked (needs fixed)
+* clean up navigator
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
@@ -36,7 +40,8 @@ NPCS
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
-* fisherman        
+* fisherman     
+* stay near home needs adjusted based, needs to clear path when home target changes/reset tasks   
         
 ITEM ROUTING
 * courier post block (civic type?)
@@ -58,7 +63,12 @@ WAREHOUSE ??
 * items will be taken from 'deposit' slot and moved into managed inventory at a pre-set rate, if room exists
         
 GUI FRAMEWORK
-* add an itemSlot element (not inventory slot...a client-side only slot that displays a static stack)
+* add an itemSlot element 
+    has internal reference for slot, passed during construction
+    passes onclick onto handleSlotClick
+    uses onHover for displaying itemstack tooltip/highlighting slot
+    will need advanced options for 'fake' stacks
+        will need to still send info to server to populate server side slot
 
 PATHFINDING
 * recalc of path towards moving target is still too aggressive
@@ -73,6 +83,7 @@ CIVICS
 * need work status bar
 * need a clearer way of designating where bounds on a civic SHOULD be.  videos/screenshots?
 * fishery (catches fish randomly based on number of water blocks present in area)
+* squid farm (harvests any squid that spawn in water in its bounds / randomly spawns squid to harvest?)
 * move over to using block-based items (ItemBlock...)(probably just need custom renderer...pull block and render that using renderBlocks instance in custom render)
 
 WORKSITES
@@ -86,7 +97,6 @@ FARMS
 * jungle tree farm needs 2x2 planting ability (adv farm?)
 * chicken farm needs to occasionally collect eggs on the ground
 * netherstalk farm needs testing
-* alternative tree farms need testing
 * need more work on cow/milk and mooshroom/soup farms
 * need to test sheep/wool farm
 
@@ -210,17 +220,28 @@ TWEAKS/OPTIMIZATION
 * fix NPCs jittery motion on vehicles (hack, set motion to 0 during update -- need investigation of actual cause/solution)
 
 /********** 05-09-13 **********/ 
-* add npc creative mode id-picked 
-* add vehicle creative mode id-picked  
-* add farmer texture
-* add lumberjack texture
-* change NPC nameplate name over to level name (easier to tell ranks apart for non-combat units)
+* add npc creative mode id-picked -- not working
+* add vehicle creative mode id-picked  -- borked
+* add farmer texture -- works
+* add lumberjack texture -- works
+* change NPC nameplate name over to level name (easier to tell ranks apart for non-combat units) -- works
 * adjust entity-item vehicle item rendering +1Y (should fix bobbing in-ground), probably needs adjusted
 
 * add miner texture
 * add objective and task icons for new AI (commander, repair, heal)
 * clean up civic-block id-picked and drop on harvest (should return civic items)
 * prep tex work on civic blocks
+
+* add log block meta rotations
+* expand meta-rotation table size to hold additional entries (logs)(now size 8)
+* update test release notes for next release
+* un-fubar icon code in civic block, and fix an actual bug (was using blockNum*4 instead of *16), and a third bug (using i (raw meta/index) instead of civNum...)
+* tree farm testing
+* fix sheep farm wool harvesting
+* add chicken farm egg pickup
+* adjust vehicle entity-item rendering code down to +0.5fY
+* add milking ability to cow farm -- just input buckets
+
 /********** 05-10-13 **********/
 /********** 05-11-13 **********/
 /********** 05-12-13 **********/

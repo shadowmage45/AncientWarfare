@@ -122,13 +122,22 @@ protected void doWork(NpcBase npc, WorkPoint p)
   {
   if(p.work==TargetType.BARN_BREED && p.target!=null && inventory.containsAtLeast(breedingItem, 2))
     {
-    WorkPoint otherP = workPoints.poll();
-    if(otherP!=null && otherP.target!=null)
+    WorkPoint otherP = null;
+    for(int i = 0; i < this.workPoints.size(); i++)
       {
-      ((EntityAnimal)p.target).inLove = 600;//.setTarget(otherP.target);
-      ((EntityAnimal)otherP.target).inLove = 600;//setTarget(p.target);
-      inventory.tryRemoveItems(breedingItem, 2);
-      }
+      /**
+       * really, the NEXT point should be a breeding point, as they are put in in pairs
+       */
+      otherP = workPoints.get(i);
+      if(otherP!=null && otherP.target!=null && otherP.work==TargetType.BARN_BREED)
+        {
+        ((EntityAnimal)p.target).inLove = 600;//.setTarget(otherP.target);
+        ((EntityAnimal)otherP.target).inLove = 600;//setTarget(p.target);
+        inventory.tryRemoveItems(breedingItem, 2);
+        workPoints.remove(otherP);
+        break;
+        }
+      }   
     }
   else if(p.work==TargetType.BARN_CULL && p.target!=null)
     {

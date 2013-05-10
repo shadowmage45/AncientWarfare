@@ -80,7 +80,7 @@ public byte buildOrder = 0;
  * one or two tables. (pistons and levers need all six)
  * all rotations will fallback to meta-data 0 if no valid information is found in the table
  */
-byte[][] metaRotations = new byte[6][4];
+byte[][] metaRotations = new byte[8][4];
 
 
 /**

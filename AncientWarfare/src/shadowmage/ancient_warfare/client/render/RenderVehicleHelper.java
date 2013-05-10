@@ -177,7 +177,7 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     }
   else if(type==ItemRenderType.ENTITY)
     {
-    GL11.glTranslatef(0.f, 1.0f, 0.f);
+    GL11.glTranslatef(0.f, .5f, 0.f);
     }
   GL11.glScalef(0.35f, 0.35f, 0.35f);
   GL11.glTranslatef(0, -1.f, 0);

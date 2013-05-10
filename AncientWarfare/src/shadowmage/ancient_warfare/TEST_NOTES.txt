@@ -1,200 +1,167 @@
 
 New features since last test release:
 Config Options:
-    Tons of new options in the config file.
-    World-gen config options moved entirely to world-gen config file (in the config/AWConfig directory)
-
-Options GUI:
-    Accessed by default with the F7 key. (keybind can be changed in MC keybind/options screen)
-        Opens a GUI with configurable settings for render options
-            Options should be self-explanatory, all should be functional.
-        Has a button to go to the Keybinds setting screen
+    Enable disable npc objective hint rendering (tells you exactly what the npc is doing)
+    Reworked Nameplate name displayed -- it will now display the entire rank name, to make it easier to tell
+        what rank a given NPC is.
         
-Keybind GUI:        
-    Accessed through the Options GUI -> Keybinds button
-        Opens a GUI to configure Ancient Warfare keybinds.
-        These keybinds can duplicate vanilla keybinds -- it is up to the player to make
-            sure no conflicts exist -- this system is used to allow a player to set the 
-            drive-forward key to the same or different key than the walk-forward key.
-            Other keys can also share keybinds with vanilla functions (such as space being fire/jump)
-        Keybinds exist for all vehicle movement functions, direct ammo selection, manual aim adjustment, 
-            enable/disable of auto-aim, and a keybind to open an ammo-select Gui for the a vehicle.
-
-Team Control GUI
-    Accessed by default with the F7 key. (keybind can be changed in MC keybind/options screen)
-        Opens a GUI to allow for changing of team
-            Gui also has controls for higher-ranked members to do team-administration
-                'Advanced Controls' button available at rank 7 or higher
-                Advanced controls has settings for alliances (non-hostile teams),
-                accepting/denying applications by members,
-                and changing rank/kicking members out of a team.
-    All players are by default assigned team 0.  All players on team 0 are of rank 0.  There is no admin
-        abilities for team 0.  Anyone may join it at any time.
-    The first player to join a team is set at the highest rank (10).  Any subsequent members are not 
-        auto-accepted, but must submit an application and be accepted by higher ranked members.
-    Teams are automatically hostile to ALL other teams. In order to become mutually netural, BOTH teams must
-        add the other to the 'non-hostile' teams list in the Advanced Teams Control gui.        
-    Ranks are mostly cosmetic, aside from ranks 7+ having access to advanced controls.  You can only kick or change
-        ranks on other members of lower ranks than your own.         
-
+Structures/Builders:
+    Fixed an issue where furnaces/dispensers/droppers/etc would not be rotated properly and would all face north.
+        This may also correct issues with chests and a several other rotatable blocks that had default placement
+        code. 
+ 
 Vehicles:
-    They are all in, and should be mostly functional.  Many need balancing.
-    Mount by right-clicking.  Dismount by right-clicking.
-    Open the inventory/control GUI by shift-right clicking.
-        Inventory GUI has slots for storage, ammo, upgrades, and armor.
-            button to 'pack' the vehicle back into an item.  It preserves vehicle health, drops inventory.
-            button to view 'stats'....mostly debug information, will be removed/replaced with more pertinent info
-    Ammo Select GUI is accessed by default with the 'v' key.  It brings up a simple GUI with a list of applicable
-        ammunition types and quantities.  Simply click on an ammo to select it and close the GUI, or click the
-        done button to cancel selection.
-    Airburst ammo for hwacha is a WIP -- it needs adjusted to be more effective.
-    Basic overlay to show basic stats (health, ammo)
-    Advanced overlay to show advanced stats AND render a predicted trajectory line (prediction should be 100% accurate before
-        the application of accuracy calculations)   
-    Overlays are toggle-able through the Options GUI (default 'F7')     
-    New upgrade system -- THEY STACK...keep this in mind if the 'bonuses' seem small -- you can now put the same type of upgrade in multiple slots to recieve (most of the time) LINEAR bonuses
-    Battering ram is...non-functional currently.  (you can see the rendering bounds for what it _will_ hit, but it does neither entity nor block damage at the moment)
+    Slightly reworked input handling system, should not have any noticeable effect in game.
+        Mostly backend code changes to make soldier interaction cleaner/unify the input interface.
+        Also moved input over to a entity data-watcher to eliminate input only packets on vehicles,
+        should slightly reduce network use.
+    NPC pathfinding on vehicles has been re-examined, and a config option is now available to enable
+        advanced pathfinding -- WIP, but it essentially looks in a larger radius for clear blocks to
+        make sure the entire vehicle can path through/over the area.  Should make them avoid obstacles
+        while riding vehicles (like lamp posts), but they will only path through areas that are entirely
+        clear.  It currently severely limits their navigation ability on rough terrain, but ensures they 
+        don't get stuck on simple obstacles. (looking into adjustments to allow better handling of rough
+        terrain while still allowing avoidance of 'real' obstacles).  Advanced pathfinding is also much
+        slower than normal because of the increased number of blocks needing to be checked, often resulting
+        in much shorter/partial paths being returned.  Will be reworking this in the future for efficiency
+        to remove much of this deficit.
+    Moved vehicle health over to data-tracker, should eliminate synch issues as well as cut down on custom
+        packets.
 
 Npcs:
-    Basic types partially implemented.  Soldier, archer, siege-engine driver, farmer, miner, lumberjack.
-    Many stats are not currently set by type/rank, but will be in the future (health, work-speed). 
-    Currently they all use the same texture -- this will be changed in the future.  
-    Right-click to command an NPC to follow you.  Right click again to tell him to stop.
-    A command baton allows for setting of advanced npc waypoints (work/home/deposit/patrol path)
-        right click the baton to set its 'command' (or clear current npc target)
-        LEFT click/attack an entity to set the 'target'
-        LEFT click/attack a BLOCK to ISSUE the command.    
-            when clicked, NPC will add the block clicked on to its appropriate waypoint type
-                (e.g. set home/work/deposit points, or add a patrol point)
-        commands to clear waypoints function the same -- set the command, and then attack/LEFT click
-            on any block to issue the 'clear' command.  
-        If issued an invalid site for work or deposit, it will function as a 'clear' command.              
-    Npc workers will automatically seek out appropriate work-sites that have work to do.  They will work at
-        that site until it has no work, or they are otherwise unable (night time, inventory full).
-    NOTE -- there is an INTENTIONAL delay in place when workers are checking to see if they have work to do.
-        if it doesn't look like they are listening to your command -- give them a few moments.  It should take
-        no more than a few seconds for the NPC to respond to the work command.  This applies for work broadcast
-        by work-sites as well.  The next time the NPC updates his work-ai priority, he will head for the
-        site broadcast/commanded, if valid.   NPCs will also pause for a moment when moving between two
-        work-sites that have work (after they finish the first, they will head home/wander a bit before heading
-        to the next site)
-    A player-issued work-command will attempt to force-set the CURRENT work-site -- if valid, the NPC will
-        work at that site until he cannot anymore--at which point he will commence 'looking' for work.
-    Non-combat NPCs will seek-shelter at night the same as vanilla villagers.  They will add nearby doors
-        to village door lists, and aid in the expansion of vanilla village bounds.
-    All NPCs have a 'home point' that is automatically set when they are spawned.  NPCs will not wander beyond
-        a certain range of this site -- though objectives may temporarily take them further away.  This home
-        site may be cleared manually through the use of a command baton / clear-home setting                 
-    Currently there is no manual list for target addition, though I plan on coming up with some system to handle
-        adding mobs from other mods.
-    Soldiers will not target non-combat NPCs, nor will they currently attack enemy civics (coming in the future)        
+    Advanced aggro configuration has now been enabled.  In the config file you should find a section for
+        npc aggro config.  Each combat NPC should be listed, along with their default targets.  To add
+        new targets to the list, simply put them on a new line.  The name must be the registered in-game
+        entity name.  (Looking into a way to dump a list of entity names, at least while in creative mode
+        so that it will be easier to find the 'correct' name for an entity).
     
-    
-Civics:
-    Basic civics in place with basic functionality for wheat/carrot/potato farms, oak tree farm, and a basic
-        mine.
-    Civics are placed similar to scanning a building.  Click the first corner, click the second corner, and then click
-        where you want the control block placed.  Use shift-click to 'offset by side hit' (get the block clicked IN and not ON)
-    Wheat/potato farms MUST include both the tilled-earth blocks AND the air block above them in their bounds.
-    Tree farms will work the bounds selected as well as 16 blocks ABOVE the selected area.
-    Mine bounds need only be on the surface.  It construct a shaft up through the minimum bound selected.    
-    Most civics size is limited, currently most are limited to 10/12/16 blocks in size, though 
-        I will be expanding this in the future with the inclusion of higher ranked civics that
-        can work larger areas and have more workers.        
-    Building Construction Civics -- these work much like the 'ticked builder', except they need a worker in order to function
-        currently, they are classified as a MINE, and need MINERS to work them (this will be changed in the future, only set
-        as such for debug purposes)(these will be the survival mode means for building construction)      
-    Civics currently all have an 9-slot inventory, accessed through right-clicking.  Most civics will place
-        harvested materials into the inventory of the worker -- only keeping the seeds/saplings needed to continue working.    
-    Farms need plantable materials in order to commence planting -- wheat farms need seeds, oak tree farms need saplings, etc.
-    Tree farms currently work a 'random' selection of blocks for planting (actually it is pos.x%4==0 && pos.z%4==0).  As such
-        the actual blocks worked for planting  will be inconsistent between 'copies' of a farm, unless placed
-        specifically at intervals of 4 blocks.
-            
+    Upkeep System:
+        Npcs need food! Currently it is only food, and all the same amount, but this will vary in the
+        future by npc rank/type.  NPCs will need their upkeep point set to a valid inventory that
+        contains food (or will contain food).  The Town Hall civic will auto-broadcast an upkeep target
+        to NPCs in range that do not have one manually set.  Upkeep site is saved/loaded, and should
+        persist as long as the target is valid (WIP--not sure what happens when a chunk unloads that
+        has the target while the entity is still loaded).  Food will be selected from the target
+        inventory, in order of slot index, until the entire upkeep cost has been met, excess being
+        wasted.  Food value is determined by the item, and is equivalent to the amount that would
+        be restored to a player.  Any/all 'food' items should be valid, including technically bad
+        foods such as zombie flesh/etc (may change to disallow certain foods in the future).  Current 
+        default upkeep value is 8 -- the equivalent of one cooked pork chop/steak.  If an NPC needs food
+        but does not have an upkeep point (or inventory doesn't have enough food), he will stand around
+        doing only the most basic of tasks (following a player, combat units will still attack very-close
+        enemies).  Siege engineers will dismount the vehicle they are riding when it is time to get upkeep,
+        head to withdraw upkeep, and return to the same vehicle that they left (vehicle gets flagged to 
+        deter any other siege-engineers from stealing it).        
+        
+                
+    New Baton Features:
+        Greatly reworked for simplicity.  There are now only two batons, basic and master.  Basic will
+        only command those NPCs which are direcly following you (and in 20 block range).  Master rank 
+        will command npcs in a radius set in the GUI, as well as any that are following you out to 20
+        blocks.  Redundant commands removed. 
+        
+        Deposit site -- in adition to blocks/tile entities, can now be set to any entity that implements 
+        IInventory, with inventory size>0. This includes vanilla minecart chest-carts, as well as Ancient 
+        Warfare chest-carts.  Deposit site should persist with save/load (even entity targets).  Does
+        not currently obey any ISided rules (WIP for mod compatibility)
+        
+        Upkeep site -- Manually set an upkeep point for an NPC. This point can be any block/tile entity/
+        entity that implements IInventory.  Should persist with load/save. Does not currently obey ISided
+        rules (WIP for mod compatibility)
+        
+        Mount target -- non-persistent mount target.  Does not save/load.  Mostly used to designate the
+        initial mount target for an npc.
+        
+    Moved npc health over to data-tracker, should eliminate synch issues as well as cut down on custom
+        packets.
+                
+    AI Related:
+        You can now disable wandering on all NPCs by assigning them at least one patrol point.
+        New ai for heal/repair/commander related objectives and tasks.
+        Revoked coffee breaks between jobs for workers.  They should switch jobs when finished quickly.
+        Attack code reworked to remove dead/invalid entries more aggressively.
+        Can now use vanilla fence-gates with the same proficiency as doors.
+                        
+    Textures for Non-Combat NPCs (combat npcs all wear armor....):
+        Farmer
+        Lumberjack
+        Miner (supposed to be a hard-hat on his head)
+        
+    New NPC types:
+    Combat Engineer -- Repairs vehicles.  Has melee combat capability, but at reduced damage compared to
+        footsoldiers.  Has limited armor.  Amount repaired scales with rank: novice-4, adept-6, expert-8.
+    Medic -- Heals nearby injured mutually friendly targets (npcs or players).  Has greatly reduced combat
+        capabilities compared to a footsoldier.  Amount healed scales with rank: novice-2, adept-3, expert-4.
+    Commander -- Provides bonuses to nearby troops depending on rank.  Different troops will receive varying
+        bonuses -- footsoldier - damage/armor increase -- archer/siege engineer - accuracy/armor increase --
+        medic/combat engineer - healing/armor increase.  Commanders will also essentially broadcast their target
+        to troops under their command, raising the aggro priority, and causing troops to usually prefer their
+        commanders target.  Troops will automatically locate and find commanders within range, prefering the
+        highest ranked available.  Troops assigned to a commander will atempt to stay within bonus range of
+        their commander.
+       
 
-Scanning and Templates:
-New features:
-    Vehicle scanning -- will save vehicles into templates.  For an example -- scan one!
-    NPC scanning -- will save npcs into templates.  Same as above -- examples provided by doing it.
-    Entity Scanning -- scan paintings, item-frames, passive mobs, and mine-carts.  Scan one to see the exported rule setup.
-        item-frames will scan and maintain the item-data for the item within (including NBT)(is ugly in templates though...)
-    No items are scanned aside from item-frames.  (May investigate in the future, but it causes large/ugly templates)
-        this means chests/furnaces/brewing stands will be EMPTY.  Chests may optionally be assigned loot
-        through special loot rules. (not a new feature..just an explanation)
-    New Gui layout (scroll-bar)
-    Override settings have changed:
-        Now there are only buttons to enable/disable spawning of vehicles/npcs/gates entirely,
-        and a selection box to set a team-override (to spawn hostile structures/structures of a specific team)               
-    Civic scanning -- will save civic type and local bounds into templates. Does not save inventory.           
-            
-        
-        
-        
+Civics:
+    Animal Farms -- Animals of the designated type within bounds will be kept for, bred, and harvested (when over max qty).
+        Sheep farms function slightly differently, shearing the wool of sheep within bounds, and breeding sheep up to the max
+        number available.  Mooshroom farms will shear mooshrooms and fill bowls with mushroom soup.  Cow (Milk) farms will
+        fill any available buckets with milk.
+    Tree Farms -- The other three types :)
+        Spruce and Birch are just like oak, merely requiring different tree types.
+        Jungle -- Currently only plants 1 sapling jungle trees.  Does nothing with cocoa beans yet. (investigating cocoa
+            bean farm)  
+    Plant Farms -- Lots of new ones, every vanilla growable.  Precise setup varies by plant -- reed and cactus harvest the
+        top blocks when 3+ in height, melon/pumpkin harvest the blocks. Mushroom plants mushrooms similar to tree farms
+        (every 4 blocks) and waits for them to grow, harvesting extras.  Netherstalk plants/harvests netherstalk on soul sand.                  
+    Mine (normal) --  slightly re-adjusted ordering and checks for blocks.  Should no longer get stuck when the mine floods
+        with water/lava.  Should also leave open areas from harvested resources, often exposing what it could not reach --
+        leaving easy access for players to 'clean up' the mine after it is finished.
+    Mine Quarry -- new mine layout, pretty much the equivalent of a BuildCraft quarry.  Available up to 64x64 in size. Slow
+        and inefficient, but it will mine everything in a given area down to Y=5, one layer at a time, top to bottom.  May
+        increase max workers in the future, but it is currently set at 4 (same as the normal mine)        
+    Town Hall -- Currently the only purpose is to serve as a broadcast point for npc upkeep -- enabling auto-assignment of
+        upkeep points to NPCs that do not have an upkeep point.  Inventory size varies by rank.  Currently no limit on
+        number of NPCs assigned, nor stat tracking (WIP, deciding how much/what info is needed, etc).  May also serve as
+        the master control block for item-routing/couriers in the future. 
+
+
+Item Tooltips:
+    Re-examined tooltips based on feedback and adjusted most for brevity and clarity.  More detailed information will be
+        available on in-game items in the future in the form of an information codex/block/library/? 
+   
+   
+   
         
 Needs testing:
 General
-* Item tooltips and descriptions.  Too much information, too little information, just right?
-* GUI tooltips -- hold the mouse over buttons to see advanced context info (only certain buttons)
-    (notably, advanced options buttons in team control and creative builder items, a few others...)
-* config options, tons of them.  Most have been tested during development, but not all.
+* Item tooltips and descriptions.  Too much information, too little information, wrong information? (many reworked since last release)
+* config options -- a few new ones, mostly relating to NPCs.
 
-Vehicles -- pretty much all of it.  
-* I need to know of any crash-related issues, any client-server synch issues with ammo/upgrades/armor/stats (e.g. something _should_ be working, but is spotty/might work after reloading).
-* Also need NPC interaction tested.  
-* The siege-engineer should be able to ride a vehicle, shoot default ammo, aim the vehicle as needed, 
-    and move the vehicle to follow players/targets.  
-* Need ammo types tested, including 'oversized' ammunitions (e.g. 45kg round in small catapult/trebuchet)
-* Need the multi-bullet options tested when using lighter ammos (trebuchet/catapult).    
-* Play around with the auto-aim, let me know if there are times when it doesn't follow the rendered trajectory.
-* Need SMP interaction tested -- how does vehicle movement look over LAN and WAN play (lan server/remote server)
-* Feedback on cluster and grape-shot type ammos (cluster explode on contact, grape-shot is more shot-gun like)
-* Feedback on movement speed for vehicles -- does it feel appropriate for the vehicle type?
-* Examine the effects of vehicle tier/material level on performance -- do the gains/decreases seem appropriate?
-* test persistence of health when packing up and re-spawning a damaged vehicle.
+Vehicles:
+* new movement network code.  How does it handle on default settings?  Look/work okay on lan/server play?
+* same thing as above, but for NPCs on vehicles.  Movement look smooth enough when changing directions/etc?
 
 TEAMS:
-* all of it.  NPCs and vehicles should auto-assign to the team of the player placing them (or optionally the team
-    override from a creative-mode constructing item).
-* NPCs are automatically hostile against teams other than their own.  Try placing an NPC while on team 0, and then
-    switching to a different team--the NPC should go hostile on you.  If you switch back to team 0/the placing team,
-    the NPC should cease hostility shortly.   
-* test changing teams.
-* test interaction with vehicles and NPCs when on different teams
-* test adding/removing members, changing ranks, accepting/denying applicants.
-* test non-hostile team functions.  If you are on team 1, and add team 2 as non-hostile, 
-    they should no longer show as red, and your NPCs should no longer attack them
-    Team two will need to add you as non-hostile for their NPCs to stop attacking you.     
+* nothing should have changed.
 
 NPCs:
-* interaction with baton.  All baton commands should work, including AOE setting (only sets AOE for same target type as the 'main' target)
-* work -- NPCs should head to work if work is available.  They should head to shelter at night and during the rain.    
-* combat NPCs should seek targets on their own.  It is not range-based, but more 'aggro-list' based (the longer a target has been visible, the higher on the list it will be)
-* combat NPCs should still folow the player if targets are far away -- but should stop following the player to attack close (20 blocks or less) targets
-* siege-engineer should dismount his vehicle if any enemy targets are within 10 blocks/min attack distance (zero for battering ram)
-* test that NPCs 'home' stuff works -- they should try and stay within 20'ish blocks of home unless actively working/pursuing a target.
-* npc attack damage should vary by rank (or ammo type for archers).
-* test that archers aren't too OP.
-* test that archers won't shoot if friendlies are in direct line-of-site of their target
-            
+* new npc types need testing for their specific functions.
+* commander bonuses need testing
+* work ai restructured, should remove delay between work jobs, and when attacking targets.
+* upkeep system -- one pork chop every 5 minutes per npc (default).  too much, too little?
+* upkeep ai -- working appropriately?
+
 Structures/scanning:
-* test vehicle scanning, it should maintain ammo/upgrades/armor during the scan, as well as orientation.
-* test npc scanning.  It should maintain npc type information, but will not maintain inventory (tools are set by type, and should persist)
-* test misc. NPC scanning -- item frames, paintings, mine-carts of all types, and passive mobs (sheep/cow/chicken/pig/dog/cat)            
-* test civic scanning -- it should maintain type and bounds information for the civics scanned (it does not query internal state, such as for a Civic Builder block that is halfway done)
-* test advanced template rules -- swap rules, biome exclusion, special-rule-datas (chests, preserve blocks)
-* check out the advancedVillageLibrary template that was included, it shows use of swap-rules.
+* nothing should have changed
 
 Structure/building:
-* test that the overrides work as they are supposed to.
-    e.g. checkboxes should enable/disable their features, and the team-override should cause any spawned npcs/vehicles/civics blocks
-        to use the forced team number (for valid numbers... -1 is the default 'no override')
+* furnaces/droppers/dispensers should now rotate properly when built
 
 Civics:
-* they should _work_ but are not complete.
-* civics should scan the area provided by their bounds, providing points to workers for any 'work' they find
-* the mine currently does not check to see if it has ladders/torches before placing them (rather, it does check, but places them regardless).  This function will be included in the future
-    and all civics will be required to possess the materials they are attempting to place/use.
-* test the worker auto-work/routing function.  A work-site that has work will broadcast to nearby eligible workers, and if there is
-    at least one nearby worker without work, he should head over shortly.  
-* NOTE -- civics are very much a WIP, and quite a few things are simply not implemented yet/have not been looked into/have not been started.
-    as such, don't bother reporting issues with these unless they are SEVERE (crashing/corrupting things)      
+* while still very much a WIP, should be stable enough for basic testing
+* existing types should work as described, if not, please let me know
+* works sites need workers!  Farms can have a single worker, Tree Farms can have 2, and Mines can have 4 workers.
+* workers should automatically seek out work from worksites within range, with minimal idle time between jobs
+* workers still need deposit sites set for when they get full.  the AI hints should let you know if/when he is full but cannot deposit things.
+
+

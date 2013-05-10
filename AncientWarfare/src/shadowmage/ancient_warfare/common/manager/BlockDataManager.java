@@ -141,6 +141,7 @@ public static void loadBlockList()
   addBlock(Block.redstoneComparatorIdle).setPriority(1).setRotatable().setMeta(0, 2, 3, 0, 1);
   addBlock(Block.redstoneComparatorActive).setPriority(1).setRotatable().setMeta(0, 2, 3, 0, 1).setBasicInventoryItem(Block.redstoneComparatorIdle.blockID, 0, 1);
   
+  addBlock(Block.wood).setMeta(0, 0, 0, 0, 0).setRotatable().setMeta(1, 8, 4, 8, 4).setMeta(2, 1, 1, 1, 1).setMeta(3, 9, 5, 9, 5).setMeta(4, 2, 2, 2, 2).setMeta(5, 10, 6, 10, 6).setMeta(6, 3, 3, 3, 3).setMeta(7, 11, 7, 11, 7);
   /**
    * add single slabs, and double slabs for stone
    */

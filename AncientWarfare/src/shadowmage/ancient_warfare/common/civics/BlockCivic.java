@@ -107,12 +107,13 @@ public void registerIcons(IconRegister reg, Description d)
   int iconID;
   for(int i = 0; i < 16; i++)
     {
-    civNum = this.blockNum*4 + i;
-    civ = CivicRegistry.instance().getCivicFor(i);    
+    civNum = this.blockNum*16 + i;
+    civ = CivicRegistry.instance().getCivicFor(civNum);    
     if(civ!=null)
       {
+      Config.logDebug("registering icons for block num: "+this.blockNum+ " meta: "+i+" civic: "+civ.getDisplayName());
       iconNames = civ.getIconNames();
-      iconID = i*3;//bottomID
+      iconID = i*3;//bottomID --  *3 is for only 3 textures per civic
       d.setIcon(reg.registerIcon(iconNames[0]), iconID);
       d.setIcon(reg.registerIcon(iconNames[1]), iconID+1);
       d.setIcon(reg.registerIcon(iconNames[2]), iconID+2);
@@ -126,7 +127,7 @@ public Icon getIcon(int side, int meta)
   Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
   if(d!=null)
     {
-    int iconID = meta*4;//bottomID
+    int iconID = meta*3;//bottomID  --  *3 is for only 3 textures per civic
     if(side==0)
       {
       return d.getIconFor(iconID);

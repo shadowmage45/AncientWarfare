@@ -20,13 +20,23 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.barn;
 
+import java.util.List;
+
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 
 
 public class TEBarnCow extends TEWorkSiteAnimalFarm
 {
+protected ItemStack bucketFilter = new ItemStack(Item.bucketEmpty);
 /**
  * 
  */
@@ -34,6 +44,100 @@ public TEBarnCow()
   {
   this.entityClass = EntityCow.class;
   this.breedingItem = new ItemStack(Item.wheat);
+  }
+
+
+@Override
+protected void scan()
+  {  
+  List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(entityClass, getWorkBounds());
+  breedingList.clear();
+  cullableList.clear();
+  if(entities!=null && !entities.isEmpty())
+    {
+    int age;
+    for(EntityAnimal ent : entities)
+      {
+      age = ent.getGrowingAge();
+      if(age==0)
+        {
+        breedingList.add(ent);
+        }
+      if(age>=0)
+        {
+        cullableList.add(ent);
+        }   
+      }
+    }
+  EntityAnimal first;
+  EntityAnimal second;
+  boolean hasFood = inventory.containsAtLeast(breedingItem, 2);
+  while(breedingList.size()>=2 && hasFood)
+    {
+    //do two animals at once...
+    first = breedingList.poll();//.remove(0);
+    second = breedingList.poll();//.remove(0);
+    this.addWorkPoint(first, TargetType.BARN_BREED);
+    this.addWorkPoint(second, TargetType.BARN_BREED);
+    }
+  int cullCount = cullableList.size() - this.maxAnimalCount;
+  int bucketCount = inventory.getCountOf(bucketFilter);
+  for(int i = 0; i < cullableList.size(); i++)
+    {
+    first = cullableList.poll();//.remove(0);
+    if(i<cullCount)
+      {
+      this.addWorkPoint(first, TargetType.BARN_CULL);
+      }
+    if(bucketCount>0)
+      {
+      bucketCount--;
+      this.addWorkPoint(first, TargetType.BARN_MILK);
+      }    
+    }  
+  }
+
+@Override
+protected void doWork(NpcBase npc, WorkPoint p)
+  {
+  super.doWork(npc, p);
+  if(p.work==TargetType.BARN_MILK && p.target!=null && inventory.containsAtLeast(bucketFilter, 1))
+    {
+    inventory.tryRemoveItems(bucketFilter, 1);
+    ItemStack stack = npc.inventory.tryMergeItem(new ItemStack(Item.bucketMilk));
+    if(stack!=null)
+      {
+      stack = inventory.tryMergeItem(stack);
+      if(stack!=null)
+        {
+        InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
+        }
+      }
+    }
+  }
+
+@Override
+protected TargetType validateWorkPoint(WorkPoint p)
+  {
+  if(!(p.target instanceof EntityCow)){return TargetType.NONE;}
+  EntityCow ent = (EntityCow) p.target;
+  if(ent.isDead)
+    {
+    return TargetType.NONE;
+    }
+  if(p.work==TargetType.BARN_BREED && ent.getGrowingAge()>0)
+    {
+    return TargetType.NONE;
+    }    
+  if(p.work==TargetType.BARN_CULL && ent.getGrowingAge()<0)
+    {
+    return TargetType.NONE;
+    }
+  if(p.work==TargetType.BARN_MILK && ent.getGrowingAge()<0)
+    {
+    return TargetType.NONE;
+    }
+  return p.work;
   }
 
 }
