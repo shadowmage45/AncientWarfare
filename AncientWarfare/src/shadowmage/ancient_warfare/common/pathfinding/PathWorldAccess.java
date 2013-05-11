@@ -56,7 +56,7 @@ public int getTravelCost(int x, int y, int z)
   }
 
 public boolean isWalkable(int x, int y, int z)
-  {
+  {  
   int id = world.getBlockId(x, y, z);
   int id2 = world.getBlockId(x, y-1, z);
   int id3 = world.getBlockId(x, y+1, z);

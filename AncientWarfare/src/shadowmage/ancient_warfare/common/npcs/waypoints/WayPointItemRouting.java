@@ -20,36 +20,19 @@
  */
 package shadowmage.ancient_warfare.common.npcs.waypoints;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class WayPointItemRouting extends WayPoint
 {
 
-/**
- * similar to logistics pipes
- *    item filter for the location
- *    toggle for command type (stock/withdraw)
- *    toggle for default include or default exclude
- *    toggle for allow partial (ignores stack quantities)(per-slot toggle)
- *      for 'keep stocked' it will pull even singles...
- *      for 'keep emptied' it will pull ALL items, even if less than qty specified
- * 
- * npcs will check their list of routing locations when they have no work
- *    for every keep stocked command
- *      if needs stocked
- *        if a withdraw point has items
- *          add stock command to queue, with pointer to origin, destination,  and items
- *    for every withdraw command
- *      if needs emptied
- *        if a stock point accepts items and has space
- *          add withdraw command to queue, with pointer to destination and items
- *
- * will need a GUI with specialized buttons/slots to accomodate filters and toggles
- *    each button will have an item-filter
- */
-boolean withdraw = true;
-boolean includeFilter = true;//is filter inclusion or exclusion type?
+boolean deliver;//is pickup or deposit point
+boolean include;//include or exclude filter
+boolean partial;//pickup/deposit of only part of request is available?
+
+ItemStack[] filters = new ItemStack[4];
 
 public WayPointItemRouting(TargetType type)
   {
@@ -74,13 +57,51 @@ public WayPointItemRouting(int x, int y, int z, int side, TargetType type)
 @Override
 public NBTTagCompound getNBTTag()
   {
-  return super.getNBTTag();
+  NBTTagCompound tag = super.getNBTTag();   
+  tag.setBoolean("d", deliver);
+  tag.setBoolean("i", include);
+  tag.setBoolean("p", partial);
+  
+  NBTTagList itemList = new NBTTagList();
+  NBTTagCompound itemTag;
+  ItemStack filter;
+  for(int i = 0; i < this.filters.length; i++)
+    {
+    filter = this.filters[i];
+    if(filter!=null)
+      {
+      itemTag = new NBTTagCompound();
+      itemTag.setByte("s", (byte)i);
+      filter.writeToNBT(itemTag);
+      itemList.appendTag(itemTag);
+      }
+    }  
+  tag.setTag("fl", itemList);
+  return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
   super.readFromNBT(tag);
+  this.deliver = tag.getBoolean("d");
+  this.include = tag.getBoolean("i");
+  this.partial = tag.getBoolean("p");  
+  if(tag.hasKey("fl"))
+    {
+    byte slot;
+    NBTTagCompound itemTag;
+    NBTTagList itemList = tag.getTagList("fl");
+    for(int i = 0; i < itemList.tagCount(); i++)
+      {
+      itemTag = (NBTTagCompound) itemList.tagAt(i);
+      slot = itemTag.getByte("s");
+      if(slot>=0 && slot< this.filters.length)
+        {
+        filters[slot] = ItemStack.loadItemStackFromNBT(itemTag);
+        }
+      }    
+    }
   }
 
 }

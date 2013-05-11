@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.client.gui.npc;
 
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiFakeSlot;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -78,7 +79,8 @@ public void updateScreenContents()
 @Override
 public void setupControls()
   {
-
+  GuiFakeSlot testSlot = new GuiFakeSlot(0, this, 90, 20);
+  this.guiElements.put(0, testSlot);
   }
 
 @Override

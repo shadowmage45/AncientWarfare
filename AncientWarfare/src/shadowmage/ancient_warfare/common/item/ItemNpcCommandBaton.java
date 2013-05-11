@@ -91,15 +91,6 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   }
 
 /**
- * right click on an entity
- */
-@Override
-public boolean itemInteractionForEntity(ItemStack par1ItemStack,   EntityLiving par2EntityLiving)
-  {  
-  return super.itemInteractionForEntity(par1ItemStack, par2EntityLiving);
-  }
-
-/**
  * left-click attack, prior to processing..
  */
 @Override
@@ -195,12 +186,6 @@ public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPla
     this.handleNpcCommand(player, stack, settings, hit);
     }   
   return true;
-  }
-
-@Override
-public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
-  {
-  return super.onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
   }
 
 public BatonSettings getBatonSettings(ItemStack stack)

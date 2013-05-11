@@ -47,6 +47,7 @@ public static final AWItemBase npcSpawner = new ItemNpcSpawner(Config.getItemID(
 public static final AWItemBase npcCommandBaton = new ItemNpcCommandBaton(Config.getItemID("itemMulti.commandBaton", 13012, "Npc Command Batons"));
 public static final AWItemBase civicPlacer = new ItemCivicPlacer(Config.getItemID("itemMulti.civiPlacer", 13013, "Constructs Civic Buildings/Sites"));
 public static final AWItemBase civicBuilder = new ItemCivicBuilder(Config.getItemID("itemMulti.civicBuilder", 13014, "Constructs Structures using Civics"));
+public static final AWItemBase courierRouteSlip = new ItemCourierSlip(Config.getItemID("itemMulti.courierSlip", 13015, "Holds Routing Info for a Courier"));
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -95,6 +96,8 @@ private void loadItems()
   this.addSubtypeInfoToItem(npcCommandBaton, 1, "Master Command Baton", "","Command NPCs in area").addDisplayStack(new ItemStack(npcCommandBaton,1,1)).setIconTexture("ancientwarfare:npc/baton3", 1);
   this.registerItemSubtyped(civicPlacer);
   this.registerItemSingle(civicBuilder, "Civic Structure Builder", "", "Construction Site");
+  this.registerItemSubtyped(courierRouteSlip);
+  this.addSubtypeInfoToItem(courierRouteSlip, 0, "Basic Routing Slip","","4 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,0)).setIconTexture("ancientwarfare:npc/route1", 0);
   }
 
 private void loadRecipes()

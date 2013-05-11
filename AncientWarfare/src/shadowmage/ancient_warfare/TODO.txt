@@ -4,17 +4,11 @@ TONIGHT
 
 THIS WEEK
 * get stuff ready for a preview video
-* upkeep site auto broadcast handling (in objective and site)
-* disable courier post blocks
 
 THIS(next) WEEKEND
 * preview video..it better be cool!
 
 GENERAL
-* add logs to block-data manager (for rotation values...currently unmapped)
-* civic block ID picked stuff.. (needs fixed)
-* npc id picked (needs fixed)
-* clean up navigator
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
@@ -38,8 +32,15 @@ NPCS
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
-* fisherman     
-* stay near home needs adjusted based, needs to clear path when home target changes/reset tasks   
+* fisherman (works fishery and squid farms)   
+* need basic courier
+    pickup items (filter) from pickup point(s)
+    deliver items (filter) to deliver point(s)
+        information could be stored on a separate "Courier Routing Slip", copied, etc
+        would allow for the NPC to have a simple interface, and the item to have simple
+        /advanced interfaces (higher ranks?).  Item could simply be slotted into NPC's
+        'Route' slot
+        (should share tag data with client?, or only populate gui through container?)
         
 ITEM ROUTING
 * courier post block (civic type?)
@@ -69,7 +70,7 @@ GUI FRAMEWORK
         will need to still send info to server to populate server side slot
 
 PATHFINDING
-* recalc of path towards moving target is still too aggressive
+* better handling of isWalkable -- in need of minor attention for other (mod) blocks
 * need to check if a block has blocking entities in it during iswalkable check
 * pathfinding for vehicles is still...off...
     it works well, but may not find paths in many areas.
@@ -83,12 +84,21 @@ CIVICS
 * fishery (catches fish randomly based on number of water blocks present in area)
 * squid farm (harvests any squid that spawn in water in its bounds / randomly spawns squid to harvest?)
 * move over to using block-based items (ItemBlock...)(probably just need custom renderer...pull block and render that using renderBlocks instance in custom render)
+* warehouse civic type
+    available in a few 'sizes'
+    occasionally rescans chests inside adds them to handling list
+        (perhaps get the tile entity list from world/chunk, faster than scanning blocks)
+    broadcasts 'deposit site' to npcs
+    couriers may deposit goods, which will go into the closest available inventory
+    
+    
 
 WORKSITES
 * don't give product to workers that don't have room
 * set hasWork==false when inventory < 1 free spot
 * need clear seperate tick dividers for full rescan and only validatePoints
 * change over to store all harvested materials in work block, use couriers to remove goods (?)
+* implement internal buffer 'overflow' slots for when something goes wrong (will dump to main slots as they become empty)
         
 FARMS
 * jungle tree farm needs to check for cocoa blocks?
@@ -258,6 +268,7 @@ TWEAKS/OPTIMIZATION
 * fix npc id picked
 * remove 'name' field from npc spawner items, redundant--info is available from npc type
 
+* disable courier post blocks (for now)
 
 /********** 05-11-13 **********/
 /********** 05-12-13 **********/

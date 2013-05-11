@@ -27,6 +27,8 @@ Vehicles:
         to remove much of this deficit.
     Moved vehicle health over to data-tracker, should eliminate synch issues as well as cut down on custom
         packets.
+    Chest carts now implement IInventory directly, allowing for interface with vanilla hoppers -- should be
+        able to drive them over a hopper to have their inventory emptied.        
 
 Npcs:
     Advanced aggro configuration has now been enabled.  In the config file you should find a section for
