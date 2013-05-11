@@ -171,6 +171,7 @@ protected void detectStuck()
       {
       if(entity.getDistance(stuckCheckPosition.x, stuckCheckPosition.y, stuckCheckPosition.z)<1.5d)
         {
+        Config.logDebug("detecting stuck, clearing path");
         this.clearPath();
         this.currentTarget = null;      
         }
@@ -196,7 +197,7 @@ protected boolean isNewTargetClose(int tx, int ty, int tz)
   }
 
 protected boolean isNewTarget(int tx, int ty, int tz)
-  {
+  {// 
   return !isNewTargetClose(tx, ty, tz) && !this.finalTarget.equals(tx, ty, tz);
   }
 
@@ -212,11 +213,14 @@ protected boolean isPathEmpty()
 
 protected boolean shouldCalculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
-  return !isNewTarget(tx, ty, tz) || (isPathEmpty() && !isAtTarget(tx, ty, tz) && currentTarget==null);
+  Config.logDebug(" isNewTarget: "+isNewTarget(tx, ty, tz) + " second test: "+(isPathEmpty() && !isAtTarget(tx, ty, tz) && currentTarget==null));
+  return isNewTarget(tx, ty, tz) || (isPathEmpty() && !isAtTarget(tx, ty, tz) && currentTarget==null);
   }
 
 protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
+  this.path.clearPath();
+  Config.logDebug("calculating path.");
   if(!world.isWalkable(ex, ey, ez) && (currentTarget==null || !world.isWalkable(currentTarget.x, currentTarget.y, currentTarget.z)))
     {
     Config.logDebug("current position unwalkable");
@@ -251,6 +255,7 @@ protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
     else
       {
       this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 4));
+//      this.path.setPath(PathManager.instance().findImmediatePath(world, ex, ey, ez, tx, ty, tz));
       //    Config.logDebug("requesting starter path");
       //    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 60));    
       Node end = this.path.getEndNode();
@@ -417,12 +422,12 @@ protected int floorX()
 
 protected int floorY()
   {
-  return MathHelper.floor_double(entity.posX);
+  return MathHelper.floor_double(entity.posY);
   }
 
 protected int floorZ()
   {
-  return MathHelper.floor_double(entity.posX);
+  return MathHelper.floor_double(entity.posZ);
   }
 
 protected float getEntityDistance(Node n)
@@ -475,7 +480,12 @@ public void setCanUseLadders(boolean ladders)
 @Override
 public void onPathFound(List<Node> pathNodes)
   {
-  //  Config.logDebug("full path request returned");
+  Config.logDebug("full path request returned length: "+pathNodes.size());
+  if(pathNodes.size()>0)
+    {
+    Node n = pathNodes.get(pathNodes.size()-1);
+    Config.logDebug("most distant node: "+Trig.getDistance(entity.posX, entity.posY, entity.posZ, n.x+0.5d, n.y, n.z+0.5d));
+    }
   this.path.addPath(world, pathNodes);
   }
 

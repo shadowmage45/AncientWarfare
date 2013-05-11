@@ -29,7 +29,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -91,8 +93,17 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
     if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
       {
       NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
-      par3List.add(tag.getString("name"));
-      par3List.add("Rank: "+tag.getInteger("lev"));      
+      int i = stack.getItemDamage();
+      int rank = tag.getInteger("lev");
+      if(i>0 && i <NpcTypeBase.npcTypes.length)
+        {
+        INpcType p = NpcTypeBase.npcTypes[i];
+        if(p!=null)
+          {
+          par3List.add(p.getLevelName(rank));
+          }
+        }
+      par3List.add("Rank: "+rank);
       }
     else
       {

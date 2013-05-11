@@ -176,7 +176,7 @@ public Class<? extends TECivic> getTileEntityClass()
 @Override
 public ItemStack getItemToConstruct()
   {
-  ItemStack item = new ItemStack(ItemLoader.civicPlacer,1);
+  ItemStack item = new ItemStack(ItemLoader.civicPlacer,1, getGlobalID());
   NBTTagCompound tag = new NBTTagCompound();
   item.setTagInfo("civicInfo", tag);
   return item;

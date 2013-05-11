@@ -75,7 +75,10 @@ public List<Node> findImmediatePath(PathWorldAccess world, int x, int y, int z, 
     {
     return staticPatherClient.findPath(world, x, y, z, tx, ty, tz, 60);
     }
-  return staticPather.findPath(world, x, y, z, tx, ty, tz, 60);
+  else
+    {
+    return staticPather.findPath(world, x, y, z, tx, ty, tz, 60);
+    }
   }
 
 public List<Node> findStartPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)

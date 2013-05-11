@@ -134,7 +134,7 @@ public void handleTileEntityTargetBroadcast(TileEntity te, TargetType t, int agg
       {
       AITargetEntry entry = list.getEntryFor(te);
       if(entry!=null)
-        {
+        {        
         this.addOrUpdateAggroEntry(entry, te, aggroAmt);
         }
       }
@@ -303,6 +303,12 @@ public ITargetEntry getHighestAggroTarget(TargetType type)
     {
     return this.aggroEntries.get(type).getHighestAggroTarget();
     }
+  return null;
+  }
+
+public ITargetEntry getClosestTargetInRange(TargetType type, float range)
+  {
+  //TODO
   return null;
   }
 

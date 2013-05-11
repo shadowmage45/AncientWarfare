@@ -165,14 +165,6 @@ protected void checkForUpkeepTarget()
   if(p==null)
     {
     this.upkeepTarget = null;
-    ITargetEntry t = npc.targetHelper.getHighestAggroTargetInRange(TargetType.UPKEEP, Config.npcAISearchRange);
-    if(t!=null && npc.worldObj.getBlockTileEntity(t.floorX(), t.floorY(), t.floorZ()) instanceof TECivicTownHall)
-      {
-      TECivicTownHall civ = (TECivicTownHall)npc.worldObj.getBlockTileEntity(t.floorX(), t.floorY(), t.floorZ());
-      npc.wayNav.setUpkeepSite(new WayPoint(t.floorX(), t.floorY(), t.floorZ(), TargetType.UPKEEP));
-      this.upkeepTarget = civ;
-      npc.setTargetAW(npc.wayNav.getUpkeepSite());
-      } 
     }
   else
     {

@@ -23,10 +23,9 @@ package shadowmage.ancient_warfare.common.npcs.types;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
@@ -147,6 +146,8 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
   helper.addTargetEntry(new AITargetEntryPlayer(npc, TargetType.ATTACK,  40, false, true));
   helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.ATTACK, 0, 40, false, true));
+//  helper.addTargetEntry(new AITargetEntry(npc, TargetType.UPKEEP, TECivicTownHall.class, 0, false, Config.npcAISearchRange));
+  
   }
 
 @Override

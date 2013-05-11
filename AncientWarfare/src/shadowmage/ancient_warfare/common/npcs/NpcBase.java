@@ -173,6 +173,7 @@ public void addConfigTargets()
 @Override
 public ItemStack getPickedResult(MovingObjectPosition target)
   {
+  
   return NpcRegistry.getStackFor(npcType, rank);
   }
 

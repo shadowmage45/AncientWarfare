@@ -103,7 +103,6 @@ public List getCreativeDisplayItems()
       stack = new ItemStack(ItemLoader.npcSpawner,1,type.getGlobalNpcType());
       tag = new NBTTagCompound();
       tag.setInteger("lev", i);
-      tag.setString("name", type.getLevelName(i));
       stack.setTagInfo("AWNpcSpawner", tag);
       stacks.add(stack);
       }
@@ -151,9 +150,8 @@ public static ItemStack getStackFor(INpcType type, int level)
   ItemStack stack = new ItemStack(ItemLoader.npcSpawner.itemID, 1, type.getGlobalNpcType());
   NBTTagCompound tag = new NBTTagCompound();
   tag.setInteger("lev", level);
-  tag.setString("name", type.getLevelName(level));
   stack.setTagInfo("AWNpcSpawner", tag);
-  return null;
+  return stack;
   }
 
 

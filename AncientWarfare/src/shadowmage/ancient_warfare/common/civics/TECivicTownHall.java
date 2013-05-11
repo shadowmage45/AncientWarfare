@@ -108,8 +108,7 @@ public void broadCastToSoldiers(int maxRange)
         {    
         if(npc.wayNav.getUpkeepSite() == null)
           {
-          Config.logDebug("broadcasting upkeep site to nearby npcs");
-          npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.UPKEEP, Config.npcAITicks*11);
+          npc.wayNav.setUpkeepSite(new WayPoint(this, 1, TargetType.UPKEEP));
           }
         }
       }
