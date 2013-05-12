@@ -23,11 +23,13 @@ package shadowmage.ancient_warfare.common.npcs.waypoints;
 import java.util.ArrayList;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 /**
  * routing information for a single routing slip for a courier
@@ -54,9 +56,84 @@ public CourierRoutingInfo(NBTTagCompound tag)
   this.readFromNBT(tag);
   }
 
+public int getRouteSize()
+  {
+  return routingPoints.size();
+  }
+
+public WayPointItemRouting getPoint(int index)
+  {
+  if(index>=0 && index<this.routingPoints.size())
+    {
+    return this.routingPoints.get(index);
+    }
+  return null;
+  }
+
+public void addRoutePoint(WayPointItemRouting point)
+  {
+  if(point!=null)
+    {
+    this.routingPoints.add(point);
+    }
+  }
+
+public void removeRoutePoint(int index)
+  {
+  if(index>=0 && index<this.routingPoints.size())
+    {
+    this.routingPoints.remove(index);
+    }
+  }
+
+public void setRoutingPoint(int index, WayPointItemRouting p)
+  {
+  if(index>=0 && index<this.routingPoints.size())
+    {
+    this.routingPoints.set(index, p);
+    }
+  else if(index==this.routingPoints.size())
+    {
+    this.routingPoints.add(p);
+    }
+  }
+
+public void movePointUp(int index)
+  {
+  if(index>0 && index<this.routingPoints.size())
+    {
+    WayPointItemRouting p = this.getPoint(index);
+    if(p!=null)
+      {
+      this.removeRoutePoint(index);
+      this.routingPoints.add(index-1, p);      
+      }
+    }
+  }
+
+public void movePointDown(int index)
+  {
+  if(index>0 && index<this.routingPoints.size())
+    {
+    WayPointItemRouting p = this.getPoint(index);
+    if(p!=null)
+      {
+      this.removeRoutePoint(index);
+      if(index>=this.routingPoints.size())
+        {
+        this.routingPoints.add(p);
+        }
+      else
+        {
+        this.routingPoints.add(index+1, p);
+        }
+      }
+    }
+  }
+
 public void writeToItem(ItemStack stack)
   {
-  if(stack!=null && stack.getItem()==ItemLoader.courierRouteSlip)
+  if(stack!=null && stack.itemID==ItemLoader.courierRouteSlip.itemID)
     {
     stack.setTagInfo("route", getNBTTag());
     }
@@ -66,15 +143,23 @@ public void writeToItem(ItemStack stack)
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  
+  NBTTagList points = new NBTTagList();
+  for(int i = 0; i < this.routingPoints.size(); i++)
+    {
+    points.appendTag(this.routingPoints.get(i).getNBTTag());
+    }  
+  tag.setTag("list", points);
   return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-  
+  NBTTagList points = tag.getTagList("list");
+  for(int i = 0; i < points.tagCount(); i++)
+    {
+    this.routingPoints.add(new WayPointItemRouting((NBTTagCompound)points.tagAt(i)));
+    }
   }
 
 

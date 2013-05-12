@@ -79,8 +79,7 @@ public void updateScreenContents()
 @Override
 public void setupControls()
   {
-  GuiFakeSlot testSlot = new GuiFakeSlot(0, this, 90, 20);
-  this.guiElements.put(0, testSlot);
+ 
   }
 
 @Override

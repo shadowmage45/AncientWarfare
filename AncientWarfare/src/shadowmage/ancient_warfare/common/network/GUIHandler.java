@@ -23,11 +23,13 @@ package shadowmage.ancient_warfare.common.network;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCommandBaton;
+import shadowmage.ancient_warfare.client.gui.npc.GuiCourierRoutingSlip;
 import shadowmage.ancient_warfare.client.gui.npc.GuiNpcBase;
 import shadowmage.ancient_warfare.client.gui.settings.GuiClientSettings;
 import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
@@ -39,11 +41,11 @@ import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleAmmoSelection;
 import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleDebug;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTE;
 import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
+import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
@@ -51,7 +53,9 @@ import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -72,6 +76,9 @@ public static final int TEAM_CONTROL = 6;
 public static final int NPC_COMMAND_BATON = 7;
 public static final int CIVIC_BASE = 8;
 public static final int NPC_BASE = 9;
+
+public static final int COURIER_SLIP = 30;
+
 public static final int VEHICLE_AMMO_SELECT = 98;
 public static final int VEHICLE_DEBUG = 99;
 
@@ -136,6 +143,15 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   case 10:
   return null;  
   
+  case COURIER_SLIP:
+  ItemStack stack = player.inventory.getCurrentItem();
+  if(stack!=null && stack.itemID==ItemLoader.courierRouteSlip.itemID)
+    {    
+    CourierRoutingInfo info = new CourierRoutingInfo(stack);
+    ContainerCourierRoutingSlip container = new ContainerCourierRoutingSlip(player, info);
+    return container;
+    }
+  return null;
   
   case VEHICLE_AMMO_SELECT:
   return new ContainerDummy();
@@ -200,6 +216,16 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   
   case 10:
   return null; 
+  
+  case COURIER_SLIP:
+  ItemStack stack = player.inventory.getCurrentItem();
+  if(stack!=null && stack.itemID==ItemLoader.courierRouteSlip.itemID)
+    {    
+    CourierRoutingInfo info = new CourierRoutingInfo(stack);
+    ContainerCourierRoutingSlip container = new ContainerCourierRoutingSlip(player, info);
+    return new GuiCourierRoutingSlip(container);
+    }
+  return null;
   
   case VEHICLE_AMMO_SELECT:
   vehicle = (VehicleBase)world.getEntityByID(x);

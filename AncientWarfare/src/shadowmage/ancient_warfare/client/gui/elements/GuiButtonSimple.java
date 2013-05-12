@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
+import org.lwjgl.opengl.GL11;
+
 import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.client.Minecraft;
 
@@ -60,6 +62,8 @@ public void setButtonText(String name)
 @Override
 public void drawElement(int mouseX, int mouseY)
   {
+  GL11.glPushMatrix();
+  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   if(!this.hidden)
     {
     int texOffset = this.getHoverState();
@@ -78,7 +82,10 @@ public void drawElement(int mouseX, int mouseY)
       fontColor = 16777120;
       }
     this.drawCenteredString(Minecraft.getMinecraft().fontRenderer, this.displayString, guiLeftOffset + this.renderPosX + this.width / 2, guiTopOffset + this.renderPosY + (this.height - 8) / 2, fontColor);
-    }  
+    }
+
+  GL11.glPopAttrib();
+  GL11.glPopMatrix();
   }
 
 protected int getHoverState()

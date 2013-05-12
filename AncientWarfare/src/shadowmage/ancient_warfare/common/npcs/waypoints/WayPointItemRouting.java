@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.npcs.waypoints;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class WayPointItemRouting extends WayPoint
@@ -41,7 +42,8 @@ public WayPointItemRouting(TargetType type)
 
 public WayPointItemRouting(NBTTagCompound tag)
   {
-  super(tag);
+  super(TargetType.DELIVER);
+  this.readFromNBT(tag);
   }
 
 public WayPointItemRouting(int x, int y, int z, TargetType type)
@@ -54,14 +56,60 @@ public WayPointItemRouting(int x, int y, int z, int side, TargetType type)
   super(x, y, z, side, type);
   }
 
+public void setDeliver(boolean val)
+  {
+  this.deliver = val;
+  }
+
+public void setInclude(boolean val)
+  {
+  this.include = val;
+  }
+
+public void setPartial(boolean val)
+  {
+  this.partial = val;
+  }
+
+public boolean getDeliver()
+  {
+  return deliver;
+  }
+
+public boolean getInclude()
+  {
+  return include;
+  }
+
+public boolean getPartial()
+  {
+  return partial;
+  }
+
+public ItemStack getFilterStack(int index)
+  {
+  if(index>=0 && index < filters.length)
+    {
+    return filters[index];
+    }
+  return null;
+  }
+
+public void setFilterStack(int index, ItemStack stack)
+  {
+  if(index>=0 && index<this.filters.length)    
+    {
+    this.filters[index] = stack;
+    }
+  }
+
 @Override
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = super.getNBTTag();   
   tag.setBoolean("d", deliver);
   tag.setBoolean("i", include);
-  tag.setBoolean("p", partial);
-  
+  tag.setBoolean("p", partial);  
   NBTTagList itemList = new NBTTagList();
   NBTTagCompound itemTag;
   ItemStack filter;
@@ -87,7 +135,6 @@ public void readFromNBT(NBTTagCompound tag)
   this.deliver = tag.getBoolean("d");
   this.include = tag.getBoolean("i");
   this.partial = tag.getBoolean("p");  
-  if(tag.hasKey("fl"))
     {
     byte slot;
     NBTTagCompound itemTag;
@@ -97,8 +144,8 @@ public void readFromNBT(NBTTagCompound tag)
       itemTag = (NBTTagCompound) itemList.tagAt(i);
       slot = itemTag.getByte("s");
       if(slot>=0 && slot< this.filters.length)
-        {
-        filters[slot] = ItemStack.loadItemStackFromNBT(itemTag);
+        {    	  
+        this.setFilterStack(slot, ItemStack.loadItemStackFromNBT(itemTag));
         }
       }    
     }

@@ -18,14 +18,32 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.interfaces;
+package shadowmage.ancient_warfare.common.container;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 
-public interface IContainerGuiCallback
+public class SlotNoPull extends Slot
 {
 
-public abstract void handleDataFromContainer(NBTTagCompound tag);
-public abstract void refreshGui();
+/**
+ * @param par1iInventory
+ * @param par2
+ * @param par3
+ * @param par4
+ */
+public SlotNoPull(IInventory par1iInventory, int par2, int par3, int par4)
+  {
+  super(par1iInventory, par2, par3, par4);
+  }
+
+/**
+ * Return whether this slot's stack can be taken from this slot.
+ */
+public boolean canTakeStack(EntityPlayer par1EntityPlayer)
+  {
+  return false;
+  }
 
 }

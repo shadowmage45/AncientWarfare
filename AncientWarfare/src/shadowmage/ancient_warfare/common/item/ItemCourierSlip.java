@@ -22,7 +22,13 @@ package shadowmage.ancient_warfare.common.item;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton.BatonSettings;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointItemRouting;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class ItemCourierSlip extends AWItemClickable
@@ -46,13 +52,37 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     }
   if(isShiftClick(player))
     {
-    //open gui
+    GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, world, 0, 0, 0);
     }
-  else if(hit!=null)
-    {
-    //add new hit to item, then open gui
-    }
+//  else if(hit!=null)
+//    {
+//    CourierRoutingInfo info = new CourierRoutingInfo(stack);
+//    info.addRoutePoint(new WayPointItemRouting(hit.x, hit.y, hit.z, side, TargetType.DELIVER));
+//    info.writeToItem(stack);    
+//    GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, world, 0, 0, 0);
+//    }
   return true;
+  }
+
+@Override
+public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPlayer player)
+  { 
+  boolean flag = player.capabilities.isCreativeMode;
+  if(!player.worldObj.isRemote)
+    {
+    MovingObjectPosition hit = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
+    CourierRoutingInfo info = new CourierRoutingInfo(stack);
+    info.addRoutePoint(new WayPointItemRouting(x, y, z, hit.sideHit, TargetType.DELIVER));
+    info.writeToItem(stack);    
+    GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, player.worldObj, 0, 0, 0);
+    }   
+  return flag;
+  }
+
+@Override
+public boolean getShareTag()
+  {
+  return false;
   }
 
 

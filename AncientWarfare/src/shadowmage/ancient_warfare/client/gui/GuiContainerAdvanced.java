@@ -18,6 +18,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -27,8 +28,10 @@ import org.lwjgl.opengl.GL12;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
+import shadowmage.ancient_warfare.client.gui.elements.GuiFakeSlot;
 import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollBarSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElementCallback;
@@ -56,6 +59,8 @@ protected boolean shouldCloseOnVanillaKeys = false;
 
 protected int tooltipDelayTicks = 10;
 
+protected GuiElement currentMouseElement;
+
 /**
  * gui controls...these are substitutes for the vanilla controlList...and allow for total control
  * over buttons and functions, while only overridding a minimal amount of vanilla code (and still allowing
@@ -82,19 +87,26 @@ public void drawStringGui(String string, int x, int y, int color)
   this.drawString(fontRenderer, string, guiLeft+x, guiTop+y, color);
   }
 
-protected GuiElement currentMouseElement;
 
 public boolean isMouseOverControl(int mouseX, int mouseY)
   {  
+  this.currentMouseElement = null;
   for(Integer i : this.guiElements.keySet())
     {
     GuiElement e = this.guiElements.get(i);
     if(e.isMouseOver(mouseX, mouseY))
       {         
+      this.currentMouseElement = e;
       return true;
       }
     }  
   return false;
+  }
+
+@Override
+public void refreshGui()
+  {
+  this.forceUpdate = true;
   }
 
 @Override
@@ -335,6 +347,18 @@ public void updateScreen()
     if(e.wasMouseOver())
       {
       foundE = e; 
+      if(e instanceof GuiScrollableArea)
+        {
+        GuiScrollableArea a = (GuiScrollableArea)e;
+        for(GuiElement g : a.elements)
+          {
+          if(g.wasMouseOver())
+            {
+            e = g;
+            foundE = g;
+            }
+          }
+        }
       break;         
       }
     }  
@@ -383,6 +407,19 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   if(this.tooltipDelayTicks<=0 && this.currentMouseElement!=null && this.currentMouseElement.renderTooltip)
     {
     this.renderTooltip(mouseX, mouseY, this.currentMouseElement.getTooltip());
+    }
+  if(this.currentMouseElement instanceof GuiFakeSlot)
+    {
+    GuiFakeSlot slot = (GuiFakeSlot)this.currentMouseElement;
+//    Config.logDebug("current element fake slot");
+    if(slot.renderTooltip)
+      {
+      
+      }
+    else if(slot.getStack()!=null)
+      {
+      this.drawItemStackTooltip(slot.getStack(), mouseX, mouseY, true);
+      }
     }
   GL11.glPopMatrix();
   }
@@ -657,4 +694,105 @@ public GuiElement getElementByNumber(int num)
   return this.guiElements.get(num);
   }
 
+
+protected void drawItemStackTooltip(ItemStack par1ItemStack, int par2, int par3, boolean fake)
+  {
+  List list = par1ItemStack.getTooltip(this.mc.thePlayer, this.mc.gameSettings.advancedItemTooltips);
+
+  for (int k = 0; k < list.size(); ++k)
+    {
+    if (k == 0)
+      {
+      list.set(k, "\u00a7" + Integer.toHexString(par1ItemStack.getRarity().rarityColor) + (String)list.get(k));
+      }
+    else
+      {
+      list.set(k, EnumChatFormatting.GRAY + (String)list.get(k));
+      }
+    }
+  if(fake)
+    {
+    list.add(EnumChatFormatting.RED + "Fake Slot");
+    }
+  FontRenderer font = par1ItemStack.getItem().getFontRenderer(par1ItemStack);
+  drawHoveringText(list, par2, par3, (font == null ? mc.fontRenderer : font));
+  }
+
+//protected void drawHoveringText(List par1List, int par2, int par3, FontRenderer font)
+//  {
+//  if (!par1List.isEmpty())
+//    {
+//    GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+//    RenderHelper.disableStandardItemLighting();
+//    GL11.glDisable(GL11.GL_LIGHTING);
+//    GL11.glDisable(GL11.GL_DEPTH_TEST);
+//    int renderWidth = 0;
+//    Iterator iterator = par1List.iterator();
+//
+//    while (iterator.hasNext())
+//      {
+//      String s = (String)iterator.next();
+//      int stringWidth = font.getStringWidth(s);
+//
+//      if (stringWidth > renderWidth)
+//        {
+//        renderWidth = stringWidth;
+//        }
+//      }
+//
+//    int renderX = par2 + 12;
+//    int renderY = par3 - 12;
+//    int renderHeight = 8;
+//
+//    if (par1List.size() > 1)
+//      {
+//      renderHeight += 2 + (par1List.size() - 1) * 10;
+//      }
+//
+//    if (renderX + renderWidth > this.width)
+//      {
+//      renderX -= 28 + renderWidth;
+//      }
+//
+//    if (renderY + renderHeight + 6 > this.height)
+//      {
+//      renderY = this.height - renderHeight - 6;
+//      }
+//
+//    this.zLevel = 300.0F;
+//    itemRenderer.zLevel = 300.0F;
+//    int backgroundColor = -267386864;
+//    this.drawGradientRect(renderX - 3, renderY - 4, renderX + renderWidth + 3, renderY - 3, backgroundColor, backgroundColor);
+//    this.drawGradientRect(renderX - 3, renderY + renderHeight + 3, renderX + renderWidth + 3, renderY + renderHeight + 4, backgroundColor, backgroundColor);
+//    this.drawGradientRect(renderX - 3, renderY - 3, renderX + renderWidth + 3, renderY + renderHeight + 3, backgroundColor, backgroundColor);
+//    this.drawGradientRect(renderX - 4, renderY - 3, renderX - 3, renderY + renderHeight + 3, backgroundColor, backgroundColor);
+//    this.drawGradientRect(renderX + renderWidth + 3, renderY - 3, renderX + renderWidth + 4, renderY + renderHeight + 3, backgroundColor, backgroundColor);
+//    int i2 = 1347420415;
+//    int j2 = (i2 & 16711422) >> 1 | i2 & -16777216;
+//    this.drawGradientRect(renderX - 3, renderY - 3 + 1, renderX - 3 + 1, renderY + renderHeight + 3 - 1, i2, j2);
+//    this.drawGradientRect(renderX + renderWidth + 2, renderY - 3 + 1, renderX + renderWidth + 3, renderY + renderHeight + 3 - 1, i2, j2);
+//    this.drawGradientRect(renderX - 3, renderY - 3, renderX + renderWidth + 3, renderY - 3 + 1, i2, i2);
+//    this.drawGradientRect(renderX - 3, renderY + renderHeight + 2, renderX + renderWidth + 3, renderY + renderHeight + 3, j2, j2);
+//
+//    for (int k2 = 0; k2 < par1List.size(); ++k2)
+//      {
+//      String s1 = (String)par1List.get(k2);
+//      font.drawStringWithShadow(s1, renderX, renderY, -1);
+//
+//      if (k2 == 0)
+//        {
+//        renderY += 2;
+//        }
+//
+//      renderY += 10;
+//      }
+//
+//    this.zLevel = 0.0F;
+//    itemRenderer.zLevel = 0.0F;
+//    GL11.glEnable(GL11.GL_LIGHTING);
+//    GL11.glEnable(GL11.GL_DEPTH_TEST);
+//    RenderHelper.enableStandardItemLighting();
+//    GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+//    }
+//  }
 }
