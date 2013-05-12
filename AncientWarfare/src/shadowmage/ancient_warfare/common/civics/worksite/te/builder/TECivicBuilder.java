@@ -71,6 +71,7 @@ public void updateEntity()
     this.removeBuilder();
     this.worldObj.setBlock(xCoord, yCoord, zCoord, 0);
     }
+//  Config.logDebug("updating builder TE");
   }
 
 /************************************************WORK SITE*************************************************/
@@ -93,14 +94,29 @@ protected void scan()
   }
 
 @Override
+public void doWork(NpcBase npc)
+  {
+//  Config.logDebug("ticking builder");
+  this.tickBuilder();
+  this.updateHasWork();
+  }
+
+@Override
 protected void doWork(NpcBase npc, WorkPoint p)
   {
-  this.tickBuilder();
+  // TODO Auto-generated method stub
+
+//  Config.logDebug("ticking builder2");
   }
+
 
 @Override
 protected TargetType validateWorkPoint(WorkPoint p)
   {
+  if(p!=null)
+    {
+    return p.work;
+    }
   return TargetType.NONE;
   }
 

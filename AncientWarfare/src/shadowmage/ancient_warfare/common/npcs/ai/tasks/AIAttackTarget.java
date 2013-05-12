@@ -57,14 +57,14 @@ public void onTick()
     }
   else
     {
-    Config.logDebug("action ticks: "+npc.actionTick);
+//    Config.logDebug("action ticks: "+npc.actionTick);
     if(npc.actionTick<=0)
       {
       this.attackTarget(target);       
       } 
     else
       {
-      Config.logDebug("pausing for action time");
+//      Config.logDebug("pausing for action time");
       }
     }  
 
@@ -90,7 +90,7 @@ protected void attackTarget(ITargetEntry target)
     }
   else
     {
-    Config.logDebug("doing entity atack: "+npc.getTarget());
+//    Config.logDebug("doing entity atack: "+npc.getTarget());
     Entity ent = target.getEntity(npc.worldObj);
     if(ent!=null)
       {

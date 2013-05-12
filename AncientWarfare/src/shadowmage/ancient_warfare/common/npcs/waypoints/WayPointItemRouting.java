@@ -56,6 +56,11 @@ public WayPointItemRouting(int x, int y, int z, int side, TargetType type)
   super(x, y, z, side, type);
   }
 
+public int getFilterLength()
+  {
+  return this.filters.length;
+  }
+
 public void setDeliver(boolean val)
   {
   this.deliver = val;

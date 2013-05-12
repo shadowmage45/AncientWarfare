@@ -174,7 +174,7 @@ protected TargetType validateWorkPoint(WorkPoint p)
     {
     return TargetType.NONE;
     }
-  if(p.work==TargetType.BARN_BREED && (ent.getGrowingAge()>0 || inventory.containsAtLeast(breedingItem, 2)))
+  if(p.work==TargetType.BARN_BREED && (ent.getGrowingAge()>0 || !inventory.containsAtLeast(breedingItem, 2)))
     {
     return TargetType.NONE;
     }    

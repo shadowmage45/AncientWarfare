@@ -25,11 +25,11 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCombatEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCommander;
+import shadowmage.ancient_warfare.common.npcs.types.NpcCourier;
 import shadowmage.ancient_warfare.common.npcs.types.NpcDummy;
 import shadowmage.ancient_warfare.common.npcs.types.NpcFarmer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcFootsoldier;
@@ -38,7 +38,6 @@ import shadowmage.ancient_warfare.common.npcs.types.NpcMedic;
 import shadowmage.ancient_warfare.common.npcs.types.NpcMiner;
 import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public abstract class NpcTypeBase implements INpcType
@@ -54,14 +53,14 @@ public static INpcType npcSiegeEngineer = new NpcSiegeEngineer(4);
 public static INpcType npcMedic = new NpcMedic(5);
 public static INpcType npcCombatEngineer = new NpcCombatEngineer(6);
 public static INpcType npcCommander = new NpcCommander(7);
-//builder/construction worker? 8
+//fisherman
 //craftsman ? 9
 public static INpcType npcMiner = new NpcMiner(10);
 public static INpcType npcFarmer = new NpcFarmer(11);
 public static INpcType npcLumberjack = new NpcLumberjack(12);
-//courier 13
-
-
+public static INpcType npcCourier = new NpcCourier(13);
+//chest courier ?
+//researcher ?
 
 protected int npcType;
 protected String displayName = "AW.Npc";
@@ -72,7 +71,6 @@ protected String iconTexture = "foo";
 protected String configName = "";
 protected String[] defaultTargets = null;
 protected List<NpcLevelEntry> levelEntries = new ArrayList<NpcLevelEntry>();
-
 
 public NpcTypeBase(int type)
   {
@@ -187,13 +185,6 @@ public String getDisplayTexture(int level)
     return this.levelEntries.get(level).texture;
     }
   return "foo.png";
-  }
-
-protected NpcLevelEntry addLevel(String name, String tex)
-  {
-  NpcLevelEntry entry = null;
-  
-  return entry;
   }
 
 protected void addLevel(NpcLevelEntry entry)

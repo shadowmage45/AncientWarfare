@@ -52,7 +52,7 @@ public byte getObjectiveNum()
 @Override
 public void updatePriority()
   {
-  if(npc.wayNav.getPatrolSize()<=0)
+  if(npc.wayNav.getPatrolSize()<=0 || npc.targetHelper.areTargetsInRange(TargetType.ATTACK, enemyRange))
     {
     this.currentPriority = 0;
     }
@@ -74,7 +74,7 @@ public void onRunningTick()
   //check to see if enemies are within range
   if(npc.targetHelper.areTargetsInRange(TargetType.ATTACK, enemyRange))
     {
-    this.isFinished = true;
+    this.setFinished();
     }
   else//check to see if we just completed a node, if so, pause.
     {

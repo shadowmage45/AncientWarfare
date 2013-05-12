@@ -26,8 +26,6 @@ SOLDIERS
 * need to set npc accuracy by rank for archer/siege engineer   
 
 NPCS
-* expand waypoint navigator with the following functions:
-    advanced item routing waypoints for use with couriers (keep stocked, keep emptied,??)
 * work out indiv costs for upkeep -- add specialized items where applicable
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities

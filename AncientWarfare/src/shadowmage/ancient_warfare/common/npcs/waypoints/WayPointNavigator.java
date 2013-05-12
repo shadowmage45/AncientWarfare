@@ -55,8 +55,9 @@ TECivic workSite = null;
 VehicleBase vehicle = null;
 NpcBase commander = null;
 List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
+List<WayPointItemRouting> courierPoints = new ArrayList<WayPointItemRouting>();
 int currentPatrolPoint = 0;
-
+int courierPoint = -1;
 
 //TODO add special item routing waypoints for couriers
 
@@ -74,6 +75,53 @@ public void handleDimensionChange(int dim)
   this.clearPatrolPoints();
   this.currentTarget = null;
   this.playerTarget = null;
+  }
+
+/************************************************COURIER TARGET*************************************************/
+public int getCourierNum()
+  {
+  return this.courierPoint;
+  }
+
+public int getCourierSize()
+  {
+  return this.courierPoints.size();
+  }
+
+public void setCourierNum(int num)
+  {
+  this.courierPoint = num;
+  }
+
+public void addCourierPoint(WayPointItemRouting point)
+  {
+  this.courierPoints.add(point);
+  }
+
+public WayPointItemRouting getCurrentCourierPoint()
+  {
+  if(this.courierPoint>=0 && this.courierPoint<this.courierPoints.size())
+    {
+    return this.courierPoints.get(courierPoint);
+    }
+  this.courierPoint = -1;
+  return null;
+  }
+
+public WayPointItemRouting getNextCourierPoint()
+  {
+  this.courierPoint++;
+  if(this.courierPoint>=this.courierPoints.size())
+    {
+    this.courierPoint = 0;
+    }
+  return this.getCurrentCourierPoint();
+  }
+
+public void clearCourierPoints()
+  {
+  this.courierPoints.clear();
+  this.courierPoint = -1;
   }
 
 /************************************************COMMANDER TARGET*************************************************/
@@ -217,6 +265,11 @@ public NBTTagCompound getNBTTag()
     }
   tag.setTag("patrol", list);  
   list = new NBTTagList(); 
+  for(WayPointItemRouting p : this.courierPoints)
+    {
+    list.appendTag(p.getNBTTag());
+    }
+  tag.setTag("courier", list);
   if(this.homePoint!=null)
     {
     tag.setCompoundTag("home", this.homePoint.getNBTTag());
@@ -233,18 +286,28 @@ public NBTTagCompound getNBTTag()
     {
     tag.setCompoundTag("upkeep", this.upkeep.getNBTTag());
     } 
+  tag.setInteger("pNum", this.currentPatrolPoint);
+  tag.setInteger("cNum", courierPoint);
   return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
+  this.currentPatrolPoint = tag.getInteger("pNum");
+  this.courierPoint = tag.getInteger("cNum");
   this.patrolPoints.clear();
+  this.courierPoints.clear();
   NBTTagList patrol = tag.getTagList("patrol");
   for(int i = 0; i < patrol.tagCount(); i++)
     {
     this.patrolPoints.add(new WayPoint((NBTTagCompound) patrol.tagAt(i)));
     } 
+  patrol = tag.getTagList("courier");
+  for(int i = 0; i < patrol.tagCount(); i++)
+    {
+    this.courierPoints.add(new WayPointItemRouting((NBTTagCompound)patrol.tagAt(i)));
+    }
   if(tag.hasKey("home"))
     {
     this.homePoint = new WayPoint(tag.getCompoundTag("home"));
