@@ -130,7 +130,7 @@ protected void attackTargetMounted(ITargetEntry target)
     {
     return;
     }
-  else
+  else if(yaw<=2 && vehicle.vehicleType.getBaseTurretRotationAmount()<=0)
     {
     vehicle.rotationYaw = vehicle.rotationYaw+yaw;
     vehicle.moveHelper.stopMotion();

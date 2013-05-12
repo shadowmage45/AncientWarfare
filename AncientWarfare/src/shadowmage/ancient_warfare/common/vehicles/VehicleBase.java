@@ -631,6 +631,10 @@ public void onUpdateClient()
       }
     this.localVehicleHealth = this.getHealth();    
     }
+  if(this.riddenByEntity !=null)
+    {
+    this.updateRiderPosition();
+    }
   }
 
 /**

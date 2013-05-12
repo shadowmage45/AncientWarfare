@@ -47,31 +47,37 @@ public PathWorldAccessEntity(World world, Entity entity)
   this.entity = entity;
   }
 
-@Override
-public boolean isWalkable(int x, int y, int z)
-  {
-  if(this.entity.width>1.f)
-    {
-    //check blocks in the x/z +/- 1/2 width
-    int size = MathHelper.ceiling_double_int(entity.width/2);
-//    int size = 1;
-    for(int dx = x-size; dx<= x+size; dx++)
-      {
-      for(int dz = z-size; dz<= z+size; dz++)
-        {
-        if(!super.isWalkable(dx, y, dz))
-          {
-          return false;
-          }
-        }
-      }
-    return true;
-    }
-  else
-    {
-    return super.isWalkable(x, y, z);
-    }
-  }
+//@Override
+//public boolean isWalkable(int x, int y, int z)
+//  {
+////  return super.isWalkable(x, y, z);
+//  if(this.entity.width>1.f)
+//    {
+//    //check blocks in the x/z +/- 1/2 width
+//    int size = MathHelper.ceiling_double_int(entity.width/2);
+////    int size = 1;
+//    for(int dx = x-size; dx<= x+size; dx++)
+//      {
+//      for(int dz = z-size; dz<= z+size; dz++)
+//        {        
+//        if(!super.isWalkable(dx, y, dz))
+//          {
+//          if(super.isWalkable(dx, y+1, dz) || super.isWalkable(dx, y-1, dz))
+//            {
+//            continue;
+////            return true;
+//            }          
+//          return false;
+//          }
+//        }
+//      }
+//    return true;
+//    }
+//  else
+//    {
+//    return super.isWalkable(x, y, z);
+//    }
+//  }
 
 @Override
 public boolean isRemote()

@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -358,7 +359,26 @@ public void onMovementTick()
     vehicle.motionY = 0.f;
     }
   if(strafeMotion !=0 || forwardMotion !=0 || vehicle.motionY !=0)
-    {    
+    { 
+    this.vehicle.noClip = false;
+    /**
+     * let soldiers cheat when riding, adjust motion x,z to move towards the nearest clear block
+     */
+    if(vehicle.isCollidedHorizontally)
+      {
+//      Config.logDebug("collided");
+      //vehicle.getWorldAccess().isWalkable(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY), MathHelper.floor_double(vehicle.posZ))
+//      float velocity = MathHelper.sqrt_double(vehicle.motionX*vehicle.motionX + vehicle.motionZ*vehicle.motionZ);      
+      if(vehicle.nav.currentTarget!=null && vehicle.getForwardInput()==1 && vehicle.getStrafeInput()==0)
+        {
+//        Config.logDebug("velocity: "+velocity);
+        if(vehicle.riddenByEntity instanceof NpcBase)
+          {
+          this.vehicle.noClip = true;
+          vehicle.motionY = 0;        
+          }
+        }
+      }
     vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
     float x = Trig.sinDegrees(vehicle.rotationYaw)*-forwardMotion;
     float z = Trig.cosDegrees(vehicle.rotationYaw)*-forwardMotion;  
