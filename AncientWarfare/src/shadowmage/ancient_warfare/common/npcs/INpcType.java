@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.npcs;
 
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -42,6 +43,7 @@ public abstract String[] getDefaultTargets();
 public abstract int getNumOfLevels();
 public abstract int getMaxHealth(int level);
 public abstract int getInventorySize(int level);
+public abstract int getSpecInventorySize(int level);
 public abstract float getRangedAttackDistance(int level);
 public abstract int getAttackDamage(int level);
 public abstract int getActionTicks(int level);
@@ -61,6 +63,8 @@ public abstract NpcVarsHelper getVarsHelper(NpcBase npc);
 public abstract void addTargets(NpcBase npc, NpcTargetHelper helper);
 
 public abstract List<CivicWorkType> getWorkTypes(int level);
+
+public abstract void openGui(EntityPlayer player, NpcBase npc);
 
 public abstract class NpcVarsHelper
 {

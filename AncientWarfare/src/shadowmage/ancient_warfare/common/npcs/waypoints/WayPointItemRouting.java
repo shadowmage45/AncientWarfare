@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class WayPointItemRouting extends WayPoint
 {
@@ -91,6 +92,41 @@ public boolean getPartial()
   return partial;
   }
 
+/**
+ * return true if the NPC should give/take the stack
+ * @param stack
+ * @return
+ */
+public boolean doesMatchFilter(ItemStack stack)
+  {
+  if(stack==null)
+    {
+    return false;
+    }
+  for(ItemStack filter : this.filters)
+    {
+    if(InventoryTools.doItemsMatch(stack , filter))
+      {
+      if(include)//if this is an 'inclusion' filter and matches a filter
+        {
+        if(partial || stack.stackSize>=filter.stackSize) // check if it is a partial filter
+          {
+          return true;
+          }
+        }
+      else
+        {
+        return false;
+        }
+      }
+    }
+  if(!include)
+    {
+    return true;
+    }
+  return false;
+  }
+
 public ItemStack getFilterStack(int index)
   {
   if(index>=0 && index < filters.length)
@@ -107,6 +143,9 @@ public void setFilterStack(int index, ItemStack stack)
     this.filters[index] = stack;
     }
   }
+
+
+
 
 @Override
 public NBTTagCompound getNBTTag()

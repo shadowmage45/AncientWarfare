@@ -41,6 +41,7 @@ protected int attackDamage = 4;
 protected int rangedAttackDistance = 0;
 protected int health = 20;
 protected int inventorySize = 9;
+protected int specInventorySize = 1;
 protected int actionTicks = 35;
 protected int upkeepCost = 8;//default one pork chop/ two apples
 protected float accuracy = 1.f;

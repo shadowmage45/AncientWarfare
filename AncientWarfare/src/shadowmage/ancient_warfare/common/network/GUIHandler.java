@@ -31,6 +31,7 @@ import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCommandBaton;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCourierRoutingSlip;
 import shadowmage.ancient_warfare.client.gui.npc.GuiNpcBase;
+import shadowmage.ancient_warfare.client.gui.npc.GuiNpcCourier;
 import shadowmage.ancient_warfare.client.gui.settings.GuiClientSettings;
 import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
 import shadowmage.ancient_warfare.client.gui.structure.GuiEditorSelect;
@@ -49,6 +50,7 @@ import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
+import shadowmage.ancient_warfare.common.container.ContainerNpcCourier;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
@@ -76,6 +78,7 @@ public static final int TEAM_CONTROL = 6;
 public static final int NPC_COMMAND_BATON = 7;
 public static final int CIVIC_BASE = 8;
 public static final int NPC_BASE = 9;
+public static final int NPC_COURIER = 10;
 
 public static final int COURIER_SLIP = 30;
 
@@ -97,6 +100,7 @@ public static GUIHandler instance()
 public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
   {
   VehicleBase vehicle;
+  NpcBase npc;
   switch(ID)
   {
   case STRUCTURE_SELECT:
@@ -133,14 +137,19 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   return null;
   
   case NPC_BASE:
-  NpcBase npc = (NpcBase)world.getEntityByID(x);
+  npc = (NpcBase)world.getEntityByID(x);
   if(npc!=null)
     {
     return new ContainerNpcBase(player, npc);
     }
   return null;
   
-  case 10:
+  case NPC_COURIER:
+  npc = (NpcBase)world.getEntityByID(x);
+  if(npc!=null)
+    {
+    return new ContainerNpcCourier(player, npc);
+    }
   return null;  
   
   case COURIER_SLIP:
@@ -172,6 +181,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
 public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
   {  
   VehicleBase vehicle;
+  NpcBase npc;
   switch(ID)
   {
   case STRUCTURE_SELECT:
@@ -207,15 +217,20 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   return null;
   
   case NPC_BASE:
-  NpcBase npc = (NpcBase)world.getEntityByID(x);
+  npc = (NpcBase)world.getEntityByID(x);
   if(npc!=null)
     {
     return new GuiNpcBase(new ContainerNpcBase(player, npc),npc);
     }
   return null;
   
-  case 10:
-  return null; 
+  case NPC_COURIER:
+  npc = (NpcBase)world.getEntityByID(x);
+  if(npc!=null)
+    {
+    return new GuiNpcCourier(new ContainerNpcCourier(player, npc),npc);
+    }
+  return null;
   
   case COURIER_SLIP:
   ItemStack stack = player.inventory.getCurrentItem();

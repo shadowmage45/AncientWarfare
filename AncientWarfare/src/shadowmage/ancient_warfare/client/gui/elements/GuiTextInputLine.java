@@ -78,7 +78,6 @@ public void drawElement(int mouseX, int mouseY)
     {
     return;
     }
-  GL11.glPushMatrix();
   int xPos = this.renderPosX + guiLeft;
   int yPos = this.renderPosY + guiTop;
   int syPos = yPos + ((this.height-8)/2);
@@ -91,7 +90,6 @@ public void drawElement(int mouseX, int mouseY)
     this.updateCursorOffset();
     this.fr.drawString("_", xPos+2+cursorOffset, syPos, cursorColor, false);
     }
-  GL11.glPopMatrix();
   }
 
 @Override

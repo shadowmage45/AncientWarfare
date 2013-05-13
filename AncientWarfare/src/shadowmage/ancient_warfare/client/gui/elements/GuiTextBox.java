@@ -23,6 +23,8 @@ package shadowmage.ancient_warfare.client.gui.elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -655,6 +657,8 @@ public void updateDrawPos(int x, int y)
 
 public void drawTextBox(FontRenderer fontRenderer, int xPos, int yPos)
   {   
+  GL11.glPushMatrix();
+  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   drawRect(xPos - 1, yPos - 1, xPos + this.xSize + 1, yPos + this.ySize + 1, -6250336);
   drawRect(xPos, yPos, xPos + this.xSize, yPos + this.ySize, -16777216);
   if(this.lines==null)
@@ -673,6 +677,8 @@ public void drawTextBox(FontRenderer fontRenderer, int xPos, int yPos)
       }
     }
   this.renderCursor(fontRenderer, xPos + border + charWidth * cursorPosX, yPos + border + charHeight*cursorPosY + 1);
+  GL11.glPopAttrib();
+  GL11.glPopMatrix();
   }
 
 private void renderCursor(FontRenderer fontRenderer, int posX, int posY)

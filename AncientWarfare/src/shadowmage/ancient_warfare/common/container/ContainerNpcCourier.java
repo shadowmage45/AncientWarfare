@@ -22,25 +22,28 @@ package shadowmage.ancient_warfare.common.container;
 
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
 
-public class ContainerNpcBase extends ContainerBase
+public class ContainerNpcCourier extends ContainerBase
 {
+
 NpcBase npc;
 
 /**
  * @param openingPlayer
  * @param synch
  */
-public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
+public ContainerNpcCourier(EntityPlayer openingPlayer, NpcBase npc)
   {
   super(openingPlayer, null);
   this.npc = npc;
@@ -66,8 +69,8 @@ public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
       this.addSlotToContainer(new Slot(openingPlayer.inventory, slotNum, xPos, yPos));
       }
     }
+    
   IInventory te = npc.inventory;
-//  Config.logDebug("setting npc inventory. size: "+te.getSizeInventory());
   for(y = 0; y < te.getSizeInventory()/9; y++)
     {
     for(x = 0; x < 9; x++)
@@ -76,17 +79,30 @@ public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
       if(slotNum<te.getSizeInventory())
         {
         xPos = 8 + x * 18;
-        yPos = 84 + y * 18 - 5*18 - 2*5+28;
-        if(slotNum>=27)
-          {
-          xPos = -1000;
-          yPos = -1000;
-          }
+        yPos = 10 + y * 18;       
         Slot slot = new Slot(te, slotNum, xPos, yPos);
         this.addSlotToContainer(slot);        
         }
       }
-    }  
+    }
+
+  
+  te = npc.specInventory;
+  Config.logDebug("opening container courier. spec inv size: "+te.getSizeInventory());
+  
+  for(x = 0; x < te.getSizeInventory(); x++)
+    {
+    slotNum = x;
+    Config.logDebug("checking slotNum: "+slotNum);
+    if(slotNum<te.getSizeInventory())
+      {
+      xPos = 8 + x * 18;
+      yPos = 10 + 3*18 + 2;       
+      Slot slot = new Slot(te, slotNum, xPos, yPos);
+      Config.logDebug("adding specinventory slot");
+      this.addSlotToContainer(slot);        
+      }
+    }
   }
 
 @Override
@@ -131,24 +147,45 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
   }
 
 @Override
+public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
+  {
+  Config.logDebug("on craft gui closed...");
+  super.onCraftGuiClosed(par1EntityPlayer);
+  if(!npc.worldObj.isRemote)
+    {
+    npc.wayNav.clearCourierPoints();
+    ItemStack stack = npc.specInventory.getStackInSlot(0);
+    Config.logDebug("stack in spec slot: "+stack);
+    if(stack!=null && stack.itemID == ItemLoader.courierRouteSlip.itemID)
+      {
+      Config.logDebug("adding courier info to npc");
+      CourierRoutingInfo info = new CourierRoutingInfo(stack);
+      for(int i = 0 ; i < info.getRouteSize(); i++)
+        {
+        Config.logDebug("adding courier waypoint to npc");
+        npc.wayNav.addCourierPoint(info.getPoint(i));
+        }    
+      }
+    } 
+  }
+
+@Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
 
   }
 
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
 
   }
 
 @Override
 public List<NBTTagCompound> getInitData()
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
+{
+
+return null;
+}
 
 }

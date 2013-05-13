@@ -106,6 +106,7 @@ private PathWorldAccessEntity worldAccess;
 public Navigator nav;
 public WayPointNavigator wayNav;
 public NpcInventory inventory;
+public NpcInventory specInventory;
 
 /**
  * @param par1World
@@ -129,6 +130,7 @@ public NpcBase(World par1World)
   this.nav.setCanSwim(true);
   this.wayNav = new WayPointNavigator(this);
   this.inventory = new NpcInventory(this, 0);
+  this.specInventory = new NpcInventory(this, 0);
   this.tasks.addTask(1, new EntityAISwimming(this));
   this.stepHeight = 1.1f;
   for (int i = 0; i < this.equipmentDropChances.length; ++i)
@@ -256,6 +258,7 @@ public void setNpcType(INpcType type, int level)
   this.aiManager.addObjectives(type.getAI(this, level));
   this.npcType.addTargets(this, targetHelper);
   this.inventory = new NpcInventory(this, type.getInventorySize(level));
+  this.specInventory = new NpcInventory(this, type.getSpecInventorySize(level));
   this.experienceValue = 10 + 10*level;
   this.addConfigTargets();
   }
@@ -343,7 +346,7 @@ public boolean interact(EntityPlayer player)
     {
     if(player.isSneaking())
       {
-      GUIHandler.instance().openGUI(GUIHandler.NPC_BASE, player, worldObj, entityId, 0, 0);
+      this.npcType.openGui(player, this);
       }
     else
       {
@@ -766,6 +769,7 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setCompoundTag("waypoints", wayNav.getNBTTag());
   tag.setInteger("health", this.getHealth());
   tag.setCompoundTag("inv", this.inventory.getNBTTag());
+  tag.setCompoundTag("spInv", this.specInventory.getNBTTag());
   tag.setInteger("upkeep", this.npcUpkeepTicks);
   tag.setInteger("healing", this.npcHealingTicks);
   }
@@ -783,6 +787,10 @@ public void readFromNBT(NBTTagCompound tag)
   if(tag.hasKey("inv"))
     {
     this.inventory.readFromNBT(tag.getCompoundTag("inv"));
+    }
+  if(tag.hasKey("spInv"))
+    {
+    this.specInventory.readFromNBT(tag.getCompoundTag("spInv"));
     }
   this.npcUpkeepTicks = tag.getInteger("upkeep");
   this.npcHealingTicks = tag.getInteger("healing");

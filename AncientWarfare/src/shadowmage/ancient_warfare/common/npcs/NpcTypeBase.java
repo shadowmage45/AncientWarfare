@@ -23,8 +23,10 @@ package shadowmage.ancient_warfare.common.npcs;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCombatEngineer;
@@ -247,6 +249,16 @@ public int getInventorySize(int level)
   }
 
 @Override
+public int getSpecInventorySize(int level)
+  {
+  if(level>=0 && level< this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).specInventorySize;
+    }
+  return 1;
+  }
+
+@Override
 public ItemStack getTool(int level)
   {
   if(level>=0 && level< this.levelEntries.size())
@@ -333,6 +345,12 @@ public List<CivicWorkType> getWorkTypes(int level)
 public String getIconTexture()
   {
   return "ancientwarfare:npc/"+iconTexture;
+  }
+
+@Override
+public void openGui(EntityPlayer player, NpcBase npc)
+  {  
+  GUIHandler.instance().openGUI(GUIHandler.NPC_BASE, player, npc.worldObj, npc.entityId, 0, 0);
   }
 
 public class NpcVarHelperDummy extends NpcVarsHelper

@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
+import org.lwjgl.opengl.GL11;
+
 public class GuiString extends GuiElement
 {
 
@@ -44,6 +46,7 @@ public GuiString(int elementNum, IGuiElementCallback parent, int w, int h, Strin
 @Override
 public void drawElement(int mouseX, int mouseY)
   {  
+
   int x = this.guiLeft+renderPosX;
   int y = this.guiTop+renderPosY + this.height/2 - 4;// stringHeight/2
   if(this.center)

@@ -23,15 +23,17 @@ package shadowmage.ancient_warfare.common.npcs.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AICourier;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDepositGoods;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
-import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIGoToWork;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AISeekShelter;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
@@ -52,9 +54,9 @@ public NpcCourier(int type)
   this.displayName = "Courier";
   this.tooltip = "Transports Items";
   this.iconTexture = "npcWorker1";  
-  this.addLevel("Courier Novice", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(0), null).addTargetType(CivicWorkType.COURIER).setInventorySize(10);
-  this.addLevel("Courier Adept", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(1), null).addTargetType(CivicWorkType.COURIER).setInventorySize(19);
-  this.addLevel("Courier Master", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(2), null).addTargetType(CivicWorkType.COURIER).setInventorySize(28);
+  this.addLevel("Courier Novice", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(0), null).addTargetType(CivicWorkType.COURIER).setInventorySize(9);
+  this.addLevel("Courier Adept", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(1), null).addTargetType(CivicWorkType.COURIER).setInventorySize(18);
+  this.addLevel("Courier Master", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(2), null).addTargetType(CivicWorkType.COURIER).setInventorySize(27);
   this.isCombatUnit = false;
   }
 
@@ -70,12 +72,19 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>();   
   aiEntries.add(new AIFollowPlayer(npc, 90));
   aiEntries.add(new AISeekShelter(npc, 85));
-  aiEntries.add(new AINpcUpkeepObjective(npc, 82)); 
-  aiEntries.add(new AIGoToWork(npc, 80));  
+  aiEntries.add(new AINpcUpkeepObjective(npc, 82));
+  aiEntries.add(new AICourier(npc, 80));
+//  aiEntries.add(new AIGoToWork(npc, 80));  
   aiEntries.add(new AIDepositGoods(npc, 80));
   aiEntries.add(new AIStayNearHome(npc, 70, 40, 15));
   aiEntries.add(new AIWander(npc, 10));
   return aiEntries;
+  }
+
+@Override
+public void openGui(EntityPlayer player, NpcBase npc)
+  {  
+  GUIHandler.instance().openGUI(GUIHandler.NPC_COURIER, player, npc.worldObj, npc.entityId, 0, 0);
   }
 
 }

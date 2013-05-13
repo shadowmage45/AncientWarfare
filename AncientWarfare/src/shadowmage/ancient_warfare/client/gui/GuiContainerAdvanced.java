@@ -402,7 +402,12 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   GL11.glDisable(GL11.GL_DEPTH_TEST);
   for(Integer i : this.guiElements.keySet())
     {
+    GL11.glPushMatrix();
+    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);    
     this.guiElements.get(i).drawElement(mouseX, mouseY);
+    mc.renderEngine.resetBoundTexture();
+    GL11.glPopAttrib();
+    GL11.glPopMatrix();
     } 
   if(this.tooltipDelayTicks<=0 && this.currentMouseElement!=null && this.currentMouseElement.renderTooltip)
     {

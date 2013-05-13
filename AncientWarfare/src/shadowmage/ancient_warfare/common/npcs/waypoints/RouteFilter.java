@@ -51,10 +51,10 @@ protected boolean finished = false;
 NpcBase npc;
 
 private class Filter
-{
-ItemStack filterStack;
-int neededQuantities;
-}
+  {
+  ItemStack filterStack;
+  int neededQuantities;
+  }
 
 public RouteFilter(WayPointItemRouting point, NpcBase npc)
   {
@@ -97,8 +97,6 @@ public RouteInfo getNextTransaction()
     for(int i = 0; i < inventory.getSizeInventory(); i++)
       {
       fromSlot = inventory.getStackInSlot(i);
-      
-      
       
       }        
     /**
