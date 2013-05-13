@@ -50,11 +50,10 @@ protected TargetType validateWorkPoint(int x, int y, int z)
     }
   else
     {
-    if(id==this.mainBlockID)
+    if(id==this.mainBlockID && inventory.getEmptySlotCount()>=1)
       {
       return TargetType.FARM_HARVEST;
       }
-    //try harvesting
     }
   return TargetType.NONE;
   }

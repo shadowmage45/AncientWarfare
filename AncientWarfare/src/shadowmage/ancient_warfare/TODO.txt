@@ -1,6 +1,8 @@
 TONIGHT
 * inventory size validation (make sure there is room to input new items into civics when validating work points)
 * test netherstalk farm
+* move civics into placing all items into their own inventory
+* remove inventory from most/all npcs (maybe combat npcs?)
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -31,48 +33,26 @@ NPCS
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
 * fisherman (works fishery and squid farms)   
-* need basic courier
-    pickup items (filter) from pickup point(s)
-    deliver items (filter) to deliver point(s)
-        information could be stored on a separate "Courier Routing Slip", copied, etc
-        would allow for the NPC to have a simple interface, and the item to have simple
-        /advanced interfaces (higher ranks?).  Item could simply be slotted into NPC's
-        'Route' slot
-        (should share tag data with client?, or only populate gui through container?)
         
 ITEM ROUTING
-* courier post block (civic type?)
-* courier post stations for pickup/deposit of items.
-    adv courier posts will have settings to push/pull items from nearby inventories (automation aid)
-    posts will have slot filter settings (give/take/quantities/default (include/exclude)
-    when a courier requests a job from a post, place couriers items into 'escrow'    
-* courier post stations will need to be linked to a town-hall (use an item to link)
-    town hall will become the central routing authority.
-    (meaning the system will go offline when the town-hall is unloaded)
-* will need client-server container synch info for displaying item routing filters
-* gui will use NSEWUD for determining containers/sides to interact with. 
-* filters need setting for 'can supply', 'demand', 'passive demand', 'active request'   
+* clean up ai task
+* validate TE on first click on routing slip
+* remove invalid points from NPC waypoint tracker
 
 WAREHOUSE ??
 * scan chests in area.  Keep inventory count/avail slot count.
 * has two inventory areas, deposit and request
 * has 'request' button to pull items from managed inventory into local inventory
 * items will be taken from 'deposit' slot and moved into managed inventory at a pre-set rate, if room exists
+* npcs should be able to access as one seamless inventory, for all of the chests it manages. probably want to make a special
+    wrapper and not use IInventory
         
 GUI FRAMEWORK
-* add an itemSlot element 
-    has internal reference for slot, passed during construction
-    passes onclick onto handleSlotClick
-    uses onHover for displaying itemstack tooltip/highlighting slot
-    will need advanced options for 'fake' stacks
-        will need to still send info to server to populate server side slot
 
 PATHFINDING
 * better handling of isWalkable -- in need of minor attention for other (mod) blocks
 * need to check if a block has blocking entities in it during iswalkable check
-* pathfinding for vehicles is still...off...
-    it works well, but may not find paths in many areas.
-    its also slow as &&^@ because of all of the block checks
+* vehicle navigator needs to enable gravity even with no-clip, if block under main body is air, fall...
 
 CIVICS
 * need objective icons and rendering
@@ -88,23 +68,18 @@ CIVICS
         (perhaps get the tile entity list from world/chunk, faster than scanning blocks)
     broadcasts 'deposit site' to npcs
     couriers may deposit goods, which will go into the closest available inventory
-    
-    
 
 WORKSITES
 * don't give product to workers that don't have room
 * set hasWork==false when inventory < 1 free spot
 * need clear seperate tick dividers for full rescan and only validatePoints
-* change over to store all harvested materials in work block, use couriers to remove goods (?)
+* change over to store all harvested materials in work block, use couriers to remove goods
 * implement internal buffer 'overflow' slots for when something goes wrong (will dump to main slots as they become empty)
         
 FARMS
 * jungle tree farm needs to check for cocoa blocks?
 * jungle tree farm needs 2x2 planting ability (adv farm?)
-* chicken farm needs to occasionally collect eggs on the ground
 * netherstalk farm needs testing
-* need more work on cow/milk and mooshroom/soup farms
-* need to test sheep/wool farm
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -269,10 +244,15 @@ TWEAKS/OPTIMIZATION
 * disable courier post blocks (for now)
 
 /********** 05-11-13 **********/
+* add guiFakeSlot
 * prep work on courier routing slip item
 
 /********** 05-12-13 **********/
+* fix npc/vehicle pathfinding/navigation. enable hax by NPCs (noClip when need to)
+* update a ton of gui element/stuff to accomodate new elements (resetting of matrix/attrib/boundTex)
 * get routing slip item mostly working
+* get basic courier functionality working
+* first pass at changing civics to use only their internal inventory
 
 /********** 05-13-13 **********/
 /********** 05-14-13 **********/

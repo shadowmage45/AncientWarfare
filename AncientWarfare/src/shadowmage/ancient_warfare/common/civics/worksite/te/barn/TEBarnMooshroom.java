@@ -81,6 +81,7 @@ protected void scan()
     }
   int cullCount = cullableList.size() - this.maxAnimalCount;
   int bowlCount = this.inventory.getCountOf(bowlFilter);
+  int emptyCount = this.inventory.getEmptySlotCount();
   for(int i = 0; i < cullableList.size() ; i++)
     {
     first = cullableList.poll();//.remove(0);
@@ -88,9 +89,9 @@ protected void scan()
       {
       break;
       }
-    if(i<bowlCount)
+    if(i<bowlCount && emptyCount>=1)
       {
-      bowlCount--;
+      emptyCount--;
       this.addWorkPoint(first, TargetType.BARN_MILK);
       }
     if(i<cullCount)
@@ -108,15 +109,9 @@ protected void doWork(NpcBase npc, WorkPoint p)
     {
     this.inventory.tryRemoveItems(bowlFilter, 1);
     ItemStack input = new ItemStack(Item.bowlSoup);
-    input = npc.inventory.tryMergeItem(input);
-    if(input!=null)
-      {
-      input = inventory.tryMergeItem(input);
-      if(input!=null)
-        {
-        InventoryTools.dropItemInWorld(worldObj, input, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
-        }
-      }
+    input = inventory.tryMergeItem(input);
+    input = overflow.tryMergeItem(input);
+    InventoryTools.dropItemInWorld(worldObj, input, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
     }
   }
 
@@ -132,11 +127,11 @@ protected TargetType validateWorkPoint(WorkPoint p)
     {
     return TargetType.NONE;
     }    
-  if(p.work==TargetType.BARN_CULL && ent.getGrowingAge()<0)
+  if(p.work==TargetType.BARN_CULL && (ent.getGrowingAge()<0 || inventory.getEmptySlotCount()<1))
     {
     return TargetType.NONE;
     }
-  if(p.work==TargetType.BARN_MILK && ent.getGrowingAge()<0)
+  if(p.work==TargetType.BARN_MILK && (ent.getGrowingAge()<0 || inventory.getEmptySlotCount()<1))
     {
     return TargetType.NONE;
     }

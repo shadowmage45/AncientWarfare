@@ -121,12 +121,12 @@ public void onRunningTick()
       }
     else
       {
-      //continue...let ai task do its thing
+      //continue...let courierInteract task do its thing
       }        
     }
   else
     {
-    
+    //continue... let moveToTarget do its thing
     }
   }
 

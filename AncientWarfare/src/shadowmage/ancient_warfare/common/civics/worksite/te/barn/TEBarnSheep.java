@@ -88,12 +88,15 @@ protected void scan()
       this.addWorkPoint(second, TargetType.BARN_BREED);
       }
     }  
-  for(int i = 0; i < cullableList.size(); i++)
+  if(this.inventory.getEmptySlotCount()>=1)
     {
-    first = (EntitySheep) cullableList.get(i);
-    if(!first.getSheared())
+    for(int i = 0; i < cullableList.size(); i++)
       {
-      this.addWorkPoint(first, TargetType.BARN_SHEAR);
+      first = (EntitySheep) cullableList.get(i);
+      if(!first.getSheared())
+        {
+        this.addWorkPoint(first, TargetType.BARN_SHEAR);
+        }
       }
     }
   }
@@ -131,16 +134,10 @@ protected void doWork(NpcBase npc, WorkPoint p)
       if(woolDrops!=null)
         {
         for(ItemStack stack : woolDrops)
-          {
-          stack = npc.inventory.tryMergeItem(stack);
-          if(stack!=null)
-            {
-            stack = inventory.tryMergeItem(stack);
-            if(stack!=null)
-              {
-              InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord, zCoord+0.5d);
-              }
-            }          
+          {          
+          stack = inventory.tryMergeItem(stack);
+          stack = overflow.tryMergeItem(stack);
+          InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord, zCoord+0.5d);                  
           }
         }
       ent.setSheared(true);
@@ -161,7 +158,7 @@ protected TargetType validateWorkPoint(WorkPoint p)
     {
     return TargetType.NONE;
     }    
-  if(p.work==TargetType.BARN_SHEAR && ent.getSheared())
+  if(p.work==TargetType.BARN_SHEAR && (ent.getSheared() || inventory.getEmptySlotCount()<1))
     {
     return TargetType.NONE;
     }

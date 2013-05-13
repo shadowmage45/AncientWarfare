@@ -158,7 +158,14 @@ public static int getEmptySlots(IInventory inv, int firstSlot, int lastSlot)
 
 public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int firstSlot, int lastSlot)
   {
-  if(toMerge==null|| inv.getSizeInventory()==0){return null;}
+  if(toMerge==null)
+    {
+    return null;
+    }
+  if(inv.getSizeInventory()==0)
+    {
+    return toMerge;
+    }
   ItemStack fromSlot = null;
   firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
   lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;

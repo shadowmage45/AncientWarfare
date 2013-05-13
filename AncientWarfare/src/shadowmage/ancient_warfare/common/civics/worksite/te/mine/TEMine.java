@@ -39,34 +39,6 @@ import shadowmage.ancient_warfare.common.utils.InventoryTools;
 public class TEMine extends TEWorkSite
 {
 
-/**
- *  I'm thinking it should map by level, keep the current level map in memory
- *    as a basic 3D array of bytes/shorts denoting action to be taken on that block
- *    /whether an action needs to be taken
- *    --when scanning for work-points, instead of scanning the world, you scan the in-
- *    memory array, which has custom tailored information for the path to be taken and
- *    action taken (both smaller lookup space, and no need to go through 'world' to get there)
- * 
- *  Mines will need a certain amount of either:
- *    logs,
- *    planks,
- *    sticks, or
- *    ladders
- *    --for construction of their central shaft.  At least one slot in the inventory
- *        should be preserved for ladders
- *  
- *  Mines will maintain fill material in their inventory slots.  When a worker harvests a point,
- *    if it is fill material and the mine is low, it will go into mine inventory, otherwise it
- *    will go into worker inventory.
- *    
- *  Mine should layout itself such that there is a central 2*2 vertical shaft, with ladders
- *    on the N/S walls.
- *  From this shaft should be one main E/W 2*2 horizontal x-axis tunnel at every level
- *  From these E/W shafts will come basic 2h*1w branch mining shafts
- *  
- *    
- */
-
 int currentLevelNum = -1;
 int minYLevel = 5;//the lowest
 int levelHeight = 4;
@@ -152,25 +124,9 @@ public boolean handleBlockBreak(NpcBase npc, int x, int y, int z)
     {
     for(ItemStack drop : drops)
       {
-      //  if filler block (cobble) && TE can hold more filler (keep room for ladders)
-      //  else add to NPC inventory
-      //check and see if te has space, else drop on ground
-      if(InventoryTools.doItemsMatch(drop, fillerFilter) && inventory.getCountOf(fillerFilter)<128 && inventory.canHoldItem(drop, drop.stackSize))
-        {
-        drop = inventory.tryMergeItem(drop);
-        if(drop!=null)
-          {
-          InventoryTools.dropItemInWorld(npc.worldObj, drop, xCoord, yCoord, zCoord);
-          }
-        }
-      else
-        {
-        drop = npc.inventory.tryMergeItem(drop);
-        if(drop!=null)
-          {
-          InventoryTools.dropItemInWorld(npc.worldObj, drop, xCoord, yCoord, zCoord);
-          }
-        }
+      drop = inventory.tryMergeItem(drop);
+      drop = overflow.tryMergeItem(drop);
+      InventoryTools.dropItemInWorld(npc.worldObj, drop, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
       }
     return true;
     }

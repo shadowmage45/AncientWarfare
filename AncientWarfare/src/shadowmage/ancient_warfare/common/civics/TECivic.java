@@ -72,6 +72,7 @@ protected int teamNum = 0;
 protected boolean isWorkSite = false;
 protected boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
 public AWInventoryBasic inventory = new AWInventoryBasic(0);
+public AWInventoryBasic overflow = new AWInventoryBasic(4);
 protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
 
 protected Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
@@ -222,6 +223,15 @@ protected void updateInventoryStatus()
   {
   if(this.inventory.getSizeInventory()>0)
     {
+    if(this.overflow.getEmptySlotCount()!=this.overflow.getSizeInventory())
+      {
+      ItemStack fromSlot;
+      for(int i = 0; i < this.overflow.getSizeInventory(); i++)
+        {
+        fromSlot = this.overflow.getStackInSlot(i);
+        this.overflow.setInventorySlotContents(i, this.inventory.tryMergeItem(fromSlot));
+        }
+      }
     int empty = this.inventory.getEmptySlotCount();
     int prevStatus = this.clientInventoryStatus;
     if(empty<=0)
@@ -446,6 +456,10 @@ protected void readCivicDataFromNBT(NBTTagCompound tag)
     {
     this.inventory.readFromNBT(tag.getCompoundTag("inventory"));
     }  
+  if(tag.hasKey("overflow"))
+    {
+    this.overflow.readFromNBT(tag.getCompoundTag("overflow"));
+    }
   if(tag.hasKey("broad"))
     {
     this.broadcastWork = tag.getBoolean("broad");
@@ -459,6 +473,7 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("civType", civic.getGlobalID());
   tag.setIntArray("bounds", new int[]{minX, minY, minZ, maxX, maxY, maxZ});
   tag.setCompoundTag("inventory", this.inventory.getNBTTag());
+  tag.setCompoundTag("overflow", this.overflow.getNBTTag());
   tag.setInteger("team", this.teamNum);
   tag.setBoolean("broad", broadcastWork);
   }

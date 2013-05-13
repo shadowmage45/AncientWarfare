@@ -72,7 +72,14 @@ protected void onCivicUpdate()
 @Override
 protected void updateHasWork()
   {  
-  this.setHasWork(!this.workPoints.isEmpty());
+  if(this.inventory.getEmptySlotCount()<=0)
+    {
+    this.setHasWork(false);
+    }
+  else
+    {
+    this.setHasWork(!this.workPoints.isEmpty());
+    }
   }
 
 @Override

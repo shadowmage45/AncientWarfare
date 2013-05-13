@@ -102,12 +102,15 @@ protected void scan()
     this.addWorkPoint(first, TargetType.BARN_BREED);
     this.addWorkPoint(second, TargetType.BARN_BREED);
     }
-  int cullCount = cullableList.size() - this.maxAnimalCount;
-  for(int i = 0; i < cullCount && cullableList.size()>0 ; i++)
+  if(this.inventory.getEmptySlotCount()>=1)
     {
-    first = cullableList.poll();//.remove(0);
-    this.addWorkPoint(first, TargetType.BARN_CULL);
-    }  
+    int cullCount = cullableList.size() - this.maxAnimalCount;
+    for(int i = 0; i < cullCount && cullableList.size()>0 ; i++)
+      {
+      first = cullableList.poll();//.remove(0);
+      this.addWorkPoint(first, TargetType.BARN_CULL);
+      }  
+    }
   t3 = System.nanoTime();
   s4 = t3-t2;
 //  Config.logDebug("world entity seek time: "+s1);
@@ -151,15 +154,9 @@ protected void doWork(NpcBase npc, WorkPoint p)
       for(EntityItem item : ent.capturedDrops)
         {
         stack = item.getEntityItem();
-        stack = npc.inventory.tryMergeItem(stack);
-        if(stack!=null)
-          {
-          stack = inventory.tryMergeItem(stack);
-          if(stack!=null)
-            {
-            InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord, zCoord+0.5d);
-            }
-          }
+        stack = inventory.tryMergeItem(stack);
+        stack = overflow.tryMergeItem(stack);
+        InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord, zCoord+0.5d);       
         item.setDead();
         }
       }
@@ -178,7 +175,7 @@ protected TargetType validateWorkPoint(WorkPoint p)
     {
     return TargetType.NONE;
     }    
-  if(p.work==TargetType.BARN_CULL && ent.getGrowingAge()<0)
+  if(p.work==TargetType.BARN_CULL && (ent.getGrowingAge()<0 || inventory.getEmptySlotCount()<1))
     {
     return TargetType.NONE;
     }

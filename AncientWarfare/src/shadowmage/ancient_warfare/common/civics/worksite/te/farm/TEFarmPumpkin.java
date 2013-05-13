@@ -46,7 +46,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
     {    
     return TargetType.FARM_PLANT;
     }
-  else if(id==Block.pumpkin.blockID)
+  else if(id==Block.pumpkin.blockID && inventory.getEmptySlotCount()>=1)
     {
     return TargetType.FARM_HARVEST;
     }

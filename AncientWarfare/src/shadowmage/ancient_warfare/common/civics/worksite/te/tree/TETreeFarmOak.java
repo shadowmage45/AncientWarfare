@@ -35,6 +35,7 @@ public TETreeFarmOak()
   saplingID = Block.sapling.blockID;
   saplingMeta = 0;
   this.saplingFilter = new ItemStack(saplingID, 1, saplingMeta);
+  this.logFilter = new ItemStack(Block.wood,1,this.logMeta);
   }
 
 

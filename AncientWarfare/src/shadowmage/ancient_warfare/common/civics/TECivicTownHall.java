@@ -44,6 +44,7 @@ public boolean hasWork()
   {
   return true;
   }
+
 @Override
 protected void updateHasWork()
   {  

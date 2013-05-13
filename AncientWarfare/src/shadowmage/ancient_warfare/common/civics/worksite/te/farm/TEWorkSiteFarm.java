@@ -33,6 +33,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public abstract class TEWorkSiteFarm extends TEWorkSite
@@ -62,7 +63,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
   else if(id==this.mainBlockID)
     {
     int meta = worldObj.getBlockMetadata(x, y, z);
-    if(meta==this.mainBlockMatureMeta)
+    if(meta==this.mainBlockMatureMeta && this.inventory.getEmptySlotCount()>=1)
       {
       return TargetType.FARM_HARVEST;
       }    
@@ -100,42 +101,19 @@ protected void doWork(NpcBase npc, WorkPoint p)
   if(p.work==TargetType.FARM_HARVEST)
     {
     Config.logDebug("harvesting crops!!");
-    Block cropsBlock = Block.blocksList[mainBlockID];
-    List<ItemStack> blockDrops = cropsBlock.getBlockDropped(npc.worldObj, p.x, p.y, p.z, worldObj.getBlockMetadata(p.x, p.y, p.z), 0);
-    worldObj.setBlockToAir(p.x, p.y, p.z);
-    for(ItemStack item : blockDrops)
+    List<ItemStack> drops = BlockTools.breakBlock(worldObj, p.x, p.y, p.z, 0);   
+    for(ItemStack item : drops)
       {
-      if(item==null){continue;}
-      if(InventoryTools.doItemsMatch(item, plantableFilter) && inventory.canHoldItem(plantableFilter, item.stackSize))
-        {
-        int count = inventory.getCountOf(plantableFilter);
-        if(count<128)
-          {
-          item = inventory.tryMergeItem(item);
-          }
-        if(item!=null)
-          {
-          item = npc.inventory.tryMergeItem(item);
-          if(item!=null)
-            {
-            InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
-            }            
-          }
-        }
-      else
-        {
-        item = npc.inventory.tryMergeItem(item);
-        if(item!=null)
-          {
-          InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
-          }
-        }
+      item = this.inventory.tryMergeItem(item);
+      item = this.overflow.tryMergeItem(item);
+      InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);      
       }
     }
   else if(p.work==TargetType.FARM_PLANT)
     {
     if(inventory.containsAtLeast(plantableFilter, 1))
       {
+      Config.logDebug("planting crops");
       inventory.tryRemoveItems(plantableFilter, 1);
       worldObj.setBlock(p.x, p.y, p.z, mainBlockID, 0, 3);
       }
@@ -143,8 +121,7 @@ protected void doWork(NpcBase npc, WorkPoint p)
       {
       Config.logDebug("had plant job but no plantables!!");
       }
-    }
-    
+    }    
   }
 
 @Override

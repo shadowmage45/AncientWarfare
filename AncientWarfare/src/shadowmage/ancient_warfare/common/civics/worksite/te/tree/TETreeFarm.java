@@ -47,6 +47,7 @@ int saplingID = Block.sapling.blockID;
 int saplingMeta = 0;
 int maxSearchHeight = 16;
 ItemStack saplingFilter;
+ItemStack logFilter;
 
 /**
  * 
@@ -124,15 +125,9 @@ protected void doWork(NpcBase npc, WorkPoint p)
     List<ItemStack> drops = BlockTools.breakBlock(worldObj, p.x, p.y, p.z, 0);   
     for(ItemStack item : drops)
       {
-      item = npc.inventory.tryMergeItem(item);
-      if(item!=null)
-        {
-        item = this.inventory.tryMergeItem(item);
-        if(item!=null)
-          {
-          InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
-          }
-        }
+      item = this.inventory.tryMergeItem(item);
+      item = this.overflow.tryMergeItem(item);
+      InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
       }
     }  
   else if(p.work==TargetType.TREE_PLANT && inventory.containsAtLeast(saplingFilter, 1))
@@ -154,7 +149,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
   int id = worldObj.getBlockId(x, y, z);
   int meta = worldObj.getBlockMetadata(x, y, z);
   boolean hasSapling = inventory.containsAtLeast(saplingFilter, 1);  
-  if( id==logID && (meta &3) == this.logMeta )
+  if( id==logID && (meta &3) == this.logMeta && this.inventory.canHoldItem(logFilter, 1) )
     {
     return TargetType.TREE_CHOP;
     }

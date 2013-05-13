@@ -49,12 +49,10 @@ protected TargetType validateWorkPoint(int x, int y, int z)
       return TargetType.FARM_PLANT;
       }
     }
-  else if(id==this.mainBlockID)
+  else if(id==this.mainBlockID && inventory.getEmptySlotCount()>=1)
     {
     return TargetType.FARM_HARVEST;
     }
-    //try harvesting
-    
   return TargetType.NONE;
   }
 }
