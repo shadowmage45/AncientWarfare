@@ -58,5 +58,6 @@ public enum TargetType
   UPKEEP,
   COMMANDER,
   BARN_MILK,
-  BARN_SHEAR
+  BARN_SHEAR,
+  FISH_CATCH,
   }

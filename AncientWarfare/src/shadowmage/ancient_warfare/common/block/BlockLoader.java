@@ -29,9 +29,9 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnMooshroom
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnPig;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnSheep;
 import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
-import shadowmage.ancient_warfare.common.civics.worksite.te.courier.TECivicCourier;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCactus;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCarrot;
+import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCocoa;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmMelon;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmMushroomBrown;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmMushroomRed;
@@ -41,6 +41,8 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmPumpkin;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmReed;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmWheat;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEWorkSiteFarm;
+import shadowmage.ancient_warfare.common.civics.worksite.te.fish.TEFishery;
+import shadowmage.ancient_warfare.common.civics.worksite.te.fish.TESquidFarm;
 import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEMine;
 import shadowmage.ancient_warfare.common.civics.worksite.te.mine.TEMineQuarry;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmBirch;
@@ -105,7 +107,9 @@ public void load()
   GameRegistry.registerTileEntity(TEBarnChicken.class, "Chicken Farm");
   GameRegistry.registerTileEntity(TEBarnSheep.class, "Sheep Farm");
   GameRegistry.registerTileEntity(TEBarnMooshroom.class, "Mooshroom Farm");
-  GameRegistry.registerTileEntity(TECivicCourier.class, "Courier Post");
+  GameRegistry.registerTileEntity(TEFishery.class, "Fish Farm");
+  GameRegistry.registerTileEntity(TESquidFarm.class, "Squid Farm");
+  GameRegistry.registerTileEntity(TEFarmCocoa.class, "Cocoa Bean Farm");
   }
 
 public void registerBlock(Block block, String name)

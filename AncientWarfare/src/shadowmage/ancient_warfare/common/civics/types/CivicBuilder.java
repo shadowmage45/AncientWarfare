@@ -36,12 +36,14 @@ public CivicBuilder(int id)
   {
   super(id);
   this.addToCreative = false;
+  this.inventorySize = 0;
   this.name = "Civic Structure Builder";
   this.tooltip = "Work site for building of structures.";
   this.teClass = TECivicBuilder.class;
   this.workType = CivicWorkType.MINE;
   this.maxWorkers = 4;
   this.isWorkSite = true;
+  this.setBlockIcons("civicBuilderBottom", "civicBuilderTop", "civicBuilderSides");
   }
 
 @Override

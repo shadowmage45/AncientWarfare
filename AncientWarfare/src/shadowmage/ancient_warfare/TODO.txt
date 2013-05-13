@@ -1,8 +1,10 @@
 TONIGHT
-* test netherstalk farm
-* remove inventory from most/all npcs (maybe combat npcs?)
 * test new civic/inventory interaction
 * civic block textures...all over the place
+* figure out cocoa block rotation for cocoa farm
+* fish farms need to catch by percentage
+* test commander bonuses
+* test netherstalk farm
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -20,14 +22,16 @@ SOLDIERS
 * siege engineer and archer need accuracy set in levels
 * investigate revenge-target designation (when something attacks a soldier)(seems to work, perhaps needs aggro set to higher)
 * investigate player-attack target setting (when a player with soldiers following attacks an entity)
+* follow/protect target (entity) -- semi persistent -- will load if/when entity is available -- no self-reset
+    player-set only
 
 NPCS
 * work out indiv costs for upkeep -- add specialized items where applicable
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
-* fisherman (works fishery and squid farms)   
 * texture for courier, fisherman
+* set work-speed by rank
         
 ITEM ROUTING
 * clean up ai task
@@ -54,20 +58,18 @@ CIVICS
 * need inventory status bar
 * need work status bar
 * need a clearer way of designating where bounds on a civic SHOULD be.  videos/screenshots?
-* fishery (catches fish randomly based on number of water blocks present in area)
-* squid farm (harvests any squid that spawn in water in its bounds / randomly spawns squid to harvest?)
 * warehouse civic type
     available in a few 'sizes'
     occasionally rescans chests inside adds them to handling list
         (perhaps get the tile entity list from world/chunk, faster than scanning blocks)
     broadcasts 'deposit site' to npcs
     couriers may deposit goods, which will go into the closest available inventory
+* need to scan when attempting to place, make sure no bounds overlap with any existing civics
 
 WORKSITES
 * need clear separate tick dividers for full rescan and only validatePoints
         
 FARMS
-* jungle tree farm needs to check for cocoa blocks?
 * jungle tree farm needs 2x2 planting ability (adv farm?)
 * netherstalk farm needs testing
 
@@ -188,6 +190,11 @@ TWEAKS/OPTIMIZATION
 * change missiles over to include a ref to living shooter (for revenge from targets)
 * change civic item rendering over to render the civic block instead of the item (hack)
     
+* add fisherman npc type
+* add fish/squid farms
+* add cocoa farm (WIP)
+* create side-icons for most civics (need top/bottom still)
+* remove inventory from most npcs (all but courier)
     
 /********** 05-14-13 **********/
 /********** 05-15-13 **********/

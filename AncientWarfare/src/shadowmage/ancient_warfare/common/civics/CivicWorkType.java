@@ -29,5 +29,6 @@ public enum CivicWorkType
   TREE,
   COURIER,
   UPKEEP,
-  BUILD;
+  BUILD,
+  FISH;
   }

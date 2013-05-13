@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.npcs.types.NpcCommander;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCourier;
 import shadowmage.ancient_warfare.common.npcs.types.NpcDummy;
 import shadowmage.ancient_warfare.common.npcs.types.NpcFarmer;
+import shadowmage.ancient_warfare.common.npcs.types.NpcFisherman;
 import shadowmage.ancient_warfare.common.npcs.types.NpcFootsoldier;
 import shadowmage.ancient_warfare.common.npcs.types.NpcLumberjack;
 import shadowmage.ancient_warfare.common.npcs.types.NpcMedic;
@@ -55,7 +56,7 @@ public static INpcType npcSiegeEngineer = new NpcSiegeEngineer(4);
 public static INpcType npcMedic = new NpcMedic(5);
 public static INpcType npcCombatEngineer = new NpcCombatEngineer(6);
 public static INpcType npcCommander = new NpcCommander(7);
-//fisherman
+public static INpcType npcFisherman = new NpcFisherman(8);
 //craftsman ? 9
 public static INpcType npcMiner = new NpcMiner(10);
 public static INpcType npcFarmer = new NpcFarmer(11);
