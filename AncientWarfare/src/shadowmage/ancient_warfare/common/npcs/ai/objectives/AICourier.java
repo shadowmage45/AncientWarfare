@@ -21,21 +21,19 @@
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AICourierInteract;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
-import shadowmage.ancient_warfare.common.npcs.waypoints.RouteFilter;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointItemRouting;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class AICourier extends NpcAIObjective
 {
 
-public WayPointItemRouting point;
-public boolean isPointFinished = false;
-public boolean setupPoint = false;
-public RouteFilter routeFilter = null;
 /**
  * @param npc
  * @param maxPriority
@@ -58,8 +56,17 @@ public void updatePriority()
   this.currentPriority = 0;
   if(npc.wayNav.getCourierSize()>0)
     {
-    this.currentPriority = this.maxPriority;
-    Config.logDebug("setting courier priority to max");
+    WayPointItemRouting point = null;
+    for(int i = 0; i < npc.wayNav.getCourierSize(); i++)
+      {
+      point = npc.wayNav.getCourierPointAt(i);
+      if(point!=null && point.hasWork(npc.worldObj, npc))
+        {
+        Config.logDebug("setting courier priority to max");
+        this.currentPriority = this.maxPriority;
+        break;
+        }
+      }
     }
   }
 
@@ -77,15 +84,15 @@ protected boolean validatePoint(WayPointItemRouting p)
 
 protected boolean findNextPoint()
   {
-  point = npc.wayNav.getNextCourierPoint();
-  npc.setTargetAW(point);
-  if(point!=null)
+  WayPointItemRouting point = npc.wayNav.getActiveCourierPoint();
+  for(int i = 0; i < npc.wayNav.getCourierSize(); i++)
     {
-    if(validatePoint(point))
+    point = npc.wayNav.getNextCourierPoint();
+    if(point.hasWork(npc.worldObj, npc))
       {
+      npc.setTargetAW(point);      
       return true;
       }
-    point = null;    
     }
   return false;
   }
@@ -93,29 +100,19 @@ protected boolean findNextPoint()
 @Override
 public void onRunningTick()
   {  
-  Config.logDebug("courier ai running");
+  WayPointItemRouting point = npc.wayNav.getActiveCourierPoint();
   if(!validatePoint(point))
     {
-    Config.logDebug("first validation failed");
     if(!findNextPoint())
       {
-      Config.logDebug("could not find next point");
       this.setFinished();
       return;
       }
-    Config.logDebug("found next point");
-    }
-  
+    }  
   if(npc.getDistanceFromTarget(point) <3)
     {
-    Config.logDebug("within distance to work");
-    if(!setupPoint)
+    if(!point.hasWork(npc.worldObj, npc))
       {
-      setupPoint = true;
-      }
-    else if(isPointFinished)
-      {
-      isPointFinished = false;
       if(!findNextPoint())
         {
         setFinished();
@@ -129,30 +126,24 @@ public void onRunningTick()
     }
   else
     {
-    Config.logDebug("not in distance to work, setting action ticks to max, setup to false");
-    setupPoint = false;
-    npc.setActionTicksToMax();
+    
     }
-  }
-
-public void setupPoint()
-  {
-  this.routeFilter = new RouteFilter(point, npc);
   }
 
 @Override
 public void onObjectiveStart()
   {
-  findNextPoint();
-  this.isPointFinished = false;
-  this.routeFilter = null;
+  WayPointItemRouting point = npc.wayNav.getActiveCourierPoint();
+  if(point==null || !point.hasWork(npc.worldObj, npc))
+    {
+    findNextPoint();
+    }
+  npc.setTargetAW(npc.wayNav.getActiveCourierPoint());
   }
 
 @Override
 public void stopObjective()
   {
-  this.routeFilter = null;
-  this.point = null;
   }
 
 @Override

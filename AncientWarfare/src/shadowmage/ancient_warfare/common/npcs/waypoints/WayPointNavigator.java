@@ -56,6 +56,7 @@ VehicleBase vehicle = null;
 NpcBase commander = null;
 List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
 List<WayPointItemRouting> courierPoints = new ArrayList<WayPointItemRouting>();
+WayPointItemRouting point = null;//current point
 int currentPatrolPoint = 0;
 int courierPoint = -1;
 
@@ -98,11 +99,21 @@ public void addCourierPoint(WayPointItemRouting point)
   this.courierPoints.add(point);
   }
 
+public WayPointItemRouting getCourierPointAt(int index)
+  {
+  if(index>=0 && index < this.courierPoints.size())
+    {
+    return this.courierPoints.get(index);
+    }
+  return null;
+  }
+
 public WayPointItemRouting getCurrentCourierPoint()
   {
   if(this.courierPoint>=0 && this.courierPoint<this.courierPoints.size())
     {
-    return this.courierPoints.get(courierPoint);
+    this.point = this.courierPoints.get(courierPoint);
+    return point;
     }
   this.courierPoint = -1;
   return null;
@@ -122,6 +133,17 @@ public void clearCourierPoints()
   {
   this.courierPoints.clear();
   this.courierPoint = -1;
+  this.point = null;
+  }
+
+public WayPointItemRouting getActiveCourierPoint()
+  {
+  return this.point;
+  }
+
+public void setActiveCourierPoint(WayPointItemRouting point)
+  {
+  this.point = point;
   }
 
 /************************************************COMMANDER TARGET*************************************************/

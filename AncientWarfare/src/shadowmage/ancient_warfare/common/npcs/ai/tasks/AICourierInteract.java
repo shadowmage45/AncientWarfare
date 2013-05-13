@@ -26,6 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AICourier;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointItemRouting;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
@@ -48,7 +49,13 @@ public void onTick()
   npc.swingItem();
   if(npc.actionTick<=0)
     {
-    TileEntity te = parent.point.getTileEntity(npc.worldObj);
+    npc.setActionTicksToMax();
+    WayPointItemRouting point = npc.wayNav.getActiveCourierPoint();
+    if(point==null)
+      {
+      return;
+      }
+    TileEntity te = point.getTileEntity(npc.worldObj);
     IInventory target = null;
     if(te instanceof IInventory)
       {
@@ -59,43 +66,31 @@ public void onTick()
       return;
       }
     ItemStack fromSlot;    
-    if(parent.point.getDeliver())
+    if(point.getDeliver())
       {
-      boolean foundWork = false;
       for(int k = 0; k < npc.inventory.getSizeInventory(); k++)
         {
         fromSlot = npc.inventory.getStackInSlot(k);
-        if(parent.point.doesMatchFilter(fromSlot) && InventoryTools.canHoldItem(target, fromSlot, fromSlot.stackSize, 0, target.getSizeInventory()-1))
+        if(point.doesMatchFilter(fromSlot) && InventoryTools.canHoldItem(target, fromSlot, fromSlot.stackSize, 0, target.getSizeInventory()-1))
           {
           fromSlot = InventoryTools.tryMergeStack(target, fromSlot, 0, target.getSizeInventory()-1);
           npc.inventory.setInventorySlotContents(k, fromSlot);
-          foundWork = true;
           break;
           }
-        }
-      if(!foundWork)
-        {
-        parent.isPointFinished = true;
-        }
+        }     
       }
     else
       {      
-      boolean foundWork = false;
       for(int i = 0; i < target.getSizeInventory(); i++)
         {
         fromSlot = target.getStackInSlot(i);
-        if(parent.point.doesMatchFilter(fromSlot) && InventoryTools.canHoldItem(npc.inventory, fromSlot, fromSlot.stackSize, 0, npc.inventory.getSizeInventory()-1))
+        if(point.doesMatchFilter(fromSlot) && InventoryTools.canHoldItem(npc.inventory, fromSlot, fromSlot.stackSize, 0, npc.inventory.getSizeInventory()-1))
           {
           fromSlot = InventoryTools.tryMergeStack(npc.inventory, fromSlot, 0, target.getSizeInventory()-1);
           target.setInventorySlotContents(i, fromSlot);
-          foundWork = true;
           break;
           }
-        }
-      if(!foundWork)
-        {
-        parent.isPointFinished = true;
-        }
+        }     
       }
     }
   }
@@ -103,7 +98,7 @@ public void onTick()
 @Override
 public boolean shouldExecute()
   {
-  if(npc.getTargetType()==TargetType.DELIVER && npc.getDistanceFromTarget(npc.getTarget())<3 && parent.point!=null)
+  if(npc.getTargetType()==TargetType.DELIVER && npc.getDistanceFromTarget(npc.getTarget())<3 && npc.wayNav.getActiveCourierPoint()!=null)
     {
     return true;
     }

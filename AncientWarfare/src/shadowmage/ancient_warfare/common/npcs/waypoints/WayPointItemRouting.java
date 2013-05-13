@@ -20,10 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.npcs.waypoints;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_warfare.common.config.Config;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
@@ -144,8 +147,43 @@ public void setFilterStack(int index, ItemStack stack)
     }
   }
 
-
-
+public boolean hasWork(World world, NpcBase npc)
+  {
+  TileEntity te = getTileEntity(world);
+  IInventory target = null;
+  if(te instanceof IInventory)
+    {
+    target = (IInventory)te;
+    }
+  if(target==null)
+    {
+    return false;
+    }
+  ItemStack fromSlot;    
+  if(getDeliver())
+    {
+    for(int k = 0; k < npc.inventory.getSizeInventory(); k++)
+      {
+      fromSlot = npc.inventory.getStackInSlot(k);
+      if(doesMatchFilter(fromSlot) && InventoryTools.canHoldItem(target, fromSlot, fromSlot.stackSize, 0, target.getSizeInventory()-1))
+        {       
+        return true;
+        }
+      }
+    }
+  else
+    {      
+    for(int i = 0; i < target.getSizeInventory(); i++)
+      {
+      fromSlot = target.getStackInSlot(i);
+      if(doesMatchFilter(fromSlot) && InventoryTools.canHoldItem(npc.inventory, fromSlot, fromSlot.stackSize, 0, npc.inventory.getSizeInventory()-1))
+        {      
+        return true;
+        }
+      }
+    }    
+  return false;
+  }
 
 @Override
 public NBTTagCompound getNBTTag()

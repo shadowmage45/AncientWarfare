@@ -149,20 +149,16 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
 @Override
 public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
   {
-  Config.logDebug("on craft gui closed...");
   super.onCraftGuiClosed(par1EntityPlayer);
   if(!npc.worldObj.isRemote)
     {
     npc.wayNav.clearCourierPoints();
     ItemStack stack = npc.specInventory.getStackInSlot(0);
-    Config.logDebug("stack in spec slot: "+stack);
     if(stack!=null && stack.itemID == ItemLoader.courierRouteSlip.itemID)
       {
-      Config.logDebug("adding courier info to npc");
       CourierRoutingInfo info = new CourierRoutingInfo(stack);
       for(int i = 0 ; i < info.getRouteSize(); i++)
         {
-        Config.logDebug("adding courier waypoint to npc");
         npc.wayNav.addCourierPoint(info.getPoint(i));
         }    
       }
