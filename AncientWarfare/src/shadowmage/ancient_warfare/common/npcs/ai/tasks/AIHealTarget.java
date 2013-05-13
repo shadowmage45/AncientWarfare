@@ -50,7 +50,7 @@ public void onTick()
       EntityLiving liv = (EntityLiving)ent;
       if(liv.getHealth()< liv.getMaxHealth())
         {
-        liv.heal(npc.rank + 2);
+        liv.heal(npc.getAmountHealed());
         npc.setActionTicksToMax();
         }
       else

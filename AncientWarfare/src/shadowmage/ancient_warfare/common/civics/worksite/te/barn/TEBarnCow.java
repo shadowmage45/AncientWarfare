@@ -110,8 +110,7 @@ protected void doWork(NpcBase npc, WorkPoint p)
   if(p.work==TargetType.BARN_MILK && p.target!=null && inventory.containsAtLeast(bucketFilter, 1))
     {
     inventory.tryRemoveItems(bucketFilter, 1);
-    ItemStack stack = npc.inventory.tryMergeItem(new ItemStack(Item.bucketMilk));
-    stack = inventory.tryMergeItem(stack);
+    ItemStack stack = inventory.tryMergeItem(new ItemStack(Item.bucketMilk));
     stack = overflow.tryMergeItem(stack);
     InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
     }

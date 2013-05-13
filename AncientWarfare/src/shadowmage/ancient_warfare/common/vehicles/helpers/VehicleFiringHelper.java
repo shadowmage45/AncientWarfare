@@ -280,7 +280,7 @@ public float getAccuracyAdjusted()
   if(vehicle.riddenByEntity!=null && vehicle.riddenByEntity instanceof NpcBase)
     {
     NpcBase npc = (NpcBase)vehicle.riddenByEntity;
-    return accuracy *= npc.npcType.getAccuracy(npc.rank);
+    return accuracy *= npc.getAccuracy();
     }  
   return accuracy;
   }

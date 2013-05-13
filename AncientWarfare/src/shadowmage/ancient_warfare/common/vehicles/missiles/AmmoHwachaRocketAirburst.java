@@ -55,7 +55,7 @@ public void onImpactWorld(World world, float x, float y, float z, MissileBase mi
   {
   if(!world.isRemote)
     {
-    this.spawnAirBurst(world, x, y, z, 10, Ammo.ammoBallShot, 4);
+    this.spawnAirBurst(world, x, y, z, 10, Ammo.ammoBallShot, 4, missile.shooterLiving);
     missile.setDead();
     }
   }
@@ -65,7 +65,7 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z, M
   {
   if(!world.isRemote)
     {
-    this.spawnAirBurst(world, x, y, z, 10, Ammo.ammoBallShot, 4);
+    this.spawnAirBurst(world, x, y, z, 10, Ammo.ammoBallShot, 4, missile.shooterLiving);
     missile.setDead();
     }
   }

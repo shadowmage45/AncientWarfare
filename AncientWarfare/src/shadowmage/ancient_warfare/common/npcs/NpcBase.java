@@ -147,24 +147,19 @@ public NpcBase(World par1World)
  */
 public void addConfigTargets()
   {
-  String[] targets = null;//Config.getConfig().get("npc_aggro_settings", "footsoldier", new String[]{}, "Forced targets for footsoldiers").getStringList();
+  String[] targets = null;
   String targetType = null;
   if(npcType.isCombatUnit() && !npcType.getConfigName().equals(""))
     {
-//    Config.logDebug("adding targets to combat unit");
     targets = Config.getConfig().get("npc_aggro_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
-//    Config.logDebug("targetsToString: "+targets);
     if(targets!=null && targets.length>0)
       {
-//      Config.logDebug("found: "+targets.length+ " targets from config");
       Class clz;
       for(String name : targets)
         {
-//        Config.logDebug("attempting to get class for name: "+name);
         clz = (Class) EntityList.stringToClassMapping.get(name);
         if(clz!=null)
           {
-//          Config.logDebug("adding "+clz+" to targets");
           targetHelper.addTargetEntry(new AITargetEntry(this, TargetType.ATTACK, clz, 0, true, Config.npcAISearchRange));
           }
         }
@@ -172,10 +167,56 @@ public void addConfigTargets()
     }
   }
 
+public float getAccuracy()
+  {
+  float acc = this.npcType.getAccuracy(rank);
+  if(this.wayNav.getCommander()!=null && this.getDistanceToEntity(wayNav.getCommander())<20.d)
+    {
+    /**
+     * should add between 0.01f and 0.04f accuracy to a soldier
+     */
+    acc += (1 + wayNav.getCommander().rank) * 0.01f;
+    if(acc>1.f)
+      {
+      acc = 1.f;
+      }
+    } 
+  return acc;
+  }
+
+public int getAttackDamage()
+  {
+  int dmg = this.npcType.getAttackDamage(rank);
+  if(this.wayNav.getCommander()!=null && this.getDistanceToEntity(wayNav.getCommander())<20.d)
+    {
+    dmg += 1 + wayNav.getCommander().rank;
+    }  
+  return dmg;
+  }
+
+public int getAmountRepaired()
+  {
+  int repair = 4 + (rank*2);
+  if(this.wayNav.getCommander()!=null && this.getDistanceToEntity(wayNav.getCommander())<20.d)
+    {
+    repair += (1+wayNav.getCommander().rank) * 2;
+    }  
+  return repair;
+  }
+
+public int getAmountHealed()
+  {
+  int heal =  2 + rank;
+  if(this.wayNav.getCommander()!=null && this.getDistanceToEntity(wayNav.getCommander())<20.d)
+    {
+    heal += (1+wayNav.getCommander().rank);
+    } 
+  return heal;
+  }
+
 @Override
 public ItemStack getPickedResult(MovingObjectPosition target)
-  {
-  
+  {  
   return NpcRegistry.getStackFor(npcType, rank);
   }
 
@@ -382,12 +423,7 @@ public void dismountVehicle()
 @Override
 public boolean attackEntityAsMob(Entity ent)
   {
-  int commanderBonus = 0;
-  if(wayNav.getCommander()!=null)
-    {
-    commanderBonus = 1 + wayNav.getCommander().rank;
-    }
-  ent.attackEntityFrom(DamageSource.causeMobDamage(this), this.npcType.getAttackDamage(rank) + commanderBonus);
+  ent.attackEntityFrom(DamageSource.causeMobDamage(this), this.getAttackDamage());
   return false;
   }
 
@@ -627,7 +663,6 @@ protected void handleHealthUpdate()
     int newHealth = this.dataWatcher.getWatchableObjectInt(31);
     if(newHealth!=this.health)
       {
-//      Config.logDebug("setting client health from watched data");
       this.setEntityHealth(newHealth);
       }    
     }
@@ -636,7 +671,6 @@ protected void handleHealthUpdate()
     int watchedHealth = this.dataWatcher.getWatchableObjectInt(31);
     if(watchedHealth!=this.health)
       {
-//      Config.logDebug("updating watched health");
       this.dataWatcher.updateObject(31, Integer.valueOf(health));
       }
     }

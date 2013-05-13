@@ -99,6 +99,7 @@ public MissileBase getMissile(IAmmoType ammo, float x, float y, float z, float y
       }
     missile.setMissileParams2(ammo, x, y, z, yaw, pitch, velocity);
     missile.setLaunchingEntity(npc);
+    missile.setShooter(npc);
     return missile;
     }
   return null;
@@ -116,7 +117,7 @@ protected void doBowAttack(Entity target)
   float ty = (float) (target.posY+target.height*0.5f - y);
   float tz = (float) (target.posZ - z);
   float angle = Trig.getLaunchAngleToHit(tx, ty, tz, 20.f).value();
-  float accuracy = npc.npcType.getAccuracy(npc.rank);
+  float accuracy = npc.getAccuracy();
   IAmmoType ammo = npc.npcType.getAmmoType(npc.rank);
   if(ammo!=null)
     {

@@ -61,7 +61,7 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z, M
   {
   if(!world.isRemote)
     {
-    ent.attackEntityFrom(DamageType.explosiveMissile, this.getEntityDamage());    
+    ent.attackEntityFrom(DamageType.causeEntityMissileDamage(missile.shooterLiving, false, true), this.getEntityDamage()); 
     ent.setFire(3);
     createExplosion(world, missile, x, y, z, 0.8f);
     }

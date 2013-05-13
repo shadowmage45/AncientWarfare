@@ -80,7 +80,7 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z, M
   {  
   if(!world.isRemote)
     {
-    ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());
+    ent.attackEntityFrom(DamageType.causeEntityMissileDamage(missile.shooterLiving, false, false), this.getEntityDamage());    
     }
   }
 

@@ -602,3 +602,63 @@
 * add quarry-pattern mine--works
 * put quaded texture rendering someplace central...--moved
 * bounds size testing on placement is one off (display is correct, test is wrong)--fixed  
+/********** 05-08-13 **********/
+* create officer type--works
+* inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)--if npc has commander, it will add aggro to commanders target
+* create AI objective Stay Near Commander--works
+* create medic NPC type--works
+* create heal targets task and objective--works
+* create vehicle repair target entry--works
+* create vehicle repair ai task and objective--works 
+* create combat engineer npc type to repair vehicles--works
+* one more attempt at turret rotation yaw bounding correction--didn't work...
+* add advanced configurable aggro options (load to config at world load/sometime after all load/init stages are done)--see below..
+* move all default targets over to advanced target options (players can edit default attack targets)--NFC if it loads
+* melee units need to NOT target creepers--works
+* fix npc canSee check for vehicles -- adj vehicle eyeHeight--works
+* vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation--works, finally fixed...
+* fix NPCs jittery motion on vehicles (hack, set motion to 0 during update -- need investigation of actual cause/solution)
+/********** 05-09-13 **********/ 
+* add npc creative mode id-picked -- not working
+* add vehicle creative mode id-picked  -- borked
+* add farmer texture -- works
+* add lumberjack texture -- works
+* change NPC nameplate name over to level name (easier to tell ranks apart for non-combat units) -- works
+* adjust entity-item vehicle item rendering +1Y (should fix bobbing in-ground), probably needs adjusted
+* add miner texture
+* add objective and task icons for new AI (commander, repair, heal)
+* clean up civic-block id-picked and drop on harvest (should return civic items)
+* prep tex work on civic blocks
+* add log block meta rotations
+* expand meta-rotation table size to hold additional entries (logs)(now size 8)
+* update test release notes for next release
+* un-fubar icon code in civic block, and fix an actual bug (was using blockNum*4 instead of *16), and a third bug (using i (raw meta/index) instead of civNum...)
+* tree farm testing
+* fix sheep farm wool harvesting
+* add chicken farm egg pickup
+* adjust vehicle entity-item rendering code down to +0.5fY
+* add milking ability to cow farm -- just input buckets
+/********** 05-10-13 **********/
+* can now disable NPC wandering by assigning any npc a patrol point.--works
+* adjust stay-near-home AI priority setting so it should trigger more logically
+* adjust seek shelter objective to clear path when stopping.
+* mooshroom farm (breed/cull/soup)
+* add Town-Hall block broadcasting of upkeep point
+* move vehicle ammo select button to elements folder
+* attempt to clean up civic block id-picked/dropped
+* actually fix broadcasting of upkeep site from town-hall
+* fix a fubar in navigator resulting in constant path recalc
+* test mooshroom farm
+* fix civic block ID picked for real...
+* fix npc id picked
+* remove 'name' field from npc spawner items, redundant--info is available from npc type
+* disable courier post blocks (for now)
+/********** 05-11-13 **********/
+* add guiFakeSlot
+* prep work on courier routing slip item
+/********** 05-12-13 **********/
+* fix npc/vehicle pathfinding/navigation. enable hax by NPCs (noClip when need to)
+* update a ton of gui element/stuff to accomodate new elements (resetting of matrix/attrib/boundTex)
+* get routing slip item mostly working
+* get basic courier functionality working
+* first pass at changing civics to use only their internal inventory

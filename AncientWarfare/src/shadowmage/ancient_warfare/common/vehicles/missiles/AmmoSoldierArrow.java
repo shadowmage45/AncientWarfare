@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.rcon.IServer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -73,7 +74,7 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z, M
   {
   if(!world.isRemote)
     {
-    ent.attackEntityFrom(DamageType.genericMissile, this.getEntityDamage());  
+    ent.attackEntityFrom(DamageType.causeEntityMissileDamage(missile.shooterLiving, isFlaming, false), this.getEntityDamage());
     }
   }
 }

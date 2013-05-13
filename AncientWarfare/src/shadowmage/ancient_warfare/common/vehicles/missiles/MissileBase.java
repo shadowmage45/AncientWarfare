@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -49,6 +50,8 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData
  * effects of impact, and model/render instance used.
  */
 public IAmmoType ammoType = Ammo.ammoArrow;
+public Entity launcher = null;
+public Entity shooterLiving;
 IMissileHitCallback shooter = null;
 public int missileType = Ammo.ammoArrow.ammoType;
 int rocketBurnTime = 0;
@@ -135,7 +138,11 @@ public void setMissileParams2(IAmmoType ammo, float x, float y, float z, float y
   this.setMissileParams(ammo, x, y, z, vX, vY, vZ);
   }
 
-public Entity launcher = null;
+public void setShooter(Entity shooter)
+  {
+  this.shooterLiving = shooter;
+  }
+
 public void setLaunchingEntity(Entity ent)
   {
   this.launcher = ent;
@@ -297,6 +304,13 @@ public void onMovementTick()
           if(this.launcher!=null)
             {
             if(curEnt==this.launcher || curEnt == this.launcher.riddenByEntity)
+              {
+              continue;
+              }
+            }
+          if(this.shooterLiving!=null)
+            {
+            if(curEnt==this.shooterLiving)
               {
               continue;
               }

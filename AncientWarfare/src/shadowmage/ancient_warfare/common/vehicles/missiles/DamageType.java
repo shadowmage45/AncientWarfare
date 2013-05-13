@@ -20,15 +20,21 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 
 public class DamageType extends DamageSource
 {
+
+Entity ent;
 
 public static DamageType fireMissile = (DamageType) new DamageType("AWFireMissile").setFireDamage().setProjectile();
 public static DamageType explosiveMissile = (DamageType) new DamageType("AWExplMissile").setFireDamage().setProjectile();
 public static DamageType genericMissile = (DamageType) new DamageType("AWGenMissile").setProjectile();
 public static DamageType piercingMissile = (DamageType) new DamageType("AWPierceMissile").setDamageBypassesArmor().setProjectile();
+
 
 /**
  * @param par1Str
@@ -37,4 +43,33 @@ protected DamageType(String par1Str)
   {
   super(par1Str);
   }
+
+protected DamageType(String type, Entity source)
+  {
+  super(type);
+  this.ent = source;
+  }
+
+@Override
+public Entity getEntity()
+  {
+  return ent;
+  }
+
+public static DamageSource causeEntityMissileDamage(Entity attacker , boolean fire, boolean expl)
+  {
+  DamageType t = new DamageType("AWMissile", attacker);
+  t.setProjectile();
+  if(fire)
+    {    
+    t.setFireDamage();
+    }
+  if(expl)
+    {
+    t.setExplosion();
+    }
+  return t;
+  }
+
+
 }

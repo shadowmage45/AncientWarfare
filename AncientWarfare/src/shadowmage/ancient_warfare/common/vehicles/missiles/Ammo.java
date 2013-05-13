@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
@@ -359,7 +360,7 @@ protected void createExplosion(World world, MissileBase missile, float x, float 
   Explosion e = world.newExplosion(missile, x, y, z, power, fires, destroyBlocks);
   }
 
-protected void spawnGroundBurst(World world, float x, float y, float z, float maxVelocity, IAmmoType type, int count, float minPitch, int sideHit)
+protected void spawnGroundBurst(World world, float x, float y, float z, float maxVelocity, IAmmoType type, int count, float minPitch, int sideHit, Entity shooter)
   {
   if(type!=null && !world.isRemote)
     {
@@ -403,7 +404,7 @@ protected void spawnGroundBurst(World world, float x, float y, float z, float ma
         randVelocity = randVelocity < 0.5f ? 0.5f : randVelocity;
         velocity = maxVelocity*randVelocity;
         }      
-      missile = getMissileByType(type, world, x, y, z, yaw, pitch, velocity);
+      missile = getMissileByType(type, world, x, y, z, yaw, pitch, velocity, shooter);
       if(missile!=null)
         {
         world.spawnEntityInWorld(missile);
@@ -459,18 +460,19 @@ public Icon getDisplayIcon()
   return null;
   }
 
-protected void spawnAirBurst(World world, float x, float y, float z, float maxVelocity, IAmmoType type, int count)
+protected void spawnAirBurst(World world, float x, float y, float z, float maxVelocity, IAmmoType type, int count, Entity shooter)
   {
-  spawnGroundBurst(world, x, y, z, maxVelocity, type, count, -90, 0);
+  spawnGroundBurst(world, x, y, z, maxVelocity, type, count, -90, 0, shooter);
   }
 
-public MissileBase getMissileByType(IAmmoType type, World world, float x, float y, float z, float yaw, float pitch, float velocity) 
+public MissileBase getMissileByType(IAmmoType type, World world, float x, float y, float z, float yaw, float pitch, float velocity, Entity shooter) 
   {
   if(type==null)
     {
     return null;
     }
   MissileBase missile = new MissileBase(world);
+  missile.setShooter(shooter);
   missile.setMissileParams2(type, x, y, z, yaw, pitch, velocity);
   return missile;
   }

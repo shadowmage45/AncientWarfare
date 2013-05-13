@@ -1,8 +1,8 @@
 TONIGHT
-* inventory size validation (make sure there is room to input new items into civics when validating work points)
 * test netherstalk farm
-* move civics into placing all items into their own inventory
 * remove inventory from most/all npcs (maybe combat npcs?)
+* test new civic/inventory interaction
+* civic block textures...all over the place
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -17,15 +17,9 @@ VEHICLES
 * clientMovement--only send packets if moving/ everyX seconds
 
 SOLDIERS
-* more fully implement commander bonuses
-    archer -- accuracy, armor increase
-    siege-engineer -- accuracy, armor increase
-    footsoldier -- damage increase, armor increase
-    combat-engineer-- ??, armor increase
-    medic -- ??, armor increase
+* siege engineer and archer need accuracy set in levels
 * investigate revenge-target designation (when something attacks a soldier)(seems to work, perhaps needs aggro set to higher)
-* investigate player-attack target setting (when a player with soldiers following attacks an entity) 
-* need to set npc accuracy by rank for archer/siege engineer   
+* investigate player-attack target setting (when a player with soldiers following attacks an entity)
 
 NPCS
 * work out indiv costs for upkeep -- add specialized items where applicable
@@ -33,6 +27,7 @@ NPCS
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
 * fisherman (works fishery and squid farms)   
+* texture for courier, fisherman
         
 ITEM ROUTING
 * clean up ai task
@@ -51,7 +46,7 @@ GUI FRAMEWORK
 
 PATHFINDING
 * better handling of isWalkable -- in need of minor attention for other (mod) blocks
-* need to check if a block has blocking entities in it during iswalkable check
+* need to check if a block has blocking entities in it during iswalkable check ( or just enable no collide)
 * vehicle navigator needs to enable gravity even with no-clip, if block under main body is air, fall...
 
 CIVICS
@@ -61,7 +56,6 @@ CIVICS
 * need a clearer way of designating where bounds on a civic SHOULD be.  videos/screenshots?
 * fishery (catches fish randomly based on number of water blocks present in area)
 * squid farm (harvests any squid that spawn in water in its bounds / randomly spawns squid to harvest?)
-* move over to using block-based items (ItemBlock...)(probably just need custom renderer...pull block and render that using renderBlocks instance in custom render)
 * warehouse civic type
     available in a few 'sizes'
     occasionally rescans chests inside adds them to handling list
@@ -70,11 +64,7 @@ CIVICS
     couriers may deposit goods, which will go into the closest available inventory
 
 WORKSITES
-* don't give product to workers that don't have room
-* set hasWork==false when inventory < 1 free spot
-* need clear seperate tick dividers for full rescan and only validatePoints
-* change over to store all harvested materials in work block, use couriers to remove goods
-* implement internal buffer 'overflow' slots for when something goes wrong (will dump to main slots as they become empty)
+* need clear separate tick dividers for full rescan and only validatePoints
         
 FARMS
 * jungle tree farm needs to check for cocoa blocks?
@@ -152,7 +142,8 @@ OPTIONAL
 * grenades ?
 * land-mines ?
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
-* advanced soldier types 
+* advanced (exotic) soldier types 
+* advanced workers
  
 MINE
  
@@ -183,78 +174,21 @@ TWEAKS/OPTIMIZATION
 
 ********************* DONE STUFF *************************  
 
-/********** 05-08-13 **********/
-* create officer type--works
-* inter-soldier comms (more commanders yelling orders to soldiers)(broadcast handler in place)--if npc has commander, it will add aggro to commanders target
-* create AI objective Stay Near Commander--works
-* create medic NPC type--works
-* create heal targets task and objective--works
-* create vehicle repair target entry--works
-* create vehicle repair ai task and objective--works 
-* create combat engineer npc type to repair vehicles--works
-* one more attempt at turret rotation yaw bounding correction--didn't work...
-* add advanced configurable aggro options (load to config at world load/sometime after all load/init stages are done)--see below..
-* move all default targets over to advanced target options (players can edit default attack targets)--NFC if it loads
-* melee units need to NOT target creepers--works
-* fix npc canSee check for vehicles -- adj vehicle eyeHeight--works
-* vehicle turret yaw on some vehicles (ballista) needs rebounded when locked to vehicle rotation--works, finally fixed...
-* fix NPCs jittery motion on vehicles (hack, set motion to 0 during update -- need investigation of actual cause/solution)
-
-/********** 05-09-13 **********/ 
-* add npc creative mode id-picked -- not working
-* add vehicle creative mode id-picked  -- borked
-* add farmer texture -- works
-* add lumberjack texture -- works
-* change NPC nameplate name over to level name (easier to tell ranks apart for non-combat units) -- works
-* adjust entity-item vehicle item rendering +1Y (should fix bobbing in-ground), probably needs adjusted
-
-* add miner texture
-* add objective and task icons for new AI (commander, repair, heal)
-* clean up civic-block id-picked and drop on harvest (should return civic items)
-* prep tex work on civic blocks
-
-* add log block meta rotations
-* expand meta-rotation table size to hold additional entries (logs)(now size 8)
-* update test release notes for next release
-* un-fubar icon code in civic block, and fix an actual bug (was using blockNum*4 instead of *16), and a third bug (using i (raw meta/index) instead of civNum...)
-* tree farm testing
-* fix sheep farm wool harvesting
-* add chicken farm egg pickup
-* adjust vehicle entity-item rendering code down to +0.5fY
-* add milking ability to cow farm -- just input buckets
-
-/********** 05-10-13 **********/
-* can now disable NPC wandering by assigning any npc a patrol point.--works
-* adjust stay-near-home AI priority setting so it should trigger more logically
-* adjust seek shelter objective to clear path when stopping.
-* mooshroom farm (breed/cull/soup)
-* add Town-Hall block broadcasting of upkeep point
-
-* move vehicle ammo select button to elements folder
-
-* attempt to clean up civic block id-picked/dropped
-
-* actually fix broadcasting of upkeep site from town-hall
-* fix a fubar in navigator resulting in constant path recalc
-* test mooshroom farm
-* fix civic block ID picked for real...
-* fix npc id picked
-* remove 'name' field from npc spawner items, redundant--info is available from npc type
-
-* disable courier post blocks (for now)
-
-/********** 05-11-13 **********/
-* add guiFakeSlot
-* prep work on courier routing slip item
-
-/********** 05-12-13 **********/
-* fix npc/vehicle pathfinding/navigation. enable hax by NPCs (noClip when need to)
-* update a ton of gui element/stuff to accomodate new elements (resetting of matrix/attrib/boundTex)
-* get routing slip item mostly working
-* get basic courier functionality working
-* first pass at changing civics to use only their internal inventory
-
 /********** 05-13-13 **********/
+* don't give product to workers that don't have room
+* set hasWork==false when inventory < 1 free spot
+* change over to store all harvested materials in work block, use couriers to remove goods
+* implement internal buffer 'overflow' slots for when something goes wrong (will dump to main slots as they become empty)
+* more fully implement commander bonuses
+    archer -- accuracy, armor increase
+    siege-engineer -- accuracy, armor increase
+    footsoldier -- damage increase, armor increase
+    combat-engineer-- ??, armor increase
+    medic -- ??, armor increase
+* change missiles over to include a ref to living shooter (for revenge from targets)
+* change civic item rendering over to render the civic block instead of the item (hack)
+    
+    
 /********** 05-14-13 **********/
 /********** 05-15-13 **********/
 /********** 05-16-13 **********/

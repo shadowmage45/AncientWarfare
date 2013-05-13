@@ -137,10 +137,6 @@ public float wheelRotationPrev = 0.f;
  * the team number this vehicle was assigned to
  */
 public int teamNum = 0;
-/**
- * used to clear input if the vehicle WAS ridden but isn't any more
- */
-private boolean isRidden = false;
 
 /**
  * used to determine if it should allow interaction (setup time on vehicle placement)
@@ -642,11 +638,10 @@ public void onUpdateClient()
  */
 public void onUpdateServer()
   {
-  if(this.isRidden && this.riddenByEntity==null)
+  if(this.riddenByEntity==null)
     {
     this.moveHelper.clearInputFromDismount();
-    }
-  this.isRidden = this.riddenByEntity != null;
+    } 
   }
 
 public void updateTurretPitch()
@@ -1058,7 +1053,6 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.upgradeHelper.updateUpgrades(); 
   this.ammoHelper.updateAmmoCounts();
   this.teamNum = tag.getInteger("team");
-  this.isRidden = tag.getBoolean("ridden");
   this.isSettingUp = tag.getBoolean("setup");
   if(this.isSettingUp)
     {
@@ -1086,7 +1080,6 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setFloat("tr", localTurretRotation);
   tag.setFloat("trd", localTurretDestRot);
   tag.setInteger("team", this.teamNum);
-  tag.setBoolean("ridden", this.isRidden);
   tag.setBoolean("setup", this.isSettingUp);
   if(this.isSettingUp)
     {
