@@ -33,12 +33,12 @@ import shadowmage.ancient_warfare.common.utils.InventoryTools;
 public class TEFishery extends TEWorkSite
 {
 
-ItemStack fishFilter = new ItemStack(Item.fishRaw);
+ItemStack fishFilter;
 int waterBlocks = 0;
 
 public TEFishery()
   {
-  
+  ItemStack fishFilter = new ItemStack(Item.fishRaw);
   }
 
 @Override
@@ -73,13 +73,18 @@ protected void doWork(NpcBase npc, WorkPoint p)
   {
   if(p.work==TargetType.FISH_CATCH && inventory.canHoldItem(fishFilter, 1))
     {
-    /**
-     * 0.5% chance to catch a fish per water block in the area
-     * 0.1% chance to catch a squid (ink) per water block in the area
-     */
-    ItemStack stack = this.inventory.tryMergeItem(fishFilter.copy());
-    stack = this.overflow.tryMergeItem(stack);
-    InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
+    float waterPercent = (float)waterBlocks * 0.001953125f; // essentially /512
+    waterPercent *= 0.5f;//cut percent in half
+    Config.logDebug("fish catch percent: "+waterPercent);
+    float check = rng.nextFloat();
+    Config.logDebug("check roll: "+check);
+    if(check<=waterPercent)      
+      {      
+      Config.logDebug("check was within bounds, harvesting fish");
+      ItemStack stack = this.inventory.tryMergeItem(fishFilter.copy());
+      stack = this.overflow.tryMergeItem(stack);
+      InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
+      }
     }
   }
 

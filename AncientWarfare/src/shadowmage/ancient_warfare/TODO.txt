@@ -1,6 +1,6 @@
 TONIGHT
-* fish farms need to catch by percentage
 * test commander bonuses
+* test new game-data handling -- might need cleanup
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -10,30 +10,24 @@ THIS(next) WEEKEND
 
 GENERAL
 
+SCANNER
+* inventory rules/scanning ability
+
+STRUCTURE BUILDING
+* inventory rules/building ability
+
+TEMPLATES
+* inventory rules storage
+
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
 * vehicle navigator needs to enable gravity even with no-clip, if block under main body is air, fall...
-
-SOLDIERS
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
     use command baton, check if player has food in inventory && withdraw upkeep ??
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
-        
-ITEM ROUTING
-* clean up ai objective/task
-
-WAREHOUSE ??
-* scan chests in area.  Keep inventory count/avail slot count.
-* has two inventory areas, deposit and request
-* has 'request' button to pull items from managed inventory into local inventory
-* items will be taken from 'deposit' slot and moved into managed inventory at a pre-set rate, if room exists
-* npcs should be able to access as one seamless inventory, for all of the chests it manages. probably want to make a special
-    wrapper and not use IInventory
-        
-GUI FRAMEWORK
 
 PATHFINDING
 * better handling of isWalkable -- in need of minor attention for other (mod) blocks
@@ -45,20 +39,15 @@ CIVICS
 * need inventory status bar
 * need work status bar
 * need a clearer way of designating where bounds on a civic SHOULD be.  videos/screenshots?
-* warehouse civic type
-    available in a few 'sizes'
-    occasionally rescans chests inside adds them to handling list
-        (perhaps get the tile entity list from world/chunk, faster than scanning blocks)
-    broadcasts 'deposit site' to npcs
-    couriers may deposit goods, which will go into the closest available inventory
 * need to scan when attempting to place, make sure no bounds overlap with any existing civics
-* fish farm is OP...I imagine squid farm is as well
 
-WORKSITES
-* need clear separate tick dividers for full rescan and only validatePoints
-        
-FARMS
-* jungle tree farm needs 2x2 planting ability (adv farm?)
+WAREHOUSE 
+* scan chests in area.  Keep inventory count/avail slot count.
+* has two inventory areas, deposit and request
+* has 'request' button to pull items from managed inventory into local inventory
+* items will be taken from 'deposit' slot and moved into managed inventory at a pre-set rate, if room exists
+* npcs should be able to access as one seamless inventory, for all of the chests it manages. probably want to make a special
+    wrapper and not use IInventory
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -133,16 +122,20 @@ OPTIONAL
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 * advanced (exotic) soldier types 
 * advanced workers
+
+ITEM ROUTING
+
+WORKSITES
+        
+FARMS
+
+SOLDIERS
  
 MINE
  
 TEAM CONTROL GUI
  
-TEMPLATES
-
-SCANNER
-
-STRUCTURE BUILDING
+GUI FRAMEWORK
 
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
@@ -200,13 +193,14 @@ TWEAKS/OPTIMIZATION
 /********** 05-14-13 **********/
 * add out-of-bounds team numbers for non-player placed NPCs --team 16 & 17 friendly/hostile
 * move over to using vanilla game-data storage for player/team/game datas
-
 * method to disable upkeep for 'NPC' villages -- use team 16/17 for npc only teams
 * new combat objective -- guard entity.  follow/protect entity.  persisitent waypoint.
 * validate TE on first click on routing slip
 * remove unused civic courier post code
 * update most ai to check if target position is loaded, skip if not loaded
 * update most civic work sites to not scan unless entire scanable area is loaded
+
+* fish farms need to catch by percentage
 
 
 /********** 05-15-13 **********/
