@@ -46,6 +46,7 @@ public static final int commander_follow=13;
 public static final int heal=14;
 public static final int repair=15;
 public static final int courier=16;
+public static final int guard = 17;
 
 protected NpcBase npc;
 protected int maxPriority;

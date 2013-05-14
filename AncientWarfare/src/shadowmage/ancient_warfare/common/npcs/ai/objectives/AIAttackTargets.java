@@ -110,7 +110,7 @@ protected boolean checkIfTargetDead()
         return true;
         }
       }
-    else if(npc.worldObj.getBlockId(target.floorX(), target.floorY(), target.floorZ())!=0)
+    else if(target.isTargetLoaded(npc.worldObj) && npc.worldObj.getBlockId(target.floorX(), target.floorY(), target.floorZ())!=0)
       {
       return false;
       }

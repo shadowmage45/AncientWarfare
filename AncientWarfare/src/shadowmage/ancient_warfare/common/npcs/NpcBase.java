@@ -287,6 +287,12 @@ public void handleBatonCommand(NpcCommand cmd, WayPoint p)
   break;
   case CLEAR_MOUNT:
   wayNav.setMountTarget(null);
+  break;  
+  case GUARD:
+  wayNav.setGuardTarget(p);
+  break;  
+  case CLEAR_GUARD:
+  wayNav.setGuardTarget(null);
   break;
   }
   }

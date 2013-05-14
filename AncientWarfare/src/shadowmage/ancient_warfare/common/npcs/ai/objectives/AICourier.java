@@ -60,7 +60,7 @@ public void updatePriority()
     for(int i = 0; i < npc.wayNav.getCourierSize(); i++)
       {
       point = npc.wayNav.getCourierPointAt(i);
-      if(point!=null && point.hasWork(npc.worldObj, npc))
+      if(point!=null && point.isTargetLoaded(npc.worldObj) && point.hasWork(npc.worldObj, npc))
         {
         this.currentPriority = this.maxPriority;
         break;
@@ -73,6 +73,10 @@ protected boolean validatePoint(WayPointItemRouting p)
   {
   if(p!=null)
     {
+    if(!p.isTargetLoaded(npc.worldObj))
+      {
+      return false;
+      }
     if(p.getTileEntity(npc.worldObj) instanceof IInventory)
       {
       return true;
@@ -83,15 +87,16 @@ protected boolean validatePoint(WayPointItemRouting p)
 
 protected boolean findNextPoint()
   {
-  WayPointItemRouting point = npc.wayNav.getActiveCourierPoint();
+  WayPointItemRouting point = npc.wayNav.getActiveCourierPoint(); 
+  npc.setTargetAW(null);
   for(int i = 0; i < npc.wayNav.getCourierSize(); i++)
     {
     point = npc.wayNav.getNextCourierPoint();
-    if(point.hasWork(npc.worldObj, npc))
+    if(point.isTargetLoaded(npc.worldObj) && point.hasWork(npc.worldObj, npc))
       {
       npc.setTargetAW(point);      
       return true;
-      }
+      }    
     }
   return false;
   }
@@ -133,11 +138,14 @@ public void onRunningTick()
 public void onObjectiveStart()
   {
   WayPointItemRouting point = npc.wayNav.getActiveCourierPoint();
-  if(point==null || !point.hasWork(npc.worldObj, npc))
+  if(point==null || !point.isTargetLoaded(npc.worldObj) || !point.hasWork(npc.worldObj, npc))
     {
     findNextPoint();
     }
-  npc.setTargetAW(npc.wayNav.getActiveCourierPoint());
+  else
+    {
+    npc.setTargetAW(npc.wayNav.getActiveCourierPoint());
+    }
   }
 
 @Override

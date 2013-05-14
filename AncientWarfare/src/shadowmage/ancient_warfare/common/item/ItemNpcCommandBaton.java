@@ -115,6 +115,10 @@ public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity en
         this.handleNpcCommand(player, stack, settings, hit);
         }
       }
+    else if(settings.command == NpcCommand.GUARD)
+      {
+      this.handleNpcCommand(player, stack, settings, hit);
+      }
     return true;
     }  
   return super.onLeftClickEntity(stack, player, entity);

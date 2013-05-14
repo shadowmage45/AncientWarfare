@@ -42,7 +42,9 @@ CLEAR_DEPOSIT ("Clear Depository", TargetType.NONE, 0),
 UPKEEP("Set Upkeep Target", TargetType.UPKEEP, 0),
 CLEAR_UPKEEP("Clear Upkeep Target", TargetType.NONE, 0),
 MOUNT("Set Vehicle to Pilot", TargetType.MOUNT, 0),
-CLEAR_MOUNT("Clear Vehicle Target", TargetType.NONE, 0);
+CLEAR_MOUNT("Clear Vehicle Target", TargetType.NONE, 0),
+GUARD("Set Guard Target", TargetType.PATROL,  0),
+CLEAR_GUARD("Clear Guard Target", TargetType.NONE, 0);
 //due to using ordinal to store command, any new commands must be added to the END of the list
 //also, don't EVER change ordering, or it will have some undesired effects in an already started game
 

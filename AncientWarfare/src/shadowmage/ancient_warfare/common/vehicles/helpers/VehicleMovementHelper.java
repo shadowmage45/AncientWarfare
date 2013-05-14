@@ -361,13 +361,12 @@ public void onMovementTick()
   if(strafeMotion !=0 || forwardMotion !=0 || vehicle.motionY !=0)
     { 
     this.vehicle.noClip = false;
-    /**
-     * let soldiers cheat when riding, adjust motion x,z to move towards the nearest clear block
-     */
     if(vehicle.isCollidedHorizontally)
       {
+      
+      
 //      Config.logDebug("collided");
-      //vehicle.getWorldAccess().isWalkable(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY), MathHelper.floor_double(vehicle.posZ))
+        
 //      float velocity = MathHelper.sqrt_double(vehicle.motionX*vehicle.motionX + vehicle.motionZ*vehicle.motionZ);      
       if(vehicle.nav.currentTarget!=null && vehicle.getForwardInput()==1 && vehicle.getStrafeInput()==0)
         {
@@ -375,7 +374,18 @@ public void onMovementTick()
         if(vehicle.riddenByEntity instanceof NpcBase)
           {
           this.vehicle.noClip = true;
-          vehicle.motionY = 0;        
+          vehicle.motionY = 0;       
+//          int x = MathHelper.floor_double(vehicle.posX);
+//          int y = MathHelper.floor_double(vehicle.posY);
+//          int z = MathHelper.floor_double(vehicle.posZ);
+//          if(vehicle.worldObj.getBlockId(x, y, z)==0)//air block, drop
+//            {
+//            vehicle.motionY -= (9.81f*0.05f*0.05f);
+//            }
+//          else if(!vehicle.getWorldAccess().isWalkable(x, y, z))//solid block, push up/out
+//            {
+//            vehicle.motionY += (9.81f*0.05f*0.05f);
+//            }
           }
         }
       }

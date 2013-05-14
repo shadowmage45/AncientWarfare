@@ -66,7 +66,7 @@ public void updatePriority()
   targetInventory = null;
   WayPoint p = npc.wayNav.getDepositSite();
   boolean deposit = true;
-  if(p==null)
+  if(p==null || !p.isTargetLoaded(npc.worldObj))
     {
     deposit = false;
     } 

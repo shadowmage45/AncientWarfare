@@ -38,5 +38,5 @@ float posZ();
 
 Entity getEntity(World world);
 TargetType getTargetType();
-
+public boolean isTargetLoaded(World world);
 }

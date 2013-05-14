@@ -87,7 +87,10 @@ public void doRender(Entity var1, double x, double y, double z, float yaw, float
     {
     GL11.glDisable(GL11.GL_BLEND);
     }
-  if(Settings.getRenderVehicleNameplates())
+  /**
+   * dont' render nameplate for the vehicle that thePlayer is on
+   */
+  if(Settings.getRenderVehicleNameplates() && vehicle.riddenByEntity!= mc.thePlayer) 
     {
     renderNamePlate(vehicle, x, y, z, yaw, tick);
     }

@@ -57,7 +57,7 @@ protected void onCivicUpdate()
   t2 = System.nanoTime();
   s1 = t2-t1;
   t1=t2;
-  if(!hasWork())
+  if(!hasWork() && worldObj.checkChunksExist(minX, minY, minZ, maxX, maxY, maxZ))
     {
     scan();
     }

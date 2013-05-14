@@ -52,6 +52,7 @@ WayPoint work = null;
 WayPoint deposit = null;
 WayPoint upkeep = null;
 TECivic workSite = null;
+WayPoint guard = null;
 VehicleBase vehicle = null;
 NpcBase commander = null;
 List<WayPoint> patrolPoints = new ArrayList<WayPoint>();
@@ -77,6 +78,18 @@ public void handleDimensionChange(int dim)
   this.currentTarget = null;
   this.playerTarget = null;
   }
+
+/************************************************GUARD TARGET*************************************************/
+public WayPoint getGuardTarget()
+  {
+  return guard;
+  }
+
+public void setGuardTarget(WayPoint guard)
+  {
+  this.guard = guard;
+  }
+
 
 /************************************************COURIER TARGET*************************************************/
 public int getCourierNum()
@@ -308,6 +321,10 @@ public NBTTagCompound getNBTTag()
     {
     tag.setCompoundTag("upkeep", this.upkeep.getNBTTag());
     } 
+  if(guard!=null)
+    {
+    tag.setCompoundTag("guard", this.guard.getNBTTag());
+    }
   tag.setInteger("pNum", this.currentPatrolPoint);
   tag.setInteger("cNum", courierPoint);
   return tag;
@@ -346,6 +363,10 @@ public void readFromNBT(NBTTagCompound tag)
     {
     this.upkeep = new WayPoint(tag.getCompoundTag("upkeep"));
     } 
+  if(tag.hasKey("guard"))
+    {
+    this.guard = new WayPoint(tag.getCompoundTag("guard"));
+    }
   }
 
 }

@@ -21,10 +21,11 @@
 package shadowmage.ancient_warfare.common.item;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton.BatonSettings;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointItemRouting;
@@ -70,11 +71,15 @@ public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPla
   boolean flag = player.capabilities.isCreativeMode;
   if(!player.worldObj.isRemote)
     {
-    MovingObjectPosition hit = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
-    CourierRoutingInfo info = new CourierRoutingInfo(stack);
-    info.addRoutePoint(new WayPointItemRouting(x, y, z, hit.sideHit, TargetType.DELIVER));
-    info.writeToItem(stack);    
-    GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, player.worldObj, 0, 0, 0);
+    TileEntity te = player.worldObj.getBlockTileEntity(x, y, z);
+    if(te instanceof IInventory)
+      {
+      MovingObjectPosition hit = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
+      CourierRoutingInfo info = new CourierRoutingInfo(stack);
+      info.addRoutePoint(new WayPointItemRouting(x, y, z, hit.sideHit, TargetType.DELIVER));
+      info.writeToItem(stack);    
+      GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, player.worldObj, 0, 0, 0);
+      }    
     }   
   return flag;
   }

@@ -80,7 +80,7 @@ protected boolean isWorkFinished()
 protected boolean findWorkSite()
   {
   WayPoint p = npc.wayNav.getWorkSite();
-  if(p!=null && isValidWorkSite(p.getTileEntity(npc.worldObj)))
+  if(p!=null && p.isTargetLoaded(npc.worldObj) && isValidWorkSite(p.getTileEntity(npc.worldObj)))
     {
     npc.wayNav.setWorkSiteTile((TECivic)p.getTileEntity(npc.worldObj));
     return true;
@@ -93,7 +93,7 @@ protected boolean findWorkSite()
     {
     entry = npc.targetHelper.getHighestAggroTarget(TargetType.WORK);
     te = npc.worldObj.getBlockTileEntity(entry.floorX(), entry.floorY(), entry.floorZ());
-    if(isValidWorkSite(te))
+    if(entry.isTargetLoaded(npc.worldObj) && isValidWorkSite(te))
       {
       npc.wayNav.setWorkSite(new WayPoint(entry.floorX(), entry.floorY(), entry.floorZ(), entry.getTargetType()));
       npc.wayNav.setWorkSiteTile((TECivic)te);

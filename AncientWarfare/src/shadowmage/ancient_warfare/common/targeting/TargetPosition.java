@@ -59,6 +59,18 @@ public TargetPosition(int x, int y, int z, int side, TargetType type)
   this.side = side;
   }
 
+public boolean isTargetLoaded(World world)
+  {
+  if(world.isRemote)
+    {
+    return true;
+    }
+  else
+    {
+    return world.checkChunksExist(floorX(), floorY(), floorZ(), floorX(), floorY(), floorZ());
+    }
+  }
+
 @Override
 public int floorX()
   {

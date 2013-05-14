@@ -116,16 +116,25 @@ public void onObjectiveStart()
   {
   if(patrolPoint==null)
     {
-    patrolPoint = npc.wayNav.getNextPatrolPoint();
+    for(int i = 0; i < npc.wayNav.getPatrolSize()-1; i++)
+      {
+      patrolPoint = npc.wayNav.getNextPatrolPoint();
+      if(patrolPoint!=null && patrolPoint.isTargetLoaded(npc.worldObj))
+        {
+        break;
+        }
+      }
     }
+  
 //  Config.logDebug("starting patrol ai, choosing next patrol point, setting target");
   
-  if(patrolPoint!=null)
+  if(patrolPoint!=null && patrolPoint.isTargetLoaded(npc.worldObj))
     {    
     npc.setTargetAW(patrolPoint);
     }
   else
     {
+    npc.setTargetAW(null);
     this.isFinished = true;
     this.cooldownTicks = maxCooldownticks;
     }

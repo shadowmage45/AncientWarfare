@@ -12,21 +12,18 @@ GENERAL
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
+* vehicle navigator needs to enable gravity even with no-clip, if block under main body is air, fall...
 
 SOLDIERS
-* new combat objective -- follow/protect target (entity) -- semi persistent -- will load if/when entity is available -- no self-reset
-    player-set only
 
 NPCS
+* create a method for players to 'convert' a pre-spawned friendly NPC to their team
+    use command baton, check if player has food in inventory && withdraw upkeep ??
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
-* method to disable upkeep for 'NPC' villages (test if team has any players present?)
-    * set team num to invalid team(16/17) -- NPC only teams, one aggro, one not
         
 ITEM ROUTING
-* clean up ai task
-* validate TE on first click on routing slip
-* remove invalid points from NPC waypoint tracker
+* clean up ai objective/task
 
 WAREHOUSE ??
 * scan chests in area.  Keep inventory count/avail slot count.
@@ -41,7 +38,6 @@ GUI FRAMEWORK
 PATHFINDING
 * better handling of isWalkable -- in need of minor attention for other (mod) blocks
 * need to check if a block has blocking entities in it during iswalkable check ( or just enable no collide)
-* vehicle navigator needs to enable gravity even with no-clip, if block under main body is air, fall...
 
 CIVICS
 * toggle in GUI's to enable/disable broadcasting of work
@@ -204,6 +200,14 @@ TWEAKS/OPTIMIZATION
 /********** 05-14-13 **********/
 * add out-of-bounds team numbers for non-player placed NPCs --team 16 & 17 friendly/hostile
 * move over to using vanilla game-data storage for player/team/game datas
+
+* method to disable upkeep for 'NPC' villages -- use team 16/17 for npc only teams
+* new combat objective -- guard entity.  follow/protect entity.  persisitent waypoint.
+* validate TE on first click on routing slip
+* remove unused civic courier post code
+* update most ai to check if target position is loaded, skip if not loaded
+* update most civic work sites to not scan unless entire scanable area is loaded
+
 
 /********** 05-15-13 **********/
 /********** 05-16-13 **********/

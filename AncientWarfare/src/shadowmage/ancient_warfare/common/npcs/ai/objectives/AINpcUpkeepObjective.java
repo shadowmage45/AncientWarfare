@@ -66,7 +66,7 @@ public void addTasks()
 @Override
 public void updatePriority()
   {
-  if(npc.npcUpkeepTicks==0)
+  if(npc.npcUpkeepTicks==0 && npc.teamNum<16)
     {    
     this.currentPriority = this.maxPriority;
     }

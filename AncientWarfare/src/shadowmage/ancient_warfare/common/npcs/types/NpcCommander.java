@@ -38,6 +38,7 @@ import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIAttackTargets;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDepositGoods;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIGuardTarget;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIPatrolPoints;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
@@ -136,6 +137,7 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AIFollowPlayer(npc, 9));
   aiEntries.add(new AINpcUpkeepObjective(npc, 8));
   aiEntries.add(new AIDepositGoods(npc, 8));
+  aiEntries.add(new AIGuardTarget(npc, 7));
   aiEntries.add(new AIPatrolPoints(npc, 7, 20));
   aiEntries.add(new AIStayNearHome(npc, 6, 40, 15));
   aiEntries.add(new AIAttackTargets(npc, 5, 40, 40));  
