@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.client.render.civic;
 
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
@@ -64,8 +65,9 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     {
     return;
     }
-  RenderBlocks render = (RenderBlocks)data[2];
+  RenderBlocks render = (RenderBlocks)data[0];
   int blockNum = item.getItemDamage()/16;
+  Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
   Block blk = null;
   switch(blockNum)
   {

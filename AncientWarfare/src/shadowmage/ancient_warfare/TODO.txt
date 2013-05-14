@@ -196,6 +196,8 @@ TWEAKS/OPTIMIZATION
 * create side-icons for most civics (need top/bottom still)
 * remove inventory from most npcs (all but courier)
     
+* cleanup civic item render derp    
+* add the rest of civic default icons
 /********** 05-14-13 **********/
 /********** 05-15-13 **********/
 /********** 05-16-13 **********/
