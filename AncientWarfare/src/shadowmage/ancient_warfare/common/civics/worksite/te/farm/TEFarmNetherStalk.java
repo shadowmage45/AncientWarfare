@@ -33,7 +33,7 @@ public class TEFarmNetherStalk extends TEWorkSiteFarm
 public TEFarmNetherStalk()
   {
   this.mainBlockID = Block.netherStalk.blockID;
-  this.mainBlockMatureMeta = 7;
+  this.mainBlockMatureMeta = 3;
   this.plantableFilter = new ItemStack(Item.netherStalkSeeds);
   this.tilledEarthID = Block.slowSand.blockID;
   }

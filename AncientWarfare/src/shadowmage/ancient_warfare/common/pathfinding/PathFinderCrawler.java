@@ -462,13 +462,6 @@ private CrawlNode getOrMakeNode(int x, int y, int z, Node p)
       }
     }
   n = new CrawlNode(x,y,z);
-//  if(p!=null)
-//    {
-//    n.travelCost = world.getTravelCost(x, y, z);
-//    n.parentNode = p;
-//    n.g = p.g + n.getDistanceFrom(p)+n.travelCost;
-//    n.f = n.g + n.getDistanceFrom(tx, ty, tz);
-//    }  
   allNodes.add(n);
   return n;
   }

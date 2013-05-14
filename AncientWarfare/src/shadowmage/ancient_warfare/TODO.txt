@@ -1,9 +1,6 @@
 TONIGHT
-* civic block textures...all over the place
-* figure out cocoa block rotation for cocoa farm
 * fish farms need to catch by percentage
 * test commander bonuses
-* test netherstalk farm
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -29,7 +26,6 @@ NPCS
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
-* texture for courier, fisherman
 * set work-speed by rank
         
 ITEM ROUTING
@@ -53,6 +49,7 @@ PATHFINDING
 * vehicle navigator needs to enable gravity even with no-clip, if block under main body is air, fall...
 
 CIVICS
+* toggle in GUI's to enable/disable broadcasting of work
 * need objective icons and rendering
 * need inventory status bar
 * need work status bar
@@ -71,7 +68,6 @@ WORKSITES
         
 FARMS
 * jungle tree farm needs 2x2 planting ability (adv farm?)
-* netherstalk farm needs testing
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -203,6 +199,11 @@ TWEAKS/OPTIMIZATION
 * fix worker self-inventory checking -- no more inventory, no more check
 * add courier task/objective icon
 * add courier and fisherman textures
+
+* test/fix nether stalk farm
+* fix npc 'running in circles on a chest' bug, hopefully for the last time
+* fix/setup cocoa bean farm. working fine/great now
+
 /********** 05-14-13 **********/
 /********** 05-15-13 **********/
 /********** 05-16-13 **********/

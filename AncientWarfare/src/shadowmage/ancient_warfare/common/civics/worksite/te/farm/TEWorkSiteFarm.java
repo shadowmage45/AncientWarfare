@@ -75,6 +75,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
 protected void scan()
   {
   TargetType t = TargetType.NONE;
+  int id;
   for(int x = this.minX; x<=this.maxX; x++)
     {
     for(int y = this.minY; y<=this.maxY; y++)

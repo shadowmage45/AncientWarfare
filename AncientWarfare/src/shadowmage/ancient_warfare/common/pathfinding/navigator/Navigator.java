@@ -213,69 +213,38 @@ protected boolean isPathEmpty()
 
 protected boolean shouldCalculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
-//  Config.logDebug(" isNewTarget: "+isNewTarget(tx, ty, tz) + " second test: "+(isPathEmpty() && !isAtTarget(tx, ty, tz) && currentTarget==null));
   return isNewTarget(tx, ty, tz) || (isPathEmpty() && !isAtTarget(tx, ty, tz) && currentTarget==null);
   }
 
 protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
   this.path.clearPath();
-//  Config.logDebug("calculating path.");
-  if(!world.isWalkable(ex, ey, ez) && (currentTarget==null || !world.isWalkable(currentTarget.x, currentTarget.y, currentTarget.z)))
+  this.currentTarget = null;
+  if(!world.isWalkable(ex, ey, ez))
     {
-//    Config.logDebug("current position unwalkable");
-    Node n = PathUtils.getClosestPathableTo(world, ex, ey, ez, (int)(entity.width*2.f), 2, ex, ey, ez);
-    if(world.isWalkable(n.x, n.y, n.z))
-      {
-//      Config.logDebug("found nearby walkable position to move towards "+ n);
-      this.currentTarget = n; 
-      owner.setMoveTo(n.x+0.5d, n.y, n.z+0.5d, owner.getDefaultMoveSpeed());
-      }
-    this.stuckCheckTicks = this.stuckCheckTicksMax;
-    this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
+    ey = PathUtils.findClosestYTo(world, ex, ey, ez);
+    }
+  if(PathUtils.canPathStraightToTarget(world, ex, ey, ez, tx, ty, tz))
+    {
+    this.currentTarget = new Node(tx, ty, tz);
     }
   else
     {
-//    if(!world.isWalkable(tx, ty, tz))
-//      {
-//      Node n = PathUtils.getClosestPathableTo(world, tx, ty, tz, 10, 3, ex, ey, ez);
-//      if(world.isWalkable(n.x, n.y, n.z))
-//        {
-//        tx = n.x;
-//        ty = n.y;
-//        tz = n.z;
-////        this.finalTarget.reassign(tx, ty, tz);
-//        }
-//      }
-    if(PathUtils.canPathStraightToTarget(world, ex, ey, ez, tx, ty, tz))
+    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 4));
+    Node end = this.path.getEndNode();
+    if(end!=null && (end.x!=tx || end.y!=ty || end.z!=tz))
       {
-      this.currentTarget = new Node(tx, ty, tz);
-      //    Config.logDebug("straight path hit goal");
-      }
-    else
-      {
-      this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 4));
-//      this.path.setPath(PathManager.instance().findImmediatePath(world, ex, ey, ez, tx, ty, tz));
-      //    Config.logDebug("requesting starter path");
-      //    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 60));    
-      Node end = this.path.getEndNode();
-      if(end!=null && (end.x!=tx || end.y!=ty || end.z!=tz))
-        {
-        //      Config.logDebug("requesting full path");
-        PathManager.instance().requestPath(this, world, end.x, end.y, end.z, tx, ty, tz, 60);
-        //      this.path.addPath(PathManager.instance().findImmediatePath(world, end.x, end.y, end.z, tx, ty, tz));
-        }  
-      } 
-    this.stuckCheckTicks = this.stuckCheckTicksMax;
-    this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
-    Node start = this.path.getFirstNode();
-    if(start!=null && getEntityDistance(start)<0.8f && start.y==ey)
-      {
-      this.path.claimNode();//skip the first node because it is probably behind you, move onto next
-      }
-    this.claimNode();   
+      PathManager.instance().requestPath(this, world, end.x, end.y, end.z, tx, ty, tz, 60);
+      }  
+    } 
+  this.stuckCheckTicks = this.stuckCheckTicksMax;
+  this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
+  Node start = this.path.getFirstNode();
+  if(start!=null && getEntityDistance(start)<0.8f && start.y==ey)
+    {
+    this.path.claimNode();//skip the first node because it is probably behind you, move onto next
     }
-  
+  this.claimNode(); 
   }
 
 protected void doorInteraction()
@@ -398,11 +367,7 @@ protected void interactWithDoor(BlockPosition doorPos, boolean open)
   }
 
 protected void claimNode()
-  {
-  if(this.currentTarget!=null && !world.isWalkable(floorX(), floorY(), floorZ()) && world.isWalkable(currentTarget.x, currentTarget.y, currentTarget.z))
-    {
-//    Config.logDebug("skipping claim node due to unwalkable current");
-    }    
+  {  
   if(this.currentTarget==null || this.getEntityDistance(currentTarget)<entity.width)
     {    
     this.currentTarget = this.path.claimNode();

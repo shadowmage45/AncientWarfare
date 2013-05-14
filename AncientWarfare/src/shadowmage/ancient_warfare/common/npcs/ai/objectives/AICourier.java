@@ -62,7 +62,6 @@ public void updatePriority()
       point = npc.wayNav.getCourierPointAt(i);
       if(point!=null && point.hasWork(npc.worldObj, npc))
         {
-        Config.logDebug("setting courier priority to max");
         this.currentPriority = this.maxPriority;
         break;
         }

@@ -20,15 +20,153 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
+
 public class TEFarmCocoa extends TEWorkSiteFarm
 {
+
 
 /**
  * 
  */
 public TEFarmCocoa()
   {
-  // TODO Auto-generated constructor stub
+  this.mainBlockID = Block.cocoaPlant.blockID;
+  this.tilledEarthID = Block.wood.blockID;
+  this.plantableFilter = new ItemStack(Item.dyePowder,1,3);
+  }
+
+protected boolean isJungleLog(int id, int meta)
+  {
+  return id==tilledEarthID && (meta & 3)==3;
+  }
+
+protected boolean isJungleLog(int x, int y, int z)
+  {
+  return isJungleLog(worldObj.getBlockId(x, y, z), worldObj.getBlockMetadata(x, y, z));
+  }
+
+@Override
+protected TargetType validateWorkPoint(int x, int y, int z)
+  {
+  int id = worldObj.getBlockId(x, y, z);  
+  if(id==0 && this.inventory.containsAtLeast(plantableFilter, 1))
+    {    
+    if(isJungleLog(x-1, y,z) || isJungleLog(x+1, y, z) || isJungleLog(x, y, z-1) || isJungleLog(x, y, z+1))
+      {
+      return TargetType.FARM_PLANT;
+      }
+    }
+  else if(id==this.mainBlockID)
+    {
+    int meta = worldObj.getBlockMetadata(x, y, z);
+    if(isMetaMature(meta) && this.inventory.getEmptySlotCount()>=1)
+      {
+      return TargetType.FARM_HARVEST;
+      }    
+    }
+  return TargetType.NONE;
+  }
+
+protected boolean isMetaMature(int meta)
+  {
+  return meta >= 8 && meta <=11;
+  }
+
+/**
+ * get the direction from x -> x1
+ * @param x
+ * @param y
+ * @param z
+ * @param x1
+ * @param y1
+ * @param z1
+ * @return
+ */
+protected int getDirection(int x, int y, int z, int x1, int y1, int z1)
+  {
+  if(z1>z)
+    {
+    return 0;
+    }
+  else if(z1<z)
+    {
+    return 2;
+    }
+  else if(x1<x)
+    {
+    return 1;
+    }
+  else if(x1>x)
+    {
+    return 3;
+    }
+  return -1;
+  }
+
+@Override
+protected void doWork(NpcBase npc, WorkPoint p)
+  {
+  if(npc==null || p==null)
+    {
+    return;
+    } 
+  if(p.work==TargetType.FARM_HARVEST)
+    {
+    List<ItemStack> drops = BlockTools.breakBlock(worldObj, p.x, p.y, p.z, 0);   
+    for(ItemStack item : drops)
+      {
+      item = this.inventory.tryMergeItem(item);
+      item = this.overflow.tryMergeItem(item);
+      InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);      
+      }
+    }
+  else if(p.work==TargetType.FARM_PLANT)
+    {
+    if(inventory.containsAtLeast(plantableFilter, 1))
+      {
+      int meta = -1;
+      if(isJungleLog(p.x-1, p.y,p.z))
+        {
+        meta = getDirection(p.x, p.y, p.z, p.x-1, p.y, p.z);
+        }
+      else if(isJungleLog(p.x+1, p.y, p.z))
+        {
+        meta = getDirection(p.x, p.y, p.z, p.x+1, p.y, p.z);
+        }
+      else if(isJungleLog(p.x, p.y, p.z-1))
+        {
+        meta = getDirection(p.x, p.y, p.z, p.x, p.y, p.z-1);
+        }
+      else if( isJungleLog(p.x, p.y, p.z+1))
+        {
+        meta = getDirection(p.x, p.y, p.z, p.x, p.y, p.z+1);
+        }
+      if(meta>=0)
+        {
+        inventory.tryRemoveItems(plantableFilter, 1);        
+        worldObj.setBlock(p.x, p.y, p.z, mainBlockID, meta, 3);
+        }
+      else
+        {
+//        Config.logDebug("could not locate jungle log to plant on");
+        }
+      }
+    else
+      {
+//      Config.logDebug("had plant job but no plantables!!");
+      }
+    }    
   }
 
 }

@@ -163,11 +163,8 @@ protected boolean mergeItemStack(ItemStack inputStack, int startSlot, int stopSl
       if(InventoryTools.doItemsMatch(inputStack, stackFromSlot))
         {
         numToMerge = slot.getSlotStackLimit() - stackFromSlot.stackSize;
-        Config.logDebug("1removing "+numToMerge+ " from stack");
         numToMerge = numToMerge > inputStack.stackSize ? inputStack.stackSize : numToMerge;
-        Config.logDebug("2removing "+numToMerge+ " from stack");
-        numToMerge = numToMerge + stackFromSlot.stackSize > stackFromSlot.getMaxStackSize() ? stackFromSlot.getMaxStackSize() - stackFromSlot.stackSize : numToMerge;       
-        Config.logDebug("3removing "+numToMerge+ " from stack");
+        numToMerge = numToMerge + stackFromSlot.stackSize > stackFromSlot.getMaxStackSize() ? stackFromSlot.getMaxStackSize() - stackFromSlot.stackSize : numToMerge; 
         if(numToMerge>0)
           {
           inputStack.stackSize -= numToMerge;
@@ -181,7 +178,6 @@ protected boolean mergeItemStack(ItemStack inputStack, int startSlot, int stopSl
 
   for(int i = startSlot; i < stopSlot && inputStack.stackSize > 0 ; i++)
     {
-    Config.logDebug("attempting direct place into slot: "+i);
     slot = (Slot)this.inventorySlots.get(i);
     stackFromSlot = slot.getStack();
     if(stackFromSlot==null)
@@ -203,7 +199,6 @@ protected boolean mergeItemStack(ItemStack inputStack, int startSlot, int stopSl
       returnFlag = true;
       if(inputStack.stackSize<=0)
         {
-        Config.logDebug("input stack size == 0, breaking from merge-place loop");
         break;
         }
       }
