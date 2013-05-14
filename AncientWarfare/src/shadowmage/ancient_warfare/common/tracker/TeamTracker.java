@@ -44,6 +44,8 @@ import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry
 public class TeamTracker implements INBTTaggable
 {
 
+static int NPC_FRIENDLY = 16;
+static int NPC_HOSTILE = 17;
 private TeamEntry[] serverTeamEntries = new TeamEntry[16];
 private TeamEntry[] clientTeamEntries = new TeamEntry[16];
 
@@ -144,7 +146,8 @@ public void handleNewPlayerLogin(EntityPlayer player)
       {
       pkt.sendPacketToPlayer(otherPlayer);
       }
-    }    
+    } 
+  GameDataTracker.instance().markGameDataDirty();
   }
 
 public void handleClientUpdate(NBTTagCompound tag, EntityPlayer player)
@@ -344,6 +347,7 @@ public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
     pkt.sendPacketToAllPlayers();
 //    Config.logDebug("updating team non-hostile status and relaying!!");
     }
+  GameDataTracker.instance().markGameDataDirty();
   }
 
 public TeamEntry getTeamEntryFor(EntityPlayer player)
@@ -389,7 +393,19 @@ public int getTeamForPlayerClient(String name)
   }
 
 public boolean isHostileTowards(World world, int aggressor, int defender)
-  {
+  {  
+  if(aggressor == NPC_HOSTILE || defender== NPC_HOSTILE)
+    {
+    return true;
+    }
+  if(aggressor==NPC_FRIENDLY)
+    {
+    return defender == NPC_HOSTILE;
+    }
+  else if(defender == NPC_FRIENDLY)
+    {
+    return aggressor==NPC_HOSTILE;
+    }
   TeamEntry entry = this.getTeamEntry(world, aggressor);
   if(entry!=null)
     {

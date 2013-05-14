@@ -129,6 +129,7 @@ private void createEntryForNewPlayer(EntityPlayer player)
   entry.playerName = String.valueOf(player.getEntityName());
   this.playerEntries.put(String.valueOf(player.getEntityName()), entry);
   TeamTracker.instance().handleNewPlayerLogin(player);
+  GameDataTracker.instance().markGameDataDirty();
   }
 
 @Override

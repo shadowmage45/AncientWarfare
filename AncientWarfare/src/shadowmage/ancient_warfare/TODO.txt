@@ -21,6 +21,7 @@ NPCS
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
+    * set team num to invalid team(16/17) -- NPC only teams, one aggro, one not
         
 ITEM ROUTING
 * clean up ai task
@@ -193,7 +194,6 @@ TWEAKS/OPTIMIZATION
 * test/fix nether stalk farm
 * fix npc 'running in circles on a chest' bug, hopefully for the last time
 * fix/setup cocoa bean farm. working fine/great now
-
 * siege engineer and archer accuracy set in levels
 * set npc work-speed by rank
 * set npc upkeep costs by rank
@@ -202,6 +202,9 @@ TWEAKS/OPTIMIZATION
 * vehicle - clientMovement--only send packets if moving/ everyX seconds
 
 /********** 05-14-13 **********/
+* add out-of-bounds team numbers for non-player placed NPCs --team 16 & 17 friendly/hostile
+* move over to using vanilla game-data storage for player/team/game datas
+
 /********** 05-15-13 **********/
 /********** 05-16-13 **********/
 /********** 05-17-13 **********/
