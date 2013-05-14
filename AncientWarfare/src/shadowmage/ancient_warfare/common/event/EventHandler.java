@@ -91,7 +91,7 @@ public void onPlayerAttack(AttackEntityEvent evt)
         }
       if(npc.getPlayerTarget()!=null && npc.getPlayerTarget().getEntity(evt.entityPlayer.worldObj)==evt.entityPlayer)
         {
-        npc.handleBroadcastAttackTarget(evt.target);
+        npc.handleBroadcastAttackTarget(evt.target, 4);
         }
       }
     }
@@ -104,7 +104,7 @@ public void onPlayerAttack(AttackEntityEvent evt)
 //    {
 //    EntityMob zomb = (EntityMob)evt.entity;
 //    Config.logDebug("setting entity attack tasks for: "+zomb);
-//    zomb.tasks.addTask(3, new EntityAIAttackOnCollide(zomb, NpcBase.class, zomb.getMoveHelper().getSpeed(), true));
+//    zomb.tasks.addTask(3, new EntityAIAttackOnCollide(zomb, NpcBase.class, zomb.getAIMoveSpeed(), true));
 //    zomb.targetTasks.addTask(2, new EntityAINearestAttackableTarget(zomb, NpcBase.class, 16.0F, 0, true));
 //    }
 //  }

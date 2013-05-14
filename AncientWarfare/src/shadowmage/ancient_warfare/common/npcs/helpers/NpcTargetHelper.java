@@ -256,11 +256,11 @@ public void handleBeingAttacked(EntityLiving damager)
   {
   if(this.targetEntries.containsKey(TargetType.ATTACK))
     {
-    this.addOrUpdateAggroEntry(revengeEntry, damager, Config.npcAITicks);
+    this.addOrUpdateAggroEntry(revengeEntry, damager, Config.npcAITicks * 4);
     }
   }
 
-public void handleBroadcastTarget(Entity ent, TargetType type)
+public void handleBroadcastTarget(Entity ent, TargetType type, int multi)
   {
   if(this.targetEntries.containsKey(type))
     {
@@ -268,7 +268,7 @@ public void handleBroadcastTarget(Entity ent, TargetType type)
     AITargetEntry entry = list.getEntryFor(ent);
     if(entry!=null)
       {
-      this.addOrUpdateAggroEntry(entry, ent, Config.npcAITicks);
+      this.addOrUpdateAggroEntry(entry, ent, Config.npcAITicks * multi);
       }
     }
   }

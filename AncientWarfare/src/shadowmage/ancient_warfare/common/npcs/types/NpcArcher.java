@@ -62,10 +62,10 @@ public NpcArcher(int type)
   this.tooltip = "Adept at bow-use";
   this.isCombatUnit = true;  
   this.iconTexture = "npcArcher1";
-  this.addLevel("Novice Archer", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setRange(20);
-  this.addLevel("Adept Archer", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setRange(20);
-  this.addLevel("Expert Archer", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setRange(20);
-  this.addLevel("Master Archer", Config.texturePath + "models/npcDefault.png", getToolStack(3), getArmorStack(3)).setRange(20);
+  this.addLevel("Novice Archer", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setRange(20).setAccuracy(0.88f).setUpkeep(6);
+  this.addLevel("Adept Archer", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setRange(20).setAccuracy(0.91f).setUpkeep(8);
+  this.addLevel("Expert Archer", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setRange(20).setAccuracy(0.94f).setUpkeep(8);
+  this.addLevel("Master Archer", Config.texturePath + "models/npcDefault.png", getToolStack(3), getArmorStack(3)).setRange(20).setAccuracy(0.97f).setUpkeep(10);
   this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
       "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
   }

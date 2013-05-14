@@ -29,6 +29,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,8 +42,6 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.network.Packet04Npc;
 import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
@@ -241,9 +240,9 @@ public void travelToDimension(int par1)
  * called from player-attack event, and commander broadcast
  * @param ent
  */
-public void handleBroadcastAttackTarget(Entity ent)
+public void handleBroadcastAttackTarget(Entity ent, int multi)
   {
-  targetHelper.handleBroadcastTarget(ent, TargetType.ATTACK);
+  targetHelper.handleBroadcastTarget(ent, TargetType.ATTACK, multi);
   }
 
 public void handleBatonCommand(NpcCommand cmd, WayPoint p)
@@ -374,6 +373,20 @@ protected void updateAITick()
     }
   aiTick = 0;
   this.aiManager.updateObjectives(); 
+//  this.broadcastAggro();
+  }
+
+protected void broadcastAggro()  
+  {
+  List<EntityMob> mobs = worldObj.getEntitiesWithinAABB(EntityMob.class, AxisAlignedBB.getAABBPool().getAABB(posX-16, posY-8, posZ-16, posX+16, posY+8, posZ+16));
+  for(EntityMob mob : mobs)
+    {
+    if(mob.getAttackTarget()==null)
+      {
+      Config.logDebug("setting mob attack target");
+      mob.setRevengeTarget(this);
+      }
+    }
   }
 
 @Override
@@ -481,7 +494,7 @@ public void onUpdate()
     this.targetHelper.checkForTargets();
     if(this.wayNav.getCommander()!=null && this.wayNav.getCommander().getTargetType()==TargetType.ATTACK)
       {
-      this.handleBroadcastAttackTarget(this.wayNav.getCommander().getTarget().getEntity(worldObj));
+      this.handleBroadcastAttackTarget(this.wayNav.getCommander().getTarget().getEntity(worldObj),2);
       }
     }  
   if(this.npcUpkeepTicks>0)

@@ -613,7 +613,7 @@ public void onUpdateClient()
   if(Config.clientVehicleMovement && this.riddenByEntity !=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
     {
     moveUpdateTicks++;
-    if(moveUpdateTicks>=Config.clientMoveUpdateTicks)
+    if(moveUpdateTicks>=Config.clientMoveUpdateTicks && (this.motionX!=0 ||this.motionY!=0 ||this.motionZ!=0 || this.ticksExisted%100==0))
       {
       moveUpdateTicks=0;
       moveHelper.sendInputToServer(getForwardInput(), getStrafeInput(), true);      

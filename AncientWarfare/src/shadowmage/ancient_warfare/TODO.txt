@@ -12,21 +12,15 @@ GENERAL
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
-* clientMovement--only send packets if moving/ everyX seconds
 
 SOLDIERS
-* siege engineer and archer need accuracy set in levels
-* investigate revenge-target designation (when something attacks a soldier)(seems to work, perhaps needs aggro set to higher)
-* investigate player-attack target setting (when a player with soldiers following attacks an entity)
-* follow/protect target (entity) -- semi persistent -- will load if/when entity is available -- no self-reset
+* new combat objective -- follow/protect target (entity) -- semi persistent -- will load if/when entity is available -- no self-reset
     player-set only
 
 NPCS
-* work out indiv costs for upkeep -- add specialized items where applicable
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
 * method to disable upkeep for 'NPC' villages (test if team has any players present?)
-* set work-speed by rank
         
 ITEM ROUTING
 * clean up ai task
@@ -184,25 +178,28 @@ TWEAKS/OPTIMIZATION
     combat-engineer-- ??, armor increase
     medic -- ??, armor increase
 * change missiles over to include a ref to living shooter (for revenge from targets)
-* change civic item rendering over to render the civic block instead of the item (hack)
-    
+* change civic item rendering over to render the civic block instead of the item (hack)    
 * add fisherman npc type
 * add fish/squid farms
 * add cocoa farm (WIP)
 * create side-icons for most civics (need top/bottom still)
-* remove inventory from most npcs (all but courier)
-    
+* remove inventory from most npcs (all but courier)    
 * cleanup civic item render derp    
 * add the rest of civic default icons
-
 * test new civic/inventory interaction
 * fix worker self-inventory checking -- no more inventory, no more check
 * add courier task/objective icon
 * add courier and fisherman textures
-
 * test/fix nether stalk farm
 * fix npc 'running in circles on a chest' bug, hopefully for the last time
 * fix/setup cocoa bean farm. working fine/great now
+
+* siege engineer and archer accuracy set in levels
+* set npc work-speed by rank
+* set npc upkeep costs by rank
+* update entity target broadcast to include aggro multiplier -- set aggro higher on player and commander target broadcasts
+* set aggro higher on being attacked
+* vehicle - clientMovement--only send packets if moving/ everyX seconds
 
 /********** 05-14-13 **********/
 /********** 05-15-13 **********/

@@ -55,9 +55,9 @@ public NpcMiner(int type)
   this.displayName = "Miner";
   this.tooltip = "For working in Mines";
   this.iconTexture = "npcWorker1";
-  this.addLevel("Novice Miner", Config.texturePath + "models/npc/npcMiner.png", getToolStack(0), null).addTargetType(CivicWorkType.MINE);
-  this.addLevel("Adpet Miner", Config.texturePath + "models/npc/npcMiner.png", getToolStack(1), null).addTargetType(CivicWorkType.MINE);
-  this.addLevel("Expert Miner", Config.texturePath + "models/npc/npcMiner.png", getToolStack(2), null).addTargetType(CivicWorkType.MINE);
+  this.addLevel("Novice Miner", Config.texturePath + "models/npc/npcMiner.png", getToolStack(0), null).addTargetType(CivicWorkType.MINE).setActionTicks(40).setUpkeep(4);
+  this.addLevel("Adpet Miner", Config.texturePath + "models/npc/npcMiner.png", getToolStack(1), null).addTargetType(CivicWorkType.MINE).setActionTicks(30).setUpkeep(6);
+  this.addLevel("Expert Miner", Config.texturePath + "models/npc/npcMiner.png", getToolStack(2), null).addTargetType(CivicWorkType.MINE).setActionTicks(20).setUpkeep(8);
   this.isCombatUnit = false;
   }
 

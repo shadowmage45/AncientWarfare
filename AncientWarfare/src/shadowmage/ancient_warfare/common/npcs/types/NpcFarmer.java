@@ -59,9 +59,9 @@ public NpcFarmer(int type)
   this.displayName = "Farmer";
   this.tooltip = "For working basic crops";
   this.iconTexture = "npcWorker1";  
-  this.addLevel("Novice Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(0), null).addTargetType(CivicWorkType.FARM);
-  this.addLevel("Adept Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(1), null).addTargetType(CivicWorkType.FARM);
-  this.addLevel("Expert Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(2), null).addTargetType(CivicWorkType.FARM);
+  this.addLevel("Novice Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(0), null).addTargetType(CivicWorkType.FARM).setActionTicks(40).setUpkeep(4);
+  this.addLevel("Adept Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(1), null).addTargetType(CivicWorkType.FARM).setActionTicks(30).setUpkeep(6);
+  this.addLevel("Expert Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(2), null).addTargetType(CivicWorkType.FARM).setActionTicks(20).setUpkeep(8);
   this.isCombatUnit = false;
   }
 
