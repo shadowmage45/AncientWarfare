@@ -54,16 +54,16 @@ public NpcFisherman(int type)
   this.displayName = "Fisherman";
   this.tooltip = "For working Fish Farms";
   this.iconTexture = "npcWorker1";  
-  this.addLevel("Fisherman Novice", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(0), null).addTargetType(CivicWorkType.FISH);
-  this.addLevel("Fisherman Adept", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(1), null).addTargetType(CivicWorkType.FISH);
-  this.addLevel("Fisherman Master", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(2), null).addTargetType(CivicWorkType.FISH);
+  this.addLevel("Fisherman Novice", Config.texturePath + "models/npc/npcFisherman.png", getToolStack(0), null).addTargetType(CivicWorkType.FISH);
+  this.addLevel("Fisherman Adept", Config.texturePath + "models/npc/npcFisherman.png", getToolStack(1), null).addTargetType(CivicWorkType.FISH);
+  this.addLevel("Fisherman Master", Config.texturePath + "models/npc/npcFisherman.png", getToolStack(2), null).addTargetType(CivicWorkType.FISH);
   this.isCombatUnit = false;
   }
 
 @Override
 public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
-  helper.addTargetEntry(new AITargetEntry(npc, TargetType.WORK, TECivic.class, 0, false, Config.npcAISearchRange));
+  helper.addTargetEntry(new AITargetEntry(npc, TargetType.WORK, TECivic.class, 0, false, 140));
   }
 
 @Override

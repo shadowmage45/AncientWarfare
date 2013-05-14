@@ -173,14 +173,15 @@ public String getObjectiveTexture(byte objective)
   case 11:
   return base + "objective_wander.png";//
   case 12:
-  return base + "objective_follow_commander.png";
+  return base + "objective_follow_commander.png";//
   case 13:
-  return base + "objective_follow_commander.png";
+  return base + "objective_follow_commander.png";//
   case 14:
-  return base + "objective_heal.png";
+  return base + "objective_heal.png";//
   case 15:
-  return base + "objective_repair_vehicle.png";
+  return base + "objective_repair_vehicle.png";//
   case 16:
+  return base + "objective_courier.png";//
   case 17:
   default:
   return base + "objective_home.png";
@@ -212,6 +213,7 @@ public String getTaskTexture(byte task)
   case 8:
   return base + "task_repair_vehicle.png";//
   case 9:
+  return base + "task_courier.png";//
   case 10:
   default:
   return base + "objective_home.png";

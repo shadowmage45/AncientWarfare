@@ -1,5 +1,4 @@
 TONIGHT
-* test new civic/inventory interaction
 * civic block textures...all over the place
 * figure out cocoa block rotation for cocoa farm
 * fish farms need to catch by percentage
@@ -65,6 +64,7 @@ CIVICS
     broadcasts 'deposit site' to npcs
     couriers may deposit goods, which will go into the closest available inventory
 * need to scan when attempting to place, make sure no bounds overlap with any existing civics
+* fish farm is OP...I imagine squid farm is as well
 
 WORKSITES
 * need clear separate tick dividers for full rescan and only validatePoints
@@ -198,6 +198,11 @@ TWEAKS/OPTIMIZATION
     
 * cleanup civic item render derp    
 * add the rest of civic default icons
+
+* test new civic/inventory interaction
+* fix worker self-inventory checking -- no more inventory, no more check
+* add courier task/objective icon
+* add courier and fisherman textures
 /********** 05-14-13 **********/
 /********** 05-15-13 **********/
 /********** 05-16-13 **********/
