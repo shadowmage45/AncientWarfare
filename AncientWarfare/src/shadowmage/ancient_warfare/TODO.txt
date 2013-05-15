@@ -199,9 +199,7 @@ TWEAKS/OPTIMIZATION
 * remove unused civic courier post code
 * update most ai to check if target position is loaded, skip if not loaded
 * update most civic work sites to not scan unless entire scanable area is loaded
-
 * fish farms need to catch by percentage
-
 * fix npc interaction for aggro teams
 * fix npc interaction for batons when on a non-player team
 * fix broadcasting of work to non-team NPCs -- it is now same-team only
@@ -209,6 +207,9 @@ TWEAKS/OPTIMIZATION
 * fix NPC attack-range issue (was using target eye pos rather than floor)
 
 * add some comments to ByteTools
+* add inventory scanning ability pass 1 -- required massive restructure of scanner, may still have bugs
+
+    
 /********** 05-15-13 **********/
 /********** 05-16-13 **********/
 /********** 05-17-13 **********/
