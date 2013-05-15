@@ -10,14 +10,7 @@ THIS(next) WEEKEND
 GENERAL
 
 SCANNER
-* inventory rules/scanning ability
 * validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?
-
-STRUCTURE BUILDING
-* inventory rules/building ability
-
-TEMPLATES
-* inventory rules storage
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
@@ -35,6 +28,7 @@ PATHFINDING
 
 CIVICS
 * toggle in GUI's to enable/disable broadcasting of work
+    apply redstone signal?
 * need objective icons and rendering
 * need inventory status bar
 * need work status bar
@@ -42,12 +36,12 @@ CIVICS
 * need to scan when attempting to place, make sure no bounds overlap with any existing civics
 
 WAREHOUSE 
-* scan chests in area.  Keep inventory count/avail slot count.
-* has two inventory areas, deposit and request
-* has 'request' button to pull items from managed inventory into local inventory
-* items will be taken from 'deposit' slot and moved into managed inventory at a pre-set rate, if room exists
-* npcs should be able to access as one seamless inventory, for all of the chests it manages. probably want to make a special
-    wrapper and not use IInventory
+* uses 'warehouse blocks' -- an essentially data-only block that serves to increase the storage area of
+    a warehouse
+* the first/only multi-block of AW.
+* TE maintains an 'inventory size' value based on number of warehouse blocks in its work bounds.
+* warehouse blocks will 'broadcast' when placed and removed
+* warehouse will not continually update/scan, but will rely on warehouse block broadcasting
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -122,6 +116,10 @@ OPTIONAL
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 * advanced (exotic) soldier types 
 * advanced workers
+
+STRUCTURE BUILDING
+
+TEMPLATES
 
 ITEM ROUTING
 
@@ -205,12 +203,12 @@ TWEAKS/OPTIMIZATION
 * fix broadcasting of work to non-team NPCs -- it is now same-team only
 * fix NPE in guard-target objective
 * fix NPC attack-range issue (was using target eye pos rather than floor)
-
 * add some comments to ByteTools
 * add inventory scanning ability pass 1 -- required massive restructure of scanner, may still have bugs
-
-    
 /********** 05-15-13 **********/
+* change civic block registry in language registry -- should now register indiv. names per civic
+
+
 /********** 05-16-13 **********/
 /********** 05-17-13 **********/
 /********** 05-18-13 **********/

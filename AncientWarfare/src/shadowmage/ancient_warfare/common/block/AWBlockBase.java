@@ -121,7 +121,6 @@ protected void setDefaultDirection(World par1World, int par2, int par3, int par4
 public void registerIcons(IconRegister par1IconRegister)
   {
   registerIcons(par1IconRegister, DescriptionRegistry2.instance().getDescriptionFor(blockID));
-//  super.registerIcons(par1IconRegister);
   }
 
 public abstract void registerIcons(IconRegister reg, Description d);

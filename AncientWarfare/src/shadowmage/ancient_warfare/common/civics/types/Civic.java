@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
+import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnChicken;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnCow;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnMooshroom;
@@ -89,7 +90,7 @@ public static ICivicType mooshroomFarm = new CivicFarm(28, "Mooshroom Farm", "16
 public static ICivicType fishFarm = new CivicFishFarm(29, "Fish Farm", "16x16 Max Width, needs water", TEFishery.class,"civicFarmWheat1", 16, 2).setBlockIcons("civicFarmFishBottom", "civicFarmFishTop", "civicFarmFishSides");
 public static ICivicType squidFarm = new CivicFishFarm(30, "Squid Farm", "16x16 Max Width, needs water", TESquidFarm.class, "civicFarmWheat1",16,2).setBlockIcons("civicFarmSquidBottom", "civicFarmSquidTop", "civicFarmSquidSides");
 public static ICivicType cocoaFarm = new CivicFarm(31, "Cocoa Bean Farm", "10x10 Max Width", TEFarmCocoa.class, "civicFarmWheat1", 10 ,2).setBlockIcons("civicFarmCocoaBottom", "civicFarmCocoaTop", "civicFarmCocoaSides");
-
+public static ICivicType warehouseSmall = new CivicWarehouse(32, "Small Warehouse", "8x8x4 -- 16 chests", TECivicWarehouse.class, 8, 4);
 //smithy (process ores -> ingots)
 //lumber yard (process logs -> planks/charcoal)
 //factory (single block)(use provided resources to craft player-set recipes)

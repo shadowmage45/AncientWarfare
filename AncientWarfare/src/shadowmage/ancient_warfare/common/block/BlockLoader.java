@@ -22,7 +22,9 @@ package shadowmage.ancient_warfare.common.block;
 
 import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
+import shadowmage.ancient_warfare.common.civics.BlockWarehouseStorage;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
+import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnChicken;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnCow;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnMooshroom;
@@ -62,6 +64,7 @@ public static final Block civicBlock1 = new BlockCivic(Config.getBlockID("blockM
 public static final Block civicBlock2 = new BlockCivic(Config.getBlockID("blockMulti.civic2", 3702, "Civic Block 2"), "CivicBlock2", 1);
 public static final Block civicBlock3 = new BlockCivic(Config.getBlockID("blockMulti.civic3", 3703, "Civic Block 3"), "CivicBlock3", 2);
 public static final Block civicBlock4 = new BlockCivic(Config.getBlockID("blockMulti.civic4", 3704, "Civic Block 4"), "CivicBlock4", 3);
+public static final Block warehouseStorage = new BlockWarehouseStorage(Config.getBlockID("blockSingle.warehouseStorage", 3705, "Warehouse Storage Block"));
 
 private static BlockLoader INSTANCE;
 private BlockLoader(){}
@@ -77,10 +80,8 @@ public static BlockLoader instance()
 public void load()
   {
   registerBlock(builder, "Builder"); 
-  registerBlock(civicBlock1, "CivicBlock1");
-  registerBlock(civicBlock2, "CivicBlock2");
-  registerBlock(civicBlock3, "CivicBlock3");
-  registerBlock(civicBlock4, "CivicBlock4");
+  registerBlock(warehouseStorage, "Warehouse Storage");
+  
   GameRegistry.registerTileEntity(TEBuilder.class, "AWBuilder");
   GameRegistry.registerTileEntity(TEWorkSiteFarm.class, "AWFarmSiteTE");   
   GameRegistry.registerTileEntity(TEFarmWheat.class, "Wheat Farm");
@@ -110,6 +111,7 @@ public void load()
   GameRegistry.registerTileEntity(TEFishery.class, "Fish Farm");
   GameRegistry.registerTileEntity(TESquidFarm.class, "Squid Farm");
   GameRegistry.registerTileEntity(TEFarmCocoa.class, "Cocoa Bean Farm");
+  GameRegistry.registerTileEntity(TECivicWarehouse.class, "Warehouse");
   }
 
 public void registerBlock(Block block, String name)

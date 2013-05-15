@@ -65,6 +65,7 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class NpcBase extends EntityCreature implements IEntityAdditionalSpawnData, IEntityContainerSynch, IPathableEntity
@@ -393,10 +394,14 @@ protected void broadcastAggro()
     {
     if(mob.getAttackTarget()==null)
       {
-      Config.logDebug("setting mob attack target");
+      Config.logDebug("setting mob attack target for: "+mob);
+      //setPrivateValue(EntityLiving.class, living, turret, "currentTarget", "field_70776_bF");
+//      ObfuscationReflectionHelper.setPrivateValue(classToAccess, instance, value, fieldNames);
       mob.setRevengeTarget(this);
+      mob.setAttackTarget(this);
+      mob.setLastAttackingEntity(this);
       }
-    }
+    }  
   }
 
 @Override

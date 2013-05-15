@@ -23,6 +23,8 @@ package shadowmage.ancient_warfare.common.registry;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.registry.LanguageRegistry;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -66,7 +68,9 @@ public void registerCivics()
     {
 	  if(civ==null || !civ.addToCreativeMenu()){continue;}
     Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.civicPlacer, civ.getGlobalID(), civ.getDisplayName(), "", civ.getDisplayTooltip());
-    d.setIconTexture(civ.getIconTexture(), civ.getGlobalID());    
+    d.setIconTexture(civ.getIconTexture(), civ.getGlobalID());
+    Block block = getBlockFor(civ.getGlobalID());
+    LanguageRegistry.addName(new ItemStack(block,1,civ.getGlobalID()%16), civ.getDisplayName());
     }
   }
 

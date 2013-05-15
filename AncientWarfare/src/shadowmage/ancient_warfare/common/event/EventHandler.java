@@ -22,6 +22,8 @@ package shadowmage.ancient_warfare.common.event;
 
 import java.util.List;
 
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
+
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityMob;
@@ -97,17 +99,18 @@ public void onPlayerAttack(AttackEntityEvent evt)
     }
   }
 
-//@ForgeSubscribe
-//public void onEntitySpawn(EntityJoinWorldEvent evt)
-//  {
-//  if(evt.entity instanceof EntityMob)
-//    {
-//    EntityMob zomb = (EntityMob)evt.entity;
-//    Config.logDebug("setting entity attack tasks for: "+zomb);
-//    zomb.tasks.addTask(3, new EntityAIAttackOnCollide(zomb, NpcBase.class, zomb.getAIMoveSpeed(), true));
-//    zomb.targetTasks.addTask(2, new EntityAINearestAttackableTarget(zomb, NpcBase.class, 16.0F, 0, true));
-//    }
-//  }
+@ForgeSubscribe
+public void onEntitySpawn(EntityJoinWorldEvent evt)
+  {
+  if(evt.entity instanceof EntityMob)
+    {
+    EntityMob zomb = (EntityMob)evt.entity;
+    Config.logDebug("setting entity attack tasks for: "+zomb);
+    float val = ObfuscationReflectionHelper.getPrivateValue(EntityMob.class, zomb, "moveSpeed");    
+    zomb.tasks.addTask(3, new EntityAIAttackOnCollide(zomb, NpcBase.class, val, true));
+    zomb.targetTasks.addTask(2, new EntityAINearestAttackableTarget(zomb, NpcBase.class, 16.0F, 0, true));
+    }
+  }
 
 
 }
