@@ -39,6 +39,7 @@ import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
@@ -441,6 +442,11 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
       {
       this.parseLayer(struct, it);
       }
+    
+    else if(line.toLowerCase().startsWith("inventory:"))
+      {
+      this.parseInventory(struct, it);
+      }
 
     if(!struct.isValid)
       {
@@ -767,6 +773,43 @@ private void parseVehicle(ProcessedStructure struct, Iterator<String> it)
   else
     {
     Config.logError("Error parsing vehicle rule for structure!");
+    struct.isValid = false;
+    }
+  }
+
+private void parseInventory(ProcessedStructure struct, Iterator<String> it)
+  {
+  if(!it.hasNext())
+    {
+    struct.isValid = false;
+    return;
+    }
+  ArrayList<String> ruleLines = new ArrayList<String>();  
+  String line;  
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("inventory:"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith(":endinventory"))
+      {
+      break;      
+      }
+    else
+      {
+      ruleLines.add(line);      
+      }    
+    }     
+  InventoryRule rule = InventoryRule.parseLines(ruleLines);
+  if(rule!=null && rule.ruleNumber>=1)
+    {    
+    struct.inventoryRules.put(rule.ruleNumber, rule); 
+    }
+  else
+    {
+    Config.logError("Error parsing inventory rule for structure!");
     struct.isValid = false;
     }
   }

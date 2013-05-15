@@ -79,6 +79,8 @@ public String[] ruinsSpecialData;
  */
 public String[] spawnerTypes;
 
+public int[] inventoryRules;
+
 /**
  * should preserve water/lava/plants when attempting to place this rule?
  */
@@ -99,6 +101,12 @@ public BlockData[] preservedBlocks;
 
 private BlockRule()
   {
+  }
+
+public BlockRule(int ruleNum, int id, int meta, int inv)
+  {
+  this(ruleNum, id, meta);
+  this.inventoryRules = new int[]{inv};
   }
 
 public BlockRule(int ruleNum, int id, int meta)
@@ -300,7 +308,11 @@ public static BlockRule parseRule(List<String> ruleLines)
     if(line.toLowerCase().startsWith("number"))
       {
       rule.ruleNumber = StringTools.safeParseShort("=", line);      
-      }    
+      } 
+    if(line.toLowerCase().startsWith("inventory"))
+      {
+      rule.inventoryRules = StringTools.safeParseIntArray("=", line);
+      }
     if(line.toLowerCase().startsWith("conditional"))
       {
       rule.conditional = StringTools.safeParseByte("=", line);

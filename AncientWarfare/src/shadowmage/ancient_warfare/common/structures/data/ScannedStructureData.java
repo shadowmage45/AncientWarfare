@@ -21,11 +21,13 @@
 package shadowmage.ancient_warfare.common.structures.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -33,11 +35,11 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
@@ -55,10 +57,16 @@ public int originFacing;
 public int xSize;
 public int ySize;
 public int zSize;
-public BlockData[][][] allBlocks;
-public ArrayList<BlockData> blockIDs = new ArrayList<BlockData>();
+//public BlockData[][][] allBlocks;
+
+//public ArrayList<BlockData> blockIDs = new ArrayList<BlockData>();
+
 private List<ScannedEntityEntry> includedEntities = new ArrayList<ScannedEntityEntry>();
 protected List<CivicRule> scannedCivics = new ArrayList<CivicRule>();
+private HashMap<Integer, InventoryRule> inventoryRules = new HashMap<Integer, InventoryRule>();
+
+private List<ScannedBlock> scannedBlocks = new ArrayList<ScannedBlock>();
+int nextInventoryNumber = 1;
 /**
  * set by structure scanner GUI prior to export
  *  
@@ -86,19 +94,45 @@ public ScannedStructureData(int face, BlockPosition pos1, BlockPosition pos2,Blo
   this.originFacing = face;  
   BlockPosition size = BlockTools.getBoxSize(pos1, pos2);
   this.setSize(originFacing, size.x, size.y, size.z);
-  this.setArraySize(originFacing, size.x, size.y, size.z);
   }
+
+private class ScannedBlock
+{
+int x;
+int y;
+int z;
+InventoryRule rule;
+BlockData data;
+private ScannedBlock(int x, int y, int z, int id, int meta, InventoryRule rule)
+  {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  this.data = new BlockData(id, meta);
+  this.rule = rule;
+  }
+}
+
+private class ScannedInventory
+{
+int ix;
+int iy;
+int iz;
+InventoryRule rule;
+private ScannedInventory(int x, int y, int z, InventoryRule inv)
+  {
+  this.ix = x;
+  this.iy = y;
+  this.iz = z;
+  this.rule = inv;
+  }
+}
 
 public void setSize(int facing, int x, int y, int z)
   {
   this.xSize = x;
   this.ySize = y;
   this.zSize = z;
-  }
-
-public void setArraySize(int facing, int x, int y, int z)
-  {
-  this.allBlocks = new BlockData[x][y][z];
   }
 
 public void scan(World world)
@@ -113,9 +147,13 @@ public void scan(World world)
     for(int y = pos1.y; y <= pos2.y; y++, indexY++, indexZ=0)
       {
       for(int z = pos1.z; z <= pos2.z; z++, indexZ++)
-        {       
+        {         
         id = world.getBlockId(x, y, z);
         meta = world.getBlockMetadata(x, y, z);
+        if(id==0)
+          {
+          continue;
+          }
         if(id==Block.doorWood.blockID || id==Block.doorIron.blockID)
           {
           int lowerID = world.getBlockId(x, y-1, z);
@@ -123,15 +161,8 @@ public void scan(World world)
             {
             meta = 8;
             }
-          }
-        if(id==BlockLoader.civicBlock1.blockID || id==BlockLoader.civicBlock2.blockID || id==BlockLoader.civicBlock3.blockID || id==BlockLoader.civicBlock4.blockID)
-          {
-          handleCivicRule(world, x,y,z, indexX, indexY, indexZ);
-          }
-        else
-          {
-          allBlocks[indexX][indexY][indexZ] = new BlockData(id, meta);
-          }     
+          } 
+        handleBlockScan(world, x, y, z, indexX, indexY, indexZ, id, meta);
         }      
       }    
     }    
@@ -139,14 +170,32 @@ public void scan(World world)
   this.normalizeForNorthFacing();
   }
 
-protected void handleCivicRule(World world, int x, int y, int z, int ix, int iy, int iz)
-  {
-  TileEntity te = world.getBlockTileEntity(x, y, z);
-  if(te!=null)
+protected void handleBlockScan(World world, int x, int y, int z, int ix, int iy, int iz, int id, int meta)
+  { 
+  if(id==BlockLoader.civicBlock1.blockID || id==BlockLoader.civicBlock2.blockID || id==BlockLoader.civicBlock3.blockID || id==BlockLoader.civicBlock4.blockID)
     {
-    this.scannedCivics.add(CivicRule.populateRule(ix, iy, iz, (TECivic)te));
+    TileEntity te = world.getBlockTileEntity(x, y, z);
+    if(te!=null)
+      {
+      this.scannedCivics.add(CivicRule.populateRule(ix, iy, iz, (TECivic)te));
+      }
     }
-  allBlocks[ix][iy][iz] = new BlockData(0,0);
+  else
+    {    
+    InventoryRule rule = null;
+    TileEntity te = world.getBlockTileEntity(x, y, z);    
+    if(te instanceof IInventory)
+      {
+      IInventory inventory = (IInventory)te;
+      rule = InventoryRule.populateRule(inventory, nextInventoryNumber);
+      if(rule!=null && rule.ruleNumber>0)
+        {
+        nextInventoryNumber++;
+        inventoryRules.put(rule.ruleNumber, rule);
+        }
+      }
+    scannedBlocks.add(new ScannedBlock(ix, iy, iz, id, meta, rule));
+    }
   }
 
 protected void scanForEntities(World world)
@@ -169,42 +218,14 @@ protected void scanForEntities(World world)
     }
   }
 
-protected void addToBlocksList(BlockData data)
-  {
-  boolean shouldAdd = true;
-  for(BlockData block : this.blockIDs)
-    {
-    if(block.id==data.id && block.meta==data.meta)
-      {
-      shouldAdd = false;
-      }
-    }
-  if(shouldAdd)
-    {
-    this.blockIDs.add(data.copy());
-    }
-  }
-
-public int getRuleForBlock(int id, int meta)
-  {
-  for(int i = 0; i< this.blockIDs.size(); i++)
-    {
-    if(this.blockIDs.get(i).id==id && this.blockIDs.get(i).meta==meta)
-      {
-      return i;
-      }
-    }
-  return 0;
-  } 
-
 /*********************************************  NORMALIZATION  ***********************************************/
 
 private void normalizeForNorthFacing()
   {
-  int newXSize;// = this.xSize;
+  int newXSize;
   int newYSize = this.ySize;
-  int newZSize;// = this.zSize;
-  BlockData[][][] newBlocks;
+  int newZSize;
+  
   if(this.originFacing==1 || this.originFacing ==3)
     {
     newXSize = this.zSize;
@@ -216,32 +237,29 @@ private void normalizeForNorthFacing()
     newZSize = this.zSize;
     }
     
-  newBlocks = new BlockData[newXSize][newYSize][newZSize];
-  
-  this.blockIDs.clear();
-  this.addToBlocksList(new BlockData(0,0));
   int rotationAmount = BlockTools.getRotationAmount(originFacing, 2);
-  for(int x = 0; x<this.xSize; x++)
+  for(ScannedBlock block : this.scannedBlocks)
     {
-    for(int y = 0; y < this.ySize; y++)
-      {
-      for(int z = 0; z< this.zSize; z++)
-        {
-        BlockPosition pos = BlockTools.getNorthRotatedPosition(x,y,z, this.originFacing, newXSize, newZSize);      
-        BlockData data = this.allBlocks[x][y][z];
-        data.rotateRight(rotationAmount);
-        newBlocks[pos.x][pos.y][pos.z] = data;
-        if(data.id!=0)
-          {
-          this.addToBlocksList(newBlocks[pos.x][pos.y][pos.z]);
-          }
-        }
-      }
-    }  
+    BlockPosition pos = BlockTools.getNorthRotatedPosition(block.x,block.y,block.z, this.originFacing, newXSize, newZSize);
+    block.x = pos.x;
+    block.y = pos.y;
+    block.z = pos.z;
+    block.data.rotateRight(rotationAmount);
+    }
+  
   this.xSize = newXSize;
   this.ySize = newYSize;
   this.zSize = newZSize;
-  this.allBlocks = newBlocks;
+  
+  this.normalizeScannedEntities(newXSize, newZSize);
+  for(CivicRule rule : this.scannedCivics)
+    {
+    rule.normalizeForNorthFacing(originFacing, newXSize, newZSize);
+    }  
+  }
+
+private void normalizeScannedEntities(int xSize, int zSize)
+  {
   int x;
   int y;
   int z;
@@ -259,7 +277,7 @@ private void normalizeForNorthFacing()
     xOff = entry.x % 1.f;
     zOff = entry.z % 1.f;
     yOff = entry.y % 1.f;
-    pos = BlockTools.getNorthRotatedPosition(x, y, z, this.originFacing, newXSize, newZSize);
+    pos = BlockTools.getNorthRotatedPosition(x, y, z, this.originFacing, xSize, zSize);
     newXOff = getRotatedOffsetX(this.originFacing, xOff, zOff);
     newZOff = getRotatedOffsetZ(this.originFacing, xOff, zOff);
     entry.bx = pos.x;
@@ -276,10 +294,6 @@ private void normalizeForNorthFacing()
       {
       entry.hangingDirection = (BlockTools.getRotationAmount(this.originFacing, 2)+entry.hangingDirection)%4;
       }
-    }
-  for(CivicRule rule : this.scannedCivics)
-    {
-    rule.normalizeForNorthFacing(originFacing, newXSize, newZSize);
     }
   }
 
@@ -339,51 +353,65 @@ public ProcessedStructure convertToProcessedStructure()
   struct.name = String.valueOf(this.name);
   struct.xSize = this.xSize;
   struct.ySize = this.ySize;
-  struct.zSize = this.zSize;
-  
+  struct.zSize = this.zSize;  
   struct.xOffset = this.buildKey.x;
   struct.verticalOffset = this.buildKey.y;
-  struct.zOffset = this.buildKey.z;
+  struct.zOffset = this.buildKey.z;  
   
-  BlockData[] blocks = this.getAllBlockTypes();
-  for(int i = 0; i < blocks.length; i++)
-    {
-    BlockData data = blocks[i];
-    BlockRule rule = new BlockRule(i, data.id, data.meta);
-    struct.blockRules.put(Integer.valueOf((int) rule.ruleNumber), rule);    
-    }
   struct.structure = new short[xSize][ySize][zSize];
-  for(int x = 0; x <struct.structure.length; x++)
+  
+  struct.blockRules.put(0, new BlockRule(0,0,0));
+  int ruleNum = 1;
+  for(ScannedBlock block : this.scannedBlocks)
     {
-    for(int y = 0; y <struct.structure[x].length; y++)
+    BlockRule bRule = null;    
+    if(block.rule==null)
       {
-      for(int z = 0; z < struct.structure[x][y].length; z++)
-        {
-        BlockData data = this.allBlocks[x][y][z];
-        struct.structure[x][y][z]=(short) this.getRuleForBlock(data.id, data.meta);
-        }
+      bRule = getRuleFor(struct, block.data.id, block.data.meta);
       }
+    if(bRule == null)
+      {
+      ruleNum++;
+      bRule = new BlockRule(ruleNum, block.data.id, block.data.meta, block.rule==null? 0 : block.rule.ruleNumber);
+      struct.blockRules.put((int) bRule.ruleNumber, bRule);
+      }    
+    struct.structure[block.x][block.y][block.z] = bRule.ruleNumber;
     }
+    
+  /**
+   * add specials
+   */
   this.addEntitiesToStructure(struct, includedEntities);
   this.addCivicsToStructrure(struct);
+  this.addInventoryRulesToStructure(struct);
+  
+  /**
+   * set the in-game template/default export template
+   */
   List<String> lines = StructureExporter.getExportLinesFor(struct);
   struct.setTemplateLines(lines);
   return struct;
   }
 
-public BlockData[] getAllBlockTypes()
-  {  
-  BlockData[] datas = new BlockData[this.blockIDs.size()];
-  for(int i = 0; i <this.blockIDs.size(); i++)
+protected BlockRule getRuleFor(ProcessedStructure struct, int id, int meta)
+  {
+  for(BlockRule rule : struct.blockRules.values())
     {
-    datas[i]=this.blockIDs.get(i);
+    if(rule.blockData!=null && rule.blockData[0].id==id && rule.blockData[0].meta==meta)
+      {
+      return rule;
+      }
     }
-  return datas;
+  return null;
+  }
+
+protected void addInventoryRulesToStructure(ProcessedStructure struct)
+  {
+  struct.inventoryRules.putAll(inventoryRules);  
   }
 
 private void addCivicsToStructrure(ProcessedStructure struct)
-  {
-//  Config.logDebug("adding civic info to processed structure");  
+  { 
   for(CivicRule civ : this.scannedCivics)
     {
     struct.civicRules.add(civ);
@@ -422,6 +450,7 @@ private void addEntitiesToStructure(ProcessedStructure struct, List<ScannedEntit
     }
   }
 
+
 private void addNpcToStructure(ProcessedStructure struct, ScannedEntityEntry entry, NpcBase npc)
   {
   NpcRule rule = NpcRule.populateRule(entry, npc);
@@ -430,6 +459,7 @@ private void addNpcToStructure(ProcessedStructure struct, ScannedEntityEntry ent
     struct.NPCRules.add(rule);
     }
   }
+
 
 private void addVehicleToStructure(ProcessedStructure struct, ScannedEntityEntry entry, VehicleBase vehicle)
   {
@@ -440,10 +470,12 @@ private void addVehicleToStructure(ProcessedStructure struct, ScannedEntityEntry
     }
   }
 
+
 private void addGateToStructure(ProcessedStructure struct, ScannedEntityEntry entry, Entity gate)
   {
   
   }
+
 
 private void addVillagerToStructure(ProcessedStructure struct, ScannedEntityEntry entry, EntityVillager villager)
   {

@@ -36,6 +36,12 @@ import com.google.common.io.ByteArrayDataOutput;
 public class ByteTools
 {
 
+/**
+ * return a list of byte[] of max size (packetSize)
+ * @param allBytes
+ * @param packetSize
+ * @return
+ */
 public static List<byte[]> getByteChunks(byte[] allBytes, int packetSize)
   {
   int numOfChunks = (allBytes.length/packetSize)+1;
@@ -59,6 +65,13 @@ public static List<byte[]> getByteChunks(byte[] allBytes, int packetSize)
   return byteChunks;
   }
 
+/**
+ * return a single byte[] containing the data in chunks list, of the same
+ * size as the sum of all arrays in chunk list
+ * @param chunks
+ * @param packetSize
+ * @return
+ */
 public static byte[] compositeByteChunks(List<byte[]> chunks, int packetSize)
   {
   int totalLen = 0;
@@ -79,6 +92,11 @@ public static byte[] compositeByteChunks(List<byte[]> chunks, int packetSize)
   return fullFile;
   }
 
+/**
+ * return a byte [] containing the data from all byte arrays
+ * @param bytes
+ * @return
+ */
 public static byte[] compositeByteChunks(byte[][] bytes)
   {
   byte [] allBytes;

@@ -11,6 +11,7 @@ GENERAL
 
 SCANNER
 * inventory rules/scanning ability
+* validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?
 
 STRUCTURE BUILDING
 * inventory rules/building ability
@@ -207,6 +208,7 @@ TWEAKS/OPTIMIZATION
 * fix NPE in guard-target objective
 * fix NPC attack-range issue (was using target eye pos rather than floor)
 
+* add some comments to ByteTools
 /********** 05-15-13 **********/
 /********** 05-16-13 **********/
 /********** 05-17-13 **********/

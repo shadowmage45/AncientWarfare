@@ -27,8 +27,10 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
@@ -43,6 +45,7 @@ import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -300,26 +303,26 @@ protected void placeBlock(World world, int x, int y, int z, int id, int meta)
   world.setBlockMetadataWithNotify(x, y, z, meta, 3);
   }
 
-/**
- * used for instant builder during non-world-gen....
- * @param world
- * @param pos
- * @param id
- * @param meta
- */
-protected void placeBlockWithDefer(World world, int x, int y, int z, int id, int meta)
-  {
-  if(world.getBlockTileEntity(x, y, z)!=null)
-    {
-    world.setBlock(x, y, z, 0);    
-    this.deferredBlocks.put(new BlockPosition(x,y,z), new BlockData(id, meta));  
-    }
-  else
-    { 
-    world.setBlock(x, y, z, id);
-    world.setBlockMetadataWithNotify(x, y, z, meta, 3);
-    }  
-  }
+///**
+// * used for instant builder during non-world-gen....
+// * @param world
+// * @param pos
+// * @param id
+// * @param meta
+// */
+//protected void placeBlockWithDefer(World world, int x, int y, int z, int id, int meta)
+//  {
+//  if(world.getBlockTileEntity(x, y, z)!=null)
+//    {
+//    world.setBlock(x, y, z, 0);    
+//    this.deferredBlocks.put(new BlockPosition(x,y,z), new BlockData(id, meta));  
+//    }
+//  else
+//    { 
+//    world.setBlock(x, y, z, id);
+//    world.setBlockMetadataWithNotify(x, y, z, meta, 3);
+//    }  
+//  }
 
 /**
  * 
@@ -331,7 +334,7 @@ protected void placeBlockWithDefer(World world, int x, int y, int z, int id, int
  * @param defer should deferPlacement of overwritten tile-entity blocks?
  * @param worldGen should use world random/gen random?
  */
-protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockRule rule, boolean defer, boolean worldGen)
+protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockRule rule, boolean worldGen)
   {   
   /**
    * check to see if block should be placed by rule percent chance
@@ -374,15 +377,14 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
       rnd -=rule.blockData.length;      
       }
     else
-      {
-     
+      {     
       BlockData data = rule.blockData[rnd];
       if(rule.swapGroup > -1)
         {
         String biomeName = world.getBiomeGenForCoords(x, z).biomeName;
         data = this.getSwappedDataFor(rule, biomeName, data);
         }
-      placeBlockData(world, x, y, z, data, defer);
+      placeBlockData(world, x, y, z, data, rule);
       return;
       }
     }  
@@ -411,17 +413,36 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
     }
   }
 
-protected void placeBlockData(World world, int x, int y, int z, BlockData data, boolean defer)
+protected void placeBlockData(World world, int x, int y, int z, BlockData data, BlockRule rule)
   {  
   int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, getRotationAmt(facing));
-  if(defer)
+  this.placeBlock(world, x,y,z, data.id, meta);
+  if(rule.inventoryRules!=null && rule.inventoryRules.length>0)
     {
-    this.placeBlockWithDefer(world, x,y,z , data.id, meta);
+    int iRuleNum = rule.inventoryRules[random.nextInt(rule.inventoryRules.length)];
+    if(iRuleNum!=0)
+      {
+      InventoryRule iRule = struct.inventoryRules.get(iRuleNum);
+      if(iRule!=null && iRule.items!=null)
+        {
+        TileEntity te = world.getBlockTileEntity(x, y, z);
+        if(te instanceof IInventory)
+          {
+          IInventory inv = (IInventory)te;
+          ItemStack stack = null;
+          for(int i = 0; i < inv.getSizeInventory(); i++)
+            {
+            stack = iRule.items.getStackInSlot(i);
+            if(stack!=null)
+              {
+              inv.setInventorySlotContents(i, stack.copy());
+              }
+            }
+          Config.logDebug("handling inventory block placement");
+          }      
+        }      
+      }
     }
-  else
-    {
-    this.placeBlock(world, x,y,z, data.id, meta);
-    }   
   }
 
 private void placeVehicles(World world)

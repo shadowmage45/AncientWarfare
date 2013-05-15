@@ -119,7 +119,7 @@ private void buildPriority(int priority)
           {
           continue;
           }        
-        handleBlockRulePlacement(world, target.x, target.y, target.z, rule, true, false);      
+        handleBlockRulePlacement(world, target.x, target.y, target.z, rule, false);      
         }
       }
     }

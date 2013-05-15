@@ -35,10 +35,12 @@ import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
+import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class StructureExporter
 {
@@ -175,7 +177,22 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
   lines.add("####LAYERS####\n");
   addLayers(lines, struct);    
   lines.add("");
+  lines.add("####INVENTORIES####\n");
+  addInventoryRules(lines, struct);    
+  lines.add("");
   return lines;
+  }
+
+private static void addInventoryRules(List<String> lines, ProcessedStructure struct)
+  {
+  List<String> ruleLines;
+  for(InventoryRule rule : struct.inventoryRules.values())
+    {
+    ruleLines = rule.getRuleLines();
+    lines.add("");
+    lines.addAll(ruleLines);
+    lines.add("");
+    }
   }
 
 private static void addVehicleRules(List<String> lines, ProcessedStructure struct)
@@ -291,6 +308,12 @@ private static void addBlockRules(List<String> lines, ProcessedStructure struct)
       String blockLine = "blocks=";
       blockLine = blockLine + getBlockDataArrayString(rule.blockData);
       lines.add(blockLine);
+      }
+    if(rule.inventoryRules!=null)
+      {
+      String invLine = "inventory=";
+      invLine = invLine + StringTools.getCSVStringForArray(rule.inventoryRules);
+      lines.add(invLine);
       }
     if(rule.ruinsSpecialData!=null)
       {

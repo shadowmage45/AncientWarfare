@@ -109,7 +109,7 @@ public void onTick()
   /**
    * once a valid target has been found, place block
    */
-  handleBlockRulePlacement(world, target.x, target.y, target.z, rule, false, false);
+  handleBlockRulePlacement(world, target.x, target.y, target.z, rule, false);
   
   /**
    * and then once again try incrementing
