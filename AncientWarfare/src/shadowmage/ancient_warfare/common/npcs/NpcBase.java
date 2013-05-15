@@ -247,6 +247,10 @@ public void handleBroadcastAttackTarget(Entity ent, int multi)
 
 public void handleBatonCommand(NpcCommand cmd, WayPoint p)
   {
+  if(this.teamNum>15)
+    {
+    return;
+    }  
   switch(cmd)
   {
   case HOME:
@@ -320,8 +324,8 @@ public boolean isAggroTowards(EntityPlayer player)
   }
 
 public boolean isAggroTowards(int otherTeam)
-  {
-  return this.npcType.isCombatUnit() && TeamTracker.instance().isHostileTowards(worldObj, teamNum, otherTeam);
+  {//this.npcType.isCombatUnit() &&
+  return  TeamTracker.instance().isHostileTowards(worldObj, teamNum, otherTeam);
   }
 
 public ITargetEntry getTarget()
@@ -364,7 +368,7 @@ public float getDistanceFromTarget(ITargetEntry target)
   {
   if(target!=null)
     {
-    return Trig.getDistance(posX, posY, posZ, target.posX(), target.posY(), target.posZ());
+    return Trig.getDistance(posX, posY, posZ, target.posX(), target.floorY(), target.posZ());
     }
   return 0;
   }
@@ -398,7 +402,7 @@ protected void broadcastAggro()
 @Override
 public boolean interact(EntityPlayer player)
   {
-  if(player.worldObj.isRemote)
+  if(player.worldObj.isRemote || this.teamNum>15)
     {
     return true;
     }

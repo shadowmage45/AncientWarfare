@@ -61,6 +61,10 @@ protected void onCivicUpdate()
     {
     scan();
     }
+//  else if(!worldObj.checkChunksExist(minX, minY, minZ, maxX, maxY, maxZ))
+//    {
+//    Config.logDebug("te work-bounds chunks don't exist, skipping update");
+//    }
   t2 = System.nanoTime();
   s2=t2-t1;
 //  Config.logDebug("work site point validation time: "+s1);

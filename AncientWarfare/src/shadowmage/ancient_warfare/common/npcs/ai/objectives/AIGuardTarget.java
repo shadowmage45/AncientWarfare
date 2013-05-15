@@ -46,7 +46,7 @@ public void addTasks()
 public void updatePriority()
   {
   this.currentPriority = 0;
-  if(npc.wayNav.getGuardTarget().getEntity(npc.worldObj)!=null)
+  if(npc.wayNav.getGuardTarget()!=null && npc.wayNav.getGuardTarget().getEntity(npc.worldObj)!=null)
     {
     this.currentPriority = this.maxPriority;
     }

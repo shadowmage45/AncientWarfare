@@ -38,7 +38,7 @@ int waterBlocks = 0;
 
 public TEFishery()
   {
-  ItemStack fishFilter = new ItemStack(Item.fishRaw);
+  fishFilter = new ItemStack(Item.fishRaw);
   }
 
 @Override
@@ -59,7 +59,7 @@ protected void scan()
           waterBlocks++;
           if(canHold>0)
             {
-            canHold--;            
+            canHold--;         
             this.addWorkPoint(x, y, z, TargetType.FISH_CATCH);
             }
           }

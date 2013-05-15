@@ -1,6 +1,5 @@
 TONIGHT
 * test commander bonuses
-* test new game-data handling -- might need cleanup
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -191,10 +190,10 @@ TWEAKS/OPTIMIZATION
 * vehicle - clientMovement--only send packets if moving/ everyX seconds
 
 /********** 05-14-13 **********/
-* add out-of-bounds team numbers for non-player placed NPCs --team 16 & 17 friendly/hostile
-* move over to using vanilla game-data storage for player/team/game datas
-* method to disable upkeep for 'NPC' villages -- use team 16/17 for npc only teams
-* new combat objective -- guard entity.  follow/protect entity.  persisitent waypoint.
+* add out-of-bounds team numbers for non-player placed NPCs --team 16 & 17 friendly/hostile--seems working
+* move over to using vanilla game-data storage for player/team/game datas -- working
+* method to disable upkeep for 'NPC' villages -- use team 16/17 for npc only teams -- working
+* new combat objective -- guard entity.  follow/protect entity.  persisitent waypoint. -- works
 * validate TE on first click on routing slip
 * remove unused civic courier post code
 * update most ai to check if target position is loaded, skip if not loaded
@@ -202,6 +201,11 @@ TWEAKS/OPTIMIZATION
 
 * fish farms need to catch by percentage
 
+* fix npc interaction for aggro teams
+* fix npc interaction for batons when on a non-player team
+* fix broadcasting of work to non-team NPCs -- it is now same-team only
+* fix NPE in guard-target objective
+* fix NPC attack-range issue (was using target eye pos rather than floor)
 
 /********** 05-15-13 **********/
 /********** 05-16-13 **********/

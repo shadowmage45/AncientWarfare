@@ -107,7 +107,7 @@ public void broadCastToSoldiers(int maxRange)
       {
       if(broadcastWork)
         {    
-        if(npc.wayNav.getUpkeepSite() == null)
+        if(npc.wayNav.getUpkeepSite() == null && npc.teamNum == this.teamNum)
           {
           npc.wayNav.setUpkeepSite(new WayPoint(this, 1, TargetType.UPKEEP));
           }

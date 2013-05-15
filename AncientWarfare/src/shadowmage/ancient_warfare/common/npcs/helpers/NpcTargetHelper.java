@@ -240,6 +240,8 @@ public float getAttackDistance(ITargetEntry target)
       {
       return rangedDistance;
       }
+//    Config.logDebug("returning attack distance of: " + 2.8f * (npc.width*0.5f + target.getEntity(npc.worldObj).width*0.5f));
+//    Config.logDebug("distance to target: "+npc.getDistanceFromTarget(target));
     return 2.8f * (npc.width*0.5f + target.getEntity(npc.worldObj).width*0.5f);
     }
   }

@@ -166,7 +166,7 @@ protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSetti
       pt = new WayPoint(p);
       npc.handleBatonCommand(cmd, p);
       }    
-    else if(player.getDistanceToEntity(npc)<settings.range)
+    else if(player.getDistanceToEntity(npc)<settings.range && !npc.isAggroTowards(player) && npc.teamNum<15)
       {
       commanded++;
       pt = new WayPoint(p);
