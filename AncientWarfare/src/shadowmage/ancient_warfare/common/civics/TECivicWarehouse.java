@@ -36,6 +36,17 @@ import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 public class TECivicWarehouse extends TECivic implements IEntityContainerSynch
 {
 
+/**
+ * needs to appear as one giant inventory from the outside
+ * 
+ * gui needs a list of all items in the chest, along with buttons to select/pull items.
+ * 
+ * gui will only show 'overflow' slots for player to deposit items
+ * 
+ * all 'withdrawn' items will be thrown at the player/placed into his inventory.
+ * 
+ * 
+ */
 int storageSize = 0;
 
 /**

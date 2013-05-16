@@ -45,6 +45,15 @@ WAREHOUSE
 * warehouse will not continually update/scan, but will rely on warehouse block broadcasting
 * needs to update client-side when inventory size changes
 
+* gui needs server side help...
+    need to count/tally items server side when window is opened
+    send init data block []s of the items in the container
+    
+    onInventoryChanged -- server side
+        re-send entire freaking thing
+        break into chunks if necessary
+
+
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
 

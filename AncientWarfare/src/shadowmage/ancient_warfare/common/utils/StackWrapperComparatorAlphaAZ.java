@@ -18,51 +18,19 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.container;
+package shadowmage.ancient_warfare.common.utils;
 
-import java.util.List;
+import java.util.Comparator;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
-
-public class ContainerCivicWarehouse extends ContainerBase
+public class StackWrapperComparatorAlphaAZ implements Comparator<StackWrapper>
 {
 
-TECivicWarehouse te;
-/**
- * @param openingPlayer
- * @param synch
- */
-public ContainerCivicWarehouse(EntityPlayer openingPlayer, TECivicWarehouse te)
-  {
-  super(openingPlayer, te);
-  this.te = te;  
-  }
-
 @Override
-public void handlePacketData(NBTTagCompound tag)
+public int compare(StackWrapper arg0, StackWrapper arg1)
   {
-  // TODO Auto-generated method stub
-
+  return arg0.stack.getDisplayName().compareTo(arg1.stack.getDisplayName());
   }
 
-@Override
-public void handleInitData(NBTTagCompound tag)
-  {
-  /**
-   * if multi part packet
-   *  stash until all parts received
-   * else
-   *  
-   */
-  }
 
-@Override
-public List<NBTTagCompound> getInitData()
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
 
 }

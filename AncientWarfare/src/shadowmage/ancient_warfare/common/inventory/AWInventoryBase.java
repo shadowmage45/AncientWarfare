@@ -23,6 +23,7 @@
 package shadowmage.ancient_warfare.common.inventory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,8 +31,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_warfare.common.interfaces.IInventoryCallback;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.utils.StackWrapper;
 
 public abstract class AWInventoryBase implements IInventory
 {
@@ -48,6 +49,38 @@ public AWInventoryBase(int size, int maxStackSize)
   this(size);
   this.maxStackSize = maxStackSize;
   }
+
+public List<StackWrapper> getCompactedInventory()
+  {
+  ArrayList<StackWrapper> stacks = new ArrayList<StackWrapper>();
+  ItemStack fromInv;
+  StackWrapper fromList;
+  
+  for(int i = 0; i < this.getSizeInventory(); i++)
+    {
+    fromInv = this.getStackInSlot(i);
+    if(fromInv==null){continue;}
+    boolean found = false;
+    for(int k = 0; k < stacks.size();k ++)
+      {
+      fromList = stacks.get(i);
+      if(fromList==null){continue;}
+      if(fromList.equals(fromInv))
+        {
+        found = true;
+        fromList.stack.stackSize+=fromInv.stackSize;
+        //found item, increment counts
+        break;
+        }
+      }
+    if(!found)
+      {
+      stacks.add(new StackWrapper(fromInv));
+      }
+    }  
+  return stacks;
+  }
+
 
 /**
  * return qty left that could not be removed from inventory

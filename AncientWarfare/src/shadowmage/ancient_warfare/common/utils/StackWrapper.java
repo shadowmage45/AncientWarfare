@@ -18,51 +18,53 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.container;
+package shadowmage.ancient_warfare.common.utils;
 
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 
-public class ContainerCivicWarehouse extends ContainerBase
+public class StackWrapper implements INBTTaggable
 {
 
-TECivicWarehouse te;
-/**
- * @param openingPlayer
- * @param synch
- */
-public ContainerCivicWarehouse(EntityPlayer openingPlayer, TECivicWarehouse te)
+public ItemStack stack;
+
+private StackWrapper()
   {
-  super(openingPlayer, te);
-  this.te = te;  
+  
+  }
+
+public StackWrapper(ItemStack stack)
+  {
+  if(stack==null)
+    {
+    throw new NullPointerException();
+    }
+  this.stack = stack.copy();
+  }
+
+public boolean equals(ItemStack stack)
+  {
+  return InventoryTools.doItemsMatch(this.stack, stack);
+  }
+
+public static StackWrapper loadFromNBT(NBTTagCompound tag)
+  {
+  StackWrapper wrap = new StackWrapper();
+  wrap.readFromNBT(tag);
+  return wrap;
   }
 
 @Override
-public void handlePacketData(NBTTagCompound tag)
+public NBTTagCompound getNBTTag()
   {
-  // TODO Auto-generated method stub
-
+  return stack.writeToNBT(new NBTTagCompound());
   }
 
 @Override
-public void handleInitData(NBTTagCompound tag)
+public void readFromNBT(NBTTagCompound tag)
   {
-  /**
-   * if multi part packet
-   *  stash until all parts received
-   * else
-   *  
-   */
-  }
-
-@Override
-public List<NBTTagCompound> getInitData()
-  {
-  // TODO Auto-generated method stub
-  return null;
+  this.stack = ItemStack.loadItemStackFromNBT(tag);
   }
 
 }
