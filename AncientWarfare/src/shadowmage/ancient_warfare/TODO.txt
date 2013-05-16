@@ -11,6 +11,7 @@ GENERAL
 
 SCANNER
 * validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?
+* dont' pass right-click on to block
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
@@ -42,6 +43,7 @@ WAREHOUSE
 * TE maintains an 'inventory size' value based on number of warehouse blocks in its work bounds.
 * warehouse blocks will 'broadcast' when placed and removed
 * warehouse will not continually update/scan, but will rely on warehouse block broadcasting
+* needs to update client-side when inventory size changes
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -208,6 +210,8 @@ TWEAKS/OPTIMIZATION
 /********** 05-15-13 **********/
 * change civic block registry in language registry -- should now register indiv. names per civic
 
+* clean up a few issues with warehouse testing
+* clean up a few icon registry problems (the rest are actual missing textures)
 
 /********** 05-16-13 **********/
 /********** 05-17-13 **********/

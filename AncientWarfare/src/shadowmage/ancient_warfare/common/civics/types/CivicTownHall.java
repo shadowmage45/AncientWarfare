@@ -43,6 +43,7 @@ public CivicTownHall(int id, String name, String tooltip, int inventorySize, Cla
   this.workType = CivicWorkType.UPKEEP;
   this.inventorySize = inventorySize;
   this.teClass = teClass;
+  this.itemIconTexture = "civicFarmWheat1";
   }
 
 }

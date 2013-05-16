@@ -288,10 +288,10 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
     {
     this.upgradeHelper.addValidArmor(armor);
     }
-  this.inventory.ammoInventory = new AWInventoryBasic(vehicle.getAmmoBaySize(), this.inventory, 64);
-  this.inventory.armorInventory = new AWInventoryBasic(vehicle.getArmorBaySize(), this.inventory, 1);
-  this.inventory.storageInventory = new AWInventoryBasic(vehicle.getStorageBaySize(), this.inventory, 64);
-  this.inventory.upgradeInventory = new AWInventoryBasic(vehicle.getUpgradeBaySize(), this.inventory, 1);
+  this.inventory.ammoInventory = new AWInventoryBasic(vehicle.getAmmoBaySize(), 64);
+  this.inventory.armorInventory = new AWInventoryBasic(vehicle.getArmorBaySize(),  1);
+  this.inventory.storageInventory = new AWInventoryBasic(vehicle.getStorageBaySize(), 64);
+  this.inventory.upgradeInventory = new AWInventoryBasic(vehicle.getUpgradeBaySize(), 1);
   this.updateBaseStats();
   this.resetCurrentStats();
 

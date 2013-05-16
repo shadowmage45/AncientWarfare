@@ -27,9 +27,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import com.google.common.collect.ImmutableBiMap;
-import com.google.common.collect.ImmutableSetMultimap;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -39,12 +36,10 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.inventory.AWInventoryBase;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.Packet05TE;
@@ -77,8 +72,8 @@ public int maxZ;
 protected int teamNum = 0;
 protected boolean isWorkSite = false;
 protected boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
-public AWInventoryBasic inventory = new AWInventoryBasic(0);
-public AWInventoryBasic overflow = new AWInventoryBasic(4);
+public AWInventoryBase inventory = new AWInventoryBasic(0);
+public AWInventoryBase overflow = new AWInventoryBasic(4);
 protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
 
 protected Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
@@ -257,6 +252,7 @@ protected void updateInventoryStatus()
 
 public boolean onInteract(World world, EntityPlayer player)
   {
+  Config.logDebug("player interact. inv size: "+this.inventory.getSizeInventory());
   if(!world.isRemote && inventory.getSizeInventory()>0)
     {
     GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);

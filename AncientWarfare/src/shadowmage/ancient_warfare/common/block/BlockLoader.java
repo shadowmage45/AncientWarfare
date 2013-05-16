@@ -81,7 +81,10 @@ public void load()
   {
   registerBlock(builder, "Builder"); 
   registerBlock(warehouseStorage, "Warehouse Storage");
-  
+  registerBlock(civicBlock1, "CivicBlock1");
+  registerBlock(civicBlock2, "CivicBlock2");
+  registerBlock(civicBlock3, "CivicBlock3");
+  registerBlock(civicBlock4, "CivicBlock4");
   GameRegistry.registerTileEntity(TEBuilder.class, "AWBuilder");
   GameRegistry.registerTileEntity(TEWorkSiteFarm.class, "AWFarmSiteTE");   
   GameRegistry.registerTileEntity(TEFarmWheat.class, "Wheat Farm");

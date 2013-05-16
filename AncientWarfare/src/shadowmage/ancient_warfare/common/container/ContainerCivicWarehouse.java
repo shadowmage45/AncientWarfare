@@ -18,28 +18,51 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.civics.types;
+package shadowmage.ancient_warfare.common.container;
 
-import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.civics.TECivic;
+import java.util.List;
 
-public class CivicWarehouse extends Civic
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
+
+public class ContainerCivicWarehouse extends ContainerBase
 {
 
+TECivicWarehouse te;
 /**
- * @param id
+ * @param openingPlayer
+ * @param synch
  */
-public CivicWarehouse(int id, String name, String tooltip, Class <?extends TECivic> teClass, int workHorizSize, int workVertSize)
+public ContainerCivicWarehouse(EntityPlayer openingPlayer, TECivicWarehouse te)
   {
-  super(id);
-  this.name = name;
-  this.tooltip = tooltip;
-  this.teClass = teClass;
-  this.inventorySize = 0;  
-  this.workType = CivicWorkType.COURIER;
-  this.workSizeMaxHorizontal = workHorizSize;
-  this.workSizeMaxHeight = workVertSize;
-  this.itemIconTexture = "civicMine1";
+  super(openingPlayer, te);
+  this.te = te;
+  
+  
+  
+  
+  }
+
+@Override
+public void handlePacketData(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub
+
+  }
+
+@Override
+public void handleInitData(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub
+
+  }
+
+@Override
+public List<NBTTagCompound> getInitData()
+  {
+  // TODO Auto-generated method stub
+  return null;
   }
 
 }

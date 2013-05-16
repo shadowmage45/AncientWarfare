@@ -27,6 +27,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.AWBlockBase;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 
 public class BlockWarehouseStorage extends AWBlockBase
@@ -50,6 +51,7 @@ public boolean onBlockClicked(World world, int posX, int posY, int posZ, EntityP
 
 public void breakBlock(World world, int x, int y, int z, int id, int meta)
   {
+  long t1 = System.nanoTime();
   if(!world.isRemote)
     {
     TileEntity te;
@@ -66,12 +68,15 @@ public void breakBlock(World world, int x, int y, int z, int id, int meta)
         }
       }
     }
+  long t2 = System.nanoTime();
+  Config.logDebug("break time: "+(t2-t1));
   super.breakBlock(world, x, y, z, id, meta);
   }
 
 @Override
 public void onBlockAdded(World world, int x, int y, int z)
   {
+  long t1 = System.nanoTime();
   if(!world.isRemote)
     {
     TileEntity te;
@@ -89,6 +94,8 @@ public void onBlockAdded(World world, int x, int y, int z)
         }
       }
     }
+  long t2 = System.nanoTime();
+  Config.logDebug("place time: "+(t2-t1));
   super.onBlockAdded(world, x, y, z);
   }
 

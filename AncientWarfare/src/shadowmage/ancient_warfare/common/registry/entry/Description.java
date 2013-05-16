@@ -249,8 +249,9 @@ public void registerIcons(IconRegister reg)
   {
   String tex;
   for(Integer key : this.iconTextures.keySet())
-    {
+    {    
     tex = this.iconTextures.get(key);
+//    Config.logDebug("registering icon tex: "+tex +" for item: "+this.getDisplayName(key));
     this.icons.put(key, reg.registerIcon(tex));
     }
   }
