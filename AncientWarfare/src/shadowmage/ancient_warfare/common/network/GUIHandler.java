@@ -28,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
+import shadowmage.ancient_warfare.client.gui.civic.GuiCivicWarehouse;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCommandBaton;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCourierRoutingSlip;
 import shadowmage.ancient_warfare.client.gui.npc.GuiNpcBase;
@@ -42,9 +43,11 @@ import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleAmmoSelection;
 import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleDebug;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTE;
+import shadowmage.ancient_warfare.common.container.ContainerCivicWarehouse;
 import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
@@ -79,8 +82,8 @@ public static final int NPC_COMMAND_BATON = 7;
 public static final int CIVIC_BASE = 8;
 public static final int NPC_BASE = 9;
 public static final int NPC_COURIER = 10;
-
-public static final int COURIER_SLIP = 30;
+public static final int COURIER_SLIP = 11;
+public static final int CIVIC_WAREHOUSE = 12;
 
 public static final int VEHICLE_AMMO_SELECT = 98;
 public static final int VEHICLE_DEBUG = 99;
@@ -101,6 +104,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   {
   VehicleBase vehicle;
   NpcBase npc;
+  TileEntity te;
   switch(ID)
   {
   case STRUCTURE_SELECT:
@@ -129,7 +133,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   return new ContainerCommandBaton(player);
   
   case CIVIC_BASE:  
-  TileEntity te = world.getBlockTileEntity(x, y, z);
+  te = world.getBlockTileEntity(x, y, z);
   if(te instanceof TECivic)
     {
     return new ContainerCivicTE(player, (TECivic)te);
@@ -159,6 +163,15 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
     CourierRoutingInfo info = new CourierRoutingInfo(stack);
     ContainerCourierRoutingSlip container = new ContainerCourierRoutingSlip(player, info);
     return container;
+    }
+  return null;
+  
+  case CIVIC_WAREHOUSE:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TECivicWarehouse)
+    {
+    TECivicWarehouse tew = (TECivicWarehouse)te;
+    return new ContainerCivicWarehouse(player, tew);
     }
   return null;
   
@@ -239,6 +252,15 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
     CourierRoutingInfo info = new CourierRoutingInfo(stack);
     ContainerCourierRoutingSlip container = new ContainerCourierRoutingSlip(player, info);
     return new GuiCourierRoutingSlip(container);
+    }
+  return null;
+  
+  case CIVIC_WAREHOUSE:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TECivicWarehouse)
+    {
+    TECivicWarehouse tew = (TECivicWarehouse)te;
+    return new GuiCivicWarehouse(new ContainerCivicWarehouse(player, tew), tew);
     }
   return null;
   

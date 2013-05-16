@@ -20,16 +20,28 @@
  */
 package shadowmage.ancient_warfare.common.container;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.utils.ByteTools;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.utils.NBTWriter;
+import shadowmage.ancient_warfare.common.utils.StackWrapper;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
 
 public class ContainerCivicWarehouse extends ContainerBase
 {
 
 TECivicWarehouse te;
+public List<StackWrapper> warehouseItems = new ArrayList<StackWrapper>();
+
 /**
  * @param openingPlayer
  * @param synch
@@ -38,31 +50,32 @@ public ContainerCivicWarehouse(EntityPlayer openingPlayer, TECivicWarehouse te)
   {
   super(openingPlayer, te);
   this.te = te;  
+  if(!te.worldObj.isRemote)
+    {
+    this.warehouseItems = InventoryTools.getCompactedInventory(te.inventory);
+    Config.logDebug("initializing server container. items length: "+warehouseItems.size());
+    }
   }
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-
+  
   }
 
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
-  /**
-   * if multi part packet
-   *  stash until all parts received
-   * else
-   *  
-   */
+  this.warehouseItems = InventoryTools.getCompactInventoryFromTag(tag);
+  Config.logDebug("read warehouse items length: "+warehouseItems.size());
   }
 
 @Override
 public List<NBTTagCompound> getInitData()
   {
-  // TODO Auto-generated method stub
-  return null;
+  List<NBTTagCompound> tags = new ArrayList<NBTTagCompound>();
+  tags.add(InventoryTools.getTagForCompactInventory(warehouseItems));
+  return tags;
   }
 
 }

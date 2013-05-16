@@ -20,17 +20,76 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 public class InventoryTools
 {
 
 static Random random = new Random();
+
+
+public static List<StackWrapper> getCompactInventoryFromTag(NBTTagCompound tag)
+  {
+  ArrayList<StackWrapper> stacks = new ArrayList<StackWrapper>();
+  NBTTagList list = tag.getTagList("items");  
+  for(int i = 0; i < list.tagCount(); i++)
+    {
+    stacks.add(StackWrapper.loadFromNBT((NBTTagCompound) list.tagAt(i)));
+    }  
+  return stacks;
+  }
+
+public static NBTTagCompound getTagForCompactInventory(List<StackWrapper> items)
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  NBTTagList list = new NBTTagList();
+  for(StackWrapper wrap : items)
+    {
+    list.appendTag(wrap.getNBTTag());
+    }
+  tag.setTag("items", list);
+  return tag;
+  }
+
+public static List<StackWrapper> getCompactedInventory(IInventory inv)
+  {
+  ArrayList<StackWrapper> stacks = new ArrayList<StackWrapper>();
+  ItemStack fromInv;
+  StackWrapper fromList;  
+  for(int i = 0; i < inv.getSizeInventory(); i++)
+    {
+    fromInv = inv.getStackInSlot(i);
+    if(fromInv==null){continue;}
+    boolean found = false;
+    for(int k = 0; k < stacks.size();k ++)
+      {
+      fromList = stacks.get(i);
+      if(fromList==null){continue;}
+      if(fromList.equals(fromInv))
+        {
+        found = true;
+        fromList.stack.stackSize+=fromInv.stackSize;
+        //found item, increment counts
+        break;
+        }
+      }
+    if(!found)
+      {
+      stacks.add(new StackWrapper(fromInv));
+      }
+    }  
+  return stacks;
+  }
 
 public static int getCountOf(IInventory inv, ItemStack filter, int firstSlot, int lastSlot)
   {

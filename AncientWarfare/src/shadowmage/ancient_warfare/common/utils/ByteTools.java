@@ -121,7 +121,6 @@ public static byte[] compositeByteChunks(byte[][] bytes)
   return allBytes;
   }
 
-
 /**
  * Writes a compressed NBTTagCompound to the OutputStream
  */

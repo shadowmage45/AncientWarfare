@@ -27,10 +27,15 @@ import java.util.WeakHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerCivicWarehouse;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryMapped;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 
 public class TECivicWarehouse extends TECivic implements IEntityContainerSynch
@@ -64,11 +69,23 @@ public void setCivic(Civic civ)
   inventory = new AWInventoryMapped(this.storageSize);
   }
 
+@Override
+public boolean onInteract(World world, EntityPlayer player)
+  {
+  Config.logDebug("player interact with warehouse. inv size: "+this.inventory.getSizeInventory());
+  if(!world.isRemote)
+    {
+    GUIHandler.instance().openGUI(GUIHandler.CIVIC_WAREHOUSE, player, world, xCoord, yCoord, zCoord);
+    }
+  return true;
+  }
+
 public void addWareHouseBlock(int x, int y, int z)
   {
   this.storageSize += 27;
   ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
   Config.logDebug("adding warehouse block. new size: "+this.storageSize);
+  this.worldObj.markBlockForUpdate(x, y, z);
   }
 
 public void removeWarehouseBlock(int x, int y, int z)
@@ -76,14 +93,16 @@ public void removeWarehouseBlock(int x, int y, int z)
   this.storageSize-= 27;
   ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
   Config.logDebug("removing warehouse block. new size: "+this.storageSize);
+  this.worldObj.markBlockForUpdate(x, y, z);
   }
 
 @Override
 protected void readCivicDataFromNBT(NBTTagCompound tag)
   {
   if(tag.hasKey("warehouseSize"))
-    {
+    {    
     storageSize = tag.getInteger("warehouseSize");
+    Config.logDebug("reading warehouse tag data, inv size: "+storageSize);
     }
   super.readCivicDataFromNBT(tag);  
   }
@@ -93,6 +112,14 @@ public void writeToNBT(NBTTagCompound tag)
   {
   super.writeToNBT(tag);
   tag.setInteger("warehouseSize", storageSize);
+  }
+
+@Override
+public Packet getDescriptionPacket()
+  {
+  Packet132TileEntityData packet = (Packet132TileEntityData) super.getDescriptionPacket();
+  packet.customParam1.setInteger("invSize", this.storageSize);
+  return packet;
   }
 
 @Override

@@ -23,17 +23,24 @@ package shadowmage.ancient_warfare.client.gui.civic;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerCivicWarehouse;
 
 public class GuiCivicWarehouse extends GuiContainerAdvanced
 {
 
+TECivicWarehouse te;
+ContainerCivicWarehouse container;
+
 /**
  * @param container
  */
-public GuiCivicWarehouse(Container container)
+public GuiCivicWarehouse(Container container, TECivicWarehouse te)
   {
   super(container);
+  this.container = (ContainerCivicWarehouse) container;
+  this.te = te;
   }
 
 @Override
@@ -63,6 +70,14 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
+  if(container.warehouseItems!=null)
+    {
+    this.drawStringGui("cont inventory size: "+container.warehouseItems.size(), 10, 10, 0xffffffff);
+    }
+  else
+    {
+    this.drawStringGui("cont inventory size: NULL CONTAINER", 10, 10, 0xffffffff);
+    }
   
   }
 
