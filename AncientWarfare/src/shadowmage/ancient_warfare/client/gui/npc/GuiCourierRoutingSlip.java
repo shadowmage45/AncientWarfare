@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.client.gui.npc;
 
 import java.util.HashSet;
 
+import net.minecraft.block.Block;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,9 +32,11 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiFakeSlot;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointItemRouting;
+import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 
 public class GuiCourierRoutingSlip extends GuiContainerAdvanced
 {
@@ -203,11 +206,22 @@ protected void addButtonsFor(int index, WayPointItemRouting point)
   slot.enabled = false;
   int id = player.worldObj.getBlockId(point.floorX(), point.floorY(), point.floorZ());
   int meta = player.worldObj.getBlockMetadata(point.floorX(), point.floorY(), point.floorZ());
-  if(id!=0)
+  if(id!=0 && Block.blocksList[id]!=null)
     {
-    slot.setItemStack(new ItemStack(id,1,meta));
-    slot.addToToolitp("Routing Waypoint: "+point.floorX()+", "+point.floorY()+", "+point.floorZ()); 
-    slot.addToToolitp(slot.getStack().getDisplayName());
+    Block block = Block.blocksList[id];
+    if(block instanceof BlockCivic)
+      {
+      BlockCivic blockC = (BlockCivic)block;
+      slot.setItemStack(CivicRegistry.instance().getItemFor(blockC.blockNum, meta));
+      slot.addToToolitp("Routing Waypoint: "+point.floorX()+", "+point.floorY()+", "+point.floorZ()); 
+      slot.addToToolitp(slot.getStack().getDisplayName());
+      }
+    else
+      {
+      slot.setItemStack(new ItemStack(block,1,meta));
+      slot.addToToolitp("Routing Waypoint: "+point.floorX()+", "+point.floorY()+", "+point.floorZ()); 
+      slot.addToToolitp(slot.getStack().getDisplayName());
+      }
     }
   area.elements.add(slot);
   

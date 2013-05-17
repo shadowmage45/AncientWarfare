@@ -118,6 +118,33 @@ public void setBounds(int minX, int minY, int minZ, int maxX, int maxY, int maxZ
   this.maxZ = maxZ;
   }
 
+public boolean isPointInBounds(int x, int y, int z)
+  {
+  return x>=this.minX && x<=this.maxX && y>=this.minY && y<=this.maxY && z>=this.minZ && z<=this.maxZ;  
+  }
+
+public boolean doesBBIntersect(AxisAlignedBB bb)
+  {
+  AxisAlignedBB work = this.getWorkBounds();
+  AxisAlignedBB extra = this.getSecondaryRenderBounds();
+  if(bb==null || work==null)
+    {
+    return false;
+    }
+  if(bb.intersectsWith(work) || work.intersectsWith(bb))
+    {
+    return true;
+    }
+  else if(extra!=null)
+    {
+    if(bb.intersectsWith(extra) || extra.intersectsWith(bb))
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
 public boolean isWorker(NpcBase worker)
   {
   return this.workers.contains(worker);

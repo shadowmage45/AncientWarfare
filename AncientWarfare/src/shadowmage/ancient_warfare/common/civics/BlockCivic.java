@@ -45,7 +45,7 @@ import shadowmage.ancient_warfare.common.registry.entry.Description;
 public class BlockCivic extends AWBlockContainer
 {
 
-int blockNum;
+public int blockNum;
 /**
  * @param par1
  * @param par2
@@ -191,5 +191,6 @@ public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, i
   Config.logDebug("getting id picked for: "+blockNum + " meta: "+world.getBlockMetadata(x, y, z));
   return CivicRegistry.instance().getItemFor(blockNum, world.getBlockMetadata(x, y, z));
   }
+
 
 }

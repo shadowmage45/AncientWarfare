@@ -1,6 +1,6 @@
 TONIGHT
-* test commander bonuses
 * broadcast targeting vs npcs
+* clean up routing GUI / rework routing a bit
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -11,8 +11,11 @@ THIS(next) WEEKEND
 GENERAL
 * create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
 * move many items over to left-click to activate (block scanner, others)(solves block interaction issues)
-* civic block descriptions in routing gui are...off...
 * clean up routing slip GUI (its freaking ugly)
+* investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
+    or other method to set NPC types as aggro for other Mob type entities
+* test commander bonuses
+* tons of gui cleanup -- civic, npc, routing..
 
 SCANNER
 * validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?
@@ -35,6 +38,7 @@ PATHFINDING
 CIVICS
 * toggle in GUI's to enable/disable broadcasting of work
     apply redstone signal?
+    can use (send client event) to trigger enable/disable of work right from the gui
 * need objective icons and rendering
 * need inventory status bar
 * need work status bar
@@ -43,7 +47,6 @@ CIVICS
 WAREHOUSE 
 * needs to drop inventory when storage block is removed
 * often displays as if it had an extra page
-* warehouse control center icons
 * warehouse description needs revision
 * need apropriate description for warehouse expansion blocks
 
@@ -229,8 +232,10 @@ TWEAKS/OPTIMIZATION
 * add routing slip1 icon    
 * routing item needs to validate only 4 slots (+2 per additional rank)
 * find/fix the incorrect blocks/.png icon registration from who knows where...(warehouse control block)
-* investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
-    or other method to set NPC types as aggro for other Mob type entities
+* warehouse control center icons
+
+* civic block descriptions in routing gui are...off...
+* fix a few other things from work (bounds checking)
     
     
 /********** 05-18-13 **********/

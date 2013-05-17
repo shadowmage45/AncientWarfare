@@ -33,6 +33,7 @@ import net.minecraft.util.Vec3Pool;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -108,13 +109,7 @@ protected boolean checkForOtherCivicBounds(World world, BlockPosition a)
     te = (TileEntity)obj;
     if(te instanceof TECivic)
       {
-      AxisAlignedBB bb = ((TECivic) te).getWorkBounds();
-      if(bb!=null && bb.isVecInside(Vec3.createVectorHelper(a.x, a.y, a.z)))
-        {
-        return true;
-        }
-      bb = ((TECivic) te).getSecondaryRenderBounds();
-      if(bb!=null && bb.isVecInside(Vec3.createVectorHelper(a.x, a.y, a.z)))
+      if(((TECivic) te).isPointInBounds(a.x, a.y, a.z))
         {
         return true;
         }
@@ -131,10 +126,14 @@ protected boolean checkForOtherCivicBounds(World world, AxisAlignedBB bb)
     te = (TileEntity)obj;
     if(te instanceof TECivic)
       {
-      AxisAlignedBB tebb = ((TECivic) te).getWorkBounds();
-      if(tebb!=null && bb!=null)
+      Config.logDebug("checking bounds for: "+te + " :: "+bb);
+      if(((TECivic) te).doesBBIntersect(bb))
         {
-        return tebb.intersectsWith(bb) || bb.intersectsWith(tebb);
+        return true;
+        }
+      else if(bb.isVecInside(Vec3.createVectorHelper(te.xCoord, te.yCoord, te.zCoord)))
+        {
+        return true;
         }
       }
     }
@@ -220,9 +219,9 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     else if(tag.hasKey("pos1"))
       {
       BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
-      
-      AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(hit.x, hit.y, hit.z, hit.x+1, hit.y+1, hit.z+1);
-      
+      BlockPosition min = BlockTools.getMin(pos1, hit);
+      BlockPosition max = BlockTools.getMax(pos1, hit);
+      AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);      
       if(checkForOtherCivicBounds(world, bb))
         {
         player.addChatMessage("Invalid position, within another civics bounds area");

@@ -71,7 +71,7 @@ public void registerCivics()
     d.setIconTexture(civ.getIconTexture(), civ.getGlobalID());
     Block block = getBlockFor(civ.getGlobalID());
     int meta = civ.getGlobalID()%16;
-    LanguageRegistry.addName(new ItemStack(block , 1 , meta), civ.getDisplayName());
+    LanguageRegistry.addName(new ItemStack(block, 1 , meta), civ.getDisplayName());    
     Config.logDebug("registering description for: "+block +" meta: "+meta+ " name: "+civ.getDisplayName());
     }
   }
