@@ -33,6 +33,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -384,7 +385,7 @@ protected void updateAITick()
     }
   aiTick = 0;
   this.aiManager.updateObjectives(); 
-//  this.broadcastAggro();
+  this.broadcastAggro();
   }
 
 protected void broadcastAggro()  
@@ -397,9 +398,13 @@ protected void broadcastAggro()
       Config.logDebug("setting mob attack target for: "+mob);
       //setPrivateValue(EntityLiving.class, living, turret, "currentTarget", "field_70776_bF");
 //      ObfuscationReflectionHelper.setPrivateValue(classToAccess, instance, value, fieldNames);
+      ObfuscationReflectionHelper.setPrivateValue(EntityLiving.class, mob, this, "currentTarget", "field_70776_bF");
       mob.setRevengeTarget(this);
       mob.setAttackTarget(this);
       mob.setLastAttackingEntity(this);
+      PathEntity path = mob.worldObj.getPathEntityToEntity(mob, this, 16.f, true, false, false, true);
+      mob.getNavigator().setPath(path, mob.getAIMoveSpeed());
+      mob.setPathToEntity(path);      
       }
     }  
   }

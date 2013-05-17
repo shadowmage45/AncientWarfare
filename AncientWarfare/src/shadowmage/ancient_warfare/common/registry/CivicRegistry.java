@@ -70,7 +70,9 @@ public void registerCivics()
     Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.civicPlacer, civ.getGlobalID(), civ.getDisplayName(), "", civ.getDisplayTooltip());
     d.setIconTexture(civ.getIconTexture(), civ.getGlobalID());
     Block block = getBlockFor(civ.getGlobalID());
-    LanguageRegistry.addName(new ItemStack(block,1,civ.getGlobalID()%16), civ.getDisplayName());
+    int meta = civ.getGlobalID()%16;
+    LanguageRegistry.addName(new ItemStack(block , 1 , meta), civ.getDisplayName());
+    Config.logDebug("registering description for: "+block +" meta: "+meta+ " name: "+civ.getDisplayName());
     }
   }
 

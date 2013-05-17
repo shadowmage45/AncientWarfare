@@ -76,9 +76,16 @@ public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPla
       {
       MovingObjectPosition hit = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
       CourierRoutingInfo info = new CourierRoutingInfo(stack);
-      info.addRoutePoint(new WayPointItemRouting(x, y, z, hit.sideHit, TargetType.DELIVER));
-      info.writeToItem(stack);    
-      GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, player.worldObj, 0, 0, 0);
+      if(info.getRouteSize() < 4 + (2*stack.getItemDamage()))
+        {
+        info.addRoutePoint(new WayPointItemRouting(x, y, z, hit.sideHit, TargetType.DELIVER));
+        info.writeToItem(stack);    
+        GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, player.worldObj, 0, 0, 0);
+        }
+      else
+        {
+        player.addChatMessage("Routing Slip has full route!");
+        }
       }    
     }   
   return flag;

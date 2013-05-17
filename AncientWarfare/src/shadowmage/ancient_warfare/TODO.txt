@@ -1,5 +1,6 @@
 TONIGHT
 * test commander bonuses
+* broadcast targeting vs npcs
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -8,24 +9,28 @@ THIS(next) WEEKEND
 * preview video..it better be cool!
 
 GENERAL
+* create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
+* move many items over to left-click to activate (block scanner, others)(solves block interaction issues)
+* civic block descriptions in routing gui are...off...
+* clean up routing slip GUI (its freaking ugly)
 
 SCANNER
 * validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?
-* dont' pass right-click on to block
+* dont' pass right-click on to block (seems set, doesn't work)
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
 * vehicle navigator needs to enable gravity even with no-clip, if block under main body is air, fall...
+    (check if current nav targetY < this.Y && isWalkable (this.Y - 1))    
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
     use command baton, check if player has food in inventory && withdraw upkeep ??
-* investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
-    or other method to set NPC types as aggro for other Mob type entities
 
 PATHFINDING
 * better handling of isWalkable -- in need of minor attention for other (mod) blocks
 * need to check if a block has blocking entities in it during iswalkable check ( or just enable no collide)
+* use iterative method (change from static-max time/length)xv ```
 
 CIVICS
 * toggle in GUI's to enable/disable broadcasting of work
@@ -34,20 +39,13 @@ CIVICS
 * need inventory status bar
 * need work status bar
 * need a clearer way of designating where bounds on a civic SHOULD be.  videos/screenshots?
-* need to scan when attempting to place, make sure no bounds overlap with any existing civics
 
 WAREHOUSE 
-* uses 'warehouse blocks' -- an essentially data-only block that serves to increase the storage area of
-    a warehouse
-* the first/only multi-block of AW.
-* TE maintains an 'inventory size' value based on number of warehouse blocks in its work bounds.
-* warehouse blocks will 'broadcast' when placed and removed
-* warehouse will not continually update/scan, but will rely on warehouse block broadcasting
-
-* gui needs server side help...
-    need to count/tally items server side when window is opened    
-    only resend on a refresh/update (player requested an item)
-
+* needs to drop inventory when storage block is removed
+* often displays as if it had an extra page
+* warehouse control center icons
+* warehouse description needs revision
+* need apropriate description for warehouse expansion blocks
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -151,7 +149,6 @@ TWEAKS/OPTIMIZATION
 * optimize, optimize, optimize.  Do massive timing/checking for generation times.
 * change creative instant builder to be...not so instant.  break it up into ticks to smooth built-times to sub 10ms/tick
 * figure out better way to handle ruins import (current is convert on run, manual copy and re-run)
-* remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
 * some ruins structures (one, jungle throne) appears offset -1Y
 * editor GUI has some really ugly code to render chars....
 * custom block placement code for creative/survival builders (set server block, manually relay to client--should 
@@ -211,6 +208,7 @@ TWEAKS/OPTIMIZATION
 * fix NPC attack-range issue (was using target eye pos rather than floor)
 * add some comments to ByteTools
 * add inventory scanning ability pass 1 -- required massive restructure of scanner, may still have bugs
+* remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
 /********** 05-15-13 **********/
 * change civic block registry in language registry -- should now register indiv. names per civic
 
@@ -219,6 +217,21 @@ TWEAKS/OPTIMIZATION
 
 /********** 05-16-13 **********/
 * warehouse will now send inventory size to clients (description packet...blah..at least it is not that often)
+* tons of work on warehouse -- working now, needs only minor attention
 
 /********** 05-17-13 **********/
+* need to scan when attempting to place, make sure no bounds overlap with any existing civics
+* needs to cache storage block locations, and only 'remove' if input location is
+    one of the stored locations
+* move civic inventory dropped into the TE
+* add warehouse control block inventory dropping (wow, that'll be a mess :) )
+* guard objective icon
+* add routing slip1 icon    
+* routing item needs to validate only 4 slots (+2 per additional rank)
+* find/fix the incorrect blocks/.png icon registration from who knows where...(warehouse control block)
+* investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
+    or other method to set NPC types as aggro for other Mob type entities
+    
+    
 /********** 05-18-13 **********/
+* get a freaking video out already ?!?!??

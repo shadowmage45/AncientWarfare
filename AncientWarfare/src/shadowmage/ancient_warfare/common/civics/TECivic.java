@@ -98,6 +98,11 @@ public void setCivic(Civic civ)
     }
   }
 
+public IInventory[] getInventoryToDropOnBreak()
+  {
+  return new IInventory[]{this, overflow};
+  }
+
 public Civic getCivic()
   {
   return this.civic;

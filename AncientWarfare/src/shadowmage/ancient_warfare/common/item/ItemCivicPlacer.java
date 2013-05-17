@@ -26,6 +26,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3Pool;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
@@ -96,6 +100,47 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   par3List.addAll(CivicRegistry.instance().getDisplayStacks());
   }
 
+protected boolean checkForOtherCivicBounds(World world, BlockPosition a)
+  {
+  TileEntity te;
+  for(Object obj : world.loadedTileEntityList)
+    {
+    te = (TileEntity)obj;
+    if(te instanceof TECivic)
+      {
+      AxisAlignedBB bb = ((TECivic) te).getWorkBounds();
+      if(bb!=null && bb.isVecInside(Vec3.createVectorHelper(a.x, a.y, a.z)))
+        {
+        return true;
+        }
+      bb = ((TECivic) te).getSecondaryRenderBounds();
+      if(bb!=null && bb.isVecInside(Vec3.createVectorHelper(a.x, a.y, a.z)))
+        {
+        return true;
+        }
+      }
+    }
+  return false;
+  }
+
+protected boolean checkForOtherCivicBounds(World world, AxisAlignedBB bb)
+  {
+  TileEntity te;
+  for(Object obj : world.loadedTileEntityList)
+    {
+    te = (TileEntity)obj;
+    if(te instanceof TECivic)
+      {
+      AxisAlignedBB tebb = ((TECivic) te).getWorkBounds();
+      if(tebb!=null && bb!=null)
+        {
+        return tebb.intersectsWith(bb) || bb.intersectsWith(tebb);
+        }
+      }
+    }
+  return false;
+  }
+
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
@@ -126,6 +171,11 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       }
     else if(tag.hasKey("pos2") && tag.hasKey("pos1"))
       {
+      if(checkForOtherCivicBounds(world, hit))
+        {
+        player.addChatMessage("Invalid position, within another civics bounds area");
+        return true;
+        }
       BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
       BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
       BlockPosition min = BlockTools.getMin(pos1, pos2);
@@ -170,6 +220,14 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     else if(tag.hasKey("pos1"))
       {
       BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
+      
+      AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(hit.x, hit.y, hit.z, hit.x+1, hit.y+1, hit.z+1);
+      
+      if(checkForOtherCivicBounds(world, bb))
+        {
+        player.addChatMessage("Invalid position, within another civics bounds area");
+        return true;
+        }
       
       if(civ!=null)
         {
@@ -216,7 +274,14 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         {
         hit.offsetForMCSide(side);
         }
-      tag.setCompoundTag("pos1", hit.writeToNBT(new NBTTagCompound()));
+      if(!checkForOtherCivicBounds(world, hit))
+        {
+        tag.setCompoundTag("pos1", hit.writeToNBT(new NBTTagCompound()));
+        }
+      else
+        {
+        player.addChatMessage("Invalid position, within another civics bounds area");
+        }
       }
     }
   return true;

@@ -183,6 +183,8 @@ public String getObjectiveTexture(byte objective)
   case 16:
   return base + "objective_courier.png";//
   case 17:
+  return base + "objective_guard.png";//
+  case 18:
   default:
   return base + "objective_home.png";
   }  

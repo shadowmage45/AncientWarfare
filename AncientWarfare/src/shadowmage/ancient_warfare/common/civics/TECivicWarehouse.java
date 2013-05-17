@@ -20,13 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.civics;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.world.World;
@@ -37,7 +40,9 @@ import shadowmage.ancient_warfare.common.inventory.AWInventoryBase;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryMapped;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class TECivicWarehouse extends TECivic implements IEntityContainerSynch
 {
@@ -57,6 +62,7 @@ int storageSize = 0;
 
 public AWInventoryBase inputSlots = new AWInventoryBasic(9);
 public AWInventoryBase withdrawSlots = new AWInventoryBasic(9);
+List<BlockPosition> storageBlocks = new ArrayList<BlockPosition>();
 
 /**
  * 
@@ -64,6 +70,12 @@ public AWInventoryBase withdrawSlots = new AWInventoryBasic(9);
 public TECivicWarehouse()
   {
   // TODO Auto-generated constructor stub
+  }
+
+@Override
+public IInventory[] getInventoryToDropOnBreak()
+  {
+  return new IInventory[]{inventory, inputSlots, withdrawSlots, overflow};
   }
 
 @Override
@@ -102,21 +114,46 @@ public boolean onInteract(World world, EntityPlayer player)
   }
 
 public void addWareHouseBlock(int x, int y, int z, int size)
-  {
-  this.storageSize += size;
-  ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
-  this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+  {  
+  boolean found = false;
+  for(BlockPosition p : this.storageBlocks)
+    {
+    if(p.x==x && p.y==y && p.z==z)
+      {
+      found = true;
+      break;
+      }
+    }
+  if(!found)
+    {
+    this.storageSize += size;
+    ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
+    this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    this.storageBlocks.add(new BlockPosition(x,y,z));
+    }
   }
 
 public void removeWarehouseBlock(int x, int y, int z, int size)
   {
-  this.storageSize-= size;
-  if(this.storageSize<0)
+  boolean found = false;
+  for(BlockPosition p : this.storageBlocks)
     {
-    this.storageSize = 0;
+    if(p.x==x && p.y==y && p.z==z)
+      {
+      found = true;
+      break;
+      }
     }
-  ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
-  this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+  if(found)
+    {
+    this.storageSize-= size;
+    if(this.storageSize<0)
+      {
+      this.storageSize = 0;
+      }
+    ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
+    this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }  
   }
 
 @Override
@@ -134,6 +171,14 @@ protected void readCivicDataFromNBT(NBTTagCompound tag)
     {
     this.withdrawSlots.readFromNBT(tag.getCompoundTag("withdrawInventory"));
     }
+  if(tag.hasKey("blockList"))
+    {
+    NBTTagList list = tag.getTagList("blockList");
+    for(int i = 0; i <list.tagCount(); i++)
+      {
+      this.storageBlocks.add(new BlockPosition((NBTTagCompound) list.tagAt(i)));
+      }
+    }
   super.readCivicDataFromNBT(tag);
   }
 
@@ -144,6 +189,12 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("warehouseSize", storageSize);
   tag.setCompoundTag("inputInventory", this.inputSlots.getNBTTag());
   tag.setCompoundTag("withdrawInventory", this.withdrawSlots.getNBTTag());
+  NBTTagList list = new NBTTagList();
+  for(int i = 0; i < this.storageBlocks.size(); i++)
+    {
+    list.appendTag(this.storageBlocks.get(i).writeToNBT(new NBTTagCompound()));
+    }
+  tag.setTag("blockList", list);
   }
 
 @Override
@@ -181,5 +232,6 @@ public boolean canInteract(EntityPlayer player)
   {
   return TeamTracker.instance().getTeamForPlayer(player)==this.teamNum;
   }
+
 
 }
