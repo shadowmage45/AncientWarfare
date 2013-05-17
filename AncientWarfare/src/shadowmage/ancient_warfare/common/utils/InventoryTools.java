@@ -21,12 +21,14 @@
 package shadowmage.ancient_warfare.common.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -61,7 +63,7 @@ public static NBTTagCompound getTagForCompactInventory(List<StackWrapper> items)
   return tag;
   }
 
-public static List<StackWrapper> getCompactedInventory(IInventory inv)
+public static List<StackWrapper> getCompactedInventory(IInventory inv, Comparator sorter)
   {
   ArrayList<StackWrapper> stacks = new ArrayList<StackWrapper>();
   ItemStack fromInv;
@@ -73,7 +75,7 @@ public static List<StackWrapper> getCompactedInventory(IInventory inv)
     boolean found = false;
     for(int k = 0; k < stacks.size();k ++)
       {
-      fromList = stacks.get(i);
+      fromList = stacks.get(k);
       if(fromList==null){continue;}
       if(fromList.equals(fromInv))
         {
@@ -88,7 +90,60 @@ public static List<StackWrapper> getCompactedInventory(IInventory inv)
       stacks.add(new StackWrapper(fromInv));
       }
     }  
+  if(sorter!=null)
+    {
+    Collections.sort(stacks, sorter);
+    }
   return stacks;
+  }
+
+public static int getFoodValue(IInventory inv, int firstSlot, int lastSlot)
+  {
+  ItemStack fromSlot = null;
+  int foodValue = 0;
+  for(int i = firstSlot; i < inv.getSizeInventory() && i <=lastSlot; i++)
+    {
+    fromSlot = inv.getStackInSlot(i);
+    if(fromSlot==null){continue;}
+    if(fromSlot.getItem() instanceof ItemFood)
+      {
+      foodValue += ((ItemFood)fromSlot.getItem()).getHealAmount() * fromSlot.stackSize;
+      }
+    }
+  return foodValue;
+  }
+
+public static void tryRemoveFoodValue(IInventory inv, int firstSlot, int lastSlot, int foodValue)
+  {
+  ItemStack fromSlot = null;
+  int stackValue;
+  int perItem;
+  for(int i = firstSlot; i < inv.getSizeInventory() && i <=lastSlot; i++)
+    {
+    fromSlot = inv.getStackInSlot(i);
+    if(fromSlot==null){continue;}
+    if(fromSlot.getItem() instanceof ItemFood)
+      {
+      perItem = ((ItemFood)fromSlot.getItem()).getHealAmount();
+      if(perItem<=0){continue;}
+      stackValue = perItem * fromSlot.stackSize;
+      if(stackValue > foodValue)
+        {
+        int remaining = stackValue - foodValue;
+        fromSlot.stackSize = remaining/perItem;
+        foodValue = 0;
+        }
+      else
+        {
+        foodValue-=stackValue;
+        inv.setInventorySlotContents(i, null);
+        }
+      }
+    if(foodValue<=0)
+      {
+      break;
+      }
+    }
   }
 
 public static int getCountOf(IInventory inv, ItemStack filter, int firstSlot, int lastSlot)
@@ -174,7 +229,11 @@ public static ItemStack getItems(IInventory inv, ItemStack filter, int max, int 
           continue;
           }
         fromSlot.stackSize-=howMany;
-        toReturn.stackSize+=howMany;        
+        toReturn.stackSize+=howMany;
+        if(fromSlot.stackSize==0)
+          {
+          inv.setInventorySlotContents(i, null);
+          }
         }
       }
     if(toReturn!=null && (toReturn.stackSize>=max || toReturn.stackSize>=toReturn.getMaxStackSize()))//found 'enough', return

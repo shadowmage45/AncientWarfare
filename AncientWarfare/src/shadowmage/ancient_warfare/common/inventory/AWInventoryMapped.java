@@ -121,8 +121,8 @@ public void readFromNBT(NBTTagCompound tag)
   for (int tagIndex = 0; tagIndex < itemList.tagCount(); ++tagIndex)
     {
     NBTTagCompound itemStackTag = (NBTTagCompound)itemList.tagAt(tagIndex);
-    int slotForItem = itemStackTag.getByte("Slot") & 255;
-    if (slotForItem >= 0 )
+    int slotForItem = itemStackTag.getInteger("Slot");
+    if(slotForItem >= 0 )
       {
       this.items.put(slotForItem, ItemStack.loadItemStackFromNBT(itemStackTag));
       }

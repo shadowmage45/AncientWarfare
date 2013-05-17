@@ -25,9 +25,11 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.AWBlockBase;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 
 public class BlockWarehouseStorage extends AWBlockBase
@@ -63,7 +65,7 @@ public void breakBlock(World world, int x, int y, int z, int id, int meta)
         TECivicWarehouse ware = (TECivicWarehouse)te;
         if(x>=ware.minX && y>=ware.minY && z>=ware.minZ && x<=ware.maxX && y<=ware.maxY && z <=ware.maxZ)
           {
-          ware.removeWarehouseBlock(x, y, z);
+          ware.removeWarehouseBlock(x, y, z, 9 * (meta+1));
           }
         }
       }
@@ -88,7 +90,7 @@ public void onBlockAdded(World world, int x, int y, int z)
         TECivicWarehouse ware = (TECivicWarehouse)te;
         if(x>=ware.minX && y>=ware.minY && z>=ware.minZ && x<=ware.maxX && y<=ware.maxY && z <=ware.maxZ)
           {
-          ware.addWareHouseBlock(x, y, z);
+          ware.addWareHouseBlock(x, y, z, 9 * (world.getBlockMetadata(x, y, z)+1));
           break;
           }
         }
@@ -114,7 +116,36 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
 @Override
 public void registerIcons(IconRegister reg, Description d)
   {
-
+  Config.logDebug("registering icons for warehouse storage block "+d);
+  int levels = 1;
+  Icon icon;
+  for(int i = 0; i < levels; i++)
+    {
+    icon = reg.registerIcon("ancientwarfare:civic/civicWarehouseStorage"+(i+1)+"Bottom");
+    d.setIcon(icon, i*3);
+    icon = reg.registerIcon("ancientwarfare:civic/civicWarehouseStorage"+(i+1)+"Top");
+    d.setIcon(icon, i*3 + 1);
+    icon = reg.registerIcon("ancientwarfare:civic/civicWarehouseStorage"+(i+1)+"Sides");
+    d.setIcon(icon, i*3 + 2);
+    }
   }
 
+@Override
+public Icon getIcon(int side, int meta)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
+  if(d!=null)
+    {
+    switch(side)
+    {
+    case 0:
+    return d.getIconFor(meta*3);
+    case 1:
+    return d.getIconFor(meta*3+1);
+    default:
+    return d.getIconFor(meta*3+2);
+    }    
+    }
+  return super.getIcon(side, meta);
+  }
 }

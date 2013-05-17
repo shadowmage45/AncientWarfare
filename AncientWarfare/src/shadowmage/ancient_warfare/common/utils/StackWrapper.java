@@ -58,13 +58,29 @@ public static StackWrapper loadFromNBT(NBTTagCompound tag)
 @Override
 public NBTTagCompound getNBTTag()
   {
-  return stack.writeToNBT(new NBTTagCompound());
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setShort("id", (short) stack.itemID);
+  tag.setShort("dmg", (short) stack.getItemDamage());
+  tag.setInteger("count", stack.stackSize);
+  if(stack.hasTagCompound())
+    {
+    tag.setCompoundTag("tag", stack.getTagCompound());
+    }  
+  return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  this.stack = ItemStack.loadItemStackFromNBT(tag);
+  int id = tag.getShort("id");
+  int dmg = tag.getShort("dmg");
+  int cnt = tag.getInteger("count");
+  ItemStack stack = new ItemStack(id,cnt,dmg);
+  if(tag.hasKey("tag"))
+    {
+    stack.setTagCompound(tag.getCompoundTag("tag"));
+    }
+  this.stack = stack;
   }
 
 }

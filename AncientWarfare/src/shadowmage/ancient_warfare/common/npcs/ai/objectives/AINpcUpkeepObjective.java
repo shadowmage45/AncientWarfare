@@ -22,12 +22,11 @@ package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
+import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIDismountVehicle;
@@ -99,61 +98,107 @@ public void onRunningTick()
     }   
   }
 
-protected void attemptUpkeepWithdrawal()
+protected void attemptWithdrawalTownHall(TECivicTownHall te)
   {
-  int foundValue = 0;
+  Config.logDebug("doing town-hall upkeep");
   int neededValue = npc.npcType.getUpkeepCost(npc.rank);
   boolean doWithdrawal = false;
-  ItemStack stack;
-  for(int i = 0; i < this.upkeepTarget.getSizeInventory(); i++)
+  boolean foundExtra = false;
+  int foundValue = InventoryTools.getFoodValue(te, 0, te.getSizeInventory()-1);  
+  if(foundValue>=neededValue)
     {
-    stack = this.upkeepTarget.getStackInSlot(i);
-    if(stack!=null && stack.getItem() instanceof ItemFood)
+    doWithdrawal = true;
+    }
+
+  ItemStack extra = npc.npcType.getUpkeepAdditionalItem(npc.rank);
+  if(doWithdrawal)    
+    {
+    if(extra!=null)
       {
-      foundValue += ((ItemFood)stack.getItem()).getHealAmount() * stack.stackSize;
-      }
-    if(foundValue>=neededValue)
-      {
-      ItemStack extra = npc.npcType.getUpkeepAdditionalItem(npc.rank);
-      if(extra!=null)
+      if(InventoryTools.containsAtLeast(te, extra, extra.stackSize, 0, te.getSizeInventory()-1))
         {
-        if(InventoryTools.containsAtLeast(upkeepTarget, extra, extra.stackSize, 0, upkeepTarget.getSizeInventory()-1))
-          {
-          doWithdrawal = true;
-          InventoryTools.tryRemoveItems(upkeepTarget, extra, extra.stackSize, 0, upkeepTarget.getSizeInventory()-1);
-          }
+        doWithdrawal = true;
+        InventoryTools.tryRemoveItems(te, extra, extra.stackSize, 0, te.getSizeInventory()-1);
         }
       else
         {
-        doWithdrawal = true;
+        doWithdrawal = false;
         }
-      break;
       }
-    }
+    }  
   if(doWithdrawal)
     {
-    int withdrawnAmount = 0;
-    for(int i = 0; i < this.upkeepTarget.getSizeInventory(); i++)
+    InventoryTools.tryRemoveFoodValue(te, 0, te.getSizeInventory()-1, neededValue);
+    npc.npcUpkeepTicks = Config.npcUpkeepTicks;
+    this.setFinished();
+    }
+  else
+    {
+    Config.logDebug("attempting town-hall adjacent warehouse upkeep");
+    TECivicWarehouse warehouse = te.getWarehousePosition();
+    if(warehouse==null){return;}
+    foundValue = InventoryTools.getFoodValue(warehouse, 0, warehouse.getSizeInventory()-1);
+    if(foundValue>=neededValue)
       {
-      stack = this.upkeepTarget.getStackInSlot(i);
-      if(stack!=null && stack.getItem() instanceof ItemFood)
+      doWithdrawal = true;
+      }
+    if(doWithdrawal)    
+      {
+      if(extra!=null)
         {
-        int perItem = ((ItemFood)stack.getItem()).getHealAmount();
-        while(withdrawnAmount<npc.npcType.getUpkeepCost(npc.rank) && stack.stackSize>0)
+        if(InventoryTools.containsAtLeast(warehouse, extra, extra.stackSize, 0, warehouse.getSizeInventory()-1))
           {
-          withdrawnAmount += perItem;
-          stack.stackSize--;
+          doWithdrawal = true;
+          InventoryTools.tryRemoveItems(warehouse, extra, extra.stackSize, 0, warehouse.getSizeInventory()-1);
           }
-        if(stack.stackSize<=0)
+        else
           {
-          upkeepTarget.setInventorySlotContents(i, null);
-          }
-        if(withdrawnAmount>=neededValue)
-          {
-          break;
+          doWithdrawal = false;
           }
         }
-      }    
+      }  
+    if(doWithdrawal)
+      {
+      InventoryTools.tryRemoveFoodValue(warehouse, 0, warehouse.getSizeInventory()-1, neededValue);
+      npc.npcUpkeepTicks = Config.npcUpkeepTicks;
+      this.setFinished();
+      }
+    }
+  }
+
+protected void attemptUpkeepWithdrawal()
+  {
+  if(upkeepTarget instanceof TECivicTownHall)
+    {
+    this.attemptWithdrawalTownHall((TECivicTownHall)upkeepTarget);
+    return;
+    }
+  int neededValue = npc.npcType.getUpkeepCost(npc.rank);
+  boolean doWithdrawal = false;
+  int foundValue = InventoryTools.getFoodValue(this.upkeepTarget, 0, this.upkeepTarget.getSizeInventory()-1);  
+  if(foundValue>=neededValue)
+    {
+    doWithdrawal = true;
+    }
+  if(doWithdrawal)    
+    {
+    ItemStack extra = npc.npcType.getUpkeepAdditionalItem(npc.rank);
+    if(extra!=null)
+      {
+      if(InventoryTools.containsAtLeast(upkeepTarget, extra, extra.stackSize, 0, upkeepTarget.getSizeInventory()-1))
+        {
+        doWithdrawal = true;
+        InventoryTools.tryRemoveItems(upkeepTarget, extra, extra.stackSize, 0, upkeepTarget.getSizeInventory()-1);
+        }
+      else
+        {
+        doWithdrawal = false;
+        }
+      }
+    }  
+  if(doWithdrawal)
+    {
+    InventoryTools.tryRemoveFoodValue(upkeepTarget, 0, upkeepTarget.getSizeInventory()-1, neededValue);
     npc.npcUpkeepTicks = Config.npcUpkeepTicks;
     this.setFinished();
     }

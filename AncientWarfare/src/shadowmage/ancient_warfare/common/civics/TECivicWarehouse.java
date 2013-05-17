@@ -32,8 +32,9 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.container.ContainerCivicWarehouse;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
+import shadowmage.ancient_warfare.common.inventory.AWInventoryBase;
+import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryMapped;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -54,6 +55,9 @@ public class TECivicWarehouse extends TECivic implements IEntityContainerSynch
  */
 int storageSize = 0;
 
+public AWInventoryBase inputSlots = new AWInventoryBasic(9);
+public AWInventoryBase withdrawSlots = new AWInventoryBasic(9);
+
 /**
  * 
  */
@@ -66,13 +70,30 @@ public TECivicWarehouse()
 public void setCivic(Civic civ)
   {
   this.civic = civ;
-  inventory = new AWInventoryMapped(this.storageSize);
+  if(inventory==null)
+    {
+    inventory = new AWInventoryMapped(this.storageSize);
+    }
+  ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
+  }
+
+@Override
+protected void updateInventoryStatus()
+  {
+  for(int i = 0; i < this.inputSlots.getSizeInventory(); i++)
+    {
+    if(this.inputSlots.getStackInSlot(i)!=null)
+      {
+      this.inputSlots.setInventorySlotContents(i, this.inventory.tryMergeItem(this.inputSlots.getStackInSlot(i)));
+      }
+    }
+  super.updateInventoryStatus();
   }
 
 @Override
 public boolean onInteract(World world, EntityPlayer player)
   {
-  Config.logDebug("player interact with warehouse. inv size: "+this.inventory.getSizeInventory());
+  Config.logDebug("player interact with warehouse. inv size: "+this.inventory.getSizeInventory() + " client: "+this.worldObj.isRemote + " on: "+this);
   if(!world.isRemote)
     {
     GUIHandler.instance().openGUI(GUIHandler.CIVIC_WAREHOUSE, player, world, xCoord, yCoord, zCoord);
@@ -80,20 +101,22 @@ public boolean onInteract(World world, EntityPlayer player)
   return true;
   }
 
-public void addWareHouseBlock(int x, int y, int z)
+public void addWareHouseBlock(int x, int y, int z, int size)
   {
-  this.storageSize += 27;
+  this.storageSize += size;
   ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
-  Config.logDebug("adding warehouse block. new size: "+this.storageSize);
-  this.worldObj.markBlockForUpdate(x, y, z);
+  this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
   }
 
-public void removeWarehouseBlock(int x, int y, int z)
+public void removeWarehouseBlock(int x, int y, int z, int size)
   {
-  this.storageSize-= 27;
+  this.storageSize-= size;
+  if(this.storageSize<0)
+    {
+    this.storageSize = 0;
+    }
   ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
-  Config.logDebug("removing warehouse block. new size: "+this.storageSize);
-  this.worldObj.markBlockForUpdate(x, y, z);
+  this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
   }
 
 @Override
@@ -102,9 +125,16 @@ protected void readCivicDataFromNBT(NBTTagCompound tag)
   if(tag.hasKey("warehouseSize"))
     {    
     storageSize = tag.getInteger("warehouseSize");
-    Config.logDebug("reading warehouse tag data, inv size: "+storageSize);
     }
-  super.readCivicDataFromNBT(tag);  
+  if(tag.hasKey("inputInventory"))
+    {
+    this.inputSlots.readFromNBT(tag.getCompoundTag("inputInventory"));
+    }
+  if(tag.hasKey("withdrawInventory"))
+    {
+    this.withdrawSlots.readFromNBT(tag.getCompoundTag("withdrawInventory"));
+    }
+  super.readCivicDataFromNBT(tag);
   }
 
 @Override
@@ -112,13 +142,15 @@ public void writeToNBT(NBTTagCompound tag)
   {
   super.writeToNBT(tag);
   tag.setInteger("warehouseSize", storageSize);
+  tag.setCompoundTag("inputInventory", this.inputSlots.getNBTTag());
+  tag.setCompoundTag("withdrawInventory", this.withdrawSlots.getNBTTag());
   }
 
 @Override
 public Packet getDescriptionPacket()
   {
   Packet132TileEntityData packet = (Packet132TileEntityData) super.getDescriptionPacket();
-  packet.customParam1.setInteger("invSize", this.storageSize);
+  packet.customParam1.setInteger("warehouseSize", this.storageSize);
   return packet;
   }
 

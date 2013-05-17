@@ -436,6 +436,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
  */
 public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay)
   {
+  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   GL11.glPushMatrix();
   RenderHelper.enableGUIStandardItemLighting();
   GL11.glDisable(GL11.GL_LIGHTING);
@@ -446,7 +447,8 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
   this.itemRenderer.renderItemAndEffectIntoGUI(fontRenderer, mc.renderEngine, stack, x, y);//render item
   if(renderOverlay)
     {
-    this.itemRenderer.renderItemOverlayIntoGUI(fontRenderer, mc.renderEngine, stack, x, y);
+    String stackSize = stack.stackSize > 999 ? ">1k" : String.valueOf(stack.stackSize);
+    this.itemRenderer.renderItemOverlayIntoGUI(fontRenderer, mc.renderEngine, stack, x, y, stackSize);
     }
   itemRenderer.zLevel = 0.0F;
   GL11.glDisable(GL11.GL_LIGHTING);
@@ -455,8 +457,9 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
     this.drawItemStackTooltip(stack, x, y);
     }   
   GL11.glPopMatrix();
-
   GL11.glEnable(GL11.GL_DEPTH_TEST);
+  GL11.glPopAttrib();
+  mc.renderEngine.resetBoundTexture();
   }
 
 /**

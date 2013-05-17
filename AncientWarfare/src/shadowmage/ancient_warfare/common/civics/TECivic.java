@@ -72,7 +72,7 @@ public int maxZ;
 protected int teamNum = 0;
 protected boolean isWorkSite = false;
 protected boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
-public AWInventoryBase inventory = new AWInventoryBasic(0);
+public AWInventoryBase inventory = null;
 public AWInventoryBase overflow = new AWInventoryBasic(4);
 protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
 
@@ -92,7 +92,10 @@ public TECivic()
 public void setCivic(Civic civ)
   {
   this.civic = civ;
-  inventory = new AWInventoryBasic(civ.getInventorySize());
+  if(inventory==null)
+    {
+    inventory = new AWInventoryBasic(civ.getInventorySize());
+    }
   }
 
 public Civic getCivic()
@@ -261,6 +264,37 @@ public boolean onInteract(World world, EntityPlayer player)
   }
 
 /******************************************************WORK-SITE*********************************************************/
+
+public TECivicWarehouse getWarehousePosition()
+  {
+  if(this instanceof TECivicWarehouse)
+    {
+    return null;
+    }
+  TileEntity te;
+  te = worldObj.getBlockTileEntity(xCoord-1, yCoord, zCoord);  
+  if(te instanceof TECivicWarehouse)
+    {
+    return (TECivicWarehouse)te;
+    }
+  te = worldObj.getBlockTileEntity(xCoord+1, yCoord, zCoord);
+  if(te instanceof TECivicWarehouse)
+    {
+    return (TECivicWarehouse)te;
+    }
+  te = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord-1);
+  if(te instanceof TECivicWarehouse)
+    {
+    return (TECivicWarehouse)te;
+    }
+  te = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord+1);
+  if(te instanceof TECivicWarehouse)
+    {
+    return (TECivicWarehouse)te;
+    }
+  return null;
+  }
+
 public boolean canHaveMoreWorkers(NpcBase npc)
   {  
   if(this.workers.contains(npc) && this.workers.size() <= this.civic.getMaxWorkers())

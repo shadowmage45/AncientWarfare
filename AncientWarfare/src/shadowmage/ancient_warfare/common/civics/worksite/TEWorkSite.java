@@ -24,8 +24,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
@@ -84,6 +85,20 @@ protected void updateHasWork()
     {
     this.setHasWork(!this.workPoints.isEmpty());
     }
+  }
+
+protected ItemStack depositItem(ItemStack stack)
+  {
+  stack = inventory.tryMergeItem(stack);
+  if(stack!=null)
+    {
+    TECivicWarehouse wareHouse = this.getWarehousePosition();
+    if(wareHouse!=null)
+      {
+      stack = wareHouse.inventory.tryMergeItem(stack);
+      }
+    }  
+  return stack;
   }
 
 @Override
