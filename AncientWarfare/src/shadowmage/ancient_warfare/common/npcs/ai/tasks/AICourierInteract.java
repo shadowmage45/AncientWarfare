@@ -46,10 +46,14 @@ public AICourierInteract(NpcBase npc, AICourier parent)
 @Override
 public void onTick()
   {
+  if(npc.aiManager.wasMoving)
+    {
+    npc.aiManager.wasMoving = false;
+    npc.actionTick = 0;
+    }
   npc.swingItem();
   if(npc.actionTick<=0)
     {
-    npc.setActionTicksToMax();
     WayPointItemRouting point = npc.wayNav.getActiveCourierPoint();
     if(point==null)
       {
@@ -65,32 +69,13 @@ public void onTick()
       {
       return;
       }
-    ItemStack fromSlot;    
-    if(point.getDeliver())
+    if(!point.doWork(npc))
       {
-      for(int k = 0; k < npc.inventory.getSizeInventory(); k++)
-        {
-        fromSlot = npc.inventory.getStackInSlot(k);
-        if(point.doesMatchFilter(fromSlot) && InventoryTools.canHoldItem(target, fromSlot, fromSlot.stackSize, 0, target.getSizeInventory()-1))
-          {
-          fromSlot = InventoryTools.tryMergeStack(target, fromSlot, 0, target.getSizeInventory()-1);
-          npc.inventory.setInventorySlotContents(k, fromSlot);
-          break;
-          }
-        }     
-      }
+      parent.setPointFinished();
+      }   
     else
-      {      
-      for(int i = 0; i < target.getSizeInventory(); i++)
-        {
-        fromSlot = target.getStackInSlot(i);
-        if(point.doesMatchFilter(fromSlot) && InventoryTools.canHoldItem(npc.inventory, fromSlot, fromSlot.stackSize, 0, npc.inventory.getSizeInventory()-1))
-          {
-          fromSlot = InventoryTools.tryMergeStack(npc.inventory, fromSlot, 0, target.getSizeInventory()-1);
-          target.setInventorySlotContents(i, fromSlot);
-          break;
-          }
-        }     
+      {
+      npc.setActionTicksToMax();
       }
     }
   }

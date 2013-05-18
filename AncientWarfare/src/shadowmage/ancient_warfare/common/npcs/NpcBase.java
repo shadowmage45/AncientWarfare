@@ -101,7 +101,7 @@ public INpcType npcType = NpcTypeBase.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
 public NpcTargetHelper targetHelper;
 
-private NpcAIObjectiveManager aiManager;
+public NpcAIObjectiveManager aiManager;
 private PathWorldAccessEntity worldAccess;
 //public EntityNavigator nav;
 public Navigator nav;
@@ -858,7 +858,7 @@ public void readFromNBT(NBTTagCompound tag)
   if(tag.hasKey("spInv"))
     {
     this.specInventory.readFromNBT(tag.getCompoundTag("spInv"));
-    }
+    } 
   this.npcUpkeepTicks = tag.getInteger("upkeep");
   this.npcHealingTicks = tag.getInteger("healing");
   }

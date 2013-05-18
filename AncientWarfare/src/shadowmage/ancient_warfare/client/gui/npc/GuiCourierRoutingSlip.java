@@ -91,8 +91,8 @@ public void onElementActivated(IGuiElement element)
       {
       GuiFakeSlot fakeSlot = (GuiFakeSlot)element;
       int index = element.getElementNumber();
-      int point = index/4;
-      int slot = index%4;
+      int point = index/8;
+      int slot = index%8;
       NBTTagCompound tag = new NBTTagCompound();
       tag.setBoolean("filter", true);
       tag.setByte("f", (byte)point);
@@ -105,35 +105,18 @@ public void onElementActivated(IGuiElement element)
       this.container.info.getPoint(point).setFilterStack(slot, fakeSlot.getStack());
       }
     }
-  if(deliverBoxes.contains(element))
-    {    
-    GuiCheckBoxSimple box = (GuiCheckBoxSimple)element;
+  if(deliverButtons.contains(element))
+    {
+    GuiButtonSimple button = (GuiButtonSimple)element;
     NBTTagCompound tag = new NBTTagCompound();
-    tag.setByte("f", (byte)box.getElementNumber());
+    tag.setByte("f", (byte)button.getElementNumber());    
     tag.setBoolean("set", true);
-    tag.setBoolean("d", box.checked());
+    WayPointItemRouting p = this.container.info.getPoint(element.getElementNumber());
+    boolean newVal = !p.getDeliver();
+    p.setDeliver(newVal);
+    tag.setBoolean("d", newVal);
+    button.setButtonText( newVal ? "Deposit" : "Pickup" );        
     this.sendDataToServer(tag);
-    this.container.info.getPoint(element.getElementNumber()).setDeliver(box.checked());
-    }
-  if(this.includeBoxes.contains(element))
-    {    
-    GuiCheckBoxSimple box = (GuiCheckBoxSimple)element;
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setByte("f", (byte)box.getElementNumber());
-    tag.setBoolean("set", true);
-    tag.setBoolean("i", box.checked());
-    this.sendDataToServer(tag);
-    this.container.info.getPoint(element.getElementNumber()).setInclude(box.checked());
-    }
-  if(partialBoxes.contains(element))
-    {    
-    GuiCheckBoxSimple box = (GuiCheckBoxSimple)element;
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setByte("f", (byte)box.getElementNumber());
-    tag.setBoolean("set", true);
-    tag.setBoolean("p", box.checked());
-    this.sendDataToServer(tag);
-    this.container.info.getPoint(element.getElementNumber()).setPartial(box.checked());
     }
   if(upButtons.contains(element))
     {
@@ -165,6 +148,18 @@ public void onElementActivated(IGuiElement element)
     this.container.info.removeRoutePoint(element.getElementNumber());
     this.refreshGui();
     }
+  if(typeButtons.contains(element))
+    {
+    GuiButtonSimple button = (GuiButtonSimple)element;
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setByte("f", (byte)button.getElementNumber());
+    tag.setBoolean("set", true);
+    WayPointItemRouting p = this.container.info.getPoint(element.getElementNumber());
+    p.nextRoutingType();
+    tag.setString("rt", p.getRoutingType().name());
+    button.setButtonText(p.getRoutingType().name());
+    this.sendDataToServer(tag);
+    }
   }
 
 @Override
@@ -176,17 +171,17 @@ public void updateScreenContents()
 GuiScrollableArea area;
 HashSet<GuiFakeSlot> slots = new HashSet<GuiFakeSlot>();
 HashSet<GuiCheckBoxSimple> deliverBoxes = new HashSet<GuiCheckBoxSimple>();
-HashSet<GuiCheckBoxSimple> includeBoxes = new HashSet<GuiCheckBoxSimple>();
-HashSet<GuiCheckBoxSimple> partialBoxes = new HashSet<GuiCheckBoxSimple>();
 HashSet<GuiButtonSimple> upButtons = new HashSet<GuiButtonSimple>();
 HashSet<GuiButtonSimple> downButtons = new HashSet<GuiButtonSimple>();
 HashSet<GuiButtonSimple> removeButtons = new HashSet<GuiButtonSimple>();
+HashSet<GuiButtonSimple> typeButtons = new HashSet<GuiButtonSimple>();
+HashSet<GuiButtonSimple> deliverButtons = new HashSet<GuiButtonSimple>();
 
 @Override
 public void setupControls()
   {
   int size = container.info.getRouteSize();
-  area = new GuiScrollableArea(0, this, 10, 10, 256-20, 240-120-10, size*(18+2));
+  area = new GuiScrollableArea(0, this, 10, 10, 256-20, 240-120-10, size*(40));
   this.guiElements.put(0, area);
  
   WayPointItemRouting point;
@@ -202,7 +197,7 @@ protected void addButtonsFor(int index, WayPointItemRouting point)
   GuiFakeSlot slot;// = new GuiFakeSlot(0, area, k*20, 20*i);
   GuiCheckBoxSimple box;
   GuiButtonSimple button;
-  slot = new GuiFakeSlot(0, area, 0, index*20);
+  slot = new GuiFakeSlot(0, area, 0, index*40);
   slot.enabled = false;
   int id = player.worldObj.getBlockId(point.floorX(), point.floorY(), point.floorZ());
   int meta = player.worldObj.getBlockMetadata(point.floorX(), point.floorY(), point.floorZ());
@@ -224,43 +219,35 @@ protected void addButtonsFor(int index, WayPointItemRouting point)
       }
     }
   area.elements.add(slot);
+      
+  button = new GuiButtonSimple(index, area, 100, 14, point.getRoutingType().toString());
+  button.updateRenderPos(62, index*40 + 20);
+  area.elements.add(button);
+  typeButtons.add(button);
   
-  box = new GuiCheckBoxSimple(index, area, 18, 18);
-  box.updateRenderPos(20*5, index*20);
-  box.setChecked(point.getDeliver());
-  area.elements.add(box);
-  deliverBoxes.add(box);  
-  
-  box = new GuiCheckBoxSimple(index, area, 18, 18);
-  box.updateRenderPos(20*6, index*20);
-  box.setChecked(point.getInclude());
-  area.elements.add(box);
-  includeBoxes.add(box);
-  
-  box = new GuiCheckBoxSimple(index, area, 18, 18);
-  box.updateRenderPos(20*7, index*20);
-  box.setChecked(point.getPartial());
-  area.elements.add(box);
-  partialBoxes.add(box);
+  button = new GuiButtonSimple (index, area, 60, 14, point.getDeliver() ? "Deposit" : "Pickup");
+  button.updateRenderPos(0, index*40+20);
+  area.elements.add(button);
+  deliverButtons.add(button);
   
   button = new GuiButtonSimple(index, area, 18, 18, "+");
-  button.updateRenderPos(20*8, index*20);
+  button.updateRenderPos(20*9, index*40);
   area.elements.add(button);
   upButtons.add(button);
   
   button = new GuiButtonSimple(index, area, 18, 18, "-");
-  button.updateRenderPos(20*9, index*20);
+  button.updateRenderPos(20*10, index*40);
   area.elements.add(button);
   downButtons.add(button);
   
-  button = new GuiButtonSimple(index, area, 18, 18, "Del");
-  button.updateRenderPos(20*10, index*20);
+  button = new GuiButtonSimple(index, area, 22, 14, "Del");
+  button.updateRenderPos(20*10-4, index*40+20);
   area.elements.add(button);
   removeButtons.add(button);
   
-  for(int k = 0; k < 4; k++)
+  for(int k = 0; k < 8; k++)
     {
-    slot = new GuiFakeSlot(index*4+k, area, (k+1)*20, 20*index);
+    slot = new GuiFakeSlot(index*8+k, area, (k+1)*20, 40*index);
     area.elements.add(slot);
     slots.add(slot);
     slot.setItemStack(point.getFilterStack(k));      
@@ -274,18 +261,17 @@ public void updateControls()
   slots.clear();
   deliverBoxes.clear();
   area.elements.clear();
-  includeBoxes.clear();
-  partialBoxes.clear();  
   upButtons.clear();
   downButtons.clear();
   removeButtons.clear();
+  typeButtons.clear();
   WayPointItemRouting point;
   for(int i = 0; i < size; i++)
     {
     point = container.info.getPoint(i);
     this.addButtonsFor(i, point);   
     }
-  area.updateTotalHeight(container.info.getRouteSize()*(18+2));
+  area.updateTotalHeight(container.info.getRouteSize()*(40));
   area.updateGuiPos(guiLeft, guiTop);  
   }
 

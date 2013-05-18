@@ -16,6 +16,7 @@ GENERAL
     or other method to set NPC types as aggro for other Mob type entities
 * test commander bonuses
 * tons of gui cleanup -- civic, npc, routing..
+* non-combat npcs flee from mobs (move to shelter)
 
 SCANNER
 * validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?

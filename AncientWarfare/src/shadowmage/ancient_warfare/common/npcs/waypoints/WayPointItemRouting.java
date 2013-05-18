@@ -20,12 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.npcs.waypoints;
 
+import java.util.ArrayList;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -33,15 +34,13 @@ import shadowmage.ancient_warfare.common.utils.InventoryTools;
 public class WayPointItemRouting extends WayPoint
 {
 
-boolean deliver;//is pickup or deposit point
-boolean include;//include or exclude filter
-boolean partial;//pickup/deposit of only part of request is available?
+boolean deposit = false;
+RoutingType routingType = RoutingType.NONE;
+ItemStack[] filters = new ItemStack[8];
 
-ItemStack[] filters = new ItemStack[4];
-
-public WayPointItemRouting(TargetType type)
+public WayPointItemRouting()
   {
-  super(type);
+  super(TargetType.DELIVER);
   }
 
 public WayPointItemRouting(NBTTagCompound tag)
@@ -50,14 +49,14 @@ public WayPointItemRouting(NBTTagCompound tag)
   this.readFromNBT(tag);
   }
 
-public WayPointItemRouting(int x, int y, int z, TargetType type)
+public WayPointItemRouting(int x, int y, int z)
   {
-  super(x, y, z, type);
+  super(x, y, z, TargetType.DELIVER);
   }
 
-public WayPointItemRouting(int x, int y, int z, int side, TargetType type)
+public WayPointItemRouting(int x, int y, int z, int side)
   {
-  super(x, y, z, side, type);
+  super(x, y, z, side, TargetType.DELIVER);
   }
 
 public int getFilterLength()
@@ -65,69 +64,39 @@ public int getFilterLength()
   return this.filters.length;
   }
 
-public void setDeliver(boolean val)
-  {
-  this.deliver = val;
-  }
-
-public void setInclude(boolean val)
-  {
-  this.include = val;
-  }
-
-public void setPartial(boolean val)
-  {
-  this.partial = val;
-  }
-
 public boolean getDeliver()
   {
-  return deliver;
+  return deposit;
   }
 
-public boolean getInclude()
+public void setDeliver(boolean val)
   {
-  return include;
+  this.deposit = val;
   }
 
-public boolean getPartial()
+public RoutingType getRoutingType()
   {
-  return partial;
+  return this.routingType;
   }
 
-/**
- * return true if the NPC should give/take the stack
- * @param stack
- * @return
- */
-public boolean doesMatchFilter(ItemStack stack)
+public void setRoutingType(RoutingType t)
   {
-  if(stack==null)
+  this.routingType = t;
+  }
+
+public void nextRoutingType()
+  {
+  int ordinal = this.routingType.ordinal();
+  ordinal++;
+  if(ordinal>=RoutingType.values().length)
     {
-    return false;
-    }
-  for(ItemStack filter : this.filters)
-    {
-    if(InventoryTools.doItemsMatch(stack , filter))
+    ordinal = 1;
+    if(ordinal>=RoutingType.values().length)
       {
-      if(include)//if this is an 'inclusion' filter and matches a filter
-        {
-        if(partial || stack.stackSize>=filter.stackSize) // check if it is a partial filter
-          {
-          return true;
-          }
-        }
-      else
-        {
-        return false;
-        }
+      ordinal = 0;
       }
     }
-  if(!include)
-    {
-    return true;
-    }
-  return false;
+  this.routingType = RoutingType.values()[ordinal];
   }
 
 public ItemStack getFilterStack(int index)
@@ -147,51 +116,203 @@ public void setFilterStack(int index, ItemStack stack)
     }
   }
 
-public boolean hasWork(World world, NpcBase npc)
+public boolean doWork(NpcBase npc)
   {
-  TileEntity te = getTileEntity(world);
-  IInventory target = null;
+  TileEntity te = getTileEntity(npc.worldObj);
+  IInventory other = null;
   if(te instanceof IInventory)
     {
-    target = (IInventory)te;
+    other = (IInventory)te;
     }
-  if(target==null)
+  if(other==null)
     {
     return false;
     }
-  ItemStack fromSlot;    
-  if(getDeliver())
+  IInventory target = deposit ? other : npc.inventory;
+  IInventory source = deposit ? npc.inventory : other;
+  boolean found = false;
+  switch(routingType)
+  {
+  case ALL_BUT:
+  found = doAllExcept(source, target);
+  break;
+  case ALL_BUT_EXACT:
+  found = doAllExceptExact(source, target);
+  break;
+  case ANY_OF:
+  found = doAllOf(source, target);
+  break;
+  case EXACT:
+  found = doAllExact(source, target);
+  break;
+  case FILL_TO:
+  found = doFillTo(source, target);
+  break;
+  }
+  return found;
+  }
+
+/**
+ * return the stack size of the filter, if any. -1 for not found
+ * @param stack
+ * @return
+ */
+protected int filterContains(ItemStack stack)
+  {
+  if(stack==null){return -1;}
+  for(int i = 0; i < filters.length; i++)
     {
-    for(int k = 0; k < npc.inventory.getSizeInventory(); k++)
+    ItemStack f = filters[i];
+    if(f==null)continue;
+    if(InventoryTools.doItemsMatch(f, stack))
       {
-      fromSlot = npc.inventory.getStackInSlot(k);
-      if(doesMatchFilter(fromSlot) && InventoryTools.canHoldItem(target, fromSlot, fromSlot.stackSize, 0, target.getSizeInventory()-1))
-        {       
-        return true;
-        }
+      return f.stackSize;
       }
     }
-  else
-    {      
-    for(int i = 0; i < target.getSizeInventory(); i++)
+  return -1;
+  }
+
+protected boolean doAllOf(IInventory source, IInventory target)
+  { 
+  boolean shouldContinue = false;
+  ItemStack stack;
+  for(int i = 0; i < source.getSizeInventory(); i++)
+    {
+    stack = source.getStackInSlot(i);
+    if(filterContains(stack)>0)
       {
-      fromSlot = target.getStackInSlot(i);
-      if(doesMatchFilter(fromSlot) && InventoryTools.canHoldItem(npc.inventory, fromSlot, fromSlot.stackSize, 0, npc.inventory.getSizeInventory()-1))
-        {      
-        return true;
+      shouldContinue = true;
+      stack = InventoryTools.tryMergeStack(target, stack, 0, target.getSizeInventory()-1);
+      if(stack!=null)
+        {
+        shouldContinue = false;        
+        }
+      source.setInventorySlotContents(i, stack);
+      break;      
+      }
+    }  
+  return shouldContinue;
+  }
+
+protected boolean doAllExact(IInventory source, IInventory target)
+  {  
+  boolean shouldContinue = false;
+  ItemStack stack;
+  for(int i = 0; i < source.getSizeInventory(); i++)
+    {
+    stack = source.getStackInSlot(i);
+    if(stack==null){continue;}
+    if(filterContains(stack)==stack.stackSize)
+      {
+      shouldContinue = true;
+      stack = InventoryTools.tryMergeStack(target, stack, 0, target.getSizeInventory()-1);
+      if(stack!=null)
+        {
+        shouldContinue = false;        
+        }
+      source.setInventorySlotContents(i, stack);
+      break;      
+      }
+    }  
+  return shouldContinue;
+  }
+
+protected boolean doFillTo(IInventory source, IInventory target)
+  { 
+  boolean shouldContinue = false;
+  ItemStack stack;
+  for(int i = 0; i < source.getSizeInventory(); i++)
+    {
+    stack = source.getStackInSlot(i);
+    if(stack==null){continue;}
+    int num = filterContains(stack);    
+    if(num >=0)
+      {
+      int found = InventoryTools.getCountOf(target, stack, 0, target.getSizeInventory()-1);
+      int needed = num-found;
+      if(needed>0)
+        {
+        if(stack.stackSize<needed)
+          {
+          //merge entire stack
+          shouldContinue = true;
+          stack = InventoryTools.tryMergeStack(target, stack, 0, target.getSizeInventory()-1);
+          if(stack!=null)
+            {
+            shouldContinue = false;
+            }
+          source.setInventorySlotContents(i, stack);
+          }
+        else
+          {
+          shouldContinue = true;
+          ItemStack split = stack.splitStack(needed);
+          source.setInventorySlotContents(i, stack);
+          split = InventoryTools.tryMergeStack(target, split, 0, target.getSizeInventory()-1);
+          if(split!=null)
+            {
+            InventoryTools.tryMergeStack(source, split, 0, source.getSizeInventory()-1);
+            shouldContinue = false;
+            }
+          }
         }
       }
-    }    
-  return false;
+    }  
+  return shouldContinue;
+  }
+
+protected boolean doAllExcept(IInventory source, IInventory target)
+  {
+  boolean shouldContinue = false;
+  ItemStack stack;
+  for(int i = 0; i < source.getSizeInventory(); i++)
+    {
+    stack = source.getStackInSlot(i);
+    if(stack==null){continue;}
+    if(filterContains(stack)==-1)
+      {
+      shouldContinue = true;
+      stack = InventoryTools.tryMergeStack(target, stack, 0, target.getSizeInventory()-1);
+      if(stack!=null)
+        {
+        shouldContinue = false;        
+        }
+      source.setInventorySlotContents(i, stack);
+      break;      
+      }
+    }  
+  return shouldContinue;
+  }
+
+protected boolean doAllExceptExact(IInventory source, IInventory target)
+  {
+  boolean shouldContinue = false;
+  ItemStack stack;
+  for(int i = 0; i < source.getSizeInventory(); i++)
+    {
+    stack = source.getStackInSlot(i);
+    if(stack==null){continue;}
+    if(filterContains(stack)!=stack.stackSize)
+      {
+      shouldContinue = true;
+      stack = InventoryTools.tryMergeStack(target, stack, 0, target.getSizeInventory()-1);
+      if(stack!=null)
+        {
+        shouldContinue = false;        
+        }
+      source.setInventorySlotContents(i, stack);
+      break;      
+      }
+    }  
+  return shouldContinue;
   }
 
 @Override
 public NBTTagCompound getNBTTag()
   {
-  NBTTagCompound tag = super.getNBTTag();   
-  tag.setBoolean("d", deliver);
-  tag.setBoolean("i", include);
-  tag.setBoolean("p", partial);  
+  NBTTagCompound tag = super.getNBTTag();
+  tag.setString("rt", this.routingType.name());
+  tag.setBoolean("d", this.deposit);
   NBTTagList itemList = new NBTTagList();
   NBTTagCompound itemTag;
   ItemStack filter;
@@ -214,23 +335,24 @@ public NBTTagCompound getNBTTag()
 public void readFromNBT(NBTTagCompound tag)
   {
   super.readFromNBT(tag);
-  this.deliver = tag.getBoolean("d");
-  this.include = tag.getBoolean("i");
-  this.partial = tag.getBoolean("p");  
+  if(tag.hasKey("rt"))
     {
-    byte slot;
-    NBTTagCompound itemTag;
-    NBTTagList itemList = tag.getTagList("fl");
-    for(int i = 0; i < itemList.tagCount(); i++)
-      {
-      itemTag = (NBTTagCompound) itemList.tagAt(i);
-      slot = itemTag.getByte("s");
-      if(slot>=0 && slot< this.filters.length)
-        {    	  
-        this.setFilterStack(slot, ItemStack.loadItemStackFromNBT(itemTag));
-        }
-      }    
-    }
+    this.routingType = RoutingType.valueOf(tag.getString("rt"));
+    }    
+  this.deposit = tag.getBoolean("d");
+  byte slot;
+  NBTTagCompound itemTag;
+  NBTTagList itemList = tag.getTagList("fl");
+  for(int i = 0; i < itemList.tagCount(); i++)
+    {
+    itemTag = (NBTTagCompound) itemList.tagAt(i);
+    slot = itemTag.getByte("s");
+    if(slot>=0 && slot< this.filters.length)
+      {    	  
+      this.setFilterStack(slot, ItemStack.loadItemStackFromNBT(itemTag));
+      }
+    }    
+    
   }
 
 }

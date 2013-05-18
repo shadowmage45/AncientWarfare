@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.utils.InventoryTools;
 public class AICourier extends NpcAIObjective
 {
 
+int ranPoints = 0;
 /**
  * @param npc
  * @param maxPriority
@@ -60,7 +61,7 @@ public void updatePriority()
     for(int i = 0; i < npc.wayNav.getCourierSize(); i++)
       {
       point = npc.wayNav.getCourierPointAt(i);
-      if(point!=null && point.isTargetLoaded(npc.worldObj) && point.hasWork(npc.worldObj, npc))
+      if(point!=null && point.isTargetLoaded(npc.worldObj))
         {
         this.currentPriority = this.maxPriority;
         break;
@@ -92,9 +93,10 @@ protected boolean findNextPoint()
   for(int i = 0; i < npc.wayNav.getCourierSize(); i++)
     {
     point = npc.wayNav.getNextCourierPoint();
-    if(point.isTargetLoaded(npc.worldObj) && point.hasWork(npc.worldObj, npc))
+    if(point.isTargetLoaded(npc.worldObj))
       {
-      npc.setTargetAW(point);      
+      npc.setTargetAW(point);
+      this.ranPoints++;
       return true;
       }    
     }
@@ -112,25 +114,10 @@ public void onRunningTick()
       this.setFinished();
       return;
       }
-    }  
-  if(npc.getDistanceFromTarget(point) <3)
+    }   
+  if(this.ranPoints>=npc.wayNav.getCourierSize())
     {
-    if(!point.hasWork(npc.worldObj, npc))
-      {
-      if(!findNextPoint())
-        {
-        setFinished();
-        return;
-        }
-      }
-    else
-      {
-      //continue...let courierInteract task do its thing
-      }        
-    }
-  else
-    {
-    //continue... let moveToTarget do its thing
+    this.setFinished();
     }
   }
 
@@ -138,7 +125,7 @@ public void onRunningTick()
 public void onObjectiveStart()
   {
   WayPointItemRouting point = npc.wayNav.getActiveCourierPoint();
-  if(point==null || !point.isTargetLoaded(npc.worldObj) || !point.hasWork(npc.worldObj, npc))
+  if(point==null || !point.isTargetLoaded(npc.worldObj))
     {
     findNextPoint();
     }
@@ -146,6 +133,12 @@ public void onObjectiveStart()
     {
     npc.setTargetAW(npc.wayNav.getActiveCourierPoint());
     }
+  this.ranPoints = 0;
+  }
+
+public void setPointFinished()
+  {
+  this.findNextPoint();
   }
 
 @Override

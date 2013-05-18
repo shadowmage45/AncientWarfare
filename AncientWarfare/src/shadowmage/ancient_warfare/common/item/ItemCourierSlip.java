@@ -78,7 +78,7 @@ public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPla
       CourierRoutingInfo info = new CourierRoutingInfo(stack);
       if(info.getRouteSize() < 4 + (2*stack.getItemDamage()))
         {
-        info.addRoutePoint(new WayPointItemRouting(x, y, z, hit.sideHit, TargetType.DELIVER));
+        info.addRoutePoint(new WayPointItemRouting(x, y, z, hit.sideHit));
         info.writeToItem(stack);    
         GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, player.worldObj, 0, 0, 0);
         }

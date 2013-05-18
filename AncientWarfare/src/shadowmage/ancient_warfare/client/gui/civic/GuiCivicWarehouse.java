@@ -49,7 +49,6 @@ public GuiCivicWarehouse(Container container, TECivicWarehouse te)
   this.shouldCloseOnVanillaKeys = true;
   }
 
-
 @Override
 public int getXSize()
   {

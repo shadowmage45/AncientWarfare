@@ -31,6 +31,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
+import shadowmage.ancient_warfare.common.npcs.waypoints.RoutingType;
 
 public class ContainerCourierRoutingSlip extends ContainerBase
 {
@@ -50,11 +51,12 @@ public ContainerCourierRoutingSlip(EntityPlayer openingPlayer, CourierRoutingInf
   int slotNum;
   int xPos; 
   int yPos;
-  for (x = 0; x < 9; ++x)//add player hotbar slots
+  
+   for (x = 0; x < 9; ++x)//add player hotbar slots
     {
     slotNum = x;
     xPos = 8 + x * 18;
-    yPos = 142+28;
+    yPos = 162 + 3*18; 
     if(x==player.inventory.currentItem)
       {
       this.addSlotToContainer(new SlotNoPull(openingPlayer.inventory, x, xPos, yPos));
@@ -70,51 +72,10 @@ public ContainerCourierRoutingSlip(EntityPlayer openingPlayer, CourierRoutingInf
       {
       slotNum = y*9 + x + 9;// +9 is to increment past hotbar slots
       xPos = 8 + x * 18;
-      yPos = 84 + y * 18+28;
+      yPos = 158 + y * 18;
       this.addSlotToContainer(new Slot(openingPlayer.inventory, slotNum, xPos, yPos));
       }
-    }
-  }
-
-@Override
-public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClickedIndex)
-  {
-  ItemStack slotStackCopy = null;
-  Slot theSlot = (Slot)this.inventorySlots.get(slotClickedIndex);
-  if (theSlot != null && theSlot.getHasStack())
-    {
-    ItemStack slotStack = theSlot.getStack();
-    slotStackCopy = slotStack.copy();
-//    int storageSlots = npc.npcType.getInventorySize(npc.rank);    
-//    if (slotClickedIndex < 36)//player slots...
-//      {      
-//      if (!this.mergeItemStack(slotStack, 36, 36+storageSlots, false))//merge into storage inventory
-//        {
-//        return null;
-//        }
-//      }
-//    else if(slotClickedIndex >=36 &&slotClickedIndex < 36+storageSlots)//vehicle slots, merge to player inventory
-//      {
-//      if (!this.mergeItemStack(slotStack, 0, 36, true))//merge into player inventory
-//        {
-//        return null;
-//        }
-//      }
-    if (slotStack.stackSize == 0)
-      {
-      theSlot.putStack((ItemStack)null);
-      }
-    else
-      {
-      theSlot.onSlotChanged();
-      }
-    if (slotStack.stackSize == slotStackCopy.stackSize)
-      {
-      return null;
-      }
-    theSlot.onPickupFromSlot(par1EntityPlayer, slotStack);
-    }
-  return slotStackCopy;
+    }  
   }
 
 @Override
@@ -142,13 +103,9 @@ public void handlePacketData(NBTTagCompound tag)
       {
       info.getPoint(filter).setDeliver(tag.getBoolean("d"));
       }
-    if(tag.hasKey("p"))
+    if(tag.hasKey("rt"))
       {
-      info.getPoint(filter).setPartial(tag.getBoolean("p"));
-      }
-    if(tag.hasKey("i"))
-      {
-      info.getPoint(filter).setInclude(tag.getBoolean("i"));
+      info.getPoint(filter).setRoutingType(RoutingType.valueOf(tag.getString("rt")));
       }
     }
   if(tag.hasKey("move"))

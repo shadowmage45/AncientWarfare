@@ -48,6 +48,8 @@ NpcBase npc;
 NpcAIObjective currentObjective;
 int currentObjectiveTicks = 0;
 
+
+public boolean wasMoving = false;
 List<NpcAIObjective> allObjectives = new ArrayList<NpcAIObjective>();
 
 public NpcAIObjectiveManager(NpcBase npc)

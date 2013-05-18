@@ -61,7 +61,8 @@ public void onTick()
     {
     bY = PathUtils.findClosestYTo(npc.getWorldAccess(), npc.getTarget().floorX(), npc.getTarget().floorY(), npc.getTarget().floorZ());
     }  
-  npc.setMoveToTarget(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));    
+  npc.setMoveToTarget(MathHelper.floor_float(bX), MathHelper.floor_float(bY), MathHelper.floor_float(bZ));   
+  npc.aiManager.wasMoving = true;
   }
 
 @Override
