@@ -246,3 +246,7 @@ TWEAKS/OPTIMIZATION
 * test commander bonuses
 * fix commander bonus for vehicle repair
 
+* add advanced courier routing slips
+* add more routing slots to higher rank couriers (1/2/4)
+* fix warehouse bug when attempting to withdraw items with maxStackSize < 64
+

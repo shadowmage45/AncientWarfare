@@ -98,6 +98,8 @@ private void loadItems()
   this.registerItemSingle(civicBuilder, "Civic Structure Builder", "", "Construction Site");
   this.registerItemSubtyped(courierRouteSlip);
   this.addSubtypeInfoToItem(courierRouteSlip, 0, "Basic Routing Slip","","4 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,0)).setIconTexture("ancientwarfare:npc/route1", 0);
+  this.addSubtypeInfoToItem(courierRouteSlip, 1, "Basic Routing Slip","","6 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,1)).setIconTexture("ancientwarfare:npc/route2", 1);
+  this.addSubtypeInfoToItem(courierRouteSlip, 2, "Basic Routing Slip","","8 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,2)).setIconTexture("ancientwarfare:npc/route3", 2);
   }
 
 private void loadRecipes()

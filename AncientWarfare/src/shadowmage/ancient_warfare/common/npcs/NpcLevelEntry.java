@@ -41,7 +41,7 @@ protected int attackDamage = 4;
 protected int rangedAttackDistance = 0;
 protected int health = 20;
 protected int inventorySize = 0;
-protected int specInventorySize = 1;
+protected int specInventorySize = 0;
 protected int actionTicks = 35;
 protected int upkeepCost = 8;//default one pork chop/ two apples
 protected float accuracy = 1.f;
@@ -123,6 +123,12 @@ public NpcLevelEntry setHealth(int health)
 public NpcLevelEntry setInventorySize(int size)
   {
   this.inventorySize = size;
+  return this;
+  }
+
+public NpcLevelEntry setSpecInventorySize(int size)
+  {
+  this.specInventorySize = size;
   return this;
   }
 

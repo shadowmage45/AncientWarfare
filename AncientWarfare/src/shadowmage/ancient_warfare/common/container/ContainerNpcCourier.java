@@ -130,14 +130,19 @@ public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
   if(!npc.worldObj.isRemote)
     {
     npc.wayNav.clearCourierPoints();
-    ItemStack stack = npc.specInventory.getStackInSlot(0);
-    if(stack!=null && stack.itemID == ItemLoader.courierRouteSlip.itemID)
+    ItemStack stack;
+    CourierRoutingInfo info;
+    for(int i = 0; i < npc.specInventory.getSizeInventory(); i++)
       {
-      CourierRoutingInfo info = new CourierRoutingInfo(stack);
-      for(int i = 0 ; i < info.getRouteSize(); i++)
+      stack = npc.specInventory.getStackInSlot(i);
+      if(stack!=null && stack.itemID == ItemLoader.courierRouteSlip.itemID)
         {
-        npc.wayNav.addCourierPoint(info.getPoint(i));
-        }    
+        info = new CourierRoutingInfo(stack);
+        for(int k = 0 ; k < info.getRouteSize(); k++)
+          {
+          npc.wayNav.addCourierPoint(info.getPoint(k));
+          }    
+        }
       }
     } 
   }

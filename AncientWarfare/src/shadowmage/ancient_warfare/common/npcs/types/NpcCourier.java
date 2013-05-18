@@ -54,9 +54,9 @@ public NpcCourier(int type)
   this.displayName = "Courier";
   this.tooltip = "Transports Items";
   this.iconTexture = "npcWorker1";  
-  this.addLevel("Courier Novice", Config.texturePath + "models/npc/npcCourier.png", getToolStack(0), null).addTargetType(CivicWorkType.COURIER).setInventorySize(9).setActionTicks(40);
-  this.addLevel("Courier Adept", Config.texturePath + "models/npc/npcCourier.png", getToolStack(1), null).addTargetType(CivicWorkType.COURIER).setInventorySize(18).setActionTicks(30);
-  this.addLevel("Courier Master", Config.texturePath + "models/npc/npcCourier.png", getToolStack(2), null).addTargetType(CivicWorkType.COURIER).setInventorySize(27).setActionTicks(20);
+  this.addLevel("Courier Novice", Config.texturePath + "models/npc/npcCourier.png", getToolStack(0), null).addTargetType(CivicWorkType.COURIER).setInventorySize(9).setActionTicks(40).setSpecInventorySize(1);
+  this.addLevel("Courier Adept", Config.texturePath + "models/npc/npcCourier.png", getToolStack(1), null).addTargetType(CivicWorkType.COURIER).setInventorySize(18).setActionTicks(30).setSpecInventorySize(2);
+  this.addLevel("Courier Master", Config.texturePath + "models/npc/npcCourier.png", getToolStack(2), null).addTargetType(CivicWorkType.COURIER).setInventorySize(27).setActionTicks(20).setSpecInventorySize(4);
   this.isCombatUnit = false;
   this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
       "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};

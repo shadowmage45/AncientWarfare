@@ -188,7 +188,7 @@ protected void handleRequest(NBTTagCompound tag)
     {
     StackWrapper wrap = this.warehouseItems.get(index);
     ItemStack stack = wrap.stack;
-    if(te.withdrawSlots.canHoldItem(stack, 64))
+    if(te.withdrawSlots.canHoldItem(stack, stack.getMaxStackSize()))
       {
       ItemStack removed = te.inventory.getItems(stack, 64);
       removed = te.withdrawSlots.tryMergeItem(removed);

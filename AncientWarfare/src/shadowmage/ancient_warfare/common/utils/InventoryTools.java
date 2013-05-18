@@ -26,6 +26,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import shadowmage.ancient_warfare.common.config.Config;
+
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemFood;
@@ -206,7 +208,7 @@ public static ItemStack getItems(IInventory inv, ItemStack filter, int max, int 
   ItemStack toReturn = null;
   ItemStack fromSlot = null;
   ItemStack tempCopy = null;
-  max = max> filter.getMaxStackSize()? filter.getMaxStackSize() : max;
+  max = max > filter.getMaxStackSize() ? filter.getMaxStackSize() : max;
   firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
   lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
   for(int i = firstSlot; i <= lastSlot; i ++)
@@ -221,7 +223,7 @@ public static ItemStack getItems(IInventory inv, ItemStack filter, int max, int 
           toReturn = ItemStack.copyItemStack(fromSlot);
           toReturn.stackSize = 0;
           }
-        int howMany = max-toReturn.stackSize;
+        int howMany = max - toReturn.stackSize;
         howMany = toReturn.stackSize + howMany > toReturn.getMaxStackSize() ? toReturn.getMaxStackSize()-toReturn.stackSize : howMany;
         howMany = howMany > fromSlot.stackSize? fromSlot.stackSize : howMany;
         if(howMany==0)
