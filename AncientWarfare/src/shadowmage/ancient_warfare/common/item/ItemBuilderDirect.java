@@ -55,6 +55,7 @@ public ItemBuilderDirect(int itemID)
   super(itemID);
 //  this.setIconIndex(4);
   this.setMaxStackSize(1);
+  this.hasLeftClick = true;
   }
 
 @Override
@@ -149,110 +150,12 @@ public void onUpdate(ItemStack stack, World world, Entity entity, int par4, bool
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {  
-  boolean openGUI = false;
   if(world.isRemote)
     {
     return true;
-    }  
-  NBTTagCompound tag;
-  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
-    {
-    tag = stack.getTagCompound().getCompoundTag("structData");
-    }
-  else
-    {
-    tag = new NBTTagCompound();
     } 
-  if(hit != null && !tag.hasKey("name"))//hit was not null, and has no current structure
-    {    
-    if(player.isSneaking())
-      {
-      hit = BlockTools.offsetForSide(hit, side);
-      }
-    /**
-     * if item is ready to scan, initiate scan
-     */
-    if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
-      {
-      //TODO move this out...
-      
-      //TODO other TODO.... really move this stuff out...to playerEntry data...
-      BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
-      BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
-      BlockPosition key = new BlockPosition(tag.getCompoundTag("buildKey"));
-      int face = tag.getCompoundTag("buildKey").getInteger("face");
-      player.addChatMessage("Initiating Scan and clearing Position Data");
-      ProcessedStructure struct = scanAndProcess(world, player, pos1, pos2, key, face);
-      
-      StructureManager.instance().addTempStructure(player, struct);         
-      List<IDPairCount> blockList = struct.getResourceList();
-      NBTTagList blocks = new NBTTagList();
-      for(IDPairCount ct : blockList)
-        {
-        if(ct.id==0)
-          {
-          continue;
-          }
-        NBTTagCompound countTag = new NBTTagCompound();
-        countTag.setInteger("id", ct.id);
-        countTag.setInteger("mt", ct.meta);
-        countTag.setInteger("ct", ct.count);
-        blocks.appendTag(countTag);       
-        }
-      tag = new NBTTagCompound();
-      tag.setTag("blockList", blocks);
-      tag.setString("name", player.getEntityName());               
-      }        
-    else if(!tag.hasKey("pos1"))
-      {
-      tag.setCompoundTag("pos1", hit.writeToNBT(new NBTTagCompound()));
-      player.addChatMessage("Setting Scan Position 1");
-      }
-    else if(!tag.hasKey("pos2"))
-      {
-      tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
-      player.addChatMessage("Setting Scan Position 2");
-      }
-    else if(!tag.hasKey("buildKey"))
-      {
-      tag.setCompoundTag("buildKey", hit.writeToNBT(new NBTTagCompound()));
-      tag.getCompoundTag("buildKey").setInteger("face", BlockTools.getPlayerFacingFromYaw(player.rotationYaw));
-      player.addChatMessage("Setting Scan Build Position and Facing");
-      }
-    }
-  else if(tag.hasKey("name"))
-    {
-    if(isShiftClick(player))
-      {
-      openGUI = true;
-      }
-    else if(hit!=null)
-      {
-      hit = BlockTools.offsetForSide(hit, side);
-      int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-      StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
-      settings.spawnGate = false;
-      settings.spawnNpc = false;
-      settings.spawnVehicle = false;
-      ProcessedStructure struct = StructureManager.instance().getTempStructure(player.getEntityName());
-      if(struct==null)
-        {
-        tag = new NBTTagCompound();
-        }
-      else
-        {
-        this.attemptConstruction(world, player, hit, face, struct, settings);
-        }      
-      }
-    } 
-  /**
-   * apply any changes to the itemStackTag
-   */
-  stack.setTagInfo("structData", tag);  
-  if(openGUI)
-    {
-    GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_BUILD_DIRECT, player, world, 0, 0, 0);
-    }  
+ 
+  GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_BUILD_DIRECT, player, world, 0, 0, 0);  
   return true;
   }
 
@@ -438,5 +341,102 @@ public BlockPosition getScanPos2(ItemStack stack)
   return ItemStructureScanner.getPos2(stack);
   }
 
+
+@Override
+public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+  {
+  if(world.isRemote)
+    {
+    return true;
+    }  
+  NBTTagCompound tag;
+  if(hit==null){return true;}
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
+    {
+    tag = stack.getTagCompound().getCompoundTag("structData");
+    }
+  else
+    {
+    tag = new NBTTagCompound();
+    } 
+  
+  if(!tag.hasKey("name"))//hit was not null, and has no current structure
+    {    
+    if(player.isSneaking())
+      {
+      hit = BlockTools.offsetForSide(hit, side);
+      }
+    /**
+     * if item is ready to scan, initiate scan
+     */
+    if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
+      {
+      BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
+      BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
+      BlockPosition key = new BlockPosition(tag.getCompoundTag("buildKey"));
+      int face = tag.getCompoundTag("buildKey").getInteger("face");
+      player.addChatMessage("Initiating Scan and clearing Position Data");
+      ProcessedStructure struct = scanAndProcess(world, player, pos1, pos2, key, face);
+      
+      StructureManager.instance().addTempStructure(player, struct);         
+      List<IDPairCount> blockList = struct.getResourceList();
+      NBTTagList blocks = new NBTTagList();
+      for(IDPairCount ct : blockList)
+        {
+        if(ct.id==0)
+          {
+          continue;
+          }
+        NBTTagCompound countTag = new NBTTagCompound();
+        countTag.setInteger("id", ct.id);
+        countTag.setInteger("mt", ct.meta);
+        countTag.setInteger("ct", ct.count);
+        blocks.appendTag(countTag);       
+        }
+      tag = new NBTTagCompound();
+      tag.setTag("blockList", blocks);
+      tag.setString("name", player.getEntityName());               
+      }        
+    else if(!tag.hasKey("pos1"))
+      {
+      tag.setCompoundTag("pos1", hit.writeToNBT(new NBTTagCompound()));
+      player.addChatMessage("Setting Scan Position 1");
+      }
+    else if(!tag.hasKey("pos2"))
+      {
+      tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
+      player.addChatMessage("Setting Scan Position 2");
+      }
+    else if(!tag.hasKey("buildKey"))
+      {
+      tag.setCompoundTag("buildKey", hit.writeToNBT(new NBTTagCompound()));
+      tag.getCompoundTag("buildKey").setInteger("face", BlockTools.getPlayerFacingFromYaw(player.rotationYaw));
+      player.addChatMessage("Setting Scan Build Position and Facing");
+      }
+    }
+  else 
+    {    
+    hit = BlockTools.offsetForSide(hit, side);
+    int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+    StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
+    settings.spawnGate = false;
+    settings.spawnNpc = false;
+    settings.spawnVehicle = false;
+    ProcessedStructure struct = StructureManager.instance().getTempStructure(player.getEntityName());
+    if(struct==null)
+      {
+      tag = new NBTTagCompound();
+      }
+    else
+      {
+      this.attemptConstruction(world, player, hit, face, struct, settings);
+      } 
+    } 
+  /**
+   * apply any changes to the itemStackTag
+   */
+  stack.setTagInfo("structData", tag);  
+  return false;
+  }
 
 }

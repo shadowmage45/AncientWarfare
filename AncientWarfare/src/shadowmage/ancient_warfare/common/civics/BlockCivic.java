@@ -95,7 +95,7 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
 public TileEntity getNewTileEntity(World world, int meta)
   {
   TileEntity te = CivicRegistry.instance().getTEFor(world, blockNum*16 + meta);
-  Config.logDebug("civic block getting te for: "+blockNum+":"+meta+" calc: "+(blockNum*16+meta) + " client: "+world.isRemote);
+//  Config.logDebug("civic block getting te for: "+blockNum+":"+meta+" calc: "+(blockNum*16+meta) + " client: "+world.isRemote);
   return te;
   }
 
@@ -112,7 +112,7 @@ public void registerIcons(IconRegister reg, Description d)
     civ = CivicRegistry.instance().getCivicFor(civNum);    
     if(civ!=null)
       {
-      Config.logDebug("registering icons for block num: "+this.blockNum+ " meta: "+i+" civic: "+civ.getDisplayName());
+//      Config.logDebug("registering icons for block num: "+this.blockNum+ " meta: "+i+" civic: "+civ.getDisplayName());
       iconNames = civ.getIconNames();
       Config.logDebug(iconNames[0] + " :: "+iconNames[1]+ " :: "+iconNames[2]);
       iconID = i*3;//bottomID --  *3 is for only 3 textures per civic
@@ -188,7 +188,7 @@ public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, in
 @Override
 public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
   {
-  Config.logDebug("getting id picked for: "+blockNum + " meta: "+world.getBlockMetadata(x, y, z));
+//  Config.logDebug("getting id picked for: "+blockNum + " meta: "+world.getBlockMetadata(x, y, z));
   return CivicRegistry.instance().getItemFor(blockNum, world.getBlockMetadata(x, y, z));
   }
 

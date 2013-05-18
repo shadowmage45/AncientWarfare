@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.client.gui.civic;
 
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -64,7 +65,8 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawStringGui("Inventory", 8, 5, 0xffffffff);
   
 
-  this.drawStringGui("Civic Type: "+teBase.getCivic().getDisplayName(), 8, 112, 0xffffffff);
+  this.drawStringGui("Civic Type: "+teBase.getCivic().getDisplayName(), 8, 112, 0xffffffff);  
+  this.drawStringGui("Broadcast Work: ", 8 , 112+10+5, 0xffffffff);
   }
 
 @Override
@@ -76,15 +78,16 @@ public void updateScreenContents()
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  // TODO Auto-generated method stub
-
+  if(element.getElementNumber()==0)
+    {
+    teBase.sendBroadCastWork(((GuiCheckBoxSimple)element).checked());
+    }
   }
 
 @Override
 public void setupControls()
   {
-  // TODO Auto-generated method stub
-
+  this.addCheckBox(0, 176-8-18, 112+10, 18, 18).setChecked(teBase.broadcastWork);
   }
 
 @Override

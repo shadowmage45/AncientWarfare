@@ -46,7 +46,7 @@ public class ItemBuilderInstant extends ItemBuilderBase
 public ItemBuilderInstant(int itemID)
   {
   super(itemID);
-//  this.setIconIndex(3);
+  this.hasLeftClick = true;
   }
 
 public void openGUI(EntityPlayer player)
@@ -132,14 +132,20 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     return true;
     }  
-  if(isShiftClick(player))
+  if(player.capabilities.isCreativeMode)
     {
-    if(player.capabilities.isCreativeMode)
-      {
-      openGUI(player);
-      }
-    return true;
+    openGUI(player);
     }
+  return true;
+  }
+
+@Override
+public boolean onUsedFinalLeft(World world, EntityPlayer player,  ItemStack stack, BlockPosition hit, int side)
+  {
+  if(world.isRemote)
+    {
+    return true;
+    } 
   if(hit==null)
     {
     return true;
@@ -216,6 +222,8 @@ public boolean attemptConstruction(World world, ProcessedStructure struct,   Blo
     }
   return false;
   }
+
+
 
 
 }

@@ -34,6 +34,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
@@ -80,6 +81,27 @@ public IInventory[] getInventoryToDropOnBreak()
   return new IInventory[]{inventory, inputSlots, withdrawSlots, overflow};
   }
 
+public void onPlaced()
+  {
+  int id;
+  int meta;
+  for(int y = this.minY; y <=this.maxY; y++)
+    {
+    for(int z = this.minZ ;z <=this.maxZ ; z++)
+      {
+      for(int x = this.minX; x <=this.maxX; x++)
+        {
+        id = worldObj.getBlockId(x, y, z);
+        if(id==BlockLoader.warehouseStorage.blockID)
+          {
+          meta = worldObj.getBlockMetadata(x, y, z);
+          this.addWareHouseBlock(x, y, z, BlockWarehouseStorage.getStorageSizeFromMeta(meta));
+          }
+        }
+      }
+    }
+  }
+
 @Override
 public void setCivic(Civic civ)
   {
@@ -92,7 +114,7 @@ public void setCivic(Civic civ)
   }
 
 @Override
-protected void updateInventoryStatus()
+protected void onCivicUpdate()
   {
   for(int i = 0; i < this.inputSlots.getSizeInventory(); i++)
     {
@@ -101,13 +123,12 @@ protected void updateInventoryStatus()
       this.inputSlots.setInventorySlotContents(i, this.inventory.tryMergeItem(this.inputSlots.getStackInSlot(i)));
       }
     }
-  super.updateInventoryStatus();
+  super.onCivicUpdate();
   }
 
 @Override
 public boolean onInteract(World world, EntityPlayer player)
   {
-  Config.logDebug("player interact with warehouse. inv size: "+this.inventory.getSizeInventory() + " client: "+this.worldObj.isRemote + " on: "+this);
   if(!world.isRemote)
     {
     GUIHandler.instance().openGUI(GUIHandler.CIVIC_WAREHOUSE, player, world, xCoord, yCoord, zCoord);

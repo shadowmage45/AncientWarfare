@@ -71,16 +71,13 @@ public int maxY;
 public int maxZ;
 protected int teamNum = 0;
 protected boolean isWorkSite = false;
-protected boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
+public boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
 public AWInventoryBase inventory = null;
 public AWInventoryBase overflow = new AWInventoryBasic(4);
 protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
 
 protected Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
 protected boolean hasWork = false;
-protected int clientWorkStatus = 0;
-protected int clientInventoryStatus = 0;
-protected int clientWorkerStatus = 0;
 
 public TECivic()
   {
@@ -116,6 +113,7 @@ public void setBounds(int minX, int minY, int minZ, int maxX, int maxY, int maxZ
   this.maxX = maxX;
   this.maxY = maxY;
   this.maxZ = maxZ;
+  this.onPlaced();
   }
 
 public boolean isPointInBounds(int x, int y, int z)
@@ -180,7 +178,6 @@ protected void onCivicUpdate()
   t2 = System.nanoTime();
   s2 = t2-t1;
   t1 = t2;
-  this.updateInventoryStatus();
   t2 = System.nanoTime();
   s3 = t2-t1;
   t1 = t2;
@@ -251,36 +248,6 @@ public void broadCastToSoldiers(int maxRange)
           npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
           }
         }
-      }
-    }
-  }
-
-protected void updateInventoryStatus()
-  {
-  if(this.inventory.getSizeInventory()>0)
-    {
-    if(this.overflow.getEmptySlotCount()!=this.overflow.getSizeInventory())
-      {
-      ItemStack fromSlot;
-      for(int i = 0; i < this.overflow.getSizeInventory(); i++)
-        {
-        fromSlot = this.overflow.getStackInSlot(i);
-        this.overflow.setInventorySlotContents(i, this.inventory.tryMergeItem(fromSlot));
-        }
-      }
-    int empty = this.inventory.getEmptySlotCount();
-    int prevStatus = this.clientInventoryStatus;
-    if(empty<=0)
-      {
-      this.clientInventoryStatus = 0;
-      }
-    else
-      {
-      this.clientInventoryStatus = 1;
-      }
-    if(prevStatus != this.clientInventoryStatus)
-      {
-      this.sendInventoryStatusUpdate(clientInventoryStatus);
       }
     }
   }
@@ -447,18 +414,7 @@ protected void updateHasWork()
  * @param newVal
  */
 protected void setHasWork(boolean newVal)
-  {
-  if(newVal!=this.hasWork)
-    {
-    if(newVal==true)
-      {
-      this.sendWorkStatusUpdate(1);
-      }
-    else
-      {
-      this.sendWorkStatusUpdate(0);
-      }    
-    }
+  { 
   this.hasWork = newVal;
   }
 
@@ -557,7 +513,6 @@ public Packet getDescriptionPacket()
   return new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);
   }
 
-
 @Override
 public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
   {
@@ -595,9 +550,21 @@ protected void sendWorkerStatusUpdate(int val)
   sendClientEvent(2, val);
   }
 
+public void sendBroadCastWork(boolean val)
+  {
+  if(val)
+    {
+    this.sendClientEvent(0, 1);
+    }
+  else
+    {
+    this.sendClientEvent(0, 0);
+    }
+  }
+
 protected void sendClientEvent(int id, int val)
   {
-  if(!worldObj.isRemote)
+  if(worldObj.isRemote)
     {
     worldObj.addBlockEvent(xCoord, yCoord, zCoord, worldObj.getBlockId(xCoord, yCoord, zCoord), id, val);
     }
@@ -606,34 +573,31 @@ protected void sendClientEvent(int id, int val)
 @Override
 public boolean receiveClientEvent(int par1, int par2)
   {
+  Config.logDebug("receiving client event: "+this.worldObj.isRemote);
   switch(par1)
   {
-  case 0://work status
-  handleWorkStatusUpdate(par2);
+  case 0://
+  if(par2==0)
+    {
+    this.broadcastWork = false;
+    }
+  else
+    { 
+    this.broadcastWork = true;
+    }
+  this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
   break;  
-  case 1://inventory status
-  handleInventoryStatusUpdate(par2);
+  case 1://
   break;
-  case 2://worker status
-  handleWorkerStatusUpdate(par2);
+  case 2://
   break;
   }
   return super.receiveClientEvent(par1, par2);
   }
 
-public void handleInventoryStatusUpdate(int val)
+public void onPlaced()
   {
-  clientInventoryStatus = val;
-  }
-
-public void handleWorkStatusUpdate(int val)
-  {
-  clientWorkStatus = val;
-  }
-
-public void handleWorkerStatusUpdate(int val)
-  {
-  clientWorkerStatus = val;
+  
   }
 
 /******************************************************************INVENTORY METHODS***********************************************************************************/

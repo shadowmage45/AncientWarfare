@@ -49,6 +49,7 @@ public class ItemCivicPlacer extends AWItemClickable implements IScannerItem
 public ItemCivicPlacer(int itemID)
   {
   super(itemID, true);
+  this.hasLeftClick = true;
   }
 
 @Override
@@ -126,7 +127,6 @@ protected boolean checkForOtherCivicBounds(World world, AxisAlignedBB bb)
     te = (TileEntity)obj;
     if(te instanceof TECivic)
       {
-      Config.logDebug("checking bounds for: "+te + " :: "+bb);
       if(((TECivic) te).doesBBIntersect(bb))
         {
         return true;
@@ -215,73 +215,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         {
         player.addChatMessage("Please choose a position directly adjacent to the work bounds!");
         }      
-      }
-    else if(tag.hasKey("pos1"))
-      {
-      BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
-      BlockPosition min = BlockTools.getMin(pos1, hit);
-      BlockPosition max = BlockTools.getMax(pos1, hit);
-      AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);      
-      if(checkForOtherCivicBounds(world, bb))
-        {
-        player.addChatMessage("Invalid position, within another civics bounds area");
-        return true;
-        }
-      
-      if(civ!=null)
-        {
-        int maxWidth = civ.getMaxWorkSizeWidth();
-        int maxHeight = civ.getMaxWorkSizeHeight();
-        int maxArea = civ.getMaxWorkAreaCube();
-        if(player.isSneaking())
-          {
-          hit.offsetForMCSide(side);
-          }
-        int width1 = Math.abs(hit.z-pos1.z)+1;
-        int width2 = Math.abs(hit.x-pos1.x)+1;
-        int height = Math.abs(hit.y-pos1.y)+1;
-        int totalArea = width1*width2*height;
-        if(width1 <= maxWidth && width2<=maxWidth && height <=maxHeight && totalArea <= maxArea)//
-          {          
-          tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
-          }
-        else
-          {
-          player.addChatMessage("Too large of an area, try a smaller area!");
-          if(width1 > maxWidth)
-            {
-            player.addChatMessage("Z axis is too large by: "+(width1-maxWidth)+" blocks");
-            }
-          if(width2 > maxWidth)
-            {
-            player.addChatMessage("X axis is too large by: "+(width2-maxWidth)+" blocks");
-            }
-          if(height > maxHeight)
-            {
-            player.addChatMessage("Y axis is too large by: "+(height-maxHeight)+" blocks");
-            }
-          if(totalArea > maxArea)
-            {
-            player.addChatMessage("Cubed area is too large by: "+(totalArea-maxArea)+" blocks");
-            }
-          }        
-        }
-      }
-    else
-      {      
-      if(player.isSneaking())
-        {
-        hit.offsetForMCSide(side);
-        }
-      if(!checkForOtherCivicBounds(world, hit))
-        {
-        tag.setCompoundTag("pos1", hit.writeToNBT(new NBTTagCompound()));
-        }
-      else
-        {
-        player.addChatMessage("Invalid position, within another civics bounds area");
-        }
-      }
+      }   
     }
   return true;
   }
@@ -342,9 +276,92 @@ public BlockPosition getScanPos2(ItemStack stack)
   return null;
   }
 
-//needs addInfo
-//NBT will have a Pos1 and Pos2 (BlockPosition)
-//NBT will have type and rank (store type as dmg)
-//might want left-click to set positions normal, shift-left click to set position w/offset, shift-right click to clear current pos1/2
+@Override
+public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+  {
+  if(world.isRemote)
+    {
+    return true;
+    }
+  if(hit!=null && stack!=null && stack.hasTagCompound() && stack.getTagCompound().hasKey("civicInfo"))
+    {
+    Civic civ = CivicRegistry.instance().getCivicFor(stack.getItemDamage());
+    NBTTagCompound tag = stack.getTagCompound().getCompoundTag("civicInfo");
+    if(civ.isDepository())
+      {
+     
+      }
+    else if(tag.hasKey("pos2") && tag.hasKey("pos1"))
+      {
+      
+      }
+    else if(tag.hasKey("pos1"))
+      {
+      BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
+      BlockPosition min = BlockTools.getMin(pos1, hit);
+      BlockPosition max = BlockTools.getMax(pos1, hit);
+      AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);      
+      if(checkForOtherCivicBounds(world, bb))
+        {
+        player.addChatMessage("Invalid position, within another civics bounds area");
+        return true;
+        }      
+      if(civ!=null)
+        {
+        int maxWidth = civ.getMaxWorkSizeWidth();
+        int maxHeight = civ.getMaxWorkSizeHeight();
+        int maxArea = civ.getMaxWorkAreaCube();
+        if(player.isSneaking())
+          {
+          hit.offsetForMCSide(side);
+          }
+        int width1 = Math.abs(hit.z-pos1.z)+1;
+        int width2 = Math.abs(hit.x-pos1.x)+1;
+        int height = Math.abs(hit.y-pos1.y)+1;
+        int totalArea = width1*width2*height;
+        if(width1 <= maxWidth && width2<=maxWidth && height <=maxHeight && totalArea <= maxArea)//
+          {          
+          tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
+          }
+        else
+          {
+          player.addChatMessage("Too large of an area, try a smaller area!");
+          if(width1 > maxWidth)
+            {
+            player.addChatMessage("Z axis is too large by: "+(width1-maxWidth)+" blocks");
+            }
+          if(width2 > maxWidth)
+            {
+            player.addChatMessage("X axis is too large by: "+(width2-maxWidth)+" blocks");
+            }
+          if(height > maxHeight)
+            {
+            player.addChatMessage("Y axis is too large by: "+(height-maxHeight)+" blocks");
+            }
+          if(totalArea > maxArea)
+            {
+            player.addChatMessage("Cubed area is too large by: "+(totalArea-maxArea)+" blocks");
+            }
+          }        
+        }
+      }
+    else
+      {      
+      if(player.isSneaking())
+        {
+        hit.offsetForMCSide(side);
+        }
+      if(!checkForOtherCivicBounds(world, hit))
+        {
+        tag.setCompoundTag("pos1", hit.writeToNBT(new NBTTagCompound()));
+        }
+      else
+        {
+        player.addChatMessage("Invalid position, within another civics bounds area");
+        }
+      }
+    }
+  return true;
+  }
 
 }

@@ -53,7 +53,6 @@ public boolean onBlockClicked(World world, int posX, int posY, int posZ, EntityP
 
 public void breakBlock(World world, int x, int y, int z, int id, int meta)
   {
-  long t1 = System.nanoTime();
   if(!world.isRemote)
     {
     TileEntity te;
@@ -65,20 +64,22 @@ public void breakBlock(World world, int x, int y, int z, int id, int meta)
         TECivicWarehouse ware = (TECivicWarehouse)te;
         if(x>=ware.minX && y>=ware.minY && z>=ware.minZ && x<=ware.maxX && y<=ware.maxY && z <=ware.maxZ)
           {
-          ware.removeWarehouseBlock(x, y, z, 9 * (meta+1));
+          ware.removeWarehouseBlock(x, y, z, getStorageSizeFromMeta(meta));
           }
         }
       }
     }
-  long t2 = System.nanoTime();
-  Config.logDebug("break time: "+(t2-t1));
   super.breakBlock(world, x, y, z, id, meta);
+  }
+
+public static int getStorageSizeFromMeta(int meta)
+  {
+  return 9 + 9*meta;
   }
 
 @Override
 public void onBlockAdded(World world, int x, int y, int z)
   {
-  long t1 = System.nanoTime();
   if(!world.isRemote)
     {
     TileEntity te;
@@ -90,14 +91,13 @@ public void onBlockAdded(World world, int x, int y, int z)
         TECivicWarehouse ware = (TECivicWarehouse)te;
         if(x>=ware.minX && y>=ware.minY && z>=ware.minZ && x<=ware.maxX && y<=ware.maxY && z <=ware.maxZ)
           {
-          ware.addWareHouseBlock(x, y, z, 9 * (world.getBlockMetadata(x, y, z)+1));
+          int meta = world.getBlockMetadata(x, y, z);
+          ware.addWareHouseBlock(x, y, z, getStorageSizeFromMeta(meta));
           break;
           }
         }
       }
     }
-  long t2 = System.nanoTime();
-  Config.logDebug("place time: "+(t2-t1));
   super.onBlockAdded(world, x, y, z);
   }
 
@@ -116,7 +116,7 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
 @Override
 public void registerIcons(IconRegister reg, Description d)
   {
-  Config.logDebug("registering icons for warehouse storage block "+d);
+//  Config.logDebug("registering icons for warehouse storage block "+d);
   int levels = 1;
   Icon icon;
   for(int i = 0; i < levels; i++)

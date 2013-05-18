@@ -120,4 +120,12 @@ public static int getVehicleLevelForStack(ItemStack stack)
   return 0;
   }
 
+@Override
+public boolean onUsedFinalLeft(World world, EntityPlayer player,
+    ItemStack stack, BlockPosition hit, int side)
+  {
+  // TODO Auto-generated method stub
+  return false;
+  }
+
 }

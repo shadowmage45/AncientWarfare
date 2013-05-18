@@ -48,7 +48,7 @@ public class ItemNpcSpawner extends AWItemClickable
 public ItemNpcSpawner(int itemID)
   {
   super(itemID, true);
-  this.setCreativeTab(CreativeTabAW.npcTab);
+  this.setCreativeTab(CreativeTabAW.npcTab);  
   }
 
 @Override
@@ -117,6 +117,14 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {
   List displayStacks = NpcRegistry.instance().getCreativeDisplayItems();
   par3List.addAll(displayStacks);
+  }
+
+@Override
+public boolean onUsedFinalLeft(World world, EntityPlayer player,
+    ItemStack stack, BlockPosition hit, int side)
+  {
+  // TODO Auto-generated method stub
+  return false;
   }
 
 

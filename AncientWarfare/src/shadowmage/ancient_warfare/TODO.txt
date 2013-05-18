@@ -8,17 +8,16 @@ THIS(next) WEEKEND
 
 GENERAL
 * create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
-* move many items over to left-click to activate (block scanner, others)(solves block interaction issues)
 * test commander bonuses
 * non-combat npcs flee from mobs (move to shelter)
 * add onInventoryChanged() calls to any AI that modifies inventories
 
+
 SCANNER
 * validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?
-* dont' pass right-click on to block (seems set, doesn't work)
 
-VEHICLES    
-* alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
+VEHICLES
+* clean up vehicle alpha rendering
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
@@ -28,11 +27,11 @@ CIVICS
 * toggle in GUI's to enable/disable broadcasting of work
     apply redstone signal?
     can use (send client event) to trigger enable/disable of work right from the gui
-* need objective icons and rendering
-* need inventory status bar
-* need work status bar
 * need a clearer way of designating where bounds on a civic SHOULD be.  videos/screenshots?
-
+* default routing broadcasting in civics?
+    add a single routing slot to the civic, broadcast to a courier that has no route points
+    will need changing of getActiveRoutePoint to not pull from list, but pull an active point
+    
 WAREHOUSE 
 
 WORLD GEN STUFF
@@ -240,3 +239,8 @@ TWEAKS/OPTIMIZATION
 * investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
     or other method to set NPC types as aggro for other Mob type entities
 * needs to drop inventory when storage block is removed
+
+* move many items over to left-click to activate (block scanner, others)(solves block interaction issues)
+* warehouse scan once on being placed
+* cleanup much debug spam
+* add few missing icons

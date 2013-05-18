@@ -21,12 +21,17 @@
 package shadowmage.ancient_warfare.common.item;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public abstract class AWItemClickable extends AWItemBase
 {
+
+boolean hasLeftClick = false;
 
 /**
  * @param itemID
@@ -50,7 +55,27 @@ public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,Entit
   return par1ItemStack;
   }
 
+@Override
+public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPlayer player)
+  { 
+  if(!hasLeftClick)
+    {
+    return super.onBlockStartBreak(stack, x, y, z, player);
+    }
+  boolean flag = player.capabilities.isCreativeMode;
+  if(!player.worldObj.isRemote)
+    {
+    MovingObjectPosition hit = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
+    if(hit!=null)
+      {
+      this.onUsedFinalLeft(player.worldObj, player, stack, new BlockPosition(hit.blockX, hit.blockY, hit.blockZ), hit.sideHit);
+      }  
+    }   
+  return flag;
+  }
+
 public abstract boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side);
 
+public abstract boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side);
 
 }

@@ -57,17 +57,9 @@ public ContainerCivicWarehouse(EntityPlayer openingPlayer, TECivicWarehouse te)
   this.te = te;  
   if(!te.worldObj.isRemote)
     {
-    long t1 = System.nanoTime();
-    this.warehouseItems = InventoryTools.getCompactedInventory(te.inventory, azSorter);
-    long t2 = System.nanoTime();
-    Config.logDebug("initializing server container. items length: "+warehouseItems.size() + " time: "+ (t2-t1));
-    t1 = System.nanoTime();
+    this.warehouseItems = InventoryTools.getCompactedInventory(te.inventory, azSorter);    
     this.filledSlotCount = te.getSizeInventory() - te.inventory.getEmptySlotCount();
-    t2 = System.nanoTime();
-    Config.logDebug("empty slot counting time: "+(t2-t1));
-    
-    this.cacheInventory.setInventorySize(te.getSizeInventory());
-    
+    this.cacheInventory.setInventorySize(te.getSizeInventory());    
     ItemStack stack = null;
     for(int i = 0; i < te.getSizeInventory(); i++)
       {
@@ -210,19 +202,15 @@ public void handleInitData(NBTTagCompound tag)
   {
   this.warehouseItems = InventoryTools.getCompactInventoryFromTag(tag);
   this.filledSlotCount = tag.getInteger("filledSlotCount");  
-  Config.logDebug("read warehouse items length: "+warehouseItems.size());
   }
 
 @Override
 public List<NBTTagCompound> getInitData()
   {
   List<NBTTagCompound> tags = new ArrayList<NBTTagCompound>();
-  long t1 = System.nanoTime();
   NBTTagCompound tag = InventoryTools.getTagForCompactInventory(warehouseItems);
   tag.setInteger("filledSlotCount", this.filledSlotCount);
   tags.add(tag);
-  long t2 = System.nanoTime();
-  Config.logDebug("inv compact time: "+(t2-t1));
   return tags;
   }
 
@@ -236,7 +224,6 @@ public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
 @Override
 public void detectAndSendChanges()
   {
-  Config.logDebug("detecting changes...client: "+this.player.worldObj.isRemote);
   boolean sendPacket = false;
   if(te.getSizeInventory()!=cacheInventory.getSizeInventory())
     {
@@ -246,7 +233,6 @@ public void detectAndSendChanges()
     {
     ItemStack cacheStack = null;
     ItemStack teStack = null;
-    long t1 = System.nanoTime();
     for(int i = 0; i < this.cacheInventory.getSizeInventory(); i++)
       {
       cacheStack = cacheInventory.getStackInSlot(i);
@@ -266,8 +252,6 @@ public void detectAndSendChanges()
         }  
         }
       }
-    long t2 = System.nanoTime();
-    Config.logDebug("inv check time: "+ (t2-t1) + " send packet: "+sendPacket);
     }
   if(sendPacket)
     {

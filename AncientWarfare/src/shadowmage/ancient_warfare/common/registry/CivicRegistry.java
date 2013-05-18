@@ -72,7 +72,7 @@ public void registerCivics()
     Block block = getBlockFor(civ.getGlobalID());
     int meta = civ.getGlobalID()%16;
     LanguageRegistry.addName(new ItemStack(block, 1 , meta), civ.getDisplayName());    
-    Config.logDebug("registering description for: "+block +" meta: "+meta+ " name: "+civ.getDisplayName());
+//    Config.logDebug("registering description for: "+block +" meta: "+meta+ " name: "+civ.getDisplayName());
     }
   }
 
@@ -146,7 +146,6 @@ public TileEntity getTEFor(World world, int type)
       Civic civ = getCivicFor(type);
       if(civ!=null && civ.getTileEntityClass()!=null)
         {
-    	  Config.logDebug(civ.getDisplayName() + " -- " +civ.getDisplayTooltip());
         te = civ.getTileEntityClass().newInstance();
         }      
       if(te!=null)      

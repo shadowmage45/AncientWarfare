@@ -36,7 +36,7 @@ public class ItemCreativeEditor extends AWItemClickable
 public ItemCreativeEditor(int itemID)
   {
   super(itemID, false);
-//  this.setIconIndex(10);
+  this.hasLeftClick = false;
   }
 
 @Override
@@ -52,5 +52,12 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
     }
   return true;
   }
+
+@Override
+public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

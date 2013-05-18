@@ -51,17 +51,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     return true;
     }
-  if(isShiftClick(player))
-    {
-    GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, world, 0, 0, 0);
-    }
-//  else if(hit!=null)
-//    {
-//    CourierRoutingInfo info = new CourierRoutingInfo(stack);
-//    info.addRoutePoint(new WayPointItemRouting(hit.x, hit.y, hit.z, side, TargetType.DELIVER));
-//    info.writeToItem(stack);    
-//    GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, world, 0, 0, 0);
-//    }
+  GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, world, 0, 0, 0);
   return true;
   }
 
@@ -94,6 +84,14 @@ public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPla
 @Override
 public boolean getShareTag()
   {
+  return false;
+  }
+
+@Override
+public boolean onUsedFinalLeft(World world, EntityPlayer player,
+    ItemStack stack, BlockPosition hit, int side)
+  {
+  // TODO Auto-generated method stub
   return false;
   }
 
