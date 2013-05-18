@@ -58,6 +58,18 @@ public VehicleInventory(VehicleBase vehicle)
   this.vehicle = vehicle;   
   }
 
+public void setInventorySizes(int upgrade, int ammo, int armor, int storage)
+  {
+  this.ammoInventory = new AWInventoryBasic(ammo, 64);
+  this.armorInventory = new AWInventoryBasic(armor,  1);
+  this.storageInventory = new AWInventoryBasic(storage, 64);
+  this.upgradeInventory = new AWInventoryBasic(upgrade, 1);
+  this.ammoInventory.setCallback(this);
+  this.armorInventory.setCallback(this);
+  this.storageInventory.setCallback(this);
+  this.upgradeInventory.setCallback(this);
+  }
+
 /**
  * if inventory is valid, write this entire inventory to the passed tag
  * @param commonTag
@@ -116,7 +128,7 @@ public void readFromNBT(NBTTagCompound commonTag)
   }
 
 @Override
-public void onInventoryChanged(IInventory changedInv, List<Integer> slotNums)
+public void onInventoryChanged(IInventory changedInv)
   { 
   if(changedInv == this.ammoInventory && !vehicle.worldObj.isRemote)
     {

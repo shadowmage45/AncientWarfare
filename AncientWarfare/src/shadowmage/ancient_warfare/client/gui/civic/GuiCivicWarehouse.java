@@ -120,7 +120,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   int centerX = guiLeft+this.getXSize()/2;
   int buttonY = guiTop + 8 + 4*18 + 2;
   int textTop = buttonY + 16;
-  String pageString = "Page "+(this.pageNum+1) +"/"+ ((this.container.warehouseItems.size()/this.elementsPerPage)+1);
+  String pageString = "Page "+(this.pageNum+1) +"/"+ this.getPageCount();
   this.drawCenteredString(getFontRenderer(), pageString, centerX, buttonY+2, 0xffffffff);
   this.drawCenteredString(this.getFontRenderer(), "Size:", centerX, textTop, 0xffffffff);
   this.drawCenteredString(this.getFontRenderer(), String.valueOf(this.te.getSizeInventory()), centerX, textTop+10, 0xffffffff);
@@ -132,6 +132,17 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 public void updateScreenContents()
   {
   
+  }
+
+public int getPageCount()
+  {
+  int elementMod = this.container.warehouseItems.size() % this.elementsPerPage;
+  int rawPages = this.container.warehouseItems.size() / this.elementsPerPage;
+  if(elementMod!=0)
+    {
+    rawPages++;
+    }
+  return rawPages;
   }
 
 @Override
@@ -147,7 +158,7 @@ public void onElementActivated(IGuiElement element)
   break;
   
   case 1://next
-  if(this.pageNum+1 <= this.container.warehouseItems.size()/this.elementsPerPage)
+  if(this.pageNum+1 < this.getPageCount())
     {
     this.pageNum++;
     }

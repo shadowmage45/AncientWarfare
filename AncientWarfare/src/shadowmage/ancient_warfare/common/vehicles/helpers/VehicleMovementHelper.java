@@ -360,36 +360,49 @@ public void onMovementTick()
     }
   if(strafeMotion !=0 || forwardMotion !=0 || vehicle.motionY !=0)
     { 
-    this.vehicle.noClip = false;
-    if(vehicle.isCollidedHorizontally)
-      {
-      
-      
-//      Config.logDebug("collided");
-        
+//    this.vehicle.noClip = false;
+//    if(vehicle.isCollidedHorizontally)
+//      {
+//      Config.logDebug("collided");        
 //      float velocity = MathHelper.sqrt_double(vehicle.motionX*vehicle.motionX + vehicle.motionZ*vehicle.motionZ);      
-      if(vehicle.nav.currentTarget!=null && vehicle.getForwardInput()==1 && vehicle.getStrafeInput()==0)
-        {
-//        Config.logDebug("velocity: "+velocity);
-        if(vehicle.riddenByEntity instanceof NpcBase)
-          {
-          this.vehicle.noClip = true;
-          vehicle.motionY = 0;       
+//      if(vehicle.nav.currentTarget!=null && vehicle.getForwardInput()==1 && vehicle.getStrafeInput()==0)
+//        {
+////        Config.logDebug("velocity: "+velocity);
+//        if(vehicle.riddenByEntity instanceof NpcBase)
+//          {
+//          this.vehicle.noClip = true;          
 //          int x = MathHelper.floor_double(vehicle.posX);
 //          int y = MathHelper.floor_double(vehicle.posY);
 //          int z = MathHelper.floor_double(vehicle.posZ);
-//          if(vehicle.worldObj.getBlockId(x, y, z)==0)//air block, drop
+//          if(vehicle.worldObj.getBlockId(x, y-1, z)==0)//air block, drop
 //            {
 //            vehicle.motionY -= (9.81f*0.05f*0.05f);
 //            }
-//          else if(!vehicle.getWorldAccess().isWalkable(x, y, z))//solid block, push up/out
+//          else if(vehicle.worldObj.getBlockId(x, y, z)!=0)
 //            {
 //            vehicle.motionY += (9.81f*0.05f*0.05f);
 //            }
-          }
-        }
-      }
+//          else if(vehicle.posY % 1.d == 0.d)
+//            {
+//            
+//            }
+//          else
+//            {
+//            vehicle.motionY = 0;      
+//            }
+//          }
+//        }
+//      }
+    
+    boolean adjWidth = false;
+    float oldWidth = vehicle.width;
+    if(vehicle.riddenByEntity instanceof NpcBase)
+      {
+      vehicle.width = 0.8f;
+      adjWidth = true;
+      }    
     vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+    vehicle.width = oldWidth;
     float x = Trig.sinDegrees(vehicle.rotationYaw)*-forwardMotion;
     float z = Trig.cosDegrees(vehicle.rotationYaw)*-forwardMotion;  
     vehicle.motionX = x;

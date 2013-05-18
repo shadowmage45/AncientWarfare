@@ -393,18 +393,15 @@ protected void broadcastAggro()
   List<EntityMob> mobs = worldObj.getEntitiesWithinAABB(EntityMob.class, AxisAlignedBB.getAABBPool().getAABB(posX-16, posY-8, posZ-16, posX+16, posY+8, posZ+16));
   for(EntityMob mob : mobs)
     {
-    if(mob.getAttackTarget()==null)
+    if(mob.getEntityToAttack()==null && mob.getAttackTarget()==null)
       {
       Config.logDebug("setting mob attack target for: "+mob);
       //setPrivateValue(EntityLiving.class, living, turret, "currentTarget", "field_70776_bF");
 //      ObfuscationReflectionHelper.setPrivateValue(classToAccess, instance, value, fieldNames);
-      ObfuscationReflectionHelper.setPrivateValue(EntityLiving.class, mob, this, "currentTarget", "field_70776_bF");
-      mob.setRevengeTarget(this);
-      mob.setAttackTarget(this);
-      mob.setLastAttackingEntity(this);
-      PathEntity path = mob.worldObj.getPathEntityToEntity(mob, this, 16.f, true, false, false, true);
-      mob.getNavigator().setPath(path, mob.getAIMoveSpeed());
-      mob.setPathToEntity(path);      
+//      ObfuscationReflectionHelper.setPrivateValue(EntityLiving.class, mob, this, "currentTarget", "field_70776_bF");
+//      mob.setRevengeTarget(this);
+      mob.setTarget(this);//handles zombie pig men, spiders, cave spiders, silverfish, endermen, creeper
+      mob.setAttackTarget(this);//handles skeleton/creeper      
       }
     }  
   }
@@ -896,6 +893,18 @@ public void setMoveTo(double x, double y, double z, float moveSpeed)
   {
   if(this.ridingEntity==null)
     {
+//    if(this.getDistance(x, y, z)<1.4f)
+//      {
+//      int fx = MathHelper.floor_double(x);
+//      int fy = MathHelper.floor_double(y);
+//      int fz = MathHelper.floor_double(z);
+//      if(!worldObj.checkNoEntityCollision(AxisAlignedBB.getAABBPool().getAABB(fx, fy, fz, fx+1, fy+1, fz+1), this))
+//        {
+//        Config.logDebug("colliding entities in path, halting move-to");
+//        this.getMoveHelper().setMoveTo(posX, posY, posZ, 0);
+//        return;
+//        }
+//      }
     this.getMoveHelper().setMoveTo(x, y, z, moveSpeed);
     }
   }

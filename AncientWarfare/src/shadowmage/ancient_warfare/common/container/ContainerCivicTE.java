@@ -51,23 +51,8 @@ public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
   int slotNum;
   int xPos; 
   int yPos;
-  for (x = 0; x < 9; ++x)//add player hotbar slots
-    {
-    slotNum = x;
-    xPos = 8 + x * 18;
-    yPos = 142+28;
-    this.addSlotToContainer(new Slot(openingPlayer.inventory, x, xPos, yPos));
-    }
-  for (y = 0; y < 3; ++y)
-    {
-    for (x = 0; x < 9; ++x)
-      {
-      slotNum = y*9 + x + 9;// +9 is to increment past hotbar slots
-      xPos = 8 + x * 18;
-      yPos = 84 + y * 18+28;
-      this.addSlotToContainer(new Slot(openingPlayer.inventory, slotNum, xPos, yPos));
-      }
-    }
+
+  this.addPlayerSlots(openingPlayer, 8, 158, 4);    
   
   for(y = 0; y < te.getSizeInventory()/9; y++)
     {
@@ -77,12 +62,7 @@ public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
       if(slotNum<te.getSizeInventory())
         {
         xPos = 8 + x * 18;
-        yPos = 84 + y * 18 - 5*18 - 2*5+28;
-        if(slotNum>=27)
-          {
-          xPos = -1000;
-          yPos = -1000;
-          }
+        yPos = y * 18 + 15;
         Slot slot = new Slot(te, slotNum, xPos, yPos);
         this.addSlotToContainer(slot);        
         }

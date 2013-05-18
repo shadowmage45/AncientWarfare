@@ -31,6 +31,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_warfare.common.interfaces.IInventoryCallback;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.StackWrapper;
 
@@ -38,6 +39,8 @@ public abstract class AWInventoryBase implements IInventory
 {
 
 int storageSize = 0;
+
+List<IInventoryCallback> callbacks = new ArrayList<IInventoryCallback>();
 
 public AWInventoryBase(int size)
   {
@@ -48,6 +51,12 @@ public AWInventoryBase(int size, int maxStackSize)
   {
   this(size);
   this.maxStackSize = maxStackSize;
+  }
+
+public AWInventoryBase setCallback(IInventoryCallback call)
+  {
+  this.callbacks.add(call);
+  return this;
   }
 
 /**
@@ -222,7 +231,10 @@ public int getInventoryStackLimit()
 @Override
 public void onInventoryChanged()
   {
- 
+  for(IInventoryCallback call : this.callbacks)
+    {
+    call.onInventoryChanged(this);
+    }
   }
 
 @Override

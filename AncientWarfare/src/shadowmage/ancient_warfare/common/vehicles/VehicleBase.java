@@ -288,10 +288,7 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
     {
     this.upgradeHelper.addValidArmor(armor);
     }
-  this.inventory.ammoInventory = new AWInventoryBasic(vehicle.getAmmoBaySize(), 64);
-  this.inventory.armorInventory = new AWInventoryBasic(vehicle.getArmorBaySize(),  1);
-  this.inventory.storageInventory = new AWInventoryBasic(vehicle.getStorageBaySize(), 64);
-  this.inventory.upgradeInventory = new AWInventoryBasic(vehicle.getUpgradeBaySize(), 1);
+  this.inventory.setInventorySizes(vehicle.getUpgradeBaySize(), vehicle.getAmmoBaySize(), vehicle.getArmorBaySize(), vehicle.getStorageBaySize());
   this.updateBaseStats();
   this.resetCurrentStats();
 
@@ -627,7 +624,7 @@ public void onUpdateClient()
       }
     this.localVehicleHealth = this.getHealth();    
     }
-  if(this.riddenByEntity !=null)
+  if(this.riddenByEntity instanceof NpcBase)
     {
     this.updateRiderPosition();
     }

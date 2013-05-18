@@ -1,6 +1,4 @@
 TONIGHT
-* broadcast targeting vs npcs
-* clean up routing GUI / rework routing a bit
 
 THIS WEEK
 * get stuff ready for a preview video
@@ -11,12 +9,9 @@ THIS(next) WEEKEND
 GENERAL
 * create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
 * move many items over to left-click to activate (block scanner, others)(solves block interaction issues)
-* clean up routing slip GUI (its freaking ugly)
-* investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
-    or other method to set NPC types as aggro for other Mob type entities
 * test commander bonuses
-* tons of gui cleanup -- civic, npc, routing..
 * non-combat npcs flee from mobs (move to shelter)
+* add onInventoryChanged() calls to any AI that modifies inventories
 
 SCANNER
 * validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?
@@ -24,17 +19,10 @@ SCANNER
 
 VEHICLES    
 * alpha blend vehicle if set to not render--looks like dookie and blanks out the trajectory line--kind of useless...
-* vehicle navigator needs to enable gravity even with no-clip, if block under main body is air, fall...
-    (check if current nav targetY < this.Y && isWalkable (this.Y - 1))    
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
     use command baton, check if player has food in inventory && withdraw upkeep ??
-
-PATHFINDING
-* better handling of isWalkable -- in need of minor attention for other (mod) blocks
-* need to check if a block has blocking entities in it during iswalkable check ( or just enable no collide)
-* use iterative method (change from static-max time/length)xv ```
 
 CIVICS
 * toggle in GUI's to enable/disable broadcasting of work
@@ -46,13 +34,13 @@ CIVICS
 * need a clearer way of designating where bounds on a civic SHOULD be.  videos/screenshots?
 
 WAREHOUSE 
-* needs to drop inventory when storage block is removed
-* often displays as if it had an extra page
-* warehouse description needs revision
-* need apropriate description for warehouse expansion blocks
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
+* need to rewrite world gen completely..it is pretty much crap right now
+    need to examine validation again
+    need to rework building selection /weighting/values
+    need to include village components w/NPCs civics/etc (if enabled in config)
 
 COMPLEXES
 * features--
@@ -146,6 +134,11 @@ GUI FRAMEWORK
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
 
+PATHFINDING
+* better handling of isWalkable -- in need of minor attention for other (mod) blocks
+* need to check if a block has blocking entities in it during iswalkable check ( or just enable no collide)
+* use iterative method (change from static-max time/length)
+
 TWEAKS/OPTIMIZATION
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
 * optimize clearing code to not include inside bounds of structure
@@ -238,6 +231,12 @@ TWEAKS/OPTIMIZATION
 * civic block descriptions in routing gui are...off...
 * fix a few other things from work (bounds checking)
     
-    
 /********** 05-18-13 **********/
-* get a freaking video out already ?!?!??
+* clean up routing GUI / rework routing a bit
+* ^^ yah..that actually required a complete rewrite of routing system. working good + new capabilities!!
+* fix foobar'd vehicle ammo count code (it needed onInventoryChanged() calls that were removed)
+* tons of gui cleanup -- civic, npc
+* seems to not remove blocks from list properly
+* investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
+    or other method to set NPC types as aggro for other Mob type entities
+* needs to drop inventory when storage block is removed

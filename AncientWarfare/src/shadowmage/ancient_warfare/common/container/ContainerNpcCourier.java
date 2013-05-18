@@ -52,24 +52,7 @@ public ContainerNpcCourier(EntityPlayer openingPlayer, NpcBase npc)
   int slotNum;
   int xPos; 
   int yPos;
-  for (x = 0; x < 9; ++x)//add player hotbar slots
-    {
-    slotNum = x;
-    xPos = 8 + x * 18;
-    yPos = 142+28;
-    this.addSlotToContainer(new Slot(openingPlayer.inventory, x, xPos, yPos));
-    }
-  for (y = 0; y < 3; ++y)
-    {
-    for (x = 0; x < 9; ++x)
-      {
-      slotNum = y*9 + x + 9;// +9 is to increment past hotbar slots
-      xPos = 8 + x * 18;
-      yPos = 84 + y * 18+28;
-      this.addSlotToContainer(new Slot(openingPlayer.inventory, slotNum, xPos, yPos));
-      }
-    }
-    
+  this.addPlayerSlots(openingPlayer, 8, 158, 4);    
   IInventory te = npc.inventory;
   for(y = 0; y < te.getSizeInventory()/9; y++)
     {
@@ -79,27 +62,21 @@ public ContainerNpcCourier(EntityPlayer openingPlayer, NpcBase npc)
       if(slotNum<te.getSizeInventory())
         {
         xPos = 8 + x * 18;
-        yPos = 10 + y * 18;       
+        yPos = y * 18 + 15;      
         Slot slot = new Slot(te, slotNum, xPos, yPos);
         this.addSlotToContainer(slot);        
         }
       }
-    }
-
-  
-  te = npc.specInventory;
-  Config.logDebug("opening container courier. spec inv size: "+te.getSizeInventory());
-  
+    } 
+  te = npc.specInventory;  
   for(x = 0; x < te.getSizeInventory(); x++)
     {
     slotNum = x;
-    Config.logDebug("checking slotNum: "+slotNum);
     if(slotNum<te.getSizeInventory())
       {
       xPos = 8 + x * 18;
-      yPos = 10 + 3*18 + 2;       
+      yPos = 5 + 10 + 3*18 + 5+10;       
       Slot slot = new Slot(te, slotNum, xPos, yPos);
-      Config.logDebug("adding specinventory slot");
       this.addSlotToContainer(slot);        
       }
     }

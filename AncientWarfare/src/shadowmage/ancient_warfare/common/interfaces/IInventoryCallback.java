@@ -26,6 +26,6 @@ import net.minecraft.inventory.IInventory;
 
 public interface IInventoryCallback
 {
-public abstract void onInventoryChanged(IInventory changedInv, List<Integer> slotNums);
+public abstract void onInventoryChanged(IInventory changedInv);
 
 }

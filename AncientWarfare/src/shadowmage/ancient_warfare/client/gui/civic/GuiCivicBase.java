@@ -43,7 +43,7 @@ public GuiCivicBase(Container container, TECivic te)
 @Override
 public int getXSize()
   {
-  return 256;
+  return 176;
   }
 
 @Override
@@ -61,8 +61,10 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  // TODO Auto-generated method stub
+  this.drawStringGui("Inventory", 8, 5, 0xffffffff);
+  
 
+  this.drawStringGui("Civic Type: "+teBase.getCivic().getDisplayName(), 8, 112, 0xffffffff);
   }
 
 @Override

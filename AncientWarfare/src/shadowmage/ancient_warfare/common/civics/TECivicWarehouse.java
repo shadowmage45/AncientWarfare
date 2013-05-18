@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.civics;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -43,6 +44,7 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TECivicWarehouse extends TECivic implements IEntityContainerSynch
 {
@@ -135,25 +137,28 @@ public void addWareHouseBlock(int x, int y, int z, int size)
 
 public void removeWarehouseBlock(int x, int y, int z, int size)
   {
-  boolean found = false;
-  for(BlockPosition p : this.storageBlocks)
+  Iterator<BlockPosition> it = this.storageBlocks.iterator();
+  BlockPosition p;
+  while(it.hasNext())
     {
+    p = it.next();
     if(p.x==x && p.y==y && p.z==z)
       {
-      found = true;
+      it.remove();
+      for(int i = this.inventory.getSizeInventory() - size; i < this.getSizeInventory(); i++)
+        {
+        InventoryTools.dropItemInWorld(worldObj, inventory.getStackInSlotOnClosing(i), xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
+        }
+      this.storageSize-= size;
+      if(this.storageSize<0)
+        {
+        this.storageSize = 0;
+        }
+      ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
+      this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
       break;
       }
     }
-  if(found)
-    {
-    this.storageSize-= size;
-    if(this.storageSize<0)
-      {
-      this.storageSize = 0;
-      }
-    ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
-    this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-    }  
   }
 
 @Override

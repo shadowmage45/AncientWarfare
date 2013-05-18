@@ -49,7 +49,7 @@ public void onElementActivated(IGuiElement element)
 @Override
 public int getXSize()
   {
-  return 256;
+  return 176;
   }
 
 @Override
@@ -67,7 +67,13 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-
+  this.drawStringGui("Inventory", 8, 5, 0xffffffff);
+  if(npc.npcType.getSpecInventorySize(npc.rank)>0)
+    {
+    this.drawStringGui("Special Tools", 8, 5 + 10 + 3*18 + 5, 0xffffffff);
+    }
+  
+  this.drawStringGui("Class: "+npc.npcType.getDisplayName(), 8, 112, 0xffffffff);
   }
 
 @Override

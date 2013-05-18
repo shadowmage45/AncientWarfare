@@ -181,7 +181,7 @@ HashSet<GuiButtonSimple> deliverButtons = new HashSet<GuiButtonSimple>();
 public void setupControls()
   {
   int size = container.info.getRouteSize();
-  area = new GuiScrollableArea(0, this, 10, 10, 256-20, 240-120-10, size*(40));
+  area = new GuiScrollableArea(0, this, 7, 7, 256-14, 240-85-7, size*(37));
   this.guiElements.put(0, area);
  
   WayPointItemRouting point;
@@ -197,7 +197,7 @@ protected void addButtonsFor(int index, WayPointItemRouting point)
   GuiFakeSlot slot;// = new GuiFakeSlot(0, area, k*20, 20*i);
   GuiCheckBoxSimple box;
   GuiButtonSimple button;
-  slot = new GuiFakeSlot(0, area, 0, index*40);
+  slot = new GuiFakeSlot(0, area, 0, index*entryHeight);
   slot.enabled = false;
   int id = player.worldObj.getBlockId(point.floorX(), point.floorY(), point.floorZ());
   int meta = player.worldObj.getBlockMetadata(point.floorX(), point.floorY(), point.floorZ());
@@ -221,39 +221,40 @@ protected void addButtonsFor(int index, WayPointItemRouting point)
   area.elements.add(slot);
       
   button = new GuiButtonSimple(index, area, 100, 14, point.getRoutingType().toString());
-  button.updateRenderPos(62, index*40 + 20);
+  button.updateRenderPos(62, index*entryHeight + 20);
   area.elements.add(button);
   typeButtons.add(button);
   
   button = new GuiButtonSimple (index, area, 60, 14, point.getDeliver() ? "Deposit" : "Pickup");
-  button.updateRenderPos(0, index*40+20);
+  button.updateRenderPos(0, index*entryHeight+20);
   area.elements.add(button);
   deliverButtons.add(button);
   
   button = new GuiButtonSimple(index, area, 18, 18, "+");
-  button.updateRenderPos(20*9, index*40);
+  button.updateRenderPos(20*9, index*entryHeight);
   area.elements.add(button);
   upButtons.add(button);
   
   button = new GuiButtonSimple(index, area, 18, 18, "-");
-  button.updateRenderPos(20*10, index*40);
+  button.updateRenderPos(20*10, index*entryHeight);
   area.elements.add(button);
   downButtons.add(button);
   
   button = new GuiButtonSimple(index, area, 22, 14, "Del");
-  button.updateRenderPos(20*10-4, index*40+20);
+  button.updateRenderPos(20*10-4, index*entryHeight+20);
   area.elements.add(button);
   removeButtons.add(button);
   
   for(int k = 0; k < 8; k++)
     {
-    slot = new GuiFakeSlot(index*8+k, area, (k+1)*20, 40*index);
+    slot = new GuiFakeSlot(index*8+k, area, (k+1)*20, entryHeight*index);
     area.elements.add(slot);
     slots.add(slot);
     slot.setItemStack(point.getFilterStack(k));      
     }
   }
 
+int entryHeight = 37;
 @Override
 public void updateControls()
   {
@@ -271,7 +272,7 @@ public void updateControls()
     point = container.info.getPoint(i);
     this.addButtonsFor(i, point);   
     }
-  area.updateTotalHeight(container.info.getRouteSize()*(40));
+  area.updateTotalHeight(container.info.getRouteSize()*entryHeight);
   area.updateGuiPos(guiLeft, guiTop);  
   }
 

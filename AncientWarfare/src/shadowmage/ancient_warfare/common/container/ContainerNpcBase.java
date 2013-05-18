@@ -49,23 +49,8 @@ public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
   int slotNum;
   int xPos; 
   int yPos;
-  for (x = 0; x < 9; ++x)//add player hotbar slots
-    {
-    slotNum = x;
-    xPos = 8 + x * 18;
-    yPos = 142+28;
-    this.addSlotToContainer(new Slot(openingPlayer.inventory, x, xPos, yPos));
-    }
-  for (y = 0; y < 3; ++y)
-    {
-    for (x = 0; x < 9; ++x)
-      {
-      slotNum = y*9 + x + 9;// +9 is to increment past hotbar slots
-      xPos = 8 + x * 18;
-      yPos = 84 + y * 18+28;
-      this.addSlotToContainer(new Slot(openingPlayer.inventory, slotNum, xPos, yPos));
-      }
-    }
+
+  this.addPlayerSlots(openingPlayer, 8, 158, 4);    
   IInventory te = npc.inventory;
 //  Config.logDebug("setting npc inventory. size: "+te.getSizeInventory());
   for(y = 0; y < te.getSizeInventory()/9; y++)
@@ -76,7 +61,7 @@ public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
       if(slotNum<te.getSizeInventory())
         {
         xPos = 8 + x * 18;
-        yPos = 84 + y * 18 - 5*18 - 2*5+28;
+        yPos = y * 18 + 15;
         if(slotNum>=27)
           {
           xPos = -1000;

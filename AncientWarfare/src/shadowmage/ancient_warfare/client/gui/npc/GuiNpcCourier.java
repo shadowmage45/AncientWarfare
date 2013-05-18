@@ -26,7 +26,7 @@ import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
-public class GuiNpcCourier extends GuiContainerAdvanced
+public class GuiNpcCourier extends GuiNpcBase
 {
 
 NpcBase npc;
@@ -35,62 +35,8 @@ NpcBase npc;
  */
 public GuiNpcCourier(Container container,  NpcBase npc)
   {
-  super(container);
-  this.npc = npc;
-  this.shouldCloseOnVanillaKeys = true;
+  super(container, npc);
   }
 
-@Override
-public void onElementActivated(IGuiElement element)
-  {
-  // TODO Auto-generated method stub
-
-  }
-
-@Override
-public int getXSize()
-  {
-  return 256;
-  }
-
-@Override
-public int getYSize()
-  {
-  return 240;
-  }
-
-@Override
-public String getGuiBackGroundTexture()
-  {
-  return Config.texturePath+"gui/guiBackgroundLarge.png";
-  }
-
-@Override
-public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
-  {
-  // TODO Auto-generated method stub
-
-  }
-
-@Override
-public void updateScreenContents()
-  {
-  // TODO Auto-generated method stub
-
-  }
-
-@Override
-public void setupControls()
-  {
-  // TODO Auto-generated method stub
-
-  }
-
-@Override
-public void updateControls()
-  {
-  // TODO Auto-generated method stub
-
-  }
 
 }

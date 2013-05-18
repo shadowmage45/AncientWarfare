@@ -66,6 +66,33 @@ public ContainerBase(EntityPlayer openingPlayer, IEntityContainerSynch synch)
     }
   }
 
+protected void addPlayerSlots(EntityPlayer player, int tx, int ty, int gap)
+  {
+  int y;
+  int x;
+  int slotNum;
+  int xPos; 
+  int yPos;
+  for (x = 0; x < 9; ++x)//add player hotbar slots
+    {
+    slotNum = x;
+    xPos = tx + x *18;
+    yPos = ty+gap + 3*18;
+    this.addSlotToContainer(new Slot(player.inventory, x, xPos, yPos));
+    }
+  for (y = 0; y < 3; ++y)
+    {
+    for (x = 0; x < 9; ++x)
+      {
+      slotNum = y*9 + x + 9;// +9 is to increment past hotbar slots
+      xPos = tx + x * 18;
+      yPos = ty + y * 18;
+      this.addSlotToContainer(new Slot(player.inventory, slotNum, xPos, yPos));
+      }
+    }
+    
+  }
+
 public void setGui(IContainerGuiCallback gui)
   {
   this.gui = gui;

@@ -67,7 +67,6 @@ public void setInventorySlotContents(int slot, ItemStack newContents)
   {
   if(slot>=0 && slot<this.storageSize)
     {
-    this.onInventoryChanged();
     if(newContents==null)
       {
       this.items.remove(slot);
