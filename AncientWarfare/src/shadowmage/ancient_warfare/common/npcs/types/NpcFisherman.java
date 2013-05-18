@@ -58,6 +58,9 @@ public NpcFisherman(int type)
   this.addLevel("Fisherman Adept", Config.texturePath + "models/npc/npcFisherman.png", getToolStack(1), null).addTargetType(CivicWorkType.FISH).setActionTicks(30).setUpkeep(6);
   this.addLevel("Fisherman Master", Config.texturePath + "models/npc/npcFisherman.png", getToolStack(2), null).addTargetType(CivicWorkType.FISH).setActionTicks(20).setUpkeep(8);
   this.isCombatUnit = false;
+  this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
+      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
+  this.configName = "civilian";
   }
 
 @Override

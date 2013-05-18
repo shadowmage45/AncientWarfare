@@ -103,7 +103,7 @@ public void onPlayerAttack(AttackEntityEvent evt)
 @ForgeSubscribe
 public void onEntitySpawn(EntityJoinWorldEvent evt)
   {
-  if(evt.entity instanceof EntityZombie)
+  if(evt.entity!=null && !evt.entity.worldObj.isRemote && evt.entity instanceof EntityZombie)
     {
     EntityMob zomb = (EntityMob)evt.entity;
     Config.logDebug("setting entity attack tasks for: "+zomb);

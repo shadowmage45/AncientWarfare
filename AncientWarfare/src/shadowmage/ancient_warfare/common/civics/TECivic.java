@@ -163,34 +163,9 @@ public void updateEntity()
 
 protected void onCivicUpdate()
   {
-  long t1;
-  long t2;  
-  long s1;
-  long s2;
-  long s3;
-  long s4;
-  t1 = System.nanoTime();
   this.validateWorkers();
-  t2 = System.nanoTime();
-  s1 = t2-t1;
-  t1 = t2;
   this.updateHasWork();
-  t2 = System.nanoTime();
-  s2 = t2-t1;
-  t1 = t2;
-  t2 = System.nanoTime();
-  s3 = t2-t1;
-  t1 = t2;
   this.broadCastToSoldiers(Config.civicBroadcastRange);
-  t2 = System.nanoTime();
-  s4 = t2-t1;
-  t1 = t2;
-//  Config.logDebug("updating civic for type : "+this.getCivic().getDisplayName());
-//  Config.logDebug("worker validation time: "+s1);
-//  Config.logDebug("update has work time: "+s2);
-//  Config.logDebug("update inventory status time: "+s3);
-//  Config.logDebug("broadcast to soldier time: "+s4);
-//  Config.logDebug("total normal update time: "+(s1+s2+s3+s4));
   }
 
 @Override
@@ -254,7 +229,6 @@ public void broadCastToSoldiers(int maxRange)
 
 public boolean onInteract(World world, EntityPlayer player)
   {
-  Config.logDebug("player interact. inv size: "+this.inventory.getSizeInventory());
   if(!world.isRemote && inventory.getSizeInventory()>0)
     {
     GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);

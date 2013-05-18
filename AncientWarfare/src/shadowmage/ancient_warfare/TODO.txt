@@ -8,8 +8,6 @@ THIS(next) WEEKEND
 
 GENERAL
 * create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
-* test commander bonuses
-* non-combat npcs flee from mobs (move to shelter)
 * add onInventoryChanged() calls to any AI that modifies inventories
 
 
@@ -24,10 +22,6 @@ NPCS
     use command baton, check if player has food in inventory && withdraw upkeep ??
 
 CIVICS
-* toggle in GUI's to enable/disable broadcasting of work
-    apply redstone signal?
-    can use (send client event) to trigger enable/disable of work right from the gui
-* need a clearer way of designating where bounds on a civic SHOULD be.  videos/screenshots?
 * default routing broadcasting in civics?
     add a single routing slot to the civic, broadcast to a courier that has no route points
     will need changing of getActiveRoutePoint to not pull from list, but pull an active point
@@ -244,3 +238,11 @@ TWEAKS/OPTIMIZATION
 * warehouse scan once on being placed
 * cleanup much debug spam
 * add few missing icons
+
+* more civic cleanup
+* add civic broadcast work toggle to gui
+* add civic work-site disable scan by powering work-site
+* non-combat npcs flee from mobs (move to shelter)
+* test commander bonuses
+* fix commander bonus for vehicle repair
+

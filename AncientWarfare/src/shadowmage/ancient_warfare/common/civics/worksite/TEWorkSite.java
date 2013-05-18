@@ -27,6 +27,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
@@ -48,29 +49,15 @@ protected abstract TargetType validateWorkPoint(WorkPoint p);
 
 @Override
 protected void onCivicUpdate()
-  {
-  long t1;
-  long t2;  
-  long s1;
-  long s2;
-  t1 = System.nanoTime();
+  { 
   validateWorkPoints();  
-  t2 = System.nanoTime();
-  s1 = t2-t1;
-  t1=t2;
   if(!hasWork() && worldObj.checkChunksExist(minX, minY, minZ, maxX, maxY, maxZ))
     {
-    scan();
-    }
-//  else if(!worldObj.checkChunksExist(minX, minY, minZ, maxX, maxY, maxZ))
-//    {
-//    Config.logDebug("te work-bounds chunks don't exist, skipping update");
-//    }
-  t2 = System.nanoTime();
-  s2=t2-t1;
-//  Config.logDebug("work site point validation time: "+s1);
-//  Config.logDebug("work site scan time: "+s2);
-//  Config.logDebug("work site total update time: "+(s2+s1)+" for type "+this.getCivic().getDisplayName());
+    if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+      {
+      scan();
+      }
+    } 
   super.onCivicUpdate();
   }
 

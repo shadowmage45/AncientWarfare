@@ -57,7 +57,7 @@ public void onTick()
       int health = (int) vehicle.getHealth();
       if(health < vehicle.baseHealth)
         {
-        int healAmt = (npc.rank*2) + 4;
+        int healAmt = npc.getAmountRepaired();
         if(health + healAmt > vehicle.baseHealth)
           {
           healAmt = (int) (vehicle.baseHealth - vehicle.getHealth());

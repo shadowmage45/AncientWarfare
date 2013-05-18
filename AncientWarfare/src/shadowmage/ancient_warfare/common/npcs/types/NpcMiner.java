@@ -59,6 +59,9 @@ public NpcMiner(int type)
   this.addLevel("Adpet Miner", Config.texturePath + "models/npc/npcMiner.png", getToolStack(1), null).addTargetType(CivicWorkType.MINE).setActionTicks(30).setUpkeep(6);
   this.addLevel("Expert Miner", Config.texturePath + "models/npc/npcMiner.png", getToolStack(2), null).addTargetType(CivicWorkType.MINE).setActionTicks(20).setUpkeep(8);
   this.isCombatUnit = false;
+  this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
+      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
+  this.configName = "civilian";
   }
 
 @Override
@@ -86,10 +89,6 @@ protected ItemStack getToolStack(int level)
 public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
   helper.addTargetEntry(new AITargetEntry(npc, TargetType.WORK, TECivic.class, 0, false, 140));
-//  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntityPlayer.class, 0, true, 40));
-//  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntityMob.class, 0, true, 40));
-//  helper.addTargetEntry(new AITargetEntry(npc, NpcTargetHelper.TARGET_ATTACK, EntitySlime.class, 0, true, 40));
-//  helper.addTargetEntry(new AITargetEntryMountableVehicle(npc, -1, 20));
   }
 
 @Override

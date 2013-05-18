@@ -308,10 +308,4 @@ public ITargetEntry getHighestAggroTarget(TargetType type)
   return null;
   }
 
-public ITargetEntry getClosestTargetInRange(TargetType type, float range)
-  {
-  //TODO
-  return null;
-  }
-
 }

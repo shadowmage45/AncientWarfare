@@ -60,26 +60,18 @@ public void addTasks()
 @Override
 public void updatePriority()
   {
+  this.currentPriority = 0;
   int x, y, z;
   x = MathHelper.floor_double(npc.posX);
   y = MathHelper.floor_double(npc.posY);
   z = MathHelper.floor_double(npc.posZ);
-  if((!npc.worldObj.isDaytime() || npc.worldObj.isRaining()) && !npc.worldObj.provider.hasNoSky)
+  if(((!npc.worldObj.isDaytime() || npc.worldObj.isRaining()) && !npc.worldObj.provider.hasNoSky) || npc.targetHelper.areTargetsInRange(TargetType.ATTACK, 16))
     {//if it is nighttime, or raining, and the world has a sky (no sky, no sun, no shelter at night!)
     this.theVillage = npc.worldObj.villageCollectionObj.findNearestVillage(x, y, z, Config.npcAISearchRange);
     if(theVillage!=null)
       {
-//      Config.logDebug("setting seek shelter priority to max!");
       this.currentPriority = this.maxPriority;
-      }
-    else
-      {
-      this.currentPriority = 0;
-      }
-    }
-  else
-    {
-    this.currentPriority = 0;
+      }    
     }
   }
 
