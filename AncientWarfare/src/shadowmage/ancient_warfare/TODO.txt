@@ -7,13 +7,10 @@ THIS(next) WEEKEND
 * preview video..it better be cool!
 
 GENERAL
-* create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
 * add onInventoryChanged() calls to any AI that modifies inventories
-* need to set pathfinder options in navigator..
 
 VEHICLES
 * clean up vehicle alpha rendering
-
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
@@ -24,7 +21,6 @@ CIVICS
 * default routing broadcasting in civics for non-player towns (or how to handle them)?
     add a single routing slot to the civic, broadcast to a courier that has no route points
     will need changing of getActiveRoutePoint to not pull from list, but pull an active point
-
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -91,7 +87,8 @@ CRAFTING
             other lists are manual select.  will have a 'start' button, and take time to make ammo.  will continue
             making same type until materials run out
     UPGRADE AND ARMOR CRAFTING
- 
+    FOOD/RECRUITING    
+       create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
  
 /************************************************DONE/OPTI*************************************************/
  

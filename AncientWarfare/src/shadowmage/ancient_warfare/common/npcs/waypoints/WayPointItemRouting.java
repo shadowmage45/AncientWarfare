@@ -232,7 +232,7 @@ protected boolean doFillTo(IInventory source, IInventory target)
       int needed = num-found;
       if(needed>0)
         {
-        if(stack.stackSize<needed)
+        if(stack.stackSize <= needed)
           {
           //merge entire stack
           shouldContinue = true;
@@ -253,6 +253,10 @@ protected boolean doFillTo(IInventory source, IInventory target)
             {
             InventoryTools.tryMergeStack(source, split, 0, source.getSizeInventory()-1);
             shouldContinue = false;
+            }
+          if(stack.stackSize==0)
+            {
+            source.setInventorySlotContents(i, null);
             }
           }
         }
