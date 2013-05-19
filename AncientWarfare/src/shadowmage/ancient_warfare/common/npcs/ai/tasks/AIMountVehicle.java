@@ -49,8 +49,11 @@ public byte getTaskType()
 public void onTick()
   {   
   VehicleBase vehicle = (VehicleBase)npc.getTarget().getEntity(npc.worldObj);
-  npc.mountEntity(vehicle);
-  npc.setTargetAW(null);
+  if(vehicle.riddenByEntity==null)
+    {
+    npc.mountEntity(vehicle);
+    npc.setTargetAW(null);
+    }
   }
 
 @Override

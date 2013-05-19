@@ -9,9 +9,11 @@ THIS(next) WEEKEND
 GENERAL
 * create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
 * add onInventoryChanged() calls to any AI that modifies inventories
+* need to set pathfinder options in navigator..
 
 VEHICLES
 * clean up vehicle alpha rendering
+
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
@@ -251,3 +253,8 @@ TWEAKS/OPTIMIZATION
 * fix warehouse bug when attempting to withdraw items with maxStackSize < 64
 
 * validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?
+
+* move over to incremental pathfinder
+
+* fix some vehicle mounting related bugs
+* one more pass at cleaning up vehicle pathfinding/navigation

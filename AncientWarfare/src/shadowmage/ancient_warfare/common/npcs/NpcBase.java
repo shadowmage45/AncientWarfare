@@ -526,6 +526,11 @@ public void onUpdate()
   {
   this.varsHelper.onTick();
   npcTicksExisted++;
+  if(this.ridingEntity!=null && this.ridingEntity.riddenByEntity!=this)
+    {
+    this.unmountEntity(ridingEntity);
+    this.ridingEntity=null;
+    }
   if(!worldObj.isRemote && (npcTicksExisted + this.entityId) % Config.npcAITicks == 0)
     {
     this.targetHelper.updateAggroEntries();

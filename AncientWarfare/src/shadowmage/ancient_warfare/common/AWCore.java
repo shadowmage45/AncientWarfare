@@ -192,7 +192,7 @@ public void load(FMLPostInitializationEvent evt)
   //DEBUG //TODO -- remove
   if(Config.DEBUG)
     {
-    PathBenchmarking.instance().doBenchmarkRuns();
+//    PathBenchmarking.instance().doBenchmarkRuns();
     }
   }
 

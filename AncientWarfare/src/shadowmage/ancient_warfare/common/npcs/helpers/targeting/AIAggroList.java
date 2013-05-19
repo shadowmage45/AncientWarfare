@@ -146,7 +146,7 @@ public ITargetEntry getHighestAggroTarget()
       bestEntry = entry;
       }
     }
-  return bestEntry.target;
+  return bestEntry==null ? null : bestEntry.target;
   }
 
 public void removeEntry(ITargetEntry target)

@@ -114,6 +114,10 @@ public void onRunningTick()
       this.setFinished();
       }
     }
+  else if(npc.getTarget().getEntity(npc.worldObj)!=null && npc.getTarget().getEntity(npc.worldObj).riddenByEntity!=null)
+  {
+	  this.setFinished();
+  }
   }
 
 @Override
@@ -131,20 +135,24 @@ public void stopObjective()
 
 protected void setMountTarget()
   {
-  if(npc.wayNav.getMountTarget()!=null)
+  if(npc.wayNav.getMountTarget()!=null && npc.wayNav.getMountTarget().riddenByEntity==null)
     {
     npc.setTargetAW(new WayPoint(npc.wayNav.getMountTarget(), TargetType.MOUNT));
     }
   else
     {
-    ITargetEntry vehicleEntry  = npc.targetHelper.getHighestAggroTargetInRange(TargetType.MOUNT, maxRange);
-    if(vehicleEntry.getEntity(npc.worldObj) instanceof VehicleBase)
+    ITargetEntry vehicleEntry  = npc.targetHelper.getHighestAggroTargetInRange(TargetType.MOUNT, maxRange);    
+    if(vehicleEntry!=null && vehicleEntry.getEntity(npc.worldObj) instanceof VehicleBase)
       {
       VehicleBase vehicle = (VehicleBase)vehicleEntry.getEntity(npc.worldObj);
       npc.setTargetAW(vehicleEntry);
       npc.wayNav.setMountTarget(vehicle);
       vehicle.assignedRider = npc;
       }
+    else
+    {
+    	this.setFinished();    	
+    }
     }  
   }
 

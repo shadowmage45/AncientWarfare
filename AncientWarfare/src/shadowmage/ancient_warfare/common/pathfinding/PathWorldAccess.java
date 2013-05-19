@@ -95,6 +95,10 @@ public boolean isWalkable(int x, int y, int z)
     {
     return false;
     }
+  else if(!canOpenDoors && isDoor(x, y, z))
+    {
+    return false;
+    }
   return true;
   }
 
