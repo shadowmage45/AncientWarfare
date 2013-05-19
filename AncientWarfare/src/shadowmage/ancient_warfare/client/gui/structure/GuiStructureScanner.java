@@ -188,7 +188,6 @@ public void onElementActivated(IGuiElement element)
     int weight = StringTools.safeParseInt(this.weight.getText());
     int value = StringTools.safeParseInt(this.value.getText());
     container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include, weight, value, unique, false); 
-    //container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include);
     } 
   closeGUI();
   break;
@@ -216,7 +215,10 @@ public void onElementActivated(IGuiElement element)
     } 
   break;
   
-  case 11:
+  case 11://text field, validate text
+  this.nameBox.setText(this.validateString(this.nameBox.getText()));
+  break;
+  
   case 12:
   case 13:
   case 14:
@@ -249,5 +251,52 @@ public void onElementActivated(IGuiElement element)
     }
   }
 
+protected String validateString(String input)
+  {
+  String scrubbed = "";
+  for(int i = 0; i < input.length(); i++)
+    {
+    char ch = input.charAt(i);
+    if(isValidChar(ch))
+      {
+      scrubbed = scrubbed + ch;
+      }
+    }  
+  return scrubbed;
+  }
+
+protected boolean isValidChar(char ch)
+  {
+  /**
+   *  public static final char[] allowedCharactersArray = new char[] {'/', '\n', '\r', '\t', '\u0000', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':'};
+   */
+  switch(ch)
+  {
+  case '/':
+  case '\\':
+  case '\n':
+  case '\r':
+  case '\"':
+  case '\'':
+  case '`':
+  case '\t':
+  case '\f':
+  case '?':
+  case '*':
+  case '<':
+  case '>':
+  case '(':
+  case ')':
+  case '|':
+  case ':':
+  case '{':
+  case '}':
+  case '[':
+  case ']':
+  return false;
+  default:
+  return true;
+  }
+  }
 
 }

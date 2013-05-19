@@ -10,23 +10,19 @@ GENERAL
 * create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
 * add onInventoryChanged() calls to any AI that modifies inventories
 
-
-SCANNER
-* validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?
-
 VEHICLES
 * clean up vehicle alpha rendering
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
     use command baton, check if player has food in inventory && withdraw upkeep ??
+* check aggro on attack targets in objective/task, remove if aggro <0/non existent    
 
 CIVICS
-* default routing broadcasting in civics?
+* default routing broadcasting in civics for non-player towns (or how to handle them)?
     add a single routing slot to the civic, broadcast to a courier that has no route points
     will need changing of getActiveRoutePoint to not pull from list, but pull an active point
-    
-WAREHOUSE 
+
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -105,6 +101,10 @@ OPTIONAL
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
 * advanced (exotic) soldier types 
 * advanced workers
+   
+SCANNER
+    
+WAREHOUSE 
 
 STRUCTURE BUILDING
 
@@ -250,3 +250,4 @@ TWEAKS/OPTIMIZATION
 * add more routing slots to higher rank couriers (1/2/4)
 * fix warehouse bug when attempting to withdraw items with maxStackSize < 64
 
+* validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?
