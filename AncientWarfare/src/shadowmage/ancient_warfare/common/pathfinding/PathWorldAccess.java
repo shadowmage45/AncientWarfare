@@ -64,7 +64,11 @@ public boolean isWalkable(int x, int y, int z)
   boolean cube2 = isSolidBlock(id2);
   boolean cube3 = isSolidBlock(id3);
   boolean ladder;
-  if(cube || !isPathable(id))//solid unpassable block, or lava
+  if(this.checkColidingEntities(x, y, z))
+    {
+    return false;
+    }
+  else if(cube || !isPathable(id))//solid unpassable block, or lava
     { 
     return false;
     }
@@ -152,6 +156,11 @@ protected boolean isPathable(int id)
     return false;
     }
   return true;
+  }
+
+protected boolean checkColidingEntities(int x, int y, int z)
+  {
+  return false;
   }
 
 protected boolean isLadder(int id)

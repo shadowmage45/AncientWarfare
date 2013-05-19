@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.pathfinding;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -46,6 +47,12 @@ public PathWorldAccessEntity(World world, Entity entity)
   worldObj = world;
   this.entity = entity;
   }
+
+//@Override
+//protected boolean checkColidingEntities(int x, int y, int z)
+//  {
+//  return !this.worldObj.checkNoEntityCollision(AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1), this.entity);
+//  }
 
 //@Override
 //public boolean isWalkable(int x, int y, int z)
