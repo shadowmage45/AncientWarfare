@@ -40,6 +40,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinderCrawler;
+import shadowmage.ancient_warfare.common.pathfinding.PathFinderThetaStar;
 import shadowmage.ancient_warfare.common.pathfinding.PathManager;
 import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
@@ -50,6 +51,8 @@ import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class Navigator implements IEntityNavigator, IPathableCallback
 {
+
+PathFinderThetaStar pathFinder = new PathFinderThetaStar();
 
 protected IPathableEntity owner;
 protected Entity entity;
@@ -148,6 +151,7 @@ protected void handleLadderMovement()
 
 protected void updateMoveHelper()
   {
+  this.pathFinder.doSearchIterations(10);
   if(this.doorOpenTicks>0)
     {
     this.doorOpenTicks--;        
@@ -213,7 +217,7 @@ protected boolean isPathEmpty()
 
 protected boolean shouldCalculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
-  return isNewTarget(tx, ty, tz) || (isPathEmpty() && !isAtTarget(tx, ty, tz) && currentTarget==null);
+  return isNewTarget(tx, ty, tz) || (isPathEmpty() && !isAtTarget(tx, ty, tz) && currentTarget==null && !pathFinder.isSearching);
   }
 
 protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
@@ -230,11 +234,12 @@ protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
     }
   else
     {
-    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 4));
+    this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 8));
     Node end = this.path.getEndNode();
     if(end!=null && (end.x!=tx || end.y!=ty || end.z!=tz))
       {
-      PathManager.instance().requestPath(this, world, end.x, end.y, end.z, tx, ty, tz, 60);
+      this.pathFinder.findPath(world, end.x, end.y, end.z, tx, ty, tz, 60, this, false);
+//      PathManager.instance().requestPath(this, world, end.x, end.y, end.z, tx, ty, tz, 60);
       }  
     } 
   this.stuckCheckTicks = this.stuckCheckTicksMax;
@@ -445,7 +450,7 @@ public void setCanUseLadders(boolean ladders)
 @Override
 public void onPathFound(List<Node> pathNodes)
   {
-//  Config.logDebug("full path request returned length: "+pathNodes.size());
+  Config.logDebug("full path request returned length: "+pathNodes.size());
   if(pathNodes.size()>0)
     {
     Node n = pathNodes.get(pathNodes.size()-1);

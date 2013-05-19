@@ -72,7 +72,7 @@ public void interruptWorker()
 @Override
 public void run()
   { 
-  path = this.pather.findPath(world, x, y, z, x1, y1, z1, maxRange);
+//  path = this.pather.findPath(world, x, y, z, x1, y1, z1, maxRange);
 //  Config.logDebug("thread finishing");
   }
 

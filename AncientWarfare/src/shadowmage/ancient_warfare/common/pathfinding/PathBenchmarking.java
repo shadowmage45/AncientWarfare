@@ -180,7 +180,7 @@ public void doTestTheta(int maxLength)
   for(int i = 0; i <100; i++)
     {
     t = System.nanoTime();
-    patherTheta.findPath(world, 1, 1, 1, 40, 1, 40, maxLength);
+    patherTheta.findPath(world, 1, 1, 1, 40, 1, 40, maxLength, null, true);
     total += System.nanoTime()-t;
     }
   Config.logDebug("100 x THETA pathfinding runs: "+total/1000000+"ms   "+ total);

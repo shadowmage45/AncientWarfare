@@ -40,50 +40,50 @@ public static PathManager instance()
   return instance;
   }
 
-public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
-  {
-  switch(Config.npcPathfinderType)
-  {
-  case 0://in-line, do now
-  caller.onPathFound(staticPather.findPath(world, x, y, z, tx, ty, tz, maxRange));
-  break;
-  
-  case 1://scheduled, call scheduler for appropriate world-side
-  if(world.isRemote())
-    {
-    PathScheduler.clientInstance().requestPath(caller, world, x, y, z, tx, ty, tz);
-    }
-  else
-    {
-    PathScheduler.serverInstance().requestPath(caller, world, x, y, z, tx, ty, tz);
-    }
-  break;
-  
-  case 2:
-  PathThreadPool.instance().requestPath(caller, world, x, y, z, tx, ty, tz, maxRange);    
-  break;
-  
-  default:
-  caller.onPathFound(staticPather.findPath(world, x, y, z, tx, ty, tz, maxRange));
-  break;
-  }
-  }
+//public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
+//  {
+//  switch(Config.npcPathfinderType)
+//  {
+//  case 0://in-line, do now
+//  caller.onPathFound(staticPather.findPath(world, x, y, z, tx, ty, tz, maxRange));
+//  break;
+//  
+//  case 1://scheduled, call scheduler for appropriate world-side
+//  if(world.isRemote())
+//    {
+//    PathScheduler.clientInstance().requestPath(caller, world, x, y, z, tx, ty, tz);
+//    }
+//  else
+//    {
+//    PathScheduler.serverInstance().requestPath(caller, world, x, y, z, tx, ty, tz);
+//    }
+//  break;
+//  
+//  case 2:
+//  PathThreadPool.instance().requestPath(caller, world, x, y, z, tx, ty, tz, maxRange);    
+//  break;
+//  
+//  default:
+//  caller.onPathFound(staticPather.findPath(world, x, y, z, tx, ty, tz, maxRange));
+//  break;
+//  }
+//  }
 
-public List<Node> findImmediatePath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
-  {
-  if(world.isRemote())
-    {
-    return staticPatherClient.findPath(world, x, y, z, tx, ty, tz, 60);
-    }
-  else
-    {
-    return staticPather.findPath(world, x, y, z, tx, ty, tz, 60);
-    }
-  }
-
-public List<Node> findStartPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
-  {
-  return staticPather.findPath(world, x, y, z, tx, ty, tz, 6);
-  }
+//public List<Node> findImmediatePath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
+//  {
+//  if(world.isRemote())
+//    {
+//    return staticPatherClient.findPath(world, x, y, z, tx, ty, tz, 60);
+//    }
+//  else
+//    {
+//    return staticPather.findPath(world, x, y, z, tx, ty, tz, 60);
+//    }
+//  }
+//
+//public List<Node> findStartPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
+//  {
+//  return staticPather.findPath(world, x, y, z, tx, ty, tz, 6);
+//  }
 
 }

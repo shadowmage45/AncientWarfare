@@ -50,10 +50,10 @@ private PathThreadPool()
     }
   }
 
-public List<Node> findStarterPath(PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int maxRange)
-  {
-  return quickPather.findPath(world, x, y, z, x1, y1, z1, maxRange);
-  }
+//public List<Node> findStarterPath(PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int maxRange)
+//  {
+//  return quickPather.findPath(world, x, y, z, x1, y1, z1, maxRange);
+//  }
 
 public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int x1, int y1, int z1, int maxRange)
   {

@@ -70,23 +70,21 @@ private PathScheduler(){}
  * @param ty
  * @param tz
  */
-public List<Node> requestStartPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
-  {
-  return this.pather.findPath(world, x, y, z, tx, ty, tz, 4);
-  }
+//public List<Node> requestStartPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
+//  {
+//  return this.pather.findPath(world, x, y, z, tx, ty, tz, 4);
+//  }
 
 public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz)
   {
   this.pathRequests.add(new PathRequest(caller, world, x, y, z, tx, ty, tz, PATH_CUTOFF_LENGTH));
   }
 
-public List<Node> getQuickPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
-  {
-  this.pather.quickStop = true;
-  List<Node> nodes = this.pather.findPath(world, x, y, z, tx, ty, tz, maxRange);      
-  this.pather.quickStop = false;
-  return nodes;
-  } 
+//public List<Node> getQuickPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
+//  {
+//  List<Node> nodes = this.pather.findPath(world, x, y, z, tx, ty, tz, maxRange); 
+//  return nodes;
+//  } 
 
 public void onTickStart()
   {
@@ -125,7 +123,7 @@ private void startProcessingPaths()
       {
       pather.maxRunTime = PATH_CUTOFF_TIME;
       }
-    req.caller.onPathFound(pather.findPath(req.world, req.x, req.y, req.z, req.tx, req.ty, req.tz, PATH_CUTOFF_LENGTH));
+//    req.caller.onPathFound(pather.findPath(req.world, req.x, req.y, req.z, req.tx, req.ty, req.tz, PATH_CUTOFF_LENGTH));
     processingTime += System.nanoTime()-jobStart;
     }
   while(this.pathRequests.size() > totalProcessed*10 )//num of paths you can process in one tick*10

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
 
 /**
  * going to be a theta-Star implementation
@@ -96,23 +97,30 @@ int minz;
 int maxx;
 int maxy;
 int maxz;
-int searchBufferRange = 10;
+int searchBufferRange = 30;
 int maxRange = 80;
 PathWorldAccess world;
 long startTime;
-public long maxRunTime = 15000000l;//15ms, default time..public so may be overriden at run-time...must be reset between runs
-public long maxSearchIterations = 600;
-public boolean quickStop = false;
+long runTime;
+public long maxRunTime = 10000000l;//15ms, default time..public so may be overriden at run-time...must be reset between runs
+public long maxSearchIterations = 1200;
 
 private Node bestEndNode = null;
 private float bestPathLength = 0.f;
 private float bestPathDist = Float.POSITIVE_INFINITY;
 private int searchIteration;
 
+IPathableCallback caller = null;
 
-public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
+public void findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange, IPathableCallback caller, boolean instant)
   {  
+  this.allNodes.clear();
+  this.qNodes.clear();
+  this.searchNodes.clear();
   this.world = world;
+  this.caller = caller;
+  this.instantSearch = instant;
+  this.isSearching = true;
   this.sx = x;
   this.sy = y;
   this.sz = z;
@@ -139,8 +147,13 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
   this.qNodes.offer(this.currentNode);
   this.bestEndNode = this.currentNode;
   this.bestPathLength = 0;
-  this.bestPathDist = Float.POSITIVE_INFINITY;
-  this.searchLoop();
+  this.bestPathDist = Float.POSITIVE_INFINITY; 
+  this.searchIteration = 0; 
+  this.runTime = 0;
+  }
+
+protected void onPathFound()
+  {
   LinkedList<Node> path = new LinkedList<Node>();
   Node n = this.currentNode;
   Node c = null;
@@ -156,116 +169,122 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
     n = n.parentNode;
     }
 //  Config.logDebug("end-theta path:");
+  if(this.caller!=null)
+    {
+    this.caller.onPathFound(path);
+    }
   this.currentNode = null;
   this.world = null; 
   this.bestEndNode = null;
   this.allNodes.clear();
   this.qNodes.clear();
   this.searchNodes.clear();
-  return path;
+  this.isSearching = false;
   }
 
-private void searchLoop()
+public boolean isSearching = false;
+protected boolean instantSearch = false;
+
+public void doSearchIterations(int num)
   {
-  this.searchIteration = 0;
+  this.startTime = System.nanoTime();
+//  Config.logDebug("calling search loop : "+this.isSearching);
+  if(!isSearching)
+    {    
+    return;
+    }
+  Node n;
+  for(int i = 0; i < num; i++)
+    {
+    if(this.searchLoop())
+      {
+      this.onPathFound();
+      this.isSearching = false;
+      break;
+      }
+    }
+  this.runTime += System.nanoTime() - this.startTime;
+  }
+
+private boolean searchLoop()
+  {
   boolean isDoor = false;
   boolean isPDoor = false;
   Node goalCache = new Node(tx, ty, tz);
   boolean goalWalkable = world.isWalkable(tx, ty, tz);
-  while(!qNodes.isEmpty())
+  this.searchIteration++;
+  if(this.qNodes.isEmpty())
+  {
+	  return true;
+  }
+  this.currentNode = this.qNodes.poll();  
+  this.allNodes.add(currentNode);
+  if(currentNode.equals(tx, ty, tz))
     {
-    this.searchIteration++;  
-    this.currentNode = this.qNodes.poll();
-    this.allNodes.add(currentNode);
-    if(currentNode.equals(tx, ty, tz))
+    return true;
+    }    
+  else if(!goalWalkable)//TODO hack to get around un-pathable target positions
+    {
+    if(currentNode.getDistanceFrom(tx, ty, tz)<=2.d)
       {
-      break;//goal was hit, found the right path
-      }    
-    else if(!goalWalkable)//TODO hack to get around un-pathable target positions
-      {
-      if(currentNode.getDistanceFrom(tx, ty, tz)<=2.d)
-        {
-//        Config.logDebug("non-walkable goal early exit 1");
-//        goalCache.parentNode = currentNode;
-//        currentNode = goalCache;
-        break;
-        }
-//      if(currentNode.x==tx && currentNode.z==tz && Math.abs(ty-currentNode.y)<=3)//directly above/below it...close enough
-//        {
-////        Config.logDebug("non-walkable goal early exit 2");
-////        goalCache.parentNode = currentNode;
-////        currentNode = goalCache;
-//        break;
-//        }      
-      }
-    if(shouldTerminateEarly())
-      {
-//      Config.logDebug("break from early terminate");
-      break;
-      }
-    currentNode.closed = true;//close the node immediately (equivalent of adding to closed list)
-//    if(canSeeParent(currentNode, goalCache))
-//      {
-////      Config.logDebug("hit goal cache, yeah..early out");
-//      goalCache.parentNode = currentNode;
-//      goalCache.g = currentNode.g + goalCache.getDistanceFrom(currentNode);
-//      goalCache.f = goalCache.g + 0;//its the goal;
-//      currentNode = goalCache;
-//      break;
-//      }
-    this.findNeighbors(currentNode);
-    float tent;
-    isDoor = world.isDoor(currentNode.x, currentNode.y, currentNode.z);
-    isPDoor = currentNode.parentNode!= null && world.isDoor(currentNode.parentNode.x, currentNode.parentNode.y, currentNode.parentNode.z);   
-    boolean isNDoor = false;
-    for(Node n : this.searchNodes)
-      {     
-      isNDoor = world.isDoor(n.x, n.y, n.z);
-      //could test for goal here, and if found, set n.f =0, insert to priority q (force to head of line)
-      tent = currentNode.g + currentNode.getDistanceFrom(n);
-      if(n.closed && tent > n.g)//new path from current node to n (already examined node) is longer than n's current path, disregard
-        {
-        continue;
-        }
-      if(!qNodes.contains(n) || tent < n.g)//if we haven't seen n before, or if we have but the path through current to n is less than n's best known path
-        {//update n's stats to path through current -> n
-        //this is where it deviates from A*, we will check to see if n can see the parent of current.  if so
-        //we calculate the path to n as if it went through the parent of current, skipping current completely.
-        
-        if(!isPDoor && !isDoor && !isNDoor && canSeeParent(n, currentNode.parentNode))//don't skip doors...
-          { 
-          n.parentNode = currentNode.parentNode;
-          n.g = n.parentNode.g + n.getDistanceFrom(n.parentNode);
-          n.f = n.g + n.getH(tx, ty, tz);
-          }
-        else//else if we cannot skip nodes, link n to current and calc path length
-          {
-          n.parentNode = currentNode;
-          n.g = tent;
-          n.f = n.g + n.getH(tx, ty, tz);
-          }
-        if(!qNodes.contains(n))//if we're not already going to examine n, put it in line to be examined
-          {
-          qNodes.offer(n);
-          }
-        n.closed = false;//go ahead and set n to open again...I don't think this really matters....
-        }     
-      }
+      return true;
+      }     
     }
-//  Config.logDebug("nodes searched: "+searchIteration+" path length found: "+this.currentNode.getPathLength());
+  if(shouldTerminateEarly())
+    {
+    return true;
+    }
+  currentNode.closed = true;
+  this.findNeighbors(currentNode);
+  float tent;
+  isDoor = world.isDoor(currentNode.x, currentNode.y, currentNode.z);
+  isPDoor = currentNode.parentNode!= null && world.isDoor(currentNode.parentNode.x, currentNode.parentNode.y, currentNode.parentNode.z);   
+  boolean isNDoor = false;
+  for(Node n : this.searchNodes)
+    {     
+    isNDoor = world.isDoor(n.x, n.y, n.z);
+    //could test for goal here, and if found, set n.f =0, insert to priority q (force to head of line)
+    tent = currentNode.g + currentNode.getDistanceFrom(n);
+    if(n.closed && tent > n.g)//new path from current node to n (already examined node) is longer than n's current path, disregard
+      {
+      continue;
+      }
+    if(!qNodes.contains(n) || tent < n.g)//if we haven't seen n before, or if we have but the path through current to n is less than n's best known path
+      {//update n's stats to path through current -> n
+      //this is where it deviates from A*, we will check to see if n can see the parent of current.  if so
+      //we calculate the path to n as if it went through the parent of current, skipping current completely.      
+      if(!isPDoor && !isDoor && !isNDoor && canSeeParent(n, currentNode.parentNode))//don't skip doors...
+        { 
+        n.parentNode = currentNode.parentNode;
+        n.g = n.parentNode.g + n.getDistanceFrom(n.parentNode);
+        n.f = n.g + n.getH(tx, ty, tz);
+        }
+      else//else if we cannot skip nodes, link n to current and calc path length
+        {
+        n.parentNode = currentNode;
+        n.g = tent;
+        n.f = n.g + n.getH(tx, ty, tz);
+        }
+      if(!qNodes.contains(n))//if we're not already going to examine n, put it in line to be examined
+        {
+        qNodes.offer(n);
+        }
+      n.closed = false;//go ahead and set n to open again...I don't think this really matters....
+      }     
+    } 
+  return false;
   }
 
 private boolean shouldTerminateEarly()  
-  {
-  long runtime = System.nanoTime() - startTime;
-  if(runtime>maxRunTime)
+  {  
+  if(runTime>maxRunTime)
     {
-//    Config.logDebug("search time exceeded max of: "+(this.maxRunTime/1000000)+"ms, terminating search.");
+    Config.logDebug("search time exceeded max of: "+(this.maxRunTime/1000000)+"ms, terminating search.");
     return true;
     }
   if(this.searchIteration>this.maxSearchIterations)
     {
-//    Config.logDebug("search iterations exceeded max of: "+this.maxSearchIterations+ " terminating search.");
+    Config.logDebug("search iterations exceeded max of: "+this.maxSearchIterations+ " terminating search.");
     return true;    
     }
   float dist = this.currentNode.getDistanceFrom(tx,ty,tz);
