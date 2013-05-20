@@ -1,10 +1,10 @@
 TONIGHT
+https://dl.dropboxusercontent.com/u/95935735/Cat_Mod_Releases/AW-DevTest-05-19-13.zip
+https://dl.dropboxusercontent.com/u/95935735/Cat_Mod_Releases/TEST_NOTES-05-19-13.txt
 
 THIS WEEK
-* get stuff ready for a preview video
 
 THIS(next) WEEKEND
-* preview video..it better be cool!
 
 GENERAL
 * add onInventoryChanged() calls to any AI that modifies inventories

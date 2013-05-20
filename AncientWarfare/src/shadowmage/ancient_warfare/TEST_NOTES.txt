@@ -9,22 +9,22 @@ Structures/Builders:
     Fixed an issue where furnaces/dispensers/droppers/etc would not be rotated properly and would all face north.
         This may also correct issues with chests and a several other rotatable blocks that had default placement
         code. 
+    Enabled scanning and duplication of inventory contents. Any tile entity that extends IInventory will be
+        scanned and saved into an inventory rule.  These may be assigned to various block rules.  If the block
+        places a block with inventory, it will populate it from the chosen inventory rule.
+        
+Pathfinding:
+    Removed pathfinding config options in favor of an iterative pathfinder for all entities.  It should have
+        similar cpu load, but return complete/accurate paths more often.        
  
 Vehicles:
     Slightly reworked input handling system, should not have any noticeable effect in game.
         Mostly backend code changes to make soldier interaction cleaner/unify the input interface.
         Also moved input over to a entity data-watcher to eliminate input only packets on vehicles,
         should slightly reduce network use.
-    NPC pathfinding on vehicles has been re-examined, and a config option is now available to enable
-        advanced pathfinding -- WIP, but it essentially looks in a larger radius for clear blocks to
-        make sure the entire vehicle can path through/over the area.  Should make them avoid obstacles
-        while riding vehicles (like lamp posts), but they will only path through areas that are entirely
-        clear.  It currently severely limits their navigation ability on rough terrain, but ensures they 
-        don't get stuck on simple obstacles. (looking into adjustments to allow better handling of rough
-        terrain while still allowing avoidance of 'real' obstacles).  Advanced pathfinding is also much
-        slower than normal because of the increased number of blocks needing to be checked, often resulting
-        in much shorter/partial paths being returned.  Will be reworking this in the future for efficiency
-        to remove much of this deficit.
+    NPC pathfinding on vehicles has been adjusted.  NPCs will now 'cheat' when moving a vehicle to ensure they can
+        move through a chosen location. (essentially enables partial no-clip to ensure they don't get stuck pathing
+        through a chosen/valid path).
     Moved vehicle health over to data-tracker, should eliminate synch issues as well as cut down on custom
         packets.
     Chest carts now implement IInventory directly, allowing for interface with vanilla hoppers -- should be
@@ -54,8 +54,14 @@ Npcs:
         enemies).  Siege engineers will dismount the vehicle they are riding when it is time to get upkeep,
         head to withdraw upkeep, and return to the same vehicle that they left (vehicle gets flagged to 
         deter any other siege-engineers from stealing it).        
-        
-                
+
+    Civilain NPCs will now flee from hostile targets, seeking shelter the same they would as if at night.
+        The exact targets to flee from is configurable via config file under npc-aggro settings.
+    
+    Vanilla mob-type entities should now target and attack all NPC types.        
+    
+    Enabled rank-based damage, accuracy, work-speed.
+                        
     New Baton Features:
         Greatly reworked for simplicity.  There are now only two batons, basic and master.  Basic will
         only command those NPCs which are direcly following you (and in 20 block range).  Master rank 
@@ -74,6 +80,8 @@ Npcs:
         Mount target -- non-persistent mount target.  Does not save/load.  Mostly used to designate the
         initial mount target for an npc.
         
+        Guard target -- command an NPC to guard a specific point.
+        
     Moved npc health over to data-tracker, should eliminate synch issues as well as cut down on custom
         packets.
                 
@@ -83,11 +91,10 @@ Npcs:
         Revoked coffee breaks between jobs for workers.  They should switch jobs when finished quickly.
         Attack code reworked to remove dead/invalid entries more aggressively.
         Can now use vanilla fence-gates with the same proficiency as doors.
+    
+    Removed inventories from all NPCs except couriers.                        
                         
-    Textures for Non-Combat NPCs (combat npcs all wear armor....):
-        Farmer
-        Lumberjack
-        Miner (supposed to be a hard-hat on his head)
+    Textures for Non-Combat NPCs (combat npcs all wear armor....)        
         
     New NPC types:
     Combat Engineer -- Repairs vehicles.  Has melee combat capability, but at reduced damage compared to
@@ -101,9 +108,32 @@ Npcs:
         commanders target.  Troops will automatically locate and find commanders within range, prefering the
         highest ranked available.  Troops assigned to a commander will atempt to stay within bonus range of
         their commander.
+    Courier -- Has 'special tool' slots for Routing Slips.  Insert a filled out routing slip to have the courier
+        work that route.  Higher ranked couriers have multiple routing slots, and routes are checked from the leftmost slip
+        first when multiple slips are used.
+        Routing slip is used by left-clicking on a valid inventory container to add a routing point to the slip. A
+        config gui will open to add any necessary configuration options to the route.  There is a simple toggle for
+        pickup or deliver at the point, and another button to select routing type. The routing types are as follows:
+        EXACT -- Only move items exactly matching the filter, including quantities.
+        ANY_OF -- move any item matching the item filter, ignore quantities.
+        FILL_TO -- if pickup, fill npc inventory UP TO the specified quantity of the filter items. if deliver, fill the target
+            inventory up to specified quantity.
+        ALL_BUT -- move all items not matching a filter, ignoring quantities
+        ALL_BUT_EXACT -- move all items not matching a filter exactly, including stack sizes.
+        
+        Using the various options and occasionally adding multiple points for the same target, it is possible to setup entire
+        supply routes with a single courier.  
+   Fisherman -- works fisheries and squid(ink) farms      
        
 
 Civics:
+    Warehouse --  Add blocks within its bounds to increase its storage capacity.  Currently only a single expansion block
+        that gives 9 slots per block added.  It is also currently possible to completely fill the bounds with blocks with
+        no space inbetween.  In the future, the blocks will be designed so that they can only be placed into rows (e.g
+        they will need air on at least one side.
+        Gui accessed by interacting.  Left slots are for 'input' which will be automatically deposited.  Right slots are for
+        items that have been requested.  Click on an item in the upper frame to 'request' a stack of that item, which will
+        be deposited into the request slots.        
     Animal Farms -- Animals of the designated type within bounds will be kept for, bred, and harvested (when over max qty).
         Sheep farms function slightly differently, shearing the wool of sheep within bounds, and breeding sheep up to the max
         number available.  Mooshroom farms will shear mooshrooms and fill bowls with mushroom soup.  Cow (Milk) farms will
@@ -125,13 +155,28 @@ Civics:
         upkeep points to NPCs that do not have an upkeep point.  Inventory size varies by rank.  Currently no limit on
         number of NPCs assigned, nor stat tracking (WIP, deciding how much/what info is needed, etc).  May also serve as
         the master control block for item-routing/couriers in the future. 
+    Fish farm -- harvests fish.  Random chance to harvest based on the amount of water in the work-area.
+    Squid (ink) farm -- harvest ink.  Random chance to harvest based on the amount of water in the area.
+    
+    Civics can now have their scanning disabled by inputting a redstone signal (any work nodes they currently have will
+        still be available, but they will not re-scan for new work).
+    Civic work-broadcasting can be disabled in their interaction GUI through a simple toggle/check box.  When checked
+        (default) civic work sites and town-halls will broadcast work/upkeep points to nearby friendly/eligible NPCs.
 
+    Civic/NPC inventory interaction has changed.  Civics will now only place harvested products into their own inventories.
+        Civics will not do work/harvest product if it would overflow their inventory, and will automatically stop broadcasting
+        work when they have no free inventory slots.  Use a courier or other means to empty the inventory.
+    
 
 Item Tooltips:
     Re-examined tooltips based on feedback and adjusted most for brevity and clarity.  More detailed information will be
-        available on in-game items in the future in the form of an information codex/block/library/? 
+        available on in-game items in the future in the form of an information codex/block/library 
    
-   
+Item interaction
+    Many items moved over to use left-click to 'use'.  Including -- structure scanner, structure builders, civic placing items
+        and command baton.  Some will still require a final right-click to activate/place the final block (civics).  Most items
+        can have their GUI activated with a simple right click now (no longer requires shift-click).  The structure scanner can
+        now be prematurely cleared by shift-right clicking (similar function will be added to other multi-click items in the future)   
    
         
 Needs testing:
@@ -154,7 +199,7 @@ NPCs:
 * upkeep ai -- working appropriately?
 
 Structures/scanning:
-* nothing should have changed
+* completely rewritten to more cleanly accomodate scanning of inventory containers.  Shouldn't really have any effect on the external functioning.
 
 Structure/building:
 * furnaces/droppers/dispensers should now rotate properly when built
