@@ -235,7 +235,10 @@ public String getIconTextureFor(ItemStack stack)
 
 public Description addDisplayStack(ItemStack stack)
   {
-  this.displayStackCache.add(stack);
+  if(stack!=null)
+    {
+    this.displayStackCache.add(stack);
+    }
   return this;
   }
 

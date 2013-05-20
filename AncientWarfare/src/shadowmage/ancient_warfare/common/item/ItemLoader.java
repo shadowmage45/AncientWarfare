@@ -48,6 +48,7 @@ public static final AWItemBase npcCommandBaton = new ItemNpcCommandBaton(Config.
 public static final AWItemBase civicPlacer = new ItemCivicPlacer(Config.getItemID("itemMulti.civiPlacer", 13013, "Constructs Civic Buildings/Sites"));
 public static final AWItemBase civicBuilder = new ItemCivicBuilder(Config.getItemID("itemMulti.civicBuilder", 13014, "Constructs Structures using Civics"));
 public static final AWItemBase courierRouteSlip = new ItemCourierSlip(Config.getItemID("itemMulti.courierSlip", 13015, "Holds Routing Info for a Courier"));
+public static final AWItemBase gateSpawner = new ItemGateSpawner(Config.getItemID("itemMulti.gateSpawner", 13016, "Base gate spawning item."));
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -100,6 +101,7 @@ private void loadItems()
   this.addSubtypeInfoToItem(courierRouteSlip, 0, "Basic Routing Slip","","4 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,0)).setIconTexture("ancientwarfare:npc/route1", 0);
   this.addSubtypeInfoToItem(courierRouteSlip, 1, "Basic Routing Slip","","6 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,1)).setIconTexture("ancientwarfare:npc/route2", 1);
   this.addSubtypeInfoToItem(courierRouteSlip, 2, "Basic Routing Slip","","8 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,2)).setIconTexture("ancientwarfare:npc/route3", 2);
+  this.registerItemSubtyped(gateSpawner);
   }
 
 private void loadRecipes()

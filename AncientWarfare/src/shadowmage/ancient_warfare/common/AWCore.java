@@ -31,6 +31,7 @@ import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.chunkloading.ChunkLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.event.EventHandler;
+import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
@@ -148,6 +149,7 @@ public void preInit(FMLPreInitializationEvent evt)
   AWEntityRegistry.registerEntity(VehicleBase.class, "Vehicle.VehicleBase", 130, 3, false);
   VehicleRegistry.instance().registerVehicles();
   AWEntityRegistry.registerEntity(NpcBase.class, "Npc.NpcBase", 130, 3, true);
+  AWEntityRegistry.registerEntity(EntityGate.class, "Gate.GateBase", 130, 100, false);
   Config.log("Ancient Warfare Pre-Init finished.");
   }
 

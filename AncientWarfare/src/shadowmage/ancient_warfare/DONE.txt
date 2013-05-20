@@ -662,3 +662,122 @@
 * get routing slip item mostly working
 * get basic courier functionality working
 * first pass at changing civics to use only their internal inventory
+/********** 05-13-13 **********/
+* don't give product to workers that don't have room
+* set hasWork==false when inventory < 1 free spot
+* change over to store all harvested materials in work block, use couriers to remove goods
+* implement internal buffer 'overflow' slots for when something goes wrong (will dump to main slots as they become empty)
+* more fully implement commander bonuses
+    archer -- accuracy, armor increase
+    siege-engineer -- accuracy, armor increase
+    footsoldier -- damage increase, armor increase
+    combat-engineer-- ??, armor increase
+    medic -- ??, armor increase
+* change missiles over to include a ref to living shooter (for revenge from targets)
+* change civic item rendering over to render the civic block instead of the item (hack)    
+* add fisherman npc type
+* add fish/squid farms
+* add cocoa farm (WIP)
+* create side-icons for most civics (need top/bottom still)
+* remove inventory from most npcs (all but courier)    
+* cleanup civic item render derp    
+* add the rest of civic default icons
+* test new civic/inventory interaction
+* fix worker self-inventory checking -- no more inventory, no more check
+* add courier task/objective icon
+* add courier and fisherman textures
+* test/fix nether stalk farm
+* fix npc 'running in circles on a chest' bug, hopefully for the last time
+* fix/setup cocoa bean farm. working fine/great now
+* siege engineer and archer accuracy set in levels
+* set npc work-speed by rank
+* set npc upkeep costs by rank
+* update entity target broadcast to include aggro multiplier -- set aggro higher on player and commander target broadcasts
+* set aggro higher on being attacked
+* vehicle - clientMovement--only send packets if moving/ everyX seconds
+
+/********** 05-14-13 **********/
+* add out-of-bounds team numbers for non-player placed NPCs --team 16 & 17 friendly/hostile--seems working
+* move over to using vanilla game-data storage for player/team/game datas -- working
+* method to disable upkeep for 'NPC' villages -- use team 16/17 for npc only teams -- working
+* new combat objective -- guard entity.  follow/protect entity.  persisitent waypoint. -- works
+* validate TE on first click on routing slip
+* remove unused civic courier post code
+* update most ai to check if target position is loaded, skip if not loaded
+* update most civic work sites to not scan unless entire scanable area is loaded
+* fish farms need to catch by percentage
+* fix npc interaction for aggro teams
+* fix npc interaction for batons when on a non-player team
+* fix broadcasting of work to non-team NPCs -- it is now same-team only
+* fix NPE in guard-target objective
+* fix NPC attack-range issue (was using target eye pos rather than floor)
+* add some comments to ByteTools
+* add inventory scanning ability pass 1 -- required massive restructure of scanner, may still have bugs
+* remove workaround for chest-overwrite-crash (test if it crashes on other entities as well?) 
+/********** 05-15-13 **********/
+* change civic block registry in language registry -- should now register indiv. names per civic
+
+* clean up a few issues with warehouse testing
+* clean up a few icon registry problems (the rest are actual missing textures)
+
+/********** 05-16-13 **********/
+* warehouse will now send inventory size to clients (description packet...blah..at least it is not that often)
+* tons of work on warehouse -- working now, needs only minor attention
+
+/********** 05-17-13 **********/
+* need to scan when attempting to place, make sure no bounds overlap with any existing civics
+* needs to cache storage block locations, and only 'remove' if input location is
+    one of the stored locations
+* move civic inventory dropped into the TE
+* add warehouse control block inventory dropping (wow, that'll be a mess :) )
+* guard objective icon
+* add routing slip1 icon    
+* routing item needs to validate only 4 slots (+2 per additional rank)
+* find/fix the incorrect blocks/.png icon registration from who knows where...(warehouse control block)
+* warehouse control center icons
+
+* civic block descriptions in routing gui are...off...
+* fix a few other things from work (bounds checking)
+    
+/********** 05-18-13 **********/
+* clean up routing GUI / rework routing a bit
+* ^^ yah..that actually required a complete rewrite of routing system. working good + new capabilities!!
+* fix foobar'd vehicle ammo count code (it needed onInventoryChanged() calls that were removed)
+* tons of gui cleanup -- civic, npc
+* seems to not remove blocks from list properly
+* investigate broadcasting 'target' to vanilla/other entities (so they will be aggro vs npcs)
+    or other method to set NPC types as aggro for other Mob type entities
+* needs to drop inventory when storage block is removed
+
+* move many items over to left-click to activate (block scanner, others)(solves block interaction issues)
+* warehouse scan once on being placed
+* cleanup much debug spam
+* add few missing icons
+
+* more civic cleanup
+* add civic broadcast work toggle to gui
+* add civic work-site disable scan by powering work-site
+* non-combat npcs flee from mobs (move to shelter)
+* test commander bonuses
+* fix commander bonus for vehicle repair
+
+* add advanced courier routing slips
+* add more routing slots to higher rank couriers (1/2/4)
+* fix warehouse bug when attempting to withdraw items with maxStackSize < 64
+
+* validate filename for valid chars ( e.g. / - . ' " (){}[]\|) -- use vanilla chat filter?
+
+* move over to incremental pathfinder
+
+* fix some vehicle mounting related bugs
+* one more pass at cleaning up vehicle pathfinding/navigation
+
+/********** 05-19-13 **********/
+* push test release
+
+/********************************************************************************/
+/****************************************FOURTH TEST RELEASE****************************************/
+/********************************************************************************/
+
+
+
