@@ -25,8 +25,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -41,10 +43,10 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 public class EntityGate extends Entity implements IEntityAdditionalSpawnData
 {
 
-BlockPosition pos1;
-BlockPosition pos2;
+public BlockPosition pos1;
+public BlockPosition pos2;
 
-float edgePosition;//the bottom/opening edge of the gate (closed should correspond to pos1)
+public float edgePosition;//the bottom/opening edge of the gate (closed should correspond to pos1)
 
 float openingSpeed = 0.f;//calculated speed of the opening gate -- used during animation
 
@@ -60,9 +62,15 @@ public EntityGate(World par1World)
   super(par1World);
   }
 
+public Gate getGateType()
+  {
+  return this.gateType;
+  }
+
 public void setGateType(Gate type)
   {
   this.gateType = type;
+  Config.logDebug("setting entity gate type to: "+type);
   }
 
 @Override
@@ -100,7 +108,10 @@ public void setHealth(int val)
 public void setPosition(double par1, double par3, double par5)
   {
   super.setPosition(par1, par3, par5);
-  this.gateType.setBounds(this);
+  if(this.gateType!=null)
+  {
+	  this.gateType.setCollisionBoundingBox(this);  
+  }
   }
 
 @Override
@@ -148,29 +159,49 @@ public float getShadowSize()
   }
 
 @Override
-protected void readEntityFromNBT(NBTTagCompound nbttagcompound)
+protected void readEntityFromNBT(NBTTagCompound tag)
   {
-  /**
-   * read bounds, current position, health, gate type, teamNum
-   */
+  this.pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
+  this.pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
+  this.setGateType(Gate.getGateByID(tag.getInteger("type")));
+  this.teamNum = tag.getInteger("team");
+  this.edgePosition = tag.getFloat("edge");
+  this.setHealth(tag.getInteger("health"));
   }
 
 @Override
-protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
+protected void writeEntityToNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub  
+  tag.setCompoundTag("pos1", pos1.writeToNBT(new NBTTagCompound()));
+  tag.setCompoundTag("pos2", pos2.writeToNBT(new NBTTagCompound()));
+  tag.setInteger("type", this.gateType.getGlobalID());
+  tag.setInteger("team", teamNum);
+  tag.setFloat("edge", this.edgePosition);
+  tag.setInteger("health", this.getHealth());
   }
 
 @Override
 public void writeSpawnData(ByteArrayDataOutput data)
   {
-  // TODO Auto-generated method stub  
+  data.writeInt(pos1.x);
+  data.writeInt(pos1.y);
+  data.writeInt(pos1.z);
+  data.writeInt(pos2.x);
+  data.writeInt(pos2.y);
+  data.writeInt(pos2.z);
+  data.writeInt(this.gateType.getGlobalID());  
+  data.writeInt(this.teamNum);
+  data.writeFloat(this.edgePosition);
   }
 
 @Override
 public void readSpawnData(ByteArrayDataInput data)
   {
-  // TODO Auto-generated method stub  
+  this.pos1 = new BlockPosition(data.readInt(), data.readInt(), data.readInt());
+  this.pos2 = new BlockPosition(data.readInt(), data.readInt(), data.readInt());
+  this.gateType = Gate.getGateByID(data.readInt());
+  this.teamNum = data.readInt();
+  this.edgePosition = data.readFloat();
   }
 
 }

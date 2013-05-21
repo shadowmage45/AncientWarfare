@@ -20,12 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import java.util.List;
-
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -46,12 +46,72 @@ public ItemGateSpawner(int itemID)
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
+  if(world.isRemote)
+    {
+    return true;
+    }  
+  NBTTagCompound tag;
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWGateInfo"))
+    {
+    tag = stack.getTagCompound().getCompoundTag("AWGateInfo");
+    }
+  else
+    {
+    tag = new NBTTagCompound();
+    }
+  if(isShiftClick(player))
+    {
+    tag = new NBTTagCompound();
+    }
+  else if(tag.hasKey("pos1") && tag.hasKey("pos2"))
+    {
+	Config.logDebug("getting gate for damage: "+stack.getItemDamage() +" :: "+  Gate.getGateByID(stack.getItemDamage()));
+    EntityGate entity = Gate.constructGate(world, new BlockPosition(tag.getCompoundTag("pos1")), new BlockPosition(tag.getCompoundTag("pos2")), Gate.getGateByID(stack.getItemDamage()));
+    world.spawnEntityInWorld(entity);
+    Config.logDebug("registering gate use final--should build");
+    /**
+     * do nothing, wait for right click for build order
+     */
+    return false;
+    }
+  stack.setTagCompound(tag);
   return false;
   }
 
 @Override
 public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
+  if(world.isRemote || hit==null)
+    {
+    return true;
+    }
+  hit.offsetForMCSide(side);
+  NBTTagCompound tag;
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWGateInfo"))
+    {
+    tag = stack.getTagCompound().getCompoundTag("AWGateInfo");
+    }
+  else
+    {
+    tag = new NBTTagCompound();
+    }
+  if(tag.hasKey("pos1") && tag.hasKey("pos2"))
+    {
+    /**
+     * do nothing, wait for right click for build order
+     */
+    }
+  else if(tag.hasKey("pos1"))
+    {
+    tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
+    player.addChatMessage("Setting second gate bounds position");
+    }
+  else
+    {
+    tag.setCompoundTag("pos1", hit.writeToNBT(new NBTTagCompound()));
+    player.addChatMessage("Setting first gate bounds position");
+    }
+  stack.setTagInfo("AWGateInfo", tag);
   return false;
   }
 

@@ -54,8 +54,6 @@ public String getTexture();
 
 public String getIconTexture();
 
-public Icon getIcon();
-
 /**
  * return the max health of this gate
  * @return
@@ -73,8 +71,9 @@ public void onUpdate(EntityGate ent);
  * called from setPosition to update gates bounding box
  * @param gate
  */
-public void setBounds(EntityGate gate);
+public void setCollisionBoundingBox(EntityGate gate);
 
+public void setInitialBounds(EntityGate gate, BlockPosition pos1, BlockPosition pos2);
 /**
  * a callback from the spawning item for validation of a chosen
  * pair of spawning points.  This is where the gate can reject

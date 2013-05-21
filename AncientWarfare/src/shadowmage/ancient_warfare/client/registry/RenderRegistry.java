@@ -41,11 +41,13 @@ import shadowmage.ancient_warfare.client.model.ModelTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandTurret;
 import shadowmage.ancient_warfare.client.model.ModelVehicleBase;
+import shadowmage.ancient_warfare.client.render.RenderGateHelper;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
 import shadowmage.ancient_warfare.client.render.RenderNpcHelper;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
 import shadowmage.ancient_warfare.client.render.civic.CivicItemRenderer;
+import shadowmage.ancient_warfare.client.render.gate.RenderGateBasic;
 import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
 import shadowmage.ancient_warfare.client.render.missile.RenderShot;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaMobile;
@@ -64,6 +66,7 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetLarge;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandTurret;
+import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
@@ -98,9 +101,13 @@ private RenderShot dummyMissileRender = new RenderShot();
 private RenderArrow arrowRender = new RenderArrow();
 private RenderShot shotRender = new RenderShot();
 
+private RenderGateBasic gateBasicRender = new RenderGateBasic();
+
 private HashMap<Integer, Render> missileRenders = new HashMap<Integer, Render>();
 private HashMap<Integer, RenderVehicleBase> vehicleRenders = new HashMap<Integer, RenderVehicleBase>();
 private HashMap<Integer, ModelVehicleBase> vehicleModels = new HashMap<Integer, ModelVehicleBase>();
+
+private HashMap<Integer, Render> gateRenders = new HashMap<Integer, Render>();
 
 public void loadRenders()
   {  
@@ -195,6 +202,14 @@ public void loadRenders()
   this.addMissileRender(Ammo.ammoSoldierArrowIronFlame.getAmmoType(), arrowRender);
   
   /**
+   * gate renders
+   */
+  RenderingRegistry.registerEntityRenderingHandler(EntityGate.class, new RenderGateHelper());
+  this.addGateRender(0, gateBasicRender);
+  
+  
+  
+  /**
    * load up the vehicle item renderer...
    */
   MinecraftForgeClient.registerItemRenderer(ItemLoader.vehicleSpawner.itemID, RenderVehicleHelper.instance());
@@ -249,5 +264,14 @@ public ModelVehicleBase getVehicleModel(int type)
   return this.vehicleModels.get(type);
   }
 
+public Render getGateRender(int type)
+  {
+  return this.gateRenders.get(type);
+  }
+
+public void addGateRender(int type, Render rend)
+  {
+  this.gateRenders.put(type, rend);
+  }
 
 }

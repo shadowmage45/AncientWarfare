@@ -8,6 +8,7 @@ GENERAL
 * add onInventoryChanged() calls to any AI that modifies inventories
 * ISidedInventory interaction for NPCs & containers
 * need to close inventories/containers when player gets too far away
+* check distance on items before scanning/building/placing/etc
 
 GATES
 * probably still need models for indiv. pieces    

@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.chunkloading.ChunkLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
+import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
@@ -181,6 +182,7 @@ public void load(FMLPostInitializationEvent evt)
   Config.log("Ancient Warfare Post-Init started");
   NpcRegistry.instance().registerNPCs(); 
   CivicRegistry.instance().registerCivics();
+  Gate.registerGateTypes();
   /**
    * and finally, save the config in case there were any changes made during init
    */
