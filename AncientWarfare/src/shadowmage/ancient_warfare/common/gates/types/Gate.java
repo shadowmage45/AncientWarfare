@@ -47,6 +47,8 @@ protected String tooltip = "";
 protected String texture = "";
 protected int maxHealth = 40;
 
+protected float moveSpeed = 0.5f *0.05f; ///1/2 block / second
+
 protected ItemStack displayStack;
 
 /**
@@ -102,6 +104,12 @@ public ItemStack getDisplayStack()
 public int getMaxHealth()
   {
   return maxHealth;
+  }
+
+@Override
+public float getMoveSpeed()
+  {
+  return moveSpeed;
   }
 
 @Override

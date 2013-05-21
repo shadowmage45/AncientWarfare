@@ -55,6 +55,12 @@ public String getTexture();
 public String getIconTexture();
 
 /**
+ * return the speed at which the gate opens/closes when activated
+ * @return
+ */
+public float getMoveSpeed();
+
+/**
  * return the max health of this gate
  * @return
  */

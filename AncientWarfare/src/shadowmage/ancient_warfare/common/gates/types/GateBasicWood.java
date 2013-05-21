@@ -62,19 +62,15 @@ public void setInitialBounds(EntityGate gate, BlockPosition pos1, BlockPosition 
   {
   BlockPosition min = BlockTools.getMin(pos1, pos2);
   BlockPosition max = BlockTools.getMax(pos1, pos2);
-  boolean xAxis = min.x!=max.x;
-  float width = xAxis ? max.z-min.z + 1 : max.x-min.x+1;
-  float xOffset = xAxis ? width*0.5f : 0.5f;
-  float zOffset = xAxis ? 0.5f : width*0.5f;
+  boolean wideOnXAxis = min.x!=max.x;
+  float width = wideOnXAxis ? max.x-min.x+1 : max.z-min.z + 1;
+  float xOffset = wideOnXAxis ? width*0.5f : 0.5f;
+  float zOffset = wideOnXAxis ? 0.5f : width*0.5f;
   gate.pos1 = min;
   gate.pos2 = max;
+  gate.edgeMax = max.y - min.y + 1;
   Config.logDebug("setting gate pos to : "+ (min.x+xOffset) +","+(min.z+zOffset));
   gate.setPosition(min.x+xOffset, min.y, min.z+zOffset);
   }
-/**
- * public void setInitialBounds(BlockPosition pos1, BlockPosition pos2)
-  {
-  
-  }
- */
+
 }

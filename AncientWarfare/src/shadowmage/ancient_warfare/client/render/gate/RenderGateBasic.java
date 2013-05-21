@@ -47,42 +47,35 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
   {
   GL11.glPushMatrix();  
   EntityGate g = (EntityGate) entity;
-  BlockPosition min = BlockTools.getMin(g.pos1, g.pos2);
-  BlockPosition max = BlockTools.getMax(g.pos1, g.pos2);
- 
-  boolean xAxis = min.x == max.x;
+  BlockPosition min = g.pos1;
+  BlockPosition max = g.pos2;
+   
+  boolean wideOnXAxis = min.x!=max.x;
+  float width = wideOnXAxis ? max.x-min.x+1 : max.z-min.z + 1;
+  float height = max.y - min.y + 1;
+  float xOffset = wideOnXAxis ? -width*0.5f : -0.5f;
+  float zOffset = wideOnXAxis ? -0.5f : -width*0.5f;
   
-  float axisRotation = 0;
-  
-  if(!xAxis)
-    {
-    axisRotation = 90;
-    }
-  model.setModelRotation(axisRotation);
-  
-  float tx = xAxis ? 0 : 1;
+  float tx = wideOnXAxis ? 0 : 1;
   float ty = -1;
-  float tz = xAxis ? 1 : 0;
-  int renderedPiece = 0;
-  float wid = xAxis ? max.z-min.z + 1 : max.x-min.x + 1;
-  float hi = max.y - min.y + 1;
-  
-//  GL11.glTranslatef(tx*wid*0.5f, 0, tz*wid*0.5f);
-  
-  for(int y = 0; y<hi; y++)
+  float tz = wideOnXAxis ? 1 : 0;    
+  float axisRotation = wideOnXAxis ? 90 : 0;
+  model.setModelRotation(axisRotation);   
+  GL11.glTranslatef(-xOffset, 0, zOffset);  
+  for(int y = 0; y<height; y++)
     {    
     GL11.glPushMatrix();
-    for(int x = 0; x <wid; x++)
+    for(int x = 0; x <width; x++)
       {
-      if(y == hi-1 && x>0 && x<wid-1)
+      if(y == height-1 && x>0 && x<width-1)
         {
         model.renderTop();
         }
-      else if(y==hi-1 && x==0)
+      else if(y==height-1 && x==0)
         {
         model.renderCorner();
         }
-      else if(y==hi-1 && x==wid-1)
+      else if(y==height-1 && x==width-1)
         {
         model.setModelRotation(axisRotation+180);
         model.renderCorner();
@@ -91,15 +84,15 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
         {
         model.renderSide();
         }
-      else if(x==wid-1)
+      else if(x==width-1)
         {
         model.setModelRotation(axisRotation+180);
         model.renderSide();
         }
-      if(y + g.edgePosition <= hi)
+      if(y + g.edgePosition <= height)
         {
         GL11.glPushMatrix();
-        GL11.glTranslatef(0, -g.edgePosition, 0);
+        GL11.glTranslatef(0, -g.edgePosition + f1*g.openingSpeed, 0);
         model.setModelRotation(axisRotation);
         model.renderSolidWall();
         GL11.glPopMatrix();

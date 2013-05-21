@@ -12,6 +12,12 @@ GENERAL
 
 GATES
 * probably still need models for indiv. pieces    
+* use TE's in the gate proxy blocks
+    TE's check if gate ref is dead/null and remove themselves
+    TE's/blocks pass interact checks onto the gate
+    gate updates proxy blocks when placed/spawned/read from NBT/activated
+    * place blocks when completely closed
+    * remove all blocks when activated open
 
 VEHICLES
 * clean up vehicle alpha rendering
@@ -154,3 +160,13 @@ TWEAKS/OPTIMIZATION
 * add gate spawner item WIP
 * add IGateType, Gate, EntityGate classes
 
+/********** 05-21-13 **********/
+/********** 05-22-13 **********/
+/********** 05-23-13 **********/
+/********** 05-24-13 **********/
+/********** 05-25-13 **********/
+/********** 05-26-13 **********/
+/********** 05-27-13 **********/
+/********** 05-28-13 **********/
+/********** 05-29-13 **********/
+/********** 05-30-13 **********/
