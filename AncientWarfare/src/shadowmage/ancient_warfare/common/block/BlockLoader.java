@@ -52,6 +52,8 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmJungl
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmOak;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmSpruce;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.gates.BlockGateProxy;
+import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -65,6 +67,7 @@ public static final Block civicBlock2 = new BlockCivic(Config.getBlockID("blockM
 public static final Block civicBlock3 = new BlockCivic(Config.getBlockID("blockMulti.civic3", 3703, "Civic Block 3"), "CivicBlock3", 2);
 public static final Block civicBlock4 = new BlockCivic(Config.getBlockID("blockMulti.civic4", 3704, "Civic Block 4"), "CivicBlock4", 3);
 public static final Block warehouseStorage = new BlockWarehouseStorage(Config.getBlockID("blockSingle.warehouseStorage", 3705, "Warehouse Storage Block"));
+public static final Block gateProxy = new BlockGateProxy(Config.getBlockID("blockSingle.gateProxy", 3706, "Gate collision/sight check proxy block"));
 
 private static BlockLoader INSTANCE;
 private BlockLoader(){}
@@ -81,11 +84,13 @@ public void load()
   {
   registerBlock(builder, "Builder"); 
   registerBlock(warehouseStorage, "Warehouse Storage");
+  registerBlock(gateProxy, "AWGateProxy");
   registerBlock(civicBlock1, "CivicBlock1");
   registerBlock(civicBlock2, "CivicBlock2");
   registerBlock(civicBlock3, "CivicBlock3");
   registerBlock(civicBlock4, "CivicBlock4");
   GameRegistry.registerTileEntity(TEBuilder.class, "AWBuilder");
+  GameRegistry.registerTileEntity(TEGateProxy.class, "AWGateProxyTE");
   GameRegistry.registerTileEntity(TEWorkSiteFarm.class, "AWFarmSiteTE");   
   GameRegistry.registerTileEntity(TEFarmWheat.class, "Wheat Farm");
   GameRegistry.registerTileEntity(TEFarmCarrot.class, "Carrot Farm");

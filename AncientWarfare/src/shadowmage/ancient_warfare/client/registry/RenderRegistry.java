@@ -48,6 +48,8 @@ import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
 import shadowmage.ancient_warfare.client.render.civic.CivicItemRenderer;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateBasic;
+import shadowmage.ancient_warfare.client.render.gate.RenderGateDouble;
+import shadowmage.ancient_warfare.client.render.gate.RenderGateSingle;
 import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
 import shadowmage.ancient_warfare.client.render.missile.RenderShot;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaMobile;
@@ -100,8 +102,6 @@ private RenderShot dummyMissileRender = new RenderShot();
 
 private RenderArrow arrowRender = new RenderArrow();
 private RenderShot shotRender = new RenderShot();
-
-private RenderGateBasic gateBasicRender = new RenderGateBasic();
 
 private HashMap<Integer, Render> missileRenders = new HashMap<Integer, Render>();
 private HashMap<Integer, RenderVehicleBase> vehicleRenders = new HashMap<Integer, RenderVehicleBase>();
@@ -205,8 +205,9 @@ public void loadRenders()
    * gate renders
    */
   RenderingRegistry.registerEntityRenderingHandler(EntityGate.class, new RenderGateHelper());
-  this.addGateRender(0, gateBasicRender);
-  
+  this.addGateRender(0, new RenderGateBasic());
+  this.addGateRender(4, new RenderGateSingle());
+  this.addGateRender(8, new RenderGateDouble());
   
   
   /**

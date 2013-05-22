@@ -28,6 +28,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class ItemGateSpawner extends AWItemClickable implements IScannerItem
@@ -67,6 +68,8 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
 	Config.logDebug("getting gate for damage: "+stack.getItemDamage() +" :: "+  Gate.getGateByID(stack.getItemDamage()));
     EntityGate entity = Gate.constructGate(world, new BlockPosition(tag.getCompoundTag("pos1")), new BlockPosition(tag.getCompoundTag("pos2")), Gate.getGateByID(stack.getItemDamage()));
+    entity.teamNum = TeamTracker.instance().getTeamForPlayer(player);
+    Gate.getGateByID(stack.getItemDamage()).onGateFinishClose(entity);
     world.spawnEntityInWorld(entity);
     Config.logDebug("registering gate use final--should build");
     /**

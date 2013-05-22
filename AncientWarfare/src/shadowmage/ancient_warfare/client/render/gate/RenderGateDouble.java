@@ -20,24 +20,21 @@
  */
 package shadowmage.ancient_warfare.client.render.gate;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelGateBasic;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
 
-public class RenderGateBasic extends Render
+public class RenderGateDouble extends Render
 {
 
 ModelGateBasic model = new ModelGateBasic();
 
-public RenderGateBasic()
+public RenderGateDouble()
   {
   
   }
@@ -47,8 +44,8 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
   {
   GL11.glPushMatrix();  
   EntityGate g = (EntityGate) entity;
-  BlockPosition min = g.pos1;
-  BlockPosition max = g.pos2;
+  BlockPosition min = BlockTools.getMin(g.pos1, g.pos2);//g.pos1;
+  BlockPosition max = BlockTools.getMax(g.pos1, g.pos2);
    
   boolean wideOnXAxis = min.x!=max.x;
   float width = wideOnXAxis ? max.x-min.x+1 : max.z-min.z + 1;
@@ -89,14 +86,34 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
         model.setModelRotation(axisRotation+180);
         model.renderSide();
         }
-      if(y + g.edgePosition <= height-0.475f)
+      float move = 0.f;
+      boolean render = false;
+      if(x < width * 0.5f)
         {
+        move = -g.edgePosition +g.openingSpeed*f1;
+        if( x-move > -0.5f)
+          {
+          render = true;
+          }
+        }
+      else
+        {
+        move = g.edgePosition -g.openingSpeed*f1;
+        if(x+move <= width-0.475f)
+          {
+          render = true;
+          }
+        }      
+      float wallTx = wideOnXAxis ? move : 0;
+      float wallTz = wideOnXAxis ? 0 : move;
+      if(render)
+        {      
         GL11.glPushMatrix();
-        GL11.glTranslatef(0, -g.edgePosition + f1*g.openingSpeed, 0);
+        GL11.glTranslatef(wallTx, 0, wallTz);
         model.setModelRotation(axisRotation);
         model.renderSolidWall();
         GL11.glPopMatrix();
-        }      
+        }   
       GL11.glTranslatef(tx, 0, tz);
       }
     GL11.glPopMatrix();

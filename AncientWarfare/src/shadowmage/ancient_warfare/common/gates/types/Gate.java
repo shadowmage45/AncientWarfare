@@ -39,7 +39,9 @@ public static final Gate[] gateTypes = new Gate[16];
 
 public static final Gate basicWood = new GateBasicWood(0);
 
+public static final Gate singleWood = new GateSingleSlideWood(4);
 
+public static final Gate doubleWood = new GateDoubleSlideWood(8);
 
 protected int globalID = 0;
 protected String displayName = "";
@@ -131,6 +133,7 @@ public static EntityGate constructGate(World world, BlockPosition pos1, BlockPos
   {
   EntityGate ent = new EntityGate(world);
   ent.setGateType(type);
+  ent.setHealth(type.getMaxHealth());
   type.setInitialBounds(ent, pos1, pos2);
   return ent;
   }

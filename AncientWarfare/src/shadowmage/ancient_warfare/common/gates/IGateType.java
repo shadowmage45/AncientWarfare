@@ -79,6 +79,11 @@ public void onUpdate(EntityGate ent);
  */
 public void setCollisionBoundingBox(EntityGate gate);
 
+public void onGateStartOpen(EntityGate gate);
+public void onGateFinishOpen(EntityGate gate);
+public void onGateStartClose(EntityGate gate);
+public void onGateFinishClose(EntityGate gate);
+  
 public void setInitialBounds(EntityGate gate, BlockPosition pos1, BlockPosition pos2);
 /**
  * a callback from the spawning item for validation of a chosen

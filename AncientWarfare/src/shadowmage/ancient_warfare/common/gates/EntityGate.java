@@ -25,12 +25,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.Pos3f;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -48,14 +49,16 @@ public class EntityGate extends Entity implements IEntityAdditionalSpawnData
 public BlockPosition pos1;
 public BlockPosition pos2;
 
+public Pos3f gatePos = null;
+
 public float edgePosition;//the bottom/opening edge of the gate (closed should correspond to pos1)
 public float edgeMax;//the 'fully extended' position of the gate
 
 public float openingSpeed = 0.f;//calculated speed of the opening gate -- used during animation
 
-Gate gateType = null;
+Gate gateType = Gate.basicWood;
 
-int teamNum = 0;
+public int teamNum = 0;
 int health = 0;
 int hurtAnimationTicks = 0;
 byte gateStatus = 0;
@@ -67,6 +70,9 @@ byte gateOrientation = 0;
 public EntityGate(World par1World)
   {
   super(par1World);
+  this.yOffset = 0;
+//  this.height = 4.f;
+//  this.width = 4.f;
   }
 
 public Gate getGateType()
@@ -92,15 +98,55 @@ public void setOpeningStatus(byte op)
   if(!this.worldObj.isRemote)
     {
     this.worldObj.setEntityState(this, op);
+    }  
+  if(op==-1)
+    {
+    this.gateType.onGateStartClose(this);
+    }
+  else if(op==1)
+    {
+    this.gateType.onGateStartOpen(this);
+    }
+  }
+
+//@Override
+//public AxisAlignedBB getBoundingBox()
+//  {
+//  return this.boundingBox;
+//  }
+//
+//@Override
+//public AxisAlignedBB getCollisionBox(Entity par1Entity)
+//  {
+//  return this.boundingBox;
+//  }
+
+@Override
+public int getBrightnessForRender(float par1)
+  {
+  int i = MathHelper.floor_double(this.posX);
+  int j = MathHelper.floor_double(this.posZ);
+  if (this.worldObj.blockExists(i, 0, j))
+    {
+    int k = MathHelper.floor_double(this.posY);
+    return this.worldObj.getLightBrightnessForSkyBlocks(i, k, j, 0);
+    }
+  else
+    {
+    return 0;
     }
   }
 
 @Override
 public void handleHealthUpdate(byte par1)
   {  
-  if(par1==-1 || par1==0 || par1==1)
+  if(worldObj.isRemote)
     {
-    this.gateStatus = par1;
+    Config.logDebug("receiving client event : "+par1);
+    if(par1==-1 || par1==0 || par1==1)
+      {
+      this.setOpeningStatus(par1);
+      }
     }  
   super.handleHealthUpdate(par1);
   }
@@ -130,12 +176,42 @@ public void setHealth(int val)
 
 @Override
 public void setPosition(double par1, double par3, double par5)
-  {
-  super.setPosition(par1, par3, par5);
+  {  
+  this.posX = par1;
+  this.posY = par3;
+  this.posZ = par5;
+  
+//  Config.logDebug(String.format("setting position to: %.2f, %.2f, %.2f", posX, posY, posZ));
   if(this.gateType!=null)
     {
   	this.gateType.setCollisionBoundingBox(this);  
     }
+  else
+    {
+    this.boundingBox.setBounds(par1, par3, par5, par1, par3, par5);
+    }
+  }
+
+@Override
+public void setPositionAndRotation(double par1, double par3, double par5,  float par7, float par8)
+  {
+  super.setPositionAndRotation(par1, par3, par5, par7, par8);
+//  Config.logDebug(String.format("setting position and rotation to: %.2f, %.2f, %.2f", posX, posY, posZ));
+  }
+
+@Override
+public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9)
+  {
+  this.setPosition(par1, par3, par5);
+  this.setRotation(par7, par8);
+//  Config.logDebug(String.format("setting position and rotation 2 to: %.2f, %.2f, %.2f", posX, posY, posZ));
+  }
+
+@Override
+public void setLocationAndAngles(double par1, double par3, double par5, float par7, float par8)
+  {
+  super.setLocationAndAngles(par1, par3, par5, par7, par8);
+//  Config.logDebug(String.format("setting location and angles to: %.2f, %.2f, %.2f", posX, posY, posZ));
   }
 
 @Override
@@ -164,17 +240,22 @@ public boolean interact(EntityPlayer par1EntityPlayer)
       {
       this.setOpeningStatus((byte)-1);
       }
-    Config.logDebug("activating gate: "+this.gateStatus);
+    Config.logDebug("activating gate: "+this.gateStatus + " bb: "+this.boundingBox);
+    return true;
     }
-  return super.interact(par1EntityPlayer);
+  return false;
+//  return super.interact(par1EntityPlayer);
   }
 
 @Override
 public void onUpdate()
-  {
-  super.onUpdate();
+  {  
+  super.onUpdate();  
   this.gateType.onUpdate(this);
   float prevEdge = this.edgePosition;
+  this.setPosition(posX, posY, posZ);
+//  Config.logDebug(String.format("Gate Pos: %.2f, %.2f, %.2f.  client:%s", posX, posY, posZ, worldObj.isRemote));
+  
   if(this.hurtAnimationTicks>0)
     {
     this.hurtAnimationTicks--;
@@ -186,6 +267,7 @@ public void onUpdate()
       {
       this.edgePosition = this.edgeMax;
       this.gateStatus = 0;
+      this.gateType.onGateFinishOpen(this);
       }    
     }
   else if(this.gateStatus==-1)
@@ -195,14 +277,21 @@ public void onUpdate()
       {
       this.edgePosition = 0;
       this.gateStatus = 0;
+      this.gateType.onGateFinishClose(this);
       }
     }
   this.openingSpeed = prevEdge - this.edgePosition;
   }
 
+
+
 @Override
 public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   {
+  if(this.worldObj.isRemote)
+    {
+    return true;
+    }
   int health = this.getHealth();
   health -= par2;
   this.setHealth(health);
@@ -210,7 +299,7 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     {
     this.setDead();
     }
-  return super.attackEntityFrom(par1DamageSource, par2);
+  return !this.isDead;
   }
 
 @Override
@@ -245,6 +334,7 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.setGateType(Gate.getGateByID(tag.getInteger("type")));
   this.teamNum = tag.getInteger("team");
   this.edgePosition = tag.getFloat("edge");
+  this.edgeMax = tag.getFloat("edgeMax");
   this.setHealth(tag.getInteger("health"));
   this.gateStatus = tag.getByte("status");
   this.gateOrientation = tag.getByte("orient");
@@ -258,6 +348,7 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setInteger("type", this.gateType.getGlobalID());
   tag.setInteger("team", teamNum);
   tag.setFloat("edge", this.edgePosition);
+  tag.setFloat("edgeMax", this.edgeMax);
   tag.setInteger("health", this.getHealth());
   tag.setByte("status", this.gateStatus);
   tag.setByte("orient", gateOrientation);
@@ -275,8 +366,9 @@ public void writeSpawnData(ByteArrayDataOutput data)
   data.writeInt(this.gateType.getGlobalID());  
   data.writeInt(this.teamNum);
   data.writeFloat(this.edgePosition);
+  data.writeFloat(this.edgeMax);
   data.writeByte(this.gateStatus);
-  data.writeByte(this.gateOrientation);
+  data.writeByte(this.gateOrientation);  
   }
 
 @Override
@@ -287,6 +379,7 @@ public void readSpawnData(ByteArrayDataInput data)
   this.gateType = Gate.getGateByID(data.readInt());
   this.teamNum = data.readInt();
   this.edgePosition = data.readFloat();
+  this.edgeMax = data.readFloat();
   this.gateStatus = data.readByte();
   this.gateOrientation = data.readByte();
   }
