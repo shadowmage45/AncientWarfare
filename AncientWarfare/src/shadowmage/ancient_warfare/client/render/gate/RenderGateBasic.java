@@ -94,7 +94,14 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
         GL11.glPushMatrix();
         GL11.glTranslatef(0, -g.edgePosition + f1*g.openingSpeed, 0);
         model.setModelRotation(axisRotation);
-        model.renderSolidWall();
+        if(g.getGateType().getModelType()==0)
+          {
+          model.renderSolidWall();          
+          }
+        else
+          {
+          model.renderBars();
+          }
         GL11.glPopMatrix();
         }      
       GL11.glTranslatef(tx, 0, tz);

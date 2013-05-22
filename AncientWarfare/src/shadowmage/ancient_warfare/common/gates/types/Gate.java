@@ -38,16 +38,20 @@ public static final Gate[] gateTypes = new Gate[16];
 
 
 public static final Gate basicWood = new GateBasicWood(0);
+public static final Gate basicIron = new GateBasicIron(1);
 
 public static final Gate singleWood = new GateSingleSlideWood(4);
+public static final Gate singleIron = new GateSingleIron(5);
 
 public static final Gate doubleWood = new GateDoubleSlideWood(8);
+public static final Gate doubleIron = new GateDoubleIron(9);
 
 protected int globalID = 0;
 protected String displayName = "";
 protected String tooltip = "";
 protected String texture = "";
 protected int maxHealth = 40;
+protected int modelType = 0;
 
 protected float moveSpeed = 0.5f *0.05f; ///1/2 block / second
 
@@ -77,6 +81,13 @@ public int getGlobalID()
   {  
   return globalID;
   }
+
+@Override
+public int getModelType()
+  {
+  return modelType;
+  }
+
 
 @Override
 public String getDisplayName()

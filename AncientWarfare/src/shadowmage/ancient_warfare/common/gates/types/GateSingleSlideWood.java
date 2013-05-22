@@ -34,8 +34,9 @@ public class GateSingleSlideWood extends GateBasicWood
 public GateSingleSlideWood(int id)
   {
   super(id);
-  this.displayName = "Gate Single Slide Wood";
+  this.displayName = "Gate Single Wood";
   this.tooltip = "Opens towards one side";
+  this.texture = "gateWood1.png";
   }
 
 @Override

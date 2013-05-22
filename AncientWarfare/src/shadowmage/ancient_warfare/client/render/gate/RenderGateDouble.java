@@ -91,7 +91,7 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
       if(x < width * 0.5f)
         {
         move = -g.edgePosition +g.openingSpeed*f1;
-        if( x-move > -0.5f)
+        if( x + move > -0.5f)
           {
           render = true;
           }
@@ -111,7 +111,14 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
         GL11.glPushMatrix();
         GL11.glTranslatef(wallTx, 0, wallTz);
         model.setModelRotation(axisRotation);
-        model.renderSolidWall();
+        if(g.getGateType().getModelType()==0)
+          {
+          model.renderSolidWall();          
+          }
+        else
+          {
+          model.renderBars();
+          }
         GL11.glPopMatrix();
         }   
       GL11.glTranslatef(tx, 0, tz);

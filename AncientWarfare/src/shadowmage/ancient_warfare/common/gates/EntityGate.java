@@ -317,7 +317,7 @@ public boolean canBePushed()
 @Override
 public String getTexture()
   {
-  return gateType.getTexture();
+  return Config.texturePath + "models/gate/"+gateType.getTexture();
   }
 
 @Override

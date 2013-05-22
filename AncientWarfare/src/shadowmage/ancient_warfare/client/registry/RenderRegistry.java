@@ -206,8 +206,11 @@ public void loadRenders()
    */
   RenderingRegistry.registerEntityRenderingHandler(EntityGate.class, new RenderGateHelper());
   this.addGateRender(0, new RenderGateBasic());
+  this.addGateRender(1, new RenderGateBasic());
   this.addGateRender(4, new RenderGateSingle());
+  this.addGateRender(5, new RenderGateSingle());
   this.addGateRender(8, new RenderGateDouble());
+  this.addGateRender(9, new RenderGateDouble());
   
   
   /**

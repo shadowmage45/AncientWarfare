@@ -95,6 +95,8 @@ public void setInitialBounds(EntityGate gate, BlockPosition pos1, BlockPosition 
  */
 public boolean arePointsValidPair(BlockPosition pos1, BlockPosition pos2);
 
+public int getModelType();
+
 public ItemStack getConstructingItem();
 
 public ItemStack getDisplayStack();

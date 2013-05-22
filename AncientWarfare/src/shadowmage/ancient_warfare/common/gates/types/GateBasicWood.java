@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.gates.types;
 
+import java.util.UUID;
+
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -37,8 +39,9 @@ public class GateBasicWood extends Gate
 public GateBasicWood(int id)
   {
   super(id);
-  this.displayName = "Basic Wooden Gate";
-  this.tooltip = "Vertical Movement";
+  this.displayName = "Gate Basic Wood";
+  this.tooltip = "Opens upwards";
+  this.texture = "gateWood1.png";
   }
 
 @Override

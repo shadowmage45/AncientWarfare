@@ -33,7 +33,10 @@ public class GateDoubleSlideWood extends GateBasicWood
  */
 public GateDoubleSlideWood(int id)
   {
-  super(id);
+  super(id); 
+  this.displayName = "Gate Double Wood";
+  this.tooltip = "Opens towards both sides";
+  this.texture = "gateWood1.png";
   }
 
 @Override

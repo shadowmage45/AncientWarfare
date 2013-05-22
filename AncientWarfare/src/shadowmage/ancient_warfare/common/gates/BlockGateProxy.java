@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.gates;
 
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -48,7 +49,7 @@ public class BlockGateProxy extends AWBlockContainer
 public BlockGateProxy(int par1)
   {
   super(par1, Material.rock, "AW Gate Proxy Block");
-  this.setCreativeTab(CreativeTabAW.normal);
+  this.setCreativeTab(null);
   }
 
 @Override
@@ -73,7 +74,6 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
 public boolean renderAsNormalBlock()
   {
   return false;
-//  return super.renderAsNormalBlock();
   }
 
 @Override
@@ -91,9 +91,9 @@ public boolean isBlockSolid(IBlockAccess par1IBlockAccess, int par2, int par3, i
   }
 
 @Override
-public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2,  int par3, int par4)
+public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int x,  int y, int z)
   {
-  return super.getSelectedBoundingBoxFromPool(par1World, par2, par3, par4);
+  return AxisAlignedBB.getAABBPool().getAABB(x+0.5d,y+0.5d,z+0.5d,x+0.5d,y+0.5d,z+0.5d);
   }
 
 @Override
@@ -106,7 +106,6 @@ public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, 
 public boolean isOpaqueCube()
   {
   return false;
-//  return super.isOpaqueCube();
   }
 
 @Override
@@ -140,6 +139,10 @@ public void registerIcons(IconRegister reg, Description d)
   // TODO Auto-generated method stub
   }
 
-
+@Override
+public int quantityDropped(Random par1Random)
+  {
+  return 0;
+  }
 
 }

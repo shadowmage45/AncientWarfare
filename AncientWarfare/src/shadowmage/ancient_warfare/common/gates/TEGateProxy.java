@@ -46,16 +46,24 @@ public void setOwner(EntityGate gate)
 public void readFromNBT(NBTTagCompound tag)
   {
   super.readFromNBT(tag);
-  long msb = tag.getLong("msb");
-  long lsb = tag.getLong("lsb");
-  entityID = new UUID(msb, lsb);
+  if(tag.hasKey("msb")&&tag.hasKey("lsb"))
+  {
+	  long msb = tag.getLong("msb");
+	  long lsb = tag.getLong("lsb");
+	  entityID = new UUID(msb, lsb);
+	  
+  }
   }
 
 @Override
 public void writeToNBT(NBTTagCompound tag)
   {
-  tag.setLong("msb", entityID.getMostSignificantBits());
-  tag.setLong("lsb", entityID.getLeastSignificantBits());
+	if(this.entityID!=null)
+	{
+		tag.setLong("msb", entityID.getMostSignificantBits());
+		  tag.setLong("lsb", entityID.getLeastSignificantBits());
+	}
+  
   super.writeToNBT(tag);
   }
 
