@@ -279,7 +279,6 @@ public static boolean isPositionWithinBounds(BlockPosition test, BlockPosition p
 
 /**
  * returns an array of positions of every block between the pair of coordinates passed
- * returns NULL if any axis spans more than 20 blocks 
  * @param pos1
  * @param pos2
  * @return
@@ -325,7 +324,6 @@ public static ArrayList<BlockPosition> getAllBlockPositionsBetween(BlockPosition
   BlockPosition min = new BlockPosition(minX, minY, minZ);
   BlockPosition max = new BlockPosition(maxX, maxY, maxZ);
   ArrayList<BlockPosition> blocks = new ArrayList<BlockPosition>();
-  blocks.clear();
   int cX;//
   int cY;
   int cZ;

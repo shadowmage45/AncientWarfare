@@ -62,7 +62,7 @@ public int teamNum = 0;
 int health = 0;
 int hurtAnimationTicks = 0;
 byte gateStatus = 0;
-byte gateOrientation = 0;
+public byte gateOrientation = 0;
 
 /**
  * @param par1World

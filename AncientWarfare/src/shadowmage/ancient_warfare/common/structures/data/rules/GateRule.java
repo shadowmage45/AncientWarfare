@@ -56,6 +56,7 @@ public static GateRule populateRule(ScannedGateEntry g)
   rule.z2 = g.pos2.z;  
   rule.teamNum = g.g.teamNum;
   rule.gateType = g.g.getGateType().getGlobalID();
+  rule.facing = g.facing;
   return rule;
   }
 
@@ -114,39 +115,8 @@ public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struc
     {
     gate.teamNum = teamNum;
     }
+  gate.gateOrientation = (byte) ((this.facing + BlockTools.getRotationAmount(2, facing)) % 4);
   return gate;
-  }
-
-protected float getRotatedXOffset(float xOff, float zOff, int face)
-  {
-  switch(face)
-  {
-  case 0:
-  return 1-xOff;
-  case 1:
-  return zOff;
-  case 2:
-  return xOff;
-  case 3:
-  return 1-zOff;
-  }  
-  return xOff;
-  }
-
-protected float getRotatedZOffset(float xOff, float zOff, int face)
-  {
-  switch(face)
-  {
-  case 0:
-  return 1-zOff;
-  case 1:
-  return xOff;
-  case 2:
-  return zOff;
-  case 3:
-  return 1-xOff;
-  }  
-  return zOff;
   }
 
 }

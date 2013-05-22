@@ -34,9 +34,8 @@ byte facing;
 BlockPosition pos1;
 BlockPosition pos2;
 
-public ScannedGateEntry(EntityGate g, BlockPosition pos)
+public ScannedGateEntry(EntityGate g, BlockPosition pos, int face)
   {
-//  BlockPosition pos = new BlockPosition(MathHelper.floor_double(g.posX), MathHelper.floor_double(g.posY), MathHelper.floor_double(g.posZ));
   this.g = g;
   this.pos1 = g.pos1.copy();
   this.pos2 = g.pos2.copy();
@@ -46,6 +45,7 @@ public ScannedGateEntry(EntityGate g, BlockPosition pos)
   pos2.x -= pos.x;
   pos2.y -= pos.y;
   pos2.z -= pos.z;
+  facing = (byte) ((g.gateOrientation + BlockTools.getRotationAmount(face, 2)) %4);
   }
 
 public void normalizeForNorthFacing(int currentFacing, int xSize, int zSize)
@@ -60,7 +60,6 @@ public void normalizeForNorthFacing(int currentFacing, int xSize, int zSize)
   
   this.pos1 = c1;
   this.pos2 = c2;
-  Config.logDebug("normalized gate scan entry: "+this.pos1 + " :: "+this.pos2);
-  
+  Config.logDebug("normalized gate scan entry: "+this.pos1 + " :: "+this.pos2);  
   }
 }

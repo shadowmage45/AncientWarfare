@@ -227,7 +227,7 @@ protected void scanForEntities(World world)
     else if( e instanceof EntityGate)
       {
       Config.logDebug("scanning gate: "+e);
-      ScannedGateEntry g = new ScannedGateEntry((EntityGate)e, this.buildKey);
+      ScannedGateEntry g = new ScannedGateEntry((EntityGate)e, this.buildKey, this.originFacing);
       this.includedGates.add(g);
       }
     }
@@ -267,18 +267,13 @@ private void normalizeForNorthFacing()
   this.zSize = newZSize;
   
   this.normalizeScannedEntities(newXSize, newZSize);
-  this.normailzeScannedGates(newXSize, newZSize);
   for(CivicRule rule : this.scannedCivics)
     {
     rule.normalizeForNorthFacing(originFacing, newXSize, newZSize);
     }  
-  }
-
-private void normailzeScannedGates(int xSize, int zSize)
-  {
   for(ScannedGateEntry gate : this.includedGates)
     {
-    gate.normalizeForNorthFacing(originFacing, xSize, zSize);    
+    gate.normalizeForNorthFacing(originFacing, newXSize, newZSize);    
     }
   }
 
