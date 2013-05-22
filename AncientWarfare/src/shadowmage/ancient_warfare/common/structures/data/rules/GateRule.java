@@ -59,7 +59,7 @@ public static GateRule populateRule(ScannedGateEntry g)
   return rule;
   }
 
-public static GateRule parseLines(List<String> lines)
+public static GateRule parseRule(List<String> lines)
   {
   GateRule rule = new GateRule();
   for(String t : lines)

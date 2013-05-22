@@ -39,6 +39,7 @@ import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.GateRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
@@ -389,65 +390,46 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
       {
       struct.biomesNotIn = StringTools.safeParseStringArray("=", line);
       }
-
-
-
-    /**
-     * parse out block rules
-     */
     else if(line.toLowerCase().startsWith("rule:"))
       {      
       this.parseRule(struct, it);
       }
-
-    /**
-     * parse out vehicle setups
-     */
     else if(line.toLowerCase().startsWith("vehicle:"))
       {      
       this.parseVehicle(struct, it);
       }
-
-    /**
-     * parse out npc setups
-     */
     else if(line.toLowerCase().startsWith("npc:"))
       {      
       this.parseNPC(struct, it);
-      }
-    
+      }    
     else if(line.toLowerCase().startsWith("civic:"))
       {
       this.parseCivic(struct, it);
       }
-
     else if(line.toLowerCase().startsWith("resources:"))
       {
       this.parseResources(struct, it);
-      }
-    
+      }    
     else if(line.toLowerCase().startsWith("swap:"))
       {
       this.parseSwap(struct, it);
-      }
-    
+      }    
     else if(line.toLowerCase().startsWith("entity:"))
       {
       this.parseEntity(struct, it);
       }
-    /**
-     * parse out layers
-     */
     else if(line.toLowerCase().startsWith("layer:"))
       {
       this.parseLayer(struct, it);
-      }
-    
+      }    
     else if(line.toLowerCase().startsWith("inventory:"))
       {
       this.parseInventory(struct, it);
+      }    
+    else if(line.toLowerCase().startsWith("gate:"))
+      {
+      this.parseGate(struct, it);
       }
-
     if(!struct.isValid)
       {
       return null;
@@ -603,6 +585,43 @@ private void parseResources(ProcessedStructure struct, Iterator<String> it)
     {
     struct.cachedCounts = resourceList;
     }  
+  }
+
+private void parseGate(ProcessedStructure struct, Iterator<String> it)
+  {
+  if(!it.hasNext())
+    {
+    struct.isValid = false;
+    return;
+    }
+  ArrayList<String> ruleLines = new ArrayList<String>();  
+  String line;  
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("gate:"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith(":endgate"))
+      {
+      break;      
+      }
+    else
+      {
+      ruleLines.add(line);      
+      }    
+    }     
+  GateRule rule = GateRule.parseRule(ruleLines);
+  if(rule!=null)
+    {    
+    struct.gateRules.add(rule);    
+    }
+  else
+    {
+    Config.logError("Error parsing gate rule for structure!");
+    struct.isValid = false;
+    }
   }
 
 private void parseEntity(ProcessedStructure struct, Iterator<String> it)
