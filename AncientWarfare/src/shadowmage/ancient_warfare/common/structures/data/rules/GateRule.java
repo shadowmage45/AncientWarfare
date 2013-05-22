@@ -98,11 +98,13 @@ public static GateRule parseRule(List<String> lines)
 public List<String> getRuleLines()
   {
   List<String> lines = new ArrayList<String>();
+  lines.add("gate:");
   lines.add("pos1="+StringTools.getCSVStringForArray(new int[]{x1,y1,z1}));
   lines.add("pos2="+StringTools.getCSVStringForArray(new int[]{x2,y2,z2}));
   lines.add("team="+String.valueOf(teamNum));
   lines.add("type="+String.valueOf(this.gateType));
   lines.add("facing="+String.valueOf(facing));
+  lines.add(":endgate");
   return lines;
   }
 

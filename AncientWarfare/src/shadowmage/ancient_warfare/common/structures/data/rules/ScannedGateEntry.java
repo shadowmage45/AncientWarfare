@@ -46,6 +46,7 @@ public ScannedGateEntry(EntityGate g, BlockPosition pos, int face)
   pos2.y -= pos.y;
   pos2.z -= pos.z;
   facing = (byte) ((g.gateOrientation + BlockTools.getRotationAmount(face, 2)) %4);
+  Config.logDebug(String.format("scanning gate. input pos: %s, original pos' %s, %s, adj pos: %s, %s",pos, g.pos1, g.pos2, pos1, pos2));
   }
 
 public void normalizeForNorthFacing(int currentFacing, int xSize, int zSize)

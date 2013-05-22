@@ -38,6 +38,10 @@ public class GateRotatingBridge extends Gate
 public GateRotatingBridge(int id)
   {
   super(id);
+  this.displayName = "Rotating drawbridge";
+  this.tooltip = "Rotates downwards to open";
+  this.moveSpeed = 1.f;
+  this.texture = "gateWood1.png";
   }
 
 @Override
@@ -66,14 +70,21 @@ public void setCollisionBoundingBox(EntityGate gate)
     {
     case 0://z++
     pos3.z+=heightAdj;
+    break;
     case 1://x--
     pos3.x -= heightAdj;
+    break;
     case 2://z--
     pos3.z -= heightAdj;
+    break;
     case 3://x++
     pos3.x += heightAdj;
+    break;
     }
-    gate.boundingBox.setBounds(min.x, min.y, min.z, pos3.x+1, pos3.y+1, pos3.z+1);
+    BlockPosition minTemp = min.copy();
+    min = BlockTools.getMin(min, pos3);    
+    max = BlockTools.getMax(minTemp, pos3);
+    gate.boundingBox.setBounds(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);
     } 
   }
 
@@ -142,18 +153,25 @@ public void onGateFinishOpen(EntityGate gate)
   {
   case 0://z++
   pos3.z+=heightAdj;
+  break;
   case 1://x--
   pos3.x -= heightAdj;
+  break;
   case 2://z--
   pos3.z -= heightAdj;
+  break;
   case 3://x++
   pos3.x += heightAdj;
+  break;
   }
-  for(int x = min.x; x <= pos3.x; x++)
+  BlockPosition minTemp = min.copy();
+  min = BlockTools.getMin(min, pos3);    
+  max = BlockTools.getMax(minTemp, pos3);
+  for(int x = min.x; x <= max.x; x++)
     {
-    for(int y = min.y; y <=pos3.y; y++)
+    for(int y = min.y; y <=max.y; y++)
       {
-      for(int z = min.z; z<= pos3.z; z++)
+      for(int z = min.z; z<= max.z; z++)
         {
         id = gate.worldObj.getBlockId(x, y, z);
         if(id==0)
@@ -188,18 +206,25 @@ public void onGateStartClose(EntityGate gate)
   {
   case 0://z++
   pos3.z+=heightAdj;
+  break;
   case 1://x--
   pos3.x -= heightAdj;
+  break;
   case 2://z--
   pos3.z -= heightAdj;
+  break;
   case 3://x++
   pos3.x += heightAdj;
+  break;
   }
-  for(int x = min.x; x <= pos3.x; x++)
+  BlockPosition minTemp = min.copy();
+  min = BlockTools.getMin(min, pos3);    
+  max = BlockTools.getMax(minTemp, pos3);
+  for(int x = min.x; x <= max.x; x++)
     {
-    for(int y = min.y; y <=pos3.y; y++)
+    for(int y = min.y; y <=max.y; y++)
       {
-      for(int z = min.z; z<= pos3.z; z++)
+      for(int z = min.z; z<= max.z; z++)
         {
         id = gate.worldObj.getBlockId(x, y, z);
         if(id==BlockLoader.gateProxy.blockID)

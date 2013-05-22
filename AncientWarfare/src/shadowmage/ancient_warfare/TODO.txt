@@ -156,7 +156,14 @@ TWEAKS/OPTIMIZATION
 * add IGateType, Gate, EntityGate classes
 
 /********** 05-21-13 **********/
+* add more gate types
+* rework gates to use blocks for collision
+
 /********** 05-22-13 **********/
+* add gate scanning
+* add drawbridge type gate
+
+* cleanup a few minor foobars from work in scanning code
 /********** 05-23-13 **********/
 /********** 05-24-13 **********/
 /********** 05-25-13 **********/
