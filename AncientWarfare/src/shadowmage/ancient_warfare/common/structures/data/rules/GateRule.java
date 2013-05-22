@@ -110,12 +110,11 @@ public Entity getEntityToSpawn(World world, int facing, ProcessedStructure struc
   {  
   BlockPosition p1 = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x1-struct.xOffset,y1-struct.verticalOffset, z1-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
   BlockPosition p2 = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x2-struct.xOffset,y2-struct.verticalOffset, z2-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
-  EntityGate gate = Gate.constructGate(world, p1, p2, Gate.getGateByID(gateType));
+  EntityGate gate = Gate.constructGate(world, p1, p2, Gate.getGateByID(gateType), (byte) ((this.facing + BlockTools.getRotationAmount(2, facing)) % 4));
   if(teamNum>=0 && teamNum < 16)
     {
     gate.teamNum = teamNum;
     }
-  gate.gateOrientation = (byte) ((this.facing + BlockTools.getRotationAmount(2, facing)) % 4);
   return gate;
   }
 

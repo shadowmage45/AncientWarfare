@@ -46,6 +46,9 @@ public static final Gate singleIron = new GateSingleIron(5);
 public static final Gate doubleWood = new GateDoubleSlideWood(8);
 public static final Gate doubleIron = new GateDoubleIron(9);
 
+public static final Gate rotatingBridge = new GateRotatingBridge(12);
+
+
 protected int globalID = 0;
 protected String displayName = "";
 protected String tooltip = "";
@@ -140,11 +143,12 @@ public static Gate getGateByID(int id)
   return basicWood;
   }
 
-public static EntityGate constructGate(World world, BlockPosition pos1, BlockPosition pos2, Gate type)
+public static EntityGate constructGate(World world, BlockPosition pos1, BlockPosition pos2, Gate type, byte facing)
   {
   EntityGate ent = new EntityGate(world);
   ent.setGateType(type);
   ent.setHealth(type.getMaxHealth());
+  ent.gateOrientation = facing;
   type.setInitialBounds(ent, pos1, pos2);
   return ent;
   }

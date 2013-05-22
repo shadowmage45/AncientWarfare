@@ -49,6 +49,7 @@ import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
 import shadowmage.ancient_warfare.client.render.civic.CivicItemRenderer;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateBasic;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateDouble;
+import shadowmage.ancient_warfare.client.render.gate.RenderGateRotatingBridge;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateSingle;
 import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
 import shadowmage.ancient_warfare.client.render.missile.RenderShot;
@@ -211,7 +212,7 @@ public void loadRenders()
   this.addGateRender(5, new RenderGateSingle());
   this.addGateRender(8, new RenderGateDouble());
   this.addGateRender(9, new RenderGateDouble());
-  
+  this.addGateRender(12, new RenderGateRotatingBridge());
   
   /**
    * load up the vehicle item renderer...
