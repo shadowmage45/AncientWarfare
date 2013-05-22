@@ -11,13 +11,8 @@ GENERAL
 * check distance on items before scanning/building/placing/etc
 
 GATES
-* probably still need models for indiv. pieces    
-* use TE's in the gate proxy blocks
-    TE's check if gate ref is dead/null and remove themselves
-    TE's/blocks pass interact checks onto the gate
-    gate updates proxy blocks when placed/spawned/read from NBT/activated
-    * place blocks when completely closed
-    * remove all blocks when activated open
+* need structure scanning
+* need drawbridge type
 
 VEHICLES
 * clean up vehicle alpha rendering

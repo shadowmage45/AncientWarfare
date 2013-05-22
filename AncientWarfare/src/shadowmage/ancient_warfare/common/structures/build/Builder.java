@@ -45,6 +45,7 @@ import shadowmage.ancient_warfare.common.structures.data.StructureBB;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.GateRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
@@ -303,27 +304,6 @@ protected void placeBlock(World world, int x, int y, int z, int id, int meta)
   world.setBlockMetadataWithNotify(x, y, z, meta, 3);
   }
 
-///**
-// * used for instant builder during non-world-gen....
-// * @param world
-// * @param pos
-// * @param id
-// * @param meta
-// */
-//protected void placeBlockWithDefer(World world, int x, int y, int z, int id, int meta)
-//  {
-//  if(world.getBlockTileEntity(x, y, z)!=null)
-//    {
-//    world.setBlock(x, y, z, 0);    
-//    this.deferredBlocks.put(new BlockPosition(x,y,z), new BlockData(id, meta));  
-//    }
-//  else
-//    { 
-//    world.setBlock(x, y, z, id);
-//    world.setBlockMetadataWithNotify(x, y, z, meta, 3);
-//    }  
-//  }
-
 /**
  * 
  * @param world world in which to build
@@ -481,7 +461,10 @@ private void placeCivics(World world)
 
 private void placeGates(World world)
   {
-  
+  for(GateRule g : this.struct.gateRules)
+    {
+    world.spawnEntityInWorld(g.getEntityToSpawn(world, facing, struct, buildPos, this.overrideTeam));
+    }
   }
 
 /**

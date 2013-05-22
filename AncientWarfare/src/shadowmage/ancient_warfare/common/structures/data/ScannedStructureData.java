@@ -35,12 +35,16 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.GateRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.ScannedGateEntry;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -61,6 +65,7 @@ public int zSize;
 
 //public ArrayList<BlockData> blockIDs = new ArrayList<BlockData>();
 
+private List<ScannedGateEntry> includedGates = new ArrayList<ScannedGateEntry>();
 private List<ScannedEntityEntry> includedEntities = new ArrayList<ScannedEntityEntry>();
 protected List<CivicRule> scannedCivics = new ArrayList<CivicRule>();
 private HashMap<Integer, InventoryRule> inventoryRules = new HashMap<Integer, InventoryRule>();
@@ -172,6 +177,10 @@ public void scan(World world)
 
 protected void handleBlockScan(World world, int x, int y, int z, int ix, int iy, int iz, int id, int meta)
   { 
+  if(id==BlockLoader.gateProxy.blockID)
+    {
+    //NOOP
+    }
   if(id==BlockLoader.civicBlock1.blockID || id==BlockLoader.civicBlock2.blockID || id==BlockLoader.civicBlock3.blockID || id==BlockLoader.civicBlock4.blockID)
     {
     TileEntity te = world.getBlockTileEntity(x, y, z);
@@ -215,6 +224,12 @@ protected void scanForEntities(World world)
       z = (float) (e.posZ - pos1.z);
       this.includedEntities.add(new ScannedEntityEntry(e, x, y, z, e.rotationYaw, e.rotationPitch));
       }
+    else if( e instanceof EntityGate)
+      {
+      Config.logDebug("scanning gate: "+e);
+      ScannedGateEntry g = new ScannedGateEntry((EntityGate)e, this.buildKey);
+      this.includedGates.add(g);
+      }
     }
   }
 
@@ -252,10 +267,19 @@ private void normalizeForNorthFacing()
   this.zSize = newZSize;
   
   this.normalizeScannedEntities(newXSize, newZSize);
+  this.normailzeScannedGates(newXSize, newZSize);
   for(CivicRule rule : this.scannedCivics)
     {
     rule.normalizeForNorthFacing(originFacing, newXSize, newZSize);
     }  
+  }
+
+private void normailzeScannedGates(int xSize, int zSize)
+  {
+  for(ScannedGateEntry gate : this.includedGates)
+    {
+    gate.normalizeForNorthFacing(originFacing, xSize, zSize);    
+    }
   }
 
 private void normalizeScannedEntities(int xSize, int zSize)
@@ -384,7 +408,7 @@ public ProcessedStructure convertToProcessedStructure()
   this.addEntitiesToStructure(struct, includedEntities);
   this.addCivicsToStructrure(struct);
   this.addInventoryRulesToStructure(struct);
-  
+  this.addGateRulesToStructure(struct);
   /**
    * set the in-game template/default export template
    */
@@ -403,6 +427,14 @@ protected BlockRule getRuleFor(ProcessedStructure struct, int id, int meta)
       }
     }
   return null;
+  }
+
+protected void addGateRulesToStructure(ProcessedStructure struct)
+  {
+  for(ScannedGateEntry gate : this.includedGates)
+    {
+    struct.gateRules.add(GateRule.populateRule(gate));
+    }
   }
 
 protected void addInventoryRulesToStructure(ProcessedStructure struct)
