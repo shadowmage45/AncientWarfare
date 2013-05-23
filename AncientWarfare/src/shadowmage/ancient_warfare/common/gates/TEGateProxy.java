@@ -32,7 +32,7 @@ public class TEGateProxy extends TileEntity
 {
 
 
-EntityGate owner = null;
+public EntityGate owner = null;
 UUID entityID = null;
 int noParentTicks = 0;
 

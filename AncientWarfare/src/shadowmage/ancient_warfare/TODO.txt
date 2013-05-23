@@ -13,10 +13,14 @@ GENERAL
 GATES
 * need to not scan/build proxy blocks
 * when spawned from scanner, need to place default blocks
-* redstone interaction
+* bridge needs to leave lowest row of proxy blocks all the time
+* bridge needs to check area is clear before opening
+* validate player orientation when placing, ensure it is one of the two valid orientations for that pair of build positions
 
 VEHICLES
 * clean up vehicle alpha rendering
+* don't render nameplate of the vehicle you are riding (check mc.thePlayer == vehicle.riddenByEntity)
+* turret rotation while vehicle is turning is fooked
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
@@ -161,15 +165,18 @@ TWEAKS/OPTIMIZATION
 * rework gates to use blocks for collision
 
 /********** 05-22-13 **********/
-* add gate scanning
-* add drawbridge type gate
-
+* add gate scanning -- working
+* add drawbridge type gate -- working
 * cleanup a few minor foobars from work in scanning code
 * clean up bounding box code on drawbridge gate
 * fix drawbridge placement code
 * fix some render partial tick code
 
 /********** 05-23-13 **********/
+* soldier pathfinding/activation for gates
+* enable gate construction bounding box rendering
+
+
 /********** 05-24-13 **********/
 /********** 05-25-13 **********/
 /********** 05-26-13 **********/

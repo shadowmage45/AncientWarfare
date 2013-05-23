@@ -228,10 +228,9 @@ public boolean interact(EntityPlayer par1EntityPlayer)
     return true;
     }
   return false;
-//  return super.interact(par1EntityPlayer);
   }
 
-protected void activateGate()
+public void activateGate()
   {
   if(this.gateStatus==1)
     {

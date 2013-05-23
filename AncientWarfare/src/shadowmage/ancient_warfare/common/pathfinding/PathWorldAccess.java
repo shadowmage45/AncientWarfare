@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding;
 
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockStairs;
@@ -67,6 +68,22 @@ public boolean isWalkable(int x, int y, int z)
   if(this.checkColidingEntities(x, y, z))
     {
     return false;
+    }
+  else if(id==BlockLoader.gateProxy.blockID)
+    {
+    if(!canOpenDoors)//if can't open doors, auto fail
+      {
+      return false;
+      }
+    else if(!cube2 || (cube3 && id3!=BlockLoader.gateProxy.blockID) || id2==BlockLoader.gateProxy.blockID)
+      {
+      /**
+       * else fail out if block below is not solid, or block above IS solid but not a gate block
+       * or block below is a gate block (dont' walk in a gate block ON a gate block)
+       * (allow gate blocks because they are generally tall...)
+       */
+      return false;
+      }
     }
   else if(cube || !isPathable(id))//solid unpassable block, or lava
     { 
@@ -139,6 +156,10 @@ protected boolean isSolidBlock(int id)
     return true;
     }  
   else if(id== Block.woodSingleSlab.blockID || id == Block.stoneSingleSlab.blockID || id == Block.chest.blockID || id== Block.chestTrapped.blockID || id == Block.slowSand.blockID)
+    {
+    return true;
+    }
+  else if(id== BlockLoader.gateProxy.blockID)
     {
     return true;
     }

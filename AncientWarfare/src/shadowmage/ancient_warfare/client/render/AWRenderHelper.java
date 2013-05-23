@@ -40,6 +40,7 @@ import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.item.ItemBuilderBase;
 import shadowmage.ancient_warfare.common.item.ItemBuilderDirect;
 import shadowmage.ancient_warfare.common.item.ItemCivicPlacer;
+import shadowmage.ancient_warfare.common.item.ItemGateSpawner;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
@@ -249,6 +250,10 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
   else if(id==ItemLoader.civicPlacer.itemID)
     {
     this.renderScannerBB(player, stack, (ItemCivicPlacer)stack.getItem(), evt.partialTicks);
+    }
+  else if(id==ItemLoader.gateSpawner.itemID)
+    {
+    this.renderScannerBB(player, stack, (ItemGateSpawner)stack.getItem(), evt.partialTicks);
     }
   }
 

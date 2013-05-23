@@ -23,8 +23,6 @@ package shadowmage.ancient_warfare.common.pathfinding.navigator;
 import java.util.List;
 import java.util.Random;
 
-import cpw.mods.fml.common.WorldAccessContainer;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
@@ -32,7 +30,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.gates.EntityGate;
+import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 import shadowmage.ancient_warfare.common.interfaces.IEntityNavigator;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.network.Packet04Npc;
@@ -41,7 +42,6 @@ import shadowmage.ancient_warfare.common.pathfinding.EntityPath;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinderCrawler;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinderThetaStar;
-import shadowmage.ancient_warfare.common.pathfinding.PathManager;
 import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
@@ -61,6 +61,8 @@ protected EntityPath path;
 protected final Node finalTarget = new Node(0,0,0);
 public Node currentTarget;
 protected Random rng = new Random();
+
+protected EntityGate gate = null;
 protected boolean hasDoor = false;
 protected BlockPosition doorPos = new BlockPosition(0,0,0);
 protected int doorOpenTicks = 0;
@@ -163,6 +165,10 @@ protected void updateMoveHelper()
       this.hasDoor = false;
       this.interactWithDoor(doorPos, false);
       } 
+    }
+  if(this.gate!=null && this.doorOpenTicks<=0)
+    {
+    //close the gate
     }
   }
 
@@ -267,6 +273,11 @@ protected void doorInteraction()
         this.interactWithDoor(doorPos, true);
         this.doorOpenTicks = this.doorOpenMax;
         }
+      else if(gate!=null)
+        {
+        this.interactWithGate(true);
+        this.doorOpenTicks = this.doorOpenMax;
+        }
       }        
     }
   else
@@ -291,6 +302,16 @@ protected boolean checkForDoors(int ex, int ey, int ez)
     doorPos.y = ey;
     doorPos.z = ez;    
     hasDoor = true;
+    return true;
+    }
+  if(id==BlockLoader.gateProxy.blockID)
+    {
+    TEGateProxy proxy = (TEGateProxy) entity.worldObj.getBlockTileEntity(ex, ey, ez);
+    if(this.gate!=null)
+      {
+      this.interactWithGate(false);
+      }     
+    this.gate = proxy.owner;
     return true;
     }
   float yaw = entity.rotationYaw;
@@ -334,11 +355,37 @@ protected boolean checkForDoors(int ex, int ey, int ez)
     hasDoor = true;
     return true;
     }  
+  if(id==BlockLoader.gateProxy.blockID)
+    {
+    TEGateProxy proxy = (TEGateProxy) entity.worldObj.getBlockTileEntity(ex, ey, ez);
+    if(this.gate!=null)
+      {
+      this.interactWithGate(false);
+      }
+    this.gate = proxy.owner;
+    return true;
+    }
   return false;
   }
 
-protected void interactWithDoor(BlockPosition doorPos, boolean open)
+protected void interactWithGate(boolean open)
   {
+  if(gate.edgePosition>0 && !open)
+    {
+    gate.activateGate();
+    }
+  else if(gate.edgePosition==0 && open)
+    {
+    gate.activateGate();
+    }
+  if(!open)
+    {
+    this.gate = null;
+    }
+  }
+
+protected void interactWithDoor(BlockPosition doorPos, boolean open)
+  { 
   Block block = Block.blocksList[entity.worldObj.getBlockId(doorPos.x, doorPos.y, doorPos.z)];
   if(block==null)
     {
