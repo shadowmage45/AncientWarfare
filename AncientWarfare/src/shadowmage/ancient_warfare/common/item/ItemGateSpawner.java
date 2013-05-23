@@ -71,7 +71,6 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 	  byte facing = (byte) BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
     EntityGate entity = Gate.constructGate(world, new BlockPosition(tag.getCompoundTag("pos1")), new BlockPosition(tag.getCompoundTag("pos2")), Gate.getGateByID(stack.getItemDamage()), facing);
     entity.teamNum = TeamTracker.instance().getTeamForPlayer(player);
-    Gate.getGateByID(stack.getItemDamage()).onGateFinishClose(entity);
     world.spawnEntityInWorld(entity);
     Config.logDebug("registering gate use final--should build");
     /**

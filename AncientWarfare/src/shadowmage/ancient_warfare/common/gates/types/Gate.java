@@ -134,6 +134,12 @@ public String getTexture()
   return texture;
   }
 
+@Override
+public boolean canActivate(EntityGate gate, boolean open)
+  {
+  return true;
+  }
+
 public static Gate getGateByID(int id)
   {
   if(id>=0 && id<gateTypes.length)
@@ -148,8 +154,25 @@ public static EntityGate constructGate(World world, BlockPosition pos1, BlockPos
   EntityGate ent = new EntityGate(world);
   ent.setGateType(type);
   ent.setHealth(type.getMaxHealth());
+  if(pos1.x==pos2.x)
+    {
+    if(facing==1 || facing==3)
+      {
+      facing++;
+      facing %= 4;
+      }
+    }
+  else if(pos1.z==pos2.z)
+    {
+    if(facing==0 || facing==2)
+      {
+      facing++;
+      facing %= 4;
+      }
+    }
   ent.gateOrientation = facing;
   type.setInitialBounds(ent, pos1, pos2);
+  type.onGateFinishClose(ent);
   return ent;
   }
 

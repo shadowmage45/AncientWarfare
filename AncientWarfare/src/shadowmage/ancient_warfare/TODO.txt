@@ -9,17 +9,14 @@ GENERAL
 * ISidedInventory interaction for NPCs & containers
 * need to close inventories/containers when player gets too far away
 * check distance on items before scanning/building/placing/etc
+* setup civic inventories to use ISided for resource slots
+* new civic GUI with split resource slots
 
 GATES
-* need to not scan/build proxy blocks
-* when spawned from scanner, need to place default blocks
-* bridge needs to leave lowest row of proxy blocks all the time
-* bridge needs to check area is clear before opening
-* validate player orientation when placing, ensure it is one of the two valid orientations for that pair of build positions
+* might need to rework how bridge does blocks -- set to only remove 'lowered' blocks when it is fully closed?
 
 VEHICLES
 * clean up vehicle alpha rendering
-* don't render nameplate of the vehicle you are riding (check mc.thePlayer == vehicle.riddenByEntity)
 * turret rotation while vehicle is turning is fooked
 
 NPCS
@@ -27,10 +24,9 @@ NPCS
     use command baton, check if player has food in inventory && withdraw upkeep ?? 
 
 CIVICS
-* default routing broadcasting in civics for non-player towns (or how to handle them)?
-    add a single routing slot to the civic, broadcast to a courier that has no route points
-    will need changing of getActiveRoutePoint to not pull from list, but pull an active point
-* warehouse blocks need placement validation
+* make it so NPC civics don't actually harvest anything and don't need resources
+     (they have no upkeep..so no harvest needed)
+* NPC town hall will occasionally respawn missing NPCs    
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -42,7 +38,7 @@ WORLD GEN STUFF
 COMPLEXES
 * features--
         -min width
-        -max widht
+        -max width
         -min length
         -max length
         -amount of terrain leveling to do (will level or fill-in and replace top-blocks)
@@ -176,6 +172,12 @@ TWEAKS/OPTIMIZATION
 * soldier pathfinding/activation for gates
 * enable gate construction bounding box rendering
 
+* need to not scan/build proxy blocks
+* when spawned from scanner, need to place default blocks
+* bridge needs to leave lowest row of proxy blocks all the time
+* validate player orientation when placing, ensure it is one of the two valid orientations for that pair of build positions
+* warehouse blocks need placement validation (simple check for at least 2 air blocks on nsew directions)
+* bridge needs to check area is clear before opening
 
 /********** 05-24-13 **********/
 /********** 05-25-13 **********/

@@ -179,7 +179,7 @@ protected void handleBlockScan(World world, int x, int y, int z, int ix, int iy,
   { 
   if(id==BlockLoader.gateProxy.blockID)
     {
-    //NOOP
+    return;
     }
   if(id==BlockLoader.civicBlock1.blockID || id==BlockLoader.civicBlock2.blockID || id==BlockLoader.civicBlock3.blockID || id==BlockLoader.civicBlock4.blockID)
     {

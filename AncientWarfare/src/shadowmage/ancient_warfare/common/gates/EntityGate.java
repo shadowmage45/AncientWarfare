@@ -232,21 +232,21 @@ public boolean interact(EntityPlayer par1EntityPlayer)
 
 public void activateGate()
   {
-  if(this.gateStatus==1)
+  if(this.gateStatus==1 && this.gateType.canActivate(this, false))
     {
     this.setOpeningStatus((byte) -1);
     }
-  else if(this.gateStatus==-1)
+  else if(this.gateStatus==-1 && this.gateType.canActivate(this, true))
     {
     this.setOpeningStatus((byte) 1);
     }
-  else if(this.edgePosition == 0)
+  else if(this.edgePosition == 0 && this.gateType.canActivate(this, true))
     {
     this.setOpeningStatus((byte)1);
     }
-  else//gate is already open/opening, set to closing
+  else if(this.gateType.canActivate(this, false))//gate is already open/opening, set to closing
     {
-    this.setOpeningStatus((byte)-1);
+    this.setOpeningStatus((byte)-1 );
     }
   Config.logDebug("activating gate: "+this.gateStatus + " bb: "+this.boundingBox + " orientation: "+this.gateOrientation);
   }

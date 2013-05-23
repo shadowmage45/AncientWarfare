@@ -94,6 +94,46 @@ public static void adjustBounds(BlockPosition pos, int height, int facing)
   }
 
 @Override
+public boolean canActivate(EntityGate gate, boolean open)
+  {  
+  if(gate.pos1==null || gate.pos2==null){return false;}
+  if(!open)
+    {
+    return true;
+    }
+  else
+    {
+    boolean wideOnXAxis = gate.pos1.x!=gate.pos2.x;  
+    BlockPosition min = BlockTools.getMin(gate.pos1, gate.pos2);
+    BlockPosition max = BlockTools.getMax(gate.pos1, gate.pos2);
+    int heightAdj = max.y - min.y;
+    BlockPosition pos3 = max.copy();
+    pos3.y = min.y;
+    adjustBounds(pos3, heightAdj, gate.gateOrientation);    
+    BlockPosition minTemp = min.copy();
+    min = BlockTools.getMin(min, pos3);    
+    max = BlockTools.getMax(minTemp, pos3);
+    int id;
+    boolean badBlock = false;
+    for(int x = min.x; x<=max.x; x++)
+      {
+      for(int z = min.z; z<=max.z; z++)
+        {
+        id = gate.worldObj.getBlockId(x, min.y, z);
+        if(id!=0 && id!=BlockLoader.gateProxy.blockID)
+          {
+          badBlock = true;
+          break;
+          }
+        
+        }
+      if(badBlock){break;}
+      }
+    return !badBlock;
+    }  
+  }
+
+@Override
 public boolean arePointsValidPair(BlockPosition pos1, BlockPosition pos2)
   {
   return pos1.x == pos2.x || pos1.z == pos2.z;
@@ -127,10 +167,10 @@ public void onGateStartOpen(EntityGate gate)
   BlockPosition max = BlockTools.getMax(gate.pos1, gate.pos2);
   for(int x = min.x; x <= max.x; x++)
     {
-    for(int y = min.y; y <=max.y; y++)
+    for(int y = min.y+1; y <=max.y; y++)
       {
       for(int z = min.z; z<= max.z; z++)
-        {
+        {        
         id = gate.worldObj.getBlockId(x, y, z);
         if(id==BlockLoader.gateProxy.blockID)
           {
@@ -190,6 +230,7 @@ public void onGateStartClose(EntityGate gate)
   int id;
   BlockPosition min = BlockTools.getMin(gate.pos1, gate.pos2);
   BlockPosition max = BlockTools.getMax(gate.pos1, gate.pos2);
+  boolean widestOnXAxis = gate.pos1.x != gate.pos2.x;
   int heightAdj = max.y - min.y;
   BlockPosition pos3 = max.copy();
   pos3.y = min.y;
@@ -203,6 +244,10 @@ public void onGateStartClose(EntityGate gate)
       {
       for(int z = min.z; z<= max.z; z++)
         {
+        if((widestOnXAxis && z==gate.pos1.z) || (!widestOnXAxis && x==gate.pos1.x))
+          {
+          continue;
+          }
         id = gate.worldObj.getBlockId(x, y, z);
         if(id==BlockLoader.gateProxy.blockID)
           {

@@ -24,9 +24,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.IPlantable;
 import shadowmage.ancient_warfare.common.block.AWBlockBase;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
@@ -70,6 +73,44 @@ public void breakBlock(World world, int x, int y, int z, int id, int meta)
       }
     }
   super.breakBlock(world, x, y, z, id, meta);
+  }
+
+@Override
+public boolean canPlaceBlockAt(World world, int x, int y, int z)
+  {
+  boolean base = super.canPlaceBlockAt(world, x, y, z);
+  if(base)
+    {
+    int blocksFound = 0;
+    if(world.getBlockId(x-1, y, z)==this.blockID)
+      {
+      blocksFound++;
+      }
+    if(world.getBlockId(x+1, y, z)==this.blockID)
+      {
+      blocksFound++;
+      }
+    if(world.getBlockId(x, y, z-1)==this.blockID)
+      {
+      blocksFound++;
+      }
+    if(world.getBlockId(x-1, y, z+1)==this.blockID)
+      {
+      blocksFound++;
+      }
+    if(blocksFound>2)
+      {
+      base = false;
+      }
+    }  
+  return base;
+  }
+
+@Override
+public boolean canBlockStay(World par1World, int par2, int par3, int par4)
+  {
+  // TODO Auto-generated method stub
+  return super.canBlockStay(par1World, par2, par3, par4);
   }
 
 public static int getStorageSizeFromMeta(int meta)
