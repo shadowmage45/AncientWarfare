@@ -222,29 +222,34 @@ public boolean interact(EntityPlayer par1EntityPlayer)
     return false;
     }
   int pNum = TeamTracker.instance().getTeamForPlayer(par1EntityPlayer);
-  if(!TeamTracker.instance().isHostileTowards(worldObj, pNum, teamNum) && !TeamTracker.instance().isHostileTowards(worldObj, teamNum, pNum))
-    {    
-    if(this.gateStatus==1)
-      {
-      this.setOpeningStatus((byte) -1);
-      }
-    else if(this.gateStatus==-1)
-      {
-      this.setOpeningStatus((byte) 1);
-      }
-    else if(this.edgePosition == 0)
-      {
-      this.setOpeningStatus((byte)1);
-      }
-    else//gate is already open/opening, set to closing
-      {
-      this.setOpeningStatus((byte)-1);
-      }
-    Config.logDebug("activating gate: "+this.gateStatus + " bb: "+this.boundingBox + " orientation: "+this.gateOrientation);
+  if(!TeamTracker.instance().isHostileTowards(worldObj, pNum, teamNum) && !TeamTracker.instance().isHostileTowards(worldObj, teamNum, pNum) && !wasPowered)
+    {
+    this.activateGate();
     return true;
     }
   return false;
 //  return super.interact(par1EntityPlayer);
+  }
+
+protected void activateGate()
+  {
+  if(this.gateStatus==1)
+    {
+    this.setOpeningStatus((byte) -1);
+    }
+  else if(this.gateStatus==-1)
+    {
+    this.setOpeningStatus((byte) 1);
+    }
+  else if(this.edgePosition == 0)
+    {
+    this.setOpeningStatus((byte)1);
+    }
+  else//gate is already open/opening, set to closing
+    {
+    this.setOpeningStatus((byte)-1);
+    }
+  Config.logDebug("activating gate: "+this.gateStatus + " bb: "+this.boundingBox + " orientation: "+this.gateOrientation);
   }
 
 @Override
@@ -255,7 +260,7 @@ public void onUpdate()
   float prevEdge = this.edgePosition;
   this.setPosition(posX, posY, posZ);
 //  Config.logDebug(String.format("Gate Pos: %.2f, %.2f, %.2f.  client:%s", posX, posY, posZ, worldObj.isRemote));
-  
+  this.checkForPowerUpdates();
   if(this.hurtAnimationTicks>0)
     {
     this.hurtAnimationTicks--;
@@ -283,7 +288,27 @@ public void onUpdate()
   this.openingSpeed = prevEdge - this.edgePosition;
   }
 
+boolean wasPowered = false;
 
+protected void checkForPowerUpdates()
+  {
+  if(this.worldObj.isRemote)
+    {
+    return;
+    }
+  boolean foundPower = false;
+  int y = pos1.y;
+  y = pos2.y < y ? pos2.y : y;
+  if(this.worldObj.isBlockIndirectlyGettingPowered(pos1.x, y, pos1.z) || this.worldObj.isBlockIndirectlyGettingPowered(pos2.x, y, pos2.z))
+    {
+    foundPower = true;
+    }
+  if(foundPower!=wasPowered && !wasPowered)
+    {
+    this.activateGate();
+    }
+  this.wasPowered = foundPower;
+  }
 
 @Override
 public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
@@ -338,6 +363,7 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.setHealth(tag.getInteger("health"));
   this.gateStatus = tag.getByte("status");
   this.gateOrientation = tag.getByte("orient");
+  this.wasPowered = tag.getBoolean("power");
   }
 
 @Override
@@ -352,6 +378,7 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setInteger("health", this.getHealth());
   tag.setByte("status", this.gateStatus);
   tag.setByte("orient", gateOrientation);
+  tag.setBoolean("power", this.wasPowered);
   }
 
 @Override

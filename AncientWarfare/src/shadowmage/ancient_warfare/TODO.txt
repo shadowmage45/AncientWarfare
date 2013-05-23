@@ -11,8 +11,9 @@ GENERAL
 * check distance on items before scanning/building/placing/etc
 
 GATES
-* need structure scanning
-* need drawbridge type
+* need to not scan/build proxy blocks
+* when spawned from scanner, need to place default blocks
+* redstone interaction
 
 VEHICLES
 * clean up vehicle alpha rendering
