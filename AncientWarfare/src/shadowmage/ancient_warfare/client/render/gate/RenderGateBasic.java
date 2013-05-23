@@ -92,7 +92,7 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
       if(y + g.edgePosition <= height-0.475f)
         {
         GL11.glPushMatrix();
-        GL11.glTranslatef(0, -g.edgePosition + f1*g.openingSpeed, 0);
+        GL11.glTranslatef(0, -g.edgePosition - g.openingSpeed * (1-f1), 0);
         model.setModelRotation(axisRotation);
         if(g.getGateType().getModelType()==0)
           {

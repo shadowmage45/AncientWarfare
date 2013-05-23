@@ -68,7 +68,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   else if(tag.hasKey("pos1") && tag.hasKey("pos2"))
     {
 	  Config.logDebug("getting gate for damage: "+stack.getItemDamage() +" :: "+  Gate.getGateByID(stack.getItemDamage()));
-	  byte facing = (byte) ((BlockTools.getPlayerFacingFromYaw(player.rotationYaw) + 2) % 4);
+	  byte facing = (byte) BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
     EntityGate entity = Gate.constructGate(world, new BlockPosition(tag.getCompoundTag("pos1")), new BlockPosition(tag.getCompoundTag("pos2")), Gate.getGateByID(stack.getItemDamage()), facing);
     entity.teamNum = TeamTracker.instance().getTeamForPlayer(player);
     Gate.getGateByID(stack.getItemDamage()).onGateFinishClose(entity);

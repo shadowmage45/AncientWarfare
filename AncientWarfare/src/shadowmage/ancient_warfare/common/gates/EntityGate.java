@@ -240,7 +240,7 @@ public boolean interact(EntityPlayer par1EntityPlayer)
       {
       this.setOpeningStatus((byte)-1);
       }
-    Config.logDebug("activating gate: "+this.gateStatus + " bb: "+this.boundingBox);
+    Config.logDebug("activating gate: "+this.gateStatus + " bb: "+this.boundingBox + " orientation: "+this.gateOrientation);
     return true;
     }
   return false;

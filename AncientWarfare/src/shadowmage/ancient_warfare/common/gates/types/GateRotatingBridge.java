@@ -41,7 +41,7 @@ public GateRotatingBridge(int id)
   this.displayName = "Rotating drawbridge";
   this.tooltip = "Rotates downwards to open";
   this.moveSpeed = 1.f;
-  this.texture = "gateWood1.png";
+  this.texture = "gateBridgeWood1.png";
   }
 
 @Override
@@ -66,26 +66,31 @@ public void setCollisionBoundingBox(EntityGate gate)
     int heightAdj = max.y - min.y;
     BlockPosition pos3 = max.copy();
     pos3.y = min.y;
-    switch(gate.gateOrientation)
-    {
-    case 0://z++
-    pos3.z+=heightAdj;
-    break;
-    case 1://x--
-    pos3.x -= heightAdj;
-    break;
-    case 2://z--
-    pos3.z -= heightAdj;
-    break;
-    case 3://x++
-    pos3.x += heightAdj;
-    break;
-    }
+    adjustBounds(pos3, heightAdj, gate.gateOrientation);    
     BlockPosition minTemp = min.copy();
     min = BlockTools.getMin(min, pos3);    
     max = BlockTools.getMax(minTemp, pos3);
     gate.boundingBox.setBounds(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);
     } 
+  }
+
+public static void adjustBounds(BlockPosition pos, int height, int facing)
+  {
+  switch(facing)
+  {
+  case 0://z++
+  pos.z +=height;
+  break;
+  case 1://x--
+  pos.x -= height;
+  break;
+  case 2://z--
+  pos.z -= height;
+  break;
+  case 3://x++
+  pos.x += height;
+  break;
+  }
   }
 
 @Override
@@ -149,21 +154,7 @@ public void onGateFinishOpen(EntityGate gate)
   int heightAdj = max.y - min.y;
   BlockPosition pos3 = max.copy();
   pos3.y = min.y;
-  switch(gate.gateOrientation)
-  {
-  case 0://z++
-  pos3.z+=heightAdj;
-  break;
-  case 1://x--
-  pos3.x -= heightAdj;
-  break;
-  case 2://z--
-  pos3.z -= heightAdj;
-  break;
-  case 3://x++
-  pos3.x += heightAdj;
-  break;
-  }
+  adjustBounds(pos3, heightAdj, gate.gateOrientation);  
   BlockPosition minTemp = min.copy();
   min = BlockTools.getMin(min, pos3);    
   max = BlockTools.getMax(minTemp, pos3);
@@ -202,21 +193,7 @@ public void onGateStartClose(EntityGate gate)
   int heightAdj = max.y - min.y;
   BlockPosition pos3 = max.copy();
   pos3.y = min.y;
-  switch(gate.gateOrientation)
-  {
-  case 0://z++
-  pos3.z+=heightAdj;
-  break;
-  case 1://x--
-  pos3.x -= heightAdj;
-  break;
-  case 2://z--
-  pos3.z -= heightAdj;
-  break;
-  case 3://x++
-  pos3.x += heightAdj;
-  break;
-  }
+  adjustBounds(pos3, heightAdj, gate.gateOrientation);  
   BlockPosition minTemp = min.copy();
   min = BlockTools.getMin(min, pos3);    
   max = BlockTools.getMax(minTemp, pos3);

@@ -90,7 +90,7 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
       boolean render = false;
       if(x < width * 0.5f)
         {
-        move = -g.edgePosition +g.openingSpeed*f1;
+        move = -g.edgePosition - g.openingSpeed * (1-f1);
         if( x + move > -0.5f)
           {
           render = true;
@@ -98,7 +98,7 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
         }
       else
         {
-        move = g.edgePosition -g.openingSpeed*f1;
+        move = g.edgePosition + g.openingSpeed * (1-f1);
         if(x+move <= width-0.475f)
           {
           render = true;

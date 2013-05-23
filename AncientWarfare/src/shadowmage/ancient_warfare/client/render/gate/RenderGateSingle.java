@@ -88,8 +88,8 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
         }
       
       boolean opensReverse = g.pos1.x > g.pos2.x || g.pos1.z > g.pos2.z;
-      float wallTx = wideOnXAxis ? g.edgePosition - g.openingSpeed*f1 : 0;
-      float wallTz = wideOnXAxis ? 0 : g.edgePosition - g.openingSpeed*f1;
+      float wallTx = wideOnXAxis ? g.edgePosition + g.openingSpeed * (1-f1) : 0;
+      float wallTz = wideOnXAxis ? 0 : g.edgePosition + g.openingSpeed * (1-f1);
       boolean render = false;
       if(opensReverse)
         {

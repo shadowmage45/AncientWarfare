@@ -164,6 +164,10 @@ TWEAKS/OPTIMIZATION
 * add drawbridge type gate
 
 * cleanup a few minor foobars from work in scanning code
+* clean up bounding box code on drawbridge gate
+* fix drawbridge placement code
+* fix some render partial tick code
+
 /********** 05-23-13 **********/
 /********** 05-24-13 **********/
 /********** 05-25-13 **********/
