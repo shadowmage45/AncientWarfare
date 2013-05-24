@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
@@ -74,6 +76,9 @@ CivicWorkType getWorkType();
 int getMaxWorkSizeWidth();
 int getMaxWorkSizeHeight();
 int getMaxWorkAreaCube();
+
+int getResourceSlotSize();
+List<ItemStack> getResourceItemFilters();
 
 boolean isWorkSite();
 boolean isDepository();

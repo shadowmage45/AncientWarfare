@@ -33,7 +33,7 @@ protected TargetType type;
 protected int x;
 protected int y; 
 protected int z;
-protected int side = -1;
+private int side = -1;
 
 public TargetPosition(NBTTagCompound tag)
   {
@@ -56,7 +56,7 @@ public TargetPosition(int x, int y, int z, TargetType type)
 public TargetPosition(int x, int y, int z, int side, TargetType type)
   {
   this(x,y,z,type);
-  this.side = side;
+  this.setSide(side);
   }
 
 public boolean isTargetLoaded(World world)
@@ -125,7 +125,7 @@ public NBTTagCompound getNBTTag()
   NBTTagCompound tag = new NBTTagCompound();
   tag.setInteger("t", this.type.ordinal());
   tag.setIntArray("pos", new int[]{x,y,z});
-  tag.setInteger("s", side);
+  tag.setInteger("s", getSide());
   return tag;
   }
 
@@ -134,7 +134,7 @@ public void readFromNBT(NBTTagCompound tag)
   {
   this.type = TargetType.values()[tag.getInteger("t")];
   int[] pos = tag.getIntArray("pos");  
-  this.side = tag.getInteger("s");  
+  this.setSide(tag.getInteger("s"));  
   this.x = pos[0];
   this.y = pos[1];
   this.z = pos[2];
@@ -160,6 +160,22 @@ public static TargetPosition getNewTarget(Entity ent, TargetType type)
 public static TargetPosition getNewTarget(int x, int y, int z, TargetType type)
   {
   return new TargetPosition(x,y,z, type);
+  }
+
+/**
+ * @return the side
+ */
+public int getSide()
+  {
+    return side;
+  }
+
+/**
+ * @param side the side to set
+ */
+public void setSide(int side)
+  {
+    this.side = side;
   }
 
 }

@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
@@ -103,12 +106,14 @@ protected String itemIconTexture = "";
 protected int maxWorkers = 1;
 protected int workSizeMaxHorizontal = 10;
 protected int workSizeMaxHeight = 2;
+protected int resourceSlotSize = 0;
 protected boolean isWorkSite = false;
 protected boolean isDepository = false;
 protected boolean isDwelling = false;
 protected boolean addToCreative = true;
 protected Class<? extends TECivic> teClass;
 protected ItemStack displayStackCache = null;
+protected List<ItemStack> resourceStackList = new ArrayList<ItemStack>();
 protected int inventorySize = 0;
 protected String[] blockIconNames = new String[]{"","",""};
 protected CivicWorkType workType = CivicWorkType.NONE;
@@ -246,6 +251,18 @@ public CivicWorkType getWorkType()
 public boolean addToCreativeMenu()
   {
   return addToCreative;
+  }
+
+@Override
+public int getResourceSlotSize()
+  {
+  return resourceSlotSize;
+  }
+
+@Override
+public List<ItemStack> getResourceItemFilters()
+  {
+  return resourceStackList;
   }
 
 }

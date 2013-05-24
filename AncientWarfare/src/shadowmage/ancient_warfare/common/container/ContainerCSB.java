@@ -100,7 +100,6 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("name"))
     {
-//    Config.logDebug("setting name " + tag.getString("name"));
     this.serverSettings.name = tag.getString("name");
     }
   }

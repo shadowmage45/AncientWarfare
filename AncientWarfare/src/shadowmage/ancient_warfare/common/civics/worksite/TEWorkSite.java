@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public abstract class TEWorkSite extends TECivic
 {
@@ -132,6 +133,23 @@ protected void addWorkPoint(int x, int y, int z, TargetType work)
 protected void addWorkPoint(Entity ent, TargetType work)
   {
   this.workPoints.add(new WorkPoint(ent, work));
+  }
+
+@Override
+public boolean isStackValidForSlot(int i, ItemStack itemstack)
+  {
+  if(i>=0 && i <this.getCivic().getResourceSlotSize())
+    {
+    for(ItemStack stack : this.getCivic().getResourceItemFilters())
+      {
+      if(InventoryTools.doItemsMatch(itemstack, stack))
+        {
+        return true;
+        }
+      }
+    return false;
+    }
+  return true;
   }
 
 }

@@ -44,7 +44,7 @@ public WayPoint(WayPoint p)
   this.x = p.x;
   this.y = p.y;
   this.z = p.z;
-  this.side = p.side;
+  this.setSide(p.getSide());
   this.entTarget = p.entTarget;
   this.entityID = p.entityID;
   }
@@ -55,7 +55,7 @@ public WayPoint(TileEntity te, int side, TargetType t)
   this.x = te.xCoord;
   this.y = te.yCoord;
   this.z = te.zCoord;
-  this.side = side;  
+  this.setSide(side);  
   }
 
 protected WayPoint(TargetType type)

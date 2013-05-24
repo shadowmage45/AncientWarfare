@@ -27,10 +27,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
 
-public class ContainerCivicTE extends ContainerBase
+public class ContainerCivicTESided extends ContainerBase
 {
 
 TECivic teBase;
@@ -39,13 +37,11 @@ TECivic teBase;
  * @param openingPlayer
  * @param synch
  */
-public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
+public ContainerCivicTESided(EntityPlayer openingPlayer, TECivic te)
   {
   super(openingPlayer, null);
-//  Config.logDebug("opening te container..client: "+openingPlayer.worldObj.isRemote);
   this.teBase = te;
-  //add player slots
-  //add te slots
+  
   int y;
   int x;
   int slotNum;
@@ -53,6 +49,8 @@ public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
   int yPos;
 
   this.addPlayerSlots(openingPlayer, 8, 158, 4);    
+  
+  
   
   for(y = 0; y < te.getSizeInventory()/9; y++)
     {
@@ -68,6 +66,9 @@ public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
         }
       }
     }  
+   
+  
+  
   }
 
 @Override
@@ -111,19 +112,18 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
   return slotStackCopy;
   }
 
-
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
   // TODO Auto-generated method stub
-
+  
   }
 
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
   // TODO Auto-generated method stub
-
+  
   }
 
 @Override
@@ -132,5 +132,7 @@ public List<NBTTagCompound> getInitData()
   // TODO Auto-generated method stub
   return null;
   }
+
+ 
 
 }

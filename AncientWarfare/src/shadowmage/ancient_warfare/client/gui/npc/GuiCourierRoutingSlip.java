@@ -26,6 +26,7 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
@@ -208,13 +209,13 @@ protected void addButtonsFor(int index, WayPointItemRouting point)
       {
       BlockCivic blockC = (BlockCivic)block;
       slot.setItemStack(CivicRegistry.instance().getItemFor(blockC.blockNum, meta));
-      slot.addToToolitp("Routing Waypoint: "+point.floorX()+", "+point.floorY()+", "+point.floorZ()); 
+      slot.addToToolitp("Routing Waypoint: "+point.floorX()+", "+point.floorY()+", "+point.floorZ() + "  Side: "+ForgeDirection.getOrientation(point.getSide())); 
       slot.addToToolitp(slot.getStack().getDisplayName());
       }
     else
       {
       slot.setItemStack(new ItemStack(block,1,meta));
-      slot.addToToolitp("Routing Waypoint: "+point.floorX()+", "+point.floorY()+", "+point.floorZ()); 
+      slot.addToToolitp("Routing Waypoint: "+point.floorX()+", "+point.floorY()+", "+point.floorZ() + "  Side: "+ForgeDirection.getOrientation(point.getSide())); 
       slot.addToToolitp(slot.getStack().getDisplayName());
       }
     }

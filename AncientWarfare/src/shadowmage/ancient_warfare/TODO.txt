@@ -11,6 +11,7 @@ GENERAL
 * check distance on items before scanning/building/placing/etc
 * setup civic inventories to use ISided for resource slots
 * new civic GUI with split resource slots
+* add input/filter box to structure builder guis (and crafting/selection guis later on.....)
 
 GATES
 * might need to rework how bridge does blocks -- set to only remove 'lowered' blocks when it is fully closed?
