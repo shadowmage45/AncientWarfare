@@ -301,16 +301,16 @@ public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int sid
   {
   if(side<0 || side>5)
     {
-    return tryMergeStack(inv, toMerge, getSlotIndicesForEntireInventory(inv));
+    return tryMergeStack(inv, toMerge, getSlotIndexMap(inv));
     }
   if(inv instanceof ISidedInventory)
     {
     return tryMergeStack(inv, toMerge, ((ISidedInventory)inv).getSizeInventorySide(side));
     }
-  return tryMergeStack(inv, toMerge, getSlotIndicesForEntireInventory(inv));
+  return tryMergeStack(inv, toMerge, getSlotIndexMap(inv));
   }
 
-public static int[] getSlotIndicesForEntireInventory(IInventory inv)
+public static int[] getSlotIndexMap(IInventory inv)
   {
   int[] indices = new int[inv.getSizeInventory()];
   for(int i = 0; i < indices.length; i++)

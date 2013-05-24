@@ -5,11 +5,8 @@ THIS WEEK
 THIS(next) WEEKEND
 
 GENERAL
-* add onInventoryChanged() calls to any AI that modifies inventories
-* ISidedInventory interaction for NPCs & containers
 * need to close inventories/containers when player gets too far away
 * check distance on items before scanning/building/placing/etc
-* setup civic inventories to use ISided for resource slots
 * new civic GUI with split resource slots
 * add input/filter box to structure builder guis (and crafting/selection guis later on.....)
 
@@ -19,11 +16,13 @@ GATES
 
 VEHICLES
 * clean up vehicle alpha rendering
+* auto aim on vehicles needs entity-hit height adjustment re-added/unbroken
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
     use command baton, check if player has food in inventory && withdraw upkeep ?? 
-* soldier aim while on vehicles could still use attention (cheat?)    
+* soldier aim while on vehicles could still use attention (cheat?) 
+    how to deal with hopping entities ?   
 
 CIVICS
 * make it so NPC civics don't actually harvest anything and don't need resources
@@ -195,6 +194,9 @@ TWEAKS/OPTIMIZATION
 * add sided inventory code to work site TEs
 * add resource items to civic work sites
 * add resource slot size to civic work sites
+
+* add onInventoryChanged() calls to any AI that modifies inventories
+* add range-validation to civic, npc, vehicle containers
 
 /********** 05-25-13 **********/
 /********** 05-26-13 **********/

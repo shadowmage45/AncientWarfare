@@ -265,6 +265,10 @@ public void detectAndSendChanges()
   super.detectAndSendChanges();
   }
 
-
+@Override
+public boolean canInteractWith(EntityPlayer var1)
+  {
+  return super.canInteractWith(var1) && var1!=null && var1.getDistance(te.xCoord+0.5d, te.yCoord, te.zCoord+0.5d) < 5.d;
+  }
 
 }

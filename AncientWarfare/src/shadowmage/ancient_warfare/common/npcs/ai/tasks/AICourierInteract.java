@@ -77,6 +77,8 @@ public void onTick()
       {
       npc.setActionTicksToMax();
       }
+    target.onInventoryChanged();
+    npc.inventory.onInventoryChanged();
     }
   }
 

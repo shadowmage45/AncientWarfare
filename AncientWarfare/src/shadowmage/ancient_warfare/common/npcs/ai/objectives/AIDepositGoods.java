@@ -180,6 +180,8 @@ public void onRunningTick()
       }
     this.isFinished = true;
     this.cooldownTicks = this.maxCooldownticks;
+    targetInventory.onInventoryChanged();
+    npc.inventory.onInventoryChanged();
     }
   }
 

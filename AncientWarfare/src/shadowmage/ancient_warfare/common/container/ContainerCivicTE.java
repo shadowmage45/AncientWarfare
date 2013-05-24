@@ -138,4 +138,11 @@ public List<NBTTagCompound> getInitData()
   return null;
   }
 
+@Override
+public boolean canInteractWith(EntityPlayer var1)
+  {
+  return super.canInteractWith(var1) && var1!=null && var1.getDistance(teBase.xCoord+0.5d, teBase.yCoord, teBase.zCoord+0.5d) < 5.d;
+  }
+
+
 }

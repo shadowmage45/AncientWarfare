@@ -187,7 +187,6 @@ protected void attemptUpkeepWithdrawal()
       {
       if(InventoryTools.containsAtLeast(upkeepTarget, extra, extra.stackSize, 0, upkeepTarget.getSizeInventory()-1))
         {
-        doWithdrawal = true;
         InventoryTools.tryRemoveItems(upkeepTarget, extra, extra.stackSize, 0, upkeepTarget.getSizeInventory()-1);
         }
       else
@@ -200,6 +199,7 @@ protected void attemptUpkeepWithdrawal()
     {
     InventoryTools.tryRemoveFoodValue(upkeepTarget, 0, upkeepTarget.getSizeInventory()-1, neededValue);
     npc.npcUpkeepTicks = Config.npcUpkeepTicks;
+    upkeepTarget.onInventoryChanged();
     this.setFinished();
     }
   }
