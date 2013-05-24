@@ -24,7 +24,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
@@ -64,21 +63,34 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   if(isShiftClick(player))
     {
     tag = new NBTTagCompound();
+    stack.setTagCompound(tag);
     }
   else if(tag.hasKey("pos1") && tag.hasKey("pos2"))
     {
-	  Config.logDebug("getting gate for damage: "+stack.getItemDamage() +" :: "+  Gate.getGateByID(stack.getItemDamage()));
 	  byte facing = (byte) BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
     EntityGate entity = Gate.constructGate(world, new BlockPosition(tag.getCompoundTag("pos1")), new BlockPosition(tag.getCompoundTag("pos2")), Gate.getGateByID(stack.getItemDamage()), facing);
-    entity.teamNum = TeamTracker.instance().getTeamForPlayer(player);
-    world.spawnEntityInWorld(entity);
-    Config.logDebug("registering gate use final--should build");
-    /**
-     * do nothing, wait for right click for build order
-     */
-    return false;
+    if(entity!=null)
+      {
+      entity.teamNum = TeamTracker.instance().getTeamForPlayer(player);
+      world.spawnEntityInWorld(entity);
+      if(!player.capabilities.isCreativeMode)
+        {
+        ItemStack item = player.getHeldItem();
+        if(item!=null)
+          {
+          item.stackSize--;
+          if(item.stackSize<=0)
+            {          
+            player.setCurrentItemOrArmor(0, null);
+            }
+          }
+        }
+      }
+    else
+      {
+      player.addChatMessage("Chosen area is not clear!!");
+      }
     }
-  stack.setTagCompound(tag);
   return false;
   }
 

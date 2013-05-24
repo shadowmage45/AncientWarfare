@@ -78,6 +78,10 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   NBTTagCompound tag;
   for(StructureClientInfo c : info)
     {    
+    if(!c.survival)
+      {
+      continue;
+      }
     stack = new ItemStack(this,1);
     tag = new NBTTagCompound();
     tag.setString("name", c.name);
@@ -111,6 +115,7 @@ public boolean attemptConstruction(World world, ProcessedStructure struct, Block
 //      te.setTicket(tk);
 //      }
     struct.addBuilder(builder);
+    
     return true;
     }  
   return false;

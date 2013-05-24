@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.gates.IGateType;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public abstract class Gate implements IGateType
 {
@@ -157,9 +158,33 @@ public static Gate getGateByID(int id)
   return basicWood;
   }
 
+/**
+ * 
+ * @param world
+ * @param pos1
+ * @param pos2
+ * @param type
+ * @param facing
+ * @return a fully setup gate, or null if chosen spawn position is invalid (blocks in the way) 
+ */
 public static EntityGate constructGate(World world, BlockPosition pos1, BlockPosition pos2, Gate type, byte facing)
   {
   EntityGate ent = new EntityGate(world);
+  BlockPosition min = BlockTools.getMin(pos1, pos2);
+  BlockPosition max = BlockTools.getMax(pos1, pos2);
+  for(int x = min.x; x <=max.x ;x++)
+    {
+    for(int y = min.y; y <=max.y ;y++)
+      {
+      for(int z = min.z; z <=max.z ;z++)
+        {
+        if(world.getBlockId(x, y, z)!=0)
+          {
+          return null;
+          }
+        }
+      }
+    }
   ent.setGateType(type);
   ent.setHealth(type.getMaxHealth());
   if(pos1.x==pos2.x)
@@ -177,7 +202,7 @@ public static EntityGate constructGate(World world, BlockPosition pos1, BlockPos
       facing++;
       facing %= 4;
       }
-    }
+    }  
   ent.gateOrientation = facing;
   type.setInitialBounds(ent, pos1, pos2);
   type.onGateFinishClose(ent);

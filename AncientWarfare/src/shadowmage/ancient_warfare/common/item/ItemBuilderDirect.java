@@ -110,7 +110,6 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
 @Override
 public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) 
   {
-  boolean openGUI = false;
   if(world.isRemote)
     {
     return;

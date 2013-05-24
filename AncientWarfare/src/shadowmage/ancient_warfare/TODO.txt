@@ -5,14 +5,12 @@ THIS WEEK
 THIS(next) WEEKEND
 
 GENERAL
-* need to close inventories/containers when player gets too far away
 * check distance on items before scanning/building/placing/etc
 * new civic GUI with split resource slots
-* add input/filter box to structure builder guis (and crafting/selection guis later on.....)
+* add name search/filter box to structure builder guis (and crafting/selection guis later on.....)
 
 GATES
 * might need to rework how bridge does blocks -- set to only remove 'lowered' blocks when it is fully closed?
-* validate entire spawn area is clear before spawning
 
 VEHICLES
 * clean up vehicle alpha rendering
@@ -25,8 +23,7 @@ NPCS
     how to deal with hopping entities ?   
 
 CIVICS
-* make it so NPC civics don't actually harvest anything and don't need resources
-     (they have no upkeep..so no harvest needed)
+* figure out method for NPC civics to 'function' besides disallowing entirely
 * NPC town hall will occasionally respawn missing NPCs    
 
 WORLD GEN STUFF
@@ -197,6 +194,10 @@ TWEAKS/OPTIMIZATION
 
 * add onInventoryChanged() calls to any AI that modifies inventories
 * add range-validation to civic, npc, vehicle containers
+
+* add stack size reduction code to useable items (spawners)
+* only add civic-builder items if structure is available in survival mode
+* validate entire gate spawn area is clear before spawning
 
 /********** 05-25-13 **********/
 /********** 05-26-13 **********/

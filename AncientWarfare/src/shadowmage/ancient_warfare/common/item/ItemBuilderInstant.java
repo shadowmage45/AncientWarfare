@@ -175,6 +175,21 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player,  ItemStack stac
       {
       player.addChatMessage("Structure is currently locked for editing!!");
       }
+    else
+      {
+      if(!player.capabilities.isCreativeMode)
+        {
+        ItemStack item = player.getHeldItem();
+        if(item!=null)
+          {
+          item.stackSize--;
+          if(item.stackSize<=0)
+            {          
+            player.setCurrentItemOrArmor(0, null);
+            }
+          }
+        }
+      }
     }
   return true;
   }
