@@ -185,7 +185,12 @@ TWEAKS/OPTIMIZATION
 * fix warehouse storage block placement code
 * clean up vehicle turret rotation while turning the vehicle
 
+* prep work on te sided inventory code
+
 /********** 05-24-13 **********/
+* implement te sided inventory
+* implement courier waypoint sided inventory interaction
+
 /********** 05-25-13 **********/
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/

@@ -175,72 +175,12 @@ protected int filterContains(ItemStack stack)
 
 protected boolean doAllOf(IInventory source, IInventory target)
   { 
-  boolean shouldContinue = false;
-  ItemStack stack;
-  int[] sourceSlots = null;
-  int[] targetSlots = null;
-  if(source instanceof ISidedInventory)
-    {
-    sourceSlots = ((ISidedInventory)source).getSizeInventorySide(getSide());
-    }
-  if(target instanceof ISidedInventory)
-    {
-    targetSlots = ((ISidedInventory)target).getSizeInventorySide(getSide());
-    }
-  int sourceSize = sourceSlots !=null ? sourceSlots.length : source.getSizeInventory();
-  int sourceIndex;
-  for(int i = 0; i < sourceSize; i++)
-    {
-    sourceIndex = sourceSlots !=null ? sourceSlots[i] : i;    
-    stack = source.getStackInSlot(sourceIndex);
-    if(filterContains(stack)>0)
-      {
-      shouldContinue = true;
-      stack = InventoryTools.tryMergeStack(target, stack, targetSlots);      
-      if(stack!=null)
-        {
-        shouldContinue = false;        
-        }
-      source.setInventorySlotContents(i, stack);
-      break;      
-      }
-    }  
-  return shouldContinue;
+  return doTransaction(source, target, false, false);
   }
 
 protected boolean doAllExact(IInventory source, IInventory target)
   {  
-  boolean shouldContinue = false;
-  ItemStack stack;
-  int[] sourceSlots = null;
-  int[] targetSlots = null;
-  if(source instanceof ISidedInventory)
-    {
-    sourceSlots = ((ISidedInventory)source).getSizeInventorySide(getSide());
-    }
-  if(target instanceof ISidedInventory)
-    {
-    targetSlots = ((ISidedInventory)target).getSizeInventorySide(getSide());
-    }
-  int sourceSize = sourceSlots !=null ? sourceSlots.length : source.getSizeInventory();
-  int sourceIndex;
-  for(int i = 0; i < sourceSize; i++)
-    {
-    sourceIndex = sourceSlots !=null ? sourceSlots[i] : i;    
-    stack = source.getStackInSlot(sourceIndex);
-    if(filterContains(stack)==stack.stackSize)
-      {
-      shouldContinue = true;
-      stack = InventoryTools.tryMergeStack(target, stack, targetSlots);      
-      if(stack!=null)
-        {
-        shouldContinue = false;        
-        }
-      source.setInventorySlotContents(i, stack);
-      break;      
-      }
-    }  
-  return shouldContinue;
+  return doTransaction(source, target, true, false);
   }
 
 protected boolean doFillTo(IInventory source, IInventory target)
@@ -277,7 +217,7 @@ protected boolean doFillTo(IInventory source, IInventory target)
           {
           //merge entire stack
           shouldContinue = true;
-          stack = InventoryTools.tryMergeStack(target, stack, targetSlots);
+          stack = InventoryTools.tryMergeStack(target, stack, getSide());
           if(stack!=null)
             {
             shouldContinue = false;
@@ -289,7 +229,7 @@ protected boolean doFillTo(IInventory source, IInventory target)
           shouldContinue = true;
           ItemStack split = stack.splitStack(needed);
           source.setInventorySlotContents(sourceIndex, stack);
-          split = InventoryTools.tryMergeStack(target, split, targetSlots);
+          split = InventoryTools.tryMergeStack(target, split, getSide());
           if(split!=null)
             {
             InventoryTools.tryMergeStack(source, split, sourceSlots);
@@ -308,6 +248,11 @@ protected boolean doFillTo(IInventory source, IInventory target)
 
 protected boolean doAllExcept(IInventory source, IInventory target)
   {
+  return doTransaction(source, target, false, true);
+  }
+
+protected boolean doTransaction(IInventory source, IInventory target, boolean exact, boolean except)
+  {
   boolean shouldContinue = false;
   ItemStack stack;
   int[] sourceSlots = null;
@@ -322,14 +267,17 @@ protected boolean doAllExcept(IInventory source, IInventory target)
     }
   int sourceSize = sourceSlots !=null ? sourceSlots.length : source.getSizeInventory();
   int sourceIndex;
+  int found;
   for(int i = 0; i < sourceSize; i++)
     {
     sourceIndex = sourceSlots !=null ? sourceSlots[i] : i;    
     stack = source.getStackInSlot(sourceIndex);
-    if(filterContains(stack)==-1)
+    if(stack==null){continue;}
+    found = filterContains(stack);
+    if( shouldTransact(found, stack.stackSize, exact, except) )
       {
       shouldContinue = true;
-      stack = InventoryTools.tryMergeStack(target, stack, targetSlots);      
+      stack = InventoryTools.tryMergeStack(target, stack, getSide());      
       if(stack!=null)
         {
         shouldContinue = false;        
@@ -341,27 +289,30 @@ protected boolean doAllExcept(IInventory source, IInventory target)
   return shouldContinue;
   }
 
+protected boolean shouldTransact(int found, int stackSize, boolean exact, boolean except)
+  {
+  if(except && !exact && found==-1)
+    {
+    return true;
+    }
+  else if(except && exact && found!=stackSize)
+    {
+    return true;
+    }
+  else if(!exact && !except)
+    {
+    return found>0;
+    }
+  else if(exact && !except)
+    {
+    return found==stackSize;
+    }
+  return false;
+  }
+
 protected boolean doAllExceptExact(IInventory source, IInventory target)
   {
-  boolean shouldContinue = false;
-  ItemStack stack;
-  for(int i = 0; i < source.getSizeInventory(); i++)
-    {
-    stack = source.getStackInSlot(i);
-    if(stack==null){continue;}
-    if(filterContains(stack)!=stack.stackSize)
-      {
-      shouldContinue = true;
-      stack = InventoryTools.tryMergeStack(target, stack, 0, target.getSizeInventory()-1);
-      if(stack!=null)
-        {
-        shouldContinue = false;        
-        }
-      source.setInventorySlotContents(i, stack);
-      break;      
-      }
-    }  
-  return shouldContinue;
+  return doTransaction(source, target, true, true);
   }
 
 @Override

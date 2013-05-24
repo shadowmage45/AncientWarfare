@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -294,6 +295,19 @@ public static int getEmptySlots(IInventory inv, int firstSlot, int lastSlot)
       }
     }
   return count;
+  }
+
+public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int side)
+  {
+  if(side<0 || side>5)
+    {
+    return tryMergeStack(inv, toMerge, 0, inv.getSizeInventory()-1);
+    }
+  if(inv instanceof ISidedInventory)
+    {
+    return tryMergeStack(inv, toMerge, ((ISidedInventory)inv).getSizeInventorySide(side));
+    }
+  return tryMergeStack(inv, toMerge, 0, inv.getSizeInventory()-1);
   }
 
 /**
