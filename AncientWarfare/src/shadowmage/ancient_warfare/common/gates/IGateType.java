@@ -97,6 +97,8 @@ public boolean arePointsValidPair(BlockPosition pos1, BlockPosition pos2);
 
 public boolean canActivate(EntityGate gate, boolean open);
 
+public boolean canSoldierActivate();
+
 public int getModelType();
 
 public ItemStack getConstructingItem();

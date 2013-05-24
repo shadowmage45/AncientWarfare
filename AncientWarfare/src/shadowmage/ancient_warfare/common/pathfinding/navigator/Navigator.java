@@ -168,7 +168,8 @@ protected void updateMoveHelper()
     }
   if(this.gate!=null && this.doorOpenTicks<=0)
     {
-    //close the gate
+    this.interactWithGate(false);
+    this.gate = null;
     }
   }
 
@@ -267,14 +268,17 @@ protected void doorInteraction()
     {
     this.doorCheckTicks = this.doorCheckTicksMax;
     if(this.entity.isCollidedHorizontally && checkForDoors(ex, ey, ez))
-      {
-      if(doorPos!=null)
+      {      
+      Config.logDebug("check for doors returned true");
+      if(this.hasDoor)
         {
+        Config.logDebug("doing initial interaction with door");
         this.interactWithDoor(doorPos, true);
         this.doorOpenTicks = this.doorOpenMax;
         }
       else if(gate!=null)
         {
+        Config.logDebug("doing initial gate interaction");
         this.interactWithGate(true);
         this.doorOpenTicks = this.doorOpenMax;
         }
@@ -357,12 +361,14 @@ protected boolean checkForDoors(int ex, int ey, int ez)
     }  
   if(id==BlockLoader.gateProxy.blockID)
     {
-    TEGateProxy proxy = (TEGateProxy) entity.worldObj.getBlockTileEntity(ex, ey, ez);
+    TEGateProxy proxy = (TEGateProxy) entity.worldObj.getBlockTileEntity(x, y, z);
     if(this.gate!=null)
       {
+      Config.logDebug("doing close gate interaction from already had gate");
       this.interactWithGate(false);
       }
-    this.gate = proxy.owner;
+    Config.logDebug("setting gate for interaction "+proxy.owner);
+    this.gate = proxy.owner;  
     return true;
     }
   return false;
@@ -370,6 +376,7 @@ protected boolean checkForDoors(int ex, int ey, int ez)
 
 protected void interactWithGate(boolean open)
   {
+  Config.logDebug("activating gate :"+open + " edge "+gate.edgePosition);
   if(gate.edgePosition>0 && !open)
     {
     gate.activateGate();

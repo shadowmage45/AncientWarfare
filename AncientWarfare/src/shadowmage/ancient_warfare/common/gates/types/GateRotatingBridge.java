@@ -42,6 +42,7 @@ public GateRotatingBridge(int id)
   this.tooltip = "Rotates downwards to open";
   this.moveSpeed = 1.f;
   this.texture = "gateBridgeWood1.png";
+  this.canSoldierInteract = false;
   }
 
 @Override

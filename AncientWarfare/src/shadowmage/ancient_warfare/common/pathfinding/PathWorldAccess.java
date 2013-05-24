@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.pathfinding;
 
 import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockStairs;
@@ -69,13 +70,17 @@ public boolean isWalkable(int x, int y, int z)
     {
     return false;
     }
+  else if(id==0 && cube2 && id3==0)//early out check for the most basic of pathable areas
+    {
+    return true;
+    }
   else if(id==BlockLoader.gateProxy.blockID)
     {
     if(!canOpenDoors)//if can't open doors, auto fail
       {
       return false;
-      }
-    else if(!cube2 || (cube3 && id3!=BlockLoader.gateProxy.blockID) || id2==BlockLoader.gateProxy.blockID)
+      }    
+    else if(!cube2 || (cube3 && id3!=BlockLoader.gateProxy.blockID) || id2==BlockLoader.gateProxy.blockID || id3==0)
       {
       /**
        * else fail out if block below is not solid, or block above IS solid but not a gate block
@@ -83,6 +88,14 @@ public boolean isWalkable(int x, int y, int z)
        * (allow gate blocks because they are generally tall...)
        */
       return false;
+      }
+    else
+      {
+      TEGateProxy proxy = (TEGateProxy)world.getBlockTileEntity(x, y, z);
+      if(proxy.owner==null || !proxy.owner.getGateType().canSoldierActivate())
+        {
+        return false;
+        }
       }
     }
   else if(cube || !isPathable(id))//solid unpassable block, or lava

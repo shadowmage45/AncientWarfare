@@ -56,6 +56,8 @@ protected String texture = "";
 protected int maxHealth = 40;
 protected int modelType = 0;
 
+protected boolean canSoldierInteract = true;
+
 protected float moveSpeed = 0.5f *0.05f; ///1/2 block / second
 
 protected ItemStack displayStack;
@@ -138,6 +140,12 @@ public String getTexture()
 public boolean canActivate(EntityGate gate, boolean open)
   {
   return true;
+  }
+
+@Override
+public boolean canSoldierActivate()
+  {
+  return canSoldierInteract;
   }
 
 public static Gate getGateByID(int id)

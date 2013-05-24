@@ -14,14 +14,15 @@ GENERAL
 
 GATES
 * might need to rework how bridge does blocks -- set to only remove 'lowered' blocks when it is fully closed?
+* validate entire spawn area is clear before spawning
 
 VEHICLES
 * clean up vehicle alpha rendering
-* turret rotation while vehicle is turning is fooked
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
     use command baton, check if player has food in inventory && withdraw upkeep ?? 
+* soldier aim while on vehicles could still use attention (cheat?)    
 
 CIVICS
 * make it so NPC civics don't actually harvest anything and don't need resources
@@ -169,15 +170,19 @@ TWEAKS/OPTIMIZATION
 * fix some render partial tick code
 
 /********** 05-23-13 **********/
-* soldier pathfinding/activation for gates
-* enable gate construction bounding box rendering
+* soldier pathfinding/activation for gates--fixed/works
+* enable gate construction bounding box rendering--works
 
 * need to not scan/build proxy blocks
 * when spawned from scanner, need to place default blocks
-* bridge needs to leave lowest row of proxy blocks all the time
+* bridge needs to leave lowest row of proxy blocks all the time--works
 * validate player orientation when placing, ensure it is one of the two valid orientations for that pair of build positions
 * warehouse blocks need placement validation (simple check for at least 2 air blocks on nsew directions)
-* bridge needs to check area is clear before opening
+* bridge needs to check area is clear before opening--works
+
+* fix up gate pathfinding
+* fix warehouse storage block placement code
+* clean up vehicle turret rotation while turning the vehicle
 
 /********** 05-24-13 **********/
 /********** 05-25-13 **********/

@@ -31,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.IPlantable;
 import shadowmage.ancient_warfare.common.block.AWBlockBase;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
@@ -85,18 +86,34 @@ public boolean canPlaceBlockAt(World world, int x, int y, int z)
     if(world.getBlockId(x-1, y, z)==this.blockID)
       {
       blocksFound++;
+      if(getWarehouseBlockCountNear(world, x-1, y, z)>1)
+        {
+        base = false;
+        }
       }
     if(world.getBlockId(x+1, y, z)==this.blockID)
       {
       blocksFound++;
+      if(getWarehouseBlockCountNear(world, x+1, y, z)>1)
+        {
+        base = false;
+        }
       }
     if(world.getBlockId(x, y, z-1)==this.blockID)
       {
       blocksFound++;
+      if(getWarehouseBlockCountNear(world, x, y, z-1)>1)
+        {
+        base = false;
+        }
       }
-    if(world.getBlockId(x-1, y, z+1)==this.blockID)
+    if(world.getBlockId(x, y, z+1)==this.blockID)
       {
       blocksFound++;
+      if(getWarehouseBlockCountNear(world, x, y, z+1)>1)
+        {
+        base = false;
+        }
       }
     if(blocksFound>2)
       {
@@ -104,6 +121,29 @@ public boolean canPlaceBlockAt(World world, int x, int y, int z)
       }
     }  
   return base;
+  }
+
+public static int getWarehouseBlockCountNear(World world, int x, int y, int z)
+  {
+  int blocksFound = 0;  
+  if(world.getBlockId(x-1, y, z)==BlockLoader.warehouseStorage.blockID)
+    {
+    blocksFound++;
+    }
+  if(world.getBlockId(x+1, y, z)==BlockLoader.warehouseStorage.blockID)
+    {
+    blocksFound++;
+    }
+  if(world.getBlockId(x, y, z-1)==BlockLoader.warehouseStorage.blockID)
+    {
+    blocksFound++;
+    }
+  if(world.getBlockId(x, y, z+1)==BlockLoader.warehouseStorage.blockID)
+    {
+    blocksFound++;
+    }
+  Config.logDebug(String.format("returning blocks found %s  from %s,%s,%s", blocksFound, x,y,z));
+  return blocksFound;
   }
 
 @Override

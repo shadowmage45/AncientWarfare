@@ -693,7 +693,7 @@ public void updateTurretRotation()
     }
   else
     {
-    localTurretRotation += moveHelper.strafeMotion;
+//    localTurretRotation += moveHelper.strafeMotion;
     }
   if(Trig.getAbsDiff(localTurretDestRot, localTurretRotation) > localTurretRotInc)
     {
