@@ -31,6 +31,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -64,6 +65,8 @@ int hurtAnimationTicks = 0;
 byte gateStatus = 0;
 public byte gateOrientation = 0;
 
+boolean hasSetWorldEntityRadius = false;
+
 /**
  * @param par1World
  */
@@ -71,8 +74,6 @@ public EntityGate(World par1World)
   {
   super(par1World);
   this.yOffset = 0;
-//  this.height = 4.f;
-//  this.width = 4.f;
   }
 
 public Gate getGateType()
@@ -82,8 +83,7 @@ public Gate getGateType()
 
 public void setGateType(Gate type)
   {
-  this.gateType = type;  
-  Config.logDebug("setting entity gate type to: "+type);
+  this.gateType = type;    
   }
 
 @Override
@@ -108,18 +108,6 @@ public void setOpeningStatus(byte op)
     this.gateType.onGateStartOpen(this);
     }
   }
-
-//@Override
-//public AxisAlignedBB getBoundingBox()
-//  {
-//  return this.boundingBox;
-//  }
-//
-//@Override
-//public AxisAlignedBB getCollisionBox(Entity par1Entity)
-//  {
-//  return this.boundingBox;
-//  }
 
 @Override
 public int getBrightnessForRender(float par1)
@@ -285,6 +273,22 @@ public void onUpdate()
       }
     }
   this.openingSpeed = prevEdge - this.edgePosition;
+  
+  if(!hasSetWorldEntityRadius)
+    {
+    hasSetWorldEntityRadius = true;
+    BlockPosition min = BlockTools.getMin(pos1, pos2);
+    BlockPosition max = BlockTools.getMax(pos1, pos2);
+    int xSize = max.x - min.x +1;
+    int zSize = max.z - min.z +1;
+    int ySize = max.y - min.y +1;
+    int largest = xSize > ySize ? xSize : ySize;
+    largest = largest > zSize ? largest : zSize;
+    if(worldObj.MAX_ENTITY_RADIUS < largest)
+      {
+      worldObj.MAX_ENTITY_RADIUS = largest/2 + 1;    
+      }    
+    }
   }
 
 boolean wasPowered = false;

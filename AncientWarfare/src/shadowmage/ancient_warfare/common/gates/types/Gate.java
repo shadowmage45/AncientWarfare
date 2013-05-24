@@ -206,6 +206,7 @@ public static EntityGate constructGate(World world, BlockPosition pos1, BlockPos
   ent.gateOrientation = facing;
   type.setInitialBounds(ent, pos1, pos2);
   type.onGateFinishClose(ent);
+  
   return ent;
   }
 

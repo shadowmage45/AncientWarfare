@@ -10,7 +10,9 @@ GENERAL
 * add name search/filter box to structure builder guis (and crafting/selection guis later on.....)
 
 GATES
-* might need to rework how bridge does blocks -- set to only remove 'lowered' blocks when it is fully closed?
+* investigate making it so missiles won't collide with with gates (including vanilla arrows)
+    could probably set gates completely no no-collide and do a custom ray trace to see if
+    player is targeting a gate
 
 VEHICLES
 * clean up vehicle alpha rendering
@@ -198,6 +200,9 @@ TWEAKS/OPTIMIZATION
 * add stack size reduction code to useable items (spawners)
 * only add civic-builder items if structure is available in survival mode
 * validate entire gate spawn area is clear before spawning
+
+* might need to rework how bridge does blocks -- set to only remove 'lowered' blocks when it is fully closed?
+* add gate worldObj.ENTITY_MAX_RADIUS code adjustment to try and improve gate interaction
 
 /********** 05-25-13 **********/
 /********** 05-26-13 **********/

@@ -75,6 +75,13 @@ public void setCollisionBoundingBox(EntityGate gate)
     } 
   }
 
+/**
+ * adjust the input position based on height/facing direction for the rotated (lowered)
+ * position of a gate
+ * @param pos
+ * @param height
+ * @param facing
+ */
 public static void adjustBounds(BlockPosition pos, int height, int facing)
   {
   switch(facing)
@@ -180,18 +187,7 @@ public void onGateStartOpen(EntityGate gate)
         }
       }
     }
-  }
-
-@Override
-public void onGateFinishOpen(EntityGate gate)
-  {
-  if(gate.worldObj.isRemote)
-    {
-    return;
-    }
-  int id;
-  BlockPosition min = BlockTools.getMin(gate.pos1, gate.pos2);
-  BlockPosition max = BlockTools.getMax(gate.pos1, gate.pos2);
+  
   int heightAdj = max.y - min.y;
   BlockPosition pos3 = max.copy();
   pos3.y = min.y;
@@ -222,41 +218,15 @@ public void onGateFinishOpen(EntityGate gate)
   }
 
 @Override
+public void onGateFinishOpen(EntityGate gate)
+  {
+  
+  }
+
+@Override
 public void onGateStartClose(EntityGate gate)
   {
-  if(gate.worldObj.isRemote)
-    {
-    return;
-    }
-  int id;
-  BlockPosition min = BlockTools.getMin(gate.pos1, gate.pos2);
-  BlockPosition max = BlockTools.getMax(gate.pos1, gate.pos2);
-  boolean widestOnXAxis = gate.pos1.x != gate.pos2.x;
-  int heightAdj = max.y - min.y;
-  BlockPosition pos3 = max.copy();
-  pos3.y = min.y;
-  adjustBounds(pos3, heightAdj, gate.gateOrientation);  
-  BlockPosition minTemp = min.copy();
-  min = BlockTools.getMin(min, pos3);    
-  max = BlockTools.getMax(minTemp, pos3);
-  for(int x = min.x; x <= max.x; x++)
-    {
-    for(int y = min.y; y <=max.y; y++)
-      {
-      for(int z = min.z; z<= max.z; z++)
-        {
-        if((widestOnXAxis && z==gate.pos1.z) || (!widestOnXAxis && x==gate.pos1.x))
-          {
-          continue;
-          }
-        id = gate.worldObj.getBlockId(x, y, z);
-        if(id==BlockLoader.gateProxy.blockID)
-          {
-          gate.worldObj.setBlockToAir(x, y, z);
-          }
-        }
-      }
-    }
+ 
   }
 
 @Override
@@ -285,6 +255,32 @@ public void onGateFinishClose(EntityGate gate)
             TEGateProxy teg = (TEGateProxy)te;
             teg.setOwner(gate);
             }
+          }
+        }
+      }
+    }
+  boolean widestOnXAxis = gate.pos1.x != gate.pos2.x;
+  int heightAdj = max.y - min.y;
+  BlockPosition pos3 = max.copy();
+  pos3.y = min.y;
+  adjustBounds(pos3, heightAdj, gate.gateOrientation);  
+  BlockPosition minTemp = min.copy();
+  min = BlockTools.getMin(min, pos3);    
+  max = BlockTools.getMax(minTemp, pos3);
+  for(int x = min.x; x <= max.x; x++)
+    {
+    for(int y = min.y; y <=max.y; y++)
+      {
+      for(int z = min.z; z<= max.z; z++)
+        {
+        if((widestOnXAxis && z==gate.pos1.z) || (!widestOnXAxis && x==gate.pos1.x))
+          {
+          continue;
+          }
+        id = gate.worldObj.getBlockId(x, y, z);
+        if(id==BlockLoader.gateProxy.blockID)
+          {
+          gate.worldObj.setBlockToAir(x, y, z);
           }
         }
       }
