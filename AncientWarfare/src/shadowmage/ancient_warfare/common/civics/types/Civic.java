@@ -23,6 +23,8 @@ package shadowmage.ancient_warfare.common.civics.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
@@ -61,26 +63,26 @@ public class Civic implements ICivicType
 
 public static final Civic[] civicList = new Civic[64];
 
-public static ICivicType wheatFarm = new CivicFarm(0, "Small Wheat Farm", "10x10 Max Width", TEFarmWheat.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmWheatBottom", "civicFarmWheatTop", "civicFarmWheatSides");
-public static ICivicType carrotFarm = new CivicFarm(1, "Small Carrot Farm", "10x10 Max Width", TEFarmCarrot.class, "civicFarmCarrot1", 10, 2).setBlockIcons("civicFarmCarrotBottom", "civicFarmCarrotTop", "civicFarmCarrotSides");
-public static ICivicType potatoFarm = new CivicFarm(2, "Small Potato Farm", "10x10 Max Width", TEFarmPotato.class, "civicFarmPotato1", 10, 2).setBlockIcons("civicFarmPotatoBottom", "civicFarmPotatoTop", "civicFarmPotatoSides");
-public static ICivicType melonFarm = new CivicFarm(3, "Small Melon Farm", "10x10 Max Width", TEFarmMelon.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMelonBottom", "civicFarmMelonTop", "civicFarmMelonSides");
-public static ICivicType pumpkinFarm = new CivicFarm(4, "Small Pumpkin Farm", "10x10 Max Width", TEFarmPumpkin.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmPumpkinBottom", "civicFarmPumpkinTop", "civicFarmPumpkinSides");
-public static ICivicType cactusFarm = new CivicFarm(5, "Small Cactus Farm", "10x10 Max Width", TEFarmCactus.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmCactusBottom", "civicFarmCactusTop", "civicFarmCactusSides");
-public static ICivicType reedFarm = new CivicFarm(6, "Small Reed Farm", "10x10 Max Width", TEFarmReed.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmReedBottom", "civicFarmReedTop", "civicFarmReedSides");
-public static ICivicType mushroomRedFarm = new CivicFarm(7, "Small Red Mushroom Farm", "10x10 Max Width", TEFarmMushroomRed.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMushroomRedBottom", "civicFarmMushroomRedTop", "civicFarmMushroomRedSides");
-public static ICivicType mushroomBrownFarm = new CivicFarm(8, "Small Brown Mushroom Farm", "10x10 Max Width", TEFarmMushroomBrown.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMushroomBrownBottom", "civicFarmMushroomBrownTop", "civicFarmMushroomBrownSides");
-public static ICivicType netherstalkFarm = new CivicFarm(9, "Small Netherstalk Farm", "10x10 Max Width", TEFarmNetherStalk.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmNetherBottom", "civicFarmNetherTop", "civicFarmNetherSides");
+public static ICivicType wheatFarm = new CivicFarm(0, "Small Wheat Farm", "10x10 Max Width", TEFarmWheat.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmWheatBottom", "civicFarmWheatTop", "civicFarmWheatSides").addResourceItem(new ItemStack(Item.seeds));
+public static ICivicType carrotFarm = new CivicFarm(1, "Small Carrot Farm", "10x10 Max Width", TEFarmCarrot.class, "civicFarmCarrot1", 10, 2).setBlockIcons("civicFarmCarrotBottom", "civicFarmCarrotTop", "civicFarmCarrotSides").addResourceItem(new ItemStack(Item.carrot));
+public static ICivicType potatoFarm = new CivicFarm(2, "Small Potato Farm", "10x10 Max Width", TEFarmPotato.class, "civicFarmPotato1", 10, 2).setBlockIcons("civicFarmPotatoBottom", "civicFarmPotatoTop", "civicFarmPotatoSides").addResourceItem(new ItemStack(Item.potato));
+public static ICivicType melonFarm = new CivicFarm(3, "Small Melon Farm", "10x10 Max Width", TEFarmMelon.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMelonBottom", "civicFarmMelonTop", "civicFarmMelonSides").addResourceItem(new ItemStack(Item.melonSeeds));
+public static ICivicType pumpkinFarm = new CivicFarm(4, "Small Pumpkin Farm", "10x10 Max Width", TEFarmPumpkin.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmPumpkinBottom", "civicFarmPumpkinTop", "civicFarmPumpkinSides").addResourceItem(new ItemStack(Item.pumpkinSeeds));
+public static ICivicType cactusFarm = new CivicFarm(5, "Small Cactus Farm", "10x10 Max Width", TEFarmCactus.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmCactusBottom", "civicFarmCactusTop", "civicFarmCactusSides").addResourceItem(new ItemStack(Block.cactus));
+public static ICivicType reedFarm = new CivicFarm(6, "Small Reed Farm", "10x10 Max Width", TEFarmReed.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmReedBottom", "civicFarmReedTop", "civicFarmReedSides").addResourceItem(new ItemStack(Item.reed));
+public static ICivicType mushroomRedFarm = new CivicFarm(7, "Small Red Mushroom Farm", "10x10 Max Width", TEFarmMushroomRed.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMushroomRedBottom", "civicFarmMushroomRedTop", "civicFarmMushroomRedSides").addResourceItem(new ItemStack(Block.mushroomRed));
+public static ICivicType mushroomBrownFarm = new CivicFarm(8, "Small Brown Mushroom Farm", "10x10 Max Width", TEFarmMushroomBrown.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMushroomBrownBottom", "civicFarmMushroomBrownTop", "civicFarmMushroomBrownSides").addResourceItem(new ItemStack(Block.mushroomBrown));
+public static ICivicType netherstalkFarm = new CivicFarm(9, "Small Netherstalk Farm", "10x10 Max Width", TEFarmNetherStalk.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmNetherBottom", "civicFarmNetherTop", "civicFarmNetherSides").addResourceItem(new ItemStack(Item.netherStalkSeeds));
 public static ICivicType mineBasic = new CivicMine(10, "Basic Layout Mine", "16x16 Max Width", TEMine.class,16).setBlockIcons("civicMineBasicBottom", "civicMineBasicTop", "civicMineBasicSides");
 //mine r2
 //mine r3
 public static ICivicType mineQuarry = new CivicMine(13, "Quarry Layout Mine", "64x64 Max Width", TEMineQuarry.class,64).setBlockIcons("civicMineQuarryBottom", "civicMineQuarryTop", "civicMineQuarrySides");
 //mine altr2
 //mine altr3
-public static ICivicType treeFarmOak = new CivicTreeFarm(16, "Oak Tree Farm", "16x16 Max Width", TETreeFarmOak.class).setBlockIcons("civicFarmOakBottom", "civicFarmOakTop", "civicFarmOakSides");
-public static ICivicType treeFarmSpruce = new CivicTreeFarm(17, "Spruce Tree Farm", "16x16 Max Width", TETreeFarmSpruce.class).setBlockIcons("civicFarmSpruceBottom", "civicFarmSpruceTop", "civicFarmSpruceSides");
-public static ICivicType treeFarmBirch = new CivicTreeFarm(18, "Birch Tree Farm", "16x16 Max Width", TETreeFarmBirch.class).setBlockIcons("civicFarmBirchBottom", "civicFarmBirchTop", "civicFarmBirchSides");
-public static ICivicType treeFarmJungle = new CivicTreeFarm(19, "Jungle Tree Farm", "16x16 Max Width", TETreeFarmJungle.class).setBlockIcons("civicFarmJungleBottom", "civicFarmJungleTop", "civicFarmJungleSides");
+public static ICivicType treeFarmOak = new CivicTreeFarm(16, "Oak Tree Farm", "16x16 Max Width", TETreeFarmOak.class).setBlockIcons("civicFarmOakBottom", "civicFarmOakTop", "civicFarmOakSides").addResourceItem(new ItemStack(Block.sapling,1,0));
+public static ICivicType treeFarmSpruce = new CivicTreeFarm(17, "Spruce Tree Farm", "16x16 Max Width", TETreeFarmSpruce.class).setBlockIcons("civicFarmSpruceBottom", "civicFarmSpruceTop", "civicFarmSpruceSides").addResourceItem(new ItemStack(Block.sapling,1,1));
+public static ICivicType treeFarmBirch = new CivicTreeFarm(18, "Birch Tree Farm", "16x16 Max Width", TETreeFarmBirch.class).setBlockIcons("civicFarmBirchBottom", "civicFarmBirchTop", "civicFarmBirchSides").addResourceItem(new ItemStack(Block.sapling,1,2));
+public static ICivicType treeFarmJungle = new CivicTreeFarm(19, "Jungle Tree Farm", "16x16 Max Width", TETreeFarmJungle.class).setBlockIcons("civicFarmJungleBottom", "civicFarmJungleTop", "civicFarmJungleSides").addResourceItem(new ItemStack(Block.sapling,1,3));
 public static ICivicType builder = new CivicBuilder(20);//survival mode ticked builder....
 public static ICivicType townHallSmall = new CivicTownHall(21, "Town Hall Small", "Small Upkeep center for NPCs", 9, TECivicTownHall.class).setBlockIcons("civicTownHallSmallBottom", "civicTownHallSmallTop", "civicTownHallSmallSides");
 public static ICivicType townHallMedium = new CivicTownHall(22, "Town Hall Medium", "Medium Upkeep center for NPCs", 18, TECivicTownHall.class).setBlockIcons("civicTownHallMediumBottom", "civicTownHallMediumTop", "civicTownHallMediumSides");
@@ -92,7 +94,7 @@ public static ICivicType sheepFarm = new CivicFarm(27, "Sheep (wool) Farm", "16x
 public static ICivicType mooshroomFarm = new CivicFarm(28, "Mooshroom Farm", "16x16 Max Width, 6 animals", TEBarnMooshroom.class, "civicFarmWheat1", 16 ,2).setBlockIcons("civicFarmMooshroomBottom", "civicFarmMooshroomTop", "civicFarmMooshroomSides");
 public static ICivicType fishFarm = new CivicFishFarm(29, "Fish Farm", "16x16 Max Width, needs water", TEFishery.class,"civicFarmWheat1", 16, 2).setBlockIcons("civicFarmFishBottom", "civicFarmFishTop", "civicFarmFishSides");
 public static ICivicType squidFarm = new CivicFishFarm(30, "Squid Farm", "16x16 Max Width, needs water", TESquidFarm.class, "civicFarmWheat1",16,2).setBlockIcons("civicFarmSquidBottom", "civicFarmSquidTop", "civicFarmSquidSides");
-public static ICivicType cocoaFarm = new CivicFarm(31, "Cocoa Bean Farm", "10x10 Max Width", TEFarmCocoa.class, "civicFarmWheat1", 10 ,2).setBlockIcons("civicFarmCocoaBottom", "civicFarmCocoaTop", "civicFarmCocoaSides");
+public static ICivicType cocoaFarm = new CivicFarm(31, "Cocoa Bean Farm", "10x10 Max Width", TEFarmCocoa.class, "civicFarmWheat1", 10 ,2).setBlockIcons("civicFarmCocoaBottom", "civicFarmCocoaTop", "civicFarmCocoaSides").addResourceItem(new ItemStack(Item.dyePowder,1,3));
 public static ICivicType warehouseSmall = new CivicWarehouse(32, "Small Warehouse", "8x8x4", TECivicWarehouse.class, 8, 4);
 //smithy (process ores -> ingots)
 //lumber yard (process logs -> planks/charcoal)
@@ -135,6 +137,12 @@ public Civic setBlockIcons(String bottom, String top, String side)
   {  
   String first = "ancientwarfare:civic/";
   this.blockIconNames = new String[]{first+bottom, first+top, first+side};
+  return this;
+  }
+
+public Civic addResourceItem(ItemStack filter)
+  {
+  this.resourceStackList.add(filter);
   return this;
   }
 

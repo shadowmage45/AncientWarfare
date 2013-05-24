@@ -175,7 +175,7 @@ public boolean canHoldItem(ItemStack filter, int qty)
  */
 public ItemStack tryMergeItem(ItemStack toMerge)
   {
-  return InventoryTools.tryMergeStack(this, toMerge, 0, this.getSizeInventory()-1);
+  return InventoryTools.tryMergeStack(this, toMerge, -1);
   }
 
 public boolean containsAtLeast(ItemStack filter, int qty)

@@ -105,6 +105,10 @@ protected void doWork(NpcBase npc, WorkPoint p)
     List<ItemStack> drops = BlockTools.breakBlock(worldObj, p.x, p.y, p.z, 0);   
     for(ItemStack item : drops)
       {
+      if(this.resourceFilterContains(item))
+        {
+        item = InventoryTools.tryMergeStack(inventory, item, 1);
+        }
       item = this.inventory.tryMergeItem(item);
       item = this.overflow.tryMergeItem(item);
       InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);      

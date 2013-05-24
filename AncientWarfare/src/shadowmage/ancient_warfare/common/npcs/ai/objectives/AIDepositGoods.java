@@ -162,7 +162,6 @@ public void onRunningTick()
     }
   if(npc.getDistance(p.floorX(), p.floorY(), p.floorZ())>3.5)
     {
-//    Config.logDebug("moving to deposit target");
     //continue moving to target
     }
   else
@@ -171,12 +170,10 @@ public void onRunningTick()
     ItemStack fromSlot = null;
     for(int i = 0; i < npc.inventory.getSizeInventory(); i++)
       {
-//      Config.logDebug("depositing into deposit target");
       fromSlot = npc.inventory.getStackInSlotOnClosing(i);
-      fromSlot = InventoryTools.tryMergeStack(targetInventory, fromSlot, 0, targetInventory.getSizeInventory()-1);      
+      fromSlot = InventoryTools.tryMergeStack(targetInventory, fromSlot, -1);      
       if(fromSlot!=null)
         {
-//        Config.logDebug("deposit target could not hold all items!!");
         npc.inventory.setInventorySlotContents(i, fromSlot);
         break;
         }

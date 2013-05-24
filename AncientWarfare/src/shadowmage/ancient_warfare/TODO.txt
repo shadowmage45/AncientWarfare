@@ -191,6 +191,11 @@ TWEAKS/OPTIMIZATION
 * implement te sided inventory
 * implement courier waypoint sided inventory interaction
 
+* more inventory tools cleanup work (sided inventory handling -- need cleaner method than creating new arrays)
+* add sided inventory code to work site TEs
+* add resource items to civic work sites
+* add resource slot size to civic work sites
+
 /********** 05-25-13 **********/
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/

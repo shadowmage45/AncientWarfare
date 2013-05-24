@@ -124,6 +124,10 @@ public boolean handleBlockBreak(NpcBase npc, int x, int y, int z)
     {
     for(ItemStack drop : drops)
       {
+      if(this.resourceFilterContains(drop))
+        {
+        drop = InventoryTools.tryMergeStack(inventory, drop, 1);
+        }
       drop = inventory.tryMergeItem(drop);
       drop = overflow.tryMergeItem(drop);
       InventoryTools.dropItemInWorld(npc.worldObj, drop, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);

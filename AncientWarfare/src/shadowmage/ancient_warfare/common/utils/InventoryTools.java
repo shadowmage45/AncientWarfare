@@ -301,27 +301,36 @@ public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int sid
   {
   if(side<0 || side>5)
     {
-    return tryMergeStack(inv, toMerge, 0, inv.getSizeInventory()-1);
+    return tryMergeStack(inv, toMerge, getSlotIndicesForEntireInventory(inv));
     }
   if(inv instanceof ISidedInventory)
     {
     return tryMergeStack(inv, toMerge, ((ISidedInventory)inv).getSizeInventorySide(side));
     }
-  return tryMergeStack(inv, toMerge, 0, inv.getSizeInventory()-1);
+  return tryMergeStack(inv, toMerge, getSlotIndicesForEntireInventory(inv));
+  }
+
+public static int[] getSlotIndicesForEntireInventory(IInventory inv)
+  {
+  int[] indices = new int[inv.getSizeInventory()];
+  for(int i = 0; i < indices.length; i++)
+    {
+    indices[i] = i;
+    }
+  return indices;
   }
 
 /**
- * will revert to normal full-inventory merge if slot indices are null
  * @param inv
  * @param toMerge
- * @param slotIndices
+ * @param slotIndices (null will abort entire merge operation)
  * @return
  */
 public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int[] slotIndices)
   {
   if(slotIndices==null)
     {
-    return tryMergeStack(inv, toMerge, 0, inv.getSizeInventory()-1);
+    return toMerge;
     }
   if(toMerge==null)
     {
@@ -337,7 +346,7 @@ public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int[] s
     {
     slot = slotIndices[i];
     fromSlot = inv.getStackInSlot(slot);
-    if(fromSlot==null)//skip emtpy slots this pass, we're trying to merge partial stacks first
+    if(fromSlot==null || !inv.isStackValidForSlot(slot, toMerge))//skip emtpy slots this pass, we're trying to merge partial stacks first
       {
       continue;
       }
@@ -357,58 +366,9 @@ public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int[] s
     {
     slot = slotIndices[i];
     fromSlot = inv.getStackInSlot(slot);
-    if(fromSlot==null)//place in slot
+    if(fromSlot==null || !inv.isStackValidForSlot(slot, toMerge))//place in slot
       {      
       inv.setInventorySlotContents(slot, toMerge);
-      toMerge = null;
-      return null;
-      }
-    }
-  if(toMerge!=null && toMerge.stackSize<=0)
-    {  
-    return null;
-    }
-  return toMerge;
-  }
-
-public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int firstSlot, int lastSlot)
-  {
-  if(toMerge==null)
-    {
-    return null;
-    }
-  if(inv.getSizeInventory()==0)
-    {
-    return toMerge;
-    }
-  ItemStack fromSlot = null;
-  firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
-  lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
-  for(int i = firstSlot; i <= lastSlot; i++)
-    {
-    fromSlot = inv.getStackInSlot(i);
-    if(fromSlot==null)//skip emtpy slots this pass, we're trying to merge partial stacks first
-      {
-      continue;
-      }
-    else if(fromSlot.itemID==toMerge.itemID && fromSlot.getItemDamage()==toMerge.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, toMerge))
-      {
-      int decrAmt = fromSlot.getMaxStackSize() - fromSlot.stackSize;
-      decrAmt = decrAmt > toMerge.stackSize ? toMerge.stackSize : decrAmt;
-      toMerge.stackSize -= decrAmt;
-      fromSlot.stackSize +=decrAmt;
-      }
-    if(toMerge.stackSize<=0)
-      {  
-      return null;
-      }
-    }
-  for(int i = firstSlot; i <= lastSlot; i++)
-    {
-    fromSlot = inv.getStackInSlot(i);
-    if(fromSlot==null)//place in slot
-      {      
-      inv.setInventorySlotContents(i, toMerge);
       toMerge = null;
       return null;
       }
@@ -429,6 +389,7 @@ public static boolean canHoldItem(IInventory inv, ItemStack filter, int qty, int
   lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
   for(int i = firstSlot ; i <= lastSlot; i ++)
     {
+    if(!inv.isStackValidForSlot(i, filter)){continue;}
     fromSlot = inv.getStackInSlot(i);
     if(fromSlot==null)//emtpy slot, decr by entire stack size
       {

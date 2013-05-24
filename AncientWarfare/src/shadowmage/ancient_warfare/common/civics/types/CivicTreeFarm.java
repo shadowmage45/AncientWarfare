@@ -45,6 +45,7 @@ public CivicTreeFarm(int id, String name, String tooltip, Class<? extends TECivi
   this.blockIconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
   this.blockIconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
   this.blockIconNames[2] = "ancientwarfare:civic/civicFarmWheatSides"; 
+  this.resourceSlotSize = 3;
   }
 
 }

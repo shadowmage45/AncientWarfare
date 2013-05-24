@@ -50,6 +50,7 @@ import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public abstract class TECivic extends TileEntity implements IInventory, ISidedInventory
 {
@@ -594,6 +595,31 @@ public void onPlaced()
   }
 
 /******************************************************************INVENTORY METHODS***********************************************************************************/
+public ItemStack tryMergeStack(ItemStack stack)
+  {
+  if(this.getCivic().getResourceSlotSize()>0 && resourceFilterContains(stack))
+    {
+    stack = InventoryTools.tryMergeStack(this, stack, 1);
+    }
+  stack = InventoryTools.tryMergeStack(this, stack, -1);
+  return stack;
+  }
+
+public boolean resourceFilterContains(ItemStack stack)
+  {
+  if(stack==null)
+    {
+    return false;
+    }
+  for(ItemStack filter : this.getCivic().getResourceItemFilters())
+    {
+    if(InventoryTools.doItemsMatch(stack, filter))
+      {
+      return true;
+      }
+    }
+  return false;
+  }
 
 @Override
 public int getSizeInventory()

@@ -44,6 +44,7 @@ public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite
   this.workType = CivicWorkType.FARM;
   this.workSizeMaxHorizontal = workHorizSize;
   this.workSizeMaxHeight = workVertSize;
+  this.resourceSlotSize = 3;
   }
 
 }
