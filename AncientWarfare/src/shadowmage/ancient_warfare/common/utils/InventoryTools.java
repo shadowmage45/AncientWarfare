@@ -148,6 +148,26 @@ public static void tryRemoveFoodValue(IInventory inv, int firstSlot, int lastSlo
     }
   }
 
+public static int getCountOf(IInventory inv, ItemStack filter, int[] slotIndices)
+  {
+  if(inv.getSizeInventory()==0)
+    {
+    return 0;
+    }
+  ItemStack fromSlot = null;
+  int qtyFound = 0;
+  for(int i = 0; i < slotIndices.length; i++)
+    {
+    fromSlot = inv.getStackInSlot(slotIndices[i]);
+    if(fromSlot==null){continue;}
+    if(doItemsMatch(fromSlot, filter))
+      {
+      qtyFound += fromSlot.stackSize;
+      }
+    }
+  return qtyFound;
+  }
+
 public static int getCountOf(IInventory inv, ItemStack filter, int firstSlot, int lastSlot)
   {
   if(inv.getSizeInventory()==0)
@@ -274,6 +294,67 @@ public static int getEmptySlots(IInventory inv, int firstSlot, int lastSlot)
       }
     }
   return count;
+  }
+
+/**
+ * will revert to normal full-inventory merge if slot indices are null
+ * @param inv
+ * @param toMerge
+ * @param slotIndices
+ * @return
+ */
+public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int[] slotIndices)
+  {
+  if(slotIndices==null)
+    {
+    return tryMergeStack(inv, toMerge, 0, inv.getSizeInventory()-1);
+    }
+  if(toMerge==null)
+    {
+    return null;
+    }
+  if(inv.getSizeInventory()==0)
+    {
+    return toMerge;
+    }
+  ItemStack fromSlot = null;
+  int slot = 0;
+  for(int i = 0; i<slotIndices.length; i++)
+    {
+    slot = slotIndices[i];
+    fromSlot = inv.getStackInSlot(slot);
+    if(fromSlot==null)//skip emtpy slots this pass, we're trying to merge partial stacks first
+      {
+      continue;
+      }
+    else if(fromSlot.itemID==toMerge.itemID && fromSlot.getItemDamage()==toMerge.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, toMerge))
+      {
+      int decrAmt = fromSlot.getMaxStackSize() - fromSlot.stackSize;
+      decrAmt = decrAmt > toMerge.stackSize ? toMerge.stackSize : decrAmt;
+      toMerge.stackSize -= decrAmt;
+      fromSlot.stackSize +=decrAmt;
+      }
+    if(toMerge.stackSize<=0)
+      {  
+      return null;
+      }
+    }
+  for(int i = 0; i<slotIndices.length; i++)
+    {
+    slot = slotIndices[i];
+    fromSlot = inv.getStackInSlot(slot);
+    if(fromSlot==null)//place in slot
+      {      
+      inv.setInventorySlotContents(slot, toMerge);
+      toMerge = null;
+      return null;
+      }
+    }
+  if(toMerge!=null && toMerge.stackSize<=0)
+    {  
+    return null;
+    }
+  return toMerge;
   }
 
 public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int firstSlot, int lastSlot)

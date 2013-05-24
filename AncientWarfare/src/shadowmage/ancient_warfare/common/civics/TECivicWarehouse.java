@@ -111,6 +111,7 @@ public void setCivic(Civic civ)
     inventory = new AWInventoryMapped(this.storageSize);
     }
   ((AWInventoryMapped)this.inventory).setInventorySize(this.storageSize);
+  this.setupSidedInventoryIndices(civ);
   }
 
 @Override

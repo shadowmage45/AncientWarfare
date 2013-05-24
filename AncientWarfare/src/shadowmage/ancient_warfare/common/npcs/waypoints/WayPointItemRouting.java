@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.npcs.waypoints;
 import java.util.ArrayList;
 
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -176,13 +177,26 @@ protected boolean doAllOf(IInventory source, IInventory target)
   { 
   boolean shouldContinue = false;
   ItemStack stack;
-  for(int i = 0; i < source.getSizeInventory(); i++)
+  int[] sourceSlots = null;
+  int[] targetSlots = null;
+  if(source instanceof ISidedInventory)
     {
-    stack = source.getStackInSlot(i);
+    sourceSlots = ((ISidedInventory)source).getSizeInventorySide(getSide());
+    }
+  if(target instanceof ISidedInventory)
+    {
+    targetSlots = ((ISidedInventory)target).getSizeInventorySide(getSide());
+    }
+  int sourceSize = sourceSlots !=null ? sourceSlots.length : source.getSizeInventory();
+  int sourceIndex;
+  for(int i = 0; i < sourceSize; i++)
+    {
+    sourceIndex = sourceSlots !=null ? sourceSlots[i] : i;    
+    stack = source.getStackInSlot(sourceIndex);
     if(filterContains(stack)>0)
       {
       shouldContinue = true;
-      stack = InventoryTools.tryMergeStack(target, stack, 0, target.getSizeInventory()-1);
+      stack = InventoryTools.tryMergeStack(target, stack, targetSlots);      
       if(stack!=null)
         {
         shouldContinue = false;        
@@ -198,14 +212,26 @@ protected boolean doAllExact(IInventory source, IInventory target)
   {  
   boolean shouldContinue = false;
   ItemStack stack;
-  for(int i = 0; i < source.getSizeInventory(); i++)
+  int[] sourceSlots = null;
+  int[] targetSlots = null;
+  if(source instanceof ISidedInventory)
     {
-    stack = source.getStackInSlot(i);
-    if(stack==null){continue;}
+    sourceSlots = ((ISidedInventory)source).getSizeInventorySide(getSide());
+    }
+  if(target instanceof ISidedInventory)
+    {
+    targetSlots = ((ISidedInventory)target).getSizeInventorySide(getSide());
+    }
+  int sourceSize = sourceSlots !=null ? sourceSlots.length : source.getSizeInventory();
+  int sourceIndex;
+  for(int i = 0; i < sourceSize; i++)
+    {
+    sourceIndex = sourceSlots !=null ? sourceSlots[i] : i;    
+    stack = source.getStackInSlot(sourceIndex);
     if(filterContains(stack)==stack.stackSize)
       {
       shouldContinue = true;
-      stack = InventoryTools.tryMergeStack(target, stack, 0, target.getSizeInventory()-1);
+      stack = InventoryTools.tryMergeStack(target, stack, targetSlots);      
       if(stack!=null)
         {
         shouldContinue = false;        
@@ -221,14 +247,29 @@ protected boolean doFillTo(IInventory source, IInventory target)
   { 
   boolean shouldContinue = false;
   ItemStack stack;
-  for(int i = 0; i < source.getSizeInventory(); i++)
+  int[] sourceSlots = null;
+  int[] targetSlots = null;
+  if(source instanceof ISidedInventory)
     {
-    stack = source.getStackInSlot(i);
+    sourceSlots = ((ISidedInventory)source).getSizeInventorySide(getSide());
+    }
+  if(target instanceof ISidedInventory)
+    {
+    targetSlots = ((ISidedInventory)target).getSizeInventorySide(getSide());
+    }
+  int sourceSize = sourceSlots !=null ? sourceSlots.length : source.getSizeInventory();
+  int targetSize = targetSlots !=null ? targetSlots.length : target.getSizeInventory();
+  int sourceIndex;
+  int targetIndex;
+  for(int i = 0; i < sourceSize; i++)
+    {
+    sourceIndex = sourceSlots !=null ? sourceSlots[i] : i;
+    stack = source.getStackInSlot(sourceIndex);
     if(stack==null){continue;}
     int num = filterContains(stack);    
     if(num >=0)
       {
-      int found = InventoryTools.getCountOf(target, stack, 0, target.getSizeInventory()-1);
+      int found = targetSlots != null ? InventoryTools.getCountOf(target, stack, targetSlots) : InventoryTools.getCountOf(target, stack, 0, target.getSizeInventory()-1);;
       int needed = num-found;
       if(needed>0)
         {
@@ -236,27 +277,27 @@ protected boolean doFillTo(IInventory source, IInventory target)
           {
           //merge entire stack
           shouldContinue = true;
-          stack = InventoryTools.tryMergeStack(target, stack, 0, target.getSizeInventory()-1);
+          stack = InventoryTools.tryMergeStack(target, stack, targetSlots);
           if(stack!=null)
             {
             shouldContinue = false;
             }
-          source.setInventorySlotContents(i, stack);
+          source.setInventorySlotContents(sourceIndex, stack);
           }
         else
           {
           shouldContinue = true;
           ItemStack split = stack.splitStack(needed);
-          source.setInventorySlotContents(i, stack);
-          split = InventoryTools.tryMergeStack(target, split, 0, target.getSizeInventory()-1);
+          source.setInventorySlotContents(sourceIndex, stack);
+          split = InventoryTools.tryMergeStack(target, split, targetSlots);
           if(split!=null)
             {
-            InventoryTools.tryMergeStack(source, split, 0, source.getSizeInventory()-1);
+            InventoryTools.tryMergeStack(source, split, sourceSlots);
             shouldContinue = false;
             }
           if(stack.stackSize==0)
             {
-            source.setInventorySlotContents(i, null);
+            source.setInventorySlotContents(sourceIndex, null);
             }
           }
         }
@@ -269,14 +310,26 @@ protected boolean doAllExcept(IInventory source, IInventory target)
   {
   boolean shouldContinue = false;
   ItemStack stack;
-  for(int i = 0; i < source.getSizeInventory(); i++)
+  int[] sourceSlots = null;
+  int[] targetSlots = null;
+  if(source instanceof ISidedInventory)
     {
-    stack = source.getStackInSlot(i);
-    if(stack==null){continue;}
+    sourceSlots = ((ISidedInventory)source).getSizeInventorySide(getSide());
+    }
+  if(target instanceof ISidedInventory)
+    {
+    targetSlots = ((ISidedInventory)target).getSizeInventorySide(getSide());
+    }
+  int sourceSize = sourceSlots !=null ? sourceSlots.length : source.getSizeInventory();
+  int sourceIndex;
+  for(int i = 0; i < sourceSize; i++)
+    {
+    sourceIndex = sourceSlots !=null ? sourceSlots[i] : i;    
+    stack = source.getStackInSlot(sourceIndex);
     if(filterContains(stack)==-1)
       {
       shouldContinue = true;
-      stack = InventoryTools.tryMergeStack(target, stack, 0, target.getSizeInventory()-1);
+      stack = InventoryTools.tryMergeStack(target, stack, targetSlots);      
       if(stack!=null)
         {
         shouldContinue = false;        

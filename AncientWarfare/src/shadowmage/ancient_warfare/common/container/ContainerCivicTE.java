@@ -59,10 +59,15 @@ public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
     for(x = 0; x < 9; x++)
       {
       slotNum = y*9 + x;
-      if(slotNum<te.getSizeInventory())
+      xPos = 8 + x * 18;
+      yPos = y * 18 + 15;
+      if(slotNum<teBase.getCivic().getResourceSlotSize())
         {
-        xPos = 8 + x * 18;
-        yPos = y * 18 + 15;
+        Slot slot = new SlotResourceOnly(te, slotNum, xPos, yPos, teBase.getCivic().getResourceItemFilters());
+        this.addSlotToContainer(slot);   
+        }
+      else if(slotNum<te.getSizeInventory())
+        {
         Slot slot = new Slot(te, slotNum, xPos, yPos);
         this.addSlotToContainer(slot);        
         }

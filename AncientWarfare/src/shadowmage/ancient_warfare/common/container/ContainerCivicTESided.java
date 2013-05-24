@@ -49,9 +49,7 @@ public ContainerCivicTESided(EntityPlayer openingPlayer, TECivic te)
   int yPos;
 
   this.addPlayerSlots(openingPlayer, 8, 158, 4);    
-  
-  
-  
+    
   for(y = 0; y < te.getSizeInventory()/9; y++)
     {
     for(x = 0; x < 9; x++)

@@ -29,6 +29,7 @@ import java.util.WeakHashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -50,7 +51,7 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
-public abstract class TECivic extends TileEntity implements IInventory
+public abstract class TECivic extends TileEntity implements IInventory, ISidedInventory
 {
 
 protected static Random rng = new Random();
@@ -93,7 +94,25 @@ public void setCivic(Civic civ)
     {
     inventory = new AWInventoryBasic(civ.getInventorySize());
     }
+  this.setupSidedInventoryIndices(civ);
   }
+
+public void setupSidedInventoryIndices(Civic civ)
+  {
+  resourceSlotIndices = new int[civ.getResourceSlotSize()];
+  for(int i = 0; i< civ.getResourceSlotSize(); i++)
+    {
+    resourceSlotIndices[i]=i;
+    }
+  otherSlotIndices = new int[civ.getInventorySize()-civ.getResourceSlotSize()];
+  for(int i = civ.getResourceSlotSize(); i < civ.getInventorySize(); i++)
+    {
+    otherSlotIndices[i]=i;
+    }
+  }
+
+int[] resourceSlotIndices;
+int[] otherSlotIndices;
 
 public IInventory[] getInventoryToDropOnBreak()
   {
@@ -646,5 +665,53 @@ public boolean isStackValidForSlot(int i, ItemStack itemstack)
   return true;
   }
 
+/**
+ * get the inventory slot indices for the input side
+ * @param input side (0--bottom, 1--top, 2-5 sides)
+ * @return an array of ints containing the slot numbers for the input side
+ */
+@Override
+public int[] getSizeInventorySide(int var1)
+  {
+  switch(var1)
+  {
+  case 0://accessed from bottom
+  return null;
+  case 1://accessed from top
+  return resourceSlotIndices;
+  
+  /**
+   * 2-5 fallthrough
+   */
+  case 2:
+  case 3:
+  case 4:
+  case 5:
+  return otherSlotIndices;
+  }
+  return null;
+  }
+
+/**
+ * can insert into slot
+ * @param slot, stack, side
+ */
+@Override
+public boolean func_102007_a(int i, ItemStack itemstack, int j)
+  {
+  // TODO Auto-generated method stub
+  return false;
+  }
+
+/**
+ * can item be withdrawn from slot
+ * @param slot, stack, side
+ */
+@Override
+public boolean func_102008_b(int i, ItemStack itemstack, int j)
+  {
+  // TODO Auto-generated method stub
+  return false;
+  }
 
 }
