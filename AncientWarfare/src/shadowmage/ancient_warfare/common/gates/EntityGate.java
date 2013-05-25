@@ -281,7 +281,7 @@ public void onUpdate()
     }
   }
 
-boolean wasPowered = false;
+public boolean wasPowered = false;
 
 protected void checkForPowerUpdates()
   {

@@ -128,7 +128,7 @@ public boolean isWalkable(int x, int y, int z)
     else
       {
       TEGateProxy proxy = (TEGateProxy)world.getBlockTileEntity(x, y, z);
-      if(proxy.owner==null || !proxy.owner.getGateType().canSoldierActivate())
+      if(proxy.owner==null || !proxy.owner.getGateType().canSoldierActivate() || proxy.owner.wasPowered)
         {
         return false;
         }

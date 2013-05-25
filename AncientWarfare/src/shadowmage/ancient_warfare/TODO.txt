@@ -9,10 +9,7 @@ GENERAL
 * add current click-actions to item-tooltips (maybe when shift is pressed?)
 
 GATES
-* add ai repair gates
-* add ai target enemy gates
 * add default (transparent) texture for proxy blocks (for sprint texture)
-* pathfinding -- check if 'locked'
 
 VEHICLES
 * clean up vehicle alpha rendering
@@ -162,12 +159,14 @@ TWEAKS/OPTIMIZATION
     how to deal with hopping entities ?       
 * missiles need adjusted to hit entities close to shooter
 * update to 1.5.2 -- forge 712
-
 * squid farm farms rose?
-
 * add work site access 'normal' inventory from bottom (for hoppers/etc)
 * validate input slot items from ISidedInventory.canInsertItem
 * add releases folder to repository
+
+* pathfinding -- check if gate is locked for interactable
+* add ai repair gates
+* soldiers don't dismount properly when enemies are close (uses vehicle min attack dist)
 
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/

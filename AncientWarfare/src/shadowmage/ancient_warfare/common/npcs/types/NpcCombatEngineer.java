@@ -47,6 +47,7 @@ import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryNpc;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryPlayer;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryRepairableVehicle;
+import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetRepairableGates;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
@@ -97,6 +98,7 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
   helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.ATTACK, 0, 40, false, true));
   helper.addTargetEntry(new AITargetEntryNpc(npc, TargetType.COMMANDER, 0, 40, true, false, NpcTypeBase.npcCommander.getGlobalNpcType()));
   helper.addTargetEntry(new AITargetEntryRepairableVehicle(npc, 20));
+  helper.addTargetEntry(new AITargetRepairableGates(npc, 20));
   }
 
 @Override

@@ -21,7 +21,7 @@
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -54,12 +54,10 @@ public void updatePriority()
   {
   if(npc.targetHelper.areTargetsInRange(TargetType.REPAIR, 20))
     {
-//    Config.logDebug("setting priority to max");
     this.currentPriority = this.maxPriority;
     }
   else
     {
-//    Config.logDebug("no repair targets in range");
     this.currentPriority = 0;
     }
   }
@@ -67,13 +65,10 @@ public void updatePriority()
 @Override
 public void onRunningTick()
   {
-//  Config.logDebug("repair vehicles onRunningTick");
   if(!isTargetValid())
     {
-//    Config.logDebug("target was not valid, checking next target");
     if(!setTarget())
       {
-//      Config.logDebug("setting repair to finished");
       this.setFinished();
       }
     }
@@ -89,6 +84,14 @@ protected boolean isTargetValid()
       {
       VehicleBase liv = (VehicleBase)ent;
       if(liv.getHealth()<liv.baseHealth)
+        {
+        return true;
+        }
+      }
+    else if(ent instanceof EntityGate)
+      {
+      EntityGate gate = (EntityGate)ent;
+      if(gate.getHealth()<gate.getGateType().getMaxHealth())
         {
         return true;
         }

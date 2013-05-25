@@ -53,7 +53,7 @@ public void updatePriority()
     this.currentPriority = 0;
     return;
     }
-  if(npc.targetHelper.areTargetsInRange(TargetType.ATTACK, ((VehicleBase)npc.ridingEntity).vehicleType.getMinAttackDistance()))
+  if(npc.targetHelper.areTargetsInRange(TargetType.ATTACK, ((VehicleBase)npc.ridingEntity).vehicleType.getMinAttackDistance()*1.5f))
     {
     this.currentPriority = this.maxPriority;   
     }

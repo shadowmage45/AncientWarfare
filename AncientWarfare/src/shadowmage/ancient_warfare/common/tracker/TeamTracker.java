@@ -123,6 +123,16 @@ public void handleClientAppAction(byte num, String name, boolean accept)
   pkt.sendPacketToServer();
   }
 
+public boolean areTeamsMutuallyFriendly(World world, int teamA, int teamB)
+  {
+  return !isHostileTowards(world, teamA, teamB) && !isHostileTowards(world, teamB, teamA);
+  }
+
+public boolean areTeamsMutuallyHosile(World world, int teamA, int teamB)
+  {
+  return isHostileTowards(world, teamA, teamB) && isHostileTowards(world, teamB, teamA);
+  }
+
 public void handleNewPlayerLogin(EntityPlayer player)
   {
   if(this.serverTeamEntries[0]==null)

@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
@@ -60,10 +61,25 @@ public void onTick()
         int healAmt = npc.getAmountRepaired();
         if(health + healAmt > vehicle.baseHealth)
           {
-          healAmt = (int) (vehicle.baseHealth - vehicle.getHealth());
+          healAmt = (int) (vehicle.baseHealth - health);
           }
-        vehicle.setHealth(vehicle.getHealth() + healAmt);        
+        vehicle.setHealth(health + healAmt);        
         }      
+      }
+    else if(ent instanceof EntityGate)
+      {
+      EntityGate gate = (EntityGate)ent;
+      int health = (int) gate.getHealth();
+      int max = gate.getGateType().getMaxHealth();
+      if(health < max)
+        {
+        int healAmt = npc.getAmountRepaired();
+        if(health + healAmt > max)
+          {
+          healAmt = (int) (max - health);
+          }
+        gate.setHealth(health + healAmt);
+        }
       }
     }
   }
