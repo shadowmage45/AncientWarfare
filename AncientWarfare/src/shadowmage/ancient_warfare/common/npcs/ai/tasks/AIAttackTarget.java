@@ -144,6 +144,18 @@ protected void attackTargetMounted(ITargetEntry target)
       vehicle.moveHelper.setInput((byte)0, (byte)0);
       }    
     }
+  else if(vehicle.firingHelper.isNearTarget())
+    {
+    if(npc.actionTick<=0)
+      {
+      vehicle.localTurretPitch = vehicle.localTurretDestPitch;
+      vehicle.localTurretRotation = vehicle.localTurretDestRot;
+      vehicle.sendCompleteTurretPacket();
+      vehicle.firingHelper.handleFireUpdate();
+      this.npc.actionTick = (vehicle.currentReloadTicks + 20);
+      vehicle.moveHelper.setInput((byte)0, (byte)0);
+      }
+    }
   else//delay a bit to line up to target 
     {
     this.npc.actionTick = 1;

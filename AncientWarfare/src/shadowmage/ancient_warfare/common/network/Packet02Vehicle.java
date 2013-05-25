@@ -72,6 +72,11 @@ public void setPackCommand()
   this.packetData.setBoolean("pack", true);
   }
 
+public void setTurretParams(NBTTagCompound tag)
+  {
+  this.packetData.setCompoundTag("turret", tag);
+  }
+
 @Override
 public int getPacketType()
   {  

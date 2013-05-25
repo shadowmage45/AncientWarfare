@@ -6,6 +6,7 @@ THIS(next) WEEKEND
 
 GENERAL
 * add name search/filter box to structure builder guis (and crafting/selection guis later on.....)
+* missiles need adjusted to hit entities close to shooter
 
 GATES
 * add ai repair gates
@@ -17,8 +18,7 @@ VEHICLES
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
     use command baton, check if player has food in inventory && withdraw upkeep ?? 
-* soldier aim while on vehicles could still use attention (cheat?) 
-    how to deal with hopping entities ?   
+
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
@@ -157,6 +157,9 @@ TWEAKS/OPTIMIZATION
 
 * cleanup pathfinding using block bounds for isPathable check (should handle mod blocks much better)
 * pathfinding needs ability to jump down blocks (and/or remove diagonal & vertical pathing from crawler)
+
+* soldier aim while on vehicles could still use attention (cheat?) 
+    how to deal with hopping entities ?   
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/

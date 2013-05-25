@@ -42,6 +42,7 @@ import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
+import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
@@ -787,6 +788,29 @@ public void handlePacketUpdate(NBTTagCompound tag)
     {
     this.packVehicle();
     }
+  if(tag.hasKey("turret"))
+    {
+    this.handleTurretPacket(tag.getCompoundTag("turret"));
+    }
+  }
+
+public void sendCompleteTurretPacket()
+  {
+  if(this.worldObj.isRemote){return;}  
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setFloat("p", localTurretPitch);
+  tag.setFloat("r", localTurretRotation);  
+  Packet02Vehicle pkt = new Packet02Vehicle();
+  pkt.setTurretParams(tag);  
+  pkt.sendPacketToAllTrackingClients(this);
+  }
+
+protected void handleTurretPacket(NBTTagCompound tag)
+  {
+  this.localTurretPitch = tag.getFloat("p");
+  this.localTurretRotation = tag.getFloat("r");
+  this.localTurretDestPitch = this.localTurretPitch;
+  this.localTurretDestRot = this.localTurretRotation;  
   }
 
 public void handleInputData(NBTTagCompound tag)

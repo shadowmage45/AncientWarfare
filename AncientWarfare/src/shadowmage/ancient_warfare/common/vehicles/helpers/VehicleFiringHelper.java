@@ -615,6 +615,18 @@ public boolean isAtTarget()
   return vehicle.localTurretDestPitch==vehicle.localTurretPitch && Trig.getAbsDiff(yaw, dest) <0.35f;
   }
 
+public boolean isNearTarget()
+  {
+  float yaw = this.vehicle.localTurretRotation;
+  float dest = this.vehicle.localTurretDestRot;
+  while(yaw<0){yaw+=360.f;}
+  while(yaw>=360.f){yaw-=360.f;}
+  while(dest<0){dest+=360.f;}
+  while(dest>=360.f){dest-=360.f;}
+//  Config.logDebug("y: "+yaw+" d: "+dest);
+  return Trig.getAbsDiff(vehicle.localTurretDestPitch, vehicle.localTurretPitch) < 5 && vehicle.localTurretDestPitch==vehicle.localTurretPitch && Trig.getAbsDiff(yaw, dest) <5f;
+  }
+
 /**
  * used by soldiers to attempt to target a position. range should have already been validated by getEffectiveRange at some point
  * @param o
