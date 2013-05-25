@@ -54,6 +54,7 @@ protected int globalID = 0;
 protected String displayName = "";
 protected String tooltip = "";
 protected String texture = "";
+protected String iconTexture = "";
 protected int maxHealth = 40;
 protected int modelType = 0;
 
@@ -79,7 +80,7 @@ public Gate(int id)
 @Override
 public String getIconTexture()
   {
-  return texture;
+  return iconTexture;
   }
 
 @Override
@@ -189,7 +190,7 @@ public static EntityGate constructGate(World world, BlockPosition pos1, BlockPos
   ent.setHealth(type.getMaxHealth());
   if(pos1.x==pos2.x)
     {
-    if(facing==1 || facing==3)
+    if(facing==0 || facing==2)
       {
       facing++;
       facing %= 4;
@@ -197,7 +198,7 @@ public static EntityGate constructGate(World world, BlockPosition pos1, BlockPos
     }
   else if(pos1.z==pos2.z)
     {
-    if(facing==0 || facing==2)
+    if(facing==1 || facing==3)
       {
       facing++;
       facing %= 4;
@@ -230,7 +231,7 @@ private static void registerGateType(IGateType g)
   {
   Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.gateSpawner, g.getGlobalID(), g.getDisplayName(), "", g.getTooltip());
   d.addDisplayStack(g.getDisplayStack());
-  d.setIconTexture(g.getIconTexture(), g.getGlobalID());  
+  d.setIconTexture("ancientwarfare:gate/"+g.getIconTexture(), g.getGlobalID());  
   }
 
 

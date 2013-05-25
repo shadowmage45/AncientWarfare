@@ -31,6 +31,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -80,14 +81,12 @@ public boolean renderAsNormalBlock()
 public boolean shouldSideBeRendered(IBlockAccess par1iBlockAccess, int par2, int par3, int par4, int par5)
   {
   return false;
-//  return super.shouldSideBeRendered(par1iBlockAccess, par2, par3, par4, par5);
   }
 
 @Override
 public boolean isBlockSolid(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
   {
   return false;
-//  return par1IBlockAccess.getBlockMaterial(par2, par3, par4).isSolid();
   }
 
 @Override
@@ -97,28 +96,9 @@ public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int x,  int
   }
 
 @Override
-public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
-  {
-  return super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4);
-  }
-
-@Override
 public boolean isOpaqueCube()
   {
   return false;
-  }
-
-@Override
-public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
-  {  
-  super.setBlockBoundsBasedOnState(world, x, y, z);
-  }
-
-@Override
-public void setBlockBoundsForItemRender()
-  {
-  // TODO Auto-generated method stub
-  super.setBlockBoundsForItemRender();
   }
 
 @Override
@@ -130,13 +110,13 @@ public boolean isBlockReplaceable(World world, int x, int y, int z)
 @Override
 public ItemStack getPickBlock(MovingObjectPosition target, World world, int x,  int y, int z)
   {
-  return super.getPickBlock(target, world, x, y, z);
+  return null;
   }
 
 @Override
 public void registerIcons(IconRegister reg, Description d)
   {
-  // TODO Auto-generated method stub
+  d.setIcon(reg.registerIcon("ancientwarfare:gate/gateProxy"), 0);
   }
 
 @Override

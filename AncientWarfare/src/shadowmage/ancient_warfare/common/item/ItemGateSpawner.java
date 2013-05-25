@@ -70,7 +70,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 	  byte facing = (byte) BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
 	  BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
 	  BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
-	  if(player.getDistance(pos1.x+0.5d, pos1.y, pos2.x+0.5d) > 10)
+	  if(player.getDistance(pos1.x+0.5d, pos1.y, pos1.z+0.5d) > 10)
 	    {
 	    player.addChatMessage("You are too far away to construct that gate, move closer");
 	    return false;

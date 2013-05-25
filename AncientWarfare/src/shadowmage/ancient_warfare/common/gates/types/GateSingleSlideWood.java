@@ -37,6 +37,7 @@ public GateSingleSlideWood(int id)
   this.displayName = "Gate Single Wood";
   this.tooltip = "Opens towards one side";
   this.texture = "gateWood1.png";
+  this.iconTexture = "gateWoodSingle";
   }
 
 @Override

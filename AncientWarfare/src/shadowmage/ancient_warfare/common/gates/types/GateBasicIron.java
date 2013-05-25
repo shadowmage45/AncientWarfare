@@ -33,6 +33,7 @@ public GateBasicIron(int id)
   this.displayName = "Gate Basic Iron";
   this.tooltip = "Opens towards one side";
   this.texture = "gateIron1.png";
+  this.iconTexture = "gateIronBasic";
   }
 
 }

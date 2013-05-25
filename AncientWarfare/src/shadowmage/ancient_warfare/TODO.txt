@@ -9,7 +9,8 @@ GENERAL
 * add current click-actions to item-tooltips (maybe when shift is pressed?)
 
 GATES
-* add default (transparent) texture for proxy blocks (for sprint texture)
+* gate proxy blocks no-destroy from explosion
+* gate placement validation -- validate range from avg of pos1/pos2 x/z, min.y
 
 VEHICLES
 * clean up vehicle alpha rendering
@@ -163,10 +164,15 @@ TWEAKS/OPTIMIZATION
 * add work site access 'normal' inventory from bottom (for hoppers/etc)
 * validate input slot items from ISidedInventory.canInsertItem
 * add releases folder to repository
-
 * pathfinding -- check if gate is locked for interactable
 * add ai repair gates
 * soldiers don't dismount properly when enemies are close (uses vehicle min attack dist)
+
+* fix gate orientation setting for improper player orientation (it was moving when proper)
+* add default (transparent) texture for proxy blocks (for sprint texture)
+* add icons for gate types
+* fix gate range validation when placing 
+
 
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/

@@ -33,6 +33,7 @@ public GateDoubleIron(int id)
   this.tooltip = "Opens towards both sides";
   this.texture = "gateIron1.png";
   this.modelType = 1;
+  this.iconTexture = "gateIronDouble";
   }
 
 }

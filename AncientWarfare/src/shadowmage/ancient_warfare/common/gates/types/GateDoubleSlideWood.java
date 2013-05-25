@@ -37,6 +37,7 @@ public GateDoubleSlideWood(int id)
   this.displayName = "Gate Double Wood";
   this.tooltip = "Opens towards both sides";
   this.texture = "gateWood1.png";
+  this.iconTexture = "gateWoodDouble";
   }
 
 @Override

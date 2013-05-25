@@ -43,6 +43,7 @@ public GateRotatingBridge(int id)
   this.moveSpeed = 1.f;
   this.texture = "gateBridgeWood1.png";
   this.canSoldierInteract = false;
+  this.iconTexture = "gateWoodRotating";
   }
 
 @Override

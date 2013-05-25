@@ -42,6 +42,7 @@ public GateBasicWood(int id)
   this.displayName = "Gate Basic Wood";
   this.tooltip = "Opens upwards";
   this.texture = "gateWood1.png";
+  this.iconTexture = "gateWoodBasic";
   }
 
 @Override
