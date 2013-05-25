@@ -384,6 +384,7 @@ public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float
     {
 //    Config.logDebug("entity hit!!");
     blockHit = new MovingObjectPosition(hitEntity);
+    blockHit.hitVec.yCoord += hitEntity.height * 0.65f;
     }
   return blockHit;
   }

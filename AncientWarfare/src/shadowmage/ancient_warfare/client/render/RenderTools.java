@@ -31,6 +31,8 @@ import net.minecraft.util.Icon;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_warfare.common.config.Config;
+
 public class RenderTools
 {
 
@@ -49,6 +51,7 @@ public static Icon registerIcon(String tex)
 
 public static Icon getIcon(String tex)
   {
+  Config.logDebug("getting icon from custom icon map: "+tex);
   Icon ico = iconMap.get(tex);
   if(ico==null)
     {

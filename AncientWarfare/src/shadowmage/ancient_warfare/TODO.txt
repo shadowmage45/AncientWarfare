@@ -6,7 +6,6 @@ THIS(next) WEEKEND
 
 GENERAL
 * check distance on items before scanning/building/placing/etc
-* new civic GUI with split resource slots
 * add name search/filter box to structure builder guis (and crafting/selection guis later on.....)
 
 GATES
@@ -16,13 +15,15 @@ GATES
 
 VEHICLES
 * clean up vehicle alpha rendering
-* auto aim on vehicles needs entity-hit height adjustment re-added/unbroken
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
     use command baton, check if player has food in inventory && withdraw upkeep ?? 
 * soldier aim while on vehicles could still use attention (cheat?) 
     how to deal with hopping entities ?   
+* pathfinding needs ability to jump down blocks
+* courier routing slip GUI top slot won't move down ( - button)
+* pathfinding wants to path through hoppers (need to just test block collision bounds?)    
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
@@ -209,6 +210,9 @@ TWEAKS/OPTIMIZATION
 * warhouse bounds rendering
 
 /********** 05-25-13 **********/
+* adjust civic GUI to place resource slots separate from regular slots
+* auto aim on vehicles needs entity-hit height adjustment re-added/unbroken
+
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/

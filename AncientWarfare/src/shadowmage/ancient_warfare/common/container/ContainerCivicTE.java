@@ -54,25 +54,51 @@ public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
 
   this.addPlayerSlots(openingPlayer, 8, 158, 4);    
   
-  for(y = 0; y < te.getSizeInventory()/9; y++)
+  this.addResourceSlots();
+  this.addRegularSlots();  
+  }
+
+protected void addRegularSlots()
+  {
+  int y;
+  int x;
+  int slotNum;
+  int xPos; 
+  int yPos;  
+  
+  for(int i = teBase.getCivic().getResourceSlotSize(); i < teBase.getCivic().getInventorySize(); i++)
+    {
+    x = (i-teBase.getCivic().getResourceSlotSize()) %9;
+    y = (i-teBase.getCivic().getResourceSlotSize()) /9;
+    slotNum = i;
+    xPos = 8 + x * 18;
+    yPos = y * 18 + 15;
+    Slot slot = new Slot(teBase, slotNum, xPos, yPos);
+    this.addSlotToContainer(slot);            
+    }  
+  }
+
+protected void addResourceSlots()
+  {
+  int y;
+  int x;
+  int slotNum;
+  int xPos; 
+  int yPos;  
+  for(y = 0; y < teBase.getCivic().getResourceSlotSize(); y++)
     {
     for(x = 0; x < 9; x++)
       {
       slotNum = y*9 + x;
       xPos = 8 + x * 18;
-      yPos = y * 18 + 15;
+      yPos = y * 18 + 15 + 3*18+ 5;
       if(slotNum<teBase.getCivic().getResourceSlotSize())
         {
-        Slot slot = new SlotResourceOnly(te, slotNum, xPos, yPos, teBase.getCivic().getResourceItemFilters());
+        Slot slot = new SlotResourceOnly(teBase, slotNum, xPos, yPos, teBase.getCivic().getResourceItemFilters());
         this.addSlotToContainer(slot);   
-        }
-      else if(slotNum<te.getSizeInventory())
-        {
-        Slot slot = new Slot(te, slotNum, xPos, yPos);
-        this.addSlotToContainer(slot);        
-        }
+        }     
       }
-    }  
+    }
   }
 
 @Override

@@ -22,11 +22,14 @@ package shadowmage.ancient_warfare.common.container;
 
 import java.util.List;
 
+import shadowmage.ancient_warfare.client.registry.RenderRegistry;
+import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 
 public class SlotResourceOnly extends Slot
 {
@@ -58,7 +61,12 @@ public boolean isItemValid(ItemStack par1ItemStack)
   return false;
   }
 
-
-
+@Override
+public Icon getBackgroundIconIndex()
+  {
+  return RenderTools.getIcon("ancientwarfare:testIcon1");
+  // TODO Auto-generated method stub
+//  return super.getBackgroundIconIndex();
+  }
 
 }
