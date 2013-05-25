@@ -52,7 +52,7 @@ import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public abstract class TECivic extends TileEntity implements IInventory, ISidedInventory
+public abstract class TECivic extends TileEntity implements IInventory
 {
 
 protected static Random rng = new Random();
@@ -78,6 +78,8 @@ public AWInventoryBase inventory = null;
 public AWInventoryBase overflow = new AWInventoryBasic(4);
 protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
 
+protected int[] resourceSlotIndices;
+protected int[] otherSlotIndices;
 protected Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
 protected boolean hasWork = false;
 
@@ -108,12 +110,10 @@ public void setupSidedInventoryIndices(Civic civ)
   otherSlotIndices = new int[civ.getInventorySize()-civ.getResourceSlotSize()];
   for(int i = civ.getResourceSlotSize(); i < civ.getInventorySize(); i++)
     {
-    otherSlotIndices[i]=i;
+    otherSlotIndices[i-civ.getResourceSlotSize()]=i;
     }
   }
 
-int[] resourceSlotIndices;
-int[] otherSlotIndices;
 
 public IInventory[] getInventoryToDropOnBreak()
   {
@@ -418,6 +418,10 @@ protected void setHasWork(boolean newVal)
  */
 public AxisAlignedBB getWorkBounds()
   { 
+  if(minX==maxX && minY==maxY && minZ==maxZ)
+    {
+    return null;
+    }
   return AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX+1, maxY+1, maxZ+1);
   }
 
@@ -490,7 +494,10 @@ public void writeToNBT(NBTTagCompound tag)
   super.writeToNBT(tag);
   tag.setInteger("civType", civic.getGlobalID());
   tag.setIntArray("bounds", new int[]{minX, minY, minZ, maxX, maxY, maxZ});
-  tag.setCompoundTag("inventory", this.inventory.getNBTTag());
+  if(this.inventory!=null)
+  {
+	  tag.setCompoundTag("inventory", this.inventory.getNBTTag());	  
+  }
   tag.setCompoundTag("overflow", this.overflow.getNBTTag());
   tag.setInteger("team", this.teamNum);
   tag.setBoolean("broad", broadcastWork);
@@ -689,55 +696,6 @@ public boolean isInvNameLocalized()
 public boolean isStackValidForSlot(int i, ItemStack itemstack)
   {  
   return true;
-  }
-
-/**
- * get the inventory slot indices for the input side
- * @param input side (0--bottom, 1--top, 2-5 sides)
- * @return an array of ints containing the slot numbers for the input side
- */
-@Override
-public int[] getSizeInventorySide(int var1)
-  {
-  switch(var1)
-  {
-  case 0://accessed from bottom
-  return null;
-  case 1://accessed from top
-  return resourceSlotIndices;
-  
-  /**
-   * 2-5 fallthrough
-   */
-  case 2:
-  case 3:
-  case 4:
-  case 5:
-  return otherSlotIndices;
-  }
-  return null;
-  }
-
-/**
- * can insert into slot
- * @param slot, stack, side
- */
-@Override
-public boolean func_102007_a(int i, ItemStack itemstack, int j)
-  {
-  // TODO Auto-generated method stub
-  return false;
-  }
-
-/**
- * can item be withdrawn from slot
- * @param slot, stack, side
- */
-@Override
-public boolean func_102008_b(int i, ItemStack itemstack, int j)
-  {
-  // TODO Auto-generated method stub
-  return false;
   }
 
 }

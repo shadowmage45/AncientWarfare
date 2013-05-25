@@ -300,7 +300,7 @@ public static int getEmptySlots(IInventory inv, int firstSlot, int lastSlot)
 public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int side)
   {
   if(side<0 || side>5)
-    {
+    {    
     return tryMergeStack(inv, toMerge, getSlotIndexMap(inv));
     }
   if(inv instanceof ISidedInventory)
@@ -331,7 +331,7 @@ public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int[] s
   if(slotIndices==null)
     {
     return toMerge;
-    }
+    } 
   if(toMerge==null)
     {
     return null;

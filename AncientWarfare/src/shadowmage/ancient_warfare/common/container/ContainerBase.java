@@ -223,7 +223,7 @@ protected boolean mergeItemStack(ItemStack inputStack, int startSlot, int stopSl
     for(int i =startSlot; i < stopSlot && inputStack.stackSize > 0 ; i++)
       {
       slot = (Slot)this.inventorySlots.get(i);
-      if(slot==null)
+      if(slot==null || !slot.isItemValid(inputStack))
         {
         continue;
         }      
@@ -247,6 +247,10 @@ protected boolean mergeItemStack(ItemStack inputStack, int startSlot, int stopSl
   for(int i = startSlot; i < stopSlot && inputStack.stackSize > 0 ; i++)
     {
     slot = (Slot)this.inventorySlots.get(i);
+    if(slot==null || !slot.isItemValid(inputStack))
+      {
+      continue;
+      } 
     stackFromSlot = slot.getStack();
     if(stackFromSlot==null)
       {

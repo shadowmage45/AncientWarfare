@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -131,26 +132,20 @@ public boolean doWork(NpcBase npc)
     }
   IInventory target = deposit ? other : npc.inventory;
   IInventory source = deposit ? npc.inventory : other;
-  boolean found = false;
   switch(routingType)
   {
   case ALL_BUT:
-  found = doAllExcept(source, target);
-  break;
+  return doTransaction(source, target, false, true);
   case ALL_BUT_EXACT:
-  found = doAllExceptExact(source, target);
-  break;
+  return doTransaction(source, target, true, true);
   case ANY_OF:
-  found = doAllOf(source, target);
-  break;
+  return doTransaction(source, target, false, false);
   case EXACT:
-  found = doAllExact(source, target);
-  break;
+  return doTransaction(source, target, true, false);
   case FILL_TO:
-  found = doFillTo(source, target);
-  break;
+  return doFillTo(source, target);
   }
-  return found;
+  return false;
   }
 
 /**
@@ -171,16 +166,6 @@ protected int filterContains(ItemStack stack)
       }
     }
   return -1;
-  }
-
-protected boolean doAllOf(IInventory source, IInventory target)
-  { 
-  return doTransaction(source, target, false, false);
-  }
-
-protected boolean doAllExact(IInventory source, IInventory target)
-  {  
-  return doTransaction(source, target, true, false);
   }
 
 protected boolean doFillTo(IInventory source, IInventory target)
@@ -246,11 +231,6 @@ protected boolean doFillTo(IInventory source, IInventory target)
   return shouldContinue;
   }
 
-protected boolean doAllExcept(IInventory source, IInventory target)
-  {
-  return doTransaction(source, target, false, true);
-  }
-
 protected boolean doTransaction(IInventory source, IInventory target, boolean exact, boolean except)
   {
   boolean shouldContinue = false;
@@ -260,21 +240,15 @@ protected boolean doTransaction(IInventory source, IInventory target, boolean ex
   if(source instanceof ISidedInventory)
     {
     sourceSlots = ((ISidedInventory)source).getSizeInventorySide(getSide());
-    }
-  if(target instanceof ISidedInventory)
-    {
-    targetSlots = ((ISidedInventory)target).getSizeInventorySide(getSide());
-    }
+    }  
   int sourceSize = sourceSlots !=null ? sourceSlots.length : source.getSizeInventory();
   int sourceIndex;
-  int found;
   for(int i = 0; i < sourceSize; i++)
     {
     sourceIndex = sourceSlots !=null ? sourceSlots[i] : i;    
     stack = source.getStackInSlot(sourceIndex);
     if(stack==null){continue;}
-    found = filterContains(stack);
-    if( shouldTransact(found, stack.stackSize, exact, except) )
+    if(shouldTransact(stack, exact, except))
       {
       shouldContinue = true;
       stack = InventoryTools.tryMergeStack(target, stack, getSide());      
@@ -282,37 +256,41 @@ protected boolean doTransaction(IInventory source, IInventory target, boolean ex
         {
         shouldContinue = false;        
         }
-      source.setInventorySlotContents(i, stack);
+      source.setInventorySlotContents(sourceIndex, stack);
       break;      
       }
     }  
   return shouldContinue;
   }
 
-protected boolean shouldTransact(int found, int stackSize, boolean exact, boolean except)
+protected boolean shouldTransact(ItemStack stack, boolean exact, boolean except)
   {
-  if(except && !exact && found==-1)
+  if(stack==null)
     {
+    return false;
+    }
+  int found = filterContains(stack);
+  if(!exact && except && found==-1)
+    {
+    Config.logDebug("returning should do ALL_BUT : true");
+    return true;
+    }  
+  else if(exact && except && stack.stackSize!=found)
+    {
+    Config.logDebug("returning should do ALL_BUT_EXCEPT : true");
     return true;
     }
-  else if(except && exact && found!=stackSize)
+  else if(exact && !except && found==stack.stackSize)
     {
+    Config.logDebug("returning should do EXACT : true");
     return true;
-    }
-  else if(!exact && !except)
+    }  
+  else if(!exact && !except && found >0)
     {
-    return found>0;
-    }
-  else if(exact && !except)
-    {
-    return found==stackSize;
+    Config.logDebug("returning should do ANY OF : true");
+    return true;
     }
   return false;
-  }
-
-protected boolean doAllExceptExact(IInventory source, IInventory target)
-  {
-  return doTransaction(source, target, true, true);
   }
 
 @Override

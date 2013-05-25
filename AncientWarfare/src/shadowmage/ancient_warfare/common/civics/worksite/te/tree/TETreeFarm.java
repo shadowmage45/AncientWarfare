@@ -127,9 +127,9 @@ protected void doWork(NpcBase npc, WorkPoint p)
       {
       if(this.resourceFilterContains(item))
         {
-        InventoryTools.tryMergeStack(inventory, item, 1);
+        InventoryTools.tryMergeStack(this, item, 1);
         }
-      item = this.inventory.tryMergeItem(item);
+      item = InventoryTools.tryMergeStack(this, item, 2);
       item = this.overflow.tryMergeItem(item);
       InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
       }

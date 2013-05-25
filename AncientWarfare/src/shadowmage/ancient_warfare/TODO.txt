@@ -26,7 +26,7 @@ NPCS
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
-* NPC town hall will occasionally respawn missing NPCs    
+* NPC town hall will occasionally respawn missing NPCs   
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -203,6 +203,10 @@ TWEAKS/OPTIMIZATION
 
 * might need to rework how bridge does blocks -- set to only remove 'lowered' blocks when it is fully closed?
 * add gate worldObj.ENTITY_MAX_RADIUS code adjustment to try and improve gate interaction
+
+* fix container slot validation code for shift click/merge item for civics with resource slots
+* fix sided inventory interaction, first pass
+* warhouse bounds rendering
 
 /********** 05-25-13 **********/
 /********** 05-26-13 **********/

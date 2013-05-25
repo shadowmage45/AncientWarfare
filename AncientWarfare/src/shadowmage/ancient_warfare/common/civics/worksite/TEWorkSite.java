@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
@@ -32,7 +33,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public abstract class TEWorkSite extends TECivic
+public abstract class TEWorkSite extends TECivic implements ISidedInventory
 {
 
 protected LinkedList<WorkPoint> workPoints = new LinkedList<WorkPoint>();
@@ -151,5 +152,62 @@ public boolean isStackValidForSlot(int i, ItemStack itemstack)
     }
   return true;
   }
+
+
+/**
+ * get the inventory slot indices for the input side
+ * @param input side (0--bottom, 1--top, 2-5 sides)
+ * @return an array of ints containing the slot numbers for the input side
+ */
+@Override
+public int[] getSizeInventorySide(int var1)
+  {
+  if(resourceSlotIndices.length==0)
+    {
+    return otherSlotIndices;
+    }
+  switch(var1)
+  {
+  case 0://accessed from bottom
+  return null;
+  case 1://accessed from top
+  Config.logDebug("returning resource slot indices from te: size: "+resourceSlotIndices.length);
+  return resourceSlotIndices;
+  
+  /**
+   * 2-5 fallthrough
+   */
+  case 2:
+  case 3:
+  case 4:
+  case 5:
+  Config.logDebug("returning normal slot indices from te: size: "+otherSlotIndices.length);
+  return otherSlotIndices;
+  }
+  return null;
+  }
+
+/**
+ * can insert into slot
+ * @param slot, stack, side
+ */
+@Override
+public boolean func_102007_a(int i, ItemStack itemstack, int j)
+  {
+  // TODO Auto-generated method stub
+  return false;
+  }
+
+/**
+ * can item be withdrawn from slot
+ * @param slot, stack, side
+ */
+@Override
+public boolean func_102008_b(int i, ItemStack itemstack, int j)
+  {
+  // TODO Auto-generated method stub
+  return false;
+  }
+
 
 }

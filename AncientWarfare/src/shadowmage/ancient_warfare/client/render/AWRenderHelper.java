@@ -264,19 +264,16 @@ public static void renderCivicBoundingBoxes(World world, EntityPlayer player, fl
     {
     if(TECivic.class.isAssignableFrom(te.getClass()))
       {
-      TECivic tec = (TECivic)te;      
-      if(tec.getCivic()!=null && tec.getCivic().isWorkSite())
+      TECivic tec = (TECivic)te;     
+      AxisAlignedBB bb = tec.getWorkBounds(); 
+      if(bb!=null)
         {
-        AxisAlignedBB bb = tec.getWorkBounds(); 
-        if(bb!=null)
-          {
-          BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick), 1.f, 1.f, 1.f);
-          }
-        bb = tec.getSecondaryRenderBounds();
-        if(bb!=null)
-          {
-          BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick), 1.f, 0.6f, 0.6f);
-          }
+        BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick), 1.f, 1.f, 1.f);
+        }
+      bb = tec.getSecondaryRenderBounds();
+      if(bb!=null)
+        {
+        BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick), 1.f, 0.6f, 0.6f);
         }
       }
     }
