@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.civics.worksite.te.builder;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
@@ -182,5 +183,6 @@ public void writeToNBT(NBTTagCompound par1nbtTagCompound)
     par1nbtTagCompound.setCompoundTag("builder", this.builder.getNBTTag());
     }
   }
+
 
 }

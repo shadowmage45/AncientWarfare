@@ -305,7 +305,7 @@ public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int sid
     }
   if(inv instanceof ISidedInventory)
     {
-    return tryMergeStack(inv, toMerge, ((ISidedInventory)inv).getSizeInventorySide(side));
+    return tryMergeStack(inv, toMerge, ((ISidedInventory)inv).getAccessibleSlotsFromSide(side));
     }
   return tryMergeStack(inv, toMerge, getSlotIndexMap(inv));
   }

@@ -161,6 +161,7 @@ TWEAKS/OPTIMIZATION
     
 * missiles need adjusted to hit entities close to shooter
 
+* update to 1.5.2 -- forge 712
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/

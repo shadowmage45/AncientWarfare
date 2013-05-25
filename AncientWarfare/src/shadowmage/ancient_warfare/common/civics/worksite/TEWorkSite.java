@@ -160,7 +160,7 @@ public boolean isStackValidForSlot(int i, ItemStack itemstack)
  * @return an array of ints containing the slot numbers for the input side
  */
 @Override
-public int[] getSizeInventorySide(int var1)
+public int[] getAccessibleSlotsFromSide(int var1)
   {
   if(resourceSlotIndices.length==0)
     {
@@ -187,23 +187,15 @@ public int[] getSizeInventorySide(int var1)
   return null;
   }
 
-/**
- * can insert into slot
- * @param slot, stack, side
- */
 @Override
-public boolean func_102007_a(int i, ItemStack itemstack, int j)
+public boolean canInsertItem(int i, ItemStack itemstack, int j)
   {
   // TODO Auto-generated method stub
   return false;
   }
 
-/**
- * can item be withdrawn from slot
- * @param slot, stack, side
- */
 @Override
-public boolean func_102008_b(int i, ItemStack itemstack, int j)
+public boolean canExtractItem(int i, ItemStack itemstack, int j)
   {
   // TODO Auto-generated method stub
   return false;

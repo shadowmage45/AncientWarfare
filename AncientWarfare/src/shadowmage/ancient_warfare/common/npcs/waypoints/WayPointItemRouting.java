@@ -176,11 +176,11 @@ protected boolean doFillTo(IInventory source, IInventory target)
   int[] targetSlots = null;
   if(source instanceof ISidedInventory)
     {
-    sourceSlots = ((ISidedInventory)source).getSizeInventorySide(getSide());
+    sourceSlots = ((ISidedInventory)source).getAccessibleSlotsFromSide(getSide());
     }
   if(target instanceof ISidedInventory)
     {
-    targetSlots = ((ISidedInventory)target).getSizeInventorySide(getSide());
+    targetSlots = ((ISidedInventory)target).getAccessibleSlotsFromSide(getSide());
     }
   int sourceSize = sourceSlots !=null ? sourceSlots.length : source.getSizeInventory();
   int targetSize = targetSlots !=null ? targetSlots.length : target.getSizeInventory();
@@ -239,7 +239,7 @@ protected boolean doTransaction(IInventory source, IInventory target, boolean ex
   int[] targetSlots = null;
   if(source instanceof ISidedInventory)
     {
-    sourceSlots = ((ISidedInventory)source).getSizeInventorySide(getSide());
+    sourceSlots = ((ISidedInventory)source).getAccessibleSlotsFromSide(getSide());
     }  
   int sourceSize = sourceSlots !=null ? sourceSlots.length : source.getSizeInventory();
   int sourceIndex;

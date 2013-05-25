@@ -30,7 +30,7 @@ import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import shadowmage.meim.common.util.StringTools;
+import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class GateRule
 {

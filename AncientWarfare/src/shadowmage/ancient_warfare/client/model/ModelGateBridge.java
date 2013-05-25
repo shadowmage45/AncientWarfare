@@ -8,7 +8,7 @@ package shadowmage.ancient_warfare.client.model;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import shadowmage.meim.common.util.Trig;
+import shadowmage.ancient_warfare.common.utils.Trig;
  
  
 public class ModelGateBridge extends ModelBase
