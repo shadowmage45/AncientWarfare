@@ -169,7 +169,7 @@ public int[] getAccessibleSlotsFromSide(int var1)
   switch(var1)
   {
   case 0://accessed from bottom
-  return null;
+  return otherSlotIndices;
   case 1://accessed from top
   Config.logDebug("returning resource slot indices from te: size: "+resourceSlotIndices.length);
   return resourceSlotIndices;
@@ -190,15 +190,17 @@ public int[] getAccessibleSlotsFromSide(int var1)
 @Override
 public boolean canInsertItem(int i, ItemStack itemstack, int j)
   {
-  // TODO Auto-generated method stub
-  return false;
+  if(this.getCivic().getResourceSlotSize()>0 && i < this.getCivic().getResourceSlotSize())
+    {
+    return this.resourceFilterContains(itemstack);
+    }
+  return true;
   }
 
 @Override
 public boolean canExtractItem(int i, ItemStack itemstack, int j)
   {
-  // TODO Auto-generated method stub
-  return false;
+  return true;
   }
 
 

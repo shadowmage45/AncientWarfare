@@ -34,7 +34,7 @@ public class TESquidFarm extends TEFishery
 
 public TESquidFarm()
   {
-  fishFilter = new ItemStack(Item.dyePowder,1,1);
+  fishFilter = new ItemStack(Item.dyePowder,1,0);
   }
 
 }

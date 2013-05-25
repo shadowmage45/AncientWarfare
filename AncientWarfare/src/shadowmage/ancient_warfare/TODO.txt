@@ -6,23 +6,31 @@ THIS(next) WEEKEND
 
 GENERAL
 * add name search/filter box to structure builder guis (and crafting/selection guis later on.....)
+* add current click-actions to item-tooltips (maybe when shift is pressed?)
 
 GATES
 * add ai repair gates
+* add ai target enemy gates
 * add default (transparent) texture for proxy blocks (for sprint texture)
+* pathfinding -- check if 'locked'
 
 VEHICLES
 * clean up vehicle alpha rendering
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
-    use command baton, check if player has food in inventory && withdraw upkeep ?? 
+    use command baton, check if player has food in inventory && withdraw upkeep ??
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
 * NPC town hall will occasionally respawn missing NPCs
 
 /***************************************************************UPCOMING FEATURES***************************************************************/
+TEMPLATES
+* resource lists for gates
+* resource lists for npcs
+* resource lists for vehicles
+
 RESEARCH
 * vehicle research system (initial only t0(rough) mats and t0(rough) vehicle variants)
 * vehicle upgrade research (0 known until researched)
@@ -105,8 +113,6 @@ WAREHOUSE
 
 STRUCTURE BUILDING
 
-TEMPLATES
-
 ITEM ROUTING
 
 WORKSITES
@@ -143,25 +149,26 @@ TWEAKS/OPTIMIZATION
 /********** 05-25-13 **********/
 * adjust civic GUI to place resource slots separate from regular slots
 * auto aim on vehicles needs entity-hit height adjustment re-added/unbroken
-
 * investigate making it so missiles won't collide with with gates (including vanilla arrows)
     could probably set gates completely no no-collide and do a custom ray trace to see if
     player is targeting a gate
 * validate point selection for gates pre-construction
 * fix gate bounds rendering
-* check distance on items before scanning/building/placing/etc
-    
+* check distance on items before scanning/building/placing/etc    
 * fix courier routing slip GUI top slot won't move down ( - button)
-
 * cleanup pathfinding using block bounds for isPathable check (should handle mod blocks much better)
 * pathfinding needs ability to jump down blocks (and/or remove diagonal & vertical pathing from crawler)
-
 * soldier aim while on vehicles could still use attention (cheat?) 
-    how to deal with hopping entities ?   
-    
+    how to deal with hopping entities ?       
 * missiles need adjusted to hit entities close to shooter
-
 * update to 1.5.2 -- forge 712
+
+* squid farm farms rose?
+
+* add work site access 'normal' inventory from bottom (for hoppers/etc)
+* validate input slot items from ISidedInventory.canInsertItem
+* add releases folder to repository
+
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/
