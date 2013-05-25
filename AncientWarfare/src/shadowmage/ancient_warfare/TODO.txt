@@ -9,6 +9,7 @@ GENERAL
 
 GATES
 * add ai repair gates
+* add default (transparent) texture for proxy blocks (for sprint texture)
 
 VEHICLES
 * clean up vehicle alpha rendering
@@ -18,8 +19,6 @@ NPCS
     use command baton, check if player has food in inventory && withdraw upkeep ?? 
 * soldier aim while on vehicles could still use attention (cheat?) 
     how to deal with hopping entities ?   
-* pathfinding needs ability to jump down blocks (and/or remove diagonal & vertical pathing from crawler)
-* pathfinding wants to path through hoppers (need to just test block collision bounds?)    
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
@@ -155,6 +154,9 @@ TWEAKS/OPTIMIZATION
 * check distance on items before scanning/building/placing/etc
     
 * fix courier routing slip GUI top slot won't move down ( - button)
+
+* cleanup pathfinding using block bounds for isPathable check (should handle mod blocks much better)
+* pathfinding needs ability to jump down blocks (and/or remove diagonal & vertical pathing from crawler)
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/

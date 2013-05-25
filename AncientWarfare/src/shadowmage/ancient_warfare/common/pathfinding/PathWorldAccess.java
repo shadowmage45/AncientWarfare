@@ -20,12 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding;
 
-import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.world.IBlockAccess;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 
 public class PathWorldAccess
 {
@@ -57,24 +57,60 @@ public int getTravelCost(int x, int y, int z)
   return 10;
   }
 
+/**
+ * checks the collision bounds of the block at x,y,z to make sure it is <= 0.5 tall (pathable)
+ * @param x
+ * @param y
+ * @param z
+ * @return true if it is a pathable block, false if it fails bounds checks
+ */
+protected boolean checkBlockBounds(int x, int y, int z)  
+  {
+  Block block;
+  int id = world.getBlockId(x, y, z);
+//  int meta = world.getBlockMetadata(x, y, z);
+  block = Block.blocksList[id];
+  if(block!=null)
+    {
+    block.setBlockBoundsBasedOnState(world, x, y, z);
+    if(block.getBlockBoundsMaxY() > 0.5d)
+      {
+      return false;
+      }
+    }
+  return true;
+  }
+
 public boolean isWalkable(int x, int y, int z)
   {  
   int id = world.getBlockId(x, y, z);
   int id2 = world.getBlockId(x, y-1, z);
   int id3 = world.getBlockId(x, y+1, z);
-  boolean cube = isSolidBlock(id);
-  boolean cube2 = isSolidBlock(id2);
-  boolean cube3 = isSolidBlock(id3);
+  boolean cube = !checkBlockBounds(x, y, z);//isSolidBlock(id);
+  boolean cube2 = !checkBlockBounds(x, y-1, z);//isSolidBlock(id2);
+  boolean cube3 = !checkBlockBounds(x, y+1, z);//isSolidBlock(id3);
   boolean ladder;
-  if(this.checkColidingEntities(x, y, z))
+  /**
+   * check basic early out
+   * check for doors
+   * check for gates
+   * check for ladders
+   * check for water
+   * check block bounds
+   */
+  if(cube)
     {
     return false;
     }
-  else if(id==0 && cube2 && id3==0)//early out check for the most basic of pathable areas
+  if(!isPathable(id))//solid unpassable block, or lava
+    { 
+    return false;
+    }
+  if(id==0 && cube2 && id3==0)//early out check for the most basic of pathable areas
     {
     return true;
     }
-  else if(id==BlockLoader.gateProxy.blockID)
+  if(id==BlockLoader.gateProxy.blockID)
     {
     if(!canOpenDoors)//if can't open doors, auto fail
       {
@@ -98,14 +134,10 @@ public boolean isWalkable(int x, int y, int z)
         }
       }
     }
-  else if(cube || !isPathable(id))//solid unpassable block, or lava
-    { 
-    return false;
-    }
-  else if(cube3)//no room to move
+  else if(!canOpenDoors && isDoor(x, y, z))
     {
     return false;
-    }
+    }  
   else if(isWater(id))//can't swim check
     {
     if(!canSwim)
@@ -128,8 +160,8 @@ public boolean isWalkable(int x, int y, int z)
   else if(id2==Block.fence.blockID || id2 == Block.fenceGate.blockID || id2 == Block.cobblestoneWall.blockID)
     {
     return false;
-    }
-  else if(!canOpenDoors && isDoor(x, y, z))
+    }  
+  else if(cube3)//no room to move
     {
     return false;
     }

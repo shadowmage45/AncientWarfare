@@ -126,6 +126,7 @@ public NpcBase(World par1World)
   this.worldAccess.canOpenDoors = true;
   this.worldAccess.canUseLaders = true;
   this.worldAccess.canSwim = true;
+  this.worldAccess.canDrop = true;
   this.nav = new Navigator(this);
   this.nav.setCanOpenDoors(true);
   this.nav.setCanSwim(true);

@@ -358,6 +358,17 @@ private void findNeighbors(Node n)
   tryAddSearchNode( n.x+1, n.y-1, n.z, n);
   tryAddSearchNode( n.x, n.y-1, n.z-1, n);
   tryAddSearchNode( n.x, n.y-1, n.z+1, n);  
+  
+  /**
+   * add NSEW Y-2 jumpable-down blocks
+   */
+  if(world.canDrop)
+    {
+    tryAddSearchNode( n.x-1, n.y-2, n.z, n);
+    tryAddSearchNode( n.x+1, n.y-2, n.z, n);
+    tryAddSearchNode( n.x, n.y-2, n.z-1, n);
+    tryAddSearchNode( n.x, n.y-2, n.z+1, n);    
+    }  
   }
 
 private void tryAddSearchNode(int x, int y, int z, Node p)
