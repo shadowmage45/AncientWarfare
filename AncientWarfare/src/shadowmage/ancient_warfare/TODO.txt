@@ -96,13 +96,10 @@ CRAFTING
 /************************************************DONE/OPTI*************************************************/
  
 OPTIONAL
-* partially destroyable blocks ? (hold destruction status as meta-data?)
 * move upgrades/ammo/armor over to self-registering class with an underlying array instead of the map they currently use        
 * grenades ?
 * land-mines ?
 * move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
-* advanced (exotic) soldier types 
-* advanced workers
    
 SCANNER
     
@@ -145,66 +142,7 @@ TWEAKS/OPTIMIZATION
 * custom block placement code for creative/survival builders (set server block, manually relay to client--should 
         decrease overall network used from vanilla MC resending entire chunks..)
 
-
-********************* DONE STUFF *************************  
-
-/********** 05-20-13 **********/
-* prep work on gates
-* add gate spawner item WIP
-* add IGateType, Gate, EntityGate classes
-
-/********** 05-21-13 **********/
-* add more gate types
-* rework gates to use blocks for collision
-
-/********** 05-22-13 **********/
-* add gate scanning -- working
-* add drawbridge type gate -- working
-* cleanup a few minor foobars from work in scanning code
-* clean up bounding box code on drawbridge gate
-* fix drawbridge placement code
-* fix some render partial tick code
-
-/********** 05-23-13 **********/
-* soldier pathfinding/activation for gates--fixed/works
-* enable gate construction bounding box rendering--works
-
-* need to not scan/build proxy blocks
-* when spawned from scanner, need to place default blocks
-* bridge needs to leave lowest row of proxy blocks all the time--works
-* validate player orientation when placing, ensure it is one of the two valid orientations for that pair of build positions
-* warehouse blocks need placement validation (simple check for at least 2 air blocks on nsew directions)
-* bridge needs to check area is clear before opening--works
-
-* fix up gate pathfinding
-* fix warehouse storage block placement code
-* clean up vehicle turret rotation while turning the vehicle
-
-* prep work on te sided inventory code
-
-/********** 05-24-13 **********/
-* implement te sided inventory
-* implement courier waypoint sided inventory interaction
-
-* more inventory tools cleanup work (sided inventory handling -- need cleaner method than creating new arrays)
-* add sided inventory code to work site TEs
-* add resource items to civic work sites
-* add resource slot size to civic work sites
-
-* add onInventoryChanged() calls to any AI that modifies inventories
-* add range-validation to civic, npc, vehicle containers
-
-* add stack size reduction code to useable items (spawners)
-* only add civic-builder items if structure is available in survival mode
-* validate entire gate spawn area is clear before spawning
-
-* might need to rework how bridge does blocks -- set to only remove 'lowered' blocks when it is fully closed?
-* add gate worldObj.ENTITY_MAX_RADIUS code adjustment to try and improve gate interaction
-
-* fix container slot validation code for shift click/merge item for civics with resource slots
-* fix sided inventory interaction, first pass
-* warhouse bounds rendering
-
+********************* DONE STUFF ************************* 
 /********** 05-25-13 **********/
 * adjust civic GUI to place resource slots separate from regular slots
 * auto aim on vehicles needs entity-hit height adjustment re-added/unbroken
