@@ -113,7 +113,7 @@ public void movePointUp(int index)
 
 public void movePointDown(int index)
   {
-  if(index>0 && index<this.routingPoints.size())
+  if(index>=0 && index<this.routingPoints.size())
     {
     WayPointItemRouting p = this.getPoint(index);
     if(p!=null)

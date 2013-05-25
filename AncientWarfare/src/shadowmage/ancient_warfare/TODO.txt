@@ -18,8 +18,7 @@ NPCS
     use command baton, check if player has food in inventory && withdraw upkeep ?? 
 * soldier aim while on vehicles could still use attention (cheat?) 
     how to deal with hopping entities ?   
-* pathfinding needs ability to jump down blocks
-* courier routing slip GUI top slot won't move down ( - button)
+* pathfinding needs ability to jump down blocks (and/or remove diagonal & vertical pathing from crawler)
 * pathfinding wants to path through hoppers (need to just test block collision bounds?)    
 
 CIVICS
@@ -216,8 +215,8 @@ TWEAKS/OPTIMIZATION
 * validate point selection for gates pre-construction
 * fix gate bounds rendering
 * check distance on items before scanning/building/placing/etc
-
     
+* fix courier routing slip GUI top slot won't move down ( - button)
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/
