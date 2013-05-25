@@ -6,7 +6,6 @@ THIS(next) WEEKEND
 
 GENERAL
 * add name search/filter box to structure builder guis (and crafting/selection guis later on.....)
-* missiles need adjusted to hit entities close to shooter
 
 GATES
 * add ai repair gates
@@ -19,10 +18,47 @@ NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
     use command baton, check if player has food in inventory && withdraw upkeep ?? 
 
-
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
-* NPC town hall will occasionally respawn missing NPCs   
+* NPC town hall will occasionally respawn missing NPCs
+
+/***************************************************************UPCOMING FEATURES***************************************************************/
+RESEARCH
+* vehicle research system (initial only t0(rough) mats and t0(rough) vehicle variants)
+* vehicle upgrade research (0 known until researched)
+* materials research (2 known, rough quality wood/iron, other tiers/materials must be researched)
+* npc research system (0 known until researched)
+* civics research system (0 known until researched)
+
+CRAFTING
+    VEHICLE CRAFTING
+        --at least 2 sizes of crafting area
+        --will be multiblock structures that will render the in-progress vehicle being built
+                will slowly add pieces over construction duration until finished constructing.
+    NPC CRAFTING
+    AMMO CRAFTING
+        --simple processing station with a overList on the far left, innerList on left, autoList in mid, 
+            and craft input grid on the right.  auto_list will fill with results based on what is in the grid
+            other lists are manual select.  will have a 'start' button, and take time to make ammo.  will continue
+            making same type until materials run out
+    UPGRADE AND ARMOR CRAFTING
+    FOOD/RECRUITING    
+       create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
+       
+SURVIVAL MODE STRUCTURE BUILDING
+* create drafting workstation
+* single-use item scanner--cannot add to world gen, only add to survival/creative mode
+* make sure survival ticked builder will not clear or level.  struct BB needs validated for clear before being built
+* use survival flag for survival drafting table structureSelection...(from structureClientInfo in client store)
+
+BASIC DRAFTING STATION
+* selection screen w/only survival eligible buildings available
+* works much like drafting station from catmod (e.g. input box, compile blocks/resources into a finished item)
+* create single-use builder item for output--stores struct data in NBT (basically, just a name and struct md5)....
+* create single use scanner item for survival mode (item is consumed on successful scan/export)
+
+ADVANCED DRAFTING STATION (editor)
+* THDT
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -30,6 +66,7 @@ WORLD GEN STUFF
     need to examine validation again
     need to rework building selection /weighting/values
     need to include village components w/NPCs civics/etc (if enabled in config)
+* move over to traditional dungeonLootChests
 
 COMPLEXES
 * features--
@@ -54,43 +91,6 @@ COMPLEXES
 -- all structures will have fill-under/backfill below them, no matter the amount of terraforming
 -- walls wil be placed slightly inside of terrain leveling bounds
 -- outer leveling bounds will use a stepped approach, out to a certain radius/height...
-
-SURVIVAL MODE STRUCTURE BUILDING
-* create drafting workstation
-* single-use item scanner--cannot add to world gen, only add to survival/creative mode
-* make sure survival ticked builder will not clear or level.  struct BB needs validated for clear before being built
-* use survival flag for survival drafting table structureSelection...(from structureClientInfo in client store)
-
-BASIC DRAFTING STATION
-* selection screen w/only survival eligible buildings available
-* works much like drafting station from catmod (e.g. input box, compile blocks/resources into a finished item)
-* create single-use builder item for output--stores struct data in NBT (basically, just a name and struct md5)....
-* create single use scanner item for survival mode (item is consumed on successful scan/export)
-
-ADVANCED DRAFTING STATION (editor)
-* THDT
-
-RESEARCH
-* vehicle research system (initial only t0(rough) mats and t0(rough) vehicle variants)
-* vehicle upgrade research (0 known until researched)
-* materials research (2 known, rough quality wood/iron, other tiers/materials must be researched)
-* npc research system (0 known until researched)
-* civics research system (0 known until researched)
-
-CRAFTING
-    VEHICLE CRAFTING
-        --at least 2 sizes of crafting area
-        --will be multiblock structures that will render the in-progress vehicle being built
-                will slowly add pieces over construction duration until finished constructing.
-    NPC CRAFTING
-    AMMO CRAFTING
-        --simple processing station with a overList on the far left, innerList on left, autoList in mid, 
-            and craft input grid on the right.  auto_list will fill with results based on what is in the grid
-            other lists are manual select.  will have a 'start' button, and take time to make ammo.  will continue
-            making same type until materials run out
-    UPGRADE AND ARMOR CRAFTING
-    FOOD/RECRUITING    
-       create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
  
 /************************************************DONE/OPTI*************************************************/
  
@@ -98,7 +98,6 @@ OPTIONAL
 * move upgrades/ammo/armor over to self-registering class with an underlying array instead of the map they currently use        
 * grenades ?
 * land-mines ?
-* move over to traditional dungeonLootChests...perhaps with an additional manual list param or addt'l rank...
    
 SCANNER
     
@@ -126,7 +125,6 @@ STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
 
 PATHFINDING
-* better handling of isWalkable -- in need of minor attention for other (mod) blocks
 * need to check if a block has blocking entities in it during iswalkable check ( or just enable no collide)
 
 TWEAKS/OPTIMIZATION
@@ -160,6 +158,9 @@ TWEAKS/OPTIMIZATION
 
 * soldier aim while on vehicles could still use attention (cheat?) 
     how to deal with hopping entities ?   
+    
+* missiles need adjusted to hit entities close to shooter
+
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/

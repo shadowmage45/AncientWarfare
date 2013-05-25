@@ -187,9 +187,21 @@ public boolean canRenderOnFire()
   }
 
 @Override
+public boolean canBeCollidedWith()
+  {
+  return false;
+  }
+
+@Override
+public boolean canBePushed()
+  {
+  return false;
+  }
+
+@Override
 public void applyEntityCollision(Entity par1Entity)
   {
-  //NOOP..they can't freaking collide in this manner...
+  
   }
 
 @Override
@@ -282,11 +294,7 @@ public void onMovementTick()
     moveVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ); 
     Entity hitEntity = null;
     boolean testEntities = true;
-    if(this.ticksExisted<10)
-      {
-      testEntities = false;
-      }
-    if(this.worldObj.isRemote && this.ammoType.isRocket() && this.ticksExisted<40)
+    if(this.worldObj.isRemote)
       {
       testEntities = false;
       }
@@ -303,18 +311,11 @@ public void onMovementTick()
           {
           if(this.launcher!=null)
             {
-            if(curEnt==this.launcher || curEnt == this.launcher.riddenByEntity)
+            if(curEnt==this.launcher || curEnt == this.launcher.riddenByEntity || curEnt==this.shooterLiving || curEnt==this.shooter)
               {
               continue;
               }
-            }
-          if(this.shooterLiving!=null)
-            {
-            if(curEnt==this.shooterLiving)
-              {
-              continue;
-              }
-            }
+            }          
           borderSize = 0.3F;
           AxisAlignedBB var12 = curEnt.boundingBox.expand((double)borderSize, (double)borderSize, (double)borderSize);
           MovingObjectPosition checkHit = var12.calculateIntercept(positionVector, moveVector);
@@ -340,15 +341,15 @@ public void onMovementTick()
         {
         this.onImpactEntity(hitPosition.entityHit, (float)posX ,(float)posY, (float)posZ);
         this.hasImpacted = true;
-        if(!this.ammoType.isPersistent() && !this.worldObj.isRemote)
+        if(!this.ammoType.isPenetrating() && !this.worldObj.isRemote)
           {
           this.setDead();
           }
-        else if(this.ammoType.isPersistent() && !this.ammoType.isPenetrating())
+        else if(this.ammoType.isPenetrating())
           {
-          this.motionX *= - 0.25f;
-          this.motionY *= - 0.25f;
-          this.motionZ *= - 0.25f;
+          this.motionX *= 0.65f;
+          this.motionY *= 0.65f;
+          this.motionZ *= 0.65f;
           }  
         }
       else
@@ -378,7 +379,13 @@ public void onMovementTick()
             this.blockID = this.worldObj.getBlockId(blockX, blockY, blockZ);
             this.blockMeta = this.worldObj.getBlockMetadata(blockX, blockY, blockZ);
             }
-          }                 
+          }  
+        else
+          {
+          this.motionX *= 0.65f;
+          this.motionY *= 0.65f;
+          this.motionZ *= 0.65f;
+          }  
         }
       }
     
