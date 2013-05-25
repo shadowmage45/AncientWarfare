@@ -5,13 +5,10 @@ THIS WEEK
 THIS(next) WEEKEND
 
 GENERAL
-* check distance on items before scanning/building/placing/etc
 * add name search/filter box to structure builder guis (and crafting/selection guis later on.....)
 
 GATES
-* investigate making it so missiles won't collide with with gates (including vanilla arrows)
-    could probably set gates completely no no-collide and do a custom ray trace to see if
-    player is targeting a gate
+* add ai repair gates
 
 VEHICLES
 * clean up vehicle alpha rendering
@@ -213,6 +210,14 @@ TWEAKS/OPTIMIZATION
 * adjust civic GUI to place resource slots separate from regular slots
 * auto aim on vehicles needs entity-hit height adjustment re-added/unbroken
 
+* investigate making it so missiles won't collide with with gates (including vanilla arrows)
+    could probably set gates completely no no-collide and do a custom ray trace to see if
+    player is targeting a gate
+* validate point selection for gates pre-construction
+* fix gate bounds rendering
+* check distance on items before scanning/building/placing/etc
+
+    
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/

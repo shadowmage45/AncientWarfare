@@ -57,8 +57,14 @@ public void setCollisionBoundingBox(EntityGate gate)
   boolean wideOnXAxis = gate.pos1.x!=gate.pos2.x;  
   BlockPosition min = BlockTools.getMin(gate.pos1, gate.pos2);
   BlockPosition max = BlockTools.getMax(gate.pos1, gate.pos2);
-  gate.boundingBox.setBounds(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);  
-  
+  if(gate.edgePosition>0)
+    {
+    gate.boundingBox.setBounds(min.x, max.y+0.5d, min.z, max.x+1, max.y+1, max.z+1);
+    }
+  else
+    {
+    gate.boundingBox.setBounds(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);    
+    }    
   }
 
 @Override

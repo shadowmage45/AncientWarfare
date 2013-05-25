@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
@@ -74,6 +75,7 @@ public EntityGate(World par1World)
   {
   super(par1World);
   this.yOffset = 0;
+  this.ignoreFrustumCheck = true;
   }
 
 public Gate getGateType()
@@ -180,27 +182,14 @@ public void setPosition(double par1, double par3, double par5)
     }
   }
 
-@Override
-public void setPositionAndRotation(double par1, double par3, double par5,  float par7, float par8)
-  {
-  super.setPositionAndRotation(par1, par3, par5, par7, par8);
-//  Config.logDebug(String.format("setting position and rotation to: %.2f, %.2f, %.2f", posX, posY, posZ));
-  }
 
 @Override
 public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9)
   {
   this.setPosition(par1, par3, par5);
   this.setRotation(par7, par8);
-//  Config.logDebug(String.format("setting position and rotation 2 to: %.2f, %.2f, %.2f", posX, posY, posZ));
   }
 
-@Override
-public void setLocationAndAngles(double par1, double par3, double par5, float par7, float par8)
-  {
-  super.setLocationAndAngles(par1, par3, par5, par7, par8);
-//  Config.logDebug(String.format("setting location and angles to: %.2f, %.2f, %.2f", posX, posY, posZ));
-  }
 
 @Override
 public boolean interact(EntityPlayer par1EntityPlayer)
@@ -284,9 +273,10 @@ public void onUpdate()
     int ySize = max.y - min.y +1;
     int largest = xSize > ySize ? xSize : ySize;
     largest = largest > zSize ? largest : zSize;
+    largest = (largest/2) + 1;
     if(worldObj.MAX_ENTITY_RADIUS < largest)
       {
-      worldObj.MAX_ENTITY_RADIUS = largest/2 + 1;    
+      worldObj.MAX_ENTITY_RADIUS = largest;    
       }    
     }
   }

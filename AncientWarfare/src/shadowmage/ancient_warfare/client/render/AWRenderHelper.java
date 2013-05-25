@@ -64,7 +64,7 @@ public static AWRenderHelper instance()
   return INSTANCE;
   }
 
-private void renderScannerBB(EntityPlayer player, ItemStack stack, IScannerItem item, float partialTick)
+private void renderScannerBB(EntityPlayer player, ItemStack stack, IScannerItem item, float partialTick, boolean useSneak)
   {
   if(player==null || stack==null || item== null)
     {
@@ -79,7 +79,7 @@ private void renderScannerBB(EntityPlayer player, ItemStack stack, IScannerItem 
   BlockPosition p2 = item.getScanPos2(stack);
   if(p2==null)
     {
-    p2 = BlockTools.getBlockClickedOn(player, player.worldObj, player.isSneaking());
+    p2 = BlockTools.getBlockClickedOn(player, player.worldObj, useSneak ? player.isSneaking() : true);
     if(p2==null)
       {   
       return;
@@ -240,20 +240,20 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     if(ItemBuilderDirect.isScanning(stack))
       {
-      this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks);      
+      this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks, true);      
       }
     }
   else if(ItemStructureScanner.isScannerItem(id))
     {
-    this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks);
+    this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks, true);
     }
   else if(id==ItemLoader.civicPlacer.itemID)
     {
-    this.renderScannerBB(player, stack, (ItemCivicPlacer)stack.getItem(), evt.partialTicks);
+    this.renderScannerBB(player, stack, (ItemCivicPlacer)stack.getItem(), evt.partialTicks, true);
     }
   else if(id==ItemLoader.gateSpawner.itemID)
     {
-    this.renderScannerBB(player, stack, (ItemGateSpawner)stack.getItem(), evt.partialTicks);
+    this.renderScannerBB(player, stack, (ItemGateSpawner)stack.getItem(), evt.partialTicks, false);
     }
   }
 

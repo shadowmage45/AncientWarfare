@@ -175,6 +175,11 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
     BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
     BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
     BlockPosition key = new BlockPosition(tag.getCompoundTag("buildKey"));
+    if(player.getDistance(key.x+0.5d, key.y, key.x+0.5d) > 10)
+      {
+      player.addChatMessage("You are too far away to scan that building, move closer to chosen build-key position");
+      return false;
+      }
     int face = tag.getCompoundTag("buildKey").getInteger("face");
     player.addChatMessage("Initiating Scan and clearing Position Data (Step 4/4)");
     scanStructure(world, player,pos1, pos2, key, face);

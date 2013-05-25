@@ -68,7 +68,14 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   else if(tag.hasKey("pos1") && tag.hasKey("pos2"))
     {
 	  byte facing = (byte) BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-    EntityGate entity = Gate.constructGate(world, new BlockPosition(tag.getCompoundTag("pos1")), new BlockPosition(tag.getCompoundTag("pos2")), Gate.getGateByID(stack.getItemDamage()), facing);
+	  BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
+	  BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
+	  if(player.getDistance(pos1.x+0.5d, pos1.y, pos2.x+0.5d) > 10)
+	    {
+	    player.addChatMessage("You are too far away to construct that gate, move closer");
+	    return false;
+	    }
+    EntityGate entity = Gate.constructGate(world, pos1, pos2, Gate.getGateByID(stack.getItemDamage()), facing);
     if(entity!=null)
       {
       entity.teamNum = TeamTracker.instance().getTeamForPlayer(player);
@@ -119,8 +126,16 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
     }
   else if(tag.hasKey("pos1"))
     {
-    tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
-    player.addChatMessage("Setting second gate bounds position");
+    Gate g = Gate.getGateByID(stack.getItemDamage());
+    if(g.arePointsValidPair(new BlockPosition(tag.getCompoundTag("pos1")), hit))
+      {
+      tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
+      player.addChatMessage("Setting second gate bounds position");      
+      }
+    else
+      {
+      player.addChatMessage("Invalid second coordinate, please re-select");
+      }
     }
   else
     {
