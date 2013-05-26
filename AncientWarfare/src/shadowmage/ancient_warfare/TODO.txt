@@ -1,22 +1,18 @@
 GENERAL
 * add name search/filter box to structure builder guis (and crafting/selection guis later on.....)
-* add current click-actions to item-tooltips (maybe when shift is pressed?)
 * missiles -- add shooter/etc to spawn data and re-enable client-side entity-hit detection?
 * create general secondary data watcher for npcs/gates/vehicles
 * more missile icons
 * more missile textures    
-
-GATES
 
 VEHICLES
 * clean up vehicle alpha rendering
 * set vehicle motion/accel to 0 when collided horizontally
 
 NPCS
-* create a method for players to 'convert' a pre-spawned friendly NPC to their team
-    use command baton, check if player has food in inventory && withdraw upkeep ??
 * more 'check if target dead' (seems creepers or entities removed by setting world to peacefull are still targets)
     perhaps check world loaded entity list to see if target is still present/loaded
+* set to no collide if colliding with vehicles.    
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
@@ -125,6 +121,8 @@ SOLDIERS
  
 MINE
  
+GATES
+
 TEAM CONTROL GUI
  
 GUI FRAMEWORK
@@ -133,7 +131,7 @@ STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
 
 PATHFINDING
-* need to check if a block has blocking entities in it during iswalkable check ( or just enable no collide)
+* need to check if a block has blocking entities in it during iswalkable check ( or just enable no collide)    
 
 TWEAKS/OPTIMIZATION
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
@@ -177,11 +175,13 @@ TWEAKS/OPTIMIZATION
         Right Click -- spawn entity
     NPC Spawner
         Right Click -- spawn entity
-* handle broadcast attack target of 'friendly' target   
-
+* handle broadcast attack target of 'friendly' target  
 * gate proxy blocks no-destroy from explosion
 * gate placement validation -- validate range from avg of pos1/pos2 x/z, min.y
 * gate hit animation (need client side health update)
+
+* create a method for players to 'convert' a pre-spawned friendly NPC to their team
+    use command baton, check if player has food in inventory && withdraw upkeep ??
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/
 /********** 05-29-13 **********/

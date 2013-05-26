@@ -39,8 +39,10 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.EntityTools;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class ItemNpcCommandBaton extends AWItemClickable
@@ -100,6 +102,22 @@ public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity en
     {
     MovingObjectPosition hit = new MovingObjectPosition(entity);
     BatonSettings settings = getBatonSettings(stack);
+    if(entity instanceof NpcBase)
+      {
+      NpcBase npc = (NpcBase)entity;
+      if(npc.teamNum==16)
+        {
+        ItemStack ration = new ItemStack(ItemLoader.rations,1);
+        int count = InventoryTools.getCountOf(player.inventory, ration, 0, player.inventory.getSizeInventory()-5);
+        if(count >= npc.npcType.getUpkeepCost(npc.rank)/2)
+          {
+          npc.teamNum = TeamTracker.instance().getTeamForPlayer(player);
+          InventoryTools.tryRemoveItems(player.inventory, ration, npc.npcType.getUpkeepCost(npc.rank)/2, 0, player.inventory.getSizeInventory()-5);
+          player.addChatMessage("Converting NPC to your team!");
+          return true;
+          }
+        }
+      }
     if(settings.command == NpcCommand.MOUNT)
       {
       if(entity instanceof VehicleBase && entity.riddenByEntity==null)
