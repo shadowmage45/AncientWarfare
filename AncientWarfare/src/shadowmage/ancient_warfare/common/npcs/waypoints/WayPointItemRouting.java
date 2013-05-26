@@ -20,14 +20,14 @@
  */
 package shadowmage.ancient_warfare.common.npcs.waypoints;
 
-import java.util.ArrayList;
-
+import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -122,7 +122,11 @@ public boolean doWork(NpcBase npc)
   {
   TileEntity te = getTileEntity(npc.worldObj);
   IInventory other = null;
-  if(te instanceof IInventory)
+  if(te instanceof TileEntityChest)
+    {
+    other = Block.chest.getInventory(npc.worldObj, te.xCoord, te.yCoord, te.zCoord);
+    }
+  else if(te instanceof IInventory)
     {
     other = (IInventory)te;
     }

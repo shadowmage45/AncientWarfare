@@ -60,7 +60,7 @@ public void addTasks()
 @Override
 public void updatePriority()
   {
-  if(npc.wayNav.getHomePoint()==null || npc.wayNav.getPatrolSize()>0 || npc.wayNav.getCommander()!=null)
+  if(npc.wayNav.getHomePoint()==null || npc.wayNav.getPatrolSize()>0 || npc.wayNav.getCommander()!=null || npc.getTargetType()==TargetType.ATTACK)
     {
     this.currentPriority = 0;
     }

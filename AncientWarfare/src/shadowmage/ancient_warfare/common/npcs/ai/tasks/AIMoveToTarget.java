@@ -75,6 +75,13 @@ public boolean shouldExecute()
     }
   float minDist = useAttackDistance ? npc.targetHelper.getAttackDistance(npc.getTarget()) : stopDistance;
   float dist = npc.getDistanceFromTarget(npc.getTarget());
+  if(useAttackDistance)
+    {
+    if(!npc.canEntityBeSeen(npc.getTarget().getEntity(npc.worldObj)))
+      {
+      return true;
+      }
+    }  
   if(dist>minDist)
     {
     return true;

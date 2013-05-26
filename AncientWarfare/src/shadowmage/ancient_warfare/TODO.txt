@@ -7,10 +7,15 @@ THIS(next) WEEKEND
 GENERAL
 * add name search/filter box to structure builder guis (and crafting/selection guis later on.....)
 * add current click-actions to item-tooltips (maybe when shift is pressed?)
+* missiles -- add shooter/etc to spawn data and re-enable client-side entity-hit detection?
+* create general secondary data watcher for npcs/gates/vehicles
+* remove 'deposit' from npcs, baton, commands, etc -- it is no longer needed
+* turret pitch up/down upgrade icons
 
 GATES
 * gate proxy blocks no-destroy from explosion
 * gate placement validation -- validate range from avg of pos1/pos2 x/z, min.y
+* gate hit animation (need client side health update)
 
 VEHICLES
 * clean up vehicle alpha rendering
@@ -18,10 +23,12 @@ VEHICLES
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
     use command baton, check if player has food in inventory && withdraw upkeep ??
+* handle broadcast attack target of 'friendly' target   
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
-* NPC town hall will occasionally respawn missing NPCs
+    NPC town hall will occasionally respawn missing NPCs
+* swap civic sided for regular/resource slots?
 
 /***************************************************************UPCOMING FEATURES***************************************************************/
 TEMPLATES
@@ -167,11 +174,16 @@ TWEAKS/OPTIMIZATION
 * pathfinding -- check if gate is locked for interactable
 * add ai repair gates
 * soldiers don't dismount properly when enemies are close (uses vehicle min attack dist)
-
 * fix gate orientation setting for improper player orientation (it was moving when proper)
 * add default (transparent) texture for proxy blocks (for sprint texture)
 * add icons for gate types
 * fix gate range validation when placing 
+
+* courier/npc upkeep/deposit double chest interaction  
+* fix heading to home if has attack target
+* add food ration item  
+* fix 'friendly' archers/npcs attacking eachother for revenge (or friendly players)
+* if cant see attack target try move closer 
 
 
 /********** 05-26-13 **********/

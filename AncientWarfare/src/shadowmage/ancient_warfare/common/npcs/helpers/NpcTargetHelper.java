@@ -26,9 +26,9 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -37,6 +37,7 @@ import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroTargetWra
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetList;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 /**
@@ -256,6 +257,22 @@ public void updateAggroEntries()
 
 public void handleBeingAttacked(EntityLiving damager)
   {
+  if(damager instanceof EntityPlayer)
+    {
+    EntityPlayer player = (EntityPlayer)damager;
+    if(TeamTracker.instance().areTeamsMutuallyFriendly(npc.worldObj, TeamTracker.instance().getTeamForPlayer(player), npc.teamNum))
+      {
+      return;
+      }
+    }
+  else if (damager instanceof NpcBase)
+    {
+    NpcBase otherNpc = (NpcBase)damager;
+    if(TeamTracker.instance().areTeamsMutuallyFriendly(npc.worldObj, otherNpc.teamNum, npc.teamNum))
+      {
+      return;
+      }
+    }
   if(this.targetEntries.containsKey(TargetType.ATTACK))
     {
     this.addOrUpdateAggroEntry(revengeEntry, damager, Config.npcAITicks * 4);

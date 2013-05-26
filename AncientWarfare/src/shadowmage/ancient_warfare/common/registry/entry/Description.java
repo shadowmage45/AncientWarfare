@@ -28,10 +28,9 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.item.AWItemBase;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class Description
@@ -40,7 +39,7 @@ public class Description
 /**
  * one or the other will be populated
  */
-AWItemBase item;
+Item item;
 
 Block block;
 
@@ -54,7 +53,7 @@ private final HashMap<Integer, String> iconTextures = new HashMap<Integer, Strin
 
 private ArrayList<ItemStack> displayStackCache = new ArrayList<ItemStack>();
 
-public Description(AWItemBase item, boolean single)
+public Description(Item item, boolean single)
   {
   this.item = item;
   this.normalItem = single;

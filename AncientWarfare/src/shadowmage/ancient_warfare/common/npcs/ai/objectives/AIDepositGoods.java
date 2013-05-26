@@ -20,11 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecartChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -82,7 +84,14 @@ public void updatePriority()
         }
       else
         {
-        targetInventory = (IInventory)te;
+        if(targetInventory instanceof TileEntityChest)
+          {
+          targetInventory = Block.chest.getInventory(npc.worldObj, p.floorX(), p.floorY(), p.floorZ());
+          }
+        else
+          {
+          targetInventory = (IInventory)te;          
+          }
         }
       }
     else if(p.isEntityEntry())

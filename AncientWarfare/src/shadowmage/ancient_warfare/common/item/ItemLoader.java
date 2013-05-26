@@ -22,6 +22,8 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
@@ -49,6 +51,7 @@ public static final AWItemBase civicPlacer = new ItemCivicPlacer(Config.getItemI
 public static final AWItemBase civicBuilder = new ItemCivicBuilder(Config.getItemID("itemMulti.civicBuilder", 13014, "Constructs Structures using Civics"));
 public static final AWItemBase courierRouteSlip = new ItemCourierSlip(Config.getItemID("itemMulti.courierSlip", 13015, "Holds Routing Info for a Courier"));
 public static final AWItemBase gateSpawner = new ItemGateSpawner(Config.getItemID("itemMulti.gateSpawner", 13016, "Base gate spawning item."));
+public static final ItemFood rations = new ItemRation(Config.getItemID("itemSingle.foodRation", 13017, "Food rations for soldiers and npcs."));
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -102,6 +105,7 @@ private void loadItems()
   this.addSubtypeInfoToItem(courierRouteSlip, 1, "Basic Routing Slip","","6 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,1)).setIconTexture("ancientwarfare:npc/route2", 1);
   this.addSubtypeInfoToItem(courierRouteSlip, 2, "Basic Routing Slip","","8 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,2)).setIconTexture("ancientwarfare:npc/route3", 2);
   this.registerItemSubtyped(gateSpawner);
+  this.registerItemSingle(rations, "Food Ration", "", "Restores 1 heart (2 Upkeep value)");
   }
 
 private void loadRecipes()
@@ -125,7 +129,7 @@ public Description registerItemSubtyped(AWItemBase item)
   return d;
   }
 
-public Description registerItemSingle(AWItemBase item, String name, String desc, String tip)
+public Description registerItemSingle(Item item, String name, String desc, String tip)
   {
   Description d = DescriptionRegistry2.instance().registerItem(item, true);
   d.setName(name, 0);

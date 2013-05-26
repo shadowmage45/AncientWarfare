@@ -165,7 +165,7 @@ protected void attackTargetMounted(ITargetEntry target)
 @Override
 public boolean shouldExecute()
   {  
-  return npc.getTarget()!=null && npc.getTargetType()==TargetType.ATTACK && npc.getDistanceFromTarget(npc.getTarget()) <= npc.targetHelper.getAttackDistance(npc.getTarget());
+  return npc.getTarget()!=null && npc.getTargetType()==TargetType.ATTACK && npc.getDistanceFromTarget(npc.getTarget()) <= npc.targetHelper.getAttackDistance(npc.getTarget()) && (!npc.getTarget().isEntityEntry() || npc.canEntityBeSeen(npc.getTarget().getEntity(npc.worldObj)));
   }
 
 @Override

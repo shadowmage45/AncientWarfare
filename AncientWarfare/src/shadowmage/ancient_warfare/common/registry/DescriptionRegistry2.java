@@ -23,8 +23,7 @@ package shadowmage.ancient_warfare.common.registry;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
-
-import shadowmage.ancient_warfare.common.item.AWItemBase;
+import net.minecraft.item.Item;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 
 public class DescriptionRegistry2
@@ -45,7 +44,7 @@ public static DescriptionRegistry2 instance()
 
 private HashMap<Integer, Description> descriptionsByID = new HashMap<Integer, Description>();
 
-public Description registerItem(AWItemBase item, boolean single)
+public Description registerItem(Item item, boolean single)
   {
   Description d = new Description(item, single);
   this.descriptionsByID.put(item.itemID, d);

@@ -20,10 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -216,7 +218,7 @@ protected void checkForUpkeepTarget()
     npc.setTargetAW(p);
     if(p.isEntityEntry())
       {
-      Entity ent = p.getEntity(npc.worldObj);
+      Entity ent = p.getEntity(npc.worldObj);      
       if(ent instanceof IInventory)
         {
         upkeepTarget = (IInventory)ent;
@@ -225,7 +227,11 @@ protected void checkForUpkeepTarget()
     else
       {
       TileEntity te = p.getTileEntity(npc.worldObj);
-      if(te instanceof IInventory)
+      if(te instanceof TileEntityChest)
+        {
+        upkeepTarget = Block.chest.getInventory(npc.worldObj, te.xCoord, te.yCoord, te.zCoord);
+        }
+      else if(te instanceof IInventory)
         {
         upkeepTarget = (IInventory)te;
         }      
