@@ -68,7 +68,10 @@ protected boolean checkBlockBounds(int x, int y, int z)
   {
   Block block;
   int id = world.getBlockId(x, y, z);
-//  int meta = world.getBlockMetadata(x, y, z);
+  if(!isPathable(id) || id==Block.waterMoving.blockID || id==Block.waterStill.blockID)
+    {
+    return false;
+    }
   block = Block.blocksList[id];
   if(block!=null)
     {

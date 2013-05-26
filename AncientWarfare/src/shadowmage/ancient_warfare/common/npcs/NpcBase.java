@@ -221,7 +221,6 @@ public int getAmountRepaired()
   int repair = 4 + (rank*2);
   if(this.wayNav.getCommander()!=null && this.getDistanceToEntity(wayNav.getCommander())<20.d)
     {
-    Config.logDebug("has commander!");
     repair += (1+wayNav.getCommander().rank) * 2;
     }  
   return repair;
