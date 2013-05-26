@@ -10,6 +10,10 @@ GENERAL
 * missiles -- add shooter/etc to spawn data and re-enable client-side entity-hit detection?
 * create general secondary data watcher for npcs/gates/vehicles
 * turret pitch up/down upgrade icons
+* food ration icon
+* more missile icons
+* more missile textures
+* clean up item interaction -- figure out unified system for items
 
 GATES
 * gate proxy blocks no-destroy from explosion
@@ -26,8 +30,12 @@ NPCS
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
-    NPC town hall will occasionally respawn missing NPCs
+    * NPC town hall ocasionally transfer items from civics in bounds (skip couriers)
+    * NPC town hall plans courier routes (use couriers)    
+* NPC town hall will occasionally respawn missing NPCs    
 * swap civic sided for regular/resource slots?
+* town hall food processing
+* food processing center -- basic autocrafting to craft food recipes (manually added list)
 
 /***************************************************************UPCOMING FEATURES***************************************************************/
 TEMPLATES
@@ -184,6 +192,8 @@ TWEAKS/OPTIMIZATION
 * if cant see attack target try move closer 
 
 * remove 'deposit' from npcs, baton, commands, etc -- it is no longer needed
+* setup BC install and test sided interaction
+* remove test icon code from resource slot
 
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/

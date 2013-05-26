@@ -61,12 +61,4 @@ public boolean isItemValid(ItemStack par1ItemStack)
   return false;
   }
 
-@Override
-public Icon getBackgroundIconIndex()
-  {
-  return RenderTools.getIcon("ancientwarfare:testIcon1");
-  // TODO Auto-generated method stub
-//  return super.getBackgroundIconIndex();
-  }
-
 }
