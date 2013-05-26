@@ -180,9 +180,11 @@ public void init(FMLInitializationEvent evt)
 public void load(FMLPostInitializationEvent evt)
   {  
   Config.log("Ancient Warfare Post-Init started");
+  
   NpcRegistry.instance().registerNPCs(); 
   CivicRegistry.instance().registerCivics();
   Gate.registerGateTypes();
+  
   /**
    * and finally, save the config in case there were any changes made during init
    */
@@ -192,12 +194,6 @@ public void load(FMLPostInitializationEvent evt)
   TickRegistry.registerTickHandler(new ServerTicker(), Side.SERVER);
   TickRegistry.registerTickHandler(new ClientTicker(), Side.CLIENT);
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
-
-  //DEBUG //TODO -- remove
-  if(Config.DEBUG)
-    {
-//    PathBenchmarking.instance().doBenchmarkRuns();
-    }
   }
 
 

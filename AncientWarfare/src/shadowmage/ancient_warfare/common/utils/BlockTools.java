@@ -128,6 +128,28 @@ public static BlockPosition getNorthRotatedPosition(int x, int y, int z, int rot
   return null;
   }
 
+public static BlockPosition getAverageOf(BlockPosition ... positions)
+  {  
+  float x = 0;
+  float y = 0;
+  float z = 0;
+  int count = 0;
+  for(BlockPosition pos : positions)
+    {
+    x+=pos.x;
+    y+=pos.y;
+    z+=pos.z;
+    count++;
+    }
+  if(count>0)
+    {
+    x /= count;
+    y /= count;
+    z /= count;      
+    }
+  return new BlockPosition(x,y,z);
+  }
+
 /**
  * will return null if nothing is in range
  * @param player

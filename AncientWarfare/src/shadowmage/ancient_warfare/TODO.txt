@@ -7,9 +7,6 @@ GENERAL
 * more missile textures    
 
 GATES
-* gate proxy blocks no-destroy from explosion
-* gate placement validation -- validate range from avg of pos1/pos2 x/z, min.y
-* gate hit animation (need client side health update)
 
 VEHICLES
 * clean up vehicle alpha rendering
@@ -181,6 +178,10 @@ TWEAKS/OPTIMIZATION
     NPC Spawner
         Right Click -- spawn entity
 * handle broadcast attack target of 'friendly' target   
+
+* gate proxy blocks no-destroy from explosion
+* gate placement validation -- validate range from avg of pos1/pos2 x/z, min.y
+* gate hit animation (need client side health update)
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/
 /********** 05-29-13 **********/

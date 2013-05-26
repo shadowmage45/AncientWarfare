@@ -51,6 +51,8 @@ public BlockGateProxy(int par1)
   {
   super(par1, Material.rock, "AW Gate Proxy Block");
   this.setCreativeTab(null);
+  this.setResistance(2000.f);
+  this.setHardness(5.f);
   }
 
 @Override
@@ -124,5 +126,22 @@ public int quantityDropped(Random par1Random)
   {
   return 0;
   }
+
+@Override
+public float getExplosionResistance(Entity par1Entity)
+  {
+  // TODO Auto-generated method stub
+  return super.getExplosionResistance(par1Entity);
+  }
+
+@Override
+public float getExplosionResistance(Entity par1Entity, World world, int x,  int y, int z, double explosionX, double explosionY, double explosionZ)
+  {
+  // TODO Auto-generated method stub
+  return super.getExplosionResistance(par1Entity, world, x, y, z, explosionX,
+      explosionY, explosionZ);
+  }
+
+
 
 }

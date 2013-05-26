@@ -46,8 +46,6 @@ public ItemGateSpawner(int itemID)
   this.hasLeftClick = true;
   }
 
-
-
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
@@ -106,7 +104,8 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 	  byte facing = (byte) BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
 	  BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
 	  BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
-	  if(player.getDistance(pos1.x+0.5d, pos1.y, pos1.z+0.5d) > 10)
+	  BlockPosition avg = BlockTools.getAverageOf(pos1, pos2);
+	  if(player.getDistance(avg.x+0.5d, pos1.y, avg.z+0.5d) > 10)
 	    {
 	    player.addChatMessage("You are too far away to construct that gate, move closer");
 	    return false;

@@ -23,13 +23,13 @@ package shadowmage.ancient_warfare.common.gates;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
+import shadowmage.ancient_warfare.common.interfaces.IEntityPacketHandler;
+import shadowmage.ancient_warfare.common.network.Packet06Entity;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -45,7 +45,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
  * @author Shadowmage
  *
  */
-public class EntityGate extends Entity implements IEntityAdditionalSpawnData
+public class EntityGate extends Entity implements IEntityAdditionalSpawnData, IEntityPacketHandler
 {
 
 public BlockPosition pos1;
@@ -62,7 +62,7 @@ Gate gateType = Gate.basicWood;
 
 public int teamNum = 0;
 int health = 0;
-int hurtAnimationTicks = 0;
+public int hurtAnimationTicks = 0;
 byte gateStatus = 0;
 public byte gateOrientation = 0;
 
@@ -160,6 +160,13 @@ public void setHealth(int val)
   if(val< health)
     {
     this.hurtAnimationTicks = 20;
+    }
+  if(val<health && !this.worldObj.isRemote)
+    {
+    Packet06Entity pkt = new Packet06Entity();
+    pkt.setParams(this);
+    pkt.setHealthUpdate(val);
+    pkt.sendPacketToAllTrackingClients(this);
     }
   this.health = val;
   }
@@ -388,7 +395,8 @@ public void writeSpawnData(ByteArrayDataOutput data)
   data.writeFloat(this.edgePosition);
   data.writeFloat(this.edgeMax);
   data.writeByte(this.gateStatus);
-  data.writeByte(this.gateOrientation);  
+  data.writeByte(this.gateOrientation);
+  data.writeInt(health);
   }
 
 @Override
@@ -402,6 +410,17 @@ public void readSpawnData(ByteArrayDataInput data)
   this.edgeMax = data.readFloat();
   this.gateStatus = data.readByte();
   this.gateOrientation = data.readByte();
+  this.health = data.readInt();
+  }
+
+@Override
+public void onPacketDataReceived(NBTTagCompound tag)
+  {
+  if(tag.hasKey("health"))
+    {
+    this.health = tag.getInteger("health");
+    this.hurtAnimationTicks = 20;
+    }  
   }
 
 }
