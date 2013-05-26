@@ -62,7 +62,7 @@ Civics:
     resource slots should only accept seeds).  Work sites will fill up their resource slots before
     placing any extras into normal inventory.  This is to aid in automation with couriers and other
     mods, by essentially separating the inventories.
-* civic resource slots are accessed through the top side of the block for work sites
+* civic resource slots are accessed through the top side of the block
 * normal inventory is accessed through the side(s) for work-sites, otherwise it should default to
     all sides.
 * on work sites, bottom side currently accesses 'normal' inventory

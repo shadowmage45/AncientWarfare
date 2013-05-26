@@ -103,12 +103,16 @@ public boolean isWalkable(int x, int y, int z)
   if(!isPathable(id))//solid unpassable block, or lava
     { 
     return false;
+    } 
+  else if(isGate(id2))
+    {
+    return false;
     }  
-  if(id==0 && cube2 && id3==0)//early out check for the most basic of pathable areas
+  else if(id==0 && cube2 && id3==0)//early out check for the most basic of pathable areas
     {
     return true;
     }
-  if(id==BlockLoader.gateProxy.blockID)
+  else if(id==BlockLoader.gateProxy.blockID)
     {
     if(!canOpenDoors)//if can't open doors, auto fail
       {
@@ -160,16 +164,17 @@ public boolean isWalkable(int x, int y, int z)
   else if(!cube2 && !isLadder(id2) && !isLadder(id))//or if air below and not a ladder
     {    
     return false;    
-    } 
-  else if(id2==Block.fence.blockID || id2 == Block.fenceGate.blockID || id2 == Block.cobblestoneWall.blockID)
-    {
-    return false;
     }  
   else if(cube || cube3)//no room to move
     {
     return false;
     }
   return true;
+  }
+
+public boolean isGate(int id)
+  {
+  return id==Block.fence.blockID || id==Block.fenceGate.blockID || id==Block.cobblestoneWall.blockID;
   }
 
 public boolean isWater(int id)

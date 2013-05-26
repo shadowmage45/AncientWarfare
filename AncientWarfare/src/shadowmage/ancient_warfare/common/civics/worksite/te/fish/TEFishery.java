@@ -75,12 +75,9 @@ protected void doWork(NpcBase npc, WorkPoint p)
     {
     float waterPercent = (float)waterBlocks * 0.001953125f; // essentially /512
     waterPercent *= 0.5f;//cut percent in half
-    Config.logDebug("fish catch percent: "+waterPercent);
     float check = rng.nextFloat();
-    Config.logDebug("check roll: "+check);
     if(check<=waterPercent)      
       {      
-      Config.logDebug("check was within bounds, harvesting fish");
       ItemStack stack = this.inventory.tryMergeItem(fishFilter.copy());
       stack = this.overflow.tryMergeItem(stack);
       InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
