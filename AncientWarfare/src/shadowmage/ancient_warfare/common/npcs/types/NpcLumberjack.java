@@ -31,7 +31,6 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
-import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDepositGoods;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIGoToWork;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
@@ -98,7 +97,6 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AISeekShelter(npc, 85));
   aiEntries.add(new AINpcUpkeepObjective(npc, 82)); 
   aiEntries.add(new AIGoToWork(npc, 80));  
-  aiEntries.add(new AIDepositGoods(npc, 80));
   aiEntries.add(new AIStayNearHome(npc, 70, 40, 15));
   aiEntries.add(new AIWander(npc, 10));
   return aiEntries;

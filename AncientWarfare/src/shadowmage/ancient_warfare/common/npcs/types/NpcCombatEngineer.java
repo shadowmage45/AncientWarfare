@@ -23,8 +23,6 @@ package shadowmage.ancient_warfare.common.npcs.types;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -33,7 +31,6 @@ import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIAttackTargets;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIChooseCommander;
-import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIDepositGoods;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIGuardTarget;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
@@ -43,12 +40,10 @@ import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearCommander;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
-import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryNpc;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryPlayer;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryRepairableVehicle;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetRepairableGates;
-import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class NpcCombatEngineer extends NpcTypeBase
@@ -104,11 +99,9 @@ public void addTargets(NpcBase npc, NpcTargetHelper helper)
 @Override
 public List<NpcAIObjective> getAI(NpcBase npc, int level)
   {
-  ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>(); 
-//  aiEntries.add(new AIAttackTargets(npc, 100, 20, 20));
+  ArrayList<NpcAIObjective> aiEntries = new ArrayList<NpcAIObjective>();
   aiEntries.add(new AIFollowPlayer(npc, 90));
   aiEntries.add(new AINpcUpkeepObjective(npc, 85));
-  aiEntries.add(new AIDepositGoods(npc, 80));
   aiEntries.add(new AIGuardTarget(npc, 75));
   aiEntries.add(new AIRepairVehicles(npc, 75));
   aiEntries.add(new AIPatrolPoints(npc, 70, 20));

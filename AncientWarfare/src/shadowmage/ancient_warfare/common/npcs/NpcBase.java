@@ -285,10 +285,7 @@ public void handleBatonCommand(NpcCommand cmd, WayPoint p)
   break;
   case PATROL:
   wayNav.addPatrolPoint(p);
-  break;
-  case DEPOSIT:
-  wayNav.setDepositSite(p);
-  break;
+  break;  
   case CLEAR_HOME:
   wayNav.setHomePoint(null);
   break;
@@ -297,10 +294,7 @@ public void handleBatonCommand(NpcCommand cmd, WayPoint p)
   break;
   case CLEAR_PATROL:
   wayNav.clearPatrolPoints();
-  break;
-  case CLEAR_DEPOSIT:
-  wayNav.setDepositSite(null);
-  break;
+  break;  
   case UPKEEP:
   wayNav.setUpkeepSite(p);
   break;

@@ -100,15 +100,7 @@ public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity en
     {
     MovingObjectPosition hit = new MovingObjectPosition(entity);
     BatonSettings settings = getBatonSettings(stack);
-    if(settings.command == NpcCommand.DEPOSIT || settings.command==NpcCommand.UPKEEP)
-      {
-      boolean transmit = false;
-      if(entity instanceof IInventory && ((IInventory)entity).getSizeInventory()>0)
-        {
-        this.handleNpcCommand(player, stack, settings, hit);
-        }  
-      } 
-    else if(settings.command == NpcCommand.MOUNT)
+    if(settings.command == NpcCommand.MOUNT)
       {
       if(entity instanceof VehicleBase && entity.riddenByEntity==null)
         {

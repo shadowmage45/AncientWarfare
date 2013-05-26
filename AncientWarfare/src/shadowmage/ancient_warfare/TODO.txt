@@ -9,7 +9,6 @@ GENERAL
 * add current click-actions to item-tooltips (maybe when shift is pressed?)
 * missiles -- add shooter/etc to spawn data and re-enable client-side entity-hit detection?
 * create general secondary data watcher for npcs/gates/vehicles
-* remove 'deposit' from npcs, baton, commands, etc -- it is no longer needed
 * turret pitch up/down upgrade icons
 
 GATES
@@ -178,13 +177,13 @@ TWEAKS/OPTIMIZATION
 * add default (transparent) texture for proxy blocks (for sprint texture)
 * add icons for gate types
 * fix gate range validation when placing 
-
 * courier/npc upkeep/deposit double chest interaction  
 * fix heading to home if has attack target
 * add food ration item  
 * fix 'friendly' archers/npcs attacking eachother for revenge (or friendly players)
 * if cant see attack target try move closer 
 
+* remove 'deposit' from npcs, baton, commands, etc -- it is no longer needed
 
 /********** 05-26-13 **********/
 /********** 05-27-13 **********/

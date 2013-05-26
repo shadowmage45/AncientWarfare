@@ -49,7 +49,6 @@ ITargetEntry currentTarget = null;
 ITargetEntry playerTarget = null;
 WayPoint homePoint = null;
 WayPoint work = null;
-WayPoint deposit = null;
 WayPoint upkeep = null;
 TECivic workSite = null;
 WayPoint guard = null;
@@ -70,7 +69,6 @@ public WayPointNavigator(IPathableEntity owner)
 
 public void handleDimensionChange(int dim)
   {
-  this.setDepositSite(null);
   this.setHomePoint(null);
   this.setUpkeepSite(null);
   this.setWorkSite(null);
@@ -255,17 +253,6 @@ public void setWorkSiteTile(TECivic te)
   this.workSite = te;
   }
 
-/************************************************DEPOSIT SITE*************************************************/
-public void setDepositSite(WayPoint p)
-  {
-  this.deposit = p;
-  }
-
-public WayPoint getDepositSite()
-  {
-  return deposit;
-  }
-
 /************************************************UPKEEP SITE*************************************************/
 public WayPoint getUpkeepSite()
   {
@@ -313,10 +300,6 @@ public NBTTagCompound getNBTTag()
     {
     tag.setCompoundTag("work", this.work.getNBTTag());
     }
-  if(deposit!=null)
-    {
-    tag.setCompoundTag("deposit", this.deposit.getNBTTag());
-    }
   if(upkeep!=null)
     {
     tag.setCompoundTag("upkeep", this.upkeep.getNBTTag());
@@ -354,11 +337,7 @@ public void readFromNBT(NBTTagCompound tag)
   if(tag.hasKey("work"))
     {
     this.work = new WayPoint(tag.getCompoundTag("work"));
-    }
-  if(tag.hasKey("deposit"))
-    {    
-    this.deposit = new WayPoint(tag.getCompoundTag("deposit"));
-    }
+    } 
   if(tag.hasKey("upkeep"))
     {
     this.upkeep = new WayPoint(tag.getCompoundTag("upkeep"));
