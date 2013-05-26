@@ -281,6 +281,22 @@ public void handleBeingAttacked(EntityLiving damager)
 
 public void handleBroadcastTarget(Entity ent, TargetType type, int multi)
   {
+  if(ent instanceof EntityPlayer)
+    {
+    EntityPlayer player = (EntityPlayer)ent;
+    if(TeamTracker.instance().areTeamsMutuallyFriendly(npc.worldObj, TeamTracker.instance().getTeamForPlayer(player), npc.teamNum))
+      {
+      return;
+      }
+    }
+  else if (ent instanceof NpcBase)
+    {
+    NpcBase otherNpc = (NpcBase)ent;
+    if(TeamTracker.instance().areTeamsMutuallyFriendly(npc.worldObj, otherNpc.teamNum, npc.teamNum))
+      {
+      return;
+      }
+    }
   if(this.targetEntries.containsKey(type))
     {
     AITargetList list = this.targetEntries.get(type);

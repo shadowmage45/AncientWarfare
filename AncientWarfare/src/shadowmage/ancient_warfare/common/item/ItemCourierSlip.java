@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -42,6 +44,17 @@ public class ItemCourierSlip extends AWItemClickable
 public ItemCourierSlip(int itemID)
   {
   super(itemID, true);
+  }
+
+
+
+@Override
+public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
+  {  
+  super.addInformation(stack, player, list, par4);
+  list.add("Left Click: Add Routing Point");
+  list.add("   for block and side clicked");
+  list.add("Right Click: Open GUI");
   }
 
 @Override

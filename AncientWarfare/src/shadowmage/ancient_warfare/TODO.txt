@@ -1,19 +1,10 @@
-TONIGHT
-
-THIS WEEK
-
-THIS(next) WEEKEND
-
 GENERAL
 * add name search/filter box to structure builder guis (and crafting/selection guis later on.....)
 * add current click-actions to item-tooltips (maybe when shift is pressed?)
 * missiles -- add shooter/etc to spawn data and re-enable client-side entity-hit detection?
 * create general secondary data watcher for npcs/gates/vehicles
-* turret pitch up/down upgrade icons
-* food ration icon
 * more missile icons
-* more missile textures
-* clean up item interaction -- figure out unified system for items
+* more missile textures    
 
 GATES
 * gate proxy blocks no-destroy from explosion
@@ -22,11 +13,13 @@ GATES
 
 VEHICLES
 * clean up vehicle alpha rendering
+* set vehicle motion/accel to 0 when collided horizontally
 
 NPCS
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
     use command baton, check if player has food in inventory && withdraw upkeep ??
-* handle broadcast attack target of 'friendly' target   
+* more 'check if target dead' (seems creepers or entities removed by setting world to peacefull are still targets)
+    perhaps check world loaded entity list to see if target is still present/loaded
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
@@ -158,44 +151,36 @@ TWEAKS/OPTIMIZATION
         decrease overall network used from vanilla MC resending entire chunks..)
 
 ********************* DONE STUFF ************************* 
-/********** 05-25-13 **********/
-* adjust civic GUI to place resource slots separate from regular slots
-* auto aim on vehicles needs entity-hit height adjustment re-added/unbroken
-* investigate making it so missiles won't collide with with gates (including vanilla arrows)
-    could probably set gates completely no no-collide and do a custom ray trace to see if
-    player is targeting a gate
-* validate point selection for gates pre-construction
-* fix gate bounds rendering
-* check distance on items before scanning/building/placing/etc    
-* fix courier routing slip GUI top slot won't move down ( - button)
-* cleanup pathfinding using block bounds for isPathable check (should handle mod blocks much better)
-* pathfinding needs ability to jump down blocks (and/or remove diagonal & vertical pathing from crawler)
-* soldier aim while on vehicles could still use attention (cheat?) 
-    how to deal with hopping entities ?       
-* missiles need adjusted to hit entities close to shooter
-* update to 1.5.2 -- forge 712
-* squid farm farms rose?
-* add work site access 'normal' inventory from bottom (for hoppers/etc)
-* validate input slot items from ISidedInventory.canInsertItem
-* add releases folder to repository
-* pathfinding -- check if gate is locked for interactable
-* add ai repair gates
-* soldiers don't dismount properly when enemies are close (uses vehicle min attack dist)
-* fix gate orientation setting for improper player orientation (it was moving when proper)
-* add default (transparent) texture for proxy blocks (for sprint texture)
-* add icons for gate types
-* fix gate range validation when placing 
-* courier/npc upkeep/deposit double chest interaction  
-* fix heading to home if has attack target
-* add food ration item  
-* fix 'friendly' archers/npcs attacking eachother for revenge (or friendly players)
-* if cant see attack target try move closer 
-
-* remove 'deposit' from npcs, baton, commands, etc -- it is no longer needed
-* setup BC install and test sided interaction
-* remove test icon code from resource slot
 
 /********** 05-26-13 **********/
+* turret pitch up/down upgrade icons
+* food ration icon
+* adjust npc step size to 1.25 (may fix issues with soul-sand and jumping out of water blocks
+* clean up item interaction -- figure out unified system for items (add tooltip text to items)
+    Structure Scanner
+        Left Click -- set first bound, set second bound, set build key and facing (shift) to offset position
+        Right Click -- scan and process when positions are set, or (shift) clear current positions
+    Structure Builder(s)
+        Right Click -- open GUI or (shift) construct building
+    Civic w/Bounds
+        Left Click -- set first bound, set second bound
+        Right Click -- place civic block on block clicked when positions set, or if not set && shift -- clear bounds
+    Civic block only
+        Right Click -- place civic block on block clicked
+    Gate Spawner                                         
+        Left Click -- set first bound, set second bound
+        Right Click -- construct gate or (shift) clear bounds
+    Command Baton
+        Left Click -- Entity or Block -- execute command
+        Right Click -- Open GUI or (shift) clear all following NPCs
+    Routing Slip
+        Left Click -- add routing point then open GUI
+        Right Click -- open GUI
+    Vehicle Spawner
+        Right Click -- spawn entity
+    NPC Spawner
+        Right Click -- spawn entity
+* handle broadcast attack target of 'friendly' target   
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/
 /********** 05-29-13 **********/

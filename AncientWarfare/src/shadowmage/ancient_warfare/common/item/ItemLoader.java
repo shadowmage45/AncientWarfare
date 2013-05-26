@@ -84,10 +84,10 @@ public void load()
 
 private void loadItems()
   {  
-  this.registerItemSingle(structureCreativeBuilderTicked, "Creative Builder Ticked", "Creative Mode Building Tool with Builder Block", "Sneak-Right-click to set structure").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
-  this.registerItemSingle(structureScanner, "Structure Scanner", "Structure Scanner", "Right-Click to Use").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
-  this.registerItemSingle(structureCreativeBuilder, "Creative Builder", "Creative Mode Building Tool", "Sneak+Right-Click to set structure").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
-  this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Right-Click to Use").setIconTexture("ancientwarfare:builder/structureScanner1", 0).addTooltip("Sneak-Right-Click to Open GUI", 0);
+  this.registerItemSingle(structureCreativeBuilderTicked, "Creative Builder Ticked", "Creative Mode Building Tool with Builder Block", "Creative Template Builder").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  this.registerItemSingle(structureScanner, "Structure Scanner", "Structure Scanner", "Creative Template Creator").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
+  this.registerItemSingle(structureCreativeBuilder, "Creative Builder", "Creative Mode Building Tool", "Creative Template Builder").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Scans and Builds from inventory").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
   this.registerItemSingle(structureEditor, "Structure Editor", "Structure Template Editor", "Right-Click to open editor GUI").setIconTexture("ancientwarfare:builder/testIcon1", 0);
   this.registerItemSubtyped(componentItem);
   this.registerItemSubtyped(ammoItem);

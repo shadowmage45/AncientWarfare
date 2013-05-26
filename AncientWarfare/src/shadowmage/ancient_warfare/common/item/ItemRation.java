@@ -34,13 +34,8 @@ import net.minecraft.item.ItemStack;
 public class ItemRation extends ItemFood
 {
 
-
-
 /**
  * @param id
- * @param healAmount
- * @param saturationModifier
- * @param par4
  */
 public ItemRation(int id)
   {

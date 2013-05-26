@@ -69,12 +69,12 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
-  super.addInformation(stack, player, list, par4);
+  super.addInformation(stack, player, list, par4);   
+  list.add("Left Click: Execute Command");
+  list.add("Right Click: Open GUI");
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("batonSettings"))
     {
-    NBTTagCompound tag = stack.getTagCompound().getCompoundTag("batonSettings");   
-    list.add("Left-Click a block or entity");
-    list.add("to execute current command.");
+    NBTTagCompound tag = stack.getTagCompound().getCompoundTag("batonSettings");
     if(tag.hasKey("com"))
       {
       list.add("Current command: "+NpcCommand.values()[tag.getInteger("com")]);
@@ -86,7 +86,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
     }
   else
     {
-    list.add("No command-right click to set");
+    list.add("No command");
     }    
   }
 

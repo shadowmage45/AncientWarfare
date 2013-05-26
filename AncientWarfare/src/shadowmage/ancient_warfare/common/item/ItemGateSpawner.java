@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -43,6 +45,40 @@ public ItemGateSpawner(int itemID)
   super(itemID, true);
   this.hasLeftClick = true;
   }
+
+
+
+@Override
+public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
+  {
+  super.addInformation(stack, player, list, par4);
+  NBTTagCompound tag = null;
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWGateInfo"))
+    {
+    tag = stack.getTagCompound().getCompoundTag("AWGateInfo");
+    }
+  else
+    {
+    tag = new NBTTagCompound();
+    }
+  if(tag.hasKey("pos1") && tag.hasKey("pos2"))
+    {
+    list.add("Right Click: Construct Gate");
+    list.add("(Shift)Right Click: Cancel/clear");
+    }
+  else if(tag.hasKey("pos1"))
+    {
+    list.add("Left Click: Set second bound");
+    list.add("(Shift)Right Click: Cancel/clear");    
+    }
+  else
+    {
+    list.add("Left Click: Set first bound");
+    list.add("(Shift)Right Click: Cancel/clear");
+    }
+  }
+
+
 
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)

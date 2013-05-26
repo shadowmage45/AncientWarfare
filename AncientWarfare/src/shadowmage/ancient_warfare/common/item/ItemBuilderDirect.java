@@ -59,9 +59,9 @@ public ItemBuilderDirect(int itemID)
   }
 
 @Override
-public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean par4)
   {
-  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);  
+  super.addInformation(par1ItemStack, par2EntityPlayer, list, par4);  
   if(par1ItemStack!=null)
     {
     NBTTagCompound tag;
@@ -76,31 +76,39 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
     if(!tag.hasKey("scanning") || tag.getBoolean("scanning")==true)
       {     
       if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
-        {
-        par3List.add("Has All Bounds set:");
-        par3List.add("Ready to scan and process");
+        {        
+        list.add("Right Click: Scan and Process");
+        list.add("(Shift)Right Click: Clear/cancel");
         }        
       else if(!tag.hasKey("pos1"))
         {
-        par3List.add("Scan Info Cleared");
+        list.add("Left Click: Set first scan bounds");
+        list.add("Hold Shift to offset for side hit");
+        list.add("(Shift)Right Click: Clear/cancel");
         }
       else if(!tag.hasKey("pos2"))
         {
-        par3List.add("First Position Set");
+        list.add("Left Click: Set second scan bounds");
+        list.add("Hold Shift to offset for side hit");
+        list.add("(Shift)Right Click: Clear/cancel");
         }
       else if(!tag.hasKey("buildKey"))
         {
-        par3List.add("Second Position Set");
+        list.add("Left Click: Set build key and facing");
+        list.add("Hold Shift to offset for side hit");
+        list.add("(Shift)Right Click: Clear/cancel");
         }
       }
     else if(tag.hasKey("building"))
       {
-      par3List.add("Ready to Build.  Needed Blocks: ");
+      list.add("Right Click: Open GUI");
+      list.add("(Shift)Right Click: Build Structure");
+      list.add("Ready to Build.  Needed Blocks: ");
       NBTTagList blockList = tag.getTagList("blockList");
       for(int i = 0; i < blockList.tagCount(); i++)
         {
         NBTTagCompound blockTag = (NBTTagCompound) blockList.tagAt(i);
-        par3List.add(String.valueOf("ID: "+blockTag.getInteger("id")+" meta: "+blockTag.getInteger("mt")+" count: "+blockTag.getInteger("ct")));
+        list.add(String.valueOf("ID: "+blockTag.getInteger("id")+" meta: "+blockTag.getInteger("mt")+" count: "+blockTag.getInteger("ct")));
         }
       }
 
@@ -148,13 +156,57 @@ public void onUpdate(ItemStack stack, World world, Entity entity, int par4, bool
  */
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
-  {  
+  { 
   if(world.isRemote)
     {
     return true;
+    }  
+  NBTTagCompound tag;
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
+    {
+    tag = stack.getTagCompound().getCompoundTag("structData");
+    }
+  else
+    {
+    tag = new NBTTagCompound();
     } 
- 
-  GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_BUILD_DIRECT, player, world, 0, 0, 0);  
+  
+  if(!tag.hasKey("name"))//hit was not null, and has no current structure
+    {    
+    if(isShiftClick(player))
+      {
+      tag = new NBTTagCompound();    
+      }
+    }
+  else 
+    {
+    if(isShiftClick(player))
+      {
+      hit = BlockTools.offsetForSide(hit, side);
+      int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+      StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
+      settings.spawnGate = false;
+      settings.spawnNpc = false;
+      settings.spawnVehicle = false;
+      ProcessedStructure struct = StructureManager.instance().getTempStructure(player.getEntityName());
+      if(struct==null)
+        {
+        tag = new NBTTagCompound();
+        }
+      else
+        {
+        this.attemptConstruction(world, player, hit, face, struct, settings);
+        } 
+      }
+    else
+      {
+      GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_BUILD_DIRECT, player, world, 0, 0, 0);           
+      } 
+    } 
+  /**
+   * apply any changes to the itemStackTag
+   */
+  stack.setTagInfo("structData", tag);
   return true;
   }
 
@@ -413,24 +465,6 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
       player.addChatMessage("Setting Scan Build Position and Facing");
       }
     }
-  else 
-    {    
-    hit = BlockTools.offsetForSide(hit, side);
-    int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-    StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
-    settings.spawnGate = false;
-    settings.spawnNpc = false;
-    settings.spawnVehicle = false;
-    ProcessedStructure struct = StructureManager.instance().getTempStructure(player.getEntityName());
-    if(struct==null)
-      {
-      tag = new NBTTagCompound();
-      }
-    else
-      {
-      this.attemptConstruction(world, player, hit, face, struct, settings);
-      } 
-    } 
   /**
    * apply any changes to the itemStackTag
    */

@@ -67,21 +67,20 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
         {
         if(civ.isDepository())
           {
-          list.add("Block-Only: right click to place");
+          list.add("Right Click: Place Block");
           }
         else if(tag.hasKey("pos2"))
           {
-          list.add("Has both bounds positions set");
-          list.add("Click to Place Civic Block");
+          list.add("Right Click: Place Block");
           }
         else if(tag.hasKey("pos1"))
           {
-          list.add("Has first bounds position set");
-          list.add("Click to Set Second Position");
+          list.add("Left Click: Set second bound");
+          list.add("(Shift)Right Click: Cancel/clear");
           }
         else
           {
-          list.add("Click to Set First Position");
+          list.add("Left Click: Set first bound");
           }
         }
       else
@@ -215,7 +214,13 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         {
         player.addChatMessage("Please choose a position directly adjacent to the work bounds!");
         }      
-      }   
+      }  
+    else if(isShiftClick(player))
+      {
+      NBTTagCompound newtag = new NBTTagCompound();
+      stack.setTagInfo("civicInfo", newtag);
+      player.openContainer.detectAndSendChanges();
+      }
     }
   return true;
   }

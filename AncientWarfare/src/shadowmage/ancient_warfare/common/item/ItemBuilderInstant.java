@@ -46,7 +46,6 @@ public class ItemBuilderInstant extends ItemBuilderBase
 public ItemBuilderInstant(int itemID)
   {
   super(itemID);
-  this.hasLeftClick = true;
   }
 
 public void openGUI(EntityPlayer player)
@@ -57,7 +56,9 @@ public void openGUI(EntityPlayer player)
 @Override
 public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
   {
-  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);  
+  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4); 
+  par3List.add("Right Click: Open GUI");
+  par3List.add("(Shift)Right Click: Build Structure");
   if(par1ItemStack!=null)
     {
     NBTTagCompound tag;
@@ -132,65 +133,64 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     return true;
     }  
-  if(player.capabilities.isCreativeMode)
+  if(player.capabilities.isCreativeMode && !isShiftClick(player))
     {
     openGUI(player);
+    }
+  if(hit==null)
+    {
+    return true;
+    }
+  if(isShiftClick(player))
+    {
+    hit = BlockTools.offsetForSide(hit, side);   
+    NBTTagCompound tag;
+    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
+      {
+      tag = stack.getTagCompound().getCompoundTag("structData");
+      }
+    else
+      {
+      tag = new NBTTagCompound();
+      }
+    if(tag.hasKey("name") && hit !=null)
+      {    
+      StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
+      ProcessedStructure struct = StructureManager.instance().getStructureServer(tag.getString("name"));
+      if(struct==null)
+        {
+        Config.logError("Structure Manager returned NULL structure to build for name : "+tag.getString("name"));      
+        tag = new NBTTagCompound();
+        stack.setTagInfo("structData", tag);
+        return true;
+        }
+      if(!this.attemptConstruction(world, struct, hit, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), settings))
+        {
+        player.addChatMessage("Structure is currently locked for editing!!");
+        }
+      else
+        {
+        if(!player.capabilities.isCreativeMode)
+          {
+          ItemStack item = player.getHeldItem();
+          if(item!=null)
+            {
+            item.stackSize--;
+            if(item.stackSize<=0)
+              {          
+              player.setCurrentItemOrArmor(0, null);
+              }
+            }
+          }
+        }
+      }
     }
   return true;
   }
 
 @Override
 public boolean onUsedFinalLeft(World world, EntityPlayer player,  ItemStack stack, BlockPosition hit, int side)
-  {
-  if(world.isRemote)
-    {
-    return true;
-    } 
-  if(hit==null)
-    {
-    return true;
-    }
-  hit = BlockTools.offsetForSide(hit, side);   
-  NBTTagCompound tag;
-  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
-    {
-    tag = stack.getTagCompound().getCompoundTag("structData");
-    }
-  else
-    {
-    tag = new NBTTagCompound();
-    }
-  if(tag.hasKey("name") && hit !=null)
-    {    
-    StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
-    ProcessedStructure struct = StructureManager.instance().getStructureServer(tag.getString("name"));
-    if(struct==null)
-      {
-      Config.logError("Structure Manager returned NULL structure to build for name : "+tag.getString("name"));      
-      tag = new NBTTagCompound();
-      stack.setTagInfo("structData", tag);
-      return true;
-      }
-    if(!this.attemptConstruction(world, struct, hit, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), settings))
-      {
-      player.addChatMessage("Structure is currently locked for editing!!");
-      }
-    else
-      {
-      if(!player.capabilities.isCreativeMode)
-        {
-        ItemStack item = player.getHeldItem();
-        if(item!=null)
-          {
-          item.stackSize--;
-          if(item.stackSize<=0)
-            {          
-            player.setCurrentItemOrArmor(0, null);
-            }
-          }
-        }
-      }
-    }
+  {  
   return true;
   }
 

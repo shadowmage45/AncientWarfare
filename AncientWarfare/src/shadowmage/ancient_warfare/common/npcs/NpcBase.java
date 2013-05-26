@@ -134,7 +134,7 @@ public NpcBase(World par1World)
   this.inventory = new NpcInventory(this, 0);
   this.specInventory = new NpcInventory(this, 0);
   this.tasks.addTask(1, new EntityAISwimming(this));
-  this.stepHeight = 1.1f;
+  this.stepHeight = 1.25f;
   for (int i = 0; i < this.equipmentDropChances.length; ++i)
     {
     this.equipmentDropChances[i] = 1.f;

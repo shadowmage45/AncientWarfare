@@ -54,9 +54,9 @@ public ItemStructureScanner(int itemID)
   }
 
 @Override
-public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean par4)
   {
-  super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);  
+  super.addInformation(par1ItemStack, par2EntityPlayer, list, par4);  
   if(par1ItemStack!=null)
     {
     NBTTagCompound tag;
@@ -68,22 +68,29 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
       {
       tag = new NBTTagCompound();
       }
-    par3List.add("Shift-Sneak Click to Clear");
     if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
       {
-      par3List.add("Area Set, Click to Process (4/4)");
+      list.add("Right Click: Scan and Process (4/4)");
+      list.add("(Shift)Right Click: Cacnel/clear");
       }        
     else if(!tag.hasKey("pos1"))
       {
-      par3List.add("Click to Set First Position (1/4)");
+      list.add("Left Click: Set first bound (1/4)");
+      list.add("Hold shift to offset for side hit");
+      list.add("(Shift)Right Click: Cacnel/clear");
       }
     else if(!tag.hasKey("pos2"))
       {
-      par3List.add("Click to Set Second Position (2/4)");
+      list.add("Left Click: Set second bound (2/4)");
+      list.add("Hold shift to offset for side hit");
+      list.add("(Shift)Right Click: Cacnel/clear");
       }
     else if(!tag.hasKey("buildKey"))
       {
-      par3List.add("Click to Set Build Position and Facing (3/4)");
+      list.add("Left Click: Set build key and");
+      list.add("    direction (3/4)");
+      list.add("Hold shift to offset for side hit");
+      list.add("(Shift)Right Click: Cacnel/clear");
       }    
     }  
   }
@@ -175,7 +182,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
     BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
     BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
     BlockPosition key = new BlockPosition(tag.getCompoundTag("buildKey"));
-    if(player.getDistance(key.x+0.5d, key.y, key.x+0.5d) > 10)
+    if(player.getDistance(key.x+0.5d, key.y, key.z+0.5d) > 10)
       {
       player.addChatMessage("You are too far away to scan that building, move closer to chosen build-key position");
       return false;
