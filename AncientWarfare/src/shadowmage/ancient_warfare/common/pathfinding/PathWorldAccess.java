@@ -68,9 +68,9 @@ protected boolean checkBlockBounds(int x, int y, int z)
   {
   Block block;
   int id = world.getBlockId(x, y, z);
-  if(!isPathable(id) || id==Block.waterMoving.blockID || id==Block.waterStill.blockID)
+  if(id==Block.waterMoving.blockID || id==Block.waterStill.blockID)
     {
-    return false;
+    return true;
     }
   block = Block.blocksList[id];
   if(block!=null)
@@ -92,7 +92,6 @@ public boolean isWalkable(int x, int y, int z)
   boolean cube = !checkBlockBounds(x, y, z);//isSolidBlock(id);
   boolean cube2 = !checkBlockBounds(x, y-1, z);//isSolidBlock(id2);
   boolean cube3 = !checkBlockBounds(x, y+1, z);//isSolidBlock(id3);
-  boolean ladder;
   /**
    * check basic early out
    * check for doors
@@ -100,15 +99,11 @@ public boolean isWalkable(int x, int y, int z)
    * check for ladders
    * check for water
    * check block bounds
-   */
-  if(cube)
-    {
-    return false;
-    }
+   */  
   if(!isPathable(id))//solid unpassable block, or lava
     { 
     return false;
-    }
+    }  
   if(id==0 && cube2 && id3==0)//early out check for the most basic of pathable areas
     {
     return true;
@@ -137,9 +132,12 @@ public boolean isWalkable(int x, int y, int z)
         }
       }
     }
-  else if(!canOpenDoors && isDoor(x, y, z))
+  else if(isDoor(x, y, z))
     {
-    return false;
+    if(!canOpenDoors)
+      {
+      return false;
+      }
     }  
   else if(isWater(id))//can't swim check
     {
@@ -151,11 +149,14 @@ public boolean isWalkable(int x, int y, int z)
       {
       return false;
       }    
-    }  
-  else if(!canUseLaders && isLadder(id) && !cube2)//ladder use check -- if block is a ladder with air below it
-    {    
-    return false;            
-    }  
+    } 
+  else if(isLadder(id))
+    {
+    if(!canUseLaders && !cube2)//ladder use check -- if block is a ladder with air below it
+      {    
+      return false;            
+      }
+    }    
   else if(!cube2 && !isLadder(id2) && !isLadder(id))//or if air below and not a ladder
     {    
     return false;    
@@ -164,7 +165,7 @@ public boolean isWalkable(int x, int y, int z)
     {
     return false;
     }  
-  else if(cube3)//no room to move
+  else if(cube || cube3)//no room to move
     {
     return false;
     }

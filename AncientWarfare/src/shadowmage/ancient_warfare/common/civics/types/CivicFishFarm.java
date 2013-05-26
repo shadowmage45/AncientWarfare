@@ -43,6 +43,5 @@ public CivicFishFarm(int id, String name, String tooltip, Class <?extends TEWork
   this.workType = CivicWorkType.FISH;
   this.workSizeMaxHorizontal = workHorizSize;
   this.workSizeMaxHeight = workVertSize;
-  this.resourceSlotSize = 3;
   }
 }

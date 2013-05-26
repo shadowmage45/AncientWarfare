@@ -180,9 +180,13 @@ TWEAKS/OPTIMIZATION
 * gate placement validation -- validate range from avg of pos1/pos2 x/z, min.y
 * gate hit animation (need client side health update)
 * create a method for players to 'convert' a pre-spawned friendly NPC to their team
-    use command baton, check if player has food in inventory && withdraw upkeep ??
-    
+    use command baton, check if player has food in inventory && withdraw upkeep ??    
 * adjust pathfinding to check water blocks (should solve thinking water can be walked on)    
+
+* re-adjust pathfinding for water
+* fix pathfinding ladder handling from cube detection changes
+* remove resource slots from fish farms
+* squid farm puts ink into resource slots
 
 /********** 05-27-13 **********/
 /********** 05-28-13 **********/

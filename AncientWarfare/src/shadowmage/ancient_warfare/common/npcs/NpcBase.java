@@ -393,7 +393,7 @@ public float getDistanceFromTarget(ITargetEntry target)
 @Override
 protected void updateAITick() 
   {
-  if(aiTick < Config.npcAITicks)
+  if(aiTick < Config.npcAITicks || this.isDead)
     {
     aiTick++;
     return;
