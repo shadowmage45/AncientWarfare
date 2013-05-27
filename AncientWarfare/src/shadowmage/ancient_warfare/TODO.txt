@@ -23,6 +23,13 @@ CIVICS
 * food processing center -- basic autocrafting to craft food recipes (manually added list)
 
 /***************************************************************UPCOMING FEATURES***************************************************************/
+CRAFTING TYPES
+* Ammo
+    normal recipes
+* upgrades
+    normal recipes (w/research?)
+        
+
 TEMPLATES
 * resource lists for gates
 * resource lists for npcs
