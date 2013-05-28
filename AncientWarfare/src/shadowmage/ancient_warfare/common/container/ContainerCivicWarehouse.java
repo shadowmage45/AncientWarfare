@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.container;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,17 +28,16 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryMapped;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
-import shadowmage.ancient_warfare.common.utils.StackWrapper;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapper;
 import shadowmage.ancient_warfare.common.utils.StackWrapperComparatorAlphaAZ;
 
 public class ContainerCivicWarehouse extends ContainerBase
 {
 
 TECivicWarehouse te;
-public List<StackWrapper> warehouseItems = new ArrayList<StackWrapper>();
+public List<ItemStackWrapper> warehouseItems = new ArrayList<ItemStackWrapper>();
 protected StackWrapperComparatorAlphaAZ azSorter = new StackWrapperComparatorAlphaAZ();
 
 
@@ -186,8 +184,8 @@ protected void handleRequest(NBTTagCompound tag)
   int index = tag.getInteger("slot");
   if(index>=0 && index < this.warehouseItems.size())
     {
-    StackWrapper wrap = this.warehouseItems.get(index);
-    ItemStack stack = wrap.stack;
+    ItemStackWrapper wrap = this.warehouseItems.get(index);
+    ItemStack stack = wrap.getFilter();
     if(te.withdrawSlots.canHoldItem(stack, stack.getMaxStackSize()))
       {
       ItemStack removed = te.inventory.getItems(stack, 64);

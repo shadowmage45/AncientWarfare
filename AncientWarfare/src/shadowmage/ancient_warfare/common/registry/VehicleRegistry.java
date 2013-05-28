@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
+import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
@@ -82,7 +84,7 @@ public static VehicleRegistry instance()
 
 public void registerVehicles()
   {
-  Description d = null;
+  Description d = null;  
   for(IVehicleType vehicle : VehicleType.vehicleTypes)
     {
     if(vehicle!=null)
@@ -92,6 +94,10 @@ public void registerVehicles()
         {
         d.addTooltip(tip, vehicle.getGlobalVehicleType());
         }
+      for(int i = 0; i < vehicle.getMaterialType().getNumOfLevels(); i++)
+        {
+        AWCraftingManager.instance().addVehicleRecipe(vehicle.constructRecipe(i));
+        }      
       }
     }  
   }

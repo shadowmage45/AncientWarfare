@@ -43,34 +43,34 @@ public class InventoryTools
 static Random random = new Random();
 
 
-public static List<StackWrapper> getCompactInventoryFromTag(NBTTagCompound tag)
+public static List<ItemStackWrapper> getCompactInventoryFromTag(NBTTagCompound tag)
   {
-  ArrayList<StackWrapper> stacks = new ArrayList<StackWrapper>();
+  ArrayList<ItemStackWrapper> stacks = new ArrayList<ItemStackWrapper>();
   NBTTagList list = tag.getTagList("items");  
   for(int i = 0; i < list.tagCount(); i++)
     {
-    stacks.add(StackWrapper.loadFromNBT((NBTTagCompound) list.tagAt(i)));
+    stacks.add(new ItemStackWrapper((NBTTagCompound)list.tagAt(i)));
     }  
   return stacks;
   }
 
-public static NBTTagCompound getTagForCompactInventory(List<StackWrapper> items)
+public static NBTTagCompound getTagForCompactInventory(List<ItemStackWrapper> items)
   {
   NBTTagCompound tag = new NBTTagCompound();
   NBTTagList list = new NBTTagList();
-  for(StackWrapper wrap : items)
+  for(ItemStackWrapper wrap : items)
     {
-    list.appendTag(wrap.getNBTTag());
+    list.appendTag(wrap.writeToNBT(new NBTTagCompound()));
     }
   tag.setTag("items", list);
   return tag;
   }
 
-public static List<StackWrapper> getCompactedInventory(IInventory inv, Comparator sorter)
+public static List<ItemStackWrapper> getCompactedInventory(IInventory inv, Comparator sorter)
   {
-  ArrayList<StackWrapper> stacks = new ArrayList<StackWrapper>();
+  ArrayList<ItemStackWrapper> stacks = new ArrayList<ItemStackWrapper>();
   ItemStack fromInv;
-  StackWrapper fromList;  
+  ItemStackWrapper fromList;  
   for(int i = 0; i < inv.getSizeInventory(); i++)
     {
     fromInv = inv.getStackInSlot(i);
@@ -83,14 +83,14 @@ public static List<StackWrapper> getCompactedInventory(IInventory inv, Comparato
       if(fromList.equals(fromInv))
         {
         found = true;
-        fromList.stack.stackSize+=fromInv.stackSize;
+        fromList.getFilter().stackSize+=fromInv.stackSize;
         //found item, increment counts
         break;
         }
       }
     if(!found)
       {
-      stacks.add(new StackWrapper(fromInv));
+      stacks.add(new ItemStackWrapper(fromInv));
       }
     }  
   if(sorter!=null)

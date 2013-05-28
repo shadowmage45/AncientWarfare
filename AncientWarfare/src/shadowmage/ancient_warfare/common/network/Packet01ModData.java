@@ -151,7 +151,11 @@ public void execute()
     AWCore.proxy.serverTickTime = packetData.getLong("tick");
     AWCore.proxy.serverTPS = packetData.getInteger("tps");
     }
-
+  
+  if(this.packetData.hasKey("research") && player.worldObj.isRemote)
+    {
+    PlayerTracker.instance().addResearchToPlayer(world, player.getEntityName(), this.packetData.getInteger("new"));
+    }
   }
 
 

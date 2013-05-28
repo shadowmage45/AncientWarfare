@@ -20,23 +20,41 @@
  */
 package shadowmage.ancient_warfare.common.tracker.entry;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class PlayerEntry implements INBTTaggable
 {
 
 public String playerName = "";
 EntityPlayer player = null;
-List<Integer> doneResearch = new ArrayList<Integer>();
+HashSet<IResearchGoal> doneResearch = new HashSet<IResearchGoal>();
 
 public void addCompletedResearch(int num)
   {
-  this.doneResearch.add(num);
+  this.doneResearch.add(ResearchGoal.getGoalByID(num));
+  }
+
+public boolean hasDoneResearch(IResearchGoal goal)
+  {
+  return this.doneResearch.contains(goal);
+  }
+
+public boolean hasDoneResearch(HashSet<IResearchGoal> goals)
+  {  
+  for(IResearchGoal goal : goals)
+    {
+    if(!this.doneResearch.contains(goal))
+      {
+      return false;
+      }
+    }
+  return true;
   }
 
 @Override
@@ -45,9 +63,11 @@ public NBTTagCompound getNBTTag()
   NBTTagCompound tag = new NBTTagCompound();
   tag.setString("name", playerName);
   int[] research = new int[doneResearch.size()];
-  for(int i = 0; i < doneResearch.size(); i++)
+  int it = 0;
+  for(IResearchGoal goal : doneResearch)
     {
-    research[i] = doneResearch.get(i);
+    research[it] = goal.getGlobalResearchNum();
+    it++;
     }
   tag.setIntArray("res", research);
   return tag;
@@ -61,7 +81,7 @@ public void readFromNBT(NBTTagCompound tag)
   int[] research = tag.getIntArray("res");
   for(int i = 0; i< research.length; i++)
     {
-    doneResearch.add(research[i]);
+    doneResearch.add(ResearchGoal.getGoalByID(research[i]));
     }
   }
 

@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
 {
@@ -51,6 +52,16 @@ public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
     this.shouldRiderSit = true;
     this.moveRiderWithTurret = true;
     this.turretRotationMax=180.f;
+    this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
+    this.addNeededResearch(1, ResearchGoal.vehicleMobility1);
+    this.addNeededResearch(2, ResearchGoal.vehicleMobility1);
+    this.addNeededResearch(3, ResearchGoal.vehicleMobility2);
+    this.addNeededResearch(4, ResearchGoal.vehicleMobility2);
+    this.addNeededResearch(0, ResearchGoal.vehicleTurrets1);
+    this.addNeededResearch(1, ResearchGoal.vehicleTurrets1);
+    this.addNeededResearch(2, ResearchGoal.vehicleTurrets1);
+    this.addNeededResearch(3, ResearchGoal.vehicleTurrets2);
+    this.addNeededResearch(4, ResearchGoal.vehicleTurrets2);
     }
 
 @Override

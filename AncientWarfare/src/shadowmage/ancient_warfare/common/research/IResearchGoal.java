@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.research;
 
+import java.util.HashSet;
 import java.util.List;
 
 public interface IResearchGoal
@@ -29,9 +30,9 @@ public interface IResearchGoal
 public abstract int getGlobalResearchNum();
 public abstract String getDisplayName();
 public abstract String getDisplayTooltip();
-public abstract List<IResearchGoal> getDependencies();
+public abstract HashSet<IResearchGoal> getDependencies();
 public abstract List<String> getDetailedDescription();
 public abstract IResearchGoal getGoalByNumber(int num);
-public abstract void addDependencies(IResearchGoal... deps);
+public abstract IResearchGoal addDependencies(IResearchGoal... deps);
 
 }

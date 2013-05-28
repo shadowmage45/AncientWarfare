@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class VehicleTypeBallistaStandTurret extends VehicleTypeBallista
 {
@@ -52,6 +53,12 @@ public VehicleTypeBallistaStandTurret(int typeNum)
   this.displayTooltip.add("Ballista Firing Mechanism");
   this.displayTooltip.add("Stand-Based");
   this.displayTooltip.add("45' Turret");
+  
+  this.addNeededResearch(0, ResearchGoal.vehicleTurrets1);
+  this.addNeededResearch(1, ResearchGoal.vehicleTurrets1);
+  this.addNeededResearch(2, ResearchGoal.vehicleTurrets1);
+  this.addNeededResearch(3, ResearchGoal.vehicleTurrets2);
+  this.addNeededResearch(4, ResearchGoal.vehicleTurrets2);
   }
 
 @Override

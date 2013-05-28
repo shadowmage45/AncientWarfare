@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
+
 
 public class VehicleTypeTrebuchetMobileFixed extends VehicleTypeTrebuchet
 {
@@ -42,6 +44,11 @@ public VehicleTypeTrebuchetMobileFixed(int typeNum)
   this.riderForwardsOffset = 1.275f;
   this.riderVerticalOffset = 0.8f;
   this.turretVerticalOffset = (34.f + 67.5f + 24.0f+12.f)*0.0625f;
+  this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(1, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(2, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(3, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(4, ResearchGoal.vehicleMobility2);
   }
 
 }

@@ -20,17 +20,41 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
-import java.util.Comparator;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
-public class StackWrapperComparatorAlphaAZ implements Comparator<ItemStackWrapper>
+public class ItemStackWrapperCrafting extends ItemStackWrapper
 {
 
-@Override
-public int compare(ItemStackWrapper arg0, ItemStackWrapper arg1)
+int remainingNeeded = 0;
+
+public ItemStackWrapperCrafting(ItemStackWrapper input)
   {
-  return arg0.getFilter().getDisplayName().compareTo(arg1.getFilter().getDisplayName());
+  super(input.getFilter(), input.getQuantity());
+  this.remainingNeeded = getQuantity();
   }
 
+public ItemStackWrapperCrafting(ItemStack stack, int qty)
+  {
+  super(stack, qty);
+  this.remainingNeeded = qty;
+  }
 
+public ItemStackWrapperCrafting(ItemStack stack)
+  {
+  super(stack);
+  }
 
+public ItemStackWrapperCrafting(NBTTagCompound tag)
+  {
+  super(tag);
+  this.remainingNeeded = tag.getInteger("rem");
+  }
+
+public NBTTagCompound writeToNBT(NBTTagCompound tag)
+  {
+  super.writeToNBT(tag);
+  tag.setInteger("rem", remainingNeeded);
+  return tag;
+  }
 }

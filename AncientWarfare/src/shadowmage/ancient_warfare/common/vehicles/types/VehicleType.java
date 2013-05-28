@@ -21,16 +21,19 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
@@ -112,6 +115,8 @@ public List<IAmmoType> validAmmoTypes = new ArrayList<IAmmoType>();
 public List<IVehicleUpgradeType> validUpgrades = new ArrayList<IVehicleUpgradeType>();
 public List<IVehicleArmorType> validArmors = new ArrayList<IVehicleArmorType>();
 public Map<Integer, IAmmoType> ammoBySoldierRank = new HashMap<Integer, IAmmoType>();
+
+public Map<Integer, HashSet<IResearchGoal>> neededResearch = new HashMap<Integer, HashSet<IResearchGoal>>();
 
 int storageBaySize = 0;
 int ammoBaySize = 6;
@@ -497,4 +502,45 @@ public String getIconTexture()
   {
   return "ancientwarfare:vehicle/"+iconTexture;
   }
+
+@Override
+public ResourceListRecipe constructRecipe(int level)
+  {
+  ResourceListRecipe recipe = new ResourceListRecipe(this.getStackForLevel(level).copy());
+  recipe.addResource(this.getMaterialType().getItem(level).copy(), this.getMaterialQuantity());
+  for(ItemStack stack : this.getAdditionalMaterials())
+    {
+    recipe.addResource(stack.copy(), stack.stackSize);
+    }  
+  recipe.neededResearch = this.getNeededResearchFor(level);
+  return recipe;
+  }
+
+@Override
+public HashSet<IResearchGoal> getNeededResearchFor(int level)
+  {
+  if(this.neededResearch.containsKey(level))
+    {
+    return this.neededResearch.get(level);
+    }
+  return new HashSet<IResearchGoal>();
+  }
+
+public void addNeededResearch(int level, IResearchGoal goal)
+  {
+  if(!this.neededResearch.containsKey(level))
+    {
+    this.neededResearch.put(level, new HashSet<IResearchGoal>());
+    }  
+  this.neededResearch.get(level).add(goal);
+  }
+
+public void addNeededResearchForMaterials()
+  {
+  for(int i = 0; i < this.getMaterialType().getNumOfLevels(); i++)
+    {
+    this.neededResearch.get(i).add(this.getMaterialType().getResearchForLevel(i));
+    }
+  }
+
 }

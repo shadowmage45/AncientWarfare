@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
@@ -114,6 +115,12 @@ public class VehicleTypeTrebuchetLarge extends VehicleType
     
     this.basePitchMax=70.f;
     this.basePitchMin=70.f;
+    this.addNeededResearchForMaterials();
+    this.addNeededResearch(0, ResearchGoal.vehicleCounterweights3);
+    this.addNeededResearch(1, ResearchGoal.vehicleCounterweights3);
+    this.addNeededResearch(2, ResearchGoal.vehicleCounterweights3);
+    this.addNeededResearch(3, ResearchGoal.vehicleCounterweights3);
+    this.addNeededResearch(4, ResearchGoal.vehicleCounterweights3);
     }
 
   @Override

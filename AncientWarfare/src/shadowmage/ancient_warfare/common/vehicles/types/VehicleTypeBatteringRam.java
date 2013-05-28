@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.BatteringRamVarHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
@@ -72,6 +73,17 @@ public VehicleTypeBatteringRam(int typeNum)
   this.storageBaySize = 0;
   this.armorBaySize = 6;
   this.upgradeBaySize = 3;
+  this.addNeededResearchForMaterials();
+  this.addNeededResearch(0, ResearchGoal.vehicleCounterweights1);
+  this.addNeededResearch(1, ResearchGoal.vehicleCounterweights1);
+  this.addNeededResearch(2, ResearchGoal.vehicleCounterweights1);
+  this.addNeededResearch(3, ResearchGoal.vehicleCounterweights2);
+  this.addNeededResearch(4, ResearchGoal.vehicleCounterweights2);
+  this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(1, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(2, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(3, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(4, ResearchGoal.vehicleMobility2);
   }
 
 @Override

@@ -23,7 +23,6 @@
 package shadowmage.ancient_warfare.common.inventory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,7 +32,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.interfaces.IInventoryCallback;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
-import shadowmage.ancient_warfare.common.utils.StackWrapper;
 
 public abstract class AWInventoryBase implements IInventory
 {

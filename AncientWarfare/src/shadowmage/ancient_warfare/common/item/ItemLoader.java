@@ -89,7 +89,6 @@ private void loadItems()
   this.registerItemSingle(structureCreativeBuilder, "Creative Builder", "Creative Mode Building Tool", "Creative Template Builder").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
   this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Scans and Builds from inventory").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
   this.registerItemSingle(structureEditor, "Structure Editor", "Structure Template Editor", "Right-Click to open editor GUI").setIconTexture("ancientwarfare:builder/testIcon1", 0);
-  this.registerItemSubtyped(componentItem);
   this.registerItemSubtyped(ammoItem);
   this.registerItemSubtyped(vehicleSpawner);
   this.registerItemSubtyped(vehicleUpgrade);
@@ -105,7 +104,22 @@ private void loadItems()
   this.addSubtypeInfoToItem(courierRouteSlip, 1, "Basic Routing Slip","","6 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,1)).setIconTexture("ancientwarfare:npc/route2", 1);
   this.addSubtypeInfoToItem(courierRouteSlip, 2, "Basic Routing Slip","","8 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,2)).setIconTexture("ancientwarfare:npc/route3", 2);
   this.registerItemSubtyped(gateSpawner);
-  this.registerItemSingle(rations, "Food Ration", "", "Restores 1 heart (2 Upkeep value)");
+  this.registerItemSingle(rations, "Food Ration", "", "Restores 1 Hunger (2 Upkeep value)");
+  
+  
+  /**
+   * register main component item (misc random items) 
+   */
+  this.registerItemSubtyped(componentItem);
+  this.addSubtypeInfoToItem(componentItem, 0, "Rough Wood Materials");
+  this.addSubtypeInfoToItem(componentItem, 1, "Treated Wood Materials");
+  this.addSubtypeInfoToItem(componentItem, 2, "IronShod Wood Materials");
+  this.addSubtypeInfoToItem(componentItem, 3, "Iron Cored Wood Materials");
+  this.addSubtypeInfoToItem(componentItem, 4, "Rough Iron Materials");
+  this.addSubtypeInfoToItem(componentItem, 5, "Fine Iron Materials");
+  this.addSubtypeInfoToItem(componentItem, 6, "Tempered Iron Materials");
+  this.addSubtypeInfoToItem(componentItem, 7, "Minor Alloy Iron Materials");
+  this.addSubtypeInfoToItem(componentItem, 8, "Alloy Materials");
   }
 
 private void loadRecipes()
@@ -156,6 +170,17 @@ public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name
   if(d!=null)
     {
     d.setName(name, damage);   
+    }  
+  return d;
+  }
+
+public Description addSubtypeInfoWithIconTexture(AWItemBase item, int damage, String name, String texture)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(item.itemID);
+  if(d!=null)
+    {
+    d.setName(name, damage);   
+    d.setIconTexture(texture, damage);
     }  
   return d;
   }

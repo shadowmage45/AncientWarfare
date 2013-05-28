@@ -18,25 +18,21 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.research;
+package shadowmage.ancient_warfare.common.research.vehicle;
 
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
-public class ResearchManager
+public class ResearchTurrets2 extends ResearchGoal
 {
-private ResearchManager(){}
-private static ResearchManager INSTANCE;
-public static ResearchManager instance()
+
+/**
+ * @param num
+ */
+public ResearchTurrets2(int num)
   {
-  if(INSTANCE==null)
-    {
-    INSTANCE=new ResearchManager();
-    }
-  return INSTANCE;
+  super(num);
+  this.displayName = "Advanced Turrets";
+  this.displayTooltip = "Enables Advanced Turreted Vehicles";
   }
-
-
-
-
-
 
 }

@@ -18,19 +18,20 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.research.vehicle;
 
-import java.util.Comparator;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
-public class StackWrapperComparatorAlphaAZ implements Comparator<ItemStackWrapper>
+public class ResearchCounterweights3 extends ResearchGoal
 {
 
-@Override
-public int compare(ItemStackWrapper arg0, ItemStackWrapper arg1)
+/**
+ * @param num
+ */
+public ResearchCounterweights3(int num)
   {
-  return arg0.getFilter().getDisplayName().compareTo(arg1.getFilter().getDisplayName());
+  super(num);
+  // TODO Auto-generated constructor stub
   }
-
-
 
 }

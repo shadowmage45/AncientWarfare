@@ -22,6 +22,9 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.util.Icon;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class VehicleTypeBallistaMobile extends VehicleTypeBallista
 {
@@ -54,6 +57,12 @@ public class VehicleTypeBallistaMobile extends VehicleTypeBallista
     this.displayTooltip.add("Ballista Firing Mechanism");
     this.displayTooltip.add("Wheeled");
     this.displayTooltip.add("No Turret");
+    
+    this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
+    this.addNeededResearch(1, ResearchGoal.vehicleMobility1);
+    this.addNeededResearch(2, ResearchGoal.vehicleMobility1);
+    this.addNeededResearch(3, ResearchGoal.vehicleMobility2);
+    this.addNeededResearch(4, ResearchGoal.vehicleMobility2);
     }
   
 @Override
@@ -75,6 +84,5 @@ public String getTextureForMaterialLevel(int level)
     return Config.texturePath + "models/ballistaMobile1.png";
     }
   }
-
 
 }

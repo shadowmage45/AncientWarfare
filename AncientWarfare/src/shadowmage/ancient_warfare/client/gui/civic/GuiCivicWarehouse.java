@@ -107,13 +107,13 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
         my = y;
         continue;
         }
-      stack = this.container.warehouseItems.get(index).stack;
+      stack = this.container.warehouseItems.get(index).getFilter();      
       this.renderItemStack(stack, guiLeft+x+8, guiTop+y+8, mouseX, mouseY, true);
       }
     }
   if(renderMouseItem)
     {
-    stack = this.container.warehouseItems.get(mouseIndex).stack;
+    stack = this.container.warehouseItems.get(mouseIndex).getFilter();
     this.renderItemStack(stack, guiLeft+mx+8, guiTop+my+8, mouseX, mouseY, true);
     }
   
@@ -190,7 +190,7 @@ protected void mouseClicked(int par1, int par2, int par3)
     Config.logDebug("clicked in warehouse inventory area");
     if(totalIndex<container.warehouseItems.size())
       {
-      Config.logDebug("clicked on : "+container.warehouseItems.get(totalIndex).stack.getDisplayName());
+      Config.logDebug("clicked on : "+container.warehouseItems.get(totalIndex).getFilter().getDisplayName());
       }
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("req", true);

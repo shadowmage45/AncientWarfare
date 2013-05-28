@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class VehicleTypeCatapultMobileFixed extends VehicleTypeCatapult
 {
@@ -50,6 +51,11 @@ public VehicleTypeCatapultMobileFixed(int typeNum)
   this.isDrivable = true;
   this.shouldRiderSit = true;
   this.moveRiderWithTurret = false;
+  this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(1, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(2, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(3, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(4, ResearchGoal.vehicleMobility2);
   }
 
 @Override

@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.CatapultVarHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
@@ -118,6 +119,12 @@ public VehicleTypeCatapult(int typeNum)
   this.isDrivable = false;
   this.shouldRiderSit = true;
   this.moveRiderWithTurret = false;
+  this.addNeededResearchForMaterials();
+  this.addNeededResearch(0, ResearchGoal.vehicleTorsion1);
+  this.addNeededResearch(1, ResearchGoal.vehicleTorsion2);
+  this.addNeededResearch(2, ResearchGoal.vehicleTorsion2);
+  this.addNeededResearch(3, ResearchGoal.vehicleTorsion3);
+  this.addNeededResearch(4, ResearchGoal.vehicleTorsion3);
   }
 
 @Override

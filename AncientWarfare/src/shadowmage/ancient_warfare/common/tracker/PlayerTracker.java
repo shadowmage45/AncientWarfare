@@ -26,11 +26,15 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import cpw.mods.fml.common.IPlayerTracker;
 
@@ -61,6 +65,24 @@ private Map<String, PlayerEntry> playerEntries = new HashMap<String, PlayerEntry
  * player entry used by thePlayer client-side
  */
 private PlayerEntry clientEntry = new PlayerEntry();
+
+public PlayerEntry getClientEntry()
+  {
+  return clientEntry;
+  }
+
+public PlayerEntry getEntryFor(EntityPlayer player)
+  {
+  if(player.worldObj.isRemote && player.getEntityName().equals(clientEntry.playerName))
+    {
+    return clientEntry;
+    }
+  else if(player.worldObj.isRemote)
+    {
+    return null;
+    }
+  return this.playerEntries.get(player.getEntityName());
+  }
 
 @Override
 public void onPlayerLogin(EntityPlayer player)
@@ -99,6 +121,30 @@ public void onPlayerLogin(EntityPlayer player)
   AWCore.proxy.sendPacketToPlayer(player, init);  
   }
 
+public void addResearchToPlayer(World world, String name, int goal)
+  {
+  if(world.isRemote)
+    {
+    if(this.clientEntry.playerName.equals(name))
+      {
+      this.clientEntry.addCompletedResearch(goal);
+      }
+    }
+  else
+    {
+    this.playerEntries.get(name).addCompletedResearch(goal);
+    EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name);
+    if(player!=null)
+      {
+      Packet01ModData pkt = new Packet01ModData();
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setBoolean("research", true);
+      tag.setInteger("new", goal);
+      pkt.sendPacketToPlayer(player);
+      }
+    }
+  }
+
 public void handleClientInit(NBTTagCompound tag)
   {
   this.clientEntry = new PlayerEntry();
@@ -126,9 +172,14 @@ private void createEntryForNewPlayer(EntityPlayer player)
     return;
     }
   PlayerEntry entry = new PlayerEntry();
-  entry.playerName = String.valueOf(player.getEntityName());
+  entry.playerName = String.valueOf(player.getEntityName());  
   this.playerEntries.put(String.valueOf(player.getEntityName()), entry);
-  TeamTracker.instance().handleNewPlayerLogin(player);
+  IResearchGoal[] knownResearch = ResearchGoal.getDefaultKnownResearch();
+  for(IResearchGoal goal : knownResearch)
+    {
+    entry.addCompletedResearch(goal.getGlobalResearchNum());
+    }
+  TeamTracker.instance().handleNewPlayerLogin(player);  
   GameDataTracker.instance().markGameDataDirty();
   }
 

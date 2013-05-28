@@ -24,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
@@ -95,6 +96,12 @@ public VehicleTypeCannon(int typeNum)
   this.armorBaySize = 3;
   this.upgradeBaySize = 3;
   this.ammoBaySize = 6;
+  this.addNeededResearchForMaterials();
+  this.addNeededResearch(0, ResearchGoal.vehicleGunpowderWeapons1);
+  this.addNeededResearch(1, ResearchGoal.vehicleGunpowderWeapons1);
+  this.addNeededResearch(2, ResearchGoal.vehicleGunpowderWeapons1);
+  this.addNeededResearch(3, ResearchGoal.vehicleGunpowderWeapons2);
+  this.addNeededResearch(4, ResearchGoal.vehicleGunpowderWeapons2);
   }
 
 @Override

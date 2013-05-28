@@ -28,7 +28,20 @@ CRAFTING TYPES
     normal recipes
 * upgrades
     normal recipes (w/research?)
-        
+* civics
+
+RESEARCH GOALS
+* vehicle
+    mobility1 (r1-3 mobile vehicles)
+    mobility2 (r4-5 mobile vehicles)
+    turrets1 (r1/2/3 turret vehicles)
+    turrets2 (r4/5 turret vehicles)
+    torsion1 (cat/bal r1)
+    torsion2 (cat/ballista r2/3)
+    torsion3 (cat/ballista/treb r4/5)
+    counterweights1 (trebuchet r1/2/)
+    counterweights2 (trebuchet r3/4)
+    counterweights3 (trebuchet 5, giant treb r1-5)
 
 TEMPLATES
 * resource lists for gates
@@ -153,50 +166,14 @@ TWEAKS/OPTIMIZATION
         decrease overall network used from vanilla MC resending entire chunks..)
 
 ********************* DONE STUFF ************************* 
-
-/********** 05-26-13 **********/
-* turret pitch up/down upgrade icons
-* food ration icon
-* adjust npc step size to 1.25 (may fix issues with soul-sand and jumping out of water blocks
-* clean up item interaction -- figure out unified system for items (add tooltip text to items)
-    Structure Scanner
-        Left Click -- set first bound, set second bound, set build key and facing (shift) to offset position
-        Right Click -- scan and process when positions are set, or (shift) clear current positions
-    Structure Builder(s)
-        Right Click -- open GUI or (shift) construct building
-    Civic w/Bounds
-        Left Click -- set first bound, set second bound
-        Right Click -- place civic block on block clicked when positions set, or if not set && shift -- clear bounds
-    Civic block only
-        Right Click -- place civic block on block clicked
-    Gate Spawner                                         
-        Left Click -- set first bound, set second bound
-        Right Click -- construct gate or (shift) clear bounds
-    Command Baton
-        Left Click -- Entity or Block -- execute command
-        Right Click -- Open GUI or (shift) clear all following NPCs
-    Routing Slip
-        Left Click -- add routing point then open GUI
-        Right Click -- open GUI
-    Vehicle Spawner
-        Right Click -- spawn entity
-    NPC Spawner
-        Right Click -- spawn entity
-* handle broadcast attack target of 'friendly' target  
-* gate proxy blocks no-destroy from explosion
-* gate placement validation -- validate range from avg of pos1/pos2 x/z, min.y
-* gate hit animation (need client side health update)
-* create a method for players to 'convert' a pre-spawned friendly NPC to their team
-    use command baton, check if player has food in inventory && withdraw upkeep ??    
-* adjust pathfinding to check water blocks (should solve thinking water can be walked on) 
-* re-adjust pathfinding for water
-* fix pathfinding ladder handling from cube detection changes
-* remove resource slots from fish farms
-* squid farm puts ink into resource slots
-* fix pathfinding fence/wall block handling
-* push for release, and bump version for next release
-
-/********** 05-27-13 **********/
 /********** 05-28-13 **********/
+* lots of prep work on crafting, research
+    add resource-list based recipe
+    add component items for vehicle materials (iron/wood levels)
+    add research goals for vehicles
+    add research goals for vehicle materials
+    add research goals TO vehicles
+    add vehicle recipes to AWCraftingManager
+    add research goal methods to PlayerEntry
 /********** 05-29-13 **********/
 /********** 05-30-13 **********/

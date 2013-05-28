@@ -20,16 +20,18 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.materials;
 
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
+
 public class MaterialLevel
 {
-
 public float hpFactor;
 public float speedForwardFactor;
 public float speedStrafeFactor;
 public float weightFactor;
 public float accuracyFactor;
 public float misfireChance;
-public int itemID;
-public int itemMeta;
+public ItemStack filter;
+public IResearchGoal neededResearch;
 
 }

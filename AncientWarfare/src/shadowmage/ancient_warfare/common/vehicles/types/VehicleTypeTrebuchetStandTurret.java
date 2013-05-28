@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class VehicleTypeTrebuchetStandTurret extends VehicleTypeTrebuchet
 {
@@ -44,6 +45,11 @@ public VehicleTypeTrebuchetStandTurret(int typeNum)
   this.riderForwardsOffset = 1.275f;
   this.riderVerticalOffset = 0.7f;
   this.turretVerticalOffset = (34.f + 67.5f + 24.0f+9.5f)*0.0625f;
+  this.addNeededResearch(0, ResearchGoal.vehicleTurrets1);
+  this.addNeededResearch(1, ResearchGoal.vehicleTurrets1);
+  this.addNeededResearch(2, ResearchGoal.vehicleTurrets1);
+  this.addNeededResearch(3, ResearchGoal.vehicleTurrets2);
+  this.addNeededResearch(4, ResearchGoal.vehicleTurrets2);
   }
 
 @Override

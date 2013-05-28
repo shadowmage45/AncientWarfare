@@ -25,6 +25,7 @@ import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
@@ -99,6 +100,12 @@ public VehicleTypeHwacha(int typeNum)
   this.armorBaySize = 3;
   this.ammoBaySize = 6;
   this.upgradeBaySize = 3;
+  this.addNeededResearchForMaterials();
+  this.addNeededResearch(0, ResearchGoal.vehicleGunpowderWeapons1);
+  this.addNeededResearch(1, ResearchGoal.vehicleGunpowderWeapons1);
+  this.addNeededResearch(2, ResearchGoal.vehicleGunpowderWeapons1);
+  this.addNeededResearch(3, ResearchGoal.vehicleGunpowderWeapons2);
+  this.addNeededResearch(4, ResearchGoal.vehicleGunpowderWeapons2);
   }
 
 @Override

@@ -75,6 +75,8 @@ public static int clientMoveUpdateTicksBase = 3;
 public static boolean clientVehicleMovement = true;
 public static int clientMoveUpdateTicks = 3;
 
+public static boolean disableResearch = false;
+
 private static Configuration config;
 private static Logger logger;
 
@@ -190,6 +192,7 @@ public void setCoreInfo()
   this.adjustMissilesForAccuracy = config.get("a-general-options", "missile_accuracy", true, "If true, missiles will be adjusted for vehicle and rider accuracy when launched.").getBoolean(true);
   this.blockDestruction = config.get("a-general-options", "missile_destroy_blocks", true, "If true, missiles will be capable of destroying blocks.").getBoolean(true);
   this.blockFires = config.get("a-general-options", "missile_start_fires", true, "If true, missiles will be capable of lighting fires and placing lava blocks.").getBoolean(true);
+  this.disableResearch = config.get("a-general-options", "disable_research", false, "If true, research system will be disabled and all recipes will be available.").getBoolean(false);
   
   /**
    * performance options
@@ -252,6 +255,7 @@ public void handleClientInit(NBTTagCompound tag)
     {
     this.clientVehicleMovement = tag.getBoolean("cm");
     this.clientMoveUpdateTicks = tag.getInteger("cmt");
+    this.disableResearch = tag.getBoolean("disableResearch");
     }
   }
 
@@ -260,6 +264,7 @@ public NBTTagCompound getClientInitData()
   NBTTagCompound tag = new NBTTagCompound();
   tag.setBoolean("cm", this.clientVehicleMovementBase);
   tag.setInteger("cmt", this.clientMoveUpdateTicksBase);
+  tag.setBoolean("disableResearch", this.disableResearch);
   return tag;
   }
 

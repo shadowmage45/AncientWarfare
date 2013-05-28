@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 import net.minecraft.client.renderer.texture.IconRegister;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.BallistaVarHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
@@ -91,6 +92,12 @@ public VehicleTypeBallista(int typeNum)
   this.isDrivable = false;//adjust based on isMobile or not
   this.canAdjustYaw = false;//adjust based on hasTurret or not
   this.turretRotationMax=360.f;//adjust based on mobile fixed (0), stand fixed(90'), or mobile or stand turret (360)
+  this.addNeededResearchForMaterials();
+  this.addNeededResearch(0, ResearchGoal.vehicleTorsion1);
+  this.addNeededResearch(1, ResearchGoal.vehicleTorsion2);
+  this.addNeededResearch(2, ResearchGoal.vehicleTorsion2);
+  this.addNeededResearch(3, ResearchGoal.vehicleTorsion3);
+  this.addNeededResearch(4, ResearchGoal.vehicleTorsion3);
   }
 
 @Override

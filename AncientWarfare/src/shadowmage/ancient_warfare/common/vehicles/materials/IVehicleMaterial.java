@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.materials;
 
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
+
 public interface IVehicleMaterial
 {
 
@@ -30,8 +33,7 @@ public abstract float getSpeedStrafeFactor(int level);
 public abstract float getWeightFactor(int level);
 public abstract float getAccuracyFactor(int level);
 public abstract float getMisfireChance(int level);
-
-public abstract int getItemID(int level);
-public abstract int getItemMeta(int level);
+public abstract ItemStack getItem(int level);
+public abstract IResearchGoal getResearchForLevel(int level);
 
 }

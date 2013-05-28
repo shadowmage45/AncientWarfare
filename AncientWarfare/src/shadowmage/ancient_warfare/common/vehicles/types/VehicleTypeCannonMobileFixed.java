@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
+
 public class VehicleTypeCannonMobileFixed extends VehicleTypeCannon
 {
 
@@ -41,7 +43,12 @@ public VehicleTypeCannonMobileFixed(int typeNum)
   this.shouldRiderSit = false;
   this.riderVerticalOffset = 0.5f;
   this.riderForwardsOffset = -2.45f;
-  this.baseMissileVelocityMax = 38.f;   
+  this.baseMissileVelocityMax = 38.f;  
+  this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(1, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(2, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(3, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(4, ResearchGoal.vehicleMobility2); 
   }
 
 }

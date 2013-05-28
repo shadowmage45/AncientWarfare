@@ -20,7 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.materials;
 
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
 
 public class VehicleMaterial implements IVehicleMaterial
 {
@@ -88,15 +90,15 @@ public float getMisfireChance(int level)
   }
 
 @Override
-public int getItemID(int level)
+public ItemStack getItem(int level)
   {
-  return getLevel(level).itemID;
+  return getLevel(level).filter;
   }
 
 @Override
-public int getItemMeta(int level)
+public IResearchGoal getResearchForLevel(int level)
   {
-  return getLevel(level).itemMeta;
+  return getLevel(level).neededResearch;
   }
 
 }

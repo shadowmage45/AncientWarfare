@@ -18,19 +18,23 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.utils;
+package shadowmage.ancient_warfare.common.research.vehicle;
 
-import java.util.Comparator;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
-public class StackWrapperComparatorAlphaAZ implements Comparator<ItemStackWrapper>
+public class ResearchMaterialLevel extends ResearchGoal
 {
 
-@Override
-public int compare(ItemStackWrapper arg0, ItemStackWrapper arg1)
+int level;
+/**
+ * @param num
+ */
+public ResearchMaterialLevel(int num, int level, String matName)
   {
-  return arg0.getFilter().getDisplayName().compareTo(arg1.getFilter().getDisplayName());
+  super(num);
+  this.level = level;
+  this.displayName = "Vehicle Material: "+matName;
+  this.displayTooltip = "Enables use of higher ranked materials";
   }
-
-
 
 }

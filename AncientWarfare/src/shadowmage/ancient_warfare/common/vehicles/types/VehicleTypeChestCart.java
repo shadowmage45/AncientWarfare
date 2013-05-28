@@ -61,6 +61,7 @@ public VehicleTypeChestCart(int typeNum)
   this.displayTooltip.add("Wheeled");
   this.displayTooltip.add("No Turret");
   this.displayTooltip.add("Special: Storage Area");
+  this.addNeededResearchForMaterials();
   }
 
 @Override
