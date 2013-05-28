@@ -537,8 +537,13 @@ public void addNeededResearch(int level, IResearchGoal goal)
 
 public void addNeededResearchForMaterials()
   {
+	
   for(int i = 0; i < this.getMaterialType().getNumOfLevels(); i++)
     {
+	  if(!this.neededResearch.containsKey(i))
+	    {
+	    this.neededResearch.put(i, new HashSet<IResearchGoal>());
+	    } 
     this.neededResearch.get(i).add(this.getMaterialType().getResearchForLevel(i));
     }
   }

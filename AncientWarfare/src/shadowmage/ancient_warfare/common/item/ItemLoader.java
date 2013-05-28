@@ -111,15 +111,15 @@ private void loadItems()
    * register main component item (misc random items) 
    */
   this.registerItemSubtyped(componentItem);
-  this.addSubtypeInfoToItem(componentItem, 0, "Rough Wood Materials");
-  this.addSubtypeInfoToItem(componentItem, 1, "Treated Wood Materials");
-  this.addSubtypeInfoToItem(componentItem, 2, "IronShod Wood Materials");
-  this.addSubtypeInfoToItem(componentItem, 3, "Iron Cored Wood Materials");
-  this.addSubtypeInfoToItem(componentItem, 4, "Rough Iron Materials");
-  this.addSubtypeInfoToItem(componentItem, 5, "Fine Iron Materials");
-  this.addSubtypeInfoToItem(componentItem, 6, "Tempered Iron Materials");
-  this.addSubtypeInfoToItem(componentItem, 7, "Minor Alloy Iron Materials");
-  this.addSubtypeInfoToItem(componentItem, 8, "Alloy Materials");
+  this.addSubtypeInfoToItem(componentItem, 0, "Rough Wood Materials").addDisplayStack(new ItemStack(componentItem,1,0));
+  this.addSubtypeInfoToItem(componentItem, 1, "Treated Wood Materials").addDisplayStack(new ItemStack(componentItem,1,1));
+  this.addSubtypeInfoToItem(componentItem, 2, "IronShod Wood Materials").addDisplayStack(new ItemStack(componentItem,1,2));
+  this.addSubtypeInfoToItem(componentItem, 3, "Iron Cored Wood Materials").addDisplayStack(new ItemStack(componentItem,1,3));
+  this.addSubtypeInfoToItem(componentItem, 4, "Rough Iron Materials").addDisplayStack(new ItemStack(componentItem,1,4));
+  this.addSubtypeInfoToItem(componentItem, 5, "Fine Iron Materials").addDisplayStack(new ItemStack(componentItem,1,5));
+  this.addSubtypeInfoToItem(componentItem, 6, "Tempered Iron Materials").addDisplayStack(new ItemStack(componentItem,1,6));
+  this.addSubtypeInfoToItem(componentItem, 7, "Minor Alloy Iron Materials").addDisplayStack(new ItemStack(componentItem,1,7));
+  this.addSubtypeInfoToItem(componentItem, 8, "Alloy Materials").addDisplayStack(new ItemStack(componentItem,1,8));
   }
 
 private void loadRecipes()

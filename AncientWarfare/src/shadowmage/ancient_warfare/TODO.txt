@@ -176,5 +176,8 @@ TWEAKS/OPTIMIZATION
     add vehicle recipes to AWCraftingManager
     add research goal methods to PlayerEntry
     
+* fix NPE for un-set research list in vehicle material levels stuff
+* fix a few issues causing new component items to not show up
+    
 /********** 05-29-13 **********/
 /********** 05-30-13 **********/
