@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.tracker.entry;
 
+import java.util.Collection;
 import java.util.HashSet;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,10 +46,11 @@ public boolean hasDoneResearch(IResearchGoal goal)
   return this.doneResearch.contains(goal);
   }
 
-public boolean hasDoneResearch(HashSet<IResearchGoal> goals)
+public boolean hasDoneResearch(Collection<IResearchGoal> goals)
   {  
   for(IResearchGoal goal : goals)
     {
+    if(goal==null){continue;}
     if(!this.doneResearch.contains(goal))
       {
       return false;

@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.container;
 
+import java.util.Collections;
 import java.util.List;
 
 import shadowmage.ancient_warfare.common.config.Config;
@@ -161,10 +162,9 @@ public void handleInitData(NBTTagCompound tag)
 
 @Override
 public List<NBTTagCompound> getInitData()
-{
-
-return null;
-}
+  {  
+  return Collections.emptyList();
+  }
 
 @Override
 public boolean canInteractWith(EntityPlayer var1)

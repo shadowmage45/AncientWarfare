@@ -175,5 +175,6 @@ TWEAKS/OPTIMIZATION
     add research goals TO vehicles
     add vehicle recipes to AWCraftingManager
     add research goal methods to PlayerEntry
+    
 /********** 05-29-13 **********/
 /********** 05-30-13 **********/

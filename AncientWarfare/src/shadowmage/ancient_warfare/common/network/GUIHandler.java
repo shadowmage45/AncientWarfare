@@ -307,19 +307,16 @@ public void openGUI(int ID, EntityPlayer player, World world, int x, int y, int 
     FMLNetworkHandler.openGui(player, AWCore.instance, ID, world, x, y, z);
     if(player.openContainer instanceof ContainerBase)
       {
-      List<NBTTagCompound> packetTags = ((ContainerBase)player.openContainer).getInitData();
-      if(packetTags!=null)
+      List<NBTTagCompound> packetTags = ((ContainerBase)player.openContainer).getInitData();      
+      for(NBTTagCompound tag : packetTags)
         {
-        for(NBTTagCompound tag : packetTags)
+        if(tag!=null)
           {
-          if(tag!=null)
-            {
-            Packet03GuiComs pkt = new Packet03GuiComs();
-            pkt.setInitData(tag);
-            AWCore.proxy.sendPacketToPlayer(player, pkt);
-            }
+          Packet03GuiComs pkt = new Packet03GuiComs();
+          pkt.setInitData(tag);
+          AWCore.proxy.sendPacketToPlayer(player, pkt);
           }
-        }
+        }        
       }
     }
   }

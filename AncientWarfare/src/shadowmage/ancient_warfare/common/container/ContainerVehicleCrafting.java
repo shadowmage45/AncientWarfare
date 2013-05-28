@@ -25,38 +25,30 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 
-public class ContainerTeamControl extends ContainerBase
+public class ContainerVehicleCrafting extends ContainerBase
 {
 
 /**
  * @param openingPlayer
  * @param synch
  */
-public ContainerTeamControl(EntityPlayer openingPlayer)
+public ContainerVehicleCrafting(EntityPlayer openingPlayer, IEntityContainerSynch synch)
   {
-  super(openingPlayer, null); 
-  }
-
-public void rebuildTeamList()
-  {
-//  Config.logDebug("sending rebuild to gui");
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setBoolean("rebuild", true);
-  this.gui.handleDataFromContainer(tag);
+  super(openingPlayer, synch);
   }
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
- 
+  
   }
 
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
-  
+
   }
 
 @Override
