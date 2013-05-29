@@ -180,4 +180,7 @@ TWEAKS/OPTIMIZATION
 * fix a few issues causing new component items to not show up
     
 /********** 05-29-13 **********/
+* more goddamn pathfinder cleanup
+
+
 /********** 05-30-13 **********/

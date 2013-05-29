@@ -211,7 +211,7 @@ private boolean searchLoop()
   boolean isDoor = false;
   boolean isPDoor = false;
   Node goalCache = new Node(tx, ty, tz);
-  boolean goalWalkable = world.isWalkable(tx, ty, tz);
+  boolean goalWalkable = world.isWalkable(tx, ty, tz) && world.isWalkable(tx, ty+1, tz);  
   this.searchIteration++;
   if(this.qNodes.isEmpty())
   {

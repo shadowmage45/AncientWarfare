@@ -80,96 +80,141 @@ protected boolean checkBlockBounds(int x, int y, int z)
       {
       return false;
       }
+    if(block.getBlockBoundsMinX()< 0.25 || block.getBlockBoundsMaxX()>0.75)
+      {
+      return false;
+      }
+    if(block.getBlockBoundsMinZ()< 0.25 || block.getBlockBoundsMaxZ()>0.75)
+      {
+      return false;
+      }
     }
   return true;
   }
 
-public boolean isWalkable(int x, int y, int z)
-  {  
+public boolean isWalkable2(int x, int y, int z)
+  {
   int id = world.getBlockId(x, y, z);
   int id2 = world.getBlockId(x, y-1, z);
   int id3 = world.getBlockId(x, y+1, z);
-  boolean cube = !checkBlockBounds(x, y, z);//isSolidBlock(id);
-  boolean cube2 = !checkBlockBounds(x, y-1, z);//isSolidBlock(id2);
-  boolean cube3 = !checkBlockBounds(x, y+1, z);//isSolidBlock(id3);
-  /**
-   * check basic early out
-   * check for doors
-   * check for gates
-   * check for ladders
-   * check for water
-   * check block bounds
-   */  
-  if(!isPathable(id))//solid unpassable block, or lava
-    { 
-    return false;
-    } 
-  else if(isGate(id2))
+  boolean cube = !checkBlockBounds(x, y, z);
+  boolean cube2 = !checkBlockBounds(x, y-1, z);
+  boolean cube3 = !checkBlockBounds(x, y+1, z);  
+  if(isFence(id2))
     {
     return false;
-    }  
-  else if(id==0 && cube2 && id3==0)//early out check for the most basic of pathable areas
+    }
+  if(canSwim && isWater(id) && id3==0)
     {
     return true;
     }
-  else if(id==BlockLoader.gateProxy.blockID)
+  if(canUseLaders && isLadder(id))
     {
-    if(!canOpenDoors)//if can't open doors, auto fail
-      {
-      return false;
-      }    
-    else if(!cube2 || (cube3 && id3!=BlockLoader.gateProxy.blockID) || id2==BlockLoader.gateProxy.blockID || id3==0)
-      {
-      /**
-       * else fail out if block below is not solid, or block above IS solid but not a gate block
-       * or block below is a gate block (dont' walk in a gate block ON a gate block)
-       * (allow gate blocks because they are generally tall...)
-       */
-      return false;
-      }
-    else
-      {
-      TEGateProxy proxy = (TEGateProxy)world.getBlockTileEntity(x, y, z);
-      if(proxy.owner==null || !proxy.owner.getGateType().canSoldierActivate() || proxy.owner.wasPowered)
-        {
-        return false;
-        }
-      }
+    return true;
     }
-  else if(isDoor(x, y, z))
+  if(canOpenDoors && isDoor(x, y, z))
     {
-    if(!canOpenDoors)
-      {
-      return false;
-      }
-    }  
-  else if(isWater(id))//can't swim check
-    {
-    if(!canSwim)
-      {
-      return false;
-      }
-    else if(id3!=0)
-      {
-      return false;
-      }    
-    } 
-  else if(isLadder(id))
-    {
-    if(!canUseLaders && !cube2)//ladder use check -- if block is a ladder with air below it
-      {    
-      return false;            
-      }
-    }    
-  else if(!cube2 && !isLadder(id2) && !isLadder(id))//or if air below and not a ladder
-    {    
-    return false;    
-    }  
-  else if(cube || cube3)//no room to move
-    {
-    return false;
+    return true;
     }
-  return true;
+  if(!cube && !cube3 && cube2)//finally, check if block and blockY+1 are clear and blockY-1 is solid
+    {
+    return true;
+    }
+  return false;
+  }
+
+public boolean isFence(int id)
+  {
+  return id==Block.fence.blockID || id==Block.fenceGate.blockID || id==Block.cobblestoneWall.blockID;
+  }
+
+public boolean isWalkable(int x, int y, int z)
+  {  
+  return isWalkable2(x, y, z);
+//  int id = world.getBlockId(x, y, z);
+//  int id2 = world.getBlockId(x, y-1, z);
+//  int id3 = world.getBlockId(x, y+1, z);
+//  boolean cube = !checkBlockBounds(x, y, z);//isSolidBlock(id);
+//  boolean cube2 = !checkBlockBounds(x, y-1, z);//isSolidBlock(id2);
+//  boolean cube3 = !checkBlockBounds(x, y+1, z);//isSolidBlock(id3);
+//  /**
+//   * check basic early out
+//   * check for doors
+//   * check for gates
+//   * check for ladders
+//   * check for water
+//   * check block bounds
+//   */  
+//  if(!isPathable(id))//solid unpassable block, or lava
+//    { 
+//    return false;
+//    } 
+//  else if(isGate(id2))
+//    {
+//    return false;
+//    }  
+//  else if(id==0 && cube2 && id3==0)//early out check for the most basic of pathable areas
+//    {
+//    return true;
+//    }
+//  else if(id==BlockLoader.gateProxy.blockID)
+//    {
+//    if(!canOpenDoors)//if can't open doors, auto fail
+//      {
+//      return false;
+//      }    
+//    else if(!cube2 || (cube3 && id3!=BlockLoader.gateProxy.blockID) || id2==BlockLoader.gateProxy.blockID || id3==0)
+//      {
+//      /**
+//       * else fail out if block below is not solid, or block above IS solid but not a gate block
+//       * or block below is a gate block (dont' walk in a gate block ON a gate block)
+//       * (allow gate blocks because they are generally tall...)
+//       */
+//      return false;
+//      }
+//    else
+//      {
+//      TEGateProxy proxy = (TEGateProxy)world.getBlockTileEntity(x, y, z);
+//      if(proxy.owner==null || !proxy.owner.getGateType().canSoldierActivate() || proxy.owner.wasPowered)
+//        {
+//        return false;
+//        }
+//      }
+//    }
+//  else if(isDoor(x, y, z))
+//    {
+//    if(!canOpenDoors)
+//      {
+//      return false;
+//      }
+//    }  
+//  else if(isWater(id))//can't swim check
+//    {
+//    if(!canSwim)
+//      {
+//      return false;
+//      }
+//    else if(id3!=0)
+//      {
+//      return false;
+//      }    
+//    } 
+//  else if(isLadder(id))
+//    {
+//    if(!canUseLaders && !cube2)//ladder use check -- if block is a ladder with air below it
+//      {    
+//      return false;            
+//      }
+//    }    
+//  else if(!cube2 && !isLadder(id2) && !isLadder(id))//or if air below and not a ladder
+//    {    
+//    return false;    
+//    }  
+//  else if(cube || cube3)//no room to move
+//    {
+//    return false;
+//    }
+//  return true;
   }
 
 public boolean isGate(int id)
@@ -185,6 +230,15 @@ public boolean isWater(int id)
 public boolean isDoor(int x, int y, int z)
   {
   int id = world.getBlockId(x, y, z);
+  if(id==BlockLoader.gateProxy.blockID)
+    {
+    TEGateProxy proxy = (TEGateProxy)world.getBlockTileEntity(x, y, z);
+    if(proxy.owner==null || !proxy.owner.getGateType().canSoldierActivate() || proxy.owner.wasPowered)
+      {
+      return false;
+      }
+    return true;
+    }
   return id==Block.doorWood.blockID || id==Block.fenceGate.blockID;
   }
 
