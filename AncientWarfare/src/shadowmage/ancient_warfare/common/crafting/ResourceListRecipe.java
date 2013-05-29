@@ -104,7 +104,7 @@ public boolean isResource(ItemStack filter)
 
 public boolean canBeCraftedBy(EntityPlayer player)
   {  
-  return Config.disableResearch ? true : this.neededResearch==null ? true : PlayerTracker.instance().getEntryFor(player)!=null && PlayerTracker.instance().getEntryFor(player).hasDoneResearch(neededResearch);
+  return Config.disableResearch || player.capabilities.isCreativeMode ? true : this.neededResearch==null ? true : PlayerTracker.instance().getEntryFor(player)!=null && PlayerTracker.instance().getEntryFor(player).hasDoneResearch(neededResearch);
   }
 
 }

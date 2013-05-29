@@ -37,10 +37,13 @@ import shadowmage.ancient_warfare.client.model.ModelCatapultStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelCatapultStandTurret;
 import shadowmage.ancient_warfare.client.model.ModelChestCart;
 import shadowmage.ancient_warfare.client.model.ModelHwacha;
+import shadowmage.ancient_warfare.client.model.ModelTEBase;
+import shadowmage.ancient_warfare.client.model.ModelTable1;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandTurret;
 import shadowmage.ancient_warfare.client.model.ModelVehicleBase;
+import shadowmage.ancient_warfare.client.render.RenderCraftingHelper;
 import shadowmage.ancient_warfare.client.render.RenderGateHelper;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
 import shadowmage.ancient_warfare.client.render.RenderNpcHelper;
@@ -69,6 +72,7 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetLarge;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandTurret;
+import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -77,6 +81,7 @@ import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 /**
@@ -109,6 +114,8 @@ private HashMap<Integer, RenderVehicleBase> vehicleRenders = new HashMap<Integer
 private HashMap<Integer, ModelVehicleBase> vehicleModels = new HashMap<Integer, ModelVehicleBase>();
 
 private HashMap<Integer, Render> gateRenders = new HashMap<Integer, Render>();
+
+private HashMap<Integer, ModelTEBase> teModels = new HashMap<Integer, ModelTEBase>();
 
 public void loadRenders()
   {  
@@ -215,6 +222,11 @@ public void loadRenders()
   this.addGateRender(12, new RenderGateRotatingBridge());
   
   /**
+   * load up crafting TE models
+   */
+  this.addTEModel(0, new ModelTable1());
+  
+  /**
    * load up the vehicle item renderer...
    */
   MinecraftForgeClient.registerItemRenderer(ItemLoader.vehicleSpawner.itemID, RenderVehicleHelper.instance());
@@ -233,6 +245,17 @@ public void loadRenders()
    * civic bounds rendering tesr
    */
 //  ClientRegistry.bindTileEntitySpecialRenderer(TECivic.class, new TESRCivic());
+  ClientRegistry.bindTileEntitySpecialRenderer(TEAWCrafting.class, new RenderCraftingHelper());
+  }
+
+public void addTEModel(int type, ModelTEBase model)
+  {
+  this.teModels.put(type, model);
+  }
+
+public ModelTEBase getTEModel(int type)
+  {
+  return this.teModels.get(type);
   }
 
 public void addVehicleRender(IVehicleType type, RenderVehicleBase rend, ModelVehicleBase model)

@@ -52,6 +52,7 @@ public static final AWItemBase civicBuilder = new ItemCivicBuilder(Config.getIte
 public static final AWItemBase courierRouteSlip = new ItemCourierSlip(Config.getItemID("itemMulti.courierSlip", 13015, "Holds Routing Info for a Courier"));
 public static final AWItemBase gateSpawner = new ItemGateSpawner(Config.getItemID("itemMulti.gateSpawner", 13016, "Base gate spawning item."));
 public static final ItemFood rations = new ItemRation(Config.getItemID("itemSingle.foodRation", 13017, "Food rations for soldiers and npcs."));
+public static final AWItemBase researchBook = new ItemResearchBook(Config.getItemID("itemSingle.researchBook", 13017, "Research book to save research progress"));
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -106,6 +107,7 @@ private void loadItems()
   this.registerItemSubtyped(gateSpawner);
   this.registerItemSingle(rations, "Food Ration", "", "Restores 1 Hunger (2 Upkeep value)");
   
+  this.registerItemSingle(researchBook, "Research Book", "", "Records research progress");
   
   /**
    * register main component item (misc random items) 

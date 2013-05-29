@@ -32,7 +32,8 @@ import shadowmage.ancient_warfare.common.registry.entry.Description;
 public class TEAWCrafting extends TileEntity implements IInventory, ISidedInventory
 {
 
-int orientation;
+public int orientation;
+int modelID;
 
 /**
  * 
@@ -41,10 +42,25 @@ public TEAWCrafting()
   {
   }
 
+public int getOrientation()
+  {
+  return orientation;
+  }
+
+public int getModelID()
+  {
+  return this.modelID;
+  }
+
 public Icon getIconForSide(BlockAWCrafting block, int side, int meta)
   {
   Description d = DescriptionRegistry2.instance().getDescriptionFor(block.blockID);
   return null;
+  }
+
+public void onBlockClicked(EntityPlayer player)
+  {
+  
   }
 
 public void setOrientation(int face)

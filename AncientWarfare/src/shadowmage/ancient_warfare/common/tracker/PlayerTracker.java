@@ -71,6 +71,11 @@ public PlayerEntry getClientEntry()
   return clientEntry;
   }
 
+public PlayerEntry getEntryFor(String name)
+  {
+  return this.playerEntries.get(name);
+  }
+
 public PlayerEntry getEntryFor(EntityPlayer player)
   {
   if(player.worldObj.isRemote && player.getEntityName().equals(clientEntry.playerName))

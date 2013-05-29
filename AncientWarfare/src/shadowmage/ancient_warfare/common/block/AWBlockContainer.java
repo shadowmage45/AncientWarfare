@@ -20,7 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.block;
 
+import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -79,6 +81,5 @@ public boolean onBlockEventReceived(World par1World, int par2, int par3, int par
   TileEntity tileentity = par1World.getBlockTileEntity(par2, par3, par4);
   return tileentity != null ? tileentity.receiveClientEvent(par5, par6) : false;
   }
-
 
 }

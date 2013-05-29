@@ -22,17 +22,16 @@ package shadowmage.ancient_warfare.common.research.vehicle;
 
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
-public class ResearchTurrets2 extends ResearchGoal
+public class ResearchGunpowderVehicles extends ResearchGoal
 {
 
 /**
  * @param num
  */
-public ResearchTurrets2(int num)
+public ResearchGunpowderVehicles(int num, int level)
   {
   super(num);
-  this.displayName = "Advanced Turrets";
-  this.displayTooltip = "Enables Advanced Turreted Vehicles";
+  // TODO Auto-generated constructor stub
   }
 
 }

@@ -18,21 +18,35 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.research.vehicle;
+package shadowmage.ancient_warfare.client.render;
 
-import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import org.lwjgl.opengl.GL11;
 
-public class ResearchMobility2 extends ResearchGoal
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import shadowmage.ancient_warfare.client.model.ModelTEBase;
+import shadowmage.ancient_warfare.client.registry.RenderRegistry;
+import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
+
+public class RenderCraftingHelper extends TileEntitySpecialRenderer
 {
-
 /**
- * @param num
+ * 
  */
-public ResearchMobility2(int num)
+public RenderCraftingHelper()
   {
-  super(num);
-  this.displayName = "Advanced Mobility";
-  this.displayTooltip = "Enables Mobile Vehicles";
+  // TODO Auto-generated constructor stub
+  }
+
+@Override
+public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f)
+  {
+  GL11.glPushMatrix();
+  GL11.glScalef(-1, -1, 1);
+  TEAWCrafting craft = (TEAWCrafting)tileentity;
+  ModelTEBase model = RenderRegistry.instance().getTEModel(craft.getModelID());
+  model.renderModel(craft);
+  GL11.glPopMatrix();
   }
 
 }

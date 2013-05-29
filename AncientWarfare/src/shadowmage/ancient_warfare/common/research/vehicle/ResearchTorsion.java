@@ -22,13 +22,13 @@ package shadowmage.ancient_warfare.common.research.vehicle;
 
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
-public class ResearchTorsion1 extends ResearchGoal
+public class ResearchTorsion extends ResearchGoal
 {
 
 /**
  * @param num
  */
-public ResearchTorsion1(int num)
+public ResearchTorsion(int num, int level)
   {
   super(num);
   this.displayName = "Torsion";

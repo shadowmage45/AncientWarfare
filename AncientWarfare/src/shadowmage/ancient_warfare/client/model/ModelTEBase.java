@@ -18,20 +18,23 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.research.vehicle;
+package shadowmage.ancient_warfare.client.model;
 
-import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 
-public class ResearchCounterweights1 extends ResearchGoal
+public abstract class ModelTEBase extends ModelBase
 {
 
 /**
- * @param num
+ * 
  */
-public ResearchCounterweights1(int num)
+public ModelTEBase()
   {
-  super(num);
   // TODO Auto-generated constructor stub
   }
+
+public abstract void renderModel(TEAWCrafting te);
 
 }

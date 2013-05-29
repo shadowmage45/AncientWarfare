@@ -18,20 +18,46 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.research.vehicle;
+package shadowmage.ancient_warfare.common.container;
 
-import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import java.util.List;
 
-public class ResearchTorsion2 extends ResearchGoal
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
+
+public class ContainerResearch extends ContainerBase
 {
+
 /**
- * @param num
+ * @param openingPlayer
+ * @param synch
  */
-public ResearchTorsion2(int num)
+public ContainerResearch(EntityPlayer openingPlayer, IEntityContainerSynch synch)
   {
-  super(num);
-  this.displayName = "Advanced Torsion";
-  this.displayTooltip = "Advanced Torsion Application";
+  super(openingPlayer, synch);
+  // TODO Auto-generated constructor stub
+  }
+
+@Override
+public void handlePacketData(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub
+
+  }
+
+@Override
+public void handleInitData(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub
+
+  }
+
+@Override
+public List<NBTTagCompound> getInitData()
+  {
+  // TODO Auto-generated method stub
+  return null;
   }
 
 }

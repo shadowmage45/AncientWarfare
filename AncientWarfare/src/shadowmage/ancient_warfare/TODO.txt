@@ -1,3 +1,14 @@
+FROM TESTERS
+* iron single gate orientation is (reversed)?
+* gate tool doesn't reset properly
+* pathfinding overhangs (finds path to block below)
+* pathfinding cobblestone walls (push out of blocks?)
+
+BALANCE/TWEAKS
+* fish farm is OP
+* patrols are a bit 'hard' to setup
+* farmers too OP harvesting too many farms?
+
 GENERAL
 * add name search/filter box to structure builder guis, and warehouse gui (and crafting/selection guis later on.....)
 * missiles -- add shooter/etc to spawn data and re-enable client-side entity-hit detection?
@@ -7,6 +18,9 @@ GENERAL
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally
+ 
+GATES
+* partially blocked bounding (use gate for collision for vertical gates?)
 
 NPCS
 * more 'check if target dead' (seems creepers or entities removed by setting world to peacefull are still targets)
@@ -140,8 +154,6 @@ FARMS
 SOLDIERS
  
 MINE
- 
-GATES
 
 TEAM CONTROL GUI
  
@@ -182,5 +194,8 @@ TWEAKS/OPTIMIZATION
 /********** 05-29-13 **********/
 * more goddamn pathfinder cleanup
 
+* courier inventory interaction check slot validity for items
+* fix unregistered packets
+* rework research goal class layout to eliminate many redunant classes
 
 /********** 05-30-13 **********/

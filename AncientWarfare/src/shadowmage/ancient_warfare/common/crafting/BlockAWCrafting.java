@@ -20,27 +20,64 @@
  */
 package shadowmage.ancient_warfare.common.crafting;
 
+import java.util.List;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.AWBlockContainer;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.AWItemBlockBase;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public class BlockAWCrafting extends AWBlockContainer
 {
+
 /**
  * @param par1
  * @param par2Material
  * @param baseName
  */
-public BlockAWCrafting(int par1, Material par2Material, String baseName)
+public BlockAWCrafting(int par1)
   {
-  super(par1, par2Material, baseName);
+  super(par1, Material.rock, "AWCraftingBlock");
+  }
+
+public void registerBlockInfo()
+  {
+  String baseTexDir = "ancientwarfare:crafting/";
+  Description d = BlockLoader.instance().registerBlockWithItem(this, "AWCraftingBlock", AWItemBlockBase.class);
+  d.setName("Research Center Block", 0);
+  d.addDisplayStack(new ItemStack(this,1,0));
+  d.setIconTexture(baseTexDir+"researchBlockBottom", 0);
+  d.setIconTexture(baseTexDir+"researchBlockTop", 1);
+  d.setIconTexture(baseTexDir+"researchBlockFront", 2);
+  d.setIconTexture(baseTexDir+"researchBlockBack", 3);
+  d.setIconTexture(baseTexDir+"researchBlockLeft", 4);
+  d.setIconTexture(baseTexDir+"researchBlockRight", 5);  
+  GameRegistry.registerTileEntity(TEAWResearch.class, "Research Center");
+  }
+
+@Override
+public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entity, ItemStack stack)
+  {
+  int face = BlockTools.getPlayerFacingFromYaw(entity.rotationYaw);
+  TEAWCrafting te = (TEAWCrafting)world.getBlockTileEntity(x, y, z);
+  te.setOrientation(face);
+  super.onBlockPlacedBy(world, x, y, z, entity, stack);
   }
 
 @Override
@@ -49,6 +86,7 @@ public TileEntity getNewTileEntity(World world, int meta)
   switch(meta)
   {
   case 0:
+  return new TEAWResearch();
   case 1:
   case 2:
   case 3:
@@ -68,12 +106,6 @@ public TileEntity getNewTileEntity(World world, int meta)
   }
 
 @Override
-public boolean onBlockClicked(World world, int posX, int posY, int posZ, EntityPlayer player, int sideHit, float hitVecX, float hitVecY, float hitVecZ)
-  {
-  return false;
-  }
-
-@Override
 public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, int par5, int par6)
   {
   TileEntity te = world.getBlockTileEntity(x, y, z);
@@ -87,19 +119,38 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
 @Override
 public void registerIcons(IconRegister reg, Description d)
   {
-  /**
-   * this is going to be fun...
-   */
+  if(d==null){return;}
+  for(int i = 0; i < 16; i++)
+    {
+    for(int k = 0; k< 6; k++)
+      {
+      String tex = d.getIconTexture(i*6 + k);
+      if(tex.equals("foo")){continue;}
+      Config.logDebug("loading texture for block "+i+","+k+" tex: "+tex);
+      d.setIcon(reg.registerIcon(tex), i*6+k);
+      }
+    }
   }
 
-public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
+@Override
+public Icon getIcon(int side, int meta)
   {
-  TEAWCrafting te = (TEAWCrafting) par1IBlockAccess.getBlockTileEntity(par2, par3, par4);
-  if(te!=null)
+  int index = meta*6 + side;
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
+  if(d!=null)
     {
-    return te.getIconForSide(this, par5, par1IBlockAccess.getBlockMetadata(par2, par3, par4));
+    return d.getIconFor(index);
     }
-  return this.getIcon(par5, par1IBlockAccess.getBlockMetadata(par2, par3, par4));
+  return super.getIcon(side, meta);
+  }
+
+@Override
+public boolean onBlockClicked(World world, int posX, int posY, int posZ, EntityPlayer player, int sideHit, float hitVecX, float hitVecY,    float hitVecZ)
+  {
+  if(world.isRemote){return true;}
+  TEAWCrafting te = (TEAWCrafting)world.getBlockTileEntity(posX, posY, posZ);
+  te.onBlockClicked(player);
+  return true;
   }
 
 }

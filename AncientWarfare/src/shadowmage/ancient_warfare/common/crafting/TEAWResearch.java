@@ -18,19 +18,20 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.research.vehicle;
+package shadowmage.ancient_warfare.common.crafting;
 
-import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import net.minecraft.tileentity.TileEntity;
 
-public class ResearchGunpowderVehicles1 extends ResearchGoal
+public class TEAWResearch extends TEAWCrafting
 {
 
+
+
 /**
- * @param num
+ * 
  */
-public ResearchGunpowderVehicles1(int num)
+public TEAWResearch()
   {
-  super(num);
   // TODO Auto-generated constructor stub
   }
 

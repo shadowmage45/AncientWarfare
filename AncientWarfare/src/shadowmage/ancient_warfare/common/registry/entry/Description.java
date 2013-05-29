@@ -196,7 +196,7 @@ public Icon getIconFor(int damage)
 
 public String getIconTexture(int damage)
   {
-  if(this.normalItem && this.iconTextures.containsKey(damage))
+  if(this.normalItem && this.iconTextures.containsKey(0))
     {
     return this.iconTextures.get(0);
     }

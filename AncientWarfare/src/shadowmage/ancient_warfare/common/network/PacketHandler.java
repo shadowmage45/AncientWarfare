@@ -49,6 +49,8 @@ public PacketHandler()
   this.packetTypes.put(2, Packet02Vehicle.class);
   this.packetTypes.put(3, Packet03GuiComs.class);
   this.packetTypes.put(4, Packet04Npc.class);
+  this.packetTypes.put(5, Packet05TE.class);
+  this.packetTypes.put(6, Packet06Entity.class);
   }
 
 @Override

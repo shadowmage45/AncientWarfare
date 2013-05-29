@@ -366,7 +366,7 @@ public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int[] s
     {
     slot = slotIndices[i];
     fromSlot = inv.getStackInSlot(slot);
-    if(fromSlot==null || !inv.isStackValidForSlot(slot, toMerge))//place in slot
+    if(fromSlot==null && inv.isStackValidForSlot(slot, toMerge))//place in slot
       {      
       inv.setInventorySlotContents(slot, toMerge);
       toMerge = null;

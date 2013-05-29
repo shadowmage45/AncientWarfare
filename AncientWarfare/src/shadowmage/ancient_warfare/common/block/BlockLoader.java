@@ -21,6 +21,8 @@
 package shadowmage.ancient_warfare.common.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.civics.BlockWarehouseStorage;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
@@ -52,9 +54,13 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmJungl
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmOak;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmSpruce;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.BlockAWCrafting;
+import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.gates.BlockGateProxy;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;
+import shadowmage.ancient_warfare.common.item.AWItemBlockBase;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -68,6 +74,7 @@ public static final Block civicBlock3 = new BlockCivic(Config.getBlockID("blockM
 public static final Block civicBlock4 = new BlockCivic(Config.getBlockID("blockMulti.civic4", 3704, "Civic Block 4"), "CivicBlock4", 3);
 public static final Block warehouseStorage = new BlockWarehouseStorage(Config.getBlockID("blockSingle.warehouseStorage", 3705, "Warehouse Storage Block"));
 public static final Block gateProxy = new BlockGateProxy(Config.getBlockID("blockSingle.gateProxy", 3706, "Gate collision/sight check proxy block"));
+public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3707, "Base block for crafting/research stations"));
 
 private static BlockLoader INSTANCE;
 private BlockLoader(){}
@@ -120,6 +127,8 @@ public void load()
   GameRegistry.registerTileEntity(TESquidFarm.class, "Squid Farm");
   GameRegistry.registerTileEntity(TEFarmCocoa.class, "Cocoa Bean Farm");
   GameRegistry.registerTileEntity(TECivicWarehouse.class, "Warehouse");
+  
+  ((BlockAWCrafting)crafting).registerBlockInfo();
   }
 
 public void registerBlock(Block block, String name)
@@ -127,6 +136,13 @@ public void registerBlock(Block block, String name)
   GameRegistry.registerBlock(block, name);
   LanguageRegistry.addName(block, name);
   DescriptionRegistry2.instance().registerBlock(block, false);
+  }
+
+public Description registerBlockWithItem(Block block, String name, Class<? extends ItemBlock>clz)
+  {
+  GameRegistry.registerBlock(block, clz, name);
+  LanguageRegistry.addName(block, name);
+  return DescriptionRegistry2.instance().registerBlock(block, false);
   }
 
 }

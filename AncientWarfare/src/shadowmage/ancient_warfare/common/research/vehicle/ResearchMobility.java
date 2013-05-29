@@ -22,16 +22,16 @@ package shadowmage.ancient_warfare.common.research.vehicle;
 
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
-public class ResearchCounterweights3 extends ResearchGoal
+public class ResearchMobility extends ResearchGoal
 {
-
 /**
  * @param num
  */
-public ResearchCounterweights3(int num)
+public ResearchMobility(int num, int level)
   {
   super(num);
-  // TODO Auto-generated constructor stub
+  this.displayName = "Mobility";
+  this.displayTooltip = "Enables Mobile Vehicles";
   }
 
 }
