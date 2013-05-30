@@ -198,4 +198,8 @@ TWEAKS/OPTIMIZATION
 * fix unregistered packets
 * rework research goal class layout to eliminate many redunant classes
 
+* and...more pathfinding cleanup
+
+* more work on research/crafting setup
+
 /********** 05-30-13 **********/

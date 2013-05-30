@@ -23,7 +23,8 @@ package shadowmage.ancient_warfare.common.pathfinding;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockStairs;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 
@@ -35,9 +36,9 @@ public boolean canSwim;
 public boolean canDrop;
 public boolean canUseLaders;
 
-IBlockAccess world;
+World world;
 
-public PathWorldAccess(IBlockAccess world)
+public PathWorldAccess(World world)
   {
   this.world = world;
   }
@@ -75,19 +76,23 @@ protected boolean checkBlockBounds(int x, int y, int z)
   block = Block.blocksList[id];
   if(block!=null)
     {
-    block.setBlockBoundsBasedOnState(world, x, y, z);
-    if(block.getBlockBoundsMaxY() > 0.5d)
+    AxisAlignedBB bb = block.getCollisionBoundingBoxFromPool(world, x, y, z);
+    if(bb==null)
       {
-      return false;
+      return true;
       }
-    if(block.getBlockBoundsMinX()< 0.25 || block.getBlockBoundsMaxX()>0.75)
+    block.setBlockBoundsBasedOnState(world, x, y, z);    
+    if(block.getBlockBoundsMaxY() >=0.5d)
       {
-      return false;
-      }
-    if(block.getBlockBoundsMinZ()< 0.25 || block.getBlockBoundsMaxZ()>0.75)
-      {
-      return false;
-      }
+      if(block.getBlockBoundsMinX()< 0.25 || block.getBlockBoundsMaxX()>0.75)
+        {
+        return false;
+        }
+      if(block.getBlockBoundsMinZ()< 0.25 || block.getBlockBoundsMaxZ()>0.75)
+        {
+        return false;
+        }
+      }   
     }
   return true;
   }
@@ -112,7 +117,7 @@ public boolean isWalkable2(int x, int y, int z)
     {
     return true;
     }
-  if(canOpenDoors && isDoor(x, y, z))
+  if(canOpenDoors && isDoor(x, y, z) && cube2)
     {
     return true;
     }

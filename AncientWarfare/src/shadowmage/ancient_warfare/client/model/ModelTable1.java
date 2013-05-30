@@ -5,11 +5,13 @@
  
 package shadowmage.ancient_warfare.client.model;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
  
  
@@ -108,6 +110,14 @@ public void setPieceRotation(ModelRenderer model, float x, float y, float z)
 @Override
 public void renderModel(TEAWCrafting te)
   {
-  GL11.glRotatef(-90*te.getOrientation(), 0, 1, 0);
+  Minecraft.getMinecraft().renderEngine.bindTexture(Config.texturePath+"models/crafting/teResearchTable.png");
+  tableTop.render(0.0625f);
+  }
+
+@Override
+public void renderModel()
+  {
+  Minecraft.getMinecraft().renderEngine.bindTexture(Config.texturePath+"models/crafting/teResearchTable.png");
+  tableTop.render(0.0625f);
   }
 }

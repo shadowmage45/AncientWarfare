@@ -231,10 +231,15 @@ protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
   this.path.clearPath();
   this.currentTarget = null;
-  if(!world.isWalkable(ex, ey, ez))
-    {
-    ey = PathUtils.findClosestYTo(world, ex, ey, ez);
-    }
+//  if(!world.isWalkable(ex, ey, ez) )
+//    {
+////    if(!world.isWalkable(ex, ey+1, ez))
+////      {
+////      Config.logDebug("skipping calc path because of stuck in unwalkable block");
+////      return;      
+////      }
+//    ey = PathUtils.findClosestYTo(world, ex, ey, ez);
+//    }  
   if(PathUtils.canPathStraightToTarget(world, ex, ey, ez, tx, ty, tz))
     {
     this.currentTarget = new Node(tx, ty, tz);

@@ -20,16 +20,22 @@
  */
 package shadowmage.ancient_warfare.common.crafting;
 
+import buildcraft.builders.GuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 
-public class TEAWCrafting extends TileEntity implements IInventory, ISidedInventory
+public abstract class TEAWCrafting extends TileEntity
 {
 
 public int orientation;
@@ -60,7 +66,7 @@ public Icon getIconForSide(BlockAWCrafting block, int side, int meta)
 
 public void onBlockClicked(EntityPlayer player)
   {
-  
+  GUIHandler.instance().openGUI(GUIHandler.RESEARCH, player, worldObj, xCoord, yCoord, zCoord);
   }
 
 public void setOrientation(int face)
@@ -69,110 +75,42 @@ public void setOrientation(int face)
   }
 
 @Override
-public int[] getAccessibleSlotsFromSide(int var1)
+public void readFromNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-  return null;
+  super.readFromNBT(tag);
+  this.orientation = tag.getByte("face");
+  this.readExtraNBT(tag);
   }
 
 @Override
-public boolean canInsertItem(int i, ItemStack itemstack, int j)
+public void writeToNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-  return false;
+  super.writeToNBT(tag);
+  tag.setByte("face", (byte)this.orientation);
+  this.writeExtraNBT(tag);
   }
 
 @Override
-public boolean canExtractItem(int i, ItemStack itemstack, int j)
+public Packet getDescriptionPacket()
   {
-  // TODO Auto-generated method stub
-  return false;
+  NBTTagCompound tag = new NBTTagCompound();
+  this.writeDescriptionData(tag);
+  tag.setByte("face", (byte) this.orientation);  
+  Packet132TileEntityData pkt = new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);  
+  return pkt;
   }
 
 @Override
-public int getSizeInventory()
+public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
   {
-  // TODO Auto-generated method stub
-  return 0;
+  super.onDataPacket(net, pkt);
+  readDescriptionPacket(pkt.customParam1);
+  this.orientation = pkt.customParam1.getByte("face");
   }
 
-@Override
-public ItemStack getStackInSlot(int i)
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
-
-@Override
-public ItemStack decrStackSize(int i, int j)
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
-
-@Override
-public ItemStack getStackInSlotOnClosing(int i)
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
-
-@Override
-public void setInventorySlotContents(int i, ItemStack itemstack)
-  {
-  // TODO Auto-generated method stub
-  
-  }
-
-@Override
-public String getInvName()
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
-
-@Override
-public boolean isInvNameLocalized()
-  {
-  // TODO Auto-generated method stub
-  return false;
-  }
-
-@Override
-public int getInventoryStackLimit()
-  {
-  // TODO Auto-generated method stub
-  return 0;
-  }
-
-@Override
-public boolean isUseableByPlayer(EntityPlayer entityplayer)
-  {
-  // TODO Auto-generated method stub
-  return false;
-  }
-
-@Override
-public void openChest()
-  {
-  // TODO Auto-generated method stub
-  
-  }
-
-@Override
-public void closeChest()
-  {
-  // TODO Auto-generated method stub
-  
-  }
-
-@Override
-public boolean isStackValidForSlot(int i, ItemStack itemstack)
-  {
-  // TODO Auto-generated method stub
-  return false;
-  }
-
-
+public abstract void readDescriptionPacket(NBTTagCompound tag);
+public abstract void writeDescriptionData(NBTTagCompound tag);
+public abstract void writeExtraNBT(NBTTagCompound tag);
+public abstract void readExtraNBT(NBTTagCompound tag);
 
 }

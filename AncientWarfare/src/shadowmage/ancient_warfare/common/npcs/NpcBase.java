@@ -619,10 +619,11 @@ public void onUpdate()
       this.worldObj.villageCollectionObj.addVillagerPosition(floorX, floorY, floorZ);
       }
     }
-  int id = worldObj.getBlockId(floorX, floorY, floorZ);
-  if(!this.worldObj.isRemote && (id==Block.fence.blockID || id==Block.thinGlass.blockID))
+  int id = worldObj.getBlockId(floorX, floorY, floorZ); 
+  if(!this.worldObj.isRemote && id!=0 && !this.worldAccess.isWalkable(floorX, floorY, floorZ) && this.posY % 1.f < 0.25f)
     {
-    this.pushOutOfBlocks();
+    Config.logDebug("block ID: "+id + " :: "+floorX+","+floorY+","+floorZ);
+    this.pushOutOfBlocks();    
     }
   this.handleHealthUpdate();
   boolean riding = false;
@@ -756,6 +757,9 @@ protected void pushOutOfBlocks()
   if(closest.x!=x || closest.z!=z)
     {
     this.setMoveTo(closest.x+0.5d, closest.y, closest.z+0.5d, this.moveSpeed);
+//    this.nav.currentTarget = null;
+//    this.clearPath();
+//    this.nav.currentTarget = new Node(closest.x, closest.y, closest.z);
     }
   }
 

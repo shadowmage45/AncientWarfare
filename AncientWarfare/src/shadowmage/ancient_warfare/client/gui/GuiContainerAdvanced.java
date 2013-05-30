@@ -2,6 +2,7 @@ package shadowmage.ancient_warfare.client.gui;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiFakeSlot;
 import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollBarSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_warfare.client.gui.elements.GuiTab;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElementCallback;
@@ -225,6 +227,14 @@ public int getGuiLeft()
 public int getGuiTop()
   {
   return this.guiTop;
+  }
+
+public GuiTab addGuiTab(int id, int x, int y, int width, int height, String text)
+  {
+  GuiTab tab = new GuiTab(id, this, width, height, text);
+  tab.updateRenderPos(x, y);
+  this.guiElements.put(id, tab);
+  return tab;
   }
 
 /**

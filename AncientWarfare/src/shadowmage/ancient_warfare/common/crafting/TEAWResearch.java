@@ -20,19 +20,56 @@
  */
 package shadowmage.ancient_warfare.common.crafting;
 
+import shadowmage.ancient_warfare.common.config.Config;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
 public class TEAWResearch extends TEAWCrafting
 {
-
-
 
 /**
  * 
  */
 public TEAWResearch()
   {
-  // TODO Auto-generated constructor stub
+  this.modelID = 0;
   }
+
+@Override
+public void onBlockClicked(EntityPlayer player)
+  {
+  Config.logDebug("TEResearch block clicked");
+  super.onBlockClicked(player);
+  }
+
+@Override
+public void readDescriptionPacket(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public void writeDescriptionData(NBTTagCompound tag)
+  {
+  
+  }
+
+@Override
+public void writeExtraNBT(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public void readExtraNBT(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
 
 }

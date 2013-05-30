@@ -46,21 +46,55 @@ import shadowmage.ancient_warfare.common.utils.BlockTools;
 public class BlockAWCrafting extends AWBlockContainer
 {
 
+int renderID;
+
 /**
  * @param par1
  * @param par2Material
  * @param baseName
  */
-public BlockAWCrafting(int par1)
+public BlockAWCrafting(int par1, int renderID)
   {
   super(par1, Material.rock, "AWCraftingBlock");
+  this.renderID = renderID;
+  this.setLightOpacity(0);
+  }
+
+//@Override
+//public int getRenderType()
+//  {
+//  return renderID;
+//  }
+
+@Override
+public boolean isOpaqueCube()
+  {
+  return false;
+  }
+
+@Override
+public boolean renderAsNormalBlock()
+  {
+  return false;
+  }
+
+@Override
+public boolean shouldSideBeRendered(IBlockAccess par1iBlockAccess, int par2, int par3, int par4, int par5)
+  {
+  return false;
+  }
+
+@Override
+public boolean isBlockSolid(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
+  {
+  return false;
   }
 
 public void registerBlockInfo()
   {
   String baseTexDir = "ancientwarfare:crafting/";
   Description d = BlockLoader.instance().registerBlockWithItem(this, "AWCraftingBlock", AWItemBlockBase.class);
-  d.setName("Research Center Block", 0);
+  d.setName("Research Table", 0);
   d.addDisplayStack(new ItemStack(this,1,0));
   d.setIconTexture(baseTexDir+"researchBlockBottom", 0);
   d.setIconTexture(baseTexDir+"researchBlockTop", 1);
@@ -68,16 +102,20 @@ public void registerBlockInfo()
   d.setIconTexture(baseTexDir+"researchBlockBack", 3);
   d.setIconTexture(baseTexDir+"researchBlockLeft", 4);
   d.setIconTexture(baseTexDir+"researchBlockRight", 5);  
+  
   GameRegistry.registerTileEntity(TEAWResearch.class, "Research Center");
   }
 
 @Override
 public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entity, ItemStack stack)
   {
+  if(entity==null || entity.worldObj.isRemote)
+    {
+    return;
+    }
   int face = BlockTools.getPlayerFacingFromYaw(entity.rotationYaw);
   TEAWCrafting te = (TEAWCrafting)world.getBlockTileEntity(x, y, z);
   te.setOrientation(face);
-  super.onBlockPlacedBy(world, x, y, z, entity, stack);
   }
 
 @Override
@@ -109,9 +147,9 @@ public TileEntity getNewTileEntity(World world, int meta)
 public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, int par5, int par6)
   {
   TileEntity te = world.getBlockTileEntity(x, y, z);
-  if(te instanceof TEAWCrafting)
+  if(te instanceof IInventory)
     {
-    return new IInventory[]{(TEAWCrafting)te};
+    return new IInventory[]{(IInventory)te};
     }
   return null;
   }
@@ -120,15 +158,10 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
 public void registerIcons(IconRegister reg, Description d)
   {
   if(d==null){return;}
-  for(int i = 0; i < 16; i++)
+  for(int k = 0; k< 6; k++)
     {
-    for(int k = 0; k< 6; k++)
-      {
-      String tex = d.getIconTexture(i*6 + k);
-      if(tex.equals("foo")){continue;}
-      Config.logDebug("loading texture for block "+i+","+k+" tex: "+tex);
-      d.setIcon(reg.registerIcon(tex), i*6+k);
-      }
+    String tex = d.getIconTexture(k);   
+    d.setIcon(reg.registerIcon(tex), k);
     }
   }
 

@@ -36,5 +36,6 @@ public ModelTEBase()
   }
 
 public abstract void renderModel(TEAWCrafting te);
+public abstract void renderModel();
 
 }

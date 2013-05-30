@@ -20,13 +20,21 @@
  */
 package shadowmage.ancient_warfare.client.gui.crafting;
 
+import java.util.HashSet;
+
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiTab;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 
 public class GuiResearch extends GuiContainerAdvanced
 {
+
+GuiTab activeTab = null;
 
 /**
  * @param container
@@ -46,7 +54,7 @@ public int getXSize()
 @Override
 public int getYSize()
   {
-  return 240;
+  return 210;
   }
 
 @Override
@@ -57,6 +65,49 @@ public String getGuiBackGroundTexture()
 
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
+  {
+  if(this.activeTab!=null)
+    {
+    switch(activeTab.getElementNumber())
+    {
+    case 100:
+    this.drawKnownBackground();
+    break;
+    case 101:
+    this.drawAvailableBackground();
+    break;
+    case 102:
+    this.drawProgressBackground();
+    break;
+    }
+    }
+  }
+
+public void drawKnownBackground()
+  {
+  PlayerEntry entry = PlayerTracker.instance().getClientEntry();
+  int x = 5;
+  int y = 5;
+  for(IResearchGoal goal : entry.getKnownResearch())
+    {
+    this.drawStringGui(goal.getDisplayName(), x, y, 0xffffffff);
+    y += 10;
+    }  
+  }
+
+public void drawAvailableBackground()
+  {
+  PlayerEntry entry = PlayerTracker.instance().getClientEntry();
+  int x = 5;
+  int y = 5; 
+  for(IResearchGoal goal : entry.getAvailableResearch())
+    {
+    this.drawStringGui(goal.getDisplayName(), x, y, 0xffffffff);
+    y += 10;
+    }
+  }
+
+public void drawProgressBackground()
   {
   
   }
@@ -70,19 +121,49 @@ public void updateScreenContents()
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  // TODO Auto-generated method stub
+  if(this.tabs.contains(element))
+    {
+    GuiTab selected = (GuiTab) element;
+    for(GuiTab tab : this.tabs)
+      {
+      tab.enabled = false;
+      }
+    selected.enabled = true;
+    this.activeTab = selected;
+    this.forceUpdate = true;
+    }
   }
+
+HashSet<GuiTab> tabs = new HashSet<GuiTab>();
 
 @Override
 public void setupControls()
-  {
-  // TODO Auto-generated method stub
+  {  
+  GuiTab tab = this.addGuiTab(100, 5, -21, 90, 24, "Known");
+  this.tabs.add(tab);
+  this.activeTab = tab;
+  tab = this.addGuiTab(101, 5+90, -21, 90, 24, "Available");
+  tab.enabled = false;
+  this.tabs.add(tab);
+  tab = this.addGuiTab(102, 5+90+90, -21, 256-90-90-10, 24, "Progress");
+  tab.enabled = false;
+  this.tabs.add(tab);
+  tab = this.addGuiTab(103, 5, this.getYSize()-3, 90, 24, "All Unknown");
+  tab.enabled = false;
+  tab.inverted = true;
+  this.tabs.add(tab);
   }
 
 @Override
 public void updateControls()
   {
-  // TODO Auto-generated method stub
+  this.guiElements.clear();
+  for(GuiTab tab : this.tabs)
+    {
+    this.guiElements.put(tab.getElementNumber(), tab);
+    }
+  
+  
   }
 
 }

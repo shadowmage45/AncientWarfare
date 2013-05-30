@@ -50,6 +50,7 @@ import shadowmage.ancient_warfare.client.render.RenderNpcHelper;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
 import shadowmage.ancient_warfare.client.render.civic.CivicItemRenderer;
+import shadowmage.ancient_warfare.client.render.crafting.RenderTECrafting;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateBasic;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateDouble;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateRotatingBridge;
@@ -72,6 +73,7 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetLarge;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandTurret;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -224,6 +226,8 @@ public void loadRenders()
   /**
    * load up crafting TE models
    */
+  ClientRegistry.bindTileEntitySpecialRenderer(TEAWCrafting.class, RenderCraftingHelper.instance());
+  MinecraftForgeClient.registerItemRenderer(BlockLoader.crafting.blockID, RenderCraftingHelper.instance());
   this.addTEModel(0, new ModelTable1());
   
   /**
@@ -245,7 +249,6 @@ public void loadRenders()
    * civic bounds rendering tesr
    */
 //  ClientRegistry.bindTileEntitySpecialRenderer(TECivic.class, new TESRCivic());
-  ClientRegistry.bindTileEntitySpecialRenderer(TEAWCrafting.class, new RenderCraftingHelper());
   }
 
 public void addTEModel(int type, ModelTEBase model)

@@ -29,6 +29,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicWarehouse;
+import shadowmage.ancient_warfare.client.gui.crafting.GuiResearch;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCommandBaton;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCourierRoutingSlip;
 import shadowmage.ancient_warfare.client.gui.npc.GuiNpcBase;
@@ -54,10 +55,12 @@ import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
 import shadowmage.ancient_warfare.common.container.ContainerNpcCourier;
+import shadowmage.ancient_warfare.common.container.ContainerResearch;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
+import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
@@ -84,6 +87,8 @@ public static final int NPC_BASE = 9;
 public static final int NPC_COURIER = 10;
 public static final int COURIER_SLIP = 11;
 public static final int CIVIC_WAREHOUSE = 12;
+
+public static final int RESEARCH = 42;
 
 public static final int VEHICLE_AMMO_SELECT = 98;
 public static final int VEHICLE_DEBUG = 99;
@@ -175,6 +180,15 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
     }
   return null;
   
+  case RESEARCH:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWResearch)
+    {
+    TEAWResearch tew = (TEAWResearch)te;
+    return new ContainerResearch(player, null);
+    }
+  return null;
+  
   case VEHICLE_AMMO_SELECT:
   return new ContainerDummy();
   
@@ -261,6 +275,15 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
     {
     TECivicWarehouse tew = (TECivicWarehouse)te;
     return new GuiCivicWarehouse(new ContainerCivicWarehouse(player, tew), tew);
+    }
+  return null;
+  
+  case RESEARCH:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWResearch)
+    {
+    TEAWResearch tew = (TEAWResearch)te;
+    return new GuiResearch(new ContainerResearch(player, null));
     }
   return null;
   

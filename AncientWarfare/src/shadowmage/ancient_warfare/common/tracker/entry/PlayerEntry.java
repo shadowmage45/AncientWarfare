@@ -21,7 +21,9 @@
 package shadowmage.ancient_warfare.common.tracker.entry;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,6 +37,11 @@ public class PlayerEntry implements INBTTaggable
 public String playerName = "";
 EntityPlayer player = null;
 HashSet<IResearchGoal> doneResearch = new HashSet<IResearchGoal>();
+
+public HashSet<IResearchGoal> getKnownResearch()
+  {
+  return this.doneResearch;
+  }
 
 public void addCompletedResearch(int num)
   {
@@ -57,6 +64,41 @@ public boolean hasDoneResearch(Collection<IResearchGoal> goals)
       }
     }
   return true;
+  }
+
+public Set<IResearchGoal> getAvailableResearch()
+  { 
+  HashSet<IResearchGoal> avail = new HashSet<IResearchGoal>();
+  boolean add = true;
+  for(IResearchGoal goal : ResearchGoal.researchGoals)
+    {
+    if(goal==null || doneResearch.contains(goal)){continue;}
+    add = true;
+    for(IResearchGoal dep : goal.getDependencies())
+      {
+      if(!doneResearch.contains(dep))
+        {
+        add = false;
+        break;
+        }
+      }
+    if(add)
+      {
+      avail.add(goal);
+      }
+    }
+  return avail;
+  }
+
+public Set<IResearchGoal> getUnknwonResearch()
+  {
+  HashSet<IResearchGoal> avail = new HashSet<IResearchGoal>();
+  for(IResearchGoal goal : ResearchGoal.researchGoals)
+    {
+    if(goal==null || doneResearch.contains(goal)){continue;}
+    avail.add(goal);
+    }
+  return avail;
   }
 
 @Override
@@ -83,7 +125,8 @@ public void readFromNBT(NBTTagCompound tag)
   int[] research = tag.getIntArray("res");
   for(int i = 0; i< research.length; i++)
     {
-    doneResearch.add(ResearchGoal.getGoalByID(research[i]));
+    IResearchGoal goal = ResearchGoal.getGoalByID(research[i]);
+    doneResearch.add(goal);
     }
   }
 

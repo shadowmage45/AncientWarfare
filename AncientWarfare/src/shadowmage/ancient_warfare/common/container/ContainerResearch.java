@@ -20,9 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.container;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 
@@ -56,8 +58,15 @@ public void handleInitData(NBTTagCompound tag)
 @Override
 public List<NBTTagCompound> getInitData()
   {
-  // TODO Auto-generated method stub
-  return null;
+  return Collections.emptyList();
   }
+
+@Override
+public void detectAndSendChanges()
+  {
+  super.detectAndSendChanges();
+  }
+
+
 
 }

@@ -20,16 +20,31 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.client.model.ModelTEBase;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 
-public class RenderCraftingHelper extends TileEntitySpecialRenderer
+public class RenderCraftingHelper extends TileEntitySpecialRenderer implements IItemRenderer
 {
+
+private static RenderCraftingHelper INSTANCE= null;
+public static RenderCraftingHelper instance()
+  {
+  if (INSTANCE==null)
+    {
+    INSTANCE= new RenderCraftingHelper();
+    }
+  return INSTANCE;
+  }
+
 /**
  * 
  */
@@ -42,10 +57,35 @@ public RenderCraftingHelper()
 public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f)
   {
   GL11.glPushMatrix();
-  GL11.glScalef(-1, -1, 1);
+  GL11.glTranslated(d0+0.5d, d1, d2+0.5d);
   TEAWCrafting craft = (TEAWCrafting)tileentity;
+  GL11.glRotatef(-90 * craft.getOrientation(), 0, 1, 0);
+  GL11.glScalef(-1, -1, 1);
   ModelTEBase model = RenderRegistry.instance().getTEModel(craft.getModelID());
   model.renderModel(craft);
+  GL11.glPopMatrix();
+  }
+
+@Override
+public boolean handleRenderType(ItemStack item, ItemRenderType type)
+  {
+  return true;
+  }
+
+@Override
+public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
+  {
+  return true;
+  }
+
+@Override
+public void renderItem(ItemRenderType type, ItemStack item, Object... data)
+  {
+  GL11.glPushMatrix();
+  GL11.glTranslatef(0, -0.5f, 0);
+  GL11.glScalef(-1, -1, 1);
+  ModelTEBase model = RenderRegistry.instance().getTEModel(item.getItemDamage());
+  model.renderModel();
   GL11.glPopMatrix();
   }
 

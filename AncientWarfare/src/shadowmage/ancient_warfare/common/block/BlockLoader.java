@@ -74,7 +74,7 @@ public static final Block civicBlock3 = new BlockCivic(Config.getBlockID("blockM
 public static final Block civicBlock4 = new BlockCivic(Config.getBlockID("blockMulti.civic4", 3704, "Civic Block 4"), "CivicBlock4", 3);
 public static final Block warehouseStorage = new BlockWarehouseStorage(Config.getBlockID("blockSingle.warehouseStorage", 3705, "Warehouse Storage Block"));
 public static final Block gateProxy = new BlockGateProxy(Config.getBlockID("blockSingle.gateProxy", 3706, "Gate collision/sight check proxy block"));
-public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3707, "Base block for crafting/research stations"));
+public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3707, "Base block for crafting/research stations"), Config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for craftinb blocks").getInt(3707));
 
 private static BlockLoader INSTANCE;
 private BlockLoader(){}

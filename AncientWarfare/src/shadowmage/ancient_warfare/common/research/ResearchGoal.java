@@ -34,7 +34,7 @@ import shadowmage.ancient_warfare.common.research.vehicle.ResearchTurrets;
 
 public class ResearchGoal implements IResearchGoal
 {
-private static ResearchGoal[] researchGoals = new ResearchGoal[256];
+public static ResearchGoal[] researchGoals = new ResearchGoal[256];
 
 public static IResearchGoal vehicleMobility1 = new ResearchMobility(0,0);
 public static IResearchGoal vehicleMobility2 = new ResearchMobility(1,1).addDependencies(vehicleMobility1);
@@ -99,6 +99,7 @@ protected List<String> detailedDescription = new ArrayList<String>();
 
 public ResearchGoal(int num)
   {
+  this.researchGoalNumber = num;
   if(num<0 || num >= researchGoals.length)
     {
     Config.logError("Research goal number out of range: "+num);

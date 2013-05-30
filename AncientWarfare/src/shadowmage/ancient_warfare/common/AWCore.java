@@ -37,7 +37,6 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.pathfinding.PathBenchmarking;
 import shadowmage.ancient_warfare.common.pathfinding.threading.ClientTicker;
 import shadowmage.ancient_warfare.common.pathfinding.threading.ServerTicker;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
