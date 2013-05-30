@@ -185,7 +185,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEAWResearch)
     {
     TEAWResearch tew = (TEAWResearch)te;
-    return new ContainerResearch(player, null);
+    return new ContainerResearch(player, tew);
     }
   return null;
   
@@ -283,7 +283,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEAWResearch)
     {
     TEAWResearch tew = (TEAWResearch)te;
-    return new GuiResearch(new ContainerResearch(player, null));
+    return new GuiResearch(new ContainerResearch(player, tew));
     }
   return null;
   

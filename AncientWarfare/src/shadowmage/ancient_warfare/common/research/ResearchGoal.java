@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchCounterweights;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchGunpowderVehicles;
@@ -96,6 +98,8 @@ protected String displayName = "";
 protected String displayTooltip = "";
 protected HashSet<IResearchGoal> dependencies = new HashSet<IResearchGoal>();
 protected List<String> detailedDescription = new ArrayList<String>();
+protected List<ItemStack> resources = new ArrayList<ItemStack>();
+protected int researchTime = 100;
 
 public ResearchGoal(int num)
   {
@@ -110,6 +114,24 @@ public ResearchGoal(int num)
     Config.logError("Research goal being overwritten");
     }  
   this.researchGoals[num] = this;
+  }
+
+public ResearchGoal addResource(ItemStack stack)
+  {
+  this.resources.add(stack);
+  return this;
+  }
+
+public ResearchGoal setDisplayName(String name)
+  {
+  this.displayName = name;
+  return this;
+  }
+
+public ResearchGoal setTooltip(String tip)
+  {
+  this.displayTooltip = tip;
+  return this;
   }
 
 @Override
@@ -177,6 +199,19 @@ public static IResearchGoal getGoalByID(int id)
 public static IResearchGoal[] getDefaultKnownResearch()
   {
   return new IResearchGoal[]{vehicleTorsion1, materialWood1};
+  }
+
+@Override
+public int getResearchTime() 
+  {
+  // TODO Auto-generated method stub
+  return researchTime;
+  }
+
+@Override
+public List<ItemStack> getResearchResources() 
+  {
+  return resources;
   }
 
 }

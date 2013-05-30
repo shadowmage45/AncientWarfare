@@ -203,3 +203,6 @@ TWEAKS/OPTIMIZATION
 * more work on research/crafting setup
 
 /********** 05-30-13 **********/
+* more PF work, attempt to cleanup stuck on chest bugs
+* more work on research gui/container/etc
+

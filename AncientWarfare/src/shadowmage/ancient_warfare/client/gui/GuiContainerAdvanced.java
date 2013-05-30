@@ -89,7 +89,6 @@ public void drawStringGui(String string, int x, int y, int color)
   this.drawString(fontRenderer, string, guiLeft+x, guiTop+y, color);
   }
 
-
 public boolean isMouseOverControl(int mouseX, int mouseY)
   {  
   this.currentMouseElement = null;
@@ -386,14 +385,19 @@ public void updateScreen()
     }  
   }
 
-@Override
-protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY)
-  { 
-  String tex = this.getGuiBackGroundTexture();
+protected void renderBackgroundImage(String tex)
+  {
   if(tex!=null)
     {
     RenderTools.drawQuadedTexture(guiLeft, guiTop, this.xSize, this.ySize, 256, 240, tex, 0, 0);
     }
+  }
+
+@Override
+protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY)
+  { 
+  String tex = this.getGuiBackGroundTexture();
+  this.renderBackgroundImage(tex);
   if(this.inventorySlots.inventorySlots.size()>0)
     {
     tex = Config.texturePath+"gui/guiButtons.png";
@@ -418,15 +422,13 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     mc.renderEngine.resetBoundTexture();
     GL11.glPopAttrib();
     GL11.glPopMatrix();
-    } 
-  if(this.tooltipDelayTicks<=0 && this.currentMouseElement!=null && this.currentMouseElement.renderTooltip)
-    {
-    this.renderTooltip(mouseX, mouseY, this.currentMouseElement.getTooltip());
     }
+  GL11.glPushMatrix();  
+  this.drawExtraForeground(mouseX, mouseY, var1);
+  GL11.glPopMatrix();
   if(this.currentMouseElement instanceof GuiFakeSlot)
     {
     GuiFakeSlot slot = (GuiFakeSlot)this.currentMouseElement;
-//    Config.logDebug("current element fake slot");
     if(slot.renderTooltip)
       {
       
@@ -436,7 +438,16 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
       this.drawItemStackTooltip(slot.getStack(), mouseX, mouseY, true);
       }
     }
+  if(this.tooltipDelayTicks<=0 && this.currentMouseElement!=null && this.currentMouseElement.renderTooltip)
+    {
+    this.renderTooltip(mouseX, mouseY, this.currentMouseElement.getTooltip());
+    }
   GL11.glPopMatrix();
+  }
+
+public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
+  {
+  
   }
 
 /**

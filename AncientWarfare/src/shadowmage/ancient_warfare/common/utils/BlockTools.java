@@ -498,7 +498,7 @@ public static int getBlockFacingMetaFromPlayerYaw(float rotation)
   float adjYaw = yaw +45;
   adjYaw *=4;
   adjYaw /= 360.d;
-  int facing = (MathHelper.floor_float(adjYaw)) % 4;//round down, mod 4 for a 0-3 range
+  int facing = (MathHelper.floor_float(adjYaw) + 2) % 4;//round down, mod 4 for a 0-3 range
   return getBlockMetaFromPlayerFace(facing);
   }
 
@@ -522,21 +522,155 @@ public static int getPlayerFacingFromYaw(float rotation)
 
 public static int getPlayerFacingFromMeta(int meta)
   {
-  if(meta==2)
-    {
-    return 0;
-    }
+  if(meta==2){return 0;}
   if(meta==5){return 1;}
   if(meta==3){return 2;}
   if(meta==4){return 3;}
   return 0;
   }
 
-public static int getBlockFacingFromMeta(int meta)
+public static RelativeSide getRelativeSide(int sideHit, int sideMeta)
   {
-  return (getPlayerFacingFromMeta(meta)+2) %4;
+  if(sideHit==sideMeta){return RelativeSide.FRONT;}
+  int diff = 0;
+  switch(sideMeta)
+  {
+  case 0:
+    switch(sideHit)
+    {
+    case 0:
+    return RelativeSide.FRONT;
+    case 1:
+    return RelativeSide.BACK;
+    case 2:
+    return RelativeSide.TOP;
+    case 3:
+    return RelativeSide.BOTTOM;
+    case 4:
+    return RelativeSide.LEFT;
+    case 5:
+    return RelativeSide.RIGHT;
+    }
+  break;
+  
+  case 1:
+    switch(sideHit)
+    {
+    case 0:
+    return RelativeSide.BACK;
+    case 1:
+    return RelativeSide.FRONT;
+    case 2:
+    return RelativeSide.BOTTOM;
+    case 3:
+    return RelativeSide.TOP;
+    case 4:
+    return RelativeSide.RIGHT;
+    case 5:
+    return RelativeSide.LEFT;
+    }
+  break;
+  
+  case 2:
+    switch(sideHit)
+    {
+    case 0:
+    return RelativeSide.BOTTOM;
+    case 1:
+    return RelativeSide.TOP;
+    case 2:
+    return RelativeSide.FRONT;
+    case 3:
+    return RelativeSide.BACK;
+    case 4:
+    return RelativeSide.LEFT;
+    case 5:
+    return RelativeSide.RIGHT;
+    }
+  break;
+  
+  case 3:
+    switch(sideHit)
+    {
+    case 0:
+    return RelativeSide.BOTTOM;
+    case 1:
+    return RelativeSide.TOP;
+    case 2:
+    return RelativeSide.BACK;
+    case 3:
+    return RelativeSide.FRONT;
+    case 4:
+    return RelativeSide.RIGHT;
+    case 5:
+    return RelativeSide.LEFT;
+    }
+  break;
+  
+  case 4:
+    switch(sideHit)
+    {
+    case 0:
+    return RelativeSide.BOTTOM;
+    case 1:
+    return RelativeSide.TOP;
+    case 2:
+    return RelativeSide.RIGHT;
+    case 3:
+    return RelativeSide.LEFT;
+    case 4:
+    return RelativeSide.FRONT;
+    case 5:
+    return RelativeSide.BACK;
+    }
+  break;
+  
+  case 5:
+    switch(sideHit)
+    {
+    case 0:
+    return RelativeSide.BOTTOM;
+    case 1:
+    return RelativeSide.TOP;
+    case 2:
+    return RelativeSide.LEFT;
+    case 3:
+    return RelativeSide.RIGHT;
+    case 4:
+    return RelativeSide.BACK;
+    case 5:
+    return RelativeSide.FRONT;
+    }
+  break;  
+  }
+  return RelativeSide.INVALID;
   }
 
+/**
+ * USED BY CRAFTING BLOCK RENDERING TO SET PROPER RENDER ORIENTATION FROM
+ * TILE ENTITY ORIENTATION DATA
+ * @param side hit
+ * @return how many 90' rotations are necessary rotate for render from meta
+ */
+public static int getTurnsForRender(int side)
+  {
+  switch(side)
+  {
+  case 0:
+  return 0;  
+  case 1:
+  return 0;
+  case 2:
+  return 2;
+  case 3:
+  return 0;
+  case 4:
+  return 1;
+  case 5:
+  return 3;
+  }
+  return 0;
+  }
 
 //facing south greatest X, lowest Z
 //facing west greatest X, greatest Z

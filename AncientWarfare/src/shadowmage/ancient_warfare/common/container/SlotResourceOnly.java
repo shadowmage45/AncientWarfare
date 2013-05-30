@@ -37,6 +37,14 @@ public class SlotResourceOnly extends Slot
 List<ItemStack> itemFilters;
 
 /**
+ * 1=nbt
+ * 2=damage
+ * 3=both
+ */
+int ignoreType = 0;
+int maxStackSize = 64;
+
+/**
  * @param par1iInventory
  * @param par2
  * @param par3
@@ -48,14 +56,58 @@ public SlotResourceOnly(IInventory par1iInventory, int par2, int par3, int par4,
   this.itemFilters = filters;
   }
 
+public SlotResourceOnly setIgnoreType(int type)
+  {
+  this.ignoreType = type;
+  return this;
+  }
+
+public SlotResourceOnly setMaxStackSize(int size)
+  {
+  this.maxStackSize = size;
+  return this;
+  }
+
+@Override
+public int getSlotStackLimit()
+  {
+  return maxStackSize;
+  }
+
 @Override
 public boolean isItemValid(ItemStack par1ItemStack)
   {
+  if(par1ItemStack==null){return true;}
   for(ItemStack item : this.itemFilters)
     {
-    if(InventoryTools.doItemsMatch(item, par1ItemStack))
+    if(item==null){continue;}
+    if(this.ignoreType==0)
       {
-      return true;
+      if(InventoryTools.doItemsMatch(item, par1ItemStack))
+        {
+        return true;
+        }
+      }
+    else if(this.ignoreType==1)
+      {
+      if(item.itemID==par1ItemStack.itemID && item.getItemDamage()==par1ItemStack.getItemDamage())
+        {
+        return true;
+        }
+      }
+    else if(this.ignoreType==2)
+      {
+      if(item.itemID==par1ItemStack.itemID && ItemStack.areItemStackTagsEqual(item, par1ItemStack))
+        {
+        return true;
+        }
+      }
+    else if(this.ignoreType==3)
+      {
+      if(item.itemID==par1ItemStack.itemID)
+        {
+        return true;
+        }
       }
     }
   return false;

@@ -31,6 +31,7 @@ import org.lwjgl.opengl.GL11;
 import shadowmage.ancient_warfare.client.model.ModelTEBase;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public class RenderCraftingHelper extends TileEntitySpecialRenderer implements IItemRenderer
 {
@@ -59,7 +60,7 @@ public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, doub
   GL11.glPushMatrix();
   GL11.glTranslated(d0+0.5d, d1, d2+0.5d);
   TEAWCrafting craft = (TEAWCrafting)tileentity;
-  GL11.glRotatef(-90 * craft.getOrientation(), 0, 1, 0);
+  GL11.glRotatef(-90 * BlockTools.getTurnsForRender(craft.getOrientation()), 0, 1, 0);
   GL11.glScalef(-1, -1, 1);
   ModelTEBase model = RenderRegistry.instance().getTEModel(craft.getModelID());
   model.renderModel(craft);

@@ -108,7 +108,10 @@ public void setMoveToTarget(int x, int y, int z)
   int ex = MathHelper.floor_double(entity.posX);
   int ey = MathHelper.floor_double(entity.posY);
   int ez = MathHelper.floor_double(entity.posZ);
-
+  if(entity.posY%1.f > 0.75 && !world.isWalkable(ex, ey, ez))
+    {
+    ey++;
+    }
   if(this.shouldCalculatePath(ex, ey, ez, x, y, z))
     {
     this.finalTarget.reassign(x, y, z);

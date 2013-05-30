@@ -113,7 +113,7 @@ public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entit
     {
     return;
     }
-  int face = BlockTools.getPlayerFacingFromYaw(entity.rotationYaw);
+  int face = BlockTools.getBlockFacingMetaFromPlayerYaw(entity.rotationYaw);
   TEAWCrafting te = (TEAWCrafting)world.getBlockTileEntity(x, y, z);
   te.setOrientation(face);
   }

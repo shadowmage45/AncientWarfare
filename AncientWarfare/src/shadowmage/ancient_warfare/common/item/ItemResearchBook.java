@@ -41,6 +41,7 @@ public ItemResearchBook(int itemID)
   {
   super(itemID, false);
   this.hasLeftClick = false;
+  this.maxStackSize = 1;
   }
 
 @Override

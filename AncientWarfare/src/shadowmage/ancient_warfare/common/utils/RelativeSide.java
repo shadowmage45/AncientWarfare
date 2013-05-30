@@ -18,25 +18,18 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.research;
+package shadowmage.ancient_warfare.common.utils;
 
-import java.util.HashSet;
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-
-public interface IResearchGoal
+public enum RelativeSide
 {
+FRONT,
+BACK,
+LEFT,
+RIGHT,
+TOP,
+BOTTOM,
+INVALID
 
 
-public abstract int getGlobalResearchNum();
-public abstract String getDisplayName();
-public abstract String getDisplayTooltip();
-public abstract HashSet<IResearchGoal> getDependencies();
-public abstract List<String> getDetailedDescription();
-public abstract IResearchGoal getGoalByNumber(int num);
-public abstract IResearchGoal addDependencies(IResearchGoal... deps);
-public abstract int getResearchTime();
-public abstract List<ItemStack> getResearchResources();
 
 }
