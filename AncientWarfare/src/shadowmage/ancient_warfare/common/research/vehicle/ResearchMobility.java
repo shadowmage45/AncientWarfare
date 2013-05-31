@@ -30,8 +30,7 @@ public class ResearchMobility extends ResearchGoal
 public ResearchMobility(int num, int level)
   {
   super(num);
-  this.displayName = "Mobility";
-  this.displayTooltip = "Enables Mobile Vehicles";
+  this.displayName = "Siege Engine Mobility "+ (level+1);
   }
 
 }

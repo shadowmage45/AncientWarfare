@@ -35,7 +35,7 @@ public ResearchMaterialLevel(int num, int level, String matName)
   {
   super(num);
   this.level = level;
-  this.displayName = "Vehicle Material: "+matName;
+  this.displayName = "Material: "+matName;
   this.displayTooltip = "Enables use of higher ranked materials";
   this.addResource(new ItemStack(Item.stick,10));
   }

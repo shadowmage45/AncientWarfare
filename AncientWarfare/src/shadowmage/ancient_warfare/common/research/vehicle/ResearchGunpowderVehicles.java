@@ -31,7 +31,7 @@ public class ResearchGunpowderVehicles extends ResearchGoal
 public ResearchGunpowderVehicles(int num, int level)
   {
   super(num);
-  // TODO Auto-generated constructor stub
+  this.displayName = "Gunpowder Weapons " +(level+1);
   }
 
 }

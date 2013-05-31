@@ -442,21 +442,10 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   GL11.glPopMatrix();
   }
 
-
-
-@Override
-public void onElementActivated(IGuiElement element)
-  {
-  // TODO Auto-generated method stub
-  
-  }
-
 public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
   {
   
   }
-
-
 
 @Override
 public void drawScreen(int par1, int par2, float par3)

@@ -31,8 +31,7 @@ public class ResearchTorsion extends ResearchGoal
 public ResearchTorsion(int num, int level)
   {
   super(num);
-  this.displayName = "Torsion";
-  this.displayTooltip = "Basic Torsion Application";
+  this.displayName = "Torsion Weapons " + (level+1);
   }
 
 }

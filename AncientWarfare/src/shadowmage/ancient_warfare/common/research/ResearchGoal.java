@@ -81,17 +81,17 @@ public static IResearchGoal vehicleGunpowderWeapons5 = new ResearchGunpowderVehi
  * efficiency research? (decrease materials costs for crafting vehicles/structures?)
  */
 
-public static IResearchGoal materialWood1 = new ResearchMaterialLevel(200, 0, "Rough Wood Materials");
-public static IResearchGoal materialWood2 = new ResearchMaterialLevel(201, 1, "Treated Wood Materials").addDependencies(materialWood1);
-public static IResearchGoal materialWood3 = new ResearchMaterialLevel(202, 2, "Ironshod Wood Materials").addDependencies(materialWood2);
-public static IResearchGoal materialWood4 = new ResearchMaterialLevel(203, 3, "Iron Core Wood Materials").addDependencies(materialWood3);
-public static IResearchGoal materialWood5 = new ResearchMaterialLevel(204, 4, "Iron Substitute Materials").addDependencies(materialWood4);
+public static IResearchGoal materialWood1 = new ResearchMaterialLevel(200, 0, "Rough Wood");
+public static IResearchGoal materialWood2 = new ResearchMaterialLevel(201, 1, "Treated Wood").addDependencies(materialWood1);
+public static IResearchGoal materialWood3 = new ResearchMaterialLevel(202, 2, "Ironshod Wood").addDependencies(materialWood2);
+public static IResearchGoal materialWood4 = new ResearchMaterialLevel(203, 3, "Iron Core Wood").addDependencies(materialWood3);
+public static IResearchGoal materialWood5 = new ResearchMaterialLevel(204, 4, "Iron Substitute").addDependencies(materialWood4);
 
-public static IResearchGoal materialIron1 = new ResearchMaterialLevel(205, 0, "Rough Iron Materials");
-public static IResearchGoal materialIron2 = new ResearchMaterialLevel(206, 1, "Fine Iron Materials").addDependencies(materialIron1);
-public static IResearchGoal materialIron3 = new ResearchMaterialLevel(207, 2, "Tempered Iron Materials").addDependencies(materialIron2);
-public static IResearchGoal materialIron4 = new ResearchMaterialLevel(208, 3, "Minor Alloy Materials").addDependencies(materialIron3);
-public static IResearchGoal materialIron5 = new ResearchMaterialLevel(209, 4, "Alloy Materials").addDependencies(materialIron4);
+public static IResearchGoal materialIron1 = new ResearchMaterialLevel(205, 0, "Rough Iron");
+public static IResearchGoal materialIron2 = new ResearchMaterialLevel(206, 1, "Fine Iron").addDependencies(materialIron1);
+public static IResearchGoal materialIron3 = new ResearchMaterialLevel(207, 2, "Tempered Iron").addDependencies(materialIron2);
+public static IResearchGoal materialIron4 = new ResearchMaterialLevel(208, 3, "Minor Alloy").addDependencies(materialIron3);
+public static IResearchGoal materialIron5 = new ResearchMaterialLevel(209, 4, "Major Alloy").addDependencies(materialIron4);
 
 protected int researchGoalNumber = 0;
 protected String displayName = "";

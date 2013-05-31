@@ -210,3 +210,5 @@ TWEAKS/OPTIMIZATION
 * fix up a few PF things, looking fairly good now, but needs thorough testing
 * much work on researching. it _works_ but needs cleanup
 
+* much more work on research GUI, looking much better. need advanced research goal descriptions
+

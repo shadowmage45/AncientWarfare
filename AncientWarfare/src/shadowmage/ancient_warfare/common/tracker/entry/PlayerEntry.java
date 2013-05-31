@@ -20,9 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.tracker.entry;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,9 +39,11 @@ public String playerName = "";
 EntityPlayer player = null;
 HashSet<IResearchGoal> doneResearch = new HashSet<IResearchGoal>();
 
-public HashSet<IResearchGoal> getKnownResearch()
+public List<IResearchGoal> getKnownResearch()
   {
-  return this.doneResearch;
+  ArrayList<IResearchGoal> known = new ArrayList<IResearchGoal>();
+  known.addAll(doneResearch);
+  return known;
   }
 
 public void addCompletedResearch(int num)
@@ -66,9 +69,9 @@ public boolean hasDoneResearch(Collection<IResearchGoal> goals)
   return true;
   }
 
-public Set<IResearchGoal> getAvailableResearch()
+public List<IResearchGoal> getAvailableResearch()
   { 
-  HashSet<IResearchGoal> avail = new HashSet<IResearchGoal>();
+  List<IResearchGoal> avail = new ArrayList<IResearchGoal>();
   boolean add = true;
   for(IResearchGoal goal : ResearchGoal.researchGoals)
     {
@@ -90,9 +93,9 @@ public Set<IResearchGoal> getAvailableResearch()
   return avail;
   }
 
-public Set<IResearchGoal> getUnknwonResearch()
+public List<IResearchGoal> getUnknwonResearch()
   {
-  HashSet<IResearchGoal> avail = new HashSet<IResearchGoal>();
+  List<IResearchGoal> avail = new ArrayList<IResearchGoal>();
   for(IResearchGoal goal : ResearchGoal.researchGoals)
     {
     if(goal==null || doneResearch.contains(goal)){continue;}

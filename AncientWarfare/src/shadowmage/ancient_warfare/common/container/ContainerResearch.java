@@ -88,7 +88,7 @@ public ContainerResearch(EntityPlayer openingPlayer, TEAWResearch te)
     {
     for(int x = 0; x <3; x++)
       {
-      posX = 8 + x * 18;
+      posX = 8+27 + x * 18;
       posY = 8+18+4+24 + y * 18;
       slotNum = y * 3 + x + 1;
       slot = new Slot(te, slotNum, posX, posY);

@@ -31,8 +31,7 @@ public class ResearchTurrets extends ResearchGoal
 public ResearchTurrets(int num, int level)
   {
   super(num);
-  this.displayName = "Basic Turrets";
-  this.displayTooltip = "Enables Basic Turreted Vehicles";
+  this.displayName = "Turreted Vehicles " + (level+1);
   }
 
 }

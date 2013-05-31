@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.research.vehicle;
 
+import net.minecraft.client.Minecraft;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class ResearchCounterweights extends ResearchGoal
@@ -31,7 +32,11 @@ public class ResearchCounterweights extends ResearchGoal
 public ResearchCounterweights(int num, int rank)
   {
   super(num);
-  // TODO Auto-generated constructor stub
+  this.displayName = "Counterweights "+(rank+1);  
+  this.detailedDescription.add("Researching counterweights advances knowledge");
+  this.detailedDescription.add("regarding the application of weight and leverage");
+  this.detailedDescription.add("to increase range, damage, and effiency of weight");
+  this.detailedDescription.add("based siege weapons.");
   }
 
 }
