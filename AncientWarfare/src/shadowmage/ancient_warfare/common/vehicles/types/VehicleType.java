@@ -116,7 +116,7 @@ public List<IVehicleUpgradeType> validUpgrades = new ArrayList<IVehicleUpgradeTy
 public List<IVehicleArmorType> validArmors = new ArrayList<IVehicleArmorType>();
 public Map<Integer, IAmmoType> ammoBySoldierRank = new HashMap<Integer, IAmmoType>();
 
-public Map<Integer, HashSet<IResearchGoal>> neededResearch = new HashMap<Integer, HashSet<IResearchGoal>>();
+public Map<Integer, HashSet<Integer>> neededResearch = new HashMap<Integer, HashSet<Integer>>();
 
 int storageBaySize = 0;
 int ammoBaySize = 6;
@@ -512,7 +512,8 @@ public ResourceListRecipe constructRecipe(int level)
     {
     recipe.addResource(stack.copy(), stack.stackSize);
     }  
-  recipe.neededResearch = this.getNeededResearchFor(level);
+  recipe.addNeededResearch(this.neededResearch.get(level));
+  recipe.setDisplayName(getDisplayName() + " "+(level+1));
   return recipe;
   }
 
@@ -521,7 +522,12 @@ public HashSet<IResearchGoal> getNeededResearchFor(int level)
   {
   if(this.neededResearch.containsKey(level))
     {
-    return this.neededResearch.get(level);
+    HashSet<IResearchGoal> set = new HashSet<IResearchGoal>();
+    for(Integer i : this.neededResearch.get(level))
+      {
+      set.add(ResearchGoal.getGoalByID(i));
+      }
+    return set;
     }
   return new HashSet<IResearchGoal>();
   }
@@ -530,21 +536,29 @@ public void addNeededResearch(int level, IResearchGoal goal)
   {
   if(!this.neededResearch.containsKey(level))
     {
-    this.neededResearch.put(level, new HashSet<IResearchGoal>());
+    this.neededResearch.put(level, new HashSet<Integer>());
     }  
-  this.neededResearch.get(level).add(goal);
+  this.neededResearch.get(level).add(goal.getGlobalResearchNum());
+  }
+
+public void addNeededResearch(int level, int num)
+  {
+  if(!this.neededResearch.containsKey(level))
+    {
+    this.neededResearch.put(level, new HashSet<Integer>());
+    }  
+  this.neededResearch.get(level).add(num);
   }
 
 public void addNeededResearchForMaterials()
-  {
-	
+  {	
   for(int i = 0; i < this.getMaterialType().getNumOfLevels(); i++)
     {
 	  if(!this.neededResearch.containsKey(i))
 	    {
-	    this.neededResearch.put(i, new HashSet<IResearchGoal>());
+	    this.neededResearch.put(i, new HashSet<Integer>());
 	    } 
-    this.neededResearch.get(i).add(this.getMaterialType().getResearchForLevel(i));
+    this.neededResearch.get(i).add(this.getMaterialType().getResearchForLevel(i).getGlobalResearchNum());
     }
   }
 

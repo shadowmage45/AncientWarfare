@@ -20,8 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import java.util.Collection;
+
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -59,5 +64,6 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z, M
     ent.attackEntityFrom(DamageType.causeEntityMissileDamage(missile.shooterLiving, false, false), this.getEntityDamage());      
     }
   }
+
 
 }

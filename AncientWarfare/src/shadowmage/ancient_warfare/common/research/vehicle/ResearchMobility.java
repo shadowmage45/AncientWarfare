@@ -31,6 +31,9 @@ public ResearchMobility(int num, int level)
   {
   super(num);
   this.displayName = "Siege Engine Mobility "+ (level+1);
+  this.detailedDescription.add("Researching Siege Engine Mobility unlocks the use of" +
+  		" mobile vehicles, and (at higher ranks) their higher tiers.  At least one rank of" +
+  		" mobility must be researched in order to unlock the basic mobile variants of vehicles.");
   }
 
 }

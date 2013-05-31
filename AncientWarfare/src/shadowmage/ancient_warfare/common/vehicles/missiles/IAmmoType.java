@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -27,6 +28,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 /**
@@ -70,5 +73,11 @@ float getRenderScale();//get relative render scale of the ammo compared to the m
 
 void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit);//called when the entity impacts a world block
 void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile);//called when the entity impacts another entity
+
+ResourceListRecipe constructRecipe();
+Collection<Integer> getNeededResearch();
+void addResearch(Integer num);
+void addResearch(IResearchGoal goal);
+Collection<ItemStack> getResources(); 
 
 }

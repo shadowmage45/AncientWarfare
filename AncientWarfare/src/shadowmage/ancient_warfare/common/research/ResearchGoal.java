@@ -21,18 +21,23 @@
 package shadowmage.ancient_warfare.common.research;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.research.ammo.ResearchBallistics;
+import shadowmage.ancient_warfare.common.research.ammo.ResearchExplosives;
+import shadowmage.ancient_warfare.common.research.ammo.ResearchFlammables;
+import shadowmage.ancient_warfare.common.research.ammo.ResearchRockets;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchCounterweights;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchGunpowderVehicles;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchMaterialLevel;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchMobility;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchTorsion;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchTurrets;
+import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
 public class ResearchGoal implements IResearchGoal
 {
@@ -58,19 +63,27 @@ public static IResearchGoal vehicleCounterweights2 = new ResearchCounterweights(
 public static IResearchGoal vehicleCounterweights3 = new ResearchCounterweights(17,2).addDependencies(vehicleCounterweights2);
 public static IResearchGoal vehicleCounterweights4 = new ResearchCounterweights(18,3).addDependencies(vehicleCounterweights3);
 public static IResearchGoal vehicleCounterweights5 = new ResearchCounterweights(19,4).addDependencies(vehicleCounterweights4);
-public static IResearchGoal vehicleGunpowderWeapons1 = new ResearchGunpowderVehicles(20, 0);
+public static IResearchGoal vehicleGunpowderWeapons1 = new ResearchGunpowderVehicles(20, 0).addDependencies(50);//50 == explosives1
 public static IResearchGoal vehicleGunpowderWeapons2 = new ResearchGunpowderVehicles(21, 1).addDependencies(vehicleGunpowderWeapons1);
 public static IResearchGoal vehicleGunpowderWeapons3 = new ResearchGunpowderVehicles(22, 2).addDependencies(vehicleGunpowderWeapons2);
 public static IResearchGoal vehicleGunpowderWeapons4 = new ResearchGunpowderVehicles(23, 3).addDependencies(vehicleGunpowderWeapons3);
 public static IResearchGoal vehicleGunpowderWeapons5 = new ResearchGunpowderVehicles(24, 4).addDependencies(vehicleGunpowderWeapons4);
 
-/**
- * upgrade/armor research?
- * 
- */
+public static IResearchGoal ammoExplosives1 = new ResearchExplosives(50, 0).addDependencies(vehicleGunpowderWeapons1).addDependencies(57);//57==flammables2
+public static IResearchGoal ammoExplosives2 = new ResearchExplosives(51, 1).addDependencies(ammoExplosives1);
+public static IResearchGoal ammoExplosives3 = new ResearchExplosives(52, 2).addDependencies(ammoExplosives2);
+public static IResearchGoal ammoRockets1 = new ResearchRockets(53, 0).addDependencies(ammoExplosives2);
+public static IResearchGoal ammoRockets2 = new ResearchRockets(54, 1).addDependencies(ammoRockets1);
+public static IResearchGoal ammoRockets3 = new ResearchRockets(55, 2).addDependencies(ammoRockets2);
+public static IResearchGoal ammoFlammables1 = new ResearchFlammables(56, 0).addDependencies(59);//59==ballistics1
+public static IResearchGoal ammoFlammables2 = new ResearchFlammables(57, 0).addDependencies(ammoFlammables1);
+public static IResearchGoal ammoFlammables3 = new ResearchFlammables(58, 0).addDependencies(ammoFlammables2);
+public static IResearchGoal ammoBallistics1 = new ResearchBallistics(59, 0);
+public static IResearchGoal ammoBallistics2 = new ResearchBallistics(60, 0).addDependencies(ammoBallistics1);
+public static IResearchGoal ammoBallistics3 = new ResearchBallistics(61, 0).addDependencies(ammoBallistics2);
 
 /**
- * ammo research?
+ * upgrade/armor research? 
  */
 
 /**
@@ -81,22 +94,23 @@ public static IResearchGoal vehicleGunpowderWeapons5 = new ResearchGunpowderVehi
  * efficiency research? (decrease materials costs for crafting vehicles/structures?)
  */
 
-public static IResearchGoal materialWood1 = new ResearchMaterialLevel(200, 0, "Rough Wood");
-public static IResearchGoal materialWood2 = new ResearchMaterialLevel(201, 1, "Treated Wood").addDependencies(materialWood1);
-public static IResearchGoal materialWood3 = new ResearchMaterialLevel(202, 2, "Ironshod Wood").addDependencies(materialWood2);
-public static IResearchGoal materialWood4 = new ResearchMaterialLevel(203, 3, "Iron Core Wood").addDependencies(materialWood3);
-public static IResearchGoal materialWood5 = new ResearchMaterialLevel(204, 4, "Iron Substitute").addDependencies(materialWood4);
+public static IResearchGoal materialWood1 = new ResearchMaterialLevel(200, 0, VehicleMaterial.materialWood);
+public static IResearchGoal materialWood2 = new ResearchMaterialLevel(201, 1, VehicleMaterial.materialWood).addDependencies(materialWood1);
+public static IResearchGoal materialWood3 = new ResearchMaterialLevel(202, 2, VehicleMaterial.materialWood).addDependencies(materialWood2);
+public static IResearchGoal materialWood4 = new ResearchMaterialLevel(203, 3, VehicleMaterial.materialWood).addDependencies(materialWood3);
+public static IResearchGoal materialWood5 = new ResearchMaterialLevel(204, 4, VehicleMaterial.materialWood).addDependencies(materialWood4);
 
-public static IResearchGoal materialIron1 = new ResearchMaterialLevel(205, 0, "Rough Iron");
-public static IResearchGoal materialIron2 = new ResearchMaterialLevel(206, 1, "Fine Iron").addDependencies(materialIron1);
-public static IResearchGoal materialIron3 = new ResearchMaterialLevel(207, 2, "Tempered Iron").addDependencies(materialIron2);
-public static IResearchGoal materialIron4 = new ResearchMaterialLevel(208, 3, "Minor Alloy").addDependencies(materialIron3);
-public static IResearchGoal materialIron5 = new ResearchMaterialLevel(209, 4, "Major Alloy").addDependencies(materialIron4);
+public static IResearchGoal materialIron1 = new ResearchMaterialLevel(205, 0, VehicleMaterial.materialIron);
+public static IResearchGoal materialIron2 = new ResearchMaterialLevel(206, 1, VehicleMaterial.materialIron).addDependencies(materialIron1);
+public static IResearchGoal materialIron3 = new ResearchMaterialLevel(207, 2, VehicleMaterial.materialIron).addDependencies(materialIron2);
+public static IResearchGoal materialIron4 = new ResearchMaterialLevel(208, 3, VehicleMaterial.materialIron).addDependencies(materialIron3);
+public static IResearchGoal materialIron5 = new ResearchMaterialLevel(209, 4, VehicleMaterial.materialIron).addDependencies(materialIron4);
 
 protected int researchGoalNumber = 0;
 protected String displayName = "";
 protected String displayTooltip = "";
-protected HashSet<IResearchGoal> dependencies = new HashSet<IResearchGoal>();
+protected HashSet<Integer> dependencies = new HashSet<Integer>();
+protected HashSet<IResearchGoal> dependencyCache = new HashSet<IResearchGoal>();
 protected List<String> detailedDescription = new ArrayList<String>();
 protected List<ItemStack> resources = new ArrayList<ItemStack>();
 protected int researchTime = 100;
@@ -155,7 +169,16 @@ public String getDisplayTooltip()
 @Override
 public HashSet<IResearchGoal> getDependencies()
   {
-  return this.dependencies;
+  if(this.dependencyCache.size() == this.dependencies.size())
+    {
+    return this.dependencyCache;
+    }
+  this.dependencyCache.clear();
+  for(Integer i : this.dependencies)
+    {
+    this.dependencyCache.add(researchGoals[i]);
+    }
+  return dependencyCache;
   }
 
 @Override
@@ -181,6 +204,19 @@ public IResearchGoal addDependencies(IResearchGoal... deps)
     {
     if(deps[i]!=null)
       {
+      this.dependencies.add(deps[i].getGlobalResearchNum());
+      }
+    }
+  return this;
+  }
+
+@Override
+public IResearchGoal addDependencies(Integer... deps)
+  {
+  for(int i = 0; i < deps.length; i++)
+    {
+    if(deps[i]!=null)
+      {
       this.dependencies.add(deps[i]);
       }
     }
@@ -201,10 +237,23 @@ public static IResearchGoal[] getDefaultKnownResearch()
   return new IResearchGoal[]{vehicleTorsion1, materialWood1};
   }
 
+public static Collection<IResearchGoal> getUnlocks(IResearchGoal goal)
+  {
+  HashSet<IResearchGoal> goals = new HashSet<IResearchGoal>();
+  for(IResearchGoal g : researchGoals)
+    {
+    if(g==null){continue;}
+    if(g.getDependencies().contains(goal))
+      {
+      goals.add(g);
+      }    
+    }
+  return goals;
+  }
+
 @Override
 public int getResearchTime() 
   {
-  // TODO Auto-generated method stub
   return researchTime;
   }
 

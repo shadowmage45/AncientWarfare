@@ -32,6 +32,12 @@ public ResearchGunpowderVehicles(int num, int level)
   {
   super(num);
   this.displayName = "Gunpowder Weapons " +(level+1);
+  this.detailedDescription.add("Researching gunpowder weapons advances knowledge" +
+  		" regaring the safe construction and use of siege weapons involving gunpowder." +
+  		"  Higher ranks unlock access to higher tiers of gunpowder based vehicles" +
+  		" (if all other prerequisites for the vehicle have been met).  At least some" +
+  		" knowledge of gunpowder based weapons is required for the construction of" +
+  		" explosive ammunitions.");
   }
 
 }

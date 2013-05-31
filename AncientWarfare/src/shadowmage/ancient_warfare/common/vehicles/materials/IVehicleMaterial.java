@@ -35,5 +35,6 @@ public abstract float getAccuracyFactor(int level);
 public abstract float getMisfireChance(int level);
 public abstract ItemStack getItem(int level);
 public abstract IResearchGoal getResearchForLevel(int level);
+public abstract String getDisplayName(int level);
 
 }

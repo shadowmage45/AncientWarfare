@@ -32,6 +32,11 @@ public ResearchTurrets(int num, int level)
   {
   super(num);
   this.displayName = "Turreted Vehicles " + (level+1);
+  this.detailedDescription.add("Researching Turreted Vehicles advances knowledge regarding the" +
+  		"construction and design of turret-based vehicles of various designs. Higher ranks" +
+  		" unlock access to higher tiers of torsion based vehicles (if all other prerequisites" +
+  		" for the vehicle have been met).");
+  		
   }
 
 }

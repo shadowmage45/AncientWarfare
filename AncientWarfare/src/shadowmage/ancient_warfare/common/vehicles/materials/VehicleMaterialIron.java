@@ -1,4 +1,5 @@
 /**
+
    Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
    This software is distributed under the terms of the GNU General Public Licence.
    Please see COPYING for precise license information.
@@ -22,7 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.materials;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class VehicleMaterialIron extends VehicleMaterial
 {
@@ -78,11 +79,17 @@ public VehicleMaterialIron()
   level2.filter = new ItemStack(ItemLoader.componentItem,1,6);
   level3.filter = new ItemStack(ItemLoader.componentItem,1,7);
   level4.filter = new ItemStack(ItemLoader.componentItem,1,8);
-  level0.neededResearch = ResearchGoal.materialIron1;
-  level1.neededResearch = ResearchGoal.materialIron2;
-  level2.neededResearch = ResearchGoal.materialIron3;
-  level3.neededResearch = ResearchGoal.materialIron4;
-  level4.neededResearch = ResearchGoal.materialIron5;
+  level0.neededResearch = ResearchGoalNumbers.iron1;
+  level1.neededResearch = ResearchGoalNumbers.iron2;
+  level2.neededResearch = ResearchGoalNumbers.iron3;
+  level3.neededResearch = ResearchGoalNumbers.iron4;
+  level4.neededResearch = ResearchGoalNumbers.iron5;
+  level0.displayName = "Rough Iron";
+  level1.displayName = "Fine Iron";
+  level2.displayName = "Tempered Iron";
+  level3.displayName = "Minor Alloy";
+  level4.displayName = "Major Alloy";
+
   }
 
 }

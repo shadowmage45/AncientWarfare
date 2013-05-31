@@ -57,15 +57,15 @@ public VehicleTypeBallistaMobileTurret(int typeNum)
   
       
   this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(1, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(2, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(3, ResearchGoal.vehicleMobility2);
-  this.addNeededResearch(4, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(1, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
+  this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
+  this.addNeededResearch(4, ResearchGoal.vehicleMobility5);
   this.addNeededResearch(0, ResearchGoal.vehicleTurrets1);
-  this.addNeededResearch(1, ResearchGoal.vehicleTurrets1);
-  this.addNeededResearch(2, ResearchGoal.vehicleTurrets1);
-  this.addNeededResearch(3, ResearchGoal.vehicleTurrets2);
-  this.addNeededResearch(4, ResearchGoal.vehicleTurrets2);
+  this.addNeededResearch(1, ResearchGoal.vehicleTurrets2);
+  this.addNeededResearch(2, ResearchGoal.vehicleTurrets3);
+  this.addNeededResearch(3, ResearchGoal.vehicleTurrets4);
+  this.addNeededResearch(4, ResearchGoal.vehicleTurrets5);
   }
 
 

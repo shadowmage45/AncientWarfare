@@ -33,10 +33,11 @@ public ResearchCounterweights(int num, int rank)
   {
   super(num);
   this.displayName = "Counterweights "+(rank+1);  
-  this.detailedDescription.add("Researching counterweights advances knowledge");
-  this.detailedDescription.add("regarding the application of weight and leverage");
-  this.detailedDescription.add("to increase range, damage, and effiency of weight");
-  this.detailedDescription.add("based siege weapons.");
+  this.detailedDescription.add("Researching counterweights advances knowledge" +
+  		" regarding the application of weight and leverage to increase range, damage," +
+  		" and effiency of weight based siege weapons.  Higher ranks unlock access to" +
+  		" higher tiers of counterweight based vehicles (if all other prerequisites for" +
+  		" the vehicle have been met).");
   }
 
 }

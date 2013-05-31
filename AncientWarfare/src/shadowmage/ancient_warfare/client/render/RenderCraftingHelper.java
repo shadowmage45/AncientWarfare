@@ -83,7 +83,10 @@ public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRe
 public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   {
   GL11.glPushMatrix();
-  GL11.glTranslatef(0, -0.5f, 0);
+  if(type==ItemRenderType.INVENTORY)
+    {
+    GL11.glTranslatef(0, -0.5f, 0);    
+    }
   GL11.glScalef(-1, -1, 1);
   ModelTEBase model = RenderRegistry.instance().getTEModel(item.getItemDamage());
   model.renderModel();

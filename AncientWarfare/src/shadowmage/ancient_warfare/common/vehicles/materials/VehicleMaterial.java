@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.materials;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class VehicleMaterial implements IVehicleMaterial
 {
@@ -98,7 +99,13 @@ public ItemStack getItem(int level)
 @Override
 public IResearchGoal getResearchForLevel(int level)
   {
-  return getLevel(level).neededResearch;
+  return ResearchGoal.getGoalByID(getLevel(level).neededResearch);
+  }
+
+@Override
+public String getDisplayName(int level)
+  {
+  return getLevel(level).displayName;
   }
 
 }

@@ -21,10 +21,14 @@
 package shadowmage.ancient_warfare.client.render;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.Icon;
@@ -130,5 +134,51 @@ public static void drawTexturedModelRectFromIcon(int par1, int par2, Icon par3Ic
   tessellator.addVertexWithUV((double)(par1 + par4), (double)(par2 + 0), (double)zLevel, (double)par3Icon.getMaxU(), (double)par3Icon.getMinV());
   tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)zLevel, (double)par3Icon.getMinU(), (double)par3Icon.getMinV());
   tessellator.draw();
+  }
+
+public static List<String> getFormattedLines(List<String> inLines, int maxWidth)
+  {
+  FontRenderer render = Minecraft.getMinecraft().fontRenderer;
+  List<String> outLines = new ArrayList<String>();
+  Iterator<String> inIt = inLines.iterator();
+  
+  String line;
+  String newLine = "";
+  int currentLineWidth = 0;
+  int absLineWidth = 0;
+  int charWidth = 0;
+  while(inIt.hasNext())
+    {
+    line = inIt.next();
+    absLineWidth = render.getStringWidth(line);
+    currentLineWidth = 0;    
+    if(absLineWidth<maxWidth)
+      {
+      outLines.add(line);
+      continue;
+      }
+    newLine = "";
+    for(int i = 0; i < line.length(); i++)
+      {      
+      char ch = line.charAt(i);
+      charWidth = render.getCharWidth(ch);
+      if(currentLineWidth + charWidth <=maxWidth)
+        {
+        newLine = newLine + ch;
+        currentLineWidth += charWidth;
+        }
+      else
+        {
+        outLines.add(newLine);
+        currentLineWidth = charWidth;
+        newLine = String.valueOf(ch);
+        }
+      }
+    if(!newLine.equals(""))
+      {
+      outLines.add(newLine);
+      }
+    }
+  return outLines;
   }
 }

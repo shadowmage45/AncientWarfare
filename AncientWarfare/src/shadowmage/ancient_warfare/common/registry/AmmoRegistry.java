@@ -42,7 +42,6 @@ private AmmoRegistry(){}
 private static AmmoRegistry INSTANCE;
 
 private Map<Integer, IAmmoType> ammoInstances = new HashMap<Integer, IAmmoType>();
-//private Map<Integer, IAmmoType> itemDamageMap = new HashMap<Integer, IAmmoType>();
 
 public static AmmoRegistry instance()
   {

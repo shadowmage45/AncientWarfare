@@ -36,7 +36,9 @@ public abstract HashSet<IResearchGoal> getDependencies();
 public abstract List<String> getDetailedDescription();
 public abstract IResearchGoal getGoalByNumber(int num);
 public abstract IResearchGoal addDependencies(IResearchGoal... deps);
+public abstract IResearchGoal addDependencies(Integer... deps);
 public abstract int getResearchTime();
 public abstract List<ItemStack> getResearchResources();
+
 
 }

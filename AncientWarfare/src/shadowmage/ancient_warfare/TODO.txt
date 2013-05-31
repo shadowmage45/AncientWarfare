@@ -212,3 +212,10 @@ TWEAKS/OPTIMIZATION
 
 * much more work on research GUI, looking much better. need advanced research goal descriptions
 
+/********** 05-31-13 **********/
+* cleanup research goal detailed info rendering.  need to finish filling in class text-info
+* rework research goal to have a list of ints instead of references for dependency info--pull from research list
+    when dependency list is queried 
+* much work on adding detailed descriptions to research
+* create research goal cache for many classes to eliminate recreating goal set on every call
+* more work on research goals and recipes for stuff....

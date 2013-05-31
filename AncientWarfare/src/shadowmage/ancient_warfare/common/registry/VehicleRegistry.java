@@ -94,10 +94,7 @@ public void registerVehicles()
         {
         d.addTooltip(tip, vehicle.getGlobalVehicleType());
         }
-      for(int i = 0; i < vehicle.getMaterialType().getNumOfLevels(); i++)
-        {
-        AWCraftingManager.instance().addVehicleRecipe(vehicle.constructRecipe(i));
-        }      
+           
       }
     }  
   }

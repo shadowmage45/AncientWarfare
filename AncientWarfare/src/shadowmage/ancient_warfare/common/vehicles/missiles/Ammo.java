@@ -21,6 +21,8 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -31,9 +33,11 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -128,6 +132,7 @@ boolean isPersistent = false;
 boolean isFlaming = false;
 boolean isPenetrating = false;
 boolean isProximityAmmo = false;
+boolean isCraftable = true;
 float groundProximity = 0.f;
 float entityProximity = 0.f;
 float ammoWeight = 10;
@@ -135,6 +140,8 @@ float renderScale = 1.f;
 IAmmoType secondaryAmmoType = null;
 int secondaryAmmoCount = 0;
 String iconTexture = "foo";
+HashSet<Integer> neededResearch = new HashSet<Integer>();
+List<ItemStack> resources = new ArrayList<ItemStack>();
 
 public Ammo(int ammoType)
   {
@@ -290,6 +297,48 @@ public float entityProximity()
 public float groundProximity()
   {
   return groundProximity;
+  }
+
+@Override
+public String getIconTexture()
+  {  
+  return "ancientwarfare:ammo/"+iconTexture;
+  }
+
+@Override
+public ResourceListRecipe constructRecipe()
+  {
+  if(!this.isCraftable)
+    {
+    return null;
+    }
+  ResourceListRecipe recipe = new ResourceListRecipe(getAmmoStack(1));
+  recipe.addResources(getResources());
+  return recipe;
+  }
+
+@Override
+public Collection<Integer> getNeededResearch()
+  {
+  return this.neededResearch;
+  }
+
+@Override
+public void addResearch(Integer num)
+  {
+  this.neededResearch.add(num); 
+  }
+
+@Override
+public void addResearch(IResearchGoal goal)
+  {
+  this.neededResearch.add(goal.getGlobalResearchNum());
+  }
+
+@Override
+public Collection<ItemStack> getResources()
+  {
+  return this.resources;
   }
 
 protected void breakBlockAndDrop(World world, int x, int y, int z)
@@ -477,9 +526,4 @@ public MissileBase getMissileByType(IAmmoType type, World world, float x, float 
   return missile;
   }
 
-@Override
-public String getIconTexture()
-  {  
-  return "ancientwarfare:ammo/"+iconTexture;
-  }
 }

@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.crafting;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapper;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
@@ -35,19 +37,24 @@ import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 public class ResourceListRecipe
 {
 
-public HashSet<IResearchGoal> neededResearch = new HashSet<IResearchGoal>();
+protected HashSet<Integer> neededResearch = new HashSet<Integer>();
+protected HashSet<IResearchGoal> neededResearchCache = new HashSet<IResearchGoal>();
+
 ItemStack result;
 List<ItemStackWrapperCrafting> resources = null;
+String displayName;
 
 public ResourceListRecipe(ItemStack result, List<ItemStackWrapperCrafting> resources)
   {
   this.result = result;
   this.resources = resources;
+  displayName = result.getDisplayName();
   }
 
 public ResourceListRecipe(ItemStack result)
   {
   this.result = result;
+  displayName = result.getDisplayName();
   this.resources = new ArrayList<ItemStackWrapperCrafting>();
   }
 
@@ -71,6 +78,19 @@ public ResourceListRecipe addResource(ItemStack stack, int qty)
   return this;
   }
 
+public ResourceListRecipe addResources(Collection<ItemStack> items)
+  {
+  if(this.resources==null)
+    {
+    this.resources = new ArrayList<ItemStackWrapperCrafting>();
+    }
+  for(ItemStack stack : items)
+    {
+    this.resources.add(new ItemStackWrapperCrafting(stack, stack.stackSize));
+    }
+  return this;
+  }
+
 public List<ItemStackWrapperCrafting> getResourceList()
   {
   return resources;
@@ -79,6 +99,17 @@ public List<ItemStackWrapperCrafting> getResourceList()
 public ItemStack getResult()
   {
   return result;
+  }
+
+public String getDisplayName()
+  {
+  return this.displayName;
+  }
+
+public ResourceListRecipe setDisplayName(String name)
+  {
+  this.displayName = name;
+  return this;
   }
 
 /**
@@ -104,7 +135,36 @@ public boolean isResource(ItemStack filter)
 
 public boolean canBeCraftedBy(EntityPlayer player)
   {  
-  return Config.disableResearch || player.capabilities.isCreativeMode ? true : this.neededResearch==null ? true : PlayerTracker.instance().getEntryFor(player)!=null && PlayerTracker.instance().getEntryFor(player).hasDoneResearch(neededResearch);
+  return (Config.disableResearch || player.capabilities.isCreativeMode) ? true : (this.neededResearch==null || this.neededResearch.isEmpty()) ? true : PlayerTracker.instance().getEntryFor(player)!=null && PlayerTracker.instance().getEntryFor(player).hasDoneResearchByNumbers(neededResearch);
+  }
+
+public HashSet<IResearchGoal> getNeededResearch()
+  {
+  if(this.neededResearchCache.size()==this.neededResearch.size())
+    {
+    return this.neededResearchCache;
+    }
+  this.neededResearchCache.clear();
+  for(Integer i : neededResearch)
+    {
+    neededResearchCache.add(ResearchGoal.getGoalByID(i));
+    }
+  return neededResearchCache;
+  }
+
+public void addNeededResearch(int res)
+  {
+  this.neededResearch.add(res);
+  }
+
+public void addNeededResearch(Collection<Integer> nums)
+  {
+  this.neededResearch.addAll(nums);
+  }
+
+public void addNeededResearch(IResearchGoal goal)
+  {
+  this.neededResearch.add(goal.getGlobalResearchNum());
   }
 
 }

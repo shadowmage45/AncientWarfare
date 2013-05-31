@@ -95,9 +95,9 @@ public VehicleTypeBallista(int typeNum)
   this.addNeededResearchForMaterials();
   this.addNeededResearch(0, ResearchGoal.vehicleTorsion1);
   this.addNeededResearch(1, ResearchGoal.vehicleTorsion2);
-  this.addNeededResearch(2, ResearchGoal.vehicleTorsion2);
-  this.addNeededResearch(3, ResearchGoal.vehicleTorsion3);
-  this.addNeededResearch(4, ResearchGoal.vehicleTorsion3);
+  this.addNeededResearch(2, ResearchGoal.vehicleTorsion3);
+  this.addNeededResearch(3, ResearchGoal.vehicleTorsion4);
+  this.addNeededResearch(4, ResearchGoal.vehicleTorsion5);
   }
 
 @Override

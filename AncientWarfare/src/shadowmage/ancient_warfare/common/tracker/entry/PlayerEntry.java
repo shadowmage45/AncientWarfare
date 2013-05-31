@@ -56,6 +56,22 @@ public boolean hasDoneResearch(IResearchGoal goal)
   return this.doneResearch.contains(goal);
   }
 
+public boolean hasDoneResearchByNumbers(Collection<Integer> goals)
+  {  
+  IResearchGoal goal;
+  for(Integer goalNum : goals)
+    {
+    if(goalNum==null){continue;}
+    goal = ResearchGoal.getGoalByID(goalNum);
+    if(goal==null){continue;}
+    if(!this.doneResearch.contains(goal))
+      {
+      return false;
+      }
+    }
+  return true;
+  }
+
 public boolean hasDoneResearch(Collection<IResearchGoal> goals)
   {  
   for(IResearchGoal goal : goals)

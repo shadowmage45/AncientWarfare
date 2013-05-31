@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.manager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.AWCore;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
@@ -84,6 +84,19 @@ public void handlePacketDataServer(NBTTagCompound tag)
 public ProcessedStructure getStructureServer(String name)
   {
   return this.structures.get(name);
+  }
+
+public Collection<ProcessedStructure> getSurvivalModeStructures()
+  {
+  ArrayList<ProcessedStructure> structs = new ArrayList<ProcessedStructure>();
+  for(ProcessedStructure struct : this.structures.values())
+    {
+    if(struct.survival)
+      {
+      structs.add(struct);
+      }
+    }
+  return structs;
   }
 
 /**

@@ -32,6 +32,7 @@ public float weightFactor;
 public float accuracyFactor;
 public float misfireChance;
 public ItemStack filter;
-public IResearchGoal neededResearch;
+public Integer neededResearch;
+String displayName = "";
 
 }

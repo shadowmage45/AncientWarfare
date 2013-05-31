@@ -18,31 +18,25 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.research.vehicle;
+package shadowmage.ancient_warfare.common.research.ammo;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
-import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
-public class ResearchMaterialLevel extends ResearchGoal
+public class ResearchFlammables extends ResearchGoal
 {
 
-int level;
 /**
  * @param num
  */
-public ResearchMaterialLevel(int num, int level, VehicleMaterial material)
+public ResearchFlammables(int num, int level)
   {
   super(num);
-  this.level = level;
-  this.displayName = "Material: "+material.getDisplayName(level);
-  this.displayTooltip = "Enables use of higher ranked materials";
-  this.detailedDescription.add("Researching higher ranks of vehicle construction" +
-  		" materials will enable the construction of those materials, and allow for" +
-  		" the use of those materials in the construction of vehicles (vehicle and" +
-  		" proper tier for vehicle must also be unlocked).");
-  this.addResource(new ItemStack(Item.stick,10));
+  this.displayName = "Flammables " + (level+1);
+  this.detailedDescription.add("Researching Flammables uncovers knowledge relating" +
+  		" to the use of flammable materials as weapons, including their manufacture" +
+  		" and use.  This research is needed for most flame-based ammunition as well as" +
+  		" Napalm ammunition.  At least some research into Flammables needs to be done in" +
+  		" order to research gunpowder weapons and explosives.");
   }
 
 }

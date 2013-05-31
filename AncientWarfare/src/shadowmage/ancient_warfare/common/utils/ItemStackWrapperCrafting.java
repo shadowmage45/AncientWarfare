@@ -43,6 +43,7 @@ public ItemStackWrapperCrafting(ItemStack stack, int qty)
 public ItemStackWrapperCrafting(ItemStack stack)
   {
   super(stack);
+  this.remainingNeeded = stack.stackSize;
   }
 
 public ItemStackWrapperCrafting(NBTTagCompound tag)
