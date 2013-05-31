@@ -35,6 +35,7 @@ import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class ContainerResearch extends ContainerBase
 {
@@ -45,7 +46,7 @@ TEAWResearch te;
  * local references for slots for easier access of placement
  */
 SlotResourceOnly bookSlot;
-Slot[] researchSlots = new Slot[9];
+public Slot[] researchSlots = new Slot[9];
 
 ItemStack book = null;
 
@@ -60,6 +61,10 @@ public int displayProgress = 0;
 
 public PlayerEntry playerEntry = null;
 
+/**
+ * server side value to detect changes made to player entry
+ */
+int researchLength = 0;
 /**
  * @param openingPlayer
  * @param synch
@@ -128,6 +133,48 @@ public void addSlots()
   bookSlot.yDisplayPosition = 8+24;
   }
 
+public void handleGoalSelectionClient(IResearchGoal goal)
+  {
+  if(goal==null || this.goal!=null){return;}
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setInteger("goal", goal.getGlobalResearchNum());
+  this.sendDataToServer(tag);
+  }
+
+public void handleGoalStopClient()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setInteger("goal", -1);
+  this.sendDataToServer(tag);
+  }
+
+protected void handleGoalSelectionServer(IResearchGoal goal)
+  {    
+  if(this.te.currentResearch!=null || goal==null){return;}
+  boolean start = true;
+  List<ItemStack> neededItems = goal.getResearchResources();
+  for(ItemStack stack : neededItems)
+    {
+    if(!InventoryTools.containsAtLeast(te, stack, stack.stackSize, 1, te.getSizeInventory()-1))
+      {
+      start = false;
+      break;
+      }    
+    }  
+  if(start)
+    {
+    for(ItemStack stack : neededItems)
+      {
+      InventoryTools.tryRemoveItems(te, stack, stack.stackSize, 1,te.getSizeInventory()-1);
+      }
+    this.goal = goal;
+    this.te.startResearch(goal); 
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setInteger("goal", goal.getGlobalResearchNum());
+    this.sendDataToPlayer(tag);
+    }
+  }
+
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
@@ -144,15 +191,21 @@ public void handlePacketData(NBTTagCompound tag)
     this.displayProgress = tag.getInteger("progress");
     }
   if(tag.hasKey("goal"))
-    { 
-    this.gui.refreshGui();
+    {    
     if(!player.worldObj.isRemote)
       {
       int num = tag.getInteger("goal");
-      if(num==-1){te.currentResearch = null;}
+      if(num==-1)
+        {        
+        te.currentResearch = null;
+        te.resetProgress();
+        /**
+         * TODO refund items..throw on ground if cannot fit in inventory
+         */
+        }
       else
         {
-        te.startResearch(ResearchGoal.getGoalByID(tag.getInteger("goal")));
+        this.handleGoalSelectionServer(ResearchGoal.getGoalByID(tag.getInteger("goal")));
         }
       }
     else
@@ -163,11 +216,18 @@ public void handlePacketData(NBTTagCompound tag)
         {
         this.goal = ResearchGoal.getGoalByID(tag.getInteger("goal"));
         }
+      } 
+    if(this.gui!=null)
+      {
+      this.gui.refreshGui();      
       }
     } 
   if(tag.hasKey("entry"))
     {    
-    this.gui.refreshGui();
+    if(this.gui!=null)
+      {
+      this.gui.refreshGui();      
+      }
     boolean name = tag.getBoolean("entry");
     if(name)
       {
@@ -199,7 +259,6 @@ public void detectAndSendChanges()
   {
   if(te.researchProgress!=this.displayProgress)
     {
-    Config.logDebug("sending display progress update");
     this.displayProgress = te.researchProgress;
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("progress", this.displayProgress);
@@ -211,12 +270,13 @@ public void detectAndSendChanges()
     if(te.currentResearch==null)
       {
       tag.setInteger("goal", -1);
+      this.goal = null;
       }
     else
       {
+      this.goal = te.currentResearch;
       tag.setInteger("goal", this.goal.getGlobalResearchNum());      
-      }
-    Config.logDebug("sending goal update");    
+      }  
     this.sendDataToPlayer(tag);
     }
   if(this.playerEntry==null || !this.playerEntry.playerName.equals(te.researchingPlayer))
@@ -227,16 +287,30 @@ public void detectAndSendChanges()
       NBTTagCompound tag = this.playerEntry.getNBTTag();
       tag.setBoolean("entry", true);   
       this.sendDataToPlayer(tag);
-      Config.logDebug("sending entry");
+      this.researchLength = this.playerEntry.getKnownResearch().size();
       }
     else
       {
+      if(this.playerEntry==null && te.researchingPlayer==null)
+        {
+        return;
+        }
       this.playerEntry = null;
       NBTTagCompound tag = new NBTTagCompound();
       tag.setBoolean("entry", false);   
       this.sendDataToPlayer(tag);
-      Config.logDebug("sending empty entry");
       }
+    }
+  else if(this.playerEntry!=null && this.playerEntry.playerName.equals(te.researchingPlayer))
+    {
+    int len = this.playerEntry.getKnownResearch().size();
+    if(len!=this.researchLength)
+      {
+      NBTTagCompound tag = this.playerEntry.getNBTTag();
+      tag.setBoolean("entry", true);   
+      this.sendDataToPlayer(tag);
+      this.researchLength = len;
+      }    
     }
   super.detectAndSendChanges();
   }

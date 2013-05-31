@@ -28,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
@@ -95,6 +96,9 @@ public void startResearch(IResearchGoal goal)
 protected void setResearchFinished()
   {
   PlayerEntry entry = PlayerTracker.instance().getEntryFor(researchingPlayer);
+  entry.addCompletedResearch(this.currentResearch.getGlobalResearchNum());
+  this.currentResearch = null;
+  this.resetProgress();
   }
 
 @Override
@@ -106,8 +110,7 @@ public boolean canUpdate()
 @Override
 public void onBlockClicked(EntityPlayer player)
   {
-  Config.logDebug("TEResearch block clicked");
-  super.onBlockClicked(player);
+  GUIHandler.instance().openGUI(GUIHandler.RESEARCH, player, worldObj, xCoord, yCoord, zCoord);
   }
 
 @Override

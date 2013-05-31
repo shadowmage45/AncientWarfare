@@ -21,8 +21,12 @@
 package shadowmage.ancient_warfare.client.gui.crafting;
 
 import java.util.HashSet;
+import java.util.Set;
+
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
@@ -32,14 +36,14 @@ import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerResearch;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
-import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class GuiResearch extends GuiContainerAdvanced
 {
 
 GuiTab activeTab = null;
 ContainerResearch container;
+IResearchGoal selectedGoal = null;
 /**
  * @param container
  */
@@ -80,7 +84,20 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawStringGui(container.goal==null? "No Research" : container.goal.getDisplayName(), -50, 0, 0xffffffff);
+  String goal = "Current Selection: ";
+  if(container.goal!=null)
+    {
+    goal += container.goal.getDisplayName();
+    }
+  else if(this.selectedGoal!=null)
+    {
+    goal += this.selectedGoal.getDisplayName();
+    }
+  else
+    {
+    goal += "No Research";
+    }
+  this.drawStringGui(goal, 8+18+5, 8+24, 0xffffffff);
   if(this.activeTab!=null)
     {
     switch(activeTab.getElementNumber())
@@ -101,6 +118,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     }
   }
 
+@Override
 public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
   {
   if(this.activeTab!=null)
@@ -122,7 +140,27 @@ public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
 
 public void drawProgressForground()
   {
-  
+  /**
+   * draw fake stacks into slots
+   */
+  if(this.selectedGoal!=null && container.goal==null)
+    {
+    int x = 0;
+    int y = 0;
+    for(ItemStack stack : this.selectedGoal.getResearchResources())
+      {
+      if(x>=3)
+        {
+        x=0;
+        y++;
+        }      
+      if(!this.container.researchSlots[y*3+x].getHasStack())
+        {
+        this.renderItemStack(stack, guiLeft + 8 + x*18, guiTop + 8+18+4+24 + y*18, mouseX, mouseY, true, true);        
+        }   
+      x++;   
+      }
+    }
   }
 
 public void drawUnknownBackground()
@@ -132,38 +170,33 @@ public void drawUnknownBackground()
 
 public void drawKnownBackground()
   {
-//  PlayerEntry entry = PlayerTracker.instance().getClientEntry();
-//  int x = 5;
-//  int y = 25;
-//  for(IResearchGoal goal : entry.getKnownResearch())
-//    {
-//    this.drawStringGui(goal.getDisplayName(), x, y, 0xffffffff);
-//    y += 10;
-//    }  
+  
   }
 
 public void drawAvailableBackground()
   {
-  PlayerEntry entry = PlayerTracker.instance().getClientEntry();
-  int x = 5;
-  int y = 25; 
-  for(IResearchGoal goal : entry.getAvailableResearch())
-    {
-    this.drawStringGui(goal.getDisplayName(), x, y, 0xffffffff);
-    y += 10;
-    }
+  
   }
 
 public void drawProgressBackground()
   {
-  
+//  this.drawTexturedModalRect(par1, par2, par3, par4, par5, par6)
   }
 
 @Override
 public void updateScreenContents()
   {
   this.area.updateGuiPos(guiLeft, guiTop);
-  // TODO Auto-generated method stub
+  if(this.selectedGoal!=null && this.container.playerEntry!=null && this.container.playerEntry.getKnownResearch().contains(selectedGoal))
+    {
+    this.selectedGoal = null;
+    this.forceUpdate = true;
+    }
+  else if(this.container.playerEntry==null)
+    {
+    this.selectedGoal = null;
+    this.forceUpdate = true;
+    }  
   }
 
 @Override
@@ -180,6 +213,34 @@ public void onElementActivated(IGuiElement element)
     this.activeTab = selected;
     this.forceUpdate = true;
     }
+  switch(activeTab.getElementNumber())
+  {
+  case 100://known -- no action?
+  break;
+  case 101://available
+  if(goals.contains(element))
+    {    
+    if(this.container.goal==null)
+      {
+      IResearchGoal g = ResearchGoal.getGoalByID(element.getElementNumber()-1000);
+      this.selectedGoal = g;
+      }
+    }
+  break;
+  case 102://progress
+  if(element.getElementNumber()==1)//start button
+    {
+    this.container.handleGoalSelectionClient(selectedGoal);
+    }
+  else if(element.getElementNumber()==2)//stop button
+    {
+    Config.logDebug("sending stop from gui");
+    this.container.handleGoalStopClient();
+    }
+  break;
+  case 103://unknown
+  break;
+  }
   }
 
 HashSet<GuiTab> tabs = new HashSet<GuiTab>();
@@ -189,20 +250,20 @@ GuiScrollableArea area;
 @Override
 public void setupControls()
   {  
-  GuiTab tab = this.addGuiTab(100, 5, 0, 90, 24, "Known");
+  GuiTab tab = this.addGuiTab(100, 5+66+90, 0, 90, 24, "Known");
+  this.tabs.add(tab);
+  tab.enabled = false;
+  tab = this.addGuiTab(101, 5+66, 0, 90, 24, "Available");
+  tab.enabled = false;
+  this.tabs.add(tab);
+  tab = this.addGuiTab(102, 5, 0, 66, 24, "Progress");
   this.tabs.add(tab);
   this.activeTab = tab;
-  tab = this.addGuiTab(101, 5+90, 0, 90, 24, "Available");
-  tab.enabled = false;
-  this.tabs.add(tab);
-  tab = this.addGuiTab(102, 5+90+90, 0, 256-90-90-10, 24, "Progress");
-  tab.enabled = false;
-  this.tabs.add(tab);
   tab = this.addGuiTab(103, 5, this.getYSize()-24, 90, 24, "All Unknown");
   tab.enabled = false;
   tab.inverted = true;
   this.tabs.add(tab);
-  this.area = new GuiScrollableArea(0, this, 5, 21+18+10, 256-10, 240-42-10-18, 0);
+  this.area = new GuiScrollableArea(0, this, 5, 21+18+10+5, 256-10, 240-42-10-18-5-8, 0);
   }
 
 @Override
@@ -234,13 +295,16 @@ public void updateControls()
     break;
     }
     }  
+  for(Integer i : this.guiElements.keySet())
+    {
+    this.guiElements.get(i).updateGuiPos(guiLeft, guiTop);
+    }  
   }
 
 HashSet<GuiButtonSimple> goals = new HashSet<GuiButtonSimple>();
 
 protected void addKnownControls()
   {
-  goals.clear();
   if(container.playerEntry!=null)
     {    
     this.guiElements.put(0, area);
@@ -251,7 +315,7 @@ protected void addKnownControls()
     GuiButtonSimple button;
     for(IResearchGoal goal : goals)
       {      
-      button = new GuiButtonSimple(goal.getGlobalResearchNum(), area, 256-10, 16, goal.getDisplayName());
+      button = new GuiButtonSimple(1000+goal.getGlobalResearchNum(), area, 256-10-12-10, 16, goal.getDisplayName());
       button.updateRenderPos(x, y);
       area.addGuiElement(button);
       this.goals.add(button);
@@ -261,18 +325,71 @@ protected void addKnownControls()
   }
 
 protected void addAvailableControls()
-  {
-  this.guiElements.put(0, area);
+  {  
+  if(container.playerEntry!=null)
+    {
+    this.guiElements.put(0, area);
+    if(container.playerEntry!=null)
+      {    
+      this.guiElements.put(0, area);
+      Set<IResearchGoal> goals = container.playerEntry.getAvailableResearch();
+      area.updateTotalHeight(goals.size()*18);
+      int x = 0;
+      int y = 0;
+      GuiButtonSimple button;
+      for(IResearchGoal goal : goals)
+        {      
+        button = new GuiButtonSimple(1000+goal.getGlobalResearchNum(), area, 256-10-12-10, 16, goal.getDisplayName());
+        button.updateRenderPos(x, y);
+        area.addGuiElement(button);
+        this.goals.add(button);
+        y+=18;
+        }
+      }
+    } 
   }
 
 protected void addProgressControls()
   {
   this.container.addSlots();
+  GuiButtonSimple button = this.addGuiButton(1, this.getXSize()-40, 21+5, 35, 16, "Start");
+  button.updateGuiPos(guiLeft, guiTop);
+  if(container.goal!=null || selectedGoal==null)
+    {
+    button.enabled = false;    
+    }
+  button = this.addGuiButton(2, this.getXSize()-40, 21+5+16+2, 35, 16 , "Stop");
+  button.updateGuiPos(guiLeft, guiTop);
+  if(container.goal==null)
+    {
+    button.enabled= false;
+    }
   }
 
 protected void addUnknownControls()
   {
-  this.guiElements.put(0, area);
+  goals.clear();
+  if(container.playerEntry!=null)
+    {
+    this.guiElements.put(0, area);
+    if(container.playerEntry!=null)
+      {    
+      this.guiElements.put(0, area);
+      Set<IResearchGoal> goals = container.playerEntry.getUnknwonResearch();
+      area.updateTotalHeight(goals.size()*18);
+      int x = 0;
+      int y = 0;
+      GuiButtonSimple button;
+      for(IResearchGoal goal : goals)
+        {      
+        button = new GuiButtonSimple(1000+goal.getGlobalResearchNum(), area, 256-10-12-10, 16, goal.getDisplayName());
+        button.updateRenderPos(x, y);
+        area.addGuiElement(button);
+        this.goals.add(button);
+        y+=18;
+        }
+      }
+    } 
   }
 
 }

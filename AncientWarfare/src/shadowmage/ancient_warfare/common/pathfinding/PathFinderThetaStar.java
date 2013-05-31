@@ -390,6 +390,10 @@ private void tryAddSearchNode(int x, int y, int z, Node p)
         }
       else if(p.y<y)//moving up from parent, check parent.y ->parent.y+2
         {
+        if(world.isPartialBlock(p.x, p.y-1, p.z))//check to make sure its not going to be too far to jump up
+          {
+          return;
+          }
         if(world.isCube(p.x, p.y+2, p.z))
           {
           return;

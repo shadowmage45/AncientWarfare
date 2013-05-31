@@ -25,7 +25,8 @@ GATES
 NPCS
 * more 'check if target dead' (seems creepers or entities removed by setting world to peacefull are still targets)
     perhaps check world loaded entity list to see if target is still present/loaded
-* set to no collide if colliding with vehicles.    
+* set to no collide if colliding with vehicles/other method of moving past blocking vehicles    
+* lilypad/short block pathfinding
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
@@ -205,4 +206,7 @@ TWEAKS/OPTIMIZATION
 /********** 05-30-13 **********/
 * more PF work, attempt to cleanup stuck on chest bugs
 * more work on research gui/container/etc
+
+* fix up a few PF things, looking fairly good now, but needs thorough testing
+* much work on researching. it _works_ but needs cleanup
 

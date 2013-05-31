@@ -422,10 +422,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     mc.renderEngine.resetBoundTexture();
     GL11.glPopAttrib();
     GL11.glPopMatrix();
-    }
-  GL11.glPushMatrix();  
-  this.drawExtraForeground(mouseX, mouseY, var1);
-  GL11.glPopMatrix();
+    }  
   if(this.currentMouseElement instanceof GuiFakeSlot)
     {
     GuiFakeSlot slot = (GuiFakeSlot)this.currentMouseElement;
@@ -445,9 +442,31 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   GL11.glPopMatrix();
   }
 
+
+
+@Override
+public void onElementActivated(IGuiElement element)
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
 public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
   {
   
+  }
+
+
+
+@Override
+public void drawScreen(int par1, int par2, float par3)
+  {
+  GL11.glPushMatrix();
+  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+  super.drawScreen(par1, par2, par3);
+  GL11.glPopAttrib();
+  GL11.glPopMatrix();
+  this.drawExtraForeground(par1, par2, par3);
   }
 
 /**
@@ -455,7 +474,7 @@ public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
  * @param x
  * @param y
  */
-public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay)
+public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay, boolean useAlpha)
   {
   GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   GL11.glPushMatrix();
@@ -465,7 +484,16 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
   GL11.glEnable(GL11.GL_COLOR_MATERIAL);
   GL11.glEnable(GL11.GL_LIGHTING);  
   itemRenderer.zLevel = 100.0F; 
+  if(useAlpha)
+    {
+    GL11.glEnable(GL11.GL_BLEND);
+    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_COLOR);
+    }
   this.itemRenderer.renderItemAndEffectIntoGUI(fontRenderer, mc.renderEngine, stack, x, y);//render item
+  if(useAlpha)
+    {
+    GL11.glDisable(GL11.GL_BLEND);
+    }
   if(renderOverlay)
     {
     String stackSize = stack.stackSize > 999 ? ">1k" : String.valueOf(stack.stackSize);
@@ -481,6 +509,11 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
   GL11.glEnable(GL11.GL_DEPTH_TEST);
   GL11.glPopAttrib();
   mc.renderEngine.resetBoundTexture();
+  }
+
+public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay)
+  {
+  this.renderItemStack(stack, x, y, mouseX, mouseY, renderOverlay, false);
   }
 
 /**

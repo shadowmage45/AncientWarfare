@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.research.vehicle;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class ResearchMaterialLevel extends ResearchGoal
@@ -35,6 +37,7 @@ public ResearchMaterialLevel(int num, int level, String matName)
   this.level = level;
   this.displayName = "Vehicle Material: "+matName;
   this.displayTooltip = "Enables use of higher ranked materials";
+  this.addResource(new ItemStack(Item.stick,10));
   }
 
 }

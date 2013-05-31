@@ -108,11 +108,7 @@ public boolean isWalkable2(int x, int y, int z)
   if(isFence(id2))
     {
     return false;
-    }
-  if(canSwim && isWater(id) && id3==0)
-    {
-    return true;
-    }
+    }  
   if(canUseLaders && isLadder(id))
     {
     return true;
@@ -121,9 +117,60 @@ public boolean isWalkable2(int x, int y, int z)
     {
     return true;
     }
-  if(!cube && !cube3 && cube2)//finally, check if block and blockY+1 are clear and blockY-1 is solid
+  if(!cube && !cube3 && (cube2 || canSupport(id, x,y,z)))//finally, check if block and blockY+1 are clear and blockY-1 is solid
     {
     return true;
+    }
+  if(canSwim && isWater(id) && id3==0)
+    {
+    return true;
+    }
+  return false;
+  }
+
+public boolean isPartialBlock(int x, int y, int z)
+  {
+  int id = world.getBlockId(x, y, z);
+  Block block; 
+  block = Block.blocksList[id];
+  if(block!=null)
+    {
+    AxisAlignedBB bb = block.getCollisionBoundingBoxFromPool(world, x, y, z);
+    if(bb==null)
+      {
+      return false;
+      }
+    block.setBlockBoundsBasedOnState(world, x, y, z);    
+    if(block.getBlockBoundsMaxY() <=0.75d)
+      {
+      if(block.getBlockBoundsMinX()< 0.35 && block.getBlockBoundsMaxX()>0.65 && block.getBlockBoundsMinZ()<0.35 && block.getBlockBoundsMaxZ()>0.65)
+        {
+        return true;
+        }
+      }   
+    }
+  return false;
+  }
+
+public boolean canSupport(int id, int x, int y, int z)
+  {
+  Block block; 
+  block = Block.blocksList[id];
+  if(block!=null)
+    {
+    AxisAlignedBB bb = block.getCollisionBoundingBoxFromPool(world, x, y, z);
+    if(bb==null)
+      {
+      return false;
+      }
+    block.setBlockBoundsBasedOnState(world, x, y, z);    
+    if(block.getBlockBoundsMaxY() <=0.5d)
+      {
+      if(block.getBlockBoundsMinX()< 0.35 && block.getBlockBoundsMaxX()>0.65 && block.getBlockBoundsMinZ()<0.35 && block.getBlockBoundsMaxZ()>0.65)
+        {
+        return true;
+        }
+      }   
     }
   return false;
   }

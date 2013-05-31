@@ -62,7 +62,6 @@ public Icon getIconForSide(BlockAWCrafting block, int side, int meta)
 
 public void onBlockClicked(EntityPlayer player)
   {
-  GUIHandler.instance().openGUI(GUIHandler.RESEARCH, player, worldObj, xCoord, yCoord, zCoord);
   }
 
 public void setOrientation(int face)
