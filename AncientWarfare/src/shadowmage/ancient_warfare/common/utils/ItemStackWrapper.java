@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -64,6 +65,11 @@ public boolean matches(ItemStack stack)
   return InventoryTools.doItemsMatch(this.filter, stack);
   }
 
+public boolean matches(ItemStackWrapper wrap)
+  {
+  return InventoryTools.doItemsMatch(filter, wrap.filter);
+  }
+
 public ItemStack getFilter()
   {
   filter.stackSize = this.getQuantity();
@@ -87,7 +93,7 @@ public NBTTagCompound writeToNBT(NBTTagCompound tag)
  */
 public int getQuantity()
   {
-    return quantity;
+  return quantity;
   }
 
 /**

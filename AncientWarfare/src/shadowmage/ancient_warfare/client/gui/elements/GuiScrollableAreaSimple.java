@@ -129,6 +129,10 @@ public void updateGuiPos(int x, int y)
     {
     el.updateGuiPos(scrollPosX, -scrollPosY);
     }
+  if(this.scrollBar!=null)
+    {
+    this.scrollBar.updateHandleHeight(totalHeight, this.height);
+    }
   }
 
 @Override

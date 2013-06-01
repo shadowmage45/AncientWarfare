@@ -140,6 +140,7 @@ public void updateHandleHeight(int setSize, int displayElements)
   float bar = (float)availBarHeight * (float)elementPercent;
   int barHeight = (int) (bar + 20);
   this.handleHeight = barHeight;
+  this.updateHandleDisplayPos(0);
   }
 
 /**

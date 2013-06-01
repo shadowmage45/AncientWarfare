@@ -18,30 +18,37 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.gui.elements;
+package shadowmage.ancient_warfare.common.container;
 
-import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
-public class GuiScrollableArea extends GuiScrollableAreaSimple
+public class SlotPullOnly extends Slot
 {
 
 /**
- * @param elementNum
- * @param parent
- * @param w
- * @param h
+ * @param par1iInventory
+ * @param par2
+ * @param par3
+ * @param par4
  */
-public GuiScrollableArea(int elementNum, GuiContainerAdvanced parent, int x, int y, int w,  int h, int totalHeight)
+public SlotPullOnly(IInventory par1iInventory, int par2, int par3, int par4)
   {
-  super(elementNum, parent, x, y, w, h, w, totalHeight); 
-  this.scrollBar = new GuiScrollBarSimple(elementNum, this, 16, h, totalHeight, h);
-  this.scrollBar.updateRenderPos(w-16, 0);
+  super(par1iInventory, par2, par3, par4);
   }
 
 @Override
-public void updateTotalHeight(int height)
+public boolean isItemValid(ItemStack par1ItemStack)
   {
-  this.totalHeight = height;
-  this.scrollBar.updateHandleHeight(totalHeight, this.height);  
+  return false;
   }
+
+@Override
+public void putStack(ItemStack par1ItemStack)
+  {
+  super.putStack(par1ItemStack);
+  }
+
 }

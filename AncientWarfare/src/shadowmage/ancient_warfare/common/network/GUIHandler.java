@@ -29,6 +29,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicWarehouse;
+import shadowmage.ancient_warfare.client.gui.crafting.GuiEngineeringStation;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiResearch;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCommandBaton;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCourierRoutingSlip;
@@ -53,6 +54,7 @@ import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
+import shadowmage.ancient_warfare.common.container.ContainerEngineeringStation;
 import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
 import shadowmage.ancient_warfare.common.container.ContainerNpcCourier;
 import shadowmage.ancient_warfare.common.container.ContainerResearch;
@@ -60,6 +62,7 @@ import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
+import shadowmage.ancient_warfare.common.crafting.TEAWEngineering;
 import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -89,6 +92,7 @@ public static final int COURIER_SLIP = 11;
 public static final int CIVIC_WAREHOUSE = 12;
 
 public static final int RESEARCH = 42;
+public static final int ENGINEERING = 43;
 
 public static final int VEHICLE_AMMO_SELECT = 98;
 public static final int VEHICLE_DEBUG = 99;
@@ -189,6 +193,15 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
     }
   return null;
   
+  case ENGINEERING:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWEngineering)
+    {
+    TEAWEngineering tew = (TEAWEngineering)te;
+    return new ContainerEngineeringStation(player, tew);
+    }
+  return null;
+  
   case VEHICLE_AMMO_SELECT:
   return new ContainerDummy();
   
@@ -284,6 +297,15 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
     {
     TEAWResearch tew = (TEAWResearch)te;
     return new GuiResearch(new ContainerResearch(player, tew));
+    }
+  return null;
+  
+  case ENGINEERING:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWEngineering)
+    {
+    TEAWEngineering tew = (TEAWEngineering)te;
+    return new GuiEngineeringStation(new ContainerEngineeringStation(player, tew));
     }
   return null;
   

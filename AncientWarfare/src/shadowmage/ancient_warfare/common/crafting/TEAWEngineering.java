@@ -20,10 +20,27 @@
  */
 package shadowmage.ancient_warfare.common.crafting;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
-public class TEAWEngineering extends TEAWCrafting
+public class TEAWEngineering extends TEAWCrafting implements IInventory, ISidedInventory
 {
+
+AWInventoryBasic inventory = new AWInventoryBasic(10);
+int[] resultSlot = new int[]{9};
+int[] craftMatrix = new int[]{0,1,2,3,4,5,6,7,8};
+ResourceListRecipe currentRecipe = null;
+public int displayProgress = 0;
+public int displayProgressMax = 0;
+public boolean isWorking = false;
+public boolean shouldUpdate = false;
 
 /**
  * 
@@ -33,32 +50,243 @@ public TEAWEngineering()
   this.modelID = 1;
   }
 
+public void validateAndSetRecipe(ResourceListRecipe recipe)
+  {
+  if(this.isWorking){return;}
+  recipe = AWCraftingManager.instance().validateRecipe(recipe);
+  if(recipe!=null)
+    {
+    this.setRecipe(recipe);    
+    }
+  }
+
+private void setRecipe(ResourceListRecipe recipe)
+  {
+  this.currentRecipe = recipe.copy();  
+  }
+
+public ResourceListRecipe getRecipe()
+  {
+  return this.currentRecipe;
+  }
+
+public void stopWork()
+  {
+  this.isWorking = false;
+  this.displayProgress = 0;
+  this.displayProgressMax = 0;
+  }
+
+public void clearRecipe()
+  {
+  this.currentRecipe = null;
+  }
+
+@Override
+public void updateEntity()
+  {  
+  super.updateEntity();
+  if(this.worldObj==null || this.worldObj.isRemote){return;}
+  if(this.currentRecipe!=null && !this.isWorking)
+    {    
+    this.displayProgress = 0;
+    if(this.tryStartRecipe())
+      {
+      this.isWorking = true;
+      }
+    }
+  if(this.isWorking && this.shouldUpdate)
+    {
+    this.displayProgress++;
+    }
+  if(this.isWorking && this.currentRecipe!=null && this.displayProgress>=this.displayProgressMax)
+    {
+    if(!this.tryFinishRecipe())
+      {
+      this.displayProgress = this.displayProgressMax;
+      }
+    }
+  this.shouldUpdate = false;
+  }
+
+protected boolean tryStartRecipe()
+  {
+  boolean start = true;
+  int count = 0;
+  if(this.currentRecipe.resources.isEmpty()){return false;}
+  for(ItemStackWrapperCrafting stack : this.currentRecipe.resources)
+    {
+    count += stack.getQuantity();
+    if(!InventoryTools.containsAtLeast(inventory, stack.getFilter(), stack.getQuantity(), 0, 8))
+      {
+      start = false;
+      break;
+      }
+    }
+  if(start)
+    {
+    this.displayProgress = 0;
+    for(ItemStackWrapperCrafting stack : this.currentRecipe.resources)
+      {
+      InventoryTools.tryRemoveItems(inventory, stack.getFilter(), stack.getQuantity(), 0, 8);      
+      }    
+    this.displayProgressMax = count*10;    
+    }
+  return start;
+  }
+
+protected boolean tryFinishRecipe()
+  {
+  if(InventoryTools.canHoldItem(inventory, currentRecipe.result, currentRecipe.result.stackSize, 0, 8))
+    {
+    InventoryTools.tryMergeStack(inventory, currentRecipe.result.copy(), resultSlot);
+    this.isWorking = false;
+    this.displayProgress = 0;
+    return true;
+    }
+  return false;
+  }
+
+@Override
+public boolean canUpdate()
+  {
+  return true;
+  }
+
+@Override
+public void onBlockClicked(EntityPlayer player)
+  {
+  if(player.worldObj.isRemote){return;}
+  GUIHandler.instance().openGUI(GUIHandler.ENGINEERING, player, player.worldObj, xCoord, yCoord, zCoord);
+  }
+
 @Override
 public void readDescriptionPacket(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-
   }
 
 @Override
 public void writeDescriptionData(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-
   }
 
 @Override
 public void writeExtraNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-
+  tag.setInteger("prog", displayProgress);
+  tag.setInteger("progMax", displayProgressMax);
+  tag.setBoolean("work", this.isWorking);
+  tag.setCompoundTag("inv", this.inventory.getNBTTag());
+  if(this.currentRecipe!=null)
+    {
+    tag.setCompoundTag("rec", this.currentRecipe.getNBTTag());
+    }
   }
 
 @Override
 public void readExtraNBT(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
+  this.displayProgress = tag.getInteger("prog");
+  this.displayProgressMax = tag.getInteger("progMax");
+  this.isWorking = tag.getBoolean("work");
+  if(tag.hasKey("inv"))
+    {
+    this.inventory.readFromNBT(tag.getCompoundTag("inv"));
+    }
+  if(tag.hasKey("rec"))
+    {
+    this.currentRecipe = new ResourceListRecipe(tag.getCompoundTag("rec"));
+    }
+  }
 
+@Override
+public int[] getAccessibleSlotsFromSide(int var1)
+  {
+  return (var1==1 || var1==0) ? resultSlot : craftMatrix;
+  }
+
+@Override
+public boolean canInsertItem(int slotNum, ItemStack itemstack, int side)
+  {
+  return slotNum==9? false : (side ==1 || side==0) ? false : true;
+  }
+
+@Override
+public boolean canExtractItem(int slotNum, ItemStack itemstack, int side)
+  {
+  return true;
+  }
+
+@Override
+public int getSizeInventory()
+  {
+  return inventory.getSizeInventory();
+  }
+
+@Override
+public ItemStack getStackInSlot(int i)
+  {
+  return inventory.getStackInSlot(i);
+  }
+
+@Override
+public ItemStack decrStackSize(int i, int j)
+  {
+  return inventory.decrStackSize(i, j);
+  }
+
+@Override
+public ItemStack getStackInSlotOnClosing(int i)
+  {
+  return inventory.getStackInSlotOnClosing(i);
+  }
+
+@Override
+public void setInventorySlotContents(int i, ItemStack itemstack)
+  {
+  inventory.setInventorySlotContents(i, itemstack);
+  }
+
+@Override
+public String getInvName()
+  {
+  return "AW.EngineeringStation";
+  }
+
+@Override
+public boolean isInvNameLocalized()
+  {  
+  return false;
+  }
+
+@Override
+public int getInventoryStackLimit()
+  {  
+  return 64;
+  }
+
+@Override
+public boolean isUseableByPlayer(EntityPlayer entityplayer)
+  {  
+  return true;
+  }
+
+@Override
+public void openChest()
+  {
+   
+  }
+
+@Override
+public void closeChest()
+  {
+    
+  }
+
+@Override
+public boolean isStackValidForSlot(int i, ItemStack itemstack)
+  {  
+  return i == 9 ? false : true;
   }
 
 }

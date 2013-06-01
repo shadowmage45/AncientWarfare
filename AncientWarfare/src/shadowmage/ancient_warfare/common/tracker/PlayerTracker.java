@@ -145,6 +145,7 @@ public void addResearchToPlayer(World world, String name, int goal)
       NBTTagCompound tag = new NBTTagCompound();
       tag.setBoolean("research", true);
       tag.setInteger("new", goal);
+      pkt.packetData = tag;
       pkt.sendPacketToPlayer(player);
       }
     }

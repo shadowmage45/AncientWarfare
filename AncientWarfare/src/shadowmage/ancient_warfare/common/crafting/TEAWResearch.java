@@ -95,8 +95,7 @@ public void startResearch(IResearchGoal goal)
 
 protected void setResearchFinished()
   {
-  PlayerEntry entry = PlayerTracker.instance().getEntryFor(researchingPlayer);
-  entry.addCompletedResearch(this.currentResearch.getGlobalResearchNum());
+  PlayerTracker.instance().addResearchToPlayer(worldObj, researchingPlayer, this.currentResearch.getGlobalResearchNum());
   this.currentResearch = null;
   this.resetProgress();
   }

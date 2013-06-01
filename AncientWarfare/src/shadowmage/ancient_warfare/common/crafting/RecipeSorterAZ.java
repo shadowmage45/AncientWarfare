@@ -18,30 +18,27 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.gui.elements;
+package shadowmage.ancient_warfare.common.crafting;
 
-import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import java.util.Comparator;
 
-public class GuiScrollableArea extends GuiScrollableAreaSimple
+public class RecipeSorterAZ implements Comparator<ResourceListRecipe>
 {
-
 /**
- * @param elementNum
- * @param parent
- * @param w
- * @param h
+ * 
  */
-public GuiScrollableArea(int elementNum, GuiContainerAdvanced parent, int x, int y, int w,  int h, int totalHeight)
+public RecipeSorterAZ()
   {
-  super(elementNum, parent, x, y, w, h, w, totalHeight); 
-  this.scrollBar = new GuiScrollBarSimple(elementNum, this, 16, h, totalHeight, h);
-  this.scrollBar.updateRenderPos(w-16, 0);
+  // TODO Auto-generated constructor stub
   }
 
 @Override
-public void updateTotalHeight(int height)
+public int compare(ResourceListRecipe arg0, ResourceListRecipe arg1)
   {
-  this.totalHeight = height;
-  this.scrollBar.updateHandleHeight(totalHeight, this.height);  
+  if(arg0==null && arg1!=null){return -1;}
+  else if(arg0!=null && arg1==null){return 1;}
+  else if(arg0==null && arg1==null){return 0;}
+  return arg0.getDisplayName().compareTo(arg1.getDisplayName());
   }
+
 }
