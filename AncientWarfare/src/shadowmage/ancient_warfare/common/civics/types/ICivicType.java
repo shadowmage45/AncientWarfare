@@ -20,11 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 
 public interface ICivicType
 {
@@ -84,6 +86,10 @@ boolean isWorkSite();
 boolean isDepository();
 boolean isDwelling();
 
+/**
+ * should add to creative menu? (and by extension, construct recipes to add to civic recipe list)
+ * @return
+ */
 boolean addToCreativeMenu();
 
 /**
@@ -100,5 +106,8 @@ int getMaxWorkers();
  * @return
  */
 Class<? extends TECivic> getTileEntityClass();
+
+ResourceListRecipe constructRecipe();
+Collection<Integer> getNeededResearch();
 
 }

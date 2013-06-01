@@ -167,4 +167,10 @@ public void addNeededResearch(IResearchGoal goal)
   this.neededResearch.add(goal.getGlobalResearchNum());
   }
 
+@Override
+public String toString()
+  {
+  return "AWResourceListRecipe: "+this.displayName + "  Required research size: "+this.neededResearch.size() + "  Resource list size: "+this.resources.size();
+  }
+
 }

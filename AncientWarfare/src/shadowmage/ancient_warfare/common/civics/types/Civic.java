@@ -21,7 +21,10 @@
 package shadowmage.ancient_warfare.common.civics.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -56,6 +59,7 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmJungl
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmOak;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmSpruce;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 public class Civic implements ICivicType
@@ -119,6 +123,8 @@ protected List<ItemStack> resourceStackList = new ArrayList<ItemStack>();
 protected int inventorySize = 0;
 protected String[] blockIconNames = new String[]{"","",""};
 protected CivicWorkType workType = CivicWorkType.NONE;
+protected List<ItemStack> recipeResources = new ArrayList<ItemStack>();
+protected Set<Integer> neededResearch = new HashSet<Integer>();
 
 public Civic(int id)
   {
@@ -143,6 +149,30 @@ public Civic setBlockIcons(String bottom, String top, String side)
 public Civic addResourceItem(ItemStack filter)
   {
   this.resourceStackList.add(filter);
+  return this;
+  }
+
+public Civic addRecipeResource(ItemStack stack)
+  {
+  this.recipeResources.add(stack);
+  return this;
+  }
+
+public Civic addNeededResearch(int num)
+  {
+  this.neededResearch.add(num);
+  return this;
+  }
+
+public Civic addRecipeResources(ItemStack... stacks)
+  {
+  for(ItemStack stack : stacks)
+    {
+    if(stack!=null)
+      {
+      this.recipeResources.add(stack);
+      }
+    }
   return this;
   }
 
@@ -271,6 +301,25 @@ public int getResourceSlotSize()
 public List<ItemStack> getResourceItemFilters()
   {
   return resourceStackList;
+  }
+
+@Override
+public ResourceListRecipe constructRecipe()
+  {
+  if(!this.addToCreative)
+    {
+    return null;
+    }
+  ResourceListRecipe recipe = new ResourceListRecipe(this.getItemToConstruct());  
+  recipe.addNeededResearch(getNeededResearch());
+  recipe.addResources(recipeResources);
+  return recipe;
+  }
+
+@Override
+public Collection<Integer> getNeededResearch()
+  {
+  return this.neededResearch;
   }
 
 }

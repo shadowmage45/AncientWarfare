@@ -28,7 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
@@ -113,6 +115,11 @@ public boolean isValid = true;
  * if resourceList has been calculated or loaded from disk, this will not be null...
  */
 public  List<IDPairCount> cachedCounts = null;
+
+/**
+ * populated through a call to getResouces
+ */
+protected List<ItemStack> cachedResources = new ArrayList<ItemStack>();
 
 /**
  * structure biome settings
@@ -359,6 +366,89 @@ public static StructureBB getClearingBoundinBox(BlockPosition hit, int facing, i
   bb.pos1 = fl;
   bb.pos2 = br;
   return bb;
+  }
+
+/**
+ * return a trimmed and tallied list of id/meta pairs necessary to construct this building
+ * used for survival direct builder.
+ * @return
+ */
+public List<IDPairCount> getResourceList()
+  {
+  List<IDPairCount> finalCounts;
+  if(cachedCounts!=null)
+    {
+    return cachedCounts;
+    }
+  else
+    {
+    finalCounts = new ArrayList<IDPairCount>();
+    }
+  
+  for(int x = 0; x < this.structure.length; x++)
+    {
+    for(int y = 0; y < this.structure[x].length; y++)
+      {
+      for(int z = 0; z < this.structure[x][y].length; z++)
+        {
+        BlockRule rule = this.getRuleAt(x, y, z);
+        if(rule.blockData==null)
+          {
+          //TODO...fix handling for no blocks but existing vehicle/npc/gate types
+          continue;
+          }
+        BlockData data = rule.blockData[0];
+        
+        if(data.id==0)
+          {
+          continue;
+          }
+        
+        //TODO HACK...
+        if(isDoorTop(data.id,data.meta) || isBedTop(data.id, data.meta)) 
+          {
+          continue;
+          }
+                
+        IDPairCount count = BlockInfo.getInventoryBlock(data.id, data.meta);        
+        boolean found = false;
+        for(IDPairCount tc : finalCounts)
+          {
+          if(tc.id==count.id && tc.meta == count.meta)
+            {
+            tc.count += count.count;
+            found = true;
+            break;
+            }
+          }
+        if(!found)
+          {
+          finalCounts.add(count);
+          }        
+        }
+      }
+    }  
+  this.cachedCounts = finalCounts;;
+  return finalCounts;
+  }
+
+public BlockRule getRuleAt(int x, int y, int z)
+  {
+  if(this.blockRules==null)
+    {
+    return null;
+    }
+  return this.blockRules.get(Integer.valueOf(this.structure[x][y][z]));
+  }
+
+protected boolean isDoorTop(int id, int meta)
+  {  
+  return meta==8 && (id == Block.doorWood.blockID || id == Block.doorIron.blockID );
+  }
+
+protected boolean isBedTop(int id, int meta)
+  {
+  return meta >=8 && id == Block.bed.blockID;
   }
 
 }

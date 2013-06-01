@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleUpgradeReload extends VehicleUpgradeBase
@@ -34,6 +35,7 @@ public VehicleUpgradeReload(int num)
   this.displayName = "Spring-Fed Reloader";
   this.tooltip = "Reload Time - 10%";
   this.iconTexture = "upgradeReload1";
+  this.neededResearch.add(ResearchGoalNumbers.mechanics2);
   }
 
 @Override

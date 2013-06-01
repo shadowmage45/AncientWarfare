@@ -20,8 +20,14 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 public abstract class VehicleUpgradeBase implements IVehicleUpgradeType
@@ -31,6 +37,9 @@ int typeNum = 0;
 String displayName = "";
 String tooltip = "";
 String iconTexture = "foo";
+List<ItemStack> resources = new ArrayList<ItemStack>();
+HashSet<Integer> neededResearch = new HashSet<Integer>();
+
 
 public VehicleUpgradeBase(int num)
   {
@@ -66,4 +75,27 @@ public String getIconTexture()
   {
   return "ancientwarfare:upgrade/"+iconTexture;
   }
+
+@Override
+public ResourceListRecipe constructRecipe()
+  {
+  ResourceListRecipe recipe = new ResourceListRecipe(getUpgradeStack(1));
+  recipe.addNeededResearch(getNeededResearch());  
+  if(!this.resources.isEmpty())
+    {
+    recipe.addResources(resources);    
+    }
+  else
+    {
+    recipe.addResource(new ItemStack(Item.paper), 1);
+    }
+  return recipe;
+  }
+
+@Override
+public Collection<Integer> getNeededResearch()
+  {
+  return this.neededResearch;
+  }
+
 }

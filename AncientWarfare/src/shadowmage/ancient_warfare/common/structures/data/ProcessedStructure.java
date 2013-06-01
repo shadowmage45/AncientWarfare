@@ -21,11 +21,15 @@
 package shadowmage.ancient_warfare.common.structures.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.item.ItemCivicBuilder;
+import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -56,14 +60,6 @@ public MemoryTemplate getTemplate()
   return template;
   }
 
-public BlockRule getRuleAt(int x, int y, int z)
-  {
-  if(this.blockRules==null)
-    {
-    return null;
-    }
-  return this.blockRules.get(Integer.valueOf(this.structure[x][y][z]));
-  }
 
 public static boolean canGenerateAtSurface(World world, BlockPosition hit, int facing, ProcessedStructure struct)
   {  
@@ -300,78 +296,47 @@ public BlockPosition getOffsetHitPosition(BlockPosition hit, int facing)
   return test;
   }
 
-/**
- * return a trimmed and tallied list of id/meta pairs necessary to construct this building
- * used for survival direct builder.
- * @return
- */
-public List<IDPairCount> getResourceList()
+public Collection<ItemStack> getResourcesNeeded()
   {
-  List<IDPairCount> finalCounts;
-  if(cachedCounts!=null)
+  if(!this.cachedResources.isEmpty())
     {
-    return cachedCounts;
+    return this.cachedResources;
     }
-  else
+  List<ItemStack> items = new ArrayList<ItemStack>();  
+  List<IDPairCount> ids = this.getResourceList();
+  int left;
+  ItemStack stack;
+  for(IDPairCount count : ids)
     {
-    finalCounts = new ArrayList<IDPairCount>();
-    }
-  
-  for(int x = 0; x < this.structure.length; x++)
-    {
-    for(int y = 0; y < this.structure[x].length; y++)
+    left = count.count;
+    while(left>0)
       {
-      for(int z = 0; z < this.structure[x][y].length; z++)
+      stack = new ItemStack(count.id,1,count.meta);
+      if(left>stack.getMaxStackSize())
         {
-        BlockRule rule = this.getRuleAt(x, y, z);
-        if(rule.blockData==null)
-          {
-          //TODO...fix handling for no blocks but existing vehicle/npc/gate types
-          continue;
-          }
-        BlockData data = rule.blockData[0];
-        
-        if(data.id==0)
-          {
-          continue;
-          }
-        
-        //TODO HACK...
-        if(isDoorTop(data.id,data.meta) || isBedTop(data.id, data.meta)) 
-          {
-          continue;
-          }
-                
-        IDPairCount count = BlockInfo.getInventoryBlock(data.id, data.meta);        
-        boolean found = false;
-        for(IDPairCount tc : finalCounts)
-          {
-          if(tc.id==count.id && tc.meta == count.meta)
-            {
-            tc.count += count.count;
-            found = true;
-            break;
-            }
-          }
-        if(!found)
-          {
-          finalCounts.add(count);
-          }        
+        left -= stack.getMaxStackSize();
+        stack.stackSize = stack.getMaxStackSize();
         }
+      else
+        {
+        stack.stackSize = left;
+        left-=left;
+        }      
+      items.add(stack);
       }
-    }  
-  this.cachedCounts = finalCounts;;
-  return finalCounts;
+    }
+  this.cachedResources.addAll(items);
+  return items;
   }
 
-private boolean isDoorTop(int id, int meta)
-  {  
-  return meta==8 && (id == Block.doorWood.blockID || id == Block.doorIron.blockID );
-  }
-
-private boolean isBedTop(int id, int meta)
+public ResourceListRecipe constructRecipe()
   {
-  return meta >=8 && id == Block.bed.blockID;
+  if(!this.survival){return null;}
+  Collection<ItemStack> stacks = this.getResourcesNeeded();
+  ItemStack result = ItemCivicBuilder.getCivicBuilderItem(this.name);
+  ResourceListRecipe recipe = new ResourceListRecipe(result);
+  recipe.addResources(stacks);
+  return recipe;
   }
 
 public boolean isValidBiome(String biomeName)

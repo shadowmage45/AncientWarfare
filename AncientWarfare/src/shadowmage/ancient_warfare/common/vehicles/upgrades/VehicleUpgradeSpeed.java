@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleUpgradeSpeed extends VehicleUpgradeBase
@@ -35,6 +36,7 @@ public VehicleUpgradeSpeed(int num)
   this.displayName = "Iron Bearings";
   this.tooltip = "Max Speed + 0.25m/s";
   this.iconTexture = "upgradeSpeed1";
+  this.neededResearch.add(ResearchGoalNumbers.mobility3);
   }
 
 @Override

@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.gui.crafting;
+package shadowmage.ancient_warfare.client.gui.info;
 
 import java.util.List;
 
@@ -71,7 +71,7 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  // TODO Auto-generated method stub
+  this.drawStringGui(goal.getDisplayName(), 5, 5, 0xffffffff);
   }
 
 @Override
@@ -102,7 +102,6 @@ public void setupControls()
   areaHeight = descriptionLines.size() * 10;
   for(String st : descriptionLines)
     {
-    Config.logDebug("adding description line: "+st);
     area.addGuiElement(new GuiString(y+100, area, 240-24, 10, st).updateRenderPos(0, y*10));
     y++;
     }
@@ -116,7 +115,6 @@ public void setupControls()
     area.addGuiElement(new GuiString(y+100, area, 240-24, 10, recipe.getDisplayName()).updateRenderPos(0, y*10));
     y++;
     }
-
   y++;
   area.addGuiElement(new GuiString(y+100, area, 240-24, 10, "Used In Research: ").updateRenderPos(0, y*10));
   y++;

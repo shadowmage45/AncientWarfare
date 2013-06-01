@@ -20,11 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.npcs;
 
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -65,6 +67,9 @@ public abstract void addTargets(NpcBase npc, NpcTargetHelper helper);
 public abstract List<CivicWorkType> getWorkTypes(int level);
 
 public abstract void openGui(EntityPlayer player, NpcBase npc);
+
+public abstract Collection<Integer> getNeededResearch(int level);
+public abstract ResourceListRecipe constructRecipe(int level);
 
 public abstract class NpcVarsHelper
 {

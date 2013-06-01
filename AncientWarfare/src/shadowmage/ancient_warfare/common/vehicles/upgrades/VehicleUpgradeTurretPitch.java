@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleUpgradeTurretPitch extends VehicleUpgradeBase
@@ -34,6 +35,7 @@ public VehicleUpgradeTurretPitch(int num)
   this.displayName = "Turret Pitch Range Extender";
   this.tooltip = "Pitch Range +/- 3'";
   this.iconTexture = "upgradePitch1";
+  this.neededResearch.add(ResearchGoalNumbers.mechanics2);
   }
 
 @Override

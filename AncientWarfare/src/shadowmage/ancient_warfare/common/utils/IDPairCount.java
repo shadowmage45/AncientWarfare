@@ -37,7 +37,7 @@ public IDPairCount(int id, int meta)
 
 public IDPairCount(NBTTagCompound tag)
   {
-  super(tag.getInteger("id"), tag.getInteger("mt"));
+  super(tag.getShort("id"), tag.getShort("mt"));
   count=tag.getInteger("ct");
   }
 
@@ -50,8 +50,8 @@ public IDPairCount(int id, int meta, int count)
 public NBTTagCompound getTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setInteger("id", id);
-  tag.setInteger("mt", meta);
+  tag.setShort("id", (short) id);
+  tag.setShort("mt", (short) meta);
   tag.setInteger("ct", count);
   return tag;
   }

@@ -30,6 +30,7 @@ import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.chunkloading.ChunkLoader;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
@@ -183,7 +184,7 @@ public void load(FMLPostInitializationEvent evt)
   NpcRegistry.instance().registerNPCs(); 
   CivicRegistry.instance().registerCivics();
   Gate.registerGateTypes();
-  
+  AWCraftingManager.instance().loadRecipes();
   /**
    * and finally, save the config in case there were any changes made during init
    */

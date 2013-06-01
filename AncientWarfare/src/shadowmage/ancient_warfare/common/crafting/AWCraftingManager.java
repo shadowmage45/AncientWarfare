@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import shadowmage.ancient_warfare.common.AWStructureModule;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.types.ICivicType;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -32,13 +32,17 @@ import shadowmage.ancient_warfare.common.gates.IGateType;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
-import shadowmage.ancient_warfare.common.structures.data.AWStructure;
+import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeBase;
 
 public class AWCraftingManager
 {
@@ -46,9 +50,18 @@ public class AWCraftingManager
 
 List<ResourceListRecipe> vehicleRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> ammoRecipes = new ArrayList<ResourceListRecipe>();
+List<ResourceListRecipe> civicRecipes = new ArrayList<ResourceListRecipe>();
+List<ResourceListRecipe> gateRecipes = new ArrayList<ResourceListRecipe>();
+List<ResourceListRecipe> upgradeRecipes = new ArrayList<ResourceListRecipe>();
+List<ResourceListRecipe> armorRecipes = new ArrayList<ResourceListRecipe>();
+List<ResourceListRecipe> npcRecipes = new ArrayList<ResourceListRecipe>();
+
+List<ResourceListRecipe> structureRecipesServer = new ArrayList<ResourceListRecipe>();
+List<ResourceListRecipe> structureRecipesClient = new ArrayList<ResourceListRecipe>();
 
 private AWCraftingManager(){}
 private static AWCraftingManager INSTANCE = new AWCraftingManager();
+
 public static AWCraftingManager instance()
   {
   return INSTANCE;
@@ -80,40 +93,128 @@ public void loadRecipes()
       recipe = ammo.constructRecipe();
       if(recipe!=null)
         {
-        recipe.setDisplayName(ammo.getDisplayName());
-        ammoRecipes.add(recipe);        
+        ammoRecipes.add(recipe);
+        Config.logDebug("adding ammo recipe for: "+recipe);
         }
       }
     }
   
   for(NpcTypeBase npc : NpcTypeBase.npcTypes)
     {
-    if(npc==null){continue;}      
-    //TODO add npc recipes      
+    if(npc==null){continue;}    
+    for(int i = 0; i < npc.getNumOfLevels(); i++)
+      {
+      recipe = npc.constructRecipe(i);
+      if(recipe!=null)
+        {
+        this.npcRecipes.add(recipe);
+        Config.logDebug("adding npc recipe for : "+recipe);
+        }
+      }      
     }
   
   for(ICivicType civic : Civic.civicList)
     {
     if(civic==null){continue;}
-    //TODO add civic recipes
+    recipe = civic.constructRecipe();
+    if(recipe!=null)
+      {
+      this.civicRecipes.add(recipe);
+      Config.logDebug("adding civic recipe: "+recipe);
+      }    
     }
   
   for(IGateType gate : Gate.gateTypes)
     {
     if(gate==null){continue;}
-    //TODO add gate recipes
+    recipe = gate.constructRecipe();
+    if(recipe!=null)
+      {
+      this.gateRecipes.add(recipe);      
+      Config.logDebug("adding gate recipe for: "+recipe);
+      }
     }
   
-  for(AWStructure structure : StructureManager.instance().getSurvivalModeStructures())
+  for(IVehicleUpgradeType upgrade : VehicleUpgradeRegistry.instance().getUpgradeList())
+    {
+    if(upgrade==null){continue;}
+    recipe = upgrade.constructRecipe();
+    if(recipe!=null)
+      {
+      this.upgradeRecipes.add(recipe);
+      Config.logDebug("adding upgrade recipe: "+recipe);
+      }
+    }
+  
+  Config.logDebug("loading structure recipes for server");
+  for(ProcessedStructure structure : StructureManager.instance().getSurvivalModeStructures())
     {
     if(structure==null){continue;}
-    //TODO add structure recipes
+    recipe = structure.constructRecipe();
+    if(recipe!=null)
+      {
+      this.structureRecipesServer.add(recipe);
+      Config.logDebug("adding recipe :"+recipe);
+      }
     }
+  }
+
+public void addStructureRecipe(ProcessedStructure struct)
+  {
+  if(struct==null || !struct.survival){return;}
+  Config.logDebug("adding server structure recipe for : "+struct.name);
+  ResourceListRecipe recipe = null;
+  for(ResourceListRecipe test : this.structureRecipesServer)
+    {
+    if(test.getDisplayName().equals(struct.name))
+      {
+      recipe = test;
+      break;
+      }
+    }
+  if(recipe!=null)
+    {
+    this.structureRecipesServer.remove(recipe);
+    }
+  recipe = struct.constructRecipe();
+  if(recipe!=null)
+    {
+    this.structureRecipesServer.add(recipe);
+    }
+  }
+
+public void addStructureRecipe(StructureClientInfo info)
+  {
+  if(info==null || !info.survival){return;}
+  Config.logDebug("adding client structure recipe for : "+info.name);
+  ResourceListRecipe recipe = null;
+  for(ResourceListRecipe test : this.structureRecipesClient)
+    {
+    if(test.getDisplayName().equals(info.name))
+      {
+      recipe = test;
+      break;
+      }
+    }
+  if(recipe!=null)
+    {
+    this.structureRecipesClient.remove(recipe);
+    }
+  recipe = info.constructRecipe();
+  if(recipe!=null)
+    {
+    this.structureRecipesClient.add(recipe);
+    }
+  }
+
+public void resetClientData()
+  {
+  this.structureRecipesClient.clear();
   }
 
 public void addVehicleRecipe(ResourceListRecipe recipe)
   {
-  Config.logDebug("Adding Vehicle Recipe for: "+recipe.getResult().getDisplayName());
+  Config.logDebug("Adding Vehicle Recipe for: "+recipe);
   this.vehicleRecipes.add(recipe);
   }
 
@@ -135,7 +236,42 @@ public List<ResourceListRecipe> getRecipesDependantOn(IResearchGoal goal)
   List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
   for(ResourceListRecipe recipe : this.vehicleRecipes)
     {
-    if(recipe.neededResearch.contains(goal))
+    if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
+      {
+      recipes.add(recipe);
+      }
+    }
+  for(ResourceListRecipe recipe : this.ammoRecipes)
+    {
+    if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
+      {
+      recipes.add(recipe);
+      }
+    }
+  for(ResourceListRecipe recipe : this.civicRecipes)
+    {
+    if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
+      {
+      recipes.add(recipe);
+      }
+    }
+  for(ResourceListRecipe recipe : this.gateRecipes)
+    {
+    if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
+      {
+      recipes.add(recipe);
+      }
+    }
+  for(ResourceListRecipe recipe : this.upgradeRecipes)
+    {
+    if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
+      {
+      recipes.add(recipe);
+      }
+    }
+  for(ResourceListRecipe recipe : this.armorRecipes)
+    {
+    if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
       {
       recipes.add(recipe);
       }

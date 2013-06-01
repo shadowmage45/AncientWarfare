@@ -18,38 +18,20 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.vehicles.upgrades;
+package shadowmage.ancient_warfare.common.research.vehicle;
 
-import java.util.Collection;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
-import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-
-public class VehicleUpgradeAim extends VehicleUpgradeBase
+public class ResearchUpgradeMechanics extends ResearchGoal
 {
 
 /**
  * @param num
  */
-public VehicleUpgradeAim(int num)
+public ResearchUpgradeMechanics(int num, int level)
   {
   super(num);
-  this.displayName = "Basic Trajectory Calculator";
-  this.tooltip = "Acc + 3%";
-  this.iconTexture = "upgradeAim1";
-  this.neededResearch.add(ResearchGoalNumbers.ballistics2);
-  }
-
-@Override
-public void applyVehicleEffects(VehicleBase vehicle)
-  {  
-  float adj = 1-vehicle.currentAccuracy;
-  vehicle.currentAccuracy += adj * .5f;
-  if(vehicle.currentAccuracy>1)
-    {
-    vehicle.currentAccuracy = 1;
-    }
+  this.displayName = "Mechanics Optimization "+ (level+1);
   }
 
 }

@@ -20,8 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.gates;
 
+import java.util.Collection;
+
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public interface IGateType
@@ -104,5 +106,9 @@ public int getModelType();
 public ItemStack getConstructingItem();
 
 public ItemStack getDisplayStack();
+
+public ResourceListRecipe constructRecipe();
+
+public Collection<Integer> getNeededResearch();
 
 }

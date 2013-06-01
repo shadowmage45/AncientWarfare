@@ -20,9 +20,7 @@
  */
 package shadowmage.ancient_warfare.client.registry;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.Render;
@@ -41,6 +39,7 @@ import shadowmage.ancient_warfare.client.model.ModelChestCart;
 import shadowmage.ancient_warfare.client.model.ModelHwacha;
 import shadowmage.ancient_warfare.client.model.ModelTEBase;
 import shadowmage.ancient_warfare.client.model.ModelTable1;
+import shadowmage.ancient_warfare.client.model.ModelTable2;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandTurret;
@@ -49,7 +48,6 @@ import shadowmage.ancient_warfare.client.render.RenderCraftingHelper;
 import shadowmage.ancient_warfare.client.render.RenderGateHelper;
 import shadowmage.ancient_warfare.client.render.RenderMissileHelper;
 import shadowmage.ancient_warfare.client.render.RenderNpcHelper;
-import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
 import shadowmage.ancient_warfare.client.render.civic.CivicItemRenderer;
@@ -76,7 +74,6 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetMobileFix
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandTurret;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -232,6 +229,7 @@ public void loadRenders()
   ClientRegistry.bindTileEntitySpecialRenderer(TEAWCrafting.class, RenderCraftingHelper.instance());
   MinecraftForgeClient.registerItemRenderer(BlockLoader.crafting.blockID, RenderCraftingHelper.instance());
   this.addTEModel(0, new ModelTable1());
+  this.addTEModel(1, new ModelTable2());
   
   /**
    * load up the vehicle item renderer...

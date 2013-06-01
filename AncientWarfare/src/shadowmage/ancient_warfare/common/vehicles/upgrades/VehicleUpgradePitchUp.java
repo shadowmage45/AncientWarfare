@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleUpgradePitchUp extends VehicleUpgradeBase
@@ -34,6 +35,7 @@ public VehicleUpgradePitchUp(int num)
   this.displayName = "Turret Wedge: +3";
   this.tooltip = "Aim Pitch + 3'";
   this.iconTexture = "upgradePitchUp1";
+  this.neededResearch.add(ResearchGoalNumbers.mechanics1);
   }
 
 @Override

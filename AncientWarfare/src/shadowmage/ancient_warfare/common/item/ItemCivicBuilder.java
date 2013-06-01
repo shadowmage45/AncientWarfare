@@ -90,6 +90,15 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     }
   }
 
+public static ItemStack getCivicBuilderItem(String structure)
+  {
+  ItemStack stack = new ItemStack(ItemLoader.civicBuilder.itemID,1,0);
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("name", structure);
+  stack.setTagInfo("structData", tag);
+  return stack;
+  }
+
 @Override
 public boolean attemptConstruction(World world, ProcessedStructure struct, BlockPosition hit, int face, StructureBuildSettings settings)
   {

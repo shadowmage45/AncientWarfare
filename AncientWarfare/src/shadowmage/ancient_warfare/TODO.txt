@@ -15,6 +15,7 @@ GENERAL
 * create general secondary data watcher for npcs/gates/vehicles
 * more missile icons
 * more missile textures    
+* chunkloader block ? (configurable range -- gui with toggleable squares to select chunks or by radius, render toggle to select if to render bounds areas)
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally
@@ -25,8 +26,7 @@ GATES
 NPCS
 * more 'check if target dead' (seems creepers or entities removed by setting world to peacefull are still targets)
     perhaps check world loaded entity list to see if target is still present/loaded
-* set to no collide if colliding with vehicles/other method of moving past blocking vehicles    
-* lilypad/short block pathfinding
+* set to no collide if colliding with vehicles/other method of moving past blocking vehicles  
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely

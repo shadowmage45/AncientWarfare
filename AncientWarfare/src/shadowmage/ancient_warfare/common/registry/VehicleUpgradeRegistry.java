@@ -22,6 +22,7 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,6 +64,10 @@ public static VehicleUpgradeRegistry instance()
   }
 private static VehicleUpgradeRegistry INSTANCE;
 
+public Collection<IVehicleUpgradeType> getUpgradeList()
+  {
+  return this.upgradeTypeMap.values();
+  }
 
 /**
  * called during init to register upgrade types as items

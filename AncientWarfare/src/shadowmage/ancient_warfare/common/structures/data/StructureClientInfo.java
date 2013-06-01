@@ -20,9 +20,18 @@
  */
 package shadowmage.ancient_warfare.common.structures.data;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.item.ItemCivicBuilder;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
 public class StructureClientInfo
 {
@@ -40,6 +49,8 @@ public final int clearingBuffer;
 public boolean creative = true;
 public boolean worldGen = false;
 public boolean survival = false;
+List<IDPairCount> resourceList = new ArrayList<IDPairCount>();
+List<ItemStack> cachedResources = new ArrayList<ItemStack>();
 
 public StructureClientInfo(NBTTagCompound tag)
   {
@@ -51,10 +62,20 @@ public StructureClientInfo(NBTTagCompound tag)
   this.yOffset = tag.getShort("yO");
   this.zOffset = tag.getShort("zO");
   this.survival = tag.getBoolean("surv");
-  this.maxLeveling = tag.getInteger("mL");
-  this.maxClearing = tag.getInteger("mC");
-  this.levelingBuffer = tag.getInteger("lB");
-  this.clearingBuffer = tag.getInteger("cB");
+  this.maxLeveling = tag.getShort("mL");
+  this.maxClearing = tag.getShort("mC");
+  this.levelingBuffer = tag.getShort("lB");
+  this.clearingBuffer = tag.getShort("cB");
+  if(tag.hasKey("res"))
+    {
+    NBTTagList list = tag.getTagList("res");
+    NBTTagCompound tag1;
+    for(int i = 0; i < list.tagCount(); i++)
+      {
+      tag1 = (NBTTagCompound) list.tagAt(i);
+      this.resourceList.add(new IDPairCount(tag1));
+      }
+    }
   }
 
 public static NBTTagCompound getClientTag(AWStructure struct)
@@ -76,10 +97,19 @@ public static NBTTagCompound getClientTag(AWStructure struct)
    structTag.setShort("yO", (short)struct.verticalOffset);
    structTag.setShort("zO", (short)struct.zOffset);
    structTag.setBoolean("surv", struct.survival);
-   structTag.setInteger("mL", leveling);
-   structTag.setInteger("mC", clearing);
-   structTag.setInteger("lB", levelingB);
-   structTag.setInteger("cB", clearingB);
+   structTag.setShort("mL", (short)leveling);
+   structTag.setShort("mC",(short) clearing);
+   structTag.setShort("lB", (short)levelingB);
+   structTag.setShort("cB", (short)clearingB);
+   if(struct.survival)
+     {
+     NBTTagList list = new NBTTagList();
+     for(IDPairCount count : struct.getResourceList())
+       {
+       list.appendTag(count.getTag());
+       }     
+     structTag.setTag("res", list);
+     }
    }
  return structTag;
  }
@@ -109,6 +139,48 @@ public AxisAlignedBB getClearingBBForRender(BlockPosition hit, int face)
   return AxisAlignedBB.getBoundingBox(bb.pos1.x, bb.pos1.y+yOffset, bb.pos1.z, bb.pos2.x, bb.pos2.y+yOffset+1, bb.pos2.z);
   }
 
+public Collection<ItemStack> getResourcesNeeded()
+  {
+  if(!this.cachedResources.isEmpty())
+    {
+    return this.cachedResources;
+    }
+  List<ItemStack> items = new ArrayList<ItemStack>();  
+  List<IDPairCount> ids = this.resourceList;
+  int left;
+  ItemStack stack;
+  for(IDPairCount count : ids)
+    {
+    left = count.count;
+    while(left>0)
+      {
+      stack = new ItemStack(count.id,1,count.meta);
+      if(left>stack.getMaxStackSize())
+        {
+        left -= stack.getMaxStackSize();
+        stack.stackSize = stack.getMaxStackSize();
+        }
+      else
+        {
+        stack.stackSize = left;
+        left-=left;
+        }      
+      items.add(stack);
+      }
+    }
+  this.cachedResources.addAll(items);
+  return items;
+  }
+
+public ResourceListRecipe constructRecipe()
+  {
+  if(!this.survival){return null;}
+  Collection<ItemStack> stacks = this.getResourcesNeeded();
+  ItemStack result = ItemCivicBuilder.getCivicBuilderItem(this.name);
+  ResourceListRecipe recipe = new ResourceListRecipe(result);
+  recipe.addResources(stacks);
+  return recipe;
+  }
 
 
 }

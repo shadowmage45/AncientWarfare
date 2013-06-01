@@ -313,6 +313,7 @@ public ResourceListRecipe constructRecipe()
     return null;
     }
   ResourceListRecipe recipe = new ResourceListRecipe(getAmmoStack(1));
+  recipe.addNeededResearch(getNeededResearch());
   recipe.addResources(getResources());
   return recipe;
   }

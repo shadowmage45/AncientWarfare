@@ -30,6 +30,7 @@ import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 
 /**
@@ -72,6 +73,7 @@ public void resetAllTrackedData()
   TeamTracker.instance().clearAllData();
   AWStructureModule.instance().clearAllData();
   WorldGenManager.resetMap();
+  AWCraftingManager.instance().resetClientData();
   this.markGameDataDirty();
   this.lastLoadedTimeStamp = -1L;
   }

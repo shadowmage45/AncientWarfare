@@ -20,7 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import java.util.Collection;
+
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public interface IVehicleUpgradeType
@@ -33,5 +36,8 @@ public abstract String getIconTexture();
 public abstract void applyVehicleEffects(VehicleBase vehicle);
 
 public abstract ItemStack getUpgradeStack(int qty);
+
+public abstract ResourceListRecipe constructRecipe();
+public abstract Collection<Integer> getNeededResearch();
 
 }

@@ -30,6 +30,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
@@ -42,7 +43,6 @@ import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 public class StructureManager
 {
 
-//TODO change these to hashmap by name
 private static Map<String, ProcessedStructure> structures = new HashMap<String, ProcessedStructure>();
 private static Map<String, StructureClientInfo> clientStructures = new HashMap<String, StructureClientInfo>();
 
@@ -120,6 +120,7 @@ public void addTempStructure(EntityPlayer player, ProcessedStructure struct)
 public void addStructure(ProcessedStructure struct, boolean sendPacket)
   {
   this.structures.put(struct.name, struct);
+  AWCraftingManager.instance().addStructureRecipe(struct);
   if(sendPacket)
     {
     NBTTagCompound structData = new NBTTagCompound();
@@ -216,8 +217,7 @@ private void handleInitClient(NBTTagList list)
   for(int i = 0; i < list.tagCount(); i++)
     {
     tag = (NBTTagCompound) list.tagAt(i);
-    StructureClientInfo info = new StructureClientInfo(tag);
-    this.clientStructures.put(info.name, info);
+    this.addClientStructureFromNBT(tag);
     }
   }
 
@@ -225,6 +225,7 @@ private void addClientStructureFromNBT(NBTTagCompound tag)
   {
   StructureClientInfo info = new StructureClientInfo(tag);
   this.clientStructures.put(info.name, info);
+  AWCraftingManager.instance().addStructureRecipe(info);
   }
 
 private void removeClientStructure(String name)

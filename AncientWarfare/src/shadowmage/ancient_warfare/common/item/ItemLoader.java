@@ -126,7 +126,7 @@ private void loadItems()
 
 private void loadRecipes()
   {
-  //TODO create recipes..figure out crafting..blahblah..
+  //TODO load any normal vanilla style recipes here.  Check config to see if should enable basic recipes for other things (vehicles, ammo, npcs, civics, upgrades, armor, wetf)
   }
 
 private void loadDebugItems()

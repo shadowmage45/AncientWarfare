@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleUpgradePower extends VehicleUpgradeBase
@@ -34,6 +35,7 @@ public VehicleUpgradePower(int num)
   this.displayName = "Power Upgrade";
   this.tooltip = "Missile Speed + 2m/s";
   this.iconTexture = "upgradePower1";
+  this.neededResearch.add(ResearchGoalNumbers.mechanics3);
   }
 
 @Override

@@ -217,6 +217,7 @@ public void export()
   struct.name = this.name;
 
   struct.survival = this.survival;
+  
   String path;
   if(this.formatAW)
     {

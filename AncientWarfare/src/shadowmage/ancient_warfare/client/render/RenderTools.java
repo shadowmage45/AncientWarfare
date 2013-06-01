@@ -169,9 +169,20 @@ public static List<String> getFormattedLines(List<String> inLines, int maxWidth)
         }
       else
         {
+        if(ch!=' ' && newLine.charAt(newLine.length()-1)!=' ')
+          {
+          newLine += "-";
+          }
         outLines.add(newLine);
         currentLineWidth = charWidth;
-        newLine = String.valueOf(ch);
+        if(ch!=' ')
+          {
+          newLine = String.valueOf(ch);
+          }
+        else
+          {
+          newLine = "";
+          }
         }
       }
     if(!newLine.equals(""))

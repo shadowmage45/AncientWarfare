@@ -20,11 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.gates.types;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.IGateType;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -64,6 +69,8 @@ protected float moveSpeed = 0.5f *0.05f; ///1/2 block / second
 
 protected ItemStack displayStack;
 
+protected Set<Integer> neededResearch = new HashSet<Integer>();
+protected List<ItemStack> resourceStacks = new ArrayList<ItemStack>();
 /**
  * 
  */
@@ -234,6 +241,26 @@ private static void registerGateType(IGateType g)
   d.setIconTexture("ancientwarfare:gate/"+g.getIconTexture(), g.getGlobalID());  
   }
 
+@Override
+public ResourceListRecipe constructRecipe()
+  {
+  ResourceListRecipe recipe = new ResourceListRecipe(getConstructingItem());
+  recipe.addNeededResearch(getNeededResearch());
+  if(!this.resourceStacks.isEmpty())
+    {
+    recipe.addResources(resourceStacks);
+    }  
+  else
+    {
+    recipe.addResource(new ItemStack(Item.paper), 1);
+    }
+  return recipe;
+  }
 
+@Override
+public Collection<Integer> getNeededResearch()
+  {
+  return this.neededResearch;
+  }
 
 }

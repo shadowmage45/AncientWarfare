@@ -21,11 +21,14 @@
 package shadowmage.ancient_warfare.common.npcs;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
@@ -41,6 +44,7 @@ import shadowmage.ancient_warfare.common.npcs.types.NpcMedic;
 import shadowmage.ancient_warfare.common.npcs.types.NpcMiner;
 import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
+import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public abstract class NpcTypeBase implements INpcType
@@ -353,6 +357,33 @@ public void openGui(EntityPlayer player, NpcBase npc)
   {  
   GUIHandler.instance().openGUI(GUIHandler.NPC_BASE, player, npc.worldObj, npc.entityId, 0, 0);
   }
+
+@Override
+public Collection<Integer> getNeededResearch(int level)
+  {
+  if(level>=0 && level<this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).getNeededResearch();
+    }
+  return Collections.emptySet();
+  }
+
+@Override
+public ResourceListRecipe constructRecipe(int level)
+  {
+  if(this.isVanillaVillager){return null;}
+  if(level>=0 && level<this.levelEntries.size())
+    {
+    NpcLevelEntry entry = this.levelEntries.get(level);
+    ResourceListRecipe recipe = new ResourceListRecipe(NpcRegistry.getStackFor(this, level));
+    recipe.addNeededResearch(this.getNeededResearch(level));
+    recipe.addResources(entry.getNeededResources());
+    return recipe;
+    }
+  return null;
+  }
+
+
 
 public class NpcVarHelperDummy extends NpcVarsHelper
 {

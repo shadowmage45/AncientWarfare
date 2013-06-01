@@ -28,6 +28,9 @@ package shadowmage.ancient_warfare.common.research;
  */
 public class ResearchGoalNumbers
 {
+/**
+ * vehicles 0-49
+ */
 public static int mobility1 = 0;
 public static int mobility2 = 1;
 public static int mobility3 = 2;
@@ -58,7 +61,9 @@ public static int gunpowder3 = 22;
 public static int gunpowder4 = 23;
 public static int gunpowder5 = 24;
 
-
+/**
+ * ammo 50-99
+ */
 public static int explosives1 = 50;
 public static int explosives2 = 51;
 public static int explosives3 = 52;
@@ -68,7 +73,48 @@ public static int rockets3 = 55;
 public static int flammables1 = 56;
 public static int flammables2 = 57;
 public static int flammables3 = 58;
+public static int ballistics1 = 59;
+public static int ballistics2 = 60;
+public static int ballistics3 = 61;
 
+/**
+ * upgrades 100-124
+ */
+public static int mechanics1 = 100;
+public static int mechanics2 = 101;
+public static int mechanics3 = 102;
+
+/**
+ * civics 125-174
+ */
+public static int civics1 = 125;
+public static int civics2 = 126;
+public static int civics3 = 127;
+public static int civics4 = 128;
+public static int civics5 = 129;
+
+/**
+ * efficiency 175-199
+ */
+public static int efficiencyWood1 = 175;
+public static int efficiencyWood2 = 176;
+public static int efficiencyWood3 = 177;
+public static int efficiencyIron1 = 178;
+public static int efficiencyIron2 = 179;
+public static int efficiencyIron3 = 180;
+public static int efficiencyAmmo1 = 181;
+public static int efficiencyAmmo2 = 182;
+public static int efficiencyAmmo3 = 183;
+public static int efficiencyConstructionCommon1 = 184;
+public static int efficiencyConstructionCommon2 = 185;
+public static int efficiencyConstructionCommon3 = 186;
+public static int efficiencyConstructionUncommon1 = 187;
+public static int efficiencyConstructionUncommon2 = 188;
+public static int efficiencyConstructionUncommon3 = 189;
+
+/**
+ * vehicle materials 200-249
+ */
 public static int wood1 = 200;
 public static int wood2 = 201;
 public static int wood3 = 202;
@@ -81,4 +127,15 @@ public static int iron3 = 207;
 public static int iron4 = 208;
 public static int iron5 = 209;
 
+/**
+ * npcs 250-299
+ */
+
+/**
+ * pilot skills 300-324
+ */
+
+/**
+ * command skills? 325-349
+ */
 }

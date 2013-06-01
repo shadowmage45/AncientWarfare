@@ -21,11 +21,13 @@
 package shadowmage.ancient_warfare.common.npcs.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -164,7 +166,6 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AIChooseCommander(npc, 8));
   return aiEntries;
   }
-
 
 
 }
