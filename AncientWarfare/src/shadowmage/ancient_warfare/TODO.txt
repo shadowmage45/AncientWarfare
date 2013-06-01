@@ -219,3 +219,18 @@ TWEAKS/OPTIMIZATION
 * much work on adding detailed descriptions to research
 * create research goal cache for many classes to eliminate recreating goal set on every call
 * more work on research goals and recipes for stuff....
+
+/********** 06-01-13 **********/
+* tons more work on crafting, research.
+* add tier 2/3 warehouse storage blocks
+* add gate recipes, research
+
+/********** 06-02-13 **********/
+/********** 06-03-13 **********/
+/********** 06-04-13 **********/
+/********** 06-05-13 **********/
+/********** 06-06-13 **********/
+/********** 06-07-13 **********/
+/********** 06-08-13 **********/
+/********** 06-09-13 **********/
+/********** 06-10-13 **********/

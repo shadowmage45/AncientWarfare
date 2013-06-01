@@ -30,6 +30,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 /**
@@ -78,6 +79,6 @@ ResourceListRecipe constructRecipe();
 Collection<Integer> getNeededResearch();
 void addResearch(Integer num);
 void addResearch(IResearchGoal goal);
-Collection<ItemStack> getResources(); 
+Collection<ItemStackWrapperCrafting> getResources(); 
 
 }

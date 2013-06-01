@@ -20,42 +20,100 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemStackWrapperCrafting extends ItemStackWrapper
 {
 
 int remainingNeeded = 0;
+public boolean ignoreDamage = false;
+public boolean ignoreTag = false;
 
-public ItemStackWrapperCrafting(ItemStackWrapper input)
-  {
-  super(input.getFilter(), input.getQuantity());
-  this.remainingNeeded = getQuantity();
-  }
-
-public ItemStackWrapperCrafting(ItemStack stack, int qty)
+public ItemStackWrapperCrafting(ItemStack stack, int qty, boolean dmg, boolean tag)
   {
   super(stack, qty);
   this.remainingNeeded = qty;
+  this.ignoreDamage = dmg;
+  this.ignoreTag = tag;
   }
 
-public ItemStackWrapperCrafting(ItemStack stack)
+public ItemStackWrapperCrafting(ItemStack stack, boolean dmg, boolean tag)
   {
-  super(stack);
-  this.remainingNeeded = stack.stackSize;
+  this(stack, stack.stackSize, dmg, tag);
   }
+
+public ItemStackWrapperCrafting(Item item, int qty, int meta, boolean tag){this(new ItemStack(item,qty),false,tag);}
+public ItemStackWrapperCrafting(Block block, int qty, int meta, boolean tag){this(new ItemStack(block,qty),false,tag);}
+public ItemStackWrapperCrafting(Item item, int qty, boolean dmg, boolean tag){this(new ItemStack(item,qty), qty, dmg, tag);}
+public ItemStackWrapperCrafting(Block block, int qty, boolean dmg, boolean tag){this(new ItemStack(block,qty), qty, dmg, tag);}
+public ItemStackWrapperCrafting(Item item, int qty){this(new ItemStack(item), qty, true, true);}
+public ItemStackWrapperCrafting(Block block, int qty){this(new ItemStack(block), qty, true, true);}
 
 public ItemStackWrapperCrafting(NBTTagCompound tag)
   {
   super(tag);
   this.remainingNeeded = tag.getInteger("rem");
+  this.ignoreDamage = tag.getBoolean("igdmg");
+  this.ignoreTag = tag.getBoolean("igtg");
   }
 
 public NBTTagCompound writeToNBT(NBTTagCompound tag)
   {
   super.writeToNBT(tag);
   tag.setInteger("rem", remainingNeeded);
+  if(this.ignoreDamage){tag.setBoolean("igdmg", true);}
+  if(this.ignoreTag){tag.setBoolean("igtg", true);}
   return tag;
   }
+
+@Override
+public boolean matches(ItemStack stack)
+  {
+  if(!this.ignoreDamage && !this.ignoreTag)
+    {
+    return super.matches(stack);    
+    }
+  int oreID = OreDictionary.getOreID(stack);
+  boolean idMeta = false;
+  if(oreID>=0)
+    {
+    List<ItemStack> targets = OreDictionary.getOres(oreID);
+    for(ItemStack target : targets)
+      {
+      if(OreDictionary.itemMatches(target, stack, !ignoreDamage))
+        {
+        idMeta = true;
+        break;
+        }
+      }
+    }
+  else
+    {
+    idMeta = stack.itemID == filter.itemID && (ignoreDamage || stack.getItemDamage() == filter.getItemDamage());
+    }  
+  boolean tag = ItemStack.areItemStackTagsEqual(stack, filter);
+  if(idMeta)
+    {    
+    if(!ignoreTag && !tag)
+      {
+      return false;
+      }
+    return true;
+    }
+  return false;
+  }
+
+@Override
+public boolean matches(ItemStackWrapper wrap)
+  {
+  return matches(wrap.filter);
+  }
+
+
 }

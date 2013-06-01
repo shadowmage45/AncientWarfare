@@ -20,12 +20,15 @@
  */
 package shadowmage.ancient_warfare.common.gates.types;
 
+import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
-public class GateDoubleSlideWood extends GateBasicWood
+public class GateDoubleSlideWood extends Gate
 {
 
 /**
@@ -38,6 +41,10 @@ public GateDoubleSlideWood(int id)
   this.tooltip = "Opens towards both sides";
   this.texture = "gateWood1.png";
   this.iconTexture = "gateWoodDouble";
+  this.neededResearch.add(ResearchGoalNumbers.wood1);
+  this.neededResearch.add(ResearchGoalNumbers.mechanics3);
+  this.resourceStacks.add(new ItemStackWrapperCrafting(Block.stone, 10, false, false));
+  this.resourceStacks.add(new ItemStackWrapperCrafting(Block.planks, 12));
   }
 
 @Override

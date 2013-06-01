@@ -59,8 +59,10 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmJungl
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmOak;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmSpruce;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class Civic implements ICivicType
 {
@@ -123,7 +125,7 @@ protected List<ItemStack> resourceStackList = new ArrayList<ItemStack>();
 protected int inventorySize = 0;
 protected String[] blockIconNames = new String[]{"","",""};
 protected CivicWorkType workType = CivicWorkType.NONE;
-protected List<ItemStack> recipeResources = new ArrayList<ItemStack>();
+protected List<ItemStackWrapperCrafting> recipeResources = new ArrayList<ItemStackWrapperCrafting>();
 protected Set<Integer> neededResearch = new HashSet<Integer>();
 
 public Civic(int id)
@@ -152,9 +154,9 @@ public Civic addResourceItem(ItemStack filter)
   return this;
   }
 
-public Civic addRecipeResource(ItemStack stack)
+public Civic addRecipeResource(ItemStack stack, boolean dmg, boolean tag)
   {
-  this.recipeResources.add(stack);
+  this.recipeResources.add(new ItemStackWrapperCrafting(stack, dmg, tag));
   return this;
   }
 
@@ -170,7 +172,7 @@ public Civic addRecipeResources(ItemStack... stacks)
     {
     if(stack!=null)
       {
-      this.recipeResources.add(stack);
+      this.recipeResources.add(new ItemStackWrapperCrafting(stack, false, false));
       }
     }
   return this;
@@ -310,7 +312,7 @@ public ResourceListRecipe constructRecipe()
     {
     return null;
     }
-  ResourceListRecipe recipe = new ResourceListRecipe(this.getItemToConstruct());  
+  ResourceListRecipe recipe = new ResourceListRecipe(this.getItemToConstruct(), RecipeType.CIVIC);  
   recipe.addNeededResearch(getNeededResearch());
   recipe.addResources(recipeResources);
   return recipe;

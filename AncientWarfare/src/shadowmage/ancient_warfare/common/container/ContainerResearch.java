@@ -257,6 +257,8 @@ public List<NBTTagCompound> getInitData()
 @Override
 public void detectAndSendChanges()
   {
+  super.detectAndSendChanges();
+  if(this.player.worldObj.isRemote){return;}
   if(te.researchProgress!=this.displayProgress)
     {
     this.displayProgress = te.researchProgress;
@@ -312,7 +314,6 @@ public void detectAndSendChanges()
       this.researchLength = len;
       }    
     }
-  super.detectAndSendChanges();
   }
 
 }

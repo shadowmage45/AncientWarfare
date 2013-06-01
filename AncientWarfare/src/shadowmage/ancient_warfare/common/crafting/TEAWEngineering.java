@@ -79,6 +79,12 @@ public void stopWork()
 
 public void clearRecipe()
   {
+  if(this.isWorking)
+    {
+    /**
+     * TODO refund used items
+     */
+    }
   this.currentRecipe = null;
   }
 
@@ -111,33 +117,43 @@ public void updateEntity()
 
 protected boolean tryStartRecipe()
   {
-  boolean start = true;
-  int count = 0;
-  if(this.currentRecipe.resources.isEmpty()){return false;}
-  for(ItemStackWrapperCrafting stack : this.currentRecipe.resources)
-    {
-    count += stack.getQuantity();
-    if(!InventoryTools.containsAtLeast(inventory, stack.getFilter(), stack.getQuantity(), 0, 8))
-      {
-      start = false;
-      break;
-      }
-    }
+//  boolean start = true;
+//  int count = 0;
+//  if(this.currentRecipe.resources.isEmpty()){return false;}
+//  for(ItemStackWrapperCrafting stack : this.currentRecipe.resources)
+//    {
+//    count += stack.getQuantity();
+//    if(!InventoryTools.containsAtLeast(inventory, stack.getFilter(), stack.getQuantity(), 0, 8))
+//      {
+//      start = false;
+//      break;
+//      }
+//    }
+//  if(start)
+//    {
+//    this.displayProgress = 0;
+//    for(ItemStackWrapperCrafting stack : this.currentRecipe.resources)
+//      {
+//      InventoryTools.tryRemoveItems(inventory, stack.getFilter(), stack.getQuantity(), 0, 8);      
+//      }    
+//    this.displayProgressMax = count*5;    
+//    }
+//  return start;
+  
+  boolean start = this.currentRecipe.doesInventoryContainResources(inventory, craftMatrix);
   if(start)
     {
-    this.displayProgress = 0;
-    for(ItemStackWrapperCrafting stack : this.currentRecipe.resources)
-      {
-      InventoryTools.tryRemoveItems(inventory, stack.getFilter(), stack.getQuantity(), 0, 8);      
-      }    
-    this.displayProgressMax = count*10;    
+    int count = this.currentRecipe.getResourceItemCount();
+    this.currentRecipe.removeResourcesFrom(inventory, craftMatrix);
+    this.displayProgress =0;
+    this.displayProgressMax = count * 5;
     }
   return start;
   }
 
 protected boolean tryFinishRecipe()
   {
-  if(InventoryTools.canHoldItem(inventory, currentRecipe.result, currentRecipe.result.stackSize, 0, 8))
+  if(InventoryTools.canHoldItem(inventory, currentRecipe.result, currentRecipe.result.stackSize, 9, 9))
     {
     InventoryTools.tryMergeStack(inventory, currentRecipe.result.copy(), resultSlot);
     this.isWorking = false;

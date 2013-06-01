@@ -28,6 +28,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -375,7 +376,7 @@ public ResourceListRecipe constructRecipe(int level)
   if(level>=0 && level<this.levelEntries.size())
     {
     NpcLevelEntry entry = this.levelEntries.get(level);
-    ResourceListRecipe recipe = new ResourceListRecipe(NpcRegistry.getStackFor(this, level));
+    ResourceListRecipe recipe = new ResourceListRecipe(NpcRegistry.getStackFor(this, level), RecipeType.NPC);
     recipe.addNeededResearch(this.getNeededResearch(level));
     recipe.addResources(entry.getNeededResources());
     return recipe;

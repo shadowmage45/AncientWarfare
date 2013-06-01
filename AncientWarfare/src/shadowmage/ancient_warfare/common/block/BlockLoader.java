@@ -90,7 +90,8 @@ public static BlockLoader instance()
 public void load()
   {
   registerBlock(builder, "Builder"); 
-  registerBlock(warehouseStorage, "Warehouse Storage");
+  registerBlockWithItem(warehouseStorage, "Warehouse Storage", AWItemBlockBase.class);
+  ((BlockWarehouseStorage) warehouseStorage).registerBlockInfo();
   registerBlock(gateProxy, "AWGateProxy");
   registerBlock(civicBlock1, "CivicBlock1");
   registerBlock(civicBlock2, "CivicBlock2");

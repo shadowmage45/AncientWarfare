@@ -55,6 +55,7 @@ public boolean onBlockClicked(World world, int posX, int posY, int posZ, EntityP
   return false;
   }
 
+@Override
 public void breakBlock(World world, int x, int y, int z, int id, int meta)
   {
   if(!world.isRemote)
@@ -74,6 +75,18 @@ public void breakBlock(World world, int x, int y, int z, int id, int meta)
       }
     }
   super.breakBlock(world, x, y, z, id, meta);
+  }
+
+public void registerBlockInfo()
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
+  Config.logDebug("registering warehouse block infos");
+  d.setName("Basic Storage", 0);
+  d.setName("Organized Storage", 1);
+  d.setName("Advanced Storage",2);
+  d.addDisplayStack(new ItemStack(this,1,0));
+  d.addDisplayStack(new ItemStack(this,1,1));
+  d.addDisplayStack(new ItemStack(this,1,2));
   }
 
 @Override
@@ -198,7 +211,7 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
 public void registerIcons(IconRegister reg, Description d)
   {
 //  Config.logDebug("registering icons for warehouse storage block "+d);
-  int levels = 1;
+  int levels = 3;
   Icon icon;
   for(int i = 0; i < levels; i++)
     {

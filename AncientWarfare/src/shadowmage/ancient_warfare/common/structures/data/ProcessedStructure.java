@@ -27,6 +27,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemCivicBuilder;
 import shadowmage.ancient_warfare.common.registry.CivicRegistry;
@@ -334,8 +335,8 @@ public ResourceListRecipe constructRecipe()
   if(!this.survival){return null;}
   Collection<ItemStack> stacks = this.getResourcesNeeded();
   ItemStack result = ItemCivicBuilder.getCivicBuilderItem(this.name);
-  ResourceListRecipe recipe = new ResourceListRecipe(result);
-  recipe.addResources(stacks);
+  ResourceListRecipe recipe = new ResourceListRecipe(result, RecipeType.STRUCTURE);
+  recipe.addResources(stacks, false, false);
   return recipe;
   }
 

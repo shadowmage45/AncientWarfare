@@ -38,7 +38,7 @@ TEAWEngineering te;
 public int displayProgress = 0;
 public int displayProgressMax = 0;
 public boolean isWorking = false;
-ResourceListRecipe currentRecipe;
+public ResourceListRecipe currentRecipe;
 
 /**
  * @param openingPlayer
@@ -156,6 +156,8 @@ public List<NBTTagCompound> getInitData()
 @Override
 public void detectAndSendChanges()
   {
+  super.detectAndSendChanges();
+	if(this.player.worldObj.isRemote){return;}
   if(this.displayProgress!=te.displayProgress)
     {
     this.displayProgress = te.displayProgress;
@@ -199,7 +201,6 @@ public void detectAndSendChanges()
     tag.setBoolean("work", this.isWorking);
     this.sendDataToPlayer(tag);
     }
-  super.detectAndSendChanges();
   }
 
 

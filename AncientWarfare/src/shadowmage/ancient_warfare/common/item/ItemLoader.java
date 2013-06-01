@@ -107,7 +107,7 @@ private void loadItems()
   this.registerItemSubtyped(gateSpawner);
   this.registerItemSingle(rations, "Food Ration", "", "Restores 1 Hunger (2 Upkeep value)");
   
-  this.registerItemSingle(researchBook, "Research Book", "", "Records research progress");
+  this.registerItemSingle(researchBook, "Research Book", "", "Records research progress").setIconTexture("ancientwarfare:misc/researchBook", 0);
   
   /**
    * register main component item (misc random items) 

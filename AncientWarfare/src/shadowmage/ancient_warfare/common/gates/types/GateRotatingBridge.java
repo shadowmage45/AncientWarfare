@@ -20,13 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.gates.types;
 
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GateRotatingBridge extends Gate
 {
@@ -44,12 +47,9 @@ public GateRotatingBridge(int id)
   this.texture = "gateBridgeWood1.png";
   this.canSoldierInteract = false;
   this.iconTexture = "gateWoodRotating";
-  }
-
-@Override
-public void onUpdate(EntityGate ent)
-  {
-  // TODO Auto-generated method stub
+  this.neededResearch.add(ResearchGoalNumbers.wood1);
+  this.neededResearch.add(ResearchGoalNumbers.mechanics4);
+  this.resourceStacks.add(new ItemStackWrapperCrafting(Block.planks, 22));
   }
 
 @Override

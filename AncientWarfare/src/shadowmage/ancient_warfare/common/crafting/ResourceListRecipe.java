@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -34,6 +35,7 @@ import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapper;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
@@ -46,47 +48,50 @@ protected HashSet<IResearchGoal> neededResearchCache = new HashSet<IResearchGoal
 ItemStack result;
 List<ItemStackWrapperCrafting> resources = new ArrayList<ItemStackWrapperCrafting>();
 String displayName;
+RecipeType type = RecipeType.NONE;
 
 public ResourceListRecipe(NBTTagCompound tag)
   {
 	this.readFromNBT(tag);
   }
 
-public ResourceListRecipe(ItemStack result, List<ItemStackWrapperCrafting> resources)
+public ResourceListRecipe(ItemStack result, List<ItemStackWrapperCrafting> resources, RecipeType type)
   {
   this.result = result;
   this.resources = resources;
   displayName = result.getDisplayName();
+  this.type = type;
   }
 
-public ResourceListRecipe(ItemStack result)
+public ResourceListRecipe(ItemStack result, RecipeType type)
   {
   this.result = result;
   displayName = result.getDisplayName();
   this.resources = new ArrayList<ItemStackWrapperCrafting>();
+  this.type = type;
   }
 
 public ResourceListRecipe copy()
   {
-  ResourceListRecipe recipe = new ResourceListRecipe(result.copy());
+  ResourceListRecipe recipe = new ResourceListRecipe(result.copy(), type);
   for(ItemStackWrapperCrafting item : this.resources)
     {
-    recipe.addResource(item.getFilter().copy(), item.getQuantity());
+    recipe.addResource(item.getFilter().copy(), item.getQuantity(), item.ignoreDamage, item.ignoreTag);
     }
   return recipe;
   }
 
-public ResourceListRecipe addResource(ItemStack stack, int qty)
+public ResourceListRecipe addResource(ItemStack stack, int qty, boolean dmg, boolean tag)
   {
   if(this.resources==null)
     {
     this.resources = new ArrayList<ItemStackWrapperCrafting>();
     }
-  this.resources.add(new ItemStackWrapperCrafting(stack, qty));
+  this.resources.add(new ItemStackWrapperCrafting(stack, qty, dmg, tag));
   return this;
   }
 
-public ResourceListRecipe addResources(Collection<ItemStack> items)
+public ResourceListRecipe addResources(Collection<ItemStack> items, boolean damage, boolean tag)
   {
   if(this.resources==null)
     {
@@ -94,8 +99,14 @@ public ResourceListRecipe addResources(Collection<ItemStack> items)
     }
   for(ItemStack stack : items)
     {
-    this.resources.add(new ItemStackWrapperCrafting(stack, stack.stackSize));
+    this.resources.add(new ItemStackWrapperCrafting(stack, stack.stackSize, damage, tag));
     }
+  return this;
+  }
+
+public ResourceListRecipe addResources(Collection<ItemStackWrapperCrafting> items)
+  {
+  this.resources.addAll(items);
   return this;
   }
 
@@ -143,7 +154,89 @@ public boolean isResource(ItemStack filter)
 
 public boolean canBeCraftedBy(EntityPlayer player)
   {  
+  if(Config.DEBUG)
+    {
+    return (Config.disableResearch /*|| player.capabilities.isCreativeMode*/) ? true : (this.neededResearch==null || this.neededResearch.isEmpty()) ? true : PlayerTracker.instance().getEntryFor(player)!=null && PlayerTracker.instance().getEntryFor(player).hasDoneResearchByNumbers(neededResearch);
+    }
   return (Config.disableResearch || player.capabilities.isCreativeMode) ? true : (this.neededResearch==null || this.neededResearch.isEmpty()) ? true : PlayerTracker.instance().getEntryFor(player)!=null && PlayerTracker.instance().getEntryFor(player).hasDoneResearchByNumbers(neededResearch);
+  }
+
+public boolean doesInventoryContainResources(IInventory inventory, int[] slotNums)
+  {
+  boolean start = true;
+  int count = 0;
+  if(this.resources.isEmpty()){return false;}
+  ItemStack fromInv = null;
+  for(ItemStackWrapperCrafting stack : this.resources)
+    {
+    count = stack.getQuantity();
+    for(int i = 0; i < slotNums.length; i++)
+      {
+      fromInv = inventory.getStackInSlot(slotNums[i]);
+      if(fromInv==null){continue;}
+      if(stack.matches(fromInv))
+        {
+        count -= fromInv.stackSize;
+        }
+      if(count<=0)
+        {
+        break;
+        }
+      }    
+    if(count>0)
+      {
+      start = false;
+      break;
+      }
+    }
+  return start;
+  }
+
+public int getResourceItemCount()
+  {
+  int count = 0;
+  for(ItemStackWrapperCrafting craft : this.resources)
+    {
+    count += craft.getQuantity();
+    }
+  return count;
+  }
+
+public void removeResourcesFrom(IInventory inventory, int[] slotNums)
+  {
+  boolean start = true;
+  int count = 0;
+  int toRemove = 0;
+  if(this.resources.isEmpty()){return;}
+  ItemStack fromInv = null;
+  for(ItemStackWrapperCrafting stack : this.resources)
+    {
+    count = stack.getQuantity();
+    for(int i = 0; i < slotNums.length; i++)
+      {
+      fromInv = inventory.getStackInSlot(slotNums[i]);
+      if(fromInv==null){continue;}
+      if(stack.matches(fromInv))
+        {
+        toRemove = fromInv.stackSize;
+        if(toRemove>count)
+          {
+          toRemove = count;
+          }
+        count -= toRemove;
+        fromInv.stackSize-=toRemove;
+        if(fromInv.stackSize<=0)
+          {
+          inventory.setInventorySlotContents(slotNums[i], null);
+          }
+        inventory.onInventoryChanged();
+        }
+      if(count<=0)
+        {
+        break;
+        }
+      }   
+    }
   }
 
 public HashSet<IResearchGoal> getNeededResearch()
@@ -186,7 +279,6 @@ public void readFromNBT(NBTTagCompound tag)
   {
   this.displayName = tag.getString("name");
   this.result = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("result"));
-  Config.logDebug("reading recipe from tag. result: "+this.result);
   NBTTagList list = tag.getTagList("res");
   for(int i = 0; i < list.tagCount(); i ++)
     {
@@ -199,7 +291,6 @@ public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
   tag.setString("name", this.displayName);
-  Config.logDebug("writing recipe to tag. result" +this.result + " name: "+this.displayName);
   tag.setCompoundTag("result", this.result.writeToNBT(new NBTTagCompound()));
   NBTTagList list = new NBTTagList();
   for(ItemStackWrapperCrafting wrap : this.resources)

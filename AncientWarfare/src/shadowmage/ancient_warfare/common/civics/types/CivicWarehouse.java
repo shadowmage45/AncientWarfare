@@ -47,7 +47,7 @@ public CivicWarehouse(int id, String name, String tooltip, Class <?extends TECiv
   this.blockIconNames[2] = "ancientwarfare:civic/civicWarehouseControl1Sides"; 
   
   
-  this.addRecipeResource(new ItemStack(Block.planks,10,0));
+  this.addRecipeResource(new ItemStack(Block.planks,10,0), false, false);
   }
 
 }

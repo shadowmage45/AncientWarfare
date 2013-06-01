@@ -83,6 +83,8 @@ public static int ballistics3 = 61;
 public static int mechanics1 = 100;
 public static int mechanics2 = 101;
 public static int mechanics3 = 102;
+public static int mechanics4 = 103;
+public static int mechanics5 = 104;
 
 /**
  * civics 125-174

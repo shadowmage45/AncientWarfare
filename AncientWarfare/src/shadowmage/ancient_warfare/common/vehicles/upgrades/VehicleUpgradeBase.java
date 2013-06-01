@@ -27,8 +27,10 @@ import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public abstract class VehicleUpgradeBase implements IVehicleUpgradeType
 {
@@ -37,7 +39,7 @@ int typeNum = 0;
 String displayName = "";
 String tooltip = "";
 String iconTexture = "foo";
-List<ItemStack> resources = new ArrayList<ItemStack>();
+List<ItemStackWrapperCrafting> resources = new ArrayList<ItemStackWrapperCrafting>();
 HashSet<Integer> neededResearch = new HashSet<Integer>();
 
 
@@ -79,7 +81,7 @@ public String getIconTexture()
 @Override
 public ResourceListRecipe constructRecipe()
   {
-  ResourceListRecipe recipe = new ResourceListRecipe(getUpgradeStack(1));
+  ResourceListRecipe recipe = new ResourceListRecipe(getUpgradeStack(1), RecipeType.UPGRADE);
   recipe.addNeededResearch(getNeededResearch());  
   if(!this.resources.isEmpty())
     {
@@ -87,7 +89,7 @@ public ResourceListRecipe constructRecipe()
     }
   else
     {
-    recipe.addResource(new ItemStack(Item.paper), 1);
+    recipe.addResource(new ItemStack(Item.paper), 1, false, false);
     }
   return recipe;
   }

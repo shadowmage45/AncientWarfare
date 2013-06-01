@@ -28,14 +28,20 @@ import java.util.Set;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.IGateType;
+import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public abstract class Gate implements IGateType
 {
@@ -70,7 +76,7 @@ protected float moveSpeed = 0.5f *0.05f; ///1/2 block / second
 protected ItemStack displayStack;
 
 protected Set<Integer> neededResearch = new HashSet<Integer>();
-protected List<ItemStack> resourceStacks = new ArrayList<ItemStack>();
+protected List<ItemStackWrapperCrafting> resourceStacks = new ArrayList<ItemStackWrapperCrafting>();
 /**
  * 
  */
@@ -166,6 +172,124 @@ public static Gate getGateByID(int id)
   return basicWood;
   }
 
+
+@Override
+public void onUpdate(EntityGate ent)
+  {
+  // TODO Auto-generated method stub
+  }
+
+@Override
+public void setCollisionBoundingBox(EntityGate gate)
+  {
+  if(gate.pos1==null || gate.pos2==null){return;}
+  boolean wideOnXAxis = gate.pos1.x!=gate.pos2.x;  
+  BlockPosition min = BlockTools.getMin(gate.pos1, gate.pos2);
+  BlockPosition max = BlockTools.getMax(gate.pos1, gate.pos2);
+  if(gate.edgePosition>0)
+    {
+    gate.boundingBox.setBounds(min.x, max.y+0.5d, min.z, max.x+1, max.y+1, max.z+1);
+    }
+  else
+    {
+    gate.boundingBox.setBounds(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);    
+    }    
+  }
+
+@Override
+public boolean arePointsValidPair(BlockPosition pos1, BlockPosition pos2)
+  {
+  return pos1.x == pos2.x || pos1.z == pos2.z;
+  }
+
+@Override
+public void setInitialBounds(EntityGate gate, BlockPosition pos1, BlockPosition pos2)
+  {
+  BlockPosition min = BlockTools.getMin(pos1, pos2);
+  BlockPosition max = BlockTools.getMax(pos1, pos2);
+  boolean wideOnXAxis = min.x!=max.x;
+  float width = wideOnXAxis ? max.x-min.x+1 : max.z-min.z + 1;
+  float xOffset = wideOnXAxis ? width*0.5f: 0.5f;
+  float zOffset = wideOnXAxis ? 0.5f : width*0.5f;
+  gate.pos1 = min;
+  gate.pos2 = max;
+  gate.edgeMax = max.y - min.y + 1;
+  Config.logDebug("setting gate pos to : "+ (min.x+xOffset) +","+(min.z+zOffset));
+  gate.setPosition(min.x+xOffset, min.y, min.z+zOffset);
+  }
+
+@Override
+public void onGateStartOpen(EntityGate gate)
+  {
+  if(gate.worldObj.isRemote)
+    {
+    return;
+    }
+  int id;
+  BlockPosition min = BlockTools.getMin(gate.pos1, gate.pos2);
+  BlockPosition max = BlockTools.getMax(gate.pos1, gate.pos2);
+  for(int x = min.x; x <= max.x; x++)
+    {
+    for(int y = min.y; y <=max.y; y++)
+      {
+      for(int z = min.z; z<= max.z; z++)
+        {
+        id = gate.worldObj.getBlockId(x, y, z);
+        if(id==BlockLoader.gateProxy.blockID)
+          {
+          gate.worldObj.setBlockToAir(x, y, z);
+          }
+        }
+      }
+    }
+  }
+
+@Override
+public void onGateFinishOpen(EntityGate gate)
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void onGateStartClose(EntityGate gate)
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void onGateFinishClose(EntityGate gate)
+  {
+  if(gate.worldObj.isRemote)
+    {
+    return;
+    }
+  int id;
+  BlockPosition min = BlockTools.getMin(gate.pos1, gate.pos2);
+  BlockPosition max = BlockTools.getMax(gate.pos1, gate.pos2);
+  for(int x = min.x; x <= max.x; x++)
+    {
+    for(int y = min.y; y <=max.y; y++)
+      {
+      for(int z = min.z; z<= max.z; z++)
+        {
+        id = gate.worldObj.getBlockId(x, y, z);
+        if(id==0)
+          {
+          gate.worldObj.setBlock(x, y, z, BlockLoader.gateProxy.blockID);
+          TileEntity te = gate.worldObj.getBlockTileEntity(x, y, z);
+          if(te!=null && te instanceof TEGateProxy)
+            {
+            TEGateProxy teg = (TEGateProxy)te;
+            teg.setOwner(gate);
+            }
+          }
+        }
+      }
+    }
+  }
+
 /**
  * 
  * @param world
@@ -244,7 +368,7 @@ private static void registerGateType(IGateType g)
 @Override
 public ResourceListRecipe constructRecipe()
   {
-  ResourceListRecipe recipe = new ResourceListRecipe(getConstructingItem());
+  ResourceListRecipe recipe = new ResourceListRecipe(getConstructingItem(), RecipeType.GATE);
   recipe.addNeededResearch(getNeededResearch());
   if(!this.resourceStacks.isEmpty())
     {
@@ -252,7 +376,7 @@ public ResourceListRecipe constructRecipe()
     }  
   else
     {
-    recipe.addResource(new ItemStack(Item.paper), 1);
+    recipe.addResource(new ItemStack(Item.paper), 1, false, false);
     }
   return recipe;
   }

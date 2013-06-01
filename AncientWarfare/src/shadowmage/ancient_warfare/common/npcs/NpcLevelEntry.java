@@ -28,8 +28,7 @@ import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.registry.NpcRegistry;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public class NpcLevelEntry
@@ -50,7 +49,7 @@ protected int upkeepCost = 8;//default one pork chop/ two apples
 protected float accuracy = 1.f;
 protected IAmmoType ammo;//used for archers
 protected List<CivicWorkType> workTypes = new ArrayList<CivicWorkType>();
-protected List<ItemStack> recipeResources = new ArrayList<ItemStack>();
+protected List<ItemStackWrapperCrafting> recipeResources = new ArrayList<ItemStackWrapperCrafting>();
 protected Set<Integer> neededResearch = new HashSet<Integer>();
 
 public NpcLevelEntry(String name, String tex)
@@ -174,12 +173,12 @@ public NpcLevelEntry addRecipeResource(ItemStack... items)
   {
   for(ItemStack item : items)
     {
-    this.recipeResources.add(item);
+    this.recipeResources.add(new ItemStackWrapperCrafting(item, false, false));
     }
   return this;
   }
 
-public Collection<ItemStack> getNeededResources()
+public Collection<ItemStackWrapperCrafting> getNeededResources()
   {
   return this.recipeResources;
   }

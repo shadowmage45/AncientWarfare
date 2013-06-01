@@ -33,12 +33,14 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public abstract class Ammo implements IAmmoType
@@ -141,7 +143,7 @@ IAmmoType secondaryAmmoType = null;
 int secondaryAmmoCount = 0;
 String iconTexture = "foo";
 HashSet<Integer> neededResearch = new HashSet<Integer>();
-List<ItemStack> resources = new ArrayList<ItemStack>();
+List<ItemStackWrapperCrafting> resources = new ArrayList<ItemStackWrapperCrafting>();
 
 public Ammo(int ammoType)
   {
@@ -312,7 +314,7 @@ public ResourceListRecipe constructRecipe()
     {
     return null;
     }
-  ResourceListRecipe recipe = new ResourceListRecipe(getAmmoStack(1));
+  ResourceListRecipe recipe = new ResourceListRecipe(getAmmoStack(1), RecipeType.AMMO);
   recipe.addNeededResearch(getNeededResearch());
   recipe.addResources(getResources());
   return recipe;
@@ -337,7 +339,7 @@ public void addResearch(IResearchGoal goal)
   }
 
 @Override
-public Collection<ItemStack> getResources()
+public Collection<ItemStackWrapperCrafting> getResources()
   {
   return this.resources;
   }

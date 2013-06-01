@@ -20,7 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.gates.types;
 
-public class GateDoubleIron extends GateDoubleSlideWood
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.gates.EntityGate;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
+
+public class GateDoubleIron extends Gate
 {
 
 /**
@@ -34,6 +43,26 @@ public GateDoubleIron(int id)
   this.texture = "gateIron1.png";
   this.modelType = 1;
   this.iconTexture = "gateIronDouble";
+  this.neededResearch.add(ResearchGoalNumbers.iron1);
+  this.neededResearch.add(ResearchGoalNumbers.mechanics3);
+  this.resourceStacks.add(new ItemStackWrapperCrafting(Block.stone, 10, false, false));
+  this.resourceStacks.add(new ItemStackWrapperCrafting(Item.ingotIron, 12, false, false));
+  }
+
+@Override
+public void setInitialBounds(EntityGate gate, BlockPosition pos1,   BlockPosition pos2)
+  {
+  BlockPosition min = BlockTools.getMin(pos1, pos2);
+  BlockPosition max = BlockTools.getMax(pos1, pos2);
+  boolean wideOnXAxis = min.x!=max.x;
+  float width = wideOnXAxis ? max.x-min.x+1 : max.z-min.z + 1;
+  float xOffset = wideOnXAxis ? width*0.5f: 0.5f;
+  float zOffset = wideOnXAxis ? 0.5f : width*0.5f;
+  gate.pos1 = pos1;
+  gate.pos2 = pos2;
+  gate.edgeMax = width * 0.5f;
+  Config.logDebug("setting gate pos to : "+ (min.x+xOffset) +","+min.y +","+(min.z+zOffset));
+  gate.setPosition(min.x+xOffset, min.y, min.z+zOffset);  
   }
 
 }

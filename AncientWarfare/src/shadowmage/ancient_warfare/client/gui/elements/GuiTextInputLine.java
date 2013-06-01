@@ -52,7 +52,7 @@ int cursorColor = 0xffff0000;
 /**
  * is focused, can capture text
  */
-boolean selected;
+public boolean selected;
 
 int maxChars = 1;
 

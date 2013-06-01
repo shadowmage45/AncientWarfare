@@ -20,7 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.gates.types;
 
-public class GateBasicIron extends GateBasicWood
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
+
+public class GateBasicIron extends Gate
 {
 
 /**
@@ -31,9 +36,13 @@ public GateBasicIron(int id)
   super(id);
   this.modelType = 1; 
   this.displayName = "Gate Basic Iron";
-  this.tooltip = "Opens towards one side";
+  this.tooltip = "Opens upwards";
   this.texture = "gateIron1.png";
   this.iconTexture = "gateIronBasic";
+  this.neededResearch.add(ResearchGoalNumbers.iron1);
+  this.neededResearch.add(ResearchGoalNumbers.mechanics2);
+  this.resourceStacks.add(new ItemStackWrapperCrafting(Block.stone, 10, false, false));
+  this.resourceStacks.add(new ItemStackWrapperCrafting(Item.ingotIron, 12, false, false));
   }
 
 }

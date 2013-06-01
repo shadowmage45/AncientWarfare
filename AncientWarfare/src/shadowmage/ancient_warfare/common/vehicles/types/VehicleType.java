@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,10 +29,12 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
@@ -124,7 +125,7 @@ int upgradeBaySize = 3;
 int armorBaySize = 3;
 
 public int materialCount = 1;
-public List<ItemStack> additionalMaterials = new ArrayList<ItemStack>();
+public List<ItemStackWrapperCrafting> additionalMaterials = new ArrayList<ItemStackWrapperCrafting>();
 
 String iconTexture = "foo.png";
 
@@ -345,7 +346,7 @@ public int getMaterialQuantity()
   }
 
 @Override
-public List<ItemStack> getAdditionalMaterials()
+public List<ItemStackWrapperCrafting> getAdditionalMaterials()
   {
   return additionalMaterials;
   }
@@ -506,12 +507,9 @@ public String getIconTexture()
 @Override
 public ResourceListRecipe constructRecipe(int level)
   {
-  ResourceListRecipe recipe = new ResourceListRecipe(this.getStackForLevel(level).copy());
-  recipe.addResource(this.getMaterialType().getItem(level).copy(), this.getMaterialQuantity());
-  for(ItemStack stack : this.getAdditionalMaterials())
-    {
-    recipe.addResource(stack.copy(), stack.stackSize);
-    }  
+  ResourceListRecipe recipe = new ResourceListRecipe(this.getStackForLevel(level).copy(), RecipeType.VEHICLE);
+  recipe.addResource(this.getMaterialType().getItem(level).copy(), this.getMaterialQuantity(), false, false);  
+  recipe.addResources(getAdditionalMaterials());
   recipe.addNeededResearch(this.neededResearch.get(level));
   recipe.setDisplayName(getDisplayName() + " "+(level+1));
   return recipe;

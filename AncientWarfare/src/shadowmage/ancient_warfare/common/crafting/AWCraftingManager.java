@@ -21,12 +21,14 @@
 package shadowmage.ancient_warfare.common.crafting;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.types.ICivicType;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -39,6 +41,7 @@ import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
@@ -51,7 +54,6 @@ import com.google.common.collect.Lists;
 public class AWCraftingManager
 {
 
-
 List<ResourceListRecipe> vehicleRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> ammoRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> civicRecipes = new ArrayList<ResourceListRecipe>();
@@ -63,17 +65,17 @@ List<ResourceListRecipe> npcRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> structureRecipesServer = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> structureRecipesClient = new ArrayList<ResourceListRecipe>();
 
-private Map<String, List<ResourceListRecipe>> recipesByType = new HashMap<String, List<ResourceListRecipe>>();
+private Map<RecipeType, List<ResourceListRecipe>> recipesByType = new HashMap<RecipeType, List<ResourceListRecipe>>();
 
 private AWCraftingManager()
   {
-  recipesByType.put("vehicles", vehicleRecipes);
-  recipesByType.put("ammo", ammoRecipes);
-  recipesByType.put("civic", civicRecipes);
-  recipesByType.put("gate", gateRecipes);
-  recipesByType.put("upgrade", upgradeRecipes);
-  recipesByType.put("armor", armorRecipes);
-  recipesByType.put("npc", npcRecipes);
+  recipesByType.put(RecipeType.VEHICLE, vehicleRecipes);
+  recipesByType.put(RecipeType.AMMO, ammoRecipes);
+  recipesByType.put(RecipeType.CIVIC, civicRecipes);
+  recipesByType.put(RecipeType.GATE, gateRecipes);
+  recipesByType.put(RecipeType.UPGRADE, upgradeRecipes);
+  recipesByType.put(RecipeType.ARMOR, armorRecipes);
+  recipesByType.put(RecipeType.NPC, npcRecipes);
   }
 
 private static AWCraftingManager INSTANCE = new AWCraftingManager();
@@ -90,13 +92,38 @@ public ResourceListRecipe validateRecipe(ResourceListRecipe recipe)
     {
     for(ResourceListRecipe valid : list)
       {
-      if(ItemStack.areItemStacksEqual(valid.result, recipe.result) && ItemStack.areItemStackTagsEqual(valid.result, recipe.result) && valid.neededResearch.size()==recipe.neededResearch.size() && areResourceListsIdentical(valid, recipe))
+      if(InventoryTools.doItemsMatch(valid.result, recipe.result))
         {
-        return valid;
-        }
+        if(areResourceListsIdentical(valid, recipe))
+          {
+          return valid;
+          }
+        }      
       }
     }
+  Config.logDebug("returning invalid recipe from recipe validate");
   return null;
+  }
+
+public List<ResourceListRecipe> getRecipesContaining(String text, EnumSet<RecipeType> types)
+  {
+  String name;
+  List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
+  for(List<ResourceListRecipe> list : this.recipesByType.values())
+    {
+    for(ResourceListRecipe recipe : list)
+      {
+      if(types.isEmpty() || types.contains(recipe.type))
+        {
+        name = recipe.displayName;
+        if(name.toLowerCase().contains(text.toLowerCase()))
+          {
+          recipes.add(recipe);
+          }
+        }
+      }
+    }  
+  return recipes;  
   }
 
 protected boolean areResourceListsIdentical(ResourceListRecipe a, ResourceListRecipe b)
@@ -115,6 +142,7 @@ protected boolean areResourceListsIdentical(ResourceListRecipe a, ResourceListRe
       }
     if(!found)
       {
+      Config.logDebug("returning could not find stack on validate recipe");
       return false;
       }
     }  
@@ -125,6 +153,92 @@ protected boolean areResourceListsIdentical(ResourceListRecipe a, ResourceListRe
  * should be called from AWCore during final INIT stages
  */
 public void loadRecipes()
+  {
+  this.addCivicRecipes();
+  this.addAmmoRecipes();
+  this.addArmorRecipes();
+  this.addGateRecipes();
+  this.addNpcRecipes();
+  this.addVehicleRecipes();
+  this.addUpgradeRecipes();
+  this.addStructureRecipes();
+  }
+
+protected void addCivicRecipes()
+  {
+  ResourceListRecipe recipe;
+  for(ICivicType civic : Civic.civicList)
+    {
+    if(civic==null){continue;}
+    recipe = civic.constructRecipe();
+    if(recipe!=null)
+      {
+      this.civicRecipes.add(recipe);
+      Config.logDebug("adding civic recipe: "+recipe);
+      }    
+    }  
+  /**
+   * TODO add needed research for warehouse...
+   * TODO add needed resources for warehouse
+   */
+  recipe = new ResourceListRecipe(new ItemStack(BlockLoader.warehouseStorage.blockID,1,0), RecipeType.CIVIC);
+  this.civicRecipes.add(recipe);
+  recipe = new ResourceListRecipe(new ItemStack(BlockLoader.warehouseStorage.blockID,1,1), RecipeType.CIVIC);
+  this.civicRecipes.add(recipe);
+  recipe = new ResourceListRecipe(new ItemStack(BlockLoader.warehouseStorage.blockID,1,2), RecipeType.CIVIC);
+  this.civicRecipes.add(recipe);
+  Config.logDebug("adding civic recipe: "+recipe);
+  }
+
+protected void addGateRecipes()
+  {
+  ResourceListRecipe recipe;
+  for(IGateType gate : Gate.gateTypes)
+    {
+    if(gate==null){continue;}
+    recipe = gate.constructRecipe();
+    if(recipe!=null)
+      {
+      this.gateRecipes.add(recipe);      
+      Config.logDebug("adding gate recipe for: "+recipe);
+      }
+    }
+  }
+
+protected void addStructureRecipes()
+  {
+  ResourceListRecipe recipe;
+  for(ProcessedStructure structure : StructureManager.instance().getSurvivalModeStructures())
+    {
+    if(structure==null){continue;}
+    recipe = structure.constructRecipe();
+    if(recipe!=null)
+      {
+      this.structureRecipesServer.add(recipe);
+      Config.logDebug("adding recipe :"+recipe);
+      }
+    }
+  }
+
+protected void addNpcRecipes()
+  {
+  ResourceListRecipe recipe;
+  for(NpcTypeBase npc : NpcTypeBase.npcTypes)
+    {
+    if(npc==null){continue;}    
+    for(int i = 0; i < npc.getNumOfLevels(); i++)
+      {
+      recipe = npc.constructRecipe(i);
+      if(recipe!=null)
+        {
+        this.npcRecipes.add(recipe);
+        Config.logDebug("adding npc recipe for : "+recipe);
+        }
+      }      
+    }
+  }
+
+protected void addVehicleRecipes()
   {
   ResourceListRecipe recipe;
   for(IVehicleType vehicle : VehicleType.vehicleTypes)
@@ -139,7 +253,26 @@ public void loadRecipes()
         }
       }
     } 
-  
+  }
+
+protected void addUpgradeRecipes()
+  {
+  ResourceListRecipe recipe;
+  for(IVehicleUpgradeType upgrade : VehicleUpgradeRegistry.instance().getUpgradeList())
+    {
+    if(upgrade==null){continue;}
+    recipe = upgrade.constructRecipe();
+    if(recipe!=null)
+      {
+      this.upgradeRecipes.add(recipe);
+      Config.logDebug("adding upgrade recipe: "+recipe);
+      }
+    }  
+  }
+
+protected void addAmmoRecipes()
+  {
+  ResourceListRecipe recipe;
   for(IAmmoType ammo : Ammo.ammoTypes)
     {
     if(ammo==null){continue;}
@@ -151,65 +284,15 @@ public void loadRecipes()
         Config.logDebug("adding ammo recipe for: "+recipe);
         }
       }
-    }
-  
-  for(NpcTypeBase npc : NpcTypeBase.npcTypes)
-    {
-    if(npc==null){continue;}    
-    for(int i = 0; i < npc.getNumOfLevels(); i++)
-      {
-      recipe = npc.constructRecipe(i);
-      if(recipe!=null)
-        {
-        this.npcRecipes.add(recipe);
-        Config.logDebug("adding npc recipe for : "+recipe);
-        }
-      }      
-    }
-  
-  for(ICivicType civic : Civic.civicList)
-    {
-    if(civic==null){continue;}
-    recipe = civic.constructRecipe();
-    if(recipe!=null)
-      {
-      this.civicRecipes.add(recipe);
-      Config.logDebug("adding civic recipe: "+recipe);
-      }    
-    }
-  
-  for(IGateType gate : Gate.gateTypes)
-    {
-    if(gate==null){continue;}
-    recipe = gate.constructRecipe();
-    if(recipe!=null)
-      {
-      this.gateRecipes.add(recipe);      
-      Config.logDebug("adding gate recipe for: "+recipe);
-      }
-    }
-  
-  for(IVehicleUpgradeType upgrade : VehicleUpgradeRegistry.instance().getUpgradeList())
-    {
-    if(upgrade==null){continue;}
-    recipe = upgrade.constructRecipe();
-    if(recipe!=null)
-      {
-      this.upgradeRecipes.add(recipe);
-      Config.logDebug("adding upgrade recipe: "+recipe);
-      }
-    }
-  
-  for(ProcessedStructure structure : StructureManager.instance().getSurvivalModeStructures())
-    {
-    if(structure==null){continue;}
-    recipe = structure.constructRecipe();
-    if(recipe!=null)
-      {
-      this.structureRecipesServer.add(recipe);
-      Config.logDebug("adding recipe :"+recipe);
-      }
-    }
+    }  
+  }
+
+protected void addArmorRecipes()
+  {
+  ResourceListRecipe recipe;
+  /**
+   * TODO
+   */
   }
 
 public void addStructureRecipe(ProcessedStructure struct)
@@ -271,69 +354,21 @@ public void addVehicleRecipe(ResourceListRecipe recipe)
   this.vehicleRecipes.add(recipe);
   }
 
-public List<ResourceListRecipe> getVehicleRecipesFor(EntityPlayer player)
+public List<ResourceListRecipe> getRecipesOfTypesFor(EntityPlayer player, RecipeType...recipeTypes)
   {
   List<ResourceListRecipe> found = new ArrayList<ResourceListRecipe>();
-  for(ResourceListRecipe recipe : this.vehicleRecipes)
+  for(RecipeType type : recipeTypes)
     {
-    if(recipe.canBeCraftedBy(player))
+    List<ResourceListRecipe> recipes = this.recipesByType.get(type);
+    for(ResourceListRecipe recipe : recipes)
       {
-      found.add(recipe);
+      if(recipe.canBeCraftedBy(player))
+        {
+        found.add(recipe);
+        }
       }
-    }  
-  return found;  
-  }
-
-public List<ResourceListRecipe> getCivicRecipesFor(EntityPlayer player)
-  {
-  List<ResourceListRecipe> found = new ArrayList<ResourceListRecipe>();
-  for(ResourceListRecipe recipe : this.civicRecipes)
-    {
-    if(recipe.canBeCraftedBy(player))
-      {
-      found.add(recipe);
-      }
-    }  
-  return found;  
-  }
-
-public List<ResourceListRecipe> getUpgradeRecipesFor(EntityPlayer player)
-  {
-  List<ResourceListRecipe> found = new ArrayList<ResourceListRecipe>();
-  for(ResourceListRecipe recipe : this.upgradeRecipes)
-    {
-    if(recipe.canBeCraftedBy(player))
-      {
-      found.add(recipe);
-      }
-    }  
-  return found;  
-  }
-
-public List<ResourceListRecipe> getAmmoRecipesFor(EntityPlayer player)
-  {
-  List<ResourceListRecipe> found = new ArrayList<ResourceListRecipe>();
-  for(ResourceListRecipe recipe : this.ammoRecipes)
-    {
-    if(recipe.canBeCraftedBy(player))
-      {
-      found.add(recipe);
-      }
-    }  
-  return found;  
-  }
-
-public List<ResourceListRecipe> getNpcRecipesFor(EntityPlayer player)
-  {
-  List<ResourceListRecipe> found = new ArrayList<ResourceListRecipe>();
-  for(ResourceListRecipe recipe : this.npcRecipes)
-    {
-    if(recipe.neededResearch==null || PlayerTracker.instance().getEntryFor(player).hasDoneResearchByNumbers(recipe.neededResearch))
-      {
-      found.add(recipe);
-      }
-    }  
-  return found;  
+    }
+  return found; 
   }
 
 public List<ResourceListRecipe> getStructureRecipesClient()

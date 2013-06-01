@@ -26,6 +26,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
@@ -97,7 +98,7 @@ public abstract int getUpgradeBaySize();
 public abstract float getMaxMissileWeight();//in KG--will be adjusted by material... any additional missile weight over this will reduce max launch speed by a ratio
 
 public abstract int getMaterialQuantity();//get the quantity of the main material to construct this vehicle
-public abstract List<ItemStack> getAdditionalMaterials();//get a list of additional materials needed to construct this vehicle
+public abstract List<ItemStackWrapperCrafting> getAdditionalMaterials();//get a list of additional materials needed to construct this vehicle
 
 public abstract ItemStack getStackForLevel(int level);
 

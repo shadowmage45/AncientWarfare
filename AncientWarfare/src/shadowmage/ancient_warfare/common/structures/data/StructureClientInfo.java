@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemCivicBuilder;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -177,8 +178,8 @@ public ResourceListRecipe constructRecipe()
   if(!this.survival){return null;}
   Collection<ItemStack> stacks = this.getResourcesNeeded();
   ItemStack result = ItemCivicBuilder.getCivicBuilderItem(this.name);
-  ResourceListRecipe recipe = new ResourceListRecipe(result);
-  recipe.addResources(stacks);
+  ResourceListRecipe recipe = new ResourceListRecipe(result, RecipeType.STRUCTURE);
+  recipe.addResources(stacks, false, false);
   return recipe;
   }
 

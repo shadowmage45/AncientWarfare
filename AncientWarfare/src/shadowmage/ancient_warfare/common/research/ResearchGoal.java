@@ -32,13 +32,13 @@ import shadowmage.ancient_warfare.common.research.ammo.ResearchExplosives;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchFlammables;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchRockets;
 import shadowmage.ancient_warfare.common.research.civic.ResearchCivics;
+import shadowmage.ancient_warfare.common.research.general.ResearchMechanics;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchCounterweights;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchGunpowderVehicles;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchMaterialLevel;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchMobility;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchTorsion;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchTurrets;
-import shadowmage.ancient_warfare.common.research.vehicle.ResearchUpgradeMechanics;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
 public class ResearchGoal implements IResearchGoal
@@ -87,10 +87,11 @@ public static IResearchGoal ammoBallistics3 = new ResearchBallistics(ResearchGoa
 /**
  * upgrade/armor research? 
  */
-public static IResearchGoal upgradeMechanics1 = new ResearchUpgradeMechanics(ResearchGoalNumbers.mechanics1, 0);
-public static IResearchGoal upgradeMechanics2 = new ResearchUpgradeMechanics(ResearchGoalNumbers.mechanics2, 1).addDependencies(upgradeMechanics1);
-public static IResearchGoal upgradeMechanics3 = new ResearchUpgradeMechanics(ResearchGoalNumbers.mechanics3, 2).addDependencies(upgradeMechanics2);
-
+public static IResearchGoal upgradeMechanics1 = new ResearchMechanics(ResearchGoalNumbers.mechanics1, 0);
+public static IResearchGoal upgradeMechanics2 = new ResearchMechanics(ResearchGoalNumbers.mechanics2, 1).addDependencies(upgradeMechanics1);
+public static IResearchGoal upgradeMechanics3 = new ResearchMechanics(ResearchGoalNumbers.mechanics3, 2).addDependencies(upgradeMechanics2);
+public static IResearchGoal upgradeMechanics4 = new ResearchMechanics(ResearchGoalNumbers.mechanics4, 3).addDependencies(upgradeMechanics3);
+public static IResearchGoal upgradeMechanics5 = new ResearchMechanics(ResearchGoalNumbers.mechanics5, 4).addDependencies(upgradeMechanics4);
 
 /**
  * civic research

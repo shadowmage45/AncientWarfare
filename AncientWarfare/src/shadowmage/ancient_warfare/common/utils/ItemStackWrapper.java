@@ -102,6 +102,7 @@ public int getQuantity()
 public void setQuantity(int quantity)
   {
     this.quantity = quantity;
+    this.filter.stackSize = quantity;
   }
 
 }
