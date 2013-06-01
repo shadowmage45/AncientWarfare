@@ -5,7 +5,9 @@
  
 package shadowmage.ancient_warfare.client.model;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
  
@@ -63,7 +65,7 @@ public ModelTable2(){
   paperLarge = new ModelRenderer(this,"paperLarge");
   paperLarge.setTextureOffset(65,0);
   paperLarge.setTextureSize(128,128);
-  paperLarge.setRotationPoint(0.0f, -14.01f, 0.0f);
+  paperLarge.setRotationPoint(0.0f, -14.02f, 0.0f);
   setPieceRotation(paperLarge,0.0f, -0.19198619f, 0.0f);
   paperLarge.addBox(-6.0f,0.0f,-6.0f,12,0,12);
   tableTop.addChild(paperLarge);
@@ -129,12 +131,14 @@ public void setPieceRotation(ModelRenderer model, float x, float y, float z)
 @Override
 public void renderModel(TEAWCrafting te)
   {
+  Minecraft.getMinecraft().renderEngine.bindTexture(Config.texturePath+"models/crafting/teEngineeringStation.png");
   tableTop.render(0.0625f);
   }
 
 @Override
 public void renderModel()
   {
+  Minecraft.getMinecraft().renderEngine.bindTexture(Config.texturePath+"models/crafting/teEngineeringStation.png");
   tableTop.render(0.0625f);
   }
 

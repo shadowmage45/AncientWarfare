@@ -96,6 +96,8 @@ public void registerBlockInfo()
   Description d = BlockLoader.instance().registerBlockWithItem(this, "AWCraftingBlock", AWItemBlockBase.class);
   d.setName("Research Table", 0);
   d.addDisplayStack(new ItemStack(this,1,0));
+  d.setName("Engineering Station", 1);
+  d.addDisplayStack(new ItemStack(this,1,1));
   d.setIconTexture(baseTexDir+"researchBlockBottom", 0);
   d.setIconTexture(baseTexDir+"researchBlockTop", 1);
   d.setIconTexture(baseTexDir+"researchBlockFront", 2);
@@ -104,6 +106,7 @@ public void registerBlockInfo()
   d.setIconTexture(baseTexDir+"researchBlockRight", 5);  
   
   GameRegistry.registerTileEntity(TEAWResearch.class, "Research Center");
+  GameRegistry.registerTileEntity(TEAWEngineering.class, "Engineering Station");
   }
 
 @Override
@@ -126,6 +129,7 @@ public TileEntity getNewTileEntity(World world, int meta)
   case 0:
   return new TEAWResearch();
   case 1:
+  return new TEAWEngineering();
   case 2:
   case 3:
   case 4:

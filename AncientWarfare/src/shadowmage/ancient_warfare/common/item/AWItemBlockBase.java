@@ -46,6 +46,14 @@ public AWItemBlockBase(int par1)
   this.setCreativeTab(CreativeTabAW.normal);
   }
 
+/**
+ * Returns the metadata of the block which this Item (ItemBlock) can place
+ */
+@Override
+public int getMetadata(int par1)
+  {
+  return par1;
+  }
 
 /**
  * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
