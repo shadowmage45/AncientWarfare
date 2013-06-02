@@ -20,7 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleUpgradePitchDown extends VehicleUpgradeBase
@@ -36,6 +40,8 @@ public VehicleUpgradePitchDown(int num)
   this.tooltip = "Aim Pitch - 3'";
   this.iconTexture = "upgradePitchDown1";
   this.neededResearch.add(ResearchGoalNumbers.mechanics1);
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 2), true, false));
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.ingotIron, 1),false, false));  
   }
 
 @Override

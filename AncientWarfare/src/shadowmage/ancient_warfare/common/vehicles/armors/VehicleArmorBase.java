@@ -20,9 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.armors;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 
 public abstract class VehicleArmorBase implements IVehicleArmorType 
@@ -36,6 +43,8 @@ float general = 0.f;
 float explosive = 0.f;
 float fire = 0.f;
 float weight = 50.f;
+Set<Integer> neededResearch = new HashSet<Integer>();
+List<ItemStackWrapperCrafting> neededResources = new ArrayList<ItemStackWrapperCrafting>();
 
 public VehicleArmorBase(int armorType)
   {
@@ -95,4 +104,30 @@ public String getIconTexture()
   {
   return "ancientwarfare:armor/"+iconTexture;
   }
+
+protected void addNeededResearch(Integer res)
+  {
+  this.neededResearch.add(res);
+  }
+
+protected void addNeededResource(ItemStack stack, boolean dmg)
+  {
+  this.neededResources.add(new ItemStackWrapperCrafting(stack, dmg, false));
+  }
+
+@Override
+public Set<Integer> getNeededResearch()
+  {
+  return this.neededResearch;
+  }
+
+@Override
+public ResourceListRecipe constructRecipe()
+  {
+  ResourceListRecipe recipe = new ResourceListRecipe(this.getArmorStack(1), RecipeType.ARMOR);
+  recipe.addNeededResearch(getNeededResearch());
+  recipe.addResources(neededResources);  
+  return recipe;
+  }
+
 }

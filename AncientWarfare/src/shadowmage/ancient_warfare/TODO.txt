@@ -16,6 +16,7 @@ GENERAL
 * more missile icons
 * more missile textures    
 * chunkloader block ? (configurable range -- gui with toggleable squares to select chunks or by radius, render toggle to select if to render bounds areas)
+* block/id picked for warehouse storage and crafting blocks (needs adjusted for meta)
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally

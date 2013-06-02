@@ -20,6 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.armors;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+
 public class VehicleArmorStone extends VehicleArmorBase
 {
 
@@ -35,6 +40,9 @@ public VehicleArmorStone(int armorType)
   this.explosive = 2.5f;
   this.fire = 7;
   this.iconTexture = "armorStone1";
+  this.neededResearch.add(ResearchGoalNumbers.iron3);
+  this.addNeededResource(new ItemStack(Block.stone, 3), false);
+  this.addNeededResource(new ItemStack(Item.ingotIron, 2), false);
   }
 
 

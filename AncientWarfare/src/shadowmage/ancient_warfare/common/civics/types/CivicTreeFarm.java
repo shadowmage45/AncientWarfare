@@ -21,8 +21,11 @@
 package shadowmage.ancient_warfare.common.civics.types;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class CivicTreeFarm extends Civic
 {
@@ -46,6 +49,11 @@ public CivicTreeFarm(int id, String name, String tooltip, Class<? extends TECivi
   this.blockIconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
   this.blockIconNames[2] = "ancientwarfare:civic/civicFarmWheatSides"; 
   this.resourceSlotSize = 3;
+  this.neededResearch.add(ResearchGoalNumbers.logistics3);
+  this.neededResearch.add(ResearchGoalNumbers.civics2);
+  this.addRecipeResource(new ItemStack(Item.axeDiamond,1 ), true);
+  this.addRecipeResource(new ItemStack(Block.planks, 10), false);
+  this.addRecipeResource(new ItemStack(Block.chest, 1), false);
   }
 
 }

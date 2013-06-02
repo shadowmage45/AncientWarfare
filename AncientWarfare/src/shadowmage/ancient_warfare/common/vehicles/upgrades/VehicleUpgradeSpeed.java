@@ -20,8 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleUpgradeSpeed extends VehicleUpgradeBase
@@ -37,6 +41,8 @@ public VehicleUpgradeSpeed(int num)
   this.tooltip = "Max Speed + 0.25m/s";
   this.iconTexture = "upgradeSpeed1";
   this.neededResearch.add(ResearchGoalNumbers.mobility3);
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 3), true, false));
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.ingotIron, 3),false, false));
   }
 
 @Override

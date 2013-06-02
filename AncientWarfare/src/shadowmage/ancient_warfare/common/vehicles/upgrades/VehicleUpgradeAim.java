@@ -22,8 +22,13 @@ package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
 import java.util.Collection;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleUpgradeAim extends VehicleUpgradeBase
@@ -39,6 +44,8 @@ public VehicleUpgradeAim(int num)
   this.tooltip = "Acc + 3%";
   this.iconTexture = "upgradeAim1";
   this.neededResearch.add(ResearchGoalNumbers.ballistics2);
+  this.resources.add(new ItemStackWrapperCrafting(Item.paper, 3));
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 1), true, false));
   }
 
 @Override

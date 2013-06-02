@@ -90,9 +90,9 @@ public static ICivicType treeFarmSpruce = new CivicTreeFarm(17, "Spruce Tree Far
 public static ICivicType treeFarmBirch = new CivicTreeFarm(18, "Birch Tree Farm", "16x16 Max Width", TETreeFarmBirch.class).setBlockIcons("civicFarmBirchBottom", "civicFarmBirchTop", "civicFarmBirchSides").addResourceItem(new ItemStack(Block.sapling,1,2));
 public static ICivicType treeFarmJungle = new CivicTreeFarm(19, "Jungle Tree Farm", "16x16 Max Width", TETreeFarmJungle.class).setBlockIcons("civicFarmJungleBottom", "civicFarmJungleTop", "civicFarmJungleSides").addResourceItem(new ItemStack(Block.sapling,1,3));
 public static ICivicType builder = new CivicBuilder(20);//survival mode ticked builder....
-public static ICivicType townHallSmall = new CivicTownHall(21, "Town Hall Small", "Small Upkeep center for NPCs", 9, TECivicTownHall.class).setBlockIcons("civicTownHallSmallBottom", "civicTownHallSmallTop", "civicTownHallSmallSides");
-public static ICivicType townHallMedium = new CivicTownHall(22, "Town Hall Medium", "Medium Upkeep center for NPCs", 18, TECivicTownHall.class).setBlockIcons("civicTownHallMediumBottom", "civicTownHallMediumTop", "civicTownHallMediumSides");
-public static ICivicType townHallLarge = new CivicTownHall(23, "Town Hall Large", "Large Upkeep center for NPCs", 27, TECivicTownHall.class).setBlockIcons("civicTownHallLargeBottom", "civicTownHallLargeTop", "civicTownHallLargeSides");
+public static ICivicType townHallSmall = new CivicTownHall(21, "Town Hall Small", "Small Upkeep center for NPCs", 9, TECivicTownHall.class, 0).setBlockIcons("civicTownHallSmallBottom", "civicTownHallSmallTop", "civicTownHallSmallSides");
+public static ICivicType townHallMedium = new CivicTownHall(22, "Town Hall Medium", "Medium Upkeep center for NPCs", 18, TECivicTownHall.class, 1).setBlockIcons("civicTownHallMediumBottom", "civicTownHallMediumTop", "civicTownHallMediumSides");
+public static ICivicType townHallLarge = new CivicTownHall(23, "Town Hall Large", "Large Upkeep center for NPCs", 27, TECivicTownHall.class, 2).setBlockIcons("civicTownHallLargeBottom", "civicTownHallLargeTop", "civicTownHallLargeSides");
 public static ICivicType pigFarm = new CivicFarm(24, "Pig Farm", "16x16 Max Width, 6 animals", TEBarnPig.class, "civicFarmWheat1", 16, 2).setBlockIcons("civicFarmPigBottom", "civicFarmPigTop", "civicFarmPigSides");
 public static ICivicType cowFarm = new CivicFarm(25, "Cow Farm", "16x16 Max Width, 6 animals", TEBarnCow.class, "civicFarmWheat1", 16, 2).setBlockIcons("civicFarmCowBottom", "civicFarmCowTop", "civicFarmCowSides");
 public static ICivicType chickenFarm = new CivicFarm(26, "Chicken Farm", "16x16 Max Width, 6 animals", TEBarnChicken.class, "civicFarmWheat1", 16, 2).setBlockIcons("civicFarmChickenBottom", "civicFarmChickenTop", "civicFarmChickenSides");
@@ -101,7 +101,7 @@ public static ICivicType mooshroomFarm = new CivicFarm(28, "Mooshroom Farm", "16
 public static ICivicType fishFarm = new CivicFishFarm(29, "Fish Farm", "16x16 Max Width, needs water", TEFishery.class,"civicFarmWheat1", 16, 2).setBlockIcons("civicFarmFishBottom", "civicFarmFishTop", "civicFarmFishSides");
 public static ICivicType squidFarm = new CivicFishFarm(30, "Squid Farm", "16x16 Max Width, needs water", TESquidFarm.class, "civicFarmWheat1",16,2).setBlockIcons("civicFarmSquidBottom", "civicFarmSquidTop", "civicFarmSquidSides");
 public static ICivicType cocoaFarm = new CivicFarm(31, "Cocoa Bean Farm", "10x10 Max Width", TEFarmCocoa.class, "civicFarmWheat1", 10 ,2).setBlockIcons("civicFarmCocoaBottom", "civicFarmCocoaTop", "civicFarmCocoaSides").addResourceItem(new ItemStack(Item.dyePowder,1,3));
-public static ICivicType warehouseSmall = new CivicWarehouse(32, "Small Warehouse", "8x8x4", TECivicWarehouse.class, 8, 4);
+public static ICivicType warehouseSmall = new CivicWarehouse(32, "Small Warehouse", "9x9x3 Max Size", TECivicWarehouse.class, 9, 3);
 //smithy (process ores -> ingots)
 //lumber yard (process logs -> planks/charcoal)
 //factory (single block)(use provided resources to craft player-set recipes)
@@ -154,9 +154,9 @@ public Civic addResourceItem(ItemStack filter)
   return this;
   }
 
-public Civic addRecipeResource(ItemStack stack, boolean dmg, boolean tag)
+public Civic addRecipeResource(ItemStack stack, boolean dmg)
   {
-  this.recipeResources.add(new ItemStackWrapperCrafting(stack, dmg, tag));
+  this.recipeResources.add(new ItemStackWrapperCrafting(stack, dmg, false));
   return this;
   }
 

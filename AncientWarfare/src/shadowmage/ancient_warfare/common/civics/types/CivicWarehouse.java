@@ -21,9 +21,11 @@
 package shadowmage.ancient_warfare.common.civics.types;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class CivicWarehouse extends Civic
 {
@@ -46,8 +48,12 @@ public CivicWarehouse(int id, String name, String tooltip, Class <?extends TECiv
   this.blockIconNames[1] = "ancientwarfare:civic/civicWarehouseControl1Top";
   this.blockIconNames[2] = "ancientwarfare:civic/civicWarehouseControl1Sides"; 
   
-  
-  this.addRecipeResource(new ItemStack(Block.planks,10,0), false, false);
+  this.addNeededResearch(ResearchGoalNumbers.civics1);
+  this.addNeededResearch(ResearchGoalNumbers.logistics3);
+    
+  this.addRecipeResource(new ItemStack(Item.paper, 10), false);
+  this.addRecipeResource(new ItemStack(Block.planks, 10), false);
+  this.addRecipeResource(new ItemStack(Block.chest, 2), false);
   }
 
 }

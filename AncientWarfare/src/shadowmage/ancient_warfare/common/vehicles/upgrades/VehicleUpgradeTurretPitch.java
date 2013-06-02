@@ -20,7 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.upgrades;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class VehicleUpgradeTurretPitch extends VehicleUpgradeBase
@@ -36,6 +40,9 @@ public VehicleUpgradeTurretPitch(int num)
   this.tooltip = "Pitch Range +/- 3'";
   this.iconTexture = "upgradePitch1";
   this.neededResearch.add(ResearchGoalNumbers.mechanics2);
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 2), true, false));
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.ingotIron, 3),false, false));
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.pistonBase, 1), true, false));
   }
 
 @Override

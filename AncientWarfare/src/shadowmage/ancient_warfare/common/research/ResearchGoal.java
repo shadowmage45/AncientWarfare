@@ -117,11 +117,11 @@ public static IResearchGoal logistics5 = new ResearchLogistics(ResearchGoalNumbe
  * efficiency research? (decrease materials costs for crafting vehicles/structures/ammo?)
  */
 public static IResearchGoal efficiencyWood1 = new ResearchEfficiencyWood(ResearchGoalNumbers.efficiencyWood1, 0);
-public static IResearchGoal efficiencyWood2 = new ResearchEfficiencyWood(ResearchGoalNumbers.efficiencyWood2, 1);
-public static IResearchGoal efficiencyWood3 = new ResearchEfficiencyWood(ResearchGoalNumbers.efficiencyWood3, 2);
+public static IResearchGoal efficiencyWood2 = new ResearchEfficiencyWood(ResearchGoalNumbers.efficiencyWood2, 1).addDependencies(efficiencyWood1);
+public static IResearchGoal efficiencyWood3 = new ResearchEfficiencyWood(ResearchGoalNumbers.efficiencyWood3, 2).addDependencies(efficiencyWood2);
 public static IResearchGoal efficiencyIron1 = new ResearchEfficiencyIron(ResearchGoalNumbers.efficiencyIron1, 0);
-public static IResearchGoal efficiencyIron2 = new ResearchEfficiencyIron(ResearchGoalNumbers.efficiencyIron2, 1);
-public static IResearchGoal efficiencyIron3 = new ResearchEfficiencyIron(ResearchGoalNumbers.efficiencyIron3, 2);
+public static IResearchGoal efficiencyIron2 = new ResearchEfficiencyIron(ResearchGoalNumbers.efficiencyIron2, 1).addDependencies(efficiencyIron1);
+public static IResearchGoal efficiencyIron3 = new ResearchEfficiencyIron(ResearchGoalNumbers.efficiencyIron3, 2).addDependencies(efficiencyIron2);
 
 /**
  * vehicle materials

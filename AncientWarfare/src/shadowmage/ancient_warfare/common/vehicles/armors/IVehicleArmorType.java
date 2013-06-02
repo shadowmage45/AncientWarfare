@@ -20,6 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.armors;
 
+import java.util.Set;
+
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+
 import net.minecraft.item.ItemStack;
 
 public interface IVehicleArmorType
@@ -38,5 +42,7 @@ public abstract float getFireDamageReduction();
 public abstract float getArmorWeight();
 
 public abstract ItemStack getArmorStack(int qty);
+public abstract Set<Integer> getNeededResearch();
+public abstract ResourceListRecipe constructRecipe();
 
 }

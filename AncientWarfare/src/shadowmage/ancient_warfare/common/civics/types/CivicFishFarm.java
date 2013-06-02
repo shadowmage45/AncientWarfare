@@ -20,8 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class CivicFishFarm extends Civic
 {
@@ -43,5 +47,11 @@ public CivicFishFarm(int id, String name, String tooltip, Class <?extends TEWork
   this.workType = CivicWorkType.FISH;
   this.workSizeMaxHorizontal = workHorizSize;
   this.workSizeMaxHeight = workVertSize;
+  
+  this.neededResearch.add(ResearchGoalNumbers.logistics3);
+  this.neededResearch.add(ResearchGoalNumbers.civics2);
+  this.addRecipeResource(new ItemStack(Block.planks, 10), false);
+  this.addRecipeResource(new ItemStack(Item.fishingRod, 1), true);
+  this.addRecipeResource(new ItemStack(Block.chest, 1), false);
   }
 }

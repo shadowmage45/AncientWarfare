@@ -20,8 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.civics.types;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class CivicTownHall extends Civic
 {
@@ -29,7 +33,7 @@ public class CivicTownHall extends Civic
 /**
  * @param id
  */
-public CivicTownHall(int id, String name, String tooltip, int inventorySize, Class<? extends TECivic> teClass)
+public CivicTownHall(int id, String name, String tooltip, int inventorySize, Class<? extends TECivic> teClass, int size)
   {
   super(id);
   this.name = name;
@@ -44,6 +48,30 @@ public CivicTownHall(int id, String name, String tooltip, int inventorySize, Cla
   this.inventorySize = inventorySize;
   this.teClass = teClass;
   this.itemIconTexture = "civicFarmWheat1";
+  
+
+  this.addRecipeResource(new ItemStack(Item.paper, 2+size), false);
+  this.addRecipeResource(new ItemStack(Block.chest, 1+size), false);  
+  this.addRecipeResource(new ItemStack(Item.ingotGold, 3), false);
+  switch(size)
+  {
+  case 0:
+  this.addRecipeResource(new ItemStack(Block.planks, 10), true);
+  this.addNeededResearch(ResearchGoalNumbers.civics1);
+  break;
+  
+  case 1:
+  this.addRecipeResource(new ItemStack(Block.stoneSingleSlab,20,0), false);
+  this.addNeededResearch(ResearchGoalNumbers.civics3);
+  this.addNeededResearch(ResearchGoalNumbers.logistics2);
+  break;
+  
+  case 2:
+  this.addRecipeResource(new ItemStack(Block.stoneBrick, 10), false);
+  this.addNeededResearch(ResearchGoalNumbers.civics5);
+  this.addNeededResearch(ResearchGoalNumbers.logistics3);
+  break;
+  }
   }
 
 }

@@ -20,6 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.armors;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+
 public class VehicleArmorObsidian extends VehicleArmorBase
 {
 
@@ -35,6 +40,8 @@ public VehicleArmorObsidian(int armorType)
   this.explosive = 7.f;
   this.fire = 2.5f;
   this.iconTexture = "armorObsidian1";
+  this.neededResearch.add(ResearchGoalNumbers.iron3);
+  this.addNeededResource(new ItemStack(Block.obsidian, 5), false);
   }
 
 }

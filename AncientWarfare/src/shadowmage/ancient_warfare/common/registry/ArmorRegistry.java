@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +55,11 @@ public void registerArmorTypes()
   this.registerArmorType(armorStone);
   this.registerArmorType(armorIron);
   this.registerArmorType(armorObsidian);
+  }
+
+public Collection<IVehicleArmorType> getArmorTypes()
+  {
+  return this.armorInstances.values();
   }
 
 public void registerArmorType(IVehicleArmorType armor)

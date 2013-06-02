@@ -26,7 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
@@ -36,14 +38,16 @@ import shadowmage.ancient_warfare.common.gates.IGateType;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
+import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
+import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
@@ -154,13 +158,13 @@ protected boolean areResourceListsIdentical(ResourceListRecipe a, ResourceListRe
  */
 public void loadRecipes()
   {
-  this.addCivicRecipes();
+  this.addGateRecipes();//done
+  this.addArmorRecipes();//done
+  this.addCivicRecipes();//done
+  this.addUpgradeRecipes();//done
   this.addAmmoRecipes();
-  this.addArmorRecipes();
-  this.addGateRecipes();
   this.addNpcRecipes();
   this.addVehicleRecipes();
-  this.addUpgradeRecipes();
   this.addStructureRecipes();
   }
 
@@ -182,12 +186,27 @@ protected void addCivicRecipes()
    * TODO add needed resources for warehouse
    */
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.warehouseStorage.blockID,1,0), RecipeType.CIVIC);
+  recipe.neededResearch.add(ResearchGoalNumbers.civics1);
+  recipe.neededResearch.add(ResearchGoalNumbers.logistics3);
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.chest, 1), false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 4), true, false));
   this.civicRecipes.add(recipe);
+  
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.warehouseStorage.blockID,1,1), RecipeType.CIVIC);
+  recipe.neededResearch.add(ResearchGoalNumbers.civics2);
+  recipe.neededResearch.add(ResearchGoalNumbers.logistics4);
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.chest, 2), false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 4), true, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.paper, 2), true, false));
   this.civicRecipes.add(recipe);
+  
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.warehouseStorage.blockID,1,2), RecipeType.CIVIC);
+  recipe.neededResearch.add(ResearchGoalNumbers.civics3);
+  recipe.neededResearch.add(ResearchGoalNumbers.logistics5);
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.chest, 2), false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.ingotIron, 8), true, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.paper, 2), true, false));
   this.civicRecipes.add(recipe);
-  Config.logDebug("adding civic recipe: "+recipe);
   }
 
 protected void addGateRecipes()
@@ -290,9 +309,15 @@ protected void addAmmoRecipes()
 protected void addArmorRecipes()
   {
   ResourceListRecipe recipe;
-  /**
-   * TODO
-   */
+  for(IVehicleArmorType t : ArmorRegistry.instance().getArmorTypes())
+    {
+    recipe = t.constructRecipe();
+    if(t!=null)
+      {
+      this.armorRecipes.add(recipe);
+      Config.logDebug("adding armor recipe: "+recipe);
+      }
+    }
   }
 
 public void addStructureRecipe(ProcessedStructure struct)
