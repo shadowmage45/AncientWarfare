@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.research.ammo;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class ResearchExplosives extends ResearchGoal
@@ -36,6 +39,12 @@ public ResearchExplosives(int num, int level)
   		" about all things that go BOOM.  Learn how to blow things up without" +
   		" dyint in the process.This research is necessary for ammunitions" +
   		" and landmines that have explosive properties.");
+  this.researchTime = 1200 * (level+1);
+  this.addResource(new ItemStack(Item.gunpowder, (level+1)*2 ), false, false);
+  this.addResource(new ItemStack(Item.ingotIron, level+1), false, false);
+  this.addResource(new ItemStack(Item.clay, level+1), false, false);
+  this.addResource(new ItemStack(Item.paper, (level+1)), false, false);
+  this.addResource(new ItemStack(Block.torchWood, level+1), false, false);
   }
 
 }

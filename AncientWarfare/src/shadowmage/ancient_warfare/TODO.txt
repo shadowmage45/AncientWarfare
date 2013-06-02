@@ -219,11 +219,14 @@ TWEAKS/OPTIMIZATION
 * much work on adding detailed descriptions to research
 * create research goal cache for many classes to eliminate recreating goal set on every call
 * more work on research goals and recipes for stuff....
+* create crafting station (Engineering Station)
 
 /********** 06-01-13 **********/
 * tons more work on crafting, research.
 * add tier 2/3 warehouse storage blocks
 * add gate recipes, research
+
+* preliminary pass at adding research resource lists
 
 /********** 06-02-13 **********/
 /********** 06-03-13 **********/

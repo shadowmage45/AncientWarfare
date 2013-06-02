@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchBallistics;
@@ -32,6 +34,9 @@ import shadowmage.ancient_warfare.common.research.ammo.ResearchExplosives;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchFlammables;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchRockets;
 import shadowmage.ancient_warfare.common.research.civic.ResearchCivics;
+import shadowmage.ancient_warfare.common.research.civic.ResearchLogistics;
+import shadowmage.ancient_warfare.common.research.general.ResearchEfficiencyIron;
+import shadowmage.ancient_warfare.common.research.general.ResearchEfficiencyWood;
 import shadowmage.ancient_warfare.common.research.general.ResearchMechanics;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchCounterweights;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchGunpowderVehicles;
@@ -39,6 +44,7 @@ import shadowmage.ancient_warfare.common.research.vehicle.ResearchMaterialLevel;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchMobility;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchTorsion;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchTurrets;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
 public class ResearchGoal implements IResearchGoal
@@ -101,26 +107,36 @@ public static IResearchGoal civicEngineering2 = new ResearchCivics(ResearchGoalN
 public static IResearchGoal civicEngineering3 = new ResearchCivics(ResearchGoalNumbers.civics3, 2).addDependencies(civicEngineering2);
 public static IResearchGoal civicEngineering4 = new ResearchCivics(ResearchGoalNumbers.civics4, 3).addDependencies(civicEngineering3);
 public static IResearchGoal civicEngineering5 = new ResearchCivics(ResearchGoalNumbers.civics5, 4).addDependencies(civicEngineering4);
-
+public static IResearchGoal logistics1 = new ResearchLogistics(ResearchGoalNumbers.logistics1,0).addDependencies(civicEngineering1);
+public static IResearchGoal logistics2 = new ResearchLogistics(ResearchGoalNumbers.logistics2,1).addDependencies(logistics1);
+public static IResearchGoal logistics3 = new ResearchLogistics(ResearchGoalNumbers.logistics3,2).addDependencies(logistics2);
+public static IResearchGoal logistics4 = new ResearchLogistics(ResearchGoalNumbers.logistics4,3).addDependencies(logistics3);
+public static IResearchGoal logistics5 = new ResearchLogistics(ResearchGoalNumbers.logistics5,4).addDependencies(logistics4);
 
 /**
  * efficiency research? (decrease materials costs for crafting vehicles/structures/ammo?)
  */
+public static IResearchGoal efficiencyWood1 = new ResearchEfficiencyWood(ResearchGoalNumbers.efficiencyWood1, 0);
+public static IResearchGoal efficiencyWood2 = new ResearchEfficiencyWood(ResearchGoalNumbers.efficiencyWood2, 1);
+public static IResearchGoal efficiencyWood3 = new ResearchEfficiencyWood(ResearchGoalNumbers.efficiencyWood3, 2);
+public static IResearchGoal efficiencyIron1 = new ResearchEfficiencyIron(ResearchGoalNumbers.efficiencyIron1, 0);
+public static IResearchGoal efficiencyIron2 = new ResearchEfficiencyIron(ResearchGoalNumbers.efficiencyIron2, 1);
+public static IResearchGoal efficiencyIron3 = new ResearchEfficiencyIron(ResearchGoalNumbers.efficiencyIron3, 2);
 
 /**
  * vehicle materials
  */
-public static IResearchGoal materialWood1 = new ResearchMaterialLevel(200, 0, VehicleMaterial.materialWood);
-public static IResearchGoal materialWood2 = new ResearchMaterialLevel(201, 1, VehicleMaterial.materialWood).addDependencies(materialWood1);
-public static IResearchGoal materialWood3 = new ResearchMaterialLevel(202, 2, VehicleMaterial.materialWood).addDependencies(materialWood2);
-public static IResearchGoal materialWood4 = new ResearchMaterialLevel(203, 3, VehicleMaterial.materialWood).addDependencies(materialWood3);
-public static IResearchGoal materialWood5 = new ResearchMaterialLevel(204, 4, VehicleMaterial.materialWood).addDependencies(materialWood4);
+public static IResearchGoal materialWood1 = new ResearchMaterialLevel(200, 0, VehicleMaterial.materialWood).addResource(new ItemStack(Block.planks,10), true, false);
+public static IResearchGoal materialWood2 = new ResearchMaterialLevel(201, 1, VehicleMaterial.materialWood).addDependencies(materialWood1).addResource(new ItemStack(Block.planks,20), true, false);
+public static IResearchGoal materialWood3 = new ResearchMaterialLevel(202, 2, VehicleMaterial.materialWood).addDependencies(materialWood2).addResource(new ItemStack(Block.planks,30), true, false);
+public static IResearchGoal materialWood4 = new ResearchMaterialLevel(203, 3, VehicleMaterial.materialWood).addDependencies(materialWood3).addResource(new ItemStack(Block.planks,40), true, false);
+public static IResearchGoal materialWood5 = new ResearchMaterialLevel(204, 4, VehicleMaterial.materialWood).addDependencies(materialWood4).addResource(new ItemStack(Block.planks,50), true, false);
 
-public static IResearchGoal materialIron1 = new ResearchMaterialLevel(205, 0, VehicleMaterial.materialIron);
-public static IResearchGoal materialIron2 = new ResearchMaterialLevel(206, 1, VehicleMaterial.materialIron).addDependencies(materialIron1);
-public static IResearchGoal materialIron3 = new ResearchMaterialLevel(207, 2, VehicleMaterial.materialIron).addDependencies(materialIron2);
-public static IResearchGoal materialIron4 = new ResearchMaterialLevel(208, 3, VehicleMaterial.materialIron).addDependencies(materialIron3);
-public static IResearchGoal materialIron5 = new ResearchMaterialLevel(209, 4, VehicleMaterial.materialIron).addDependencies(materialIron4);
+public static IResearchGoal materialIron1 = new ResearchMaterialLevel(205, 0, VehicleMaterial.materialIron).addResource(new ItemStack(Item.ingotIron, 10), false, true);
+public static IResearchGoal materialIron2 = new ResearchMaterialLevel(206, 1, VehicleMaterial.materialIron).addDependencies(materialIron1).addResource(new ItemStack(Item.ingotIron, 20), false, true);
+public static IResearchGoal materialIron3 = new ResearchMaterialLevel(207, 2, VehicleMaterial.materialIron).addDependencies(materialIron2).addResource(new ItemStack(Item.ingotIron, 30), false, true);
+public static IResearchGoal materialIron4 = new ResearchMaterialLevel(208, 3, VehicleMaterial.materialIron).addDependencies(materialIron3).addResource(new ItemStack(Item.ingotIron, 40), false, true);
+public static IResearchGoal materialIron5 = new ResearchMaterialLevel(209, 4, VehicleMaterial.materialIron).addDependencies(materialIron4).addResource(new ItemStack(Item.ingotIron, 50), false, true);
 
 /**
  * npcs?
@@ -134,7 +150,7 @@ protected String displayTooltip = "";
 protected HashSet<Integer> dependencies = new HashSet<Integer>();
 protected HashSet<IResearchGoal> dependencyCache = new HashSet<IResearchGoal>();
 protected List<String> detailedDescription = new ArrayList<String>();
-protected List<ItemStack> resources = new ArrayList<ItemStack>();
+protected List<ItemStackWrapperCrafting> resources = new ArrayList<ItemStackWrapperCrafting>();
 protected int researchTime = 100;
 
 public ResearchGoal(int num)
@@ -152,9 +168,10 @@ public ResearchGoal(int num)
   this.researchGoals[num] = this;
   }
 
-public ResearchGoal addResource(ItemStack stack)
+@Override
+public ResearchGoal addResource(ItemStack stack, boolean dmg, boolean tag)
   {
-  this.resources.add(stack);
+  this.resources.add(new ItemStackWrapperCrafting(stack, dmg, tag));
   return this;
   }
 
@@ -282,7 +299,7 @@ public int getResearchTime()
   }
 
 @Override
-public List<ItemStack> getResearchResources() 
+public List<ItemStackWrapperCrafting> getResearchResources() 
   {
   return resources;
   }

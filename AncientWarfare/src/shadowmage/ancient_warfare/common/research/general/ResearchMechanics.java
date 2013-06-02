@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.research.general;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class ResearchMechanics extends ResearchGoal
@@ -32,6 +35,12 @@ public ResearchMechanics(int num, int level)
   {
   super(num);
   this.displayName = "Mechanicics "+ (level+1);
+  this.researchTime = 900 * (level+1);
+  this.addResource(new ItemStack(Item.silk, level+1), false, false);
+  this.addResource(new ItemStack(Item.ingotIron, level+1), false, false);
+  this.addResource(new ItemStack(Item.stick, level+1), false, false);
+  this.addResource(new ItemStack(Item.paper, (level+1)), false, false);
+  this.addResource(new ItemStack(Block.torchWood, level+1), false, false);
   }
 
 }

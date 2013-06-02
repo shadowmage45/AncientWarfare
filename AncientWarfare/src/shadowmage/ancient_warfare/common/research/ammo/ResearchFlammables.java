@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.research.ammo;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class ResearchFlammables extends ResearchGoal
@@ -37,6 +40,13 @@ public ResearchFlammables(int num, int level)
   		" and use.  This research is needed for most flame-based ammunition as well as" +
   		" Napalm ammunition.  At least some research into Flammables needs to be done in" +
   		" order to research gunpowder weapons and explosives.");
+  this.researchTime = 1200 * (level+1);
+  this.addResource(new ItemStack(Item.coal, (level+1)), true, false);
+  this.addResource(new ItemStack(Block.planks, (level+1)), true, false);
+  this.addResource(new ItemStack(Item.gunpowder, (level+1)), false, false);
+  this.addResource(new ItemStack(Item.ingotIron, level+1), false, false);
+  this.addResource(new ItemStack(Item.paper, (level+1)*2), false, false);
+  this.addResource(new ItemStack(Block.torchWood, level+1), false, false);
   }
 
 }

@@ -94,6 +94,12 @@ public static int civics2 = 126;
 public static int civics3 = 127;
 public static int civics4 = 128;
 public static int civics5 = 129;
+public static int logistics1 = 130;
+public static int logistics2 = 131;
+public static int logistics3 = 132;
+public static int logistics4 = 133;
+public static int logistics5 = 134;
+
 
 /**
  * efficiency 175-199
@@ -104,15 +110,12 @@ public static int efficiencyWood3 = 177;
 public static int efficiencyIron1 = 178;
 public static int efficiencyIron2 = 179;
 public static int efficiencyIron3 = 180;
-public static int efficiencyAmmo1 = 181;
-public static int efficiencyAmmo2 = 182;
-public static int efficiencyAmmo3 = 183;
-public static int efficiencyConstructionCommon1 = 184;
-public static int efficiencyConstructionCommon2 = 185;
-public static int efficiencyConstructionCommon3 = 186;
-public static int efficiencyConstructionUncommon1 = 187;
-public static int efficiencyConstructionUncommon2 = 188;
-public static int efficiencyConstructionUncommon3 = 189;
+public static int efficiencyConstructionCommon1 = 181;
+public static int efficiencyConstructionCommon2 = 182;
+public static int efficiencyConstructionCommon3 = 183;
+public static int efficiencyConstructionUncommon1 = 184;
+public static int efficiencyConstructionUncommon2 = 185;
+public static int efficiencyConstructionUncommon3 = 186;
 
 /**
  * vehicle materials 200-249

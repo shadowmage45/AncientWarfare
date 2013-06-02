@@ -26,9 +26,11 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
@@ -36,6 +38,7 @@ import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class ContainerResearch extends ContainerBase
 {
@@ -152,27 +155,23 @@ protected void handleGoalSelectionServer(IResearchGoal goal)
   {    
   if(this.te.currentResearch!=null || goal==null){return;}
   boolean start = true;
-  List<ItemStack> neededItems = goal.getResearchResources();
-  for(ItemStack stack : neededItems)
+  List<ItemStackWrapperCrafting> neededItems = goal.getResearchResources();
+  ItemStack fromInv = null;
+  ResourceListRecipe recipe = new ResourceListRecipe(new ItemStack(Item.appleRed), RecipeType.NONE);
+  recipe.addResources(neededItems);
+  if(!recipe.doesInventoryContainResources(te, te.getAccessibleSlotsFromSide(2)))
     {
-    if(!InventoryTools.containsAtLeast(te, stack, stack.stackSize, 1, te.getSizeInventory()-1))
-      {
-      start = false;
-      break;
-      }    
-    }  
+    start = false;
+    }
   if(start)
     {
-    for(ItemStack stack : neededItems)
-      {
-      InventoryTools.tryRemoveItems(te, stack, stack.stackSize, 1,te.getSizeInventory()-1);
-      }
+    recipe.removeResourcesFrom(te, te.getAccessibleSlotsFromSide(2));   
     this.goal = goal;
     this.te.startResearch(goal); 
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("goal", goal.getGlobalResearchNum());
     this.sendDataToPlayer(tag);
-    }
+    }  
   }
 
 @Override

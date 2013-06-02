@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.research.vehicle;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class ResearchTorsion extends ResearchGoal
@@ -38,6 +41,12 @@ public ResearchTorsion(int num, int level)
   		" based vehicles (if all other prerequisites for the vehicle have been met)." +
   		"  Torsion Weapons 1 is granted to all new players, to allow access to basic Catpult and" +
   		" Ballista vehicles.");
+  this.researchTime = 900 * (level+1);
+  this.addResource(new ItemStack(Block.planks, (level+1)), true, false);
+  this.addResource(new ItemStack(Item.ingotIron, (level+2)/2), false, false);
+  this.addResource(new ItemStack(Item.silk, level+1), false, false);
+  this.addResource(new ItemStack(Item.paper, (level+1)), false, false);
+  this.addResource(new ItemStack(Block.torchWood, level+1), false, false);
   }
 
 }

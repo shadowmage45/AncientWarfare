@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.research.ammo;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class ResearchBallistics extends ResearchGoal
@@ -32,7 +35,11 @@ public ResearchBallistics(int num, int level)
   {
   super(num);
   this.displayName = "Ballistics " + (level+1);
-  this.detailedDescription.add("");
+  this.researchTime = 1200 * (level+1);
+  this.addResource(new ItemStack(Item.silk, level+1), false, false);
+  this.addResource(new ItemStack(Item.dyePowder, level+1, 0), false, false);
+  this.addResource(new ItemStack(Item.paper, (level+1)*2), false, false);
+  this.addResource(new ItemStack(Block.torchWood, level+1), false, false);
   }
 
 }

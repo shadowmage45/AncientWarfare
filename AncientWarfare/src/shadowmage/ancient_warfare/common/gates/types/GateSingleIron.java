@@ -61,7 +61,6 @@ public void setInitialBounds(EntityGate gate, BlockPosition pos1,   BlockPositio
   gate.pos1 = pos1;
   gate.pos2 = pos2;
   gate.edgeMax = width;
-  Config.logDebug("setting gate pos to : "+ (min.x+xOffset) +","+min.y +","+(min.z+zOffset));
   gate.setPosition(min.x+xOffset, min.y, min.z+zOffset);  
   }
 

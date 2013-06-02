@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.research.vehicle;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
@@ -42,7 +43,10 @@ public ResearchMaterialLevel(int num, int level, VehicleMaterial material)
   		" materials will enable the construction of those materials, and allow for" +
   		" the use of those materials in the construction of vehicles (vehicle and" +
   		" proper tier for vehicle must also be unlocked).");
-  this.addResource(new ItemStack(Item.stick,10));
+  this.researchTime = 1200*(level+1);
+  this.addResource(new ItemStack(Item.paper, (level+1)*2), false, false);
+  this.addResource(new ItemStack(Item.dyePowder, level+1, 0), false, false);
+  this.addResource(new ItemStack(Block.torchWood, level+1), false, false);
   }
 
 }

@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
 
 import org.lwjgl.input.Keyboard;
 
@@ -43,6 +42,7 @@ import shadowmage.ancient_warfare.common.container.ContainerResearch;
 import shadowmage.ancient_warfare.common.research.GoalSorterAZ;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GuiResearch extends GuiContainerAdvanced
 {
@@ -155,7 +155,7 @@ public void drawProgressForground()
     {
     int x = 0;
     int y = 0;
-    for(ItemStack stack : this.selectedGoal.getResearchResources())
+    for(ItemStackWrapperCrafting stack : this.selectedGoal.getResearchResources())
       {
       if(x>=3)
         {
@@ -164,7 +164,7 @@ public void drawProgressForground()
         }      
       if(!this.container.researchSlots[y*3+x].getHasStack())
         {
-        this.renderItemStack(stack, guiLeft + 8 + x*18+27, guiTop + 8+18+4+24 + y*18, mouseX, mouseY, true, true);        
+        this.renderItemStack(stack.getFilter(), guiLeft + 8 + x*18+27, guiTop + 8+18+4+24 + y*18, mouseX, mouseY, true, true);        
         }   
       x++;   
       }

@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public interface IResearchGoal
 {
@@ -38,7 +39,7 @@ public abstract IResearchGoal getGoalByNumber(int num);
 public abstract IResearchGoal addDependencies(IResearchGoal... deps);
 public abstract IResearchGoal addDependencies(Integer... deps);
 public abstract int getResearchTime();
-public abstract List<ItemStack> getResearchResources();
-
+public abstract List<ItemStackWrapperCrafting> getResearchResources();
+public abstract IResearchGoal addResource(ItemStack stack, boolean dmg, boolean tag);
 
 }

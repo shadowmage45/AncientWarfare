@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.research.vehicle;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class ResearchMobility extends ResearchGoal
@@ -34,6 +37,13 @@ public ResearchMobility(int num, int level)
   this.detailedDescription.add("Researching Siege Engine Mobility unlocks the use of" +
   		" mobile vehicles, and (at higher ranks) their higher tiers.  At least one rank of" +
   		" mobility must be researched in order to unlock the basic mobile variants of vehicles.");
+  this.researchTime = 900 * (level+1);
+  this.addResource(new ItemStack(Block.planks, 2 * (level+1)), true, false);
+  this.addResource(new ItemStack(Item.ingotIron, (level+1)), false, false);
+  this.addResource(new ItemStack(Item.paper, (level+1)), false, false);
+  this.addResource(new ItemStack(Block.torchWood, level+1), false, false);
+  this.addResource(new ItemStack(Block.pistonBase, level+1), false, false);
+  this.addResource(new ItemStack(Item.redstone, (level+1)*2), false, false);
   }
 
 }
