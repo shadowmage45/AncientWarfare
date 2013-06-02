@@ -144,6 +144,7 @@ int secondaryAmmoCount = 0;
 String iconTexture = "foo";
 HashSet<Integer> neededResearch = new HashSet<Integer>();
 List<ItemStackWrapperCrafting> resources = new ArrayList<ItemStackWrapperCrafting>();
+int numCrafted = 10;
 
 public Ammo(int ammoType)
   {
@@ -314,7 +315,7 @@ public ResourceListRecipe constructRecipe()
     {
     return null;
     }
-  ResourceListRecipe recipe = new ResourceListRecipe(getAmmoStack(1), RecipeType.AMMO);
+  ResourceListRecipe recipe = new ResourceListRecipe(getAmmoStack(this.getNumCrafted()), RecipeType.AMMO);
   recipe.addNeededResearch(getNeededResearch());
   recipe.addResources(getResources());
   return recipe;
@@ -529,4 +530,9 @@ public MissileBase getMissileByType(IAmmoType type, World world, float x, float 
   return missile;
   }
 
+@Override
+public int getNumCrafted()
+  {
+  return this.numCrafted;
+  }
 }

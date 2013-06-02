@@ -21,6 +21,10 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -43,6 +47,34 @@ public AmmoIronShot(int ammoType, int weight, int damage)
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoStone1";
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
+  
+  int cases = 1;
+  this.numCrafted = 8;
+  switch(weight)
+  {
+  case 5:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics1);
+  cases = 1;
+  break;
+  
+  case 10:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics1);
+  cases = 2;
+  break;
+  
+  case 15:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics2);
+  cases = 4;
+  break;
+  
+  case 25:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics3);
+  cases = 6;
+  break;
+  }
+  
+  
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.ironCasing, cases, false, false));
   }
 
 @Override

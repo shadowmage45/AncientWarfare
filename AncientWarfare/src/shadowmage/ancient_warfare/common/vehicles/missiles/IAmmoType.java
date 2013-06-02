@@ -80,5 +80,6 @@ Collection<Integer> getNeededResearch();
 void addResearch(Integer num);
 void addResearch(IResearchGoal goal);
 Collection<ItemStackWrapperCrafting> getResources(); 
+int getNumCrafted();
 
 }

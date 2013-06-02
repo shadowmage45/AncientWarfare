@@ -21,7 +21,11 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -45,6 +49,10 @@ public AmmoBallistaBoltIron(int ammoType)
   this.addTooltip("A large iron tipped iron shafted bolt.");  
   this.iconTexture = "ammoArrow1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
+  this.neededResearch.add(ResearchGoalNumbers.ballistics2);
+  this.resources.add(new ItemStackWrapperCrafting(Item.ingotIron, 7));
+  this.resources.add(new ItemStackWrapperCrafting(Item.feather, 5));
+  this.numCrafted = 8;
   }
 
 @Override

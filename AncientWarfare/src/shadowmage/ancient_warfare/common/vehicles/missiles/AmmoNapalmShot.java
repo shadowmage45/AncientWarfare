@@ -26,6 +26,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class AmmoNapalmShot extends Ammo
 {
@@ -46,6 +49,40 @@ public AmmoNapalmShot(int ammoType, int weight)
   this.iconTexture = "ammoNapalm1";
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
   this.isFlaming = true;
+  
+  this.neededResearch.add(ResearchGoalNumbers.flammables3);
+  int cases = 1;
+  int explosives = 1;
+  this.numCrafted = 2;
+  switch(weight)
+  {
+  case 10:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics1);
+  cases = 1;
+  explosives = 1;
+  break;
+  
+  case 15:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics1);
+  cases = 2;
+  explosives = 2;
+  break;
+  
+  case 30:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics2);
+  cases = 4;
+  explosives = 4;
+  break;
+  
+  case 45:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics3);
+  cases = 6;
+  explosives = 6;
+  break;
+  }
+   
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.napalmCharge, explosives, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clayCasing, cases, false, false));
   }
 
 @Override

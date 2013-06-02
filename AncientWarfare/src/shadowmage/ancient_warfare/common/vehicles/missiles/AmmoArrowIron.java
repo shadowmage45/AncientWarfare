@@ -21,7 +21,10 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -45,6 +48,10 @@ public AmmoArrowIron(int ammoType)
   this.addTooltip("Well-built, with iron shaft"); 
   this.iconTexture = "ammoArrow1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
+  this.neededResearch.add(ResearchGoalNumbers.ballistics1);
+  this.resources.add(new ItemStackWrapperCrafting(Item.flint, 5));
+  this.resources.add(new ItemStackWrapperCrafting(Item.ingotIron, 2));
+  this.resources.add(new ItemStackWrapperCrafting(Item.feather, 5));
   }
 
 @Override

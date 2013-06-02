@@ -54,6 +54,27 @@ public static final AWItemBase gateSpawner = new ItemGateSpawner(Config.getItemI
 public static final ItemFood rations = new ItemRation(Config.getItemID("itemSingle.foodRation", 13017, "Food rations for soldiers and npcs."));
 public static final AWItemBase researchBook = new ItemResearchBook(Config.getItemID("itemSingle.researchBook", 13017, "Research book to save research progress"));
 
+
+public static final ItemStack wood1 = new ItemStack(componentItem, 1, 0);
+public static final ItemStack wood2 = new ItemStack(componentItem, 1, 1);
+public static final ItemStack wood3 = new ItemStack(componentItem, 1, 2);
+public static final ItemStack wood4 = new ItemStack(componentItem, 1, 3);
+public static final ItemStack iron1 = new ItemStack(componentItem, 1, 4);
+public static final ItemStack iron2 = new ItemStack(componentItem, 1, 5);
+public static final ItemStack iron3 = new ItemStack(componentItem, 1, 6);
+public static final ItemStack iron4 = new ItemStack(componentItem, 1, 7);
+public static final ItemStack iron5 = new ItemStack(componentItem, 1, 8);
+
+public static final ItemStack flameCharge = new ItemStack(componentItem, 1, 9);
+public static final ItemStack explosiveCharge = new ItemStack(componentItem, 1, 10);
+public static final ItemStack rocketCharge = new ItemStack(componentItem, 1, 11);
+public static final ItemStack clusterCharge = new ItemStack(componentItem, 1, 12);
+public static final ItemStack napalmCharge = new ItemStack(componentItem, 1, 13);
+public static final ItemStack clayCasing = new ItemStack(componentItem, 1, 14);
+public static final ItemStack ironCasing = new ItemStack(componentItem, 1, 15);
+public static final ItemStack mobilityUnit = new ItemStack(componentItem, 1, 16);
+public static final ItemStack turretComponents = new ItemStack(componentItem, 1, 17);
+
 /**
  * debug items, will only be given instances if debug is enabled in Config
  * e.g. will be null unless debug mode is on
@@ -113,15 +134,25 @@ private void loadItems()
    * register main component item (misc random items) 
    */
   this.registerItemSubtyped(componentItem);
-  this.addSubtypeInfoToItem(componentItem, 0, "Rough Wood Materials").addDisplayStack(new ItemStack(componentItem,1,0));
-  this.addSubtypeInfoToItem(componentItem, 1, "Treated Wood Materials").addDisplayStack(new ItemStack(componentItem,1,1));
-  this.addSubtypeInfoToItem(componentItem, 2, "IronShod Wood Materials").addDisplayStack(new ItemStack(componentItem,1,2));
-  this.addSubtypeInfoToItem(componentItem, 3, "Iron Cored Wood Materials").addDisplayStack(new ItemStack(componentItem,1,3));
-  this.addSubtypeInfoToItem(componentItem, 4, "Rough Iron Materials").addDisplayStack(new ItemStack(componentItem,1,4));
-  this.addSubtypeInfoToItem(componentItem, 5, "Fine Iron Materials").addDisplayStack(new ItemStack(componentItem,1,5));
-  this.addSubtypeInfoToItem(componentItem, 6, "Tempered Iron Materials").addDisplayStack(new ItemStack(componentItem,1,6));
-  this.addSubtypeInfoToItem(componentItem, 7, "Minor Alloy Iron Materials").addDisplayStack(new ItemStack(componentItem,1,7));
-  this.addSubtypeInfoToItem(componentItem, 8, "Alloy Materials").addDisplayStack(new ItemStack(componentItem,1,8));
+  this.addSubtypeInfoToItem(componentItem, 0, "Rough Wood Materials").addDisplayStack(wood1);
+  this.addSubtypeInfoToItem(componentItem, 1, "Treated Wood Materials").addDisplayStack(wood2);
+  this.addSubtypeInfoToItem(componentItem, 2, "IronShod Wood Materials").addDisplayStack(wood3);
+  this.addSubtypeInfoToItem(componentItem, 3, "Iron Cored Wood Materials").addDisplayStack(wood4);
+  this.addSubtypeInfoToItem(componentItem, 4, "Rough Iron Materials").addDisplayStack(iron1);
+  this.addSubtypeInfoToItem(componentItem, 5, "Fine Iron Materials").addDisplayStack(iron2);
+  this.addSubtypeInfoToItem(componentItem, 6, "Tempered Iron Materials").addDisplayStack(iron3);
+  this.addSubtypeInfoToItem(componentItem, 7, "Minor Alloy Iron Materials").addDisplayStack(iron4);
+  this.addSubtypeInfoToItem(componentItem, 8, "Alloy Materials").addDisplayStack(iron5);
+  this.addSubtypeInfoToItem(componentItem, 9, "Flame Charge").addDisplayStack(flameCharge);
+  this.addSubtypeInfoToItem(componentItem, 10, "Explosive Charge").addDisplayStack(explosiveCharge);
+  this.addSubtypeInfoToItem(componentItem, 11, "Rocket Charge").addDisplayStack(rocketCharge);
+  this.addSubtypeInfoToItem(componentItem, 12, "Cluster Charge").addDisplayStack(clusterCharge);
+  this.addSubtypeInfoToItem(componentItem, 13, "Napalm Charge").addDisplayStack(napalmCharge);
+  this.addSubtypeInfoToItem(componentItem, 14, "Clay Casing").addDisplayStack(clayCasing);
+  this.addSubtypeInfoToItem(componentItem, 15, "Iron Casing").addDisplayStack(ironCasing);
+  this.addSubtypeInfoToItem(componentItem, 16, "Mobility Unit").addDisplayStack(mobilityUnit);
+  this.addSubtypeInfoToItem(componentItem, 17, "Turret Components").addDisplayStack(turretComponents);
+  
   }
 
 private void loadRecipes()

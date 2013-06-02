@@ -21,7 +21,11 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -46,6 +50,12 @@ public class AmmoArrowIronFlame extends Ammo
     this.addTooltip("Iron shaft, with head soaked in oil");  
     this.iconTexture = "ammoArrowFlame1";
     this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
+    this.neededResearch.add(ResearchGoalNumbers.ballistics1);
+    this.neededResearch.add(ResearchGoalNumbers.flammables1);
+    this.resources.add(new ItemStackWrapperCrafting(Item.flint, 5));
+    this.resources.add(new ItemStackWrapperCrafting(Item.ingotIron, 2));
+    this.resources.add(new ItemStackWrapperCrafting(Item.feather, 5));
+    this.resources.add(new ItemStackWrapperCrafting(ItemLoader.flameCharge, 2, false, false));
     }
 
 @Override
@@ -66,5 +76,6 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z, M
     ent.setFire(4);
     }
   }
+
 
 }

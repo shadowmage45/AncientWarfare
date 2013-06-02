@@ -181,10 +181,7 @@ protected void addCivicRecipes()
       Config.logDebug("adding civic recipe: "+recipe);
       }    
     }  
-  /**
-   * TODO add needed research for warehouse...
-   * TODO add needed resources for warehouse
-   */
+  
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.warehouseStorage.blockID,1,0), RecipeType.CIVIC);
   recipe.neededResearch.add(ResearchGoalNumbers.civics1);
   recipe.neededResearch.add(ResearchGoalNumbers.logistics3);

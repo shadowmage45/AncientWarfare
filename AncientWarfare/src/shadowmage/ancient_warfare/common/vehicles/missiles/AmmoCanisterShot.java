@@ -21,6 +21,9 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -43,6 +46,41 @@ public AmmoCanisterShot(int ammoType, int weight)
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png"; 
   this.entityDamage = 8;
   this.vehicleDamage = 8;
+  this.neededResearch.add(ResearchGoalNumbers.explosives1);
+  this.numCrafted = 4;
+  switch(weight)
+  {
+  case 5:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics1);
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, 1, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clusterCharge, 2, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.ironCasing, 2, false, false));
+  break;
+  
+  case 10:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics1);
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, 1, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clusterCharge, 3, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.ironCasing, 3, false, false));
+  break;
+  
+  case 15:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics2);
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, 2, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clusterCharge, 4, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.ironCasing, 4, false, false));
+  break;
+  
+  case 25:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics3);
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, 3, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clusterCharge, 6, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.ironCasing, 6, false, false));
+  break;
+  }
+  /**
+   * 5,10,15,25
+   */
   }
 
 @Override

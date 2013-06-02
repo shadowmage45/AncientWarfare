@@ -21,7 +21,12 @@
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -45,6 +50,16 @@ public AmmoHwachaRocketExplosive(int ammoType)
   this.renderScale = 0.2f;
   this.iconTexture = "ammoRocketFlame1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
+  
+  this.numCrafted = 8;
+  this.neededResearch.add(ResearchGoalNumbers.rockets2);
+  this.neededResearch.add(ResearchGoalNumbers.ballistics2);  
+  this.neededResearch.add(ResearchGoalNumbers.explosives2);
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.rocketCharge, 1, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.stick), 8, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.feather), 2, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.ingotIron), 1, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, 2, false, false));
   }
 
 @Override

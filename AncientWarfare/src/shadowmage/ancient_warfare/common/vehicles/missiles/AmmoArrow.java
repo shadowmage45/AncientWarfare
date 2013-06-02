@@ -20,16 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
-import java.util.Collection;
-
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.item.Item;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class AmmoArrow extends Ammo
 {
@@ -48,6 +44,9 @@ public AmmoArrow(int ammoType)
   this.addTooltip("Well-built, heavy-duty");  
   this.iconTexture = "ammoArrow1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
+  this.resources.add(new ItemStackWrapperCrafting(Item.flint, 5));
+  this.resources.add(new ItemStackWrapperCrafting(Item.stick, 5));
+  this.resources.add(new ItemStackWrapperCrafting(Item.feather, 5));
   }
 
 @Override

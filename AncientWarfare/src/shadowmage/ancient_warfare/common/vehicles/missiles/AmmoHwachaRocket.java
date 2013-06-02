@@ -20,10 +20,15 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
-import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class AmmoHwachaRocket extends Ammo
 {
@@ -48,6 +53,14 @@ public AmmoHwachaRocket(int ammoType)
   this.renderScale = 0.2f;
   this.iconTexture = "ammoRocket1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
+  
+  this.numCrafted = 12;
+  this.neededResearch.add(ResearchGoalNumbers.rockets1);
+  this.neededResearch.add(ResearchGoalNumbers.ballistics1);  
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.rocketCharge, 1, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.stick), 12, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.feather), 2, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.ingotIron), 1, false, false));
   }
 
 @Override

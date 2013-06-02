@@ -24,6 +24,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class AmmoExplosiveShot extends Ammo
 {
@@ -48,12 +51,51 @@ public AmmoExplosiveShot(int ammoType, int weight, boolean bigExplosion)
   if(bigExplosion)
     {
     this.iconTexture = "ammoHE1";
+    this.neededResearch.add(ResearchGoalNumbers.explosives3);
     }
   else
     {
     this.iconTexture = "ammoExplosive1";
+    this.neededResearch.add(ResearchGoalNumbers.explosives2);
     }
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
+    
+  int cases = 1;
+  int explosives = 1;
+  this.numCrafted = 2;
+  switch(weight)
+  {
+  case 10:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics1);
+  cases = 1;
+  explosives = 1;
+  break;
+  
+  case 15:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics1);
+  cases = 2;
+  explosives = 2;
+  break;
+  
+  case 30:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics2);
+  cases = 4;
+  explosives = 4;
+  break;
+  
+  case 45:
+  this.neededResearch.add(ResearchGoalNumbers.ballistics3);
+  cases = 6;
+  explosives = 6;
+  break;
+  }
+  if(bigExplosion)
+    {
+    explosives *=2;
+    }
+
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, explosives, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clayCasing, cases, false, false));
   }
 
 @Override
