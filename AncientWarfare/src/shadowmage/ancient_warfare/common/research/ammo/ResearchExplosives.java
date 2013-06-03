@@ -37,7 +37,7 @@ public ResearchExplosives(int num, int level)
   this.displayName = "Explosives " + (level+1);
   this.detailedDescription.add("Researching Explosives furthers knowledge" +
   		" about all things that go BOOM.  Learn how to blow things up without" +
-  		" dyint in the process.This research is necessary for ammunitions" +
+  		" dying in the process.This research is necessary for ammunitions" +
   		" and landmines that have explosive properties.");
   this.researchTime = 1200 * (level+1);
   this.addResource(new ItemStack(Item.gunpowder, (level+1)*2 ), false, false);

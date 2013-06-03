@@ -51,12 +51,12 @@ public class ResearchGoal implements IResearchGoal
 {
 public static ResearchGoal[] researchGoals = new ResearchGoal[256];
 
-public static IResearchGoal vehicleMobility1 = new ResearchMobility(ResearchGoalNumbers.mobility1,0);
+public static IResearchGoal vehicleMobility1 = new ResearchMobility(ResearchGoalNumbers.mobility1,0).addDependencies(ResearchGoalNumbers.mechanics1);
 public static IResearchGoal vehicleMobility2 = new ResearchMobility(ResearchGoalNumbers.mobility2,1).addDependencies(vehicleMobility1);
 public static IResearchGoal vehicleMobility3 = new ResearchMobility(ResearchGoalNumbers.mobility3,2).addDependencies(vehicleMobility2);
 public static IResearchGoal vehicleMobility4 = new ResearchMobility(ResearchGoalNumbers.mobility4,3).addDependencies(vehicleMobility3);
 public static IResearchGoal vehicleMobility5 = new ResearchMobility(ResearchGoalNumbers.mobility5,4).addDependencies(vehicleMobility4);
-public static IResearchGoal vehicleTurrets1 = new ResearchTurrets(ResearchGoalNumbers.turrets1, 0);
+public static IResearchGoal vehicleTurrets1 = new ResearchTurrets(ResearchGoalNumbers.turrets1, 0).addDependencies(ResearchGoalNumbers.mechanics1);
 public static IResearchGoal vehicleTurrets2 = new ResearchTurrets(ResearchGoalNumbers.turrets2, 1).addDependencies(vehicleTurrets1);
 public static IResearchGoal vehicleTurrets3 = new ResearchTurrets(ResearchGoalNumbers.turrets3, 2).addDependencies(vehicleTurrets2);
 public static IResearchGoal vehicleTurrets4 = new ResearchTurrets(ResearchGoalNumbers.turrets4, 3).addDependencies(vehicleTurrets3);
@@ -66,7 +66,7 @@ public static IResearchGoal vehicleTorsion2 = new ResearchTorsion(ResearchGoalNu
 public static IResearchGoal vehicleTorsion3 = new ResearchTorsion(ResearchGoalNumbers.torsion3, 2).addDependencies(vehicleTorsion2);
 public static IResearchGoal vehicleTorsion4 = new ResearchTorsion(ResearchGoalNumbers.torsion4, 3).addDependencies(vehicleTorsion3);
 public static IResearchGoal vehicleTorsion5 = new ResearchTorsion(ResearchGoalNumbers.torsion5, 4).addDependencies(vehicleTorsion4);
-public static IResearchGoal vehicleCounterweights1 = new ResearchCounterweights(ResearchGoalNumbers.counterweights1,0);
+public static IResearchGoal vehicleCounterweights1 = new ResearchCounterweights(ResearchGoalNumbers.counterweights1,0).addDependencies(ResearchGoalNumbers.mechanics1);
 public static IResearchGoal vehicleCounterweights2 = new ResearchCounterweights(ResearchGoalNumbers.counterweights2,1).addDependencies(vehicleCounterweights1);
 public static IResearchGoal vehicleCounterweights3 = new ResearchCounterweights(ResearchGoalNumbers.counterweights3,2).addDependencies(vehicleCounterweights2);
 public static IResearchGoal vehicleCounterweights4 = new ResearchCounterweights(ResearchGoalNumbers.counterweights4,3).addDependencies(vehicleCounterweights3);

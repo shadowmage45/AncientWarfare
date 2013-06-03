@@ -36,6 +36,10 @@ public ResearchLogistics(int num, int level)
   super(num);
   this.displayName = "Logistics " + (level+1);
   this.researchTime = 900 * (level+1);
+  this.detailedDescription.add("Researching Logistics advances knowledge regarding" +
+  		" efficient layouts and designs for transportation of goods and supply chains.  Higher" +
+  		" ranks of Logistics allow for construction of routing devices and automated civics." +
+  		"  Logistics research is necessary for most automated Civics.");
   this.addResource(new ItemStack(Item.paper, (level+1)*2), false, false);
   this.addResource(new ItemStack(Item.dyePowder, level+1, 0), false, false);
   this.addResource(new ItemStack(Block.torchWood, level+1), false, false);

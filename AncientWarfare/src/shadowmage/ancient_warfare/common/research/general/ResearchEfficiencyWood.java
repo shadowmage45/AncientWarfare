@@ -39,6 +39,10 @@ public ResearchEfficiencyWood(int num, int level)
   this.material = VehicleMaterial.materialWood;
   this.displayName = "Efficiency: Wood Materials" + (level+1);
   this.researchTime = 1200 * (level+1);
+  this.detailedDescription.add("Researching Efficieny Wood allows for decreasing" +
+  		" the total amount of resources necessary for the construction of wood-" +
+  		"based vehicles.  Higher ranks increase the efficiency bonus and further" +
+  		" decrease the material requirements.");
   this.addResource(new ItemStack(Item.paper, (level+1)*2), false, false);
   this.addResource(new ItemStack(Item.dyePowder, level+1, 0), false, false);
   this.addResource(new ItemStack(Block.torchWood, level+1), false, false);
