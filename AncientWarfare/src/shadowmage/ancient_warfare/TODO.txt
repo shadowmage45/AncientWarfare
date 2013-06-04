@@ -10,7 +10,7 @@ BALANCE/TWEAKS
 * farmers too OP harvesting too many farms?
 
 GENERAL
-* add name search/filter box to structure builder guis, and warehouse gui (and crafting/selection guis later on.....)
+* add name search/filter box to structure builder guis, and warehouse gui
 * missiles -- add shooter/etc to spawn data and re-enable client-side entity-hit detection?
 * create general secondary data watcher for npcs/gates/vehicles
 * more missile icons
@@ -38,26 +38,7 @@ CIVICS
 * town hall food processing
 * food processing center -- basic autocrafting to craft food recipes (manually added list)
 
-/***************************************************************UPCOMING FEATURES***************************************************************/
-CRAFTING TYPES
-* Ammo
-    normal recipes
-* upgrades
-    normal recipes (w/research?)
-* civics
-
 RESEARCH GOALS
-* vehicle
-    mobility1 (r1-3 mobile vehicles)
-    mobility2 (r4-5 mobile vehicles)
-    turrets1 (r1/2/3 turret vehicles)
-    turrets2 (r4/5 turret vehicles)
-    torsion1 (cat/bal r1)
-    torsion2 (cat/ballista r2/3)
-    torsion3 (cat/ballista/treb r4/5)
-    counterweights1 (trebuchet r1/2/)
-    counterweights2 (trebuchet r3/4)
-    counterweights3 (trebuchet 5, giant treb r1-5)
 
 TEMPLATES
 * resource lists for gates
@@ -65,11 +46,6 @@ TEMPLATES
 * resource lists for vehicles
 
 RESEARCH
-* vehicle research system (initial only t0(rough) mats and t0(rough) vehicle variants)
-* vehicle upgrade research (0 known until researched)
-* materials research (2 known, rough quality wood/iron, other tiers/materials must be researched)
-* npc research system (0 known until researched)
-* civics research system (0 known until researched)
 
 CRAFTING
     VEHICLE CRAFTING
@@ -78,10 +54,7 @@ CRAFTING
                 will slowly add pieces over construction duration until finished constructing.
     NPC CRAFTING
     AMMO CRAFTING
-        --simple processing station with a overList on the far left, innerList on left, autoList in mid, 
-            and craft input grid on the right.  auto_list will fill with results based on what is in the grid
-            other lists are manual select.  will have a 'start' button, and take time to make ammo.  will continue
-            making same type until materials run out
+        --create ammo crafting center -- automated center that uses npc craftsmen to do the work
     UPGRADE AND ARMOR CRAFTING
     FOOD/RECRUITING    
        create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
@@ -101,6 +74,7 @@ BASIC DRAFTING STATION
 ADVANCED DRAFTING STATION (editor)
 * THDT
 
+/***************************************************************UPCOMING FEATURES***************************************************************/
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
 * need to rewrite world gen completely..it is pretty much crap right now

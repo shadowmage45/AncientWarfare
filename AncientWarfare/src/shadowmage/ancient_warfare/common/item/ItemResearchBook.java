@@ -63,10 +63,17 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
+  if(world.isRemote)
+    {
+    return true;
+    }
   NBTTagCompound tag = null;
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWResInfo"))
     {
     tag = stack.getTagCompound().getCompoundTag("AWResInfo");
+    /**
+     * open GUI
+     */
     }
   else
     {
@@ -75,7 +82,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     player.addChatMessage("Binding Research Book to You!");    
     }  
   stack.setTagInfo("AWResInfo", tag);
-  return false;
+  return true;
   }
 
 @Override
