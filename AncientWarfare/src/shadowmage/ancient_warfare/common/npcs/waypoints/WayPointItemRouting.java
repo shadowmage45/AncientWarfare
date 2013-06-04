@@ -148,6 +148,8 @@ public boolean doWork(NpcBase npc)
   return doTransaction(source, target, true, false);
   case FILL_TO:
   return doFillTo(source, target);
+  case NONE:
+  break;
   }
   return false;
   }

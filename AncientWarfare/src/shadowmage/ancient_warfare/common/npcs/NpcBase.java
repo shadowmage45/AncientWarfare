@@ -315,6 +315,9 @@ public void handleBatonCommand(NpcCommand cmd, WayPoint p)
   case CLEAR_GUARD:
   wayNav.setGuardTarget(null);
   break;
+  
+  case NONE:
+  break;
   }
   }
 

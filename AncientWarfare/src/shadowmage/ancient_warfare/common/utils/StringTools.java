@@ -368,6 +368,7 @@ public static List<String> getLines(byte[] bytes)
     {    
     lines.add(scan.nextLine());
     }
+  scan.close();
   return lines;
   }
 
