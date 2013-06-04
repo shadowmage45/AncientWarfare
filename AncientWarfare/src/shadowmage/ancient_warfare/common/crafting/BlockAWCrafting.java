@@ -135,6 +135,7 @@ public TileEntity getNewTileEntity(World world, int meta)
   case 1:
   return new TEAWEngineering();
   case 2:
+  return new TEAWStructureCraft();
   case 3:
   case 4:
   case 5:

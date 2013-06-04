@@ -31,6 +31,8 @@ public class ContainerCivilEngineering extends ContainerBase
 {
 
 TEAWStructureCraft te;
+public boolean isWorking;
+
 /**
  * @param openingPlayer
  * @param synch

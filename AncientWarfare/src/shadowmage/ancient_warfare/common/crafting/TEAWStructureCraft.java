@@ -47,7 +47,7 @@ short compileTimeMax = 20;
  */
 public TEAWStructureCraft()
   {
-  this.modelID = 2;
+  this.modelID = 1;
   }
 
 @Override
