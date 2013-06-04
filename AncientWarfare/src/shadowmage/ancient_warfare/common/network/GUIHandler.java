@@ -31,6 +31,7 @@ import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicWarehouse;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiEngineeringStation;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiResearch;
+import shadowmage.ancient_warfare.client.gui.info.GuiResearchBook;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCommandBaton;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCourierRoutingSlip;
 import shadowmage.ancient_warfare.client.gui.npc.GuiNpcBase;
@@ -91,8 +92,12 @@ public static final int NPC_COURIER = 10;
 public static final int COURIER_SLIP = 11;
 public static final int CIVIC_WAREHOUSE = 12;
 
+public static final int INFO = 40;
+//41
 public static final int RESEARCH = 42;
 public static final int ENGINEERING = 43;
+public static final int VEHICLE_CRAFT = 44;
+public static final int NPC_CRAFT = 45;
 
 public static final int VEHICLE_AMMO_SELECT = 98;
 public static final int VEHICLE_DEBUG = 99;
@@ -202,6 +207,9 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
     }
   return null;
   
+  case INFO:
+  return new ContainerDummy();
+  
   case VEHICLE_AMMO_SELECT:
   return new ContainerDummy();
   
@@ -308,6 +316,9 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
     return new GuiEngineeringStation(new ContainerEngineeringStation(player, tew));
     }
   return null;
+  
+  case INFO:
+  return new GuiResearchBook(player);
   
   case VEHICLE_AMMO_SELECT:
   vehicle = (VehicleBase)world.getEntityByID(x);

@@ -20,61 +20,61 @@
  */
 package shadowmage.ancient_warfare.client.gui.info;
 
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.EntityPlayer;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerDummy;
+import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 
 public class GuiResearchBook extends GuiContainerAdvanced
 {
 
+PlayerEntry entry;
 /**
  * @param container
  */
-public GuiResearchBook(Container container)
+public GuiResearchBook(EntityPlayer player)
   {
-  super(container);
-  // TODO Auto-generated constructor stub
+  super(new ContainerDummy());
+  this.entry = PlayerTracker.instance().getClientEntry();
+  this.shouldCloseOnVanillaKeys = true;
   }
 
 @Override
 public int getXSize()
   {
-  // TODO Auto-generated method stub
-  return 0;
+  return 256;
   }
 
 @Override
 public int getYSize()
   {
-  // TODO Auto-generated method stub
-  return 0;
+  return 240;
   }
 
 @Override
 public String getGuiBackGroundTexture()
   {
-  // TODO Auto-generated method stub
-  return null;
+  return Config.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  // TODO Auto-generated method stub
-  
+ 
   }
 
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
-  
+ 
   }
 
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  // TODO Auto-generated method stub
   
   }
 
@@ -88,7 +88,6 @@ public void setupControls()
 @Override
 public void updateControls()
   {
-  // TODO Auto-generated method stub
   
   }
 
