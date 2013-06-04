@@ -221,7 +221,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   
   case INFO:
   return new ContainerDummy();
-  
+    
   case VEHICLE_AMMO_SELECT:
   return new ContainerDummy();
   
