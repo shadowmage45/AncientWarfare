@@ -39,7 +39,7 @@ public ResearchBallistics(int num, int level)
   this.detailedDescription.add("Researching Ballistics increases knowledge regarding ballistic" +
   		" properties of missiles in flight.  Higher ranks allow for construction of more advanced" +
   		" ammunition designs and proficiency in their use.  This research is needed for most" +
-  		" advanced ammunitions, as well as several upgrades and vehicle types.");
+  		" advanced ammunitions.");
   this.addResource(new ItemStack(Item.silk, level+1), false, false);
   this.addResource(new ItemStack(Item.dyePowder, level+1, 0), false, false);
   this.addResource(new ItemStack(Item.paper, (level+1)*2), false, false);

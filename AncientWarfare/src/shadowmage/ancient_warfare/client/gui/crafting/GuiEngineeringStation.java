@@ -49,6 +49,7 @@ import shadowmage.ancient_warfare.common.crafting.RecipeSorterAZ;
 import shadowmage.ancient_warfare.common.crafting.RecipeSorterTextFilter;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GuiEngineeringStation extends GuiContainerAdvanced
 {
@@ -202,7 +203,27 @@ public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
 
 public void drawProgressForeground()
   {
-  
+  /**
+   * draw fake stacks into slots
+   */
+  if(this.container.currentRecipe!=null && !this.container.isWorking)
+    {
+    int x = 0;
+    int y = 0;
+    for(ItemStackWrapperCrafting stack : this.container.currentRecipe.getResourceList())
+      {
+      if(x>=3)
+        {
+        x=0;
+        y++;
+        }      
+      if(!this.container.getSlot(36 + y*3+x).getHasStack())
+        {
+        this.renderItemStack(stack.getFilter(), guiLeft + 8 + x*18+27, guiTop + 8+18+4+24 + y*18, mouseX, mouseY, true, true);        
+        }   
+      x++;   
+      }
+    }
   }
 
 public void drawProgressBackground()
@@ -319,7 +340,7 @@ protected void handleSearchBoxUpdate()
     this.recipes.clear();
     this.area.elements.clear();
     this.sorterFilter.setFilterText(text);
-    this.addRecipeButtons(AWCraftingManager.instance().getRecipesContaining(text, EnumSet.of(RecipeType.AMMO, RecipeType.ARMOR, RecipeType.CIVIC, RecipeType.GATE, RecipeType.UPGRADE)), sorterFilter);
+    this.addRecipeButtons(AWCraftingManager.instance().getRecipesContaining(player, text, EnumSet.of(RecipeType.AMMO, RecipeType.ARMOR, RecipeType.CIVIC, RecipeType.GATE, RecipeType.UPGRADE)), sorterFilter);
     }
   }
 
@@ -396,7 +417,7 @@ public void updateControls()
     
     case 1002://progress
     container.addSlots();
-    this.addGuiButton(1, 35, 16, "Clear").updateRenderPos(120, 40);  
+    this.addGuiButton(1, 35, 16, "Clear").updateRenderPos(120, 45);  
     break;
     
     case 1003://upgrades/armor

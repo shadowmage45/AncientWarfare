@@ -139,7 +139,7 @@ public static IResearchGoal materialIron4 = new ResearchMaterialLevel(208, 3, Ve
 public static IResearchGoal materialIron5 = new ResearchMaterialLevel(209, 4, VehicleMaterial.materialIron).addDependencies(materialIron4).addResource(new ItemStack(Item.ingotIron, 50), false, true);
 
 /**
- * npcs?
+ * npcs/command?
  */
 
 

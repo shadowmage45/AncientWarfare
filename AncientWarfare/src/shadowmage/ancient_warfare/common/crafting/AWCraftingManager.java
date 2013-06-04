@@ -109,7 +109,7 @@ public ResourceListRecipe validateRecipe(ResourceListRecipe recipe)
   return null;
   }
 
-public List<ResourceListRecipe> getRecipesContaining(String text, EnumSet<RecipeType> types)
+public List<ResourceListRecipe> getRecipesContaining(EntityPlayer player, String text, EnumSet<RecipeType> types)
   {
   String name;
   List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
@@ -120,7 +120,7 @@ public List<ResourceListRecipe> getRecipesContaining(String text, EnumSet<Recipe
       if(types.isEmpty() || types.contains(recipe.type))
         {
         name = recipe.displayName;
-        if(name.toLowerCase().contains(text.toLowerCase()))
+        if(name.toLowerCase().contains(text.toLowerCase()) && recipe.canBeCraftedBy(player))
           {
           recipes.add(recipe);
           }

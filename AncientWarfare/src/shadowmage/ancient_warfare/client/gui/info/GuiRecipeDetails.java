@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.gui.info;
 
+import org.lwjgl.input.Keyboard;
+
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -47,19 +49,18 @@ public GuiRecipeDetails(GuiContainerAdvanced parent, ResourceListRecipe recipe)
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  // TODO Auto-generated method stub
   }
 
 @Override
 public int getXSize()
   {
-  return 256;
+  return 120;
   }
 
 @Override
 public int getYSize()
   {
-  return 240;
+  return 100;
   }
 
 @Override
@@ -72,13 +73,14 @@ public String getGuiBackGroundTexture()
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   this.drawStringGui(recipe.getDisplayName(), 5, 5, 0xffffffff);
+  this.drawStringGui("Required resources:", 5, 15, 0xffffffff);
   int x = 0;
   int y = 0;
   for(ItemStackWrapperCrafting stack : recipe.getResourceList())
     {
-    this.renderItemStack(stack.getFilter(), guiLeft + x*18 + 8, guiTop + y * 18 + 24, mouseX, mouseY, true);
+    this.renderItemStack(stack.getFilter(), guiLeft + x*18 + 8, guiTop + y * 18 + 5+10+10, mouseX, mouseY, true);
     x++;
-    if(x>=3)      
+    if(x>=9)      
       {
       x = 0;
       y++;
@@ -87,9 +89,14 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   }
 
 @Override
-public void closeGUI()
+protected void keyTyped(char par1, int par2)
   {
-  mc.displayGuiScreen(parent);
+  if(par2 == this.mc.gameSettings.keyBindInventory.keyCode || par2 == Keyboard.KEY_ESCAPE)
+    {
+    mc.displayGuiScreen(parent);
+    return;
+    }
+  super.keyTyped(par1, par2);
   }
 
 @Override

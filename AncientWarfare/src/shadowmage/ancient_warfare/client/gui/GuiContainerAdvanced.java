@@ -2,7 +2,6 @@ package shadowmage.ancient_warfare.client.gui;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +29,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.GuiFakeSlot;
+import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollBarSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
@@ -423,7 +423,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     GL11.glPopAttrib();
     GL11.glPopMatrix();
     }  
-  if(this.currentMouseElement instanceof GuiFakeSlot)
+  if(this.currentMouseElement instanceof GuiItemStack)
     {
     GuiFakeSlot slot = (GuiFakeSlot)this.currentMouseElement;
     if(slot.renderTooltip)
