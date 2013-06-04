@@ -98,6 +98,9 @@ public void registerBlockInfo()
   d.addDisplayStack(new ItemStack(this,1,0));
   d.setName("Engineering Station", 1);
   d.addDisplayStack(new ItemStack(this,1,1));
+  d.setName("Civil Engineering Station", 2);
+  d.addDisplayStack(new ItemStack(this,1,2));
+  
   d.setIconTexture(baseTexDir+"researchBlockBottom", 0);
   d.setIconTexture(baseTexDir+"researchBlockTop", 1);
   d.setIconTexture(baseTexDir+"researchBlockFront", 2);
@@ -107,6 +110,7 @@ public void registerBlockInfo()
   
   GameRegistry.registerTileEntity(TEAWResearch.class, "Research Center");
   GameRegistry.registerTileEntity(TEAWEngineering.class, "Engineering Station");
+  GameRegistry.registerTileEntity(TEAWStructureCraft.class, "Civil Engineering Station");
   }
 
 @Override

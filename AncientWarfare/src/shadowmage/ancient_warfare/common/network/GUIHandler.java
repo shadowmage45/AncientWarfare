@@ -29,6 +29,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicWarehouse;
+import shadowmage.ancient_warfare.client.gui.crafting.GuiCivilEngineering;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiEngineeringStation;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiResearch;
 import shadowmage.ancient_warfare.client.gui.info.GuiResearchBook;
@@ -51,6 +52,7 @@ import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTE;
 import shadowmage.ancient_warfare.common.container.ContainerCivicWarehouse;
+import shadowmage.ancient_warfare.common.container.ContainerCivilEngineering;
 import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
@@ -65,6 +67,7 @@ import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
 import shadowmage.ancient_warfare.common.crafting.TEAWEngineering;
 import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
+import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
@@ -93,7 +96,7 @@ public static final int COURIER_SLIP = 11;
 public static final int CIVIC_WAREHOUSE = 12;
 
 public static final int INFO = 40;
-//41
+public static final int CIVIL_ENGINEERING = 41;
 public static final int RESEARCH = 42;
 public static final int ENGINEERING = 43;
 public static final int VEHICLE_CRAFT = 44;
@@ -186,6 +189,15 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
     {
     TECivicWarehouse tew = (TECivicWarehouse)te;
     return new ContainerCivicWarehouse(player, tew);
+    }
+  return null;
+  
+  case CIVIL_ENGINEERING:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWStructureCraft)
+    {
+    TEAWStructureCraft tew = (TEAWStructureCraft)te;
+    return new ContainerCivilEngineering(player, tew);
     }
   return null;
   
@@ -296,6 +308,15 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
     {
     TECivicWarehouse tew = (TECivicWarehouse)te;
     return new GuiCivicWarehouse(new ContainerCivicWarehouse(player, tew), tew);
+    }
+  return null;
+  
+  case CIVIL_ENGINEERING:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWStructureCraft)
+    {
+    TEAWStructureCraft tew = (TEAWStructureCraft)te;
+    return new GuiCivilEngineering(new ContainerCivilEngineering(player, tew));
     }
   return null;
   

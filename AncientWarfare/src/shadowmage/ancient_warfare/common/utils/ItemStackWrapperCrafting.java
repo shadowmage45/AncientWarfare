@@ -63,6 +63,11 @@ public ItemStackWrapperCrafting(NBTTagCompound tag)
   this.ignoreTag = tag.getBoolean("igtg");
   }
 
+public int getRemainingNeeded()
+  {
+  return this.remainingNeeded;
+  }
+
 public NBTTagCompound writeToNBT(NBTTagCompound tag)
   {
   super.writeToNBT(tag);
