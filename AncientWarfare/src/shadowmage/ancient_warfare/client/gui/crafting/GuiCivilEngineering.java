@@ -110,16 +110,14 @@ public String getGuiBackGroundTexture()
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   switch(activeTab.getElementNumber())
-  {
-  case 1001:
-  break;
-  case 1000:
-  case 1002:
-  this.drawCurrentRecipeBackground();
-  break;
-  }
-  // TODO Auto-generated method stub
-
+    {
+    case 1001:
+    break;
+    case 1000:
+    case 1002:
+    this.drawCurrentRecipeBackground();
+    break;
+    }
   }
 
 public void drawCurrentRecipeBackground()
@@ -153,7 +151,6 @@ public void updateScreenContents()
       }
     }
   }
-
 
 @Override
 public void onElementActivated(IGuiElement element)
@@ -268,8 +265,10 @@ public void updateControls()
     case 1002://progress    
     container.addSlots();
     this.addRecipeMaterialList();
-    this.addGuiButton(3, 35, 16, "Start").updateRenderPos(120, 45-18);
-    this.addGuiButton(1, 35, 16, "Clear").updateRenderPos(120, 45);  
+    int x =  8;
+    int y =  21 + 4 + 4*18 + 8;
+    this.addGuiButton(3, 35, 16, "Start").updateRenderPos(x, y);
+    this.addGuiButton(1, 35, 16, "Clear").updateRenderPos(x+37, y);  
     break;
        
     }

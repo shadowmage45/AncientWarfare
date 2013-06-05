@@ -94,11 +94,8 @@ public void drawElement(int mouseX, int mouseY)
     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     //enable lighting
     GL11.glEnable(GL11.GL_DEPTH_TEST);
-    itemRenderer.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack, guiLeft+renderPosX+1, guiTop+renderPosY+1);
-    if(fakeStack.stackSize>1)
-      {
-      itemRenderer.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack,  guiLeft+renderPosX+1, guiTop+renderPosY+1);  
-      }    
+    itemRenderer.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack, guiLeft+renderPosX+1, guiTop+renderPosY+1); 
+    itemRenderer.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack,  guiLeft+renderPosX+1, guiTop+renderPosY+1);          
     //disable lighting
     if(this.renderName)
       {

@@ -74,6 +74,7 @@ public ResourceListRecipe(ItemStack result, RecipeType type)
 public ResourceListRecipe copy()
   {
   ResourceListRecipe recipe = new ResourceListRecipe(result.copy(), type);
+  recipe.displayName = this.displayName;
   for(ItemStackWrapperCrafting item : this.resources)
     {
     ItemStackWrapperCrafting newItem = new ItemStackWrapperCrafting(item.getFilter(), item.getQuantity(), item.ignoreDamage, item.ignoreTag);

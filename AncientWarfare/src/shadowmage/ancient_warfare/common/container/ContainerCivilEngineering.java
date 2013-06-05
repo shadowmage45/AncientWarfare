@@ -54,7 +54,7 @@ public ContainerCivilEngineering(EntityPlayer openingPlayer, TEAWStructureCraft 
   super(openingPlayer, null);
   this.te = te;
   this.addPlayerSlots(player, 8, 156, 4);
-  
+
   int posX = 8;
   int posY = 8+24;
   int slotNum = 0;
@@ -63,14 +63,14 @@ public ContainerCivilEngineering(EntityPlayer openingPlayer, TEAWStructureCraft 
     {
     for(int x = 0; x <3; x++)
       {
-      posX = 8+27 + x * 18;
-      posY = 8+18+4+24 + y * 18;
+      posX = 8 + x * 18;
+      posY = 8 + 18 + 4 + y * 18 + 18;
       slotNum = y * 3 + x;
       slot = new Slot(te, slotNum, posX, posY);
       this.addSlotToContainer(slot);
       }
     }
-  slot = new SlotPullOnly(te, 9, 120, 8+18+4+24+18);
+  slot = new SlotPullOnly(te, 9, 8 + 3* 18 + 27 , 8 + 18 + 4 + 3 * 18 + 18 + 27);
   this.addSlotToContainer(slot);
   Slot s;
   for(Object o : this.inventorySlots)
@@ -127,11 +127,7 @@ public void handlePacketData(NBTTagCompound tag)
   if(tag.hasKey("recUp"))
     {
     Config.logDebug("receiving recipe single component update");
-    this.handleRecipeUpdate(tag.getCompoundTag("recUp"));
-    if(this.gui!=null)
-      {
-      this.gui.refreshGui();      
-      }
+    this.handleRecipeUpdate(tag.getCompoundTag("recUp"));   
     }
   if(tag.hasKey("rem"))
     {
@@ -142,6 +138,7 @@ public void handlePacketData(NBTTagCompound tag)
     {
     Config.logDebug("receiving server stop work command");
     te.stopWorkAndClearRecipe();
+    this.currentRecipe = null;
     }
   if(tag.hasKey("set") && !player.worldObj.isRemote)
     {
@@ -164,9 +161,14 @@ protected void handleRecipeUpdate(NBTTagCompound tag)
     {
     if(craft.matches(item))
       {
-      craft.setRemainingNeeded(craft.getRemainingNeeded());
+      Config.logDebug("found matching item, updating");
+      craft.setRemainingNeeded(item.getRemainingNeeded());
       break;
       }
+    }
+  if(this.gui!=null)
+    {
+    this.gui.refreshGui();      
     }
   }
 
@@ -179,9 +181,9 @@ public void handleInitData(NBTTagCompound tag)
 
 @Override
 public List<NBTTagCompound> getInitData()
-  {
-  return Collections.emptyList();
-  }
+{
+return Collections.emptyList();
+}
 
 
 @Override
@@ -205,48 +207,62 @@ public void detectAndSendChanges()
     this.sendDataToPlayer(tag);
     Config.logDebug("sending progress MAX update");
     }
+
+
   /**
-   * verify recipe -- send entire recipe, or just a single item update if necessary
+   * check if current recipe is the same as TE recipe
+   * if not, set current recipe to TE recipe and send complete packet
+   * else check resource lists for differences, send diff
+   *  
    */
-  if(this.currentRecipe != te.getRecipe())
+  ResourceListRecipe ter = te.getRecipe();
+  if(ter==null)
     {
-    this.currentRecipe = te.getRecipe().copy();
-    NBTTagCompound tag = new NBTTagCompound();
     if(this.currentRecipe!=null)
       {
-      tag.setCompoundTag("rec", this.currentRecipe.getNBTTag());
+      this.currentRecipe = null;
+      NBTTagCompound tag = new NBTTagCompound();   
+      tag.setBoolean("rem", true);      
+      this.sendDataToPlayer(tag);
+      Config.logDebug("sending remove recipe update to player");
+      }   
+    }
+  else
+    {
+    if(this.currentRecipe==null || !this.currentRecipe.getDisplayName().equals(ter.getDisplayName()))
+      {
+      this.currentRecipe = te.getRecipe().copy();
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setCompoundTag("rec", this.currentRecipe.getNBTTag());      
+      this.sendDataToPlayer(tag);
+      Config.logDebug("sending recipe update to player");
       }
     else
       {
-      tag.setBoolean("rem", true);
-      }
-    this.sendDataToPlayer(tag);
-    Config.logDebug("sending recipe update to player");
-    } 
-  else if(te.getRecipe()!=null)
-    {
-    Config.logDebug("examining te recipe to match up to this.recipe resource list");
-    List<ItemStackWrapperCrafting> curList = this.currentRecipe.getResourceList();
-    List<ItemStackWrapperCrafting> teList = this.te.getRecipe().getResourceList();
-    ItemStackWrapperCrafting item = null;
-    for(int i = 0; i < curList.size(); i++)
-      {
-      int needed = curList.get(i).getRemainingNeeded();
-      if(needed!=teList.get(i).getRemainingNeeded())
+      //      Config.logDebug("examining te recipe to match up to this.recipe resource list");
+      List<ItemStackWrapperCrafting> curList = this.currentRecipe.getResourceList();
+      List<ItemStackWrapperCrafting> teList = this.te.getRecipe().getResourceList();
+      ItemStackWrapperCrafting item = null;
+      for(int i = 0; i < curList.size(); i++)
         {
-        item = teList.get(i);
-        curList.get(i).setRemainingNeeded(item.getRemainingNeeded());
-        break;
+        int needed = curList.get(i).getRemainingNeeded();
+        if(needed!=teList.get(i).getRemainingNeeded())
+          {
+          item = teList.get(i);
+          curList.get(i).setRemainingNeeded(item.getRemainingNeeded());
+          break;
+          }
+        }
+      if(item!=null)
+        {
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setCompoundTag("recUp", item.writeToNBT(new NBTTagCompound()));
+        this.sendDataToPlayer(tag);
+        Config.logDebug("sending recipe single component update");
         }
       }
-    if(item!=null)
-      {
-      NBTTagCompound tag = new NBTTagCompound();
-      tag.setCompoundTag("recUp", item.writeToNBT(new NBTTagCompound()));
-      this.sendDataToPlayer(tag);
-      Config.logDebug("sending recipe single component update");
-      }
     }
+
   if(this.isWorking!= te.isStarted)
     {
     this.isWorking = te.isStarted;
