@@ -230,7 +230,7 @@ public void loadRenders()
   MinecraftForgeClient.registerItemRenderer(BlockLoader.crafting.blockID, RenderCraftingHelper.instance());
   this.addTEModel(0, new ModelTable1());
   this.addTEModel(1, new ModelTable2());
-  
+  this.addTEModel(2, new ModelTable2());
   /**
    * load up the vehicle item renderer...
    */

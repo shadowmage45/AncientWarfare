@@ -425,7 +425,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     }  
   if(this.currentMouseElement instanceof GuiItemStack)
     {
-    GuiFakeSlot slot = (GuiFakeSlot)this.currentMouseElement;
+	  GuiItemStack slot = (GuiFakeSlot)this.currentMouseElement;
     if(slot.renderTooltip)
       {
       

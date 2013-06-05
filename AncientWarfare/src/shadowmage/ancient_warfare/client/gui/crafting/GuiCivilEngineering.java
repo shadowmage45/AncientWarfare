@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.client.gui.crafting;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,9 +31,12 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
+import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTab;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
@@ -45,8 +49,10 @@ import shadowmage.ancient_warfare.common.container.ContainerEngineeringStation;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.RecipeSorterAZ;
 import shadowmage.ancient_warfare.common.crafting.RecipeSorterTextFilter;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GuiCivilEngineering extends GuiContainerAdvanced
 {
@@ -55,11 +61,13 @@ GuiTab activeTab = null;
 HashSet<GuiTab> tabs = new HashSet<GuiTab>();
 HashMap<GuiButtonSimple, ResourceListRecipe> recipes = new HashMap<GuiButtonSimple, ResourceListRecipe>();
 GuiScrollableArea area;
+GuiScrollableArea area2;
 int buttonWidth = 176-10-12-10;
 ContainerCivilEngineering container;
 RecipeSorterAZ sorterAZ = new RecipeSorterAZ();
 RecipeSorterTextFilter sorterFilter = new RecipeSorterTextFilter();
 GuiTextInputLine searchBox;
+ResourceListRecipe currentRecipe;
 
 /**
  * @param container
@@ -101,15 +109,49 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
+  switch(activeTab.getElementNumber())
+  {
+  case 1001:
+  break;
+  case 1000:
+  case 1002:
+  this.drawCurrentRecipeBackground();
+  break;
+  }
   // TODO Auto-generated method stub
 
+  }
+
+public void drawCurrentRecipeBackground()
+  {
+	/**
+	 * todo..move to foreground rendering
+	 */
+  if(this.container.currentRecipe!=null)
+    {
+    this.drawStringGui(this.container.currentRecipe.getDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
+    this.renderItemStack(this.container.currentRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true);
+    }
+  else if(this.currentRecipe!=null)
+    {
+    this.drawStringGui(this.currentRecipe.getDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
+    this.renderItemStack(this.currentRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true);
+    }
   }
 
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
-
+  area.updateGuiPos(guiLeft, guiTop);
+  area2.updateGuiPos(guiLeft, guiTop);
+  if(this.currentRecipe!=this.container.currentRecipe)
+    {
+    if(this.container.currentRecipe!=null)
+      {
+      this.currentRecipe = this.container.currentRecipe;
+      this.forceUpdate = true;
+      }
+    }
   }
 
 
@@ -130,14 +172,30 @@ public void onElementActivated(IGuiElement element)
     }
   switch(activeTab.getElementNumber())
   {
+  case 1000:
   case 1001:
   if(element==this.searchBox)
     {
-//    this.handleSearchBoxUpdate();
+    this.handleSearchBoxUpdate();
     }
-  else if(recipes.containsKey(element))
+  else if(recipes.containsKey(element) && container.currentRecipe==null)
     {
     this.handleRecipeClick(element);
+    }
+  break;
+  
+  case 1002:
+  if(element.getElementNumber()==1 && this.container.isWorking)//clear
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("stop", true);
+    this.sendDataToServer(tag);
+    }
+  else if(element.getElementNumber()==3 && this.currentRecipe!=null && !this.container.isWorking)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setString("set", this.currentRecipe.getDisplayName());
+    this.sendDataToServer(tag);
     }
   break;
   }
@@ -155,9 +213,7 @@ protected void handleRecipeClick(IGuiElement element)
       {
       return;
       }
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setCompoundTag("set", recipes.get(element).getNBTTag());
-    this.sendDataToServer(tag);
+    this.currentRecipe = recipes.get(element);   
     }
   }
 
@@ -177,24 +233,80 @@ public void setupControls()
   
   this.searchBox = (GuiTextInputLine) new GuiTextInputLine(2, this, 160, 12, 30, "").updateRenderPos(5, 24);
   searchBox.selected = false;
-  this.area = new GuiScrollableArea(0, this, 5, 21+18+10+5, 176-10, 240-42-10-18-5-8, 0);
+  this.area = new GuiScrollableArea(0, this, 5, 21+18+10+5, 176-10, 240-21-10-18-5-8, 0);
+  this.area2 = new GuiScrollableArea(4, this, 176-16+16+5, 21+18+10+5, 37, 240-21-4*18-5-5, 0);
   }
 
 @Override
 public void updateControls()
   {
-  switch(activeTab.getElementNumber())
-  {
-  case 1000://select
-  this.addRecipeButtons(AWCraftingManager.instance().getStructureRecipesClient(), sorterAZ);
-  break;
+  this.guiElements.clear();
+  this.area.elements.clear();
+  this.recipes.clear();
+  for(GuiTab tab : this.tabs)
+    {
+    this.guiElements.put(tab.getElementNumber(), tab);
+    }
+  this.container.removeSlots();
+  if(this.activeTab!=null)
+    {
+    switch(activeTab.getElementNumber())
+    {
+    case 1000://select
+    this.addRecipeButtons(AWCraftingManager.instance().getStructureRecipesClient(), sorterAZ);
+    break;
+    
+    case 1001://search
+    this.guiElements.put(2, searchBox);    
+    this.handleSearchBoxUpdate();
+    break;
+    
+    case 1002://progress    
+    container.addSlots();
+    this.addRecipeMaterialList();
+    this.addGuiButton(3, 35, 16, "Start").updateRenderPos(120, 45-18);
+    this.addGuiButton(1, 35, 16, "Clear").updateRenderPos(120, 45);  
+    break;
+       
+    }
+    }  
+  for(Integer i : this.guiElements.keySet())
+    {
+    this.guiElements.get(i).updateGuiPos(guiLeft, guiTop);
+    }
   
-  case 1001://search
-  break;
-  
-  case 1002://progress
-  break;  
   }
+
+protected void addRecipeMaterialList()
+  {
+  this.guiElements.put(4, area2);
+  if(this.currentRecipe!=null)
+    {
+    GuiItemStack element;
+    ItemStack stack;
+    int y = 0;
+    for(ItemStackWrapperCrafting item : this.currentRecipe.getResourceList())
+      {
+      stack = item.getFilter().copy();
+      stack.stackSize = item.getRemainingNeeded();
+      element = new GuiItemStack(9000, this, 0 ,y).setItemStack(stack);          
+      area2.addGuiElement(element);      
+      y+=18;
+      }
+    area2.updateTotalHeight(y);
+    }  
+  }
+
+protected void handleSearchBoxUpdate()
+  {  
+  if(this.activeTab!=null && this.activeTab.getElementNumber()==1001)
+    {
+    String text = this.searchBox.getText();
+    this.recipes.clear();
+    this.area.elements.clear();
+    this.sorterFilter.setFilterText(text);
+    this.addRecipeButtons(AWCraftingManager.instance().getStructureRecipesClient(), sorterFilter);
+    }
   }
 
 protected void addRecipeButtons(List<ResourceListRecipe> recipes, Comparator sorter)
@@ -221,4 +333,21 @@ protected void addRecipeButtons(List<ResourceListRecipe> recipes, Comparator sor
     }
   }
 
+@Override
+protected void keyTyped(char par1, int par2)
+  {
+  for(Integer i : this.guiElements.keySet())
+    {
+    GuiElement el = this.guiElements.get(i);
+    el.onKeyTyped(par1, par2);
+    }
+  if(!this.searchBox.selected)
+    {
+    super.keyTyped(par1, par2);
+    }
+  else
+    {
+    this.handleSearchBoxUpdate();
+    }
+  }
 }

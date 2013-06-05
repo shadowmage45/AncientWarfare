@@ -336,6 +336,7 @@ public ResourceListRecipe constructRecipe()
   Collection<ItemStack> stacks = this.getResourcesNeeded();
   ItemStack result = ItemCivicBuilder.getCivicBuilderItem(this.name);
   ResourceListRecipe recipe = new ResourceListRecipe(result, RecipeType.STRUCTURE);
+  recipe.setDisplayName(name);
   recipe.addResources(stacks, false, false);
   return recipe;
   }

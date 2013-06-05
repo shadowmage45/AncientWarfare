@@ -32,14 +32,13 @@ private int quantity;
 
 public ItemStackWrapper(ItemStack stack, int qty)
   {
-  this.filter = stack;
+  this.filter = stack.copy();
   this.setQuantity(qty);
   }
 
 public ItemStackWrapper(ItemStack stack)
   {
-  this.filter = stack;
-  this.setQuantity(stack.stackSize);
+  this(stack, stack.stackSize);
   }
 
 public ItemStackWrapper(NBTTagCompound tag)

@@ -180,6 +180,7 @@ public ResourceListRecipe constructRecipe()
   ItemStack result = ItemCivicBuilder.getCivicBuilderItem(this.name);
   ResourceListRecipe recipe = new ResourceListRecipe(result, RecipeType.STRUCTURE);
   recipe.addResources(stacks, false, false);
+  recipe.setDisplayName(name);
   return recipe;
   }
 

@@ -25,6 +25,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -37,17 +38,18 @@ AWInventoryBasic inventory = new AWInventoryBasic(10);
 int[] resultSlot = new int[]{9};
 int[] craftMatrix = new int[]{0,1,2,3,4,5,6,7,8};
 ResourceListRecipe recipe = null;
-boolean working = false;
-boolean compiling = false;
+public boolean isStarted = false;
+public int displayProgress;
+public int displayProgressMax;
 short compileTime = 0;
-short compileTimeMax = 20;
+short compileTimeMax = 5;
 
 /**
  * 
  */
 public TEAWStructureCraft()
   {
-  this.modelID = 1;
+  this.modelID = 2;
   }
 
 @Override
@@ -58,52 +60,57 @@ public void onBlockClicked(EntityPlayer player)
 
 @Override
 public void updateEntity()
-  {
-  
-  if(this.working)
+  {  
+  if(this.isStarted)
     {
     if(this.recipe==null)
       {
       this.setFinished();
       return;
       }
-    if(this.compiling)
-      {      
-      if(this.compileTime>=this.compileTimeMax)
-        {        
-        if(isRecipeFinished())
-          {
-          if(this.canSetFinished())
-            {
-            this.produceItem();
-            this.setFinished();
-            }
-          }
-        else if(!this.tryStartCompiling())
-          {          
-          this.compiling = false;
-          }
-        }
-      else
+    if(this.compileTime>=this.compileTimeMax)
+      {
+      if(this.tryRemoveItem())
         {
-        this.compileTime++;
+        if(this.isRecipeFinished())
+          {        
+          this.produceItem();
+          this.setFinished();        
+          }
+        else
+          {
+          this.compileTime = 0;
+          }
         }
       }
-    else
+    if(this.compileTime<this.compileTimeMax)
       {
-      this.compileTime = 0;
-      tryStartCompiling();
+      this.compileTime++;
+      this.displayProgress++;
       }
     }
   }
 
-protected boolean tryStartCompiling()
+protected int calcTotalTime()
+  {
+  int time = 0;
+  for(ItemStackWrapperCrafting item : recipe.resources)
+    {
+    time += item.getQuantity() * 5;
+    }
+  return time;
+  }
+
+protected boolean tryRemoveItem()
   {
   for(ItemStackWrapperCrafting item : recipe.resources)
     {
-    if(InventoryTools.getCountOf(inventory, item.getFilter(), craftMatrix)>0)
+    if(item.getRemainingNeeded() > 0 && InventoryTools.getCountOf(inventory, item.getFilter(), craftMatrix)>0)
       {
+      Config.logDebug("found matching filter");
       InventoryTools.tryRemoveItems(inventory, item.getFilter(), 1, 0, 8);
+      item.setRemainingNeeded(item.getRemainingNeeded()-1);
+      Config.logDebug("decremented item : "+item.getFilter().toString() + " remaining count : "+item.getRemainingNeeded());    
       return true;
       }
     }
@@ -112,10 +119,12 @@ protected boolean tryStartCompiling()
 
 protected boolean isRecipeFinished()
   {
+  Config.logDebug("checking if recipe finished");
   for(ItemStackWrapperCrafting item : recipe.resources)
     {
     if(item.getRemainingNeeded()>0)
       {
+      Config.logDebug("sensing recipe not finished...");
       return false;
       }
     }
@@ -129,10 +138,12 @@ protected boolean canSetFinished()
 
 protected void setFinished()
   {
-  this.working = false;
-  this.compiling = false;
+  this.isStarted = false;
   this.compileTimeMax = 0;
+  this.compileTime = 0;
   this.recipe = null;
+  this.displayProgress = 0;
+  this.displayProgressMax = 0;
   }
 
 protected void produceItem()
@@ -144,6 +155,20 @@ protected void produceItem()
 public boolean canUpdate()
   {
   return true;
+  }
+
+public void validateAndSetRecipe(ResourceListRecipe recipe)
+  {
+  if(this.isStarted || this.recipe!=null || recipe == null){return;}
+  this.recipe = recipe.copy();
+  this.isStarted = true;
+  this.displayProgressMax = this.calcTotalTime();
+  Config.logDebug("setting recipe and working....recipe: "+recipe);
+  }
+
+public void clearWork()
+  {
+  this.setFinished();
   }
 
 @Override
@@ -165,10 +190,11 @@ public void writeExtraNBT(NBTTagCompound tag)
     {
     tag.setCompoundTag("rec", this.recipe.getNBTTag());
     }
-  tag.setBoolean("work", this.working);
-  tag.setBoolean("comp", this.compiling);
+  tag.setBoolean("work", this.isStarted);
   tag.setShort("time", this.compileTime);
   tag.setCompoundTag("inv", this.inventory.getNBTTag());
+  tag.setInteger("dtime", displayProgress);
+  tag.setInteger("dmax", displayProgressMax);  
   }
 
 @Override
@@ -182,10 +208,10 @@ public void readExtraNBT(NBTTagCompound tag)
     {
     this.inventory.readFromNBT(tag.getCompoundTag("inv"));
     }
-  this.working = tag.getBoolean("work");
-  this.compiling = tag.getBoolean("comp");
+  this.isStarted = tag.getBoolean("work");
   this.compileTime = tag.getShort("time");
-  
+  this.displayProgress = tag.getInteger("dtime");
+  this.displayProgressMax = tag.getInteger("dmax");
   }
 
 @Override
@@ -276,6 +302,22 @@ public void closeChest()
 public boolean isStackValidForSlot(int i, ItemStack itemstack)
   {  
   return i == 9 ? false : true;
+  }
+
+/**
+ * @return
+ */
+public ResourceListRecipe getRecipe()
+  {
+  return this.recipe;
+  }
+
+/**
+ * 
+ */
+public void stopWorkAndClearRecipe()
+  {
+  this.setFinished();
   }
 
 }

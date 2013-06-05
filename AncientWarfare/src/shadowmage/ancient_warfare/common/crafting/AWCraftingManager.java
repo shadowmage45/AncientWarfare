@@ -109,6 +109,18 @@ public ResourceListRecipe validateRecipe(ResourceListRecipe recipe)
   return null;
   }
 
+public ResourceListRecipe getStructureRecipeFor(String name)
+  {
+  for(ResourceListRecipe recipe : this.structureRecipesServer)
+    {
+    if(recipe.getDisplayName().toLowerCase().equals(name.toLowerCase()))
+      {
+      return recipe;
+      }
+    }
+  return null;
+  }
+
 public List<ResourceListRecipe> getRecipesContaining(EntityPlayer player, String text, EnumSet<RecipeType> types)
   {
   String name;

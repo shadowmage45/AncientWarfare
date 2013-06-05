@@ -68,6 +68,15 @@ public int getRemainingNeeded()
   return this.remainingNeeded;
   }
 
+public void setRemainingNeeded(int val)
+  {
+  this.remainingNeeded = val;
+  if(val<0)
+    {
+    val = 0;
+    }  
+  }
+
 public NBTTagCompound writeToNBT(NBTTagCompound tag)
   {
   super.writeToNBT(tag);
