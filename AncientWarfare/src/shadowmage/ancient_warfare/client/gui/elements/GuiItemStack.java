@@ -35,6 +35,7 @@ public class GuiItemStack extends GuiElement
 
 ItemStack fakeStack = null;
 boolean renderName = false;
+public boolean isFake = false;
 /**
  * @param elementNum
  * @param parent
@@ -94,7 +95,10 @@ public void drawElement(int mouseX, int mouseY)
     //enable lighting
     GL11.glEnable(GL11.GL_DEPTH_TEST);
     itemRenderer.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack, guiLeft+renderPosX+1, guiTop+renderPosY+1);
-//    itemRenderer.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack,  guiLeft+renderPosX+1, guiTop+renderPosY+1);
+    if(fakeStack.stackSize>1)
+      {
+      itemRenderer.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack,  guiLeft+renderPosX+1, guiTop+renderPosY+1);  
+      }    
     //disable lighting
     if(this.renderName)
       {

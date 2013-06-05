@@ -33,6 +33,7 @@ import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class ContainerCivilEngineering extends ContainerBase
 {
@@ -121,7 +122,16 @@ public void handlePacketData(NBTTagCompound tag)
   if(tag.hasKey("rec"))
     {
     Config.logDebug("receiving recipe update");
-    this.currentRecipe = StructureManager.instance().getClientStructure(tag.getString("rec")).constructRecipe();
+    this.currentRecipe = new ResourceListRecipe(tag.getCompoundTag("rec"));    
+    }  
+  if(tag.hasKey("recUp"))
+    {
+    Config.logDebug("receiving recipe single component update");
+    this.handleRecipeUpdate(tag.getCompoundTag("recUp"));
+    if(this.gui!=null)
+      {
+      this.gui.refreshGui();      
+      }
     }
   if(tag.hasKey("rem"))
     {
@@ -144,6 +154,19 @@ public void handlePacketData(NBTTagCompound tag)
     {
     Config.logDebug("receiving work update");
     this.isWorking = tag.getBoolean("work");
+    }
+  }
+
+protected void handleRecipeUpdate(NBTTagCompound tag)
+  {
+  ItemStackWrapperCrafting item = new ItemStackWrapperCrafting(tag);
+  for(ItemStackWrapperCrafting craft : this.currentRecipe.getResourceList())
+    {
+    if(craft.matches(item))
+      {
+      craft.setRemainingNeeded(craft.getRemainingNeeded());
+      break;
+      }
     }
   }
 
@@ -182,13 +205,16 @@ public void detectAndSendChanges()
     this.sendDataToPlayer(tag);
     Config.logDebug("sending progress MAX update");
     }
+  /**
+   * verify recipe -- send entire recipe, or just a single item update if necessary
+   */
   if(this.currentRecipe != te.getRecipe())
     {
-    this.currentRecipe = te.getRecipe();
+    this.currentRecipe = te.getRecipe().copy();
     NBTTagCompound tag = new NBTTagCompound();
     if(this.currentRecipe!=null)
       {
-      tag.setString("rec", this.currentRecipe.getDisplayName());
+      tag.setCompoundTag("rec", this.currentRecipe.getNBTTag());
       }
     else
       {
@@ -197,6 +223,30 @@ public void detectAndSendChanges()
     this.sendDataToPlayer(tag);
     Config.logDebug("sending recipe update to player");
     } 
+  else if(te.getRecipe()!=null)
+    {
+    Config.logDebug("examining te recipe to match up to this.recipe resource list");
+    List<ItemStackWrapperCrafting> curList = this.currentRecipe.getResourceList();
+    List<ItemStackWrapperCrafting> teList = this.te.getRecipe().getResourceList();
+    ItemStackWrapperCrafting item = null;
+    for(int i = 0; i < curList.size(); i++)
+      {
+      int needed = curList.get(i).getRemainingNeeded();
+      if(needed!=teList.get(i).getRemainingNeeded())
+        {
+        item = teList.get(i);
+        curList.get(i).setRemainingNeeded(item.getRemainingNeeded());
+        break;
+        }
+      }
+    if(item!=null)
+      {
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setCompoundTag("recUp", item.writeToNBT(new NBTTagCompound()));
+      this.sendDataToPlayer(tag);
+      Config.logDebug("sending recipe single component update");
+      }
+    }
   if(this.isWorking!= te.isStarted)
     {
     this.isWorking = te.isStarted;

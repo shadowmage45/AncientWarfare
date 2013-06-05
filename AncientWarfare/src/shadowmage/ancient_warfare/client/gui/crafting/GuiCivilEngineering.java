@@ -234,7 +234,11 @@ public void setupControls()
   this.searchBox = (GuiTextInputLine) new GuiTextInputLine(2, this, 160, 12, 30, "").updateRenderPos(5, 24);
   searchBox.selected = false;
   this.area = new GuiScrollableArea(0, this, 5, 21+18+10+5, 176-10, 240-21-10-18-5-8, 0);
-  this.area2 = new GuiScrollableArea(4, this, 176-16+16+5, 21+18+10+5, 37, 240-21-4*18-5-5, 0);
+  int x = 134;
+  int y = 26; 
+  int w = 37;
+  int h = 124;
+  this.area2 = new GuiScrollableArea(4, this, x, y, w, h, 0);
   }
 
 @Override
@@ -280,6 +284,7 @@ public void updateControls()
 protected void addRecipeMaterialList()
   {
   this.guiElements.put(4, area2);
+  area2.elements.clear();
   if(this.currentRecipe!=null)
     {
     GuiItemStack element;
@@ -289,7 +294,8 @@ protected void addRecipeMaterialList()
       {
       stack = item.getFilter().copy();
       stack.stackSize = item.getRemainingNeeded();
-      element = new GuiItemStack(9000, this, 0 ,y).setItemStack(stack);          
+      element = new GuiItemStack(9000, this, 0 ,y).setItemStack(stack);  
+      element.renderTooltip = false;
       area2.addGuiElement(element);      
       y+=18;
       }

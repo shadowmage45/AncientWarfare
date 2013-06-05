@@ -43,11 +43,13 @@ public class GuiFakeSlot extends GuiItemStack
 public GuiFakeSlot(int elementNum, IGuiElementCallback parent)
   {
   super(elementNum, parent, 18, 18);
+  this.isFake = true;  
   }
 
 public GuiFakeSlot(int elementNum, IGuiElementCallback parent, int x, int y)
   {
   super(elementNum, parent, x, y);
+  this.isFake = true;
   }
 
 @Override

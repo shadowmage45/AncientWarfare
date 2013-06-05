@@ -425,18 +425,18 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     }  
   if(this.currentMouseElement instanceof GuiItemStack)
     {
-	  GuiItemStack slot = (GuiFakeSlot)this.currentMouseElement;
+	  GuiItemStack slot = (GuiItemStack)this.currentMouseElement;	 
     if(slot.renderTooltip)
       {
       
       }
     else if(slot.getStack()!=null)
       {
-      this.drawItemStackTooltip(slot.getStack(), mouseX, mouseY, true);
+      this.drawItemStackTooltip(slot.getStack(), mouseX, mouseY, slot.isFake);
       }
     }
   if(this.tooltipDelayTicks<=0 && this.currentMouseElement!=null && this.currentMouseElement.renderTooltip)
-    {
+    {    
     this.renderTooltip(mouseX, mouseY, this.currentMouseElement.getTooltip());
     }
   GL11.glPopMatrix();

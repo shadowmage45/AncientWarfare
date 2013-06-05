@@ -309,22 +309,8 @@ public Collection<ItemStack> getResourcesNeeded()
   ItemStack stack;
   for(IDPairCount count : ids)
     {
-    left = count.count;
-    while(left>0)
-      {
-      stack = new ItemStack(count.id,1,count.meta);
-      if(left>stack.getMaxStackSize())
-        {
-        left -= stack.getMaxStackSize();
-        stack.stackSize = stack.getMaxStackSize();
-        }
-      else
-        {
-        stack.stackSize = left;
-        left-=left;
-        }      
-      items.add(stack);
-      }
+    stack = new ItemStack(count.id, count.count,count.meta);
+    items.add(stack);
     }
   this.cachedResources.addAll(items);
   return items;

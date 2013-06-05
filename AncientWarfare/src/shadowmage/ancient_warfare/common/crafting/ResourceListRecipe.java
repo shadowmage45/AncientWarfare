@@ -76,9 +76,21 @@ public ResourceListRecipe copy()
   ResourceListRecipe recipe = new ResourceListRecipe(result.copy(), type);
   for(ItemStackWrapperCrafting item : this.resources)
     {
-    recipe.addResource(item.getFilter().copy(), item.getQuantity(), item.ignoreDamage, item.ignoreTag);
+    ItemStackWrapperCrafting newItem = new ItemStackWrapperCrafting(item.getFilter(), item.getQuantity(), item.ignoreDamage, item.ignoreTag);
+    newItem.setRemainingNeeded(item.getRemainingNeeded());
+    recipe.addResource(newItem);
     }
   return recipe;
+  }
+
+public ResourceListRecipe addResource(ItemStackWrapperCrafting item)
+  {
+  if(this.resources==null)
+    {
+    this.resources = new ArrayList<ItemStackWrapperCrafting>();
+    }
+  this.resources.add(item);
+  return this;
   }
 
 public ResourceListRecipe addResource(ItemStack stack, int qty, boolean dmg, boolean tag)
