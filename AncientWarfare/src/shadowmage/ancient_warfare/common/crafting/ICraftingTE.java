@@ -18,47 +18,21 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.targeting;
+package shadowmage.ancient_warfare.common.crafting;
 
-/**
- * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
- * @author Shadowmage
- *
- */
-public enum TargetType
-  { 
-  ATTACK,
-  MOUNT,
-  REPAIR,
-  HEAL,
-  FOLLOW,
-  WANDER,
-  PATROL,
-  MOVE,
-  SHELTER,
-  FLEE,
-  NONE,
-  WORK,
-  FARM_PLANT,
-  FARM_HARVEST,
-  BARN_BREED,
-  BARN_CULL,
-  BUILD_CLEAR,
-  BUILD_PLACE,
-  MINE_CLEAR,//
-  MINE_LADDER,//for the central vertical shaft
-  MINE_FILL,//for holes in the wall/roof/floor
-  MINE_TORCH,//for some tunnel/branch lines
-  MINE_CLEAR_RESOURCE,
-  TREE_CHOP,
-  TREE_PLANT,
-  PICKUP,
-  DELIVER,
-  ATTACK_TILE,
-  UPKEEP,
-  COMMANDER,
-  BARN_MILK,
-  BARN_SHEAR,
-  FISH_CATCH,
-  CRAFT,
-  }
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
+public interface ICraftingTE
+{
+
+public abstract void readDescriptionPacket(NBTTagCompound tag);
+public abstract void writeDescriptionData(NBTTagCompound tag);
+public abstract void writeExtraNBT(NBTTagCompound tag);
+public abstract void readExtraNBT(NBTTagCompound tag);
+public int getOrientation(); 
+public int getModelID();
+public void onBlockClicked(EntityPlayer player);
+public void setOrientation(int face);
+
+}

@@ -297,6 +297,7 @@ public void readFromNBT(NBTTagCompound tag)
     {
     this.resources.add(new ItemStackWrapperCrafting((NBTTagCompound)list.tagAt(i)));
     }
+  this.type = RecipeType.values()[tag.getInteger("type")];
   }
 
 @Override
@@ -305,6 +306,7 @@ public NBTTagCompound getNBTTag()
   NBTTagCompound tag = new NBTTagCompound();
   tag.setString("name", this.displayName);
   tag.setCompoundTag("result", this.result.writeToNBT(new NBTTagCompound()));
+  tag.setInteger("type", this.type.ordinal());
   NBTTagList list = new NBTTagList();
   for(ItemStackWrapperCrafting wrap : this.resources)
     {

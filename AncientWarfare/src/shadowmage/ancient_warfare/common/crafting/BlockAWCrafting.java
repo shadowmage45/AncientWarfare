@@ -111,6 +111,7 @@ public void registerBlockInfo()
   GameRegistry.registerTileEntity(TEAWResearch.class, "Research Center");
   GameRegistry.registerTileEntity(TEAWEngineering.class, "Engineering Station");
   GameRegistry.registerTileEntity(TEAWStructureCraft.class, "Civil Engineering Station");
+  GameRegistry.registerTileEntity(TEAWVehicleCraft.class, "Vehicle Engineering Station");
   }
 
 @Override
@@ -137,6 +138,7 @@ public TileEntity getNewTileEntity(World world, int meta)
   case 2:
   return new TEAWStructureCraft();
   case 3:
+  return new TEAWVehicleCraft();
   case 4:
   case 5:
   case 7:

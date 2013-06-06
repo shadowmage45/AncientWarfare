@@ -192,9 +192,9 @@ public void handleInitData(NBTTagCompound tag)
 
 @Override
 public List<NBTTagCompound> getInitData()
-{
-return Collections.emptyList();
-}
+  {
+  return Collections.emptyList();
+  }
 
 
 @Override

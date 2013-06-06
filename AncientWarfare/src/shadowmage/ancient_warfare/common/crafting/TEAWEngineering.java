@@ -25,6 +25,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -117,29 +118,6 @@ public void updateEntity()
 
 protected boolean tryStartRecipe()
   {
-//  boolean start = true;
-//  int count = 0;
-//  if(this.currentRecipe.resources.isEmpty()){return false;}
-//  for(ItemStackWrapperCrafting stack : this.currentRecipe.resources)
-//    {
-//    count += stack.getQuantity();
-//    if(!InventoryTools.containsAtLeast(inventory, stack.getFilter(), stack.getQuantity(), 0, 8))
-//      {
-//      start = false;
-//      break;
-//      }
-//    }
-//  if(start)
-//    {
-//    this.displayProgress = 0;
-//    for(ItemStackWrapperCrafting stack : this.currentRecipe.resources)
-//      {
-//      InventoryTools.tryRemoveItems(inventory, stack.getFilter(), stack.getQuantity(), 0, 8);      
-//      }    
-//    this.displayProgressMax = count*5;    
-//    }
-//  return start;
-  
   boolean start = this.currentRecipe.doesInventoryContainResources(inventory, craftMatrix);
   if(start)
     {

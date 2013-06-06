@@ -324,13 +324,21 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
         int width2 = Math.abs(hit.x-pos1.x)+1;
         int height = Math.abs(hit.y-pos1.y)+1;
         int totalArea = width1*width2*height;
-        if(width1 <= maxWidth && width2<=maxWidth && height <=maxHeight && totalArea <= maxArea)//
+        int minS1 = Math.min(width1, width2);
+        int minS2 = Math.max(width1, width2);
+        
+        boolean shouldPlace = false;
+        if(width1 <= maxWidth && width2<=maxWidth && height <=maxHeight && totalArea <= maxArea && minS1>=civ.getMinWorkSizeWidth1() && minS2>=civ.getMinWorkSizeWidth2() && height >= civ.getMinWorkSizeHeight())
+          {
+          shouldPlace = true;
+          }
+        if(shouldPlace)
           {          
           tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
           }
         else
           {
-          player.addChatMessage("Too large of an area, try a smaller area!");
+          player.addChatMessage("Improper area, please try another!");
           if(width1 > maxWidth)
             {
             player.addChatMessage("Z axis is too large by: "+(width1-maxWidth)+" blocks");
@@ -346,6 +354,18 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
           if(totalArea > maxArea)
             {
             player.addChatMessage("Cubed area is too large by: "+(totalArea-maxArea)+" blocks");
+            }
+          if(minS1 < civ.getMinWorkSizeWidth1() )
+            {
+            player.addChatMessage("Smallest Width is less than civic minimum width" );
+            }
+          if(minS2 < civ.getMinWorkSizeWidth2() )
+            {
+            player.addChatMessage("Largest Width is less than civic minimum width" );
+            }
+          if(height< civ.getMinWorkSizeHeight())
+            {
+            player.addChatMessage("Height is less than civic minimum height");
             }
           }        
         }

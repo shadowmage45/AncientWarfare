@@ -25,23 +25,66 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
-public abstract class TEAWCrafting extends TileEntity implements ICraftingTE
+public abstract class TEAWCraftingWorkSite extends TEWorkSite implements ICraftingTE
 {
 
-public int orientation;
-int modelID;
+byte orientation = 0;
+byte modelID;
 
 /**
  * 
  */
-public TEAWCrafting()
+public TEAWCraftingWorkSite()
   {
+  
+  }
+
+@Override
+public boolean onInteract(World world, EntityPlayer player)
+  {
+  if(!world.isRemote)
+    {
+    this.onBlockClicked(player);
+    }
+  return true;
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  super.readFromNBT(tag);
+  this.readExtraNBT(tag);
+  }
+
+@Override
+public void writeToNBT(NBTTagCompound tag)
+  {
+  super.writeToNBT(tag);
+  this.writeExtraNBT(tag);
+  }
+
+@Override
+public Packet getDescriptionPacket()
+  {
+  Packet132TileEntityData pkt = (Packet132TileEntityData) super.getDescriptionPacket();
+  NBTTagCompound custData = new NBTTagCompound();
+  this.writeDescriptionData(custData);
+  pkt.customParam1.setTag("craftDesc", custData);
+  return pkt;
+  }
+
+@Override
+public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
+  {  
+  super.onDataPacket(net, pkt);
+  this.readDescriptionPacket(pkt.customParam1.getCompoundTag("craftDesc"));
   }
 
 @Override
@@ -53,47 +96,13 @@ public int getOrientation()
 @Override
 public int getModelID()
   {
-  return this.modelID;
+  return modelID;
   }
 
 @Override
 public void setOrientation(int face)
   {
-  this.orientation = face;
-  }
-
-@Override
-public void readFromNBT(NBTTagCompound tag)
-  {
-  super.readFromNBT(tag);
-  this.orientation = tag.getByte("face");
-  this.readExtraNBT(tag);
-  }
-
-@Override
-public void writeToNBT(NBTTagCompound tag)
-  {
-  super.writeToNBT(tag);
-  tag.setByte("face", (byte)this.orientation);
-  this.writeExtraNBT(tag);
-  }
-
-@Override
-public Packet getDescriptionPacket()
-  {
-  NBTTagCompound tag = new NBTTagCompound();
-  this.writeDescriptionData(tag);
-  tag.setByte("face", (byte) this.orientation);  
-  Packet132TileEntityData pkt = new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);  
-  return pkt;
-  }
-
-@Override
-public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
-  {
-  super.onDataPacket(net, pkt);
-  readDescriptionPacket(pkt.customParam1);
-  this.orientation = pkt.customParam1.getByte("face");
+  this.orientation = (byte) face;
   }
 
 }

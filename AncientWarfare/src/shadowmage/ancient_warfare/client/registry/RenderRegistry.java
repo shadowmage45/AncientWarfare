@@ -75,7 +75,9 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetMobileFix
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandTurret;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
+import shadowmage.ancient_warfare.common.crafting.TEAWCraftingWorkSite;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -119,6 +121,7 @@ private HashMap<Integer, ModelVehicleBase> vehicleModels = new HashMap<Integer, 
 private HashMap<Integer, Render> gateRenders = new HashMap<Integer, Render>();
 
 private HashMap<Integer, ModelTEBase> teModels = new HashMap<Integer, ModelTEBase>();
+private HashMap<Integer, String> teModelTextures = new HashMap<Integer, String>();
 
 public void loadRenders()
   {  
@@ -225,13 +228,19 @@ public void loadRenders()
   this.addGateRender(12, new RenderGateRotatingBridge());
   
   /**
-   * load up crafting TE models
+   * load up crafting TE models, renders, etc
    */
   ClientRegistry.bindTileEntitySpecialRenderer(TEAWCrafting.class, RenderCraftingHelper.instance());
+//  ClientRegistry.bindTileEntitySpecialRenderer(TEAWCraftingWorkSite.class, RenderCraftingHelper.instance());
   MinecraftForgeClient.registerItemRenderer(BlockLoader.crafting.blockID, RenderCraftingHelper.instance());
   this.addTEModel(0, new ModelTable1());
   this.addTEModel(1, new ModelTable2());
   this.addTEModel(2, new ModelTable3());
+  
+  this.teModelTextures.put(0, Config.texturePath+"models/crafting/teResearchTable.png");
+  this.teModelTextures.put(1, Config.texturePath+"models/crafting/teEngineeringStation.png");
+  this.teModelTextures.put(2, Config.texturePath+"models/crafting/teCivilEngineeringStation.png");
+  
   /**
    * load up the vehicle item renderer...
    */
@@ -261,6 +270,11 @@ public void addTEModel(int type, ModelTEBase model)
 public ModelTEBase getTEModel(int type)
   {
   return this.teModels.get(type);
+  }
+
+public String getTEModelTexture(int type)
+  {
+  return this.teModelTextures.get(type);
   }
 
 public void addVehicleRender(IVehicleType type, RenderVehicleBase rend, ModelVehicleBase model)

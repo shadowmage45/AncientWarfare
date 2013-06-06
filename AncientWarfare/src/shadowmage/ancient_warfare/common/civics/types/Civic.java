@@ -102,6 +102,8 @@ public static ICivicType fishFarm = new CivicFishFarm(29, "Fish Farm", "16x16 Ma
 public static ICivicType squidFarm = new CivicFishFarm(30, "Squid Farm", "16x16 Max Width, needs water", TESquidFarm.class, "civicFarmWheat1",16,2).setBlockIcons("civicFarmSquidBottom", "civicFarmSquidTop", "civicFarmSquidSides");
 public static ICivicType cocoaFarm = new CivicFarm(31, "Cocoa Bean Farm", "10x10 Max Width", TEFarmCocoa.class, "civicFarmWheat1", 10 ,2).setBlockIcons("civicFarmCocoaBottom", "civicFarmCocoaTop", "civicFarmCocoaSides").addResourceItem(new ItemStack(Item.dyePowder,1,3));
 public static ICivicType warehouseSmall = new CivicWarehouse(32, "Small Warehouse", "9x9x3 Max Size", TECivicWarehouse.class, 9, 3);
+public static ICivicType siegeWorkShopSmall = new CivicSiegeWorkshop(33, 0).setBlockIcons("civicTownHallSmallBottom", "civicTownHallSmallTop", "civicTownHallSmallSides");
+public static ICivicType siegeWorkShopMedium = new CivicSiegeWorkshop(34, 1).setBlockIcons("civicTownHallMediumBottom", "civicTownHallMediumTop", "civicTownHallMediumSides");
 //smithy (process ores -> ingots)
 //lumber yard (process logs -> planks/charcoal)
 //factory (single block)(use provided resources to craft player-set recipes)
@@ -114,6 +116,9 @@ protected String itemIconTexture = "";
 protected int maxWorkers = 1;
 protected int workSizeMaxHorizontal = 10;
 protected int workSizeMaxHeight = 2;
+protected int minSize1 = 1;
+protected int minSize2 = 1;
+protected int minHeight = 1;
 protected int resourceSlotSize = 0;
 protected boolean isWorkSite = false;
 protected boolean isDepository = false;
@@ -127,6 +132,8 @@ protected String[] blockIconNames = new String[]{"","",""};
 protected CivicWorkType workType = CivicWorkType.NONE;
 protected List<ItemStackWrapperCrafting> recipeResources = new ArrayList<ItemStackWrapperCrafting>();
 protected Set<Integer> neededResearch = new HashSet<Integer>();
+protected Block blockType = null;
+protected int blockMeta = -1;
 
 public Civic(int id)
   {
@@ -139,6 +146,12 @@ public Civic(int id)
     {
     Config.logError("Duplicate Civic attempted to register: "+id);
     }
+  }
+
+@Override
+public Block getBlockType()
+  {
+  return blockType;
   }
 
 public Civic setBlockIcons(String bottom, String top, String side)
@@ -322,6 +335,31 @@ public ResourceListRecipe constructRecipe()
 public Collection<Integer> getNeededResearch()
   {
   return this.neededResearch;
+  }
+
+@Override
+public int getMinWorkSizeWidth1()
+  {
+  return this.minSize1;
+  }
+
+@Override
+public int getMinWorkSizeWidth2()
+  {
+  return this.minSize2;
+  }
+
+@Override
+public int getMinWorkSizeHeight()
+  {
+  return this.minHeight;
+  }
+
+@Override
+public int getBlockMeta()
+  {
+  // TODO Auto-generated method stub
+  return 0;
   }
 
 }

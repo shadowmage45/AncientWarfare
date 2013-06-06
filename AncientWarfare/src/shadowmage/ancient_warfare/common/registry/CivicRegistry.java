@@ -78,13 +78,11 @@ public void registerCivics()
 
 public void setCivicBlock(World world, int x, int y, int z, int type)
   {
-  Block block = getBlockFor(type);
-  if(block!=null)
-    {
-    world.setBlock(x, y, z, block.blockID, type%16, 3);
-    TECivic te = (TECivic) world.getBlockTileEntity(x, y, z);    
-    te.setCivic(getCivicFor(type));      
-    }
+  Block block = null;
+  block = getBlockFor(type); 
+  world.setBlock(x, y, z, block.blockID, type%16, 3);    
+  TECivic te = (TECivic) world.getBlockTileEntity(x, y, z);    
+  te.setCivic(getCivicFor(type));      
   }
 
 public ItemStack getItemFor(int blockNum, int meta)

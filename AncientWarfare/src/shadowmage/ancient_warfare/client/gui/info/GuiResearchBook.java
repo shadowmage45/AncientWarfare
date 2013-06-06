@@ -46,7 +46,27 @@ RecipeSorterAZ sorterAZ = new RecipeSorterAZ();
 RecipeSorterTextFilter sorterFilter = new RecipeSorterTextFilter();
 GuiTextInputLine searchBox;
 GuiScrollableArea area;
-
+/**
+ * tabs
+ * INFO
+ *    hints/tips/beginners guide/basic stats
+ * VEHICLES
+ *    searchable list of  (available?) vehicle detail pages
+ * AMMO
+ *    searchable list of (available?) ammo detail pages
+ * NPC
+ *    searchable list of (available?) npc detail pages
+ * MISC
+ *    gates/armor/upgrades (available?) detail pages
+ * CIVICS -- MISSING
+ *    searchable list of  (available?) civic detail pages
+ * RECIPES
+ *    searchable list of all (available?) recipes
+ * RESEARCH
+ *    searchable list of all (completed?) research
+ * STRUCTURES
+ *    info sheet on structures -- how to scan, build, etc
+ */
 /**
  * @param container
  */
@@ -128,7 +148,7 @@ public void setupControls()
   tab = this.addGuiTab(1003, 3+50+50+50, 0, 50, 24, "Npcs");
   tab.enabled = false;
   this.tabs.add(tab);
-  tab = this.addGuiTab(1004, 3+50+50+50+50, 0, 50, 24, "Misc");
+  tab = this.addGuiTab(1004, 3+50+50+50+50, 0, 50, 24, "Civics");
   tab.enabled = false;
   this.tabs.add(tab);
     
@@ -137,15 +157,15 @@ public void setupControls()
   tab.enabled = false;
   tab.inverted = true;
   this.tabs.add(tab);
-  tab = this.addGuiTab(1006, 3+60, y, 50, 24, "Recipes");
+  tab = this.addGuiTab(1006, 3+60, y, 60, 24, "Recipes");
   tab.enabled = false;
   tab.inverted = true;
   this.tabs.add(tab);
-  tab = this.addGuiTab(1007, 3+60+50, y, 80, 24, "Structures");
+  tab = this.addGuiTab(1007, 3+60+60, y, 80, 24, "Structures");
   tab.enabled = false;
   tab.inverted = true;
   this.tabs.add(tab);
-  tab = this.addGuiTab(1008, 3+60+50+80, y, 60, 24, "....");
+  tab = this.addGuiTab(1008, 3+60+60+80, y, 50, 24, "Misc");
   tab.enabled = false;
   tab.inverted = true;
   this.tabs.add(tab);
@@ -169,6 +189,27 @@ public void updateControls()
     {
     this.guiElements.get(i).updateGuiPos(guiLeft, guiTop);
     }
+  switch(this.activeTab.getElementNumber())
+  {
+  case 1000:
+  break;
+  case 1001:
+  break;  
+  case 1002:
+  break;
+  case 1003:
+  break;
+  case 1004:
+  break;
+  case 1005:
+  break;
+  case 1006:
+  break;
+  case 1007:
+  break;
+  case 1008:
+  break;  
+  }
   }
 
 }

@@ -18,47 +18,43 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.targeting;
+package shadowmage.ancient_warfare.common.civics.types;
+
+import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.crafting.TEAWVehicleCraft;
+
+public class CivicSiegeWorkshop extends Civic
+{
 
 /**
- * used by target/aggro entries and waypoints, to determine the 'type' of the target/point
- * @author Shadowmage
- *
+ * @param id
  */
-public enum TargetType
-  { 
-  ATTACK,
-  MOUNT,
-  REPAIR,
-  HEAL,
-  FOLLOW,
-  WANDER,
-  PATROL,
-  MOVE,
-  SHELTER,
-  FLEE,
-  NONE,
-  WORK,
-  FARM_PLANT,
-  FARM_HARVEST,
-  BARN_BREED,
-  BARN_CULL,
-  BUILD_CLEAR,
-  BUILD_PLACE,
-  MINE_CLEAR,//
-  MINE_LADDER,//for the central vertical shaft
-  MINE_FILL,//for holes in the wall/roof/floor
-  MINE_TORCH,//for some tunnel/branch lines
-  MINE_CLEAR_RESOURCE,
-  TREE_CHOP,
-  TREE_PLANT,
-  PICKUP,
-  DELIVER,
-  ATTACK_TILE,
-  UPKEEP,
-  COMMANDER,
-  BARN_MILK,
-  BARN_SHEAR,
-  FISH_CATCH,
-  CRAFT,
+public CivicSiegeWorkshop(int id, int size)
+  {
+  super(id);
+  this.blockType = BlockLoader.crafting;
+  this.teClass = TEAWVehicleCraft.class;
+  this.blockMeta = 3;
+  switch(size)
+  {
+  case 0:
+  this.name = "Small Siege Engine Workshop";
+  this.minSize1 = 5;
+  this.minSize2 = 5;
+  this.minHeight = 5;
+  this.workSizeMaxHeight =5;
+  this.workSizeMaxHorizontal = 5;
+  break;
+  
+  case 1:
+  this.name = "Medium Siege Engine Workshop";
+  this.minSize1 = 9;
+  this.minSize2 = 9;
+  this.minHeight = 9;
+  this.workSizeMaxHeight =9;
+  this.workSizeMaxHorizontal = 9;
+  break;
   }
+  }
+
+}
