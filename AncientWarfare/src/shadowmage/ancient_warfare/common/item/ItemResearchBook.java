@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -52,6 +53,10 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
     {
     tag = stack.getTagCompound().getCompoundTag("AWResInfo");
     list.add("Belongs to: "+tag.getString("name"));
+    if(player.getEntityName().equals(tag.getString("name")))
+      {
+      list.add("Right click to view your research notes.");
+      }
     }
   else
     {
@@ -71,9 +76,18 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWResInfo"))
     {
     tag = stack.getTagCompound().getCompoundTag("AWResInfo");
-    /**
-     * open GUI
-     */
+    if(tag.hasKey("name"))
+      {
+      String name = tag.getString("name");
+      if(name.equals(player.getEntityName()))
+        {
+        GUIHandler.instance().openGUI(GUIHandler.INFO, player, world, 0, 0, 0);        
+        }
+      else        
+        {
+        player.addChatMessage("This is not your research book!");
+        }
+      }
     }
   else
     {

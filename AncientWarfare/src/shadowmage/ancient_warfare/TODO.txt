@@ -34,7 +34,7 @@ CIVICS
     * NPC town hall ocasionally transfer items from civics in bounds (skip couriers)
     * NPC town hall plans courier routes (use couriers)    
 * NPC town hall will occasionally respawn missing NPCs    
-* swap civic sided for regular/resource slots?
+* swap civic sided regular/resource slots?
 * town hall food processing
 * food processing center -- basic autocrafting to craft food recipes (manually added list)
 

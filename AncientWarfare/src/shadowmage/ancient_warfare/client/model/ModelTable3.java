@@ -45,6 +45,7 @@ ModelRenderer b21;
 ModelRenderer b22;
 ModelRenderer b23;
 ModelRenderer b25;
+ModelRenderer b27;
 public ModelTable3(){
   tableTop = new ModelRenderer(this,"tableTop");
   tableTop.setTextureOffset(0,0);
@@ -254,6 +255,14 @@ public ModelTable3(){
   setPieceRotation(b25,1.0402973E-9f, 1.0402973E-9f, 0.0f);
   b25.addBox(-0.5f,-0.5f,-0.5f,8,1,8);
   paperLarge.addChild(b25);
+  b27 = new ModelRenderer(this,"b27");
+  b27.setTextureOffset(60,27);
+  b27.setTextureSize(128,128);
+  b27.setRotationPoint(0.5f, -2.5f, -4.5f);
+  setPieceRotation(b27,1.0402973E-9f, 1.0402973E-9f, 0.0f);
+  b27.addBox(-0.5f,-0.5f,-0.5f,1,1,1);
+  paperLarge.addChild(b27);
+
   tableTop.addChild(paperLarge);
   }
  
