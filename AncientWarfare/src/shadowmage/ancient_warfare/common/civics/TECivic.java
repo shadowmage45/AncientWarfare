@@ -602,16 +602,6 @@ public void onPlaced()
   }
 
 /******************************************************************INVENTORY METHODS***********************************************************************************/
-public ItemStack tryMergeStack(ItemStack stack)
-  {
-  if(this.getCivic().getResourceSlotSize()>0 && resourceFilterContains(stack))
-    {
-    stack = InventoryTools.tryMergeStack(this, stack, 1);
-    }
-  stack = InventoryTools.tryMergeStack(this, stack, -1);
-  return stack;
-  }
-
 public boolean resourceFilterContains(ItemStack stack)
   {
   if(stack==null)

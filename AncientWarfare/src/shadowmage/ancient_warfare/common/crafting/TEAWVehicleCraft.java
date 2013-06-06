@@ -20,12 +20,15 @@
  */
 package shadowmage.ancient_warfare.common.crafting;
 
+import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TEAWVehicleCraft extends TEAWCraftingWorkSite
@@ -39,12 +42,24 @@ protected boolean isWorkSiteSet = false;
 public boolean shouldUpdate = false;
 public boolean isWorking = false;
 
+int[] bookSlot = new int[10];
+
 /**
  * 
  */
 public TEAWVehicleCraft()
   {
   this.isWorkSite = true;
+  
+  /**
+   * used as craft matrix
+   */
+  this.resourceSlotIndices = new int[]{0,1,2,3,4,5,6,7,8};
+  
+  /**
+   * used as OUTPUT
+   */
+  this.otherSlotIndices = new int[]{9};
   }
 
 @Override
@@ -135,8 +150,7 @@ protected void validateStructure()
           }
         }
       }
-    }  
-  
+    }
   if(!valid)
     {
     this.recipe = null;
@@ -241,6 +255,49 @@ protected TargetType validateWorkPoint(WorkPoint p)
     return TargetType.NONE;
     }
   return p.work;
+  }
+
+@Override
+public void setupSidedInventoryIndices(Civic civ)
+  {
+  //NOOP set in constructor
+  }
+
+@Override
+public boolean isStackValidForSlot(int i, ItemStack itemstack)
+  {
+  return i==10 ? itemstack.itemID== ItemLoader.researchBook.itemID: i== 9? false : true;
+  }
+
+@Override
+public int[] getAccessibleSlotsFromSide(int var1)
+  {
+  switch(var1)
+  {  
+  case 0://bottom -- output
+  return otherSlotIndices;
+  case 1://top -- book slot
+  return bookSlot;
+  
+  case 2://fallthrough for resourceslots
+  case 3:
+  case 4:
+  case 5:
+  return resourceSlotIndices;
+  }
+  return new int[]{};
+  }
+
+@Override
+public boolean canInsertItem(int i, ItemStack itemstack, int j)
+  {
+  return i == 9 ? false : i==10 ? itemstack.itemID==ItemLoader.researchBook.itemID : true;
+  }
+
+@Override
+public boolean canExtractItem(int i, ItemStack itemstack, int j)
+  {
+  return true;
   }
 
 }
