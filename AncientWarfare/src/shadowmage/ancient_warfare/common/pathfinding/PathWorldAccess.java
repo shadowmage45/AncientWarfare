@@ -84,14 +84,15 @@ protected boolean checkBlockBounds(int x, int y, int z)
     block.setBlockBoundsBasedOnState(world, x, y, z);    
     if(block.getBlockBoundsMaxY() >=0.5d)
       {
-      if(block.getBlockBoundsMinX()< 0.25 || block.getBlockBoundsMaxX()>0.75)
-        {
-        return false;
-        }
-      if(block.getBlockBoundsMinZ()< 0.25 || block.getBlockBoundsMaxZ()>0.75)
-        {
-        return false;
-        }
+      return false;
+//      if(block.getBlockBoundsMinX()< 0.25 || block.getBlockBoundsMaxX()>0.75)
+//        {
+//        return false;
+//        }
+//      if(block.getBlockBoundsMinZ()< 0.25 || block.getBlockBoundsMaxZ()>0.75)
+//        {
+//        return false;
+//        }
       }   
     }
   return true;

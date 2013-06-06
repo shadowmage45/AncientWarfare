@@ -67,7 +67,6 @@ ContainerCivilEngineering container;
 RecipeSorterAZ sorterAZ = new RecipeSorterAZ();
 RecipeSorterTextFilter sorterFilter = new RecipeSorterTextFilter();
 GuiTextInputLine searchBox;
-ResourceListRecipe currentRecipe;
 
 /**
  * @param container
@@ -113,11 +112,48 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     {
     case 1001:
     break;
+    
     case 1000:
-    case 1002:
     this.drawCurrentRecipeBackground();
     break;
+    
+    case 1002:
+    this.drawProgressBackground();
+    break;
     }
+  }
+
+public void drawProgressBackground()
+  {
+  /**
+   * 152, 234   x 104,10
+   */
+  int w = 100;
+  int h = 10; 
+  int w1 = 100;
+  int x = guiLeft + 7;
+  int y = guiTop + 112+18;
+  String tex = Config.texturePath+"gui/guiButtons2.png";
+  RenderTools.drawQuadedTexture(x, y, w+6, h+6, 256, 40, tex, 0, 0);
+  float progress = container.displayProgress;
+  float max = container.displayProgressMax;
+  float percent = 0;
+  if(max!=0)
+    {
+    percent = progress/max;
+    }
+  w1 = (int)(percent*100.f);
+  tex = Config.texturePath+"gui/guiButtons.png"; 
+  RenderTools.drawQuadedTexture(x+3, y+3, w1, h, 104, 10, tex, 152, 234);
+  x += 112;
+  y += 4;
+  w = (int) ((max-progress)/20);
+  h = w/60;
+  w = w% 60;
+  tex = String.format("%sm %ss", h,w);
+  this.drawString(getFontRenderer(), tex, x, y, 0xffffffff);
+
+  this.drawCurrentRecipeBackground();
   }
 
 public void drawCurrentRecipeBackground()
@@ -129,27 +165,19 @@ public void drawCurrentRecipeBackground()
     {
     this.drawStringGui(this.container.currentRecipe.getDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
     this.renderItemStack(this.container.currentRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true);
-    }
-  else if(this.currentRecipe!=null)
+    } 
+  if(this.container.clientRecipe!=null)
     {
-    this.drawStringGui(this.currentRecipe.getDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
-    this.renderItemStack(this.currentRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true);
-    }
+    this.drawStringGui(this.container.clientRecipe.getDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
+    this.renderItemStack(this.container.clientRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true);
+    } 
   }
 
 @Override
 public void updateScreenContents()
   {
   area.updateGuiPos(guiLeft, guiTop);
-  area2.updateGuiPos(guiLeft, guiTop);
-  if(this.currentRecipe!=this.container.currentRecipe)
-    {
-    if(this.container.currentRecipe!=null)
-      {
-      this.currentRecipe = this.container.currentRecipe;
-      this.forceUpdate = true;
-      }
-    }
+  area2.updateGuiPos(guiLeft, guiTop); 
   }
 
 @Override
@@ -175,23 +203,26 @@ public void onElementActivated(IGuiElement element)
     {
     this.handleSearchBoxUpdate();
     }
-  else if(recipes.containsKey(element) && container.currentRecipe==null)
+  else if(recipes.containsKey(element))
     {
     this.handleRecipeClick(element);
     }
   break;
   
   case 1002:
-  if(element.getElementNumber()==1 && this.container.isWorking)//clear
+  if(element.getElementNumber()==1)//clear
     {
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("stop", true);
     this.sendDataToServer(tag);
+    this.container.currentRecipe = null;
+    this.container.clientRecipe = null;
+    this.forceUpdate = true;
     }
-  else if(element.getElementNumber()==3 && this.currentRecipe!=null && !this.container.isWorking)
+  else if(element.getElementNumber()==3 && !this.container.isWorking)
     {
     NBTTagCompound tag = new NBTTagCompound();
-    tag.setString("set", this.currentRecipe.getDisplayName());
+    tag.setString("set", this.container.clientRecipe.getDisplayName());
     this.sendDataToServer(tag);
     }
   break;
@@ -210,17 +241,17 @@ protected void handleRecipeClick(IGuiElement element)
       {
       return;
       }
-    this.currentRecipe = recipes.get(element);   
+    this.container.clientRecipe = recipes.get(element);   
     }
   }
 
 @Override
 public void setupControls()
   {
-  GuiTab tab = this.addGuiTab(1000, 5+60+60, 0, 40, 24, "Select");
+  GuiTab tab = this.addGuiTab(1000, 5+60, 0, 50, 24, "Select");
   this.tabs.add(tab);
   tab.enabled = false;
-  tab = this.addGuiTab(1001, 5+60, 0, 60, 24, "Search");
+  tab = this.addGuiTab(1001, 5+60+50, 0, 55, 24, "Search");
   tab.enabled = false;
   this.tabs.add(tab);
   tab = this.addGuiTab(1002, 5, 0, 60, 24, "Progress");
@@ -228,13 +259,13 @@ public void setupControls()
   this.activeTab = tab;
   
   
-  this.searchBox = (GuiTextInputLine) new GuiTextInputLine(2, this, 160, 12, 30, "").updateRenderPos(5, 24);
+  this.searchBox = (GuiTextInputLine) new GuiTextInputLine(2, this, 176-16, 12, 30, "").updateRenderPos(8, 29);
   searchBox.selected = false;
   this.area = new GuiScrollableArea(0, this, 5, 21+18+10+5, 176-10, 240-21-10-18-5-8, 0);
   int x = 134;
   int y = 26; 
   int w = 37;
-  int h = 124;
+  int h = 5*18;
   this.area2 = new GuiScrollableArea(4, this, x, y, w, h, 0);
   }
 
@@ -281,22 +312,30 @@ public void updateControls()
   }
 
 protected void addRecipeMaterialList()
-  {
-  this.guiElements.put(4, area2);
+  {  
   area2.elements.clear();
-  if(this.currentRecipe!=null)
+  if(this.container.clientRecipe!=null)
     {
     GuiItemStack element;
     ItemStack stack;
     int y = 0;
-    for(ItemStackWrapperCrafting item : this.currentRecipe.getResourceList())
+    int addedStacks = 0;
+    for(ItemStackWrapperCrafting item : this.container.clientRecipe.getResourceList())
       {
-      stack = item.getFilter().copy();
+      stack = item.getFilter().copy();      
       stack.stackSize = item.getRemainingNeeded();
-      element = new GuiItemStack(9000, this, 0 ,y).setItemStack(stack);  
-      element.renderTooltip = false;
-      area2.addGuiElement(element);      
-      y+=18;
+      if(stack.stackSize>0)
+        {
+        element = new GuiItemStack(9000, this, 0 ,y).setItemStack(stack);  
+        element.renderTooltip = false;
+        area2.addGuiElement(element);      
+        y+=18;        
+        addedStacks++;
+        }
+      }
+    if(addedStacks>0)
+      {
+      this.guiElements.put(4, area2);
       }
     area2.updateTotalHeight(y);
     }  

@@ -40,6 +40,7 @@ import shadowmage.ancient_warfare.client.model.ModelHwacha;
 import shadowmage.ancient_warfare.client.model.ModelTEBase;
 import shadowmage.ancient_warfare.client.model.ModelTable1;
 import shadowmage.ancient_warfare.client.model.ModelTable2;
+import shadowmage.ancient_warfare.client.model.ModelTable3;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandTurret;
@@ -230,7 +231,7 @@ public void loadRenders()
   MinecraftForgeClient.registerItemRenderer(BlockLoader.crafting.blockID, RenderCraftingHelper.instance());
   this.addTEModel(0, new ModelTable1());
   this.addTEModel(1, new ModelTable2());
-  this.addTEModel(2, new ModelTable2());
+  this.addTEModel(2, new ModelTable3());
   /**
    * load up the vehicle item renderer...
    */

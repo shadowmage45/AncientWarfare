@@ -41,9 +41,9 @@ public class ContainerCivilEngineering extends ContainerBase
 TEAWStructureCraft te;
 public boolean isWorking;
 public ResourceListRecipe currentRecipe = null;
-String currentRecipeName;
-int displayProgress;
-int displayProgressMax;
+public ResourceListRecipe clientRecipe = null;
+public int displayProgress;
+public int displayProgressMax;
 
 /**
  * @param openingPlayer
@@ -61,16 +61,16 @@ public ContainerCivilEngineering(EntityPlayer openingPlayer, TEAWStructureCraft 
   Slot slot;
   for(int y = 0; y < 3; y++)
     {
-    for(int x = 0; x <3; x++)
+    for(int x = 0; x <6; x++)
       {
       posX = 8 + x * 18;
       posY = 8 + 18 + 4 + y * 18 + 18;
-      slotNum = y * 3 + x;
+      slotNum = y * 6 + x;
       slot = new Slot(te, slotNum, posX, posY);
       this.addSlotToContainer(slot);
       }
     }
-  slot = new SlotPullOnly(te, 9, 8 + 3* 18 + 27 , 8 + 18 + 4 + 3 * 18 + 18 + 27);
+  slot = new SlotPullOnly(te, 18, 8 + 3* 18 + 27 , 8 + 18 + 4 + 3 * 18 + 27);
   this.addSlotToContainer(slot);
   Slot s;
   for(Object o : this.inventorySlots)
@@ -122,7 +122,12 @@ public void handlePacketData(NBTTagCompound tag)
   if(tag.hasKey("rec"))
     {
     Config.logDebug("receiving recipe update");
-    this.currentRecipe = new ResourceListRecipe(tag.getCompoundTag("rec"));    
+    this.currentRecipe = new ResourceListRecipe(tag.getCompoundTag("rec")); 
+    this.clientRecipe = this.currentRecipe;
+    if(this.gui!=null)
+      {
+      this.gui.refreshGui();
+      }
     }  
   if(tag.hasKey("recUp"))
     {
@@ -133,12 +138,18 @@ public void handlePacketData(NBTTagCompound tag)
     {
     Config.logDebug("receiving clear recipe update");
     this.currentRecipe = null;
+    this.clientRecipe = null;
+    if(this.gui!=null)
+      {
+      this.gui.refreshGui();
+      }
     }
   if(tag.hasKey("stop") && !player.worldObj.isRemote)
     {
     Config.logDebug("receiving server stop work command");
     te.stopWorkAndClearRecipe();
     this.currentRecipe = null;
+    this.clientRecipe = null;
     }
   if(tag.hasKey("set") && !player.worldObj.isRemote)
     {

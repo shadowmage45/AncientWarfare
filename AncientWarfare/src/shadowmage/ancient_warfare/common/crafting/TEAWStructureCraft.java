@@ -34,9 +34,9 @@ import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 public class TEAWStructureCraft extends TEAWCrafting implements IInventory, ISidedInventory
 {
 
-AWInventoryBasic inventory = new AWInventoryBasic(10);
-int[] resultSlot = new int[]{9};
-int[] craftMatrix = new int[]{0,1,2,3,4,5,6,7,8};
+AWInventoryBasic inventory = new AWInventoryBasic(19);
+int[] resultSlot = new int[]{18};
+int[] craftMatrix = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
 ResourceListRecipe recipe = null;
 public boolean isStarted = false;
 public int displayProgress;
@@ -72,14 +72,11 @@ public void updateEntity()
       {
       if(this.tryRemoveItem())
         {
+        this.compileTime = 0;
         if(this.isRecipeFinished())
           {        
           this.produceItem();
           this.setFinished();        
-          }
-        else
-          {
-          this.compileTime = 0;
           }
         }
       }
@@ -108,7 +105,7 @@ protected boolean tryRemoveItem()
     if(item.getRemainingNeeded() > 0 && InventoryTools.getCountOf(inventory, item.getFilter(), craftMatrix)>0)
       {
       Config.logDebug("found matching filter");
-      InventoryTools.tryRemoveItems(inventory, item.getFilter(), 1, 0, 8);
+      InventoryTools.tryRemoveItems(inventory, item.getFilter(), 1, 0, 17);
       item.setRemainingNeeded(item.getRemainingNeeded()-1);
       Config.logDebug("decremented item : "+item.getFilter().toString() + " remaining count : "+item.getRemainingNeeded());    
       return true;
@@ -128,18 +125,18 @@ protected boolean isRecipeFinished()
       return false;
       }
     }
+  Config.logDebug("recipe finished!!!");
   return true;
   }
 
 protected boolean canSetFinished()
   {
-  return InventoryTools.canHoldItem(inventory, recipe.getResult(), recipe.getResult().stackSize, 9, 9);
+  return InventoryTools.canHoldItem(inventory, recipe.getResult(), recipe.getResult().stackSize, 18, 18);
   }
 
 protected void setFinished()
   {
   this.isStarted = false;
-  this.compileTimeMax = 0;
   this.compileTime = 0;
   this.recipe = null;
   this.displayProgress = 0;
@@ -223,7 +220,7 @@ public int[] getAccessibleSlotsFromSide(int var1)
 @Override
 public boolean canInsertItem(int slotNum, ItemStack itemstack, int side)
   {
-  return slotNum==9? false : (side ==1 || side==0) ? false : true;
+  return slotNum==18? false : (side ==1 || side==0) ? false : true;
   }
 
 @Override
@@ -301,7 +298,7 @@ public void closeChest()
 @Override
 public boolean isStackValidForSlot(int i, ItemStack itemstack)
   {  
-  return i == 9 ? false : true;
+  return i == 18 ? false : true;
   }
 
 /**
