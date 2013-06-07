@@ -23,12 +23,12 @@ package shadowmage.ancient_warfare.common.civics;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 
 public class TECivicTownHall extends TECivic
 {
@@ -66,17 +66,17 @@ public boolean canHaveMoreWorkers(NpcBase npc)
 @Override
 protected void validateWorkers()
   {
-  Iterator<NpcBase> workIt = this.workers.iterator();
-  NpcBase npc = null;
+  Iterator<IWorker> workIt = this.workers.iterator();
+  IWorker npc = null;
   while(workIt.hasNext())
     {
     npc = workIt.next();
-    if(npc==null || npc.isDead || npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
+    if(npc==null || npc.isDead() || npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
       {      
       workIt.remove();
       continue;
       }
-    WayPoint p = npc.wayNav.getUpkeepSite();
+    WayPoint p = npc.getUpkeepPoint();
     if(p==null || p.floorX()!= xCoord || p.floorY()!=yCoord || p.floorZ()!=zCoord || worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ())!=this)
       {
       workIt.remove();

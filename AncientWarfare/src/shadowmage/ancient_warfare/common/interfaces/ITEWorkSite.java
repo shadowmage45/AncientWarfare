@@ -26,7 +26,8 @@ public interface ITEWorkSite
 public void doWork(IWorker worker);
 public boolean hasWork();
 public double getDistance(double x, double y, double z);
-
+public void addWorker(IWorker worker);
+public void removeWorker(IWorker worker);
 
 
 }

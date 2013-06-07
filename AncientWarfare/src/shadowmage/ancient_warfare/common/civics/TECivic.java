@@ -29,7 +29,6 @@ import java.util.WeakHashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -40,6 +39,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
+import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBase;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
@@ -80,7 +81,7 @@ protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
 
 protected int[] resourceSlotIndices;
 protected int[] otherSlotIndices;
-protected Set<NpcBase> workers = Collections.newSetFromMap(new WeakHashMap<NpcBase, Boolean>());
+protected Set<IWorker> workers = Collections.newSetFromMap(new WeakHashMap<IWorker, Boolean>());
 protected boolean hasWork = false;
 
 public TECivic()
@@ -358,23 +359,23 @@ public void removeWorker(NpcBase npc)
 
 protected void validateWorkers()
   {
-  Iterator<NpcBase> workIt = this.workers.iterator();
-  NpcBase npc = null;
+  Iterator<IWorker> workIt = this.workers.iterator();
+  IWorker npc = null;
   while(workIt.hasNext())
     {
     npc = workIt.next();
-    if(npc==null || npc.isDead || npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
+    if(npc==null || npc.isDead() || npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
       {      
       workIt.remove();
       continue;
       }
-    WayPoint p = npc.wayNav.getWorkSite();
+    WayPoint p = npc.getWorkPoint();
     if(p==null || p.floorX()!= xCoord || p.floorY()!=yCoord || p.floorZ()!=zCoord)
       {
       workIt.remove();
       continue;
       }
-    TECivic te = npc.wayNav.getWorkSiteTile();
+    ITEWorkSite  te = npc.getWorkSite();
     if(te!=this)
       {
       workIt.remove();

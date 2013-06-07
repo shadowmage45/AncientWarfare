@@ -20,7 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
-import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -44,7 +44,7 @@ public byte getTaskType()
 @Override
 public void onTick()
   {
-  TECivic te = npc.wayNav.getWorkSiteTile();   
+  ITEWorkSite te = npc.wayNav.getWorkSiteTile();   
   npc.swingItem();
   if(te!=null && npc.actionTick<=0)
     {  

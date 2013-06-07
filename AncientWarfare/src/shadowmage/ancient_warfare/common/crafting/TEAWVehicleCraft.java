@@ -29,6 +29,9 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 
 public class TEAWVehicleCraft extends TEAWCrafting implements IInventory, ISidedInventory
 {
@@ -37,7 +40,6 @@ public ResourceListRecipe recipe = null;
 public int displayProgress = 0;
 public int displayProgressMax = 0;
 int progressPerWork = 20;
-protected boolean isWorkSiteSet = false;
 public boolean shouldUpdate = false;
 public boolean isWorking = false;
 
@@ -47,6 +49,9 @@ int[] craftMatrix= new int[]{0,1,2,3,4,5,6,7,8};
 int[] outputSlot= new int[]{9};
 int[] bookSlot = new int[]{10};
 public String workingPlayer;
+
+int vehicleType = -1;
+int vehicleLevel = -1;
 
 /**
  * 
@@ -60,51 +65,72 @@ public TEAWVehicleCraft()
 public void updateEntity()
   {  
   super.updateEntity();
-  if(this.isWorkSiteSet)
+  if(this.recipe!=null)
     {
-    if(this.recipe!=null)
+    if(isWorking)
       {
-      if(isWorking)
+      if(this.displayProgress>=this.displayProgressMax)
         {
-        if(this.displayProgress>=this.displayProgressMax)
+        this.displayProgress = this.displayProgressMax;
+        if(this.tryFinish())
           {
-          this.displayProgress = this.displayProgressMax;
-          if(this.tryFinish())
-            {
-            this.displayProgress = 0;
-            this.displayProgressMax = 0;
-            this.isWorking = false;
-            }
-          }
-        if(this.shouldUpdate)
-          {
-          this.displayProgress++;
+          this.displayProgress = 0;
+          this.displayProgressMax = 0;
+          this.isWorking = false;
           }
         }
-      else
+      if(this.shouldUpdate)
         {
-        if(this.tryStart())
-          {
-          this.isWorking = true;
-          }
+        this.displayProgress++;
+        shouldUpdate = false;
         }
-      } 
-    }  
+      }
+    else
+      {
+      if(this.tryStart())
+        {
+        this.isWorking = true;
+        }
+      }
+    }       
   }
 
 public void validateAndSetRecipe(ResourceListRecipe recipe)
   {
-//  recipe = AWCraftingManager.instance().validateRecipe(recipe);
   if(recipe!=null)
     {
     Config.logDebug("setting recipe to : "+recipe);    
     this.recipe = recipe;
+    ItemStack result = recipe.getResult();    
+    if(result!=null)
+      {
+      int type = result.getItemDamage();
+      int level = 0;
+      IVehicleType t = VehicleType.getVehicleType(type);
+      if(result.hasTagCompound() && result.getTagCompound().hasKey("AWVehSpawner"))
+        {
+        level = result.getTagCompound().getCompoundTag("AWVehSpawner").getInteger("lev");
+        }
+      this.vehicleType = type;
+      this.vehicleLevel = level;
+      Config.logDebug("set working vehicle to "+t);
+      }
     }
+  else
+    {
+    this.stopAndClearRecipe();
+    }
+  this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
   }
 
 public void stopAndClearRecipe()
   {
-  
+  this.isWorking = false;
+  this.recipe = null;
+  this.displayProgress = 0;
+  this.displayProgressMax = 0;
+  this.vehicleLevel = -1;
+  this.vehicleType = -1;  
   }
 
 /**
@@ -113,6 +139,19 @@ public void stopAndClearRecipe()
  */
 protected boolean tryStart()
   {
+  if(this.recipe!=null)
+    {
+    boolean start = this.recipe.doesInventoryContainResources(inventory, craftMatrix);
+    if(start)
+      {
+      Config.logDebug("starting working");
+      int count = this.recipe.getResourceItemCount();
+      this.recipe.removeResourcesFrom(inventory, craftMatrix);
+      this.displayProgress =0;
+      this.displayProgressMax = count * 20;
+      }
+    return start;
+    }
   return false;
   }
 
@@ -122,6 +161,14 @@ protected boolean tryStart()
  */
 protected boolean tryFinish()
   {
+  if(InventoryTools.canHoldItem(inventory, recipe.result, recipe.result.stackSize, 9, 9))
+    {
+    Config.logDebug("setting finished and producing item");
+    InventoryTools.tryMergeStack(inventory, recipe.result.copy(), outputSlot);
+    this.isWorking = false;
+    this.displayProgress = 0;
+    return true;
+    }
   return false;
   }
 
@@ -182,26 +229,54 @@ public boolean canExtractItem(int i, ItemStack itemstack, int j)
 @Override
 public void readDescriptionPacket(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub  
+  if(tag.hasKey("type"))
+    {
+    this.vehicleType = tag.getInteger("type");
+    this.vehicleLevel = tag.getInteger("lev");
+    }
   }
 
 @Override
 public void writeDescriptionData(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-  
+  tag.setInteger("type", this.vehicleType);
+  tag.setInteger("lev", this.vehicleLevel);
   }
 
 @Override
 public void writeExtraNBT(NBTTagCompound tag)
   {
   tag.setCompoundTag("inv", this.inventory.getNBTTag());
+  tag.setBoolean("work", this.isWorking);
+  tag.setBoolean("up", this.shouldUpdate);
+  tag.setInteger("time", displayProgress);
+  tag.setInteger("tMax", this.displayProgressMax);
+  if(this.workingPlayer!=null)
+    {
+    tag.setString("name", this.workingPlayer);    
+    }
+  if(this.recipe!=null)
+    {
+    tag.setCompoundTag("rec", this.recipe.getNBTTag());
+    }
   }
 
 @Override
 public void readExtraNBT(NBTTagCompound tag)
   {
   this.inventory.readFromNBT(tag.getCompoundTag("inv"));
+  this.isWorking = tag.getBoolean("work");
+  this.shouldUpdate = tag.getBoolean("up");
+  this.displayProgress = tag.getInteger("time");
+  this.displayProgressMax = tag.getInteger("tMax");
+  if(tag.hasKey("name"))
+    {
+    this.workingPlayer = tag.getString("name");
+    }
+  if(tag.hasKey("rec"))
+    {
+    this.recipe = new ResourceListRecipe(tag.getCompoundTag("rec"));
+    }
   }
 
 @Override

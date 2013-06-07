@@ -30,5 +30,6 @@ boolean isDead();
 double getDistance(double x, double y, double z);
 WayPoint getWorkPoint();
 ITEWorkSite getWorkSite();
+WayPoint getUpkeepPoint();
 
 }

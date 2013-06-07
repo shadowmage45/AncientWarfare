@@ -28,6 +28,7 @@ import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
+import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -50,7 +51,7 @@ ITargetEntry playerTarget = null;
 WayPoint homePoint = null;
 WayPoint work = null;
 WayPoint upkeep = null;
-TECivic workSite = null;
+ITEWorkSite workSite = null;
 WayPoint guard = null;
 VehicleBase vehicle = null;
 NpcBase commander = null;
@@ -243,12 +244,12 @@ public void setWorkSite(WayPoint p)
   this.work = p;  
   }
 
-public TECivic getWorkSiteTile()
+public ITEWorkSite getWorkSiteTile()
   {
   return this.workSite;
   }
 
-public void setWorkSiteTile(TECivic te)
+public void setWorkSiteTile(ITEWorkSite te)
   {
   this.workSite = te;
   }

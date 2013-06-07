@@ -22,7 +22,6 @@ package shadowmage.ancient_warfare.common.npcs;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
@@ -33,7 +32,6 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -42,7 +40,9 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
+import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
+import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
@@ -66,10 +66,9 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class NpcBase extends EntityCreature implements IEntityAdditionalSpawnData, IEntityContainerSynch, IPathableEntity
+public class NpcBase extends EntityCreature implements IEntityAdditionalSpawnData, IEntityContainerSynch, IPathableEntity, IWorker
 {
 
 
@@ -1017,6 +1016,30 @@ public VehicleBase getRidingVehicle()
 public float getDefaultMoveSpeed()
   {
   return 0.325f;
+  }
+
+@Override
+public boolean isDead()
+  {
+  return isDead;
+  }
+
+@Override
+public WayPoint getWorkPoint()
+  {
+  return wayNav.getWorkSite();
+  }
+
+@Override
+public ITEWorkSite getWorkSite()
+  {
+  return wayNav.getWorkSiteTile();
+  }
+
+@Override
+public WayPoint getUpkeepPoint()
+  {
+  return wayNav.getUpkeepSite();
   }
 
 }

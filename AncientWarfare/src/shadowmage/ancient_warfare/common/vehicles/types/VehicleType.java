@@ -560,4 +560,10 @@ public void addNeededResearchForMaterials()
     }
   }
 
+@Override
+public String toString()
+  {
+  return "AWVehicleType: "+this.displayName;
+  }
+
 }

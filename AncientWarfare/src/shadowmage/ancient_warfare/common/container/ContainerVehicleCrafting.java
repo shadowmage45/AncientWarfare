@@ -68,13 +68,14 @@ public ContainerVehicleCrafting(EntityPlayer openingPlayer, TEAWVehicleCraft te)
     for(int x = 0; x <3; x++)
       {
       posX = 8 + x * 18;
-      posY = 8 + 18 + 4 + y * 18 + 18;
+      posY = 8 + 24 + 18 + 4 + 18 + 4;
+      posY += y * 18;
       slotNum = y * 3 + x;
       slot = new Slot(te, slotNum, posX, posY);
       this.addSlotToContainer(slot);
       }
     }
-  slot = new SlotPullOnly(te, 9, 8 + 3* 18 + 27 , 8 + 18 + 4 + 3 * 18 + 27);
+  slot = new SlotPullOnly(te, 9, 8 + 3* 18 + 18 , 8 + 24 + 18 + 4 + 18 + 4 + 18);
   this.addSlotToContainer(slot);
  
   slot = new SlotResourceOnly(te, 10, 8 , 8 + 24, Arrays.asList(new ItemStack(ItemLoader.researchBook))).setIgnoreType(3).setMaxStackSize(1);
@@ -150,10 +151,12 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("set") && !player.worldObj.isRemote)
     {
-    Config.logDebug("receiving server set recipe command :: ");  
-    int id = tag.getInteger("id");
-    int dmg = tag.getInteger("dmg");  
-    ResourceListRecipe recipe = AWCraftingManager.instance().getRecipesFor(new ItemStack(id,1,dmg), EnumSet.of(RecipeType.VEHICLE));
+    ItemStack result = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("result"));
+    int id = result.itemID;
+    int dmg = result.getItemDamage(); 
+    Config.logDebug("recipe id: "+id+" dmg: "+dmg);
+    ResourceListRecipe recipe = AWCraftingManager.instance().getRecipesFor(result, EnumSet.of(RecipeType.VEHICLE));
+    Config.logDebug("receiving server set recipe command :: "+recipe);  
     te.validateAndSetRecipe(recipe);
     }
   if(tag.hasKey("work"))
@@ -167,6 +170,9 @@ public void handlePacketData(NBTTagCompound tag)
       {
       this.gui.refreshGui();      
       }
+    te.stopAndClearRecipe();
+    this.currentRecipe = null;
+    this.clientRecipe = null;
     boolean name = tag.getBoolean("entry");
     if(name)
       {
@@ -262,6 +268,9 @@ public void detectAndSendChanges()
       tag.setBoolean("entry", true);   
       this.sendDataToPlayer(tag);
       this.researchLength = this.entry.getKnownResearch().size();
+      this.currentRecipe = null;
+      this.clientRecipe = null;
+      te.stopAndClearRecipe();
       }
     else
       {
@@ -273,6 +282,9 @@ public void detectAndSendChanges()
       NBTTagCompound tag = new NBTTagCompound();
       tag.setBoolean("entry", false);   
       this.sendDataToPlayer(tag);
+      this.currentRecipe = null;
+      this.clientRecipe = null;
+      te.stopAndClearRecipe();
       }
     }
   else if(this.entry!=null && this.entry.playerName.equals(te.workingPlayer))
@@ -283,9 +295,11 @@ public void detectAndSendChanges()
       NBTTagCompound tag = this.entry.getNBTTag();
       tag.setBoolean("entry", true);   
       this.sendDataToPlayer(tag);
-      this.researchLength = len;
+      this.researchLength = len;      
+      
       }    
     }
+  te.shouldUpdate = true;
   }
 
 }

@@ -51,6 +51,7 @@ import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GuiVehicleCrafting extends GuiContainerAdvanced
 {
@@ -105,7 +106,17 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
+  switch(activeTab.getElementNumber())
+  {
   
+  
+  case 1000:
+  this.drawProgressBackground();
+  break;
+  
+  case 1001:
+  break;
+  }
   }
 
 public void drawProgressBackground()
@@ -117,7 +128,7 @@ public void drawProgressBackground()
   int h = 10; 
   int w1 = 100;
   int x = guiLeft + 7;
-  int y = guiTop + 112+18;
+  int y = guiTop + 112+18+3;
   String tex = Config.texturePath+"gui/guiButtons2.png";
   RenderTools.drawQuadedTexture(x, y, w+6, h+6, 256, 40, tex, 0, 0);
   float progress = container.displayProgress;
@@ -137,8 +148,6 @@ public void drawProgressBackground()
   w = w% 60;
   tex = String.format("%sm %ss", h,w);
   this.drawString(getFontRenderer(), tex, x, y, 0xffffffff);
-
-  this.drawCurrentRecipeBackground();
   }
 
 public void drawCurrentRecipeBackground()
@@ -148,14 +157,59 @@ public void drawCurrentRecipeBackground()
    */
   if(this.container.currentRecipe!=null)
     {
-    this.drawStringGui(this.container.currentRecipe.getDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
-    this.renderItemStack(this.container.currentRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true);
+    this.drawStringGui(this.container.currentRecipe.getDisplayName(), 8+18+2, 24+3+4+18+5, 0xffffffff);
+    this.renderItemStack(this.container.currentRecipe.getResult(), guiLeft+8, guiTop+24+3+18+5, mouseX, mouseY, true);
     } 
-  if(this.container.clientRecipe!=null)
+  else if(this.container.clientRecipe!=null)
     {
-    this.drawStringGui(this.container.clientRecipe.getDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
-    this.renderItemStack(this.container.clientRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true);
+    this.drawStringGui(this.container.clientRecipe.getDisplayName(), 8+18+2, 24+3+4+18+5, 0xffffffff);
+    this.renderItemStack(this.container.clientRecipe.getResult(), guiLeft+8, guiTop+24+3+18+5, mouseX, mouseY, true);
     } 
+  }
+
+@Override
+public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
+  {
+  if(this.activeTab!=null)
+    {
+    switch(activeTab.getElementNumber())
+    {
+    
+    case 1000:
+    this.drawProgressForeground();
+    this.drawCurrentRecipeBackground();
+    break;
+    
+    case 1001:   
+    this.drawCurrentRecipeBackground();
+    break; 
+    }
+    }
+  }
+
+public void drawProgressForeground()
+  {
+  /**
+   * draw fake stacks into slots
+   */
+  if(this.container.clientRecipe!=null && !this.container.isWorking)
+    {
+    int x = 0;
+    int y = 0;
+    for(ItemStackWrapperCrafting stack : this.container.clientRecipe.getResourceList())
+      {
+      if(x>=3)
+        {
+        x=0;
+        y++;
+        }      
+      if(!this.container.getSlot(36 + y*3+x).getHasStack())
+        {
+        this.renderItemStack(stack.getFilter(), guiLeft + 8 + x * 18, guiTop + 8 + 24 + 18 + 4 + 18 + 4 + y*18, mouseX, mouseY, true, true);        
+        }   
+      x++;   
+      }
+    }
   }
 
 @Override
@@ -195,8 +249,7 @@ public void onElementActivated(IGuiElement element)
     {
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("set", true);
-    tag.setInteger("id", this.container.clientRecipe.getResult().itemID);
-    tag.setInteger("dmg", this.container.clientRecipe.getResult().getItemDamage());
+    tag.setCompoundTag("result", this.container.clientRecipe.getResult().writeToNBT(new NBTTagCompound()));
     this.sendDataToServer(tag);
     }
   break;
@@ -246,7 +299,7 @@ public void setupControls()
     
   this.searchBox = (GuiTextInputLine) new GuiTextInputLine(2, this, 176-16, 12, 30, "").updateRenderPos(8, 29);
   searchBox.selected = false;
-  this.area = new GuiScrollableArea(0, this, 5, 21+18+10+5, 176-10, 240-21-10-18-5-8, 0);
+  this.area = new GuiScrollableArea(0, this, 5, 21+18+10+5+18, 176-10, 240-21-10-18-5-8-18, 0);
   }
 
 @Override
@@ -266,10 +319,10 @@ public void updateControls()
     {
     case 1000://progress
     container.addSlots();
-    int x =  8;
-    int y =  21 + 4 + 4*18 + 8;
+    int x =  8 + 3* 18 + 27 + 18 + 9;
+    int y =  8 + 24 + 18 + 4 + 18 + 4;
     this.addGuiButton(3, 35, 16, "Start").updateRenderPos(x, y);
-    this.addGuiButton(1, 35, 16, "Clear").updateRenderPos(x+37, y);  
+    this.addGuiButton(1, 35, 16, "Clear").updateRenderPos(x, y+36);  
     break;
     
     case 1001://select

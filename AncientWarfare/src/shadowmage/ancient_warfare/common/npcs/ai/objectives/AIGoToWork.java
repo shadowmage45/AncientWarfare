@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -82,7 +83,7 @@ protected boolean findWorkSite()
   WayPoint p = npc.wayNav.getWorkSite();
   if(p!=null && p.isTargetLoaded(npc.worldObj) && isValidWorkSite(p.getTileEntity(npc.worldObj)))
     {
-    npc.wayNav.setWorkSiteTile((TECivic)p.getTileEntity(npc.worldObj));
+    npc.wayNav.setWorkSiteTile((ITEWorkSite)p.getTileEntity(npc.worldObj));
     return true;
     }
   npc.wayNav.setWorkSiteTile(null);
@@ -96,7 +97,7 @@ protected boolean findWorkSite()
     if(entry.isTargetLoaded(npc.worldObj) && isValidWorkSite(te))
       {
       npc.wayNav.setWorkSite(new WayPoint(entry.floorX(), entry.floorY(), entry.floorZ(), entry.getTargetType()));
-      npc.wayNav.setWorkSiteTile((TECivic)te);
+      npc.wayNav.setWorkSiteTile((ITEWorkSite)te);
       return true;
       }
     else
@@ -151,7 +152,7 @@ public void onRunningTick()
 
 protected void updateWorkSiteWorkerStatus()
   {
-  TECivic te = npc.wayNav.getWorkSiteTile();
+  ITEWorkSite te = npc.wayNav.getWorkSiteTile();
   if(te!=null)
     {
     te.addWorker(npc);
