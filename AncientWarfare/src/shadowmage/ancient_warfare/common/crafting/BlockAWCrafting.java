@@ -100,6 +100,8 @@ public void registerBlockInfo()
   d.addDisplayStack(new ItemStack(this,1,1));
   d.setName("Civil Engineering Station", 2);
   d.addDisplayStack(new ItemStack(this,1,2));
+  d.setName("Vehicle Engineering Station", 3);
+  d.addDisplayStack(new ItemStack(this,1,3));
   
   d.setIconTexture(baseTexDir+"researchBlockBottom", 0);
   d.setIconTexture(baseTexDir+"researchBlockTop", 1);
@@ -179,7 +181,7 @@ public void registerIcons(IconRegister reg, Description d)
 @Override
 public Icon getIcon(int side, int meta)
   {
-  int index = meta*6 + side;
+  int index = side;
   Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
   if(d!=null)
     {

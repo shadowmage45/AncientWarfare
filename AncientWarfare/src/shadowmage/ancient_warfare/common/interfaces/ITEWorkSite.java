@@ -18,43 +18,13 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.civics.types;
+package shadowmage.ancient_warfare.common.interfaces;
 
-import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.crafting.TEAWVehicleCraft;
-
-public class CivicSiegeWorkshop extends Civic
+public interface ITEWorkSite
 {
 
-/**
- * @param id
- */
-public CivicSiegeWorkshop(int id, int size)
-  {
-  super(id);
-  this.blockType = BlockLoader.crafting;
-//  this.teClass = TEAWVehicleCraft.class;
-  this.blockMeta = 3;
-  switch(size)
-  {
-  case 0:
-  this.name = "Small Siege Engine Workshop";
-  this.minSize1 = 5;
-  this.minSize2 = 5;
-  this.minHeight = 5;
-  this.workSizeMaxHeight =5;
-  this.workSizeMaxHorizontal = 5;
-  break;
-  
-  case 1:
-  this.name = "Medium Siege Engine Workshop";
-  this.minSize1 = 9;
-  this.minSize2 = 9;
-  this.minHeight = 9;
-  this.workSizeMaxHeight =9;
-  this.workSizeMaxHorizontal = 9;
-  break;
-  }
-  }
+public void doWork(IWorker worker);
+
+
 
 }

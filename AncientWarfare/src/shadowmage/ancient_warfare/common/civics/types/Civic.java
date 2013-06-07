@@ -102,8 +102,8 @@ public static ICivicType fishFarm = new CivicFishFarm(29, "Fish Farm", "16x16 Ma
 public static ICivicType squidFarm = new CivicFishFarm(30, "Squid Farm", "16x16 Max Width, needs water", TESquidFarm.class, "civicFarmWheat1",16,2).setBlockIcons("civicFarmSquidBottom", "civicFarmSquidTop", "civicFarmSquidSides");
 public static ICivicType cocoaFarm = new CivicFarm(31, "Cocoa Bean Farm", "10x10 Max Width", TEFarmCocoa.class, "civicFarmWheat1", 10 ,2).setBlockIcons("civicFarmCocoaBottom", "civicFarmCocoaTop", "civicFarmCocoaSides").addResourceItem(new ItemStack(Item.dyePowder,1,3));
 public static ICivicType warehouseSmall = new CivicWarehouse(32, "Small Warehouse", "9x9x3 Max Size", TECivicWarehouse.class, 9, 3);
-public static ICivicType siegeWorkShopSmall = new CivicSiegeWorkshop(33, 0).setBlockIcons("civicTownHallSmallBottom", "civicTownHallSmallTop", "civicTownHallSmallSides");
-public static ICivicType siegeWorkShopMedium = new CivicSiegeWorkshop(34, 1).setBlockIcons("civicTownHallMediumBottom", "civicTownHallMediumTop", "civicTownHallMediumSides");
+//public static ICivicType siegeWorkShopSmall = new CivicSiegeWorkshop(33, 0).setBlockIcons("civicTownHallSmallBottom", "civicTownHallSmallTop", "civicTownHallSmallSides");
+//public static ICivicType siegeWorkShopMedium = new CivicSiegeWorkshop(34, 1).setBlockIcons("civicTownHallMediumBottom", "civicTownHallMediumTop", "civicTownHallMediumSides");
 //smithy (process ores -> ingots)
 //lumber yard (process logs -> planks/charcoal)
 //factory (single block)(use provided resources to craft player-set recipes)
