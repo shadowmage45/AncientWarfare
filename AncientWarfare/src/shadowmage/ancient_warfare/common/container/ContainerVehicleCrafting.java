@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.container;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,6 +30,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.crafting.TEAWVehicleCraft;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -150,7 +153,7 @@ public void handlePacketData(NBTTagCompound tag)
     Config.logDebug("receiving server set recipe command :: ");  
     int id = tag.getInteger("id");
     int dmg = tag.getInteger("dmg");  
-    ResourceListRecipe recipe = null;
+    ResourceListRecipe recipe = AWCraftingManager.instance().getRecipesFor(new ItemStack(id,1,dmg), EnumSet.of(RecipeType.VEHICLE));
     te.validateAndSetRecipe(recipe);
     }
   if(tag.hasKey("work"))

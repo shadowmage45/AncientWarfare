@@ -24,6 +24,8 @@ public interface ITEWorkSite
 {
 
 public void doWork(IWorker worker);
+public boolean hasWork();
+public double getDistance(double x, double y, double z);
 
 
 

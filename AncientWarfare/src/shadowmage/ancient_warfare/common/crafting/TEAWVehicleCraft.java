@@ -94,9 +94,10 @@ public void updateEntity()
 
 public void validateAndSetRecipe(ResourceListRecipe recipe)
   {
-  recipe = AWCraftingManager.instance().validateRecipe(recipe);
+//  recipe = AWCraftingManager.instance().validateRecipe(recipe);
   if(recipe!=null)
     {
+    Config.logDebug("setting recipe to : "+recipe);    
     this.recipe = recipe;
     }
   }
@@ -165,7 +166,8 @@ public boolean canInsertItem(int i, ItemStack itemstack, int j)
     return itemstack.itemID == ItemLoader.researchBook.itemID;
     }
   else if(i==9)
-    {Config.logDebug("trying place into slot 9:");
+    {
+    Config.logDebug("trying place into slot 9:");
     return false;
     }
   return true;

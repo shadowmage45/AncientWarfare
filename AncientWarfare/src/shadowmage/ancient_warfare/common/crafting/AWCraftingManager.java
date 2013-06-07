@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
@@ -88,6 +87,23 @@ private static AWCraftingManager INSTANCE = new AWCraftingManager();
 public static AWCraftingManager instance()
   {
   return INSTANCE;
+  }
+
+public ResourceListRecipe getRecipesFor(ItemStack result, EnumSet<RecipeType> types)
+  {
+  List<ResourceListRecipe> list;
+  for(RecipeType t : types)
+    {
+    list = this.recipesByType.get(t);
+    for(ResourceListRecipe valid : list)
+      {
+      if(InventoryTools.doItemsMatch(valid.result, result))
+        {
+        return valid;
+        }      
+      }
+    } 
+  return null;
   }
 
 public ResourceListRecipe validateRecipe(ResourceListRecipe recipe)
