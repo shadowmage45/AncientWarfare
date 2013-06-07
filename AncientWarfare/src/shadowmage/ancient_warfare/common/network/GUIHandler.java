@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.client.gui.civic.GuiCivicWarehouse;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiCivilEngineering;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiEngineeringStation;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiResearch;
+import shadowmage.ancient_warfare.client.gui.crafting.GuiVehicleCrafting;
 import shadowmage.ancient_warfare.client.gui.info.GuiResearchBook;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCommandBaton;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCourierRoutingSlip;
@@ -65,9 +66,11 @@ import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
+import shadowmage.ancient_warfare.common.container.ContainerVehicleCrafting;
 import shadowmage.ancient_warfare.common.crafting.TEAWEngineering;
 import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
+import shadowmage.ancient_warfare.common.crafting.TEAWVehicleCraft;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
@@ -192,6 +195,9 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
     }
   return null;
   
+  case INFO:
+  return new ContainerDummy();
+  
   case CIVIL_ENGINEERING:
   te = world.getBlockTileEntity(x, y, z);
   if(te instanceof TEAWStructureCraft)
@@ -219,8 +225,14 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
     }
   return null;
   
-  case INFO:
-  return new ContainerDummy();
+  case VEHICLE_CRAFT:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWVehicleCraft)
+    {
+    TEAWVehicleCraft tew = (TEAWVehicleCraft)te;
+    return new ContainerVehicleCrafting(player, tew);
+    }
+  return null;
     
   case VEHICLE_AMMO_SELECT:
   return new ContainerDummy();
@@ -340,6 +352,15 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   
   case INFO:
   return new GuiResearchBook(player);
+  
+  case VEHICLE_CRAFT:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWVehicleCraft)
+    {
+    TEAWVehicleCraft tew = (TEAWVehicleCraft)te;
+    return new GuiVehicleCrafting(new ContainerVehicleCrafting(player, tew));
+    }
+  return null;
   
   case VEHICLE_AMMO_SELECT:
   vehicle = (VehicleBase)world.getEntityByID(x);

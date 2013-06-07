@@ -49,6 +49,7 @@ import shadowmage.ancient_warfare.common.crafting.RecipeSorterAZ;
 import shadowmage.ancient_warfare.common.crafting.RecipeSorterTextFilter;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GuiEngineeringStation extends GuiContainerAdvanced
@@ -340,7 +341,7 @@ protected void handleSearchBoxUpdate()
     this.recipes.clear();
     this.area.elements.clear();
     this.sorterFilter.setFilterText(text);
-    this.addRecipeButtons(AWCraftingManager.instance().getRecipesContaining(player, text, EnumSet.of(RecipeType.AMMO, RecipeType.ARMOR, RecipeType.CIVIC, RecipeType.GATE, RecipeType.UPGRADE)), sorterFilter);
+    this.addRecipeButtons(AWCraftingManager.instance().getRecipesContaining(PlayerTracker.instance().getClientEntry(), text, EnumSet.of(RecipeType.AMMO, RecipeType.ARMOR, RecipeType.CIVIC, RecipeType.GATE, RecipeType.UPGRADE), player.capabilities.isCreativeMode), sorterFilter);
     }
   }
 
@@ -408,11 +409,11 @@ public void updateControls()
     switch(activeTab.getElementNumber())
     {
     case 1000://civics
-    this.addRecipeButtons(AWCraftingManager.instance().getRecipesOfTypesFor(player, RecipeType.CIVIC), sorterAZ);
+    this.addRecipeButtons(AWCraftingManager.instance().getRecipesOfTypesFor(PlayerTracker.instance().getClientEntry(), player.capabilities.isCreativeMode, RecipeType.CIVIC), sorterAZ);
     break;
     
     case 1001://ammo
-    this.addRecipeButtons(AWCraftingManager.instance().getRecipesOfTypesFor(player, RecipeType.AMMO), sorterAZ);
+    this.addRecipeButtons(AWCraftingManager.instance().getRecipesOfTypesFor(PlayerTracker.instance().getClientEntry(), player.capabilities.isCreativeMode,  RecipeType.AMMO), sorterAZ);
     break;
     
     case 1002://progress
@@ -421,11 +422,11 @@ public void updateControls()
     break;
     
     case 1003://upgrades/armor
-    this.addRecipeButtons(AWCraftingManager.instance().getRecipesOfTypesFor(player, RecipeType.UPGRADE), sorterAZ);
+    this.addRecipeButtons(AWCraftingManager.instance().getRecipesOfTypesFor(PlayerTracker.instance().getClientEntry(), player.capabilities.isCreativeMode,  RecipeType.UPGRADE), sorterAZ);
     break;
     
     case 1004://gates
-    this.addRecipeButtons(AWCraftingManager.instance().getRecipesOfTypesFor(player, RecipeType.GATE), sorterAZ);
+    this.addRecipeButtons(AWCraftingManager.instance().getRecipesOfTypesFor(PlayerTracker.instance().getClientEntry(), player.capabilities.isCreativeMode,  RecipeType.GATE), sorterAZ);
     break;
     
     case 1005://search

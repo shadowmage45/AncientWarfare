@@ -44,6 +44,7 @@ import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
@@ -121,7 +122,7 @@ public ResourceListRecipe getStructureRecipeFor(String name)
   return null;
   }
 
-public List<ResourceListRecipe> getRecipesContaining(EntityPlayer player, String text, EnumSet<RecipeType> types)
+public List<ResourceListRecipe> getRecipesContaining(PlayerEntry entry, String text, EnumSet<RecipeType> types, boolean creative)
   {
   String name;
   List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
@@ -132,7 +133,7 @@ public List<ResourceListRecipe> getRecipesContaining(EntityPlayer player, String
       if(types.isEmpty() || types.contains(recipe.type))
         {
         name = recipe.displayName;
-        if(name.toLowerCase().contains(text.toLowerCase()) && recipe.canBeCraftedBy(player))
+        if(name.toLowerCase().contains(text.toLowerCase()) && ((!Config.DEBUG && creative) || Config.disableResearch || recipe.canBeCraftedBy(entry)))
           {
           recipes.add(recipe);
           }
@@ -388,7 +389,7 @@ public void addVehicleRecipe(ResourceListRecipe recipe)
   this.vehicleRecipes.add(recipe);
   }
 
-public List<ResourceListRecipe> getRecipesOfTypesFor(EntityPlayer player, RecipeType...recipeTypes)
+public List<ResourceListRecipe> getRecipesOfTypesFor(PlayerEntry entry, boolean creative, RecipeType...recipeTypes)
   {
   List<ResourceListRecipe> found = new ArrayList<ResourceListRecipe>();
   for(RecipeType type : recipeTypes)
@@ -396,7 +397,7 @@ public List<ResourceListRecipe> getRecipesOfTypesFor(EntityPlayer player, Recipe
     List<ResourceListRecipe> recipes = this.recipesByType.get(type);
     for(ResourceListRecipe recipe : recipes)
       {
-      if(recipe.canBeCraftedBy(player))
+      if(recipe.canBeCraftedBy(entry) || (!Config.DEBUG && creative))
         {
         found.add(recipe);
         }

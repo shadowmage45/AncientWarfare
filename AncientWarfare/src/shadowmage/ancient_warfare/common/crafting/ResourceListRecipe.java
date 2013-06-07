@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +34,7 @@ import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapper;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
@@ -165,13 +164,9 @@ public boolean isResource(ItemStack filter)
   return false;
   }
 
-public boolean canBeCraftedBy(EntityPlayer player)
-  {  
-  if(Config.DEBUG)
-    {
-    return (Config.disableResearch /*|| player.capabilities.isCreativeMode*/) ? true : (this.neededResearch==null || this.neededResearch.isEmpty()) ? true : PlayerTracker.instance().getEntryFor(player)!=null && PlayerTracker.instance().getEntryFor(player).hasDoneResearchByNumbers(neededResearch);
-    }
-  return (Config.disableResearch || player.capabilities.isCreativeMode) ? true : (this.neededResearch==null || this.neededResearch.isEmpty()) ? true : PlayerTracker.instance().getEntryFor(player)!=null && PlayerTracker.instance().getEntryFor(player).hasDoneResearchByNumbers(neededResearch);
+public boolean canBeCraftedBy(PlayerEntry entry)
+  {
+  return Config.disableResearch? true : (this.neededResearch==null || this.neededResearch.isEmpty()) ? true : entry.hasDoneResearchByNumbers(neededResearch);
   }
 
 public boolean doesInventoryContainResources(IInventory inventory, int[] slotNums)

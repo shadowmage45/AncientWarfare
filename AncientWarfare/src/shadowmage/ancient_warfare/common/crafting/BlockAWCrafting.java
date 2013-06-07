@@ -60,12 +60,6 @@ public BlockAWCrafting(int par1, int renderID)
   this.setLightOpacity(0);
   }
 
-//@Override
-//public int getRenderType()
-//  {
-//  return renderID;
-//  }
-
 @Override
 public boolean isOpaqueCube()
   {

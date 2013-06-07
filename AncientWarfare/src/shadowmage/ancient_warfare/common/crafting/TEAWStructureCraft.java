@@ -262,7 +262,7 @@ public void setInventorySlotContents(int i, ItemStack itemstack)
 @Override
 public String getInvName()
   {
-  return "AW.EngineeringStation";
+  return "AW.CivilEngineering";
   }
 
 @Override

@@ -236,10 +236,12 @@ public void loadRenders()
   this.addTEModel(0, new ModelTable1());
   this.addTEModel(1, new ModelTable2());
   this.addTEModel(2, new ModelTable3());
+  this.addTEModel(3, new ModelTable3());
   
   this.teModelTextures.put(0, Config.texturePath+"models/crafting/teResearchTable.png");
   this.teModelTextures.put(1, Config.texturePath+"models/crafting/teEngineeringStation.png");
   this.teModelTextures.put(2, Config.texturePath+"models/crafting/teCivilEngineeringStation.png");
+  this.teModelTextures.put(3, Config.texturePath+"models/crafting/teCivilEngineeringStation.png");
   
   /**
    * load up the vehicle item renderer...
