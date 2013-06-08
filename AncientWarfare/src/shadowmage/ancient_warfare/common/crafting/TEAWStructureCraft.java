@@ -34,13 +34,7 @@ import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 public class TEAWStructureCraft extends TEAWCrafting
 {
 	
-AWInventoryBasic inventory = new AWInventoryBasic(19);
-int[] resultSlot = new int[]{18};
-int[] craftMatrix = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
-ResourceListRecipe recipe = null;
 public boolean isStarted = false;
-public int displayProgress;
-public int displayProgressMax;
 short compileTime = 0;
 short compileTimeMax = 5;
 
@@ -50,6 +44,9 @@ short compileTimeMax = 5;
 public TEAWStructureCraft()
   {
   this.modelID = 2;
+  craftMatrix = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
+  resultSlot = new int[]{18};
+  inventory = new AWInventoryBasic(19);
   }
 
 @Override
@@ -83,7 +80,7 @@ public void updateEntity()
     if(this.compileTime<this.compileTimeMax)
       {
       this.compileTime++;
-      this.displayProgress++;
+      this.workProgress++;
       }
     }
   }
@@ -139,8 +136,8 @@ protected void setFinished()
   this.isStarted = false;
   this.compileTime = 0;
   this.recipe = null;
-  this.displayProgress = 0;
-  this.displayProgressMax = 0;
+  this.workProgress = 0;
+  this.workProgressMax = 0;
   }
 
 protected void produceItem()
@@ -159,7 +156,7 @@ public void validateAndSetRecipe(ResourceListRecipe recipe)
   if(this.isStarted || this.recipe!=null || recipe == null){return;}
   this.recipe = recipe.copy();
   this.isStarted = true;
-  this.displayProgressMax = this.calcTotalTime();
+  this.workProgressMax = this.calcTotalTime();
   Config.logDebug("setting recipe and working....recipe: "+recipe);
   }
 
@@ -182,131 +179,16 @@ public void writeDescriptionData(NBTTagCompound tag)
 
 @Override
 public void writeExtraNBT(NBTTagCompound tag)
-  {
-  if(this.recipe!=null)
-    {
-    tag.setCompoundTag("rec", this.recipe.getNBTTag());
-    }
+  {  
   tag.setBoolean("work", this.isStarted);
   tag.setShort("cTime", this.compileTime);
-  tag.setCompoundTag("inv", this.inventory.getNBTTag());
-  tag.setInteger("dtime", displayProgress);
-  tag.setInteger("dmax", displayProgressMax);  
   }
 
 @Override
 public void readExtraNBT(NBTTagCompound tag)
-  {
-  if(tag.hasKey("rec"))
-    {
-    this.recipe = new ResourceListRecipe(tag.getCompoundTag("rec"));
-    }
-  if(tag.hasKey("inv"))
-    {
-    this.inventory.readFromNBT(tag.getCompoundTag("inv"));
-    }
+  { 
   this.isStarted = tag.getBoolean("work");
   this.compileTime = tag.getShort("cTime");
-  this.displayProgress = tag.getInteger("dtime");
-  this.displayProgressMax = tag.getInteger("dmax");
-  }
-
-@Override
-public int[] getAccessibleSlotsFromSide(int var1)
-  {
-  return (var1==1 || var1==0) ? resultSlot : craftMatrix;
-  }
-
-@Override
-public boolean canInsertItem(int slotNum, ItemStack itemstack, int side)
-  {
-  return slotNum==18? false : (side ==1 || side==0) ? false : true;
-  }
-
-@Override
-public boolean canExtractItem(int slotNum, ItemStack itemstack, int side)
-  {
-  return true;
-  }
-
-@Override
-public int getSizeInventory()
-  {
-  return inventory.getSizeInventory();
-  }
-
-@Override
-public ItemStack getStackInSlot(int i)
-  {
-  return inventory.getStackInSlot(i);
-  }
-
-@Override
-public ItemStack decrStackSize(int i, int j)
-  {
-  return inventory.decrStackSize(i, j);
-  }
-
-@Override
-public ItemStack getStackInSlotOnClosing(int i)
-  {
-  return inventory.getStackInSlotOnClosing(i);
-  }
-
-@Override
-public void setInventorySlotContents(int i, ItemStack itemstack)
-  {
-  inventory.setInventorySlotContents(i, itemstack);
-  }
-
-@Override
-public String getInvName()
-  {
-  return "AW.CivilEngineering";
-  }
-
-@Override
-public boolean isInvNameLocalized()
-  {  
-  return false;
-  }
-
-@Override
-public int getInventoryStackLimit()
-  {  
-  return 64;
-  }
-
-@Override
-public boolean isUseableByPlayer(EntityPlayer entityplayer)
-  {  
-  return true;
-  }
-
-@Override
-public void openChest()
-  {
-   
-  }
-
-@Override
-public void closeChest()
-  {
-    
-  }
-
-@Override
-public boolean isStackValidForSlot(int i, ItemStack itemstack)
-  {  
-  return i == 18 ? false : true;
-  }
-
-/**
- * @return
- */
-public ResourceListRecipe getRecipe()
-  {
-  return this.recipe;
   }
 
 /**

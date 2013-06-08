@@ -202,17 +202,17 @@ public void detectAndSendChanges()
   {
   super.detectAndSendChanges();
   if(this.player.worldObj.isRemote){return;}
-  if(this.displayProgress!=te.displayProgress)
+  if(this.displayProgress!=te.getWorkProgress())
     {
-    this.displayProgress = te.displayProgress;
+    this.displayProgress = te.getWorkProgress();
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("prog", displayProgress);
     this.sendDataToPlayer(tag);
     Config.logDebug("sending progress update");
     }
-  if(this.displayProgressMax!=te.displayProgressMax)
+  if(this.displayProgressMax!=te.getWorkProgressMax())
     {
-    this.displayProgressMax = te.displayProgressMax;
+    this.displayProgressMax = te.getWorkProgressMax();
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("progMax", displayProgressMax);
     this.sendDataToPlayer(tag);
