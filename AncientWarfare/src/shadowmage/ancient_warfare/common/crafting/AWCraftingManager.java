@@ -40,6 +40,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
@@ -65,6 +66,7 @@ List<ResourceListRecipe> gateRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> upgradeRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> armorRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> npcRecipes = new ArrayList<ResourceListRecipe>();
+List<ResourceListRecipe> researchRecipes = new ArrayList<ResourceListRecipe>();
 
 List<ResourceListRecipe> structureRecipesServer = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> structureRecipesClient = new ArrayList<ResourceListRecipe>();
@@ -80,6 +82,7 @@ private AWCraftingManager()
   recipesByType.put(RecipeType.UPGRADE, upgradeRecipes);
   recipesByType.put(RecipeType.ARMOR, armorRecipes);
   recipesByType.put(RecipeType.NPC, npcRecipes);
+  recipesByType.put(RecipeType.RESEARCH, researchRecipes);
   }
 
 private static AWCraftingManager INSTANCE = new AWCraftingManager();
@@ -193,6 +196,22 @@ public void loadRecipes()
   this.addNpcRecipes();
   this.addVehicleRecipes();
   this.addStructureRecipes();
+  this.addResearchRecipes();
+  }
+
+protected void addResearchRecipes()
+  {
+  ResourceListRecipe recipe;
+  for(IResearchGoal goal : ResearchGoal.researchGoals)
+    {
+    if(goal==null){continue;}
+    recipe = goal.constructRecipe();
+    if(recipe!=null)
+      {
+      this.researchRecipes.add(recipe);
+      Config.logDebug("adding research recipe: "+recipe);
+      }    
+    }   
   }
 
 protected void addCivicRecipes()

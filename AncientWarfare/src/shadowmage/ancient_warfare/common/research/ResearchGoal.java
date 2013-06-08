@@ -29,6 +29,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchBallistics;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchExplosives;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchFlammables;
@@ -302,6 +305,16 @@ public int getResearchTime()
 public List<ItemStackWrapperCrafting> getResearchResources() 
   {
   return resources;
+  }
+
+@Override
+public ResourceListRecipe constructRecipe()
+  {
+  ResourceListRecipe recipe = new ResourceListRecipe(new ItemStack(ItemLoader.researchNotes,1,this.getGlobalResearchNum()), RecipeType.NONE);
+  recipe.setDisplayName(getDisplayName());
+  recipe.addNeededResearch(dependencies);
+  recipe.addResources(getResearchResources());
+  return recipe;
   }
 
 }

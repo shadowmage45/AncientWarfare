@@ -49,7 +49,7 @@ import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public abstract class TEAWCrafting extends TileEntity implements IInventory, ISidedInventory, ITEWorkSite
+public abstract class TEAWCrafting extends TileEntity implements IInventory, ISidedInventory
 {
 
 
@@ -62,19 +62,12 @@ public int[] resultSlot;
 public int[] bookSlot;
 protected ResourceListRecipe recipe;
 protected boolean isWorking = false;
-protected boolean shouldBroadcast = false;
-protected boolean isWorkSite = false;
 protected String workingPlayerName = null;
 protected PlayerEntry workingPlayerEntry = null;
 protected int workProgress = 0;
 protected int workProgressMax = 0;
-protected Set<IWorker> workers = Collections.newSetFromMap(new WeakHashMap<IWorker, Boolean>());
-TargetType workType = TargetType.NONE;
 
-int maxWorkers = 1;
-int broadcastDelayTicks = 0;
 int recipeStartCheckDelayTicks = 0;
-int workerValidationDelayTicks = 0;
 
 protected boolean canUpdate = false;
 
@@ -117,52 +110,7 @@ public void updateEntity()
     {
     return;
     }
-  this.validateWorkers();
-  this.broadcastWork(Config.npcAISearchRange);
   this.updateCrafting();
-  }
-
-@Override
-public void broadcastWork(int maxRange)
-  {
-  if(!this.shouldBroadcast || !this.isWorkSite)
-    {
-    return;
-    }
-  if(this.broadcastDelayTicks>0)
-    {
-    this.broadcastDelayTicks--;
-    return;
-    }
-  this.broadcastDelayTicks = Config.npcAITicks * 10;
-  if(!this.isWorking)
-    {
-    return;
-    }
-  Config.logDebug("should broadcast work!!");
-  if(this.worldObj==null || this.worldObj.isRemote)
-    {
-    return;
-    }
-  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(maxRange, maxRange/2, maxRange);
-  List<NpcBase> npcList = worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
-  for(NpcBase npc : npcList)
-    {
-    if(isHostile(npc.teamNum))      
-      {
-      if(npc.npcType.isCombatUnit())
-        {
-        npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, Config.npcAITicks*11);
-        }      
-      }
-    else
-      {
-      if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(workType) && npc.teamNum==this.teamNum)
-        {
-        npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
-        }
-      }
-    }
   }
 
 public boolean isHostile(int sourceTeam)
@@ -173,6 +121,7 @@ public boolean isHostile(int sourceTeam)
     }
   return TeamTracker.instance().isHostileTowards(worldObj, sourceTeam, teamNum);
   }
+
 /************************************************CRAFTING METHODS*************************************************/
 
 protected void updateCrafting()
@@ -218,6 +167,7 @@ protected boolean tryStart()
     this.recipe.removeResourcesFrom(inventory, craftMatrix);
     this.workProgress =0;
     this.isWorking = true;
+    this.workProgressMax = 20 * recipe.getResourceItemCount();
     return true;
     }
   this.isWorking = false;
@@ -506,75 +456,4 @@ public boolean isStackValidForSlot(int i, ItemStack itemstack)
   return true;
   }
 
-/************************************************WORKSITE METHODS*************************************************/
-@Override
-public void doWork(IWorker worker)
-  {
-  this.workProgress+=20;
-  }
-
-@Override
-public boolean hasWork()
-  {
-  return this.isWorking;
-  }
-
-@Override
-public boolean canHaveMoreWorkers(IWorker worker)
-  {
-  if(this.workers.contains(worker) && this.workers.size() <= maxWorkers)
-    {
-    return true;
-    }
-  else if(this.workers.size()+1 <= maxWorkers)
-    {
-    return true;
-    }
-  return false;
-  }
-
-@Override
-public void addWorker(IWorker worker)
-  {
-  this.workers.add(worker);
-  }
-
-@Override
-public void removeWorker(IWorker worker)
-  {
-  this.workers.remove(worker);  
-  }
-
-protected void validateWorkers()
-  {
-  if(this.workerValidationDelayTicks>0)
-    {
-    this.workerValidationDelayTicks--;
-    return;
-    }
-  this.workerValidationDelayTicks = Config.npcAITicks * 10;
-  Iterator<IWorker> workIt = this.workers.iterator();
-  IWorker npc = null;
-  while(workIt.hasNext())
-    {
-    npc = workIt.next();
-    if(npc==null || npc.isDead() || npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
-      {      
-      workIt.remove();
-      continue;
-      }
-    WayPoint p = npc.getWorkPoint();
-    if(p==null || p.floorX()!= xCoord || p.floorY()!=yCoord || p.floorZ()!=zCoord)
-      {
-      workIt.remove();
-      continue;
-      }
-    ITEWorkSite  te = npc.getWorkSite();
-    if(te!=this)
-      {
-      workIt.remove();
-      continue;
-      }
-    }
-  }
 }
