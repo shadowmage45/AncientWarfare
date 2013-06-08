@@ -31,9 +31,9 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
-public class TEAWStructureCraft extends TEAWCrafting implements IInventory, ISidedInventory
+public class TEAWStructureCraft extends TEAWCrafting
 {
-
+	
 AWInventoryBasic inventory = new AWInventoryBasic(19);
 int[] resultSlot = new int[]{18};
 int[] craftMatrix = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
@@ -188,7 +188,7 @@ public void writeExtraNBT(NBTTagCompound tag)
     tag.setCompoundTag("rec", this.recipe.getNBTTag());
     }
   tag.setBoolean("work", this.isStarted);
-  tag.setShort("time", this.compileTime);
+  tag.setShort("cTime", this.compileTime);
   tag.setCompoundTag("inv", this.inventory.getNBTTag());
   tag.setInteger("dtime", displayProgress);
   tag.setInteger("dmax", displayProgressMax);  
@@ -206,7 +206,7 @@ public void readExtraNBT(NBTTagCompound tag)
     this.inventory.readFromNBT(tag.getCompoundTag("inv"));
     }
   this.isStarted = tag.getBoolean("work");
-  this.compileTime = tag.getShort("time");
+  this.compileTime = tag.getShort("cTime");
   this.displayProgress = tag.getInteger("dtime");
   this.displayProgressMax = tag.getInteger("dmax");
   }

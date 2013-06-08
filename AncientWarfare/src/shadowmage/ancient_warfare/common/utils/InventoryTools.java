@@ -223,6 +223,38 @@ public static int tryRemoveItems(IInventory inv, ItemStack filter, int qty, int 
   return qtyLeft;
   }
 
+public static int tryRemoveItems(IInventory inv, ItemStack filter, int qty, int [] slots)
+  {
+  if(filter==null || inv.getSizeInventory()==0)
+    {
+    return 0;
+    }
+  ItemStack fromSlot = null;
+  int qtyLeft = qty;  
+  int slot;
+  for(int i = 0; i < slots.length; i++)
+    {
+    slot = slots[i];
+    fromSlot = inv.getStackInSlot(slot);
+    if(fromSlot==null){continue;}
+    if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, filter))
+      {
+      int howMany = fromSlot.stackSize > qty? qty : fromSlot.stackSize;
+      qtyLeft -= howMany;
+      fromSlot.stackSize-= howMany;
+      if(fromSlot.stackSize<=0)
+        {
+        inv.setInventorySlotContents(slot, null);
+        }
+      if(qtyLeft<=0)
+        {
+        return 0;
+        }
+      }    
+    }  
+  return qtyLeft;
+  }
+
 public static ItemStack getItems(IInventory inv, ItemStack filter, int max, int firstSlot, int lastSlot)
   {
   if(filter==null|| inv.getSizeInventory()==0){ return null;}

@@ -311,4 +311,15 @@ public NBTTagCompound getNBTTag()
   return tag;
   }
 
+/**
+ * 
+ */
+public void reset()
+  {
+  for(ItemStackWrapperCrafting item : this.resources)
+    {
+    item.setRemainingNeeded(item.getQuantity());
+    }
+  }
+
 }
