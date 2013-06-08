@@ -53,7 +53,7 @@ import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public abstract class TECivic extends TileEntity implements IInventory
+public abstract class TECivic extends TileEntity implements IInventory, ITEWorkSite
 {
 
 protected static Random rng = new Random();
@@ -164,7 +164,7 @@ public boolean doesBBIntersect(AxisAlignedBB bb)
   return false;
   }
 
-public boolean isWorker(NpcBase worker)
+public boolean isWorker(IWorker worker)
   {
   return this.workers.contains(worker);
   }
@@ -186,7 +186,7 @@ protected void onCivicUpdate()
   {
   this.validateWorkers();
   this.updateHasWork();
-  this.broadCastToSoldiers(Config.civicBroadcastRange);
+  this.broadcastWork(Config.civicBroadcastRange);
   }
 
 @Override
@@ -218,7 +218,7 @@ public boolean canTeamInteract(int sourceTeam)
   return !TeamTracker.instance().isHostileTowards(worldObj, teamNum, sourceTeam);
   }
 
-public void broadCastToSoldiers(int maxRange)
+public void broadcastWork(int maxRange)
   {
   if(this.worldObj==null || this.worldObj.isRemote)
     {
@@ -289,7 +289,8 @@ public TECivicWarehouse getWarehousePosition()
   return null;
   }
 
-public boolean canHaveMoreWorkers(NpcBase npc)
+@Override
+public boolean canHaveMoreWorkers(IWorker npc)
   {  
   if(this.workers.contains(npc) && this.workers.size() <= this.civic.getMaxWorkers())
     {
@@ -331,7 +332,8 @@ public BlockPosition getPositionInBounds(int border)
   return new BlockPosition(x,y,z);
   }
 
-public void addWorker(NpcBase npc)
+@Override
+public void addWorker(IWorker npc)
   {
   if(npc!=null && !this.workers.contains(npc))
     {
@@ -343,12 +345,14 @@ public void addWorker(NpcBase npc)
     }  
   }
 
-public void doWork(NpcBase npc)
+@Override
+public void doWork(IWorker npc)
   {
   
   }
 
-public void removeWorker(NpcBase npc)
+@Override
+public void removeWorker(IWorker npc)
   {
   this.workers.remove(npc);
   if(this.workers.isEmpty())

@@ -20,6 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.crafting;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.WeakHashMap;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -29,16 +35,25 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
+import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
-public abstract class TEAWCrafting extends TileEntity implements IInventory, ISidedInventory
+public abstract class TEAWCrafting extends TileEntity implements IInventory, ISidedInventory, ITEWorkSite
 {
 
+
+public int teamNum;
 public int orientation;
 protected int modelID;
 protected AWInventoryBasic inventory;
@@ -48,13 +63,18 @@ public int[] bookSlot;
 protected ResourceListRecipe recipe;
 protected boolean isWorking = false;
 protected boolean shouldBroadcast = false;
+protected boolean isWorkSite = false;
 protected String workingPlayerName = null;
 protected PlayerEntry workingPlayerEntry = null;
 protected int workProgress = 0;
 protected int workProgressMax = 0;
+protected Set<IWorker> workers = Collections.newSetFromMap(new WeakHashMap<IWorker, Boolean>());
+TargetType workType = TargetType.NONE;
 
+int maxWorkers = 1;
 int broadcastDelayTicks = 0;
 int recipeStartCheckDelayTicks = 0;
+int workerValidationDelayTicks = 0;
 
 protected boolean canUpdate = false;
 
@@ -97,13 +117,15 @@ public void updateEntity()
     {
     return;
     }
-  this.broadcastWork();
+  this.validateWorkers();
+  this.broadcastWork(Config.npcAISearchRange);
   this.updateCrafting();
   }
 
-protected void broadcastWork()
+@Override
+public void broadcastWork(int maxRange)
   {
-  if(!this.shouldBroadcast)
+  if(!this.shouldBroadcast || !this.isWorkSite)
     {
     return;
     }
@@ -118,11 +140,39 @@ protected void broadcastWork()
     return;
     }
   Config.logDebug("should broadcast work!!");
-  /**
-   * TODO
-   */
+  if(this.worldObj==null || this.worldObj.isRemote)
+    {
+    return;
+    }
+  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(maxRange, maxRange/2, maxRange);
+  List<NpcBase> npcList = worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
+  for(NpcBase npc : npcList)
+    {
+    if(isHostile(npc.teamNum))      
+      {
+      if(npc.npcType.isCombatUnit())
+        {
+        npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, Config.npcAITicks*11);
+        }      
+      }
+    else
+      {
+      if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(workType) && npc.teamNum==this.teamNum)
+        {
+        npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
+        }
+      }
+    }
   }
 
+public boolean isHostile(int sourceTeam)
+  {
+  if(this.worldObj==null)
+    {
+    return false;
+    }
+  return TeamTracker.instance().isHostileTowards(worldObj, sourceTeam, teamNum);
+  }
 /************************************************CRAFTING METHODS*************************************************/
 
 protected void updateCrafting()
@@ -244,6 +294,7 @@ public void readFromNBT(NBTTagCompound tag)
   this.workProgress = tag.getInteger("time");
   this.workProgressMax = tag.getInteger("timeMax");
   this.isWorking = tag.getBoolean("work");
+  this.teamNum = tag.getInteger("team");
   if(tag.hasKey("name"))
     {
     this.workingPlayerName = tag.getString("name");
@@ -264,6 +315,7 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("time", this.workProgress);
   tag.setInteger("timeMax", this.workProgressMax);
   tag.setBoolean("work", this.isWorking);
+  tag.setInteger("team", this.teamNum);
   if(this.workingPlayerName!=null)
     {
     tag.setString("name", this.workingPlayerName);
@@ -454,4 +506,75 @@ public boolean isStackValidForSlot(int i, ItemStack itemstack)
   return true;
   }
 
+/************************************************WORKSITE METHODS*************************************************/
+@Override
+public void doWork(IWorker worker)
+  {
+  this.workProgress+=20;
+  }
+
+@Override
+public boolean hasWork()
+  {
+  return this.isWorking;
+  }
+
+@Override
+public boolean canHaveMoreWorkers(IWorker worker)
+  {
+  if(this.workers.contains(worker) && this.workers.size() <= maxWorkers)
+    {
+    return true;
+    }
+  else if(this.workers.size()+1 <= maxWorkers)
+    {
+    return true;
+    }
+  return false;
+  }
+
+@Override
+public void addWorker(IWorker worker)
+  {
+  this.workers.add(worker);
+  }
+
+@Override
+public void removeWorker(IWorker worker)
+  {
+  this.workers.remove(worker);  
+  }
+
+protected void validateWorkers()
+  {
+  if(this.workerValidationDelayTicks>0)
+    {
+    this.workerValidationDelayTicks--;
+    return;
+    }
+  this.workerValidationDelayTicks = Config.npcAITicks * 10;
+  Iterator<IWorker> workIt = this.workers.iterator();
+  IWorker npc = null;
+  while(workIt.hasNext())
+    {
+    npc = workIt.next();
+    if(npc==null || npc.isDead() || npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
+      {      
+      workIt.remove();
+      continue;
+      }
+    WayPoint p = npc.getWorkPoint();
+    if(p==null || p.floorX()!= xCoord || p.floorY()!=yCoord || p.floorZ()!=zCoord)
+      {
+      workIt.remove();
+      continue;
+      }
+    ITEWorkSite  te = npc.getWorkSite();
+    if(te!=this)
+      {
+      workIt.remove();
+      continue;
+      }
+    }
+  }
 }

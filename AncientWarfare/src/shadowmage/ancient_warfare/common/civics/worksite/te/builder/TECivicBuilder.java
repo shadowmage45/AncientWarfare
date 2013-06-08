@@ -21,13 +21,12 @@
 package shadowmage.ancient_warfare.common.civics.worksite.te.builder;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -95,7 +94,7 @@ protected void scan()
   }
 
 @Override
-public void doWork(NpcBase npc)
+public void doWork(IWorker npc)
   {
 //  Config.logDebug("ticking builder");
   this.tickBuilder();
@@ -103,7 +102,7 @@ public void doWork(NpcBase npc)
   }
 
 @Override
-protected void doWork(NpcBase npc, WorkPoint p)
+protected void doWork(IWorker npc, WorkPoint p)
   {
   // TODO Auto-generated method stub
 

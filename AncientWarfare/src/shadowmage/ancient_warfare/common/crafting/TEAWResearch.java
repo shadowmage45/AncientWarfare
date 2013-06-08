@@ -37,10 +37,6 @@ import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 public class TEAWResearch extends TEAWCrafting implements IInventory, ISidedInventory
 {
 
-protected AWInventoryBasic inventory = new AWInventoryBasic(10);
-int[] bookSlot = new int[]{0};
-int[] researchSlots = new int[]{1,2,3,4,5,6,7,8,9};
-
 /**
  * server side value..client side is kept in the container...
  */
@@ -56,6 +52,9 @@ public String researchingPlayer = null;
 public TEAWResearch()
   {
   this.modelID = 0;
+  inventory = new AWInventoryBasic(10);
+  bookSlot = new int[]{0};
+  craftMatrix = new int[]{1,2,3,4,5,6,7,8,9};
   }
 
 @Override

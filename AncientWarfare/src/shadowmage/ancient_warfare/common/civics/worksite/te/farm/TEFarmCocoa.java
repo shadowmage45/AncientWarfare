@@ -26,8 +26,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -115,7 +114,7 @@ protected int getDirection(int x, int y, int z, int x1, int y1, int z1)
   }
 
 @Override
-protected void doWork(NpcBase npc, WorkPoint p)
+protected void doWork(IWorker npc, WorkPoint p)
   {
   if(npc==null || p==null)
     {

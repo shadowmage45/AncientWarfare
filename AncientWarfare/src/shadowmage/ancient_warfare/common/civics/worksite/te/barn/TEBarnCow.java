@@ -22,16 +22,14 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.barn;
 
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
+import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.interfaces.IWorker;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 
 public class TEBarnCow extends TEWorkSiteAnimalFarm
@@ -104,7 +102,7 @@ protected void scan()
   }
 
 @Override
-protected void doWork(NpcBase npc, WorkPoint p)
+protected void doWork(IWorker npc, WorkPoint p)
   {
   super.doWork(npc, p);
   if(p.work==TargetType.BARN_MILK && p.target!=null && inventory.containsAtLeast(bucketFilter, 1))

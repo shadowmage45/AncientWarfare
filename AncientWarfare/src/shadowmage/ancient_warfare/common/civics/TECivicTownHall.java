@@ -58,7 +58,7 @@ protected void setHasWork(boolean newVal)
   }
 
 @Override
-public boolean canHaveMoreWorkers(NpcBase npc)
+public boolean canHaveMoreWorkers(IWorker npc)
   {  
   return true;
   }
@@ -86,7 +86,7 @@ protected void validateWorkers()
   }
 
 @Override
-public void broadCastToSoldiers(int maxRange)
+public void broadcastWork(int maxRange)
   {
   if(this.worldObj==null || this.worldObj.isRemote)
     {

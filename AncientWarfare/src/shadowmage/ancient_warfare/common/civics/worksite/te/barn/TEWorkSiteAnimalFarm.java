@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.barn;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,8 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
@@ -121,7 +119,7 @@ protected void scan()
   }
 
 @Override
-protected void doWork(NpcBase npc, WorkPoint p)
+protected void doWork(IWorker npc, WorkPoint p)
   {
   if(p.work==TargetType.BARN_BREED && p.target!=null && inventory.containsAtLeast(breedingItem, 2))
     {

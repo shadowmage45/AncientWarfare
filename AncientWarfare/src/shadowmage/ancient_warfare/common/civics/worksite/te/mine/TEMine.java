@@ -23,14 +23,12 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -70,56 +68,56 @@ protected void onCivicUpdate()
   super.onCivicUpdate(); 
   }
 
-public void handleLadderAction(NpcBase npc,  WorkPoint m)
+public void handleLadderAction(IWorker npc,  WorkPoint m)
   {
-  int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
+  int id = worldObj.getBlockId(m.x, m.y, m.z);
   if(id!=0)
     {
     handleClearAction(npc, m);
     }
   if(inventory.containsAtLeast(ladderFilter, 1))
     {
-    npc.worldObj.setBlock(m.x, m.y, m.z, Block.ladder.blockID, (int)m.special, 3);
+    worldObj.setBlock(m.x, m.y, m.z, Block.ladder.blockID, (int)m.special, 3);
     inventory.tryRemoveItems(ladderFilter, 1);
     }
   }
 
-public void handleTorchAction(NpcBase npc, WorkPoint m)
+public void handleTorchAction(IWorker npc, WorkPoint m)
   {
-  int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
+  int id = worldObj.getBlockId(m.x, m.y, m.z);
   if(id!=0)    
     {
     handleClearAction(npc, m);
     }
   if(inventory.containsAtLeast(torchFilter, 1))
     {
-    npc.worldObj.setBlock(m.x, m.y, m.z, Block.torchWood.blockID, 5, 3);  
+    worldObj.setBlock(m.x, m.y, m.z, Block.torchWood.blockID, 5, 3);  
     inventory.tryRemoveItems(torchFilter, 1);
     }
   }
 
-public void handleClearAction(NpcBase npc, WorkPoint m)
+public void handleClearAction(IWorker npc, WorkPoint m)
   {
   this.handleBlockBreak(npc, m.x, m.y, m.z);
   }
 
-public void handleFillAction(NpcBase npc, WorkPoint m)
+public void handleFillAction(IWorker npc, WorkPoint m)
   {  
-  int id = npc.worldObj.getBlockId(m.x, m.y, m.z);
+  int id = worldObj.getBlockId(m.x, m.y, m.z);
   if(id!=0)
     {
     this.handleBlockBreak(npc, m.x, m.y, m.z);
     }
   if(inventory.containsAtLeast(fillerFilter, 1))
     {
-    npc.worldObj.setBlock(m.x, m.y, m.z, Block.cobblestone.blockID, 0,3);
+    worldObj.setBlock(m.x, m.y, m.z, Block.cobblestone.blockID, 0,3);
     inventory.tryRemoveItems(fillerFilter, 1);
     }
   }
 
-public boolean handleBlockBreak(NpcBase npc, int x, int y, int z)
+public boolean handleBlockBreak(IWorker npc, int x, int y, int z)
   {
-  List<ItemStack> drops = BlockTools.breakBlock(npc.worldObj, x, y, z, 0);
+  List<ItemStack> drops = BlockTools.breakBlock(worldObj, x, y, z, 0);
   if(drops!=null)
     {
     for(ItemStack drop : drops)
@@ -130,7 +128,7 @@ public boolean handleBlockBreak(NpcBase npc, int x, int y, int z)
         }
       drop = inventory.tryMergeItem(drop);
       drop = overflow.tryMergeItem(drop);
-      InventoryTools.dropItemInWorld(npc.worldObj, drop, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
+      InventoryTools.dropItemInWorld(worldObj, drop, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
       }
     return true;
     }
@@ -208,7 +206,7 @@ protected void scan()
   }
 
 @Override
-protected void doWork(NpcBase npc, WorkPoint p)
+protected void doWork(IWorker npc, WorkPoint p)
   {
   switch(p.work)
     {
