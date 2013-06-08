@@ -360,6 +360,10 @@ protected void addProgressButtons()
     {
     stopButton.enabled = false;
     }
+  if(container.clientRecipe==null)
+    {
+    stopButton.enabled = false;
+    }
   }
 
 protected void handleSearchBoxUpdate()

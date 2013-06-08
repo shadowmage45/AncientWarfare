@@ -48,6 +48,7 @@ import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.ServerTickTimer;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -184,6 +185,7 @@ public void load(FMLPostInitializationEvent evt)
   NpcRegistry.instance().registerNPCs(); 
   CivicRegistry.instance().registerCivics();
   Gate.registerGateTypes();
+  ResearchGoal.load();
   AWCraftingManager.instance().loadRecipes();
   /**
    * and finally, save the config in case there were any changes made during init

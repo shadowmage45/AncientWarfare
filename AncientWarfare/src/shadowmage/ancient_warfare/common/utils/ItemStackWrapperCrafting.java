@@ -93,7 +93,7 @@ public boolean matches(ItemStack stack)
     {
     return super.matches(stack);    
     }
-  int oreID = OreDictionary.getOreID(stack);
+  int oreID = OreDictionary.getOreID(filter);
   boolean idMeta = false;
   if(oreID>=0)
     {

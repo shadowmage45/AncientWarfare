@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchBallistics;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchExplosives;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchFlammables;
@@ -155,6 +156,16 @@ protected HashSet<IResearchGoal> dependencyCache = new HashSet<IResearchGoal>();
 protected List<String> detailedDescription = new ArrayList<String>();
 protected List<ItemStackWrapperCrafting> resources = new ArrayList<ItemStackWrapperCrafting>();
 protected int researchTime = 100;
+
+public static void load()
+  {
+  Description d = ItemLoader.instance().registerItemSubtyped(ItemLoader.researchNotes);
+  for(IResearchGoal goal : researchGoals)
+    {
+	  if(goal==null){continue;}
+    ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.researchNotes, goal.getGlobalResearchNum(), goal.getDisplayName()).addDisplayStack(new ItemStack(ItemLoader.researchNotes,1,goal.getGlobalResearchNum()));
+    }
+  }
 
 public ResearchGoal(int num)
   {

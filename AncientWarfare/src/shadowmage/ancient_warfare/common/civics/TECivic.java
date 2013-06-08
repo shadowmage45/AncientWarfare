@@ -259,6 +259,18 @@ public boolean onInteract(World world, EntityPlayer player)
 
 /******************************************************WORK-SITE*********************************************************/
 
+@Override
+public CivicWorkType getWorkType()
+  {
+  return this.getCivic().getWorkType();
+  }
+
+@Override
+public boolean isWorkSite()
+  {
+  return this.getCivic().isWorkSite();
+  }
+
 public TECivicWarehouse getWarehousePosition()
   {
   if(this instanceof TECivicWarehouse)

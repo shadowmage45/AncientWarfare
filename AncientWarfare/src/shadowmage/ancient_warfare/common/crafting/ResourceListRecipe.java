@@ -49,6 +49,7 @@ List<ItemStackWrapperCrafting> resources = new ArrayList<ItemStackWrapperCraftin
 String displayName;
 RecipeType type = RecipeType.NONE;
 
+
 public ResourceListRecipe(NBTTagCompound tag)
   {
 	this.readFromNBT(tag);
@@ -177,7 +178,8 @@ public boolean doesInventoryContainResources(IInventory inventory, int[] slotNum
   ItemStack fromInv = null;
   for(ItemStackWrapperCrafting stack : this.resources)
     {
-    count = stack.getQuantity();
+    count = stack.getRemainingNeeded();
+    Config.logDebug("examinig stack "+stack.getFilter() + " needed: " +  stack.getRemainingNeeded());
     for(int i = 0; i < slotNums.length; i++)
       {
       fromInv = inventory.getStackInSlot(slotNums[i]);
@@ -185,6 +187,7 @@ public boolean doesInventoryContainResources(IInventory inventory, int[] slotNum
       if(stack.matches(fromInv))
         {
         count -= fromInv.stackSize;
+        Config.logDebug("found matching item ..count: "+fromInv.stackSize);
         }
       if(count<=0)
         {
@@ -193,6 +196,7 @@ public boolean doesInventoryContainResources(IInventory inventory, int[] slotNum
       }    
     if(count>0)
       {
+      Config.logDebug("failed count check");
       start = false;
       break;
       }

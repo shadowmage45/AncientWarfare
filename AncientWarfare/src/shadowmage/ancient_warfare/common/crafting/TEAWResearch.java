@@ -25,6 +25,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -34,17 +35,8 @@ import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 
-public class TEAWResearch extends TEAWCrafting implements IInventory, ISidedInventory
+public class TEAWResearch extends TEAWCraftingWorkSite
 {
-
-/**
- * server side value..client side is kept in the container...
- */
-public int researchProgress = 0;
-
-public IResearchGoal currentResearch = null;
-
-public String researchingPlayer = null;
 
 /**
  * 
@@ -52,56 +44,34 @@ public String researchingPlayer = null;
 public TEAWResearch()
   {
   this.modelID = 0;
-  inventory = new AWInventoryBasic(10);
-  bookSlot = new int[]{0};
-  craftMatrix = new int[]{1,2,3,4,5,6,7,8,9};
+  inventory = new AWInventoryBasic(11);
+  bookSlot = new int[]{10};
+  craftMatrix = new int[]{0,1,2,3,4,5,6,7,8};
+  this.workType = CivicWorkType.RESEARCH;
+  this.shouldBroadcast = true;  
   }
 
 @Override
-public void updateEntity()
+public void setRecipe(ResourceListRecipe recipe)
   {
-  if(this.worldObj.isRemote){return;}
-  if(this.currentResearch!=null)
+  if(this.recipe==null && recipe!=null)
     {
-    if(this.researchingPlayer==null || this.researchingPlayer.equals(""))
-      {
-      this.researchingPlayer = null;
-      this.currentResearch = null;
-      this.resetProgress(); 
-      return;
-      }
-    this.researchProgress++;
-    if(this.researchProgress>=this.currentResearch.getResearchTime())
-      {
-      this.setResearchFinished();
-      }
-    }
-  }
-
-public void startResearch(IResearchGoal goal)
-  {
-  if(this.researchingPlayer!=null)
-    {
-    this.currentResearch = goal;
-    this.researchProgress = 0;
-    }
-  else
-    {
-    this.currentResearch = null;
-    this.researchProgress = 0;
-    }
-  }
-
-protected void setResearchFinished()
-  {
-  PlayerTracker.instance().addResearchToPlayer(worldObj, researchingPlayer, this.currentResearch.getGlobalResearchNum());
-  this.currentResearch = null;
-  this.resetProgress();
+    this.recipe = recipe;
+    this.workProgressMax = ResearchGoal.getGoalByID(recipe.getResult().getItemDamage()).getResearchTime();
+    this.workProgress = 0;
+    this.isWorking = false;
+    } 
   }
 
 @Override
-public boolean canUpdate()
+protected boolean tryFinish()
   {
+  IResearchGoal goal = ResearchGoal.getGoalByID(recipe.getResult().getItemDamage());
+  PlayerTracker.instance().addResearchToPlayer(worldObj, workingPlayerName, goal.getGlobalResearchNum());
+  this.recipe = null;
+  this.isWorking = false;
+  this.workProgress = 0;
+  this.workProgressMax = 0;
   return true;
   }
 
@@ -126,157 +96,13 @@ public void writeDescriptionData(NBTTagCompound tag)
 @Override
 public void writeExtraNBT(NBTTagCompound tag)
   {
-  tag.setCompoundTag("inv", this.inventory.getNBTTag());
-  if(this.currentResearch!=null){tag.setInteger("goal", currentResearch.getGlobalResearchNum());}
-  tag.setInteger("prog", this.researchProgress);
-  if(this.researchingPlayer!=null){tag.setString("name", this.researchingPlayer);}  
+  
   }
 
 @Override
 public void readExtraNBT(NBTTagCompound tag)
   {
-  if(tag.hasKey("inv"))
-    {
-    this.inventory.readFromNBT(tag.getCompoundTag("inv"));
-    }
-  if(tag.hasKey("name")){this.researchingPlayer = tag.getString("name");}
-  if(tag.hasKey("prog")){this.researchProgress = tag.getInteger("prog");}
-  if(tag.hasKey("goal")){this.currentResearch = ResearchGoal.getGoalByID(tag.getInteger("goal"));}
+  
   }
-
-@Override
-public int[] getAccessibleSlotsFromSide(int var1)
-  {
-  if(var1==0)
-    {
-    return bookSlot;
-    }
-  return researchSlots;
-  }
-
-@Override
-public boolean canInsertItem(int i, ItemStack itemstack, int j)
-  {
-  return isStackValidForSlot(i, itemstack);
-  }
-
-@Override
-public boolean canExtractItem(int i, ItemStack itemstack, int j)
-  {
-  return isStackValidForSlot(i, itemstack);
-  }
-
-@Override
-public int getSizeInventory()
-  {
-  return inventory.getSizeInventory();
-  }
-
-@Override
-public ItemStack getStackInSlot(int i)
-  {
-  return inventory.getStackInSlot(i);
-  }
-
-@Override
-public ItemStack decrStackSize(int i, int j)
-  {
-  return inventory.decrStackSize(i, j);
-  }
-
-@Override
-public ItemStack getStackInSlotOnClosing(int i)
-  {
-  return inventory.getStackInSlotOnClosing(i);
-  }
-
-@Override
-public void setInventorySlotContents(int i, ItemStack itemstack)
-  {
-  inventory.setInventorySlotContents(i, itemstack);
-  }
-
-@Override
-public String getInvName()
-  {
-  return "AW.ResearchTable";
-  }
-
-@Override
-public boolean isInvNameLocalized()
-  {
-  return false;
-  }
-
-@Override
-public int getInventoryStackLimit()
-  {
-  return 64;
-  }
-
-@Override
-public boolean isUseableByPlayer(EntityPlayer entityplayer)
-  {
-  return true;
-  }
-
-@Override
-public void openChest()
-  {
-  }
-
-@Override
-public void closeChest()
-  {
-  }
-
-@Override
-public boolean isStackValidForSlot(int i, ItemStack itemstack)
-  {
-  if(i==0)
-    {
-    return itemstack==null || itemstack.itemID==ItemLoader.researchBook.itemID;
-    }
-  return true;
-  }
-
-@Override
-public void onInventoryChanged()
-  {
-  super.onInventoryChanged();
-  if(worldObj==null || worldObj.isRemote)
-    {
-    return;
-    }
-  String name = null;
-  ItemStack stack = this.getStackInSlot(0);
-  if(stack!=null && stack.itemID==ItemLoader.researchBook.itemID)
-    {
-    if(stack.hasTagCompound() && stack.getTagCompound().getCompoundTag("AWResInfo").hasKey("name"))
-      {
-      name = stack.getTagCompound().getCompoundTag("AWResInfo").getString("name");
-      if(this.researchingPlayer==null || !this.researchingPlayer.equals(name))
-        {
-        Config.logDebug("setting researching player to: "+name);
-        this.researchingPlayer = name;
-        this.resetProgress();
-        this.currentResearch = null;
-        }
-      }    
-    }
-  if(name==null && this.researchingPlayer!=null)
-    {   
-    Config.logDebug("clearing researching player");
-    this.currentResearch = null;
-    this.researchingPlayer = null;
-    this.resetProgress();    
-    }
-  }
-
-public void resetProgress()
-  {
-  this.researchProgress = 0;  
-  }
-
 
 }

@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -110,14 +111,14 @@ protected boolean findWorkSite()
 
 protected boolean isValidWorkSite(TileEntity te)
   {
-  if(te instanceof TECivic)
+  if(te instanceof ITEWorkSite)
     {
-    TECivic tec = (TECivic)te;
-    if(tec.getCivic().isWorkSite() && tec.hasWork() && tec.canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(tec.getCivic().getWorkType()))
+    ITEWorkSite tec = (ITEWorkSite)te;
+    if(tec.isWorkSite() && tec.hasWork() && tec.canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(tec.getWorkType()))
       {
       return true;
       }
-    }
+    }  
   return false;
   }
 

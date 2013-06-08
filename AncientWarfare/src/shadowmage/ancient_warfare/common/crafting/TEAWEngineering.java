@@ -25,6 +25,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
@@ -32,7 +33,7 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
-public class TEAWEngineering extends TEAWCrafting
+public class TEAWEngineering extends TEAWCraftingWorkSite
 {
 
 /**
@@ -45,6 +46,7 @@ public TEAWEngineering()
   this.resultSlot = new int[]{9};
   this.bookSlot = new int[]{10};
   this.inventory = new AWInventoryBasic(11);
+  this.workType = CivicWorkType.CRAFT;
   }
 
 @Override

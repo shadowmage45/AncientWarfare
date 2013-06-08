@@ -26,9 +26,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
@@ -44,7 +43,7 @@ int broadcastDelayTicks = 0;
 int workerValidationDelayTicks = 0;
 protected boolean shouldBroadcast = false;
 protected Set<IWorker> workers = Collections.newSetFromMap(new WeakHashMap<IWorker, Boolean>());
-TargetType workType = TargetType.NONE;
+CivicWorkType workType = CivicWorkType.NONE;
 
 /**
  * 
@@ -69,6 +68,10 @@ public void updateEntity()
 public void doWork(IWorker worker)
   {
   this.workProgress+=20;
+  if(this.workProgress>this.workProgressMax)
+    {
+    this.workProgress = this.workProgressMax;
+    }
   }
 
 @Override
@@ -177,5 +180,17 @@ public void broadcastWork(int maxRange)
         }
       }
     }
+  }
+
+@Override
+public CivicWorkType getWorkType()
+  {
+  return this.workType;
+  }
+
+@Override
+public boolean isWorkSite()
+  {
+  return true;
   }
 }

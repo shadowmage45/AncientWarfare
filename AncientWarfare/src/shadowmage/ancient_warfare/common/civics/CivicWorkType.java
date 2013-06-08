@@ -30,5 +30,7 @@ public enum CivicWorkType
   COURIER,
   UPKEEP,
   BUILD,
-  FISH;
+  FISH,
+  CRAFT,
+  RESEARCH,
   }

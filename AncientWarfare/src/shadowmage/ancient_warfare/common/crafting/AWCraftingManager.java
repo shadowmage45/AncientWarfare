@@ -29,6 +29,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.types.ICivicType;
@@ -143,17 +144,19 @@ public List<ResourceListRecipe> getRecipesContaining(PlayerEntry entry, String t
   {
   String name;
   List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
-  for(List<ResourceListRecipe> list : this.recipesByType.values())
+  List<ResourceListRecipe> list;
+  for(RecipeType t : types)
     {
+    Config.logDebug("examining recipe type : "+t);
+    list = this.recipesByType.get(t);
     for(ResourceListRecipe recipe : list)
       {
-      if(types.isEmpty() || types.contains(recipe.type))
+      Config.logDebug("examining recipe: "+recipe);
+      name = recipe.displayName;
+      if(name.toLowerCase().contains(text.toLowerCase()) && ((!Config.DEBUG && creative) || Config.disableResearch || recipe.canBeCraftedBy(entry)))
         {
-        name = recipe.displayName;
-        if(name.toLowerCase().contains(text.toLowerCase()) && ((!Config.DEBUG && creative) || Config.disableResearch || recipe.canBeCraftedBy(entry)))
-          {
-          recipes.add(recipe);
-          }
+        Config.logDebug("adding recipe: "+recipe);
+        recipes.add(recipe);
         }
       }
     }  
@@ -196,7 +199,7 @@ public void loadRecipes()
   this.addNpcRecipes();
   this.addVehicleRecipes();
   this.addStructureRecipes();
-  this.addResearchRecipes();
+  this.addResearchRecipes(); 
   }
 
 protected void addResearchRecipes()

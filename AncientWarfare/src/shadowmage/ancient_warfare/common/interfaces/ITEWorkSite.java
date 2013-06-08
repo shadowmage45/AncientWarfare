@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.interfaces;
 
+import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+
 public interface ITEWorkSite
 {
 
@@ -30,6 +32,8 @@ public double getDistanceFrom(double x, double y, double z);
 public void addWorker(IWorker worker);
 public void removeWorker(IWorker worker);
 public void broadcastWork(int maxRange);
+public CivicWorkType getWorkType();
+public boolean isWorkSite();
 
 
 }

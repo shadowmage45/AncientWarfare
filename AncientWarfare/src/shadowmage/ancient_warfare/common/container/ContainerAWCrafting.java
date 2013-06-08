@@ -104,12 +104,12 @@ public ContainerAWCrafting(EntityPlayer openingPlayer, TEAWCrafting te)
     slot = new SlotResourceOnly(te, te.bookSlot[0], 8 , 8 + 24, Arrays.asList(new ItemStack(ItemLoader.researchBook))).setIgnoreType(3).setMaxStackSize(1);
     this.addSlotToContainer(slot);    
     }
-  this.isWorking = te.isWorking();
-  this.recipeCache = te.getRecipe();
-  this.isLocked = this.recipeCache!=null;
-  this.displayProgress = te.getWorkProgress();
-  this.displayProgressMax = te.getWorkProgressMax();
-  this.entry = te.getWorkingPlayerEntry();
+//  this.isWorking = te.isWorking();
+//  this.recipeCache = te.getRecipe();
+//  this.isLocked = this.recipeCache!=null;
+//  this.displayProgress = te.getWorkProgress();
+//  this.displayProgressMax = te.getWorkProgressMax();
+//  this.entry = te.getWorkingPlayerEntry();
   }
 
 public void addSlots()
@@ -219,34 +219,42 @@ public void handlePacketData(NBTTagCompound tag)
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
-  this.displayProgress = tag.getInteger("time");
-  this.displayProgressMax = tag.getInteger("timeMax");
-  this.isWorking = tag.getBoolean("work");
-  this.isLocked = tag.getBoolean("lock");
-  if(tag.hasKey("entry"))    
-    {
-    this.entry = new PlayerEntry();
-    entry.readFromNBT(tag.getCompoundTag("entry"));
-    }
-  if(this.gui!=null)
-    {
-    this.gui.refreshGui();
-    }
+//  this.displayProgress = tag.getInteger("time");
+//  this.displayProgressMax = tag.getInteger("timeMax");
+//  this.isWorking = tag.getBoolean("work");
+//  this.isLocked = tag.getBoolean("lock");  
+//  if(tag.hasKey("entry"))    
+//    {
+//    this.entry = new PlayerEntry();
+//    entry.readFromNBT(tag.getCompoundTag("entry"));
+//    }
+//  if(tag.hasKey("recipe"))
+//    {
+//    this.recipeCache = new ResourceListRecipe(tag.getCompoundTag("recipe"));
+//    }
+//  if(this.gui!=null)
+//    {
+//    this.gui.refreshGui();
+//    }
   }
 
 @Override
 public List<NBTTagCompound> getInitData()
   {
   ArrayList<NBTTagCompound> list = new ArrayList<NBTTagCompound>();
-  NBTTagCompound tag = new NBTTagCompound();
-  if(this.entry!=null)
-    {
-    tag.setCompoundTag("entry", this.entry.getNBTTag());
-    }
-  tag.setInteger("time", this.displayProgress);
-  tag.setInteger("timeMax", this.displayProgressMax);
-  tag.setBoolean("work", this.isWorking);
-  tag.setBoolean("lock", this.isLocked);
+//  NBTTagCompound tag = new NBTTagCompound();
+//  if(this.entry!=null)
+//    {
+//    tag.setCompoundTag("entry", this.entry.getNBTTag());
+//    }
+//  if(this.recipeCache!=null)
+//    {
+//    tag.setCompoundTag("recipe", this.recipeCache.getNBTTag());
+//    }
+//  tag.setInteger("time", this.displayProgress);
+//  tag.setInteger("timeMax", this.displayProgressMax);
+//  tag.setBoolean("work", this.isWorking);
+//  tag.setBoolean("lock", this.isLocked);
   return list;
   }
 
@@ -314,6 +322,7 @@ public void detectAndSendChanges()
     if(this.entry!=null)
       {
       tag.setCompoundTag("entryData", entry.getNBTTag());
+      this.researchLength = entry.getKnownResearch().size();
       }
     }
   else if(this.entry!=null && this.entry.getKnownResearch().size() != this.researchLength)

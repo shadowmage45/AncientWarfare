@@ -134,7 +134,8 @@ protected void updateCrafting()
         {
         if(this.canUpdate || !Config.useNpcWorkForCrafting)
           {
-          this.workProgress++;          
+          this.workProgress++;
+          this.canUpdate = false;
           }
         }
       if(this.workProgress>=this.workProgressMax)
@@ -158,16 +159,21 @@ protected void updateCrafting()
         }
       }
     }
+  else
+    {
+    this.workProgress = 0;
+    this.workProgressMax = 0;
+    this.recipe = null;
+    }
   }
 
 protected boolean tryStart()
   {  
-  if(this.recipe.doesInventoryContainResources(inventory, craftMatrix))
+  if(this.recipe!=null && this.recipe.doesInventoryContainResources(inventory, craftMatrix))
     {
     this.recipe.removeResourcesFrom(inventory, craftMatrix);
     this.workProgress =0;
     this.isWorking = true;
-    this.workProgressMax = 20 * recipe.getResourceItemCount();
     return true;
     }
   this.isWorking = false;
@@ -181,6 +187,7 @@ protected boolean tryFinish()
     Config.logDebug("setting finished and producing item");
     InventoryTools.tryMergeStack(inventory, recipe.result.copy(), resultSlot);
     this.workProgress = 0;
+    this.recipeStartCheckDelayTicks = 0;
     return true;
     }
   return false;
@@ -194,6 +201,7 @@ public void setRecipe(ResourceListRecipe recipe)
     this.workProgressMax = recipe.getResourceItemCount() * 20;
     this.workProgress = 0;
     this.isWorking = false;
+    this.recipeStartCheckDelayTicks = 0;
     }
   }
 
@@ -254,6 +262,10 @@ public void readFromNBT(NBTTagCompound tag)
     {
     this.inventory.readFromNBT(tag.getCompoundTag("inv"));
     }
+  if(tag.hasKey("recipe"))
+    {
+    this.recipe = new ResourceListRecipe(tag.getCompoundTag("recipe"));
+    }
   this.readExtraNBT(tag);
   }
 
@@ -273,6 +285,10 @@ public void writeToNBT(NBTTagCompound tag)
   if(this.inventory!=null)
     {
     tag.setCompoundTag("inv", this.inventory.getNBTTag());
+    }
+  if(this.recipe!=null)
+    {
+    tag.setCompoundTag("recipe", this.recipe.getNBTTag());
     }
   this.writeExtraNBT(tag);
   }
