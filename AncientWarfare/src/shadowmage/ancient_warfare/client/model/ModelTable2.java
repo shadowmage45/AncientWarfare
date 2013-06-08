@@ -5,11 +5,9 @@
  
 package shadowmage.ancient_warfare.client.model;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.crafting.ICraftingTE;
+import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
  
  
 public class ModelTable2 extends ModelTEBase
@@ -129,7 +127,7 @@ public void setPieceRotation(ModelRenderer model, float x, float y, float z)
   }
 
 @Override
-public void renderModel(ICraftingTE te)
+public void renderModel(TEAWCrafting te)
   {
   tableTop.render(0.0625f);
   }

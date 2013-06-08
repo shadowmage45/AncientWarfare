@@ -423,9 +423,22 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     GL11.glPopAttrib();
     GL11.glPopMatrix();
     }  
+
+  GL11.glPopMatrix();
+  }
+
+public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
+  {
+  
+  }
+
+protected void drawTooltips(int mouseX, int mouseY, float partialTick)
+  {
+  //Config.logDebug("Gui mouse element: " + this.currentMouseElement);
   if(this.currentMouseElement instanceof GuiItemStack)
-    {
-	  GuiItemStack slot = (GuiItemStack)this.currentMouseElement;	 
+    {    
+    GuiItemStack slot = (GuiItemStack)this.currentMouseElement;
+  //  Config.logDebug("mouse is over itemstack element!");
     if(slot.renderTooltip)
       {
       
@@ -439,12 +452,6 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     {    
     this.renderTooltip(mouseX, mouseY, this.currentMouseElement.getTooltip());
     }
-  GL11.glPopMatrix();
-  }
-
-public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
-  {
-  
   }
 
 @Override
@@ -457,6 +464,7 @@ public void drawScreen(int par1, int par2, float par3)
   GL11.glPopMatrix();
   mc.renderEngine.resetBoundTexture();
   this.drawExtraForeground(par1, par2, par3);
+  this.drawTooltips(par1, par2, par3);
   }
 
 /**

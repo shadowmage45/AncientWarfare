@@ -49,6 +49,7 @@ import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleDebug;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
+import shadowmage.ancient_warfare.common.container.ContainerAWCrafting;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTE;
@@ -58,7 +59,6 @@ import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
-import shadowmage.ancient_warfare.common.container.ContainerEngineeringStation;
 import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
 import shadowmage.ancient_warfare.common.container.ContainerNpcCourier;
 import shadowmage.ancient_warfare.common.container.ContainerResearch;
@@ -66,7 +66,6 @@ import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
-import shadowmage.ancient_warfare.common.container.ContainerVehicleCrafting;
 import shadowmage.ancient_warfare.common.crafting.TEAWEngineering;
 import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
@@ -221,7 +220,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEAWEngineering)
     {
     TEAWEngineering tew = (TEAWEngineering)te;
-    return new ContainerEngineeringStation(player, tew);
+    return new ContainerAWCrafting(player, tew);
     }
   return null;
   
@@ -230,7 +229,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEAWVehicleCraft)
     {
     TEAWVehicleCraft tew = (TEAWVehicleCraft)te;
-    return new ContainerVehicleCrafting(player, tew);
+    return new ContainerAWCrafting(player, tew);
     }
   return null;
     
@@ -346,7 +345,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEAWEngineering)
     {
     TEAWEngineering tew = (TEAWEngineering)te;
-    return new GuiEngineeringStation(new ContainerEngineeringStation(player, tew));
+    return new GuiEngineeringStation(new ContainerAWCrafting(player, tew));
     }
   return null;
   
@@ -358,7 +357,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEAWVehicleCraft)
     {
     TEAWVehicleCraft tew = (TEAWVehicleCraft)te;
-    return new GuiVehicleCrafting(new ContainerVehicleCrafting(player, tew));
+    return new GuiVehicleCrafting(new ContainerAWCrafting(player, tew));
     }
   return null;
   

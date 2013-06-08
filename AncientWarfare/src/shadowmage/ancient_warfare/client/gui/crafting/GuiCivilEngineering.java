@@ -23,16 +23,16 @@ package shadowmage.ancient_warfare.client.gui.crafting;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import org.lwjgl.input.Keyboard;
+
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
@@ -45,13 +45,10 @@ import shadowmage.ancient_warfare.client.gui.info.GuiRecipeDetails;
 import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerCivilEngineering;
-import shadowmage.ancient_warfare.common.container.ContainerEngineeringStation;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.RecipeSorterAZ;
 import shadowmage.ancient_warfare.common.crafting.RecipeSorterTextFilter;
-import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GuiCivilEngineering extends GuiContainerAdvanced

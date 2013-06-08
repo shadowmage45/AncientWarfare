@@ -23,7 +23,9 @@ package shadowmage.ancient_warfare.client.gui.info;
 import java.util.HashSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTab;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
@@ -33,6 +35,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.crafting.RecipeSorterAZ;
 import shadowmage.ancient_warfare.common.crafting.RecipeSorterTextFilter;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 
@@ -170,6 +173,7 @@ public void setupControls()
   tab.inverted = true;
   this.tabs.add(tab);
   
+
   
   this.searchBox = (GuiTextInputLine) new GuiTextInputLine(2, this, 160, 12, 30, "").updateRenderPos(5, 24);
   searchBox.selected = false;

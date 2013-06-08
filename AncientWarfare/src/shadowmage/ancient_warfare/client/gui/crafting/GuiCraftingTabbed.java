@@ -30,13 +30,20 @@ import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import org.lwjgl.input.Keyboard;
+
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
+import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTab;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.client.gui.info.GuiRecipeDetails;
 import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerAWCrafting;
@@ -45,6 +52,7 @@ import shadowmage.ancient_warfare.common.crafting.RecipeSorterTextFilter;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public abstract class GuiCraftingTabbed extends GuiContainerAdvanced
 {
@@ -61,8 +69,8 @@ ContainerAWCrafting container;
 GuiTab craftingTab = null;
 GuiTab tab1 = null;
 GuiTab tab2 = null;
-GuiButton startButton = null;
-GuiButton stopButton = null;
+GuiButtonSimple startButton = null;
+GuiButtonSimple stopButton = null;
 EnumSet recipeTypes = null;
 
 /**
@@ -72,10 +80,13 @@ public GuiCraftingTabbed(Container container)
   {
   super(container);
   this.container = (ContainerAWCrafting)container;
+  this.shouldCloseOnVanillaKeys = true;
   }
 
 public abstract EnumSet<RecipeType> getTab1RecipeTypes();
 public abstract EnumSet<RecipeType> getTab2RecipeTypes();
+public abstract String getTab1Label();
+public abstract String getTab2Label();
 
 @Override
 public int getXSize()
@@ -107,8 +118,10 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  // TODO Auto-generated method stub
-
+  if(this.activeTab==this.craftingTab)
+    {
+    this.drawProgressBackground();
+    }
   }
 
 public void drawProgressBackground()
@@ -140,21 +153,145 @@ public void drawProgressBackground()
   }
 
 @Override
+public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
+  {
+  if(this.activeTab!=null)
+    {
+    if(this.activeTab==this.craftingTab)
+      {
+      this.drawProgressForeground();
+      }
+    else if(this.activeTab==this.tab1)
+      {
+      
+      }
+    else if(this.activeTab==this.tab2)
+      {
+      
+      }
+    }
+  }
+
+public void drawProgressForeground()
+  {
+  /**
+   * TODO render slot under mouse last
+   */ 
+  if(this.container.clientRecipe!=null && !this.container.isWorking)
+    {
+    int x = 0;
+    int y = 0;
+    for(ItemStackWrapperCrafting stack : this.container.clientRecipe.getResourceList())
+      {
+      if(x>=3)
+        {
+        x=0;
+        y++;
+        }      
+      if(!this.container.getSlot(36 + y*3+x).getHasStack())
+        {
+        this.renderItemStack(stack.getFilter(), guiLeft + 8 + x * 18, guiTop + 8 + 24 + 18 + 4 + 18 + 4 + y*18, mouseX, mouseY, true, true);        
+        }   
+      x++;   
+      }
+    }
+  }
+
+@Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
+  area.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  // TODO Auto-generated method stub
+  if(this.tabs.contains(element))
+    {
+    GuiTab selected = (GuiTab) element;
+    for(GuiTab tab : this.tabs)
+      {
+      tab.enabled = false;
+      }
+    selected.enabled = true;
+    this.activeTab = selected;
+    this.forceUpdate = true;
+    this.searchBox.selected = false;
+    }
+  if(this.activeTab==this.craftingTab)
+    {
+    if(element==stopButton)//clear
+      {
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setBoolean("stop", true);
+      this.sendDataToServer(tag);
+      }
+    else if(element==startButton && !this.container.isLocked && this.container.clientRecipe!=null)
+      {
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setBoolean("set", true);
+      tag.setCompoundTag("result", this.container.clientRecipe.getResult().writeToNBT(new NBTTagCompound()));
+      this.sendDataToServer(tag);
+      }
+    }
+  else if(this.activeTab==this.tab1 || this.activeTab==this.tab2)
+    {
+    if(element==this.searchBox)
+      {
+      this.handleSearchBoxUpdate();
+      }
+    else if(recipes.containsKey(element))
+      {
+      this.handleRecipeClick(element);
+      }
+    }
+  }
+
+protected void handleRecipeClick(IGuiElement element)
+  {  
+  if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
+    {
+    mc.displayGuiScreen(new GuiRecipeDetails(this, recipes.get(element)));      
+    }
+  else
+    {
+    if(container.isWorking)
+      {
+      return;
+      }    
+    this.container.clientRecipe = recipes.get(element);
+    Config.logDebug("setting current recipe to: "+this.container.clientRecipe);
+    this.forceUpdate = true;
+    }
   }
 
 @Override
 public void setupControls()
-  {
-  // TODO Auto-generated method stub
+  { 
+  GuiTab tab = this.addGuiTab(1000, 8, 0, 40, 24, "Craft");
+  this.tabs.add(tab);
+  this.activeTab = tab;
+  this.craftingTab = tab;
+  String name = this.getTab1Label();
+  if(name!=null)
+    {
+    tab = this.addGuiTab(1001, 8+40, 0, 60, 24, name);
+    tab.enabled = false;
+    this.tabs.add(tab);  
+    this.tab1 = tab;
+    }
+  name = this.getTab2Label();
+  if(name!=null)
+    {
+    tab = this.addGuiTab(1002, 8+40+60, 0, 60, 24, name);
+    tab.enabled = false;
+    this.tabs.add(tab);
+    this.tab2 = tab;
+    }
+  this.searchBox = (GuiTextInputLine) new GuiTextInputLine(2, this, 176-16, 12, 30, "").updateRenderPos(8, 29);
+  searchBox.selected = false;
+  this.area = new GuiScrollableArea(0, this, 5, 21+18+10+5+18, 176-10, 240-21-10-18-5-8-18, 0);
+  this.forceUpdate = true;
   }
 
 @Override
@@ -168,28 +305,60 @@ public void updateControls()
     this.guiElements.put(tab.getElementNumber(), tab);
     }
   this.container.removeSlots();
+  if(this.container.clientRecipe!=null)
+    {
+    this.addCurrentRecipeElements();
+    }
   if(this.activeTab==this.craftingTab)
     {
-    /**
-     * ADD ITEM STACK SLOT FOR RESULT
-     * GUI STRING ELEMENT FOR TEXT
-     */
+    this.container.addSlots();
+    this.addProgressButtons();
     }
-  else if(this.activeTab==this.tab1)
+  else if(this.activeTab==this.tab1 || this.activeTab==this.tab2)
     {
     this.guiElements.put(0, area);
     this.guiElements.put(1, searchBox);    
     this.handleSearchBoxUpdate();
-    }
-  else if(this.activeTab==this.tab2)
-    {
-    this.guiElements.put(0, area);
-    this.guiElements.put(1, searchBox);
-    this.handleSearchBoxUpdate();
-    }
+    }  
   for(Integer i : this.guiElements.keySet())
     {
     this.guiElements.get(i).updateGuiPos(guiLeft, guiTop);
+    }
+  }
+
+protected void addCurrentRecipeElements()
+  {
+  ItemStack result = container.clientRecipe.getResult();
+  String name = result.getDisplayName();
+  if(name.length()>20)
+    {
+    name = name.substring(0, 20);
+    }
+  int x = 8;
+  int y = 24 + 8 + 18 + 4;  
+  GuiItemStack stack = new GuiItemStack(2, this).setItemStack(result).setRenderName(true);
+  stack.updateRenderPos(x, y); 
+  stack.renderTooltip = false;
+  this.guiElements.put(2, stack);
+  }
+
+protected void addProgressButtons()
+  {
+  int x = 8 + 3* 18 + 18 + 27;
+  int y = 8 + 24 +  4 + 18 + 4 + 18;
+  this.startButton = new GuiButtonSimple(3, this, 36, 16, "Start");
+  this.startButton.updateRenderPos(x, y);
+  this.stopButton = new GuiButtonSimple(4, this, 36, 16, "Stop");
+  this.stopButton.updateRenderPos(x, y+36);
+  this.guiElements.put(3, startButton);
+  this.guiElements.put(4, stopButton);
+  if(container.isLocked || container.clientRecipe==null)
+    {
+    startButton.enabled = false;
+    }
+  else
+    {
+    stopButton.enabled = false;
     }
   }
 

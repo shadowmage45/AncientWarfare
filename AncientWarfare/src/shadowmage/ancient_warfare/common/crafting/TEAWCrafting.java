@@ -327,7 +327,7 @@ public void setInventorySlotContents(int i, ItemStack itemstack)
 @Override
 public String getInvName()
   {
-  return "AW.VehicleCrafting";
+  return "AW.Crafting";
   }
 
 @Override
@@ -368,7 +368,7 @@ public void onInventoryChanged()
     {
     return;
     }
-  if(this.bookSlot.length>0)
+  if(this.bookSlot!=null && this.bookSlot.length>0)
     {
     String name = null;
     ItemStack stack = this.getStackInSlot(10);
@@ -400,10 +400,14 @@ public void onInventoryChanged()
 @Override
 public int[] getAccessibleSlotsFromSide(int side)
   {
-  /**
-   * TODO
-   */
-  return null;
+  if(side==0 || side==1)
+    {
+    if(this.resultSlot!=null)
+      {
+      return this.resultSlot;
+      }
+    }
+  return craftMatrix;
   }
 
 @Override
@@ -429,8 +433,11 @@ public boolean canInsertItem(int slot, ItemStack stack, int side)
 @Override
 public boolean canExtractItem(int slot, ItemStack stack, int side)
   {
-  // TODO Auto-generated method stub
-  return false;
+  if(this.bookSlot!=null && this.bookSlot.length>0 && slot== this.bookSlot[0])
+    {
+    return false;
+    }
+  return true;
   }
 
 @Override

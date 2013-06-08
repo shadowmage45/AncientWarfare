@@ -45,6 +45,7 @@ public boolean isFake = false;
 public GuiItemStack(int elementNum, IGuiElementCallback parent)
   {
   super(elementNum, parent, 18, 18);
+  this.renderWithGuiOffset = true;
   }
 
 public GuiItemStack(int elementNum, IGuiElementCallback parent, int x, int y)
@@ -96,13 +97,18 @@ public void drawElement(int mouseX, int mouseY)
     GL11.glEnable(GL11.GL_DEPTH_TEST);
     itemRenderer.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack, guiLeft+renderPosX+1, guiTop+renderPosY+1); 
     itemRenderer.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack,  guiLeft+renderPosX+1, guiTop+renderPosY+1);          
-    //disable lighting
-    if(this.renderName)
-      {
-      this.drawString(fr, fakeStack.getDisplayName(), guiLeft+renderPosX+18, guiTop+renderPosY+4, 0xffffffff);
-      }
+    //disable lighting   
     }  
   GL11.glPopAttrib();
+  if(fakeStack!=null)
+    {
+    String name = fakeStack.getDisplayName();
+    name = name.length()>20 ? name.substring(0,20) : name;
+    if(this.renderName)
+      {
+      this.drawString(fr, name, guiLeft+renderPosX+20, guiTop+renderPosY+4, 0xffffffff);
+      }    
+    }
   GL11.glPopMatrix();
   }
 

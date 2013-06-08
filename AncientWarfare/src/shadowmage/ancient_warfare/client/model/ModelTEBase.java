@@ -21,7 +21,7 @@
 package shadowmage.ancient_warfare.client.model;
 
 import net.minecraft.client.model.ModelBase;
-import shadowmage.ancient_warfare.common.crafting.ICraftingTE;
+import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 
 public abstract class ModelTEBase extends ModelBase
 {
@@ -34,7 +34,7 @@ public ModelTEBase()
   // TODO Auto-generated constructor stub
   }
 
-public abstract void renderModel(ICraftingTE te);
+public abstract void renderModel(TEAWCrafting te);
 public abstract void renderModel();
 
 }

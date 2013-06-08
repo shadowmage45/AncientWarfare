@@ -36,6 +36,8 @@ import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import shadowmage.ancient_warfare.common.config.Config;
+
 public abstract class GuiElement extends Gui implements IGuiElement
 {
 

@@ -47,11 +47,11 @@ public int displayProgressMax;
 /**
  * is te locked for auto-work e.g. is TE recipe!=null?
  */
-boolean isLocked = false;
+public boolean isLocked = false;
 /**
  * is TE currently processing a recipe?
  */
-boolean isWorking = false;
+public boolean isWorking = false;
 /**
  * cached copy of te current recipe
  */
@@ -60,7 +60,7 @@ ResourceListRecipe recipeCache = null;
 /**
  * current client-recipe
  */
-ResourceListRecipe clientRecipe = null;
+public ResourceListRecipe clientRecipe = null;
 
 public PlayerEntry entry;
 int researchLength;
@@ -141,16 +141,20 @@ public void removeSlots()
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
+  Config.logDebug("receiving data packet");
   if(tag.hasKey("time"))
     {
     this.displayProgress = tag.getInteger("time");
+    Config.logDebug("receiving time packet");
     }  
   if(tag.hasKey("timeMax"))
     {
     this.displayProgressMax = tag.getInteger("timeMax");
+    Config.logDebug("receiving timeMax packet");
     }
   if(tag.hasKey("recipe") && player.worldObj.isRemote)
     {
+    Config.logDebug("receiving recipe packet");
     ItemStack stack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("recipe"));
     this.recipeCache = AWCraftingManager.instance().getRecipeByResult(stack);
     this.clientRecipe = this.recipeCache;
@@ -161,6 +165,7 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("remove"))
     {    
+    Config.logDebug("receiving remove packet");
     this.recipeCache = null;
     this.clientRecipe = null;
     if(this.gui!=null)
@@ -172,15 +177,10 @@ public void handlePacketData(NBTTagCompound tag)
     {
     Config.logDebug("receiving server stop work command");
     te.stopAndClear();
-    this.recipeCache = null;
-    this.clientRecipe = null;
-    this.isWorking = false;
-    this.isLocked = false;
-    this.displayProgress = 0;
-    this.displayProgressMax = 0;
     }
   if(tag.hasKey("set") && !player.worldObj.isRemote)
     {
+    Config.logDebug("receiving set packet");
     ItemStack result = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("result"));
     int id = result.itemID;
     int dmg = result.getItemDamage();
@@ -194,10 +194,12 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("lock"))
     {
+    Config.logDebug("receiving lock packet");
     this.isLocked = tag.getBoolean("lock");
     }
   if(tag.hasKey("entry"))
     {    
+    Config.logDebug("receiving entry packet");
     if(tag.getBoolean("entry"))
       {
       this.entry = new PlayerEntry();
@@ -319,6 +321,7 @@ public void detectAndSendChanges()
     if(tag==null){tag = new NBTTagCompound();}
     tag.setBoolean("entry", true);
     tag.setCompoundTag("entryData", entry.getNBTTag());
+    this.researchLength = entry.getKnownResearch().size();
     }
       
   te.setCanUpdate();
