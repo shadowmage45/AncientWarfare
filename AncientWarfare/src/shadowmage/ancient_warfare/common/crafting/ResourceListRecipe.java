@@ -166,7 +166,7 @@ public boolean isResource(ItemStack filter)
 
 public boolean canBeCraftedBy(PlayerEntry entry)
   {
-  return Config.disableResearch? true : (this.neededResearch==null || this.neededResearch.isEmpty()) ? true : entry.hasDoneResearchByNumbers(neededResearch);
+  return Config.disableResearch? true : (this.neededResearch==null || this.neededResearch.isEmpty()) ? true : entry==null ? false : entry.hasDoneResearchByNumbers(neededResearch);
   }
 
 public boolean doesInventoryContainResources(IInventory inventory, int[] slotNums)

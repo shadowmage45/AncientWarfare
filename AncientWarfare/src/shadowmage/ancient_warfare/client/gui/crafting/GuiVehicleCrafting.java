@@ -245,7 +245,7 @@ public void onElementActivated(IGuiElement element)
     this.container.clientRecipe = null;
     this.forceUpdate = true;
     }
-  else if(element.getElementNumber()==3 && !this.container.isWorking && this.container.clientRecipe!=null)
+  else if(element.getElementNumber()==3 && !this.container.isWorking && this.container.clientRecipe!=null && this.container.currentRecipe==null)
     {
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("set", true);

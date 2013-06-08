@@ -89,12 +89,10 @@ public static AWCraftingManager instance()
   return INSTANCE;
   }
 
-public ResourceListRecipe getRecipesFor(ItemStack result, EnumSet<RecipeType> types)
+public ResourceListRecipe getRecipeByResult(ItemStack result)
   {
-  List<ResourceListRecipe> list;
-  for(RecipeType t : types)
+  for(List<ResourceListRecipe> list : this.recipesByType.values())
     {
-    list = this.recipesByType.get(t);
     for(ResourceListRecipe valid : list)
       {
       if(InventoryTools.doItemsMatch(valid.result, result))

@@ -61,11 +61,6 @@ public void validateAndSetRecipe(ResourceListRecipe recipe)
     }
   }
 
-private void setRecipe(ResourceListRecipe recipe)
-  {
-  this.currentRecipe = recipe.copy();  
-  }
-
 public ResourceListRecipe getRecipe()
   {
   return this.currentRecipe;

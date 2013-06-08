@@ -126,6 +126,7 @@ public void handlePacketData(NBTTagCompound tag)
     Config.logDebug("receiving recipe update");
     this.currentRecipe = new ResourceListRecipe(tag.getCompoundTag("rec")); 
     this.clientRecipe = this.currentRecipe;
+    Config.logDebug("recieved recipe: "+this.currentRecipe);
     if(this.gui!=null)
       {
       this.gui.refreshGui();
@@ -155,7 +156,7 @@ public void handlePacketData(NBTTagCompound tag)
     int id = result.itemID;
     int dmg = result.getItemDamage(); 
     Config.logDebug("recipe id: "+id+" dmg: "+dmg);
-    ResourceListRecipe recipe = AWCraftingManager.instance().getRecipesFor(result, EnumSet.of(RecipeType.VEHICLE));
+    ResourceListRecipe recipe = AWCraftingManager.instance().getRecipeByResult(result);
     Config.logDebug("receiving server set recipe command :: "+recipe);  
     te.validateAndSetRecipe(recipe);
     }

@@ -36,7 +36,7 @@ public class Config
 //*******************************************************FIELDS**********************************************//
 
 public static final String CORE_VERSION_MAJOR = "0.1.0";
-public static final String CORE_VERSION_BUILD = "006";
+public static final String CORE_VERSION_BUILD = "007";
 public static final String CORE_BUILD_STATUS = "dev";
 public static final String MC_VERSION = "1.5.2";
 
@@ -57,6 +57,7 @@ public static boolean blockFires = true;
 public static boolean addOversizeAmmo = true;
 public static boolean useVehicleSetupTime = true;
 public static boolean soldiersUseAmmo = false;
+public static boolean useNpcWorkForCrafting = true;
 
 public static int trajectoryIterationsServer = 20;
 public static int civicBroadcastRange = 80;
@@ -67,6 +68,8 @@ public static int npcAISearchRange = 80;
 public static int npcPathfinderType = 1;//0-inline, 1-scheduled, 2-threaded
 public static int npcPathfinderThreads = 2;
 
+
+//***************************************************SYNCHED CONFIGS************************************************//
 /**
  * the base (Server side) and current (client side) values...
  */
@@ -77,11 +80,10 @@ public static int clientMoveUpdateTicks = 3;
 
 public static boolean disableResearch = false;
 
-private static Configuration config;
-private static Logger logger;
 
 
 //***************************************************SINGLETON************************************************//
+
 private Config(){};
 private static Config INSTANCE;
 public static Config instance()
@@ -92,6 +94,9 @@ public static Config instance()
    }
  return INSTANCE;
  }
+
+private static Configuration config;
+private static Logger logger;
 
 //**************************************************LOGGER*****************************************************//
 
