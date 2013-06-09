@@ -124,7 +124,7 @@ public Set<Integer> getNeededResearch()
 @Override
 public ResourceListRecipe constructRecipe()
   {
-  ResourceListRecipe recipe = new ResourceListRecipe(this.getArmorStack(1), RecipeType.ARMOR);
+  ResourceListRecipe recipe = new ResourceListRecipe(this.getArmorStack(1), RecipeType.VEHICLE_MISC);
   recipe.addNeededResearch(getNeededResearch());
   recipe.addResources(neededResources);  
   return recipe;

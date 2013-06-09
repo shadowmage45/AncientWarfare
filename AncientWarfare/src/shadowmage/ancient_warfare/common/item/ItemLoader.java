@@ -65,15 +65,19 @@ public static final ItemStack iron3 = new ItemStack(componentItem, 1, 6);
 public static final ItemStack iron4 = new ItemStack(componentItem, 1, 7);
 public static final ItemStack iron5 = new ItemStack(componentItem, 1, 8);
 
-public static final ItemStack flameCharge = new ItemStack(componentItem, 1, 9);
-public static final ItemStack explosiveCharge = new ItemStack(componentItem, 1, 10);
-public static final ItemStack rocketCharge = new ItemStack(componentItem, 1, 11);
-public static final ItemStack clusterCharge = new ItemStack(componentItem, 1, 12);
+public static final ItemStack flameCharge = new ItemStack(componentItem, 1, 9);//
+public static final ItemStack explosiveCharge = new ItemStack(componentItem, 1, 10);//
+public static final ItemStack rocketCharge = new ItemStack(componentItem, 1, 11);//
+public static final ItemStack clusterCharge = new ItemStack(componentItem, 1, 12);//
 public static final ItemStack napalmCharge = new ItemStack(componentItem, 1, 13);
-public static final ItemStack clayCasing = new ItemStack(componentItem, 1, 14);
-public static final ItemStack ironCasing = new ItemStack(componentItem, 1, 15);
-public static final ItemStack mobilityUnit = new ItemStack(componentItem, 1, 16);
-public static final ItemStack turretComponents = new ItemStack(componentItem, 1, 17);
+public static final ItemStack clayCasing = new ItemStack(componentItem, 1, 14);//
+public static final ItemStack ironCasing = new ItemStack(componentItem, 1, 15);//
+public static final ItemStack mobilityUnit = new ItemStack(componentItem, 1, 16);//
+public static final ItemStack turretComponents = new ItemStack(componentItem, 1, 17);//
+public static final ItemStack torsionUnit = new ItemStack(componentItem, 1, 18);//
+public static final ItemStack counterWeightUnit = new ItemStack(componentItem, 1, 19);//
+public static final ItemStack powderCase = new ItemStack(componentItem, 1, 20);//
+public static final ItemStack equipmentBay = new ItemStack(componentItem, 1, 21);//
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -134,25 +138,28 @@ private void loadItems()
    * register main component item (misc random items) 
    */
   this.registerItemSubtyped(componentItem);
-  this.addSubtypeInfoToItem(componentItem, 0, "Rough Wood Materials").addDisplayStack(wood1);
-  this.addSubtypeInfoToItem(componentItem, 1, "Treated Wood Materials").addDisplayStack(wood2);
-  this.addSubtypeInfoToItem(componentItem, 2, "IronShod Wood Materials").addDisplayStack(wood3);
-  this.addSubtypeInfoToItem(componentItem, 3, "Iron Cored Wood Materials").addDisplayStack(wood4);
-  this.addSubtypeInfoToItem(componentItem, 4, "Rough Iron Materials").addDisplayStack(iron1);
-  this.addSubtypeInfoToItem(componentItem, 5, "Fine Iron Materials").addDisplayStack(iron2);
-  this.addSubtypeInfoToItem(componentItem, 6, "Tempered Iron Materials").addDisplayStack(iron3);
-  this.addSubtypeInfoToItem(componentItem, 7, "Minor Alloy Iron Materials").addDisplayStack(iron4);
-  this.addSubtypeInfoToItem(componentItem, 8, "Alloy Materials").addDisplayStack(iron5);
-  this.addSubtypeInfoToItem(componentItem, 9, "Flame Charge").addDisplayStack(flameCharge);
-  this.addSubtypeInfoToItem(componentItem, 10, "Explosive Charge").addDisplayStack(explosiveCharge);
-  this.addSubtypeInfoToItem(componentItem, 11, "Rocket Charge").addDisplayStack(rocketCharge);
-  this.addSubtypeInfoToItem(componentItem, 12, "Cluster Charge").addDisplayStack(clusterCharge);
-  this.addSubtypeInfoToItem(componentItem, 13, "Napalm Charge").addDisplayStack(napalmCharge);
-  this.addSubtypeInfoToItem(componentItem, 14, "Clay Casing").addDisplayStack(clayCasing);
-  this.addSubtypeInfoToItem(componentItem, 15, "Iron Casing").addDisplayStack(ironCasing);
-  this.addSubtypeInfoToItem(componentItem, 16, "Mobility Unit").addDisplayStack(mobilityUnit);
-  this.addSubtypeInfoToItem(componentItem, 17, "Turret Components").addDisplayStack(turretComponents);
-  
+  this.addSubtypeInfoToItem(componentItem, 0, "Rough Wood Materials").addDisplayStack(wood1).setIconTexture("ancientwarfare:misc/materialWood1", 0);
+  this.addSubtypeInfoToItem(componentItem, 1, "Treated Wood Materials").addDisplayStack(wood2).setIconTexture("ancientwarfare:misc/materialWood2", 1);
+  this.addSubtypeInfoToItem(componentItem, 2, "IronShod Wood Materials").addDisplayStack(wood3).setIconTexture("ancientwarfare:misc/materialWood3", 2);
+  this.addSubtypeInfoToItem(componentItem, 3, "Iron Cored Wood Materials").addDisplayStack(wood4).setIconTexture("ancientwarfare:misc/materialWood4", 3);
+  this.addSubtypeInfoToItem(componentItem, 4, "Rough Iron Materials").addDisplayStack(iron1).setIconTexture("ancientwarfare:misc/materialIron1", 4);
+  this.addSubtypeInfoToItem(componentItem, 5, "Fine Iron Materials").addDisplayStack(iron2).setIconTexture("ancientwarfare:misc/materialIron2", 5);
+  this.addSubtypeInfoToItem(componentItem, 6, "Tempered Iron Materials").addDisplayStack(iron3).setIconTexture("ancientwarfare:misc/materialIron3", 6);
+  this.addSubtypeInfoToItem(componentItem, 7, "Minor Alloy Iron Materials").addDisplayStack(iron4).setIconTexture("ancientwarfare:misc/materialIron4", 7);
+  this.addSubtypeInfoToItem(componentItem, 8, "Alloy Materials").addDisplayStack(iron5).setIconTexture("ancientwarfare:misc/materialIron5", 8);
+  this.addSubtypeInfoToItem(componentItem, 9, "Flame Charge").addDisplayStack(flameCharge).setIconTexture("ancientwarfare:ammo/ammoFlameCharge", 9);
+  this.addSubtypeInfoToItem(componentItem, 10, "Explosive Charge").addDisplayStack(explosiveCharge).setIconTexture("ancientwarfare:ammo/ammoExplosiveCharge", 10);
+  this.addSubtypeInfoToItem(componentItem, 11, "Rocket Charge").addDisplayStack(rocketCharge).setIconTexture("ancientwarfare:ammo/ammoRocketCharge", 11);
+  this.addSubtypeInfoToItem(componentItem, 12, "Cluster Charge").addDisplayStack(clusterCharge).setIconTexture("ancientwarfare:ammo/ammoClusterCharge", 12);
+  this.addSubtypeInfoToItem(componentItem, 13, "Napalm Charge").addDisplayStack(napalmCharge).setIconTexture("ancientwarfare:ammo/ammoNapalmCharge", 13);
+  this.addSubtypeInfoToItem(componentItem, 14, "Clay Casing").addDisplayStack(clayCasing).setIconTexture("ancientwarfare:ammo/ammoClayCasing", 14);
+  this.addSubtypeInfoToItem(componentItem, 15, "Iron Casing").addDisplayStack(ironCasing).setIconTexture("ancientwarfare:ammo/ammoIronCasing", 15);
+  this.addSubtypeInfoToItem(componentItem, 16, "Mobility Unit").addDisplayStack(mobilityUnit).setIconTexture("ancientwarfare:misc/vehicleMobilityUnit", 16);
+  this.addSubtypeInfoToItem(componentItem, 17, "Turret Unit").addDisplayStack(turretComponents).setIconTexture("ancientwarfare:misc/vehicleTurretUnit", 17);
+  this.addSubtypeInfoToItem(componentItem, 18, "Torsion Unit").addDisplayStack(torsionUnit).setIconTexture("ancientwarfare:misc/vehicleTorsionUnit", 18);
+  this.addSubtypeInfoToItem(componentItem, 19, "CounterWeight Unit").addDisplayStack(counterWeightUnit).setIconTexture("ancientwarfare:misc/vehicleCounterWeightUnit", 19);
+  this.addSubtypeInfoToItem(componentItem, 20, "Powder Case").addDisplayStack(powderCase).setIconTexture("ancientwarfare:misc/vehiclePowderUnit", 20);
+  this.addSubtypeInfoToItem(componentItem, 21, "Equipment Bay").addDisplayStack(equipmentBay).setIconTexture("ancientwarfare:misc/vehicleEquipmentBay", 21);  
   }
 
 private void loadRecipes()

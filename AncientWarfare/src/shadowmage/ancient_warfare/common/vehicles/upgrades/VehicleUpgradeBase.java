@@ -81,7 +81,7 @@ public String getIconTexture()
 @Override
 public ResourceListRecipe constructRecipe()
   {
-  ResourceListRecipe recipe = new ResourceListRecipe(getUpgradeStack(1), RecipeType.UPGRADE);
+  ResourceListRecipe recipe = new ResourceListRecipe(getUpgradeStack(1), RecipeType.VEHICLE_MISC);
   recipe.addNeededResearch(getNeededResearch());  
   if(!this.resources.isEmpty())
     {

@@ -45,7 +45,7 @@ public EnumSet<RecipeType> getTab1RecipeTypes()
 @Override
 public EnumSet<RecipeType> getTab2RecipeTypes() 
   {
-  return EnumSet.of(RecipeType.ARMOR, RecipeType.UPGRADE);
+  return EnumSet.of(RecipeType.VEHICLE_MISC);
   }
 
 @Override

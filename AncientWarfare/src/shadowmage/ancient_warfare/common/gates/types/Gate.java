@@ -368,7 +368,7 @@ private static void registerGateType(IGateType g)
 @Override
 public ResourceListRecipe constructRecipe()
   {
-  ResourceListRecipe recipe = new ResourceListRecipe(getConstructingItem(), RecipeType.GATE);
+  ResourceListRecipe recipe = new ResourceListRecipe(getConstructingItem(), RecipeType.CIVIC_MISC);
   recipe.addNeededResearch(getNeededResearch());
   if(!this.resourceStacks.isEmpty())
     {

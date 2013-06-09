@@ -20,10 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
@@ -38,7 +41,7 @@ public VehicleTypeTrebuchet(int typeNum)
   {
   super(typeNum);
   this.vehicleMaterial = VehicleMaterial.materialWood;
-  
+  this.materialCount = 8;
   this.maxMissileWeight = 10.f;
   
   this.validAmmoTypes.add(Ammo.ammoStoneShot10);
@@ -117,6 +120,10 @@ public VehicleTypeTrebuchet(int typeNum)
   this.addNeededResearch(2, ResearchGoal.vehicleCounterweights2);
   this.addNeededResearch(3, ResearchGoal.vehicleCounterweights2);
   this.addNeededResearch(4, ResearchGoal.vehicleCounterweights3);
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.silk, 8, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.leather, 4, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.counterWeightUnit, 4, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
   }
 
 @Override

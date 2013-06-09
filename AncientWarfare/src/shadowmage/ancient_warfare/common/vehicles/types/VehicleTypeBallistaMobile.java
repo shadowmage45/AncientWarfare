@@ -23,8 +23,10 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 import net.minecraft.util.Icon;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class VehicleTypeBallistaMobile extends VehicleTypeBallista
 {
@@ -63,6 +65,7 @@ public class VehicleTypeBallistaMobile extends VehicleTypeBallista
     this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
     this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
     this.addNeededResearch(4, ResearchGoal.vehicleMobility5);
+    this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.mobilityUnit, 1, false, false));
     }
   
 @Override

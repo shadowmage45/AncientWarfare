@@ -81,7 +81,7 @@ public VehicleMaterialWood()
   level1.neededResearch = ResearchGoalNumbers.wood2;
   level2.neededResearch = ResearchGoalNumbers.wood3;
   level3.neededResearch = ResearchGoalNumbers.wood4;
-  level4.neededResearch = ResearchGoalNumbers.wood5;  
+  level4.neededResearch = ResearchGoalNumbers.iron1;  
   level0.displayName = "Rough Wood";
   level1.displayName = "Treated Wood";
   level2.displayName = "Ironshod Wood";

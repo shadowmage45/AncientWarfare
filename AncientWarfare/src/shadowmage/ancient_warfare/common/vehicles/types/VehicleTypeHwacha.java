@@ -23,9 +23,11 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
@@ -42,7 +44,8 @@ public class VehicleTypeHwacha extends VehicleType
 public VehicleTypeHwacha(int typeNum)
   {
   super(typeNum);
-  this.vehicleMaterial = VehicleMaterial.materialWood;  
+  this.vehicleMaterial = VehicleMaterial.materialWood;
+  this.materialCount = 4;
   this.width = 1.5f;
   this.height = 1.8f;
   
@@ -106,6 +109,8 @@ public VehicleTypeHwacha(int typeNum)
   this.addNeededResearch(2, ResearchGoal.vehicleGunpowderWeapons1);
   this.addNeededResearch(3, ResearchGoal.vehicleGunpowderWeapons2);
   this.addNeededResearch(4, ResearchGoal.vehicleGunpowderWeapons2);
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.powderCase, 1, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
   }
 
 @Override

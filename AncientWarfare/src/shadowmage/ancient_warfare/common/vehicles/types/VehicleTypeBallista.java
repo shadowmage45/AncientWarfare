@@ -20,10 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.item.Item;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.BallistaVarHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
@@ -41,6 +43,7 @@ public VehicleTypeBallista(int typeNum)
   super(typeNum);
 
   this.vehicleMaterial = VehicleMaterial.materialWood;  
+  this.materialCount = 5;
   
   this.maxMissileWeight = 2.f;  
   
@@ -98,6 +101,10 @@ public VehicleTypeBallista(int typeNum)
   this.addNeededResearch(2, ResearchGoal.vehicleTorsion3);
   this.addNeededResearch(3, ResearchGoal.vehicleTorsion4);
   this.addNeededResearch(4, ResearchGoal.vehicleTorsion5);
+
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.silk, 8, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.torsionUnit, 2, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
   }
 
 @Override

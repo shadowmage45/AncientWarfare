@@ -29,7 +29,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -39,6 +38,7 @@ import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCombatEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCommander;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCourier;
+import shadowmage.ancient_warfare.common.npcs.types.NpcCraftsman;
 import shadowmage.ancient_warfare.common.npcs.types.NpcDummy;
 import shadowmage.ancient_warfare.common.npcs.types.NpcFarmer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcFisherman;
@@ -46,6 +46,7 @@ import shadowmage.ancient_warfare.common.npcs.types.NpcFootsoldier;
 import shadowmage.ancient_warfare.common.npcs.types.NpcLumberjack;
 import shadowmage.ancient_warfare.common.npcs.types.NpcMedic;
 import shadowmage.ancient_warfare.common.npcs.types.NpcMiner;
+import shadowmage.ancient_warfare.common.npcs.types.NpcResearcher;
 import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
@@ -65,13 +66,13 @@ public static INpcType npcMedic = new NpcMedic(5);
 public static INpcType npcCombatEngineer = new NpcCombatEngineer(6);
 public static INpcType npcCommander = new NpcCommander(7);
 public static INpcType npcFisherman = new NpcFisherman(8);
-//craftsman ? 9
+public static INpcType npcCraftsman = new NpcCraftsman(9);
 public static INpcType npcMiner = new NpcMiner(10);
 public static INpcType npcFarmer = new NpcFarmer(11);
 public static INpcType npcLumberjack = new NpcLumberjack(12);
 public static INpcType npcCourier = new NpcCourier(13);
 //chest courier ?
-//researcher ?
+public static INpcType npcResearcher = new NpcResearcher(15);
 
 protected int npcType;
 protected String displayName = "AW.Npc";

@@ -135,7 +135,6 @@ public static IResearchGoal materialWood1 = new ResearchMaterialLevel(200, 0, Ve
 public static IResearchGoal materialWood2 = new ResearchMaterialLevel(201, 1, VehicleMaterial.materialWood).addDependencies(materialWood1).addResource(new ItemStack(Block.planks,20), true, false);
 public static IResearchGoal materialWood3 = new ResearchMaterialLevel(202, 2, VehicleMaterial.materialWood).addDependencies(materialWood2).addResource(new ItemStack(Block.planks,30), true, false);
 public static IResearchGoal materialWood4 = new ResearchMaterialLevel(203, 3, VehicleMaterial.materialWood).addDependencies(materialWood3).addResource(new ItemStack(Block.planks,40), true, false);
-public static IResearchGoal materialWood5 = new ResearchMaterialLevel(204, 4, VehicleMaterial.materialWood).addDependencies(materialWood4).addResource(new ItemStack(Block.planks,50), true, false);
 
 public static IResearchGoal materialIron1 = new ResearchMaterialLevel(205, 0, VehicleMaterial.materialIron).addResource(new ItemStack(Item.ingotIron, 10), false, true);
 public static IResearchGoal materialIron2 = new ResearchMaterialLevel(206, 1, VehicleMaterial.materialIron).addDependencies(materialIron1).addResource(new ItemStack(Item.ingotIron, 20), false, true);
@@ -178,7 +177,7 @@ public static void load()
   for(IResearchGoal goal : researchGoals)
     {
 	  if(goal==null){continue;}
-    ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.researchNotes, goal.getGlobalResearchNum(), goal.getDisplayName()).addDisplayStack(new ItemStack(ItemLoader.researchNotes,1,goal.getGlobalResearchNum()));
+    ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.researchNotes, goal.getGlobalResearchNum(), goal.getDisplayName()).addDisplayStack(new ItemStack(ItemLoader.researchNotes,1,goal.getGlobalResearchNum())).setIconTexture("ancientwarfare:misc/researchNotes", goal.getGlobalResearchNum());
     }
   }
 

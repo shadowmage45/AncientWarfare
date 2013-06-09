@@ -20,11 +20,14 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
@@ -39,6 +42,7 @@ public VehicleTypeChestCart(int typeNum)
   {
   super(typeNum);
   this.vehicleMaterial = VehicleMaterial.materialWood;
+  this.materialCount = 3;
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorObsidian);
   this.validArmors.add(ArmorRegistry.armorIron);  
@@ -62,6 +66,8 @@ public VehicleTypeChestCart(int typeNum)
   this.displayTooltip.add("No Turret");
   this.displayTooltip.add("Special: Storage Area");
   this.addNeededResearchForMaterials();
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(Block.chest, 8, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
   }
 
 @Override

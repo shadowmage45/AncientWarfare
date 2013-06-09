@@ -65,6 +65,9 @@ public ResourceListRecipe clientRecipe = null;
 public PlayerEntry entry;
 int researchLength;
 
+int resultSlotNum = -1;
+int bookSlotNum = -1;
+
 /**
  * @param openingPlayer
  * @param synch
@@ -80,6 +83,7 @@ public ContainerAWCrafting(EntityPlayer openingPlayer, TEAWCrafting te)
   int slotNum = 0;
   Slot slot;
   int totalSlots = te.craftMatrix.length;
+  int slotCount = 0;
   int columns = totalSlots / 3;
   if(totalSlots%3!=0){columns++;}  
   for(int y = 0; y < 3; y++)
@@ -92,17 +96,20 @@ public ContainerAWCrafting(EntityPlayer openingPlayer, TEAWCrafting te)
       slotNum = y * columns + x;
       slot = new Slot(te, slotNum, posX, posY);
       this.addSlotToContainer(slot);
+      slotCount++;
       }
     }
   if(te.resultSlot!=null && te.resultSlot.length>0)
     {
     slot = new SlotPullOnly(te, te.resultSlot[0], 8 + 3* 18 + 18 , 8 + 24 + 18 + 4 + 18 + 4 + 18);
-    this.addSlotToContainer(slot);    
+    resultSlotNum = this.inventorySlots.size();
+    this.addSlotToContainer(slot);
     }
   if(te.bookSlot!=null && te.bookSlot.length>0)
     {
     slot = new SlotResourceOnly(te, te.bookSlot[0], 8 , 8 + 24, Arrays.asList(new ItemStack(ItemLoader.researchBook))).setIgnoreType(3).setMaxStackSize(1);
-    this.addSlotToContainer(slot);    
+    bookSlotNum = this.inventorySlots.size();
+    this.addSlotToContainer(slot);
     }
 //  this.isWorking = te.isWorking();
 //  this.recipeCache = te.getRecipe();
@@ -111,6 +118,75 @@ public ContainerAWCrafting(EntityPlayer openingPlayer, TEAWCrafting te)
 //  this.displayProgressMax = te.getWorkProgressMax();
 //  this.entry = te.getWorkingPlayerEntry();
   }
+
+
+
+@Override
+public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClickedIndex)
+  {
+  ItemStack slotStackCopy = null;
+  Slot theSlot = (Slot)this.inventorySlots.get(slotClickedIndex);
+  if (theSlot != null && theSlot.getHasStack())
+    {
+    ItemStack slotStack = theSlot.getStack();
+    slotStackCopy = slotStack.copy();
+    int invIndex = theSlot.getSlotIndex();
+    
+    int storageSlots = te.craftMatrix.length;    
+    if (slotClickedIndex < 36)//player slots...
+      {      
+      if(bookSlotNum>-1 && slotStack.itemID==ItemLoader.researchBook.itemID)
+        {
+        if(!this.mergeItemStack(slotStack, bookSlotNum, bookSlotNum+1, false))
+          {
+          return null;
+          }        
+        }
+      else if (!this.mergeItemStack(slotStack, 36, 36+storageSlots, false))//merge into storage inventory
+        {
+        return null;
+        }
+      }
+    else if(slotClickedIndex >=36 &&slotClickedIndex < 36+storageSlots)//storage slots, merge to player inventory
+      {
+      if (!this.mergeItemStack(slotStack, 0, 36, true))//merge into player inventory
+        {
+        return null;
+        }
+      }
+    else if(slotClickedIndex>0 && slotClickedIndex==resultSlotNum)
+      {
+      if (!this.mergeItemStack(slotStack, 0, 36, true))//merge into player inventory
+        {
+        return null;
+        }
+      }
+    else if(slotClickedIndex>0 && slotClickedIndex==bookSlotNum)
+      {
+      if (!this.mergeItemStack(slotStack, 0, 36, true))//merge into player inventory
+        {
+        return null;
+        }
+      }
+      
+    if (slotStack.stackSize == 0)
+      {
+      theSlot.putStack((ItemStack)null);
+      }
+    else
+      {
+      theSlot.onSlotChanged();
+      }
+    if (slotStack.stackSize == slotStackCopy.stackSize)
+      {
+      return null;
+      }
+    theSlot.onPickupFromSlot(par1EntityPlayer, slotStack);
+    }
+  return slotStackCopy;
+  }
+
+
 
 public void addSlots()
   {

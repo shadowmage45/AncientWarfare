@@ -24,13 +24,13 @@ public enum RecipeType
 {
 NONE,
 VEHICLE,
+VEHICLE_MISC,//vehicle components, upgrades, armor
 NPC,
-STRUCTURE,
+NPC_MISC,//command batons, routing slips
 AMMO,
-UPGRADE,
-GATE,
+AMMO_MISC,//ammo components
 CIVIC,
-ARMOR,
-COMPONENTS,
-RESEARCH,
+CIVIC_MISC,//gates, warehouse blocks
+STRUCTURE,//structures
+RESEARCH,//research notes recipes
 }

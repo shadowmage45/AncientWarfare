@@ -3,6 +3,7 @@ FROM TESTERS
 * gate tool doesn't reset properly
 * pathfinding overhangs (finds path to block below)
 * pathfinding cobblestone walls (push out of blocks?)
+* death message from missiles is untranslated
 
 BALANCE/TWEAKS
 * fish farm is OP
@@ -36,7 +37,6 @@ CIVICS
 * NPC town hall will occasionally respawn missing NPCs    
 * swap civic sided regular/resource slots?
 * town hall food processing
-* food processing center -- basic autocrafting to craft food recipes (manually added list)
 
 RESEARCH GOALS
 
@@ -44,33 +44,13 @@ TEMPLATES
 * resource lists for gates
 * resource lists for npcs
 * resource lists for vehicles
+* scan/duplicate of crafting station, w/ orientation
 
 RESEARCH
 
 CRAFTING
-    VEHICLE CRAFTING
-        --at least 2 sizes of crafting area
-        --will be multiblock structures that will render the in-progress vehicle being built
-                will slowly add pieces over construction duration until finished constructing.
-    NPC CRAFTING
-    AMMO CRAFTING
-        --create ammo crafting center -- automated center that uses npc craftsmen to do the work
-    UPGRADE AND ARMOR CRAFTING
-    FOOD/RECRUITING    
-       create a 'food ration' (2 food value, can be created from any/most other food--more efficient for npc/less waste)
-       
-SURVIVAL MODE STRUCTURE BUILDING
-* create drafting workstation
-* single-use item scanner--cannot add to world gen, only add to survival/creative mode
-* make sure survival ticked builder will not clear or level.  struct BB needs validated for clear before being built
-* use survival flag for survival drafting table structureSelection...(from structureClientInfo in client store)
-
-BASIC DRAFTING STATION
-* selection screen w/only survival eligible buildings available
-* works much like drafting station from catmod (e.g. input box, compile blocks/resources into a finished item)
-* create single-use builder item for output--stores struct data in NBT (basically, just a name and struct md5)....
-* create single use scanner item for survival mode (item is consumed on successful scan/export)
-
+* container shift-click interaction for all crafting containers 
+ 
 ADVANCED DRAFTING STATION (editor)
 * THDT
 

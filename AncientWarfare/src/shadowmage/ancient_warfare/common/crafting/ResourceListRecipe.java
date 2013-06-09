@@ -25,7 +25,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -33,7 +35,6 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapper;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
@@ -65,11 +66,16 @@ public ResourceListRecipe(ItemStack result, List<ItemStackWrapperCrafting> resou
 
 public ResourceListRecipe(ItemStack result, RecipeType type)
   {
-  this.result = result;
+  this.result = result.copy();
   displayName = result.getDisplayName();
-  this.resources = new ArrayList<ItemStackWrapperCrafting>();
   this.type = type;
   Config.logDebug("constructed recipe for : "+this.result + "  ::::  "+this.result.getTagCompound());
+  }
+
+public ResourceListRecipe(ItemStack result, int count, RecipeType type)
+  {
+  this(result, type);
+  this.result.stackSize = count;
   }
 
 public ResourceListRecipe copy()
@@ -87,30 +93,52 @@ public ResourceListRecipe copy()
 
 public ResourceListRecipe addResource(ItemStackWrapperCrafting item)
   {
-  if(this.resources==null)
-    {
-    this.resources = new ArrayList<ItemStackWrapperCrafting>();
-    }
   this.resources.add(item);
   return this;
   }
 
-public ResourceListRecipe addResource(ItemStack stack, int qty, boolean dmg, boolean tag)
+public ResourceListRecipe addResource(ItemStackWrapperCrafting... items)
   {
-  if(this.resources==null)
+  for(ItemStackWrapperCrafting item : items)
     {
-    this.resources = new ArrayList<ItemStackWrapperCrafting>();
+    this.resources.add(item);    
     }
+  return this;
+  }
+
+public ResourceListRecipe addResource(Item item, int qty, boolean dmg)
+  {
+  return addResource(new ItemStack(item, qty), qty, dmg, false);
+  }
+
+public ResourceListRecipe addResource(Item item, int meta, int qty, boolean dmg)
+  {
+  return this.addResource(new ItemStack(item, qty, meta), qty, dmg, false);
+  }
+
+public ResourceListRecipe addResource(int id, int meta, int qty, boolean dmg)
+  {
+  return this.addResource(new ItemStack(id, qty, meta), qty, dmg, false);
+  }
+
+public ResourceListRecipe addResource(Block block, int qty, boolean dmg)
+  {
+  return this.addResource(new ItemStack(block, qty), qty, dmg, false);
+  }
+
+public ResourceListRecipe addResource(Block block, int meta, int qty)
+  {
+  return this.addResource(new ItemStack(block, qty, meta), qty, false, false);
+  }
+
+public ResourceListRecipe addResource(ItemStack stack, int qty, boolean dmg, boolean tag)
+  { 
   this.resources.add(new ItemStackWrapperCrafting(stack, qty, dmg, tag));
   return this;
   }
 
 public ResourceListRecipe addResources(Collection<ItemStack> items, boolean damage, boolean tag)
-  {
-  if(this.resources==null)
-    {
-    this.resources = new ArrayList<ItemStackWrapperCrafting>();
-    }
+  {  
   for(ItemStack stack : items)
     {
     this.resources.add(new ItemStackWrapperCrafting(stack, stack.stackSize, damage, tag));
@@ -119,7 +147,7 @@ public ResourceListRecipe addResources(Collection<ItemStack> items, boolean dama
   }
 
 public ResourceListRecipe addResources(Collection<ItemStackWrapperCrafting> items)
-  {
+  { 
   this.resources.addAll(items);
   return this;
   }
@@ -274,6 +302,14 @@ public void addNeededResearch(int res)
 public void addNeededResearch(Collection<Integer> nums)
   {
   this.neededResearch.addAll(nums);
+  }
+
+public void addNeededResearch(Integer... nums)
+  {
+  for(Integer i : nums)
+    {
+    this.neededResearch.add(i);
+    }
   }
 
 public void addNeededResearch(IResearchGoal goal)

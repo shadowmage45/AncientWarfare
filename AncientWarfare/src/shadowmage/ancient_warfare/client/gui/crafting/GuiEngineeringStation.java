@@ -46,7 +46,7 @@ public EnumSet<RecipeType> getTab1RecipeTypes()
 @Override
 public EnumSet<RecipeType> getTab2RecipeTypes()
   {
-  return EnumSet.of(RecipeType.GATE);
+  return EnumSet.of(RecipeType.CIVIC_MISC);
   }
 
 @Override

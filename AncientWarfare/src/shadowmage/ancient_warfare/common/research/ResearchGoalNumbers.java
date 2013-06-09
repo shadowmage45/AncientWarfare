@@ -124,7 +124,6 @@ public static int wood1 = 200;
 public static int wood2 = 201;
 public static int wood3 = 202;
 public static int wood4 = 203;
-public static int wood5 = 204;
 
 public static int iron1 = 205;
 public static int iron2 = 206;
