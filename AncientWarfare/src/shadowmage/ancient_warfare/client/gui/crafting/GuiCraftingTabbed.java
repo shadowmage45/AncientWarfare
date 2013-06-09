@@ -255,7 +255,7 @@ protected void handleRecipeClick(IGuiElement element)
     }
   else
     {
-    if(container.isWorking)
+    if(container.isWorking || container.isLocked)
       {
       return;
       }    

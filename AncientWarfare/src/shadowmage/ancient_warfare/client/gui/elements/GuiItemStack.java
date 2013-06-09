@@ -106,6 +106,7 @@ public void drawElement(int mouseX, int mouseY)
     name = name.length()>20 ? name.substring(0,20) : name;
     if(this.renderName)
       {
+      mc.renderEngine.resetBoundTexture();
       this.drawString(fr, name, guiLeft+renderPosX+20, guiTop+renderPosY+4, 0xffffffff);
       }    
     }

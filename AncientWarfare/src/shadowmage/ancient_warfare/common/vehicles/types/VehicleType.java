@@ -379,9 +379,10 @@ public List<String> getDisplayTooltip()
 public ItemStack getStackForLevel(int level)
   {
   ItemStack stack = new ItemStack(ItemLoader.vehicleSpawner,1,this.getGlobalVehicleType());
+  stack.setTagCompound(new NBTTagCompound("tag"));
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setInteger("lev", level);
-  stack.setTagInfo("AWVehSpawner", tag);
+  tag.setInteger("lev", level);  
+  stack.setTagInfo("AWVehSpawner", tag);  
   return stack;
   }
 

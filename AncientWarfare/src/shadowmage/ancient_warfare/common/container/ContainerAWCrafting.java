@@ -156,8 +156,10 @@ public void handlePacketData(NBTTagCompound tag)
     {
     Config.logDebug("receiving recipe packet");
     ItemStack stack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("recipe"));
+    Config.logDebug("read stack : "+stack.getDisplayName());
     this.recipeCache = AWCraftingManager.instance().getRecipeByResult(stack);
     this.clientRecipe = this.recipeCache;
+    Config.logDebug("client recipe: "+this.clientRecipe);
     if(this.gui!=null)
       {
       this.gui.refreshGui();
@@ -182,8 +184,6 @@ public void handlePacketData(NBTTagCompound tag)
     {
     Config.logDebug("receiving set packet");
     ItemStack result = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("result"));
-    int id = result.itemID;
-    int dmg = result.getItemDamage();
     ResourceListRecipe recipe = AWCraftingManager.instance().getRecipeByResult(result);
     te.setRecipe(recipe);
     }
@@ -219,42 +219,12 @@ public void handlePacketData(NBTTagCompound tag)
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
-//  this.displayProgress = tag.getInteger("time");
-//  this.displayProgressMax = tag.getInteger("timeMax");
-//  this.isWorking = tag.getBoolean("work");
-//  this.isLocked = tag.getBoolean("lock");  
-//  if(tag.hasKey("entry"))    
-//    {
-//    this.entry = new PlayerEntry();
-//    entry.readFromNBT(tag.getCompoundTag("entry"));
-//    }
-//  if(tag.hasKey("recipe"))
-//    {
-//    this.recipeCache = new ResourceListRecipe(tag.getCompoundTag("recipe"));
-//    }
-//  if(this.gui!=null)
-//    {
-//    this.gui.refreshGui();
-//    }
   }
 
 @Override
 public List<NBTTagCompound> getInitData()
   {
   ArrayList<NBTTagCompound> list = new ArrayList<NBTTagCompound>();
-//  NBTTagCompound tag = new NBTTagCompound();
-//  if(this.entry!=null)
-//    {
-//    tag.setCompoundTag("entry", this.entry.getNBTTag());
-//    }
-//  if(this.recipeCache!=null)
-//    {
-//    tag.setCompoundTag("recipe", this.recipeCache.getNBTTag());
-//    }
-//  tag.setInteger("time", this.displayProgress);
-//  tag.setInteger("timeMax", this.displayProgressMax);
-//  tag.setBoolean("work", this.isWorking);
-//  tag.setBoolean("lock", this.isLocked);
   return list;
   }
 
@@ -297,6 +267,7 @@ public void detectAndSendChanges()
       if(tag==null){tag = new NBTTagCompound();}
       this.recipeCache = ter;
       tag.setCompoundTag("recipe", this.recipeCache.getResult().writeToNBT(new NBTTagCompound()));
+      Config.logDebug("writing recipe for: "+this.recipeCache.getResult().getDisplayName());
       }
     }
 

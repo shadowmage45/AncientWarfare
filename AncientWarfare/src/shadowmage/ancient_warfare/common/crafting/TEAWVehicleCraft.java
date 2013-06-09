@@ -39,8 +39,8 @@ public class TEAWVehicleCraft extends TEAWCraftingWorkSite
 
 int progressPerWork = 20;
 
-int vehicleType = -1;
-int vehicleLevel = -1;
+public int vehicleType = -1;
+public int vehicleLevel = -1;
 
 /**
  * 
@@ -76,8 +76,19 @@ public void setRecipe(ResourceListRecipe recipe)
       this.vehicleLevel = level;
       Config.logDebug("set working vehicle to "+t);
       }
-    }
+    }  
   this.recipeStartCheckDelayTicks = 0;
+  this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+  }
+
+
+
+@Override
+public void stopAndClear()
+  {
+  super.stopAndClear();
+  this.vehicleLevel = -1;
+  this.vehicleType = -1;
   this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
   }
 
@@ -101,13 +112,15 @@ public void writeDescriptionData(NBTTagCompound tag)
 @Override
 public void writeExtraNBT(NBTTagCompound tag)
   {
- 
+  tag.setInteger("type", this.vehicleType);
+  tag.setInteger("lev", this.vehicleLevel);
   }
 
 @Override
 public void readExtraNBT(NBTTagCompound tag)
   {
-  
+  this.vehicleLevel = tag.getInteger("lev");
+  this.vehicleType = tag.getInteger("type");
   }
 
 @Override

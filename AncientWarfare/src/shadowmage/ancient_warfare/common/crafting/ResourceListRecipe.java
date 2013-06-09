@@ -69,6 +69,7 @@ public ResourceListRecipe(ItemStack result, RecipeType type)
   displayName = result.getDisplayName();
   this.resources = new ArrayList<ItemStackWrapperCrafting>();
   this.type = type;
+  Config.logDebug("constructed recipe for : "+this.result + "  ::::  "+this.result.getTagCompound());
   }
 
 public ResourceListRecipe copy()

@@ -29,8 +29,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicWarehouse;
+import shadowmage.ancient_warfare.client.gui.crafting.GuiAmmoCrafting;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiCivilEngineering;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiEngineeringStation;
+import shadowmage.ancient_warfare.client.gui.crafting.GuiNpcCraft;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiResearch;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiVehicleCrafting;
 import shadowmage.ancient_warfare.client.gui.info.GuiResearchBook;
@@ -65,7 +67,9 @@ import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
-import shadowmage.ancient_warfare.common.crafting.TEAWEngineering;
+import shadowmage.ancient_warfare.common.crafting.TEAWAmmoCraft;
+import shadowmage.ancient_warfare.common.crafting.TEAWCivicCraft;
+import shadowmage.ancient_warfare.common.crafting.TEAWNpcCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWVehicleCraft;
@@ -102,6 +106,7 @@ public static final int RESEARCH = 42;
 public static final int ENGINEERING = 43;
 public static final int VEHICLE_CRAFT = 44;
 public static final int NPC_CRAFT = 45;
+public static final int AMMO_CRAFT = 46;
 
 public static final int VEHICLE_AMMO_SELECT = 98;
 public static final int VEHICLE_DEBUG = 99;
@@ -216,9 +221,9 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   
   case ENGINEERING:
   te = world.getBlockTileEntity(x, y, z);
-  if(te instanceof TEAWEngineering)
+  if(te instanceof TEAWCivicCraft)
     {
-    TEAWEngineering tew = (TEAWEngineering)te;
+    TEAWCivicCraft tew = (TEAWCivicCraft)te;
     return new ContainerAWCrafting(player, tew);
     }
   return null;
@@ -228,6 +233,24 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEAWVehicleCraft)
     {
     TEAWVehicleCraft tew = (TEAWVehicleCraft)te;
+    return new ContainerAWCrafting(player, tew);
+    }
+  return null;
+  
+  case NPC_CRAFT:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWNpcCraft)
+    {
+    TEAWNpcCraft tew = (TEAWNpcCraft)te;
+    return new ContainerAWCrafting(player, tew);
+    }
+  return null;
+  
+  case AMMO_CRAFT:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWAmmoCraft)
+    {
+    TEAWAmmoCraft tew = (TEAWAmmoCraft)te;
     return new ContainerAWCrafting(player, tew);
     }
   return null;
@@ -341,9 +364,9 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   
   case ENGINEERING:
   te = world.getBlockTileEntity(x, y, z);
-  if(te instanceof TEAWEngineering)
+  if(te instanceof TEAWCivicCraft)
     {
-    TEAWEngineering tew = (TEAWEngineering)te;
+    TEAWCivicCraft tew = (TEAWCivicCraft)te;
     return new GuiEngineeringStation(new ContainerAWCrafting(player, tew));
     }
   return null;
@@ -357,6 +380,24 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
     {
     TEAWVehicleCraft tew = (TEAWVehicleCraft)te;
     return new GuiVehicleCrafting(new ContainerAWCrafting(player, tew));
+    }
+  return null;
+  
+  case AMMO_CRAFT:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWAmmoCraft)
+    {
+    TEAWAmmoCraft tew = (TEAWAmmoCraft)te;
+    return new GuiAmmoCrafting(new ContainerAWCrafting(player, tew));
+    }
+  return null;
+  
+  case NPC_CRAFT:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEAWNpcCraft)
+    {
+    TEAWNpcCraft tew = (TEAWNpcCraft)te;
+    return new GuiNpcCraft(new ContainerAWCrafting(player, tew));
     }
   return null;
   

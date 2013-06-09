@@ -41,6 +41,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.AWItemBlockBase;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public class BlockAWCrafting extends AWBlockContainer
@@ -88,14 +89,18 @@ public void registerBlockInfo()
   {
   String baseTexDir = "ancientwarfare:crafting/";
   Description d = BlockLoader.instance().registerBlockWithItem(this, "AWCraftingBlock", AWItemBlockBase.class);
-  d.setName("Research Table", 0);
+  d.setName("Research Station", 0);
   d.addDisplayStack(new ItemStack(this,1,0));
-  d.setName("Engineering Station", 1);
+  d.setName("Civil Engineering Station", 1);
   d.addDisplayStack(new ItemStack(this,1,1));
-  d.setName("Civil Engineering Station", 2);
+  d.setName("Structure Engineering Station", 2);
   d.addDisplayStack(new ItemStack(this,1,2));
   d.setName("Vehicle Engineering Station", 3);
-  d.addDisplayStack(new ItemStack(this,1,3));
+  d.addDisplayStack(new ItemStack(this,1,3));  
+  d.setName("Ammo Production Station", 4);
+  d.addDisplayStack(new ItemStack(this,1,4)); 
+  d.setName("NPC Recruiting Center", 5);
+  d.addDisplayStack(new ItemStack(this,1,5));
   
   d.setIconTexture(baseTexDir+"researchBlockBottom", 0);
   d.setIconTexture(baseTexDir+"researchBlockTop", 1);
@@ -105,9 +110,11 @@ public void registerBlockInfo()
   d.setIconTexture(baseTexDir+"researchBlockRight", 5);  
   
   GameRegistry.registerTileEntity(TEAWResearch.class, "Research Center");
-  GameRegistry.registerTileEntity(TEAWEngineering.class, "Engineering Station");
+  GameRegistry.registerTileEntity(TEAWCivicCraft.class, "Engineering Station");
   GameRegistry.registerTileEntity(TEAWStructureCraft.class, "Civil Engineering Station");
   GameRegistry.registerTileEntity(TEAWVehicleCraft.class, "Vehicle Engineering Station");
+  GameRegistry.registerTileEntity(TEAWAmmoCraft.class, "Ammo Engineering Station");
+  GameRegistry.registerTileEntity(TEAWNpcCraft.class, "NPC Recruiting Center");
   }
 
 @Override
@@ -120,6 +127,10 @@ public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entit
   int face = BlockTools.getBlockFacingMetaFromPlayerYaw(entity.rotationYaw);
   TEAWCrafting te = (TEAWCrafting)world.getBlockTileEntity(x, y, z);
   te.setOrientation(face);
+  if(entity instanceof EntityPlayer)
+    {
+    te.teamNum = TeamTracker.instance().getTeamForPlayer((EntityPlayer)entity);
+    }
   }
 
 @Override
@@ -130,13 +141,15 @@ public TileEntity getNewTileEntity(World world, int meta)
   case 0:
   return new TEAWResearch();
   case 1:
-  return new TEAWEngineering();
+  return new TEAWCivicCraft();
   case 2:
   return new TEAWStructureCraft();
   case 3:
   return new TEAWVehicleCraft();
   case 4:
+  return new TEAWAmmoCraft();
   case 5:
+  return new TEAWNpcCraft();
   case 7:
   case 8:
   case 9:

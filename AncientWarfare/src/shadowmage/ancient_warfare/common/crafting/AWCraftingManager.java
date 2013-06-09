@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.crafting;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +69,7 @@ List<ResourceListRecipe> upgradeRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> armorRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> npcRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> researchRecipes = new ArrayList<ResourceListRecipe>();
+List<ResourceListRecipe> componentRecipes = new ArrayList<ResourceListRecipe>();
 
 List<ResourceListRecipe> structureRecipesServer = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> structureRecipesClient = new ArrayList<ResourceListRecipe>();
@@ -84,6 +86,8 @@ private AWCraftingManager()
   recipesByType.put(RecipeType.ARMOR, armorRecipes);
   recipesByType.put(RecipeType.NPC, npcRecipes);
   recipesByType.put(RecipeType.RESEARCH, researchRecipes);
+  recipesByType.put(RecipeType.COMPONENTS, componentRecipes);
+  recipesByType.put(RecipeType.NONE, new ArrayList<ResourceListRecipe>());
   }
 
 private static AWCraftingManager INSTANCE = new AWCraftingManager();
@@ -99,12 +103,21 @@ public ResourceListRecipe getRecipeByResult(ItemStack result)
     {
     for(ResourceListRecipe valid : list)
       {
-      if(InventoryTools.doItemsMatch(valid.result, result))
+//      Config.logDebug("checking..... valid: "+valid.getResult().getDisplayName() + " result: "+result.getDisplayName());
+      
+      if(result.itemID==valid.getResult().itemID && result.getItemDamage()==valid.getResult().getItemDamage())
         {
-        return valid;
-        }      
+        if(ItemStack.areItemStackTagsEqual(result, valid.getResult()))
+          {
+//          Config.logDebug("stack tags match");
+//          Config.logDebug("res: " + result.getTagCompound() + " valid: "+valid.getResult().getTagCompound());
+          return valid;
+          }      
+        } 
+            
       }
     } 
+  Config.logDebug("could not find recipe by stack");
   return null;
   }
 
@@ -147,15 +160,12 @@ public List<ResourceListRecipe> getRecipesContaining(PlayerEntry entry, String t
   List<ResourceListRecipe> list;
   for(RecipeType t : types)
     {
-    Config.logDebug("examining recipe type : "+t);
     list = this.recipesByType.get(t);
     for(ResourceListRecipe recipe : list)
       {
-      Config.logDebug("examining recipe: "+recipe);
       name = recipe.displayName;
       if(name.toLowerCase().contains(text.toLowerCase()) && ((!Config.DEBUG && creative) || Config.disableResearch || recipe.canBeCraftedBy(entry)))
         {
-        Config.logDebug("adding recipe: "+recipe);
         recipes.add(recipe);
         }
       }
@@ -195,11 +205,11 @@ public void loadRecipes()
   this.addArmorRecipes();//done
   this.addCivicRecipes();//done
   this.addUpgradeRecipes();//done
-  this.addAmmoRecipes();
-  this.addNpcRecipes();
-  this.addVehicleRecipes();
-  this.addStructureRecipes();
-  this.addResearchRecipes(); 
+  this.addAmmoRecipes();//done
+  this.addNpcRecipes();//?? not done
+  this.addVehicleRecipes();//?? not done
+  this.addStructureRecipes();//dynamic-done
+  this.addResearchRecipes();//done
   }
 
 protected void addResearchRecipes()

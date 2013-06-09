@@ -41,6 +41,9 @@ import shadowmage.ancient_warfare.client.model.ModelTEBase;
 import shadowmage.ancient_warfare.client.model.ModelTable1;
 import shadowmage.ancient_warfare.client.model.ModelTable2;
 import shadowmage.ancient_warfare.client.model.ModelTable3;
+import shadowmage.ancient_warfare.client.model.ModelTable4;
+import shadowmage.ancient_warfare.client.model.ModelTable5;
+import shadowmage.ancient_warfare.client.model.ModelTable6;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandTurret;
@@ -77,7 +80,6 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandTurr
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
-import shadowmage.ancient_warfare.common.crafting.TEAWCraftingWorkSite;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -236,12 +238,16 @@ public void loadRenders()
   this.addTEModel(0, new ModelTable1());
   this.addTEModel(1, new ModelTable2());
   this.addTEModel(2, new ModelTable3());
-  this.addTEModel(3, new ModelTable3());
+  this.addTEModel(3, new ModelTable4());
+  this.addTEModel(4, new ModelTable5());
+  this.addTEModel(5, new ModelTable6());
   
   this.teModelTextures.put(0, Config.texturePath+"models/crafting/teResearchTable.png");
   this.teModelTextures.put(1, Config.texturePath+"models/crafting/teEngineeringStation.png");
   this.teModelTextures.put(2, Config.texturePath+"models/crafting/teCivilEngineeringStation.png");
-  this.teModelTextures.put(3, Config.texturePath+"models/crafting/teCivilEngineeringStation.png");
+  this.teModelTextures.put(3, Config.texturePath+"models/crafting/teVehicleStation.png");
+  this.teModelTextures.put(4, Config.texturePath+"models/crafting/teAmmoStation.png");
+  this.teModelTextures.put(5, Config.texturePath+"models/crafting/teNpcStation.png");
   
   /**
    * load up the vehicle item renderer...

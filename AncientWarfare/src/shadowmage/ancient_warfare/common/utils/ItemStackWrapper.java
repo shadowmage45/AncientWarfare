@@ -43,20 +43,8 @@ public ItemStackWrapper(ItemStack stack)
 
 public ItemStackWrapper(NBTTagCompound tag)
   {
-  NBTTagCompound itemTag = null;
-  int id = tag.getInteger("id");
-  int meta = tag.getInteger("dmg");
-  if(tag.hasKey("tag"))
-    {
-    itemTag = tag.getCompoundTag("tag");
-    } 
-  ItemStack stack = new ItemStack(id,1,meta);
-  if(tag!=null)
-    {
-    stack.setTagCompound(itemTag);
-    }
-  filter = stack;
-  setQuantity(tag.getInteger("count"));
+  this.filter = ItemStack.loadItemStackFromNBT(tag);
+  setQuantity(tag.getInteger("intcount"));
   }
 
 public boolean matches(ItemStack stack)
@@ -77,13 +65,8 @@ public ItemStack getFilter()
 
 public NBTTagCompound writeToNBT(NBTTagCompound tag)
   {
-  tag.setInteger("id", filter.itemID);
-  tag.setInteger("dmg", filter.getItemDamage());
-  tag.setInteger("count", getQuantity());
-  if(filter.hasTagCompound())
-    {
-    tag.setTag("tag", filter.getTagCompound());
-    }
+  this.filter.writeToNBT(tag);
+  tag.setInteger("intcount", getQuantity());
   return tag;
   }
 
