@@ -60,7 +60,7 @@ public TEAWVehicleCraft()
 public void setRecipe(ResourceListRecipe recipe)
   {
   super.setRecipe(recipe);
-  if(recipe!=null)
+  if(recipe!=null && recipe.type==RecipeType.VEHICLE)
     {
     ItemStack result = recipe.getResult();    
     if(result!=null)

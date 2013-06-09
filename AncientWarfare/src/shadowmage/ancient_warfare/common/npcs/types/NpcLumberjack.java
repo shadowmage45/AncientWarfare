@@ -39,6 +39,7 @@ import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class NpcLumberjack extends NpcTypeBase
@@ -53,9 +54,9 @@ public NpcLumberjack(int type)
   this.displayName = "Lumberjack";
   this.tooltip = "For working tree farms";
   this.iconTexture = "npcWorker1";  
-  this.addLevel("Lumberjack Novice", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(0), null).addTargetType(CivicWorkType.TREE).setActionTicks(40).setUpkeep(4);
-  this.addLevel("Lumberjack Adept", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(1), null).addTargetType(CivicWorkType.TREE).setActionTicks(30).setUpkeep(6);
-  this.addLevel("Lumberjack Master", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(2), null).addTargetType(CivicWorkType.TREE).setActionTicks(20).setUpkeep(8);
+  this.addLevel("Lumberjack Novice", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(0), null).addTargetType(CivicWorkType.TREE).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
+  this.addLevel("Lumberjack Adept", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(1), null).addTargetType(CivicWorkType.TREE).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
+  this.addLevel("Lumberjack Master", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(2), null).addTargetType(CivicWorkType.TREE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
       "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};

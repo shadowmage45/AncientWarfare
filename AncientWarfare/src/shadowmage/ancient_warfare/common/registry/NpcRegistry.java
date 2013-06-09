@@ -151,6 +151,7 @@ public static ItemStack getStackFor(INpcType type, int level)
   NBTTagCompound tag = new NBTTagCompound();
   tag.setInteger("lev", level);
   stack.setTagInfo("AWNpcSpawner", tag);
+  stack.getTagCompound().setName("tag");
   return stack;
   }
 

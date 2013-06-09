@@ -251,7 +251,7 @@ protected void handleRecipeClick(IGuiElement element)
   {  
   if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
     {
-    mc.displayGuiScreen(new GuiRecipeDetails(this, recipes.get(element)));      
+    this.handleRecipeDetailsClick(recipes.get(element));          
     }
   else
     {
@@ -263,6 +263,11 @@ protected void handleRecipeClick(IGuiElement element)
     Config.logDebug("setting current recipe to: "+this.container.clientRecipe);
     this.forceUpdate = true;
     }
+  }
+
+protected void handleRecipeDetailsClick(ResourceListRecipe recipe)
+  {
+  mc.displayGuiScreen(new GuiRecipeDetails(this, recipe));
   }
 
 @Override

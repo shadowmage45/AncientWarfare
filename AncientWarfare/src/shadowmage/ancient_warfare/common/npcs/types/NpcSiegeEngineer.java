@@ -44,6 +44,7 @@ import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryMountableVehicle;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryNpc;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryPlayer;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class NpcSiegeEngineer extends NpcTypeBase
@@ -62,9 +63,9 @@ public NpcSiegeEngineer(int type)
   this.iconTexture = "npcSiegeEngineer1";
   this.defaultTargets = new String[]{"Zombie", "Spider", "CaveSpider", "Blaze", 
       "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
-  this.addLevel("Novice Siege Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3).setAccuracy(0.88f).setUpkeep(4);
-  this.addLevel("Adept Siege Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4).setAccuracy(0.92f).setUpkeep(6);
-  this.addLevel("Expert Siege Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(6).setAccuracy(0.96f).setUpkeep(8);  
+  this.addLevel("Novice Siege Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3).setAccuracy(0.88f).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.command1);
+  this.addLevel("Adept Siege Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4).setAccuracy(0.92f).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.command2);
+  this.addLevel("Expert Siege Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(6).setAccuracy(0.96f).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command3);  
   }
 
 @Override

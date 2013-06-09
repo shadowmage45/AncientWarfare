@@ -20,13 +20,24 @@
  */
 package shadowmage.ancient_warfare.client.gui.info;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.lwjgl.input.Keyboard;
 
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
+import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
+import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GuiRecipeDetails extends GuiContainerAdvanced
@@ -46,21 +57,17 @@ public GuiRecipeDetails(GuiContainerAdvanced parent, ResourceListRecipe recipe)
   this.recipe = recipe;
   }
 
-@Override
-public void onElementActivated(IGuiElement element)
-  {
-  }
 
 @Override
 public int getXSize()
   {
-  return 120;
+  return 256;
   }
 
 @Override
 public int getYSize()
   {
-  return 100;
+  return 240;
   }
 
 @Override
@@ -99,16 +106,80 @@ protected void keyTyped(char par1, int par2)
   super.keyTyped(par1, par2);
   }
 
+GuiScrollableArea area;
+GuiButtonSimple back;
+
+HashMap<GuiButtonSimple, IResearchGoal> buttonGoalMap = new HashMap<GuiButtonSimple, IResearchGoal>();
+HashMap<GuiButtonSimple, ResourceListRecipe> buttonRecipeMap = new HashMap<GuiButtonSimple, ResourceListRecipe>();
+
+@Override
+public void onElementActivated(IGuiElement element)
+  {
+  if(element==back)
+    {
+    mc.displayGuiScreen(parent);
+    }
+  if(buttonGoalMap.containsKey(element))
+    {
+    mc.displayGuiScreen(new GuiResearchGoal(inventorySlots, buttonGoalMap.get(element), this));
+    }
+  if(buttonRecipeMap.containsKey(element))
+    {
+    mc.displayGuiScreen(new GuiRecipeDetails(this, buttonRecipeMap.get(element)));
+    }
+  }
+
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
+  this.area.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override
 public void setupControls()
   {
-  // TODO Auto-generated method stub
+  this.area = new GuiScrollableArea(0, this, 5, 5+16+5+30, 256-10, 240-10-16-5-30, 0);
+  int elementNum = 100;
+  int nextElementY = 0; 
+  area.addGuiElement(new GuiString(elementNum, area, 240-24, 10, "Used In Recipes: ").updateRenderPos(0, nextElementY));
+  nextElementY += 10;
+  List<ResourceListRecipe> recipes = AWCraftingManager.instance().getRecipesContaining(recipe.getResult());
+  GuiString string;
+  GuiButtonSimple button;
+  GuiItemStack item;
+  for(ResourceListRecipe recipe : recipes)
+    {
+    button = new GuiButtonSimple(elementNum, area, 240-24 - 22, 16, recipe.getDisplayName());
+    button.updateRenderPos(22, nextElementY+1);
+    button.addToToolitp("Click to view detailed recipe information");
+    elementNum++;
+    item = new GuiItemStack(elementNum, area).setItemStack(recipe.getResult());
+    item.updateRenderPos(0, nextElementY);
+    buttonRecipeMap.put(button, recipe);
+    area.addGuiElement(button);
+    area.addGuiElement(item);
+    elementNum++;
+    nextElementY += 18;
+    }
+  nextElementY += 10;
+  area.addGuiElement(new GuiString(elementNum, area, 240-24, 10, "Required Research: ").updateRenderPos(0, nextElementY));
+  nextElementY += 10;
+  
+  for(IResearchGoal g : recipe.getNeededResearch())
+    {
+    button = new GuiButtonSimple(elementNum, area, 240-24, 16, g.getDisplayName());
+    button.updateRenderPos(0, nextElementY);
+    button.addToToolitp("Click to view detailed research goal information");
+    buttonGoalMap.put(button, g);
+    area.addGuiElement(button);
+    elementNum++;
+    nextElementY += 18;
+    }    
+  area.updateTotalHeight(nextElementY);
+  area.updateGuiPos(guiLeft, guiTop);
+  this.guiElements.put(0, area);
+  
+  back = this.addGuiButton(1, this.getXSize()-40, 5, 35, 16, "Back");
   }
 
 @Override

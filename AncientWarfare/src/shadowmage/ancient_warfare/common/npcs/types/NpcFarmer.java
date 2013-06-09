@@ -39,6 +39,7 @@ import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class NpcFarmer extends NpcTypeBase
@@ -53,9 +54,9 @@ public NpcFarmer(int type)
   this.displayName = "Farmer";
   this.tooltip = "For working basic crops";
   this.iconTexture = "npcWorker1";  
-  this.addLevel("Novice Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(0), null).addTargetType(CivicWorkType.FARM).setActionTicks(40).setUpkeep(4);
-  this.addLevel("Adept Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(1), null).addTargetType(CivicWorkType.FARM).setActionTicks(30).setUpkeep(6);
-  this.addLevel("Expert Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(2), null).addTargetType(CivicWorkType.FARM).setActionTicks(20).setUpkeep(8);
+  this.addLevel("Novice Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(0), null).addTargetType(CivicWorkType.FARM).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
+  this.addLevel("Adept Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(1), null).addTargetType(CivicWorkType.FARM).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
+  this.addLevel("Expert Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(2), null).addTargetType(CivicWorkType.FARM).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
       "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};

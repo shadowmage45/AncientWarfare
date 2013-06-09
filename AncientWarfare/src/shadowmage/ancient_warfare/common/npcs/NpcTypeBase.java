@@ -26,10 +26,13 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
@@ -372,19 +375,35 @@ public Collection<Integer> getNeededResearch(int level)
 @Override
 public ResourceListRecipe constructRecipe(int level)
   {
-  if(this.isVanillaVillager){return null;}
+  if(this.isVanillaVillager || this.getGlobalNpcType()==0){return null;}
   if(level>=0 && level<this.levelEntries.size())
     {
     NpcLevelEntry entry = this.levelEntries.get(level);
     ResourceListRecipe recipe = new ResourceListRecipe(NpcRegistry.getStackFor(this, level), RecipeType.NPC);
     recipe.addNeededResearch(this.getNeededResearch(level));
     recipe.addResources(entry.getNeededResources());
+    ItemStack[] stacks = this.getArmor(level);
+    if(stacks!=null)
+      {
+      for(ItemStack stack : stacks)
+        {
+        if(stack!=null)
+          {
+          recipe.addResource(stack, 1, false, false);          
+          }
+        }      
+      }
+    ItemStack stack = this.getTool(level);
+    if(stack!=null)
+      {
+      recipe.addResource(stack, 1, false, false);      
+      }
+    recipe.addResource(new ItemStack(ItemLoader.rations), this.getUpkeepCost(level), false, false);
+    recipe.addResource(new ItemStack(Item.paper), level+1, false, false);
     return recipe;
     }
   return null;
   }
-
-
 
 public class NpcVarHelperDummy extends NpcVarsHelper
 {

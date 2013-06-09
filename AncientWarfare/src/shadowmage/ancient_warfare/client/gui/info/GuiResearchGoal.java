@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.gui.info;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.inventory.Container;
@@ -36,6 +38,7 @@ import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.research.GoalSorterAZ;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
@@ -114,11 +117,22 @@ public void onElementActivated(IGuiElement element)
   if(element==back)
     {
     mc.displayGuiScreen(parent);
-    }  
+    }
+  if(buttonGoalMap.containsKey(element))
+    {
+    mc.displayGuiScreen(new GuiResearchGoal(inventorySlots, buttonGoalMap.get(element), this));
+    } 
+  if(stringRecipeMap.containsKey(element))
+    {
+    mc.displayGuiScreen(new GuiRecipeDetails(this, stringRecipeMap.get(element)));
+    }
   }
 
 GuiScrollableArea area;
 GuiButtonSimple back;
+
+HashMap<GuiButtonSimple, IResearchGoal> buttonGoalMap = new HashMap<GuiButtonSimple, IResearchGoal>();
+HashMap<GuiButtonSimple, ResourceListRecipe> stringRecipeMap = new HashMap<GuiButtonSimple, ResourceListRecipe>();
 
 @Override
 public void setupControls()
@@ -137,22 +151,36 @@ public void setupControls()
   area.addGuiElement(new GuiString(elementNum, area, 240-24, 10, "Used In Recipes: ").updateRenderPos(0, nextElementY));
   nextElementY += 10;
   List<ResourceListRecipe> recipes = AWCraftingManager.instance().getRecipesDependantOn(goal);
+  GuiString string;
+  GuiButtonSimple button;
+  GuiItemStack item;
   for(ResourceListRecipe recipe : recipes)
     {
-    area.addGuiElement(new GuiString(elementNum, area, 240-24, 10, recipe.getDisplayName()).updateRenderPos(22, nextElementY+5));
+    button = new GuiButtonSimple(elementNum, area, 240-24 - 22, 16, recipe.getDisplayName());
+    button.updateRenderPos(22, nextElementY+1);
+    button.addToToolitp("Click to view detailed recipe information");
     elementNum++;
-    area.addGuiElement(new GuiItemStack(elementNum, area).setItemStack(recipe.getResult()).updateRenderPos(0, nextElementY));
+    item = new GuiItemStack(elementNum, area).setItemStack(recipe.getResult());
+    item.updateRenderPos(0, nextElementY);
+    stringRecipeMap.put(button, recipe);
+    area.addGuiElement(button);
+    area.addGuiElement(item);
     elementNum++;
     nextElementY += 18;
     }
   nextElementY += 10;
   area.addGuiElement(new GuiString(elementNum, area, 240-24, 10, "Used In Research: ").updateRenderPos(0, nextElementY));
   nextElementY += 10;
+  
   for(IResearchGoal g : ResearchGoal.getUnlocks(goal))
     {
-    area.addGuiElement(new GuiString(elementNum, area, 240-24, 10, g.getDisplayName()).updateRenderPos(0, nextElementY));
+    button = new GuiButtonSimple(elementNum, area, 240-24, 16, g.getDisplayName());
+    button.updateRenderPos(0, nextElementY);
+    button.addToToolitp("Click to view detailed research goal information");
+    buttonGoalMap.put(button, g);
+    area.addGuiElement(button);
     elementNum++;
-    nextElementY += 10;
+    nextElementY += 18;
     }    
   area.updateTotalHeight(nextElementY);
   area.updateGuiPos(guiLeft, guiTop);

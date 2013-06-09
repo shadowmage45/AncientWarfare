@@ -44,6 +44,7 @@ import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryNpc;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryPlayer;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryTeamHealing;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class NpcMedic extends NpcTypeBase
@@ -62,9 +63,9 @@ public NpcMedic(int type)
   this.iconTexture = "npcSoldier1";
   this.defaultTargets = new String[]{"Zombie", "Spider", "CaveSpider", "Blaze", 
       "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
-  this.addLevel("Novice Medic", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3).setUpkeep(6);
-  this.addLevel("Adept Medic", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4).setUpkeep(8);
-  this.addLevel("Expert Medic", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(5).setUpkeep(10);
+  this.addLevel("Novice Medic", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.command1);
+  this.addLevel("Adept Medic", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);
+  this.addLevel("Expert Medic", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(5).setUpkeep(10).addNeededResearch(ResearchGoalNumbers.command3);
   }
 
 

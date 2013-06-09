@@ -135,6 +135,12 @@ public static int iron5 = 209;
 /**
  * npcs 250-299
  */
+public static final int command1 = 250;
+public static final int command2 = 251;
+public static final int command3 = 252;
+public static final int command4 = 253;
+public static final int command5 = 254;
+
 
 /**
  * pilot skills 300-324

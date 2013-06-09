@@ -23,17 +23,18 @@ package shadowmage.ancient_warfare.client.gui.info;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 
 public class GuiVehicleDetails extends GuiContainerAdvanced
 {
-
+IVehicleType vehicle;
 /**
  * @param container
  */
-public GuiVehicleDetails(Container container)
+public GuiVehicleDetails(Container container, IVehicleType type)
   {
   super(container);
-  // TODO Auto-generated constructor stub
+  this.vehicle = type;
   }
 
 @Override

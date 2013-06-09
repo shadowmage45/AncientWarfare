@@ -28,8 +28,11 @@ import java.util.List;
 
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.info.GuiRecipeDetails;
+import shadowmage.ancient_warfare.client.gui.info.GuiResearchGoal;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class GuiResearch extends GuiCraftingTabbed
@@ -65,6 +68,14 @@ public String getTab1Label()
 public String getTab2Label()
   {
   return null;
+  }
+
+@Override
+protected void handleRecipeDetailsClick(ResourceListRecipe recipe)
+  {
+  int id = recipe.getResult().getItemDamage();
+  IResearchGoal goal = ResearchGoal.getGoalByID(id);
+  mc.displayGuiScreen(new GuiResearchGoal(inventorySlots, goal, this));
   }
 
 @Override

@@ -42,6 +42,7 @@ import shadowmage.ancient_warfare.common.research.civic.ResearchLogistics;
 import shadowmage.ancient_warfare.common.research.general.ResearchEfficiencyIron;
 import shadowmage.ancient_warfare.common.research.general.ResearchEfficiencyWood;
 import shadowmage.ancient_warfare.common.research.general.ResearchMechanics;
+import shadowmage.ancient_warfare.common.research.npc.ResearchCommand;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchCounterweights;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchGunpowderVehicles;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchMaterialLevel;
@@ -145,6 +146,20 @@ public static IResearchGoal materialIron5 = new ResearchMaterialLevel(209, 4, Ve
 /**
  * npcs/command?
  */
+public static IResearchGoal command1 = new ResearchCommand(ResearchGoalNumbers.command1, 0);
+public static IResearchGoal command2 = new ResearchCommand(ResearchGoalNumbers.command2, 1).addDependencies(ResearchGoalNumbers.command1);
+public static IResearchGoal command3 = new ResearchCommand(ResearchGoalNumbers.command3, 2).addDependencies(ResearchGoalNumbers.command2);
+public static IResearchGoal command4 = new ResearchCommand(ResearchGoalNumbers.command4, 3).addDependencies(ResearchGoalNumbers.command3);
+public static IResearchGoal command5 = new ResearchCommand(ResearchGoalNumbers.command5, 4).addDependencies(ResearchGoalNumbers.command4);
+//command1
+//command2
+//command3
+//command4
+//farming1 -- freebie, requires command1
+//farming2
+//farming3
+//mining1 -- freebie, requires command1
+
 
 
 
@@ -289,7 +304,7 @@ public static IResearchGoal getGoalByID(int id)
 
 public static IResearchGoal[] getDefaultKnownResearch()
   {
-  return new IResearchGoal[]{vehicleTorsion1, materialWood1};
+  return new IResearchGoal[]{vehicleTorsion1, materialWood1, command1};
   }
 
 public static Collection<IResearchGoal> getUnlocks(IResearchGoal goal)

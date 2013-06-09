@@ -462,6 +462,25 @@ public List<ResourceListRecipe> getStructureRecipesServer()
   return Lists.newArrayList(this.structureRecipesServer);
   }
 
+public List<ResourceListRecipe> getRecipesContaining(ItemStack stack)
+  {
+  List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
+  for(List<ResourceListRecipe> list : this.recipesByType.values())
+    {
+    for(ResourceListRecipe recipe : list)
+      {
+      for(ItemStackWrapperCrafting item : recipe.resources)
+        {
+        if(item.matches(stack))
+          {
+          recipes.add(recipe);
+          }
+        }
+      }
+    }
+  return recipes;
+  }
+
 public List<ResourceListRecipe> getRecipesDependantOn(IResearchGoal goal)
   {
   List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
@@ -501,6 +520,13 @@ public List<ResourceListRecipe> getRecipesDependantOn(IResearchGoal goal)
       }
     }
   for(ResourceListRecipe recipe : this.armorRecipes)
+    {
+    if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
+      {
+      recipes.add(recipe);
+      }
+    }
+  for(ResourceListRecipe recipe : this.npcRecipes)
     {
     if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
       {
