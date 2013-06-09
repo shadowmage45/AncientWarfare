@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.civics;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,12 +30,16 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.IPlantable;
 import shadowmage.ancient_warfare.common.block.AWBlockBase;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 
@@ -242,4 +249,43 @@ public Icon getIcon(int side, int meta)
     }
   return super.getIcon(side, meta);
   }
+
+@Override
+public int idDropped(int par1, Random par2Random, int par3)
+  {
+  return BlockLoader.warehouseStorage.blockID;
+  }
+
+@Override
+public int damageDropped(int par1)
+  {
+  return par1;
+  }
+
+@Override
+public int quantityDropped(Random par1Random)
+  {
+  return 1;
+  }
+
+@Override
+protected ItemStack createStackedBlock(int par1)
+  {
+  return new ItemStack(BlockLoader.warehouseStorage,1,par1);
+  }
+
+@Override
+public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+  {
+  ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+  ret.add(createStackedBlock(metadata));
+  return ret;
+  }
+
+@Override
+public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+  {
+  return new ItemStack(BlockLoader.warehouseStorage,1,world.getBlockMetadata(x, y, z));
+  }
+
 }

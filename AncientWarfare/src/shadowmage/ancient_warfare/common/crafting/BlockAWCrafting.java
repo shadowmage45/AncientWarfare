@@ -20,7 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.crafting;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -33,6 +35,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.AWBlockContainer;
@@ -206,4 +209,41 @@ public boolean onBlockClicked(World world, int posX, int posY, int posZ, EntityP
   return true;
   }
 
+@Override
+public int idDropped(int par1, Random par2Random, int par3)
+  {
+  return BlockLoader.crafting.blockID;
+  }
+
+@Override
+public int damageDropped(int par1)
+  {
+  return par1;
+  }
+
+@Override
+public int quantityDropped(Random par1Random)
+  {
+  return 1;
+  }
+
+@Override
+protected ItemStack createStackedBlock(int par1)
+  {
+  return new ItemStack(BlockLoader.crafting,1,par1);
+  }
+
+@Override
+public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+  {
+  ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+  ret.add(createStackedBlock(metadata));
+  return ret;
+  }
+
+@Override
+public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+  {
+  return new ItemStack(BlockLoader.crafting,1,world.getBlockMetadata(x, y, z));
+  }
 }

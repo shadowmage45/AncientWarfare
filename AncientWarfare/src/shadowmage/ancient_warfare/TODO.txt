@@ -38,8 +38,6 @@ CIVICS
 * swap civic sided regular/resource slots?
 * town hall food processing
 
-RESEARCH GOALS
-
 TEMPLATES
 * resource lists for gates
 * resource lists for npcs
@@ -49,10 +47,6 @@ TEMPLATES
 RESEARCH
 
 CRAFTING
-* container shift-click interaction for all crafting containers 
- 
-ADVANCED DRAFTING STATION (editor)
-* THDT
 
 /***************************************************************UPCOMING FEATURES***************************************************************/
 WORLD GEN STUFF
