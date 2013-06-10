@@ -34,7 +34,7 @@ Research
 
 Town-Halls
 * If given a redstone signal, will convert ANY AND ALL food in its inventory into internal food value, at the rate of 1 item/tick.
-* Any food-value in the town-hall inventory is converted into rations as fast as it is available.
+* Any food-value in the town-hall inventory is converted into rations immediately, as long as the town-hall can hold more.
 * FOOD RATIONS are the only way to recruit NPCs. So..you will need a town hall before you can recruit anyone, and at least a few rations.
                     
 Pathfinding:
