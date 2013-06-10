@@ -414,17 +414,17 @@ protected void addRecipeButtons(List<ResourceListRecipe> recipes, Comparator sor
 @Override
 protected void keyTyped(char par1, int par2)
   {
-  for(Integer i : this.guiElements.keySet())
-    {
-    GuiElement el = this.guiElements.get(i);
-    el.onKeyTyped(par1, par2);
-    }
   if(!this.searchBox.selected)
     {
     super.keyTyped(par1, par2);
     }
   else
     {
+    for(Integer i : this.guiElements.keySet())
+      {
+      GuiElement el = this.guiElements.get(i);
+      el.onKeyTyped(par1, par2);
+      }
     this.handleSearchBoxUpdate();
     }
   }

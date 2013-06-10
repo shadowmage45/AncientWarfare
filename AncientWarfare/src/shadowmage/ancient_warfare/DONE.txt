@@ -902,5 +902,74 @@
 
 /********** 05-27-13 **********/
 * minor prep for recipe systems
+/********** 05-28-13 **********/
+* lots of prep work on crafting, research
+    add resource-list based recipe
+    add component items for vehicle materials (iron/wood levels)
+    add research goals for vehicles
+    add research goals for vehicle materials
+    add research goals TO vehicles
+    add vehicle recipes to AWCraftingManager
+    add research goal methods to PlayerEntry
+    
+* fix NPE for un-set research list in vehicle material levels stuff
+* fix a few issues causing new component items to not show up
+    
+/********** 05-29-13 **********/
+* more goddamn pathfinder cleanup
 
+* courier inventory interaction check slot validity for items
+* fix unregistered packets
+* rework research goal class layout to eliminate many redunant classes
+
+* and...more pathfinding cleanup
+
+* more work on research/crafting setup
+
+/********** 05-30-13 **********/
+* more PF work, attempt to cleanup stuck on chest bugs
+* more work on research gui/container/etc
+
+* fix up a few PF things, looking fairly good now, but needs thorough testing
+* much work on researching. it _works_ but needs cleanup
+
+* much more work on research GUI, looking much better. need advanced research goal descriptions
+
+/********** 05-31-13 **********/
+* cleanup research goal detailed info rendering.  need to finish filling in class text-info
+* rework research goal to have a list of ints instead of references for dependency info--pull from research list
+    when dependency list is queried 
+* much work on adding detailed descriptions to research
+* create research goal cache for many classes to eliminate recreating goal set on every call
+* more work on research goals and recipes for stuff....
+* create crafting station (Engineering Station)
+
+/********** 06-01-13 **********/
+* tons more work on crafting, research.
+* add tier 2/3 warehouse storage blocks
+* add gate recipes, research
+
+* preliminary pass at adding research resource lists
+
+/********** 06-02-13 **********/
+* crafting/research work
+/********** 06-03-13 **********/
+* crafting/research work
+/********** 06-04-13 **********/
+* crafting/research work
+/********** 06-05-13 **********/
+* crafting/research work
+/********** 06-06-13 **********/
+* crafting/research work
+/********** 06-07-13 **********/
+* crafting/research work
+/********** 06-08-13 **********/
+* crafting/research work
+/********** 06-09-13 **********/
+* crafting/research work
+* test release...
+
+/********************************************************************************/
+/****************************************SIXTH TEST RELEASE .007****************************************/
+/********************************************************************************/
 

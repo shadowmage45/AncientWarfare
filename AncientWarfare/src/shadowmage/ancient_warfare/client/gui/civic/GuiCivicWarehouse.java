@@ -20,23 +20,35 @@
  */
 package shadowmage.ancient_warfare.client.gui.civic;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
+import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
+import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerCivicWarehouse;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapper;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.common.utils.StackWrapperComparatorAlphaAZ;
 
 public class GuiCivicWarehouse extends GuiContainerAdvanced
 {
 
-int pageNum = 0;
-int elementsPerPage = 9*4;
-
 TECivicWarehouse te;
 ContainerCivicWarehouse container;
+GuiScrollableArea area;
+Set<GuiItemStack> stacks = new HashSet<GuiItemStack>();
+GuiTextInputLine searchBox;
+StackWrapperComparatorAlphaAZ sorter = new StackWrapperComparatorAlphaAZ();
 
 /**
  * @param container
@@ -69,59 +81,11 @@ public String getGuiBackGroundTexture()
 
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
-  {
-  int index;
-  ItemStack stack;
-  
-  
-  int adjX = mouseX-guiLeft - 7;
-  int adjY = mouseY-guiTop - 7;
-  
-  boolean mouseOver = false;
-  int mouseIndex = -1;
-  if(adjX >= 0 && adjX < 9 * 18 && adjY>=0 && adjY< 4*18)
-    {
-    int xIndex = adjX/18;
-    int yIndex = adjY/18;
-    int totalIndex = yIndex*9 + xIndex;
-    mouseOver = true;
-    mouseIndex = totalIndex;   
-    }
-  
-  boolean renderMouseItem = false;
-  int x;
-  int y;
-  int mx = 0;
-  int my = 0;
-  for(int i = 0; i < this.elementsPerPage; i++)
-    {
-    x = (i%9)*18;
-    y = (i/9)*18;
-    index = i + (this.pageNum*this.elementsPerPage);    
-    if(index<this.container.warehouseItems.size())
-      {
-      if(index == mouseIndex)
-        {
-        renderMouseItem = true;
-        mx = x;
-        my = y;
-        continue;
-        }
-      stack = this.container.warehouseItems.get(index).getFilter();      
-      this.renderItemStack(stack, guiLeft+x+8, guiTop+y+8, mouseX, mouseY, true);
-      }
-    }
-  if(renderMouseItem)
-    {
-    stack = this.container.warehouseItems.get(mouseIndex).getFilter();
-    this.renderItemStack(stack, guiLeft+mx+8, guiTop+my+8, mouseX, mouseY, true);
-    }
-  
-  int centerX = guiLeft+this.getXSize()/2;
+  {  
+  int centerX = guiLeft+176/2;
   int buttonY = guiTop + 8 + 4*18 + 2;
   int textTop = buttonY + 16;
-  String pageString = "Page "+(this.pageNum+1) +"/"+ this.getPageCount();
-  this.drawCenteredString(getFontRenderer(), pageString, centerX, buttonY+2, 0xffffffff);
+  
   this.drawCenteredString(this.getFontRenderer(), "Size:", centerX, textTop, 0xffffffff);
   this.drawCenteredString(this.getFontRenderer(), String.valueOf(this.te.getSizeInventory()), centerX, textTop+10, 0xffffffff);
   this.drawCenteredString(this.getFontRenderer(), "Filled:", centerX, textTop+20, 0xffffffff);
@@ -131,75 +95,97 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void updateScreenContents()
   {
-  
-  }
-
-public int getPageCount()
-  {
-  int elementMod = this.container.warehouseItems.size() % this.elementsPerPage;
-  int rawPages = this.container.warehouseItems.size() / this.elementsPerPage;
-  if(elementMod!=0)
-    {
-    rawPages++;
-    }
-  return rawPages;
+  this.area.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  switch(element.getElementNumber())
-  {
-  case 0://prev
-  if(this.pageNum-1>=0)
+  if(this.stacks.contains(element))
     {
-    this.pageNum--;
+    GuiItemStack item = (GuiItemStack)element;
+    this.handleStackClick(item);
     }
-  break;
-  
-  case 1://next
-  if(this.pageNum+1 < this.getPageCount())
-    {
-    this.pageNum++;
-    }
-  break;
-  }
+  this.forceUpdate = true;  
   }
 
 @Override
 public void setupControls()
-  {
-  int buttonRowY = 8 + 4*18 + 2;
-  this.addGuiButton(0, 8, buttonRowY, 30, 12, "Prev");
-  this.addGuiButton(1, this.getXSize()-8-30, buttonRowY, 30, 12, "Next");
+  {    
+  this.searchBox = (GuiTextInputLine) new GuiTextInputLine(1, this, 176-16, 12, 30, "").updateRenderPos(8, 4);
+  searchBox.selected = false;
+  int x = 8;
+  int y = 4 + 12 + 4;
+  int w = 176-16;
+  int h = 3 * 18;
+  this.area = new GuiScrollableArea(0, this, x, y, w, h, 0);
+  this.forceUpdate = true;
+  this.guiElements.put(0, area);
+  this.guiElements.put(1, searchBox);
   }
-
-
-
-@Override
-protected void mouseClicked(int par1, int par2, int par3)
-  {
-  int adjX = par1-guiLeft - 7;
-  int adjY = par2-guiTop - 7;
-  
-  if(adjX >= 0 && adjX < 9 * 18 && adjY>=0 && adjY< 4*18)
-    {
-    int xIndex = adjX/18;
-    int yIndex = adjY/18;
-    int totalIndex = yIndex*9 + xIndex + (pageNum * elementsPerPage) ;    
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setBoolean("req", true);
-    tag.setInteger("slot", totalIndex);
-    this.sendDataToServer(tag);
-    }
-  super.mouseClicked(par1, par2, par3);
-  }
-
 
 @Override
 public void updateControls()
   {
-  
+  this.addDisplayStacks();
   }
+
+protected void addDisplayStacks()
+  {
+  this.stacks.clear();
+  this.area.elements.clear();
+  String text = this.searchBox.getText();
+  int x = 0 ;
+  int y = 0 ;
+  int index = 0;
+  GuiItemStack stack;
+  ItemStack item;
+  Collections.sort(this.container.warehouseItems, sorter);
+  for(ItemStackWrapper wrap : this.container.warehouseItems)
+    {
+    item = wrap.getFilter();
+    if(item==null || !item.getDisplayName().toLowerCase().contains(text.toLowerCase())){continue;}    
+    stack = new GuiItemStack(index, area);
+    stack.renderSlotBackground = true;
+    stack.isClickable = true;
+    stack.setItemStack(wrap.getFilter());
+    stack.updateRenderPos(x*18, y*18);
+    area.addGuiElement(stack);
+    stacks.add(stack);
+    x++;
+    index++;
+    if(x>=8)
+      {
+      x= 0;
+      y++;
+      }
+    }
+  }
+
+protected void handleStackClick(GuiItemStack stack)
+  {
+  NBTTagCompound tag = stack.getStack().writeToNBT(new NBTTagCompound());
+  tag.setBoolean("req", true);
+  this.sendDataToServer(tag);
+  }
+
+@Override
+protected void keyTyped(char par1, int par2)
+  { 
+  if(!this.searchBox.selected)
+    {
+    super.keyTyped(par1, par2);
+    }
+  else
+    {
+    for(Integer i : this.guiElements.keySet())
+      {
+      GuiElement el = this.guiElements.get(i);
+      el.onKeyTyped(par1, par2);
+      }
+    this.refreshGui();
+    }
+  }
+
 
 }

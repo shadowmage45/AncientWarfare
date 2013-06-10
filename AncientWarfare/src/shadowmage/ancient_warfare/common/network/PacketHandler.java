@@ -31,6 +31,7 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.NBTWriter;
+import shadowmage.ancient_warfare.common.utils.ServerTickTimer;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -75,7 +76,7 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
     }
   catch(Exception e)
     {
-    System.out.println("Extreme error during packet handling, could not instantiate packet instance, improper packetType info");
+    Config.logError("Extreme error during packet handling, could not instantiate packet instance, improper packetType info");
     Config.log("Exception During Packet Handling, problem reading packet data");
     e.printStackTrace();
     }

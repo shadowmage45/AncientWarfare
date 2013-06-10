@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.crafting;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,8 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.ShapedRecipes;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.types.ICivicType;
@@ -59,8 +59,6 @@ import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 import com.google.common.collect.Lists;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-
 public class AWCraftingManager
 {
 
@@ -78,6 +76,8 @@ List<ResourceListRecipe> structureRecipesServer = new ArrayList<ResourceListReci
 List<ResourceListRecipe> structureRecipesClient = new ArrayList<ResourceListRecipe>();
 
 private Map<RecipeType, List<ResourceListRecipe>> recipesByType = new HashMap<RecipeType, List<ResourceListRecipe>>();
+
+public static List<ShapedRecipes> vanillaRecipeList = new ArrayList<ShapedRecipes>();
 
 private AWCraftingManager()
   {
@@ -155,15 +155,18 @@ public List<ResourceListRecipe> getRecipesContaining(PlayerEntry entry, String t
   String name;
   List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
   List<ResourceListRecipe> list;
-  for(RecipeType t : types)
+  if(entry!=null)
     {
-    list = this.recipesByType.get(t);
-    for(ResourceListRecipe recipe : list)
+    for(RecipeType t : types)
       {
-      name = recipe.displayName;
-      if(name.toLowerCase().contains(text.toLowerCase()) && ((!Config.DEBUG && creative) || Config.disableResearch || recipe.canBeCraftedBy(entry)))
+      list = this.recipesByType.get(t);
+      for(ResourceListRecipe recipe : list)
         {
-        recipes.add(recipe);
+        name = recipe.displayName;
+        if(name.toLowerCase().contains(text.toLowerCase()) && ((!Config.DEBUG && creative) || Config.disableResearch || recipe.canBeCraftedBy(entry)))
+          {
+          recipes.add(recipe);
+          }
         }
       }
     }  
@@ -206,29 +209,26 @@ public void loadRecipes()
   this.addStructureRecipes();//dynamic-done
   this.addResearchRecipes();//done
   
-  /**
-   * needed recipes:
-   * rations (food conversion @ town hall)
-   */
-  GameRegistry.addRecipe(new ItemStack(ItemLoader.researchBook), new Object[] {"gll","ppp","gll", 'p', Item.paper, 'l', Item.leather, 'g', Item.ingotGold} );
+  //research book
+  this.vanillaRecipeList.add(CraftingManager.getInstance().addRecipe(new ItemStack(ItemLoader.researchBook), new Object[] {"gll","ppp","gll", 'p', Item.paper, 'l', Item.leather, 'g', Item.ingotGold} ));
   
   //research table
-  GameRegistry.addRecipe(new ItemStack(BlockLoader.crafting,1, 0 ), new Object[] {"sps","wcw","w_w", 's', Block.stoneSingleSlab, 'w', Block.planks, 'c', Block.chest, 'p', Item.paper} );
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 0 ), new Object[] {"sps","wcw","w_w", 's', Block.stoneSingleSlab, 'w', Block.planks, 'c', Block.chest, 'p', Item.paper}) );
   
   //civil engineering
-  GameRegistry.addRecipe(new ItemStack(BlockLoader.crafting,1, 1 ), new Object[] {"sss","wcw","w_w", 's', Item.ingotIron, 'w', Block.planks, 'c', Block.chest} );
+  this.vanillaRecipeList.add(CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 1 ), new Object[] {"sss","wcw","w_w", 's', Item.ingotIron, 'w', Block.planks, 'c', Block.chest} ));
   
   //structure engineering
-  GameRegistry.addRecipe(new ItemStack(BlockLoader.crafting,1, 2 ), new Object[] {"sss","wcw", 's', Block.stone, 'w', Block.planks, 'c', Block.chest} );
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 2 ), new Object[] {"sss","wcw", 's', Block.stone, 'w', Block.planks, 'c', Block.chest} ));
   
   //vehicle
-  GameRegistry.addRecipe(new ItemStack(BlockLoader.crafting,1, 3 ), new Object[] {"sss","wcw", 's', Block.stoneSingleSlab, 'w', Block.planks, 'c', Block.chest} );
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 3 ), new Object[] {"sss","wcw", 's', Block.stoneSingleSlab, 'w', Block.planks, 'c', Block.chest} ));
   
   //ammo
-  GameRegistry.addRecipe(new ItemStack(BlockLoader.crafting,1, 4 ), new Object[] {"sis","wcw", 's', Block.stoneSingleSlab, 'w', Block.planks, 'c', Block.chest, 'i', Item.ingotIron} );
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 4 ), new Object[] {"sis","wcw", 's', Block.stoneSingleSlab, 'w', Block.planks, 'c', Block.chest, 'i', Item.ingotIron} ));
   
   //npc
-  GameRegistry.addRecipe(new ItemStack(BlockLoader.crafting,1, 5 ), new Object[] {"sis","ici","i_i", 'i', Item.ingotIron, 'c', Block.chest, 's', Item.ingotGold} );
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 5 ), new Object[] {"sis","ici","i_i", 'i', Item.ingotIron, 'c', Block.chest, 's', Item.ingotGold} ));
   }
 
 protected void addResearchRecipes()

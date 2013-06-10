@@ -176,23 +176,30 @@ public void handlePacketData(NBTTagCompound tag)
   if(tag.hasKey("init"))
     {
     this.handleInitData(tag);
+    if(this.gui!=null)
+      {
+      this.gui.refreshGui();
+      }
     }
   }
 
 protected void handleRequest(NBTTagCompound tag)
   {
-  int index = tag.getInteger("slot");
-  if(index>=0 && index < this.warehouseItems.size())
+  ItemStack filter = ItemStack.loadItemStackFromNBT(tag);
+  for(int i = 0; i< this.warehouseItems.size(); i++)
     {
-    ItemStackWrapper wrap = this.warehouseItems.get(index);
-    ItemStack stack = wrap.getFilter();
-    if(te.withdrawSlots.canHoldItem(stack, stack.getMaxStackSize()))
+    ItemStack item = this.warehouseItems.get(i).getFilter();
+    if(InventoryTools.doItemsMatch(filter, item))
       {
-      ItemStack removed = te.inventory.getItems(stack, 64);
-      removed = te.withdrawSlots.tryMergeItem(removed);
-      te.overflow.tryMergeItem(removed);
+      if(te.withdrawSlots.canHoldItem(item, item.getMaxStackSize()))
+        {
+        ItemStack removed = te.inventory.getItems(item, 64);
+        removed = te.withdrawSlots.tryMergeItem(removed);
+        te.overflow.tryMergeItem(removed);
+        }
+      break;
       }
-    }
+    } 
   }
 
 @Override
@@ -239,15 +246,13 @@ public void detectAndSendChanges()
         {
         sendPacket = true;      
         if(teStack!=null)
-        {
-            cacheInventory.setInventorySlotContents(i, teStack.copy());
-        	
-        }
+          {
+          cacheInventory.setInventorySlotContents(i, teStack.copy());
+          }
         else
-        {
-
-            cacheInventory.setInventorySlotContents(i, null);
-        }  
+          {
+          cacheInventory.setInventorySlotContents(i, null);
+          }  
         }
       }
     }

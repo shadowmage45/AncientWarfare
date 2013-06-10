@@ -28,13 +28,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapedRecipes;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
+import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTab;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
@@ -46,6 +48,8 @@ import shadowmage.ancient_warfare.common.crafting.RecipeSorterAZ;
 import shadowmage.ancient_warfare.common.crafting.RecipeSorterTextFilter;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 
@@ -61,6 +65,8 @@ GuiTextInputLine searchBox;
 GuiScrollableArea area;
 int buttonWidth = 256 - 16 - 24-10;
 HashMap<GuiButtonSimple, ResourceListRecipe> recipes = new HashMap<GuiButtonSimple, ResourceListRecipe>();
+
+
 
 GuiTab mainTab;
 GuiTab vehicleTab;
@@ -257,9 +263,7 @@ public void updateControls()
     }
   if(this.activeTab==this.mainTab)
     {
-   /**
-    * need basic stats on front info page, ++ descriptions of what they other tabs are for
-    */
+    this.addMainInfo();
     }
   else if(this.activeTab==this.vehicleTab)
     {
@@ -267,18 +271,211 @@ public void updateControls()
     this.guiElements.put(1, searchBox);
     this.handleSearchBoxUpdate(recipeTypes);
     }
-  else if(this.activeTab==this.ammoTab){}
-  else if(this.activeTab==this.npcTab){}
-  else if(this.activeTab==this.civicTab){}
-  else if(this.activeTab==this.researchTab){}
-  else if(this.activeTab==this.craftingTab){}
-  else if(this.activeTab==this.structuresTab){}
-  else if(this.activeTab==this.miscTab){} 
+  else if(this.activeTab==this.ammoTab)
+    {
+    this.recipeTypes = EnumSet.of(RecipeType.AMMO, RecipeType.AMMO_MISC);
+    this.guiElements.put(1, searchBox);
+    this.handleSearchBoxUpdate(recipeTypes);
+    }
+  else if(this.activeTab==this.npcTab)
+    {
+    this.recipeTypes = EnumSet.of(RecipeType.NPC, RecipeType.NPC_MISC);
+    this.guiElements.put(1, searchBox);
+    this.handleSearchBoxUpdate(recipeTypes);
+    }
+  else if(this.activeTab==this.civicTab)
+    {
+    this.recipeTypes = EnumSet.of(RecipeType.CIVIC, RecipeType.CIVIC_MISC);
+    this.guiElements.put(1, searchBox);
+    this.handleSearchBoxUpdate(recipeTypes);
+    }
+  else if(this.activeTab==this.researchTab)
+    {
+    /**
+     * hmm...might need sub-tabs/buttons for known/unknown
+     */
+    this.recipeTypes = EnumSet.of(RecipeType.RESEARCH);
+    this.guiElements.put(1, searchBox);
+    this.handleSearchBoxUpdate(recipeTypes);
+    }
+  else if(this.activeTab==this.craftingTab)
+    {
+    this.addCraftingInfo();//mostly done..or done..w/e
+    }
+  else if(this.activeTab==this.structuresTab)
+    {
+    this.addStructureInfo();
+    }
+  else if(this.activeTab==this.miscTab)
+    {
+    this.addMiscInfo();
+    } 
   
   for(Integer i : this.guiElements.keySet())
     {
     this.guiElements.get(i).updateGuiPos(guiLeft, guiTop);
     }
+  }
+
+protected void addMainInfo()
+  {
+  this.guiElements.put(0, area);
+  int y = 0;
+  int elementNum = 0;
+  List<String> displayText = new ArrayList<String>();
+  
+  String text = "";
+  displayText.add(text);
+   
+  displayText = RenderTools.getFormattedLines(displayText, 220);
+  GuiString string;  
+  for(String line : displayText)
+    {
+    string = new GuiString(elementNum, area, 240, 10, line);
+    string.updateRenderPos(0, y);
+    y+=10;
+    elementNum++;
+    area.elements.add(string);
+    }  
+  area.updateTotalHeight(y);
+  }
+
+protected void addMiscInfo(){}
+
+protected void addStructureInfo()
+  {
+  this.guiElements.put(0, area);
+  int y = 0;
+  int elementNum = 0;
+  List<String> displayText = new ArrayList<String>();
+  
+  String text = "Structure crafting in Ancient Warfare is accomplished at the Drafting Station.  " +
+  		"This station allows for the production of structure creation items for any structures flagged" +
+  		" as being available in survival-mode.";
+  displayText.add(text);
+  
+  text = "";
+  displayText.add(text);
+  
+  text = "In order to begin production of a structure, select if from the selection list, and click the" +
+  		" start button on the crafting/progress page.  The structure will then be 'locked in' and may not be" +
+  		" changed except through the use of the 'Clear' button (which will discard any used materials--so" +
+  		" use with caution).";
+  displayText.add(text);
+  
+  text = "";
+  displayText.add(text);
+  
+  text = "Once a structure item has been produced, you must select an appropriate site for its construction.  In" +
+  		" survival mode, the chosen site must be 100% clear of any existing blocks or obstructions in order to proceed" +
+  		" with placement.  Once you have placed the building site, you will need workers in order to construct the building" +
+  		" for you.  Currently Miner type NPCs are the only type that can construct buildings.";
+  displayText.add(text);
+ 
+  displayText = RenderTools.getFormattedLines(displayText, 220);
+  GuiString string;  
+  for(String line : displayText)
+    {
+    string = new GuiString(elementNum, area, 240, 10, line);
+    string.updateRenderPos(0, y);
+    y+=10;
+    elementNum++;
+    area.elements.add(string);
+    }  
+  area.updateTotalHeight(y);
+  }
+
+protected void addCraftingInfo()
+  {
+  this.guiElements.put(0, area);
+  int y = 0;
+  int elementNum = 0;
+  List<String> displayText = new ArrayList<String>();
+  String text = "Crafting in Ancient Warfare is accomplished at one of five crafting" +
+  		" stations.  These stations each have specific types of recipes that may be crafted" +
+  		" corresponding with the station type.  Crafting stations are available for Vehicles," +
+  		" Npcs, Civics, Ammunitions, and Structures.";
+  displayText.add(text);
+  text = "";
+  displayText.add(text);
+  text = "All crafting stations aside from the Structure station require that a Research Book" +
+  		" be present in the Upper-Left slot (The research book slot).  The recipes available at" +
+  		" any particular station are dependant upon the research book that is slotted (and whether" +
+  		" or not creative mode is enabled).";
+  displayText.add(text);
+  text = "";
+  displayText.add(text);
+  text = "Crafting stations need workers in order to make progress.  Any time a player is interacting" +
+  		" with a crafting station this counts as a full-time worker.  NPC Craftsman may also be designated" +
+  		" to work at crafting stations so that items may be crafted without a player present.  (Config option" +
+  		" available to disable worker requirements)";
+  displayText.add(text);
+  text = "";
+  displayText.add(text);
+  text = "All Crafting station recipes are available in the normal Crafting Bench (as well as the Civic" +
+  		" crafting station).  The recipes are as follows: ";
+  displayText.add(text);
+  text = "";
+  displayText.add(text);
+  displayText = RenderTools.getFormattedLines(displayText, 220);
+  GuiString string;
+  
+  for(String line : displayText)
+    {
+    string = new GuiString(elementNum, area, 240, 10, line);
+    string.updateRenderPos(0, y);
+    y+=10;
+    elementNum++;
+    area.elements.add(string);
+    }
+  
+
+  GuiItemStack stack;
+  ItemStack recipeStack;
+    
+  for(ShapedRecipes recipe : AWCraftingManager.vanillaRecipeList)
+    {
+    int sy = 0;
+    int sx = 0;
+    string = new GuiString(elementNum, area, 220, 10, recipe.getRecipeOutput().getDisplayName());
+    string.updateRenderPos(0, y);
+    area.elements.add(string);
+    y+=10;
+    elementNum++;
+    for(int i = 0; i < 9; i++)
+      {
+      if(i<recipe.recipeItems.length)
+        {
+        recipeStack = recipe.recipeItems[i];        
+        }
+      else
+        {
+        recipeStack = null;
+        }
+      stack = new GuiItemStack(elementNum, area);
+      stack.renderSlotBackground = true;
+      stack.setItemStack(recipeStack);
+      stack.updateRenderPos(sx * 18, y);      
+      area.elements.add(stack);
+      sx++;
+      elementNum++;
+      if(sx>=3)
+        {
+        sx= 0;
+        sy++;
+        y+=18;
+        }
+      }
+    stack = new GuiItemStack(elementNum, area);
+    stack.updateRenderPos(4*18, y-36);
+    stack.setItemStack(recipe.getRecipeOutput());
+    stack.renderSlotBackground = true;
+    area.elements.add(stack);
+    y+=10;
+    elementNum++;
+    }
+  
+  area.updateTotalHeight(y);
   }
 
 protected void handleSearchBoxUpdate(EnumSet<RecipeType> recipeTypes)
@@ -339,11 +536,26 @@ protected void keyTyped(char par1, int par2)
 
 protected void handleRecipeClick(IGuiElement element)
   {  
-  this.handleRecipeDetailsClick(recipes.get(element));     
+  ResourceListRecipe recipe = recipes.get(element);
+  if(recipe.type==RecipeType.RESEARCH)
+    {
+    this.handleResearchDetailsClick(recipe);
+    }
+  else
+    {
+    this.handleRecipeDetailsClick(recipe);    
+    }
   }
 
 protected void handleRecipeDetailsClick(ResourceListRecipe recipe)
   {
-  mc.displayGuiScreen(new GuiRecipeDetails(this, recipe));
+  mc.displayGuiScreen(new GuiRecipeDetails(this, recipe));    
+  }
+
+protected void handleResearchDetailsClick(ResourceListRecipe recipe)
+  {
+  int id = recipe.getResult().getItemDamage();
+  IResearchGoal goal = ResearchGoal.getGoalByID(id);
+  mc.displayGuiScreen(new GuiResearchGoal(inventorySlots, goal, this));
   }
 }

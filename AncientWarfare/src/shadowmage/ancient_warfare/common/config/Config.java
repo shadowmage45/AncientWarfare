@@ -43,7 +43,7 @@ public static final String MC_VERSION = "1.5.2";
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
-public static final boolean DEBUG = false;
+public static final boolean DEBUG = true;
 
 
 //***************************************************LOADED CONFIGS******************************************//
@@ -198,6 +198,7 @@ public void setCoreInfo()
   this.blockDestruction = config.get("a-general-options", "missile_destroy_blocks", true, "If true, missiles will be capable of destroying blocks.").getBoolean(true);
   this.blockFires = config.get("a-general-options", "missile_start_fires", true, "If true, missiles will be capable of lighting fires and placing lava blocks.").getBoolean(true);
   this.disableResearch = config.get("a-general-options", "disable_research", false, "If true, research system will be disabled and all recipes will be available.").getBoolean(false);
+  this.useNpcWorkForCrafting = config.get("a-general-options", "npc_work", true, "If true, npcs will be required to produce items at crafting stations.").getBoolean(true);
   
   /**
    * performance options

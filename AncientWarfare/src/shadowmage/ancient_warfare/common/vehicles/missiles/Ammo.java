@@ -399,7 +399,7 @@ protected void setBlockToLava(World world, int x, int y, int z, int maxSearch)
       {
       if(world.getBlockId(x, y-i+1, z)==0)
         {
-        world.setBlock(x, y-i+1, z, Block.lavaStill.blockID, 0, 3);        
+        world.setBlock(x, y-i+1, z, Block.lavaMoving.blockID, 0, 3);        
         }
       break;
       }

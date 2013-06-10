@@ -48,7 +48,7 @@ protected HashSet<IResearchGoal> neededResearchCache = new HashSet<IResearchGoal
 ItemStack result;
 List<ItemStackWrapperCrafting> resources = new ArrayList<ItemStackWrapperCrafting>();
 String displayName;
-RecipeType type = RecipeType.NONE;
+public RecipeType type = RecipeType.NONE;
 
 
 public ResourceListRecipe(NBTTagCompound tag)
