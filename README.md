@@ -1,14 +1,26 @@
 AncientWarfare
 ==============
 
-Updated Ancient Warfare mod for Minecraft 1.4.7+ (rewrite)
+Updated Ancient Warfare mod for Minecraft 1.5.2+ (complete rewrite)
+
 Complete rewrite of structures module.
-Complete rewrite of vehicles module (client/server coms, interaction, crafting)
-Complete rewrite of soldiers module (more npc types, interaction, ai simplification)
-Improvements to Gates (Portcullis'), also, adding drawbridges, larger swing-style doors, and mid-open doors(star-trek style)
+
+Complete rewrite of vehicles module (client/server coms, interaction, crafting).
+
+Complete rewrite of soldiers module (more npc types, interaction, ai simplification).
+
+Improved Gates -- more styles, and better handling of interaction and synching).
+
 Integration of teams into everything, from the ground up.
 
 Overall reduced network use, only relaying necessary information.
-Greatly enhanced crafting mechanisms
-Introduction of research system
-Introduction of Civics Building system
+
+New Crafting system.
+
+New Research Mechanics.
+
+New civics system for the automation of mining, farming, tree chopping, others.
+
+Fully supports sided inventories.
+
+Auto-crafting support with the use of NPC.s
