@@ -102,7 +102,6 @@ public void onRunningTick()
 
 protected void attemptWithdrawalTownHall(TECivicTownHall te)
   {
-  Config.logDebug("doing town-hall upkeep");
   int neededValue = npc.npcType.getUpkeepCost(npc.rank);
   boolean doWithdrawal = false;
   boolean foundExtra = false;
@@ -136,7 +135,6 @@ protected void attemptWithdrawalTownHall(TECivicTownHall te)
     }
   else
     {
-    Config.logDebug("attempting town-hall adjacent warehouse upkeep");
     TECivicWarehouse warehouse = te.getWarehousePosition();
     if(warehouse==null){return;}
     foundValue = InventoryTools.getFoodValue(warehouse, 0, warehouse.getSizeInventory()-1);

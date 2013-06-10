@@ -115,7 +115,6 @@ public void setupSidedInventoryIndices(Civic civ)
     }
   }
 
-
 public IInventory[] getInventoryToDropOnBreak()
   {
   return new IInventory[]{this, overflow};
@@ -591,7 +590,6 @@ protected void sendClientEvent(int id, int val)
 @Override
 public boolean receiveClientEvent(int par1, int par2)
   {
-  Config.logDebug("receiving client event: "+this.worldObj.isRemote);
   switch(par1)
   {
   case 0://

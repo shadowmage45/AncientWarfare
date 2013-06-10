@@ -172,7 +172,7 @@ public int[] getAccessibleSlotsFromSide(int var1)
   case 0://accessed from bottom
   return otherSlotIndices;
   case 1://accessed from top
-  Config.logDebug("returning resource slot indices from te: size: "+resourceSlotIndices.length);
+//  Config.logDebug("returning resource slot indices from te: size: "+resourceSlotIndices.length);
   return resourceSlotIndices;
   
   /**
@@ -182,7 +182,7 @@ public int[] getAccessibleSlotsFromSide(int var1)
   case 3:
   case 4:
   case 5:
-  Config.logDebug("returning normal slot indices from te: size: "+otherSlotIndices.length);
+//  Config.logDebug("returning normal slot indices from te: size: "+otherSlotIndices.length);
   return otherSlotIndices;
   }
   return null;

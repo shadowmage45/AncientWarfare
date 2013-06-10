@@ -156,7 +156,6 @@ public void broadcastWork(int maxRange)
     {
     return;
     }
-  Config.logDebug("should broadcast work!!");
   if(this.worldObj==null || this.worldObj.isRemote)
     {
     return;

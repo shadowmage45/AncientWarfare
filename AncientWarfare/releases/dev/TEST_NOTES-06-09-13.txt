@@ -1,0 +1,49 @@
+New features since last test release:
+ 
+Crafting    
+* 5 crafting tables
+    Each has separate recipe lists depending upon discipline.
+* shift-click a recipe to view details
+* Most need a research book inserted in upper-left slot.
+* Click on a recipe, and then click 'start' to begin
+    if all of the resources are present, the recipe will remove its components, and begin processing
+    Progress only occurs when you are using the crafting table -- when you close the GUI, progress will halt
+        (however, you can browse recipes/etc and it will still progress)(Config option to enable auto-crafting coming soon)
+* (Structure crafting table is the one exception -- it requires no research book, and will continue working even with the GUI closed)        
+* NPC Craftsman will work at any crafting tables that have their recipes set.  Each work tick by an NPC adds 1 second of work time.  Higher ranked craftsman work faster  (e.g. tick more often).
+* Will 'auto-craft' once the recipe is set. Will continually try and craft the set item until told to stop.  If resources are not present it may 'pause' for a few seconds inbetween attempts.
+* Most recipes have required research that must be met (or be in creative mode) before the recipe may be crafted.
+* craft-matrix may be accessed from any side slot. result slot may be accessed through the top or bottom. book slot is not externally accessible.
+* fully supports BC pipes/automation (and should support pretty much anything, as long as it obeys vanilla ISidedInventory rules)
+    --this means you can set up an auto-crafting table for each commonly used recipe, and just feed it resources.    
+***NOTE -- currently crafting tables require either player or NPC workers, but I will be adding in a BC compatibility block/engine receptacle to allow for all work sites 
+            to use BC - MJ power, in case people want to use the blocks but not the NPCs.
+    
+Research
+* Research Table
+    Insert a claimed research book to begin researching.
+* shift-click a goal to view details
+* Click on a research, and then click 'start' to begin
+    if all of the resources are present, the recipe will remove its components, and begin processing
+    Progress only occurs when you are using the research table -- when you close the GUI, progress will halt
+        (however, you can browse recipes/etc and it will still progress)(Config option to enable auto-research coming soon)
+* NPC Researcher will work at any research tables that have their goals set.  Each work tick by an NPC adds 1 second of work time.  Higher ranked Researcher work faster (e.g. tick more often).
+* Most research goals have dependencies that must be acquired before the goal may be researched (e.g. rank 2 wood materials requires rank 1 wood materials).
+    This dependency information may be viewed in the research details screen (shift-click on any research goal button)
+* craft-matrix may be accessed from any side slot. book slot is not externally accessible.            
+
+Town-Halls
+* If given a redstone signal, will convert ANY AND ALL food in its inventory into internal food value, at the rate of 1 item/tick.
+* Any food-value in the town-hall inventory is converted into rations as fast as it is available.
+* FOOD RATIONS are the only way to recruit NPCs. So..you will need a town hall before you can recruit anyone, and at least a few rations.
+                    
+Pathfinding:
+* reworked and further abstracted the pathfinding to remove hand-coded special-cases.  This should improve compatibility with mod added blocks.
+* re-examined and adjusted block walkable checks, hopefully improve overall speed and reliability.   
+   
+Npcs:
+* New Types--
+    * NPC Craftsman -- Works at crafting tables
+    * NPC Researcher -- Works at research tables
+
+    

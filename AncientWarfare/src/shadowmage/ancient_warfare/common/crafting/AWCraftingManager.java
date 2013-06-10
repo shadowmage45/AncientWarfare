@@ -106,21 +106,16 @@ public ResourceListRecipe getRecipeByResult(ItemStack result)
     {
     for(ResourceListRecipe valid : list)
       {
-//      Config.logDebug("checking..... valid: "+valid.getResult().getDisplayName() + " result: "+result.getDisplayName());
-      
       if(result.itemID==valid.getResult().itemID && result.getItemDamage()==valid.getResult().getItemDamage())
         {
         if(ItemStack.areItemStackTagsEqual(result, valid.getResult()))
           {
-//          Config.logDebug("stack tags match");
-//          Config.logDebug("res: " + result.getTagCompound() + " valid: "+valid.getResult().getTagCompound());
           return valid;
           }      
         } 
             
       }
     } 
-  Config.logDebug("could not find recipe by stack");
   return null;
   }
 
@@ -140,7 +135,6 @@ public ResourceListRecipe validateRecipe(ResourceListRecipe recipe)
         }      
       }
     }
-  Config.logDebug("returning invalid recipe from recipe validate");
   return null;
   }
 
@@ -192,7 +186,6 @@ protected boolean areResourceListsIdentical(ResourceListRecipe a, ResourceListRe
       }
     if(!found)
       {
-      Config.logDebug("returning could not find stack on validate recipe");
       return false;
       }
     }  

@@ -133,7 +133,6 @@ public void sendInputToServer(byte forward, byte strafe, boolean fullPacket)
   pkt.setParams(this.vehicle);
   pkt.setInputData(tag);
   pkt.sendPacketToServer();
-  Config.logDebug("sending input to server from moveHelper sendInputToServer");
   }
 
 /**
@@ -147,7 +146,6 @@ public void sendUpdateToClients()
     {
     return;
     }
-  Config.logDebug("sending update to clients");
   NBTTagCompound tag = new NBTTagCompound();  
   tag.setFloat("fMot", forwardMotion);
   tag.setFloat("sMot", strafeMotion);    

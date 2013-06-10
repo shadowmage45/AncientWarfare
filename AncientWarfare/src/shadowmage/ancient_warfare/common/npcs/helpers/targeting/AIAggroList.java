@@ -158,7 +158,6 @@ public void removeEntry(ITargetEntry target)
     entry = it.next();
     if(target==entry.getTarget())
       {
-      Config.logDebug("removing entry :"+target);
       it.remove();
       break;
       }

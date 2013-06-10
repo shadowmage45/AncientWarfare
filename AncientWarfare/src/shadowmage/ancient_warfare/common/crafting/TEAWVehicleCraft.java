@@ -74,7 +74,6 @@ public void setRecipe(ResourceListRecipe recipe)
         }
       this.vehicleType = type;
       this.vehicleLevel = level;
-      Config.logDebug("set working vehicle to "+t);
       }
     }  
   this.recipeStartCheckDelayTicks = 0;

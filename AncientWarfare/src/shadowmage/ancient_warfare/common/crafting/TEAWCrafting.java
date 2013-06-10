@@ -184,7 +184,6 @@ protected boolean tryFinish()
   {
   if(InventoryTools.canHoldItem(inventory, recipe.result, recipe.result.stackSize, resultSlot[0], resultSlot[0]))
     {
-    Config.logDebug("setting finished and producing item");
     InventoryTools.tryMergeStack(inventory, recipe.result.copy(), resultSlot);
     this.workProgress = 0;
     this.recipeStartCheckDelayTicks = 0;
@@ -397,7 +396,6 @@ public void onInventoryChanged()
         name = stack.getTagCompound().getCompoundTag("AWResInfo").getString("name");
         if(this.workingPlayerName==null || !this.workingPlayerName.equals(name))
           {
-          Config.logDebug("setting researching player to: "+name);
           this.workingPlayerName = name;
           this.workingPlayerEntry = PlayerTracker.instance().getEntryFor(workingPlayerName); 
           this.stopAndClear();
@@ -406,7 +404,6 @@ public void onInventoryChanged()
       }
     if(name==null && this.workingPlayerName!=null)
       {   
-      Config.logDebug("clearing researching player");
       this.workingPlayerName = null;
       this.workingPlayerEntry = null;
       this.stopAndClear();

@@ -186,12 +186,7 @@ protected void mouseClicked(int par1, int par2, int par3)
     {
     int xIndex = adjX/18;
     int yIndex = adjY/18;
-    int totalIndex = yIndex*9 + xIndex + (pageNum * elementsPerPage) ;
-    Config.logDebug("clicked in warehouse inventory area");
-    if(totalIndex<container.warehouseItems.size())
-      {
-      Config.logDebug("clicked on : "+container.warehouseItems.get(totalIndex).getFilter().getDisplayName());
-      }
+    int totalIndex = yIndex*9 + xIndex + (pageNum * elementsPerPage) ;    
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("req", true);
     tag.setInteger("slot", totalIndex);

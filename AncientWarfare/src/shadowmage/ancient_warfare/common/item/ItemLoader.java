@@ -106,6 +106,7 @@ public void load()
   this.loadItems();
   this.loadRecipes();  
   this.loadDebugItems();
+  researchNotes.setCreativeTab(null);
   }
 
 private void loadItems()

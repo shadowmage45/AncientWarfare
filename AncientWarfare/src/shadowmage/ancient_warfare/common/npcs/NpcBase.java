@@ -412,7 +412,6 @@ protected void broadcastAggro()
     {
     if(mob.getEntityToAttack()==null && mob.getAttackTarget()==null)
       {
-      Config.logDebug("setting mob attack target for: "+mob);
       //setPrivateValue(EntityLiving.class, living, turret, "currentTarget", "field_70776_bF");
 //      ObfuscationReflectionHelper.setPrivateValue(classToAccess, instance, value, fieldNames);
 //      ObfuscationReflectionHelper.setPrivateValue(EntityLiving.class, mob, this, "currentTarget", "field_70776_bF");
@@ -624,7 +623,6 @@ public void onUpdate()
   int id = worldObj.getBlockId(floorX, floorY, floorZ); 
   if(!this.worldObj.isRemote && id!=0 && !this.worldAccess.isWalkable(floorX, floorY, floorZ) && this.posY % 1.f < 0.25f)
     {
-    Config.logDebug("block ID: "+id + " :: "+floorX+","+floorY+","+floorZ);
     this.pushOutOfBlocks();    
     }
   this.handleHealthUpdate();
@@ -731,7 +729,6 @@ protected void handleHealthUpdate()
 
 protected void pushOutOfBlocks()
   {
-  Config.logDebug("setting push out of blocks");
   int x = MathHelper.floor_double(posX);
   int y = MathHelper.floor_double(posY);
   int z = MathHelper.floor_double(posZ);

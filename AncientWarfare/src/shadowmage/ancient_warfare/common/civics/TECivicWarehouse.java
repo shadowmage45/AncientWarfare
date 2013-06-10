@@ -241,14 +241,12 @@ public void handleClientInput(NBTTagCompound tag)
 @Override
 public void addPlayer(EntityPlayer player)
   {
-  Config.logDebug("adding player to warehouse viewers");
   this.viewingPlayers.add(player);  
   }
 
 @Override
 public void removePlayer(EntityPlayer player)
   {  
-  Config.logDebug("removing player from warehouse viewers");
   this.viewingPlayers.remove(player);
   }
 

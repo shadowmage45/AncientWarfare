@@ -47,7 +47,6 @@ public byte getTaskType()
 @Override
 public void onTick()
   {
-  Config.logDebug("choosing patrol point");
   this.currentPoint = npc.wayNav.getNextPatrolPoint();
   npc.setTargetAW(currentPoint);  
   }

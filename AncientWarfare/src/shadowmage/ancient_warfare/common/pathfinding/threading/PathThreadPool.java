@@ -70,7 +70,7 @@ public void requestPath(IPathableCallback caller, PathWorldAccess world, int x, 
     }
   worker.setupPathParams(caller, world, x, y, z, x1, y1, z1, maxRange);
   addTaskToQueue(worker);
-  Config.logDebug("work queue size: "+this.workQueue.size());
+//  Config.logDebug("work queue size: "+this.workQueue.size());
   while(this.workQueue.size()>300)
     {
     this.workQueue.pop();
@@ -155,7 +155,7 @@ public void run()
       }
     catch(RuntimeException e)
       {
-      Config.logDebug("caught runtime exception from pool thread");
+//      Config.logDebug("caught runtime exception from pool thread");
       }    
     }
   }

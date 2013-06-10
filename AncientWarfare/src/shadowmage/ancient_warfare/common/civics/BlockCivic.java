@@ -114,7 +114,7 @@ public void registerIcons(IconRegister reg, Description d)
       {
 //      Config.logDebug("registering icons for block num: "+this.blockNum+ " meta: "+i+" civic: "+civ.getDisplayName());
       iconNames = civ.getIconNames();
-      Config.logDebug(iconNames[0] + " :: "+iconNames[1]+ " :: "+iconNames[2]);
+//      Config.logDebug(iconNames[0] + " :: "+iconNames[1]+ " :: "+iconNames[2]);
       iconID = i*3;//bottomID --  *3 is for only 3 textures per civic
       d.setIcon(reg.registerIcon(iconNames[0]), iconID);
       d.setIcon(reg.registerIcon(iconNames[1]), iconID+1);

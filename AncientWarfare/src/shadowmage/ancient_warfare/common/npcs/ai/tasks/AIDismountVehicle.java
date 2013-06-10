@@ -47,7 +47,6 @@ public byte getTaskType()
 @Override
 public void onTick()
   {  
-  Config.logDebug("executing dismount task");
   npc.dismountVehicle();
   }
 

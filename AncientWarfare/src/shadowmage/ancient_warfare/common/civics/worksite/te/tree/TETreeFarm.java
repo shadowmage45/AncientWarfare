@@ -118,7 +118,6 @@ protected void doWork(IWorker npc, WorkPoint p)
   {
   if(p.work==TargetType.TREE_CHOP)
     {
-    Config.logDebug("chopping tree!!"); 
     List<ItemStack> drops = BlockTools.breakBlock(worldObj, p.x, p.y, p.z, 0);   
     for(ItemStack item : drops)
       {
@@ -133,7 +132,6 @@ protected void doWork(IWorker npc, WorkPoint p)
     }  
   else if(p.work==TargetType.TREE_PLANT && inventory.containsAtLeast(saplingFilter, 1))
     { 
-    Config.logDebug("planting sapling ");
     worldObj.setBlock(p.x, p.y, p.z, saplingID, saplingMeta, 3);      
     inventory.tryRemoveItems(saplingFilter, 1);    
     }

@@ -90,7 +90,6 @@ public void updatePriority()
     }
   else if(npc.targetHelper.areTargetsInRange(TargetType.MOUNT, maxRange))
     {
-    Config.logDebug("has vehicle targets in range");
     this.currentPriority = this.maxPriority;
     }
   else

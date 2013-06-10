@@ -279,12 +279,12 @@ private boolean shouldTerminateEarly()
   {  
   if(runTime>maxRunTime)
     {
-    Config.logDebug("search time exceeded max of: "+(this.maxRunTime/1000000)+"ms, terminating search.");
+//    Config.logDebug("search time exceeded max of: "+(this.maxRunTime/1000000)+"ms, terminating search.");
     return true;
     }
   if(this.searchIteration>this.maxSearchIterations)
     {
-    Config.logDebug("search iterations exceeded max of: "+this.maxSearchIterations+ " terminating search.");
+//    Config.logDebug("search iterations exceeded max of: "+this.maxSearchIterations+ " terminating search.");
     return true;    
     }
   float dist = this.currentNode.getDistanceFrom(tx,ty,tz);

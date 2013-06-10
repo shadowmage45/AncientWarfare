@@ -55,7 +55,6 @@ public static Icon registerIcon(String tex)
 
 public static Icon getIcon(String tex)
   {
-  Config.logDebug("getting icon from custom icon map: "+tex);
   Icon ico = iconMap.get(tex);
   if(ico==null)
     {

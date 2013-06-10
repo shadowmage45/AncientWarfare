@@ -226,7 +226,6 @@ protected void scanForEntities(World world)
       }
     else if( e instanceof EntityGate)
       {
-      Config.logDebug("scanning gate: "+e);
       ScannedGateEntry g = new ScannedGateEntry((EntityGate)e, pos1, this.originFacing);
       this.includedGates.add(g);
       }

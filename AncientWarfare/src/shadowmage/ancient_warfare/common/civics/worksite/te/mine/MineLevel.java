@@ -75,12 +75,9 @@ public boolean hasWork()
  */
 public void initializeLevel(TEMine mine, World world)
   { 
-  long t1 = System.nanoTime();
   shaftX = minX -1 + xSize/2;
   shaftZ = minZ -1 + zSize/2;
   scanLevel(mine, world);  
-  long t2 = System.nanoTime();
-  Config.logDebug("mine level init time nanos: "+(t2-t1)); 
   }
 
 protected abstract void scanLevel(TEMine mine, World world);

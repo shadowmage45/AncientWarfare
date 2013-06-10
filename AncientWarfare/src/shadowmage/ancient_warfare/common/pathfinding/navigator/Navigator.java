@@ -506,11 +506,10 @@ public void setCanUseLadders(boolean ladders)
 @Override
 public void onPathFound(List<Node> pathNodes)
   {
-  Config.logDebug("full path request returned length: "+pathNodes.size());
+//  Config.logDebug("full path request returned length: "+pathNodes.size());
   if(pathNodes.size()>0)
     {
     Node n = pathNodes.get(pathNodes.size()-1);
-//    Config.logDebug("most distant node: "+Trig.getDistance(entity.posX, entity.posY, entity.posZ, n.x+0.5d, n.y, n.z+0.5d));
     }
   this.path.addPath(world, pathNodes);
   }

@@ -133,7 +133,7 @@ private void startProcessingPaths()
     }
   if(totalProcessed>0 && this == serverScheduler)
     {
-    Config.logDebug("processed: "+totalProcessed+" paths this tick. left in q: "+this.pathRequests.size()+" dropped: "+totalDropped+"  Processing time: "+processingTime+" had: "+pathingMaxTime);
+//    Config.logDebug("processed: "+totalProcessed+" paths this tick. left in q: "+this.pathRequests.size()+" dropped: "+totalDropped+"  Processing time: "+processingTime+" had: "+pathingMaxTime);
     }
   }
 

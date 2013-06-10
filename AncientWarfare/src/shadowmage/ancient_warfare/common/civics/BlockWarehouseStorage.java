@@ -87,7 +87,6 @@ public void breakBlock(World world, int x, int y, int z, int id, int meta)
 public void registerBlockInfo()
   {
   Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
-  Config.logDebug("registering warehouse block infos");
   d.setName("Basic Storage", 0);
   d.setName("Organized Storage", 1);
   d.setName("Advanced Storage",2);
@@ -162,7 +161,6 @@ public static int getWarehouseBlockCountNear(World world, int x, int y, int z)
     {
     blocksFound++;
     }
-  Config.logDebug(String.format("returning blocks found %s  from %s,%s,%s", blocksFound, x,y,z));
   return blocksFound;
   }
 

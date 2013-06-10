@@ -217,25 +217,19 @@ public void removeSlots()
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  Config.logDebug("receiving data packet");
   if(tag.hasKey("time"))
     {
     this.displayProgress = tag.getInteger("time");
-    Config.logDebug("receiving time packet");
     }  
   if(tag.hasKey("timeMax"))
     {
     this.displayProgressMax = tag.getInteger("timeMax");
-    Config.logDebug("receiving timeMax packet");
     }
   if(tag.hasKey("recipe") && player.worldObj.isRemote)
     {
-    Config.logDebug("receiving recipe packet");
     ItemStack stack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("recipe"));
-    Config.logDebug("read stack : "+stack.getDisplayName());
     this.recipeCache = AWCraftingManager.instance().getRecipeByResult(stack);
     this.clientRecipe = this.recipeCache;
-    Config.logDebug("client recipe: "+this.clientRecipe);
     if(this.gui!=null)
       {
       this.gui.refreshGui();
@@ -243,7 +237,6 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("remove"))
     {    
-    Config.logDebug("receiving remove packet");
     this.recipeCache = null;
     this.clientRecipe = null;
     if(this.gui!=null)
@@ -253,29 +246,24 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("stop") && !player.worldObj.isRemote)
     {
-    Config.logDebug("receiving server stop work command");
     te.stopAndClear();
     }
   if(tag.hasKey("set") && !player.worldObj.isRemote)
     {
-    Config.logDebug("receiving set packet");
     ItemStack result = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("result"));
     ResourceListRecipe recipe = AWCraftingManager.instance().getRecipeByResult(result);
     te.setRecipe(recipe);
     }
   if(tag.hasKey("work"))
     {
-    Config.logDebug("receiving work update");
     this.isWorking = tag.getBoolean("work");
     }
   if(tag.hasKey("lock"))
     {
-    Config.logDebug("receiving lock packet");
     this.isLocked = tag.getBoolean("lock");
     }
   if(tag.hasKey("entry"))
     {    
-    Config.logDebug("receiving entry packet");
     if(tag.getBoolean("entry"))
       {
       this.entry = new PlayerEntry();
@@ -343,7 +331,6 @@ public void detectAndSendChanges()
       if(tag==null){tag = new NBTTagCompound();}
       this.recipeCache = ter;
       tag.setCompoundTag("recipe", this.recipeCache.getResult().writeToNBT(new NBTTagCompound()));
-      Config.logDebug("writing recipe for: "+this.recipeCache.getResult().getDisplayName());
       }
     }
 

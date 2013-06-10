@@ -132,7 +132,6 @@ public void handleHealthUpdate(byte par1)
   {  
   if(worldObj.isRemote)
     {
-    Config.logDebug("receiving client event : "+par1);
     if(par1==-1 || par1==0 || par1==1)
       {
       this.setOpeningStatus(par1);
@@ -232,7 +231,6 @@ public void activateGate()
     {
     this.setOpeningStatus((byte)-1 );
     }
-  Config.logDebug("activating gate: "+this.gateStatus + " bb: "+this.boundingBox + " orientation: "+this.gateOrientation);
   }
 
 @Override

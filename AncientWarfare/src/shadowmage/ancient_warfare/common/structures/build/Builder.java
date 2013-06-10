@@ -418,7 +418,6 @@ protected void placeBlockData(World world, int x, int y, int z, BlockData data, 
               inv.setInventorySlotContents(i, stack.copy());
               }
             }
-          Config.logDebug("handling inventory block placement");
           }      
         }      
       }

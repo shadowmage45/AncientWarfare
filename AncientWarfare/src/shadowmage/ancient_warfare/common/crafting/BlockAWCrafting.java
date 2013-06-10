@@ -94,9 +94,9 @@ public void registerBlockInfo()
   Description d = BlockLoader.instance().registerBlockWithItem(this, "AWCraftingBlock", AWItemBlockBase.class);
   d.setName("Research Station", 0);
   d.addDisplayStack(new ItemStack(this,1,0));
-  d.setName("Civil Engineering Station", 1);
+  d.setName("Engineering Station", 1);
   d.addDisplayStack(new ItemStack(this,1,1));
-  d.setName("Structure Engineering Station", 2);
+  d.setName("Drafting Station", 2);
   d.addDisplayStack(new ItemStack(this,1,2));
   d.setName("Vehicle Engineering Station", 3);
   d.addDisplayStack(new ItemStack(this,1,3));  
@@ -114,9 +114,9 @@ public void registerBlockInfo()
   
   GameRegistry.registerTileEntity(TEAWResearch.class, "Research Center");
   GameRegistry.registerTileEntity(TEAWCivicCraft.class, "Engineering Station");
-  GameRegistry.registerTileEntity(TEAWStructureCraft.class, "Civil Engineering Station");
+  GameRegistry.registerTileEntity(TEAWStructureCraft.class, "Drafting Station");
   GameRegistry.registerTileEntity(TEAWVehicleCraft.class, "Vehicle Engineering Station");
-  GameRegistry.registerTileEntity(TEAWAmmoCraft.class, "Ammo Engineering Station");
+  GameRegistry.registerTileEntity(TEAWAmmoCraft.class, "Ammo Production Station");
   GameRegistry.registerTileEntity(TEAWNpcCraft.class, "NPC Recruiting Center");
   }
 

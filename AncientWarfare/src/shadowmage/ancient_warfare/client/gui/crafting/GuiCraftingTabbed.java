@@ -260,7 +260,6 @@ protected void handleRecipeClick(IGuiElement element)
       return;
       }    
     this.container.clientRecipe = recipes.get(element);
-    Config.logDebug("setting current recipe to: "+this.container.clientRecipe);
     this.forceUpdate = true;
     }
   }

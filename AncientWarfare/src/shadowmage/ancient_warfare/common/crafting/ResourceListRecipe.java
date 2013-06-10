@@ -69,7 +69,6 @@ public ResourceListRecipe(ItemStack result, RecipeType type)
   this.result = result.copy();
   displayName = result.getDisplayName();
   this.type = type;
-  Config.logDebug("constructed recipe for : "+this.result + "  ::::  "+this.result.getTagCompound());
   }
 
 public ResourceListRecipe(ItemStack result, int count, RecipeType type)
@@ -208,7 +207,6 @@ public boolean doesInventoryContainResources(IInventory inventory, int[] slotNum
   for(ItemStackWrapperCrafting stack : this.resources)
     {
     count = stack.getRemainingNeeded();
-    Config.logDebug("examinig stack "+stack.getFilter() + " needed: " +  stack.getRemainingNeeded());
     for(int i = 0; i < slotNums.length; i++)
       {
       fromInv = inventory.getStackInSlot(slotNums[i]);
@@ -216,7 +214,6 @@ public boolean doesInventoryContainResources(IInventory inventory, int[] slotNum
       if(stack.matches(fromInv))
         {
         count -= fromInv.stackSize;
-        Config.logDebug("found matching item ..count: "+fromInv.stackSize);
         }
       if(count<=0)
         {
@@ -225,7 +222,6 @@ public boolean doesInventoryContainResources(IInventory inventory, int[] slotNum
       }    
     if(count>0)
       {
-      Config.logDebug("failed count check");
       start = false;
       break;
       }

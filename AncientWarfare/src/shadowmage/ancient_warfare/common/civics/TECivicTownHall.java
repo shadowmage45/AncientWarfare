@@ -23,20 +23,64 @@ package shadowmage.ancient_warfare.common.civics;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TECivicTownHall extends TECivic
 {
 
+int foodValue = 0;
+ItemStack rationFilter;
+
 public TECivicTownHall()
   {
   this.hasWork = true;
-  this.broadcastWork = true;  
+  this.broadcastWork = true;
+  rationFilter = new ItemStack(ItemLoader.rations);
+  }
+
+@Override
+public void updateEntity()
+  {  
+  super.updateEntity();
+  if(worldObj==null || worldObj.isRemote)
+    {
+    return;
+    }
+  if(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+    {
+    int index;
+    int foodValue = 0;
+    ItemStack stack;
+    for(int i = 0; i < this.otherSlotIndices.length; i++)
+      {
+      index = this.otherSlotIndices[i];
+      stack = this.getStackInSlot(index);
+      if(stack==null || stack.itemID == ItemLoader.rations.itemID || !(stack.getItem() instanceof ItemFood)){continue;}
+      foodValue = ((ItemFood)stack.getItem()).getHealAmount();
+      this.foodValue+=foodValue;
+      stack.stackSize--;
+      if(stack.stackSize<=0)
+        {
+        this.setInventorySlotContents(index, null);
+        }
+      break;
+      }    
+    }
+  while(this.foodValue>=2 && this.inventory.canHoldItem(rationFilter, 1))
+    {
+    InventoryTools.tryMergeStack(inventory, rationFilter.copy(), otherSlotIndices);
+    this.foodValue -=2;
+    }
   }
 
 @Override
@@ -115,5 +159,20 @@ public void broadcastWork(int maxRange)
       }
     }
   }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  super.readFromNBT(tag);
+  this.foodValue = tag.getInteger("foodValue");
+  }
+
+@Override
+public void writeToNBT(NBTTagCompound tag)
+  {
+  super.writeToNBT(tag);
+  tag.setInteger("foodValue", this.foodValue);
+  }
+
 
 }

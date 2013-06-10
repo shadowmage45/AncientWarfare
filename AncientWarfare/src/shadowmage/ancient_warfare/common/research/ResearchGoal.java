@@ -241,10 +241,8 @@ public HashSet<IResearchGoal> getDependencies()
     return this.dependencyCache;
     }
   this.dependencyCache.clear();
-  Config.logDebug("setting up dependency cache for goal: "+this.displayName );
   for(Integer i : this.dependencies)
     {
-    Config.logDebug("adding dependency : "+researchGoals[i].displayName);
     this.dependencyCache.add(researchGoals[i]);
     }
   return dependencyCache;

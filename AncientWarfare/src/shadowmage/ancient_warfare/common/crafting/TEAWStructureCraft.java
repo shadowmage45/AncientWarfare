@@ -101,10 +101,8 @@ protected boolean tryRemoveItem()
     {
     if(item.getRemainingNeeded() > 0 && InventoryTools.getCountOf(inventory, item.getFilter(), craftMatrix)>0)
       {
-      Config.logDebug("found matching filter");
       InventoryTools.tryRemoveItems(inventory, item.getFilter(), 1, 0, 17);
       item.setRemainingNeeded(item.getRemainingNeeded()-1);
-      Config.logDebug("decremented item : "+item.getFilter().toString() + " remaining count : "+item.getRemainingNeeded());    
       return true;
       }
     }
@@ -113,16 +111,13 @@ protected boolean tryRemoveItem()
 
 protected boolean isRecipeFinished()
   {
-  Config.logDebug("checking if recipe finished");
   for(ItemStackWrapperCrafting item : recipe.resources)
     {
     if(item.getRemainingNeeded()>0)
       {
-      Config.logDebug("sensing recipe not finished...");
       return false;
       }
     }
-  Config.logDebug("recipe finished!!!");
   return true;
   }
 
@@ -157,7 +152,6 @@ public void validateAndSetRecipe(ResourceListRecipe recipe)
   this.recipe = recipe.copy();
   this.isStarted = true;
   this.workProgressMax = this.calcTotalTime();
-  Config.logDebug("setting recipe and working....recipe: "+recipe);
   }
 
 public void clearWork()

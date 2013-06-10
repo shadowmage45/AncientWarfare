@@ -278,22 +278,18 @@ protected boolean shouldTransact(ItemStack stack, boolean exact, boolean except)
   int found = filterContains(stack);
   if(!exact && except && found==-1)
     {
-    Config.logDebug("returning should do ALL_BUT : true");
     return true;
     }  
   else if(exact && except && stack.stackSize!=found)
     {
-    Config.logDebug("returning should do ALL_BUT_EXCEPT : true");
     return true;
     }
   else if(exact && !except && found==stack.stackSize)
     {
-    Config.logDebug("returning should do EXACT : true");
     return true;
     }  
   else if(!exact && !except && found >0)
     {
-    Config.logDebug("returning should do ANY OF : true");
     return true;
     }
   return false;

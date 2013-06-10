@@ -167,17 +167,14 @@ public void handlePacketData(NBTTagCompound tag)
   {
   if(tag.hasKey("prog"))
     {
-    Config.logDebug("receiving display progress update");
     this.displayProgress = tag.getInteger("prog");
     }
   if(tag.hasKey("progMax"))
     {
-    Config.logDebug("receiving display MAX update");
     this.displayProgressMax = tag.getInteger("progMax");
     }
   if(tag.hasKey("rec"))
     {
-    Config.logDebug("receiving recipe update");
     this.currentRecipe = new ResourceListRecipe(tag.getCompoundTag("rec")); 
     this.clientRecipe = this.currentRecipe;
     if(this.gui!=null)
@@ -187,12 +184,10 @@ public void handlePacketData(NBTTagCompound tag)
     }  
   if(tag.hasKey("recUp"))
     {
-    Config.logDebug("receiving recipe single component update");
     this.handleRecipeUpdate(tag.getCompoundTag("recUp"));   
     }
   if(tag.hasKey("rem"))
     {
-    Config.logDebug("receiving clear recipe update");
     this.currentRecipe = null;
     this.clientRecipe = null;
     if(this.gui!=null)
@@ -202,21 +197,18 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("stop") && !player.worldObj.isRemote)
     {
-    Config.logDebug("receiving server stop work command");
     te.stopWorkAndClearRecipe();
     this.currentRecipe = null;
     this.clientRecipe = null;
     }
   if(tag.hasKey("set") && !player.worldObj.isRemote)
     {
-    String name = tag.getString("set");
-    Config.logDebug("receiving server set recipe command :: "+name);    
+    String name = tag.getString("set");   
     ResourceListRecipe recipe = AWCraftingManager.instance().getStructureRecipeFor(name);
     te.validateAndSetRecipe(recipe);
     }
   if(tag.hasKey("work"))
     {
-    Config.logDebug("receiving work update");
     this.isWorking = tag.getBoolean("work");
     }
   }
@@ -228,7 +220,6 @@ protected void handleRecipeUpdate(NBTTagCompound tag)
     {
     if(craft.matches(item))
       {
-      Config.logDebug("found matching item, updating");
       craft.setRemainingNeeded(item.getRemainingNeeded());
       break;
       }
@@ -264,7 +255,6 @@ public void detectAndSendChanges()
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("prog", displayProgress);
     this.sendDataToPlayer(tag);
-    Config.logDebug("sending progress update");
     }
   if(this.displayProgressMax!=te.getWorkProgressMax())
     {
@@ -272,7 +262,6 @@ public void detectAndSendChanges()
     NBTTagCompound tag = new NBTTagCompound();
     tag.setInteger("progMax", displayProgressMax);
     this.sendDataToPlayer(tag);
-    Config.logDebug("sending progress MAX update");
     }
 
 
@@ -291,7 +280,6 @@ public void detectAndSendChanges()
       NBTTagCompound tag = new NBTTagCompound();   
       tag.setBoolean("rem", true);      
       this.sendDataToPlayer(tag);
-      Config.logDebug("sending remove recipe update to player");
       }   
     }
   else
@@ -302,7 +290,6 @@ public void detectAndSendChanges()
       NBTTagCompound tag = new NBTTagCompound();
       tag.setCompoundTag("rec", this.currentRecipe.getNBTTag());      
       this.sendDataToPlayer(tag);
-      Config.logDebug("sending recipe update to player");
       }
     else
       {
@@ -325,7 +312,6 @@ public void detectAndSendChanges()
         NBTTagCompound tag = new NBTTagCompound();
         tag.setCompoundTag("recUp", item.writeToNBT(new NBTTagCompound()));
         this.sendDataToPlayer(tag);
-        Config.logDebug("sending recipe single component update");
         }
       }
     }

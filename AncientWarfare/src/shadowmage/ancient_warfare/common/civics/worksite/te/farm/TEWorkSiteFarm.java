@@ -97,7 +97,6 @@ protected void doWork(IWorker npc, WorkPoint p)
     } 
   if(p.work==TargetType.FARM_HARVEST)
     {
-    Config.logDebug("harvesting crops!!");
     List<ItemStack> drops = BlockTools.breakBlock(worldObj, p.x, p.y, p.z, 0);   
     for(ItemStack item : drops)
       {
@@ -114,14 +113,9 @@ protected void doWork(IWorker npc, WorkPoint p)
     {
     if(inventory.containsAtLeast(plantableFilter, 1))
       {
-      Config.logDebug("planting crops");
       inventory.tryRemoveItems(plantableFilter, 1);
       worldObj.setBlock(p.x, p.y, p.z, mainBlockID, 0, 3);
-      }
-    else
-      {
-      Config.logDebug("had plant job but no plantables!!");
-      }
+      }  
     }    
   }
 
