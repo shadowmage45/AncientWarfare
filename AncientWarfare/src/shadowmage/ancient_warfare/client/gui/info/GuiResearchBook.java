@@ -20,12 +20,20 @@
  */
 package shadowmage.ancient_warfare.client.gui.info;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+
+import org.lwjgl.input.Keyboard;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
+import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTab;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
@@ -33,9 +41,11 @@ import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
+import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.RecipeSorterAZ;
 import shadowmage.ancient_warfare.common.crafting.RecipeSorterTextFilter;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 
@@ -49,6 +59,20 @@ RecipeSorterAZ sorterAZ = new RecipeSorterAZ();
 RecipeSorterTextFilter sorterFilter = new RecipeSorterTextFilter();
 GuiTextInputLine searchBox;
 GuiScrollableArea area;
+int buttonWidth = 256 - 16 - 24-10;
+HashMap<GuiButtonSimple, ResourceListRecipe> recipes = new HashMap<GuiButtonSimple, ResourceListRecipe>();
+
+GuiTab mainTab;
+GuiTab vehicleTab;
+GuiTab ammoTab;
+GuiTab npcTab;
+GuiTab civicTab;
+GuiTab miscTab;
+GuiTab researchTab;
+GuiTab structuresTab;
+GuiTab craftingTab;
+
+EnumSet recipeTypes = null;
 /**
  * tabs
  * INFO
@@ -63,8 +87,6 @@ GuiScrollableArea area;
  *    gates/armor/upgrades (available?) detail pages
  * CIVICS -- MISSING
  *    searchable list of  (available?) civic detail pages
- * RECIPES
- *    searchable list of all (available?) recipes
  * RESEARCH
  *    searchable list of all (completed?) research
  * STRUCTURES
@@ -116,7 +138,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void updateScreenContents()
   {
- 
+  area.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override
@@ -134,6 +156,33 @@ public void onElementActivated(IGuiElement element)
     this.forceUpdate = true;
     this.searchBox.selected = false;
     }
+  
+  if(this.activeTab==this.mainTab)
+    {
+   /**
+    * need basic stats on front info page, ++ descriptions of what they other tabs are for
+    */
+    }
+  else if(this.activeTab==this.vehicleTab)
+    {
+    if(this.recipes.containsKey(element))
+      {
+      /**
+       * TODO swap over to vehicle details page
+       */
+      this.handleRecipeClick(element);
+      }
+//    this.recipeTypes = EnumSet.of(RecipeType.VEHICLE, RecipeType.VEHICLE_MISC);
+//    this.handleSearchBoxUpdate(recipeTypes);
+    }
+  else if(this.activeTab==this.ammoTab){}
+  else if(this.activeTab==this.npcTab){}
+  else if(this.activeTab==this.civicTab){}
+  else if(this.activeTab==this.researchTab){}
+  else if(this.activeTab==this.craftingTab){}
+  else if(this.activeTab==this.structuresTab){}
+  else if(this.activeTab==this.miscTab){} 
+  
   }
 
 @Override
@@ -142,42 +191,54 @@ public void setupControls()
   GuiTab tab = this.addGuiTab(1000, 3, 0, 50, 24, "Info");
   this.activeTab = tab;
   this.tabs.add(tab);
+  this.mainTab = tab;
   tab = this.addGuiTab(1001, 3+50, 0, 50, 24, "Vehicles");
   tab.enabled = false;
   this.tabs.add(tab);
+  this.vehicleTab = tab;
   tab = this.addGuiTab(1002, 3+50+50, 0, 50, 24, "Ammo");
   tab.enabled = false;
   this.tabs.add(tab);
+  this.ammoTab = tab;
   tab = this.addGuiTab(1003, 3+50+50+50, 0, 50, 24, "Npcs");
   tab.enabled = false;
   this.tabs.add(tab);
+  this.npcTab = tab;
   tab = this.addGuiTab(1004, 3+50+50+50+50, 0, 50, 24, "Civics");
   tab.enabled = false;
   this.tabs.add(tab);
+  this.civicTab = tab;
     
   int y = this.getYSize()-24;
   tab = this.addGuiTab(1005, 3, y, 60, 24, "Research");
   tab.enabled = false;
   tab.inverted = true;
   this.tabs.add(tab);
-  tab = this.addGuiTab(1006, 3+60, y, 60, 24, "Recipes");
+  this.researchTab = tab;
+  tab = this.addGuiTab(1006, 3+60, y, 60, 24, "Crafting");
   tab.enabled = false;
   tab.inverted = true;
   this.tabs.add(tab);
+  this.craftingTab = tab;  
   tab = this.addGuiTab(1007, 3+60+60, y, 80, 24, "Structures");
   tab.enabled = false;
   tab.inverted = true;
   this.tabs.add(tab);
+  this.structuresTab = tab;
   tab = this.addGuiTab(1008, 3+60+60+80, y, 50, 24, "Misc");
   tab.enabled = false;
   tab.inverted = true;
   this.tabs.add(tab);
+  this.miscTab = tab;
   
-
-  
-  this.searchBox = (GuiTextInputLine) new GuiTextInputLine(2, this, 160, 12, 30, "").updateRenderPos(5, 24);
+  this.searchBox = (GuiTextInputLine) new GuiTextInputLine(2, this, 240, 12, 30, "").updateRenderPos(5, 24);
   searchBox.selected = false;
-  this.area = new GuiScrollableArea(0, this, 5, 21+18+10+5, 176-10, 240-42-10-18-5-8, 0);
+  int w = 256-10;
+  int h = 240 - 42 - 10 - 20;
+  int x = 5;
+  y = 21+5+20;  
+  this.area = new GuiScrollableArea(0, this, x, y, w, h, 0);
+  this.forceUpdate = true;
   }
 
 @Override
@@ -185,6 +246,7 @@ public void updateControls()
   {
   this.guiElements.clear();
   this.area.elements.clear();
+  this.recipeTypes = null;
   for(GuiTab tab : this.tabs)
     {
     this.guiElements.put(tab.getElementNumber(), tab);
@@ -193,27 +255,95 @@ public void updateControls()
     {
     this.guiElements.get(i).updateGuiPos(guiLeft, guiTop);
     }
-  switch(this.activeTab.getElementNumber())
-  {
-  case 1000:
-  break;
-  case 1001:
-  break;  
-  case 1002:
-  break;
-  case 1003:
-  break;
-  case 1004:
-  break;
-  case 1005:
-  break;
-  case 1006:
-  break;
-  case 1007:
-  break;
-  case 1008:
-  break;  
-  }
+  if(this.activeTab==this.mainTab)
+    {
+   /**
+    * need basic stats on front info page, ++ descriptions of what they other tabs are for
+    */
+    }
+  else if(this.activeTab==this.vehicleTab)
+    {
+    this.recipeTypes = EnumSet.of(RecipeType.VEHICLE, RecipeType.VEHICLE_MISC);
+    this.guiElements.put(1, searchBox);
+    this.handleSearchBoxUpdate(recipeTypes);
+    }
+  else if(this.activeTab==this.ammoTab){}
+  else if(this.activeTab==this.npcTab){}
+  else if(this.activeTab==this.civicTab){}
+  else if(this.activeTab==this.researchTab){}
+  else if(this.activeTab==this.craftingTab){}
+  else if(this.activeTab==this.structuresTab){}
+  else if(this.activeTab==this.miscTab){} 
+  
+  for(Integer i : this.guiElements.keySet())
+    {
+    this.guiElements.get(i).updateGuiPos(guiLeft, guiTop);
+    }
   }
 
+protected void handleSearchBoxUpdate(EnumSet<RecipeType> recipeTypes)
+  {  
+  this.guiElements.put(0, area);
+  String text = this.searchBox.getText();
+  this.recipes.clear();
+  this.area.elements.clear();
+  this.sorterFilter.setFilterText(text);
+  PlayerEntry entry = PlayerTracker.instance().getClientEntry();
+  if(recipeTypes!=null)
+    {
+    this.addRecipeButtons(AWCraftingManager.instance().getRecipesContaining(entry, text, recipeTypes, player.capabilities.isCreativeMode), sorterFilter);      
+    }  
+  }
+
+protected void addRecipeButtons(List<ResourceListRecipe> recipes, Comparator sorter)
+  {
+  this.guiElements.put(0, area);
+  Collections.sort(recipes, sorter);
+  area.updateTotalHeight(recipes.size()*18);
+  GuiButtonSimple button;
+  int x = 0;
+  int y = 0;
+  ArrayList<String> tooltip = new ArrayList<String>();
+  tooltip.add("Hold (shift) while clicking to");
+  tooltip.add("view detailed recipe information");
+  int num = 100;
+  for(ResourceListRecipe recipe : recipes)
+    {      
+    button = new GuiButtonSimple(num, area, buttonWidth, 16, recipe.getDisplayName());
+    button.updateRenderPos(x, y);
+    button.setTooltip(tooltip);
+    area.addGuiElement(button);
+    this.recipes.put(button, recipe);
+    y+=18;
+    num++;
+    }
+  }
+ 
+@Override
+protected void keyTyped(char par1, int par2)
+  {
+  for(Integer i : this.guiElements.keySet())
+    {
+    GuiElement el = this.guiElements.get(i);
+    el.onKeyTyped(par1, par2);
+    }
+  if(!this.searchBox.selected)
+    {
+    super.keyTyped(par1, par2);
+    }
+  else
+    {
+    this.handleSearchBoxUpdate(this.recipeTypes);
+    }
+  }
+
+protected void handleRecipeClick(IGuiElement element)
+  {  
+  this.handleRecipeDetailsClick(recipes.get(element));     
+  }
+
+protected void handleRecipeDetailsClick(ResourceListRecipe recipe)
+  {
+  mc.displayGuiScreen(new GuiRecipeDetails(this, recipe));
+  }
 }

@@ -44,50 +44,14 @@ public GuiFakeSlot(int elementNum, IGuiElementCallback parent)
   {
   super(elementNum, parent, 18, 18);
   this.isFake = true;  
+  this.renderSlotBackground = true;
   }
 
 public GuiFakeSlot(int elementNum, IGuiElementCallback parent, int x, int y)
   {
   super(elementNum, parent, x, y);
   this.isFake = true;
-  }
-
-@Override
-public void drawElement(int mouseX, int mouseY)
-  {
-  GL11.glPushMatrix();
-  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-  String tex = Config.texturePath+"gui/guiButtons.png";
-  this.mc.renderEngine.bindTexture(tex);
-  this.drawTexturedModalRect(guiLeft+renderPosX, guiTop+renderPosY, 152, 120, 18, 18);
-  if(fakeStack!=null)
-    {    
-    RenderHelper.enableGUIStandardItemLighting();
-//    GL11.glPushMatrix();
-    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-    GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-    short short1 = 240;
-    short short2 = 240;
-    OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)short1 / 1.0F, (float)short2 / 1.0F);
-    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-    //enable lighting
-    GL11.glEnable(GL11.GL_DEPTH_TEST);
-    itemRenderer.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack, guiLeft+renderPosX+1, guiTop+renderPosY+1);
-    itemRenderer.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack,  guiLeft+renderPosX+1, guiTop+renderPosY+1);
-    //disable lighting
-    }  
-  if(isMouseOver)
-    {
-    GL11.glDisable(GL11.GL_LIGHTING);
-    GL11.glDisable(GL11.GL_DEPTH_TEST);
-    int k1 = guiLeft+renderPosX+1;
-    int i1 = guiTop+renderPosY+1;
-    this.drawGradientRect(k1, i1, k1 + 16, i1 + 16, -2130706433, -2130706433);
-    GL11.glEnable(GL11.GL_LIGHTING);
-    GL11.glEnable(GL11.GL_DEPTH_TEST);       
-    }
-  GL11.glPopAttrib();
-  GL11.glPopMatrix();
+  this.renderSlotBackground = true;
   }
 
 @Override

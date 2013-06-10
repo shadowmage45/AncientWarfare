@@ -208,11 +208,14 @@ public void onPlayerRespawn(EntityPlayer player)
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
+  NBTTagCompound entryTag;
   NBTTagList list = new NBTTagList();  
   for(String name : this.playerEntries.keySet())
     {
     PlayerEntry ent = this.playerEntries.get(name);
-    list.appendTag(ent.getNBTTag());
+    entryTag = ent.getNBTTag();
+    entryTag.setName(ent.playerName);
+    list.appendTag(entryTag);
     }
   tag.setTag("list", list);
   return tag;

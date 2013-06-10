@@ -127,6 +127,7 @@ public NBTTagCompound getNBTTag()
     {    
     entry = this.memberNames.get(i);
     NBTTagCompound memberTag = new NBTTagCompound();
+    memberTag.setName(entry.getMemberName());
     memberTag.setString("name", entry.getMemberName());
     memberTag.setByte("rank", entry.getMemberRank());
     namesList.appendTag(memberTag);

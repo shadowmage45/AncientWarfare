@@ -9,6 +9,7 @@ BALANCE/TWEAKS
 * fish farm is OP
 * patrols are a bit 'hard' to setup
 * farmers too OP harvesting too many farms?
+* examine recipe balance
 
 GENERAL
 * add name search/filter box to structure builder guis, and warehouse gui
