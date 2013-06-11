@@ -20,77 +20,46 @@
  */
 package shadowmage.ancient_warfare.client.gui.info;
 
-import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
+import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 
-public class GuiVehicleDetails extends GuiContainerAdvanced
+public class GuiVehicleDetails extends GuiInfoBase
 {
+
 IVehicleType vehicle;
+int level;
+
+
+
 /**
- * @param container
+ * @param parent
+ * @param recipe
  */
-public GuiVehicleDetails(Container container, IVehicleType type)
+public GuiVehicleDetails(GuiContainerAdvanced parent,  ResourceListRecipe recipe, IVehicleType vehicle, int level)
   {
-  super(container);
-  this.vehicle = type;
-  }
-
-@Override
-public void onElementActivated(IGuiElement element)
-  {
-  // TODO Auto-generated method stub
-
-  }
-
-@Override
-public int getXSize()
-  {
-  // TODO Auto-generated method stub
-  return 0;
-  }
-
-@Override
-public int getYSize()
-  {
-  // TODO Auto-generated method stub
-  return 0;
-  }
-
-@Override
-public String getGuiBackGroundTexture()
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
-
-@Override
-public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
-  {
-  // TODO Auto-generated method stub
-
-  }
-
-@Override
-public void updateScreenContents()
-  {
-  // TODO Auto-generated method stub
-
-  }
-
-@Override
-public void setupControls()
-  {
-  // TODO Auto-generated method stub
-
-  }
-
-@Override
-public void updateControls()
-  {
-  // TODO Auto-generated method stub
-
+  super(parent, recipe);
+  this.level = level;
+  this.vehicle = vehicle;
+  IVehicleMaterial material = vehicle.getMaterialType();
+  this.detailText.add("Max Hit Points     : "+vehicle.getBaseHealth() * material.getHPFactor(level));
+  this.detailText.add("Max Forward Speed  : " +vehicle.getBaseForwardSpeed() * material.getSpeedForwardFactor(level));
+  this.detailText.add("Max Strafe Speed   : " +vehicle.getBaseStrafeSpeed() * material.getSpeedStrafeFactor(level));
+  this.detailText.add("Vehicle Weight     : "+vehicle.getBaseWeight() * material.getWeightFactor(level));
+  this.detailText.add("Has turret         : "+vehicle.canAdjustYaw());
+  this.detailText.add("Can aim pitch      : "+vehicle.canAdjustPitch());
+  this.detailText.add("Can adjust power   : "+vehicle.canAdjustPower());
+  this.detailText.add("Ammo Bay Size      : " +  vehicle.getAmmoBaySize());
+  this.detailText.add("Armor Bay Size     : "+ vehicle.getArmorBaySize());
+  this.detailText.add("Upgrade Bay Size   : "+vehicle.getUpgradeBaySize());
+  this.detailText.add("Storage Bay Size   : "+vehicle.getStorageBaySize());
+  this.detailText.add("Is mountable       : "+vehicle.isMountable());
+  this.detailText.add("Is driveable       : "+vehicle.isDrivable());
+  this.detailText.add("Is Combat Engine   : "+vehicle.isCombatEngine());
+  
+  
+  
   }
 
 }

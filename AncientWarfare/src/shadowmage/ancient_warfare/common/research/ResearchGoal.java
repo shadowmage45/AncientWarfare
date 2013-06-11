@@ -333,7 +333,7 @@ public List<ItemStackWrapperCrafting> getResearchResources()
 @Override
 public ResourceListRecipe constructRecipe()
   {
-  ResourceListRecipe recipe = new ResourceListRecipe(new ItemStack(ItemLoader.researchNotes,1,this.getGlobalResearchNum()), RecipeType.NONE);
+  ResourceListRecipe recipe = new ResourceListRecipe(new ItemStack(ItemLoader.researchNotes,1,this.getGlobalResearchNum()), RecipeType.RESEARCH);
   recipe.setDisplayName(getDisplayName());
   recipe.addNeededResearch(dependencies);
   recipe.addResources(getResearchResources());

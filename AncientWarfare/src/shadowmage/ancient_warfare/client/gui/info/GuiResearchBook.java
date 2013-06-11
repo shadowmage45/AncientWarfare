@@ -52,6 +52,8 @@ import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
+import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 
 public class GuiResearchBook extends GuiContainerAdvanced
 {
@@ -173,22 +175,49 @@ public void onElementActivated(IGuiElement element)
     {
     if(this.recipes.containsKey(element))
       {
-      /**
-       * TODO swap over to vehicle details page
-       */
       this.handleRecipeClick(element);
       }
-//    this.recipeTypes = EnumSet.of(RecipeType.VEHICLE, RecipeType.VEHICLE_MISC);
-//    this.handleSearchBoxUpdate(recipeTypes);
     }
-  else if(this.activeTab==this.ammoTab){}
-  else if(this.activeTab==this.npcTab){}
-  else if(this.activeTab==this.civicTab){}
-  else if(this.activeTab==this.researchTab){}
-  else if(this.activeTab==this.craftingTab){}
-  else if(this.activeTab==this.structuresTab){}
-  else if(this.activeTab==this.miscTab){} 
+  else if(this.activeTab==this.ammoTab)
+    {
+    if(this.recipes.containsKey(element))
+      {
+      this.handleRecipeClick(element);
+      }
+    }
+  else if(this.activeTab==this.npcTab)
+    {
+    if(this.recipes.containsKey(element))
+      {
+      this.handleRecipeClick(element);
+      }
+    }
+  else if(this.activeTab==this.civicTab)
+    {
+    if(this.recipes.containsKey(element))
+      {
+      this.handleRecipeClick(element);
+      }
+    }
+  else if(this.activeTab==this.researchTab)
+    {
+    if(this.recipes.containsKey(element))
+      {
+      this.handleRecipeClick(element);
+      }
+    }
+  else if(this.activeTab==this.craftingTab)
+    {
+   
+    }
+  else if(this.activeTab==this.structuresTab)
+    {
   
+    }
+  else if(this.activeTab==this.miscTab)
+    {
+   
+    }   
   }
 
 @Override
@@ -488,7 +517,7 @@ protected void handleSearchBoxUpdate(EnumSet<RecipeType> recipeTypes)
   PlayerEntry entry = PlayerTracker.instance().getClientEntry();
   if(recipeTypes!=null)
     {
-    this.addRecipeButtons(AWCraftingManager.instance().getRecipesContaining(entry, text, recipeTypes, player.capabilities.isCreativeMode), sorterFilter);      
+    this.addRecipeButtons(AWCraftingManager.instance().getRecipesContaining(entry, text, recipeTypes, true), sorterFilter);      
     }  
   }
 
@@ -541,6 +570,10 @@ protected void handleRecipeClick(IGuiElement element)
     {
     this.handleResearchDetailsClick(recipe);
     }
+  else if(recipe.type==RecipeType.VEHICLE)
+    {
+    this.handleVehicleDetailsClick(recipe);
+    }
   else
     {
     this.handleRecipeDetailsClick(recipe);    
@@ -557,5 +590,13 @@ protected void handleResearchDetailsClick(ResourceListRecipe recipe)
   int id = recipe.getResult().getItemDamage();
   IResearchGoal goal = ResearchGoal.getGoalByID(id);
   mc.displayGuiScreen(new GuiResearchGoal(inventorySlots, goal, this));
+  }
+
+protected void handleVehicleDetailsClick(ResourceListRecipe recipe)
+  {
+  int type = recipe.getResult().getItemDamage();
+  int lev = recipe.getResult().getTagCompound().getCompoundTag("AWVehSpawner").getInteger("lev");
+  IVehicleType t = VehicleType.getVehicleType(type);
+  mc.displayGuiScreen(new GuiVehicleDetails(this, recipe, t, lev));
   }
 }

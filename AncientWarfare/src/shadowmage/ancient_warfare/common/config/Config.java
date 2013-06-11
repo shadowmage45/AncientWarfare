@@ -36,7 +36,7 @@ public class Config
 //*******************************************************FIELDS**********************************************//
 
 public static final String CORE_VERSION_MAJOR = "0.1.0";
-public static final String CORE_VERSION_BUILD = "007";
+public static final String CORE_VERSION_BUILD = "008";
 public static final String CORE_BUILD_STATUS = "alpha";
 public static final String MC_VERSION = "1.5.2";
 

@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.client.gui.info;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,30 +33,52 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 
-public class GuiRecipeDetails extends GuiContainerAdvanced
+public class GuiInfoBase extends GuiContainerAdvanced
 {
 
 GuiContainerAdvanced parent;
 ResourceListRecipe recipe;
+GuiScrollableArea area;
+GuiButtonSimple back;
+List<String> detailText = new ArrayList<String>();
+
+HashMap<GuiButtonSimple, IResearchGoal> buttonGoalMap = new HashMap<GuiButtonSimple, IResearchGoal>();
+HashMap<GuiButtonSimple, ResourceListRecipe> buttonRecipeMap = new HashMap<GuiButtonSimple, ResourceListRecipe>();
+HashSet<GuiItemStack> stackButtons = new HashSet<GuiItemStack>();
 
 /**
  * @param container
  */
-public GuiRecipeDetails(GuiContainerAdvanced parent, ResourceListRecipe recipe)
+public GuiInfoBase(GuiContainerAdvanced parent, ResourceListRecipe recipe)
   {
   super(new ContainerDummy());
-  this.shouldCloseOnVanillaKeys = true;
   this.parent = parent;
   this.recipe = recipe;
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(recipe.getResult().itemID);
+  if(d!=null)
+    {
+    String s = d.getDescription(this.recipe.getResult().getItemDamage());
+    if(s!=null && s.equals(""))
+      {
+      this.detailText.add(s);
+      this.detailText.add("");
+      }
+    }
   }
-
 
 @Override
 public int getXSize()
@@ -67,6 +90,17 @@ public int getXSize()
 public int getYSize()
   {
   return 240;
+  }
+
+@Override
+protected void keyTyped(char par1, int par2)
+  {
+  if(par2 == this.mc.gameSettings.keyBindInventory.keyCode || par2 == Keyboard.KEY_ESCAPE)
+    {
+    mc.displayGuiScreen(parent);
+    return;
+    }
+  super.keyTyped(par1, par2);
   }
 
 @Override
@@ -83,22 +117,10 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   }
 
 @Override
-protected void keyTyped(char par1, int par2)
+public void updateScreenContents()
   {
-  if(par2 == this.mc.gameSettings.keyBindInventory.keyCode || par2 == Keyboard.KEY_ESCAPE)
-    {
-    mc.displayGuiScreen(parent);
-    return;
-    }
-  super.keyTyped(par1, par2);
+  this.area.updateGuiPos(guiLeft, guiTop);
   }
-
-GuiScrollableArea area;
-GuiButtonSimple back;
-
-HashMap<GuiButtonSimple, IResearchGoal> buttonGoalMap = new HashMap<GuiButtonSimple, IResearchGoal>();
-HashMap<GuiButtonSimple, ResourceListRecipe> buttonRecipeMap = new HashMap<GuiButtonSimple, ResourceListRecipe>();
-HashSet<GuiItemStack> stackButtons = new HashSet<GuiItemStack>();
 
 @Override
 public void onElementActivated(IGuiElement element)
@@ -120,15 +142,45 @@ public void onElementActivated(IGuiElement element)
     ResourceListRecipe recipe = AWCraftingManager.instance().getRecipeByResult(((GuiItemStack)element).getStack());
     if(recipe!=null)
       {
-      mc.displayGuiScreen(new GuiRecipeDetails(this, recipe));
+      this.handleRecipeClick(recipe);
       }
     }
   }
 
-@Override
-public void updateScreenContents()
+protected void handleRecipeClick(ResourceListRecipe recipe)
+  {  
+  if(recipe.type==RecipeType.RESEARCH)
+    {
+    this.handleResearchDetailsClick(recipe);
+    }
+  else if(recipe.type==RecipeType.VEHICLE)
+    {
+    this.handleVehicleDetailsClick(recipe);
+    }
+  else
+    {
+    this.handleRecipeDetailsClick(recipe);    
+    }
+  }
+
+protected void handleRecipeDetailsClick(ResourceListRecipe recipe)
   {
-  this.area.updateGuiPos(guiLeft, guiTop);
+  mc.displayGuiScreen(new GuiRecipeDetails(this, recipe));    
+  }
+
+protected void handleResearchDetailsClick(ResourceListRecipe recipe)
+  {
+  int id = recipe.getResult().getItemDamage();
+  IResearchGoal goal = ResearchGoal.getGoalByID(id);
+  mc.displayGuiScreen(new GuiResearchGoal(inventorySlots, goal, this));
+  }
+
+protected void handleVehicleDetailsClick(ResourceListRecipe recipe)
+  {
+  int type = recipe.getResult().getItemDamage();
+  int lev = recipe.getResult().getTagCompound().getCompoundTag("AWVehSpawner").getInteger("lev");
+  IVehicleType t = VehicleType.getVehicleType(type);
+  mc.displayGuiScreen(new GuiVehicleDetails(this, recipe, t, lev));
   }
 
 @Override
@@ -159,10 +211,21 @@ public void setupControls()
   
   this.area = new GuiScrollableArea(0, this, 5, 5+16+5+30, 256-10, 240-10-16-5-30, 0);
   int nextElementY = 0; 
+  
+  List<String> displayText = RenderTools.getFormattedLines(detailText, 220);
+  GuiString string;  
+  for(String line : displayText)
+    {
+    string = new GuiString(elementNum, area, 240, 10, line);
+    string.updateRenderPos(0, nextElementY);
+    nextElementY+=10;
+    elementNum++;
+    area.elements.add(string);
+    }  
+  nextElementY+=10;
   area.addGuiElement(new GuiString(elementNum, area, 240-24, 10, "Used In Recipes: ").updateRenderPos(0, nextElementY));
   nextElementY += 10;
   List<ResourceListRecipe> recipes = AWCraftingManager.instance().getRecipesContaining(recipe.getResult());
-  GuiString string;
   GuiButtonSimple button;
   for(ResourceListRecipe recipe : recipes)
     {
@@ -203,6 +266,7 @@ public void setupControls()
 public void updateControls()
   {
   // TODO Auto-generated method stub
+
   }
 
 }

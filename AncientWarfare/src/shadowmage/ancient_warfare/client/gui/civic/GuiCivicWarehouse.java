@@ -112,12 +112,12 @@ public void onElementActivated(IGuiElement element)
 @Override
 public void setupControls()
   {    
-  this.searchBox = (GuiTextInputLine) new GuiTextInputLine(1, this, 176-16, 12, 30, "").updateRenderPos(8, 4);
+  this.searchBox = (GuiTextInputLine) new GuiTextInputLine(1, this, 176-16, 12, 30, "").updateRenderPos(8, 5);
   searchBox.selected = false;
-  int x = 8;
+  int x = 7;
   int y = 4 + 12 + 4;
-  int w = 176-16;
-  int h = 3 * 18;
+  int w = 176-14;
+  int h = 4 * 18;
   this.area = new GuiScrollableArea(0, this, x, y, w, h, 0);
   this.forceUpdate = true;
   this.guiElements.put(0, area);
@@ -160,6 +160,11 @@ protected void addDisplayStacks()
       y++;
       }
     }
+  if(x%8!=0)
+    {
+    y++;
+    }
+  area.updateTotalHeight(y*18);
   }
 
 protected void handleStackClick(GuiItemStack stack)

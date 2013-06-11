@@ -25,6 +25,7 @@ import shadowmage.ancient_warfare.common.research.IResearchGoal;
 
 public class MaterialLevel
 {
+
 public float hpFactor;
 public float speedForwardFactor;
 public float speedStrafeFactor;
