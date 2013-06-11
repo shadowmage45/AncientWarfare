@@ -186,7 +186,7 @@ public void clearBuilderFromStructure()
 
 /**
  * for instantBuilder--construct
- * for tickedBuilder--add to tickQue in AWStructureModule
+ * for tickedBuilder--setup bounds/block
  */
 public abstract void startConstruction();
 
