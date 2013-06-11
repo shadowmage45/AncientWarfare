@@ -58,6 +58,6 @@ public String getTab1Label()
 @Override
 public String getTab2Label()
   {
-  return "Gates";
+  return "Misc";
   }
 }

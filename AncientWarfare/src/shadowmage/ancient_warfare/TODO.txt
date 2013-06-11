@@ -51,6 +51,7 @@ TEMPLATES
 * scan/duplicate of crafting station, w/ orientation
 
 RESEARCH
+* research goal GUI needs research time put back into rendering
 
 CRAFTING
 
@@ -140,3 +141,4 @@ TWEAKS/OPTIMIZATION
 * adjust napalm ammunition to deposit non-source lava blocks
 * add warehouse search box / rework display to use guiStack elements and a scroll bar
 * enable config option for NPC work requirements (use_npcs_for_work..)
+* rework info-details GUIs to use a consistent base framework, most can extend with no problem

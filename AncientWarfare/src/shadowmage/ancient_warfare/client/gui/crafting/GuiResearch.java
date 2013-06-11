@@ -75,7 +75,7 @@ protected void handleRecipeDetailsClick(ResourceListRecipe recipe)
   {
   int id = recipe.getResult().getItemDamage();
   IResearchGoal goal = ResearchGoal.getGoalByID(id);
-  mc.displayGuiScreen(new GuiResearchGoal(inventorySlots, goal, this));
+  mc.displayGuiScreen(new GuiResearchGoal(this, goal));
   }
 
 @Override

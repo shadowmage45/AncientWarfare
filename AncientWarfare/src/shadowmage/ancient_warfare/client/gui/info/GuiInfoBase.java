@@ -131,11 +131,11 @@ public void onElementActivated(IGuiElement element)
     }
   if(buttonGoalMap.containsKey(element))
     {
-    mc.displayGuiScreen(new GuiResearchGoal(inventorySlots, buttonGoalMap.get(element), this));
+    mc.displayGuiScreen(new GuiResearchGoal(this , buttonGoalMap.get(element)));
     }
   if(buttonRecipeMap.containsKey(element))
     {
-    mc.displayGuiScreen(new GuiRecipeDetails(this, buttonRecipeMap.get(element)));
+    this.handleRecipeClick(this.buttonRecipeMap.get(element));
     }
   if(stackButtons.contains(element))
     {
@@ -172,7 +172,7 @@ protected void handleResearchDetailsClick(ResourceListRecipe recipe)
   {
   int id = recipe.getResult().getItemDamage();
   IResearchGoal goal = ResearchGoal.getGoalByID(id);
-  mc.displayGuiScreen(new GuiResearchGoal(inventorySlots, goal, this));
+  mc.displayGuiScreen(new GuiResearchGoal(this, goal));
   }
 
 protected void handleVehicleDetailsClick(ResourceListRecipe recipe)
@@ -196,6 +196,10 @@ public void setupControls()
     item.updateRenderPos(x*18+8, y*18+5+10+10);
     item.isClickable = true;
     item.setItemStack(stack.getFilter());
+    for(String l : (List<String>)stack.getFilter().getTooltip(player, false))
+      {
+      item.addToToolitp(l);
+      }
     item.addToToolitp("Click to view detailed recipe information");
     item.addToToolitp("(if available)");
     stackButtons.add(item);
