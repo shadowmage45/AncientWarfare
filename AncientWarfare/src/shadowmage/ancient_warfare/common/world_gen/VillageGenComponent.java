@@ -66,12 +66,32 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
         this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + structure.ySize - 1, 0);
     }
   Config.logDebug("SHOULD PROCESS CONSTRUCTION OF STRUCTURE: "+structure.name);
+  int hostile = 0;
+  int team = -1;
+  if(VillageGenerator.villageMap.containsKey(startPiece))
+    {
+    hostile = VillageGenerator.villageMap.get(startPiece);
+    Config.logDebug("read value from village map for team status of village: "+hostile);
+    if(hostile==0)
+      {
+      team=16;
+      }
+    else if(hostile==1)
+      {
+      team = 17;
+      }
+    Config.logDebug("set team to: "+team);
+    }  
   BlockPosition hit = getPositionFromBoundingBox();
   hit.moveRight(coordBaseMode, structure.xOffset);
   hit.moveBack(coordBaseMode, structure.zOffset);
   hit.y = this.boundingBox.minY;
+  
   BuilderInstant builder = new BuilderInstant(world, structure, coordBaseMode, hit);
-  builder.setTeamOverride(16);
+  if(team>=0)
+    {
+    builder.setTeamOverride(team);    
+    }
   /**
    * skip preconstruction methods...just do the block placement (no clearing, leveling, or validation)
    */

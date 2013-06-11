@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.world_gen;
 
+import java.util.Random;
+import java.util.WeakHashMap;
+
 import net.minecraft.world.gen.structure.ComponentVillage;
 import net.minecraft.world.gen.structure.ComponentVillageStartPiece;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -66,6 +69,8 @@ public class VillageGenerator
 
 public static VillageGenHook fortress;
 public static VillageGenHook library;
+public static Random teamRandom = new Random();
+public static WeakHashMap<ComponentVillageStartPiece, Integer> villageMap = new WeakHashMap<ComponentVillageStartPiece, Integer>();
 
 public static void load()
   {
@@ -80,6 +85,13 @@ public static void load()
 
 public static VillageGenComponent constructComponent(Class<? extends ComponentVillage> clz, ComponentVillageStartPiece start, int type, int face, ProcessedStructure struct, int x, int y, int z, StructureBoundingBox box)
   {
+  if(!villageMap.containsKey(start))
+    {
+    /**
+     * TODO assign each village as hostile, neutral
+     */
+    villageMap.put(start, teamRandom.nextInt(2));
+    }
   VillageGenComponent part = null;
   Config.logDebug("should construct component for structure: "+struct.name);
   if(clz == AWVCFortress.class)
