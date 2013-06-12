@@ -68,9 +68,9 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
   Config.logDebug("SHOULD PROCESS CONSTRUCTION OF STRUCTURE: "+structure.name);
   int hostile = 0;
   int team = -1;
-  if(VillageGenerator.villageMap.containsKey(startPiece))
+  if(VillageGenerator.instance().villageMap.containsKey(startPiece))
     {
-    hostile = VillageGenerator.villageMap.get(startPiece);
+    hostile = VillageGenerator.instance().villageMap.get(startPiece);
     Config.logDebug("read value from village map for team status of village: "+hostile);
     if(hostile==0)
       {

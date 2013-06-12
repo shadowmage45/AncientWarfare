@@ -50,7 +50,7 @@ public VillageGenHook(Class<? extends VillageGenComponent> clz, int max, int wei
 @Override
 public StructureVillagePieceWeight getVillagePieceWeight(Random random, int i)
   {
-  return new PieceWeight(componentClass, weight, maxNum);
+  return new StructureVillagePieceWeight(componentClass, weight, maxNum);
   }
 
 @Override
@@ -75,35 +75,5 @@ public Object buildComponent(StructureVillagePieceWeight villagePiece, Component
   return canGenerate ? VillageGenerator.constructComponent(componentClass, startPiece, type, face,  structure, x, y, z, structureboundingbox) : null;
   }
 
-protected class PieceWeight extends StructureVillagePieceWeight
-{
-
-/**
- * @param par1Class
- * @param par2
- * @param par3
- */
-public PieceWeight(Class par1Class, int par2, int par3)
-  {
-  super(par1Class, par2, par3);
-  }
-
-@Override
-public boolean canSpawnMoreVillagePiecesOfType(int par1)
-  {
-  boolean can = super.canSpawnMoreVillagePiecesOfType(par1);
-  Config.logDebug("checking if can spawn more : "+can+ "  :t: "+par1 + " cur: "+this.villagePiecesSpawned + " mx: "+this.villagePiecesLimit);
-  return can;
-  }
-
-@Override
-public boolean canSpawnMoreVillagePieces()
-  {
-  boolean can = super.canSpawnMoreVillagePieces();
-  Config.logDebug("checking if can spawn more : "+can+ " cur: "+this.villagePiecesSpawned + " mx: "+this.villagePiecesLimit);
-  return can;
-  }
-
-}
 
 }

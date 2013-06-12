@@ -31,6 +31,7 @@ import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.world_gen.village.AWVCAdvancedLibrary;
 import shadowmage.ancient_warfare.common.world_gen.village.AWVCFortress;
+import shadowmage.ancient_warfare.common.world_gen.village.AWVCTower;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
 public class VillageGenerator
@@ -69,8 +70,13 @@ public class VillageGenerator
 
 public static VillageGenHook fortress;
 public static VillageGenHook library;
+public static VillageGenHook tower;
 public static Random teamRandom = new Random();
-public static WeakHashMap<ComponentVillageStartPiece, Integer> villageMap = new WeakHashMap<ComponentVillageStartPiece, Integer>();
+public WeakHashMap<ComponentVillageStartPiece, Integer> villageMap = new WeakHashMap<ComponentVillageStartPiece, Integer>();
+
+private static VillageGenerator INSTANCE = new VillageGenerator();
+public static VillageGenerator instance(){return INSTANCE;}
+private VillageGenerator(){};
 
 public static void load()
   {
@@ -81,16 +87,23 @@ public static void load()
   struct = StructureManager.instance().getStructureServer("advancedVillageLibrary");
   library = new VillageGenHook(AWVCAdvancedLibrary.class, 1, 20, struct);
   VillagerRegistry.instance().registerVillageCreationHandler(library);
+  
+  struct = StructureManager.instance().getStructureServer("towerTest1");
+  tower = new VillageGenHook(AWVCTower.class, 1, 20, struct);
+  VillagerRegistry.instance().registerVillageCreationHandler(tower);
   }
 
 public static VillageGenComponent constructComponent(Class<? extends ComponentVillage> clz, ComponentVillageStartPiece start, int type, int face, ProcessedStructure struct, int x, int y, int z, StructureBoundingBox box)
   {
-  if(!villageMap.containsKey(start))
+  if(!instance().villageMap.containsKey(start))
     {
     /**
      * TODO assign each village as hostile, neutral
      */
-    villageMap.put(start, teamRandom.nextInt(2));
+    int team = teamRandom.nextInt(2);
+    Config.logDebug("assigining team random of: "+team);
+    instance().villageMap.put(start, team);
+    
     }
   VillageGenComponent part = null;
   Config.logDebug("should construct component for structure: "+struct.name);
@@ -98,9 +111,13 @@ public static VillageGenComponent constructComponent(Class<? extends ComponentVi
     {
     part  = new AWVCFortress(start, type, face, struct, box);
     } 
-  if(clz== AWVCAdvancedLibrary.class)
+  else if(clz== AWVCAdvancedLibrary.class)
     {
     part = new AWVCAdvancedLibrary(start, type, face, struct, box);
+    }
+  else if(clz == AWVCTower.class)
+    {
+    part = new AWVCTower(start, type, face, struct, box);
     }
   return part;
   }
