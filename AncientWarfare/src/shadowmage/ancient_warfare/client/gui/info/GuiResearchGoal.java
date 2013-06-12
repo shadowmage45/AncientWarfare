@@ -20,26 +20,22 @@
  */
 package shadowmage.ancient_warfare.client.gui.info;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-
-import org.lwjgl.input.Keyboard;
-
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
-import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
-import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 
 public class GuiResearchGoal extends GuiInfoBase
 {
@@ -90,7 +86,18 @@ public void setupControls()
   ticks /=10;//div 10 to get tenths...
   String timeLabel = minutes + "m " + seconds + "."+ticks+"s";
   
-  for(String st : descriptionLines)
+  List<String> newLines = new ArrayList<String>();  
+  if(PlayerTracker.instance().getClientEntry().hasDoneResearch(goal))
+    {
+    newLines.add("Known Research");
+    }
+  else
+    {
+    newLines.add("Unknown Research");
+    newLines.add("Research Time: "+timeLabel);
+    }  
+  newLines.addAll(descriptionLines);
+  for(String st : newLines)
     {
     area.addGuiElement(new GuiString(elementNum, area, 240-24, 10, st).updateRenderPos(0, nextElementY));
     elementNum++;

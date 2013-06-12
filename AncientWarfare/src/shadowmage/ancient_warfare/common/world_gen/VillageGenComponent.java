@@ -36,12 +36,13 @@ public abstract class VillageGenComponent extends ComponentVillage
 
 private int averageGroundLevel = -1;
 ProcessedStructure structure;
+BlockPosition hitPos = null;
 
 /**
  * @param start
  * @param par2
  */
-public VillageGenComponent(ComponentVillageStartPiece start, int par2, int face, ProcessedStructure struct, StructureBoundingBox box)
+public VillageGenComponent(ComponentVillageStartPiece start, Integer par2, Integer face, ProcessedStructure struct, StructureBoundingBox box)
   {
   super(start, par2);
   this.coordBaseMode = face;
@@ -53,7 +54,7 @@ public VillageGenComponent(ComponentVillageStartPiece start, int par2, int face,
 @Override
 public boolean addComponentParts(World world, Random random, StructureBoundingBox structureboundingbox)
   {  
-  
+  if(this.structure==null){return false;}
   if (this.averageGroundLevel < 0)
     {
         this.averageGroundLevel = this.getAverageGroundLevel(world, structureboundingbox);
@@ -65,13 +66,11 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
 
         this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + structure.ySize - 1, 0);
     }
-  Config.logDebug("SHOULD PROCESS CONSTRUCTION OF STRUCTURE: "+structure.name);
   int hostile = 0;
   int team = -1;
   if(VillageGenerator.instance().villageMap.containsKey(startPiece))
     {
     hostile = VillageGenerator.instance().villageMap.get(startPiece);
-    Config.logDebug("read value from village map for team status of village: "+hostile);
     if(hostile==0)
       {
       team=16;
@@ -80,7 +79,6 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
       {
       team = 17;
       }
-    Config.logDebug("set team to: "+team);
     }  
   BlockPosition hit = getPositionFromBoundingBox();
   hit.moveRight(coordBaseMode, structure.xOffset);
@@ -91,12 +89,15 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
   if(team>=0)
     {
     builder.setTeamOverride(team);    
+    } 
+  if(hitPos==null || !hitPos.equals(hit))
+    {
+    hitPos = hit;
+    builder.startConstruction();    
     }
-  /**
-   * skip preconstruction methods...just do the block placement (no clearing, leveling, or validation)
-   */
-  Config.logDebug("doing construction at: "+hit + "  bb: "+this.boundingBox);
-  builder.startConstruction();
+  else
+    {
+    }
   return true;
   }
 

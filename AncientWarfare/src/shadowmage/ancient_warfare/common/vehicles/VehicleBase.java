@@ -129,7 +129,14 @@ public float localTurretPitchInc = 1.f;
 public float localLaunchPower = 31.321f;
 
 /**
- * set by move helper on movement update. used during client rendering to update wheel rotation and other movement speed based animations
+ * roll angle, used by boats and aircraft
+ */
+public float vehicleRoll = 0.f;
+
+/**
+ * set by move helper on movement update. used during client rendering to update 
+ * wheel rotation and other movement speed based animations (airplanes use for prop,
+ * helicopter uses for main and tail rotors).
  */
 public float wheelRotation = 0.f;
 public float wheelRotationPrev = 0.f;

@@ -62,6 +62,7 @@ public Class<?> getComponentClass()
 @Override
 public Object buildComponent(StructureVillagePieceWeight villagePiece, ComponentVillageStartPiece startPiece, List pieces, Random random, int x, int y, int z, int face, int type)
   {
+	if(structure==null){return null;}
   Config.logDebug("checking can generate at : "+x+","+y+","+z);
   StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, -structure.verticalOffset, 0, structure.xSize, structure.ySize, structure.zSize, face);
   boolean canGenerate = (structureboundingbox != null && structureboundingbox.minY > 10);

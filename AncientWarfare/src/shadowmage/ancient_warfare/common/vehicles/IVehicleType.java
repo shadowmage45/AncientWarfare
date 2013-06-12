@@ -112,4 +112,6 @@ public abstract ResourceListRecipe constructRecipe(int level);
 
 public abstract HashSet<IResearchGoal> getNeededResearchFor(int level);
 
+public abstract VehicleMovementType getMovementType();
+
 }

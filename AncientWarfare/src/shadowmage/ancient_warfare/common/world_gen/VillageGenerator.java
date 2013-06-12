@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.world_gen;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.WeakHashMap;
 
@@ -81,16 +82,25 @@ private VillageGenerator(){};
 public static void load()
   {
   ProcessedStructure struct = StructureManager.instance().getStructureServer("mineArea");
-  fortress = new VillageGenHook(AWVCFortress.class, 1, 20, struct);  
-  VillagerRegistry.instance().registerVillageCreationHandler(fortress);
+  if(struct!=null)
+    {
+    fortress = new VillageGenHook(AWVCFortress.class, 1, 20, struct);  
+    VillagerRegistry.instance().registerVillageCreationHandler(fortress);
+    }
   
   struct = StructureManager.instance().getStructureServer("advancedVillageLibrary");
-  library = new VillageGenHook(AWVCAdvancedLibrary.class, 1, 20, struct);
-  VillagerRegistry.instance().registerVillageCreationHandler(library);
-  
+  if(struct!=null)
+    {
+    library = new VillageGenHook(AWVCAdvancedLibrary.class, 1, 20, struct);
+    VillagerRegistry.instance().registerVillageCreationHandler(library);    
+    }
+    
   struct = StructureManager.instance().getStructureServer("towerTest1");
-  tower = new VillageGenHook(AWVCTower.class, 1, 20, struct);
-  VillagerRegistry.instance().registerVillageCreationHandler(tower);
+  if(struct!=null)
+    {
+    tower = new VillageGenHook(AWVCTower.class, 1, 20, struct);
+    VillagerRegistry.instance().registerVillageCreationHandler(tower);    
+    }
   }
 
 public static VillageGenComponent constructComponent(Class<? extends ComponentVillage> clz, ComponentVillageStartPiece start, int type, int face, ProcessedStructure struct, int x, int y, int z, StructureBoundingBox box)
@@ -101,12 +111,14 @@ public static VillageGenComponent constructComponent(Class<? extends ComponentVi
      * TODO assign each village as hostile, neutral
      */
     int team = teamRandom.nextInt(2);
-    Config.logDebug("assigining team random of: "+team);
     instance().villageMap.put(start, team);
     
     }
+  if(struct==null)
+    {
+    return null;
+    }
   VillageGenComponent part = null;
-  Config.logDebug("should construct component for structure: "+struct.name);
   if(clz == AWVCFortress.class)
     {
     part  = new AWVCFortress(start, type, face, struct, box);

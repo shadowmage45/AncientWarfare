@@ -1,8 +1,5 @@
 FROM TESTERS
-* iron single gate orientation is (reversed)?
-* gate tool doesn't reset properly
-* pathfinding overhangs (finds path to block below)
-* pathfinding cobblestone walls (push out of blocks?)
+* iron single gate orientation is (reversed)(or at least inconsistent)?
 * death message from missiles is untranslated
 
 BALANCE/TWEAKS
@@ -12,23 +9,22 @@ BALANCE/TWEAKS
 * examine recipe balance
 
 GENERAL
-* add name search/filter box to structure builder guis, and warehouse gui
+* add name search/filter box to structure builder guis
 * missiles -- add shooter/etc to spawn data and re-enable client-side entity-hit detection?
 * create general secondary data watcher for npcs/gates/vehicles
 * more missile icons
 * more missile textures    
 * chunkloader block ? (configurable range -- gui with toggleable squares to select chunks or by radius, render toggle to select if to render bounds areas)
-* block/id picked for warehouse storage and crafting blocks (needs adjusted for meta)
-* airplanes (will be part of the BC compat plugin/addon, or perhaps separate completely).
-
-INFO GUIs
-* add 'known/not known(avail/unavail)' to recipe/research detail guis.
+* add default structures for world gen, village gen
 
 VEHICLES
-* set vehicle motion/accel to 0 when collided horizontally
+* set vehicle motion/accel to 0 when collided horizontally (hmm..)
+* add potential motion handling for aquatic and aerial vehicles
+* airplanes (will be part of the BC compat plugin/addon, or perhaps separate completely).
+* boat(s)
  
 GATES
-* partially blocked bounding (use gate for collision for vertical gates?)
+* rework model into a 1/4 block model to allow for true mid-split/open gates
 
 NPCS
 * more 'check if target dead' (seems creepers or entities removed by setting world to peacefull are still targets)
@@ -42,16 +38,14 @@ CIVICS
     * NPC town hall plans courier routes (use couriers)    
 * NPC town hall will occasionally respawn missing NPCs    
 * swap civic sided regular/resource slots?
-* town hall food processing
 
 TEMPLATES
 * resource lists for gates
 * resource lists for npcs
 * resource lists for vehicles
-* scan/duplicate of crafting station, w/ orientation
+* scan/build of crafting station, w/ orientation
 
 RESEARCH
-* research goal GUI needs research time put back into rendering
 
 CRAFTING
 
@@ -95,6 +89,7 @@ OPTIONAL
 * grenades ?
 * land-mines ?
 * clean up vehicle alpha rendering
+* structures can have their base map moved into a single-dimensional array
    
 SCANNER
     
@@ -115,6 +110,8 @@ MINE
 TEAM CONTROL GUI
  
 GUI FRAMEWORK
+
+INFO GUIs
 
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
@@ -141,4 +138,12 @@ TWEAKS/OPTIMIZATION
 * adjust napalm ammunition to deposit non-source lava blocks
 * add warehouse search box / rework display to use guiStack elements and a scroll bar
 * enable config option for NPC work requirements (use_npcs_for_work..)
-* rework info-details GUIs to use a consistent base framework, most can extend with no problem
+* rework info-details GUIs to use a consistent base framework, most can extend with no problem.
+/********** 06-11-13 **********/
+* prep work on village-additional structures
+    they are technically in and working, but have a few issues to sort through before I feel okay with them
+
+/********** 06-10-13 **********/
+* research goal GUI needs research time put back into rendering
+* add 'known/not known(avail/unavail)' to recipe/research detail guis.
+* minor prep work for additional vehicle movement types

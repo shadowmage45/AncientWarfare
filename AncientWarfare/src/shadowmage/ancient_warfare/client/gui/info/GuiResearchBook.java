@@ -51,6 +51,7 @@ import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
@@ -65,7 +66,7 @@ RecipeSorterAZ sorterAZ = new RecipeSorterAZ();
 RecipeSorterTextFilter sorterFilter = new RecipeSorterTextFilter();
 GuiTextInputLine searchBox;
 GuiScrollableArea area;
-int buttonWidth = 256 - 16 - 24-10;
+int buttonWidth = 256 - 24 - 10;
 HashMap<GuiButtonSimple, ResourceListRecipe> recipes = new HashMap<GuiButtonSimple, ResourceListRecipe>();
 
 
@@ -81,25 +82,7 @@ GuiTab structuresTab;
 GuiTab craftingTab;
 
 EnumSet recipeTypes = null;
-/**
- * tabs
- * INFO
- *    hints/tips/beginners guide/basic stats
- * VEHICLES
- *    searchable list of  (available?) vehicle detail pages
- * AMMO
- *    searchable list of (available?) ammo detail pages
- * NPC
- *    searchable list of (available?) npc detail pages
- * MISC
- *    gates/armor/upgrades (available?) detail pages
- * CIVICS -- MISSING
- *    searchable list of  (available?) civic detail pages
- * RESEARCH
- *    searchable list of all (completed?) research
- * STRUCTURES
- *    info sheet on structures -- how to scan, build, etc
- */
+
 /**
  * @param container
  */
@@ -145,7 +128,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 
 @Override
 public void updateScreenContents()
-  {
+  {  
   area.updateGuiPos(guiLeft, guiTop);
   }
 
@@ -346,16 +329,19 @@ public void updateControls()
     }
   }
 
-protected void addMainInfo()
+protected void addMiscInfo()
   {
   this.guiElements.put(0, area);
   int y = 0;
   int elementNum = 0;
   List<String> displayText = new ArrayList<String>();
   
-  String text = "";
-  displayText.add(text);
-   
+  displayText.add("Misc Tips and Info");  
+  displayText.add("");
+  
+  displayText.add("Coming soon.....");
+ 
+
   displayText = RenderTools.getFormattedLines(displayText, 220);
   GuiString string;  
   for(String line : displayText)
@@ -369,7 +355,43 @@ protected void addMainInfo()
   area.updateTotalHeight(y);
   }
 
-protected void addMiscInfo(){}
+protected void addMainInfo()
+  {
+  this.guiElements.put(0, area);
+  int y = 0;
+  int elementNum = 0;
+  List<String> displayText = new ArrayList<String>();
+  
+  displayText.add("Welcome to Ancient Warfare.");  
+  displayText.add("");
+  displayText.add("Current Team: " + TeamTracker.instance().getTeamForPlayer(player));
+  displayText.add("Players on Team: " +TeamTracker.instance().getTeamEntryFor(player).memberNames.size());
+  displayText.add("Known Research: "+entry.getKnownResearch().size());
+  displayText.add("Unkown Research: "+entry.getUnknwonResearch().size());
+
+  displayText.add("");
+  displayText.add("To begin research, place a research book (that is bound to you) into a research table.");
+  displayText.add("");
+  displayText.add("To begin crafting, place a research book (that is bound to you) into the book slot of a crafting table.");
+  displayText.add("");
+  displayText.add("Recipes for Vehicles, NPCs, Civics, and Ammo may be viewed by opening the corresponding tab.  All research goals" +
+  		"may be viewed by clicking on the Research Tab.");
+  displayText.add("");
+  displayText.add("Crafting instructions are available in the Crafing tab.");
+  displayText.add("Structure processing instructions are available in the Structures tab.");
+   
+  displayText = RenderTools.getFormattedLines(displayText, 220);
+  GuiString string;  
+  for(String line : displayText)
+    {
+    string = new GuiString(elementNum, area, 240, 10, line);
+    string.updateRenderPos(0, y);
+    y+=10;
+    elementNum++;
+    area.elements.add(string);
+    }  
+  area.updateTotalHeight(y);
+  }
 
 protected void addStructureInfo()
   {

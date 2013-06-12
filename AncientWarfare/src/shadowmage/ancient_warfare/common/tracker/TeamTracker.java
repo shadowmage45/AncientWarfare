@@ -404,6 +404,10 @@ public int getTeamForPlayerClient(String name)
 
 public boolean isHostileTowards(World world, int aggressor, int defender)
   {  
+  if(aggressor == defender)
+    {
+    return false;
+    }
   if(aggressor == NPC_HOSTILE || defender== NPC_HOSTILE)
     {
     return true;

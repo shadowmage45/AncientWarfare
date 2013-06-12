@@ -37,6 +37,7 @@ import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -129,10 +130,18 @@ public List<ItemStackWrapperCrafting> additionalMaterials = new ArrayList<ItemSt
 
 String iconTexture = "foo.png";
 
+protected VehicleMovementType movementType = VehicleMovementType.GROUND;
+
 public VehicleType(int typeNum)
   {
   this.vehicleType = typeNum; 
   vehicleTypes[typeNum] = this;
+  }
+
+@Override
+public VehicleMovementType getMovementType()
+  {
+  return this.movementType;
   }
 
 @Override
