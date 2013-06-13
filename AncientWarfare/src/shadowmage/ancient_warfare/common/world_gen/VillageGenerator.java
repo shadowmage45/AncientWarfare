@@ -81,6 +81,7 @@ private VillageGenerator(){};
 
 public static void load()
   {
+  if(true){return;}
   ProcessedStructure struct = StructureManager.instance().getStructureServer("mineArea");
   if(struct!=null)
     {

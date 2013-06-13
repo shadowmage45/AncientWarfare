@@ -163,7 +163,7 @@ public List<ResourceListRecipe> getRecipesContaining(PlayerEntry entry, String t
       for(ResourceListRecipe recipe : list)
         {
         name = recipe.displayName;
-        if(name.toLowerCase().contains(text.toLowerCase()) && ((!Config.DEBUG && creative) || Config.disableResearch || recipe.canBeCraftedBy(entry)))
+        if(name.toLowerCase().contains(text.toLowerCase()) && (creative || Config.disableResearch || recipe.canBeCraftedBy(entry)))
           {
           recipes.add(recipe);
           }
@@ -675,7 +675,7 @@ public List<ResourceListRecipe> getRecipesOfTypesFor(PlayerEntry entry, boolean 
     List<ResourceListRecipe> recipes = this.recipesByType.get(type);
     for(ResourceListRecipe recipe : recipes)
       {
-      if(recipe.canBeCraftedBy(entry) || (!Config.DEBUG && creative))
+      if(creative || Config.disableResearch  || recipe.canBeCraftedBy(entry) )
         {
         found.add(recipe);
         }

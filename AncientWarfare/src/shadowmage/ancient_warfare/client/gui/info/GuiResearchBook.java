@@ -375,7 +375,7 @@ protected void addMainInfo()
   displayText.add("To begin crafting, place a research book (that is bound to you) into the book slot of a crafting table.");
   displayText.add("");
   displayText.add("Recipes for Vehicles, NPCs, Civics, and Ammo may be viewed by opening the corresponding tab.  All research goals" +
-  		"may be viewed by clicking on the Research Tab.");
+  		" may be viewed by clicking on the Research Tab.");
   displayText.add("");
   displayText.add("Crafting instructions are available in the Crafing tab.");
   displayText.add("Structure processing instructions are available in the Structures tab.");
