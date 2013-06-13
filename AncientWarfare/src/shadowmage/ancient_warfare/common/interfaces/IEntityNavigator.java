@@ -37,6 +37,7 @@ void setMoveToTarget(int x, int y, int z);
 void setCanSwim(boolean swim);
 void setCanOpenDoors(boolean doors);
 void setCanUseLadders(boolean ladders);
+void setCanGoOnLand(boolean land);
 void onMovementUpdate();
 void clearPath();
 void forcePath(List<Node> n);

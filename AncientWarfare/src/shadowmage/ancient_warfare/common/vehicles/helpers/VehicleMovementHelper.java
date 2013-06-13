@@ -23,8 +23,10 @@ package shadowmage.ancient_warfare.common.vehicles.helpers;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -150,9 +152,6 @@ public void sendUpdateToClients()
   NBTTagCompound tag = new NBTTagCompound();  
   tag.setFloat("fMot", forwardMotion);
   tag.setFloat("sMot", strafeMotion);    
-//  tag.setFloat("px", (float)vehicle.posX);
-//  tag.setFloat("py", (float)vehicle.posY);
-//  tag.setFloat("pz", (float)vehicle.posZ);
   tag.setFloat("ry", (float)vehicle.rotationYaw);
   tag.setFloat("fAcc", forwardAccel);
   tag.setFloat("sAcc", strafeAccel);
@@ -350,15 +349,27 @@ public void onMovementTick()
   else if(absStr <= 0.2f && strafeInput == 0)
     {
     strafeMotion = 0;
-    }    
-  if(!vehicle.onGround)
-    {
-    vehicle.motionY -= (9.81f*0.05f*0.05f);//yes..vehicles will 'fall' whenever they are moving..it is what keeps them on the ground...
     }
-  else
+    
+
+  
+  
+  if(vehicle.vehicleType.getMovementType()==VehicleMovementType.WATER)
     {
-    vehicle.motionY = 0.f;
+    if(!this.handleWaterMovement())
+      {
+      strafeMotion *=.85f;
+      strafeAccel *= 0.85f;
+      forwardAccel *= 0.85f;
+      forwardMotion *= .85f;
+      }
+    vehicle.motionY *= 0.949999988079071D;
     }
+  else if(vehicle.vehicleType.getMovementType()==VehicleMovementType.GROUND)
+    {
+    vehicle.motionY -= (9.81f*0.05f*0.05f);
+    }
+  
   if(strafeMotion !=0 || forwardMotion !=0 || vehicle.motionY !=0)
     { 
     if(vehicle.riddenByEntity instanceof NpcBase)
@@ -383,6 +394,71 @@ public void onMovementTick()
     }  
   vehicle.width = prevWidth;
   vehicle.setPosition(vehicle.posX, vehicle.posY, vehicle.posZ); 
+  }
+
+protected boolean handleWaterMovement()
+  {
+  byte submersionDepthMax = 5;
+  double submersionAmount = 0.0D;
+  boolean inWater = false;
+  for (int i = 0; i < submersionDepthMax; ++i)
+    {
+    double d1 = vehicle.boundingBox.minY + (vehicle.boundingBox.maxY - vehicle.boundingBox.minY) * (double)(i + 0) / (double)submersionDepthMax - 0.125D;
+    double d2 = vehicle.boundingBox.minY + (vehicle.boundingBox.maxY - vehicle.boundingBox.minY) * (double)(i + 1) / (double)submersionDepthMax - 0.125D;
+    AxisAlignedBB axisalignedbb = AxisAlignedBB.getAABBPool().getAABB(vehicle.boundingBox.minX, d1, vehicle.boundingBox.minZ, vehicle.boundingBox.maxX, d2, vehicle.boundingBox.maxZ);
+
+    if (vehicle.worldObj.isAABBInMaterial(axisalignedbb, Material.water))
+      {
+      submersionAmount += 1.0D / (double)submersionDepthMax;
+      inWater = true;
+      }
+    
+    }
+
+  double vehicleMotion = Math.sqrt(vehicle.motionX * vehicle.motionX + vehicle.motionZ * vehicle.motionZ);
+  double vehicleForwardMotion;
+  double strafeMotion;
+
+  if (vehicleMotion > 0.26249999999999996D)
+    {
+    vehicleForwardMotion = Math.cos((double)vehicle.rotationYaw * Math.PI / 180.0D);
+    strafeMotion = Math.sin((double)vehicle.rotationYaw * Math.PI / 180.0D);
+
+    for (int j = 0; (double)j < 1.0D + vehicleMotion * 60.0D; ++j)
+      {
+      double particleFloatOffset = (double)(vehicle.getRNG().nextFloat() * 2.0F - 1.0F);
+      double particleIntegerOffset = (double)(vehicle.getRNG().nextInt(2) * 2 - 1) * 0.7D;
+      double particleXOffset;
+      double particleZOffset;
+
+      if (vehicle.getRNG().nextBoolean())
+        {
+        particleXOffset = vehicle.posX - vehicleForwardMotion * particleFloatOffset * 0.8D + strafeMotion * particleIntegerOffset;
+        particleZOffset = vehicle.posZ - strafeMotion * particleFloatOffset * 0.8D - vehicleForwardMotion * particleIntegerOffset;
+        vehicle.worldObj.spawnParticle("splash", particleXOffset, vehicle.posY - 0.125D, particleZOffset, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+        }
+      else
+        {
+        particleXOffset = vehicle.posX + vehicleForwardMotion + strafeMotion * particleFloatOffset * 0.7D;
+        particleZOffset = vehicle.posZ + strafeMotion - vehicleForwardMotion * particleFloatOffset * 0.7D;
+        vehicle.worldObj.spawnParticle("splash", particleXOffset, vehicle.posY - 0.125D, particleZOffset, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+        }
+      }
+    }
+  if (submersionAmount < 1.0D)
+    {
+    vehicleForwardMotion = submersionAmount * 2.0D - 1.0D;
+    vehicle.motionY += 0.03999999910593033D * vehicleForwardMotion;
+    }
+  else
+    {
+    if (vehicle.motionY < 0.0D)
+      {
+      vehicle.motionY /= 2.0D;
+      }
+    vehicle.motionY += 0.007000000216066837D;
+    }
+  return inWater;
   }
 
 /**

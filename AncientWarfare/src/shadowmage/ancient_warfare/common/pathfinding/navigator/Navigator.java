@@ -534,4 +534,10 @@ public List<Node> getCurrentPath()
   return path.getActivePath();
   }
 
+@Override
+public void setCanGoOnLand(boolean land)
+  {
+  this.world.setCanGoOnLand(land);
+  }
+
 }

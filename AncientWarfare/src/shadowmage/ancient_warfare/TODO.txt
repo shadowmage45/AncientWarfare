@@ -137,3 +137,8 @@ TWEAKS/OPTIMIZATION
 /********** 06-12-13 (post release)**********/
 * fix research goal resource-list display (was missing the item stacks)
 
+
+/********** 06-13-13 (post release)**********/
+* adj vehicle MoveHelper for boat movement
+* add boat test vehicle
+* adjust pathfinding to account for boats

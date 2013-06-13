@@ -150,6 +150,8 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.TREBUCHET_LARGE, new RenderTrebuchetLarge(), new ModelTrebuchetStandFixed());
   this.addVehicleRender(VehicleRegistry.CHEST_CART, new RenderChestCart(), new ModelChestCart());
   
+  this.addVehicleRender(VehicleRegistry.BOAT_TEST, new RenderBallistaMobile(), new ModelBallistaMobile());
+  
   /**
    * missiles...
    */

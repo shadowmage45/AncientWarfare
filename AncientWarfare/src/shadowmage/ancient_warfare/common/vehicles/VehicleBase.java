@@ -23,6 +23,7 @@
 package shadowmage.ancient_warfare.common.vehicles;
 
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -40,7 +41,6 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
-import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.VehicleInventory;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -191,7 +191,12 @@ public VehicleBase(World par1World)
   this.nav.setStuckCheckTicks(100);
   this.stepHeight = 1.12f;
   this.entityCollisionReduction = 0.9f;
-  this.onGround = false;
+  this.onGround = false;  
+  }
+
+public Random getRNG()
+  {
+  return this.rand;
   }
 
 @Override
@@ -313,6 +318,7 @@ public void setVehicleType(IVehicleType vehicle, int materialLevel)
     {
     this.localTurretRotation = this.rotationYaw;
     }
+  this.nav.setCanGoOnLand(vehicleType.getMovementType()==VehicleMovementType.GROUND);
   }
 
 private int setupTicks = 0;

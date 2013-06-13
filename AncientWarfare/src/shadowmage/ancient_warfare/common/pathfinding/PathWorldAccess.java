@@ -35,12 +35,22 @@ public boolean canOpenDoors;
 public boolean canSwim;
 public boolean canDrop;
 public boolean canUseLaders;
+public boolean canGoOnLand = true;
 
 World world;
 
 public PathWorldAccess(World world)
   {
   this.world = world;
+  }
+
+public void setCanGoOnLand(boolean val)
+  {
+  this.canGoOnLand = val;
+  if(!val)
+    {
+    this.canSwim = true;
+    }
   }
 
 public int getBlockId(int x, int y, int z)
@@ -53,8 +63,16 @@ public int getTravelCost(int x, int y, int z)
   int id = world.getBlockId(x, y, z);
   if((id==Block.waterMoving.blockID || id==Block.waterStill.blockID))//can't swim check
     {
+    if(!canGoOnLand)
+      {
+      return 10;
+      }
     return 30;
     }  
+  if(!canGoOnLand)
+    {
+    return 30;
+    }
   return 10;
   }
 
@@ -105,23 +123,26 @@ public boolean isWalkable2(int x, int y, int z)
   int id3 = world.getBlockId(x, y+1, z);
   boolean cube = !checkBlockBounds(x, y, z);
   boolean cube2 = !checkBlockBounds(x, y-1, z);
-  boolean cube3 = !checkBlockBounds(x, y+1, z);  
+  boolean cube3 = !checkBlockBounds(x, y+1, z);
   if(isFence(id2))
     {
     return false;
+    } 
+  if(canGoOnLand)
+    {     
+    if(canUseLaders && isLadder(id))
+      {
+      return true;
+      }
+    if(canOpenDoors && isDoor(x, y, z) && cube2)
+      {
+      return true;
+      }
+    if(!cube && !cube3 && (cube2 || canSupport(id, x,y,z)))//finally, check if block and blockY+1 are clear and blockY-1 is solid
+      {
+      return true;
+      }    
     }  
-  if(canUseLaders && isLadder(id))
-    {
-    return true;
-    }
-  if(canOpenDoors && isDoor(x, y, z) && cube2)
-    {
-    return true;
-    }
-  if(!cube && !cube3 && (cube2 || canSupport(id, x,y,z)))//finally, check if block and blockY+1 are clear and blockY-1 is solid
-    {
-    return true;
-    }
   if(canSwim && isWater(id) && id3==0)
     {
     return true;

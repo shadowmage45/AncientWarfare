@@ -31,6 +31,7 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobil
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStand;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStandTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBatteringRam;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBoatTest;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCannonMobileFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCannonStandFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCannonStandTurret;
@@ -72,6 +73,8 @@ public static final IVehicleType TREBUCHET_MOBILE_FIXED = new VehicleTypeTrebuch
 public static final IVehicleType TREBUCHET_LARGE = new VehicleTypeTrebuchetLarge(16);
 
 public static final IVehicleType CHEST_CART = new VehicleTypeChestCart(17);
+
+public static final IVehicleType BOAT_TEST = new VehicleTypeBoatTest(18);
 
 private VehicleRegistry(){}
 private static VehicleRegistry INSTANCE;
