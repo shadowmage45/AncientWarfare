@@ -973,3 +973,23 @@
 /****************************************SIXTH TEST RELEASE .007****************************************/
 /********************************************************************************/
 
+
+/********** 06-10-13 **********/
+* add many details to research book
+* adjust napalm ammunition to deposit non-source lava blocks
+* add warehouse search box / rework display to use guiStack elements and a scroll bar
+* enable config option for NPC work requirements (use_npcs_for_work..)
+* rework info-details GUIs to use a consistent base framework, most can extend with no problem.
+/********** 06-11-13 **********/
+* prep work on village-additional structures
+    they are technically in and working, but have a few issues to sort through before I feel okay with them
+
+/********** 06-12-13 **********/
+* research goal GUI needs research time put back into rendering
+* add 'known/not known(avail/unavail)' to recipe/research detail guis.
+* minor prep work for additional vehicle movement types
+
+
+/********************************************************************************/
+/****************************************SEVENT TEST RELEASE .008 (bugfix)****************************************/
+/********************************************************************************/

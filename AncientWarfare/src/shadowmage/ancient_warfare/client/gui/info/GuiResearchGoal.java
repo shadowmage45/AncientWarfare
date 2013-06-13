@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GuiResearchGoal extends GuiInfoBase
 {
@@ -73,8 +74,35 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void setupControls()
   {
-  this.area = new GuiScrollableArea(0, this, 5, 5+16+5+30, 256-10, 240-10-16-5-30, 0);
+  
   int elementNum = 100;
+  GuiItemStack item;
+  int x = 0;
+  int y = 0;
+  for(ItemStackWrapperCrafting stack : recipe.getResourceList())
+    {
+    item = new GuiItemStack(elementNum, this);
+    item.updateRenderPos(x*18+8, y*18+5+10+10);
+    item.isClickable = true;
+    item.setItemStack(stack.getFilter());
+    for(String l : (List<String>)stack.getFilter().getTooltip(player, false))
+      {
+      item.addToToolitp(l);
+      }
+    item.addToToolitp("Click to view detailed recipe information");
+    item.addToToolitp("(if available)");
+    stackButtons.add(item);
+    this.guiElements.put(elementNum, item);
+    elementNum++;
+    x++;
+    if(x>=9)      
+      {
+      x = 0;
+      y++;
+      }
+    }
+  
+  this.area = new GuiScrollableArea(0, this, 5, 5+16+5+30, 256-10, 240-10-16-5-30, 0);
   int nextElementY = 0;
   List<String> descriptionLines = RenderTools.getFormattedLines(this.goal.getDetailedDescription(), 200);
   int ticks = goal.getResearchTime();
@@ -109,7 +137,6 @@ public void setupControls()
   List<ResourceListRecipe> recipes = AWCraftingManager.instance().getRecipesDependantOn(goal);
   GuiString string;
   GuiButtonSimple button;
-  GuiItemStack item;
   for(ResourceListRecipe recipe : recipes)
     {
     button = new GuiButtonSimple(elementNum, area, 240-24 - 22, 16, recipe.getDisplayName());
