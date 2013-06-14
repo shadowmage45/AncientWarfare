@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
@@ -54,16 +55,17 @@ public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
     this.shouldRiderSit = true;
     this.moveRiderWithTurret = true;
     this.turretRotationMax=180.f;
+    this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
     this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
-    this.addNeededResearch(1, ResearchGoal.vehicleMobility1);
-    this.addNeededResearch(2, ResearchGoal.vehicleMobility1);
-    this.addNeededResearch(3, ResearchGoal.vehicleMobility2);
-    this.addNeededResearch(4, ResearchGoal.vehicleMobility2);
+    this.addNeededResearch(1, ResearchGoal.vehicleMobility2);
+    this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
+    this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
+    this.addNeededResearch(4, ResearchGoal.vehicleMobility5);
     this.addNeededResearch(0, ResearchGoal.vehicleTurrets1);
-    this.addNeededResearch(1, ResearchGoal.vehicleTurrets1);
-    this.addNeededResearch(2, ResearchGoal.vehicleTurrets1);
-    this.addNeededResearch(3, ResearchGoal.vehicleTurrets2);
-    this.addNeededResearch(4, ResearchGoal.vehicleTurrets2);
+    this.addNeededResearch(1, ResearchGoal.vehicleTurrets2);
+    this.addNeededResearch(2, ResearchGoal.vehicleTurrets3);
+    this.addNeededResearch(3, ResearchGoal.vehicleTurrets4);
+    this.addNeededResearch(4, ResearchGoal.vehicleTurrets5);
     this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.mobilityUnit, 1, false, false));
     this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.turretComponents, 1, false, false));
     }

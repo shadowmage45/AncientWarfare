@@ -17,7 +17,9 @@ GENERAL
 * chunkloader block ? (configurable range -- gui with toggleable squares to select chunks or by radius, render toggle to select if to render bounds areas)
 * add default structures for world gen, village gen
 * icons for NPC spawner items
-* structure builder crashes if attempt to build on air
+* structure builder direct crashes if attempt to build on air
+* add some method to craft vanilla recipes using craftsman
+* find/make a cleaner method of processing food -> rations (separate crafting table?)
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally (hmm..)
@@ -30,6 +32,28 @@ VEHICLES
 * finish boat textures
 * finish boat stats (health, speed, power, etc)
 * it appears that vehicles are missing the speed upgrade
+
+AIRPLANE
+* will need at rewrite of movementHelper to allow for new input methods
+* need new controls for throttle
+    throttle will use a constant acceleration in the thrust-axis of the vehicle
+    * can link throttle controls from the manual turret power/pitch control    
+* will use forwardMotion for pitch adjustments
+* will use strafeMotion for yaw and roll adjustments (simple TER)
+    * directly link roll rate to yaw rate, don't even bother with roll packets/data, merely calc for render
+* server side will need special code to detect a 'crash' (if velocity change over X ticks is greater than Y then EXPLODE)    
+* calculate lift as a ratio of groundspeed vs airspeed
+    //** The lift equation states that lift 
+    L is equal to the lift coefficient 
+    Cl times the density r times half of the velocity V squared times the wing area A.
+    L = Cl * A * .5 * r * V^2
+    //**http://www.grc.nasa.gov/WWW/k-12/airplane/lifteq.html
+
+HELICOPTER
+* will be super-simple layout for controls
+* throttle control for vertical speed
+* AWSD for traditional turn/move forward/left
+* link to turret yaw control for strafe left-right
  
 GATES
 * rework model into a 1/4 block model to allow for true mid-split/open gates
@@ -145,8 +169,15 @@ TWEAKS/OPTIMIZATION
 /********** 06-12-13 (post release)**********/
 * fix research goal resource-list display (was missing the item stacks)
 
-
-/********** 06-13-13 (post release)**********/
+/********** 06-13-13**********/
 * adj vehicle MoveHelper for boat movement
 * add boat test vehicle
 * adjust pathfinding to account for boats
+* adj boat test vehicle to ballista boat
+* add catapult boat, transport boat, r1 textures for all boats (need r2-r5 tex done)
+
+/********** 06-14-13**********/
+* add tons of missing valid upgrade entries to vehicles
+* update vehicle research goals to use the full 1-5 range of levels for each goal
+* potentially fix crash issue with direct-builder when shift-right clicking on air
+* adjust boat base speed to be the same as vanilla boat (6.2m/s)

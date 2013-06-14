@@ -104,7 +104,8 @@ public VehicleTypeCatapult(int typeNum)
   this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);  
+  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade); 
+  this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade); 
   
   this.width = 2;
   this.height = 2; 
@@ -124,9 +125,9 @@ public VehicleTypeCatapult(int typeNum)
   this.addNeededResearchForMaterials();
   this.addNeededResearch(0, ResearchGoal.vehicleTorsion1);
   this.addNeededResearch(1, ResearchGoal.vehicleTorsion2);
-  this.addNeededResearch(2, ResearchGoal.vehicleTorsion2);
-  this.addNeededResearch(3, ResearchGoal.vehicleTorsion3);
-  this.addNeededResearch(4, ResearchGoal.vehicleTorsion3);
+  this.addNeededResearch(2, ResearchGoal.vehicleTorsion3);
+  this.addNeededResearch(3, ResearchGoal.vehicleTorsion4);
+  this.addNeededResearch(4, ResearchGoal.vehicleTorsion5);
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.torsionUnit, 3, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
   }

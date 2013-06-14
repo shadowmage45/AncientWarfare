@@ -27,6 +27,8 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
@@ -46,6 +48,7 @@ public VehicleTypeChestCart(int typeNum)
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorObsidian);
   this.validArmors.add(ArmorRegistry.armorIron);  
+  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.width = 2.7f;
   this.height = 1.8f; 
   this.isMountable = true;
@@ -66,6 +69,11 @@ public VehicleTypeChestCart(int typeNum)
   this.displayTooltip.add("No Turret");
   this.displayTooltip.add("Special: Storage Area");
   this.addNeededResearchForMaterials();
+  this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(1, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
+  this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
+  this.addNeededResearch(4, ResearchGoal.vehicleMobility5);
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Block.chest, 8, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
   }

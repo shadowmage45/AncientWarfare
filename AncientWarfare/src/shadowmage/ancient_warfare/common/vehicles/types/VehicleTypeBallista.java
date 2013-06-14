@@ -56,7 +56,6 @@ public VehicleTypeBallista(int typeNum)
   this.ammoBySoldierRank.put(1, Ammo.ammoBallistaBolt);
   this.ammoBySoldierRank.put(2, Ammo.ammoBallistaBoltFlame);
     
-  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchExtUpgrade);

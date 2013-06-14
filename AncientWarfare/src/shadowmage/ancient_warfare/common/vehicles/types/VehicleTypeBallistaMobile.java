@@ -24,6 +24,7 @@ import net.minecraft.util.Icon;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
@@ -59,7 +60,8 @@ public class VehicleTypeBallistaMobile extends VehicleTypeBallista
     this.displayTooltip.add("Ballista Firing Mechanism");
     this.displayTooltip.add("Wheeled");
     this.displayTooltip.add("No Turret");
-    
+
+    this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
     this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
     this.addNeededResearch(1, ResearchGoal.vehicleMobility2);
     this.addNeededResearch(2, ResearchGoal.vehicleMobility3);

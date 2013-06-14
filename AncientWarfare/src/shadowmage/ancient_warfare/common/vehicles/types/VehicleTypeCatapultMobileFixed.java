@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
@@ -39,7 +40,7 @@ public VehicleTypeCatapultMobileFixed(int typeNum)
   this.baseStrafeSpeed = 1.7f;
   this.baseForwardSpeed = 4.2f*0.05f;
   this.baseMissileVelocityMax = 32.f;  
-  this.turretVerticalOffset = 15 * 0.0625f; 
+  this.turretVerticalOffset = 0.9375f; 
   this.riderForwardsOffset = 1.2f;
   this.riderVerticalOffset = 0.7f;
   this.displayName = "Catapult Mobile Fixed";
@@ -53,11 +54,12 @@ public VehicleTypeCatapultMobileFixed(int typeNum)
   this.isDrivable = true;
   this.shouldRiderSit = true;
   this.moveRiderWithTurret = false;
+  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(1, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(2, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(3, ResearchGoal.vehicleMobility2);
-  this.addNeededResearch(4, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(1, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
+  this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
+  this.addNeededResearch(4, ResearchGoal.vehicleMobility5);
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.mobilityUnit, 1, false, false));
   }
 

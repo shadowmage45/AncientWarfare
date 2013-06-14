@@ -100,10 +100,10 @@ public VehicleTypeCannon(int typeNum)
   this.ammoBaySize = 6;
   this.addNeededResearchForMaterials();
   this.addNeededResearch(0, ResearchGoal.vehicleGunpowderWeapons1);
-  this.addNeededResearch(1, ResearchGoal.vehicleGunpowderWeapons1);
-  this.addNeededResearch(2, ResearchGoal.vehicleGunpowderWeapons1);
-  this.addNeededResearch(3, ResearchGoal.vehicleGunpowderWeapons2);
-  this.addNeededResearch(4, ResearchGoal.vehicleGunpowderWeapons2);
+  this.addNeededResearch(1, ResearchGoal.vehicleGunpowderWeapons2);
+  this.addNeededResearch(2, ResearchGoal.vehicleGunpowderWeapons3);
+  this.addNeededResearch(3, ResearchGoal.vehicleGunpowderWeapons4);
+  this.addNeededResearch(4, ResearchGoal.vehicleGunpowderWeapons5);
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.powderCase, 2, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
   }

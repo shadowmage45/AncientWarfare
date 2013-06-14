@@ -72,6 +72,7 @@ private float forwardAccel = 0;
 private float strafeAccel = 0;
 public float forwardMotion = 0;
 public float strafeMotion = 0;
+protected float prevWidth = 0.8f;
 
 public VehicleMovementHelper (VehicleBase veh)
   {
@@ -105,6 +106,44 @@ public void setInput(byte forward, byte strafe)
     }
   }
 
+public void setThrottleInput(byte delta)
+  {  
+  this.handleThrottleUpdate(vehicle.localThrottle + (float)delta * 0.025f); 
+  }
+
+public void handleThrottleUpdate(float value)
+  {
+  Config.logDebug("receiving vehicle throttle update. client : "+vehicle.worldObj.isRemote);
+  if(vehicle.worldObj.isRemote)
+    {
+    vehicle.localThrottle = value;   
+    }
+  else
+    {    
+    vehicle.localThrottle = value;
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setFloat("tr", vehicle.localThrottle);
+    Packet02Vehicle pkt = new Packet02Vehicle();
+    pkt.setInputData(tag);
+    if(Config.clientVehicleMovementBase && vehicle.riddenByEntity instanceof EntityPlayer)
+      {
+      EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
+      List<EntityPlayer> allPlayers = vehicle.worldObj.playerEntities;
+      for(EntityPlayer serverPlayer : allPlayers)
+        {
+        if(serverPlayer!=player)
+          {
+          pkt.sendPacketToPlayer(serverPlayer);
+          }
+        }
+      }
+    else
+      {
+      pkt.sendPacketToAllTrackingClients(vehicle);
+      }
+    }  
+  }
+
 /**
  * send input to server. at the very least, send forward/strafe input
  * if fullPacket -- send pos/motion/accel as well
@@ -130,7 +169,7 @@ public void sendInputToServer(byte forward, byte strafe, boolean fullPacket)
     tag.setFloat("pz", (float)vehicle.posZ);
     tag.setFloat("ry", (float)vehicle.rotationYaw);
     tag.setFloat("fAcc", forwardAccel);
-    tag.setFloat("sAcc", strafeAccel);
+    tag.setFloat("sAcc", strafeAccel);    
     }
   Packet02Vehicle pkt = new Packet02Vehicle();
   pkt.setParams(this.vehicle);
@@ -244,6 +283,10 @@ public void handleInputData(NBTTagCompound tag)
     while(newRot - 360 >=vehRot) {newRot-=360.f;}
     vehicle.rotationYaw = newRot;
     }  
+  if(tag.hasKey("tr"))
+    {
+    this.handleThrottleUpdate(tag.getFloat("tr")); 
+    }
   }
 
 /**
@@ -282,7 +325,7 @@ public void onMovementTick()
   {
   byte forwardInput = vehicle.getForwardInput();
   byte strafeInput = vehicle.getStrafeInput();
-  float prevWidth = vehicle.width;
+  this.prevWidth = vehicle.width;
   vehicle.width = 0.8f;
   this.vehicle.nav.onMovementUpdate();//vehicle navigator will provide input and other vehicle settings, if it has a node...   
   float weightAdjust = 1.f;
@@ -349,11 +392,7 @@ public void onMovementTick()
   else if(absStr <= 0.2f && strafeInput == 0)
     {
     strafeMotion = 0;
-    }
-    
-
-  
-  
+    }       
   if(vehicle.vehicleType.getMovementType()==VehicleMovementType.WATER)
     {
     if(!this.handleWaterMovement())
@@ -364,12 +403,73 @@ public void onMovementTick()
       forwardMotion *= .85f;
       }
     vehicle.motionY *= 0.949999988079071D;
+    this.applyGroundMotion();
     }
   else if(vehicle.vehicleType.getMovementType()==VehicleMovementType.GROUND)
     {
     vehicle.motionY -= (9.81f*0.05f*0.05f);
+    this.applyGroundMotion();
     }
-  
+  else if(vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR1)//plane
+    {
+    this.handleAirMovement1();
+    this.applyAirMotion();
+    }
+  else if(vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR2)//heli
+    {
+    this.handleAirMovement2();
+    this.applyAirMotion();
+    } 
+  else
+    {
+    vehicle.motionY -= (9.81f*0.05f*0.05f);
+    this.applyGroundMotion();
+    }
+  }
+
+
+protected void applyAirMotion()
+  {;
+  if(strafeMotion !=0 || forwardMotion !=0 || vehicle.motionY !=0 || vehicle.localThrottle!=0)
+    { 
+    if(vehicle.riddenByEntity instanceof NpcBase)
+      {
+      vehicle.width = 0.8f;
+      vehicle.setPosition(vehicle.posX, vehicle.posY, vehicle.posZ);
+      }    
+    vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ); 
+    vehicle.wheelRotationPrev = vehicle.wheelRotation;
+    vehicle.wheelRotation += vehicle.localThrottle*0.02f;
+    
+    /**
+     * find current heading pitch/yaw
+     * 
+     */
+    
+    
+    float velocity = Trig.getVelocity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+    float mx;//
+    float my;// == velocity * sin(forwardMotion) (use forwardMotion as pitch)
+    float mz;//
+    float x = Trig.sinDegrees(vehicle.rotationYaw)*-forwardMotion;
+    float z = Trig.cosDegrees(vehicle.rotationYaw)*-forwardMotion;  
+    vehicle.motionX = x;
+    vehicle.motionZ = z;   
+    vehicle.rotationYaw += strafeMotion;
+    
+    
+    this.tearUpGrass();
+    }
+  else if(forwardMotion==0)
+    {
+    vehicle.wheelRotationPrev = vehicle.wheelRotation;
+    }  
+  vehicle.width = prevWidth;
+  vehicle.setPosition(vehicle.posX, vehicle.posY, vehicle.posZ);
+  }
+
+protected void applyGroundMotion()
+  {
   if(strafeMotion !=0 || forwardMotion !=0 || vehicle.motionY !=0)
     { 
     if(vehicle.riddenByEntity instanceof NpcBase)
@@ -393,9 +493,29 @@ public void onMovementTick()
     vehicle.wheelRotationPrev = vehicle.wheelRotation;
     }  
   vehicle.width = prevWidth;
-  vehicle.setPosition(vehicle.posX, vehicle.posY, vehicle.posZ); 
+  vehicle.setPosition(vehicle.posX, vehicle.posY, vehicle.posZ);
   }
 
+/**
+ * handle airplane style movement
+ */
+protected void handleAirMovement1()
+  {
+  
+  }
+
+/**
+ * handle helicopter style movement
+ */
+protected void handleAirMovement2()
+  {
+  
+  }
+
+/**
+ * handle boat style movement
+ * @return
+ */
 protected boolean handleWaterMovement()
   {
   byte submersionDepthMax = 5;

@@ -182,21 +182,28 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     if(isShiftClick(player))
       {
-      hit = BlockTools.offsetForSide(hit, side);
-      int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-      StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
-      settings.spawnGate = false;
-      settings.spawnNpc = false;
-      settings.spawnVehicle = false;
-      ProcessedStructure struct = StructureManager.instance().getTempStructure(player.getEntityName());
-      if(struct==null)
+      if(hit!=null)
         {
-        tag = new NBTTagCompound();
+        hit = BlockTools.offsetForSide(hit, side);
+        int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+        StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
+        settings.spawnGate = false;
+        settings.spawnNpc = false;
+        settings.spawnVehicle = false;
+        ProcessedStructure struct = StructureManager.instance().getTempStructure(player.getEntityName());
+        if(struct==null)
+          {
+          tag = new NBTTagCompound();
+          }
+        else
+          {
+          this.attemptConstruction(world, player, hit, face, struct, settings);
+          } 
         }
       else
         {
-        this.attemptConstruction(world, player, hit, face, struct, settings);
-        } 
+        tag = new NBTTagCompound();
+        }
       }
     else
       {

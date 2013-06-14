@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
@@ -57,7 +58,8 @@ public VehicleTypeBallistaMobileTurret(int typeNum)
   this.displayTooltip.add("Wheeled");
   this.displayTooltip.add("360' Turret");
   
-      
+
+  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
   this.addNeededResearch(1, ResearchGoal.vehicleMobility2);
   this.addNeededResearch(2, ResearchGoal.vehicleMobility3);

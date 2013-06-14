@@ -94,8 +94,10 @@ public VehicleTypeBoatCatapult(int typeNum)
   this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);  
- 
+  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade); 
+  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade);
   
   this.storageBaySize = 0;
   this.armorBaySize = 3;
@@ -114,8 +116,8 @@ public VehicleTypeBoatCatapult(int typeNum)
   this.width = 2.7f;
   this.height = 1.4f;  
 
-  this.baseStrafeSpeed = 1.7f;
-  this.baseForwardSpeed = 4.2f*0.05f;
+  this.baseStrafeSpeed = 2.f;
+  this.baseForwardSpeed = 6.2f*0.05f;
   
   this.accuracy = 0.95f;  
   
@@ -140,15 +142,15 @@ public VehicleTypeBoatCatapult(int typeNum)
   this.addNeededResearchForMaterials();
   this.addNeededResearch(0, ResearchGoal.vehicleTorsion1);
   this.addNeededResearch(1, ResearchGoal.vehicleTorsion2);
-  this.addNeededResearch(2, ResearchGoal.vehicleTorsion2);
-  this.addNeededResearch(3, ResearchGoal.vehicleTorsion3);
-  this.addNeededResearch(4, ResearchGoal.vehicleTorsion3);
+  this.addNeededResearch(2, ResearchGoal.vehicleTorsion3);
+  this.addNeededResearch(3, ResearchGoal.vehicleTorsion4);
+  this.addNeededResearch(4, ResearchGoal.vehicleTorsion5);
   
   this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(1, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(2, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(3, ResearchGoal.vehicleMobility2);
-  this.addNeededResearch(4, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(1, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
+  this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
+  this.addNeededResearch(4, ResearchGoal.vehicleMobility5);
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.torsionUnit, 3, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.mobilityUnit, 1, false, false));

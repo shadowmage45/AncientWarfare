@@ -46,6 +46,7 @@ public VehicleTypeBoatBallista(int typeNum)
   super(typeNum);
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   this.materialCount = 5;
+  this.movementType = VehicleMovementType.WATER;
   
   this.maxMissileWeight = 2.f;  
       
@@ -69,9 +70,7 @@ public VehicleTypeBoatBallista(int typeNum)
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorObsidian);
   this.validArmors.add(ArmorRegistry.armorIron);
-  
-  this.movementType = VehicleMovementType.WATER;
-  
+    
   this.armorBaySize = 3;
   this.upgradeBaySize = 3;
   this.ammoBaySize = 6;  
@@ -98,8 +97,8 @@ public VehicleTypeBoatBallista(int typeNum)
   this.width = 2.7f;
   this.height = 1.4f;  
           
-  this.baseStrafeSpeed = 1.7f;
-  this.baseForwardSpeed = 4.2f*0.05f;
+  this.baseStrafeSpeed = 2.f;
+  this.baseForwardSpeed = 6.2f*0.05f;
   
   this.turretForwardsOffset = 23*0.0625f;
   this.turretVerticalOffset = 1.325f;

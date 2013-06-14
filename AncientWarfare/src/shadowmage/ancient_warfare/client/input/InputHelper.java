@@ -40,6 +40,7 @@ import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -215,9 +216,19 @@ public void onTickEnd()
     hasMoveInput = false;
     if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
       {
+      VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
+      VehicleMovementType move = vehicle.vehicleType.getMovementType();
       int strafe = right.isPressed && left.isPressed ? 0 : left.isPressed ? -1 : right.isPressed ? 1 : 0;
       int forwards = forward.isPressed && reverse.isPressed ? 0 : reverse.isPressed ? -1 : forward.isPressed ? 1 : 0;
-      ((VehicleBase)mc.thePlayer.ridingEntity).moveHelper.setInput((byte)forwards, (byte)strafe);
+      vehicle.moveHelper.setInput((byte)forwards, (byte)strafe);
+      if(move==VehicleMovementType.AIR1 || move ==VehicleMovementType.AIR2)
+        {
+        byte throttle = (byte) (pitchUp.isPressed ? 1: pitchDown.isPressed ? -1 : 0);
+        if(throttle!=0)
+          {
+          vehicle.moveHelper.setThrottleInput(throttle);          
+          }
+        }
       }
     } 
   if(Settings.getMouseAim() && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
@@ -261,21 +272,29 @@ public void handleAimAction(Keybind kb)
   {
   if(mc.thePlayer.ridingEntity instanceof VehicleBase)
     {
+    VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
+    VehicleMovementType move = vehicle.vehicleType.getMovementType();
     if(kb==pitchDown)
-      {    
-      ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(-1, 0);
+      {
+      this.hasMoveInput = true;
+      vehicle.firingHelper.handleAimKeyInput(-1, 0);
       }
     else if(kb==pitchUp)
       {
-      ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(1, 0);
+      vehicle.firingHelper.handleAimKeyInput(1, 0);
+      
+      if(move==VehicleMovementType.AIR1 || move ==VehicleMovementType.AIR2)
+        {
+        
+        }
       }
     else if(kb==turretLeft)
       {
-      ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(0, -1);
+      vehicle.firingHelper.handleAimKeyInput(0, -1);
       }
     else if(kb==turretRight)
       {
-      ((VehicleBase)mc.thePlayer.ridingEntity).firingHelper.handleAimKeyInput(0, 1);
+      vehicle.firingHelper.handleAimKeyInput(0, 1);
       }
     }  
   }

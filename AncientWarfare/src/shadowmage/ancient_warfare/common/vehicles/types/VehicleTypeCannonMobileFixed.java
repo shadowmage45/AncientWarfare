@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
@@ -46,11 +47,12 @@ public VehicleTypeCannonMobileFixed(int typeNum)
   this.riderVerticalOffset = 0.5f;
   this.riderForwardsOffset = -2.45f;
   this.baseMissileVelocityMax = 38.f;  
+  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(1, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(2, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(3, ResearchGoal.vehicleMobility2);
-  this.addNeededResearch(4, ResearchGoal.vehicleMobility2); 
+  this.addNeededResearch(1, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
+  this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
+  this.addNeededResearch(4, ResearchGoal.vehicleMobility5); 
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.mobilityUnit, 1, false, false));
   }
 

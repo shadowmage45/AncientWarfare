@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -89,6 +90,11 @@ public VehicleTypeTrebuchet(int typeNum)
   this.validArmors.add(ArmorRegistry.armorIron);
   this.validArmors.add(ArmorRegistry.armorObsidian);
  
+  this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
   
   this.displayName = "Trebuchet";
 //  this.displayTooltip.add("Trebuchet Firing Mechanism");
@@ -116,10 +122,10 @@ public VehicleTypeTrebuchet(int typeNum)
   this.baseMissileVelocityMax = 40.f;
   this.addNeededResearchForMaterials();
   this.addNeededResearch(0, ResearchGoal.vehicleCounterweights1);
-  this.addNeededResearch(1, ResearchGoal.vehicleCounterweights1);
-  this.addNeededResearch(2, ResearchGoal.vehicleCounterweights2);
-  this.addNeededResearch(3, ResearchGoal.vehicleCounterweights2);
-  this.addNeededResearch(4, ResearchGoal.vehicleCounterweights3);
+  this.addNeededResearch(1, ResearchGoal.vehicleCounterweights2);
+  this.addNeededResearch(2, ResearchGoal.vehicleCounterweights3);
+  this.addNeededResearch(3, ResearchGoal.vehicleCounterweights4);
+  this.addNeededResearch(4, ResearchGoal.vehicleCounterweights5);
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.silk, 8, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.leather, 4, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.counterWeightUnit, 4, false, false));

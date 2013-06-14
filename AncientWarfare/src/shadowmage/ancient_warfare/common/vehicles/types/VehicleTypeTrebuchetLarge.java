@@ -121,9 +121,9 @@ public class VehicleTypeTrebuchetLarge extends VehicleType
     this.addNeededResearchForMaterials();
     this.addNeededResearch(0, ResearchGoal.vehicleCounterweights3);
     this.addNeededResearch(1, ResearchGoal.vehicleCounterweights3);
-    this.addNeededResearch(2, ResearchGoal.vehicleCounterweights3);
-    this.addNeededResearch(3, ResearchGoal.vehicleCounterweights3);
-    this.addNeededResearch(4, ResearchGoal.vehicleCounterweights3);
+    this.addNeededResearch(2, ResearchGoal.vehicleCounterweights4);
+    this.addNeededResearch(3, ResearchGoal.vehicleCounterweights4);
+    this.addNeededResearch(4, ResearchGoal.vehicleCounterweights5);
     this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.silk, 24, false, false));
     this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.leather, 12, false, false));
     this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.counterWeightUnit, 12, false, false));

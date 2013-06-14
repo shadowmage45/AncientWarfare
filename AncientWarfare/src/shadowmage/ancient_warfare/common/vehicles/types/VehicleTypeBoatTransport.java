@@ -24,6 +24,8 @@ import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
@@ -54,8 +56,8 @@ public VehicleTypeBoatTransport(int typeNum)
   this.shouldRiderSit = true;
   this.riderForwardsOffset = 1.4f;
   this.riderVerticalOffset = 0.7f;
-  this.baseForwardSpeed = 3.7f*0.05f;
-  this.baseStrafeSpeed = 1.75f;
+  this.baseStrafeSpeed = 2.f;
+  this.baseForwardSpeed = 6.2f*0.05f;
   this.ammoBaySize = 0;
   this.upgradeBaySize = 6;
   this.armorBaySize = 6;
@@ -65,7 +67,13 @@ public VehicleTypeBoatTransport(int typeNum)
   this.displayTooltip.add("Boat Hull");
   this.displayTooltip.add("No Turret");
   this.displayTooltip.add("Special: Storage Area");
+  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.addNeededResearchForMaterials();
+  this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
+  this.addNeededResearch(1, ResearchGoal.vehicleMobility2);
+  this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
+  this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
+  this.addNeededResearch(4, ResearchGoal.vehicleMobility5);
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Block.chest, 8, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
   }

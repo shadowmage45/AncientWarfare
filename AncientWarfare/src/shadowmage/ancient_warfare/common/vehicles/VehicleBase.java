@@ -127,11 +127,7 @@ public float localTurretPitch = 45.f;
 public float localTurretDestPitch = 45.f;
 public float localTurretPitchInc = 1.f;
 public float localLaunchPower = 31.321f;
-
-/**
- * roll angle, used by boats and aircraft
- */
-public float vehicleRoll = 0.f;
+public float localThrottle = 1.f;
 
 /**
  * set by move helper on movement update. used during client rendering to update 
