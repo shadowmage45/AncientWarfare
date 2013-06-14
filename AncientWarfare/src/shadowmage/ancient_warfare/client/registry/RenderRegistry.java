@@ -28,6 +28,9 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import shadowmage.ancient_warfare.client.model.ModelBallistaMobile;
 import shadowmage.ancient_warfare.client.model.ModelBallistaStand;
 import shadowmage.ancient_warfare.client.model.ModelBatteringRam;
+import shadowmage.ancient_warfare.client.model.ModelBoatBallista;
+import shadowmage.ancient_warfare.client.model.ModelBoatCatapult;
+import shadowmage.ancient_warfare.client.model.ModelBoatTransport;
 import shadowmage.ancient_warfare.client.model.ModelCannonMobileFixed;
 import shadowmage.ancient_warfare.client.model.ModelCannonStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelCannonStandTurret;
@@ -64,6 +67,9 @@ import shadowmage.ancient_warfare.client.render.missile.RenderShot;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaMobile;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaStand;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBatteringRam;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderBoatBallista;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderBoatCatapult;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderBoatTransport;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCannonMobileFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCannonStandFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderCannonStandTurret;
@@ -150,7 +156,9 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.TREBUCHET_LARGE, new RenderTrebuchetLarge(), new ModelTrebuchetStandFixed());
   this.addVehicleRender(VehicleRegistry.CHEST_CART, new RenderChestCart(), new ModelChestCart());
   
-  this.addVehicleRender(VehicleRegistry.BOAT_TEST, new RenderBallistaMobile(), new ModelBallistaMobile());
+  this.addVehicleRender(VehicleRegistry.BOAT_BALLISTA, new RenderBoatBallista(), new ModelBoatBallista());
+  this.addVehicleRender(VehicleRegistry.BOAT_CATAPULT, new RenderBoatCatapult(), new ModelBoatCatapult());
+  this.addVehicleRender(VehicleRegistry.BOAT_TRANSPORT, new RenderBoatTransport(), new ModelBoatTransport());
   
   /**
    * missiles...

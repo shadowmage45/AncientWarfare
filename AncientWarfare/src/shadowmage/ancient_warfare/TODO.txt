@@ -16,12 +16,20 @@ GENERAL
 * more missile textures    
 * chunkloader block ? (configurable range -- gui with toggleable squares to select chunks or by radius, render toggle to select if to render bounds areas)
 * add default structures for world gen, village gen
+* icons for NPC spawner items
+* structure builder crashes if attempt to build on air
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally (hmm..)
-* add potential motion handling for aquatic and aerial vehicles
+* add potential motion handling for aerial vehicles
 * airplanes (will be part of the BC compat plugin/addon, or perhaps separate completely).
-* boat(s)
+* cat mobile turret(fixed?) rider position is too far forward
+* vehicle goals need their level range expanded in vehicles (many only use rank 1-3)
+* pathfinding needs adjusted so that it doesn't need to be as close to the node to claim next (will help with aquatic pathfinding and the coast-hugging that npcs do)
+* re-allow theta pathfinding in water (it was disabled for crawler--fix crawler some other way)
+* finish boat textures
+* finish boat stats (health, speed, power, etc)
+* it appears that vehicles are missing the speed upgrade
  
 GATES
 * rework model into a 1/4 block model to allow for true mid-split/open gates

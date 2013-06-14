@@ -20,8 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
-import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
-import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
@@ -31,7 +29,9 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobil
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStand;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStandTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBatteringRam;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBoatTest;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBoatBallista;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBoatCatapult;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBoatTransport;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCannonMobileFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCannonStandFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCannonStandTurret;
@@ -74,7 +74,9 @@ public static final IVehicleType TREBUCHET_LARGE = new VehicleTypeTrebuchetLarge
 
 public static final IVehicleType CHEST_CART = new VehicleTypeChestCart(17);
 
-public static final IVehicleType BOAT_TEST = new VehicleTypeBoatTest(18);
+public static final IVehicleType BOAT_BALLISTA = new VehicleTypeBoatBallista(18);
+public static final IVehicleType BOAT_CATAPULT = new VehicleTypeBoatCatapult(19);
+public static final IVehicleType BOAT_TRANSPORT = new VehicleTypeBoatTransport(20);
 
 private VehicleRegistry(){}
 private static VehicleRegistry INSTANCE;
