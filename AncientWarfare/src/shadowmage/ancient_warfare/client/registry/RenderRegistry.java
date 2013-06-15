@@ -64,6 +64,7 @@ import shadowmage.ancient_warfare.client.render.gate.RenderGateRotatingBridge;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateSingle;
 import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
 import shadowmage.ancient_warfare.client.render.missile.RenderShot;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderAircraftTest;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaMobile;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaStand;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBatteringRam;
@@ -160,6 +161,7 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.BOAT_CATAPULT, new RenderBoatCatapult(), new ModelBoatCatapult());
   this.addVehicleRender(VehicleRegistry.BOAT_TRANSPORT, new RenderBoatTransport(), new ModelBoatTransport());
   
+  this.addVehicleRender(VehicleRegistry.AIR_TEST, new RenderAircraftTest(), new ModelBoatBallista());
   /**
    * missiles...
    */

@@ -226,7 +226,7 @@ public void onTickEnd()
         byte throttle = (byte) (pitchUp.isPressed ? 1: pitchDown.isPressed ? -1 : 0);
         if(throttle!=0)
           {
-          vehicle.moveHelper.setThrottleInput(throttle);          
+          vehicle.moveHelper.handleThrottleInput(throttle);          
           }
         }
       }
@@ -276,16 +276,18 @@ public void handleAimAction(Keybind kb)
     VehicleMovementType move = vehicle.vehicleType.getMovementType();
     if(kb==pitchDown)
       {
-      this.hasMoveInput = true;
       vehicle.firingHelper.handleAimKeyInput(-1, 0);
+      if(move==VehicleMovementType.AIR1 || move ==VehicleMovementType.AIR2)
+        {
+        this.hasMoveInput = true;
+        }
       }
     else if(kb==pitchUp)
       {
-      vehicle.firingHelper.handleAimKeyInput(1, 0);
-      
+      vehicle.firingHelper.handleAimKeyInput(1, 0);      
       if(move==VehicleMovementType.AIR1 || move ==VehicleMovementType.AIR2)
         {
-        
+        this.hasMoveInput = true;
         }
       }
     else if(kb==turretLeft)

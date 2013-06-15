@@ -83,7 +83,7 @@ public int getTravelCost(int x, int y, int z)
  * @param z
  * @return true if it is a pathable block, false if it fails bounds checks
  */
-protected boolean checkBlockBounds(int x, int y, int z)  
+public boolean checkBlockBounds(int x, int y, int z)  
   {
   Block block;
   int id = world.getBlockId(x, y, z);

@@ -24,6 +24,7 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeAirTest;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobile;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobileTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStand;
@@ -77,6 +78,8 @@ public static final IVehicleType CHEST_CART = new VehicleTypeChestCart(17);
 public static final IVehicleType BOAT_BALLISTA = new VehicleTypeBoatBallista(18);
 public static final IVehicleType BOAT_CATAPULT = new VehicleTypeBoatCatapult(19);
 public static final IVehicleType BOAT_TRANSPORT = new VehicleTypeBoatTransport(20);
+
+public static final IVehicleType AIR_TEST = new VehicleTypeAirTest(21);
 
 private VehicleRegistry(){}
 private static VehicleRegistry INSTANCE;

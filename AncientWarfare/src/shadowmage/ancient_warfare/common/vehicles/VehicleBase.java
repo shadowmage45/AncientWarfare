@@ -95,7 +95,8 @@ public float baseExplosionResist = 0.f;
  * local current stats, fully updated and modified from upgrades/etc. should not be altered aside from
  * upgrades/armor
  */
-public float currentForwardSpeedMax = 0.8f;
+public float currentForwardSpeedMax = 0.42f;
+public float currentPitchSpeedMax = 2.f;
 public float currentStrafeSpeedMax = 2.0f;
 
 /**
@@ -127,7 +128,6 @@ public float localTurretPitch = 45.f;
 public float localTurretDestPitch = 45.f;
 public float localTurretPitchInc = 1.f;
 public float localLaunchPower = 31.321f;
-public float localThrottle = 1.f;
 
 /**
  * set by move helper on movement update. used during client rendering to update 
@@ -136,6 +136,7 @@ public float localThrottle = 1.f;
  */
 public float wheelRotation = 0.f;
 public float wheelRotationPrev = 0.f;
+
 
 /**
  * the team number this vehicle was assigned to
@@ -169,7 +170,7 @@ public VehicleFiringHelper firingHelper;
 public VehicleFiringVarsHelper firingVarsHelper;
 public VehicleInventory inventory;
 public Navigator nav;
-private PathWorldAccessEntity worldAccess;
+public PathWorldAccessEntity worldAccess;
 public IVehicleType vehicleType = VehicleRegistry.CATAPULT_STAND_FIXED;//set to dummy vehicle so it is never null...
 public int vehicleMaterialLevel = 0;//the current material level of this vehicle. should be read/set prior to calling updateBaseStats
 
