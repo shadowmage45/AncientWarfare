@@ -75,6 +75,7 @@ public float strafeMotion = 0;
 protected float prevWidth = 0.8f;
 public float localThrottle = 0.f;
 public float airPitch = 0.f;
+public float prevVelocity = 0.f;
 
 public VehicleMovementHelper (VehicleBase veh)
   {
@@ -559,12 +560,31 @@ protected void handleAirMovementUpdate()
   
   boolean onGround = vehicle.worldObj.getBlockId(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY)-1, MathHelper.floor_double(vehicle.posZ))!=0;
 //  float velocity = Trig.getVelocity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
-  float horizontalVelocity = Trig.getVelocity(vehicle.motionX, vehicle.motionZ);    
+  float horizontalVelocity = Trig.getVelocity(vehicle.motionX, vehicle.motionZ); 
+  prevVelocity = horizontalVelocity;
   float throttlePercent = horizontalVelocity / vehicle.currentForwardSpeedMax;  
   float drag = onGround ? 0.995f : 0.99995f;    
   drag = localThrottle==0 ? drag * 0.975f : drag;
   float accel = 0.05f * localThrottle * (1-throttlePercent);
-  horizontalVelocity = (horizontalVelocity + accel)*(drag);  
+  horizontalVelocity = (horizontalVelocity + accel)*(drag);
+  
+  /**
+   * how to detect when 'crashed'
+   *   check for previous velocity vs current velocity 
+   * 
+   * 
+   * 
+   */ 
+  boolean crashSpeed = false;
+
+  
+  if(horizontalVelocity > vehicle.currentForwardSpeedMax * 0.5f)
+    {
+    crashSpeed = true;
+    }
+  else
+    {
+    }
   
   if(horizontalVelocity < vehicle.currentForwardSpeedMax * 0.65f)
     {
@@ -580,7 +600,44 @@ protected void handleAirMovementUpdate()
     horizontalVelocity = 0.f;
     }  
   
+  boolean vertCrashSpeed = false;
+//  Config.logDebug("motionY :" + vehicle.motionY);
+  if(vehicle.motionY < -0.15f || vehicle.motionY > 0.15f)
+    {
+    vertCrashSpeed = true;    
+    }
+  
+  
+  
   vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+  
+  if(vehicle.isCollidedHorizontally)
+    {
+    if(!onGround || crashSpeed)
+      {
+      Config.logDebug("CRASH");
+      horizontalVelocity *= 0.5f;  
+      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
+        {
+        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
+        player.addChatMessage("you have crashed!!");
+        }
+      }
+    }
+  
+  if(vehicle.isCollidedVertically)
+    {
+    if(vertCrashSpeed)
+      {
+      Config.logDebug(" VERT CRASH");
+      horizontalVelocity *= 0.5f;   
+      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
+        {
+        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
+        player.addChatMessage("you have crashed (vertical)!!");
+        }
+      }
+    }
   
   float x = Trig.sinDegrees(vehicle.rotationYaw)*-horizontalVelocity;
   float z = Trig.cosDegrees(vehicle.rotationYaw)*-horizontalVelocity;

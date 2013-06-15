@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.client.render.vehicle;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_warfare.client.model.ModelAirplane;
 import shadowmage.ancient_warfare.client.model.ModelBoatBallista;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -30,7 +31,7 @@ import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelpe
 public class RenderAircraftTest extends RenderVehicleBase
 {
 
-ModelBoatBallista model = new ModelBoatBallista();
+ModelAirplane model = new ModelAirplane();
 
 @Override
 public void renderVehicle(VehicleBase veh, double x, double y, double z,  float yaw, float tick)
@@ -38,10 +39,6 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z,  float 
   GL11.glRotatef(-veh.moveHelper.airPitch, 1, 0, 0);
   GL11.glRotatef(veh.moveHelper.strafeMotion*10, 0, 0, 1);
   VehicleFiringVarsHelper var = veh.firingVarsHelper;
-  model.setTurretRotation(yaw-veh.localTurretRotation + (1-tick)*veh.currentTurretYawSpeed, -veh.localTurretPitch + tick * veh.currentTurretPitchSpeed);
-  model.setCrankRotations(var.getVar1() + (tick*var.getVar2()));
-  model.setBowAndStringRotation(var.getVar3() + tick*var.getVar4(), var.getVar5() + tick*var.getVar6());
-  model.setTriggerAngle(var.getVar7());
   float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
@@ -49,7 +46,7 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z,  float 
 
 @Override
 public void renderVehicleFlag()
-  {
+  {  
   model.renderFlag();
   }
 

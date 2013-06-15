@@ -624,7 +624,7 @@ public void onUpdateClient()
     if(moveUpdateTicks>=Config.clientMoveUpdateTicks && (this.motionX!=0 ||this.motionY!=0 ||this.motionZ!=0 || this.ticksExisted%100==0))
       {
       moveUpdateTicks=0;
-      moveHelper.sendInputToServer(getForwardInput(), getStrafeInput(), true);      
+      moveHelper.sendInputToServer(getForwardInput(), getStrafeInput(), true);  
       }
     }
   if(this.localVehicleHealth!=this.getHealth())

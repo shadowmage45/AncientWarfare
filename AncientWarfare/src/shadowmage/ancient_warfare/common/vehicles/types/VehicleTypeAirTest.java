@@ -29,7 +29,7 @@ import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
-import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.DummyVehicleHelper;
+import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.BallistaVarHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
@@ -46,41 +46,63 @@ public VehicleTypeAirTest(int typeNum)
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   this.materialCount = 5;
   this.movementType = VehicleMovementType.AIR1;
+  this.maxMissileWeight = 20.f;
   
-  this.maxMissileWeight = 2.f;  
-      
-  this.validAmmoTypes.add(Ammo.ammoBallistaBolt);
-  this.validAmmoTypes.add(Ammo.ammoBallistaBoltFlame);
-  this.validAmmoTypes.add(Ammo.ammoBallistaBoltExplosive);
-  this.validAmmoTypes.add(Ammo.ammoBallistaBoltIron);
+  this.validAmmoTypes.add(Ammo.ammoStoneShot10);
+  this.validAmmoTypes.add(Ammo.ammoStoneShot15); 
+  this.validAmmoTypes.add(Ammo.ammoFireShot10);
+  this.validAmmoTypes.add(Ammo.ammoFireShot15);
+  this.validAmmoTypes.add(Ammo.ammoPebbleShot10);
+  this.validAmmoTypes.add(Ammo.ammoPebbleShot15);
+  this.validAmmoTypes.add(Ammo.ammoClusterShot10);
+  this.validAmmoTypes.add(Ammo.ammoClusterShot15);
+  this.validAmmoTypes.add(Ammo.ammoExplosive10);
+  this.validAmmoTypes.add(Ammo.ammoExplosive15);
+  this.validAmmoTypes.add(Ammo.ammoHE10);
+  this.validAmmoTypes.add(Ammo.ammoHE15);
+  this.validAmmoTypes.add(Ammo.ammoNapalm10);
+  this.validAmmoTypes.add(Ammo.ammoNapalm15);
   
-  this.ammoBySoldierRank.put(0, Ammo.ammoBallistaBolt);  
-  this.ammoBySoldierRank.put(1, Ammo.ammoBallistaBolt);
-  this.ammoBySoldierRank.put(2, Ammo.ammoBallistaBoltFlame);
+  
+  this.validAmmoTypes.add(Ammo.ammoArrow);
+  this.validAmmoTypes.add(Ammo.ammoArrowFlame);
+  this.validAmmoTypes.add(Ammo.ammoArrowIron);
+  this.validAmmoTypes.add(Ammo.ammoArrowIronFlame);
+  
+  if(Config.addOversizeAmmo)
+    {
+    this.validAmmoTypes.add(Ammo.ammoStoneShot30);
+    this.validAmmoTypes.add(Ammo.ammoStoneShot45);
+    this.validAmmoTypes.add(Ammo.ammoFireShot30);
+    this.validAmmoTypes.add(Ammo.ammoFireShot45);
+    this.validAmmoTypes.add(Ammo.ammoPebbleShot30);
+    this.validAmmoTypes.add(Ammo.ammoPebbleShot45);
+    this.validAmmoTypes.add(Ammo.ammoClusterShot30);
+    this.validAmmoTypes.add(Ammo.ammoClusterShot45);
+    this.validAmmoTypes.add(Ammo.ammoExplosive30);
+    this.validAmmoTypes.add(Ammo.ammoExplosive45);
+    this.validAmmoTypes.add(Ammo.ammoHE30);
+    this.validAmmoTypes.add(Ammo.ammoHE45);
     
-  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.pitchExtUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
+    }
+  
+  this.ammoBySoldierRank.put(0, Ammo.ammoStoneShot10);
+  this.ammoBySoldierRank.put(1, Ammo.ammoStoneShot10);
+  this.ammoBySoldierRank.put(2, Ammo.ammoStoneShot10);
   
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorObsidian);
   this.validArmors.add(ArmorRegistry.armorIron);
     
-  this.armorBaySize = 3;
+  this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
+  this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade);
+      
+  this.armorBaySize = 1;
   this.upgradeBaySize = 3;
-  this.ammoBaySize = 6;  
+  this.ammoBaySize = 2;  
   this.storageBaySize = 0;    
   
   this.addNeededResearchForMaterials();
-  this.addNeededResearch(0, ResearchGoal.vehicleTorsion1);
-  this.addNeededResearch(1, ResearchGoal.vehicleTorsion2);
-  this.addNeededResearch(2, ResearchGoal.vehicleTorsion3);
-  this.addNeededResearch(3, ResearchGoal.vehicleTorsion4);
-  this.addNeededResearch(4, ResearchGoal.vehicleTorsion5);
   
   this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
   this.addNeededResearch(1, ResearchGoal.vehicleMobility2);
@@ -99,27 +121,27 @@ public VehicleTypeAirTest(int typeNum)
   this.baseStrafeSpeed = 2.f;
   this.baseForwardSpeed = 25f*0.05f;
   
-  this.turretForwardsOffset = 23*0.0625f;
-  this.turretVerticalOffset = 1.325f;
+  this.turretForwardsOffset = 0.f;
+  this.turretVerticalOffset = 0.f;
   this.accuracy = 0.98f;
-  this.basePitchMax = 0;
-  this.basePitchMin = 0; 
-  this.baseMissileVelocityMax = 55.f;//stand versions should have higher velocity, as should fixed version--i.e. mobile turret should have the worst of all versions   
+  this.basePitchMax = -90;
+  this.basePitchMin = -90; 
+  this.baseMissileVelocityMax = 2.f;   
   
-  this.riderForwardsOffset = -1.0f ;
-  this.riderVerticalOffset = 0.7f;  
+  this.riderForwardsOffset = -0.0625f * 7;
+  this.riderVerticalOffset = 0.0625f * 12;  
   this.shouldRiderSit = true;
   
   this.isMountable = true;
   this.isDrivable = true;//adjust based on isMobile or not
   this.isCombatEngine = true;
   
-  this.canAdjustPitch = false;
-  this.canAdjustPower = true;
+  this.canAdjustPitch = true;
+  this.canAdjustPower = false;
   this.canAdjustYaw = false;
   this.turretRotationMax=0.f;//adjust based on mobile/stand fixed (0), stand fixed(90'), or mobile or stand turret (360) 
   this.displayName = "Aircraft test";
-  this.displayTooltip.add("Ballista Firing Mechanism");
+  this.displayTooltip.add("No Firing Mechanism");
   this.displayTooltip.add("Airplane Hull");
   this.displayTooltip.add("No Turret");
   }
@@ -130,24 +152,24 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Config.texturePath + "models/boatBallista1.png";
+    return Config.texturePath + "models/airplane1.png";
     case 1:
-    return Config.texturePath + "models/boatBallista2.png";
+    return Config.texturePath + "models/airplane2.png";
     case 2:
-    return Config.texturePath + "models/boatBallista3.png";
+    return Config.texturePath + "models/airplane3.png";
     case 3:
-    return Config.texturePath + "models/boatBallista4.png";
+    return Config.texturePath + "models/airplane4.png";
     case 4:
-    return Config.texturePath + "models/boatBallista5.png";
+    return Config.texturePath + "models/airplane5.png";
     default:
-    return Config.texturePath + "models/boatBallista1.png";
+    return Config.texturePath + "models/airplane1.png";
     }
   }
 
 @Override
 public VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh)
   {
-  return new DummyVehicleHelper(veh);
+  return new BallistaVarHelper(veh);
   }
 
 }
