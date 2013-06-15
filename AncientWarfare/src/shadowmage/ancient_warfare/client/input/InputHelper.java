@@ -211,29 +211,29 @@ public void onKeyPressed(Keybind kb)
 @Override
 public void onTickEnd()
   {
-  if(hasMoveInput)
+  if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
     {
-    hasMoveInput = false;
-    if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase)
+    VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
+    VehicleMovementType move = vehicle.vehicleType.getMovementType();
+    if(move==VehicleMovementType.AIR1 || move ==VehicleMovementType.AIR2)
       {
-      VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
-      VehicleMovementType move = vehicle.vehicleType.getMovementType();
-      int strafe = right.isPressed && left.isPressed ? 0 : left.isPressed ? -1 : right.isPressed ? 1 : 0;
-      int forwards = forward.isPressed && reverse.isPressed ? 0 : reverse.isPressed ? -1 : forward.isPressed ? 1 : 0;
-      vehicle.moveHelper.setInput((byte)forwards, (byte)strafe);
-      if(move==VehicleMovementType.AIR1 || move ==VehicleMovementType.AIR2)
+      byte throttle = (byte) (pitchUp.isPressed ? 1: pitchDown.isPressed ? -1 : 0);
+      if(throttle!=0)
         {
-        byte throttle = (byte) (pitchUp.isPressed ? 1: pitchDown.isPressed ? -1 : 0);
-        if(throttle!=0)
-          {
-          vehicle.moveHelper.handleThrottleInput(throttle);          
-          }
+        vehicle.moveHelper.handleThrottleInput(throttle);          
         }
       }
-    } 
-  if(Settings.getMouseAim() && mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
-    {
-    this.handleMouseAimUpdate();
+    if(hasMoveInput)
+      {
+      hasMoveInput = false;
+      int strafe = right.isPressed && left.isPressed ? 0 : left.isPressed ? -1 : right.isPressed ? 1 : 0;
+      int forwards = forward.isPressed && reverse.isPressed ? 0 : reverse.isPressed ? -1 : forward.isPressed ? 1 : 0;
+      vehicle.moveHelper.setInput((byte)forwards, (byte)strafe); 
+      } 
+    if(Settings.getMouseAim())
+      {
+      this.handleMouseAimUpdate();
+      }
     }
   }
 
@@ -276,19 +276,11 @@ public void handleAimAction(Keybind kb)
     VehicleMovementType move = vehicle.vehicleType.getMovementType();
     if(kb==pitchDown)
       {
-      vehicle.firingHelper.handleAimKeyInput(-1, 0);
-      if(move==VehicleMovementType.AIR1 || move ==VehicleMovementType.AIR2)
-        {
-        this.hasMoveInput = true;
-        }
+      vehicle.firingHelper.handleAimKeyInput(-1, 0);      
       }
     else if(kb==pitchUp)
       {
-      vehicle.firingHelper.handleAimKeyInput(1, 0);      
-      if(move==VehicleMovementType.AIR1 || move ==VehicleMovementType.AIR2)
-        {
-        this.hasMoveInput = true;
-        }
+      vehicle.firingHelper.handleAimKeyInput(1, 0);    
       }
     else if(kb==turretLeft)
       {

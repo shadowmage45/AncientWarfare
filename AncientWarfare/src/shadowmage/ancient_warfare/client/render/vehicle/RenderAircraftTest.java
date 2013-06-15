@@ -36,6 +36,7 @@ ModelBoatBallista model = new ModelBoatBallista();
 public void renderVehicle(VehicleBase veh, double x, double y, double z,  float yaw, float tick)
   {
   GL11.glRotatef(-veh.moveHelper.airPitch, 1, 0, 0);
+  GL11.glRotatef(veh.moveHelper.strafeMotion*10, 0, 0, 1);
   VehicleFiringVarsHelper var = veh.firingVarsHelper;
   model.setTurretRotation(yaw-veh.localTurretRotation + (1-tick)*veh.currentTurretYawSpeed, -veh.localTurretPitch + tick * veh.currentTurretPitchSpeed);
   model.setCrankRotations(var.getVar1() + (tick*var.getVar2()));
