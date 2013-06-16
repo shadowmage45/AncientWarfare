@@ -47,7 +47,7 @@ public AmmoBallistaBoltExplosive(int ammoType)
   this.isPersistent = false;
   this.displayName = "Explosive Ballista Bolt";  
   this.addTooltip("A large bolt with explosive tip.");  
-  this.iconTexture = "ammoArrowFlame1";
+  this.iconTexture = "ammoBoltExplosive1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
   this.neededResearch.add(ResearchGoalNumbers.ballistics1);
   this.neededResearch.add(ResearchGoalNumbers.explosives1);

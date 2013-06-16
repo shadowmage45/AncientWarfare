@@ -45,7 +45,7 @@ public AmmoIronShot(int ammoType, int weight, int damage)
   this.vehicleDamage = damage;
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
-  this.iconTexture = "ammoStone1";
+  this.iconTexture = "ammoIron1";
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
   
   int cases = 1;

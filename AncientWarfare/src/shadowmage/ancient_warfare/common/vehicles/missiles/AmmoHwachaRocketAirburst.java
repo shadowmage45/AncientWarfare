@@ -51,7 +51,7 @@ public AmmoHwachaRocketAirburst(int ammoType)
   this.entityProximity = 10f;
   this.ammoWeight = 1.4f;
   this.renderScale = 0.2f;
-  this.iconTexture = "ammoRocketFlame1";
+  this.iconTexture = "ammoRocketAirburst1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
   
   this.numCrafted = 6;

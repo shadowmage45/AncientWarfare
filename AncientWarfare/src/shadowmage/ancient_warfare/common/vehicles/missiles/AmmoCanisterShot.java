@@ -42,7 +42,7 @@ public AmmoCanisterShot(int ammoType, int weight)
   this.addTooltip("Spawns "+weight+" submunitions on impact");
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
-  this.iconTexture = "ammoCluster1";
+  this.iconTexture = "ammoCanister1";
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png"; 
   this.entityDamage = 8;
   this.vehicleDamage = 8;

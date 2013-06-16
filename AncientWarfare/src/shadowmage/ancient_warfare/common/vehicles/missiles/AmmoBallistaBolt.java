@@ -46,7 +46,7 @@ public AmmoBallistaBolt(int ammoType)
   this.isPersistent = true;
   this.displayName = "Ballista Bolt";  
   this.addTooltip("Large iron tipped wooden bolt.");  
-  this.iconTexture = "ammoArrow1";
+  this.iconTexture = "ammoBolt1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
   
   this.resources.add(new ItemStackWrapperCrafting(Item.stick, 5));

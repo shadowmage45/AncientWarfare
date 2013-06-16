@@ -46,7 +46,7 @@ public AmmoArrowIron(int ammoType)
   this.isPersistent = true;
   this.displayName = "Iron Arrow";  
   this.addTooltip("Well-built, with iron shaft"); 
-  this.iconTexture = "ammoArrow1";
+  this.iconTexture = "ammoArrowIron1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
   this.neededResearch.add(ResearchGoalNumbers.ballistics1);
   this.resources.add(new ItemStackWrapperCrafting(Item.flint, 5));

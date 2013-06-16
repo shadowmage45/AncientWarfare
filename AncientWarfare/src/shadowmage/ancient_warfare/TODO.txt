@@ -23,20 +23,16 @@ GENERAL
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally (hmm..)
-* add potential motion handling for aerial vehicles
-* airplanes (will be part of the BC compat plugin/addon, or perhaps separate completely).
 * cat mobile turret(fixed?) rider position is too far forward
-* vehicle goals need their level range expanded in vehicles (many only use rank 1-3)
 * pathfinding needs adjusted so that it doesn't need to be as close to the node to claim next (will help with aquatic pathfinding and the coast-hugging that npcs do)
 * re-allow theta pathfinding in water (it was disabled for crawler--fix crawler some other way)
 * finish boat textures
 * finish boat stats (health, speed, power, etc)
-* it appears that vehicles are missing the speed upgrade
 
 AIRPLANE
-* need to send throttle and pitch data in entity client init packet
-* need to zero throttle on dismount
-* texture is still missing a few little pips
+* needs stats setup
+* needs research
+* needs custom firingvar helper to drop bombs (num depends on type of ammo selected)
 
 HELICOPTER
 * will be super-simple layout for controls

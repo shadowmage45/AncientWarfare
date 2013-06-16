@@ -500,6 +500,10 @@ protected void handleGroundMovementUpdate()
 
 protected void handleAirMovementUpdate()
   {
+  if(vehicle.riddenByEntity==null)
+    {
+    this.localThrottle = 0;
+    }
   byte pitchInput = vehicle.getForwardInput();
   byte strafeInput = vehicle.getStrafeInput();
   float weightAdjust = 1.f;
@@ -807,10 +811,6 @@ protected boolean isPlant(int id)
 public void clearInputFromDismount()
   {
   setInput((byte)0, (byte)0);
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setByte("tr", (byte)0);
-  tag.setFloat("trA", this.localThrottle);
-  this.handleThrottlePacket(tag);
   }
 
 public void resetUpgradeStats()
