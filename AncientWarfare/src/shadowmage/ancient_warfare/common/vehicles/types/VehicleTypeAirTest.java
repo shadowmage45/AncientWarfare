@@ -21,12 +21,15 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.BallistaVarHelper;
@@ -46,7 +49,7 @@ public VehicleTypeAirTest(int typeNum)
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   this.materialCount = 5;
   this.movementType = VehicleMovementType.AIR1;
-  this.maxMissileWeight = 20.f;
+  this.maxMissileWeight = 30.f;
   
   this.validAmmoTypes.add(Ammo.ammoStoneShot10);
   this.validAmmoTypes.add(Ammo.ammoStoneShot15); 
@@ -169,7 +172,122 @@ public String getTextureForMaterialLevel(int level)
 @Override
 public VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh)
   {
-  return new BallistaVarHelper(veh);
+  return new AircraftVarsHelper(veh);
   }
 
+public class AircraftVarsHelper extends VehicleFiringVarsHelper
+{
+
+int missileFired = 0;
+int maxMissiles = 0;
+int delayTick = 0;
+/**
+ * @param vehicle
+ */
+public AircraftVarsHelper(VehicleBase vehicle)
+  {
+  super(vehicle);
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  return new NBTTagCompound();
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+
+  }
+
+@Override
+public void onFiringUpdate()
+  {  
+  this.maxMissiles = vehicle.firingHelper.getMissileLaunchCount();
+  Config.logDebug("set missiles to fire to: "+this.maxMissiles);
+  vehicle.firingHelper.startLaunching();  
+  }
+
+@Override
+public void onReloadUpdate()
+  {
+  
+  }
+
+@Override
+public void onLaunchingUpdate()
+  {  
+  delayTick++;
+  if(delayTick>=5)
+    {
+    delayTick = 0;
+    if(!vehicle.worldObj.isRemote && vehicle.ammoHelper.getCurrentAmmoCount()>0)
+      {
+      vehicle.worldObj.playSoundAtEntity(vehicle, "fireworks.launch", 1.0F, 0.5F);
+      }
+    vehicle.firingHelper.spawnMissile(0, 0, 0);
+    this.missileFired++;
+    if(missileFired>=maxMissiles)
+      {
+      vehicle.firingHelper.setFinishedLaunching();
+      }
+    }  
+  }
+
+@Override
+public void onReloadingFinished()
+  {
+  this.missileFired = 0;
+  this.delayTick = 0;
+  }
+
+@Override
+public float getVar1()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar2()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar3()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar4()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar5()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar6()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar7()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar8()
+  {
+  return 0;
+  }
+}
 }

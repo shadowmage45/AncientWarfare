@@ -1030,6 +1030,9 @@ public void writeSpawnData(ByteArrayDataOutput data)
     {
     data.writeInt(this.setupTicks);
     }
+  data.writeDouble(motionX);
+  data.writeDouble(motionY);
+  data.writeDouble(motionZ);
   }
 
 @Override
@@ -1060,6 +1063,9 @@ public void readSpawnData(ByteArrayDataInput data)
     this.setupTicks = data.readInt();
     }  
   this.setPosition(posX, posY, posZ);//this is to reset the bounding box, because the size of the entity changed during vehicleType setup
+  this.motionX = data.readDouble();
+  this.motionY = data.readDouble();
+  this.motionZ = data.readDouble();
   }
 
 @Override

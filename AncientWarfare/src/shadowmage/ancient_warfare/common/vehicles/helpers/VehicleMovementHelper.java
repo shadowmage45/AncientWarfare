@@ -294,17 +294,17 @@ public void handleInputData(NBTTagCompound tag)
   if(tag.hasKey("px"))
     {
     vehicle.posX = (float)tag.getFloat("px");
-    vehicle.prevPosX = vehicle.posX;
+    vehicle.lastTickPosX = vehicle.prevPosX = vehicle.posX;
     }
   if(tag.hasKey("py"))
     {
     vehicle.posY = (float)tag.getFloat("py");
-    vehicle.prevPosY = vehicle.posY;
+    vehicle.lastTickPosY = vehicle.prevPosY = vehicle.posY;
     }
   if(tag.hasKey("pz"))
     {
     vehicle.posZ = (float)tag.getFloat("pz");
-    vehicle.prevPosZ = vehicle.posZ;
+    vehicle.lastTickPosZ = vehicle.prevPosZ = vehicle.posZ;
     }
   if(tag.hasKey("ry"))
     {
@@ -322,11 +322,6 @@ public void handleInputData(NBTTagCompound tag)
     {
     this.handleThrottlePacket(tag); 
     }
-  }
-
-protected void handleRollUpdate()
-  {
-  
   }
 
 /**
