@@ -296,14 +296,17 @@ public void handleInputData(NBTTagCompound tag)
   if(tag.hasKey("px"))
     {
     vehicle.posX = (float)tag.getFloat("px");
+    vehicle.prevPosX = vehicle.posX;
     }
   if(tag.hasKey("py"))
     {
     vehicle.posY = (float)tag.getFloat("py");
+    vehicle.prevPosY = vehicle.posY;
     }
   if(tag.hasKey("pz"))
     {
     vehicle.posZ = (float)tag.getFloat("pz");
+    vehicle.prevPosZ = vehicle.posZ;
     }
   if(tag.hasKey("ry"))
     {
@@ -562,11 +565,28 @@ protected void handleAirMovementUpdate()
 //  float velocity = Trig.getVelocity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
   float horizontalVelocity = Trig.getVelocity(vehicle.motionX, vehicle.motionZ); 
   prevVelocity = horizontalVelocity;
-  float throttlePercent = horizontalVelocity / vehicle.currentForwardSpeedMax;  
-  float drag = onGround ? 0.995f : 0.99995f;    
-  drag = localThrottle==0 ? drag * 0.975f : drag;
-  float accel = 0.05f * localThrottle * (1-throttlePercent);
-  horizontalVelocity = (horizontalVelocity + accel)*(drag);
+  float throttlePercent = horizontalVelocity / vehicle.currentForwardSpeedMax;
+  throttlePercent = 1-throttlePercent;
+  throttlePercent *=throttlePercent;
+  float drag = onGround ? 0.995f : 0.999f;    
+  drag = localThrottle==0 && onGround ? drag * 0.985f : drag;
+    
+  float pitchAdjust = -airPitch * 0.01f * 0.0625f;
+  if(airPitch<0)
+    {
+    pitchAdjust*=0.5f;
+    }
+  float accel = 0.08f * (localThrottle*localThrottle*localThrottle*localThrottle) * throttlePercent;
+  if(horizontalVelocity>vehicle.currentForwardSpeedMax && airPitch<0)
+    {
+    float absMaxFactor = vehicle.currentForwardSpeedMax*2;
+    absMaxFactor = horizontalVelocity / absMaxFactor;
+    absMaxFactor = 1-absMaxFactor;    
+    pitchAdjust *=absMaxFactor;
+    }
+//  Config.logDebug("drag: "+drag + " adj: "+pitchAdjust);
+  horizontalVelocity = (horizontalVelocity + accel + pitchAdjust)*(drag);
+  
   
   /**
    * how to detect when 'crashed'
@@ -589,10 +609,15 @@ protected void handleAirMovementUpdate()
   if(horizontalVelocity < vehicle.currentForwardSpeedMax * 0.65f)
     {
     vehicle.motionY -= (9.81f*0.05f*0.05f);
+    if(!onGround)
+      {
+      airPitch--;      
+      }
+    vehicle.motionY += Trig.sinDegrees(airPitch) * accel;
     }
   else
     {
-    vehicle.motionY = Trig.sinDegrees(airPitch) * horizontalVelocity;
+    vehicle.motionY = Trig.sinDegrees(airPitch) * horizontalVelocity;    
     }  
   
   if(horizontalVelocity < 0.04f && localThrottle==0)//short-stop code
@@ -601,8 +626,7 @@ protected void handleAirMovementUpdate()
     }  
   
   boolean vertCrashSpeed = false;
-//  Config.logDebug("motionY :" + vehicle.motionY);
-  if(vehicle.motionY < -0.15f || vehicle.motionY > 0.15f)
+  if(vehicle.motionY < -0.25f || vehicle.motionY > 0.25f)
     {
     vertCrashSpeed = true;    
     }
@@ -616,11 +640,14 @@ protected void handleAirMovementUpdate()
     if(!onGround || crashSpeed)
       {
       Config.logDebug("CRASH");
-      horizontalVelocity *= 0.5f;  
       if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
         {
         EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
         player.addChatMessage("you have crashed!!");
+        }
+      if(!vehicle.worldObj.isRemote)
+        {
+        vehicle.setDead();
         }
       }
     }
@@ -630,11 +657,14 @@ protected void handleAirMovementUpdate()
     if(vertCrashSpeed)
       {
       Config.logDebug(" VERT CRASH");
-      horizontalVelocity *= 0.5f;   
       if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
         {
         EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
         player.addChatMessage("you have crashed (vertical)!!");
+        }
+      if(!vehicle.worldObj.isRemote)
+        {
+        vehicle.setDead();
         }
       }
     }
@@ -650,6 +680,10 @@ protected void handleAirMovementUpdate()
   float mp = vehicle.onGround ? 1 : 20;
   if(airPitch>mp){airPitch = mp;}
   if(airPitch<-mp){airPitch = -mp;}
+  if(airPitch<.2f && airPitch>-.2f && forwardMotion==0)
+    {
+    airPitch = 0;
+    }
   vehicle.wheelRotationPrev = vehicle.wheelRotation;
   vehicle.wheelRotation += localThrottle * 0.1f;
   this.tearUpGrass();  
@@ -733,6 +767,10 @@ protected boolean handleWaterMovement()
  */
 public void tearUpGrass()
   {
+  if(vehicle.worldObj.isRemote)
+    {
+    return;
+    }
   for(int var24 = 0; var24 < 4; ++var24)
     {      
     int x = MathHelper.floor_double(vehicle.posX + ((double)(var24 % 2) - 0.5D) * 0.8D);

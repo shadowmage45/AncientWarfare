@@ -25,6 +25,7 @@ import java.util.HashMap;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraftforge.client.MinecraftForgeClient;
+import shadowmage.ancient_warfare.client.model.ModelAirplane;
 import shadowmage.ancient_warfare.client.model.ModelBallistaMobile;
 import shadowmage.ancient_warfare.client.model.ModelBallistaStand;
 import shadowmage.ancient_warfare.client.model.ModelBatteringRam;
@@ -161,7 +162,7 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.BOAT_CATAPULT, new RenderBoatCatapult(), new ModelBoatCatapult());
   this.addVehicleRender(VehicleRegistry.BOAT_TRANSPORT, new RenderBoatTransport(), new ModelBoatTransport());
   
-  this.addVehicleRender(VehicleRegistry.AIR_TEST, new RenderAircraftTest(), new ModelBoatBallista());
+  this.addVehicleRender(VehicleRegistry.AIR_TEST, new RenderAircraftTest(), new ModelAirplane());
   /**
    * missiles...
    */

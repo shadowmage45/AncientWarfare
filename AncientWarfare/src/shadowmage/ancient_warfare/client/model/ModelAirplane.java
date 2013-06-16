@@ -12,7 +12,7 @@ import shadowmage.ancient_warfare.common.utils.Trig;
  
 public class ModelAirplane extends ModelVehicleBase
 {
- 
+
 ModelRenderer fuseParent;
 ModelRenderer fuse1;
 ModelRenderer fuse2;
@@ -22,10 +22,6 @@ ModelRenderer fuse5R;
 ModelRenderer fuse5L;
 ModelRenderer fuse6L;
 ModelRenderer fuse7L;
-ModelRenderer fuse8L;
-ModelRenderer fuse9L;
-ModelRenderer fuse10L;
-ModelRenderer fuse11L;
 ModelRenderer fuse12L;
 ModelRenderer fuseRear1;
 ModelRenderer fuseTail1;
@@ -47,10 +43,6 @@ ModelRenderer wingL1;
 ModelRenderer wingR1;
 ModelRenderer fuse6R;
 ModelRenderer fuse7R;
-ModelRenderer fuse8R;
-ModelRenderer fuse9R;
-ModelRenderer fuse10R;
-ModelRenderer fuse11R;
 ModelRenderer fuse12R;
 ModelRenderer nose1;
 ModelRenderer nose2;
@@ -174,40 +166,12 @@ public ModelAirplane(){
   fuse6L.addBox(0.0f,0.0f,0.0f,2,1,44);
   fuseParent.addChild(fuse6L);
   fuse7L = new ModelRenderer(this,"fuse7L");
-  fuse7L.setTextureOffset(75,116);
+  fuse7L.setTextureOffset(75,57);
   fuse7L.setTextureSize(256,256);
-  fuse7L.setRotationPoint(7.0f, 2.0f, -23.0f);
+  fuse7L.setRotationPoint(7.0f, -2.0f, -23.0f);
   setPieceRotation(fuse7L,0.0f, 0.0f, 0.0f);
-  fuse7L.addBox(0.0f,0.0f,0.0f,2,1,47);
+  fuse7L.addBox(0.0f,0.0f,0.0f,2,5,47);
   fuseParent.addChild(fuse7L);
-  fuse8L = new ModelRenderer(this,"fuse8L");
-  fuse8L.setTextureOffset(75,116);
-  fuse8L.setTextureSize(256,256);
-  fuse8L.setRotationPoint(7.0f, 1.0f, -23.0f);
-  setPieceRotation(fuse8L,0.0f, 0.0f, 0.0f);
-  fuse8L.addBox(0.0f,0.0f,0.0f,2,1,47);
-  fuseParent.addChild(fuse8L);
-  fuse9L = new ModelRenderer(this,"fuse9L");
-  fuse9L.setTextureOffset(75,116);
-  fuse9L.setTextureSize(256,256);
-  fuse9L.setRotationPoint(7.0f, 0.0f, -23.0f);
-  setPieceRotation(fuse9L,0.0f, 0.0f, 0.0f);
-  fuse9L.addBox(0.0f,0.0f,0.0f,2,1,47);
-  fuseParent.addChild(fuse9L);
-  fuse10L = new ModelRenderer(this,"fuse10L");
-  fuse10L.setTextureOffset(75,116);
-  fuse10L.setTextureSize(256,256);
-  fuse10L.setRotationPoint(7.0f, -1.0f, -23.0f);
-  setPieceRotation(fuse10L,0.0f, 0.0f, 0.0f);
-  fuse10L.addBox(0.0f,0.0f,0.0f,2,1,47);
-  fuseParent.addChild(fuse10L);
-  fuse11L = new ModelRenderer(this,"fuse11L");
-  fuse11L.setTextureOffset(75,116);
-  fuse11L.setTextureSize(256,256);
-  fuse11L.setRotationPoint(7.0f, -2.0f, -23.0f);
-  setPieceRotation(fuse11L,0.0f, 0.0f, 0.0f);
-  fuse11L.addBox(0.0f,0.0f,0.0f,2,1,47);
-  fuseParent.addChild(fuse11L);
   fuse12L = new ModelRenderer(this,"fuse12L");
   fuse12L.setTextureOffset(164,116);
   fuse12L.setTextureSize(256,256);
@@ -349,40 +313,12 @@ public ModelAirplane(){
   fuse6R.addBox(0.0f,0.0f,0.0f,2,1,44);
   fuseParent.addChild(fuse6R);
   fuse7R = new ModelRenderer(this,"fuse7R");
-  fuse7R.setTextureOffset(75,116);
+  fuse7R.setTextureOffset(75,57);
   fuse7R.setTextureSize(256,256);
-  fuse7R.setRotationPoint(-9.0f, 2.0f, -23.0f);
+  fuse7R.setRotationPoint(-9.0f, -2.0f, -23.0f);
   setPieceRotation(fuse7R,0.0f, 0.0f, 0.0f);
-  fuse7R.addBox(0.0f,0.0f,0.0f,2,1,47);
+  fuse7R.addBox(0.0f,0.0f,0.0f,2,5,47);
   fuseParent.addChild(fuse7R);
-  fuse8R = new ModelRenderer(this,"fuse8R");
-  fuse8R.setTextureOffset(75,116);
-  fuse8R.setTextureSize(256,256);
-  fuse8R.setRotationPoint(-9.0f, 1.0f, -23.0f);
-  setPieceRotation(fuse8R,0.0f, 0.0f, 0.0f);
-  fuse8R.addBox(0.0f,0.0f,0.0f,2,1,47);
-  fuseParent.addChild(fuse8R);
-  fuse9R = new ModelRenderer(this,"fuse9R");
-  fuse9R.setTextureOffset(75,116);
-  fuse9R.setTextureSize(256,256);
-  fuse9R.setRotationPoint(-9.0f, 0.0f, -23.0f);
-  setPieceRotation(fuse9R,0.0f, 0.0f, 0.0f);
-  fuse9R.addBox(0.0f,0.0f,0.0f,2,1,47);
-  fuseParent.addChild(fuse9R);
-  fuse10R = new ModelRenderer(this,"fuse10R");
-  fuse10R.setTextureOffset(75,116);
-  fuse10R.setTextureSize(256,256);
-  fuse10R.setRotationPoint(-9.0f, -1.0f, -23.0f);
-  setPieceRotation(fuse10R,0.0f, 0.0f, 0.0f);
-  fuse10R.addBox(0.0f,0.0f,0.0f,2,1,47);
-  fuseParent.addChild(fuse10R);
-  fuse11R = new ModelRenderer(this,"fuse11R");
-  fuse11R.setTextureOffset(75,116);
-  fuse11R.setTextureSize(256,256);
-  fuse11R.setRotationPoint(-9.0f, -2.0f, -23.0f);
-  setPieceRotation(fuse11R,0.0f, 0.0f, 0.0f);
-  fuse11R.addBox(0.0f,0.0f,0.0f,2,1,47);
-  fuseParent.addChild(fuse11R);
   fuse12R = new ModelRenderer(this,"fuse12R");
   fuse12R.setTextureOffset(164,116);
   fuse12R.setTextureSize(256,256);
@@ -845,7 +781,7 @@ public ModelAirplane(){
   setPieceRotation(flagCloth,0.0f, 0.0f, 0.0f);
   flagCloth.addBox(-0.5f,-20.0f,23.0f,1,8,11);
   }
- 
+  
 @Override
 public void render(Entity entity, float f1, float f2, float f3, float f4, float f5, float f6)
   {

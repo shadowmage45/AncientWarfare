@@ -34,7 +34,9 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
+import shadowmage.meim.common.util.Trig;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -58,6 +60,43 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
   
   }
 
+public void renderVehicleOverlay()
+  {
+  VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
+  int white = 0xffffffff;
+  if(vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR1 || vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR2)
+    {
+    this.drawString(fontRenderer, "Throttle: "+vehicle.moveHelper.localThrottle, 10, 10, white);    
+    this.drawString(fontRenderer, "Pitch: "+vehicle.moveHelper.airPitch, 10, 20, white);
+    this.drawString(fontRenderer, "Climb Rate: "+vehicle.motionY*20, 10, 30, white);
+    this.drawString(fontRenderer, "Elevation: "+vehicle.posY, 10, 40, white);
+    }
+  else
+    {
+    this.drawString(fontRenderer, "Range: "+vehicle.firingHelper.clientHitRange, 10, 10, white);
+    this.drawString(fontRenderer, "Pitch: "+vehicle.firingHelper.clientTurretPitch, 10, 20, white);
+    this.drawString(fontRenderer, "Yaw: "+vehicle.firingHelper.clientTurretYaw, 10, 30, white);
+    this.drawString(fontRenderer, "Velocity: "+vehicle.firingHelper.clientLaunchSpeed, 10, 40, white);    
+    }
+  IAmmoType ammo = vehicle.ammoHelper.getCurrentAmmoType();
+  if(ammo!=null)
+    {
+    int count = vehicle.ammoHelper.getCurrentAmmoCount();
+    this.drawString(fontRenderer, "Ammo: "+ammo.getDisplayName(), 10, 50, white);
+    this.drawString(fontRenderer, "Count: "+count, 10, 60, white);
+    }
+  else
+    {
+    this.drawString(fontRenderer, "No Ammo Selected", 10, 50, white);
+    }    
+  if(Settings.getRenderAdvOverlay())
+    {
+    float velocity = Trig.getVelocity(vehicle.motionX, vehicle.motionZ);
+    this.drawString(fontRenderer, "Velocity: "+velocity*20.f+"m/s  max: " + vehicle.currentForwardSpeedMax*20, 10, 70, white);
+    this.drawString(fontRenderer, "Yaw Rate: "+vehicle.moveHelper.strafeMotion*20.f, 10, 80, white);   
+    } 
+  }
+
 @Override
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {
@@ -65,35 +104,7 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
     {
     if(mc.thePlayer.ridingEntity instanceof VehicleBase)
       {
-      VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
-      this.drawString(fontRenderer, "Range: "+vehicle.firingHelper.clientHitRange, 10, 10, 0xffffffff);
-      this.drawString(fontRenderer, "Pitch: "+vehicle.firingHelper.clientTurretPitch, 10, 20, 0xffffffff);
-      this.drawString(fontRenderer, "Yaw: "+vehicle.firingHelper.clientTurretYaw, 10, 30, 0xffffffff);
-      this.drawString(fontRenderer, "Velocity: "+vehicle.firingHelper.clientLaunchSpeed, 10, 40, 0xffffffff);
-      IAmmoType ammo = vehicle.ammoHelper.getCurrentAmmoType();
-      if(ammo!=null)
-        {
-        int count = vehicle.ammoHelper.getCurrentAmmoCount();
-        this.drawString(fontRenderer, "Ammo: "+ammo.getDisplayName(), 10, 50, 0xffffffff);
-        this.drawString(fontRenderer, "Count: "+count, 10, 60, 0xffffffff);
-        }
-      else
-        {
-        this.drawString(fontRenderer, "No Ammo Selected", 10, 50, 0xffffffff);
-        }    
-      if(Settings.getRenderAdvOverlay())
-        {
-        this.drawString(fontRenderer, "FSp: "+vehicle.moveHelper.forwardMotion*20.f, 10, 70, 0xffffffff);
-        this.drawString(fontRenderer, "SSp: "+vehicle.moveHelper.strafeMotion*20.f, 10, 80, 0xffffffff);
-        this.drawString(fontRenderer, "Wgt: "+vehicle.currentWeight+ " base: "+vehicle.baseWeight, 10, 90, 0xffffffff);
-        this.drawString(fontRenderer, "Speed: "+vehicle.currentForwardSpeedMax*20.f+ " base: "+vehicle.baseForwardSpeed*20.f + " root: "+vehicle.vehicleType.getBaseForwardSpeed()*20.f, 10, 100, 0xffffffff);    
-        float weightAdjust = 1.f;
-        if(vehicle.currentWeight > vehicle.baseWeight)
-          {
-          weightAdjust = vehicle.baseWeight  / vehicle.currentWeight;
-          }
-        this.drawString(fontRenderer, "WeightAdjusted max Speed: "+vehicle.currentForwardSpeedMax*weightAdjust*20.f, 10, 110, 0xffffffff);
-        } 
+      this.renderVehicleOverlay();      
       }
     else
       {
