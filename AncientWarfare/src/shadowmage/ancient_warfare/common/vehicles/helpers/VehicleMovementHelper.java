@@ -75,8 +75,6 @@ public float strafeMotion = 0;
 protected float prevWidth = 0.8f;
 public float localThrottle = 0.f;
 public float airPitch = 0.f;
-public float prevVelocity = 0.f;
-
 public VehicleMovementHelper (VehicleBase veh)
   {
   this.vehicle = veh;
@@ -567,29 +565,26 @@ protected void handleAirMovementUpdate()
   
   boolean onGround = vehicle.worldObj.getBlockId(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY)-1, MathHelper.floor_double(vehicle.posZ))!=0;
 //  float velocity = Trig.getVelocity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
-  float horizontalVelocity = Trig.getVelocity(vehicle.motionX, vehicle.motionZ); 
-  prevVelocity = horizontalVelocity;
-  float throttlePercent = horizontalVelocity / vehicle.currentForwardSpeedMax;
-  throttlePercent = 1-throttlePercent;
-  throttlePercent *=throttlePercent;
-  float drag = onGround ? 0.995f : 0.999f;    
+  float horizontalVelocity = Trig.getVelocity(vehicle.motionX, vehicle.motionZ);   
+  float maxVelocity = vehicle.currentForwardSpeedMax;
+  float velocityPercent = horizontalVelocity/maxVelocity;
+  float doubleVelocityPercent = horizontalVelocity  / (maxVelocity*2);
+  float drag = onGround ? 0.995f : 0.999f;   
   drag = localThrottle==0 && onGround ? drag * 0.985f : drag;
-    
-  float pitchAdjust = -airPitch * 0.01f * 0.0625f;
+  
+  
+  float accel = 0.025f * localThrottle*localThrottle*localThrottle;
+  accel *= (1-velocityPercent);
+  
+  
+  float pitchAccel = -Trig.sinDegrees(airPitch) * horizontalVelocity * 0.075f * (1-doubleVelocityPercent);
+  
   if(airPitch<0)
     {
-    pitchAdjust*=0.5f;
+    pitchAccel *= 0.5f;
     }
-  float accel = 0.08f * (localThrottle*localThrottle*localThrottle*localThrottle) * throttlePercent;
-  if(horizontalVelocity>vehicle.currentForwardSpeedMax && airPitch<0)
-    {
-    float absMaxFactor = vehicle.currentForwardSpeedMax*2;
-    absMaxFactor = horizontalVelocity / absMaxFactor;
-    absMaxFactor = 1-absMaxFactor;    
-    pitchAdjust *=absMaxFactor;
-    }
-//  Config.logDebug("drag: "+drag + " adj: "+pitchAdjust);
-  horizontalVelocity = (horizontalVelocity + accel + pitchAdjust)*(drag);
+  
+  horizontalVelocity = (horizontalVelocity + accel + pitchAccel)*(drag);
   
   
   /**
@@ -617,7 +612,6 @@ protected void handleAirMovementUpdate()
       {
       airPitch--;      
       }
-    vehicle.motionY += Trig.sinDegrees(airPitch) * accel;
     }
   else
     {
