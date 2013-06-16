@@ -807,6 +807,10 @@ protected boolean isPlant(int id)
 public void clearInputFromDismount()
   {
   setInput((byte)0, (byte)0);
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setByte("tr", (byte)0);
+  tag.setFloat("trA", this.localThrottle);
+  this.handleThrottlePacket(tag);
   }
 
 public void resetUpgradeStats()
@@ -824,7 +828,8 @@ public NBTTagCompound getNBTTag()
   tag.setFloat("sa", strafeAccel);
   tag.setFloat("mf", forwardMotion);
   tag.setFloat("fa", forwardAccel);
-  tag.setFloat("tr", localThrottle);
+  tag.setFloat("tr", localThrottle);  
+  tag.setFloat("ap", airPitch);
   return tag;
   }
 
@@ -838,6 +843,7 @@ public void readFromNBT(NBTTagCompound tag)
   this.forwardMotion = tag.getFloat("mf");
   this.forwardAccel = tag.getFloat("fa");
   this.localThrottle = tag.getFloat("tr");
+  this.airPitch = tag.getFloat("ap");
   }
 
 }

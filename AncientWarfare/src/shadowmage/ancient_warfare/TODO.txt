@@ -34,20 +34,9 @@ VEHICLES
 * it appears that vehicles are missing the speed upgrade
 
 AIRPLANE
-* will need at rewrite of movementHelper to allow for new input methods
-* need new controls for throttle
-    throttle will use a constant acceleration in the thrust-axis of the vehicle
-    * can link throttle controls from the manual turret power/pitch control    
-* will use forwardMotion for pitch adjustments
-* will use strafeMotion for yaw and roll adjustments (simple TER)
-    * directly link roll rate to yaw rate, don't even bother with roll packets/data, merely calc for render
-* server side will need special code to detect a 'crash' (if velocity change over X ticks is greater than Y then EXPLODE)    
-* calculate lift as a ratio of groundspeed vs airspeed
-    //** The lift equation states that lift 
-    L is equal to the lift coefficient 
-    Cl times the density r times half of the velocity V squared times the wing area A.
-    L = Cl * A * .5 * r * V^2
-    //**http://www.grc.nasa.gov/WWW/k-12/airplane/lifteq.html
+* need to send throttle and pitch data in entity client init packet
+* need to zero throttle on dismount
+* texture is still missing a few little pips
 
 HELICOPTER
 * will be super-simple layout for controls
