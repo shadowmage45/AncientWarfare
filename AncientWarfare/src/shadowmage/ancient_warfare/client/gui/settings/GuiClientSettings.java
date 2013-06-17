@@ -82,6 +82,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Render Npc Objectives", left, guiTop+150+4, 0xffffffff);
   if(Config.DEBUG)
     {
+//    this.drawString(fontRenderer, "RPS: "+AWCore.proxy.recPacketAvg+ " SPS: "+AWCore.proxy.sentPacketAvg, guiLeft+5, guiTop+getYSize()-25, 0xffffffff);
     this.drawString(fontRenderer, "TPS: "+AWCore.proxy.serverTPS+ " AVG TICK: "+AWCore.proxy.serverTickTime, guiLeft+5, guiTop+getYSize()-15, 0xffffffff);
     }
   }

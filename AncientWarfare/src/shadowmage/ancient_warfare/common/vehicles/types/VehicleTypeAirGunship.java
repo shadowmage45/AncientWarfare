@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -33,7 +34,7 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeAirTest.AircraftVarsHelper;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeAirBomber.AircraftVarsHelper;
 
 public class VehicleTypeAirGunship extends VehicleType
 {
@@ -44,8 +45,8 @@ public class VehicleTypeAirGunship extends VehicleType
 public VehicleTypeAirGunship(int typeNum)
   {
   super(typeNum);
-  this.vehicleMaterial = VehicleMaterial.materialWood;  
-  this.materialCount = 5;
+  this.vehicleMaterial = VehicleMaterial.materialWood;   
+  this.materialCount = 4;
   this.movementType = VehicleMovementType.AIR1;
   this.maxMissileWeight = 10.f;
   
@@ -77,16 +78,31 @@ public VehicleTypeAirGunship(int typeNum)
   
   this.addNeededResearchForMaterials();
   
-  this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
-  this.addNeededResearch(1, ResearchGoal.vehicleMobility2);
-  this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
-  this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
+  this.addNeededResearch(0, ResearchGoal.vehicleMobility5);
+  this.addNeededResearch(1, ResearchGoal.vehicleMobility5);
+  this.addNeededResearch(2, ResearchGoal.vehicleMobility5);
+  this.addNeededResearch(3, ResearchGoal.vehicleMobility5);
   this.addNeededResearch(4, ResearchGoal.vehicleMobility5);
   
+  this.addNeededResearch(0, ResearchGoal.vehicleGunpowderWeapons5);
+  this.addNeededResearch(1, ResearchGoal.vehicleGunpowderWeapons5);
+  this.addNeededResearch(2, ResearchGoal.vehicleGunpowderWeapons5);
+  this.addNeededResearch(3, ResearchGoal.vehicleGunpowderWeapons5);
+  this.addNeededResearch(4, ResearchGoal.vehicleGunpowderWeapons5);
+  
+  this.addNeededResearch(0, ResearchGoal.upgradeMechanics5);
+  this.addNeededResearch(1, ResearchGoal.upgradeMechanics5);
+  this.addNeededResearch(2, ResearchGoal.upgradeMechanics5);
+  this.addNeededResearch(3, ResearchGoal.upgradeMechanics5);
+  this.addNeededResearch(4, ResearchGoal.upgradeMechanics5);
+  
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.silk, 8, false, false));
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.torsionUnit, 2, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.powderCase, 2, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.mobilityUnit, 1, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.mobilityUnit, 2, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(Block.cloth, 10, true, false));
+    
+  this.baseHealth = 50;
   
   this.width = 2.7f;
   this.height = 1.4f;  

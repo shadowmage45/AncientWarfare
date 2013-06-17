@@ -22,6 +22,9 @@ package shadowmage.ancient_warfare.common.utils;
 
 import java.util.EnumSet;
 
+import net.minecraft.network.packet.Packet;
+import net.minecraft.server.MinecraftServer;
+
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import cpw.mods.fml.common.ITickHandler;
@@ -30,9 +33,6 @@ import cpw.mods.fml.common.TickType;
 public class ServerTickTimer implements ITickHandler
 {
 
-//ArrayList<Long> tickTimes = new ArrayList<Long>();
-//ArrayList<Long> tickIntervals = new ArrayList<Long>();
-
 long[] tickTimes = new long[20];
 long[] tickIntervals = new long[20];
 
@@ -40,6 +40,14 @@ int index = 0;
 
 long startTime = System.nanoTime();
 long prevStartTime = System.nanoTime();
+
+int ticks = 0;
+long perSecondReceived = 0;
+long perSecondSent = 0;
+long[] packetSizesReceived = new long[100];
+long prevTotalSizeReceived = 0;
+long[] packetSizesSent = new long[100];
+long prevTotalSizeSent = 0;
 
 @Override
 public void tickStart(EnumSet<TickType> type, Object... tickData)
@@ -51,7 +59,19 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
   this.count();
   prevStartTime = startTime;
   startTime = System.nanoTime();
-  this.tickIntervals[index] = startTime-prevStartTime;
+  this.tickIntervals[index] = startTime-prevStartTime;  
+  
+  
+  this.packetSizesReceived[(int) (ticks%100)]=Packet.receivedSize-prevTotalSizeReceived;
+  this.prevTotalSizeReceived = Packet.receivedSize;
+  this.packetSizesSent[(int)(ticks%100)]=Packet.sentSize-prevTotalSizeSent;
+  this.prevTotalSizeSent = Packet.sentSize;
+  int tickDiv = ticks/20;
+  tickDiv = tickDiv==0? 1 : tickDiv;
+  this.perSecondReceived = this.prevTotalSizeReceived / tickDiv;
+  this.perSecondSent = this.prevTotalSizeSent / tickDiv;
+  this.ticks++;  
+//  Config.logDebug("sps: "+this.perSecondSent  + " rps: "+this.perSecondReceived  + " rrs: "+Packet.receivedSize + " rss: "+Packet.sentSize);
   }
 
 @Override
@@ -83,7 +103,9 @@ public void count()
     {
     Packet01ModData pkt = new Packet01ModData();
     pkt.setTickTimes(avg, tps);
+//    pkt.setPacketSizes(this.perSecondSent, this.perSecondReceived);
     pkt.sendPacketToAllPlayers();
+    
     }
   
 //  Config.logDebug("avg: " + avg + "  TPS: "+ (1000/tms)+" avgI: "+avgInterval);  

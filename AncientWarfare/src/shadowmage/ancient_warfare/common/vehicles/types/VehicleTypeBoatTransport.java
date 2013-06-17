@@ -44,7 +44,7 @@ public VehicleTypeBoatTransport(int typeNum)
   super(typeNum);
   this.vehicleMaterial = VehicleMaterial.materialWood;
   this.movementType = VehicleMovementType.WATER;
-  this.materialCount = 3;
+  this.materialCount = 5;
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorObsidian);
   this.validArmors.add(ArmorRegistry.armorIron);  
@@ -74,8 +74,16 @@ public VehicleTypeBoatTransport(int typeNum)
   this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
   this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
   this.addNeededResearch(4, ResearchGoal.vehicleMobility5);
+
+  this.addNeededResearch(0, ResearchGoal.upgradeMechanics1);
+  this.addNeededResearch(1, ResearchGoal.upgradeMechanics2);
+  this.addNeededResearch(2, ResearchGoal.upgradeMechanics3);
+  this.addNeededResearch(3, ResearchGoal.upgradeMechanics4);
+  this.addNeededResearch(4, ResearchGoal.upgradeMechanics5);
+  
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Block.chest, 8, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(Block.cactus, 2, false, false));
   }
 
 @Override

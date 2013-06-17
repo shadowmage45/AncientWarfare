@@ -38,6 +38,9 @@ public class CommonProxy
 public long serverTickTime;
 public int serverTPS;
 
+public int sentPacketAvg;
+public int recPacketAvg;
+
 public EntityPlayer getClientPlayer()
   {
   return null;

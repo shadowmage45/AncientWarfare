@@ -27,11 +27,9 @@ VEHICLES
 * pathfinding needs adjusted so that it doesn't need to be as close to the node to claim next (will help with aquatic pathfinding and the coast-hugging that npcs do)
 * re-allow theta pathfinding in water (it was disabled for crawler--fix crawler some other way)
 * finish boat textures
-* finish boat stats (health, speed, power, etc)
+* finish airplane textures
 
 AIRPLANE
-* needs stats setup
-* needs research
 
 HELICOPTER
 * will be super-simple layout for controls
@@ -174,3 +172,6 @@ TWEAKS/OPTIMIZATION
 * fix trajectory rendering partial-tick handling
 
 /********** 06-17-13**********/
+* finish boat stats (health, speed, power, etc)
+* needs stats setup
+* needs research

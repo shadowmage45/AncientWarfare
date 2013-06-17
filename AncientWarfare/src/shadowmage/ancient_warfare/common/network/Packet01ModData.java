@@ -78,6 +78,13 @@ public void setTickTimes(long time, int tps)
   this.packetData.setInteger("tps", tps);
   }
 
+public void setPacketSizes(long s, long r)
+  {
+  this.packetData.setBoolean("packetCount", true);
+  this.packetData.setInteger("sent", (int) s);
+  this.packetData.setInteger("received", (int) r);
+  }
+
 @Override
 public void writeDataToStream(ByteArrayDataOutput data)
   {
@@ -150,6 +157,12 @@ public void execute()
     {
     AWCore.proxy.serverTickTime = packetData.getLong("tick");
     AWCore.proxy.serverTPS = packetData.getInteger("tps");
+    }
+  
+  if(this.packetData.hasKey("packetCount"))
+    {
+    AWCore.proxy.recPacketAvg = packetData.getInteger("r");
+    AWCore.proxy.sentPacketAvg = packetData.getInteger("s");
     }
   
   if(this.packetData.hasKey("research") && player.worldObj.isRemote)

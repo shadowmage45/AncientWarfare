@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import net.minecraft.block.Block;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
@@ -151,9 +152,18 @@ public VehicleTypeBoatCatapult(int typeNum)
   this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
   this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
   this.addNeededResearch(4, ResearchGoal.vehicleMobility5);
+  
+
+  this.addNeededResearch(0, ResearchGoal.upgradeMechanics1);
+  this.addNeededResearch(1, ResearchGoal.upgradeMechanics2);
+  this.addNeededResearch(2, ResearchGoal.upgradeMechanics3);
+  this.addNeededResearch(3, ResearchGoal.upgradeMechanics4);
+  this.addNeededResearch(4, ResearchGoal.upgradeMechanics5);
+  
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.torsionUnit, 3, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.mobilityUnit, 1, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(Block.cactus, 2, false, false));
   }
 
 @Override
