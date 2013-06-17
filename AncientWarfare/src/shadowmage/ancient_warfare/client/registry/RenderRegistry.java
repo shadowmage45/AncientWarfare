@@ -163,6 +163,7 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.BOAT_TRANSPORT, new RenderBoatTransport(), new ModelBoatTransport());
   
   this.addVehicleRender(VehicleRegistry.AIR_TEST, new RenderAircraftTest(), new ModelAirplane());
+  this.addVehicleRender(VehicleRegistry.AIR_TEST2, new RenderAircraftTest(), new ModelAirplane());
   /**
    * missiles...
    */

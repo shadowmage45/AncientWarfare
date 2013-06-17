@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.utils.Pair;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
 
@@ -146,7 +147,7 @@ public void spawnMissile(float ox, float oy, float oz)
         maxPower = getAdjustedMaxMissileVelocity();
         power = vehicle.localLaunchPower > maxPower ? maxPower : vehicle.localLaunchPower;      
         yaw = vehicle.localTurretRotation;
-        pitch = vehicle.localTurretPitch; 
+        pitch = vehicle.localTurretPitch + vehicle.moveHelper.airPitch; 
         if(Config.adjustMissilesForAccuracy)
           {        
           accuracy = getAccuracyAdjusted();        
@@ -170,6 +171,12 @@ public void spawnMissile(float ox, float oy, float oz)
             } 
           }
         missile = vehicle.ammoHelper.getMissile2(x, y, z, yaw, pitch, power);
+        if(vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR1 || vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR2)
+          {
+          missile.motionX +=vehicle.motionX;
+          missile.motionY +=vehicle.motionY;
+          missile.motionZ += vehicle.motionZ;
+          }
         if(missile!=null)
           {
           vehicle.worldObj.spawnEntityInWorld(missile);
@@ -551,7 +558,7 @@ public void handleAimInput(Vec3 target)
     }
   else if(vehicle.canAimPower())
     {     
-    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch, Settings.getClientPowerIterations(), (vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));    
+    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch+vehicle.moveHelper.airPitch, Settings.getClientPowerIterations(), (vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));    
     if(this.clientLaunchSpeed!=power && power < getAdjustedMaxMissileVelocity())
       {
       this.clientLaunchSpeed = power;
@@ -674,7 +681,7 @@ public void handleSoldierTargetInput(double targetX, double targetY, double targ
     }
   else if(vehicle.canAimPower())
     {     
-    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch, Settings.getClientPowerIterations(), (vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));    
+    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch+vehicle.moveHelper.airPitch, Settings.getClientPowerIterations(), (vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));    
     if(vehicle.localLaunchPower!=power && power < getAdjustedMaxMissileVelocity())
       {
       this.vehicle.localLaunchPower = power;

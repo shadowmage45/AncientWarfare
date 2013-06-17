@@ -49,16 +49,13 @@ public VehicleTypeAirTest(int typeNum)
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   this.materialCount = 5;
   this.movementType = VehicleMovementType.AIR1;
-  this.maxMissileWeight = 30.f;
+  this.maxMissileWeight = 20.f;
+  this.accuracy = 0.7f;
   
   this.validAmmoTypes.add(Ammo.ammoStoneShot10);
   this.validAmmoTypes.add(Ammo.ammoStoneShot15); 
   this.validAmmoTypes.add(Ammo.ammoFireShot10);
   this.validAmmoTypes.add(Ammo.ammoFireShot15);
-  this.validAmmoTypes.add(Ammo.ammoPebbleShot10);
-  this.validAmmoTypes.add(Ammo.ammoPebbleShot15);
-  this.validAmmoTypes.add(Ammo.ammoClusterShot10);
-  this.validAmmoTypes.add(Ammo.ammoClusterShot15);
   this.validAmmoTypes.add(Ammo.ammoExplosive10);
   this.validAmmoTypes.add(Ammo.ammoExplosive15);
   this.validAmmoTypes.add(Ammo.ammoHE10);
@@ -66,42 +63,25 @@ public VehicleTypeAirTest(int typeNum)
   this.validAmmoTypes.add(Ammo.ammoNapalm10);
   this.validAmmoTypes.add(Ammo.ammoNapalm15);
   
+  this.validAmmoTypes.add(Ammo.ammoBallistaBolt);
+  this.validAmmoTypes.add(Ammo.ammoBallistaBoltFlame);
+  this.validAmmoTypes.add(Ammo.ammoBallistaBoltExplosive);
+  this.validAmmoTypes.add(Ammo.ammoBallistaBoltIron);
   
-  this.validAmmoTypes.add(Ammo.ammoArrow);
-  this.validAmmoTypes.add(Ammo.ammoArrowFlame);
-  this.validAmmoTypes.add(Ammo.ammoArrowIron);
-  this.validAmmoTypes.add(Ammo.ammoArrowIronFlame);
-  
-  if(Config.addOversizeAmmo)
-    {
-    this.validAmmoTypes.add(Ammo.ammoStoneShot30);
-    this.validAmmoTypes.add(Ammo.ammoStoneShot45);
-    this.validAmmoTypes.add(Ammo.ammoFireShot30);
-    this.validAmmoTypes.add(Ammo.ammoFireShot45);
-    this.validAmmoTypes.add(Ammo.ammoPebbleShot30);
-    this.validAmmoTypes.add(Ammo.ammoPebbleShot45);
-    this.validAmmoTypes.add(Ammo.ammoClusterShot30);
-    this.validAmmoTypes.add(Ammo.ammoClusterShot45);
-    this.validAmmoTypes.add(Ammo.ammoExplosive30);
-    this.validAmmoTypes.add(Ammo.ammoExplosive45);
-    this.validAmmoTypes.add(Ammo.ammoHE30);
-    this.validAmmoTypes.add(Ammo.ammoHE45);
-    
-    }
-  
-  this.ammoBySoldierRank.put(0, Ammo.ammoStoneShot10);
-  this.ammoBySoldierRank.put(1, Ammo.ammoStoneShot10);
-  this.ammoBySoldierRank.put(2, Ammo.ammoStoneShot10);
-  
-  this.validArmors.add(ArmorRegistry.armorStone);
-  this.validArmors.add(ArmorRegistry.armorObsidian);
-  this.validArmors.add(ArmorRegistry.armorIron);
+  this.ammoBySoldierRank.put(0, Ammo.ammoBallistaBolt);  
+  this.ammoBySoldierRank.put(1, Ammo.ammoBallistaBolt);
+  this.ammoBySoldierRank.put(2, Ammo.ammoBallistaBoltFlame);
+
+  this.validAmmoTypes.add(Ammo.ammoStoneShot30);
+  this.validAmmoTypes.add(Ammo.ammoFireShot30);
+  this.validAmmoTypes.add(Ammo.ammoExplosive30);
+  this.validAmmoTypes.add(Ammo.ammoHE30); 
     
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade);
       
-  this.armorBaySize = 1;
-  this.upgradeBaySize = 3;
+  this.armorBaySize = 0;
+  this.upgradeBaySize = 6;
   this.ammoBaySize = 2;  
   this.storageBaySize = 0;    
   
@@ -125,11 +105,10 @@ public VehicleTypeAirTest(int typeNum)
   this.baseForwardSpeed = 25f*0.05f;
   
   this.turretForwardsOffset = 0.f;
-  this.turretVerticalOffset = 0.f;
-  this.accuracy = 0.98f;
+  this.missileVerticalOffset = 0.65f;
   this.basePitchMax = -90;
   this.basePitchMin = -90; 
-  this.baseMissileVelocityMax = 2.f;   
+  this.baseMissileVelocityMax = 5.f;   
   
   this.riderForwardsOffset = -0.0625f * 7;
   this.riderVerticalOffset = 0.0625f * 12;  
@@ -219,7 +198,7 @@ public void onReloadUpdate()
 public void onLaunchingUpdate()
   {  
   delayTick++;
-  if(delayTick>=5)
+  if(delayTick>=2)
     {
     delayTick = 0;
     if(!vehicle.worldObj.isRemote && vehicle.ammoHelper.getCurrentAmmoCount()>0)

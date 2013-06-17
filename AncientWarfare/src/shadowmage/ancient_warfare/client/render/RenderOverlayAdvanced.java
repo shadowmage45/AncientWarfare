@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 import shadowmage.ancient_warfare.common.vehicles.missiles.AmmoHwachaRocket;
 
@@ -42,7 +43,7 @@ public static void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlaye
     {
     renderBatteringRamOverlay(vehicle, player, partialTick);
     }
-  else if(vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType()==Ammo.ammoRocket)
+  else if(vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket())
     {
     renderRocketFlightPath(vehicle, player, partialTick);
     }
@@ -67,9 +68,9 @@ public static void renderRocketFlightPath(VehicleBase vehicle, EntityPlayer play
   /**
    * vectors for a straight line
    */
-  double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw);
+  double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.strafeMotion);
   double y2 = y1;
-  double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw);
+  double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.strafeMotion);
   GL11.glLineWidth(3f);
   GL11.glBegin(GL11.GL_LINES);    
   GL11.glVertex3d(x1, y1+0.12d, z1);
@@ -87,8 +88,8 @@ public static void renderRocketFlightPath(VehicleBase vehicle, EntityPlayer play
    
   double gravity = 9.81d * 0.05d *0.05d;
   double speed = vehicle.localLaunchPower * 0.05d;
-  double angle = 90 - vehicle.localTurretPitch;
-  double yaw = vehicle.localTurretRotation;
+  double angle = 90 - vehicle.localTurretPitch - vehicle.moveHelper.airPitch;
+  double yaw = vehicle.localTurretRotation + partialTick * vehicle.moveHelper.strafeMotion;
   
   double vH = -Trig.sinDegrees((float) angle)*speed;
   double vY = Trig.cosDegrees((float) angle)*speed ;
@@ -96,6 +97,13 @@ public static void renderRocketFlightPath(VehicleBase vehicle, EntityPlayer play
   double vZ = Trig.cosDegrees((float) yaw)*vH ;
   int rocketBurnTime = (int) (speed * 20.f*AmmoHwachaRocket.burnTimeFactor);
   
+  if(vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR1 || vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR2)
+    {
+    vY +=vehicle.motionY;
+    vX +=vehicle.motionX;
+    vZ +=vehicle.motionZ;
+    y1 = -player.posY;
+    }
   
   float xAcc = (float) (vX/speed) * AmmoHwachaRocket.accelerationFactor;;
   float yAcc = (float) (vY/speed) * AmmoHwachaRocket.accelerationFactor;;
@@ -217,9 +225,9 @@ public static void renderNormalVehicleOverlay(VehicleBase vehicle, EntityPlayer 
   /**
    * vectors for a straight line
    */
-  double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw);
+  double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.strafeMotion);
   double y2 = y1;
-  double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw);
+  double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.strafeMotion);
   GL11.glLineWidth(3f);
   GL11.glBegin(GL11.GL_LINES);    
   GL11.glVertex3d(x1, y1+0.12d, z1);
@@ -240,14 +248,21 @@ public static void renderNormalVehicleOverlay(VehicleBase vehicle, EntityPlayer 
    
   double gravity = 9.81d * 0.05d *0.05d;
   double speed = vehicle.localLaunchPower * 0.05d;
-  double angle = 90 - vehicle.localTurretPitch;
-  double yaw = vehicle.localTurretRotation;
+  double angle = 90 - vehicle.localTurretPitch - vehicle.moveHelper.airPitch;;
+  double yaw = vehicle.localTurretRotation + partialTick * vehicle.moveHelper.strafeMotion;
   
   double vH = -Trig.sinDegrees((float) angle)*speed;
   double vY = Trig.cosDegrees((float) angle)*speed ;
   double vX = Trig.sinDegrees((float) yaw)*vH ;
   double vZ = Trig.cosDegrees((float) yaw)*vH ;
     
+  if(vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR1 || vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR2)
+    {
+    vY +=vehicle.motionY;
+    vX +=vehicle.motionX;
+    vZ +=vehicle.motionZ;
+    y1 = -player.posY;
+    }
   while(y2>=y1)
     {
     GL11.glVertex3d(x2, y2, z2);   

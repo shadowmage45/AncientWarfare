@@ -32,7 +32,6 @@ VEHICLES
 AIRPLANE
 * needs stats setup
 * needs research
-* needs custom firingvar helper to drop bombs (num depends on type of ammo selected)
 
 HELICOPTER
 * will be super-simple layout for controls
@@ -166,3 +165,12 @@ TWEAKS/OPTIMIZATION
 * update vehicle research goals to use the full 1-5 range of levels for each goal
 * potentially fix crash issue with direct-builder when shift-right clicking on air
 * adjust boat base speed to be the same as vanilla boat (6.2m/s)
+
+/********** 06-15-13**********/
+* add airplane...
+
+/********** 06-16-13**********/
+* add tons of missing ammo icons
+* fix trajectory rendering partial-tick handling
+
+/********** 06-17-13**********/

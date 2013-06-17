@@ -503,9 +503,9 @@ public Pos3f getMissileOffset()
     angle = Trig.toDegrees((float) Math.atan2(z, x));
     len = MathHelper.sqrt_float(x*x+z*z+y*y);
     angle+= this.localTurretRotation;   
-    x = Trig.cosDegrees(angle)*Trig.sinDegrees(localTurretPitch)*len;
-    z = -Trig.sinDegrees(angle)*Trig.sinDegrees(localTurretPitch)*len;
-    y = Trig.cosDegrees(localTurretPitch)*len;
+    x = Trig.cosDegrees(angle)*Trig.sinDegrees(localTurretPitch+moveHelper.airPitch)*len;
+    z = -Trig.sinDegrees(angle)*Trig.sinDegrees(localTurretPitch+moveHelper.airPitch)*len;
+    y = Trig.cosDegrees(localTurretPitch+moveHelper.airPitch)*len;
     }    
   x+=x1;
   z+=z1;
@@ -638,7 +638,7 @@ public void onUpdateClient()
   if(this.riddenByEntity instanceof NpcBase)
     {
     this.updateRiderPosition();
-    }
+    }  
   }
 
 /**
@@ -1030,9 +1030,6 @@ public void writeSpawnData(ByteArrayDataOutput data)
     {
     data.writeInt(this.setupTicks);
     }
-  data.writeDouble(motionX);
-  data.writeDouble(motionY);
-  data.writeDouble(motionZ);
   }
 
 @Override
@@ -1062,10 +1059,7 @@ public void readSpawnData(ByteArrayDataInput data)
     {
     this.setupTicks = data.readInt();
     }  
-  this.setPosition(posX, posY, posZ);//this is to reset the bounding box, because the size of the entity changed during vehicleType setup
-  this.motionX = data.readDouble();
-  this.motionY = data.readDouble();
-  this.motionZ = data.readDouble();
+  this.setPosition(posX, posY, posZ);//this is to reset the bounding box, because the size of the entity changed during vehicleType setup 
   }
 
 @Override
