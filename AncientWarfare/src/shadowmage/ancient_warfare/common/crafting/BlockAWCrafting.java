@@ -21,14 +21,10 @@
 package shadowmage.ancient_warfare.common.crafting;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -40,12 +36,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.AWBlockContainer;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.AWItemBlockBase;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockAWCrafting extends AWBlockContainer
 {
@@ -103,7 +99,11 @@ public void registerBlockInfo()
   d.setName("Ammo Production Station", 4);
   d.addDisplayStack(new ItemStack(this,1,4)); 
   d.setName("NPC Recruiting Center", 5);
-  d.addDisplayStack(new ItemStack(this,1,5));
+  d.addDisplayStack(new ItemStack(this,1,5));  
+  d.setName("Alchemy Station", 6);
+  d.addDisplayStack(new ItemStack(this,1,6));
+  d.setName("AutoCrafting Station", 7);
+  d.addDisplayStack(new ItemStack(this,1,7));
   
   d.setIconTexture(baseTexDir+"researchBlockBottom", 0);
   d.setIconTexture(baseTexDir+"researchBlockTop", 1);
@@ -118,6 +118,8 @@ public void registerBlockInfo()
   GameRegistry.registerTileEntity(TEAWVehicleCraft.class, "Vehicle Engineering Station");
   GameRegistry.registerTileEntity(TEAWAmmoCraft.class, "Ammo Production Station");
   GameRegistry.registerTileEntity(TEAWNpcCraft.class, "NPC Recruiting Center");
+  GameRegistry.registerTileEntity(TEAWAlchemy.class, "Alchemy Station");
+  GameRegistry.registerTileEntity(TEAWCraftingVanilla.class, "AutoCrafting Station");
   }
 
 @Override
@@ -154,6 +156,7 @@ public TileEntity getNewTileEntity(World world, int meta)
   case 5:
   return new TEAWNpcCraft();
   case 7:
+  return new TEAWAlchemy();
   case 8:
   case 9:
   case 10:

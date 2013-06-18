@@ -18,21 +18,45 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.crafting;
+package shadowmage.ancient_warfare.client.gui.crafting;
 
-public enum RecipeType
+import java.util.EnumSet;
+
+import net.minecraft.inventory.Container;
+import shadowmage.ancient_warfare.common.crafting.RecipeType;
+
+public class GuiAlchemy extends GuiCraftingTabbed
 {
-NONE,
-VEHICLE,
-VEHICLE_MISC,//vehicle components, upgrades, armor
-NPC,
-NPC_MISC,//command batons, routing slips
-AMMO,
-AMMO_MISC,//ammo components
-CIVIC,
-CIVIC_MISC,//gates, warehouse blocks
-STRUCTURE,//structures
-RESEARCH,//research notes recipes
-ALCHEMY,
-ALCHEMY_MISC,
+/**
+ * @param container
+ */
+public GuiAlchemy(Container container)
+  {
+  super(container);
+  }
+
+@Override
+public EnumSet<RecipeType> getTab1RecipeTypes()
+  {
+  return EnumSet.of(RecipeType.ALCHEMY);
+  }
+
+@Override
+public EnumSet<RecipeType> getTab2RecipeTypes()
+  {
+  return EnumSet.of(RecipeType.ALCHEMY_MISC);
+  }
+
+@Override
+public String getTab1Label()
+  {
+  return "Alchemy";
+  }
+
+@Override
+public String getTab2Label()
+  {
+  return "Reinforce";
+  }
+
 }

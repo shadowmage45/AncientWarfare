@@ -247,7 +247,6 @@ public void loadRenders()
    * load up crafting TE models, renders, etc
    */
   ClientRegistry.bindTileEntitySpecialRenderer(TEAWCrafting.class, RenderCraftingHelper.instance());
-//  ClientRegistry.bindTileEntitySpecialRenderer(TEAWCraftingWorkSite.class, RenderCraftingHelper.instance());
   MinecraftForgeClient.registerItemRenderer(BlockLoader.crafting.blockID, RenderCraftingHelper.instance());
   this.addTEModel(0, new ModelTable1());
   this.addTEModel(1, new ModelTable2());
@@ -255,6 +254,8 @@ public void loadRenders()
   this.addTEModel(3, new ModelTable4());
   this.addTEModel(4, new ModelTable5());
   this.addTEModel(5, new ModelTable6());
+  this.addTEModel(6, new ModelTable6());//TODO add alchemy table model/texture
+  this.addTEModel(7, new ModelTable6());//TODO add auto crafting table model/texture
   
   this.teModelTextures.put(0, Config.texturePath+"models/crafting/teResearchTable.png");
   this.teModelTextures.put(1, Config.texturePath+"models/crafting/teEngineeringStation.png");
@@ -262,6 +263,8 @@ public void loadRenders()
   this.teModelTextures.put(3, Config.texturePath+"models/crafting/teVehicleStation.png");
   this.teModelTextures.put(4, Config.texturePath+"models/crafting/teAmmoStation.png");
   this.teModelTextures.put(5, Config.texturePath+"models/crafting/teNpcStation.png");
+  this.teModelTextures.put(6, Config.texturePath+"models/crafting/teNpcStation.png");//TODO add alchemy table model/texture
+  this.teModelTextures.put(7, Config.texturePath+"models/crafting/teNpcStation.png");//TODO add auto crafting table model/texture
   
   /**
    * load up the vehicle item renderer...

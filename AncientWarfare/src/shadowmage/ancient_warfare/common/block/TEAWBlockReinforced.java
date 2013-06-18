@@ -18,21 +18,23 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.crafting;
+package shadowmage.ancient_warfare.common.block;
 
-public enum RecipeType
+import net.minecraft.tileentity.TileEntity;
+
+public class TEAWBlockReinforced extends TileEntity
 {
-NONE,
-VEHICLE,
-VEHICLE_MISC,//vehicle components, upgrades, armor
-NPC,
-NPC_MISC,//command batons, routing slips
-AMMO,
-AMMO_MISC,//ammo components
-CIVIC,
-CIVIC_MISC,//gates, warehouse blocks
-STRUCTURE,//structures
-RESEARCH,//research notes recipes
-ALCHEMY,
-ALCHEMY_MISC,
+
+
+int baseBlockID;
+int baseBlockMeta;
+
+/**
+ * 
+ */
+public TEAWBlockReinforced()
+  {
+  // TODO Auto-generated constructor stub
+  }
+
 }

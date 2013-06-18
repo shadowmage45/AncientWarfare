@@ -21,18 +21,20 @@
 package shadowmage.ancient_warfare.common.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-
-import shadowmage.ancient_warfare.common.config.Config;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
@@ -99,6 +101,8 @@ public static List<ItemStackWrapper> getCompactedInventory(IInventory inv, Compa
     }
   return stacks;
   }
+
+
 
 public static int getFoodValue(IInventory inv, int firstSlot, int lastSlot)
   {
@@ -550,6 +554,39 @@ public static void dropInventoryInWorld(World world, IInventory localInventory, 
       dropItemInWorld(world, stack, x, y, z);      
       }
     }
+  }
+
+public static List<ItemStack> getCompactResourcesForRecipe(ShapedRecipes recipe)
+  {
+  return getCompactedItemList(Arrays.asList(recipe.recipeItems));
+  }
+
+public static List<ItemStack> getCompactResourcesForRecipe(ShapelessRecipes recipe)
+  {
+  return getCompactedItemList(recipe.recipeItems);
+  }
+
+public static List<ItemStack> getCompactedItemList(Collection<ItemStack> items)
+  {
+  ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
+  for(ItemStack stack : items)
+    {
+    if(stack==null){continue;}
+    boolean found = false;
+    for(ItemStack test : stacks)
+      {
+      if(stack.areItemStacksEqual(stack, test) && stack.areItemStackTagsEqual(stack, test))
+        {
+        test.stackSize += stack.stackSize;
+        break;
+        }
+      }
+    if(!found)
+      {
+      stacks.add(stack.copy());
+      }
+    }  
+  return stacks;
   }
 
 }

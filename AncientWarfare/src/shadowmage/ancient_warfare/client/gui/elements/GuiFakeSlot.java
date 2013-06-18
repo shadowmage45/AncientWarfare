@@ -34,6 +34,8 @@ import net.minecraft.item.ItemStack;
 public class GuiFakeSlot extends GuiItemStack
 {
 
+public boolean autoUpdateOnClick = true;
+
 /**
  * @param elementNum
  * @param parent
@@ -61,25 +63,28 @@ public boolean handleMousePressed(int x, int y, int num)
     {
     return false;
     }
-  ItemStack p = mc.thePlayer.inventory.getItemStack();
-  if(p!=null)
+  if(this.autoUpdateOnClick)
     {
-    if(InventoryTools.doItemsMatch(fakeStack, p))
+    ItemStack p = mc.thePlayer.inventory.getItemStack();
+    if(p!=null)
       {
-      
-      }
-    else if(fakeStack!=null)
-      {
-      fakeStack=null;
+      if(InventoryTools.doItemsMatch(fakeStack, p))
+        {
+        
+        }
+      else if(fakeStack!=null)
+        {
+        fakeStack=null;
+        }
+      else
+        {
+        fakeStack = p.copy();      
+        }
       }
     else
       {
-      fakeStack = p.copy();      
+      fakeStack = null;
       }
-    }
-  else
-    {
-    fakeStack = null;
     }
   return true;
   }
