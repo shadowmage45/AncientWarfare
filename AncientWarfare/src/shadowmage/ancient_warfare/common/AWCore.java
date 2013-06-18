@@ -70,14 +70,14 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 
-@Mod( modid = "AncientWarfare", name="Ancient Warfare", version="MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_BUILD+"-"+Config.CORE_BUILD_STATUS)
+@Mod( modid = "AncientWarfare", name="Ancient Warfare", version="MC"+Config.MC_VERSION+"-"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_BUILD+"-"+Config.CORE_BUILD_STATUS)
 @NetworkMod
 (
 clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
-channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
-versionBounds="["+"MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_BUILD+",)"
+channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"}
+//versionBounds="["+"MC"+Config.MC_VERSION+"-"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_BUILD+",)"
 )
 
 public class AWCore 

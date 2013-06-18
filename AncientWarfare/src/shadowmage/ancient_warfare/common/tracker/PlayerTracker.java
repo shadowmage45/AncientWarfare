@@ -213,9 +213,7 @@ public NBTTagCompound getNBTTag()
   for(String name : this.playerEntries.keySet())
     {
     PlayerEntry ent = this.playerEntries.get(name);
-    entryTag = ent.getNBTTag();
-    entryTag.setName(ent.playerName);
-    list.appendTag(entryTag);
+    list.appendTag(ent.getNBTTag());
     }
   tag.setTag("list", list);
   return tag;

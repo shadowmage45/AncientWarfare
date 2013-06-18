@@ -991,5 +991,38 @@
 
 
 /********************************************************************************/
-/****************************************SEVENT TEST RELEASE .008 (bugfix)****************************************/
+/****************************************SEVENTH TEST RELEASE .008 (bugfix)****************************************/
+/********************************************************************************/
+/********** 06-12-13 (post release)**********/
+* fix research goal resource-list display (was missing the item stacks)
+
+/********** 06-13-13**********/
+* adj vehicle MoveHelper for boat movement
+* add boat test vehicle
+* adjust pathfinding to account for boats
+* adj boat test vehicle to ballista boat
+* add catapult boat, transport boat, r1 textures for all boats (need r2-r5 tex done)
+
+/********** 06-14-13**********/
+* add tons of missing valid upgrade entries to vehicles
+* update vehicle research goals to use the full 1-5 range of levels for each goal
+* potentially fix crash issue with direct-builder when shift-right clicking on air
+* adjust boat base speed to be the same as vanilla boat (6.2m/s)
+
+/********** 06-15-13**********/
+* add airplane...
+
+/********** 06-16-13**********/
+* add tons of missing ammo icons
+* fix trajectory rendering partial-tick handling
+
+/********** 06-17-13**********/
+* finish boat stats (health, speed, power, etc)
+* aircraft stats setup
+* aircraft research
+* fix version check issues for smp/dedicated server
+* fix research not saving properly on exit
+* update version number
+/********************************************************************************/
+/****************************************TEST RELEASE .009****************************************/
 /********************************************************************************/

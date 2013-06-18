@@ -28,9 +28,11 @@ import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 
 public class PlayerEntry implements INBTTaggable
 {
@@ -48,7 +50,9 @@ public List<IResearchGoal> getKnownResearch()
 
 public void addCompletedResearch(int num)
   {
+  Config.logDebug("adding completed research: "+num);
   this.doneResearch.add(ResearchGoal.getGoalByID(num));
+  GameDataTracker.instance().markGameDataDirty();
   }
 
 public boolean hasDoneResearch(IResearchGoal goal)
@@ -130,6 +134,7 @@ public NBTTagCompound getNBTTag()
   for(IResearchGoal goal : doneResearch)
     {
     research[it] = goal.getGlobalResearchNum();
+    Config.logDebug("saving research goal: "+research[it]);
     it++;
     }
   tag.setIntArray("res", research);
