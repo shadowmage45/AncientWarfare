@@ -47,7 +47,7 @@ public boolean isWorking = false;
 
 int resultSlotNum = -1;
 
-ItemStack result = null;
+public ItemStack result = null;
 public ItemStack[] layoutMatrix = new ItemStack[9];
 /**
  * @param openingPlayer
@@ -181,50 +181,29 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("set") && !player.worldObj.isRemote)
     {
-    Config.logDebug("receiving item set command");
+    int slot = tag.getInteger("setSlot");
     ItemStack item = null;
     if(tag.hasKey("setItem"))
       {
       item = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("setItem"));
-      }
-    int slot = tag.getInteger("setSlot");
+      }    
     te.setLayoutMatrixSlot(slot, item);
-    this.layoutMatrix[slot] = item;
-    NBTTagCompound returnTag = new NBTTagCompound();
-    if(item!=null)
-      {
-      returnTag.setCompoundTag("setItem", item.writeToNBT(new NBTTagCompound()));      
-      }
-    returnTag.setInteger("setSlot", slot);
-    returnTag.setBoolean("layoutUpdate", true);
-    this.sendDataToPlayer(returnTag);
+    Config.logDebug("received set command for slot: "+slot + " item: "+item);
     }
   if(tag.hasKey("layout") && player.worldObj.isRemote)//client side full-matrix init
     {
-    Config.logDebug("receiving layout matrix full update--client");
+    /*
+     * TODO clean this up to not xmit whole matrix, only slot(s) changed
+     */
     this.layoutMatrix = new ItemStack[9];
     NBTTagList list = tag.getTagList("layout");
     for(int i = 0; i < list.tagCount(); i++)
       {
       NBTTagCompound slotTag = (NBTTagCompound) list.tagAt(i);
       ItemStack item = ItemStack.loadItemStackFromNBT(slotTag.getCompoundTag("setItem"));     
-      int slot = tag.getInteger("setSlot");
+      int slot = slotTag.getInteger("setSlot");
       this.layoutMatrix[slot] = item;
       }
-    if(this.gui!=null)
-      {
-      this.gui.refreshGui();
-      }
-    }
-  if(tag.hasKey("layoutUpdate") && player.worldObj.isRemote)//client side single item update
-    {
-    ItemStack item = null;
-    if(tag.hasKey("setItem"))
-      {
-      item = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("setItem"));
-      }
-    int slot = tag.getInteger("setSlot");
-    this.layoutMatrix[slot] = item;
     if(this.gui!=null)
       {
       this.gui.refreshGui();
@@ -237,10 +216,18 @@ public void handlePacketData(NBTTagCompound tag)
   if(tag.hasKey("result"))
     {    
     this.result = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("result"));
+    if(this.gui!=null)
+      {
+      this.gui.refreshGui();
+      }
     }
   if(tag.hasKey("resultClear"))
     {
     this.result = null;
+    if(this.gui!=null)
+      {
+      this.gui.refreshGui();
+      }
     }
   }
 
@@ -253,6 +240,7 @@ public void handleLayoutSlotClick(int slot, ItemStack stack)
     {
     tag.setCompoundTag("setItem", stack.writeToNBT(new NBTTagCompound()));
     }  
+  Config.logDebug("sending slot click to server: "+slot + " item: "+stack);
   this.sendDataToServer(tag);
   }
 
@@ -302,11 +290,13 @@ public void detectAndSendChanges()
     else if(!InventoryTools.doItemsMatch(a, b))
       {
       sendMatrix = true;
-      this.layoutMatrix[i] = b.copy();
+      if(b!=null){this.layoutMatrix[i] = b.copy();}
+      else{this.layoutMatrix[i] = b;}
       }
     }
   if(sendMatrix)
     {
+    Config.logDebug("sending matrix layout update");
     if(tag==null){tag = new NBTTagCompound();}
     NBTTagList list = new NBTTagList();
     NBTTagCompound itemTag;

@@ -47,6 +47,7 @@ public GuiFakeSlot(int elementNum, IGuiElementCallback parent)
   super(elementNum, parent, 18, 18);
   this.isFake = true;  
   this.renderSlotBackground = true;
+  this.isClickable = true;
   }
 
 public GuiFakeSlot(int elementNum, IGuiElementCallback parent, int x, int y)
@@ -54,12 +55,13 @@ public GuiFakeSlot(int elementNum, IGuiElementCallback parent, int x, int y)
   super(elementNum, parent, x, y);
   this.isFake = true;
   this.renderSlotBackground = true;
+  this.isClickable = true;
   }
 
 @Override
 public boolean handleMousePressed(int x, int y, int num)
   {
-  if(!enabled || hidden)
+  if(!enabled || hidden || !isClickable)
     {
     return false;
     }

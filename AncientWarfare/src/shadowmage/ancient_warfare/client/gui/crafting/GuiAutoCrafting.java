@@ -114,7 +114,12 @@ public void onElementActivated(IGuiElement element)
   if(this.fakeSlots.contains(element))
     {
     int slotNum = element.getElementNumber();
-    ItemStack stack = player.inventory.getCurrentItem();
+    ItemStack stack = player.inventory.getItemStack();
+    if(stack!=null)
+      {
+      stack = stack.copy();
+      stack.stackSize = 1;
+      }
     this.container.handleLayoutSlotClick(slotNum, stack);    
     }
   }
@@ -133,16 +138,23 @@ public void setupControls()
     this.guiElements.put(i, slotElement);
     this.fakeSlots.add(slotElement);
     this.fakeSlotArray[i] = slotElement;
+    slotElement.autoUpdateOnClick = false;
     slotElement.updateRenderPos(8 + 18* x, 8 + 18*y);
     x++;
     if(x>=3)
       {
-      x= 0;
+      x = 0;
       y++;
       }
     }
+  resultSlot = new GuiFakeSlot(9, this);
+  resultSlot.updateRenderPos(8+4*18, 8+18);
+  resultSlot.isClickable = false;
+  this.guiElements.put(9, resultSlot);
   this.forceUpdate = true;
   }
+
+GuiFakeSlot resultSlot;
 
 @Override
 public void updateControls()
@@ -151,6 +163,7 @@ public void updateControls()
     {
     this.fakeSlotArray[i].setItemStack(this.container.layoutMatrix[i]);
     }
+  this.resultSlot.setItemStack(this.container.result);
   }
 
 }

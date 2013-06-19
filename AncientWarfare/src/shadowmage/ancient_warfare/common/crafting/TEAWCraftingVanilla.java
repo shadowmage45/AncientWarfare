@@ -26,27 +26,27 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TEAWCraftingVanilla extends TEAWCraftingWorkSite
 {
 
 public ItemStack result = null;
-protected ItemStack[] layoutMatrix = new ItemStack[9];
+//protected ItemStack[] layoutMatrix = new ItemStack[9];
+
+InventoryCrafting layoutInventory;
 
 /**
  * 
@@ -57,9 +57,10 @@ public TEAWCraftingVanilla()
   this.workType = CivicWorkType.CRAFT;  
   this.craftMatrix = new int[]{0,1,2,3,4,5,6,7,8};
   this.resultSlot = new int[]{9};
-  this.inventory = new AWInventoryBasic(11);
+  this.inventory = new AWInventoryBasic(10);
   this.workType = CivicWorkType.RESEARCH;
   this.shouldBroadcast = true;
+  this.layoutInventory = new InventoryCrafting(new ContainerDummy(), 3, 3);
   }
 
 @Override
@@ -79,6 +80,7 @@ protected void updateCrafting()
         }
       if(this.workProgress>=this.workProgressMax)
         {
+        Config.logDebug("attempting to set finished");
         if(tryFinish())
           {   
           tryStart();
@@ -114,11 +116,14 @@ protected boolean tryStart()
     this.isWorking = true;
     this.workProgress = 0;
     this.workProgressMax = 40;
-    for(ItemStack stack : this.layoutMatrix)
+    ItemStack stack;
+    for(int i = 0; i < this.layoutInventory.getSizeInventory(); i++)
       {
+      stack = layoutInventory.getStackInSlot(i);
       if(stack==null){continue;}
       InventoryTools.tryRemoveItems(inventory, stack, 1, craftMatrix);
       }
+    return true;
     }
   this.isWorking = false;
   return false;
@@ -129,10 +134,9 @@ protected boolean tryFinish()
   {
   if(InventoryTools.canHoldItem(inventory, result, result.stackSize, resultSlot[0], resultSlot[0]))
     {
-    InventoryTools.tryMergeStack(inventory, result, resultSlot);
+    InventoryTools.tryMergeStack(inventory, result.copy(), resultSlot);
     this.workProgress = 0;
     this.recipeStartCheckDelayTicks = 0;
-    this.result = null;
     return true;
     }
   return false;
@@ -141,7 +145,7 @@ protected boolean tryFinish()
 @Override
 public void setRecipe(ResourceListRecipe recipe)
   {
-  // noop for vanilla table, recipe is set by craft matrix
+  // noop for vanilla table, recipe is set by craft matrix/result
   }
 
 @Override
@@ -234,7 +238,7 @@ public ItemStack getLayoutMatrixSlot(int num)
   {
   if(num>=0 && num<9)
     {
-    return this.layoutMatrix[num];
+    return this.layoutInventory.getStackInSlot(num);
     }
   return null;
   }
@@ -243,13 +247,13 @@ public void setLayoutMatrixSlot(int num, ItemStack stack)
   {
   if(num>=0 && num<9)
     {
-    this.layoutMatrix[num] = stack;
+    this.layoutInventory.setInventorySlotContents(num, stack);
     this.onLayoutMatrixChanged();
     }
   }
 
 private void onLayoutMatrixChanged()
-  {
+  {  
   this.result = null;
   this.workProgress = 0;
   this.workProgressMax = 0;
@@ -263,138 +267,22 @@ private void onLayoutMatrixChanged()
 private boolean checkMatchingRecipes()
   {
   this.result = null;
-  List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
-  for(IRecipe rec : recipes)
-    {
-    if(rec instanceof ShapedRecipes)
-      {
-      ShapedRecipes recipe = (ShapedRecipes)rec;
-      if(this.matches(recipe))
-        {
-        this.result = recipe.getRecipeOutput().copy();        
-        break;     
-        }
-      }
-    else if(rec instanceof ShapelessRecipes)
-      {
-      ShapelessRecipes recipe = (ShapelessRecipes)rec;
-      if(this.matchesShapeless(recipe))
-        {
-        this.result = recipe.getRecipeOutput().copy();
-        break;
-        }
-      }    
-    }
+  this.result = CraftingManager.getInstance().findMatchingRecipe(layoutInventory, worldObj);
   return this.result!=null;
   }
 
-/**
- * Used to check if a recipe matches current crafting inventory
- */
-private boolean matches(ShapedRecipes recipe)
-  {
-  for (int i = 0; i <= 3 - recipe.recipeWidth; ++i)
-    {
-    for (int j = 0; j <= 3 - recipe.recipeHeight; ++j)
-      {
-      if (this.checkMatch(recipe, i, j, true))
-        {
-        return true;
-        }
-      if (this.checkMatch(recipe, i, j, false))
-        {
-        return true;
-        }
-      }
-    }
-  return false;
-  }
-
-/**
- * Checks if the region of a crafting inventory is match for the recipe.
- */
-private boolean checkMatch(ShapedRecipes recipe, int par2, int par3, boolean par4)
-  {
-  for (int k = 0; k < 3; ++k)
-    {
-    for (int l = 0; l < 3; ++l)
-      {
-      int i1 = k - par2;
-      int j1 = l - par3;
-      ItemStack itemstack = null;
-
-      if (i1 >= 0 && j1 >= 0 && i1 < recipe.recipeWidth && j1 < recipe.recipeHeight)
-        {
-        if (par4)
-          {
-          itemstack = recipe.recipeItems[recipe.recipeWidth - i1 - 1 + j1 * recipe.recipeWidth];
-          }
-        else
-          {
-          itemstack = recipe.recipeItems[i1 + j1 * recipe.recipeWidth];
-          }
-        }
-
-//      ItemStack itemstack1 = par1InventoryCrafting.getStackInRowAndColumn(k, l);
-      ItemStack itemstack1 = this.layoutMatrix[l*3+k];//this.getStackInSlot(l*3+k);
-      if (itemstack1 != null || itemstack != null)
-        {
-        if (itemstack1 == null && itemstack != null || itemstack1 != null && itemstack == null)
-          {
-          return false;
-          }
-
-        if (itemstack.itemID != itemstack1.itemID)
-          {
-          return false;
-          }
-
-        if (itemstack.getItemDamage() != 32767 && itemstack.getItemDamage() != itemstack1.getItemDamage())
-          {
-          return false;
-          }
-        }
-      }
-    }
-  return true;
-  }
-
-private boolean matchesShapeless(ShapelessRecipes recipe)
-  {
-  ArrayList arraylist = new ArrayList(recipe.recipeItems);
-  for (int i = 0; i < 3; ++i)
-    {
-    for (int j = 0; j < 3; ++j)
-      {
-      //              ItemStack itemstack = par1InventoryCrafting.getStackInRowAndColumn(j, i);
-      ItemStack itemstack = this.layoutMatrix[i*3+j];
-      if (itemstack != null)
-        {
-        boolean flag = false;
-        Iterator iterator = arraylist.iterator();
-        while (iterator.hasNext())
-          {
-          ItemStack itemstack1 = (ItemStack)iterator.next();
-          if (itemstack.itemID == itemstack1.itemID && (itemstack1.getItemDamage() == 32767 || itemstack.getItemDamage() == itemstack1.getItemDamage()))
-            {
-            flag = true;
-            arraylist.remove(itemstack1);
-            break;
-            }
-          }
-        if (!flag)
-          {
-          return false;
-          }
-        }
-      }
-    }
-  return arraylist.isEmpty();
-  }
 
 private boolean canStartRecipe()
   {
-  return this.containsResources(InventoryTools.getCompactedItemList(Arrays.asList(this.layoutMatrix)));
+  ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+  ItemStack item; 
+  for(int i = 0; i < 9; i++)
+    {
+    item = this.layoutInventory.getStackInSlot(i);
+    if(item==null){continue;}
+    items.add(item);
+    }
+  return this.containsResources(InventoryTools.getCompactedItemList(items));
   }
 
 private boolean containsResources(List<ItemStack> items)

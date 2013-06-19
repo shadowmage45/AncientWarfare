@@ -50,7 +50,6 @@ public List<IResearchGoal> getKnownResearch()
 
 public void addCompletedResearch(int num)
   {
-  Config.logDebug("adding completed research: "+num);
   this.doneResearch.add(ResearchGoal.getGoalByID(num));
   GameDataTracker.instance().markGameDataDirty();
   }
@@ -134,7 +133,6 @@ public NBTTagCompound getNBTTag()
   for(IResearchGoal goal : doneResearch)
     {
     research[it] = goal.getGlobalResearchNum();
-    Config.logDebug("saving research goal: "+research[it]);
     it++;
     }
   tag.setIntArray("res", research);

@@ -36,6 +36,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.AWBlockContainer;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.AWItemBlockBase;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
@@ -141,6 +142,7 @@ public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entit
 @Override
 public TileEntity getNewTileEntity(World world, int meta)
   {
+  Config.logDebug("returning te for meta: "+meta);
   switch(meta)
   {
   case 0:
@@ -155,8 +157,10 @@ public TileEntity getNewTileEntity(World world, int meta)
   return new TEAWAmmoCraft();
   case 5:
   return new TEAWNpcCraft();
-  case 7:
+  case 6:
   return new TEAWAlchemy();
+  case 7:
+  return new TEAWCraftingVanilla();
   case 8:
   case 9:
   case 10:
