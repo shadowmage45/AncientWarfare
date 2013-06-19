@@ -44,6 +44,37 @@ public class InventoryTools
 
 static Random random = new Random();
 
+public static NBTTagCompound getTagForInventory(IInventory inventory)
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  NBTTagList itemList = new NBTTagList();
+  for (int slotIndex = 0; slotIndex < inventory.getSizeInventory(); ++slotIndex)
+    {
+    if (inventory.getStackInSlot(slotIndex) != null)
+      {
+      NBTTagCompound itemEntryTag = new NBTTagCompound();
+      itemEntryTag.setByte("Slot", (byte)slotIndex);
+      inventory.getStackInSlot(slotIndex).writeToNBT(itemEntryTag);
+      itemList.appendTag(itemEntryTag);
+      }
+    }
+  tag.setTag("Items", itemList);
+  return tag;
+  }
+
+public static void readInventoryFromTag(IInventory inventory, NBTTagCompound tag)
+  {
+  NBTTagList itemList = tag.getTagList("Items");  
+  for (int tagIndex = 0; tagIndex < itemList.tagCount(); ++tagIndex)
+    {
+    NBTTagCompound itemStackTag = (NBTTagCompound)itemList.tagAt(tagIndex);
+    int slotForItem = itemStackTag.getByte("Slot") & 255;
+    if (slotForItem >= 0 && slotForItem < inventory.getSizeInventory())
+      {
+      inventory.setInventorySlotContents(slotForItem, ItemStack.loadItemStackFromNBT(itemStackTag));
+      }
+    }
+  }
 
 public static List<ItemStackWrapper> getCompactInventoryFromTag(NBTTagCompound tag)
   {

@@ -120,7 +120,7 @@ public void registerBlockInfo()
   GameRegistry.registerTileEntity(TEAWAmmoCraft.class, "Ammo Production Station");
   GameRegistry.registerTileEntity(TEAWNpcCraft.class, "NPC Recruiting Center");
   GameRegistry.registerTileEntity(TEAWAlchemy.class, "Alchemy Station");
-  GameRegistry.registerTileEntity(TEAWCraftingVanilla.class, "AutoCrafting Station");
+  GameRegistry.registerTileEntity(TEAWAutoCrafting.class, "AutoCrafting Station");
   }
 
 @Override
@@ -160,7 +160,7 @@ public TileEntity getNewTileEntity(World world, int meta)
   case 6:
   return new TEAWAlchemy();
   case 7:
-  return new TEAWCraftingVanilla();
+  return new TEAWAutoCrafting();
   case 8:
   case 9:
   case 10:

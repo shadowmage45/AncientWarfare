@@ -30,13 +30,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.crafting.TEAWCraftingVanilla;
+import shadowmage.ancient_warfare.common.crafting.TEAWAutoCrafting;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class ContainerAWAutoCrafting extends ContainerBase
 {
 
-TEAWCraftingVanilla te;
+TEAWAutoCrafting te;
 public int displayProgress;
 public int displayProgressMax;
 
@@ -53,7 +53,7 @@ public ItemStack[] layoutMatrix = new ItemStack[9];
  * @param openingPlayer
  * @param synch
  */
-public ContainerAWAutoCrafting(EntityPlayer openingPlayer, TEAWCraftingVanilla te)
+public ContainerAWAutoCrafting(EntityPlayer openingPlayer, TEAWAutoCrafting te)
   {
   super(openingPlayer, null);
   this.te = te;

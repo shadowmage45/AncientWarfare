@@ -20,14 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.block;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
 public class TEAWBlockReinforced extends TileEntity
 {
 
-
-int baseBlockID;
-int baseBlockMeta;
+public int baseBlockID;
 
 /**
  * 
@@ -35,6 +37,22 @@ int baseBlockMeta;
 public TEAWBlockReinforced()
   {
   // TODO Auto-generated constructor stub
+  }
+
+@Override
+public Packet getDescriptionPacket()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setInteger("block", baseBlockID);  
+  Packet132TileEntityData pkt = new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);  
+  return pkt;
+  }
+
+@Override
+public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
+  {
+  super.onDataPacket(net, pkt);
+  this.baseBlockID = pkt.customParam1.getInteger("block");
   }
 
 }

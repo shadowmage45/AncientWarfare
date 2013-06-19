@@ -73,7 +73,7 @@ import shadowmage.ancient_warfare.common.container.ContainerVehicle;
 import shadowmage.ancient_warfare.common.crafting.TEAWAlchemy;
 import shadowmage.ancient_warfare.common.crafting.TEAWAmmoCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWCivicCraft;
-import shadowmage.ancient_warfare.common.crafting.TEAWCraftingVanilla;
+import shadowmage.ancient_warfare.common.crafting.TEAWAutoCrafting;
 import shadowmage.ancient_warfare.common.crafting.TEAWNpcCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
@@ -273,9 +273,9 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   
   case AUTO_CRAFT:
   te = world.getBlockTileEntity(x, y, z);
-  if(te instanceof TEAWCraftingVanilla)
+  if(te instanceof TEAWAutoCrafting)
     {
-    TEAWCraftingVanilla tew = (TEAWCraftingVanilla)te;
+    TEAWAutoCrafting tew = (TEAWAutoCrafting)te;
     return new ContainerAWAutoCrafting(player, tew);
     }
   return null;
@@ -437,9 +437,9 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   
   case AUTO_CRAFT:
   te = world.getBlockTileEntity(x, y, z);
-  if(te instanceof TEAWCraftingVanilla)
+  if(te instanceof TEAWAutoCrafting)
     {
-    TEAWCraftingVanilla tew = (TEAWCraftingVanilla)te;
+    TEAWAutoCrafting tew = (TEAWAutoCrafting)te;
     return new GuiAutoCrafting(new ContainerAWAutoCrafting(player, tew));
     }
   return null;

@@ -65,6 +65,7 @@ import shadowmage.ancient_warfare.client.render.gate.RenderGateRotatingBridge;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateSingle;
 import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
 import shadowmage.ancient_warfare.client.render.missile.RenderShot;
+import shadowmage.ancient_warfare.client.render.reinforcedblocks.ReinforcedBlockItemRender;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderAircraftTest;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaMobile;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaStand;
@@ -164,6 +165,7 @@ public void loadRenders()
   
   this.addVehicleRender(VehicleRegistry.AIR_TEST, new RenderAircraftTest(), new ModelAirplane());
   this.addVehicleRender(VehicleRegistry.AIR_TEST2, new RenderAircraftTest(), new ModelAirplane());
+  
   /**
    * missiles...
    */
@@ -281,10 +283,7 @@ public void loadRenders()
    */
   MinecraftForgeClient.registerItemRenderer(ItemLoader.civicPlacer.itemID, new CivicItemRenderer());
   
-  /**
-   * civic bounds rendering tesr
-   */
-//  ClientRegistry.bindTileEntitySpecialRenderer(TECivic.class, new TESRCivic());  
+  MinecraftForgeClient.registerItemRenderer(BlockLoader.reinforced.blockID, new ReinforcedBlockItemRender());  
   }
 
 public void addTEModel(int type, ModelTEBase model)

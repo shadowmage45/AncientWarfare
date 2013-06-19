@@ -114,10 +114,6 @@ public Description setDescription(String desc, int damage)
 
 public Description addTooltip(String tooltip, int damage)
   {
-  if(this.item!=null)
-    {
-//    Config.logDebug("setting tooltip for : "+item.itemID +"::"+damage+ " tip:: "+tooltip);
-    }
   if(this.normalItem)
     {
     damage = 0;
@@ -243,7 +239,6 @@ public Description addDisplayStack(ItemStack stack)
 
 public List<ItemStack> getDisplayStackCache()
   {
-//  Config.logDebug("returning display stack cache for : " +this.getDisplayName(0));
   return this.displayStackCache;
   }
 
@@ -253,7 +248,6 @@ public void registerIcons(IconRegister reg)
   for(Integer key : this.iconTextures.keySet())
     {    
     tex = this.iconTextures.get(key);
-//    Config.logDebug("registering icon tex: "+tex +" for item: "+this.getDisplayName(key));
     this.icons.put(key, reg.registerIcon(tex));
     }
   }

@@ -15,6 +15,7 @@ TEXTURE/ART
 * finish airplane textures
 * icons for NPC spawner items
 * model/texture for new crafting stations (chemistry, auto-crafting)
+* textures for new reinforced blocks
 
 GENERAL
 * add name search/filter box to structure builder guis
@@ -22,17 +23,16 @@ GENERAL
 * create general secondary data watcher for npcs/gates/vehicles
 * chunkloader block ? (configurable range -- gui with toggleable squares to select chunks or by radius, render toggle to select if to render bounds areas)
 * add default structures for world gen, village gen
-* add some method to craft vanilla recipes using craftsman (a persistent vanilla crafting table)
-* find/make a cleaner method of processing food -> rations (separate crafting table?)
+* find/make a cleaner method of processing food -> rations (separate crafting table?)(add vanilla recipes for all vanilla foods -> rations)
 * add toggle for workers to allow receiving of work broadcasts (for a single work-site worker)
     might need slight restructure of the work AI
 * method to scan buildings in survival mode?   
-* add re-enforced bricks
 * add chemistry table -- will have recipe to make cement, gunpowder, require researchers to work it
 * researcher and craftsmsan need specific tools
 * research notes item need to have right-click function to learn the research
-* save/read NBT for auto-crafting supplemental inventory
 * add recipes for chemistry table 
+* fix rotation of rendered crafting blocks in inventory
+* fix position of rendered crafting blocks when held/on ground (item form)
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally (hmm..)
@@ -166,6 +166,9 @@ TWEAKS/OPTIMIZATION
 * add autocrafting station (new crafting)
 
 /********** 06-19-13 **********/
+* much prep-work for reinforced blocks
+* save/read NBT for auto-crafting supplemental inventory
+
 /********** 06-20-13 **********/
 /********** 06-21-13 **********/
 /********** 06-22-13 **********/
