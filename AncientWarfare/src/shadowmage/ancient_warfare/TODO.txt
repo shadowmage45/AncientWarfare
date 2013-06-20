@@ -11,7 +11,6 @@ BALANCE/TWEAKS
 
 TEXTURE/ART
 * more missile textures
-* finish boat textures
 * finish airplane textures
 * icons for NPC spawner items
 * model/texture for new crafting stations (chemistry, auto-crafting)
@@ -168,6 +167,8 @@ TWEAKS/OPTIMIZATION
 /********** 06-19-13 **********/
 * much prep-work for reinforced blocks
 * save/read NBT for auto-crafting supplemental inventory
+* more testing of reinforced / explosion resistant blocks
+* finish boat textures
 
 /********** 06-20-13 **********/
 /********** 06-21-13 **********/
