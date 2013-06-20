@@ -244,11 +244,9 @@ public List<ItemStack> getDisplayStackCache()
 
 public void registerIcons(IconRegister reg)
   {
-  String tex;
   for(Integer key : this.iconTextures.keySet())
     {    
-    tex = this.iconTextures.get(key);
-    this.icons.put(key, reg.registerIcon(tex));
+    this.icons.put(key, reg.registerIcon(this.iconTextures.get(key)));
     }
   }
 

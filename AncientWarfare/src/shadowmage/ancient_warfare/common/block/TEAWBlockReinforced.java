@@ -20,16 +20,19 @@
  */
 package shadowmage.ancient_warfare.common.block;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.Explosion;
 
 public class TEAWBlockReinforced extends TileEntity
 {
 
 public int baseBlockID;
+int damageRemaining = 16;
 
 /**
  * 
@@ -44,6 +47,7 @@ public Packet getDescriptionPacket()
   {
   NBTTagCompound tag = new NBTTagCompound();
   tag.setInteger("block", baseBlockID);  
+  tag.setInteger("dmg", this.damageRemaining);
   Packet132TileEntityData pkt = new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);  
   return pkt;
   }
@@ -53,6 +57,35 @@ public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
   {
   super.onDataPacket(net, pkt);
   this.baseBlockID = pkt.customParam1.getInteger("block");
+  this.damageRemaining = pkt.customParam1.getInteger("dmg");
   }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {  
+  super.readFromNBT(tag);
+  this.baseBlockID = tag.getInteger("block");
+  this.damageRemaining = tag.getInteger("dmg");
+  }
+
+@Override
+public void writeToNBT(NBTTagCompound tag)
+  {
+  super.writeToNBT(tag);
+  tag.setInteger("block", this.baseBlockID);
+  tag.setInteger("dmg", damageRemaining);
+  }
+
+public void onExploded(Explosion expl)
+  {
+  Config.logDebug("dmg: "+this.damageRemaining + " size: "+expl.explosionSize);
+  this.damageRemaining -= expl.explosionSize;
+  Config.logDebug("newdmg: "+this.damageRemaining);
+  if(this.damageRemaining<=0)
+    {
+    worldObj.setBlockToAir(xCoord, yCoord, zCoord);    
+    }
+  }
+
 
 }

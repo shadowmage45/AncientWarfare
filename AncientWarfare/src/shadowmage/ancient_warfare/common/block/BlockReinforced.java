@@ -27,6 +27,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -82,9 +83,9 @@ public Icon getBlockTexture(IBlockAccess par1iBlockAccess, int par2, int par3, i
 @Override
 public Icon getIcon(int side, int meta)
   {
-  Config.logDebug("retuning block texture from side/meta call....");
-  new Exception().printStackTrace();
-  return super.getIcon(side, meta);
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(this.blockID);
+  if(d==null){return null;}
+  return d.getIconFor(0);
   }
 
 @Override
@@ -117,4 +118,20 @@ public void registerIcons(IconRegister reg, Description d)
   d.registerIcons(reg);
   }
 
+/**
+ * Called when the block is destroyed by an explosion.
+ * Useful for allowing the block to take into account tile entities,
+ * metadata, etc. when exploded, before it is removed.
+ *
+ * @param world The current world
+ * @param x X Position
+ * @param y Y Position
+ * @param z Z Position
+ * @param Explosion The explosion instance affecting the block
+ */
+public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
+  {
+  TEAWBlockReinforced te = (TEAWBlockReinforced) world.getBlockTileEntity(x, y, z);
+  te.onExploded(explosion);
+  }
 }
