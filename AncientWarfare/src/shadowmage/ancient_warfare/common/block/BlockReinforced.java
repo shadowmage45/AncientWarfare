@@ -134,4 +134,41 @@ public void onBlockExploded(World world, int x, int y, int z, Explosion explosio
   TEAWBlockReinforced te = (TEAWBlockReinforced) world.getBlockTileEntity(x, y, z);
   te.onExploded(explosion);
   }
+
+@Override
+public float getBlockHardness(World world, int x, int y, int z)
+  {
+  // TODO Auto-generated method stub
+  return super.getBlockHardness(world, x, y, z);
+  }
+
+@Override
+public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta)
+  {
+  // TODO Auto-generated method stub
+  super.onBlockDestroyedByPlayer(world, x, y, z, meta);
+  }
+
+@Override
+public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, int x, int y, int z)
+  {
+  // TODO Auto-generated method stub
+  return super.getPlayerRelativeBlockHardness(player, world, x, y, z);
+  }
+
+@Override
+public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player)
+  {
+  // TODO Auto-generated method stub
+  super.onBlockHarvested(world, x, y, z, meta, player);
+  }
+
+@Override
+public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+  {
+  // TODO Auto-generated method stub
+  return super.removeBlockByPlayer(world, player, x, y, z);
+  }
+
+
 }

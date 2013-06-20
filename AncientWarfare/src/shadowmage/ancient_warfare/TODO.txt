@@ -5,6 +5,9 @@ FROM TESTERS
 * fish farm is OP
 * patrols are a bit 'hard' to setup
 * farmers too OP harvesting too many farms?
+* stone slabs render as quartz slabs in research book (possibly other places)
+* investigate gate redstone interaction
+*
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -38,6 +41,7 @@ VEHICLES
 * cat mobile turret(fixed?) rider position is too far forward
 * pathfinding needs adjusted so that it doesn't need to be as close to the node to claim next (will help with aquatic pathfinding and the coast-hugging that npcs do)
 * re-allow theta pathfinding in water (it was disabled for crawler--fix crawler some other way)
+* battering ram needs damage-code implemented
 
 AIRPLANE
 
@@ -171,6 +175,8 @@ TWEAKS/OPTIMIZATION
 * finish boat textures
 
 /********** 06-20-13 **********/
+
+
 /********** 06-21-13 **********/
 /********** 06-22-13 **********/
 /********** 06-23-13 **********/
