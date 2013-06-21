@@ -35,6 +35,7 @@ GENERAL
 * add recipes for chemistry table 
 * fix rotation of rendered crafting blocks in inventory
 * fix position of rendered crafting blocks when held/on ground (item form)
+* implement method to upgrade NPCs to next-higher tier without slaying them
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally (hmm..)

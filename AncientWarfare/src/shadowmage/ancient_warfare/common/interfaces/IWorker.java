@@ -27,7 +27,7 @@ public interface IWorker
 
 
 boolean isDead();
-double getDistance(double x, double y, double z);
+double getDistanceFrom(double x, double y, double z);
 WayPoint getWorkPoint();
 ITEWorkSite getWorkSite();
 WayPoint getUpkeepPoint();

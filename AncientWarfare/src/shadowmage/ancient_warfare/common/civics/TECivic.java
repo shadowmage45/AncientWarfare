@@ -389,7 +389,7 @@ protected void validateWorkers()
       workIt.remove();
       continue;
       }
-    if(npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
+    if(npc.getDistanceFrom(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
       {
       workIt.remove();
       continue;

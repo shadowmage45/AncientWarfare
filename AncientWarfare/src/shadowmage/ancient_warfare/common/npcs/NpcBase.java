@@ -1039,7 +1039,8 @@ public WayPoint getUpkeepPoint()
   return wayNav.getUpkeepSite();
   }
 
-public double getDistance(double par1, double par3, double par5)
+@Override
+public double getDistanceFrom(double par1, double par3, double par5)
   {
   double d3 = this.posX - par1;
   double d4 = this.posY - par3;
