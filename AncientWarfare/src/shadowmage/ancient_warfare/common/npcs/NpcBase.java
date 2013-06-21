@@ -1018,7 +1018,7 @@ public float getDefaultMoveSpeed()
 @Override
 public boolean isDead()
   {
-  return isDead;
+  return this.isDead;
   }
 
 @Override
@@ -1037,6 +1037,12 @@ public ITEWorkSite getWorkSite()
 public WayPoint getUpkeepPoint()
   {
   return wayNav.getUpkeepSite();
+  }
+
+@Override
+public double getDistance(double par1, double par3, double par5)
+  {
+  return super.getDistance(par1, par3, par5);
   }
 
 }

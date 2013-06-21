@@ -8,6 +8,7 @@ FROM TESTERS
 * stone slabs render as quartz slabs in research book (possibly other places)
 * investigate gate redstone interaction
 * adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
+* possibly not saving research still
 
 BALANCE/TWEAKS
 * examine recipe balance
