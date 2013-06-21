@@ -1,0 +1,20 @@
+New features since last test release:
+
+/********** 06-18-13 **********/
+* add alchemy station (new crafting)
+* add autocrafting station (new crafting)
+
+/********** 06-19-13 **********/
+* much prep-work for reinforced blocks
+* save/read NBT for auto-crafting supplemental inventory
+* more testing of reinforced / explosion resistant blocks
+* finish boat textures
+
+/********** 06-20-13 **********/
+* work on test server/testing
+
+/********** 06-21-13 **********/
+* fix issue of crafting tables not recognizing recipe set (mismatch on NBT tags)
+* some vanilla recipes need set to precise blocks (slabs)
+* fix crafting table item subtype issue (would stack mismatching tables, converting them to different types)
+* disable debug, update version#, release for bugfixes

@@ -31,6 +31,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.types.ICivicType;
@@ -108,6 +109,17 @@ public ResourceListRecipe getRecipeByResult(ItemStack result)
       {
       if(result.itemID==valid.getResult().itemID && result.getItemDamage()==valid.getResult().getItemDamage())
         {
+        Config.logDebug("examining tags: "+result.getTagCompound() + " :: " +valid.getResult().getTagCompound());
+        NBTTagCompound tag = valid.getResult().getTagCompound();
+        if(tag!=null)
+          {
+          tag.setName("tag");
+          }
+        tag = result.getTagCompound();
+        if(tag!=null)
+          {
+          tag.setName("tag");
+          }
         if(ItemStack.areItemStackTagsEqual(result, valid.getResult()))
           {
           return valid;
@@ -200,6 +212,7 @@ protected boolean areResourceListsIdentical(ResourceListRecipe a, ResourceListRe
  */
 public void loadRecipes()
   {
+  Config.logDebug("LOADING RECIPES");
   this.addGateRecipes();//done
   this.addCivicRecipes();//done
   this.addUpgradeRecipes();//done
@@ -213,7 +226,7 @@ public void loadRecipes()
   this.vanillaRecipeList.add(CraftingManager.getInstance().addRecipe(new ItemStack(ItemLoader.researchBook), new Object[] {"gll","ppp","gll", 'p', Item.paper, 'l', Item.leather, 'g', Item.ingotGold} ));
   
   //research table
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 0 ), new Object[] {"sps","wcw","w_w", 's', Block.stoneSingleSlab, 'w', Block.planks, 'c', Block.chest, 'p', Item.paper}) );
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 0 ), new Object[] {"sps","wcw","w_w", 's', new ItemStack(Block.stoneSingleSlab,1,0), 'w', Block.planks, 'c', Block.chest, 'p', Item.paper}) );
   
   //civil engineering
   this.vanillaRecipeList.add(CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 1 ), new Object[] {"sss","wcw","w_w", 's', Item.ingotIron, 'w', Block.planks, 'c', Block.chest} ));
@@ -222,10 +235,10 @@ public void loadRecipes()
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 2 ), new Object[] {"sss","wcw", 's', Block.stone, 'w', Block.planks, 'c', Block.chest} ));
   
   //vehicle
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 3 ), new Object[] {"sss","wcw", 's', Block.stoneSingleSlab, 'w', Block.planks, 'c', Block.chest} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 3 ), new Object[] {"sss","wcw", 's', new ItemStack(Block.stoneSingleSlab,1,0), 'w', Block.planks, 'c', Block.chest} ));
   
   //ammo
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 4 ), new Object[] {"sis","wcw", 's', Block.stoneSingleSlab, 'w', Block.planks, 'c', Block.chest, 'i', Item.ingotIron} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 4 ), new Object[] {"sis","wcw", 's', new ItemStack(Block.stoneSingleSlab,1,0), 'w', Block.planks, 'c', Block.chest, 'i', Item.ingotIron} ));
   
   //npc
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 5 ), new Object[] {"sis","ici","i_i", 'i', Item.ingotIron, 'c', Block.chest, 's', Item.ingotGold} ));
@@ -247,6 +260,7 @@ protected void addResearchRecipes()
 
 protected void addCivicRecipes()
   {
+  Config.logDebug("LOADING CIVIC RECIPES");
   ResourceListRecipe recipe;
   for(ICivicType civic : Civic.civicList)
     {
@@ -254,6 +268,7 @@ protected void addCivicRecipes()
     recipe = civic.constructRecipe();
     if(recipe!=null)
       {
+      Config.logDebug("Adding civic recipe for: "+civic.getDisplayName());
       this.civicRecipes.add(recipe);
       }    
     }  
@@ -319,6 +334,7 @@ protected void addCivicRecipes()
   recipe.addResource(Item.ingotGold,2,false);
   this.gateRecipes.add(recipe);
   
+  Config.logDebug("finished loading civic recipes");
   }
 
 protected void addGateRecipes()

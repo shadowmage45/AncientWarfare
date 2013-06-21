@@ -44,6 +44,7 @@ public AWItemBlockBase(int par1)
   {
   super(par1);
   this.setCreativeTab(CreativeTabAW.normal);
+  this.setHasSubtypes(true);
   }
 
 /**
