@@ -29,7 +29,6 @@ GENERAL
 * add toggle for workers to allow receiving of work broadcasts (for a single work-site worker)
     might need slight restructure of the work AI
 * method to scan buildings in survival mode?   
-* add chemistry table -- will have recipe to make cement, gunpowder, require researchers to work it
 * researcher and craftsmsan need specific tools
 * research notes item need to have right-click function to learn the research
 * add recipes for chemistry table 
