@@ -379,8 +379,18 @@ protected void validateWorkers()
   while(workIt.hasNext())
     {
     npc = workIt.next();
-    if(npc==null || npc.isDead() || npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
+    if(npc==null)
       {      
+      workIt.remove();
+      continue;
+      }
+    if(npc.isDead())
+      {
+      workIt.remove();
+      continue;
+      }
+    if(npc.getDistance(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
+      {
       workIt.remove();
       continue;
       }
