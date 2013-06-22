@@ -1,4 +1,4 @@
-FROM TESTERS
+FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
 * death message from missiles is untranslated
 * examine forge dictionary use for wood (research related)
@@ -9,6 +9,9 @@ FROM TESTERS
 * investigate gate redstone interaction
 * adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
 * possibly not saving research still
+* remove rotten flesh from applicable NPC food sources(perhaps all potion-effect foods)
+* command baton interaction on server is f'n weird (all of the left-click interaction stuff is messed up)
+* tree farm puts apples in as a resource
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -36,6 +39,7 @@ GENERAL
 * fix rotation of rendered crafting blocks in inventory
 * fix position of rendered crafting blocks when held/on ground (item form)
 * implement method to upgrade NPCs to next-higher tier without slaying them
+* pathfind wander attempts to go through upper block of a door
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally (hmm..)
@@ -183,6 +187,8 @@ TWEAKS/OPTIMIZATION
 * some vanilla recipes need set to precise blocks (slabs)
 * fix crafting table item subtype issue (would stack mismatching tables, converting them to different types)
 * disable debug, update version#, release for bugfixes
+* fix worker obfuscation problem
+* fix client-side npc-crafting gui issue that prevented misc tab from displaying
 
 /********** 06-22-13 **********/
 /********** 06-23-13 **********/

@@ -58,7 +58,7 @@ public String getTab1Label()
 @Override
 public String getTab2Label()
   {
-  return null;
+  return "Misc";
   }
 
 }
