@@ -69,42 +69,29 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   }
 
 @Override
-public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPlayer player)
-  { 
-  boolean flag = player.capabilities.isCreativeMode;
-  if(!player.worldObj.isRemote)
-    {
-    TileEntity te = player.worldObj.getBlockTileEntity(x, y, z);
-    if(te instanceof IInventory)
-      {
-      MovingObjectPosition hit = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
-      CourierRoutingInfo info = new CourierRoutingInfo(stack);
-      if(info.getRouteSize() < 4 + (2*stack.getItemDamage()))
-        {
-        info.addRoutePoint(new WayPointItemRouting(x, y, z, hit.sideHit));
-        info.writeToItem(stack);    
-        GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, player.worldObj, 0, 0, 0);
-        }
-      else
-        {
-        player.addChatMessage("Routing Slip has full route!");
-        }
-      }    
-    }   
-  return flag;
-  }
-
-@Override
 public boolean getShareTag()
   {
   return false;
   }
 
 @Override
-public boolean onUsedFinalLeft(World world, EntityPlayer player,
-    ItemStack stack, BlockPosition hit, int side)
+public boolean onUsedFinalLeft(World world, EntityPlayer player,  ItemStack stack, BlockPosition hit, int side)
   {
-  // TODO Auto-generated method stub
+  TileEntity te = player.worldObj.getBlockTileEntity(hit.x, hit.y, hit.z);
+  if(te instanceof IInventory)
+    {
+    CourierRoutingInfo info = new CourierRoutingInfo(stack);
+    if(info.getRouteSize() < 4 + (2*stack.getItemDamage()))
+      {
+      info.addRoutePoint(new WayPointItemRouting(hit.x, hit.y, hit.z, side));
+      info.writeToItem(stack);    
+      GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, player.worldObj, 0, 0, 0);
+      }
+    else
+      {
+      player.addChatMessage("Routing Slip has full route!");
+      }
+    }
   return false;
   }
 

@@ -22,8 +22,6 @@ package shadowmage.ancient_warfare.common.event;
 
 import java.util.List;
 
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -34,11 +32,15 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.WorldEvent;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.AWItemClickable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
 public class EventHandler
 {
@@ -113,5 +115,15 @@ public void onEntitySpawn(EntityJoinWorldEvent evt)
     }
   }
 
+@ForgeSubscribe
+public void onItemUsed(PlayerInteractEvent evt)
+  {
+  Config.logDebug("block event..type: "+evt.action);
+  if(evt.entityPlayer!=null && evt.action == Action.LEFT_CLICK_BLOCK && evt.entityPlayer.inventory.getCurrentItem()!=null && evt.entityPlayer.inventory.getCurrentItem().getItem() instanceof AWItemClickable)
+    {
+    AWItemClickable item = (AWItemClickable) evt.entityPlayer.inventory.getCurrentItem().getItem();
+    item.onUsedFinalLeft(evt.entityPlayer.worldObj, evt.entityPlayer, evt.entityPlayer.inventory.getCurrentItem(), new BlockPosition(evt.x, evt.y, evt.z), evt.face);    
+    }  
+  }
 
 }

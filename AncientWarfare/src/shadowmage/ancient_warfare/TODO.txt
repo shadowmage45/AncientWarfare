@@ -189,6 +189,7 @@ TWEAKS/OPTIMIZATION
 * disable debug, update version#, release for bugfixes
 * fix worker obfuscation problem
 * fix client-side npc-crafting gui issue that prevented misc tab from displaying
+* fix left-click interaction in batons, routing slips, etc
 
 /********** 06-22-13 **********/
 /********** 06-23-13 **********/

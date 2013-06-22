@@ -62,16 +62,7 @@ public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPla
     {
     return super.onBlockStartBreak(stack, x, y, z, player);
     }
-  boolean flag = player.capabilities.isCreativeMode;
-  if(!player.worldObj.isRemote)
-    {
-    MovingObjectPosition hit = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
-    if(hit!=null)
-      {
-      this.onUsedFinalLeft(player.worldObj, player, stack, new BlockPosition(hit.blockX, hit.blockY, hit.blockZ), hit.sideHit);
-      }  
-    }   
-  return flag;
+  return false;
   }
 
 public abstract boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side);
