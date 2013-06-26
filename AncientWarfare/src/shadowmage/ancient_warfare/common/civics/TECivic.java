@@ -443,11 +443,7 @@ protected void setHasWork(boolean newVal)
  * @return
  */
 public AxisAlignedBB getWorkBounds()
-  { 
-  if(minX==maxX && minY==maxY && minZ==maxZ)
-    {
-    return null;
-    }
+  {   
   return AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX+1, maxY+1, maxZ+1);
   }
 
