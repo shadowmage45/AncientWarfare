@@ -59,10 +59,10 @@ public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,Entit
 public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPlayer player)
   { 
   if(!hasLeftClick)
-    {
+    {    
     return super.onBlockStartBreak(stack, x, y, z, player);
     }
-  return false;
+  return true;
   }
 
 public abstract boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side);

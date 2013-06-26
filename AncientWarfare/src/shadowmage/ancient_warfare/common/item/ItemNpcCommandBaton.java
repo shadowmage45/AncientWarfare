@@ -32,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
@@ -191,15 +192,14 @@ protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSetti
   }
 
 @Override
-public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPlayer player)
-  { 
+public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+  {
   if(!player.worldObj.isRemote)
     {
-    MovingObjectPosition hit = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
     BatonSettings settings = getBatonSettings(stack);
-    this.handleNpcCommand(player, stack, settings, hit);
+    this.handleNpcCommand(player, stack, settings, new MovingObjectPosition(hit.x, hit.y, hit.z, side, Vec3.fakePool.getVecFromPool(0, 0, 0)));
     }   
-  return true;
+  return false;
   }
 
 public BatonSettings getBatonSettings(ItemStack stack)
@@ -271,11 +271,5 @@ public void readFromNBT(NBTTagCompound tag)
   }
 }
 
-@Override
-public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
-  {
-  // TODO Auto-generated method stub
-  return false;
-  }
 
 }

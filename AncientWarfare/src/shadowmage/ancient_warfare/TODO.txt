@@ -9,13 +9,8 @@ FROM TESTING
 * investigate gate redstone interaction
 * adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
 * possibly not saving research still
-* remove rotten flesh from applicable NPC food sources(perhaps all potion-effect foods)
-* command baton interaction on server is f'n weird (all of the left-click interaction stuff is messed up)
 * tree farm puts apples in as a resource
 * implement method to upgrade NPCs to next-higher tier without slaying them
-* pathfind wander attempts to go through upper block of a door
-* implement player set npc 'bed' area
-* cow-farm (possibly others) does not place resources into correct slots
 * pathfinding wanders through cactus
 
 BALANCE/TWEAKS
@@ -196,4 +191,19 @@ TWEAKS/OPTIMIZATION
 * fix left-click interaction in batons, routing slips, etc
 
 /********** 06-22-13 **********/
+* camping...
 /********** 06-23-13 **********/
+* camping...
+/********** 06-24-13 **********/
+* camping...
+/********** 06-25-13 **********/
+* fix NPE from zero size BB on civic
+* fix command baton block interaction
+* npcs will now use 'home point' as priority shelter point.  (this is by default the place an npc is spawned)(if no home point, they will default to closest available door)
+* fix npcs attempting to path through top block of doors
+* pathfind wander attempts to go through upper block of a door
+* implement player set npc 'bed' area
+* cow-farm (possibly others) does not place resources into correct slots
+* fix up TE bounds rendering, move to dedicated trigger function
+* command baton interaction on server is f'n weird (all of the left-click interaction stuff is messed up)
+* remove rotten flesh from applicable NPC food sources(perhaps all potion-effect foods)

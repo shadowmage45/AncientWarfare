@@ -52,7 +52,7 @@ ItemStack torchFilter = new ItemStack(Block.torchWood, 1);
 
 public TEMine()
   {
-  
+  this.renderBounds = true;
   }
 
 @Override

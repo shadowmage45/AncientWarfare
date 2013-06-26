@@ -45,7 +45,6 @@ public TEBarnCow()
   this.breedingItem = new ItemStack(Item.wheat);
   }
 
-
 @Override
 protected void scan()
   {  
@@ -105,10 +104,10 @@ protected void scan()
 protected void doWork(IWorker npc, WorkPoint p)
   {
   super.doWork(npc, p);
-  if(p.work==TargetType.BARN_MILK && p.target!=null && inventory.containsAtLeast(bucketFilter, 1))
+  if(p.work==TargetType.BARN_MILK && p.target!=null && InventoryTools.containsAtLeast(inventory, bucketFilter, 1, resourceSlotIndices))
     {
-    inventory.tryRemoveItems(bucketFilter, 1);
-    ItemStack stack = inventory.tryMergeItem(new ItemStack(Item.bucketMilk));
+    InventoryTools.tryRemoveItems(inventory, bucketFilter, 1, resourceSlotIndices);
+    ItemStack stack = InventoryTools.tryMergeStack(inventory, new ItemStack(Item.bucketMilk), this.otherSlotIndices);
     stack = overflow.tryMergeItem(stack);
     InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
     }

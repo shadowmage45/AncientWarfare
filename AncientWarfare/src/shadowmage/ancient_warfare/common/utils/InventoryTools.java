@@ -143,7 +143,7 @@ public static int getFoodValue(IInventory inv, int firstSlot, int lastSlot)
     {
     fromSlot = inv.getStackInSlot(i);
     if(fromSlot==null){continue;}
-    if(fromSlot.getItem() instanceof ItemFood)
+    if(fromSlot.getItem() instanceof ItemFood && fromSlot.getItem().getPotionEffect(fromSlot)==null)
       {
       foodValue += ((ItemFood)fromSlot.getItem()).getHealAmount() * fromSlot.stackSize;
       }
@@ -490,6 +490,35 @@ public static boolean containsAtLeast(IInventory inv, ItemStack filter, int qty,
   for(int i = firstSlot; i <= lastSlot; i++)
     {
     fromSlot = inv.getStackInSlot(i);
+    if(fromSlot==null)
+      {
+      continue;
+      }
+    if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(filter, fromSlot))
+      {
+      foundQty += fromSlot.stackSize;
+      if(foundQty>=qty)
+        {
+        return true;
+        }
+      }
+    }
+  return false;
+  }
+
+public static boolean containsAtLeast(IInventory inv, ItemStack filter, int qty, int[] slotIndices)
+  {
+  if(filter==null|| inv.getSizeInventory()==0)
+    {
+    return false;
+    }
+  ItemStack fromSlot = null;
+  int foundQty = 0;  
+  int slot = 0;
+  for(int i = 0; i <= slotIndices.length; i++)
+    {
+    slot = slotIndices[i];
+    fromSlot = inv.getStackInSlot(slot);
     if(fromSlot==null)
       {
       continue;

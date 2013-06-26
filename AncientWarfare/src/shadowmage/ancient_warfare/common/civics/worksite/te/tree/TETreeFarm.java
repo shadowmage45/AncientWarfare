@@ -51,7 +51,7 @@ ItemStack logFilter;
  */
 public TETreeFarm()
   {
-  
+  this.renderBounds = true;
   }
 
 @Override

@@ -108,7 +108,6 @@ public void onEntitySpawn(EntityJoinWorldEvent evt)
   if(evt.entity!=null && !evt.entity.worldObj.isRemote && evt.entity instanceof EntityZombie)
     {
     EntityMob zomb = (EntityMob)evt.entity;
-//    Config.logDebug("setting entity attack tasks for: "+zomb);
     float val = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, zomb, "moveSpeed", "field_70697_bw");    
     zomb.tasks.addTask(3, new EntityAIAttackOnCollide(zomb, NpcBase.class, val, true));
     zomb.targetTasks.addTask(2, new EntityAINearestAttackableTarget(zomb, NpcBase.class, 16.0F, 0, true));
@@ -118,7 +117,6 @@ public void onEntitySpawn(EntityJoinWorldEvent evt)
 @ForgeSubscribe
 public void onItemUsed(PlayerInteractEvent evt)
   {
-  Config.logDebug("block event..type: "+evt.action);
   if(evt.entityPlayer!=null && evt.action == Action.LEFT_CLICK_BLOCK && evt.entityPlayer.inventory.getCurrentItem()!=null && evt.entityPlayer.inventory.getCurrentItem().getItem() instanceof AWItemClickable)
     {
     AWItemClickable item = (AWItemClickable) evt.entityPlayer.inventory.getCurrentItem().getItem();

@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetPosition;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
@@ -67,21 +68,26 @@ public void updatePriority()
   z = MathHelper.floor_double(npc.posZ);
   if(((!npc.worldObj.isDaytime() || npc.worldObj.isRaining()) && !npc.worldObj.provider.hasNoSky) || npc.targetHelper.areTargetsInRange(TargetType.ATTACK, 16))
     {//if it is nighttime, or raining, and the world has a sky (no sky, no sun, no shelter at night!)
-    this.theVillage = npc.worldObj.villageCollectionObj.findNearestVillage(x, y, z, Config.npcAISearchRange);
-    if(theVillage!=null)
+    WayPoint p = npc.wayNav.getHomePoint();
+    if(p==null)
+      {
+      this.theVillage = npc.worldObj.villageCollectionObj.findNearestVillage(x, y, z, Config.npcAISearchRange);
+      if(theVillage!=null)
+        {
+        this.currentPriority = this.maxPriority;
+        }      
+      }  
+    else
       {
       this.currentPriority = this.maxPriority;
-      }    
+      }
     }
   }
 
 @Override
 public void onRunningTick()
   {
-  int x, y, z;
-  x = MathHelper.floor_double(npc.posX);
-  y = MathHelper.floor_double(npc.posY);
-  z = MathHelper.floor_double(npc.posZ);
+  
   }
 
 @Override
@@ -91,14 +97,19 @@ public void onObjectiveStart()
   x = MathHelper.floor_double(npc.posX);
   y = MathHelper.floor_double(npc.posY);
   z = MathHelper.floor_double(npc.posZ);
-  if(theVillage==null)
-    {
+  WayPoint p = npc.wayNav.getHomePoint();
+  if(theVillage==null && p == null)
+    {    
     this.isFinished = true;
-    this.cooldownTicks = this.maxCooldownticks;    
+    this.cooldownTicks = this.maxCooldownticks;
     }
   else
     {
-    if(theVillage!=null)
+    if(p!=null)
+      {
+      npc.setTargetAW(TargetPosition.getNewTarget(p.floorX(), p.floorY(), p.floorZ(), TargetType.MOVE));
+      }
+    else if(theVillage!=null)
       {
       theDoor = theVillage.findNearestDoorUnrestricted(x, y, z);
       if(theDoor==null)
@@ -109,7 +120,6 @@ public void onObjectiveStart()
         }
       else
         {
-//        Config.logDebug("setting move target for seek shelter");
         npc.setTargetAW(TargetPosition.getNewTarget(theDoor.getInsidePosX(), theDoor.getInsidePosY(), theDoor.getInsidePosZ(), TargetType.MOVE));
         }
       }

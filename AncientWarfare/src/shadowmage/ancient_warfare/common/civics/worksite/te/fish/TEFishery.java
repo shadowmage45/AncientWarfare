@@ -38,6 +38,7 @@ int waterBlocks = 0;
 public TEFishery()
   {
   fishFilter = new ItemStack(Item.fishRaw);
+  this.renderBounds = true;
   }
 
 @Override

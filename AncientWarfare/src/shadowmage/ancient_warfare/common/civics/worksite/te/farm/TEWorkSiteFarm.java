@@ -46,7 +46,7 @@ ItemStack plantableFilter;
 
 public TEWorkSiteFarm()
   {
-  
+  this.renderBounds = true;
   }
 
 protected TargetType validateWorkPoint(int x, int y, int z)

@@ -50,6 +50,7 @@ LinkedList<EntityAnimal>cullableList = new LinkedList<EntityAnimal>();
 public TEWorkSiteAnimalFarm()
   {
   this.isWorkSite = true;
+  this.renderBounds = true;
   }
 
 @Override
@@ -111,17 +112,12 @@ protected void scan()
     }
   t3 = System.nanoTime();
   s4 = t3-t2;
-//  Config.logDebug("world entity seek time: "+s1);
-//  Config.logDebug("list clearing time: "+s2);
-//  Config.logDebug("first pass time: "+s3);
-//  Config.logDebug("second pass time: "+s4);
-//  Config.logDebug("total entity seek time: "+(s1+s2+s3+s4));
   }
 
 @Override
 protected void doWork(IWorker npc, WorkPoint p)
   {
-  if(p.work==TargetType.BARN_BREED && p.target!=null && inventory.containsAtLeast(breedingItem, 2))
+  if(p.work==TargetType.BARN_BREED && p.target!=null && InventoryTools.containsAtLeast(inventory, breedingItem, 2, resourceSlotIndices))
     {
     WorkPoint otherP = null;
     for(int i = 0; i < this.workPoints.size(); i++)
@@ -134,7 +130,7 @@ protected void doWork(IWorker npc, WorkPoint p)
         {
         ((EntityAnimal)p.target).inLove = 600;//.setTarget(otherP.target);
         ((EntityAnimal)otherP.target).inLove = 600;//setTarget(p.target);
-        inventory.tryRemoveItems(breedingItem, 2);
+        InventoryTools.tryRemoveItems(inventory, breedingItem, 2, resourceSlotIndices);
         workPoints.remove(otherP);
         break;
         }
@@ -152,7 +148,7 @@ protected void doWork(IWorker npc, WorkPoint p)
       for(EntityItem item : ent.capturedDrops)
         {
         stack = item.getEntityItem();
-        stack = inventory.tryMergeItem(stack);
+        stack = InventoryTools.tryMergeStack(inventory, stack, otherSlotIndices);
         stack = overflow.tryMergeItem(stack);
         InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord, zCoord+0.5d);       
         item.setDead();

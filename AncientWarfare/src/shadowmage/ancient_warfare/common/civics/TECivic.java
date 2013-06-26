@@ -74,6 +74,7 @@ public int maxY;
 public int maxZ;
 protected int teamNum = 0;
 protected boolean isWorkSite = false;
+protected boolean renderBounds = false;
 public boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
 public AWInventoryBase inventory = null;
 public AWInventoryBase overflow = new AWInventoryBasic(4);
@@ -113,6 +114,11 @@ public void setupSidedInventoryIndices(Civic civ)
     {
     otherSlotIndices[i-civ.getResourceSlotSize()]=i;
     }
+  }
+
+public boolean shouldRenderMainBounds()
+  {
+  return this.renderBounds;
   }
 
 public IInventory[] getInventoryToDropOnBreak()

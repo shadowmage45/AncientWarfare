@@ -264,7 +264,11 @@ public static void renderCivicBoundingBoxes(World world, EntityPlayer player, fl
     {
     if(TECivic.class.isAssignableFrom(te.getClass()))
       {
-      TECivic tec = (TECivic)te;     
+      TECivic tec = (TECivic)te;
+      if(!tec.shouldRenderMainBounds())
+        {
+        continue;
+        }
       AxisAlignedBB bb = tec.getWorkBounds(); 
       if(bb!=null)
         {

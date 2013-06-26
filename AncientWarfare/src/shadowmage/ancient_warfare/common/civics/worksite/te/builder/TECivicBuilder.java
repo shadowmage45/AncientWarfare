@@ -36,6 +36,12 @@ public class TECivicBuilder extends TEWorkSite
 private BuilderTicked builder;
 private boolean shouldRemove = false;
 
+public TECivicBuilder()
+  {
+  this.renderBounds = true;
+  this.isWorkSite = true;
+  }
+
 @Override
 public boolean onInteract(World world, EntityPlayer player)
   {
