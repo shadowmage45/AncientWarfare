@@ -31,7 +31,7 @@ import shadowmage.ancient_warfare.common.utils.BlockPosition;
 public abstract class AWItemClickable extends AWItemBase
 {
 
-boolean hasLeftClick = false;
+public boolean hasLeftClick = false;
 
 /**
  * @param itemID

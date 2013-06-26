@@ -57,6 +57,7 @@ public ItemNpcCommandBaton(int itemID)
   {
   super(itemID, true);
   this.maxStackSize = 1;
+  this.hasLeftClick = true;
   }
 
 @Override

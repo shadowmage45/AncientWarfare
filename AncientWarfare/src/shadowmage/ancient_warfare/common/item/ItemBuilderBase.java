@@ -36,6 +36,7 @@ public abstract class ItemBuilderBase extends AWItemClickable
 public ItemBuilderBase(int itemID)
   {
   super(itemID, false);
+  this.hasLeftClick = true;
   }
 
 /**

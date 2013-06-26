@@ -55,7 +55,7 @@ public byte getObjectiveNum()
 @Override
 public void addTasks()
   {
-  this.aiTasks.add(new AIMoveToTarget(npc, 1, false));
+  this.aiTasks.add(new AIMoveToTarget(npc, 3, false));
   }
 
 @Override

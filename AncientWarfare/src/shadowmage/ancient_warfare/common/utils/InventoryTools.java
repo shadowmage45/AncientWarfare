@@ -31,6 +31,7 @@ import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
@@ -141,7 +142,7 @@ public static int getFoodValue(IInventory inv, int firstSlot, int lastSlot)
     {
     fromSlot = inv.getStackInSlot(i);
     if(fromSlot==null){continue;}
-    if(fromSlot.getItem() instanceof ItemFood && fromSlot.getItem().getPotionEffect(fromSlot)==null)
+    if(fromSlot.getItem() instanceof ItemFood && fromSlot.itemID != Item.rottenFlesh.itemID)
       {
       foodValue += ((ItemFood)fromSlot.getItem()).getHealAmount() * fromSlot.stackSize;
       }
@@ -158,7 +159,7 @@ public static void tryRemoveFoodValue(IInventory inv, int firstSlot, int lastSlo
     {
     fromSlot = inv.getStackInSlot(i);
     if(fromSlot==null){continue;}
-    if(fromSlot.getItem() instanceof ItemFood)
+    if(fromSlot.getItem() instanceof ItemFood && fromSlot.itemID!=Item.rottenFlesh.itemID)
       {
       perItem = ((ItemFood)fromSlot.getItem()).getHealAmount();
       if(perItem<=0){continue;}

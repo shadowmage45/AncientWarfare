@@ -44,6 +44,7 @@ public class ItemCourierSlip extends AWItemClickable
 public ItemCourierSlip(int itemID)
   {
   super(itemID, true);
+  this.hasLeftClick = true;
   }
 
 

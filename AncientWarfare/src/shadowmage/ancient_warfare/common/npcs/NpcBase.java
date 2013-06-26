@@ -43,6 +43,7 @@ import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
@@ -438,6 +439,11 @@ public boolean interact(EntityPlayer player)
     }
   if(!this.isAggroTowards(player))
     {
+    if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().itemID == ItemLoader.npcSpawner.itemID)
+      {
+      tryUpgradeNpc(this.worldObj, player, player.getCurrentEquippedItem(), this);
+      return true;
+      }    
     if(player.isSneaking())
       {
       this.npcType.openGui(player, this);
@@ -458,6 +464,28 @@ public boolean interact(EntityPlayer player)
       }
     }
   return true;
+  }
+
+protected boolean tryUpgradeNpc(World world, EntityPlayer player, ItemStack stack, NpcBase npc)
+  {
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
+    {
+    int level = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");
+    if(level >= npc.rank+1)
+      {
+      NBTTagCompound tag = new NBTTagCompound();
+      npc.writeToNBT(tag);
+      tag.setInteger("rank", level);
+      Entity newNpc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, npc.teamNum);
+      newNpc.readFromNBT(tag);
+      npc.isDead = true;      
+      world.removeEntity(npc);
+      newNpc.setLocationAndAngles(npc.posX, npc.posY, npc.posZ, npc.rotationYaw, npc.rotationPitch);
+      world.spawnEntityInWorld(newNpc);
+      return true;
+      }
+    }
+  return false;
   }
 
 public void dismountVehicle()

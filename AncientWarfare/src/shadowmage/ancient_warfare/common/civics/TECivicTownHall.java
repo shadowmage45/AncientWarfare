@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.civics;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -64,9 +65,10 @@ public void updateEntity()
     for(int i = 0; i < this.otherSlotIndices.length; i++)
       {
       index = this.otherSlotIndices[i];
-      stack = this.getStackInSlot(index);
-      if(stack==null || stack.itemID == ItemLoader.rations.itemID || !(stack.getItem() instanceof ItemFood)){continue;}
-      foodValue = ((ItemFood)stack.getItem()).getHealAmount();
+      stack = this.getStackInSlot(index);      
+      if(stack==null || stack.itemID == ItemLoader.rations.itemID || !(stack.getItem() instanceof ItemFood) || stack.itemID == Item.rottenFlesh.itemID){continue;}
+      ItemFood item = (ItemFood)stack.getItem();
+      foodValue = item.getHealAmount();
       this.foodValue+=foodValue;
       stack.stackSize--;
       if(stack.stackSize<=0)

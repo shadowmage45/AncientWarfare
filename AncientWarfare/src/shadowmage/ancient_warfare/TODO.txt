@@ -206,20 +206,23 @@ TWEAKS/OPTIMIZATION
 * fix npcs attempting to path through top block of doors
 * pathfind wander attempts to go through upper block of a door
 * implement player set npc 'bed' area -- WORKS
-* cow-farm (possibly others) does not place resources into correct slots (needs test)
-* fix up TE bounds rendering, move to dedicated trigger function (needs verification)
-* remove rotten flesh from applicable NPC food sources(perhaps all potion-effect foods) (needs test)
+* cow-farm (possibly others) does not place resources into correct slots (resolved)
+* fix up TE bounds rendering, move to dedicated trigger function (resolved, may have missed a few that need rendering)
+* remove rotten flesh from applicable NPC food sources(perhaps all potion-effect foods) (fixed ,working)
 
 /********** 06-26-13 **********/
-* implement method to upgrade NPCs to next-higher tier without slaying them
+* implement method to upgrade NPCs to next-higher tier without slaying them -- works
 * decrease efficiency of fish-farm harvesting (decreased chance of catch by 50%)
-* tree farm puts apples in as a resource
+* tree farm puts apples in as a resource -- fixed
 * remove npc ability to pickup items from ground (uneeded, and annoying)
-* disable npc collision with other npcs (should remove door cluster issues)
+* disable npc collision with other npcs (should remove door cluster issues) -- works
 * adjust npc pathfinding to explicitly remove cactus as a pathable block
 * add recipes for iron rings and iron rings -> chain mail
-
 * add recipes for chemistry table and auto-crafting table
+
+* fix left-click interaction to no longer break blocks in creative/survival if hasLeftClick==true in base item
+* fix zombie flesh non-acceptance as a resource
+* adjust home position grace range to limit pathing oddities(1 -> 3 blocks)
 
 /********** 06-27-13 **********/
 /********** 06-28-13 **********/
