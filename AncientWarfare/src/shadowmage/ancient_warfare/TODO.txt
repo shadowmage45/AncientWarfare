@@ -34,9 +34,14 @@ GENERAL
 * researcher and craftsmsan need specific tools
 * research notes item need to have right-click function to learn the research if not already known
 * add recipes to chemistry table 
-* add recipes for chemistry and auto-crafting table
 * fix rotation of rendered crafting blocks in inventory
 * fix position of rendered crafting blocks when held/on ground (item form)
+
+REINFORCED BLOCKS
+* figure out method to allow for partially destroyed blocks w/ destroyed texture rendering
+
+ENGINEERS LOGIC WIRE / TILES (replacement for MIA redpower)
+* THDT
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally (hmm..)
@@ -47,7 +52,7 @@ VEHICLES
 
 AIRPLANE
 
-HELICOPTER
+HELICOPTER/airship/vtol
 * will be super-simple layout for controls
 * throttle control for vertical speed
 * AWSD for traditional turn/move forward/left
@@ -209,10 +214,12 @@ TWEAKS/OPTIMIZATION
 * implement method to upgrade NPCs to next-higher tier without slaying them
 * decrease efficiency of fish-farm harvesting (decreased chance of catch by 50%)
 * tree farm puts apples in as a resource
-* remove ability to pickup items from ground (uneeded, and annoying)
+* remove npc ability to pickup items from ground (uneeded, and annoying)
 * disable npc collision with other npcs (should remove door cluster issues)
 * adjust npc pathfinding to explicitly remove cactus as a pathable block
 * add recipes for iron rings and iron rings -> chain mail
+
+* add recipes for chemistry table and auto-crafting table
 
 /********** 06-27-13 **********/
 /********** 06-28-13 **********/

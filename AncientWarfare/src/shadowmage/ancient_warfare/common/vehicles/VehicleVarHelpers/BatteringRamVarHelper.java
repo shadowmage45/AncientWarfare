@@ -91,6 +91,8 @@ public void onLaunchingUpdate()
   if(logAngle<=-30)
     {
     this.vehicle.firingHelper.setFinishedLaunching();
+    this.damageEntities();
+    this.damageBlocks();
     this.logSpeed = 0;
     }
   else
@@ -98,6 +100,16 @@ public void onLaunchingUpdate()
     logAngle-=2;
     this.logSpeed = -2;
     }
+  }
+
+public void damageEntities()
+  {
+  //TODO
+  }
+
+public void damageBlocks()
+  {
+  //TODO
   }
 
 @Override
