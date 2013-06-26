@@ -50,6 +50,7 @@ import shadowmage.ancient_warfare.common.npcs.types.NpcResearcher;
 import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public abstract class NpcTypeBase implements INpcType

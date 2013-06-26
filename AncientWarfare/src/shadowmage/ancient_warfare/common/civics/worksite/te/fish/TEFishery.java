@@ -74,7 +74,7 @@ protected void doWork(IWorker npc, WorkPoint p)
   if(p.work==TargetType.FISH_CATCH && inventory.canHoldItem(fishFilter, 1))
     {
     float waterPercent = (float)waterBlocks * 0.001953125f; // essentially /512
-    waterPercent *= 0.5f;//cut percent in half
+    waterPercent *= 0.25f;//cut percent in half
     float check = rng.nextFloat();
     if(check<=waterPercent)      
       {      

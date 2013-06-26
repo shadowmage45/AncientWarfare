@@ -166,6 +166,11 @@ public boolean canHoldItem(ItemStack filter, int qty)
   return InventoryTools.canHoldItem(this, filter, qty, 0, this.getSizeInventory()-1);
   }
 
+public boolean canHoldItem(ItemStack filter, int qty, int [] slots)
+  {
+  return InventoryTools.canHoldItem(this, filter, qty, slots);
+  }
+
 /**
  * returns the remainder of the items not merged, or null if completely successful 
  * @param toMerge
@@ -174,6 +179,11 @@ public boolean canHoldItem(ItemStack filter, int qty)
 public ItemStack tryMergeItem(ItemStack toMerge)
   {
   return InventoryTools.tryMergeStack(this, toMerge, -1);
+  }
+
+public ItemStack tryMergeItem(ItemStack toMerge, int[] slots)
+  {
+  return InventoryTools.tryMergeStack(this, toMerge, slots);
   }
 
 public boolean containsAtLeast(ItemStack filter, int qty)

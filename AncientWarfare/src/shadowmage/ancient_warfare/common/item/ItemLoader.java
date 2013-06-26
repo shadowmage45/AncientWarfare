@@ -78,6 +78,7 @@ public static final ItemStack torsionUnit = new ItemStack(componentItem, 1, 18);
 public static final ItemStack counterWeightUnit = new ItemStack(componentItem, 1, 19);//
 public static final ItemStack powderCase = new ItemStack(componentItem, 1, 20);//
 public static final ItemStack equipmentBay = new ItemStack(componentItem, 1, 21);//
+public static final ItemStack ironRings = new ItemStack(componentItem, 1, 22);//
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -128,8 +129,8 @@ private void loadItems()
   this.registerItemSingle(civicBuilder, "Civic Structure Builder", "", "Construction Site");
   this.registerItemSubtyped(courierRouteSlip);
   this.addSubtypeInfoToItem(courierRouteSlip, 0, "Basic Routing Slip","","4 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,0)).setIconTexture("ancientwarfare:npc/route1", 0);
-  this.addSubtypeInfoToItem(courierRouteSlip, 1, "Basic Routing Slip","","6 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,1)).setIconTexture("ancientwarfare:npc/route2", 1);
-  this.addSubtypeInfoToItem(courierRouteSlip, 2, "Basic Routing Slip","","8 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,2)).setIconTexture("ancientwarfare:npc/route3", 2);
+  this.addSubtypeInfoToItem(courierRouteSlip, 1, "Intermediate Routing Slip","","6 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,1)).setIconTexture("ancientwarfare:npc/route2", 1);
+  this.addSubtypeInfoToItem(courierRouteSlip, 2, "Advanced Routing Slip","","8 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,2)).setIconTexture("ancientwarfare:npc/route3", 2);
   this.registerItemSubtyped(gateSpawner);
   this.registerItemSingle(rations, "Food Ration", "", "Restores 1 Hunger (2 Upkeep value)");
   
@@ -160,7 +161,8 @@ private void loadItems()
   this.addSubtypeInfoToItem(componentItem, 18, "Torsion Unit").addDisplayStack(torsionUnit).setIconTexture("ancientwarfare:misc/vehicleTorsionUnit", 18);
   this.addSubtypeInfoToItem(componentItem, 19, "CounterWeight Unit").addDisplayStack(counterWeightUnit).setIconTexture("ancientwarfare:misc/vehicleCounterWeightUnit", 19);
   this.addSubtypeInfoToItem(componentItem, 20, "Powder Case").addDisplayStack(powderCase).setIconTexture("ancientwarfare:misc/vehiclePowderUnit", 20);
-  this.addSubtypeInfoToItem(componentItem, 21, "Equipment Bay").addDisplayStack(equipmentBay).setIconTexture("ancientwarfare:misc/vehicleEquipmentBay", 21);  
+  this.addSubtypeInfoToItem(componentItem, 21, "Equipment Bay").addDisplayStack(equipmentBay).setIconTexture("ancientwarfare:misc/vehicleEquipmentBay", 21);
+  this.addSubtypeInfoToItem(componentItem, 22, "Iron Rings").addDisplayStack(ironRings).setIconTexture("ancientwarfare:misc/ironRings", 22);
   }
 
 private void loadRecipes()

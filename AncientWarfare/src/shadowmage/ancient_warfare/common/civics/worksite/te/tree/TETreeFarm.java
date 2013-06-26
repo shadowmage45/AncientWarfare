@@ -67,11 +67,38 @@ protected void onCivicUpdate()
       if(ent!=null && ent.getEntityItem()!=null)
         {
         stack = ent.getEntityItem();
-        if((stack.itemID==saplingID && stack.getItemDamage()==saplingMeta) || stack.itemID==Item.appleRed.itemID)
+        if((stack.itemID==saplingID && stack.getItemDamage()==saplingMeta))
           {
-          if(inventory.canHoldItem(stack, stack.stackSize))
+          if(inventory.canHoldItem(stack, stack.stackSize, resourceSlotIndices))
             {
-            stack = inventory.tryMergeItem(stack);
+            stack = inventory.tryMergeItem(stack, resourceSlotIndices);
+            if(stack!=null)
+              {
+              ent.setEntityItemStack(stack);
+              }
+            else//stack is null/merged sucessfully
+              {
+              ent.setDead();
+              }
+            }
+          else if(inventory.canHoldItem(stack, stack.stackSize, otherSlotIndices))
+            {
+            stack = inventory.tryMergeItem(stack, otherSlotIndices);
+            if(stack!=null)
+              {
+              ent.setEntityItemStack(stack);
+              }
+            else//stack is null/merged sucessfully
+              {
+              ent.setDead();
+              }
+            }
+          }
+        else if( stack.itemID==Item.appleRed.itemID)
+          {
+          if(inventory.canHoldItem(stack, stack.stackSize, otherSlotIndices))
+            {
+            stack = inventory.tryMergeItem(stack, otherSlotIndices);
             if(stack!=null)
               {
               ent.setEntityItemStack(stack);

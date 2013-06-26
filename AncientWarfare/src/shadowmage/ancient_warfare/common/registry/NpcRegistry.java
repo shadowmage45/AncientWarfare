@@ -155,6 +155,4 @@ public static ItemStack getStackFor(INpcType type, int level)
   return stack;
   }
 
-
-
 }

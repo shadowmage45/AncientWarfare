@@ -88,8 +88,6 @@ public int villageUpdateTick = 0;
 
 protected int idleLookTicks = 0;
 
-protected int lootCheckTicks = 0;
-
 protected int npcTicksExisted = 0;
 
 public int npcUpkeepTicks = Config.npcUpkeepTicks;//how many upkeep ticks worth of food are remaining?
@@ -140,6 +138,15 @@ public NpcBase(World par1World)
     }
   this.experienceValue = 10;
   this.health = 20;  
+  }
+
+@Override
+protected void collideWithEntity(Entity par1Entity)
+  {
+  if(!(par1Entity instanceof NpcBase))
+    {
+    super.collideWithEntity(par1Entity);    
+    }
   }
 
 /**
@@ -555,15 +562,15 @@ public void onUpdate()
     {
     actionTick--;
     }
-  if(this.lootCheckTicks<=0)
-    {
-    this.lootCheckTicks = Config.npcAITicks;
-    this.handleLootPickup();
-    }
-  else
-    {
-    this.lootCheckTicks--;
-    }   
+//  if(this.lootCheckTicks<=0)
+//    {
+//    this.lootCheckTicks = Config.npcAITicks;
+//    this.handleLootPickup();
+//    }
+//  else
+//    {
+//    this.lootCheckTicks--;
+//    }   
   this.updateArmSwingProgress();
   if(!this.worldObj.isRemote)
     {

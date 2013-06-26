@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,6 +28,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
@@ -51,13 +53,58 @@ public ItemNpcSpawner(int itemID)
   this.setCreativeTab(CreativeTabAW.npcTab);  
   }
 
-@Override
-public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,    BlockPosition hit, int side)
+protected boolean tryUpgradeNpc(World world, EntityPlayer player, ItemStack stack, NpcBase npc)
   {
-  if(hit==null || world.isRemote || stack == null)
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
+    {
+    int level = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");
+    if(level >= npc.rank+1)
+      {
+      NBTTagCompound tag = new NBTTagCompound();
+      npc.writeToNBT(tag);
+      tag.setInteger("rank", level);
+      Entity newNpc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, npc.teamNum);
+      newNpc.readFromNBT(tag);
+      npc.isDead = true;      
+      world.removeEntity(npc);
+      newNpc.setLocationAndAngles(npc.posX, npc.posY, npc.posZ, npc.rotationYaw, npc.rotationPitch);
+      world.spawnEntityInWorld(newNpc);
+      return true;
+      }
+    }
+  return false;
+  }
+
+@Override
+public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+  {
+  if(world.isRemote || stack == null)
     {
     return false;
     }
+ if(hit==null)
+   {
+   MovingObjectPosition pos = getMovingObjectPositionFromPlayer(world, player, true);  
+   if(pos!=null && pos.entityHit instanceof NpcBase)
+     {
+     NpcBase npc = (NpcBase)pos.entityHit;
+     if(npc.npcType.getGlobalNpcType()==stack.getItemDamage())
+       {
+       if(tryUpgradeNpc(world, player, stack, npc))
+         {
+         if(!player.capabilities.isCreativeMode)
+           {
+           stack.stackSize--;
+           if(stack.stackSize<=0)
+             {
+             player.inventory.setInventorySlotContents(player.inventory.currentItem, null);    
+             }
+           }
+         }    
+       }          
+     }
+   return false;
+   }
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
     {
     int level = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");    

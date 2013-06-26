@@ -124,7 +124,7 @@ public boolean isWalkable2(int x, int y, int z)
   boolean cube = !checkBlockBounds(x, y, z);
   boolean cube2 = !checkBlockBounds(x, y-1, z);
   boolean cube3 = !checkBlockBounds(x, y+1, z);
-  if(isFence(id2) || (isDoor(x,y-1,z) && isDoor(x,y,z)))
+  if(isFence(id2) || (isDoor(x,y-1,z) && isDoor(x,y,z)) || (id==Block.cactus.blockID || id2==Block.cactus.blockID || id3==Block.cactus.blockID))
     {
     return false;
     } 

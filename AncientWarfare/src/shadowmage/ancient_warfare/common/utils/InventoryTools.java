@@ -133,8 +133,6 @@ public static List<ItemStackWrapper> getCompactedInventory(IInventory inv, Compa
   return stacks;
   }
 
-
-
 public static int getFoodValue(IInventory inv, int firstSlot, int lastSlot)
   {
   ItemStack fromSlot = null;
@@ -387,12 +385,6 @@ public static int[] getSlotIndexMap(IInventory inv)
   return indices;
   }
 
-/**
- * @param inv
- * @param toMerge
- * @param slotIndices (null will abort entire merge operation)
- * @return
- */
 public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int[] slotIndices)
   {
   if(slotIndices==null)
@@ -458,6 +450,36 @@ public static boolean canHoldItem(IInventory inv, ItemStack filter, int qty, int
     {
     if(!inv.isStackValidForSlot(i, filter)){continue;}
     fromSlot = inv.getStackInSlot(i);
+    if(fromSlot==null)//emtpy slot, decr by entire stack size
+      {
+      qtyLeft -= filter.getMaxStackSize();
+      }
+    else
+      {
+      if(fromSlot.itemID==filter.itemID && fromSlot.getItemDamage()==filter.getItemDamage() && ItemStack.areItemStackTagsEqual(fromSlot, filter))
+        {
+        qtyLeft -= fromSlot.getMaxStackSize()-fromSlot.stackSize;
+        }
+      }
+    if(qtyLeft<=0)
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
+public static boolean canHoldItem(IInventory inv, ItemStack filter, int qty, int [] slots)
+  {
+  if(filter==null){return false;}
+  int qtyLeft = qty;
+  ItemStack fromSlot = null;
+  int slot;
+  for(int i = 0 ; i < slots.length; i ++)
+    {
+    slot = slots[i];
+    if(!inv.isStackValidForSlot(slot, filter)){continue;}
+    fromSlot = inv.getStackInSlot(slot);
     if(fromSlot==null)//emtpy slot, decr by entire stack size
       {
       qtyLeft -= filter.getMaxStackSize();

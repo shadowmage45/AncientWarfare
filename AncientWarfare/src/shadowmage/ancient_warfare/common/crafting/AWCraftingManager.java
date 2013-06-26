@@ -63,10 +63,12 @@ import com.google.common.collect.Lists;
 public class AWCraftingManager
 {
 
+private String[][] recipePatterns = new String[][] {{"XXX", "X X"}, {"X X", "XXX", "XXX"}, {"XXX", "X X", "X X"}, {"X X", "X X"}};
+private Object[][] recipeItems;
 List<ResourceListRecipe> vehicleRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> ammoRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> civicRecipes = new ArrayList<ResourceListRecipe>();
-List<ResourceListRecipe> gateRecipes = new ArrayList<ResourceListRecipe>();
+List<ResourceListRecipe> civicMiscRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> upgradeRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> npcRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> npcMiscRecipes = new ArrayList<ResourceListRecipe>();
@@ -85,13 +87,15 @@ private AWCraftingManager()
   recipesByType.put(RecipeType.VEHICLE, vehicleRecipes);
   recipesByType.put(RecipeType.AMMO, ammoRecipes);
   recipesByType.put(RecipeType.CIVIC, civicRecipes);
-  recipesByType.put(RecipeType.CIVIC_MISC, gateRecipes);
+  recipesByType.put(RecipeType.CIVIC_MISC, civicMiscRecipes);
   recipesByType.put(RecipeType.VEHICLE_MISC, upgradeRecipes);
   recipesByType.put(RecipeType.NPC, npcRecipes);
   recipesByType.put(RecipeType.NPC_MISC, npcMiscRecipes);
   recipesByType.put(RecipeType.RESEARCH, researchRecipes);
   recipesByType.put(RecipeType.AMMO_MISC, componentRecipes);
   recipesByType.put(RecipeType.NONE, new ArrayList<ResourceListRecipe>());
+  this.recipeItems = new Object[][] {{ItemLoader.ironRings}, {Item.helmetChain}, {Item.plateChain}, {Item.legsChain}, {Item.bootsChain}};
+
   }
 
 private static AWCraftingManager INSTANCE = new AWCraftingManager();
@@ -242,6 +246,27 @@ public void loadRecipes()
   
   //npc
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 5 ), new Object[] {"sis","ici","i_i", 'i', Item.ingotIron, 'c', Block.chest, 's', Item.ingotGold} ));
+
+  //chemistry/alchemy table
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 6 ), new Object[] {"pip","pcp","p_p", 'p', Block.woodSingleSlab, 'c', Block.chest, 'i', Item.clay} ));
+ 
+  //auto-craft table
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 7 ), new Object[] {"ppp","pcp","p_p", 'p', Block.woodSingleSlab, 'c', Block.chest} ));
+     
+  //iron rings
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(ItemLoader.componentItem, 5, ItemLoader.ironRings.getItemDamage()), new Object[] {"_i_","i_i", 'i', Item.ingotIron} ));
+  
+  //iron ring->chain mail  
+  for (int i = 0; i < this.recipeItems[0].length; ++i)
+    {
+    Object object = this.recipeItems[0][i];
+
+    for (int j = 0; j < this.recipeItems.length - 1; ++j)
+      {
+      Item item = (Item)this.recipeItems[j + 1][i];
+      CraftingManager.getInstance().addRecipe(new ItemStack(item), new Object[] {this.recipePatterns[j], 'X', object});
+      }
+    }
   }
 
 protected void addResearchRecipes()
@@ -278,7 +303,7 @@ protected void addCivicRecipes()
   recipe.neededResearch.add(ResearchGoalNumbers.logistics3);
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.chest, 1), false, false));
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 4), true, false));
-  this.gateRecipes.add(recipe);
+  this.civicMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.warehouseStorage.blockID,1,1), RecipeType.CIVIC_MISC);
   recipe.neededResearch.add(ResearchGoalNumbers.civics2);
@@ -286,7 +311,7 @@ protected void addCivicRecipes()
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.chest, 2), false, false));
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 4), true, false));
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.paper, 2), true, false));
-  this.gateRecipes.add(recipe);
+  this.civicMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.warehouseStorage.blockID,1,2), RecipeType.CIVIC_MISC);
   recipe.neededResearch.add(ResearchGoalNumbers.civics3);
@@ -294,45 +319,56 @@ protected void addCivicRecipes()
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.chest, 2), false, false));
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.ingotIron, 8), true, false));
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.paper, 2), true, false));
-  this.gateRecipes.add(recipe);
+  this.civicMiscRecipes.add(recipe);
     
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.crafting,1,0), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,1,false);//
   recipe.addResource(Block.stoneSingleSlab,2,false);//
   recipe.addResource(Block.planks, 4, true);//
   recipe.addResource(Item.paper,1,false);//
-  this.gateRecipes.add(recipe);
+  this.civicMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.crafting,1,1), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,1,false);//
   recipe.addResource(Item.ingotIron,3,false);//
   recipe.addResource(Block.planks, 4, true);//
-  this.gateRecipes.add(recipe);
+  this.civicMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.crafting,1,2), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,1,false);//
   recipe.addResource(Block.planks, 2, true);//
   recipe.addResource(Block.stone, 3, false);//
-  this.gateRecipes.add(recipe);
+  this.civicMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.crafting,1,3), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,1,false);//
   recipe.addResource(Block.stoneSingleSlab,3,false);//
   recipe.addResource(Block.planks, 2, true);//
-  this.gateRecipes.add(recipe);
+  this.civicMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.crafting,1,4), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,1,false);//
   recipe.addResource(Block.stoneSingleSlab,2,false);
   recipe.addResource(Item.ingotIron,1,false);//
   recipe.addResource(Block.planks, 2, true);//
-  this.gateRecipes.add(recipe);
+  this.civicMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.crafting,1,5), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,1,false);  
   recipe.addResource(Item.ingotIron,5,false);
   recipe.addResource(Item.ingotGold,2,false);
-  this.gateRecipes.add(recipe);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(new ItemStack(BlockLoader.crafting,1,6), RecipeType.CIVIC_MISC);
+  recipe.addResource(Block.chest,1,false);  
+  recipe.addResource(Block.planks,6,false);
+  recipe.addResource(Item.clay,1,false);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(new ItemStack(BlockLoader.crafting,1,7), RecipeType.CIVIC_MISC);
+  recipe.addResource(Block.chest,1,false);  
+  recipe.addResource(Block.planks,7,false);
+  this.civicMiscRecipes.add(recipe);
   
   Config.logDebug("finished loading civic recipes");
   }
@@ -346,7 +382,7 @@ protected void addGateRecipes()
     recipe = gate.constructRecipe();
     if(recipe!=null)
       {
-      this.gateRecipes.add(recipe);      
+      this.civicMiscRecipes.add(recipe);      
       }
     }
   }
@@ -753,7 +789,7 @@ public List<ResourceListRecipe> getRecipesDependantOn(IResearchGoal goal)
       recipes.add(recipe);
       }
     }
-  for(ResourceListRecipe recipe : this.gateRecipes)
+  for(ResourceListRecipe recipe : this.civicMiscRecipes)
     {
     if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
       {

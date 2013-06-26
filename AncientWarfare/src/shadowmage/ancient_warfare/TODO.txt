@@ -2,19 +2,17 @@ FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
 * death message from missiles is untranslated
 * examine forge dictionary use for wood (research related)
-* fish farm is OP
-* patrols are a bit 'hard' to setup
-* farmers too OP harvesting too many farms?
 * stone slabs render as quartz slabs in research book (possibly other places)
 * investigate gate redstone interaction
 * adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
 * possibly not saving research still
-* tree farm puts apples in as a resource
-* implement method to upgrade NPCs to next-higher tier without slaying them
-* pathfinding wanders through cactus
 
 BALANCE/TWEAKS
 * examine recipe balance
+* routing slips more expensive
+* require backpack item for couriers?
+* farmers too OP harvesting too many farms?
+* patrols are a bit 'hard' to setup
 
 TEXTURE/ART
 * more missile textures
@@ -33,12 +31,12 @@ GENERAL
 * add toggle for workers to allow receiving of work broadcasts (for a single work-site worker)
     might need slight restructure of the work AI
 * method to scan buildings in survival mode?   
-* researcher and craftsmsan need specific tools(
-* research notes item need to have right-click function to learn the research
-* add recipes for chemistry table 
+* researcher and craftsmsan need specific tools
+* research notes item need to have right-click function to learn the research if not already known
+* add recipes to chemistry table 
+* add recipes for chemistry and auto-crafting table
 * fix rotation of rendered crafting blocks in inventory
 * fix position of rendered crafting blocks when held/on ground (item form)
-*
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally (hmm..)
@@ -197,13 +195,26 @@ TWEAKS/OPTIMIZATION
 /********** 06-24-13 **********/
 * camping...
 /********** 06-25-13 **********/
-* fix NPE from zero size BB on civic
-* fix command baton block interaction
+* fix NPE from zero size BB on civic -- WORKS (but now all civics attempt to render bounds
+* fix command baton block interaction -- needs tested
 * npcs will now use 'home point' as priority shelter point.  (this is by default the place an npc is spawned)(if no home point, they will default to closest available door)
 * fix npcs attempting to path through top block of doors
 * pathfind wander attempts to go through upper block of a door
-* implement player set npc 'bed' area
-* cow-farm (possibly others) does not place resources into correct slots
-* fix up TE bounds rendering, move to dedicated trigger function
-* command baton interaction on server is f'n weird (all of the left-click interaction stuff is messed up)
-* remove rotten flesh from applicable NPC food sources(perhaps all potion-effect foods)
+* implement player set npc 'bed' area -- WORKS
+* cow-farm (possibly others) does not place resources into correct slots (needs test)
+* fix up TE bounds rendering, move to dedicated trigger function (needs verification)
+* remove rotten flesh from applicable NPC food sources(perhaps all potion-effect foods) (needs test)
+
+/********** 06-26-13 **********/
+* implement method to upgrade NPCs to next-higher tier without slaying them
+* decrease efficiency of fish-farm harvesting (decreased chance of catch by 50%)
+* tree farm puts apples in as a resource
+* remove ability to pickup items from ground (uneeded, and annoying)
+* disable npc collision with other npcs (should remove door cluster issues)
+* adjust npc pathfinding to explicitly remove cactus as a pathable block
+* add recipes for iron rings and iron rings -> chain mail
+
+/********** 06-27-13 **********/
+/********** 06-28-13 **********/
+/********** 06-29-13 **********/
+/********** 06-30-13 **********/
