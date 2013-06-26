@@ -219,10 +219,10 @@ TWEAKS/OPTIMIZATION
 * adjust npc pathfinding to explicitly remove cactus as a pathable block
 * add recipes for iron rings and iron rings -> chain mail
 * add recipes for chemistry table and auto-crafting table
-
 * fix left-click interaction to no longer break blocks in creative/survival if hasLeftClick==true in base item
 * fix zombie flesh non-acceptance as a resource
 * adjust home position grace range to limit pathing oddities(1 -> 3 blocks)
+
 
 /********** 06-27-13 **********/
 /********** 06-28-13 **********/
