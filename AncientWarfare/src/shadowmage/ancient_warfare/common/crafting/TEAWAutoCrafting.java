@@ -58,7 +58,7 @@ public TEAWAutoCrafting()
   this.craftMatrix = new int[]{0,1,2,3,4,5,6,7,8};
   this.resultSlot = new int[]{9};
   this.inventory = new AWInventoryBasic(10);
-  this.workType = CivicWorkType.RESEARCH;
+  this.workType = CivicWorkType.CRAFT;
   this.shouldBroadcast = true;
   this.layoutInventory = new InventoryCrafting(new ContainerDummy(), 3, 3);
   }

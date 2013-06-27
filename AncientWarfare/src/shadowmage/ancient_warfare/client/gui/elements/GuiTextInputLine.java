@@ -162,7 +162,8 @@ public boolean handleKeyInput(char ch, int keyCode)
     handleEnterAction();
     break;
 
-    case 1:
+    case 1://escape
+    this.selected = false;
     break;
 
     case 210:

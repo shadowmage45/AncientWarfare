@@ -236,8 +236,8 @@ public void setKingdomInfo()
       }
     }
   defaults = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
-      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
-  config.get("d-npc_target_settings", "civilian", defaults, "Forced targets for civilians to run away from");
+      "Ghast", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
+  config.get("d-npc_target_settings", "civilian", defaults, "Forced targets that will aggro civilians and which they will run away from");
   }
 
 public void setWorldGenInfo()

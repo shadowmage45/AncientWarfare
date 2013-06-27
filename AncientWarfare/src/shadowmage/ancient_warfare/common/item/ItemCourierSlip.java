@@ -45,9 +45,8 @@ public ItemCourierSlip(int itemID)
   {
   super(itemID, true);
   this.hasLeftClick = true;
+  this.setMaxStackSize(1);
   }
-
-
 
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)

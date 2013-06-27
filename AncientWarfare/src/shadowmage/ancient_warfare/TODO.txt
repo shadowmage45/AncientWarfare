@@ -6,6 +6,8 @@ FROM TESTING
 * investigate gate redstone interaction
 * adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
 * possibly not saving research still
+* adpet researcher ? (sp error)
+* routing slip/furnace interaction is strange
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -169,60 +171,12 @@ TWEAKS/OPTIMIZATION
 ********************* DONE STUFF ************************* 
 
 
-/********** 06-17-13 (post release)**********/
-
-/********** 06-18-13 **********/
-* add alchemy station (new crafting)
-* add autocrafting station (new crafting)
-
-/********** 06-19-13 **********/
-* much prep-work for reinforced blocks
-* save/read NBT for auto-crafting supplemental inventory
-* more testing of reinforced / explosion resistant blocks
-* finish boat textures
-
-/********** 06-20-13 **********/
-* work on test server/testing
-
-/********** 06-21-13 **********/
-* fix issue of crafting tables not recognizing recipe set (mismatch on NBT tags)
-* some vanilla recipes need set to precise blocks (slabs)
-* fix crafting table item subtype issue (would stack mismatching tables, converting them to different types)
-* disable debug, update version#, release for bugfixes
-* fix worker obfuscation problem
-* fix client-side npc-crafting gui issue that prevented misc tab from displaying
-* fix left-click interaction in batons, routing slips, etc
-
-/********** 06-22-13 **********/
-* camping...
-/********** 06-23-13 **********/
-* camping...
-/********** 06-24-13 **********/
-* camping...
-/********** 06-25-13 **********/
-* fix NPE from zero size BB on civic -- WORKS (but now all civics attempt to render bounds
-* fix command baton block interaction -- needs tested
-* npcs will now use 'home point' as priority shelter point.  (this is by default the place an npc is spawned)(if no home point, they will default to closest available door)
-* fix npcs attempting to path through top block of doors
-* pathfind wander attempts to go through upper block of a door
-* implement player set npc 'bed' area -- WORKS
-* cow-farm (possibly others) does not place resources into correct slots (resolved)
-* fix up TE bounds rendering, move to dedicated trigger function (resolved, may have missed a few that need rendering)
-* remove rotten flesh from applicable NPC food sources(perhaps all potion-effect foods) (fixed ,working)
-
-/********** 06-26-13 **********/
-* implement method to upgrade NPCs to next-higher tier without slaying them -- works
-* decrease efficiency of fish-farm harvesting (decreased chance of catch by 50%)
-* tree farm puts apples in as a resource -- fixed
-* remove npc ability to pickup items from ground (uneeded, and annoying)
-* disable npc collision with other npcs (should remove door cluster issues) -- works
-* adjust npc pathfinding to explicitly remove cactus as a pathable block
-* add recipes for iron rings and iron rings -> chain mail
-* add recipes for chemistry table and auto-crafting table
-* fix left-click interaction to no longer break blocks in creative/survival if hasLeftClick==true in base item
-* fix zombie flesh non-acceptance as a resource
-* adjust home position grace range to limit pathing oddities(1 -> 3 blocks)
-
+/********** 06-26-13 **********/(post release)
+* update courier slip max stack size -> 1
+* text input lines will now deselect if escape is pressed
+* fix auto-crafting station to use 'CRAFT' work type (fixes researchers working at them)
+* re-enable warehouse civic bounds rendering (was disabled in previous update because of an unrelated issue)
+* remove endermen from auto-target list for civilians (they would randomly teleport through a town and kill something)
 
 /********** 06-27-13 **********/
 /********** 06-28-13 **********/

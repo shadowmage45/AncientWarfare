@@ -58,6 +58,7 @@ List<BlockPosition> storageBlocks = new ArrayList<BlockPosition>();
 
 public TECivicWarehouse()
   {
+  this.renderBounds = true;
   }
 
 @Override
