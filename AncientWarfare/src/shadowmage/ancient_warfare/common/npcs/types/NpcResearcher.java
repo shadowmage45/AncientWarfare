@@ -56,7 +56,7 @@ public NpcResearcher(int type)
   this.tooltip = "Works on Research";
   this.iconTexture = "npcWorker1";
   this.addLevel("Novice Researcher", Config.texturePath + "models/npc/npcResearcher.png", getToolStack(0), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
-  this.addLevel("Adpet Researcher", Config.texturePath + "models/npc/npcResearcher.png", getToolStack(1), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
+  this.addLevel("Adept Researcher", Config.texturePath + "models/npc/npcResearcher.png", getToolStack(1), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
   this.addLevel("Expert Researcher", Config.texturePath + "models/npc/npcResearcher.png", getToolStack(2), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 

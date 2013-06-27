@@ -6,8 +6,11 @@ FROM TESTING
 * investigate gate redstone interaction
 * adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
 * possibly not saving research still
-* adpet researcher ? (sp error)
 * routing slip/furnace interaction is strange
+* death journal for NPCs
+* npc tracking for town-halls
+    (town hall links up to a game-wide list of NPCs for that team)
+* ability to swap/change/reassign block positions in routing slip    
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -36,8 +39,8 @@ GENERAL
 * researcher and craftsmsan need specific tools
 * research notes item need to have right-click function to learn the research if not already known
 * add recipes to chemistry table 
-* fix rotation of rendered crafting blocks in inventory
-* fix position of rendered crafting blocks when held/on ground (item form)
+* fix rotation of rendered crafting station blocks in inventory
+* fix position of rendered crafting station blocks when held/on ground (item form)
 
 REINFORCED BLOCKS
 * figure out method to allow for partially destroyed blocks w/ destroyed texture rendering
@@ -179,6 +182,9 @@ TWEAKS/OPTIMIZATION
 * remove endermen from auto-target list for civilians (they would randomly teleport through a town and kill something)
 
 /********** 06-27-13 **********/
+* adpet researcher ? (sp error)
+* rename many civics slightly (remove 'Small'..there will be only 1 size)
+
 /********** 06-28-13 **********/
 /********** 06-29-13 **********/
 /********** 06-30-13 **********/
