@@ -28,6 +28,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
+import shadowmage.ancient_warfare.client.gui.civic.GuiCivicTownHall;
+import shadowmage.ancient_warfare.client.gui.civic.GuiCivicTownHallInfo;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicWarehouse;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiAlchemy;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiAmmoCrafting;
@@ -52,12 +54,14 @@ import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleAmmoSelection;
 import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleDebug;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.container.ContainerAWAutoCrafting;
 import shadowmage.ancient_warfare.common.container.ContainerAWCrafting;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTE;
+import shadowmage.ancient_warfare.common.container.ContainerCivicTownHallInfo;
 import shadowmage.ancient_warfare.common.container.ContainerCivicWarehouse;
 import shadowmage.ancient_warfare.common.container.ContainerCivilEngineering;
 import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
@@ -72,8 +76,8 @@ import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
 import shadowmage.ancient_warfare.common.crafting.TEAWAlchemy;
 import shadowmage.ancient_warfare.common.crafting.TEAWAmmoCraft;
-import shadowmage.ancient_warfare.common.crafting.TEAWCivicCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWAutoCrafting;
+import shadowmage.ancient_warfare.common.crafting.TEAWCivicCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWNpcCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
@@ -104,6 +108,8 @@ public static final int NPC_BASE = 9;
 public static final int NPC_COURIER = 10;
 public static final int COURIER_SLIP = 11;
 public static final int CIVIC_WAREHOUSE = 12;
+public static final int CIVIC_TOWNHALL = 13;
+public static final int CIVIC_TOWNHALL_INFO = 14;
 
 public static final int INFO = 40;
 public static final int CIVIL_ENGINEERING = 41;
@@ -202,6 +208,24 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
     {
     TECivicWarehouse tew = (TECivicWarehouse)te;
     return new ContainerCivicWarehouse(player, tew);
+    }
+  return null;
+  
+  case CIVIC_TOWNHALL:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TECivicTownHall)
+    {
+    TECivicTownHall tew = (TECivicTownHall)te;
+    return new ContainerCivicTE(player, tew);
+    }
+  return null;
+  
+  case CIVIC_TOWNHALL_INFO:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TECivicTownHall)
+    {
+    TECivicTownHall tew = (TECivicTownHall)te;
+    return new ContainerCivicTownHallInfo(player, tew);
     }
   return null;
   
@@ -366,6 +390,24 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
     {
     TECivicWarehouse tew = (TECivicWarehouse)te;
     return new GuiCivicWarehouse(new ContainerCivicWarehouse(player, tew), tew);
+    }
+  return null;
+  
+  case CIVIC_TOWNHALL:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TECivicTownHall)
+    {
+    TECivicTownHall tew = (TECivicTownHall)te;
+    return new GuiCivicTownHall(new ContainerCivicTE(player, tew), tew);
+    }
+  return null;
+  
+  case CIVIC_TOWNHALL_INFO:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TECivicTownHall)
+    {
+    TECivicTownHall tew = (TECivicTownHall)te;
+    return new GuiCivicTownHallInfo(new ContainerCivicTownHallInfo(player, tew), tew);
     }
   return null;
   

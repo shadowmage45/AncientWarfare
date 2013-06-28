@@ -25,6 +25,7 @@ import java.util.UUID;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class NpcDataEntry implements INBTTaggable
@@ -38,6 +39,7 @@ int npcType;
 int npcRank;
 BlockPosition lastKnownPosition = new BlockPosition(0,0,0);
 int lastKnownHealth = 20;
+boolean dead = false;
 
 /**
  * 
@@ -62,6 +64,11 @@ public void updateEntry(NpcBase npc)
   this.lastKnownPosition.updateFromEntityPosition(npc);
   }
 
+public void setDead()
+  {
+  this.dead = true;
+  }
+
 @Override
 public NBTTagCompound getNBTTag()
   {
@@ -72,6 +79,7 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("health", lastKnownHealth);
   tag.setInteger("type", npcType);
   tag.setInteger("rank", npcRank);
+  tag.setBoolean("dead", this.dead);
   return tag;
   }
 
@@ -83,6 +91,13 @@ public void readFromNBT(NBTTagCompound tag)
   this.npcRank = tag.getInteger("rank");
   this.npcType = tag.getInteger("type");
   this.entityID = new UUID(tag.getLong("idmsb"), tag.getLong("idlsb"));
+  this.dead = tag.getBoolean("dead");
+  }
+
+@Override
+public String toString()
+  {
+  return String.format("%s R: %s P: %s H: %s", NpcTypeBase.getNpcType(npcType).getDisplayName(), npcRank, lastKnownPosition, lastKnownHealth);
   }
 
 }

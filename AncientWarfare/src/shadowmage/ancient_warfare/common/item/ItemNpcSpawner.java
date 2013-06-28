@@ -78,33 +78,10 @@ protected boolean tryUpgradeNpc(World world, EntityPlayer player, ItemStack stac
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
-  if(world.isRemote || stack == null)
+  if(world.isRemote || stack == null || hit==null)
     {
     return false;
     }
-// if(hit==null)
-//   {
-//   MovingObjectPosition pos = getMovingObjectPositionFromPlayer(world, player, true);  
-//   if(pos!=null && pos.entityHit instanceof NpcBase)
-//     {
-//     NpcBase npc = (NpcBase)pos.entityHit;
-//     if(npc.npcType.getGlobalNpcType()==stack.getItemDamage())
-//       {
-//       if(tryUpgradeNpc(world, player, stack, npc))
-//         {
-//         if(!player.capabilities.isCreativeMode)
-//           {
-//           stack.stackSize--;
-//           if(stack.stackSize<=0)
-//             {
-//             player.inventory.setInventorySlotContents(player.inventory.currentItem, null);    
-//             }
-//           }
-//         }    
-//       }          
-//     }
-//   return false;
-//   }
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
     {
     int level = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");    

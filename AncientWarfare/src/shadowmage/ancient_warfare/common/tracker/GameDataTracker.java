@@ -29,6 +29,7 @@ import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.tracker.entry.NpcDataEntry;
 import shadowmage.ancient_warfare.common.tracker.entry.NpcDataList;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 
@@ -48,6 +49,8 @@ AWGameData gameData = null;
  * stored to be viewable through npc town-hall block info GUI
  */
 HashMap<Integer, NpcDataList> npcTracker = new HashMap<Integer, NpcDataList>();
+
+HashMap<Integer, NpcDataList> deadNpcTracker = new HashMap<Integer, NpcDataList>();
 
 private GameDataTracker()
   {  
@@ -72,6 +75,16 @@ public void markGameDataDirty()
     }
   }
 
+public NpcDataList getListFor(int team)
+  {
+  return this.npcTracker.get(team);
+  }
+
+public NpcDataList getDeadListFor(int team)
+  {
+  return this.deadNpcTracker.get(team);
+  }
+
 public void handleNpcUpdate(NpcBase npc)
   {
   if(!this.npcTracker.containsKey(npc.teamNum))
@@ -86,9 +99,22 @@ public void handleNpcDeath(NpcBase npc)
   {
   if(!this.npcTracker.containsKey(npc.teamNum))
     {
-    return;
+    this.npcTracker.put(npc.teamNum, new NpcDataList(npc.teamNum));
     }
-  this.npcTracker.get(npc.teamNum).handleNpcDeath(npc);
+  NpcDataEntry data = this.npcTracker.get(npc.teamNum).getEntryFor(npc);
+  data.updateEntry(npc);
+  data.setDead();
+  if(!this.deadNpcTracker.containsKey(npc.teamNum))
+    {
+    this.deadNpcTracker.put(npc.teamNum, new NpcDataList(npc.teamNum));
+    }  
+  this.deadNpcTracker.get(npc.teamNum).addEntry(data);
+  this.markGameDataDirty();
+  }
+
+public void clearDeadEntries(int team)
+  {
+  this.deadNpcTracker.remove(team);
   this.markGameDataDirty();
   }
 
@@ -100,6 +126,7 @@ public void resetAllTrackedData()
   WorldGenManager.resetMap();
   AWCraftingManager.instance().resetClientData();
   this.npcTracker.clear();
+  this.deadNpcTracker.clear();
   this.markGameDataDirty();
   this.lastLoadedTimeStamp = -1L;
   }
@@ -134,6 +161,14 @@ public void loadNpcMap(NBTTagCompound tag)
     data.readFromNBT(entryTag);
     this.npcTracker.put(data.teamNum, data);
     }
+  list = tag.getTagList("deadList");
+  for(int i = 0; i < list.tagCount(); i++)
+    {
+    entryTag = (NBTTagCompound) list.tagAt(i);
+    data = new NpcDataList();
+    data.readFromNBT(entryTag);
+    this.deadNpcTracker.put(data.teamNum, data);
+    }
   }
 
 public NBTTagCompound getNpcMapTag()
@@ -145,6 +180,13 @@ public NBTTagCompound getNpcMapTag()
     list.appendTag(data.getNBTTag());
     }  
   tag.setTag("list", list);
+  
+  list = new NBTTagList();
+  for(NpcDataList data : this.deadNpcTracker.values())
+    {
+    list.appendTag(data.getNBTTag());
+    }
+  tag.setTag("deadList", list);
   return tag;
   }
 

@@ -23,14 +23,17 @@ package shadowmage.ancient_warfare.common.civics;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
@@ -83,6 +86,16 @@ public void updateEntity()
     InventoryTools.tryMergeStack(inventory, rationFilter.copy(), otherSlotIndices);
     this.foodValue -=2;
     }
+  }
+
+@Override
+public boolean onInteract(World world, EntityPlayer player)
+  {
+  if(!world.isRemote)
+    {
+    GUIHandler.instance().openGUI(GUIHandler.CIVIC_TOWNHALL, player, world, xCoord, yCoord, zCoord);
+    }
+  return true;
   }
 
 @Override

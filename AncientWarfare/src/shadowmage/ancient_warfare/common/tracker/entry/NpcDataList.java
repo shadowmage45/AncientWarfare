@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.tracker.entry;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -41,6 +42,16 @@ public NpcDataList(int team)
   this.teamNum = team;
   }
 
+public int getDataLength()
+  {
+  return this.npcDatas.size();
+  }
+
+public void addEntry(NpcDataEntry entry)
+  {
+  this.npcDatas.put(entry.entityID, entry);
+  }
+
 public void handleNpcUpdate(NpcBase npc)
   {
   if(!this.npcDatas.containsKey(npc.getPersistentID()))
@@ -49,6 +60,20 @@ public void handleNpcUpdate(NpcBase npc)
     return;
     }
   this.npcDatas.get(npc.getPersistentID()).updateEntry(npc);
+  }
+
+public Collection<NpcDataEntry> getDataList()
+  {
+  return this.npcDatas.values();
+  }
+
+public NpcDataEntry getEntryFor(NpcBase npc)
+  {
+  if(!this.npcDatas.containsKey(npc.getPersistentID()))
+    {
+    this.npcDatas.put(npc.getPersistentID(), new NpcDataEntry(npc));
+    }
+  return this.npcDatas.get(npc.getPersistentID());
   }
 
 public void handleNpcDeath(NpcBase npc)

@@ -188,5 +188,8 @@ TWEAKS/OPTIMIZATION
 * add ability to swap destination points on a routing slip (click on the block icon -- next 'added' point will replace the clicked point, maintaining filter list)
 * prep work on npc stat tracking
 
+* fix NPE on spawning NPC on no block (null hit coordinate)
+* npc stats gui mostly working, need to find a way to detect & remove invalid entries
+
 /********** 06-29-13 **********/
 /********** 06-30-13 **********/

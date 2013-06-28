@@ -51,6 +51,7 @@ import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 
 
 public class NpcRegistry
@@ -141,6 +142,8 @@ public static Entity getNpcForType(int num, World world, int level, int team)
         }
       }
     npc.teamNum = team;
+    Config.logDebug("handling npc update from NPC spawn (NpcRegistry.getNpcForType(...))");
+    GameDataTracker.instance().handleNpcUpdate(npc);
     return npc;
     }
   }

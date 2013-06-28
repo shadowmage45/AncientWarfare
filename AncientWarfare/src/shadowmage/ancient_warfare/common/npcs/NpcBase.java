@@ -925,6 +925,8 @@ public void readFromNBT(NBTTagCompound tag)
     } 
   this.npcUpkeepTicks = tag.getInteger("upkeep");
   this.npcHealingTicks = tag.getInteger("healing");
+  Config.logDebug("loading npc from NBT, reporting to data tracker");
+  GameDataTracker.instance().handleNpcUpdate(this);
   }
 
 @Override
