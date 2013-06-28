@@ -95,7 +95,7 @@ public void onElementActivated(IGuiElement element)
 public void setupControls()
   {
   this.addCheckBox(0, 176-8-18, 112+10, 18, 18).setChecked(teBase.broadcastWork);
-  this.addGuiButton(1, 176-8-18-45-18, 112+10-18, 45, 16, "Npc List");
+  this.addGuiButton(1, 5, 5+10+3*18+9, 55, 16, "Npc List");
   }
 
 @Override

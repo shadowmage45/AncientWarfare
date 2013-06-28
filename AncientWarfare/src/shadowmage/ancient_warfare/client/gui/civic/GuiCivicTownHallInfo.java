@@ -103,7 +103,7 @@ public void onElementActivated(IGuiElement element)
 public void setupControls()
   {
   this.addGuiButton(0, 256-5-40, 5, 40, 16, "Back");
-  area1 = new GuiScrollableArea(1, this, 5, 5+18, 256-14, 97, 0);
+  area1 = new GuiScrollableArea(1, this, 5, 5+18, 256-10, 97, 0);
   this.guiElements.put(1, area1);
   area2 = new GuiScrollableArea(2, this, 5, 5+18+97+20, 256-10, 97, 0);
   this.guiElements.put(2, area2);
@@ -120,14 +120,23 @@ public void updateControls()
     int y = 0;
     for(NpcDataEntry entry : this.container.datas.getDataList())
       {
-      area1.elements.add(new GuiString(y, area1, 256-20, 10, entry.toString()).updateRenderPos(0, y));
-      y +=14;
+      area1.elements.add(new GuiString(y, area1, 256-20, 10, entry.getPrimaryDescription()).updateRenderPos(0, y));
+      y += 10;
+      area1.elements.add(new GuiString(y, area1, 256-20, 10, entry.getLocation()).updateRenderPos(0, y));
+      y += 14;
       }    
     area1.updateTotalHeight(y);
     } 
   if(this.container.deadDatas!=null)
     {
     int y = 0;
+    for(NpcDataEntry entry : this.container.deadDatas.getDataList())
+      {
+      area2.elements.add(new GuiString(y, area2, 256-20, 10, entry.getPrimaryDescription()).updateRenderPos(0, y));
+      y += 10;
+      area2.elements.add(new GuiString(y, area2, 256-20, 10, entry.getLocation()).updateRenderPos(0, y));
+      y += 14;
+      }    
     area2.updateTotalHeight(y);
     }
   }

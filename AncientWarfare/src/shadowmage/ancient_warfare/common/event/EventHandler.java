@@ -41,6 +41,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 public class EventHandler
 {
@@ -67,6 +68,7 @@ public void onWorldLoad(WorldEvent.Load evt)
 @ForgeSubscribe
 public void onWorldUnload(WorldEvent.Unload evt)
   {
+  
   }
 
 @ForgeSubscribe

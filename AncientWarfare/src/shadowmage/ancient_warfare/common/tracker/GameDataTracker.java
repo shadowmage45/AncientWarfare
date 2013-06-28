@@ -102,12 +102,18 @@ public void handleNpcDeath(NpcBase npc)
     this.npcTracker.put(npc.teamNum, new NpcDataList(npc.teamNum));
     }
   NpcDataEntry data = this.npcTracker.get(npc.teamNum).getEntryFor(npc);
+  if(data==null)
+    {
+    data = new NpcDataEntry(npc);
+    }
+  this.npcTracker.get(npc.teamNum).handleNpcDeath(npc);
   data.updateEntry(npc);
   data.setDead();
   if(!this.deadNpcTracker.containsKey(npc.teamNum))
     {
     this.deadNpcTracker.put(npc.teamNum, new NpcDataList(npc.teamNum));
-    }  
+    }
+  Config.logDebug("adding dead npc entry");
   this.deadNpcTracker.get(npc.teamNum).addEntry(data);
   this.markGameDataDirty();
   }
@@ -127,17 +133,17 @@ public void resetAllTrackedData()
   AWCraftingManager.instance().resetClientData();
   this.npcTracker.clear();
   this.deadNpcTracker.clear();
+  this.gameData = null;
   this.markGameDataDirty();
   this.lastLoadedTimeStamp = -1L;
   }
 
 public void handleWorldLoad(World world)
   {
-  if(world.isRemote)
+  if(world.isRemote || this.gameData!=null)
     {
     return;
     }
-  Config.logDebug("loading game data from world");
   this.gameData = AWGameData.get(world);
   }
 
@@ -158,7 +164,7 @@ public void loadNpcMap(NBTTagCompound tag)
     {
     entryTag = (NBTTagCompound) list.tagAt(i);
     data = new NpcDataList();
-    data.readFromNBT(entryTag);
+    data.readFromNBT(entryTag);    
     this.npcTracker.put(data.teamNum, data);
     }
   list = tag.getTagList("deadList");

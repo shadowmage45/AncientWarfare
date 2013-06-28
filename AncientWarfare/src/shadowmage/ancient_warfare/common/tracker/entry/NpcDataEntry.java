@@ -37,7 +37,7 @@ public class NpcDataEntry implements INBTTaggable
 UUID entityID;
 int npcType;
 int npcRank;
-BlockPosition lastKnownPosition = new BlockPosition(0,0,0);
+BlockPosition lastKnownPosition = new BlockPosition(0,-1,0);
 int lastKnownHealth = 20;
 boolean dead = false;
 
@@ -98,6 +98,16 @@ public void readFromNBT(NBTTagCompound tag)
 public String toString()
   {
   return String.format("%s R: %s P: %s H: %s", NpcTypeBase.getNpcType(npcType).getDisplayName(), npcRank, lastKnownPosition, lastKnownHealth);
+  }
+
+public String getPrimaryDescription()
+  {
+  return String.format("%s  Rank: %s, Health: %s", NpcTypeBase.getNpcType(npcType).getDisplayName(), npcRank, lastKnownHealth);
+  }
+
+public String getLocation()
+  {
+  return String.format("Position: %s, %s, %s", lastKnownPosition.x, lastKnownPosition.y, lastKnownPosition.z);
   }
 
 }

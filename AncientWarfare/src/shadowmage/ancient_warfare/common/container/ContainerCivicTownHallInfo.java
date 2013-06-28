@@ -109,7 +109,7 @@ public void detectAndSendChanges()
       Config.logDebug("sending data");
       this.sendDataToPlayer(tag);
       }
-    if(deadDatas!=null && (deadDataLength!=deadDatas.getDataLength() || updateTicks>=20))
+    if(deadDatas!=null && deadDataLength!=deadDatas.getDataLength())
       {
       deadDataLength = deadDatas.getDataLength();
       NBTTagCompound tag = new NBTTagCompound();

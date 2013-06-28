@@ -271,8 +271,8 @@ protected void addButtonsFor(int index, WayPointItemRouting point)
   area.elements.add(button);
   sideButtons.add(button);
   
-  button = new GuiButtonSimple(index, area, 22, 14, "Del");
-  button.updateRenderPos(20*10+1, index*entryHeight+20);
+  button = new GuiButtonSimple(index, area, 21, 14, "Del");
+  button.updateRenderPos(20*10+2, index*entryHeight+20);
   area.elements.add(button);
   removeButtons.add(button);
   

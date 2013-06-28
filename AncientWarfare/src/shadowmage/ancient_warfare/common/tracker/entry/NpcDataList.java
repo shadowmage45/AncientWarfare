@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
@@ -49,13 +50,16 @@ public int getDataLength()
 
 public void addEntry(NpcDataEntry entry)
   {
+  Config.logDebug("adding entry...new size:"+(this.npcDatas.size()+1));  
   this.npcDatas.put(entry.entityID, entry);
   }
 
 public void handleNpcUpdate(NpcBase npc)
   {
+  if(npc.isDead){return;}
   if(!this.npcDatas.containsKey(npc.getPersistentID()))
     {
+    Config.logDebug("adding new npc from npc update new size: "+(this.npcDatas.size()+1));
     this.npcDatas.put(npc.getPersistentID(), new NpcDataEntry(npc));
     return;
     }
@@ -78,7 +82,10 @@ public NpcDataEntry getEntryFor(NpcBase npc)
 
 public void handleNpcDeath(NpcBase npc)
   {
+  Config.logDebug("removing npc from death...size: "+this.npcDatas.size());
   this.npcDatas.remove(npc.getPersistentID());
+  Config.logDebug("removed...new size: "+this.npcDatas.size());
+  
   }
 
 @Override
@@ -103,7 +110,10 @@ public void readFromNBT(NBTTagCompound tag)
     {
     NpcDataEntry entry = new NpcDataEntry();
     entry.readFromNBT((NBTTagCompound) list.tagAt(i));
-    this.npcDatas.put(entry.entityID, entry);
+    if(entry.lastKnownPosition.y>=0 && (entry.dead || entry.lastKnownHealth>0))
+      {
+      this.npcDatas.put(entry.entityID, entry);      
+      }
     }
   this.teamNum = tag.getInteger("team");
   }
