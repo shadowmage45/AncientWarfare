@@ -61,6 +61,14 @@ public WayPointItemRouting(int x, int y, int z, int side)
   super(x, y, z, side, TargetType.DELIVER);
   }
 
+public void reassignPoint(int x, int y, int z, int side)
+  {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  this.side = side;
+  }
+
 public int getFilterLength()
   {
   return this.filters.length;

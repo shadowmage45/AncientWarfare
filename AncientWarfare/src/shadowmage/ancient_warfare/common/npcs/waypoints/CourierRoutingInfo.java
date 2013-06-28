@@ -42,6 +42,7 @@ public class CourierRoutingInfo implements INBTTaggable
 {
 
 List<WayPointItemRouting> routingPoints = new ArrayList<WayPointItemRouting>();
+int swapPoint = -1;
 
 public CourierRoutingInfo(ItemStack stack)
   {
@@ -74,7 +75,27 @@ public void addRoutePoint(WayPointItemRouting point)
   {
   if(point!=null)
     {
-    this.routingPoints.add(point);
+    if(this.swapPoint>-1)
+      {
+      this.routingPoints.get(swapPoint).reassignPoint(point.floorX(), point.floorY(), point.floorZ(), point.getSide());
+      this.swapPoint = -1;
+      }
+    else
+      {
+      this.routingPoints.add(point);      
+      }
+    }
+  }
+
+public void setSwapPoint(int index)
+  {
+  if(index>=0 && index<this.routingPoints.size())
+    {
+    this.swapPoint = index;    
+    }
+  else
+    {
+    this.swapPoint = -1;
     }
   }
 
@@ -109,6 +130,11 @@ public void movePointUp(int index)
       this.routingPoints.add(index-1, p);      
       }
     }
+  }
+
+public int getSwapPoint()
+  {
+  return this.swapPoint;
   }
 
 public void movePointDown(int index)
@@ -149,6 +175,10 @@ public NBTTagCompound getNBTTag()
     points.appendTag(this.routingPoints.get(i).getNBTTag());
     }  
   tag.setTag("list", points);
+  if(this.swapPoint>-1)
+    {
+    tag.setInteger("swap", this.swapPoint);
+    }
   return tag;
   }
 
@@ -159,6 +189,10 @@ public void readFromNBT(NBTTagCompound tag)
   for(int i = 0; i < points.tagCount(); i++)
     {
     this.routingPoints.add(new WayPointItemRouting((NBTTagCompound)points.tagAt(i)));
+    }
+  if(tag.hasKey("swap"))
+    {
+    this.swapPoint = tag.getInteger("swap");
     }
   }
 

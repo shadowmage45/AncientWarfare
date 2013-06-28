@@ -124,6 +124,10 @@ public void handlePacketData(NBTTagCompound tag)
       info.movePointDown(filter);
       }
     }
+  if(tag.hasKey("swap"))
+    {
+    info.setSwapPoint(tag.getInteger("swap"));
+    }
   }
 
 @Override

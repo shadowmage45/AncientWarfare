@@ -81,7 +81,7 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player,  ItemStack stac
   if(te instanceof IInventory)
     {
     CourierRoutingInfo info = new CourierRoutingInfo(stack);
-    if(info.getRouteSize() < 4 + (2*stack.getItemDamage()))
+    if(info.getRouteSize() < 4 + (2*stack.getItemDamage()) || info.getSwapPoint()>-1)
       {
       info.addRoutePoint(new WayPointItemRouting(hit.x, hit.y, hit.z, side));
       info.writeToItem(stack);    

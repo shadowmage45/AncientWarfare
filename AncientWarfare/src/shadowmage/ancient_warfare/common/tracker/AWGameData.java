@@ -72,6 +72,10 @@ public void readFromNBT(NBTTagCompound tag)
     Config.logDebug("loading spawned structure data");
     WorldGenManager.instance().readFromNBT(tag.getCompoundTag("structMap"));
     }
+  if(tag.hasKey("npcMap"))
+    {
+    GameDataTracker.instance().loadNpcMap(tag.getCompoundTag("npcMap"));
+    }
   }
 
 @Override
@@ -81,6 +85,7 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setCompoundTag("teamData", TeamTracker.instance().getNBTTag());
   tag.setCompoundTag("builders", AWStructureModule.instance().getNBTTag());  
   tag.setCompoundTag("structMap", WorldGenManager.instance().getNBTTag());  
+  tag.setCompoundTag("npcMap", GameDataTracker.instance().getNpcMapTag());
   }
 
 public static AWGameData get(World world) 

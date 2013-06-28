@@ -86,6 +86,15 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void onElementActivated(IGuiElement element)
   {
+  if(blockSlots.contains(element))
+    {
+    int num = element.getElementNumber();
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setInteger("swap", num);
+    this.sendDataToServer(tag);
+    this.closeGUI();
+    return;
+    }
   if(slots.contains(element))
     {
     if(element==this.currentMouseElement)//handle slot click
@@ -177,6 +186,7 @@ HashSet<GuiButtonSimple> downButtons = new HashSet<GuiButtonSimple>();
 HashSet<GuiButtonSimple> removeButtons = new HashSet<GuiButtonSimple>();
 HashSet<GuiButtonSimple> typeButtons = new HashSet<GuiButtonSimple>();
 HashSet<GuiButtonSimple> deliverButtons = new HashSet<GuiButtonSimple>();
+HashSet<GuiFakeSlot> blockSlots = new HashSet<GuiFakeSlot>();
 
 @Override
 public void setupControls()
@@ -198,8 +208,11 @@ protected void addButtonsFor(int index, WayPointItemRouting point)
   GuiFakeSlot slot;// = new GuiFakeSlot(0, area, k*20, 20*i);
   GuiCheckBoxSimple box;
   GuiButtonSimple button;
-  slot = new GuiFakeSlot(0, area, 0, index*entryHeight);
-  slot.enabled = false;
+  slot = new GuiFakeSlot(index, area, 0, index*entryHeight);
+  slot.enabled = true;
+  slot.isClickable = true;
+  slot.autoUpdateOnClick = false;
+  blockSlots.add(slot);
   int id = player.worldObj.getBlockId(point.floorX(), point.floorY(), point.floorZ());
   int meta = player.worldObj.getBlockMetadata(point.floorX(), point.floorY(), point.floorZ());
   if(id!=0 && Block.blocksList[id]!=null)

@@ -9,8 +9,7 @@ FROM TESTING
 * routing slip/furnace interaction is strange
 * death journal for NPCs
 * npc tracking for town-halls
-    (town hall links up to a game-wide list of NPCs for that team)
-* ability to swap/change/reassign block positions in routing slip    
+    (town hall links up to a game-wide list of NPCs for that team) 
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -186,5 +185,8 @@ TWEAKS/OPTIMIZATION
 * rename many civics slightly (remove 'Small'..there will be only 1 size)
 
 /********** 06-28-13 **********/
+* add ability to swap destination points on a routing slip (click on the block icon -- next 'added' point will replace the clicked point, maintaining filter list)
+* prep work on npc stat tracking
+
 /********** 06-29-13 **********/
 /********** 06-30-13 **********/

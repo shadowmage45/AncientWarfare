@@ -22,6 +22,7 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 
@@ -67,6 +68,13 @@ public BlockPosition(BlockPosition pos)
   this.x = pos.x;
   this.y = pos.y;
   this.z = pos.z;
+  }
+
+public void updateFromEntityPosition(Entity ent)
+  {
+  this.x = MathHelper.floor_double(ent.posX);
+  this.y = MathHelper.floor_double(ent.posY);
+  this.z = MathHelper.floor_double(ent.posZ);
   }
 
 /**

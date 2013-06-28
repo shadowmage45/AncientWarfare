@@ -33,7 +33,7 @@ protected TargetType type;
 protected int x;
 protected int y; 
 protected int z;
-private int side = -1;
+protected int side = -1;
 
 public TargetPosition(NBTTagCompound tag)
   {

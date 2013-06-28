@@ -58,6 +58,7 @@ import shadowmage.ancient_warfare.common.pathfinding.navigator.Navigator;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.targeting.TargetPosition;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -544,6 +545,10 @@ public void setDead()
     {
     this.getRidingVehicle().moveHelper.clearInputFromDismount();
     }
+  if(!this.worldObj.isRemote)
+    {
+    GameDataTracker.instance().handleNpcDeath(this);
+    }
   }
 
 public void setActionTicksToMax()
@@ -568,6 +573,10 @@ public void onUpdate()
     if(this.wayNav.getCommander()!=null && this.wayNav.getCommander().getTargetType()==TargetType.ATTACK)
       {
       this.handleBroadcastAttackTarget(this.wayNav.getCommander().getTarget().getEntity(worldObj),2);
+      }
+    if(!this.worldObj.isRemote)
+      {
+      GameDataTracker.instance().handleNpcUpdate(this);      
       }
     }  
   if(this.npcUpkeepTicks>0)
