@@ -128,6 +128,12 @@ public void handlePacketData(NBTTagCompound tag)
     {
     info.setSwapPoint(tag.getInteger("swap"));
     }
+  if(tag.hasKey("side"))
+    {
+    byte filter = tag.getByte("f");
+    info.getPoint(filter).incrementSide();
+    Config.logDebug("incrementing side, server!!");
+    }
   }
 
 @Override

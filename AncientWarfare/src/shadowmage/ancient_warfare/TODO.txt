@@ -7,9 +7,7 @@ FROM TESTING
 * adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
 * possibly not saving research still
 * routing slip/furnace interaction is strange
-* death journal for NPCs
-* npc tracking for town-halls
-    (town hall links up to a game-wide list of NPCs for that team) 
+* investigate ghost items placed into player inventory (not closing a gui correctly?)
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -190,6 +188,8 @@ TWEAKS/OPTIMIZATION
 
 * fix NPE on spawning NPC on no block (null hit coordinate)
 * npc stats gui mostly working, need to find a way to detect & remove invalid entries
+
+* add ability to swap side of block in routing slip (increments side)
 
 /********** 06-29-13 **********/
 /********** 06-30-13 **********/

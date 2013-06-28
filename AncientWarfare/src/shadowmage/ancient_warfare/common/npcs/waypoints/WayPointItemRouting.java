@@ -69,6 +69,16 @@ public void reassignPoint(int x, int y, int z, int side)
   this.side = side;
   }
 
+public void incrementSide()
+  {
+  this.side++;
+  if(this.side>=6)
+    {
+    this.side = 0;
+    }
+  Config.logDebug("incrementing side");
+  }
+
 public int getFilterLength()
   {
   return this.filters.length;

@@ -170,6 +170,15 @@ public void onElementActivated(IGuiElement element)
     button.setButtonText(p.getRoutingType().name());
     this.sendDataToServer(tag);
     }
+  if(sideButtons.contains(element))
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setByte("f", (byte)element.getElementNumber());
+    tag.setBoolean("side", true);
+    this.container.info.getPoint(element.getElementNumber()).incrementSide();
+    this.sendDataToServer(tag);
+    this.refreshGui();
+    }
   }
 
 @Override
@@ -183,6 +192,7 @@ HashSet<GuiFakeSlot> slots = new HashSet<GuiFakeSlot>();
 HashSet<GuiCheckBoxSimple> deliverBoxes = new HashSet<GuiCheckBoxSimple>();
 HashSet<GuiButtonSimple> upButtons = new HashSet<GuiButtonSimple>();
 HashSet<GuiButtonSimple> downButtons = new HashSet<GuiButtonSimple>();
+HashSet<GuiButtonSimple> sideButtons = new HashSet<GuiButtonSimple>();
 HashSet<GuiButtonSimple> removeButtons = new HashSet<GuiButtonSimple>();
 HashSet<GuiButtonSimple> typeButtons = new HashSet<GuiButtonSimple>();
 HashSet<GuiButtonSimple> deliverButtons = new HashSet<GuiButtonSimple>();
@@ -222,14 +232,16 @@ protected void addButtonsFor(int index, WayPointItemRouting point)
       {
       BlockCivic blockC = (BlockCivic)block;
       slot.setItemStack(CivicRegistry.instance().getItemFor(blockC.blockNum, meta));
-      slot.addToToolitp("Routing Waypoint: "+point.floorX()+", "+point.floorY()+", "+point.floorZ() + "  Side: "+ForgeDirection.getOrientation(point.getSide())); 
+      slot.addToToolitp("Block: "+point.floorX()+", "+point.floorY()+", "+point.floorZ() + "  Side: "+ForgeDirection.getOrientation(point.getSide())); 
       slot.addToToolitp(slot.getStack().getDisplayName());
+      slot.addToToolitp("Click to change block position");
       }
     else
       {
       slot.setItemStack(new ItemStack(block,1,meta));
-      slot.addToToolitp("Routing Waypoint: "+point.floorX()+", "+point.floorY()+", "+point.floorZ() + "  Side: "+ForgeDirection.getOrientation(point.getSide())); 
+      slot.addToToolitp("Block: "+point.floorX()+", "+point.floorY()+", "+point.floorZ() + "  Side: "+ForgeDirection.getOrientation(point.getSide())); 
       slot.addToToolitp(slot.getStack().getDisplayName());
+      slot.addToToolitp("Click to change block position");
       }
     }
   area.elements.add(slot);
@@ -244,18 +256,23 @@ protected void addButtonsFor(int index, WayPointItemRouting point)
   area.elements.add(button);
   deliverButtons.add(button);
   
-  button = new GuiButtonSimple(index, area, 18, 18, "+");
-  button.updateRenderPos(20*9, index*entryHeight);
+  button = new GuiButtonSimple(index, area, 20, 18, "+");
+  button.updateRenderPos(20*9+1, index*entryHeight);
   area.elements.add(button);
   upButtons.add(button);
   
-  button = new GuiButtonSimple(index, area, 18, 18, "-");
-  button.updateRenderPos(20*10, index*entryHeight);
+  button = new GuiButtonSimple(index, area, 20, 18, "-");
+  button.updateRenderPos(20*10+3, index*entryHeight);
   area.elements.add(button);
   downButtons.add(button);
   
+  button = new GuiButtonSimple(index, area, 36, 14, ForgeDirection.VALID_DIRECTIONS[point.getSide()].toString());
+  button.updateRenderPos(17*10-6, index*entryHeight+20);
+  area.elements.add(button);
+  sideButtons.add(button);
+  
   button = new GuiButtonSimple(index, area, 22, 14, "Del");
-  button.updateRenderPos(20*10-4, index*entryHeight+20);
+  button.updateRenderPos(20*10+1, index*entryHeight+20);
   area.elements.add(button);
   removeButtons.add(button);
   
