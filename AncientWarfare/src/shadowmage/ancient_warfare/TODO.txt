@@ -6,22 +6,13 @@ FROM TESTING
 * investigate gate redstone interaction
 * adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
 * possibly not saving research still (hopefully fixed with not reworking of game-data loading 6-28-13)
-* routing slip/furnace interaction is strange (hopefully fixed with side-swap button 6-28-13)
 * investigate ghost items placed into player inventory (not closing a gui correctly?)
-* verify couriers drop special inventory slots on death
-* rework non-courier npc guis to be more compact/non-existent
 * add 'go back to base gui' button to info guis
-* add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
-* add some ability to 'copy' routing slips (quick transcription table? do it in the research or npc crafting tables?)
-* warehouse will occasionally not x-mit datas (or just not receive them properly)
 * adjust npc shadow size (its like 2-blocks currently)
-* add death cause/display to dead-npc tracker
-* add clear tracker ability for both live and dead npc trackers
 
 BALANCE/TWEAKS
 * examine recipe balance
 * routing slips more expensive
-* require backpack item for couriers?
 * farmers too OP harvesting too many farms?
 * patrols are a bit 'hard' to setup
 
@@ -31,6 +22,7 @@ TEXTURE/ART
 * icons for NPC spawner items
 * model/texture for new crafting stations (chemistry, auto-crafting)
 * textures for new reinforced blocks
+* textures for backpack (1)
 
 GENERAL
 * add name search/filter box to structure builder guis
@@ -48,6 +40,7 @@ GENERAL
 * fix rotation of rendered crafting station blocks in inventory
 * fix position of rendered crafting station blocks when held/on ground (item form)
 * NEI plugin for special crafting recipes
+* add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
 
 REINFORCED BLOCKS
 * figure out method to allow for partially destroyed blocks w/ destroyed texture rendering
@@ -202,7 +195,6 @@ TWEAKS/OPTIMIZATION
 * clean up remaining bugs in NPC tracking list, fully functional now
 * rework game-data loading to prevent overwriting of already existing data (may resolve research occasionally not saving)
 * implement game-data resetting on server-stop, should clean up issues of game-data persisting between worlds
-
 * fix background lighting issue when hovering over fake slots / some other gui elements (mostly those with tooltips)
 * add ability to adjust quantities in routing slip as such: 
     If item on cursor matches item in slot:
@@ -223,4 +215,14 @@ TWEAKS/OPTIMIZATION
 * simplify code for default target list
     
 /********** 06-29-13 **********/
+* fix -- warehouse will occasionally not x-mit datas (or just not receive them properly)(client will now request datas if not present after 1/4 second, and until it has received it)
+* re-enable version checking for SMP (needs real test)
+* add clear buttons for npc info lists (live list will repopulate as entities are loaded/check in)
+* add death cause/display to dead-npc tracker
+* add some ability to 'copy' routing slips (if shift-right click && routing slip is present in next slot, copy to next slot)
+* fix -- couriers/other npcs will now drop 'special inventory' on death (routing slip slots)
+* remove gui from non-courier NPCs as they no longer have inventories (may be replaced in the future with an info GUI)
+* add backpack item, container, gui, recipes
+* add backpack as necessary item for couriers
+
 /********** 06-30-13 **********/

@@ -71,8 +71,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   if(npc.npcType.getSpecInventorySize(npc.rank)>0)
     {
     this.drawStringGui("Special Tools", 8, 5 + 10 + 3*18 + 5, 0xffffffff);
-    }
-  
+    }  
   this.drawStringGui("Class: "+npc.npcType.getDisplayName(), 8, 112, 0xffffffff);
   }
 

@@ -255,7 +255,7 @@ public void loadRecipes()
      
   //iron rings
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(ItemLoader.componentItem, 5, ItemLoader.ironRings.getItemDamage()), new Object[] {"_i_","i_i", 'i', Item.ingotIron} ));
-  
+      
   //iron ring->chain mail  
   for (int i = 0; i < this.recipeItems[0].length; ++i)
     {
@@ -368,6 +368,30 @@ protected void addCivicRecipes()
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.crafting,1,7), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,1,false);  
   recipe.addResource(Block.planks,7,false);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.backpack,1,0), RecipeType.CIVIC_MISC);
+  recipe.addResource(Block.chest,1,false);  
+  recipe.addResource(Block.cloth,8,true);
+  recipe.addNeededResearch(ResearchGoalNumbers.logistics2);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.backpack,1,16), RecipeType.CIVIC_MISC);
+  recipe.addResource(Block.chest,2,false);  
+  recipe.addResource(Block.cloth,8,true);
+  recipe.addNeededResearch(ResearchGoalNumbers.logistics3);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.backpack,1,32), RecipeType.CIVIC_MISC);
+  recipe.addResource(Block.chest,3,false);  
+  recipe.addResource(Block.cloth,8,true);
+  recipe.addNeededResearch(ResearchGoalNumbers.logistics4);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.backpack,1,48), RecipeType.CIVIC_MISC);
+  recipe.addResource(Block.chest,4,false);  
+  recipe.addResource(Block.cloth,8,true);
+  recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
   this.civicMiscRecipes.add(recipe);
   
   Config.logDebug("finished loading civic recipes");

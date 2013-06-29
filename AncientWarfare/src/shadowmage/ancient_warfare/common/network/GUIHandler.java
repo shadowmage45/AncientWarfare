@@ -40,6 +40,7 @@ import shadowmage.ancient_warfare.client.gui.crafting.GuiNpcCraft;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiResearch;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiVehicleCrafting;
 import shadowmage.ancient_warfare.client.gui.info.GuiResearchBook;
+import shadowmage.ancient_warfare.client.gui.npc.GuiBackpack;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCommandBaton;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCourierRoutingSlip;
 import shadowmage.ancient_warfare.client.gui.npc.GuiNpcBase;
@@ -58,6 +59,7 @@ import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.container.ContainerAWAutoCrafting;
 import shadowmage.ancient_warfare.common.container.ContainerAWCrafting;
+import shadowmage.ancient_warfare.common.container.ContainerBackpack;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTE;
@@ -111,6 +113,7 @@ public static final int CIVIC_WAREHOUSE = 12;
 public static final int CIVIC_TOWNHALL = 13;
 public static final int CIVIC_TOWNHALL_INFO = 14;
 
+public static final int BACKPACK = 39;
 public static final int INFO = 40;
 public static final int CIVIL_ENGINEERING = 41;
 public static final int RESEARCH = 42;
@@ -231,6 +234,13 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   
   case INFO:
   return new ContainerDummy();
+  
+  case BACKPACK:
+  if(player.inventory.getCurrentItem()!=null && player.inventory.getCurrentItem().itemID == ItemLoader.backpack.itemID)
+    {
+    return new ContainerBackpack(player);
+    }
+  return null;
   
   case CIVIL_ENGINEERING:
   te = world.getBlockTileEntity(x, y, z);
@@ -435,6 +445,13 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
     {
     TEAWCivicCraft tew = (TEAWCivicCraft)te;
     return new GuiEngineeringStation(new ContainerAWCrafting(player, tew));
+    }
+  return null;
+  
+  case BACKPACK:
+  if(player.inventory.getCurrentItem()!=null && player.inventory.getCurrentItem().itemID == ItemLoader.backpack.itemID)
+    {
+    return new GuiBackpack(new ContainerBackpack(player));   
     }
   return null;
   

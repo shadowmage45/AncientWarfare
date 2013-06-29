@@ -50,6 +50,9 @@ Set<GuiItemStack> stacks = new HashSet<GuiItemStack>();
 GuiTextInputLine searchBox;
 StackWrapperComparatorAlphaAZ sorter = new StackWrapperComparatorAlphaAZ();
 
+boolean receivedInfo = false;
+int recTick =0;
+
 /**
  * @param container
  */
@@ -96,6 +99,17 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 public void updateScreenContents()
   {
   this.area.updateGuiPos(guiLeft, guiTop);
+  if(!this.container.receivedDatas)
+    {
+    recTick++;
+    if(recTick>=5)
+      {
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setBoolean("reqInit", true);
+      this.sendDataToServer(tag);
+      recTick = 0;
+      }    
+    }
   }
 
 @Override

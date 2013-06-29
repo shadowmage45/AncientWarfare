@@ -40,6 +40,7 @@ int npcRank;
 BlockPosition lastKnownPosition = new BlockPosition(0,-1,0);
 int lastKnownHealth = 20;
 boolean dead = false;
+String deathCause = null;
 
 /**
  * 
@@ -64,9 +65,10 @@ public void updateEntry(NpcBase npc)
   this.lastKnownPosition.updateFromEntityPosition(npc);
   }
 
-public void setDead()
+public void setDead(String cause)
   {
   this.dead = true;
+  this.deathCause = cause;
   }
 
 @Override
@@ -80,6 +82,10 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("type", npcType);
   tag.setInteger("rank", npcRank);
   tag.setBoolean("dead", this.dead);
+  if(deathCause!=null)
+    {
+    tag.setString("deathCause", deathCause);
+    }
   return tag;
   }
 
@@ -92,6 +98,10 @@ public void readFromNBT(NBTTagCompound tag)
   this.npcType = tag.getInteger("type");
   this.entityID = new UUID(tag.getLong("idmsb"), tag.getLong("idlsb"));
   this.dead = tag.getBoolean("dead");
+  if(tag.hasKey("deathCause"))
+    {
+    this.deathCause = tag.getString("deathCause");
+    }
   }
 
 @Override
@@ -102,11 +112,15 @@ public String toString()
 
 public String getPrimaryDescription()
   {
+  if(deathCause!=null)
+    {
+    return String.format("%s  Rank: %s  Killed By: %s ", NpcTypeBase.getNpcType(npcType).getDisplayName(), npcRank, deathCause);
+    }
   return String.format("%s  Rank: %s, Health: %s", NpcTypeBase.getNpcType(npcType).getDisplayName(), npcRank, lastKnownHealth);
   }
 
 public String getLocation()
-  {
+  {  
   return String.format("Position: %s, %s, %s", lastKnownPosition.x, lastKnownPosition.y, lastKnownPosition.z);
   }
 

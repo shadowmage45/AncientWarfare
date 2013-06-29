@@ -364,7 +364,7 @@ public String getIconTexture()
 @Override
 public void openGui(EntityPlayer player, NpcBase npc)
   {  
-  GUIHandler.instance().openGUI(GUIHandler.NPC_BASE, player, npc.worldObj, npc.entityId, 0, 0);
+  //GUIHandler.instance().openGUI(GUIHandler.NPC_BASE, player, npc.worldObj, npc.entityId, 0, 0);
   }
 
 @Override

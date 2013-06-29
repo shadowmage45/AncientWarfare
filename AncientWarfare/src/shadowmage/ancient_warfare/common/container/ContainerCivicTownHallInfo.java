@@ -61,7 +61,6 @@ public void handlePacketData(NBTTagCompound tag)
   {
   if(tag.hasKey("data"))
     {
-    Config.logDebug("receiving npc datas!!");
     this.datas = new NpcDataList();
     this.datas.readFromNBT(tag.getCompoundTag("data"));
     if(this.gui!=null)
@@ -71,14 +70,21 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("deadData"))
     {
-    Config.logDebug("receiving dead npc datas!!");
     this.deadDatas = new NpcDataList();
     this.deadDatas.readFromNBT(tag.getCompoundTag("deadData"));
     if(this.gui!=null)
       {
       this.gui.refreshGui();
       }
-    }  
+    } 
+  if(tag.hasKey("clearLiving"))
+    {
+    GameDataTracker.instance().clearLivingEntries(teBase.getTeamNum());
+    }
+  if(tag.hasKey("clearDead"))
+    {
+    GameDataTracker.instance().clearDeadEntries(teBase.getTeamNum());
+    }
   }
 
 @Override
@@ -106,7 +112,6 @@ public void detectAndSendChanges()
       dataLength = datas.getDataLength();
       NBTTagCompound tag = new NBTTagCompound();
       tag.setCompoundTag("data", datas.getNBTTag());
-      Config.logDebug("sending data");
       this.sendDataToPlayer(tag);
       }
     if(deadDatas!=null && deadDataLength!=deadDatas.getDataLength())
@@ -114,7 +119,6 @@ public void detectAndSendChanges()
       deadDataLength = deadDatas.getDataLength();
       NBTTagCompound tag = new NBTTagCompound();
       tag.setCompoundTag("deadData", deadDatas.getNBTTag());
-      Config.logDebug("sending deadData");
       this.sendDataToPlayer(tag);
       }
     if(updateTicks>=20)

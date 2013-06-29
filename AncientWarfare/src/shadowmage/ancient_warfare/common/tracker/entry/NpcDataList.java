@@ -50,7 +50,6 @@ public int getDataLength()
 
 public void addEntry(NpcDataEntry entry)
   {
-  Config.logDebug("adding entry...new size:"+(this.npcDatas.size()+1));  
   this.npcDatas.put(entry.entityID, entry);
   }
 
@@ -59,7 +58,6 @@ public void handleNpcUpdate(NpcBase npc)
   if(npc.isDead){return;}
   if(!this.npcDatas.containsKey(npc.getPersistentID()))
     {
-    Config.logDebug("adding new npc from npc update new size: "+(this.npcDatas.size()+1));
     this.npcDatas.put(npc.getPersistentID(), new NpcDataEntry(npc));
     return;
     }
@@ -82,10 +80,7 @@ public NpcDataEntry getEntryFor(NpcBase npc)
 
 public void handleNpcDeath(NpcBase npc)
   {
-  Config.logDebug("removing npc from death...size: "+this.npcDatas.size());
   this.npcDatas.remove(npc.getPersistentID());
-  Config.logDebug("removed...new size: "+this.npcDatas.size());
-  
   }
 
 @Override

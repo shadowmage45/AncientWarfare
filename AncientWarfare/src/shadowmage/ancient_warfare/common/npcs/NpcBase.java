@@ -540,15 +540,13 @@ public void setDead()
   if(this.worldObj!=null && !this.worldObj.isRemote && this.inventory.getSizeInventory()>0)
     {
     InventoryTools.dropInventoryInWorld(worldObj, inventory, posX, posY, posZ);
+    InventoryTools.dropInventoryInWorld(worldObj, specInventory, posX, posY, posZ);
     }
   if(!this.worldObj.isRemote && this.isRidingVehicle())
     {
     this.getRidingVehicle().moveHelper.clearInputFromDismount();
     }
-  if(!this.worldObj.isRemote)
-    {
-    GameDataTracker.instance().handleNpcDeath(this);
-    }
+  
   }
 
 public void setActionTicksToMax()
@@ -847,20 +845,27 @@ public void handlePacketUpdate(NBTTagCompound tag)
   }
 
 @Override
-public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
+public boolean attackEntityFrom(DamageSource damageSource, int damageAmount)
   {  
   if(wayNav.getCommander()!=null)
     {
-    par2 -= (2 + wayNav.getCommander().rank)/2;
-    if(par2<1)
+    damageAmount -= (2 + wayNav.getCommander().rank)/2;
+    if(damageAmount<1)
       {
-      par2 = 1;
+      damageAmount = 1;
       }
     }
-  super.attackEntityFrom(par1DamageSource, par2);
-  if(par1DamageSource.getEntity() instanceof EntityLiving)
+  super.attackEntityFrom(damageSource, damageAmount);
+  if(damageSource.getEntity() instanceof EntityLiving)
     {
-    this.targetHelper.handleBeingAttacked((EntityLiving)par1DamageSource.getEntity()); 
+    this.targetHelper.handleBeingAttacked((EntityLiving)damageSource.getEntity()); 
+    }
+  if(!this.isDead && this.health<=0)
+    {
+    if(!this.worldObj.isRemote)
+      {
+      GameDataTracker.instance().handleNpcDeath(this, damageSource);
+      }
     }
   return true;
   }

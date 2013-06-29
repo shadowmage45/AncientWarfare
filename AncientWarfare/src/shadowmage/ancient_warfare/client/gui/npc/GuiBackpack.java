@@ -24,18 +24,23 @@ import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
-public class GuiNpcCourier extends GuiNpcBase
+public class GuiBackpack extends GuiContainerAdvanced
 {
 
-NpcBase npc;
 /**
  * @param container
  */
-public GuiNpcCourier(Container container,  NpcBase npc)
+public GuiBackpack(Container container)
   {
-  super(container, npc);
+  super(container);
+  this.shouldCloseOnVanillaKeys = true;
+  }
+
+@Override
+public void onElementActivated(IGuiElement element)
+  {
+
   }
 
 @Override
@@ -59,11 +64,22 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawStringGui("Inventory", 8, 5, 0xffffffff);
-  if(npc.npcType.getSpecInventorySize(npc.rank)>0)
-    {
-    this.drawStringGui("Special Tools", 8, 5 + 10 + 3*18 + 5, 0xffffffff);
-    }  
-  this.drawStringGui("Class: "+npc.npcType.getDisplayName(), 8, 112, 0xffffffff);
   }
+
+@Override
+public void updateScreenContents()
+  {
+
+  }
+
+@Override
+public void setupControls()
+  {
+  }
+
+@Override
+public void updateControls()
+  {
+  }
+
 }

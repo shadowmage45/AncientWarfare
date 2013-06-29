@@ -79,7 +79,8 @@ import cpw.mods.fml.relauncher.Side;
 clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
-channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"}
+channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
+versionBounds="MC"+Config.MC_VERSION+"-"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_BUILD+"-"+Config.CORE_BUILD_STATUS
 //versionBounds="["+"MC"+Config.MC_VERSION+"-"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_BUILD+",)"
 )
 

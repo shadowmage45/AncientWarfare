@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.client.gui.civic;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
@@ -91,11 +92,21 @@ public void onElementActivated(IGuiElement element)
     this.closeGUI();
     GUIHandler.instance().openGUI(GUIHandler.CIVIC_TOWNHALL, player, player.worldObj, teBase.xCoord, teBase.yCoord, teBase.zCoord);
     }
-  else
+  else if(element.getElementNumber()==3)//clear living
     {
-    /**
-     * TODO...nothing? just info displays in areas?
-     */
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("clearLiving", true);
+    this.sendDataToServer(tag);
+    this.container.datas = null;
+    this.refreshGui();
+    }
+  else if(element.getElementNumber()==4)//clear dead
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("clearDead", true);
+    this.sendDataToServer(tag);
+    this.container.deadDatas = null;
+    this.refreshGui();
     }
   }
 
@@ -103,6 +114,8 @@ public void onElementActivated(IGuiElement element)
 public void setupControls()
   {
   this.addGuiButton(0, 256-5-40, 5, 40, 16, "Back");
+  this.addGuiButton(3, 5, 5, 40, 16, "Clear");
+  this.addGuiButton(4, 5, 5+97+20, 40, 16, "Clear");
   area1 = new GuiScrollableArea(1, this, 5, 5+18, 256-10, 97, 0);
   this.guiElements.put(1, area1);
   area2 = new GuiScrollableArea(2, this, 5, 5+18+97+20, 256-10, 97, 0);
@@ -120,9 +133,9 @@ public void updateControls()
     int y = 0;
     for(NpcDataEntry entry : this.container.datas.getDataList())
       {
-      area1.elements.add(new GuiString(y, area1, 256-20, 10, entry.getPrimaryDescription()).updateRenderPos(0, y));
+      area1.elements.add(new GuiString(6, area1, 256-20, 10, entry.getPrimaryDescription()).updateRenderPos(0, y));
       y += 10;
-      area1.elements.add(new GuiString(y, area1, 256-20, 10, entry.getLocation()).updateRenderPos(0, y));
+      area1.elements.add(new GuiString(6, area1, 256-20, 10, entry.getLocation()).updateRenderPos(0, y));
       y += 14;
       }    
     area1.updateTotalHeight(y);
@@ -132,9 +145,9 @@ public void updateControls()
     int y = 0;
     for(NpcDataEntry entry : this.container.deadDatas.getDataList())
       {
-      area2.elements.add(new GuiString(y, area2, 256-20, 10, entry.getPrimaryDescription()).updateRenderPos(0, y));
+      area2.elements.add(new GuiString(6, area2, 256-20, 10, entry.getPrimaryDescription()).updateRenderPos(0, y));
       y += 10;
-      area2.elements.add(new GuiString(y, area2, 256-20, 10, entry.getLocation()).updateRenderPos(0, y));
+      area2.elements.add(new GuiString(6, area2, 256-20, 10, entry.getLocation()).updateRenderPos(0, y));
       y += 14;
       }    
     area2.updateTotalHeight(y);

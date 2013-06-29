@@ -24,6 +24,7 @@ import java.util.HashMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -95,7 +96,7 @@ public void handleNpcUpdate(NpcBase npc)
   this.markGameDataDirty();
   }
 
-public void handleNpcDeath(NpcBase npc)
+public void handleNpcDeath(NpcBase npc, DamageSource src)
   {
   if(!this.npcTracker.containsKey(npc.teamNum))
     {
@@ -108,7 +109,7 @@ public void handleNpcDeath(NpcBase npc)
     }
   this.npcTracker.get(npc.teamNum).handleNpcDeath(npc);
   data.updateEntry(npc);
-  data.setDead();
+  data.setDead(src.getDamageType());
   if(!this.deadNpcTracker.containsKey(npc.teamNum))
     {
     this.deadNpcTracker.put(npc.teamNum, new NpcDataList(npc.teamNum));
@@ -121,6 +122,12 @@ public void handleNpcDeath(NpcBase npc)
 public void clearDeadEntries(int team)
   {
   this.deadNpcTracker.remove(team);
+  this.markGameDataDirty();
+  }
+
+public void clearLivingEntries(int team)
+  {
+  this.npcTracker.remove(team);
   this.markGameDataDirty();
   }
 

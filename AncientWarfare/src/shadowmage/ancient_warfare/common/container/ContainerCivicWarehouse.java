@@ -28,6 +28,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryMapped;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapper;
@@ -44,6 +45,8 @@ protected StackWrapperComparatorAlphaAZ azSorter = new StackWrapperComparatorAlp
 protected AWInventoryMapped cacheInventory = new AWInventoryMapped(0);
 
 public int filledSlotCount = 0;
+
+public boolean receivedDatas = false;
 
 /**
  * @param openingPlayer
@@ -175,11 +178,17 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("init"))
     {
+    this.receivedDatas = true;
     this.handleInitData(tag);
     if(this.gui!=null)
       {
       this.gui.refreshGui();
       }
+    }
+  if(tag.hasKey("reqInit") && !player.worldObj.isRemote)
+    {
+    Config.logDebug("sending inventory to client from request");
+    this.updateAndSendInventory(true);
     }
   }
 
@@ -207,6 +216,7 @@ public void handleInitData(NBTTagCompound tag)
   {
   this.warehouseItems = InventoryTools.getCompactInventoryFromTag(tag);
   this.filledSlotCount = tag.getInteger("filledSlotCount");  
+  this.receivedDatas = true;
   }
 
 @Override
@@ -229,7 +239,13 @@ public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
 @Override
 public void detectAndSendChanges()
   {
-  boolean sendPacket = false;
+  this.updateAndSendInventory(false); 
+  super.detectAndSendChanges();
+  }
+
+protected void updateAndSendInventory(boolean defaultVal)
+  {
+  boolean sendPacket = defaultVal;
   if(te.getSizeInventory()!=cacheInventory.getSizeInventory())
     {
     sendPacket = true;
@@ -265,7 +281,6 @@ public void detectAndSendChanges()
     tag.setBoolean("init", true);
     this.sendDataToPlayer(tag);
     }  
-  super.detectAndSendChanges();
   }
 
 @Override

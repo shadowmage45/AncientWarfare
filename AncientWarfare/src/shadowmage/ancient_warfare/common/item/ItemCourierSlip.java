@@ -64,7 +64,26 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     return true;
     }
-  GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, world, 0, 0, 0);
+  if(isShiftClick(player))
+    {
+    int s1 = player.inventory.currentItem;
+    int s2 = s1+1;
+    if(s2>8)
+      {
+      s2=0;
+      }
+    ItemStack stack1 = player.inventory.mainInventory[s2];
+    if(stack1!=null && stack1.itemID == this.itemID)
+      {
+      CourierRoutingInfo info = new CourierRoutingInfo(stack);
+      info.writeToItem(stack1);
+      }
+    player.addChatMessage("Copied Routing Slip");
+    }
+  else
+    {
+    GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, world, 0, 0, 0);
+    }
   return true;
   }
 
