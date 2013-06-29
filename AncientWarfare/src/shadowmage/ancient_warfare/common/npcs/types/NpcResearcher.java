@@ -59,8 +59,7 @@ public NpcResearcher(int type)
   this.addLevel("Adept Researcher", Config.texturePath + "models/npc/npcResearcher.png", getToolStack(1), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
   this.addLevel("Expert Researcher", Config.texturePath + "models/npc/npcResearcher.png", getToolStack(2), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
-  this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
-      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
+  this.defaultTargets = defaultTargetList;
   this.configName = "civilian";
   }
 

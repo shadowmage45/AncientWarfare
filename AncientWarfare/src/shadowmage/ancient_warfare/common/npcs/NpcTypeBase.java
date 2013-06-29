@@ -58,6 +58,9 @@ public abstract class NpcTypeBase implements INpcType
 
 public static NpcTypeBase [] npcTypes = new NpcTypeBase[256];
 
+public static String[] defaultTargetList = new String[]{"Zombie", "Spider", "CaveSpider", "Blaze", 
+    "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
+
 public static INpcType npcDummy = new NpcDummy(0);
 public static INpcType npcVillager = new NpcVillager(1);
 public static INpcType npcFootSoldier = new NpcFootsoldier(2);
@@ -81,7 +84,7 @@ protected String tooltip = "AW.Npc.Tooltip";
 protected boolean isCombatUnit = false;
 protected boolean isVanillaVillager = false;
 protected String iconTexture = "foo";
-protected String configName = "";
+protected String configName = "civilian";
 protected String[] defaultTargets = null;
 protected List<NpcLevelEntry> levelEntries = new ArrayList<NpcLevelEntry>();
 

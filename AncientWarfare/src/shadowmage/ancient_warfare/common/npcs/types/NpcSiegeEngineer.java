@@ -61,8 +61,7 @@ public NpcSiegeEngineer(int type)
   this.tooltip = "Adept at using siege engines";
   this.isCombatUnit = true;
   this.iconTexture = "npcSiegeEngineer1";
-  this.defaultTargets = new String[]{"Zombie", "Spider", "CaveSpider", "Blaze", 
-      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
+  this.defaultTargets = defaultTargetList;
   this.addLevel("Novice Siege Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3).setAccuracy(0.88f).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.command1);
   this.addLevel("Adept Siege Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4).setAccuracy(0.92f).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.command2);
   this.addLevel("Expert Siege Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(6).setAccuracy(0.96f).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command3);  

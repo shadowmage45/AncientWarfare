@@ -58,8 +58,7 @@ public NpcFarmer(int type)
   this.addLevel("Adept Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(1), null).addTargetType(CivicWorkType.FARM).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
   this.addLevel("Expert Farmer", Config.texturePath + "models/npc/npcFarmer.png", getToolStack(2), null).addTargetType(CivicWorkType.FARM).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
-  this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
-      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
+  this.defaultTargets = defaultTargetList;
   this.configName = "civilian";
   }
 

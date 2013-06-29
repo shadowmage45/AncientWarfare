@@ -67,8 +67,7 @@ public NpcArcher(int type)
   this.addLevel("Adept Archer", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setRange(20).setAccuracy(0.91f).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);
   this.addLevel("Expert Archer", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setRange(20).setAccuracy(0.94f).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command3);
   this.addLevel("Master Archer", Config.texturePath + "models/npcDefault.png", getToolStack(3), getArmorStack(3)).setRange(20).setAccuracy(0.97f).setUpkeep(10).addNeededResearch(ResearchGoalNumbers.command3);
-  this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
-      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
+  this.defaultTargets = defaultTargetList;
   }
 
 @Override

@@ -5,9 +5,18 @@ FROM TESTING
 * stone slabs render as quartz slabs in research book (possibly other places)
 * investigate gate redstone interaction
 * adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
-* possibly not saving research still
-* routing slip/furnace interaction is strange
+* possibly not saving research still (hopefully fixed with not reworking of game-data loading 6-28-13)
+* routing slip/furnace interaction is strange (hopefully fixed with side-swap button 6-28-13)
 * investigate ghost items placed into player inventory (not closing a gui correctly?)
+* verify couriers drop special inventory slots on death
+* rework non-courier npc guis to be more compact/non-existent
+* add 'go back to base gui' button to info guis
+* add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
+* add some ability to 'copy' routing slips (quick transcription table? do it in the research or npc crafting tables?)
+* warehouse will occasionally not x-mit datas (or just not receive them properly)
+* adjust npc shadow size (its like 2-blocks currently)
+* add death cause/display to dead-npc tracker
+* add clear tracker ability for both live and dead npc trackers
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -38,6 +47,7 @@ GENERAL
 * add recipes to chemistry table 
 * fix rotation of rendered crafting station blocks in inventory
 * fix position of rendered crafting station blocks when held/on ground (item form)
+* NEI plugin for special crafting recipes
 
 REINFORCED BLOCKS
 * figure out method to allow for partially destroyed blocks w/ destroyed texture rendering
@@ -188,9 +198,29 @@ TWEAKS/OPTIMIZATION
 * fix NPE on spawning NPC on no block (null hit coordinate)
 * npc stats gui mostly working, need to find a way to detect & remove invalid entries
 * add ability to swap side of block in routing slip (increments side)
-
 * clean up routing slip element positioning
 * clean up remaining bugs in NPC tracking list, fully functional now
+* rework game-data loading to prevent overwriting of already existing data (may resolve research occasionally not saving)
+* implement game-data resetting on server-stop, should clean up issues of game-data persisting between worlds
 
+* fix background lighting issue when hovering over fake slots / some other gui elements (mostly those with tooltips)
+* add ability to adjust quantities in routing slip as such: 
+    If item on cursor matches item in slot:
+        Left click action:
+            increment slot stack size by cursor stack size (increment by 1 if shift is pressed)
+        Right Click action:
+            decrement slot stack size by 1
+    If item on cursor is empty
+        Left click action:
+            if shift is pressed, increment slot stack size by 1
+            else if shift not pressed, empty the slot
+        Right click action:
+            if shift is pressed, decrement slot stack size by 1
+            else if shift not pressed, empty the slot
+    If item on cursor does not match:
+        swap for item on cursor (no change from old behavior)
+* remove endermen as default targets for all npcs
+* simplify code for default target list
+    
 /********** 06-29-13 **********/
 /********** 06-30-13 **********/

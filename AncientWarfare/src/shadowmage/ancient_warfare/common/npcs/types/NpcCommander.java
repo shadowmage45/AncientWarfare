@@ -56,11 +56,10 @@ public NpcCommander(int type)
   this.tooltip = "Provides bonuses to troops";
   this.isCombatUnit = true;
   this.iconTexture = "npcSoldier1";
-  this.defaultTargets = new String[]{"Zombie", "Spider", "CaveSpider", "Blaze", 
-      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
+  this.defaultTargets = defaultTargetList;
   this.addLevel("Leiutenant", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);
   this.addLevel("Colonel", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6).setUpkeep(10).addNeededResearch(ResearchGoalNumbers.command3);
-  this.addLevel("General", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8).setUpkeep(12).addNeededResearch(ResearchGoalNumbers.command3);  
+  this.addLevel("General", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8).setUpkeep(12).addNeededResearch(ResearchGoalNumbers.command5);  
   }
 
 @Override

@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -72,7 +73,21 @@ public boolean handleMousePressed(int x, int y, int num)
       {
       if(InventoryTools.doItemsMatch(fakeStack, p))
         {
-        
+        if(num==0)
+          {
+          if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
+            {
+            fakeStack.stackSize++;
+            }
+          else
+            {
+            fakeStack.stackSize+=p.stackSize;
+            }
+          }
+        else
+          {
+          fakeStack.stackSize--;
+          }
         }
       else if(fakeStack!=null)
         {
@@ -85,7 +100,24 @@ public boolean handleMousePressed(int x, int y, int num)
       }
     else
       {
-      fakeStack = null;
+      if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
+        {
+        if(fakeStack!=null)
+          {
+          if(num==0)
+            {
+            fakeStack.stackSize++;
+            }
+          else
+            {
+            fakeStack.stackSize--;
+            }
+          }
+        }
+      else
+        {
+        fakeStack = null;
+        }
       }
     }
   return true;

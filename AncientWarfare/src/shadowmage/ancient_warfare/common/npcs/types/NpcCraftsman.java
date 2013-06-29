@@ -60,8 +60,7 @@ public NpcCraftsman(int type)
   this.addLevel("Adpet Craftsman", Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(1), null).addTargetType(CivicWorkType.CRAFT).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
   this.addLevel("Expert Craftsman", Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(2), null).addTargetType(CivicWorkType.CRAFT).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
-  this.defaultTargets = new String[]{"Zombie", "Spider","Creeper", "CaveSpider", "Blaze", 
-      "Enderman", "Ghast", "Giant", "LavaSlime", "PigZombie", "Silverfish", "Skeleton", "Slime"};
+  this.defaultTargets = defaultTargetList;
   this.configName = "civilian";
   }
 
