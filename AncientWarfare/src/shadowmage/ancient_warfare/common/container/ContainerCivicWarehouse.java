@@ -217,6 +217,7 @@ public void handleInitData(NBTTagCompound tag)
   this.warehouseItems = InventoryTools.getCompactInventoryFromTag(tag);
   this.filledSlotCount = tag.getInteger("filledSlotCount");  
   this.receivedDatas = true;
+  if(this.gui!=null){this.gui.refreshGui();}
   }
 
 @Override

@@ -182,7 +182,7 @@ protected boolean tryStart()
 
 protected boolean tryFinish()
   {
-  if(InventoryTools.canHoldItem(inventory, recipe.result, recipe.result.stackSize, resultSlot[0], resultSlot[0]))
+  if(canFinish())
     {
     InventoryTools.tryMergeStack(inventory, recipe.result.copy(), resultSlot);
     this.workProgress = 0;
@@ -190,6 +190,11 @@ protected boolean tryFinish()
     return true;
     }
   return false;
+  }
+
+protected boolean canFinish()
+  {
+  return recipe!=null && InventoryTools.canHoldItem(inventory, recipe.result, recipe.result.stackSize, resultSlot[0], resultSlot[0]);
   }
 
 public void setRecipe(ResourceListRecipe recipe)

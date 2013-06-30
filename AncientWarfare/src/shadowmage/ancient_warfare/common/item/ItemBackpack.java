@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -41,6 +43,13 @@ public ItemBackpack(int itemID)
   super(itemID, true);
   this.maxStackSize = 1;
   this.hasLeftClick = false;
+  }
+
+@Override
+public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
+  {
+  super.addInformation(stack, player, list, par4); NBTTagCompound tag = null;
+  list.add("Size: " + ((stack.getItemDamage()/16)*9+9) + " slots");
   }
 
 @Override

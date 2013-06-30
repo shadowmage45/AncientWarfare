@@ -224,5 +224,11 @@ TWEAKS/OPTIMIZATION
 * remove gui from non-courier NPCs as they no longer have inventories (may be replaced in the future with an info GUI)
 * add backpack item, container, gui, recipes
 * add backpack as necessary item for couriers
+* add warehouse refreshGui command to init-data received packet
+* disable 'hasWork' at craft table if product is finished but cannot produce (isWorking && workProgress<workProgressMax)
 
 /********** 06-30-13 **********/
+* add icon for backpack
+* remove creeper from npc default targeting lists
+* add backpack size description
+* fix up npc-working at 'finished' station, while still continiously working

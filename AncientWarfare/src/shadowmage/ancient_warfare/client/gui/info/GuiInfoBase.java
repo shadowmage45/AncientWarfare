@@ -50,6 +50,8 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 public class GuiInfoBase extends GuiContainerAdvanced
 {
 
+
+GuiContainerAdvanced baseParent;
 GuiContainerAdvanced parent;
 ResourceListRecipe recipe;
 GuiScrollableArea area;

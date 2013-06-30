@@ -77,7 +77,7 @@ public void doWork(IWorker worker)
 @Override
 public boolean hasWork()
   {
-  return this.isWorking;
+  return this.isWorking && (this.workProgress<this.workProgressMax || this.tryFinish());
   }
 
 @Override
