@@ -29,7 +29,6 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 public class GuiNpcCourier extends GuiNpcBase
 {
 
-NpcBase npc;
 /**
  * @param container
  */
@@ -38,32 +37,4 @@ public GuiNpcCourier(Container container,  NpcBase npc)
   super(container, npc);
   }
 
-@Override
-public int getXSize()
-  {
-  return 176;
-  }
-
-@Override
-public int getYSize()
-  {
-  return 240;
-  }
-
-@Override
-public String getGuiBackGroundTexture()
-  {
-  return Config.texturePath+"gui/guiBackgroundLarge.png";
-  }
-
-@Override
-public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
-  {
-  this.drawStringGui("Inventory", 8, 5, 0xffffffff);
-  if(npc.npcType.getSpecInventorySize(npc.rank)>0)
-    {
-    this.drawStringGui("Special Tools", 8, 5 + 10 + 3*18 + 5, 0xffffffff);
-    }  
-  this.drawStringGui("Class: "+npc.npcType.getDisplayName(), 8, 112, 0xffffffff);
-  }
 }

@@ -1085,9 +1085,66 @@
 /********************************************************************************/
 /****************************************TEST RELEASE .011****************************************/
 /********************************************************************************/
+/********** 06-26-13 **********/(post release)
+* update courier slip max stack size -> 1
+* text input lines will now deselect if escape is pressed
+* fix auto-crafting station to use 'CRAFT' work type (fixes researchers working at them)
+* re-enable warehouse civic bounds rendering (was disabled in previous update because of an unrelated issue)
+* remove endermen from auto-target list for civilians (they would randomly teleport through a town and kill something)
 
+/********** 06-27-13 **********/
+* adpet researcher ? (sp error)
+* rename many civics slightly (remove 'Small'..there will be only 1 size)
 
+/********** 06-28-13 **********/
+* add ability to swap destination points on a routing slip (click on the block icon -- next 'added' point will replace the clicked point, maintaining filter list)
+* prep work on npc stat tracking
+* fix NPE on spawning NPC on no block (null hit coordinate)
+* npc stats gui mostly working, need to find a way to detect & remove invalid entries
+* add ability to swap side of block in routing slip (increments side)
+* clean up routing slip element positioning
+* clean up remaining bugs in NPC tracking list, fully functional now
+* rework game-data loading to prevent overwriting of already existing data (may resolve research occasionally not saving)
+* implement game-data resetting on server-stop, should clean up issues of game-data persisting between worlds
+* fix background lighting issue when hovering over fake slots / some other gui elements (mostly those with tooltips)
+* add ability to adjust quantities in routing slip as such: 
+    If item on cursor matches item in slot:
+        Left click action:
+            increment slot stack size by cursor stack size (increment by 1 if shift is pressed)
+        Right Click action:
+            decrement slot stack size by 1
+    If item on cursor is empty
+        Left click action:
+            if shift is pressed, increment slot stack size by 1
+            else if shift not pressed, empty the slot
+        Right click action:
+            if shift is pressed, decrement slot stack size by 1
+            else if shift not pressed, empty the slot
+    If item on cursor does not match:
+        swap for item on cursor (no change from old behavior)
+* remove endermen as default targets for all npcs
+* simplify code for default target list
+    
+/********** 06-29-13 **********/
+* fix -- warehouse will occasionally not x-mit datas (or just not receive them properly)(client will now request datas if not present after 1/4 second, and until it has received it)
+* re-enable version checking for SMP (single version only, exact match necessary)
+* add clear buttons for npc info lists (live list will repopulate as entities are loaded/check in)
+* add death cause/display to dead-npc tracker
+* add some ability to 'copy' routing slips (if shift-right click && routing slip is present in next slot, copy to next slot)
+* fix -- couriers/other npcs will now drop 'special inventory' on death (routing slip slots)
+* remove gui from non-courier NPCs as they no longer have inventories
+* add backpack item, container, gui, recipes
+* add backpack as necessary item for couriers
+* add warehouse refreshGui command to init-data received packet
+* disable 'hasWork' at craft table if product is finished but cannot produce (isWorking && workProgress<workProgressMax)
 
+/********** 06-30-13 **********/
+* add icon for backpack
+* remove creeper from npc default targeting lists
+* add backpack size description
+* fix up npc-working at 'finished' station, while still continiously working
+* fix courier-inventory not opening properly
+* update version number, disable debug, and release (.012)
 /********************************************************************************/
 /****************************************TEST RELEASE .012****************************************/
 /********************************************************************************/
