@@ -9,6 +9,9 @@ FROM TESTING
 * investigate ghost items placed into player inventory (not closing a gui correctly?)
 * add 'go back to base gui' button to info guis
 * adjust npc shadow size (its like 2-blocks currently)
+* add 'live' / 'dead' labels to npc-list gui
+* add shift-click interaction to backpack
+* fix needing a 'fresh' backpack for crafting of npcs (maybe)
 
 BALANCE/TWEAKS
 * examine recipe balance
