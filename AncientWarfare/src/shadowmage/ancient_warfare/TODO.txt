@@ -12,6 +12,9 @@ FROM TESTING
 * add 'live' / 'dead' labels to npc-list gui
 * add death-message translate to local in npc list gui
 * add decrement item stack on item used for npc-upgrading with npc spawner item
+* town hall-update area1/area2 size on 'clear' button pressed
+* mines harvest water
+* routing slip wont' save values > 128
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -185,6 +188,7 @@ TWEAKS/OPTIMIZATION
 * add death-cause entity-name to dead-npc tracking list
 * fix default targets that will aggro on NPCs (essentially, use the config-target list as the list of mobs that will aggro said npc)
 
+* auto-crafting table (probably others) dont' use materials since last patch when an npc completes a recipe
 /********** 07-02-13 **********/
 /********** 07-03-13 **********/
 /********** 07-04-13 **********/
