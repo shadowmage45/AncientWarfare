@@ -10,8 +10,8 @@ FROM TESTING
 * add 'go back to base gui' button to info guis
 * adjust npc shadow size (its like 2-blocks currently)
 * add 'live' / 'dead' labels to npc-list gui
-* add shift-click interaction to backpack
-* fix needing a 'fresh' backpack for crafting of npcs (maybe)
+* add death-message translate to local in npc list gui
+* add decrement item stack on item used for npc-upgrading with npc spawner item
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -175,5 +175,24 @@ TWEAKS/OPTIMIZATION
         decrease overall network used from vanilla MC resending entire chunks..)
 
 ********************* DONE STUFF ************************* 
+
+/********** 07-01-13 **********/
+* expand pathfinder bounds and time limit to allow for longer paths to be found, even on slower computers.  This WILL have
+    negative impact on slower computers that are operating near their performance limit (the additional pathfinding time will likely
+    push it past acceptible tick times).  Will be opening these up to config options so that server admins can adjust to
+    suit their hardware.
+* add shift-click interaction to backpack
+* add death-cause entity-name to dead-npc tracking list
+* fix default targets that will aggro on NPCs (essentially, use the config-target list as the list of mobs that will aggro said npc)
+
+/********** 07-02-13 **********/
+/********** 07-03-13 **********/
+/********** 07-04-13 **********/
+/********** 07-05-13 **********/
+/********** 07-06-13 **********/
+/********** 07-07-13 **********/
+/********** 07-08-13 **********/
+/********** 07-09-13 **********/
+/********** 07-10-13 **********/
 
 

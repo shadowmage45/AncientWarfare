@@ -97,12 +97,12 @@ int minz;
 int maxx;
 int maxy;
 int maxz;
-int searchBufferRange = 30;
+int searchBufferRange = 60;
 int maxRange = 80;
 PathWorldAccess world;
 long startTime;
 long runTime;
-public long maxRunTime = 10000000l;//15ms, default time..public so may be overriden at run-time...must be reset between runs
+public long maxRunTime = 20000000l;//20ms, default time..public so may be overriden at run-time...must be reset between runs
 public long maxSearchIterations = 1200;
 
 private Node bestEndNode = null;
@@ -158,17 +158,14 @@ protected void onPathFound()
   Node n = this.currentNode;
   Node c = null;
   Node p = null;
-//  Config.logDebug("theta path:");
   while(n!=null)
     {
     p = c;
     c = new Node(n.x, n.y, n.z);
     c.parentNode = p;
     path.push(c);
-//    Config.logDebug(c.toString());
     n = n.parentNode;
     }
-//  Config.logDebug("end-theta path:");
   if(this.caller!=null)
     {
     this.caller.onPathFound(path);
@@ -188,7 +185,6 @@ protected boolean instantSearch = false;
 public void doSearchIterations(int num)
   {
   this.startTime = System.nanoTime();
-//  Config.logDebug("calling search loop : "+this.isSearching);
   if(!isSearching)
     {    
     return;
@@ -214,9 +210,9 @@ private boolean searchLoop()
   boolean goalWalkable = world.isWalkable(tx, ty, tz) && world.isWalkable(tx, ty+1, tz);  
   this.searchIteration++;
   if(this.qNodes.isEmpty())
-  {
-	  return true;
-  }
+    {
+    return true;
+    }
   this.currentNode = this.qNodes.poll();  
   this.allNodes.add(currentNode);
   if(currentNode.equals(tx, ty, tz))

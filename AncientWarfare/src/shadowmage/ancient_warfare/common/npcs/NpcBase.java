@@ -65,6 +65,7 @@ import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
+import com.google.common.collect.Lists;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
@@ -190,6 +191,7 @@ public void addConfigTargets()
         clz = (Class) EntityList.stringToClassMapping.get(name);
         if(clz!=null)
           {
+          Config.logDebug("adding target entry for target: "+clz);
           targetHelper.addTargetEntry(new AITargetEntry(this, TargetType.ATTACK, clz, 0, true, Config.npcAISearchRange));
           }
         }
@@ -417,16 +419,21 @@ protected void updateAITick()
 protected void broadcastAggro()  
   {
   List<EntityMob> mobs = worldObj.getEntitiesWithinAABB(EntityMob.class, AxisAlignedBB.getAABBPool().getAABB(posX-16, posY-8, posZ-16, posX+16, posY+8, posZ+16));
+  String[] targets = Config.getConfig().get("npc_aggro_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
+  List<String> targ = Lists.newArrayList(targets);
   for(EntityMob mob : mobs)
     {
     if(mob.getEntityToAttack()==null && mob.getAttackTarget()==null)
       {
-      //setPrivateValue(EntityLiving.class, living, turret, "currentTarget", "field_70776_bF");
+      if(targ.contains(EntityList.classToStringMapping.get(mob.getClass())))
+        {
+        //setPrivateValue(EntityLiving.class, living, turret, "currentTarget", "field_70776_bF");
 //      ObfuscationReflectionHelper.setPrivateValue(classToAccess, instance, value, fieldNames);
 //      ObfuscationReflectionHelper.setPrivateValue(EntityLiving.class, mob, this, "currentTarget", "field_70776_bF");
 //      mob.setRevengeTarget(this);
-      mob.setTarget(this);//handles zombie pig men, spiders, cave spiders, silverfish, endermen, creeper
-      mob.setAttackTarget(this);//handles skeleton/creeper      
+        mob.setTarget(this);//handles zombie pig men, spiders, cave spiders, silverfish, endermen, creeper
+        mob.setAttackTarget(this);//handles skeleton/creeper      
+        }     
       }
     }  
   }

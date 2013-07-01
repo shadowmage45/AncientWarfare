@@ -92,6 +92,50 @@ public ContainerBackpack(EntityPlayer openingPlayer)
   }
 
 @Override
+public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClickedIndex)
+  {
+  ItemStack slotStackCopy = null;
+  Slot theSlot = (Slot)this.inventorySlots.get(slotClickedIndex);
+  if (theSlot != null && theSlot.getHasStack())
+    {
+    ItemStack slotStack = theSlot.getStack();
+    slotStackCopy = slotStack.copy();
+    int invIndex = theSlot.getSlotIndex();    
+    int storageSlots = inventory.getSizeInventory();    
+    if (slotClickedIndex < 36)//player slots...
+      {      
+      if (!this.mergeItemStack(slotStack, 36, 36+storageSlots, false))//merge into storage inventory
+        {
+        return null;
+        }
+      }
+    else if(slotClickedIndex >=36 &&slotClickedIndex < 36+storageSlots)//storage slots, merge to player inventory
+      {
+      if (!this.mergeItemStack(slotStack, 0, 36, true))//merge into player inventory
+        {
+        return null;
+        }
+      }       
+    if (slotStack.stackSize == 0)
+      {
+      theSlot.putStack((ItemStack)null);
+      }
+    else
+      {
+      theSlot.onSlotChanged();
+      }
+    if (slotStack.stackSize == slotStackCopy.stackSize)
+      {
+      return null;
+      }
+    theSlot.onPickupFromSlot(par1EntityPlayer, slotStack);
+    }
+  return slotStackCopy;
+  }
+
+
+
+@Override
 public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
   {
   super.onCraftGuiClosed(par1EntityPlayer);  
