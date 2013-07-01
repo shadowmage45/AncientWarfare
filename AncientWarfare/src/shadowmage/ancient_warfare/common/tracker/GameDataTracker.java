@@ -110,11 +110,11 @@ public void handleNpcDeath(NpcBase npc, DamageSource src)
   this.npcTracker.get(npc.teamNum).handleNpcDeath(npc);
   data.updateEntry(npc);
   String deathCause = src.getDamageType();
-  if(src.getSourceOfDamage()!=null)
+  if(src.getEntity()!=null)
     {
-    deathCause = deathCause + " : " + src.getSourceOfDamage().getEntityName();
+    deathCause = deathCause + " : " + src.getEntity().getEntityName();
     }
-  data.setDead(src.getDamageType());
+  data.setDead(deathCause);
   if(!this.deadNpcTracker.containsKey(npc.teamNum))
     {
     this.deadNpcTracker.put(npc.teamNum, new NpcDataList(npc.teamNum));
