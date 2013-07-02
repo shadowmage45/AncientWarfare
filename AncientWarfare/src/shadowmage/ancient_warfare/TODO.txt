@@ -8,10 +8,12 @@ FROM TESTING
 * civic block in-hand rendering is off
 * investigate ghost items placed into player inventory (not closing a gui correctly?)
 * add 'go back to base gui' button to info guis
-* adjust npc shadow size (its like 2-blocks currently)
 * add death-message translate to local in npc list gui
 * heuristic evaluation of tick times for pathfinding scheduling -> when tick times are good, do more cylcles per path
 * soldiers attempt to walk up/down through a leaf block
+* gates overlapping
+* move over to the forge-based packet system (basically wrap my packets in a single forge packet)
+* auto-craft table synch craft-grid to client to render stacks on model
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -187,7 +189,7 @@ TWEAKS/OPTIMIZATION
 
 * auto-crafting table (probably others) dont' use materials since last patch when an npc completes a recipe
 /********** 07-02-13 **********/
-* fix auo-crafting bug for real, and non-hacky (should remove any performance degredation from the previous hack)
+* fix auo-crafting bug for real, and non-hacky
 * decrease pathfinding search range from 60->40 (I think search range was fine, max path-time was not)
 * routing slip wont' save values > 128
 * town hall-update area1/area2 size on 'clear' button pressed
@@ -195,6 +197,8 @@ TWEAKS/OPTIMIZATION
 * add 'live' / 'dead' labels to npc-list gui
 
 * add models for alchemy and auto-crafting tables
+* add textures for alchemy and auto-craft tables
+* adjust npc shadow size (its like 2-blocks currently)
 
 /********** 07-03-13 **********/
 /********** 07-04-13 **********/

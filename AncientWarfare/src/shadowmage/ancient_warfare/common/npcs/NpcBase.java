@@ -70,6 +70,8 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class NpcBase extends EntityCreature implements IEntityAdditionalSpawnData, IEntityContainerSynch, IPathableEntity, IWorker
 {
@@ -141,6 +143,14 @@ public NpcBase(World par1World)
     }
   this.experienceValue = 10;
   this.health = 20;  
+  }
+
+
+@Override
+@SideOnly(Side.CLIENT)
+public float getShadowSize()
+  {
+  return 0.8f;
   }
 
 @Override
