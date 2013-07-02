@@ -94,7 +94,7 @@ protected boolean needsFilledFloor(int id)
 
 protected boolean isValidResource(int id)
   {
-  if(id==0 || id==Block.stone.blockID || id==Block.cobblestone.blockID || id== Block.bedrock.blockID || id== Block.dirt.blockID || id==Block.grass.blockID || id==Block.ladder.blockID || id==Block.torchWood.blockID || id==Block.gravel.blockID)
+  if(id==0 || id==Block.stone.blockID || id==Block.cobblestone.blockID || id== Block.bedrock.blockID || id== Block.dirt.blockID || id==Block.grass.blockID || id==Block.ladder.blockID || id==Block.torchWood.blockID || id==Block.gravel.blockID || id==Block.waterStill.blockID || id==Block.waterMoving.blockID || id==Block.lavaMoving.blockID || id==Block.lavaStill.blockID)
     {
     return false;
     }

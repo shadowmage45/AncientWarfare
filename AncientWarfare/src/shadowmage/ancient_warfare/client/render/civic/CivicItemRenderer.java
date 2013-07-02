@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.render.civic;
 
+import org.lwjgl.opengl.GL11;
+
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -91,7 +93,12 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   blk = BlockLoader.civicBlock1;
   break;
   }
+  GL11.glPushMatrix();
+  //TODO
+//  GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
+//  GL11.glRotatef(180, 0, 1, 0);
   render.renderBlockAsItem(blk, item.getItemDamage()%16, 1.f);
+  GL11.glPopMatrix();
   }
 
 }

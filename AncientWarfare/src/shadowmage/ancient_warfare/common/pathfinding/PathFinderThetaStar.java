@@ -97,7 +97,7 @@ int minz;
 int maxx;
 int maxy;
 int maxz;
-int searchBufferRange = 60;
+int searchBufferRange = 40;
 int maxRange = 80;
 PathWorldAccess world;
 long startTime;

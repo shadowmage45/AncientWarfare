@@ -71,13 +71,17 @@ public void doWork(IWorker worker)
   if(this.workProgress>this.workProgressMax)
     {
     this.workProgress = this.workProgressMax;
+    if(this.tryFinish())
+      {
+      this.tryStart();
+      }
     }
   }
 
 @Override
 public boolean hasWork()
   {
-  return this.isWorking && (this.workProgress<this.workProgressMax || ( this.tryFinish() && this.tryStart() ));
+  return this.isWorking && this.workProgress<this.workProgressMax;
   }
 
 @Override

@@ -329,7 +329,7 @@ public NBTTagCompound getNBTTag()
       {
       itemTag = new NBTTagCompound();
       itemTag.setByte("s", (byte)i);
-      filter.writeToNBT(itemTag);
+      writeItemToNBT(filter, itemTag);
       itemList.appendTag(itemTag);
       }
     }  
@@ -355,10 +355,42 @@ public void readFromNBT(NBTTagCompound tag)
     slot = itemTag.getByte("s");
     if(slot>=0 && slot< this.filters.length)
       {    	  
-      this.setFilterStack(slot, ItemStack.loadItemStackFromNBT(itemTag));
+      this.setFilterStack(slot, readItemStackFromTag(itemTag));   
       }
     }    
     
+  }
+
+protected ItemStack readItemStackFromTag(NBTTagCompound tag)
+  {
+  int itemID = tag.getShort("id");
+  int stackSize = 1;
+  int itemDamage = tag.getShort("Damage");
+  if(tag.hasKey("Count"))
+    {
+    stackSize = tag.getByte("Count");
+    }
+  else if(tag.hasKey("ICount"))
+    {
+    stackSize = tag.getInteger("ICount");
+    }
+  ItemStack stack = new ItemStack(itemID, stackSize, itemDamage);
+  if(tag.hasKey("tag"))
+    {
+    stack.setTagCompound(tag.getCompoundTag("tag"));
+    }
+  return stack;
+  }
+
+protected void writeItemToNBT(ItemStack stack, NBTTagCompound tag)
+  {
+  tag.setShort("id", (short) stack.itemID);
+  tag.setShort("Damage", (short) stack.getItemDamage());
+  tag.setInteger("ICount", stack.stackSize);
+  if(stack.hasTagCompound())
+    {
+    tag.setTag("tag", stack.getTagCompound());
+    }
   }
 
 }

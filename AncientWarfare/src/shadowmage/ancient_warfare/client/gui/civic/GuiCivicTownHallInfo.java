@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.client.gui.civic;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
@@ -99,6 +98,7 @@ public void onElementActivated(IGuiElement element)
     this.sendDataToServer(tag);
     this.container.datas = null;
     this.refreshGui();
+    this.area1.updateTotalHeight(0);
     }
   else if(element.getElementNumber()==4)//clear dead
     {
@@ -107,6 +107,7 @@ public void onElementActivated(IGuiElement element)
     this.sendDataToServer(tag);
     this.container.deadDatas = null;
     this.refreshGui();
+    this.area2.updateTotalHeight(0);
     }
   }
 
@@ -116,6 +117,8 @@ public void setupControls()
   this.addGuiButton(0, 256-5-40, 5, 40, 16, "Back");
   this.addGuiButton(3, 5, 5, 40, 16, "Clear");
   this.addGuiButton(4, 5, 5+97+20, 40, 16, "Clear");
+  this.guiElements.put(5, new GuiString(5, this, 100, 8, "Living:").updateRenderPos(5+40+4, 5+4));
+  this.guiElements.put(6, new GuiString(6, this, 100, 8, "Dead:").updateRenderPos(5+40+4, 5+4+97+20));
   area1 = new GuiScrollableArea(1, this, 5, 5+18, 256-10, 97, 0);
   this.guiElements.put(1, area1);
   area2 = new GuiScrollableArea(2, this, 5, 5+18+97+20, 256-10, 97, 0);

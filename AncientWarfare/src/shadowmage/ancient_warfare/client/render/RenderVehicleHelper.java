@@ -176,7 +176,7 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   GL11.glPushMatrix();
   if(type==ItemRenderType.EQUIPPED)
     {    
-    GL11.glTranslatef(0.25f, 1.0f, 1.0f);
+    GL11.glTranslatef(0.25f, 1.2f, 1.0f);
     }
   else if(type==ItemRenderType.ENTITY)
     {
