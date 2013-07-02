@@ -194,6 +194,7 @@ TWEAKS/OPTIMIZATION
 * mines attempt to harvest water
 * add 'live' / 'dead' labels to npc-list gui
 
+* add models for alchemy and auto-crafting tables
 
 /********** 07-03-13 **********/
 /********** 07-04-13 **********/
