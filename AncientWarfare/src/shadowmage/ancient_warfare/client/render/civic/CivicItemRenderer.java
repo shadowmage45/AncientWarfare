@@ -94,9 +94,8 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   break;
   }
   GL11.glPushMatrix();
-  //TODO
-//  GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
-//  GL11.glRotatef(180, 0, 1, 0);
+  GL11.glTranslatef(0.5f, 0.5f, 0.5f);
+  GL11.glRotatef(180, 0, 1, 0);
   render.renderBlockAsItem(blk, item.getItemDamage()%16, 1.f);
   GL11.glPopMatrix();
   }

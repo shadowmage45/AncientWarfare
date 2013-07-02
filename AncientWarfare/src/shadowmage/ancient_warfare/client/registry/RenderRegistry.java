@@ -48,6 +48,8 @@ import shadowmage.ancient_warfare.client.model.ModelTable3;
 import shadowmage.ancient_warfare.client.model.ModelTable4;
 import shadowmage.ancient_warfare.client.model.ModelTable5;
 import shadowmage.ancient_warfare.client.model.ModelTable6;
+import shadowmage.ancient_warfare.client.model.ModelTable7;
+import shadowmage.ancient_warfare.client.model.ModelTable8;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandTurret;
@@ -256,8 +258,8 @@ public void loadRenders()
   this.addTEModel(3, new ModelTable4());
   this.addTEModel(4, new ModelTable5());
   this.addTEModel(5, new ModelTable6());
-  this.addTEModel(6, new ModelTable6());//TODO add alchemy table model/texture
-  this.addTEModel(7, new ModelTable6());//TODO add auto crafting table model/texture
+  this.addTEModel(6, new ModelTable7());
+  this.addTEModel(7, new ModelTable8());
   
   this.teModelTextures.put(0, Config.texturePath+"models/crafting/teResearchTable.png");
   this.teModelTextures.put(1, Config.texturePath+"models/crafting/teEngineeringStation.png");
@@ -265,8 +267,8 @@ public void loadRenders()
   this.teModelTextures.put(3, Config.texturePath+"models/crafting/teVehicleStation.png");
   this.teModelTextures.put(4, Config.texturePath+"models/crafting/teAmmoStation.png");
   this.teModelTextures.put(5, Config.texturePath+"models/crafting/teNpcStation.png");
-  this.teModelTextures.put(6, Config.texturePath+"models/crafting/teNpcStation.png");//TODO add alchemy table model/texture
-  this.teModelTextures.put(7, Config.texturePath+"models/crafting/teNpcStation.png");//TODO add auto crafting table model/texture
+  this.teModelTextures.put(6, Config.texturePath+"models/crafting/teAlchemyStation.png");
+  this.teModelTextures.put(7, Config.texturePath+"models/crafting/teAutoCrafting.png");
   
   /**
    * load up the vehicle item renderer...

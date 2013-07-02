@@ -174,9 +174,9 @@ public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRe
 public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   {  
   GL11.glPushMatrix();
-  if(type==ItemRenderType.EQUIPPED)
+  if(type==ItemRenderType.EQUIPPED || type==ItemRenderType.EQUIPPED_FIRST_PERSON)
     {    
-    GL11.glTranslatef(0.25f, 1.2f, 1.0f);
+    GL11.glTranslatef(0.5f, 1.0f, 0.5f);
     }
   else if(type==ItemRenderType.ENTITY)
     {

@@ -5,7 +5,6 @@ FROM TESTING
 * stone slabs render as quartz slabs in research book (possibly other places)
 * investigate gate redstone interaction
 * adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
-* civic block in-hand rendering is off
 * investigate ghost items placed into player inventory (not closing a gui correctly?)
 * add 'go back to base gui' button to info guis
 * add death-message translate to local in npc list gui
@@ -195,10 +194,14 @@ TWEAKS/OPTIMIZATION
 * town hall-update area1/area2 size on 'clear' button pressed
 * mines attempt to harvest water
 * add 'live' / 'dead' labels to npc-list gui
-
 * add models for alchemy and auto-crafting tables
 * add textures for alchemy and auto-craft tables
 * adjust npc shadow size (its like 2-blocks currently)
+
+* add alchemy/auto-crafting model/textures in-game
+* fix civic block in-hand rendering is off
+* fix crafting table block in-hand rendering being off
+* fix vehicle in-hand rendering (first and third person)
 
 /********** 07-03-13 **********/
 /********** 07-04-13 **********/
