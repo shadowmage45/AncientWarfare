@@ -74,6 +74,8 @@ List<ResourceListRecipe> npcRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> npcMiscRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> researchRecipes = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> componentRecipes = new ArrayList<ResourceListRecipe>();
+List<ResourceListRecipe> alchemyRecipes = new ArrayList<ResourceListRecipe>();
+List<ResourceListRecipe> alchemyMiscRecipes = new ArrayList<ResourceListRecipe>();
 
 List<ResourceListRecipe> structureRecipesServer = new ArrayList<ResourceListRecipe>();
 List<ResourceListRecipe> structureRecipesClient = new ArrayList<ResourceListRecipe>();
@@ -93,6 +95,8 @@ private AWCraftingManager()
   recipesByType.put(RecipeType.NPC_MISC, npcMiscRecipes);
   recipesByType.put(RecipeType.RESEARCH, researchRecipes);
   recipesByType.put(RecipeType.AMMO_MISC, componentRecipes);
+  recipesByType.put(RecipeType.ALCHEMY, alchemyRecipes);
+  recipesByType.put(RecipeType.ALCHEMY_MISC, alchemyMiscRecipes);
   recipesByType.put(RecipeType.NONE, new ArrayList<ResourceListRecipe>());
   this.recipeItems = new Object[][] {{ItemLoader.ironRings}, {Item.helmetChain}, {Item.plateChain}, {Item.legsChain}, {Item.bootsChain}};
 
@@ -224,7 +228,8 @@ public void loadRecipes()
   this.addNpcRecipes();//?? not done
   this.addVehicleRecipes();//NEEDS MATERIALS
   this.addStructureRecipes();//dynamic-done
-  this.addResearchRecipes();//done
+  this.addResearchRecipes();//done  
+  this.addAlchemyRecipes();
   
   //research book
   this.vanillaRecipeList.add(CraftingManager.getInstance().addRecipe(new ItemStack(ItemLoader.researchBook), new Object[] {"gll","ppp","gll", 'p', Item.paper, 'l', Item.leather, 'g', Item.ingotGold} ));
@@ -283,9 +288,19 @@ protected void addResearchRecipes()
     }   
   }
 
+protected void addAlchemyRecipes()
+  {
+  ResourceListRecipe recipe;
+  
+  recipe = new ResourceListRecipe(new ItemStack(Item.gunpowder), RecipeType.ALCHEMY);
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.netherrack,4), false, false));
+  this.alchemyRecipes.add(recipe);
+  
+  
+  }
+
 protected void addCivicRecipes()
   {
-  Config.logDebug("LOADING CIVIC RECIPES");
   ResourceListRecipe recipe;
   for(ICivicType civic : Civic.civicList)
     {
@@ -293,7 +308,6 @@ protected void addCivicRecipes()
     recipe = civic.constructRecipe();
     if(recipe!=null)
       {
-      Config.logDebug("Adding civic recipe for: "+civic.getDisplayName());
       this.civicRecipes.add(recipe);
       }    
     }  
@@ -394,7 +408,6 @@ protected void addCivicRecipes()
   recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
   this.civicMiscRecipes.add(recipe);
   
-  Config.logDebug("finished loading civic recipes");
   }
 
 protected void addGateRecipes()
@@ -828,6 +841,27 @@ public List<ResourceListRecipe> getRecipesDependantOn(IResearchGoal goal)
       }
     }
   for(ResourceListRecipe recipe : this.npcRecipes)
+    {
+    if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
+      {
+      recipes.add(recipe);
+      }
+    }
+  for(ResourceListRecipe recipe : this.npcMiscRecipes)
+    {
+    if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
+      {
+      recipes.add(recipe);
+      }
+    }
+  for(ResourceListRecipe recipe : this.alchemyRecipes)
+    {
+    if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
+      {
+      recipes.add(recipe);
+      }
+    }
+  for(ResourceListRecipe recipe : this.alchemyMiscRecipes)
     {
     if(recipe.neededResearch.contains(goal.getGlobalResearchNum()))
       {
