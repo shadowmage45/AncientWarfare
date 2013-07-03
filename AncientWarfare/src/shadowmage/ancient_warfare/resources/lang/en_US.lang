@@ -6,17 +6,17 @@
 
 
 #ITEM NAMES
-itemMulti.vehicleUpgrade.speed=Speed Upgrade
-itemMulti.vehicleUpgrade.aim=Aim Upgrade
-itemMulti.vehicleUpgrade.reload=Reload UPgrade
-itemMulti.vehicleUpgrade.power=Power Upgrade
-itemMulti.vehicleUpgrade.pitchExtension=Pitch Extension
-itemMulti.vehicleUpgrade.pitchUp=Pitch Up Wedge
-itemMulti.vehicleUpgrade.pitchDown= Pitch Down Wedge
-itemMulti.ammo.stone10
-itemMulti.ammo.stone15
-itemMulti.ammo.stone30
-itemMulti.ammo.stone45
+item.vehicleUpgrade.speed=Speed Upgrade
+item.vehicleUpgrade.aim=Aim Upgrade
+item.vehicleUpgrade.reload=Reload UPgrade
+item.vehicleUpgrade.power=Power Upgrade
+item.vehicleUpgrade.pitchExtension=Pitch Extension
+item.vehicleUpgrade.pitchUp=Pitch Up Wedge
+item.vehicleUpgrade.pitchDown= Pitch Down Wedge
+item.ammo.stone10
+item.ammo.stone15
+item.ammo.stone30
+item.ammo.stone45
 
 
 

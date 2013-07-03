@@ -8,7 +8,6 @@ PORTING TO 1.6
 * rewrite fucking everything to make it so I can load blocks and entities during pre-init...
     --really fucking everything (as I can't build items until everything else is built, 
     as my items depend on the rest of the shit)            
-    
 
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
@@ -219,6 +218,7 @@ TWEAKS/OPTIMIZATION
 /********** 07-03-13 **********/
 * gates overlapping (validate gate positioning on attempt to spawn via item)
 * prep for port to 1.6
+
 
 /********** 07-04-13 **********/
 /********** 07-05-13 **********/

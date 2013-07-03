@@ -35,6 +35,7 @@ import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.lang.LanguageLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -81,7 +82,6 @@ serverSideRequired = true,
 packetHandler = PacketHandler.class,
 channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
 versionBounds="MC"+Config.MC_VERSION+"-"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_BUILD+"-"+Config.CORE_BUILD_STATUS
-//versionBounds="["+"MC"+Config.MC_VERSION+"-"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_BUILD+",)"
 )
 
 public class AWCore 
@@ -157,6 +157,7 @@ public void preInit(FMLPreInitializationEvent evt)
   VehicleRegistry.instance().registerVehicles();
   AWEntityRegistry.registerEntity(NpcBase.class, "Npc.NpcBase", 130, 3, true);
   AWEntityRegistry.registerEntity(EntityGate.class, "Gate.GateBase", 130, 100, false);
+//  LanguageLoader.instance().loadDefaultLanguageFiles();
   Config.log("Ancient Warfare Pre-Init finished.");
   }
 
