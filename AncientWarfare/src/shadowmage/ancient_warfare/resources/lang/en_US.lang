@@ -1,0 +1,32 @@
+# ANCIENT WARFARE LANGUAGE LOCALIZATION FILE
+# LANGUAGE: ENGLISH
+# AUTHOR: Shadowmage45 (aka Shadowmage4513)
+# # (pound/hash symbol) DENOTES A COMMENT LINE
+# USE OF % DENOTES A VARIABLE THAT WILL BE REPLACED WITH STRING.FORMAT()
+
+
+#ITEM NAMES
+itemMulti.vehicleUpgrade.speed=Speed Upgrade
+itemMulti.vehicleUpgrade.aim=Aim Upgrade
+itemMulti.vehicleUpgrade.reload=Reload UPgrade
+itemMulti.vehicleUpgrade.power=Power Upgrade
+itemMulti.vehicleUpgrade.pitchExtension=Pitch Extension
+itemMulti.vehicleUpgrade.pitchUp=Pitch Up Wedge
+itemMulti.vehicleUpgrade.pitchDown= Pitch Down Wedge
+itemMulti.ammo.stone10
+itemMulti.ammo.stone15
+itemMulti.ammo.stone30
+itemMulti.ammo.stone45
+
+
+
+#BLOCK NAMES
+
+
+#ENTITY NAMES
+
+
+#TOOLTIPS
+
+
+#DESCRIPTIONS

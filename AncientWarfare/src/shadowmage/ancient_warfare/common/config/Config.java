@@ -49,6 +49,7 @@ public static final boolean DEBUG = false;
 //***************************************************LOADED CONFIGS******************************************//
 
 public static String texturePath = "/mods/ancientwarfare/textures/";
+public static String languagePath = "/shadowmage/ancient_warfare/resources/lang/";
 public static boolean invertShiftClickOnItems = false;
 public static String templateExtension = "aws";
 public static boolean adjustMissilesForAccuracy = false;

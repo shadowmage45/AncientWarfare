@@ -1,8 +1,14 @@
 PORTING TO 1.6
-Instead of renderEngine.bindTexture(String path), use:
-Code: [Select]
-
-renderEngine.func_110577_a(new ResourceLocation("modID","texture path"))
+* Instead of renderEngine.bindTexture(String path), use:
+    renderEngine.func_110577_a(new ResourceLocation("modID","texture path"))
+* rip out description registry or rewrite to accomodate language packs/translations
+    move over to loading translated names/descriptions from a language-file
+* remove item-names from description registry -- move over to loading a language file    
+* figure out a textureManager
+* rewrite fucking everything to make it so I can load blocks and entities during pre-init...
+    --really fucking everything (as I can't build items until everything else is built, 
+    as my items depend on the rest of the shit)            
+    
 
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
