@@ -203,6 +203,7 @@ TWEAKS/OPTIMIZATION
 * fix vehicle in-hand rendering (first and third person)
 * add alchemy table recipe : (netherrack x4 => 1x gunpowder)
 * and..one more pass at cleaning up auto-crafting/crafting table worker interaction
+* update version number (013) and release, last release for 1.5.2
 
 /********** 07-03-13 **********/
 /********** 07-04-13 **********/
