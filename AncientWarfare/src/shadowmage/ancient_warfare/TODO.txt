@@ -1,3 +1,9 @@
+PORTING TO 1.6
+Instead of renderEngine.bindTexture(String path), use:
+Code: [Select]
+
+renderEngine.func_110577_a(new ResourceLocation("modID","texture path"))
+
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
 * death message from missiles is untranslated
@@ -10,7 +16,6 @@ FROM TESTING
 * add death-message translate to local gui in npc list gui
 * heuristic evaluation of tick times for pathfinding scheduling -> when tick times are good, do more cylcles per path
 * soldiers attempt to walk up/down through a leaf block
-* gates overlapping
 * move over to the forge-based packet system (basically wrap my packets in a single forge packet)
 * soldiers stick in gates?
 
@@ -206,6 +211,9 @@ TWEAKS/OPTIMIZATION
 * update version number (013) and release, last release for 1.5.2
 
 /********** 07-03-13 **********/
+* gates overlapping (validate gate positioning on attempt to spawn via item)
+* prep for port to 1.6
+
 /********** 07-04-13 **********/
 /********** 07-05-13 **********/
 /********** 07-06-13 **********/

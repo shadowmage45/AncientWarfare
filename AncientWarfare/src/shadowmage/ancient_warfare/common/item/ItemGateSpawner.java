@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
@@ -110,6 +111,11 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 	    player.addChatMessage("You are too far away to construct that gate, move closer");
 	    return false;
 	    }
+	  if(!canSpawnGate(world, pos1, pos2))
+	    {
+	    player.addChatMessage("There is already a gate in that location!!");
+	    return false;
+	    }
     EntityGate entity = Gate.constructGate(world, pos1, pos2, Gate.getGateByID(stack.getItemDamage()), facing);
     if(entity!=null)
       {
@@ -134,6 +140,26 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       }
     }
   return false;
+  }
+
+protected boolean canSpawnGate(World world, BlockPosition pos1, BlockPosition pos2)
+  {  
+  BlockPosition min = BlockTools.getMin(pos1, pos2);
+  BlockPosition max = BlockTools.getMax(pos1, pos2);
+  AxisAlignedBB newGateBB = AxisAlignedBB.getAABBPool().getAABB(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);
+  AxisAlignedBB oldGateBB = null;
+  List<EntityGate> gates = world.getEntitiesWithinAABB(EntityGate.class, newGateBB);
+  for(EntityGate gate : gates)
+    {  
+    min = BlockTools.getMin(gate.pos1, gate.pos2);
+    max = BlockTools.getMax(gate.pos1, gate.pos2);
+    oldGateBB = AxisAlignedBB.getAABBPool().getAABB(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1);
+    if(oldGateBB.intersectsWith(newGateBB))
+      {
+      return false;
+      }
+    }
+  return true;
   }
 
 @Override
