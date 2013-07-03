@@ -201,8 +201,8 @@ TWEAKS/OPTIMIZATION
 * fix civic block in-hand rendering is off
 * fix crafting table block in-hand rendering being off
 * fix vehicle in-hand rendering (first and third person)
-
 * add alchemy table recipe : (netherrack x4 => 1x gunpowder)
+* and..one more pass at cleaning up auto-crafting/crafting table worker interaction
 
 /********** 07-03-13 **********/
 /********** 07-04-13 **********/

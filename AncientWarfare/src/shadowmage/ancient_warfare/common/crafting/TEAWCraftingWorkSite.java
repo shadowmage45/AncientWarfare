@@ -68,7 +68,7 @@ public void updateEntity()
 public void doWork(IWorker worker)
   {
   this.workProgress+=20;
-  if(this.workProgress>this.workProgressMax)
+  if(this.workProgress>=this.workProgressMax)
     {
     this.workProgress = this.workProgressMax;
     if(this.tryFinish())
