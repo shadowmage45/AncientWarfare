@@ -23,6 +23,7 @@ FROM TESTING
 * soldiers attempt to walk up/down through a leaf block
 * move over to the forge-based packet system (basically wrap my packets in a single forge packet)
 * soldiers stick in gates?
+* ignore incorrect packet/container types (remove error msg)
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -50,9 +51,6 @@ GENERAL
 * method to remove buildings/templates from server (editor gui?)   
 * researcher and craftsmsan need specific tools
 * research notes item need to have right-click function to learn the research if not already known
-* add recipes to chemistry table 
-* fix rotation of rendered crafting station blocks in inventory
-* fix position of rendered crafting station blocks when held/on ground (item form)
 * NEI plugin for special crafting recipes
 * add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
 
