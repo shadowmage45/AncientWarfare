@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,11 +29,14 @@ import net.minecraft.item.ItemStack;
 public class TEFarmMelon extends TEWorkSiteFarm
 {
 
+ItemStack melonFilter;
+
 public TEFarmMelon()
   {
   this.mainBlockID = Block.melon.blockID;
   this.mainBlockMatureMeta = 0;
   this.plantableFilter = new ItemStack(Item.melonSeeds);
+  melonFilter = new ItemStack(Item.melon);
   }
 
 @Override
@@ -43,7 +47,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
     {    
     return TargetType.FARM_PLANT;
     }
-  else if(id==Block.melon.blockID && inventory.getEmptySlotCount()>=1)
+  else if(id==Block.melon.blockID && InventoryTools.canHoldItem(inventory, melonFilter, 1, otherSlotIndices))
     {
     return TargetType.FARM_HARVEST;
     }

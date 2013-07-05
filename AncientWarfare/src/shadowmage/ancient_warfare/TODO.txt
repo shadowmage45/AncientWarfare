@@ -25,8 +25,6 @@ FROM TESTING
 * soldiers stick in gates?
 * ignore incorrect packet/container types (remove error msg)
 * melon farm doesn't pickup melons?
-* npc upgrading doesn't consume npc spawner item
-* melon farm overfills
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -222,6 +220,8 @@ TWEAKS/OPTIMIZATION
 
 
 /********** 07-04-13 **********/
+* npc upgrading doesn't consume npc spawner item
+* melon farm overfills
 /********** 07-05-13 **********/
 /********** 07-06-13 **********/
 /********** 07-07-13 **********/

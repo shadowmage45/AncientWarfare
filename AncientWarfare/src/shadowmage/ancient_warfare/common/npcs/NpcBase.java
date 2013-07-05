@@ -459,7 +459,10 @@ public boolean interact(EntityPlayer player)
     {
     if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().itemID == ItemLoader.npcSpawner.itemID)
       {
-      tryUpgradeNpc(this.worldObj, player, player.getCurrentEquippedItem(), this);
+      if(tryUpgradeNpc(this.worldObj, player, player.getCurrentEquippedItem(), this))
+        {
+        player.inventory.consumeInventoryItem(player.inventory.currentItem);
+        }      
       return true;
       }    
     if(player.isSneaking())
