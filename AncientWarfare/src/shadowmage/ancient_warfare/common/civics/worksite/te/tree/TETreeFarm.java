@@ -175,7 +175,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
   int id = worldObj.getBlockId(x, y, z);
   int meta = worldObj.getBlockMetadata(x, y, z);
   boolean hasSapling = inventory.containsAtLeast(saplingFilter, 1);  
-  if( id==logID && (meta &3) == this.logMeta && this.inventory.canHoldItem(logFilter, 1) )
+  if( id==logID && (meta &3) == this.logMeta && InventoryTools.canHoldItem(inventory, logFilter, 1, otherSlotIndices))
     {
     return TargetType.TREE_CHOP;
     }

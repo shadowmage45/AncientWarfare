@@ -18,13 +18,17 @@ FROM TESTING
 * adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
 * investigate ghost items placed into player inventory (not closing a gui correctly?)
 * add 'go back to base gui' button to info guis
-* add death-message translate to local gui in npc list gui
+* add death-message translate to local gui in npc list gui (figure out how/where they are translated, pull manual translate)
 * heuristic evaluation of tick times for pathfinding scheduling -> when tick times are good, do more cylcles per path
 * soldiers attempt to walk up/down through a leaf block
-* move over to the forge-based packet system (basically wrap my packets in a single forge packet)
 * soldiers stick in gates?
 * ignore incorrect packet/container types (remove error msg)
-* melon farm doesn't pickup melons?
+
+LANGUAGE/TRANSLATIONS
+* move over to generic names for all
+* add en_US translation table
+* find others to add/contribute to other translation tables
+* move all GUIs over from rendering static strings to rendering translated strings
 
 BALANCE/TWEAKS
 * examine recipe balance
@@ -183,36 +187,10 @@ TWEAKS/OPTIMIZATION
 * editor GUI has some really ugly code to render chars....
 * custom block placement code for creative/survival builders (set server block, manually relay to client--should 
         decrease overall network used from vanilla MC resending entire chunks..)
+* move over to the forge-based packet system (basically wrap my packets in a single forge packet)
 
 ********************* DONE STUFF ************************* 
 
-/********** 07-01-13 **********/
-* expand pathfinder bounds and time limit to allow for longer paths to be found, even on slower computers.  This WILL have
-    negative impact on slower computers that are operating near their performance limit (the additional pathfinding time will likely
-    push it past acceptible tick times).  Will be opening these up to config options so that server admins can adjust to
-    suit their hardware.
-* add shift-click interaction to backpack
-* add death-cause entity-name to dead-npc tracking list
-* fix default targets that will aggro on NPCs (essentially, use the config-target list as the list of mobs that will aggro said npc)
-* auto-crafting table (probably others) dont' use materials since last patch when an npc completes a recipe
-
-/********** 07-02-13 **********/
-* fix auto-crafting bug for real, and non-hacky
-* decrease pathfinding search range from 60->40 (I think search range was fine, max path-time was not)
-* routing slip wont' save values > 128
-* town hall-update area1/area2 size on 'clear' button pressed
-* mines attempt to harvest water
-* add 'live' / 'dead' labels to npc-list gui
-* add models for alchemy and auto-crafting tables
-* add textures for alchemy and auto-craft tables
-* adjust npc shadow size (its like 2-blocks currently)
-* add alchemy/auto-crafting model/textures in-game
-* fix civic block in-hand rendering is off
-* fix crafting table block in-hand rendering being off
-* fix vehicle in-hand rendering (first and third person)
-* add alchemy table recipe : (netherrack x4 => 1x gunpowder)
-* and..one more pass at cleaning up auto-crafting/crafting table worker interaction
-* update version number (013) and release, last release for 1.5.2
 
 /********** 07-03-13 **********/
 * gates overlapping (validate gate positioning on attempt to spawn via item)
@@ -222,7 +200,10 @@ TWEAKS/OPTIMIZATION
 /********** 07-04-13 **********/
 * npc upgrading doesn't consume npc spawner item
 * melon farm overfills
+
 /********** 07-05-13 **********/
+* update tree farms to check inventory spots specifically when validating work-points
+* update civic resource slot size on many civics (3 -> 1), to reduce latency from starting the civic to it being actually productive
 /********** 07-06-13 **********/
 /********** 07-07-13 **********/
 /********** 07-08-13 **********/

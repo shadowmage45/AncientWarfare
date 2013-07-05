@@ -70,15 +70,15 @@ public class Civic implements ICivicType
 public static final Civic[] civicList = new Civic[64];
 
 public static ICivicType wheatFarm = new CivicFarm(0, "Wheat Farm", "10x10 Max Width", TEFarmWheat.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmWheatBottom", "civicFarmWheatTop", "civicFarmWheatSides").addResourceItem(new ItemStack(Item.seeds));
-public static ICivicType carrotFarm = new CivicFarm(1, "Carrot Farm", "10x10 Max Width", TEFarmCarrot.class, "civicFarmCarrot1", 10, 2).setBlockIcons("civicFarmCarrotBottom", "civicFarmCarrotTop", "civicFarmCarrotSides").addResourceItem(new ItemStack(Item.carrot));
-public static ICivicType potatoFarm = new CivicFarm(2, "Potato Farm", "10x10 Max Width", TEFarmPotato.class, "civicFarmPotato1", 10, 2).setBlockIcons("civicFarmPotatoBottom", "civicFarmPotatoTop", "civicFarmPotatoSides").addResourceItem(new ItemStack(Item.potato));
-public static ICivicType melonFarm = new CivicFarm(3, "Melon Farm", "10x10 Max Width", TEFarmMelon.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMelonBottom", "civicFarmMelonTop", "civicFarmMelonSides").addResourceItem(new ItemStack(Item.melonSeeds));
-public static ICivicType pumpkinFarm = new CivicFarm(4, "Pumpkin Farm", "10x10 Max Width", TEFarmPumpkin.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmPumpkinBottom", "civicFarmPumpkinTop", "civicFarmPumpkinSides").addResourceItem(new ItemStack(Item.pumpkinSeeds));
-public static ICivicType cactusFarm = new CivicFarm(5, "Cactus Farm", "10x10 Max Width", TEFarmCactus.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmCactusBottom", "civicFarmCactusTop", "civicFarmCactusSides").addResourceItem(new ItemStack(Block.cactus));
-public static ICivicType reedFarm = new CivicFarm(6, "Reed Farm", "10x10 Max Width", TEFarmReed.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmReedBottom", "civicFarmReedTop", "civicFarmReedSides").addResourceItem(new ItemStack(Item.reed));
-public static ICivicType mushroomRedFarm = new CivicFarm(7, "Red Mushroom Farm", "10x10 Max Width", TEFarmMushroomRed.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMushroomRedBottom", "civicFarmMushroomRedTop", "civicFarmMushroomRedSides").addResourceItem(new ItemStack(Block.mushroomRed));
-public static ICivicType mushroomBrownFarm = new CivicFarm(8, "Brown Mushroom Farm", "10x10 Max Width", TEFarmMushroomBrown.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMushroomBrownBottom", "civicFarmMushroomBrownTop", "civicFarmMushroomBrownSides").addResourceItem(new ItemStack(Block.mushroomBrown));
-public static ICivicType netherstalkFarm = new CivicFarm(9, "Netherstalk Farm", "10x10 Max Width", TEFarmNetherStalk.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmNetherBottom", "civicFarmNetherTop", "civicFarmNetherSides").addResourceItem(new ItemStack(Item.netherStalkSeeds));
+public static ICivicType carrotFarm = new CivicFarm(1, "Carrot Farm", "10x10 Max Width", TEFarmCarrot.class, "civicFarmCarrot1", 10, 2).setBlockIcons("civicFarmCarrotBottom", "civicFarmCarrotTop", "civicFarmCarrotSides").addResourceItem(new ItemStack(Item.carrot)).setResourceSlotSize(1);
+public static ICivicType potatoFarm = new CivicFarm(2, "Potato Farm", "10x10 Max Width", TEFarmPotato.class, "civicFarmPotato1", 10, 2).setBlockIcons("civicFarmPotatoBottom", "civicFarmPotatoTop", "civicFarmPotatoSides").addResourceItem(new ItemStack(Item.potato)).setResourceSlotSize(1);
+public static ICivicType melonFarm = new CivicFarm(3, "Melon Farm", "10x10 Max Width", TEFarmMelon.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMelonBottom", "civicFarmMelonTop", "civicFarmMelonSides").addResourceItem(new ItemStack(Item.melonSeeds)).setResourceSlotSize(3);
+public static ICivicType pumpkinFarm = new CivicFarm(4, "Pumpkin Farm", "10x10 Max Width", TEFarmPumpkin.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmPumpkinBottom", "civicFarmPumpkinTop", "civicFarmPumpkinSides").addResourceItem(new ItemStack(Item.pumpkinSeeds)).setResourceSlotSize(3);
+public static ICivicType cactusFarm = new CivicFarm(5, "Cactus Farm", "10x10 Max Width", TEFarmCactus.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmCactusBottom", "civicFarmCactusTop", "civicFarmCactusSides").addResourceItem(new ItemStack(Block.cactus)).setResourceSlotSize(1);
+public static ICivicType reedFarm = new CivicFarm(6, "Reed Farm", "10x10 Max Width", TEFarmReed.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmReedBottom", "civicFarmReedTop", "civicFarmReedSides").addResourceItem(new ItemStack(Item.reed)).setResourceSlotSize(1);
+public static ICivicType mushroomRedFarm = new CivicFarm(7, "Red Mushroom Farm", "10x10 Max Width", TEFarmMushroomRed.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMushroomRedBottom", "civicFarmMushroomRedTop", "civicFarmMushroomRedSides").addResourceItem(new ItemStack(Block.mushroomRed)).setResourceSlotSize(1);
+public static ICivicType mushroomBrownFarm = new CivicFarm(8, "Brown Mushroom Farm", "10x10 Max Width", TEFarmMushroomBrown.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMushroomBrownBottom", "civicFarmMushroomBrownTop", "civicFarmMushroomBrownSides").addResourceItem(new ItemStack(Block.mushroomBrown)).setResourceSlotSize(1);
+public static ICivicType netherstalkFarm = new CivicFarm(9, "Netherstalk Farm", "10x10 Max Width", TEFarmNetherStalk.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmNetherBottom", "civicFarmNetherTop", "civicFarmNetherSides").addResourceItem(new ItemStack(Item.netherStalkSeeds)).setResourceSlotSize(1);
 public static ICivicType mineBasic = new CivicMine(10, "Basic Layout Mine", "16x16 Max Width", TEMine.class,16).setBlockIcons("civicMineBasicBottom", "civicMineBasicTop", "civicMineBasicSides");
 //mine r2
 //mine r3
@@ -102,10 +102,7 @@ public static ICivicType fishFarm = new CivicFishFarm(29, "Fish Farm", "16x16 Ma
 public static ICivicType squidFarm = new CivicFishFarm(30, "Squid Farm", "16x16 Max Width, needs water", TESquidFarm.class, "civicFarmWheat1",16,2).setBlockIcons("civicFarmSquidBottom", "civicFarmSquidTop", "civicFarmSquidSides");
 public static ICivicType cocoaFarm = new CivicFarm(31, "Cocoa Bean Farm", "10x10 Max Width", TEFarmCocoa.class, "civicFarmWheat1", 10 ,2).setBlockIcons("civicFarmCocoaBottom", "civicFarmCocoaTop", "civicFarmCocoaSides").addResourceItem(new ItemStack(Item.dyePowder,1,3));
 public static ICivicType warehouseSmall = new CivicWarehouse(32, "Warehouse", "9x9x3 Max Size", TECivicWarehouse.class, 9, 3);
-//smithy (process ores -> ingots)(auto-furnace station)
-//lumber yard (process logs -> planks/charcoal)
-//factory (single block)(use provided resources to craft player-set recipes)
-//dwellings (player designated shelter sites....)
+
 
 protected int globalID = 0;
 protected String name = "";
@@ -144,6 +141,12 @@ public Civic(int id)
     {
     Config.logError("Duplicate Civic attempted to register: "+id);
     }
+  }
+
+public Civic setResourceSlotSize(int size)
+  {
+  this.resourceSlotSize = size;
+  return this;
   }
 
 @Override
