@@ -24,6 +24,9 @@ FROM TESTING
 * move over to the forge-based packet system (basically wrap my packets in a single forge packet)
 * soldiers stick in gates?
 * ignore incorrect packet/container types (remove error msg)
+* melon farm doesn't pickup melons?
+* npc upgrading doesn't consume npc spawner item
+* melon farm overfills
 
 BALANCE/TWEAKS
 * examine recipe balance
