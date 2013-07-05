@@ -379,7 +379,7 @@ private void tryAddSearchNode(int x, int y, int z, Node p)
       {
       if(p.y > y)//moving down from parent, check y -> y +2
         {
-        if(world.isCube(x, y+2, z))
+        if(!world.checkBlockBounds(x, y+2, z))//.isCube(x, y+2, z))
           {
           return;
           }
@@ -390,10 +390,14 @@ private void tryAddSearchNode(int x, int y, int z, Node p)
           {
           return;
           }
-        if(world.isCube(p.x, p.y+2, p.z))
+        if(!world.checkBlockBounds(p.x, p.y+2, p.z))
           {
           return;
           }
+//        if(world.isCube(p.x, p.y+2, p.z))
+//          {
+//          return;
+//          }
         }
       }
     searchNodes.add(getOrMakeNode(x, y, z, p));

@@ -204,6 +204,7 @@ TWEAKS/OPTIMIZATION
 /********** 07-05-13 **********/
 * update tree farms to check inventory spots specifically when validating work-points
 * update civic resource slot size on many civics (3 -> 1), to reduce latency from starting the civic to it being actually productive
+* fix up pathfinding to use new block bounds check for diagonal up/down blocks.  should eliminate many instances of npcs becoming stuck on leaves (and some other blocks)
 /********** 07-06-13 **********/
 /********** 07-07-13 **********/
 /********** 07-08-13 **********/
