@@ -30,28 +30,27 @@ import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
-public class ServerTickTimer implements ITickHandler
+public class ServerPerformanceMonitor implements ITickHandler
 {
 
 long[] tickTimes = new long[20];
 long[] tickIntervals = new long[20];
+long[] pathTickTimes = new long[20];
 
 int index = 0;
-
 long startTime = System.nanoTime();
 long prevStartTime = System.nanoTime();
 
-int ticks = 0;
-long perSecondReceived = 0;
-long perSecondSent = 0;
-long[] packetSizesReceived = new long[100];
-long prevTotalSizeReceived = 0;
-long[] packetSizesSent = new long[100];
-long prevTotalSizeSent = 0;
+public static long pathFindTimeThisTick = 0;
+public static long tickTime;
+public static long tickPerSecond;
+public static long pathTimeOneSecond;
+public static long pathTimeTickAverage;
 
 @Override
 public void tickStart(EnumSet<TickType> type, Object... tickData)
   {
+  if(!Config.enablePerformanceMonitor){return;}
   if(index==20)
     {
     index = 0;    
@@ -59,56 +58,46 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
   this.count();
   prevStartTime = startTime;
   startTime = System.nanoTime();
-  this.tickIntervals[index] = startTime-prevStartTime;  
-  
-  
-  this.packetSizesReceived[(int) (ticks%100)]=Packet.receivedSize-prevTotalSizeReceived;
-  this.prevTotalSizeReceived = Packet.receivedSize;
-  this.packetSizesSent[(int)(ticks%100)]=Packet.sentSize-prevTotalSizeSent;
-  this.prevTotalSizeSent = Packet.sentSize;
-  int tickDiv = ticks/20;
-  tickDiv = tickDiv==0? 1 : tickDiv;
-  this.perSecondReceived = this.prevTotalSizeReceived / tickDiv;
-  this.perSecondSent = this.prevTotalSizeSent / tickDiv;
-  this.ticks++;  
+  this.tickIntervals[index] = startTime-prevStartTime;     
+ 
 //  Config.logDebug("sps: "+this.perSecondSent  + " rps: "+this.perSecondReceived  + " rrs: "+Packet.receivedSize + " rss: "+Packet.sentSize);
   }
 
 @Override
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {  
+  if(!Config.enablePerformanceMonitor){return;}
   tickTimes[index] = System.nanoTime() - startTime;
-//  Config.logDebug("t: "+tickTimes[index]);
+  pathTickTimes[index] = pathFindTimeThisTick;
+  pathFindTimeThisTick = 0;
   index++;
   }
 
 public void count()
   {
+  if(!Config.enablePerformanceMonitor){return;}
   long total = 0;
   long totalInterval = 0;
+  long totalPathTime = 0;
   for(int i = 0; i < this.tickTimes.length; i++)
     {
     total += this.tickTimes[i];
     totalInterval += this.tickIntervals[i];
     //Config.logDebug("tickTime: "+tickTimes[i]+" I: "+tickIntervals[i]);
     } 
-  long avg = total/this.tickTimes.length;
-  long avgInterval = totalInterval/this.tickIntervals.length;
-  long tms = (avg/1000000)+1;
-  long tmsI = (avgInterval/1000000)+1;
-  
-  
-  int tps = (int)(1000/tms);  
-  if(Config.DEBUG)
+  for(int i = 0; i < this.pathTickTimes.length; i++)
     {
-    Packet01ModData pkt = new Packet01ModData();
-    pkt.setTickTimes(avg, tps);
-//    pkt.setPacketSizes(this.perSecondSent, this.perSecondReceived);
-    pkt.sendPacketToAllPlayers();
-    
+    totalPathTime += this.pathTickTimes[i];
     }
-  
-//  Config.logDebug("avg: " + avg + "  TPS: "+ (1000/tms)+" avgI: "+avgInterval);  
+  long avg = total/20;
+  long avgInterval = totalInterval/20;
+  long tms = (avg/1000000)+1;
+  long tmsI = (avgInterval/1000000)+1; 
+  int tps = (int)(1000/tms);  
+  tickTime = avg;
+  tickPerSecond = tps;
+  pathTimeOneSecond = totalPathTime;
+  pathTimeTickAverage = totalPathTime / 20;
   }
 
 @Override

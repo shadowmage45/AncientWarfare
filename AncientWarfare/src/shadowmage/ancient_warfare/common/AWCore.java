@@ -52,7 +52,7 @@ import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
-import shadowmage.ancient_warfare.common.utils.ServerTickTimer;
+import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.world_gen.VillageGenerator;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
@@ -199,7 +199,7 @@ public void load(FMLPostInitializationEvent evt)
    */
   Config.saveConfig();
   
-  TickRegistry.registerTickHandler(new ServerTickTimer(), Side.SERVER);
+  TickRegistry.registerTickHandler(new ServerPerformanceMonitor(), Side.SERVER);
   TickRegistry.registerTickHandler(new ServerTicker(), Side.SERVER);
   TickRegistry.registerTickHandler(new ClientTicker(), Side.CLIENT);
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 

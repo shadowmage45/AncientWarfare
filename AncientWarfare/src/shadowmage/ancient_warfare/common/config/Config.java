@@ -40,6 +40,9 @@ public static final String CORE_VERSION_BUILD = "013";
 public static final String CORE_BUILD_STATUS = "alpha";
 public static final String MC_VERSION = "1.5.2";
 
+public static String texturePath = "/mods/ancientwarfare/textures/";
+public static String languagePath = "/shadowmage/ancient_warfare/resources/lang/";
+
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
@@ -48,8 +51,7 @@ public static final boolean DEBUG = true;
 
 //***************************************************LOADED CONFIGS******************************************//
 
-public static String texturePath = "/mods/ancientwarfare/textures/";
-public static String languagePath = "/shadowmage/ancient_warfare/resources/lang/";
+public static boolean enablePerformanceMonitor = false;
 public static boolean invertShiftClickOnItems = false;
 public static String templateExtension = "aws";
 public static boolean adjustMissilesForAccuracy = false;
@@ -200,6 +202,7 @@ public void setCoreInfo()
   this.blockFires = config.get("a-general-options", "missile_start_fires", true, "If true, missiles will be capable of lighting fires and placing lava blocks.").getBoolean(true);
   this.disableResearch = config.get("a-general-options", "disable_research", false, "If true, research system will be disabled and all recipes will be available.").getBoolean(false);
   this.useNpcWorkForCrafting = config.get("a-general-options", "npc_work", true, "If true, npcs will be required to produce items at crafting stations.").getBoolean(true);
+  this.enablePerformanceMonitor = config.get("a-general-options", "performance_monitor", true, "If true, enables a server-side performance monitor viewable by server OPs from the AW config menu (F7)").getBoolean(true);
   
   /**
    * performance options

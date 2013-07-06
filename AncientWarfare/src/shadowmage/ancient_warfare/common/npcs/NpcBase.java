@@ -461,7 +461,11 @@ public boolean interact(EntityPlayer player)
       {
       if(tryUpgradeNpc(this.worldObj, player, player.getCurrentEquippedItem(), this))
         {
-        player.inventory.consumeInventoryItem(player.inventory.currentItem);
+        player.inventory.getCurrentItem().stackSize--;
+        if(player.inventory.getCurrentItem().stackSize<=0)
+          {
+          player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+          }
         }      
       return true;
       }    

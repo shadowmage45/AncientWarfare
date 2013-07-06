@@ -27,15 +27,16 @@ import net.minecraft.item.ItemStack;
 
 public class TEFarmPumpkin extends TEWorkSiteFarm
 {
-
+ItemStack pumpkinFilter;
 /**
  * 
  */
 public TEFarmPumpkin()
   {
-  this.mainBlockID = Block.pumpkin.blockID;
+  this.mainBlockID = Block.pumpkinStem.blockID;
   this.mainBlockMatureMeta = 0;
   this.plantableFilter = new ItemStack(Item.pumpkinSeeds);
+  pumpkinFilter = new ItemStack(Block.pumpkin);
   }
 
 @Override
@@ -46,7 +47,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
     {    
     return TargetType.FARM_PLANT;
     }
-  else if(id==Block.pumpkin.blockID && inventory.getEmptySlotCount()>=1)
+  else if(id==Block.pumpkin.blockID && inventory.canHoldItem(pumpkinFilter, 1, resourceSlotIndices))
     {
     return TargetType.FARM_HARVEST;
     }

@@ -46,6 +46,7 @@ import shadowmage.ancient_warfare.client.gui.npc.GuiCourierRoutingSlip;
 import shadowmage.ancient_warfare.client.gui.npc.GuiNpcBase;
 import shadowmage.ancient_warfare.client.gui.npc.GuiNpcCourier;
 import shadowmage.ancient_warfare.client.gui.settings.GuiClientSettings;
+import shadowmage.ancient_warfare.client.gui.settings.GuiDebugInfo;
 import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
 import shadowmage.ancient_warfare.client.gui.structure.GuiEditorSelect;
 import shadowmage.ancient_warfare.client.gui.structure.GuiStructureScanner;
@@ -68,6 +69,7 @@ import shadowmage.ancient_warfare.common.container.ContainerCivicWarehouse;
 import shadowmage.ancient_warfare.common.container.ContainerCivilEngineering;
 import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
+import shadowmage.ancient_warfare.common.container.ContainerDebugInfo;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
@@ -126,6 +128,7 @@ public static final int AUTO_CRAFT = 48;
 
 public static final int VEHICLE_AMMO_SELECT = 98;
 public static final int VEHICLE_DEBUG = 99;
+public static final int PERFORMANCE = 100;
 
 private static GUIHandler INSTANCE;
 private GUIHandler(){}
@@ -325,6 +328,9 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
     }
   return null;
   
+  case PERFORMANCE:
+  return new ContainerDebugInfo(player);  
+  
   } 
   return null;
   }
@@ -352,7 +358,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   return new GuiEditorSelect(new ContainerEditor(player));
   
   case SETTINGS:
-  return new GuiClientSettings(new ContainerDummy());
+  return new GuiClientSettings(player, new ContainerDummy());
   
   case TEAM_CONTROL:
   return new GuiTeamControl(new ContainerTeamControl(player));
@@ -518,6 +524,10 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
     return new GuiVehicleDebug(new ContainerVehicle(player, vehicle, vehicle));
     }
   return null;//TODO make/set gui & container..
+  
+  case PERFORMANCE:
+  return new GuiDebugInfo(new ContainerDebugInfo(player));
+  
   } 
   return null;
   }

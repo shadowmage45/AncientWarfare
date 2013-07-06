@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.client.gui.settings;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
@@ -28,6 +29,7 @@ import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 
 public class GuiClientSettings extends GuiContainerAdvanced
 {
@@ -41,13 +43,17 @@ GuiCheckBoxSimple enableNpcNameplates;
 GuiCheckBoxSimple enableCivicBounds;
 GuiCheckBoxSimple enableNpcObjective;
 GuiButtonSimple keyBinds;
+GuiButtonSimple performance;
+
+EntityPlayer player;
 
 /**
  * @param container
  */
-public GuiClientSettings(Container container)
+public GuiClientSettings(EntityPlayer player, Container container)
   {
-  super(container);  
+  super(container); 
+  this.player = player;
   }
 
 @Override
@@ -79,12 +85,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Render Vehicle Nameplates", left, guiTop+90+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Npc Nameplates", left, guiTop+110+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Civic Work Bounds", left, guiTop+130+4, 0xffffffff);
-  this.drawString(fontRenderer, "Render Npc Objectives", left, guiTop+150+4, 0xffffffff);
-  if(Config.DEBUG)
-    {
-//    this.drawString(fontRenderer, "RPS: "+AWCore.proxy.recPacketAvg+ " SPS: "+AWCore.proxy.sentPacketAvg, guiLeft+5, guiTop+getYSize()-25, 0xffffffff);
-    this.drawString(fontRenderer, "TPS: "+AWCore.proxy.serverTPS+ " AVG TICK: "+AWCore.proxy.serverTickTime, guiLeft+5, guiTop+getYSize()-15, 0xffffffff);
-    }
+  this.drawString(fontRenderer, "Render Npc Objectives", left, guiTop+150+4, 0xffffffff); 
   }
 
 @Override
@@ -127,6 +128,11 @@ public void onElementActivated(IGuiElement element)
     case 9:
     Settings.setRenderNpcObjectives(this.enableNpcObjective.checked());
     break;
+    
+    case 10:
+    GUIHandler.instance().openGUI(GUIHandler.PERFORMANCE, player, player.worldObj, 0, 0, 0);    
+    break;
+    
     default:
     break;   
     }
@@ -145,6 +151,7 @@ public void setupControls()
   this.enableNpcNameplates = this.addCheckBox(7, 10, 110, 16, 16).setChecked(Settings.getRenderNpcNameplates());
   this.enableCivicBounds = this.addCheckBox(8, 10, 130, 16, 16).setChecked(Settings.getRenderCivicBounds());
   this.enableNpcObjective = this.addCheckBox(9, 10, 150, 16, 16).setChecked(Settings.getRenderNpcObjectives());
+  this.performance = this.addGuiButton(10, getXSize()-55-10, 50, 55, 16, "Perf.");
   }
 
 @Override

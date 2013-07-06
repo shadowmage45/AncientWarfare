@@ -33,7 +33,7 @@ ItemStack melonFilter;
 
 public TEFarmMelon()
   {
-  this.mainBlockID = Block.melon.blockID;
+  this.mainBlockID = Block.melonStem.blockID;
   this.mainBlockMatureMeta = 0;
   this.plantableFilter = new ItemStack(Item.melonSeeds);
   melonFilter = new ItemStack(Item.melon);
