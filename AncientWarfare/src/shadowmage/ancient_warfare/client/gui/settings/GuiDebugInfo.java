@@ -66,11 +66,41 @@ public String getGuiBackGroundTexture()
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   int white = 0xffffffff;
-  this.drawStringGui("tickTime  : "+container.tickTime, 5, 5, white);
-  this.drawStringGui("tps       : "+container.tickPerSecond, 5, 15, white);
-  this.drawStringGui("pathAvg   : "+container.pathTimeTickAverage, 5, 25, white);
-  this.drawStringGui("pathOneSec: "+container.pathTimeOneSecond, 5, 35, white);
-  this.drawStringGui("memUse    : "+container.memUse, 5, 45, white);
+  String tickTime = String.format("%,.4f ms", (float)container.tickTime/1000000);
+  String tps = String.format("%,d", container.tickPerSecond);
+  String path = String.format("%,.4f ms", (float)container.pathTimeTickAverage/1000000);
+  String memUse = String.format("%,d bytes", container.memUse);
+  String civ = String.format("%,.4f ms", (float)container.civicTick/1000000);
+  String npc = String.format("%,.4f ms", (float)container.npcTick/1000000);
+  String veh = String.format("%,.4f ms", (float)container.vehicleTick/1000000);
+  
+  this.drawStringGui("tickTime", 5, 5, white);
+  this.drawStringGui("tps", 5, 15, white);
+  this.drawStringGui("memUse", 5, 25, white);
+  this.drawStringGui("pathAvg", 5, 35, white);
+  this.drawStringGui("civTick", 5, 45, white);
+  this.drawStringGui("npcTick", 5, 55, white);
+  this.drawStringGui("vehTick", 5, 65, white);
+  
+  this.drawStringGui(" : " + tickTime, 75, 5, white);
+  this.drawStringGui(" : " + tps, 75, 15, white);
+  this.drawStringGui(" : " + memUse, 75, 25, white);
+  this.drawStringGui(" : " + path, 75, 35, white);
+  this.drawStringGui(" : " + civ, 75, 45, white);
+  this.drawStringGui(" : " + npc, 75, 55, white);
+  this.drawStringGui(" : " + veh, 75, 65, white);
+  
+  container.tickTime = container.tickTime==0?  1: container.tickTime;
+  float pathPercent = (float)container.pathTimeTickAverage / (float)container.tickTime;
+  float civPercent = (float)container.civicTick / (float)container.tickTime;
+  float npcPercent = (float)container.npcTick / (float)container.tickTime;
+  float vehPercent = (float)container.vehicleTick / (float)container.tickTime;
+    
+  this.drawStringGui(" : " + String.format("%.2f", pathPercent*100) + "%", 135, 35, white);
+  this.drawStringGui(" : " + String.format("%.2f", civPercent*100) + "%", 135, 45, white);
+  this.drawStringGui(" : " + String.format("%.2f", npcPercent*100) + "%", 135, 55, white);
+  this.drawStringGui(" : " + String.format("%.2f", vehPercent*100) + "%", 135, 65, white);
+  
   }
 
 @Override

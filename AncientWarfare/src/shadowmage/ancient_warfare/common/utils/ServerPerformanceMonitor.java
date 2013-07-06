@@ -36,16 +36,26 @@ public class ServerPerformanceMonitor implements ITickHandler
 long[] tickTimes = new long[20];
 long[] tickIntervals = new long[20];
 long[] pathTickTimes = new long[20];
+long[] npcTickTimes = new long[20];
+long[] civicTickTimes = new long[20];
+long[] vehicleTickTimes = new long[20];
 
 int index = 0;
 long startTime = System.nanoTime();
 long prevStartTime = System.nanoTime();
 
+
 public static long pathFindTimeThisTick = 0;
+public static long npcTickTimeThisTick = 0;
+public static long civicTickTimeThisTick = 0;
+public static long vehicleTickTimeThisTick = 0;
+
 public static long tickTime;
 public static long tickPerSecond;
-public static long pathTimeOneSecond;
-public static long pathTimeTickAverage;
+public static long pathTimeAverage;
+public static long npcTimeAverage;
+public static long civicTimeAverage;
+public static long vehicleTimeAverage;
 
 @Override
 public void tickStart(EnumSet<TickType> type, Object... tickData)
@@ -58,9 +68,7 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
   this.count();
   prevStartTime = startTime;
   startTime = System.nanoTime();
-  this.tickIntervals[index] = startTime-prevStartTime;     
- 
-//  Config.logDebug("sps: "+this.perSecondSent  + " rps: "+this.perSecondReceived  + " rrs: "+Packet.receivedSize + " rss: "+Packet.sentSize);
+  this.tickIntervals[index] = startTime-prevStartTime;   
   }
 
 @Override
@@ -69,7 +77,13 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
   if(!Config.enablePerformanceMonitor){return;}
   tickTimes[index] = System.nanoTime() - startTime;
   pathTickTimes[index] = pathFindTimeThisTick;
+  npcTickTimes[index] = npcTickTimeThisTick;
+  civicTickTimes[index] = civicTickTimeThisTick;
+  vehicleTickTimes[index] = vehicleTickTimeThisTick;
   pathFindTimeThisTick = 0;
+  npcTickTimeThisTick = 0;
+  civicTickTimeThisTick = 0;
+  vehicleTickTimeThisTick = 0;
   index++;
   }
 
@@ -79,16 +93,18 @@ public void count()
   long total = 0;
   long totalInterval = 0;
   long totalPathTime = 0;
-  for(int i = 0; i < this.tickTimes.length; i++)
+  long totalNpcTime = 0;
+  long totalCivicTime = 0;
+  long totalVehicleTime = 0;
+  for(int i = 0; i < 20; i++)
     {
     total += this.tickTimes[i];
     totalInterval += this.tickIntervals[i];
-    //Config.logDebug("tickTime: "+tickTimes[i]+" I: "+tickIntervals[i]);
-    } 
-  for(int i = 0; i < this.pathTickTimes.length; i++)
-    {
     totalPathTime += this.pathTickTimes[i];
-    }
+    totalNpcTime += this.npcTickTimes[i];
+    totalCivicTime += this.civicTickTimes[i];
+    totalVehicleTime += this.vehicleTickTimes[i];
+    }   
   long avg = total/20;
   long avgInterval = totalInterval/20;
   long tms = (avg/1000000)+1;
@@ -96,8 +112,30 @@ public void count()
   int tps = (int)(1000/tms);  
   tickTime = avg;
   tickPerSecond = tps;
-  pathTimeOneSecond = totalPathTime;
-  pathTimeTickAverage = totalPathTime / 20;
+  pathTimeAverage = totalPathTime / 20;
+  npcTimeAverage = totalNpcTime/20;
+  civicTimeAverage = totalCivicTime / 20;
+  vehicleTimeAverage = totalVehicleTime / 20;  
+  }
+
+public static void addPathfindingTime(long time)
+  {
+  pathFindTimeThisTick += time;
+  }
+
+public static void addNpcTickTime(long time)
+  {
+  npcTickTimeThisTick += time;
+  }
+
+public static void addCivicTickTime(long time)
+  {
+  civicTickTimeThisTick += time;
+  }
+
+public static void addVehicleTickTime(long time)
+  {
+  vehicleTickTimeThisTick += time;
   }
 
 @Override

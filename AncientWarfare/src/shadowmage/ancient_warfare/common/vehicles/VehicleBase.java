@@ -52,6 +52,7 @@ import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.utils.ByteTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
+import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.DummyVehicleHelper;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
@@ -578,6 +579,7 @@ public void setDead()
 @Override
 public void onUpdate()
   {  
+  long t1 = System.nanoTime();
   super.onUpdate(); 
   if(this.worldObj.isRemote)
     {
@@ -611,6 +613,7 @@ public void onUpdate()
       this.assignedRider=null;
       }
     }
+  ServerPerformanceMonitor.addVehicleTickTime(System.nanoTime() - t1);
   }
 
 /**

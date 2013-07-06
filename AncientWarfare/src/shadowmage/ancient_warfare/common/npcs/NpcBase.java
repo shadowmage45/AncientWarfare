@@ -62,6 +62,7 @@ import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -581,6 +582,7 @@ public void setActionTicksToMax()
 @Override
 public void onUpdate()
   {
+  long t1 = System.nanoTime();
   this.varsHelper.onTick();
   npcTicksExisted++;
   if(this.ridingEntity!=null && this.ridingEntity.riddenByEntity!=this)
@@ -702,7 +704,8 @@ public void onUpdate()
     VehicleBase vehicle = (VehicleBase)this.ridingEntity;
     vehicle.moveHelper.clearInputFromDismount();    
     }  
-  super.onUpdate();     
+  super.onUpdate();  
+  ServerPerformanceMonitor.addNpcTickTime(System.nanoTime() - t1);
   }
 
 /**

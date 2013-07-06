@@ -52,6 +52,7 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
 
 public abstract class TECivic extends TileEntity implements IInventory, ITEWorkSite
 {
@@ -177,14 +178,14 @@ public boolean isWorker(IWorker worker)
 @Override
 public void updateEntity()
   {
+  long t1 = System.nanoTime();
   ticksExisted++;
   if(this.worldObj!=null && !this.worldObj.isRemote && (this.ticksExisted+this.teID)% tickDivider == 0 )
     {
-//    long t1 = System.nanoTime();
     this.onCivicUpdate();
-//    Config.logDebug("TE tick time: "+(System.nanoTime()-t1) + " for: "+this.getCivic().getDisplayName());
     }   
   super.updateEntity();
+  ServerPerformanceMonitor.addCivicTickTime(System.nanoTime() - t1);
   }
 
 protected void onCivicUpdate()

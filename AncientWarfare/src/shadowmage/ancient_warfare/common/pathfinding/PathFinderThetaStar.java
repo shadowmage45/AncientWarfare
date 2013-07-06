@@ -27,6 +27,7 @@ import java.util.PriorityQueue;
 
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
+import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
 
 /**
  * going to be a theta-Star implementation
@@ -200,6 +201,7 @@ public void doSearchIterations(int num)
       }
     }
   this.runTime += System.nanoTime() - this.startTime;
+  ServerPerformanceMonitor.addPathfindingTime(System.nanoTime() - this.startTime);
   }
 
 private boolean searchLoop()

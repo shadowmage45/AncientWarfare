@@ -34,8 +34,11 @@ public class ContainerDebugInfo extends ContainerBase
 public long memUse;
 public long tickTime;
 public long tickPerSecond;
-public long pathTimeOneSecond;
 public long pathTimeTickAverage;
+public long civicTick;
+public long npcTick;
+public long vehicleTick;
+
 
 /**
  * @param openingPlayer
@@ -52,8 +55,10 @@ public void handlePacketData(NBTTagCompound tag)
   if(tag.hasKey("tick")){this.tickTime = tag.getLong("tick");}
   if(tag.hasKey("tps")){this.tickPerSecond = tag.getLong("tps");}
   if(tag.hasKey("pathTick")){this.pathTimeTickAverage = tag.getLong("pathTick");}
-  if(tag.hasKey("pathTickTotal")){this.pathTimeOneSecond = tag.getLong("pathTickTotal");}
   if(tag.hasKey("mem")){this.memUse = tag.getLong("mem");}
+  if(tag.hasKey("civTick")){this.civicTick = tag.getLong("civTick");}
+  if(tag.hasKey("npcTick")){this.npcTick = tag.getLong("npcTick");}
+  if(tag.hasKey("vehTick")){this.vehicleTick = tag.getLong("vehTick");}
   }
 
 @Override
@@ -76,9 +81,11 @@ public void detectAndSendChanges()
   NBTTagCompound tag = new NBTTagCompound();
   tag.setLong("tick", ServerPerformanceMonitor.tickTime);
   tag.setLong("tps", ServerPerformanceMonitor.tickPerSecond);
-  tag.setLong("pathTick", ServerPerformanceMonitor.pathTimeTickAverage);
-  tag.setLong("pathTickTotal", ServerPerformanceMonitor.pathTimeOneSecond);
+  tag.setLong("pathTick", ServerPerformanceMonitor.pathTimeAverage);
   tag.setLong("mem", Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+  tag.setLong("civTick", ServerPerformanceMonitor.civicTimeAverage);
+  tag.setLong("npcTick", ServerPerformanceMonitor.npcTimeAverage);
+  tag.setLong("vehTick", ServerPerformanceMonitor.vehicleTimeAverage);
   this.sendDataToPlayer(tag);
   }
 

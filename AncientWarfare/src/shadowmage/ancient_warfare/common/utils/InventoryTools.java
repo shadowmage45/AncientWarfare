@@ -175,6 +175,10 @@ public static void tryRemoveFoodValue(IInventory inv, int firstSlot, int lastSlo
         foodValue-=stackValue;
         inv.setInventorySlotContents(i, null);
         }
+      if(fromSlot.stackSize==0)
+        {
+        inv.setInventorySlotContents(i, null);
+        }
       }
     if(foodValue<=0)
       {

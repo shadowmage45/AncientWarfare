@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
+
 public class PathFinderCrawler
 {
 
@@ -51,6 +53,7 @@ PathWorldAccess world;
 
 public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, int ty, int tz, int maxRange)
   {  
+  long t1 = System.nanoTime();
   this.world = world;
   this.sx = this.cx = x;
   this.sy = this.cy = y;
@@ -95,6 +98,7 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
   this.world = null; 
   this.allNodes.clear();
   this.path.clear();
+  ServerPerformanceMonitor.addPathfindingTime(System.nanoTime()-t1);
   return foundPath;
   }
 

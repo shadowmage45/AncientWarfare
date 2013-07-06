@@ -36,7 +36,7 @@ public class Config
 //*******************************************************FIELDS**********************************************//
 
 public static final String CORE_VERSION_MAJOR = "0.1.0";
-public static final String CORE_VERSION_BUILD = "013";
+public static final String CORE_VERSION_BUILD = "014";
 public static final String CORE_BUILD_STATUS = "alpha";
 public static final String MC_VERSION = "1.5.2";
 
@@ -46,7 +46,7 @@ public static String languagePath = "/shadowmage/ancient_warfare/resources/lang/
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
-public static final boolean DEBUG = true;
+public static final boolean DEBUG = false;
 
 
 //***************************************************LOADED CONFIGS******************************************//
