@@ -15,12 +15,10 @@ FROM TESTING
 * examine forge dictionary use for wood (research related)
 * stone slabs render as quartz slabs in research book (possibly other places)
 * investigate gate redstone interaction
-* adjust vehicle item-render--first person--Y+ (needs to show in-hand while in first person)
 * investigate ghost items placed into player inventory (not closing a gui correctly?)
 * add 'go back to base gui' button to info guis
 * add death-message translate to local gui in npc list gui (figure out how/where they are translated, pull manual translate)
 * heuristic evaluation of tick times for pathfinding scheduling -> when tick times are good, do more cylcles per path
-* soldiers attempt to walk up/down through a leaf block
 * soldiers stick in gates?
 * ignore incorrect packet/container types (remove error msg)
 * custom block item renders are huge
@@ -90,13 +88,16 @@ NPCS
     perhaps check world loaded entity list to see if target is still present/loaded
 * set to no collide if colliding with vehicles/other method of moving past blocking vehicles  
 * keep a timed list of requested path-to positions, if same path requested (less than 60 blocks) in X time with failed paths, disregard request entirely (unpathable target)
+* OPTIMIZATION
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
     * NPC town hall ocasionally transfer items from civics in bounds (skip couriers)
     * NPC town hall plans courier routes (use couriers)    
-* NPC town hall will occasionally respawn missing NPCs    
-* swap civic sided regular/resource slots?
+* NPC town hall will occasionally respawn missing NPCs
+* add bottom side as output slot
+* add extra resource slot for bonemeal to farms that can use it
+
 
 TEMPLATES
 * resource lists for gates

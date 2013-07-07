@@ -175,6 +175,18 @@ public boolean isWorker(IWorker worker)
   return this.workers.contains(worker);
   }
 
+protected void tryAddItemToInventory(ItemStack item, int[] ... slotIndices)
+  {
+  if(item==null || slotIndices==null){return;}
+  for(int[] indices : slotIndices)
+    {
+    if(item==null){return;}
+    item = inventory.tryMergeItem(item, indices);
+    }
+  item = overflow.tryMergeItem(item);
+  InventoryTools.dropItemInWorld(worldObj, item, xCoord, yCoord, zCoord);
+  }
+
 @Override
 public void updateEntity()
   {
