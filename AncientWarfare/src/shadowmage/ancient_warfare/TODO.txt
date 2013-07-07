@@ -24,6 +24,7 @@ FROM TESTING
 * soldiers stick in gates?
 * ignore incorrect packet/container types (remove error msg)
 * custom block item renders are huge
+* wander/crawler pathfinding likes to circle on chests and go up/down ladders a lot
 
 LANGUAGE/TRANSLATIONS
 * move over to generic names for all
