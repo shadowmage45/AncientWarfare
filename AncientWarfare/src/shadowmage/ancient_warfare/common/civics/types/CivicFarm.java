@@ -40,7 +40,9 @@ public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite
   this.name = name;
   this.tooltip = tooltip;
   this.teClass = teClass;
-  this.inventorySize = 9;
+  this.regularInventorySize = 9;
+  this.resourceSlotSize = 3;
+  
   this.itemIconTexture = iconTex;
   this.blockIconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
   this.blockIconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
@@ -48,7 +50,6 @@ public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite
   this.workType = CivicWorkType.FARM;
   this.workSizeMaxHorizontal = workHorizSize;
   this.workSizeMaxHeight = workVertSize;
-  this.resourceSlotSize = 3;
   
   this.neededResearch.add(ResearchGoalNumbers.logistics1);
   this.neededResearch.add(ResearchGoalNumbers.civics1);

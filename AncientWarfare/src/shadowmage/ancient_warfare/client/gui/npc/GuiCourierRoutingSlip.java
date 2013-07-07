@@ -38,6 +38,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointItemRouting;
 import shadowmage.ancient_warfare.common.registry.CivicRegistry;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class GuiCourierRoutingSlip extends GuiContainerAdvanced
 {
@@ -109,7 +110,7 @@ public void onElementActivated(IGuiElement element)
       tag.setByte("s", (byte)slot);
       if(fakeSlot.getStack()!=null)
         {
-        tag.setCompoundTag("fs", fakeSlot.getStack().writeToNBT(new NBTTagCompound()));
+        tag.setCompoundTag("fs", InventoryTools.writeItemStackToTag(fakeSlot.getStack(), new NBTTagCompound()));
         }
       this.sendDataToServer(tag);
       this.container.info.getPoint(point).setFilterStack(slot, fakeSlot.getStack());

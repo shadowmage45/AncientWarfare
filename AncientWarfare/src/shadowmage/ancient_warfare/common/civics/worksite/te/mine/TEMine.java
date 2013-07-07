@@ -124,11 +124,12 @@ public boolean handleBlockBreak(IWorker npc, int x, int y, int z)
       {
       if(this.resourceFilterContains(drop))
         {
-        drop = InventoryTools.tryMergeStack(inventory, drop, 1);
+        this.tryAddItemToInventory(drop, resourceSlotIndices, regularIndices);
         }
-      drop = inventory.tryMergeItem(drop);
-      drop = overflow.tryMergeItem(drop);
-      InventoryTools.dropItemInWorld(worldObj, drop, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
+      else
+        {
+        this.tryAddItemToInventory(drop, regularIndices);
+        }
       }
     return true;
     }

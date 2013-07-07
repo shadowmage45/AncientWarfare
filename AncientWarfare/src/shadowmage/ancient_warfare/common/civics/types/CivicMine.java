@@ -40,7 +40,8 @@ public CivicMine(int id, String name, String tooltip, Class <?extends TECivic> t
   this.name = name;
   this.tooltip = tooltip;
   this.teClass = teClass;
-  this.inventorySize = 9;
+  this.regularInventorySize = 27;
+  this.resourceSlotSize = 6;  
   this.workSizeMaxHeight = 2;
   this.workSizeMaxHorizontal = hSize;
   this.maxWorkers = 4;

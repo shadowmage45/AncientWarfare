@@ -76,7 +76,6 @@ public void incrementSide()
     {
     this.side = 0;
     }
-  Config.logDebug("incrementing side");
   }
 
 public int getFilterLength()
@@ -357,40 +356,30 @@ public void readFromNBT(NBTTagCompound tag)
       {    	  
       this.setFilterStack(slot, readItemStackFromTag(itemTag));   
       }
-    }    
-    
+    }        
   }
 
 protected ItemStack readItemStackFromTag(NBTTagCompound tag)
   {
-  int itemID = tag.getShort("id");
-  int stackSize = 1;
-  int itemDamage = tag.getShort("Damage");
-  if(tag.hasKey("Count"))
+  ItemStack stack = InventoryTools.loadStackFromTag(tag);
+  if(stack.stackSize>999)
     {
-    stackSize = tag.getByte("Count");
+    stack.stackSize = 999;
     }
-  else if(tag.hasKey("ICount"))
+  if(stack.stackSize<1)
     {
-    stackSize = tag.getInteger("ICount");
-    }
-  ItemStack stack = new ItemStack(itemID, stackSize, itemDamage);
-  if(tag.hasKey("tag"))
-    {
-    stack.setTagCompound(tag.getCompoundTag("tag"));
+    stack.stackSize = 1;
     }
   return stack;
   }
 
 protected void writeItemToNBT(ItemStack stack, NBTTagCompound tag)
   {
-  tag.setShort("id", (short) stack.itemID);
-  tag.setShort("Damage", (short) stack.getItemDamage());
-  tag.setInteger("ICount", stack.stackSize);
-  if(stack.hasTagCompound())
+  if(stack.stackSize>999)
     {
-    tag.setTag("tag", stack.getTagCompound());
+    stack.stackSize = 999;
     }
+  InventoryTools.writeItemStackToTag(stack, tag);
   }
 
 }

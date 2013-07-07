@@ -125,9 +125,7 @@ protected void doWork(IWorker npc, WorkPoint p)
     List<ItemStack> drops = BlockTools.breakBlock(worldObj, p.x, p.y, p.z, 0);   
     for(ItemStack item : drops)
       {
-      item = this.inventory.tryMergeItem(item);
-      item = this.overflow.tryMergeItem(item);
-      InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);      
+      this.tryAddItemToInventory(item, resourceSlotIndices, regularIndices);      
       }
     }
   else if(p.work==TargetType.FARM_PLANT)

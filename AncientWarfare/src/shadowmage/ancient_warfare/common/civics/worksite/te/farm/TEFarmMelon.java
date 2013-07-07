@@ -47,7 +47,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
     {    
     return TargetType.FARM_PLANT;
     }
-  else if(id==Block.melon.blockID && InventoryTools.canHoldItem(inventory, melonFilter, 1, otherSlotIndices))
+  else if(id==Block.melon.blockID && InventoryTools.canHoldItem(inventory, melonFilter, 1, regularIndices))
     {
     return TargetType.FARM_HARVEST;
     }

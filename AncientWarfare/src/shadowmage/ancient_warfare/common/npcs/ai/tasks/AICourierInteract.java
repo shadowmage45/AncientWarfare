@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AICourier;
@@ -34,6 +35,9 @@ public class AICourierInteract extends NpcAITask
 {
 
 AICourier parent;
+int workCycles = 0;
+boolean isWorking = false;
+
 /**
  * @param npc
  */
@@ -51,34 +55,53 @@ public void onTick()
     npc.aiManager.wasMoving = false;
     npc.actionTick = 0;
     }
-  npc.swingItem();
-  if(npc.actionTick<=0)
+  npc.swingItem();  
+  if(!isWorking)
     {
-    WayPointItemRouting point = npc.wayNav.getActiveCourierPoint();
-    if(point==null)
+    if(npc.actionTick<=0)
       {
-      return;
-      }
-    TileEntity te = point.getTileEntity(npc.worldObj);
-    IInventory target = null;
-    if(te instanceof IInventory)
-      {
-      target = (IInventory)te;
-      }
-    if(target==null)
-      {
-      return;
-      }
-    if(!point.doWork(npc))
+      WayPointItemRouting point = npc.wayNav.getActiveCourierPoint();
+      if(point==null)
+        {
+        return;
+        }
+      TileEntity te = point.getTileEntity(npc.worldObj);
+      IInventory target = null;
+      if(te instanceof IInventory)
+        {
+        target = (IInventory)te;
+        }
+      if(target==null)
+        {
+        return;
+        }
+      workCycles = 0;
+      while(point.doWork(npc))
+        {
+        workCycles++;
+        }
+      if(workCycles == 0)
+        {
+        parent.setPointFinished();
+        }   
+      else
+        {
+        isWorking = true;
+        npc.setActionTicksToMax();
+        }
+      target.onInventoryChanged();
+      npc.inventory.onInventoryChanged();
+      }    
+    }
+  else if(npc.actionTick<=0)
+    {
+    workCycles--;
+    if(workCycles<=0)
       {
       parent.setPointFinished();
-      }   
-    else
-      {
-      npc.setActionTicksToMax();
+      isWorking = false;
       }
-    target.onInventoryChanged();
-    npc.inventory.onInventoryChanged();
+    npc.setActionTicksToMax();
     }
   }
 

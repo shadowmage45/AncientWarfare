@@ -36,7 +36,6 @@ public CivicBuilder(int id)
   {
   super(id);
   this.addToCreative = false;
-  this.inventorySize = 0;
   this.name = "Civic Structure Builder";
   this.tooltip = "Work site for building of structures.";
   this.teClass = TECivicBuilder.class;

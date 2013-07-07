@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
@@ -39,6 +40,8 @@ int mainBlockID = Block.crops.blockID;//the blockID that this civic looks for wi
 int tilledEarthID = Block.tilledField.blockID;//the 'plantable' block. these are the 'plant' points, if y+1==0
 int mainBlockMatureMeta;
 ItemStack plantableFilter;
+ItemStack bonemealFilter;
+boolean canUseBonemeal = false;
 
 //id / meta of plantable block (-1 meta for all)
 //id / meta of harvest block
@@ -47,6 +50,7 @@ ItemStack plantableFilter;
 public TEWorkSiteFarm()
   {
   this.renderBounds = true;
+  this.bonemealFilter = new ItemStack(Item.dyePowder,1,15);
   }
 
 protected TargetType validateWorkPoint(int x, int y, int z)
@@ -56,13 +60,18 @@ protected TargetType validateWorkPoint(int x, int y, int z)
     {    
     return TargetType.FARM_PLANT;
     }
-  else if(id==this.mainBlockID)
+  else if(id==this.mainBlockID  && this.overflow.getEmptySlotCount()==this.overflow.getSizeInventory())
     {
-    int meta = worldObj.getBlockMetadata(x, y, z);
-    if(meta==this.mainBlockMatureMeta && this.inventory.getEmptySlotCount()>=1)
+    int meta = worldObj.getBlockMetadata(x, y, z);    
+    if(meta==this.mainBlockMatureMeta)
       {
       return TargetType.FARM_HARVEST;
-      }    
+      }
+    else if(this.canUseBonemeal && this.inventory.containsAtLeast(bonemealFilter, 3))
+      {
+      Config.logDebug("returning bonemeal work type");
+      return TargetType.FARM_BONEMEAL;
+      }
     }
   return TargetType.NONE;
   }
@@ -102,11 +111,12 @@ protected void doWork(IWorker npc, WorkPoint p)
       {
       if(this.resourceFilterContains(item))
         {
-        item = InventoryTools.tryMergeStack(this, item, 1);
+        this.tryAddItemToInventory(item, resourceSlotIndices, regularIndices);
         }
-      item = InventoryTools.tryMergeStack(this, item, 2);
-      item = this.overflow.tryMergeItem(item);
-      InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);      
+      else
+        {
+        this.tryAddItemToInventory(item, regularIndices);
+        }      
       }
     }
   else if(p.work==TargetType.FARM_PLANT)
@@ -116,7 +126,34 @@ protected void doWork(IWorker npc, WorkPoint p)
       inventory.tryRemoveItems(plantableFilter, 1);
       worldObj.setBlock(p.x, p.y, p.z, mainBlockID, 0, 3);
       }  
-    }    
+    }
+  else if(p.work==TargetType.FARM_BONEMEAL)
+    {
+    if(worldObj.getBlockMetadata(p.x, p.y, p.z)==this.mainBlockMatureMeta)
+      {
+      List<ItemStack> drops = BlockTools.breakBlock(worldObj, p.x, p.y, p.z, 0);   
+      for(ItemStack item : drops)
+        {
+        if(this.resourceFilterContains(item))
+          {
+          this.tryAddItemToInventory(item, resourceSlotIndices, regularIndices);
+          }
+        else
+          {
+          this.tryAddItemToInventory(item, regularIndices);
+          }      
+        }
+      }
+    else
+      { 
+      Config.logDebug("using bonemeal on: "+p);
+      if(inventory.containsAtLeast(bonemealFilter, 3))
+        {
+        inventory.tryRemoveItems(bonemealFilter, 3);
+        worldObj.setBlock(p.x, p.y, p.z, mainBlockID, mainBlockMatureMeta, 3);
+        }      
+      }   
+    }
   }
 
 @Override

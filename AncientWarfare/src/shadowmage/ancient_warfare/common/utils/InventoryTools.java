@@ -134,6 +134,51 @@ public static List<ItemStackWrapper> getCompactedInventory(IInventory inv, Compa
   return stacks;
   }
 
+public static ItemStack loadStackFromTag(NBTTagCompound tag)
+  {
+  int itemID = tag.getShort("id");
+  int stackSize = tag.getInteger("ICount");
+  int itemDamage = tag.getShort("Damage");
+  if(stackSize==0)
+    {
+    stackSize=1;
+    }  
+  if ( itemDamage < 0)
+    {
+    itemDamage = 0;
+    }
+  ItemStack stack = new ItemStack(itemID, stackSize, itemDamage);  
+  if (tag.hasKey("tag"))
+    {
+    stack.setTagCompound(tag.getCompoundTag("tag"));
+    }
+  return stack;
+  }
+
+public static NBTTagCompound writeItemStackToTag(ItemStack stack, NBTTagCompound tag)
+  {
+  tag.setShort("id", (short) stack.itemID);
+  tag.setShort("Damage", (short) stack.getItemDamage());
+  tag.setInteger("ICount", stack.stackSize);
+  if(stack.hasTagCompound())
+    {
+    tag.setCompoundTag("tag", stack.getTagCompound());
+    }  
+  return tag;
+  }
+
+public static boolean isSlotPresentInIndices(int slot, int[] indices)
+  {
+  for(int k : indices)
+    {
+    if(slot==k)
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
 public static int getFoodValue(IInventory inv, int firstSlot, int lastSlot)
   {
   ItemStack fromSlot = null;

@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.tree;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSapling;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -45,7 +46,7 @@ int saplingMeta = 0;
 int maxSearchHeight = 16;
 ItemStack saplingFilter;
 ItemStack logFilter;
-
+ItemStack bonemealFilter = new ItemStack(Item.dyePowder,1,15);
 /**
  * 
  */
@@ -69,36 +70,21 @@ protected void onCivicUpdate()
         stack = ent.getEntityItem();
         if((stack.itemID==saplingID && stack.getItemDamage()==saplingMeta))
           {
-          if(inventory.canHoldItem(stack, stack.stackSize, resourceSlotIndices))
+          stack = tryAddItemToInventory(stack, resourceSlotIndices, regularIndices);
+          if(stack!=null)
             {
-            stack = inventory.tryMergeItem(stack, resourceSlotIndices);
-            if(stack!=null)
-              {
-              ent.setEntityItemStack(stack);
-              }
-            else//stack is null/merged sucessfully
-              {
-              ent.setDead();
-              }
+            ent.setEntityItemStack(stack);
             }
-          else if(inventory.canHoldItem(stack, stack.stackSize, otherSlotIndices))
+          else//stack is null/merged sucessfully
             {
-            stack = inventory.tryMergeItem(stack, otherSlotIndices);
-            if(stack!=null)
-              {
-              ent.setEntityItemStack(stack);
-              }
-            else//stack is null/merged sucessfully
-              {
-              ent.setDead();
-              }
+            ent.setDead();
             }
           }
         else if( stack.itemID==Item.appleRed.itemID)
           {
-          if(inventory.canHoldItem(stack, stack.stackSize, otherSlotIndices))
+          if(inventory.canHoldItem(stack, stack.stackSize, regularIndices))
             {
-            stack = inventory.tryMergeItem(stack, otherSlotIndices);
+            stack = inventory.tryMergeItem(stack, regularIndices);
             if(stack!=null)
               {
               ent.setEntityItemStack(stack);
@@ -162,6 +148,18 @@ protected void doWork(IWorker npc, WorkPoint p)
     worldObj.setBlock(p.x, p.y, p.z, saplingID, saplingMeta, 3);      
     inventory.tryRemoveItems(saplingFilter, 1);    
     }
+  else if(p.work==TargetType.TREE_BONEMEAL && inventory.containsAtLeast(bonemealFilter, 3))
+    {
+    if(worldObj.getBlockId(p.x, p.y, p.z)==this.saplingID && worldObj.getBlockMetadata(p.x, p.y, p.z)==this.saplingMeta)
+      {
+      BlockSapling block = (BlockSapling) Block.blocksList[this.saplingID];
+      if(block!=null)
+        {
+        block.growTree(worldObj, p.x, p.y, p.z, worldObj.rand);
+        this.inventory.tryRemoveItems(bonemealFilter, 3);
+        }
+      }
+    }
   }
 
 @Override
@@ -175,7 +173,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
   int id = worldObj.getBlockId(x, y, z);
   int meta = worldObj.getBlockMetadata(x, y, z);
   boolean hasSapling = inventory.containsAtLeast(saplingFilter, 1);  
-  if( id==logID && (meta &3) == this.logMeta && InventoryTools.canHoldItem(inventory, logFilter, 1, otherSlotIndices))
+  if( id==logID && (meta &3) == this.logMeta && InventoryTools.canHoldItem(inventory, logFilter, 1, regularIndices))
     {
     return TargetType.TREE_CHOP;
     }
@@ -189,6 +187,10 @@ protected TargetType validateWorkPoint(int x, int y, int z)
         return TargetType.TREE_PLANT;
         }
       } 
+    }
+  else if(id==saplingID && meta==saplingMeta && inventory.containsAtLeast(bonemealFilter, 3))
+    {
+    return TargetType.TREE_BONEMEAL;
     }
   return TargetType.NONE;
   }

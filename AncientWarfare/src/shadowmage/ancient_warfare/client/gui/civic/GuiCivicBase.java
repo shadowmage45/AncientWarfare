@@ -65,8 +65,8 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawStringGui("Inventory", 8, 5, 0xffffffff);
   
 
-  this.drawStringGui("Civic Type: "+teBase.getCivic().getDisplayName(), 8, 112, 0xffffffff);  
-  this.drawStringGui("Broadcast Work: ", 8 , 112+10+5, 0xffffffff);
+  this.drawStringGui("Civic Type: "+teBase.getCivic().getDisplayName(), 8, 112+12+3, 0xffffffff);  
+  this.drawStringGui("Broadcast Work: ", 8 , 112+10+5+12, 0xffffffff);
   }
 
 @Override
@@ -87,7 +87,7 @@ public void onElementActivated(IGuiElement element)
 @Override
 public void setupControls()
   {
-  this.addCheckBox(0, 176-8-18, 112+10, 18, 18).setChecked(teBase.broadcastWork);
+  this.addCheckBox(0, 176-8-18, 112+10+12, 18, 18).setChecked(teBase.broadcastWork);
   }
 
 @Override

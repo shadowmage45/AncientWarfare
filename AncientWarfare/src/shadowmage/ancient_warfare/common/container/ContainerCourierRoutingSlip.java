@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
 import shadowmage.ancient_warfare.common.npcs.waypoints.RoutingType;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class ContainerCourierRoutingSlip extends ContainerBase
 {
@@ -92,7 +93,7 @@ public void handlePacketData(NBTTagCompound tag)
     ItemStack filterStack = null;
     if(tag.hasKey("fs"))
       {
-      filterStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("fs"));
+      filterStack = InventoryTools.loadStackFromTag(tag.getCompoundTag("fs"));
       }  
     info.getPoint(filter).setFilterStack(slot, filterStack);
     }
@@ -132,7 +133,6 @@ public void handlePacketData(NBTTagCompound tag)
     {
     byte filter = tag.getByte("f");
     info.getPoint(filter).incrementSide();
-    Config.logDebug("incrementing side, server!!");
     }
   }
 

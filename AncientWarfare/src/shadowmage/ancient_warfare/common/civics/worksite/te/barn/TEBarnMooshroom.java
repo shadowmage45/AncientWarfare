@@ -107,9 +107,7 @@ protected void doWork(IWorker npc, WorkPoint p)
     {
     this.inventory.tryRemoveItems(bowlFilter, 1);
     ItemStack input = new ItemStack(Item.bowlSoup);
-    input = inventory.tryMergeItem(input);
-    input = overflow.tryMergeItem(input);
-    InventoryTools.dropItemInWorld(worldObj, input, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
+    this.tryAddItemToInventory(input, regularIndices);
     }
   }
 

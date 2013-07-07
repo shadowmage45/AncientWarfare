@@ -43,20 +43,11 @@ TECivic teBase;
 public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
   {
   super(openingPlayer, null);
-//  Config.logDebug("opening te container..client: "+openingPlayer.worldObj.isRemote);
   this.teBase = te;
-  //add player slots
-  //add te slots
-  int y;
-  int x;
-  int slotNum;
-  int xPos; 
-  int yPos;
-
-  this.addPlayerSlots(openingPlayer, 8, 158, 4);    
-  
+  this.addPlayerSlots(openingPlayer, 8, 158, 4);   
   this.addResourceSlots();
   this.addRegularSlots();  
+  this.addSpecSlots();
   }
 
 protected void addRegularSlots()
@@ -67,7 +58,7 @@ protected void addRegularSlots()
   int xPos; 
   int yPos;  
   
-  for(int i = teBase.getCivic().getResourceSlotSize(); i < teBase.getCivic().getInventorySize(); i++)
+  for(int i = teBase.getCivic().getResourceSlotSize(); i < teBase.getCivic().getInventorySize()+teBase.getCivic().getResourceSlotSize(); i++)
     {
     x = (i-teBase.getCivic().getResourceSlotSize()) %9;
     y = (i-teBase.getCivic().getResourceSlotSize()) /9;
@@ -102,6 +93,23 @@ protected void addResourceSlots()
     }
   }
 
+protected void addSpecSlots()
+  {
+  int y = 0;
+  int x;
+  int slotNum = teBase.getCivic().getResourceSlotSize()+teBase.getCivic().getInventorySize();
+  int xPos; 
+  int yPos = 15 + 4*18 + 10; 
+  for(x = 0; x < teBase.getCivic().getSpecResourceSlotSize(); x++)
+    {
+    xPos = 8 + x * 18;
+    Config.logDebug("adding spec resource slot " +slotNum + " at: "+xPos + ","+yPos);
+    Slot slot = new SlotResourceOnly(teBase, slotNum, xPos, yPos, teBase.getCivic().getSpecResourceItemFilters());
+    this.addSlotToContainer(slot);   
+    slotNum++;
+    }  
+  }
+
 @Override
 public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClickedIndex)
   {
@@ -111,7 +119,7 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
     {
     ItemStack slotStack = theSlot.getStack();
     slotStackCopy = slotStack.copy();
-    int storageSlots = teBase.getCivic().getInventorySize();    
+    int storageSlots = teBase.getCivic().getTotalInventorySize();    
     if (slotClickedIndex < 36)//player slots...
       {      
       if (!this.mergeItemStack(slotStack, 36, 36+storageSlots, false))//merge into storage inventory

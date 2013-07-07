@@ -35,6 +35,7 @@ public TEFarmCarrot()
   this.mainBlockID = Block.carrot.blockID;
   this.mainBlockMatureMeta = 7;
   this.plantableFilter = new ItemStack(Item.carrot);
+  this.canUseBonemeal = true;
   }
 
 

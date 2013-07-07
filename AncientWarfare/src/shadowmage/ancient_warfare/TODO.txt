@@ -23,6 +23,9 @@ FROM TESTING
 * ignore incorrect packet/container types (remove error msg)
 * custom block item renders are huge
 * wander/crawler pathfinding likes to circle on chests and go up/down ladders a lot
+* courier routing slip qty > 64
+* courier routing slip -- do all transaction in single pass, then work for time based on stuff moved (will clean up workers hanging out at mines)
+    this will also allow to tally up the entire slip for a single-pass go at things, enabling larger quantities through multiple stacks in the filters
 
 LANGUAGE/TRANSLATIONS
 * move over to generic names for all
@@ -95,9 +98,7 @@ CIVICS
     * NPC town hall ocasionally transfer items from civics in bounds (skip couriers)
     * NPC town hall plans courier routes (use couriers)    
 * NPC town hall will occasionally respawn missing NPCs
-* add bottom side as output slot
-* add extra resource slot for bonemeal to farms that can use it
-
+* mine still harvests water
 
 TEMPLATES
 * resource lists for gates
@@ -193,10 +194,12 @@ TWEAKS/OPTIMIZATION
 * move over to the forge-based packet system (basically wrap my packets in a single forge packet)
 
 ********************* DONE STUFF ************************* 
-
-
-
 /********** 07-07-13 **********/
+* clean up civic inventory interaction to move through a single method, should clean up most resource slot foobars
+* add bonemeal slots to applicable farms (wheat, carrot, potato, tree farms)(add to container, gui, resource list, etc)(slots could be used for other purposes on other civics, just a second resource slot)
+* clean up courier routing slip to finally accept stack sizes > 64
+* clean up courier interaction to move items in one pass, work for relative time to items moved (cleans up issues of interaction at some work sites)
+
 /********** 07-08-13 **********/
 /********** 07-09-13 **********/
 /********** 07-10-13 **********/

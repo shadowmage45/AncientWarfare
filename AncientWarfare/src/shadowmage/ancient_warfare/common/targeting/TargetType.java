@@ -61,4 +61,6 @@ public enum TargetType
   BARN_SHEAR,
   FISH_CATCH,
   CRAFT,
+  FARM_BONEMEAL,
+  TREE_BONEMEAL,
   }

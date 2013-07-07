@@ -39,7 +39,7 @@ public CivicWarehouse(int id, String name, String tooltip, Class <?extends TECiv
   this.name = name;
   this.tooltip = tooltip;
   this.teClass = teClass;
-  this.inventorySize = 0;  
+  this.regularInventorySize = 0;  
   this.workType = CivicWorkType.COURIER;
   this.workSizeMaxHorizontal = workHorizSize;
   this.workSizeMaxHeight = workVertSize;

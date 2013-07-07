@@ -77,9 +77,14 @@ protected void updateHasWork()
     }
   }
 
+/**
+ * attempt to add an item to regular inventory, and if fail, deposit into warehouse, if available
+ * @param stack
+ * @return
+ */
 protected ItemStack depositItem(ItemStack stack)
   {
-  stack = inventory.tryMergeItem(stack);
+  stack = tryAddItemToInventory(stack, regularIndices);
   if(stack!=null)
     {
     TECivicWarehouse wareHouse = this.getWarehousePosition();
@@ -140,7 +145,18 @@ protected void addWorkPoint(Entity ent, TargetType work)
 @Override
 public boolean isStackValidForSlot(int i, ItemStack itemstack)
   {
-  if(i>=0 && i <this.getCivic().getResourceSlotSize())
+  if(InventoryTools.isSlotPresentInIndices(i, specResourceIndices))
+    {
+    for(ItemStack stack : this.getCivic().getSpecResourceItemFilters())
+      {
+      if(InventoryTools.doItemsMatch(itemstack, stack))
+        {
+        return true;
+        }
+      }
+    return false;
+    }
+  else if(InventoryTools.isSlotPresentInIndices(i, resourceSlotIndices))
     {
     for(ItemStack stack : this.getCivic().getResourceItemFilters())
       {
@@ -154,7 +170,6 @@ public boolean isStackValidForSlot(int i, ItemStack itemstack)
   return true;
   }
 
-
 /**
  * get the inventory slot indices for the input side
  * @param input side (0--bottom, 1--top, 2-5 sides)
@@ -162,19 +177,13 @@ public boolean isStackValidForSlot(int i, ItemStack itemstack)
  */
 @Override
 public int[] getAccessibleSlotsFromSide(int var1)
-  {
-  if(resourceSlotIndices.length==0)
-    {
-    return otherSlotIndices;
-    }
+  {  
   switch(var1)
   {
   case 0://accessed from bottom
-  return otherSlotIndices;
+  return specResourceIndices.length > 0 ? specResourceIndices : regularIndices;
   case 1://accessed from top
-//  Config.logDebug("returning resource slot indices from te: size: "+resourceSlotIndices.length);
-  return resourceSlotIndices;
-  
+  return resourceSlotIndices.length > 0 ? resourceSlotIndices : regularIndices;
   /**
    * 2-5 fallthrough
    */
@@ -183,7 +192,7 @@ public int[] getAccessibleSlotsFromSide(int var1)
   case 4:
   case 5:
 //  Config.logDebug("returning normal slot indices from te: size: "+otherSlotIndices.length);
-  return otherSlotIndices;
+  return regularIndices;
   }
   return null;
   }
@@ -191,11 +200,7 @@ public int[] getAccessibleSlotsFromSide(int var1)
 @Override
 public boolean canInsertItem(int i, ItemStack itemstack, int j)
   {
-  if(this.getCivic().getResourceSlotSize()>0 && i < this.getCivic().getResourceSlotSize())
-    {
-    return this.resourceFilterContains(itemstack);
-    }
-  return true;
+  return isStackValidForSlot(i, itemstack);
   }
 
 @Override

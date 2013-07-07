@@ -69,9 +69,9 @@ public class Civic implements ICivicType
 
 public static final Civic[] civicList = new Civic[64];
 
-public static ICivicType wheatFarm = new CivicFarm(0, "Wheat Farm", "10x10 Max Width", TEFarmWheat.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmWheatBottom", "civicFarmWheatTop", "civicFarmWheatSides").addResourceItem(new ItemStack(Item.seeds));
-public static ICivicType carrotFarm = new CivicFarm(1, "Carrot Farm", "10x10 Max Width", TEFarmCarrot.class, "civicFarmCarrot1", 10, 2).setBlockIcons("civicFarmCarrotBottom", "civicFarmCarrotTop", "civicFarmCarrotSides").addResourceItem(new ItemStack(Item.carrot)).setResourceSlotSize(1);
-public static ICivicType potatoFarm = new CivicFarm(2, "Potato Farm", "10x10 Max Width", TEFarmPotato.class, "civicFarmPotato1", 10, 2).setBlockIcons("civicFarmPotatoBottom", "civicFarmPotatoTop", "civicFarmPotatoSides").addResourceItem(new ItemStack(Item.potato)).setResourceSlotSize(1);
+public static ICivicType wheatFarm = new CivicFarm(0, "Wheat Farm", "10x10 Max Width", TEFarmWheat.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmWheatBottom", "civicFarmWheatTop", "civicFarmWheatSides").addResourceItem(new ItemStack(Item.seeds)).setSpecResourceSize(3).addSpecResourceItem(new ItemStack(Item.dyePowder,1,15));
+public static ICivicType carrotFarm = new CivicFarm(1, "Carrot Farm", "10x10 Max Width", TEFarmCarrot.class, "civicFarmCarrot1", 10, 2).setBlockIcons("civicFarmCarrotBottom", "civicFarmCarrotTop", "civicFarmCarrotSides").addResourceItem(new ItemStack(Item.carrot)).setResourceSlotSize(1).setSpecResourceSize(3).addSpecResourceItem(new ItemStack(Item.dyePowder,1,15));
+public static ICivicType potatoFarm = new CivicFarm(2, "Potato Farm", "10x10 Max Width", TEFarmPotato.class, "civicFarmPotato1", 10, 2).setBlockIcons("civicFarmPotatoBottom", "civicFarmPotatoTop", "civicFarmPotatoSides").addResourceItem(new ItemStack(Item.potato)).setResourceSlotSize(1).setSpecResourceSize(3).addSpecResourceItem(new ItemStack(Item.dyePowder,1,15));
 public static ICivicType melonFarm = new CivicFarm(3, "Melon Farm", "10x10 Max Width", TEFarmMelon.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMelonBottom", "civicFarmMelonTop", "civicFarmMelonSides").addResourceItem(new ItemStack(Item.melonSeeds)).setResourceSlotSize(3);
 public static ICivicType pumpkinFarm = new CivicFarm(4, "Pumpkin Farm", "10x10 Max Width", TEFarmPumpkin.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmPumpkinBottom", "civicFarmPumpkinTop", "civicFarmPumpkinSides").addResourceItem(new ItemStack(Item.pumpkinSeeds)).setResourceSlotSize(3);
 public static ICivicType cactusFarm = new CivicFarm(5, "Cactus Farm", "10x10 Max Width", TEFarmCactus.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmCactusBottom", "civicFarmCactusTop", "civicFarmCactusSides").addResourceItem(new ItemStack(Block.cactus)).setResourceSlotSize(1);
@@ -85,10 +85,10 @@ public static ICivicType mineBasic = new CivicMine(10, "Basic Layout Mine", "16x
 public static ICivicType mineQuarry = new CivicMine(13, "Quarry Layout Mine", "64x64 Max Width", TEMineQuarry.class,64).setBlockIcons("civicMineQuarryBottom", "civicMineQuarryTop", "civicMineQuarrySides");
 //mine altr2
 //mine altr3
-public static ICivicType treeFarmOak = new CivicTreeFarm(16, "Oak Tree Farm", "16x16 Max Width", TETreeFarmOak.class).setBlockIcons("civicFarmOakBottom", "civicFarmOakTop", "civicFarmOakSides").addResourceItem(new ItemStack(Block.sapling,1,0));
-public static ICivicType treeFarmSpruce = new CivicTreeFarm(17, "Spruce Tree Farm", "16x16 Max Width", TETreeFarmSpruce.class).setBlockIcons("civicFarmSpruceBottom", "civicFarmSpruceTop", "civicFarmSpruceSides").addResourceItem(new ItemStack(Block.sapling,1,1));
-public static ICivicType treeFarmBirch = new CivicTreeFarm(18, "Birch Tree Farm", "16x16 Max Width", TETreeFarmBirch.class).setBlockIcons("civicFarmBirchBottom", "civicFarmBirchTop", "civicFarmBirchSides").addResourceItem(new ItemStack(Block.sapling,1,2));
-public static ICivicType treeFarmJungle = new CivicTreeFarm(19, "Jungle Tree Farm", "16x16 Max Width", TETreeFarmJungle.class).setBlockIcons("civicFarmJungleBottom", "civicFarmJungleTop", "civicFarmJungleSides").addResourceItem(new ItemStack(Block.sapling,1,3));
+public static ICivicType treeFarmOak = new CivicTreeFarm(16, "Oak Tree Farm", "16x16 Max Width", TETreeFarmOak.class).setBlockIcons("civicFarmOakBottom", "civicFarmOakTop", "civicFarmOakSides").addResourceItem(new ItemStack(Block.sapling,1,0)).setSpecResourceSize(3).addSpecResourceItem(new ItemStack(Item.dyePowder,1,15));
+public static ICivicType treeFarmSpruce = new CivicTreeFarm(17, "Spruce Tree Farm", "16x16 Max Width", TETreeFarmSpruce.class).setBlockIcons("civicFarmSpruceBottom", "civicFarmSpruceTop", "civicFarmSpruceSides").addResourceItem(new ItemStack(Block.sapling,1,1)).setSpecResourceSize(3).addSpecResourceItem(new ItemStack(Item.dyePowder,1,15));
+public static ICivicType treeFarmBirch = new CivicTreeFarm(18, "Birch Tree Farm", "16x16 Max Width", TETreeFarmBirch.class).setBlockIcons("civicFarmBirchBottom", "civicFarmBirchTop", "civicFarmBirchSides").addResourceItem(new ItemStack(Block.sapling,1,2)).setSpecResourceSize(3).addSpecResourceItem(new ItemStack(Item.dyePowder,1,15));
+public static ICivicType treeFarmJungle = new CivicTreeFarm(19, "Jungle Tree Farm", "16x16 Max Width", TETreeFarmJungle.class).setBlockIcons("civicFarmJungleBottom", "civicFarmJungleTop", "civicFarmJungleSides").addResourceItem(new ItemStack(Block.sapling,1,3)).setSpecResourceSize(3).addSpecResourceItem(new ItemStack(Item.dyePowder,1,15));
 public static ICivicType builder = new CivicBuilder(20);//survival mode ticked builder....
 public static ICivicType townHallSmall = new CivicTownHall(21, "Town Hall Small", "Small Upkeep center for NPCs", 9, TECivicTownHall.class, 0).setBlockIcons("civicTownHallSmallBottom", "civicTownHallSmallTop", "civicTownHallSmallSides");
 public static ICivicType townHallMedium = new CivicTownHall(22, "Town Hall Medium", "Medium Upkeep center for NPCs", 18, TECivicTownHall.class, 1).setBlockIcons("civicTownHallMediumBottom", "civicTownHallMediumTop", "civicTownHallMediumSides");
@@ -99,7 +99,7 @@ public static ICivicType chickenFarm = new CivicFarm(26, "Chicken Farm", "16x16 
 public static ICivicType sheepFarm = new CivicFarm(27, "Sheep (wool) Farm", "16x16 Max Width, 6 animals", TEBarnSheep.class, "civicFarmWheat1", 16, 2).setBlockIcons("civicFarmSheepBottom", "civicFarmSheepTop", "civicFarmSheepSides").addResourceItem(new ItemStack(Item.wheat));
 public static ICivicType mooshroomFarm = new CivicFarm(28, "Mooshroom Farm", "16x16 Max Width, 6 animals", TEBarnMooshroom.class, "civicFarmWheat1", 16 ,2).setBlockIcons("civicFarmMooshroomBottom", "civicFarmMooshroomTop", "civicFarmMooshroomSides").addResourceItem(new ItemStack(Item.wheat));
 public static ICivicType fishFarm = new CivicFishFarm(29, "Fish Farm", "16x16 Max Width, needs water", TEFishery.class,"civicFarmWheat1", 16, 2).setBlockIcons("civicFarmFishBottom", "civicFarmFishTop", "civicFarmFishSides");
-public static ICivicType squidFarm = new CivicFishFarm(30, "Squid Farm", "16x16 Max Width, needs water", TESquidFarm.class, "civicFarmWheat1",16,2).setBlockIcons("civicFarmSquidBottom", "civicFarmSquidTop", "civicFarmSquidSides");
+public static ICivicType squidFarm = new CivicFishFarm(30, "Squid (ink) Farm", "16x16 Max Width, needs water", TESquidFarm.class, "civicFarmWheat1",16,2).setBlockIcons("civicFarmSquidBottom", "civicFarmSquidTop", "civicFarmSquidSides");
 public static ICivicType cocoaFarm = new CivicFarm(31, "Cocoa Bean Farm", "10x10 Max Width", TEFarmCocoa.class, "civicFarmWheat1", 10 ,2).setBlockIcons("civicFarmCocoaBottom", "civicFarmCocoaTop", "civicFarmCocoaSides").addResourceItem(new ItemStack(Item.dyePowder,1,3));
 public static ICivicType warehouseSmall = new CivicWarehouse(32, "Warehouse", "9x9x3 Max Size", TECivicWarehouse.class, 9, 3);
 
@@ -114,8 +114,8 @@ protected int workSizeMaxHeight = 2;
 protected int minSize1 = 1;
 protected int minSize2 = 1;
 protected int minHeight = 1;
+//protected int inventorySize = 0;
 protected int regularInventorySize = 0;
-protected int inventorySize = 0;
 protected int resourceSlotSize = 0;
 protected int specResourceSlotSize = 0;
 protected boolean isWorkSite = false;
@@ -125,6 +125,7 @@ protected boolean addToCreative = true;
 protected Class<? extends TECivic> teClass;
 protected ItemStack displayStackCache = null;
 protected List<ItemStack> resourceStackList = new ArrayList<ItemStack>();
+protected List<ItemStack> specResourceStackList = new ArrayList<ItemStack>();
 protected String[] blockIconNames = new String[]{"","",""};
 protected CivicWorkType workType = CivicWorkType.NONE;
 protected List<ItemStackWrapperCrafting> recipeResources = new ArrayList<ItemStackWrapperCrafting>();
@@ -145,18 +146,6 @@ public Civic(int id)
     }
   }
 
-public Civic setResourceSlotSize(int size)
-  {
-  this.resourceSlotSize = size;
-  return this;
-  }
-
-@Override
-public Block getBlockType()
-  {
-  return blockType;
-  }
-
 public Civic setBlockIcons(String bottom, String top, String side)
   {  
   String first = "ancientwarfare:civic/";
@@ -167,6 +156,12 @@ public Civic setBlockIcons(String bottom, String top, String side)
 public Civic addResourceItem(ItemStack filter)
   {
   this.resourceStackList.add(filter);
+  return this;
+  }
+
+public Civic addSpecResourceItem(ItemStack filter)
+  {
+  this.specResourceStackList.add(filter);
   return this;
   }
 
@@ -191,6 +186,24 @@ public Civic addRecipeResources(ItemStack... stacks)
       this.recipeResources.add(new ItemStackWrapperCrafting(stack, false, false));
       }
     }
+  return this;
+  }
+
+public Civic setInventorySize(int size)
+  {
+  this.regularInventorySize = size;
+  return this;
+  }
+
+public Civic setSpecResourceSize(int size)
+  {
+  this.specResourceSlotSize = size;
+  return this;
+  }
+
+public Civic setResourceSlotSize(int size)
+  {
+  this.resourceSlotSize = size;
   return this;
   }
 
@@ -268,9 +281,9 @@ public ItemStack getDisplayItem()
   }
 
 @Override
-public int getInventorySize()
+public int getTotalInventorySize()
   {
-  return inventorySize;
+  return regularInventorySize+resourceSlotSize+specResourceSlotSize;
   }
 
 @Override
@@ -322,6 +335,12 @@ public List<ItemStack> getResourceItemFilters()
   }
 
 @Override
+public List<ItemStack> getSpecResourceItemFilters()
+  {
+  return specResourceStackList;
+  }
+
+@Override
 public ResourceListRecipe constructRecipe()
   {
   if(!this.addToCreative)
@@ -359,10 +378,15 @@ public int getMinWorkSizeHeight()
   }
 
 @Override
-public int getBlockMeta()
+public int getSpecResourceSlotSize()
   {
-  // TODO Auto-generated method stub
-  return 0;
+  return this.specResourceSlotSize;
+  }
+
+@Override
+public int getInventorySize()
+  {
+  return this.regularInventorySize;
   }
 
 }

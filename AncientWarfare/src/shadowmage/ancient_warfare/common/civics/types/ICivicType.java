@@ -39,11 +39,30 @@ public interface ICivicType
 int getGlobalID();
 
 /**
+ * get the size of the normal inventory slots
+ * @return
+ */
+int getInventorySize();
+
+/**
  * get the size of the inventory, may be 0
  * @param level
  * @return
  */
-int getInventorySize();
+int getTotalInventorySize();
+
+/**
+ * get the resource slot size of the civic (used for seeds for farms, food for animal farms, saplings for tree farms, ladders/torches for mines, etc..)
+ * @return
+ */
+int getResourceSlotSize();
+
+/**
+ * get the size of special resource slots (used primarily for bonemeal)
+ * @return
+ */
+int getSpecResourceSlotSize();
+
 
 /**
  * get item/gui display name for this civic
@@ -83,10 +102,6 @@ int getMinWorkSizeWidth1();
 int getMinWorkSizeWidth2();
 int getMinWorkSizeHeight();
 
-Block getBlockType();
-int getBlockMeta();
-
-int getResourceSlotSize();
 List<ItemStack> getResourceItemFilters();
 
 boolean isWorkSite();
@@ -116,5 +131,10 @@ Class<? extends TECivic> getTileEntityClass();
 
 ResourceListRecipe constructRecipe();
 Collection<Integer> getNeededResearch();
+
+/**
+ * @return
+ */
+List<ItemStack> getSpecResourceItemFilters();
 
 }

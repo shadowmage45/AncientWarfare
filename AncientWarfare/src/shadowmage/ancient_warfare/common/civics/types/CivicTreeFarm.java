@@ -42,13 +42,13 @@ public CivicTreeFarm(int id, String name, String tooltip, Class<? extends TECivi
   this.maxWorkers = 2;
   this.workSizeMaxHeight = 2;
   this.workSizeMaxHorizontal = 16;
-  this.inventorySize = 9;
+  this.regularInventorySize = 9;
+  this.resourceSlotSize = 3;
   this.workType = CivicWorkType.TREE;
   this.itemIconTexture = "civicMine1";
   this.blockIconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
   this.blockIconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
   this.blockIconNames[2] = "ancientwarfare:civic/civicFarmWheatSides"; 
-  this.resourceSlotSize = 3;
   this.neededResearch.add(ResearchGoalNumbers.logistics3);
   this.neededResearch.add(ResearchGoalNumbers.civics2);
   this.addRecipeResource(new ItemStack(Item.axeDiamond,1 ), true);

@@ -81,8 +81,9 @@ public AWInventoryBase inventory = null;
 public AWInventoryBase overflow = new AWInventoryBasic(4);
 protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
 
+protected int[] regularIndices;
+protected int[] specResourceIndices;
 protected int[] resourceSlotIndices;
-protected int[] otherSlotIndices;
 protected Set<IWorker> workers = Collections.newSetFromMap(new WeakHashMap<IWorker, Boolean>());
 protected boolean hasWork = false;
 
@@ -98,22 +99,31 @@ public void setCivic(Civic civ)
   this.civic = civ;
   if(inventory==null)
     {
-    inventory = new AWInventoryBasic(civ.getInventorySize());
+    inventory = new AWInventoryBasic(civ.getTotalInventorySize());
     }
   this.setupSidedInventoryIndices(civ);
   }
 
 public void setupSidedInventoryIndices(Civic civ)
   {
+  regularIndices = new int[civ.getInventorySize()];  
   resourceSlotIndices = new int[civ.getResourceSlotSize()];
+  specResourceIndices = new int[civ.getSpecResourceSlotSize()];
+  int index = 0;
   for(int i = 0; i< civ.getResourceSlotSize(); i++)
     {
-    resourceSlotIndices[i]=i;
+    resourceSlotIndices[i]=index;
+    index++;
     }
-  otherSlotIndices = new int[civ.getInventorySize()-civ.getResourceSlotSize()];
-  for(int i = civ.getResourceSlotSize(); i < civ.getInventorySize(); i++)
+  for(int i = 0; i < civ.getInventorySize(); i++)
     {
-    otherSlotIndices[i-civ.getResourceSlotSize()]=i;
+    regularIndices[i]=index;
+    index++;
+    }
+  for(int i = 0; i < civ.getSpecResourceSlotSize(); i++)
+    {
+    specResourceIndices[i] = index;
+    index++;
     }
   }
 
@@ -173,18 +183,6 @@ public boolean doesBBIntersect(AxisAlignedBB bb)
 public boolean isWorker(IWorker worker)
   {
   return this.workers.contains(worker);
-  }
-
-protected void tryAddItemToInventory(ItemStack item, int[] ... slotIndices)
-  {
-  if(item==null || slotIndices==null){return;}
-  for(int[] indices : slotIndices)
-    {
-    if(item==null){return;}
-    item = inventory.tryMergeItem(item, indices);
-    }
-  item = overflow.tryMergeItem(item);
-  InventoryTools.dropItemInWorld(worldObj, item, xCoord, yCoord, zCoord);
   }
 
 @Override
@@ -642,6 +640,19 @@ public void onPlaced()
   }
 
 /******************************************************************INVENTORY METHODS***********************************************************************************/
+protected ItemStack tryAddItemToInventory(ItemStack item, int[] ... slotIndices)
+  {
+  if(item==null || slotIndices==null){return item;}
+  for(int[] indices : slotIndices)
+    {
+    if(item==null){return item;}
+    item = inventory.tryMergeItem(item, indices);
+    }
+  item = overflow.tryMergeItem(item);
+  InventoryTools.dropItemInWorld(worldObj, item, xCoord, yCoord, zCoord);
+  return item;
+  }
+
 public boolean resourceFilterContains(ItemStack stack)
   {
   if(stack==null)

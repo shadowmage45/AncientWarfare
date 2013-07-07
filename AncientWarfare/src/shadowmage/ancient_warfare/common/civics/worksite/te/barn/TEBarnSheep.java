@@ -132,10 +132,8 @@ protected void doWork(IWorker npc, WorkPoint p)
       if(woolDrops!=null)
         {
         for(ItemStack stack : woolDrops)
-          {          
-          stack = inventory.tryMergeItem(stack);
-          stack = overflow.tryMergeItem(stack);
-          InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord, zCoord+0.5d);                  
+          {       
+          this.tryAddItemToInventory(stack, regularIndices);                  
           }
         }
       ent.setSheared(true);

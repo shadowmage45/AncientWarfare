@@ -65,9 +65,9 @@ public void updateEntity()
     int index;
     int foodValue = 0;
     ItemStack stack;
-    for(int i = 0; i < this.otherSlotIndices.length; i++)
+    for(int i = 0; i < this.regularIndices.length; i++)
       {
-      index = this.otherSlotIndices[i];
+      index = this.regularIndices[i];
       stack = this.getStackInSlot(index);      
       if(stack==null || stack.itemID == ItemLoader.rations.itemID || !(stack.getItem() instanceof ItemFood) || stack.itemID == Item.rottenFlesh.itemID){continue;}
       ItemFood item = (ItemFood)stack.getItem();
@@ -83,7 +83,7 @@ public void updateEntity()
     }
   while(this.foodValue>=2 && this.inventory.canHoldItem(rationFilter, 1))
     {
-    InventoryTools.tryMergeStack(inventory, rationFilter.copy(), otherSlotIndices);
+    InventoryTools.tryMergeStack(inventory, rationFilter.copy(), regularIndices);
     this.foodValue -=2;
     }
   }

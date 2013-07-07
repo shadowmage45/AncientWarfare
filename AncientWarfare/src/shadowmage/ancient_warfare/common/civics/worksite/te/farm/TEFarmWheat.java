@@ -35,6 +35,7 @@ public TEFarmWheat()
   this.mainBlockID = Block.crops.blockID;
   this.mainBlockMatureMeta = 7;
   this.plantableFilter = new ItemStack(Item.seeds);
+  this.canUseBonemeal = true;
   }
 
 

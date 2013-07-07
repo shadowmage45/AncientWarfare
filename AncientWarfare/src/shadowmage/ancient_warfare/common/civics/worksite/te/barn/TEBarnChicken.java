@@ -57,7 +57,7 @@ protected void onCivicUpdate()
           {
           if(inventory.canHoldItem(stack, stack.stackSize))
             {
-            stack = inventory.tryMergeItem(stack);
+            stack = this.tryAddItemToInventory(stack, this.regularIndices);
             if(stack!=null)
               {
               ent.setEntityItemStack(stack);

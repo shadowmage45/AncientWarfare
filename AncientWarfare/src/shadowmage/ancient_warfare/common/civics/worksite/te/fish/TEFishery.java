@@ -78,9 +78,7 @@ protected void doWork(IWorker npc, WorkPoint p)
     float check = rng.nextFloat();
     if(check<=waterPercent)      
       {      
-      ItemStack stack = this.inventory.tryMergeItem(fishFilter.copy());
-      stack = this.overflow.tryMergeItem(stack);
-      InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord+1.d, zCoord+0.5d);
+      this.tryAddItemToInventory(fishFilter.copy(), regularIndices);
       }
     }
   }

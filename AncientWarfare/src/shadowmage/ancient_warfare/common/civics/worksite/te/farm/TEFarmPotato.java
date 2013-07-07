@@ -35,6 +35,7 @@ public TEFarmPotato()
   this.mainBlockID = Block.potato.blockID;
   this.mainBlockMatureMeta = 7;
   this.plantableFilter = new ItemStack(Item.potato);
+  this.canUseBonemeal = true;
   }
 
 

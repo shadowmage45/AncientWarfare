@@ -39,7 +39,7 @@ public CivicFishFarm(int id, String name, String tooltip, Class <?extends TEWork
   this.name = name;
   this.tooltip = tooltip;
   this.teClass = teClass;
-  this.inventorySize = 9;
+  this.regularInventorySize = 9;
   this.itemIconTexture = iconTex;
   this.blockIconNames[0] = "ancientwarfare:civic/civicFarmFishBottom";
   this.blockIconNames[1] = "ancientwarfare:civic/civicFarmFishTop";

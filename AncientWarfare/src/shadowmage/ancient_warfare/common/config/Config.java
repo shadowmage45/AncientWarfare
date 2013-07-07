@@ -46,7 +46,7 @@ public static String languagePath = "/shadowmage/ancient_warfare/resources/lang/
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
-public static final boolean DEBUG = false;
+public static final boolean DEBUG = true;
 
 
 //***************************************************LOADED CONFIGS******************************************//

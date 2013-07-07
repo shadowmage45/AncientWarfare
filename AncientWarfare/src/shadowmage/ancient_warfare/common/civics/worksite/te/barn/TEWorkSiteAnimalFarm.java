@@ -148,9 +148,7 @@ protected void doWork(IWorker npc, WorkPoint p)
       for(EntityItem item : ent.capturedDrops)
         {
         stack = item.getEntityItem();
-        stack = InventoryTools.tryMergeStack(inventory, stack, otherSlotIndices);
-        stack = overflow.tryMergeItem(stack);
-        InventoryTools.dropItemInWorld(worldObj, stack, xCoord+0.5d, yCoord, zCoord+0.5d);       
+        this.tryAddItemToInventory(stack, regularIndices);       
         item.setDead();
         }
       }
