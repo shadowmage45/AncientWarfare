@@ -1,13 +1,6 @@
 PORTING TO 1.6
 * Instead of renderEngine.bindTexture(String path), use:
     renderEngine.func_110577_a(new ResourceLocation("modID","texture path"))
-* rip out description registry or rewrite to accomodate language packs/translations
-    move over to loading translated names/descriptions from a language-file
-* remove item-names from description registry -- move over to loading a language file    
-* figure out a textureManager
-* rewrite fucking everything to make it so I can load blocks and entities during pre-init...
-    --really fucking everything (as I can't build items until everything else is built, 
-    as my items depend on the rest of the shit)            
 
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
@@ -23,12 +16,6 @@ FROM TESTING
 * ignore incorrect packet/container types (remove error msg)
 * custom block item renders are huge
 * wander/crawler pathfinding likes to circle on chests and go up/down ladders a lot
-* courier routing slip qty > 64
-* courier routing slip -- do all transaction in single pass, then work for time based on stuff moved (will clean up workers hanging out at mines)
-    this will also allow to tally up the entire slip for a single-pass go at things, enabling larger quantities through multiple stacks in the filters
-* world gen structures can cut in too low    
-* rotation of hoppers when scanned/built is off
-
 
 LANGUAGE/TRANSLATIONS
 * move over to generic names for all
@@ -37,16 +24,13 @@ LANGUAGE/TRANSLATIONS
 * move all GUIs over from rendering static strings to rendering translated strings
 
 BALANCE/TWEAKS
-* examine recipe balance
-* routing slips more expensive
-* farmers too OP harvesting too many farms?
+* routing slips more expensive (use various dyes for them?)
 * patrols are a bit 'hard' to setup
 
 TEXTURE/ART
 * more missile textures
 * finish airplane textures
 * icons for NPC spawner items
-* model/texture for new crafting stations (chemistry, auto-crafting)
 * textures for new reinforced blocks
 
 GENERAL
@@ -101,7 +85,7 @@ CIVICS
     * NPC town hall ocasionally transfer items from civics in bounds (skip couriers)
     * NPC town hall plans courier routes (use couriers)    
 * NPC town hall will occasionally respawn missing NPCs
-* mine still harvests water
+* mine still harvests water, specifically on the ladder blocks
 
 TEMPLATES
 * resource lists for gates
@@ -120,7 +104,6 @@ WORLD GEN STUFF
     need to examine validation again
     need to rework building selection /weighting/values
     need to include village components w/NPCs civics/etc (if enabled in config)
-* move over to traditional dungeonLootChests
 
 COMPLEXES
 * features--
@@ -180,8 +163,7 @@ INFO GUIs
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
 
-PATHFINDING
-* need to check if a block has blocking entities in it during iswalkable check ( or just enable no collide)    
+PATHFINDING   
 
 TWEAKS/OPTIMIZATION
 * alter gen algorithm to account for rejection frequency on larger buildings (multiple retries for them?)
@@ -202,14 +184,17 @@ TWEAKS/OPTIMIZATION
 * add bonemeal slots to applicable farms (wheat, carrot, potato, tree farms)(add to container, gui, resource list, etc)(slots could be used for other purposes on other civics, just a second resource slot)
 * clean up courier routing slip to finally accept stack sizes > 64
 * clean up courier interaction to move items in one pass, work for relative time to items moved (cleans up issues of interaction at some work sites)
-
 * fix up a couple of issues with world-gen
 * more world-gen updates
 * add first couple of world-gen structures
-
 * fix hopper rotation data
 * move over to using forge chestgenhooks for loot generation
+
 /********** 07-08-13 **********/
+* world gen structures can cut in too low    
+* add research notes clickable item -- should be able to click to learn the research for that note
+
+
 /********** 07-09-13 **********/
 /********** 07-10-13 **********/
 

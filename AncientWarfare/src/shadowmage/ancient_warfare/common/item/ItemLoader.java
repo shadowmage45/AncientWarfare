@@ -53,7 +53,7 @@ public static final AWItemBase courierRouteSlip = new ItemCourierSlip(Config.get
 public static final AWItemBase gateSpawner = new ItemGateSpawner(Config.getItemID("itemMulti.gateSpawner", 13016, "Base gate spawning item."));
 public static final ItemFood rations = new ItemRation(Config.getItemID("itemSingle.foodRation", 13017, "Food rations for soldiers and npcs."));
 public static final AWItemBase researchBook = new ItemResearchBook(Config.getItemID("itemSingle.researchBook", 13017, "Research book to save research progress"));
-public static final AWItemBase researchNotes = new ItemComponent(Config.getItemID("itemMulti.researchNotes", 13018, "Research notes"), true);
+public static final AWItemBase researchNotes = (AWItemBase) new ItemResearchNote(Config.getItemID("itemMulti.researchNotes", 13018, "Research notes")).setCreativeTab(null);
 public static final AWItemBase backpack = new ItemBackpack(Config.getItemID("itemMulti.backpack", 13019, "Backpack"));
 
 public static final ItemStack wood1 = new ItemStack(componentItem, 1, 0);
@@ -106,9 +106,7 @@ public static ItemLoader instance()
 public void load()
   {
   this.loadItems();
-  this.loadRecipes();  
   this.loadDebugItems();
-  researchNotes.setCreativeTab(null);
   }
 
 private void loadItems()
@@ -138,6 +136,9 @@ private void loadItems()
   this.registerItemSingle(backpack, "Backpack", "", "Right Click to open GUI").setIconTexture("ancientwarfare:misc/backpack", 0).addDisplayStack(new ItemStack(backpack,1,16)).addDisplayStack(new ItemStack(backpack, 1, 32)).addDisplayStack(new ItemStack(backpack, 1, 48));    
   this.registerItemSingle(researchBook, "Research Book", "", "Records research progress").setIconTexture("ancientwarfare:misc/researchBook", 0);
   
+  
+  this.registerItemSubtyped(researchNotes);
+  
   /**
    * register main component item (misc random items) 
    */
@@ -165,11 +166,6 @@ private void loadItems()
   this.addSubtypeInfoToItem(componentItem, 20, "Powder Case").addDisplayStack(powderCase).setIconTexture("ancientwarfare:misc/vehiclePowderUnit", 20);
   this.addSubtypeInfoToItem(componentItem, 21, "Equipment Bay").addDisplayStack(equipmentBay).setIconTexture("ancientwarfare:misc/vehicleEquipmentBay", 21);
   this.addSubtypeInfoToItem(componentItem, 22, "Iron Rings").addDisplayStack(ironRings).setIconTexture("ancientwarfare:misc/ironRings", 22);
-  }
-
-private void loadRecipes()
-  {
-  //TODO load any normal vanilla style recipes here.  Check config to see if should enable basic recipes for other things (vehicles, ammo, npcs, civics, upgrades, armor, wetf)
   }
 
 private void loadDebugItems()

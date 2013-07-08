@@ -93,6 +93,12 @@ public boolean attemptPlacementSubsurface(World world, int x, int y, int z, int 
 //    Config.logDebug("underground structure--invalid topBlock");
     return false;
     }
+  int size = struct.ySize - (struct.ySize-struct.verticalOffset);
+  if(y-size <=1)
+    {
+    Config.logDebug("site rejected by structure, too low");
+    return false;
+    }
   BlockPosition hit = new BlockPosition(x,y,z);    
   hit.y++;
   if(!struct.canGenerateAtSubSurface(world, hit, face, struct))
@@ -114,6 +120,12 @@ public boolean attemptPlacementSurface(World world, int x, int y, int z, int fac
   if(y==-1)
     {
     Config.logDebug("invalid topBlock");
+    return false;
+    }
+  int size = struct.ySize - (struct.ySize-struct.verticalOffset);
+  if(y-size <=1)
+    {
+    Config.logDebug("site rejected by structure, too low");
     return false;
     }
   BlockPosition hit = new BlockPosition(x,y,z);

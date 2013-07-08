@@ -57,6 +57,15 @@ public static CreativeTabAW ammoTab = new CreativeTabAW("Ancient Warfare Ammunit
     return new ItemStack(ItemLoader.ammoItem);
     }
   };
+
+public static CreativeTabAW researchTab = new CreativeTabAW("Ancient Warfare Research")
+  {
+  @Override
+  public ItemStack getIconItemStack()
+    {
+    return new ItemStack(ItemLoader.researchNotes);
+    }
+  };
   
 public static CreativeTabAW instance()
   {
