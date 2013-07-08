@@ -102,16 +102,23 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
 //    return true;
 //    }
 //  Config.logDebug("hitPos"+hit);
-  StructureBB bb = getClearingValidationBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, struct.getClearingMax()); 
-//  Config.logDebug("clearance validation bb: "+bb);
-  List<BlockPosition> nonClearedBlocks = BlockTools.getAllBlockPositionsBetween(bb.pos1, bb.pos2);
-  for(BlockPosition pos : nonClearedBlocks)
+  if(struct.getClearingMax()>=0)
     {
-    if(world.getBlockId(pos.x, pos.y, pos.z)!=0)
+    StructureBB bb = getClearingValidationBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.xSize, struct.ySize, struct.zSize, struct.getClearingMax()); 
+    //  Config.logDebug("clearance validation bb: "+bb);
+    List<BlockPosition> nonClearedBlocks = BlockTools.getAllBlockPositionsBetween(bb.pos1, bb.pos2);
+    for(BlockPosition pos : nonClearedBlocks)
       {
-      Config.logDebug("rejected due to clearance :: "+struct.name);
-      return false;
-      }
+      if(world.getBlockId(pos.x, pos.y, pos.z)!=0)
+        {
+        Config.logDebug("rejected due to clearance :: "+struct.name);
+        return false;
+        }
+      }    
+    }
+  else
+    {
+    Config.logDebug("skipping clearance check");
     }
   return true;
   }

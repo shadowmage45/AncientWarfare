@@ -216,7 +216,8 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
       placed = this.attemptPlacementSurface(world, x, y, z, face, struct, random);
       }    
     if(placed)
-      {      
+      {   
+      Config.logDebug("generated : "+struct.name);
       WorldGenStructureEntry ent = struct.getWorldGenEntry();
       if(ent!=null)
         {

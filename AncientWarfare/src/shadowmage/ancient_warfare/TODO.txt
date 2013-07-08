@@ -202,6 +202,8 @@ TWEAKS/OPTIMIZATION
 * clean up courier interaction to move items in one pass, work for relative time to items moved (cleans up issues of interaction at some work sites)
 
 * fix up a couple of issues with world-gen
+* more world-gen updates
+* add first couple of world-gen structures
 /********** 07-08-13 **********/
 /********** 07-09-13 **********/
 /********** 07-10-13 **********/
