@@ -60,7 +60,7 @@ public NpcMedic(int type)
   this.configName = "medic";
   this.tooltip = "Heals nearby troops";
   this.isCombatUnit = true;
-  this.iconTexture = "npcSoldier1";
+  this.iconTexture = "npcMedic";
   this.defaultTargets = defaultTargetList;
   this.addLevel("Novice Medic", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.command1);
   this.addLevel("Adept Medic", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);

@@ -57,7 +57,7 @@ public NpcFootsoldier(int type)
   this.configName = "footsoldier";
   this.tooltip = "Adept at melee combat.";
   this.isCombatUnit = true;
-  this.iconTexture = "npcSoldier1";
+  this.iconTexture = "npcSoldier";
   this.defaultTargets = defaultTargetList;
   this.addLevel("Novice Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.command1);
   this.addLevel("Adept Footsoldier", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);

@@ -60,7 +60,7 @@ public NpcCombatEngineer(int type)
   this.configName = "combat_engineer";
   this.tooltip = "Repairs nearby Vehicles";
   this.isCombatUnit = true;
-  this.iconTexture = "npcSoldier1";
+  this.iconTexture = "npcCombatEngineer";
   this.defaultTargets = defaultTargetList;
   this.addLevel("Novice Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.command1);
   this.addLevel("Adept Engineer", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);

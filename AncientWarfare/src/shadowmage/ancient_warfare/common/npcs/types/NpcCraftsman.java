@@ -55,7 +55,7 @@ public NpcCraftsman(int type)
   super(type);
   this.displayName = "Craftsman";
   this.tooltip = "Crafts items at workstations";
-  this.iconTexture = "npcWorker1";
+  this.iconTexture = "npcCraftsman";
   this.addLevel("Novice Craftsman", Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(0), null).addTargetType(CivicWorkType.CRAFT).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
   this.addLevel("Adept Craftsman", Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(1), null).addTargetType(CivicWorkType.CRAFT).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
   this.addLevel("Expert Craftsman", Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(2), null).addTargetType(CivicWorkType.CRAFT).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);

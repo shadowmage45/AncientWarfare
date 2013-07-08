@@ -63,17 +63,17 @@ public static String[] defaultTargetList = new String[]{"Zombie", "Spider", "Cav
 
 public static INpcType npcDummy = new NpcDummy(0);
 public static INpcType npcVillager = new NpcVillager(1);
-public static INpcType npcFootSoldier = new NpcFootsoldier(2);
-public static INpcType npcArcher = new NpcArcher(3);
+public static INpcType npcFootSoldier = new NpcFootsoldier(2);//icon made
+public static INpcType npcArcher = new NpcArcher(3);//icon made
 public static INpcType npcSiegeEngineer = new NpcSiegeEngineer(4);
-public static INpcType npcMedic = new NpcMedic(5);
+public static INpcType npcMedic = new NpcMedic(5);//icon made
 public static INpcType npcCombatEngineer = new NpcCombatEngineer(6);
 public static INpcType npcCommander = new NpcCommander(7);
-public static INpcType npcFisherman = new NpcFisherman(8);
-public static INpcType npcCraftsman = new NpcCraftsman(9);
-public static INpcType npcMiner = new NpcMiner(10);
-public static INpcType npcFarmer = new NpcFarmer(11);
-public static INpcType npcLumberjack = new NpcLumberjack(12);
+public static INpcType npcFisherman = new NpcFisherman(8);//icon made
+public static INpcType npcCraftsman = new NpcCraftsman(9);//icon made
+public static INpcType npcMiner = new NpcMiner(10);//icon made
+public static INpcType npcFarmer = new NpcFarmer(11);//icon made
+public static INpcType npcLumberjack = new NpcLumberjack(12);//icon made
 public static INpcType npcCourier = new NpcCourier(13);
 //chest courier ?
 public static INpcType npcResearcher = new NpcResearcher(15);

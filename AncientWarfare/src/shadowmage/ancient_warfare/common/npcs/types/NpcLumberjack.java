@@ -53,7 +53,7 @@ public NpcLumberjack(int type)
   super(type);
   this.displayName = "Lumberjack";
   this.tooltip = "For working tree farms";
-  this.iconTexture = "npcWorker1";  
+  this.iconTexture = "npcLumberjack";  
   this.addLevel("Lumberjack Novice", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(0), null).addTargetType(CivicWorkType.TREE).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
   this.addLevel("Lumberjack Adept", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(1), null).addTargetType(CivicWorkType.TREE).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
   this.addLevel("Lumberjack Master", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(2), null).addTargetType(CivicWorkType.TREE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);

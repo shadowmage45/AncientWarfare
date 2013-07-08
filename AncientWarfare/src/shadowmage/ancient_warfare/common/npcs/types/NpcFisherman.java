@@ -53,7 +53,7 @@ public NpcFisherman(int type)
   super(type);
   this.displayName = "Fisherman";
   this.tooltip = "For working Fish Farms";
-  this.iconTexture = "npcWorker1";  
+  this.iconTexture = "npcFisherman";  
   this.addLevel("Fisherman Novice", Config.texturePath + "models/npc/npcFisherman.png", getToolStack(0), null).addTargetType(CivicWorkType.FISH).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
   this.addLevel("Fisherman Adept", Config.texturePath + "models/npc/npcFisherman.png", getToolStack(1), null).addTargetType(CivicWorkType.FISH).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
   this.addLevel("Fisherman Master", Config.texturePath + "models/npc/npcFisherman.png", getToolStack(2), null).addTargetType(CivicWorkType.FISH).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);

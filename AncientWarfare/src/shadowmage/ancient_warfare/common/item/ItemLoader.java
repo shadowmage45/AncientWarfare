@@ -80,6 +80,7 @@ public static final ItemStack counterWeightUnit = new ItemStack(componentItem, 1
 public static final ItemStack powderCase = new ItemStack(componentItem, 1, 20);//
 public static final ItemStack equipmentBay = new ItemStack(componentItem, 1, 21);//
 public static final ItemStack ironRings = new ItemStack(componentItem, 1, 22);//
+public static final ItemStack cement = new ItemStack(componentItem, 1, 23);
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -135,8 +136,7 @@ private void loadItems()
   
   this.registerItemSingle(backpack, "Backpack", "", "Right Click to open GUI").setIconTexture("ancientwarfare:misc/backpack", 0).addDisplayStack(new ItemStack(backpack,1,16)).addDisplayStack(new ItemStack(backpack, 1, 32)).addDisplayStack(new ItemStack(backpack, 1, 48));    
   this.registerItemSingle(researchBook, "Research Book", "", "Records research progress").setIconTexture("ancientwarfare:misc/researchBook", 0);
-  
-  
+    
   this.registerItemSubtyped(researchNotes);
   
   /**
@@ -166,6 +166,7 @@ private void loadItems()
   this.addSubtypeInfoToItem(componentItem, 20, "Powder Case").addDisplayStack(powderCase).setIconTexture("ancientwarfare:misc/vehiclePowderUnit", 20);
   this.addSubtypeInfoToItem(componentItem, 21, "Equipment Bay").addDisplayStack(equipmentBay).setIconTexture("ancientwarfare:misc/vehicleEquipmentBay", 21);
   this.addSubtypeInfoToItem(componentItem, 22, "Iron Rings").addDisplayStack(ironRings).setIconTexture("ancientwarfare:misc/ironRings", 22);
+  this.addSubtypeInfoToItem(componentItem, 23, "Cement").addDisplayStack(cement).setIconTexture("ancientwarfare:misc/cement", 23);
   }
 
 private void loadDebugItems()

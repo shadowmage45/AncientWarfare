@@ -62,7 +62,7 @@ public NpcArcher(int type)
   this.configName = "archer";
   this.tooltip = "Adept at bow-use";
   this.isCombatUnit = true;  
-  this.iconTexture = "npcArcher1";
+  this.iconTexture = "npcArcher";
   this.addLevel("Novice Archer", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setRange(20).setAccuracy(0.88f).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.command1);
   this.addLevel("Adept Archer", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setRange(20).setAccuracy(0.91f).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);
   this.addLevel("Expert Archer", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setRange(20).setAccuracy(0.94f).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command3);

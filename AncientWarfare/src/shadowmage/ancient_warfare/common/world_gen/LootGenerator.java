@@ -30,7 +30,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.DungeonHooks;
+import shadowmage.ancient_warfare.common.civics.types.Civic;
+import shadowmage.ancient_warfare.common.civics.types.ICivicType;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
+import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
+import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 public class LootGenerator
 {
@@ -61,6 +71,48 @@ public void generateLootFor(IInventory inventory, int slots, int level, Random r
   WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 27+54);
   break;
   }
+  }
+
+public void addLootToTables()
+  {    
+  for(ResearchGoal g : ResearchGoal.researchGoals)
+    {
+    if(g==null){continue;}
+    addLoot(new ItemStack(ItemLoader.researchNotes,1,g.getGlobalResearchNum()),1,1,10);
+    }
+  for(IVehicleType t : VehicleType.vehicleTypes)
+    {
+    if(t==null){continue;}
+    for(int i = 0; i< t.getMaterialType().getNumOfLevels(); i++)
+      {
+      addLoot(t.getStackForLevel(i), 1, 1, 10 - i);
+      }
+    }
+  for(IVehicleUpgradeType t : VehicleUpgradeRegistry.instance().getUpgradeList())
+    {
+    if(t==null){continue;}
+    addLoot(t.getUpgradeStack(1), 1, 1, 15);
+    }  
+  for(IAmmoType t : Ammo.ammoTypes)
+    {
+    if(t==null){continue;}
+    addLoot(t.getAmmoStack(1),5,32,5);
+    }
+  for(ICivicType c : Civic.civicList)
+    {
+    if(c==null){continue;}
+    addLoot(c.getItemToConstruct(), 1, 1, 1);
+    }
+  
+  addLoot(new ItemStack(ItemLoader.npcCommandBaton,1,0),1,1,15);
+  addLoot(new ItemStack(ItemLoader.npcCommandBaton,1,1),1,1,5);
+    
+  
+  }
+
+private void addLoot(ItemStack item, int min, int max, int weight)
+  {
+  ChestGenHooks.addItem(ChestGenHooks.DUNGEON_CHEST, new WeightedRandomChestContent(item, min, max, weight));
   }
 
 }

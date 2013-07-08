@@ -55,7 +55,7 @@ public NpcCommander(int type)
   this.configName = "commander";
   this.tooltip = "Provides bonuses to troops";
   this.isCombatUnit = true;
-  this.iconTexture = "npcSoldier1";
+  this.iconTexture = "npcCommander";
   this.defaultTargets = defaultTargetList;
   this.addLevel("Leiutenant", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);
   this.addLevel("Colonel", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6).setUpkeep(10).addNeededResearch(ResearchGoalNumbers.command3);
