@@ -27,6 +27,8 @@ FROM TESTING
 * courier routing slip -- do all transaction in single pass, then work for time based on stuff moved (will clean up workers hanging out at mines)
     this will also allow to tally up the entire slip for a single-pass go at things, enabling larger quantities through multiple stacks in the filters
 * world gen structures can cut in too low    
+* rotation of hoppers when scanned/built is off
+
 
 LANGUAGE/TRANSLATIONS
 * move over to generic names for all
@@ -204,6 +206,9 @@ TWEAKS/OPTIMIZATION
 * fix up a couple of issues with world-gen
 * more world-gen updates
 * add first couple of world-gen structures
+
+* fix hopper rotation data
+* move over to using forge chestgenhooks for loot generation
 /********** 07-08-13 **********/
 /********** 07-09-13 **********/
 /********** 07-10-13 **********/

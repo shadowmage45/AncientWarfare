@@ -24,8 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.DungeonHooks;
 import shadowmage.ancient_warfare.common.config.Config;
 
 public class LootGenerator
@@ -42,323 +46,21 @@ public static LootGenerator instance()
   return INSTANCE;
   }
 
-/**
- * loot table types
- */
-public static final int GENERIC = 0;
-public static final int VALUABLES = 1;
-public static final int RESEARCH = 2;
-public static final int COMPONENTS = 3;
-public static final int FOOD = 4;
-public static final int AMMO = 5;
-public static final int WEAPONS = 6;
-public static final int VEHICLES = 7;
-
-/**
- * entry for a single item
- * @author Shadowmage
- *
- */
-private class ItemEntry
-{
-int id;
-int meta;
-int count;
-int weight;
-int value;
-public ItemEntry(int id, int meta, int count, int weight, int value)
+public void generateLootFor(IInventory inventory, int slots, int level, Random random)
   {
-  this.id = id;
-  this.meta = meta;
-  this.count = count;
-  this.weight = weight;
-  this.value = value;
-  }
-}/////////////////////////////END ITEMENTRY
-
-/**
- * represents an entire level of loot for one loot type
- * @author Shadowmage
- *
- */
-private class WeightedLootLevel
-{
-int totalWeight;
-
-private List<ItemEntry> itemList = new ArrayList<ItemEntry>();
-
-public void addItem(int id, int meta, int count, int weight, int value)
+  switch(level)
   {
-  this.itemList.add(new ItemEntry(id, meta, count, weight, value));
-  this.totalWeight+=weight;
-  }
-
-public void addItem(Item item, int count, int weight, int value)
-  {
-  this.addItem(item.itemID, 0, count, weight, value);
-  }
-
-public ItemEntry getRandomWeightedEntry(Random random)
-  {
-  if(totalWeight ==0 || this.itemList.isEmpty())
-    {
-    return null;
-    }
-  int check = random.nextInt(totalWeight);
-  for(ItemEntry ent : this.itemList)
-    {
-    if(check> ent.weight)
-      {
-      check -=ent.weight;
-      }
-    else
-      {
-      return ent;
-      }
-    }
-  return null;
-  }
-
-
-}/////////////////////////////END WEIGHTEDLOOTLEVEL
-
-/**
- * loot tables..
- */
-private WeightedLootLevel [] genericLootTable = new WeightedLootLevel[10];
-private WeightedLootLevel [] valuablesTable = new WeightedLootLevel[10];
-private WeightedLootLevel [] researchTable = new WeightedLootLevel[10];
-private WeightedLootLevel [] componentsTable = new WeightedLootLevel[10];
-private WeightedLootLevel [] foodTable = new WeightedLootLevel[10];
-private WeightedLootLevel [] ammoTable = new WeightedLootLevel[10];
-private WeightedLootLevel [] weaponsTable = new WeightedLootLevel[10];
-private WeightedLootLevel [] vehiclesTable = new WeightedLootLevel[10];
-
-
-public List<ItemStack> getRandomLoot(int maxValue, int maxLvl, int numOfStacks, int[] tables, Random random)
-  {
-  List<ItemStack> loot = new ArrayList<ItemStack>();
-  
-  int foundVal = 0;
-  int table = 0;
-  int level = 0;
-  int retryCount;
-  for(int i = 0; i < numOfStacks; i++)
-    {
-    if(random.nextInt(100)<=50)//50% empty stacks...might adjust
-      {
-      continue;
-      }
-    retryCount = maxLvl;
-    table = selectTable(tables, random);
-    level = selectLevel(maxLvl, random);
-    ItemEntry entry = getEntryFromTable(table,level, random);
-    if(entry!=null)
-      {
-      loot.add(new ItemStack(entry.id, entry.count, entry.meta));
-//      Config.logDebug("adding stack "+entry.id+","+entry.meta);
-      }
-    else//if nothing at that level, keep checking levels until 0...      
-      {
-//      Config.logDebug("null stack, retrying");
-      while(entry==null && retryCount >=0)
-        {
-        retryCount--;
-        entry = getEntryFromTable(table, retryCount, random);        
-        }
-      if(entry!=null)
-        {
-        loot.add(new ItemStack(entry.id, entry.count, entry.meta));
-//        Config.logDebug("adding stack "+entry.id+","+entry.meta+"   from retry");
-        }
-      }
-    }    
-  return loot;
-  }
-
-private ItemEntry getEntryFromTable(int table, int level, Random random)
-  {
-  if(level>9 || table > 7 || table < 0 || level < 0)
-    {
-    return null;
-    }
-  WeightedLootLevel lvl = getTable(table)[level];
-  if(lvl!=null)
-    {
-    return lvl.getRandomWeightedEntry(random);
-    }
-  return null;
-  }
-
-private WeightedLootLevel[] getTable(int table)
-  {
-  if(table > 7 || table < 0)
-    {
-    return null;
-    }
-  switch(table)
-  {
-  case GENERIC:
-  return genericLootTable;
-  case VALUABLES:
-  return valuablesTable;
-  case RESEARCH:
-  return researchTable;
-  case COMPONENTS:
-  return componentsTable;
-  case FOOD:
-  return foodTable;
-  case AMMO:
-  return ammoTable;
-  case WEAPONS:
-  return weaponsTable;
-  case VEHICLES:  
-  return vehiclesTable;
   default:
-  return null;  
+  case 0:
+  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 27);
+  break;
+  case 1:
+  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 54);
+  break;
+  case 2:
+  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 27+54);
+  break;
   }
-  }
-
-private int selectTable(int[] tables, Random random)
-  {
-  return tables[random.nextInt(tables.length)];
-  }
-
-private int selectLevel(int maxLevel, Random random)
-  {
-  int totalLevelWeight = 0;
-  for(int i = 0; i <= maxLevel; i++)
-    {
-    totalLevelWeight += (i+1)^4;
-    }  
-  int check = random.nextInt(totalLevelWeight);
-  for(int i = 0; i <= maxLevel; i++)
-    {
-    int pow = (maxLevel-i+1)^4;
-    if(check>=pow)
-      {
-      check-=pow;
-      }
-    else
-      {
-      return i;
-      }
-    }
-  return 0;
-  }
-
-private void addLootEntry(int table, int level, int id, int meta, int count, int weight, int value)
-  {
-  if(table > 7 || table < 0|| level < 0 || level >9)
-    {
-    return;
-    }
-  WeightedLootLevel[] tbl = getTable(table);
-  if(tbl[level]==null)
-    {
-    tbl[level] = new WeightedLootLevel();
-    }
-  tbl[level].addItem(id, meta, count, weight, value);
-  }
-
-private void addLootEntry(int table, int level, Item item, int count, int weight, int value)
-  {
-  this.addLootEntry(table, level, item.itemID, 0, count, weight, value);
-  }
-
-public void loadStaticLootTables()
-  {
-//  this.addLootEntry(GENERIC, 0, Block.torchWood.blockID, 0, 1, 10, 1);
-//  this.addLootEntry(GENERIC, 1, Item.silk, 2, 10, 2);
-//  this.addLootEntry(GENERIC, 2, Item.gunpowder, 1, 10, 4);
-  this.addLootEntry(VALUABLES, 0, Item.coal, 1, 10, 1);
-  this.addLootEntry(VALUABLES, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(VALUABLES, 2, Item.swordIron, 1, 10, 5);
-  this.addLootEntry(VALUABLES, 3, Item.goldNugget, 1, 10, 1);
-  this.addLootEntry(VALUABLES, 4, Item.ingotIron, 5, 10, 15);
-  this.addLootEntry(VALUABLES, 5, Item.ingotGold, 1, 10, 10);
-  this.addLootEntry(VALUABLES, 6, Item.ingotGold, 2, 10, 20);
-  this.addLootEntry(VALUABLES, 7, Item.ingotIron, 10, 10, 30);
-  this.addLootEntry(VALUABLES, 8, Item.diamond, 1, 10, 50);
-  this.addLootEntry(VALUABLES, 9, Item.swordDiamond, 1, 10, 100);
-  
-  this.addLootEntry(GENERIC, 0, Item.coal, 1, 10, 1);
-  this.addLootEntry(GENERIC, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(GENERIC, 2, Item.swordIron, 1, 10, 5);
-  this.addLootEntry(GENERIC, 3, Item.goldNugget, 1, 10, 1);
-  this.addLootEntry(GENERIC, 4, Item.ingotIron, 5, 10, 15);
-  this.addLootEntry(GENERIC, 5, Item.ingotGold, 1, 10, 10);
-  this.addLootEntry(GENERIC, 6, Item.ingotGold, 2, 10, 20);
-  this.addLootEntry(GENERIC, 7, Item.ingotIron, 10, 10, 30);
-  this.addLootEntry(GENERIC, 8, Item.diamond, 1, 10, 50);
-  this.addLootEntry(GENERIC, 9, Item.swordDiamond, 1, 10, 100);
-  
-  this.addLootEntry(RESEARCH, 0, Item.coal, 1, 10, 1);
-  this.addLootEntry(RESEARCH, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(RESEARCH, 2, Item.swordIron, 1, 10, 5);
-  this.addLootEntry(RESEARCH, 3, Item.goldNugget, 1, 10, 1);
-  this.addLootEntry(RESEARCH, 4, Item.ingotIron, 5, 10, 15);
-  this.addLootEntry(RESEARCH, 5, Item.ingotGold, 1, 10, 10);
-  this.addLootEntry(RESEARCH, 6, Item.ingotGold, 2, 10, 20);
-  this.addLootEntry(RESEARCH, 7, Item.ingotIron, 10, 10, 30);
-  this.addLootEntry(RESEARCH, 8, Item.diamond, 1, 10, 50);
-  this.addLootEntry(RESEARCH, 9, Item.swordDiamond, 1, 10, 100);
-  
-  this.addLootEntry(COMPONENTS, 0, Item.coal, 1, 10, 1);
-  this.addLootEntry(COMPONENTS, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(COMPONENTS, 2, Item.swordIron, 1, 10, 5);
-  this.addLootEntry(COMPONENTS, 3, Item.goldNugget, 1, 10, 1);
-  this.addLootEntry(COMPONENTS, 4, Item.ingotIron, 5, 10, 15);
-  this.addLootEntry(COMPONENTS, 5, Item.ingotGold, 1, 10, 10);
-  this.addLootEntry(COMPONENTS, 6, Item.ingotGold, 2, 10, 20);
-  this.addLootEntry(COMPONENTS, 7, Item.ingotIron, 10, 10, 30);
-  this.addLootEntry(COMPONENTS, 8, Item.diamond, 1, 10, 50);
-  this.addLootEntry(COMPONENTS, 9, Item.swordDiamond, 1, 10, 100);
-  
-  this.addLootEntry(FOOD, 0, Item.coal, 1, 10, 1);
-  this.addLootEntry(FOOD, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(FOOD, 2, Item.swordIron, 1, 10, 5);
-  this.addLootEntry(FOOD, 3, Item.goldNugget, 1, 10, 1);
-  this.addLootEntry(FOOD, 4, Item.ingotIron, 5, 10, 15);
-  this.addLootEntry(FOOD, 5, Item.ingotGold, 1, 10, 10);
-  this.addLootEntry(FOOD, 6, Item.ingotGold, 2, 10, 20);
-  this.addLootEntry(FOOD, 7, Item.ingotIron, 10, 10, 30);
-  this.addLootEntry(FOOD, 8, Item.diamond, 1, 10, 50);
-  this.addLootEntry(FOOD, 9, Item.swordDiamond, 1, 10, 100);
-  
-  this.addLootEntry(AMMO, 0, Item.coal, 1, 10, 1);
-  this.addLootEntry(AMMO, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(AMMO, 2, Item.swordIron, 1, 10, 5);
-  this.addLootEntry(AMMO, 3, Item.goldNugget, 1, 10, 1);
-  this.addLootEntry(AMMO, 4, Item.ingotIron, 5, 10, 15);
-  this.addLootEntry(AMMO, 5, Item.ingotGold, 1, 10, 10);
-  this.addLootEntry(AMMO, 6, Item.ingotGold, 2, 10, 20);
-  this.addLootEntry(AMMO, 7, Item.ingotIron, 10, 10, 30);
-  this.addLootEntry(AMMO, 8, Item.diamond, 1, 10, 50);
-  this.addLootEntry(AMMO, 9, Item.swordDiamond, 1, 10, 100);
-  
-  this.addLootEntry(WEAPONS, 0, Item.coal, 1, 10, 1);
-  this.addLootEntry(WEAPONS, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(WEAPONS, 2, Item.swordIron, 1, 10, 5);
-  this.addLootEntry(WEAPONS, 3, Item.goldNugget, 1, 10, 1);
-  this.addLootEntry(WEAPONS, 4, Item.ingotIron, 5, 10, 15);
-  this.addLootEntry(WEAPONS, 5, Item.ingotGold, 1, 10, 10);
-  this.addLootEntry(WEAPONS, 6, Item.ingotGold, 2, 10, 20);
-  this.addLootEntry(WEAPONS, 7, Item.ingotIron, 10, 10, 30);
-  this.addLootEntry(WEAPONS, 8, Item.diamond, 1, 10, 50);
-  this.addLootEntry(WEAPONS, 9, Item.swordDiamond, 1, 10, 100);
-  
-  this.addLootEntry(VEHICLES, 0, Item.coal, 1, 10, 1);
-  this.addLootEntry(VEHICLES, 1, Item.ingotIron, 1, 10, 3);
-  this.addLootEntry(VEHICLES, 2, Item.swordIron, 1, 10, 5);
-  this.addLootEntry(VEHICLES, 3, Item.goldNugget, 1, 10, 1);
-  this.addLootEntry(VEHICLES, 4, Item.ingotIron, 5, 10, 15);
-  this.addLootEntry(VEHICLES, 5, Item.ingotGold, 1, 10, 10);
-  this.addLootEntry(VEHICLES, 6, Item.ingotGold, 2, 10, 20);
-  this.addLootEntry(VEHICLES, 7, Item.ingotIron, 10, 10, 30);
-  this.addLootEntry(VEHICLES, 8, Item.diamond, 1, 10, 50);
-  this.addLootEntry(VEHICLES, 9, Item.swordDiamond, 1, 10, 100);
-  
   }
 
 }

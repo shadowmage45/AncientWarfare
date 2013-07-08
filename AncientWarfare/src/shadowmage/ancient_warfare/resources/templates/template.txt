@@ -118,7 +118,7 @@ preserveBlocks=false
 #  preservedBlocks= <blank> #none
 #  team=0  # defaults to neutral team, supports csv for random team assignment
 #  orientation=0 #defaults to north-facing
-
+#  lootlevel=-1 # 0-2 for easy, med, hard. will fill any valid block found, attempts to fill block after it is chosen/placed from blocks list
 
 
 #hard-air rule

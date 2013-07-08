@@ -79,7 +79,6 @@ public void setGeneratedAt(int dim, int worldX, int worldY, int worldZ, int face
 public void loadConfig(String pathName)
   {
   WorldGenStructureManager.instance().loadConfig(pathName);
-  LootGenerator.instance().loadStaticLootTables();
   }
 
 public static void resetMap()

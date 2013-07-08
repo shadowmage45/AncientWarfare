@@ -327,6 +327,10 @@ private static void addBlockRules(List<String> lines, ProcessedStructure struct)
       invLine = invLine + StringTools.getCSVStringForArray(rule.inventoryRules);
       lines.add(invLine);
       }
+    if(rule.inventoryLevel>=0)
+      {
+      lines.add("lootlevel="+String.valueOf(rule.inventoryLevel));
+      }
     if(rule.ruinsSpecialData!=null)
       {
       String ruinsLine = "ruinsspecialdata=";

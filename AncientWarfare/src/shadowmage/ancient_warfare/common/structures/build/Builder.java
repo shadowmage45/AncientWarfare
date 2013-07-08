@@ -397,7 +397,16 @@ protected void placeBlockData(World world, int x, int y, int z, BlockData data, 
   {  
   int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, getRotationAmt(facing));
   this.placeBlock(world, x,y,z, data.id, meta);
-  if(rule.inventoryRules!=null && rule.inventoryRules.length>0)
+  if(rule.inventoryLevel>=0)
+    {
+    TileEntity te = world.getBlockTileEntity(x, y, z);
+    if(te instanceof IInventory)
+      {
+      IInventory inventory = (IInventory)te;
+      LootGenerator.instance().generateLootFor(inventory, inventory.getSizeInventory(), rule.inventoryLevel, random); 
+      }
+    }
+  else if(rule.inventoryRules!=null && rule.inventoryRules.length>0)
     {
     int iRuleNum = rule.inventoryRules[random.nextInt(rule.inventoryRules.length)];
     if(iRuleNum!=0)
@@ -513,38 +522,31 @@ protected void placeSpecials(World world, int x, int y, int z, String name)
     } 
   if(name.toLowerCase().endsWith("chest"))
     {
-    int[] tables = new int[]{0,1,2,3,4,5,6,7};
-    List<ItemStack> loot = null;
+    createChestAt(world, x, y, z, 54, 0);
+    TileEntityChest te = (TileEntityChest) world.getBlockTileEntity(x, y, z);
     if(name.toLowerCase().startsWith("easy"))
       {
-      loot = LootGenerator.instance().getRandomLoot(30, 3, 15, tables, random);
+      LootGenerator.instance().generateLootFor(te, 27, 0, random);
       }
     else if(name.toLowerCase().startsWith("medium"))
       {
-      loot = LootGenerator.instance().getRandomLoot(65, 6, 20, tables, random);
+      LootGenerator.instance().generateLootFor(te, 27, 1, random);
       }
     else if(name.toLowerCase().startsWith("hard"))
       {
-      loot = LootGenerator.instance().getRandomLoot(105, 6, 25, tables, random);
-      }
-    if(loot!=null)
-      {
-      int meta = 0;
-      createChestAt(world, x, y, z, meta);
-      setChestLoot(world, x, y, z, loot);
-      }   
+      LootGenerator.instance().generateLootFor(te, 27, 2, random);
+      }      
     return;
     }
   else
     {
     world.setBlock(x, y, z, 0);
-    //TODO handle other special rules (custom chests, ?)
     }
   }
 
-protected void createChestAt(World world, int x, int y, int z, int meta)
+protected void createChestAt(World world, int x, int y, int z, int id, int meta)
   {
-  world.setBlock(x, y, z, 54);
+  world.setBlock(x, y, z, id);
   world.setBlockMetadataWithNotify(x, y, z, meta, 3);
   }
 

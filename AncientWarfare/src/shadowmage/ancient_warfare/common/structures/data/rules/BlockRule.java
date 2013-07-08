@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.utils.StringTools;
@@ -69,6 +70,7 @@ byte team = 0;
  * blockData array for each block ID/meta for this blockRule, may contain duplicates for weighting
  */
 public BlockData[] blockData;
+
 /**
  * ruins special block data (chests, spawners)
  */
@@ -80,6 +82,8 @@ public String[] ruinsSpecialData;
 public String[] spawnerTypes;
 
 public int[] inventoryRules;
+
+public int inventoryLevel = -1;
 
 /**
  * should preserve water/lava/plants when attempting to place this rule?
@@ -209,15 +213,15 @@ public static BlockRule parseRuinsRule(String line, int ruleNum)
       }
     else if(split[i].toLowerCase().startsWith("easychest"))
       {
-      specialStrings.add(data.trim());
+      specialStrings.add(data.trim()); 
       }
     else if(split[i].toLowerCase().startsWith("mediumchest"))
       {
-      specialStrings.add(data.trim());
+      specialStrings.add(data.trim()); 
       }
     else if(split[i].toLowerCase().startsWith("hardchest"))
       {
-      specialStrings.add(data.trim());
+      specialStrings.add(data.trim()); 
       }
     else
       {
@@ -360,7 +364,11 @@ public static BlockRule parseRule(List<String> ruleLines)
     if(line.toLowerCase().startsWith("spawner"))
       {
       rule.spawnerTypes = StringTools.safeParseStringArray("=", line);
-      }    
+      }
+    if(line.toLowerCase().startsWith("lootlevel"))
+      {
+      rule.inventoryLevel = StringTools.safeParseInt("=", line);
+      }
     }
   if((rule.blockData !=null || rule.ruinsSpecialData !=null || rule.spawnerTypes != null )&& rule.ruleNumber>=0)
     {
