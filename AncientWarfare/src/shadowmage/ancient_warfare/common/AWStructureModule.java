@@ -158,7 +158,7 @@ public void load(String directory)
     existTest.mkdirs();
     }
      
-  if(shouldExportDefaults || Config.DEBUG)
+  if(shouldExportDefaults)
     {
     this.copyDefaultStructures(includeDirectory);
     this.shouldExportDefaults = false;
@@ -183,6 +183,10 @@ private void setDefaultStructureNames()
   this.defaultExportStructures.add("villageWell.aws");
   this.defaultExportStructures.add("advancedVillageLibrary.aws");
   this.defaultExportStructures.add("mineArea.aws");
+  this.defaultExportStructures.add("obsidianVault.aws");
+  this.defaultExportStructures.add("banditCamp.aws");
+  this.defaultExportStructures.add("lavaFarm.aws");
+  this.defaultExportStructures.add("fountain1.aws");
   }
 
 private void setValidScannableEntities()

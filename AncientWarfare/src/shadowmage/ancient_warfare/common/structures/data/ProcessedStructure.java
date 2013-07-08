@@ -24,14 +24,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemCivicBuilder;
-import shadowmage.ancient_warfare.common.registry.CivicRegistry;
-import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
@@ -83,7 +81,7 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
         }
       if(missingBlocks > struct.getOverhangMax())
         {
-//        Config.logDebug("Rejected due to overhang");
+        Config.logDebug("Rejected due to overhang :: "+struct.name);
         return false;
         }    
       }
@@ -92,7 +90,7 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
     { 
     if(!isValidLevelingTarget(world, levelingBB, struct.validTargetBlocks, struct.getLevelingBuffer()))
       {
-//      Config.logDebug("rejected for improper leveling");
+      Config.logDebug("rejected for improper leveling :: "+struct.name);
       return false;
       }   
     }
@@ -111,7 +109,7 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
     {
     if(world.getBlockId(pos.x, pos.y, pos.z)!=0)
       {
-//      Config.logDebug("rejected due to clearance");
+      Config.logDebug("rejected due to clearance :: "+struct.name);
       return false;
       }
     }

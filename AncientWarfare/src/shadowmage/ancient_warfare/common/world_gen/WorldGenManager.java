@@ -114,7 +114,7 @@ public boolean attemptPlacementSurface(World world, int x, int y, int z, int fac
   {  
   if(y==-1)
     {
-//    Config.logDebug("invalid topBlock");
+    Config.logDebug("invalid topBlock");
     return false;
     }
   BlockPosition hit = new BlockPosition(x,y,z);
@@ -141,6 +141,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   int dim =world.getWorldInfo().getDimension();
   if(!WorldGenStructureManager.instance().isValidDimension(dim))
     {
+    Config.logDebug("invalid dimension for generation");
     return;
     }
   

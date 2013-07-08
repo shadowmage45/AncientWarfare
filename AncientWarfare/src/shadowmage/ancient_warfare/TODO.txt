@@ -26,6 +26,7 @@ FROM TESTING
 * courier routing slip qty > 64
 * courier routing slip -- do all transaction in single pass, then work for time based on stuff moved (will clean up workers hanging out at mines)
     this will also allow to tally up the entire slip for a single-pass go at things, enabling larger quantities through multiple stacks in the filters
+* world gen structures can cut in too low    
 
 LANGUAGE/TRANSLATIONS
 * move over to generic names for all
@@ -200,6 +201,7 @@ TWEAKS/OPTIMIZATION
 * clean up courier routing slip to finally accept stack sizes > 64
 * clean up courier interaction to move items in one pass, work for relative time to items moved (cleans up issues of interaction at some work sites)
 
+* fix up a couple of issues with world-gen
 /********** 07-08-13 **********/
 /********** 07-09-13 **********/
 /********** 07-10-13 **********/

@@ -84,6 +84,7 @@ public void addEntry(WorldGenStructureEntry entry)
   {
   if(!structureEntries.containsKey(entry.name))
     {
+    Config.logDebug("adding structure to world gen: "+entry.name);
     structureEntries.put(entry.name, entry);
     }
   else
@@ -204,6 +205,7 @@ public boolean isValidDimension(int dim)
         return false;
         }
       }
+    return true;
     }
   return false;
   }
