@@ -58,7 +58,10 @@ import shadowmage.ancient_warfare.common.crafting.BlockAWCrafting;
 import shadowmage.ancient_warfare.common.gates.BlockGateProxy;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 import shadowmage.ancient_warfare.common.item.AWItemBlockBase;
+import shadowmage.ancient_warfare.common.item.ItemMachine;
 import shadowmage.ancient_warfare.common.item.ItemReinforcedBlock;
+import shadowmage.ancient_warfare.common.machine.BlockMiscMachine;
+import shadowmage.ancient_warfare.common.machine.MachineData;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -75,7 +78,8 @@ public static final Block civicBlock4 = new BlockCivic(Config.getBlockID("blockM
 public static final Block warehouseStorage = new BlockWarehouseStorage(Config.getBlockID("blockSingle.warehouseStorage", 3705, "Warehouse Storage Block"));
 public static final Block gateProxy = new BlockGateProxy(Config.getBlockID("blockSingle.gateProxy", 3706, "Gate collision/sight check proxy block"));
 public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3707, "Base block for crafting/research stations"), Config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for craftinb blocks").getInt(3707));
-public static final Block reinforced = new BlockReinforced(3708, Material.rock, "Reinforced Blocks");
+public static final Block reinforced = new BlockReinforced(Config.getBlockID("blockMulti.reinforced", 3708, "Base block for reinforced blocks"), Material.rock, "Reinforced Blocks");
+public static final Block machineBlock = new BlockMiscMachine(Config.getBlockID("blockMulti.machine", 3709, "Base block for misc machines"), Material.rock, "Machine");
 
 private static BlockLoader INSTANCE;
 private BlockLoader(){}
@@ -97,7 +101,8 @@ public void load()
   registerBlock(civicBlock1, "CivicBlock1");
   registerBlock(civicBlock2, "CivicBlock2");
   registerBlock(civicBlock3, "CivicBlock3");
-  registerBlock(civicBlock4, "CivicBlock4");
+  registerBlock(civicBlock4, "CivicBlock4");  
+  registerBlockWithItem(machineBlock, "Machine", ItemMachine.class);
   
   registerBlockWithItem(reinforced, "Reinforced Blocks", ItemReinforcedBlock.class);
   ((BlockReinforced)reinforced).registerBlockInfo();
@@ -136,6 +141,8 @@ public void load()
   GameRegistry.registerTileEntity(TECivicWarehouse.class, "Warehouse");
   
   ((BlockAWCrafting)crafting).registerBlockInfo();
+  
+  MachineData.registerBlockData();
   }
 
 public void registerBlock(Block block, String name)

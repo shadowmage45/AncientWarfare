@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
+import shadowmage.ancient_warfare.common.machine.MailboxData;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.entry.NpcDataEntry;
 import shadowmage.ancient_warfare.common.tracker.entry.NpcDataList;
@@ -143,6 +144,7 @@ public void resetAllTrackedData()
   AWStructureModule.instance().clearAllData();
   WorldGenManager.resetMap();
   AWCraftingManager.instance().resetClientData();
+  MailboxData.instance().resetTrackedData();
   this.npcTracker.clear();
   this.deadNpcTracker.clear();
   this.gameData = null;

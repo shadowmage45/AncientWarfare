@@ -18,6 +18,8 @@ FROM TESTING
 * some sort of trashcan to delete items
 * item-teleporting system (long range delivery -- delivery speed depends upon distance)
 * npcs need massive optimization pass, using far too much of server tick time
+* trashcan shift-click
+* add recipe for trashcan (bucket of lava, stone, redstone, sticks, planks)
 
 LANGUAGE/TRANSLATIONS
 * move over to generic names for all
@@ -206,6 +208,9 @@ TWEAKS/OPTIMIZATION
 * add recipe for cement
 
 * update bandit camp, lava farm, obsidian vault templates with biome swap and chest loot
+
+* add trashcan -- destroys any input items at the rate of 4/second
+* add prep work on mailbox delivery system
 /********** 07-09-13 **********/
 /********** 07-10-13 **********/
 

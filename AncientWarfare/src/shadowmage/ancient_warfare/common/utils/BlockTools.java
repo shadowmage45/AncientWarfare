@@ -41,6 +41,34 @@ import shadowmage.ancient_warfare.common.config.Config;
 public class BlockTools
 {
 
+
+public static int getCardinalFromSide(int side)
+  {
+  switch(side)
+  {
+  case 2://n
+  side = 2;
+  break;
+  
+  case 3://s
+  side = 0;
+  break;
+  
+  case 4://w
+  side = 3;
+  break;
+  
+  case 5://e
+  side = 1;
+  break;
+  
+  default:
+  side = -1;
+  break;  
+  }    
+  return side;
+  }
+
 public static BlockPosition offsetForSide(BlockPosition pos, int sideHit)
   {
   switch (sideHit)
