@@ -53,7 +53,7 @@ public static final AWItemBase courierRouteSlip = new ItemCourierSlip(Config.get
 public static final AWItemBase gateSpawner = new ItemGateSpawner(Config.getItemID("itemMulti.gateSpawner", 13016, "Base gate spawning item."));
 public static final ItemFood rations = new ItemRation(Config.getItemID("itemSingle.foodRation", 13017, "Food rations for soldiers and npcs."));
 public static final AWItemBase researchBook = new ItemResearchBook(Config.getItemID("itemSingle.researchBook", 13017, "Research book to save research progress"));
-public static final AWItemBase researchNotes = (AWItemBase) new ItemResearchNote(Config.getItemID("itemMulti.researchNotes", 13018, "Research notes")).setCreativeTab(null);
+public static final AWItemBase researchNotes = (AWItemBase) new ItemResearchNote(Config.getItemID("itemMulti.researchNotes", 13018, "Research notes"));
 public static final AWItemBase backpack = new ItemBackpack(Config.getItemID("itemMulti.backpack", 13019, "Backpack"));
 
 public static final ItemStack wood1 = new ItemStack(componentItem, 1, 0);

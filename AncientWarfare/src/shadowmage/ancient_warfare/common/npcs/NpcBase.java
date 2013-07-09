@@ -351,7 +351,7 @@ public void setNpcType(INpcType type, int level)
   this.inventory = new NpcInventory(this, type.getInventorySize(level));
   this.specInventory = new NpcInventory(this, type.getSpecInventorySize(level));
   this.experienceValue = 10 + 10*level;
-  this.addConfigTargets();
+  this.addConfigTargets();  
   }
 
 public boolean isAggroTowards(NpcBase npc)

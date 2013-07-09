@@ -32,9 +32,10 @@ import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
+import shadowmage.ancient_warfare.common.npcs.types.NpcBandit;
+import shadowmage.ancient_warfare.common.npcs.types.NpcBanditRanged;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCombatEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCommander;
 import shadowmage.ancient_warfare.common.npcs.types.NpcCourier;
@@ -50,7 +51,6 @@ import shadowmage.ancient_warfare.common.npcs.types.NpcResearcher;
 import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
 import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
-import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public abstract class NpcTypeBase implements INpcType
@@ -77,12 +77,16 @@ public static INpcType npcLumberjack = new NpcLumberjack(12);//icon made
 public static INpcType npcCourier = new NpcCourier(13);
 //chest courier ?
 public static INpcType npcResearcher = new NpcResearcher(15);
+public static INpcType npcBandit = new NpcBandit(16);
+public static INpcType npcBanditArcher = new NpcBanditRanged(17);
 
 protected int npcType;
 protected String displayName = "AW.Npc";
 protected String tooltip = "AW.Npc.Tooltip";
 protected boolean isCombatUnit = false;
 protected boolean isVanillaVillager = false;
+protected boolean isAvailableInSurvival = true;
+protected boolean isBandit = false;
 protected String iconTexture = "foo";
 protected String configName = "civilian";
 protected String[] defaultTargets = null;
@@ -380,7 +384,7 @@ public Collection<Integer> getNeededResearch(int level)
 @Override
 public ResourceListRecipe constructRecipe(int level)
   {
-  if(this.isVanillaVillager || this.getGlobalNpcType()==0){return null;}
+  if(this.isVanillaVillager || !this.isAvailableInSurvival){return null;}
   if(level>=0 && level<this.levelEntries.size())
     {
     NpcLevelEntry entry = this.levelEntries.get(level);
@@ -408,6 +412,19 @@ public ResourceListRecipe constructRecipe(int level)
     return recipe;
     }
   return null;
+  }
+
+
+@Override
+public boolean isBandit()
+  {
+  return this.isBandit;
+  }
+
+@Override
+public boolean isAvailableInSurvival()
+  {
+  return this.isAvailableInSurvival;
   }
 
 public class NpcVarHelperDummy extends NpcVarsHelper

@@ -127,7 +127,11 @@ public static Entity getNpcForType(int num, World world, int level, int team)
   else
     {
     NpcBase npc = new NpcBase(world);
-    npc.setNpcType(type, level);  
+    npc.setNpcType(type, level); 
+    if(type.isBandit())
+      {
+      npc.teamNum = 17;
+      }
     ItemStack tool = type.getTool(level);
     if(tool!=null)
       {
@@ -141,9 +145,12 @@ public static Entity getNpcForType(int num, World world, int level, int team)
         npc.setCurrentItemOrArmor(i+1, armorStacks[i].copy());
         }
       }
-    npc.teamNum = team;
-    Config.logDebug("handling npc update from NPC spawn (NpcRegistry.getNpcForType(...))");
-    GameDataTracker.instance().handleNpcUpdate(npc);
+    if(!type.isBandit())
+      {
+      npc.teamNum = team;
+      Config.logDebug("handling npc update from NPC spawn (NpcRegistry.getNpcForType(...))");
+      GameDataTracker.instance().handleNpcUpdate(npc);      
+      }
     return npc;
     }
   }

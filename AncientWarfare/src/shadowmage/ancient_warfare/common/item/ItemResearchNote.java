@@ -22,9 +22,12 @@ package shadowmage.ancient_warfare.common.item;
 
 import java.util.List;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.registry.NpcRegistry;
+import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -40,6 +43,8 @@ public ItemResearchNote(int itemID)
   {
   super(itemID, true);
   this.hasLeftClick = false;
+  this.setCreativeTab(CreativeTabAW.researchTab);
+  this.maxStackSize = 1;
   }
 
 @Override
@@ -53,16 +58,20 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
   if(world.isRemote){return false;}
-  player.addChatMessage("Learning research from notes: "+ResearchGoal.getGoalByID(stack.getItemDamage()).getDisplayName());
-  PlayerTracker.instance().addResearchToPlayer(world, player.getEntityName(), stack.getItemDamage());
-  if(!player.capabilities.isCreativeMode)
+  IResearchGoal goal = ResearchGoal.getGoalByID(stack.getItemDamage());
+  if(goal!=null && !PlayerTracker.instance().getEntryFor(player).hasDoneResearch(goal))
     {
-    stack.stackSize--;
-    if(stack.stackSize<=0)
+    player.addChatMessage("Learning research from notes: " + goal.getDisplayName());
+    PlayerTracker.instance().addResearchToPlayer(world, player.getEntityName(), goal.getGlobalResearchNum());
+    if(!player.capabilities.isCreativeMode)
       {
-      player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
-      }
-    return false;
+      stack.stackSize--;
+      if(stack.stackSize<=0)
+        {
+        player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+        }
+      return false;
+      }    
     }
   return false;
   }

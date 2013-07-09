@@ -56,6 +56,8 @@ public abstract List<NpcAIObjective> getAI(NpcBase npc, int level);
 
 public abstract boolean isCombatUnit();
 public abstract boolean isVanillaVillager();
+public abstract boolean isBandit();
+public abstract boolean isAvailableInSurvival();
 public abstract IAmmoType getAmmoType(int level);
 public abstract float getAccuracy(int level);
 public abstract ItemStack getTool(int level);
