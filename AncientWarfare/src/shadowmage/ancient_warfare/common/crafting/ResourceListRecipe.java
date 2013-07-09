@@ -31,11 +31,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapper;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
@@ -239,7 +243,7 @@ public int getResourceItemCount()
   return count;
   }
 
-public void removeResourcesFrom(IInventory inventory, int[] slotNums)
+public void removeResourcesFrom(IInventory inventory, int[] slotNums, TileEntity te)
   {
   boolean start = true;
   int count = 0;
@@ -266,6 +270,10 @@ public void removeResourcesFrom(IInventory inventory, int[] slotNums)
           {
           inventory.setInventorySlotContents(slotNums[i], null);
           }
+        if(fromInv.getItem().hasContainerItem())
+          {
+          this.handleContainerItem(inventory, fromInv, te);    
+          }
         inventory.onInventoryChanged();
         }
       if(count<=0)
@@ -273,6 +281,24 @@ public void removeResourcesFrom(IInventory inventory, int[] slotNums)
         break;
         }
       }   
+    }
+  }
+
+protected void handleContainerItem(IInventory inventory, ItemStack stack, TileEntity te)
+  {
+  ItemStack itemstack2 = stack.getItem().getContainerItemStack(stack);
+  if (itemstack2.isItemStackDamageable() && itemstack2.getItemDamage() > itemstack2.getMaxDamage())
+    {
+//    MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(thePlayer, itemstack2));
+    itemstack2 = null;
+    }
+  if (itemstack2 != null)
+    {
+    InventoryTools.tryMergeStack(inventory, itemstack2, -1);
+    if(te!=null)
+      {
+      InventoryTools.dropItemInWorld(te.worldObj, itemstack2, te.xCoord, te.yCoord, te.zCoord);      
+      }
     }
   }
 

@@ -171,7 +171,7 @@ protected boolean tryStart()
   {  
   if(this.recipe!=null && this.recipe.doesInventoryContainResources(inventory, craftMatrix))
     {
-    this.recipe.removeResourcesFrom(inventory, craftMatrix);
+    this.recipe.removeResourcesFrom(inventory, craftMatrix, this);
     this.workProgress =0;
     this.isWorking = true;
     return true;

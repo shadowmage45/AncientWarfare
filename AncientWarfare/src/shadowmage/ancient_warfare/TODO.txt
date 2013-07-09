@@ -202,6 +202,9 @@ TWEAKS/OPTIMIZATION
 * add icon for cement
 * add bandit and bandit archer
 
+* add bucket compatibility to resource list recipes...they now return emtpy buckets if they have room
+* add recipe for cement
+
 /********** 07-09-13 **********/
 /********** 07-10-13 **********/
 

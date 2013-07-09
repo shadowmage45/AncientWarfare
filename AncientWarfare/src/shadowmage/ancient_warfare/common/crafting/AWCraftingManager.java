@@ -296,7 +296,11 @@ protected void addAlchemyRecipes()
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.netherrack,4), false, false));
   this.alchemyRecipes.add(recipe);
   
-  
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.cement.itemID, 8, ItemLoader.cement.getItemDamage()), RecipeType.ALCHEMY);
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.bucketWater), false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.sand), false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.clay), false, false));
+  this.alchemyRecipes.add(recipe);
   }
 
 protected void addCivicRecipes()
