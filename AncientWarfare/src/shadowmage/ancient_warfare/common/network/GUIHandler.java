@@ -40,6 +40,7 @@ import shadowmage.ancient_warfare.client.gui.crafting.GuiNpcCraft;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiResearch;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiVehicleCrafting;
 import shadowmage.ancient_warfare.client.gui.info.GuiResearchBook;
+import shadowmage.ancient_warfare.client.gui.machine.GuiMailbox;
 import shadowmage.ancient_warfare.client.gui.machine.GuiTrashcan;
 import shadowmage.ancient_warfare.client.gui.npc.GuiBackpack;
 import shadowmage.ancient_warfare.client.gui.npc.GuiCommandBaton;
@@ -73,6 +74,7 @@ import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.container.ContainerDebugInfo;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
+import shadowmage.ancient_warfare.common.container.ContainerMailbox;
 import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
 import shadowmage.ancient_warfare.common.container.ContainerNpcCourier;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
@@ -89,6 +91,7 @@ import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWVehicleCraft;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.machine.TEMailBox;
 import shadowmage.ancient_warfare.common.machine.TETrashcan;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
@@ -118,6 +121,7 @@ public static final int CIVIC_WAREHOUSE = 12;
 public static final int CIVIC_TOWNHALL = 13;
 public static final int CIVIC_TOWNHALL_INFO = 14;
 public static final int TRASHCAN = 15;
+public static final int MAILBOX = 16;
 
 public static final int BACKPACK = 39;
 public static final int INFO = 40;
@@ -244,6 +248,14 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TETrashcan)
     {
     return new ContainerTrashcan(player, (TETrashcan)te);
+    }
+  return null;
+  
+  case MAILBOX:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEMailBox)
+    {
+    return new ContainerMailbox(player, (TEMailBox)te);
     }
   return null;
   
@@ -453,6 +465,14 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TETrashcan)
     {
     return new GuiTrashcan(new ContainerTrashcan(player, (TETrashcan)te));
+    }
+  return null;
+  
+  case MAILBOX:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEMailBox)
+    {
+    return new GuiMailbox(new ContainerMailbox(player, (TEMailBox)te));
     }
   return null;
   

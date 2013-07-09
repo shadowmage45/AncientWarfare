@@ -25,7 +25,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.machine.MailboxData;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 
 

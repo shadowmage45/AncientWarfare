@@ -11,15 +11,17 @@ FROM TESTING
 * investigate ghost items placed into player inventory (not closing a gui correctly?)
 * add 'go back to base gui' button to info guis
 * add death-message translate to local gui in npc list gui (figure out how/where they are translated, pull manual translate)
-* heuristic evaluation of tick times for pathfinding scheduling -> when tick times are good, do more cylcles per path
+* heuristic evaluation of tick times for pathfinding scheduling -> when tick times are good, do more cycles per path
 * ignore incorrect packet/container types (remove error msg)
 * custom block item renders are huge
 * wander/crawler pathfinding likes to circle on chests and go up/down ladders a lot
-* some sort of trashcan to delete items
-* item-teleporting system (long range delivery -- delivery speed depends upon distance)
 * npcs need massive optimization pass, using far too much of server tick time
 * trashcan shift-click
 * add recipe for trashcan (bucket of lava, stone, redstone, sticks, planks)
+* mailbox recipe, research
+* mailbox shift-click interaction
+* mailbox tick interaction (should use a tick handler and tick all deliveries, or let the TE tick the deliveries when it is loaded?)
+* mailbox save names to NBT
 
 LANGUAGE/TRANSLATIONS
 * move over to generic names for all

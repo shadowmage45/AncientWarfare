@@ -30,6 +30,7 @@ public boolean shadow = true;
 public boolean center = false;
 public int color = 0xffffffff;
 public int hoverColor = 0xffffffff;
+public boolean clickable = false;
 
 /**
  * @param elementNum
@@ -52,7 +53,7 @@ public void drawElement(int mouseX, int mouseY)
   if(this.center)
     {
     int wid = fr.getStringWidth(text);
-    x += this.width/2 - wid/2;    
+    x -= wid/2;    
     }
   int color = this.isMouseOver ? hoverColor : this.color;
   this.fr.drawString(text, x, y, color, shadow);
@@ -61,6 +62,10 @@ public void drawElement(int mouseX, int mouseY)
 @Override
 public boolean handleMousePressed(int x, int y, int num)
   {
+  if(this.clickable)
+    {
+    return true;
+    }
   return false;
   }
 
