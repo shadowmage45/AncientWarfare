@@ -22,8 +22,8 @@ xOffset=3
 zOffset=0
 
 maxOverhang=0
-maxLeveling=0
-levelingBuffer=0
+maxLeveling=2
+levelingBuffer=4
 maxVerticalClear=0
 clearingBuffer=0
 preserveWater=false
@@ -254,6 +254,7 @@ conditional=0
 percent=100
 blocks=146-3
 inventory=0
+lootlevel=2
 :endrule
 
 rule:

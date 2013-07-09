@@ -205,6 +205,7 @@ TWEAKS/OPTIMIZATION
 * add bucket compatibility to resource list recipes...they now return emtpy buckets if they have room
 * add recipe for cement
 
+* update bandit camp, lava farm, obsidian vault templates with biome swap and chest loot
 /********** 07-09-13 **********/
 /********** 07-10-13 **********/
 

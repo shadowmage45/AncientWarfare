@@ -65,6 +65,7 @@ conditional=0
 percent=100
 blocks=3-0
 inventory=0
+swap=0
 :endrule
 
 rule:
@@ -83,6 +84,7 @@ conditional=0
 percent=100
 blocks=2-0
 inventory=0
+swap=0
 :endrule
 
 rule:
@@ -171,7 +173,7 @@ number=17
 order=0
 conditional=0
 percent=100
-blocks=154-11
+blocks=154-12
 inventory=0
 :endrule
 
@@ -190,6 +192,8 @@ order=0
 conditional=0
 percent=100
 blocks=54-3
+lootlevel=2
+#ruinsspecialdata=hardchest
 inventory=0
 :endrule
 
@@ -198,7 +202,7 @@ number=18
 order=0
 conditional=0
 percent=100
-blocks=154-5
+blocks=154-3
 inventory=0
 :endrule
 
@@ -483,7 +487,13 @@ inventory=0
 
 
 ####SWAP RULESS####
-
+swap:
+number=0
+biome=desert,3-0,12-0
+biome=desert,2-0,12-0
+biome=hell,3-0,87-0
+biome=hell,3-0,87-0
+endswap:
 ####VEHICLE RULES####
 
 ####NPC RULES####
