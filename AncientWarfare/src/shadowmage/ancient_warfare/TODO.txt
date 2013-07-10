@@ -17,11 +17,9 @@ FROM TESTING
 * wander/crawler pathfinding likes to circle on chests and go up/down ladders a lot
 * npcs need massive optimization pass, using far too much of server tick time
 * trashcan shift-click
-* add recipe for trashcan (bucket of lava, stone, redstone, sticks, planks)
+* trashcan recipe (bucket of lava, stone, redstone, sticks, planks)
 * mailbox recipe, research
 * mailbox shift-click interaction
-* mailbox tick interaction (should use a tick handler and tick all deliveries, or let the TE tick the deliveries when it is loaded?)
-* mailbox onBreakBlock -- un-assign box, if present
 
 LANGUAGE/TRANSLATIONS
 * move over to generic names for all
@@ -217,5 +215,6 @@ TWEAKS/OPTIMIZATION
 * mailboxes.. lots of work on mailboxes
 
 /********** 07-10-13 **********/
+* add industrial mailbox -- single destination but large buffer inventory
 
 

@@ -37,17 +37,12 @@ import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.Trig;
 
-public class TEMailBox extends TEMachine implements IInventory, ISidedInventory
+public class TEMailBox extends TEMailBoxBase
 {
 
-AWInventoryMailbox inventory;
 int[][] sideSlotIndices = new int[4][4];
 int[] topIndices = new int[4];
 int[] bottomIndices = new int[18];
-int mailTicks = 0;
-BoxData boxData = null;
-
-public int mailBoxSize = 38;
 
 /**
  * 
@@ -55,9 +50,8 @@ public int mailBoxSize = 38;
 public TEMailBox()
   {
   this.machineNumber = 1;
-  this.canUpdate = true;
-  this.shouldWriteInventory = false;
   this.guiNumber = GUIHandler.MAILBOX;
+  this.mailBoxSize = 38;
   this.inventory = new AWInventoryMailbox(mailBoxSize, null);
   int index = 0;  
   for(int i = 0; i < 18; i++, index++)
@@ -113,57 +107,7 @@ public void updateEntity()
         this.setInventorySlotContents(slot, null);
         Config.logDebug("adding stack to mail route for: "+destination + " time: "+((int)dist*5));
         }
-      }    
-    /**
-     * check mailbox for any incoming packages and attempt merge into inventory
-     */
-    this.boxData.tryDeliverMail(this, bottomIndices);
-    }
-  }
-
-/************************************************BOX INTERACTION METHODS*************************************************/
-
-public BoxData getBoxData()
-  {
-  return this.boxData;
-  }
-
-public void setBoxData(BoxData data)
-  {
-  this.boxData = data;
-  this.mailTicks = 0;
-  this.inventory.setBoxData(data);
-  }
-
-public void onBlockBreak()
-  {  
-  if(this.worldObj!=null && !this.worldObj.isRemote && this.boxData!=null)
-    {
-    this.boxData.clearAssignment();
-    }
-  }
-
-/************************************************DATA SYNCH METHODS*************************************************/
-
-@Override
-public void readFromNBT(NBTTagCompound tag)
-  {  
-  super.readFromNBT(tag);
-  if(tag.hasKey("boxName"))
-    {
-    String boxName = tag.getString("boxName");
-    this.setBoxData(MailboxData.instance().getBoxDataFor(boxName, mailBoxSize));
-    }
-  this.mailTicks = tag.getInteger("mailTick");
-  }
-
-@Override
-public void writeToNBT(NBTTagCompound tag)
-  {
-  super.writeToNBT(tag);
-  if(this.boxData!=null)
-    {
-    tag.setString("boxName", this.boxData.getBoxName());
+      } 
     }
   }
 
@@ -189,98 +133,6 @@ public int[] getAccessibleSlotsFromSide(int side)
   return sideSlotIndices[side];
   }
 
-@Override
-public boolean canInsertItem(int i, ItemStack itemstack, int j)
-  {  
-  return this.boxData==null? false : true;
-  }
-
-@Override
-public boolean canExtractItem(int i, ItemStack itemstack, int j)
-  {
-  if(this.boxData==null){return false;}
-  if(j==1)
-    {
-    return true;
-    }
-  return false;
-  }
-
 /************************************************INVENTORY METHODS*************************************************/
 
-@Override
-public void onInventoryChanged()
-  {
-  super.onInventoryChanged();
-  }
-
-@Override
-public int getSizeInventory()
-  {
-  return inventory.getSizeInventory();
-  }
-
-@Override
-public ItemStack getStackInSlot(int i)
-  {
-  return inventory.getStackInSlot(i);
-  }
-
-@Override
-public ItemStack decrStackSize(int i, int j)
-  {
-  return inventory.decrStackSize(i, j);
-  }
-
-@Override
-public ItemStack getStackInSlotOnClosing(int i)
-  {
-  return inventory.getStackInSlotOnClosing(i);
-  }
-
-@Override
-public void setInventorySlotContents(int i, ItemStack itemstack)
-  {
-  inventory.setInventorySlotContents(i, itemstack);
-  }
-
-@Override
-public String getInvName()
-  {
-  return "AWInventory.mail";
-  }
-
-@Override
-public boolean isInvNameLocalized()
-  {
-  return false;
-  }
-
-@Override
-public int getInventoryStackLimit()
-  {
-  return inventory.getInventoryStackLimit();
-  }
-
-@Override
-public boolean isUseableByPlayer(EntityPlayer entityplayer)
-  {
-  return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
-  }
-
-@Override
-public void openChest()
-  {
-  }
-
-@Override
-public void closeChest()
-  {
-  }
-
-@Override
-public boolean isStackValidForSlot(int i, ItemStack itemstack)
-  {
-  return true;
-  }
 }

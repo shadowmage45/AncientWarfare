@@ -31,13 +31,13 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.container.ContainerMailbox;
+import shadowmage.ancient_warfare.common.container.ContainerMailboxBase;
 
 public class GuiMailboxSelection extends GuiContainerAdvanced
 {
 
 
-ContainerMailbox container;
+ContainerMailboxBase container;
 GuiMailbox parent;
 GuiScrollableArea area;//8,40,160,93 (x,y,w,h)
 GuiButtonSimple addButton;//8,24 (x,y)

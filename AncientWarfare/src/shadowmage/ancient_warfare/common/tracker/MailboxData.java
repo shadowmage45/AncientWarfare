@@ -31,6 +31,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.machine.TEMailBox;
+import shadowmage.ancient_warfare.common.machine.TEMailBoxBase;
 import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
 import shadowmage.ancient_warfare.common.tracker.entry.MailboxSaveData;
 
@@ -77,7 +78,7 @@ public void updateMailTicks()
     }
   } 
 
-public boolean tryRemoveMailbox(String name, TEMailBox mailBox)
+public boolean tryRemoveMailbox(String name, TEMailBoxBase mailBox)
   {
   BoxData data = mailboxes.get(name);
   if(data==null)
@@ -95,9 +96,9 @@ public boolean tryRemoveMailbox(String name, TEMailBox mailBox)
     if(world!=null && world.blockExists(data.posX(), data.posY(), data.posZ()))
       {
       TileEntity te = world.getBlockTileEntity(data.posX(), data.posY(), data.posZ());
-      if(te instanceof TEMailBox)
+      if(te instanceof TEMailBoxBase)
         {
-        TEMailBox tem = (TEMailBox)te;
+        TEMailBoxBase tem = (TEMailBoxBase)te;
         if(tem.getBoxData() == data && tem !=mailBox)
           {
           return false;
@@ -116,7 +117,7 @@ public boolean tryRemoveMailbox(String name, TEMailBox mailBox)
   return true;
   }
 
-public boolean tryAssignMailbox(TEMailBox te, String name)
+public boolean tryAssignMailbox(TEMailBoxBase te, String name)
   {
   if(this.mailboxes.containsKey(name))
     {    
@@ -156,6 +157,7 @@ public void markDirty()
 public void resetTrackedData()
   {
   this.mailboxes.clear();
+  this.saveData = null;
   }
 
 @Override

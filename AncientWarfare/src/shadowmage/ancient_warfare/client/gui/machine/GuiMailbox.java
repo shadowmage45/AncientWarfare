@@ -20,18 +20,18 @@
  */
 package shadowmage.ancient_warfare.client.gui.machine;
 
-import net.minecraft.inventory.Slot;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerMailbox;
+import shadowmage.ancient_warfare.common.container.ContainerMailboxBase;
 
 public class GuiMailbox extends GuiContainerAdvanced
 {
 
-ContainerMailbox container;
+ContainerMailboxBase container;
 
 GuiButtonSimple[] sideNameButtons = new GuiButtonSimple[4];
 GuiButtonSimple topNameButton = null;
@@ -40,7 +40,7 @@ GuiButtonSimple boxNameButton = null;
 /**
  * @param container
  */
-public GuiMailbox(ContainerMailbox container)
+public GuiMailbox(ContainerMailboxBase container)
   {
   super(container);
   this.container = container;

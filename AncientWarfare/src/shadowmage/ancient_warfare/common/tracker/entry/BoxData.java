@@ -32,7 +32,7 @@ import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
-import shadowmage.ancient_warfare.common.machine.TEMailBox;
+import shadowmage.ancient_warfare.common.machine.TEMailBoxBase;
 import shadowmage.ancient_warfare.common.tracker.MailboxData;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
@@ -177,7 +177,7 @@ public void setSideName(int side, String name)
   MailboxData.instance().markDirty();
   }
 
-public void handleAssignment(TEMailBox box)
+public void handleAssignment(TEMailBoxBase box)
   {
   if(box==null)
     {

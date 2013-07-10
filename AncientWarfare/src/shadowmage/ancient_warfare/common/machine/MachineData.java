@@ -56,8 +56,10 @@ public static TileEntity getTEFor(int dmg)
   return new TETrashcan();
   case 1:
   return new TEMailBox();
+  case 2:
+  return new TEMailBoxIndustrial();  
   }
-  return null;
+  return new TETrashcan();
   }
 
 public static void registerIcons(IconRegister registry, Description d)
@@ -75,6 +77,13 @@ public static void registerIcons(IconRegister registry, Description d)
   d.setIcon(registry.registerIcon("ancientwarfare:machine/mailSide"), 9);//trash right
   d.setIcon(registry.registerIcon("ancientwarfare:machine/mailBottom"), 10);//trash bottom
   d.setIcon(registry.registerIcon("ancientwarfare:machine/mailTop"), 11);//trash top
+  
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/mailIndustrialFront"), 12);//trash front
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/mailIndustrialSide"), 13);//trash left
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/mailIndustrialSide"), 14);//trash rear
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/mailIndustrialSide"), 15);//trash right
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/mailIndustrialBottom"), 16);//trash bottom
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/mailIndustrialTop"), 17);//trash top
   }
 
 public static void addSubBlocks(List list)
@@ -139,6 +148,10 @@ public static void registerBlockData()
   GameRegistry.registerTileEntity(TEMailBox.class, "Mailbox");
   d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,1));
   d.setName("Mailbox", 1);
+  
+  GameRegistry.registerTileEntity(TEMailBoxIndustrial.class, "MailboxIndustrial");
+  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,2));
+  d.setName("Industrial Mailbox", 2);
   }
 
 }
