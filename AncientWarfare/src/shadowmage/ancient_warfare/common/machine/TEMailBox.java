@@ -20,27 +20,34 @@
  */
 package shadowmage.ancient_warfare.common.machine;
 
-import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.utils.BlockTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_warfare.common.inventory.AWInventoryMailbox;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.tracker.MailboxData;
+import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class TEMailBox extends TEMachine implements IInventory, ISidedInventory
 {
 
-AWInventoryBasic inventory = new AWInventoryBasic(38);
+AWInventoryMailbox inventory;
 int[][] sideSlotIndices = new int[4][4];
 int[] topIndices = new int[4];
 int[] bottomIndices = new int[18];
+int mailTicks = 0;
+BoxData boxData = null;
 
-String boxName = null;
-String topDestination = null;
-String[] sideDestinations = new String[4];
-
+public int mailBoxSize = 38;
 
 /**
  * 
@@ -50,7 +57,7 @@ public TEMailBox()
   this.machineNumber = 1;
   this.canUpdate = true;
   this.guiNumber = GUIHandler.MAILBOX;
-  
+  this.inventory = new AWInventoryMailbox(mailBoxSize, null);
   int index = 0;  
   for(int i = 0; i < 18; i++, index++)
     {
@@ -69,54 +76,62 @@ public TEMailBox()
     }
   }
 
+/************************************************UPDATE METHODS*************************************************/
+
+@Override
+public void updateEntity()
+  {
+  if(this.worldObj==null || this.worldObj.isRemote || this.boxData==null){return;}
+  this.mailTicks++;
+  if(this.mailTicks>=Config.mailSendTicks)
+    {
+    this.mailTicks = 0;
+    /**
+     * check each side destination in data, if valid destination, send packages
+     */
+    String destination = null;
+    int[] slots;
+    int slot;
+    ItemStack stack;
+    BoxData data;
+    for(int i = 1; i <6; i++)
+      {
+      destination = this.boxData.getSideName(i);      
+      if(destination==null){continue;}      
+      data=MailboxData.instance().getBoxDataFor(destination, mailBoxSize);
+      if(data==null || !data.isAssigned()){continue;}
+      slots = i==1? this.topIndices : this.sideSlotIndices[i-2];
+      for(int k = 0; k < slots.length; k++)
+        {
+        slot = slots[k];
+        stack = this.getStackInSlot(slot);
+        if(stack==null){continue;}
+        
+        float dist = Trig.getDistance(xCoord, yCoord, zCoord, data.posX(), data.posY(), data.posZ());
+        data.addIncomingItem(stack, (int)dist*5);
+        this.setInventorySlotContents(slot, null);
+        Config.logDebug("adding stack to mail route for: "+destination + " time: "+((int)dist*5));
+        }
+      }    
+    /**
+     * check mailbox for any incoming packages and attempt merge into inventory
+     */
+    this.boxData.tryDeliverMail(this, bottomIndices);
+    }
+  }
+
 /************************************************BOX INTERACTION METHODS*************************************************/
 
-public String getBoxName()
+public BoxData getBoxData()
   {
-  return this.boxName;
+  return this.boxData;
   }
 
-public void setBoxName(String name)
+public void setBoxData(BoxData data)
   {
-  this.boxName = name;
-  }
-
-public String getBoxName(int side)
-  {
-  switch(side)
-  {
-  case 0:
-  return this.boxName;
-  case 1:
-  return this.topDestination;
-  case 2:
-  case 3:
-  case 4:
-  case 5:
-  return this.sideDestinations[BlockTools.getCardinalFromSide(side)];
-  default:
-  return null;
-  }
-  }
-
-public void setBoxName(int side, String name)
-  {
-  switch(side)
-  {
-  case 0:
-  this.boxName = name;
-  break;
-  
-  case 1:
-  this.topDestination = name;
-  break;
-  
-  case 2:
-  case 3:
-  case 4:
-  case 5:
-  this.sideDestinations[BlockTools.getCardinalFromSide(side)]=name;
-  }
+  this.boxData = data;
+  this.mailTicks = 0;
+  this.inventory.setBoxData(data);
   }
 
 /************************************************DATA SYNCH METHODS*************************************************/
@@ -127,39 +142,19 @@ public void readFromNBT(NBTTagCompound tag)
   super.readFromNBT(tag);
   if(tag.hasKey("boxName"))
     {
-    this.boxName = tag.getString("boxName");    
+    String boxName = tag.getString("boxName");
+    this.setBoxData(MailboxData.instance().getBoxDataFor(boxName, mailBoxSize));
     }
-  if(tag.hasKey("topName"))
-    {
-    this.topDestination = tag.getString("topName");
-    }
-  for(int i = 0; i < 4; i++)
-    {
-    if(tag.hasKey(String.valueOf("sideName"+i)))
-      {
-      this.sideDestinations[i] = tag.getString(String.valueOf("sideName"+i));
-      }
-    }
+  this.mailTicks = tag.getInteger("mailTick");
   }
 
 @Override
 public void writeToNBT(NBTTagCompound tag)
   {
   super.writeToNBT(tag);
-  if(this.boxName!=null)
+  if(this.boxData!=null)
     {
-    tag.setString("boxName", boxName);    
-    }
-  if(topDestination!=null)
-    {
-    tag.setString("topName", topDestination);
-    }
-  for(int i = 0; i <4; i++)
-    {
-    if(tag.hasKey(String.valueOf("sideName"+i)))
-      {
-      this.sideDestinations[i] = tag.getString(String.valueOf("sideName"+i));
-      }
+    tag.setString("boxName", this.boxData.getBoxName());
     }
   }
 
@@ -168,6 +163,10 @@ public void writeToNBT(NBTTagCompound tag)
 @Override
 public int[] getAccessibleSlotsFromSide(int side)
   {
+  if(this.boxData==null)
+    {
+    return new int[0];
+    }
   if(side==0)
     {
     return bottomIndices;
@@ -181,16 +180,16 @@ public int[] getAccessibleSlotsFromSide(int side)
   return sideSlotIndices[side];
   }
 
-
 @Override
 public boolean canInsertItem(int i, ItemStack itemstack, int j)
-  {
-  return true;
+  {  
+  return this.boxData==null? false : true;
   }
 
 @Override
 public boolean canExtractItem(int i, ItemStack itemstack, int j)
   {
+  if(this.boxData==null){return false;}
   if(j==1)
     {
     return true;

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -34,18 +35,16 @@ import net.minecraft.nbt.NBTTagString;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.machine.TEMailBox;
 import shadowmage.ancient_warfare.common.tracker.MailboxData;
-import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
 
 public class ContainerMailbox extends ContainerBase
 {
 
-TEMailBox te;
+public TEMailBox te;
+BoxData data;
 
-public String boxName = null;
-public String topDestination = null;
-public String[] sideDestinations = new String[4];
+String[] sideNames = new String[6];
 public Set<String> boxNames = new HashSet<String>();
-
 
 /**
  * @param openingPlayer
@@ -55,6 +54,7 @@ public ContainerMailbox(EntityPlayer openingPlayer, TEMailBox te)
   {
   super(openingPlayer, null);
   this.te = te;
+  this.data = te.getBoxData();
   this.addPlayerSlots(openingPlayer, 46, 156, 4);
   
   int index = 0; 
@@ -67,6 +67,7 @@ public ContainerMailbox(EntityPlayer openingPlayer, TEMailBox te)
   //46,108
   for(i = 0, x = 0, y = 0, xPos=46, yPos=108; i < 18; i++, index++)
     {    
+    if(index>=te.getSizeInventory()){break;}
     this.addSlotToContainer(new Slot(te, index, x*18+xPos, y*18+yPos)); 
     x++;
     if(x>8)
@@ -79,6 +80,7 @@ public ContainerMailbox(EntityPlayer openingPlayer, TEMailBox te)
   //92,30
   for(i = 0, x = 0, y = 0, xPos=92, yPos=30; i < 4; i++, index++, x++)
     {
+    if(index>=te.getSizeInventory()){break;}
     this.addSlotToContainer(new Slot(te, index, x*18+xPos, y*18+yPos));    
     }  
   
@@ -113,6 +115,7 @@ public ContainerMailbox(EntityPlayer openingPlayer, TEMailBox te)
     }
     for(int k = 0; k <4; k++, index++, x++)
       {
+      if(index>=te.getSizeInventory()){break;}
       this.addSlotToContainer(new Slot(te, index, x*18+xPos, y*18+yPos));      
       }
     }
@@ -175,7 +178,8 @@ public void handlePacketData(NBTTagCompound tag)
         {
         name = boxTag.getString("name");
         }
-      this.setBoxName(box, name);
+      Config.logDebug("setting box: "+box + " to: "+name);
+      this.setSideName(box, name);
       }
     if(this.gui!=null)
       {
@@ -184,7 +188,7 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("add"))
     {
-    if(!MailboxData.instance().tryAddMailbox(tag.getString("add")))
+    if(!MailboxData.instance().tryAddMailbox(tag.getString("add"), te.mailBoxSize))
       {
       NBTTagCompound reply = new NBTTagCompound();
       reply.setString("reject", "Could not add name, duplicate name detected.");
@@ -193,7 +197,7 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("remove"))
     {
-    if(!MailboxData.instance().tryRemoveMailbox(tag.getString("remove")))
+    if(!MailboxData.instance().tryRemoveMailbox(tag.getString("remove"), te))
       {
       NBTTagCompound reply = new NBTTagCompound();
       reply.setString("reject", "Could not remove name: already assigned to a box, or has undelivered mail.");
@@ -221,10 +225,12 @@ public void handlePacketData(NBTTagCompound tag)
       {
       NBTTagCompound reply = new NBTTagCompound();
       reply.setBoolean("accept", true);
-      te.setBoxName(box, name);
-      this.sendDataToGUI(reply);   
-      }
-    
+      if(data!=null)
+      {
+          data.setSideName(box, name);
+          this.sendDataToGUI(reply);    	  
+      }   
+      }    
     } 
   }
 
@@ -245,6 +251,10 @@ public void detectAndSendChanges()
   {
   super.detectAndSendChanges();
   if(player.worldObj.isRemote){return;}
+  
+  /**
+   * update all mailbox names list
+   */
   Collection<String> boxNames = MailboxData.instance().getBoxNames();
   NBTTagCompound updateTag = null;
   if(this.boxNames.size()!=boxNames.size() || !this.boxNames.containsAll(boxNames))
@@ -261,30 +271,49 @@ public void detectAndSendChanges()
     updateTag.setTag("nameList", nameList);
     }
   
-  NBTTagList boxList = null;
-  NBTTagCompound tag = null;
-  for(int i = 0; i < 6 ; i++)
+  /**
+   * update box data
+   */
+  if(this.data!=this.te.getBoxData())
     {
-    if(!this.equals(this.getBoxName(i), te.getBoxName(i)))
+    if(updateTag==null){updateTag = new NBTTagCompound();}
+    this.data = te.getBoxData();
+    if(this.data==null)
       {
-      if(updateTag==null){updateTag = new NBTTagCompound();}      
-      if(boxList==null)
-        {
-        boxList = new NBTTagList();
-        }
-      tag = new NBTTagCompound();
-      tag.setInteger("box", i);
-      if(te.getBoxName(i)!=null)
-        {
-        tag.setString("name", te.getBoxName(i));
-        }
-      boxList.appendTag(tag);      
-      this.setBoxName(i, te.getBoxName(i));
+      this.sideNames = new String[6];
       }
-    }
-  if(boxList!=null)
+    } 
+
+  /**
+   * update box data sides
+   */
+  else
     {
-    updateTag.setTag("boxList", boxList);
+    NBTTagList boxList = null;
+    NBTTagCompound tag = null;
+    for(int i = 0; i < 6 ; i++)
+      {
+      if(!this.equals(this.getSideName(i), (data!=null ? data.getSideName(i) : null)))
+        {
+        if(updateTag==null){updateTag = new NBTTagCompound();}      
+        if(boxList==null)
+          {
+          boxList = new NBTTagList();
+          }
+        tag = new NBTTagCompound();
+        tag.setInteger("box", i);
+        this.setSideName(i, data.getSideName(i));
+        if(this.getSideName(i)!=null)
+          {
+          tag.setString("name", this.getSideName(i));
+          }
+        boxList.appendTag(tag);      
+        }
+      }
+    if(boxList!=null)
+      {
+      updateTag.setTag("boxList", boxList);
+      }
     }
   if(updateTag!=null)
     {
@@ -308,42 +337,14 @@ protected boolean equals(String a, String b)
     }
   }
 
-public String getBoxName(int side)
+public String getSideName(int side)
   {
-  switch(side)
-  {
-  case 0:
-  return this.boxName;
-  case 1:
-  return this.topDestination;
-  case 2:
-  case 3:
-  case 4:
-  case 5:
-  return this.sideDestinations[BlockTools.getCardinalFromSide(side)];
-  default:
-  return null;
-  }
+  return this.sideNames[side];
   }
 
-public void setBoxName(int side, String name)
+protected void setSideName(int side, String name)
   {
-  switch(side)
-  {
-  case 0:
-  this.boxName = name;
-  break;
-  
-  case 1:
-  this.topDestination = name;
-  break;
-  
-  case 2:
-  case 3:
-  case 4:
-  case 5:
-  this.sideDestinations[BlockTools.getCardinalFromSide(side)]=name;
-  }
+  this.sideNames[side]=name;
   }
 
 }

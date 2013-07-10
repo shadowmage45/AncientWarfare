@@ -21,7 +21,7 @@ FROM TESTING
 * mailbox recipe, research
 * mailbox shift-click interaction
 * mailbox tick interaction (should use a tick handler and tick all deliveries, or let the TE tick the deliveries when it is loaded?)
-* mailbox save names to NBT
+* mailbox onBreakBlock -- un-assign box, if present
 
 LANGUAGE/TRANSLATIONS
 * move over to generic names for all

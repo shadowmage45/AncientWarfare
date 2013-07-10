@@ -81,13 +81,11 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  // TODO Auto-generated method stub
   }
 
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
   }
 
 @Override
@@ -133,13 +131,15 @@ public void handleDataFromContainer(NBTTagCompound tag)
   if(tag.hasKey("accept"))
     {
     this.container.addSlots();
-    mc.displayGuiScreen(parent);
+    this.closeGUI();
+    this.container.te.openGui(player);
     parent.refreshGui();
     }
   else if(tag.hasKey("reject"))
     {
     String error = tag.getString("reject");
     Config.logDebug("receiving reject message: "+error);
+    parent.refreshGui();
     /**
      * TODO add error GUI
      */

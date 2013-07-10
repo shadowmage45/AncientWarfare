@@ -18,15 +18,48 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.pathfinding.threading;
+package shadowmage.ancient_warfare.common.inventory;
 
-import java.util.List;
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
 
-import shadowmage.ancient_warfare.common.pathfinding.Node;
-
-public interface IPathableCallback
+public class AWInventoryMailbox extends AWInventoryBase
 {
 
-public void onPathFound(List<Node> pathNodes);
+protected BoxData data;
+ItemStack[] stacks;
+/**
+ * @param size
+ */
+public AWInventoryMailbox(int size, BoxData data)
+  {
+  super(size);
+  this.data = data;
+  this.stacks = new ItemStack[size];
+  }
+
+public void setBoxData(BoxData data)
+  {
+  this.data = data;
+  }
+
+@Override
+public ItemStack getStackInSlot(int i)
+  {
+  return data==null? stacks[i] : data.getStackInSlot(i);
+  }
+
+@Override
+public void setInventorySlotContents(int i, ItemStack itemstack)
+  {
+  if(data!=null)
+    {
+    data.setInventorySlotContents(i, itemstack);
+    }
+  else
+    {
+    stacks[i] = itemstack;
+    }
+  }
 
 }

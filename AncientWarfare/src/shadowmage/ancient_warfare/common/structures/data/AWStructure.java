@@ -32,6 +32,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
@@ -433,11 +434,7 @@ public List<IDPairCount> getResourceList()
   }
 
 public BlockRule getRuleAt(int x, int y, int z)
-  {
-  if(this.blockRules==null)
-    {
-    return null;
-    }
+  {  
   return this.blockRules.get(Integer.valueOf(this.structure[x][y][z]));
   }
 

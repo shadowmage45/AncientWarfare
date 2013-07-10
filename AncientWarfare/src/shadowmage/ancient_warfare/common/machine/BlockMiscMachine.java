@@ -57,6 +57,7 @@ public boolean onBlockClicked(World world, int posX, int posY, int posZ, EntityP
   if(te instanceof IInteractable)
     {
     ((IInteractable)te).onPlayerInteract(player);
+    return true;
     }
   return false;
   }
@@ -70,6 +71,17 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
     return new IInventory[]{(IInventory)te};
     }  
   return null;
+  }
+
+@Override
+public void breakBlock(World world, int x, int y, int z, int par5, int par6)
+  {
+  super.breakBlock(world, x, y, z, par5, par6);
+  TileEntity te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEMachine)
+    {
+    ((TEMachine)te).onBlockBreak();
+    }
   }
 
 @Override

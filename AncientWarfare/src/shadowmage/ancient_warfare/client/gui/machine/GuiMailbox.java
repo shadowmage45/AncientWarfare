@@ -74,7 +74,12 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void updateScreenContents()
   {
-
+  this.boxNameButton.setButtonText(container.getSideName(0) != null ? container.getSideName(0) : "No Name");
+  this.topNameButton.setButtonText(container.getSideName(1) != null ? container.getSideName(1) : "No Dest.");
+  for(int i = 0; i < this.sideNameButtons.length; i++)
+    {
+    this.sideNameButtons[i].setButtonText(container.getSideName(i+2)!=null? container.getSideName(i+2) : "No Dest.");
+    }
   }
 
 @Override
@@ -82,8 +87,11 @@ public void onElementActivated(IGuiElement element)
   {
   if(element.getElementNumber()<6)
     {
-    this.container.removeSlots();
-    mc.displayGuiScreen(new GuiMailboxSelection(this, element.getElementNumber()));
+    if(element.getElementNumber()==0 || container.getSideName(0)!=null)
+      {
+      this.container.removeSlots();
+      mc.displayGuiScreen(new GuiMailboxSelection(this, element.getElementNumber()));      
+      }
     }
   }
 
@@ -154,12 +162,7 @@ public void setupControls()
 @Override
 public void updateControls()
   {
-  this.boxNameButton.setButtonText(container.boxName!=null? container.boxName : "No Name");
-  this.topNameButton.setButtonText(container.topDestination!=null? container.topDestination : "No Dest.");
-  for(int i = 0; i < this.sideNameButtons.length; i++)
-    {
-    this.sideNameButtons[i].setButtonText(container.sideDestinations[i]!=null? container.sideDestinations[i] : "No Dest.");
-    }
+  
   }
 
 }

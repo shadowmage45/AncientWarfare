@@ -49,6 +49,11 @@ public int getRotation()
   return rotation;
   }
 
+public void onBlockBreak()
+  {
+  
+  }
+
 @Override
 public boolean canUpdate()
   {
@@ -115,8 +120,12 @@ public void onPlayerInteract(EntityPlayer player)
   {
   if(!player.worldObj.isRemote && this.guiNumber>=0)
     {
-    GUIHandler.instance().openGUI(guiNumber, player, player.worldObj, xCoord, yCoord, zCoord);
+    this.openGui(player);
     }
   }
 
+public void openGui(EntityPlayer player)
+  {
+  GUIHandler.instance().openGUI(guiNumber, player, player.worldObj, xCoord, yCoord, zCoord);
+  }
 }

@@ -20,12 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.pathfinding;
 
-import java.util.List;
-
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.pathfinding.queuing.PathScheduler;
-import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
-import shadowmage.ancient_warfare.common.pathfinding.threading.PathThreadPool;
 
 public class PathManager
 {

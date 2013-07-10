@@ -35,12 +35,9 @@ import shadowmage.ancient_warfare.common.event.EventHandler;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.lang.LanguageLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.pathfinding.threading.ClientTicker;
-import shadowmage.ancient_warfare.common.pathfinding.threading.ServerTicker;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.registry.AWEntityRegistry;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
@@ -53,6 +50,7 @@ import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
+import shadowmage.ancient_warfare.common.utils.ServerTicker;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.world_gen.VillageGenerator;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
@@ -201,7 +199,6 @@ public void load(FMLPostInitializationEvent evt)
   
   TickRegistry.registerTickHandler(new ServerPerformanceMonitor(), Side.SERVER);
   TickRegistry.registerTickHandler(new ServerTicker(), Side.SERVER);
-  TickRegistry.registerTickHandler(new ClientTicker(), Side.CLIENT);
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
   }
 

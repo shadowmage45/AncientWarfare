@@ -524,8 +524,9 @@ public ProcessedStructure loadStructureRuins(List<String> lines)
       }    
     }  
 
-  if(!struct.isValid)
+  if(!struct.isValid || struct.structure==null)
     {
+	  Config.logDebug("RETURNING NULL FOR INVALID STRUCTURE DURING LOADING");
     return null;
     }
   struct.setTemplateLines(lines);
@@ -673,6 +674,7 @@ private void parseLayer(ProcessedStructure struct, Iterator<String> it)
       {
       Config.logError("Invalid structure size while attempting to create layers, one or more axis are size 0!");
       struct.isValid = false;
+      struct.structure = new short[struct.xSize][struct.ySize][struct.zSize];
       return;
       }
     else

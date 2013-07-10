@@ -21,13 +21,10 @@
 package shadowmage.ancient_warfare.common.pathfinding.queuing;
 
 import java.util.LinkedList;
-import java.util.List;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.pathfinding.Node;
+import shadowmage.ancient_warfare.common.pathfinding.IPathableCallback;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinderThetaStar;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
-import shadowmage.ancient_warfare.common.pathfinding.threading.IPathableCallback;
 
 /**
  * attempted alternative to
