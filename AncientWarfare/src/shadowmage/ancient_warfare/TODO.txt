@@ -214,6 +214,8 @@ TWEAKS/OPTIMIZATION
 * add trashcan -- destroys any input items at the rate of 4/second
 * add prep work on mailbox delivery system
 /********** 07-09-13 **********/
+* mailboxes.. lots of work on mailboxes
+
 /********** 07-10-13 **********/
 
 

@@ -38,6 +38,7 @@ protected int machineNumber = 0;
 protected int rotation = 0;
 protected int guiNumber = -1;
 protected boolean canUpdate = false;
+protected boolean shouldWriteInventory = true;
 
 public int getMachineNumber()
   {
@@ -90,7 +91,7 @@ public void writeToNBT(NBTTagCompound tag)
   {
   super.writeToNBT(tag);
   tag.setByte("face", (byte)this.rotation);
-  if(this instanceof IInventory)
+  if(this instanceof IInventory && this.shouldWriteInventory)
     {
     tag.setCompoundTag("inventory",InventoryTools.getTagForInventory((IInventory)this));
     }

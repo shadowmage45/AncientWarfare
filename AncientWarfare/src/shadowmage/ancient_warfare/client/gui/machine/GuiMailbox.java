@@ -45,6 +45,7 @@ public GuiMailbox(ContainerMailbox container)
   super(container);
   this.container = container;
   this.shouldCloseOnVanillaKeys = true;
+  this.container.removeSlots();
   }
 
 @Override
@@ -79,6 +80,14 @@ public void updateScreenContents()
   for(int i = 0; i < this.sideNameButtons.length; i++)
     {
     this.sideNameButtons[i].setButtonText(container.getSideName(i+2)!=null? container.getSideName(i+2) : "No Dest.");
+    }
+  if(this.container.getSideName(0)==null)
+    {
+    this.container.removeSlots();
+    }
+  else
+    {
+    this.container.addSlots();
     }
   }
 

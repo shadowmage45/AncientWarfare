@@ -20,19 +20,22 @@
  */
 package shadowmage.ancient_warfare.common.machine;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.AWBlockContainer;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IInteractable;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 
@@ -65,8 +68,8 @@ public boolean onBlockClicked(World world, int posX, int posY, int posZ, EntityP
 @Override
 public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z,  int par5, int par6)
   {
-  TileEntity te = world.getBlockTileEntity(x, y, z);
-  if(te instanceof IInventory)
+  TEMachine te = (TEMachine) world.getBlockTileEntity(x, y, z);
+  if(te!=null && te.shouldWriteInventory && te instanceof IInventory)
     {
     return new IInventory[]{(IInventory)te};
     }  
@@ -76,12 +79,12 @@ public IInventory[] getInventoryToDropOnBreak(World world, int x, int y, int z, 
 @Override
 public void breakBlock(World world, int x, int y, int z, int par5, int par6)
   {
-  super.breakBlock(world, x, y, z, par5, par6);
   TileEntity te = world.getBlockTileEntity(x, y, z);
   if(te instanceof TEMachine)
     {
     ((TEMachine)te).onBlockBreak();
     }
+  super.breakBlock(world, x, y, z, par5, par6);
   }
 
 @Override
@@ -102,5 +105,45 @@ public Icon getIcon(int side, int meta)
   {
   return MachineData.getIcon(null, meta, side);
   }
+
+
+@Override
+public int idDropped(int par1, Random par2Random, int par3)
+  {
+  return this.blockID;
+  }
+
+@Override
+public int damageDropped(int par1)
+  {
+  return par1;
+  }
+
+@Override
+public int quantityDropped(Random par1Random)
+  {
+  return 1;
+  }
+
+@Override
+protected ItemStack createStackedBlock(int par1)
+  {
+  return new ItemStack(this.blockID,1,par1);
+  }
+
+@Override
+public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+  {
+  ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+  ret.add(createStackedBlock(metadata));
+  return ret;
+  }
+
+@Override
+public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+  {
+  return new ItemStack(this.blockID,1,world.getBlockMetadata(x, y, z));
+  }
+
 
 }

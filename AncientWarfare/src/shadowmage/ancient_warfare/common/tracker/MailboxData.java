@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.machine.TEMailBox;
 import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
+import shadowmage.ancient_warfare.common.tracker.entry.MailboxSaveData;
 
 public class MailboxData implements INBTTaggable
 {
@@ -42,9 +43,20 @@ public static MailboxData instance(){return INSTANCE;}
 
 private HashMap<String, BoxData> mailboxes = new HashMap<String, BoxData>();
 
+private MailboxSaveData saveData = null;
+
 public Collection<String> getBoxNames()
   {
   return this.mailboxes.keySet();
+  }
+
+public void handleWorldLoad(World world)
+  {
+  if(world.isRemote || this.saveData!=null)
+    {
+    return;
+    }
+  saveData = MailboxSaveData.get(world);
   }
 
 public boolean tryAddMailbox(String name, int size)
@@ -135,7 +147,10 @@ public BoxData getBoxDataFor(String name, int size)
 
 public void markDirty()
   {
-  GameDataTracker.instance().markGameDataDirty();
+  if(this.saveData!=null)
+    {
+    this.saveData.markDirty();
+    }
   }
 
 public void resetTrackedData()

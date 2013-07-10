@@ -56,6 +56,7 @@ public TEMailBox()
   {
   this.machineNumber = 1;
   this.canUpdate = true;
+  this.shouldWriteInventory = false;
   this.guiNumber = GUIHandler.MAILBOX;
   this.inventory = new AWInventoryMailbox(mailBoxSize, null);
   int index = 0;  
@@ -132,6 +133,14 @@ public void setBoxData(BoxData data)
   this.boxData = data;
   this.mailTicks = 0;
   this.inventory.setBoxData(data);
+  }
+
+public void onBlockBreak()
+  {  
+  if(this.worldObj!=null && !this.worldObj.isRemote && this.boxData!=null)
+    {
+    this.boxData.clearAssignment();
+    }
   }
 
 /************************************************DATA SYNCH METHODS*************************************************/

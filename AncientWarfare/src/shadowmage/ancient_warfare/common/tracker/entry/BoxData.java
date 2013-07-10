@@ -194,6 +194,7 @@ public void handleAssignment(TEMailBox box)
 
 public void clearAssignment()
   {
+  Config.logDebug("clearing assigned status for mailbox: "+this.boxName);
   this.isAssigned = false;
   MailboxData.instance().markDirty();
   }

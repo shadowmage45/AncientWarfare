@@ -75,11 +75,7 @@ public void readFromNBT(NBTTagCompound tag)
   if(tag.hasKey("npcMap"))
     {
     GameDataTracker.instance().loadNpcMap(tag.getCompoundTag("npcMap"));
-    }
-  if(tag.hasKey("mailboxData"))
-    {
-    MailboxData.instance().readFromNBT(tag.getCompoundTag("mailboxData"));
-    }
+    }  
   }
 
 @Override
@@ -90,7 +86,6 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setCompoundTag("builders", AWStructureModule.instance().getNBTTag());  
   tag.setCompoundTag("structMap", WorldGenManager.instance().getNBTTag());  
   tag.setCompoundTag("npcMap", GameDataTracker.instance().getNpcMapTag());
-  tag.setCompoundTag("mailboxData", MailboxData.instance().getNBTTag());
   }
 
 public static AWGameData get(World world) 
