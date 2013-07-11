@@ -20,6 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.machine;
 
+import java.util.Iterator;
+
+import com.google.common.collect.ImmutableSet;
+
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -29,7 +33,7 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 
-public class TEChunkLoaderSingle extends TEMachine
+public class TEChunkLoader extends TEMachine
 {
 
 Ticket tk;
@@ -37,7 +41,7 @@ Ticket tk;
 /**
  * 
  */
-public TEChunkLoaderSingle()
+public TEChunkLoader()
   {
   this.machineNumber = 3;
   this.guiNumber = -1;
@@ -51,10 +55,18 @@ public void setTicket(Ticket tk)
   this.tk = tk;
   if(this.tk!=null)
     {
-    ForgeChunkManager.forceChunk(tk, new ChunkCoordIntPair(xCoord/16, zCoord/16));
     NBTTagCompound tag = new NBTTagCompound();
     tag.setCompoundTag("pos", new BlockPosition(xCoord, yCoord, zCoord).writeToNBT(new NBTTagCompound()));
     tk.getModData().setCompoundTag("chunkTE", tag);
+    
+    ForgeChunkManager.forceChunk(tk, new ChunkCoordIntPair(xCoord/16, zCoord/16));
+    ImmutableSet tkCk = tk.getChunkList();
+    Iterator<ChunkCoordIntPair> it = tkCk.iterator();
+    while(it.hasNext())
+      {
+      ChunkCoordIntPair ccip = it.next();
+      ForgeChunkManager.forceChunk(tk, ccip);
+      }
     }
   }
 

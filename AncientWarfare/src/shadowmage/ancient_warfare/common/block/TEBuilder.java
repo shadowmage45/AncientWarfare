@@ -20,8 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.block;
 
+import java.util.Iterator;
+
+import com.google.common.collect.ImmutableSet;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -47,6 +52,13 @@ public void setTicket(Ticket tk)
     NBTTagCompound tag = new NBTTagCompound();
     tag.setCompoundTag("pos", new BlockPosition(xCoord, yCoord, zCoord).writeToNBT(new NBTTagCompound()));
     tk.getModData().setCompoundTag("buildTE", tag);
+    ImmutableSet tkCk = tk.getChunkList();
+    Iterator<ChunkCoordIntPair> it = tkCk.iterator();
+    while(it.hasNext())
+      {
+      ChunkCoordIntPair ccip = it.next();
+      ForgeChunkManager.forceChunk(tk, ccip);
+      }
     }
   }
 

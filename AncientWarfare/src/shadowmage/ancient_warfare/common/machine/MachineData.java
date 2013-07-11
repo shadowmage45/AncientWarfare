@@ -59,7 +59,9 @@ public static TileEntity getTEFor(int dmg)
   case 2:
   return new TEMailBoxIndustrial();
   case 3:
-  return new TEChunkLoaderSingle();
+  return new TEChunkLoader();
+  case 4:
+  return new TEChunkLoaderDeluxe();
   }
   return new TETrashcan();
   }
@@ -93,6 +95,13 @@ public static void registerIcons(IconRegister registry, Description d)
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 21);//trash right
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 22);//trash bottom
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 23);//trash top
+  
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 24);//trash front
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 25);//trash left
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 26);//trash rear
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 27);//trash right
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 28);//trash bottom
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 29);//trash top
   }
 
 public static void addSubBlocks(List list)
@@ -165,9 +174,13 @@ public static void registerBlockData()
   d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,2));
   d.setName("Industrial Mailbox", 2);
   
-  GameRegistry.registerTileEntity(TEChunkLoaderSingle.class, "ChunkLoaderSingle");
+  GameRegistry.registerTileEntity(TEChunkLoader.class, "ChunkLoaderSingle");
   d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,3));
   d.setName("Simple Chunkloader", 3);
+  
+  GameRegistry.registerTileEntity(TEChunkLoaderDeluxe.class, "ChunkLoaderDeluxe");
+  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,4));
+  d.setName("Deluxe Chunkloader", 4);
   }
 
 }

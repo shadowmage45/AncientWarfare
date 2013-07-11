@@ -18,6 +18,10 @@ FROM TESTING
 * npcs need massive optimization pass, using far too much of server tick time
 * industrial mailbox gui needs elements centered
 * research book gui search box needs moved down a few pixels
+* large trebuchet health should be increased
+* deluxe chunkloader gui
+* deluxe chunkloader container
+* deluxe chunkloader world rendering
 
 LANGUAGE/TRANSLATIONS
 * move over to generic names for all
