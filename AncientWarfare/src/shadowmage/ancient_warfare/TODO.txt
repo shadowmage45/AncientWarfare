@@ -230,4 +230,6 @@ TWEAKS/OPTIMIZATION
 * add single-chunk chunkloader (needs recipe, research, icons, etc)
 * teMachine needs to render a different direction in inventory
 
+/********** 07-11-13 **********/
+* work on setting up jenkins build system
 
