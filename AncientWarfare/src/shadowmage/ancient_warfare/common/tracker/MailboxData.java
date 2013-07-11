@@ -74,7 +74,7 @@ public void updateMailTicks()
   {
   for(BoxData d : this.mailboxes.values())
     {
-    d.updateRoutedItems();
+    d.updateTick();
     }
   } 
 
@@ -85,11 +85,7 @@ public boolean tryRemoveMailbox(String name, TEMailBoxBase mailBox)
     {
     return true;
     }
-  
-  if(!data.incomingItems.isEmpty())
-    {
-    return false;
-    }  
+  if(!data.canBeRemoved()){return false;}
   else if(data.isAssigned())
     {
     World world = MinecraftServer.getServer().worldServerForDimension(data.dimID);

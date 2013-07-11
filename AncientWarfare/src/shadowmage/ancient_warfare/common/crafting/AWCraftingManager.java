@@ -261,6 +261,7 @@ public void loadRecipes()
   //iron rings
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(ItemLoader.componentItem, 5, ItemLoader.ironRings.getItemDamage()), new Object[] {"_i_","i_i", 'i', Item.ingotIron} ));
       
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(BlockLoader.trashcan.copy(), new Object[] {"psp", "rtr", "blb", 'p', Block.planks, 's', Item.stick, 't', Block.stone, 'r', Item.redstone, 'b', Block.stoneBrick, 'l', Item.bucketLava} ));
   //iron ring->chain mail  
   for (int i = 0; i < this.recipeItems[0].length; ++i)
     {
@@ -412,6 +413,30 @@ protected void addCivicRecipes()
   recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
   this.civicMiscRecipes.add(recipe);
   
+  recipe = new ResourceListRecipe(BlockLoader.trashcan, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.redstone, 2, false);
+  recipe.addResource(Block.planks, 2, true);
+  recipe.addResource(Block.stoneBrick, 2, true);
+  recipe.addResource(Block.stone, 1, false);
+  recipe.addResource(Item.bucketLava, 1, false);
+  recipe.addResource(Item.stick, 1, false);
+  this.civicMiscRecipes.add(recipe);
+    
+  recipe = new ResourceListRecipe(BlockLoader.mailbox, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.enderPearl, 1, false);
+  recipe.addResource(Item.ingotIron, 8, false);
+  recipe.addResource(Block.chest, 1, false);
+  recipe.addResource(Item.dyePowder, 4, 4, false);
+  recipe.addNeededResearch(ResearchGoalNumbers.logistics4);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(BlockLoader.mailboxIndustrial, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.enderPearl, 1, false);
+  recipe.addResource(Item.ingotIron, 8, false);
+  recipe.addResource(Block.chest, 1, false);
+  recipe.addResource(Item.dyePowder, 7, 4, false);
+  recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
+  this.civicMiscRecipes.add(recipe);
   }
 
 protected void addGateRecipes()

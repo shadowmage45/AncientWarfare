@@ -28,6 +28,7 @@ import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -81,6 +82,56 @@ public void removeSlots()
       s.yDisplayPosition-=1000;      
       }
     }
+  }
+
+
+
+@Override
+public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClickedIndex)
+  {
+  ItemStack slotStackCopy = null;
+  Slot theSlot = (Slot)this.inventorySlots.get(slotClickedIndex);
+  if (theSlot != null && theSlot.getHasStack())
+    {
+    ItemStack slotStack = theSlot.getStack();
+    slotStackCopy = slotStack.copy();
+    int storageSlots = 18;
+    if (slotClickedIndex < 36)//player slots...
+      {      
+      if (!this.mergeItemStack(slotStack, 36+storageSlots, 36+te.getSizeInventory(), false))//merge into send inventory
+        {
+        return null;
+        }
+      }
+    else if(slotClickedIndex >=36 &&slotClickedIndex < 36+storageSlots)//storage slots, merge to player inventory
+      {
+      if (!this.mergeItemStack(slotStack, 0, 36, true))//merge into player inventory
+        {
+        return null;
+        }
+      }
+    else if(slotClickedIndex >=36+storageSlots &&slotClickedIndex < 36+te.getSizeInventory())//send slots, merge to player inventory
+      {
+      if (!this.mergeItemStack(slotStack, 0, 36, true))//merge into player inventory
+        {
+        return null;
+        }
+      }
+    if (slotStack.stackSize == 0)
+      {
+      theSlot.putStack((ItemStack)null);
+      }
+    else
+      {
+      theSlot.onSlotChanged();
+      }
+    if (slotStack.stackSize == slotStackCopy.stackSize)
+      {
+      return null;
+      }
+    theSlot.onPickupFromSlot(par1EntityPlayer, slotStack);
+    }
+  return slotStackCopy;
   }
 
 @Override

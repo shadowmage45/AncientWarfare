@@ -57,7 +57,9 @@ public static TileEntity getTEFor(int dmg)
   case 1:
   return new TEMailBox();
   case 2:
-  return new TEMailBoxIndustrial();  
+  return new TEMailBoxIndustrial();
+  case 3:
+  return new TEChunkLoaderSingle();
   }
   return new TETrashcan();
   }
@@ -84,6 +86,13 @@ public static void registerIcons(IconRegister registry, Description d)
   d.setIcon(registry.registerIcon("ancientwarfare:machine/mailIndustrialSide"), 15);//trash right
   d.setIcon(registry.registerIcon("ancientwarfare:machine/mailIndustrialBottom"), 16);//trash bottom
   d.setIcon(registry.registerIcon("ancientwarfare:machine/mailIndustrialTop"), 17);//trash top
+  
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 18);//trash front
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 19);//trash left
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 20);//trash rear
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 21);//trash right
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 22);//trash bottom
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 23);//trash top
   }
 
 public static void addSubBlocks(List list)
@@ -122,6 +131,9 @@ public static Icon getIcon(TileEntity te, int meta, int side)
       return d.getIconFor(machine+rot);      
       }
     } 
+  /**
+   * return default icons for inventory rendering
+   */
   if(side==0)
     {
     return d.getIconFor(meta*6+4);
@@ -130,7 +142,7 @@ public static Icon getIcon(TileEntity te, int meta, int side)
     {
     return d.getIconFor(meta*6+5);
     }
-  else if(side==2)
+  else if(side==3)
     {
     return d.getIconFor(meta*6+0);
     }
@@ -152,6 +164,10 @@ public static void registerBlockData()
   GameRegistry.registerTileEntity(TEMailBoxIndustrial.class, "MailboxIndustrial");
   d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,2));
   d.setName("Industrial Mailbox", 2);
+  
+  GameRegistry.registerTileEntity(TEChunkLoaderSingle.class, "ChunkLoaderSingle");
+  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,3));
+  d.setName("Simple Chunkloader", 3);
   }
 
 }

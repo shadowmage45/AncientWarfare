@@ -16,10 +16,8 @@ FROM TESTING
 * custom block item renders are huge
 * wander/crawler pathfinding likes to circle on chests and go up/down ladders a lot
 * npcs need massive optimization pass, using far too much of server tick time
-* trashcan shift-click
-* trashcan recipe (bucket of lava, stone, redstone, sticks, planks)
-* mailbox recipe, research
-* mailbox shift-click interaction
+* industrial mailbox gui needs elements centered
+* research book gui search box needs moved down a few pixels
 
 LANGUAGE/TRANSLATIONS
 * move over to generic names for all
@@ -54,6 +52,11 @@ GENERAL
 
 REINFORCED BLOCKS
 * figure out method to allow for partially destroyed blocks w/ destroyed texture rendering
+* block will track owner (placing player)
+    all attempts to break block except by owner will break as obsidian
+    owner will break as stone block
+    explosions will use partial-damage system
+        possible multiple textures for damages?
 
 ENGINEERS LOGIC WIRE / TILES (replacement for MIA redpower)
 * THDT
@@ -216,5 +219,11 @@ TWEAKS/OPTIMIZATION
 
 /********** 07-10-13 **********/
 * add industrial mailbox -- single destination but large buffer inventory
+* trashcan recipe (bucket of lava, stone, redstone, sticks, planks)
+* mailbox recipe, research
+* trashcan shift-click
+* mailbox shift-click interaction
+* add single-chunk chunkloader (needs recipe, research, icons, etc)
+* teMachine needs to render a different direction in inventory
 
 

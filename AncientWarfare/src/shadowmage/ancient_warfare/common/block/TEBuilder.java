@@ -27,6 +27,7 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class TEBuilder extends TileEntity
 {
@@ -39,7 +40,14 @@ private Ticket tk = null;
 
 public void setTicket(Ticket tk)
   {
-  
+  this.releaseTicket();
+  this.tk = tk;
+  if(this.tk!=null)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setCompoundTag("pos", new BlockPosition(xCoord, yCoord, zCoord).writeToNBT(new NBTTagCompound()));
+    tk.getModData().setCompoundTag("buildTE", tag);
+    }
   }
 
 public void removeBuilder()

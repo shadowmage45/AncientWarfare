@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -33,6 +34,7 @@ import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.OrderedLoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import shadowmage.ancient_warfare.common.block.TEBuilder;
+import shadowmage.ancient_warfare.common.machine.TEChunkLoaderSingle;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 import com.google.common.collect.ImmutableSet;
@@ -86,7 +88,17 @@ public void ticketsLoaded(List<Ticket> tickets, World world)
         {
         builder.setTicket(tk);
         }
-      }   
+      }  
+    else if(tag!=null && tag.hasKey("chunkTE"))
+      {
+      tag = tag.getCompoundTag("chunkTE");
+      BlockPosition tePos = new BlockPosition(tag.getCompoundTag("pos"));
+      TileEntity te =  world.getBlockTileEntity(tePos.x, tePos.y, tePos.z);
+      if(te instanceof TEChunkLoaderSingle)
+        {
+        ((TEChunkLoaderSingle)te).setTicket(tk);
+        }
+      }
     else//not null, does not have buildTE key
       {
       

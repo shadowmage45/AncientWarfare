@@ -55,6 +55,11 @@ public void onBlockBreak()
   
   }
 
+public void onBlockPlaced()
+  {
+  
+  }
+
 @Override
 public boolean canUpdate()
   {
@@ -127,6 +132,9 @@ public void onPlayerInteract(EntityPlayer player)
 
 public void openGui(EntityPlayer player)
   {
-  GUIHandler.instance().openGUI(guiNumber, player, player.worldObj, xCoord, yCoord, zCoord);
+  if(this.guiNumber>=0)
+    {
+    GUIHandler.instance().openGUI(guiNumber, player, player.worldObj, xCoord, yCoord, zCoord);    
+    }
   }
 }

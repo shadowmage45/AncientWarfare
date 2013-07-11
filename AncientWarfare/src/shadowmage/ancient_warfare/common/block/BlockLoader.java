@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.civics.BlockWarehouseStorage;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
@@ -80,6 +81,10 @@ public static final Block gateProxy = new BlockGateProxy(Config.getBlockID("bloc
 public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3707, "Base block for crafting/research stations"), Config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for craftinb blocks").getInt(3707));
 public static final Block reinforced = new BlockReinforced(Config.getBlockID("blockMulti.reinforced", 3708, "Base block for reinforced blocks"), Material.rock, "Reinforced Blocks");
 public static final Block machineBlock = new BlockMiscMachine(Config.getBlockID("blockMulti.machine", 3709, "Base block for misc machines"), Material.rock, "Machine");
+
+public static final ItemStack trashcan = new ItemStack(machineBlock,1,0);
+public static final ItemStack mailbox = new ItemStack(machineBlock,1,1);
+public static final ItemStack mailboxIndustrial = new ItemStack(machineBlock,1,2);
 
 private static BlockLoader INSTANCE;
 private BlockLoader(){}

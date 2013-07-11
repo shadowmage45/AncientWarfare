@@ -60,7 +60,8 @@ public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, i
     if(ter!=null)
       {
       TEMachine te = (TEMachine)world.getBlockTileEntity(x, y, z);
-      te.setRotation((BlockTools.getPlayerFacingFromYaw(player.rotationYaw) + 2) %4);      
+      te.setRotation((BlockTools.getPlayerFacingFromYaw(player.rotationYaw) + 2) %4);     
+      te.onBlockPlaced();
       }
     return true;
     }

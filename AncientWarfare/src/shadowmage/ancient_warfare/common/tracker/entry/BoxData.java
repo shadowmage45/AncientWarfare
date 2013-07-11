@@ -79,12 +79,37 @@ public BoxData(String name, int size)
   MailboxData.instance().markDirty();
   }
 
-public void updateRoutedItems()
+public void updateTick()
   {
   ticks++;
   if(this.ticks<20){return;}
   ticks = 0;
-  this.tryDeliverMail(inventory, bottomIndices);
+  this.validateSideNames();
+  this.updateRoutedItems();
+  this.tryDeliverMail(inventory, bottomIndices);  
+  }
+
+public boolean canBeRemoved()
+  {
+  return this.incomingItems.isEmpty() && this.deliverableItems.isEmpty() && this.inventory.getEmptySlotCount()==this.getSizeInventory();
+  }
+
+protected void validateSideNames()
+  {
+  String s;
+  for(int i = 0; i < this.sideNames.length; i++)
+    {
+    s = this.sideNames[i];
+    if(s==null){continue;}
+    if(MailboxData.instance().getBoxDataFor(s, getSizeInventory())==null)
+      {
+      this.sideNames[i] = null;
+      }
+    }
+  }
+
+protected void updateRoutedItems()
+  {
   if(this.incomingItems.isEmpty()){return;}  
   MailboxData.instance().markDirty();
   Iterator<RoutedDelivery> it = this.incomingItems.iterator();
@@ -99,7 +124,7 @@ public void updateRoutedItems()
       continue;
       }
     d.ticksLeft -= 20;    
-    }  
+    }
   }
 
 public void tryDeliverMail(IInventory inventory, int[] slots)
