@@ -6,9 +6,11 @@ rd /s/q build
 md build
 xcopy /e/i/q/y "%STARTPATH%\AncientWarfare\src\shadowmage\*.*" "%STARTPATH%\mcp\src\minecraft\*.*"
 echo FILES COPIED, RECOMPILING....
-mcp\runtime\bin\python\python_mcp runtime\recompile.py %*
+cd mcp
+runtime\bin\python\python_mcp runtime\recompile.py %*
 echo RECOMPILE COMPLETED, REOBFUSCATING.....
-mc\runtime\bin\python\python_mcp runtime\reobfuscate.py %*
+runtime\bin\python\python_mcp runtime\reobfuscate.py %*
+cd..
 echo COPYING COMPILED FILES FOR REPACKAGE.......
 xcopy /e/i/q/y "%STARTPATH%\mcp\reobf\minecraft\*.*" "%STARTPATH%\build\*.*"
 xcopy /e/i/q/y "%STARTPATH%\AncientWarfare\src\shadowmage\ancient_warfare\resources\*.*" "%STARTPATH%\build\shadowmage\ancient_warfare\resources\*.*"
