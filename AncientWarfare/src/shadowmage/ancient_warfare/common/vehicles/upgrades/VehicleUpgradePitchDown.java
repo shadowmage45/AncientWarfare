@@ -36,8 +36,8 @@ public class VehicleUpgradePitchDown extends VehicleUpgradeBase
 public VehicleUpgradePitchDown(int num)
   {
   super(num);
-  this.displayName = "Turret Wedge: -3";
-  this.tooltip = "Aim Pitch - 3'";
+  this.displayName = "item.vehicleUpgrade.pitchDown";
+  this.tooltip = "item.vehicleUpgrade.pitchDown.tooltip1";
   this.iconTexture = "upgradePitchDown1";
   this.neededResearch.add(ResearchGoalNumbers.mechanics1);
   this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 2), true, false));

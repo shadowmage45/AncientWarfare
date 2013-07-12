@@ -56,10 +56,10 @@ public class VehicleTypeBallistaMobile extends VehicleTypeBallista
     this.isDrivable = true;//adjust based on isMobile or not
     this.canAdjustYaw = false;//adjust based on hasTurret or not
     this.turretRotationMax=0.f;//adjust based on mobile/stand fixed (0), stand fixed(90'), or mobile or stand turret (360) 
-    this.displayName = "Ballista Mobile Fixed";
-    this.displayTooltip.add("Ballista Firing Mechanism");
-    this.displayTooltip.add("Wheeled");
-    this.displayTooltip.add("No Turret");
+    this.displayName = "item.vehicleSpawner.6";
+    this.displayTooltip.add("item.vehicleSpawner.tooltip.torsion");
+    this.displayTooltip.add("item.vehicleSpawner.tooltip.mobile");
+    this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
 
     this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
     this.addNeededResearch(0, ResearchGoal.vehicleMobility1);

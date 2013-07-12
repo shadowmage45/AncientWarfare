@@ -47,10 +47,10 @@ public VehicleTypeBallistaStand(int typeNum)
   this.baseStrafeSpeed = .5f;
   this.canAdjustYaw = false;//adjust based on hasTurret or not
   this.turretRotationMax=0.f;//adjust based on mobile/stand fixed (0), stand fixed(90'), or mobile or stand turret (360) 
-  this.displayName = "Ballista Stand";
-  this.displayTooltip.add("Ballista Firing Mechanism");
-  this.displayTooltip.add("Stand-Based");
-  this.displayTooltip.add("No Turret");
+  this.displayName = "item.vehicleSpawner.4";
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.torsion");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.fixed");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
   }
 
 @Override

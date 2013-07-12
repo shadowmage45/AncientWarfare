@@ -31,9 +31,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -91,7 +93,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
         {
         for(String tip : tips)
           {
-          list.add(tip);
+          list.add(StringTranslate.getInstance().translateKey(tip));
           }        
         }
       }     
@@ -132,7 +134,8 @@ public String getItemDisplayName(ItemStack par1ItemStack)
   Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
   if(d!=null)
     {
-    return d.getDisplayName(par1ItemStack.getItemDamage());
+    String name = d.getDisplayName(par1ItemStack.getItemDamage());
+    return StringTranslate.getInstance().translateKey(name);
     }
   return "Unregistered Item : "+itemID+":"+par1ItemStack.getItemDamage();
   }

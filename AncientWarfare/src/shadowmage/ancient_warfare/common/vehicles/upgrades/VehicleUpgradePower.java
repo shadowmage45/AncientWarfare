@@ -36,8 +36,8 @@ public class VehicleUpgradePower extends VehicleUpgradeBase
 public VehicleUpgradePower(int num)
   {
   super(num);
-  this.displayName = "Power Upgrade";
-  this.tooltip = "Missile Speed + 2m/s";
+  this.displayName = "item.vehicleUpgrade.power";
+  this.tooltip = "item.vehicleUpgrade.power.tooltip1";
   this.iconTexture = "upgradePower1";
   this.neededResearch.add(ResearchGoalNumbers.mechanics3);
   this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 2), true, false));

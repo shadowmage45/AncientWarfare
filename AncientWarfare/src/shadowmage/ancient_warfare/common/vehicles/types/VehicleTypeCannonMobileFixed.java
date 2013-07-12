@@ -34,10 +34,10 @@ public class VehicleTypeCannonMobileFixed extends VehicleTypeCannon
 public VehicleTypeCannonMobileFixed(int typeNum)
   {
   super(typeNum);
-  this.displayName = "Cannon Mobile Fixed";
-  this.displayTooltip.add("Cannon Firing Mechanism");
-  this.displayTooltip.add("Wheeled");
-  this.displayTooltip.add("No Turret");
+  this.displayName = "item.vehicleSpawner.11";
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.gunpowder");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.mobile");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
   this.width = 1.9f;
   this.height = 1.5f;
   this.baseForwardSpeed = 3.5f*0.05f;

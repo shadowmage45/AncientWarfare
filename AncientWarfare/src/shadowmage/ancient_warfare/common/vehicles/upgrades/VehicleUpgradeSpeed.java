@@ -37,8 +37,8 @@ public class VehicleUpgradeSpeed extends VehicleUpgradeBase
 public VehicleUpgradeSpeed(int num)
   {
   super(num);
-  this.displayName = "Iron Bearings";
-  this.tooltip = "Max Speed + 0.25m/s";
+  this.displayName = "item.vehicleUpgrade.speed";
+  this.tooltip = "item.vehicleUpgrade.speed.tooltip1";
   this.iconTexture = "upgradeSpeed1";
   this.neededResearch.add(ResearchGoalNumbers.mobility3);
   this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 3), true, false));

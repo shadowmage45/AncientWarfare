@@ -63,11 +63,11 @@ public VehicleTypeChestCart(int typeNum)
   this.upgradeBaySize = 6;
   this.armorBaySize = 6;
   this.storageBaySize = 54*4;
-  this.displayName = "Chest Cart" ;
-  this.displayTooltip.add("No Firing Mechanism");
-  this.displayTooltip.add("Wheeled");
-  this.displayTooltip.add("No Turret");
-  this.displayTooltip.add("Special: Storage Area");
+  this.displayName = "item.vehicleSpawner.17" ;
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noweapon");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.mobile");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.storage");
   this.addNeededResearchForMaterials();
   this.addNeededResearch(0, ResearchGoal.vehicleMobility1);
   this.addNeededResearch(1, ResearchGoal.vehicleMobility2);

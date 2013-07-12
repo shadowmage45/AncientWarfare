@@ -95,10 +95,11 @@ public VehicleTypeHwacha(int typeNum)
   
   this.riderForwardsOffset = -1.4f;
   this.riderVerticalOffset = 0.5f;
-  this.displayName = "Hwacha";
-  this.displayTooltip.add("Hwacha Firing Mechanism");
-  this.displayTooltip.add("Wheeled");
-  this.displayTooltip.add("No Turret");
+  this.displayName = "item.vehicleSpawner.12";
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.gunpowder");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.mobile");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.barrage");
   this.storageBaySize = 0;
   this.armorBaySize = 3;
   this.ammoBaySize = 6;

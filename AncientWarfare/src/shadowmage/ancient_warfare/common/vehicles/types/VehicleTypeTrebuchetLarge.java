@@ -86,11 +86,11 @@ public class VehicleTypeTrebuchetLarge extends VehicleType
     this.validArmors.add(ArmorRegistry.armorIron);
     this.validArmors.add(ArmorRegistry.armorObsidian);
     
-    this.displayName = "Trebuchet Large";
-    this.displayTooltip.add("Trebuchet Firing Mechanism");
-    this.displayTooltip.add("Fixed-Emplacement");
-    this.displayTooltip.add("No Turret");
-    this.displayTooltip.add("Special: Can Use Large Ammo");
+    this.displayName = "item.vehicleSpawner.16";
+    this.displayTooltip.add("item.vehicleSpawner.tooltip.weight");
+    this.displayTooltip.add("item.vehicleSpawner.tooltip.fixed");
+    this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
+    this.displayTooltip.add("item.vehicleSpawner.tooltip.large");
     
     this.canAdjustPitch = false;
     this.canAdjustPower = true;

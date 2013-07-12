@@ -36,8 +36,8 @@ public class VehicleUpgradeReload extends VehicleUpgradeBase
 public VehicleUpgradeReload(int num)
   {
   super(num);
-  this.displayName = "Spring-Fed Reloader";
-  this.tooltip = "Reload Time - 10%";
+  this.displayName = "item.vehicleUpgrade.reload";
+  this.tooltip = "item.vehicleUpgrade.reload.tooltip1";
   this.iconTexture = "upgradeReload1";
   this.neededResearch.add(ResearchGoalNumbers.mechanics2); 
   this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.planks, 2), true, false));

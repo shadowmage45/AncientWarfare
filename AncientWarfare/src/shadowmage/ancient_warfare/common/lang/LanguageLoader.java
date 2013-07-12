@@ -22,6 +22,8 @@ package shadowmage.ancient_warfare.common.lang;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Scanner;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -37,57 +39,20 @@ public static LanguageLoader instance(){return INSTANCE;}
 
 String defaultLanguages[] = new String[]{"en_US.lang"};
 
-public void loadDefaultLanguageFiles()
+public void loadLanguageFiles()
   {
-  InputStream is;
-  for(String lang : this.defaultLanguages)
+  Properties languageFile = new Properties();
+  try
     {
-    is = this.getClass().getResourceAsStream(Config.languagePath+lang);
-    this.loadLanguageFile(is, lang);
-    try
+    languageFile.load(this.getClass().getResourceAsStream("/lang/ancientwarfare/en_US.lang"));    
+    if(!languageFile.isEmpty())
       {
-      is.close();
-      } 
-    catch (IOException e)
-      {
-      Config.logError("Could not close input stream while reading language file " + lang);
-      e.printStackTrace();      
+      LanguageRegistry.instance().addStringLocalization(languageFile, "en_US");
       }
-    }
-  
-  }
-
-public void loadPluginLanguageFiles()
-  {
-  //TODO
-  /**
-   * load language files from a directory in config path, for user-provided files
-   */
-  }
-
-protected void loadLanguageFile(InputStream is, String lang)
-  {
-  Scanner scan = new Scanner(is);
-  String line;
-  String[] keyVal;
-  while(scan.hasNextLine())
+    } 
+  catch (IOException e)
     {
-    line = scan.nextLine();
-    if(line.startsWith("#") || line.equals("")){continue;}
-    keyVal = splitString(line);
-    Config.logDebug(String.format("adding translation entry for language: %s  of  %s  to  %s", lang, keyVal[0], keyVal[1]));
-    LanguageRegistry.instance().addStringLocalization(keyVal[0], lang, keyVal[1]);
+    e.printStackTrace();
     }
   }
-
-protected String[] splitString(String string)
-  {
-  String[] split = string.split("=", 2);
-  if(split.length<2)
-    {
-    return new String[]{string, string};
-    }
-  return split;
-  }
-
 }

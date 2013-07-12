@@ -53,10 +53,10 @@ public VehicleTypeBallistaMobileTurret(int typeNum)
   this.isDrivable = true;//adjust based on isMobile or not
   this.canAdjustYaw = true;//adjust based on hasTurret or not
   this.turretRotationMax=360.f;//adjust based on mobile fixed (0), stand fixed(90'), or mobile or stand turret (360)
-  this.displayName = "Ballista Mobile Turret";
-  this.displayTooltip.add("Ballista Firing Mechanism");
-  this.displayTooltip.add("Wheeled");
-  this.displayTooltip.add("360' Turret");
+  this.displayName = "item.vehicleSpawner.7";
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.torsion");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.mobile");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.fullturret");
   
 
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);

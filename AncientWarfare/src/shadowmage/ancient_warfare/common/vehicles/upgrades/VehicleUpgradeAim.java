@@ -40,8 +40,8 @@ public class VehicleUpgradeAim extends VehicleUpgradeBase
 public VehicleUpgradeAim(int num)
   {
   super(num);
-  this.displayName = "Basic Trajectory Calculator";
-  this.tooltip = "Acc + 3%";
+  this.displayName = "item.vehicleUpgrade.aim";
+  this.tooltip = "item.vehicleUpgrade.aim.tooltip1";
   this.iconTexture = "upgradeAim1";
   this.neededResearch.add(ResearchGoalNumbers.ballistics2);
   this.resources.add(new ItemStackWrapperCrafting(Item.paper, 3));

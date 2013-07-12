@@ -51,10 +51,10 @@ public VehicleTypeBallistaStandTurret(int typeNum)
   this.moveRiderWithTurret = true;
   this.canAdjustYaw = true;//adjust based on hasTurret or not
   this.turretRotationMax=45.f; 
-  this.displayName = "Ballista Stand Turret";
-  this.displayTooltip.add("Ballista Firing Mechanism");
-  this.displayTooltip.add("Stand-Based");
-  this.displayTooltip.add("45' Turret");
+  this.displayName = "item.vehicleSpawner.5";
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.torsion");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.fixed");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.midturret");
   
   this.addNeededResearch(0, ResearchGoal.vehicleTurrets1);
   this.addNeededResearch(1, ResearchGoal.vehicleTurrets2);

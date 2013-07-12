@@ -112,19 +112,19 @@ public void load()
 
 private void loadItems()
   {  
-  this.registerItemSingle(structureCreativeBuilderTicked, "Creative Builder Ticked", "Creative Mode Building Tool with Builder Block", "Creative Template Builder").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
-  this.registerItemSingle(structureScanner, "Structure Scanner", "Structure Scanner", "Creative Template Creator").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
-  this.registerItemSingle(structureCreativeBuilder, "Creative Builder", "Creative Mode Building Tool", "Creative Template Builder").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
-  this.registerItemSingle(structureBuilderDirect, "Structure Builder Direct", "Survival Mode Quick Building Tool", "Scans and Builds from inventory").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
-  this.registerItemSingle(structureEditor, "Structure Editor", "Structure Template Editor", "Right-Click to open editor GUI").setIconTexture("ancientwarfare:builder/testIcon1", 0);
+  this.registerItemSingle(structureCreativeBuilderTicked, "item.single.structureBuilderTicked", "item.single.structureBuilderTicked.description", "item.single.structureBuilderTicked.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  this.registerItemSingle(structureScanner, "item.single.structureScanner", "item.single.structureScanner.description", "item.single.structureScanner.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
+  this.registerItemSingle(structureCreativeBuilder, "item.single.structureBuilderInstant", "item.single.structureBuilderInstant.description", "item.single.structureBuilderInstant.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  this.registerItemSingle(structureBuilderDirect, "item.single.structureBuilderDirect", "item.single.structureBuilderDirect.description", "item.single.structureBuilderDirect.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
+  this.registerItemSingle(structureEditor, "item.single.structureEditor", "item.single.structureEditor.description", "item.single.structureEditor.tooltip").setIconTexture("ancientwarfare:builder/testIcon1", 0);
   this.registerItemSubtyped(ammoItem);
   this.registerItemSubtyped(vehicleSpawner);
   this.registerItemSubtyped(vehicleUpgrade);
   this.registerItemSubtyped(armorItem);
   this.registerItemSubtyped(npcSpawner);
   this.registerItemSubtyped(npcCommandBaton);
-  this.addSubtypeInfoToItem(npcCommandBaton, 0, "Simple Command Baton", "","Command following NPCs").addDisplayStack(new ItemStack(npcCommandBaton,1,0)).setIconTexture("ancientwarfare:npc/baton1", 0);
-  this.addSubtypeInfoToItem(npcCommandBaton, 1, "Master Command Baton", "","Command NPCs in area").addDisplayStack(new ItemStack(npcCommandBaton,1,1)).setIconTexture("ancientwarfare:npc/baton3", 1);
+  this.addSubtypeInfoToItem(npcCommandBaton, 0, "item.baton.0", "item.baton.0.description","item.baton.0.tooltip").addDisplayStack(new ItemStack(npcCommandBaton,1,0)).setIconTexture("ancientwarfare:npc/baton1", 0);
+  this.addSubtypeInfoToItem(npcCommandBaton, 1, "item.baton.1", "item.baton.0.description","item.baton.1.tooltip").addDisplayStack(new ItemStack(npcCommandBaton,1,1)).setIconTexture("ancientwarfare:npc/baton3", 1);
   this.registerItemSubtyped(civicPlacer);
   this.registerItemSingle(civicBuilder, "Civic Structure Builder", "", "Construction Site");
   this.registerItemSubtyped(courierRouteSlip);

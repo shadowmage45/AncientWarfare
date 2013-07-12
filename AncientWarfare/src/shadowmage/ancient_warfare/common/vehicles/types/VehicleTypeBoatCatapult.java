@@ -135,10 +135,10 @@ public VehicleTypeBoatCatapult(int typeNum)
   this.riderForwardsOffset = 1.10f;
   this.riderVerticalOffset = 0.7f;
   
-  this.displayName = "Catapult Ship";
-  this.displayTooltip.add("Catapult Firing Mechanism");
-  this.displayTooltip.add("Boat Hull");
-  this.displayTooltip.add("No Turret");
+  this.displayName = "item.vehicleSpawner.19";
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.torsion");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.boat");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
   
   this.addNeededResearchForMaterials();
   this.addNeededResearch(0, ResearchGoal.vehicleTorsion1);

@@ -1,0 +1,81 @@
+# ancient warfare language file
+# en_US (default)
+
+# single items
+item.single.structureScanner=Structure Scanner
+item.single.structureScanner.tooltip=Creative Mode Scanning Tool
+item.single.structureBuilderTicked=Creative Builder Ticked
+item.single.structureBuilderTicked.tooltip=Build Structures Slowly
+item.single.structureBuilderInstant=Creative Builder Instant
+item.single.structureBuilderInstant.tooltip=Build Structures Instantly
+item.single.structureBuilderDirect=Creative Builder Direct
+item.single.structureBuilderDirect.tooltip=Build Structures From Inventory
+item.single.structureEditor=Structure Editor
+item.single.structureEditor=Creative Mode Structure Editor
+
+#batons
+item.baton.0=Simple Baton
+item.baton.0.tooltip=Command Directly Following Npcs
+item.baton.1=Master Baton
+item.baton.1.tooltip=Commmand Npcs in area
+
+#component items -- TODO
+
+# vehicle upgrades
+item.vehicleUpgrade.speed=Iron Bearings
+item.vehicleUpgrade.speed.tooltip1=Max Speed + 0.25m/s
+item.vehicleUpgrade.aim=Basic Trajectory Calculator
+item.vehicleUpgrade.aim.tooltip1=Acc +3%
+item.vehicleUpgrade.reload=Spring-Fed Reloader
+item.vehicleUpgrade.reload.tooltip1=Reload Time - 10%
+item.vehicleUpgrade.power=Power Upgrade
+item.vehicleUpgrade.power.tooltip1=Missile Speed + 2m/s
+item.vehicleUpgrade.pitchExtension=Pitch Extension
+item.vehicleUpgrade.pitchExtension.tooltip1=Extends Turret Rotation
+item.vehicleUpgrade.pitchUp=Turret Wedge: +3'
+item.vehicleUpgrade.pitchUp.tooltip1=Aim Pitch +3'
+item.vehicleUpgrade.pitchDown=Turret Wedge: -3'
+item.vehicleUpgrade.pitchDown.tooltip1=Aim Pitch -3'
+
+#vehicle spawner items
+item.vehicleSpawner.0=Catapult Stand Fixed
+item.vehicleSpawner.1=Catapult Stand Turret
+item.vehicleSpawner.2=Catapult Mobile Fixed
+item.vehicleSpawner.3=Catapult Mobile Turret
+item.vehicleSpawner.4=Ballista Stand Fixed
+item.vehicleSpawner.5=Ballista Stand Turret
+item.vehicleSpawner.6=Ballista Mobile Fixed
+item.vehicleSpawner.7=Ballista Mobile Turret
+item.vehicleSpawner.8=Battering Ram
+item.vehicleSpawner.9=Cannon Stand Fixed
+item.vehicleSpawner.10=Cannon Stand Turret
+item.vehicleSpawner.11=Cannon Mobile Fixed
+item.vehicleSpawner.12=Hwacha
+item.vehicleSpawner.13=Trebuchet Stand Fixed
+item.vehicleSpawner.14=Trebuchet Stand Turret
+item.vehicleSpawner.15=Trebuchet Mobile Fixed
+item.vehicleSpawner.16=Giant Trebuchet
+item.vehicleSpawner.17=Chest Cart
+item.vehicleSpawner.18=Boat Ballista
+item.vehicleSpawner.19=Boat Catapult
+item.vehicleSpawner.20=Boat Transport
+item.vehicleSpawner.21=Bomber
+item.vehicleSpawner.22=Gunship
+
+#tooltips used in vehicle items
+item.vehicleSpawner.tooltip.torsion=Torsion Weapon
+item.vehicleSpawner.tooltip.gunpowder=Gunpowder Weapon
+item.vehicleSpawner.tooltip.weight=Countweight Weapon
+item.vehicleSpawner.tooltip.noturret=No Turret
+item.vehicleSpawner.tooltip.midturret=45' Turret
+item.vehicleSpawner.tooltip.fullturret=360' Turret
+item.vehicleSpawner.tooltip.mobile=Mobile
+item.vehicleSpawner.tooltip.fixed=Fixed Emplacement
+item.vehicleSpawner.tooltip.storage=Special: Storage
+item.vehicleSpawner.tooltip.ram=Special: Melee Damage
+item.vehicleSpawner.tooltip.air=Special: Flight
+item.vehicleSpawner.tooltip.barrage=Special: Barrage
+item.vehicleSpawner.tooltip.large=Special: Can Use Large Ammo
+item.vehicleSpawner.tooltip.noweapon=No Weapons
+item.vehicleSpawner.tooltip.boat=Special: Boat
+

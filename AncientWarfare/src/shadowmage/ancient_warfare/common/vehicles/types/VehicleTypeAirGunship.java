@@ -130,10 +130,10 @@ public VehicleTypeAirGunship(int typeNum)
   this.canAdjustPower = false;
   this.canAdjustYaw = false;
   this.turretRotationMax=0.f;//adjust based on mobile/stand fixed (0), stand fixed(90'), or mobile or stand turret (360) 
-  this.displayName = "Aircraft Gunship test";
-  this.displayTooltip.add("No Firing Mechanism");
-  this.displayTooltip.add("Airplane Hull");
-  this.displayTooltip.add("No Turret");
+  this.displayName = "item.vehicleSpawner.22";
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.gunpowder");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.air");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
   }
 
 @Override

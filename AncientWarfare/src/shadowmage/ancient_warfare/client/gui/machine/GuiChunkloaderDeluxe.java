@@ -63,34 +63,8 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-//  int xPos;
-//  int yPos;
-//  int x;
-//  int z;
-//  
-//  int tx = container.te.xCoord/16;
-//  int tz = container.te.zCoord/16;
-//  int cx = tx;
-//  int cz = tz;
-//  int white = 0xffffffff;
-//  ChunkCoordIntPair c;
-//  String text;
-//  boolean flag;
-//  int color;
-//  for(z = 0, yPos = this.guiTop; z < 11 && yPos < this.guiTop+this.getYSize(); z++, yPos+=16, cz++)
-//    {    
-//    for(x = 0, xPos = this.guiLeft; x<11 && xPos<this.guiLeft+this.getXSize(); x++, xPos+=16, tz++)
-//      {     
-//      flag = container.chunkMap[x][z]==null;
-//      color = flag? 0xff000000 : 0xffff0000;
-//      this.drawRect(xPos, yPos, xPos+16, yPos+16, color);
-//      text = cx+","+cz;
-//      this.drawString(getFontRenderer(), text, xPos, yPos+4, white);
-//      }
-//    } 
+  
   }
-
-
 
 @Override
 public void updateScreenContents()

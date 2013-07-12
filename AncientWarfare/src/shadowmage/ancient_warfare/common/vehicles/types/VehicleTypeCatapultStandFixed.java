@@ -38,10 +38,10 @@ public VehicleTypeCatapultStandFixed(int typeNum)
   this.turretVerticalOffset = 3*0.0625f;
   this.riderForwardsOffset = 1.2f;
   this.riderVerticalOffset = 0.0f;
-  this.displayName = "Catapult Stand Fixed";
-  this.displayTooltip.add("Catapult Firing Mechanism");
-  this.displayTooltip.add("Fixed-Emplacement");
-  this.displayTooltip.add("No Turret");
+  this.displayName = "item.vehicleSpawner.0";
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.torsion");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.fixed");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
   this.storageBaySize = 0;
   this.armorBaySize = 4;
   this.upgradeBaySize = 4;

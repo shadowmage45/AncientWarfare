@@ -72,11 +72,11 @@ public VehicleTypeBatteringRam(int typeNum)
   this.riderForwardsOffset = 0.f;
   this.riderVerticalOffset = 0.65f;
   this.riderHorizontalOffset = 0.325f;
-  this.displayName = "Battering Ram";
-  this.displayTooltip.add("Battering-Ram Firing Mechanism");
-  this.displayTooltip.add("Wheeled");
-  this.displayTooltip.add("No Turret");
-  this.displayTooltip.add("Special: Close Range Damage");
+  this.displayName = "item.vehicleSpawner.8";
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.weight");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.mobile");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.ram");
   this.storageBaySize = 0;
   this.armorBaySize = 6;
   this.upgradeBaySize = 3;

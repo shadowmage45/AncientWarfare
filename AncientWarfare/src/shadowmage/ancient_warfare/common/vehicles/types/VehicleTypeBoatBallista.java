@@ -127,10 +127,10 @@ public VehicleTypeBoatBallista(int typeNum)
   this.canAdjustPower = false;
   this.canAdjustYaw = true;
   this.turretRotationMax=360.f;//adjust based on mobile/stand fixed (0), stand fixed(90'), or mobile or stand turret (360) 
-  this.displayName = "Bolt Ship";
-  this.displayTooltip.add("Ballista Firing Mechanism");
-  this.displayTooltip.add("Boat Hull");
-  this.displayTooltip.add("360' Turret");
+  this.displayName = "item.vehicleSpawner.18";
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.torsion");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.boat");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.fullturret");
   
   }
 

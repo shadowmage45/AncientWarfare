@@ -62,11 +62,11 @@ public VehicleTypeBoatTransport(int typeNum)
   this.upgradeBaySize = 6;
   this.armorBaySize = 6;
   this.storageBaySize = 54*4;
-  this.displayName = "Transport Ship" ;
-  this.displayTooltip.add("No Firing Mechanism");
-  this.displayTooltip.add("Boat Hull");
-  this.displayTooltip.add("No Turret");
-  this.displayTooltip.add("Special: Storage Area");
+  this.displayName = "item.vehicleSpawner.20" ;
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noweapon");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.boat");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.storage");
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.addNeededResearchForMaterials();
   this.addNeededResearch(0, ResearchGoal.vehicleMobility1);

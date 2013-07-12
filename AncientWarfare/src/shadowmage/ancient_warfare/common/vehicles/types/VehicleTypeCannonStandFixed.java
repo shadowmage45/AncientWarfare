@@ -30,10 +30,10 @@ public VehicleTypeCannonStandFixed(int typeNum)
   {
   super(typeNum);
   this.isDrivable = true;
-  this.displayName = "Cannon Stand Fixed";
-  this.displayTooltip.add("Cannon Firing Mechanism");
-  this.displayTooltip.add("Fixed-Emplacement");
-  this.displayTooltip.add("No Turret");
+  this.displayName = "item.vehicleSpawner.9";
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.gunpowder");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.fixed");
+  this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
   this.width = 1.2f;
   this.height = 1.4f;
   this.baseStrafeSpeed = 0.5f;
