@@ -103,28 +103,28 @@ public void registerAmmoTypeWithItem(IAmmoType ammo)
     {
     d.addTooltip(tip, ammo.getAmmoType());
     }
-  d.addTooltip("Weight: "+ammo.getAmmoWeight(), ammo.getAmmoType());
-  d.addTooltip("Entity Damage: "+ammo.getEntityDamage(), ammo.getAmmoType());
-  d.addTooltip("Vehicle Damage: "+ammo.getVehicleDamage(), ammo.getAmmoType());
-  if(ammo.isFlaming())
-    {
-    d.addTooltip("Flaming -- ignites targets when hit", ammo.getAmmoType());
-    }
-  if(ammo.isProximityAmmo())
-    {
-    d.addTooltip("Proximity -- detonates near targets", ammo.getAmmoType());
-    }
-  if(ammo.isPenetrating())
-    {
-    d.addTooltip("Penetrating -- does not stop on impact", ammo.getAmmoType());
-    }
-  if(ammo.getSecondaryAmmoType() != null && ammo.getSecondaryAmmoTypeCount()>0)
-    {
-    d.addTooltip("Cluster ammunition, spawns "+ammo.getSecondaryAmmoTypeCount()+" submunitions", ammo.getAmmoType());
-    IAmmoType t = ammo.getSecondaryAmmoType();
-    d.addTooltip("Submunition Entity Damage: "+t.getEntityDamage(), ammo.getAmmoType());
-    d.addTooltip("Submunition Vehicle Damage: "+t.getVehicleDamage(), ammo.getAmmoType());
-    }
+//  d.addTooltip("Weight: "+ammo.getAmmoWeight(), ammo.getAmmoType());
+//  d.addTooltip("Entity Damage: "+ammo.getEntityDamage(), ammo.getAmmoType());
+//  d.addTooltip("Vehicle Damage: "+ammo.getVehicleDamage(), ammo.getAmmoType());
+//  if(ammo.isFlaming())
+//    {
+//    d.addTooltip("Flaming -- ignites targets when hit", ammo.getAmmoType());
+//    }
+//  if(ammo.isProximityAmmo())
+//    {
+//    d.addTooltip("Proximity -- detonates near targets", ammo.getAmmoType());
+//    }
+//  if(ammo.isPenetrating())
+//    {
+//    d.addTooltip("Penetrating -- does not stop on impact", ammo.getAmmoType());
+//    }
+//  if(ammo.getSecondaryAmmoType() != null && ammo.getSecondaryAmmoTypeCount()>0)
+//    {
+//    d.addTooltip("Cluster ammunition, spawns "+ammo.getSecondaryAmmoTypeCount()+" submunitions", ammo.getAmmoType());
+//    IAmmoType t = ammo.getSecondaryAmmoType();
+//    d.addTooltip("Submunition Entity Damage: "+t.getEntityDamage(), ammo.getAmmoType());
+//    d.addTooltip("Submunition Vehicle Damage: "+t.getVehicleDamage(), ammo.getAmmoType());
+//    }
   d.addDisplayStack(ammo.getDisplayStack());
   d.setIconTexture(ammo.getIconTexture(), ammo.getAmmoType());
   this.registerAmmoType(ammo);

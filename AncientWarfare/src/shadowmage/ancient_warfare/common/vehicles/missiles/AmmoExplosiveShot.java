@@ -38,9 +38,6 @@ boolean bigExplosion;
 public AmmoExplosiveShot(int ammoType, int weight, boolean bigExplosion)
   {
   super(ammoType);
-  String prefix = bigExplosion ? "High Explosive" : "Explosive";
-  this.displayName = prefix + " shot " + weight +"kg";
-  this.addTooltip(weight+"kg of "+prefix+" powder");
   this.ammoWeight = weight;
   this.bigExplosion = bigExplosion;
   this.entityDamage = weight;

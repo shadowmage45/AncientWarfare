@@ -41,8 +41,6 @@ public AmmoStoneShot(int ammoType, int weight)
   this.isArrow = false;
   this.isRocket = false;
   this.ammoWeight = weight;
-  this.displayName = "Stone Shot "+weight+"kg";
-  this.addTooltip(weight+"kg rough stone shot.");
   this.iconTexture = "ammoStone1";
   this.entityDamage = weight;
   this.vehicleDamage = weight;

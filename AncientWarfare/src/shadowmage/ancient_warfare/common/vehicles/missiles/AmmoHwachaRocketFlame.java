@@ -39,8 +39,6 @@ public class AmmoHwachaRocketFlame extends Ammo
 public AmmoHwachaRocketFlame(int ammoType)
   {
   super(ammoType);
-  this.displayName = "Flame Hwacha Rocket";
-  this.addTooltip("Self-propelled, soaked in flammable oil.");
   this.entityDamage = 5;
   this.vehicleDamage = 5;
   this.isArrow = true;

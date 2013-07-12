@@ -38,8 +38,6 @@ public AmmoGrapeShot(int ammoType, int weight)
   {
   super(ammoType);
   this.ammoWeight = weight;
-  this.displayName = "Grape Shot "+weight+"kg";
-  this.addTooltip("Delivers a shotgun-like blast"); 
   this.secondaryAmmoType = Ammo.ammoBallIronShot;
   this.secondaryAmmoCount = weight;
   float scaleFactor = weight + 45.f;

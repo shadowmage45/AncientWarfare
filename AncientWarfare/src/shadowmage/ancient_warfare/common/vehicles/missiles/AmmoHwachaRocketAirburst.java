@@ -39,8 +39,6 @@ public class AmmoHwachaRocketAirburst extends Ammo
 public AmmoHwachaRocketAirburst(int ammoType)
   {
   super(ammoType);
-  this.displayName = "Hwacha Airburst Rocket";
-  this.addTooltip("Explodes above enemy heads");
   this.entityDamage = 0;
   this.vehicleDamage = 0;
   this.isArrow = true;

@@ -46,8 +46,6 @@ public class AmmoArrowIronFlame extends Ammo
     this.isRocket = false;
     this.isPersistent = true;
     this.isFlaming = true;
-    this.displayName = "Iron Flame Arrow";  
-    this.addTooltip("Iron shaft, with head soaked in oil");  
     this.iconTexture = "ammoArrowIronFlame1";
     this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
     this.neededResearch.add(ResearchGoalNumbers.ballistics1);

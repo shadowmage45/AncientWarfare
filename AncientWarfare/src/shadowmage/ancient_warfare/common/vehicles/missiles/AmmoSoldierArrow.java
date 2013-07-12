@@ -41,10 +41,6 @@ public AmmoSoldierArrow(int ammoType, int damage, boolean flaming)
   this.isRocket = false;
   this.isPersistent = true;
   this.isFlaming = flaming;  
-  String prefix = flaming? "Small Flaming " : "Small ";
-  String suffix = damage <= 5? "Wooden Arrow" : "Iron Arrow";
-  this.displayName = prefix+suffix;  
-  this.addTooltip("A smaller arrow designed for use in bows.");  
   
   if(flaming)
     {

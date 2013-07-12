@@ -114,7 +114,6 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 @Override
 public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
   {
-  super.addInformation(stack, par2EntityPlayer, par3List, par4); 
   if(stack!=null)
     {
     if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
@@ -122,7 +121,7 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
       NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
       int i = stack.getItemDamage();
       int rank = tag.getInteger("lev");
-      par3List.add(NpcTypeBase.getNpcType(i).getDisplayTooltip(rank));      
+      par3List.add(StringTranslate.getInstance().translateKey(NpcTypeBase.getNpcType(i).getDisplayTooltip(rank)));      
       }
     else
       {
@@ -150,11 +149,12 @@ public String getItemDisplayName(ItemStack par1ItemStack)
   int type = par1ItemStack.getItemDamage();
   int rank = 0;
   if(par1ItemStack.hasTagCompound()&& par1ItemStack.getTagCompound().hasKey("AWNpcSpawner"))
-    {
-    rank = par1ItemStack.getTagCompound().getCompoundTag("AWNpcSpanwer").getInteger("lev");
+    {    
+    rank = par1ItemStack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");
     }
   INpcType t = NpcTypeBase.getNpcType(type);
   String name = t.getDisplayName(rank);
+  
   return StringTranslate.getInstance().translateKey(name);
   }
 

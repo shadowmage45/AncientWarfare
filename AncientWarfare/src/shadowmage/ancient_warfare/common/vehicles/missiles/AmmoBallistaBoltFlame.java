@@ -46,8 +46,6 @@ public AmmoBallistaBoltFlame(int ammoType)
   this.isRocket = false;
   this.isPersistent = true;
   this.isFlaming = true;
-  this.displayName = "Flame Ballista Bolt";  
-  this.addTooltip("Large bolt soaked in flammable oil"); 
   this.iconTexture = "ammoBoltFlame1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
   this.neededResearch.add(ResearchGoalNumbers.ballistics1);

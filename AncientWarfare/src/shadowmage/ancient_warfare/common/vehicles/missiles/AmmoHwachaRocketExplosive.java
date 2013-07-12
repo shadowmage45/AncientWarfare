@@ -39,8 +39,6 @@ public class AmmoHwachaRocketExplosive extends Ammo
 public AmmoHwachaRocketExplosive(int ammoType)
   {
   super(ammoType);
-  this.displayName = "Explosive Hwacha Rocket";
-  this.addTooltip("Self-propelled, explosive-tipped");
   this.entityDamage = 4;
   this.vehicleDamage = 4;
   this.isArrow = true;

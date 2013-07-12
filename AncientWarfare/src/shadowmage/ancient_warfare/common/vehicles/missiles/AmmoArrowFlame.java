@@ -46,8 +46,6 @@ public class AmmoArrowFlame extends Ammo
     this.isRocket = false;
     this.isPersistent = true;
     this.isFlaming = true;
-    this.displayName = "Flame Arrow";  
-    this.addTooltip("Soaked in flammable oil");  
     this.iconTexture = "ammoArrowFlame1";
     this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
     this.neededResearch.add(ResearchGoalNumbers.flammables1);

@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 
 public class AmmoFlameShot extends Ammo
 {
+
 /**
  * @param ammoType
  * @param weight
@@ -42,8 +43,6 @@ public AmmoFlameShot(int ammoType, int weight)
   this.isRocket = false;
   this.isFlaming = true;
   this.ammoWeight = weight;
-  this.displayName = "Fire Shot "+weight+"kg";
-  this.addTooltip(weight+"kg of flammable oil.");  
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoFlame1";

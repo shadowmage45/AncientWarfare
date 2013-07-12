@@ -35,8 +35,6 @@ public class AmmoIronBallShot extends Ammo
 public AmmoIronBallShot(int ammoType)
   {
   super(ammoType);
-  this.displayName = "Iron Ball Shot";
-  this.addTooltip("Used in cluster-type ammunition.");
   this.renderScale = 0.05f;
   this.ammoWeight = 1.f;
   this.entityDamage = 8;

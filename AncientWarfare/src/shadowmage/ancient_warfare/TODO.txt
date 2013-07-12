@@ -5,6 +5,10 @@ PORTING TO 1.6
 PRE OPEN BETA
 * reinforced blocks
 * better system for making rations (special machine probably with auto-output?)
+* gui polish
+    civic
+    npc
+    vehicle
 
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
@@ -24,10 +28,9 @@ FROM TESTING
 * research book gui search box needs moved down a few pixels
 * large trebuchet health should be increased
 * deluxe chunkloader world rendering
+* method to clear the status of a backpack to use in crafting (or other resolution to the issue)
 
 LANGUAGE/TRANSLATIONS
-* move over to generic names for all
-* add en_US translation table
 * find others to add/contribute to other translation tables
 * move all GUIs over from rendering static strings to rendering translated strings
 
@@ -249,6 +252,10 @@ TWEAKS/OPTIMIZATION
     * civics
     * npcs
     * research
+    
+* fixup localization support code for npcs    
+* add ammo localization support
+
 
 /********** 07-13-13 **********/
 /********** 07-14-13 **********/

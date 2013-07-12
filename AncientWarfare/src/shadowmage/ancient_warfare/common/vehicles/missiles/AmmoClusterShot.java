@@ -37,8 +37,6 @@ public class AmmoClusterShot extends Ammo
 public AmmoClusterShot(int ammoType, int weight)
   {
   super(ammoType);    
-  this.displayName = "Cluster Shot " + weight +"kg";
-  this.addTooltip("Spawns "+weight+" submunitions on impact");
   this.ammoWeight = weight;
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 

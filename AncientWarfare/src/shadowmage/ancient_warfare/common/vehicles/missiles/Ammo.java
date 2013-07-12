@@ -154,6 +154,8 @@ public Ammo(int ammoType)
     {    
     ammoTypes[ammoType]=this;
     }  
+  this.displayName = "ammo."+ammoType;
+  this.displayTooltip.add("ammo."+ammoType+".tooltip");
   }
 
 public void addTooltip(String tip)

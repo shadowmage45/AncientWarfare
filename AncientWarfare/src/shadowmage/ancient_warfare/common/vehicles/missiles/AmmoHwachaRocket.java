@@ -42,8 +42,6 @@ public static float accelerationFactor = 0.01f;
 public AmmoHwachaRocket(int ammoType)
   {
   super(ammoType);
-  this.displayName = "Hwacha Rocket";
-  this.addTooltip("Self-propelled, variable burn-time.");
   this.entityDamage = 6;
   this.vehicleDamage = 6;
   this.isArrow = true;

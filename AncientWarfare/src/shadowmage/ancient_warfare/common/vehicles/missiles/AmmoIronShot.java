@@ -39,8 +39,6 @@ public AmmoIronShot(int ammoType, int weight, int damage)
   {
   super(ammoType);
   this.ammoWeight = weight;
-  this.displayName = "Iron Shot "+weight+"kg";
-  this.addTooltip(weight+"kg rough iron shot.");
   this.entityDamage = damage;
   this.vehicleDamage = damage;
   float scaleFactor = weight + 45.f;

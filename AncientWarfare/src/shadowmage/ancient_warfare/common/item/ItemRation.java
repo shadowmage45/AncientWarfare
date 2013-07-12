@@ -30,6 +30,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StringTranslate;
 
 public class ItemRation extends ItemFood
 {
@@ -62,7 +63,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
         {
         for(String tip : tips)
           {
-          list.add(tip);
+          list.add(StringTranslate.getInstance().translateKey(tip));
           }        
         }
       }     
@@ -103,7 +104,7 @@ public String getItemDisplayName(ItemStack par1ItemStack)
   Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
   if(d!=null)
     {
-    return d.getDisplayName(par1ItemStack.getItemDamage());
+    return StringTranslate.getInstance().translateKey(d.getDisplayName(par1ItemStack.getItemDamage()));
     }
   return "Unregistered Item : "+itemID+":"+par1ItemStack.getItemDamage();
   }
