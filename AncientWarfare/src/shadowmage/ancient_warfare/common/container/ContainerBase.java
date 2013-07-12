@@ -93,6 +93,14 @@ protected void addPlayerSlots(EntityPlayer player, int tx, int ty, int gap)
     
   }
 
+protected void refreshGui()
+  {
+  if(this.gui!=null)
+    {
+    this.gui.refreshGui();
+    }
+  }
+
 public void setGui(IContainerGuiCallback gui)
   {
   this.gui = gui;

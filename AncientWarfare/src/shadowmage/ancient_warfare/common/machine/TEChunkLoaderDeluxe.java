@@ -23,6 +23,9 @@ package shadowmage.ancient_warfare.common.machine;
 import java.util.Collection;
 import java.util.Collections;
 
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
+
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.ForgeChunkManager;
 
@@ -32,6 +35,7 @@ public class TEChunkLoaderDeluxe extends TEChunkLoader
 public TEChunkLoaderDeluxe()
   {
   this.machineNumber = 4;
+  this.guiNumber = GUIHandler.CHUNKLOADER_DEULXE;
   }
 
 public Collection<ChunkCoordIntPair> getForcedChunks()
@@ -53,7 +57,16 @@ public void setChunk(int chunkX, int chunkZ, boolean force)
   {
   if(this.tk!=null)
     {
-    ForgeChunkManager.forceChunk(tk, new ChunkCoordIntPair(chunkX, chunkZ));
+    ChunkCoordIntPair chunk = new ChunkCoordIntPair(chunkX, chunkZ);
+    Config.logDebug("setting chunk: "+chunkX+","+chunkZ+" forced: "+force);
+    if(force)
+      {
+      ForgeChunkManager.forceChunk(tk, chunk);
+      }
+    else
+      {
+      ForgeChunkManager.unforceChunk(tk, chunk);
+      }
     }
   }
 

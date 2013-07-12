@@ -40,6 +40,7 @@ import shadowmage.ancient_warfare.client.gui.crafting.GuiNpcCraft;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiResearch;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiVehicleCrafting;
 import shadowmage.ancient_warfare.client.gui.info.GuiResearchBook;
+import shadowmage.ancient_warfare.client.gui.machine.GuiChunkloaderDeluxe;
 import shadowmage.ancient_warfare.client.gui.machine.GuiMailbox;
 import shadowmage.ancient_warfare.client.gui.machine.GuiMailboxIndustrial;
 import shadowmage.ancient_warfare.client.gui.machine.GuiTrashcan;
@@ -66,6 +67,7 @@ import shadowmage.ancient_warfare.common.container.ContainerAWCrafting;
 import shadowmage.ancient_warfare.common.container.ContainerBackpack;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
+import shadowmage.ancient_warfare.common.container.ContainerChunkloaderDeluxe;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTE;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTownHallInfo;
 import shadowmage.ancient_warfare.common.container.ContainerCivicWarehouse;
@@ -93,6 +95,7 @@ import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWVehicleCraft;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.machine.TEChunkLoaderDeluxe;
 import shadowmage.ancient_warfare.common.machine.TEMailBox;
 import shadowmage.ancient_warfare.common.machine.TEMailBoxIndustrial;
 import shadowmage.ancient_warfare.common.machine.TETrashcan;
@@ -126,6 +129,8 @@ public static final int CIVIC_TOWNHALL_INFO = 14;
 public static final int TRASHCAN = 15;
 public static final int MAILBOX = 16;
 public static final int MAILBOX_INDUSTRIAL = 17;
+public static final int CHUNKLOADER = 18;//TODO
+public static final int CHUNKLOADER_DEULXE = 19;
 
 public static final int BACKPACK = 39;
 public static final int INFO = 40;
@@ -268,6 +273,14 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEMailBoxIndustrial)
     {
     return new ContainerMailboxIndustrial(player, (TEMailBoxIndustrial)te);
+    }
+  return null;
+  
+  case CHUNKLOADER_DEULXE:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEChunkLoaderDeluxe)
+    {
+    return new ContainerChunkloaderDeluxe(player, (TEChunkLoaderDeluxe) te);
     }
   return null;
   
@@ -493,6 +506,14 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEMailBoxIndustrial)
     {
     return new GuiMailboxIndustrial(new ContainerMailboxIndustrial(player, (TEMailBoxIndustrial)te));
+    }
+  return null;
+  
+  case CHUNKLOADER_DEULXE:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEChunkLoaderDeluxe)
+    {
+    return new GuiChunkloaderDeluxe(new ContainerChunkloaderDeluxe(player, (TEChunkLoaderDeluxe) te));
     }
   return null;
   
