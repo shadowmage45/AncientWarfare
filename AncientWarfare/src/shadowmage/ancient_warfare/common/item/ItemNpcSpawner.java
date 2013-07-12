@@ -29,13 +29,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StringTranslate;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -119,15 +122,7 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
       NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
       int i = stack.getItemDamage();
       int rank = tag.getInteger("lev");
-      if(i>0 && i <NpcTypeBase.npcTypes.length)
-        {
-        INpcType p = NpcTypeBase.npcTypes[i];
-        if(p!=null)
-          {
-          par3List.add(p.getLevelName(rank));
-          }
-        }
-      par3List.add("Rank: "+rank);
+      par3List.add(NpcTypeBase.getNpcType(i).getDisplayTooltip(rank));      
       }
     else
       {
@@ -144,11 +139,23 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   }
 
 @Override
-public boolean onUsedFinalLeft(World world, EntityPlayer player,
-    ItemStack stack, BlockPosition hit, int side)
+public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
-  // TODO Auto-generated method stub
   return false;
+  }
+
+@Override
+public String getItemDisplayName(ItemStack par1ItemStack)
+  {
+  int type = par1ItemStack.getItemDamage();
+  int rank = 0;
+  if(par1ItemStack.hasTagCompound()&& par1ItemStack.getTagCompound().hasKey("AWNpcSpawner"))
+    {
+    rank = par1ItemStack.getTagCompound().getCompoundTag("AWNpcSpanwer").getInteger("lev");
+    }
+  INpcType t = NpcTypeBase.getNpcType(type);
+  String name = t.getDisplayName(rank);
+  return StringTranslate.getInstance().translateKey(name);
   }
 
 

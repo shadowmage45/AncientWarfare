@@ -34,11 +34,8 @@ public class ResearchTurrets extends ResearchGoal
 public ResearchTurrets(int num, int level)
   {
   super(num);
-  this.displayName = "Turreted Vehicles " + (level+1);
-  this.detailedDescription.add("Researching Turreted Vehicles advances knowledge regarding the" +
-  		"construction and design of turret-based vehicles of various designs. Higher ranks" +
-  		" unlock access to higher tiers of turreted vehicles (if all other prerequisites" +
-  		" for the vehicle have been met).");
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.researchTime = 900 * (level+1);
   this.addResource(new ItemStack(Block.planks, 2 * (level+1)), true, false);
   this.addResource(new ItemStack(Item.ingotIron, (level+1)), false, false);

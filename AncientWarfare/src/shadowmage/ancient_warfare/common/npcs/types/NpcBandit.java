@@ -53,17 +53,15 @@ public class NpcBandit extends NpcTypeBase
 public NpcBandit(int type)
   {
   super(type);
-  this.displayName = "Bandit";
   this.configName = "bandit";
-  this.tooltip = "Adept at melee combat.";
   this.isCombatUnit = true;
   this.iconTexture = "npcSoldier";
   this.defaultTargets = defaultTargetList;
   this.isAvailableInSurvival = false;
   this.isBandit = true;
-  this.addLevel("Bandit", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4).setUpkeep(6);
-  this.addLevel("Bandit", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6).setUpkeep(8);
-  this.addLevel("Bandit", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8).setUpkeep(10);
+  this.addLevel(type, 0, Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4).setUpkeep(6);
+  this.addLevel(type, 1, Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6).setUpkeep(8);
+  this.addLevel(type, 2, Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8).setUpkeep(10);
   }
 
 @Override

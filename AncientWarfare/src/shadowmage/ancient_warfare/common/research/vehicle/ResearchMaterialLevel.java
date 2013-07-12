@@ -37,12 +37,8 @@ public ResearchMaterialLevel(int num, int level, VehicleMaterial material)
   {
   super(num);
   this.level = level;
-  this.displayName = "Material: "+material.getDisplayName(level);
-  this.displayTooltip = "Enables use of higher ranked materials";
-  this.detailedDescription.add("Researching higher ranks of vehicle construction" +
-  		" materials will enable the construction of those materials, and allow for" +
-  		" the use of those materials in the construction of vehicles (vehicle and" +
-  		" proper tier for vehicle must also be unlocked).");
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.researchTime = 1200*(level+1);
   this.addResource(new ItemStack(Item.paper, (level+1)*2), false, false);
   this.addResource(new ItemStack(Item.dyePowder, level+1, 0), false, false);

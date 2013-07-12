@@ -38,16 +38,15 @@ public class NpcVillager extends NpcTypeBase
 public NpcVillager(int type)
   {
   super(type);
-  this.displayName = "Villager";
-  this.tooltip = "Spawns a Villager";
   this.isVanillaVillager = true;
   this.iconTexture = "npcVillager";
-  this.addLevel("Farmer", "", null, null);
-  this.addLevel("Librarian", "", null, null);
-  this.addLevel("Priest", "", null, null);
-  this.addLevel("Smith", "", null, null);
-  this.addLevel("Butcher", "", null, null);
+  this.addLevel(type, 0, "", null, null);
+  this.addLevel(type, 1, "", null, null);
+  this.addLevel(type, 2, "", null, null);
+  this.addLevel(type, 3, "", null, null);
+  this.addLevel(type, 4, "", null, null);
   
+  int level = 5;
   /**
    * reaaaaaaaaallllyyyy ugly reflection to get at cpw's villager registry to pull extra villager types..
    */
@@ -59,7 +58,8 @@ public NpcVillager(int type)
     for(Object ob : theList)
       {
       Integer entry = (Integer)ob;
-      this.addLevel("ModVillager:"+entry, "", null, null);
+      this.addLevel(type, level, "", null, null);
+      level++;
       }
     }
   catch(Exception e)

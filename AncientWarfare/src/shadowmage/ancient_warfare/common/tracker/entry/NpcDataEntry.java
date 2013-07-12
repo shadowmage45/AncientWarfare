@@ -107,16 +107,16 @@ public void readFromNBT(NBTTagCompound tag)
 @Override
 public String toString()
   {
-  return String.format("%s R: %s P: %s H: %s", NpcTypeBase.getNpcType(npcType).getDisplayName(), npcRank, lastKnownPosition, lastKnownHealth);
+  return String.format("%s R: %s P: %s H: %s", NpcTypeBase.getNpcType(npcType).getDisplayName(npcRank), npcRank, lastKnownPosition, lastKnownHealth);
   }
 
 public String getPrimaryDescription()
   {
   if(deathCause!=null)
     {
-    return String.format("%s  Rank: %s  Killed By: %s ", NpcTypeBase.getNpcType(npcType).getDisplayName(), npcRank, deathCause);
+    return String.format("%s  Rank: %s  Killed By: %s ", NpcTypeBase.getNpcType(npcType).getDisplayName(npcRank), npcRank, deathCause);
     }
-  return String.format("%s  Rank: %s, Health: %s", NpcTypeBase.getNpcType(npcType).getDisplayName(), npcRank, lastKnownHealth);
+  return String.format("%s  Rank: %s, Health: %s", NpcTypeBase.getNpcType(npcType).getDisplayName(npcRank), npcRank, lastKnownHealth);
   }
 
 public String getLocation()

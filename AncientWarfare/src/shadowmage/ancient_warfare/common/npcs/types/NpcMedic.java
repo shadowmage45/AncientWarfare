@@ -56,15 +56,13 @@ public class NpcMedic extends NpcTypeBase
 public NpcMedic(int type)
   {
   super(type);
-  this.displayName = "Medic";
   this.configName = "medic";
-  this.tooltip = "Heals nearby troops";
   this.isCombatUnit = true;
   this.iconTexture = "npcMedic";
   this.defaultTargets = defaultTargetList;
-  this.addLevel("Novice Medic", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.command1);
-  this.addLevel("Adept Medic", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);
-  this.addLevel("Expert Medic", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(5).setUpkeep(10).addNeededResearch(ResearchGoalNumbers.command3);
+  this.addLevel(type, 0, Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(3).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.command1);
+  this.addLevel(type, 1, Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(4).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);
+  this.addLevel(type, 2, Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(5).setUpkeep(10).addNeededResearch(ResearchGoalNumbers.command3);
   }
 
 

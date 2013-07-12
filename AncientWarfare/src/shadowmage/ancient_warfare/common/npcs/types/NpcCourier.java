@@ -53,12 +53,10 @@ public class NpcCourier extends NpcTypeBase
 public NpcCourier(int type)
   {
   super(type); 
-  this.displayName = "Courier";
-  this.tooltip = "Transports Items";
   this.iconTexture = "npcCourier";  
-  this.addLevel("Courier Novice", Config.texturePath + "models/npc/npcCourier.png", getToolStack(0), null).addTargetType(CivicWorkType.COURIER).setInventorySize(9).setActionTicks(40).setSpecInventorySize(1).addNeededResearch(ResearchGoalNumbers.logistics3).addRecipeResource(new ItemStack(ItemLoader.backpack,1,0));
-  this.addLevel("Courier Adept", Config.texturePath + "models/npc/npcCourier.png", getToolStack(1), null).addTargetType(CivicWorkType.COURIER).setInventorySize(18).setActionTicks(30).setSpecInventorySize(2).addNeededResearch(ResearchGoalNumbers.logistics4).addRecipeResource(new ItemStack(ItemLoader.backpack,1,16));
-  this.addLevel("Courier Master", Config.texturePath + "models/npc/npcCourier.png", getToolStack(2), null).addTargetType(CivicWorkType.COURIER).setInventorySize(27).setActionTicks(20).setSpecInventorySize(4).addNeededResearch(ResearchGoalNumbers.logistics5).addRecipeResource(new ItemStack(ItemLoader.backpack,1,32));
+  this.addLevel(type, 0, Config.texturePath + "models/npc/npcCourier.png", getToolStack(0), null).addTargetType(CivicWorkType.COURIER).setInventorySize(9).setActionTicks(40).setSpecInventorySize(1).addNeededResearch(ResearchGoalNumbers.logistics3).addRecipeResource(new ItemStack(ItemLoader.backpack,1,0));
+  this.addLevel(type, 1, Config.texturePath + "models/npc/npcCourier.png", getToolStack(1), null).addTargetType(CivicWorkType.COURIER).setInventorySize(18).setActionTicks(30).setSpecInventorySize(2).addNeededResearch(ResearchGoalNumbers.logistics4).addRecipeResource(new ItemStack(ItemLoader.backpack,1,16));
+  this.addLevel(type, 2, Config.texturePath + "models/npc/npcCourier.png", getToolStack(2), null).addTargetType(CivicWorkType.COURIER).setInventorySize(27).setActionTicks(20).setSpecInventorySize(4).addNeededResearch(ResearchGoalNumbers.logistics5).addRecipeResource(new ItemStack(ItemLoader.backpack,1,32));
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
   this.configName = "civilian";

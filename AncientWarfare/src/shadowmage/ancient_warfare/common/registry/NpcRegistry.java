@@ -78,7 +78,7 @@ public void registerNPCs()
   for(INpcType type : types)
     {
     if(type==null || type.getGlobalNpcType()==0){continue;}//if null or dummy type, don't register....
-    Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.npcSpawner, type.getGlobalNpcType(), type.getDisplayName(), "", type.getDisplayTooltip());
+    Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.npcSpawner, type.getGlobalNpcType(), type.getDisplayName(0), "", type.getDisplayTooltip(0));
     d.setIconTexture(type.getIconTexture(), type.getGlobalNpcType());
     } 
   }

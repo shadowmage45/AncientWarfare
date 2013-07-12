@@ -34,12 +34,8 @@ public class ResearchFlammables extends ResearchGoal
 public ResearchFlammables(int num, int level)
   {
   super(num);
-  this.displayName = "Flammables " + (level+1);
-  this.detailedDescription.add("Researching Flammables uncovers knowledge relating" +
-  		" to the use of flammable materials as weapons, including their manufacture" +
-  		" and use.  This research is needed for most flame-based ammunition as well as" +
-  		" Napalm ammunition.  At least some research into Flammables needs to be done in" +
-  		" order to research gunpowder weapons and explosives.");
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.researchTime = 1200 * (level+1);
   this.addResource(new ItemStack(Item.coal, (level+1)), true, false);
   this.addResource(new ItemStack(Block.planks, (level+1)), true, false);

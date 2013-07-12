@@ -39,6 +39,7 @@ protected ItemStack toolStack;
 private ItemStack[] armorStacks = new ItemStack[4];
 protected String name;
 protected String texture;
+protected String tooltip;
 protected int attackDamage = 4;
 protected int rangedAttackDistance = 0;
 protected int health = 20;
@@ -52,22 +53,23 @@ protected List<CivicWorkType> workTypes = new ArrayList<CivicWorkType>();
 protected List<ItemStackWrapperCrafting> recipeResources = new ArrayList<ItemStackWrapperCrafting>();
 protected Set<Integer> neededResearch = new HashSet<Integer>();
 
-public NpcLevelEntry(String name, String tex)
+public NpcLevelEntry(int type, int level, String tex)
   {
-  this.name = name;
+  this.name = "npc."+type+"."+level;
+  this.tooltip = "npc."+type+"."+level+".tooltip";
   this.texture = tex;
   }
 
-public NpcLevelEntry(String name, String tex, ItemStack tool, ItemStack[] armor)
+public NpcLevelEntry(int type, int level, String tex, ItemStack tool, ItemStack[] armor)
   {
-  this(name, tex);  
+  this(type, level, tex);  
   this.setTool(tool);  
   this.setArmor(armor);    
   }
 
-public NpcLevelEntry(String name, String tex, int damage, int health, float accuracy)
+public NpcLevelEntry(int type, int level, String tex, int damage, int health, float accuracy)
   {
-  this(name, tex);
+  this(type, level, tex);
   this.setAttackDamage(damage);
   this.setHealth(health);
   this.setAccuracy(accuracy);
@@ -186,6 +188,11 @@ public Collection<ItemStackWrapperCrafting> getNeededResources()
 public Collection<Integer> getNeededResearch()
   {
   return this.neededResearch;
+  }
+
+public String getTooltip()
+  {
+  return this.tooltip;
   }
 
 /**

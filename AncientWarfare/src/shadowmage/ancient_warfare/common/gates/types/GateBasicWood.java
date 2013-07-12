@@ -42,8 +42,8 @@ public class GateBasicWood extends Gate
 public GateBasicWood(int id)
   {
   super(id);
-  this.displayName = "Gate Basic Wood";
-  this.tooltip = "Opens upwards";
+  this.displayName = "item.gate.0";
+  this.tooltip = "item.gate.0.tooltip";
   this.texture = "gateWood1.png";
   this.iconTexture = "gateWoodBasic";
   this.neededResearch.add(ResearchGoalNumbers.wood1);

@@ -34,12 +34,9 @@ public class ResearchCivics extends ResearchGoal
 public ResearchCivics(int num, int level)
   {
   super(num);
-  this.displayName = "Civilian Engineering " + (level + 1);
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.researchTime = 900 * (level+1);
-  this.detailedDescription.add("Researching Civilian Engineering advances knowledge regarding" +
-  		" the design and construction of civic buildings and worksites.  Knowlege of civilian" +
-  		" engineering is necessary for the construction of civic buildings and recruiting of" +
-  		" civilian workers.");
   this.addResource(new ItemStack(Item.silk, level+1), false, false);  
   this.addResource(new ItemStack(Item.stick, level+1), false, false);
   this.addResource(new ItemStack(Item.paper, (level+1)*2), false, false);

@@ -72,7 +72,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     {
     this.drawStringGui("Special Tools", 8, 5 + 10 + 3*18 + 5, 0xffffffff);
     }  
-  this.drawStringGui("Class: "+npc.npcType.getDisplayName(), 8, 112, 0xffffffff);
+  this.drawStringGui("Class: "+npc.npcType.getDisplayName(npc.rank), 8, 112, 0xffffffff);
   }
 
 @Override

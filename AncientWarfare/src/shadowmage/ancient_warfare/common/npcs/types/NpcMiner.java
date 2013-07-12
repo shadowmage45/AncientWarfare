@@ -51,12 +51,10 @@ public class NpcMiner extends NpcTypeBase
 public NpcMiner(int type)
   {
   super(type);
-  this.displayName = "Miner";
-  this.tooltip = "For working in Mines";
   this.iconTexture = "npcMiner";
-  this.addLevel("Novice Miner", Config.texturePath + "models/npc/npcMiner.png", getToolStack(0), null).addTargetType(CivicWorkType.MINE).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
-  this.addLevel("Adpet Miner", Config.texturePath + "models/npc/npcMiner.png", getToolStack(1), null).addTargetType(CivicWorkType.MINE).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
-  this.addLevel("Expert Miner", Config.texturePath + "models/npc/npcMiner.png", getToolStack(2), null).addTargetType(CivicWorkType.MINE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
+  this.addLevel(type, 0, Config.texturePath + "models/npc/npcMiner.png", getToolStack(0), null).addTargetType(CivicWorkType.MINE).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
+  this.addLevel(type, 1, Config.texturePath + "models/npc/npcMiner.png", getToolStack(1), null).addTargetType(CivicWorkType.MINE).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
+  this.addLevel(type, 2, Config.texturePath + "models/npc/npcMiner.png", getToolStack(2), null).addTargetType(CivicWorkType.MINE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
   this.configName = "civilian";

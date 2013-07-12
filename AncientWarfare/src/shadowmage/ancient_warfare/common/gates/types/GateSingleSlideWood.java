@@ -37,8 +37,8 @@ public class GateSingleSlideWood extends Gate
 public GateSingleSlideWood(int id)
   {
   super(id);
-  this.displayName = "Gate Single Wood";
-  this.tooltip = "Opens towards one side";
+  this.displayName = "item.gate.4";
+  this.tooltip = "item.gate.4.tooltip";
   this.texture = "gateWood1.png";
   this.iconTexture = "gateWoodSingle";
   this.neededResearch.add(ResearchGoalNumbers.wood1);

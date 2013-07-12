@@ -51,12 +51,10 @@ public class NpcLumberjack extends NpcTypeBase
 public NpcLumberjack(int type)
   {
   super(type);
-  this.displayName = "Lumberjack";
-  this.tooltip = "For working tree farms";
   this.iconTexture = "npcLumberjack";  
-  this.addLevel("Lumberjack Novice", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(0), null).addTargetType(CivicWorkType.TREE).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
-  this.addLevel("Lumberjack Adept", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(1), null).addTargetType(CivicWorkType.TREE).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
-  this.addLevel("Lumberjack Master", Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(2), null).addTargetType(CivicWorkType.TREE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
+  this.addLevel(type, 0, Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(0), null).addTargetType(CivicWorkType.TREE).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
+  this.addLevel(type, 1, Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(1), null).addTargetType(CivicWorkType.TREE).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
+  this.addLevel(type, 2, Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(2), null).addTargetType(CivicWorkType.TREE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
   this.configName = "civilian";

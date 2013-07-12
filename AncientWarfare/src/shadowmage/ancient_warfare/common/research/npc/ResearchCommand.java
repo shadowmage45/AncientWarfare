@@ -35,6 +35,8 @@ public ResearchCommand(int num, int level)
   super(num);
   this.displayName = "Command " + (level+1);
   this.researchTime = 1200 * (level+1);
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.addResource(new ItemStack(Item.paper, (level+1)*2), false, false);
   this.addResource(new ItemStack(Item.dyePowder, level+1, 0), false, false);
   this.addResource(new ItemStack(Block.torchWood, level+1), false, false);

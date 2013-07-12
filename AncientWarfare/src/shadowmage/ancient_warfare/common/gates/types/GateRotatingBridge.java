@@ -41,8 +41,8 @@ public class GateRotatingBridge extends Gate
 public GateRotatingBridge(int id)
   {
   super(id);
-  this.displayName = "Rotating drawbridge";
-  this.tooltip = "Rotates downwards to open";
+  this.displayName = "item.gate.12";
+  this.tooltip = "item.gate.12.tooltip";
   this.moveSpeed = 1.f;
   this.texture = "gateBridgeWood1.png";
   this.canSoldierInteract = false;

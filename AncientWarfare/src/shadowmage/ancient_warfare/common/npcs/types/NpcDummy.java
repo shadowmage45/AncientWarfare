@@ -39,10 +39,8 @@ public NpcDummy(int type)
   {
   super(type);
   this.isAvailableInSurvival = false;
-  this.displayName = "Dummy Test";
-  this.tooltip = "Dummy Test -- PlaceHolder tooltip";
-  this.addLevel("Dummy Test Level Name 1", Config.texturePath + "models/npcDefault.png", null, null);
-  this.addLevel("Dummy Test Level Name 2", Config.texturePath + "models/npcDefault.png", null, null);
+  this.addLevel(type, 0, Config.texturePath + "models/npcDefault.png", null, null);
+  this.addLevel(type, 1, Config.texturePath + "models/npcDefault.png", null, null);
   this.isCombatUnit = true;
   }
 

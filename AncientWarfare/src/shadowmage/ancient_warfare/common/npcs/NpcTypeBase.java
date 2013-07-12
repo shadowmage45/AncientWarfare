@@ -81,8 +81,6 @@ public static INpcType npcBandit = new NpcBandit(16);
 public static INpcType npcBanditArcher = new NpcBanditRanged(17);
 
 protected int npcType;
-protected String displayName = "AW.Npc";
-protected String tooltip = "AW.Npc.Tooltip";
 protected boolean isCombatUnit = false;
 protected boolean isVanillaVillager = false;
 protected boolean isAvailableInSurvival = true;
@@ -166,9 +164,9 @@ public int getNumOfLevels()
   }
 
 @Override
-public String getDisplayName()
+public String getDisplayName(int level)
   {
-  return displayName;
+  return this.getLevelName(level);
   }
 
 @Override
@@ -192,9 +190,13 @@ public String getLevelName(int level)
   }
 
 @Override
-public String getDisplayTooltip()
+public String getDisplayTooltip(int level)
   {
-  return tooltip;
+  if(level>=0 && level< this.levelEntries.size())
+    {
+    return this.levelEntries.get(level).tooltip;
+    }
+  return null;
   }
 
 @Override
@@ -212,9 +214,9 @@ protected void addLevel(NpcLevelEntry entry)
   this.levelEntries.add(entry);
   }
 
-public NpcLevelEntry addLevel(String name, String tex, ItemStack toolStack, ItemStack[] armorStacks)
+public NpcLevelEntry addLevel(int type, int level, String tex, ItemStack toolStack, ItemStack[] armorStacks)
   {
-  NpcLevelEntry entry = new NpcLevelEntry(name, tex, toolStack, armorStacks);
+  NpcLevelEntry entry = new NpcLevelEntry(type, level, tex, toolStack, armorStacks);
   this.levelEntries.add(entry);
   return entry;
   }

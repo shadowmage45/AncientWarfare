@@ -34,8 +34,8 @@ public class VehicleArmorStone extends VehicleArmorBase
 public VehicleArmorStone(int armorType)
   {
   super(armorType);
-  this.displayName = "Stone Armor Tier 1";
-  this.tooltip = "Fire damage - 7%";
+  this.displayName = "item.vehicleArmor.stone";
+  this.tooltip = "item.vehicleArmor.stone.tooltip";
   this.general = 2.5f;
   this.explosive = 2.5f;
   this.fire = 7;

@@ -36,6 +36,9 @@ VehicleMaterial material;
 public ResearchEfficiencyWood(int num, int level)
   {
   super(num);
+
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.material = VehicleMaterial.materialWood;
   this.displayName = "Efficiency: Wood Materials" + (level+1);
   this.researchTime = 1200 * (level+1);

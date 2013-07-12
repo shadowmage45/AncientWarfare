@@ -22,13 +22,22 @@ package shadowmage.ancient_warfare.common.item;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Icon;
+import net.minecraft.util.StringTranslate;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.client.render.AWRenderHelper;
+import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class ItemBackpack extends AWItemClickable
@@ -48,8 +57,29 @@ public ItemBackpack(int itemID)
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
-  super.addInformation(stack, player, list, par4); NBTTagCompound tag = null;
-  list.add("Size: " + ((stack.getItemDamage()/16)*9+9) + " slots");
+  if(stack!=null)
+    {
+    int dmg = stack.getItemDamage() - stack.getItemDamage()%16;
+    Description d = DescriptionRegistry2.instance().getDescriptionFor(stack.itemID);
+    if(d!=null)
+      {
+      List<String> tips = d.getDisplayTooltips(stack.getItemDamage());
+      if(tips!=null && !tips.isEmpty())
+        {
+        for(String tip : tips)
+          {
+          list.add(StringTranslate.getInstance().translateKey(tip));
+          }        
+        }
+      }     
+    }
+  }
+
+@Override
+public Icon getIconFromDamage(int par1)
+  {
+  par1 = par1 - par1%16;
+  return super.getIconFromDamage(par1);
   }
 
 @Override
@@ -93,6 +123,14 @@ public static void writeInventoryToItem(ItemStack stack, AWInventoryBasic invent
     tag.setInteger("size", inventory.getSizeInventory());
     stack.setTagInfo("AWBackPack", tag);
     }
+  }
+
+@Override
+@SideOnly(Side.CLIENT)
+public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+  {
+  int color = par1ItemStack.getItemDamage()%16;
+  return AWRenderHelper.getCompositeColor(color);
   }
 
 }

@@ -100,7 +100,6 @@ public static ItemLoader instance()
   return INSTANCE;
   }
 
-
 /**
  * initial load, called during pre-init from mod core file
  */
@@ -126,16 +125,21 @@ private void loadItems()
   this.addSubtypeInfoToItem(npcCommandBaton, 0, "item.baton.0", "item.baton.0.description","item.baton.0.tooltip").addDisplayStack(new ItemStack(npcCommandBaton,1,0)).setIconTexture("ancientwarfare:npc/baton1", 0);
   this.addSubtypeInfoToItem(npcCommandBaton, 1, "item.baton.1", "item.baton.0.description","item.baton.1.tooltip").addDisplayStack(new ItemStack(npcCommandBaton,1,1)).setIconTexture("ancientwarfare:npc/baton3", 1);
   this.registerItemSubtyped(civicPlacer);
-  this.registerItemSingle(civicBuilder, "Civic Structure Builder", "", "Construction Site");
+  this.registerItemSingle(civicBuilder, "item.civicBuilder", "item.civicBuilder.description", "item.civicBuilder.tooltip");
   this.registerItemSubtyped(courierRouteSlip);
-  this.addSubtypeInfoToItem(courierRouteSlip, 0, "Basic Routing Slip","","4 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,0)).setIconTexture("ancientwarfare:npc/route1", 0);
-  this.addSubtypeInfoToItem(courierRouteSlip, 1, "Intermediate Routing Slip","","6 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,1)).setIconTexture("ancientwarfare:npc/route2", 1);
-  this.addSubtypeInfoToItem(courierRouteSlip, 2, "Advanced Routing Slip","","8 Routing Slots").addDisplayStack(new ItemStack(courierRouteSlip,1,2)).setIconTexture("ancientwarfare:npc/route3", 2);
+  this.addSubtypeInfoToItem(courierRouteSlip, 0, "item.routingSlip.0","item.routingSlip.0.description","item.routingSlip.0.tooltip").addDisplayStack(new ItemStack(courierRouteSlip,1,0)).setIconTexture("ancientwarfare:npc/route1", 0);
+  this.addSubtypeInfoToItem(courierRouteSlip, 1, "item.routingSlip.1","item.routingSlip.1.description","item.routingSlip.1.tooltip").addDisplayStack(new ItemStack(courierRouteSlip,1,1)).setIconTexture("ancientwarfare:npc/route2", 1);
+  this.addSubtypeInfoToItem(courierRouteSlip, 2, "item.routingSlip.2","item.routingSlip.2.description","item.routingSlip.2.tooltip").addDisplayStack(new ItemStack(courierRouteSlip,1,2)).setIconTexture("ancientwarfare:npc/route3", 2);
   this.registerItemSubtyped(gateSpawner);
-  this.registerItemSingle(rations, "Food Ration", "", "Restores 1 Hunger (2 Upkeep value)");
-  
-  this.registerItemSingle(backpack, "Backpack", "", "Right Click to open GUI").setIconTexture("ancientwarfare:misc/backpack", 0).addDisplayStack(new ItemStack(backpack,1,16)).addDisplayStack(new ItemStack(backpack, 1, 32)).addDisplayStack(new ItemStack(backpack, 1, 48));    
-  this.registerItemSingle(researchBook, "Research Book", "", "Records research progress").setIconTexture("ancientwarfare:misc/researchBook", 0);
+  this.registerItemSingle(rations, "item.single.rations", "item.single.rations.description", "item.single.rations.tooltip");
+   
+  this.registerItemSubtyped(backpack);
+  this.addSubtypeInfoToItem(backpack, 0, "item.backpack.0").addTooltip("item.backpack.0.tooltip", 0).addDisplayStack(new ItemStack(backpack,1,0)).setIconTexture("ancientwarfare:misc/backpack", 0);
+  this.addSubtypeInfoToItem(backpack, 16, "item.backpack.16").addTooltip("item.backpack.16.tooltip", 16).addDisplayStack(new ItemStack(backpack,1,16)).setIconTexture("ancientwarfare:misc/backpack", 16);
+  this.addSubtypeInfoToItem(backpack, 32, "item.backpack.32").addTooltip("item.backpack.32.tooltip", 32).addDisplayStack(new ItemStack(backpack,1,32)).setIconTexture("ancientwarfare:misc/backpack", 32);
+  this.addSubtypeInfoToItem(backpack, 48, "item.backpack.48").addTooltip("item.backpack.48.tooltip", 48).addDisplayStack(new ItemStack(backpack,1,48)).setIconTexture("ancientwarfare:misc/backpack", 48);
+    
+  this.registerItemSingle(researchBook, "item.single.researchBook", "item.single.researchBook.description", "item.single.researchBook").setIconTexture("ancientwarfare:misc/researchBook", 0);
     
   this.registerItemSubtyped(researchNotes);
   
@@ -143,30 +147,30 @@ private void loadItems()
    * register main component item (misc random items) 
    */
   this.registerItemSubtyped(componentItem);
-  this.addSubtypeInfoToItem(componentItem, 0, "Rough Wood Materials").addDisplayStack(wood1).setIconTexture("ancientwarfare:misc/materialWood1", 0);
-  this.addSubtypeInfoToItem(componentItem, 1, "Treated Wood Materials").addDisplayStack(wood2).setIconTexture("ancientwarfare:misc/materialWood2", 1);
-  this.addSubtypeInfoToItem(componentItem, 2, "IronShod Wood Materials").addDisplayStack(wood3).setIconTexture("ancientwarfare:misc/materialWood3", 2);
-  this.addSubtypeInfoToItem(componentItem, 3, "Iron Cored Wood Materials").addDisplayStack(wood4).setIconTexture("ancientwarfare:misc/materialWood4", 3);
-  this.addSubtypeInfoToItem(componentItem, 4, "Rough Iron Materials").addDisplayStack(iron1).setIconTexture("ancientwarfare:misc/materialIron1", 4);
-  this.addSubtypeInfoToItem(componentItem, 5, "Fine Iron Materials").addDisplayStack(iron2).setIconTexture("ancientwarfare:misc/materialIron2", 5);
-  this.addSubtypeInfoToItem(componentItem, 6, "Tempered Iron Materials").addDisplayStack(iron3).setIconTexture("ancientwarfare:misc/materialIron3", 6);
-  this.addSubtypeInfoToItem(componentItem, 7, "Minor Alloy Iron Materials").addDisplayStack(iron4).setIconTexture("ancientwarfare:misc/materialIron4", 7);
-  this.addSubtypeInfoToItem(componentItem, 8, "Alloy Materials").addDisplayStack(iron5).setIconTexture("ancientwarfare:misc/materialIron5", 8);
-  this.addSubtypeInfoToItem(componentItem, 9, "Flame Charge").addDisplayStack(flameCharge).setIconTexture("ancientwarfare:ammo/ammoFlameCharge", 9);
-  this.addSubtypeInfoToItem(componentItem, 10, "Explosive Charge").addDisplayStack(explosiveCharge).setIconTexture("ancientwarfare:ammo/ammoExplosiveCharge", 10);
-  this.addSubtypeInfoToItem(componentItem, 11, "Rocket Charge").addDisplayStack(rocketCharge).setIconTexture("ancientwarfare:ammo/ammoRocketCharge", 11);
-  this.addSubtypeInfoToItem(componentItem, 12, "Cluster Charge").addDisplayStack(clusterCharge).setIconTexture("ancientwarfare:ammo/ammoClusterCharge", 12);
-  this.addSubtypeInfoToItem(componentItem, 13, "Napalm Charge").addDisplayStack(napalmCharge).setIconTexture("ancientwarfare:ammo/ammoNapalmCharge", 13);
-  this.addSubtypeInfoToItem(componentItem, 14, "Clay Casing").addDisplayStack(clayCasing).setIconTexture("ancientwarfare:ammo/ammoClayCasing", 14);
-  this.addSubtypeInfoToItem(componentItem, 15, "Iron Casing").addDisplayStack(ironCasing).setIconTexture("ancientwarfare:ammo/ammoIronCasing", 15);
-  this.addSubtypeInfoToItem(componentItem, 16, "Mobility Unit").addDisplayStack(mobilityUnit).setIconTexture("ancientwarfare:misc/vehicleMobilityUnit", 16);
-  this.addSubtypeInfoToItem(componentItem, 17, "Turret Unit").addDisplayStack(turretComponents).setIconTexture("ancientwarfare:misc/vehicleTurretUnit", 17);
-  this.addSubtypeInfoToItem(componentItem, 18, "Torsion Unit").addDisplayStack(torsionUnit).setIconTexture("ancientwarfare:misc/vehicleTorsionUnit", 18);
-  this.addSubtypeInfoToItem(componentItem, 19, "CounterWeight Unit").addDisplayStack(counterWeightUnit).setIconTexture("ancientwarfare:misc/vehicleCounterWeightUnit", 19);
-  this.addSubtypeInfoToItem(componentItem, 20, "Powder Case").addDisplayStack(powderCase).setIconTexture("ancientwarfare:misc/vehiclePowderUnit", 20);
-  this.addSubtypeInfoToItem(componentItem, 21, "Equipment Bay").addDisplayStack(equipmentBay).setIconTexture("ancientwarfare:misc/vehicleEquipmentBay", 21);
-  this.addSubtypeInfoToItem(componentItem, 22, "Iron Rings").addDisplayStack(ironRings).setIconTexture("ancientwarfare:misc/ironRings", 22);
-  this.addSubtypeInfoToItem(componentItem, 23, "Cement").addDisplayStack(cement).setIconTexture("ancientwarfare:misc/cement", 23);
+  this.addSubtypeInfoToItem(componentItem, 0, "item.component.0").addTooltip("item.component.0.tooltip", 0).addDisplayStack(wood1).setIconTexture("ancientwarfare:misc/materialWood1", 0);
+  this.addSubtypeInfoToItem(componentItem, 1, "item.component.1").addTooltip("item.component.1.tooltip", 1).addDisplayStack(wood2).setIconTexture("ancientwarfare:misc/materialWood2", 1);
+  this.addSubtypeInfoToItem(componentItem, 2, "item.component.2").addTooltip("item.component.2.tooltip", 2).addDisplayStack(wood3).setIconTexture("ancientwarfare:misc/materialWood3", 2);
+  this.addSubtypeInfoToItem(componentItem, 3, "item.component.3").addTooltip("item.component.3.tooltip", 3).addDisplayStack(wood4).setIconTexture("ancientwarfare:misc/materialWood4", 3);
+  this.addSubtypeInfoToItem(componentItem, 4, "item.component.4").addTooltip("item.component.4.tooltip", 4).addDisplayStack(iron1).setIconTexture("ancientwarfare:misc/materialIron1", 4);
+  this.addSubtypeInfoToItem(componentItem, 5, "item.component.5").addTooltip("item.component.5.tooltip", 5).addDisplayStack(iron2).setIconTexture("ancientwarfare:misc/materialIron2", 5);
+  this.addSubtypeInfoToItem(componentItem, 6, "item.component.6").addTooltip("item.component.6.tooltip", 6).addDisplayStack(iron3).setIconTexture("ancientwarfare:misc/materialIron3", 6);
+  this.addSubtypeInfoToItem(componentItem, 7, "item.component.7").addTooltip("item.component.7.tooltip", 7).addDisplayStack(iron4).setIconTexture("ancientwarfare:misc/materialIron4", 7);
+  this.addSubtypeInfoToItem(componentItem, 8, "item.component.8").addTooltip("item.component.8.tooltip", 8).addDisplayStack(iron5).setIconTexture("ancientwarfare:misc/materialIron5", 8);
+  this.addSubtypeInfoToItem(componentItem, 9, "item.component.9").addTooltip("item.component.9.tooltip", 9).addDisplayStack(flameCharge).setIconTexture("ancientwarfare:ammo/ammoFlameCharge", 9);
+  this.addSubtypeInfoToItem(componentItem, 10, "item.component.10").addTooltip("item.component.10.tooltip", 10).addDisplayStack(explosiveCharge).setIconTexture("ancientwarfare:ammo/ammoExplosiveCharge", 10);
+  this.addSubtypeInfoToItem(componentItem, 11, "item.component.11").addTooltip("item.component.11.tooltip", 11).addDisplayStack(rocketCharge).setIconTexture("ancientwarfare:ammo/ammoRocketCharge", 11);
+  this.addSubtypeInfoToItem(componentItem, 12, "item.component.12").addTooltip("item.component.12.tooltip", 12).addDisplayStack(clusterCharge).setIconTexture("ancientwarfare:ammo/ammoClusterCharge", 12);
+  this.addSubtypeInfoToItem(componentItem, 13, "item.component.13").addTooltip("item.component.13.tooltip", 13).addDisplayStack(napalmCharge).setIconTexture("ancientwarfare:ammo/ammoNapalmCharge", 13);
+  this.addSubtypeInfoToItem(componentItem, 14, "item.component.14").addTooltip("item.component.14.tooltip", 14).addDisplayStack(clayCasing).setIconTexture("ancientwarfare:ammo/ammoClayCasing", 14);
+  this.addSubtypeInfoToItem(componentItem, 15, "item.component.15").addTooltip("item.component.15.tooltip", 15).addDisplayStack(ironCasing).setIconTexture("ancientwarfare:ammo/ammoIronCasing", 15);
+  this.addSubtypeInfoToItem(componentItem, 16, "item.component.16").addTooltip("item.component.16.tooltip", 16).addDisplayStack(mobilityUnit).setIconTexture("ancientwarfare:misc/vehicleMobilityUnit", 16);
+  this.addSubtypeInfoToItem(componentItem, 17, "item.component.17").addTooltip("item.component.17.tooltip", 17).addDisplayStack(turretComponents).setIconTexture("ancientwarfare:misc/vehicleTurretUnit", 17);
+  this.addSubtypeInfoToItem(componentItem, 18, "item.component.18").addTooltip("item.component.18.tooltip", 18).addDisplayStack(torsionUnit).setIconTexture("ancientwarfare:misc/vehicleTorsionUnit", 18);
+  this.addSubtypeInfoToItem(componentItem, 19, "item.component.19").addTooltip("item.component.19.tooltip", 19).addDisplayStack(counterWeightUnit).setIconTexture("ancientwarfare:misc/vehicleCounterWeightUnit", 19);
+  this.addSubtypeInfoToItem(componentItem, 20, "item.component.20").addTooltip("item.component.20.tooltip", 20).addDisplayStack(powderCase).setIconTexture("ancientwarfare:misc/vehiclePowderUnit", 20);
+  this.addSubtypeInfoToItem(componentItem, 21, "item.component.21").addTooltip("item.component.21.tooltip", 21).addDisplayStack(equipmentBay).setIconTexture("ancientwarfare:misc/vehicleEquipmentBay", 21);
+  this.addSubtypeInfoToItem(componentItem, 22, "item.component.22").addTooltip("item.component.22.tooltip", 22).addDisplayStack(ironRings).setIconTexture("ancientwarfare:misc/ironRings", 22);
+  this.addSubtypeInfoToItem(componentItem, 23, "item.component.23").addTooltip("item.component.23.tooltip", 23).addDisplayStack(cement).setIconTexture("ancientwarfare:misc/cement", 23);
   }
 
 private void loadDebugItems()
@@ -176,7 +180,7 @@ private void loadDebugItems()
     return;
     }  
   blockScanner = new ItemBlockScanner(Config.getItemID("debug.blockScanner", 9000));
-  this.registerItemSingle(blockScanner, "Block Scanner", "Block Scanning Tool","Display id/meta from block clicked.").setIconTexture("ancientwarfare:testIcon1", 0);
+  this.registerItemSingle(blockScanner, "item.single.debug.blockScanner", "item.single.debug.blockScanner.description","item.single.debug.blockScanner.tooltip").setIconTexture("ancientwarfare:testIcon1", 0);
   }
 
 public Description registerItemSubtyped(AWItemBase item)

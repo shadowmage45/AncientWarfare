@@ -34,11 +34,8 @@ public class ResearchExplosives extends ResearchGoal
 public ResearchExplosives(int num, int level)
   {
   super(num);
-  this.displayName = "Explosives " + (level+1);
-  this.detailedDescription.add("Researching Explosives furthers knowledge" +
-  		" about all things that go BOOM.  Learn how to blow things up without" +
-  		" dying in the process.This research is necessary for ammunitions" +
-  		" and landmines that have explosive properties.");
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.researchTime = 1200 * (level+1);
   this.addResource(new ItemStack(Item.gunpowder, (level+1)*2 ), false, false);
   this.addResource(new ItemStack(Item.ingotIron, level+1), false, false);

@@ -34,8 +34,8 @@ public class VehicleArmorObsidian extends VehicleArmorBase
 public VehicleArmorObsidian(int armorType)
   {
   super(armorType);
-  this.displayName = "Obsidian Armor Tier 1";
-  this.tooltip = "Explosive damage - 7%";
+  this.displayName = "item.vehicleArmor.obsidian";
+  this.tooltip = "item.vehicleArmor.obsidian.tooltip";
   this.general = 2.5f;
   this.explosive = 7.f;
   this.fire = 2.5f;

@@ -283,63 +283,57 @@ public static void renderCivicBoundingBoxes(World world, EntityPlayer player, fl
     }
   }
 
-public static void setTeamRenderColor(int teamNum)
+static int[][] colors = new int[16][3];
+
+static
+{
+colors[0] = new int[]{221,221,221};
+colors[1] = new int[]{219,125,62};
+colors[2] = new int[]{179,80,188};
+colors[3] = new int[]{107,138,201};
+colors[4] = new int[]{177,166,39};
+colors[5] = new int[]{65,174,56};
+colors[6] = new int[]{208,132,153};
+colors[7] = new int[]{64,64,64};
+colors[8] = new int[]{154,161,161};
+colors[9] = new int[]{46,110,137};
+colors[10] = new int[]{126,61,181};
+colors[11] = new int[]{46,56,141};
+colors[12] = new int[]{79,50,31};
+colors[13] = new int[]{53,70,27};
+colors[14] = new int[]{150,52,48};
+colors[15] = new int[]{25,22,22};
+}
+static int[] colorWhite = new int[]{255,255,255};
+
+public static int[] getRenderColorFor(int color)
   {
-  switch(teamNum)
-  {
-  case 0:
-  GL11.glColor3ub((byte)221,(byte)221,(byte)221); 
-  break;
-  case 1:  
-  GL11.glColor3ub((byte)219,(byte)125,(byte)62);  
-  break;     
-  case 2:
-  GL11.glColor3ub((byte)179,(byte)80,(byte)188); 
-  break;      
-  case 3:
-  GL11.glColor3ub((byte)107,(byte)138,(byte)201); 
-  break;      
-  case 4:
-  GL11.glColor3ub((byte)177,(byte)166,(byte)39); 
-  break;
-  case 5:
-  GL11.glColor3ub((byte)65,(byte)174,(byte)56); 
-  break;
-  case 6:
-  GL11.glColor3ub((byte)208,(byte)132,(byte)153); 
-  break;
-  case 7:
-  GL11.glColor3ub((byte)64,(byte)64,(byte)64); 
-  break;
-  case 8:
-  GL11.glColor3ub((byte)154,(byte)161,(byte)161); 
-  break;  
-  case 9:
-  GL11.glColor3ub((byte)46,(byte)110,(byte)137); 
-  break;
-  case 10:
-  GL11.glColor3ub((byte)126,(byte)61,(byte)181); 
-  break;
-  case 11:
-  GL11.glColor3ub((byte)46,(byte)56,(byte)141); 
-  break;
-  case 12:
-  GL11.glColor3ub((byte)79,(byte)50,(byte)31); 
-  break;
-  case 13:
-  GL11.glColor3ub((byte)53,(byte)70,(byte)27); 
-  break;
-  case 14:
-  GL11.glColor3ub((byte)150,(byte)52,(byte)48); 
-  break;
-  case 15:
-  GL11.glColor3ub((byte)25,(byte)22,(byte)22); 
-  break;
-  default:
-  GL11.glColor4f(1, 1, 1, 1);  
-  break;
-  }    
+  if(color <0 || color>=16)
+    {
+    return colorWhite;
+    }
+  return colors[color];     
   }
 
+public static void setTeamRenderColor(int teamNum)
+  {
+  int[] color = getRenderColorFor(teamNum);
+  GL11.glColor3ub((byte)color[0], (byte)color[1], (byte)color[2]); 
+  }
+
+/**
+ * from meta of 0-15 return the composite color (ARGB) for rendering
+ * @param woolColor
+ * @return
+ */
+public static int getCompositeColor(int woolColor)
+  {
+  int color = 0;
+  int colors[] = getRenderColorFor(woolColor);
+  color = color | (colors[0]<<16);
+  color = color | (colors[1]<<8);
+  color = color | (colors[2]);
+  return color;
+  }
 
 }

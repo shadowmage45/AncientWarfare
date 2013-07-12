@@ -35,12 +35,8 @@ public class ResearchCounterweights extends ResearchGoal
 public ResearchCounterweights(int num, int level)
   {
   super(num);
-  this.displayName = "Counterweights "+(level+1);  
-  this.detailedDescription.add("Researching counterweights advances knowledge" +
-  		" regarding the application of weight and leverage to increase range, damage," +
-  		" and effiency of weight based siege weapons.  Higher ranks unlock access to" +
-  		" higher tiers of counterweight based vehicles (if all other prerequisites for" +
-  		" the vehicle have been met).");
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.researchTime = 900 * (level+1);
   this.addResource(new ItemStack(Block.cobblestone, (level+1)*2), false, false);
   this.addResource(new ItemStack(Item.ingotIron, (level+2)/2), false, false);

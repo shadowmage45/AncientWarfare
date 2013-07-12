@@ -102,20 +102,20 @@ public static int logistics5 = 134;
 
 
 /**
- * efficiency 175-199
+ * unused 175-199
  */
-public static int efficiencyWood1 = 175;
-public static int efficiencyWood2 = 176;
-public static int efficiencyWood3 = 177;
-public static int efficiencyIron1 = 178;
-public static int efficiencyIron2 = 179;
-public static int efficiencyIron3 = 180;
-public static int efficiencyConstructionCommon1 = 181;
-public static int efficiencyConstructionCommon2 = 182;
-public static int efficiencyConstructionCommon3 = 183;
-public static int efficiencyConstructionUncommon1 = 184;
-public static int efficiencyConstructionUncommon2 = 185;
-public static int efficiencyConstructionUncommon3 = 186;
+//public static int efficiencyWood1 = 175;
+//public static int efficiencyWood2 = 176;
+//public static int efficiencyWood3 = 177;
+//public static int efficiencyIron1 = 178;
+//public static int efficiencyIron2 = 179;
+//public static int efficiencyIron3 = 180;
+//public static int efficiencyConstructionCommon1 = 181;
+//public static int efficiencyConstructionCommon2 = 182;
+//public static int efficiencyConstructionCommon3 = 183;
+//public static int efficiencyConstructionUncommon1 = 184;
+//public static int efficiencyConstructionUncommon2 = 185;
+//public static int efficiencyConstructionUncommon3 = 186;
 
 /**
  * vehicle materials 200-249
@@ -140,12 +140,4 @@ public static final int command3 = 252;
 public static final int command4 = 253;
 public static final int command5 = 254;
 
-
-/**
- * pilot skills 300-324
- */
-
-/**
- * command skills? 325-349
- */
 }

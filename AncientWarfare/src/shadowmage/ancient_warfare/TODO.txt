@@ -2,6 +2,10 @@ PORTING TO 1.6
 * Instead of renderEngine.bindTexture(String path), use:
     renderEngine.func_110577_a(new ResourceLocation("modID","texture path"))
 
+PRE OPEN BETA
+* reinforced blocks
+* better system for making rations (special machine probably with auto-output?)
+
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
 * death message from missiles is untranslated
@@ -19,8 +23,6 @@ FROM TESTING
 * industrial mailbox gui needs elements centered
 * research book gui search box needs moved down a few pixels
 * large trebuchet health should be increased
-* deluxe chunkloader gui
-* deluxe chunkloader container
 * deluxe chunkloader world rendering
 
 LANGUAGE/TRANSLATIONS
@@ -232,4 +234,41 @@ TWEAKS/OPTIMIZATION
 
 /********** 07-11-13 **********/
 * work on setting up jenkins build system
+* add preliminary functionality to deluxe chunkloader
+* prep work on localization support
+* get jenkins build server setup @ home
+
+/********** 07-12-13 **********/
+* more work on localization support -- converting existing stuff over to localization system
+    * component items
+    * single items
+    * backpack
+    * routing slip
+    * vehicle armor items
+    * gates
+    * civics
+    * npcs
+    * research
+
+/********** 07-13-13 **********/
+/********** 07-14-13 **********/
+/********** 07-15-13 **********/
+/********** 07-16-13 **********/
+/********** 07-17-13 **********/
+/********** 07-18-13 **********/
+/********** 07-19-13 **********/
+/********** 07-20-13 **********/
+/********** 07-21-13 **********/
+/********** 07-22-13 **********/
+/********** 07-23-13 **********/
+/********** 07-24-13 **********/
+/********** 07-25-13 **********/
+/********** 07-26-13 **********/
+/********** 07-27-13 **********/
+/********** 07-28-13 **********/
+/********** 07-29-13 **********/
+/********** 07-30-13 **********/
+
+
+
 

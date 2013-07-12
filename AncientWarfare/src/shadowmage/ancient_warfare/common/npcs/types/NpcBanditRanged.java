@@ -51,17 +51,15 @@ public class NpcBanditRanged extends NpcTypeBase
 public NpcBanditRanged(int type)
   {
   super(type);
-  this.displayName = "Bandit Archer";
   this.configName = "bandit_archer";
-  this.tooltip = "Adept at bow-use";
   this.isCombatUnit = true;  
   this.iconTexture = "npcArcher";
   this.isAvailableInSurvival = false;
   this.isBandit = true;
-  this.addLevel("Bandit Archer", Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setRange(20).setAccuracy(0.88f).setUpkeep(6);
-  this.addLevel("Bandit Archer", Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setRange(20).setAccuracy(0.91f).setUpkeep(8);
-  this.addLevel("Bandit Archer", Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setRange(20).setAccuracy(0.94f).setUpkeep(8);
-  this.addLevel("Bandit Archer", Config.texturePath + "models/npcDefault.png", getToolStack(3), getArmorStack(3)).setRange(20).setAccuracy(0.97f).setUpkeep(10);
+  this.addLevel(type, 0, Config.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setRange(20).setAccuracy(0.88f).setUpkeep(6);
+  this.addLevel(type, 1, Config.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setRange(20).setAccuracy(0.91f).setUpkeep(8);
+  this.addLevel(type, 2, Config.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setRange(20).setAccuracy(0.94f).setUpkeep(8);
+  this.addLevel(type, 3, Config.texturePath + "models/npcDefault.png", getToolStack(3), getArmorStack(3)).setRange(20).setAccuracy(0.97f).setUpkeep(10);
   this.defaultTargets = defaultTargetList;
   }
 

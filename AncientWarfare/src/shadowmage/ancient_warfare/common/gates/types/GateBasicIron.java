@@ -35,8 +35,8 @@ public GateBasicIron(int id)
   {
   super(id);
   this.modelType = 1; 
-  this.displayName = "Gate Basic Iron";
-  this.tooltip = "Opens upwards";
+  this.displayName = "item.gate.1";
+  this.tooltip = "item.gate.1.tooltip";
   this.texture = "gateIron1.png";
   this.iconTexture = "gateIronBasic";
   this.neededResearch.add(ResearchGoalNumbers.iron1);

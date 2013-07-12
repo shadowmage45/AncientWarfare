@@ -34,11 +34,8 @@ public class ResearchRockets extends ResearchGoal
 public ResearchRockets(int num, int level)
   {
   super(num);
-  this.displayName = "Rockets " + (level+1);
-  this.detailedDescription.add("Researching Rockets furthers knowledge regarding" +
-  		" the application of explosive materials as propellent, and the safe and" +
-  		" efficient use and construction of weapons involving such materials.  This" +
-  		" research is needed for any rocket-based ammunition.");
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.researchTime = 1200 * (level+1);
   this.addResource(new ItemStack(Item.gunpowder, (level+1)*2 ), false, false);
   this.addResource(new ItemStack(Item.ingotIron, level+1), false, false);

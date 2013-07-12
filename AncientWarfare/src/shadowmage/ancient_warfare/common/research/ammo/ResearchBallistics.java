@@ -34,12 +34,9 @@ public class ResearchBallistics extends ResearchGoal
 public ResearchBallistics(int num, int level)
   {
   super(num);
-  this.displayName = "Ballistics " + (level+1);
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.researchTime = 1200 * (level+1);
-  this.detailedDescription.add("Researching Ballistics increases knowledge regarding ballistic" +
-  		" properties of missiles in flight.  Higher ranks allow for construction of more advanced" +
-  		" ammunition designs and proficiency in their use.  This research is needed for most" +
-  		" advanced ammunitions.");
   this.addResource(new ItemStack(Item.silk, level+1), false, false);
   this.addResource(new ItemStack(Item.dyePowder, level+1, 0), false, false);
   this.addResource(new ItemStack(Item.paper, (level+1)*2), false, false);

@@ -34,13 +34,8 @@ public class ResearchTorsion extends ResearchGoal
 public ResearchTorsion(int num, int level)
   {
   super(num);
-  this.displayName = "Torsion Weapons " + (level+1);
-  this.detailedDescription.add("Researching Torsion Weapons advances knowledge" +
-  		" of safe conststruction and use of torsion based weapons (using twisted fibers" +
-  		" to store energy).  Higher ranks unlock access to higher tiers of torsion" +
-  		" based vehicles (if all other prerequisites for the vehicle have been met)." +
-  		"  Torsion Weapons 1 is granted to all new players, to allow access to basic Catpult and" +
-  		" Ballista vehicles.");
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.researchTime = 900 * (level+1);
   this.addResource(new ItemStack(Block.planks, (level+1)), true, false);
   this.addResource(new ItemStack(Item.ingotIron, (level+2)/2), false, false);

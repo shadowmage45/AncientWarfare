@@ -33,8 +33,8 @@ public class VehicleArmorIron extends VehicleArmorBase
 public VehicleArmorIron(int armorType)
   {
   super(armorType);
-  this.displayName = "Iron Armor Tier 1";
-  this.tooltip = "Most damage - 7%";
+  this.displayName = "item.vehicleArmor.iron";
+  this.tooltip = "item.vehicleArmor.iron.tooltip";
   this.general = 7.0f;
   this.explosive = 2.5f;
   this.fire = 2.5f;

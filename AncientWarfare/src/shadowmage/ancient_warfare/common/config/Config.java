@@ -236,7 +236,7 @@ public void setKingdomInfo()
       defaults = t.getDefaultTargets();
       if(defaults!=null && defaults.length>0)
         {
-        config.get("d-npc_target_settings", name, defaults, "Forced targets for npc type: "+t.getDisplayName());
+        config.get("d-npc_target_settings", name, defaults, "Forced targets for npc type: "+t.getConfigName());
         }
       }
     }

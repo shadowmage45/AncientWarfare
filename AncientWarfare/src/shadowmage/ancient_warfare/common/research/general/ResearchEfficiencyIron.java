@@ -37,6 +37,9 @@ VehicleMaterial material;
 public ResearchEfficiencyIron(int num, int level)
   {
   super(num);
+
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.material = VehicleMaterial.materialIron;
   this.displayName = "Efficiency: Iron Materials" + (level+1);
   this.researchTime = 1200 * (level+1);

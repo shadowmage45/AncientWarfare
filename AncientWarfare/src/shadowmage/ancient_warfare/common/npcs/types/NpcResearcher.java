@@ -52,12 +52,10 @@ public class NpcResearcher extends NpcTypeBase
 public NpcResearcher(int type)
   {
   super(type);
-  this.displayName = "Researcher";
-  this.tooltip = "Works on Research";
   this.iconTexture = "npcResearcher";
-  this.addLevel("Novice Researcher", Config.texturePath + "models/npc/npcResearcher.png", getToolStack(0), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
-  this.addLevel("Adept Researcher", Config.texturePath + "models/npc/npcResearcher.png", getToolStack(1), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
-  this.addLevel("Expert Researcher", Config.texturePath + "models/npc/npcResearcher.png", getToolStack(2), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
+  this.addLevel(type, 0, Config.texturePath + "models/npc/npcResearcher.png", getToolStack(0), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
+  this.addLevel(type, 1, Config.texturePath + "models/npc/npcResearcher.png", getToolStack(1), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
+  this.addLevel(type, 2, Config.texturePath + "models/npc/npcResearcher.png", getToolStack(2), null).addTargetType(CivicWorkType.RESEARCH).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
   this.configName = "civilian";

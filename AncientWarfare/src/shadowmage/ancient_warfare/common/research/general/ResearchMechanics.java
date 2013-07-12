@@ -34,11 +34,9 @@ public class ResearchMechanics extends ResearchGoal
 public ResearchMechanics(int num, int level)
   {
   super(num);
-  this.displayName = "Mechanicics "+ (level+1);
+  this.displayName = "research."+num;
+  this.detailedDescription.add("research."+num+".description");
   this.researchTime = 900 * (level+1);
-  this.detailedDescription.add("Researching Mechanics advances knowledge in the field of" +
-  		" mechanical engineering.  Higher ranks of Mechanics allow for the creation of more" +
-  		" advanced vehicle upgrades and other mechanical based devices.");
   this.addResource(new ItemStack(Item.silk, level+1), false, false);
   this.addResource(new ItemStack(Item.ingotIron, level+1), false, false);
   this.addResource(new ItemStack(Item.stick, level+1), false, false);
