@@ -251,11 +251,11 @@ TWEAKS/OPTIMIZATION
     * gates
     * civics
     * npcs
-    * research
-    
+    * research    
 * fixup localization support code for npcs    
 * add ammo localization support
 
+* update build script to include language files
 
 /********** 07-13-13 **********/
 /********** 07-14-13 **********/
