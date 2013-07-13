@@ -233,8 +233,10 @@ TWEAKS/OPTIMIZATION
 * add ammo localization support
 * update build script to include language files
 * minor work on reinforced blocks.  they now break at different speeds depending upon if on placing team or not
-
 * first pass of gui localization cleanup -- items/recipes/info guis (have not touched other text yet)
+
+* fix localization of detailed description in research goal gui
+* fix some spelling errors in research goal descriptions
 
 /********** 07-13-13 **********/
 /********** 07-14-13 **********/

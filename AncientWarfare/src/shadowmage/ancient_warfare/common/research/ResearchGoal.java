@@ -256,6 +256,17 @@ public List<String> getDetailedDescription()
   }
 
 @Override
+public List<String> getLocalizedDescription()
+  {
+  ArrayList<String> trans = new ArrayList<String>();
+  for(String s : this.getDetailedDescription())
+    {
+    trans.add(StringTranslate.getInstance().translateKey(s));
+    }
+  return trans;
+  }
+
+@Override
 public IResearchGoal getGoalByNumber(int num)
   {
   if(num>=0 && num < this.researchGoals.length)

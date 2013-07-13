@@ -38,6 +38,7 @@ public abstract String getDisplayTooltip();
 public abstract String getLocalizedTooltip();
 public abstract HashSet<IResearchGoal> getDependencies();
 public abstract List<String> getDetailedDescription();
+public abstract List<String> getLocalizedDescription();
 public abstract IResearchGoal getGoalByNumber(int num);
 public abstract IResearchGoal addDependencies(IResearchGoal... deps);
 public abstract IResearchGoal addDependencies(Integer... deps);

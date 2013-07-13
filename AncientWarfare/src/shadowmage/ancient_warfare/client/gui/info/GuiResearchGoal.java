@@ -105,7 +105,7 @@ public void setupControls()
   
   this.area = new GuiScrollableArea(0, this, 5, 5+16+5+30, 256-10, 240-10-16-5-30, 0);
   int nextElementY = 0;
-  List<String> descriptionLines = RenderTools.getFormattedLines(this.goal.getDetailedDescription(), 200);
+  List<String> descriptionLines = RenderTools.getFormattedLines(this.goal.getLocalizedDescription(), 200);
   int ticks = goal.getResearchTime();
   int seconds = ticks/20;
   int minutes = seconds/60;
