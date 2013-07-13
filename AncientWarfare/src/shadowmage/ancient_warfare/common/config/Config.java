@@ -23,6 +23,8 @@
 package shadowmage.ancient_warfare.common.config;
 
 import java.io.File;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,14 +36,9 @@ import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 public class Config
 {
 //*******************************************************FIELDS**********************************************//
-
-public static final String CORE_VERSION_MAJOR = "0.1.0";
-public static final String CORE_VERSION_BUILD = "014";
-public static final String CORE_BUILD_STATUS = "alpha";
-public static final String MC_VERSION = "1.5.2";
+public static final String VERSION = "0.0.014-alpha-MC152";//major version(mc version updates), minor version(releases), build version(test releases total)
 
 public static String texturePath = "/mods/ancientwarfare/textures/";
-public static String languagePath = "/shadowmage/ancient_warfare/resources/lang/";
 
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
@@ -101,6 +98,31 @@ public static Config instance()
 
 private static Configuration config;
 private static Logger logger;
+
+//**************************************************STATIC VERSION LOADING*****************************************************//
+
+private static final String loadVersion()
+  {
+  String version = "ERROR";
+  InputStream is = Config.class.getResourceAsStream("shadowmage/ancient_warfare/resources/version.properties");
+  Properties p = new Properties();
+  try
+    {
+    p.load(is);
+    version = p.getProperty("version");
+    if(version ==null)
+      {
+      version = "ERROR";
+      }
+    is.close();
+    }
+  catch(Exception e)
+    {  
+    e.printStackTrace();
+    version = "ERROR";
+    }  
+  return version;
+  }
 
 //**************************************************LOGGER*****************************************************//
 

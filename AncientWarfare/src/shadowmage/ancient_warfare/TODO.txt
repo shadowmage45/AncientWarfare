@@ -21,6 +21,10 @@ PRE OPEN BETA
     vehicle
 * battering ram needs damage-code implemented
 * finish adding world gen and village gen structures
+    add log cabin as a village structure, perhaps with a random NPC in it
+    add fountain as random world-gen structure (find good validation settings)
+    add fortress as village gen structure (need to finish it first)
+    randomly add bandits to world during world-gen on surface (spawn in packs of 2-3, 1xarcher 1xmelee ?xcommander)
     
 PRE FULL RELEASE
 * NEI plugin
@@ -253,9 +257,10 @@ TWEAKS/OPTIMIZATION
 * add numerical extras to research goal names to help differentiate them
 * add npc nameplate localization support
 * add vehicle nameplate localization support
-
 * add direct localization support to ICivicType
 * cleanup of civic GUIs (normal/town hall) -- adjust to dynamically reposition slots and elements to fill up the screen more logically
+
+* update build script for automatic version numbering (requires version number in config + version.properties)
 
 /********** 07-14-13 **********/
 /********** 07-15-13 **********/
