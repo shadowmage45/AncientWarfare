@@ -557,7 +557,7 @@ protected void addRecipeButtons(List<ResourceListRecipe> recipes, Comparator sor
   int num = 100;
   for(ResourceListRecipe recipe : recipes)
     {      
-    button = new GuiButtonSimple(num, area, buttonWidth, 16, recipe.getDisplayName());
+    button = new GuiButtonSimple(num, area, buttonWidth, 16, recipe.getLocalizedDisplayName());
     button.updateRenderPos(x, y);
     button.setTooltip(tooltip);
     area.addGuiElement(button);

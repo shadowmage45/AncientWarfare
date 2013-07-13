@@ -32,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StringTranslate;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -168,6 +169,11 @@ public ItemStack getResult()
 public String getDisplayName()
   {
   return this.displayName;
+  }
+
+public String getLocalizedDisplayName()
+  {
+  return StringTranslate.getInstance().translateKey(getDisplayName());
   }
 
 public ResourceListRecipe setDisplayName(String name)

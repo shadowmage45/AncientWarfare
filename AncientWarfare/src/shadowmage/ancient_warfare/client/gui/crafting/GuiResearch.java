@@ -27,6 +27,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.info.GuiRecipeDetails;
 import shadowmage.ancient_warfare.client.gui.info.GuiResearchGoal;
@@ -96,7 +97,7 @@ protected void addRecipeButtons(List<ResourceListRecipe> recipes,  Comparator so
       {
       continue;
       }
-    button = new GuiButtonSimple(num, area, buttonWidth, 16, recipe.getDisplayName());
+    button = new GuiButtonSimple(num, area, buttonWidth, 16, StringTranslate.getInstance().translateKey(recipe.getLocalizedDisplayName()));
     button.updateRenderPos(x, y);
     button.setTooltip(tooltip);
     area.addGuiElement(button);

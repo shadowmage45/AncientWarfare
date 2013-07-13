@@ -33,7 +33,9 @@ public interface IResearchGoal
 
 public abstract int getGlobalResearchNum();
 public abstract String getDisplayName();
+public abstract String getLocalizedName();
 public abstract String getDisplayTooltip();
+public abstract String getLocalizedTooltip();
 public abstract HashSet<IResearchGoal> getDependencies();
 public abstract List<String> getDetailedDescription();
 public abstract IResearchGoal getGoalByNumber(int num);

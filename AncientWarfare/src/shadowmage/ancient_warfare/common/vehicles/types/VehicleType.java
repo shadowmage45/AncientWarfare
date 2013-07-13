@@ -521,7 +521,7 @@ public ResourceListRecipe constructRecipe(int level)
   recipe.addResource(this.getMaterialType().getItem(level).copy(), this.getMaterialQuantity(), false, false);  
   recipe.addResources(getAdditionalMaterials());
   recipe.addNeededResearch(this.neededResearch.get(level));
-  recipe.setDisplayName(getDisplayName() + " "+(level+1));
+//  recipe.setDisplayName(getDisplayName() + " "+(level+1));
   return recipe;
   }
 

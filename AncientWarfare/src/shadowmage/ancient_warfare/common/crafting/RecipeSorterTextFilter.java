@@ -45,12 +45,12 @@ public int compare(ResourceListRecipe arg0, ResourceListRecipe arg1)
   if(arg0==null && arg1!=null){return 1;}
   else if(arg0!=null && arg1==null){return -1;}
   else if(arg0==null && arg1==null){return 0;}
-  String a = arg0.getDisplayName().toLowerCase();
-  String b = arg1.getDisplayName().toLowerCase();
+  String a = arg0.getLocalizedDisplayName().toLowerCase();
+  String b = arg1.getLocalizedDisplayName().toLowerCase();
   String tex = filterText.toLowerCase();
   if(a.startsWith(tex) && b.startsWith(tex))
     {
-    return arg0.getDisplayName().compareTo(arg1.getDisplayName());
+    return arg0.getLocalizedDisplayName().compareTo(arg1.getLocalizedDisplayName());
     }
   else if(a.startsWith(tex))
     {
@@ -60,7 +60,7 @@ public int compare(ResourceListRecipe arg0, ResourceListRecipe arg1)
     {
     return 1;
     }
-  return arg0.getDisplayName().compareTo(arg1.getDisplayName());  
+  return arg0.getLocalizedDisplayName().compareTo(arg1.getLocalizedDisplayName());  
   }
 
 }

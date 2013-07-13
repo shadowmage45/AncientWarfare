@@ -35,7 +35,7 @@ public GoalSorterAZ()
 @Override
 public int compare(IResearchGoal arg0, IResearchGoal arg1)
   {
-  return arg0.getDisplayName().compareTo(arg1.getDisplayName());
+  return arg0.getLocalizedName().compareTo(arg1.getLocalizedName());
   }
 
 }

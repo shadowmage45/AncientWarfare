@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
@@ -67,7 +68,7 @@ public GuiResearchGoal(GuiContainerAdvanced parent, IResearchGoal goal)
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawStringGui(goal.getDisplayName(), 5, 5, 0xffffffff); 
+  this.drawStringGui(goal.getLocalizedName(), 5, 5, 0xffffffff); 
   this.drawStringGui("Needed Resources:", 5, 5+10, 0xffffffff); 
   }
 
@@ -139,7 +140,7 @@ public void setupControls()
   GuiButtonSimple button;
   for(ResourceListRecipe recipe : recipes)
     {
-    button = new GuiButtonSimple(elementNum, area, 240-24 - 22, 16, recipe.getDisplayName());
+    button = new GuiButtonSimple(elementNum, area, 240-24 - 22, 16, recipe.getLocalizedDisplayName());
     button.updateRenderPos(22, nextElementY+1);
     button.addToToolitp("Click to view detailed recipe information");
     elementNum++;
@@ -159,7 +160,7 @@ public void setupControls()
   
   for(IResearchGoal g : ResearchGoal.getUnlocks(goal))
     {
-    button = new GuiButtonSimple(elementNum, area, 240-24, 16, g.getDisplayName());
+    button = new GuiButtonSimple(elementNum, area, 240-24, 16, g.getLocalizedName());
     button.updateRenderPos(0, nextElementY);
     button.addToToolitp("Click to view detailed research goal information");
     buttonGoalMap.put(button, g);

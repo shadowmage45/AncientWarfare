@@ -28,6 +28,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
@@ -338,6 +339,18 @@ public ResourceListRecipe constructRecipe()
   recipe.addNeededResearch(dependencies);
   recipe.addResources(getResearchResources());
   return recipe;
+  }
+
+@Override
+public String getLocalizedName()
+  {
+  return StringTranslate.getInstance().translateKey(getDisplayName());
+  }
+
+@Override
+public String getLocalizedTooltip()
+  {
+  return StringTranslate.getInstance().translateKey(getDisplayTooltip());
   }
 
 }

@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import net.minecraft.util.StringTranslate;
+
 import org.lwjgl.input.Keyboard;
 
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
@@ -74,9 +76,9 @@ public GuiInfoBase(GuiContainerAdvanced parent, ResourceListRecipe recipe)
   if(d!=null)
     {
     String s = d.getDescription(this.recipe.getResult().getItemDamage());
-    if(s!=null && s.equals(""))
+    if(s!=null && !s.equals(""))
       {
-      this.detailText.add(s);
+      this.detailText.add(StringTranslate.getInstance().translateKey(s));
       this.detailText.add("");
       }
     }
@@ -114,7 +116,7 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawStringGui(recipe.getDisplayName(), 5, 5, 0xffffffff);
+  this.drawStringGui(recipe.getLocalizedDisplayName(), 5, 5, 0xffffffff);
   this.drawStringGui("Required resources:", 5, 15, 0xffffffff);
   }
 
@@ -235,7 +237,7 @@ public void setupControls()
   GuiButtonSimple button;
   for(ResourceListRecipe recipe : recipes)
     {
-    button = new GuiButtonSimple(elementNum, area, 240-24 - 22, 16, recipe.getDisplayName());
+    button = new GuiButtonSimple(elementNum, area, 240-24 - 22, 16, recipe.getLocalizedDisplayName());
     button.updateRenderPos(22, nextElementY+1);
     button.addToToolitp("Click to view detailed recipe information");
     elementNum++;
@@ -253,7 +255,7 @@ public void setupControls()
   
   for(IResearchGoal g : recipe.getNeededResearch())
     {
-    button = new GuiButtonSimple(elementNum, area, 240-24, 16, g.getDisplayName());
+    button = new GuiButtonSimple(elementNum, area, 240-24, 16, g.getLocalizedName());
     button.updateRenderPos(0, nextElementY);
     button.addToToolitp("Click to view detailed research goal information");
     buttonGoalMap.put(button, g);

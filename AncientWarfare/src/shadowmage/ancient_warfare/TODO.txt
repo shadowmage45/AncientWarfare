@@ -10,6 +10,8 @@ PRE OPEN BETA
     civic
     npc
     vehicle
+* battering ram needs damage-code implemented
+* finish adding world gen and village gen structures
     
 PRE FULL RELEASE
 * NEI plugin
@@ -40,6 +42,7 @@ FROM TESTING
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
 * move all GUIs over from rendering static strings to rendering translated strings
+* add additional names for vehicles w/material
 
 BALANCE/TWEAKS
 * routing slips more expensive (use various dyes for them?)
@@ -68,20 +71,14 @@ GENERAL
 
 REINFORCED BLOCKS
 * id/meta dropped
-* rework explosion resistance...
+* rework explosion resistance/explosion damage system
 * figure out method to allow for partially destroyed blocks w/ destroyed texture rendering
-* block will track owner (placing player)
-    all attempts to break block except by owner will break as obsidian
-    owner will break as stone block
-    explosions will use partial-damage system
-        possible multiple textures for damages?
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally (hmm..)
 * cat mobile turret(fixed?) rider position is too far forward
 * pathfinding needs adjusted so that it doesn't need to be as close to the node to claim next (will help with aquatic pathfinding and the coast-hugging that npcs do)
 * re-allow theta pathfinding in water (it was disabled for crawler--fix crawler some other way)
-* battering ram needs damage-code implemented
 
 AIRPLANE
 
@@ -235,8 +232,9 @@ TWEAKS/OPTIMIZATION
 * fixup localization support code for npcs    
 * add ammo localization support
 * update build script to include language files
-
 * minor work on reinforced blocks.  they now break at different speeds depending upon if on placing team or not
+
+* first pass of gui localization cleanup -- items/recipes/info guis (have not touched other text yet)
 
 /********** 07-13-13 **********/
 /********** 07-14-13 **********/

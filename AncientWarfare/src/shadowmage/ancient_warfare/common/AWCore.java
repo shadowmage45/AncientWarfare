@@ -105,6 +105,7 @@ public void preInit(FMLPreInitializationEvent evt)
   Config.setLogger(evt.getModLog());
   Config.log("Starting Loading.  Version: "+"MC"+Config.MC_VERSION+"--"+Config.CORE_VERSION_MAJOR+"."+Config.CORE_VERSION_BUILD+"-"+Config.CORE_BUILD_STATUS);
 
+  LanguageLoader.instance().loadLanguageFiles();
   /**
    * register player tracker
    */
@@ -156,7 +157,6 @@ public void preInit(FMLPreInitializationEvent evt)
   VehicleRegistry.instance().registerVehicles();
   AWEntityRegistry.registerEntity(NpcBase.class, "Npc.NpcBase", 130, 3, true);
   AWEntityRegistry.registerEntity(EntityGate.class, "Gate.GateBase", 130, 100, false);
-  LanguageLoader.instance().loadLanguageFiles();
   Config.log("Ancient Warfare Pre-Init finished.");
   }
 

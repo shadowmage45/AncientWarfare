@@ -160,12 +160,12 @@ public void drawCurrentRecipeBackground()
 	 */
   if(this.container.currentRecipe!=null)
     {
-    this.drawStringGui(this.container.currentRecipe.getDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
+    this.drawStringGui(this.container.currentRecipe.getLocalizedDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
     this.renderItemStack(this.container.currentRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true);
     } 
   if(this.container.clientRecipe!=null)
     {
-    this.drawStringGui(this.container.clientRecipe.getDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
+    this.drawStringGui(this.container.clientRecipe.getLocalizedDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
     this.renderItemStack(this.container.clientRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true);
     } 
   }
@@ -219,7 +219,7 @@ public void onElementActivated(IGuiElement element)
   else if(element.getElementNumber()==3 && !this.container.isWorking)
     {
     NBTTagCompound tag = new NBTTagCompound();
-    tag.setString("set", this.container.clientRecipe.getDisplayName());
+    tag.setString("set", this.container.clientRecipe.getLocalizedDisplayName());
     this.sendDataToServer(tag);
     }
   break;
@@ -364,7 +364,7 @@ protected void addRecipeButtons(List<ResourceListRecipe> recipes, Comparator sor
   int num = 100;
   for(ResourceListRecipe recipe : recipes)
     {      
-    button = new GuiButtonSimple(num, area, buttonWidth, 16, recipe.getDisplayName());
+    button = new GuiButtonSimple(num, area, buttonWidth, 16, recipe.getLocalizedDisplayName());
     button.updateRenderPos(x, y);
     button.setTooltip(tooltip);
     area.addGuiElement(button);

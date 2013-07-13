@@ -38,7 +38,7 @@ public int compare(ResourceListRecipe arg0, ResourceListRecipe arg1)
   if(arg0==null && arg1!=null){return -1;}
   else if(arg0!=null && arg1==null){return 1;}
   else if(arg0==null && arg1==null){return 0;}
-  return arg0.getDisplayName().compareTo(arg1.getDisplayName());
+  return arg0.getLocalizedDisplayName().compareTo(arg1.getLocalizedDisplayName());
   }
 
 }

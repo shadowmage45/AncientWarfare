@@ -284,7 +284,7 @@ public void detectAndSendChanges()
     }
   else
     {
-    if(this.currentRecipe==null || !this.currentRecipe.getDisplayName().equals(ter.getDisplayName()))
+    if(this.currentRecipe==null || !this.currentRecipe.getLocalizedDisplayName().equals(ter.getLocalizedDisplayName()))
       {
       this.currentRecipe = te.getRecipe().copy();
       NBTTagCompound tag = new NBTTagCompound();
