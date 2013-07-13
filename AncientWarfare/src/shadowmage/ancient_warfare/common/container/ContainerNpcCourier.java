@@ -39,7 +39,10 @@ public class ContainerNpcCourier extends ContainerBase
 {
 
 NpcBase npc;
-
+public int playerSlotsY;
+public int inventorySlotsY;
+public int specSlotsY;
+public int totalHeight;
 /**
  * @param openingPlayer
  * @param synch
@@ -53,8 +56,15 @@ public ContainerNpcCourier(EntityPlayer openingPlayer, NpcBase npc)
   int slotNum;
   int xPos; 
   int yPos;
-  this.addPlayerSlots(openingPlayer, 8, 158, 4);    
   IInventory te = npc.inventory;
+  
+  this.inventorySlotsY = 4 + 10;
+  int invHeight = (te.getSizeInventory()/9 + (te.getSizeInventory()%9==0 ? 0 : 1)) * 18;
+  this.specSlotsY = this.inventorySlotsY + invHeight + 10;   
+  this.playerSlotsY = specSlotsY+18+10;
+  this.addPlayerSlots(openingPlayer, 8, this.playerSlotsY, 4);
+  this.totalHeight = (5*18+8+10)+specSlotsY; 
+  
   for(y = 0; y < te.getSizeInventory()/9; y++)
     {
     for(x = 0; x < 9; x++)
@@ -63,24 +73,24 @@ public ContainerNpcCourier(EntityPlayer openingPlayer, NpcBase npc)
       if(slotNum<te.getSizeInventory())
         {
         xPos = 8 + x * 18;
-        yPos = y * 18 + 15;      
+        yPos = y * 18 + this.inventorySlotsY;      
         Slot slot = new Slot(te, slotNum, xPos, yPos);
         this.addSlotToContainer(slot);        
         }
       }
-    } 
-  te = npc.specInventory;  
+    }    
+  te = npc.specInventory;
+  yPos = specSlotsY;
   for(x = 0; x < te.getSizeInventory(); x++)
     {
     slotNum = x;
     if(slotNum<te.getSizeInventory())
       {
-      xPos = 8 + x * 18;
-      yPos = 5 + 10 + 3*18 + 5+10;       
+      xPos = 8 + x * 18;       
       Slot slot = new Slot(te, slotNum, xPos, yPos);
       this.addSlotToContainer(slot);        
       }
-    }
+    } 
   }
 
 @Override

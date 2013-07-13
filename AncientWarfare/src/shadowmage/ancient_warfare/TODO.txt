@@ -16,9 +16,6 @@ MOD BETA TEST PACK
 PRE OPEN BETA
 * finish localization support (gui cleanup/validation)
 * better system for making rations (special machine probably with auto-output?)
-* gui polish
-    npc
-    vehicle
 * battering ram needs damage-code implemented
 * finish adding world gen and village gen structures
     add log cabin as a village structure, perhaps with a random NPC in it
@@ -259,8 +256,15 @@ TWEAKS/OPTIMIZATION
 * add vehicle nameplate localization support
 * add direct localization support to ICivicType
 * cleanup of civic GUIs (normal/town hall) -- adjust to dynamically reposition slots and elements to fill up the screen more logically
-
 * update build script for automatic version numbering (requires version number in config + version.properties)
+
+* more update of build script...probably need a better method to set version
+* add direct localization support to INpcType
+* udpate npc courier GUI with dynamic slot and element positioning
+* fix crash on load due to null input stream in language loader
+* update vehicle gui with with dynamic slot and element positioning
+* add direct localization support to IVehicleType
+* fix vehicle naming localization on vehicle stats gui
 
 /********** 07-14-13 **********/
 /********** 07-15-13 **********/

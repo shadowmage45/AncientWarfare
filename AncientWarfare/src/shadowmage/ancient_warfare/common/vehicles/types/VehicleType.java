@@ -28,6 +28,7 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StringTranslate;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
@@ -274,6 +275,12 @@ public float getWidth()
 public float getHeight()
   {
   return this.height;
+  }
+
+@Override
+public String getLocalizedName()
+  {
+  return StringTranslate.getInstance().translateKey(this.getDisplayName());
   }
 
 @Override

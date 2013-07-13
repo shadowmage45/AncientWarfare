@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.inventory.SlotVehicleAmmo;
 import shadowmage.ancient_warfare.common.inventory.SlotVehicleArmor;
@@ -41,6 +42,12 @@ public VehicleBase vehicle;
 
 public Slot[] storageSlots;
 
+public int storageY;
+
+public int extrasY;
+
+public int playerY;
+
 /**
  * @param openingPlayer
  * @param synch
@@ -54,23 +61,15 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
   int slotNum;
   int xPos; 
   int yPos;
-  for (x = 0; x < 9; ++x)//add player hotbar slots
-    {
-    slotNum = x;
-    xPos = 8 + x * 18;
-    yPos = 142+28;
-    this.addSlotToContainer(new Slot(openingPlayer.inventory, x, xPos, yPos));
-    }
-  for (y = 0; y < 3; ++y)
-    {
-    for (x = 0; x < 9; ++x)
-      {
-      slotNum = y*9 + x + 9;// +9 is to increment past hotbar slots
-      xPos = 8 + x * 18;
-      yPos = 84 + y * 18+28;
-      this.addSlotToContainer(new Slot(openingPlayer.inventory, slotNum, xPos, yPos));
-      }
-    }
+  
+  storageY = 4+10 + 20;
+  int invHeight = (vehicle.inventory.storageInventory.getSizeInventory()/9 + (vehicle.inventory.storageInventory.getSizeInventory()%9==0 ? 0 : 1)) * 18;
+  invHeight = invHeight > 3*18 ? 3*18 : invHeight;
+  extrasY = storageY + (invHeight==0 ? 0 : 10) + invHeight;
+  playerY = extrasY + 4 + 10 + 2*18;
+  Config.logDebug("set player inventory to: "+playerY);
+  this.addPlayerSlots(player, 8, playerY, 4);
+  
   for (y = 0; y < 2; y++)
     {
     for(x = 0; x <3 ;x++)
@@ -79,7 +78,7 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
       if(slotNum<vehicle.inventory.ammoInventory.getSizeInventory())
         {
         xPos = 8 + x * 18;
-        yPos = 84 + y * 18 - 2*18 - 5+28;
+        yPos = y * 18 +extrasY;
         this.addSlotToContainer(new SlotVehicleAmmo(vehicle.inventory.ammoInventory, vehicle, slotNum, xPos, yPos));
         }
       }
@@ -93,7 +92,7 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
       if(slotNum<vehicle.inventory.upgradeInventory.getSizeInventory())
         {
         xPos = 8 + x * 18 + 3*18 + 5;
-        yPos = 84 + y * 18 - 2*18 - 5+28;
+        yPos = y * 18 +extrasY;
         this.addSlotToContainer(new SlotVehicleUpgrade(vehicle.inventory.upgradeInventory, vehicle, slotNum, xPos, yPos));
         }
       }
@@ -106,7 +105,7 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
       if(slotNum<vehicle.inventory.armorInventory.getSizeInventory())
         {
         xPos = 8 + x * 18 + 6*18 + 2*5;
-        yPos = 84 + y * 18 - 2*18 - 5+28;
+        yPos = y * 18 +extrasY;
         this.addSlotToContainer(new SlotVehicleArmor(vehicle.inventory.armorInventory, vehicle, slotNum, xPos, yPos));
         }
       }
@@ -121,7 +120,7 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
       if(slotNum<vehicle.inventory.storageInventory.getSizeInventory())
         {
         xPos = 8 + x * 18;
-        yPos = 84 + y * 18 - 5*18 - 2*5+28;
+        yPos = y * 18 + storageY;
         if(slotNum>=27)
           {
           xPos = -1000;

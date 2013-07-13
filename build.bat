@@ -19,7 +19,7 @@ xcopy /e/i/q/y "%STARTPATH%\AncientWarfare\src\lang\*.*" "%STARTPATH%\build\lang
 echo ZIPPING AND FINISHING BUILD...............
 
 set version="BAD VERSION"
-FOR /F "usebackq eol=# tokens=1,2,3 delims==" %%i in (%STARTPATH%\AncientWarfare\src\shadowmage\ancient_warfare\resources\version.properties) do set version=%%j
+FOR /F "usebackq eol=# tokens=1,2,3 delims==" %%i in ("%STARTPATH%\AncientWarfare\src\shadowmage\ancient_warfare\resources\version.properties") do set version=%%j
 
 7za a -r build.zip .\build\*.*
 set DESTFILENAME=AW-%version%-%BUILD_NUMBER%.zip

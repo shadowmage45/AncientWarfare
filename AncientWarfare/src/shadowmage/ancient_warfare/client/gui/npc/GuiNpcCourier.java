@@ -24,17 +24,82 @@ import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerNpcCourier;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
-public class GuiNpcCourier extends GuiNpcBase
+public class GuiNpcCourier extends GuiContainerAdvanced
 {
+
+
+NpcBase npc;
+ContainerNpcCourier container;
 
 /**
  * @param container
  */
-public GuiNpcCourier(Container container,  NpcBase npc)
+public GuiNpcCourier(Container container, NpcBase npc)
   {
-  super(container, npc);
+  super(container);
+  this.container = (ContainerNpcCourier) container;
+  this.npc = npc;
+  this.shouldCloseOnVanillaKeys = true;
+  this.xSize = this.getXSize();
+  this.ySize = this.getYSize();
   }
+
+@Override
+public void onElementActivated(IGuiElement element)
+  {
+
+  }
+
+@Override
+public int getXSize()
+  {
+  return 176;
+  }
+
+@Override
+public int getYSize()
+  {
+  return this.container==null ? 240 : container.totalHeight+4;
+  }
+
+@Override
+public String getGuiBackGroundTexture()
+  {
+  return Config.texturePath+"gui/guiBackgroundLarge.png";
+  }
+
+@Override
+public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
+  {
+  this.drawStringGui("Inventory", 8, 4, WHITE);
+  if(npc.npcType.getSpecInventorySize(npc.rank)>0)
+    {
+    this.drawStringGui("Special Tools", 8, container.specSlotsY-10 , WHITE);
+    }  
+  this.drawStringGui(npc.npcType.getLocalizedName(npc.rank), 8 + 70, 4, WHITE);
+  this.drawStringGui("Player Inventory", 8, container.playerSlotsY-10, WHITE);
+  }
+
+@Override
+public void updateScreenContents()
+  {
+
+  }
+
+@Override
+public void setupControls()
+  {
+ 
+  }
+
+@Override
+public void updateControls()
+  {
+
+  }
+
 
 }

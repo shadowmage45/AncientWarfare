@@ -69,7 +69,7 @@ public String getGuiBackGroundTexture()
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   int color = 0xffffffff;
-  this.drawStringGui("Vehicle Type: " + vehicle.vehicleType.getDisplayName(), 10, 4, color);
+  this.drawStringGui("Vehicle Type: " + vehicle.vehicleType.getLocalizedName(), 10, 4, color);
   this.drawStringGui("Material Level: "+vehicle.vehicleMaterialLevel, 10, 14, color);
   this.drawStringGui("Health: "+vehicle.getHealth() + "/"+vehicle.baseHealth, 10, 24, color);
   this.drawStringGui("Weight: "+vehicle.currentWeight + "/"+vehicle.baseWeight, 10, 34, color);

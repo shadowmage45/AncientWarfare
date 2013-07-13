@@ -156,7 +156,10 @@ protected void loadOtherLocalizations()
         {
         LanguageRegistry.instance().addStringLocalization(defaultLanguage, langName);
         }
-      is.close();
+      if(is!=null)
+      {
+          is.close();    	  
+      }
       } 
     catch (IOException e)
       {

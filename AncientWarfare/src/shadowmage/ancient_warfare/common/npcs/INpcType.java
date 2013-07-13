@@ -36,7 +36,9 @@ public interface INpcType
 
 public abstract int getGlobalNpcType();
 public abstract String getDisplayName(int level);
+public abstract String getLocalizedName(int level);
 public abstract String getDisplayTooltip(int level);
+public abstract String getLocalizedTooltip(int level);
 public abstract String getDisplayTexture(int level);
 public abstract String getIconTexture();
 public abstract String getLevelName(int level);

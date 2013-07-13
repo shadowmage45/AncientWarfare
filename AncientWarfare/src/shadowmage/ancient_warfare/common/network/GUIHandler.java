@@ -57,7 +57,7 @@ import shadowmage.ancient_warfare.client.gui.structure.GuiStructureScanner;
 import shadowmage.ancient_warfare.client.gui.structure.GuiSurvivalBuilder;
 import shadowmage.ancient_warfare.client.gui.teams.GuiTeamControl;
 import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleAmmoSelection;
-import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleDebug;
+import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleInventory;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
@@ -602,7 +602,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   vehicle = (VehicleBase)world.getEntityByID(x);
   if(vehicle!=null)
     {
-    return new GuiVehicleDebug(new ContainerVehicle(player, vehicle, vehicle));
+    return new GuiVehicleInventory(new ContainerVehicle(player, vehicle, vehicle));
     }
   return null;//TODO make/set gui & container..
   

@@ -43,6 +43,7 @@ public abstract float getBaseHealth();//base max health, before any materials ad
 
 public abstract String getTextureForMaterialLevel(int level);//get the texture for the input material quality level
 public abstract String getDisplayName();
+public abstract String getLocalizedName();
 public abstract List<String> getDisplayTooltip();
 
 public abstract int getGlobalVehicleType();//by number, registry num...

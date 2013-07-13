@@ -29,6 +29,8 @@ import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 public class GuiNpcBase extends GuiContainerAdvanced
 {
+
+
 NpcBase npc;
 /**
  * @param container
