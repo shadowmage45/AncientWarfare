@@ -34,9 +34,18 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 public class ContainerCivicTE extends ContainerBase
 {
 
+
 TECivic teBase;
+public int regSlotY;
+public boolean regLabel = false;
+public int resSlotY;
+public boolean resLabel = false;
+public int specSlotY;
+public boolean specLabel = false;
+public int playerSlotsY;
 
 /**
+ * 
  * @param openingPlayer
  * @param synch
  */
@@ -44,13 +53,39 @@ public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
   {
   super(openingPlayer, null);
   this.teBase = te;
-  this.addPlayerSlots(openingPlayer, 8, 158, 4);   
-  this.addResourceSlots();
-  this.addRegularSlots();  
-  this.addSpecSlots();
+  
+  int invSize = teBase.getCivic().getInventorySize();
+  regLabel = invSize>0 ? true : false;
+  regSlotY = 4 + 10 + (regLabel ? 10: 0);//border, civic label, inventory label
+  int regSlotHeight = (invSize/9 + (invSize%9==0 ? 0 : 1)) *18;  
+  
+  Config.logDebug("regSLotY: "+regSlotY + " H: "+regSlotHeight);
+  
+  invSize = teBase.getCivic().getResourceSlotSize();
+  resLabel = invSize > 0 ? true : false;
+  resSlotY = regSlotY+regSlotHeight + (resLabel ? 14 : 0);
+  int resSlotHeight = (invSize/9 + (invSize%9==0 ? 0 : 1)) *18;   
+  
+  Config.logDebug("resSlotY: "+resSlotY + " H: "+resSlotHeight);
+  
+  invSize = teBase.getCivic().getSpecResourceSlotSize();
+  specLabel = invSize > 0 ? true : false;
+  specSlotY = resSlotY+resSlotHeight + (specLabel ? 14 : 0);
+  int specSlotHeight = (invSize/9 + (invSize%9==0 ? 0 : 1)) *18; 
+  
+  
+  
+  playerSlotsY = specSlotY+specSlotHeight+4+10;//bottom of spec slot + buffer + label
+  
+  Config.logDebug("specLabel: "+specLabel + " specSlotY: "+specSlotY + " specH: "+specSlotHeight +  " playerSlotY: "+playerSlotsY);
+  
+  this.addPlayerSlots(openingPlayer, 8, playerSlotsY, 4);//158   
+  this.addResourceSlots(resSlotY);
+  this.addRegularSlots(regSlotY);  
+  this.addSpecSlots(specSlotY);
   }
 
-protected void addRegularSlots()
+protected void addRegularSlots(int yStart)
   {
   int y;
   int x;
@@ -64,13 +99,13 @@ protected void addRegularSlots()
     y = (i-teBase.getCivic().getResourceSlotSize()) /9;
     slotNum = i;
     xPos = 8 + x * 18;
-    yPos = y * 18 + 15;
+    yPos = y*18+yStart;
     Slot slot = new Slot(teBase, slotNum, xPos, yPos);
     this.addSlotToContainer(slot);            
     }  
   }
 
-protected void addResourceSlots()
+protected void addResourceSlots(int yStart)
   {
   int y;
   int x;
@@ -83,7 +118,7 @@ protected void addResourceSlots()
       {
       slotNum = y*9 + x;
       xPos = 8 + x * 18;
-      yPos = y * 18 + 15 + 3*18+ 5;
+      yPos = y * 18 + yStart;
       if(slotNum<teBase.getCivic().getResourceSlotSize())
         {
         Slot slot = new SlotResourceOnly(teBase, slotNum, xPos, yPos, teBase.getCivic().getResourceItemFilters());
@@ -93,13 +128,13 @@ protected void addResourceSlots()
     }
   }
 
-protected void addSpecSlots()
+protected void addSpecSlots(int yStart)
   {
   int y = 0;
   int x;
   int slotNum = teBase.getCivic().getResourceSlotSize()+teBase.getCivic().getInventorySize();
   int xPos; 
-  int yPos = 15 + 4*18 + 10; 
+  int yPos = y*18+yStart; 
   for(x = 0; x < teBase.getCivic().getSpecResourceSlotSize(); x++)
     {
     xPos = 8 + x * 18;

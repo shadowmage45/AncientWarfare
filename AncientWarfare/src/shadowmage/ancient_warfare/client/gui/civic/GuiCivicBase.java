@@ -26,19 +26,26 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerCivicTE;
 
 public class GuiCivicBase extends GuiContainerAdvanced
 {
 
 TECivic teBase;
+ContainerCivicTE container;
+//int ySize;
+
 /**
  * @param container
  */
 public GuiCivicBase(Container container, TECivic te)
   {
-  super(container);
+  super(container);  
+  this.container = (ContainerCivicTE) container;
   this.teBase = te;
   this.shouldCloseOnVanillaKeys = true;
+  this.xSize = this.getXSize();
+  this.ySize = this.getYSize();
   }
 
 @Override
@@ -50,7 +57,7 @@ public int getXSize()
 @Override
 public int getYSize()
   {
-  return 240;
+  return this.container==null ? 240 : this.container.playerSlotsY + 4*18 +4 + 8;
   }
 
 @Override
@@ -62,32 +69,39 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawStringGui("Inventory", 8, 5, 0xffffffff);
-  
-
-  this.drawStringGui("Civic Type: "+teBase.getCivic().getDisplayName(), 8, 112+12+3, 0xffffffff);  
-  this.drawStringGui("Broadcast Work: ", 8 , 112+10+5+12, 0xffffffff);
+  this.drawStringGui("Civic Type: "+teBase.getCivic().getLocalizedName(), 8, 4, WHITE);
+  if(container.regLabel)
+    {
+    this.drawStringGui("Inventory (Sides)", 8, container.regSlotY-10, WHITE);    
+    }
+  if(container.resLabel)
+    {
+    this.drawStringGui("Resources (Top)", 8, container.resSlotY-10, WHITE);
+    }
+  if(container.specLabel)
+    {
+    this.drawStringGui("Special Resources (Bottom)", 8, container.specSlotY-10, WHITE);
+    }
+  this.drawStringGui("Player Inventory", 8, container.playerSlotsY-10, WHITE);
   }
 
 @Override
 public void updateScreenContents()
   {
-  // TODO Auto-generated method stub
-
   }
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  if(element.getElementNumber()==0)
-    {
-    teBase.sendBroadCastWork(((GuiCheckBoxSimple)element).checked());
-    }
+//  if(element.getElementNumber()==0)
+//    {
+//    teBase.sendBroadCastWork(((GuiCheckBoxSimple)element).checked());
+//    }
   }
 
 @Override
 public void setupControls()
   {
-  this.addCheckBox(0, 176-8-18, 112+10+12, 18, 18).setChecked(teBase.broadcastWork);
+//  this.addCheckBox(0, 176-8-18, 112+10+12, 18, 18).setChecked(teBase.broadcastWork);
   }
 
 @Override

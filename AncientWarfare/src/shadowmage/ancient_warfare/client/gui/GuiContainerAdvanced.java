@@ -63,6 +63,8 @@ protected int tooltipDelayTicks = 10;
 
 protected GuiElement currentMouseElement;
 
+protected static final int WHITE = 0xffffffff;
+
 /**
  * gui controls...these are substitutes for the vanilla controlList...and allow for total control
  * over buttons and functions, while only overridding a minimal amount of vanilla code (and still allowing

@@ -70,13 +70,13 @@ int getSpecResourceSlotSize();
  * @return
  */
 String getDisplayName();
-
+String getLocalizedName();
 /**
  * get the default itemTooltip to be used with this civic * 
  * @return
  */
 String getDisplayTooltip();
-
+String getLocalizedTooltip();
 String getIconTexture();
 
 String[] getIconNames();

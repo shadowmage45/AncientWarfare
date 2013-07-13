@@ -17,7 +17,6 @@ PRE OPEN BETA
 * finish localization support (gui cleanup/validation)
 * better system for making rations (special machine probably with auto-output?)
 * gui polish
-    civic
     npc
     vehicle
 * battering ram needs damage-code implemented
@@ -195,21 +194,17 @@ TWEAKS/OPTIMIZATION
 /********** 07-08-13 **********/
 * world gen structures can cut in too low    
 * add research notes clickable item -- should be able to click to learn the research for that note
-
 * add reinforced block cement item (will be used in reinforced block recipes)
 * icons for NPC spawner items
-
 * fix archer missing commander target (and thus would never choose a commander)
 * add icon for cement
 * add bandit and bandit archer
-
 * add bucket compatibility to resource list recipes...they now return emtpy buckets if they have room
 * add recipe for cement
-
 * update bandit camp, lava farm, obsidian vault templates with biome swap and chest loot
-
 * add trashcan -- destroys any input items at the rate of 4/second
 * add prep work on mailbox delivery system
+
 /********** 07-09-13 **********/
 * mailboxes.. lots of work on mailboxes
 
@@ -244,24 +239,23 @@ TWEAKS/OPTIMIZATION
 * update build script to include language files
 * minor work on reinforced blocks.  they now break at different speeds depending upon if on placing team or not
 * first pass of gui localization cleanup -- items/recipes/info guis (have not touched other text yet)
-
 * fix localization of detailed description in research goal gui
 * fix some spelling errors in research goal descriptions
 
 /********** 07-13-13 **********/
 * load english translations for any languages missing translations
-
 * +/- buttons for team select in team gui are broken
 * reimplement reinforced block partial explosion damage (was removed when making them break at diff speeds)
-
 * add bandits and loot to bandit camp
 * set npcs when spawned in creative to automatically have a patrol point @ spawn point to aid in template creation (might make it a toggle with shift-pressed)
 * enable dungeon-loot table additions
 * adjust loot tables to remove spamminess from all the different types of ammo/etc that were added
-
 * add numerical extras to research goal names to help differentiate them
 * add npc nameplate localization support
 * add vehicle nameplate localization support
+
+* add direct localization support to ICivicType
+* cleanup of civic GUIs (normal/town hall) -- adjust to dynamically reposition slots and elements to fill up the screen more logically
 
 /********** 07-14-13 **********/
 /********** 07-15-13 **********/
