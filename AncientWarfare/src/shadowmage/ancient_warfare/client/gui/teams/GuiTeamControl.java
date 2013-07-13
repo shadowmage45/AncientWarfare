@@ -108,9 +108,31 @@ public void onElementActivated(IGuiElement element)
   mc.displayGuiScreen(childGui);
   break;
   
+  case 7:
+    {
+    int num = this.teamSelectNumber.getIntVal();
+    if(num>0)
+      {
+      this.teamSelectNumber.setIntegerValue(teamSelectNumber.getIntVal()-1);    
+      }    
+    }
+  break;
+  
+  case 9:
+    {
+    int num = this.teamSelectNumber.getIntVal();
+    if(num<15)
+      {
+      this.teamSelectNumber.setIntegerValue(teamSelectNumber.getIntVal()+1);    
+      }    
+    }
+  break;
+  
   case 10://apply
-  byte num = (byte) teamSelectNumber.getIntVal();
-  TeamTracker.instance().handleClientApplyToTeam(player.getEntityName(), num);
+    {
+    byte num = (byte) teamSelectNumber.getIntVal();
+    TeamTracker.instance().handleClientApplyToTeam(player.getEntityName(), num);    
+    }
   break;
   
   

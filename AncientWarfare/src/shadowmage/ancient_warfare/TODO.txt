@@ -1,10 +1,20 @@
-PORTING TO 1.6
-* Instead of renderEngine.bindTexture(String path), use:
-    renderEngine.func_110577_a(new ResourceLocation("modID","texture path"))
+MOD BETA TEST PACK
+* NEI
+* gravity gun
+* BC
+* TE
+* RC
+* Twilight forest
+* EE3
+* Iron Chests
+* AE?
+* MFR?
+* Modular Power Suits?
+* Forestry? (not needed?)
+* thaumcraft?
 
 PRE OPEN BETA
-* finish localization support
-* reinforced blocks
+* finish localization support (gui cleanup/validation/verification)
 * better system for making rations (special machine probably with auto-output?)
 * gui polish
     civic
@@ -37,7 +47,6 @@ FROM TESTING
 * large trebuchet health should be increased
 * deluxe chunkloader world rendering
 * method to clear the status of a backpack to use in crafting (or other resolution to the issue)
-* +/- buttons for team select in team gui are broken
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -239,6 +248,11 @@ TWEAKS/OPTIMIZATION
 * fix some spelling errors in research goal descriptions
 
 /********** 07-13-13 **********/
+* load english translations for any languages missing translations
+
+* +/- buttons for team select in team gui are broken
+* reimplement reinforced block partial explosion damage (was removed when making them break at diff speeds)
+
 /********** 07-14-13 **********/
 /********** 07-15-13 **********/
 /********** 07-16-13 **********/

@@ -51,7 +51,6 @@ public BlockReinforced(int par1, Material par2Material, String baseName)
   {
   super(par1, par2Material, baseName);
   this.blockHardness = 2.f;
-  this.blockResistance = 2000.f;
   }
 
 @Override
