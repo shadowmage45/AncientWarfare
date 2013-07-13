@@ -3,12 +3,18 @@ PORTING TO 1.6
     renderEngine.func_110577_a(new ResourceLocation("modID","texture path"))
 
 PRE OPEN BETA
+* finish localization support
 * reinforced blocks
 * better system for making rations (special machine probably with auto-output?)
 * gui polish
     civic
     npc
     vehicle
+    
+PRE FULL RELEASE
+* NEI plugin
+* bc plugin
+* cleanup research notes book    
 
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
@@ -29,6 +35,7 @@ FROM TESTING
 * large trebuchet health should be increased
 * deluxe chunkloader world rendering
 * method to clear the status of a backpack to use in crafting (or other resolution to the issue)
+* +/- buttons for team select in team gui are broken
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -60,15 +67,14 @@ GENERAL
 * add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
 
 REINFORCED BLOCKS
+* id/meta dropped
+* rework explosion resistance...
 * figure out method to allow for partially destroyed blocks w/ destroyed texture rendering
 * block will track owner (placing player)
     all attempts to break block except by owner will break as obsidian
     owner will break as stone block
     explosions will use partial-damage system
         possible multiple textures for damages?
-
-ENGINEERS LOGIC WIRE / TILES (replacement for MIA redpower)
-* THDT
 
 VEHICLES
 * set vehicle motion/accel to 0 when collided horizontally (hmm..)
@@ -107,42 +113,16 @@ TEMPLATES
 * resource lists for npcs
 * resource lists for vehicles
 * scan/build of crafting station, w/ orientation
+* scan/build of machines, w/orientation
 
 RESEARCH
 
 CRAFTING
 
-/***************************************************************UPCOMING FEATURES***************************************************************/
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
 * need to rewrite world gen completely..it is pretty much crap right now
-    need to examine validation again
-    need to rework building selection /weighting/values
     need to include village components w/NPCs civics/etc (if enabled in config)
-
-COMPLEXES
-* features--
-        -min width
-        -max width
-        -min length
-        -max length
-        -amount of terrain leveling to do (will level or fill-in and replace top-blocks)
-        -list of structures w/min spacing around the structure
-                -min spacing around the structure
-                -max # of that structure
-                -min # of that structure
-        -list of acceptable biomes (or unnaceptable biomes)
-        -# of structures in a 'city block' (min/max) (determines road frequency)
-        -size of a 'city block' (min/max)
-        -layout type (grid, staggered grid, haphazard)
-        -wall types
-        -team override for structures within
-        -road width
-        -ability to specify a basic template??
-        -will have full biome-block swapping in-place for all structures AND walls
--- all structures will have fill-under/backfill below them, no matter the amount of terraforming
--- walls wil be placed slightly inside of terrain leveling bounds
--- outer leveling bounds will use a stepped approach, out to a certain radius/height...
  
 /************************************************DONE/OPTI*************************************************/
  
@@ -254,8 +234,9 @@ TWEAKS/OPTIMIZATION
     * research    
 * fixup localization support code for npcs    
 * add ammo localization support
-
 * update build script to include language files
+
+* minor work on reinforced blocks.  they now break at different speeds depending upon if on placing team or not
 
 /********** 07-13-13 **********/
 /********** 07-14-13 **********/

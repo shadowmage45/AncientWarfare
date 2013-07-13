@@ -21,18 +21,23 @@
 package shadowmage.ancient_warfare.common.block;
 
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
 public class TEAWBlockReinforced extends TileEntity
 {
 
 public int baseBlockID;
 int damageRemaining = 16;
+public int ownerTeam = 0;
 
 /**
  * 
@@ -40,6 +45,17 @@ int damageRemaining = 16;
 public TEAWBlockReinforced()
   {
   // TODO Auto-generated constructor stub
+  }
+
+public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, int x, int y, int z)
+  {
+  float strength = ForgeHooks.blockStrength(BlockLoader.reinforced, player, world, x, y, z);
+  int team = TeamTracker.instance().getTeamForPlayer(player);
+  if(team==this.ownerTeam)
+    {
+    return strength;
+    }
+  return strength*0.1f;
   }
 
 @Override
@@ -66,6 +82,7 @@ public void readFromNBT(NBTTagCompound tag)
   super.readFromNBT(tag);
   this.baseBlockID = tag.getInteger("block");
   this.damageRemaining = tag.getInteger("dmg");
+  this.ownerTeam = tag.getByte("team");
   }
 
 @Override
@@ -74,6 +91,7 @@ public void writeToNBT(NBTTagCompound tag)
   super.writeToNBT(tag);
   tag.setInteger("block", this.baseBlockID);
   tag.setInteger("dmg", damageRemaining);
+  tag.setByte("team", (byte)this.ownerTeam);
   }
 
 public void onExploded(Explosion expl)

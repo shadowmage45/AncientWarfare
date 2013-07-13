@@ -30,9 +30,11 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -48,6 +50,8 @@ public class BlockReinforced extends AWBlockContainer
 public BlockReinforced(int par1, Material par2Material, String baseName)
   {
   super(par1, par2Material, baseName);
+  this.blockHardness = 2.f;
+  this.blockResistance = 2000.f;
   }
 
 @Override
@@ -97,7 +101,9 @@ public int getRenderType()
 @Override
 public TileEntity getNewTileEntity(World world, int meta)
   {
-  return new TEAWBlockReinforced();
+  TEAWBlockReinforced te = new TEAWBlockReinforced();
+  te.baseBlockID = meta;
+  return te;
   }
 
 @Override
@@ -152,7 +158,11 @@ public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta)
 @Override
 public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, int x, int y, int z)
   {
-  // TODO Auto-generated method stub
+  TileEntity te = world.getBlockTileEntity(x, y, z);
+  if(te!=null)
+    {
+    return ((TEAWBlockReinforced)te).getPlayerRelativeBlockHardness(player, world, x, y, z);
+    }
   return super.getPlayerRelativeBlockHardness(player, world, x, y, z);
   }
 

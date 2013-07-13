@@ -31,6 +31,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 
 public class ItemReinforcedBlock extends AWItemBlockBase
 {
@@ -59,6 +60,7 @@ public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, i
     {
     TEAWBlockReinforced te =(TEAWBlockReinforced) world.getBlockTileEntity(x, y, z);
     te.baseBlockID = stack.getItemDamage();
+    te.ownerTeam = TeamTracker.instance().getTeamForPlayer(player);
     return true;
     }
   return false;
