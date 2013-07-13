@@ -28,6 +28,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -52,7 +53,7 @@ public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double pa
   if(Settings.getRenderNpcNameplates())
     {
     NpcBase npc = (NpcBase) par1EntityLiving;
-    String displayLabel = npc.npcType.getLevelName(npc.rank)+" "+npc.getHealth()+"/"+npc.getMaxHealth();
+    String displayLabel = StringTranslate.getInstance().translateKey(npc.npcType.getLevelName(npc.rank))+" "+npc.getHealth()+"/"+npc.getMaxHealth();
     this.renderLivingLabel(par1EntityLiving, displayLabel, par2, par4, par6, 64);
     }
   }
@@ -106,7 +107,7 @@ protected void renderLivingLabel(EntityLiving par1EntityLiving, String par2Str, 
     GL11.glEnable(GL11.GL_DEPTH_TEST);
     GL11.glDepthMask(true);
     fontRenderer.drawString(par2Str, -fontRenderer.getStringWidth(par2Str) / 2, yOffset, color2);//was-1
-    if(Settings.getRenderNpcObjectives())
+    if(!hostile && Settings.getRenderNpcObjectives())
       {
       renderObjectiveIcon(npc.getAIObjectiveID());
       renderTaskIcon(npc.getAITaskID());

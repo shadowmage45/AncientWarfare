@@ -28,6 +28,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StringTranslate;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
@@ -102,7 +103,7 @@ private void renderNamePlate(VehicleBase vehicle, double par3, double par5, doub
   {
   double var10 = vehicle.getDistanceSqToEntity(this.renderManager.livingPlayer);
   int par9 = 64;
-  String par2Str = vehicle.vehicleType.getDisplayName()+" "+formatter1d.format(vehicle.getHealth())+"/"+formatter1d.format(vehicle.baseHealth);
+  String par2Str = StringTranslate.getInstance().translateKey(vehicle.vehicleType.getDisplayName())+" "+formatter1d.format(vehicle.getHealth())+"/"+formatter1d.format(vehicle.baseHealth);
   if (var10 <= (double)(par9 * par9))
     {
     FontRenderer var12 = this.getFontRendererFromRenderManager();
