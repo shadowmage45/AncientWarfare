@@ -302,6 +302,31 @@ protected void addAlchemyRecipes()
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.sand), false, false));
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.clay), false, false));
   this.alchemyRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(new ItemStack(BlockLoader.reinforced,16,0), RecipeType.ALCHEMY_MISC);
+  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoader.cement, false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(Block.stoneBrick, 16, true, false));
+  this.alchemyMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(new ItemStack(BlockLoader.reinforced,16,1), RecipeType.ALCHEMY_MISC);
+  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoader.cement, false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(Block.brick, 16, true, false));
+  this.alchemyMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(new ItemStack(BlockLoader.reinforced,16,2), RecipeType.ALCHEMY_MISC);
+  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoader.cement, false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(Block.netherBrick, 16, true, false));
+  this.alchemyMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(new ItemStack(BlockLoader.reinforced,16,3), RecipeType.ALCHEMY_MISC);
+  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoader.cement, false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(Block.obsidian, 8, true, false));
+  this.alchemyMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(new ItemStack(BlockLoader.reinforced,16,4), RecipeType.ALCHEMY_MISC);
+  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoader.cement, false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(Block.sandStone, 16, true, false));
+  this.alchemyMiscRecipes.add(recipe);
   }
 
 protected void addCivicRecipes()

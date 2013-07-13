@@ -21,12 +21,17 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.item.Item;
+import net.minecraft.util.AxisAlignedBB;
+import shadowmage.ancient_warfare.client.render.AWRenderHelper;
+import shadowmage.ancient_warfare.client.render.BoundingBoxRender;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.common.utils.Pos3f;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.BatteringRamVarHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
@@ -123,4 +128,29 @@ public String getTextureForMaterialLevel(int level)
     }
   }
 
+public static BlockPosition[] getEffectedPositions(VehicleBase vehicle)
+  {  
+  double x1 = vehicle.posX;
+  double y1 = vehicle.posY;
+  double z1 = vehicle.posZ;
+  
+  BlockPosition[] positions = new BlockPosition[7];
+  Pos3f offset = vehicle.getMissileOffset();
+  double x2 = x1+offset.x;
+  double y2 = y1+offset.y;
+  double z2 = z1+offset.z;  
+  float bx = (float) (vehicle.posX + offset.x);
+  float by = (float) (vehicle.posY + offset.y);
+  float bz = (float) (vehicle.posZ + offset.z);
+  BlockPosition blockHit = new BlockPosition(bx, by, bz);  
+  
+  positions[0] = blockHit;
+  positions[1] = new BlockPosition(blockHit.x-1, blockHit.y, blockHit.z);
+  positions[2] = new BlockPosition(blockHit.x, blockHit.y-1, blockHit.z);
+  positions[3] = new BlockPosition(blockHit.x, blockHit.y, blockHit.z-1);
+  positions[4] = new BlockPosition(blockHit.x+1, blockHit.y, blockHit.z);
+  positions[5] = new BlockPosition(blockHit.x, blockHit.y+1, blockHit.z);
+  positions[6] = new BlockPosition(blockHit.x, blockHit.y, blockHit.z+1);
+  return positions;
+  }
 }

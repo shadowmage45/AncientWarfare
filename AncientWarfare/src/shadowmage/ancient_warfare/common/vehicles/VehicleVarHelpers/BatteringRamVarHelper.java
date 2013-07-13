@@ -20,9 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers;
 
+import java.util.List;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
+import shadowmage.ancient_warfare.common.vehicles.missiles.DamageType;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBatteringRam;
 
 
 public class BatteringRamVarHelper extends VehicleFiringVarsHelper
@@ -91,8 +98,7 @@ public void onLaunchingUpdate()
   if(logAngle<=-30)
     {
     this.vehicle.firingHelper.setFinishedLaunching();
-    this.damageEntities();
-    this.damageBlocks();
+    this.doDamageEffects();
     this.logSpeed = 0;
     }
   else
@@ -102,14 +108,25 @@ public void onLaunchingUpdate()
     }
   }
 
-public void damageEntities()
+public void doDamageEffects()
   {
-  //TODO
-  }
-
-public void damageBlocks()
-  {
-  //TODO
+  BlockPosition[] effectedPositions = VehicleTypeBatteringRam.getEffectedPositions(vehicle);
+  AxisAlignedBB bb;
+  List<Entity> hitEntities;
+  for(BlockPosition pos : effectedPositions)
+    {
+    if(pos==null){continue;}
+    bb = AxisAlignedBB.getAABBPool().getAABB(pos.x, pos.y, pos.z, pos.x+1, pos.y+1, pos.z+1);
+    hitEntities = vehicle.worldObj.getEntitiesWithinAABBExcludingEntity(vehicle, bb);
+    if(hitEntities!=null)
+      {
+      for(Entity ent : hitEntities)
+        {
+        ent.attackEntityFrom(DamageType.batteringDamage, 5+vehicle.vehicleMaterialLevel);
+        }
+      }
+    vehicle.worldObj.setBlockToAir(pos.x, pos.y, pos.z);
+    }
   }
 
 @Override

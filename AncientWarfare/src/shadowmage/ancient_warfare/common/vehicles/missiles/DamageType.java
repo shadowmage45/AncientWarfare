@@ -34,7 +34,7 @@ public static DamageType fireMissile = (DamageType) new DamageType("AWFireMissil
 public static DamageType explosiveMissile = (DamageType) new DamageType("AWExplMissile").setFireDamage().setProjectile();
 public static DamageType genericMissile = (DamageType) new DamageType("AWGenMissile").setProjectile();
 public static DamageType piercingMissile = (DamageType) new DamageType("AWPierceMissile").setDamageBypassesArmor().setProjectile();
-
+public static DamageType batteringDamage = (DamageType) new DamageType("dmg.battering");
 
 /**
  * @param par1Str

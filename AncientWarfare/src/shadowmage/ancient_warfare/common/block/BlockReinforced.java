@@ -65,12 +65,18 @@ public void registerBlockInfo()
   d.setName("Reinforced Stone Brick", 0);
   d.setName("Reinforced Red Brick", 1);
   d.setName("Reinforced Nether Brick", 2);
+  d.setName("Reinforced Obsidian Brick", 3);
+  d.setName("Reinforced Sandsone Brick", 4);
   d.addDisplayStack(new ItemStack(this,1,0));
   d.addDisplayStack(new ItemStack(this,1,1));
   d.addDisplayStack(new ItemStack(this,1,2));
+  d.addDisplayStack(new ItemStack(this,1,3));
+  d.addDisplayStack(new ItemStack(this,1,4));
   d.setIconTexture("ancientwarfare:reinforced/stoneBrick", 0);
   d.setIconTexture("ancientwarfare:reinforced/redBrick", 1);
   d.setIconTexture("ancientwarfare:reinforced/netherBrick", 2);
+  d.setIconTexture("ancientwarfare:reinforced/obsidianBrick", 3);
+  d.setIconTexture("ancientwarfare:reinforced/sandBrick", 4);
   }
 
 @Override

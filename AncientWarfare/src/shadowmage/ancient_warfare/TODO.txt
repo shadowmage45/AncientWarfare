@@ -14,14 +14,17 @@ MOD BETA TEST PACK
 * thaumcraft?
 
 PRE OPEN BETA
+* block/machine/te localizations
 * finish localization support (gui cleanup/validation)
+* GUI polish
+    deluxe chunkloader
+* default survival-mode structures    
 * better system for making rations (special machine probably with auto-output?)
-* battering ram needs damage-code implemented
 * finish adding world gen and village gen structures
     add log cabin as a village structure, perhaps with a random NPC in it
     add fountain as random world-gen structure (find good validation settings)
     add fortress as village gen structure (need to finish it first)
-    randomly add bandits to world during world-gen on surface (spawn in packs of 2-3, 1xarcher 1xmelee ?xcommander)
+    ?randomly add bandits to world during world-gen on surface (spawn in packs of 2-3, 1xarcher 1xmelee ?xcommander)?
     
 PRE FULL RELEASE
 * NEI plugin
@@ -61,7 +64,6 @@ BALANCE/TWEAKS
 TEXTURE/ART
 * more missile textures
 * finish airplane textures
-* textures for new reinforced blocks
 
 GENERAL
 * add name search/filter box to structure builder guis
@@ -75,7 +77,6 @@ GENERAL
 * method to scan buildings in survival mode?
 * method to remove buildings/templates from server (editor gui?)   
 * researcher and craftsmsan need specific tools
-* research notes item need to have right-click function to learn the research if not already known
 * NEI plugin for special crafting recipes
 * add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
 
@@ -257,7 +258,6 @@ TWEAKS/OPTIMIZATION
 * add direct localization support to ICivicType
 * cleanup of civic GUIs (normal/town hall) -- adjust to dynamically reposition slots and elements to fill up the screen more logically
 * update build script for automatic version numbering (requires version number in config + version.properties)
-
 * more update of build script...probably need a better method to set version
 * add direct localization support to INpcType
 * udpate npc courier GUI with dynamic slot and element positioning
@@ -265,6 +265,10 @@ TWEAKS/OPTIMIZATION
 * update vehicle gui with with dynamic slot and element positioning
 * add direct localization support to IVehicleType
 * fix vehicle naming localization on vehicle stats gui
+
+* add obsidian and sandstone reinforced blocks
+* enable battering ram damage (both entity and block)
+* add reinforced block recipes
 
 /********** 07-14-13 **********/
 /********** 07-15-13 **********/

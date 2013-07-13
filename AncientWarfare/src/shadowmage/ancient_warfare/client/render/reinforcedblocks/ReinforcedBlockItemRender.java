@@ -75,7 +75,7 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   
 //  render.renderBlockAsItem(par1Block, 0, 1.f);
   
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(BlockLoader.reinforced.blockID);
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(par1Block.blockID);
   Icon ico = d.getIconFor(item.getItemDamage());
   
   Tessellator tessellator = Tessellator.instance;
