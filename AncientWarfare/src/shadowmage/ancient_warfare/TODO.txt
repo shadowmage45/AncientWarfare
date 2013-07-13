@@ -47,6 +47,7 @@ FROM TESTING
 * large trebuchet health should be increased
 * deluxe chunkloader world rendering
 * method to clear the status of a backpack to use in crafting (or other resolution to the issue)
+* remove soldier arrows from dungeon loot (and creative mode, etc)
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -252,6 +253,11 @@ TWEAKS/OPTIMIZATION
 
 * +/- buttons for team select in team gui are broken
 * reimplement reinforced block partial explosion damage (was removed when making them break at diff speeds)
+
+* add bandits and loot to bandit camp
+* set npcs when spawned in creative to automatically have a patrol point @ spawn point to aid in template creation (might make it a toggle with shift-pressed)
+* enable dungeon-loot table additions
+* adjust loot tables to remove spamminess from all the different types of ammo/etc that were added
 
 /********** 07-14-13 **********/
 /********** 07-15-13 **********/

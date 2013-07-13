@@ -60,7 +60,7 @@ public boolean isTarget(Entity ent)
     int thisTeam = this.npc.teamNum;
     int otherTeam = TeamTracker.instance().getTeamForPlayer(player);//.teamNum;
     boolean hostile = TeamTracker.instance().isHostileTowards(player.worldObj, thisTeam, otherTeam);
-    if(hostile && oppositeTeam || !hostile && sameTeam)
+    if((hostile && oppositeTeam &&!player.capabilities.isCreativeMode) || (!hostile && sameTeam))
       {
       return true;
       }    

@@ -93,7 +93,12 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     npc.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
     if(npc instanceof NpcBase)
       {
-      ((NpcBase)npc).wayNav.setHomePoint(new WayPoint(hit.x, hit.y, hit.z, TargetType.SHELTER));
+      NpcBase npcBase = (NpcBase)npc;      
+      npcBase.wayNav.setHomePoint(new WayPoint(hit.x, hit.y, hit.z, TargetType.SHELTER));
+      if(player.capabilities.isCreativeMode)
+        {
+        npcBase.wayNav.addPatrolPoint(new WayPoint(hit.x, hit.y, hit.z, TargetType.PATROL));
+        }
       }    
     npc.prevRotationYaw = npc.rotationYaw = player.rotationYaw;
     world.spawnEntityInWorld(npc);
