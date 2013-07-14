@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.block;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +30,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -147,20 +151,6 @@ public void onBlockExploded(World world, int x, int y, int z, Explosion explosio
   }
 
 @Override
-public float getBlockHardness(World world, int x, int y, int z)
-  {
-  // TODO Auto-generated method stub
-  return super.getBlockHardness(world, x, y, z);
-  }
-
-@Override
-public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta)
-  {
-  // TODO Auto-generated method stub
-  super.onBlockDestroyedByPlayer(world, x, y, z, meta);
-  }
-
-@Override
 public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, int x, int y, int z)
   {
   TileEntity te = world.getBlockTileEntity(x, y, z);
@@ -170,20 +160,5 @@ public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, in
     }
   return super.getPlayerRelativeBlockHardness(player, world, x, y, z);
   }
-
-@Override
-public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player)
-  {
-  // TODO Auto-generated method stub
-  super.onBlockHarvested(world, x, y, z, meta, player);
-  }
-
-@Override
-public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
-  {
-  // TODO Auto-generated method stub
-  return super.removeBlockByPlayer(world, player, x, y, z);
-  }
-
 
 }

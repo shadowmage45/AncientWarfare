@@ -18,9 +18,7 @@ PRE OPEN BETA
     * none known
 * GUI polish
     * none known
-* recipes for chunkloaders
 * finish adding world gen and village gen structures
-    add NPCs to fortress
     ?randomly add bandits to world during world-gen on surface (spawn in packs of 2-3, 1xarcher 1xmelee ?xcommander)?
 OPTIONAL?    
 * block/machine/te localizations
@@ -28,10 +26,11 @@ OPTIONAL?
     * crafting
     * machine
     * reinforced   
-* default survival-mode structures
 * better system for making rations (special machine probably with auto-output?)
     
 PRE FULL RELEASE
+* default survival-mode structures
+* scanning authentication list (server ops?)
 * NEI plugin
 * bc plugin
 * cleanup research notes book    
@@ -279,11 +278,15 @@ TWEAKS/OPTIMIZATION
 * minor cleanup of world-gen for structures, disallow placement of blocks/entities < 2y
 * add fortress to village gen -- template is still WIP -- needs NPCs and loot added
 * add log cabin to village gen -- template is still WIP -- needs NPCs, loot, paintings removed
-
 * remove paintings from logCabin
 * add loot to logCabin
 * add npc to logCabin
 * add loot to fortress
+* add missing rank #'s to logistics research english localization file
+* fix incorrect npc in log cabins
+* fix id dropped/picked for reinforced blocks
+* fix localization in ammo select gui and of ammo in vehicle overlay
+* add recipes and needed research for chunkloader blocks
 
 /********** 07-14-13 **********/
 /********** 07-15-13 **********/
@@ -302,7 +305,3 @@ TWEAKS/OPTIMIZATION
 /********** 07-28-13 **********/
 /********** 07-29-13 **********/
 /********** 07-30-13 **********/
-
-
-
-

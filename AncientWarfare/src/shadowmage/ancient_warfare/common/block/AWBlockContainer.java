@@ -20,10 +20,15 @@
  */
 package shadowmage.ancient_warfare.common.block;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 
@@ -82,4 +87,41 @@ public boolean onBlockEventReceived(World par1World, int par2, int par3, int par
   return tileentity != null ? tileentity.receiveClientEvent(par5, par6) : false;
   }
 
+@Override
+public int idDropped(int par1, Random par2Random, int par3)
+  {
+  return this.blockID;
+  }
+
+@Override
+public int damageDropped(int par1)
+  {
+  return par1;
+  }
+
+@Override
+public int quantityDropped(Random par1Random)
+  {
+  return 1;
+  }
+
+@Override
+protected ItemStack createStackedBlock(int par1)
+  {
+  return new ItemStack(this.blockID,1,par1);
+  }
+
+@Override
+public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+  {
+  ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+  ret.add(createStackedBlock(metadata));
+  return ret;
+  }
+
+@Override
+public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+  {
+  return new ItemStack(this.blockID,1,world.getBlockMetadata(x, y, z));
+  }
 }

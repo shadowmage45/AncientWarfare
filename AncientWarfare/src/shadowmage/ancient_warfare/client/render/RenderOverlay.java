@@ -27,6 +27,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -80,7 +81,7 @@ public void renderVehicleOverlay()
   if(ammo!=null)
     {
     int count = vehicle.ammoHelper.getCurrentAmmoCount();
-    this.drawString(fontRenderer, "Ammo: "+ammo.getDisplayName(), 10, 50, white);
+    this.drawString(fontRenderer, "Ammo: "+StringTranslate.getInstance().translateKey(ammo.getDisplayName()), 10, 50, white);
     this.drawString(fontRenderer, "Count: "+count, 10, 60, white);
     }
   else

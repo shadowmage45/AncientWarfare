@@ -462,6 +462,18 @@ protected void addCivicRecipes()
   recipe.addResource(Item.dyePowder, 7, 4, false);
   recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
   this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(BlockLoader.chunkloader, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.enderPearl, 1, false);
+  recipe.addResource(Block.stoneBrick,4, true);
+  recipe.addNeededResearch(ResearchGoalNumbers.logistics2);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(BlockLoader.chunkloaderDeluxe, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.enderPearl, 2, false);
+  recipe.addResource(Block.obsidian,4, false);
+  recipe.addNeededResearch(ResearchGoalNumbers.logistics4);
+  this.civicMiscRecipes.add(recipe);
   }
 
 protected void addGateRecipes()

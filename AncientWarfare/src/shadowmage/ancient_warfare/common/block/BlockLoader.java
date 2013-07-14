@@ -85,6 +85,8 @@ public static final Block machineBlock = new BlockMiscMachine(Config.getBlockID(
 public static final ItemStack trashcan = new ItemStack(machineBlock,1,0);
 public static final ItemStack mailbox = new ItemStack(machineBlock,1,1);
 public static final ItemStack mailboxIndustrial = new ItemStack(machineBlock,1,2);
+public static final ItemStack chunkloader = new ItemStack(machineBlock, 1, 3);
+public static final ItemStack chunkloaderDeluxe = new ItemStack(machineBlock, 1, 4);
 
 private static BlockLoader INSTANCE;
 private BlockLoader(){}
