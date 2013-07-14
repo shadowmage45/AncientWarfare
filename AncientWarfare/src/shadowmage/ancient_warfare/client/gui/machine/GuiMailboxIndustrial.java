@@ -75,20 +75,20 @@ public void setupControls()
   {
   GuiString label;
   this.boxNameButton = new GuiButtonSimple(0, this, 4*18, 12, "");
-  this.boxNameButton.updateRenderPos(46-1+2*18+9, 96-1);
+  this.boxNameButton.updateRenderPos(52, 96-1);
   this.guiElements.put(0, boxNameButton);
   
   label = new GuiString(0+2, this, 4*18, 8, "Box Name:");
-  label.updateRenderPos(46-1+2*18+9+2*18 , 96-1-10);
+  label.updateRenderPos(88 , 96-1-10);
   label.center = true;
   
   this.guiElements.put(0+6, label);
   this.topNameButton = new GuiButtonSimple(1, this, 4*18, 12, "");
-  this.topNameButton.updateRenderPos(92-1, 18-1);
+  this.topNameButton.updateRenderPos(52, 18-1);
   this.guiElements.put(1, topNameButton);
   
   label = new GuiString(1+6, this, 4*18, 8, "Top/Sides");
-  label.updateRenderPos(92-1+2*18, 18-1-10);
+  label.updateRenderPos(88, 18-1-10);
   label.center = true;
   this.guiElements.put(1+2, label); 
   }

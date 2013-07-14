@@ -14,10 +14,6 @@ MOD BETA TEST PACK
 * thaumcraft?
 
 PRE OPEN BETA
-* method to clear the status of a backpack to use in crafting (or other resolution to the issue)
-* industrial mailbox gui needs elements centered
-* research book gui search box needs moved down a few pixels
-* custom block item renders are huge
 OPTIONAL?    
 * block/machine/te localizations
     * civic
@@ -283,9 +279,12 @@ TWEAKS/OPTIMIZATION
 /********** 07-14-13 **********/
 * remove soldier arrows and ball shots from creative mode, etc
 * ignore incorrect packet/container types (remove error msg)
-
 * fix civic block rendering as entity-item
 * fix reinforced block in-hand item rendering
+
+* research book gui search box needs moved down a few pixels
+* industrial mailbox gui needs elements centered
+* remove tag validation from backpack use in courier crafting -- it will now eat full/empty/used/colored backpacks
 
 /********** 07-15-13 **********/
 /********** 07-16-13 **********/

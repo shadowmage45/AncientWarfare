@@ -249,7 +249,7 @@ public void setupControls()
   this.tabs.add(tab);
   this.miscTab = tab;
   
-  this.searchBox = (GuiTextInputLine) new GuiTextInputLine(2, this, 240, 12, 30, "").updateRenderPos(5, 24);
+  this.searchBox = (GuiTextInputLine) new GuiTextInputLine(2, this, 240, 12, 30, "").updateRenderPos(5, 28);
   searchBox.selected = false;
   int w = 256-10;
   int h = 240 - 42 - 10 - 20;

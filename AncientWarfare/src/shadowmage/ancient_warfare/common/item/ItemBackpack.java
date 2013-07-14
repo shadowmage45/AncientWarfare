@@ -78,7 +78,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
 @Override
 public Icon getIconFromDamage(int par1)
   {
-  par1 = par1 - par1%16;
+  par1 = par1;
   return super.getIconFromDamage(par1);
   }
 
@@ -127,10 +127,14 @@ public static void writeInventoryToItem(ItemStack stack, AWInventoryBasic invent
 
 @Override
 @SideOnly(Side.CLIENT)
-public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-  {
-  int color = par1ItemStack.getItemDamage()%16;
-  return AWRenderHelper.getCompositeColor(color);
+public int getColorFromItemStack(ItemStack stack, int par2)
+  {  
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("color"))
+    {
+    int color = stack.getTagCompound().getInteger("color");
+    return AWRenderHelper.getCompositeColor(color);    
+    }
+  return super.getColorFromItemStack(stack, par2);
   }
 
 }

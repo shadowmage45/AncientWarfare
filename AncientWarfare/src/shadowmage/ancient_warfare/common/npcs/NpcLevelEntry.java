@@ -180,6 +180,15 @@ public NpcLevelEntry addRecipeResource(ItemStack... items)
   return this;
   }
 
+public NpcLevelEntry addRecipeResource(ItemStackWrapperCrafting... items)
+  {
+  for(ItemStackWrapperCrafting item : items)
+    {
+    this.recipeResources.add(item);
+    }
+  return this;
+  }
+
 public Collection<ItemStackWrapperCrafting> getNeededResources()
   {
   return this.recipeResources;
