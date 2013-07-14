@@ -218,6 +218,12 @@ public boolean updateAsArrow()
   }
 
 @Override
+public boolean isAvailableAsItem()
+  {
+  return this.isCraftable;
+  }
+
+@Override
 public float getAmmoWeight()
   {
   return ammoWeight;

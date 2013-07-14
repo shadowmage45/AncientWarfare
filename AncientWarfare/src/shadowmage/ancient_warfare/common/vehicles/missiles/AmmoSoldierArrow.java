@@ -41,6 +41,7 @@ public AmmoSoldierArrow(int ammoType, int damage, boolean flaming)
   this.isRocket = false;
   this.isPersistent = true;
   this.isFlaming = flaming;  
+  this.isCraftable = false;
   
   if(flaming)
     {

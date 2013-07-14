@@ -103,9 +103,8 @@ public void execute()
       ((IHandlePacketData)player.openContainer).handleInitData(packetData.getCompoundTag("init"));
       return;      
       }    
-    }
-  
-  Config.logError("Attempt to send container data packet to non-applicable container (no valid interface)");
+    }  
+  //Config.logError("Attempt to send container data packet to non-applicable container (no valid interface)");
   }
 
 }

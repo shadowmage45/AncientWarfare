@@ -66,6 +66,7 @@ boolean isRocket();//determines flight characteristics
 boolean isPersistent();//should die on impact, or stay on ground(arrows)
 boolean isPenetrating();//if persistent, and penetrating==true, will not bounce off of stuff, but instead go through it (heavy projectiles)
 boolean isProximityAmmo();//should detonate when coming CLOSE to something? (range for entity/ground set below)
+boolean isAvailableAsItem();
 float entityProximity();
 float groundProximity();
 float getGravityFactor();//statically set..should techincally be depricated in favor of a const
