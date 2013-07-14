@@ -344,6 +344,7 @@ conditional=0
 percent=100
 blocks=54-5
 inventory=0
+lootlevel=0
 :endrule
 
 rule:
@@ -361,59 +362,26 @@ inventory=0
 ####VEHICLE RULES####
 
 ####NPC RULES####
+
+npc:
+type=1
+rank=0
+team=0
+bx=11
+by=1
+bz=5
+ox=0.41170025
+oy=0.0
+oz=0.30558252
+rotation=701.68353
+pitch=0.0
+:endnpc
+
 ####CIVIC RULES####
 
 ####GATE RULES####
 
 ####ENTITY RULES####
-
-entity:
-entityname=Painting
-bx=5
-by=3
-bz=8
-ox=0.5
-oy=0.5
-oz=0.9375
-rotation=360.0
-pitch=0.0
-ispainting=true
-hangdir=2
-paintingtype=2
-:endentity
-
-
-entity:
-entityname=Painting
-bx=6
-by=3
-bz=3
-ox=0.0625
-oy=0.5
-oz=0.5
-rotation=270.0
-pitch=0.0
-ispainting=true
-hangdir=3
-paintingtype=5
-:endentity
-
-
-entity:
-entityname=Painting
-bx=4
-by=4
-bz=3
-ox=0.9375
-oy=0.0
-oz=1.0
-rotation=450.0
-pitch=0.0
-ispainting=true
-hangdir=1
-paintingtype=18
-:endentity
-
 
 ####RESOURCE LIST####
 resources:

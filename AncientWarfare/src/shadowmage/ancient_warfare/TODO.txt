@@ -20,9 +20,7 @@ PRE OPEN BETA
     * none known
 * recipes for chunkloaders
 * finish adding world gen and village gen structures
-    add NPCs and loot to fortress
-    add NPCs and loot to logCabin
-    remove paintings from logCabin
+    add NPCs to fortress
     ?randomly add bandits to world during world-gen on surface (spawn in packs of 2-3, 1xarcher 1xmelee ?xcommander)?
 OPTIONAL?    
 * block/machine/te localizations
@@ -276,12 +274,16 @@ TWEAKS/OPTIMIZATION
 * enable battering ram damage (both entity and block)
 * add reinforced block recipes
 * remove rendering of npc objectives for hosile npcs
-
 * clean up chunk handling in chunk-handler deluxe -- it should now get/set the appropriate chunks (numerically) from the gui
 * clean up chunkloader deluxe gui to make more efficient use of space
 * minor cleanup of world-gen for structures, disallow placement of blocks/entities < 2y
 * add fortress to village gen -- template is still WIP -- needs NPCs and loot added
 * add log cabin to village gen -- template is still WIP -- needs NPCs, loot, paintings removed
+
+* remove paintings from logCabin
+* add loot to logCabin
+* add npc to logCabin
+* add loot to fortress
 
 /********** 07-14-13 **********/
 /********** 07-15-13 **********/

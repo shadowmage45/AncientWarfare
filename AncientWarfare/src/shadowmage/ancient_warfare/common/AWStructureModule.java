@@ -182,12 +182,12 @@ private void setDefaultStructureNames()
   this.defaultExportStructures.add("villageTorch.aws");
   this.defaultExportStructures.add("villageWell.aws");
   this.defaultExportStructures.add("advancedVillageLibrary.aws");
-  this.defaultExportStructures.add("mineArea.aws");
   this.defaultExportStructures.add("obsidianVault.aws");
   this.defaultExportStructures.add("banditCamp.aws");
   this.defaultExportStructures.add("lavaFarm.aws");
   this.defaultExportStructures.add("fountain1.aws");
   this.defaultExportStructures.add("logCabin.aws");
+  this.defaultExportStructures.add("fortress1.aws");  
   }
 
 private void setValidScannableEntities()
