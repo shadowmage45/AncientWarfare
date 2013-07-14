@@ -285,7 +285,7 @@ public void loadRenders()
    */
   MinecraftForgeClient.registerItemRenderer(ItemLoader.civicPlacer.itemID, new CivicItemRenderer());
   
-  MinecraftForgeClient.registerItemRenderer(BlockLoader.reinforced.blockID, new ReinforcedBlockItemRender());  
+  //MinecraftForgeClient.registerItemRenderer(BlockLoader.reinforced.blockID, new ReinforcedBlockItemRender());  
   }
 
 public void addTEModel(int type, ModelTEBase model)

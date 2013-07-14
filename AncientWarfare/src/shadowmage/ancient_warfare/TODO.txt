@@ -284,6 +284,9 @@ TWEAKS/OPTIMIZATION
 * remove soldier arrows and ball shots from creative mode, etc
 * ignore incorrect packet/container types (remove error msg)
 
+* fix civic block rendering as entity-item
+* fix reinforced block in-hand item rendering
+
 /********** 07-15-13 **********/
 /********** 07-16-13 **********/
 /********** 07-17-13 **********/

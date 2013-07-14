@@ -90,7 +90,7 @@ public Icon getBlockTexture(IBlockAccess par1iBlockAccess, int par2, int par3, i
   TEAWBlockReinforced te = (TEAWBlockReinforced)par1iBlockAccess.getBlockTileEntity(par2, par3, par4);
   Description d = DescriptionRegistry2.instance().getDescriptionFor(this.blockID);
   if(d==null){return null;}
-  return d.getIconFor(te.baseBlockID);
+  return d.getIconFor(par1iBlockAccess.getBlockMetadata(par2, par3, par4));
   }
 
 @Override
@@ -98,7 +98,7 @@ public Icon getIcon(int side, int meta)
   {
   Description d = DescriptionRegistry2.instance().getDescriptionFor(this.blockID);
   if(d==null){return null;}
-  return d.getIconFor(0);
+  return d.getIconFor(meta);
   }
 
 @Override
