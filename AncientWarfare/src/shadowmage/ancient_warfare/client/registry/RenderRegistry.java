@@ -159,8 +159,7 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.TREBUCHET_STAND_TURRET, new RenderTrebuchetStandTurret(), new ModelTrebuchetStandTurret());
   this.addVehicleRender(VehicleRegistry.TREBUCHET_MOBILE_FIXED, new RenderTrebuchetMobileFixed(), new ModelTrebuchetMobileFixed());
   this.addVehicleRender(VehicleRegistry.TREBUCHET_LARGE, new RenderTrebuchetLarge(), new ModelTrebuchetStandFixed());
-  this.addVehicleRender(VehicleRegistry.CHEST_CART, new RenderChestCart(), new ModelChestCart());
-  
+  this.addVehicleRender(VehicleRegistry.CHEST_CART, new RenderChestCart(), new ModelChestCart());  
   this.addVehicleRender(VehicleRegistry.BOAT_BALLISTA, new RenderBoatBallista(), new ModelBoatBallista());
   this.addVehicleRender(VehicleRegistry.BOAT_CATAPULT, new RenderBoatCatapult(), new ModelBoatCatapult());
   this.addVehicleRender(VehicleRegistry.BOAT_TRANSPORT, new RenderBoatTransport(), new ModelBoatTransport());
@@ -168,6 +167,7 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.AIR_TEST, new RenderAircraftTest(), new ModelAirplane());
   this.addVehicleRender(VehicleRegistry.AIR_TEST2, new RenderAircraftTest(), new ModelAirplane());
   
+  this.addVehicleRender(VehicleRegistry.AIR_TEST3, new RenderAircraftTest(), new ModelAirplane());
   /**
    * missiles...
    */

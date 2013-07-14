@@ -24,8 +24,8 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeAirGunship;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeAirBomber;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeAirGunship;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobile;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaMobileTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBallistaStand;
@@ -41,6 +41,7 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultMobil
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultMobileTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultStandFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeChestCart;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeHelicopter;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeHwacha;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetLarge;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetMobileFixed;
@@ -82,6 +83,8 @@ public static final IVehicleType BOAT_TRANSPORT = new VehicleTypeBoatTransport(2
 
 public static final IVehicleType AIR_TEST = new VehicleTypeAirBomber(21);
 public static final IVehicleType AIR_TEST2 = new VehicleTypeAirGunship(22);
+
+public static final IVehicleType AIR_TEST3 = new VehicleTypeHelicopter(23);
 
 private VehicleRegistry(){}
 private static VehicleRegistry INSTANCE;

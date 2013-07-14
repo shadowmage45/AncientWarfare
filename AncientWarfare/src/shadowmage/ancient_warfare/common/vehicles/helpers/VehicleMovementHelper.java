@@ -40,32 +40,6 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 
 public class VehicleMovementHelper implements INBTTaggable
 {
-/**
- * vehicle input flow (onInput)
- * 
- * if client
- *  if client move
- *    set local info to input
- *    send FULL input packet to server
- *  else
- *    send partial input to server 
- * else
- *    set local info to input
- */
-
-/**
- * vehicle movement update flow
- * 
- * if client
- *  if client move
- *    every X ticks, send FULL input packet to server
- * else
- *  every X ticks send FULL motion packet to clients
- *    if client move
- *      do not send to riding player
- * update local motion params (client AND server)
- */
-
 private VehicleBase vehicle;
 
 private float forwardAccel = 0;
@@ -75,6 +49,7 @@ public float strafeMotion = 0;
 protected float prevWidth = 0.8f;
 public float localThrottle = 0.f;
 public float airPitch = 0.f;
+float airSpeed;
 public VehicleMovementHelper (VehicleBase veh)
   {
   this.vehicle = veh;
@@ -197,6 +172,7 @@ public void sendInputToServer(byte forward, byte strafe, boolean fullPacket)
     tag.setFloat("fAcc", forwardAccel);
     tag.setFloat("sAcc", strafeAccel);  
     tag.setFloat("rp", airPitch);
+    tag.setFloat("aS", this.airSpeed);
     }
   Packet02Vehicle pkt = new Packet02Vehicle();
   pkt.setParams(this.vehicle);
@@ -222,6 +198,7 @@ public void sendUpdateToClients()
   tag.setFloat("fAcc", forwardAccel);
   tag.setFloat("sAcc", strafeAccel);
   tag.setFloat("rp", airPitch);
+  tag.setFloat("aS", this.airSpeed);
   Packet02Vehicle pkt = new Packet02Vehicle();
   pkt.setParams(this.vehicle);
   pkt.setInputData(tag);  
@@ -318,6 +295,10 @@ public void handleInputData(NBTTagCompound tag)
     {
     airPitch = tag.getFloat("rp");
     } 
+  if(tag.hasKey("aS"))
+    {
+    this.airSpeed = tag.getFloat("aS");
+    }
   if(tag.hasKey("tr"))
     {
     this.handleThrottlePacket(tag); 
@@ -362,9 +343,14 @@ public void onMovementTick()
   switch(type)
   {
   case AIR1:
-  case AIR2:
     {
     this.handleAirMovementUpdate();
+    break;   
+    } 
+    
+  case AIR2:
+    {
+    this.handleHelicopterMotion();
     break;   
     } 
   
@@ -383,72 +369,11 @@ protected void handleGroundMovementUpdate()
   byte strafeInput = vehicle.getStrafeInput();
   this.prevWidth = vehicle.width;
   vehicle.width = 0.8f;
-  this.vehicle.nav.onMovementUpdate();//vehicle navigator will provide input and other vehicle settings, if it has a node...   
-  float weightAdjust = 1.f;
-  if(vehicle.currentWeight > vehicle.baseWeight)
-    {
-    weightAdjust = vehicle.baseWeight  / vehicle.currentWeight;
-    }
-  if(forwardInput!=0)
-    {
-    forwardAccel = forwardInput * 0.03f * (vehicle.currentForwardSpeedMax*weightAdjust - MathHelper.abs(forwardMotion));
-    if(forwardInput<0)
-      {
-      forwardAccel *= 0.6f;
-      }
-    forwardAccel *= weightAdjust;
-    }
-  else
-    {
-    forwardAccel = forwardMotion * -0.08f;
-    }
-  if(strafeInput!=0)
-    {
-    strafeAccel = -strafeInput * 0.06f * (vehicle.currentStrafeSpeedMax*weightAdjust -MathHelper.abs(strafeMotion));
-    strafeAccel *= weightAdjust;
-    if((strafeInput>0 && strafeMotion >0 ) || (strafeInput<0 && strafeMotion<0))
-      {
-      strafeAccel += strafeMotion * -0.13f;
-      }
-    }  
-  else
-    {
-    strafeAccel = strafeMotion * -0.13f;
-    }
+  this.vehicle.nav.onMovementUpdate();//vehicle navigator will provide input and other vehicle settings, if it has a node...
+
+  this.handleForwardMotion(0.03f, 0.08f, true);
+  this.handleStrafeMotion(0.06f, 0.13f);
   
-  strafeMotion +=strafeAccel;
-  forwardMotion +=forwardAccel;
-  
-  float absFor = MathHelper.abs(forwardMotion);
-  float absStr = MathHelper.abs(strafeMotion);
-    
-  if(forwardInput ==1 && absFor > vehicle.currentForwardSpeedMax*weightAdjust)
-    {
-    forwardMotion = vehicle.currentForwardSpeedMax;
-    }
-  else if(forwardInput == -1 && absFor > vehicle.currentForwardSpeedMax * 0.6f)
-    {
-    forwardMotion = -vehicle.currentForwardSpeedMax * 0.6f;
-    }
-  else if(absFor <= 0.02f && forwardInput == 0)
-    {
-    forwardMotion = 0;
-    }
-  if(absStr > vehicle.currentStrafeSpeedMax * weightAdjust)
-    {
-    if(strafeMotion>0)
-      {
-      strafeMotion = vehicle.currentStrafeSpeedMax;
-      }
-    else
-      {
-      strafeMotion = -vehicle.currentStrafeSpeedMax;
-      }     
-    }
-  else if(absStr <= 0.2f && strafeInput == 0)
-    {
-    strafeMotion = 0;
-    }       
   if(vehicle.vehicleType.getMovementType()==VehicleMovementType.WATER)
     {
     if(!this.handleWaterMovement())
@@ -497,51 +422,236 @@ protected void handleAirMovementUpdate()
     {
     this.localThrottle = 0;
     }
-  byte pitchInput = vehicle.getForwardInput();
+  this.handleStrafeMotion(0.06f, 0.13f);
+  this.handleForwardMotion(0.06f, 0.13f, false);  
+  boolean onGround = vehicle.worldObj.getBlockId(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY)-1, MathHelper.floor_double(vehicle.posZ))!=0;
+  float horizontalVelocity = Trig.getVelocity(vehicle.motionX, vehicle.motionZ);   
+  float maxVelocity = vehicle.currentForwardSpeedMax;
+  float velocityPercent = horizontalVelocity/maxVelocity;
+  float doubleVelocityPercent = horizontalVelocity  / (maxVelocity*2);
+  float drag = onGround ? 0.995f : 0.999f;   
+  drag = localThrottle==0 && onGround ? drag * 0.985f : drag;
+  float accel = 0.025f * localThrottle*localThrottle*localThrottle;
+  accel *= (1-velocityPercent);    
+  float pitchAccel = -Trig.sinDegrees(airPitch) * horizontalVelocity * 0.075f * (1-doubleVelocityPercent);  
+  if(airPitch<0)
+    {
+    pitchAccel *= 0.5f;
+    }  
+  horizontalVelocity = (horizontalVelocity + accel + pitchAccel)*(drag);    
+  if(horizontalVelocity < vehicle.currentForwardSpeedMax * 0.65f)
+    {
+    vehicle.motionY -= (9.81f*0.05f*0.05f);
+    if(!onGround)
+      {
+      airPitch--;      
+      }
+    }
+  else
+    {
+    vehicle.motionY = Trig.sinDegrees(airPitch) * horizontalVelocity;    
+    }   
+  if(horizontalVelocity < 0.04f && localThrottle==0)//short-stop code
+    {
+    horizontalVelocity = 0.f;
+    }  
+  
+  boolean crashSpeed = false;  
+  if(horizontalVelocity > vehicle.currentForwardSpeedMax * 0.5f)
+    {
+    crashSpeed = true;
+    }    
+  boolean vertCrashSpeed = false;
+  if(vehicle.motionY < -0.25f || vehicle.motionY > 0.25f)
+    {
+    vertCrashSpeed = true;    
+    }
+  
+
+  vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);  
+  boolean onGroundNow = vehicle.worldObj.getBlockId(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY)-1, MathHelper.floor_double(vehicle.posZ))!=0;
+  this.handleAirCrash(crashSpeed, vertCrashSpeed, onGround, onGroundNow);
+   
+  float x = Trig.sinDegrees(vehicle.rotationYaw)*-horizontalVelocity;
+  float z = Trig.cosDegrees(vehicle.rotationYaw)*-horizontalVelocity;  
+  vehicle.motionX= x;  
+  vehicle.motionZ= z;  
+  vehicle.rotationYaw += strafeMotion;  
+  airPitch -= forwardMotion;
+  float mp = vehicle.onGround ? 1 : 20;
+  if(airPitch>mp){airPitch = mp;}
+  if(airPitch<-mp){airPitch = -mp;}
+  if(airPitch<.2f && airPitch>-.2f && forwardMotion==0)
+    {
+    airPitch = 0;
+    }
+  vehicle.wheelRotationPrev = vehicle.wheelRotation;
+  vehicle.wheelRotation += localThrottle * 0.1f;
+  this.tearUpGrass();  
+  vehicle.setPosition(vehicle.posX, vehicle.posY, vehicle.posZ);  
+//  Config.logDebug(String.format("handling air movement update. client: %s throttle:%s  yaw: %.2f   pitch %.2f   horizVelocity %.2f  motion: %.2f, %.2f, %.2f", vehicle.worldObj.isRemote, localThrottle, vehicle.rotationYaw, airPitch, horizontalVelocity, vehicle.motionX, vehicle.motionY, vehicle.motionZ));
+  }
+
+
+public void handleHelicopterMotion()
+  {
+  if(vehicle.riddenByEntity==null)
+    {
+    this.localThrottle = 0;
+    }
+  this.handleStrafeMotion(0.06f, 0.13f);
+  this.handleForwardMotion(0.06f, 0.13f, false);
+  airPitch -= forwardMotion;
+  if(airPitch< -5){airPitch = -5;}
+  if(airPitch> 5){airPitch = 5;}    
+  if(Math.abs(airPitch)<0.4f && vehicle.getForwardInput()==0)
+    {
+    airPitch = 0;
+    }
+  float maxVelocity = vehicle.currentForwardSpeedMax;
+  float velocityPercent = Math.abs(airSpeed)/maxVelocity;
+  boolean onGround = vehicle.worldObj.getBlockId(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY)-1, MathHelper.floor_double(vehicle.posZ))!=0;
+  boolean breaking = airPitch < 0 && airSpeed < 0 || airPitch > 0 && airSpeed >0;
+  float throttleFactor = localThrottle * localThrottle * (-airPitch * 0.00625f);
+  float velFactor = breaking ? 1.5f : (1-velocityPercent) * (1-velocityPercent);
+  float drag = onGround ? 0.95f : Math.abs(airPitch) < 0.4f? 0.95f: 0.999f;   
+  drag = localThrottle==0 && onGround ? drag * 0.985f : drag;  
+  airSpeed += (throttleFactor) * velFactor;
+  airSpeed *= drag;
+  if(airPitch==0.f && Math.abs(airSpeed) < 0.02f)
+    {
+    airSpeed = 0.f;
+    }    
+  float gravity = (9.81f * 0.05f * 0.05f);
+  float lift = (15.f*0.05f);
+  float throttleYSpeed = (lift*localThrottle)-(gravity*20);  
+  float maxLift = lift-(gravity*20);
+  if(localThrottle==0)
+    {     
+    vehicle.motionY -= gravity;   
+    }
+  else
+    {
+    vehicle.motionY = throttleYSpeed - ((Math.abs(airPitch)/5)*maxLift);
+    }
+  boolean crashSpeed = false;  
+  if(airSpeed > vehicle.currentForwardSpeedMax * 0.5f)
+    {
+    crashSpeed = true;
+    }    
+  boolean vertCrashSpeed = false;
+  if(vehicle.motionY < -0.25f || vehicle.motionY > 0.25f)
+    {
+    vertCrashSpeed = true;    
+    }  
+  vehicle.rotationYaw += strafeMotion;   
+  vehicle.motionX = Trig.sinDegrees(vehicle.rotationYaw)*-airSpeed;
+  vehicle.motionZ = Trig.cosDegrees(vehicle.rotationYaw)*-airSpeed;
+  vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+  boolean onGroundNow = vehicle.worldObj.getBlockId(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY)-1, MathHelper.floor_double(vehicle.posZ))!=0;
+  this.handleAirCrash(crashSpeed, vertCrashSpeed, onGround, onGroundNow);
+  vehicle.wheelRotationPrev = vehicle.wheelRotation;
+  vehicle.wheelRotation += localThrottle * 0.1f;
+  this.tearUpGrass();  
+  vehicle.setPosition(vehicle.posX, vehicle.posY, vehicle.posZ);  
+  }
+
+protected void handleAirCrash(boolean crashSpeed, boolean vertCrashSpeed, boolean onGroundPrev, boolean onGroundNow)
+  { 
+  if(vehicle.isCollidedHorizontally)
+    {
+    if(!onGroundPrev || crashSpeed)
+      {
+      Config.logDebug("CRASH");
+      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
+        {
+        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
+        player.addChatMessage("you have crashed!!");
+        }
+      if(!vehicle.worldObj.isRemote)
+        {
+        vehicle.setDead();
+        }
+      }
+    }  
+  if(vehicle.isCollidedVertically)
+    {
+    if(vertCrashSpeed && !onGroundPrev &&onGroundNow)
+      {
+      Config.logDebug(" VERT CRASH");
+      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
+        {
+        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
+        player.addChatMessage("you have crashed (vertical)!!");
+        }
+      if(!vehicle.worldObj.isRemote)
+        {
+        vehicle.setDead();
+        }
+      }
+    } 
+  }
+
+protected void handleForwardMotion(float inputFactor, float breakFactor, boolean slowReverse)
+  {
+  byte forwardInput = vehicle.getForwardInput();
+  float weightAdjust = 1.f;
+  if(vehicle.currentWeight > vehicle.baseWeight)
+    {
+    weightAdjust = vehicle.baseWeight  / vehicle.currentWeight;
+    }  
+  if(forwardInput!=0)
+    {
+    forwardAccel = forwardInput * inputFactor * (vehicle.currentForwardSpeedMax*weightAdjust - MathHelper.abs(forwardMotion));
+    if(forwardInput<0 && slowReverse)
+      {
+      forwardAccel *= 0.6f;
+      }
+    forwardAccel *= weightAdjust;
+    }
+  else
+    {
+    forwardAccel = forwardMotion * -breakFactor;
+    }
+  forwardMotion +=forwardAccel;
+  float absFor = MathHelper.abs(forwardMotion);
+  if(forwardInput ==1 && absFor > vehicle.currentForwardSpeedMax*weightAdjust || (!slowReverse && forwardInput==-1 && absFor> vehicle.currentForwardSpeedMax))
+    {
+    forwardMotion = vehicle.currentForwardSpeedMax;
+    }
+  else if(slowReverse && forwardInput == -1 && absFor > vehicle.currentForwardSpeedMax * 0.6f)
+    {
+    forwardMotion = -vehicle.currentForwardSpeedMax * 0.6f;
+    }
+  else if(absFor <= 0.02f && forwardInput == 0)
+    {
+    forwardMotion = 0;
+    }
+  }
+
+protected void handleStrafeMotion(float inputFactor, float breakFactor)
+  {
   byte strafeInput = vehicle.getStrafeInput();
   float weightAdjust = 1.f;
   if(vehicle.currentWeight > vehicle.baseWeight)
     {
     weightAdjust = vehicle.baseWeight  / vehicle.currentWeight;
     }  
-  if(pitchInput!=0)
-    {
-    forwardAccel = pitchInput * 0.06f * (vehicle.currentForwardSpeedMax*weightAdjust - MathHelper.abs(forwardMotion));    
-    forwardAccel *= weightAdjust;
-    }
-  else
-    {
-    forwardAccel = forwardMotion * -0.13f;
-    }
   if(strafeInput!=0)
     {
-    strafeAccel = -strafeInput * 0.06f * (vehicle.currentStrafeSpeedMax*weightAdjust -MathHelper.abs(strafeMotion));
+    strafeAccel = -strafeInput * inputFactor * (vehicle.currentStrafeSpeedMax*weightAdjust -MathHelper.abs(strafeMotion));
     strafeAccel *= weightAdjust;
     if((strafeInput>0 && strafeMotion >0 ) || (strafeInput<0 && strafeMotion<0))
       {
-      strafeAccel += strafeMotion * -0.13f;
+      strafeAccel += strafeMotion * -breakFactor;
       }
     }  
   else
     {
-    strafeAccel = strafeMotion * -0.13f;
+    strafeAccel = strafeMotion * -breakFactor;
     }  
-  strafeMotion +=strafeAccel;  
-  forwardMotion +=forwardAccel;  
-  float absFor = MathHelper.abs(forwardMotion);
-  float absStr = MathHelper.abs(strafeMotion);    
-  if(pitchInput ==1 && absFor > vehicle.currentPitchSpeedMax*weightAdjust)
-    {
-    forwardMotion = vehicle.currentPitchSpeedMax;
-    }
-  else if(pitchInput == -1 && absFor > vehicle.currentPitchSpeedMax * 0.6f)
-    {
-    forwardMotion = -vehicle.currentPitchSpeedMax * 0.6f;
-    }
-  else if(absFor <= 0.02f && pitchInput == 0)
-    {
-    forwardMotion = 0;
-    }
+  strafeMotion +=strafeAccel; 
+  float absStr = MathHelper.abs(strafeMotion);     
   if(absStr > vehicle.currentStrafeSpeedMax * weightAdjust)
     {
     if(strafeMotion>0)
@@ -556,135 +666,8 @@ protected void handleAirMovementUpdate()
   else if(absStr <= 0.2f && strafeInput == 0)
     {
     strafeMotion = 0;
-    }   
-  
-  boolean onGround = vehicle.worldObj.getBlockId(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY)-1, MathHelper.floor_double(vehicle.posZ))!=0;
-//  float velocity = Trig.getVelocity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
-  float horizontalVelocity = Trig.getVelocity(vehicle.motionX, vehicle.motionZ);   
-  float maxVelocity = vehicle.currentForwardSpeedMax;
-  float velocityPercent = horizontalVelocity/maxVelocity;
-  float doubleVelocityPercent = horizontalVelocity  / (maxVelocity*2);
-  float drag = onGround ? 0.995f : 0.999f;   
-  drag = localThrottle==0 && onGround ? drag * 0.985f : drag;
-  
-  
-  float accel = 0.025f * localThrottle*localThrottle*localThrottle;
-  accel *= (1-velocityPercent);
-  
-  
-  float pitchAccel = -Trig.sinDegrees(airPitch) * horizontalVelocity * 0.075f * (1-doubleVelocityPercent);
-  
-  if(airPitch<0)
-    {
-    pitchAccel *= 0.5f;
-    }
-  
-  horizontalVelocity = (horizontalVelocity + accel + pitchAccel)*(drag);
-  
-  
-  /**
-   * how to detect when 'crashed'
-   *   check for previous velocity vs current velocity 
-   * 
-   * 
-   * 
-   */ 
-  boolean crashSpeed = false;
-
-  
-  if(horizontalVelocity > vehicle.currentForwardSpeedMax * 0.5f)
-    {
-    crashSpeed = true;
-    }
-  else
-    {
-    }
-  
-  if(horizontalVelocity < vehicle.currentForwardSpeedMax * 0.65f)
-    {
-    vehicle.motionY -= (9.81f*0.05f*0.05f);
-    if(!onGround)
-      {
-      airPitch--;      
-      }
-    }
-  else
-    {
-    vehicle.motionY = Trig.sinDegrees(airPitch) * horizontalVelocity;    
-    }  
-  
-  if(horizontalVelocity < 0.04f && localThrottle==0)//short-stop code
-    {
-    horizontalVelocity = 0.f;
-    }  
-  
-  boolean vertCrashSpeed = false;
-  if(vehicle.motionY < -0.25f || vehicle.motionY > 0.25f)
-    {
-    vertCrashSpeed = true;    
-    }
-  
-  
-  
-  vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
-  
-  if(vehicle.isCollidedHorizontally)
-    {
-    if(!onGround || crashSpeed)
-      {
-      Config.logDebug("CRASH");
-      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
-        {
-        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
-        player.addChatMessage("you have crashed!!");
-        }
-      if(!vehicle.worldObj.isRemote)
-        {
-        vehicle.setDead();
-        }
-      }
-    }
-  
-  if(vehicle.isCollidedVertically)
-    {
-    if(vertCrashSpeed)
-      {
-      Config.logDebug(" VERT CRASH");
-      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
-        {
-        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
-        player.addChatMessage("you have crashed (vertical)!!");
-        }
-      if(!vehicle.worldObj.isRemote)
-        {
-        vehicle.setDead();
-        }
-      }
-    }
-  
-  float x = Trig.sinDegrees(vehicle.rotationYaw)*-horizontalVelocity;
-  float z = Trig.cosDegrees(vehicle.rotationYaw)*-horizontalVelocity;
-  
-  vehicle.motionX= x;  
-  vehicle.motionZ= z;
-  
-  vehicle.rotationYaw += strafeMotion;  
-  airPitch -= forwardMotion;
-  float mp = vehicle.onGround ? 1 : 20;
-  if(airPitch>mp){airPitch = mp;}
-  if(airPitch<-mp){airPitch = -mp;}
-  if(airPitch<.2f && airPitch>-.2f && forwardMotion==0)
-    {
-    airPitch = 0;
-    }
-  vehicle.wheelRotationPrev = vehicle.wheelRotation;
-  vehicle.wheelRotation += localThrottle * 0.1f;
-  this.tearUpGrass();  
-  vehicle.setPosition(vehicle.posX, vehicle.posY, vehicle.posZ);
-  
-//  Config.logDebug(String.format("handling air movement update. client: %s throttle:%s  yaw: %.2f   pitch %.2f   horizVelocity %.2f  motion: %.2f, %.2f, %.2f", vehicle.worldObj.isRemote, localThrottle, vehicle.rotationYaw, airPitch, horizontalVelocity, vehicle.motionX, vehicle.motionY, vehicle.motionZ));
+    } 
   }
-
 
 /**
  * handle boat style movement

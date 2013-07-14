@@ -1202,3 +1202,106 @@
 /********************************************************************************/
 /****************************************TEST RELEASE .014****************************************/
 /********************************************************************************/
+
+/********** 07-07-13 **********/
+* clean up civic inventory interaction to move through a single method, should clean up most resource slot foobars
+* add bonemeal slots to applicable farms (wheat, carrot, potato, tree farms)(add to container, gui, resource list, etc)(slots could be used for other purposes on other civics, just a second resource slot)
+* clean up courier routing slip to finally accept stack sizes > 64
+* clean up courier interaction to move items in one pass, work for relative time to items moved (cleans up issues of interaction at some work sites)
+* fix up a couple of issues with world-gen
+* more world-gen updates
+* add first couple of world-gen structures
+* fix hopper rotation data
+* move over to using forge chestgenhooks for loot generation
+
+/********** 07-08-13 **********/
+* world gen structures can cut in too low    
+* add research notes clickable item -- should be able to click to learn the research for that note
+* add reinforced block cement item (will be used in reinforced block recipes)
+* icons for NPC spawner items
+* fix archer missing commander target (and thus would never choose a commander)
+* add icon for cement
+* add bandit and bandit archer
+* add bucket compatibility to resource list recipes...they now return emtpy buckets if they have room
+* add recipe for cement
+* update bandit camp, lava farm, obsidian vault templates with biome swap and chest loot
+* add trashcan -- destroys any input items at the rate of 4/second
+* add prep work on mailbox delivery system
+
+/********** 07-09-13 **********/
+* mailboxes.. lots of work on mailboxes
+
+/********** 07-10-13 **********/
+* add industrial mailbox -- single destination but large buffer inventory
+* trashcan recipe (bucket of lava, stone, redstone, sticks, planks)
+* mailbox recipe, research
+* trashcan shift-click
+* mailbox shift-click interaction
+* add single-chunk chunkloader (needs recipe, research, icons, etc)
+* teMachine needs to render a different direction in inventory
+
+/********** 07-11-13 **********/
+* work on setting up jenkins build system
+* add preliminary functionality to deluxe chunkloader
+* prep work on localization support
+* get jenkins build server setup @ home
+
+/********** 07-12-13 **********/
+* more work on localization support -- converting existing stuff over to localization system
+    * component items
+    * single items
+    * backpack
+    * routing slip
+    * vehicle armor items
+    * gates
+    * civics
+    * npcs
+    * research    
+* fixup localization support code for npcs    
+* add ammo localization support
+* update build script to include language files
+* minor work on reinforced blocks.  they now break at different speeds depending upon if on placing team or not
+* first pass of gui localization cleanup -- items/recipes/info guis (have not touched other text yet)
+* fix localization of detailed description in research goal gui
+* fix some spelling errors in research goal descriptions
+
+/********** 07-13-13 **********/
+* load english translations for any languages missing translations
+* +/- buttons for team select in team gui are broken
+* reimplement reinforced block partial explosion damage (was removed when making them break at diff speeds)
+* add bandits and loot to bandit camp
+* set npcs when spawned in creative to automatically have a patrol point @ spawn point to aid in template creation (might make it a toggle with shift-pressed)
+* enable dungeon-loot table additions
+* adjust loot tables to remove spamminess from all the different types of ammo/etc that were added
+* add numerical extras to research goal names to help differentiate them
+* add npc nameplate localization support
+* add vehicle nameplate localization support
+* add direct localization support to ICivicType
+* cleanup of civic GUIs (normal/town hall) -- adjust to dynamically reposition slots and elements to fill up the screen more logically
+* update build script for automatic version numbering (requires version number in config + version.properties)
+* more update of build script...probably need a better method to set version
+* add direct localization support to INpcType
+* udpate npc courier GUI with dynamic slot and element positioning
+* fix crash on load due to null input stream in language loader
+* update vehicle gui with with dynamic slot and element positioning
+* add direct localization support to IVehicleType
+* fix vehicle naming localization on vehicle stats gui
+* add obsidian and sandstone reinforced blocks
+* enable battering ram damage (both entity and block)
+* add reinforced block recipes
+* remove rendering of npc objectives for hosile npcs
+* clean up chunk handling in chunk-handler deluxe -- it should now get/set the appropriate chunks (numerically) from the gui
+* clean up chunkloader deluxe gui to make more efficient use of space
+* minor cleanup of world-gen for structures, disallow placement of blocks/entities < 2y
+* add fortress to village gen -- template is still WIP -- needs NPCs and loot added
+* add log cabin to village gen -- template is still WIP -- needs NPCs, loot, paintings removed
+* remove paintings from logCabin
+* add loot to logCabin
+* add npc to logCabin
+* add loot to fortress
+* add missing rank #'s to logistics research english localization file
+* fix incorrect npc in log cabins
+* fix id dropped/picked for reinforced blocks
+* fix localization in ammo select gui and of ammo in vehicle overlay
+* add recipes and needed research for chunkloader blocks
+
