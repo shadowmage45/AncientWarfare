@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiRectangle;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerChunkloaderDeluxe;
+import shadowmage.ancient_warfare.common.container.ContainerChunkloaderDeluxe.ChunkMapEntry;
 
 public class GuiChunkloaderDeluxe extends GuiContainerAdvanced
 {
@@ -45,7 +46,7 @@ public GuiChunkloaderDeluxe(Container container)
 @Override
 public int getXSize()
   {
-  return 256;
+  return 11*16 + 16;
   }
 
 @Override
@@ -63,7 +64,8 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  
+  this.drawStringGui("Click on chunks to force/unforce", 8, 8, WHITE);
+  this.drawStringGui("Red=Forced   Black=Unforced", 8, 18, WHITE);
   }
 
 @Override
@@ -92,27 +94,30 @@ public void setupControls()
   {
   this.guiElements.clear();
   int xPos = 8;
-  int yPos = 8;
+  int yPos = 240 - (11*16)-8;
   int x;
-  int z;  
-  int tx = container.te.xCoord/16;
-  int tz = container.te.zCoord/16;
-  int cx = tx;
-  int cz = tz;
+  int z;
   boolean flag;
   int color;
   GuiRectangle rect;
   int index = 0;  
-  for(z = 0; z < 11; z++, yPos+=16, cz++, xPos = 8, cx=tx)
+  ChunkMapEntry chunk;
+  for(z = 0; z < 11; z++, yPos+=16, xPos = 8)
     {    
-    for(x = 0; x<11; x++, xPos+=16, index++, cx++)
+    for(x = 0; x<11; x++, xPos+=16, index++)
       {     
-      flag = container.chunkMap[x][z]==null;
+      chunk = container.chunkMap[x][z];
+      flag = !chunk.isForced();
+      
       color = x==5 && z==5 ? 0xffff00ff : flag? 0xff000000 : 0xffff0000;
       rect = new GuiRectangle(index, this, 16, 16);
       rect.updateRenderPos(xPos, yPos);
       rect.setRenderColor(color);
-      rect.addToToolitp("Chunk: "+(cx-5)+","+(cz-5));
+      rect.addToToolitp("Chunk: "+chunk.getChunkX()+","+chunk.getChunkZ());
+      if(x==5 && z==5)
+        {
+        rect.addToToolitp("Cannot Unforce TEs own chunk");
+        }
       this.guiElements.put(index, rect);
       this.rects[x][z] = rect;
       }
@@ -132,7 +137,7 @@ public void updateControls()
     {    
     for(x = 0; x<11; x++)
       {     
-      flag = container.chunkMap[x][z]==null;
+      flag = !container.chunkMap[x][z].isForced();
       color = x==5 && z==5 ? 0xffff00ff : flag? 0xff000000 : 0xffff0000;
       this.rects[x][z].setRenderColor(color);
       }

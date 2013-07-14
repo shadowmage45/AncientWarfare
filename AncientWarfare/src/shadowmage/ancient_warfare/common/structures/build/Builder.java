@@ -316,6 +316,10 @@ protected void placeBlock(World world, int x, int y, int z, int id, int meta)
  */
 protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockRule rule, boolean worldGen)
   {   
+  if(y<=1)
+    {
+    return;
+    }
   /**
    * check to see if block should be placed by rule percent chance
    */
@@ -469,9 +473,14 @@ private void placeCivics(World world)
 
 private void placeGates(World world)
   {
+	Entity e;
   for(GateRule g : this.struct.gateRules)
     {
-    world.spawnEntityInWorld(g.getEntityToSpawn(world, facing, struct, buildPos, this.overrideTeam));
+	  e = g.getEntityToSpawn(world, facing, struct, buildPos, this.overrideTeam);
+	  if(e!=null)
+	  {
+		    world.spawnEntityInWorld(e);		  
+	  }
     }
   }
 

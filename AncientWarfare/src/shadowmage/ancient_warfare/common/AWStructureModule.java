@@ -187,6 +187,7 @@ private void setDefaultStructureNames()
   this.defaultExportStructures.add("banditCamp.aws");
   this.defaultExportStructures.add("lavaFarm.aws");
   this.defaultExportStructures.add("fountain1.aws");
+  this.defaultExportStructures.add("logCabin.aws");
   }
 
 private void setValidScannableEntities()

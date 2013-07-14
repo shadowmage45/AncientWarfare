@@ -59,7 +59,7 @@ public void setTicket(Ticket tk)
     tag.setCompoundTag("pos", new BlockPosition(xCoord, yCoord, zCoord).writeToNBT(new NBTTagCompound()));
     tk.getModData().setCompoundTag("chunkTE", tag);
     
-    ForgeChunkManager.forceChunk(tk, new ChunkCoordIntPair(xCoord/16, zCoord/16));
+    ForgeChunkManager.forceChunk(tk, new ChunkCoordIntPair(xCoord>>4, zCoord>>4));
     ImmutableSet tkCk = tk.getChunkList();
     Iterator<ChunkCoordIntPair> it = tkCk.iterator();
     while(it.hasNext())

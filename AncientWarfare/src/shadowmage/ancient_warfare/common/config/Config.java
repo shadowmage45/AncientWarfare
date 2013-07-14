@@ -58,6 +58,7 @@ public static boolean addOversizeAmmo = true;
 public static boolean useVehicleSetupTime = true;
 public static boolean soldiersUseAmmo = false;
 public static boolean useNpcWorkForCrafting = true;
+public static boolean enableVillageGen = true;
 
 public static int trajectoryIterationsServer = 20;
 public static int civicBroadcastRange = 80;

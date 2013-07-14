@@ -20,10 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.world_gen;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.WeakHashMap;
 
+import net.minecraft.village.VillageCollection;
 import net.minecraft.world.gen.structure.ComponentVillage;
 import net.minecraft.world.gen.structure.ComponentVillageStartPiece;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.world_gen.village.AWVCAdvancedLibrary;
 import shadowmage.ancient_warfare.common.world_gen.village.AWVCFortress;
+import shadowmage.ancient_warfare.common.world_gen.village.AWVCLogCabin;
 import shadowmage.ancient_warfare.common.world_gen.village.AWVCTower;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
@@ -70,8 +71,8 @@ public class VillageGenerator
  */
 
 public static VillageGenHook fortress;
-public static VillageGenHook library;
 public static VillageGenHook tower;
+public static VillageGenHook logCabin;
 public static Random teamRandom = new Random();
 public WeakHashMap<ComponentVillageStartPiece, Integer> villageMap = new WeakHashMap<ComponentVillageStartPiece, Integer>();
 
@@ -81,26 +82,18 @@ private VillageGenerator(){};
 
 public static void load()
   {
-  if(true){return;}
-  ProcessedStructure struct = StructureManager.instance().getStructureServer("mineArea");
+  if(!Config.enableVillageGen){return;}
+  ProcessedStructure struct = StructureManager.instance().getStructureServer("fortress1");
   if(struct!=null)
     {
     fortress = new VillageGenHook(AWVCFortress.class, 1, 20, struct);  
     VillagerRegistry.instance().registerVillageCreationHandler(fortress);
-    }
-  
-  struct = StructureManager.instance().getStructureServer("advancedVillageLibrary");
+    }    
+  struct = StructureManager.instance().getStructureServer("logCabin");
   if(struct!=null)
     {
-    library = new VillageGenHook(AWVCAdvancedLibrary.class, 1, 20, struct);
-    VillagerRegistry.instance().registerVillageCreationHandler(library);    
-    }
-    
-  struct = StructureManager.instance().getStructureServer("towerTest1");
-  if(struct!=null)
-    {
-    tower = new VillageGenHook(AWVCTower.class, 1, 20, struct);
-    VillagerRegistry.instance().registerVillageCreationHandler(tower);    
+    logCabin = new VillageGenHook(AWVCLogCabin.class, 2, 20, struct);
+    VillagerRegistry.instance().registerVillageCreationHandler(logCabin);
     }
   }
 
@@ -118,7 +111,7 @@ public static VillageGenComponent constructComponent(Class<? extends ComponentVi
   if(struct==null)
     {
     return null;
-    }
+    }  
   VillageGenComponent part = null;
   if(clz == AWVCFortress.class)
     {
@@ -127,11 +120,12 @@ public static VillageGenComponent constructComponent(Class<? extends ComponentVi
   else if(clz== AWVCAdvancedLibrary.class)
     {
     part = new AWVCAdvancedLibrary(start, type, face, struct, box);
-    }
-  else if(clz == AWVCTower.class)
+    }  
+  else if(clz== AWVCLogCabin.class)
     {
-    part = new AWVCTower(start, type, face, struct, box);
+    part = new AWVCLogCabin(start, type, face, struct, box);
     }
+  
   return part;
   }
 

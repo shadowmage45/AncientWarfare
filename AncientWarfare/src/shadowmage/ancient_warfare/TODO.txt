@@ -14,17 +14,24 @@ MOD BETA TEST PACK
 * thaumcraft?
 
 PRE OPEN BETA
-* block/machine/te localizations
 * finish localization support (gui cleanup/validation)
+    * none known
 * GUI polish
-    deluxe chunkloader
-* default survival-mode structures    
-* better system for making rations (special machine probably with auto-output?)
+    * none known
+* recipes for chunkloaders
 * finish adding world gen and village gen structures
-    add log cabin as a village structure, perhaps with a random NPC in it
-    add fountain as random world-gen structure (find good validation settings)
-    add fortress as village gen structure (need to finish it first)
+    add NPCs and loot to fortress
+    add NPCs and loot to logCabin
+    remove paintings from logCabin
     ?randomly add bandits to world during world-gen on surface (spawn in packs of 2-3, 1xarcher 1xmelee ?xcommander)?
+OPTIONAL?    
+* block/machine/te localizations
+    * civic
+    * crafting
+    * machine
+    * reinforced   
+* default survival-mode structures
+* better system for making rations (special machine probably with auto-output?)
     
 PRE FULL RELEASE
 * NEI plugin
@@ -265,10 +272,16 @@ TWEAKS/OPTIMIZATION
 * update vehicle gui with with dynamic slot and element positioning
 * add direct localization support to IVehicleType
 * fix vehicle naming localization on vehicle stats gui
-
 * add obsidian and sandstone reinforced blocks
 * enable battering ram damage (both entity and block)
 * add reinforced block recipes
+* remove rendering of npc objectives for hosile npcs
+
+* clean up chunk handling in chunk-handler deluxe -- it should now get/set the appropriate chunks (numerically) from the gui
+* clean up chunkloader deluxe gui to make more efficient use of space
+* minor cleanup of world-gen for structures, disallow placement of blocks/entities < 2y
+* add fortress to village gen -- template is still WIP -- needs NPCs and loot added
+* add log cabin to village gen -- template is still WIP -- needs NPCs, loot, paintings removed
 
 /********** 07-14-13 **********/
 /********** 07-15-13 **********/

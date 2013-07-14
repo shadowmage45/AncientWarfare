@@ -156,6 +156,10 @@ public void handleWorldPlacement(World world, int facing, ProcessedStructure str
   BlockPosition min = BlockTools.getMin(c1, c2);
   BlockPosition max = BlockTools.getMax(c1, c2);
   max.y += (ySize-1);
+  if(target.y<=2)
+  {
+	  return;
+  }
   CivicRegistry.instance().setCivicBlock(world, target.x, target.y, target.z, civicType);
   TECivic te = (TECivic) world.getBlockTileEntity(target.x, target.y, target.z);
   te.setBounds(min.x, min.y, min.z, max.x, max.y, max.z);

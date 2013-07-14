@@ -68,6 +68,7 @@ public Object buildComponent(StructureVillagePieceWeight villagePiece, Component
   boolean canGenerate = (structureboundingbox != null && structureboundingbox.minY > 10);
   Config.logDebug("found struct bb for check: "+ structureboundingbox);
   Config.logDebug("gen check1: "+canGenerate);
+  Config.logDebug("weightStats: "+villagePiece.villagePiecesSpawned + " for: "+villagePiece.villagePieceClass);
   if(canGenerate)
     {
     canGenerate = StructureComponent.findIntersecting(pieces, structureboundingbox) == null ? true : false;

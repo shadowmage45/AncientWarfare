@@ -22,9 +22,9 @@ xOffset=3
 zOffset=0
 
 maxOverhang=0
-maxLeveling=0
-levelingBuffer=0
-maxVerticalClear=0
+maxLeveling=2
+levelingBuffer=2
+maxVerticalClear=3
 clearingBuffer=0
 preserveWater=false
 preserveLava=false

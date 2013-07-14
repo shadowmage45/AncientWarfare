@@ -118,7 +118,11 @@ private void buildPriority(int priority)
         if(shouldSkipBlock(world, rule, target.x, target.y, target.z, priority))
           {
           continue;
-          }        
+          } 
+        if(target.y<=2)
+        {
+        	continue;
+        }
         handleBlockRulePlacement(world, target.x, target.y, target.z, rule, false);      
         }
       }
