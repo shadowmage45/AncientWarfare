@@ -641,7 +641,7 @@ public void onUpdateClient()
   if(this.riddenByEntity instanceof NpcBase)
     {
     this.updateRiderPosition();
-    }  
+    }
   }
 
 /**
@@ -652,11 +652,7 @@ public void onUpdateServer()
   if(this.riddenByEntity==null)
     {
     this.moveHelper.clearInputFromDismount();
-    }
-  else if(this.vehicleType.getMovementType()==VehicleMovementType.AIR1 || this.vehicleType.getMovementType()==VehicleMovementType.AIR2)
-    {
-    this.riddenByEntity.fallDistance = 0.f;
-    }
+    }  
   }
 
 public void updateTurretPitch()

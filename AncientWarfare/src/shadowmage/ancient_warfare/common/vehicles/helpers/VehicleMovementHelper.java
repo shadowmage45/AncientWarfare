@@ -345,12 +345,14 @@ public void onMovementTick()
   case AIR1:
     {
     this.handleAirMovementUpdate();
+    vehicle.fallDistance = 0;
     break;   
     } 
     
   case AIR2:
     {
     this.handleHelicopterMotion();
+    vehicle.fallDistance = 0;
     break;   
     } 
   
@@ -470,7 +472,7 @@ protected void handleAirMovementUpdate()
 
   vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);  
   boolean onGroundNow = vehicle.worldObj.getBlockId(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY)-1, MathHelper.floor_double(vehicle.posZ))!=0;
-  this.handleAirCrash(crashSpeed, vertCrashSpeed, onGround, onGroundNow);
+  this.handleAirCrash(crashSpeed, vertCrashSpeed, onGround);
    
   float x = Trig.sinDegrees(vehicle.rotationYaw)*-horizontalVelocity;
   float z = Trig.cosDegrees(vehicle.rotationYaw)*-horizontalVelocity;  
@@ -504,35 +506,52 @@ public void handleHelicopterMotion()
   airPitch -= forwardMotion;
   if(airPitch< -5){airPitch = -5;}
   if(airPitch> 5){airPitch = 5;}    
-  if(Math.abs(airPitch)<0.4f && vehicle.getForwardInput()==0)
+  if(Math.abs(airPitch)<0.125f && vehicle.getForwardInput()==0)
     {
     airPitch = 0;
     }
+  if(localThrottle>0.645f && localThrottle <0.655f)
+    {
+    localThrottle = 0.65f;
+    }
+    
   float maxVelocity = vehicle.currentForwardSpeedMax;
   float velocityPercent = Math.abs(airSpeed)/maxVelocity;
-  boolean onGround = vehicle.worldObj.getBlockId(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY)-1, MathHelper.floor_double(vehicle.posZ))!=0;
+//  boolean onGround = vehicle.worldObj.getBlockId(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY)-1, MathHelper.floor_double(vehicle.posZ))!=0;
+  boolean onGround = vehicle.onGround;
   boolean breaking = airPitch < 0 && airSpeed < 0 || airPitch > 0 && airSpeed >0;
-  float throttleFactor = localThrottle * localThrottle * (-airPitch * 0.00625f);
-  float velFactor = breaking ? 1.5f : (1-velocityPercent) * (1-velocityPercent);
-  float drag = onGround ? 0.95f : Math.abs(airPitch) < 0.4f? 0.95f: 0.999f;   
+  float throttleFactor = localThrottle * (-airPitch*0.20f);
+  float velFactor = breaking ? 1.5f : (1-velocityPercent) * (1-velocityPercent);  
+  float drag = onGround ? 0.95f : 1.f - (0.05f - Math.abs(airPitch)*0.01f);   
   drag = localThrottle==0 && onGround ? drag * 0.985f : drag;  
-  airSpeed += (throttleFactor) * velFactor;
+  airSpeed += ((throttleFactor) * velFactor) * 0.03125f;
   airSpeed *= drag;
   if(airPitch==0.f && Math.abs(airSpeed) < 0.02f)
     {
     airSpeed = 0.f;
-    }    
+    }   
+  
+  
   float gravity = (9.81f * 0.05f * 0.05f);
   float lift = (15.f*0.05f);
   float throttleYSpeed = (lift*localThrottle)-(gravity*20);  
   float maxLift = lift-(gravity*20);
+//  float motAdj = ((Math.abs(airPitch)/5)*maxLift);
+  float motAdj = 0.f;
   if(localThrottle==0)
     {     
     vehicle.motionY -= gravity;   
     }
   else
     {
-    vehicle.motionY = throttleYSpeed - ((Math.abs(airPitch)/5)*maxLift);
+    if(localThrottle==0.65f && airPitch == 0)
+      {
+      vehicle.motionY = 0;
+      }
+    else
+      {
+      vehicle.motionY = throttleYSpeed - motAdj;        
+      }
     }
   boolean crashSpeed = false;  
   if(airSpeed > vehicle.currentForwardSpeedMax * 0.5f)
@@ -549,14 +568,14 @@ public void handleHelicopterMotion()
   vehicle.motionZ = Trig.cosDegrees(vehicle.rotationYaw)*-airSpeed;
   vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
   boolean onGroundNow = vehicle.worldObj.getBlockId(MathHelper.floor_double(vehicle.posX), MathHelper.floor_double(vehicle.posY)-1, MathHelper.floor_double(vehicle.posZ))!=0;
-  this.handleAirCrash(crashSpeed, vertCrashSpeed, onGround, onGroundNow);
+  this.handleAirCrash(crashSpeed, vertCrashSpeed, onGround);
   vehicle.wheelRotationPrev = vehicle.wheelRotation;
   vehicle.wheelRotation += localThrottle * 0.1f;
   this.tearUpGrass();  
   vehicle.setPosition(vehicle.posX, vehicle.posY, vehicle.posZ);  
   }
 
-protected void handleAirCrash(boolean crashSpeed, boolean vertCrashSpeed, boolean onGroundPrev, boolean onGroundNow)
+protected void handleAirCrash(boolean crashSpeed, boolean vertCrashSpeed, boolean onGroundPrev)
   { 
   if(vehicle.isCollidedHorizontally)
     {
@@ -576,7 +595,7 @@ protected void handleAirCrash(boolean crashSpeed, boolean vertCrashSpeed, boolea
     }  
   if(vehicle.isCollidedVertically)
     {
-    if(vertCrashSpeed && !onGroundPrev &&onGroundNow)
+    if(vertCrashSpeed && !onGroundPrev)
       {
       Config.logDebug(" VERT CRASH");
       if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)

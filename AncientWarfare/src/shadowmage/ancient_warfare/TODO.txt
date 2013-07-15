@@ -1,6 +1,7 @@
 PRE OPEN BETA
 * large trebuchet health should be increased
 * researcher and craftsmsan need specific tools
+* adjust npc attack distance from target if target is ridding an entity (use ridden width instead of target width)
 OPTIONAL?    
 * block/machine/te localizations
     * civic
