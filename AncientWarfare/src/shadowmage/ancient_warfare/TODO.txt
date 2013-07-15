@@ -151,6 +151,8 @@ TWEAKS/OPTIMIZATION
 * remove tag validation from backpack use in courier crafting -- it will now eat full/empty/used/colored backpacks
 
 /********** 07-15-13 **********/
+* new wiki created and WIP
+
 /********** 07-16-13 **********/
 /********** 07-17-13 **********/
 /********** 07-18-13 **********/
