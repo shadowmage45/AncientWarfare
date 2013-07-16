@@ -1,13 +1,7 @@
 PRE OPEN BETA
-* large trebuchet health should be increased
+* helicopter model
 * researcher and craftsmsan need specific tools
-* adjust npc attack distance from target if target is ridding an entity (use ridden width instead of target width)
 OPTIONAL?    
-* block/machine/te localizations
-    * civic
-    * crafting
-    * machine
-    * reinforced   
 * better system for making rations (special machine probably with auto-output?)
     
 PRE FULL RELEASE
@@ -19,7 +13,6 @@ PRE FULL RELEASE
 
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
-* death message from missiles is untranslated
 * examine forge dictionary use for wood (research related)
 * stone slabs render as quartz slabs in research book (possibly other places)
 * investigate gate redstone interaction
@@ -30,15 +23,21 @@ FROM TESTING
 * wander/crawler pathfinding likes to circle on chests and go up/down ladders a lot
 * npcs need massive optimization pass, using far too much of server tick time
 * deluxe chunkloader world rendering
+* bed placement is fubar in structure gen from templates
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
 * move all GUIs over from rendering static strings to rendering translated strings
 * add additional names for vehicles w/material
+* block/machine/te localizations
+    * civic
+    * crafting
+    * machine
+    * reinforced   
+* death message from missiles is untranslated
 
 BALANCE/TWEAKS
 * routing slips more expensive (use various dyes for them?)
-* patrols are a bit 'hard' to setup
 
 TEXTURE/ART
 * more missile textures
@@ -65,10 +64,6 @@ VEHICLES
 AIRPLANE
 
 HELICOPTER/airship/vtol
-* will be super-simple layout for controls
-* throttle control for vertical speed
-* AWSD for traditional turn/move forward/left
-* link to turret yaw control for strafe left-right
  
 GATES
 * rework model into a 1/4 block model to allow for true mid-split/open gates
@@ -154,6 +149,10 @@ TWEAKS/OPTIMIZATION
 * new wiki created and WIP
 
 /********** 07-16-13 **********/
+* adjust npc attack distance from target if target is ridding an entity (use ridden width instead of target width)
+* large trebuchet health should be increased
+
+
 /********** 07-17-13 **********/
 /********** 07-18-13 **********/
 /********** 07-19-13 **********/

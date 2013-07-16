@@ -236,13 +236,15 @@ public float getAttackDistance(ITargetEntry target)
     }
   else//is entity entry
     {
+    if(ent.ridingEntity!=null && ent.ridingEntity.width > ent.width)
+      {
+      ent = ent.ridingEntity;
+      }        
     float rangedDistance = npc.npcType.getRangedAttackDistance(npc.rank);
     if(rangedDistance>0)
       {
       return rangedDistance;
       }
-//    Config.logDebug("returning attack distance of: " + 2.8f * (npc.width*0.5f + target.getEntity(npc.worldObj).width*0.5f));
-//    Config.logDebug("distance to target: "+npc.getDistanceFromTarget(target));
     return 2.8f * (npc.width*0.5f + target.getEntity(npc.worldObj).width*0.5f);
     }
   }

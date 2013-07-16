@@ -44,7 +44,7 @@ public class VehicleTypeTrebuchetLarge extends VehicleType
     this.vehicleMaterial = VehicleMaterial.materialWood;
     this.materialCount = 20;
     this.maxMissileWeight = 30.f;
-    
+    this.baseHealth = 175;
     this.validAmmoTypes.add(Ammo.ammoStoneShot10);
     this.validAmmoTypes.add(Ammo.ammoStoneShot15); 
     this.validAmmoTypes.add(Ammo.ammoFireShot10);
