@@ -102,6 +102,7 @@ WORLD GEN STUFF
 * BC
 * TE
 * RC
+* IC2?
 * Twilight forest
 * EE3
 * Iron Chests
