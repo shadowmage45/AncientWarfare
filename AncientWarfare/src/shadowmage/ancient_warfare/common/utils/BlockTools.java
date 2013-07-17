@@ -69,6 +69,33 @@ public static int getCardinalFromSide(int side)
   return side;
   }
 
+public static int getSideFromCardinal(int side)
+  {
+  switch(side)
+  {
+  case 2://n
+  side = 2;
+  break;
+  
+  case 0://s
+  side = 3;
+  break;
+  
+  case 3://w
+  side = 4;
+  break;
+  
+  case 1://e
+  side = 5;
+  break;
+  
+  default:
+  side = -1;
+  break;  
+  }    
+  return side;
+  }
+
 public static BlockPosition offsetForSide(BlockPosition pos, int sideHit)
   {
   switch (sideHit)

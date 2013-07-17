@@ -43,7 +43,6 @@ Ticket tk;
  */
 public TEChunkLoader()
   {
-  this.machineNumber = 3;
   this.guiNumber = -1;
   this.shouldWriteInventory = false;
   this.canUpdate = false;  

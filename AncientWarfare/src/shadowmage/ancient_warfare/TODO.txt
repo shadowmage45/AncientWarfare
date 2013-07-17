@@ -152,7 +152,9 @@ TWEAKS/OPTIMIZATION
 /********** 07-16-13 **********/
 * adjust npc attack distance from target if target is ridding an entity (use ridden width instead of target width)
 * large trebuchet health should be increased
-
+* fix naming issue on industrial mailbox top icon
+* add bc plugin proxy
+* add bc-power worker block
 
 /********** 07-17-13 **********/
 /********** 07-18-13 **********/

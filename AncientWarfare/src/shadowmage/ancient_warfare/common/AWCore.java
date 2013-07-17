@@ -25,6 +25,7 @@ package shadowmage.ancient_warfare.common;
 
 import java.io.IOException;
 
+import net.minecraft.src.ModLoader;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
@@ -39,6 +40,7 @@ import shadowmage.ancient_warfare.common.lang.LanguageLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.plugins.PluginProxy;
 import shadowmage.ancient_warfare.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.registry.AWEntityRegistry;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
@@ -107,6 +109,7 @@ public void preInit(FMLPreInitializationEvent evt)
   Config.log("Starting Loading.  Version: "+Config.VERSION);
 
   LanguageLoader.instance().loadLanguageFiles();
+  PluginProxy.instance().detectAndLoadPlugins();
   /**
    * register player tracker
    */
@@ -176,6 +179,7 @@ public void init(FMLInitializationEvent evt)
    * process loaded structures
    */
   AWStructureModule.instance().process();
+ 
   Config.log("Ancient Warfare Init completed.");
   }
 

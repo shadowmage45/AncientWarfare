@@ -37,7 +37,6 @@ int tickDivider = 0;
  */
 public TETrashcan()
   {
-  this.machineNumber = 0;  
   this.guiNumber = GUIHandler.TRASHCAN;
   this.canUpdate = true;
   }

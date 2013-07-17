@@ -34,16 +34,10 @@ import net.minecraft.tileentity.TileEntity;
 public abstract class TEMachine extends TileEntity implements IInteractable
 {
 
-protected int machineNumber = 0;
 protected int rotation = 0;
 protected int guiNumber = -1;
 protected boolean canUpdate = false;
 protected boolean shouldWriteInventory = true;
-
-public int getMachineNumber()
-  {
-  return machineNumber;
-  }
 
 public int getRotation()
   {

@@ -18,55 +18,51 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.machine;
-
-import java.util.Collection;
-import java.util.Collections;
+package shadowmage.ancient_warfare.common.plugins;
 
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.plugins.bc.BCProxy;
+import shadowmage.ancient_warfare.common.plugins.bc.BCProxyBase;
 
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraftforge.common.ForgeChunkManager;
-
-public class TEChunkLoaderDeluxe extends TEChunkLoader
+public class PluginProxy
 {
 
-public TEChunkLoaderDeluxe()
+private PluginProxy(){}
+private static final PluginProxy INSTANCE = new PluginProxy();
+public static PluginProxy instance(){return INSTANCE;}
+
+public static boolean bcLoaded = false;
+
+public static BCProxyBase bcProxy;
+
+public void detectAndLoadPlugins()
   {
-  this.guiNumber = GUIHandler.CHUNKLOADER_DEULXE;
+  this.tryLoadBCProxy();
   }
 
-public Collection<ChunkCoordIntPair> getForcedChunks()
-  {
-  if(this.tk!=null)
+protected void tryLoadBCProxy()
+  {  
+  try
     {
-    return this.tk.getChunkList();
-    }
-  return Collections.emptyList();    
-  }
-
-/**
- * 
- * @param chunkX
- * @param chunkZ
- * @param force if true, release if false
- */
-public void setChunk(int chunkX, int chunkZ, boolean force)
-  {
-  if(this.tk!=null)
-    {
-    ChunkCoordIntPair chunk = new ChunkCoordIntPair(chunkX, chunkZ);
-    Config.logDebug("setting chunk: "+chunkX+","+chunkZ+" forced: "+force);
-    if(force)
+    Class clz = Class.forName("buildcraft.BuildCraftCore");
+    if(clz!=null)
       {
-      ForgeChunkManager.forceChunk(tk, chunk);
+      Config.log("Initializing BC Plugin");
+      bcProxy = new BCProxy();      
+      bcLoaded = true;
       }
     else
       {
-      ForgeChunkManager.unforceChunk(tk, chunk);
+      Config.log("Skipping BC Plugin loading, BuildCraft not detected...");
+      bcProxy = new BCProxyBase();
       }
-    }
+    } 
+  catch (ClassNotFoundException e)
+    {
+    Config.log("Skipping BC Plugin loading, BuildCraft not detected...");
+    bcProxy = new BCProxyBase();
+    return;
+    }  
   }
 
 

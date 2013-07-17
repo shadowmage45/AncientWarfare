@@ -49,7 +49,6 @@ int[] bottomIndices = new int[18];
  */
 public TEMailBox()
   {
-  this.machineNumber = 1;
   this.guiNumber = GUIHandler.MAILBOX;
   this.mailBoxSize = 38;
   this.inventory = new AWInventoryMailbox(mailBoxSize, null);

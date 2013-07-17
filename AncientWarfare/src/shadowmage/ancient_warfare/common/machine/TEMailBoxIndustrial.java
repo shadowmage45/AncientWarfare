@@ -38,7 +38,6 @@ int[] otherIndices = new int[27];
  */
 public TEMailBoxIndustrial()
   {
-  this.machineNumber = 2;
   this.mailBoxSize = 45;
   this.guiNumber = GUIHandler.MAILBOX_INDUSTRIAL;
   this.inventory = new AWInventoryMailbox(mailBoxSize, null);

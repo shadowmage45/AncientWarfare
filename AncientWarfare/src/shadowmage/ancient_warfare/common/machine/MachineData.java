@@ -27,6 +27,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.plugins.PluginProxy;
+import shadowmage.ancient_warfare.common.plugins.bc.BCProxy;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -62,6 +64,8 @@ public static TileEntity getTEFor(int dmg)
   return new TEChunkLoader();
   case 4:
   return new TEChunkLoaderDeluxe();
+  case 5:
+  return PluginProxy.bcProxy.getMotorTileEntity();
   }
   return new TETrashcan();
   }
@@ -102,6 +106,13 @@ public static void registerIcons(IconRegister registry, Description d)
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 27);//trash right
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 28);//trash bottom
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 29);//trash top
+  
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 30);//trash front
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 31);//trash left
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSide"), 32);//trash rear
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 33);//trash right
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 34);//trash bottom
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 35);//trash top
   }
 
 public static void addSubBlocks(List list)
@@ -181,6 +192,13 @@ public static void registerBlockData()
   GameRegistry.registerTileEntity(TEChunkLoaderDeluxe.class, "ChunkLoaderDeluxe");
   d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,4));
   d.setName("Deluxe Chunkloader", 4);
+  
+  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getMotorTEClass(), "Work Motor");
+  if(PluginProxy.bcLoaded)
+    {
+    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,5));
+    d.setName("Work Motor", 5);    
+    }
   }
 
 }
