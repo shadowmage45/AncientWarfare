@@ -39,6 +39,7 @@ public TETrashcan()
   {
   this.guiNumber = GUIHandler.TRASHCAN;
   this.canUpdate = true;
+  this.facesOpposite = true;
   }
 
 @Override

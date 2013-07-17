@@ -28,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
+import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryMailbox;
@@ -127,9 +128,24 @@ public int[] getAccessibleSlotsFromSide(int side)
     {
     return topIndices;
     }
-  side = BlockTools.getCardinalFromSide(side);
-  side = (side + this.rotation)%4;
-  return sideSlotIndices[side];
+  ForgeDirection d = ForgeDirection.getOrientation(side);
+  if(d==facingDirection)
+    {
+    return sideSlotIndices[0];
+    }
+  if(d==BlockTools.getRight(facingDirection))
+    {
+    return sideSlotIndices[1];
+    }
+  if(d== facingDirection.getOpposite())
+    {
+    return sideSlotIndices[2];
+    }
+  if(d== BlockTools.getLeft(facingDirection))
+    {
+    return sideSlotIndices[3];
+    }
+  return this.bottomIndices;
   }
 
 /************************************************INVENTORY METHODS*************************************************/

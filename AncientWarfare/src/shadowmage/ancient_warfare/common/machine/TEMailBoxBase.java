@@ -48,6 +48,7 @@ public TEMailBoxBase()
   {
   this.canUpdate = true;
   this.shouldWriteInventory = false;  
+  this.facesOpposite = true;
   }
 
 /************************************************BOX INTERACTION METHODS*************************************************/

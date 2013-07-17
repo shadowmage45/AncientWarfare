@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.plugins.bc;
 
 import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_warfare.common.machine.TEMotorBC;
 
 public class BCProxy extends BCProxyBase
 {
@@ -38,5 +37,16 @@ public TileEntity getMotorTileEntity()
   return new TEMotorBC();
   }
 
+@Override
+public Class getWorkerTEClass()
+  {
+  return TEWorkerMotorBC.class;
+  }
+
+@Override
+public TileEntity getWorkerTileEntity()
+  {
+  return new TEWorkerMotorBC();
+  }
 
 }

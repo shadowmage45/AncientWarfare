@@ -1,6 +1,8 @@
 PRE OPEN BETA
 * helicopter model
 * researcher and craftsmsan need specific tools
+* add rotation support to rotatable blocks
+* move other rotatable blocks over to forgeDirection for consistency
 OPTIONAL?    
 * better system for making rations (special machine probably with auto-output?)
     

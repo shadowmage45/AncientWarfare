@@ -25,7 +25,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.machine.TEMachine;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
@@ -44,13 +46,6 @@ public ItemMachine(int par1)
   this.hasSubtypes = true;  
   }
 
-//@Override
-//public Icon getIconFromDamage(int par1)
-//  {
-//  Description d = DescriptionRegistry2.instance().getDescriptionFor(BlockLoader.reinforced.blockID);
-//  return d.getIconFor(par1);
-//  }
-
 @Override
 public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
   {
@@ -60,7 +55,20 @@ public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, i
     if(ter!=null)
       {
       TEMachine te = (TEMachine)world.getBlockTileEntity(x, y, z);
-      te.setRotation((BlockTools.getPlayerFacingFromYaw(player.rotationYaw) + 2) %4);     
+      int face = side;
+      if(!te.canPointVertical)
+        {
+        face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+        face = (face+2)%4;
+        face = BlockTools.getSideFromCardinal(face);   
+        Config.logDebug("converted side: "+face);
+        }
+      ForgeDirection direction = ForgeDirection.getOrientation(face);
+      if(!te.facesOpposite)
+        {
+        direction = direction.getOpposite();
+        }
+      te.setDirection(direction);           
       te.onBlockPlaced();
       }
     return true;

@@ -18,13 +18,13 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.machine;
+package shadowmage.ancient_warfare.common.plugins.bc;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
-import shadowmage.ancient_warfare.common.utils.BlockTools;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
+import shadowmage.ancient_warfare.common.machine.TEWorkMotor;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
@@ -95,27 +95,12 @@ public void updateEntity()
     }
   if(this.workSite==null)
     {
-    Config.logDebug("rotation: "+rotation);
-    int c = rotation;
-    c = (c +2) %4;
     int x = xCoord;
     int y = yCoord;
     int z = zCoord;
-    switch(c)
-    {
-    case 0:
-    z++;
-    break;
-    case 1:
-    x--;
-    break;
-    case 2:
-    z--;
-    break;
-    case 3:
-    x++;
-    break;
-    }
+    ForgeDirection d = this.facingDirection;
+    x += d.offsetX;
+    z += d.offsetZ;   
     Config.logDebug(String.format("checking block %s, %s, %s for work site", x,y,z));
     TileEntity e = worldObj.getBlockTileEntity(x, y, z);
     if(e instanceof ITEWorkSite)

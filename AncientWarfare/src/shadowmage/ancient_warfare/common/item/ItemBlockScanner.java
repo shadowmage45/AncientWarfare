@@ -47,13 +47,13 @@ public ItemBlockScanner(int itemID)
 @Override
 public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float xOff, float yOff, float zOff)
   {
-  return onActivated(world, player, stack, new BlockPosition(x,y,z));
+  return onActivated(world, player, stack, new BlockPosition(x,y,z), side);
   }
 
 @Override
 public ItemStack onItemRightClick(ItemStack stack, World world,EntityPlayer player)
   {
-  onActivated(world, player, stack, BlockTools.getBlockClickedOn(player, world, false));
+  onActivated(world, player, stack, BlockTools.getBlockClickedOn(player, world, false), -1);
   return stack;
   }
 
@@ -71,7 +71,7 @@ public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par
  * @param hit
  * @return
  */
-private boolean onActivated(World world, EntityPlayer player, ItemStack stack, BlockPosition hit)
+private boolean onActivated(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
   if(world.isRemote || hit==null)
     {
@@ -81,7 +81,7 @@ private boolean onActivated(World world, EntityPlayer player, ItemStack stack, B
   int meta = world.getBlockMetadata(hit.x, hit.y, hit.z);
   int rotation = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
   String facing = rotation==0 ? "South": rotation==1? "West": rotation==2?"North":rotation==3?"East":"huh?";  
-  player.addChatMessage("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation);
+  player.addChatMessage("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation +  " side: "+side);
   Config.logDebug("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation+" player yaw: "+player.rotationYaw);
   return true;
   }

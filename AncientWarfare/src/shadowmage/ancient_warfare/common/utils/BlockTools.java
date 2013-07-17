@@ -36,6 +36,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
 
 public class BlockTools
@@ -69,6 +70,52 @@ public static int getCardinalFromSide(int side)
   return side;
   }
 
+public static ForgeDirection getLeft(ForgeDirection a)
+  {
+  switch(a)
+  {
+  case SOUTH:
+  return ForgeDirection.EAST;
+  case WEST:
+  return ForgeDirection.SOUTH;
+  case NORTH:
+  return ForgeDirection.WEST;
+  case EAST:
+  return ForgeDirection.NORTH;
+  }
+  return a;
+  }
+
+public static ForgeDirection getRight(ForgeDirection a)
+  {
+  switch(a)
+  {
+  case SOUTH:
+  return ForgeDirection.WEST;
+  case WEST:
+  return ForgeDirection.NORTH;
+  case NORTH:
+  return ForgeDirection.EAST;
+  case EAST:
+  return ForgeDirection.SOUTH;
+  }
+  return a;
+  }
+
+public static ForgeDirection rotateRight(ForgeDirection a, int rot)
+  {
+  for(int i = 0; i< rot; i++)
+    {
+    a = getRight(a);
+    }
+  return a;
+  }
+
+public static ForgeDirection getOpposite(ForgeDirection a)
+  {
+  return a.getOpposite();
+  }
+
 public static int getSideFromCardinal(int side)
   {
   switch(side)
@@ -82,11 +129,11 @@ public static int getSideFromCardinal(int side)
   break;
   
   case 3://w
-  side = 4;
+  side = 5;
   break;
   
   case 1://e
-  side = 5;
+  side = 4;
   break;
   
   default:

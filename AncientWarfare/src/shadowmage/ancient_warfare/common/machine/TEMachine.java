@@ -20,9 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.machine;
 
-import shadowmage.ancient_warfare.common.interfaces.IInteractable;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,23 +27,37 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.IInteractable;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public abstract class TEMachine extends TileEntity implements IInteractable
 {
 
-protected int rotation = 0;
 protected int guiNumber = -1;
 protected boolean canUpdate = false;
 protected boolean shouldWriteInventory = true;
+public boolean canPointVertical = false;
+public boolean facesOpposite = false;
 
-public int getRotation()
-  {
-  return rotation;
-  }
+protected ForgeDirection facingDirection = ForgeDirection.UNKNOWN;
 
 public void onBlockBreak()
   {
   
+  }
+
+public void setDirection(ForgeDirection direction)
+  {
+  this.facingDirection = direction;
+  Config.logDebug("setting direction to: "+direction);
+  }
+
+public ForgeDirection getFacing()
+  {
+  return this.facingDirection;
   }
 
 public void onBlockPlaced()
@@ -60,25 +71,11 @@ public boolean canUpdate()
   return canUpdate;
   }
 
-/**
- * 0-south
- * 1-east
- * 2-north
- * 3-west
- * 4-down
- * 5-up
- * @param rotation
- */
-public void setRotation(int rotation)
-  {
-  this.rotation = rotation;
-  }
-
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
   super.readFromNBT(tag);
-  this.rotation = tag.getByte("face");
+  this.facingDirection = ForgeDirection.getOrientation(tag.getByte("face"));
   if(this instanceof IInventory)
     {
     InventoryTools.readInventoryFromTag((IInventory)this, tag.getCompoundTag("inventory"));
@@ -89,7 +86,7 @@ public void readFromNBT(NBTTagCompound tag)
 public void writeToNBT(NBTTagCompound tag)
   {
   super.writeToNBT(tag);
-  tag.setByte("face", (byte)this.rotation);
+  tag.setByte("face", (byte) this.facingDirection.ordinal());
   if(this instanceof IInventory && this.shouldWriteInventory)
     {
     tag.setCompoundTag("inventory",InventoryTools.getTagForInventory((IInventory)this));
@@ -100,7 +97,7 @@ public void writeToNBT(NBTTagCompound tag)
 public Packet getDescriptionPacket()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setByte("face", (byte)rotation);
+  tag.setByte("face", (byte) this.facingDirection.ordinal());
   Packet132TileEntityData pkt = new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);
   return pkt;
   }
@@ -110,7 +107,7 @@ public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
   {
   if(pkt.customParam1.hasKey("face"))
     {
-    this.rotation = pkt.customParam1.getByte("face");
+    this.facingDirection = ForgeDirection.getOrientation(pkt.customParam1.getByte("face"));
     }
   super.onDataPacket(net, pkt);
   }

@@ -33,7 +33,7 @@ public static PluginProxy instance(){return INSTANCE;}
 
 public static boolean bcLoaded = false;
 
-public static BCProxyBase bcProxy;
+public static BCProxyBase bcProxy = new BCProxyBase();
 
 public void detectAndLoadPlugins()
   {
@@ -54,13 +54,11 @@ protected void tryLoadBCProxy()
     else
       {
       Config.log("Skipping BC Plugin loading, BuildCraft not detected...");
-      bcProxy = new BCProxyBase();
       }
     } 
   catch (ClassNotFoundException e)
     {
     Config.log("Skipping BC Plugin loading, BuildCraft not detected...");
-    bcProxy = new BCProxyBase();
     return;
     }  
   }

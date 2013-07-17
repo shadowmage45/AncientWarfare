@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.plugins.PluginProxy;
 import shadowmage.ancient_warfare.common.plugins.bc.BCProxy;
@@ -66,6 +67,8 @@ public static TileEntity getTEFor(int dmg)
   return new TEChunkLoaderDeluxe();
   case 5:
   return PluginProxy.bcProxy.getMotorTileEntity();
+  case 6:
+  return PluginProxy.bcProxy.getWorkerTileEntity();
   }
   return new TETrashcan();
   }
@@ -107,12 +110,19 @@ public static void registerIcons(IconRegister registry, Description d)
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 28);//trash bottom
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 29);//trash top
   
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 30);//trash front
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSide"), 30);//trash front
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 31);//trash left
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSide"), 32);//trash rear
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 32);//trash rear
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 33);//trash right
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 34);//trash bottom
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 35);//trash top
+  
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSide"), 36);//trash front
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 37);//trash left
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 38);//trash rear
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 39);//trash right
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 40);//trash bottom
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 41);//trash top
   }
 
 public static void addSubBlocks(List list)
@@ -136,20 +146,46 @@ public static Icon getIcon(TileEntity te, int meta, int side)
     TEMachine tem = (TEMachine)te;
     int machine = meta;    
     machine*=6;    
-    if(side==0)//bottom
+    ForgeDirection sideD = ForgeDirection.getOrientation(side);
+    ForgeDirection face = tem.getFacing();
+    
+    int rot = 0;
+    if(face == ForgeDirection.UP || face == ForgeDirection.DOWN)
       {
-      return d.getIconFor(machine+4);
+      if((side==0 && face.ordinal()==0) ||(side==1 && face.ordinal()==1))
+        {
+        rot = 0;
+        }
+      else if((side==0 && face.ordinal()==1) ||(side==1 && face.ordinal()==0))
+        {
+        rot = 1;
+        }
+      else
+        {
+        rot = 2;
+        }
       }
-    else if(side==1)//top
+    else if(side==0)
       {
-      return d.getIconFor(machine+5);
+      rot = 4;     
       }
-    else
+    else if(side==1)
       {
-      side = BlockTools.getCardinalFromSide(side);    
-      int rot = (tem.getRotation() + side) % 4;
-      return d.getIconFor(machine+rot);      
+      rot = 5;        
       }
+    else if(sideD == BlockTools.getLeft(face))
+      {
+      rot = 3;
+      }
+    else if(sideD == BlockTools.getOpposite(face))
+      {
+      rot = 2;
+      }
+    else if(sideD==BlockTools.getRight(face))
+      {
+      rot = 1;
+      }      
+    return d.getIconFor(machine+rot); 
     } 
   /**
    * return default icons for inventory rendering
@@ -198,6 +234,13 @@ public static void registerBlockData()
     {
     d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,5));
     d.setName("Work Motor", 5);    
+    }
+  
+  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getWorkerTEClass(), "Worker Engine");
+  if(PluginProxy.bcLoaded)
+    {
+    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,6));
+    d.setName("Worker Engine", 6);
     }
   }
 
