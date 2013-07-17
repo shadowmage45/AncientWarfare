@@ -66,9 +66,8 @@ public static int npcUpkeepTicks = 20*60*5;//five minute base timer..  -1 to dis
 public static int npcHealingTicks = 20*10;//ten second base timer  -1 to disable healing
 public static int npcAITicks = 5;
 public static int npcAISearchRange = 80;
-public static int npcPathfinderType = 1;//0-inline, 1-scheduled, 2-threaded
-public static int npcPathfinderThreads = 2;
 public static int mailSendTicks = 5*20;//five seconds between sending mail
+public static int npcWorkMJ = 80;//how many BuildCraft MJ represent one NPC 'work' unit
 
 
 //***************************************************SYNCHED CONFIGS************************************************//
@@ -227,6 +226,7 @@ public void setCoreInfo()
   this.disableResearch = config.get("a-general-options", "disable_research", false, "If true, research system will be disabled and all recipes will be available.").getBoolean(false);
   this.useNpcWorkForCrafting = config.get("a-general-options", "npc_work", true, "If true, npcs will be required to produce items at crafting stations.").getBoolean(true);
   this.enablePerformanceMonitor = config.get("a-general-options", "performance_monitor", true, "If true, enables a server-side performance monitor viewable by server OPs from the AW config menu (F7)").getBoolean(true);
+  this.npcWorkMJ = config.get("a-general-options", "npc_work_mj", 80, "How many BuildCraft MJ represent one NPC 'work' unit.").getInt(80);
   
   /**
    * performance options
@@ -235,8 +235,6 @@ public void setCoreInfo()
   this.npcAISearchRange = config.get("b-performance", "npc_search_radius", 140, "How many blocks of radius should entities search for targets and work? (MAX range, some AI limits this further)").getInt(140);
   this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory_iterations", 20, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);
   this.clientMoveUpdateTicksBase = config.get("b-performance", "client_movement_ticks", 3, "How many ticks between client movement update packets if client movement is enabled? (setting is sent and synched to clients on login)").getInt(3);
-  this.npcPathfinderType = config.get("b-performance", "pathfinder_type", 1, "0--Immediate. 1--Scheduled. 2--Threaded").getInt(1);
-  this.npcPathfinderThreads = config.get("b-performance", "pathfinder_threaded_thread_count", 2, "How many threads to use? (spare cores is a good starting number)").getInt(2);
   }
 
 public void setVehicleInfo()

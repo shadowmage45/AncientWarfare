@@ -159,6 +159,8 @@ TWEAKS/OPTIMIZATION
 * add bc-power worker block
 
 /********** 07-17-13 **********/
+* fix up worker-motor wooden pipe connection issues
+
 /********** 07-18-13 **********/
 /********** 07-19-13 **********/
 /********** 07-20-13 **********/

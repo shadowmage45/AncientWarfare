@@ -20,27 +20,42 @@
  */
 package shadowmage.ancient_warfare.common.plugins.bc;
 
+import java.util.List;
+
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.machine.TEWorkerMotor;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
 import buildcraft.api.power.PowerProvider;
 import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.ISolidSideTile;
 
-public class TEWorkerMotorBC extends TEWorkerMotor
+public class TEWorkerMotorBC extends TEWorkerMotor implements IPipeConnection, ISolidSideTile, IPowerReceptor
 {
 
 IPowerReceptor receptor = null;
-
+IPowerProvider provider = null;
 /**
  * 
  */
 public TEWorkerMotorBC()
   {
+  provider = PowerFramework.currentFramework.createPowerProvider();
   this.canUpdate = true;
+  this.initPowerProvider();
+  }
+
+private void initPowerProvider() 
+  {
+  provider.configure(20, 1, 8, 10, 100);
+  provider.configurePowerPerdition(1, 100);
   }
 
 @Override
@@ -52,9 +67,19 @@ public void updateEntity()
   int y = yCoord + facingDirection.offsetY;
   int z = zCoord + facingDirection.offsetZ;
   TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
+//  if(this.provider!=null && this.provider.getEnergyStored()>0)
+//    {
+//    this.powerBuffer += this.provider.useEnergy(0, this.provider.getEnergyStored(), true);
+//    }
   if(isPoweredTile(tile))
     {
-    this.receptor = (IPowerReceptor)tile;    
+    this.receptor = (IPowerReceptor)tile; 
+    if(this.receptor!=null && this.receptor.getPowerProvider()!=null)// && this.receptor.getPowerProvider().isPowerSource(facingDirection)
+      {      
+      int toMove = (int) (this.provider!=null ? this.provider.getEnergyStored() : 0);
+      toMove = receptor.getPowerProvider().getMaxEnergyReceived() > toMove ? receptor.getPowerProvider().getMaxEnergyReceived() : toMove;
+      this.receptor.getPowerProvider().receiveEnergy(this.provider.useEnergy(0, toMove, true), facingDirection.getOpposite());      
+      }
     }
   else
     {
@@ -75,25 +100,85 @@ public boolean isPoweredTile(TileEntity tile)
 @Override
 public void broadcastWork(int maxRange)
   {
-    /**
-     * TODO
-     */
+  if(this.worldObj==null || this.worldObj.isRemote)
+    {
+    return;
+    }
+  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(maxRange, maxRange/2, maxRange);
+  List<NpcBase> npcList = worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
+  for(NpcBase npc : npcList)
+    {
+    if(isHostile(npc.teamNum))      
+      {
+      if(npc.npcType.isCombatUnit())
+        {
+        npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, Config.npcAITicks*11);
+        }      
+      }
+    else
+      {
+      if(broadcastWork)
+        {    
+        if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(this.getWorkType()) && npc.teamNum==this.teamNumber)
+          {
+          npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
+          }
+        }
+      }
+    }
   }
 
 @Override
 public boolean hasWork()
   {
-  return this.receptor!=null && this.receptor.getPowerProvider()!=null && receptor.getPowerProvider().getEnergyStored() < receptor.getPowerProvider().getMaxEnergyStored() && this.receptor.getPowerProvider().isPowerSource(facingDirection.getOpposite());
+  return this.provider!=null && this.provider.getEnergyStored() < this.provider.getMaxEnergyStored();
+//  return this.receptor!=null && this.receptor.getPowerProvider()!=null && receptor.getPowerProvider().getEnergyStored() < receptor.getPowerProvider().getMaxEnergyStored() ;//&& this.receptor.getPowerProvider().isPowerSource(facingDirection)
   }
 
 @Override
 public void doWork(IWorker worker)
   {
-  if(worker==this.worker && worker!=null && this.receptor!=null && this.receptor.getPowerProvider()!=null && this.receptor.getPowerProvider().isPowerSource(facingDirection.getOpposite()))
+  if(this.provider!=null && this.provider.getEnergyStored() < this.provider.getMaxEnergyStored())
     {
-    this.receptor.getPowerProvider().receiveEnergy(40, facingDirection.getOpposite());
-    Config.logDebug("doing worker motor-work!!");
+    this.provider.receiveEnergy(Config.npcWorkMJ, facingDirection);
     }
   }
 
+@Override
+public boolean isSolidOnSide(ForgeDirection side)
+  {
+  return true;
+  }
+
+@Override
+public boolean isPipeConnected(ForgeDirection with)
+  {
+  return true;
+  }
+
+@Override
+public void setPowerProvider(IPowerProvider provider)
+  {
+  this.provider = provider;
+  }
+
+@Override
+public IPowerProvider getPowerProvider()
+  {
+  return this.provider;
+  }
+
+@Override
+public void doWork()
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public int powerRequest(ForgeDirection from)
+  {
+  IPowerProvider p = getPowerProvider();
+  float needed = p.getMaxEnergyStored() - p.getEnergyStored();
+  return (int) Math.ceil(Math.min(p.getMaxEnergyReceived(), needed));  
+  }
 }

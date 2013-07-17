@@ -34,6 +34,8 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.RotationHelper;
 import shadowmage.ancient_warfare.common.block.AWBlockContainer;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -64,6 +66,16 @@ public boolean onBlockClicked(World world, int posX, int posY, int posZ, EntityP
     return true;
     }
   return false;
+  }
+
+public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis)
+  {
+  TileEntity te = worldObj.getBlockTileEntity(x, y, z);
+  if(te instanceof TEMachine)
+    {
+    ((TEMachine) te).rotate();
+    }
+  return true;
   }
 
 @Override

@@ -31,6 +31,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.machine.TEMachine;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public class ItemMachine extends AWItemBlockBase
@@ -68,6 +69,7 @@ public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, i
         {
         direction = direction.getOpposite();
         }
+      te.setTeamNum(TeamTracker.instance().getTeamForPlayer(player));
       te.setDirection(direction);           
       te.onBlockPlaced();
       }

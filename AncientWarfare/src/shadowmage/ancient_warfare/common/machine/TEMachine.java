@@ -31,14 +31,18 @@ import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IInteractable;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public abstract class TEMachine extends TileEntity implements IInteractable
 {
 
+protected int teamNumber = 0;
 protected int guiNumber = -1;
 protected boolean canUpdate = false;
 protected boolean shouldWriteInventory = true;
+protected boolean broadcastWork = false;
 public boolean canPointVertical = false;
 public boolean facesOpposite = false;
 
@@ -60,9 +64,49 @@ public ForgeDirection getFacing()
   return this.facingDirection;
   }
 
+public void rotate()
+  {
+  if(!this.canPointVertical)
+    {
+    this.setDirection(BlockTools.getRight(facingDirection));
+    }
+  else
+    {
+    this.setDirection(facingDirection.getRotation(ForgeDirection.DOWN));
+    }
+  }
+
 public void onBlockPlaced()
   {
   
+  }
+
+public void setTeamNum(int num)
+  {
+  this.teamNumber = num;
+  }
+
+public int getTeamNum()
+  {
+  return teamNumber;
+  }
+
+public boolean isHostile(int sourceTeam)
+  {
+  if(this.worldObj==null)
+    {
+    return false;
+    }
+  return TeamTracker.instance().isHostileTowards(worldObj, sourceTeam, teamNumber);
+  }
+
+public boolean canTeamInteract(int sourceTeam)
+  {
+  if(this.worldObj==null)
+    {
+    return false;
+    }
+  return !TeamTracker.instance().isHostileTowards(worldObj, teamNumber, sourceTeam);
   }
 
 @Override
