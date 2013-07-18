@@ -54,7 +54,7 @@ public TEWorkerMotorBC()
 
 private void initPowerProvider() 
   {
-  provider.configure(20, 1, 8, 10, 100);
+  provider.configure(20, 1, 2, Config.npcWorkMJ, Config.npcWorkMJ);
   provider.configurePowerPerdition(1, 100);
   }
 
@@ -67,10 +67,6 @@ public void updateEntity()
   int y = yCoord + facingDirection.offsetY;
   int z = zCoord + facingDirection.offsetZ;
   TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
-//  if(this.provider!=null && this.provider.getEnergyStored()>0)
-//    {
-//    this.powerBuffer += this.provider.useEnergy(0, this.provider.getEnergyStored(), true);
-//    }
   if(isPoweredTile(tile))
     {
     this.receptor = (IPowerReceptor)tile; 
@@ -153,7 +149,7 @@ public boolean isSolidOnSide(ForgeDirection side)
 @Override
 public boolean isPipeConnected(ForgeDirection with)
   {
-  return true;
+  return with == facingDirection.getOpposite();
   }
 
 @Override

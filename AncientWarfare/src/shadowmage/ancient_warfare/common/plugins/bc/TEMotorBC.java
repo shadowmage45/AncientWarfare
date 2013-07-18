@@ -45,7 +45,7 @@ public TEMotorBC()
 
 private void initPowerProvider() 
   {
-  provider.configure(20, 1, 8, 10, 100);
+  provider.configure(20, 25, 25, 70, 210);
   provider.configurePowerPerdition(1, 100);
   }
 

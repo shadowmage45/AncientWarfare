@@ -42,7 +42,7 @@ protected int teamNumber = 0;
 protected int guiNumber = -1;
 protected boolean canUpdate = false;
 protected boolean shouldWriteInventory = true;
-protected boolean broadcastWork = false;
+protected boolean broadcastWork = true;
 public boolean canPointVertical = false;
 public boolean facesOpposite = false;
 

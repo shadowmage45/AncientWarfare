@@ -226,7 +226,7 @@ public void setCoreInfo()
   this.disableResearch = config.get("a-general-options", "disable_research", false, "If true, research system will be disabled and all recipes will be available.").getBoolean(false);
   this.useNpcWorkForCrafting = config.get("a-general-options", "npc_work", true, "If true, npcs will be required to produce items at crafting stations.").getBoolean(true);
   this.enablePerformanceMonitor = config.get("a-general-options", "performance_monitor", true, "If true, enables a server-side performance monitor viewable by server OPs from the AW config menu (F7)").getBoolean(true);
-  this.npcWorkMJ = config.get("a-general-options", "npc_work_mj", 80, "How many BuildCraft MJ represent one NPC 'work' unit.").getInt(80);
+  this.npcWorkMJ = config.get("a-general-options", "npc_work_mj", 70, "How many BuildCraft MJ represent one NPC 'work' unit.").getInt(70);
   
   /**
    * performance options
