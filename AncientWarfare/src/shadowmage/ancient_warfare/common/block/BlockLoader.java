@@ -101,17 +101,17 @@ public static BlockLoader instance()
 
 public void load()
   {
-  registerBlock(builder, "Builder"); 
+  registerBlock(builder, "block.single.builder"); 
   registerBlockWithItem(warehouseStorage, "Warehouse Storage", AWItemBlockBase.class);
   ((BlockWarehouseStorage) warehouseStorage).registerBlockInfo();
-  registerBlock(gateProxy, "AWGateProxy");
+  registerBlock(gateProxy, "block.single.gateproxy");
   registerBlock(civicBlock1, "CivicBlock1");
   registerBlock(civicBlock2, "CivicBlock2");
   registerBlock(civicBlock3, "CivicBlock3");
   registerBlock(civicBlock4, "CivicBlock4");  
-  registerBlockWithItem(machineBlock, "Machine", ItemMachine.class);
+  registerBlockWithItem(machineBlock, "block.multi.machine.0", ItemMachine.class);
   
-  registerBlockWithItem(reinforced, "Reinforced Blocks", ItemReinforcedBlock.class);
+  registerBlockWithItem(reinforced, "block.multi.reinforced.0", ItemReinforcedBlock.class);
   ((BlockReinforced)reinforced).registerBlockInfo();
   GameRegistry.registerTileEntity(TEAWBlockReinforced.class, "Reinforced Block");
   

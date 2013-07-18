@@ -24,19 +24,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
-import shadowmage.ancient_warfare.common.machine.TEWorkMotor;
+import shadowmage.ancient_warfare.common.machine.TEMechanicalWorker;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 
-public class TEMotorBC extends TEWorkMotor implements IPowerReceptor
+public class TEMechanicalWorkerBC extends TEMechanicalWorker implements IPowerReceptor
 {
 
 IPowerProvider provider;
 /**
  * 
  */
-public TEMotorBC()
+public TEMechanicalWorkerBC()
   {
   provider = PowerFramework.currentFramework.createPowerProvider();
   this.canUpdate = true;  

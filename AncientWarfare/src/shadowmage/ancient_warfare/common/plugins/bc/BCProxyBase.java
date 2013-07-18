@@ -21,8 +21,8 @@
 package shadowmage.ancient_warfare.common.plugins.bc;
 
 import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_warfare.common.machine.TEWorkMotor;
-import shadowmage.ancient_warfare.common.machine.TEWorkerMotor;
+import shadowmage.ancient_warfare.common.machine.TEMechanicalWorker;
+import shadowmage.ancient_warfare.common.machine.TEHandCrankEngine;
 
 public class BCProxyBase
 {
@@ -34,22 +34,22 @@ public BCProxyBase()
 
 public Class<? extends TileEntity> getMotorTEClass()
   {
-  return TEWorkMotor.class;
+  return TEMechanicalWorker.class;
   }
 
 public TileEntity getMotorTileEntity()
   {
-  return new TEWorkMotor();
+  return new TEMechanicalWorker();
   }
 
 public Class getWorkerTEClass()
   {
-  return TEWorkerMotor.class;
+  return TEHandCrankEngine.class;
   }
 
 public TileEntity getWorkerTileEntity()
   {
-  return new TEWorkerMotor();
+  return new TEHandCrankEngine();
   }
 
 }

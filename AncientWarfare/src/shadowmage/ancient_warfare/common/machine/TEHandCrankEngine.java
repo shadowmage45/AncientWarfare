@@ -24,7 +24,7 @@ import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 
-public class TEWorkerMotor extends TEMachine implements ITEWorkSite
+public class TEHandCrankEngine extends TEMachine implements ITEWorkSite
 {
 
 protected IWorker worker;
@@ -32,7 +32,7 @@ protected IWorker worker;
 /**
  * 
  */
-public TEWorkerMotor()
+public TEHandCrankEngine()
   {
   this.canPointVertical = true;
   this.canUpdate = true;

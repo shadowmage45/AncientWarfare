@@ -24,7 +24,7 @@ import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 
-public class TEWorkMotor extends TEMachine implements IWorker
+public class TEMechanicalWorker extends TEMachine implements IWorker
 {
 
 protected ITEWorkSite workSite;
@@ -35,7 +35,7 @@ public boolean isRedstonePowered = false;
 /**
  * 
  */
-public TEWorkMotor()
+public TEMechanicalWorker()
   {
   }
 

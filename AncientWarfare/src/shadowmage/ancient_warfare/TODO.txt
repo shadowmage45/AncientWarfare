@@ -26,6 +26,8 @@ FROM TESTING
 * npcs need massive optimization pass, using far too much of server tick time
 * deluxe chunkloader world rendering
 * bed placement is fubar in structure gen from templates
+* textures for bc compat blocks
+* 
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -162,6 +164,9 @@ TWEAKS/OPTIMIZATION
 * fix up worker-motor wooden pipe connection issues
 
 /********** 07-18-13 **********/
+* rename BC compat blocks (mechanical worker, hand crank engine)
+* add language translation entries for blocks
+
 /********** 07-19-13 **********/
 /********** 07-20-13 **********/
 /********** 07-21-13 **********/

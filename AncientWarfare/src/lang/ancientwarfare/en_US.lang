@@ -181,6 +181,26 @@ item.vehicleSpawner.tooltip.large=Special: Can Use Large Ammo
 item.vehicleSpawner.tooltip.noweapon=No Weapons
 item.vehicleSpawner.tooltip.boat=Special: Boat
 
+#blocks
+block.single.builder=Ticked Builder Block
+block.single.gateproxy=Gate Proxy
+block.multi.storage.0=Basic Storage Expansion
+block.multi.storage.1=Intermediate Storage Expansion
+block.multi.storage.2=Advanced Storage Expansion
+block.multi.reinforced.0=Reinforced Stone Brick
+block.multi.reinforced.1=Reinforced Brick
+block.multi.reinforced.2=Reinforced Nether Brick
+block.multi.reinforced.3=Reinforced Obsidian Brick
+block.multi.reinforced.4=Reinforced Sand Brick
+block.multi.machine.0=Trash Disposal
+block.multi.machine.1=Personal Mailbox
+block.multi.machine.2=Industrial Mailbox
+block.multi.machine.3=Spot Chunkloader
+block.multi.machine.4=Deluxe Chunkloader
+block.multi.machine.5=Mechanical Worker
+block.multi.machine.6=Hand Cranked Engine
+
+
 #civics
 civic.farm.wheat=Wheat Farm
 civic.farm.wheat.tooltip=10x10x2 Max Size

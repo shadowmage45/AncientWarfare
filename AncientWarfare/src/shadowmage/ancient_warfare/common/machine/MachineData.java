@@ -211,36 +211,36 @@ public static void registerBlockData()
   
   GameRegistry.registerTileEntity(TETrashcan.class, "Trashcan");
   d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,0));
-  d.setName("Trash Disposal", 0);  
+  d.setName("block.multi.machine.0", 0);  
   
   GameRegistry.registerTileEntity(TEMailBox.class, "Mailbox");
   d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,1));
-  d.setName("Mailbox", 1);
+  d.setName("block.multi.machine.1", 1);
   
   GameRegistry.registerTileEntity(TEMailBoxIndustrial.class, "MailboxIndustrial");
   d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,2));
-  d.setName("Industrial Mailbox", 2);
+  d.setName("block.multi.machine.2", 2);
   
   GameRegistry.registerTileEntity(TEChunkLoader.class, "ChunkLoaderSingle");
   d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,3));
-  d.setName("Simple Chunkloader", 3);
+  d.setName("block.multi.machine.3", 3);
   
   GameRegistry.registerTileEntity(TEChunkLoaderDeluxe.class, "ChunkLoaderDeluxe");
   d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,4));
-  d.setName("Deluxe Chunkloader", 4);
+  d.setName("block.multi.machine.4", 4);
   
-  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getMotorTEClass(), "Work Motor");
+  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getMotorTEClass(), "Mechanical Worker");
   if(PluginProxy.bcLoaded)
     {
     d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,5));
-    d.setName("Work Motor", 5);    
+    d.setName("block.multi.machine.5", 5);    
     }
   
-  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getWorkerTEClass(), "Worker Engine");
+  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getWorkerTEClass(), "Hand Crank Engine");
   if(PluginProxy.bcLoaded)
     {
     d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,6));
-    d.setName("Worker Engine", 6);
+    d.setName("block.multi.machine.6", 6);
     }
   }
 

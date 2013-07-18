@@ -38,7 +38,7 @@ public class BlockBuilder extends AWBlockContainer
    */
 public BlockBuilder(int par1)
   {
-  super(par1, Material.rock, "AWBuilderBlock");
+  super(par1, Material.rock, "block.single.builder");
   this.setCreativeTab(null);
   }
 

@@ -53,7 +53,7 @@ public class BlockWarehouseStorage extends AWBlockBase
  */
 public BlockWarehouseStorage(int par1)
   {
-  super(par1, Material.rock, "Warehouse Storage Block");
+  super(par1, Material.rock, "block.multi.storage.0");
   }
 
 @Override
@@ -87,9 +87,9 @@ public void breakBlock(World world, int x, int y, int z, int id, int meta)
 public void registerBlockInfo()
   {
   Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
-  d.setName("Basic Storage", 0);
-  d.setName("Organized Storage", 1);
-  d.setName("Advanced Storage",2);
+  d.setName("block.multi.storage.0", 0);
+  d.setName("block.multi.storage.1", 1);
+  d.setName("block.multi.storage.2",2);
   d.addDisplayStack(new ItemStack(this,1,0));
   d.addDisplayStack(new ItemStack(this,1,1));
   d.addDisplayStack(new ItemStack(this,1,2));

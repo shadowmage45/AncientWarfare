@@ -27,7 +27,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
-import shadowmage.ancient_warfare.common.machine.TEWorkerMotor;
+import shadowmage.ancient_warfare.common.machine.TEHandCrankEngine;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import buildcraft.api.power.IPowerProvider;
@@ -37,7 +37,7 @@ import buildcraft.api.power.PowerProvider;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.ISolidSideTile;
 
-public class TEWorkerMotorBC extends TEWorkerMotor implements IPipeConnection, ISolidSideTile, IPowerReceptor
+public class TEHandCrankEngineBC extends TEHandCrankEngine implements IPipeConnection, ISolidSideTile, IPowerReceptor
 {
 
 IPowerReceptor receptor = null;
@@ -45,7 +45,7 @@ IPowerProvider provider = null;
 /**
  * 
  */
-public TEWorkerMotorBC()
+public TEHandCrankEngineBC()
   {
   provider = PowerFramework.currentFramework.createPowerProvider();
   this.canUpdate = true;

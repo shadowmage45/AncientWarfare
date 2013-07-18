@@ -28,25 +28,25 @@ public class BCProxy extends BCProxyBase
 @Override
 public Class<? extends TileEntity> getMotorTEClass()
   {
-  return TEMotorBC.class;
+  return TEMechanicalWorkerBC.class;
   }
 
 @Override
 public TileEntity getMotorTileEntity()
   {
-  return new TEMotorBC();
+  return new TEMechanicalWorkerBC();
   }
 
 @Override
 public Class getWorkerTEClass()
   {
-  return TEWorkerMotorBC.class;
+  return TEHandCrankEngineBC.class;
   }
 
 @Override
 public TileEntity getWorkerTileEntity()
   {
-  return new TEWorkerMotorBC();
+  return new TEHandCrankEngineBC();
   }
 
 }

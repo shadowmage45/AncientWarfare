@@ -66,11 +66,11 @@ public boolean renderAsNormalBlock()
 public void registerBlockInfo()
   {
   Description d = DescriptionRegistry2.instance().getDescriptionFor(this.blockID);
-  d.setName("Reinforced Stone Brick", 0);
-  d.setName("Reinforced Red Brick", 1);
-  d.setName("Reinforced Nether Brick", 2);
-  d.setName("Reinforced Obsidian Brick", 3);
-  d.setName("Reinforced Sandsone Brick", 4);
+  d.setName("block.multi.reinforced.0", 0);
+  d.setName("block.multi.reinforced.1", 1);
+  d.setName("block.multi.reinforced.2", 2);
+  d.setName("block.multi.reinforced.3", 3);
+  d.setName("block.multi.reinforced.4", 4);
   d.addDisplayStack(new ItemStack(this,1,0));
   d.addDisplayStack(new ItemStack(this,1,1));
   d.addDisplayStack(new ItemStack(this,1,2));
