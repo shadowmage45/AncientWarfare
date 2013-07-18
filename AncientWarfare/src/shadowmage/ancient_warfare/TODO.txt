@@ -33,7 +33,6 @@ LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
 * move all GUIs over from rendering static strings to rendering translated strings
 * add additional names for vehicles w/material
-* death message from missiles is untranslated
 
 BALANCE/TWEAKS
 * routing slips more expensive (use various dyes for them?)
@@ -162,6 +161,8 @@ TWEAKS/OPTIMIZATION
 * rename BC compat blocks (mechanical worker, hand crank engine)
 * add language translation entries for blocks
 * add en_US translation entries for crafting stations
+* add en_US translation entries for damage types for missiles
+* add en_US translation entries for entity type names
 
 /********** 07-19-13 **********/
 /********** 07-20-13 **********/

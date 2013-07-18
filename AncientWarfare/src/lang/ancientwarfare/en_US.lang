@@ -5,6 +5,19 @@
 # blocks
 # guiStrings (lots and lots..and even more...)
 
+# entities
+entity.npc=Ancient Warfare NPC
+entity.vehicle=Ancient Warfare Vehicle
+entity.missile=Ancient Warfare Missile
+entity.gate=Ancient Warfare Gate
+
+# damage types
+dmg.firemissile=Fire Missile
+dmg.explosivemissile=Explosive Missile
+dmg.genericmissile=Generic Missile
+dmg.piercingmissile=Piercing Missile
+dmg.battering=Battering Damage
+
 # single items
 item.single.structureScanner=Structure Scanner
 item.single.structureScanner.tooltip=Creative Mode Scanning Tool

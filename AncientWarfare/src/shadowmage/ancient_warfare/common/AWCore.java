@@ -157,10 +157,10 @@ public void preInit(FMLPreInitializationEvent evt)
   /**
    * have to load vehicles after everything else i think...
    */
-  AWEntityRegistry.registerEntity(VehicleBase.class, "Vehicle.VehicleBase", 130, 3, false);
+  AWEntityRegistry.registerEntity(VehicleBase.class, "entity.vehicle", 130, 3, false);
   VehicleRegistry.instance().registerVehicles();
-  AWEntityRegistry.registerEntity(NpcBase.class, "Npc.NpcBase", 130, 3, true);
-  AWEntityRegistry.registerEntity(EntityGate.class, "Gate.GateBase", 130, 100, false);
+  AWEntityRegistry.registerEntity(NpcBase.class, "entity.npc", 130, 3, true);
+  AWEntityRegistry.registerEntity(EntityGate.class, "entity.gate", 130, 100, false);
   Config.log("Ancient Warfare Pre-Init finished.");
   }
 

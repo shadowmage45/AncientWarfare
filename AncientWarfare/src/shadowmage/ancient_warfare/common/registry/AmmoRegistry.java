@@ -51,7 +51,7 @@ public static AmmoRegistry instance()
 
 public void registerAmmoTypes()
   {
-  AWEntityRegistry.registerEntity(MissileBase.class, "AWMissileBase", 165, 5, true);  
+  AWEntityRegistry.registerEntity(MissileBase.class, "entity.missile", 165, 5, true);  
   
   /**
    * debug..these will need to use the itemRegistry method..
