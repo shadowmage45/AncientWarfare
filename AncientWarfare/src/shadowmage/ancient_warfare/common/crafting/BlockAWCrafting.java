@@ -89,21 +89,21 @@ public void registerBlockInfo()
   {
   String baseTexDir = "ancientwarfare:crafting/";
   Description d = BlockLoader.instance().registerBlockWithItem(this, "AWCraftingBlock", AWItemBlockBase.class);
-  d.setName("Research Station", 0);
+  d.setName("block.multi.machine.0", 0);
   d.addDisplayStack(new ItemStack(this,1,0));
-  d.setName("Engineering Station", 1);
+  d.setName("block.multi.machine.1", 1);
   d.addDisplayStack(new ItemStack(this,1,1));
-  d.setName("Drafting Station", 2);
+  d.setName("block.multi.machine.2", 2);
   d.addDisplayStack(new ItemStack(this,1,2));
-  d.setName("Vehicle Engineering Station", 3);
+  d.setName("block.multi.machine.3", 3);
   d.addDisplayStack(new ItemStack(this,1,3));  
-  d.setName("Ammo Production Station", 4);
+  d.setName("block.multi.machine.4", 4);
   d.addDisplayStack(new ItemStack(this,1,4)); 
-  d.setName("NPC Recruiting Center", 5);
+  d.setName("block.multi.machine.5", 5);
   d.addDisplayStack(new ItemStack(this,1,5));  
-  d.setName("Alchemy Station", 6);
+  d.setName("block.multi.machine.6", 6);
   d.addDisplayStack(new ItemStack(this,1,6));
-  d.setName("AutoCrafting Station", 7);
+  d.setName("block.multi.machine.7", 7);
   d.addDisplayStack(new ItemStack(this,1,7));
   
   d.setIconTexture(baseTexDir+"researchBlockBottom", 0);

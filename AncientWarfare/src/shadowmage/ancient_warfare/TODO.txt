@@ -33,11 +33,6 @@ LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
 * move all GUIs over from rendering static strings to rendering translated strings
 * add additional names for vehicles w/material
-* block/machine/te localizations
-    * civic
-    * crafting
-    * machine
-    * reinforced   
 * death message from missiles is untranslated
 
 BALANCE/TWEAKS
@@ -166,6 +161,7 @@ TWEAKS/OPTIMIZATION
 /********** 07-18-13 **********/
 * rename BC compat blocks (mechanical worker, hand crank engine)
 * add language translation entries for blocks
+* add en_US translation entries for crafting stations
 
 /********** 07-19-13 **********/
 /********** 07-20-13 **********/
