@@ -65,9 +65,9 @@ import shadowmage.ancient_warfare.client.render.gate.RenderGateBasic;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateDouble;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateRotatingBridge;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateSingle;
+import shadowmage.ancient_warfare.client.render.machine.RenderTEMotor;
 import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
 import shadowmage.ancient_warfare.client.render.missile.RenderShot;
-import shadowmage.ancient_warfare.client.render.reinforcedblocks.ReinforcedBlockItemRender;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderAircraftTest;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaMobile;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaStand;
@@ -94,6 +94,7 @@ import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.plugins.PluginProxy;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -284,8 +285,9 @@ public void loadRenders()
    * civic item render (render item as block)
    */
   MinecraftForgeClient.registerItemRenderer(ItemLoader.civicPlacer.itemID, new CivicItemRenderer());
-  
-  //MinecraftForgeClient.registerItemRenderer(BlockLoader.reinforced.blockID, new ReinforcedBlockItemRender());  
+  RenderTEMotor engineRender = new RenderTEMotor();
+  MinecraftForgeClient.registerItemRenderer(BlockLoader.engineBlock.blockID, engineRender);
+  ClientRegistry.bindTileEntitySpecialRenderer(PluginProxy.bcProxy.getWorkerTEClass(), engineRender);
   }
 
 public void addTEModel(int type, ModelTEBase model)

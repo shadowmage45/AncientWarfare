@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.machine.TEHandCrankEngine;
@@ -40,47 +41,104 @@ import buildcraft.api.transport.ISolidSideTile;
 public class TEHandCrankEngineBC extends TEHandCrankEngine implements IPipeConnection, ISolidSideTile, IPowerReceptor
 {
 
-IPowerReceptor receptor = null;
-IPowerProvider provider = null;
+IPowerReceptor outputTarget = null;
+IPowerProvider internalBuffer = null;
 /**
  * 
  */
 public TEHandCrankEngineBC()
   {
-  provider = PowerFramework.currentFramework.createPowerProvider();
+  internalBuffer = PowerFramework.currentFramework.createPowerProvider();
   this.canUpdate = true;
   this.initPowerProvider();
   }
 
 private void initPowerProvider() 
   {
-  provider.configure(20, 1, 2, Config.npcWorkMJ, Config.npcWorkMJ);
-  provider.configurePowerPerdition(1, 100);
+  internalBuffer.configure(20, 1, 2, Config.npcWorkMJ, Config.npcWorkMJ*3);
+  internalBuffer.configurePowerPerdition(1, 100);
   }
 
 @Override
 public void updateEntity()
   {
   super.updateEntity();
+  if(this.isWorking || this.pistonProgress>0)
+    {
+    if(this.pistonGoingUp)
+      {
+      this.pistonProgress+=0.8f;
+      if(this.pistonProgress>=8f)
+        {
+        this.pistonGoingUp = false;
+        this.pistonProgress = 8.f;
+        }
+      }
+    else
+      {
+      this.pistonProgress-=0.8f;
+      if(this.pistonProgress<=0)
+        {
+        this.pistonProgress = 0;
+        }
+      }
+    }
   if(worldObj==null || worldObj.isRemote){return;} 
   int x = xCoord + facingDirection.offsetX;
   int y = yCoord + facingDirection.offsetY;
   int z = zCoord + facingDirection.offsetZ;
-  TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
+  TileEntity tile = worldObj.getBlockTileEntity(x, y, z);  
   if(isPoweredTile(tile))
-    {
-    this.receptor = (IPowerReceptor)tile; 
-    if(this.receptor!=null && this.receptor.getPowerProvider()!=null)// && this.receptor.getPowerProvider().isPowerSource(facingDirection)
+    {    
+    Config.logDebug("checking for power transfer to: "+x+","+y+","+z);
+    this.outputTarget = (IPowerReceptor)tile; 
+    if(this.outputTarget.getPowerProvider()!=null)
       {      
-      int toMove = (int) (this.provider!=null ? this.provider.getEnergyStored() : 0);
-      toMove = receptor.getPowerProvider().getMaxEnergyReceived() > toMove ? receptor.getPowerProvider().getMaxEnergyReceived() : toMove;
-      this.receptor.getPowerProvider().receiveEnergy(this.provider.useEnergy(0, toMove, true), facingDirection.getOpposite());      
+      int toMove = (int) (this.internalBuffer!=null ? this.internalBuffer.getEnergyStored() : 0);
+      toMove = outputTarget.getPowerProvider().getMaxEnergyReceived() > toMove ? outputTarget.getPowerProvider().getMaxEnergyReceived() : toMove;
+      if(toMove>0)
+        {
+        this.setIsWorking(true);
+        }
+      else
+        {
+        this.setIsWorking(false);
+        }
+      Config.logDebug("moving power: "+toMove);
+      this.outputTarget.getPowerProvider().receiveEnergy(this.internalBuffer.useEnergy(0, toMove, true), facingDirection.getOpposite());      
+      }
+    else
+      {
+      this.setIsWorking(false);
       }
     }
   else
     {
-    this.receptor = null;
+    this.outputTarget = null;
+    this.setIsWorking(false);
     }
+  
+  }
+
+protected void setIsWorking(boolean work)
+  {
+  if(this.worldObj!=null && work!=this.isWorking)
+    {
+    this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, BlockLoader.engineBlock.blockID, 0, work? 1 : 0);
+    this.isWorking = work;
+    Config.logDebug("set isWorking to: "+isWorking);
+    }
+  }
+
+@Override
+public boolean receiveClientEvent(int par1, int par2)
+  {
+  if(par1==0)
+    {    
+    this.isWorking = par2==1;
+    Config.logDebug("set isWorking to: "+this.isWorking+ " on "+ (this.worldObj.isRemote? "Client" : "Server"));
+    }
+  return super.receiveClientEvent(par1, par2);
   }
 
 public boolean isPoweredTile(TileEntity tile) 
@@ -127,16 +185,15 @@ public void broadcastWork(int maxRange)
 @Override
 public boolean hasWork()
   {
-  return this.provider!=null && this.provider.getEnergyStored() < this.provider.getMaxEnergyStored();
-//  return this.receptor!=null && this.receptor.getPowerProvider()!=null && receptor.getPowerProvider().getEnergyStored() < receptor.getPowerProvider().getMaxEnergyStored() ;//&& this.receptor.getPowerProvider().isPowerSource(facingDirection)
+  return this.internalBuffer!=null && this.internalBuffer.getEnergyStored() < this.internalBuffer.getMaxEnergyStored();
   }
 
 @Override
 public void doWork(IWorker worker)
   {
-  if(this.provider!=null && this.provider.getEnergyStored() < this.provider.getMaxEnergyStored())
+  if(this.internalBuffer!=null && this.internalBuffer.getEnergyStored() < this.internalBuffer.getMaxEnergyStored())
     {
-    this.provider.receiveEnergy(Config.npcWorkMJ, facingDirection);
+    this.internalBuffer.receiveEnergy(Config.npcWorkMJ, facingDirection);
     }
   }
 
@@ -155,13 +212,13 @@ public boolean isPipeConnected(ForgeDirection with)
 @Override
 public void setPowerProvider(IPowerProvider provider)
   {
-  this.provider = provider;
+  this.internalBuffer = provider;
   }
 
 @Override
 public IPowerProvider getPowerProvider()
   {
-  return this.provider;
+  return this.internalBuffer;
   }
 
 @Override

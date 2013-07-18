@@ -29,6 +29,10 @@ public class TEHandCrankEngine extends TEMachine implements ITEWorkSite
 
 protected IWorker worker;
 
+protected boolean pistonGoingUp = true;
+public boolean isWorking = false;
+protected float pistonProgress = 0.f;
+
 /**
  * 
  */
@@ -36,6 +40,22 @@ public TEHandCrankEngine()
   {
   this.canPointVertical = true;
   this.canUpdate = true;
+  this.hasSpecialModel = true;
+  }
+
+public boolean isPistonMovingUp()
+  {
+  return this.pistonGoingUp;
+  }
+
+public float getPistonProgress()
+  {
+  return this.pistonProgress;      
+  }
+
+public String getTexture()
+  {
+  return EngineData.getEngineTexture(worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
   }
 
 @Override

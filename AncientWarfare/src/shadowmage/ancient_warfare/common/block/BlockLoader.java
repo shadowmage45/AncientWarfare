@@ -59,9 +59,12 @@ import shadowmage.ancient_warfare.common.crafting.BlockAWCrafting;
 import shadowmage.ancient_warfare.common.gates.BlockGateProxy;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 import shadowmage.ancient_warfare.common.item.AWItemBlockBase;
+import shadowmage.ancient_warfare.common.item.ItemEngine;
 import shadowmage.ancient_warfare.common.item.ItemMachine;
 import shadowmage.ancient_warfare.common.item.ItemReinforcedBlock;
+import shadowmage.ancient_warfare.common.machine.BlockEngine;
 import shadowmage.ancient_warfare.common.machine.BlockMiscMachine;
+import shadowmage.ancient_warfare.common.machine.EngineData;
 import shadowmage.ancient_warfare.common.machine.MachineData;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
@@ -81,6 +84,7 @@ public static final Block gateProxy = new BlockGateProxy(Config.getBlockID("bloc
 public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3707, "Base block for crafting/research stations"), Config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for craftinb blocks").getInt(3707));
 public static final Block reinforced = new BlockReinforced(Config.getBlockID("blockMulti.reinforced", 3708, "Base block for reinforced blocks"), Material.rock, "Reinforced Blocks");
 public static final Block machineBlock = new BlockMiscMachine(Config.getBlockID("blockMulti.machine", 3709, "Base block for misc machines"), Material.rock, "Machine");
+public static final Block engineBlock = new BlockEngine(Config.getBlockID("blockMulti.engine", 3710, "Base block for misc machines"), Material.rock, "block.multi.engine.0");
 
 public static final ItemStack trashcan = new ItemStack(machineBlock,1,0);
 public static final ItemStack mailbox = new ItemStack(machineBlock,1,1);
@@ -110,6 +114,7 @@ public void load()
   registerBlock(civicBlock3, "CivicBlock3");
   registerBlock(civicBlock4, "CivicBlock4");  
   registerBlockWithItem(machineBlock, "block.multi.machine.0", ItemMachine.class);
+  registerBlockWithItem(engineBlock, "block.multi.engine.0", ItemEngine.class);
   
   registerBlockWithItem(reinforced, "block.multi.reinforced.0", ItemReinforcedBlock.class);
   ((BlockReinforced)reinforced).registerBlockInfo();
@@ -150,6 +155,7 @@ public void load()
   ((BlockAWCrafting)crafting).registerBlockInfo();
   
   MachineData.registerBlockData();
+  EngineData.registerBlockData();
   }
 
 public void registerBlock(Block block, String name)

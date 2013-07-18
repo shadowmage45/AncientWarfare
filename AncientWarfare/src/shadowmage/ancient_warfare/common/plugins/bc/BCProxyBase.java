@@ -42,7 +42,7 @@ public TileEntity getMotorTileEntity()
   return new TEMechanicalWorker();
   }
 
-public Class getWorkerTEClass()
+public Class<? extends TileEntity> getWorkerTEClass()
   {
   return TEHandCrankEngine.class;
   }

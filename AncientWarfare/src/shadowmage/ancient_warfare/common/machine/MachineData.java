@@ -46,7 +46,7 @@ public class MachineData
 /**
  * 
  */
-public MachineData()
+protected MachineData()
   {
   // TODO Auto-generated constructor stub
   }
@@ -67,8 +67,6 @@ public static TileEntity getTEFor(int dmg)
   return new TEChunkLoaderDeluxe();
   case 5:
   return PluginProxy.bcProxy.getMotorTileEntity();
-  case 6:
-  return PluginProxy.bcProxy.getWorkerTileEntity();
   }
   return new TETrashcan();
   }
@@ -100,29 +98,23 @@ public static void registerIcons(IconRegister registry, Description d)
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 19);//trash left
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 20);//trash rear
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 21);//trash right
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 22);//trash bottom
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 23);//trash top
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleBottom"), 22);//trash bottom
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleTop"), 23);//trash top
   
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 24);//trash front
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 25);//trash left
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 26);//trash rear
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 27);//trash right
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 28);//trash bottom
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 29);//trash top
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeBottom"), 28);//trash bottom
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeTop"), 29);//trash top
   
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSide"), 30);//trash front
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 30);//trash front
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 31);//trash left
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 32);//trash rear
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 33);//trash right
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 34);//trash bottom
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 35);//trash top
-  
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSide"), 36);//trash front
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 37);//trash left
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 38);//trash rear
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 39);//trash right
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 40);//trash bottom
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 41);//trash top
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 35);//trash top 
+
   }
 
 public static void addSubBlocks(List list)
@@ -236,12 +228,12 @@ public static void registerBlockData()
     d.setName("block.multi.machine.5", 5);    
     }
   
-  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getWorkerTEClass(), "Hand Crank Engine");
-  if(PluginProxy.bcLoaded)
-    {
-    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,6));
-    d.setName("block.multi.machine.6", 6);
-    }
+//  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getWorkerTEClass(), "Hand Crank Engine");
+//  if(PluginProxy.bcLoaded)
+//    {
+//    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,6));
+//    d.setName("block.multi.machine.6", 6);
+//    }
   }
 
 }
