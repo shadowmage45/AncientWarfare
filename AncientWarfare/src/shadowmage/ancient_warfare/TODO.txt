@@ -9,7 +9,7 @@ PRE OPEN BETA
 * upgrade slots in engines? (more mj/work for hand-cranked, more mj/t for waterwheel)
 * model for waterwheel engine wheel
 * texture for waterwheel engine && wheel
-* somehow expand the BB on waterwheel block to accomodate the wheel (spawn an entity in that position?)
+* somehow expand the BB on waterwheel block to accomodate the wheel (spawn a basic entity in that position?)
 
 OPTIONAL?    
 * better system for making rations (special machine probably with auto-output?)
@@ -170,6 +170,7 @@ TWEAKS/OPTIMIZATION
 /********** 07-19-13 **********/
 * fix--mine still harvests water, specifically on the ladder blocks
 * add en_US translation entry for Hand Cranked Engine
+* add prep work for waterwheel engine
 
 /********** 07-20-13 **********/
 /********** 07-21-13 **********/

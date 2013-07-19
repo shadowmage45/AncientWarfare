@@ -179,7 +179,7 @@ public boolean isSolidOnSide(ForgeDirection side)
 @Override
 public boolean isPipeConnected(ForgeDirection with)
   {
-  return with == facingDirection.getOpposite();
+  return with != facingDirection;
   }
 
 @Override

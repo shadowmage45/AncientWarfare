@@ -47,6 +47,8 @@ public static TileEntity getTEFor(int dmg)
   {
   case 0:
   return PluginProxy.bcProxy.getHandCrankEngineTE();  
+  case 1:
+  return PluginProxy.bcProxy.getWaterwheelEngineTE();  
   }
   return PluginProxy.bcProxy.getHandCrankEngineTE();  
   }
@@ -56,7 +58,9 @@ public static String getEngineTexture(int meta)
   switch(meta)
   {
   case 1:
+  return "engineHandCrank.png";  
   case 2:
+  return "engineWaterwheel.png";  
   case 3:
   default:
   return "engineHandCrank.png";  
@@ -71,6 +75,13 @@ public static void registerIcons(IconRegister registry, Description d)
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 3);//trash right
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 4);//trash bottom
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 5);//trash top
+  
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 6);//trash front
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 7);//trash left
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 8);//trash rear
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 9);//trash right
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 10);//trash bottom
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 11);//trash top
   }
 
 public static void addSubBlocks(List list)
@@ -87,6 +98,13 @@ public static void registerBlockData()
     {
     d.addDisplayStack(new ItemStack(BlockLoader.engineBlock,1,0));
     d.setName("block.multi.engine.0", 0);
+    }
+  
+  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getWaterwheelEngineClass(), "Waterwheel Engine");
+  if(PluginProxy.bcLoaded)
+    {
+    d.addDisplayStack(new ItemStack(BlockLoader.engineBlock,1,1));
+    d.setName("block.multi.engine.1", 1);
     }
   }
 }

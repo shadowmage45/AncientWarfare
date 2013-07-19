@@ -28,10 +28,9 @@ public class TEEngineWaterwheel extends TEEngine
 
 protected boolean displayWheel;
 protected int wheelUpdateTicks = 0;
+protected float wheelRotation = 0;
+protected float wheelSpeed = 0;
 
-/**
- * 
- */
 public TEEngineWaterwheel()
   {
   this.canPointVertical = false;
@@ -66,7 +65,7 @@ public void updateEntity()
       wheelZ = 1;
       }
     int id;
-    this.displayWheel = true;
+    boolean displayWheel = true;
     outerLoop://finally..a legitimate use of a label statment...
     for(int by = y-1; by <= y+1; by++)
       {
@@ -77,12 +76,13 @@ public void updateEntity()
           id = this.worldObj.getBlockId(bx, by, bz);
           if(id!=Block.waterMoving.blockID && id!=Block.waterStill.blockID && !this.worldObj.isAirBlock(bx, by, bz))
             {
-            this.displayWheel = false;
+            displayWheel = false;
             break outerLoop;//break completely out of the loop, no need to continue
             }
           }        
         }      
       }
+    this.setDisplayWheel(displayWheel);
     }
   }
 

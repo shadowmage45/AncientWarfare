@@ -56,9 +56,14 @@ private void initPowerProvider()
 public void updateEntity()
   {
   super.updateEntity();
-  /**
-   * TODO gen power based on if wheel is present or not
-   */
+  if(this.worldObj==null || this.worldObj.isRemote)
+    {
+    return;
+    }
+  if(this.displayWheel && this.internalBuffer!=null)
+    {
+    
+    }
   }
 
 public boolean isPoweredTile(TileEntity tile) 
