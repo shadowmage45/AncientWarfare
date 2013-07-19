@@ -10,7 +10,6 @@ PRE OPEN BETA
 * model for waterwheel engine wheel
 * texture for waterwheel engine && wheel
 * somehow expand the BB on waterwheel block to accomodate the wheel (spawn a basic entity in that position?)
-
 OPTIONAL?    
 * better system for making rations (special machine probably with auto-output?)
     
@@ -32,6 +31,7 @@ FROM TESTING
 * npcs need massive optimization pass, using far too much of server tick time
 * deluxe chunkloader world rendering
 * bed placement is fubar in structure gen from templates
+* optimize vehicle data transmission to only include relavent data for that vehicle (disable air stats on land vehicles)
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -66,6 +66,7 @@ VEHICLES
 AIRPLANE
 
 HELICOPTER/airship/vtol
+* model / textures
  
 GATES
 * rework model into a 1/4 block model to allow for true mid-split/open gates
@@ -98,20 +99,21 @@ WORLD GEN STUFF
  
 /************************************************DONE/OPTI*************************************************/
  MOD BETA TEST PACK
-* NEI
-* gravity gun
-* BC
-* TE
-* RC
-* IC2?
-* Twilight forest
-* EE3
-* Iron Chests
-* AE?
-* MFR?
-* Modular Power Suits?
-* Forestry? (not needed?)
-* thaumcraft?
+* NEI--
+* gravity gun--
+* BC--
+* TE--
+* RC--
+* IC2--
+* Twilight forest--
+* EE3--
+* Iron Chests--
+* AE--
+* MFR--
+* Modular Power Suits--
+* Forestry--
+* thaumcraft--
+* computercraft--
 
 OPTIONAL
 * move upgrades/ammo/armor over to self-registering class with an underlying array instead of the map they currently use        
