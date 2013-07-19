@@ -56,13 +56,45 @@ private void initPowerProvider()
 public void updateEntity()
   {
   super.updateEntity();
-  if(this.worldObj==null || this.worldObj.isRemote)
+  if(this.worldObj==null || this.worldObj.isRemote || this.internalBuffer==null)
     {
     return;
-    }
-  if(this.displayWheel && this.internalBuffer!=null)
+    }  
+  if(this.displayWheel)
     {
-    
+    int blocks = this.waterBlocks > 3 ? 3 : this.waterBlocks;
+    this.internalBuffer.receiveEnergy(blocks, facingDirection.getOpposite());
+    }
+  int x = xCoord + facingDirection.offsetX;
+  int y = yCoord + facingDirection.offsetY;
+  int z = zCoord + facingDirection.offsetZ;
+  TileEntity tile = worldObj.getBlockTileEntity(x, y, z);  
+  if(isPoweredTile(tile))
+    {    
+    this.outputTarget = ((IPowerReceptor)tile).getPowerProvider(); 
+    if(this.outputTarget!=null)
+      {  
+      int toMove = (int) (this.internalBuffer!=null ? this.internalBuffer.getEnergyStored() : 0);
+      if(toMove>this.internalBuffer.getActivationEnergy())
+        {
+        toMove = outputTarget.getMaxEnergyReceived() < toMove ? outputTarget.getMaxEnergyReceived() : toMove;
+        this.setIsWorking(true);
+        this.outputTarget.receiveEnergy(this.internalBuffer.useEnergy(0, toMove, true), facingDirection.getOpposite());   
+        }
+      else
+        {
+        this.setIsWorking(false);
+        }
+      }
+    else
+      {
+      this.setIsWorking(false);
+      }
+    }
+  else
+    {
+    this.outputTarget = null;
+    this.setIsWorking(false);
     }
   }
 

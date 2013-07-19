@@ -10,6 +10,7 @@ PRE OPEN BETA
 * model for waterwheel engine wheel
 * texture for waterwheel engine && wheel
 * somehow expand the BB on waterwheel block to accomodate the wheel (spawn a basic entity in that position?)
+* save to NBT the power-state from BC plugin blocks
 OPTIONAL?    
 * better system for making rations (special machine probably with auto-output?)
     
@@ -173,6 +174,7 @@ TWEAKS/OPTIMIZATION
 * fix--mine still harvests water, specifically on the ladder blocks
 * add en_US translation entry for Hand Cranked Engine
 * add prep work for waterwheel engine
+* more work on waterwheel engine
 
 /********** 07-20-13 **********/
 /********** 07-21-13 **********/

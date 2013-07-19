@@ -28,6 +28,7 @@ public class TEEngineWaterwheel extends TEEngine
 
 protected boolean displayWheel;
 protected int wheelUpdateTicks = 0;
+protected int waterBlocks = 0;
 protected float wheelRotation = 0;
 protected float wheelSpeed = 0;
 
@@ -66,6 +67,7 @@ public void updateEntity()
       }
     int id;
     boolean displayWheel = true;
+    this.waterBlocks = 0;
     outerLoop://finally..a legitimate use of a label statment...
     for(int by = y-1; by <= y+1; by++)
       {
@@ -78,6 +80,10 @@ public void updateEntity()
             {
             displayWheel = false;
             break outerLoop;//break completely out of the loop, no need to continue
+            }
+          else
+            {
+            waterBlocks++;
             }
           }        
         }      
