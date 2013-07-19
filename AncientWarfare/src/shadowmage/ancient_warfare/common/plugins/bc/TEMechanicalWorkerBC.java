@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.plugins.bc;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -115,5 +116,23 @@ public void updateEntity()
   }
 
 
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  super.readFromNBT(tag);
+  NBTTagCompound powerTag = new NBTTagCompound();
+  this.provider.writeToNBT(powerTag);
+  tag.setCompoundTag("power", powerTag);
+  }
 
+@Override
+public void writeToNBT(NBTTagCompound tag)
+  {
+  super.writeToNBT(tag);
+  if(tag.hasKey("power"))
+    {
+    NBTTagCompound powerTag = tag.getCompoundTag("power");
+    this.provider.readFromNBT(powerTag);
+    }
+  }
 }

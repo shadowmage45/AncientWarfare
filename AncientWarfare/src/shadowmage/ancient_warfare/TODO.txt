@@ -1,16 +1,17 @@
-PRE OPEN BETA
+TONIGHT
 * helicopter model and textures
+* model for waterwheel engine wheel
+* texture for waterwheel engine && wheel
+* textures mechanical worker block
+
+PRE OPEN BETA
 * researcher and craftsmsen need specific tools
 * add rotation support to rotatable blocks
 * move other rotatable blocks over to forgeDirection for consistency
 * recipes and research for additional machine blocks (engine and worker blocks)
-* textures mechanical worker block
 * update world-gen config file
 * upgrade slots in engines? (more mj/work for hand-cranked, more mj/t for waterwheel)
-* model for waterwheel engine wheel
-* texture for waterwheel engine && wheel
 * somehow expand the BB on waterwheel block to accomodate the wheel (spawn a basic entity in that position?)
-* save to NBT the power-state from BC plugin blocks
 OPTIONAL?    
 * better system for making rations (special machine probably with auto-output?)
     
@@ -176,6 +177,7 @@ TWEAKS/OPTIMIZATION
 * add prep work for waterwheel engine
 * more work on waterwheel engine
 
+* save to NBT the power-state from BC plugin blocks
 /********** 07-20-13 **********/
 /********** 07-21-13 **********/
 /********** 07-22-13 **********/

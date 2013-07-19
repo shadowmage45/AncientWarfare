@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.plugins.bc;
 
 import java.util.List;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
@@ -206,5 +207,25 @@ public int powerRequest(ForgeDirection from)
   IPowerProvider p = getPowerProvider();
   float needed = p.getMaxEnergyStored() - p.getEnergyStored();
   return (int) Math.ceil(Math.min(p.getMaxEnergyReceived(), needed));  
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  super.readFromNBT(tag);
+  NBTTagCompound powerTag = new NBTTagCompound();
+  this.internalBuffer.writeToNBT(powerTag);
+  tag.setCompoundTag("power", powerTag);
+  }
+
+@Override
+public void writeToNBT(NBTTagCompound tag)
+  {
+  super.writeToNBT(tag);
+  if(tag.hasKey("power"))
+    {
+    NBTTagCompound powerTag = tag.getCompoundTag("power");
+    this.internalBuffer.readFromNBT(powerTag);
+    }
   }
 }
