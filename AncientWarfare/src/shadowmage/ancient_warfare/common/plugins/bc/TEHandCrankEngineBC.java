@@ -110,6 +110,8 @@ public boolean isPoweredTile(TileEntity tile)
     }
   return false;
   }
+  
+ 
 
 @Override
 public void broadcastWork(int maxRange)

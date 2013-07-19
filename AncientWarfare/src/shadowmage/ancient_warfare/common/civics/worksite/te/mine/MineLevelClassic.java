@@ -97,7 +97,7 @@ protected void addNorthShaft(TEMine mine, World world, int x, int y, int z)
       {
       addNewPoint(x, y, z,  (byte)2, TargetType.MINE_LADDER);
       }
-    else
+    else if(shouldClear(id))
       {
       addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
       }    
@@ -121,7 +121,7 @@ protected void addSouthShaft(TEMine mine, World world, int x, int y, int z)
       {
       addNewPoint(x, y, z,  (byte)3, TargetType.MINE_LADDER);
       }
-    else
+    else if(shouldClear(id))
       {
       addNewPoint(x, y, z,  TargetType.MINE_CLEAR);
       }    

@@ -1,8 +1,16 @@
 PRE OPEN BETA
-* helicopter model
+* helicopter model and textures
 * researcher and craftsmsen need specific tools
 * add rotation support to rotatable blocks
 * move other rotatable blocks over to forgeDirection for consistency
+* recipes and research for additional machine blocks (engine and worker blocks)
+* textures mechanical worker block
+* update world-gen config file
+* upgrade slots in engines? (more mj/work for hand-cranked, more mj/t for waterwheel)
+* model for waterwheel engine wheel
+* texture for waterwheel engine && wheel
+* somehow expand the BB on waterwheel block to accomodate the wheel (spawn an entity in that position?)
+
 OPTIONAL?    
 * better system for making rations (special machine probably with auto-output?)
     
@@ -10,7 +18,6 @@ PRE FULL RELEASE
 * default survival-mode structures
 * scanning authentication list (server ops?)
 * NEI plugin
-* bc plugin
 * cleanup research notes book    
 
 FROM TESTING
@@ -18,7 +25,6 @@ FROM TESTING
 * examine forge dictionary use for wood (research related)
 * stone slabs render as quartz slabs in research book (possibly other places)
 * investigate gate redstone interaction
-* investigate ghost items placed into player inventory (not closing a gui correctly?)
 * add 'go back to base gui' button to info guis
 * add death-message translate to local gui in npc list gui (figure out how/where they are translated, pull manual translate)
 * heuristic evaluation of tick times for pathfinding scheduling -> when tick times are good, do more cycles per path
@@ -26,8 +32,6 @@ FROM TESTING
 * npcs need massive optimization pass, using far too much of server tick time
 * deluxe chunkloader world rendering
 * bed placement is fubar in structure gen from templates
-* textures for bc compat blocks
-* 
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -78,7 +82,6 @@ CIVICS
     * NPC town hall ocasionally transfer items from civics in bounds (skip couriers)
     * NPC town hall plans courier routes (use couriers)    
 * NPC town hall will occasionally respawn missing NPCs
-* mine still harvests water, specifically on the ladder blocks
 
 TEMPLATES
 * resource lists for gates
@@ -165,6 +168,9 @@ TWEAKS/OPTIMIZATION
 * add en_US translation entries for entity type names
 
 /********** 07-19-13 **********/
+* fix--mine still harvests water, specifically on the ladder blocks
+* add en_US translation entry for Hand Cranked Engine
+
 /********** 07-20-13 **********/
 /********** 07-21-13 **********/
 /********** 07-22-13 **********/

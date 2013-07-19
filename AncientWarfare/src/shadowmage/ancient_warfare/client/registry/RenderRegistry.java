@@ -287,7 +287,7 @@ public void loadRenders()
   MinecraftForgeClient.registerItemRenderer(ItemLoader.civicPlacer.itemID, new CivicItemRenderer());
   RenderTEMotor engineRender = new RenderTEMotor();
   MinecraftForgeClient.registerItemRenderer(BlockLoader.engineBlock.blockID, engineRender);
-  ClientRegistry.bindTileEntitySpecialRenderer(PluginProxy.bcProxy.getWorkerTEClass(), engineRender);
+  ClientRegistry.bindTileEntitySpecialRenderer(PluginProxy.bcProxy.getHandCrankEngineClass(), engineRender);
   }
 
 public void addTEModel(int type, ModelTEBase model)

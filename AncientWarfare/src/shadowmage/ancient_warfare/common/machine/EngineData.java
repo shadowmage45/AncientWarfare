@@ -46,9 +46,9 @@ public static TileEntity getTEFor(int dmg)
   switch(dmg)
   {
   case 0:
-  return PluginProxy.bcProxy.getWorkerTileEntity();  
+  return PluginProxy.bcProxy.getHandCrankEngineTE();  
   }
-  return PluginProxy.bcProxy.getWorkerTileEntity();  
+  return PluginProxy.bcProxy.getHandCrankEngineTE();  
   }
 
 public static String getEngineTexture(int meta)
@@ -82,7 +82,7 @@ public static void registerBlockData()
   {
   Description d = DescriptionRegistry2.instance().getDescriptionFor(BlockLoader.engineBlock.blockID);
   
-  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getWorkerTEClass(), "Hand Crank Engine");
+  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getHandCrankEngineClass(), "Hand Cranked Engine");
   if(PluginProxy.bcLoaded)
     {
     d.addDisplayStack(new ItemStack(BlockLoader.engineBlock,1,0));

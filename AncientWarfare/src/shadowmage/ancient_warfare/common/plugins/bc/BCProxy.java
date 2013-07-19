@@ -38,13 +38,13 @@ public TileEntity getMotorTileEntity()
   }
 
 @Override
-public Class getWorkerTEClass()
+public Class getHandCrankEngineClass()
   {
   return TEHandCrankEngineBC.class;
   }
 
 @Override
-public TileEntity getWorkerTileEntity()
+public TileEntity getHandCrankEngineTE()
   {
   return new TEHandCrankEngineBC();
   }
