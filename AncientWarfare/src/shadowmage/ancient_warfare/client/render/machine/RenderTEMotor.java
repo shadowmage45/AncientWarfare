@@ -49,6 +49,7 @@ public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, doub
   GL11.glTranslated(d0+0.5d, d1+0.5d, d2+0.5d);
   teModel.setDirection(engine.getFacing());
   teModel.setPistonPosition(engine.getPistonProgress(), f, engine.getPistonDirection());
+  this.renderExtras(engine);
   teModel.renderEngine();
   GL11.glPopMatrix();
   }
@@ -76,6 +77,11 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   teModel.setPistonPosition(4.f, 0, (byte) 0);
   teModel.renderEngine();
   GL11.glPopMatrix();
+  }
+
+public void renderExtras(TEEngine te)
+  {
+  
   }
 
 }
