@@ -41,8 +41,10 @@ import buildcraft.api.transport.ISolidSideTile;
 public class TEHandCrankEngineBC extends TEHandCrankEngine implements IPipeConnection, ISolidSideTile, IPowerReceptor
 {
 
-IPowerReceptor outputTarget = null;
+IPowerProvider outputTarget = null;
 IPowerProvider internalBuffer = null;
+int broadcastDelayTicks = 0;
+protected boolean broadcastWork = true;
 /**
  * 
  */
@@ -55,57 +57,36 @@ public TEHandCrankEngineBC()
 
 private void initPowerProvider() 
   {
-  internalBuffer.configure(20, 1, 2, Config.npcWorkMJ, Config.npcWorkMJ*3);
+  internalBuffer.configure(20, 1, 200, Config.npcWorkMJ, Config.npcWorkMJ*3);
   internalBuffer.configurePowerPerdition(1, 100);
   }
 
 @Override
 public void updateEntity()
   {
-  super.updateEntity();
-  if(this.isWorking || this.pistonProgress>0)
-    {
-    if(this.pistonGoingUp)
-      {
-      this.pistonProgress+=0.8f;
-      if(this.pistonProgress>=8f)
-        {
-        this.pistonGoingUp = false;
-        this.pistonProgress = 8.f;
-        }
-      }
-    else
-      {
-      this.pistonProgress-=0.8f;
-      if(this.pistonProgress<=0)
-        {
-        this.pistonProgress = 0;
-        }
-      }
-    }
+  super.updateEntity(); 
   if(worldObj==null || worldObj.isRemote){return;} 
   int x = xCoord + facingDirection.offsetX;
   int y = yCoord + facingDirection.offsetY;
   int z = zCoord + facingDirection.offsetZ;
+  this.broadcastWork(Config.npcAISearchRange);
   TileEntity tile = worldObj.getBlockTileEntity(x, y, z);  
   if(isPoweredTile(tile))
     {    
-    Config.logDebug("checking for power transfer to: "+x+","+y+","+z);
-    this.outputTarget = (IPowerReceptor)tile; 
-    if(this.outputTarget.getPowerProvider()!=null)
-      {      
+    this.outputTarget = ((IPowerReceptor)tile).getPowerProvider(); 
+    if(this.outputTarget!=null)
+      {  
       int toMove = (int) (this.internalBuffer!=null ? this.internalBuffer.getEnergyStored() : 0);
-      toMove = outputTarget.getPowerProvider().getMaxEnergyReceived() > toMove ? outputTarget.getPowerProvider().getMaxEnergyReceived() : toMove;
-      if(toMove>0)
+      if(toMove>this.internalBuffer.getActivationEnergy())
         {
+        toMove = outputTarget.getMaxEnergyReceived() < toMove ? outputTarget.getMaxEnergyReceived() : toMove;
         this.setIsWorking(true);
+        this.outputTarget.receiveEnergy(this.internalBuffer.useEnergy(0, toMove, true), facingDirection.getOpposite());   
         }
       else
         {
         this.setIsWorking(false);
         }
-      Config.logDebug("moving power: "+toMove);
-      this.outputTarget.getPowerProvider().receiveEnergy(this.internalBuffer.useEnergy(0, toMove, true), facingDirection.getOpposite());      
       }
     else
       {
@@ -116,30 +97,9 @@ public void updateEntity()
     {
     this.outputTarget = null;
     this.setIsWorking(false);
-    }
-  
+    }  
   }
 
-protected void setIsWorking(boolean work)
-  {
-  if(this.worldObj!=null && work!=this.isWorking)
-    {
-    this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, BlockLoader.engineBlock.blockID, 0, work? 1 : 0);
-    this.isWorking = work;
-    Config.logDebug("set isWorking to: "+isWorking);
-    }
-  }
-
-@Override
-public boolean receiveClientEvent(int par1, int par2)
-  {
-  if(par1==0)
-    {    
-    this.isWorking = par2==1;
-    Config.logDebug("set isWorking to: "+this.isWorking+ " on "+ (this.worldObj.isRemote? "Client" : "Server"));
-    }
-  return super.receiveClientEvent(par1, par2);
-  }
 
 public boolean isPoweredTile(TileEntity tile) 
   {
@@ -154,6 +114,20 @@ public boolean isPoweredTile(TileEntity tile)
 @Override
 public void broadcastWork(int maxRange)
   {
+  if(!this.broadcastWork)
+    {
+    return;
+    }
+  if(this.broadcastDelayTicks>0)
+    {
+    this.broadcastDelayTicks--;
+    return;
+    }
+  this.broadcastDelayTicks = Config.npcAITicks * 10;
+  if(!this.hasWork())
+    {
+    return;
+    }
   if(this.worldObj==null || this.worldObj.isRemote)
     {
     return;
@@ -171,12 +145,9 @@ public void broadcastWork(int maxRange)
       }
     else
       {
-      if(broadcastWork)
-        {    
-        if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(this.getWorkType()) && npc.teamNum==this.teamNumber)
-          {
-          npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
-          }
+      if(canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(this.getWorkType()) && npc.teamNum==this.teamNumber)
+        {
+        npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
         }
       }
     }

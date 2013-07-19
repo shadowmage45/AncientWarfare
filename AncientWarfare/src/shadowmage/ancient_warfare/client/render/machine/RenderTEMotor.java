@@ -20,19 +20,19 @@
  */
 package shadowmage.ancient_warfare.client.render.machine;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.common.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+
 import shadowmage.ancient_warfare.client.model.ModelEngine;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.machine.EngineData;
-import shadowmage.ancient_warfare.common.machine.TEHandCrankEngine;
+import shadowmage.ancient_warfare.common.machine.TEEngine;
 
 public class RenderTEMotor extends TileEntitySpecialRenderer implements IItemRenderer
 {
@@ -43,12 +43,12 @@ ModelEngine teModel = new ModelEngine();
 public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f)
   {
   GL11.glPushMatrix();
-  TEHandCrankEngine engine = (TEHandCrankEngine)tileentity;
-  String tex = Config.texturePath+"model/"+engine.getTexture();
+  TEEngine engine = (TEEngine)tileentity;
+  String tex = Config.texturePath+"models/"+engine.getTexture();
   Minecraft.getMinecraft().renderEngine.bindTexture(tex);
   GL11.glTranslated(d0+0.5d, d1+0.5d, d2+0.5d);
   teModel.setDirection(engine.getFacing());
-  teModel.setPistonPosition(engine.getPistonProgress(), f, (byte) (engine.isWorking ? (engine.isPistonMovingUp() ? 1 : -1) : 0));
+  teModel.setPistonPosition(engine.getPistonProgress(), f, engine.getPistonDirection());
   teModel.renderEngine();
   GL11.glPopMatrix();
   }
@@ -69,7 +69,7 @@ public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRe
 public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   {
   GL11.glPushMatrix();
-  String tex = Config.texturePath+"model/"+EngineData.getEngineTexture(item.getItemDamage());
+  String tex = Config.texturePath+"models/"+EngineData.getEngineTexture(item.getItemDamage());
   Minecraft.getMinecraft().renderEngine.bindTexture(tex);
   GL11.glTranslated(0.5d, 0.5d, 0.5d);
   teModel.setDirection(ForgeDirection.UP);

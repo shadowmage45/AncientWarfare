@@ -53,7 +53,14 @@ public static TileEntity getTEFor(int dmg)
 
 public static String getEngineTexture(int meta)
   {
-  return "";
+  switch(meta)
+  {
+  case 1:
+  case 2:
+  case 3:
+  default:
+  return "engineHandCrank.png";  
+  }
   }
 
 public static void registerIcons(IconRegister registry, Description d)

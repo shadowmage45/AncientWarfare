@@ -83,7 +83,6 @@ public void updateEntity()
     {
     return;
     }
-  Config.logDebug("energy stored: " + this.provider.getEnergyStored());
   if(this.provider.getEnergyStored()>=this.provider.getActivationEnergy())
     {    
     if(this.workSite!=null && this.workSite.hasWork())

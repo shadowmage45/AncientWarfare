@@ -42,7 +42,6 @@ protected int teamNumber = 0;
 protected int guiNumber = -1;
 protected boolean canUpdate = false;
 protected boolean shouldWriteInventory = true;
-protected boolean broadcastWork = true;
 protected boolean hasSpecialModel = false;
 public boolean canPointVertical = false;
 public boolean facesOpposite = false;
@@ -57,7 +56,6 @@ public void onBlockBreak()
 public void setDirection(ForgeDirection direction)
   {
   this.facingDirection = direction;
-  Config.logDebug("setting direction to: "+direction);
   }
 
 public ForgeDirection getFacing()

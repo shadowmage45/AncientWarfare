@@ -159,14 +159,17 @@ public void setDirection(ForgeDirection d)
 
 public void setPistonPosition(float pos, float partial, byte direction)
   {
-  float z = -pos + (partial * (float)direction) +0.01f;
+  float z = -pos;
+  float partialFactor = ((float)direction) * (partial);
+  z -= partialFactor;
+//  Config.logDebug("z: "+z+" pF: "+partialFactor + " p: "+partial + " direction: "+direction);
   if(z<=-7.99f)
     {
     z=-7.99f;
     }
-  if(z>=0.01f)
+  if(z>=0.f)
     {
-    z = 0.01f;
+    z = 0.f;
     }
   engineTrunk1.isHidden = true;
   engineTrunk2.isHidden = true;

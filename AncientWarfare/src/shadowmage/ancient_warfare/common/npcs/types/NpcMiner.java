@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -84,7 +85,7 @@ protected ItemStack getToolStack(int level)
 @Override
 public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
-  helper.addTargetEntry(new AITargetEntry(npc, TargetType.WORK, TECivic.class, 0, false, 140));
+  helper.addTargetEntry(new AITargetEntry(npc, TargetType.WORK, ITEWorkSite.class, 0, false, 140));
   }
 
 @Override
