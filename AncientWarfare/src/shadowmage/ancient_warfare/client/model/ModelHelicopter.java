@@ -218,7 +218,7 @@ public ModelHelicopter(){
   bodyTail7 = new ModelRenderer(this,"bodyTail7");
   bodyTail7.setTextureOffset(95,59);
   bodyTail7.setTextureSize(256,256);
-  bodyTail7.setRotationPoint(0.0f, -9.0f, 34.0f);
+  bodyTail7.setRotationPoint(0.5f, -9.0f, 34.0f);
   setPieceRotation(bodyTail7,0.0f, 0.0f, 0.0f);
   bodyTail7.addBox(-2.0f,0.0f,0.0f,3,4,27);
   bodyBottom.addChild(bodyTail7);
@@ -337,14 +337,14 @@ public ModelHelicopter(){
   tailFin1 = new ModelRenderer(this,"tailFin1");
   tailFin1.setTextureOffset(0,75);
   tailFin1.setTextureSize(256,256);
-  tailFin1.setRotationPoint(-1.0f, -17.0f, 56.0f);
+  tailFin1.setRotationPoint(-0.5f, -17.0f, 56.0f);
   setPieceRotation(tailFin1,-0.24434602f, 0.0f, 0.0f);
   tailFin1.addBox(0.0f,0.0f,0.0f,1,9,6);
   bodyBottom.addChild(tailFin1);
   tailRotorAxle = new ModelRenderer(this,"tailRotorAxle");
   tailRotorAxle.setTextureOffset(31,103);
   tailRotorAxle.setTextureSize(256,256);
-  tailRotorAxle.setRotationPoint(0.0f, -7.0f, 59.0f);
+  tailRotorAxle.setRotationPoint(0.5f, -7.0f, 59.0f);
   setPieceRotation(tailRotorAxle,0.0f, 0.0f, 1.2483568E-8f);
   tailRotorAxle.addBox(-4.0f,-0.5f,-0.5f,2,1,1);
   tailHub = new ModelRenderer(this,"tailHub");
@@ -396,7 +396,6 @@ public ModelHelicopter(){
   setPieceRotation(flagCloth,0.0f, 0.0f, 0.0f);
   flagCloth.addBox(0.0f,0.0f,0.0f,1,8,11);
   }
-
 
  
 @Override

@@ -20,24 +20,31 @@
  */
 package shadowmage.ancient_warfare.client.render.machine;
 
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.Minecraft;
+import shadowmage.ancient_warfare.client.model.ModelEngineWheel;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.machine.TEEngine;
+import shadowmage.ancient_warfare.common.plugins.bc.TEEngineWaterwheelBC;
 
 public class RenderTEEngineWaterwheel extends RenderTEMotor
 {
+ModelEngineWheel wheel = new ModelEngineWheel();
 
-/**
- * 
- */
 public RenderTEEngineWaterwheel()
   {
-  // TODO Auto-generated constructor stub
+  
   }
 
 @Override
-public void renderExtras(TEEngine te)
+public void renderExtras(TEEngine te, float f)
   {
-  /**
-   * TODO render wheel, wheel model, etc
-   */
+  Minecraft.getMinecraft().renderEngine.bindTexture(Config.texturePath+"models/"+"engineWheel.png");
+//  GL11.glRotatef(180, 0, 1, 0);
+  TEEngineWaterwheelBC engine = (TEEngineWaterwheelBC)te;
+  wheel.setDirection(engine.getFacing());
+  wheel.setWheelRotation(engine.getWheelRotation(), (1-f) * engine.getWheelSpeed());
+  wheel.renderModel();  
   }
 }

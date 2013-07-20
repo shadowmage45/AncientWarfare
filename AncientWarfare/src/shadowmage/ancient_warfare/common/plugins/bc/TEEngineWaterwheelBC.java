@@ -65,6 +65,7 @@ public void updateEntity()
     {
     int blocks = this.waterBlocks > 3 ? 3 : this.waterBlocks;
     this.internalBuffer.receiveEnergy(blocks, facingDirection.getOpposite());
+    this.wheelRotation++;
     }
   int x = xCoord + facingDirection.offsetX;
   int y = yCoord + facingDirection.offsetY;

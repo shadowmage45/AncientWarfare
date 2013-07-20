@@ -1,7 +1,4 @@
 TONIGHT
-* helicopter textures
-* model for waterwheel engine wheel
-* texture for waterwheel engine && wheel
 * textures mechanical worker block
 
 PRE OPEN BETA
@@ -176,12 +173,14 @@ TWEAKS/OPTIMIZATION
 * add en_US translation entry for Hand Cranked Engine
 * add prep work for waterwheel engine
 * more work on waterwheel engine
-
 * save to NBT the power-state from BC plugin blocks
-
 * add helicopter model
 
 /********** 07-20-13 **********/
+* add helicopter texture
+* add waterwheel engine texture
+* add waterwheel wheel model and texture
+
 /********** 07-21-13 **********/
 /********** 07-22-13 **********/
 /********** 07-23-13 **********/

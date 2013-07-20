@@ -57,11 +57,11 @@ public static String getEngineTexture(int meta)
   {
   switch(meta)
   {
-  case 1:
+  case 0:
   return "engineHandCrank.png";  
-  case 2:
+  case 1:
   return "engineWaterwheel.png";  
-  case 3:
+  case 2:
   default:
   return "engineHandCrank.png";  
   }

@@ -176,6 +176,7 @@ item.vehicleSpawner.19=Boat Catapult
 item.vehicleSpawner.20=Boat Transport
 item.vehicleSpawner.21=Bomber
 item.vehicleSpawner.22=Gunship
+item.vehicleSpawner.23=Helicopter
 
 #tooltips used in vehicle items
 item.vehicleSpawner.tooltip.torsion=Torsion Weapon
@@ -220,6 +221,7 @@ block.multi.crafting.5=NPC Recruiting Center
 block.multi.crafting.6=Alchemy Station
 block.multi.crafting.7=AutoCrafting Station
 block.multi.engine.0=Hand Cranked Engine
+block.multi.engine.1=Waterwheel Engine
 
 #civics
 civic.farm.wheat=Wheat Farm

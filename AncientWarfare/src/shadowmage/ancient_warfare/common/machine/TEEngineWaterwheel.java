@@ -37,10 +37,29 @@ public TEEngineWaterwheel()
   this.canPointVertical = false;
   }
 
+public float getWheelRotation()
+  {
+  return this.wheelRotation;
+  }
+
+public float getWheelSpeed()
+  {
+  return this.wheelSpeed;
+  }
+
 @Override
 public void updateEntity()
   {
   super.updateEntity();
+  if(this.displayWheel)
+    {
+    this.wheelRotation++;
+    this.wheelSpeed = 1;
+    }
+  else
+    {
+    this.wheelSpeed = 0;
+    }
   if(this.worldObj==null || this.worldObj.isRemote)
     {
     return;
@@ -90,6 +109,7 @@ public void updateEntity()
       }
     this.setDisplayWheel(displayWheel);
     }
+  
   }
 
 protected void setDisplayWheel(boolean present)
