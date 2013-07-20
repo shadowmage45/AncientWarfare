@@ -1,6 +1,3 @@
-TONIGHT
-* textures mechanical worker block
-
 PRE OPEN BETA
 * researcher and craftsmsen need specific tools
 * add rotation support to rotatable blocks
@@ -180,6 +177,7 @@ TWEAKS/OPTIMIZATION
 * add helicopter texture
 * add waterwheel engine texture
 * add waterwheel wheel model and texture
+* add mechanical worker block textures
 
 /********** 07-21-13 **********/
 /********** 07-22-13 **********/

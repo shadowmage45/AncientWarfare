@@ -108,12 +108,12 @@ public static void registerIcons(IconRegister registry, Description d)
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeBottom"), 28);//trash bottom
   d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeTop"), 29);//trash top
   
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkSimpleSide"), 30);//trash front
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 31);//trash left
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 32);//trash rear
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 33);//trash right
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 34);//trash bottom
-  d.setIcon(registry.registerIcon("ancientwarfare:machine/chunkDeluxeSide"), 35);//trash top 
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/workerFront"), 30);//trash front
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/workerRight"), 31);//trash left
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/workerRear"), 32);//trash rear
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/workerLeft"), 33);//trash right
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/workerBottom"), 34);//trash bottom
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/workerTop"), 35);//trash top 
 
   }
 
