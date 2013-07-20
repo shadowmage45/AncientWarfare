@@ -101,7 +101,6 @@ public void updateEntity()
     }  
   }
 
-
 public boolean isPoweredTile(TileEntity tile) 
   {
   if (tile instanceof IPowerReceptor) 
@@ -112,8 +111,6 @@ public boolean isPoweredTile(TileEntity tile)
   return false;
   }
   
- 
-
 @Override
 public void broadcastWork(int maxRange)
   {

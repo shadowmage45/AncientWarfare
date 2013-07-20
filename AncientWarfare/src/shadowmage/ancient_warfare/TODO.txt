@@ -1,5 +1,5 @@
 TONIGHT
-* helicopter model and textures
+* helicopter textures
 * model for waterwheel engine wheel
 * texture for waterwheel engine && wheel
 * textures mechanical worker block
@@ -178,6 +178,9 @@ TWEAKS/OPTIMIZATION
 * more work on waterwheel engine
 
 * save to NBT the power-state from BC plugin blocks
+
+* add helicopter model
+
 /********** 07-20-13 **********/
 /********** 07-21-13 **********/
 /********** 07-22-13 **********/

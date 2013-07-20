@@ -46,7 +46,7 @@ protected boolean hasSpecialModel = false;
 public boolean canPointVertical = false;
 public boolean facesOpposite = false;
 
-protected ForgeDirection facingDirection = ForgeDirection.UNKNOWN;
+protected ForgeDirection facingDirection = ForgeDirection.SOUTH;
 
 public void onBlockBreak()
   {

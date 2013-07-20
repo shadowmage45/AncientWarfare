@@ -124,8 +124,8 @@ public VehicleTypeHelicopter(int typeNum)
   this.basePitchMin = -90; 
   this.baseMissileVelocityMax = 5.f;   
   
-  this.riderForwardsOffset = -0.0625f * 7;
-  this.riderVerticalOffset = 0.0625f * 12;  
+  this.riderForwardsOffset = 0.0625f * 5;
+  this.riderVerticalOffset = 0.0625f * 10;  
   this.shouldRiderSit = true;
   
   this.isMountable = true;
@@ -154,17 +154,17 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Config.texturePath + "models/airplane1.png";
+    return Config.texturePath + "models/helicopter1.png";
     case 1:
-    return Config.texturePath + "models/airplane2.png";
+    return Config.texturePath + "models/helicopter2.png";
     case 2:
-    return Config.texturePath + "models/airplane3.png";
+    return Config.texturePath + "models/helicopter3.png";
     case 3:
-    return Config.texturePath + "models/airplane4.png";
+    return Config.texturePath + "models/helicopter4.png";
     case 4:
-    return Config.texturePath + "models/airplane5.png";
+    return Config.texturePath + "models/helicopter5.png";
     default:
-    return Config.texturePath + "models/airplane1.png";
+    return Config.texturePath + "models/helicopter1.png";
     }
   }
 

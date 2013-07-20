@@ -30,7 +30,7 @@ import shadowmage.ancient_warfare.common.machine.TEMachine;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
-public class ItemEngine extends AWItemBlockBase
+public class ItemEngine extends ItemMachine
 {
 
 /**
@@ -39,39 +39,6 @@ public class ItemEngine extends AWItemBlockBase
 public ItemEngine(int par1)
   {
   super(par1);
-  this.bFull3D = true;
-  this.hasSubtypes = true;  
-  }
-
-@Override
-public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
-  {
-  if(super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata))
-    {
-    TileEntity ter = world.getBlockTileEntity(x, y, z);
-    if(ter!=null)
-      {
-      TEMachine te = (TEMachine)world.getBlockTileEntity(x, y, z);
-      int face = side;
-      if(!te.canPointVertical)
-        {
-        face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-        face = (face+2)%4;
-        face = BlockTools.getSideFromCardinal(face);   
-        Config.logDebug("converted side: "+face);
-        }
-      ForgeDirection direction = ForgeDirection.getOrientation(face);
-      if(!te.facesOpposite)
-        {
-        direction = direction.getOpposite();
-        }
-      te.setTeamNum(TeamTracker.instance().getTeamForPlayer(player));
-      te.setDirection(direction);           
-      te.onBlockPlaced();
-      }
-    return true;
-    }
-  return false;
   }
 
 }

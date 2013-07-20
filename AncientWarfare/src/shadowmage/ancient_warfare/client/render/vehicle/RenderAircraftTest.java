@@ -38,7 +38,6 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z,  float 
   {
   GL11.glRotatef(-veh.moveHelper.airPitch, 1, 0, 0);
   GL11.glRotatef(veh.moveHelper.strafeMotion*10, 0, 0, 1);
-  VehicleFiringVarsHelper var = veh.firingVarsHelper;
   float wheelAngle = veh.wheelRotation + (tick * (veh.wheelRotation-veh.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
