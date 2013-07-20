@@ -63,7 +63,7 @@ public void updateEntity()
     }  
   if(this.displayWheel)
     {
-    int blocks = this.waterBlocks > 3 ? 3 : this.waterBlocks;
+    int blocks = this.waterBlocks >= 3 ? 1 : 0;
     this.internalBuffer.receiveEnergy(blocks, facingDirection.getOpposite());
     this.wheelRotation++;
     }

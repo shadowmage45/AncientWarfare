@@ -26,7 +26,7 @@ import net.minecraft.block.Block;
 public class TEEngineWaterwheel extends TEEngine
 {
 
-protected boolean displayWheel;
+public boolean displayWheel;
 protected int wheelUpdateTicks = 0;
 protected int waterBlocks = 0;
 protected float wheelRotation = 0;
@@ -100,7 +100,7 @@ public void updateEntity()
             displayWheel = false;
             break outerLoop;//break completely out of the loop, no need to continue
             }
-          else
+          else if(id!=Block.waterMoving.blockID && id!=Block.waterStill.blockID)
             {
             waterBlocks++;
             }
@@ -108,8 +108,7 @@ public void updateEntity()
         }      
       }
     this.setDisplayWheel(displayWheel);
-    }
-  
+    }  
   }
 
 protected void setDisplayWheel(boolean present)

@@ -34,17 +34,19 @@ ModelEngineWheel wheel = new ModelEngineWheel();
 
 public RenderTEEngineWaterwheel()
   {
-  
+
   }
 
 @Override
 public void renderExtras(TEEngine te, float f)
   {
-  Minecraft.getMinecraft().renderEngine.bindTexture(Config.texturePath+"models/"+"engineWheel.png");
-//  GL11.glRotatef(180, 0, 1, 0);
   TEEngineWaterwheelBC engine = (TEEngineWaterwheelBC)te;
-  wheel.setDirection(engine.getFacing());
-  wheel.setWheelRotation(engine.getWheelRotation(), (1-f) * engine.getWheelSpeed());
-  wheel.renderModel();  
+  if(engine.displayWheel)
+    {
+    Minecraft.getMinecraft().renderEngine.bindTexture(Config.texturePath+"models/"+"engineWheel.png");
+    wheel.setDirection(engine.getFacing());
+    wheel.setWheelRotation(engine.getWheelRotation(), (1-f) * engine.getWheelSpeed());
+    wheel.renderModel();    
+    }  
   }
 }
