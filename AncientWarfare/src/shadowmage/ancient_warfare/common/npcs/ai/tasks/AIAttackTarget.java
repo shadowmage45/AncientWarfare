@@ -124,7 +124,8 @@ protected void attackTargetMounted(ITargetEntry target)
       //      Config.logDebug("yaw diff to target: "+yaw);
       }
     } 
-  vehicle.moveHelper.setInput((byte)0, s); 
+  vehicle.moveHelper.setForwardInput((byte) 0);
+  vehicle.moveHelper.setStrafeInput(s); 
   vehicle.firingHelper.handleSoldierTargetInput(target.posX(), target.posY(), target.posZ());
   if(turning)
     {
@@ -141,7 +142,8 @@ protected void attackTargetMounted(ITargetEntry target)
       {
       vehicle.firingHelper.handleFireUpdate();
       this.npc.actionTick = (vehicle.currentReloadTicks + 20);
-      vehicle.moveHelper.setInput((byte)0, (byte)0);
+      vehicle.moveHelper.setForwardInput((byte) 0);
+      vehicle.moveHelper.setStrafeInput((byte)0); 
       }    
     }
   else if(vehicle.firingHelper.isNearTarget())
@@ -153,7 +155,8 @@ protected void attackTargetMounted(ITargetEntry target)
       vehicle.sendCompleteTurretPacket();
       vehicle.firingHelper.handleFireUpdate();
       this.npc.actionTick = (vehicle.currentReloadTicks + 20);
-      vehicle.moveHelper.setInput((byte)0, (byte)0);
+      vehicle.moveHelper.setForwardInput((byte) 0);
+      vehicle.moveHelper.setStrafeInput((byte)0); 
       }
     }
   else//delay a bit to line up to target 

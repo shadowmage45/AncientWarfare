@@ -42,8 +42,8 @@ public RenderHelicopter()
 @Override
 public void renderVehicle(VehicleBase vehicle, double x, double y, double z, float yaw, float tick)
   {
-  GL11.glRotatef(-vehicle.moveHelper.airPitch, 1, 0, 0);
-  GL11.glRotatef(vehicle.moveHelper.strafeMotion*10, 0, 0, 1);
+  GL11.glRotatef(-vehicle.rotationPitch, 1, 0, 0);
+  GL11.glRotatef(vehicle.moveHelper.getRotationSpeed()*10, 0, 0, 1);
   float wheelAngle = (vehicle.wheelRotation + (tick * (vehicle.wheelRotation-vehicle.wheelRotationPrev))) * -1000;
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
   model.render(vehicle, 0, 0, 0, 0, 0, 0.0625f);

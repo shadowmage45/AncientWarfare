@@ -494,7 +494,6 @@ protected void handleAirMovementUpdate()
 //  Config.logDebug(String.format("handling air movement update. client: %s throttle:%s  yaw: %.2f   pitch %.2f   horizVelocity %.2f  motion: %.2f, %.2f, %.2f", vehicle.worldObj.isRemote, localThrottle, vehicle.rotationYaw, airPitch, horizontalVelocity, vehicle.motionX, vehicle.motionY, vehicle.motionZ));
   }
 
-
 public void handleHelicopterMotion()
   {
   if(vehicle.riddenByEntity==null)

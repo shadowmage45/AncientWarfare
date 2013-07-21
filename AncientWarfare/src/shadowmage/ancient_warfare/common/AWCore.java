@@ -157,7 +157,7 @@ public void preInit(FMLPreInitializationEvent evt)
   /**
    * have to load vehicles after everything else i think...
    */
-  AWEntityRegistry.registerEntity(VehicleBase.class, "entity.vehicle", 130, 3, false);
+  AWEntityRegistry.registerEntity(VehicleBase.class, "entity.vehicle", 130, Integer.MAX_VALUE, false);
   VehicleRegistry.instance().registerVehicles();
   AWEntityRegistry.registerEntity(NpcBase.class, "entity.npc", 130, 3, true);
   AWEntityRegistry.registerEntity(EntityGate.class, "entity.gate", 130, 100, false);

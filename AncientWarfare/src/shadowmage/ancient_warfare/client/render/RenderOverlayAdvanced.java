@@ -68,9 +68,9 @@ public static void renderRocketFlightPath(VehicleBase vehicle, EntityPlayer play
   /**
    * vectors for a straight line
    */
-  double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.strafeMotion);
+  double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.getRotationSpeed());
   double y2 = y1;
-  double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.strafeMotion);
+  double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.getRotationSpeed());
   GL11.glLineWidth(3f);
   GL11.glBegin(GL11.GL_LINES);    
   GL11.glVertex3d(x1, y1+0.12d, z1);
@@ -88,8 +88,8 @@ public static void renderRocketFlightPath(VehicleBase vehicle, EntityPlayer play
    
   double gravity = 9.81d * 0.05d *0.05d;
   double speed = vehicle.localLaunchPower * 0.05d;
-  double angle = 90 - vehicle.localTurretPitch - vehicle.moveHelper.airPitch;
-  double yaw = vehicle.localTurretRotation + partialTick * vehicle.moveHelper.strafeMotion;
+  double angle = 90 - vehicle.localTurretPitch - vehicle.rotationPitch;
+  double yaw = vehicle.localTurretRotation + partialTick * vehicle.moveHelper.getRotationSpeed();
   
   double vH = -Trig.sinDegrees((float) angle)*speed;
   double vY = Trig.cosDegrees((float) angle)*speed ;
@@ -225,9 +225,9 @@ public static void renderNormalVehicleOverlay(VehicleBase vehicle, EntityPlayer 
   /**
    * vectors for a straight line
    */
-  double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.strafeMotion);
+  double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.getRotationSpeed());
   double y2 = y1;
-  double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.strafeMotion);
+  double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.getRotationSpeed());
   GL11.glLineWidth(3f);
   GL11.glBegin(GL11.GL_LINES);    
   GL11.glVertex3d(x1, y1+0.12d, z1);
@@ -248,8 +248,8 @@ public static void renderNormalVehicleOverlay(VehicleBase vehicle, EntityPlayer 
    
   double gravity = 9.81d * 0.05d *0.05d;
   double speed = vehicle.localLaunchPower * 0.05d;
-  double angle = 90 - vehicle.localTurretPitch - vehicle.moveHelper.airPitch;;
-  double yaw = vehicle.localTurretRotation + partialTick * vehicle.moveHelper.strafeMotion;
+  double angle = 90 - vehicle.localTurretPitch - vehicle.rotationPitch;;
+  double yaw = vehicle.localTurretRotation + partialTick * vehicle.moveHelper.getRotationSpeed();
   
   double vH = -Trig.sinDegrees((float) angle)*speed;
   double vY = Trig.cosDegrees((float) angle)*speed ;

@@ -36,7 +36,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IMissileHitCallback;
@@ -60,7 +59,6 @@ import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleAmmoHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMoveHelper;
-import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleUpgradeHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -74,6 +72,9 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IEntityContainerSynch, IPathableEntity, IInventory
 {
+
+
+
 /**
  * these are the current max stats.  set from setVehicleType().  
  * these are local cached bases, after application of material factors
@@ -92,6 +93,7 @@ public int baseReloadTicks = 100;
 public float baseGenericResist = 0.f;
 public float baseFireResist = 0.f;
 public float baseExplosionResist = 0.f;
+
 
 /**
  * local current stats, fully updated and modified from upgrades/etc. should not be altered aside from
@@ -794,6 +796,10 @@ public void handlePacketUpdate(NBTTagCompound tag)
     {
     this.handleTurretPacket(tag.getCompoundTag("turret"));
     }
+  if(tag.hasKey("moveData"))
+    {
+    this.moveHelper.handleMoveData(tag);
+    }
   }
 
 public void sendCompleteTurretPacket()
@@ -907,7 +913,7 @@ public void updateRiderPosition()
   posZ += Trig.cosDegrees(yaw)*-this.getRiderForwardOffset();
   posZ += Trig.cosDegrees(yaw+90)*this.getRiderHorizontalOffset();
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
-  this.riddenByEntity.rotationYaw -= this.moveHelper.strafeMotion*2;
+  this.riddenByEntity.rotationYaw -= this.moveHelper.getRotationSpeed()*2;
   }
 
 @Override
@@ -925,9 +931,27 @@ public boolean interact(EntityPlayer player)
   }
 
 @Override
+public String toString()
+  {
+  return String.format("%s::%s @ %.2f, %.2f, %.2f  -- y:%.2f p:%.2f -- m: %.2f, %.2f, %.2f", this.vehicleType.getDisplayName(), this.entityId, this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch, this.motionX, this.motionY, this.motionZ);
+  }
+
+@Override
 public void setPositionAndRotation2(double par1, double par3, double par5, float yaw, float par8, int par9)
   {     
-  this.moveHelper.handleClientSynch(par1, par3, par5, yaw, par8, par9);
+  
+  }
+
+@Override
+public void addVelocity(double par1, double par3, double par5)
+  {
+  super.addVelocity(par1, par3, par5);
+  }
+
+@Override
+public void setVelocity(double par1, double par3, double par5)
+  {
+  
   }
 
 @Override
@@ -939,7 +963,6 @@ public boolean shouldRiderSit()
 @Override
 public AxisAlignedBB getBoundingBox()
   {
-//  return null;
   return this.boundingBox;
   }
 

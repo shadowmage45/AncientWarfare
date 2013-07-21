@@ -25,6 +25,7 @@ import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.meim.common.util.Trig;
 
 public class GuiVehicleStats extends GuiContainerAdvanced
 {
@@ -73,7 +74,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawStringGui("Material Level: "+vehicle.vehicleMaterialLevel, 10, 14, color);
   this.drawStringGui("Health: "+vehicle.getHealth() + "/"+vehicle.baseHealth, 10, 24, color);
   this.drawStringGui("Weight: "+vehicle.currentWeight + "/"+vehicle.baseWeight, 10, 34, color);
-  this.drawStringGui("Speed: "+(vehicle.moveHelper.forwardMotion*20) + "/"+(vehicle.currentForwardSpeedMax*20), 10, 44, color);
+  this.drawStringGui("Speed: "+(Trig.getVelocity(vehicle.motionX, vehicle.motionY, vehicle.motionZ)*20) + "/"+(vehicle.currentForwardSpeedMax*20), 10, 44, color);
   this.drawStringGui("Missile Velocity: "+vehicle.localLaunchPower + "/" +vehicle.currentLaunchSpeedPowerMax, 10, 54, color);
   this.drawStringGui("Resists: F: "+vehicle.currentFireResist+" E: "+vehicle.currentExplosionResist+ " G: "+vehicle.currentGenericResist, 10, 64, color);
   this.drawStringGui("Mountable: "+vehicle.isMountable(), 10, 74, color);

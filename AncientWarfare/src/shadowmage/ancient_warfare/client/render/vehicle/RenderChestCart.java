@@ -24,6 +24,7 @@ import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.client.model.ModelChestCart;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.meim.common.util.Trig;
 
 public class RenderChestCart extends RenderVehicleBase
 {
@@ -32,7 +33,7 @@ ModelChestCart model = new ModelChestCart();
 @Override
 public void renderVehicle(VehicleBase vehicle, double x, double y, double z,  float yaw, float tick)
   {  
-  model.setHitchAngle(MathHelper.abs(vehicle.moveHelper.forwardMotion)>0.02f ? 0.f : 25.f);
+  model.setHitchAngle(MathHelper.abs(Trig.getVelocity(vehicle.motionX, vehicle.motionY, vehicle.motionZ))>0.02f ? 0.f : 25.f);
   float wheelAngle = vehicle.wheelRotation + (tick * (vehicle.wheelRotation-vehicle.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
   model.render(vehicle, 0, 0, 0, 0, 0, 0.0625f);

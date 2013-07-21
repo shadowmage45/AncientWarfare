@@ -65,8 +65,8 @@ public void renderVehicleOverlay()
   int white = 0xffffffff;
   if(vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR1 || vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR2)
     {
-    this.drawString(fontRenderer, "Throttle: "+vehicle.moveHelper.localThrottle, 10, 10, white);    
-    this.drawString(fontRenderer, "Pitch: "+vehicle.moveHelper.airPitch, 10, 20, white);
+//    this.drawString(fontRenderer, "Throttle: "+vehicle.moveHelper.localThrottle, 10, 10, white);    
+//    this.drawString(fontRenderer, "Pitch: "+vehicle.moveHelper.airPitch, 10, 20, white);
     this.drawString(fontRenderer, "Climb Rate: "+vehicle.motionY*20, 10, 30, white);
     this.drawString(fontRenderer, "Elevation: "+vehicle.posY, 10, 40, white);
     }
@@ -92,7 +92,7 @@ public void renderVehicleOverlay()
     {
     float velocity = Trig.getVelocity(vehicle.motionX, vehicle.motionZ);
     this.drawString(fontRenderer, "Velocity: "+velocity*20.f+"m/s  max: " + vehicle.currentForwardSpeedMax*20, 10, 70, white);
-    this.drawString(fontRenderer, "Yaw Rate: "+vehicle.moveHelper.strafeMotion*20.f, 10, 80, white);   
+    this.drawString(fontRenderer, "Yaw Rate: "+vehicle.moveHelper.getRotationSpeed()*20.f, 10, 80, white);   
     } 
   }
 

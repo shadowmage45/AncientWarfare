@@ -147,7 +147,7 @@ public void spawnMissile(float ox, float oy, float oz)
         maxPower = getAdjustedMaxMissileVelocity();
         power = vehicle.localLaunchPower > maxPower ? maxPower : vehicle.localLaunchPower;      
         yaw = vehicle.localTurretRotation;
-        pitch = vehicle.localTurretPitch + vehicle.moveHelper.airPitch; 
+        pitch = vehicle.localTurretPitch + vehicle.rotationPitch; 
         if(Config.adjustMissilesForAccuracy)
           {        
           accuracy = getAccuracyAdjusted();        
@@ -558,7 +558,7 @@ public void handleAimInput(Vec3 target)
     }
   else if(vehicle.canAimPower())
     {     
-    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch+vehicle.moveHelper.airPitch, Settings.getClientPowerIterations(), (vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));    
+    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch+vehicle.rotationPitch, Settings.getClientPowerIterations(), (vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));    
     if(this.clientLaunchSpeed!=power && power < getAdjustedMaxMissileVelocity())
       {
       this.clientLaunchSpeed = power;
@@ -681,7 +681,7 @@ public void handleSoldierTargetInput(double targetX, double targetY, double targ
     }
   else if(vehicle.canAimPower())
     {     
-    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch+vehicle.moveHelper.airPitch, Settings.getClientPowerIterations(), (vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));    
+    float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch+vehicle.rotationPitch, Settings.getClientPowerIterations(), (vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));    
     if(vehicle.localLaunchPower!=power && power < getAdjustedMaxMissileVelocity())
       {
       this.vehicle.localLaunchPower = power;

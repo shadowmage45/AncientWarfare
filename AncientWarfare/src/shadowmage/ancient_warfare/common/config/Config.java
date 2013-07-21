@@ -68,17 +68,9 @@ public static int npcAITicks = 5;
 public static int npcAISearchRange = 80;
 public static int mailSendTicks = 5*20;//five seconds between sending mail
 public static int npcWorkMJ = 80;//how many BuildCraft MJ represent one NPC 'work' unit
-
+public static int vehicleMoveUpdateFrequency = 3;
 
 //***************************************************SYNCHED CONFIGS************************************************//
-/**
- * the base (Server side) and current (client side) values...
- */
-public static boolean clientVehicleMovementBase = true;
-public static int clientMoveUpdateTicksBase = 3;
-public static boolean clientVehicleMovement = true;
-public static int clientMoveUpdateTicks = 3;
-
 public static boolean disableResearch = false;
 
 
@@ -218,8 +210,7 @@ public void setCoreInfo()
   /**
    * general options
    */
-  this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").getString();
-  this.clientVehicleMovementBase = config.get("a-general-options", "client_movement", true, "If true, movement is calculated and authenticated client-side (smoother motion for clients)").getBoolean(true);
+  this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").getString();  
   this.adjustMissilesForAccuracy = config.get("a-general-options", "missile_accuracy", true, "If true, missiles will be adjusted for vehicle and rider accuracy when launched.").getBoolean(true);
   this.blockDestruction = config.get("a-general-options", "missile_destroy_blocks", true, "If true, missiles will be capable of destroying blocks.").getBoolean(true);
   this.blockFires = config.get("a-general-options", "missile_start_fires", true, "If true, missiles will be capable of lighting fires and placing lava blocks.").getBoolean(true);
@@ -233,8 +224,7 @@ public void setCoreInfo()
    */
   this.npcAITicks = config.get("b-performance", "npc_aiticks", 5, "How many ticks should pass between updating passive ai tasks for NPCs?").getInt(5);
   this.npcAISearchRange = config.get("b-performance", "npc_search_radius", 140, "How many blocks of radius should entities search for targets and work? (MAX range, some AI limits this further)").getInt(140);
-  this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory_iterations", 20, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);
-  this.clientMoveUpdateTicksBase = config.get("b-performance", "client_movement_ticks", 3, "How many ticks between client movement update packets if client movement is enabled? (setting is sent and synched to clients on login)").getInt(3);
+  this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory_iterations", 20, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);  
   }
 
 public void setVehicleInfo()
@@ -283,8 +273,6 @@ public void handleClientInit(NBTTagCompound tag)
   {
   if(tag.hasKey("cm"))
     {
-    this.clientVehicleMovement = tag.getBoolean("cm");
-    this.clientMoveUpdateTicks = tag.getInteger("cmt");
     this.disableResearch = tag.getBoolean("disableResearch");
     }
   }
@@ -292,8 +280,6 @@ public void handleClientInit(NBTTagCompound tag)
 public NBTTagCompound getClientInitData()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setBoolean("cm", this.clientVehicleMovementBase);
-  tag.setInteger("cmt", this.clientMoveUpdateTicksBase);
   tag.setBoolean("disableResearch", this.disableResearch);
   return tag;
   }

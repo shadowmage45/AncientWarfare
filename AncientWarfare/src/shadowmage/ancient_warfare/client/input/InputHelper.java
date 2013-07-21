@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.client.input;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -28,17 +29,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
 import org.lwjgl.input.Keyboard;
 
-import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleAmmoSelection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
-import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
@@ -170,6 +171,7 @@ public EnumSet<TickType> ticks()
 @Override
 public void onKeyUp(Keybind kb)
   {
+  this.changedKeys.add(kb);
   if(kb==forward || kb==left || kb==right || kb==reverse)
     {
     hasMoveInput = true;
@@ -179,6 +181,7 @@ public void onKeyUp(Keybind kb)
 @Override
 public void onKeyPressed(Keybind kb)
   {
+  this.changedKeys.add(kb);
   if(mc.currentScreen==null && mc.theWorld != null && mc.thePlayer!=null && !mc.isGamePaused)
     {
     if(kb==this.mouseAim )
@@ -208,32 +211,84 @@ public void onKeyPressed(Keybind kb)
     }
   }
 
+List<Keybind> changedKeys = new ArrayList<Keybind>();
+
 @Override
 public void onTickEnd()
   {
   if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
     {
     VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
-    VehicleMovementType move = vehicle.vehicleType.getMovementType();
-    if(move==VehicleMovementType.AIR1 || move ==VehicleMovementType.AIR2)
-      {
-      byte throttle = (byte) (pitchUp.isPressed ? 1: pitchDown.isPressed ? -1 : 0);
-      if(throttle!=0)
-        {
-        vehicle.moveHelper.handleThrottleInput(throttle);          
-        }
-      }
-    if(hasMoveInput)
-      {
-      hasMoveInput = false;
-      int strafe = right.isPressed && left.isPressed ? 0 : left.isPressed ? -1 : right.isPressed ? 1 : 0;
-      int forwards = forward.isPressed && reverse.isPressed ? 0 : reverse.isPressed ? -1 : forward.isPressed ? 1 : 0;
-      vehicle.moveHelper.setInput((byte)forwards, (byte)strafe); 
-      } 
+    this.handleTickInput(vehicle);    
     if(Settings.getMouseAim())
       {
       this.handleMouseAimUpdate();
       }
+    }
+  this.changedKeys.clear();
+  }
+
+protected void handleTickInput(VehicleBase vehicle)
+  {  
+  NBTTagCompound tag = null;
+  if(vehicle.ticksExisted%20==0)
+    {
+    tag = new NBTTagCompound();
+    tag.setByte("f", (byte) (forward.isPressed ? 1 : reverse.isPressed? -1: 0));
+    tag.setByte("s", (byte)(left.isPressed ? -1 : right.isPressed ? 1 : 0));
+    tag.setByte("p", (byte)(pitchUp.isPressed ? 1 : pitchDown.isPressed ? -1 : 0));
+    tag.setByte("r", (byte)(turretLeft.isPressed ? -1 : turretRight.isPressed ? 1 : 0));
+    }
+  else
+    {
+    if(changedKeys.isEmpty())
+      {
+      return;
+      }
+    tag = new NBTTagCompound();
+    for(Keybind k : this.changedKeys)
+      {
+      if(k==forward)
+        {
+        tag.setByte("f", (byte) (forward.isPressed ? 1 : 0));
+        }
+      else if(k==reverse)
+        {
+        tag.setByte("f", (byte) (reverse.isPressed ? -1 : 0));
+        }
+      else if(k==left)
+        {
+        tag.setByte("s", (byte)(left.isPressed ? -1 : 0));
+        }
+      else if(k==right)
+        {
+        tag.setByte("s", (byte)(right.isPressed ? 1 : 0));
+        }
+      else if(k==pitchUp)
+        {
+        tag.setByte("p", (byte)(pitchUp.isPressed ? 1 : 0));
+        }
+      else if(k==pitchDown)
+        {
+        tag.setByte("p", (byte)(pitchDown.isPressed ? -1 : 0));
+        }
+      else if(k==turretLeft)
+        {
+        tag.setByte("r", (byte)(turretLeft.isPressed ? -1 : 0));
+        }
+      else if(k==turretRight)
+        {
+        tag.setByte("r", (byte)(turretRight.isPressed ? 1 : 0));
+        }
+      }    
+    }
+  if(tag!=null)
+    {
+//    Config.logDebug("sending input packet to server");
+    Packet02Vehicle pkt = new Packet02Vehicle();
+    pkt.setParams(vehicle);
+    pkt.setInputData(tag);
+    pkt.sendPacketToServer();
     }
   }
 

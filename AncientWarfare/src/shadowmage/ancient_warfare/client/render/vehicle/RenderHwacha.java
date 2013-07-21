@@ -25,6 +25,7 @@ import shadowmage.ancient_warfare.client.model.ModelHwacha;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
+import shadowmage.meim.common.util.Trig;
 
 
 
@@ -37,7 +38,7 @@ ModelHwacha model = new ModelHwacha();
 public void renderVehicle(VehicleBase vehicle, double x, double y, double z, float yaw, float tick)
   {
   VehicleFiringVarsHelper var = vehicle.firingVarsHelper;
-  model.setModelPitch(MathHelper.abs(vehicle.moveHelper.forwardMotion)>0.02f ? -8 :-39);
+  model.setModelPitch(MathHelper.abs(Trig.getVelocity(vehicle.motionX, vehicle.motionY, vehicle.motionZ))>0.02f ? -8 :-39);
   float wheelAngle = vehicle.wheelRotation + (tick * (vehicle.wheelRotation-vehicle.wheelRotationPrev));
   model.setWheelRotations(wheelAngle, wheelAngle, wheelAngle, wheelAngle);
   model.render(vehicle, 0, 0, 0, 0, 0, 0.0625f);

@@ -30,6 +30,10 @@ import com.google.common.io.ByteArrayDataOutput;
 public class Packet02Vehicle extends PacketBase
 {
 int entityID;
+boolean isPosition = false;
+boolean isMove = false;
+boolean isRotation = false;
+VehicleBase vehicle;
 
 @Override
 public String getChannel()
@@ -77,6 +81,16 @@ public void setTurretParams(NBTTagCompound tag)
   this.packetData.setCompoundTag("turret", tag);
   }
 
+public void setMoveUpdate(VehicleBase vehicle, boolean pos, boolean move, boolean rot)
+  {
+  this.vehicle = vehicle;
+  this.entityID = vehicle.entityId;
+  this.isPosition = pos;
+  this.isMove = move;
+  this.isRotation = rot;
+  this.packetData.setBoolean("moveData", true);
+  }
+
 @Override
 public int getPacketType()
   {  
@@ -87,12 +101,52 @@ public int getPacketType()
 public void writeDataToStream(ByteArrayDataOutput data)
   {
   data.writeInt(entityID);
+  data.writeBoolean(isPosition);
+  if(isPosition)
+    {
+    data.writeFloat((float) vehicle.posX);
+    data.writeFloat((float) vehicle.posY);
+    data.writeFloat((float) vehicle.posZ);
+    }
+  data.writeBoolean(isMove);
+  if(isMove)
+    {
+    data.writeFloat((float) vehicle.motionX);
+    data.writeFloat((float) vehicle.motionY);
+    data.writeFloat((float) vehicle.motionZ);
+    }
+  data.writeBoolean(isRotation);
+  if(isRotation)
+    {
+    data.writeFloat(vehicle.rotationYaw);
+    data.writeFloat(vehicle.rotationPitch);
+    }
   }
 
 @Override
 public void readDataStream(ByteArrayDataInput data)
   {
   this.entityID = data.readInt();
+  boolean flag = data.readBoolean();
+  if(flag)//position data
+    {
+    packetData.setFloat("px", data.readFloat());
+    packetData.setFloat("py", data.readFloat());
+    packetData.setFloat("pz", data.readFloat());
+    }
+  flag = data.readBoolean();
+  if(flag)//move data
+    {
+    packetData.setFloat("mx", data.readFloat());
+    packetData.setFloat("my", data.readFloat());
+    packetData.setFloat("mz", data.readFloat());
+    }
+  flag = data.readBoolean();
+  if(flag)//rotation data
+    {
+    packetData.setFloat("ry", data.readFloat());
+    packetData.setFloat("rp", data.readFloat());
+    }
   }
 
 @Override
