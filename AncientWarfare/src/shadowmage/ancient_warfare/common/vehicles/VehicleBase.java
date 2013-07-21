@@ -59,6 +59,7 @@ import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleAmmoHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMoveHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMovementHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleUpgradeHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
@@ -166,7 +167,8 @@ public NpcBase assignedRider = null;
  */
 public VehicleAmmoHelper ammoHelper;
 public VehicleUpgradeHelper upgradeHelper;
-public VehicleMovementHelper moveHelper;
+//public VehicleMovementHelper moveHelper;
+public VehicleMoveHelper moveHelper;
 public VehicleFiringHelper firingHelper;
 public VehicleFiringVarsHelper firingVarsHelper;
 public VehicleInventory inventory;
@@ -179,7 +181,7 @@ public VehicleBase(World par1World)
   {
   super(par1World);
   this.upgradeHelper = new VehicleUpgradeHelper(this);
-  this.moveHelper = new VehicleMovementHelper(this);
+  this.moveHelper = new VehicleMoveHelper(this);
   this.ammoHelper = new VehicleAmmoHelper(this);
   this.firingHelper = new VehicleFiringHelper(this);
   this.firingVarsHelper = new DummyVehicleHelper(this);
@@ -504,9 +506,9 @@ public Pos3f getMissileOffset()
     angle = Trig.toDegrees((float) Math.atan2(z, x));
     len = MathHelper.sqrt_float(x*x+z*z+y*y);
     angle+= this.localTurretRotation;   
-    x = Trig.cosDegrees(angle)*Trig.sinDegrees(localTurretPitch+moveHelper.airPitch)*len;
-    z = -Trig.sinDegrees(angle)*Trig.sinDegrees(localTurretPitch+moveHelper.airPitch)*len;
-    y = Trig.cosDegrees(localTurretPitch+moveHelper.airPitch)*len;
+    x = Trig.cosDegrees(angle)*Trig.sinDegrees(localTurretPitch+rotationPitch)*len;
+    z = -Trig.sinDegrees(angle)*Trig.sinDegrees(localTurretPitch+rotationPitch)*len;
+    y = Trig.cosDegrees(localTurretPitch+rotationPitch)*len;
     }    
   x+=x1;
   z+=z1;
@@ -548,7 +550,6 @@ public void onLaunchingUpdate()
 public void resetCurrentStats()
   {
   this.firingHelper.resetUpgradeStats();
-  this.moveHelper.resetUpgradeStats();
   this.currentForwardSpeedMax = this.baseForwardSpeed;
   this.currentStrafeSpeedMax = this.baseStrafeSpeed;
   this.currentTurretPitchMin = this.basePitchMin;
@@ -591,7 +592,7 @@ public void onUpdate()
     }
   this.updateTurretPitch();
   this.updateTurretRotation(); 
-  this.moveHelper.onMovementTick();
+  this.moveHelper.onUpdate();
   this.firingHelper.onTick();
   this.firingVarsHelper.onTick();
   if(this.hitAnimationTicks>0)
@@ -621,15 +622,6 @@ public void onUpdate()
  */
 public void onUpdateClient()
   {  
-  if(Config.clientVehicleMovement && this.riddenByEntity !=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())
-    {
-    moveUpdateTicks++;
-    if(moveUpdateTicks>=Config.clientMoveUpdateTicks && (this.motionX!=0 ||this.motionY!=0 ||this.motionZ!=0 || this.ticksExisted%100==0))
-      {
-      moveUpdateTicks=0;
-      moveHelper.sendInputToServer(getForwardInput(), getStrafeInput(), true);  
-      }
-    }
   if(this.localVehicleHealth!=this.getHealth())
     {
     if(localVehicleHealth>this.getHealth())//only play hit animation when attacked
@@ -649,14 +641,7 @@ public void onUpdateClient()
  */
 public void onUpdateServer()
   {
-  if(this.riddenByEntity==null)
-    {
-    this.moveHelper.clearInputFromDismount();
-    }  
-  else
-    {
-    this.updateRiderPosition();
-    }
+
   }
 
 public void updateTurretPitch()
@@ -901,19 +886,6 @@ public void applyEntityCollision(Entity par1Entity)
   }
 
 @Override
-public void addVelocity(double x, double y, double z)
-  {  
-  //TODO this may be all F@!#%D up...
-  this.motionY += y;
-  float velocity = MathHelper.sqrt_double(x*x+z*z);
-  this.moveHelper.forwardMotion += velocity;
-  
-  float yaw = (float) Math.atan2(z, x);
-  this.moveHelper.strafeMotion += rotationYaw-yaw;
-    
-  }
-
-@Override
 public String getTexture()
   {
   return vehicleType.getTextureForMaterialLevel(vehicleMaterialLevel);
@@ -935,7 +907,7 @@ public void updateRiderPosition()
   posZ += Trig.cosDegrees(yaw)*-this.getRiderForwardOffset();
   posZ += Trig.cosDegrees(yaw+90)*this.getRiderHorizontalOffset();
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
-  this.riddenByEntity.rotationYaw -= this.moveHelper.strafeMotion*2;  
+  this.riddenByEntity.rotationYaw -= this.moveHelper.strafeMotion*2;
   }
 
 @Override
@@ -954,38 +926,9 @@ public boolean interact(EntityPlayer player)
 
 @Override
 public void setPositionAndRotation2(double par1, double par3, double par5, float yaw, float par8, int par9)
-  {      
-  this.setPositionAndRotationNormalized(par1, par3, par5, yaw, par8, par9);
+  {     
+  this.moveHelper.handleClientSynch(par1, par3, par5, yaw, par8, par9);
   }
-
-public void setPositionAndRotationNormalized(double par1, double par3, double par5, float yaw, float par8, int par9)
-  {
-  if(this.riddenByEntity!=null && this.riddenByEntity == AWCore.proxy.getClientPlayer())//if this is a client instance, and thePlayer is riding...
-    {
-    if(Config.clientVehicleMovement)
-      {
-      return;
-      }
-    double var10 = par1 - this.posX;
-    double var12 = par3 - this.posY;
-    double var14 = par5 - this.posZ;
-    double var16 = var10 * var10 + var12 * var12 + var14 * var14;    
-    if (var16 <= 1.0D)
-      {
-      float rot = this.rotationYaw;
-      float rot2 = yaw;      
-      if(Trig.getAbsDiff(rot, rot2)>2)
-        {        
-        this.setRotation(yaw, par8);
-        this.prevRotationYaw = this.rotationYaw;         
-        }      
-      return;
-      }
-    } 
-  super.setPositionAndRotation(par1, par3, par5, yaw, par8);
-  }
-
-
 
 @Override
 public boolean shouldRiderSit()
