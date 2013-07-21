@@ -66,7 +66,6 @@ import shadowmage.ancient_warfare.client.render.gate.RenderGateBasic;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateDouble;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateRotatingBridge;
 import shadowmage.ancient_warfare.client.render.gate.RenderGateSingle;
-import shadowmage.ancient_warfare.client.render.machine.RenderTEEngineWaterwheel;
 import shadowmage.ancient_warfare.client.render.machine.RenderTEMotor;
 import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
 import shadowmage.ancient_warfare.client.render.missile.RenderShot;
@@ -291,7 +290,6 @@ public void loadRenders()
   RenderTEMotor engineRender = new RenderTEMotor();
   MinecraftForgeClient.registerItemRenderer(BlockLoader.engineBlock.blockID, engineRender);
   ClientRegistry.bindTileEntitySpecialRenderer(PluginProxy.bcProxy.getHandCrankEngineClass(), engineRender);
-  ClientRegistry.bindTileEntitySpecialRenderer(PluginProxy.bcProxy.getWaterwheelEngineClass(), new RenderTEEngineWaterwheel());
   }
 
 public void addTEModel(int type, ModelTEBase model)

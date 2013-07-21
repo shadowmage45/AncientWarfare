@@ -63,7 +63,7 @@ public ForgeDirection getFacing()
   return this.facingDirection;
   }
 
-public void rotate()
+public void rotate(ForgeDirection axis)
   {
   if(!this.canPointVertical)
     {
@@ -71,8 +71,9 @@ public void rotate()
     }
   else
     {
-    this.setDirection(facingDirection.getRotation(ForgeDirection.DOWN));
+    this.setDirection(facingDirection.getRotation(axis));
     }
+  this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
   }
 
 public void onBlockPlaced()

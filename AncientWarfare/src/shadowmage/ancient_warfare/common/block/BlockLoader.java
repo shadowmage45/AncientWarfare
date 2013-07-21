@@ -84,13 +84,15 @@ public static final Block gateProxy = new BlockGateProxy(Config.getBlockID("bloc
 public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3707, "Base block for crafting/research stations"), Config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for craftinb blocks").getInt(3707));
 public static final Block reinforced = new BlockReinforced(Config.getBlockID("blockMulti.reinforced", 3708, "Base block for reinforced blocks"), Material.rock, "Reinforced Blocks");
 public static final Block machineBlock = new BlockMiscMachine(Config.getBlockID("blockMulti.machine", 3709, "Base block for misc machines"), Material.rock, "Machine");
-public static final Block engineBlock = new BlockEngine(Config.getBlockID("blockMulti.engine", 3710, "Base block for misc machines"), Material.rock, "block.multi.engine.0");
+public static final Block engineBlock = new BlockEngine(Config.getBlockID("blockMulti.engine", 3710, "Base block for misc engines"), Material.rock, "block.multi.engine.0");
 
 public static final ItemStack trashcan = new ItemStack(machineBlock,1,0);
 public static final ItemStack mailbox = new ItemStack(machineBlock,1,1);
 public static final ItemStack mailboxIndustrial = new ItemStack(machineBlock,1,2);
 public static final ItemStack chunkloader = new ItemStack(machineBlock, 1, 3);
 public static final ItemStack chunkloaderDeluxe = new ItemStack(machineBlock, 1, 4);
+public static final ItemStack mechanicalWorker = new ItemStack(machineBlock, 1, 5);
+public static final ItemStack handCrankedEngine = new ItemStack(engineBlock, 1, 0);
 
 private static BlockLoader INSTANCE;
 private BlockLoader(){}

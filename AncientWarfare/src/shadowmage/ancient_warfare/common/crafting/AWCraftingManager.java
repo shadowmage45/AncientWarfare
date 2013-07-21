@@ -41,6 +41,7 @@ import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
+import shadowmage.ancient_warfare.common.plugins.PluginProxy;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
@@ -474,6 +475,25 @@ protected void addCivicRecipes()
   recipe.addResource(Block.obsidian,4, false);
   recipe.addNeededResearch(ResearchGoalNumbers.logistics4);
   this.civicMiscRecipes.add(recipe);
+  
+  if(PluginProxy.bcLoaded)
+    {
+    recipe = new ResourceListRecipe(BlockLoader.mechanicalWorker, RecipeType.CIVIC_MISC);
+    recipe.addResource(Item.enderPearl, 2, false);
+    recipe.addResource(Item.ingotIron, 8, false);
+    recipe.addResource(Block.pistonBase, 1, false);
+    recipe.addNeededResearch(ResearchGoalNumbers.logistics3, ResearchGoalNumbers.mechanics5);
+    this.civicMiscRecipes.add(recipe);
+    
+    recipe = new ResourceListRecipe(BlockLoader.handCrankedEngine, RecipeType.CIVIC_MISC);
+    recipe.addResource(Block.lever, 1, false);
+    recipe.addResource(Item.ingotIron, 6, false);
+    recipe.addResource(Block.pistonBase, 2, false);
+    recipe.addResource(Item.redstone, 2, false);
+    recipe.addNeededResearch(ResearchGoalNumbers.logistics3, ResearchGoalNumbers.mechanics5);
+    this.civicMiscRecipes.add(recipe);    
+    } 
+  
   }
 
 protected void addGateRecipes()

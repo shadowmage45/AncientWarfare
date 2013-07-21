@@ -119,13 +119,15 @@ public VehicleTypeHelicopter(int typeNum)
   this.baseForwardSpeed = 25f*0.05f;
   
   this.turretForwardsOffset = 0.f;
-  this.missileVerticalOffset = 0.65f;
-  this.basePitchMax = -90;
-  this.basePitchMin = -90; 
-  this.baseMissileVelocityMax = 5.f;   
+  this.turretVerticalOffset = 0.f;
+  this.missileVerticalOffset = 0.25f;
+  this.accuracy = 0.94f;
+  this.basePitchMax = 0;
+  this.basePitchMin = 0; 
+  this.baseMissileVelocityMax = 50.f;   
   
-  this.riderForwardsOffset = 0.0625f * 5;
-  this.riderVerticalOffset = 0.0625f * 10;  
+  this.riderForwardsOffset = -0.0625f * 7;
+  this.riderVerticalOffset = 0.0625f * 12;  
   this.shouldRiderSit = true;
   
   this.isMountable = true;

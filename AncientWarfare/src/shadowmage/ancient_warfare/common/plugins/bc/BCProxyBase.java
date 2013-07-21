@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.plugins.bc;
 
 import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_warfare.common.machine.TEEngineWaterwheel;
 import shadowmage.ancient_warfare.common.machine.TEHandCrankEngine;
 import shadowmage.ancient_warfare.common.machine.TEMechanicalWorker;
 
@@ -51,16 +50,6 @@ public Class<? extends TileEntity> getHandCrankEngineClass()
 public TileEntity getHandCrankEngineTE()
   {
   return new TEHandCrankEngine();
-  }
-
-public Class<? extends TileEntity> getWaterwheelEngineClass()
-  {
-  return TEEngineWaterwheel.class;
-  }
-
-public TileEntity getWaterwheelEngineTE()
-  {
-  return new TEEngineWaterwheel();
   }
 
 

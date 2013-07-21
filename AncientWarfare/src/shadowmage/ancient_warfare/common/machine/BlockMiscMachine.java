@@ -73,7 +73,7 @@ public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection a
   TileEntity te = worldObj.getBlockTileEntity(x, y, z);
   if(te instanceof TEMachine)
     {
-    ((TEMachine) te).rotate();
+    ((TEMachine) te).rotate(axis);
     }
   return true;
   }

@@ -49,14 +49,4 @@ public TileEntity getHandCrankEngineTE()
   return new TEHandCrankEngineBC();
   }
 
-public Class<? extends TileEntity> getWaterwheelEngineClass()
-  {
-  return TEEngineWaterwheelBC.class;
-  }
-
-public TileEntity getWaterwheelEngineTE()
-  {
-  return new TEEngineWaterwheelBC();
-  }
-
 }

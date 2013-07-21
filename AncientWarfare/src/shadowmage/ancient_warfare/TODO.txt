@@ -1,12 +1,8 @@
 PRE OPEN BETA
 * vehicle movement, server side, is fooked, need to completely re-implement movement model
 * fix engine work-command -- only send update on work command -- send work-speed only (if work speed is received, it means move the freaking piston)
-* hand cranked engine recipes/research
-* waterwheel engine recipes/research
-* waterwheel engine water block validation
-* waterwheel engine placement validation (make sure it is not colliding with any other waterwheels
+* add npc types that can work on engines (add new work type?)
 * engine optional upgrade slots?
-* helicopter recipes/research
 * researcher and craftsmsen need specific tools
 * add rotation support to rotatable blocks
 * move other rotatable blocks over to forgeDirection for consistency
@@ -183,7 +179,10 @@ TWEAKS/OPTIMIZATION
 * add waterwheel wheel model and texture
 * add mechanical worker block textures
 
-* waterwheel engine wheel display validation (it is displaying 100% of the time currently)
+* remove waterwheel -- too many issues with validation of the wheel placement
+* hand cranked engine recipes/research
+* update helicopter to use aircraft gunship style firing
+* fix rotation support for machine blocks
 
 /********** 07-21-13 **********/
 /********** 07-22-13 **********/

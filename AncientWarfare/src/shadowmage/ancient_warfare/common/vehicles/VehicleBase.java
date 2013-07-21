@@ -653,6 +653,10 @@ public void onUpdateServer()
     {
     this.moveHelper.clearInputFromDismount();
     }  
+  else
+    {
+    this.updateRiderPosition();
+    }
   }
 
 public void updateTurretPitch()
