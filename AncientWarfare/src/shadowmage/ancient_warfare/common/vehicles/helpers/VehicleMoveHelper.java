@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.helpers;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -55,6 +56,7 @@ protected float verticalMotion = 0.f;
 protected float turnMotion = 0.f;
 protected float pitchMotion = 0.f;
 protected float strafeMotion = 0.f;
+protected float throttle = 0.f;
 
 protected float groundDrag = 0.96f;
 protected float groundStop = 0.02f;
@@ -89,27 +91,27 @@ public void handleMoveData(NBTTagCompound tag)
   {
   if(tag.hasKey("rp"))
     {
-    this.pitchTicks = Config.vehicleMoveUpdateFrequency;
+    this.pitchTicks = Config.vehicleMoveUpdateFrequency+1;
     this.destPitch = tag.getFloat("rp");
     }
   if(tag.hasKey("ry"))
     {
-    this.rotationTicks = Config.vehicleMoveUpdateFrequency;
+    this.rotationTicks = Config.vehicleMoveUpdateFrequency+1;
     this.destYaw = tag.getFloat("ry");
     }
   if(tag.hasKey("px"))
     {
-    this.moveTicks = Config.vehicleMoveUpdateFrequency;
+    this.moveTicks = Config.vehicleMoveUpdateFrequency+1;
     this.destX = tag.getFloat("px");
     }
   if(tag.hasKey("py"))
     {
-    this.moveTicks = Config.vehicleMoveUpdateFrequency;
+    this.moveTicks = Config.vehicleMoveUpdateFrequency+1;
     this.destY = tag.getFloat("py");
     }
   if(tag.hasKey("pz"))
     {
-    this.moveTicks = Config.vehicleMoveUpdateFrequency;
+    this.moveTicks = Config.vehicleMoveUpdateFrequency+1;
     this.destZ = tag.getFloat("pz");
     }
   }
@@ -139,10 +141,12 @@ public void onUpdate()
   if(vehicle.worldObj.isRemote)
     {
     onUpdateClient();
+//    Config.logDebug("c: "+vehicle);
     }
   else
     {
     onUpdateServer();
+//    Config.logDebug("s: "+vehicle);
     }
   }
 
@@ -152,13 +156,19 @@ protected void onUpdateClient()
   vehicle.motionY = 0;
   vehicle.motionZ = 0;
   rotationSpeed = 0;
+  pitchSpeed = 0;
   if(this.rotationTicks>0)
     {
-    float dr = (this.destYaw - vehicle.rotationYaw)/rotationTicks;
-    rotationSpeed = dr;
+    rotationSpeed = (this.destYaw - vehicle.rotationYaw)/rotationTicks;
+    vehicle.rotationYaw += this.rotationSpeed;
     this.rotationTicks--;
     } 
-  vehicle.rotationYaw += this.rotationSpeed;
+  if(this.pitchTicks>0)
+    {
+    pitchSpeed = (this.destPitch - vehicle.rotationPitch)/pitchTicks;    
+    vehicle.rotationPitch += this.pitchSpeed;
+    this.pitchTicks--;
+    }
   if(moveTicks>0)
     {
     double dx = (destX - vehicle.posX)/(float)moveTicks;
@@ -192,8 +202,8 @@ protected void onUpdateServer()
   this.applyAir2Motion();
   break;  
   }
-  this.vehicle.rotationYaw -= this.turnMotion;
-  this.vehicle.rotationPitch += this.pitchMotion;
+  vehicle.motionX = Trig.sinDegrees(vehicle.rotationYaw)*-forwardMotion;
+  vehicle.motionZ = Trig.cosDegrees(vehicle.rotationYaw)*-forwardMotion;  
   this.vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
   this.tearUpGrass();
   boolean sendUpdate = (vehicle.motionX!=0 || vehicle.motionY!=0 || vehicle.motionZ!=0 || vehicle.rotationYaw!=vehicle.prevRotationYaw || vehicle.rotationPitch!=vehicle.prevRotationPitch);
@@ -210,27 +220,133 @@ protected void onUpdateServer()
 
 protected void applyGroundMotion()
   {
-  this.applyForwardInput(0.0125f, true);
   this.applyTurnInput(0.05f);
+  this.applyForwardInput(0.0125f, true);
   }
 
 protected void applyWaterMotion()
   {
-  this.applyForwardInput(0.0125f, true);
   this.applyTurnInput(0.05f);
-  this.handleWaterMovement();
+  this.applyForwardInput(0.0125f, true);
+  this.handleWaterMovement();  
   }
 
 protected void applyAir1Motion()
   {
-
+  this.applyThrottleInput();
+  this.applyPitchInput(-15, 15);
   this.applyTurnInput(0.05f);
+  this.applyAirplaneInput();
   }
 
 protected void applyAir2Motion()
   {
-
+  this.applyThrottleInput();
+  this.applyPitchInput(-5, 5);
   this.applyTurnInput(0.05f);
+  this.applyHelicopterInput();
+  }
+
+protected void applyAirplaneInput()
+  {
+  float weightAdjust = 1.f;
+  if(vehicle.currentWeight > vehicle.baseWeight)
+    {
+    weightAdjust = vehicle.baseWeight  / vehicle.currentWeight;
+    }  
+  float maxSpeed = vehicle.currentForwardSpeedMax * weightAdjust;
+  float percent = 1 - (forwardMotion / maxSpeed);
+  float doublePercent = 1 - (forwardMotion / (maxSpeed*2));
+  percent = percent > 0.25f ? 0.25f : percent;  
+  float drag = vehicle.onGround ? 0.95f : 1.f - ((1-throttle)*0.1f);
+  
+  float changeFactor = percent * throttle * 0.125f;  
+  
+
+  if(forwardMotion+changeFactor > maxSpeed){changeFactor = 0;}  
+  forwardMotion += changeFactor;
+  if(forwardMotion < 0){forwardMotion = 0;}
+  forwardMotion *= drag;    
+  if(forwardMotion > vehicle.currentForwardSpeedMax * 0.35f)//stall speed check
+    {
+//    forwardMotion += vehicle.rotationPitch * forwardMotion * doublePercent * 0.0125f;
+    vehicle.motionY = vehicle.rotationPitch * forwardMotion * 0.0125f;
+    }
+  else
+    {
+    vehicle.motionY -= 9.81*0.05f*0.05f;
+    }
+  if(forwardMotion > maxSpeed*2){forwardMotion = maxSpeed*2;}
+  if(Math.abs(forwardMotion)<groundStop && throttle==0)
+    {
+    forwardMotion = 0.f;
+    }  
+  }
+
+protected void applyHelicopterInput()
+  {
+  float weightAdjust = 1.f;
+  if(vehicle.currentWeight > vehicle.baseWeight)
+    {
+    weightAdjust = vehicle.baseWeight  / vehicle.currentWeight;
+    }  
+  float drag = 1.f - (1-(throttle*1.538f))*0.1f; 
+  drag = throttle > 0.64f ? 1.f : drag;
+  boolean reverse = (vehicle.rotationPitch>0 && forwardMotion>0) || (vehicle.rotationPitch<0 && forwardMotion<0);
+  float maxSpeed = vehicle.currentForwardSpeedMax * weightAdjust;
+  float maxReverse = -maxSpeed;
+  float percent = 1 - (forwardMotion >= 0 ? (forwardMotion / maxSpeed) : (forwardMotion / maxReverse));
+  percent = percent > 0.25f ? 0.25f : percent;
+  percent = reverse ? 0.25f : percent;
+  float changeFactor = percent * -vehicle.rotationPitch*0.2f * 0.125f * throttle * (vehicle.onGround ? 0.35f : 1.f);
+  if(reverse){changeFactor *=2;}
+  forwardMotion += changeFactor;
+  if(forwardMotion > maxSpeed){forwardMotion = maxSpeed;}
+  if(forwardMotion < maxReverse){forwardMotion = maxReverse;}
+  forwardMotion*=drag;
+  if(Math.abs(forwardMotion)<groundStop && vehicle.rotationPitch==0)
+    {
+    forwardMotion = 0.f;
+    }  
+  float grav = 9.81f*0.05f*0.05f;
+  if(throttle>0)
+    {
+    vehicle.motionY = (10.f*grav*throttle) - (6.5f*grav);
+    }
+  else
+    {
+    vehicle.motionY-=grav;
+    }
+  }
+
+protected void applyThrottleInput()
+  {
+  if(vehicle.riddenByEntity==null)
+    {
+    this.throttle = 0.f;
+    this.powerInput = 0;
+    }
+  if(this.powerInput!=0)
+    {
+    this.throttle += 0.025f * (float)this.powerInput;
+    Config.logDebug("set throttle to: "+throttle);
+    }
+  this.throttle = this.throttle < 0.f ? 0.f : this.throttle > 1.f ? 1.f : this.throttle;
+  }
+
+protected void applyPitchInput(float min, float max)
+  {
+  if(forwardInput!=0)
+    {
+    this.pitchMotion = (float)-forwardInput;
+    }
+  else
+    {
+    this.pitchMotion = 0;
+    }
+  this.vehicle.rotationPitch += this.pitchMotion;
+  if(vehicle.rotationPitch<min){vehicle.rotationPitch = min;}
+  if(vehicle.rotationPitch>max){vehicle.rotationPitch = max;}
   }
 
 protected void applyForwardInput(float inputFactor, boolean slowReverse)
@@ -261,10 +377,8 @@ protected void applyForwardInput(float inputFactor, boolean slowReverse)
   if(Math.abs(forwardMotion)<groundStop && forwardInput==0)
     {
     forwardMotion = 0.f;
-    }
-  vehicle.motionX = Trig.sinDegrees(vehicle.rotationYaw)*-forwardMotion;
-  vehicle.motionY = 0;
-  vehicle.motionZ = Trig.cosDegrees(vehicle.rotationYaw)*-forwardMotion;  
+    }  
+  vehicle.motionY -= 9.81*0.05f*0.05f;
   }
 
 protected void applyTurnInput(float inputFactor)
@@ -294,6 +408,7 @@ protected void applyTurnInput(float inputFactor)
     {
     turnMotion = 0.f;
     }  
+  this.vehicle.rotationYaw -= this.turnMotion;
   }
 
 /**
@@ -363,6 +478,42 @@ protected boolean handleWaterMovement()
     vehicle.motionY += 0.007000000216066837D;
     }
   return inWater;
+  }
+
+protected void handleAirCrash(boolean crashSpeed, boolean vertCrashSpeed, boolean onGroundPrev)
+  { 
+  if(vehicle.isCollidedHorizontally)
+    {
+    if(!onGroundPrev || crashSpeed)
+      {
+      Config.logDebug("CRASH");
+      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
+        {
+        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
+        player.addChatMessage("you have crashed!!");
+        }
+      if(!vehicle.worldObj.isRemote)
+        {
+        vehicle.setDead();
+        }
+      }
+    }  
+  if(vehicle.isCollidedVertically)
+    {
+    if(vertCrashSpeed && !onGroundPrev)
+      {
+      Config.logDebug(" VERT CRASH");
+      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
+        {
+        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
+        player.addChatMessage("you have crashed (vertical)!!");
+        }
+      if(!vehicle.worldObj.isRemote)
+        {
+        vehicle.setDead();
+        }
+      }
+    } 
   }
 
 protected void tearUpGrass()

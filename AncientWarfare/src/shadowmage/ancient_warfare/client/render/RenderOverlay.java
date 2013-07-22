@@ -39,9 +39,6 @@ import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
-
-
-
 public class RenderOverlay extends Gui implements ITickHandler
 {
 
@@ -66,7 +63,7 @@ public void renderVehicleOverlay()
   if(vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR1 || vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR2)
     {
 //    this.drawString(fontRenderer, "Throttle: "+vehicle.moveHelper.localThrottle, 10, 10, white);    
-//    this.drawString(fontRenderer, "Pitch: "+vehicle.moveHelper.airPitch, 10, 20, white);
+    this.drawString(fontRenderer, "Pitch: "+vehicle.rotationPitch, 10, 20, white);
     this.drawString(fontRenderer, "Climb Rate: "+vehicle.motionY*20, 10, 30, white);
     this.drawString(fontRenderer, "Elevation: "+vehicle.posY, 10, 40, white);
     }
