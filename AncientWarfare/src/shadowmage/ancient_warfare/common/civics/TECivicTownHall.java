@@ -42,50 +42,10 @@ import shadowmage.ancient_warfare.common.utils.InventoryTools;
 public class TECivicTownHall extends TECivic
 {
 
-int foodValue = 0;
-ItemStack rationFilter;
-
 public TECivicTownHall()
   {
   this.hasWork = true;
   this.broadcastWork = true;
-  rationFilter = new ItemStack(ItemLoader.rations);
-  }
-
-@Override
-public void updateEntity()
-  {  
-  super.updateEntity();
-  if(worldObj==null || worldObj.isRemote)
-    {
-    return;
-    }
-  if(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
-    {
-    int index;
-    int foodValue = 0;
-    ItemStack stack;
-    for(int i = 0; i < this.regularIndices.length; i++)
-      {
-      index = this.regularIndices[i];
-      stack = this.getStackInSlot(index);      
-      if(stack==null || stack.itemID == ItemLoader.rations.itemID || !(stack.getItem() instanceof ItemFood) || stack.itemID == Item.rottenFlesh.itemID){continue;}
-      ItemFood item = (ItemFood)stack.getItem();
-      foodValue = item.getHealAmount();
-      this.foodValue+=foodValue;
-      stack.stackSize--;
-      if(stack.stackSize<=0)
-        {
-        this.setInventorySlotContents(index, null);
-        }
-      break;
-      }    
-    }
-  while(this.foodValue>=2 && this.inventory.canHoldItem(rationFilter, 1))
-    {
-    InventoryTools.tryMergeStack(inventory, rationFilter.copy(), regularIndices);
-    this.foodValue -=2;
-    }
   }
 
 @Override
@@ -174,20 +134,5 @@ public void broadcastWork(int maxRange)
       }
     }
   }
-
-@Override
-public void readFromNBT(NBTTagCompound tag)
-  {
-  super.readFromNBT(tag);
-  this.foodValue = tag.getInteger("foodValue");
-  }
-
-@Override
-public void writeToNBT(NBTTagCompound tag)
-  {
-  super.writeToNBT(tag);
-  tag.setInteger("foodValue", this.foodValue);
-  }
-
 
 }
