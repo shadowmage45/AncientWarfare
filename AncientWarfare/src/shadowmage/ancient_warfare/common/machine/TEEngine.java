@@ -72,6 +72,7 @@ protected void updatePistonState()
       {
       this.pistonDirection = 0;
       }
+    this.isWorking = false;
     }
   }
 
@@ -92,10 +93,9 @@ protected void setIsWorking(boolean work)
     if(!isWorking && pistonProgress==0)
       {
       this.pistonDirection = 1;
+      this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, BlockLoader.engineBlock.blockID, 0, work? 1 : 0);
+      this.isWorking = work;
       }
-    Config.logDebug("set isWorking to: "+isWorking);
-    this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, BlockLoader.engineBlock.blockID, 0, work? 1 : 0);
-    this.isWorking = work;
     }
   }
 
@@ -105,7 +105,6 @@ public boolean receiveClientEvent(int par1, int par2)
   if(par1==0)
     {    
     this.isWorking = par2==1;
-    Config.logDebug("set isWorking to: "+this.isWorking+ " on "+ (this.worldObj.isRemote? "Client" : "Server"));
     }
   return true;
   }

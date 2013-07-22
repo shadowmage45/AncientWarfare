@@ -1,10 +1,7 @@
 PRE OPEN BETA
-* fix engine work-command -- only send update on work command -- send work-speed only (if work speed is received, it means move the freaking piston)
-* engine optional upgrade slots?
 * researcher and craftsmsen need specific tools
-    textures for hammer and quill items
     recipes for hammer1-3 and quill1-3
-* add rotation support to rotatable blocks
+* add rotation support to rotatable blocks (crafting tables -- just for cosmetics?)
 * move other rotatable blocks over to forgeDirection for consistency
 * update world-gen config file
     
@@ -13,6 +10,7 @@ PRE FULL RELEASE
 * scanning authentication list (server ops?)
 * NEI plugin
 * cleanup research notes book    
+* worker-engine optional upgrade slots?
 
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
@@ -26,7 +24,8 @@ FROM TESTING
 * npcs need massive optimization pass, using far too much of server tick time
 * deluxe chunkloader world rendering
 * bed placement is fubar in structure gen from templates
-* optimize vehicle data transmission to only include relavent data for that vehicle (disable air stats on land vehicles)
+* npc despawning?
+* npc trampling on crops
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -39,6 +38,7 @@ BALANCE/TWEAKS
 TEXTURE/ART
 * more missile textures
 * finish airplane textures
+* finish helicopter textures
 
 GENERAL
 * add name search/filter box to structure builder guis
@@ -57,11 +57,6 @@ VEHICLES
 * cat mobile turret(fixed?) rider position is too far forward
 * pathfinding needs adjusted so that it doesn't need to be as close to the node to claim next (will help with aquatic pathfinding and the coast-hugging that npcs do)
 * re-allow theta pathfinding in water (it was disabled for crawler--fix crawler some other way)
-
-AIRPLANE
-
-HELICOPTER/airship/vtol
-* model / textures
  
 GATES
 * rework model into a 1/4 block model to allow for true mid-split/open gates
@@ -86,29 +81,11 @@ TEMPLATES
 * add support for machine and crafting table rotations
     * add generic support for tile-entities by caching nbt?
         after block placed, call TE.updatecontainingblockinfo
-* scan/build of crafting station, w/ orientation
-* scan/build of machines, w/orientation
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
  
 /************************************************DONE/OPTI*************************************************/
- MOD BETA TEST PACK
-* NEI--
-* gravity gun--
-* BC--
-* TE--
-* RC--
-* IC2--
-* Twilight forest--
-* EE3--
-* Iron Chests--
-* AE--
-* MFR--
-* Modular Power Suits--
-* Forestry--
-* thaumcraft--
-* computercraft--
 
 OPTIONAL
 * move upgrades/ammo/armor over to self-registering class with an underlying array instead of the map they currently use        
@@ -135,63 +112,16 @@ TWEAKS/OPTIMIZATION
 
 ********************* DONE STUFF ************************* 
 
-/********** 07-14-13 **********/
-* remove soldier arrows and ball shots from creative mode, etc
-* ignore incorrect packet/container types (remove error msg)
-* fix civic block rendering as entity-item
-* fix reinforced block in-hand item rendering
-* research book gui search box needs moved down a few pixels
-* industrial mailbox gui needs elements centered
-* remove tag validation from backpack use in courier crafting -- it will now eat full/empty/used/colored backpacks
-
-/********** 07-15-13 **********/
-* new wiki created and WIP
-
-/********** 07-16-13 **********/
-* adjust npc attack distance from target if target is ridding an entity (use ridden width instead of target width)
-* large trebuchet health should be increased
-* fix naming issue on industrial mailbox top icon
-* add bc plugin proxy
-* add bc-power worker block
-
-/********** 07-17-13 **********/
-* fix up worker-motor wooden pipe connection issues
-
-/********** 07-18-13 **********/
-* rename BC compat blocks (mechanical worker, hand crank engine)
-* add language translation entries for blocks
-* add en_US translation entries for crafting stations
-* add en_US translation entries for damage types for missiles
-* add en_US translation entries for entity type names
-
-/********** 07-19-13 **********/
-* fix--mine still harvests water, specifically on the ladder blocks
-* add en_US translation entry for Hand Cranked Engine
-* add prep work for waterwheel engine
-* more work on waterwheel engine
-* save to NBT the power-state from BC plugin blocks
-* add helicopter model
-
-/********** 07-20-13 **********/
-* add helicopter texture
-* add waterwheel engine texture
-* add waterwheel wheel model and texture
-* add mechanical worker block textures
-
-* remove waterwheel -- too many issues with validation of the wheel placement
-* hand cranked engine recipes/research
-* update helicopter to use aircraft gunship style firing
-* fix rotation support for machine blocks
-
-/********** 07-21-13 **********/
-* rewrite vehicle motion to be entirely server-side
-
 /********** 07-22-13 **********/
 * add food-processor machine -- converts food -> rations
 * add hammer and quill items (for craftsman / researcher tools)
 * add 'ENGINE' civic work type
 * add ENGINE work type as valid work for all worker NPCs (farmer, fisher, lumber, craft, research, miner)
 * translation entries for new items / blocks (food processor, hammers, quills)
+
+* add food-processor block textures
+* fix engine work-command -- only send update on work command -- send work-speed only (if work speed is received, it means move the freaking piston)
+* add hammer/quill textures
 
 /********** 07-23-13 **********/
 /********** 07-24-13 **********/

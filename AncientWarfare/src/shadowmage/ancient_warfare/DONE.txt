@@ -1305,3 +1305,52 @@
 * fix localization in ammo select gui and of ammo in vehicle overlay
 * add recipes and needed research for chunkloader blocks
 
+/********** 07-14-13 **********/
+* remove soldier arrows and ball shots from creative mode, etc
+* ignore incorrect packet/container types (remove error msg)
+* fix civic block rendering as entity-item
+* fix reinforced block in-hand item rendering
+* research book gui search box needs moved down a few pixels
+* industrial mailbox gui needs elements centered
+* remove tag validation from backpack use in courier crafting -- it will now eat full/empty/used/colored backpacks
+
+/********** 07-15-13 **********/
+* new wiki created and WIP
+
+/********** 07-16-13 **********/
+* adjust npc attack distance from target if target is ridding an entity (use ridden width instead of target width)
+* large trebuchet health should be increased
+* fix naming issue on industrial mailbox top icon
+* add bc plugin proxy
+* add bc-power worker block
+
+/********** 07-17-13 **********/
+* fix up worker-motor wooden pipe connection issues
+
+/********** 07-18-13 **********/
+* rename BC compat blocks (mechanical worker, hand crank engine)
+* add language translation entries for blocks
+* add en_US translation entries for crafting stations
+* add en_US translation entries for damage types for missiles
+* add en_US translation entries for entity type names
+
+/********** 07-19-13 **********/
+* fix--mine still harvests water, specifically on the ladder blocks
+* add en_US translation entry for Hand Cranked Engine
+* add prep work for waterwheel engine
+* more work on waterwheel engine
+* save to NBT the power-state from BC plugin blocks
+* add helicopter model
+
+/********** 07-20-13 **********/
+* add helicopter texture
+* add waterwheel engine texture
+* add waterwheel wheel model and texture
+* add mechanical worker block textures
+* remove waterwheel -- too many issues with validation of the wheel placement
+* hand cranked engine recipes/research
+* update helicopter to use aircraft gunship style firing
+* fix rotation support for machine blocks
+
+/********** 07-21-13 **********/
+* rewrite vehicle motion to be entirely server-side

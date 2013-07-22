@@ -48,6 +48,7 @@ public TEFoodProcessor()
     otherIndices[i] = i+1;
     }
   this.guiNumber = GUIHandler.FOOD_PROCESSOR;
+  this.facesOpposite = true;
   }
 
 int delayTicks = 0;
