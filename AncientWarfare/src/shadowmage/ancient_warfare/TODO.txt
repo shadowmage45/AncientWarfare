@@ -127,8 +127,8 @@ TWEAKS/OPTIMIZATION
 * re-enable aircraft crash mechanics
 * enable collision braking in vehicles (slow down on collide with blocks/etc)
 * enable noclip on client-side vehicles (no reason for them to collide client-side, they just need to move)
-
 * add forwardMotion to variables sent during vehicle movement--used for wheel rotation
+
 
 /********** 07-23-13 **********/
 /********** 07-24-13 **********/
