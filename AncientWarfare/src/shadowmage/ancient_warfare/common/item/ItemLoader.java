@@ -81,6 +81,8 @@ public static final ItemStack powderCase = new ItemStack(componentItem, 1, 20);/
 public static final ItemStack equipmentBay = new ItemStack(componentItem, 1, 21);//
 public static final ItemStack ironRings = new ItemStack(componentItem, 1, 22);//
 public static final ItemStack cement = new ItemStack(componentItem, 1, 23);
+public static final ItemStack hammer = new ItemStack(componentItem, 1, 24);
+public static final ItemStack quill = new ItemStack(componentItem, 1, 25);
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -171,6 +173,8 @@ private void loadItems()
   this.addSubtypeInfoToItem(componentItem, 21, "item.component.21").addTooltip("item.component.21.tooltip", 21).addDisplayStack(equipmentBay).setIconTexture("ancientwarfare:misc/vehicleEquipmentBay", 21);
   this.addSubtypeInfoToItem(componentItem, 22, "item.component.22").addTooltip("item.component.22.tooltip", 22).addDisplayStack(ironRings).setIconTexture("ancientwarfare:misc/ironRings", 22);
   this.addSubtypeInfoToItem(componentItem, 23, "item.component.23").addTooltip("item.component.23.tooltip", 23).addDisplayStack(cement).setIconTexture("ancientwarfare:misc/cement", 23);
+  this.addSubtypeInfoToItem(componentItem, 24, "item.component.24").addTooltip("item.component.24.tooltip", 24).addDisplayStack(hammer).setIconTexture("ancientwarfare:misc/hammer", 24);
+  this.addSubtypeInfoToItem(componentItem, 25, "item.component.25").addTooltip("item.component.25.tooltip", 25).addDisplayStack(quill).setIconTexture("ancientwarfare:misc/quill", 25);
   }
 
 private void loadDebugItems()

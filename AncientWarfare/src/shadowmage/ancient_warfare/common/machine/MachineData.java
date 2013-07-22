@@ -37,18 +37,14 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
  * static data and reference class for machines, to give a central organization point
- * @author Shadowmage
- *
+ * @author Shadowmage *
  */
 public class MachineData
 {
 
-/**
- * 
- */
 protected MachineData()
   {
-  // TODO Auto-generated constructor stub
+  
   }
 
 public static TileEntity getTEFor(int dmg)
@@ -67,6 +63,8 @@ public static TileEntity getTEFor(int dmg)
   return new TEChunkLoaderDeluxe();
   case 5:
   return PluginProxy.bcProxy.getMotorTileEntity();
+  case 6:
+  return new TEFoodProcessor();
   }
   return new TETrashcan();
   }
@@ -115,11 +113,12 @@ public static void registerIcons(IconRegister registry, Description d)
   d.setIcon(registry.registerIcon("ancientwarfare:machine/workerBottom"), 34);//trash bottom
   d.setIcon(registry.registerIcon("ancientwarfare:machine/workerTop"), 35);//trash top 
 
-  }
-
-public static void addSubBlocks(List list)
-  {
-  
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/foodFront"), 36);//trash front
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/foodRight"), 37);//trash left
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/foodRear"), 38);//trash rear
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/foodLeft"), 39);//trash right
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/foodBottom"), 40);//trash bottom
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/foodTop"), 41);//trash top 
   }
 
 public static Icon getIcon(TileEntity te, int meta, int side)
@@ -228,12 +227,9 @@ public static void registerBlockData()
     d.setName("block.multi.machine.5", 5);    
     }
   
-//  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getWorkerTEClass(), "Hand Crank Engine");
-//  if(PluginProxy.bcLoaded)
-//    {
-//    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,6));
-//    d.setName("block.multi.machine.6", 6);
-//    }
+  GameRegistry.registerTileEntity(TEFoodProcessor.class, "Food Processor");
+  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,6));
+  d.setName("block.multi.machine.6", 6);
   }
 
 }

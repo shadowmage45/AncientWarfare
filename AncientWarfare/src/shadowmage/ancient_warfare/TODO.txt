@@ -6,7 +6,6 @@ PRE OPEN BETA
 * add rotation support to rotatable blocks
 * move other rotatable blocks over to forgeDirection for consistency
 * update world-gen config file
-* better system for making rations (special machine probably with auto-output?)
     
 PRE FULL RELEASE
 * default survival-mode structures
