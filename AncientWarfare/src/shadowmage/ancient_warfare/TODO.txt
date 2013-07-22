@@ -1,16 +1,11 @@
 PRE OPEN BETA
-* researcher and craftsmsen need specific tools
-    recipes for hammer1-3 and quill1-3
-* add rotation support to rotatable blocks (crafting tables -- just for cosmetics?)
-* move other rotatable blocks over to forgeDirection for consistency
-* update world-gen config file
+* update world-gen config file that ships with release (resources/config/AWWorldGen.cfg)
     
 PRE FULL RELEASE
 * default survival-mode structures
 * scanning authentication list (server ops?)
 * NEI plugin
 * cleanup research notes book    
-* worker-engine optional upgrade slots?
 
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
@@ -93,6 +88,9 @@ OPTIONAL
 * land-mines ?
 * clean up vehicle alpha rendering
 * structures can have their base map moved into a single-dimensional array
+* worker-engine optional upgrade slots?
+* add rotation support to rotatable blocks (crafting tables -- just for cosmetics?)
+* move other rotatable blocks over to forgeDirection for consistency
    
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
@@ -118,10 +116,11 @@ TWEAKS/OPTIMIZATION
 * add 'ENGINE' civic work type
 * add ENGINE work type as valid work for all worker NPCs (farmer, fisher, lumber, craft, research, miner)
 * translation entries for new items / blocks (food processor, hammers, quills)
-
 * add food-processor block textures
 * fix engine work-command -- only send update on work command -- send work-speed only (if work speed is received, it means move the freaking piston)
 * add hammer/quill textures
+
+* add recipes for hammer and quill items
 
 /********** 07-23-13 **********/
 /********** 07-24-13 **********/

@@ -263,6 +263,19 @@ public void loadRecipes()
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(ItemLoader.componentItem, 5, ItemLoader.ironRings.getItemDamage()), new Object[] {"_i_","i_i", 'i', Item.ingotIron} ));
       
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(BlockLoader.trashcan.copy(), new Object[] {"psp", "rtr", "blb", 'p', Block.planks, 's', Item.stick, 't', Block.stone, 'r', Item.redstone, 'b', Block.stoneBrick, 'l', Item.bucketLava} ));
+  
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer1.copy(), new Object[] {"ms_", "mm_", "ms", 's', Item.stick, 'm', Item.ingotIron} ));
+  
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer2.copy(), new Object[] {"ms_", "mm_", "ms", 's', Item.stick, 'm', Item.ingotGold} ));
+  
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer3.copy(), new Object[] {"ms_", "mm_", "ms", 's', Item.stick, 'm', Item.diamond} ));
+  
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.quill1.copy(), new Object[] {"__f", "_s_", "m__", 's', Item.stick, 'm', Item.ingotIron, 'f', Item.feather} ));
+  
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.quill2.copy(), new Object[] {"__f", "_s_", "m__", 's', Item.stick, 'm', Item.ingotGold, 'f', Item.feather} ));
+  
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.quill3.copy(), new Object[] {"__f", "_s_", "m__", 's', Item.stick, 'm', Item.diamond, 'f', Item.feather} ));
+  
   //iron ring->chain mail  
   for (int i = 0; i < this.recipeItems[0].length; ++i)
     {
@@ -494,6 +507,44 @@ protected void addCivicRecipes()
     this.civicMiscRecipes.add(recipe);    
     } 
   
+  recipe = new ResourceListRecipe(ItemLoader.hammer1, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.ingotIron, 4, false);
+  recipe.addResource(Item.stick, 2, false);
+  recipe.addNeededResearch(ResearchGoal.logistics1);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(ItemLoader.hammer2, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.ingotGold, 4, false);
+  recipe.addResource(Item.stick, 2, false);
+  recipe.addNeededResearch(ResearchGoal.logistics3);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(ItemLoader.hammer3, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.diamond, 4, false);
+  recipe.addResource(Item.stick, 2, false);
+  recipe.addNeededResearch(ResearchGoal.logistics5);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(ItemLoader.quill1, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.ingotIron, 1, false);
+  recipe.addResource(Item.stick, 1, false);
+  recipe.addResource(Item.feather, 1, false);
+  recipe.addNeededResearch(ResearchGoal.logistics1);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(ItemLoader.quill2, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.ingotGold, 1, false);
+  recipe.addResource(Item.stick, 1, false);
+  recipe.addResource(Item.feather, 1, false);
+  recipe.addNeededResearch(ResearchGoal.logistics1);
+  this.civicMiscRecipes.add(recipe);
+  
+  recipe = new ResourceListRecipe(ItemLoader.quill3, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.diamond, 1, false);
+  recipe.addResource(Item.stick, 1, false);
+  recipe.addResource(Item.feather, 1, false);
+  recipe.addNeededResearch(ResearchGoal.logistics1);
+  this.civicMiscRecipes.add(recipe);
   }
 
 protected void addGateRecipes()
