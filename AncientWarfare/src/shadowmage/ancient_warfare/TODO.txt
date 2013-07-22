@@ -1,5 +1,4 @@
 PRE OPEN BETA
-* vehicle movement, server side, is fooked, need to completely re-implement movement model
 * fix engine work-command -- only send update on work command -- send work-speed only (if work speed is received, it means move the freaking piston)
 * add npc types that can work on engines (add new work type?)
 * engine optional upgrade slots?
@@ -185,6 +184,8 @@ TWEAKS/OPTIMIZATION
 * fix rotation support for machine blocks
 
 /********** 07-21-13 **********/
+* rewrite vehicle motion to be entirely server-side
+
 /********** 07-22-13 **********/
 /********** 07-23-13 **********/
 /********** 07-24-13 **********/
