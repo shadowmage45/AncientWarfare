@@ -1,5 +1,8 @@
 PRE OPEN BETA
 * update world-gen config file that ships with release (resources/config/AWWorldGen.cfg)
+* enable vehicle collision braking (slow forward motion if collided horizontally)
+* reduce max speed of helicopter (should be 1/2 -> 2/3 of airplane speed)
+* tweak airplane throttle settings for more reliable cruise-throttle ability
     
 PRE FULL RELEASE
 * default survival-mode structures
@@ -120,8 +123,11 @@ TWEAKS/OPTIMIZATION
 * fix engine work-command -- only send update on work command -- send work-speed only (if work speed is received, it means move the freaking piston)
 * add hammer/quill textures
 * add recipes for hammer and quill items
-
 * remove ration creation ability from town hall blocks
+
+* re-enable aircraft crash mechanics
+* enable collision braking in vehicles (slow down on collide with blocks/etc)
+* enable noclip on client-side vehicles (no reason for them to collide client-side, they just need to move)
 
 /********** 07-23-13 **********/
 /********** 07-24-13 **********/

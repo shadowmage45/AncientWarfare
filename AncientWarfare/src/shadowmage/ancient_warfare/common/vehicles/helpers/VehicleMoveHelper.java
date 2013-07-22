@@ -66,6 +66,9 @@ protected float rotationStop = 0.2f;
 
 protected float rotationSpeed = 0.f;
 protected float pitchSpeed = 0.f;
+
+protected boolean wasOnGround = true;
+
 protected VehicleBase vehicle;
 
 public VehicleMoveHelper(VehicleBase vehicle)
@@ -155,6 +158,7 @@ public void onUpdate()
 
 protected void onUpdateClient()
   {
+  vehicle.noClip = true;
   vehicle.motionX = 0;
   vehicle.motionY = 0;
   vehicle.motionZ = 0;
@@ -210,10 +214,12 @@ protected void onUpdateServer()
   case AIR2:
   this.applyAir2Motion();
   break;  
-  }
+  }  
   vehicle.motionX = Trig.sinDegrees(vehicle.rotationYaw)*-forwardMotion;
   vehicle.motionZ = Trig.cosDegrees(vehicle.rotationYaw)*-forwardMotion;  
   this.vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+  this.wasOnGround = vehicle.onGround;
+  if(vehicle.isCollidedHorizontally){forwardMotion*=0.65f;}
   this.tearUpGrass();
   boolean sendUpdate = (vehicle.motionX!=0 || vehicle.motionY!=0 || vehicle.motionZ!=0 || vehicle.rotationYaw!=vehicle.prevRotationYaw || vehicle.rotationPitch!=vehicle.prevRotationPitch);
   sendUpdate = sendUpdate || vehicle.riddenByEntity!=null;
@@ -246,6 +252,7 @@ protected void applyAir1Motion()
   this.applyPitchInput(-15, 15);
   this.applyTurnInput(0.05f);
   this.applyAirplaneInput();
+  this.handleAirCrash(wasOnGround);
   }
 
 protected void applyAir2Motion()
@@ -254,6 +261,7 @@ protected void applyAir2Motion()
   this.applyPitchInput(-5, 5);
   this.applyTurnInput(0.05f);
   this.applyHelicopterInput();
+  this.handleAirCrash(wasOnGround);
   }
 
 protected void applyAirplaneInput()
@@ -369,8 +377,6 @@ protected void applyHelicopterInput()
   
   }
 
-protected float vertAccel = 0.f;
-
 protected void applyThrottleInput()
   {
   if(vehicle.riddenByEntity==null)
@@ -465,6 +471,51 @@ protected void applyTurnInput(float inputFactor)
   this.vehicle.rotationYaw -= this.turnMotion;
   }
 
+protected void handleAirCrash(boolean wasOnGround)
+  {
+  boolean crashSpeed = false;  
+  if(forwardMotion > vehicle.currentForwardSpeedMax * 0.35f)
+    {
+    crashSpeed = true;
+    }    
+  boolean vertCrashSpeed = false;
+  if(vehicle.motionY < -0.25f || vehicle.motionY > 0.25f)
+    {
+    vertCrashSpeed = true;    
+    }
+  if(vehicle.isCollidedHorizontally)
+    {
+    if(!wasOnGround || crashSpeed)
+      {
+      Config.logDebug("CRASH");
+      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
+        {
+        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
+        player.addChatMessage("you have crashed!!");
+        }
+      if(!vehicle.worldObj.isRemote)
+        {
+        vehicle.setDead();
+        }
+      }
+    }  
+  if(vehicle.isCollidedVertically)
+    {
+    if(vertCrashSpeed && !wasOnGround)
+      {
+      Config.logDebug(" VERT CRASH");
+      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
+        {
+        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
+        player.addChatMessage("you have crashed (vertical)!!");
+        }
+      if(!vehicle.worldObj.isRemote)
+        {
+        vehicle.setDead();
+        }
+      }
+    } 
+  }
 /**
  * handle boat style movement
  * @return
