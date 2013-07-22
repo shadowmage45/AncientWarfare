@@ -41,6 +41,7 @@ import shadowmage.ancient_warfare.client.gui.crafting.GuiResearch;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiVehicleCrafting;
 import shadowmage.ancient_warfare.client.gui.info.GuiResearchBook;
 import shadowmage.ancient_warfare.client.gui.machine.GuiChunkloaderDeluxe;
+import shadowmage.ancient_warfare.client.gui.machine.GuiFoodProcessor;
 import shadowmage.ancient_warfare.client.gui.machine.GuiMailbox;
 import shadowmage.ancient_warfare.client.gui.machine.GuiMailboxIndustrial;
 import shadowmage.ancient_warfare.client.gui.machine.GuiTrashcan;
@@ -77,6 +78,7 @@ import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.container.ContainerDebugInfo;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
+import shadowmage.ancient_warfare.common.container.ContainerFoodProcessor;
 import shadowmage.ancient_warfare.common.container.ContainerMailbox;
 import shadowmage.ancient_warfare.common.container.ContainerMailboxIndustrial;
 import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
@@ -96,6 +98,7 @@ import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWVehicleCraft;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.machine.TEChunkLoaderDeluxe;
+import shadowmage.ancient_warfare.common.machine.TEFoodProcessor;
 import shadowmage.ancient_warfare.common.machine.TEMailBox;
 import shadowmage.ancient_warfare.common.machine.TEMailBoxIndustrial;
 import shadowmage.ancient_warfare.common.machine.TETrashcan;
@@ -131,6 +134,7 @@ public static final int MAILBOX = 16;
 public static final int MAILBOX_INDUSTRIAL = 17;
 public static final int CHUNKLOADER = 18;//TODO
 public static final int CHUNKLOADER_DEULXE = 19;
+public static final int FOOD_PROCESSOR = 20;
 
 public static final int BACKPACK = 39;
 public static final int INFO = 40;
@@ -281,6 +285,14 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEChunkLoaderDeluxe)
     {
     return new ContainerChunkloaderDeluxe(player, (TEChunkLoaderDeluxe) te);
+    }
+  return null;
+  
+  case FOOD_PROCESSOR:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEFoodProcessor)
+    {
+    return new ContainerFoodProcessor(player, (TEFoodProcessor) te);
     }
   return null;
   
@@ -514,6 +526,14 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEChunkLoaderDeluxe)
     {
     return new GuiChunkloaderDeluxe(new ContainerChunkloaderDeluxe(player, (TEChunkLoaderDeluxe) te));
+    }
+  return null;
+  
+  case FOOD_PROCESSOR:
+  te = world.getBlockTileEntity(x, y, z);
+  if(te instanceof TEFoodProcessor)
+    {
+    return new GuiFoodProcessor(new ContainerFoodProcessor(player, (TEFoodProcessor) te));
     }
   return null;
   

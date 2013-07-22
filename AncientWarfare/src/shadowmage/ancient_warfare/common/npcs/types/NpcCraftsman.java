@@ -29,6 +29,7 @@ import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -54,9 +55,9 @@ public NpcCraftsman(int type)
   {
   super(type);
   this.iconTexture = "npcCraftsman";
-  this.addLevel(type, 0, Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(0), null).addTargetType(CivicWorkType.CRAFT).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
-  this.addLevel(type, 1, Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(1), null).addTargetType(CivicWorkType.CRAFT).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
-  this.addLevel(type, 2, Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(2), null).addTargetType(CivicWorkType.CRAFT).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
+  this.addLevel(type, 0, Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(0), null).addTargetType(CivicWorkType.CRAFT, CivicWorkType.ENGINE).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
+  this.addLevel(type, 1, Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(1), null).addTargetType(CivicWorkType.CRAFT, CivicWorkType.ENGINE).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
+  this.addLevel(type, 2, Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(2), null).addTargetType(CivicWorkType.CRAFT, CivicWorkType.ENGINE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
   this.configName = "civilian";
@@ -69,15 +70,15 @@ protected ItemStack getToolStack(int level)
   switch(level)
   {
   case 0:
-  sword1 = new ItemStack(Item.pickaxeStone,1);
+  sword1 = ItemLoader.hammer1.copy();
   return sword1;
   
   case 1:
-  sword1 = new ItemStack(Item.pickaxeIron,1);
+  sword1 = ItemLoader.hammer2.copy();
   return sword1;
   
   case 2:  
-  sword1 = new ItemStack(Item.pickaxeDiamond,1);
+  sword1 = ItemLoader.hammer3.copy();
   return sword1;
   }
   return null;

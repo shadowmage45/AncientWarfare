@@ -86,7 +86,7 @@ public void broadcastWork(int maxRange)
 @Override
 public CivicWorkType getWorkType()
   {
-  return CivicWorkType.MINE;
+  return CivicWorkType.ENGINE;
   }
 
 @Override

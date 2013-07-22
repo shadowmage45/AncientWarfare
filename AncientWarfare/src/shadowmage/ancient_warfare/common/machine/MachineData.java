@@ -140,6 +140,10 @@ public static Icon getIcon(TileEntity te, int meta, int side)
     ForgeDirection sideD = ForgeDirection.getOrientation(side);
     ForgeDirection face = tem.getFacing();
     
+    if(tem.canActivate && tem.isActivated)
+      {
+      machine+=96;//offset past regular icons -- 16*6
+      }    
     int rot = 0;
     if(face == ForgeDirection.UP || face == ForgeDirection.DOWN)
       {

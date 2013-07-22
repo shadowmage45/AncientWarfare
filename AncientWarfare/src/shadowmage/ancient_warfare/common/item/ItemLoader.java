@@ -81,8 +81,13 @@ public static final ItemStack powderCase = new ItemStack(componentItem, 1, 20);/
 public static final ItemStack equipmentBay = new ItemStack(componentItem, 1, 21);//
 public static final ItemStack ironRings = new ItemStack(componentItem, 1, 22);//
 public static final ItemStack cement = new ItemStack(componentItem, 1, 23);
-public static final ItemStack hammer = new ItemStack(componentItem, 1, 24);
-public static final ItemStack quill = new ItemStack(componentItem, 1, 25);
+public static final ItemStack hammer1 = new ItemStack(componentItem, 1, 24);
+public static final ItemStack hammer2 = new ItemStack(componentItem, 1, 25);
+public static final ItemStack hammer3 = new ItemStack(componentItem, 1, 26);
+public static final ItemStack quill1 = new ItemStack(componentItem, 1, 27);
+public static final ItemStack quill2 = new ItemStack(componentItem, 1, 28);
+public static final ItemStack quill3 = new ItemStack(componentItem, 1, 29);
+
 
 /**
  * debug items, will only be given instances if debug is enabled in Config
@@ -173,8 +178,12 @@ private void loadItems()
   this.addSubtypeInfoToItem(componentItem, 21, "item.component.21").addTooltip("item.component.21.tooltip", 21).addDisplayStack(equipmentBay).setIconTexture("ancientwarfare:misc/vehicleEquipmentBay", 21);
   this.addSubtypeInfoToItem(componentItem, 22, "item.component.22").addTooltip("item.component.22.tooltip", 22).addDisplayStack(ironRings).setIconTexture("ancientwarfare:misc/ironRings", 22);
   this.addSubtypeInfoToItem(componentItem, 23, "item.component.23").addTooltip("item.component.23.tooltip", 23).addDisplayStack(cement).setIconTexture("ancientwarfare:misc/cement", 23);
-  this.addSubtypeInfoToItem(componentItem, 24, "item.component.24").addTooltip("item.component.24.tooltip", 24).addDisplayStack(hammer).setIconTexture("ancientwarfare:misc/hammer", 24);
-  this.addSubtypeInfoToItem(componentItem, 25, "item.component.25").addTooltip("item.component.25.tooltip", 25).addDisplayStack(quill).setIconTexture("ancientwarfare:misc/quill", 25);
+  this.addSubtypeInfoToItem(componentItem, 24, "item.component.24").addTooltip("item.component.24.tooltip", 24).addDisplayStack(hammer1).setIconTexture("ancientwarfare:misc/hamme1r", 24);
+  this.addSubtypeInfoToItem(componentItem, 25, "item.component.25").addTooltip("item.component.25.tooltip", 25).addDisplayStack(hammer2).setIconTexture("ancientwarfare:misc/hammer2", 25);
+  this.addSubtypeInfoToItem(componentItem, 26, "item.component.26").addTooltip("item.component.26.tooltip", 26).addDisplayStack(hammer3).setIconTexture("ancientwarfare:misc/hammer3", 26);
+  this.addSubtypeInfoToItem(componentItem, 27, "item.component.27").addTooltip("item.component.27.tooltip", 27).addDisplayStack(quill1).setIconTexture("ancientwarfare:misc/quill", 27);
+  this.addSubtypeInfoToItem(componentItem, 28, "item.component.28").addTooltip("item.component.28.tooltip", 28).addDisplayStack(quill2).setIconTexture("ancientwarfare:misc/quill", 28);  
+  this.addSubtypeInfoToItem(componentItem, 29, "item.component.29").addTooltip("item.component.29.tooltip", 29).addDisplayStack(quill3).setIconTexture("ancientwarfare:misc/quill", 29);
   }
 
 private void loadDebugItems()

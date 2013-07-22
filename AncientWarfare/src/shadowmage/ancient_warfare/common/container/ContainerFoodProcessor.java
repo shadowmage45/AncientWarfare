@@ -48,7 +48,7 @@ public ContainerFoodProcessor(EntityPlayer openingPlayer, TEFoodProcessor te)
   int y = 0;
   for(int i = 1; i <te.getSizeInventory(); i++)
     {    
-    this.addSlotToContainer(new Slot(te, i, x*18 + 8 + 3*18, y*18+8));    
+    this.addSlotToContainer(new Slot(te, i, x*18 + 8 + 1*18, y*18+8));    
     x++;
     if(x>2)
       {
@@ -57,7 +57,7 @@ public ContainerFoodProcessor(EntityPlayer openingPlayer, TEFoodProcessor te)
       }    
     }
   
-  this.addSlotToContainer(new Slot(te, 0, x*18 + 8 + 4*18, y*18+8+3*18+4));
+  this.addSlotToContainer(new Slot(te, 0, 8 + 7*18, 8+18));
   }
 
 @Override

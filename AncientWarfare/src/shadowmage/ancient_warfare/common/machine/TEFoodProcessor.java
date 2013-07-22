@@ -29,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 
 public class TEFoodProcessor extends TEMachine implements IInventory, ISidedInventory
 {
@@ -46,6 +47,7 @@ public TEFoodProcessor()
     {
     otherIndices[i] = i+1;
     }
+  this.guiNumber = GUIHandler.FOOD_PROCESSOR;
   }
 
 int delayTicks = 0;

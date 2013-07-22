@@ -28,6 +28,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IInteractable;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
@@ -45,6 +46,8 @@ protected boolean shouldWriteInventory = true;
 protected boolean hasSpecialModel = false;
 public boolean canPointVertical = false;
 public boolean facesOpposite = false;
+public boolean isActivated = false;
+public boolean canActivate = false;
 
 protected ForgeDirection facingDirection = ForgeDirection.SOUTH;
 
@@ -74,6 +77,30 @@ public void rotate(ForgeDirection axis)
     this.setDirection(facingDirection.getRotation(axis));
     }
   this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+  }
+
+protected void setActivated(boolean act)
+  {
+  if(!this.canActivate || this.worldObj==null || this.worldObj.isRemote){return;}
+  if(act!=this.isActivated)
+    {    
+    this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, BlockLoader.machineBlock.blockID, 100, act ? 1 : 0);
+    }
+  }
+
+@Override
+public boolean receiveClientEvent(int par1, int par2)
+  {
+  boolean flag = super.receiveClientEvent(par1, par2);  
+  boolean flag2 = false;
+  if(par1==100)
+    {    
+    this.isActivated = par2==1;
+    Config.logDebug("set isWorking to: "+this.isActivated+ " on "+ (this.worldObj.isRemote? "Client" : "Server"));
+    this.worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+    flag2 = true;
+    }
+  return flag || flag2;
   }
 
 public void onBlockPlaced()

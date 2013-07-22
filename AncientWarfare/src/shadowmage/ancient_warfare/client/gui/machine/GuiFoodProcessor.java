@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.client.gui.machine;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class GuiFoodProcessor extends GuiContainerAdvanced
 {
@@ -33,63 +34,55 @@ public class GuiFoodProcessor extends GuiContainerAdvanced
 public GuiFoodProcessor(Container container)
   {
   super(container);
-  // TODO Auto-generated constructor stub
   }
 
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  // TODO Auto-generated method stub
 
   }
+
 
 @Override
 public int getXSize()
   {
-  // TODO Auto-generated method stub
-  return 0;
+  return 176;
   }
 
 @Override
 public int getYSize()
   {
-  // TODO Auto-generated method stub
-  return 0;
+  return 8 + 8 + 3*18 + 3*18 + 18 + 4 + 8;
   }
 
 @Override
 public String getGuiBackGroundTexture()
   {
-  // TODO Auto-generated method stub
-  return null;
+  return Config.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   // TODO Auto-generated method stub
-
   }
 
 @Override
 public void updateScreenContents()
   {
   // TODO Auto-generated method stub
-
   }
 
 @Override
 public void setupControls()
   {
   // TODO Auto-generated method stub
-
   }
 
 @Override
 public void updateControls()
   {
   // TODO Auto-generated method stub
-
   }
 
 }

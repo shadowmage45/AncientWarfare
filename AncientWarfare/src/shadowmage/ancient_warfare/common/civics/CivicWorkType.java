@@ -33,4 +33,5 @@ public enum CivicWorkType
   FISH,
   CRAFT,
   RESEARCH,
+  ENGINE,
   }

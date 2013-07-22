@@ -127,6 +127,19 @@ item.component.22=Iron Rings
 item.component.22.tooltip=
 item.component.23=Cement
 item.component.23.tooltip=
+item.component.24=Basic Hammer
+item.component.24.tooptip=
+item.component.25=Advanced Hammer
+item.component.25.tooptip=
+item.component.26=Mastercraft Hammer
+item.component.26.tooptip=
+item.component.27=Basic Quill
+item.component.27.tooptip=
+item.component.28=Advanced Quill
+item.component.28.tooptip=
+item.component.29=MasterCraft Quill
+item.component.29.tooptip=
+
 
 # vehicle upgrades
 item.vehicleUpgrade.speed=Iron Bearings
@@ -212,6 +225,7 @@ block.multi.machine.2=Industrial Mailbox
 block.multi.machine.3=Spot Chunkloader
 block.multi.machine.4=Deluxe Chunkloader
 block.multi.machine.5=Mechanical Worker
+block.multi.machine.6=Food Processor
 block.multi.crafting.0=Research Station
 block.multi.crafting.1=Engineering Station
 block.multi.crafting.2=Drafting Station
@@ -221,7 +235,6 @@ block.multi.crafting.5=NPC Recruiting Center
 block.multi.crafting.6=Alchemy Station
 block.multi.crafting.7=AutoCrafting Station
 block.multi.engine.0=Hand Cranked Engine
-block.multi.engine.1=Waterwheel Engine
 
 #civics
 civic.farm.wheat=Wheat Farm
