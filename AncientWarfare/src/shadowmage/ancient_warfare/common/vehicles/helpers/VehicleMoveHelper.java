@@ -52,7 +52,7 @@ int moveTicks = 0;
 int rotationTicks = 0;
 int pitchTicks = 0;
 
-protected float forwardMotion = 0.f;
+public float forwardMotion = 0.f;
 protected float verticalMotion = 0.f;
 protected float turnMotion = 0.f;
 protected float pitchMotion = 0.f;
@@ -122,6 +122,10 @@ public void handleMoveData(NBTTagCompound tag)
     {
     this.throttle = tag.getFloat("tr");
     }
+  if(tag.hasKey("fm"))
+    {
+    this.forwardMotion = tag.getFloat("fm");
+    }
   }
 
 public void handleInputData(NBTTagCompound tag)
@@ -186,10 +190,14 @@ protected void onUpdateClient()
     vehicle.motionZ = dz;  
     moveTicks--;
     }
+  vehicle.wheelRotationPrev = vehicle.wheelRotation;
   if(vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR1 || vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR2)
     {
-    vehicle.wheelRotationPrev = vehicle.wheelRotation;
-    vehicle.wheelRotation+=throttle;
+    vehicle.wheelRotation += throttle;
+    }
+  else
+    {
+    vehicle.wheelRotation += forwardMotion;
     }
   this.vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
   }

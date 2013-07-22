@@ -113,6 +113,10 @@ public void writeDataToStream(ByteArrayDataOutput data)
     {
     data.writeFloat((float) vehicle.moveHelper.throttle);
     }
+  else
+    {
+    data.writeFloat((float)vehicle.moveHelper.forwardMotion);
+    }
   data.writeBoolean(isRotation);
   if(isRotation)
     {
@@ -136,6 +140,10 @@ public void readDataStream(ByteArrayDataInput data)
   if(flag)//air data
     {
     packetData.setFloat("tr", data.readFloat());
+    }
+  else
+    {
+    packetData.setFloat("fm", data.readFloat());
     }
   flag = data.readBoolean();
   if(flag)//rotation data
