@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 
 public class VehicleMoveHelper implements INBTTaggable
 {
@@ -56,7 +57,7 @@ protected float verticalMotion = 0.f;
 protected float turnMotion = 0.f;
 protected float pitchMotion = 0.f;
 protected float strafeMotion = 0.f;
-protected float throttle = 0.f;
+public float throttle = 0.f;
 
 protected float groundDrag = 0.96f;
 protected float groundStop = 0.02f;
@@ -114,6 +115,10 @@ public void handleMoveData(NBTTagCompound tag)
     this.moveTicks = Config.vehicleMoveUpdateFrequency+1;
     this.destZ = tag.getFloat("pz");
     }
+  if(tag.hasKey("tr"))
+    {
+    this.throttle = tag.getFloat("tr");
+    }
   }
 
 public void handleInputData(NBTTagCompound tag)
@@ -141,12 +146,10 @@ public void onUpdate()
   if(vehicle.worldObj.isRemote)
     {
     onUpdateClient();
-//    Config.logDebug("c: "+vehicle);
     }
   else
     {
     onUpdateServer();
-//    Config.logDebug("s: "+vehicle);
     }
   }
 
@@ -179,12 +182,18 @@ protected void onUpdateClient()
     vehicle.motionZ = dz;  
     moveTicks--;
     }
+  if(vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR1 || vehicle.vehicleType.getMovementType()==VehicleMovementType.AIR2)
+    {
+    vehicle.wheelRotationPrev = vehicle.wheelRotation;
+    vehicle.wheelRotation+=throttle;
+    }
   this.vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
   }
 
 protected void onUpdateServer()
   {
-  switch(vehicle.vehicleType.getMovementType())
+  VehicleMovementType move = vehicle.vehicleType.getMovementType();
+  switch(move)
   {
   case GROUND:
   this.applyGroundMotion();
@@ -213,7 +222,7 @@ protected void onUpdateServer()
   if(sendUpdate)
     {
     Packet02Vehicle pkt = new Packet02Vehicle();
-    pkt.setMoveUpdate(this.vehicle, true, false, true);
+    pkt.setMoveUpdate(this.vehicle, true, move == VehicleMovementType.AIR1 || move==VehicleMovementType.AIR2, true);
     pkt.sendPacketToAllTrackingClients(vehicle);
     }
   }
@@ -289,35 +298,78 @@ protected void applyHelicopterInput()
   if(vehicle.currentWeight > vehicle.baseWeight)
     {
     weightAdjust = vehicle.baseWeight  / vehicle.currentWeight;
-    }  
-  float drag = 1.f - (1-(throttle*1.538f))*0.1f; 
-  drag = throttle > 0.64f ? 1.f : drag;
+    }
+  
   boolean reverse = (vehicle.rotationPitch>0 && forwardMotion>0) || (vehicle.rotationPitch<0 && forwardMotion<0);
-  float maxSpeed = vehicle.currentForwardSpeedMax * weightAdjust;
-  float maxReverse = -maxSpeed;
-  float percent = 1 - (forwardMotion >= 0 ? (forwardMotion / maxSpeed) : (forwardMotion / maxReverse));
-  percent = percent > 0.25f ? 0.25f : percent;
-  percent = reverse ? 0.25f : percent;
-  float changeFactor = percent * -vehicle.rotationPitch*0.2f * 0.125f * throttle * (vehicle.onGround ? 0.35f : 1.f);
+  float maxSpeed = vehicle.currentForwardSpeedMax * weightAdjust;  
+  float percent = 1 - (Math.abs(forwardMotion)/maxSpeed);
+  
+  float changeFactor = percent * -vehicle.rotationPitch*0.2f * 0.125f * throttle;
   if(reverse){changeFactor *=2;}
   forwardMotion += changeFactor;
-  if(forwardMotion > maxSpeed){forwardMotion = maxSpeed;}
-  if(forwardMotion < maxReverse){forwardMotion = maxReverse;}
+  
+  float drag = vehicle.onGround ? 0.95f : 1.f - (0.05f - Math.abs(vehicle.rotationPitch)*0.01f);   
   forwardMotion*=drag;
-  if(Math.abs(forwardMotion)<groundStop && vehicle.rotationPitch==0)
-    {
-    forwardMotion = 0.f;
-    }  
+  
+  if(forwardMotion > maxSpeed){forwardMotion = maxSpeed;}
+  if(forwardMotion < -maxSpeed){forwardMotion = -maxSpeed;}
+  if(Math.abs(forwardMotion)<groundStop && vehicle.rotationPitch<=0.15f && vehicle.rotationPitch>-0.15f){forwardMotion = 0.f;}  
   float grav = 9.81f*0.05f*0.05f;
-  if(throttle>0)
+  float adjThr = 1 - (throttle > 0.65f ? 1.f : (throttle/0.65f));
+  if(throttle >= 0.642f && throttle <= 0.658f){throttle = 0.65f;}
+  /**
+   * 0=no adjust to grav
+   * 0.65f=cancel grav
+   * >0.65f=anti grav
+   */
+  if(throttle>=0.3f)
     {
-    vehicle.motionY = (10.f*grav*throttle) - (6.5f*grav);
+    
+    float minVertSpeed = -0.7f;
+    float maxVertSpeed = 0.35f;    
+    float perfectSpeed = 0.f;
+    float bitFactor = 0.142857f;
+    float invFactor = 2.857143f;
+    if(throttle<0.65f)
+      {
+      float tpercent = 1 - ((throttle - 0.3f)*invFactor);
+      perfectSpeed = tpercent * minVertSpeed;
+      }
+    else if(throttle>0.65f)
+      {
+      float tpercent = (throttle - 0.65f)*invFactor;
+      perfectSpeed = tpercent * maxVertSpeed;
+      }
+    //float perfectSpeed = minVertSpeed + (((throttle-0.25f)*1.33333f)*spread);    
+    float speedDelta = (float) (perfectSpeed - vehicle.motionY);
+    if(Math.abs(speedDelta)<0.01f)
+      {
+      vehicle.motionY = perfectSpeed;
+      }
+    else
+      {
+      Config.logDebug("perfect: "+perfectSpeed +  " d: "+speedDelta);    
+      float adjPercent = speedDelta / 0.45f;
+      adjPercent = adjPercent > 1.f ? 1.f : adjPercent;
+      adjPercent = 1-adjPercent;
+      vehicle.motionY += adjPercent * speedDelta * 0.05f;      
+      }
+//    if(vehicle.motionY < 0.02f)
+//      {
+//      vehicle.motionY = 0.f;
+//      }
     }
   else
     {
-    vehicle.motionY-=grav;
+    vehicle.motionY -= grav*adjThr;
     }
+  
+//  vehicle.motionY -= grav*adjThr;
+//  vehicle.motionY += throttle*0.0125f;
+  
   }
+
+protected float vertAccel = 0.f;
 
 protected void applyThrottleInput()
   {
@@ -331,14 +383,14 @@ protected void applyThrottleInput()
     this.throttle += 0.025f * (float)this.powerInput;
     Config.logDebug("set throttle to: "+throttle);
     }
-  this.throttle = this.throttle < 0.f ? 0.f : this.throttle > 1.f ? 1.f : this.throttle;
+  this.throttle = this.throttle < 0.f ? 0.f : this.throttle > 1.f ? 1.f : this.throttle;  
   }
 
 protected void applyPitchInput(float min, float max)
   {
   if(forwardInput!=0)
     {
-    this.pitchMotion = (float)-forwardInput;
+    this.pitchMotion = (float)-forwardInput*0.25f;
     }
   else
     {
@@ -347,6 +399,7 @@ protected void applyPitchInput(float min, float max)
   this.vehicle.rotationPitch += this.pitchMotion;
   if(vehicle.rotationPitch<min){vehicle.rotationPitch = min;}
   if(vehicle.rotationPitch>max){vehicle.rotationPitch = max;}
+  if(vehicle.rotationPitch> -0.15f && vehicle.rotationPitch < 0.15f){vehicle.rotationPitch = 0.f;}
   }
 
 protected void applyForwardInput(float inputFactor, boolean slowReverse)
@@ -392,7 +445,8 @@ protected void applyTurnInput(float inputFactor)
     {
     boolean reverse = (turnInput ==-1 && turnMotion>0) || (turnInput ==1 && turnMotion<0);
     float maxSpeed = vehicle.currentStrafeSpeedMax * weightAdjust;
-    float percent = 1 - (Math.abs(turnMotion));
+    Config.logDebug("max strafe speed: "+vehicle.currentStrafeSpeedMax + " current: "+turnMotion);
+    float percent = 1 - (Math.abs(turnMotion)/maxSpeed);
     percent = reverse ? 1.f : percent;
     float changeFactor = percent * (turnInput*2) * inputFactor;
     if(reverse){changeFactor *=2;}

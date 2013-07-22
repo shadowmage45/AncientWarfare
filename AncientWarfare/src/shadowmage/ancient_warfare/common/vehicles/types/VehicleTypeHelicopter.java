@@ -126,7 +126,7 @@ public VehicleTypeHelicopter(int typeNum)
   this.basePitchMin = 0; 
   this.baseMissileVelocityMax = 50.f;   
   
-  this.riderForwardsOffset = -0.0625f * 7;
+  this.riderForwardsOffset = 0.0625f * 7;
   this.riderVerticalOffset = 0.0625f * 12;  
   this.shouldRiderSit = true;
   

@@ -31,7 +31,7 @@ public class Packet02Vehicle extends PacketBase
 {
 int entityID;
 boolean isPosition = false;
-boolean isMove = false;
+boolean airData = false;
 boolean isRotation = false;
 VehicleBase vehicle;
 
@@ -81,12 +81,12 @@ public void setTurretParams(NBTTagCompound tag)
   this.packetData.setCompoundTag("turret", tag);
   }
 
-public void setMoveUpdate(VehicleBase vehicle, boolean pos, boolean move, boolean rot)
+public void setMoveUpdate(VehicleBase vehicle, boolean pos, boolean airData, boolean rot)
   {
   this.vehicle = vehicle;
   this.entityID = vehicle.entityId;
   this.isPosition = pos;
-  this.isMove = move;
+  this.airData = airData;
   this.isRotation = rot;
   this.packetData.setBoolean("moveData", true);
   }
@@ -108,12 +108,10 @@ public void writeDataToStream(ByteArrayDataOutput data)
     data.writeFloat((float) vehicle.posY);
     data.writeFloat((float) vehicle.posZ);
     }
-  data.writeBoolean(isMove);
-  if(isMove)
+  data.writeBoolean(airData);
+  if(airData)
     {
-    data.writeFloat((float) vehicle.motionX);
-    data.writeFloat((float) vehicle.motionY);
-    data.writeFloat((float) vehicle.motionZ);
+    data.writeFloat((float) vehicle.moveHelper.throttle);
     }
   data.writeBoolean(isRotation);
   if(isRotation)
@@ -135,11 +133,9 @@ public void readDataStream(ByteArrayDataInput data)
     packetData.setFloat("pz", data.readFloat());
     }
   flag = data.readBoolean();
-  if(flag)//move data
+  if(flag)//air data
     {
-    packetData.setFloat("mx", data.readFloat());
-    packetData.setFloat("my", data.readFloat());
-    packetData.setFloat("mz", data.readFloat());
+    packetData.setFloat("tr", data.readFloat());
     }
   flag = data.readBoolean();
   if(flag)//rotation data
