@@ -91,6 +91,26 @@ public void handlePacketData(NBTTagCompound tag)
       {
       this.handlePartialTemplateServer(tag.getCompoundTag("saveData"));
       }
+    if(tag.hasKey("remove"))
+      {
+      boolean success = StructureManager.instance().tryRemoveStructure(tag.getString("remove"));
+      if(!success)
+        {
+        NBTTagCompound rejectTag = new NBTTagCompound();
+        rejectTag.setBoolean("noRem", true);
+        this.sendDataToGUI(rejectTag);
+        }
+      }
+    if(tag.hasKey("delete"))
+      {
+      boolean success = StructureManager.instance().tryDeleteStructure(tag.getString("delete"));
+      if(!success)
+        {
+        NBTTagCompound rejectTag = new NBTTagCompound();
+        rejectTag.setBoolean("noDel", true);
+        this.sendDataToGUI(rejectTag);
+        }      
+      }
     }  
   }
 

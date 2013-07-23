@@ -30,10 +30,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 
 /**
  * Manages server side processed structures, and their client-side data equivalents
@@ -76,6 +78,36 @@ private Packet01ModData constructPacket(NBTTagCompound tag)
   }
 
 /************************************* SERVER METHODS ************************************/
+public boolean tryRemoveStructure(String name)
+  {
+  if(this.structures.containsKey(name))
+    {
+    ProcessedStructure struct = this.structures.get(name);
+    if(!struct.isLocked() && !AWStructureModule.instance().isBeingBuilt(name))
+      {
+      this.structures.remove(name);
+      WorldGenStructureManager.instance().removeStructure(name);      
+      NBTTagCompound structData = new NBTTagCompound();
+      structData.setString("remove", name);   
+      AWCore.proxy.sendPacketToAllPlayers(constructPacket(structData));
+      return true;
+      }    
+    }
+  return false;
+  }
+
+public boolean tryDeleteStructure(String name)
+  {
+  if(this.tryRemoveStructure(name))
+    {
+    /**
+     * TODO ...no fuckin clue...try and pull up a ref to the base file that the struct was loaded from, and delete?
+     * 
+     */
+    }  
+  return false;
+  }
+
 public void handlePacketDataServer(NBTTagCompound tag)
   {
   //TODO??
@@ -193,6 +225,10 @@ public void handlePacketDataClient(NBTTagCompound tag)
   if(tag.hasKey("addTemp"))
     {
     addTempClientInfo(tag.getCompoundTag("addTemp"));
+    }
+  if(tag.hasKey("remove"))
+    {
+    this.clientStructures.remove(tag.getString("remove"));
     }
   }
 

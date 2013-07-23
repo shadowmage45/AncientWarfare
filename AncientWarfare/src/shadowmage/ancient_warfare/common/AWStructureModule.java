@@ -301,6 +301,18 @@ public void removeBuilder(Builder builder)
   this.builders.remove(builder);
   }
 
+public boolean isBeingBuilt(String name)
+  {
+  for(Builder b : this.builders)
+    {
+    if(b.struct.name.equals(name))
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
 /*************************************************************************** TICK HANDLING ****************************************************************************/
 @Override
 public void tickStart(EnumSet<TickType> type, Object... tickData)

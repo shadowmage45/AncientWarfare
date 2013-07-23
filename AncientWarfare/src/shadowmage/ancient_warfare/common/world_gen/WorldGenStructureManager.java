@@ -153,6 +153,16 @@ public String getRandomWeightedEntryBelow(int maxValue, Random random)
   return "";
   }
 
+public void removeEntry(String name)
+  {
+  WorldGenStructureEntry entry = this.structureEntries.get(name);
+  if(entry!=null)
+    {
+    this.totalWeight-=entry.weight;
+    }
+  this.structureEntries.remove(name);
+  }
+
 }
 
 private WorldGenStructureManager(){};
@@ -178,6 +188,15 @@ public int getValueFor(String name)
     return this.namesStructureMap.get(name).value;
     }
   return 0;
+  }
+
+public void removeStructure(String name)
+  {
+  for(WorldGenBiomeStructList list : this.biomesStructureMap.values())
+    {
+    if(list==null){continue;}//no reason it should be null..but W/E
+    list.removeEntry(name);
+    }
   }
 
 public boolean isValidDimension(int dim)

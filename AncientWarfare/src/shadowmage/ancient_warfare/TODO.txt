@@ -1,23 +1,19 @@
 PRE OPEN BETA
-* enable vehicle collision braking (slow forward motion if collided horizontally)
 * tweak airplane throttle settings for more reliable cruise-throttle ability
+* mailbox time for cross-dimensional travel ?
     
 PRE FULL RELEASE
 * default survival-mode structures
-* scanning authentication list (server ops?)
 * NEI plugin
 * cleanup research notes book    
 
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
-* examine forge dictionary use for wood (research related)
 * stone slabs render as quartz slabs in research book (possibly other places)
-* investigate gate redstone interaction
 * add 'go back to base gui' button to info guis
 * add death-message translate to local gui in npc list gui (figure out how/where they are translated, pull manual translate)
 * heuristic evaluation of tick times for pathfinding scheduling -> when tick times are good, do more cycles per path
 * wander/crawler pathfinding likes to circle on chests and go up/down ladders a lot
-* npcs need massive optimization pass, using far too much of server tick time
 * deluxe chunkloader world rendering
 * bed placement is fubar in structure gen from templates
 * npc despawning?
@@ -39,17 +35,13 @@ TEXTURE/ART
 GENERAL
 * add name search/filter box to structure builder guis
 * missiles -- add shooter/etc to spawn data and re-enable client-side entity-hit detection?
-* add toggle for workers to allow receiving of work broadcasts (for a single work-site worker)
-    might need slight restructure of the work AI
 * method to scan buildings in survival mode?
-* method to remove buildings/templates from server (editor gui?)  
 * add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
 
 REINFORCED BLOCKS
 * figure out method to allow for partially destroyed blocks w/ destroyed texture rendering
 
 VEHICLES
-* set vehicle motion/accel to 0 when collided horizontally (hmm..)
 * cat mobile turret(fixed?) rider position is too far forward
 * pathfinding needs adjusted so that it doesn't need to be as close to the node to claim next (will help with aquatic pathfinding and the coast-hugging that npcs do)
 * re-allow theta pathfinding in water (it was disabled for crawler--fix crawler some other way)
@@ -61,8 +53,7 @@ NPCS
 * more 'check if target dead' (seems creepers or entities removed by setting world to peacefull are still targets)
     perhaps check world loaded entity list to see if target is still present/loaded
 * set to no collide if colliding with vehicles/other method of moving past blocking vehicles  
-* keep a timed list of requested path-to positions, if same path requested (less than 60 blocks) in X time with failed paths, disregard request entirely (unpathable target)
-* OPTIMIZATION
+
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
@@ -92,9 +83,6 @@ OPTIONAL
 * worker-engine optional upgrade slots?
 * add rotation support to rotatable blocks (crafting tables -- just for cosmetics?)
 * move other rotatable blocks over to forgeDirection for consistency
-
-OPTIMIZATION
-
    
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
@@ -111,6 +99,8 @@ TWEAKS/OPTIMIZATION
 * custom block placement code for creative/survival builders (set server block, manually relay to client--should 
         decrease overall network used from vanilla MC resending entire chunks..)
 * move over to the forge-based packet system (basically wrap my packets in a single forge packet)
+* keep a timed list of requested path-to positions, if same path requested (less than 60 blocks) in X time with failed paths, disregard request entirely (unpathable target)
+* npcs need massive optimization pass, using far too much of server tick time
 
 ********************* DONE STUFF ************************* 
 
@@ -141,6 +131,7 @@ TWEAKS/OPTIMIZATION
 * minor cleanup on air motion handling
 * verify player OP status before allowing scanning or building of structures w/creative items
 * fix hammer/quill icons
+* method to remove buildings/templates from server (editor gui?)  
 
 /********** 07-24-13 **********/
 /********** 07-25-13 **********/

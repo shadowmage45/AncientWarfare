@@ -69,6 +69,16 @@ public void handleDataFromContainer(NBTTagCompound tag)
     Config.logError("received bad selection packet on editor select GUI(locked or invalid structure)");
     this.errorMessage = "Structure is not currently available for editing";
     }
+  else if(tag.hasKey("noDel"))
+    {
+    Config.logError("received bad delete packet on editor select GUI(locked or invalid structure)");
+    this.errorMessage = "Cannot delete structure, currently locked";
+    }
+  else if(tag.hasKey("noRem"))
+    {
+    Config.logError("received bad remove packet on editor select GUI(locked or invalid structure)");
+    this.errorMessage = "Cannot remove structure, currently locked";
+    }
   }
 
 @Override
@@ -131,7 +141,8 @@ public void setStructureName(String name)
 public void setupControls()
   {
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
-  
+  this.addGuiButton(1, 10,30, 35, 18, "Delete");
+  this.addGuiButton(2, 10,30, 35, 18, "Remove");
   this.addGuiButton(3, 256-35-10, 30, 35, 18, "Edit");
   
   int totalHeight = clientStructures.size()*14;
@@ -157,6 +168,16 @@ public void updateControls()
  
   }
 
+protected void tryRemoveSelection()
+  {
+  
+  }
+
+protected void tryDeleteSelection()
+  {
+  
+  }
+
 @Override
 public void onElementActivated(IGuiElement element)
   {
@@ -167,6 +188,14 @@ public void onElementActivated(IGuiElement element)
   closeGUI();
   return;
  
+  case 1://delete
+  this.tryDeleteSelection();
+  return;
+  
+  case 2://remove
+  this.tryRemoveSelection();
+  return;
+  
   case 3:
   if(StructureManager.instance().getClientStructure(currentStructure)!=null)
     {
