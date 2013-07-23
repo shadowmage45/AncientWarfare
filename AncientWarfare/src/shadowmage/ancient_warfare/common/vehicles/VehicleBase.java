@@ -979,7 +979,6 @@ public boolean canBeCollidedWith()
   return true;
   }
 
-
 @Override
 public void writeSpawnData(ByteArrayDataOutput data)
   {
@@ -1142,6 +1141,7 @@ public boolean canInteract(EntityPlayer player)
 @Override
 public void setMoveTo(double x, double y, double z, float moveSpeed)
   {
+  Config.logDebug("setting move to target from navigator");
   this.moveHelper.setMoveTo(x, y, z);
   }
 

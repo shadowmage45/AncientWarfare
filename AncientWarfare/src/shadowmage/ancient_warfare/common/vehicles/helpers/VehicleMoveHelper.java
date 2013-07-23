@@ -157,6 +157,7 @@ public void onUpdate()
   else
     {
     onUpdateServer();
+    this.vehicle.nav.onMovementUpdate();
     }
   }
 

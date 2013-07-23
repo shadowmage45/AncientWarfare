@@ -994,18 +994,6 @@ public void setMoveTo(double x, double y, double z, float moveSpeed)
   {
   if(this.ridingEntity==null)
     {
-//    if(this.getDistance(x, y, z)<1.4f)
-//      {
-//      int fx = MathHelper.floor_double(x);
-//      int fy = MathHelper.floor_double(y);
-//      int fz = MathHelper.floor_double(z);
-//      if(!worldObj.checkNoEntityCollision(AxisAlignedBB.getAABBPool().getAABB(fx, fy, fz, fx+1, fy+1, fz+1), this))
-//        {
-//        Config.logDebug("colliding entities in path, halting move-to");
-//        this.getMoveHelper().setMoveTo(posX, posY, posZ, 0);
-//        return;
-//        }
-//      }
     this.getMoveHelper().setMoveTo(x, y, z, moveSpeed);
     }
   }

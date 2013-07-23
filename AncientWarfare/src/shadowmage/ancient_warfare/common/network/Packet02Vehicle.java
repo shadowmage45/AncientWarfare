@@ -30,10 +30,6 @@ import com.google.common.io.ByteArrayDataOutput;
 public class Packet02Vehicle extends PacketBase
 {
 int entityID;
-boolean isPosition = false;
-boolean airData = false;
-boolean isRotation = false;
-VehicleBase vehicle;
 
 @Override
 public String getChannel()
@@ -83,12 +79,27 @@ public void setTurretParams(NBTTagCompound tag)
 
 public void setMoveUpdate(VehicleBase vehicle, boolean pos, boolean airData, boolean rot)
   {
-  this.vehicle = vehicle;
   this.entityID = vehicle.entityId;
-  this.isPosition = pos;
-  this.airData = airData;
-  this.isRotation = rot;
   this.packetData.setBoolean("moveData", true);
+  if(pos)
+    {
+    this.packetData.setFloat("px", (float) vehicle.posX);
+    this.packetData.setFloat("py", (float) vehicle.posY);
+    this.packetData.setFloat("pz", (float) vehicle.posZ);
+    }
+  if(airData)
+    {
+    this.packetData.setFloat("tr", vehicle.moveHelper.throttle);
+    }
+  else
+    {
+    this.packetData.setFloat("fm", vehicle.moveHelper.forwardMotion);
+    }
+  if(rot)
+    {
+    this.packetData.setFloat("ry", vehicle.rotationYaw);
+    this.packetData.setFloat("rp", vehicle.rotationPitch);
+    }
   }
 
 @Override
@@ -100,57 +111,13 @@ public int getPacketType()
 @Override
 public void writeDataToStream(ByteArrayDataOutput data)
   {
-  data.writeInt(entityID);
-  data.writeBoolean(isPosition);
-  if(isPosition)
-    {
-    data.writeFloat((float) vehicle.posX);
-    data.writeFloat((float) vehicle.posY);
-    data.writeFloat((float) vehicle.posZ);
-    }
-  data.writeBoolean(airData);
-  if(airData)
-    {
-    data.writeFloat((float) vehicle.moveHelper.throttle);
-    }
-  else
-    {
-    data.writeFloat((float)vehicle.moveHelper.forwardMotion);
-    }
-  data.writeBoolean(isRotation);
-  if(isRotation)
-    {
-    data.writeFloat(vehicle.rotationYaw);
-    data.writeFloat(vehicle.rotationPitch);
-    }
+  data.writeInt(entityID);  
   }
 
 @Override
 public void readDataStream(ByteArrayDataInput data)
   {
-  this.entityID = data.readInt();
-  boolean flag = data.readBoolean();
-  if(flag)//position data
-    {
-    packetData.setFloat("px", data.readFloat());
-    packetData.setFloat("py", data.readFloat());
-    packetData.setFloat("pz", data.readFloat());
-    }
-  flag = data.readBoolean();
-  if(flag)//air data
-    {
-    packetData.setFloat("tr", data.readFloat());
-    }
-  else
-    {
-    packetData.setFloat("fm", data.readFloat());
-    }
-  flag = data.readBoolean();
-  if(flag)//rotation data
-    {
-    packetData.setFloat("ry", data.readFloat());
-    packetData.setFloat("rp", data.readFloat());
-    }
+  this.entityID = data.readInt(); 
   }
 
 @Override

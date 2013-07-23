@@ -129,6 +129,8 @@ TWEAKS/OPTIMIZATION
 * enable noclip on client-side vehicles (no reason for them to collide client-side, they just need to move)
 * add forwardMotion to variables sent during vehicle movement--used for wheel rotation
 
+* fix vehicle/npc navigator interaction
+* fix vehicle packet
 
 /********** 07-23-13 **********/
 /********** 07-24-13 **********/

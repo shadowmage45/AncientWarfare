@@ -219,11 +219,14 @@ public void onTickEnd()
   if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
     {
     VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
-    this.handleTickInput(vehicle);    
-    if(Settings.getMouseAim())
-      {
-      this.handleMouseAimUpdate();
-      }
+    if(vehicle!=null)
+    {
+        this.handleTickInput(vehicle);    
+        if(Settings.getMouseAim())
+          {
+          this.handleMouseAimUpdate();
+          }    	
+    }
     }
   this.changedKeys.clear();
   }
