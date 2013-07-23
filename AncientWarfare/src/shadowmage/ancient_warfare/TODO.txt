@@ -92,6 +92,9 @@ OPTIONAL
 * worker-engine optional upgrade slots?
 * add rotation support to rotatable blocks (crafting tables -- just for cosmetics?)
 * move other rotatable blocks over to forgeDirection for consistency
+
+OPTIMIZATION
+
    
 STRUCTURE EDITOR
 * add selection ability (clipboard/copy/paste)
@@ -129,12 +132,14 @@ TWEAKS/OPTIMIZATION
 * fix vehicle/npc navigator interaction
 * fix vehicle packet
 * add command baton command to enable/disable accepting work broadcasts
-
 * switch helicopter ammo types to rockets
 * adjust helicopter max speed
 * update world-gen config file that ships with release (resources/config/AWWorldGen.cfg)
 
 /********** 07-23-13 **********/
+* clear vehicle input on dismount (just do a pure reset input when not mounted?)
+* minor cleanup on air motion handling
+
 /********** 07-24-13 **********/
 /********** 07-25-13 **********/
 /********** 07-26-13 **********/

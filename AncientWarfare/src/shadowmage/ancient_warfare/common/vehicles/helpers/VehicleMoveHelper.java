@@ -156,6 +156,10 @@ public void onUpdate()
     }
   else
     {
+    if(this.vehicle.riddenByEntity==null)
+      {
+      this.clearInputFromDismount();
+      }
     onUpdateServer();
     this.vehicle.nav.onMovementUpdate();
     }
@@ -261,7 +265,7 @@ protected void applyAir1Motion()
   this.applyPitchInput(-15, 15);
   this.applyTurnInput(0.05f);
   this.applyAirplaneInput();
-  this.handleAirCrash(wasOnGround);
+  this.detectCrash();
   }
 
 protected void applyAir2Motion()
@@ -270,7 +274,7 @@ protected void applyAir2Motion()
   this.applyPitchInput(-5, 5);
   this.applyTurnInput(0.05f);
   this.applyHelicopterInput();
-  this.handleAirCrash(wasOnGround);
+  this.detectCrash();
   }
 
 protected void applyAirplaneInput()
@@ -288,14 +292,12 @@ protected void applyAirplaneInput()
   
   float changeFactor = percent * throttle * 0.125f;  
   
-
   if(forwardMotion+changeFactor > maxSpeed){changeFactor = 0;}  
   forwardMotion += changeFactor;
   if(forwardMotion < 0){forwardMotion = 0;}
   forwardMotion *= drag;    
   if(forwardMotion > vehicle.currentForwardSpeedMax * 0.35f)//stall speed check
     {
-//    forwardMotion += vehicle.rotationPitch * forwardMotion * doublePercent * 0.0125f;
     vehicle.motionY = vehicle.rotationPitch * forwardMotion * 0.0125f;
     }
   else
@@ -388,11 +390,6 @@ protected void applyHelicopterInput()
 
 protected void applyThrottleInput()
   {
-  if(vehicle.riddenByEntity==null)
-    {
-    this.throttle = 0.f;
-    this.powerInput = 0;
-    }
   if(this.powerInput!=0)
     {
     this.throttle += 0.025f * (float)this.powerInput;
@@ -480,7 +477,7 @@ protected void applyTurnInput(float inputFactor)
   this.vehicle.rotationYaw -= this.turnMotion;
   }
 
-protected void handleAirCrash(boolean wasOnGround)
+protected void detectCrash()
   {
   boolean crashSpeed = false;  
   if(forwardMotion > vehicle.currentForwardSpeedMax * 0.35f)
@@ -525,6 +522,7 @@ protected void handleAirCrash(boolean wasOnGround)
       }
     } 
   }
+
 /**
  * handle boat style movement
  * @return
@@ -592,42 +590,6 @@ protected boolean handleWaterMovement()
     vehicle.motionY += 0.007000000216066837D;
     }
   return inWater;
-  }
-
-protected void handleAirCrash(boolean crashSpeed, boolean vertCrashSpeed, boolean onGroundPrev)
-  { 
-  if(vehicle.isCollidedHorizontally)
-    {
-    if(!onGroundPrev || crashSpeed)
-      {
-      Config.logDebug("CRASH");
-      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
-        {
-        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
-        player.addChatMessage("you have crashed!!");
-        }
-      if(!vehicle.worldObj.isRemote)
-        {
-        vehicle.setDead();
-        }
-      }
-    }  
-  if(vehicle.isCollidedVertically)
-    {
-    if(vertCrashSpeed && !onGroundPrev)
-      {
-      Config.logDebug(" VERT CRASH");
-      if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
-        {
-        EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
-        player.addChatMessage("you have crashed (vertical)!!");
-        }
-      if(!vehicle.worldObj.isRemote)
-        {
-        vehicle.setDead();
-        }
-      }
-    } 
   }
 
 protected void tearUpGrass()
@@ -707,6 +669,7 @@ public void clearInputFromDismount()
   this.turnInput = 0;
   this.powerInput = 0;
   this.rotationInput = 0;
+  this.throttle = 0;
   }
 
 @Override
