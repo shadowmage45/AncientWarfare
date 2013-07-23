@@ -50,30 +50,22 @@ public VehicleTypeHelicopter(int typeNum)
   this.movementType = VehicleMovementType.AIR2;
   this.maxMissileWeight = 20.f;
   this.accuracy = 0.7f;
-  
-  this.validAmmoTypes.add(Ammo.ammoStoneShot10);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot15);
-  this.validAmmoTypes.add(Ammo.ammoStoneShot30); 
-  this.validAmmoTypes.add(Ammo.ammoFireShot10);
-  this.validAmmoTypes.add(Ammo.ammoFireShot15);
-  this.validAmmoTypes.add(Ammo.ammoFireShot30);
-  this.validAmmoTypes.add(Ammo.ammoExplosive10);
-  this.validAmmoTypes.add(Ammo.ammoExplosive15);
-  this.validAmmoTypes.add(Ammo.ammoExplosive30);
-  this.validAmmoTypes.add(Ammo.ammoHE10);
-  this.validAmmoTypes.add(Ammo.ammoHE15);  
-  this.validAmmoTypes.add(Ammo.ammoHE30); 
-  this.validAmmoTypes.add(Ammo.ammoNapalm10);
-  this.validAmmoTypes.add(Ammo.ammoNapalm15);
     
-  this.validAmmoTypes.add(Ammo.ammoBallistaBolt);
-  this.validAmmoTypes.add(Ammo.ammoBallistaBoltFlame);
-  this.validAmmoTypes.add(Ammo.ammoBallistaBoltExplosive);
-  this.validAmmoTypes.add(Ammo.ammoBallistaBoltIron);
-  
-  this.ammoBySoldierRank.put(0, Ammo.ammoBallistaBolt);  
-  this.ammoBySoldierRank.put(1, Ammo.ammoBallistaBolt);
-  this.ammoBySoldierRank.put(2, Ammo.ammoBallistaBoltFlame);
+  this.validAmmoTypes.add(Ammo.ammoPebbleShot10);
+
+  this.validAmmoTypes.add(Ammo.ammoArrow);
+  this.validAmmoTypes.add(Ammo.ammoArrowFlame);
+  this.validAmmoTypes.add(Ammo.ammoArrowIron);
+  this.validAmmoTypes.add(Ammo.ammoArrowIronFlame);
+
+  this.validAmmoTypes.add(Ammo.ammoRocket);
+  this.validAmmoTypes.add(Ammo.ammoHwachaRocketFlame);
+  this.validAmmoTypes.add(Ammo.ammoHwachaRocketExplosive);
+  this.validAmmoTypes.add(Ammo.ammoHwachaRocketAirburst);
+    
+  this.ammoBySoldierRank.put(0, Ammo.ammoArrow);
+  this.ammoBySoldierRank.put(1, Ammo.ammoArrowFlame);
+  this.ammoBySoldierRank.put(2, Ammo.ammoArrowIronFlame);
 
     
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
@@ -116,7 +108,7 @@ public VehicleTypeHelicopter(int typeNum)
   this.height = 1.4f;  
           
   this.baseStrafeSpeed = 2.f;
-  this.baseForwardSpeed = 25f*0.05f;
+  this.baseForwardSpeed = 17f*0.05f;
   
   this.turretForwardsOffset = 0.f;
   this.turretVerticalOffset = 0.f;

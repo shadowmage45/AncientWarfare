@@ -42,7 +42,9 @@ CLEAR_UPKEEP("Clear Upkeep Target", TargetType.NONE, 0),
 MOUNT("Set Vehicle to Pilot", TargetType.MOUNT, 0),
 CLEAR_MOUNT("Clear Vehicle Target", TargetType.NONE, 0),
 GUARD("Set Guard Target", TargetType.PATROL,  0),
-CLEAR_GUARD("Clear Guard Target", TargetType.NONE, 0);
+CLEAR_GUARD("Clear Guard Target", TargetType.NONE, 0),
+ACCEPT_BROADACST("Accept Work Broadcast",TargetType.NONE, 0),
+DENY_BROADCAST("Ignore Work Broadcast",TargetType.NONE, 0);
 //due to using ordinal to store command, any new commands must be added to the END of the list
 //also, don't EVER change ordering, or it will have some undesired effects in an already started game
 

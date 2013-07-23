@@ -32,6 +32,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -89,6 +90,8 @@ public int rank = 0;
 public int actionTick = 0;
 
 protected int aiTick = 0;
+
+protected boolean acceptWorkBroadcast = true;
 
 public int villageUpdateTick = 0;
 
@@ -289,6 +292,12 @@ public void handleBroadcastAttackTarget(Entity ent, int multi)
   targetHelper.handleBroadcastTarget(ent, TargetType.ATTACK, multi);
   }
 
+public void handleTileEntityTargetBroadcast(TileEntity te, TargetType t, int aggroAmount)
+  {
+  if(t==TargetType.WORK && !acceptWorkBroadcast){return;}
+  this.targetHelper.handleTileEntityTargetBroadcast(te, t, aggroAmount);
+  }
+
 public void handleBatonCommand(NpcCommand cmd, WayPoint p)
   {
   if(this.teamNum>15)
@@ -335,6 +344,14 @@ public void handleBatonCommand(NpcCommand cmd, WayPoint p)
   break;  
   case CLEAR_GUARD:
   wayNav.setGuardTarget(null);
+  break;
+  
+  case ACCEPT_BROADACST:
+  this.acceptWorkBroadcast = true;
+  break;
+  
+  case DENY_BROADCAST:
+  this.acceptWorkBroadcast = false;
   break;
   
   case NONE:
@@ -935,6 +952,7 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setCompoundTag("spInv", this.specInventory.getNBTTag());
   tag.setInteger("upkeep", this.npcUpkeepTicks);
   tag.setInteger("healing", this.npcHealingTicks);
+  tag.setBoolean("work", this.acceptWorkBroadcast);
   }
 
 @Override
@@ -957,6 +975,10 @@ public void readFromNBT(NBTTagCompound tag)
     } 
   this.npcUpkeepTicks = tag.getInteger("upkeep");
   this.npcHealingTicks = tag.getInteger("healing");
+  if(tag.hasKey("work"))
+    {
+    this.acceptWorkBroadcast = tag.getBoolean("work");
+    }
   Config.logDebug("loading npc from NBT, reporting to data tracker");
   GameDataTracker.instance().handleNpcUpdate(this);
   }

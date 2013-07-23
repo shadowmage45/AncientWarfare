@@ -248,7 +248,7 @@ public void broadcastWork(int maxRange)
       {
       if(npc.npcType.isCombatUnit())
         {
-        npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, Config.npcAITicks*11);
+        npc.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, Config.npcAITicks*11);
         }      
       }
     else
@@ -257,7 +257,7 @@ public void broadcastWork(int maxRange)
         {    
         if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()) && npc.teamNum==this.teamNum)
           {
-          npc.targetHelper.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
+          npc.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
           }
         }
       }
