@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
@@ -133,6 +134,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     return true;
     }  
+  if(!MinecraftServer.getServer().getConfigurationManager().areCommandsAllowed(player.getEntityName()))
+    {
+    return true;
+    }
   if(player.capabilities.isCreativeMode && !isShiftClick(player))
     {
     openGUI(player);

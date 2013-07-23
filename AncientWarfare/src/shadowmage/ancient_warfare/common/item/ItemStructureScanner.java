@@ -27,7 +27,9 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
@@ -168,6 +170,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
     {
     return true;
     }  
+  if(!MinecraftServer.getServer().getConfigurationManager().areCommandsAllowed(player.getEntityName()))
+    {
+    return true;
+    }
   NBTTagCompound tag;
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
     {
@@ -207,6 +213,10 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
     {
     return true;
     }  
+  if(!MinecraftServer.getServer().getConfigurationManager().areCommandsAllowed(player.getEntityName()))
+    {
+    return true;
+    }
   NBTTagCompound tag;
   if(hit!=null && isShiftClick(player))
     {

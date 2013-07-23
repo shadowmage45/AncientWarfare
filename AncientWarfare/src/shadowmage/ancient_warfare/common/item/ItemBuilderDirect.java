@@ -28,6 +28,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -161,6 +162,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     return true;
     }  
+  if(!MinecraftServer.getServer().getConfigurationManager().areCommandsAllowed(player.getEntityName()))
+    {
+    return true;
+    }
   NBTTagCompound tag;
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
     {
@@ -407,6 +412,10 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
     {
     return true;
     }  
+  if(!MinecraftServer.getServer().getConfigurationManager().areCommandsAllowed(player.getEntityName()))
+    {
+    return true;
+    }
   NBTTagCompound tag;
   if(hit==null){return true;}
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
