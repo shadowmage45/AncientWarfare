@@ -139,8 +139,8 @@ TWEAKS/OPTIMIZATION
 /********** 07-23-13 **********/
 * clear vehicle input on dismount (just do a pure reset input when not mounted?)
 * minor cleanup on air motion handling
-
 * verify player OP status before allowing scanning or building of structures w/creative items
+* fix hammer/quill icons
 
 /********** 07-24-13 **********/
 /********** 07-25-13 **********/

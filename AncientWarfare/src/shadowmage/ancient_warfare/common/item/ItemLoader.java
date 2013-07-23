@@ -178,12 +178,12 @@ private void loadItems()
   this.addSubtypeInfoToItem(componentItem, 21, "item.component.21").addTooltip("item.component.21.tooltip", 21).addDisplayStack(equipmentBay).setIconTexture("ancientwarfare:misc/vehicleEquipmentBay", 21);
   this.addSubtypeInfoToItem(componentItem, 22, "item.component.22").addTooltip("item.component.22.tooltip", 22).addDisplayStack(ironRings).setIconTexture("ancientwarfare:misc/ironRings", 22);
   this.addSubtypeInfoToItem(componentItem, 23, "item.component.23").addTooltip("item.component.23.tooltip", 23).addDisplayStack(cement).setIconTexture("ancientwarfare:misc/cement", 23);
-  this.addSubtypeInfoToItem(componentItem, 24, "item.component.24").addTooltip("item.component.24.tooltip", 24).addDisplayStack(hammer1).setIconTexture("ancientwarfare:misc/hamme1r", 24);
+  this.addSubtypeInfoToItem(componentItem, 24, "item.component.24").addTooltip("item.component.24.tooltip", 24).addDisplayStack(hammer1).setIconTexture("ancientwarfare:misc/hammer1", 24);
   this.addSubtypeInfoToItem(componentItem, 25, "item.component.25").addTooltip("item.component.25.tooltip", 25).addDisplayStack(hammer2).setIconTexture("ancientwarfare:misc/hammer2", 25);
   this.addSubtypeInfoToItem(componentItem, 26, "item.component.26").addTooltip("item.component.26.tooltip", 26).addDisplayStack(hammer3).setIconTexture("ancientwarfare:misc/hammer3", 26);
-  this.addSubtypeInfoToItem(componentItem, 27, "item.component.27").addTooltip("item.component.27.tooltip", 27).addDisplayStack(quill1).setIconTexture("ancientwarfare:misc/quill", 27);
-  this.addSubtypeInfoToItem(componentItem, 28, "item.component.28").addTooltip("item.component.28.tooltip", 28).addDisplayStack(quill2).setIconTexture("ancientwarfare:misc/quill", 28);  
-  this.addSubtypeInfoToItem(componentItem, 29, "item.component.29").addTooltip("item.component.29.tooltip", 29).addDisplayStack(quill3).setIconTexture("ancientwarfare:misc/quill", 29);
+  this.addSubtypeInfoToItem(componentItem, 27, "item.component.27").addTooltip("item.component.27.tooltip", 27).addDisplayStack(quill1).setIconTexture("ancientwarfare:misc/quill1", 27);
+  this.addSubtypeInfoToItem(componentItem, 28, "item.component.28").addTooltip("item.component.28.tooltip", 28).addDisplayStack(quill2).setIconTexture("ancientwarfare:misc/quill2", 28);  
+  this.addSubtypeInfoToItem(componentItem, 29, "item.component.29").addTooltip("item.component.29.tooltip", 29).addDisplayStack(quill3).setIconTexture("ancientwarfare:misc/quill3", 29);
   }
 
 private void loadDebugItems()
