@@ -16,6 +16,7 @@ xcopy /e/i/q/y "%STARTPATH%\mcp\reobf\minecraft\*.*" "%STARTPATH%\build\*.*"
 xcopy /e/i/q/y "%STARTPATH%\AncientWarfare\src\shadowmage\ancient_warfare\resources\*.*" "%STARTPATH%\build\shadowmage\ancient_warfare\resources\*.*"
 xcopy /e/i/q/y "%STARTPATH%\AncientWarfare\src\mods\*.*" "%STARTPATH%\build\mods\*.*"
 xcopy /e/i/q/y "%STARTPATH%\AncientWarfare\src\lang\*.*" "%STARTPATH%\build\lang\*.*"
+xcopy /e/i/q/y "%STARTPATH%\AncientWarfare\src\*.info" "%STARTPATH%\build\*.info"
 echo ZIPPING AND FINISHING BUILD...............
 
 set version="BAD VERSION"

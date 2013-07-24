@@ -102,6 +102,9 @@ TWEAKS/OPTIMIZATION
 * keep a timed list of requested path-to positions, if same path requested (less than 60 blocks) in X time with failed paths, disregard request entirely (unpathable target)
 * npcs need massive optimization pass, using far too much of server tick time
 
+THINGS TO INVESTIGATE
+* portable shelter type setup (could be done if used special blocks)
+* siege tower (make multiple generic heights? adjustable height? set height once in the vehicle gui?)
 ********************* DONE STUFF ************************* 
 
 /********** 07-22-13 **********/
@@ -134,6 +137,9 @@ TWEAKS/OPTIMIZATION
 * method to remove buildings/templates from server (editor gui?)  
 
 /********** 07-24-13 **********/
+* add mcmod.info file (NFC if it works or not)
+* update build script to copy mcmod.info file
+
 /********** 07-25-13 **********/
 /********** 07-26-13 **********/
 /********** 07-27-13 **********/

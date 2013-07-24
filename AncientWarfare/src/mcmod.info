@@ -1,0 +1,17 @@
+[
+{
+  "modid": "AncientWarfare",
+  "name": "Ancient Warfare",
+  "version": "1.0.015",
+  "mcversion": "1.5.2",
+  "description": "Adds Soldiers and Worker NPCs, Vehicles, and Automation tools",
+  "credits": "",
+  "logoFile": "/mods/ancientwarfare/textures/items/castle.png",
+  "url": "http://ancientwarfare.wikispaces.com/",
+  "updateUrl": "",
+  "authors": [ "shadowmage4513" ],
+  "parent":"",
+  "screenshots": [],
+  "dependencies": ["mod_MinecraftForge"]
+}
+]
