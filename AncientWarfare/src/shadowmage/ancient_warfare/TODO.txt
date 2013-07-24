@@ -1,6 +1,5 @@
 PRE OPEN BETA
 * tweak airplane throttle settings for more reliable cruise-throttle ability
-* mailbox time for cross-dimensional travel ?
     
 PRE FULL RELEASE
 * default survival-mode structures
@@ -105,6 +104,9 @@ TWEAKS/OPTIMIZATION
 THINGS TO INVESTIGATE
 * portable shelter type setup (could be done if used special blocks)
 * siege tower (make multiple generic heights? adjustable height? set height once in the vehicle gui?)
+* survival-mode structure scanning
+* world-gen villages w/active npcs
+
 ********************* DONE STUFF ************************* 
 
 /********** 07-22-13 **********/
@@ -140,6 +142,7 @@ THINGS TO INVESTIGATE
 * add mcmod.info file (NFC if it works or not)
 * update build script to copy mcmod.info file
 * add template file delete ability to delete button in editor gui
+* mailbox time for cross-dimensional travel
 
 /********** 07-25-13 **********/
 /********** 07-26-13 **********/
