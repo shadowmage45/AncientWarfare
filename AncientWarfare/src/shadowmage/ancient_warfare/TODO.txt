@@ -139,6 +139,7 @@ THINGS TO INVESTIGATE
 /********** 07-24-13 **********/
 * add mcmod.info file (NFC if it works or not)
 * update build script to copy mcmod.info file
+* add template file delete ability to delete button in editor gui
 
 /********** 07-25-13 **********/
 /********** 07-26-13 **********/

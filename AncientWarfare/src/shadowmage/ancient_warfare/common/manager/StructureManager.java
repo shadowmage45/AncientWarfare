@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.manager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.AWStructureModule;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
@@ -100,10 +102,13 @@ public boolean tryDeleteStructure(String name)
   {
   if(this.tryRemoveStructure(name))
     {
-    /**
-     * TODO ...no fuckin clue...try and pull up a ref to the base file that the struct was loaded from, and delete?
-     * 
-     */
+    File f = new File(AWStructureModule.includeDirectory+"/"+name+"."+Config.templateExtension);
+    if(f.exists())
+      {
+      Config.log("Deleting structure for name: "+name + " file: "+f.getAbsolutePath());
+      f.delete();      
+      return true;
+      }
     }  
   return false;
   }
