@@ -143,6 +143,7 @@ THINGS TO INVESTIGATE
 * update build script to copy mcmod.info file
 * add template file delete ability to delete button in editor gui
 * mailbox time for cross-dimensional travel
+* adjust speed of bomber down to 20m/s max nominal
 
 /********** 07-25-13 **********/
 /********** 07-26-13 **********/

@@ -36,13 +36,13 @@ import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeAirBomber.AircraftVarsHelper;
 
-public class VehicleTypeAirGunship extends VehicleType
+public class VehicleTypeAirInterceptor extends VehicleType
 {
 
 /**
  * @param typeNum
  */
-public VehicleTypeAirGunship(int typeNum)
+public VehicleTypeAirInterceptor(int typeNum)
   {
   super(typeNum);
   this.vehicleMaterial = VehicleMaterial.materialWood;   

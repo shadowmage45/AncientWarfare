@@ -114,7 +114,7 @@ public VehicleTypeAirBomber(int typeNum)
   this.height = 1.4f;  
           
   this.baseStrafeSpeed = 2.f;
-  this.baseForwardSpeed = 25f*0.05f;
+  this.baseForwardSpeed = 20f*0.05f;
   
   this.turretForwardsOffset = 0.f;
   this.missileVerticalOffset = 0.65f;
