@@ -120,16 +120,6 @@ public static IResearchGoal logistics4 = new ResearchLogistics(ResearchGoalNumbe
 public static IResearchGoal logistics5 = new ResearchLogistics(ResearchGoalNumbers.logistics5,4).addDependencies(logistics4);
 
 /**
- * efficiency research? (decrease materials costs for crafting vehicles/structures/ammo?)
- */
-//public static IResearchGoal efficiencyWood1 = new ResearchEfficiencyWood(ResearchGoalNumbers.efficiencyWood1, 0);
-//public static IResearchGoal efficiencyWood2 = new ResearchEfficiencyWood(ResearchGoalNumbers.efficiencyWood2, 1).addDependencies(efficiencyWood1);
-//public static IResearchGoal efficiencyWood3 = new ResearchEfficiencyWood(ResearchGoalNumbers.efficiencyWood3, 2).addDependencies(efficiencyWood2);
-//public static IResearchGoal efficiencyIron1 = new ResearchEfficiencyIron(ResearchGoalNumbers.efficiencyIron1, 0);
-//public static IResearchGoal efficiencyIron2 = new ResearchEfficiencyIron(ResearchGoalNumbers.efficiencyIron2, 1).addDependencies(efficiencyIron1);
-//public static IResearchGoal efficiencyIron3 = new ResearchEfficiencyIron(ResearchGoalNumbers.efficiencyIron3, 2).addDependencies(efficiencyIron2);
-
-/**
  * vehicle materials
  */
 public static IResearchGoal materialWood1 = new ResearchMaterialLevel(200, 0, VehicleMaterial.materialWood).addResource(new ItemStack(Block.planks,10), true, false);
@@ -151,15 +141,6 @@ public static IResearchGoal command2 = new ResearchCommand(ResearchGoalNumbers.c
 public static IResearchGoal command3 = new ResearchCommand(ResearchGoalNumbers.command3, 2).addDependencies(ResearchGoalNumbers.command2);
 public static IResearchGoal command4 = new ResearchCommand(ResearchGoalNumbers.command4, 3).addDependencies(ResearchGoalNumbers.command3);
 public static IResearchGoal command5 = new ResearchCommand(ResearchGoalNumbers.command5, 4).addDependencies(ResearchGoalNumbers.command4);
-//command1
-//command2
-//command3
-//command4
-//farming1 -- freebie, requires command1
-//farming2
-//farming3
-//mining1 -- freebie, requires command1
-
 
 
 

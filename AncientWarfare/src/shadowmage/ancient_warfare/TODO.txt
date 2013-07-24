@@ -75,8 +75,6 @@ WORLD GEN STUFF
 
 OPTIONAL
 * move upgrades/ammo/armor over to self-registering class with an underlying array instead of the map they currently use        
-* grenades ?
-* land-mines ?
 * clean up vehicle alpha rendering
 * structures can have their base map moved into a single-dimensional array
 * worker-engine optional upgrade slots?
@@ -102,10 +100,18 @@ TWEAKS/OPTIMIZATION
 * npcs need massive optimization pass, using far too much of server tick time
 
 THINGS TO INVESTIGATE
-* portable shelter type setup (could be done if used special blocks)
 * siege tower (make multiple generic heights? adjustable height? set height once in the vehicle gui?)
 * survival-mode structure scanning
 * world-gen villages w/active npcs
+* using villagers as recruits for NPC workers (scan area around town-hall?)
+* wireless redstone module
+* portable shelter type setup (could be done if used special blocks)
+* grenades
+* land-mines
+* hand-weapons
+* flamethrower type vehicles
+* gate lock blocks
+* add fields to templates for requisite research? (and restructure table to need a book/etc)
 
 ********************* DONE STUFF ************************* 
 
