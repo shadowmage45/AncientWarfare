@@ -50,30 +50,28 @@ public void updateEntity()
 
 protected void updatePistonState()
   {
-  if(this.isWorking && this.pistonDirection==0)
+  if(this.isWorking && this.pistonProgress <=0)
     {
+    this.isWorking = false;
     this.pistonDirection = 1;
     }
-  if(this.isWorking || this.pistonProgress>0)
+  if(this.pistonDirection!=0)
     {
-    this.pistonProgress += pistonDirection*0.8f;
-    if(this.pistonProgress>=8)
-      {
-      if(this.pistonDirection==1)
-        {
-        this.pistonDirection = 0;        
-        }
-      else
-        {
-        this.pistonDirection = -1;
-        }
-      }
-    else if(this.pistonProgress<=0)
-      {
-      this.pistonDirection = 0;
-      }
-    this.isWorking = false;
+    this.pistonProgress+=this.pistonDirection*0.8f;
     }
+//  else if(this.pistonProgress==8.f)
+//    {
+//    this.pistonDirection = -1;
+//    }
+  if(this.pistonProgress>=8)
+    {
+    this.pistonDirection = -1;
+    }
+  else if(this.pistonProgress<=0)
+    {
+    this.pistonProgress = 0.f;
+    }
+  
   }
 
 public byte getPistonDirection()

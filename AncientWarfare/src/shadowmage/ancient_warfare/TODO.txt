@@ -154,6 +154,7 @@ THINGS TO INVESTIGATE
 * adjust loot tables to spawn less loot
 * fix structure remove/delete ability
 * update a few names and tooltips
+* fix engine-piston work progress/updating
 
 /********** 07-25-13 **********/
 /********** 07-26-13 **********/
