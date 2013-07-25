@@ -41,7 +41,6 @@ protected boolean isPowered = false;
 
 protected ForgeDirection facingDirection = ForgeDirection.UNKNOWN;
 protected ForgeDirection placementSide = ForgeDirection.DOWN;
-protected boolean[] connections = new boolean[6];
 
 public RedstoneLogicTileGeneric(int tileID, int tileMeta)
   {

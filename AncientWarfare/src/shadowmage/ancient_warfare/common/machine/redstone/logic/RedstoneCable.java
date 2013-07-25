@@ -57,6 +57,23 @@ public boolean isOutputtingPower(int side)
 @Override
 public boolean updateState(TERedstoneLogic te)
   {
+  ForgeDirection direction;
+  int x;
+  int y;
+  int z;
+  this.isPowered = false;
+  for(int i = 0; i <6 ; i++)
+    {
+    direction = ForgeDirection.values()[i];
+    x = te.xCoord + direction.offsetX;
+    y = te.yCoord + direction.offsetY;
+    z = te.zCoord + direction.offsetZ;
+    if(te.worldObj.isBlockIndirectlyGettingPowered(x, y, z))
+      {
+      this.isPowered = true;
+      break;
+      }
+    }
   return super.updateState(te);
   }
 
