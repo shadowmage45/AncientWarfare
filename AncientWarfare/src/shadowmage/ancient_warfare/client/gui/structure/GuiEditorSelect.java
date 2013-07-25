@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
@@ -108,6 +109,10 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 public void updateScreenContents()
   {
   area.updateGuiPos(guiLeft, guiTop);
+  if(area.elements.size()!=StructureManager.instance().getClientStructures().size())
+    {
+    this.refreshGui();
+    }
   }
 
 /**
@@ -141,19 +146,27 @@ public void setStructureName(String name)
 public void setupControls()
   {
   this.addGuiButton(0, 256-35-10, 10, 35, 18, "Done"); 
-  this.addGuiButton(1, 10,30, 35, 18, "Delete");
-  this.addGuiButton(2, 10,30, 35, 18, "Remove");
+  this.addGuiButton(1, 10,30, 55, 18, "Delete");
+  this.addGuiButton(2, 10+55+5, 30, 55, 18, "Remove");
   this.addGuiButton(3, 256-35-10, 30, 35, 18, "Edit");
   
   int totalHeight = clientStructures.size()*14;
   area = new GuiScrollableArea(4, this, 10, 50, this.getXSize()-20, this.getYSize()-60, totalHeight);
   this.guiElements.put(4, area);
   
+  this.refreshGui();
+  
+  }
+
+@Override
+public void updateControls()
+  {
   int kX = 5;
   int kY = 0;
   int buttonHeight = 12;
   int buffer = 2;
   
+  this.area.elements.clear();
   for(int i = 0; i < clientStructures.size(); i++)
     {
     String name = this.clientStructures.get(i).name;
@@ -162,20 +175,18 @@ public void setupControls()
     } 
   }
 
-@Override
-public void updateControls()
-  {
- 
-  }
-
 protected void tryRemoveSelection()
   {
-  
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("remove", currentStructure);
+  this.sendDataToServer(tag);
   }
 
 protected void tryDeleteSelection()
   {
-  
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("delete", currentStructure);
+  this.sendDataToServer(tag);
   }
 
 @Override

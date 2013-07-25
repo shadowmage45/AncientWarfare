@@ -62,13 +62,13 @@ public void generateLootFor(IInventory inventory, int slots, int level, Random r
   {
   default:
   case 0:
-  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 27);
+  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 9);
   break;
   case 1:
-  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 54);
+  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 18);
   break;
   case 2:
-  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 27+54);
+  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 27);
   break;
   }
   }

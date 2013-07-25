@@ -1,5 +1,6 @@
 PRE OPEN BETA
 * tweak airplane throttle settings for more reliable cruise-throttle ability
+* adjust loot to put less in chests
     
 PRE FULL RELEASE
 * default survival-mode structures
@@ -150,6 +151,9 @@ THINGS TO INVESTIGATE
 * add template file delete ability to delete button in editor gui
 * mailbox time for cross-dimensional travel
 * adjust speed of bomber down to 20m/s max nominal
+* adjust loot tables to spawn less loot
+* fix structure remove/delete ability
+* update a few names and tooltips
 
 /********** 07-25-13 **********/
 /********** 07-26-13 **********/
