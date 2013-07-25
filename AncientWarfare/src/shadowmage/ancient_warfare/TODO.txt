@@ -159,6 +159,9 @@ THINGS TO INVESTIGATE
 * disable debug mode for potential release
 
 /********** 07-25-13 **********/
+* prep work on redstone logic framework
+* fix crash in vehicle inventory gui related to slot positioning
+
 /********** 07-26-13 **********/
 /********** 07-27-13 **********/
 /********** 07-28-13 **********/

@@ -61,11 +61,15 @@ import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 import shadowmage.ancient_warfare.common.item.AWItemBlockBase;
 import shadowmage.ancient_warfare.common.item.ItemEngine;
 import shadowmage.ancient_warfare.common.item.ItemMachine;
+import shadowmage.ancient_warfare.common.item.ItemRedstoneLogic;
 import shadowmage.ancient_warfare.common.item.ItemReinforcedBlock;
 import shadowmage.ancient_warfare.common.machine.BlockEngine;
 import shadowmage.ancient_warfare.common.machine.BlockMiscMachine;
 import shadowmage.ancient_warfare.common.machine.EngineData;
 import shadowmage.ancient_warfare.common.machine.MachineData;
+import shadowmage.ancient_warfare.common.machine.redstone.BlockRedstoneTile;
+import shadowmage.ancient_warfare.common.machine.redstone.RedstoneData;
+import shadowmage.ancient_warfare.common.machine.redstone.TERedstoneLogic;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -81,10 +85,11 @@ public static final Block civicBlock3 = new BlockCivic(Config.getBlockID("blockM
 public static final Block civicBlock4 = new BlockCivic(Config.getBlockID("blockMulti.civic4", 3704, "Civic Block 4"), "CivicBlock4", 3);
 public static final Block warehouseStorage = new BlockWarehouseStorage(Config.getBlockID("blockSingle.warehouseStorage", 3705, "Warehouse Storage Block"));
 public static final Block gateProxy = new BlockGateProxy(Config.getBlockID("blockSingle.gateProxy", 3706, "Gate collision/sight check proxy block"));
-public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3707, "Base block for crafting/research stations"), Config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for craftinb blocks").getInt(3707));
+public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3707, "Base block for crafting/research stations"), Config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for crafting blocks").getInt(3707));
 public static final Block reinforced = new BlockReinforced(Config.getBlockID("blockMulti.reinforced", 3708, "Base block for reinforced blocks"), Material.rock, "Reinforced Blocks");
 public static final Block machineBlock = new BlockMiscMachine(Config.getBlockID("blockMulti.machine", 3709, "Base block for misc machines"), Material.rock, "Machine");
 public static final Block engineBlock = new BlockEngine(Config.getBlockID("blockMulti.engine", 3710, "Base block for misc engines"), Material.rock, "block.multi.engine.0");
+public static final Block redstoneLogic = new BlockRedstoneTile(Config.getBlockID("blockMulti.logic", 3711, "Base block for all redstone logic tiles"), "block.multi.logic");
 
 public static final ItemStack trashcan = new ItemStack(machineBlock,1,0);
 public static final ItemStack mailbox = new ItemStack(machineBlock,1,1);
@@ -119,9 +124,13 @@ public void load()
   registerBlockWithItem(engineBlock, "block.multi.engine.0", ItemEngine.class);
   
   registerBlockWithItem(reinforced, "block.multi.reinforced.0", ItemReinforcedBlock.class);
-  ((BlockReinforced)reinforced).registerBlockInfo();
+  ((BlockReinforced)reinforced).registerBlockInfo();  
   GameRegistry.registerTileEntity(TEAWBlockReinforced.class, "Reinforced Block");
   
+  registerBlockWithItem(redstoneLogic, "block.multi.logic", ItemRedstoneLogic.class);
+  RedstoneData.registerBlockInfo();
+  GameRegistry.registerTileEntity(TERedstoneLogic.class, "Redstone Logic Tile");
+    
   GameRegistry.registerTileEntity(TEBuilder.class, "AWBuilder");
   GameRegistry.registerTileEntity(TEGateProxy.class, "AWGateProxyTE");
   GameRegistry.registerTileEntity(TEWorkSiteFarm.class, "AWFarmSiteTE");   

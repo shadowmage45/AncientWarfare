@@ -176,7 +176,7 @@ public void setCurrentTopStorageRow(int row)
         else
           {
           xPos = 8 + x * 18;
-          yPos = 84 + curRow * 18 - 5*18 - 2*5+28;          
+          yPos = storageY + curRow * 18;          
           }
         storageSlots[slotNum].xDisplayPosition = xPos;
         storageSlots[slotNum].yDisplayPosition = yPos;
