@@ -361,31 +361,29 @@ protected void applyHelicopterInput()
       }
     //float perfectSpeed = minVertSpeed + (((throttle-0.25f)*1.33333f)*spread);    
     float speedDelta = (float) (perfectSpeed - vehicle.motionY);
-    if(Math.abs(speedDelta)<0.01f)
+    if(Math.abs(speedDelta)<0.03f)
       {
       vehicle.motionY = perfectSpeed;
       }
     else
       {
-      Config.logDebug("perfect: "+perfectSpeed +  " d: "+speedDelta);    
-      float adjPercent = speedDelta / 0.45f;
+      float adjPercent = Math.abs(speedDelta) / 0.45f;
       adjPercent = adjPercent > 1.f ? 1.f : adjPercent;
-      adjPercent = 1-adjPercent;
-      vehicle.motionY += adjPercent * speedDelta * 0.05f;      
+      adjPercent *= 0.1f;
+      float adjFactor = 1.0f;
+//      Config.logDebug("perfect: "+perfectSpeed +  " d: "+speedDelta + " sPerc: "+adjPercent);
+      if(perfectSpeed<vehicle.motionY)
+        {
+        adjFactor*=2.f;
+        }
+      vehicle.motionY += adjPercent * speedDelta * adjFactor;      
       }
-//    if(vehicle.motionY < 0.02f)
-//      {
-//      vehicle.motionY = 0.f;
-//      }
     }
   else
     {
     vehicle.motionY -= grav*adjThr;
     }
-  
-//  vehicle.motionY -= grav*adjThr;
-//  vehicle.motionY += throttle*0.0125f;
-  
+    
   }
 
 protected void applyThrottleInput()

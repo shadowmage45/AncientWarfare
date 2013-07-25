@@ -1,6 +1,5 @@
 PRE OPEN BETA
 * tweak airplane throttle settings for more reliable cruise-throttle ability
-* adjust loot to put less in chests
     
 PRE FULL RELEASE
 * default survival-mode structures
@@ -156,6 +155,8 @@ THINGS TO INVESTIGATE
 * update a few names and tooltips
 * fix engine-piston work progress/updating
 * fix some fubard' imports
+* adjust helicopter throttle handling to actually work instead of _somehow_ work
+* disable debug mode for potential release
 
 /********** 07-25-13 **********/
 /********** 07-26-13 **********/
