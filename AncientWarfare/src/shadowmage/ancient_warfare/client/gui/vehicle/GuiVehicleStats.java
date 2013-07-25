@@ -24,8 +24,8 @@ import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.meim.common.util.Trig;
 
 public class GuiVehicleStats extends GuiContainerAdvanced
 {

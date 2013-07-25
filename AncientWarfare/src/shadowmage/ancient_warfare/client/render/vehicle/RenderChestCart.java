@@ -23,8 +23,8 @@ package shadowmage.ancient_warfare.client.render.vehicle;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.client.model.ModelChestCart;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
+import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.meim.common.util.Trig;
 
 public class RenderChestCart extends RenderVehicleBase
 {

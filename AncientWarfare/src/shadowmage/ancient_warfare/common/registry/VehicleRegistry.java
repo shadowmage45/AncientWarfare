@@ -83,7 +83,6 @@ public static final IVehicleType BOAT_TRANSPORT = new VehicleTypeBoatTransport(2
 
 public static final IVehicleType AIR_TEST = new VehicleTypeAirBomber(21);
 public static final IVehicleType AIR_TEST2 = new VehicleTypeAirInterceptor(22);
-
 public static final IVehicleType AIR_TEST3 = new VehicleTypeHelicopter(23);
 
 private VehicleRegistry(){}
