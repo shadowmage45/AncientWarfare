@@ -264,11 +264,11 @@ public void loadRecipes()
       
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(BlockLoader.trashcan.copy(), new Object[] {"psp", "rtr", "blb", 'p', Block.planks, 's', Item.stick, 't', Block.stone, 'r', Item.redstone, 'b', Block.stoneBrick, 'l', Item.bucketLava} ));
   
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer1.copy(), new Object[] {"ms_", "mm_", "ms", 's', Item.stick, 'm', Item.ingotIron} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer1.copy(), new Object[] {"ms", "ms", "ms", 's', Item.stick, 'm', Block.cobblestone} ));
   
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer2.copy(), new Object[] {"ms_", "mm_", "ms", 's', Item.stick, 'm', Item.ingotGold} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer2.copy(), new Object[] {"ms", "ms", "ms", 's', Item.stick, 'm', Item.ingotIron} ));
   
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer3.copy(), new Object[] {"ms_", "mm_", "ms", 's', Item.stick, 'm', Item.diamond} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer3.copy(), new Object[] {"ms", "ms", "ms", 's', Item.stick, 'm', Item.diamond} ));
   
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.quill1.copy(), new Object[] {"__f", "_s_", "m__", 's', Item.stick, 'm', Item.ingotIron, 'f', Item.feather} ));
   
