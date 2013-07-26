@@ -32,7 +32,7 @@ public class TERedstoneLogic extends TileEntity
 /**
  * tiles on individual sides of the block, index 6 (tile7) is used for center
  */
-IRedstoneLogicTile[] tiles = new IRedstoneLogicTile[7];
+public IRedstoneLogicTile[] tiles = new IRedstoneLogicTile[7];
 
 public TERedstoneLogic()
   {

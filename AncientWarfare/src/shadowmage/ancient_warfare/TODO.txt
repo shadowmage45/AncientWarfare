@@ -123,6 +123,7 @@ THINGS TO INVESTIGATE
 * fix food processor shift-click functionality
 * more minor work on redstone stuff....this is going to take awhile
 * update version numbers, disable debug, prep for release
+* more prep for redstone stuff
 
 /********** 07-27-13 **********/
 /********** 07-28-13 **********/
