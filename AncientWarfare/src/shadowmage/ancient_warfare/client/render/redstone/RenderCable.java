@@ -38,7 +38,7 @@ public RenderCable()
 @Override
 public void renderTile(IRedstoneLogicTile tile, TERedstoneLogic te, float partialTick)
   {
-  this.setRenderForSide(tile.getPlacementSide());
+//  this.setRenderForSide(tile.getPlacementSide());
   this.model.render(tile, partialTick);
   }
 

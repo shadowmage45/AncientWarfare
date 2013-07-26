@@ -116,5 +116,28 @@ public void onNeighborBlockChange(World par1World, int par2, int par3, int par4,
   }
 
 
+@Override
+public boolean isOpaqueCube()
+  {
+  return false;
+  }
+
+@Override
+public boolean renderAsNormalBlock()
+  {
+  return false;
+  }
+
+@Override
+public boolean shouldSideBeRendered(IBlockAccess par1iBlockAccess, int x, int y, int z, int par5)
+  {
+  return false;
+  }
+
+@Override
+public boolean isBlockSolid(IBlockAccess par1IBlockAccess, int x, int y, int z, int par5)
+  {
+  return false;
+  }
 
 }

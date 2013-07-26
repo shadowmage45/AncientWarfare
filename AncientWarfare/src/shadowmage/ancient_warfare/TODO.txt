@@ -124,7 +124,7 @@ THINGS TO INVESTIGATE
 * more minor work on redstone stuff....this is going to take awhile
 * update version numbers, disable debug, prep for release
 * more prep for redstone stuff
-
+* minor adjust to mailbox select gui -- disable normal exit keybinds
 /********** 07-27-13 **********/
 /********** 07-28-13 **********/
 /********** 07-29-13 **********/

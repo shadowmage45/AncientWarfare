@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.client.render.redstone;
 
 import java.util.HashMap;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -51,6 +52,7 @@ public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, doub
   GL11.glPushMatrix();
   GL11.glTranslated(d0+0.5d, d1+0.5d, d2+0.5d);
   TERedstoneLogic te = (TERedstoneLogic)tileentity;
+  Minecraft.getMinecraft().renderEngine.bindTexture("foo");
   for(IRedstoneLogicTile t : te.tiles)
     {
     if(t==null){continue;}

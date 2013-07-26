@@ -58,7 +58,7 @@ public GuiMailboxSelection(GuiMailbox parent, int side)
   this.parent = parent;
   this.sideSelection = side;
   this.container = parent.container;
-  this.shouldCloseOnVanillaKeys = true;
+//  this.shouldCloseOnVanillaKeys = true;
   }
 
 @Override
