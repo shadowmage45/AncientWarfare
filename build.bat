@@ -3,7 +3,9 @@ set STARTPATH=%CD%
 echo BUILD STARTED AT %STARTPATH%
 del /q *.zip
 rd /s/q build
+rd /s/q "%STARTPATH%\mcp\minecraft\ancient_warfare
 md build
+del
 xcopy /e/i/q/y "%STARTPATH%\AncientWarfare\src\shadowmage\*.*" "%STARTPATH%\mcp\src\minecraft\*.*"
 echo FILES COPIED, RECOMPILING....
 cd mcp

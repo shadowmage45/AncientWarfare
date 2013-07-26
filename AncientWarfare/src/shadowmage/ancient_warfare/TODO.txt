@@ -162,6 +162,7 @@ THINGS TO INVESTIGATE
 * prep work on redstone logic framework
 * fix crash in vehicle inventory gui related to slot positioning
 * update version number and disable redstone stuff for release
+* update build script to remove old source before recompile
 
 /********** 07-26-13 **********/
 /********** 07-27-13 **********/
