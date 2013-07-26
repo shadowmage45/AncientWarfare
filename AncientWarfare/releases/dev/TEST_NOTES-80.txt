@@ -1,0 +1,3 @@
+New features since last test release:
+
+* FIX -- Fix Potential crash in vehicle inventory GUI regarding storage slots and the done/exit button.

@@ -96,10 +96,10 @@ public static int getTileMeta(ItemStack stack)
 
 public static void registerBlockInfo()
   {
-//  if(true)//TODO HACK DEBUG
-//    {
-//    return;
-//    }
+  if(true)//TODO HACK DEBUG
+    {
+    return;
+    }
   Description d = DescriptionRegistry2.instance().getDescriptionFor(BlockLoader.redstoneLogic.blockID);  
   ItemStack stack;    
   d.addDisplayStack(getStackForType(1, 0));

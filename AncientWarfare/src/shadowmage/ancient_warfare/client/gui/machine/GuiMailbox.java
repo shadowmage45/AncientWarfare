@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.client.gui.machine;
 
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -167,6 +168,7 @@ public void setupControls()
     this.guiElements.put(label.getElementNumber(), label);
     }
   }
+
 
 @Override
 public void updateControls()

@@ -165,6 +165,12 @@ THINGS TO INVESTIGATE
 * update build script to remove old source before recompile
 
 /********** 07-26-13 **********/
+* fix invalid obsidian vault template (swap rule not closed properly)
+* fix mailbox naming closing when 'e' is pressed
+* fix food processor gui being un-closeable
+* fix food processor not creating rations (it never set stack if slot was empty)
+* fix food processor shift-click functionality
+
 /********** 07-27-13 **********/
 /********** 07-28-13 **********/
 /********** 07-29-13 **********/

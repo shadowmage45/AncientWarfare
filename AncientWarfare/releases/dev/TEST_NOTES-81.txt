@@ -1,0 +1,7 @@
+New features since last test release:
+
+* FIX -- invalid obsidian vault template (swap rule not closed properly)
+* FIX -- mailbox naming closing when 'e' is pressed
+* FIX -- food processor gui being un-closeable
+* FIX -- food processor not creating rations (it never set stack if slot was empty)
+* FIX -- food processor shift-click functionality

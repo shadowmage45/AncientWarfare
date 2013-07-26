@@ -193,7 +193,6 @@ conditional=0
 percent=100
 blocks=54-3
 lootlevel=2
-#ruinsspecialdata=hardchest
 inventory=0
 :endrule
 
@@ -493,7 +492,7 @@ biome=desert,3-0,12-0
 biome=desert,2-0,12-0
 biome=hell,3-0,87-0
 biome=hell,3-0,87-0
-endswap:
+:endswap
 ####VEHICLE RULES####
 
 ####NPC RULES####

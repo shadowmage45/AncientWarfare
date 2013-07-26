@@ -34,6 +34,7 @@ public class GuiFoodProcessor extends GuiContainerAdvanced
 public GuiFoodProcessor(Container container)
   {
   super(container);
+  this.shouldCloseOnVanillaKeys = true;
   }
 
 @Override

@@ -26,6 +26,7 @@ import java.util.Set;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
@@ -58,6 +59,23 @@ public GuiMailboxSelection(GuiMailbox parent, int side)
   this.sideSelection = side;
   this.container = parent.container;
   this.shouldCloseOnVanillaKeys = true;
+  }
+
+@Override
+protected void keyTyped(char par1, int par2)
+  {
+  if(!this.inputBox.selected)
+    {
+    super.keyTyped(par1, par2);
+    }
+  else
+    {
+    for(Integer i : this.guiElements.keySet())
+      {
+      GuiElement el = this.guiElements.get(i);
+      el.onKeyTyped(par1, par2);
+      }
+    }
   }
 
 @Override
