@@ -1,0 +1,7 @@
+<project name="AncientWarfare">
+	<!-- NFC how to use ant...this will take awhile...-->
+	<!--set environment variables from jenkins-->
+	<property environment="env"/>
+	<property name="label" value="${env.BUILD_NUMBER}"/>
+	<property name="build.number" value=""/>	
+</project>

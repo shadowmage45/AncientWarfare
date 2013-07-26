@@ -37,8 +37,6 @@ int getTileType();
  */
 int getTileMeta();
 
-
-
 /**
  * can this tile be placed with the other tiles in a block?
  * @param side
@@ -69,6 +67,12 @@ boolean isConnected(ForgeDirection side, IRedstoneLogicTile[] tiles);
 boolean isOutputtingPower(int side);
 
 /**
+ * is this an active power supply, or merely passing on current?
+ * @return
+ */
+boolean isProvidingPower(int side);
+
+/**
  * @param te
  * @return true if state changed, should update client
  */
@@ -78,6 +82,16 @@ boolean updateState(TERedstoneLogic te);
  * @return true if this tile is in the powered state
  */
 boolean isPowered();
+
+/**
+ * @return true if tile requires ticking from TE for logic updates (timers)
+ */
+boolean canUpdate();
+
+/**
+ * called onEntityUpdate from TE if canUpdate()==true
+ */
+void onUpdate();
 
 /**
  * the side the tile is facing (default output)

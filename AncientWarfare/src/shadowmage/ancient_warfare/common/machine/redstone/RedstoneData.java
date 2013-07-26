@@ -38,6 +38,21 @@ public static final int BARE_CABLE = 1;
 public static final int INSULATED_CABLE = 2;
 public static final int CONDUIT = 3;
 
+
+/**
+ * will need two types of power transmission -- full block, and partial block
+ * to check if power is being output, will need to check if the output destination is a full block
+ * or if output destination is partial block (repeater, redstone dust, logic block)
+ *    if full -- output == any tile outputting to side
+ *    if partial -- output == tile on bottom outputting 
+ */
+
+/**
+ * return a tile for the given type and meta value
+ * @param tileType
+ * @param tileMeta (full int available)
+ * @return a non-null tile, valid if type is a valid type -- (meta qualified and sanitized in tile itself)
+ */
 public static IRedstoneLogicTile getLogicTile(int tileType, int tileMeta)
   {
   RedstoneLogicTileGeneric tile = null;

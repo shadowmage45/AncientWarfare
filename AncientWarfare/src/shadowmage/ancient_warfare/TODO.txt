@@ -115,61 +115,14 @@ THINGS TO INVESTIGATE
 
 ********************* DONE STUFF ************************* 
 
-/********** 07-22-13 **********/
-* add food-processor machine -- converts food -> rations
-* add hammer and quill items (for craftsman / researcher tools)
-* add 'ENGINE' civic work type
-* add ENGINE work type as valid work for all worker NPCs (farmer, fisher, lumber, craft, research, miner)
-* translation entries for new items / blocks (food processor, hammers, quills)
-* add food-processor block textures
-* fix engine work-command -- only send update on work command -- send work-speed only (if work speed is received, it means move the freaking piston)
-* add hammer/quill textures
-* add recipes for hammer and quill items
-* remove ration creation ability from town hall blocks
-* re-enable aircraft crash mechanics
-* enable collision braking in vehicles (slow down on collide with blocks/etc)
-* enable noclip on client-side vehicles (no reason for them to collide client-side, they just need to move)
-* add forwardMotion to variables sent during vehicle movement--used for wheel rotation
-* fix vehicle/npc navigator interaction
-* fix vehicle packet
-* add command baton command to enable/disable accepting work broadcasts
-* switch helicopter ammo types to rockets
-* adjust helicopter max speed
-* update world-gen config file that ships with release (resources/config/AWWorldGen.cfg)
-
-/********** 07-23-13 **********/
-* clear vehicle input on dismount (just do a pure reset input when not mounted?)
-* minor cleanup on air motion handling
-* verify player OP status before allowing scanning or building of structures w/creative items
-* fix hammer/quill icons
-* method to remove buildings/templates from server (editor gui?)  
-
-/********** 07-24-13 **********/
-* add mcmod.info file (NFC if it works or not)
-* update build script to copy mcmod.info file
-* add template file delete ability to delete button in editor gui
-* mailbox time for cross-dimensional travel
-* adjust speed of bomber down to 20m/s max nominal
-* adjust loot tables to spawn less loot
-* fix structure remove/delete ability
-* update a few names and tooltips
-* fix engine-piston work progress/updating
-* fix some fubard' imports
-* adjust helicopter throttle handling to actually work instead of _somehow_ work
-* disable debug mode for potential release
-
-/********** 07-25-13 **********/
-* prep work on redstone logic framework
-* fix crash in vehicle inventory gui related to slot positioning
-* update version number and disable redstone stuff for release
-* update build script to remove old source before recompile
-
 /********** 07-26-13 **********/
 * fix invalid obsidian vault template (swap rule not closed properly)
 * fix mailbox naming closing when 'e' is pressed
 * fix food processor gui being un-closeable
 * fix food processor not creating rations (it never set stack if slot was empty)
 * fix food processor shift-click functionality
+* more minor work on redstone stuff....this is going to take awhile
+* update version numbers, disable debug, prep for release
 
 /********** 07-27-13 **********/
 /********** 07-28-13 **********/

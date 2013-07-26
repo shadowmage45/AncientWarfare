@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.machine.redstone;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.machine.redstone.logic.IRedstoneLogicTile;
 
 public class TERedstoneLogic extends TileEntity
@@ -38,20 +39,63 @@ public TERedstoneLogic()
   
   }
 
+
+public void propogateCurrent(ForgeDirection from, ForgeDirection side, int inputCurrent)
+  {
+  int highestNeighbor = 0;
+  ForgeDirection to;
+  int x;
+  int y;
+  int z;
+  int id;
+  for(int i = 0; i < 6; i++)
+    {
+    to = ForgeDirection.values()[i];
+    if(to==from || !this.isEmittingPower(to.ordinal())){continue;}
+    x = this.xCoord + to.offsetX;
+    y = this.yCoord + to.offsetY;
+    z = this.zCoord + to.offsetZ;
+    id = this.worldObj.getBlockId(x, y, z);
+    if(id != BlockLoader.redstoneLogic.blockID)
+      {
+      //check if block is active redstone/torch/etc, and that this block has a component connected to it??
+      }
+    else
+      {
+      TERedstoneLogic te = (TERedstoneLogic) this.worldObj.getBlockTileEntity(x, y, z);
+      
+      }
+    }
+  }
+
+/**
+ * does this TE generate an active (full strength) current?
+ * @param side
+ * @return
+ */
+public boolean isPowerProvider(int side)
+  {
+  for(IRedstoneLogicTile t : this.tiles)
+    {
+    if(t!=null && t.isProvidingPower(side))
+      {
+      return true;
+      }
+    }
+  return false;
+  }
+
 public boolean isEmittingPower(int sideOut)
   {
   if(tiles[sideOut]!=null)
     {
     return false;
     }
-  for(int i = 0; i < 6; i++)
+  for(IRedstoneLogicTile t : this.tiles)
     {
-    if(tiles[i]!=null)
+    if(t!=null && t.isOutputtingPower(sideOut))
       {
-      if(tiles[i].isOutputtingPower(sideOut))
-        {
-        return true;
-        }
+      return true;
       }
     }
   return false;

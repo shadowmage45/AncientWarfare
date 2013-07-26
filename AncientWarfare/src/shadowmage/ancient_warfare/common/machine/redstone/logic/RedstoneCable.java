@@ -28,6 +28,9 @@ import shadowmage.ancient_warfare.common.machine.redstone.TERedstoneLogic;
 public class RedstoneCable extends RedstoneLogicTileGeneric
 {
 
+byte orientation = 0;//0==n/s, 1==e/w, 2==both..used by client for rendering
+int currentStrength = 0;
+
 /**
  * @param tileID
  * @param tileMeta

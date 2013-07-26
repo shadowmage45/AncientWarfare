@@ -38,6 +38,7 @@ protected int tileID;
 protected int tileMeta;
 
 protected boolean isPowered = false;
+protected boolean isPowerProvider = false;
 
 protected ForgeDirection facingDirection = ForgeDirection.UNKNOWN;
 protected ForgeDirection placementSide = ForgeDirection.DOWN;
@@ -122,6 +123,23 @@ public boolean isConnected(ForgeDirection side, IRedstoneLogicTile[] tiles)
 public ForgeDirection getPlacementSide()
   {
   return placementSide;
+  }
+
+@Override
+public boolean isProvidingPower(int side)
+  {
+  return false;
+  }
+
+@Override
+public boolean canUpdate()
+  {
+  return false;
+  }
+
+@Override
+public void onUpdate()
+  {
   }
 
 
