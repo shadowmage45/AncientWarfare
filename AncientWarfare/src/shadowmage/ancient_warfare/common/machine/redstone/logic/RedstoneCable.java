@@ -62,6 +62,7 @@ public boolean updateState(TERedstoneLogic te)
   int y;
   int z;
   this.isPowered = false;
+  Config.logDebug("updating state..");
   for(int i = 0; i <6 ; i++)
     {
     direction = ForgeDirection.values()[i];
