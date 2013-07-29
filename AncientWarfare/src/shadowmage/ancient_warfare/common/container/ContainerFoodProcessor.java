@@ -58,7 +58,7 @@ public ContainerFoodProcessor(EntityPlayer openingPlayer, TEFoodProcessor te)
       }    
     }
   
-  this.addSlotToContainer(new Slot(te, 0, 8 + 7*18, 8+18));
+  this.addSlotToContainer(new SlotPullOnly(te, 0, 8 + 7*18, 8+18));
   }
 
 @Override

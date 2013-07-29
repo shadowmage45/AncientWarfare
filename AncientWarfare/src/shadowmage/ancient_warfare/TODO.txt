@@ -17,6 +17,8 @@ FROM TESTING
 * bed placement is fubar in structure gen from templates
 * npc despawning?
 * npc trampling on crops
+* food processor -- can place items in output slot
+* ghost blocks in world-gen (village fortress)
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -126,6 +128,21 @@ THINGS TO INVESTIGATE
 * more prep for redstone stuff
 * minor adjust to mailbox select gui -- disable normal exit keybinds
 /********** 07-27-13 **********/
+* moving...
 /********** 07-28-13 **********/
+* moving...
 /********** 07-29-13 **********/
+* fix food processor output slot to not accept items from gui (pull only)
+
 /********** 07-30-13 **********/
+/********** 07-31-13 **********/
+/********** 08-01-13 **********/
+/********** 08-02-13 **********/
+/********** 08-03-13 **********/
+/********** 08-04-13 **********/
+/********** 08-05-13 **********/
+/********** 08-06-13 **********/
+/********** 08-07-13 **********/
+/********** 08-08-13 **********/
+/********** 08-09-13 **********/
+/********** 08-10-13 **********/
