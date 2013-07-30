@@ -57,9 +57,6 @@ public static CivicRule populateRule(int x, int y, int z, TECivic te)
   rule.xMin = te.minX-te.xCoord;
   rule.yMin = te.minY-te.yCoord;
   rule.zMin = te.minZ-te.zCoord;
-//  rule.xMin = x + te.minX-te.xCoord;
-//  rule.yMin = y + te.minY-te.yCoord;
-//  rule.zMin = z + te.minZ-te.zCoord;
   rule.xSize = te.maxX - te.minX + 1;
   rule.ySize = te.maxY - te.minY + 1;
   rule.zSize = te.maxZ - te.minZ + 1;  
