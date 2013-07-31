@@ -75,14 +75,15 @@ public void addRoutePoint(WayPointItemRouting point)
   {
   if(point!=null)
     {
-    if(this.swapPoint>-1)
+    if(this.swapPoint>=0 && this.swapPoint <this.routingPoints.size())
       {
       this.routingPoints.get(swapPoint).reassignPoint(point.floorX(), point.floorY(), point.floorZ(), point.getSide());
       this.swapPoint = -1;
       }
     else
       {
-      this.routingPoints.add(point);      
+      this.routingPoints.add(point);
+      this.swapPoint = -1;
       }
     }
   }

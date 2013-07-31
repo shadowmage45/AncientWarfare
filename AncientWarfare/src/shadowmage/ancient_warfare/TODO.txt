@@ -135,6 +135,8 @@ THINGS TO INVESTIGATE
 * fix food processor output slot to not accept items from gui (pull only)
 
 /********** 07-30-13 **********/
+* fix crash in routing slip related to swapping routing points
+
 /********** 07-31-13 **********/
 /********** 08-01-13 **********/
 /********** 08-02-13 **********/
