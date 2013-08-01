@@ -69,7 +69,6 @@ import shadowmage.ancient_warfare.client.render.gate.RenderGateSingle;
 import shadowmage.ancient_warfare.client.render.machine.RenderTEMotor;
 import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
 import shadowmage.ancient_warfare.client.render.missile.RenderShot;
-import shadowmage.ancient_warfare.client.render.redstone.RenderRedstoneHelper;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderAircraftTest;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaMobile;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaStand;
@@ -96,7 +95,6 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.machine.redstone.TERedstoneLogic;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.plugins.PluginProxy;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
@@ -292,7 +290,6 @@ public void loadRenders()
   MinecraftForgeClient.registerItemRenderer(BlockLoader.engineBlock.blockID, engineRender);
   ClientRegistry.bindTileEntitySpecialRenderer(PluginProxy.bcProxy.getHandCrankEngineClass(), engineRender);
   
-  ClientRegistry.bindTileEntitySpecialRenderer(TERedstoneLogic.class, new RenderRedstoneHelper());
   }
 
 public void addTEModel(int type, ModelTEBase model)
