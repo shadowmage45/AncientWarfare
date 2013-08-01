@@ -141,6 +141,8 @@ THINGS TO INVESTIGATE
 * remove redstone stuff, moved to separate mod
 
 /********** 08-01-13 **********/
+* fix boats sinking in water
+
 /********** 08-02-13 **********/
 /********** 08-03-13 **********/
 /********** 08-04-13 **********/
