@@ -3,10 +3,9 @@ set STARTPATH=%CD%
 echo BUILD STARTED AT %STARTPATH%
 del /q *.zip
 rd /s/q build
-rd /s/q "%STARTPATH%\mcp\minecraft\ancient_warfare
+rd /s/q "%STARTPATH%\mcp\minecraft\shadowmage"
 md build
-del
-xcopy /e/i/q/y "%STARTPATH%\AncientWarfare\src\shadowmage\*.*" "%STARTPATH%\mcp\src\minecraft\*.*"
+xcopy /e/i/q/y "%STARTPATH%\AncientWarfare\src\shadowmage\*.*" "%STARTPATH%\mcp\src\minecraft\shadowmage\*.*"
 echo FILES COPIED, RECOMPILING....
 cd mcp
 runtime\bin\python\python_mcp runtime\recompile.py %*
