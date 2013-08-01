@@ -78,7 +78,6 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
 @Override
 public Icon getIconFromDamage(int par1)
   {
-  par1 = par1;
   return super.getIconFromDamage(par1);
   }
 
