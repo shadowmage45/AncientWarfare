@@ -74,17 +74,17 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class BlockLoader
 {
 
-public static final Block builder = new BlockBuilder(Config.getBlockID("blockSingle.builder", 3700, "Placeholder block for ticked-structure builders."));
-public static final Block civicBlock1 = new BlockCivic(Config.getBlockID("blockMulti.civic1", 3701, "Civic Block 1"), "CivicBlock1", 0);
-public static final Block civicBlock2 = new BlockCivic(Config.getBlockID("blockMulti.civic2", 3702, "Civic Block 2"), "CivicBlock2", 1);
-public static final Block civicBlock3 = new BlockCivic(Config.getBlockID("blockMulti.civic3", 3703, "Civic Block 3"), "CivicBlock3", 2);
-public static final Block civicBlock4 = new BlockCivic(Config.getBlockID("blockMulti.civic4", 3704, "Civic Block 4"), "CivicBlock4", 3);
-public static final Block warehouseStorage = new BlockWarehouseStorage(Config.getBlockID("blockSingle.warehouseStorage", 3705, "Warehouse Storage Block"));
-public static final Block gateProxy = new BlockGateProxy(Config.getBlockID("blockSingle.gateProxy", 3706, "Gate collision/sight check proxy block"));
-public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3707, "Base block for crafting/research stations"), Config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for crafting blocks").getInt(3707));
-public static final Block reinforced = new BlockReinforced(Config.getBlockID("blockMulti.reinforced", 3708, "Base block for reinforced blocks"), Material.rock, "Reinforced Blocks");
-public static final Block machineBlock = new BlockMiscMachine(Config.getBlockID("blockMulti.machine", 3709, "Base block for misc machines"), Material.rock, "Machine");
-public static final Block engineBlock = new BlockEngine(Config.getBlockID("blockMulti.engine", 3710, "Base block for misc engines"), Material.rock, "block.multi.engine.0");
+public static final Block builder = new BlockBuilder(Config.getBlockID("blockSingle.builder", 3750, "Placeholder block for ticked-structure builders."));
+public static final Block civicBlock1 = new BlockCivic(Config.getBlockID("blockMulti.civic1", 3751, "Civic Block 1"), "CivicBlock1", 0);
+public static final Block civicBlock2 = new BlockCivic(Config.getBlockID("blockMulti.civic2", 3752, "Civic Block 2"), "CivicBlock2", 1);
+public static final Block civicBlock3 = new BlockCivic(Config.getBlockID("blockMulti.civic3", 3753, "Civic Block 3"), "CivicBlock3", 2);
+public static final Block civicBlock4 = new BlockCivic(Config.getBlockID("blockMulti.civic4", 3754, "Civic Block 4"), "CivicBlock4", 3);
+public static final Block warehouseStorage = new BlockWarehouseStorage(Config.getBlockID("blockSingle.warehouseStorage", 3755, "Warehouse Storage Block"));
+public static final Block gateProxy = new BlockGateProxy(Config.getBlockID("blockSingle.gateProxy", 3756, "Gate collision/sight check proxy block"));
+public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3757, "Base block for crafting/research stations"), Config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for crafting blocks").getInt(3707));
+public static final Block reinforced = new BlockReinforced(Config.getBlockID("blockMulti.reinforced", 3758, "Base block for reinforced blocks"), Material.rock, "Reinforced Blocks");
+public static final Block machineBlock = new BlockMiscMachine(Config.getBlockID("blockMulti.machine", 3759, "Base block for misc machines"), Material.rock, "Machine");
+public static final Block engineBlock = new BlockEngine(Config.getBlockID("blockMulti.engine", 3760, "Base block for misc engines"), Material.rock, "block.multi.engine.0");
 
 public static final ItemStack trashcan = new ItemStack(machineBlock,1,0);
 public static final ItemStack mailbox = new ItemStack(machineBlock,1,1);

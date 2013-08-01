@@ -35,26 +35,26 @@ public class ItemLoader
 /**
  * Items
  */
-public static final AWItemBase vehicleUpgrade = new ItemVehicleUpgrade(Config.getItemID("itemMulti.vehicleUpgrade", 13001, "Base item for all vehicle upgrades"));
-public static final AWItemBase ammoItem = new ItemAmmo(Config.getItemID("itemMulti.vehicleAmmo", 13002, "Base item for all vehicle ammunition types"));
-public static final AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 13003, "Base item for all vehicle-spawning items"));
-public static final AWItemBase componentItem = new ItemComponent(Config.getItemID("itemMulti.component", 13004, "Base item for all components and misc items"), true);
-public static final AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 13005, "Item used to scan structures"));
-public static final AWItemBase structureCreativeBuilder = new ItemBuilderInstant(Config.getItemID("itemSingle.structureBuilderCreative", 13006, "Creative-Mode Selectable Structure Builder"));
-public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Config.getItemID("itemSingle.builderDirect", 13007, "Survival mode builder, uses blocks from inventory"));
-public static final AWItemBase structureCreativeBuilderTicked = new ItemBuilderTicked(Config.getItemID("itemSingle.structureBuilderCreativeTicked", 13008, "Creative-mode slow (ticked) builder"));
-public static final AWItemBase structureEditor = new ItemCreativeEditor(Config.getItemID("itemSingle.templateEditor", 13009, "Creative-mode template editor"));
-public static final AWItemBase armorItem = new ItemVehicleArmor(Config.getItemID("itemMulti.vehicleArmor", 13010, "Vehicle Armor Component"));
-public static final AWItemBase npcSpawner = new ItemNpcSpawner(Config.getItemID("itemMulti.npcSpawner", 13011, "Npc Spawning Item"));
-public static final AWItemBase npcCommandBaton = new ItemNpcCommandBaton(Config.getItemID("itemMulti.commandBaton", 13012, "Npc Command Batons"));
-public static final AWItemBase civicPlacer = new ItemCivicPlacer(Config.getItemID("itemMulti.civiPlacer", 13013, "Constructs Civic Buildings/Sites"));
-public static final AWItemBase civicBuilder = new ItemCivicBuilder(Config.getItemID("itemMulti.civicBuilder", 13014, "Constructs Structures using Civics"));
-public static final AWItemBase courierRouteSlip = new ItemCourierSlip(Config.getItemID("itemMulti.courierSlip", 13015, "Holds Routing Info for a Courier"));
-public static final AWItemBase gateSpawner = new ItemGateSpawner(Config.getItemID("itemMulti.gateSpawner", 13016, "Base gate spawning item."));
-public static final ItemFood rations = new ItemRation(Config.getItemID("itemSingle.foodRation", 13017, "Food rations for soldiers and npcs."));
-public static final AWItemBase researchBook = new ItemResearchBook(Config.getItemID("itemSingle.researchBook", 13017, "Research book to save research progress"));
-public static final AWItemBase researchNotes = (AWItemBase) new ItemResearchNote(Config.getItemID("itemMulti.researchNotes", 13018, "Research notes"));
-public static final AWItemBase backpack = new ItemBackpack(Config.getItemID("itemMulti.backpack", 13019, "Backpack"));
+public static final AWItemBase vehicleUpgrade = new ItemVehicleUpgrade(Config.getItemID("itemMulti.vehicleUpgrade", 24001, "Base item for all vehicle upgrades"));
+public static final AWItemBase ammoItem = new ItemAmmo(Config.getItemID("itemMulti.vehicleAmmo", 24002, "Base item for all vehicle ammunition types"));
+public static final AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 24003, "Base item for all vehicle-spawning items"));
+public static final AWItemBase componentItem = new ItemComponent(Config.getItemID("itemMulti.component", 24004, "Base item for all components and misc items"), true);
+public static final AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 24005, "Item used to scan structures"));
+public static final AWItemBase structureCreativeBuilder = new ItemBuilderInstant(Config.getItemID("itemSingle.structureBuilderCreative", 24006, "Creative-Mode Selectable Structure Builder"));
+public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Config.getItemID("itemSingle.builderDirect", 24007, "Survival mode builder, uses blocks from inventory"));
+public static final AWItemBase structureCreativeBuilderTicked = new ItemBuilderTicked(Config.getItemID("itemSingle.structureBuilderCreativeTicked", 24008, "Creative-mode slow (ticked) builder"));
+public static final AWItemBase structureEditor = new ItemCreativeEditor(Config.getItemID("itemSingle.templateEditor", 24009, "Creative-mode template editor"));
+public static final AWItemBase armorItem = new ItemVehicleArmor(Config.getItemID("itemMulti.vehicleArmor", 24010, "Vehicle Armor Component"));
+public static final AWItemBase npcSpawner = new ItemNpcSpawner(Config.getItemID("itemMulti.npcSpawner", 24011, "Npc Spawning Item"));
+public static final AWItemBase npcCommandBaton = new ItemNpcCommandBaton(Config.getItemID("itemMulti.commandBaton", 24012, "Npc Command Batons"));
+public static final AWItemBase civicPlacer = new ItemCivicPlacer(Config.getItemID("itemMulti.civiPlacer", 24024, "Constructs Civic Buildings/Sites"));
+public static final AWItemBase civicBuilder = new ItemCivicBuilder(Config.getItemID("itemMulti.civicBuilder", 24014, "Constructs Structures using Civics"));
+public static final AWItemBase courierRouteSlip = new ItemCourierSlip(Config.getItemID("itemMulti.courierSlip", 24015, "Holds Routing Info for a Courier"));
+public static final AWItemBase gateSpawner = new ItemGateSpawner(Config.getItemID("itemMulti.gateSpawner", 24016, "Base gate spawning item."));
+public static final ItemFood rations = new ItemRation(Config.getItemID("itemSingle.foodRation", 24017, "Food rations for soldiers and npcs."));
+public static final AWItemBase researchNotes = (AWItemBase) new ItemResearchNote(Config.getItemID("itemMulti.researchNotes", 24018, "Research notes"));
+public static final AWItemBase backpack = new ItemBackpack(Config.getItemID("itemMulti.backpack", 24019, "Backpack"));
+public static final AWItemBase researchBook = new ItemResearchBook(Config.getItemID("itemSingle.researchBook", 24020, "Research book to save research progress"));
 
 public static final ItemStack wood1 = new ItemStack(componentItem, 1, 0);
 public static final ItemStack wood2 = new ItemStack(componentItem, 1, 1);
