@@ -250,6 +250,7 @@ protected void applyGroundMotion()
   {
   this.applyTurnInput(0.05f);
   this.applyForwardInput(0.0125f, true);
+  vehicle.motionY -= 9.81*0.05f*0.05f;
   }
 
 protected void applyWaterMotion()
@@ -441,7 +442,6 @@ protected void applyForwardInput(float inputFactor, boolean slowReverse)
     {
     forwardMotion = 0.f;
     }  
-  vehicle.motionY -= 9.81*0.05f*0.05f;
   }
 
 protected void applyTurnInput(float inputFactor)
@@ -540,8 +540,7 @@ protected boolean handleWaterMovement()
       {
       submersionAmount += 1.0D / (double)submersionDepthMax;
       inWater = true;
-      }
-    
+      }    
     }
 
   double vehicleMotion = Math.sqrt(vehicle.motionX * vehicle.motionX + vehicle.motionZ * vehicle.motionZ);

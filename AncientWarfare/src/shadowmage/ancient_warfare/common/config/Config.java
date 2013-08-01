@@ -36,7 +36,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 public class Config
 {
 //*******************************************************FIELDS**********************************************//
-public static final String VERSION = "1.0.018-alpha-MC152";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
+public static final String VERSION = "1.0.019-alpha-MC152";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
 public static final String ANTVERSION = "@VERSION@";
 public static String texturePath = "/mods/ancientwarfare/textures/";
 
