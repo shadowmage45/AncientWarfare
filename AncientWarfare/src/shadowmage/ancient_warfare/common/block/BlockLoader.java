@@ -158,6 +158,7 @@ public void load()
   
   MachineData.registerBlockData();
   EngineData.registerBlockData();
+  Config.saveConfig();
   }
 
 public void registerBlock(Block block, String name)
