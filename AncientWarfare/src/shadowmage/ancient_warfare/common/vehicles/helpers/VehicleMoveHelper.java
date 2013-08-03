@@ -256,14 +256,11 @@ protected void applyGroundMotion()
 protected void applyWaterMotion()
   {
   this.applyTurnInput(0.05f);
-  if(this.handleWaterMovement())
+  if(!this.handleWaterMovement())
     {
-    this.applyForwardInput(0.0125f, true);
+    this.forwardMotion*=0.85f;   
     }
-  else
-    {
-    this.forwardMotion*=0.85f;    
-    }
+  this.applyForwardInput(0.0125f, true);
   }
 
 protected void applyAir1Motion()

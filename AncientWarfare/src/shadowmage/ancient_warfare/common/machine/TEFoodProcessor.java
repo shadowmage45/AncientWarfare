@@ -74,6 +74,7 @@ public void updateEntity()
       {
       this.setInventorySlotContents(b, null);
       }
+    break;
     } 
   if(this.storedFoodValue>=2)
     {

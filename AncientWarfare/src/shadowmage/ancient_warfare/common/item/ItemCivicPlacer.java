@@ -36,6 +36,7 @@ import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.registry.CivicRegistry;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
@@ -153,7 +154,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     if(civ.isDepository())
       {
       hit.offsetForMCSide(side);
-      placeCivicBlock(world, hit, stack.getItemDamage());
+      placeCivicBlock(world, hit, stack.getItemDamage(), TeamTracker.instance().getTeamForPlayer(player));
       ItemStack item = player.getCurrentEquippedItem();
       if(item!=null && item.itemID == ItemLoader.civicPlacer.itemID)
         {
@@ -190,7 +191,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         }
       if(placeBlock)
         {  
-        placeCivicBlock(world, hit, pos1, pos2,  stack.getItemDamage());
+        placeCivicBlock(world, hit, pos1, pos2,  stack.getItemDamage(), TeamTracker.instance().getTeamForPlayer(player));
         ItemStack item = player.getCurrentEquippedItem();
         if(item!=null && item.itemID == ItemLoader.civicPlacer.itemID)
           {
@@ -225,7 +226,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   return true;
   }
 
-public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1, BlockPosition pos2, int type)
+public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1, BlockPosition pos2, int type, int team)
   {
   if(hit==null || pos1==null || pos2==null || world==null)
     {
@@ -236,6 +237,7 @@ public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1,
   CivicRegistry.instance().setCivicBlock(world, hit.x, hit.y, hit.z, type);
   TECivic te = (TECivic) world.getBlockTileEntity(hit.x, hit.y, hit.z);
   te.setBounds(min.x, min.y, min.z, max.x, max.y, max.z);
+  te.setTeamNum(team);
   world.markBlockForUpdate(hit.x, hit.y, hit.z);
   }
 
@@ -245,11 +247,12 @@ public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1,
  * @param hit
  * @param type
  */
-public void placeCivicBlock(World world, BlockPosition hit, int type)
+public void placeCivicBlock(World world, BlockPosition hit, int type, int team)
   {
   CivicRegistry.instance().setCivicBlock(world, hit.x, hit.y, hit.z, type);
   TECivic te = (TECivic) world.getBlockTileEntity(hit.x, hit.y, hit.z);
   te.setBounds(hit.x, hit.y, hit.z, hit.x, hit.y, hit.z);
+  te.setTeamNum(team);
   world.markBlockForUpdate(hit.x, hit.y, hit.z);
   }
 

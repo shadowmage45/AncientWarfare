@@ -93,6 +93,7 @@ public static final ItemStack chunkloader = new ItemStack(machineBlock, 1, 3);
 public static final ItemStack chunkloaderDeluxe = new ItemStack(machineBlock, 1, 4);
 public static final ItemStack mechanicalWorker = new ItemStack(machineBlock, 1, 5);
 public static final ItemStack handCrankedEngine = new ItemStack(engineBlock, 1, 0);
+public static final ItemStack foodProcessor = new ItemStack(machineBlock, 1, 6);
 
 private static BlockLoader INSTANCE;
 private BlockLoader(){}
@@ -158,7 +159,6 @@ public void load()
   
   MachineData.registerBlockData();
   EngineData.registerBlockData();
-  Config.saveConfig();
   }
 
 public void registerBlock(Block block, String name)

@@ -104,6 +104,11 @@ public void setCivic(Civic civ)
   this.setupSidedInventoryIndices(civ);
   }
 
+public void setTeamNum(int num)
+  {
+  this.teamNum = num;
+  }
+
 public void setupSidedInventoryIndices(Civic civ)
   {
   regularIndices = new int[civ.getInventorySize()];  

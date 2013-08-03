@@ -142,9 +142,14 @@ THINGS TO INVESTIGATE
 
 /********** 08-01-13 **********/
 * fix boats sinking in water
+* fix boats driving on land
 
 /********** 08-02-13 **********/
 /********** 08-03-13 **********/
+* add food processor machine recipe
+* fix food processor decreasing stack size for every stack (should only do 1 item per tick)
+* update civics to actually set team number based on the placing players team
+
 /********** 08-04-13 **********/
 /********** 08-05-13 **********/
 /********** 08-06-13 **********/

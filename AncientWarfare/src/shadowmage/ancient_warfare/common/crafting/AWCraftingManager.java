@@ -507,6 +507,13 @@ protected void addCivicRecipes()
     this.civicMiscRecipes.add(recipe);    
     } 
   
+  recipe = new ResourceListRecipe(BlockLoader.foodProcessor, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.ingotIron, 6, false);
+  recipe.addResource(Block.stone,4, false);
+  recipe.addNeededResearch(ResearchGoalNumbers.logistics1);
+  recipe.addNeededResearch(ResearchGoalNumbers.command1);  
+  this.civicMiscRecipes.add(recipe);
+  
   recipe = new ResourceListRecipe(ItemLoader.hammer1, RecipeType.CIVIC_MISC);
   recipe.addResource(Item.ingotIron, 4, false);
   recipe.addResource(Item.stick, 2, false);
