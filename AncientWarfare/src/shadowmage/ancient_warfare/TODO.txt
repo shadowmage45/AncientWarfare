@@ -1,5 +1,6 @@
 PRE OPEN BETA
 * tweak airplane throttle settings for more reliable cruise-throttle ability
+* add config option to remove block drops from vehicle movement
     
 PRE FULL RELEASE
 * default survival-mode structures
