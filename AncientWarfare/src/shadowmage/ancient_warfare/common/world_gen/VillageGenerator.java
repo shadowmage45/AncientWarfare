@@ -86,13 +86,13 @@ public static void load()
   ProcessedStructure struct = StructureManager.instance().getStructureServer("fortress1");
   if(struct!=null)
     {
-    fortress = new VillageGenHook(AWVCFortress.class, 1, 20, struct);  
+    fortress = new VillageGenHook(AWVCFortress.class, 1, 5, struct);  
     VillagerRegistry.instance().registerVillageCreationHandler(fortress);
     }    
   struct = StructureManager.instance().getStructureServer("logCabin");
   if(struct!=null)
     {
-    logCabin = new VillageGenHook(AWVCLogCabin.class, 2, 20, struct);
+    logCabin = new VillageGenHook(AWVCLogCabin.class, 1, 10, struct);
     VillagerRegistry.instance().registerVillageCreationHandler(logCabin);
     }
   }
@@ -117,10 +117,6 @@ public static VillageGenComponent constructComponent(Class<? extends ComponentVi
     {
     part  = new AWVCFortress(start, type, face, struct, box);
     } 
-  else if(clz== AWVCAdvancedLibrary.class)
-    {
-    part = new AWVCAdvancedLibrary(start, type, face, struct, box);
-    }  
   else if(clz== AWVCLogCabin.class)
     {
     part = new AWVCLogCabin(start, type, face, struct, box);
