@@ -33,6 +33,7 @@ public class VehicleTypeCannonStandTurret extends VehicleTypeCannon
 public VehicleTypeCannonStandTurret(int typeNum)
   {
   super(typeNum);
+  this.configName = "cannon_stand_turret";
   this.displayName = "item.vehicleSpawner.10";
   this.displayTooltip.add("item.vehicleSpawner.tooltip.gunpowder");
   this.displayTooltip.add("item.vehicleSpawner.tooltip.fixed");

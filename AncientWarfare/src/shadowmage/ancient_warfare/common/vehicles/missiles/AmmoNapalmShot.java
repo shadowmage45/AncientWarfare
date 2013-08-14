@@ -45,6 +45,7 @@ public AmmoNapalmShot(int ammoType, int weight)
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoNapalm1";
+  this.configName = "napalm_shot_"+weight;
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
   this.isFlaming = true;
   

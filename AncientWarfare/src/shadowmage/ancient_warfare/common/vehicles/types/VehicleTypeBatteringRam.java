@@ -46,6 +46,7 @@ public class VehicleTypeBatteringRam extends VehicleType
 public VehicleTypeBatteringRam(int typeNum)
   {
   super(typeNum);
+  this.configName = "battering_ram";
   this.vehicleMaterial = VehicleMaterial.materialWood;
   this.validArmors.add(ArmorRegistry.armorStone);
   this.validArmors.add(ArmorRegistry.armorIron);

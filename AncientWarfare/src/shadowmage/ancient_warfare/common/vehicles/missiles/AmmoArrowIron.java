@@ -45,6 +45,7 @@ public AmmoArrowIron(int ammoType)
   this.isRocket = false;
   this.isPersistent = true;
   this.iconTexture = "ammoArrowIron1";
+  this.configName = "arrow_iron";
   this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
   this.neededResearch.add(ResearchGoalNumbers.ballistics1);
   this.resources.add(new ItemStackWrapperCrafting(Item.flint, 5));

@@ -41,6 +41,7 @@ public AmmoClusterShot(int ammoType, int weight)
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoCluster1";
+  this.configName = "cluster_shot_"+weight;
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
 
   this.entityDamage = 5;

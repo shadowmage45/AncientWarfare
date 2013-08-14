@@ -34,6 +34,7 @@ public class VehicleTypeCannonMobileFixed extends VehicleTypeCannon
 public VehicleTypeCannonMobileFixed(int typeNum)
   {
   super(typeNum);
+  this.configName = "cannon_mobile";
   this.displayName = "item.vehicleSpawner.11";
   this.displayTooltip.add("item.vehicleSpawner.tooltip.gunpowder");
   this.displayTooltip.add("item.vehicleSpawner.tooltip.mobile");

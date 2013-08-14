@@ -49,6 +49,11 @@ int getAmmoType();//the global unique ammo type, used by structure spawning to f
 int getEntityDamage();
 int getVehicleDamage();
 
+String getConfigName();
+boolean isEnabled();
+void setEnabled(boolean val);
+void setEntityDamage(int damage);
+void setVehicleDamage(int damage);
 String getDisplayName();//the displayed item-name/ammo name for this ammo
 List<String> getDisplayTooltip();//the display tooltip for this ammo
 String getModelTexture();//get the display texture

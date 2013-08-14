@@ -18,12 +18,13 @@ FROM TESTING
 * bed placement is fubar in structure gen from templates
 * npc despawning?
 * npc trampling on crops
-* food processor -- can place items in output slot
 * ghost blocks in world-gen (village fortress)
 * fortresses too hard to defeat
-* config options for enable/disable specific vehicles for crafting, loot
 * cleanup memory churn, esp on npcs pathfinding
-* fix searching names to use localized names (crafting guis)
+* check ammo enable/disable config support to see if there are any other areas it needs disabled (ammo select guis?)
+* completely remove spawning ability for vehicles whos types are disabled (vehicle will need to check type and auto-kill if disabled)
+* examine tinkers construct village gen for ideas on proper methods to reduce/remove duplicated buildings
+    https://github.com/mDiyo/TinkersConstruct/tree/16working/tconstruct/worldgen/village
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -32,11 +33,6 @@ LANGUAGE/TRANSLATIONS
 
 BALANCE/TWEAKS
 * routing slips more expensive (use various dyes for them?)
-
-TEXTURE/ART
-* more missile textures
-* finish airplane textures
-* finish helicopter textures
 
 GENERAL
 * add name search/filter box to structure builder guis
@@ -120,45 +116,18 @@ THINGS TO INVESTIGATE
 * gate lock blocks
 * add fields to templates for requisite research? (and restructure table to need a book/etc)
 
+TEXTURE/ART
+
 ********************* DONE STUFF ************************* 
 
-/********** 07-26-13 **********/
-* fix invalid obsidian vault template (swap rule not closed properly)
-* fix mailbox naming closing when 'e' is pressed
-* fix food processor gui being un-closeable
-* fix food processor not creating rations (it never set stack if slot was empty)
-* fix food processor shift-click functionality
-* more minor work on redstone stuff....this is going to take awhile
-* update version numbers, disable debug, prep for release
-* more prep for redstone stuff
-* minor adjust to mailbox select gui -- disable normal exit keybinds
-/********** 07-27-13 **********/
-* moving...
-/********** 07-28-13 **********/
-* moving...
-/********** 07-29-13 **********/
-* fix food processor output slot to not accept items from gui (pull only)
+**************RELEASE************
 
-/********** 07-30-13 **********/
-* fix crash in routing slip related to swapping routing points
+/********** 08-13-13 **********/
 
-/********** 07-31-13 **********/
-* remove redstone stuff, moved to separate mod
-
-/********** 08-01-13 **********/
-* fix boats sinking in water
-* fix boats driving on land
-
-/********** 08-02-13 **********/
-/********** 08-03-13 **********/
-* add food processor machine recipe
-* fix food processor decreasing stack size for every stack (should only do 1 item per tick)
-* update civics to actually set team number based on the placing players team
-
-/********** 08-04-13 **********/
-/********** 08-05-13 **********/
-/********** 08-06-13 **********/
-/********** 08-07-13 **********/
-/********** 08-08-13 **********/
-/********** 08-09-13 **********/
-/********** 08-10-13 **********/
+/********** 08-14-13 **********/
+* add config options to enable/disable specific vehicle recipes
+* add config options to enable/disable vehicles from being added to dungeon loot table (linked to crafting options)
+* add config options to enable/disable specific ammunitions
+* add config options to change vehicle and entity damage on ammunitions
+* fix searching names to use localized names (crafting guis)
+* disable vehicle spawning entirely for disabled vehicle types

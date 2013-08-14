@@ -48,11 +48,13 @@ public AmmoExplosiveShot(int ammoType, int weight, boolean bigExplosion)
   if(bigExplosion)
     {
     this.iconTexture = "ammoHE1";
+    this.configName = "high_explosive_"+weight;
     this.neededResearch.add(ResearchGoalNumbers.explosives3);
     }
   else
     {
     this.iconTexture = "ammoExplosive1";
+    this.configName = "explosive_"+weight;
     this.neededResearch.add(ResearchGoalNumbers.explosives2);
     }
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";

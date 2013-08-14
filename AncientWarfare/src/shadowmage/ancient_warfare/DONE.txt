@@ -1412,18 +1412,38 @@
 /****************************************TEST RELEASE .016****************************************/
 /********************************************************************************/
 
-/********************************************************************************/
-/****************************************TEST RELEASE .017****************************************/
-/********************************************************************************/
+/********** 07-26-13 **********/
+* fix invalid obsidian vault template (swap rule not closed properly)
+* fix mailbox naming closing when 'e' is pressed
+* fix food processor gui being un-closeable
+* fix food processor not creating rations (it never set stack if slot was empty)
+* fix food processor shift-click functionality
+* more minor work on redstone stuff....this is going to take awhile
+* update version numbers, disable debug, prep for release
+* more prep for redstone stuff
+* minor adjust to mailbox select gui -- disable normal exit keybinds
+/********** 07-27-13 **********/
+* moving...
+/********** 07-28-13 **********/
+* moving...
+/********** 07-29-13 **********/
+* fix food processor output slot to not accept items from gui (pull only)
 
-/********************************************************************************/
-/****************************************TEST RELEASE .018****************************************/
-/********************************************************************************/
+/********** 07-30-13 **********/
+* fix crash in routing slip related to swapping routing points
 
-/********************************************************************************/
-/****************************************TEST RELEASE .019****************************************/
-/********************************************************************************/
+/********** 07-31-13 **********/
+* remove redstone stuff, moved to separate mod
 
+/********** 08-01-13 **********/
+* fix boats sinking in water
+* fix boats driving on land
+
+/********** 08-02-13 **********/
+/********** 08-03-13 **********/
+* add food processor machine recipe
+* fix food processor decreasing stack size for every stack (should only do 1 item per tick)
+* update civics to actually set team number based on the placing players team
 /********************************************************************************/
 /****************************************TEST RELEASE .020****************************************/
 /********************************************************************************/

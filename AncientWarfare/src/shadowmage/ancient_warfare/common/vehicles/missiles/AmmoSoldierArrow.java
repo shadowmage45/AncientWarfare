@@ -42,14 +42,16 @@ public AmmoSoldierArrow(int ammoType, int damage, boolean flaming)
   this.isPersistent = true;
   this.isFlaming = flaming;  
   this.isCraftable = false;
-  
+
   if(flaming)
     {
     this.iconTexture = "ammoArrowFlame1";
+    this.configName = "soldier_arrow_flame_"+damage;
     }
   else
     {
     this.iconTexture = "ammoArrow1";
+    this.configName = "soldier_arrow_"+damage;
     }  
   if(damage<=5)
     {

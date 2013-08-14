@@ -35,6 +35,7 @@ public class VehicleTypeCatapultMobileFixed extends VehicleTypeCatapult
 public VehicleTypeCatapultMobileFixed(int typeNum)
   {
   super(typeNum);
+  this.configName = "catapult_mobile";
   this.width = 2.7f;
   this.height = 2; 
   this.baseStrafeSpeed = 1.7f;

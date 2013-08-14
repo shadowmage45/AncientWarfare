@@ -41,6 +41,7 @@ public class VehicleTypeTrebuchetLarge extends VehicleType
   public VehicleTypeTrebuchetLarge(int typeNum)
     {
     super(typeNum);
+    this.configName = "trebuchet_giant";
     this.vehicleMaterial = VehicleMaterial.materialWood;
     this.materialCount = 20;
     this.maxMissileWeight = 30.f;

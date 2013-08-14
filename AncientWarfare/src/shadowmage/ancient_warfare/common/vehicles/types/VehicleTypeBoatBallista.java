@@ -45,6 +45,7 @@ public class VehicleTypeBoatBallista extends VehicleType
 public VehicleTypeBoatBallista(int typeNum)
   {
   super(typeNum);
+  this.configName = "boat_ballista";
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   this.materialCount = 5;
   this.movementType = VehicleMovementType.WATER;

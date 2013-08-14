@@ -41,6 +41,7 @@ public AmmoArrow(int ammoType)
   this.isRocket = false;
   this.isPersistent = true;
   this.iconTexture = "ammoArrow1";
+  this.configName = "arrow";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
   this.resources.add(new ItemStackWrapperCrafting(Item.flint, 5));
   this.resources.add(new ItemStackWrapperCrafting(Item.stick, 5));
@@ -61,6 +62,7 @@ public void onImpactEntity(World world, Entity ent, float x, float y, float z, M
     ent.attackEntityFrom(DamageType.causeEntityMissileDamage(missile.shooterLiving, false, false), this.getEntityDamage());      
     }
   }
+
 
 
 }

@@ -43,8 +43,7 @@ public class VehicleTypeHelicopter extends VehicleType
 public VehicleTypeHelicopter(int typeNum)
   {
   super(typeNum);
-  
-  
+  this.configName = "aircraft_helicopter";  
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   this.materialCount = 4;
   this.movementType = VehicleMovementType.AIR2;

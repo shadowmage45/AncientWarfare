@@ -43,6 +43,7 @@ public class VehicleTypeAirBomber extends VehicleType
 public VehicleTypeAirBomber(int typeNum)
   {
   super(typeNum);
+  this.configName = "aircraft_bomber";
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   this.materialCount = 4;
   this.movementType = VehicleMovementType.AIR1;
@@ -281,4 +282,7 @@ public float getVar8()
   return 0;
   }
 }
+
+
+
 }

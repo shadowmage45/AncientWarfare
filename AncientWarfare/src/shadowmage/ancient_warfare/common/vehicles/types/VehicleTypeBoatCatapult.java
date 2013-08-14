@@ -43,6 +43,7 @@ public class VehicleTypeBoatCatapult extends VehicleType
 public VehicleTypeBoatCatapult(int typeNum)
   {
   super(typeNum);
+  this.configName = "boat_catapult";
   this.vehicleMaterial = VehicleMaterial.materialWood;
   this.materialCount = 5;
   this.movementType = VehicleMovementType.WATER;

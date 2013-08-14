@@ -34,6 +34,7 @@ public class VehicleTypeTrebuchetStandTurret extends VehicleTypeTrebuchet
 public VehicleTypeTrebuchetStandTurret(int typeNum)
   {
   super(typeNum);
+  this.configName = "trebuchet_stand_turret";
   this.displayName = "item.vehicleSpawner.14";
   this.displayTooltip.add("item.vehicleSpawner.tooltip.weight");
   this.displayTooltip.add("item.vehicleSpawner.tooltip.fixed");

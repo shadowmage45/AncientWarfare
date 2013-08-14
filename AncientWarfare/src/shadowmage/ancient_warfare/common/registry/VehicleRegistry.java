@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
@@ -47,13 +48,13 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetLarg
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetStandFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetStandTurret;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicletypeCatapultStandTurret;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultStandTurret;
 
 public class VehicleRegistry
 {
 
 public static final IVehicleType CATAPULT_STAND_FIXED = new VehicleTypeCatapultStandFixed(0);
-public static final IVehicleType CATAPULT_STAND_TURRET = new VehicletypeCatapultStandTurret(1);
+public static final IVehicleType CATAPULT_STAND_TURRET = new VehicleTypeCatapultStandTurret(1);
 public static final IVehicleType CATAPULT_MOBILE_FIXED = new VehicleTypeCatapultMobileFixed(2);
 public static final IVehicleType CATAPULT_MOBILE_TURRET = new VehicleTypeCatapultMobileTurret(3);
 
@@ -96,17 +97,18 @@ public static VehicleRegistry instance()
 
 public void registerVehicles()
   {
-  Description d = null;  
+  Description d = null;
   for(IVehicleType vehicle : VehicleType.vehicleTypes)
-    {
+    {    
     if(vehicle!=null)
       {
+      vehicle.setIsCraftable(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName(), true).getBoolean(true));
+      if(!vehicle.isEnabled()){continue;}
       d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.vehicleSpawner, vehicle.getGlobalVehicleType(), vehicle.getDisplayName());
       for(String tip : vehicle.getDisplayTooltip())
         {
         d.addTooltip(tip, vehicle.getGlobalVehicleType());
-        }
-           
+        }           
       }
     }  
   }

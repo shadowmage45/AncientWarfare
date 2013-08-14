@@ -48,6 +48,7 @@ public AmmoHwachaRocketFlame(int ammoType)
   this.ammoWeight = 1.1f;
   this.renderScale = 0.2f;
   this.renderScale = 0.2f;
+  this.configName = "hwacha_rocket_flame";
   this.iconTexture = "ammoRocketFlame1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
   

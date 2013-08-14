@@ -45,6 +45,7 @@ public class VehicleTypeAirInterceptor extends VehicleType
 public VehicleTypeAirInterceptor(int typeNum)
   {
   super(typeNum);
+  this.configName = "aircraft_interceptor";
   this.vehicleMaterial = VehicleMaterial.materialWood;   
   this.materialCount = 4;
   this.movementType = VehicleMovementType.AIR1;

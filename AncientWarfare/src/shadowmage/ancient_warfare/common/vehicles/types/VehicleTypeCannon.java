@@ -41,6 +41,7 @@ public class VehicleTypeCannon extends VehicleType
 public VehicleTypeCannon(int typeNum)
   {
   super(typeNum);
+  this.configName = "cannon_base";
   this.vehicleMaterial = VehicleMaterial.materialIron;
   this.materialCount = 5;
   this.maxMissileWeight = 10.f;

@@ -126,6 +126,7 @@ int entityDamage;
 int vehicleDamage;
 static final float gravityFactor = 9.81f*0.05f*0.05f;
 String displayName = "AW.Ammo";
+String configName = "none";
 List<String> displayTooltip = new ArrayList<String>();
 String modelTexture = "foo.png";
 boolean isRocket = false;
@@ -135,6 +136,7 @@ boolean isFlaming = false;
 boolean isPenetrating = false;
 boolean isProximityAmmo = false;
 boolean isCraftable = true;
+boolean isEnabled = true;
 float groundProximity = 0.f;
 float entityProximity = 0.f;
 float ammoWeight = 10;
@@ -162,6 +164,39 @@ public void addTooltip(String tip)
   {
   this.displayTooltip.add(tip);
   }
+
+@Override
+public void setEntityDamage(int damage)
+  {
+  if(damage<0){damage = 0;}
+  this.entityDamage = damage;
+  }
+
+@Override
+public void setVehicleDamage(int damage)
+  {
+  if(damage<0){damage = 0;}
+  this.vehicleDamage = damage;  
+  }
+
+@Override
+public String getConfigName()
+  {
+  return configName;
+  }
+
+@Override
+public boolean isEnabled()
+  {
+  return isEnabled;
+  }
+
+@Override
+public void setEnabled(boolean val)
+  {
+  this.isEnabled = val;  
+  }
+
 
 @Override
 public int getAmmoType()
@@ -319,7 +354,7 @@ public String getIconTexture()
 @Override
 public ResourceListRecipe constructRecipe()
   {
-  if(!this.isCraftable)
+  if(!this.isCraftable || !this.isEnabled)
     {
     return null;
     }

@@ -41,6 +41,7 @@ public abstract class VehicleTypeBallista extends VehicleType
 public VehicleTypeBallista(int typeNum)
   {
   super(typeNum);
+  this.configName = "ballista_base";
 
   this.vehicleMaterial = VehicleMaterial.materialWood;  
   this.materialCount = 5;

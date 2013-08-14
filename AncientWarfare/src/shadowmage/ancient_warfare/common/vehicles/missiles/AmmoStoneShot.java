@@ -42,6 +42,7 @@ public AmmoStoneShot(int ammoType, int weight)
   this.isRocket = false;
   this.ammoWeight = weight;
   this.iconTexture = "ammoStone1";
+  this.configName = "stone_shot_"+weight;
   this.entityDamage = weight;
   this.vehicleDamage = weight;
   float scaleFactor = weight + 45.f;

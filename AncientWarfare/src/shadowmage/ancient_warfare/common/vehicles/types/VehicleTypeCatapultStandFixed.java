@@ -31,7 +31,7 @@ public class VehicleTypeCatapultStandFixed extends VehicleTypeCatapult
 public VehicleTypeCatapultStandFixed(int typeNum)
   {
   super(typeNum);
-  
+  this.configName = "catapult_stand";  
   this.width = 2;
   this.height = 1.7f; 
   this.baseMissileVelocityMax = 37.f;  

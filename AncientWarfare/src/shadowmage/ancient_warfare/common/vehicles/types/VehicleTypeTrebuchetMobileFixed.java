@@ -35,6 +35,7 @@ public class VehicleTypeTrebuchetMobileFixed extends VehicleTypeTrebuchet
 public VehicleTypeTrebuchetMobileFixed(int typeNum)
   {
   super(typeNum);
+  this.configName = "trebuchet_mobile";
   this.displayName = "item.vehicleSpawner.15";
   this.displayTooltip.add("item.vehicleSpawner.tooltip.weight");
   this.displayTooltip.add("item.vehicleSpawner.tooltip.mobile");

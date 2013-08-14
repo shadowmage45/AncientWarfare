@@ -56,6 +56,7 @@ public abstract boolean canAdjustYaw();//can aim yaw be adjusted independently o
 public abstract boolean canAdjustPitch();//can aim pitch be adjusted? (should be EITHER pitch OR power)
 public abstract boolean canAdjustPower();//can shot velocity be adjusted? (should be EITHER pitch OR power)
 
+
 public abstract float getMissileForwardsOffset();//the offset in the turretYaw direction from the turretPosition
 public abstract float getMissileHorizontalOffset();//the offset in the turretYaw+90 direction from the turretPosition
 public abstract float getMissileVerticalOffset();//the offset in the y+ direction from the turretPosition
@@ -114,5 +115,9 @@ public abstract ResourceListRecipe constructRecipe(int level);
 public abstract HashSet<IResearchGoal> getNeededResearchFor(int level);
 
 public abstract VehicleMovementType getMovementType();
+
+public abstract void setIsCraftable(boolean val);
+public abstract boolean isEnabled();//determined via config, used to add recipes and to loot tables
+public abstract String getConfigName();//get the name used to load config settings for this vehicle
 
 }

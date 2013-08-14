@@ -43,6 +43,7 @@ public AmmoGrapeShot(int ammoType, int weight)
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoGrape1";
+  this.configName = "grape_shot_"+weight;
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
   
   this.neededResearch.add(ResearchGoalNumbers.explosives1);

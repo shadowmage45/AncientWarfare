@@ -44,6 +44,7 @@ public class VehicleTypeHwacha extends VehicleType
 public VehicleTypeHwacha(int typeNum)
   {
   super(typeNum);
+  this.configName = "hwacha";
   this.vehicleMaterial = VehicleMaterial.materialWood;
   this.materialCount = 4;
   this.width = 1.5f;

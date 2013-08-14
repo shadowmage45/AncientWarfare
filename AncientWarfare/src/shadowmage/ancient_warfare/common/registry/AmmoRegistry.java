@@ -60,14 +60,15 @@ public void registerAmmoTypes()
     {
     if(ammo!=null)
       {
-      this.registerAmmoTypeWithItem(ammo);
+      ammo.setEnabled(Config.getConfig().get("f_ammo_config", ammo.getConfigName(), true).getBoolean(true));
+      if(ammo.isEnabled())
+        {
+        ammo.setEntityDamage(Config.getConfig().get("f_ammo_config", ammo.getConfigName()+".ent_damage", ammo.getEntityDamage()).getInt(ammo.getEntityDamage()));
+        ammo.setVehicleDamage(Config.getConfig().get("f_ammo_config", ammo.getConfigName()+".veh_damage", ammo.getVehicleDamage()).getInt(ammo.getVehicleDamage()));
+        this.registerAmmoTypeWithItem(ammo);      
+        }
       }
     }
-//  this.registerAmmoTypeWithItem(Ammo.ammoStoneShot10);
-//  this.registerAmmoTypeWithItem(Ammo.ammoStoneShot25);
-//  this.registerAmmoTypeWithItem(Ammo.ammoStoneShot50);
-//  this.registerAmmoTypeWithItem(Ammo.ammoArrow);
-//  this.registerAmmoTypeWithItem(Ammo.ammoRocket);
   }
 
 public List<IAmmoType> getAmmoTypes()

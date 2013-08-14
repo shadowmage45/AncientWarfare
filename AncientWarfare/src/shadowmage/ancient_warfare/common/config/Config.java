@@ -206,6 +206,9 @@ public void setCoreInfo()
   config.addCustomCategoryComment("c-vehicle-options", "Global options that effect vehicles in some fashion");
   config.addCustomCategoryComment("structure-management", "Global World Generation options, effect every save/world.  Check AWWorldGen.cfg for advanced options");
   config.addCustomCategoryComment("d-npc_target_settings", "Forced NPC Targets.  Place target names between the < > braces, each value on its own line. \nInvalid values or improperly spelled names will be silently ignored.\nNeeds the full name as registered in game (ask the mod author!)");
+  config.addCustomCategoryComment("e_vehicle_config", "Enable/disable vehicle recipes and dungeon loot entries for specific vehicle types");
+  config.addCustomCategoryComment("f_ammo_config", "Enable/disable ammo recipes and alter damage amounts");
+  config.addCustomCategoryComment("g_npc_config", "Enable/disable npc recipes and alter damage/health/healing amounts");
   
   /**
    * general options

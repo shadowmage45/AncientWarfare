@@ -29,6 +29,7 @@ public class VehicleTypeCannonStandFixed extends VehicleTypeCannon
 public VehicleTypeCannonStandFixed(int typeNum)
   {
   super(typeNum);
+  this.configName = "cannon_stand";
   this.isDrivable = true;
   this.displayName = "item.vehicleSpawner.9";
   this.displayTooltip.add("item.vehicleSpawner.tooltip.gunpowder");

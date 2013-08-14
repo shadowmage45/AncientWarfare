@@ -46,6 +46,9 @@ public AmmoFlameShot(int ammoType, int weight)
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoFlame1";
+  this.configName = "flame_shot_"+weight;
+  this.vehicleDamage = 8;
+  this.entityDamage = 8;
   this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
   
   this.neededResearch.add(ResearchGoalNumbers.flammables2);

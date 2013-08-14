@@ -82,7 +82,7 @@ public void addLootToTables()
     }
   for(IVehicleType t : VehicleType.vehicleTypes)
     {
-    if(t==null){continue;}
+    if(t==null || !t.isEnabled()){continue;}
     int level = t.getMaterialType().getNumOfLevels();
     for(int i = 0; i< t.getMaterialType().getNumOfLevels(); i++)
       {

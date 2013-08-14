@@ -38,6 +38,7 @@ public class VehicleTypeBallistaMobile extends VehicleTypeBallista
   public VehicleTypeBallistaMobile(int typeNum)
     {
     super(typeNum);
+    this.configName = "ballista_mobile";
     this.baseMissileVelocityMax = 42.f;//stand versions should have higher velocity, as should fixed version--i.e. mobile turret should have the worst of all versions   
     this.width = 2.7f;
     this.height = 1.4f;  

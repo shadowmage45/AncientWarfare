@@ -41,6 +41,7 @@ public class VehicleTypeCatapult extends VehicleType
 public VehicleTypeCatapult(int typeNum)
   {
   super(typeNum);
+  this.configName = "catapult_base";
   this.vehicleMaterial = VehicleMaterial.materialWood;
   this.materialCount = 5;
   this.maxMissileWeight = 10.f;

@@ -45,6 +45,7 @@ public AmmoBallistaBoltExplosive(int ammoType)
   this.isArrow = true;
   this.isRocket = false;
   this.isPersistent = false;
+  this.configName = "ballist_bolt_explosive";
   this.iconTexture = "ammoBoltExplosive1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
   this.neededResearch.add(ResearchGoalNumbers.ballistics1);

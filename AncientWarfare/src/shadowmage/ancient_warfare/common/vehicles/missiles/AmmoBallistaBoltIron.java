@@ -45,6 +45,7 @@ public AmmoBallistaBoltIron(int ammoType)
   this.isArrow = true;
   this.isRocket = false;
   this.isPersistent = true;
+  this.configName = "ballist_bolt_iron";
   this.iconTexture = "ammoBoltIron1";
   this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
   this.neededResearch.add(ResearchGoalNumbers.ballistics2);

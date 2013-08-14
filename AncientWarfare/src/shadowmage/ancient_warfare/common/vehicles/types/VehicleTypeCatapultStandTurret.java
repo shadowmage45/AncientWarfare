@@ -25,16 +25,16 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
-public class VehicletypeCatapultStandTurret extends VehicleTypeCatapult
+public class VehicleTypeCatapultStandTurret extends VehicleTypeCatapult
 {
 
 /**
  * @param typeNum
  */
-public VehicletypeCatapultStandTurret(int typeNum)
+public VehicleTypeCatapultStandTurret(int typeNum)
   {
   super(typeNum);
-  
+  this.configName = "catapult_stand_turret";
   this.width = 2.7f;
   this.height = 2.f; 
   this.baseMissileVelocityMax = 32.f;  

@@ -45,6 +45,7 @@ public AmmoBallistaBolt(int ammoType)
   this.isRocket = false;
   this.isPersistent = true;
   this.iconTexture = "ammoBolt1";
+  this.configName = "ballist_bolt";
   this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
   
   this.resources.add(new ItemStackWrapperCrafting(Item.stick, 5));

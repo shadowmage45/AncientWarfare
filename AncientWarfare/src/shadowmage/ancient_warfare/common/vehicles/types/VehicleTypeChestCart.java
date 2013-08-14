@@ -43,6 +43,7 @@ public class VehicleTypeChestCart extends VehicleType
 public VehicleTypeChestCart(int typeNum)
   {
   super(typeNum);
+  this.configName = "chest_cart";
   this.vehicleMaterial = VehicleMaterial.materialWood;
   this.materialCount = 3;
   this.validArmors.add(ArmorRegistry.armorStone);

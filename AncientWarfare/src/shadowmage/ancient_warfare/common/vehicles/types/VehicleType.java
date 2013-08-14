@@ -130,6 +130,8 @@ public int materialCount = 1;
 public List<ItemStackWrapperCrafting> additionalMaterials = new ArrayList<ItemStackWrapperCrafting>();
 
 String iconTexture = "foo.png";
+protected String configName = "none";
+protected boolean enabled = true;
 
 protected VehicleMovementType movementType = VehicleMovementType.GROUND;
 
@@ -161,6 +163,25 @@ public IAmmoType getAmmoForSoldierRank(int rank)
       }
     }
   return null;
+  }
+
+
+@Override
+public void setIsCraftable(boolean val)
+  {
+  this.enabled = val;  
+  }
+
+@Override
+public boolean isEnabled()
+  {
+  return enabled;
+  }
+
+@Override
+public String getConfigName()
+  {
+  return configName;
   }
 
 @Override
@@ -451,7 +472,7 @@ public static IVehicleType getVehicleType(int num)
 
 public static VehicleBase getVehicleForType(World world, int type, int level)
   {
-  if(type>=0 && type < vehicleTypes.length && vehicleTypes[type]!=null)
+  if(type>=0 && type < vehicleTypes.length && vehicleTypes[type]!=null && vehicleTypes[type].isEnabled())
     {
     IVehicleType vehType = getVehicleType(type);
     VehicleBase vehicle = new VehicleBase(world);
@@ -524,6 +545,10 @@ public String getIconTexture()
 @Override
 public ResourceListRecipe constructRecipe(int level)
   {
+  if(!isEnabled())
+    {
+    return null;
+    }
   ResourceListRecipe recipe = new ResourceListRecipe(this.getStackForLevel(level).copy(), RecipeType.VEHICLE);
   recipe.addResource(this.getMaterialType().getItem(level).copy(), this.getMaterialQuantity(), false, false);  
   recipe.addResources(getAdditionalMaterials());
