@@ -20,6 +20,10 @@ FROM TESTING
 * npc trampling on crops
 * food processor -- can place items in output slot
 * ghost blocks in world-gen (village fortress)
+* fortresses too hard to defeat
+* config options for enable/disable specific vehicles for crafting, loot
+* cleanup memory churn, esp on npcs pathfinding
+* fix searching names to use localized names (crafting guis)
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
