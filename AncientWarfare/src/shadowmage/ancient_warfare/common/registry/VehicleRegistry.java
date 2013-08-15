@@ -102,8 +102,18 @@ public void registerVehicles()
     {    
     if(vehicle!=null)
       {
-      vehicle.setIsCraftable(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName(), true).getBoolean(true));
+      vehicle.setIsCraftable(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".enabled", true).getBoolean(true));
       if(!vehicle.isEnabled()){continue;}
+      
+      vehicle.setBaseAccuracy((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".accuracy", vehicle.getBaseAccuracy()).getDouble(vehicle.getBaseAccuracy()));
+      vehicle.setBaseForwardSpeed((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".forward_speed", vehicle.getBaseForwardSpeed()).getDouble(vehicle.getBaseForwardSpeed()));
+      vehicle.setBaseHealth((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".health", vehicle.getBaseHealth()).getDouble(vehicle.getBaseHealth()));
+      vehicle.setBaseMissileVelocity((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".missile_speed", vehicle.getBaseMissileVelocityMax()).getDouble(vehicle.getBaseMissileVelocityMax()));
+      vehicle.setBasePitchMax((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".pitch_max", vehicle.getBasePitchMax()).getDouble(vehicle.getBasePitchMax()));
+      vehicle.setBasePitchMin((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".pitch_min", vehicle.getBasePitchMin()).getDouble(vehicle.getBasePitchMin()));
+      vehicle.setBaseStrafeSpeed((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".strafe_speed", vehicle.getBaseStrafeSpeed()).getDouble(vehicle.getBaseStrafeSpeed()));
+      vehicle.setBaseTurretRotationAmount((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".turret_rotation", vehicle.getBaseTurretRotationAmount()).getDouble(vehicle.getBaseTurretRotationAmount()));
+      
       d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.vehicleSpawner, vehicle.getGlobalVehicleType(), vehicle.getDisplayName());
       for(String tip : vehicle.getDisplayTooltip())
         {

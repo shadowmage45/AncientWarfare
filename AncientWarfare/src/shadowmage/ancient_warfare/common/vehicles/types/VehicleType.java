@@ -608,4 +608,64 @@ public String toString()
   return "AWVehicleType: "+this.displayName;
   }
 
+@Override
+public void setBaseHealth(float val)
+  {
+  if(val<0){val = 0;}  
+  this.baseHealth = val;
+  }
+
+@Override
+public void setBaseForwardSpeed(float val)
+  {
+  if(val<0){val = 0;} 
+  this.baseForwardSpeed = val;
+  }
+
+@Override
+public void setBaseStrafeSpeed(float val)
+  {
+  if(val<0){val = 0;}  
+  this.baseStrafeSpeed = val;
+  }
+
+@Override
+public void setBasePitchMin(float val)
+  {
+  if(val>90){val = 90;}
+  if(val<0){val = 0;}
+  this.basePitchMin = val;
+  }
+
+@Override
+public void setBasePitchMax(float val)
+  {
+  if(val>90){val = 90;}
+  if(val<0){val = 0;}
+  this.basePitchMax = val;
+  }
+
+@Override
+public void setBaseTurretRotationAmount(float val)
+  {
+  if(val>180){val = 180.f;}
+  if(val<0){val = 0.f;}
+  this.turretRotationMax = val;
+  }
+
+@Override
+public void setBaseMissileVelocity(float val)
+  {
+  if(val<0){val = 0;}  
+  this.baseMissileVelocityMax = val;
+  }
+
+@Override
+public void setBaseAccuracy(float val)
+  {
+  if(val<0){val = 0.f;}
+  if(val>1.f){val = 1.f;}
+  this.accuracy = val;
+  }
+
 }

@@ -38,8 +38,26 @@ public interface IVehicleType
 
 public abstract float getWidth();
 public abstract float getHeight();
+
 public abstract float getBaseWeight();
+
+/*adjustable stats, set at time of vehicle registration DO NOT CHANGE DURING RUN-TIME--CHANGES WILL NOT PROPOGATE PROPERLY*/
 public abstract float getBaseHealth();//base max health, before any materials adjustments
+public abstract void setBaseHealth(float val);
+public abstract float getBaseForwardSpeed();
+public abstract void setBaseForwardSpeed(float val);
+public abstract float getBaseStrafeSpeed();
+public abstract void setBaseStrafeSpeed(float val);
+public abstract float getBasePitchMin();
+public abstract void setBasePitchMin(float val);
+public abstract float getBasePitchMax();
+public abstract void setBasePitchMax(float val);
+public abstract float getBaseTurretRotationAmount();//max rotation from a center point. >=180 means the turret can spin around completely
+public abstract void setBaseTurretRotationAmount(float val);
+public abstract float getBaseMissileVelocityMax();//base missile velocity, before materials or upgrades
+public abstract void setBaseMissileVelocity(float val);
+public abstract float getBaseAccuracy();
+public abstract void setBaseAccuracy(float val);
 
 public abstract String getTextureForMaterialLevel(int level);//get the texture for the input material quality level
 public abstract String getDisplayName();
@@ -55,7 +73,6 @@ public abstract boolean isCombatEngine();//should check non-movement input param
 public abstract boolean canAdjustYaw();//can aim yaw be adjusted independently of vehicle yaw?
 public abstract boolean canAdjustPitch();//can aim pitch be adjusted? (should be EITHER pitch OR power)
 public abstract boolean canAdjustPower();//can shot velocity be adjusted? (should be EITHER pitch OR power)
-
 
 public abstract float getMissileForwardsOffset();//the offset in the turretYaw direction from the turretPosition
 public abstract float getMissileHorizontalOffset();//the offset in the turretYaw+90 direction from the turretPosition
@@ -73,16 +90,6 @@ public abstract float getMinAttackDistance();//used by soldiers to determine whe
 
 public abstract boolean shouldRiderSit();//should rider be seated while riding?
 public abstract boolean moveRiderWithTurret();//should position of rider update with the position of the turret, rather than vehicle?
-
-public abstract float getBaseForwardSpeed();
-public abstract float getBaseStrafeSpeed();
-
-public abstract float getBasePitchMin();
-public abstract float getBasePitchMax();
-public abstract float getBaseTurretRotationAmount();//max rotation from a center point. >=180 means the turret can spin around completely
-public abstract float getBaseMissileVelocityMax();//base missile velocity, before materials or upgrades
-
-public abstract float getBaseAccuracy();
 
 public abstract boolean isAmmoValidForInventory(IAmmoType ammo);//does not determine if it can be fired, only if it can be placed into inventory
 public abstract boolean isUpgradeValid(IVehicleUpgradeType upgrade);

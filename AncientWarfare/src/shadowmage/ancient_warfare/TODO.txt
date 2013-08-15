@@ -131,3 +131,7 @@ TEXTURE/ART
 * add config options to change vehicle and entity damage on ammunitions
 * fix searching names to use localized names (crafting guis)
 * disable vehicle spawning entirely for disabled vehicle types
+* minor adjustment to village structure spawning to enable randomness in selection of numbers
+
+/********** 08-15-13 **********/
+* add config options to change many vehicle stats (speed, accuracy, health, pitch stuffs)
