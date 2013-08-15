@@ -50,7 +50,7 @@ public VillageGenHook(Class<? extends VillageGenComponent> clz, int max, int wei
 @Override
 public StructureVillagePieceWeight getVillagePieceWeight(Random random, int i)
   {
-  return new StructureVillagePieceWeight(componentClass, weight, maxNum);
+  return new StructureVillagePieceWeight(componentClass, weight, i==1 ? 0 : random.nextInt(maxNum+1));
   }
 
 @Override
@@ -64,7 +64,7 @@ public Object buildComponent(StructureVillagePieceWeight villagePiece, Component
   {
 	if(structure==null){return null;}
   Config.logDebug("checking can generate at : "+x+","+y+","+z);
-  StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, -structure.verticalOffset, 0, structure.xSize, structure.ySize, structure.zSize, face);
+  StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, -structure.verticalOffset, 0, structure.xSize, structure.ySize, structure.zSize, face);  
   boolean canGenerate = (structureboundingbox != null && structureboundingbox.minY > 10);
   Config.logDebug("found struct bb for check: "+ structureboundingbox);
   Config.logDebug("gen check1: "+canGenerate);
