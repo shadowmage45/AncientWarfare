@@ -62,7 +62,9 @@ public void startConstruction()
     }      
   this.placeNonBlocks(world);
 //  this.doFillBeneathInvPyramid(10);
-  this.doFillBeneathStraight(10);
+//  this.doFillBeneathStraight(10);
+  this.doFillAround(10);
+  this.doFillBeneathStraight(10-struct.verticalOffset);
   long t3;
   if(Config.DEBUG)
     {

@@ -187,7 +187,74 @@ public void clearBuilderFromStructure()
 
 public void doFillAround(int depth)
   {
+  BlockPosition a = this.buildPos.copy();
+  a.moveLeft(facing, struct.xOffset);
+  a.moveBack(facing, struct.zOffset);
+  BlockPosition b = a.copy();
+  b.moveRight(facing, struct.xSize);
+  b.moveForward(facing, struct.zSize);
+  BlockPosition min = BlockTools.getMin(a, b);
+  BlockPosition max = BlockTools.getMax(a, b);
+ 
+  switch(facing)
+  {
+  case 0:
+  min.x++;
+  max.x++;
+  break;
   
+  case 1:
+  min.x++;
+  max.x++;
+  min.z++;
+  max.z++;
+  break;
+  
+  case 2:
+  min.z++;
+  max.z++;
+  break; 
+  }  
+  
+  int x = min.x;
+  int y = min.y;
+  int z = min.z;
+  int x1 = max.x;
+  int z1 = max.z;
+  int bx, bz;
+  int dec = 0;
+  int setID = 0;
+  for(int i = 0; i <= depth; i++)
+    {
+    for(bx = x; bx < x1; bx++)
+      {
+      for(bz = z; bz < z1; bz++)
+        {
+        if(bx>=min.x && bx < max.x && bz>=min.z && bz < max.z)
+          {
+          continue;
+          }        
+        if(!world.isBlockSolidOnSide(bx, y, bz, ForgeDirection.UP))
+          {
+          if(dec<5)
+            {
+            setID = world.getBiomeGenForCoords(bx, bz).topBlock;   
+            }
+          else
+            {
+            setID = Block.stone.blockID;
+            }
+          world.setBlock(bx, y, bz, setID);
+          }
+        }
+      }
+    dec--;
+    y--;
+    x--;
+    x1++;
+    z--;
+    z1++;
+    }
   }
 
 public void doFillBeneathStraight(int depth)
