@@ -135,3 +135,7 @@ TEXTURE/ART
 
 /********** 08-15-13 **********/
 * add config options to change many vehicle stats (speed, accuracy, health, pitch stuffs)
+
+/********** 08-17-13 **********/
+* fix vehicle config options to actually remove vehicles
+* add config options to disable npcs and change many npc stats
