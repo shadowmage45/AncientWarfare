@@ -97,38 +97,7 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
     {
     hitPos = hit;
     builder.startConstruction();    
-    }
-  else
-    {
-    }
-  int x, y, z, x1, z1;
-  y = this.boundingBox.minY - structure.verticalOffset;
-  x = this.boundingBox.minX; 
-  x1 = this.boundingBox.maxX;
-  z = this.boundingBox.minZ;
-  z1 = this.boundingBox.maxZ;
-  
-  int bx, bz;  
-  int iter = (x1-x) / 2;
-  int iter2 = (z1-z) / 2;
-  for(int i = 0; i < iter && i<iter2; i++)
-    {
-    for(bx = x; bx<=x1; bx++)
-      {
-      for(bz = z; bz<=z1; bz++)
-        {
-        if(!world.isAirBlock(bx, y, bz))
-          {
-          world.setBlock(bx, y, bz, Block.sandStone.blockID);
-          }
-        }
-      }
-    x++;
-    x1--;
-    z++;
-    z1--;    
-    y--;
-    }
+    } 
   return true;
   }
 

@@ -61,7 +61,8 @@ public void startConstruction()
     AWStructureModule.instance().addBuilder(this);
     }      
   this.placeNonBlocks(world);
-  this.doFillBeneath();
+//  this.doFillBeneathInvPyramid(10);
+  this.doFillBeneathStraight(10);
   long t3;
   if(Config.DEBUG)
     {

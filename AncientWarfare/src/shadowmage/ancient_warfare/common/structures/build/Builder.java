@@ -34,6 +34,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
@@ -184,7 +185,67 @@ public void clearBuilderFromStructure()
   this.struct.removeBuilder(this);
   }
 
-public void doFillBeneath()
+public void doFillAround(int depth)
+  {
+  
+  }
+
+public void doFillBeneathStraight(int depth)
+  {
+  BlockPosition a = this.buildPos.copy();
+  a.moveLeft(facing, struct.xOffset);
+  a.moveBack(facing, struct.zOffset);
+  BlockPosition b = a.copy();
+  b.moveRight(facing, struct.xSize);
+  b.moveForward(facing, struct.zSize);
+  BlockPosition min = BlockTools.getMin(a, b);
+  BlockPosition max = BlockTools.getMax(a, b);
+  int x = min.x;
+  int y = min.y - struct.verticalOffset - 1;
+  int z = min.z;
+  int x1 = max.x;
+  int z1 = max.z;
+  int bx, bz, by;
+  switch(facing)
+  {
+  case 0:
+  x++;
+  x1++;
+  break;
+  
+  case 1:
+  x++;
+  x1++;
+  z++;
+  z1++;
+  break;
+  
+  case 2:
+  z++;
+  z1++;  
+  break;
+ 
+  }  
+  for(bx = x; bx < x1; bx++)
+    {
+    for(bz = z; bz < z1; bz++)
+      {
+      for(by = y; by > y-depth && by>0; by--)
+        {
+        if(!world.isBlockSolidOnSide(bx, by, bz, ForgeDirection.UP))
+          {
+          world.setBlock(bx, by, bz, Block.stone.blockID);
+          }
+        else
+          {
+          break;
+          }
+        }
+      }
+    }
+  }
+
+public void doFillBeneathInvPyramid(int depth)
   {
   BlockPosition a = this.buildPos.copy();
   a.moveLeft(facing, struct.xOffset);
@@ -225,19 +286,32 @@ public void doFillBeneath()
  
   }
   
-  while(xDiff>0 || zDiff >0)
+  int dec = 0;
+  int id;
+  int setID = 0;
+  while((xDiff>0 || zDiff >0) && dec <= depth)
     {
     for(bx = x; bx<x1; bx++)
       {
       for(bz = z; bz<z1; bz++)
         {
-        if(world.isAirBlock(bx, y, bz))
+        if(dec<5)
           {
-          world.setBlock(bx, y, bz, Block.oreIron.blockID);
+          setID = world.getBiomeGenForCoords(bx, bz).topBlock;   
+          setID = setID== Block.sand.blockID ? Block.sandStone.blockID : setID;
+          }
+        else
+          {
+          setID = Block.stone.blockID;
+          }
+        if(!world.isBlockSolidOnSide(bx, y, bz, ForgeDirection.UP))
+          {
+          world.setBlock(bx, y, bz, setID);
           }
         }
       } 
     y--;
+    dec++;
     if(xDiff>0)
       {
       xDiff--;
