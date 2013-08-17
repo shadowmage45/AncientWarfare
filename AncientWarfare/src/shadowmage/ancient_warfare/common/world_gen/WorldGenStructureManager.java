@@ -265,7 +265,7 @@ private void loadBiomesList()
 public void addEntry(ProcessedStructure struct, int weight, int value, boolean unique)
   {
   String name = struct.name;
-  WorldGenStructureEntry entry = new WorldGenStructureEntry(name, unique, weight, value, -1, -1, -1, -1, null, null, -1);
+  WorldGenStructureEntry entry = new WorldGenStructureEntry(name, unique, weight, value, -1, -1, -1, -1, null, null, -1, 0);
   this.addStructureEntry(entry);
   this.saveConfig();
   }
@@ -595,6 +595,7 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
   int mL = -1;
   int lB = -1;
   int ov = -1;
+  int ft = -1;
   String[] bO = null;
   String[] bN = null;
   boolean unique = false;
@@ -653,6 +654,10 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
       {
       ov = StringTools.safeParseInt("=", line);
       }
+    if(line.toLowerCase().startsWith("filltype"))
+      {
+      ft = StringTools.safeParseInt("=", line);
+      }
     }
   if(name.equals("") || weight == 0 || value == -1)
     {
@@ -667,7 +672,7 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
     {
     lB = 0;
     }
-  WorldGenStructureEntry ent = new WorldGenStructureEntry(name, unique, weight, value, mC, cB, mL, lB, bO, bN, ov);
+  WorldGenStructureEntry ent = new WorldGenStructureEntry(name, unique, weight, value, mC, cB, mL, lB, bO, bN, ov, ft);
   return ent;
   }
 

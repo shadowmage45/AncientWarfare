@@ -318,6 +318,10 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
       {
       struct.maxLavaDepth = StringTools.safeParseInt("=", line);
       }
+    else if(line.toLowerCase().startsWith("filltype"))
+      {      
+      struct.fillType = StringTools.safeParseInt("=", line);
+      }
     else if(line.toLowerCase().startsWith("xsize"))
       {
       struct.xSize = StringTools.safeParseInt("=", line);

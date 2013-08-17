@@ -248,7 +248,7 @@ public void doFillAround(int depth)
           }
         }
       }
-    dec--;
+    dec++;
     y--;
     x--;
     x1++;

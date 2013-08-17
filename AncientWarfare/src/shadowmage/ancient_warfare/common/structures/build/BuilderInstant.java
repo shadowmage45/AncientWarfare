@@ -60,11 +60,26 @@ public void startConstruction()
     {
     AWStructureModule.instance().addBuilder(this);
     }      
-  this.placeNonBlocks(world);
-//  this.doFillBeneathInvPyramid(10);
-//  this.doFillBeneathStraight(10);
-  this.doFillAround(10);
-  this.doFillBeneathStraight(10-struct.verticalOffset);
+  this.placeNonBlocks(world); 
+  switch(this.struct.getFillType())
+  {
+  case 1://straight
+  this.doFillBeneathStraight(struct.ySize - struct.verticalOffset);
+  break;
+  
+  case 2://inv pyramid
+  this.doFillBeneathInvPyramid(struct.ySize - struct.verticalOffset);
+  break;
+  
+  case 3://around
+  this.doFillAround(struct.ySize);
+  break;
+  
+  case 4://around+straight
+  this.doFillBeneathStraight(struct.ySize - struct.verticalOffset);
+  this.doFillAround(struct.ySize);
+  break;  
+  }
   long t3;
   if(Config.DEBUG)
     {

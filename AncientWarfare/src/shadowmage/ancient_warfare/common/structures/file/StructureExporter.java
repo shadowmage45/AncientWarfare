@@ -120,6 +120,10 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
   lines.add("minSubmergedDepth="+String.valueOf(struct.minSubmergedDepth));
   lines.add("maxWaterDepth="+String.valueOf(struct.maxWaterDepth));
   lines.add("maxLavaDepth="+String.valueOf(struct.maxLavaDepth));
+  if(struct.fillType!=0)
+    {
+    lines.add("fillType="+String.valueOf(struct.fillType));
+    }
   lines.add("");
   lines.add("xSize="+String.valueOf(struct.xSize));
   lines.add("ySize="+String.valueOf(struct.ySize));

@@ -40,6 +40,7 @@ public final int maxClearing;
 public final int clearingBuffer;
 public final int maxLeveling;
 public final int levelingBuffer;
+public final int fillType;
 public final String[] biomesOnly;
 public final String[] biomesNot;
 
@@ -48,7 +49,7 @@ private final boolean clearingOverride;
 private final boolean levelingOverride;
 private final boolean biomeOverride;
 
-public WorldGenStructureEntry(String name, boolean unique, int weight, int value, int mC, int cB, int mL, int lB, String[] bO, String[] bN, int overHang)
+public WorldGenStructureEntry(String name, boolean unique, int weight, int value, int mC, int cB, int mL, int lB, String[] bO, String[] bN, int overHang, int ft)
   {
   this.name = name;
   this.unique = unique;
@@ -61,6 +62,7 @@ public WorldGenStructureEntry(String name, boolean unique, int weight, int value
   this.biomesOnly = bO;
   this.biomesNot = bN;
   this.overhang = overHang;
+  this.fillType = ft;
   if(this.overhang>=0)
     {
     this.overhangOverride = true;
