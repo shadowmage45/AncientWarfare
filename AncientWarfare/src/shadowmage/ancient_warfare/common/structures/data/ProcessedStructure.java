@@ -65,8 +65,11 @@ public static boolean canGenerateAtSurface(World world, BlockPosition hit, int f
   int missingBlocks = 0; 
   
   StructureBB levelingBB = getLevelingBoundingBox(hit, facing, struct.xOffset, struct.verticalOffset, struct.zOffset, struct.zSize, struct.ySize, struct.zSize, struct.getLevelingMax(), struct.getLevelingBuffer());
-  
-  if(struct.getLevelingMax()==0)//should level the site, or check for overhang?
+  if(struct.getFillType()>0)
+    {
+    //NOOP
+    }
+  else if(struct.getLevelingMax()==0)//should level the site, or check for overhang?
     {
     BlockPosition front = levelingBB.pos1.copy();    
     BlockPosition back = levelingBB.pos2.copy();

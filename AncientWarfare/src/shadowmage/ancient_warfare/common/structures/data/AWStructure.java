@@ -85,6 +85,7 @@ public int undergroundMaxAirAbove = 0;
 public int minSubmergedDepth = 0;
 public int maxWaterDepth = 0;
 public int maxLavaDepth = 0;
+public int fillType = 0;
 
 /**
  * preservation flags for entire structure
@@ -190,6 +191,15 @@ public int getLevelingBufferRaw(){return this.levelingBuffer;}
 public int getClearingMaxRaw(){return this.maxVerticalClear;}
 public int getClearingBufferRaw(){return this.clearingBuffer;}
 public int getOverHangRaw(){return this.maxOverhang;}
+
+public int getFillType()
+  {
+  if(this.worldGen!=null && this.worldGen.fillType>=0)
+    {
+    return this.worldGen.fillType;
+    }
+  return this.fillType;
+  }
 
 public int getLevelingMax()
   {

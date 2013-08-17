@@ -50,7 +50,7 @@ public VillageGenHook(Class<? extends VillageGenComponent> clz, int max, int wei
 @Override
 public StructureVillagePieceWeight getVillagePieceWeight(Random random, int i)
   {
-  return new StructureVillagePieceWeight(componentClass, weight, i==1 ? 0 : random.nextInt(maxNum+1));
+  return new StructureVillagePieceWeight(componentClass, weight, random.nextInt(maxNum+1));
   }
 
 @Override
