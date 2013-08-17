@@ -12,6 +12,7 @@ undergroundMaxAirAbove=0
 minSubmergedDepth=0
 maxWaterDepth=0
 maxLavaDepth=0
+fillType=4
 
 xSize=23
 ySize=16
