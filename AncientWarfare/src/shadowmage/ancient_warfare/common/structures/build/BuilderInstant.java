@@ -60,6 +60,8 @@ public void startConstruction()
     {
     AWStructureModule.instance().addBuilder(this);
     }      
+  this.placeNonBlocks(world);
+  this.doFillBeneath();
   long t3;
   if(Config.DEBUG)
     {
@@ -68,7 +70,6 @@ public void startConstruction()
     Config.logDebug("const: "+(t3-t2));
     Config.logDebug("Struct gen time: "+(t3-t1));
     }
-  this.placeNonBlocks(world);
   }
 
 @Override

@@ -184,6 +184,76 @@ public void clearBuilderFromStructure()
   this.struct.removeBuilder(this);
   }
 
+public void doFillBeneath()
+  {
+  BlockPosition a = this.buildPos.copy();
+  a.moveLeft(facing, struct.xOffset);
+  a.moveBack(facing, struct.zOffset);
+  BlockPosition b = a.copy();
+  b.moveRight(facing, struct.xSize);
+  b.moveForward(facing, struct.zSize);
+  BlockPosition min = BlockTools.getMin(a, b);
+  BlockPosition max = BlockTools.getMax(a, b);
+  
+  int xDiff = max.x - min.x;
+  int zDiff = max.z - min.z;
+  
+  int x = min.x;
+  int y = min.y - struct.verticalOffset - 1;
+  int z = min.z;
+  int x1 = max.x;
+  int z1 = max.z;
+  int bx, bz;
+  switch(facing)
+  {
+  case 0:
+  x++;
+  x1++;
+  break;
+  
+  case 1:
+  x++;
+  x1++;
+  z++;
+  z1++;
+  break;
+  
+  case 2:
+  z++;
+  z1++;  
+  break;
+ 
+  }
+  
+  while(xDiff>0 || zDiff >0)
+    {
+    for(bx = x; bx<x1; bx++)
+      {
+      for(bz = z; bz<z1; bz++)
+        {
+        if(world.isAirBlock(bx, y, bz))
+          {
+          world.setBlock(bx, y, bz, Block.oreIron.blockID);
+          }
+        }
+      } 
+    y--;
+    if(xDiff>0)
+      {
+      xDiff--;
+      x++;
+      x1--;
+      }
+    if(zDiff>0)
+      {
+      zDiff--;
+      z++;
+      z1--;
+      }
+    }
+  
+  }
+
 /**
  * for instantBuilder--construct
  * for tickedBuilder--setup bounds/block

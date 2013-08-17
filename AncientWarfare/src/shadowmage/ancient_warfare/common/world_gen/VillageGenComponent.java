@@ -22,6 +22,8 @@ package shadowmage.ancient_warfare.common.world_gen;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.ComponentVillage;
 import net.minecraft.world.gen.structure.ComponentVillageStartPiece;
@@ -30,6 +32,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.build.BuilderInstant;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.Trig;
 
 public abstract class VillageGenComponent extends ComponentVillage
 {
@@ -97,6 +100,34 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
     }
   else
     {
+    }
+  int x, y, z, x1, z1;
+  y = this.boundingBox.minY - structure.verticalOffset;
+  x = this.boundingBox.minX; 
+  x1 = this.boundingBox.maxX;
+  z = this.boundingBox.minZ;
+  z1 = this.boundingBox.maxZ;
+  
+  int bx, bz;  
+  int iter = (x1-x) / 2;
+  int iter2 = (z1-z) / 2;
+  for(int i = 0; i < iter && i<iter2; i++)
+    {
+    for(bx = x; bx<=x1; bx++)
+      {
+      for(bz = z; bz<=z1; bz++)
+        {
+        if(!world.isAirBlock(bx, y, bz))
+          {
+          world.setBlock(bx, y, bz, Block.sandStone.blockID);
+          }
+        }
+      }
+    x++;
+    x1--;
+    z++;
+    z1--;    
+    y--;
     }
   return true;
   }
