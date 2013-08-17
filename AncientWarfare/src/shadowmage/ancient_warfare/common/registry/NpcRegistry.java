@@ -78,6 +78,13 @@ public void registerNPCs()
   for(INpcType type : types)
     {
     if(type==null || type.getGlobalNpcType()==0){continue;}//if null or dummy type, don't register....
+    type.setEnabled(Config.getConfig().get("g_npc_config", type.getConfigName()+".enabled", true).getBoolean(true));
+    if(!type.isEnabled()){continue;}    
+    for(int i = 0; i < type.getNumOfLevels(); i++)
+      {
+      type.getLevelEntry(i).setAttackDamage(Config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".damage", type.getAttackDamage(i)).getInt(type.getAttackDamage(i)));
+      type.getLevelEntry(i).setHealth(Config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".maxhealth", type.getMaxHealth(i)).getInt(type.getMaxHealth(i)));
+      }
     Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.npcSpawner, type.getGlobalNpcType(), type.getDisplayName(0), "", type.getDisplayTooltip(0));
     d.setIconTexture(type.getIconTexture(), type.getGlobalNpcType());
     } 
@@ -98,7 +105,7 @@ public List getCreativeDisplayItems()
   for(INpcType type : types)
     {
     //DEBUG//|| type.getGlobalNpcType()==0
-    if(type==null || type.getGlobalNpcType()==0){continue;}//if null or dummy type, don't register....
+    if(type==null || type.getGlobalNpcType()==0 || !type.isEnabled()){continue;}//if null or dummy type, don't register....
     for(int i = 0; i < type.getNumOfLevels(); i++)
       {
       stack = new ItemStack(ItemLoader.npcSpawner,1,type.getGlobalNpcType());

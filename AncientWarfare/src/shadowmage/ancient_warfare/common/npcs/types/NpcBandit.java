@@ -136,4 +136,5 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
   aiEntries.add(new AIChooseCommander(npc, 10));
   return aiEntries;
   }
+
 }

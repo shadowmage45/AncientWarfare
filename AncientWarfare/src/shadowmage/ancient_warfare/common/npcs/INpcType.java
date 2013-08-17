@@ -60,6 +60,11 @@ public abstract boolean isCombatUnit();
 public abstract boolean isVanillaVillager();
 public abstract boolean isBandit();
 public abstract boolean isAvailableInSurvival();
+
+public abstract NpcLevelEntry getLevelEntry(int level);
+public abstract boolean isEnabled();
+public abstract void setEnabled(boolean val);
+
 public abstract IAmmoType getAmmoType(int level);
 public abstract float getAccuracy(int level);
 public abstract ItemStack getTool(int level);

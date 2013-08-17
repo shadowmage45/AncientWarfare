@@ -86,6 +86,7 @@ protected boolean isCombatUnit = false;
 protected boolean isVanillaVillager = false;
 protected boolean isAvailableInSurvival = true;
 protected boolean isBandit = false;
+protected boolean isEnabled = true;
 protected String iconTexture = "foo";
 protected String configName = "civilian";
 protected String[] defaultTargets = null;
@@ -98,6 +99,28 @@ public NpcTypeBase(int type)
     {
     npcTypes[type] = this;
     }
+  }
+
+@Override
+public NpcLevelEntry getLevelEntry(int level)
+  {
+  if(level>=0 && level<this.levelEntries.size())
+    {
+    return this.levelEntries.get(level);
+    }  
+  return null;
+  }
+
+@Override
+public boolean isEnabled()
+  {
+  return this.isEnabled;
+  }
+
+@Override
+public void setEnabled(boolean val)
+  {
+  this.isEnabled = val;
   }
 
 @Override
