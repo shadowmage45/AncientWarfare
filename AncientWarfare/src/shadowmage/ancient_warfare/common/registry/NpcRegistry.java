@@ -83,7 +83,12 @@ public void registerNPCs()
     for(int i = 0; i < type.getNumOfLevels(); i++)
       {
       type.getLevelEntry(i).setAttackDamage(Config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".damage", type.getAttackDamage(i)).getInt(type.getAttackDamage(i)));
+      if(type.getLevelEntry(i).getHealingDone()>0)
+        {
+        type.getLevelEntry(i).setHealingDone( Config.getConfig().get( "g_npc_config", type.getConfigName()+"."+i+".healing", type.getLevelEntry(i).getHealingDone()).getInt(type.getLevelEntry(i).getHealingDone() ) );        
+        }
       type.getLevelEntry(i).setHealth(Config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".maxhealth", type.getMaxHealth(i)).getInt(type.getMaxHealth(i)));
+      type.getLevelEntry(i).setActionTicks(Config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".actiontime", type.getActionTicks(i)).getInt(type.getActionTicks(i)));
       }
     Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.npcSpawner, type.getGlobalNpcType(), type.getDisplayName(0), "", type.getDisplayTooltip(0));
     d.setIconTexture(type.getIconTexture(), type.getGlobalNpcType());
@@ -122,7 +127,7 @@ public List getCreativeDisplayItems()
 public static Entity getNpcForType(int num, World world, int level, int team)
   {
   INpcType type = NpcTypeBase.getNpcType(num);
-  if(type==null)
+  if(type==null || !type.isEnabled())
     {
     return null;
     }

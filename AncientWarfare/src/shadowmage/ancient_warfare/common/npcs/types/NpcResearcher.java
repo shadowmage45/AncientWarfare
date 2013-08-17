@@ -59,7 +59,7 @@ public NpcResearcher(int type)
   this.addLevel(type, 2, Config.texturePath + "models/npc/npcResearcher.png", getToolStack(2), null).addTargetType(CivicWorkType.RESEARCH, CivicWorkType.ENGINE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
-  this.configName = "civilian";
+  this.configName = "researcher";
   }
 
 @Override

@@ -60,7 +60,7 @@ public NpcCourier(int type)
   this.addLevel(type, 2, Config.texturePath + "models/npc/npcCourier.png", getToolStack(2), null).addTargetType(CivicWorkType.COURIER).setInventorySize(27).setActionTicks(20).setSpecInventorySize(4).addNeededResearch(ResearchGoalNumbers.logistics5).addRecipeResource(new ItemStackWrapperCrafting(ItemLoader.backpack, 1, 32, true));
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
-  this.configName = "civilian";
+  this.configName = "courier";
   }
 
 @Override

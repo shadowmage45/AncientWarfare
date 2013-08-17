@@ -57,7 +57,7 @@ public NpcFarmer(int type)
   this.addLevel(type, 2, Config.texturePath + "models/npc/npcFarmer.png", getToolStack(2), null).addTargetType(CivicWorkType.FARM, CivicWorkType.ENGINE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
-  this.configName = "civilian";
+  this.configName = "farmer";
   }
 
 @Override

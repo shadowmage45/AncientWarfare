@@ -242,7 +242,7 @@ public int getAttackDamage()
 
 public int getAmountRepaired()
   {
-  int repair = 4 + (rank*2);
+  int repair = this.npcType.getLevelEntry(rank).getHealingDone();
   if(this.wayNav.getCommander()!=null && this.getDistanceToEntity(wayNav.getCommander())<20.d)
     {
     repair += (1+wayNav.getCommander().rank) * 2;
@@ -252,7 +252,7 @@ public int getAmountRepaired()
 
 public int getAmountHealed()
   {
-  int heal =  2 + rank;
+  int heal = this.npcType.getLevelEntry(rank).getHealingDone();
   if(this.wayNav.getCommander()!=null && this.getDistanceToEntity(wayNav.getCommander())<20.d)
     {
     heal += (1+wayNav.getCommander().rank);

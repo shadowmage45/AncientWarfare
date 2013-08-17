@@ -41,6 +41,7 @@ protected String name;
 protected String texture;
 protected String tooltip;
 protected int attackDamage = 4;
+protected int healingDone = 0;
 protected int rangedAttackDistance = 0;
 protected int health = 20;
 protected int inventorySize = 0;
@@ -78,6 +79,12 @@ public NpcLevelEntry(int type, int level, String tex, int damage, int health, fl
 public NpcLevelEntry setUpkeepAdditionalItem(ItemStack item)
   {
   this.upkeepAdditionalItem = item;
+  return this;
+  }
+
+public NpcLevelEntry setHealingDone(int val)
+  {
+  this.healingDone = val;
   return this;
   }
 
@@ -187,6 +194,11 @@ public NpcLevelEntry addRecipeResource(ItemStackWrapperCrafting... items)
     this.recipeResources.add(item);
     }
   return this;
+  }
+
+public int getHealingDone()
+  {
+  return this.healingDone;
   }
 
 public Collection<ItemStackWrapperCrafting> getNeededResources()

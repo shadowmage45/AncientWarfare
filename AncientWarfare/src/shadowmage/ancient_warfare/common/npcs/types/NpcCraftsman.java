@@ -60,7 +60,7 @@ public NpcCraftsman(int type)
   this.addLevel(type, 2, Config.texturePath + "models/npc/npcCraftsman.png", getToolStack(2), null).addTargetType(CivicWorkType.CRAFT, CivicWorkType.ENGINE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
-  this.configName = "civilian";
+  this.configName = "craftsman";
   }
 
 @Override
