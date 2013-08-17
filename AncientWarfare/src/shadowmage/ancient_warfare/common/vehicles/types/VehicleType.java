@@ -495,7 +495,7 @@ public static List getCreativeDisplayItems()
   ItemStack stack = null;
   for(IVehicleType type : vehicleTypes)
     {
-    if(type==null || type.getMaterialType()==null)
+    if(type==null || type.getMaterialType()==null || ! type.isEnabled())
       {
       continue;
       }
