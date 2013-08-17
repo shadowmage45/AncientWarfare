@@ -223,7 +223,7 @@ public void doFillAround(int depth)
   int z1 = max.z;
   int bx, bz;
   int dec = 0;
-  int setID = 0;
+  int setID = 0;  
   for(int i = 0; i <= depth; i++)
     {
     for(bx = x; bx < x1; bx++)
@@ -235,14 +235,14 @@ public void doFillAround(int depth)
           continue;
           }        
         if(!world.isBlockSolidOnSide(bx, y, bz, ForgeDirection.UP))
-          {
-          if(dec<5)
+          {          
+          if(dec<5 || world.isAirBlock(bx, y+1, bz))
             {
             setID = world.getBiomeGenForCoords(bx, bz).topBlock;   
             }
           else
             {
-            setID = Block.stone.blockID;
+            setID = world.getBiomeGenForCoords(bx, bz).fillerBlock;
             }
           world.setBlock(bx, y, bz, setID);
           }
