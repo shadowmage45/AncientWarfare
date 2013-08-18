@@ -138,3 +138,6 @@ TEXTURE/ART
 /********** 08-17-13 **********/
 * fix vehicle config options to actually remove vehicles
 * add config options to disable npcs and change many npc stats
+
+/********** 08-18-13 **********/
+* udpate vehicles to remove disabled ammunition types from valid ammo list
