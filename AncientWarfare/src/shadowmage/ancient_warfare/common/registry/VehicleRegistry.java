@@ -20,10 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.registry;
 
+import java.util.Iterator;
+
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
+import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeAirBomber;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeAirInterceptor;
@@ -41,6 +44,7 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCannonStandTu
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultMobileFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultMobileTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultStandFixed;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultStandTurret;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeChestCart;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeHelicopter;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeHwacha;
@@ -48,7 +52,6 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetLarg
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetStandFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetStandTurret;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultStandTurret;
 
 public class VehicleRegistry
 {
@@ -114,11 +117,23 @@ public void registerVehicles()
       vehicle.setBaseStrafeSpeed((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".strafe_speed", vehicle.getBaseStrafeSpeed()).getDouble(vehicle.getBaseStrafeSpeed()));
       vehicle.setBaseTurretRotationAmount((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".turret_rotation", vehicle.getBaseTurretRotationAmount()).getDouble(vehicle.getBaseTurretRotationAmount()));
       
+      Iterator<IAmmoType> it = vehicle.getValidAmmoTypes().iterator();
+      IAmmoType t;
+      while(it.hasNext())
+        {
+        t = it.next();
+        if(!t.isEnabled())
+          {
+          it.remove();
+          }
+        }
+      
       d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.vehicleSpawner, vehicle.getGlobalVehicleType(), vehicle.getDisplayName());
       for(String tip : vehicle.getDisplayTooltip())
         {
         d.addTooltip(tip, vehicle.getGlobalVehicleType());
-        }           
+        }
+      
       }
     }  
   }

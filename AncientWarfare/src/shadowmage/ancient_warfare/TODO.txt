@@ -22,7 +22,6 @@ FROM TESTING
 * fortresses too hard to defeat
 * cleanup memory churn, esp on npcs pathfinding
 * check ammo enable/disable config support to see if there are any other areas it needs disabled (ammo select guis?)
-* completely remove spawning ability for vehicles whos types are disabled (vehicle will need to check type and auto-kill if disabled)
 * examine tinkers construct village gen for ideas on proper methods to reduce/remove duplicated buildings
     https://github.com/mDiyo/TinkersConstruct/tree/16working/tconstruct/worldgen/village
 
