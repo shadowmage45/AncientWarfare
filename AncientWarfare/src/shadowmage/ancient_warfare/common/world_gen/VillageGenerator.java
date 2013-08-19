@@ -121,7 +121,7 @@ public static VillageGenComponent constructComponent(Class<? extends ComponentVi
     {
     part = new AWVCLogCabin(start, type, face, struct, box);
     }
-  
+  Config.logDebug("returning piece for construction: "+part);
   return part;
   }
 

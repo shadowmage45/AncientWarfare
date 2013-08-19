@@ -20,10 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.world_gen;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.ComponentVillage;
 import net.minecraft.world.gen.structure.ComponentVillageStartPiece;
@@ -32,14 +32,14 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.build.BuilderInstant;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.utils.Trig;
 
 public abstract class VillageGenComponent extends ComponentVillage
 {
 
 private int averageGroundLevel = -1;
 ProcessedStructure structure;
-BlockPosition hitPos = null;
+
+Set<StructureBoundingBox> builtStructs = new HashSet<StructureBoundingBox>();
 
 /**
  * @param start
@@ -51,13 +51,12 @@ public VillageGenComponent(ComponentVillageStartPiece start, Integer par2, Integ
   this.coordBaseMode = face;
   this.structure = struct;
   this.boundingBox = box;
-  Config.logDebug("constructing village gen component with bounding box of: "+boundingBox);
   }
 
 @Override
 public boolean addComponentParts(World world, Random random, StructureBoundingBox structureboundingbox)
   {  
-  if(this.structure==null){return false;}
+  if(this.structure==null){return true;}
   if (this.averageGroundLevel < 0)
     {
         this.averageGroundLevel = this.getAverageGroundLevel(world, structureboundingbox);
@@ -93,10 +92,22 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
     {
     builder.setTeamOverride(team);    
     } 
-  if(hitPos==null || !hitPos.equals(hit))
+  boolean build = true;
+  for(StructureBoundingBox b : this.builtStructs)
     {
-    hitPos = hit;
-    builder.startConstruction();    
+    if(b.intersectsWith(boundingBox))
+      {
+      build = false;
+      Config.logDebug("intersecting bounding boxes, aborting final build...");
+      break;
+      }
+    }
+  if(build)
+    {
+    this.builtStructs.add(this.boundingBox);
+    Config.logDebug("actually building component:  "+this + " at: "+this.boundingBox + " client: "+world.isRemote);
+    builder.startConstruction();
+    return true;
     } 
   return true;
   }

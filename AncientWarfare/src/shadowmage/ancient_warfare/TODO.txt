@@ -28,6 +28,11 @@ FROM TESTING
 WORLD SEEDS with villages:
 * 6663435395855598992
 * REDSTONEUPDATE
+* 119540751128687641 (large biomes) (has fortress)
+* 207140310
+* -10011002
+* -915855788
+* 5504436305081970315
 
 
 LANGUAGE/TRANSLATIONS
@@ -149,3 +154,5 @@ TEXTURE/ART
 
 /********** 08-18-13 **********/
 * add config option to enable/disable vehicles tearing up snow/grass/flowers
+* change village generation to cache built bounding boxes to validate structures (try to remove dupe/ghost structures)
+

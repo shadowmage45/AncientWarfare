@@ -72,7 +72,11 @@ public Object buildComponent(StructureVillagePieceWeight villagePiece, Component
   if(canGenerate)
     {
     canGenerate = StructureComponent.findIntersecting(pieces, structureboundingbox) == null ? true : false;
-    Config.logDebug("gen check2 (intersect): "+canGenerate);    
+    Config.logDebug("gen check2 (intersect): "+canGenerate);
+    }
+  if(canGenerate)
+    {
+    Config.logDebug("should generate==true!!!!");
     }
   return canGenerate ? VillageGenerator.constructComponent(componentClass, startPiece, type, face,  structure, x, y, z, structureboundingbox) : null;
   }
