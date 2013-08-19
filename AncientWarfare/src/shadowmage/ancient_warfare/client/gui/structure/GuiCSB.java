@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.gui.structure;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,6 +33,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_warfare.common.utils.ClientStructureComparator;
 
 /**
  * creative structure builder
@@ -59,7 +62,9 @@ public GuiCSB(ContainerCSB container)
   this.container = container;
   if(container instanceof ContainerCSB)
     {
-    clientStructures = StructureManager.instance().getClientStructures();    
+    clientStructures = new ArrayList<StructureClientInfo>();
+    clientStructures.addAll(StructureManager.instance().getClientStructures());
+    Collections.sort(clientStructures, ClientStructureComparator.COMPARATOR);
     }  
   else
     {

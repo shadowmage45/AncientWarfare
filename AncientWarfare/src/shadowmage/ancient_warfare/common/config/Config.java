@@ -43,7 +43,7 @@ public static String texturePath = "/mods/ancientwarfare/textures/";
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
-public static final boolean DEBUG = true;
+public static final boolean DEBUG = false;
 
 
 //***************************************************LOADED CONFIGS******************************************//
@@ -222,7 +222,7 @@ public void setCoreInfo()
   this.useNpcWorkForCrafting = config.get("a-general-options", "npc_work", true, "If true, npcs (or interacting player) will be required to produce items at crafting stations.  Set to false to auto-produce.").getBoolean(true);
   this.enablePerformanceMonitor = config.get("a-general-options", "performance_monitor", true, "If true, enables a server-side performance monitor viewable by server OPs from the AW config menu (F7)").getBoolean(true);
   this.npcWorkMJ = config.get("a-general-options", "npc_work_mj", 70, "How many BuildCraft MJ represent one NPC 'work' unit.").getInt(70);
-  this.vehiclesTearUpGrass = config.get("a-general-options", "performance_monitor", true, "If true, vehicles will tear up grass/snow/flower blocks when driving over them.  Can be disabled for minor performance boost (less items in world)").getBoolean(true);
+  
   
   /**
    * performance options
@@ -237,6 +237,7 @@ public void setVehicleInfo()
   this.addOversizeAmmo = config.get("c-vehicle-options", "add_oversize_ammo", true, "If true, ALL ammo types for a vehicle will be available regardless of weight/being useless.").getBoolean(true);
   this.soldiersUseAmmo = config.get("c-vehicle-options", "soldiers_use_ammo", false, "If true, Soldiers will consume ammo from vehicles but the type must be selected before hand, and kept stocked. If false, soldiers are limited to a default ammo type for the vehicle.").getBoolean(false);
   this.useVehicleSetupTime = config.get("c-vehicle-options", "use_setup_time", true, "If true, vehicles will be un-useable for the first 5 seconds after placement.").getBoolean(true);
+  this.vehiclesTearUpGrass = config.get("c-vehicle-options", "vehicle_destroy_grass", true, "If true, vehicles will tear up grass/snow/flower blocks when driving over them.  Can be disabled for minor performance boost (less items in world)").getBoolean(true);
   }
 
 public void setKingdomInfo()

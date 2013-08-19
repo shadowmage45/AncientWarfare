@@ -206,7 +206,7 @@ protected void onUpdateClient()
     }
   else
     {
-    vehicle.wheelRotation += forwardMotion*42;
+    vehicle.wheelRotation += forwardMotion*60;
     }
   this.vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
   }
