@@ -1,6 +1,7 @@
 PRE OPEN BETA
-* tweak airplane throttle settings for more reliable cruise-throttle ability
 * add config option to remove block drops from vehicle movement
+* add more structures to default world-gen -- both manned and un-manned
+* fix wheel rotation speed on boats, ground vehicles
     
 PRE FULL RELEASE
 * default survival-mode structures
@@ -24,6 +25,10 @@ FROM TESTING
 * check ammo enable/disable config support to see if there are any other areas it needs disabled (ammo select guis?)
 * examine tinkers construct village gen for ideas on proper methods to reduce/remove duplicated buildings
     https://github.com/mDiyo/TinkersConstruct/tree/16working/tconstruct/worldgen/village
+WORLD SEEDS with villages:
+* 6663435395855598992
+* REDSTONEUPDATE
+
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -141,3 +146,6 @@ TEXTURE/ART
 
 /********** 08-18-13 **********/
 * udpate vehicles to remove disabled ammunition types from valid ammo list
+
+/********** 08-18-13 **********/
+* add config option to enable/disable vehicles tearing up snow/grass/flowers

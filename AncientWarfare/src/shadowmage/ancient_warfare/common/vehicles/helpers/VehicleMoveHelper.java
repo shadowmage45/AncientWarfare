@@ -594,7 +594,7 @@ protected boolean handleWaterMovement()
 
 protected void tearUpGrass()
   {
-  if(vehicle.worldObj.isRemote || !vehicle.onGround)
+  if(vehicle.worldObj.isRemote || !vehicle.onGround || !Config.vehiclesTearUpGrass)
     {
     return;
     }

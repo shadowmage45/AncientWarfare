@@ -59,6 +59,7 @@ public static boolean useVehicleSetupTime = true;
 public static boolean soldiersUseAmmo = false;
 public static boolean useNpcWorkForCrafting = true;
 public static boolean enableVillageGen = true;
+public static boolean vehiclesTearUpGrass = true;
 
 public static int trajectoryIterationsServer = 20;
 public static int civicBroadcastRange = 80;
@@ -218,9 +219,10 @@ public void setCoreInfo()
   this.blockDestruction = config.get("a-general-options", "missile_destroy_blocks", true, "If true, missiles will be capable of destroying blocks.").getBoolean(true);
   this.blockFires = config.get("a-general-options", "missile_start_fires", true, "If true, missiles will be capable of lighting fires and placing lava blocks.").getBoolean(true);
   this.disableResearch = config.get("a-general-options", "disable_research", false, "If true, research system will be disabled and all recipes will be available.").getBoolean(false);
-  this.useNpcWorkForCrafting = config.get("a-general-options", "npc_work", true, "If true, npcs will be required to produce items at crafting stations.").getBoolean(true);
+  this.useNpcWorkForCrafting = config.get("a-general-options", "npc_work", true, "If true, npcs (or interacting player) will be required to produce items at crafting stations.  Set to false to auto-produce.").getBoolean(true);
   this.enablePerformanceMonitor = config.get("a-general-options", "performance_monitor", true, "If true, enables a server-side performance monitor viewable by server OPs from the AW config menu (F7)").getBoolean(true);
   this.npcWorkMJ = config.get("a-general-options", "npc_work_mj", 70, "How many BuildCraft MJ represent one NPC 'work' unit.").getInt(70);
+  this.vehiclesTearUpGrass = config.get("a-general-options", "performance_monitor", true, "If true, vehicles will tear up grass/snow/flower blocks when driving over them.  Can be disabled for minor performance boost (less items in world)").getBoolean(true);
   
   /**
    * performance options
