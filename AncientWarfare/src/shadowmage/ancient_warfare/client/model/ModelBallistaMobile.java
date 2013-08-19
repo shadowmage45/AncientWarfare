@@ -856,10 +856,10 @@ public void setPieceRotation(ModelRenderer model, float x, float y, float z)
 
 public void setWheelRotations(float fl, float fr, float rl, float rr)
   {
-  this.FRWheelPivot.rotateAngleX = Trig.toDegrees(fr);
-  this.FLWheelPivot.rotateAngleX = Trig.toDegrees(fl);
-  this.RRWheelPivot.rotateAngleX = Trig.toDegrees(rr);
-  this.RLWheelPivot.rotateAngleX = Trig.toDegrees(rl);
+  this.FRWheelPivot.rotateAngleX = Trig.toRadians(fr);
+  this.FLWheelPivot.rotateAngleX = Trig.toRadians(fl);
+  this.RRWheelPivot.rotateAngleX = Trig.toRadians(rr);
+  this.RLWheelPivot.rotateAngleX = Trig.toRadians(rl);
   }
 
 public void setTurretRotation(float yaw, float pitch)

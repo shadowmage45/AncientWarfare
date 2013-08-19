@@ -632,8 +632,8 @@ public void render(Entity entity, float f1, float f2, float f3, float f4, float 
 
 public void setWheelRotations(float fl, float fr, float rl, float rr)
   {
-  this.FRWheelPivot.rotateAngleX = Trig.toDegrees(fr);
-  this.FLWheelPivot.rotateAngleX = Trig.toDegrees(fl);
+  this.FRWheelPivot.rotateAngleX = Trig.toRadians(fr);
+  this.FLWheelPivot.rotateAngleX = Trig.toRadians(fl);
   }
 
 public void setTurretRotation(float yaw, float pitch)

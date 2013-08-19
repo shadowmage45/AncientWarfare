@@ -464,8 +464,8 @@ public void setModelPitch(float pitch)
 
 public void setWheelRotations(float fl, float fr, float rl, float rr)
   {
-  this.FRWheelPivot.rotateAngleX = Trig.toDegrees(fr);
-  this.FLWheelPivot.rotateAngleX = Trig.toDegrees(fl);
+  this.FRWheelPivot.rotateAngleX = Trig.toRadians(fr);
+  this.FLWheelPivot.rotateAngleX = Trig.toRadians(fl);
   }
  
 public void setPieceRotation(ModelRenderer model, float x, float y, float z)

@@ -1,7 +1,8 @@
 PRE OPEN BETA
-* add config option to remove block drops from vehicle movement
+
+TONIGHT
 * add more structures to default world-gen -- both manned and un-manned
-* fix wheel rotation speed on boats, ground vehicles
+* cat mobile turret(fixed?) rider position is too far forward
     
 PRE FULL RELEASE
 * default survival-mode structures
@@ -53,7 +54,6 @@ REINFORCED BLOCKS
 * figure out method to allow for partially destroyed blocks w/ destroyed texture rendering
 
 VEHICLES
-* cat mobile turret(fixed?) rider position is too far forward
 * pathfinding needs adjusted so that it doesn't need to be as close to the node to claim next (will help with aquatic pathfinding and the coast-hugging that npcs do)
 * re-allow theta pathfinding in water (it was disabled for crawler--fix crawler some other way)
  
@@ -155,4 +155,6 @@ TEXTURE/ART
 /********** 08-18-13 **********/
 * add config option to enable/disable vehicles tearing up snow/grass/flowers
 * change village generation to cache built bounding boxes to validate structures (try to remove dupe/ghost structures)
+* fix wheel rotation speed on boats, ground vehicles
+* adjust boat bob speed/magnitude
 

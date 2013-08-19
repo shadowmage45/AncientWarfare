@@ -200,9 +200,13 @@ protected void onUpdateClient()
     {
     vehicle.wheelRotation += throttle;
     }
+  else if(vehicle.vehicleType.getMovementType()==VehicleMovementType.WATER)
+    {
+    vehicle.wheelRotation += forwardMotion*64;
+    }
   else
     {
-    vehicle.wheelRotation += forwardMotion;
+    vehicle.wheelRotation += forwardMotion*42;
     }
   this.vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
   }
@@ -576,9 +580,9 @@ protected boolean handleWaterMovement()
         }
       }
     }
-  if (submersionAmount < 1.0D)
+  if (submersionAmount < 0.80D)
     {
-    vehicleForwardMotion = submersionAmount * 2.0D - 1.0D;
+    vehicleForwardMotion = (submersionAmount * 2.0D - 1.0D) * 1.25f;
     vehicle.motionY += 0.03999999910593033D * vehicleForwardMotion;
     }
   else

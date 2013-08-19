@@ -849,7 +849,7 @@ public void setPieceRotation(ModelRenderer model, float x, float y, float z)
 
 public void setWheelRotations(float fl, float fr, float rl, float rr)
   {
-  this.padleAxle.rotateAngleX = Trig.toDegrees(fr);
+  this.padleAxle.rotateAngleX = Trig.toRadians(fr);
   }
 
 public void setTurretRotation(float yaw, float pitch)

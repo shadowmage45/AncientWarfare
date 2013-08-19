@@ -528,7 +528,7 @@ public void render(Entity entity, float f1, float f2, float f3, float f4, float 
 
 public void setWheelRotations(float fl, float fr, float rl, float rr)
   {
-  this.padleAxle.rotateAngleX = Trig.toDegrees(fr);
+  this.padleAxle.rotateAngleX = Trig.toRadians(fr);
   }
 
 public void setPieceRotation(ModelRenderer model, float x, float y, float z)

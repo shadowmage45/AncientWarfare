@@ -561,10 +561,10 @@ public void render(Entity entity, float f1, float f2, float f3, float f4, float 
 
 public void setWheelRotations(float fl, float fr, float rl, float rr)
   {
-  this.FRWheelPivot.rotateAngleX = Trig.toDegrees(fr);
-  this.FLWheelPivot.rotateAngleX = Trig.toDegrees(fl);
-  this.RRWheelPivot.rotateAngleX = Trig.toDegrees(rr);
-  this.RLWheelPivot.rotateAngleX = Trig.toDegrees(rl);
+  this.FRWheelPivot.rotateAngleX = Trig.toRadians(fr);
+  this.FLWheelPivot.rotateAngleX = Trig.toRadians(fl);
+  this.RRWheelPivot.rotateAngleX = Trig.toRadians(rr);
+  this.RLWheelPivot.rotateAngleX = Trig.toRadians(rl);
   }
 
 public void setHitchAngle(float angle)
