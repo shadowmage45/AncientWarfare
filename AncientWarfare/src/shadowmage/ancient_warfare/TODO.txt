@@ -3,11 +3,12 @@ PRE OPEN BETA
 TONIGHT
 * add more structures to default world-gen -- both manned and un-manned
 * cat mobile turret(fixed?) rider position is too far forward
+* more basic validation testing of config options (do they _work_?)(let others find if they crash crap)
     
 PRE FULL RELEASE
 * default survival-mode structures
 * NEI plugin
-* cleanup research notes book    
+* cleanup research notes book (add more to the tips/notes section)  
 
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
@@ -34,6 +35,19 @@ WORLD SEEDS with villages:
 * -10011002
 * -915855788
 * 5504436305081970315
+
+/**
+patch this into RenderGlobal:
+line 520'ish (in renderEntities)
+try
+  {
+  TileEntityRenderer.instance.renderTileEntity(tile, par3);
+  }
+catch(Exception e)
+  {
+  Config.logDebug("exception rendering tile entity!! for tile: "+tile);
+  }                  
+**/
 
 
 LANGUAGE/TRANSLATIONS
