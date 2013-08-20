@@ -153,7 +153,7 @@ TEXTURE/ART
 /********** 08-18-13 **********/
 * udpate vehicles to remove disabled ammunition types from valid ammo list
 
-/********** 08-18-13 **********/
+/********** 08-19-13 **********/
 * add config option to enable/disable vehicles tearing up snow/grass/flowers
 * change village generation to cache built bounding boxes to validate structures (try to remove dupe/ghost structures)
 * fix wheel rotation speed on boats, ground vehicles

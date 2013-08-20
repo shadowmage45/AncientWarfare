@@ -26,7 +26,7 @@ zOffset=0
 maxOverhang=0
 maxLeveling=0
 levelingBuffer=0
-maxVerticalClear=0
+maxVerticalClear=1
 clearingBuffer=0
 preserveWater=false
 preserveLava=false
@@ -901,7 +901,7 @@ layer:
 :endlayer
 
 layer:
-0,8,0,8,0,0,0,0,0,0,0,8,0,8,7
+0,8,0,8,0,0,0,0,0,0,0,8,0,8,0
 0,0,0,0,0,8,0,0,0,8,0,0,0,0,0
 8,0,0,0,0,0,0,0,0,0,0,0,0,0,8
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
