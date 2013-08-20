@@ -85,6 +85,7 @@ List<ResourceListRecipe> structureRecipesClient = new ArrayList<ResourceListReci
 private Map<RecipeType, List<ResourceListRecipe>> recipesByType = new HashMap<RecipeType, List<ResourceListRecipe>>();
 
 public static List<ShapedRecipes> vanillaRecipeList = new ArrayList<ShapedRecipes>();
+protected static List<ResourceListRecipe> cachedRecipes = new ArrayList<ResourceListRecipe>();
 
 private AWCraftingManager()
   {
@@ -109,6 +110,19 @@ private static AWCraftingManager INSTANCE = new AWCraftingManager();
 public static AWCraftingManager instance()
   {
   return INSTANCE;
+  }
+
+public static List<ResourceListRecipe> getAllRecipes()
+  {
+  if(cachedRecipes.isEmpty())
+    {
+    for(RecipeType t : instance().recipesByType.keySet())
+      {
+      if(t==RecipeType.NONE){continue;}
+      cachedRecipes.addAll(instance().recipesByType.get(t));
+      }
+    }
+  return cachedRecipes;
   }
 
 public ResourceListRecipe getRecipeByResult(ItemStack result)
