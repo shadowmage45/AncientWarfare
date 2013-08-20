@@ -285,7 +285,7 @@ private void addStructureEntry(WorldGenStructureEntry ent)
     biomesNotIn = ent.biomesNot;
     biomesOnlyIn = ent.biomesOnly;
     }
-  else
+  else if(struct!=null)
     {
     biomesNotIn = struct.biomesNotIn;
     biomesOnlyIn = struct.biomesOnlyIn;

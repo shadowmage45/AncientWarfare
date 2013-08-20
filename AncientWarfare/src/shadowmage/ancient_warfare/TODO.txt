@@ -1,9 +1,8 @@
 PRE OPEN BETA
 
 TONIGHT
-* add more structures to default world-gen -- both manned and un-manned
 * cat mobile turret(fixed?) rider position is too far forward
-* more basic validation testing of config options (do they _work_?)(let others find if they crash crap)
+* find way to auto-export new structures/world gen file when a new version is released.
     
 PRE FULL RELEASE
 * default survival-mode structures
@@ -24,7 +23,8 @@ FROM TESTING
 * ghost blocks in world-gen (village fortress)
 * fortresses too hard to defeat
 * cleanup memory churn, esp on npcs pathfinding
-* check ammo enable/disable config support to see if there are any other areas it needs disabled (ammo select guis?)
+* adjust vehicles to have no collision box with npcs, should solve npc pathing/clustering around them on castle walls
+* possibly adjust commander bonus damage/damage reduction
 * npc craftsmen hold hammers at a strange angle (would require a special item render for that item/damage)
 * examine tinkers construct village gen for ideas on proper methods to reduce/remove duplicated buildings
     https://github.com/mDiyo/TinkersConstruct/tree/16working/tconstruct/worldgen/village
@@ -36,6 +36,17 @@ WORLD SEEDS with villages:
 * -10011002
 * -915855788 (bad, no village)
 * 5504436305081970315
+
+FEATURE REQUESTS
+* disable npc nametags on hostile enemies until engaged the first time?
+* method to send attack command to npcs
+* advanced baton target selection for what npcs to command -- allow mouse-look add to group
+
+MOD COMPATIBILITY
+* Ruins -- ruins will generate multiple times?
+* Better dungeons -- interferes with placement of dungeons
+* keybind conflicts for default team and options keybinds -- may consider changing (at least mine are configurable)
+
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -161,4 +172,8 @@ TEXTURE/ART
 * add alpha sorting to creative mode structure selection guis
 * add two new world-gen structures -- fortress2 / tower1  both structures from Me2005
 * add release zip
+
+
+/********** 08-20-13 **********/
+* add missing check for null structure when attempting to load world-gen structures
 
