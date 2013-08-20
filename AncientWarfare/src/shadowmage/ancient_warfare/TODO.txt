@@ -160,3 +160,5 @@ TEXTURE/ART
 * adjust boat bob speed/magnitude
 * add alpha sorting to creative mode structure selection guis
 
+* add two new world-gen structures -- fortress2 / tower1  both structures from Me2005
+
