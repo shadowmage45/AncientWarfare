@@ -178,5 +178,6 @@ TEXTURE/ART
 * update recipe manager to ease development of nei plugin
 * add nei plugin -- needs separate compile/build & project setup w/nei environment
 * add auto export/update ability for when mod version updates/changes
+* add release zip
 
 
