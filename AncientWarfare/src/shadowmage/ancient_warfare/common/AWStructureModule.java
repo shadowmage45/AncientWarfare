@@ -158,7 +158,7 @@ public void load(String directory)
     existTest.mkdirs();
     }
      
-  if(shouldExportDefaults)
+  if(shouldExportDefaults || (Config.updatedVersion && Config.autoExportOnUpdate))
     {
     this.copyDefaultStructures(includeDirectory);
     this.shouldExportDefaults = false;
@@ -187,7 +187,9 @@ private void setDefaultStructureNames()
   this.defaultExportStructures.add("lavaFarm.aws");
   this.defaultExportStructures.add("fountain1.aws");
   this.defaultExportStructures.add("logCabin.aws");
-  this.defaultExportStructures.add("fortress1.aws");  
+  this.defaultExportStructures.add("fortress1.aws");
+  this.defaultExportStructures.add("fortress2.aws");
+  this.defaultExportStructures.add("tower1.aws");
   }
 
 private void setValidScannableEntities()

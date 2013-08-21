@@ -429,8 +429,33 @@ public void loadConfig(String pathName)
     if(!configFile.exists())
       {
       copyDefaultFile(fileName);
-      Config.logDebug("AWWorldGen.cfg could not be located, creating default file.");
-      return;
+      Config.log("AWWorldGen.cfg could not be located, creating default file.");      
+      if(!configFile.exists())
+        {
+        Config.logError("Error creating or accessing world gen configuration file, world gen is not enabled");
+        return;
+        }
+      }
+    else if(Config.updatedVersion && Config.autoExportWorldGenOnUpdate)
+      {
+      File oldConfig = new File(pathName+"AWWorldGen.old");
+      if(oldConfig.exists())
+        {
+        oldConfig.delete();
+        }
+      if(configFile.exists())
+        {
+        configFile.renameTo(new File(pathName+"AWWorldGen.old"));
+        configFile = new File(fileName);
+        }
+      copyDefaultFile(fileName);
+      Config.log("Updated mod version detected, re-exporting AWWorldGen.cfg as per config settings.");
+      Config.log("Your old config has been saved as AWWorldGen.old.");
+      if(!configFile.exists())
+        {
+        Config.logError("Error creating or accessing world gen configuration file, world gen is not enabled");
+        return;
+        }
       }
     this.configFile = configFile;
     FileInputStream fis = new FileInputStream(configFile);
@@ -449,6 +474,7 @@ public void loadConfig(String pathName)
     scan.close();
     fis.close();
     
+    int addedEntries = 0;
     Iterator<String> it= lines.iterator();
     while(it.hasNext())
       {
@@ -457,12 +483,14 @@ public void loadConfig(String pathName)
         {
         WorldGenStructureEntry ent = parseEntry(it);
         addStructureEntry(ent);
+        addedEntries++;
         }
       if(line.toLowerCase().startsWith("config:"))
         {
         parseConfig(it);
         }
       }    
+    Config.log("Added "+addedEntries + " world gen structure entries.");
     }
   catch(IOException e)
     {

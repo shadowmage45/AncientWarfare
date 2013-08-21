@@ -59,6 +59,12 @@ public static boolean soldiersUseAmmo = false;
 public static boolean useNpcWorkForCrafting = true;
 public static boolean enableVillageGen = true;
 public static boolean vehiclesTearUpGrass = true;
+public static boolean autoExportOnUpdate = true;
+public static boolean autoExportWorldGenOnUpdate = true;
+
+
+public static boolean updatedVersion = false;
+public static String configVersion = "";
 
 public static int trajectoryIterationsServer = 20;
 public static int civicBroadcastRange = 80;
@@ -209,7 +215,12 @@ public void setCoreInfo()
   config.addCustomCategoryComment("e_vehicle_config", "Enable/disable vehicle recipes and dungeon loot entries for specific vehicle types");
   config.addCustomCategoryComment("f_ammo_config", "Enable/disable ammo recipes and alter damage amounts");
   config.addCustomCategoryComment("g_npc_config", "Enable/disable npc recipes and alter damage/health/healing amounts");
-  
+  String configVersion = config.get("version", "version", "NULL", "The mod version used to last save this config").getString();
+  if(!configVersion.equals(VERSION))
+    {
+    this.updatedVersion = true;
+    config.get("version", "version", VERSION, "The mod version used to last save this config").set(VERSION);
+    }
   /**
    * general options
    */
@@ -221,7 +232,8 @@ public void setCoreInfo()
   this.useNpcWorkForCrafting = config.get("a-general-options", "npc_work", true, "If true, npcs (or interacting player) will be required to produce items at crafting stations.  Set to false to auto-produce.").getBoolean(true);
   this.enablePerformanceMonitor = config.get("a-general-options", "performance_monitor", true, "If true, enables a server-side performance monitor viewable by server OPs from the AW config menu (F7)").getBoolean(true);
   this.npcWorkMJ = config.get("a-general-options", "npc_work_mj", 70, "How many BuildCraft MJ represent one NPC 'work' unit.").getInt(70);
-  
+  this.autoExportOnUpdate = config.get("a-general-options", "auto_export_structure", true, "If true, will automatically re-export the default structure templates when the mod version is updated").getBoolean(true);
+  this.autoExportWorldGenOnUpdate = config.get("a-general-options", "auto_export_worldgen", true, "If true, will automatically re-export the default world gen configuration when the mod version is updated").getBoolean(true);
   
   /**
    * performance options

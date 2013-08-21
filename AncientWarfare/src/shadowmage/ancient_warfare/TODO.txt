@@ -175,5 +175,8 @@ TEXTURE/ART
 
 /********** 08-20-13 **********/
 * add missing check for null structure when attempting to load world-gen structures.
+* update recipe manager to ease development of nei plugin
 * add nei plugin -- needs separate compile/build & project setup w/nei environment
+* add auto export/update ability for when mod version updates/changes
+
 
