@@ -139,6 +139,7 @@ TEXTURE/ART
 * add prep work for using command baton to designate attack targets.
 * add ability to designate an attack target or move to (single patrol) point using the command baton
 * fix cat mobile turret rider position is too far forward
+* update version number in prep for next release
 
 
 
