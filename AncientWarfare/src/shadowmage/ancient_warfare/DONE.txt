@@ -1447,3 +1447,47 @@
 /********************************************************************************/
 /****************************************TEST RELEASE .020****************************************/
 /********************************************************************************/
+
+
+/********** 08-13-13 **********/
+
+/********** 08-14-13 **********/
+* add config options to enable/disable specific vehicle recipes
+* add config options to enable/disable vehicles from being added to dungeon loot table (linked to crafting options)
+* add config options to enable/disable specific ammunitions
+* add config options to change vehicle and entity damage on ammunitions
+* fix searching names to use localized names (crafting guis)
+* disable vehicle spawning entirely for disabled vehicle types
+* minor adjustment to village structure spawning to enable randomness in selection of numbers
+
+/********** 08-15-13 **********/
+* add config options to change many vehicle stats (speed, accuracy, health, pitch stuffs)
+
+/********** 08-17-13 **********/
+* fix vehicle config options to actually remove vehicles
+* add config options to disable npcs and change many npc stats
+
+/********** 08-18-13 **********/
+* udpate vehicles to remove disabled ammunition types from valid ammo list
+
+/********** 08-19-13 **********/
+* add config option to enable/disable vehicles tearing up snow/grass/flowers
+* change village generation to cache built bounding boxes to validate structures (try to remove dupe/ghost structures)
+* fix wheel rotation speed on boats, ground vehicles
+* adjust boat bob speed/magnitude
+* add alpha sorting to creative mode structure selection guis
+* add two new world-gen structures -- fortress2 / tower1  both structures from Me2005
+* add release zip
+/********************************************************************************/
+/****************************************TEST RELEASE .021****************************************/
+/********************************************************************************/
+
+/********** 08-20-13 **********/
+* add missing check for null structure when attempting to load world-gen structures.
+* update recipe manager to ease development of nei plugin
+* add nei plugin -- needs separate compile/build & project setup w/nei environment
+* add auto export/update ability for when mod version updates/changes
+* add release zip
+/********************************************************************************/
+/****************************************TEST RELEASE .022****************************************/
+/********************************************************************************/
