@@ -2,7 +2,6 @@ PRE OPEN BETA
 
 TONIGHT
 * cat mobile turret(fixed?) rider position is too far forward
-* find way to auto-export new structures/world gen file when a new version is released.
     
 PRE FULL RELEASE
 * default survival-mode structures
@@ -74,8 +73,6 @@ GATES
 NPCS
 * more 'check if target dead' (seems creepers or entities removed by setting world to peacefull are still targets)
     perhaps check world loaded entity list to see if target is still present/loaded
-* set to no collide if colliding with vehicles/other method of moving past blocking vehicles  
-
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
@@ -141,8 +138,11 @@ TEXTURE/ART
 ********************* DONE STUFF ************************* 
 
 **************RELEASE************
-/********** 08-21-13 **********/
 
+/********** 08-21-13 **********/
+* disable npc/vehicle collision checks, should solve issues of npcs getting stuck on vehicles
+* add prep work for using command baton to designate attack targets.
+* add ability to designate an attack target or move to (single patrol) point using the command baton
 
 
 

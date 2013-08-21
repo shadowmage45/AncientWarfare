@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -35,10 +36,21 @@ public class RayTraceUtils
 
 public static MovingObjectPosition tracePathWithYawPitch(World world, float x, float y, float z, float yaw, float pitch, float range, float borderSize, HashSet<Entity> excluded)
   {
-  float tx = Trig.sinDegrees(yaw)*range*Trig.cosDegrees(pitch) + x;
-  float ty = Trig.sinDegrees(pitch)*range+y;
-  float tz = Trig.cosDegrees(yaw)*range*Trig.cosDegrees(pitch) + z;
+  float tx = x + (Trig.sinDegrees(yaw+180) * range * Trig.cosDegrees(pitch));
+  float ty = (-Trig.sinDegrees(pitch) * range) + y;
+  float tz = z + (Trig.cosDegrees(yaw) * range * Trig.cosDegrees(pitch));
   return tracePath(world, x, y, z, tx, ty, tz, borderSize, excluded);
+  }
+
+public static MovingObjectPosition getPlayerTarget(EntityPlayer player, float range, float border)
+  {
+  HashSet<Entity> excluded = new HashSet<Entity>();
+  excluded.add(player);
+  if(player.ridingEntity!=null)
+    {
+    excluded.add(player.ridingEntity);
+    }
+  return tracePathWithYawPitch(player.worldObj, (float)player.posX, (float)player.posY + (player.worldObj.isRemote ? 0.f : 1.62f), (float)player.posZ, player.rotationYaw, player.rotationPitch, range, border, excluded);  
   }
 
 public static MovingObjectPosition tracePath(World world, float x, float y, float z, float tx, float ty, float tz, float borderSize, HashSet<Entity> excluded)

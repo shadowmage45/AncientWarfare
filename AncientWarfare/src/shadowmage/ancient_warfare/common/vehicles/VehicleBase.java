@@ -861,7 +861,7 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
 @Override
 public void applyEntityCollision(Entity par1Entity)
   {
-  if( par1Entity != this.riddenByEntity)//skip if it if it is the rider 
+  if( par1Entity != this.riddenByEntity && !(par1Entity instanceof NpcBase))//skip if it if it is the rider 
     {
     double xDiff = par1Entity.posX - this.posX;
     double zDiff = par1Entity.posZ - this.posZ;
@@ -1141,7 +1141,6 @@ public boolean canInteract(EntityPlayer player)
 @Override
 public void setMoveTo(double x, double y, double z, float moveSpeed)
   {
-  Config.logDebug("setting move to target from navigator");
   this.moveHelper.setMoveTo(x, y, z);
   }
 

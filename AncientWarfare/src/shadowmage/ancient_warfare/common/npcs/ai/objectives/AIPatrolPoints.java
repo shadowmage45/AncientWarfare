@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -81,19 +82,18 @@ public void onRunningTick()
     ITargetEntry entry = npc.getTarget();
     if(entry==null)
       {
-//      Config.logDebug("entity has no target, setting patrol to finished");
-
+      Config.logDebug("entity has no target, point may have finished, setting patrol to finished");
       this.cooldownTicks = this.maxCooldownticks;
       this.isFinished = true;
       this.patrolPoint = null;
       }
     else
-      {
+      {      
       if(entry.getTargetType() == TargetType.PATROL)
         {
         if(npc.getDistanceFromTarget(entry) < 3)
           {
-//          Config.logDebug("sensing completed patrol point, setting finished");
+          Config.logDebug("sensing completed patrol point, setting finished");
           this.cooldownTicks = this.maxCooldownticks;
           this.isFinished = true;
           this.patrolPoint = null;
@@ -114,26 +114,29 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
+  Config.logDebug("starting patrol objective...");
   if(patrolPoint==null)
     {
-    for(int i = 0; i < npc.wayNav.getPatrolSize()-1; i++)
+    Config.logDebug("has no current patrol point, finding starting point.  patrol size: "+npc.wayNav.getPatrolSize());
+    for(int i = 0; i < npc.wayNav.getPatrolSize(); i++)
       {
       patrolPoint = npc.wayNav.getNextPatrolPoint();
       if(patrolPoint!=null && patrolPoint.isTargetLoaded(npc.worldObj))
         {
+        Config.logDebug("found patrol point: "+patrolPoint);
         break;
         }
       }
-    }
-  
-//  Config.logDebug("starting patrol ai, choosing next patrol point, setting target");
-  
+    }  
   if(patrolPoint!=null && patrolPoint.isTargetLoaded(npc.worldObj))
     {    
+    Config.logDebug("setting patrol point: "+patrolPoint);
     npc.setTargetAW(patrolPoint);
     }
   else
     {
+
+    Config.logDebug("no patrol point found..setting finished");
     npc.setTargetAW(null);
     this.isFinished = true;
     this.cooldownTicks = maxCooldownticks;
@@ -143,7 +146,6 @@ public void onObjectiveStart()
 @Override
 public void stopObjective()
   {
-//  Config.logDebug("stopping patrol ai, clearing target");
   npc.setTargetAW(null);  
   npc.clearPath();
   }

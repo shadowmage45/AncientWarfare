@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -40,10 +41,12 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.EntityTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.utils.RayTraceUtils;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class ItemNpcCommandBaton extends AWItemClickable
@@ -63,9 +66,40 @@ public ItemNpcCommandBaton(int itemID)
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   { 
-  if(!world.isRemote)
+  if(world.isRemote){return false;}
+  if(player.isSneaking())
     {
     GUIHandler.instance().openGUI(GUIHandler.instance().NPC_COMMAND_BATON, player, world, 0, 0, 0);
+    }
+  else
+    {
+    if(true)
+      {
+      HashSet<Entity> excluded = new HashSet<Entity>();
+      excluded.add(player);
+      if(player.ridingEntity!=null)
+        {
+        excluded.add(player.ridingEntity);
+        }
+      MovingObjectPosition pos = RayTraceUtils.getPlayerTarget(player, 140.f, 1.f);
+      if(pos!=null)
+        {
+        if(pos.entityHit!=null)
+          {
+          handleNpcAttackCommand(player, stack, getBatonSettings(stack), pos);
+          }
+        else
+          {
+          handleNpcCommand(player, stack, getBatonSettings(stack), pos, NpcCommand.CLEAR_PATROL);
+          handleNpcCommand(player, stack, getBatonSettings(stack), pos, NpcCommand.PATROL);
+          }
+        Config.logDebug("hit pos: "+pos.hitVec + " entity: "+pos.entityHit);
+        }
+      else
+        {
+        Config.logDebug(" NULL HIT ");
+        }
+      }
     }
   return false;
   }
@@ -74,8 +108,9 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
   super.addInformation(stack, player, list, par4);   
-  list.add("Left Click: Execute Command");
-  list.add("Right Click: Open GUI");
+  list.add("Left Click: Execute Baton Command");
+  list.add("Right Click: Command attack/move to");
+  list.add("(Sneak)Right Click: Open GUI");
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("batonSettings"))
     {
     NBTTagCompound tag = stack.getTagCompound().getCompoundTag("batonSettings");
@@ -124,22 +159,59 @@ public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity en
       {
       if(entity instanceof VehicleBase && entity.riddenByEntity==null)
         {
-        this.handleNpcCommand(player, stack, settings, hit);
+        this.handleNpcCommand(player, stack, settings, hit, settings.command);
         }
       }
     else if(settings.command == NpcCommand.GUARD)
       {
-      this.handleNpcCommand(player, stack, settings, hit);
+      this.handleNpcCommand(player, stack, settings, hit, settings.command);
       }
     return true;
     }  
   return super.onLeftClickEntity(stack, player, entity);
   }
 
-protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSettings settings, MovingObjectPosition hit)
+protected void handleNpcAttackCommand(EntityPlayer player, ItemStack stack, BatonSettings settings, MovingObjectPosition hit)
   {
   NpcBase npc = null;
-  NpcCommand cmd = settings.command;
+  
+  if(hit==null || hit.entityHit==null)
+    {
+    return;
+    }    
+  int range = settings.range < 20 ? 20 : settings.range;
+  AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(player.posX-range, player.posY-range, player.posZ-range, player.posX+range, player.posY+range, player.posZ+range);
+  List<NpcBase> npcs = player.worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
+  
+  Iterator<NpcBase> it = npcs.iterator();
+  int commanded = 0;
+  int followCommanded = 0;
+  while(it.hasNext())
+    {
+    npc = it.next();  
+    if(!npc.npcType.isCombatUnit())
+      {
+      continue;
+      }
+    if(npc.getPlayerTarget()!=null && npc.getPlayerTarget().getEntity(npc.worldObj)==player)
+      {
+      followCommanded++;
+      npc.setTargetAW(null);
+      npc.handleBroadcastAttackTarget(hit.entityHit, 1000);
+      }    
+    else if(player.getDistanceToEntity(npc)<settings.range && !npc.isAggroTowards(player) && npc.teamNum<15)
+      {
+      commanded++;
+      npc.setTargetAW(null);
+      npc.handleBroadcastAttackTarget(hit.entityHit, 1000);
+      }   
+    }  
+  player.addChatMessage("Commanding "+(commanded + followCommanded)+ " Npcs to attack " + hit.entityHit.getTranslatedEntityName());
+  }
+
+protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSettings settings, MovingObjectPosition hit, NpcCommand cmd)
+  {
+  NpcBase npc = null;
   
   if(hit==null)
     {
@@ -169,20 +241,22 @@ protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSetti
   Iterator<NpcBase> it = npcs.iterator();
   int commanded = 0;
   int followCommanded = 0;
+  
+  Config.logDebug(" commanding for wp: "+p);
   while(it.hasNext())
     {
-    npc = it.next();
+    npc = it.next();    
     if(npc.getPlayerTarget()!=null && npc.getPlayerTarget().getEntity(npc.worldObj)==player)
       {
       followCommanded++;
       pt = new WayPoint(p);
-      npc.handleBatonCommand(cmd, p);
+      npc.handleBatonCommand(cmd, pt);
       }    
-    else if(player.getDistanceToEntity(npc)<settings.range && !npc.isAggroTowards(player) && npc.teamNum<15)
+    else if(player.getDistanceToEntity(npc) < settings.range && !npc.isAggroTowards(player) && npc.teamNum<=15)
       {
       commanded++;
       pt = new WayPoint(p);
-      npc.handleBatonCommand(cmd, p);
+      npc.handleBatonCommand(cmd, pt);
       }
     if(cmd.isSingleTargetOnly(cmd) && commanded+followCommanded>=1)
       {
@@ -198,7 +272,7 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
   if(!player.worldObj.isRemote)
     {
     BatonSettings settings = getBatonSettings(stack);
-    this.handleNpcCommand(player, stack, settings, new MovingObjectPosition(hit.x, hit.y, hit.z, side, Vec3.fakePool.getVecFromPool(0, 0, 0)));
+    this.handleNpcCommand(player, stack, settings, new MovingObjectPosition(hit.x, hit.y, hit.z, side, Vec3.fakePool.getVecFromPool(0, 0, 0)), settings.command);
     }   
   return false;
   }
