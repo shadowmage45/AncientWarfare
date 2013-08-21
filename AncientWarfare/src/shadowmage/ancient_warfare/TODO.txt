@@ -1,7 +1,6 @@
 PRE OPEN BETA
 
 TONIGHT
-* cat mobile turret(fixed?) rider position is too far forward
     
 PRE FULL RELEASE
 * default survival-mode structures
@@ -37,14 +36,11 @@ WORLD SEEDS with villages:
 
 FEATURE REQUESTS
 * disable npc nametags on hostile enemies until engaged the first time?
-* method to send attack command to npcs
-* advanced baton target selection for what npcs to command -- allow mouse-look add to group
 
 MOD COMPATIBILITY
 * Ruins -- ruins will generate multiple times?
 * Better dungeons -- interferes with placement of dungeons
 * keybind conflicts for default team and options keybinds -- may consider changing (at least mine are configurable)
-
 
 LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
@@ -124,7 +120,6 @@ THINGS TO INVESTIGATE
 * survival-mode structure scanning
 * world-gen villages w/active npcs
 * using villagers as recruits for NPC workers (scan area around town-hall?)
-* wireless redstone module
 * portable shelter type setup (could be done if used special blocks)
 * grenades
 * land-mines
@@ -143,6 +138,7 @@ TEXTURE/ART
 * disable npc/vehicle collision checks, should solve issues of npcs getting stuck on vehicles
 * add prep work for using command baton to designate attack targets.
 * add ability to designate an attack target or move to (single patrol) point using the command baton
+* fix cat mobile turret rider position is too far forward
 
 
 

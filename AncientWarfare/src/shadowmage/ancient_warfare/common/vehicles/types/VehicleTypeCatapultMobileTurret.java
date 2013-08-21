@@ -42,7 +42,7 @@ public class VehicleTypeCatapultMobileTurret extends VehicleTypeCatapult
     this.baseForwardSpeed = 4.0f*0.05f;  
     this.baseMissileVelocityMax = 30.f;  
     this.turretVerticalOffset = 15 * 0.0625f;   
-    this.riderForwardsOffset = 1.2f;
+    this.riderForwardsOffset = 0.8f;
     this.riderVerticalOffset = 0.8f;
     this.displayName = "item.vehicleSpawner.3";
     this.displayTooltip.add("item.vehicleSpawner.tooltip.torsion");

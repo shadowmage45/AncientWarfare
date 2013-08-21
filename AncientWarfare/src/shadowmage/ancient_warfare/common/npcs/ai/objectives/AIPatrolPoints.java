@@ -82,7 +82,6 @@ public void onRunningTick()
     ITargetEntry entry = npc.getTarget();
     if(entry==null)
       {
-      Config.logDebug("entity has no target, point may have finished, setting patrol to finished");
       this.cooldownTicks = this.maxCooldownticks;
       this.isFinished = true;
       this.patrolPoint = null;
@@ -93,7 +92,6 @@ public void onRunningTick()
         {
         if(npc.getDistanceFromTarget(entry) < 3)
           {
-          Config.logDebug("sensing completed patrol point, setting finished");
           this.cooldownTicks = this.maxCooldownticks;
           this.isFinished = true;
           this.patrolPoint = null;
@@ -101,8 +99,6 @@ public void onRunningTick()
         }
       else
         {
-//        Config.logDebug("inconsistent target, not patrol target, setting finished");
-        //what? somehow a diff target was set, force-finished
         this.cooldownTicks = this.maxCooldownticks;
         this.isFinished = true;
         this.patrolPoint = null;
@@ -114,29 +110,23 @@ public void onRunningTick()
 @Override
 public void onObjectiveStart()
   {
-  Config.logDebug("starting patrol objective...");
   if(patrolPoint==null)
     {
-    Config.logDebug("has no current patrol point, finding starting point.  patrol size: "+npc.wayNav.getPatrolSize());
     for(int i = 0; i < npc.wayNav.getPatrolSize(); i++)
       {
       patrolPoint = npc.wayNav.getNextPatrolPoint();
       if(patrolPoint!=null && patrolPoint.isTargetLoaded(npc.worldObj))
         {
-        Config.logDebug("found patrol point: "+patrolPoint);
         break;
         }
       }
     }  
   if(patrolPoint!=null && patrolPoint.isTargetLoaded(npc.worldObj))
     {    
-    Config.logDebug("setting patrol point: "+patrolPoint);
     npc.setTargetAW(patrolPoint);
     }
   else
     {
-
-    Config.logDebug("no patrol point found..setting finished");
     npc.setTargetAW(null);
     this.isFinished = true;
     this.cooldownTicks = maxCooldownticks;
