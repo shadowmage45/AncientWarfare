@@ -108,6 +108,11 @@ public void onBlockPlaced()
   
   }
 
+public void onBlockNeighborChanged()
+  {
+  
+  }
+
 public void setTeamNum(int num)
   {
   this.teamNumber = num;

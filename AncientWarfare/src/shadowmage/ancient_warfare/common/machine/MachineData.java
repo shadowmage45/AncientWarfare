@@ -65,6 +65,8 @@ public static TileEntity getTEFor(int dmg)
   return PluginProxy.bcProxy.getMotorTileEntity();
   case 6:
   return new TEFoodProcessor();
+  case 7:
+  return new TEGateLock();
   }
   return new TETrashcan();
   }
@@ -119,6 +121,13 @@ public static void registerIcons(IconRegister registry, Description d)
   d.setIcon(registry.registerIcon("ancientwarfare:machine/foodLeft"), 39);//trash right
   d.setIcon(registry.registerIcon("ancientwarfare:machine/foodBottom"), 40);//trash bottom
   d.setIcon(registry.registerIcon("ancientwarfare:machine/foodTop"), 41);//trash top 
+  
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/gateLockFront"), 42);//trash front
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/gateLockRight"), 43);//trash left
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/gateLockRear"), 44);//trash rear
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/gateLockLeft"), 45);//trash right
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/gateLockBottom"), 46);//trash bottom
+  d.setIcon(registry.registerIcon("ancientwarfare:machine/gateLockTop"), 47);//trash top 
   }
 
 public static Icon getIcon(TileEntity te, int meta, int side)
@@ -234,6 +243,10 @@ public static void registerBlockData()
   GameRegistry.registerTileEntity(TEFoodProcessor.class, "Food Processor");
   d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,6));
   d.setName("block.multi.machine.6", 6);
+  
+  GameRegistry.registerTileEntity(TEGateLock.class, "Gate Lock");
+  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,7));
+  d.setName("block.multi.machine.7", 7);
   }
 
 }

@@ -23,12 +23,14 @@ package shadowmage.ancient_warfare.common.gates;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.interfaces.IEntityPacketHandler;
+import shadowmage.ancient_warfare.common.machine.TEGateLock;
 import shadowmage.ancient_warfare.common.network.Packet06Entity;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -188,14 +190,12 @@ public void setPosition(double par1, double par3, double par5)
     }
   }
 
-
 @Override
 public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9)
   {
   this.setPosition(par1, par3, par5);
   this.setRotation(par7, par8);
   }
-
 
 @Override
 public boolean interact(EntityPlayer par1EntityPlayer)
@@ -215,6 +215,10 @@ public boolean interact(EntityPlayer par1EntityPlayer)
 
 public void activateGate()
   {
+  if(this.checkForLockStatus())
+    {
+    return;
+    }
   if(this.gateStatus==1 && this.gateType.canActivate(this, false))
     {
     this.setOpeningStatus((byte) -1);
@@ -293,7 +297,7 @@ protected void checkForPowerUpdates()
   if(this.worldObj.isRemote)
     {
     return;
-    }
+    } 
   boolean foundPower = false;
   int y = pos1.y;
   y = pos2.y < y ? pos2.y : y;
@@ -301,11 +305,38 @@ protected void checkForPowerUpdates()
     {
     foundPower = true;
     }
-  if(foundPower!=wasPowered && !wasPowered)
+  if(foundPower!=wasPowered && !wasPowered && !this.checkForLockStatus())
     {
     this.activateGate();
     }
   this.wasPowered = foundPower;
+  }
+
+protected boolean checkForLockStatus()
+  {
+  if(this.worldObj.isRemote)
+    {
+    return false;
+    }
+  BlockPosition a = pos1.copy();
+  BlockPosition b = pos2.copy();
+  a.moveRight(gateOrientation, 1);
+  b.y = a.y;
+  b.moveLeft(gateOrientation, 1);
+  boolean locked = false;
+  TileEntity te;
+  te = this.worldObj.getBlockTileEntity(a.x, a.y, a.z);
+  if(te instanceof TEGateLock)
+    {
+    locked = ((TEGateLock)te).isLocked();
+    }
+  te = this.worldObj.getBlockTileEntity(b.x, b.y, b.z);
+  if(te instanceof TEGateLock)
+    {
+    locked = ((TEGateLock)te).isLocked();
+    }
+  Config.logDebug("checking locked status for gate...locked: "+locked);
+  return locked;
   }
 
 @Override

@@ -141,5 +141,7 @@ TEXTURE/ART
 * fix cat mobile turret rider position is too far forward
 * update version number in prep for next release
 
-
-
+/********** 08-22-13 **********/
+* add in gate lock-block -- when placed next to a gate and powered, completely prevents gate from opening/closing
+    NEEDS TEXTURES/MORE TESTING
+    
