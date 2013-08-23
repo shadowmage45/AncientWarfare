@@ -25,6 +25,8 @@ FROM TESTING
 * npc craftsmen hold hammers at a strange angle (would require a special item render for that item/damage)
 * examine tinkers construct village gen for ideas on proper methods to reduce/remove duplicated buildings
     https://github.com/mDiyo/TinkersConstruct/tree/16working/tconstruct/worldgen/village
+* server not authenticating AW versions properly    
+    
 WORLD SEEDS with villages:
 * 6663435395855598992
 * REDSTONEUPDATE
