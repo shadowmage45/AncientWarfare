@@ -17,10 +17,9 @@ FROM TESTING
 * bed placement is fubar in structure gen from templates
 * npc despawning?
 * npc trampling on crops
-* ghost blocks in world-gen (village fortress)
+* ghost blocks in world-gen (village fortress)<fixed??>
 * fortresses too hard to defeat
 * cleanup memory churn, esp on npcs pathfinding
-* adjust vehicles to have no collision box with npcs, should solve npc pathing/clustering around them on castle walls
 * possibly adjust commander bonus damage/damage reduction
 * npc craftsmen hold hammers at a strange angle (would require a special item render for that item/damage)
 * examine tinkers construct village gen for ideas on proper methods to reduce/remove duplicated buildings
