@@ -69,6 +69,7 @@ byte gateStatus = 0;
 public byte gateOrientation = 0;
 
 boolean hasSetWorldEntityRadius = false;
+boolean isLocked = false;
 
 /**
  * @param par1World
@@ -207,7 +208,10 @@ public boolean interact(EntityPlayer par1EntityPlayer)
   int pNum = TeamTracker.instance().getTeamForPlayer(par1EntityPlayer);
   if(!TeamTracker.instance().isHostileTowards(worldObj, pNum, teamNum) && !TeamTracker.instance().isHostileTowards(worldObj, teamNum, pNum))
     {
-    this.activateGate();
+    if(!isLocked)
+      {
+      this.activateGate();
+      }   
     return true;
     }
   else
@@ -219,10 +223,6 @@ public boolean interact(EntityPlayer par1EntityPlayer)
 
 public void activateGate()
   {
-  if(this.checkForLockStatus())
-    {
-    return;
-    }
   if(this.gateStatus==1 && this.gateType.canActivate(this, false))
     {
     this.setOpeningStatus((byte) -1);
@@ -249,6 +249,7 @@ public void onUpdate()
   float prevEdge = this.edgePosition;
   this.setPosition(posX, posY, posZ);
 //  Config.logDebug(String.format("Gate Pos: %.2f, %.2f, %.2f.  client:%s", posX, posY, posZ, worldObj.isRemote));
+  this.checkForLockStatus();
   this.checkForPowerUpdates();
   if(this.hurtAnimationTicks>0)
     {
@@ -306,38 +307,47 @@ protected void checkForPowerUpdates()
   int y = pos1.y;
   y = pos2.y < y ? pos2.y : y;
   foundPower = this.worldObj.isBlockIndirectlyGettingPowered(pos1.x, y, pos1.z) || this.worldObj.isBlockIndirectlyGettingPowered(pos2.x, y, pos2.z);
-  if(foundPower && !wasPowered)
+  if(foundPower && !wasPowered && !isLocked)
     {
     this.activateGate();
     }
   this.wasPowered = foundPower;
   }
 
-protected boolean checkForLockStatus()
+protected void checkForLockStatus()
   {
   if(this.worldObj.isRemote)
     {
-    return false;
+    return;
     }
+  this.isLocked = false;
   BlockPosition a = BlockTools.getMin(pos1, pos2);
-  BlockPosition b = BlockTools.getMax(pos1, pos2);
-  a.moveRight(gateOrientation, 1);
+  BlockPosition b = BlockTools.getMax(pos1, pos2);  
   b.y = a.y;
-  b.moveLeft(gateOrientation, 1);
+  if(a.x!=b.x)
+    {
+    a.x--;
+    b.x++;
+    }
+  else
+    {
+    a.z--;
+    b.z++;
+    }
   boolean locked = false;
   TileEntity te;
   te = this.worldObj.getBlockTileEntity(a.x, a.y, a.z);
   if(te instanceof TEGateLock)
     {
     locked = ((TEGateLock)te).isLocked();
+    this.isLocked = locked || this.isLocked;
     }
   te = this.worldObj.getBlockTileEntity(b.x, b.y, b.z);
   if(te instanceof TEGateLock)
     {
     locked = ((TEGateLock)te).isLocked();
+    this.isLocked = locked || this.isLocked;
     }
-  Config.logDebug("checking locked status for gate...locked: "+locked);
-  return locked;
   }
 
 @Override
@@ -394,6 +404,7 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.gateStatus = tag.getByte("status");
   this.gateOrientation = tag.getByte("orient");
   this.wasPowered = tag.getBoolean("power");
+  this.isLocked = tag.getBoolean("lock");  
   }
 
 @Override
@@ -409,6 +420,7 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setByte("status", this.gateStatus);
   tag.setByte("orient", gateOrientation);
   tag.setBoolean("power", this.wasPowered);
+  tag.setBoolean("lock", this.isLocked);
   }
 
 @Override

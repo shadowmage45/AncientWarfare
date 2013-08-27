@@ -153,4 +153,5 @@ TEXTURE/ART
 * remove original gate power/lock ability--lock is now only enabled through gate lock block
 * add recipe for gate lock
 * remove a research goal dependency for explosives1 that would have prevented it every being researched
+* fix gate-lock block interaction/locking
     
