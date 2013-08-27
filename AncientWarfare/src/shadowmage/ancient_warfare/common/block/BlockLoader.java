@@ -94,6 +94,7 @@ public static final ItemStack chunkloaderDeluxe = new ItemStack(machineBlock, 1,
 public static final ItemStack mechanicalWorker = new ItemStack(machineBlock, 1, 5);
 public static final ItemStack handCrankedEngine = new ItemStack(engineBlock, 1, 0);
 public static final ItemStack foodProcessor = new ItemStack(machineBlock, 1, 6);
+public static final ItemStack gateLock = new ItemStack(machineBlock, 1, 7);
 
 private static BlockLoader INSTANCE;
 private BlockLoader(){}

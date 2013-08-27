@@ -205,10 +205,14 @@ public boolean interact(EntityPlayer par1EntityPlayer)
     return false;
     }
   int pNum = TeamTracker.instance().getTeamForPlayer(par1EntityPlayer);
-  if(!TeamTracker.instance().isHostileTowards(worldObj, pNum, teamNum) && !TeamTracker.instance().isHostileTowards(worldObj, teamNum, pNum) && !wasPowered)
+  if(!TeamTracker.instance().isHostileTowards(worldObj, pNum, teamNum) && !TeamTracker.instance().isHostileTowards(worldObj, teamNum, pNum))
     {
     this.activateGate();
     return true;
+    }
+  else
+    {
+    par1EntityPlayer.addChatMessage("You cannot open enemy gates!!");
     }
   return false;
   }

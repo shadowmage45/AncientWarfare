@@ -17,7 +17,7 @@ FROM TESTING
 * bed placement is fubar in structure gen from templates
 * npc despawning?
 * npc trampling on crops
-* ghost blocks in world-gen (village fortress)<fixed??>
+* ghost blocks in world-gen (village fortress)<fixed??--may have been related to RNG>
 * fortresses too hard to defeat
 * cleanup memory churn, esp on npcs pathfinding
 * possibly adjust commander bonus damage/damage reduction
@@ -150,4 +150,6 @@ TEXTURE/ART
 /********** 08-27-13 **********/
 * add textures for gate lock block.
 * finish up gate lock functionality.  slightly modify gate onPowered activation.
+* remove original gate power/lock ability--lock is now only enabled through gate lock block
+* add recipe for gate lock
     

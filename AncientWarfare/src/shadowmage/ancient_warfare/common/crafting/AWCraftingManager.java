@@ -529,6 +529,12 @@ protected void addCivicRecipes()
   recipe.addNeededResearch(ResearchGoalNumbers.command1);  
   this.civicMiscRecipes.add(recipe);
   
+  recipe = new ResourceListRecipe(BlockLoader.gateLock, RecipeType.CIVIC_MISC);
+  recipe.addResource(Item.ingotIron, 2, false);
+  recipe.addResource(Block.stoneBrick,4, false);
+  recipe.addNeededResearch(ResearchGoalNumbers.mechanics1);
+  this.civicMiscRecipes.add(recipe);
+  
   recipe = new ResourceListRecipe(ItemLoader.hammer1, RecipeType.CIVIC_MISC);
   recipe.addResource(Item.ingotIron, 4, false);
   recipe.addResource(Item.stick, 2, false);
