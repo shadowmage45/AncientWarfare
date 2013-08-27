@@ -24,7 +24,8 @@ FROM TESTING
 * npc craftsmen hold hammers at a strange angle (would require a special item render for that item/damage)
 * examine tinkers construct village gen for ideas on proper methods to reduce/remove duplicated buildings
     https://github.com/mDiyo/TinkersConstruct/tree/16working/tconstruct/worldgen/village
-* server not authenticating AW versions properly    
+* server not authenticating AW versions properly   
+* still not saving research properly?  (lost research on test server) 
     
 WORLD SEEDS with villages:
 * 6663435395855598992
@@ -151,4 +152,5 @@ TEXTURE/ART
 * finish up gate lock functionality.  slightly modify gate onPowered activation.
 * remove original gate power/lock ability--lock is now only enabled through gate lock block
 * add recipe for gate lock
+* remove a research goal dependency for explosives1 that would have prevented it every being researched
     

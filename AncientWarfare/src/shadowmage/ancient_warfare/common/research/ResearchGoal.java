@@ -83,7 +83,7 @@ public static IResearchGoal vehicleGunpowderWeapons3 = new ResearchGunpowderVehi
 public static IResearchGoal vehicleGunpowderWeapons4 = new ResearchGunpowderVehicles(ResearchGoalNumbers.gunpowder4, 3).addDependencies(vehicleGunpowderWeapons3);
 public static IResearchGoal vehicleGunpowderWeapons5 = new ResearchGunpowderVehicles(ResearchGoalNumbers.gunpowder5, 4).addDependencies(vehicleGunpowderWeapons4);
 
-public static IResearchGoal ammoExplosives1 = new ResearchExplosives(ResearchGoalNumbers.explosives1, 0).addDependencies(vehicleGunpowderWeapons1).addDependencies(ResearchGoalNumbers.flammables2);
+public static IResearchGoal ammoExplosives1 = new ResearchExplosives(ResearchGoalNumbers.explosives1, 0).addDependencies(ResearchGoalNumbers.flammables2);
 public static IResearchGoal ammoExplosives2 = new ResearchExplosives(ResearchGoalNumbers.explosives2, 1).addDependencies(ammoExplosives1);
 public static IResearchGoal ammoExplosives3 = new ResearchExplosives(ResearchGoalNumbers.explosives3, 2).addDependencies(ammoExplosives2);
 public static IResearchGoal ammoRockets1 = new ResearchRockets(ResearchGoalNumbers.rockets1, 0).addDependencies(ammoExplosives2);
