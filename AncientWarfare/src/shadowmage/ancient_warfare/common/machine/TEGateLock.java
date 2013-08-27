@@ -27,7 +27,6 @@ public class TEGateLock extends TEMachine
 {
 
 boolean isLocked;
-
 /**
  * 
  */

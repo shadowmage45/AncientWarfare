@@ -126,7 +126,6 @@ THINGS TO INVESTIGATE
 * land-mines
 * hand-weapons
 * flamethrower type vehicles
-* gate lock blocks
 * add fields to templates for requisite research? (and restructure table to need a book/etc)
 
 TEXTURE/ART
