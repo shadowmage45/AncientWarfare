@@ -146,4 +146,8 @@ TEXTURE/ART
 * add in gate lock-block -- when placed next to a gate and powered, completely prevents gate from opening/closing
     NEEDS TEXTURES/MORE TESTING
 * add translation entry for gate-lock
+
+/********** 08-27-13 **********/
+* add textures for gate lock block.
+* finish up gate lock functionality.  slightly modify gate onPowered activation.
     

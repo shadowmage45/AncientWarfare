@@ -96,7 +96,7 @@ protected void entityInit()
   
   }
 
-public void setOpeningStatus(byte op)
+protected void setOpeningStatus(byte op)
   {
   this.gateStatus = op;  
   if(!this.worldObj.isRemote)
@@ -301,11 +301,8 @@ protected void checkForPowerUpdates()
   boolean foundPower = false;
   int y = pos1.y;
   y = pos2.y < y ? pos2.y : y;
-  if(this.worldObj.isBlockIndirectlyGettingPowered(pos1.x, y, pos1.z) || this.worldObj.isBlockIndirectlyGettingPowered(pos2.x, y, pos2.z))
-    {
-    foundPower = true;
-    }
-  if(foundPower!=wasPowered && !wasPowered && !this.checkForLockStatus())
+  foundPower = this.worldObj.isBlockIndirectlyGettingPowered(pos1.x, y, pos1.z) || this.worldObj.isBlockIndirectlyGettingPowered(pos2.x, y, pos2.z);
+  if(foundPower && !wasPowered)
     {
     this.activateGate();
     }
@@ -318,8 +315,8 @@ protected boolean checkForLockStatus()
     {
     return false;
     }
-  BlockPosition a = pos1.copy();
-  BlockPosition b = pos2.copy();
+  BlockPosition a = BlockTools.getMin(pos1, pos2);
+  BlockPosition b = BlockTools.getMax(pos1, pos2);
   a.moveRight(gateOrientation, 1);
   b.y = a.y;
   b.moveLeft(gateOrientation, 1);
