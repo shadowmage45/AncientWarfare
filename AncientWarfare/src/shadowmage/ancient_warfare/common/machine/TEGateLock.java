@@ -33,7 +33,7 @@ boolean isLocked;
  */
 public TEGateLock()
   {
-  this.canUpdate = true;
+  this.canUpdate = false;
   this.facesOpposite = true;
   }
 
@@ -46,21 +46,8 @@ public boolean isLocked()
 public void onBlockNeighborChanged()
   {
   this.isLocked = false;
-  int bx,by,bz;
-  bx = xCoord + facingDirection.offsetX;
-  by = yCoord + facingDirection.offsetY;
-  bz = zCoord + facingDirection.offsetZ;
-  Config.logDebug("checking lock block status...facing direction: "+facingDirection + " @"+xCoord+","+yCoord+","+zCoord);
-  Config.logDebug("checking block: "+bx+","+by+","+bz+" for power.");
-  int p = this.worldObj.isBlockProvidingPowerTo(bx, by, bz, facingDirection.ordinal());
-  int p1 = this.worldObj.getIndirectPowerLevelTo(bx, by, bz, facingDirection.ordinal());
-  boolean p2 = this.worldObj.getIndirectPowerOutput(bx, by, bz, facingDirection.ordinal());
-  
-  Config.logDebug(String.format("status: %s, %s, %s", p, p1, p2));
-    
-  if(this.worldObj.getIndirectPowerOutput(bx, by, bz, facingDirection.ordinal()))
-    {
-    Config.logDebug("setting lock block to locked!!");
+  if(this.worldObj.getIndirectPowerOutput(xCoord + facingDirection.offsetX, yCoord + facingDirection.offsetY, zCoord + facingDirection.offsetZ, facingDirection.ordinal()))
+    {  
     this.isLocked = true;
     }
   }
