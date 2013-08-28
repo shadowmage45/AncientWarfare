@@ -96,7 +96,6 @@ OPTIONAL
 * move upgrades/ammo/armor over to self-registering class with an underlying array instead of the map they currently use        
 * clean up vehicle alpha rendering
 * structures can have their base map moved into a single-dimensional array
-* worker-engine optional upgrade slots?
 * add rotation support to rotatable blocks (crafting tables -- just for cosmetics?)
 * move other rotatable blocks over to forgeDirection for consistency
    
@@ -129,6 +128,8 @@ THINGS TO INVESTIGATE
 * hand-weapons
 * flamethrower type vehicles
 * add fields to templates for requisite research? (and restructure table to need a book/etc)
+* worker-engine optional upgrade slots?
+* add crafting/recruit recipes for all vanilla / mod villagers (probably the same recipe..)
 
 TEXTURE/ART
 
