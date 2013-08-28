@@ -390,7 +390,10 @@ public Collection<ItemStackWrapperCrafting> getResources()
 
 protected void breakBlockAndDrop(World world, int x, int y, int z)
   {
-  BlockTools.breakBlockAndDrop(world, x, y, z);
+  if(Config.blockDestruction)
+    {
+    BlockTools.breakBlockAndDrop(world, x, y, z);    
+    }
   }
 
 /**

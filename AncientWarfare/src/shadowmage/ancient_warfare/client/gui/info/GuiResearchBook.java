@@ -339,7 +339,8 @@ protected void addMiscInfo()
   displayText.add("Misc Tips and Info");  
   displayText.add("");
   
-  displayText.add("Coming soon.....");
+  displayText.add("1.) Always keep your NPCs fed, and protected.  Hungry NPCs won't work very hard!");  
+  displayText.add("2.) More coming soon!");
  
 
   displayText = RenderTools.getFormattedLines(displayText, 220);
@@ -463,7 +464,7 @@ protected void addCraftingInfo()
   displayText.add(text);
   text = "";
   displayText.add(text);
-  text = "All Crafting station recipes are available in the normal Crafting Bench (as well as the Civic" +
+  text = "All Crafting Station recipes are available in the normal Crafting Bench (as well as the Civic" +
   		" crafting station).  The recipes are as follows: ";
   displayText.add(text);
   text = "";
