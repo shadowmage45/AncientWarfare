@@ -27,6 +27,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
@@ -158,14 +159,24 @@ public void writeDescriptionData(NBTTagCompound tag)
 
 @Override
 public void writeExtraNBT(NBTTagCompound tag)
-  {
-  
+  {  
+  int[] array = new int[this.researchQueue.size()];
+  for(int i = 0;i < this.researchQueue.size(); i++)
+    {
+    array[i] = this.researchQueue.get(i);
+    }
+  tag.setIntArray("queue", array);
   }
 
 @Override
 public void readExtraNBT(NBTTagCompound tag)
   {
-  
+  this.researchQueue.clear();
+  int[] queue = tag.getIntArray("queue");
+  for(int i =0;i < queue.length; i++)    
+    {
+    this.researchQueue.add(queue[i]);
+    }
   }
 
 }

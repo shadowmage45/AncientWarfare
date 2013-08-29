@@ -173,3 +173,4 @@ TEXTURE/ART
 * more work on adding queue to research table -- nearly there.
 * fix persistent recipes to allow switching to a new recipe if not yet started
 * update/fix machine scanning/building rotation mapping/calculation
+* add save/load of research queue to research table te

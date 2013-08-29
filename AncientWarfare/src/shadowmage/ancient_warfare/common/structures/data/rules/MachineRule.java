@@ -153,9 +153,7 @@ public void normalizeForNorthFacing(int currentFacing, int xSize, int zSize)
   BlockPosition pos = BlockTools.getNorthRotatedPosition(x,y,z, currentFacing, xSize, zSize);  
   x = pos.x;
   z = pos.z;    
-  Config.logDebug("pre normalize face: "+facing);
   facing = BlockTools.rotateRight(facing, BlockTools.getRotationAmt(currentFacing));
-  Config.logDebug("post normalize face: "+facing);
   }
 
 public void createBlock(World world, BlockPosition buildPos, ProcessedStructure struct, int facing)
@@ -163,7 +161,6 @@ public void createBlock(World world, BlockPosition buildPos, ProcessedStructure 
   BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset, z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
   int rotation = BlockTools.getRotationAmount(2, facing);
   ForgeDirection face = BlockTools.rotateRight(this.facing, rotation);
-  Config.logDebug("scanned face: " +this.facing+" placing face: "+face);
   tileTag.setInteger("x", target.x);
   tileTag.setInteger("y", target.y);
   tileTag.setInteger("z", target.z);
