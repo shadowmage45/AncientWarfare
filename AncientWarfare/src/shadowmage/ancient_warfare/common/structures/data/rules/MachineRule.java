@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.block.TEAWBlockReinforced;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import shadowmage.ancient_warfare.common.machine.TEEngine;
 import shadowmage.ancient_warfare.common.machine.TEMachine;
@@ -152,13 +153,17 @@ public void normalizeForNorthFacing(int currentFacing, int xSize, int zSize)
   BlockPosition pos = BlockTools.getNorthRotatedPosition(x,y,z, currentFacing, xSize, zSize);  
   x = pos.x;
   z = pos.z;    
+  Config.logDebug("pre normalize face: "+facing);
   facing = BlockTools.rotateRight(facing, BlockTools.getRotationAmt(currentFacing));
+  Config.logDebug("post normalize face: "+facing);
   }
 
 public void createBlock(World world, BlockPosition buildPos, ProcessedStructure struct, int facing)
   {
-  BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset, z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));  
-  ForgeDirection face = BlockTools.getForgeDirectionFromCardinal((facing + BlockTools.getCardinalFromSide(this.facing) % 4));
+  BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset, z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
+  int rotation = BlockTools.getRotationAmount(2, facing);
+  ForgeDirection face = BlockTools.rotateRight(this.facing, rotation);
+  Config.logDebug("scanned face: " +this.facing+" placing face: "+face);
   tileTag.setInteger("x", target.x);
   tileTag.setInteger("y", target.y);
   tileTag.setInteger("z", target.z);
@@ -180,6 +185,7 @@ public void createBlock(World world, BlockPosition buildPos, ProcessedStructure 
   createReinforcedBlock(world, target, face);
   break;
   }
+  world.markBlockForUpdate(target.x, target.y, target.z);
   }
 
 protected void createCraftingBlock(World world, BlockPosition target, ForgeDirection facing)
@@ -187,7 +193,6 @@ protected void createCraftingBlock(World world, BlockPosition target, ForgeDirec
   world.setBlock(target.x, target.y, target.z, BlockLoader.crafting.blockID, blockMeta, 3);
   TEAWCrafting te = (TEAWCrafting) world.getBlockTileEntity(target.x, target.y, target.z);  
   te.readFromNBT(tileTag);
-  te.updateContainingBlockInfo();
   te.orientation = BlockTools.getCardinalFromSide(facing);
   }
 
@@ -196,7 +201,6 @@ protected void createMachine(World world, BlockPosition target, ForgeDirection f
   world.setBlock(target.x, target.y, target.z, BlockLoader.machineBlock.blockID, blockMeta, 3);
   TEMachine te = (TEMachine) world.getBlockTileEntity(target.x, target.y, target.z);
   te.readFromNBT(tileTag);
-  te.updateContainingBlockInfo();
   te.setDirection(facing);
   }
 
@@ -205,7 +209,6 @@ protected void createEngine(World world, BlockPosition target, ForgeDirection fa
   world.setBlock(target.x, target.y, target.z, BlockLoader.engineBlock.blockID, blockMeta, 3);
   TEEngine te = (TEEngine) world.getBlockTileEntity(target.x, target.y, target.z);
   te.readFromNBT(tileTag);
-  te.updateContainingBlockInfo();
   te.setDirection(facing);
   }
 
@@ -214,7 +217,6 @@ protected void createReinforcedBlock(World world, BlockPosition target, ForgeDir
   world.setBlock(target.x, target.y, target.z, BlockLoader.reinforced.blockID, blockMeta, 3);
   TEAWBlockReinforced te = (TEAWBlockReinforced) world.getBlockTileEntity(target.x, target.y, target.z);
   te.readFromNBT(tileTag);
-  te.updateContainingBlockInfo();
   //NOOP facing  
   }
 

@@ -128,10 +128,10 @@ public static ForgeDirection getForgeDirectionFromCardinal(int side)
   return ForgeDirection.SOUTH;
   
   case 3://w
-  return ForgeDirection.WEST;
+  return ForgeDirection.EAST;
   
   case 1://e
-  return ForgeDirection.EAST;
+  return ForgeDirection.WEST;
   
   default:
   return ForgeDirection.UNKNOWN;

@@ -25,8 +25,6 @@ FROM TESTING
 * add scanner support for generic tile entities through export of NBT data (will need to have the post-build tile-entity update its block position..)
 * add scan toggles for 'scan chest items' and 'scan tile data'
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
-* add queue ability to research table
-* preserve selected recipe in crafting block pre-'start' (synch client selection to tile)
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
@@ -174,3 +172,4 @@ TEXTURE/ART
 * first pass of adding research queue to research table
 * more work on adding queue to research table -- nearly there.
 * fix persistent recipes to allow switching to a new recipe if not yet started
+* update/fix machine scanning/building rotation mapping/calculation
