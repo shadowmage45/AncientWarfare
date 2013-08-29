@@ -345,4 +345,19 @@ public String getLocalizedTooltip()
   return StringTranslate.getInstance().translateKey(getDisplayTooltip());
   }
 
+@Override
+public boolean isResearchMet(Collection<Integer> goals)
+  {
+  for(Integer g : this.dependencies)
+    {
+    if(!goals.contains(g))
+      {
+      return false;
+      }
+    }
+  return true;
+  }
+
+
+
 }

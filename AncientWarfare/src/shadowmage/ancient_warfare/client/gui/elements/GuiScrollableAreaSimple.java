@@ -58,6 +58,15 @@ public GuiScrollableAreaSimple(int elementNum, GuiContainerAdvanced parent, int 
   this.totalHeight = totalHeight;  
   }
 
+public void setHeight(int height)
+  {
+  this.height = height;
+  if(this.height<0)
+    {
+    this.height = 0;
+    }
+  }
+
 public void updateTotalHeight(int height)
   {
   this.totalHeight = height;

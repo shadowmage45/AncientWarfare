@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.crafting;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,17 +64,25 @@ public List<Integer> getResearchQueue()
 
 public void addResearchToQueue(int num)
   {
-  if(!this.researchQueue.contains(Integer.valueOf(num)) && !this.workingPlayerEntry.hasDoneResearch(ResearchGoal.getGoalByID(num)))
+  IResearchGoal goal = ResearchGoal.getGoalByID(num);
+  List<IResearchGoal> known = workingPlayerEntry.getKnownResearch();
+  List<Integer> deps = new ArrayList<Integer>();
+  for(IResearchGoal g : known)
+    {
+    deps.add(g.getGlobalResearchNum());
+    }
+  deps.addAll(researchQueue);
+  if(goal.isResearchMet(deps) && !this.researchQueue.contains(Integer.valueOf(num)) && !this.workingPlayerEntry.hasDoneResearch(ResearchGoal.getGoalByID(num)))
     {
     this.researchQueue.add(Integer.valueOf(num));
     }
   }
 
-public void removeResearch(int index)
+public void removeResearchFromQueue(int index)
   {
-  if(index<this.researchQueue.size())
+  while(this.researchQueue.contains(Integer.valueOf(index)))
     {
-    this.researchQueue.remove(index);    
+    this.researchQueue.remove(Integer.valueOf(index));
     }
   }
 
@@ -101,7 +110,7 @@ protected boolean tryFinishCrafting()
       {
       int num = this.researchQueue.remove(0);
       IResearchGoal g = ResearchGoal.getGoalByID(num);
-      if(!this.workingPlayerEntry.hasDoneResearch(g))
+      if(!this.workingPlayerEntry.hasDoneResearch(g) && this.workingPlayerEntry.hasDoneResearch(g.getDependencies()))
         {
         this.recipe = AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1, g.getGlobalResearchNum()));
         this.workProgressMax = g.getResearchTime();
@@ -123,6 +132,8 @@ protected boolean tryFinishCrafting()
   this.workProgressMax = 0;
   return true;
   }
+
+
 
 @Override
 public void onBlockClicked(EntityPlayer player)

@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.research;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -46,5 +47,6 @@ public abstract int getResearchTime();
 public abstract List<ItemStackWrapperCrafting> getResearchResources();
 public abstract IResearchGoal addResource(ItemStack stack, boolean dmg, boolean tag);
 public abstract ResourceListRecipe constructRecipe();
+public abstract boolean isResearchMet(Collection<Integer> goals);
 
 }

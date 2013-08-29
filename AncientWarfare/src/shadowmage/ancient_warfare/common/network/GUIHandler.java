@@ -83,6 +83,7 @@ import shadowmage.ancient_warfare.common.container.ContainerMailbox;
 import shadowmage.ancient_warfare.common.container.ContainerMailboxIndustrial;
 import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
 import shadowmage.ancient_warfare.common.container.ContainerNpcCourier;
+import shadowmage.ancient_warfare.common.container.ContainerResearch;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
@@ -320,7 +321,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEAWResearch)
     {
     TEAWResearch tew = (TEAWResearch)te;
-    return new ContainerAWCrafting(player, tew);
+    return new ContainerResearch(player, tew);
     }
   return null;
   
@@ -542,7 +543,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   if(te instanceof TEAWResearch)
     {
     TEAWResearch tew = (TEAWResearch)te;
-    return new GuiResearch(new ContainerAWCrafting(player, tew));
+    return new GuiResearch(new ContainerResearch(player, tew));
     }
   return null;
   

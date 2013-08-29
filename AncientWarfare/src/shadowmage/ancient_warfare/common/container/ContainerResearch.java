@@ -36,7 +36,7 @@ public class ContainerResearch extends ContainerAWCrafting
 {
 
 TEAWResearch resTE;
-List<Integer> researchQueueCache = new ArrayList<Integer>();
+public List<Integer> researchQueueCache = new ArrayList<Integer>();
 
 /**
  * @param openingPlayer
@@ -54,15 +54,11 @@ public void handlePacketData(NBTTagCompound tag)
   super.handlePacketData(tag);
   if(tag.hasKey("addQ"))
     {
-    Integer i = tag.getInteger("addQ");
-    if(!this.resTE.getResearchQueue().contains(i))
-      {
-      
-      }
+    this.resTE.addResearchToQueue(tag.getInteger("addQ"));
     }
   if(tag.hasKey("remQ"))
-    {
-    
+    {    
+    this.resTE.removeResearchFromQueue(tag.getInteger("remQ"));
     }
   if(tag.hasKey("queue"))
     {
@@ -72,6 +68,7 @@ public void handlePacketData(NBTTagCompound tag)
       {
       this.researchQueueCache.add(datas[i]);
       }
+    this.refreshGui();
     }
   }
 

@@ -172,3 +172,4 @@ TEXTURE/ART
 * update machineRule to appropriately re-set tile position through nbt tag
 * first pass of updating crafting stations to retain player selection server side, even when not started
 * first pass of adding research queue to research table
+* more work on adding queue to research table -- nearly there
