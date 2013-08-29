@@ -189,6 +189,18 @@ protected void handleBlockScan(World world, int x, int y, int z, int ix, int iy,
       this.scannedCivics.add(CivicRule.populateRule(ix, iy, iz, (TECivic)te));
       }
     }
+  else if(id==BlockLoader.machineBlock.blockID)
+    {
+    /**
+     * type, facing
+     */
+    }
+  else if(id==BlockLoader.engineBlock.blockID)
+    {
+    /**
+     * type, facing
+     */
+    }
   else
     {    
     InventoryRule rule = null;

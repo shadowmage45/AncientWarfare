@@ -24,6 +24,9 @@ FROM TESTING
     https://github.com/mDiyo/TinkersConstruct/tree/16working/tconstruct/worldgen/village
 * server not authenticating AW versions properly   
 * still not saving research properly?  (lost research on test server) 
+* add scanning/building support for crafting tables and machines
+* add scanner support for generic tile entities through export of NBT data (will need to have the post-build tile-entity update its block position..)
+* add scan toggles for 'scan chest items' and 'scan tile data'
     
 WORLD SEEDS with villages:
 * 6663435395855598992
@@ -162,4 +165,5 @@ TEXTURE/ART
 * update build script to not include buildcraft files after reobf
 * update included village_ structures to be in survival mode by default
 * minor updates to BlockPosition 
+* prep work on adding block rules to support crafting tables/machines/engines/reinforced blocks
     
