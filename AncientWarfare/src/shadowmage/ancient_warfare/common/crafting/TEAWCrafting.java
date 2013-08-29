@@ -138,60 +138,63 @@ public boolean isStarted()
 
 protected void updateCrafting()
   {
-  if(isStarted && this.recipe!=null && this.workingPlayerName!=null)
+  if(isStarted)
     {
-    if(this.isWorking)
+    if(this.recipe!=null && this.workingPlayerName!=null)
       {
-      if(this.workProgress<this.workProgressMax)
+      if(this.isWorking)
         {
-        if(this.canUpdate || !Config.useNpcWorkForCrafting)
+        if(this.workProgress<this.workProgressMax)
           {
-          this.workProgress++;
-          this.canUpdate = false;
+          if(this.canUpdate || !Config.useNpcWorkForCrafting)
+            {
+            this.workProgress++;
+            this.canUpdate = false;
+            }
           }
-        }
-      if(this.workProgress>=this.workProgressMax)
-        {
-        if(tryFinishCrafting())
-          {   
-          tryStartCrafting();
+        if(this.workProgress>=this.workProgressMax)
+          {
+          if(tryFinishCrafting())
+            {   
+            tryStartCrafting();
+            }
           }
-        }
-      }
-    else
-      {
-      if(this.recipeStartCheckDelayTicks>0)
-        {
-        this.recipeStartCheckDelayTicks--;
         }
       else
         {
-        this.recipeStartCheckDelayTicks = Config.npcAITicks*10;
-        this.tryStartCrafting();        
+        if(this.recipeStartCheckDelayTicks>0)
+          {
+          this.recipeStartCheckDelayTicks--;
+          }
+        else
+          {
+          this.recipeStartCheckDelayTicks = Config.npcAITicks*10;
+          this.tryStartCrafting();        
+          }
         }
       }
-    }
-  else if(this.workingPlayerName==null)
-    {
-    this.isWorking = false;
-    this.isStarted = false;
-    this.workProgress = 0;
-    this.workProgressMax = 0;
-    this.recipe = null;
-    }
-  else if(this.recipe==null)
-    {
-    this.isWorking = false;
-    this.isStarted = false;
-    this.workProgress = 0;
-    this.workProgressMax = 0;
-    }
-  else
-    {
-    this.isWorking = false;
-    this.workProgress = 0;
-    this.workProgressMax = 0;
-    }
+    else if(this.workingPlayerName==null)
+      {
+      this.isWorking = false;
+      this.isStarted = false;
+      this.workProgress = 0;
+      this.workProgressMax = 0;
+      this.recipe = null;
+      }
+    else if(this.recipe==null)
+      {
+      this.isWorking = false;
+      this.isStarted = false;
+      this.workProgress = 0;
+      this.workProgressMax = 0;
+      }
+    else
+      {
+      this.isWorking = false;
+      this.workProgress = 0;
+      this.workProgressMax = 0;
+      }
+    }  
   }
 
 protected boolean tryStartCrafting()
@@ -226,7 +229,7 @@ protected boolean canFinishCrafting()
 
 public void setRecipe(ResourceListRecipe recipe)
   {
-  if(this.recipe==null && recipe!=null)
+  if(!this.isStarted && !this.isWorking && recipe!=null)
     {
     this.recipe = recipe;
     this.workProgressMax = recipe.getResourceItemCount() * 20;

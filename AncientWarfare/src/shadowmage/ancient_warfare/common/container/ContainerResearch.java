@@ -76,7 +76,6 @@ public void handlePacketData(NBTTagCompound tag)
 public void detectAndSendChanges()
   {
   super.detectAndSendChanges();
-  boolean update = false;
   List<Integer> queue = resTE.getResearchQueue();
   if(!this.researchQueueCache.equals(queue))
     {

@@ -232,20 +232,24 @@ protected void handleSearchBoxUpdate()
   {  
   if(this.activeTab == this.tab1)
     {
+    this.area.setHeight(240-21-10-18-5-8-18);
     String text = this.searchBox.getText();
     this.recipes.clear();
     this.area.elements.clear();
     this.sorterFilter.setFilterText(text);
     PlayerEntry entry = container.entry;
-    this.recipeTypes = this.getTab1RecipeTypes();
-    if(recipeTypes!=null)
+    List<IResearchGoal> goals = entry.getAvailableResearch();
+    List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
+    for(IResearchGoal g : goals)
       {
-      this.addRecipeButtons(AWCraftingManager.instance().getRecipesContaining(entry, text, recipeTypes, player.capabilities.isCreativeMode), sorterFilter);      
+      recipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,g.getGlobalResearchNum())));
       }
+    this.addRecipeButtons(recipes, sorterFilter);     
     }
-  if(this.activeTab==this.tab2)
+  if(this.activeTab==this.tab2 && this.container.entry!=null)
     {
     String text = this.searchBox.getText();
+    this.recipes.clear();
     this.area.setHeight(70);
     this.queueRecipes.clear();
     this.area.elements.clear();

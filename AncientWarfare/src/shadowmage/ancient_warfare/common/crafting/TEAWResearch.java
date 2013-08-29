@@ -28,6 +28,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
@@ -72,6 +73,10 @@ public void addResearchToQueue(int num)
     deps.add(g.getGlobalResearchNum());
     }
   deps.addAll(researchQueue);
+  if(this.recipe!=null)
+    {
+    deps.add(this.recipe.getResult().getItemDamage());
+    }
   if(goal.isResearchMet(deps) && !this.researchQueue.contains(Integer.valueOf(num)) && !this.workingPlayerEntry.hasDoneResearch(ResearchGoal.getGoalByID(num)))
     {
     this.researchQueue.add(Integer.valueOf(num));
@@ -89,12 +94,13 @@ public void removeResearchFromQueue(int index)
 @Override
 public void setRecipe(ResourceListRecipe recipe)
   {
-  if(this.recipe==null && recipe!=null)
+  if(!this.isStarted && !this.isWorking && recipe!=null)
     {
     this.recipe = recipe;
     this.workProgressMax = ResearchGoal.getGoalByID(recipe.getResult().getItemDamage()).getResearchTime();
     this.workProgress = 0;
     this.isWorking = false;
+    this.isStarted = false;
     } 
   }
 
@@ -119,17 +125,14 @@ protected boolean tryFinishCrafting()
       }
     if(this.recipe==null)
       {
-      this.isWorking = false;
       this.isStarted = false;
       }
     }
   else
     {
     this.recipe = null;
-    this.isWorking = false;
     }
   this.workProgress = 0;
-  this.workProgressMax = 0;
   return true;
   }
 
