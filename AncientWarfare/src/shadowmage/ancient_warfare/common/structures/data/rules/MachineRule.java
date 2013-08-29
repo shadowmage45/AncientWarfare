@@ -159,7 +159,9 @@ public void createBlock(World world, BlockPosition buildPos, ProcessedStructure 
   {
   BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset, z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));  
   ForgeDirection face = BlockTools.getForgeDirectionFromCardinal((facing + BlockTools.getCardinalFromSide(this.facing) % 4));
-  
+  tileTag.setInteger("x", target.x);
+  tileTag.setInteger("y", target.y);
+  tileTag.setInteger("z", target.z);
   switch(machineType)
   {  
   case 0:

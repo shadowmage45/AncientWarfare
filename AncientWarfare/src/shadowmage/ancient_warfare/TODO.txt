@@ -24,7 +24,6 @@ FROM TESTING
     https://github.com/mDiyo/TinkersConstruct/tree/16working/tconstruct/worldgen/village
 * server not authenticating AW versions properly   
 * still not saving research properly?  (lost research on test server) 
-* add scanning/building support for crafting tables and machines
 * add scanner support for generic tile entities through export of NBT data (will need to have the post-build tile-entity update its block position..)
 * add scan toggles for 'scan chest items' and 'scan tile data'
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
@@ -171,3 +170,4 @@ TEXTURE/ART
     
 /********** 08-29-13 **********/
 * add most of the remaining support work for machine rules...scan, export, load, and build
+* update machineRule to appropriately re-set tile position through nbt tag
