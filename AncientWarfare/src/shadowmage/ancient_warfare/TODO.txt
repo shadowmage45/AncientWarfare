@@ -171,6 +171,4 @@ TEXTURE/ART
 * add most of the remaining support work for machine rules...scan, export, load, and build
 * update machineRule to appropriately re-set tile position through nbt tag
 * first pass of updating crafting stations to retain player selection server side, even when not started
-* add read/write 'started' flag to NBT data
-* updates to remove possible name-collision from structure-crafting station
-    (need much testing on crafting changes...probably subtly broke something terribly)
+* first pass of adding research queue to research table

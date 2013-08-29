@@ -20,23 +20,23 @@
  */
 package shadowmage.ancient_warfare.common.crafting;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
-import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 
 public class TEAWResearch extends TEAWCraftingWorkSite
 {
+protected List<Integer> researchQueue = new ArrayList<Integer>();
 
 /**
  * 
@@ -49,6 +49,32 @@ public TEAWResearch()
   craftMatrix = new int[]{0,1,2,3,4,5,6,7,8};
   this.workType = CivicWorkType.RESEARCH;
   this.shouldBroadcast = true;  
+  }
+
+public int getQueueLength()
+  {
+  return this.researchQueue.size();
+  }
+
+public List<Integer> getResearchQueue()
+  {
+  return researchQueue;
+  }
+
+public void addResearchToQueue(int num)
+  {
+  if(!this.researchQueue.contains(Integer.valueOf(num)) && !this.workingPlayerEntry.hasDoneResearch(ResearchGoal.getGoalByID(num)))
+    {
+    this.researchQueue.add(Integer.valueOf(num));
+    }
+  }
+
+public void removeResearch(int index)
+  {
+  if(index<this.researchQueue.size())
+    {
+    this.researchQueue.remove(index);    
+    }
   }
 
 @Override
@@ -68,8 +94,31 @@ protected boolean tryFinishCrafting()
   {
   IResearchGoal goal = ResearchGoal.getGoalByID(recipe.getResult().getItemDamage());
   PlayerTracker.instance().addResearchToPlayer(worldObj, workingPlayerName, goal.getGlobalResearchNum());
-  this.recipe = null;
-  this.isWorking = false;
+  if(!this.researchQueue.isEmpty())
+    {
+    this.recipe = null;
+    while(!this.researchQueue.isEmpty())
+      {
+      int num = this.researchQueue.remove(0);
+      IResearchGoal g = ResearchGoal.getGoalByID(num);
+      if(!this.workingPlayerEntry.hasDoneResearch(g))
+        {
+        this.recipe = AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1, g.getGlobalResearchNum()));
+        this.workProgressMax = g.getResearchTime();
+        break;
+        }
+      }
+    if(this.recipe==null)
+      {
+      this.isWorking = false;
+      this.isStarted = false;
+      }
+    }
+  else
+    {
+    this.recipe = null;
+    this.isWorking = false;
+    }
   this.workProgress = 0;
   this.workProgressMax = 0;
   return true;
