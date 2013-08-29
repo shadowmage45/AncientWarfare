@@ -284,6 +284,7 @@ public void readFromNBT(NBTTagCompound tag)
   this.workProgress = tag.getInteger("time");
   this.workProgressMax = tag.getInteger("timeMax");
   this.isWorking = tag.getBoolean("work");
+  this.isStarted = tag.getBoolean("started");
   this.teamNum = tag.getInteger("team");
   if(tag.hasKey("name"))
     {
@@ -309,6 +310,7 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("time", this.workProgress);
   tag.setInteger("timeMax", this.workProgressMax);
   tag.setBoolean("work", this.isWorking);
+  tag.setBoolean("started", this.isStarted);
   tag.setInteger("team", this.teamNum);
   if(this.workingPlayerName!=null)
     {

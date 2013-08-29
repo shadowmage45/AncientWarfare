@@ -316,9 +316,9 @@ public void detectAndSendChanges()
       }
     }
 
-  if(this.isWorking!= te.isStarted)
+  if(this.isWorking!= te.isStructureStarted)
     {
-    this.isWorking = te.isStarted;
+    this.isWorking = te.isStructureStarted;
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("work", this.isWorking);
     this.sendDataToPlayer(tag);

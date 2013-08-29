@@ -34,7 +34,7 @@ import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 public class TEAWStructureCraft extends TEAWCrafting
 {
 	
-public boolean isStarted = false;
+public boolean isStructureStarted = false;
 short compileTime = 0;
 short compileTimeMax = 5;
 
@@ -58,7 +58,7 @@ public void onBlockClicked(EntityPlayer player)
 @Override
 public void updateEntity()
   {  
-  if(this.isStarted)
+  if(this.isStructureStarted)
     {
     if(this.recipe==null)
       {
@@ -123,12 +123,12 @@ protected boolean isRecipeFinished()
 
 protected boolean canSetFinished()
   {
-  return InventoryTools.canHoldItem(inventory, recipe.getResult(), recipe.getResult().stackSize, 18, 18);
+  return recipe!=null && InventoryTools.canHoldItem(inventory, recipe.getResult(), recipe.getResult().stackSize, 18, 18);
   }
 
 protected void setFinished()
   {
-  this.isStarted = false;
+  this.isStructureStarted = false;
   this.compileTime = 0;
   this.recipe = null;
   this.workProgress = 0;
@@ -148,9 +148,9 @@ public boolean canUpdate()
 
 public void validateAndSetRecipe(ResourceListRecipe recipe)
   {
-  if(this.isStarted || this.recipe!=null || recipe == null){return;}
+  if(this.isStructureStarted || this.recipe!=null || recipe == null){return;}
   this.recipe = recipe.copy();
-  this.isStarted = true;
+  this.isStructureStarted = true;
   this.workProgressMax = this.calcTotalTime();
   }
 
@@ -174,14 +174,14 @@ public void writeDescriptionData(NBTTagCompound tag)
 @Override
 public void writeExtraNBT(NBTTagCompound tag)
   {  
-  tag.setBoolean("work", this.isStarted);
+  tag.setBoolean("structStarted", this.isStructureStarted);
   tag.setShort("cTime", this.compileTime);
   }
 
 @Override
 public void readExtraNBT(NBTTagCompound tag)
   { 
-  this.isStarted = tag.getBoolean("work");
+  this.isStructureStarted = tag.getBoolean("structStarted");
   this.compileTime = tag.getShort("cTime");
   }
 
