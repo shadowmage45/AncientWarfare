@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.container;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,11 +31,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
-import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 
 public class ContainerAWCrafting extends ContainerBase
@@ -52,6 +50,7 @@ public boolean isLocked = false;
  * is TE currently processing a recipe?
  */
 public boolean isWorking = false;
+
 /**
  * cached copy of te current recipe
  */
@@ -247,6 +246,7 @@ public void handlePacketData(NBTTagCompound tag)
   if(tag.hasKey("stop") && !player.worldObj.isRemote)
     {
     te.stopAndClear();
+    te.setStarted(false);
     }
   if(tag.hasKey("set") && !player.worldObj.isRemote)
     {
@@ -255,6 +255,10 @@ public void handlePacketData(NBTTagCompound tag)
     te.setRecipe(recipe);
     Config.logDebug("receiving set recipe packet: " + result + " rec: " +recipe);    
     }
+  if(tag.hasKey("start"))
+    {
+    te.setStarted(true);
+    }
   if(tag.hasKey("work"))
     {
     this.isWorking = tag.getBoolean("work");
@@ -262,6 +266,7 @@ public void handlePacketData(NBTTagCompound tag)
   if(tag.hasKey("lock"))
     {
     this.isLocked = tag.getBoolean("lock");
+    this.refreshGui();
     }
   if(tag.hasKey("entry"))
     {    
@@ -274,10 +279,7 @@ public void handlePacketData(NBTTagCompound tag)
       {
       this.entry = null;
       }
-    if(this.gui!=null)
-      {
-      this.gui.refreshGui();      
-      }    
+    this.refreshGui();    
     }
   }
 
@@ -289,8 +291,7 @@ public void handleInitData(NBTTagCompound tag)
 @Override
 public List<NBTTagCompound> getInitData()
   {
-  ArrayList<NBTTagCompound> list = new ArrayList<NBTTagCompound>();
-  return list;
+  return Collections.emptyList();
   }
 
 @Override
@@ -342,10 +343,10 @@ public void detectAndSendChanges()
     tag.setBoolean("work", this.isWorking);
     }
   
-  if(this.isLocked != (te.getRecipe()!=null))
+  if(this.isLocked != (te.isStarted()))
     {
     if(tag==null){tag = new NBTTagCompound();}
-    this.isLocked = te.getRecipe()!=null;
+    this.isLocked = te.isStarted();
     tag.setBoolean("lock", this.isLocked);
     }
   

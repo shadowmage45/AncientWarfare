@@ -230,8 +230,7 @@ public void onElementActivated(IGuiElement element)
     else if(element==startButton && !this.container.isLocked && this.container.clientRecipe!=null)
       {
       NBTTagCompound tag = new NBTTagCompound();
-      tag.setBoolean("set", true);
-      tag.setCompoundTag("result", this.container.clientRecipe.getResult().writeToNBT(new NBTTagCompound()));
+      tag.setBoolean("start", true);
       this.sendDataToServer(tag);
       }
     }
@@ -260,8 +259,10 @@ protected void handleRecipeClick(IGuiElement element)
       {
       return;
       }    
-    this.container.clientRecipe = recipes.get(element);
-    this.forceUpdate = true;
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("set", true);
+    tag.setCompoundTag("result", ((ResourceListRecipe)this.recipes.get(element)).getResult().writeToNBT(new NBTTagCompound()));
+    this.sendDataToServer(tag);
     }
   }
 

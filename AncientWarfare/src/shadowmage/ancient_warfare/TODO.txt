@@ -16,9 +16,7 @@ FROM TESTING
 * npc despawning?
 * npc trampling on crops
 * ghost blocks in world-gen (village fortress)<fixed??--may have been related to RNG>
-* fortresses too hard to defeat
 * cleanup memory churn, esp on npcs pathfinding
-* possibly adjust commander bonus damage/damage reduction
 * npc craftsmen hold hammers at a strange angle (would require a special item render for that item/damage)
 * examine tinkers construct village gen for ideas on proper methods to reduce/remove duplicated buildings
     https://github.com/mDiyo/TinkersConstruct/tree/16working/tconstruct/worldgen/village
@@ -28,6 +26,12 @@ FROM TESTING
 * add scan toggles for 'scan chest items' and 'scan tile data'
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
 * add queue ability to research table
+* preserve selected recipe in crafting block pre-'start' (synch client selection to tile)
+
+BALANCE FROM TESTING
+* fortresses too hard to defeat
+* possibly adjust commander bonus damage/damage reduction
+* routing slips more expensive (use various dyes for them?)
     
 WORLD SEEDS with villages:
 * 6663435395855598992
@@ -51,9 +55,6 @@ LANGUAGE/TRANSLATIONS
 * find others to add/contribute to other translation tables
 * move all GUIs over from rendering static strings to rendering translated strings
 * add additional names for vehicles w/material
-
-BALANCE/TWEAKS
-* routing slips more expensive (use various dyes for them?)
 
 GENERAL
 * add name search/filter box to structure builder guis
@@ -85,9 +86,7 @@ TEMPLATES
 * resource lists for gates
 * resource lists for npcs
 * resource lists for vehicles
-* add support for machine and crafting table rotations
-    * add generic support for tile-entities by caching nbt?
-        after block placed, call TE.updatecontainingblockinfo
+* resource lists for machineRule blocks
 
 WORLD GEN STUFF
 * handle structure spawning in cave dimensions (test for hasSky? and disallow non-dungeon structures?)
@@ -171,3 +170,4 @@ TEXTURE/ART
 /********** 08-29-13 **********/
 * add most of the remaining support work for machine rules...scan, export, load, and build
 * update machineRule to appropriately re-set tile position through nbt tag
+* first pass of updating crafting stations to retain player selection server side, even when not started

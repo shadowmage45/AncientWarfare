@@ -62,6 +62,7 @@ public int[] resultSlot;
 public int[] bookSlot;
 protected ResourceListRecipe recipe;
 protected boolean isWorking = false;
+protected boolean isStarted = false;
 protected String workingPlayerName = null;
 protected PlayerEntry workingPlayerEntry = null;
 protected int workProgress = 0;
@@ -122,11 +123,22 @@ public boolean isHostile(int sourceTeam)
   return TeamTracker.instance().isHostileTowards(worldObj, sourceTeam, teamNum);
   }
 
+/************************************************PLAYER INTERACTION METHODS*************************************************/
+public void setStarted(boolean value)
+  {
+  this.isStarted = value;
+  }
+
+public boolean isStarted()
+  {
+  return isStarted;
+  }
+
 /************************************************CRAFTING METHODS*************************************************/
 
 protected void updateCrafting()
   {
-  if(this.recipe!=null && this.workingPlayerName!=null)
+  if(isStarted && this.recipe!=null && this.workingPlayerName!=null)
     {
     if(this.isWorking)
       {
@@ -140,9 +152,9 @@ protected void updateCrafting()
         }
       if(this.workProgress>=this.workProgressMax)
         {
-        if(tryFinish())
+        if(tryFinishCrafting())
           {   
-          tryStart();
+          tryStartCrafting();
           }
         }
       }
@@ -155,19 +167,34 @@ protected void updateCrafting()
       else
         {
         this.recipeStartCheckDelayTicks = Config.npcAITicks*10;
-        this.tryStart();        
+        this.tryStartCrafting();        
         }
       }
     }
-  else
+  else if(this.workingPlayerName==null)
     {
+    this.isWorking = false;
+    this.isStarted = false;
     this.workProgress = 0;
     this.workProgressMax = 0;
     this.recipe = null;
     }
+  else if(this.recipe==null)
+    {
+    this.isWorking = false;
+    this.isStarted = false;
+    this.workProgress = 0;
+    this.workProgressMax = 0;
+    }
+  else
+    {
+    this.isWorking = false;
+    this.workProgress = 0;
+    this.workProgressMax = 0;
+    }
   }
 
-protected boolean tryStart()
+protected boolean tryStartCrafting()
   {  
   if(this.recipe!=null && this.recipe.doesInventoryContainResources(inventory, craftMatrix))
     {
@@ -180,9 +207,9 @@ protected boolean tryStart()
   return false;
   }
 
-protected boolean tryFinish()
+protected boolean tryFinishCrafting()
   {
-  if(canFinish())
+  if(canFinishCrafting())
     {
     InventoryTools.tryMergeStack(inventory, recipe.result.copy(), resultSlot);
     this.workProgress = 0;
@@ -192,7 +219,7 @@ protected boolean tryFinish()
   return false;
   }
 
-protected boolean canFinish()
+protected boolean canFinishCrafting()
   {
   return recipe!=null && InventoryTools.canHoldItem(inventory, recipe.result, recipe.result.stackSize, resultSlot[0], resultSlot[0]);
   }
@@ -211,6 +238,7 @@ public void setRecipe(ResourceListRecipe recipe)
 
 public void stopAndClear()
   {
+  this.setStarted(false);
   this.recipe = null;
   this.workProgress = 0;
   this.workProgressMax = 0;

@@ -64,7 +64,7 @@ public void setRecipe(ResourceListRecipe recipe)
   }
 
 @Override
-protected boolean tryFinish()
+protected boolean tryFinishCrafting()
   {
   IResearchGoal goal = ResearchGoal.getGoalByID(recipe.getResult().getItemDamage());
   PlayerTracker.instance().addResearchToPlayer(worldObj, workingPlayerName, goal.getGlobalResearchNum());

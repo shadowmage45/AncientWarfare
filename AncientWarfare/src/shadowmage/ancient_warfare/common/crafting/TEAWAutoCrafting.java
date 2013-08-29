@@ -81,9 +81,9 @@ protected void updateCrafting()
       if(this.workProgress>=this.workProgressMax)
         {
         Config.logDebug("attempting to set finished");
-        if(tryFinish())
+        if(tryFinishCrafting())
           {   
-          tryStart();
+          tryStartCrafting();
           }
         }
       }
@@ -96,7 +96,7 @@ protected void updateCrafting()
       else
         {
         this.recipeStartCheckDelayTicks = Config.npcAITicks*10;
-        this.tryStart();        
+        this.tryStartCrafting();        
         }
       }
     }
@@ -109,7 +109,7 @@ protected void updateCrafting()
   }
 
 @Override
-protected boolean tryStart()
+protected boolean tryStartCrafting()
   {  
   if(this.canStartRecipe())
     {
@@ -130,7 +130,7 @@ protected boolean tryStart()
   }
 
 @Override
-protected boolean tryFinish()
+protected boolean tryFinishCrafting()
   {
   if(InventoryTools.canHoldItem(inventory, result, result.stackSize, resultSlot[0], resultSlot[0]))
     {
@@ -260,7 +260,7 @@ private void onLayoutMatrixChanged()
   this.isWorking = false;
   if(this.checkMatchingRecipes())
     {
-    this.tryStart();
+    this.tryStartCrafting();
     }
   }
 

@@ -71,9 +71,9 @@ public void doWork(IWorker worker)
   if(this.workProgress>=this.workProgressMax)
     {
     this.workProgress = this.workProgressMax;
-    if(this.tryFinish())
+    if(this.tryFinishCrafting())
       {
-      this.tryStart();
+      this.tryStartCrafting();
       }
     }
   }
