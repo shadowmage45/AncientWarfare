@@ -75,12 +75,7 @@ public void normalizeForNorthFacing(int currentFacing, int xSize, int zSize)
   /**
    * corners of block bounds relative to TL corner of scanned stucture
    */  
-  BlockPosition c1 = BlockTools.getNorthRotatedPosition(x+xMin, yMin, z+zMin, currentFacing, xSize, zSize);
-  
-//  BlockPosition corner2 = BlockTools.getNorthRotatedPosition(x+xMin+this.xSize, yMin, z+zMin, currentFacing, xSize, zSize);
-//  BlockPosition corner3 = BlockTools.getNorthRotatedPosition(x+xMin, yMin, z+zMin+this.zSize, currentFacing, xSize, zSize);
-//  BlockPosition corner4 = BlockTools.getNorthRotatedPosition(x+xMin+this.xSize, yMin, z+zMin+this.zSize, currentFacing, xSize, zSize);
-  
+  BlockPosition c1 = BlockTools.getNorthRotatedPosition(x+xMin, yMin, z+zMin, currentFacing, xSize, zSize);  
   x = pos.x;
   z = pos.z;   
   

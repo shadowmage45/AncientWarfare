@@ -34,15 +34,19 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.block.TEAWBlockReinforced;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
+import shadowmage.ancient_warfare.common.machine.TEEngine;
+import shadowmage.ancient_warfare.common.machine.TEMachine;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.GateRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.MachineRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.ScannedGateEntry;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
@@ -68,6 +72,7 @@ public int zSize;
 private List<ScannedGateEntry> includedGates = new ArrayList<ScannedGateEntry>();
 private List<ScannedEntityEntry> includedEntities = new ArrayList<ScannedEntityEntry>();
 protected List<CivicRule> scannedCivics = new ArrayList<CivicRule>();
+protected List<MachineRule> scannedMachines = new ArrayList<MachineRule>();
 private HashMap<Integer, InventoryRule> inventoryRules = new HashMap<Integer, InventoryRule>();
 
 private List<ScannedBlock> scannedBlocks = new ArrayList<ScannedBlock>();
@@ -189,17 +194,37 @@ protected void handleBlockScan(World world, int x, int y, int z, int ix, int iy,
       this.scannedCivics.add(CivicRule.populateRule(ix, iy, iz, (TECivic)te));
       }
     }
+  else if(id==BlockLoader.crafting.blockID)
+    {
+    TileEntity te = world.getBlockTileEntity(x, y, z);
+    if(te!=null)
+      {
+      this.scannedMachines.add(new MachineRule((TEAWCrafting)te, ix, iy, iz, meta));
+      }
+    }
   else if(id==BlockLoader.machineBlock.blockID)
     {
-    /**
-     * type, facing
-     */
+    TileEntity te = world.getBlockTileEntity(x, y, z);
+    if(te!=null)
+      {
+      this.scannedMachines.add(new MachineRule((TEMachine)te, ix, iy, iz, meta));
+      }
     }
   else if(id==BlockLoader.engineBlock.blockID)
     {
-    /**
-     * type, facing
-     */
+    TileEntity te = world.getBlockTileEntity(x, y, z);
+    if(te!=null)
+      {
+      this.scannedMachines.add(new MachineRule((TEEngine)te, ix, iy, iz, meta));
+      }
+    }
+  else if(id==BlockLoader.reinforced.blockID)
+    {
+    TileEntity te = world.getBlockTileEntity(x, y, z);
+    if(te!=null)
+      {
+      this.scannedMachines.add(new MachineRule((TEAWBlockReinforced)te, ix, iy, iz, meta));
+      }
     }
   else
     {    
@@ -285,6 +310,10 @@ private void normalizeForNorthFacing()
   for(ScannedGateEntry gate : this.includedGates)
     {
     gate.normalizeForNorthFacing(originFacing, newXSize, newZSize);    
+    }
+  for(MachineRule rule : this.scannedMachines)
+    {
+    rule.normalizeForNorthFacing(originFacing, newXSize, newZSize);
     }
   }
 
@@ -415,6 +444,7 @@ public ProcessedStructure convertToProcessedStructure()
   this.addCivicsToStructrure(struct);
   this.addInventoryRulesToStructure(struct);
   this.addGateRulesToStructure(struct);
+  this.addMachinesToStructure(struct);
   /**
    * set the in-game template/default export template
    */
@@ -450,10 +480,12 @@ protected void addInventoryRulesToStructure(ProcessedStructure struct)
 
 private void addCivicsToStructrure(ProcessedStructure struct)
   { 
-  for(CivicRule civ : this.scannedCivics)
-    {
-    struct.civicRules.add(civ);
-    }
+  struct.civicRules.addAll(scannedCivics);
+  }
+
+private void addMachinesToStructure(ProcessedStructure struct)
+  {
+  struct.machineRules.addAll(scannedMachines);
   }
 
 private void addEntitiesToStructure(ProcessedStructure struct, List<ScannedEntityEntry> entities)

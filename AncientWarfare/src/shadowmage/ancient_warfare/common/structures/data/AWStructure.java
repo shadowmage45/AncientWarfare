@@ -32,13 +32,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.GateRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.MachineRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
@@ -107,6 +107,7 @@ public ArrayList<EntityRule> entityRules = new ArrayList<EntityRule>();
 public ArrayList<CivicRule> civicRules = new ArrayList<CivicRule>();
 public Map<Integer, InventoryRule> inventoryRules = new HashMap<Integer, InventoryRule>();
 public ArrayList<GateRule> gateRules = new ArrayList<GateRule>();
+public ArrayList<MachineRule> machineRules = new ArrayList<MachineRule>();
 
 /**
  * only set to false for bad values during parsing, struct is then discarded and not loaded into structures map

@@ -48,6 +48,7 @@ import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.GateRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.MachineRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -695,6 +696,14 @@ private void placeGates(World world)
     }
   }
 
+private void placeMachines(World world)
+  {
+  for(MachineRule m : this.struct.machineRules)
+    {
+    m.createBlock(world, buildPos, struct, facing);
+    }
+  }
+
 /**
  * called to start placing entities from the EntityRule list, first -> last
  * @param world
@@ -727,6 +736,7 @@ protected void placeNonBlocks(World world)
     {
     this.placeGates(world);
     }
+  this.placeMachines(world);
   this.placeCivics(world);
   }
 

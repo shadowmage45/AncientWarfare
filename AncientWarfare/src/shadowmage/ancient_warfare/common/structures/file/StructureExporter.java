@@ -37,6 +37,7 @@ import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.GateRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.MachineRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
@@ -184,7 +185,22 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
   lines.add("####INVENTORIES####\n");
   addInventoryRules(lines, struct);    
   lines.add("");
+  lines.add("####MACHINES####\n");
+  addMachineRules(lines, struct);
+  lines.add("");
   return lines;
+  }
+
+private static void addMachineRules(List<String> lines, ProcessedStructure struct)
+  {
+  List<String> ruleLines;
+  for(MachineRule rule : struct.machineRules)
+    {
+    ruleLines = rule.getRuleLines();
+    lines.add("");
+    lines.addAll(ruleLines);
+    lines.add("");
+    }
   }
 
 private static void addGateRules(List<String> lines, ProcessedStructure struct)

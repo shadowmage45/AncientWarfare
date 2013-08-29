@@ -169,3 +169,5 @@ TEXTURE/ART
 * minor updates to BlockPosition 
 * prep work on adding block rules to support crafting tables/machines/engines/reinforced blocks
     
+/********** 08-29-13 **********/
+* add most of the remaining support work for machine rules...scan, export, load, and build

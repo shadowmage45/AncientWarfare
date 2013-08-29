@@ -43,9 +43,10 @@ public class BlockTools
 {
 
 
-public static int getCardinalFromSide(int side)
+public static int getCardinalFromSide(ForgeDirection theSide)
   {
-  switch(side)
+  int side;
+  switch(theSide.ordinal())
   {
   case 2://n
   side = 2;
@@ -116,31 +117,25 @@ public static ForgeDirection getOpposite(ForgeDirection a)
   return a.getOpposite();
   }
 
-public static int getSideFromCardinal(int side)
+public static ForgeDirection getForgeDirectionFromCardinal(int side)
   {
   switch(side)
   {
   case 2://n
-  side = 2;
-  break;
+  return ForgeDirection.NORTH;
   
   case 0://s
-  side = 3;
-  break;
+  return ForgeDirection.SOUTH;
   
   case 3://w
-  side = 5;
-  break;
+  return ForgeDirection.WEST;
   
   case 1://e
-  side = 4;
-  break;
+  return ForgeDirection.EAST;
   
   default:
-  side = -1;
-  break;  
+  return ForgeDirection.UNKNOWN;
   }    
-  return side;
   }
 
 public static BlockPosition offsetForSide(BlockPosition pos, int sideHit)

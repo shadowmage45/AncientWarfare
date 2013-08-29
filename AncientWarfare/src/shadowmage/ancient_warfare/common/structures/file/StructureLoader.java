@@ -41,6 +41,7 @@ import shadowmage.ancient_warfare.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.GateRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.InventoryRule;
+import shadowmage.ancient_warfare.common.structures.data.rules.MachineRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.SwapRule;
 import shadowmage.ancient_warfare.common.structures.data.rules.VehicleRule;
@@ -434,6 +435,10 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
       {
       this.parseGate(struct, it);
       }
+    else if(line.toLowerCase().startsWith("machine:"))
+      {
+      this.parseMachine(struct, it);
+      }
     if(!struct.isValid)
       {
       return null;
@@ -625,6 +630,43 @@ private void parseGate(ProcessedStructure struct, Iterator<String> it)
   else
     {
     Config.logError("Error parsing gate rule for structure!");
+    struct.isValid = false;
+    }
+  }
+
+private void parseMachine(ProcessedStructure struct, Iterator<String> it)
+  {
+  if(!it.hasNext())
+    {
+    struct.isValid = false;
+    return;
+    }
+  ArrayList<String> ruleLines = new ArrayList<String>();  
+  String line;  
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("machine:"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith(":endmachine"))
+      {
+      break;      
+      }
+    else
+      {
+      ruleLines.add(line);      
+      }    
+    }     
+  MachineRule rule = MachineRule.parseLines(ruleLines);
+  if(rule!=null)
+    {    
+    struct.machineRules.add(rule);    
+    }
+  else
+    {
+    Config.logError("Error parsing machine rule for structure!");
     struct.isValid = false;
     }
   }

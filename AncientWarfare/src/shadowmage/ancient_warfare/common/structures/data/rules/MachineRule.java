@@ -20,9 +20,14 @@
  */
 package shadowmage.ancient_warfare.common.structures.data.rules;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.block.TEAWBlockReinforced;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
@@ -31,6 +36,9 @@ import shadowmage.ancient_warfare.common.machine.TEMachine;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.NBTReader;
+import shadowmage.ancient_warfare.common.utils.NBTWriter;
+import shadowmage.meim.common.util.StringTools;
 
 public class MachineRule
 {
@@ -51,12 +59,12 @@ int machineType;
  * the 'meta' of the block
  * as machines/crafting/engines/reinforced are all mapped by meta, this simplifies things greatly
  */
-int type;
+int blockMeta;
 
 /**
- * the facing direction, if applicable
+ * the facing direction, if applicable, for the machine, relative to north facing
  */
-int facing;
+ForgeDirection facing;
 
 /**
  * the assigned team for the block, if any
@@ -75,10 +83,10 @@ private MachineRule()
 
 public MachineRule(TEAWCrafting te, int x, int y, int z, int meta)
   {
-  this.type = meta;
+  this.blockMeta = meta;
   this.team = te.teamNum;
   this.machineType = 0;
-  this.facing = te.orientation;
+  this.facing = BlockTools.getForgeDirectionFromCardinal(te.orientation);
   this.x = x;
   this.y = y;
   this.z = z;
@@ -87,10 +95,10 @@ public MachineRule(TEAWCrafting te, int x, int y, int z, int meta)
 
 public MachineRule(TEMachine te, int x, int y, int z, int meta)
   {
-  this.type = meta;
+  this.blockMeta = meta;
   this.team = te.getTeamNum();
   this.machineType = 1;
-  this.facing = te.getFacing().ordinal();
+  this.facing = te.getFacing();
   this.x = x;
   this.y = y;
   this.z = z;
@@ -99,10 +107,10 @@ public MachineRule(TEMachine te, int x, int y, int z, int meta)
 
 public MachineRule(TEEngine te, int x, int y, int z, int meta)
   {
-  this.type = meta;
+  this.blockMeta = meta;
   this.team = te.getTeamNum();
   this.machineType = 2;
-  this.facing = te.getFacing().ordinal();
+  this.facing = te.getFacing();
   this.x = x;
   this.y = y;
   this.z = z;
@@ -111,10 +119,10 @@ public MachineRule(TEEngine te, int x, int y, int z, int meta)
 
 public MachineRule(TEAWBlockReinforced te, int x, int y, int z, int meta)
   {
-  this.type = meta;
+  this.blockMeta = meta;
   this.team = te.ownerTeam;
   this.machineType = 3;
-  this.facing = 0;
+  this.facing = ForgeDirection.NORTH;
   this.x = x;
   this.y = y;
   this.z = z;
@@ -144,54 +152,150 @@ public void normalizeForNorthFacing(int currentFacing, int xSize, int zSize)
   BlockPosition pos = BlockTools.getNorthRotatedPosition(x,y,z, currentFacing, xSize, zSize);  
   x = pos.x;
   z = pos.z;    
+  facing = BlockTools.rotateRight(facing, BlockTools.getRotationAmt(currentFacing));
   }
 
 public void createBlock(World world, BlockPosition buildPos, ProcessedStructure struct, int facing)
   {
-  BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset, z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
+  BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(x-struct.xOffset,y-struct.verticalOffset, z-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));  
+  ForgeDirection face = BlockTools.getForgeDirectionFromCardinal((facing + BlockTools.getCardinalFromSide(this.facing) % 4));
   
   switch(machineType)
   {  
   case 0:
-  createCraftingBlock(world, target, facing);
+  createCraftingBlock(world, target, face);
   break;
   
   case 1:
-  createMachine(world, target, facing);
+  createMachine(world, target, face);
   break;
   
   case 2:
-  createEngine(world, target, facing);
+  createEngine(world, target, face);
   break;
   
   case 3:
-  createReinforcedBlock(world, target, facing);
+  createReinforcedBlock(world, target, face);
   break;
   }
   }
 
-protected void createCraftingBlock(World world, BlockPosition target, int facing)
+protected void createCraftingBlock(World world, BlockPosition target, ForgeDirection facing)
   {
-  world.setBlock(target.x, target.y, target.z, BlockLoader.crafting.blockID, type, 3);
+  world.setBlock(target.x, target.y, target.z, BlockLoader.crafting.blockID, blockMeta, 3);
   TEAWCrafting te = (TEAWCrafting) world.getBlockTileEntity(target.x, target.y, target.z);  
+  te.readFromNBT(tileTag);
+  te.updateContainingBlockInfo();
+  te.orientation = BlockTools.getCardinalFromSide(facing);
   }
 
-protected void createMachine(World world, BlockPosition target, int facing)
+protected void createMachine(World world, BlockPosition target, ForgeDirection facing)
   {
-  world.setBlock(target.x, target.y, target.z, BlockLoader.machineBlock.blockID, type, 3);
-  TEMachine te = (TEMachine) world.getBlockTileEntity(target.x, target.y, target.z);  
+  world.setBlock(target.x, target.y, target.z, BlockLoader.machineBlock.blockID, blockMeta, 3);
+  TEMachine te = (TEMachine) world.getBlockTileEntity(target.x, target.y, target.z);
+  te.readFromNBT(tileTag);
+  te.updateContainingBlockInfo();
+  te.setDirection(facing);
   }
 
-protected void createEngine(World world, BlockPosition target, int facing)
+protected void createEngine(World world, BlockPosition target, ForgeDirection facing)
   {
-  world.setBlock(target.x, target.y, target.z, BlockLoader.engineBlock.blockID, type, 3);
+  world.setBlock(target.x, target.y, target.z, BlockLoader.engineBlock.blockID, blockMeta, 3);
   TEEngine te = (TEEngine) world.getBlockTileEntity(target.x, target.y, target.z);
+  te.readFromNBT(tileTag);
+  te.updateContainingBlockInfo();
+  te.setDirection(facing);
   }
 
-protected void createReinforcedBlock(World world, BlockPosition target, int facing)
+protected void createReinforcedBlock(World world, BlockPosition target, ForgeDirection facing)
   {
-  world.setBlock(target.x, target.y, target.z, BlockLoader.reinforced.blockID, type, 3);
+  world.setBlock(target.x, target.y, target.z, BlockLoader.reinforced.blockID, blockMeta, 3);
   TEAWBlockReinforced te = (TEAWBlockReinforced) world.getBlockTileEntity(target.x, target.y, target.z);
+  te.readFromNBT(tileTag);
+  te.updateContainingBlockInfo();
+  //NOOP facing  
+  }
+
+public List<String> getRuleLines()
+  {
+  List<String> lines = new ArrayList<String>();  
+  lines.add("machine:");
+  lines.add("type="+machineType);
+  lines.add("meta="+blockMeta);
+  lines.add("facing="+facing.ordinal());
+  lines.add("position="+StringTools.getCSVStringForArray(new int[]{x,y,z}));
+  if(tileTag!=null)
+    {
+    lines.add("data:");
+    lines.addAll(NBTWriter.writeNBTToStrings(tileTag));
+    lines.add(":enddata");    
+    }
+  lines.add(":endmachine");  
+  return lines;
+  }
+
+public static MachineRule parseLines(List<String> lines)
+  {
+  MachineRule rule = new MachineRule();
+  String line;
+  Iterator<String> it = lines.iterator();
+  boolean valid = true;
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.toLowerCase().startsWith("machine:") || line.toLowerCase().startsWith(":endmachine"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith("type"))
+      {
+      rule.machineType = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("meta"))
+      {
+      rule.blockMeta = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("facing"))
+      {
+      rule.facing = ForgeDirection.getOrientation(StringTools.safeParseInt("=", line));
+      }
+    else if(line.toLowerCase().startsWith("position"))
+      {
+      int[] pos = StringTools.safeParseIntArray("=", line);
+      if(pos==null || pos.length<3)
+        {
+        valid = false;
+        }
+      else
+        {
+        rule.x = pos[0];
+        rule.y = pos[1];
+        rule.z = pos[2];
+        }
+      }
+    else if(line.toLowerCase().startsWith("data:"))
+      {   
+      ArrayList<String>dataLines = new ArrayList<String>();
+      while(it.hasNext())
+        {
+        line = it.next();   
+        if(line.toLowerCase().startsWith(":enddata"))
+          {
+          NBTTagCompound tileTag = NBTReader.readTagFromLines(dataLines);
+          rule.tileTag = tileTag;
+          break;
+          }
+        dataLines.add(line);
+        }
+      }
+    }
+  
+  
+  if(valid)
+    {
+    return rule;
+    }
+  return null;
   }
 
 }
