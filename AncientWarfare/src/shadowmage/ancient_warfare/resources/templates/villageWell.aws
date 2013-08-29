@@ -5,7 +5,7 @@
 name=villageWell
 worldgen=false
 creative=true
-survival=false
+survival=true
 validTargetblocks=1,2,3,12,13
 
 unique=false

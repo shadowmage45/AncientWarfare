@@ -1,6 +1,4 @@
 PRE OPEN BETA/TONIGHT
-* add more structures, possibly survival-mode included structures? (or flag some existing village structures for survival mode)
-* have build script remove buildcraft files after compile (it is building w/ BC api in the final dist .zip)    
 * add more tips/etc to research note book
     
 PRE FULL RELEASE
@@ -161,4 +159,6 @@ TEXTURE/ART
 * add missing localization entry for survival-mode construction sites
 * minor cleanups in research book gui stuff
 * actually use breakBlocks config option for normal stone-shot ammunitions
+* update build script to not include buildcraft files after reobf
+* update included village_ structures to be in survival mode by default
     
