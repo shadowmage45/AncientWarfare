@@ -161,4 +161,5 @@ TEXTURE/ART
 * actually use breakBlocks config option for normal stone-shot ammunitions
 * update build script to not include buildcraft files after reobf
 * update included village_ structures to be in survival mode by default
+* minor updates to BlockPosition 
     
