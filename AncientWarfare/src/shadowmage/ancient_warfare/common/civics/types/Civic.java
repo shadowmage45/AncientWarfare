@@ -80,10 +80,10 @@ public static ICivicType reedFarm = new CivicFarm(6, "civic.farm.reed", "civic.f
 public static ICivicType mushroomRedFarm = new CivicFarm(7, "civic.farm.redmushroom", "civic.farm.redmushroom.tooltip", TEFarmMushroomRed.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMushroomRedBottom", "civicFarmMushroomRedTop", "civicFarmMushroomRedSides").addResourceItem(new ItemStack(Block.mushroomRed)).setResourceSlotSize(1);
 public static ICivicType mushroomBrownFarm = new CivicFarm(8, "civic.farm.brownmushroom", "civic.farm.brownmushroom.tooltip", TEFarmMushroomBrown.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmMushroomBrownBottom", "civicFarmMushroomBrownTop", "civicFarmMushroomBrownSides").addResourceItem(new ItemStack(Block.mushroomBrown)).setResourceSlotSize(1);
 public static ICivicType netherstalkFarm = new CivicFarm(9, "civic.farm.netherstalk", "civic.farm.netherstalk.tooltip", TEFarmNetherStalk.class, "civicFarmWheat1", 10, 2).setBlockIcons("civicFarmNetherBottom", "civicFarmNetherTop", "civicFarmNetherSides").addResourceItem(new ItemStack(Item.netherStalkSeeds)).setResourceSlotSize(1);
-public static ICivicType mineBasic = new CivicMine(10, "civic.mine.basic", "civic.mine.basic.tooltip", TEMine.class,16).setBlockIcons("civicMineBasicBottom", "civicMineBasicTop", "civicMineBasicSides");
+public static ICivicType mineBasic = new CivicMine(10, "civic.mine.basic", "civic.mine.basic.tooltip", TEMine.class,16).setBlockIcons("civicMineBasicBottom", "civicMineBasicTop", "civicMineBasicSides").addResourceItem(new ItemStack(Block.ladder)).addResourceItem(new ItemStack(Block.torchWood));
 //mine r2
 //mine r3
-public static ICivicType mineQuarry = new CivicMine(13, "civic.mine.quarry", "civic.mine.quarry.tooltip", TEMineQuarry.class,64).setBlockIcons("civicMineQuarryBottom", "civicMineQuarryTop", "civicMineQuarrySides");
+public static ICivicType mineQuarry = new CivicMine(13, "civic.mine.quarry", "civic.mine.quarry.tooltip", TEMineQuarry.class,64).setBlockIcons("civicMineQuarryBottom", "civicMineQuarryTop", "civicMineQuarrySides").addResourceItem(new ItemStack(Block.ladder));
 //mine altr2
 //mine altr3
 public static ICivicType treeFarmOak = new CivicTreeFarm(16, "civic.tree.oak", "civic.tree.oak.tooltip", TETreeFarmOak.class).setBlockIcons("civicFarmOakBottom", "civicFarmOakTop", "civicFarmOakSides").addResourceItem(new ItemStack(Block.sapling,1,0)).setSpecResourceSize(3).addSpecResourceItem(new ItemStack(Item.dyePowder,1,15));

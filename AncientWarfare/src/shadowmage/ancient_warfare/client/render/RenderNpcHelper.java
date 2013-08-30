@@ -69,6 +69,10 @@ protected void renderLivingLabel(EntityLiving par1EntityLiving, String par2Str, 
     {
     NpcBase npc = (NpcBase)par1EntityLiving;
     boolean hostile = TeamTracker.instance().isHostileTowards(npc.worldObj, npc.teamNum, TeamTracker.instance().getTeamForPlayer(Minecraft.getMinecraft().thePlayer));
+    if(hostile && !Config.renderHostileNames)
+      {
+      return;
+      }
     FontRenderer fontRenderer = this.getFontRendererFromRenderManager();
     float var13 = 1.6F;
     float var14 = 0.016666668F * var13;

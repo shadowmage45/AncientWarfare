@@ -48,46 +48,57 @@ protected void scanLevel(TEMine mine, World world)
     {
     for(int z = this.minZ; z < this.minZ + this.zSize; z++)
       {      
+      boolean addLadder = false;
+      byte ladderMeta = 0;
       if(x==this.minX && z==this.minZ + this.zSize/2)
         {
+        addLadder = true;
+        ladderMeta = 5;
         id = world.getBlockId(x-1, minY, z);
         if(needsFilled(id))
           {
           this.addNewPoint(x-1, minY, z, TargetType.MINE_FILL);
           }
-        this.addNewPoint(x, minY, z, TargetType.MINE_LADDER);
         }
       else if(x==this.minX+this.xSize-1 && z==this.minZ + this.zSize/2)
         {
+        addLadder = true;
+        ladderMeta = 4;
         id = world.getBlockId(x+1, minY, z);
         if(needsFilled(id))
           {
           this.addNewPoint(x+1, minY, z, TargetType.MINE_FILL);
           }
-        this.addNewPoint(x, minY, z, TargetType.MINE_LADDER);
         }
       else if(z==this.minZ && x==this.minX + this.xSize/2)
         {
+        addLadder = true;
+        ladderMeta = 3;
         id = world.getBlockId(x, minY, z-1);
         if(needsFilled(id))
           {
           this.addNewPoint(x, minY, z-1, TargetType.MINE_FILL);
           }
-        this.addNewPoint(x, minY, z, TargetType.MINE_LADDER);
         }
       else if(z==this.minZ + this.zSize-1 && x==this.minX+this.xSize/2)
         {
+        addLadder = true;
+        ladderMeta = 2;
         id = world.getBlockId(x, minY, z+1);
         if(needsFilled(id))
           {
           this.addNewPoint(x, minY, z+1, TargetType.MINE_FILL);
           }
-        this.addNewPoint(x, minY, z, TargetType.MINE_LADDER);
         }
       else if(shouldClear(world.getBlockId(x, minY, z)))
         {
         this.addNewPoint(x, minY, z, TargetType.MINE_CLEAR);
-        }      
+        } 
+      if(addLadder)
+        {
+        this.addNewPoint(x, minY, z, TargetType.MINE_CLEAR);
+        this.addNewPoint(x, minY, z, ladderMeta, TargetType.MINE_LADDER);        
+        }
       }
     }
   }

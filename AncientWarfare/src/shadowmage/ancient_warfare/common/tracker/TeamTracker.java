@@ -133,18 +133,18 @@ public boolean areTeamsMutuallyHosile(World world, int teamA, int teamB)
   return isHostileTowards(world, teamA, teamB) && isHostileTowards(world, teamB, teamA);
   }
 
-public void handleNewPlayerLogin(EntityPlayer player)
+public void handleNewPlayerLogin(String playerName)
   {
   if(this.serverTeamEntries[0]==null)
     {
     this.serverTeamEntries[0] = new TeamEntry();
     this.serverTeamEntries[0].teamNum = 0;    
     }
-  this.serverTeamEntries[0].addNewPlayer(player.getEntityName(), (byte)0);//.memberNames.add(player.getEntityName());
+  this.serverTeamEntries[0].addNewPlayer(playerName, (byte)0);//.memberNames.add(player.getEntityName());
       
   NBTTagCompound tag = new NBTTagCompound();
   tag.setByte("num", (byte) 0);
-  tag.setString("pName", player.getEntityName());
+  tag.setString("pName", playerName);
   tag.setBoolean("new", true);
   Packet01ModData pkt = new Packet01ModData();
   pkt.setTeamUpdate(tag);
@@ -152,7 +152,7 @@ public void handleNewPlayerLogin(EntityPlayer player)
   for(Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList)
     {
     otherPlayer = (EntityPlayer)obj;
-    if(otherPlayer!=null && otherPlayer != player)
+    if(otherPlayer!=null && !otherPlayer.getEntityName().equals(playerName))
       {
       pkt.sendPacketToPlayer(otherPlayer);
       }

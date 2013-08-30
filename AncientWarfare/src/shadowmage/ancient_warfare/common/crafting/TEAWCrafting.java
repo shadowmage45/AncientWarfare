@@ -435,7 +435,7 @@ public void onInventoryChanged()
         if(this.workingPlayerName==null || !this.workingPlayerName.equals(name))
           {
           this.workingPlayerName = name;
-          this.workingPlayerEntry = PlayerTracker.instance().getEntryFor(workingPlayerName); 
+          this.workingPlayerEntry = PlayerTracker.instance().getEntryFor( workingPlayerName); 
           this.stopAndClear();
           }
         }    

@@ -391,4 +391,10 @@ public void reset()
     }
   }
 
+public boolean matches(ResourceListRecipe recipe)
+  {
+  return recipe!=null && InventoryTools.doItemsMatch(recipe.result, this.result);
+  }
+
+
 }

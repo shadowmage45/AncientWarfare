@@ -73,6 +73,10 @@ public PlayerEntry getClientEntry()
 
 public PlayerEntry getEntryFor(String name)
   {
+  if(!this.playerEntries.containsKey(name))
+    {
+    this.createEntryForNewPlayer(name);
+    }
   return this.playerEntries.get(name);
   }
 
@@ -99,7 +103,7 @@ public void onPlayerLogin(EntityPlayer player)
   StructureManager.instance().handlePlayerLogin(player);  
   if(!playerEntries.containsKey(player.getEntityName()))
     {
-    this.createEntryForNewPlayer(player);
+    this.createEntryForNewPlayer(player.getEntityName());
     }  
   
   NBTTagCompound initTag = new NBTTagCompound();
@@ -171,21 +175,17 @@ private NBTTagCompound getClientInitData(EntityPlayer player)
  * create a new entry for a player, set team to 0,
  * and relay new player/team info to all logged in players
  */
-private void createEntryForNewPlayer(EntityPlayer player)
-  {
-  if(player.worldObj.isRemote)
-    {
-    return;
-    }
+private void createEntryForNewPlayer(String playerName)
+  { 
   PlayerEntry entry = new PlayerEntry();
-  entry.playerName = String.valueOf(player.getEntityName());  
-  this.playerEntries.put(String.valueOf(player.getEntityName()), entry);
+  entry.playerName = String.valueOf(playerName);  
+  this.playerEntries.put(String.valueOf(playerName), entry);
   IResearchGoal[] knownResearch = ResearchGoal.getDefaultKnownResearch();
   for(IResearchGoal goal : knownResearch)
     {
     entry.addCompletedResearch(goal.getGlobalResearchNum());
     }
-  TeamTracker.instance().handleNewPlayerLogin(player);  
+  TeamTracker.instance().handleNewPlayerLogin(playerName);  
   GameDataTracker.instance().markGameDataDirty();
   }
 

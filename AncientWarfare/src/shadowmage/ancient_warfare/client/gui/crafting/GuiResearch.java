@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
@@ -212,12 +213,12 @@ public void updateControls()
   else if(this.activeTab==this.tab1 || this.activeTab==this.tab2)
     {
     this.guiElements.put(0, area);
-    this.guiElements.put(1, searchBox);    
-    this.handleSearchBoxUpdate();
+    this.guiElements.put(1, searchBox);
     if(this.activeTab==this.tab2)
       {
       this.guiElements.put(3, area2);
       }
+    this.handleSearchBoxUpdate();    
     }  
   for(Integer i : this.guiElements.keySet())
     {
@@ -282,6 +283,19 @@ protected void handleSearchBoxUpdate()
       {
       recipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,b.getGlobalResearchNum())));
       }
+//    Iterator<ResourceListRecipe> it = recipes.iterator();
+//    ResourceListRecipe recipe;
+//    while(it.hasNext())
+//      {
+//      recipe = it.next();
+//      for(ResourceListRecipe r : queuedRecipes.values())
+//        {
+//        if(recipe.matches(r))
+//          {
+//          it.remove();
+//          }
+//        }
+//      }
     Collections.sort(recipes, sorterFilter);
     this.addQueueRecipeButtons(recipes, sorterFilter);    
     area2.elements.clear();    
