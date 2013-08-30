@@ -70,7 +70,8 @@ public byte gateOrientation = 0;
 
 boolean hasSetWorldEntityRadius = false;
 boolean isLocked = false;
-
+public boolean wasPoweredA = false;
+public boolean wasPoweredB = false;
 /**
  * @param par1World
  */
@@ -295,7 +296,6 @@ public void onUpdate()
     }
   }
 
-public boolean wasPowered = false;
 
 protected void checkForPowerUpdates()
   {
@@ -303,15 +303,30 @@ protected void checkForPowerUpdates()
     {
     return;
     } 
-  boolean foundPower = false;
+  boolean foundPowerA = false;
+  boolean foundPowerB = false;
+  boolean activate = false;
   int y = pos1.y;
   y = pos2.y < y ? pos2.y : y;
-  foundPower = this.worldObj.isBlockIndirectlyGettingPowered(pos1.x, y, pos1.z) || this.worldObj.isBlockIndirectlyGettingPowered(pos2.x, y, pos2.z);
-  if(foundPower && !wasPowered && !isLocked)
+  foundPowerA = this.worldObj.isBlockIndirectlyGettingPowered(pos1.x, y, pos1.z);
+  foundPowerB = this.worldObj.isBlockIndirectlyGettingPowered(pos2.x, y, pos2.z);  
+  if(!isLocked)
+    {
+    if(foundPowerA && !wasPoweredA)
+      {
+      activate = true;
+      }
+    if(foundPowerB && !wasPoweredB)
+      {
+      activate = true;
+      }
+    }
+  this.wasPoweredA = foundPowerA;
+  this.wasPoweredB = foundPowerB;
+  if(activate)
     {
     this.activateGate();
     }
-  this.wasPowered = foundPower;
   }
 
 protected void checkForLockStatus()
@@ -403,7 +418,8 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.setHealth(tag.getInteger("health"));
   this.gateStatus = tag.getByte("status");
   this.gateOrientation = tag.getByte("orient");
-  this.wasPowered = tag.getBoolean("power");
+  this.wasPoweredA = tag.getBoolean("power");
+  this.wasPoweredB = tag.getBoolean("power2");
   this.isLocked = tag.getBoolean("lock");  
   }
 
@@ -419,7 +435,8 @@ protected void writeEntityToNBT(NBTTagCompound tag)
   tag.setInteger("health", this.getHealth());
   tag.setByte("status", this.gateStatus);
   tag.setByte("orient", gateOrientation);
-  tag.setBoolean("power", this.wasPowered);
+  tag.setBoolean("power", this.wasPoweredA);
+  tag.setBoolean("power2", this.wasPoweredB);
   tag.setBoolean("lock", this.isLocked);
   }
 

@@ -176,3 +176,4 @@ TEXTURE/ART
 * add save/load of research queue to research table te
 * cleanup some issues in research gui
 * add 'view details' action to research queue tab
+* update gates to query power status for sides independently

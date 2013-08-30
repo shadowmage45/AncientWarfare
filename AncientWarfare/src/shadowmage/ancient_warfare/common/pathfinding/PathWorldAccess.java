@@ -307,7 +307,7 @@ public boolean isDoor(int x, int y, int z)
   if(id==BlockLoader.gateProxy.blockID)
     {
     TEGateProxy proxy = (TEGateProxy)world.getBlockTileEntity(x, y, z);
-    if(proxy.owner==null || !proxy.owner.getGateType().canSoldierActivate() || proxy.owner.wasPowered)
+    if(proxy.owner==null || !proxy.owner.getGateType().canSoldierActivate() || proxy.owner.wasPoweredA)
       {
       return false;
       }
