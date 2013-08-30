@@ -69,7 +69,7 @@ byte gateStatus = 0;
 public byte gateOrientation = 0;
 
 boolean hasSetWorldEntityRadius = false;
-boolean isLocked = false;
+public boolean isLocked = false;
 public boolean wasPoweredA = false;
 public boolean wasPoweredB = false;
 /**
