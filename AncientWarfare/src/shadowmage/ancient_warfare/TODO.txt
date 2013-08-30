@@ -29,6 +29,8 @@ FROM TESTING
 * spelling of leuitenant(sp?)
 * more nerf on ink farm
 * add some specific resource requirements to some higher-end research
+* invl timer on gate/vehicle hit, to reduce spam-click killing
+* possible config option for gates to only be damaged by battering rams
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
@@ -182,3 +184,7 @@ TEXTURE/ART
 * add 'view details' action to research queue tab
 * update gates to query power status for sides independently
 * toggle debug mode in prep for release
+
+
+* fix spelling of lieutenant
+* fix translation/localization of npc names in town-hall gui

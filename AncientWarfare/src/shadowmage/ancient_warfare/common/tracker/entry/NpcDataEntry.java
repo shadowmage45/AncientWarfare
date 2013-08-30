@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.tracker.entry;
 import java.util.UUID;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
@@ -114,9 +115,9 @@ public String getPrimaryDescription()
   {
   if(deathCause!=null)
     {
-    return String.format("%s  Rank: %s  Killed By: %s ", NpcTypeBase.getNpcType(npcType).getDisplayName(npcRank), npcRank, deathCause);
+    return String.format("%s  Rank: %s  Killed By: %s ", StringTranslate.getInstance().translateKey(NpcTypeBase.getNpcType(npcType).getDisplayName(npcRank)), npcRank, deathCause);
     }
-  return String.format("%s  Rank: %s, Health: %s", NpcTypeBase.getNpcType(npcType).getDisplayName(npcRank), npcRank, lastKnownHealth);
+  return String.format("%s  Rank: %s, Health: %s", StringTranslate.getInstance().translateKey(NpcTypeBase.getNpcType(npcType).getDisplayName(npcRank)), npcRank, lastKnownHealth);
   }
 
 public String getLocation()
