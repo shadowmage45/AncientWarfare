@@ -27,6 +27,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -160,17 +162,29 @@ public void onElementActivated(IGuiElement element)
       }
     else if(queueRecipes.containsKey(element))
       {
-      Config.logDebug("attempting to add goal...");
-      NBTTagCompound tag = new NBTTagCompound();
-      tag.setInteger("addQ", this.queueRecipes.get(element).getResult().getItemDamage());
-      this.sendDataToServer(tag);
+      if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
+        {
+        this.handleRecipeDetailsClick(queueRecipes.get(element));
+        }
+      else
+        {
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setInteger("addQ", this.queueRecipes.get(element).getResult().getItemDamage());
+        this.sendDataToServer(tag);        
+        }
       }
     else if(queuedRecipes.containsKey(element))
       {
-      Config.logDebug("attempting to remove goal...");
-      NBTTagCompound tag = new NBTTagCompound();
-      tag.setInteger("remQ", this.queuedRecipes.get(element).getResult().getItemDamage());
-      this.sendDataToServer(tag);
+      if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
+        {
+        this.handleRecipeDetailsClick(queuedRecipes.get(element));
+        }
+      else
+        {
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setInteger("remQ", this.queuedRecipes.get(element).getResult().getItemDamage());
+        this.sendDataToServer(tag);        
+        }
       }
     }
   }
@@ -222,7 +236,7 @@ public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
       }
     else if(this.activeTab==this.tab2)
       {
-      this.drawStringGui("Queued: ", 5, 21+18+10+5+18+70, 0xffffffff);
+      this.drawStringGui("Queued: ", 5, 21+18+10+5+18+70+2, 0xffffffff);
       }
     }
   }
@@ -238,6 +252,10 @@ protected void handleSearchBoxUpdate()
     this.area.elements.clear();
     this.sorterFilter.setFilterText(text);
     PlayerEntry entry = container.entry;
+    if(entry==null)
+      {
+      return;
+      }
     List<IResearchGoal> goals = entry.getAvailableResearch();
     List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
     for(IResearchGoal g : goals)
@@ -246,22 +264,25 @@ protected void handleSearchBoxUpdate()
       }
     this.addRecipeButtons(recipes, sorterFilter);     
     }
-  if(this.activeTab==this.tab2 && this.container.entry!=null)
+  if(this.activeTab==this.tab2)
     {
     String text = this.searchBox.getText();
     this.recipes.clear();
     this.area.setHeight(70);
     this.queueRecipes.clear();
     this.area.elements.clear();
+    if(this.container.entry==null)
+      {
+      return;
+      }
     this.sorterFilter.setFilterText(text);
-    PlayerEntry entry = container.entry;
-    this.recipeTypes = this.getTab1RecipeTypes();
     List<IResearchGoal> goals = this.container.entry.getUnknwonResearch();
     List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
     for(IResearchGoal b : goals)
       {
       recipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,b.getGlobalResearchNum())));
       }
+    Collections.sort(recipes, sorterFilter);
     this.addQueueRecipeButtons(recipes, sorterFilter);    
     area2.elements.clear();    
     this.addQueuedRecipeButtons();
@@ -277,6 +298,7 @@ protected void addQueueRecipeButtons(List<ResourceListRecipe> recipes, Comparato
   int x = 0;
   int y = 0;
   ArrayList<String> tooltip = new ArrayList<String>();
+  tooltip.add("Left click to add to queue, if possible");
   tooltip.add("Hold (shift) while clicking to");
   tooltip.add("view detailed recipe information");
   int num = 100;
@@ -291,7 +313,6 @@ protected void addQueueRecipeButtons(List<ResourceListRecipe> recipes, Comparato
     num++;
     }
   }
-
 
 protected void addQueuedRecipeButtons()
   {
@@ -310,6 +331,7 @@ protected void addQueuedRecipeButtons()
   int x = 0;
   int y = 0;
   ArrayList<String> tooltip = new ArrayList<String>();
+  tooltip.add("Left click to remove from queue");
   tooltip.add("Hold (shift) while clicking to");
   tooltip.add("view detailed recipe information");
   int num = 100;

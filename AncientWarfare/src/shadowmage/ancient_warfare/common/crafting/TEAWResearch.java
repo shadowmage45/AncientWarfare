@@ -109,6 +109,15 @@ public void setRecipe(ResourceListRecipe recipe)
 protected boolean tryFinishCrafting()
   {
   IResearchGoal goal = ResearchGoal.getGoalByID(recipe.getResult().getItemDamage());
+  if(goal==null || workingPlayerName==null)
+  {
+	  this.recipe = null;
+	  this.isStarted = false;
+	  this.isWorking = false;
+	  this.workProgress = 0;
+	  this.workProgressMax = 0;
+	  return false;
+  }
   PlayerTracker.instance().addResearchToPlayer(worldObj, workingPlayerName, goal.getGlobalResearchNum());
   if(!this.researchQueue.isEmpty())
     {

@@ -174,3 +174,5 @@ TEXTURE/ART
 * fix persistent recipes to allow switching to a new recipe if not yet started
 * update/fix machine scanning/building rotation mapping/calculation
 * add save/load of research queue to research table te
+* cleanup some issues in research gui
+* add 'view details' action to research queue tab

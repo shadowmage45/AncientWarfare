@@ -135,7 +135,7 @@ public void addResearchToPlayer(World world, String name, int goal)
       this.clientEntry.addCompletedResearch(goal);
       }
     }
-  else
+  else if(this.playerEntries.containsKey(name))
     {
     this.playerEntries.get(name).addCompletedResearch(goal);
     EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name);
