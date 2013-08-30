@@ -32,10 +32,12 @@ import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.interfaces.IEntityPacketHandler;
 import shadowmage.ancient_warfare.common.machine.TEGateLock;
 import shadowmage.ancient_warfare.common.network.Packet06Entity;
+import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.Pos3f;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -67,6 +69,7 @@ int health = 0;
 public int hurtAnimationTicks = 0;
 byte gateStatus = 0;
 public byte gateOrientation = 0;
+public int hurtInvulTicks = 0;
 
 boolean hasSetWorldEntityRadius = false;
 public boolean isLocked = false;
@@ -250,6 +253,10 @@ public void onUpdate()
   float prevEdge = this.edgePosition;
   this.setPosition(posX, posY, posZ);
 //  Config.logDebug(String.format("Gate Pos: %.2f, %.2f, %.2f.  client:%s", posX, posY, posZ, worldObj.isRemote));
+  if(this.hurtInvulTicks>0)
+    {
+    this.hurtInvulTicks--;
+    }
   this.checkForLockStatus();
   this.checkForPowerUpdates();
   if(this.hurtAnimationTicks>0)
@@ -372,9 +379,27 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     {
     return true;
     }
+  if(Config.gatesOnlyDamageByRams)
+    {
+    if(par1DamageSource.getEntity()==null || !(par1DamageSource.getEntity() instanceof VehicleBase))  
+      {
+      return !this.isDead;
+      }
+    VehicleBase vehicle = (VehicleBase) par1DamageSource.getEntity();
+    if(vehicle.vehicleType.getGlobalVehicleType()!=VehicleRegistry.BATTERING_RAM.getGlobalVehicleType())
+      {
+      return !this.isDead;
+      }
+    }
+  if(this.hurtInvulTicks>0)
+    {
+    return !this.isDead;
+    }
+  this.hurtInvulTicks = 10;
   int health = this.getHealth();
   health -= par2;
   this.setHealth(health);
+  
   if(health<=0)
     {
     this.setDead();

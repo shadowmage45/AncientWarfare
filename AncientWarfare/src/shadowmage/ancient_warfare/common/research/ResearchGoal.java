@@ -101,9 +101,9 @@ public static IResearchGoal ammoBallistics3 = new ResearchBallistics(ResearchGoa
  */
 public static IResearchGoal upgradeMechanics1 = new ResearchMechanics(ResearchGoalNumbers.mechanics1, 0);
 public static IResearchGoal upgradeMechanics2 = new ResearchMechanics(ResearchGoalNumbers.mechanics2, 1).addDependencies(upgradeMechanics1);
-public static IResearchGoal upgradeMechanics3 = new ResearchMechanics(ResearchGoalNumbers.mechanics3, 2).addDependencies(upgradeMechanics2);
-public static IResearchGoal upgradeMechanics4 = new ResearchMechanics(ResearchGoalNumbers.mechanics4, 3).addDependencies(upgradeMechanics3);
-public static IResearchGoal upgradeMechanics5 = new ResearchMechanics(ResearchGoalNumbers.mechanics5, 4).addDependencies(upgradeMechanics4);
+public static IResearchGoal upgradeMechanics3 = new ResearchMechanics(ResearchGoalNumbers.mechanics3, 2).addDependencies(upgradeMechanics2).addResource(new ItemStack(Block.pistonBase,1,0), false, false);
+public static IResearchGoal upgradeMechanics4 = new ResearchMechanics(ResearchGoalNumbers.mechanics4, 3).addDependencies(upgradeMechanics3).addResource(new ItemStack(Block.pistonBase,2,0), false, false);
+public static IResearchGoal upgradeMechanics5 = new ResearchMechanics(ResearchGoalNumbers.mechanics5, 4).addDependencies(upgradeMechanics4).addResource(new ItemStack(Block.pistonStickyBase,2,0), false, false);
 
 /**
  * civic research
@@ -138,9 +138,9 @@ public static IResearchGoal materialIron5 = new ResearchMaterialLevel(209, 4, Ve
  */
 public static IResearchGoal command1 = new ResearchCommand(ResearchGoalNumbers.command1, 0);
 public static IResearchGoal command2 = new ResearchCommand(ResearchGoalNumbers.command2, 1).addDependencies(ResearchGoalNumbers.command1);
-public static IResearchGoal command3 = new ResearchCommand(ResearchGoalNumbers.command3, 2).addDependencies(ResearchGoalNumbers.command2);
-public static IResearchGoal command4 = new ResearchCommand(ResearchGoalNumbers.command4, 3).addDependencies(ResearchGoalNumbers.command3);
-public static IResearchGoal command5 = new ResearchCommand(ResearchGoalNumbers.command5, 4).addDependencies(ResearchGoalNumbers.command4);
+public static IResearchGoal command3 = new ResearchCommand(ResearchGoalNumbers.command3, 2).addDependencies(ResearchGoalNumbers.command2).addResource(new ItemStack(ItemLoader.npcCommandBaton,1,0), false, true);
+public static IResearchGoal command4 = new ResearchCommand(ResearchGoalNumbers.command4, 3).addDependencies(ResearchGoalNumbers.command3).addResource(new ItemStack(ItemLoader.npcCommandBaton,1,0), false, true);
+public static IResearchGoal command5 = new ResearchCommand(ResearchGoalNumbers.command5, 4).addDependencies(ResearchGoalNumbers.command4).addResource(new ItemStack(ItemLoader.npcCommandBaton,1,1), false, true);
 
 
 

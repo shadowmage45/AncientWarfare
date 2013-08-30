@@ -25,11 +25,7 @@ FROM TESTING
 * add scanner support for generic tile entities through export of NBT data (will need to have the post-build tile-entity update its block position..)
 * add scan toggles for 'scan chest items' and 'scan tile data'
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
-* add localization support in town-hall block
-* spelling of leuitenant(sp?)
-* more nerf on ink farm
 * add some specific resource requirements to some higher-end research
-* invl timer on gate/vehicle hit, to reduce spam-click killing
 * possible config option for gates to only be damaged by battering rams
 
 BALANCE FROM TESTING
@@ -185,6 +181,13 @@ TEXTURE/ART
 * update gates to query power status for sides independently
 * toggle debug mode in prep for release
 
-
+/********** 08-29-13 **********/
 * fix spelling of lieutenant
 * fix translation/localization of npc names in town-hall gui
+* reduce squid farm from 0.25%/block to 0.175%/block (minor reduction in frequency of successful harvests)
+* slightly increase the expense of t2/3 courier slips (add some dyes and metals to their recipes)
+* add command baton items as requisite materials for higher-end command-research.  Need to add other specifics.
+* add config option to restrict damage sources to gates to only allow battering rams (default is to allow all damage)
+* add temporary invulnerability to gate when it is hit.. 1/2 second invulnerability period after it takes damage from any source
+
+

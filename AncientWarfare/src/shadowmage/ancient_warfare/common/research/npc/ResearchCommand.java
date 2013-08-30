@@ -40,7 +40,7 @@ public ResearchCommand(int num, int level)
   this.addResource(new ItemStack(Item.paper, (level+1)*2), false, false);
   this.addResource(new ItemStack(Item.dyePowder, level+1, 0), false, false);
   this.addResource(new ItemStack(Block.torchWood, level+1), false, false);
-  this.addResource(new ItemStack(Item.ingotGold, level+1), false, false);
+  this.addResource(new ItemStack(Item.ingotGold, level+1), false, false);  
   }
 
 }

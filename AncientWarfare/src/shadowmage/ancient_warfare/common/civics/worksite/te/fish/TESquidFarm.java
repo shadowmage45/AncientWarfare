@@ -32,9 +32,11 @@ import shadowmage.ancient_warfare.common.utils.InventoryTools;
 public class TESquidFarm extends TEFishery
 {
 
+
 public TESquidFarm()
   {
-  fishFilter = new ItemStack(Item.dyePowder,1,0);  
+  fishFilter = new ItemStack(Item.dyePowder,1,0);
+  this.harvestFactor = 0.175f;
   }
 
 }

@@ -634,7 +634,7 @@ protected void addNpcRecipes()
   
   recipe = new ResourceListRecipe(new ItemStack(ItemLoader.courierRouteSlip,1,0), RecipeType.NPC_MISC);
   recipe.addResource(Item.paper, 1, false);
-  recipe.addResource(Item.dyePowder, 1, 2, false);
+  recipe.addResource(Item.dyePowder, 1, 2, false);    
   recipe.addResource(Block.planks, 1, true);
   recipe.addNeededResearch(ResearchGoalNumbers.logistics3);
   this.npcMiscRecipes.add(recipe);
@@ -642,13 +642,18 @@ protected void addNpcRecipes()
   recipe = new ResourceListRecipe(new ItemStack(ItemLoader.courierRouteSlip,1,1), RecipeType.NPC_MISC);
   recipe.addResource(Item.paper, 2, false);
   recipe.addResource(Item.dyePowder, 1, 2, false);
+  recipe.addResource(Item.dyePowder, 4, 2, false);
+  recipe.addResource(Item.ingotIron, 0, 2, false);
   recipe.addResource(Block.planks, 1, true);
   recipe.addNeededResearch(ResearchGoalNumbers.logistics4);
   this.npcMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(ItemLoader.courierRouteSlip,1,2), RecipeType.NPC_MISC);
   recipe.addResource(Item.paper, 3, false);
-  recipe.addResource(Item.dyePowder, 1, 2, false);
+  recipe.addResource(Item.dyePowder, 0, 2, false);//ink
+  recipe.addResource(Item.dyePowder, 1, 2, false);//red
+  recipe.addResource(Item.dyePowder, 4, 2, false);//blue  
+  recipe.addResource(Item.ingotGold, 0, 2, false);
   recipe.addResource(Block.planks, 1, true);
   recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
   this.npcMiscRecipes.add(recipe);

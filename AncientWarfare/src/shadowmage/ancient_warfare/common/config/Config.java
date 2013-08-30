@@ -61,7 +61,7 @@ public static boolean enableVillageGen = true;
 public static boolean vehiclesTearUpGrass = true;
 public static boolean autoExportOnUpdate = true;
 public static boolean autoExportWorldGenOnUpdate = true;
-
+public static boolean gatesOnlyDamageByRams = false;
 
 public static boolean updatedVersion = false;
 public static String configVersion = "";
@@ -75,6 +75,7 @@ public static int npcAISearchRange = 80;
 public static int mailSendTicks = 5*20;//five seconds between sending mail
 public static int npcWorkMJ = 80;//how many BuildCraft MJ represent one NPC 'work' unit
 public static int vehicleMoveUpdateFrequency = 3;
+
 
 //***************************************************SYNCHED CONFIGS************************************************//
 public static boolean disableResearch = false;
@@ -249,6 +250,7 @@ public void setVehicleInfo()
   this.soldiersUseAmmo = config.get("c-vehicle-options", "soldiers_use_ammo", false, "If true, Soldiers will consume ammo from vehicles but the type must be selected before hand, and kept stocked. If false, soldiers are limited to a default ammo type for the vehicle.").getBoolean(false);
   this.useVehicleSetupTime = config.get("c-vehicle-options", "use_setup_time", true, "If true, vehicles will be un-useable for the first 5 seconds after placement.").getBoolean(true);
   this.vehiclesTearUpGrass = config.get("c-vehicle-options", "vehicle_destroy_grass", true, "If true, vehicles will tear up grass/snow/flower blocks when driving over them.  Can be disabled for minor performance boost (less items in world)").getBoolean(true);
+  this.gatesOnlyDamageByRams = config.get("c-vehicle-options", "gates_only_damaged_by_rams", false, "If true, gates will only take damage from battering rams (no other sources).  Default is false--to allow all damage sources").getBoolean(false);
   }
 
 public void setKingdomInfo()
