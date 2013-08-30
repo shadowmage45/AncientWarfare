@@ -53,6 +53,19 @@ public static MovingObjectPosition getPlayerTarget(EntityPlayer player, float ra
   return tracePathWithYawPitch(player.worldObj, (float)player.posX, (float)player.posY + (player.worldObj.isRemote ? 0.f : 1.62f), (float)player.posZ, player.rotationYaw, player.rotationPitch, range, border, excluded);  
   }
 
+/**
+ * 
+ * @param world
+ * @param x startX
+ * @param y startY
+ * @param z startZ
+ * @param tx endX
+ * @param ty endY
+ * @param tz endZ
+ * @param borderSize extra area to examine around line for entities
+ * @param excluded any excluded entities (the player, etc)
+ * @return a MovingObjectPosition of either the block hit (no entity hit), the entity hit (hit an entity), or null for nothing hit
+ */
 public static MovingObjectPosition tracePath(World world, float x, float y, float z, float tx, float ty, float tz, float borderSize, HashSet<Entity> excluded)
   {
   Vec3 startVec = Vec3.fakePool.getVecFromPool(x, y, z);

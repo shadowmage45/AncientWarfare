@@ -47,11 +47,47 @@ protected void scanLevel(TEMine mine, World world)
   for(int x = this.minX; x < this.minX + this.xSize; x++)
     {
     for(int z = this.minZ; z < this.minZ + this.zSize; z++)
-      {
-      if(shouldClear(world.getBlockId(x, minY, z)))
+      {      
+      if(x==this.minX && z==this.minZ + this.zSize/2)
+        {
+        id = world.getBlockId(x-1, minY, z);
+        if(needsFilled(id))
+          {
+          this.addNewPoint(x-1, minY, z, TargetType.MINE_FILL);
+          }
+        this.addNewPoint(x, minY, z, TargetType.MINE_LADDER);
+        }
+      else if(x==this.minX+this.xSize-1 && z==this.minZ + this.zSize/2)
+        {
+        id = world.getBlockId(x+1, minY, z);
+        if(needsFilled(id))
+          {
+          this.addNewPoint(x+1, minY, z, TargetType.MINE_FILL);
+          }
+        this.addNewPoint(x, minY, z, TargetType.MINE_LADDER);
+        }
+      else if(z==this.minZ && x==this.minX + this.xSize/2)
+        {
+        id = world.getBlockId(x, minY, z-1);
+        if(needsFilled(id))
+          {
+          this.addNewPoint(x, minY, z-1, TargetType.MINE_FILL);
+          }
+        this.addNewPoint(x, minY, z, TargetType.MINE_LADDER);
+        }
+      else if(z==this.minZ + this.zSize-1 && x==this.minX+this.xSize/2)
+        {
+        id = world.getBlockId(x, minY, z+1);
+        if(needsFilled(id))
+          {
+          this.addNewPoint(x, minY, z+1, TargetType.MINE_FILL);
+          }
+        this.addNewPoint(x, minY, z, TargetType.MINE_LADDER);
+        }
+      else if(shouldClear(world.getBlockId(x, minY, z)))
         {
         this.addNewPoint(x, minY, z, TargetType.MINE_CLEAR);
-        }
+        }      
       }
     }
   }

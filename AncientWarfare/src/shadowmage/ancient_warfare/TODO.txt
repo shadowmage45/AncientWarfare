@@ -27,7 +27,6 @@ FROM TESTING
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
 * add some specific resource requirements to some higher-end research
 * test out ars magica for potential conflict/issues
-* add ability to quarry to place ladders on 1 or more corners/sides of the quarry (if ladders are provided)
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
@@ -192,3 +191,5 @@ TEXTURE/ART
 * add temporary invulnerability to gate when it is hit.. 1/2 second invulnerability period after it takes damage from any source
 * swap naming from alpha->beta
 * add crafting/recruit recipes for all vanilla / mod villagers with config option for randomization
+* add ability to quarry to place ladders on 1 or more corners/sides of the quarry (if ladders are provided)
+* add comment to raytracer
