@@ -22,12 +22,9 @@ package shadowmage.ancient_warfare.common.registry;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cpw.mods.fml.common.registry.EntityRegistry;
+import java.util.Random;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityTracker;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,20 +34,7 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
-import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
-import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
-import shadowmage.ancient_warfare.common.npcs.types.NpcCombatEngineer;
-import shadowmage.ancient_warfare.common.npcs.types.NpcCommander;
-import shadowmage.ancient_warfare.common.npcs.types.NpcDummy;
-import shadowmage.ancient_warfare.common.npcs.types.NpcFarmer;
-import shadowmage.ancient_warfare.common.npcs.types.NpcFootsoldier;
-import shadowmage.ancient_warfare.common.npcs.types.NpcLumberjack;
-import shadowmage.ancient_warfare.common.npcs.types.NpcMedic;
-import shadowmage.ancient_warfare.common.npcs.types.NpcMiner;
-import shadowmage.ancient_warfare.common.npcs.types.NpcSiegeEngineer;
-import shadowmage.ancient_warfare.common.npcs.types.NpcVillager;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 
 
@@ -61,6 +45,7 @@ public class NpcRegistry
 
 private NpcRegistry(){}
 private static NpcRegistry INSTANCE;
+static Random random = new Random();
 
 public static NpcRegistry instance()
   {
@@ -133,6 +118,10 @@ public static Entity getNpcForType(int num, World world, int level, int team)
     }
   if(type.isVanillaVillager())
     {
+    if(Config.randomizeVillagers)
+      {
+      level = random.nextInt(type.getNumOfLevels()+1);
+      }
     EntityVillager villager = new EntityVillager(world, level);
     return villager;
     }

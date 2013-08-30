@@ -23,10 +23,13 @@ package shadowmage.ancient_warfare.common.npcs.types;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
 public class NpcVillager extends NpcTypeBase
@@ -64,7 +67,11 @@ public NpcVillager(int type)
     }
   catch(Exception e)
     {
-    Config.logError("Could not access VillagerRegistry.instance()");
+    Config.logError("Could not access VillagerRegistry.instance() to add mod villager recruit recipes");
+    }
+  for(int i = 0; i < level; i++)
+    {
+    this.getLevelEntry(i).addNeededResearch(ResearchGoalNumbers.command1).addRecipeResource(new ItemStack(Item.emerald,1,0), new ItemStack(Item.porkCooked, 20, 0));    
     }
   }
 

@@ -1,0 +1,28 @@
+New features since last test release:
+/********** 08-21-13 **********/
+* add ability to designate an attack target or move to (single patrol) point using the command baton
+* fix catapult mobile turret rider position is too far forward
+* add in gate lock-block -- when placed next to a gate and powered, completely prevents gate from opening/closing
+* remove original gate power/lock ability--lock is now only enabled through gate lock block
+* remove a research goal dependency for explosives1 that would have prevented it ever being researched
+* add/fix missing localization entry for survival-mode construction sites
+* minor cleanups in research book gui stuff
+* actually use breakBlocks config option for normal stone-shot ammunitions
+* update build script to not include buildcraft files after reobf (smaller release .zip)
+* update included village_ structures to be in survival mode by default
+* add support to structure scanner for AW Crafting Stations, Machines, Engines, and Reinforced Blocks
+* Crafting Stations will now retain client selection, even when not 'started' -- this should make it easier
+    if you have forgotten materials/etc and forgot to hit the 'start' button.
+* Research Station now has a queue ability.  See the Queue tab in the research gui -- top is 'available', bottom is 'queued'.  There is little validation on what you can add
+    but when it tries to research it, it will remove/skip invalid/unattainable/already learned entries.
+* update gates to query power status for sides independently, they now check both bottom corners independently for power status, and will toggle when either block receivies an 'on' signal -- this helps alleviate
+    problems of a lever/etc still locking a gate from other redstone interaction by providing two interaction points.
+* fix spelling of lieutenant
+* fix translation/localization of npc names in town-hall gui
+* reduce squid farm from 0.25%/block to 0.175%/block (minor reduction in frequency of successful harvests)
+* slightly increase the expense of t2/3 courier slips (add some dyes and metals to their recipes)
+* add command baton items as requisite materials for higher-end command-research.
+* add config option to restrict damage sources to gates to only allow battering rams (default is to allow all damage)
+* add temporary invulnerability to gate when it is hit.. 1/2 second invulnerability period after it takes damage from any source-- should help eliminate problems of spam/macro attacking gates to kill them fast
+* swap release naming from alpha -> beta in prep for first public release
+* add crafting/recruit recipes for all vanilla / mod villagers with config option for randomization

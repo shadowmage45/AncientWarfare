@@ -423,7 +423,7 @@ public Collection<Integer> getNeededResearch(int level)
 @Override
 public ResourceListRecipe constructRecipe(int level)
   {
-  if(this.isVanillaVillager || !this.isAvailableInSurvival || !this.isEnabled){return null;}
+  if(!this.isAvailableInSurvival || !this.isEnabled){return null;}
   if(level>=0 && level<this.levelEntries.size())
     {
     NpcLevelEntry entry = this.levelEntries.get(level);
@@ -452,7 +452,6 @@ public ResourceListRecipe constructRecipe(int level)
     }
   return null;
   }
-
 
 @Override
 public boolean isBandit()

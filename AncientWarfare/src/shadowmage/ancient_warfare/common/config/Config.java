@@ -36,7 +36,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 public class Config
 {
 //*******************************************************FIELDS**********************************************//
-public static final String VERSION = "1.0.023-alpha-MC152";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
+public static final String VERSION = "1.0.023-beta-MC152";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
 public static final String ANTVERSION = "@VERSION@";
 public static String texturePath = "/mods/ancientwarfare/textures/";
 
@@ -62,6 +62,7 @@ public static boolean vehiclesTearUpGrass = true;
 public static boolean autoExportOnUpdate = true;
 public static boolean autoExportWorldGenOnUpdate = true;
 public static boolean gatesOnlyDamageByRams = false;
+public static boolean randomizeVillagers = false;
 
 public static boolean updatedVersion = false;
 public static String configVersion = "";
@@ -235,6 +236,7 @@ public void setCoreInfo()
   this.npcWorkMJ = config.get("a-general-options", "npc_work_mj", 70, "How many BuildCraft MJ represent one NPC 'work' unit.").getInt(70);
   this.autoExportOnUpdate = config.get("a-general-options", "auto_export_structure", true, "If true, will automatically re-export the default structure templates when the mod version is updated").getBoolean(true);
   this.autoExportWorldGenOnUpdate = config.get("a-general-options", "auto_export_worldgen", true, "If true, will automatically re-export the default world gen configuration when the mod version is updated").getBoolean(true);
+  this.randomizeVillagers = config.get("a-general-options", "randomize_villagers", false, "If true, villager spawners will spawn a random villager type instead of set type").getBoolean(false);
   
   /**
    * performance options
