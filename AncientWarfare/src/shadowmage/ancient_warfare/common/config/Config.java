@@ -43,7 +43,7 @@ public static String texturePath = "/mods/ancientwarfare/textures/";
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
-public static final boolean DEBUG = true;
+public static final boolean DEBUG = false;
 
 //***************************************************LOADED CONFIGS******************************************//
 

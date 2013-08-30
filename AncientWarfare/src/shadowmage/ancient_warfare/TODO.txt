@@ -177,3 +177,4 @@ TEXTURE/ART
 * cleanup some issues in research gui
 * add 'view details' action to research queue tab
 * update gates to query power status for sides independently
+* toggle debug mode in prep for release
