@@ -26,4 +26,6 @@ New features since last test release:
 * add temporary invulnerability to gate when it is hit.. 1/2 second invulnerability period after it takes damage from any source-- should help eliminate problems of spam/macro attacking gates to kill them fast
 * swap release naming from alpha -> beta in prep for first public release
 * add crafting/recruit recipes for all vanilla / mod villagers with config option for randomization
-* add ability to quarry to place ladders on 1 or more corners/sides of the quarry (if ladders are provided)
+* fix missing resource entry for mines regarding ladders and torches that would prevent them being placed in the inventory
+* add ability to quarry to place ladders on sides of the quarry (if ladders are provided)
+* fix potential crash that could result if research/AWGameData became corrupt/missing or was missing an entry for a player for any reason
