@@ -30,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.block.TEAWBlockReinforced;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import shadowmage.ancient_warfare.common.machine.TEEngine;
 import shadowmage.ancient_warfare.common.machine.TEMachine;
@@ -39,7 +38,7 @@ import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.NBTReader;
 import shadowmage.ancient_warfare.common.utils.NBTWriter;
-import shadowmage.meim.common.util.StringTools;
+import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class MachineRule
 {
