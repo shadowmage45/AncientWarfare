@@ -135,3 +135,4 @@ TEXTURE/ART
 /********** 09-02-13 **********/
 * fix mailboxes not being able to extract from bottom with hoppers
 * update version number for release
+* add public release
