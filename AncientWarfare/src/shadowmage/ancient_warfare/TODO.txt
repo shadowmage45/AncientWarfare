@@ -27,6 +27,7 @@ FROM TESTING
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
 * add some specific resource requirements to some higher-end research
 * test out ars magica for potential conflict/issues
+* mailbox extraction from bottom side
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
