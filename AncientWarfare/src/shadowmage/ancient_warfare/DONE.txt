@@ -1491,3 +1491,66 @@
 /********************************************************************************/
 /****************************************TEST RELEASE .022****************************************/
 /********************************************************************************/
+
+/********** 08-21-13 **********/
+* disable npc/vehicle collision checks, should solve issues of npcs getting stuck on vehicles
+* add prep work for using command baton to designate attack targets.
+* add ability to designate an attack target or move to (single patrol) point using the command baton
+* fix cat mobile turret rider position is too far forward
+* update version number in prep for next release
+
+/********** 08-22-13 **********/
+* add in gate lock-block -- when placed next to a gate and powered, completely prevents gate from opening/closing
+    NEEDS TEXTURES/MORE TESTING
+* add translation entry for gate-lock
+
+/********** 08-27-13 **********/
+* add textures for gate lock block.
+* finish up gate lock functionality.  slightly modify gate onPowered activation.
+* remove original gate power/lock ability--lock is now only enabled through gate lock block
+* add recipe for gate lock
+* remove a research goal dependency for explosives1 that would have prevented it ever being researched
+* fix gate-lock block interaction/locking
+
+/********** 08-28-13 **********/
+* add missing localization entry for survival-mode construction sites
+* minor cleanups in research book gui stuff
+* actually use breakBlocks config option for normal stone-shot ammunitions
+* update build script to not include buildcraft files after reobf
+* update included village_ structures to be in survival mode by default
+* minor updates to BlockPosition 
+* prep work on adding block rules to support crafting tables/machines/engines/reinforced blocks
+    
+/********** 08-29-13 **********/
+* add most of the remaining support work for machine rules...scan, export, load, and build
+* update machineRule to appropriately re-set tile position through nbt tag
+* first pass of updating crafting stations to retain player selection server side, even when not started
+* first pass of adding research queue to research table
+* more work on adding queue to research table -- nearly there.
+* fix persistent recipes to allow switching to a new recipe if not yet started
+* update/fix machine scanning/building rotation mapping/calculation
+* add save/load of research queue to research table te
+* cleanup some issues in research gui
+* add 'view details' action to research queue tab
+* update gates to query power status for sides independently
+* toggle debug mode in prep for release
+
+/********** 08-29-13 **********/
+* fix spelling of lieutenant
+* fix translation/localization of npc names in town-hall gui
+* reduce squid farm from 0.25%/block to 0.175%/block (minor reduction in frequency of successful harvests)
+* slightly increase the expense of t2/3 courier slips (add some dyes and metals to their recipes)
+* add command baton items as requisite materials for higher-end command-research.  Need to add other specifics.
+* add config option to restrict damage sources to gates to only allow battering rams (default is to allow all damage)
+* add temporary invulnerability to gate when it is hit.. 1/2 second invulnerability period after it takes damage from any source
+* swap naming from alpha->beta
+* add crafting/recruit recipes for all vanilla / mod villagers with config option for randomization
+* add ability to quarry to place ladders on 1 or more corners/sides of the quarry (if ladders are provided)
+* add comment to raytracer
+* fix potential crash that could result if research/AWGameData became corrupt/missing
+* fix missing resource entry for mines regarding ladders and torches that would prevent them being placed in the inventory
+* fix quarry ladder placement logic
+
+/********************************************************************************/
+/****************************************TEST RELEASE .023****************************************/
+/********************************************************************************/

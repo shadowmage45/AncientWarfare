@@ -110,7 +110,7 @@ public boolean canInsertItem(int i, ItemStack itemstack, int j)
 public boolean canExtractItem(int i, ItemStack itemstack, int j)
   {
   if(this.boxData==null){return false;}
-  if(j==1)
+  if(j==0)
     {
     return true;
     }

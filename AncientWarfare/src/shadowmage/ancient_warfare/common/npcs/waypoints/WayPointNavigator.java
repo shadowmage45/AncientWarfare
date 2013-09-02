@@ -61,8 +61,6 @@ WayPointItemRouting point = null;//current point
 int currentPatrolPoint = 0;
 int courierPoint = -1;
 
-//TODO add special item routing waypoints for couriers
-
 public WayPointNavigator(IPathableEntity owner)
   {
   this.owner = owner;
