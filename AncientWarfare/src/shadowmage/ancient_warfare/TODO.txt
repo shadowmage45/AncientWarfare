@@ -20,6 +20,7 @@ FROM TESTING
 * add scan toggles for 'scan chest items' and 'scan tile data'
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
 * ignore work/ clear work commands not working on first time* cleanup research notes book (add more to the tips/notes section)  
+* mines/quarries picking up any additional loot from chests/etc
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
