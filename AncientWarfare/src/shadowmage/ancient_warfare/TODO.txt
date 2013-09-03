@@ -14,13 +14,11 @@ FROM TESTING
 * npc craftsmen hold hammers at a strange angle (would require a special item render for that item/damage)
 * examine tinkers construct village gen for ideas on proper methods to reduce/remove duplicated buildings
     https://github.com/mDiyo/TinkersConstruct/tree/16working/tconstruct/worldgen/village
-* server not authenticating AW versions properly   
-* still not saving research properly?  (lost research on test server) 
 * add scanner support for generic tile entities through export of NBT data (will need to have the post-build tile-entity update its block position..)
 * add scan toggles for 'scan chest items' and 'scan tile data'
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
-* ignore work/ clear work commands not working on first time* cleanup research notes book (add more to the tips/notes section)  
-* mines/quarries picking up any additional loot from chests/etc
+* ignore work/ clear work commands not working on first time
+* cleanup research notes book (add more to the tips/notes section)  
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
@@ -142,3 +140,4 @@ TEXTURE/ART
 * fix a potential cause of loss of research data on dedicated servers (moved data- clearing from server stopping to server starting...it will now retain data from a previous instance
     until the next server is started (be it an integrated or dedicated)
 * attempt to fix version bounding not verifying version mismatch on server
+* add ability to mines/quarries to pickup any loot from chests (or other IInventory blocks) that may be encountered when clearing blocks

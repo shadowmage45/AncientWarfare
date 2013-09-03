@@ -23,16 +23,16 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TEMine extends TEWorkSite
 {
@@ -118,6 +118,21 @@ public void handleFillAction(IWorker npc, WorkPoint m)
 public boolean handleBlockBreak(IWorker npc, int x, int y, int z)
   {
   List<ItemStack> drops = BlockTools.breakBlock(worldObj, x, y, z, 0);
+  TileEntity te = worldObj.getBlockTileEntity(x, y, z);
+  if(te instanceof IInventory)
+    {
+    IInventory inv = (IInventory)te;
+    ItemStack stack;
+    for(int i = 0; i < inv.getSizeInventory(); i++)
+      {
+      stack = inv.getStackInSlot(i);
+      if(stack!=null)
+        {
+        drops.add(stack);
+        inv.setInventorySlotContents(i, null);
+        }
+      }
+    }
   if(drops!=null)
     {
     for(ItemStack drop : drops)
