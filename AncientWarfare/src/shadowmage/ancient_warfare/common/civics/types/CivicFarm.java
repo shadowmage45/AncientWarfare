@@ -53,7 +53,7 @@ public CivicFarm(int id, String name, String tooltip, Class <?extends TEWorkSite
   
   this.neededResearch.add(ResearchGoalNumbers.logistics1);
   this.neededResearch.add(ResearchGoalNumbers.civics1);
-  this.addRecipeResource(new ItemStack(Block.planks, 10), false);
+  this.addRecipeResource(new ItemStack(Block.planks, 10), true);
   this.addRecipeResource(new ItemStack(Item.hoeIron, 1), true);
   this.addRecipeResource(new ItemStack(Block.chest, 1), false);
   }

@@ -52,7 +52,7 @@ public CivicWarehouse(int id, String name, String tooltip, Class <?extends TECiv
   this.addNeededResearch(ResearchGoalNumbers.logistics3);
     
   this.addRecipeResource(new ItemStack(Item.paper, 10), false);
-  this.addRecipeResource(new ItemStack(Block.planks, 10), false);
+  this.addRecipeResource(new ItemStack(Block.planks, 10), true);
   this.addRecipeResource(new ItemStack(Block.chest, 2), false);
   }
 

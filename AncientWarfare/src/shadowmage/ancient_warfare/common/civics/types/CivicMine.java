@@ -53,7 +53,7 @@ public CivicMine(int id, String name, String tooltip, Class <?extends TECivic> t
   this.neededResearch.add(ResearchGoalNumbers.logistics3);
   this.neededResearch.add(ResearchGoalNumbers.civics3);
   this.addRecipeResource(new ItemStack(Item.pickaxeDiamond,1), true);
-  this.addRecipeResource(new ItemStack(Block.planks, 10), false);
+  this.addRecipeResource(new ItemStack(Block.planks, 10), true);
   this.addRecipeResource(new ItemStack(Block.chest, 1), false);
   }
 

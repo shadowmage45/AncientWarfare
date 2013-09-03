@@ -50,7 +50,7 @@ public CivicFishFarm(int id, String name, String tooltip, Class <?extends TEWork
   
   this.neededResearch.add(ResearchGoalNumbers.logistics3);
   this.neededResearch.add(ResearchGoalNumbers.civics2);
-  this.addRecipeResource(new ItemStack(Block.planks, 10), false);
+  this.addRecipeResource(new ItemStack(Block.planks, 10), true);
   this.addRecipeResource(new ItemStack(Item.fishingRod, 1), true);
   this.addRecipeResource(new ItemStack(Block.chest, 1), false);
   }

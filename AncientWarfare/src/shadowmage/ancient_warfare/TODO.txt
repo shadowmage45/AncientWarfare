@@ -141,3 +141,5 @@ TEXTURE/ART
     until the next server is started (be it an integrated or dedicated)
 * attempt to fix version bounding not verifying version mismatch on server
 * add ability to mines/quarries to pickup any loot from chests (or other IInventory blocks) that may be encountered when clearing blocks
+* fix Farms(all animal and plant), Fish Farms (ink/fish), Mines (mine/quarry), Tree Farms (all types), and Warehouse civic recipes to accept all plank/wood types.
+* fix a few other misc recipes to also allow all vanilla plank types in place of oak planks (uses ore-dict, so may work for mod-added planks as well)

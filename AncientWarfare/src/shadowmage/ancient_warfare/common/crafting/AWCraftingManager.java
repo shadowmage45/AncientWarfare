@@ -434,13 +434,13 @@ protected void addCivicRecipes()
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.crafting,1,6), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,1,false);  
-  recipe.addResource(Block.planks,6,false);
+  recipe.addResource(Block.planks,6,true);
   recipe.addResource(Item.clay,1,false);
   this.civicMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.crafting,1,7), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,1,false);  
-  recipe.addResource(Block.planks,7,false);
+  recipe.addResource(Block.planks,7,true);
   this.civicMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(ItemLoader.backpack,1,0), RecipeType.CIVIC_MISC);
