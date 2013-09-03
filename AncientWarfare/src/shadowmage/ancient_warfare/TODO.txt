@@ -139,4 +139,6 @@ TEXTURE/ART
 * add public release
 
 /********** 09-02-13 **********/
-* fix a potential cause of loss of research data on dedicated servers
+* fix a potential cause of loss of research data on dedicated servers (moved data- clearing from server stopping to server starting...it will now retain data from a previous instance
+    until the next server is started (be it an integrated or dedicated)
+* attempt to fix version bounding not verifying version mismatch on server

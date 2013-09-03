@@ -82,7 +82,7 @@ clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
 channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
-versionBounds=Config.VERSION
+versionBounds="["+Config.VERSION+",)"
 )
 
 public class AWCore 
