@@ -22,6 +22,8 @@ package shadowmage.ancient_warfare.client.gui.settings;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
@@ -30,6 +32,7 @@ import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.network.Packet01ModData;
 
 public class GuiClientSettings extends GuiContainerAdvanced
 {
@@ -44,6 +47,7 @@ GuiCheckBoxSimple enableCivicBounds;
 GuiCheckBoxSimple enableNpcObjective;
 GuiButtonSimple keyBinds;
 GuiButtonSimple performance;
+GuiButtonSimple entityDump;
 
 EntityPlayer player;
 
@@ -81,7 +85,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   this.drawString(fontRenderer, "Render Overlay", left, guiTop+10+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Advanced Overlay", left, guiTop+30+4, 0xffffffff);
   this.drawString(fontRenderer, "Use Mouse Aim Input", left, guiTop+50+4, 0xffffffff);
-  this.drawString(fontRenderer, "Render Ridden Vehicle in First-person", left, guiTop+70+4, 0xffffffff);
+  this.drawString(fontRenderer, "Render Ridden Vehiclein FPV", left, guiTop+70+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Vehicle Nameplates", left, guiTop+90+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Npc Nameplates", left, guiTop+110+4, 0xffffffff);
   this.drawString(fontRenderer, "Render Civic Work Bounds", left, guiTop+130+4, 0xffffffff);
@@ -133,6 +137,14 @@ public void onElementActivated(IGuiElement element)
     GUIHandler.instance().openGUI(GUIHandler.PERFORMANCE, player, player.worldObj, 0, 0, 0);    
     break;
     
+    case 11:
+    NBTTagCompound tag = new NBTTagCompound();
+    Packet01ModData pkt = new Packet01ModData();
+    tag.setBoolean("entityDump", true);
+    pkt.packetData = tag;
+    pkt.sendPacketToServer();   
+    break;
+    
     default:
     break;   
     }
@@ -152,6 +164,7 @@ public void setupControls()
   this.enableCivicBounds = this.addCheckBox(8, 10, 130, 16, 16).setChecked(Settings.getRenderCivicBounds());
   this.enableNpcObjective = this.addCheckBox(9, 10, 150, 16, 16).setChecked(Settings.getRenderNpcObjectives());
   this.performance = this.addGuiButton(10, getXSize()-55-10, 50, 55, 16, "Perf.");
+  this.entityDump = this.addGuiButton(11, getXSize()-55-10, 50+18, 55, 16, "Ent Dump");
   }
 
 @Override

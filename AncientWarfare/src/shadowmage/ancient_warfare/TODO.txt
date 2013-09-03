@@ -18,8 +18,7 @@ FROM TESTING
 * add scan toggles for 'scan chest items' and 'scan tile data'
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
 * ignore work/ clear work commands not working on first time
-* cleanup research notes book (add more to the tips/notes section)  
-* add utility to determine all registered entity string names
+* cleanup research notes book (add more to the tips/notes section) 
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
@@ -147,4 +146,5 @@ TEXTURE/ART
 * add ability to mines/quarries to pickup any loot from chests (or other IInventory blocks) that may be encountered when clearing blocks
 * fix Farms(all animal and plant), Fish Farms (ink/fish), Mines (mine/quarry), Tree Farms (all types), and Warehouse civic recipes to accept all plank/wood types.
 * fix a few other misc recipes to also allow all vanilla plank types in place of oak planks (uses ore-dict, so may work for mod-added planks as well)
-* fix helicopter/airplane damaging player when landing
+* fix helicopter/airplane damaging player when landing 
+* add utility to determine all registered entity string names (accessed from f7 options menu, Ent Dump button)

@@ -141,6 +141,7 @@ public void preInit(FMLPreInitializationEvent evt)
   try
     {
     AWStructureModule.instance().load(evt.getModConfigurationDirectory().getCanonicalPath());
+    Config.configPath = evt.getModConfigurationDirectory().getCanonicalPath();
     } 
   catch (IOException e)
     {
