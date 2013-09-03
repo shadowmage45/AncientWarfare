@@ -19,6 +19,7 @@ FROM TESTING
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
 * ignore work/ clear work commands not working on first time
 * cleanup research notes book (add more to the tips/notes section)  
+* add utility to determine all registered entity string names
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
@@ -36,7 +37,6 @@ WORLD SEEDS with villages:
 * 5504436305081970315
 
 FEATURE REQUESTS
-* disable npc nametags on hostile enemies until engaged the first time?
 
 MOD COMPATIBILITY
 * Ruins -- ruins will generate multiple times?
@@ -126,7 +126,11 @@ THINGS TO INVESTIGATE
 * worker-engine optional upgrade slots?
 * possible to check blocks to see if they will do damage to entities for pathfinding purposes?
 * chunk-loader upgrade slots for civics, machines
-
+* disable npc nametags on hostile enemies until engaged the first time?
+* structure control block for hostile structures -- coordinates npcs, respawns missing npcs after timer,
+* broadcast 'need-help' on-hit (NPCs) (possibly just broadcast target as an aggro target)
+* check balance of adding iron/etc as upkeep for NPCs (1 iron every 5 minutes seems excessive) 
+    could use a 'repair kit' type item (iron tool repair kit, diamond tool repair kit) that makes X kits from 1 iron
 TEXTURE/ART
 
 ********************* DONE STUFF ************************* 
@@ -143,3 +147,4 @@ TEXTURE/ART
 * add ability to mines/quarries to pickup any loot from chests (or other IInventory blocks) that may be encountered when clearing blocks
 * fix Farms(all animal and plant), Fish Farms (ink/fish), Mines (mine/quarry), Tree Farms (all types), and Warehouse civic recipes to accept all plank/wood types.
 * fix a few other misc recipes to also allow all vanilla plank types in place of oak planks (uses ore-dict, so may work for mod-added planks as well)
+* fix helicopter/airplane damaging player when landing

@@ -232,6 +232,14 @@ protected void onUpdateServer()
   this.applyAir2Motion();
   break;  
   }  
+  if(move==VehicleMovementType.AIR1 || move==VehicleMovementType.AIR2)
+    {
+    vehicle.fallDistance = 0.f;
+    if(vehicle.riddenByEntity!=null)
+      {
+      vehicle.riddenByEntity.fallDistance = 0.f;      
+      }
+    }
   vehicle.motionX = Trig.sinDegrees(vehicle.rotationYaw)*-forwardMotion;
   vehicle.motionZ = Trig.cosDegrees(vehicle.rotationYaw)*-forwardMotion;  
   this.vehicle.moveEntity(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
