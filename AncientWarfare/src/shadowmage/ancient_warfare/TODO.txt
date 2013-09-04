@@ -140,13 +140,11 @@ TEXTURE/ART
 ** denotes done and tested
 
 /********** 09-03-13 **********/
-* fix a potential cause of loss of research data on dedicated servers (moved data- clearing from server stopping to server starting...it will now retain data from a previous instance
-    until the next server is started (be it an integrated or dedicated)
-* attempt to fix version bounding not verifying version mismatch on server
+** fix version bounding not verifying version mismatch on server
 ** add ability to mines/quarries to pickup any loot from chests (or other IInventory blocks) that may be encountered when clearing blocks
 ** fix Farms(all animal and plant), Fish Farms (ink/fish), Mines (mine/quarry), Tree Farms (all types), and Warehouse civic recipes to accept all plank/wood types.
 ** fix a few other misc recipes to also allow all vanilla plank types in place of oak planks (uses ore-dict, so may work for mod-added planks as well)
-* fix helicopter/airplane damaging player when landing 
+** fix helicopter/airplane damaging player when landing 
 ** add utility to determine all registered entity string names (accessed from f7 options menu, Ent Dump button)
 
 /********** 09-04-13 **********/
@@ -155,6 +153,7 @@ TEXTURE/ART
 ** fix trapdoor interaction with pathfinding -- it now sees open doors as empty blocks, closed doors as full/supporting blocks
 ** fix courier backpack requirements not correct
 ** add a delay during 'morning' to npc ai before going to work (so mobs have time to burn/etc)
-* convert over to list-based overFlow for civics -- eases handling of adding/removing items
-* add config option to disable friendly-fire damage by npcs that use ammunitions (archers mostly)
-* add ability to repack NPCs into slips (retain health value, reset team)
+** convert over to list-based overFlow for civics -- eases handling of adding/removing items
+** add config option to disable friendly-fire damage by npcs that use ammunitions (archers mostly)
+** add ability to repack NPCs into slips (retain health value, reset team)
+** actually fix cause of loss of research/team data on dedicated servers following a proper shutdown

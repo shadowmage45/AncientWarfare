@@ -119,7 +119,6 @@ public void handleNpcDeath(NpcBase npc, DamageSource src)
     {
     this.deadNpcTracker.put(npc.teamNum, new NpcDataList(npc.teamNum));
     }
-  Config.logDebug("adding dead npc entry");
   this.deadNpcTracker.get(npc.teamNum).addEntry(data);
   this.markGameDataDirty();
   }

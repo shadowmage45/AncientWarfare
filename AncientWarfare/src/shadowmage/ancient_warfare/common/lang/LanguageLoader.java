@@ -123,11 +123,11 @@ protected void loadEnglishFile()
   Properties languageFile = new Properties();
   try
     {
-	InputStream is = this.getClass().getResourceAsStream("/lang/ancientwarfare/en_US.lang");
+	InputStream is = this.getClass().getResourceAsStream("/lang/ancientwarfare/en_US.lang");	
+	if(is==null){return;}
     languageFile.load(is);    
     if(!languageFile.isEmpty())
       {
-      Config.logDebug("loading default english translations");
       LanguageRegistry.instance().addStringLocalization(languageFile, "en_US");
       }
     defaultLanguage = languageFile;

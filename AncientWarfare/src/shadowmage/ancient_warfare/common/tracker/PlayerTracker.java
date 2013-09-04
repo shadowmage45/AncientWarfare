@@ -104,25 +104,21 @@ public void onPlayerLogin(EntityPlayer player)
   if(!playerEntries.containsKey(player.getEntityName()))
     {
     this.createEntryForNewPlayer(player.getEntityName());
-    }  
-  
+    }    
   NBTTagCompound initTag = new NBTTagCompound();
   NBTTagCompound tag = this.getClientInitData(player);
   if(tag!=null)
     {
-//    Config.logDebug("getting playerData");
     initTag.setCompoundTag("playerData", tag);
     }
   tag = TeamTracker.instance().getClientInitData();
   if(tag!=null)
     {
-//    Config.logDebug("getting teamData");
     initTag.setCompoundTag("teamData", tag);
     }
   tag = Config.instance().getClientInitData();
   if(tag!=null)
     {
-//    Config.logDebug("getting configData");
     initTag.setCompoundTag("configData", tag);
     }  
   Packet01ModData init = new Packet01ModData();
@@ -152,6 +148,7 @@ public void addResearchToPlayer(World world, String name, int goal)
       pkt.packetData = tag;
       pkt.sendPacketToPlayer(player);
       }
+    GameDataTracker.instance().markGameDataDirty();
     }
   }
 

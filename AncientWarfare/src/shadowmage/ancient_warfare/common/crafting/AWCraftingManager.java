@@ -133,7 +133,6 @@ public ResourceListRecipe getRecipeByResult(ItemStack result)
       {
       if(result.itemID==valid.getResult().itemID && result.getItemDamage()==valid.getResult().getItemDamage())
         {
-        Config.logDebug("examining tags: "+result.getTagCompound() + " :: " +valid.getResult().getTagCompound());
         NBTTagCompound tag = valid.getResult().getTagCompound();
         if(tag!=null)
           {
