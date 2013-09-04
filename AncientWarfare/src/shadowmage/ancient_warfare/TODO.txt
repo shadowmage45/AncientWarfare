@@ -19,6 +19,10 @@ FROM TESTING
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
 * ignore work/ clear work commands not working on first time
 * cleanup research notes book (add more to the tips/notes section) 
+* chunkloader doesn't release chunks when broken? (my base seemed to stay loaded)
+* add a delay during 'morning' to npc ai before going to work (so mobs have time to burn/etc)
+* courier backpack requirements not correct
+* add traplist to 'full block' exception list for pathfinding
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
