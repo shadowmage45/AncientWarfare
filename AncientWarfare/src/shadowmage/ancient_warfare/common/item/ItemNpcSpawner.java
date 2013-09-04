@@ -101,7 +101,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         }
       if(stack.getTagCompound().getCompoundTag("AWNpcSpawner").hasKey("health"))
         {
-        npcBase.setHealth(stack.getTagCompound().getCompoundTag("AWNpcSpanwer").getInteger("health"));
+        npcBase.setHealth(stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("health"));
         }
       }    
     npc.prevRotationYaw = npc.rotationYaw = player.rotationYaw;
