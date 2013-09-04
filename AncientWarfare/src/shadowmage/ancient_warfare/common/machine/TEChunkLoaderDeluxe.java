@@ -23,11 +23,13 @@ package shadowmage.ancient_warfare.common.machine;
 import java.util.Collection;
 import java.util.Collections;
 
+import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Type;
 
 public class TEChunkLoaderDeluxe extends TEChunkLoader
 {
@@ -67,6 +69,14 @@ public void setChunk(int chunkX, int chunkZ, boolean force)
       ForgeChunkManager.unforceChunk(tk, chunk);
       }
     }
+  }
+
+@Override
+public void onBlockPlaced()
+  {  
+  if(this.worldObj==null || this.worldObj.isRemote){return;}
+  this.setTicket(ForgeChunkManager.requestTicket(AWCore.instance, worldObj, Type.NORMAL));  
+  Config.log("Forcing chunk for position: "+xCoord +"," + yCoord +"," + zCoord + " for AW Deluxe chunkloader.");
   }
 
 

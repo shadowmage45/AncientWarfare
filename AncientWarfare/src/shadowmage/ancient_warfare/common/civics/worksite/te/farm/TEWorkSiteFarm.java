@@ -55,8 +55,12 @@ public TEWorkSiteFarm()
 
 protected TargetType validateWorkPoint(int x, int y, int z)
   {
-  int id = worldObj.getBlockId(x, y, z);  
-  if(id==0 && worldObj.getBlockId(x, y-1, z)==tilledEarthID && inventory.containsAtLeast(plantableFilter, 1))
+  int id = worldObj.getBlockId(x, y, z);
+  if(id==0 && (worldObj.getBlockId(x, y-1, z) == Block.dirt.blockID || worldObj.getBlockId(x, y-1, z)==Block.grass.blockID))
+    {
+    return TargetType.FARM_TILL;
+    }
+  else if(id==0 && worldObj.getBlockId(x, y-1, z)==tilledEarthID && inventory.containsAtLeast(plantableFilter, 1))
     {    
     return TargetType.FARM_PLANT;
     }
@@ -69,7 +73,6 @@ protected TargetType validateWorkPoint(int x, int y, int z)
       }
     else if(this.canUseBonemeal && this.inventory.containsAtLeast(bonemealFilter, 3))
       {
-      Config.logDebug("returning bonemeal work type");
       return TargetType.FARM_BONEMEAL;
       }
     }
@@ -153,6 +156,10 @@ protected void doWork(IWorker npc, WorkPoint p)
         worldObj.setBlock(p.x, p.y, p.z, mainBlockID, mainBlockMatureMeta, 3);
         }      
       }   
+    }
+  else if(p.work == TargetType.FARM_TILL)
+    {
+    worldObj.setBlock(p.x, p.y-1, p.z, Block.tilledField.blockID, 0, 3);
     }
   }
 

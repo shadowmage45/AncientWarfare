@@ -23,9 +23,11 @@ package shadowmage.ancient_warfare.common.pathfinding;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 
 public class PathWorldAccess
@@ -91,6 +93,11 @@ public boolean checkBlockBounds(int x, int y, int z)
     {
     return true;
     }
+  else if(id==Block.trapdoor.blockID)
+    {    
+    int meta = world.getBlockMetadata(x, y, z);
+    return BlockTrapDoor.isTrapdoorOpen(meta);
+    }
   block = Block.blocksList[id];
   if(block!=null)
     {
@@ -103,14 +110,6 @@ public boolean checkBlockBounds(int x, int y, int z)
     if(block.getBlockBoundsMaxY() >=0.5d)
       {
       return false;
-//      if(block.getBlockBoundsMinX()< 0.25 || block.getBlockBoundsMaxX()>0.75)
-//        {
-//        return false;
-//        }
-//      if(block.getBlockBoundsMinZ()< 0.25 || block.getBlockBoundsMaxZ()>0.75)
-//        {
-//        return false;
-//        }
       }   
     }
   return true;
@@ -180,6 +179,11 @@ public boolean canSupport(int id, int x, int y, int z)
   block = Block.blocksList[id];
   if(block!=null)
     {
+    if(block.blockID==Block.trapdoor.blockID)
+      {
+      int meta = world.getBlockMetadata(x, y, z);
+      return !BlockTrapDoor.isTrapdoorOpen(meta) && (meta&8)==0;
+      }
     AxisAlignedBB bb = block.getCollisionBoundingBoxFromPool(world, x, y, z);
     if(bb==null)
       {

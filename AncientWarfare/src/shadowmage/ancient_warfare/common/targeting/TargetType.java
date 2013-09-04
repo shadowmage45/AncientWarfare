@@ -63,4 +63,5 @@ public enum TargetType
   CRAFT,
   FARM_BONEMEAL,
   TREE_BONEMEAL,
+  FARM_TILL,
   }

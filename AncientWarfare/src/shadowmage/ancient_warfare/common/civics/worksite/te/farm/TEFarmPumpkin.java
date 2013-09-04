@@ -43,7 +43,11 @@ public TEFarmPumpkin()
 protected TargetType validateWorkPoint(int x, int y, int z)
   {
   int id = worldObj.getBlockId(x, y, z);  
-  if(id==0 && worldObj.getBlockId(x, y-1, z)==tilledEarthID && inventory.containsAtLeast(plantableFilter, 1))
+  if(id==0 && (worldObj.getBlockId(x, y-1, z)==Block.dirt.blockID || worldObj.getBlockId(x, y-1, z)==Block.grass.blockID))
+    {
+    return TargetType.FARM_TILL;
+    }
+  else if(id==0 && worldObj.getBlockId(x, y-1, z)==tilledEarthID && inventory.containsAtLeast(plantableFilter, 1))
     {    
     return TargetType.FARM_PLANT;
     }

@@ -83,6 +83,7 @@ public void releaseTicket()
   {
   if(this.tk!=null)
     {
+    Config.log("Releasing chunks from chunkloader at: "+xCoord+","+yCoord+","+zCoord);
     ForgeChunkManager.releaseTicket(tk);
     this.tk = null;
     }

@@ -245,7 +245,7 @@ public void doFillAround(int depth)
             {
             setID = world.getBiomeGenForCoords(bx, bz).fillerBlock;
             }
-          world.setBlock(bx, y, bz, setID);
+          setBlock(world, bx, y, bz, setID, 0);
           }
         }
       }
@@ -255,6 +255,10 @@ public void doFillAround(int depth)
     x1++;
     z--;
     z1++;
+    if(y<=0)
+      {
+      break;
+      }
     }
   }
 
@@ -302,7 +306,7 @@ public void doFillBeneathStraight(int depth)
         {
         if(!world.isBlockSolidOnSide(bx, by, bz, ForgeDirection.UP))
           {
-          world.setBlock(bx, by, bz, Block.stone.blockID);
+          setBlock(world, bx, by, bz, Block.stone.blockID, 0);
           }
         else
           {
@@ -374,7 +378,7 @@ public void doFillBeneathInvPyramid(int depth)
           }
         if(!world.isBlockSolidOnSide(bx, y, bz, ForgeDirection.UP))
           {
-          world.setBlock(bx, y, bz, setID);
+          setBlock(world, bx, y, bz, setID, 0);
           }
         }
       } 
@@ -480,7 +484,7 @@ protected void doLeveling()
     int testID = world.getBlockId(pos.x, pos.y, pos.z);
     if(testID==0)
       {
-      world.setBlock(pos.x, pos.y, pos.z, id);
+      setBlock(world, pos.x, pos.y, pos.z, id, 0);
       }
     }
   }
@@ -505,15 +509,20 @@ protected void doClearing()
     int id = world.getBlockId(pos.x, pos.y, pos.z);
     if(!shouldPreserveBlockDuringClearing(id))
       {
-      world.setBlock(pos.x, pos.y, pos.z, 0);
+      setBlock(world, pos.x, pos.y, pos.z, 0, 0);
       }
     }  
   }
 
-protected void placeBlock(World world, int x, int y, int z, int id, int meta)
+protected void setBlock(World world, int x, int y, int z, int id, int meta)
   { 
-  world.setBlock(x, y, z, id);
-  world.setBlockMetadataWithNotify(x, y, z, meta, 3);
+  if(y<=0)
+    {
+    return;
+    }  
+  world.setBlock(x, y, z, id, meta, 3);
+//  world.setBlock(x, y, z, id);
+//  world.setBlockMetadataWithNotify(x, y, z, meta, 3);
   }
 
 /**
@@ -528,7 +537,7 @@ protected void placeBlock(World world, int x, int y, int z, int id, int meta)
  */
 protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockRule rule, boolean worldGen)
   {   
-  if(y<=1)
+  if(y<=0)
     {
     return;
     }
@@ -612,7 +621,7 @@ protected void handleBlockRulePlacement(World world, int x, int y, int z, BlockR
 protected void placeBlockData(World world, int x, int y, int z, BlockData data, BlockRule rule)
   {  
   int meta = BlockDataManager.instance().getRotatedMeta(data.id, data.meta, getRotationAmt(facing));
-  this.placeBlock(world, x,y,z, data.id, meta);
+  this.setBlock(world, x,y,z, data.id, meta);
   if(rule.inventoryLevel>=0)
     {
     TileEntity te = world.getBlockTileEntity(x, y, z);
@@ -770,14 +779,13 @@ protected void placeSpecials(World world, int x, int y, int z, String name)
     }
   else
     {
-    world.setBlock(x, y, z, 0);
+    setBlock(world, x,y,z, 0, 0);
     }
   }
 
 protected void createChestAt(World world, int x, int y, int z, int id, int meta)
   {
-  world.setBlock(x, y, z, id);
-  world.setBlockMetadataWithNotify(x, y, z, meta, 3);
+  setBlock(world, x,y,z,id,meta);
   }
 
 protected void setChestLoot(World world, int x, int y, int z, List<ItemStack> items)
