@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.civics;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
@@ -78,7 +80,7 @@ protected boolean isWorkSite = false;
 protected boolean renderBounds = false;
 public boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
 public AWInventoryBase inventory = null;
-public AWInventoryBase overflow = new AWInventoryBasic(4);
+public List<ItemStack> overFlow = new ArrayList<ItemStack>();
 protected Civic civic = (Civic) Civic.wheatFarm;//dummy/placeholder...
 
 protected int[] regularIndices;
@@ -139,7 +141,11 @@ public boolean shouldRenderMainBounds()
 
 public IInventory[] getInventoryToDropOnBreak()
   {
-  return new IInventory[]{this, overflow};
+  for(int i = 0; i < this.overFlow.size(); i++)
+    {
+    InventoryTools.dropItemInWorld(worldObj, this.overFlow.get(i), xCoord, yCoord, zCoord);
+    }
+  return new IInventory[]{this};
   }
 
 public Civic getCivic()
@@ -208,6 +214,15 @@ protected void onCivicUpdate()
   this.validateWorkers();
   this.updateHasWork();
   this.broadcastWork(Config.civicBroadcastRange);
+  if(!this.overFlow.isEmpty())
+    {
+    ItemStack stack = this.overFlow.remove(0);
+    stack = this.inventory.tryMergeItem(stack, regularIndices);
+    if(stack!=null)
+      {
+      this.overFlow.add(stack);
+      }
+    }
   }
 
 @Override
@@ -522,9 +537,13 @@ protected void readCivicDataFromNBT(NBTTagCompound tag)
     {
     this.inventory.readFromNBT(tag.getCompoundTag("inventory"));
     }  
-  if(tag.hasKey("overflow"))
+  if(tag.hasKey("overFlow"))
     {
-    this.overflow.readFromNBT(tag.getCompoundTag("overflow"));
+    NBTTagList list = tag.getTagList("overFlow");
+    for(int i = 0; i < list.tagCount(); i++)
+      {
+      this.overFlow.add(ItemStack.loadItemStackFromNBT((NBTTagCompound) list.tagAt(i)));
+      }
     }
   if(tag.hasKey("broad"))
     {
@@ -539,10 +558,18 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("civType", civic.getGlobalID());
   tag.setIntArray("bounds", new int[]{minX, minY, minZ, maxX, maxY, maxZ});
   if(this.inventory!=null)
-  {
-	  tag.setCompoundTag("inventory", this.inventory.getNBTTag());	  
-  }
-  tag.setCompoundTag("overflow", this.overflow.getNBTTag());
+    {
+    tag.setCompoundTag("inventory", this.inventory.getNBTTag());	  
+    }
+  if(this.overFlow.size()>0)
+    {
+    NBTTagList list = new NBTTagList();
+    for(int i = 0; i<overFlow.size(); i++)
+      {
+      list.appendTag(this.overFlow.get(i).writeToNBT(new NBTTagCompound()));
+      }
+    tag.setTag("overFlow", list);
+    }
   tag.setInteger("team", this.teamNum);
   tag.setBoolean("broad", broadcastWork);
   }
@@ -653,8 +680,10 @@ protected ItemStack tryAddItemToInventory(ItemStack item, int[] ... slotIndices)
     if(item==null){return item;}
     item = inventory.tryMergeItem(item, indices);
     }
-  item = overflow.tryMergeItem(item);
-  InventoryTools.dropItemInWorld(worldObj, item, xCoord, yCoord, zCoord);
+  if(item!=null)
+    {
+    this.overFlow.add(item);
+    }
   return item;
   }
 

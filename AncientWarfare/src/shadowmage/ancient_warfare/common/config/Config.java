@@ -65,6 +65,7 @@ public static boolean autoExportWorldGenOnUpdate = true;
 public static boolean gatesOnlyDamageByRams = false;
 public static boolean randomizeVillagers = false;
 public static boolean renderHostileNames = false;
+public static boolean allowFriendlyFire = false;
 
 public static boolean updatedVersion = false;
 public static String configVersion = "";
@@ -240,7 +241,7 @@ public void setCoreInfo()
   this.autoExportWorldGenOnUpdate = config.get("a-general-options", "auto_export_worldgen", true, "If true, will automatically re-export the default world gen configuration when the mod version is updated").getBoolean(true);
   this.randomizeVillagers = config.get("a-general-options", "randomize_villagers", false, "If true, villager spawners will spawn a random villager type instead of set type").getBoolean(false);
   this.renderHostileNames = config.get("a-general-options", "render_hostile_nameplates", false, "If true, will render nameplates/health for hostile NPCs and vehicles -- client side config (for now)").getBoolean(false);
-  
+  this.allowFriendlyFire = config.get("a-general-options", "allow_friendly_fire", false, "If true, soldiers can/will injure other friendly soldiers with arrows/ammunitions").getBoolean(false);
   /**
    * performance options
    */

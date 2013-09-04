@@ -28,6 +28,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
@@ -36,9 +37,11 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -422,6 +425,32 @@ protected void igniteBlock(World world, int x, int y, int z, int maxSearch)
       break;
       }
     } 
+  }
+
+public static boolean shouldEffectEntity(World world, Entity entity, MissileBase missile)
+  {  
+  if(!Config.allowFriendlyFire && missile.shooterLiving instanceof NpcBase)
+    {
+    NpcBase shooter = (NpcBase) missile.shooterLiving;
+    int aTeam = shooter.teamNum;
+    int team = -1;
+    if(entity instanceof NpcBase)
+      {
+      team = ((NpcBase)entity).teamNum;
+      }
+    else if(entity instanceof EntityPlayer)
+      {
+      team = TeamTracker.instance().getTeamForPlayer((EntityPlayer)entity);
+      }
+    if(team>=0)
+      {
+      if(!TeamTracker.instance().isHostileTowards(world, aTeam, team))
+        {
+        return false;
+        }
+      }
+    }
+  return true;
   }
 
 /**

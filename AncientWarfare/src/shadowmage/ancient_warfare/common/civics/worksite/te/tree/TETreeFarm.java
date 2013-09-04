@@ -139,8 +139,10 @@ protected void doWork(IWorker npc, WorkPoint p)
         InventoryTools.tryMergeStack(this, item, 1);
         }
       item = InventoryTools.tryMergeStack(this, item, 2);
-      item = this.overflow.tryMergeItem(item);
-      InventoryTools.dropItemInWorld(worldObj, item, xCoord+0.5d, yCoord, zCoord+0.5d);
+      if(item!=null)
+        {
+        this.overFlow.add(item);
+        }
       }
     }  
   else if(p.work==TargetType.TREE_PLANT && inventory.containsAtLeast(saplingFilter, 1))

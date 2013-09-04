@@ -8,7 +8,6 @@ FROM TESTING
 * deluxe chunkloader world rendering
 * bed placement is fubar in structure gen from templates
 * npc despawning?
-* npc trampling on crops
 * ghost blocks in world-gen (village fortress)<fixed??--may have been related to RNG>
 * cleanup memory churn, esp on npcs pathfinding
 * npc craftsmen hold hammers at a strange angle (would require a special item render for that item/damage)
@@ -20,6 +19,8 @@ FROM TESTING
 * ignore work/ clear work commands not working on first time
 * cleanup research notes book (add more to the tips/notes section) 
 * chunkloader doesn't release chunks when broken? (my base seemed to stay loaded)
+* cannot dismount vehicles (ballista? -- it warps away or other position desynch)?
+* check missile launcher for friendly-fire (disallow FF on soldier-launched arrows)
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
@@ -134,27 +135,24 @@ THINGS TO INVESTIGATE
 TEXTURE/ART
 
 ********************* DONE STUFF ************************* 
-
-/********** 09-02-13 **********/
-* fix mailboxes not being able to extract from bottom with hoppers
-* update version number for release
-* add public release
+*  denotes done
+** denotes done and tested
 
 /********** 09-03-13 **********/
 * fix a potential cause of loss of research data on dedicated servers (moved data- clearing from server stopping to server starting...it will now retain data from a previous instance
     until the next server is started (be it an integrated or dedicated)
 * attempt to fix version bounding not verifying version mismatch on server
-* add ability to mines/quarries to pickup any loot from chests (or other IInventory blocks) that may be encountered when clearing blocks
-* fix Farms(all animal and plant), Fish Farms (ink/fish), Mines (mine/quarry), Tree Farms (all types), and Warehouse civic recipes to accept all plank/wood types.
-* fix a few other misc recipes to also allow all vanilla plank types in place of oak planks (uses ore-dict, so may work for mod-added planks as well)
+** add ability to mines/quarries to pickup any loot from chests (or other IInventory blocks) that may be encountered when clearing blocks
+** fix Farms(all animal and plant), Fish Farms (ink/fish), Mines (mine/quarry), Tree Farms (all types), and Warehouse civic recipes to accept all plank/wood types.
+** fix a few other misc recipes to also allow all vanilla plank types in place of oak planks (uses ore-dict, so may work for mod-added planks as well)
 * fix helicopter/airplane damaging player when landing 
-* add utility to determine all registered entity string names (accessed from f7 options menu, Ent Dump button)
+** add utility to determine all registered entity string names (accessed from f7 options menu, Ent Dump button)
 
 /********** 09-04-13 **********/
-* fix potential cause of out of bound exception when creating worlds
-* add farms till soil for normal farm types (wheat, carrot, potato, pumpkin, melon)
-* fix trapdoor interaction with pathfinding -- it now sees open doors as empty blocks, closed doors as full/supporting blocks
-
-
-* fix courier backpack requirements not correct
-* add a delay during 'morning' to npc ai before going to work (so mobs have time to burn/etc)
+** fix potential cause of out of bound exception when creating worlds (related to village generation, setting blocks that are too low in the world)
+** add farms till soil for normal farm types (wheat, carrot, potato, pumpkin, melon)
+** fix trapdoor interaction with pathfinding -- it now sees open doors as empty blocks, closed doors as full/supporting blocks
+** fix courier backpack requirements not correct
+** add a delay during 'morning' to npc ai before going to work (so mobs have time to burn/etc)
+* convert over to list-based overFlow for civics -- eases handling of adding/removing items
+* add config option to disable friendly-fire damage by npcs that use ammunitions (archers mostly)

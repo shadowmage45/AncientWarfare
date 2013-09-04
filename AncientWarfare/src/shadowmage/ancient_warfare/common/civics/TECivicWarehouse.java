@@ -64,7 +64,7 @@ public TECivicWarehouse()
 @Override
 public IInventory[] getInventoryToDropOnBreak()
   {
-  return new IInventory[]{inventory, inputSlots, withdrawSlots, overflow};
+  return new IInventory[]{inventory, inputSlots, withdrawSlots};
   }
 
 public void onPlaced()

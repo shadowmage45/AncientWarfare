@@ -204,7 +204,10 @@ protected void handleRequest(NBTTagCompound tag)
         {
         ItemStack removed = te.inventory.getItems(item, 64);
         removed = te.withdrawSlots.tryMergeItem(removed);
-        te.overflow.tryMergeItem(removed);
+        if(item!=null)
+          {
+          te.overFlow.add(item);
+          }
         }
       break;
       }

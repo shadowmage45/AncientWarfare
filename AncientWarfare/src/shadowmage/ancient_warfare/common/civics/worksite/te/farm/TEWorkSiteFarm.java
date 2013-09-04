@@ -64,7 +64,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
     {    
     return TargetType.FARM_PLANT;
     }
-  else if(id==this.mainBlockID  && this.overflow.getEmptySlotCount()==this.overflow.getSizeInventory())
+  else if(id==this.mainBlockID  && this.overFlow.isEmpty())
     {
     int meta = worldObj.getBlockMetadata(x, y, z);    
     if(meta==this.mainBlockMatureMeta)

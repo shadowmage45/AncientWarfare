@@ -75,6 +75,7 @@ protected void updateHasWork()
     {
     this.setHasWork(!this.workPoints.isEmpty());
     }
+  Config.logDebug("updated has work to...: "+this.hasWork());
   }
 
 /**

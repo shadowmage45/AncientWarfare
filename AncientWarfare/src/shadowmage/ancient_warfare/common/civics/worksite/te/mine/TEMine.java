@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -117,7 +118,7 @@ public void handleFillAction(IWorker npc, WorkPoint m)
 
 public boolean handleBlockBreak(IWorker npc, int x, int y, int z)
   {
-  List<ItemStack> drops = BlockTools.breakBlock(worldObj, x, y, z, 0);
+  List<ItemStack> invDrops = new ArrayList<ItemStack>();
   TileEntity te = worldObj.getBlockTileEntity(x, y, z);
   if(te instanceof IInventory)
     {
@@ -128,11 +129,14 @@ public boolean handleBlockBreak(IWorker npc, int x, int y, int z)
       stack = inv.getStackInSlot(i);
       if(stack!=null)
         {
-        drops.add(stack);
+        invDrops.add(stack);
         inv.setInventorySlotContents(i, null);
         }
       }
     }
+
+  List<ItemStack> drops = BlockTools.breakBlock(worldObj, x, y, z, 0);
+  drops.addAll(invDrops);
   if(drops!=null)
     {
     for(ItemStack drop : drops)

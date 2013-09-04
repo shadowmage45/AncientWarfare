@@ -155,11 +155,13 @@ public void setMissileCallback(IMissileHitCallback shooter)
 
 public void onImpactEntity(Entity ent, float x, float y, float z)
   {
-//  Config.logDebug("Entity Impacted: "+ent+" by: "+this.ammoType.getDisplayName()+" :: "+this);
-  this.ammoType.onImpactEntity(worldObj, ent, x, y, z, this);
-  if(this.shooter!=null)
+  if(Ammo.shouldEffectEntity(worldObj, ent, this))
     {
-    this.shooter.onMissileImpactEntity(worldObj, ent);
+    this.ammoType.onImpactEntity(worldObj, ent, x, y, z, this);
+    if(this.shooter!=null)
+      {
+      this.shooter.onMissileImpactEntity(worldObj, ent);
+      }
     }
   }
 
