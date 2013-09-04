@@ -20,8 +20,6 @@ FROM TESTING
 * ignore work/ clear work commands not working on first time
 * cleanup research notes book (add more to the tips/notes section) 
 * chunkloader doesn't release chunks when broken? (my base seemed to stay loaded)
-* add a delay during 'morning' to npc ai before going to work (so mobs have time to burn/etc)
-* courier backpack requirements not correct
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
@@ -156,3 +154,7 @@ TEXTURE/ART
 * fix potential cause of out of bound exception when creating worlds
 * add farms till soil for normal farm types (wheat, carrot, potato, pumpkin, melon)
 * fix trapdoor interaction with pathfinding -- it now sees open doors as empty blocks, closed doors as full/supporting blocks
+
+
+* fix courier backpack requirements not correct
+* add a delay during 'morning' to npc ai before going to work (so mobs have time to burn/etc)

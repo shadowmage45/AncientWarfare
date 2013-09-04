@@ -66,7 +66,7 @@ public void updatePriority()
   x = MathHelper.floor_double(npc.posX);
   y = MathHelper.floor_double(npc.posY);
   z = MathHelper.floor_double(npc.posZ);
-  if(((!npc.worldObj.isDaytime() || npc.worldObj.isRaining()) && !npc.worldObj.provider.hasNoSky) || npc.targetHelper.areTargetsInRange(TargetType.ATTACK, 16))
+  if(npc.shelterExtraTicks>0 || ((!npc.worldObj.isDaytime() || npc.worldObj.isRaining()) && !npc.worldObj.provider.hasNoSky) || npc.targetHelper.areTargetsInRange(TargetType.ATTACK, 16))
     {//if it is nighttime, or raining, and the world has a sky (no sky, no sun, no shelter at night!)
     WayPoint p = npc.wayNav.getHomePoint();
     if(p==null)
@@ -87,7 +87,10 @@ public void updatePriority()
 @Override
 public void onRunningTick()
   {
-  
+  if(!npc.worldObj.isDaytime() || npc.worldObj.isRaining())
+    {
+    npc.shelterExtraTicks = 200;    
+    }
   }
 
 @Override

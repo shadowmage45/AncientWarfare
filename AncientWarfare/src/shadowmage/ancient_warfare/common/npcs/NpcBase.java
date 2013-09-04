@@ -99,6 +99,11 @@ protected int idleLookTicks = 0;
 
 protected int npcTicksExisted = 0;
 
+/**
+ * used in AI to delay starting work in the morning by X ticks
+ */
+public int shelterExtraTicks = 0;
+
 public int npcUpkeepTicks = Config.npcUpkeepTicks;//how many upkeep ticks worth of food are remaining?
 
 protected int npcHealingTicks = Config.npcHealingTicks;//
@@ -619,7 +624,11 @@ public void onUpdate()
       {
       GameDataTracker.instance().handleNpcUpdate(this);      
       }
-    }  
+    } 
+  if(this.shelterExtraTicks>0)
+    {
+    this.shelterExtraTicks--;
+    }
   if(this.npcUpkeepTicks>0)
     {
     this.npcUpkeepTicks--;

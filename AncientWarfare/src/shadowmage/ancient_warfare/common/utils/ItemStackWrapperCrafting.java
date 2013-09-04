@@ -48,7 +48,7 @@ public ItemStackWrapperCrafting(ItemStack stack, boolean dmg, boolean tag)
   this(stack, stack.stackSize, dmg, tag);
   }
 
-public ItemStackWrapperCrafting(Item item, int qty, int meta, boolean tag){this(new ItemStack(item,qty),false,tag);}
+public ItemStackWrapperCrafting(Item item, int qty, int meta, boolean tag){this(new ItemStack(item,qty, meta),false,tag);}
 public ItemStackWrapperCrafting(Block block, int qty, int meta, boolean tag){this(new ItemStack(block,qty),false,tag);}
 public ItemStackWrapperCrafting(Item item, int qty, boolean dmg, boolean tag){this(new ItemStack(item,qty), qty, dmg, tag);}
 public ItemStackWrapperCrafting(Block block, int qty, boolean dmg, boolean tag){this(new ItemStack(block,qty), qty, dmg, tag);}

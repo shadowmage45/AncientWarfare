@@ -125,7 +125,6 @@ protected boolean isValidWorkSite(TileEntity te)
 protected boolean canStartWork()
   {
   return true;
-//  return npc.inventory.getEmptySlotCount() > 1;
   }
 
 protected boolean canWork()
