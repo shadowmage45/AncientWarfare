@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.client.gui.npc;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiFakeSlot;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
@@ -45,7 +46,13 @@ public GuiNpcBase(Container container, NpcBase npc)
 @Override
 public void onElementActivated(IGuiElement element)
   {
-
+  if(element.getElementNumber()==0)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("repack", true);
+    this.sendDataToServer(tag);
+    this.closeGUI();
+    }
   }
 
 @Override
@@ -69,12 +76,7 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  this.drawStringGui("Inventory", 8, 5, 0xffffffff);
-  if(npc.npcType.getSpecInventorySize(npc.rank)>0)
-    {
-    this.drawStringGui("Special Tools", 8, 5 + 10 + 3*18 + 5, 0xffffffff);
-    }  
-  this.drawStringGui("Class: "+npc.npcType.getDisplayName(npc.rank), 8, 112, 0xffffffff);
+  this.drawStringGui("Class: "+npc.npcType.getLocalizedName(npc.rank), 8, 8, 0xffffffff);  
   }
 
 @Override
@@ -86,7 +88,7 @@ public void updateScreenContents()
 @Override
 public void setupControls()
   {
- 
+  this.addGuiButton(0, 8, 8+10+2, 55, 16, "Repack").addToToolitp("Repack the NPC into a spawning item").addToToolitp("Retains present health when respawned");
   }
 
 @Override

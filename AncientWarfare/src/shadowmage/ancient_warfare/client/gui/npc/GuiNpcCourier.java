@@ -20,11 +20,13 @@
  */
 package shadowmage.ancient_warfare.client.gui.npc;
 
+import buildcraft.builders.GuiHandler;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerNpcCourier;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 public class GuiNpcCourier extends GuiContainerAdvanced
@@ -50,7 +52,10 @@ public GuiNpcCourier(Container container, NpcBase npc)
 @Override
 public void onElementActivated(IGuiElement element)
   {
-
+  if(element.getElementNumber()==0)
+    {
+    GUIHandler.instance().openGUI(GUIHandler.NPC_BASE, player, player.worldObj, npc.entityId, 0, 0);
+    }
   }
 
 @Override
@@ -62,7 +67,7 @@ public int getXSize()
 @Override
 public int getYSize()
   {
-  return this.container==null ? 240 : container.totalHeight+4;
+  return this.container==null ? 240 : container.totalHeight+4+16;
   }
 
 @Override
@@ -81,6 +86,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     }  
   this.drawStringGui(npc.npcType.getLocalizedName(npc.rank), 8 + 70, 4, WHITE);
   this.drawStringGui("Player Inventory", 8, container.playerSlotsY-10, WHITE);
+  
   }
 
 @Override
@@ -92,7 +98,7 @@ public void updateScreenContents()
 @Override
 public void setupControls()
   {
- 
+  this.addGuiButton(0, 8, container.totalHeight-4, 55, 16, "Upkeep Stats");
   }
 
 @Override

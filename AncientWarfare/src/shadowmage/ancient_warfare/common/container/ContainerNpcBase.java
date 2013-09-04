@@ -52,27 +52,27 @@ public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
   int yPos;
 
   this.addPlayerSlots(openingPlayer, 8, 158, 4);    
-  IInventory te = npc.inventory;
+//  IInventory te = npc.inventory;
 //  Config.logDebug("setting npc inventory. size: "+te.getSizeInventory());
-  for(y = 0; y < te.getSizeInventory()/9; y++)
-    {
-    for(x = 0; x < 9; x++)
-      {
-      slotNum = y*9 + x;
-      if(slotNum<te.getSizeInventory())
-        {
-        xPos = 8 + x * 18;
-        yPos = y * 18 + 15;
-        if(slotNum>=27)
-          {
-          xPos = -1000;
-          yPos = -1000;
-          }
-        Slot slot = new Slot(te, slotNum, xPos, yPos);
-        this.addSlotToContainer(slot);        
-        }
-      }
-    }  
+//  for(y = 0; y < te.getSizeInventory()/9; y++)
+//    {
+//    for(x = 0; x < 9; x++)
+//      {
+//      slotNum = y*9 + x;
+//      if(slotNum<te.getSizeInventory())
+//        {
+//        xPos = 8 + x * 18;
+//        yPos = y * 18 + 15;
+//        if(slotNum>=27)
+//          {
+//          xPos = -1000;
+//          yPos = -1000;
+//          }
+//        Slot slot = new Slot(te, slotNum, xPos, yPos);
+//        this.addSlotToContainer(slot);        
+//        }
+//      }
+//    }  
   }
 
 @Override
@@ -119,8 +119,10 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
-
+  if(tag.hasKey("repack") && !npc.worldObj.isRemote)
+    {
+    npc.repackIntoItem();
+    }
   }
 
 @Override

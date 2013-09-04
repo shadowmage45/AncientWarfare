@@ -33,6 +33,7 @@ import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
 import shadowmage.ancient_warfare.common.npcs.types.NpcBandit;
@@ -407,7 +408,7 @@ public String getIconTexture()
 @Override
 public void openGui(EntityPlayer player, NpcBase npc)
   {  
-  //GUIHandler.instance().openGUI(GUIHandler.NPC_BASE, player, npc.worldObj, npc.entityId, 0, 0);
+  GUIHandler.instance().openGUI(GUIHandler.NPC_BASE, player, npc.worldObj, npc.entityId, 0, 0);
   }
 
 @Override

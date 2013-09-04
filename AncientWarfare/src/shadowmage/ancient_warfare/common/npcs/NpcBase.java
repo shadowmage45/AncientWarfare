@@ -171,6 +171,35 @@ protected void collideWithEntity(Entity par1Entity)
     }
   }
 
+public void setHealth(int health)
+  {
+  this.health = health;
+  if(this.health<=0 && !this.isDead)
+    {
+    this.setDead();
+    }
+  }
+
+public void repackIntoItem()
+  {
+  int health = this.health;
+  ItemStack stack = NpcRegistry.getStackFor(npcType, rank);
+  stack.getTagCompound().getCompoundTag("AWNpcSpawner").setInteger("health", health);
+  this.worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY+0.5d, posZ, stack));
+  if(!this.worldObj.isRemote)
+    {
+    InventoryTools.dropInventoryInWorld(worldObj, inventory, posX, posY, posZ);
+    InventoryTools.dropInventoryInWorld(worldObj, specInventory, posX, posY, posZ);
+    if(this.isRidingVehicle())
+      {
+      this.getRidingVehicle().moveHelper.clearInputFromDismount();
+      this.ridingEntity.riddenByEntity = null;
+      this.ridingEntity = null;
+      }
+    } 
+  this.isDead = true;
+  }
+
 /**
  * add extra forced targets from config file. happens at entity instantiation to prevent issues
  * of people not registering their entities until post-post init...etc....

@@ -99,6 +99,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         {
         npcBase.wayNav.addPatrolPoint(new WayPoint(hit.x, hit.y, hit.z, TargetType.PATROL));
         }
+      if(stack.getTagCompound().getCompoundTag("AWNpcSpawner").hasKey("health"))
+        {
+        npcBase.setHealth(stack.getTagCompound().getCompoundTag("AWNpcSpanwer").getInteger("health"));
+        }
       }    
     npc.prevRotationYaw = npc.rotationYaw = player.rotationYaw;
     world.spawnEntityInWorld(npc);
@@ -126,7 +130,11 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
       NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
       int i = stack.getItemDamage();
       int rank = tag.getInteger("lev");
-      par3List.add(StringTranslate.getInstance().translateKey(NpcTypeBase.getNpcType(i).getDisplayTooltip(rank)));      
+      par3List.add(StringTranslate.getInstance().translateKey(NpcTypeBase.getNpcType(i).getDisplayTooltip(rank)));
+      if(tag.hasKey("health"))
+        {
+        par3List.add("Health: " + tag.getInteger("health"));
+        }
       }
     else
       {
@@ -158,8 +166,7 @@ public String getItemDisplayName(ItemStack par1ItemStack)
     rank = par1ItemStack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");
     }
   INpcType t = NpcTypeBase.getNpcType(type);
-  String name = t.getDisplayName(rank);
-  
+  String name = t.getDisplayName(rank);  
   return StringTranslate.getInstance().translateKey(name);
   }
 
