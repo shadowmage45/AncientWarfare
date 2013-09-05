@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.gui.npc;
 
-import buildcraft.builders.GuiHandler;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
