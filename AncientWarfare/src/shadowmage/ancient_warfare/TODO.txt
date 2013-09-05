@@ -159,4 +159,4 @@ TEXTURE/ART
 ** actually fix cause of loss of research/team data on dedicated servers following a proper shutdown
 ** fix cause of vehicles disappearing and becoming un-dismountable (trying to apply motion to an immobile vehicle)
 ** update version number
-
+** add release
