@@ -130,6 +130,7 @@ protected void handleCharAction(char ch)
   {
   super.handleCharAction(ch);
   this.floatVal = StringTools.safeParseFloat(text);
+  this.parent.onElementActivated(this);
   }
 
 public int getIntVal()

@@ -525,7 +525,6 @@ protected void addCivicRecipes()
   recipe.addResource(Item.ingotIron, 6, false);
   recipe.addResource(Block.stone,4, false);
   recipe.addNeededResearch(ResearchGoalNumbers.logistics1);
-  recipe.addNeededResearch(ResearchGoalNumbers.command1);  
   this.civicMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(BlockLoader.gateLock, RecipeType.CIVIC_MISC);

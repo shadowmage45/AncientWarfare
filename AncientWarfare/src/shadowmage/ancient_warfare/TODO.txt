@@ -19,10 +19,9 @@ FROM TESTING
 * ignore work/ clear work commands not working on first time
 * cleanup research notes book (add more to the tips/notes section) 
 * chunkloader doesn't release chunks when broken? (my base seemed to stay loaded)
-* cannot dismount vehicles (ballista? -- it warps away or other position desynch)?
 * progressive additional upkeep requirements for NPCs such as miners, lumberjack, fishermen, farmers
 * add/remove allied teams text missing in advanced team control gui
-* enter-key is necessary to accept range updates in command baton
+* gui to add/remove targets from npcs (op/admin only?, on a per-npc basis?)
 
 BALANCE FROM TESTING
 * fortresses too hard to defeat
@@ -129,35 +128,13 @@ THINGS TO INVESTIGATE
 * worker-engine optional upgrade slots?
 * possible to check blocks to see if they will do damage to entities for pathfinding purposes?
 * chunk-loader upgrade slots for civics, machines
-* disable npc nametags on hostile enemies until engaged the first time?
 * structure control block for hostile structures -- coordinates npcs, respawns missing npcs after timer,
 * broadcast 'need-help' on-hit (NPCs) (possibly just broadcast target as an aggro target)
-* check balance of adding iron/etc as upkeep for NPCs (1 iron every 5 minutes seems excessive) 
-    could use a 'repair kit' type item (iron tool repair kit, diamond tool repair kit) that makes X kits from 1 iron
 TEXTURE/ART
 
 ********************* DONE STUFF ************************* 
 *  denotes done
 ** denotes done and tested
+/********** 09-05-13 **********/
+* fix-- enter-key is necessary to accept range updates in command baton (should update internal/server val now on any valid char press)
 
-/********** 09-03-13 **********/
-** fix version bounding not verifying version mismatch on server
-** add ability to mines/quarries to pickup any loot from chests (or other IInventory blocks) that may be encountered when clearing blocks
-** fix Farms(all animal and plant), Fish Farms (ink/fish), Mines (mine/quarry), Tree Farms (all types), and Warehouse civic recipes to accept all plank/wood types.
-** fix a few other misc recipes to also allow all vanilla plank types in place of oak planks (uses ore-dict, so may work for mod-added planks as well)
-** fix helicopter/airplane damaging player when landing 
-** add utility to determine all registered entity string names (accessed from f7 options menu, Ent Dump button)
-
-/********** 09-04-13 **********/
-** fix potential cause of out of bound exception when creating worlds (related to village generation, setting blocks that are too low in the world)
-** add farms till soil for normal farm types (wheat, carrot, potato, pumpkin, melon)
-** fix trapdoor interaction with pathfinding -- it now sees open doors as empty blocks, closed doors as full/supporting blocks
-** fix courier backpack requirements not correct
-** add a delay during 'morning' to npc ai before going to work (so mobs have time to burn/etc)
-** convert over to list-based overFlow for civics -- eases handling of adding/removing items
-** add config option to disable friendly-fire damage by npcs that use ammunitions (archers mostly)
-** add ability to repack NPCs into slips (retain health value, reset team)
-** actually fix cause of loss of research/team data on dedicated servers following a proper shutdown
-** fix cause of vehicles disappearing and becoming un-dismountable (trying to apply motion to an immobile vehicle)
-** update version number
-** add release

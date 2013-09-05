@@ -305,6 +305,7 @@ protected void handleCharAction(char ch)
 private void handleDeleteAction()
   {  
   this.text = StringTools.removeCharAt(text, cursorPos);
+  this.parent.onElementActivated(this);
   }
 
 private void handleBackspaceAction()
