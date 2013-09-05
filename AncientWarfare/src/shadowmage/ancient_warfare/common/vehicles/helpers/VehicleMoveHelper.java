@@ -430,6 +430,11 @@ protected void applyPitchInput(float min, float max)
 
 protected void applyForwardInput(float inputFactor, boolean slowReverse)
   {
+  if(vehicle.currentForwardSpeedMax<=0.f)
+    {
+    forwardMotion = 0.f;
+    return;
+    }
   float weightAdjust = 1.f;
   if(vehicle.currentWeight > vehicle.baseWeight)
     {
