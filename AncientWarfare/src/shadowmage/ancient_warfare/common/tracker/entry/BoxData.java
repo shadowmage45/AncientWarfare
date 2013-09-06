@@ -101,7 +101,7 @@ protected void validateSideNames()
     {
     s = this.sideNames[i];
     if(s==null){continue;}
-    if(MailboxData.instance().getBoxDataFor(s, getSizeInventory())==null)
+    if(!MailboxData.instance().containsBox(s))
       {
       this.sideNames[i] = null;
       }

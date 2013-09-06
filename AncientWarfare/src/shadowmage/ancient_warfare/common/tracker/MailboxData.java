@@ -30,7 +30,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.machine.TEMailBox;
 import shadowmage.ancient_warfare.common.machine.TEMailBoxBase;
 import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
 import shadowmage.ancient_warfare.common.tracker.entry.MailboxSaveData;
@@ -67,15 +66,17 @@ public boolean tryAddMailbox(String name, int size)
     return false;
     }
   this.mailboxes.put(name, new BoxData(name, size));
+  this.markDirty();
   return true;
   }
 
 public void updateMailTicks()
-  {
+  { 
   for(BoxData d : this.mailboxes.values())
     {
     d.updateTick();
     }
+  this.markDirty();
   } 
 
 public boolean tryRemoveMailbox(String name, TEMailBoxBase mailBox)
@@ -110,6 +111,7 @@ public boolean tryRemoveMailbox(String name, TEMailBoxBase mailBox)
       }    
     }
   this.mailboxes.remove(name);
+  this.markDirty();
   return true;
   }
 
@@ -127,6 +129,7 @@ public boolean tryAssignMailbox(TEMailBoxBase te, String name)
       te.setBoxData(data);
       Config.logDebug("assigning mailbox for name: "+name);
       this.mailboxes.get(name).handleAssignment(te);
+      this.markDirty();
       return true;
       }
     }
@@ -140,6 +143,11 @@ public BoxData getBoxDataFor(String name, int size)
     this.mailboxes.put(name, new BoxData(name, size));
     }
   return this.mailboxes.get(name);
+  }
+
+public boolean containsBox(String name)
+  {
+  return this.mailboxes.containsKey(name);
   }
 
 public void markDirty()
@@ -164,7 +172,8 @@ public void readFromNBT(NBTTagCompound tag)
     {
     BoxData d = new BoxData((NBTTagCompound) list.tagAt(i));
     this.mailboxes.put(d.boxName, d);
-    } 
+    }
+  this.markDirty();
   }
 
 @Override
