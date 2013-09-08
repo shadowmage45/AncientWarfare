@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
 public class MineLevelQuarry extends MineLevel
@@ -96,8 +97,11 @@ protected void scanLevel(TEMine mine, World world)
         } 
       if(addLadder)
         {
-        this.addNewPoint(x, minY, z, TargetType.MINE_CLEAR);
-        this.addNewPoint(x, minY, z, ladderMeta, TargetType.MINE_LADDER);        
+        if(world.getBlockId(x, minY, z)!=Block.ladder.blockID)
+          {
+          this.addNewPoint(x, minY, z, TargetType.MINE_CLEAR);
+          this.addNewPoint(x, minY, z, ladderMeta, TargetType.MINE_LADDER);          
+          }        
         }
       }
     }
