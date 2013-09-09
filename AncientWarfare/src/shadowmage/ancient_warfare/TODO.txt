@@ -24,7 +24,6 @@ FROM TESTING
 * freaking submarines!!
 * gridlines on deluxe chunkloader chunk selection gui (perhaps map underlay?)
 * pathfinding up-diagonal current block clearance check ?? seems set properly in pathfinder
-* missing death message translation (death.attack.AWMissile or somesuch crap)
 * chunkloader doesn't release chunks when broken? (my base seemed to stay loaded)
 
 server opt flags::
@@ -157,4 +156,5 @@ TEXTURE/ART
 /********** 09-09-13 **********/
 * fix -- bc engine self-powering from redstone cell (net zero power transfer, but constant action)
 ** fix -- deluxe chunkloader not saving/communicating forced chunks properly on client reload/reconnect
+* fix -- missing death message translation (death.attack.AWMissile becomes "<PlayerName> was killed by Missile Damage")
 
