@@ -157,4 +157,4 @@ TEXTURE/ART
 * fix -- bc engine self-powering from redstone cell (net zero power transfer, but constant action)
 ** fix -- deluxe chunkloader not saving/communicating forced chunks properly on client reload/reconnect
 * fix -- missing death message translation (death.attack.AWMissile becomes "<PlayerName> was killed by Missile Damage")
-
+* patch -- explicitly skip world generation if attempted on a client world

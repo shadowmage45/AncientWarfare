@@ -149,6 +149,7 @@ public boolean attemptPlacementSurface(World world, int x, int y, int z, int fac
 @Override
 public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {  
+  if(world.isRemote){return;}
   int dim =world.getWorldInfo().getDimension();
   if(!WorldGenStructureManager.instance().isValidDimension(dim))
     {
