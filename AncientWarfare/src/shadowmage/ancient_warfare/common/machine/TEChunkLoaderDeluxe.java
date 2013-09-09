@@ -39,38 +39,6 @@ public TEChunkLoaderDeluxe()
   this.guiNumber = GUIHandler.CHUNKLOADER_DEULXE;
   }
 
-public Collection<ChunkCoordIntPair> getForcedChunks()
-  {
-  if(this.tk!=null)
-    {
-    return this.tk.getChunkList();
-    }
-  return Collections.emptyList();    
-  }
-
-/**
- * 
- * @param chunkX
- * @param chunkZ
- * @param force if true, release if false
- */
-public void setChunk(int chunkX, int chunkZ, boolean force)
-  {
-  if(this.tk!=null)
-    {
-    ChunkCoordIntPair chunk = new ChunkCoordIntPair(chunkX, chunkZ);
-    Config.logDebug("setting chunk: "+chunkX+","+chunkZ+" forced: "+force);
-    if(force)
-      {
-      ForgeChunkManager.forceChunk(tk, chunk);
-      }
-    else
-      {
-      ForgeChunkManager.unforceChunk(tk, chunk);
-      }
-    }
-  }
-
 @Override
 public void onBlockPlaced()
   {  
@@ -78,6 +46,5 @@ public void onBlockPlaced()
   this.setTicket(ForgeChunkManager.requestTicket(AWCore.instance, worldObj, Type.NORMAL));  
   Config.log("Forcing chunk for position: "+xCoord +"," + yCoord +"," + zCoord + " for AW Deluxe chunkloader.");
   }
-
 
 }

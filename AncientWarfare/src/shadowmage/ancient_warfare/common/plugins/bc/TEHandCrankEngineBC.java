@@ -201,9 +201,14 @@ public void doWork()
 @Override
 public int powerRequest(ForgeDirection from)
   {
-  IPowerProvider p = getPowerProvider();
-  float needed = p.getMaxEnergyStored() - p.getEnergyStored();
-  return (int) Math.ceil(Math.min(p.getMaxEnergyReceived(), needed));  
+  return 0;
+//  if(from==facingDirection)
+//    {
+//    return 0;
+//    }
+//  IPowerProvider p = getPowerProvider();
+//  float needed = p.getMaxEnergyStored() - p.getEnergyStored();
+//  return (int) Math.ceil(Math.min(p.getMaxEnergyReceived(), needed));  
   }
 
 @Override

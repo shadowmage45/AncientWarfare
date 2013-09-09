@@ -20,23 +20,31 @@
  */
 package shadowmage.ancient_warfare.common.machine;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
-import com.google.common.collect.ImmutableSet;
-
-import shadowmage.ancient_warfare.common.AWCore;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
+import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerChunkloaderDeluxe.ChunkMapEntry;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
+
+import com.google.common.collect.ImmutableSet;
 
 public class TEChunkLoader extends TEMachine
 {
 
 Ticket tk;
+
+Set<ChunkCoordIntPair> forcedChunks = new HashSet<ChunkCoordIntPair>();
 
 /**
  * 
@@ -64,7 +72,63 @@ public void setTicket(Ticket tk)
     while(it.hasNext())
       {
       ChunkCoordIntPair ccip = it.next();
-      ForgeChunkManager.forceChunk(tk, ccip);
+      this.forceChunk(ccip);
+      }
+    for(ChunkCoordIntPair ccip : this.forcedChunks)
+      {
+      this.forceChunk(ccip);
+      }
+    }
+  }
+
+public Collection<ChunkCoordIntPair> getForcedChunks()
+{
+if(this.tk!=null)
+  {
+  return this.tk.getChunkList();
+  }
+return Collections.emptyList();    
+}
+
+protected void forceChunk(ChunkCoordIntPair chunk)
+  {
+  if(this.tk!=null)
+    {
+    Config.log("Forcing chunk: "+chunk.chunkXPos+","+chunk.chunkZPos);
+    ForgeChunkManager.forceChunk(tk, chunk);
+    this.forcedChunks.add(chunk);
+    Config.logDebug("forced chunks size: "+this.forcedChunks.size());
+    }
+  }
+
+protected void releaseChunk(ChunkCoordIntPair chunk)
+  {
+  if(this.tk!=null)
+    {
+    Config.log("Releasing forced chunk: "+chunk.chunkXPos+","+chunk.chunkZPos);
+    ForgeChunkManager.unforceChunk(tk, chunk);
+    this.forcedChunks.remove(chunk);
+    }
+  }
+
+/**
+ * 
+ * @param chunkX
+ * @param chunkZ
+ * @param force if true, release if false
+ */
+public void setChunk(int chunkX, int chunkZ, boolean force)
+  {
+  if(this.tk!=null)
+    {
+    ChunkCoordIntPair chunk = new ChunkCoordIntPair(chunkX, chunkZ);
+    if(force)
+      {
+      this.forceChunk(chunk);
+      }
+    else
+      {
+      this.releaseChunk(chunk);
       }
     }
   }
@@ -83,7 +147,7 @@ public void releaseTicket()
   {
   if(this.tk!=null)
     {
-    Config.log("Releasing chunks from chunkloader at: "+xCoord+","+yCoord+","+zCoord);
+    Config.log("Releasing chunks from chunkloader at: "+xCoord+","+yCoord+","+zCoord);  
     ForgeChunkManager.releaseTicket(tk);
     this.tk = null;
     }
@@ -96,4 +160,40 @@ public void onBlockPlaced()
   this.setTicket(ForgeChunkManager.requestTicket(AWCore.instance, worldObj, Type.NORMAL));  
   Config.log("Forcing chunk for position: "+xCoord +"," + yCoord +"," + zCoord + " for AW single chunkloader.");
   }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {  
+  super.readFromNBT(tag);
+  if(tag.hasKey("chunkList"))
+    {
+    NBTTagList chunkList = tag.getTagList("chunkList");
+    NBTTagCompound chunkTag;
+    ChunkCoordIntPair chunk;
+    for(int i = 0; i < chunkList.tagCount(); i++)
+      {
+      chunkTag = (NBTTagCompound) chunkList.tagAt(i);
+      chunk = new ChunkCoordIntPair(chunkTag.getInteger("x"), chunkTag.getInteger("z"));
+      this.forcedChunks.add(chunk);
+      }
+    }
+  }
+
+@Override
+public void writeToNBT(NBTTagCompound tag)
+  {
+  super.writeToNBT(tag);
+  NBTTagList chunkList = new NBTTagList();
+  NBTTagCompound chunkTag;
+  for(ChunkCoordIntPair ck : this.forcedChunks)
+    {
+    chunkTag = new NBTTagCompound();
+    chunkTag.setInteger("x", ck.chunkXPos);
+    chunkTag.setInteger("z", ck.chunkZPos);
+    chunkList.appendTag(chunkTag);
+    }
+  tag.setTag("chunkList", chunkList);
+  }
+
+
 }

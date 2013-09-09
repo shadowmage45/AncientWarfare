@@ -55,16 +55,19 @@ public ContainerChunkloaderDeluxe(EntityPlayer openingPlayer, TEChunkLoaderDelux
       chunkMap[x][z] = new ChunkMapEntry(x+cornerChunkX, z+cornerChunkZ);
       }
     }
-  Collection<ChunkCoordIntPair> chunks = this.te.getForcedChunks();
-  int adjX;
-  int adjZ;
-  for(ChunkCoordIntPair chunk : chunks)
+  if(!openingPlayer.worldObj.isRemote)
     {
-    adjX = chunk.chunkXPos - cornerChunkX;
-    adjZ = chunk.chunkZPos - cornerChunkZ;
-    if(adjX>=0 && adjX<11 && adjZ >=0 && adjZ <11)
+    Collection<ChunkCoordIntPair> chunks = this.te.getForcedChunks();
+    int adjX;
+    int adjZ;
+    for(ChunkCoordIntPair chunk : chunks)
       {
-      chunkMap[adjX][adjZ].forced = true;
+      adjX = chunk.chunkXPos - cornerChunkX;
+      adjZ = chunk.chunkZPos - cornerChunkZ;
+      if(adjX>=0 && adjX<11 && adjZ >=0 && adjZ <11)
+        {
+        chunkMap[adjX][adjZ].forced = true;
+        }
       }
     }
   }

@@ -245,7 +245,10 @@ public void doFillAround(int depth)
             {
             setID = world.getBiomeGenForCoords(bx, bz).fillerBlock;
             }
-          setBlock(world, bx, y, bz, setID, 0);
+          if(y>=1)
+            {
+            setBlock(world, bx, y, bz, setID, 0);            
+            }
           }
         }
       }
@@ -520,7 +523,7 @@ protected void setBlock(World world, int x, int y, int z, int id, int meta)
     {
     return;
     }  
-  if(world.checkChunksExist(x, y, z, x, y, z))
+  if(world.blockExists(x, y, z))
     {
     world.setBlock(x, y, z, id, meta, 3);
     }
