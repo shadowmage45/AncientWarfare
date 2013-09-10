@@ -158,3 +158,4 @@ TEXTURE/ART
 ** fix -- deluxe chunkloader not saving/communicating forced chunks properly on client reload/reconnect
 * fix -- missing death message translation (death.attack.AWMissile becomes "<PlayerName> was killed by Missile Damage")
 * patch -- explicitly skip world generation if attempted on a client world
+* fix -- add fix for disabled vehicles that are still in templates causing crashes.

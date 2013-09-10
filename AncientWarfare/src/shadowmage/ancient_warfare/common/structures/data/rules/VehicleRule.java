@@ -27,6 +27,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
@@ -201,6 +202,10 @@ public VehicleBase getVehicleToSpawn(World world, int facing, ProcessedStructure
   {  
   int team = teamOverride >= 0? teamOverride : teamNum;
   VehicleBase vehicle = getVehicleForRule(world, team, getVehicleType(), vehicleRank, armorTypes, ammoTypes, upgradeTypes);
+  if(vehicle==null)
+    {
+    return null;
+    }
   int rotAmt = BlockTools.getRotationAmt(facing);
   BlockPosition target = BlockTools.getTranslatedPosition(buildPos, new BlockPosition(bx-struct.xOffset,by-struct.verticalOffset, bz-struct.zOffset), facing, new BlockPosition(struct.xSize, struct.ySize, struct.zSize));
   float ax = target.x;
@@ -253,6 +258,16 @@ protected float getRotatedZOffset(float xOff, float zOff, int face)
 private VehicleBase getVehicleForRule(World world, int teamNum, int vehicleType, int vehicleRank, byte[] armorTypes, byte[] ammoTypes, byte[] upgradeTypes)
   {
   VehicleBase vehicle = VehicleType.getVehicleForType(world, vehicleType, vehicleRank);
+  if(vehicle==null)
+    {
+    String name = String.valueOf(vehicleType);
+    if(VehicleType.getVehicleType(vehicleType)!=null)
+      {
+      name = VehicleType.getVehicleType(vehicleType).getDisplayName();
+      }
+    Config.logError("Attempt to get invalid vehicle for type: "+name+". It might be disabled via config, please update your templates.");
+    return null;
+    }
   vehicle.teamNum = teamNum;  
   byte type = (byte) 0;
   int i;
