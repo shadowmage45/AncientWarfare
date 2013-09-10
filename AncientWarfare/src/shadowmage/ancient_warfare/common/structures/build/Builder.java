@@ -245,6 +245,10 @@ public void doFillAround(int depth)
             {
             setID = world.getBiomeGenForCoords(bx, bz).fillerBlock;
             }
+          if(setID<=0)
+            {
+            setID = Block.dirt.blockID;
+            }
           if(y>=1)
             {
             setBlock(world, bx, y, bz, setID, 0);            
@@ -378,6 +382,10 @@ public void doFillBeneathInvPyramid(int depth)
         else
           {
           setID = Block.stone.blockID;
+          }
+        if(setID<=0)
+          {
+          setID = Block.dirt.blockID;
           }
         if(!world.isBlockSolidOnSide(bx, y, bz, ForgeDirection.UP))
           {
@@ -523,12 +531,17 @@ protected void setBlock(World world, int x, int y, int z, int id, int meta)
     {
     return;
     }  
+  if(id<0)
+    {
+    Config.logError("Attempt to set block to invalid id: "+x+","+y+","+z+","+"::"+id+"-"+meta + " from structure: "+struct.name);
+    Exception e = new Exception();
+    e.printStackTrace();
+    return;
+    }
   if(world.blockExists(x, y, z))
     {
     world.setBlock(x, y, z, id, meta, 3);
     }
-//  world.setBlock(x, y, z, id);
-//  world.setBlockMetadataWithNotify(x, y, z, meta, 3);
   }
 
 /**

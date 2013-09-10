@@ -104,6 +104,10 @@ public void setStuckCheckTicks(int ticks)
 @Override
 public void setMoveToTarget(int x, int y, int z)
   {
+  if(!entity.worldObj.blockExists(x, y, z))
+    {
+    return;
+    }
   this.sendToClients(x, y, z);    
   int ex = MathHelper.floor_double(entity.posX);
   int ey = MathHelper.floor_double(entity.posY);

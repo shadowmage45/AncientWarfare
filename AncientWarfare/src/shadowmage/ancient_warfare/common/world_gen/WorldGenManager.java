@@ -141,6 +141,7 @@ public boolean attemptPlacementSurface(World world, int x, int y, int z, int fac
     Config.logDebug("site rejected due to structure overlap");
     return false;
     }
+  Config.log("Ancient Warfare generating structure at: "+x+","+y+","+z +" :: "+struct.name);
   BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
   builder.startConstruction();  
   return true;

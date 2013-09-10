@@ -11,20 +11,20 @@ FROM TESTING
 * ghost blocks in world-gen (village fortress)<fixed??--may have been related to RNG>
 * cleanup memory churn, esp on npcs pathfinding
 * npc craftsmen hold hammers at a strange angle (would require a special item render for that item/damage)
-* examine tinkers construct village gen for ideas on proper methods to reduce/remove duplicated buildings
-    https://github.com/mDiyo/TinkersConstruct/tree/16working/tconstruct/worldgen/village
 * add scanner support for generic tile entities through export of NBT data (will need to have the post-build tile-entity update its block position..)
 * add scan toggles for 'scan chest items' and 'scan tile data'
 * find way to remove 'civicBlock4', etc from NEI, as well as any other invalid items
-* ignore work/ clear work commands not working on first time
+* ignore work/ clear work commands not working on first time??
+* duplicate chat messages from command baton
 * cleanup research notes book (add more to the tips/notes section) 
 * progressive additional upkeep requirements for NPCs such as miners, lumberjack, fishermen, farmers
 * add/remove allied teams text missing in advanced team control gui
 * gui to add/remove targets from npcs (op/admin only?, on a per-npc basis?)
 * freaking submarines!!
 * gridlines on deluxe chunkloader chunk selection gui (perhaps map underlay?)
-* pathfinding up-diagonal current block clearance check ?? seems set properly in pathfinder
+* pathfinding up-diagonal current block clearance check ?? seems set properly in pathfinder (it is in straight-check or crawler that the error exists)
 * chunkloader doesn't release chunks when broken? (my base seemed to stay loaded)
+* deluxe chunkloader only holds 25 chunks max
 
 server opt flags::
 ionice -c1 -n0 nice -n -10 /usr/lib/jvm/jdk1.7.0/bin/java -Djava.library.path=/usr/lib/jvm/jdk1.7.0/lib/amd64 -d64 -server -XX:+UseG1GC -DJINTEGRA_NATIVE_MODE -DJINTEGRA_COINIT_VALUE=0 -Dsun.io.useCanonCaches=false -Djline.terminal=jline.UnsupportedTerminal -XX:ThreadPriorityPolicy=42 -XX:CompileThreshold=1500 -XX:+TieredCompilation -XX:parallelGCThreads=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=15 -XX:+UnlockExperimentalVMOptions -XX:+UseAdaptiveGCBoundary -XX:permSize=64M -XX:MaxPermSize=256M -XX:+UseGCOverheadLimit -XX:+UseBiasedLocking -Xnoclassgc -Xverify:none -XX:UseSSE=3 -XX:+UseThreadPriorities -Djava.net.preferIPv4Stack=true -XX:+UseLargePages -XX:+UseStringCache -XX:+OptimizeStringConcat -XX:+UseFastAccessorMethods -Xrs -XX:+UseCompressedOops -XX:+AggressiveOpts -jar craftbukkit-0.0.1-SNAPSHOT.jar nogui
@@ -158,3 +158,7 @@ TEXTURE/ART
 ** fix -- deluxe chunkloader not saving/communicating forced chunks properly on client reload/reconnect
 * fix -- missing death message translation (death.attack.AWMissile becomes "<PlayerName> was killed by Missile Damage")
 * patch -- explicitly skip world generation if attempted on a client world
+/********** 09-10-13 **********/
+* more cleanup of npc aggro settings (handle civilian settings)
+* fix -- invalid biome blockID crash that could happen with certain mods installed.
+* update version number and toggle debug in prep for release

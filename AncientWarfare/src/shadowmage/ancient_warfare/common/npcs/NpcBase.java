@@ -215,22 +215,14 @@ public void addConfigTargets()
   if(npcType.isCombatUnit() && !npcType.getConfigName().equals(""))
     {
     targets = Config.getConfig().get("d-npc_target_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
-    Config.logDebug("targets for: "+npcType.getConfigName()+"  ---------------------");
-    for(String s : targets)
-      {
-      Config.logDebug("target: " + s);
-      }    
-    Config.logDebug("end target list --------------------------");
     if(targets!=null && targets.length>0)
       {
       Class clz;
       for(String name : targets)
         {
         clz = (Class) EntityList.stringToClassMapping.get(name);
-        Config.logDebug("attempting to add target entry for: "+this.npcType.getConfigName() + " of: "+name);
         if(clz!=null)
           {
-          Config.logDebug("added target entry: "+name + " :: "+clz);
           targetHelper.addTargetEntry(new AITargetEntry(this, TargetType.ATTACK, clz, 0, true, Config.npcAISearchRange));
           }
         }
@@ -238,7 +230,7 @@ public void addConfigTargets()
     }
   else if(npcType.getConfigName().equals("civilian"))
     {
-    targets = Config.getConfig().get("npc_aggro_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
+    targets = Config.getConfig().get("d-npc_target_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
     if(targets!=null && targets.length>0)
       {
       Class clz;
@@ -247,7 +239,6 @@ public void addConfigTargets()
         clz = (Class) EntityList.stringToClassMapping.get(name);
         if(clz!=null)
           {
-          Config.logDebug("adding target entry for target: "+clz);
           targetHelper.addTargetEntry(new AITargetEntry(this, TargetType.ATTACK, clz, 0, true, Config.npcAISearchRange));
           }
         }

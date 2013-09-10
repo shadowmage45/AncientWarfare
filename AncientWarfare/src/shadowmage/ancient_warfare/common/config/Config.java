@@ -36,7 +36,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 public class Config
 {
 //*******************************************************FIELDS**********************************************//
-public static final String VERSION = "1.0.025-beta-MC152";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
+public static final String VERSION = "1.0.026-beta-MC152";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
 public static final String ANTVERSION = "@VERSION@";
 public static String texturePath = "/mods/ancientwarfare/textures/";
 public static String configPath = "";
@@ -44,7 +44,7 @@ public static String configPath = "";
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
-public static final boolean DEBUG = true;
+public static final boolean DEBUG = false;
 
 //***************************************************LOADED CONFIGS******************************************//
 
