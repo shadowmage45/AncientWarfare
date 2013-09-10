@@ -158,10 +158,8 @@ TEXTURE/ART
 ** fix -- deluxe chunkloader not saving/communicating forced chunks properly on client reload/reconnect
 * fix -- missing death message translation (death.attack.AWMissile becomes "<PlayerName> was killed by Missile Damage")
 * patch -- explicitly skip world generation if attempted on a client world
-<<<<<<< HEAD
-=======
 /********** 09-10-13 **********/
 * more cleanup of npc aggro settings (handle civilian settings)
 * fix -- invalid biome blockID crash that could happen with certain mods installed.
 * update version number and toggle debug in prep for release
->>>>>>> branch 'master' of https://github.com/shadowmage45/AncientWarfare.git
+* fix -- fix for disabled vehicles still being generated from templates causing crash
