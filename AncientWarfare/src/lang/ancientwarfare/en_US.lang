@@ -189,6 +189,7 @@ item.vehicleSpawner.20=Boat Transport
 item.vehicleSpawner.21=Bomber
 item.vehicleSpawner.22=Gunship
 item.vehicleSpawner.23=Helicopter
+item.vehicleSpawner.24=Submarine
 
 #tooltips used in vehicle items
 item.vehicleSpawner.tooltip.torsion=Torsion Weapon

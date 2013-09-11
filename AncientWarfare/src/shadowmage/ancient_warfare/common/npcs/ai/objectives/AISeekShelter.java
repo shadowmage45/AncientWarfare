@@ -34,9 +34,6 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 public class AISeekShelter extends NpcAIObjective
 {
 
-Village theVillage;
-VillageDoorInfo theDoor;
-
 /**
  * @param npc
  * @param maxPriority
@@ -69,18 +66,10 @@ public void updatePriority()
   if(npc.shelterExtraTicks>0 || ((!npc.worldObj.isDaytime() || npc.worldObj.isRaining()) && !npc.worldObj.provider.hasNoSky) || npc.targetHelper.areTargetsInRange(TargetType.ATTACK, 16))
     {//if it is nighttime, or raining, and the world has a sky (no sky, no sun, no shelter at night!)
     WayPoint p = npc.wayNav.getHomePoint();
-    if(p==null)
+    if(p!=null)
       {
-      this.theVillage = npc.worldObj.villageCollectionObj.findNearestVillage(x, y, z, Config.npcAISearchRange);
-      if(theVillage!=null)
-        {
-        this.currentPriority = this.maxPriority;
-        }      
+      this.currentPriority = this.maxPriority;    
       }  
-    else
-      {
-      this.currentPriority = this.maxPriority;
-      }
     }
   }
 
@@ -101,7 +90,7 @@ public void onObjectiveStart()
   y = MathHelper.floor_double(npc.posY);
   z = MathHelper.floor_double(npc.posZ);
   WayPoint p = npc.wayNav.getHomePoint();
-  if(theVillage==null && p == null)
+  if(p == null)
     {    
     this.isFinished = true;
     this.cooldownTicks = this.maxCooldownticks;
@@ -112,27 +101,12 @@ public void onObjectiveStart()
       {
       npc.setTargetAW(TargetPosition.getNewTarget(p.floorX(), p.floorY(), p.floorZ(), TargetType.MOVE));
       }
-    else if(theVillage!=null)
-      {
-      theDoor = theVillage.findNearestDoorUnrestricted(x, y, z);
-      if(theDoor==null)
-        {
-        this.isFinished = true;
-        this.cooldownTicks = this.maxCooldownticks;    
-        this.currentPriority = 0;
-        }
-      else
-        {
-        npc.setTargetAW(TargetPosition.getNewTarget(theDoor.getInsidePosX(), theDoor.getInsidePosY(), theDoor.getInsidePosZ(), TargetType.MOVE));
-        }
-      }
     }
   }
 
 @Override
 public void stopObjective()
   {
-  this.theDoor = null;
   this.npc.clearPath();
   }
 

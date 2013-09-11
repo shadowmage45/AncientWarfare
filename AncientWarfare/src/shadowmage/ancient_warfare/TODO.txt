@@ -25,6 +25,7 @@ FROM TESTING
 * pathfinding up-diagonal current block clearance check ?? seems set properly in pathfinder (it is in straight-check or crawler that the error exists)
 * chunkloader doesn't release chunks when broken? (my base seemed to stay loaded)
 * deluxe chunkloader only holds 25 chunks max
+* baton commands not working properly -- need restartAI method?
 
 server opt flags::
 ionice -c1 -n0 nice -n -10 /usr/lib/jvm/jdk1.7.0/bin/java -Djava.library.path=/usr/lib/jvm/jdk1.7.0/lib/amd64 -d64 -server -XX:+UseG1GC -DJINTEGRA_NATIVE_MODE -DJINTEGRA_COINIT_VALUE=0 -Dsun.io.useCanonCaches=false -Djline.terminal=jline.UnsupportedTerminal -XX:ThreadPriorityPolicy=42 -XX:CompileThreshold=1500 -XX:+TieredCompilation -XX:parallelGCThreads=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=15 -XX:+UnlockExperimentalVMOptions -XX:+UseAdaptiveGCBoundary -XX:permSize=64M -XX:MaxPermSize=256M -XX:+UseGCOverheadLimit -XX:+UseBiasedLocking -Xnoclassgc -Xverify:none -XX:UseSSE=3 -XX:+UseThreadPriorities -Djava.net.preferIPv4Stack=true -XX:+UseLargePages -XX:+UseStringCache -XX:+OptimizeStringConcat -XX:+UseFastAccessorMethods -Xrs -XX:+UseCompressedOops -XX:+AggressiveOpts -jar craftbukkit-0.0.1-SNAPSHOT.jar nogui
@@ -143,23 +144,9 @@ TEXTURE/ART
 ********************* DONE STUFF ************************* 
 *  denotes done
 ** denotes done and tested
-/********** 09-05-13 **********/ 
-** fix-- enter-key is necessary to accept range updates in command baton (should update internal/server val now on any valid char press)
-/********** 09-06-13 **********/
-** fix -- add hack/patch to fix possible concurrent modification exception in mailboxData (nfc..it gets called on server tick...should only ever be one server/tick running...)
-** fix -- add missing code to mark mailbox data for saving after it has been changed
-** fix -- add patch release for fix for mailbox crash
-/********** 09-07-13 **********/
-* fix -- quarry removes its own ladders
-/********** 09-08-13 **********/
-** fix -- npc aggro config settings
-/********** 09-09-13 **********/
-* fix -- bc engine self-powering from redstone cell (net zero power transfer, but constant action)
-** fix -- deluxe chunkloader not saving/communicating forced chunks properly on client reload/reconnect
-* fix -- missing death message translation (death.attack.AWMissile becomes "<PlayerName> was killed by Missile Damage")
-* patch -- explicitly skip world generation if attempted on a client world
-/********** 09-10-13 **********/
-* more cleanup of npc aggro settings (handle civilian settings)
-* fix -- invalid biome blockID crash that could happen with certain mods installed.
-* update version number and toggle debug in prep for release
-* fix -- fix for disabled vehicles still being generated from templates causing crash
+
+/********** 09-11-13 **********/
+* fix --remove village/door interaction from NPC seek shelter ai objective -- should more reliably be able to remove
+    a home point now
+* fix -- other side of forced-target settings (where the entities target NPCs).  it should now properly function two-directionally
+* new -- add base test code for submarines -- motion works, but needs slight bit of help.    

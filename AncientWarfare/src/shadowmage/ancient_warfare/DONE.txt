@@ -1586,7 +1586,31 @@
 /********************************************************************************/
 /****************************************PUBLIC RELEASE .025****************************************/
 /********************************************************************************/
+/********** 09-05-13 **********/ 
+** fix-- enter-key is necessary to accept range updates in command baton (should update internal/server val now on any valid char press)
+/********** 09-06-13 **********/
+** fix -- add hack/patch to fix possible concurrent modification exception in mailboxData (nfc..it gets called on server tick...should only ever be one server/tick running...)
+** fix -- add missing code to mark mailbox data for saving after it has been changed
+** fix -- add patch release for fix for mailbox crash
+/********** 09-07-13 **********/
+* fix -- quarry removes its own ladders
+/********** 09-08-13 **********/
+** fix -- npc aggro config settings
+/********** 09-09-13 **********/
+* fix -- bc engine self-powering from redstone cell (net zero power transfer, but constant action)
+** fix -- deluxe chunkloader not saving/communicating forced chunks properly on client reload/reconnect
+* fix -- missing death message translation (death.attack.AWMissile becomes "<PlayerName> was killed by Missile Damage")
+* patch -- explicitly skip world generation if attempted on a client world
+/********** 09-10-13 **********/
+* more cleanup of npc aggro settings (handle civilian settings)
+* fix -- invalid biome blockID crash that could happen with certain mods installed.
+* update version number and toggle debug in prep for release
+* fix -- fix for disabled vehicles still being generated from templates causing crash
 
 /********************************************************************************/
 /****************************************PUBLIC RELEASE .026****************************************/
+/********************************************************************************/
+
+/********************************************************************************/
+/****************************************PUBLIC RELEASE .027****************************************/
 /********************************************************************************/

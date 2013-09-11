@@ -48,6 +48,7 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeCatapultStand
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeChestCart;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeHelicopter;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeHwacha;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeSubmarine;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetLarge;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeTrebuchetStandFixed;
@@ -85,9 +86,11 @@ public static final IVehicleType BOAT_BALLISTA = new VehicleTypeBoatBallista(18)
 public static final IVehicleType BOAT_CATAPULT = new VehicleTypeBoatCatapult(19);
 public static final IVehicleType BOAT_TRANSPORT = new VehicleTypeBoatTransport(20);
 
-public static final IVehicleType AIR_TEST = new VehicleTypeAirBomber(21);
-public static final IVehicleType AIR_TEST2 = new VehicleTypeAirInterceptor(22);
-public static final IVehicleType AIR_TEST3 = new VehicleTypeHelicopter(23);
+public static final IVehicleType AIR_BOMBER = new VehicleTypeAirBomber(21);
+public static final IVehicleType AIR_FIGHTER = new VehicleTypeAirInterceptor(22);
+public static final IVehicleType AIR_HELICOPTER = new VehicleTypeHelicopter(23);
+
+public static final IVehicleType SUBMARINE_TEST = new VehicleTypeSubmarine(24);
 
 private VehicleRegistry(){}
 private static VehicleRegistry INSTANCE;

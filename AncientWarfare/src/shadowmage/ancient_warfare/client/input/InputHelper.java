@@ -142,12 +142,10 @@ public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boo
     {    
     if(kb==options)
       {
-//      Config.logDebug("sending client settings openGUI request");
       GUIHandler.instance().openGUI((byte)GUIHandler.SETTINGS, mc.thePlayer, mc.theWorld, 0, 0, 0);
       }
     else if(kb==teamControl)
       {
-//      Config.logDebug("sending teamControl openGUI request");
       GUIHandler.instance().openGUI((byte)GUIHandler.TEAM_CONTROL, mc.thePlayer, mc.theWorld, 0, 0, 0);
       }    
     }
@@ -331,7 +329,6 @@ public void handleAimAction(Keybind kb)
   if(mc.thePlayer.ridingEntity instanceof VehicleBase)
     {
     VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
-    VehicleMovementType move = vehicle.vehicleType.getMovementType();
     if(kb==pitchDown)
       {
       vehicle.firingHelper.handleAimKeyInput(-1, 0);      

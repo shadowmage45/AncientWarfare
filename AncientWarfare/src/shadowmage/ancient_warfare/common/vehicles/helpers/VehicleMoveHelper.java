@@ -224,6 +224,10 @@ protected void onUpdateServer()
   this.applyWaterMotion();
   break;
   
+  case WATER2:
+  this.applyWaterMotion2();
+  break;
+  
   case AIR1:
   this.applyAir1Motion();
   break;
@@ -268,9 +272,38 @@ protected void applyGroundMotion()
 protected void applyWaterMotion()
   {
   this.applyTurnInput(0.05f);
-  if(!this.handleWaterMovement())
+  if(!this.handleBoatMovement())
     {
     this.forwardMotion*=0.85f;   
+    }
+  this.applyForwardInput(0.0125f, true);
+  }
+
+protected void applyWaterMotion2()
+  {
+  this.applyTurnInput(0.05f);
+  this.handleSubmarineMovement();
+  int submersionDepthMax = 5;
+  boolean inWater = false;
+  for (int i = 0; i < submersionDepthMax; ++i)
+    {
+    double d1 = vehicle.boundingBox.minY + (vehicle.boundingBox.maxY - vehicle.boundingBox.minY) * (double)(i + 0) / (double)submersionDepthMax - 0.125D;
+    double d2 = vehicle.boundingBox.minY + (vehicle.boundingBox.maxY - vehicle.boundingBox.minY) * (double)(i + 1) / (double)submersionDepthMax - 0.125D;
+    AxisAlignedBB axisalignedbb = AxisAlignedBB.getAABBPool().getAABB(vehicle.boundingBox.minX, d1, vehicle.boundingBox.minZ, vehicle.boundingBox.maxX, d2, vehicle.boundingBox.maxZ);
+
+    if (vehicle.worldObj.isAABBInMaterial(axisalignedbb, Material.water))
+      {
+      inWater = true;
+      }    
+    }
+  if(!inWater)
+    {
+    vehicle.motionY -= 9.81*0.05f*0.05f;
+    this.forwardMotion*=0.85f;  
+    }
+  else
+    {
+    vehicle.motionY*=0.85f;
     }
   this.applyForwardInput(0.0125f, true);
   }
@@ -291,6 +324,29 @@ protected void applyAir2Motion()
   this.applyTurnInput(0.05f);
   this.applyHelicopterInput();
   this.detectCrash();
+  }
+
+protected void handleSubmarineMovement()
+  {
+  float maxY = 0.2f;
+  if(powerInput!=0)
+    {
+    Config.logDebug("adjusting vertical based on power input!!");
+    if(Math.abs(vehicle.motionY)<maxY)
+      {
+      float percent = (float) (Math.abs(vehicle.motionY) / maxY);
+      float adj = maxY * (1.f-percent) * (float)powerInput * 0.05f;
+      vehicle.motionY += adj;
+      if(vehicle.motionY < -maxY)
+        {
+        vehicle.motionY = -maxY;        
+        }
+      if(vehicle.motionY> maxY)
+        {
+        vehicle.motionY = maxY;
+        }
+      }
+    }
   }
 
 protected void applyAirplaneInput()
@@ -545,7 +601,7 @@ protected void detectCrash()
  * handle boat style movement
  * @return
  */
-protected boolean handleWaterMovement()
+protected boolean handleBoatMovement()
   {
   byte submersionDepthMax = 5;
   double submersionAmount = 0.0D;
@@ -697,6 +753,7 @@ public NBTTagCompound getNBTTag()
   tag.setByte("si", turnInput);
   tag.setByte("pi", powerInput);
   tag.setByte("ri", rotationInput);
+  tag.setFloat("tr", throttle);
   return tag;
   }
 
@@ -707,6 +764,7 @@ public void readFromNBT(NBTTagCompound tag)
   this.turnInput = tag.getByte("si");
   this.powerInput = tag.getByte("pi");
   this.rotationInput = tag.getByte("ri");
+  this.throttle = tag.getFloat("tr");
   }
 
 }

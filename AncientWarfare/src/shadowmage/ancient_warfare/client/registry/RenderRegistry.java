@@ -69,7 +69,7 @@ import shadowmage.ancient_warfare.client.render.gate.RenderGateSingle;
 import shadowmage.ancient_warfare.client.render.machine.RenderTEMotor;
 import shadowmage.ancient_warfare.client.render.missile.RenderArrow;
 import shadowmage.ancient_warfare.client.render.missile.RenderShot;
-import shadowmage.ancient_warfare.client.render.vehicle.RenderAircraftTest;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderAircraft;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaMobile;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBallistaStand;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderBatteringRam;
@@ -165,11 +165,11 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.CHEST_CART, new RenderChestCart(), new ModelChestCart());  
   this.addVehicleRender(VehicleRegistry.BOAT_BALLISTA, new RenderBoatBallista(), new ModelBoatBallista());
   this.addVehicleRender(VehicleRegistry.BOAT_CATAPULT, new RenderBoatCatapult(), new ModelBoatCatapult());
-  this.addVehicleRender(VehicleRegistry.BOAT_TRANSPORT, new RenderBoatTransport(), new ModelBoatTransport());
-  
-  this.addVehicleRender(VehicleRegistry.AIR_TEST, new RenderAircraftTest(), new ModelAirplane());
-  this.addVehicleRender(VehicleRegistry.AIR_TEST2, new RenderAircraftTest(), new ModelAirplane());  
-  this.addVehicleRender(VehicleRegistry.AIR_TEST3, new RenderHelicopter(), new ModelHelicopter());
+  this.addVehicleRender(VehicleRegistry.BOAT_TRANSPORT, new RenderBoatTransport(), new ModelBoatTransport());    
+  this.addVehicleRender(VehicleRegistry.AIR_BOMBER, new RenderAircraft(), new ModelAirplane());
+  this.addVehicleRender(VehicleRegistry.AIR_FIGHTER, new RenderAircraft(), new ModelAirplane());  
+  this.addVehicleRender(VehicleRegistry.AIR_HELICOPTER, new RenderHelicopter(), new ModelHelicopter());  
+  this.addVehicleRender(VehicleRegistry.SUBMARINE_TEST, new RenderBoatTransport(), new ModelBoatTransport());
   /**
    * missiles...
    */

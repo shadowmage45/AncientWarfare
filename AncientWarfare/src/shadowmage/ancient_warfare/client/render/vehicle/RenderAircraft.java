@@ -28,7 +28,7 @@ import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
-public class RenderAircraftTest extends RenderVehicleBase
+public class RenderAircraft extends RenderVehicleBase
 {
 
 ModelAirplane model = new ModelAirplane();

@@ -27,5 +27,6 @@ GROUND,
 WATER,
 AIR1,//airplane style
 AIR2,//helicopter style
+WATER2,
 
 }

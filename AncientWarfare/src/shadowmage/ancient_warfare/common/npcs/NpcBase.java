@@ -480,7 +480,7 @@ protected void updateAITick()
 protected void broadcastAggro()  
   {
   List<EntityMob> mobs = worldObj.getEntitiesWithinAABB(EntityMob.class, AxisAlignedBB.getAABBPool().getAABB(posX-16, posY-8, posZ-16, posX+16, posY+8, posZ+16));
-  String[] targets = Config.getConfig().get("npc_aggro_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
+  String[] targets = Config.getConfig().get("d-npc_target_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
   List<String> targ = Lists.newArrayList(targets);
   for(EntityMob mob : mobs)
     {
