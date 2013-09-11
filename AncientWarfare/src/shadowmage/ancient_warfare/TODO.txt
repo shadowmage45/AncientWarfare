@@ -4,7 +4,6 @@ FROM TESTING
 * add 'go back to base gui' button to info guis
 * add death-message translate to local gui in npc list gui (figure out how/where they are translated, pull manual translate)
 * heuristic evaluation of tick times for pathfinding scheduling -> when tick times are good, do more cycles per path
-* wander/crawler pathfinding likes to circle on chests and go up/down ladders a lot
 * deluxe chunkloader world rendering
 * bed placement is fubar in structure gen from templates
 * npc despawning?
@@ -18,12 +17,15 @@ FROM TESTING
 * duplicate chat messages from command baton
 * cleanup research notes book (add more to the tips/notes section) 
 * progressive additional upkeep requirements for NPCs such as miners, lumberjack, fishermen, farmers
-* add/remove allied teams text missing in advanced team control gui
 * gui to add/remove targets from npcs (op/admin only?, on a per-npc basis?)
 * gridlines on deluxe chunkloader chunk selection gui (perhaps map underlay?)
 * chunkloader doesn't release chunks when broken? (my base seemed to stay loaded)
 * deluxe chunkloader only holds 25 chunks max
 * baton commands not working properly -- need restartAI method?
+* tree farm needs better method to mark trees -- keeps leaving stuff outside the borders of the farm
+* method to scan buildings in survival mode? (disallow mod-blocks and don't copy inventories?)
+* add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
+* crafting tables do not rotate properly from template construction (purely cosmetic..but...)
 
 server opt flags::
 ionice -c1 -n0 nice -n -10 /usr/lib/jvm/jdk1.7.0/bin/java -Djava.library.path=/usr/lib/jvm/jdk1.7.0/lib/amd64 -d64 -server -XX:+UseG1GC -DJINTEGRA_NATIVE_MODE -DJINTEGRA_COINIT_VALUE=0 -Dsun.io.useCanonCaches=false -Djline.terminal=jline.UnsupportedTerminal -XX:ThreadPriorityPolicy=42 -XX:CompileThreshold=1500 -XX:+TieredCompilation -XX:parallelGCThreads=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=15 -XX:+UnlockExperimentalVMOptions -XX:+UseAdaptiveGCBoundary -XX:permSize=64M -XX:MaxPermSize=256M -XX:+UseGCOverheadLimit -XX:+UseBiasedLocking -Xnoclassgc -Xverify:none -XX:UseSSE=3 -XX:+UseThreadPriorities -Djava.net.preferIPv4Stack=true -XX:+UseLargePages -XX:+UseStringCache -XX:+OptimizeStringConcat -XX:+UseFastAccessorMethods -Xrs -XX:+UseCompressedOops -XX:+AggressiveOpts -jar craftbukkit-0.0.1-SNAPSHOT.jar nogui
@@ -62,8 +64,7 @@ LANGUAGE/TRANSLATIONS
 GENERAL
 * add name search/filter box to structure builder guis
 * missiles -- add shooter/etc to spawn data and re-enable client-side entity-hit detection?
-* method to scan buildings in survival mode?
-* add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
+
 
 REINFORCED BLOCKS
 * figure out method to allow for partially destroyed blocks w/ destroyed texture rendering
@@ -149,3 +150,5 @@ TEXTURE/ART
 * fix -- other side of forced-target settings (where the entities target NPCs).  it should now properly function two-directionally
 * new -- add base test code for submarines -- motion works, but needs slight bit of help.   
 * fix -- pathfinding up-diagonal current block clearance check (error was in straight-path quick pathfinder) 
+* fix -- add 'Ally Teams' string to team-advanced-control GUI
+

@@ -82,6 +82,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   this.drawCenteredString(fontRenderer, "Current Team: "+entry.teamNum, guiLeft+(getXSize()/2), guiTop+5, 0xffffffff);  
   this.drawCenteredString(fontRenderer, "Current Rank: "+entry.getPlayerRank(player.getEntityName()), guiLeft+(getXSize()/2), guiTop+15, 0xffffffff);
+  this.drawStringGui("Ally Teams", 8, 20, WHITE);
   }
 
 @Override
