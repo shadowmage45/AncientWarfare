@@ -237,6 +237,11 @@ public void loadRenders()
   this.addMissileRender(Ammo.ammoSoldierArrowWoodFlame.getAmmoType(), arrowRender);
   this.addMissileRender(Ammo.ammoSoldierArrowIronFlame.getAmmoType(), arrowRender);
   
+  this.addMissileRender(Ammo.ammoTorpedo10.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoTorpedo15.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoTorpedo30.getAmmoType(), shotRender);
+  this.addMissileRender(Ammo.ammoTorpedo45.getAmmoType(), shotRender);
+  
   /**
    * gate renders
    */

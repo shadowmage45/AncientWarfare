@@ -121,6 +121,10 @@ public static Ammo ammoSoldierArrowWood = new AmmoSoldierArrow(54, 5, false);
 public static Ammo ammoSoldierArrowIron = new AmmoSoldierArrow(55, 7, false);
 public static Ammo ammoSoldierArrowWoodFlame = new AmmoSoldierArrow(56, 5, true);
 public static Ammo ammoSoldierArrowIronFlame = new AmmoSoldierArrow(57, 7, true);
+public static Ammo ammoTorpedo10 = new AmmoTorpedo(58, 10);
+public static Ammo ammoTorpedo15 = new AmmoTorpedo(58, 15);
+public static Ammo ammoTorpedo30 = new AmmoTorpedo(58, 30);
+public static Ammo ammoTorpedo45 = new AmmoTorpedo(58, 45);
 //58-63 reserved for future ammo types
 
 private final ItemStack ammoStack;
@@ -140,6 +144,7 @@ boolean isPenetrating = false;
 boolean isProximityAmmo = false;
 boolean isCraftable = true;
 boolean isEnabled = true;
+boolean isTorpedo = false;
 float groundProximity = 0.f;
 float entityProximity = 0.f;
 float ammoWeight = 10;
@@ -200,6 +205,11 @@ public void setEnabled(boolean val)
   this.isEnabled = val;  
   }
 
+@Override
+public boolean isTorpedo()
+  {
+  return this.isTorpedo;
+  }
 
 @Override
 public int getAmmoType()

@@ -47,10 +47,83 @@ public static void renderAdvancedVehicleOverlay(VehicleBase vehicle, EntityPlaye
     {
     renderRocketFlightPath(vehicle, player, partialTick);
     }
+  else if(vehicle.ammoHelper.getCurrentAmmoType()!=null && vehicle.ammoHelper.getCurrentAmmoType().isTorpedo())
+    {
+    renderTorpedoPath(vehicle, player, partialTick);
+    }
   else
     {
     renderNormalVehicleOverlay(vehicle, player, partialTick);
     }  
+  }
+
+public static void renderTorpedoPath(VehicleBase vehicle, EntityPlayer player, float partialTick)
+  {
+  GL11.glPushMatrix();
+  GL11.glEnable(GL11.GL_BLEND);
+  GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+  GL11.glDisable(GL11.GL_TEXTURE_2D);
+  GL11.glColor4d(1, 1, 1, 0.6d);
+  
+  double x1 = vehicle.posX - player.posX;
+  double y1 = vehicle.posY - player.posY;
+  double z1 = vehicle.posZ - player.posZ;
+  
+  /**
+   * vectors for a straight line
+   */
+  double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.getRotationSpeed());
+  double y2 = y1;
+  double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw + partialTick*vehicle.moveHelper.getRotationSpeed());
+  GL11.glLineWidth(3f);
+  GL11.glBegin(GL11.GL_LINES);    
+  GL11.glVertex3d(x1, y1+0.12d, z1);
+  GL11.glVertex3d(x2, y2+0.12d, z2);  
+  GL11.glEnd();
+  
+  GL11.glLineWidth(4f);    
+  GL11.glColor4f(1.f, 0.4f, 0.4f, 0.4f);
+  GL11.glBegin(GL11.GL_LINES);
+  
+  Pos3f offset = vehicle.getMissileOffset();
+  x2 = x1+offset.x;
+  y2 = y1+offset.y;
+  z2 = z1+offset.z;
+   
+  double gravity = 9.81d * 0.05d *0.05d;
+  double speed = vehicle.localLaunchPower * 0.05d;
+  double angle = 90 - vehicle.localTurretPitch - vehicle.rotationPitch;
+  double yaw = vehicle.localTurretRotation + partialTick * vehicle.moveHelper.getRotationSpeed();
+  
+  double vH = -Trig.sinDegrees((float) angle)*speed;
+  double vY = Trig.cosDegrees((float) angle)*speed ;
+  double vX = Trig.sinDegrees((float) yaw)*vH ;
+  double vZ = Trig.cosDegrees((float) yaw)*vH ;
+  int rocketBurnTime = (int) (speed * 20.f*AmmoHwachaRocket.burnTimeFactor);
+  
+  float xAcc = (float) (vX/speed) * AmmoHwachaRocket.accelerationFactor;;
+  float yAcc = (float) (vY/speed) * AmmoHwachaRocket.accelerationFactor;;
+  float zAcc = (float) (vZ/speed) * AmmoHwachaRocket.accelerationFactor;;
+  vX = xAcc;
+  vY = yAcc;
+  vZ = zAcc;
+  float dist = 0;
+   
+  while(dist<100*100)
+    {
+    GL11.glVertex3d(x2, y2, z2);   
+    x2+=vX;
+    z2+=vZ;
+    y2+=vY;
+    dist += x2*x2+z2*z2+y2*y2;
+    GL11.glVertex3d(x2, y2, z2);
+    }
+  GL11.glEnd();
+  
+  GL11.glPopMatrix();
+  GL11.glDepthMask(true);  
+  GL11.glDisable(GL11.GL_BLEND);
+  GL11.glEnable(GL11.GL_TEXTURE_2D);
   }
 
 public static void renderRocketFlightPath(VehicleBase vehicle, EntityPlayer player, float partialTick)

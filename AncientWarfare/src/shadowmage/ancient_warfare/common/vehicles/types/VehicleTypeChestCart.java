@@ -52,7 +52,7 @@ public VehicleTypeChestCart(int typeNum)
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.width = 2.7f;
   this.height = 1.8f; 
-  this.isMountable = true;
+  this.isMountable = false;
   this.isDrivable = true;
   this.isCombatEngine = false;
   this.shouldRiderSit = false;
@@ -126,7 +126,6 @@ public boolean interact(EntityPlayer player)
     }
   else if(!player.worldObj.isRemote && player.isSneaking())
     {
-    //TODO change this to open chestCartGUI
     GUIHandler.instance().openGUI(GUIHandler.VEHICLE_DEBUG, player, vehicle.worldObj, vehicle.entityId, 0, 0);
     }
   return true;

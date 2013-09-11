@@ -115,7 +115,7 @@ public void setMissileParams(IAmmoType type, float x, float y, float z, float mx
     }
   this.prevRotationPitch = this.rotationPitch;
   this.prevRotationYaw = this.rotationYaw;
-  if(this.ammoType.isRocket())//use launch power to determine rocket burn time...
+  if(this.ammoType.isRocket() || this.ammoType.isTorpedo())//use launch power to determine rocket burn time...
     {
     float temp = MathHelper.sqrt_float(mx*mx+my*my+mz*mz);
     this.rocketBurnTime = (int) (temp*20.f*AmmoHwachaRocket.burnTimeFactor);
@@ -213,6 +213,10 @@ public void onUpdate()
   super.onUpdate();
   this.onMovementTick();
   if(this.ticksExisted>6000 && !this.worldObj.isRemote)//5 min timer max for missiles...
+    {
+    this.setDead();
+    }
+  else if(this.ammoType.isTorpedo() && this.ticksExisted>100 && !this.worldObj.isRemote)
     {
     this.setDead();
     }
@@ -413,6 +417,18 @@ public void onMovementTick()
       if(this.worldObj.isRemote)
         {
         //TODO spawn particles...smoke..fire...wtf ever
+        this.worldObj.spawnParticle("smoke", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+        }
+      }
+    else if(this.ammoType.isTorpedo())
+      {
+      this.rocketBurnTime--;
+      this.motionX += mX;
+      this.motionY += mY;
+      this.motionZ += mZ;
+      if(this.worldObj.isRemote)
+        {
+        //TODO spawn particles...bubbles...
         this.worldObj.spawnParticle("smoke", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
         }
       }

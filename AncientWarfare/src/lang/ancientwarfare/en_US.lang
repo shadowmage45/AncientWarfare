@@ -207,6 +207,7 @@ item.vehicleSpawner.tooltip.barrage=Special: Barrage
 item.vehicleSpawner.tooltip.large=Special: Can Use Large Ammo
 item.vehicleSpawner.tooltip.noweapon=No Weapons
 item.vehicleSpawner.tooltip.boat=Special: Boat
+item.vehicleSpawner.tooltip.submarine=Special: Submarine
 
 #blocks
 block.single.builder=Ticked Builder Block
@@ -976,6 +977,10 @@ ammo.54=Soldier Arrow
 ammo.55=Soldier Iron Arrow
 ammo.56=Soldier Flame Arrow
 ammo.57=Soldier Iron Flame Arrow
+ammo.58=Torpedo 10kg
+ammo.59=Torpedo 15kg
+ammo.60=Torpedo 30kg
+ammo.61=Torpedo 45kg
 ammo.0.tooltip=10kg of Stone
 ammo.1.tooltip=15kg of Stone
 ammo.2.tooltip=30kg of Stone

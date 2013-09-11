@@ -151,4 +151,5 @@ TEXTURE/ART
 * new -- add base test code for submarines -- motion works, but needs slight bit of help.   
 * fix -- pathfinding up-diagonal current block clearance check (error was in straight-path quick pathfinder) 
 * fix -- add 'Ally Teams' string to team-advanced-control GUI
-
+* fix -- set chest-cart as un-mountable for npc AI purposes
+* new -- add torpedo missile type -- currently only usable by submarines

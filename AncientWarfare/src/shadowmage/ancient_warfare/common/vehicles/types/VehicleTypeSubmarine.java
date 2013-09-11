@@ -44,26 +44,23 @@ public class VehicleTypeSubmarine extends VehicleType
 public VehicleTypeSubmarine(int typeNum)
   {
   super(typeNum);
-  this.configName = "submarine_ballista";
-  this.vehicleMaterial = VehicleMaterial.materialWood;  
+  this.configName = "submarine";
+  this.vehicleMaterial = VehicleMaterial.materialIron;  
   this.materialCount = 5;
   this.movementType = VehicleMovementType.WATER2;
   
-  this.maxMissileWeight = 2.f;  
+  this.maxMissileWeight = 15.f;  
       
-  this.validAmmoTypes.add(Ammo.ammoBallistaBolt);
-  this.validAmmoTypes.add(Ammo.ammoBallistaBoltFlame);
-  this.validAmmoTypes.add(Ammo.ammoBallistaBoltExplosive);
-  this.validAmmoTypes.add(Ammo.ammoBallistaBoltIron);
+  this.validAmmoTypes.add(Ammo.ammoTorpedo10);
+  this.validAmmoTypes.add(Ammo.ammoTorpedo15);
+  this.validAmmoTypes.add(Ammo.ammoTorpedo30);
+  this.validAmmoTypes.add(Ammo.ammoTorpedo45);
   
   this.ammoBySoldierRank.put(0, Ammo.ammoBallistaBolt);  
   this.ammoBySoldierRank.put(1, Ammo.ammoBallistaBolt);
   this.ammoBySoldierRank.put(2, Ammo.ammoBallistaBoltFlame);
     
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.pitchDownUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.pitchUpUpgrade);
-  this.validUpgrades.add(VehicleUpgradeRegistry.pitchExtUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.powerUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.reloadUpgrade);
   this.validUpgrades.add(VehicleUpgradeRegistry.aimUpgrade);
@@ -119,8 +116,8 @@ public VehicleTypeSubmarine(int typeNum)
   this.riderVerticalOffset = 0.7f;  
   this.shouldRiderSit = true;
   
-  this.isMountable = true;
-  this.isDrivable = true;//adjust based on isMobile or not
+  this.isMountable = false;
+  this.isDrivable = true;
   this.isCombatEngine = true;
   
   this.canAdjustPitch = false;
