@@ -52,10 +52,11 @@ public VehicleTypeChestCart(int typeNum)
   this.validUpgrades.add(VehicleUpgradeRegistry.speedUpgrade);
   this.width = 2.7f;
   this.height = 1.8f; 
-  this.isMountable = false;
+  this.isMountable = true;
   this.isDrivable = true;
   this.isCombatEngine = false;
   this.shouldRiderSit = false;
+  this.canSoldiersPilot = false;
   this.riderVerticalOffset = 0.5f;
   this.riderForwardsOffset = 2.85f;
   this.baseForwardSpeed = 3.7f*0.05f;

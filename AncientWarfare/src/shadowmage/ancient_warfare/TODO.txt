@@ -153,3 +153,5 @@ TEXTURE/ART
 * fix -- add 'Ally Teams' string to team-advanced-control GUI
 * fix -- set chest-cart as un-mountable for npc AI purposes
 * new -- add torpedo missile type -- currently only usable by submarines
+* fix -- add canSoldierPilot flag to vehicles to force pilotable/unpilotable status (air, sub)
+* fix -- increase additional work bounds on tree farms +/- 3 blocks in x/z axis.

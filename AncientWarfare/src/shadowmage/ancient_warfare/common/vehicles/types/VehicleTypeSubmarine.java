@@ -116,9 +116,10 @@ public VehicleTypeSubmarine(int typeNum)
   this.riderVerticalOffset = 0.7f;  
   this.shouldRiderSit = true;
   
-  this.isMountable = false;
+  this.isMountable = true;
   this.isDrivable = true;
   this.isCombatEngine = true;
+  this.canSoldiersPilot = false;
   
   this.canAdjustPitch = false;
   this.canAdjustPower = false;

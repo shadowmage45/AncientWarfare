@@ -35,6 +35,7 @@ import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.common.utils.Trig;
 
 public abstract class TETreeFarm extends TEWorkSite
 {
@@ -103,7 +104,7 @@ protected void onCivicUpdate()
 @Override
 public AxisAlignedBB getSecondaryRenderBounds()
   {
-  return AxisAlignedBB.getAABBPool().getAABB(minX, maxY+1, minZ, maxX+1, maxY+1+maxSearchHeight, maxZ+1);
+  return AxisAlignedBB.getAABBPool().getAABB(minX-3, maxY+1, minZ-3, maxX+4, maxY+1+maxSearchHeight, maxZ+4);
   }
 
 @Override
@@ -112,9 +113,9 @@ protected void scan()
   TargetType t;
   for(int y = this.minY; y<=this.maxY+this.maxSearchHeight; y++)
     {
-    for(int x = this.minX; x<=this.maxX; x++)
+    for(int x = this.minX-3; x<=this.maxX+3; x++)
       {
-      for(int z = this.minZ; z<=this.maxZ; z++)
+      for(int z = this.minZ-3; z<=this.maxZ+3; z++)
         { 
         t = this.validateWorkPoint(x, y, z);
         if(t!=TargetType.NONE)
@@ -179,7 +180,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
     {
     return TargetType.TREE_CHOP;
     }
-  else if(id==0)
+  else if(id==0 && y<=this.maxY && Trig.isBetween(x, minX, maxX) && Trig.isBetween(z, minZ, maxZ))
     {
     if(x%4==0 && z%4==0)
       {

@@ -70,6 +70,7 @@ public abstract IVehicleMaterial getMaterialType();//wood, iron...?? material ty
 public abstract boolean isMountable();//should allow mounting
 public abstract boolean isDrivable();//should check movement input params?
 public abstract boolean isCombatEngine();//should check non-movement input params?
+public abstract boolean canSoldiersPilot();//can npcs pilot this vehicle (e.g. normal ground vehicle)
 public abstract boolean canAdjustYaw();//can aim yaw be adjusted independently of vehicle yaw?
 public abstract boolean canAdjustPitch();//can aim pitch be adjusted? (should be EITHER pitch OR power)
 public abstract boolean canAdjustPower();//can shot velocity be adjusted? (should be EITHER pitch OR power)

@@ -82,6 +82,7 @@ public boolean isCombatEngine = false;
 public boolean canAdjustYaw = false;
 public boolean canAdjustPitch = false;
 public boolean canAdjustPower = false;
+public boolean canSoldiersPilot = true;
 
 public float turretForwardsOffset = 0.f;
 public float turretHorizontalOffset = 0.f;
@@ -165,6 +166,11 @@ public IAmmoType getAmmoForSoldierRank(int rank)
   return null;
   }
 
+@Override
+public boolean canSoldiersPilot()
+  {
+  return this.canSoldiersPilot;
+  }
 
 @Override
 public void setIsCraftable(boolean val)

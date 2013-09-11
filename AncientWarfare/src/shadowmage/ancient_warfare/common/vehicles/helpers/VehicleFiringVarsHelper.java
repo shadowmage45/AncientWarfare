@@ -65,7 +65,7 @@ public boolean interact(EntityPlayer player)
     {
     return true;
     }
-  if(vehicle.isMountable() && !player.isSneaking() && (vehicle.riddenByEntity==null || vehicle.riddenByEntity==player))
+  if(!player.isSneaking() && (vehicle.riddenByEntity==null || vehicle.riddenByEntity==player))
     {
     player.mountEntity(vehicle);
     return true;

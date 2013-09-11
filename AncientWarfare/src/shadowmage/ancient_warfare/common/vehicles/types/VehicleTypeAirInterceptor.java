@@ -126,6 +126,7 @@ public VehicleTypeAirInterceptor(int typeNum)
   this.isMountable = true;
   this.isDrivable = true;//adjust based on isMobile or not
   this.isCombatEngine = true;
+  this.canSoldiersPilot = false;
   
   this.canAdjustPitch = true;
   this.canAdjustPower = false;
