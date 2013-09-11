@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
@@ -30,6 +31,7 @@ import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
+import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.BallistaVarHelper;
 import shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers.DummyVehicleHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
@@ -154,7 +156,108 @@ public String getTextureForMaterialLevel(int level)
 @Override
 public VehicleFiringVarsHelper getFiringVarsHelper(VehicleBase veh)
   {
-  return new DummyVehicleHelper(veh);
+  return new SubmarineVarsHelper(veh);
   }
 
+
+
+public class SubmarineVarsHelper extends VehicleFiringVarsHelper
+{
+/**
+ * @param vehicle
+ */
+public SubmarineVarsHelper(VehicleBase vehicle)
+  {
+  super(vehicle);
+  }
+
+@Override
+public NBTTagCompound getNBTTag()
+  {
+  return new NBTTagCompound();
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+
+  }
+
+@Override
+public void onFiringUpdate()
+  {   
+  vehicle.firingHelper.startLaunching();  
+  }
+
+@Override
+public void onReloadUpdate()
+  {
+  
+  }
+
+@Override
+public void onLaunchingUpdate()
+  {  
+  if(!vehicle.worldObj.isRemote && vehicle.ammoHelper.getCurrentAmmoCount()>0)
+    {
+    vehicle.worldObj.playSoundAtEntity(vehicle, "fireworks.launch", 1.0F, 0.5F);
+    }
+  vehicle.firingHelper.spawnMissile(0, 0, 0);
+  vehicle.firingHelper.setFinishedLaunching();
+  }
+
+@Override
+public void onReloadingFinished()
+  {
+  
+  }
+
+@Override
+public float getVar1()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar2()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar3()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar4()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar5()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar6()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar7()
+  {
+  return 0;
+  }
+
+@Override
+public float getVar8()
+  {
+  return 0;
+  }
+}
 }
