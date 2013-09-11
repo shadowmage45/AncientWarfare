@@ -388,6 +388,8 @@ public static boolean canPathStraightToTarget(PathWorldAccess worldAccess, int e
     }  
   int dx = (int) Math.abs(tx-ex);
   int dz = (int) Math.abs(tz-ez);
+  int px = ex;
+  int pz = ez;
   int sx = ex< tx ? 1 : -1;
   int sz = ez< tz ? 1 : -1;
   int err = dx-dz;
@@ -409,7 +411,7 @@ public static boolean canPathStraightToTarget(PathWorldAccess worldAccess, int e
       canPath = false;
       break;
       }
-    if(worldAccess.isWalkable(ex, cy-1, ez))
+    if(worldAccess.isWalkable(ex, cy-1, ez) && !worldAccess.checkBlockBounds(ex, cy+1, ez))
       {
       cy--;
       }
@@ -417,7 +419,7 @@ public static boolean canPathStraightToTarget(PathWorldAccess worldAccess, int e
       {
       
       }
-    else if(worldAccess.isWalkable(ex, cy+1, ez))
+    else if(worldAccess.isWalkable(ex, cy+1, ez) && !worldAccess.checkBlockBounds(px, cy+2, pz))
       {
       cy++;
       }
@@ -436,6 +438,8 @@ public static boolean canPathStraightToTarget(PathWorldAccess worldAccess, int e
       break;//finished
       }
     e2 = 2*err;
+    px = ex;
+    pz = ez;
     if(e2>-dz)
       {
       err = err-dz;

@@ -20,9 +20,7 @@ FROM TESTING
 * progressive additional upkeep requirements for NPCs such as miners, lumberjack, fishermen, farmers
 * add/remove allied teams text missing in advanced team control gui
 * gui to add/remove targets from npcs (op/admin only?, on a per-npc basis?)
-* freaking submarines!!
 * gridlines on deluxe chunkloader chunk selection gui (perhaps map underlay?)
-* pathfinding up-diagonal current block clearance check ?? seems set properly in pathfinder (it is in straight-check or crawler that the error exists)
 * chunkloader doesn't release chunks when broken? (my base seemed to stay loaded)
 * deluxe chunkloader only holds 25 chunks max
 * baton commands not working properly -- need restartAI method?
@@ -149,4 +147,5 @@ TEXTURE/ART
 * fix --remove village/door interaction from NPC seek shelter ai objective -- should more reliably be able to remove
     a home point now
 * fix -- other side of forced-target settings (where the entities target NPCs).  it should now properly function two-directionally
-* new -- add base test code for submarines -- motion works, but needs slight bit of help.    
+* new -- add base test code for submarines -- motion works, but needs slight bit of help.   
+* fix -- pathfinding up-diagonal current block clearance check (error was in straight-path quick pathfinder) 
