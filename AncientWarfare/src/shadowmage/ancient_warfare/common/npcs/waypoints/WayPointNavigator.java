@@ -240,6 +240,7 @@ public WayPoint getWorkSite()
 public void setWorkSite(WayPoint p)
   {
   this.work = p;  
+  this.workSite = null;
   }
 
 public ITEWorkSite getWorkSiteTile()

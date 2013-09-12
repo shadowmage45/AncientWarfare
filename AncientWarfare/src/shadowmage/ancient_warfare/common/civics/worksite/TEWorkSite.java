@@ -104,11 +104,8 @@ public void doWork(IWorker npc)
   while(it.hasNext())
     {
     p = it.next();
-    if(validateWorkPoint(p)!=p.work)
-      {
-      it.remove();
-      }
-    else
+    it.remove();
+    if(validateWorkPoint(p)==p.work)
       {
       this.doWork(npc, p);
       break;
