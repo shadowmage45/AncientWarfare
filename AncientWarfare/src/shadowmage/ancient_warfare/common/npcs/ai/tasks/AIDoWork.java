@@ -46,17 +46,28 @@ public void onTick()
   {
   ITEWorkSite te = npc.wayNav.getWorkSiteTile();   
   npc.swingItem();
-  if(te!=null && npc.actionTick<=0)
-    {  
-    te.doWork(npc);
-    npc.setActionTicksToMax();    
+  if(te!=null && npc.actionTick<=0 && te.hasWork())
+    {
+    if(npc.actionTick<=0)
+      {
+      te.doWork(npc);
+      npc.setActionTicksToMax();      
+      }    
+    }
+  else if(te==null)
+    {
+    npc.wayNav.setWorkSite(null);
+    }
+  else
+    {
+    npc.wayNav.setWorkSiteTile(null);
     }
   }
 
 @Override
 public boolean shouldExecute()
   {
-  return npc.getTargetType()==TargetType.WORK && npc.wayNav.getWorkSiteTile()!=null && npc.getDistanceFromTarget(npc.getTarget())<2.4f;
+  return npc.getTargetType()==TargetType.WORK && npc.wayNav.getWorkSiteTile()!=null && npc.getDistanceFromTarget(npc.getTarget())<2.4f && npc.wayNav.getWorkSiteTile().hasWork();
   }
 
 }
