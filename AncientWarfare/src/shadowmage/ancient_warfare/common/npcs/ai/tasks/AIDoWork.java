@@ -20,19 +20,25 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
+import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIGoToWork;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class AIDoWork extends NpcAITask
 {
+
+AIGoToWork parent = null;
+
 /**
  * @param npc
  */
-public AIDoWork(NpcBase npc)
+public AIDoWork(NpcBase npc, AIGoToWork parent)
   {
   super(npc);
+  this.parent = parent;
   }
 
 @Override
@@ -46,22 +52,40 @@ public void onTick()
   {
   ITEWorkSite te = npc.wayNav.getWorkSiteTile();   
   npc.swingItem();
-  if(te!=null && npc.actionTick<=0 && te.hasWork())
+  Config.logDebug("doing work tick...action time: "+npc.actionTick);
+  if(te!=null && te.hasWork())
     {
+    Config.logDebug("te not null and has work");
     if(npc.actionTick<=0)
       {
+      Config.logDebug("doing work!!");
       te.doWork(npc);
-      npc.setActionTicksToMax();      
+      npc.setActionTicksToMax();
+      Config.logDebug("new action ticks: "+npc.actionTick);
       }    
     }
   else if(te==null)
-    {
+    {    
     npc.wayNav.setWorkSite(null);
+    parent.setFinished();
     }
   else
     {
     npc.wayNav.setWorkSiteTile(null);
     }
+  }
+
+@Override
+public void onTaskStopped()
+  {
+  npc.setActionTicksToMax();
+  parent.setFinished();
+  }
+
+@Override
+public void onTaskStarted()
+  {
+  npc.setActionTicksToMax();
   }
 
 @Override

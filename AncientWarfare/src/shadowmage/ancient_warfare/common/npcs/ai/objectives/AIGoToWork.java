@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
+import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIDoWork;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
@@ -48,7 +49,7 @@ public AIGoToWork(NpcBase npc, int maxPriority)
 public void addTasks()
   {
   this.aiTasks.add(new AIMoveToTarget(npc, 1.8f, false));
-  this.aiTasks.add(new AIDoWork(npc));
+  this.aiTasks.add(new AIDoWork(npc, this));
   }
 
 @Override
@@ -170,6 +171,10 @@ public void onObjectiveStart()
   else
     {    
     this.setFinished();
+    }
+  for(NpcAITask task : this.aiTasks)
+    {
+    task.wasRunning = false;
     }
   }
 

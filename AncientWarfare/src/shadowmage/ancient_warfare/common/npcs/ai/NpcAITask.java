@@ -52,6 +52,7 @@ protected NpcBase npc;
 protected int taskType = 0;
 protected int exclusiveTasks = 0;
 protected final Random rng = new Random();
+public boolean wasRunning = false;
 
 public NpcAITask(NpcBase npc)
   {
@@ -62,6 +63,9 @@ public abstract void onTick();
 
 public abstract boolean shouldExecute();
 public abstract byte getTaskType();
+
+public void onTaskStopped(){}
+public void onTaskStarted(){}
 
 public boolean canExecute(int mutex)
   {

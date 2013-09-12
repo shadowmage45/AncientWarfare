@@ -88,6 +88,7 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
   hit.y = this.boundingBox.minY;
   
   BuilderInstant builder = new BuilderInstant(world, structure, coordBaseMode, hit);
+  builder.setWorldGen();
   if(team>=0)
     {
     builder.setTeamOverride(team);    

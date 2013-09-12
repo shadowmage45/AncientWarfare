@@ -91,10 +91,20 @@ public void onTick()
     {
     if(task.canExecute(mutex) && task.shouldExecute())
       {
+      if(!task.wasRunning)
+        {
+        task.onTaskStarted();
+        }
+      task.wasRunning = true;
       hadWork = true;
       task.onTick();
       mutex += task.taskType;
       last = task;      
+      }
+    else if(task.wasRunning)
+      {
+      task.wasRunning = false;
+      task.onTaskStopped();
       }
     }
   if(last!=null)

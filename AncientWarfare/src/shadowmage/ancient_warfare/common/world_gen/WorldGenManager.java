@@ -110,7 +110,9 @@ public boolean attemptPlacementSubsurface(World world, int x, int y, int z, int 
     {
     return false;
     }
+  Config.log("Ancient Warfare generating structure at: "+x+","+y+","+z +" :: "+struct.name);
   BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
+  builder.setWorldGen();
   builder.startConstruction(); 
   return true;
   }
@@ -143,6 +145,7 @@ public boolean attemptPlacementSurface(World world, int x, int y, int z, int fac
     }
   Config.log("Ancient Warfare generating structure at: "+x+","+y+","+z +" :: "+struct.name);
   BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
+  builder.setWorldGen();
   builder.startConstruction();  
   return true;
   }
