@@ -161,3 +161,5 @@ TEXTURE/ART
 * fix -- update work site validation to remove invalid points on doWork request -- should more properly validate if invalid points are present
 * fix -- update setWorkSite to clear workTile as well -- should solve many instances of NPCs not properly resetting after a clear-work command.
 * fix -- immediately stop working at work-sites that do not have work.
+* new -- add new tree-finding algorithm to hopefully more reliable catch full trees in tree farms -- needs rework on how to scan/validate work
+    can probably move to scanning only the bottom row, but KEEPING cut-down work points unless specifically removed by doWork or invaildated by block change
