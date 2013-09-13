@@ -212,13 +212,16 @@ public void onUpdate()
   this.ticksExisted++;
   super.onUpdate();
   this.onMovementTick();
-  if(this.ticksExisted>6000 && !this.worldObj.isRemote)//5 min timer max for missiles...
+  if(!this.worldObj.isRemote)
     {
-    this.setDead();
-    }
-  else if(this.ammoType.isTorpedo() && this.ticksExisted>100 && !this.worldObj.isRemote)
-    {
-    this.setDead();
+    if(this.ticksExisted>6000)//5 min timer max for missiles...
+      {
+      this.setDead();
+      }
+    else if(this.ammoType.isTorpedo() && this.ticksExisted>400)//and much shorter for torpedoes, 10 second lifetime
+      {
+      this.setDead();
+      }    
     }
   }
 
@@ -416,20 +419,40 @@ public void onMovementTick()
       this.motionZ += mZ;
       if(this.worldObj.isRemote)
         {
-        //TODO spawn particles...smoke..fire...wtf ever
         this.worldObj.spawnParticle("smoke", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
         }
       }
     else if(this.ammoType.isTorpedo())
-      {
-      this.rocketBurnTime--;
-      this.motionX += mX;
-      this.motionY += mY;
-      this.motionZ += mZ;
-      if(this.worldObj.isRemote)
+      {      
+      if(this.rocketBurnTime>0)
         {
-        //TODO spawn particles...bubbles...
-        this.worldObj.spawnParticle("smoke", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+        this.rocketBurnTime--;
+        this.motionX += mX;
+        this.motionY += mY;
+        this.motionZ += mZ;        
+        }
+      if(this.worldObj.isRemote && this.inWater)
+        {
+        if(this.inWater)
+          {
+          this.worldObj.spawnParticle("bubble", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+          }
+        else
+          {
+          this.worldObj.spawnParticle("smoke", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);          
+          }
+        }      
+      if(!this.isInWater())
+        {     
+        this.motionY -= (double)this.ammoType.getGravityFactor();        
+        }
+      else
+        {
+        this.motionY*=0.45f;
+        if(Math.abs(this.motionY)<0.001)
+          {
+          this.motionY = 0.f;
+          }
         }
       }
     else
@@ -498,9 +521,9 @@ protected void readEntityFromNBT(NBTTagCompound tag)
   this.mY = tag.getFloat("mY");
   this.mZ = tag.getFloat("mZ");
   if(this.ammoType==null)
-  {
-	  this.ammoType = Ammo.ammoArrow;
-  }
+    {
+    this.ammoType = Ammo.ammoArrow;
+    }
   }
 
 @Override

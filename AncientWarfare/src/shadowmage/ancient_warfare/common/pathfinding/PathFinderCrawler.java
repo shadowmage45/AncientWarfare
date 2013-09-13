@@ -311,8 +311,7 @@ protected boolean tryFollowWall()
 
 protected boolean tryMoveStraight()
   {
-  //  Config.logDebug("trying straight - level");
-  if(world.isWalkable(cx, cy+1, cz) && ty>cy)
+  if(world.isWalkable(cx, cy+1, cz) && ty>cy )
     {
     dy = 1;
     cy+=dy;
@@ -335,8 +334,7 @@ protected boolean tryMoveStraight()
     this.currentNode = getOrMakeNode(cx, cy, cz, currentNode);
     return true;
     }
-  //  Config.logDebug("trying straight - up");
-  if(world.isWalkable(cx+dx, cy+1, cz+dz))
+  if(world.isWalkable(cx+dx, cy+1, cz+dz)&& !world.checkBlockBounds(cx, cy+2, cz))
     {
     dy = 1;
     cx+=dx;
@@ -346,7 +344,7 @@ protected boolean tryMoveStraight()
     return true;
     }
   //  Config.logDebug("trying straight - down");
-  if(world.isWalkable(cx+dx, cy-1, cz+dz))
+  if(world.isWalkable(cx+dx, cy-1, cz+dz) && !world.checkBlockBounds(cx+dx, cy+1, cz+dz))
     {
     dy = -1;
     cx+=dx;

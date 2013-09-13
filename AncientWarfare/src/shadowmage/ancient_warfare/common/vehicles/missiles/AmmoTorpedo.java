@@ -40,6 +40,7 @@ public AmmoTorpedo(int ammoType, int weight)
   this.isPersistent = false;
   this.isArrow = true;
   this.isRocket = false;
+  this.isTorpedo = true;
   this.ammoWeight = weight;
   this.iconTexture = "ammoStone1";
   this.configName = "torpedo_"+weight;

@@ -392,7 +392,6 @@ public void handleAimUpdate(NBTTagCompound tag)
     sendReply = true;
     vehicle.localTurretDestPitch = tag.getFloat("aimPitch");
     reply.setFloat("aimPitch", vehicle.localTurretDestPitch);
-//    Config.logDebug("setting desired turret pitch to: "+vehicle.localTurretDestPitch);
     } 
   if(tag.hasKey("aimYaw"))
     {

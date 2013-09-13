@@ -122,10 +122,10 @@ public static Ammo ammoSoldierArrowIron = new AmmoSoldierArrow(55, 7, false);
 public static Ammo ammoSoldierArrowWoodFlame = new AmmoSoldierArrow(56, 5, true);
 public static Ammo ammoSoldierArrowIronFlame = new AmmoSoldierArrow(57, 7, true);
 public static Ammo ammoTorpedo10 = new AmmoTorpedo(58, 10);
-public static Ammo ammoTorpedo15 = new AmmoTorpedo(58, 15);
-public static Ammo ammoTorpedo30 = new AmmoTorpedo(58, 30);
-public static Ammo ammoTorpedo45 = new AmmoTorpedo(58, 45);
-//58-63 reserved for future ammo types
+public static Ammo ammoTorpedo15 = new AmmoTorpedo(59, 15);
+public static Ammo ammoTorpedo30 = new AmmoTorpedo(60, 30);
+public static Ammo ammoTorpedo45 = new AmmoTorpedo(61, 45);
+//62-63 reserved for future ammo types
 
 private final ItemStack ammoStack;
 public final int ammoType;
