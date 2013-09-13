@@ -22,7 +22,6 @@ FROM TESTING
 * chunkloader doesn't release chunks when broken? (my base seemed to stay loaded)
 * deluxe chunkloader only holds 25 chunks max
 * baton commands not working properly -- need restartAI method?
-* tree farm needs better method to mark trees -- keeps leaving stuff outside the borders of the farm
 * method to scan buildings in survival mode? (disallow mod-blocks and don't copy inventories?)
 * add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
 * crafting tables do not rotate properly from template construction (purely cosmetic..but...)
