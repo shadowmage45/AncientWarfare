@@ -28,6 +28,8 @@ import net.minecraft.block.BlockSapling;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
@@ -252,4 +254,40 @@ protected TargetType validateWorkPoint(int x, int y, int z)
     }
   return TargetType.NONE;
   }
+
+@Override
+public void readFromNBT(NBTTagCompound tag)
+  {
+  super.readFromNBT(tag);
+  if(tag.hasKey("workPointList"))
+    {
+    NBTTagList points = tag.getTagList("workPointList");
+    NBTTagCompound pointTag;
+    WorkPoint point;
+    for(int i = 0; i < points.tagCount(); i++)
+      {
+      pointTag = (NBTTagCompound) points.tagAt(i);
+      point = WorkPoint.constructFromNBT(pointTag);
+      this.workPoints.add(point);
+      }
+    }
+  }
+
+@Override
+public void writeToNBT(NBTTagCompound tag)
+  {
+  super.writeToNBT(tag);
+  if(!this.workPoints.isEmpty())
+    {
+    NBTTagList pointList = new NBTTagList();
+    for(WorkPoint p : this.workPoints)
+      {
+      pointList.appendTag(p.writeToNBT(new NBTTagCompound()));
+      }
+    tag.setTag("workPointList", pointList);
+    }
+  
+  }
+
+
 }

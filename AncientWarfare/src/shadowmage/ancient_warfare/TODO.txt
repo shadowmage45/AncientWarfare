@@ -25,7 +25,6 @@ FROM TESTING
 * method to scan buildings in survival mode? (disallow mod-blocks and don't copy inventories?)
 * add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
 * crafting tables do not rotate properly from template construction (purely cosmetic..but...)
-* farmers momentarily working at a work site with no valid work-points??
 
 server opt flags::
 ionice -c1 -n0 nice -n -10 /usr/lib/jvm/jdk1.7.0/bin/java -Djava.library.path=/usr/lib/jvm/jdk1.7.0/lib/amd64 -d64 -server -XX:+UseG1GC -DJINTEGRA_NATIVE_MODE -DJINTEGRA_COINIT_VALUE=0 -Dsun.io.useCanonCaches=false -Djline.terminal=jline.UnsupportedTerminal -XX:ThreadPriorityPolicy=42 -XX:CompileThreshold=1500 -XX:+TieredCompilation -XX:parallelGCThreads=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=15 -XX:+UnlockExperimentalVMOptions -XX:+UseAdaptiveGCBoundary -XX:permSize=64M -XX:MaxPermSize=256M -XX:+UseGCOverheadLimit -XX:+UseBiasedLocking -Xnoclassgc -Xverify:none -XX:UseSSE=3 -XX:+UseThreadPriorities -Djava.net.preferIPv4Stack=true -XX:+UseLargePages -XX:+UseStringCache -XX:+OptimizeStringConcat -XX:+UseFastAccessorMethods -Xrs -XX:+UseCompressedOops -XX:+AggressiveOpts -jar craftbukkit-0.0.1-SNAPSHOT.jar nogui
@@ -168,3 +167,6 @@ TEXTURE/ART
 ** fix -- up/down diagonal checking in crawler pathfinder 
 ** fix -- submarine can actually fire now (improper ammo declarations in ammo type -- ID num was wrong)
 ** fix -- fix torpedo ammo type
+/********** 09-13-13 **********/
+* fix -- add code to tree-farms to save out their work points on world save/load.
+* fix -- add min/max bounding to treefinder to prevent potentially long/infinite log chains from never returning from method

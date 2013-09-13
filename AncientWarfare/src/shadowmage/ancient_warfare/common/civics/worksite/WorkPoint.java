@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.civics.worksite;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class WorkPoint
@@ -67,6 +68,42 @@ public WorkPoint(Entity ent, TargetType type)
 public String toString()
   {
   return "Work Point: "+x+","+y+","+z+"::"+work;
+  }
+
+/**
+ * currently only writes out x,y,z,meta,workType
+ * @param tag
+ * @return
+ */
+public NBTTagCompound writeToNBT(NBTTagCompound tag)
+  {
+  tag.setInteger("x", x);
+  tag.setInteger("y", y);
+  tag.setInteger("z", z);
+  tag.setByte("s", special);
+  tag.setInteger("t", work.ordinal());
+//  if(target!=null)
+//    {
+//    tag.setLong("idmsb", target.getPersistentID().getMostSignificantBits());
+//    tag.setLong("idlsb", target.getPersistentID().getLeastSignificantBits());
+//    }
+  return tag;
+  }
+
+/**
+ * does not maintain/load any entity target of the work point..no reference to worldObj
+ * @param tag
+ * @return
+ */
+public static WorkPoint constructFromNBT(NBTTagCompound tag)
+  {
+  int x = tag.getInteger("x");
+  int y = tag.getInteger("y");
+  int z = tag.getInteger("z");
+  byte s = tag.getByte("s");
+  TargetType work = TargetType.values()[tag.getInteger("t")];  
+  WorkPoint p = new WorkPoint(x,y,z, s, work);
+  return p;
   }
 
 }

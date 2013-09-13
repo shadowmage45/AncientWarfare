@@ -31,6 +31,7 @@ import java.util.Set;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
+import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class TreeFinder
 {
@@ -46,6 +47,9 @@ List<Node> cache = new ArrayList<Node>();
 
 int id = 0;
 int meta = 0;
+int x;
+int y;
+int z;
 
 public static TreeFinder instance(){return INSTANCE;}
 private static TreeFinder INSTANCE = new TreeFinder();
@@ -54,8 +58,11 @@ private TreeFinder(){}
 public List<Node> findTreeNodes(World world, int x, int y, int z, int blockID, int blockMeta)
   {
   Config.logDebug("doing treefind run at: "+x+","+y+","+z);
-  id = blockID;
-  meta = blockMeta;
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  this.id = blockID;
+  this.meta = blockMeta;
   
   Node start = getNode(x,y,z);
   foundNodes.add(start);
@@ -119,6 +126,10 @@ protected void addNeighborNodes(World world, int x, int y, int z)
     x1 = x+offset[0];
     y1 = y+offset[1];
     z1 = z+offset[2];
+    if(!Trig.isBetween(x1, this.x-4, this.x+4) || !Trig.isBetween(z1, this.z-4, this.z+4) || !Trig.isBetween(y1, this.y, this.y+16))
+      {
+      continue;
+      }
     Node n = getNode(x1, y1, z1);
     if(!badNodes.contains(n) && !openList.contains(n) &&!foundNodes.contains(n))
       {
