@@ -63,4 +63,10 @@ public WorkPoint(Entity ent, TargetType type)
   special = 0;
   }
 
+@Override
+public String toString()
+  {
+  return "Work Point: "+x+","+y+","+z+"::"+work;
+  }
+
 }

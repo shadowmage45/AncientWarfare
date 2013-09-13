@@ -29,17 +29,15 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 
 public class TreeFinder
 {
 
-List<Node> allNodes = new ArrayList<Node>();
 LinkedList<Node> openList = new LinkedList<Node>();
 List<Node> badNodes = new ArrayList<Node>();
 List<Node> foundNodes = new ArrayList<Node>();
-List<Node> searchNodes = new ArrayList<Node>(); 
-Node testNode = new Node(0,0,0);
 
 /**
  * currently un-used nodes, to reduce memory churn
@@ -49,47 +47,43 @@ List<Node> cache = new ArrayList<Node>();
 int id = 0;
 int meta = 0;
 
-/**
- * 
- */
-public TreeFinder()
-  {
-  // TODO Auto-generated constructor stub
-  }
+public static TreeFinder instance(){return INSTANCE;}
+private static TreeFinder INSTANCE = new TreeFinder();
+private TreeFinder(){}
 
 public List<Node> findTreeNodes(World world, int x, int y, int z, int blockID, int blockMeta)
   {
+  Config.logDebug("doing treefind run at: "+x+","+y+","+z);
   id = blockID;
   meta = blockMeta;
-  openList.add(getNode(x, y, z));  
+  
+  Node start = getNode(x,y,z);
+  foundNodes.add(start);
+  openList.add(start);  
+  
   Node toCheck;
   while(!openList.isEmpty())
     {
-    searchNodes.clear();
     toCheck = openList.poll();
+    foundNodes.add(toCheck);
     this.addNeighborNodes(world, toCheck.x, toCheck.y, toCheck.z);
-    for(Node n : searchNodes)
-      {
-      if(!openList.contains(n) && !badNodes.contains(n))
-        {
-        openList.add(n);
-        }
-      }
     }  
+  
   List<Node> foundNodes = new ArrayList<Node>();
+  Config.logDebug("tree finder-------------");
   for(Node n : this.foundNodes)
     {
+    Config.logDebug("found nodes: "+n);
     foundNodes.add(new Node(n.x, n.y, n.z));
     }
+  
   cache.addAll(this.foundNodes);
   cache.addAll(badNodes);
   cache.addAll(openList);
-  cache.addAll(searchNodes);
   this.foundNodes.clear();
   this.badNodes.clear();
   this.openList.clear();
-  this.searchNodes.clear();
-  return Collections.emptyList();  
+  return foundNodes;  
   }
 
 static int[][] offsets = new int[17][3];
@@ -117,21 +111,32 @@ offsets[16] = new int[]{0,1,0};
 
 protected void addNeighborNodes(World world, int x, int y, int z)
   {
-  searchNodes.clear();
   int[] offset;
+  int x1,y1,z1;
   for(int i =0; i < offsets.length; i++)
     {
     offset = offsets[i];
-    if(isTree(world, x+offset[0], y+offset[1], z+offset[2]))
+    x1 = x+offset[0];
+    y1 = y+offset[1];
+    z1 = z+offset[2];
+    Node n = getNode(x1, y1, z1);
+    if(!badNodes.contains(n) && !openList.contains(n) &&!foundNodes.contains(n))
       {
-      this.foundNodes.add(new Node(x+offset[0], y+offset[1], z+offset[2]));
+      if(isTree(world, n))
+        {      
+        openList.add(n);
+        }
+      else
+        {
+        badNodes.add(n);
+        }
       }
     }
   }
 
-protected boolean isTree(World world, int x, int y, int z)
+protected boolean isTree(World world, Node n)
   {
-  if(world.getBlockId(x, y, z)==id && world.getBlockMetadata(x, y, z)==meta)
+  if(world.getBlockId(n.x, n.y, n.z)==id && (world.getBlockMetadata(n.x, n.y, n.z) & 3)==meta)
     {
     return true;
     }

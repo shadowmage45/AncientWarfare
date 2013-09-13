@@ -452,7 +452,7 @@ protected void validateWorkers()
  */
 public boolean hasWork()
   {
-  return hasWork;
+  return this.overFlow.isEmpty() && hasWork;
   }
 
 /**

@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.tree;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -32,7 +33,9 @@ import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
+import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.Trig;
@@ -48,6 +51,8 @@ int maxSearchHeight = 16;
 ItemStack saplingFilter;
 ItemStack logFilter;
 ItemStack bonemealFilter = new ItemStack(Item.dyePowder,1,15);
+List<BlockPosition> treeBasePositions = new ArrayList<BlockPosition>();
+
 /**
  * 
  */
@@ -104,26 +109,68 @@ protected void onCivicUpdate()
 @Override
 public AxisAlignedBB getSecondaryRenderBounds()
   {
-  return AxisAlignedBB.getAABBPool().getAABB(minX-3, maxY+1, minZ-3, maxX+4, maxY+1+maxSearchHeight, maxZ+4);
+  return AxisAlignedBB.getAABBPool().getAABB(minX, maxY, minZ, maxX+1, maxY+1+maxSearchHeight, maxZ+1);
   }
 
 @Override
 protected void scan()
   {
   TargetType t;
-  for(int y = this.minY; y<=this.maxY+this.maxSearchHeight; y++)
+  int id;
+  int meta;
+  this.treeBasePositions.clear();
+  this.workPoints.clear();
+  Config.logDebug("scanning tree farm...minY: "+this.minY);
+  for(int y = this.minY; y <=this.maxY; y++)
     {
-    for(int x = this.minX-3; x<=this.maxX+3; x++)
+    for(int x = this.minX; x<=this.maxX; x++)
       {
-      for(int z = this.minZ-3; z<=this.maxZ+3; z++)
-        { 
-        t = this.validateWorkPoint(x, y, z);
-        if(t!=TargetType.NONE)
+      for(int z = this.minZ; z<=this.maxZ; z++)
+        {
+        id = worldObj.getBlockId(x, y, z);
+        meta = worldObj.getBlockMetadata(x, y, z);
+        if(id==0 && x%4==0 && z%4==0)
           {
-          this.addWorkPoint(x, y, z, t);
+          id=worldObj.getBlockId(x, y-1, z);
+          if(id==Block.dirt.blockID || id==Block.grass.blockID)
+            {
+            this.addWorkPoint(x, y, z, TargetType.TREE_PLANT);
+            }
+          }
+        else if(id==this.saplingID && meta==this.saplingMeta && inventory.containsAtLeast(bonemealFilter, 3))
+          {
+          this.addWorkPoint(x, y, z, TargetType.TREE_BONEMEAL);
+          }
+        else if(id==this.logID && (meta &3) == this.logMeta)
+          {
+          Config.logDebug("scan found tree block");
+          boolean skip = false;
+          for(BlockPosition pos : this.treeBasePositions)
+            {
+            if(pos.x==x && pos.z==z && pos.y==y-1)
+              {
+              skip = true;
+              break;
+              }
+            }
+          if(!skip)
+            {
+            List<Node> treeBlocks = TreeFinder.instance().findTreeNodes(worldObj, x, y, z, logID, logMeta);
+            Config.logDebug("found tree blocks of size: "+treeBlocks.size());
+            this.treeBasePositions.add(new BlockPosition(x,y,z));
+            for(Node n : treeBlocks)
+              {
+              this.addWorkPoint(n.x, n.y, n.z, TargetType.TREE_CHOP);              
+              }
+            }
           }
         }
       }
+    }
+  Config.logDebug("tree farm scanned...work point size: "+this.workPoints.size());
+  for(WorkPoint p : this.workPoints)
+    {
+    Config.logDebug("p: "+p);
     }
   }
 
@@ -168,16 +215,24 @@ protected void doWork(IWorker npc, WorkPoint p)
 @Override
 protected TargetType validateWorkPoint(WorkPoint p)
   {
-  return p==null ? TargetType.NONE : validateWorkPoint(p.x, p.y, p.z);
+  TargetType t = TargetType.NONE;
+  if(p!=null)
+    {
+    t = validateWorkPoint(p.x, p.y, p.z);    
+    }
+  Config.logDebug("validating point: "+p+" of type: "+t);
+  return t;
   }
 
 protected TargetType validateWorkPoint(int x, int y, int z)
   {
+  Config.logDebug("validating work point: "+x+","+y+","+z);
   int id = worldObj.getBlockId(x, y, z);
-  int meta = worldObj.getBlockMetadata(x, y, z);
+  int meta = worldObj.getBlockMetadata(x, y, z);  
   boolean hasSapling = inventory.containsAtLeast(saplingFilter, 1);  
-  if( id==logID && (meta &3) == this.logMeta && InventoryTools.canHoldItem(inventory, logFilter, 1, regularIndices))
+  if( id==logID && (meta &3) == this.logMeta)
     {
+    
     return TargetType.TREE_CHOP;
     }
   else if(id==0 && y<=this.maxY && Trig.isBetween(x, minX, maxX) && Trig.isBetween(z, minZ, maxZ))

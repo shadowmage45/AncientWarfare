@@ -165,4 +165,5 @@ TEXTURE/ART
     can probably move to scanning only the bottom row, but KEEPING cut-down work points unless specifically removed by doWork or invaildated by block change
 * fix -- (hack) fix flat world crash when generating pistons/redstone wire during initial world-generation before client login (or any other block that sends block updates).
     (I think this is caused because it is referencing a field from WorldServer during the constructor phase of World, where the WorldServer fields do not yet exist)
-* fix -- npc 'instant' work at some worksites under particular conditions        
+* fix -- npc 'instant' work at some worksites under particular conditions    
+* fix -- cleanup treeFinder algorithm    
