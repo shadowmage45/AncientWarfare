@@ -50,16 +50,20 @@ protected abstract void doWork(IWorker npc, WorkPoint p);
 
 protected abstract TargetType validateWorkPoint(WorkPoint p);
 
+protected boolean isPowered = false;
+
 @Override
 protected void onCivicUpdate()
   { 
-  validateWorkPoints();  
-  if(!hasWork() && worldObj.checkChunksExist(minX, minY, minZ, maxX, maxY, maxZ))
+  validateWorkPoints();
+  isPowered = false;
+  if(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
     {
-    if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
-      {
-      scan();
-      }
+    isPowered = true;
+    }
+  if(!hasWork()  && this.workPoints.isEmpty() && worldObj.checkChunksExist(minX, minY, minZ, maxX, maxY, maxZ) && !isPowered)
+    {
+    scan();    
     } 
   super.onCivicUpdate();
   }
@@ -112,7 +116,7 @@ public void doWork(IWorker npc)
       }
     }  
   this.updateHasWork();
-  if(!this.hasWork())
+  if(!this.hasWork() && this.workPoints.isEmpty() && worldObj.checkChunksExist(minX, minY, minZ, maxX, maxY, maxZ) && !isPowered)
     {
     this.scan();
     }

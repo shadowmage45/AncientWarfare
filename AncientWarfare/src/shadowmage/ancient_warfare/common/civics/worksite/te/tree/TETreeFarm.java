@@ -111,7 +111,7 @@ protected void onCivicUpdate()
 @Override
 public AxisAlignedBB getSecondaryRenderBounds()
   {
-  return AxisAlignedBB.getAABBPool().getAABB(minX, maxY, minZ, maxX+1, maxY+1+maxSearchHeight, maxZ+1);
+  return AxisAlignedBB.getAABBPool().getAABB(minX-4, maxY, minZ-4, maxX+5, maxY+1+maxSearchHeight, maxZ+5);
   }
 
 @Override
@@ -147,7 +147,7 @@ protected void scan()
           boolean skip = false;
           for(BlockPosition pos : this.treeBasePositions)
             {
-            if(pos.x==x && pos.z==z && pos.y==y-1)
+            if(pos.x==x && pos.z==z)
               {
               skip = true;
               break;
@@ -165,11 +165,6 @@ protected void scan()
           }
         }
       }
-    }
-  Config.logDebug("tree farm scanned...work point size: "+this.workPoints.size());
-  for(WorkPoint p : this.workPoints)
-    {
-    Config.logDebug("p: "+p);
     }
   }
 
@@ -219,13 +214,11 @@ protected TargetType validateWorkPoint(WorkPoint p)
     {
     t = validateWorkPoint(p.x, p.y, p.z);    
     }
-  Config.logDebug("validating point: "+p+" of type: "+t);
   return t;
   }
 
 protected TargetType validateWorkPoint(int x, int y, int z)
   {
-  Config.logDebug("validating work point: "+x+","+y+","+z);
   int id = worldObj.getBlockId(x, y, z);
   int meta = worldObj.getBlockMetadata(x, y, z);  
   boolean hasSapling = inventory.containsAtLeast(saplingFilter, 1);  

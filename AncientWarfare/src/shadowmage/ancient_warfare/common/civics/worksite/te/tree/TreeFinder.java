@@ -57,30 +57,25 @@ private TreeFinder(){}
 
 public List<Node> findTreeNodes(World world, int x, int y, int z, int blockID, int blockMeta)
   {
-  Config.logDebug("doing treefind run at: "+x+","+y+","+z);
   this.x = x;
   this.y = y;
   this.z = z;
   this.id = blockID;
   this.meta = blockMeta;
   
-  Node start = getNode(x,y,z);
-  foundNodes.add(start);
-  openList.add(start);  
+  Node node = getNode(x,y,z);
+  openList.add(node);  
   
-  Node toCheck;
   while(!openList.isEmpty())
     {
-    toCheck = openList.poll();
-    foundNodes.add(toCheck);
-    this.addNeighborNodes(world, toCheck.x, toCheck.y, toCheck.z);
+    node = openList.poll();
+    foundNodes.add(node);
+    this.addNeighborNodes(world, node.x, node.y, node.z);
     }  
   
   List<Node> foundNodes = new ArrayList<Node>();
-  Config.logDebug("tree finder-------------");
   for(Node n : this.foundNodes)
     {
-    Config.logDebug("found nodes: "+n);
     foundNodes.add(new Node(n.x, n.y, n.z));
     }
   
