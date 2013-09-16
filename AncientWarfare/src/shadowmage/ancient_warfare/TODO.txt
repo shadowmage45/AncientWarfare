@@ -176,3 +176,4 @@ TEXTURE/ART
 /********** 09-16-13 **********/
 ** fix -- adjust how submarine floats on water
 ** fix -- move over boat to use new boat-bob mechanics -- much simplified motion, no more constant bobbing
+** update version number and toggle debug in prep for release
