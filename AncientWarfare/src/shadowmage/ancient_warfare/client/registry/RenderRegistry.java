@@ -42,6 +42,7 @@ import shadowmage.ancient_warfare.client.model.ModelCatapultStandTurret;
 import shadowmage.ancient_warfare.client.model.ModelChestCart;
 import shadowmage.ancient_warfare.client.model.ModelHelicopter;
 import shadowmage.ancient_warfare.client.model.ModelHwacha;
+import shadowmage.ancient_warfare.client.model.ModelSubmarine;
 import shadowmage.ancient_warfare.client.model.ModelTEBase;
 import shadowmage.ancient_warfare.client.model.ModelTable1;
 import shadowmage.ancient_warfare.client.model.ModelTable2;
@@ -86,6 +87,7 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderCatapultStandTurre
 import shadowmage.ancient_warfare.client.render.vehicle.RenderChestCart;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderHelicopter;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderHwacha;
+import shadowmage.ancient_warfare.client.render.vehicle.RenderSubmarine;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetLarge;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetMobileFixed;
 import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandFixed;
@@ -169,7 +171,7 @@ public void loadRenders()
   this.addVehicleRender(VehicleRegistry.AIR_BOMBER, new RenderAircraft(), new ModelAirplane());
   this.addVehicleRender(VehicleRegistry.AIR_FIGHTER, new RenderAircraft(), new ModelAirplane());  
   this.addVehicleRender(VehicleRegistry.AIR_HELICOPTER, new RenderHelicopter(), new ModelHelicopter());  
-  this.addVehicleRender(VehicleRegistry.SUBMARINE_TEST, new RenderBoatTransport(), new ModelBoatTransport());
+  this.addVehicleRender(VehicleRegistry.SUBMARINE_TEST, new RenderSubmarine(), new ModelSubmarine());
   /**
    * missiles...
    */

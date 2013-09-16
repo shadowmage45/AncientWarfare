@@ -170,3 +170,5 @@ TEXTURE/ART
 /********** 09-13-13 **********/
 * fix -- add code to tree-farms to save out their work points on world save/load.
 * fix -- add min/max bounding to treefinder to prevent potentially long/infinite log chains from never returning from method
+/********** 09-15-13 **********/
+* add -- submarine textures

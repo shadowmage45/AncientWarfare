@@ -200,7 +200,7 @@ protected void onUpdateClient()
     {
     vehicle.wheelRotation += throttle;
     }
-  else if(vehicle.vehicleType.getMovementType()==VehicleMovementType.WATER)
+  else if(vehicle.vehicleType.getMovementType()==VehicleMovementType.WATER || vehicle.vehicleType.getMovementType()==VehicleMovementType.WATER2)
     {
     vehicle.wheelRotation += forwardMotion*64;
     }
@@ -304,6 +304,10 @@ protected void applyWaterMotion2()
   else
     {
     vehicle.motionY*=0.85f;
+    }
+  if(vehicle.riddenByEntity!=null)
+    {
+    vehicle.riddenByEntity.setAir(300);    
     }
   this.applyForwardInput(0.0125f, true);
   }

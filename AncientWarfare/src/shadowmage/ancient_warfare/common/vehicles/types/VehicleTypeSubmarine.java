@@ -107,15 +107,15 @@ public VehicleTypeSubmarine(int typeNum)
   this.baseStrafeSpeed = 2.f;
   this.baseForwardSpeed = 6.2f*0.05f;
   
-  this.turretForwardsOffset = 23*0.0625f;
-  this.turretVerticalOffset = 1.325f;
+  this.turretForwardsOffset = 2.45f;
+  this.turretVerticalOffset = 0.325f;
   this.accuracy = 0.98f;
   this.basePitchMax = 0;
   this.basePitchMin = 0; 
   this.baseMissileVelocityMax = 42.f;//stand versions should have higher velocity, as should fixed version--i.e. mobile turret should have the worst of all versions   
   
-  this.riderForwardsOffset = -1.0f ;
-  this.riderVerticalOffset = 0.7f;  
+  this.riderForwardsOffset = 0.75f ;
+  this.riderVerticalOffset = 0.1f;  
   this.shouldRiderSit = true;
   
   this.isMountable = true;
@@ -139,17 +139,17 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Config.texturePath + "models/boatBallista1.png";
+    return Config.texturePath + "models/submarine1.png";
     case 1:
-    return Config.texturePath + "models/boatBallista2.png";
+    return Config.texturePath + "models/submarine2.png";
     case 2:
-    return Config.texturePath + "models/boatBallista3.png";
+    return Config.texturePath + "models/submarine3.png";
     case 3:
-    return Config.texturePath + "models/boatBallista4.png";
+    return Config.texturePath + "models/submarine4.png";
     case 4:
-    return Config.texturePath + "models/boatBallista5.png";
+    return Config.texturePath + "models/submarine5.png";
     default:
-    return Config.texturePath + "models/boatBallista1.png";
+    return Config.texturePath + "models/submarine1.png";
     }
   }
 
