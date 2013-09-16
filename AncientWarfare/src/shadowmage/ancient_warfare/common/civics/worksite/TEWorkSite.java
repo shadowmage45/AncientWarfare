@@ -112,6 +112,10 @@ public void doWork(IWorker npc)
       }
     }  
   this.updateHasWork();
+  if(!this.hasWork())
+    {
+    this.scan();
+    }
   }
 
 protected void validateWorkPoints()

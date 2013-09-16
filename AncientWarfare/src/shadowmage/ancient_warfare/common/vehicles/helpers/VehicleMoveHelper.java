@@ -272,9 +272,10 @@ protected void applyGroundMotion()
 protected void applyWaterMotion()
   {
   this.applyTurnInput(0.05f);
-  if(!this.handleBoatMovement())
+  if(this.handleBoatBob(true)<0)
     {
-    this.forwardMotion*=0.85f;   
+    this.forwardMotion*=0.85f;
+    this.strafeMotion*=0.85f;    
     }
   this.applyForwardInput(0.0125f, true);
   }
@@ -283,27 +284,10 @@ protected void applyWaterMotion2()
   {
   this.applyTurnInput(0.05f);
   this.handleSubmarineMovement();
-  int submersionDepthMax = 5;
-  boolean inWater = false;
-  for (int i = 0; i < submersionDepthMax; ++i)
+  if(this.handleBoatBob(false)<0)
     {
-    double d1 = vehicle.boundingBox.minY + (vehicle.boundingBox.maxY - vehicle.boundingBox.minY) * (double)(i + 0) / (double)submersionDepthMax - 0.125D;
-    double d2 = vehicle.boundingBox.minY + (vehicle.boundingBox.maxY - vehicle.boundingBox.minY) * (double)(i + 1) / (double)submersionDepthMax - 0.125D;
-    AxisAlignedBB axisalignedbb = AxisAlignedBB.getAABBPool().getAABB(vehicle.boundingBox.minX, d1, vehicle.boundingBox.minZ, vehicle.boundingBox.maxX, d2, vehicle.boundingBox.maxZ);
-
-    if (vehicle.worldObj.isAABBInMaterial(axisalignedbb, Material.water))
-      {
-      inWater = true;
-      }    
-    }
-  if(!inWater)
-    {
-    vehicle.motionY -= 9.81*0.05f*0.05f;
-    this.forwardMotion*=0.85f;  
-    }
-  else
-    {
-    vehicle.motionY*=0.85f;
+    this.forwardMotion*=0.85f;
+    this.strafeMotion*=0.85f;  
     }
   if(vehicle.riddenByEntity!=null)
     {
@@ -602,71 +586,41 @@ protected void detectCrash()
   }
 
 /**
- * handle boat style movement
- * @return
+ * code to set Y motion on a surface or subsurface water vehicle
+ * @param floats if the vehicle should return to the surface if it is underwater (false for submarines) 
  */
-protected boolean handleBoatMovement()
+protected int handleBoatBob(boolean floats)
   {
-  byte submersionDepthMax = 5;
-  double submersionAmount = 0.0D;
-  boolean inWater = false;
-  for (int i = 0; i < submersionDepthMax; ++i)
+  float bitHeight = vehicle.height * 0.2f;
+  AxisAlignedBB bb;
+  int submergedBits = 0;
+  for(int i = 0; i < 5; i++)
     {
-    double d1 = vehicle.boundingBox.minY + (vehicle.boundingBox.maxY - vehicle.boundingBox.minY) * (double)(i + 0) / (double)submersionDepthMax - 0.125D;
-    double d2 = vehicle.boundingBox.minY + (vehicle.boundingBox.maxY - vehicle.boundingBox.minY) * (double)(i + 1) / (double)submersionDepthMax - 0.125D;
-    AxisAlignedBB axisalignedbb = AxisAlignedBB.getAABBPool().getAABB(vehicle.boundingBox.minX, d1, vehicle.boundingBox.minZ, vehicle.boundingBox.maxX, d2, vehicle.boundingBox.maxZ);
-
-    if (vehicle.worldObj.isAABBInMaterial(axisalignedbb, Material.water))
+    bb = AxisAlignedBB.getAABBPool().getAABB(vehicle.boundingBox.minX, vehicle.boundingBox.minY + (i*bitHeight), vehicle.boundingBox.minZ, vehicle.boundingBox.maxX, vehicle.boundingBox.minY + ((1+i)*bitHeight), vehicle.boundingBox.maxZ);
+    if(vehicle.worldObj.isAABBInMaterial(bb, Material.water))
       {
-      submersionAmount += 1.0D / (double)submersionDepthMax;
-      inWater = true;
-      }    
-    }
-
-  double vehicleMotion = Math.sqrt(vehicle.motionX * vehicle.motionX + vehicle.motionZ * vehicle.motionZ);
-  double vehicleForwardMotion;
-  double strafeMotion;
-
-  if (vehicleMotion > 0.26249999999999996D)
-    {
-    vehicleForwardMotion = Math.cos((double)vehicle.rotationYaw * Math.PI / 180.0D);
-    strafeMotion = Math.sin((double)vehicle.rotationYaw * Math.PI / 180.0D);
-
-    for (int j = 0; (double)j < 1.0D + vehicleMotion * 60.0D; ++j)
+      submergedBits++;
+      }
+    else
       {
-      double particleFloatOffset = (double)(vehicle.getRNG().nextFloat() * 2.0F - 1.0F);
-      double particleIntegerOffset = (double)(vehicle.getRNG().nextInt(2) * 2 - 1) * 0.7D;
-      double particleXOffset;
-      double particleZOffset;
-
-      if (vehicle.getRNG().nextBoolean())
-        {
-        particleXOffset = vehicle.posX - vehicleForwardMotion * particleFloatOffset * 0.8D + strafeMotion * particleIntegerOffset;
-        particleZOffset = vehicle.posZ - strafeMotion * particleFloatOffset * 0.8D - vehicleForwardMotion * particleIntegerOffset;
-        vehicle.worldObj.spawnParticle("splash", particleXOffset, vehicle.posY - 0.125D, particleZOffset, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
-        }
-      else
-        {
-        particleXOffset = vehicle.posX + vehicleForwardMotion + strafeMotion * particleFloatOffset * 0.7D;
-        particleZOffset = vehicle.posZ + strafeMotion - vehicleForwardMotion * particleFloatOffset * 0.7D;
-        vehicle.worldObj.spawnParticle("splash", particleXOffset, vehicle.posY - 0.125D, particleZOffset, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
-        }
+      break;
       }
     }
-  if (submersionAmount < 0.80D)
+  submergedBits -= 2;
+  if(!floats && submergedBits>0)
     {
-    vehicleForwardMotion = (submersionAmount * 2.0D - 1.0D) * 1.25f;
-    vehicle.motionY += 0.03999999910593033D * vehicleForwardMotion;
+    submergedBits = 0;
+    }  
+  if(submergedBits < 0)
+    {
+    vehicle.motionY-=9.81f*0.05f*0.05f;
     }
   else
     {
-    if (vehicle.motionY < 0.0D)
-      {
-      vehicle.motionY /= 2.0D;
-      }
-    vehicle.motionY += 0.007000000216066837D;
+    vehicle.motionY += (float) submergedBits * 0.02f;  
+    vehicle.motionY *= 0.8f;
     }
-  return inWater;
+  return submergedBits;
   }
 
 protected void tearUpGrass()

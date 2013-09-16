@@ -122,7 +122,6 @@ protected void scan()
   int meta;
   this.treeBasePositions.clear();
   this.workPoints.clear();
-  Config.logDebug("scanning tree farm...minY: "+this.minY);
   for(int y = this.minY; y <=this.maxY; y++)
     {
     for(int x = this.minX; x<=this.maxX; x++)
@@ -145,7 +144,6 @@ protected void scan()
           }
         else if(id==this.logID && (meta &3) == this.logMeta)
           {
-          Config.logDebug("scan found tree block");
           boolean skip = false;
           for(BlockPosition pos : this.treeBasePositions)
             {
@@ -158,7 +156,6 @@ protected void scan()
           if(!skip)
             {
             List<Node> treeBlocks = TreeFinder.instance().findTreeNodes(worldObj, x, y, z, logID, logMeta);
-            Config.logDebug("found tree blocks of size: "+treeBlocks.size());
             this.treeBasePositions.add(new BlockPosition(x,y,z));
             for(Node n : treeBlocks)
               {
@@ -233,8 +230,7 @@ protected TargetType validateWorkPoint(int x, int y, int z)
   int meta = worldObj.getBlockMetadata(x, y, z);  
   boolean hasSapling = inventory.containsAtLeast(saplingFilter, 1);  
   if( id==logID && (meta &3) == this.logMeta)
-    {
-    
+    {    
     return TargetType.TREE_CHOP;
     }
   else if(id==0 && y<=this.maxY && Trig.isBetween(x, minX, maxX) && Trig.isBetween(z, minZ, maxZ))
