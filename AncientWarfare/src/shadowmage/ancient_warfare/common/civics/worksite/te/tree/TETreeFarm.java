@@ -111,7 +111,7 @@ protected void onCivicUpdate()
 @Override
 public AxisAlignedBB getSecondaryRenderBounds()
   {
-  return AxisAlignedBB.getAABBPool().getAABB(minX-4, maxY, minZ-4, maxX+5, maxY+1+maxSearchHeight, maxZ+5);
+  return AxisAlignedBB.getAABBPool().getAABB(minX, maxY, minZ, maxX+1, maxY+1+maxSearchHeight, maxZ+1);
   }
 
 @Override
