@@ -55,10 +55,8 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z, float y
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
   GL11.glDepthMask(true);
   GL11.glDisable(GL11.GL_BLEND);
-  AWTextureManager.bindTexture(Config.texturePath+veh.getTexture());
+  AWTextureManager.bindTexture(veh.getTexture());
   }
-
-
 
 @Override
 public void renderVehicleFlag()

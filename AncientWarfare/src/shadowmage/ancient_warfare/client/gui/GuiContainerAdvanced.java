@@ -421,7 +421,6 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
     GL11.glPushMatrix();
     GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);    
     this.guiElements.get(i).drawElement(mouseX, mouseY);
-    mc.renderEngine.resetBoundTexture();
     GL11.glPopAttrib();
     GL11.glPopMatrix();
     }  
@@ -463,17 +462,14 @@ public void drawScreen(int par1, int par2, float par3)
   GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   super.drawScreen(par1, par2, par3);
   GL11.glPopAttrib();
-  GL11.glPopMatrix();
-  
+  GL11.glPopMatrix();  
   GL11.glPushMatrix();
   GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-  mc.renderEngine.resetBoundTexture();
   this.drawExtraForeground(par1, par2, par3);
   GL11.glPopAttrib();
   GL11.glPopMatrix();
   GL11.glPushMatrix();
   GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-  mc.renderEngine.resetBoundTexture();
   this.drawTooltips(par1, par2, par3);
   GL11.glPopAttrib();
   GL11.glPopMatrix();
@@ -518,7 +514,6 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
   GL11.glPopMatrix();
   GL11.glEnable(GL11.GL_DEPTH_TEST);
   GL11.glPopAttrib();
-  mc.renderEngine.resetBoundTexture();
   }
 
 public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay)

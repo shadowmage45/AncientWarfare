@@ -26,6 +26,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
@@ -130,7 +131,6 @@ public NpcBase(World par1World)
   this.varsHelper = new NpcDummyVarHelper(this);  
   this.targetHelper = new NpcTargetHelper(this);
   this.aiManager = new NpcAIObjectiveManager(this);
-  this.moveSpeed = 0.325f;
   this.setAIMoveSpeed(0.325f);
   this.setMoveForward(0);
   this.worldAccess = new PathWorldAccessEntity(par1World, this);  
@@ -151,8 +151,9 @@ public NpcBase(World par1World)
     this.equipmentDropChances[i] = 1.f;
     }
   this.experienceValue = 10;
-  this.health = 20;  
+  this.setHealth(20.f);
   }
+
 
 
 @Override
@@ -171,10 +172,11 @@ protected void collideWithEntity(Entity par1Entity)
     }
   }
 
-public void setHealth(int health)
+@Override
+public void setHealth(float health)
   {
-  this.health = health;
-  if(this.health<=0 && !this.isDead)
+  super.setHealth(health);
+  if(this.getHealth()<=0 && !this.isDead && !this.worldObj.isRemote)
     {
     this.setDead();
     }
@@ -182,7 +184,7 @@ public void setHealth(int health)
 
 public void repackIntoItem()
   {
-  int health = this.health;
+  int health = (int)this.getHealth();
   ItemStack stack = NpcRegistry.getStackFor(npcType, rank);
   stack.getTagCompound().getCompoundTag("AWNpcSpawner").setInteger("health", health);
   this.worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY+0.5d, posZ, stack));
@@ -590,12 +592,6 @@ protected boolean isAIEnabled()
   return true;
   }
 
-@Override
-public int getMaxHealth()
-  {
-  return this.npcType== null? 20 : this.npcType.getMaxHealth(rank);
-  }
-
 public String getTexture()
   {
   return this.npcType.getDisplayTexture(rank);
@@ -746,7 +742,6 @@ public void onUpdate()
     {
     this.pushOutOfBlocks();    
     }
-  this.handleHealthUpdate();
   boolean riding = false;
   if(this.isRidingVehicle())
     {
@@ -793,11 +788,19 @@ public boolean isEntityInsideOpaqueBlock()
 protected void entityInit()
   {
   super.entityInit();  
+  this.dataWatcher.updateObject(6, Float.valueOf(20.0F));
   this.dataWatcher.addObject(28, Byte.valueOf((byte) -1));//objective
   this.dataWatcher.addObject(29, Byte.valueOf((byte) -1));//task
   this.dataWatcher.addObject(30, Byte.valueOf((byte) -1));//other/error (no food/no deposit)
-  this.dataWatcher.addObject(31, new Integer(20));//health  
+  this.dataWatcher.addObject(31, new Integer(20));//health
+  
   }
+
+protected void applyEntityAttributes()
+	{
+	super.applyEntityAttributes();
+	this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(20.f);
+	}
 
 public byte getAIObjectiveID()
   {
@@ -829,26 +832,6 @@ public void setErrorID(byte b)
   this.dataWatcher.updateObject(30, Byte.valueOf(b));
   }
 
-protected void handleHealthUpdate()
-  {
-  if(this.worldObj.isRemote)
-    {
-    int newHealth = this.dataWatcher.getWatchableObjectInt(31);
-    if(newHealth!=this.health)
-      {
-      this.setEntityHealth(newHealth);
-      }    
-    }
-  else
-    {
-    int watchedHealth = this.dataWatcher.getWatchableObjectInt(31);
-    if(watchedHealth!=this.health)
-      {
-      this.dataWatcher.updateObject(31, Integer.valueOf(health));
-      }
-    }
-  }
-
 protected void pushOutOfBlocks()
   {
   int x = MathHelper.floor_double(posX);
@@ -877,7 +860,7 @@ protected void pushOutOfBlocks()
     }
   if(closest.x!=x || closest.z!=z)
     {
-    this.setMoveTo(closest.x+0.5d, closest.y, closest.z+0.5d, this.moveSpeed);
+    this.setMoveTo(closest.x+0.5d, closest.y, closest.z+0.5d, this.getAIMoveSpeed());
 //    this.nav.currentTarget = null;
 //    this.clearPath();
 //    this.nav.currentTarget = new Node(closest.x, closest.y, closest.z);
@@ -886,9 +869,9 @@ protected void pushOutOfBlocks()
 
 protected void handleHealingUpdate()
   {
-  if(this.health<this.getMaxHealth())
+  if(this.getHealth()<this.getMaxHealth())
     {
-    this.health++;
+    this.setHealth(this.getHealth()+1.f);
     }
   }
 
@@ -940,7 +923,7 @@ public boolean attackEntityFrom(DamageSource damageSource, float damageAmount)
     {
     this.targetHelper.handleBeingAttacked((EntityLiving)damageSource.getEntity()); 
     }
-  if(!this.isDead && this.health<=0)
+  if(!this.isDead && this.getHealth()<=0)
     {
     if(!this.worldObj.isRemote)
       {
@@ -961,8 +944,7 @@ public void writeSpawnData(ByteArrayDataOutput data)
   {
   data.writeInt(teamNum);
   data.writeInt(rank);
-  data.writeInt(this.npcType.getGlobalNpcType());
-  data.writeByte((byte)health);
+  data.writeInt(this.npcType.getGlobalNpcType());  
   }
 
 @Override
@@ -972,7 +954,6 @@ public void readSpawnData(ByteArrayDataInput data)
   this.rank = data.readInt();
   INpcType t = NpcTypeBase.getNpcType(data.readInt());
   this.setNpcType(t, rank);
-  this.health = (int)data.readByte();
   }
 
 @Override
@@ -983,7 +964,6 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("rank", this.rank);
   tag.setInteger("type", this.npcType.getGlobalNpcType());
   tag.setCompoundTag("waypoints", wayNav.getNBTTag());
-  tag.setInteger("health", this.getHealth());
   tag.setCompoundTag("inv", this.inventory.getNBTTag());
   tag.setCompoundTag("spInv", this.specInventory.getNBTTag());
   tag.setInteger("upkeep", this.npcUpkeepTicks);
@@ -1000,7 +980,6 @@ public void readFromNBT(NBTTagCompound tag)
   int type = tag.getInteger("type");
   this.setNpcType(NpcTypeBase.getNpcType(type), this.rank);
   this.wayNav.readFromNBT(tag.getCompoundTag("waypoints"));
-  this.health = tag.getInteger("health");
   if(tag.hasKey("inv"))
     {
     this.inventory.readFromNBT(tag.getCompoundTag("inv"));

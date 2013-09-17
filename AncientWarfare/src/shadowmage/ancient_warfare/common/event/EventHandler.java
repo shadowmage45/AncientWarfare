@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.event;
 import java.util.List;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityMob;
@@ -113,9 +114,8 @@ public void onEntitySpawn(EntityJoinWorldEvent evt)
   {
   if(evt.entity!=null && !evt.entity.worldObj.isRemote && evt.entity instanceof EntityZombie)
     {
-    EntityMob zomb = (EntityMob)evt.entity;
-    float val = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, zomb, "moveSpeed", "field_70697_bw");    
-    zomb.tasks.addTask(3, new EntityAIAttackOnCollide(zomb, NpcBase.class, val, true));
+    EntityMob zomb = (EntityMob)evt.entity;   
+    zomb.tasks.addTask(3, new EntityAIAttackOnCollide(zomb, NpcBase.class, zomb.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue(), true));
     zomb.targetTasks.addTask(2, new EntityAINearestAttackableTarget(zomb, NpcBase.class, 0, true));
     }
   }

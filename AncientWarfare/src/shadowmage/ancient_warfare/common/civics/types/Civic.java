@@ -218,7 +218,7 @@ public int getGlobalID()
 @Override
 public String getIconTexture()
   {
-  return "ancientwarfare:civic/"+itemIconTexture;
+  return Config.texturePath+"blocks/civic/"+itemIconTexture;
   }
 
 @Override

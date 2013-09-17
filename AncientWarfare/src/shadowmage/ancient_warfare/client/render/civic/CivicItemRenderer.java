@@ -21,18 +21,28 @@
 package shadowmage.ancient_warfare.client.render.civic;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.civics.types.Civic;
+import shadowmage.ancient_warfare.common.civics.types.ICivicType;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.CivicRegistry;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 
 public class CivicItemRenderer implements IItemRenderer
 {
-
 /**
  * 
  */
@@ -70,7 +80,9 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     }
   RenderBlocks render = (RenderBlocks)data[0];
   int blockNum = item.getItemDamage()/16;
-  AWTextureManager.bindTexture("/terrain.png");
+  ICivicType civType = CivicRegistry.instance().getCivicFor(item.getItemDamage()); 
+  
+  //AWTextureManager.bindTexture(civType.getIconTexture()+".png");
   Block blk = null;
   switch(blockNum)
   {
@@ -104,7 +116,48 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     {
     GL11.glScalef(0.5f, 0.5f, 0.5f);
     }
-  render.renderBlockAsItem(blk, item.getItemDamage()%16, 1.f);
+      
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(ItemLoader.civicPlacer.itemID);
+  Icon ico = d.getIconFor(civType.getGlobalID()*3);
+  
+  Tessellator tessellator = Tessellator.instance;
+
+  blk.setBlockBoundsForItemRender();
+  render.setRenderBoundsFromBlock(blk);
+  GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+  GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(0.0F, -1.0F, 0.0F);
+  render.renderFaceYNeg(blk, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
+
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(0.0F, 1.0F, 0.0F);
+  render.renderFaceYPos(blk, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
+
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(0.0F, 0.0F, -1.0F);
+  render.renderFaceZNeg(blk, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
+
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(0.0F, 0.0F, 1.0F);
+  render.renderFaceZPos(blk, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
+
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+  render.renderFaceXNeg(blk, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
+
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(1.0F, 0.0F, 0.0F);
+  render.renderFaceXPos(blk, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
+
+  GL11.glTranslatef(0.5F, 0.5F, 0.5F);
   GL11.glPopMatrix();
   }
 

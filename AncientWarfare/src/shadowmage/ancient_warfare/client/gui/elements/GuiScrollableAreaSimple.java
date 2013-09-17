@@ -91,7 +91,6 @@ public void drawElement(int mouseX, int mouseY)
     this.scrollPosY = this.scrollBar.getTopIndexForSet(totalHeight, height);  
     this.scrollBar.updateGuiPos(0, 0);
     this.scrollBar.drawElement(mouseX, mouseY-scrollPosY);
-    mc.renderEngine.resetBoundTexture();
     GL11.glPopAttrib();
     GL11.glPopMatrix();
     }
@@ -100,7 +99,6 @@ public void drawElement(int mouseX, int mouseY)
     GL11.glPushMatrix();
     GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
     el.drawElement(mouseX, mouseY);    
-    mc.renderEngine.resetBoundTexture();
     GL11.glPopAttrib();
     GL11.glPopMatrix();
     }  

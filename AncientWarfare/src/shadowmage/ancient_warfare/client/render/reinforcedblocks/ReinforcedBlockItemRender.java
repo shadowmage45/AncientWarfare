@@ -66,74 +66,49 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     }
   RenderBlocks render = (RenderBlocks)data[0];
   int blockNum = item.getItemDamage()/16;
-  AWTextureManager.bindTexture("/terrain.png");
   Block par1Block = BlockLoader.reinforced; 
     
   Description d = DescriptionRegistry2.instance().getDescriptionFor(par1Block.blockID);
   Icon ico = d.getIconFor(item.getItemDamage());
   
   Tessellator tessellator = Tessellator.instance;
-  int j = 0;
-  int par2 = 0;
-  int par1;
-  float par3 = 1.f;  
-  boolean flag = false;
-  int k;
-  float f2;
-  float f3;
-  
-  
-  
-  if (j == 16)
-    {
-        par2 = 1;
-    }
 
-    par1Block.setBlockBoundsForItemRender();
-    render.setRenderBoundsFromBlock(par1Block);
-    GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
-    GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-    tessellator.startDrawingQuads();
-    tessellator.setNormal(0.0F, -1.0F, 0.0F);
-    render.renderFaceYNeg(par1Block, 0.0D, 0.0D, 0.0D, ico);
-    tessellator.draw();
+  par1Block.setBlockBoundsForItemRender();
+  render.setRenderBoundsFromBlock(par1Block);
+  GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+  GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 
-    if (flag && render.useInventoryTint)
-    {
-        k = par1Block.getRenderColor(par2);
-        f2 = (float)(k >> 16 & 255) / 255.0F;
-        f3 = (float)(k >> 8 & 255) / 255.0F;
-        float f7 = (float)(k & 255) / 255.0F;
-        GL11.glColor4f(f2 * par3, f3 * par3, f7 * par3, 1.0F);
-    }
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(0.0F, -1.0F, 0.0F);
+  render.renderFaceYNeg(par1Block, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
 
-    tessellator.startDrawingQuads();
-    tessellator.setNormal(0.0F, 1.0F, 0.0F);
-    render.renderFaceYPos(par1Block, 0.0D, 0.0D, 0.0D, ico);
-    tessellator.draw();
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(0.0F, 1.0F, 0.0F);
+  render.renderFaceYPos(par1Block, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
 
-    if (flag && render.useInventoryTint)
-    {
-        GL11.glColor4f(par3, par3, par3, 1.0F);
-    }
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(0.0F, 0.0F, -1.0F);
+  render.renderFaceZNeg(par1Block, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
 
-    tessellator.startDrawingQuads();
-    tessellator.setNormal(0.0F, 0.0F, -1.0F);
-    render.renderFaceZNeg(par1Block, 0.0D, 0.0D, 0.0D, ico);
-    tessellator.draw();
-    tessellator.startDrawingQuads();
-    tessellator.setNormal(0.0F, 0.0F, 1.0F);
-    render.renderFaceZPos(par1Block, 0.0D, 0.0D, 0.0D, ico);
-    tessellator.draw();
-    tessellator.startDrawingQuads();
-    tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-    render.renderFaceXNeg(par1Block, 0.0D, 0.0D, 0.0D, ico);
-    tessellator.draw();
-    tessellator.startDrawingQuads();
-    tessellator.setNormal(1.0F, 0.0F, 0.0F);
-    render.renderFaceXPos(par1Block, 0.0D, 0.0D, 0.0D, ico);
-    tessellator.draw();
-    GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(0.0F, 0.0F, 1.0F);
+  render.renderFaceZPos(par1Block, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
+
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+  render.renderFaceXNeg(par1Block, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
+
+  tessellator.startDrawingQuads();
+  tessellator.setNormal(1.0F, 0.0F, 0.0F);
+  render.renderFaceXPos(par1Block, 0.0D, 0.0D, 0.0D, ico);
+  tessellator.draw();
+
+  GL11.glTranslatef(0.5F, 0.5F, 0.5F);
   }
 
 }
