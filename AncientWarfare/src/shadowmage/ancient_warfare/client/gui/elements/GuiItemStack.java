@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
@@ -88,7 +89,7 @@ public void drawElement(int mouseX, int mouseY)
   if(this.renderSlotBackground)
     {
     String tex = Config.texturePath+"gui/guiButtons.png";
-    this.mc.renderEngine.bindTexture(tex);
+    AWTextureManager.bindTexture(tex);
     this.drawTexturedModalRect(guiLeft+renderPosX, guiTop+renderPosY, 152, 120, 18, 18);    
     }  
   if(fakeStack!=null)

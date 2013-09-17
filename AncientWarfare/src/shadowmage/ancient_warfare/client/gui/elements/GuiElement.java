@@ -21,22 +21,16 @@
 package shadowmage.ancient_warfare.client.gui.elements;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.client.render.AWTextureManager;
 
 public abstract class GuiElement extends Gui implements IGuiElement
 {
@@ -240,7 +234,7 @@ protected void drawQuadedTexture(int x, int y, int w, int h, int tw, int th, Str
   int halfH = h/2;  
   int u1 = u + tw - halfW;
   int v1 = v + th - halfH;
-  Minecraft.getMinecraft().renderEngine.bindTexture(tex);
+  AWTextureManager.bindTexture(tex);
   GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
   this.drawTexturedModalRect(x, y, u, v, halfW, halfH);
   this.drawTexturedModalRect(x + halfW, y, u1, v, halfW, halfH);

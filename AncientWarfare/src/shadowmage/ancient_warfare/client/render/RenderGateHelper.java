@@ -52,7 +52,7 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
     float percent = ((float)gate.hurtAnimationTicks / 20.f);
     GL11.glColor4f(1.f, 1.f-percent, 1.f-percent, 1.f);
     }
-  mc.renderEngine.bindTexture(entity.getTexture());
+  AWTextureManager.bindTexture(entity.getTexture());
   GL11.glTranslated(d0, d1, d2);
   GL11.glRotatef(f, 0, 1, 0);
   GL11.glScalef(-1, -1, 1);  

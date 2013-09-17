@@ -77,7 +77,7 @@ public void doRender(Entity var1, double x, double y, double z, float yaw, float
     float percent = ((float)vehicle.hitAnimationTicks / 20.f);
     GL11.glColor4f(1.f, 1.f-percent, 1.f-percent, 1.f);
     }
-  Minecraft.getMinecraft().renderEngine.bindTexture(var1.getTexture());
+  AWTextureManager.bindTexture(var1.getTexture());
   RenderVehicleBase render = RenderRegistry.instance().getRenderForVehicle(vehicle.vehicleType.getGlobalVehicleType());
   render.renderVehicle(vehicle, x, y, z, yaw, tick);
   AWRenderHelper.instance().setTeamRenderColor(vehicle.teamNum);
@@ -152,7 +152,7 @@ public static void renderVehicleModel(int typeNum, int level)
     {
     GL11.glPushMatrix();
     GL11.glScalef(-1, -1, 1);    
-    Minecraft.getMinecraft().renderEngine.bindTexture(type.getTextureForMaterialLevel(level));    
+    AWTextureManager.bindTexture(type.getTextureForMaterialLevel(level));    
     model.render(null, 0, 0, 0, 0, 0, 0.0625f);
     model.renderFlag();
     GL11.glPopMatrix();

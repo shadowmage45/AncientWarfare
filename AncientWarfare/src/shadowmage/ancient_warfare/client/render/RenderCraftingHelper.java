@@ -63,7 +63,7 @@ public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, doub
   GL11.glRotatef(-90 * BlockTools.getTurnsForRender(craft.getOrientation()), 0, 1, 0);
   GL11.glScalef(-1, -1, 1);
   ModelTEBase model = RenderRegistry.instance().getTEModel(craft.getModelID());
-  Minecraft.getMinecraft().renderEngine.bindTexture(RenderRegistry.instance().getTEModelTexture(craft.getModelID()));
+  AWTextureManager.bindTexture(RenderRegistry.instance().getTEModelTexture(craft.getModelID()));
   model.renderModel(craft);
   GL11.glPopMatrix();
   }
@@ -88,7 +88,7 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   GL11.glTranslatef(-0.5f, 0.0f, 0.5f);
   GL11.glRotatef(270, 0, 1, 0);
   ModelTEBase model = RenderRegistry.instance().getTEModel(item.getItemDamage());
-  Minecraft.getMinecraft().renderEngine.bindTexture(RenderRegistry.instance().getTEModelTexture(item.getItemDamage()));
+  AWTextureManager.bindTexture(RenderRegistry.instance().getTEModelTexture(item.getItemDamage()));
   model.renderModel();
   GL11.glPopMatrix();
   }

@@ -28,7 +28,6 @@ import org.lwjgl.opengl.GL12;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
-import shadowmage.ancient_warfare.client.gui.elements.GuiFakeSlot;
 import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollBarSimple;
@@ -38,6 +37,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElementCallback;
 import shadowmage.ancient_warfare.client.render.RenderTools;
+import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.interfaces.IContainerGuiCallback;
@@ -403,7 +403,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   if(this.inventorySlots.inventorySlots.size()>0)
     {
     tex = Config.texturePath+"gui/guiButtons.png";
-    this.mc.renderEngine.bindTexture(tex);
+    AWTextureManager.bindTexture(tex);
     for(Object ob : this.inventorySlots.inventorySlots)    
       {      
       Slot slot = (Slot)ob;
@@ -632,7 +632,7 @@ protected boolean isMouseInAdjustedArea(int slotX, int slotY, int slotWidth, int
 public void render50pxStatusBar(int x, int y, int length)
   { 
   GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-  this.mc.renderEngine.bindTexture("/Catapult_Mod/gui/statusBar.png");
+  AWTextureManager.bindTexture("/Catapult_Mod/gui/statusBar.png");
   this.drawTexturedModalRect(guiLeft+x, guiTop+y, 0, 0, length, 10);
   }
 

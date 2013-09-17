@@ -20,14 +20,15 @@
  */
 package shadowmage.ancient_warfare.client.render.civic;
 
-import org.lwjgl.opengl.GL11;
-
-import shadowmage.ancient_warfare.common.block.BlockLoader;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
+import org.lwjgl.opengl.GL11;
+
+import shadowmage.ancient_warfare.client.render.AWTextureManager;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 
 public class CivicItemRenderer implements IItemRenderer
 {
@@ -69,7 +70,7 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     }
   RenderBlocks render = (RenderBlocks)data[0];
   int blockNum = item.getItemDamage()/16;
-  Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
+  AWTextureManager.bindTexture("/terrain.png");
   Block blk = null;
   switch(blockNum)
   {
