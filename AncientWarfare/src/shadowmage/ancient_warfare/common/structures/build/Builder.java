@@ -171,7 +171,7 @@ public void setWorld(World world)
   this.world = world;
   if(world!=null)
     {
-    this.dimension = world.getWorldInfo().getDimension();
+    this.dimension = this.world.provider.dimensionId;
     }
   }
 
@@ -845,7 +845,7 @@ protected void handleNamedSpawner(World world, int x, int y, int z, String name)
   TileEntityMobSpawner ent = (TileEntityMobSpawner) world.getBlockTileEntity(x, y, z);  
   if(ent!=null)
     {
-    ent.func_98049_a().setMobID(name);//t.setMobID(name);
+    ent.getSpawnerLogic().setMobID(name);//t.setMobID(name);
     }
   }
 
@@ -1090,7 +1090,7 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("z", currentZ);
   tag.setInteger("p", currentPriority);
   tag.setInteger("mP", maxPriority);
-  tag.setInteger("dim", this.world.getWorldInfo().getDimension());
+  tag.setInteger("dim", this.world.provider.dimensionId);
   tag.setInteger("bX", this.buildPos.x);
   tag.setInteger("bY", this.buildPos.y);
   tag.setInteger("bZ", this.buildPos.z);

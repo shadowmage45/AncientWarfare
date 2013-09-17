@@ -30,6 +30,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
@@ -229,7 +230,7 @@ public String getDisplayName()
 @Override
 public String getLocalizedName()
   {
-  return StringTranslate.getInstance().translateKey(name);
+  return StatCollector.translateToLocal(name);
   }
 
 @Override
@@ -241,7 +242,7 @@ public String getDisplayTooltip()
 @Override
 public String getLocalizedTooltip()
   {
-  return StringTranslate.getInstance().translateKey(tooltip);
+  return StatCollector.translateToLocal(tooltip);
   }
 
 @Override

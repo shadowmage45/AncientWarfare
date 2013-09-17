@@ -154,7 +154,7 @@ public boolean attemptPlacementSurface(World world, int x, int y, int z, int fac
 public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {  
   if(world.isRemote){return;}
-  int dim =world.getWorldInfo().getDimension();
+  int dim = world.provider.dimensionId;
   if(!WorldGenStructureManager.instance().isValidDimension(dim))
     {
     Config.logDebug("invalid dimension for generation");
@@ -415,7 +415,7 @@ public void addStructureMapForDimension(int dim, WorldGenStructureMap map)
  */
 private boolean checkBBCollisions(World world, ProcessedStructure struct, BlockPosition hit, int face, int chunkX, int chunkZ)
   {
-  int dim = world.getWorldInfo().getDimension();
+  int dim = world.provider.dimensionId;
   if(!dimensionStructures.containsKey(dim))
     {
     return false;

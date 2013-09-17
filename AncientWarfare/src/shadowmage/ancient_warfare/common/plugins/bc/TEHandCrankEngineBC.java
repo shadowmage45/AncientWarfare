@@ -26,16 +26,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
-import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.machine.TEHandCrankEngine;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
-import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerFramework;
-import buildcraft.api.power.PowerProvider;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.ISolidSideTile;
 

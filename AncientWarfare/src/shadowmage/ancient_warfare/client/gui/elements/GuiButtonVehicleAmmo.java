@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.client.gui.elements;
 
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -49,7 +50,7 @@ public GuiButtonVehicleAmmo(int elementNum, IGuiElementCallback parent, int x, i
   this.vehicle = vehicle;
   if(ammo!=null)
     {
-    this.displayString = StringTranslate.getInstance().translateKey(ammo.getDisplayName());
+    this.displayString = StatCollector.translateToLocal(ammo.getDisplayName());
     }
   this.updateRenderPos(x, y);
   this.displayString =  this.displayString.length() > 30 ? this.displayString.substring(0, 30) : this.displayString;

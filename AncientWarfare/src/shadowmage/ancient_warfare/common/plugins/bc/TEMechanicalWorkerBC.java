@@ -22,59 +22,38 @@ package shadowmage.ancient_warfare.common.plugins.bc;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.machine.TEMechanicalWorker;
-import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerFramework;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
+import buildcraft.api.power.PowerHandler.Type;
 
 public class TEMechanicalWorkerBC extends TEMechanicalWorker implements IPowerReceptor
 {
 
-IPowerProvider provider;
+PowerHandler provider;
 /**
  * 
  */
 public TEMechanicalWorkerBC()
   {
-  provider = PowerFramework.currentFramework.createPowerProvider();
-  this.canUpdate = true;  
-  this.initPowerProvider();
-  }
-
-private void initPowerProvider() 
-  {
-  provider.configure(20, 25, 25, 70, 210);
+  provider = new PowerHandler(this, Type.MACHINE);
   provider.configurePowerPerdition(1, 100);
+  provider.configure(2, 25, 70, 210);
+  this.canUpdate = true;
   }
 
-@Override
-public void setPowerProvider(IPowerProvider provider)
-  {
-  this.provider = provider;
-  }
-
-@Override
-public IPowerProvider getPowerProvider()
-  {
-  return this.provider;
-  }
-
-@Override
-public void doWork()
-  {
-  // TODO Auto-generated method stub  
-  }
-
-@Override
-public int powerRequest(ForgeDirection from)
-  {
-  IPowerProvider p = getPowerProvider();
-  float needed = p.getMaxEnergyStored() - p.getEnergyStored();
-  return (int) Math.ceil(Math.min(p.getMaxEnergyReceived(), needed));  
-  }
+//@Override
+//public int powerRequest(ForgeDirection from)
+//  {
+//  IPowerProvider p = getPowerProvider();
+//  float needed = p.getMaxEnergyStored() - p.getEnergyStored();
+//  return (int) Math.ceil(Math.min(p.getMaxEnergyReceived(), needed));  
+//  }
 
 @Override
 public void updateEntity()
@@ -134,5 +113,22 @@ public void writeToNBT(NBTTagCompound tag)
     NBTTagCompound powerTag = tag.getCompoundTag("power");
     this.provider.readFromNBT(powerTag);
     }
+  }
+
+@Override
+public PowerReceiver getPowerReceiver(ForgeDirection side)
+  {
+  return provider.getPowerReceiver();
+  }
+
+@Override
+public void doWork(PowerHandler workProvider)
+  {  
+  }
+
+@Override
+public World getWorld()
+  {
+  return worldObj;
   }
 }

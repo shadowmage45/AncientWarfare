@@ -116,7 +116,7 @@ public void onEntitySpawn(EntityJoinWorldEvent evt)
     EntityMob zomb = (EntityMob)evt.entity;
     float val = ObfuscationReflectionHelper.getPrivateValue(EntityLiving.class, zomb, "moveSpeed", "field_70697_bw");    
     zomb.tasks.addTask(3, new EntityAIAttackOnCollide(zomb, NpcBase.class, val, true));
-    zomb.targetTasks.addTask(2, new EntityAINearestAttackableTarget(zomb, NpcBase.class, 16.0F, 0, true));
+    zomb.targetTasks.addTask(2, new EntityAINearestAttackableTarget(zomb, NpcBase.class, 0, true));
     }
   }
 

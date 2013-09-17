@@ -32,6 +32,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 
 import org.lwjgl.input.Keyboard;
@@ -403,7 +404,7 @@ protected void addRecipeButtons(List<ResourceListRecipe> recipes, Comparator sor
   int num = 100;
   for(ResourceListRecipe recipe : recipes)
     {      
-    button = new GuiButtonSimple(num, area, buttonWidth, 16, StringTranslate.getInstance().translateKey(recipe.getLocalizedDisplayName()));
+    button = new GuiButtonSimple(num, area, buttonWidth, 16, StatCollector.translateToLocal(recipe.getLocalizedDisplayName()));
     button.updateRenderPos(x, y);
     button.setTooltip(tooltip);
     area.addGuiElement(button);

@@ -344,8 +344,8 @@ public Packet getDescriptionPacket()
 public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
   {
   super.onDataPacket(net, pkt);
-  readDescriptionPacket(pkt.customParam1);
-  this.orientation = pkt.customParam1.getByte("face");
+  readDescriptionPacket(pkt.data);
+  this.orientation = pkt.data.getByte("face");
   }
 
 /************************************************INVENTORY METHODS*************************************************/
@@ -494,7 +494,7 @@ public boolean canExtractItem(int slot, ItemStack stack, int side)
   }
 
 @Override
-public boolean isStackValidForSlot(int i, ItemStack itemstack)
+public boolean isItemValidForSlot(int i, ItemStack itemstack)
   {
   if(bookSlot!=null && bookSlot.length>0 && i == bookSlot[0])
     {

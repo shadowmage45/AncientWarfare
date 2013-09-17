@@ -71,7 +71,7 @@ public void onBlockClicked(EntityPlayer player)
   {
   if(this.owner!=null && this.worldObj!=null && !this.worldObj.isRemote)
     {
-    this.owner.interact(player);
+    this.owner.interactFirst(player);
     }
   }
 

@@ -271,7 +271,7 @@ public static BlockPosition getBlockClickedOn(EntityPlayer player, World world, 
   float vectorZ = var14 * var16;
   double reachLength = 5.0D;
   Vec3 testVectorFar = testVector.addVector(vectorX * reachLength, vectorY * reachLength, vectorZ * reachLength);
-  MovingObjectPosition testHitPosition = world.rayTraceBlocks_do(testVector, testVectorFar, true);
+  MovingObjectPosition testHitPosition = world.clip(testVector, testVectorFar, true);
 
   /**
    * if nothing was hit, return null

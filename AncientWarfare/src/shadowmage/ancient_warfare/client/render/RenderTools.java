@@ -41,27 +41,6 @@ public class RenderTools
 {
 
 static float zLevel = 0;
-/** Missing texture image */
-static TextureMap texMap = new TextureMap(1, "items", "textures/custom_icons/", new BufferedImage(64, 64, 2));
-
-private static Map<String, Icon> iconMap = new HashMap<String, Icon>();
-
-public static Icon registerIcon(String tex)
-  {
-  Icon ico = texMap.registerIcon(tex);
-  iconMap.put(tex, ico);
-  return ico;
-  }
-
-public static Icon getIcon(String tex)
-  {
-  Icon ico = iconMap.get(tex);
-  if(ico==null)
-    {
-    ico = registerIcon(tex);
-    }
-  return ico;
-  }
 
 /**
  * renders the given icon texture, of given size, at the current render coordinates

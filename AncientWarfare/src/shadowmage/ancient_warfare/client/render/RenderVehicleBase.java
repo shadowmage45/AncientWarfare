@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.client.render;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public abstract class RenderVehicleBase extends Render
@@ -37,4 +38,10 @@ public abstract void renderVehicle(VehicleBase vehicle, double x, double y, doub
 
 public abstract void renderVehicleFlag();
 
+
+@Override
+protected ResourceLocation getEntityTexture(Entity entity)
+  {
+  return AWTextureManager.getResource(((VehicleBase)entity).getTexture());
+  }
 }

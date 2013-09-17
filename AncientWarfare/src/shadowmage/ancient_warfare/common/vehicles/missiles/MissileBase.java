@@ -499,7 +499,6 @@ public void setPositionAndRotation2(double par1, double par3, double par5, float
   this.setPosition(par1, par3, par5); 
   }
 
-@Override
 public String getTexture()
   {
   return ammoType.getModelTexture();

@@ -20,10 +20,15 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import java.util.HashMap;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 
 public class AWTextureManager
 {
+
+private static HashMap<String, ResourceLocation> textures = new HashMap<String, ResourceLocation>();
 
 /**
  * 
@@ -35,7 +40,17 @@ public AWTextureManager()
 
 public static void bindTexture(String texture)
   {
-  Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+  Minecraft.getMinecraft().renderEngine.bindTexture(getResource(texture));
+  }
+
+public static ResourceLocation getResource(String texture)
+  {
+  ResourceLocation resource = textures.get(texture);
+  if(resource==null)
+    {
+    resource = new ResourceLocation("ancientwarfare", texture);
+    }
+  return resource;
   }
 
 }

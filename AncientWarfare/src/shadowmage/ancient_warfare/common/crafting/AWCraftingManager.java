@@ -32,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
@@ -197,7 +198,7 @@ public List<ResourceListRecipe> getRecipesContaining(PlayerEntry entry, String t
       list = this.recipesByType.get(t);
       for(ResourceListRecipe recipe : list)
         {
-        name = StringTranslate.getInstance().translateKey(recipe.displayName);
+        name = StatCollector.translateToLocal(recipe.displayName);
         if(name.toLowerCase().contains(text.toLowerCase()) && (creative || Config.disableResearch || recipe.canBeCraftedBy(entry)))
           {
           recipes.add(recipe);

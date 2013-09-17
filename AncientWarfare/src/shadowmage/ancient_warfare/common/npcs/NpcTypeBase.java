@@ -28,6 +28,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
@@ -197,13 +198,13 @@ public String getDisplayName(int level)
 @Override
 public String getLocalizedName(int level)
   {
-  return StringTranslate.getInstance().translateKey(this.getLevelName(level));
+  return StatCollector.translateToLocal(this.getLevelName(level));
   }
 
 @Override
 public String getLocalizedTooltip(int level)
   {
-  return StringTranslate.getInstance().translateKey(this.getDisplayTooltip(level));
+  return StatCollector.translateToLocal(this.getDisplayTooltip(level));
   }
 
 

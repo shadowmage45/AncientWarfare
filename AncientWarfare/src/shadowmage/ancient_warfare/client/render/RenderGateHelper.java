@@ -25,6 +25,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 
@@ -52,13 +53,19 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
     float percent = ((float)gate.hurtAnimationTicks / 20.f);
     GL11.glColor4f(1.f, 1.f-percent, 1.f-percent, 1.f);
     }
-  AWTextureManager.bindTexture(entity.getTexture());
+  AWTextureManager.bindTexture(((EntityGate)entity).getTexture());
   GL11.glTranslated(d0, d1, d2);
   GL11.glRotatef(f, 0, 1, 0);
   GL11.glScalef(-1, -1, 1);  
   RenderRegistry.instance().getGateRender(typeNum).doRender(entity, d0, d1, d2, f, f1);
   GL11.glColor4f(1.f, 1.f, 1.f, 1.f);
   GL11.glPopMatrix();
+  }
+
+@Override
+protected ResourceLocation getEntityTexture(Entity entity)
+  {
+  return AWTextureManager.getResource(((EntityGate)entity).getTexture());
   }
 
 

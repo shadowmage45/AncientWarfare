@@ -28,6 +28,7 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
@@ -307,7 +308,7 @@ public float getHeight()
 @Override
 public String getLocalizedName()
   {
-  return StringTranslate.getInstance().translateKey(this.getDisplayName());
+  return StatCollector.translateToLocal(this.getDisplayName());
   }
 
 @Override

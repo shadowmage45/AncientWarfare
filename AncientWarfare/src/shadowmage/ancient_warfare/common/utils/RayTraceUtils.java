@@ -79,7 +79,7 @@ public static MovingObjectPosition tracePath(World world, float x, float y, floa
   float maxZ = z > tz ? z : tz;
   AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(minX, minY, minZ, maxX, maxY, maxZ).expand(borderSize, borderSize, borderSize);
   List<Entity> allEntities = world.getEntitiesWithinAABBExcludingEntity(null, bb);  
-  MovingObjectPosition blockHit = world.rayTraceBlocks(startVec, endVec);
+  MovingObjectPosition blockHit = world.clip(startVec, endVec);
   startVec = Vec3.fakePool.getVecFromPool(x, y, z);
   endVec = Vec3.fakePool.getVecFromPool(tx, ty, tz);
   float maxDistance = (float) endVec.distanceTo(startVec);

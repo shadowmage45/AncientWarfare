@@ -181,9 +181,9 @@ public Packet getDescriptionPacket()
 @Override
 public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
   {
-  if(pkt.customParam1.hasKey("face"))
+  if(pkt.data.hasKey("face"))
     {
-    this.facingDirection = ForgeDirection.getOrientation(pkt.customParam1.getByte("face"));
+    this.facingDirection = ForgeDirection.getOrientation(pkt.data.getByte("face"));
     }
   super.onDataPacket(net, pkt);
   }

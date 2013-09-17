@@ -32,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
@@ -173,7 +174,7 @@ public String getDisplayName()
 
 public String getLocalizedDisplayName()
   {
-  return StringTranslate.getInstance().translateKey(getDisplayName());
+  return StatCollector.translateToLocal(getDisplayName());
   }
 
 public ResourceListRecipe setDisplayName(String name)

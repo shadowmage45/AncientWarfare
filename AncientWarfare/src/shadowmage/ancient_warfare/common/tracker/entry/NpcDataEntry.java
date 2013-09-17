@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.tracker.entry;
 import java.util.UUID;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -39,7 +40,7 @@ UUID entityID;
 int npcType;
 int npcRank;
 BlockPosition lastKnownPosition = new BlockPosition(0,-1,0);
-int lastKnownHealth = 20;
+float lastKnownHealth = 20;
 boolean dead = false;
 String deathCause = null;
 
@@ -79,7 +80,7 @@ public NBTTagCompound getNBTTag()
   tag.setLong("idmsb", entityID.getMostSignificantBits());
   tag.setLong("idlsb", entityID.getLeastSignificantBits());
   tag.setCompoundTag("pos", lastKnownPosition.writeToNBT(new NBTTagCompound()));
-  tag.setInteger("health", lastKnownHealth);
+  tag.setFloat("healthF", lastKnownHealth);
   tag.setInteger("type", npcType);
   tag.setInteger("rank", npcRank);
   tag.setBoolean("dead", this.dead);
@@ -94,7 +95,7 @@ public NBTTagCompound getNBTTag()
 public void readFromNBT(NBTTagCompound tag)
   {
   this.lastKnownPosition = new BlockPosition(tag.getCompoundTag("pos"));
-  this.lastKnownHealth = tag.getInteger("health");
+  this.lastKnownHealth = tag.getFloat("healthF");
   this.npcRank = tag.getInteger("rank");
   this.npcType = tag.getInteger("type");
   this.entityID = new UUID(tag.getLong("idmsb"), tag.getLong("idlsb"));
@@ -115,9 +116,9 @@ public String getPrimaryDescription()
   {
   if(deathCause!=null)
     {
-    return String.format("%s  Rank: %s  Killed By: %s ", StringTranslate.getInstance().translateKey(NpcTypeBase.getNpcType(npcType).getDisplayName(npcRank)), npcRank, deathCause);
+    return String.format("%s  Rank: %s  Killed By: %s ", StatCollector.translateToLocal(NpcTypeBase.getNpcType(npcType).getDisplayName(npcRank)), npcRank, deathCause);
     }
-  return String.format("%s  Rank: %s, Health: %s", StringTranslate.getInstance().translateKey(NpcTypeBase.getNpcType(npcType).getDisplayName(npcRank)), npcRank, lastKnownHealth);
+  return String.format("%s  Rank: %s, Health: %s", StatCollector.translateToLocal(NpcTypeBase.getNpcType(npcType).getDisplayName(npcRank)), npcRank, lastKnownHealth);
   }
 
 public String getLocation()

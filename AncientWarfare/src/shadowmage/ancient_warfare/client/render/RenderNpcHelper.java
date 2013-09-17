@@ -20,15 +20,17 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.StringTranslate;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.StatCollector;
+
+import org.lwjgl.opengl.GL11;
+
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -53,7 +55,7 @@ public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double pa
   if(Settings.getRenderNpcNameplates())
     {
     NpcBase npc = (NpcBase) par1EntityLiving;
-    String displayLabel = StringTranslate.getInstance().translateKey(npc.npcType.getLevelName(npc.rank))+" "+npc.getHealth()+"/"+npc.getMaxHealth();
+    String displayLabel = StatCollector.translateToLocal(npc.npcType.getLevelName(npc.rank))+" "+npc.getHealth()+"/"+npc.getMaxHealth();
     this.renderLivingLabel(par1EntityLiving, displayLabel, par2, par4, par6, 64);
     }
   }
@@ -62,7 +64,7 @@ public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double pa
  * shamelessly copied to enable color-differentiation per-entity
  */
 @Override
-protected void renderLivingLabel(EntityLiving par1EntityLiving, String par2Str, double renderX, double renderY, double renderZ, int renderDistance)
+protected void renderLivingLabel(EntityLivingBase par1EntityLiving, String par2Str, double renderX, double renderY, double renderZ, int renderDistance)
   {
   double var10 = par1EntityLiving.getDistanceSqToEntity(this.renderManager.livingPlayer);  
   if (var10 <= (double)(renderDistance * renderDistance))

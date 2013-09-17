@@ -571,7 +571,7 @@ public void dismountVehicle()
     Entity et = ridingEntity;
     this.ridingEntity = null;
     et.riddenByEntity = null;
-    this.unmountEntity(et);
+    this.dismountEntity(et);
     VehicleBase vehicle = (VehicleBase)et;
     vehicle.moveHelper.clearInputFromDismount();    
     }
@@ -596,7 +596,6 @@ public int getMaxHealth()
   return this.npcType== null? 20 : this.npcType.getMaxHealth(rank);
   }
 
-@Override
 public String getTexture()
   {
   return this.npcType.getDisplayTexture(rank);
@@ -637,7 +636,7 @@ public void onUpdate()
   npcTicksExisted++;
   if(this.ridingEntity!=null && this.ridingEntity.riddenByEntity!=this)
     {
-    this.unmountEntity(ridingEntity);
+    this.dismountEntity(ridingEntity);
     this.ridingEntity=null;
     }
   if(!worldObj.isRemote && (npcTicksExisted + this.entityId) % Config.npcAITicks == 0)
@@ -926,7 +925,7 @@ public void handlePacketUpdate(NBTTagCompound tag)
   }
 
 @Override
-public boolean attackEntityFrom(DamageSource damageSource, int damageAmount)
+public boolean attackEntityFrom(DamageSource damageSource, float damageAmount)
   {  
   if(wayNav.getCommander()!=null)
     {

@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.client.render.vehicle;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelAirplane;

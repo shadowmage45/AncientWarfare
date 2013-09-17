@@ -33,6 +33,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 
 public class AWItemBlockBase extends ItemBlock
@@ -109,7 +110,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   }
 
 @Override
-public String getLocalizedName(ItemStack par1ItemStack)
+public String getItemStackDisplayName(ItemStack par1ItemStack)
   {
   return getItemDisplayName(par1ItemStack);
   }
@@ -142,7 +143,7 @@ public String getItemDisplayName(ItemStack par1ItemStack)
   Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
   if(d!=null)
     {
-    return StringTranslate.getInstance().translateKey(d.getDisplayName(par1ItemStack.getItemDamage()));
+    return StatCollector.translateToLocal(d.getDisplayName(par1ItemStack.getItemDamage()));
     }
   return "Unregistered Item : "+itemID+":"+par1ItemStack.getItemDamage();
   }

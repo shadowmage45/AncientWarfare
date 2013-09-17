@@ -455,7 +455,7 @@ public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int[] s
     {
     slot = slotIndices[i];
     fromSlot = inv.getStackInSlot(slot);
-    if(fromSlot==null || !inv.isStackValidForSlot(slot, toMerge))//skip emtpy slots this pass, we're trying to merge partial stacks first
+    if(fromSlot==null || !inv.isItemValidForSlot(slot, toMerge))//skip emtpy slots this pass, we're trying to merge partial stacks first
       {
       continue;
       }
@@ -475,7 +475,7 @@ public static ItemStack tryMergeStack(IInventory inv, ItemStack toMerge, int[] s
     {
     slot = slotIndices[i];
     fromSlot = inv.getStackInSlot(slot);
-    if(fromSlot==null && inv.isStackValidForSlot(slot, toMerge))//place in slot
+    if(fromSlot==null && inv.isItemValidForSlot(slot, toMerge))//place in slot
       {      
       inv.setInventorySlotContents(slot, toMerge);
       toMerge = null;
@@ -498,7 +498,7 @@ public static boolean canHoldItem(IInventory inv, ItemStack filter, int qty, int
   lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
   for(int i = firstSlot ; i <= lastSlot; i ++)
     {
-    if(!inv.isStackValidForSlot(i, filter)){continue;}
+    if(!inv.isItemValidForSlot(i, filter)){continue;}
     fromSlot = inv.getStackInSlot(i);
     if(fromSlot==null)//emtpy slot, decr by entire stack size
       {
@@ -528,7 +528,7 @@ public static boolean canHoldItem(IInventory inv, ItemStack filter, int qty, int
   for(int i = 0 ; i < slots.length; i ++)
     {
     slot = slots[i];
-    if(!inv.isStackValidForSlot(slot, filter)){continue;}
+    if(!inv.isItemValidForSlot(slot, filter)){continue;}
     fromSlot = inv.getStackInSlot(slot);
     if(fromSlot==null)//emtpy slot, decr by entire stack size
       {

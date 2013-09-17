@@ -28,6 +28,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringTranslate;
 import net.minecraftforge.client.IItemRenderer;
 
@@ -77,7 +78,7 @@ public void doRender(Entity var1, double x, double y, double z, float yaw, float
     float percent = ((float)vehicle.hitAnimationTicks / 20.f);
     GL11.glColor4f(1.f, 1.f-percent, 1.f-percent, 1.f);
     }
-  AWTextureManager.bindTexture(var1.getTexture());
+  AWTextureManager.bindTexture(vehicle.getTexture());
   RenderVehicleBase render = RenderRegistry.instance().getRenderForVehicle(vehicle.vehicleType.getGlobalVehicleType());
   render.renderVehicle(vehicle, x, y, z, yaw, tick);
   AWRenderHelper.instance().setTeamRenderColor(vehicle.teamNum);
@@ -191,6 +192,12 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     }
   renderVehicleModel(item.getItemDamage(), ItemVehicleSpawner.getVehicleLevelForStack(item));
   GL11.glPopMatrix();
+  }
+
+@Override
+protected ResourceLocation getEntityTexture(Entity entity)
+  {
+  return AWTextureManager.getResource(((VehicleBase)entity).getTexture());
   }
 
 }

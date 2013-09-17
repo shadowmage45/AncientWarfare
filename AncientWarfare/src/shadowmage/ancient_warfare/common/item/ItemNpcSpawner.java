@@ -29,6 +29,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -130,7 +131,7 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
       NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
       int i = stack.getItemDamage();
       int rank = tag.getInteger("lev");
-      par3List.add(StringTranslate.getInstance().translateKey(NpcTypeBase.getNpcType(i).getDisplayTooltip(rank)));
+      par3List.add(StatCollector.translateToLocal(NpcTypeBase.getNpcType(i).getDisplayTooltip(rank)));
       if(tag.hasKey("health"))
         {
         par3List.add("Health: " + tag.getInteger("health"));
@@ -167,7 +168,7 @@ public String getItemDisplayName(ItemStack par1ItemStack)
     }
   INpcType t = NpcTypeBase.getNpcType(type);
   String name = t.getDisplayName(rank);  
-  return StringTranslate.getInstance().translateKey(name);
+  return StatCollector.translateToLocal(name);
   }
 
 

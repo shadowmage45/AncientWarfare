@@ -22,10 +22,8 @@ package shadowmage.ancient_warfare.common.vehicles.missiles;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.StatCollector;
 
 public class DamageType extends DamageSource
 {
@@ -74,9 +72,9 @@ public static DamageSource causeEntityMissileDamage(Entity attacker , boolean fi
   }
 
 @Override
-public String getDeathMessage(EntityLiving par1EntityLiving)
+public String getDeathMessage(EntityLivingBase par1EntityLiving)
   {
-  EntityLiving entityliving1 = par1EntityLiving.func_94060_bK();
+  EntityLivingBase entityliving1 = par1EntityLiving.func_94060_bK();
   String name = entityliving1==null? "No Entity" : entityliving1.getEntityName();
   return name + " was killed by Missile Damage";
   }

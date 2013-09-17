@@ -214,7 +214,7 @@ public void writeToNBT(NBTTagCompound tag)
 public Packet getDescriptionPacket()
   {
   Packet132TileEntityData packet = (Packet132TileEntityData) super.getDescriptionPacket();
-  packet.customParam1.setInteger("warehouseSize", this.storageSize);
+  packet.data.setInteger("warehouseSize", this.storageSize);
   return packet;
   }
 

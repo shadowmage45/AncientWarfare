@@ -840,7 +840,7 @@ public void packVehicle()
   }
 
 @Override
-public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
+public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
   {  
   if(this.worldObj.isRemote)
     {
@@ -891,7 +891,6 @@ public void applyEntityCollision(Entity par1Entity)
     }
   }
 
-@Override
 public String getTexture()
   {
   return vehicleType.getTextureForMaterialLevel(vehicleMaterialLevel);
@@ -917,7 +916,7 @@ public void updateRiderPosition()
   }
 
 @Override
-public boolean interact(EntityPlayer player)
+public boolean interactFirst(EntityPlayer player)
   {  
   if(this.isSettingUp)
     {
@@ -1252,8 +1251,8 @@ public void closeChest()
   }
 
 @Override
-public boolean isStackValidForSlot(int i, ItemStack itemstack)
+public boolean isItemValidForSlot(int i, ItemStack itemstack)
   {
-  return inventory.storageInventory.isStackValidForSlot(i, itemstack);
+  return inventory.storageInventory.isItemValidForSlot(i, itemstack);
   }
 }

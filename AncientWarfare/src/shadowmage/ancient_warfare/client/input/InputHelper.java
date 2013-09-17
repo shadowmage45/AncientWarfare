@@ -180,7 +180,7 @@ public void onKeyUp(Keybind kb)
 public void onKeyPressed(Keybind kb)
   {
   this.changedKeys.add(kb);
-  if(mc.currentScreen==null && mc.theWorld != null && mc.thePlayer!=null && !mc.isGamePaused)
+  if(mc.currentScreen==null && mc.theWorld != null && mc.thePlayer!=null)
     {
     if(kb==this.mouseAim )
       {
@@ -214,7 +214,7 @@ List<Keybind> changedKeys = new ArrayList<Keybind>();
 @Override
 public void onTickEnd()
   {
-  if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && !mc.isGamePaused && mc.currentScreen==null)
+  if(mc.thePlayer!=null && mc.thePlayer.ridingEntity instanceof VehicleBase && mc.currentScreen==null)
     {
     VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
     if(vehicle!=null)
@@ -396,7 +396,7 @@ public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float
   Vec3 playerPos = player.getPosition(0);
   Vec3 lookVector = player.getLook(0);
   Vec3 endVector = playerPos.addVector(lookVector.xCoord * range, lookVector.yCoord * range, lookVector.zCoord * range);
-  MovingObjectPosition blockHit = player.worldObj.rayTraceBlocks(playerPos, endVector);
+  MovingObjectPosition blockHit = player.worldObj.clip(playerPos, endVector);
   
   /**
    * reseat vectors, as they get messed with in the rayTrace...

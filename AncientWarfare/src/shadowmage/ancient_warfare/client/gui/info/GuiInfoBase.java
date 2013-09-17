@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 
 import org.lwjgl.input.Keyboard;
@@ -78,7 +79,7 @@ public GuiInfoBase(GuiContainerAdvanced parent, ResourceListRecipe recipe)
     String s = d.getDescription(this.recipe.getResult().getItemDamage());
     if(s!=null && !s.equals(""))
       {
-      this.detailText.add(StringTranslate.getInstance().translateKey(s));
+      this.detailText.add(StatCollector.translateToLocal(s));
       this.detailText.add("");
       }
     }

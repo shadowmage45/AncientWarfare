@@ -319,13 +319,13 @@ public List<NBTTagCompound> getInitData()
   }
 
 @Override
-public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
+public void onContainerClosed(EntityPlayer par1EntityPlayer)
   {
   if(this.serverStructure!=null)
     {
     this.serverStructure.removeEditor(this.player.getEntityName());
     }
-  super.onCraftGuiClosed(par1EntityPlayer);
+  super.onContainerClosed(par1EntityPlayer);
   }
 
 

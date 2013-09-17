@@ -28,6 +28,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
@@ -242,7 +243,7 @@ public List<String> getLocalizedDescription()
   ArrayList<String> trans = new ArrayList<String>();
   for(String s : this.getDetailedDescription())
     {
-    trans.add(StringTranslate.getInstance().translateKey(s));
+    trans.add(StatCollector.translateToLocal(s));
     }
   return trans;
   }
@@ -336,13 +337,13 @@ public ResourceListRecipe constructRecipe()
 @Override
 public String getLocalizedName()
   {
-  return StringTranslate.getInstance().translateKey(getDisplayName());
+  return StatCollector.translateToLocal(getDisplayName());
   }
 
 @Override
 public String getLocalizedTooltip()
   {
-  return StringTranslate.getInstance().translateKey(getDisplayTooltip());
+  return StatCollector.translateToLocal(getDisplayTooltip());
   }
 
 @Override

@@ -33,6 +33,7 @@ import org.lwjgl.input.Keyboard;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
@@ -318,7 +319,7 @@ protected void addQueueRecipeButtons(List<ResourceListRecipe> recipes, Comparato
   int num = 100;
   for(ResourceListRecipe recipe : recipes)
     {      
-    button = new GuiButtonSimple(num, area, buttonWidth, 16, StringTranslate.getInstance().translateKey(recipe.getLocalizedDisplayName()));
+    button = new GuiButtonSimple(num, area, buttonWidth, 16, StatCollector.translateToLocal(recipe.getLocalizedDisplayName()));
     button.updateRenderPos(x, y);
     button.setTooltip(tooltip);
     area.addGuiElement(button);
@@ -351,7 +352,7 @@ protected void addQueuedRecipeButtons()
   int num = 100;
   for(ResourceListRecipe recipe : queuedRecipes)
     {      
-    button = new GuiButtonSimple(num, area, buttonWidth, 16, StringTranslate.getInstance().translateKey(recipe.getLocalizedDisplayName()));
+    button = new GuiButtonSimple(num, area, buttonWidth, 16, StatCollector.translateToLocal(recipe.getLocalizedDisplayName()));
     button.updateRenderPos(x, y);
     button.setTooltip(tooltip);
     area2.addGuiElement(button);

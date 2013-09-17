@@ -30,6 +30,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
@@ -68,7 +69,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
         {
         for(String tip : tips)
           {
-          list.add(StringTranslate.getInstance().translateKey(tip));
+          list.add(StatCollector.translateToLocal(tip));
           }        
         }
       }     
