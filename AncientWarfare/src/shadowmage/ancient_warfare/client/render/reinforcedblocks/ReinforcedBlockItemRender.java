@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.client.render.reinforcedblocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
@@ -30,6 +29,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
@@ -66,15 +66,9 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     }
   RenderBlocks render = (RenderBlocks)data[0];
   int blockNum = item.getItemDamage()/16;
-  Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
+  AWTextureManager.bindTexture("/terrain.png");
   Block par1Block = BlockLoader.reinforced; 
-  
-  
-  
-  
-  
-//  render.renderBlockAsItem(par1Block, 0, 1.f);
-  
+    
   Description d = DescriptionRegistry2.instance().getDescriptionFor(par1Block.blockID);
   Icon ico = d.getIconFor(item.getItemDamage());
   

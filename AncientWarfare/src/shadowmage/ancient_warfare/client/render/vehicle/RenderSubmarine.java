@@ -20,11 +20,10 @@
  */
 package shadowmage.ancient_warfare.client.render.vehicle;
 
-import net.minecraft.client.Minecraft;
-
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelSubmarine;
+import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -52,11 +51,11 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z, float y
   GL11.glEnable(GL11.GL_BLEND);  
   GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
   GL11.glDepthMask(false);
-  Minecraft.getMinecraft().renderEngine.bindTexture(Config.texturePath+"models/submarine_screen.png");
+  AWTextureManager.bindTexture(Config.texturePath+"models/submarine_screen.png");
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
   GL11.glDepthMask(true);
   GL11.glDisable(GL11.GL_BLEND);
-  Minecraft.getMinecraft().renderEngine.bindTexture(Config.texturePath+veh.getTexture());
+  AWTextureManager.bindTexture(Config.texturePath+veh.getTexture());
   }
 
 

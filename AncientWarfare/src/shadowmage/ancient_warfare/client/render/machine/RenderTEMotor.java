@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.render.machine;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -30,6 +29,7 @@ import net.minecraftforge.common.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelEngine;
+import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.machine.EngineData;
 import shadowmage.ancient_warfare.common.machine.TEEngine;
@@ -45,7 +45,7 @@ public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, doub
   GL11.glPushMatrix();
   TEEngine engine = (TEEngine)tileentity;
   String tex = Config.texturePath+"models/"+engine.getTexture();
-  Minecraft.getMinecraft().renderEngine.bindTexture(tex);
+  AWTextureManager.bindTexture(tex);
   GL11.glTranslated(d0+0.5d, d1+0.5d, d2+0.5d);
   teModel.setDirection(engine.getFacing());
   teModel.setPistonPosition(engine.getPistonProgress(), f, engine.getPistonDirection());
@@ -71,7 +71,7 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   {
   GL11.glPushMatrix();
   String tex = Config.texturePath+"models/"+EngineData.getEngineTexture(item.getItemDamage());
-  Minecraft.getMinecraft().renderEngine.bindTexture(tex);
+  AWTextureManager.bindTexture(tex);
   GL11.glTranslated(0.5d, 0.5d, 0.5d);
   teModel.setDirection(ForgeDirection.UP);
   teModel.setPistonPosition(4.f, 0, (byte) 0);

@@ -73,7 +73,7 @@ public static Icon getIcon(String tex)
 public static void renderIcon(String tex, int width, int height, int x, int y)
   {
   Tessellator tess = Tessellator.instance;
-  Minecraft.getMinecraft().renderEngine.bindTexture(tex);
+  AWTextureManager.bindTexture(tex);
   int halfW = width/2;
   int halfH = height/2;
   tess.startDrawingQuads();
@@ -103,7 +103,7 @@ public static void drawQuadedTexture(int x, int y, int w, int h, int tw, int th,
   int halfH = h/2;  
   int u1 = u + tw - halfW;
   int v1 = v + th - halfH;
-  Minecraft.getMinecraft().renderEngine.bindTexture(tex);
+  AWTextureManager.bindTexture(tex);
   GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
   drawTexturedModalRect(x, y, u, v, halfW, halfH);
   drawTexturedModalRect(x + halfW, y, u1, v, halfW, halfH);
