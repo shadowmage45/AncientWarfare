@@ -43,12 +43,10 @@ import shadowmage.ancient_warfare.common.registry.entry.Description;
 
 public class CivicItemRenderer implements IItemRenderer
 {
-/**
- * 
- */
+
 public CivicItemRenderer()
   {
-  // TODO Auto-generated constructor stub
+  
   }
 
 @Override
@@ -77,35 +75,35 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   if(type==ItemRenderType.FIRST_PERSON_MAP)
     {
     return;
-    }
+    }  
   RenderBlocks render = (RenderBlocks)data[0];
   int blockNum = item.getItemDamage()/16;
-  ICivicType civType = CivicRegistry.instance().getCivicFor(item.getItemDamage()); 
+ 
   
-  //AWTextureManager.bindTexture(civType.getIconTexture()+".png");
   Block blk = null;
   switch(blockNum)
-  {
-  case 0:
-  blk = BlockLoader.civicBlock1;
-  break;
+    {
+    case 0:
+    blk = BlockLoader.civicBlock1;
+    break;
+    
+    case 1:
+    blk = BlockLoader.civicBlock2;
+    break;
+    
+    case 2:
+    blk = BlockLoader.civicBlock3;
+    break;
+    
+    case 3:
+    blk = BlockLoader.civicBlock4;
+    break;
+    
+    default:
+    blk = BlockLoader.civicBlock1;
+    break;
+    }
   
-  case 1:
-  blk = BlockLoader.civicBlock2;
-  break;
-  
-  case 2:
-  blk = BlockLoader.civicBlock3;
-  break;
-  
-  case 3:
-  blk = BlockLoader.civicBlock4;
-  break;
-  
-  default:
-  blk = BlockLoader.civicBlock1;
-  break;
-  }
   GL11.glPushMatrix();
   if(type!=ItemRenderType.ENTITY)
     {
@@ -115,48 +113,48 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   else
     {
     GL11.glScalef(0.5f, 0.5f, 0.5f);
-    }
-      
+    }    
+   
   Description d = DescriptionRegistry2.instance().getDescriptionFor(ItemLoader.civicPlacer.itemID);
-  Icon ico = d.getIconFor(civType.getGlobalID()*3);
+  Icon ico = d.getIconFor(item.getItemDamage()*3);
+ 
+  Config.logDebug(ico.getIconName());
   
   Tessellator tessellator = Tessellator.instance;
-
   blk.setBlockBoundsForItemRender();
   render.setRenderBoundsFromBlock(blk);
   GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
   GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-
+  
+  
   tessellator.startDrawingQuads();
   tessellator.setNormal(0.0F, -1.0F, 0.0F);
   render.renderFaceYNeg(blk, 0.0D, 0.0D, 0.0D, ico);
   tessellator.draw();
 
+  ico = d.getIconFor((item.getItemDamage()*3) + 1);
   tessellator.startDrawingQuads();
   tessellator.setNormal(0.0F, 1.0F, 0.0F);
   render.renderFaceYPos(blk, 0.0D, 0.0D, 0.0D, ico);
   tessellator.draw();
 
+  ico = d.getIconFor((item.getItemDamage()*3) + 2);
   tessellator.startDrawingQuads();
   tessellator.setNormal(0.0F, 0.0F, -1.0F);
   render.renderFaceZNeg(blk, 0.0D, 0.0D, 0.0D, ico);
   tessellator.draw();
-
   tessellator.startDrawingQuads();
   tessellator.setNormal(0.0F, 0.0F, 1.0F);
   render.renderFaceZPos(blk, 0.0D, 0.0D, 0.0D, ico);
   tessellator.draw();
-
   tessellator.startDrawingQuads();
   tessellator.setNormal(-1.0F, 0.0F, 0.0F);
   render.renderFaceXNeg(blk, 0.0D, 0.0D, 0.0D, ico);
   tessellator.draw();
-
   tessellator.startDrawingQuads();
   tessellator.setNormal(1.0F, 0.0F, 0.0F);
   render.renderFaceXPos(blk, 0.0D, 0.0D, 0.0D, ico);
   tessellator.draw();
-
   GL11.glTranslatef(0.5F, 0.5F, 0.5F);
   GL11.glPopMatrix();
   }
