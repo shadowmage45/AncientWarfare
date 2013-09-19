@@ -163,8 +163,7 @@ protected void entityInit()
   this.dataWatcher.addObject(28, Byte.valueOf((byte) -1));//objective
   this.dataWatcher.addObject(29, Byte.valueOf((byte) -1));//task
   this.dataWatcher.addObject(30, Byte.valueOf((byte) -1));//other/error (no food/no deposit)
-  this.dataWatcher.addObject(31, new Integer(20));//health
-  
+  this.dataWatcher.addObject(31, new Integer(20));//health  
   }
 
 @Override
@@ -697,16 +696,7 @@ public void onUpdate()
   if(actionTick>0)
     {
     actionTick--;
-    }
-//  if(this.lootCheckTicks<=0)
-//    {
-//    this.lootCheckTicks = Config.npcAITicks;
-//    this.handleLootPickup();
-//    }
-//  else
-//    {
-//    this.lootCheckTicks--;
-//    }   
+    } 
   this.updateArmSwingProgress();
   if(!this.worldObj.isRemote)
     {
