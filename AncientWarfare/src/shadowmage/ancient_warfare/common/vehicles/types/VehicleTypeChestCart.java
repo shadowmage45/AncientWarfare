@@ -29,6 +29,7 @@ import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
+import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
@@ -117,20 +118,21 @@ public ChestCartVarHelper(VehicleBase vehicle)
   super(vehicle);
   }
 
-@Override
-public boolean interact(EntityPlayer player)
-  {
-  if(vehicle.isMountable() && !player.worldObj.isRemote && player.isSneaking() && (vehicle.riddenByEntity==null || vehicle.riddenByEntity==player))
-    {
-    player.mountEntity(vehicle);
-    return true;
-    }
-  else if(!player.worldObj.isRemote && !player.isSneaking())
-    {
-    GUIHandler.instance().openGUI(GUIHandler.VEHICLE_DEBUG, player, vehicle.worldObj, vehicle.entityId, 0, 0);
-    }
-  return true;
-  }
+//@Override
+//public boolean interact(EntityPlayer player)
+//  {
+//  boolean control = PlayerTracker.instance().isControlPressed(player);
+//  if(vehicle.isMountable() && !player.worldObj.isRemote && !control && (vehicle.riddenByEntity==null || vehicle.riddenByEntity==player))
+//    {
+//    player.mountEntity(vehicle);
+//    return true;
+//    }
+//  else if(!player.worldObj.isRemote && control)
+//    {
+//    GUIHandler.instance().openGUI(GUIHandler.VEHICLE_DEBUG, player, vehicle.worldObj, vehicle.entityId, 0, 0);
+//    }
+//  return true;
+//  }
 
 @Override
 public NBTTagCompound getNBTTag()

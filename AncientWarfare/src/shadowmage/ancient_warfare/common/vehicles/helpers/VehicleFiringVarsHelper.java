@@ -25,6 +25,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 
@@ -65,12 +66,13 @@ public boolean interact(EntityPlayer player)
     {
     return true;
     }
-  if(player.isSneaking() && (vehicle.riddenByEntity==null || vehicle.riddenByEntity==player))
+  boolean control = PlayerTracker.instance().isControlPressed(player);
+  if(!control && vehicle.riddenByEntity==null && !player.isSneaking())
     {
     player.mountEntity(vehicle);
     return true;
-    }  
-  else if(!player.worldObj.isRemote && !player.isSneaking())
+    }
+  else if(control)
     {
     GUIHandler.instance().openGUI(GUIHandler.VEHICLE_DEBUG, player, vehicle.worldObj, vehicle.entityId, 0, 0);
     }

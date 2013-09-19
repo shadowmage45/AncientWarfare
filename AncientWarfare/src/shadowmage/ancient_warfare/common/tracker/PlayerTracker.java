@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.tracker;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -65,6 +66,23 @@ private Map<String, PlayerEntry> playerEntries = new HashMap<String, PlayerEntry
  * player entry used by thePlayer client-side
  */
 private PlayerEntry clientEntry = new PlayerEntry();
+
+private HashMap<String, Boolean> playerControlKeys = new HashMap<String, Boolean>();
+
+public boolean isControlPressed(EntityPlayer player)
+  {
+  return playerControlKeys.containsKey(player.getEntityName()) ? playerControlKeys.get(player.getEntityName()) : false;
+  }
+
+public void handleControlPacket(World world,  NBTTagCompound tag)
+  {  
+  this.handleControlInput(tag.getString("id"), tag.getBoolean("down"));
+  }
+
+public void handleControlInput(String name, boolean down)
+  {
+  this.playerControlKeys.put(name, down);
+  }
 
 public PlayerEntry getClientEntry()
   {

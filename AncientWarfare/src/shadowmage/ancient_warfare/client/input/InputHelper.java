@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.WeakHashMap;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -39,7 +40,9 @@ import org.lwjgl.input.Keyboard;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
+import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
@@ -57,6 +60,7 @@ static KeyBinding teamControl = new KeyBinding("AW-TeamControl", Keyboard.KEY_F6
 private static KeyBinding[] keys = new KeyBinding[]{options, teamControl};
 private static boolean[] keyRepeats = new boolean []{false, false};
 private static Minecraft mc = Minecraft.getMinecraft();
+
 
 private boolean hasMoveInput = false;
 
@@ -90,6 +94,7 @@ public static Keybind turretLeft;
 public static Keybind turretRight;
 public static Keybind mouseAim;
 public static Keybind ammoSelect;
+public static Keybind control;
 
 public void loadKeysFromConfig()
   {
@@ -120,6 +125,8 @@ public void loadKeysFromConfig()
   KeybindManager.addKeybind(mouseAim);
   ammoSelect = new Keybind(Config.getKeyBindID("keybind.ammoSelect", Keyboard.KEY_V, "Open ammo Select GUI"), "Ammo Select");
   KeybindManager.addKeybind(ammoSelect);
+  control = new Keybind(Config.getKeyBindID("keybind.control", Keyboard.KEY_LCONTROL, "Control/Alt function key"), "Control");
+  KeybindManager.addKeybind(control);
   }
 
 @Override
@@ -174,6 +181,15 @@ public void onKeyUp(Keybind kb)
     {
     hasMoveInput = true;
     }
+  else if(kb==control)
+    {
+    Packet01ModData pkt = new Packet01ModData();
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setString("id", mc.thePlayer.getEntityName());
+    tag.setBoolean("down", control.isPressed);
+    pkt.packetData.setCompoundTag("keySynch", tag);
+    pkt.sendPacketToServer();
+    }
   }
 
 @Override
@@ -206,6 +222,15 @@ public void onKeyPressed(Keybind kb)
       {
       this.handleAmmoSelectGui();
       }
+    else if(kb==control)
+      {
+      Packet01ModData pkt = new Packet01ModData();
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setString("id", mc.thePlayer.getEntityName());
+      tag.setBoolean("down", control.isPressed);
+      pkt.packetData.setCompoundTag("keySynch", tag);
+      pkt.sendPacketToServer();
+      }
     }
   }
 
@@ -218,16 +243,18 @@ public void onTickEnd()
     {
     VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
     if(vehicle!=null)
-    {
-        this.handleTickInput(vehicle);    
-        if(Settings.getMouseAim())
-          {
-          this.handleMouseAimUpdate();
-          }    	
-    }
+      {
+      this.handleTickInput(vehicle);    
+      if(Settings.getMouseAim())
+        {
+        this.handleMouseAimUpdate();
+        }    	
+      }
     }
   this.changedKeys.clear();
   }
+
+
 
 protected void handleTickInput(VehicleBase vehicle)
   {  

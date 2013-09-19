@@ -23,6 +23,7 @@
 package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.client.input.InputHelper;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
@@ -174,6 +175,11 @@ public void execute()
   if(this.packetData.hasKey("entityDump"))
     {
     EntityDataDump.dumpEntityData();
+    }
+  
+  if(this.packetData.hasKey("keySynch"))
+    {
+    PlayerTracker.instance().handleControlPacket(world, packetData.getCompoundTag("keySynch"));
     }
   }
 
