@@ -27,6 +27,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
@@ -124,6 +125,11 @@ protected void renderLivingLabel(EntityLivingBase par1EntityLiving, String par2S
     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     GL11.glPopMatrix();
     }
+  }
+
+protected ResourceLocation func_110856_a(EntityLiving par1EntityLiving)
+  {
+  return AWTextureManager.getResource(((NpcBase)par1EntityLiving).getTexture());
   }
 
 public void renderObjectiveIcon(byte obj)

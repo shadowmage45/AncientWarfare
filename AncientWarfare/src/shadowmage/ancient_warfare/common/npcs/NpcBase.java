@@ -155,6 +155,25 @@ public NpcBase(World par1World)
   }
 
 
+@Override
+protected void entityInit()
+  {
+  super.entityInit();  
+  this.dataWatcher.updateObject(6, Float.valueOf(20.0F));
+  this.dataWatcher.addObject(28, Byte.valueOf((byte) -1));//objective
+  this.dataWatcher.addObject(29, Byte.valueOf((byte) -1));//task
+  this.dataWatcher.addObject(30, Byte.valueOf((byte) -1));//other/error (no food/no deposit)
+  this.dataWatcher.addObject(31, new Integer(20));//health
+  
+  }
+
+@Override
+protected void applyEntityAttributes()
+  {
+  super.applyEntityAttributes();
+  this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(20.f);
+  this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.325f);
+  }
 
 @Override
 @SideOnly(Side.CLIENT)
@@ -625,6 +644,13 @@ public void setActionTicksToMax()
   }
 
 @Override
+public void onLivingUpdate()
+  {
+  this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.325f);
+  super.onLivingUpdate();
+  }
+
+@Override
 public void onUpdate()
   {
   long t1 = System.nanoTime();
@@ -784,23 +810,6 @@ public boolean isEntityInsideOpaqueBlock()
   return false;
   }
 
-@Override
-protected void entityInit()
-  {
-  super.entityInit();  
-  this.dataWatcher.updateObject(6, Float.valueOf(20.0F));
-  this.dataWatcher.addObject(28, Byte.valueOf((byte) -1));//objective
-  this.dataWatcher.addObject(29, Byte.valueOf((byte) -1));//task
-  this.dataWatcher.addObject(30, Byte.valueOf((byte) -1));//other/error (no food/no deposit)
-  this.dataWatcher.addObject(31, new Integer(20));//health
-  
-  }
-
-protected void applyEntityAttributes()
-	{
-	super.applyEntityAttributes();
-	this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(20.f);
-	}
 
 public byte getAIObjectiveID()
   {
@@ -1115,7 +1124,7 @@ public VehicleBase getRidingVehicle()
 @Override
 public float getDefaultMoveSpeed()
   {
-  return 0.325f;
+  return 1.f;
   }
 
 @Override
