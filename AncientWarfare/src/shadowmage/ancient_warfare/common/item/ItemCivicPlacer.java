@@ -22,6 +22,9 @@ package shadowmage.ancient_warfare.common.item;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -54,6 +57,13 @@ public ItemCivicPlacer(int itemID)
   {
   super(itemID, true);
   this.hasLeftClick = true;
+  }
+
+@Override
+@SideOnly(Side.CLIENT)
+public int getSpriteNumber()
+  {
+  return 0;
   }
 
 @Override
@@ -242,24 +252,6 @@ public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1,
   te.setBounds(min.x, min.y, min.z, max.x, max.y, max.z);
   te.setTeamNum(team);
   world.markBlockForUpdate(hit.x, hit.y, hit.z);
-  }
-
-@Override
-public void registerIcons(IconRegister par1IconRegister)
-  {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
-  if(d!=null)
-    {
-    for(Civic civ : Civic.civicList)
-      {
-      if(civ==null){continue;}
-      d.setIconTexture(civ.getIconNames()[0], civ.getGlobalID()*3);
-      d.setIconTexture(civ.getIconNames()[1], (civ.getGlobalID()*3) + 1);
-      d.setIconTexture(civ.getIconNames()[2], (civ.getGlobalID()*3) + 2);
-      }
-//    Config.logDebug("registering icons for : "+itemID +":: "+d.getDisplayName(0));
-    d.registerIcons(par1IconRegister);
-    }
   }
 
 /**

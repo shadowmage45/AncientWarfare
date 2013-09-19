@@ -116,10 +116,8 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     }    
    
   Description d = DescriptionRegistry2.instance().getDescriptionFor(ItemLoader.civicPlacer.itemID);
-  Icon ico = d.getIconFor(item.getItemDamage()*3);
- 
-  Config.logDebug(ico.getIconName());
-  
+  Icon ico = blk.getIcon(0, item.getItemDamage()%16);//d.getIconFor(item.getItemDamage()*3);
+   
   Tessellator tessellator = Tessellator.instance;
   blk.setBlockBoundsForItemRender();
   render.setRenderBoundsFromBlock(blk);
@@ -132,13 +130,13 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   render.renderFaceYNeg(blk, 0.0D, 0.0D, 0.0D, ico);
   tessellator.draw();
 
-  ico = d.getIconFor((item.getItemDamage()*3) + 1);
+  ico = blk.getIcon(1, item.getItemDamage()%16);
   tessellator.startDrawingQuads();
   tessellator.setNormal(0.0F, 1.0F, 0.0F);
   render.renderFaceYPos(blk, 0.0D, 0.0D, 0.0D, ico);
   tessellator.draw();
 
-  ico = d.getIconFor((item.getItemDamage()*3) + 2);
+  ico = blk.getIcon(2, item.getItemDamage()%16);
   tessellator.startDrawingQuads();
   tessellator.setNormal(0.0F, 0.0F, -1.0F);
   render.renderFaceZNeg(blk, 0.0D, 0.0D, 0.0D, ico);
