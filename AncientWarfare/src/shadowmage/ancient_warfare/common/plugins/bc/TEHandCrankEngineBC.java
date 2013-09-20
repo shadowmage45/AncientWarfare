@@ -90,7 +90,6 @@ public void updateEntity()
         {
         this.setIsWorking(false);
         }
-      Config.logDebug("toMove..."+toMove);
       }
     else
       {
@@ -167,7 +166,6 @@ public void doWork(IWorker worker)
   {
   if(this.powerHandler!=null && this.powerHandler.getEnergyStored() < this.powerHandler.getMaxEnergyStored())
     {
-    Config.logDebug("adding energy..");
     this.powerHandler.addEnergy(Config.npcWorkMJ);
     }
   }
