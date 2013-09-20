@@ -912,7 +912,7 @@ public void updateRiderPosition()
   posZ += Trig.cosDegrees(yaw)*-this.getRiderForwardOffset();
   posZ += Trig.cosDegrees(yaw+90)*this.getRiderHorizontalOffset();
   this.riddenByEntity.setPosition(posX, posY  + this.riddenByEntity.getYOffset(), posZ);
-  this.riddenByEntity.rotationYaw -= this.moveHelper.getRotationSpeed()*2;
+  this.riddenByEntity.rotationYaw -= this.moveHelper.getRotationSpeed();
   }
 
 @Override
