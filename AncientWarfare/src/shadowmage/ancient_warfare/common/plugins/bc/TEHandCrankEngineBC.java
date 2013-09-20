@@ -60,7 +60,7 @@ public TEHandCrankEngineBC()
   this.canUpdate = true;
   powerHandler = new PowerHandler(this, Type.ENGINE);
   powerHandler.configurePowerPerdition(1, 100);
-  powerHandler.configure(0, 75, Config.npcWorkMJ, Config.npcWorkMJ*3);
+  powerHandler.configure(0, 75, Config.npcWorkMJ, 1000);
   }
 
 @Override
@@ -78,17 +78,19 @@ public void updateEntity()
     this.outputTarget = ((IPowerReceptor)tile).getPowerReceiver(this.facingDirection.getOpposite()); 
     if(this.outputTarget!=null)
       {  
-      float toMove = (this.powerHandler!=null ? this.powerHandler.getEnergyStored() : 0);
-      if(toMove>this.powerHandler.getActivationEnergy())
+      float toMove = this.powerHandler.getEnergyStored();
+      if(toMove>=this.powerHandler.getActivationEnergy())
         {
         toMove = outputTarget.getMaxEnergyReceived() < toMove ? outputTarget.getMaxEnergyReceived() : toMove;
         this.setIsWorking(true);
-        this.outputTarget.receiveEnergy(Type.ENGINE,this.powerHandler.useEnergy(0, toMove, true), facingDirection.getOpposite());   
+        toMove = this.powerHandler.useEnergy(toMove, toMove, true);
+        toMove = this.outputTarget.receiveEnergy(Type.ENGINE, toMove, facingDirection.getOpposite());   
         }
       else
         {
         this.setIsWorking(false);
         }
+      Config.logDebug("toMove..."+toMove);
       }
     else
       {
@@ -157,7 +159,7 @@ public void broadcastWork(int maxRange)
 @Override
 public boolean hasWork()
   {
-  return this.powerHandler!=null && this.powerHandler.getEnergyStored() > this.powerHandler.getActivationEnergy();
+  return this.powerHandler!=null && this.powerHandler.getEnergyStored() < this.powerHandler.getMaxEnergyStored();
   }
 
 @Override
@@ -165,6 +167,7 @@ public void doWork(IWorker worker)
   {
   if(this.powerHandler!=null && this.powerHandler.getEnergyStored() < this.powerHandler.getMaxEnergyStored())
     {
+    Config.logDebug("adding energy..");
     this.powerHandler.addEnergy(Config.npcWorkMJ);
     }
   }

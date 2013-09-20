@@ -67,7 +67,7 @@ public void updateEntity()
     {    
     if(this.workSite!=null && this.workSite.hasWork())
       {
-      Config.logDebug("using energey: "+this.provider.getActivationEnergy());
+//      Config.logDebug("using energy: "+this.provider.getActivationEnergy());
       this.provider.useEnergy(this.provider.getActivationEnergy(), this.provider.getActivationEnergy(), true);
       this.workSite.doWork(this);
       }
@@ -80,7 +80,7 @@ public void updateEntity()
     ForgeDirection d = this.facingDirection;
     x += d.offsetX;
     z += d.offsetZ;   
-    Config.logDebug(String.format("checking block %s, %s, %s for work site", x,y,z));
+//    Config.logDebug(String.format("checking block %s, %s, %s for work site", x,y,z));
     TileEntity e = worldObj.getBlockTileEntity(x, y, z);
     if(e instanceof ITEWorkSite)
       {
@@ -88,7 +88,7 @@ public void updateEntity()
       if(workSite.canHaveMoreWorkers(this))
         {
         this.workSite = (ITEWorkSite)e;
-        Config.logDebug("found work site!!");        
+//        Config.logDebug("found work site!!");        
         }
       }
     }
