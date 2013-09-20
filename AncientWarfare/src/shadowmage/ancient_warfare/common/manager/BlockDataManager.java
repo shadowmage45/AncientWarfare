@@ -82,8 +82,8 @@ public static void loadBlockList()
   addBlock(Block.mushroomCapRed).setPriority(1);
   
   /************************************ ROTATABLE/METADATA BLOCKS ************************************/
-  addBlock(Block.dropper).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0);
-  addBlock(Block.dispenser).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0);
+  addBlock(Block.dropper).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0).setMeta(3, 10, 13, 11, 12);
+  addBlock(Block.dispenser).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0).setMeta(3, 10, 13, 11, 12);
   addBlock(Block.hopperBlock).setRotatable().setMeta(0, 3, 4, 2, 5).setMeta(1, 0, 0, 0, 0).setMeta(2, 11, 12, 10, 13).setMeta(3, 8, 8, 8, 8);
   addBlock(Block.chest).setRotatable().setMeta(0, 2, 5, 3, 4);  
   addBlock(Block.chestTrapped).setRotatable().setMeta(0, 2, 5, 3, 4);

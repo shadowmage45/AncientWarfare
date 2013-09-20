@@ -553,7 +553,8 @@ protected void setBlock(World world, int x, int y, int z, int id, int meta)
       {
       try
         {
-        world.setBlock(x, y, z, id, meta, 0);      
+        world.setBlock(x, y, z, id);
+        world.setBlockMetadataWithNotify(x, y, z, meta, 0);
         }
       catch(Exception e)
         {
@@ -562,7 +563,9 @@ protected void setBlock(World world, int x, int y, int z, int id, int meta)
       }
     else
       {
-      world.setBlock(x, y, z, id, meta, 3);      
+      world.setBlock(x, y, z, id);
+      world.setBlockMetadataWithNotify(x, y, z, meta, 3);
+//      world.setBlock(x, y, z, id, meta, 3);      
       }
     }
   }
