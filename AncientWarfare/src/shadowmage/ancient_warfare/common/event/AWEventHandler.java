@@ -48,13 +48,13 @@ import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
-public class EventHandler
+public class AWEventHandler
 {
-private static EventHandler INSTANCE;
-private EventHandler(){}
-public static EventHandler instance()
+private static AWEventHandler INSTANCE;
+private AWEventHandler(){}
+public static AWEventHandler instance()
   {
-  if(INSTANCE==null){INSTANCE = new EventHandler();}
+  if(INSTANCE==null){INSTANCE = new AWEventHandler();}
   return INSTANCE;
   }
 

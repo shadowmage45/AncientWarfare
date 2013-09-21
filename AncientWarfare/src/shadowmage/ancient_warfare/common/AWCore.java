@@ -26,14 +26,13 @@ package shadowmage.ancient_warfare.common;
 import java.io.IOException;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.MinecraftException;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.chunkloading.ChunkLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
-import shadowmage.ancient_warfare.common.event.EventHandler;
+import shadowmage.ancient_warfare.common.event.AWEventHandler;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -60,10 +59,9 @@ import shadowmage.ancient_warfare.common.world_gen.LootGenerator;
 import shadowmage.ancient_warfare.common.world_gen.VillageGenerator;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.Mod.ServerStopping;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -99,7 +97,7 @@ public static AWCore instance;
  * load settings, config, items
  * @param evt
  */
-@PreInit
+@EventHandler
 public void preInit(FMLPreInitializationEvent evt) 
   {  
   /**
@@ -119,7 +117,7 @@ public void preInit(FMLPreInitializationEvent evt)
   /**
    * register eventHandler
    */
-  MinecraftForge.EVENT_BUS.register(EventHandler.instance());
+  MinecraftForge.EVENT_BUS.register(AWEventHandler.instance());
 
   /**
    * register worldGenHandler
@@ -170,7 +168,7 @@ public void preInit(FMLPreInitializationEvent evt)
  * load registry stuff....
  * @param evt
  */
-@Init
+@EventHandler
 public void init(FMLInitializationEvent evt)
   {
   Config.log("Ancient Warfare Init started.");
@@ -189,7 +187,7 @@ public void init(FMLInitializationEvent evt)
  * finalize config settings, load NPCs (which rely on other crap from other mods..potentially)
  * @param evt
  */
-@PostInit
+@EventHandler
 public void load(FMLPostInitializationEvent evt)
   {  
   Config.log("Ancient Warfare Post-Init started");
@@ -211,7 +209,7 @@ public void load(FMLPostInitializationEvent evt)
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
   }
 
-@ServerStopping
+@EventHandler
 public void serverStarting(FMLServerStoppingEvent evt)
   {
   if(MinecraftServer.getServer().worldServers[0]!=null)

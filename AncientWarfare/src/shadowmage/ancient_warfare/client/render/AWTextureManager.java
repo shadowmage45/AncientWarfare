@@ -22,6 +22,8 @@ package shadowmage.ancient_warfare.client.render;
 
 import java.util.HashMap;
 
+import shadowmage.ancient_warfare.common.config.Config;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
@@ -49,6 +51,7 @@ public static ResourceLocation getResource(String texture)
   if(resource==null)
     {
     resource = new ResourceLocation("ancientwarfare", texture);
+    textures.put(texture, resource);
     }
   return resource;
   }

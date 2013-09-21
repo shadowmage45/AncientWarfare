@@ -20,11 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.lang;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -123,8 +125,12 @@ protected void loadEnglishFile()
   Properties languageFile = new Properties();
   try
     {
-	InputStream is = this.getClass().getResourceAsStream("/lang/ancientwarfare/en_US.lang");	
-	if(is==null){return;}
+    InputStream is = AWCore.instance.getClass().getResourceAsStream("/lang/ancientwarfare/en_US.lang");	
+    if(is==null)
+      {
+      Config.logError("error loading english language file...could not locate file.../lang/ancientwarfare/en_US.lang");
+      return;
+      }
     languageFile.load(is);    
     if(!languageFile.isEmpty())
       {
@@ -135,6 +141,7 @@ protected void loadEnglishFile()
     } 
   catch (IOException e)
     {
+    Config.logError("error loading english language file...");
     e.printStackTrace();
     }
   }
