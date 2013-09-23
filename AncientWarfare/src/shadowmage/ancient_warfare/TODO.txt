@@ -27,8 +27,6 @@ FROM TESTING
 * crafting tables do not rotate properly from template construction (purely cosmetic..but...)
 * npcs don't retain work points when work-site runs out of work (breaks manually setting a work-site for an npc..he'll stop working completely the first time the work-site completes its queue)
 * somehow still dropping config information on server crash (lost research...also lost forge forced chunk data though, so may be an error out of my control)
-* textures not loading in packed mod.
-* lang file not loading
 
 
 server opt flags::
@@ -185,3 +183,6 @@ TEXTURE/ART
 * minor cleanup in tree farm
 * minor cleanup in TEWorkSite
 * revert secondary BB change in tree farm
+
+/********** 09-23-13 **********/
+* fix workers dropping work-site if it was out of work

@@ -62,13 +62,10 @@ public byte getObjectiveNum()
 public void updatePriority()
   {
   this.currentPriority =  0;
-  if(this.canStartWork())
+  if(this.findWorkSite())
     {
-    if(this.findWorkSite())
-      {
-      this.currentPriority = this.maxPriority;
-      }    
-    } 
+    this.currentPriority = this.maxPriority;
+    }  
   }
 
 protected boolean isWorkFinished()
@@ -89,7 +86,6 @@ protected boolean findWorkSite()
     return true;
     }
   npc.wayNav.setWorkSiteTile(null);
-  npc.wayNav.setWorkSite(null);
   ITargetEntry entry;
   TileEntity te;
   while(npc.targetHelper.hasTargetsOfType(TargetType.WORK))
@@ -121,16 +117,6 @@ protected boolean isValidWorkSite(TileEntity te)
       }
     }  
   return false;
-  }
-
-protected boolean canStartWork()
-  {
-  return true;
-  }
-
-protected boolean canWork()
-  {
-  return npc.wayNav.getWorkSiteTile()!=null && npc.wayNav.getWorkSiteTile().hasWork() && canStartWork();
   }
 
 @Override
