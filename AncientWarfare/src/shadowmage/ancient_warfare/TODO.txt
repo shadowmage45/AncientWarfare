@@ -186,3 +186,4 @@ TEXTURE/ART
 
 /********** 09-23-13 **********/
 * fix workers dropping work-site if it was out of work
+* add biome swap rules for fortress1/2, lavaFarm, tower1 -- grass/dirt->desert

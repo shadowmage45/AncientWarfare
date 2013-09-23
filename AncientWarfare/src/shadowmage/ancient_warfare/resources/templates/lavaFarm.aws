@@ -46,6 +46,7 @@ order=0
 conditional=0
 percent=100
 blocks=3-0
+swap=0
 inventory=0
 :endrule
 
@@ -154,6 +155,7 @@ order=0
 conditional=0
 percent=100
 blocks=2-0
+swap=0
 inventory=0
 :endrule
 
@@ -329,8 +331,16 @@ blocks=75-3
 inventory=0
 :endrule
 
-
 ####SWAP RULESS####
+#swap dirt/grass for sand in desert, netherrack in hell
+swap:
+number=0
+biome=desert,3-0,12-0
+biome=desert,2-0,12-0
+biome=hell,3-0,87-0
+biome=hell,2-0,87-0
+:endswap
+####VEHICLE RULES####
 
 ####VEHICLE RULES####
 
