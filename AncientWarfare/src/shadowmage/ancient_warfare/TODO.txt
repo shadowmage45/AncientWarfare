@@ -146,44 +146,7 @@ TEXTURE/ART
 *  denotes done
 ** denotes done and tested
 
-/********** 09-11-13 **********/
-** fix --remove village/door interaction from NPC seek shelter ai objective -- should more reliably be able to remove
-    a home point now
-** fix -- other side of forced-target settings (where the entities target NPCs).  it should now properly function two-directionally
-** new -- add base test code for submarines -- motion works, but needs slight bit of help.   
-** fix -- pathfinding up-diagonal current block clearance check (error was in straight-path quick pathfinder) 
-** fix -- add 'Ally Teams' string to team-advanced-control GUI
-** fix -- set chest-cart as un-mountable for npc AI purposes
-** new -- add torpedo missile type -- currently only usable by submarines
-** fix -- add canSoldierPilot flag to vehicles to force pilotable/unpilotable status (air, sub)
-** new -- add firing capability to submarine
-/********** 09-12-13 **********/
-** fix -- update work site validation to remove invalid points on doWork request -- should more properly validate if invalid points are present
-** fix -- update setWorkSite to clear workTile as well -- should solve many instances of NPCs not properly resetting after a clear-work command.
-** fix -- immediately stop working at work-sites that do not have work.
-** new -- add new tree-finding algorithm to hopefully more reliable catch full trees in tree farms -- needs rework on how to scan/validate work
-    can probably move to scanning only the bottom row, but KEEPING cut-down work points unless specifically removed by doWork or invaildated by block change
-** fix -- (hack) fix flat world crash when generating pistons/redstone wire during initial world-generation before client login (or any other block that sends block updates).
-    (I think this is caused because it is referencing a field from WorldServer during the constructor phase of World, where the WorldServer fields do not yet exist)
-** fix -- npc 'instant' work at some worksites under particular conditions    
-** fix -- cleanup treeFinder algorithm   
-** fix -- up/down diagonal checking in crawler pathfinder 
-** fix -- submarine can actually fire now (improper ammo declarations in ammo type -- ID num was wrong)
-** fix -- fix torpedo ammo type
-/********** 09-13-13 **********/
-** fix -- add code to tree-farms to save out their work points on world save/load.
-** fix -- add min/max bounding to treefinder to prevent potentially long/infinite log chains from never returning from method
-/********** 09-14-13 **********/
-/********** 09-15-13 **********/
-** add -- submarine model and basic texture
-/********** 09-16-13 **********/
-** fix -- adjust how submarine floats on water
-** fix -- move over boat to use new boat-bob mechanics -- much simplified motion, no more constant bobbing
-** update version number and toggle debug in prep for release
-* minor cleanup in tree farm
-* minor cleanup in TEWorkSite
-* revert secondary BB change in tree farm
-
 /********** 09-23-13 **********/
-* fix workers dropping work-site if it was out of work
+* fix workers dropping work-site if it was out of work -- should fix issues with manual work-site selection using command baton w/ ignore broadcast enabled
+    should also fix 'issues' of workers swapping sites, or a worker moving to next site before current is finished
 * add biome swap rules for fortress1/2, lavaFarm, tower1 -- grass/dirt->desert
