@@ -19,6 +19,8 @@ sensors -- different types, etc. different types of scans will reveal different 
 all in-game objects will be entities
 
 
+how to convert to a 'fun' 2d format?
+
 needed:
 modeler
 sound artist
