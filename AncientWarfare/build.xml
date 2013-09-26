@@ -2,10 +2,75 @@
 <!--http://www.minecraftforge.net/forum/index.php?topic=12634.0-->
 <!--<?xml version="1.0" encoding="UTF-8" ?>-->
 
-<project name="Test Project" basedir="c:/forge-871/mcp" default="build">
-    
-    <target name="build">
-        
+<project name="AW" default="build">
+	
+	<!--base directory variable-->
+	<dirname property="imported.basedir" file="${ant.file.AW}"/>
+	
+	<!--build directory variable-->
+	<property name="build.dir" value="build"/>
+	
+	<!--base source file directory variable-->
+    <property name="src.dir" value="${imported.basedir}/src/shadowmage"/>
+	
+	<!--base language file directory variable-->
+	<property name="lang.dir" value="${imported.basedir}/src/lang"/>
+	
+	<!--base assets file directory variable-->
+	<property name="resources.dir" value="${imported.basedir}/src/assets"/>
+	
+	<property name="mc.version" value="1.6.2"/>	
+	<property name="forge.version" value="9.10.1.871"/>
+    <property name="download.dir" value="${imported.basedir}/download"/>
+
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir" value="bin"/>
+
+    <property name="forge.dir" value="${build.dir}/forge"/>
+    <property name="mcp.dir" value="${forge.dir}/mcp"/>
+	
+	<property name="forge.name" value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
+	
+	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
+	
+    <condition property="out-of-date">
+        <not>
+            <and>
+                <isset property="forge-exists"/>
+                <available file="${mcpsrc.dir}"/>
+            </and>
+        </not>
+    </condition>
+	
+	<!-- Download necessary files -->
+    <target name="download-files" depends="download-forge"/>
+
+    <!-- Download forge (if it doesn't exist) -->
+    <target name="download-forge" unless="forge-exists">
+        <get src="http://files.minecraftforge.net/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
+    </target>
+
+    <!-- Setup mcp and forge -->
+    <target name="setup" depends="download-files" if="out-of-date">
+
+        <unzip dest="${forge.dir}/.." src="${download.dir}/${forge.name}"/>
+
+        <!-- Fix executable permissions -->
+        <chmod dir="${forge.dir}" perm="ugo+rx" includes="**.sh"/>
+
+        <!-- Install forge -->
+        <exec dir="${forge.dir}" executable="cmd" osfamily="windows">
+            <arg line="/c install.cmd"/>
+        </exec>
+
+        <exec dir="${forge.dir}" executable="sh" osfamily="unix">
+            <arg value="install.sh"/>
+        </exec>
+
+    </target>
+			
+    <target name="build" depends="setup">
+        <!--
         <delete dir="output" />
         <delete dir="reobf/minecraft" />
         
@@ -47,7 +112,7 @@
 
         <delete dir="src/minecraft/shadowmage"/>
     	<delete dir="src/minecraft/buildcraft"/>
-    	
+    	-->
     </target>
     
 </project>
