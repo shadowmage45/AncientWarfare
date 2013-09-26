@@ -1,7 +1,53 @@
-<project name="AncientWarfare">
-	<!-- NFC how to use ant...this will take awhile...-->
-	<!--set environment variables from jenkins-->
-	<property environment="env"/>
-	<property name="label" value="${env.BUILD_NUMBER}"/>
-	<property name="build.number" value=""/>	
+
+<!--http://www.minecraftforge.net/forum/index.php?topic=12634.0-->
+<!--<?xml version="1.0" encoding="UTF-8" ?>-->
+
+<project name="Test Project" basedir="c:/forge-871/mcp" default="build">
+    
+    <target name="build">
+        
+        <delete dir="output" />
+        <delete dir="reobf/minecraft" />
+        
+        <copy todir="src/minecraft">        
+        <fileset dir="c:/git_source/git/AncientWarfare/AncientWarfare/src"/>  
+        <fileset dir="c:/git_source/git/BuildCraft/common"/>  
+        </copy>
+        
+        <mkdir dir="output" />
+        <mkdir dir="output/pack" />
+    	
+        <exec executable="recompile.bat" dir="." resolveexecutable="true" osfamily="windows"></exec>
+        
+        <exec executable="reobfuscate_srg.bat" dir="." resolveexecutable="true" osfamily="windows"></exec>
+        
+        <exec executable="recompile.sh" dir="." resolveexecutable="true" osfamily="unix"></exec>
+        
+        <exec executable="reobfuscate_srg.sh" dir="." resolveexecutable="true" osfamily="unix"></exec>
+    
+    	<copy todir="output/pack/shadowmage">
+    	<fileset dir="reobf/minecraft/shadowmage"/>
+    	</copy>
+    	
+    	<copy todir="output/pack/assets">
+		<fileset dir="c:/git_source/git/AncientWarfare/AncientWarfare/src/assets"/>
+		</copy>
+        
+    	<copy todir="output/pack/lang">
+        <fileset dir="c:/git_source/git/AncientWarfare/AncientWarfare/src/lang"/>
+    	</copy>
+    	
+    	<copy todir="output/pack">
+        <fileset file="c:/git_source/git/AncientWarfare/AncientWarfare/src/mcmod.info"/>
+        </copy>
+    	
+        <jar destfile="output/TestMod_1.1.jar">            
+        <fileset dir="output/pack" />            
+        </jar>
+
+        <delete dir="src/minecraft/shadowmage"/>
+    	<delete dir="src/minecraft/buildcraft"/>
+    	
+    </target>
+    
 </project>

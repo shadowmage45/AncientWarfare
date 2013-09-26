@@ -104,8 +104,8 @@ public VehicleTypeSubmarine(int typeNum)
   this.width = 2.7f;
   this.height = 1.4f;  
           
-  this.baseStrafeSpeed = 2.f;
-  this.baseForwardSpeed = 6.2f*0.05f;
+  this.baseStrafeSpeed = 1.2f;
+  this.baseForwardSpeed = 3.7f*0.05f;
   
   this.turretForwardsOffset = 2.45f;
   this.turretVerticalOffset = 0.325f;
