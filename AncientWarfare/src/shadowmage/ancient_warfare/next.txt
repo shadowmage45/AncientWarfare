@@ -25,3 +25,6 @@ needed:
 modeler
 sound artist
 texture artist
+
+http://www.playblack.net/zee-code/unity-3d-authoritative-server-networking-pt1
+http://www.smartfoxserver.com/download/sfs2x#p=installer
