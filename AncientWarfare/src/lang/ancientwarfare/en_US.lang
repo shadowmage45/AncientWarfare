@@ -13,7 +13,7 @@ entity.gate=Ancient Warfare Gate
 # damage types
 dmg.firemissile=Fire Missile
 dmg.explosivemissile=Explosive Missile
-dmg.genericmissile=Generic Missile
+dmg.genericmissile=Normal Missile
 dmg.piercingmissile=Piercing Missile
 dmg.battering=Battering Damage
 
