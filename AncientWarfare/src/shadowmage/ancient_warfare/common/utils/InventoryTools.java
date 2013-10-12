@@ -587,7 +587,7 @@ public static boolean containsAtLeast(IInventory inv, ItemStack filter, int qty,
   ItemStack fromSlot = null;
   int foundQty = 0;  
   int slot = 0;
-  for(int i = 0; i <= slotIndices.length; i++)
+  for(int i = 0; i < slotIndices.length; i++)
     {
     slot = slotIndices[i];
     fromSlot = inv.getStackInSlot(slot);
