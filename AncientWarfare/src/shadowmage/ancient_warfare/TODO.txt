@@ -25,7 +25,8 @@ FROM TESTING
 * add detailed vehicle and npc descriptions to description registry, display those descriptions in info GUIs
 * crafting tables do not rotate properly from template construction (purely cosmetic..but...)
 * somehow still dropping config information on server crash (lost research...also lost forge forced chunk data though, so may be an error out of my control)
-* pathfinding on fences apparently still needs work (re-enable push-out of blocks whenever inside a fence block?)
+* chunkloader not working properly?
+
 
 server opt flags::
 ionice -c1 -n0 nice -n -10 /usr/lib/jvm/jdk1.7.0/bin/java -Djava.library.path=/usr/lib/jvm/jdk1.7.0/lib/amd64 -d64 -server -XX:+UseG1GC -DJINTEGRA_NATIVE_MODE -DJINTEGRA_COINIT_VALUE=0 -Dsun.io.useCanonCaches=false -Djline.terminal=jline.UnsupportedTerminal -XX:ThreadPriorityPolicy=42 -XX:CompileThreshold=1500 -XX:+TieredCompilation -XX:parallelGCThreads=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=15 -XX:+UnlockExperimentalVMOptions -XX:+UseAdaptiveGCBoundary -XX:permSize=64M -XX:MaxPermSize=256M -XX:+UseGCOverheadLimit -XX:+UseBiasedLocking -Xnoclassgc -Xverify:none -XX:UseSSE=3 -XX:+UseThreadPriorities -Djava.net.preferIPv4Stack=true -XX:+UseLargePages -XX:+UseStringCache -XX:+OptimizeStringConcat -XX:+UseFastAccessorMethods -Xrs -XX:+UseCompressedOops -XX:+AggressiveOpts -jar craftbukkit-0.0.1-SNAPSHOT.jar nogui
@@ -152,3 +153,11 @@ TEXTURE/ART
 /********** 09-26-13 **********/
 * adjust submarine max forward speed 6.2 -> 3.7, strafe 2.0 -> 1.2
 * add useable build.xml -- will need crazy edits for 1.6 / real workspace setup
+
+/********** 10-26-13 **********/
+* pathfinding on fences apparently still needs work (re-enable push-out of blocks whenever inside a fence block?)
+* soldier health display float rounding
+* village component/generation 1.6.4 support (add mapping to structuregenIO, default no-param constructors)
+* switch airplane/helicopter/submarine to be disabled by default.  In order to use these vehicles, you will need to enable them in your config file. 
+    THIS WILL DELETE ANY CURRENT ENTITIES OF THESE TYPES IN YOUR WORLD WHEN THE CONFIG FILE IS REGENERATED.  IF YOU WISH TO KEEP THESE, RUN MC ONCE (DONT LOAD YOUR WORLD),
+    EXIT MC, OPEN THE CONFIG FILE, RE-ENABLE THEM, AND THEN START MC/LOAD YOUR WORLD

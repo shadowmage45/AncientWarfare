@@ -131,6 +131,8 @@ public VehicleTypeSubmarine(int typeNum)
   this.displayTooltip.add("item.vehicleSpawner.tooltip.torsion");
   this.displayTooltip.add("item.vehicleSpawner.tooltip.submarine");
   this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
+  
+  this.enabled = false;
   }
 
 @Override

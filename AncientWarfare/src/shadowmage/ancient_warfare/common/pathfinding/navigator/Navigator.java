@@ -121,6 +121,10 @@ public void setMoveToTarget(int x, int y, int z)
     this.finalTarget.reassign(x, y, z);
     this.calculatePath(ex, ey, ez, x, y, z);
     } 
+  else
+    {
+//    Config.logDebug("skipping path calc...");
+    }
   }
 
 @Override
@@ -139,6 +143,7 @@ public void onMovementUpdate()
       {
       this.doorInteraction(); 
       }
+//    Config.logDebug("setting move to: "+currentTarget);
     owner.setMoveTo(currentTarget.x+0.5d, currentTarget.y, currentTarget.z+0.5d, owner.getDefaultMoveSpeed());
     }
   }
@@ -199,7 +204,7 @@ protected void detectStuck()
   else
     {
     this.stuckCheckTicks--;
-    }
+    } 
   }
 
 protected boolean isNewTargetClose(int tx, int ty, int tz)
@@ -231,40 +236,40 @@ protected boolean isPathEmpty()
 
 protected boolean shouldCalculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
+//  Config.logDebug("new target: "+isNewTarget(tx, ty, tz));
+//  Config.logDebug("path empty: "+isPathEmpty());
+//  Config.logDebug("current target: " + (currentTarget==null));
+//  Config.logDebug("at target: " + !isAtTarget(tx, ty, tz));
+//  Config.logDebug("searching already: " + !pathFinder.isSearching);
   return isNewTarget(tx, ty, tz) || (isPathEmpty() && !isAtTarget(tx, ty, tz) && currentTarget==null && !pathFinder.isSearching);
   }
 
 protected void calculatePath(int ex, int ey, int ez, int tx, int ty, int tz)
   {
+//  Config.logDebug("calculating path..");
+//  Config.logDebug("checking path from: "+ex+","+ey+","+ez+" to: "+tx+","+ty+","+tz);
   this.path.clearPath();
   this.currentTarget = null;
-//  if(!world.isWalkable(ex, ey, ez) )
-//    {
-////    if(!world.isWalkable(ex, ey+1, ez))
-////      {
-////      Config.logDebug("skipping calc path because of stuck in unwalkable block");
-////      return;      
-////      }
-//    ey = PathUtils.findClosestYTo(world, ex, ey, ez);
-//    }  
   if(PathUtils.canPathStraightToTarget(world, ex, ey, ez, tx, ty, tz))
     {
+//    Config.logDebug("can path straight...");
     this.currentTarget = new Node(tx, ty, tz);
     }
   else
     {
     this.path.setPath(testCrawler.findPath(world, ex, ey, ez, tx, ty, tz, 8));
     Node end = this.path.getEndNode();
+//    Config.logDebug("crawler path end node: "+end);
     if(end!=null && (end.x!=tx || end.y!=ty || end.z!=tz))
       {
+//      Config.logDebug("crawler did not return complete path...");
       this.pathFinder.findPath(world, end.x, end.y, end.z, tx, ty, tz, 60, this, false);
-//      PathManager.instance().requestPath(this, world, end.x, end.y, end.z, tx, ty, tz, 60);
       }  
     } 
   this.stuckCheckTicks = this.stuckCheckTicksMax;
   this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
   Node start = this.path.getFirstNode();
-  if(start!=null && getEntityDistance(start)<0.8f && start.y==ey)
+  if(start!=null && (getEntityDistance(start)<0.8f && start.y==ey))
     {
     this.path.claimNode();//skip the first node because it is probably behind you, move onto next
     }
@@ -435,14 +440,17 @@ protected void claimNode()
   {  
   if(this.currentTarget==null || this.getEntityDistance(currentTarget)<entity.width)
     {    
+//    Config.logDebug("attempting to claim node..");
     this.currentTarget = this.path.claimNode();
     while(this.currentTarget!=null && this.getEntityDistance(currentTarget)<entity.width)
       {
       this.currentTarget = this.path.claimNode();
+//      Config.logDebug("new move target: "+this.currentTarget);
       }
     this.stuckCheckTicks = this.stuckCheckTicksMax;
     this.stuckCheckPosition.setup(entity.posX, entity.posY, entity.posZ);
-    }   
+    }
+  
   }
 
 protected int floorX()
@@ -467,17 +475,17 @@ protected float getEntityDistance(Node n)
 
 protected void sendToClients(int x, int y, int z)  
   {
-  if(Config.DEBUG && !world.isRemote() && owner.getEntity() instanceof NpcBase)//relay to client, force client-side to find path as well (debug rendering of path)
-    {
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setInteger("tx", x);
-    tag.setInteger("ty", y);
-    tag.setInteger("tz", z);
-    Packet04Npc pkt = new Packet04Npc();
-    pkt.setParams(entity);
-    pkt.setPathTarget(tag);
-    pkt.sendPacketToAllTrackingClients(entity);
-    }
+//  if(Config.DEBUG && !world.isRemote() && owner.getEntity() instanceof NpcBase)//relay to client, force client-side to find path as well (debug rendering of path)
+//    {
+//    NBTTagCompound tag = new NBTTagCompound();
+//    tag.setInteger("tx", x);
+//    tag.setInteger("ty", y);
+//    tag.setInteger("tz", z);
+//    Packet04Npc pkt = new Packet04Npc();
+//    pkt.setParams(entity);
+//    pkt.setPathTarget(tag);
+//    pkt.sendPacketToAllTrackingClients(entity);
+//    }
   }
 
 @Override
@@ -513,8 +521,12 @@ public void onPathFound(List<Node> pathNodes)
 //  Config.logDebug("full path request returned length: "+pathNodes.size());
   if(pathNodes.size()>0)
     {
-    Node n = pathNodes.get(pathNodes.size()-1);
+    Node n = pathNodes.get(pathNodes.size()-1);    
     }
+//  for(Node n : pathNodes)
+//    {
+//    Config.logDebug("n:" +n);
+//    }
   this.path.addPath(world, pathNodes);
   }
 

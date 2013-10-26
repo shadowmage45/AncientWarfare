@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import java.text.DecimalFormat;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBiped;
@@ -40,6 +42,8 @@ import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 public class RenderNpcHelper extends RenderBiped
 {
 
+DecimalFormat format2p = new DecimalFormat("#.##");
+
 /**
  * @param par1ModelBiped
  * @param par2
@@ -56,7 +60,7 @@ public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double pa
   if(Settings.getRenderNpcNameplates())
     {
     NpcBase npc = (NpcBase) par1EntityLiving;
-    String displayLabel = StatCollector.translateToLocal(npc.npcType.getLevelName(npc.rank))+" "+npc.getHealth()+"/"+npc.getMaxHealth();
+    String displayLabel = StatCollector.translateToLocal(npc.npcType.getLevelName(npc.rank))+" "+format2p.format(npc.getHealth())+"/"+npc.getMaxHealth();
     this.renderLivingLabel(par1EntityLiving, displayLabel, par2, par4, par6, 64);
     }
   }

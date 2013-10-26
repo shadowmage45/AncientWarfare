@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.npcs;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
@@ -753,11 +754,11 @@ public void onUpdate()
       this.worldObj.villageCollectionObj.addVillagerPosition(floorX, floorY, floorZ);
       }
     }
-  int id = worldObj.getBlockId(floorX, floorY, floorZ); 
-  if(!this.worldObj.isRemote && id!=0 && !this.worldAccess.isWalkable(floorX, floorY, floorZ) && this.posY % 1.f < 0.25f)
-    {
-    this.pushOutOfBlocks();    
-    }
+//  int id = worldObj.getBlockId(floorX, floorY, floorZ); 
+//  if(!this.worldObj.isRemote && id!=0 && (!this.worldAccess.isWalkable(floorX, floorY, floorZ)) && this.posY % 1.f < 0.25f)
+//    {
+//    this.pushOutOfBlocks();    
+//    }
   boolean riding = false;
   if(this.isRidingVehicle())
     {
@@ -993,7 +994,7 @@ public void readFromNBT(NBTTagCompound tag)
     {
     this.acceptWorkBroadcast = tag.getBoolean("work");
     }
-  Config.logDebug("loading npc from NBT, reporting to data tracker");
+//  Config.logDebug("loading npc from NBT, reporting to data tracker");
   GameDataTracker.instance().handleNpcUpdate(this);
   }
 

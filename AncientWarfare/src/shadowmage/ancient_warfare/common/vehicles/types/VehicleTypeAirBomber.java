@@ -140,6 +140,8 @@ public VehicleTypeAirBomber(int typeNum)
   this.displayTooltip.add("item.vehicleSpawner.tooltip.gunpowder");
   this.displayTooltip.add("item.vehicleSpawner.tooltip.air");
   this.displayTooltip.add("item.vehicleSpawner.tooltip.noturret");
+  
+  this.enabled = false;
   }
 
 @Override

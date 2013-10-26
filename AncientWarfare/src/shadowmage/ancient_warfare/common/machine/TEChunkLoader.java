@@ -53,8 +53,19 @@ public TEChunkLoader()
   {
   this.guiNumber = -1;
   this.shouldWriteInventory = false;
-  this.canUpdate = false;  
+  this.canUpdate = true;//DEBUG--CHANGE BACK TO FALSE WHEN DONE  
   }
+
+
+
+@Override
+public void updateEntity()
+  {  
+  super.updateEntity();
+  Config.log("chunkloader...loaded...");
+  }
+
+
 
 public void setTicket(Ticket tk)
   {

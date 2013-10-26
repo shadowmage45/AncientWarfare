@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
 
 public class PathFinderCrawler
@@ -87,7 +88,7 @@ public List<Node> findPath(PathWorldAccess world, int x, int y, int z, int tx, i
         }
       }
     foundPath.add(new Node(n.x, n.y, n.z));
-//    Config.logDebug(n.toString());
+//    Config.logDebug("crawler node: "+n.toString());
     }
   if(cx==tx && cy==ty && cz==tz)
     {

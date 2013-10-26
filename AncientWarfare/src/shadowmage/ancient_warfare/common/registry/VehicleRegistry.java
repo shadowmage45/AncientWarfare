@@ -108,7 +108,7 @@ public void registerVehicles()
     {    
     if(vehicle!=null)
       {
-      vehicle.setIsCraftable(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".enabled", true).getBoolean(true));
+      vehicle.setIsCraftable(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".enabled", vehicle.isEnabled()).getBoolean(vehicle.isEnabled()));
       if(!vehicle.isEnabled()){continue;}
       
       vehicle.setBaseAccuracy((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".accuracy", vehicle.getBaseAccuracy()).getDouble(vehicle.getBaseAccuracy()));

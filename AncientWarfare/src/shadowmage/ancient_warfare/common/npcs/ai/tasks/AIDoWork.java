@@ -52,16 +52,16 @@ public void onTick()
   {
   ITEWorkSite te = npc.wayNav.getWorkSiteTile();   
   npc.swingItem();
-  Config.logDebug("doing work tick...action time: "+npc.actionTick);
+//  Config.logDebug("doing work tick...action time: "+npc.actionTick);
   if(te!=null && te.hasWork())
     {
-    Config.logDebug("te not null and has work");
+//    Config.logDebug("te not null and has work");
     if(npc.actionTick<=0)
       {
-      Config.logDebug("doing work!!");
+//      Config.logDebug("doing work!!");
       te.doWork(npc);
       npc.setActionTicksToMax();
-      Config.logDebug("new action ticks: "+npc.actionTick);
+//      Config.logDebug("new action ticks: "+npc.actionTick);
       }    
     }
   else if(te==null)
