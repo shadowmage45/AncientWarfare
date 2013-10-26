@@ -34,7 +34,6 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.container.ContainerChunkloaderDeluxe.ChunkMapEntry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 import com.google.common.collect.ImmutableSet;
@@ -53,7 +52,7 @@ public TEChunkLoader()
   {
   this.guiNumber = -1;
   this.shouldWriteInventory = false;
-  this.canUpdate = true;//DEBUG--CHANGE BACK TO FALSE WHEN DONE  
+  this.canUpdate = false;  
   }
 
 
@@ -62,7 +61,6 @@ public TEChunkLoader()
 public void updateEntity()
   {  
   super.updateEntity();
-  Config.log("chunkloader...loaded...");
   }
 
 
