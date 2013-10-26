@@ -41,6 +41,8 @@ ProcessedStructure structure;
 
 Set<StructureBoundingBox> builtStructs = new HashSet<StructureBoundingBox>();
 
+protected ComponentVillageStartPiece startPieceA;
+
 /**
  * @param start
  * @param par2
@@ -51,6 +53,7 @@ public VillageGenComponent(ComponentVillageStartPiece start, Integer par2, Integ
   this.coordBaseMode = face;
   this.structure = struct;
   this.boundingBox = box;
+  this.startPieceA = start;
   }
 
 @Override
@@ -59,20 +62,18 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
   if(this.structure==null){return true;}
   if (this.averageGroundLevel < 0)
     {
-        this.averageGroundLevel = this.getAverageGroundLevel(world, structureboundingbox);
-
-        if (this.averageGroundLevel < 0)
-        {
-            return true;
-        }
-
-        this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + structure.ySize - 1, 0);
+    this.averageGroundLevel = this.getAverageGroundLevel(world, structureboundingbox);
+    if (this.averageGroundLevel < 0)
+      {
+      return true;
+      }
+    this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + structure.ySize - 1, 0);
     }
   int hostile = 0;
   int team = -1;
-  if(VillageGenerator.instance().villageMap.containsKey(startPiece))
+  if(VillageGenerator.instance().villageMap.containsKey(startPieceA))
     {
-    hostile = VillageGenerator.instance().villageMap.get(startPiece);
+    hostile = VillageGenerator.instance().villageMap.get(startPieceA);
     if(hostile==0)
       {
       team=16;
@@ -99,14 +100,14 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
     if(b.intersectsWith(boundingBox))
       {
       build = false;
-      Config.logDebug("intersecting bounding boxes, aborting final build...");
+//      Config.logDebug("intersecting bounding boxes, aborting final build...");
       break;
       }
     }
   if(build)
     {
     this.builtStructs.add(this.boundingBox);
-    Config.logDebug("actually building component:  "+this + " at: "+this.boundingBox + " client: "+world.isRemote);
+//    Config.logDebug("actually building component:  "+this + " at: "+this.boundingBox + " client: "+world.isRemote);
     builder.startConstruction();
     return true;
     } 

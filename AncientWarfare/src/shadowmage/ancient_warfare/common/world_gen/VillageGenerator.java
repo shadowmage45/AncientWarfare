@@ -25,7 +25,9 @@ import java.util.WeakHashMap;
 
 import net.minecraft.village.VillageCollection;
 import net.minecraft.world.gen.structure.ComponentVillage;
+import net.minecraft.world.gen.structure.ComponentVillageHouse1;
 import net.minecraft.world.gen.structure.ComponentVillageStartPiece;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
@@ -88,12 +90,14 @@ public static void load()
     {
     fortress = new VillageGenHook(AWVCFortress.class, 1, 5, struct);  
     VillagerRegistry.instance().registerVillageCreationHandler(fortress);
+    MapGenStructureIO.func_143031_a(AWVCFortress.class, "AWViFT");
     }    
   struct = StructureManager.instance().getStructureServer("logCabin");
   if(struct!=null)
     {
     logCabin = new VillageGenHook(AWVCLogCabin.class, 1, 10, struct);
     VillagerRegistry.instance().registerVillageCreationHandler(logCabin);
+    MapGenStructureIO.func_143031_a(AWVCLogCabin.class, "AWViLC");
     }
   }
 
