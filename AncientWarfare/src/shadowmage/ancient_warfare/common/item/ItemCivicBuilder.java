@@ -24,8 +24,10 @@ import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
@@ -52,6 +54,12 @@ public ItemCivicBuilder(int itemID)
   {
   super(itemID);
   this.setHasSubtypes(true);
+  }
+
+@Override
+protected boolean canPlayerUse(EntityPlayer player)
+  {
+  return true;
   }
 
 @Override

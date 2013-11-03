@@ -104,7 +104,7 @@ public void updateEntity()
         float dist = Trig.getDistance(xCoord, yCoord, zCoord, data.posX(), data.posY(), data.posZ());
         if(data.dimID != this.boxData.dimID)
           {
-          dist = 500;
+          dist = Config.mailDimensionalTime / 5;
           }
         data.addIncomingItem(stack, (int)dist*5);
         this.setInventorySlotContents(slot, null);

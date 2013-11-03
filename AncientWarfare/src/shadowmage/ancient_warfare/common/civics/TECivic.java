@@ -286,7 +286,7 @@ public void broadcastWork(int maxRange)
 
 public boolean onInteract(World world, EntityPlayer player)
   {
-  if(!world.isRemote && inventory.getSizeInventory()>0)
+  if(!world.isRemote && inventory!=null && inventory.getSizeInventory()>0)
     {
     GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);
     }

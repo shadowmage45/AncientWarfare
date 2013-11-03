@@ -309,7 +309,7 @@ public static EntityGate constructGate(World world, BlockPosition pos1, BlockPos
       {
       for(int z = min.z; z <=max.z ;z++)
         {
-        if(world.getBlockId(x, y, z)!=0)
+        if(!world.isAirBlock(x, y, z))
           {
           return null;
           }

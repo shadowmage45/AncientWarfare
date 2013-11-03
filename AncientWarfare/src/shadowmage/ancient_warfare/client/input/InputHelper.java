@@ -181,7 +181,7 @@ public void onKeyUp(Keybind kb)
     {
     hasMoveInput = true;
     }
-  else if(kb==control)
+  else if(kb==control && mc!=null && mc.thePlayer!=null)
     {
     Packet01ModData pkt = new Packet01ModData();
     NBTTagCompound tag = new NBTTagCompound();

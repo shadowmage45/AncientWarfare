@@ -36,7 +36,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 public class Config
 {
 //*******************************************************FIELDS**********************************************//
-public static final String VERSION = "1.1.031-beta-MC164";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
+public static final String VERSION = "1.1.032-beta-MC164";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
 public static final String ANTVERSION = "@VERSION@";
 public static String texturePath = "textures/";
 public static String configPath = "";
@@ -79,6 +79,7 @@ public static int npcAISearchRange = 80;
 public static int mailSendTicks = 5*20;//five seconds between sending mail
 public static int npcWorkMJ = 80;//how many BuildCraft MJ represent one NPC 'work' unit
 public static int vehicleMoveUpdateFrequency = 3;
+public static int mailDimensionalTime = 2500;
 
 
 //***************************************************SYNCHED CONFIGS************************************************//
@@ -242,6 +243,7 @@ public void setCoreInfo()
   this.randomizeVillagers = config.get("a-general-options", "randomize_villagers", false, "If true, villager spawners will spawn a random villager type instead of set type").getBoolean(false);
   this.renderHostileNames = config.get("a-general-options", "render_hostile_nameplates", false, "If true, will render nameplates/health for hostile NPCs and vehicles -- client side config (for now)").getBoolean(false);
   this.allowFriendlyFire = config.get("a-general-options", "allow_friendly_fire", false, "If true, soldiers can/will injure other friendly soldiers with arrows/ammunitions").getBoolean(false);
+  this.mailDimensionalTime = config.get("a-general-options", "mailbox_dimensional_delay", mailDimensionalTime, "Delay introduced for cross-dimensional mail in ticks. Any mail sent across dimensions will take this number of ticks to arrive").getInt(mailDimensionalTime);
   /**
    * performance options
    */

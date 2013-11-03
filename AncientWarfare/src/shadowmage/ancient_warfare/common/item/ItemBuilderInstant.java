@@ -127,14 +127,19 @@ private void clearStructureData(ItemStack stack)
   stack.setTagInfo("structData", getDefaultTag());
   }
 
+protected boolean canPlayerUse(EntityPlayer player)
+  {
+  if(!MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.getEntityName()))
+    {
+    return true;
+    }
+  return false;
+  }
+
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
-  if(world.isRemote)
-    {
-    return true;
-    }  
-  if(!MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.getEntityName()))
+  if(world.isRemote || !canPlayerUse(player))
     {
     return true;
     }
