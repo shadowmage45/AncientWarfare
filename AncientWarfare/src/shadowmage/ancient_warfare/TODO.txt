@@ -26,6 +26,7 @@ FROM TESTING
 * crafting tables do not rotate properly from template construction (purely cosmetic..but...)
 * somehow still dropping config information on server crash (lost research...also lost forge forced chunk data though, so may be an error out of my control)
 * chunkloader not working properly?
+* possibly look into expanding the reach on npcs slightly so they have a better chance vs players
 
 
 server opt flags::
