@@ -28,6 +28,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import shadowmage.ancient_warfare.common.config.Config;
+
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -700,25 +702,26 @@ public static List<ItemStack> getCompactResourcesForRecipe(ShapelessRecipes reci
 
 public static List<ItemStack> getCompactedItemList(Collection<ItemStack> items)
   {
-  ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
+  ArrayList<ItemStack> foundStacks = new ArrayList<ItemStack>();
   for(ItemStack stack : items)
     {
     if(stack==null){continue;}
     boolean found = false;
-    for(ItemStack test : stacks)
+    for(ItemStack test : foundStacks)
       {
-      if(stack.areItemStacksEqual(stack, test) && stack.areItemStackTagsEqual(stack, test))
-        {
+      if(stack.itemID==test.itemID && stack.getItemDamage()==test.getItemDamage() && stack.areItemStackTagsEqual(stack, test))
+        {        
         test.stackSize += stack.stackSize;
+        found = true;
         break;
         }
       }
     if(!found)
       {
-      stacks.add(stack.copy());
+      foundStacks.add(stack.copy());
       }
     }  
-  return stacks;
+  return foundStacks;
   }
 
 }

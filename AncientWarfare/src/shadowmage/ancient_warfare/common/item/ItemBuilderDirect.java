@@ -161,11 +161,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   if(world.isRemote)
     {
     return true;
-    }  
-  if(!MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.getEntityName()))
-    {
-    return true;
-    }
+    } 
   NBTTagCompound tag;
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
     {

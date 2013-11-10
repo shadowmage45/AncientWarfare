@@ -289,6 +289,7 @@ private boolean containsResources(List<ItemStack> items)
   {
   for(ItemStack item : items)
     {
+    Config.logDebug("examining stack of required items: "+item);
     if(item==null){continue;}
     if(InventoryTools.getCountOf(this, item, craftMatrix)<item.stackSize)
       {

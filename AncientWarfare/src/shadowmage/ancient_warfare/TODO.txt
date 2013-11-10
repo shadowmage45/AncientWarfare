@@ -167,4 +167,11 @@ TEXTURE/ART
 * fix civic builder needing op status to use.  would prevent use in true SSP/SMP games (but would work fine if started in creative and swapped to survival)
 * open up config option to adjust delay for cross-dimensional mail
 * fix NPE on interaction with a TECivic that had a null inventory
-* fix validation on gate placement to test for air blocks instead of blockID==0, should help with cases of RC phantom blocks obstructing gate construction    
+* fix validation on gate placement to test for air blocks instead of blockID==0, should help with cases of RC phantom blocks obstructing gate construction
+
+/********** 11-10-13 **********/
+* fix crash in drafting table if 'start' is pressed when no structure is selected
+* remove server-op validation from structure-builder items.  should resolve issues of structure building items not working in survival mode (e.g. civic building sites)
+* fix checking for blockID==0 in drawbridges.  should fix some issues of RC/other phantom blocks preventing it from opening/closing
+* fix recipe-resource related issue in auto-crafting table that would allow for crafting of things with only partial resources -- thanks Varka for reporting this one   
+* update version# for release 

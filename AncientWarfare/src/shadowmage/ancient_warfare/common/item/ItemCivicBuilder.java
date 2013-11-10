@@ -57,12 +57,6 @@ public ItemCivicBuilder(int itemID)
   }
 
 @Override
-protected boolean canPlayerUse(EntityPlayer player)
-  {
-  return true;
-  }
-
-@Override
 public Icon getIconFromDamage(int par1)
   {
   return icon;
@@ -123,16 +117,9 @@ public boolean attemptConstruction(World world, ProcessedStructure struct, Block
     { 
     BuilderTicked builder = new BuilderTicked(world, struct, face, offsetHit);
     builder.startConstruction();
-    builder.setOverrides(-1, false, false, true);//TODO handle gate stuff...
+    builder.setOverrides(-1, false, false, true);
     te.setBuilder(builder);
-//    Ticket tk = ForgeChunkManager.requestTicket(AWCore.instance, world, Type.NORMAL);
-//    if(tk!=null)
-//      {
-//      ForgeChunkManager.forceChunk(tk, new ChunkCoordIntPair(hit.x/16, hit.z/16));
-//      te.setTicket(tk);
-//      }
-    struct.addBuilder(builder);
-    
+    struct.addBuilder(builder);    
     return true;
     }  
   return false;

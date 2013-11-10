@@ -129,7 +129,7 @@ public boolean canActivate(EntityGate gate, boolean open)
       for(int z = min.z; z<=max.z; z++)
         {
         id = gate.worldObj.getBlockId(x, min.y, z);
-        if(id!=0 && id!=BlockLoader.gateProxy.blockID)
+        if(!gate.worldObj.isAirBlock(x, min.y, z) && id!=BlockLoader.gateProxy.blockID)
           {
           badBlock = true;
           break;
@@ -236,7 +236,6 @@ public void onGateFinishClose(EntityGate gate)
     {
     return;
     }
-  int id;
   BlockPosition min = BlockTools.getMin(gate.pos1, gate.pos2);
   BlockPosition max = BlockTools.getMax(gate.pos1, gate.pos2);
   for(int x = min.x; x <= max.x; x++)
@@ -245,8 +244,7 @@ public void onGateFinishClose(EntityGate gate)
       {
       for(int z = min.z; z<= max.z; z++)
         {
-        id = gate.worldObj.getBlockId(x, y, z);
-        if(id==0)
+        if(gate.worldObj.isAirBlock(x, y, z))
           {
           gate.worldObj.setBlock(x, y, z, BlockLoader.gateProxy.blockID);
           TileEntity te = gate.worldObj.getBlockTileEntity(x, y, z);
@@ -267,6 +265,7 @@ public void onGateFinishClose(EntityGate gate)
   BlockPosition minTemp = min.copy();
   min = BlockTools.getMin(min, pos3);    
   max = BlockTools.getMax(minTemp, pos3);
+  int id;
   for(int x = min.x; x <= max.x; x++)
     {
     for(int y = min.y; y <=max.y; y++)
