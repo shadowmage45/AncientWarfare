@@ -134,6 +134,8 @@ public List<ItemStackWrapperCrafting> additionalMaterials = new ArrayList<ItemSt
 String iconTexture = "foo.png";
 protected String configName = "none";
 protected boolean enabled = true;
+protected boolean enabledForCrafting = true;
+protected boolean enabledForLoot = true;
 
 protected VehicleMovementType movementType = VehicleMovementType.GROUND;
 
@@ -174,7 +176,7 @@ public boolean canSoldiersPilot()
   }
 
 @Override
-public void setIsCraftable(boolean val)
+public void setEnabled(boolean val)
   {
   this.enabled = val;  
   }
@@ -674,5 +676,31 @@ public void setBaseAccuracy(float val)
   if(val>1.f){val = 1.f;}
   this.accuracy = val;
   }
+
+
+@Override
+public boolean isEnabledForLoot()
+  {
+  return this.enabledForLoot;
+  }
+
+@Override
+public boolean isEnabledForCrafting()
+  {
+  return this.enabledForCrafting;
+  }
+
+@Override
+public void setEnabledForLoot(boolean val)
+  {
+  this.enabledForLoot = val;
+  }
+
+@Override
+public void setEnabledForCrafting(boolean val)
+  {
+  this.enabledForCrafting = val;
+  }
+
 
 }

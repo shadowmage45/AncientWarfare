@@ -78,7 +78,7 @@ public void addResearchToQueue(int num)
     {
     deps.add(this.recipe.getResult().getItemDamage());
     }
-  if(goal.isResearchMet(deps) && !this.researchQueue.contains(Integer.valueOf(num)) && !this.workingPlayerEntry.hasDoneResearch(ResearchGoal.getGoalByID(num)))
+  if(goal!=null && goal.isEnabledForResearch() && goal.isResearchMet(deps) && !this.researchQueue.contains(Integer.valueOf(num)) && !this.workingPlayerEntry.hasDoneResearch(ResearchGoal.getGoalByID(num)))
     {
     this.researchQueue.add(Integer.valueOf(num));
     }
@@ -110,14 +110,14 @@ protected boolean tryFinishCrafting()
   {
   IResearchGoal goal = ResearchGoal.getGoalByID(recipe.getResult().getItemDamage());
   if(goal==null || workingPlayerName==null)
-  {
-	  this.recipe = null;
-	  this.isStarted = false;
-	  this.isWorking = false;
-	  this.workProgress = 0;
-	  this.workProgressMax = 0;
-	  return false;
-  }
+    {
+    this.recipe = null;
+    this.isStarted = false;
+    this.isWorking = false;
+    this.workProgress = 0;
+    this.workProgressMax = 0;
+    return false;
+    }
   PlayerTracker.instance().addResearchToPlayer(worldObj, workingPlayerName, goal.getGlobalResearchNum());
   if(!this.researchQueue.isEmpty())
     {

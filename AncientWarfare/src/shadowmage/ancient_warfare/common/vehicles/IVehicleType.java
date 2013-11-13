@@ -124,8 +124,14 @@ public abstract HashSet<IResearchGoal> getNeededResearchFor(int level);
 
 public abstract VehicleMovementType getMovementType();
 
-public abstract void setIsCraftable(boolean val);
+public abstract void setEnabled(boolean val);
 public abstract boolean isEnabled();//determined via config, used to add recipes and to loot tables
+public abstract boolean isEnabledForLoot();
+public abstract boolean isEnabledForCrafting();
+
+public abstract void setEnabledForLoot(boolean val);
+public abstract void setEnabledForCrafting(boolean val);
+
 public abstract String getConfigName();//get the name used to load config settings for this vehicle
 
 }

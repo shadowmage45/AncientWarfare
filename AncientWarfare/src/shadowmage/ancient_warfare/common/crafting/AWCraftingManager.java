@@ -309,7 +309,7 @@ protected void addResearchRecipes()
   ResourceListRecipe recipe;
   for(IResearchGoal goal : ResearchGoal.researchGoals)
     {
-    if(goal==null){continue;}
+    if(goal==null || !goal.isEnabled() || !goal.isEnabledForResearch()){continue;}
     recipe = goal.constructRecipe();
     if(recipe!=null)
       {
@@ -669,7 +669,7 @@ protected void addVehicleRecipes()
   ResourceListRecipe recipe;
   for(IVehicleType vehicle : VehicleType.vehicleTypes)
     {
-    if(vehicle==null){continue;}
+    if(vehicle==null || !vehicle.isEnabled() || !vehicle.isEnabledForCrafting()){continue;}
     for(int i = 0; i < vehicle.getMaterialType().getNumOfLevels(); i++)
       {
       recipe = vehicle.constructRecipe(i);

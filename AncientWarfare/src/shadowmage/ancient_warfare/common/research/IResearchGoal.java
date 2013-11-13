@@ -49,4 +49,13 @@ public abstract IResearchGoal addResource(ItemStack stack, boolean dmg, boolean 
 public abstract ResourceListRecipe constructRecipe();
 public abstract boolean isResearchMet(Collection<Integer> goals);
 
+public abstract boolean isEnabled();
+public abstract boolean isEnabledForLoot();
+public abstract void setEnabled(boolean val);
+public abstract void setEnabledForLoot(boolean val);
+
+
+public abstract boolean isEnabledForResearch();
+public abstract void setEnabledForResearch(boolean val);
+
 }

@@ -78,11 +78,14 @@ public void addLootToTables()
   for(ResearchGoal g : ResearchGoal.researchGoals)
     {
     if(g==null){continue;}
-    addLoot(new ItemStack(ItemLoader.researchNotes,1,g.getGlobalResearchNum()),1,1,1);
+    if(g.isEnabled() && g.isEnabledForLoot())
+      {
+      addLoot(new ItemStack(ItemLoader.researchNotes,1,g.getGlobalResearchNum()) , 1 , 1 , 1);      
+      }
     }
   for(IVehicleType t : VehicleType.vehicleTypes)
     {
-    if(t==null || !t.isEnabled()){continue;}
+    if(t==null || !t.isEnabled() || !t.isEnabledForLoot()){continue;}
     int level = t.getMaterialType().getNumOfLevels();
     for(int i = 0; i< t.getMaterialType().getNumOfLevels(); i++)
       {

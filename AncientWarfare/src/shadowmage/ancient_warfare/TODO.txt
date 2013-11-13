@@ -26,7 +26,13 @@ FROM TESTING
 * crafting tables do not rotate properly from template construction (purely cosmetic..but...)
 * somehow still dropping config information on server crash (lost research...also lost forge forced chunk data though, so may be an error out of my control)
 * chunkloader not working properly?
+
 * possibly look into expanding the reach on npcs slightly so they have a better chance vs players
+* add config options to change if loot is added to to loot tables for each vehicle, npc, civ, etc.
+* add easier/cleaner method to completely disable vehicles
+* npc armor / skinning system
+* examine swapping over to unique entity-ids for different npc types -- may need to re-sublcass npcBase into various types...
+* add config option to adjust rarity/weight of each added loot type
 
 
 server opt flags::
@@ -176,3 +182,11 @@ TEXTURE/ART
 * fix checking for blockID==0 in drawbridges.  should fix some issues of RC/other phantom blocks preventing it from opening/closing
 * fix recipe-resource related issue in auto-crafting table that would allow for crafting of things with only partial resources -- thanks Varka for reporting this one   
 * update version# for release 
+
+/********** 11-13-13 **********/
+* add ability to enable/disable specific research goals globally.
+* add ability to remove specific research goals from research table
+* add ability to remove specific research goals from generating in chest loot
+* add ability to enable/disable specific vehicles globally (should work more reliably than before)
+* add ability to remove specific vehicles from being craftable (but still enabled to use)
+* add ability to remove specific vehicles from generating in chest loot

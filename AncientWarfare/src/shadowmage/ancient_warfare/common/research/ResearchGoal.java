@@ -153,14 +153,33 @@ protected HashSet<IResearchGoal> dependencyCache = new HashSet<IResearchGoal>();
 protected List<String> detailedDescription = new ArrayList<String>();
 protected List<ItemStackWrapperCrafting> resources = new ArrayList<ItemStackWrapperCrafting>();
 protected int researchTime = 100;
+protected boolean enabled;
+protected boolean addToLoot;
+protected boolean enabledForResearch;
 
 public static void load()
   {
   Description d = ItemLoader.instance().registerItemSubtyped(ItemLoader.researchNotes);
+  boolean enabled;
   for(IResearchGoal goal : researchGoals)
     {
 	  if(goal==null){continue;}
-    ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.researchNotes, goal.getGlobalResearchNum(), goal.getDisplayName()).addDisplayStack(new ItemStack(ItemLoader.researchNotes,1,goal.getGlobalResearchNum())).setIconTexture("ancientwarfare:misc/researchNotes", goal.getGlobalResearchNum());
+	  enabled = Config.getConfig().get("research_enabled_global", goal.getLocalizedName(), true).getBoolean(true);
+	  goal.setEnabled(enabled);
+	  if(enabled)
+	    {	    
+	    ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.researchNotes, goal.getGlobalResearchNum(), goal.getDisplayName()).addDisplayStack(new ItemStack(ItemLoader.researchNotes,1,goal.getGlobalResearchNum())).setIconTexture("ancientwarfare:misc/researchNotes", goal.getGlobalResearchNum());
+
+	    enabled = Config.getConfig().get("research_add_to_chests", goal.getLocalizedName(), true).getBoolean(true);
+	    goal.setEnabledForLoot(enabled);
+	    
+	    enabled = Config.getConfig().get("research_enabled_research_table", goal.getLocalizedName(), true).getBoolean(true);
+	    goal.setEnabledForResearch(enabled);
+	    }
+	  else
+	    {
+	    researchGoals[goal.getGlobalResearchNum()] = null;
+	    }
     }
   }
 
@@ -357,6 +376,42 @@ public boolean isResearchMet(Collection<Integer> goals)
       }
     }
   return true;
+  }
+
+@Override
+public void setEnabled(boolean val)
+  {
+  this.enabled = val;
+  }
+
+@Override
+public void setEnabledForLoot(boolean val)
+  {
+  this.addToLoot = val;
+  }
+
+@Override
+public boolean isEnabled()
+  {
+  return enabled;
+  }
+
+@Override
+public boolean isEnabledForLoot()
+  {
+  return addToLoot;
+  }
+
+@Override
+public boolean isEnabledForResearch()
+  {
+  return this.enabledForResearch;
+  }
+
+@Override
+public void setEnabledForResearch(boolean val)
+  {
+  this.enabledForResearch = val;
   }
 
 

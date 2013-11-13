@@ -261,8 +261,11 @@ protected void handleSearchBoxUpdate()
     List<IResearchGoal> goals = entry.getAvailableResearch();
     List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
     for(IResearchGoal g : goals)
-      {
-      recipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,g.getGlobalResearchNum())));
+      {   
+      if(g.isEnabledForResearch())
+        {
+        recipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,g.getGlobalResearchNum())));        
+        }
       }
     this.addRecipeButtons(recipes, sorterFilter);     
     }
@@ -282,21 +285,11 @@ protected void handleSearchBoxUpdate()
     List<ResourceListRecipe> recipes = new ArrayList<ResourceListRecipe>();
     for(IResearchGoal b : goals)
       {
-      recipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,b.getGlobalResearchNum())));
+      if(b.isEnabledForResearch())
+        {
+        recipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,b.getGlobalResearchNum())));        
+        }
       }
-//    Iterator<ResourceListRecipe> it = recipes.iterator();
-//    ResourceListRecipe recipe;
-//    while(it.hasNext())
-//      {
-//      recipe = it.next();
-//      for(ResourceListRecipe r : queuedRecipes.values())
-//        {
-//        if(recipe.matches(r))
-//          {
-//          it.remove();
-//          }
-//        }
-//      }
     Collections.sort(recipes, sorterFilter);
     this.addQueueRecipeButtons(recipes, sorterFilter);    
     area2.elements.clear();    

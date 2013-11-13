@@ -108,9 +108,14 @@ public void registerVehicles()
     {    
     if(vehicle!=null)
       {
-      vehicle.setIsCraftable(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".enabled", vehicle.isEnabled()).getBoolean(vehicle.isEnabled()));
-      if(!vehicle.isEnabled()){continue;}
-      
+      vehicle.setEnabled(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".enabled", vehicle.isEnabled()).getBoolean(vehicle.isEnabled()));
+      if(!vehicle.isEnabled())
+        {
+        VehicleType.vehicleTypes[vehicle.getGlobalVehicleType()]=null;
+        continue;
+        }
+      vehicle.setEnabledForCrafting(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".craftable", true).getBoolean(true));
+      vehicle.setEnabledForLoot(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".add_to_chests", true).getBoolean(true));
       vehicle.setBaseAccuracy((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".accuracy", vehicle.getBaseAccuracy()).getDouble(vehicle.getBaseAccuracy()));
       vehicle.setBaseForwardSpeed((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".forward_speed", vehicle.getBaseForwardSpeed()).getDouble(vehicle.getBaseForwardSpeed()));
       vehicle.setBaseHealth((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".health", vehicle.getBaseHealth()).getDouble(vehicle.getBaseHealth()));
