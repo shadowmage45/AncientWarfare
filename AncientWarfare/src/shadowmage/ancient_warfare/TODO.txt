@@ -188,4 +188,5 @@ TEXTURE/ART
 * add ability to enable/disable specific vehicles globally (should work more reliably than before)
 * add ability to remove specific vehicles from being craftable (but still enabled to use)
 * add ability to remove specific vehicles from generating in chest loot
-* add slots to NPC inventory gui to allow for manual armor changes
+* add slots to most NPC inventory/container/guis to allow for manual armor changes (needs position adjusted)
+* add armor slots to courier inventory/container/gui

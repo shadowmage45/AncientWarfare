@@ -61,9 +61,9 @@ public ContainerNpcCourier(EntityPlayer openingPlayer, NpcBase npc)
   this.inventorySlotsY = 4 + 10;
   int invHeight = (te.getSizeInventory()/9 + (te.getSizeInventory()%9==0 ? 0 : 1)) * 18;
   this.specSlotsY = this.inventorySlotsY + invHeight + 10;   
-  this.playerSlotsY = specSlotsY+18+10;
+  this.playerSlotsY = specSlotsY+18+10+18+10;
   this.addPlayerSlots(openingPlayer, 8, this.playerSlotsY, 4);
-  this.totalHeight = (5*18+8+10)+specSlotsY; 
+  this.totalHeight = (5*18+8+10+18+10)+specSlotsY; 
   
   for(y = 0; y < te.getSizeInventory()/9; y++)
     {
@@ -91,6 +91,18 @@ public ContainerNpcCourier(EntityPlayer openingPlayer, NpcBase npc)
       this.addSlotToContainer(slot);        
       }
     } 
+  this.addArmorSlots();
+  }
+
+protected void addArmorSlots()
+  {
+  IInventory inv = npc.armorInventory;
+  int x = 8, y = 0;
+  for(int i = 0; i <4; i++)
+    {    
+    this.addSlotToContainer(new SlotArmor(player, inv, 3-i, x, specSlotsY+18+10, i));
+    x+=18;
+    }
   }
 
 @Override
