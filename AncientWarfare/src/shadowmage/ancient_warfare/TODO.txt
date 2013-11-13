@@ -28,8 +28,6 @@ FROM TESTING
 * chunkloader not working properly?
 
 * possibly look into expanding the reach on npcs slightly so they have a better chance vs players
-* add config options to change if loot is added to to loot tables for each vehicle, npc, civ, etc.
-* add easier/cleaner method to completely disable vehicles
 * npc armor / skinning system
 * examine swapping over to unique entity-ids for different npc types -- may need to re-sublcass npcBase into various types...
 * add config option to adjust rarity/weight of each added loot type
