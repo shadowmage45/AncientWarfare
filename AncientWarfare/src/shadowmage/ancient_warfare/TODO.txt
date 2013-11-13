@@ -28,9 +28,9 @@ FROM TESTING
 * chunkloader not working properly?
 
 * possibly look into expanding the reach on npcs slightly so they have a better chance vs players
-* npc armor / skinning system
 * examine swapping over to unique entity-ids for different npc types -- may need to re-sublcass npcBase into various types...
 * add config option to adjust rarity/weight of each added loot type
+* add banners to NPCs to tell that they are an NPC and team color
 
 
 server opt flags::
@@ -188,3 +188,4 @@ TEXTURE/ART
 * add ability to enable/disable specific vehicles globally (should work more reliably than before)
 * add ability to remove specific vehicles from being craftable (but still enabled to use)
 * add ability to remove specific vehicles from generating in chest loot
+* add slots to NPC inventory gui to allow for manual armor changes

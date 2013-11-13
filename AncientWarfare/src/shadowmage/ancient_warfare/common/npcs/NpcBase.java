@@ -51,6 +51,7 @@ import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntry;
+import shadowmage.ancient_warfare.common.npcs.inventory.NpcArmorInventory;
 import shadowmage.ancient_warfare.common.npcs.inventory.NpcInventory;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointNavigator;
@@ -121,6 +122,7 @@ public Navigator nav;
 public WayPointNavigator wayNav;
 public NpcInventory inventory;
 public NpcInventory specInventory;
+public NpcArmorInventory armorInventory;
 
 /**
  * @param par1World
@@ -153,6 +155,7 @@ public NpcBase(World par1World)
     }
   this.experienceValue = 10;
   this.setHealth(20.f);
+  this.armorInventory = new NpcArmorInventory(this);
   }
 
 
@@ -436,7 +439,7 @@ public boolean isAggroTowards(EntityPlayer player)
   }
 
 public boolean isAggroTowards(int otherTeam)
-  {//this.npcType.isCombatUnit() &&
+  {
   return  TeamTracker.instance().isHostileTowards(worldObj, teamNum, otherTeam);
   }
 

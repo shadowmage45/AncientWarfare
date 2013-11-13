@@ -143,7 +143,7 @@ public static Entity getNpcForType(int num, World world, int level, int team)
       {
       if(armorStacks[i]!=null)
         {
-        npc.setCurrentItemOrArmor(i+1, armorStacks[i].copy());
+        npc.setCurrentItemOrArmor(1 + 3-i, armorStacks[i].copy());
         }
       }
     if(!type.isBandit())

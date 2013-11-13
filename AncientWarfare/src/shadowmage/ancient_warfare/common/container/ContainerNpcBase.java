@@ -51,7 +51,8 @@ public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
   int xPos; 
   int yPos;
 
-  this.addPlayerSlots(openingPlayer, 8, 158, 4);    
+  this.addPlayerSlots(openingPlayer, 8, 158, 4);   
+  this.addArmorSlots();
 //  IInventory te = npc.inventory;
 //  Config.logDebug("setting npc inventory. size: "+te.getSizeInventory());
 //  for(y = 0; y < te.getSizeInventory()/9; y++)
@@ -142,6 +143,17 @@ public List<NBTTagCompound> getInitData()
 public boolean canInteractWith(EntityPlayer var1)
   {
   return super.canInteractWith(var1) && var1!=null && var1.getDistanceToEntity(npc) < 5.d;
+  }
+
+protected void addArmorSlots()
+  {
+  IInventory inv = npc.armorInventory;
+  int x = 0, y = 0;
+  for(int i = 0; i <4; i++)
+    {    
+    this.addSlotToContainer(new SlotArmor(player, inv, 3-i, x, y, i));
+    x+=18;
+    }
   }
 
 }
