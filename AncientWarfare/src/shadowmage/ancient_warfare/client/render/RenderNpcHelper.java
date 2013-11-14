@@ -34,6 +34,8 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_warfare.client.model.ModelArrow2;
+import shadowmage.ancient_warfare.client.model.ModelFlag;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -43,7 +45,8 @@ public class RenderNpcHelper extends RenderBiped
 {
 
 DecimalFormat format2p = new DecimalFormat("#.##");
-
+ModelArrow2 arrow = new ModelArrow2();
+ModelFlag flag = new ModelFlag();
 /**
  * @param par1ModelBiped
  * @param par2
@@ -63,6 +66,15 @@ public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double pa
     String displayLabel = StatCollector.translateToLocal(npc.npcType.getLevelName(npc.rank))+" "+format2p.format(npc.getHealth())+"/"+npc.getMaxHealth();
     this.renderLivingLabel(par1EntityLiving, displayLabel, par2, par4, par6, 64);
     }
+  }
+
+@Override
+protected void renderEquippedItems(EntityLivingBase par1EntityLivingBase, float par2)
+  {
+  super.renderEquippedItems(par1EntityLivingBase, par2);
+  GL11.glDisable(GL11.GL_TEXTURE_2D);
+  this.flag.render();
+  GL11.glEnable(GL11.GL_TEXTURE_2D);
   }
 
 /**

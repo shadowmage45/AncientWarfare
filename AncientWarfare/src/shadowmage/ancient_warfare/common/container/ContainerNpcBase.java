@@ -148,7 +148,7 @@ public boolean canInteractWith(EntityPlayer var1)
 protected void addArmorSlots()
   {
   IInventory inv = npc.armorInventory;
-  int x = 0, y = 0;
+  int x = 8, y = 40;
   for(int i = 0; i <4; i++)
     {    
     this.addSlotToContainer(new SlotArmor(player, inv, 3-i, x, y, i));
