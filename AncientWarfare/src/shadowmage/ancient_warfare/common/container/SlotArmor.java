@@ -63,7 +63,7 @@ public int getSlotStackLimit()
 public boolean isItemValid(ItemStack par1ItemStack)
   {
   Item item = (par1ItemStack == null ? null : par1ItemStack.getItem());
-  return item != null && item.isValidArmor(par1ItemStack, armorType, player);
+  return par1ItemStack.getItemDamage()==0 && item != null && item.isValidArmor(par1ItemStack, armorType, player);
   }
 
 @SideOnly(Side.CLIENT)

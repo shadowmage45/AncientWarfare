@@ -168,3 +168,4 @@ TEXTURE/ART
 * fix shading/lighting on giant-sized trebuchet (needed normals rescaled)
 * add toggle for npc flag rendering
 * fix team colors for teams 16/17, now show as white/red respectively
+* fix-change npc armor slots to only allow fully repaired armor to be inserted by players
