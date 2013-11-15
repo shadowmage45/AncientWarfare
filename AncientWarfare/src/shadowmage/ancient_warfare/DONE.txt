@@ -1706,7 +1706,7 @@
 * add slots to most NPC inventory/container/guis to allow for manual armor changes (needs position adjusted)
 * add armor slots to courier inventory/container/gui
 
-/********** 11-13-13 **********/
+/********** 11-14-13 **********/
 * fix alignment of armor slots on npc and courier guis
 * add prep for rendering npc team flags (need flag model / textures)
 * fix shading/lighting on giant-sized trebuchet (needed normals rescaled)
