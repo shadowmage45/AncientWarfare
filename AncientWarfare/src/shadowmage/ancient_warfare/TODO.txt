@@ -151,35 +151,6 @@ TEXTURE/ART
 *  denotes done
 ** denotes done and tested
 
-/********** 09-23-13 **********/
-* fix workers dropping work-site if it was out of work -- should fix issues with manual work-site selection using command baton w/ ignore broadcast enabled
-    should also fix 'issues' of workers swapping sites, or a worker moving to next site before current is finished
-** add biome swap rules for fortress1/2, lavaFarm, tower1 -- grass/dirt->desert
-/********** 09-26-13 **********/
-* adjust submarine max forward speed 6.2 -> 3.7, strafe 2.0 -> 1.2
-* add useable build.xml -- will need crazy edits for 1.6 / real workspace setup
-
-/********** 10-26-13 **********/
-* pathfinding on fences apparently still needs work (re-enable push-out of blocks whenever inside a fence block?)
-* soldier health display float rounding
-* village component/generation 1.6.4 support (add mapping to structuregenIO, default no-param constructors)
-* switch airplane/helicopter/submarine to be disabled by default.  In order to use these vehicles, you will need to enable them in your config file. 
-    THIS WILL DELETE ANY CURRENT ENTITIES OF THESE TYPES IN YOUR WORLD WHEN THE CONFIG FILE IS REGENERATED.  IF YOU WISH TO KEEP THESE, RUN MC ONCE (DONT LOAD YOUR WORLD),
-    EXIT MC, OPEN THE CONFIG FILE, RE-ENABLE THEM, AND THEN START MC/LOAD YOUR WORLD
-    
-/********** 11-03-13 **********/
-* fix crash in input helper if mc/player happened to be null
-* fix civic builder needing op status to use.  would prevent use in true SSP/SMP games (but would work fine if started in creative and swapped to survival)
-* open up config option to adjust delay for cross-dimensional mail
-* fix NPE on interaction with a TECivic that had a null inventory
-* fix validation on gate placement to test for air blocks instead of blockID==0, should help with cases of RC phantom blocks obstructing gate construction
-
-/********** 11-10-13 **********/
-* fix crash in drafting table if 'start' is pressed when no structure is selected
-* remove server-op validation from structure-builder items.  should resolve issues of structure building items not working in survival mode (e.g. civic building sites)
-* fix checking for blockID==0 in drawbridges.  should fix some issues of RC/other phantom blocks preventing it from opening/closing
-* fix recipe-resource related issue in auto-crafting table that would allow for crafting of things with only partial resources -- thanks Varka for reporting this one   
-* update version# for release 
 
 /********** 11-13-13 **********/
 * add ability to enable/disable specific research goals globally.
@@ -194,3 +165,6 @@ TEXTURE/ART
 /********** 11-13-13 **********/
 * fix alignment of armor slots on npc and courier guis
 * add prep for rendering npc team flags (need flag model / textures)
+* fix shading/lighting on giant-sized trebuchet (needed normals rescaled)
+* add toggle for npc flag rendering
+* fix team colors for teams 16/17, now show as white/red respectively

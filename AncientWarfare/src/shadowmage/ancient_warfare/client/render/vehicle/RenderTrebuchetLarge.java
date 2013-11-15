@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.client.render.vehicle;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import shadowmage.ancient_warfare.client.model.ModelTrebuchetStandFixed;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
@@ -35,10 +36,12 @@ ModelTrebuchetStandFixed model = new ModelTrebuchetStandFixed();
 @Override
 public void renderVehicle(VehicleBase vehicle, double x, double y, double z,  float yaw, float tick)
   {
+  GL11.glEnable(GL12.GL_RESCALE_NORMAL);
   GL11.glScalef(2.5f, 2.5f, 2.5f);
   VehicleFiringVarsHelper var = vehicle.firingVarsHelper;
   model.setArmRotations(var.getVar1() + tick*var.getVar2(), var.getVar3()+tick*var.getVar4());
   model.render(vehicle, 0, 0, 0, 0, 0, 0.0625f);
+  GL11.glDisable(GL12.GL_RESCALE_NORMAL);
   }
 
 @Override

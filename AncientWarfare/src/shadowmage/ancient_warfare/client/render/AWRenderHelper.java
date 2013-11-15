@@ -305,12 +305,21 @@ colors[14] = new int[]{150,52,48};
 colors[15] = new int[]{25,22,22};
 }
 static int[] colorWhite = new int[]{255,255,255};
+static int[] colorRed = new int[]{221, 0, 0};
 
 public static int[] getRenderColorFor(int color)
   {
-  if(color <0 || color>=16)
+  if(color < 0)
     {
     return colorWhite;
+    }
+  else if(color==16)//'friendly' team
+    {
+    return colors[0];
+    }
+  else if(color==17)
+    {
+    return colorRed;
     }
   return colors[color];     
   }

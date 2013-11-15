@@ -72,9 +72,12 @@ public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double pa
 protected void renderEquippedItems(EntityLivingBase par1EntityLivingBase, float par2)
   {
   super.renderEquippedItems(par1EntityLivingBase, par2);
-  GL11.glDisable(GL11.GL_TEXTURE_2D);
-  this.flag.render();
-  GL11.glEnable(GL11.GL_TEXTURE_2D);
+  if(Config.renderNpcFlags)
+    {
+    GL11.glDisable(GL11.GL_TEXTURE_2D);
+    this.flag.render(((NpcBase)par1EntityLivingBase).teamNum);
+    GL11.glEnable(GL11.GL_TEXTURE_2D);    
+    }
   }
 
 /**

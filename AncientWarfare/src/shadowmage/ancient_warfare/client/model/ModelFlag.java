@@ -23,6 +23,10 @@ package shadowmage.ancient_warfare.client.model;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
+import org.lwjgl.opengl.GL11;
+
+import shadowmage.ancient_warfare.client.render.AWRenderHelper;
+
 public class ModelFlag extends ModelBase
 {
 
@@ -34,18 +38,21 @@ public ModelFlag()
   flagPole = new ModelRenderer(this,"flagPole");
   flagPole.setTextureOffset(19,78);
   flagPole.setTextureSize(256,256);
-  flagPole.addBox(0.0f,-32.0f,0.0f, 1, 16, 1);
+  flagPole.addBox(5.0f,-16.0f,0.0f, 1, 16, 1);
   
   flagCloth = new ModelRenderer(this,"flagCloth");
   flagCloth.setTextureOffset(24,78);
   flagCloth.setTextureSize(256,256);
-  flagCloth.addBox(0.f, -32.f, -1.f ,1,8,11);
+  flagCloth.addBox(5.f, -16.f, 1.f ,1,8,11);
   }
 
-public void render()
+public void render(int team)
   {
+  GL11.glColor4f(0.7f, 0.7f, 0.7f, 1.f);
   flagPole.render(0.0625f);
+  AWRenderHelper.instance().setTeamRenderColor(team);
   flagCloth.render(0.0625f);
+  GL11.glColor4f(1.f, 1.f, 1.f, 1.f);
   }
 
 }
