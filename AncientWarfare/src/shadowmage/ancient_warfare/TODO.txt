@@ -148,6 +148,11 @@ THINGS TO INVESTIGATE
 TEXTURE/ART
 
 ********************* DONE STUFF ************************* 
+
+[youtube]http://youtu.be/WDwPZ4qCfP0[/youtube]
+
+[youtube]http://youtu.be/euKFV3FJ47E[/youtube]
+
 *  denotes done
 ** denotes done and tested
 
