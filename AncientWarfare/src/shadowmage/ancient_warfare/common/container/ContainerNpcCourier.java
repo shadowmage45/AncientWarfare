@@ -100,7 +100,7 @@ protected void addArmorSlots()
   int x = 8, y = 0;
   for(int i = 0; i <4; i++)
     {    
-    this.addSlotToContainer(new SlotArmor(player, inv, 3-i, x, specSlotsY+18+10, i));
+    this.addSlotToContainer(new SlotArmor(npc, inv, 3-i, x, specSlotsY+18+10, i));
     x+=18;
     }
   }

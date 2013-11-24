@@ -20,14 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -39,9 +38,9 @@ class SlotArmor extends Slot
 final int armorType;
 
 
-EntityPlayer player;
+NpcBase player;
 
-public SlotArmor(EntityPlayer player, IInventory par2IInventory, int par3, int par4, int par5, int par6)
+public SlotArmor(NpcBase player, IInventory par2IInventory, int par3, int par4, int par5, int par6)
   {
   super(par2IInventory, par3, par4, par5);
   this.player = player;
