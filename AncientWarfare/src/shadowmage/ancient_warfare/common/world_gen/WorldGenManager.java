@@ -171,9 +171,10 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
 
   float dist = 0;//found distance
   int foundValue = 0;//found value
-  if(! WorldGenManager.instance().dimensionStructures.containsKey(dim))
+  WorldGenStructureMap map = WorldGenManager.instance().dimensionStructures.get(dim);
+  if(map==null)
     {
-    WorldGenStructureMap map = new WorldGenStructureMap();
+    map = new WorldGenStructureMap();
     WorldGenManager.instance().dimensionStructures.put(dim, map);
     }
   Pair<Float, Integer> values =  WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(chunkX, chunkZ, maxRange);
@@ -202,7 +203,8 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   String biomeName = world.provider.getBiomeGenForCoords(x, z).biomeName;
   int maxValue = WorldGenStructureManager.structureGenMaxClusterValue - foundValue;
   maxValue = maxValue < 0 ? 0 : maxValue;
-  ProcessedStructure struct = WorldGenStructureManager.instance().getStructureForBiome(biomeName, maxValue, random);
+  
+  ProcessedStructure struct = WorldGenStructureManager.instance().getStructureForBiome(biomeName, maxValue, random, map.getUniqueStructureList());
   if(struct!=null)
     {
     /**

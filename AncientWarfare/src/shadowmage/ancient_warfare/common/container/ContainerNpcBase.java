@@ -52,7 +52,10 @@ public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
   int yPos;
 
   this.addPlayerSlots(openingPlayer, 8, 158, 4);   
-  this.addArmorSlots();
+  if(Config.getConfig().get("g_npc_config", "enable_armor_swapping", true).getBoolean(true))
+    {
+    this.addArmorSlots();    
+    }
 //  IInventory te = npc.inventory;
 //  Config.logDebug("setting npc inventory. size: "+te.getSizeInventory());
 //  for(y = 0; y < te.getSizeInventory()/9; y++)

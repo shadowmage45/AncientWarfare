@@ -28,6 +28,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.plugins.PluginProxy;
 import shadowmage.ancient_warfare.common.plugins.bc.BCProxy;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
@@ -213,40 +214,64 @@ public static void registerBlockData()
   {
   Description d = DescriptionRegistry2.instance().getDescriptionFor(BlockLoader.machineBlock.blockID);
   
-  GameRegistry.registerTileEntity(TETrashcan.class, "Trashcan");
-  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,0));
-  d.setName("block.multi.machine.0", 0);  
-  
-  GameRegistry.registerTileEntity(TEMailBox.class, "Mailbox");
-  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,1));
-  d.setName("block.multi.machine.1", 1);
-  
-  GameRegistry.registerTileEntity(TEMailBoxIndustrial.class, "MailboxIndustrial");
-  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,2));
-  d.setName("block.multi.machine.2", 2);
-  
-  GameRegistry.registerTileEntity(TEChunkLoader.class, "ChunkLoaderSingle");
-  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,3));
-  d.setName("block.multi.machine.3", 3);
-  
-  GameRegistry.registerTileEntity(TEChunkLoaderDeluxe.class, "ChunkLoaderDeluxe");
-  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,4));
-  d.setName("block.multi.machine.4", 4);
-  
-  GameRegistry.registerTileEntity(PluginProxy.bcProxy.getMotorTEClass(), "Mechanical Worker");
-  if(PluginProxy.bcLoaded)
+  if(Config.getConfig().get("h_additional_toggles", "machine.trashcan.enabled", true).getBoolean(true))
     {
-    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,5));
-    d.setName("block.multi.machine.5", 5);    
+    GameRegistry.registerTileEntity(TETrashcan.class, "Trashcan");
+    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,0));
+    d.setName("block.multi.machine.0", 0);      
     }
   
-  GameRegistry.registerTileEntity(TEFoodProcessor.class, "Food Processor");
-  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,6));
-  d.setName("block.multi.machine.6", 6);
+  if(Config.getConfig().get("h_additional_toggles", "machine.mailbox.enabled", true).getBoolean(true))
+    {
+    GameRegistry.registerTileEntity(TEMailBox.class, "Mailbox");
+    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,1));
+    d.setName("block.multi.machine.1", 1);    
+    }
   
-  GameRegistry.registerTileEntity(TEGateLock.class, "Gate Lock");
-  d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,7));
-  d.setName("block.multi.machine.7", 7);
+  if(Config.getConfig().get("h_additional_toggles", "machine.mailboxindustrial.enabled", true).getBoolean(true))
+    {
+    GameRegistry.registerTileEntity(TEMailBoxIndustrial.class, "MailboxIndustrial");
+    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,2));
+    d.setName("block.multi.machine.2", 2);
+    }
+  
+  if(Config.getConfig().get("h_additional_toggles", "machine.chunkloader.enabled", true).getBoolean(true))
+    {
+    GameRegistry.registerTileEntity(TEChunkLoader.class, "ChunkLoaderSingle");
+    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,3));
+    d.setName("block.multi.machine.3", 3);
+    }
+  
+  if(Config.getConfig().get("h_additional_toggles", "machine.chunkloaderlarge.enabled", true).getBoolean(true))
+    {
+    GameRegistry.registerTileEntity(TEChunkLoaderDeluxe.class, "ChunkLoaderDeluxe");
+    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,4));
+    d.setName("block.multi.machine.4", 4);
+    }
+  
+  if(Config.getConfig().get("h_additional_toggles", "machine.mechanicalworker.enabled", true).getBoolean(true))
+    {
+    GameRegistry.registerTileEntity(PluginProxy.bcProxy.getMotorTEClass(), "Mechanical Worker");
+    if(PluginProxy.bcLoaded)
+      {
+      d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,5));
+      d.setName("block.multi.machine.5", 5);    
+      }
+    }
+  
+  if(Config.getConfig().get("h_additional_toggles", "machine.foodprocessor.enabled", true).getBoolean(true))
+    {
+    GameRegistry.registerTileEntity(TEFoodProcessor.class, "Food Processor");
+    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,6));
+    d.setName("block.multi.machine.6", 6);
+    }
+  
+  if(Config.getConfig().get("h_additional_toggles", "machine.gatelock.enabled", true).getBoolean(true))
+    {
+    GameRegistry.registerTileEntity(TEGateLock.class, "Gate Lock");
+    d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,7));
+    d.setName("block.multi.machine.7", 7);
+    }
   }
 
 }

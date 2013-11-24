@@ -108,7 +108,7 @@ public void updateEntity()
           }
         data.addIncomingItem(stack, (int)dist*5);
         this.setInventorySlotContents(slot, null);
-        Config.logDebug("adding stack to mail route for: "+destination + " time: "+((int)dist*5));
+//        Config.logDebug("adding stack to mail route for: "+destination + " time: "+((int)dist*5));
         }
       } 
     }

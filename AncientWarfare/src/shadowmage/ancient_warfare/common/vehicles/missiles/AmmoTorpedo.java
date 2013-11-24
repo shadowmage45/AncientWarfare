@@ -37,6 +37,7 @@ public class AmmoTorpedo extends Ammo
 public AmmoTorpedo(int ammoType, int weight)
   {
   super(ammoType);
+  this.isEnabled = false;
   this.isPersistent = false;
   this.isArrow = true;
   this.isRocket = false;

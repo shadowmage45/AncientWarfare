@@ -27,6 +27,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -72,7 +73,6 @@ private static File configFile;
 
 private class WorldGenBiomeStructList
 {
-int totalWeight;//weight for this entire biome, used for structure selection
 Map<String, WorldGenStructureEntry> structureEntries = new HashMap<String, WorldGenStructureEntry>();
 
 /**
@@ -91,26 +91,7 @@ public void addEntry(WorldGenStructureEntry entry)
     {
     Config.logError("Attempt to register duplicate structure name for world-generation. name: "+entry.name);
     return;
-    }
-  totalWeight += entry.weight; 
-  }
-
-public String getRandomWeightedEntry(Random random)
-  {
-  int value = random.nextInt(totalWeight);
-  for(String name : this.structureEntries.keySet())
-    {
-    WorldGenStructureEntry ent = this.structureEntries.get(name);
-    if(value>ent.weight)
-      {
-      value-=ent.weight;
-      }
-    else
-      {
-      return ent.name;
-      }
-    }  
-  return "";
+    } 
   }
 
 /**
@@ -119,13 +100,13 @@ public String getRandomWeightedEntry(Random random)
  * @param random
  * @return
  */
-public String getRandomWeightedEntryBelow(int maxValue, Random random)
+public String getRandomWeightedEntryBelow(int maxValue, Random random, Collection<String> excludes)
   {
   int foundTotalWeight = 0;
   for(String name : this.structureEntries.keySet())
     {
     WorldGenStructureEntry ent = this.structureEntries.get(name);
-    if(ent.value<=maxValue)
+    if(!excludes.contains(ent.name) && ent.value<=maxValue)
       {
       foundTotalWeight += ent.weight;
       }    
@@ -138,15 +119,18 @@ public String getRandomWeightedEntryBelow(int maxValue, Random random)
   for(String name : this.structureEntries.keySet())
     {
     WorldGenStructureEntry ent = this.structureEntries.get(name);
-    if(ent.value<=maxValue)
+    if(!excludes.contains(ent.name))
       {
-      if(value>=ent.weight)
+      if(ent.value<=maxValue)
         {
-        value-=ent.weight;
-        }
-      else
-        {
-        return ent.name;
+        if(value>=ent.weight)
+          {
+          value-=ent.weight;
+          }
+        else
+          {
+          return ent.name;
+          }
         }
       }
     }  
@@ -155,11 +139,6 @@ public String getRandomWeightedEntryBelow(int maxValue, Random random)
 
 public void removeEntry(String name)
   {
-  WorldGenStructureEntry entry = this.structureEntries.get(name);
-  if(entry!=null)
-    {
-    this.totalWeight-=entry.weight;
-    }
   this.structureEntries.remove(name);
   }
 
@@ -711,11 +690,11 @@ private WorldGenStructureEntry parseEntry(Iterator<String> it)
  * @param random
  * @return
  */
-public ProcessedStructure getStructureForBiome(String biomeName, int maxValue, Random random)
+public ProcessedStructure getStructureForBiome(String biomeName, int maxValue, Random random, Collection<String> uniques)
   {
   if(this.biomesStructureMap.containsKey(biomeName.toLowerCase()))
     {
-    String name = this.biomesStructureMap.get(biomeName.toLowerCase()).getRandomWeightedEntryBelow(maxValue, random);        
+    String name = this.biomesStructureMap.get(biomeName.toLowerCase()).getRandomWeightedEntryBelow(maxValue, random, uniques);        
     return StructureManager.instance().getStructureServer(name);
     }
   return null;

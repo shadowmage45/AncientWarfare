@@ -64,6 +64,11 @@ public void handleNpcUpdate(NpcBase npc)
   this.npcDatas.get(npc.getPersistentID()).updateEntry(npc);
   }
 
+public void removeNpcEntry(NpcBase npc)
+  {
+  npcDatas.remove(npc.entityId);
+  }
+
 public Collection<NpcDataEntry> getDataList()
   {
   return this.npcDatas.values();

@@ -21,11 +21,13 @@
 package shadowmage.ancient_warfare.common.world_gen;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.utils.Pair;
@@ -81,6 +83,11 @@ public void readFromNBT(NBTTagCompound tag)
         }      
       this.generatedStructures.get(xPos).put(zPos, ent);
       }
+    }
+  NBTTagList uniqueList = tag.getTagList("uniques");
+  for(int i = 0; i < uniqueList.tagCount(); i++)
+    {
+    this.generatedUniques.add(((NBTTagString)uniqueList.tagAt(i)).data);
     }
   }
 
@@ -162,6 +169,10 @@ public void setGeneratedAt(int x, int y, int z, int face, int value, String name
   GeneratedStructureEntry ent = new GeneratedStructureEntry(name, oX, (byte)y, oZ, (byte)face, (byte) value);
   ent.name = name;
   ent.structureValue = (byte)value;
+  if(unique)
+    {
+    this.generatedUniques.add(name);
+    }
   this.setEntry(cX, cZ, ent);
   }
 
@@ -308,6 +319,18 @@ public NBTTagCompound getNBTTag()
     xList.appendTag(xTag);
     }
   tag.setTag("x", xList);
+  
+  NBTTagList uniqueList = new NBTTagList();
+  for(String unique : this.generatedUniques)
+    {
+    uniqueList.appendTag(new NBTTagString(unique));
+    }
+  tag.setTag("uniques", uniqueList);
   return tag;
+  }
+
+public Collection<String> getUniqueStructureList()
+  {
+  return this.generatedUniques;
   }
 }

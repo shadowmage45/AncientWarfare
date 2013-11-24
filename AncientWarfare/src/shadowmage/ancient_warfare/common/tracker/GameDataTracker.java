@@ -123,6 +123,12 @@ public void handleNpcDeath(NpcBase npc, DamageSource src)
   this.markGameDataDirty();
   }
 
+public void removeNpcEntry(NpcBase npc)
+  {
+  NpcDataList lst = this.getListFor(npc.teamNum);
+  lst.removeNpcEntry(npc);
+  }
+
 public void clearDeadEntries(int team)
   {
   this.deadNpcTracker.remove(team);

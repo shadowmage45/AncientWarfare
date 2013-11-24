@@ -36,7 +36,7 @@ import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 public class Config
 {
 //*******************************************************FIELDS**********************************************//
-public static final String VERSION = "1.1.033-beta-MC164";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
+public static final String VERSION = "1.1.034-beta-MC164";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
 public static final String ANTVERSION = "@VERSION@";
 public static String texturePath = "textures/";
 public static String configPath = "";
@@ -222,6 +222,7 @@ public void setCoreInfo()
   config.addCustomCategoryComment("e_vehicle_config", "Enable/disable vehicle recipes and dungeon loot entries for specific vehicle types");
   config.addCustomCategoryComment("f_ammo_config", "Enable/disable ammo recipes and alter damage amounts");
   config.addCustomCategoryComment("g_npc_config", "Enable/disable npc recipes and alter damage/health/healing amounts");
+  config.addCustomCategoryComment("h_additional_toggles", "Enable/disable various features/recipes that don't fit into other categories");
   String configVersion = config.get("version", "version", "NULL", "The mod version used to last save this config").getString();
   if(!configVersion.equals(VERSION))
     {
@@ -251,7 +252,9 @@ public void setCoreInfo()
    */
   this.npcAITicks = config.get("b-performance", "npc_aiticks", 5, "How many ticks should pass between updating passive ai tasks for NPCs?").getInt(5);
   this.npcAISearchRange = config.get("b-performance", "npc_search_radius", 140, "How many blocks of radius should entities search for targets and work? (MAX range, some AI limits this further)").getInt(140);
-  this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory_iterations", 20, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);  
+  this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory_iterations", 20, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);
+  
+  config.get("g_npc_config", "enable_armor_swapping", true);
   }
 
 public void setVehicleInfo()

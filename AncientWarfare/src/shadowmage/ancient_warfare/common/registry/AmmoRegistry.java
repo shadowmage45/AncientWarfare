@@ -60,7 +60,7 @@ public void registerAmmoTypes()
     {
     if(ammo!=null)
       {
-      ammo.setEnabled(Config.getConfig().get("f_ammo_config", ammo.getConfigName()+".enabled", true).getBoolean(true));
+      ammo.setEnabled(Config.getConfig().get("f_ammo_config", ammo.getConfigName()+".enabled", ammo.isEnabled()).getBoolean(ammo.isEnabled()));
       if(ammo.isEnabled())
         {
         ammo.setEntityDamage(Config.getConfig().get("f_ammo_config", ammo.getConfigName()+".ent_damage", ammo.getEntityDamage()).getInt(ammo.getEntityDamage()));

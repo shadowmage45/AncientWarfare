@@ -221,6 +221,7 @@ public void repackIntoItem()
       this.ridingEntity = null;
       }
     } 
+  GameDataTracker.instance().removeNpcEntry(this);
   this.isDead = true;
   }
 
@@ -335,6 +336,7 @@ public void updateRidden()
 @Override
 public void travelToDimension(int par1)
   {
+  GameDataTracker.instance().removeNpcEntry(this);
   wayNav.handleDimensionChange(par1);
   targetHelper.handleDimensionChange(par1);
   super.travelToDimension(par1);

@@ -49,6 +49,8 @@ public boolean facesOpposite = false;
 public boolean isActivated = false;
 public boolean canActivate = false;
 
+
+
 protected ForgeDirection facingDirection = ForgeDirection.SOUTH;
 
 public void onBlockBreak()

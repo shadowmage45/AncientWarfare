@@ -467,72 +467,99 @@ protected void addCivicRecipes()
   recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
   this.civicMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(BlockLoader.trashcan, RecipeType.CIVIC_MISC);
-  recipe.addResource(Item.redstone, 2, false);
-  recipe.addResource(Block.planks, 2, true);
-  recipe.addResource(Block.stoneBrick, 2, true);
-  recipe.addResource(Block.stone, 1, false);
-  recipe.addResource(Item.bucketLava, 1, false);
-  recipe.addResource(Item.stick, 1, false);
-  this.civicMiscRecipes.add(recipe);
+  if(Config.getConfig().get("h_additional_toggles", "machine.trashcan.craftable", true).getBoolean(true) && Config.getConfig().get("h_additional_toggles", "machine.trashcan.enabled", true).getBoolean(true))
+    {
+    recipe = new ResourceListRecipe(BlockLoader.trashcan, RecipeType.CIVIC_MISC);
+    recipe.addResource(Item.redstone, 2, false);
+    recipe.addResource(Block.planks, 2, true);
+    recipe.addResource(Block.stoneBrick, 2, true);
+    recipe.addResource(Block.stone, 1, false);
+    recipe.addResource(Item.bucketLava, 1, false);
+    recipe.addResource(Item.stick, 1, false);
+    this.civicMiscRecipes.add(recipe);
+    }
     
-  recipe = new ResourceListRecipe(BlockLoader.mailbox, RecipeType.CIVIC_MISC);
-  recipe.addResource(Item.enderPearl, 1, false);
-  recipe.addResource(Item.ingotIron, 8, false);
-  recipe.addResource(Block.chest, 1, false);
-  recipe.addResource(Item.dyePowder, 4, 4, false);
-  recipe.addNeededResearch(ResearchGoalNumbers.logistics4);
-  this.civicMiscRecipes.add(recipe);
+  if(Config.getConfig().get("h_additional_toggles", "machine.mailbox.craftable", true).getBoolean(true) && Config.getConfig().get("h_additional_toggles", "machine.mailbox.enabled", true).getBoolean(true))
+    {
+    recipe = new ResourceListRecipe(BlockLoader.mailbox, RecipeType.CIVIC_MISC);
+    recipe.addResource(Item.enderPearl, 1, false);
+    recipe.addResource(Item.ingotIron, 8, false);
+    recipe.addResource(Block.chest, 1, false);
+    recipe.addResource(Item.dyePowder, 4, 4, false);
+    recipe.addNeededResearch(ResearchGoalNumbers.logistics4);
+    this.civicMiscRecipes.add(recipe);
+    }
   
-  recipe = new ResourceListRecipe(BlockLoader.mailboxIndustrial, RecipeType.CIVIC_MISC);
-  recipe.addResource(Item.enderPearl, 1, false);
-  recipe.addResource(Item.ingotIron, 8, false);
-  recipe.addResource(Block.chest, 1, false);
-  recipe.addResource(Item.dyePowder, 7, 4, false);
-  recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
-  this.civicMiscRecipes.add(recipe);
+  if(Config.getConfig().get("h_additional_toggles", "machine.mailboxindustrial.craftable", true).getBoolean(true) && Config.getConfig().get("h_additional_toggles", "machine.mailboxindustrial.enabled", true).getBoolean(true))
+    {
+    recipe = new ResourceListRecipe(BlockLoader.mailboxIndustrial, RecipeType.CIVIC_MISC);
+    recipe.addResource(Item.enderPearl, 1, false);
+    recipe.addResource(Item.ingotIron, 8, false);
+    recipe.addResource(Block.chest, 1, false);
+    recipe.addResource(Item.dyePowder, 7, 4, false);
+    recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
+    this.civicMiscRecipes.add(recipe);
+    }
   
-  recipe = new ResourceListRecipe(BlockLoader.chunkloader, RecipeType.CIVIC_MISC);
-  recipe.addResource(Item.enderPearl, 1, false);
-  recipe.addResource(Block.stoneBrick,4, true);
-  recipe.addNeededResearch(ResearchGoalNumbers.logistics2);
-  this.civicMiscRecipes.add(recipe);
+  if(Config.getConfig().get("h_additional_toggles", "machine.chunkloader.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.chunkloader.enabled", true).getBoolean(true))
+    {
+    recipe = new ResourceListRecipe(BlockLoader.chunkloader, RecipeType.CIVIC_MISC);
+    recipe.addResource(Item.enderPearl, 1, false);
+    recipe.addResource(Block.stoneBrick,4, true);
+    recipe.addNeededResearch(ResearchGoalNumbers.logistics2);
+    this.civicMiscRecipes.add(recipe);
+    }
   
-  recipe = new ResourceListRecipe(BlockLoader.chunkloaderDeluxe, RecipeType.CIVIC_MISC);
-  recipe.addResource(Item.enderPearl, 2, false);
-  recipe.addResource(Block.obsidian,4, false);
-  recipe.addNeededResearch(ResearchGoalNumbers.logistics4);
-  this.civicMiscRecipes.add(recipe);
+  if(Config.getConfig().get("h_additional_toggles", "machine.chunkloaderlarge.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.chunkloaderlarge.enabled", true).getBoolean(true))
+    {
+    recipe = new ResourceListRecipe(BlockLoader.chunkloaderDeluxe, RecipeType.CIVIC_MISC);
+    recipe.addResource(Item.enderPearl, 2, false);
+    recipe.addResource(Block.obsidian,4, false);
+    recipe.addNeededResearch(ResearchGoalNumbers.logistics4);
+    this.civicMiscRecipes.add(recipe);
+    }
+  
   
   if(PluginProxy.bcLoaded)
     {
-    recipe = new ResourceListRecipe(BlockLoader.mechanicalWorker, RecipeType.CIVIC_MISC);
-    recipe.addResource(Item.enderPearl, 2, false);
-    recipe.addResource(Item.ingotIron, 8, false);
-    recipe.addResource(Block.pistonBase, 1, false);
-    recipe.addNeededResearch(ResearchGoalNumbers.logistics3, ResearchGoalNumbers.mechanics5);
-    this.civicMiscRecipes.add(recipe);
-    
-    recipe = new ResourceListRecipe(BlockLoader.handCrankedEngine, RecipeType.CIVIC_MISC);
-    recipe.addResource(Block.lever, 1, false);
-    recipe.addResource(Item.ingotIron, 6, false);
-    recipe.addResource(Block.pistonBase, 2, false);
-    recipe.addResource(Item.redstone, 2, false);
-    recipe.addNeededResearch(ResearchGoalNumbers.logistics3, ResearchGoalNumbers.mechanics5);
-    this.civicMiscRecipes.add(recipe);    
+    if(Config.getConfig().get("h_additional_toggles", "machine.mechanicalworker.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.mechanicalworker.enabled", true).getBoolean(true))
+      {
+      recipe = new ResourceListRecipe(BlockLoader.mechanicalWorker, RecipeType.CIVIC_MISC);
+      recipe.addResource(Item.enderPearl, 2, false);
+      recipe.addResource(Item.ingotIron, 8, false);
+      recipe.addResource(Block.pistonBase, 1, false);
+      recipe.addNeededResearch(ResearchGoalNumbers.logistics3, ResearchGoalNumbers.mechanics5);
+      this.civicMiscRecipes.add(recipe);
+      }
+    if(Config.getConfig().get("h_additional_toggles", "machine.handcrankedengine.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.handcrankedengine.enabled", true).getBoolean(true))
+      {
+      recipe = new ResourceListRecipe(BlockLoader.handCrankedEngine, RecipeType.CIVIC_MISC);
+      recipe.addResource(Block.lever, 1, false);
+      recipe.addResource(Item.ingotIron, 6, false);
+      recipe.addResource(Block.pistonBase, 2, false);
+      recipe.addResource(Item.redstone, 2, false);
+      recipe.addNeededResearch(ResearchGoalNumbers.logistics3, ResearchGoalNumbers.mechanics5);
+      this.civicMiscRecipes.add(recipe);
+      }
     } 
   
-  recipe = new ResourceListRecipe(BlockLoader.foodProcessor, RecipeType.CIVIC_MISC);
-  recipe.addResource(Item.ingotIron, 6, false);
-  recipe.addResource(Block.stone,4, false);
-  recipe.addNeededResearch(ResearchGoalNumbers.logistics1);
-  this.civicMiscRecipes.add(recipe);
+  if(Config.getConfig().get("h_additional_toggles", "machine.foodprocessor.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.foodprocessor.enabled", true).getBoolean(true))
+    {
+    recipe = new ResourceListRecipe(BlockLoader.foodProcessor, RecipeType.CIVIC_MISC);
+    recipe.addResource(Item.ingotIron, 6, false);
+    recipe.addResource(Block.stone,4, false);
+    recipe.addNeededResearch(ResearchGoalNumbers.logistics1);
+    this.civicMiscRecipes.add(recipe);
+    }
   
-  recipe = new ResourceListRecipe(BlockLoader.gateLock, RecipeType.CIVIC_MISC);
-  recipe.addResource(Item.ingotIron, 2, false);
-  recipe.addResource(Block.stoneBrick,4, false);
-  recipe.addNeededResearch(ResearchGoalNumbers.mechanics1);
-  this.civicMiscRecipes.add(recipe);
+  if(Config.getConfig().get("h_additional_toggles", "machine.gatelock.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.gatelock.enabled", true).getBoolean(true))
+    {
+    recipe = new ResourceListRecipe(BlockLoader.gateLock, RecipeType.CIVIC_MISC);
+    recipe.addResource(Item.ingotIron, 2, false);
+    recipe.addResource(Block.stoneBrick,4, false);
+    recipe.addNeededResearch(ResearchGoalNumbers.mechanics1);
+    this.civicMiscRecipes.add(recipe);
+    }
   
   recipe = new ResourceListRecipe(ItemLoader.hammer1, RecipeType.CIVIC_MISC);
   recipe.addResource(Item.ingotIron, 4, false);

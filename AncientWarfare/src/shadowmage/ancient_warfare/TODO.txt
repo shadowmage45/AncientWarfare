@@ -152,20 +152,4 @@ TEXTURE/ART
 ** denotes done and tested
 
 
-/********** 11-13-13 **********/
-* add ability to enable/disable specific research goals globally.
-* add ability to remove specific research goals from research table
-* add ability to remove specific research goals from generating in chest loot
-* add ability to enable/disable specific vehicles globally (should work more reliably than before)
-* add ability to remove specific vehicles from being craftable (but still enabled to use)
-* add ability to remove specific vehicles from generating in chest loot
-* add slots to most NPC inventory/container/guis to allow for manual armor changes (needs position adjusted)
-* add armor slots to courier inventory/container/gui
 
-/********** 11-13-13 **********/
-* fix alignment of armor slots on npc and courier guis
-* add prep for rendering npc team flags (need flag model / textures)
-* fix shading/lighting on giant-sized trebuchet (needed normals rescaled)
-* add toggle for npc flag rendering
-* fix team colors for teams 16/17, now show as white/red respectively
-* fix-change npc armor slots to only allow fully repaired armor to be inserted by players

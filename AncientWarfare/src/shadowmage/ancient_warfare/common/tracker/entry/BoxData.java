@@ -130,7 +130,6 @@ protected void updateRoutedItems()
 public void tryDeliverMail(IInventory inventory, int[] slots)
   {
   if(this.deliverableItems.isEmpty()){return;}
-  Config.logDebug("Delivering items to mailbox: "+this.boxName);
   int delivered = 0;
   Iterator<RoutedDelivery> it = this.deliverableItems.iterator();
   RoutedDelivery d;
@@ -157,7 +156,6 @@ public void tryDeliverMail(IInventory inventory, int[] slots)
       break;
       }    
     }
-  Config.logDebug("Delivered: " + delivered + " items");
   }
 
 public void addIncomingItem(ItemStack item, int ticks)
@@ -219,7 +217,6 @@ public void handleAssignment(TEMailBoxBase box)
 
 public void clearAssignment()
   {
-  Config.logDebug("clearing assigned status for mailbox: "+this.boxName);
   this.isAssigned = false;
   MailboxData.instance().markDirty();
   }
@@ -228,7 +225,7 @@ public void clearAssignment()
 public void readFromNBT(NBTTagCompound tag)
   {  
   this.boxName = tag.getString("boxName");
-  for(int i = 1; i <5; i++)
+  for(int i = 0; i <5; i++)
     {
     if(tag.hasKey("sideName"+i))
       {

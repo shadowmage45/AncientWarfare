@@ -135,6 +135,8 @@ protected Set<Integer> neededResearch = new HashSet<Integer>();
 protected Block blockType = null;
 protected int blockMeta = -1;
 
+
+
 public Civic(int id)
   {
   this.globalID = id;

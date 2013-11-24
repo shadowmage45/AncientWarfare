@@ -1696,6 +1696,7 @@
 /********************************************************************************/
 /****************************************PUBLIC RELEASE .033****************************************/
 /********************************************************************************/
+
 /********** 11-13-13 **********/
 * add ability to enable/disable specific research goals globally.
 * add ability to remove specific research goals from research table
@@ -1712,3 +1713,23 @@
 * fix shading/lighting on giant-sized trebuchet (needed normals rescaled)
 * add toggle for npc flag rendering
 * fix team colors for teams 16/17, now show as white/red respectively
+* fix-change npc armor slots to only allow fully repaired armor to be inserted by players
+
+/********** 11-24-13 **********/
+* fix armor slot validation to use npc rather than player
+* add ability to enable/disable machines entirely (chunkloader, mailbox, etc)
+* add ability to enable/disable machine recipes (still useable, but uncraftable)
+* fix mailboxes loosing destination setting for top-slot destination
+* fix two instances where npcs would not be properly removed from the 'live' npc list (repacking and traveling to a different dimension)
+* fix load/save of generated unique structures
+* fix validation of unique structures during selection for generation
+* default disable of submarine torpedo recipes (to match default-disable of submarines)  if you have subs enabled, you may need to re-enable this in order to craft ammunition
+* add config option to disable npc armor swapping (temporary, may be removed with further reworking of npc armor system)
+
+/********************************************************************************/
+/****************************************PUBLIC RELEASE .034 (11-24-13)****************************************/
+/********************************************************************************/
+
+/********************************************************************************/
+/****************************************PUBLIC RELEASE .035****************************************/
+/********************************************************************************/
