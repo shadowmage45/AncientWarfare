@@ -57,6 +57,7 @@ public ItemCivicPlacer(int itemID)
   {
   super(itemID, true);
   this.hasLeftClick = true;
+  this.maxStackSize = 1;
   }
 
 @Override
