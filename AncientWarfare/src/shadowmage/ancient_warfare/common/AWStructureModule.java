@@ -121,9 +121,9 @@ public void setExportDefaults()
   this.shouldExportDefaults = true;
   }
 
-public void load(String directory)
-  {
-  this.directory = directory;  
+public void load()
+  {  
+  this.directory = Config.configPath;  
   outputDirectory = directory+"/AWConfig/structures/export/";
   includeDirectory = directory+"/AWConfig/structures/included/";
   convertDirectory = directory+"/AWConfig/structures/convert/";
@@ -166,6 +166,7 @@ public void load(String directory)
 
   loader = StructureLoader.instance();
   loader.scanForPrebuiltFiles(); 
+  this.process();
   }
 
 private void setDefaultStructureNames()
@@ -277,10 +278,7 @@ private void createDirectory(File file)
     }
   }
 
-/**
- * aka. post-load, post-init..w/e
- */
-public void process()
+protected void process()
   {
   if(loader==null)
     {

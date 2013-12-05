@@ -140,7 +140,6 @@ public void preInit(FMLPreInitializationEvent evt)
    */
   try
     {
-    AWStructureModule.instance().load(evt.getModConfigurationDirectory().getCanonicalPath());
     Config.configPath = evt.getModConfigurationDirectory().getCanonicalPath();
     } 
   catch (IOException e)
@@ -173,13 +172,7 @@ public void init(FMLInitializationEvent evt)
   {
   Config.log("Ancient Warfare Init started.");
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
-  proxy.registerClientData();
-
-  /**
-   * process loaded structures
-   */
-  AWStructureModule.instance().process();
- 
+  proxy.registerClientData(); 
   Config.log("Ancient Warfare Init completed.");
   }
 
@@ -191,7 +184,8 @@ public void init(FMLInitializationEvent evt)
 public void load(FMLPostInitializationEvent evt)
   {  
   Config.log("Ancient Warfare Post-Init started");
-  
+
+  AWStructureModule.instance().load();
   VillageGenerator.load();
   NpcRegistry.instance().registerNPCs(); 
   CivicRegistry.instance().registerCivics();
