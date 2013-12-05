@@ -569,7 +569,7 @@ public void resetCurrentStats()
 @Override
 public void setDead()
   {
-  if(!this.worldObj.isRemote && !this.isDead)
+  if(!this.worldObj.isRemote && !this.isDead && this.getHealth()<=0)
     {
     InventoryTools.dropInventoryInWorld(worldObj, inventory.ammoInventory, posX, posY, posZ);
     InventoryTools.dropInventoryInWorld(worldObj, inventory.armorInventory, posX, posY, posZ);
