@@ -57,7 +57,6 @@ public ItemCivicPlacer(int itemID)
   {
   super(itemID, true);
   this.hasLeftClick = true;
-  this.maxStackSize = 1;
   }
 
 @Override
@@ -179,7 +178,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
             {
             player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
             }
-          }             
+          } 
+        NBTTagCompound newtag = new NBTTagCompound();
+        stack.setTagInfo("civicInfo", newtag);
+        player.openContainer.detectAndSendChanges();
         }
       }
     else if(tag.hasKey("pos2") && tag.hasKey("pos1"))
