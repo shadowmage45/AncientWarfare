@@ -28,6 +28,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class GuiScrollableAreaSimple extends GuiElement implements IGuiElementCallback
 {
@@ -86,21 +87,20 @@ public void drawElement(int mouseX, int mouseY)
   if(this.scrollBar!=null)
     {
     GL11.glPushMatrix();
-    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
     this.scrollBar.updateHandleHeight(totalHeight, height);  
     this.scrollPosY = this.scrollBar.getTopIndexForSet(totalHeight, height);  
     this.scrollBar.updateGuiPos(0, 0);
     this.scrollBar.drawElement(mouseX, mouseY-scrollPosY);
-    GL11.glPopAttrib();
     GL11.glPopMatrix();
     }
   for(GuiElement el : this.elements)
-    {
-    GL11.glPushMatrix();
-    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-    el.drawElement(mouseX, mouseY);    
-    GL11.glPopAttrib();
-    GL11.glPopMatrix();
+    {    
+    if(el.renderPosX<width || el.renderPosX+el.width > 0 || el.renderPosY<height || el.renderPosY+el.height>0)
+      {
+      GL11.glPushMatrix();
+      el.drawElement(mouseX, mouseY);  
+      GL11.glPopMatrix();    
+      }    
     }  
   this.resetViewPort();
   }
