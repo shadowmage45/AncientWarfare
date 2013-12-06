@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -125,7 +126,10 @@ public void doDamageEffects()
         ent.attackEntityFrom(DamageType.batteringDamage, 5+vehicle.vehicleMaterialLevel);
         }
       }
-    vehicle.worldObj.setBlockToAir(pos.x, pos.y, pos.z);
+    if(vehicle.worldObj.getBlockId(pos.x, pos.y, pos.z)!=Block.bedrock.blockID)
+      {
+      vehicle.worldObj.setBlockToAir(pos.x, pos.y, pos.z);
+      }    
     }
   }
 
