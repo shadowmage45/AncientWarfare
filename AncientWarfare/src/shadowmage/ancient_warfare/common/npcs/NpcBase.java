@@ -235,6 +235,7 @@ public void repackIntoItem()
       inv.appendTag(itemTag);
       }
     }
+  stack.getTagCompound().getCompoundTag("AWNpcSpawner").setInteger("hunger", npcUpkeepTicks);
   stack.getTagCompound().getCompoundTag("AWNpcSpawner").setTag("inventory", inv);
   GameDataTracker.instance().removeNpcEntry(this);
   this.isDead = true;
@@ -850,6 +851,11 @@ public void setObjectiveID(byte b)
 public void setErrorID(byte b)
   {
   this.dataWatcher.updateObject(30, Byte.valueOf(b));
+  }
+
+public void setUpkeepTicks(int ticks)
+  {
+  this.npcUpkeepTicks = ticks;
   }
 
 protected void pushOutOfBlocks()

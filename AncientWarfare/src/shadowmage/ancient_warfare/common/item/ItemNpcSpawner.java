@@ -90,7 +90,8 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     }
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
     {
-    int level = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");    
+    NBTTagCompound npcTag = stack.getTagCompound().getCompoundTag("AWNpcSpanwer");
+    int level = npcTag.getInteger("lev");    
     hit = BlockTools.offsetForSide(hit, side);  
     Entity npc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, TeamTracker.instance().getTeamForPlayerServer(player.getEntityName()));
     npc.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
@@ -102,17 +103,17 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         {
         npcBase.wayNav.addPatrolPoint(new WayPoint(hit.x, hit.y, hit.z, TargetType.PATROL));
         }
-      if(stack.getTagCompound().getCompoundTag("AWNpcSpawner").hasKey("health"))
+      if(npcTag.hasKey("health"))
         {
-        npcBase.setHealth(stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("health"));
+        npcBase.setHealth(npcTag.getInteger("health"));
         }
-      if(stack.getTagCompound().getCompoundTag("AWNpcSpawner").hasKey("inventory"))
+      if(npcTag.hasKey("inventory"))
         {
         for(int i = 0; i < 5; i++)
           {
           npcBase.setCurrentItemOrArmor(i, null);
           }
-        NBTTagList inv = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getTagList("inventory");
+        NBTTagList inv = npcTag.getTagList("inventory");
         NBTTagCompound itemTag;
         ItemStack invStack;
         int slot = 0;
@@ -123,6 +124,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
           slot = itemTag.getByte("slot");
           npcBase.setCurrentItemOrArmor(slot, invStack);
           }
+        }
+      if(npcTag.hasKey("hunger"))
+        {
+        npcBase.npcUpkeepTicks = npcTag.getInteger("hunger");
         }
       } 
     npc.prevRotationYaw = npc.rotationYaw = player.rotationYaw;
