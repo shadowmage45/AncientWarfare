@@ -216,11 +216,11 @@ protected void onCivicUpdate()
   this.broadcastWork(Config.civicBroadcastRange);
   if(!this.overFlow.isEmpty())
     {
-    ItemStack stack = this.overFlow.remove(0);
+    ItemStack stack = this.overFlow.get(0);
     stack = this.inventory.tryMergeItem(stack, regularIndices);
-    if(stack!=null)
+    if(stack==null)
       {
-      this.overFlow.add(stack);
+      this.overFlow.remove(0);
       }
     }
   }

@@ -46,14 +46,14 @@ protected void onCivicUpdate()
   super.onCivicUpdate();
   List<EntityItem> entities = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(minX-1, minY-1, minZ-1, maxX+2, maxY+2, maxZ+2));
   ItemStack stack;
-  if(entities!=null)
+  if(entities!=null && this.overFlow.isEmpty())
     {
     for(EntityItem ent : entities)
       {
       if(ent!=null && ent.getEntityItem()!=null)
         {
         stack = ent.getEntityItem();
-        if(stack.itemID==Item.egg.itemID )
+        if(stack.itemID==Item.egg.itemID)
           {
           if(inventory.canHoldItem(stack, stack.stackSize))
             {

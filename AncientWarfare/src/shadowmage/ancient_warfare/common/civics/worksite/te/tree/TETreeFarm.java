@@ -69,7 +69,7 @@ protected void onCivicUpdate()
   super.onCivicUpdate();
   List<EntityItem> entities = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(minX-1, minY-1, minZ-1, maxX+2, maxY+2, maxZ+2));
   ItemStack stack;
-  if(entities!=null)
+  if(entities!=null && overFlow.isEmpty())
     {
     for(EntityItem ent : entities)
       {
@@ -175,7 +175,7 @@ protected void doWork(IWorker npc, WorkPoint p)
     {
     List<ItemStack> drops = BlockTools.breakBlock(worldObj, p.x, p.y, p.z, 0);   
     for(ItemStack item : drops)
-      {
+      {      
       if(this.resourceFilterContains(item))
         {
         InventoryTools.tryMergeStack(this, item, 1);
