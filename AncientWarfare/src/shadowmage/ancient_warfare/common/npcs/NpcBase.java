@@ -34,6 +34,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -221,6 +222,20 @@ public void repackIntoItem()
       this.ridingEntity = null;
       }
     } 
+  NBTTagList inv = new NBTTagList();
+  NBTTagCompound itemTag;
+  ItemStack invStack;
+  for(int i = 0; i < 5; i++)
+    {
+    invStack = getCurrentItemOrArmor(i);
+    if(invStack!=null)
+      {
+      itemTag = InventoryTools.writeItemStackToTag(invStack, new NBTTagCompound());
+      itemTag.setByte("slot", (byte) i);
+      inv.appendTag(itemTag);
+      }
+    }
+  stack.getTagCompound().getCompoundTag("AWNpcSpawner").setTag("inventory", inv);
   GameDataTracker.instance().removeNpcEntry(this);
   this.isDead = true;
   }

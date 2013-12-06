@@ -28,6 +28,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
@@ -44,6 +45,7 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class ItemNpcSpawner extends AWItemClickable
 {
@@ -104,7 +106,25 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         {
         npcBase.setHealth(stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("health"));
         }
-      }    
+      if(stack.getTagCompound().getCompoundTag("AWNpcSpawner").hasKey("inventory"))
+        {
+        for(int i = 0; i < 5; i++)
+          {
+          npcBase.setCurrentItemOrArmor(i, null);
+          }
+        NBTTagList inv = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getTagList("inventory");
+        NBTTagCompound itemTag;
+        ItemStack invStack;
+        int slot = 0;
+        for(int i = 0; i < inv.tagCount(); i++)
+          {
+          itemTag = (NBTTagCompound) inv.tagAt(i);
+          invStack = InventoryTools.loadStackFromTag(itemTag);
+          slot = itemTag.getByte("slot");
+          npcBase.setCurrentItemOrArmor(slot, invStack);
+          }
+        }
+      } 
     npc.prevRotationYaw = npc.rotationYaw = player.rotationYaw;
     world.spawnEntityInWorld(npc);
     if(!player.capabilities.isCreativeMode)
@@ -135,6 +155,10 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
       if(tag.hasKey("health"))
         {
         par3List.add("Health: " + tag.getInteger("health"));
+        }
+      if(tag.hasKey("inventory"))
+        {
+        par3List.add("Has stored armor inventory.");
         }
       }
     else
