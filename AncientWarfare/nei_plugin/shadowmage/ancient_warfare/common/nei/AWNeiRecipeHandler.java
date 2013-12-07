@@ -25,29 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiCraftingTabbed;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_warfare.common.utils.StackWrapperComparatorAlphaAZ;
-import codechicken.nei.NEICompatibility;
-import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.RecipeInfo;
-import codechicken.nei.recipe.ShapedRecipeHandler;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import codechicken.nei.recipe.weakDependancy_Forge;
-import codechicken.nei.recipe.ShapedRecipeHandler.CachedShapedRecipe;
-import codechicken.nei.recipe.TemplateRecipeHandler.RecipeTransferRect;
 
 public class AWNeiRecipeHandler extends TemplateRecipeHandler
 {
@@ -120,7 +108,7 @@ public void setIngredients(List<ItemStackWrapperCrafting> items)
   }
 
 @Override
-public ArrayList<PositionedStack> getIngredients()
+public List<PositionedStack> getIngredients()
   {
   return getCycledIngredients(cycleticks / 20, ingredients);
   }

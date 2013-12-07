@@ -24,7 +24,7 @@ package shadowmage.ancient_warfare.common.nei;
 public class NEIConfig
 {
 
-public static final String version = "1.0.001-alpha-MC152-1";
+public static final String version = "1.1.002-alpha-MC164";
 /**
  * 
  */
