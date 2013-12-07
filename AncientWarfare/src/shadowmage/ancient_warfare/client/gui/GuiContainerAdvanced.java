@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -135,26 +136,23 @@ public void onElementKeyTyped(char ch, int keyNum)
 @Override
 protected void keyTyped(char par1, int par2)
   {  
+  boolean passKeyOn = true;
   for(Integer i : this.guiElements.keySet())
     {
     GuiElement el = this.guiElements.get(i);
     el.onKeyTyped(par1, par2);
+    if(el instanceof GuiTextInputLine && ((GuiTextInputLine)el).selected)
+      {
+      passKeyOn = false;
+      }
     }
-  if(this.shouldCloseOnVanillaKeys)
+  if(!this.shouldCloseOnVanillaKeys && (par2 == this.mc.gameSettings.keyBindInventory.keyCode || par2 == Keyboard.KEY_ESCAPE))
+    {
+    passKeyOn = false;
+    }
+  if(passKeyOn)
     {
     super.keyTyped(par1, par2);
-    }
-  else
-    {
-    boolean callSuper = true;
-    if(par2 == this.mc.gameSettings.keyBindInventory.keyCode || par2 == Keyboard.KEY_ESCAPE)
-      {
-      callSuper = false;
-      }
-    if(callSuper)
-      {
-      super.keyTyped(par1, par2);
-      } 
     }
   }
 
@@ -781,9 +779,7 @@ protected void drawItemStackTooltip(ItemStack par1ItemStack, int par2, int par3,
     {
     list.add(EnumChatFormatting.RED + "Fake Slot");
     }
-//  FontRenderer font = par1ItemStack.getItem().getFontRenderer(par1ItemStack);
-//  drawHoveringText(list, par2, par3, (font == null ? mc.fontRenderer : font));
-
+  
   func_102021_a(list, par2, par3);
   }
 
@@ -803,7 +799,6 @@ protected void drawItemStackTooltip(ItemStack par1ItemStack, int par2, int par3)
       list.set(k, EnumChatFormatting.GRAY + (String)list.get(k));
       }
     }
-//  FontRenderer font = par1ItemStack.getItem().getFontRenderer(par1ItemStack);
   func_102021_a(list, par2, par3);
   }
 

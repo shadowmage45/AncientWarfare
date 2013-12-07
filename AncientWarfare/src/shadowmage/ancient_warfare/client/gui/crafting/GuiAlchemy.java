@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.client.gui.crafting;
 import java.util.EnumSet;
 
 import net.minecraft.inventory.Container;
+import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 
 public class GuiAlchemy extends GuiCraftingTabbed
@@ -58,5 +59,6 @@ public String getTab2Label()
   {
   return "Reinforce";
   }
+
 
 }

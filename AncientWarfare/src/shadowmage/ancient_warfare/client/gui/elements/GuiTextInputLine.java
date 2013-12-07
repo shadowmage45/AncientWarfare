@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.ChatAllowedCharacters;
 
 import org.lwjgl.opengl.GL11;
@@ -68,7 +69,7 @@ int maxChars = 1;
 public GuiTextInputLine(int elementNum, IGuiElementCallback parent, int w, int h, int maxChars, String defaultText)
   {
   super(elementNum, parent, w, h);
-  this.maxChars = maxChars;
+  this.maxChars = maxChars;  
   }
 
 @Override

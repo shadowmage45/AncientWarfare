@@ -63,6 +63,7 @@ GuiTextInputLine nameBox;
 public GuiStructureScanner(Container container)
   {
   super(container);
+  this.shouldCloseOnVanillaKeys = false;
   }
 
 @Override
