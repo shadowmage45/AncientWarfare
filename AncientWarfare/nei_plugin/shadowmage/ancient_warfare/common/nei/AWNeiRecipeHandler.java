@@ -57,7 +57,7 @@ public String getRecipeName()
 @Override
 public String getGuiTexture()
   {
-  return "/gui/crafting.png";
+  return "textures/gui/container/crafting_table.png";
   }
 
 @Override
