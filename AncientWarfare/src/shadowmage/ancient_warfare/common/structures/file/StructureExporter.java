@@ -78,15 +78,13 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
   try
     {
     writer = new FileWriter(outputFile);
-    List<String> lines = null;
-    if(!struct.getTemplate().getLines().isEmpty())
-      {
-      lines = struct.getTemplate().getLines();
-      }
-    else
+    List<String> lines = struct.getTemplate().getLines();
+    if(lines==null)
       {
       lines = getExportLinesFor(struct);
+      struct.setTemplateLines(lines);
       }
+    struct.setTemplateLines(lines);
     for(String line : lines)
       {
       writer.write(line+"\n");

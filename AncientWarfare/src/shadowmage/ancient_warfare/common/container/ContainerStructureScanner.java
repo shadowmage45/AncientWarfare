@@ -143,21 +143,6 @@ public void handleExportSettings(NBTTagCompound tag)
     }
   }
 
-//public void sendSettingsAndExport(String name, boolean world, boolean surv, boolean fR, boolean fAW, boolean inc)
-//  {
-//  NBTTagCompound baseTag = new NBTTagCompound();
-//  NBTTagCompound tag = new NBTTagCompound();
-//  tag.setString("name", name);
-//  tag.setBoolean("world", world);
-//  tag.setBoolean("surv", surv);
-//  tag.setBoolean("fR", fR);
-//  tag.setBoolean("fAW", fAW);
-//  tag.setBoolean("inc", inc);
-//  
-//  baseTag.setTag("export", tag);
-//  this.sendDataToServer(baseTag);
-//  }
-
 public void handleEditServer(NBTTagCompound tag)
   {
   this.handleExportSettings(tag);
@@ -216,8 +201,9 @@ public void export()
     }
   struct.name = this.name;
 
-  struct.survival = this.survival;
   
+  struct.survival = this.survival;
+  struct.setTemplateLines(StructureExporter.getExportLinesFor(struct));  
   String path;
   if(this.formatAW)
     {
@@ -230,7 +216,7 @@ public void export()
       {
       path = String.valueOf(AWStructureModule.includeDirectory+name+"."+Config.templateExtension);
       }    
-    boolean success = StructureExporter.writeStructureToFile(struct, path,false);
+    boolean success = StructureExporter.writeStructureToFile(struct, path, false);
     struct.filePath = path;
     if(success && includeOnExport)
       {
@@ -245,11 +231,6 @@ public void export()
   if(this.world)
     {
     WorldGenStructureManager.instance().addEntry(struct, weight, value, unique);
-//    if(struct.worldGen)
-//      {
-//      WorldGenStructureManager.instance().addStructure(struct, false, 1, 1);//TODO add values to export config, or remove the entire thing...
-//      }
-    //TODO export to world-gen settings, update world-gen file....(dirty hack)
     }
   if(this.formatRuins)
     {
