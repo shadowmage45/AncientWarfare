@@ -8,6 +8,7 @@ Change Log 034 -> 035 (12-07-13)
 * FIX -- Change order of loading biomes and structures to hopefully catch more mod-added biomes.  Moved structure registration/loading from pre-init to post init-init stage (post-init is the last stage, cannot be delayed further)
 * FIX -- Clear the bounding box/NBT data on a -stack- of civic items when a single item is used from the stack (as NBT data is stored per-stack, not per individual item in the stack).
 * FIX -- Improved frame-rate across multiple GUIs, specifically aimed at improving the fps when the warehouse inventory is displayed (manual element culling, clean up some un-needed/terrible openGL calls, draw ordering)
+* FIX -- Introduce fix for 'kicked for flying not allowed' when riding a vehicle.  This does not solve issues of kicked while standing on top of a vehicle (yet).
 * NEW -- Added zh_CN localization.  Many thanks to crafteverywhere and his friends for taking the time to do the translation work.  
     Most item/object names, and many tooltips, have translations -- however there are a few static strings that I still need to hook into the localization system
     such as various labels on GUIs and a few extra information tooltips (e.g. Material Level on vehicle tooltips).  I will work on getting the rest of the user-readable text

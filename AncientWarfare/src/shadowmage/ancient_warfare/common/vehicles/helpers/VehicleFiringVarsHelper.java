@@ -67,7 +67,7 @@ public boolean interact(EntityPlayer player)
     return true;
     }
   boolean control = PlayerTracker.instance().isControlPressed(player);
-  if(!control && vehicle.riddenByEntity==null && !player.isSneaking())
+  if(!control && vehicle.riddenByEntity==null)
     {
     player.mountEntity(vehicle);
     return true;
