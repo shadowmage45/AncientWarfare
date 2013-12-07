@@ -20,22 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.container;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.machine.TEMailBox;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.machine.TEMailBoxBase;
-import shadowmage.ancient_warfare.common.tracker.MailboxData;
-import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
 
 public class ContainerMailbox extends ContainerMailboxBase
 {

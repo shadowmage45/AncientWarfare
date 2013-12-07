@@ -20,13 +20,12 @@
  */
 package shadowmage.ancient_warfare.client.gui.machine;
 
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
-import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.container.ContainerMailbox;
 import shadowmage.ancient_warfare.common.container.ContainerMailboxBase;
 
 public class GuiMailbox extends GuiContainerAdvanced
@@ -97,10 +96,13 @@ public void onElementActivated(IGuiElement element)
   {
   if(element.getElementNumber()<6)
     {
-    if(element.getElementNumber()==0 || container.getSideName(0)!=null)
+    if(player.inventory.getItemStack()==null)
       {
-      this.container.removeSlots();
-      mc.displayGuiScreen(new GuiMailboxSelection(this, element.getElementNumber()));      
+      if(element.getElementNumber()==0 || container.getSideName(0)!=null)
+        {
+        this.container.removeSlots();
+        mc.displayGuiScreen(new GuiMailboxSelection(this, element.getElementNumber()));   
+        }      
       }
     }
   }

@@ -84,8 +84,6 @@ public void removeSlots()
     }
   }
 
-
-
 @Override
 public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClickedIndex)
   {
@@ -213,10 +211,10 @@ public void handlePacketData(NBTTagCompound tag)
       NBTTagCompound reply = new NBTTagCompound();
       reply.setBoolean("accept", true);
       if(data!=null)
-      {
-          data.setSideName(box, name);
-          this.sendDataToGUI(reply);        
-      }   
+        {
+        data.setSideName(box, name);
+        this.sendDataToGUI(reply);        
+        }   
       }    
     } 
   }

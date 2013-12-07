@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.client.gui.machine;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.inventory.Slot;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
@@ -131,14 +132,28 @@ public void onElementActivated(IGuiElement element)
     }
   else if(element == this.cancelButton)
     {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("addSlots", true);
+    this.sendDataToServer(tag);
     this.container.addSlots();
-    mc.displayGuiScreen(parent);    
+    mc.displayGuiScreen(parent);     
     }    
   else if(this.boxNames.contains(element))
     {
     GuiString string = (GuiString)element;
     this.inputBox.setText(string.text);
     }
+  }
+
+@Override
+protected void handleMouseClick(Slot par1Slot, int par2, int par3, int par4)
+  {
+  //NOOP -- no slot interaction for this GUI
+//  if (par1Slot != null)
+//    {
+//    par2 = par1Slot.slotNumber;
+//    }
+//  this.mc.playerController.windowClick(this.inventorySlots.windowId, par2, par3, par4, this.mc.thePlayer);
   }
 
 @Override
