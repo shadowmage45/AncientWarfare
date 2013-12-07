@@ -357,10 +357,11 @@ private void copyDefaultFile(String fileName)
     {
     return;
     } 
+
   InputStream is = null;
   FileOutputStream os = null;
   File file = null;
-  Config.log("Exporting default AWWorldGen.cfg ....");
+  
   int exportCount = 0;
   byte[] byteBuffer;
   try
@@ -369,15 +370,15 @@ private void copyDefaultFile(String fileName)
     if(is==null)
       {
       return;
-      }
+      }    
     
     file = new File(fileName);
-
+    
     if(!file.exists())
       {
       file.createNewFile();
       }   
-
+    
     byteBuffer = ByteStreams.toByteArray(is);
     is.close();
     if(byteBuffer.length>0)
@@ -392,7 +393,6 @@ private void copyDefaultFile(String fileName)
     Config.logError("Error during export of: "+fileName);
     e.printStackTrace();
     }  
-  Config.log("Exported default file: AWConfig.cfg");  
   }
 
 /**

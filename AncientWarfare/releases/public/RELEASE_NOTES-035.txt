@@ -1,0 +1,16 @@
+Change Log 034 -> 035 (12-07-13)
+* FIX -- Structure Scanner not properly saving survival/world/other values set in the export gui.
+* FIX -- Battering Ram can no longer break bedrock
+* FIX -- NPC Upkeep status is now saved and restored when a soldier is repacked into an item.  Fixes potential exploits of repacking NPCs instead of feeding them.
+* FIX -- NPC Armor/Weapon inventory is now saved and restored when a soldier is repacked into an item.  Fixes armor duplication exploit.
+* FIX -- Chicken Farms and Tree Farms will no longer continue to pick up eggs/apples/sapplings after their inventory is full.  Fixes problems of potentially infinite items being stored/ejected (performance issues)
+* FIX -- Vehicles will no longer drop their inventory when a player logs out while riding the vehicle.  (They now validate for health<=0 when setDead is called before dropping items)
+* FIX -- Change order of loading biomes and structures to hopefully catch more mod-added biomes.  Moved structure registration/loading from pre-init to post init-init stage (post-init is the last stage, cannot be delayed further)
+* FIX -- Clear the bounding box/NBT data on a -stack- of civic items when a single item is used from the stack (as NBT data is stored per-stack, not per individual item in the stack).
+* FIX -- Improved frame-rate across multiple GUIs, specifically aimed at improving the fps when the warehouse inventory is displayed (manual element culling, clean up some un-needed/terrible openGL calls, draw ordering)
+* NEW -- Added zh_CN localization.  Many thanks to crafteverywhere and his friends for taking the time to do the translation work.  
+    Most item/object names, and many tooltips, have translations -- however there are a few static strings that I still need to hook into the localization system
+    such as various labels on GUIs and a few extra information tooltips (e.g. Material Level on vehicle tooltips).  I will work on getting the rest of the user-readable text
+    hooked into the localization system over the next few releases -- it is a lot of find/replace work and takes time.
+    
+    If anyone is interested in contributing localizations for other languages, please feel free to contact me via PM to go over the details or submit a pull request on github. 

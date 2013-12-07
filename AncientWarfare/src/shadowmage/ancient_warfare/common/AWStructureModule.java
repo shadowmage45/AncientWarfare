@@ -157,6 +157,13 @@ public void load()
     Config.log("Creating default Convert Directory");
     existTest.mkdirs();
     }
+  
+  existTest = new File(configBaseDirectory);
+  if(!existTest.exists())
+    {
+    Config.log("Creating AWConfig directory in config/");
+    existTest.mkdirs();
+    }
      
   if(shouldExportDefaults || (Config.updatedVersion && Config.autoExportOnUpdate))
     {

@@ -28,9 +28,11 @@ import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetServerHandler;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -643,7 +645,12 @@ public void onUpdateClient()
  */
 public void onUpdateServer()
   {
-
+  if(this.riddenByEntity instanceof EntityPlayerMP)
+    {
+    EntityPlayerMP player = (EntityPlayerMP)this.riddenByEntity;
+    NetServerHandler serv = player.playerNetServerHandler;
+    serv.ticksForFloatKick = 0;
+    }
   }
 
 public void updateTurretPitch()
