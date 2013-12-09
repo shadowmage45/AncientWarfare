@@ -28,11 +28,6 @@ import shadowmage.ancient_warfare.common.world_gen.VillageGenComponent;
 public class AWVCFortress extends VillageGenComponent
 {
 
-
-public AWVCFortress()
-  {
-  
-  }
 /**
  * @param start
  * @param par2

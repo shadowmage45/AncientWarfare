@@ -43,11 +43,6 @@ Set<StructureBoundingBox> builtStructs = new HashSet<StructureBoundingBox>();
 
 protected ComponentVillageStartPiece startPieceA;
 
-public VillageGenComponent()
-  {
-  
-  }
-
 /**
  * @param start
  * @param par2

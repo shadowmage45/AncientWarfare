@@ -70,14 +70,5 @@ public static DamageSource causeEntityMissileDamage(Entity attacker , boolean fi
   return t;
   }
 
-@Override
-public ChatMessageComponent getDeathMessage(EntityLiving par1EntityLiving)
-  {
-  EntityLiving entityliving1 = par1EntityLiving.func_94060_bK();
-  String name = entityliving1==null? "No Entity" : entityliving1.getEntityName();
-  ChatMessageComponent chat = ChatMessageComponent.createFromText(name + " was killed by Missile Damage");
-  return chat;
-  }
-
 
 }

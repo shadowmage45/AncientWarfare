@@ -28,11 +28,6 @@ import shadowmage.ancient_warfare.common.world_gen.VillageGenComponent;
 public class AWVCLogCabin extends VillageGenComponent
 {
 
-public AWVCLogCabin()
-  {
-  
-  }
-
 /**
  * @param start
  * @param par2
