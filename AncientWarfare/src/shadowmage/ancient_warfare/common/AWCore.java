@@ -59,10 +59,11 @@ import shadowmage.ancient_warfare.common.world_gen.LootGenerator;
 import shadowmage.ancient_warfare.common.world_gen.VillageGenerator;
 import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.ServerStopping;
+import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -97,7 +98,7 @@ public static AWCore instance;
  * load settings, config, items
  * @param evt
  */
-@EventHandler
+@PreInit
 public void preInit(FMLPreInitializationEvent evt) 
   {  
   /**
@@ -167,7 +168,7 @@ public void preInit(FMLPreInitializationEvent evt)
  * load registry stuff....
  * @param evt
  */
-@EventHandler
+@Init
 public void init(FMLInitializationEvent evt)
   {
   Config.log("Ancient Warfare Init started.");
@@ -180,7 +181,7 @@ public void init(FMLInitializationEvent evt)
  * finalize config settings, load NPCs (which rely on other crap from other mods..potentially)
  * @param evt
  */
-@EventHandler
+@PostInit
 public void load(FMLPostInitializationEvent evt)
   {  
   Config.log("Ancient Warfare Post-Init started");
@@ -203,7 +204,7 @@ public void load(FMLPostInitializationEvent evt)
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
   }
 
-@EventHandler
+@ServerStarting
 public void serverStarting(FMLServerStoppingEvent evt)
   {
   if(MinecraftServer.getServer().worldServers[0]!=null)

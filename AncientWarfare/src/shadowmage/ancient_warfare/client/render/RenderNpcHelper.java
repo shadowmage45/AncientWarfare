@@ -28,8 +28,6 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
@@ -69,7 +67,7 @@ public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double pa
   }
 
 @Override
-protected void renderEquippedItems(EntityLivingBase par1EntityLivingBase, float par2)
+protected void renderEquippedItems(EntityLiving par1EntityLivingBase, float par2)
   {
   super.renderEquippedItems(par1EntityLivingBase, par2);
   if(Config.renderNpcFlags)
@@ -84,7 +82,7 @@ protected void renderEquippedItems(EntityLivingBase par1EntityLivingBase, float 
  * shamelessly copied to enable color-differentiation per-entity
  */
 @Override
-protected void renderLivingLabel(EntityLivingBase par1EntityLiving, String par2Str, double renderX, double renderY, double renderZ, int renderDistance)
+protected void renderLivingLabel(EntityLiving par1EntityLiving, String par2Str, double renderX, double renderY, double renderZ, int renderDistance)
   {
   double var10 = par1EntityLiving.getDistanceSqToEntity(this.renderManager.livingPlayer);  
   if (var10 <= (double)(renderDistance * renderDistance))

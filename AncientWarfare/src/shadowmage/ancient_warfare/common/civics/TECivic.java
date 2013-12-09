@@ -589,7 +589,7 @@ public Packet getDescriptionPacket()
 public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
   {
   super.onDataPacket(net, pkt);
-  this.readCivicDataFromNBT(pkt.data);
+  this.readCivicDataFromNBT(pkt.customParam1);
   }
 
 /**
@@ -768,7 +768,7 @@ public boolean isInvNameLocalized()
   }
 
 @Override
-public boolean isItemValidForSlot(int i, ItemStack itemstack)
+public boolean isStackValidForSlot(int i, ItemStack itemstack)
   {  
   return true;
   }

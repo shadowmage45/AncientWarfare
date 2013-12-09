@@ -137,9 +137,9 @@ public void handlePacketData(NBTTagCompound tag)
   }
 
 @Override
-public void onContainerClosed(EntityPlayer par1EntityPlayer)
+public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
   {
-  super.onContainerClosed(par1EntityPlayer);  
+  super.onCraftGuiClosed(par1EntityPlayer);  
   if(!par1EntityPlayer.worldObj.isRemote)
     {
     ItemStack stack = par1EntityPlayer.inventory.getCurrentItem();

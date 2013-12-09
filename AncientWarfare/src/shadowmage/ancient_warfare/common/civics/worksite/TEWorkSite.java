@@ -148,7 +148,7 @@ protected void addWorkPoint(Entity ent, TargetType work)
   }
 
 @Override
-public boolean isItemValidForSlot(int i, ItemStack itemstack)
+public boolean isStackValidForSlot(int i, ItemStack itemstack)
   {
   if(InventoryTools.isSlotPresentInIndices(i, specResourceIndices))
     {
@@ -205,7 +205,7 @@ public int[] getAccessibleSlotsFromSide(int var1)
 @Override
 public boolean canInsertItem(int i, ItemStack itemstack, int j)
   {
-  return isItemValidForSlot(i, itemstack);
+  return isStackValidForSlot(i, itemstack);
   }
 
 @Override

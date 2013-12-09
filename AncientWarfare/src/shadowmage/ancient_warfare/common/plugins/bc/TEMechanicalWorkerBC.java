@@ -22,38 +22,59 @@ package shadowmage.ancient_warfare.common.plugins.bc;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.machine.TEMechanicalWorker;
+import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.power.PowerHandler.Type;
+import buildcraft.api.power.PowerFramework;
 
 public class TEMechanicalWorkerBC extends TEMechanicalWorker implements IPowerReceptor
 {
 
-PowerHandler provider;
+IPowerProvider provider;
 /**
  * 
  */
 public TEMechanicalWorkerBC()
   {
-  provider = new PowerHandler(this, Type.MACHINE);
-  provider.configurePowerPerdition(1, 100);
-  provider.configure(2, 25, 70, 210);
-  this.canUpdate = true;
+  provider = PowerFramework.currentFramework.createPowerProvider();
+  this.canUpdate = true;  
+  this.initPowerProvider();
   }
 
-//@Override
-//public int powerRequest(ForgeDirection from)
-//  {
-//  IPowerProvider p = getPowerProvider();
-//  float needed = p.getMaxEnergyStored() - p.getEnergyStored();
-//  return (int) Math.ceil(Math.min(p.getMaxEnergyReceived(), needed));  
-//  }
+private void initPowerProvider() 
+  {
+  provider.configure(20, 25, 25, 70, 210);
+  provider.configurePowerPerdition(1, 100);
+  }
+
+@Override
+public void setPowerProvider(IPowerProvider provider)
+  {
+  this.provider = provider;
+  }
+
+@Override
+public IPowerProvider getPowerProvider()
+  {
+  return this.provider;
+  }
+
+@Override
+public void doWork()
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public int powerRequest(ForgeDirection from)
+  {
+  IPowerProvider p = getPowerProvider();
+  float needed = p.getMaxEnergyStored() - p.getEnergyStored();
+  return (int) Math.ceil(Math.min(p.getMaxEnergyReceived(), needed));  
+  }
 
 @Override
 public void updateEntity()
@@ -67,7 +88,7 @@ public void updateEntity()
     {    
     if(this.workSite!=null && this.workSite.hasWork())
       {
-//      Config.logDebug("using energy: "+this.provider.getActivationEnergy());
+      Config.logDebug("using energey: "+this.provider.getActivationEnergy());
       this.provider.useEnergy(this.provider.getActivationEnergy(), this.provider.getActivationEnergy(), true);
       this.workSite.doWork(this);
       }
@@ -80,7 +101,7 @@ public void updateEntity()
     ForgeDirection d = this.facingDirection;
     x += d.offsetX;
     z += d.offsetZ;   
-//    Config.logDebug(String.format("checking block %s, %s, %s for work site", x,y,z));
+    Config.logDebug(String.format("checking block %s, %s, %s for work site", x,y,z));
     TileEntity e = worldObj.getBlockTileEntity(x, y, z);
     if(e instanceof ITEWorkSite)
       {
@@ -88,7 +109,7 @@ public void updateEntity()
       if(workSite.canHaveMoreWorkers(this))
         {
         this.workSite = (ITEWorkSite)e;
-//        Config.logDebug("found work site!!");        
+        Config.logDebug("found work site!!");        
         }
       }
     }
@@ -113,22 +134,5 @@ public void writeToNBT(NBTTagCompound tag)
     NBTTagCompound powerTag = tag.getCompoundTag("power");
     this.provider.readFromNBT(powerTag);
     }
-  }
-
-@Override
-public PowerReceiver getPowerReceiver(ForgeDirection side)
-  {
-  return provider.getPowerReceiver();
-  }
-
-@Override
-public void doWork(PowerHandler workProvider)
-  {  
-  }
-
-@Override
-public World getWorld()
-  {
-  return worldObj;
   }
 }

@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -257,7 +257,7 @@ public void updateAggroEntries()
     }  
   }
 
-public void handleBeingAttacked(EntityLivingBase damager)
+public void handleBeingAttacked(EntityLiving damager)
   {
   if(damager instanceof EntityPlayer)
     {

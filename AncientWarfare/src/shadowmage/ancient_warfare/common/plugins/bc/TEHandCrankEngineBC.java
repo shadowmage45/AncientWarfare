@@ -20,36 +20,30 @@
  */
 package shadowmage.ancient_warfare.common.plugins.bc;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.machine.TEHandCrankEngine;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
-import buildcraft.api.gates.IOverrideDefaultTriggers;
-import buildcraft.api.gates.ITrigger;
-import buildcraft.api.power.IPowerEmitter;
+import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.power.PowerHandler.Type;
+import buildcraft.api.power.PowerFramework;
+import buildcraft.api.power.PowerProvider;
 import buildcraft.api.transport.IPipeConnection;
-import buildcraft.api.transport.IPipeTile.PipeType;
 import buildcraft.api.transport.ISolidSideTile;
 
-public class TEHandCrankEngineBC extends TEHandCrankEngine implements IPowerReceptor, IPowerEmitter
+public class TEHandCrankEngineBC extends TEHandCrankEngine implements IPipeConnection, ISolidSideTile, IPowerReceptor
 {
 
-
-protected PowerHandler powerHandler;
-protected PowerReceiver outputTarget;
+IPowerProvider outputTarget = null;
+IPowerProvider internalBuffer = null;
 int broadcastDelayTicks = 0;
 protected boolean broadcastWork = true;
 /**
@@ -57,10 +51,15 @@ protected boolean broadcastWork = true;
  */
 public TEHandCrankEngineBC()
   {
+  internalBuffer = PowerFramework.currentFramework.createPowerProvider();
   this.canUpdate = true;
-  powerHandler = new PowerHandler(this, Type.ENGINE);
-  powerHandler.configurePowerPerdition(1, 100);
-  powerHandler.configure(0, 75, Config.npcWorkMJ, 1000);
+  this.initPowerProvider();
+  }
+
+private void initPowerProvider() 
+  {
+  internalBuffer.configure(20, 1, 200, Config.npcWorkMJ, Config.npcWorkMJ*3);
+  internalBuffer.configurePowerPerdition(1, 100);
   }
 
 @Override
@@ -75,16 +74,15 @@ public void updateEntity()
   TileEntity tile = worldObj.getBlockTileEntity(x, y, z);  
   if(isPoweredTile(tile))
     {    
-    this.outputTarget = ((IPowerReceptor)tile).getPowerReceiver(this.facingDirection.getOpposite()); 
+    this.outputTarget = ((IPowerReceptor)tile).getPowerProvider(); 
     if(this.outputTarget!=null)
       {  
-      float toMove = this.powerHandler.getEnergyStored();
-      if(toMove>=this.powerHandler.getActivationEnergy())
+      int toMove = (int) (this.internalBuffer!=null ? this.internalBuffer.getEnergyStored() : 0);
+      if(toMove>this.internalBuffer.getActivationEnergy())
         {
         toMove = outputTarget.getMaxEnergyReceived() < toMove ? outputTarget.getMaxEnergyReceived() : toMove;
         this.setIsWorking(true);
-        toMove = this.powerHandler.useEnergy(toMove, toMove, true);
-        toMove = this.outputTarget.receiveEnergy(Type.ENGINE, toMove, facingDirection.getOpposite());   
+        this.outputTarget.receiveEnergy(this.internalBuffer.useEnergy(0, toMove, true), facingDirection.getOpposite());   
         }
       else
         {
@@ -107,8 +105,8 @@ public boolean isPoweredTile(TileEntity tile)
   {
   if (tile instanceof IPowerReceptor) 
     {
-    PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(facingDirection.getOpposite());
-    return receptor != null;
+    IPowerProvider receptor = ((IPowerReceptor) tile).getPowerProvider();
+    return receptor != null && receptor.getClass().getSuperclass().equals(PowerProvider.class);
     }
   return false;
   }
@@ -158,16 +156,59 @@ public void broadcastWork(int maxRange)
 @Override
 public boolean hasWork()
   {
-  return this.powerHandler!=null && this.powerHandler.getEnergyStored() < this.powerHandler.getMaxEnergyStored();
+  return this.internalBuffer!=null && this.internalBuffer.getEnergyStored() < this.internalBuffer.getMaxEnergyStored();
   }
 
 @Override
 public void doWork(IWorker worker)
   {
-  if(this.powerHandler!=null && this.powerHandler.getEnergyStored() < this.powerHandler.getMaxEnergyStored())
+  if(this.internalBuffer!=null && this.internalBuffer.getEnergyStored() < this.internalBuffer.getMaxEnergyStored())
     {
-    this.powerHandler.addEnergy(Config.npcWorkMJ);
+    this.internalBuffer.receiveEnergy(Config.npcWorkMJ, facingDirection);
     }
+  }
+
+@Override
+public boolean isSolidOnSide(ForgeDirection side)
+  {
+  return true;
+  }
+
+@Override
+public boolean isPipeConnected(ForgeDirection with)
+  {
+  return with != facingDirection;
+  }
+
+@Override
+public void setPowerProvider(IPowerProvider provider)
+  {
+  this.internalBuffer = provider;
+  }
+
+@Override
+public IPowerProvider getPowerProvider()
+  {
+  return this.internalBuffer;
+  }
+
+@Override
+public void doWork()
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public int powerRequest(ForgeDirection from)
+  {
+  return 0;
+//  if(from==facingDirection)
+//    {
+//    return 0;
+//    }
+//  IPowerProvider p = getPowerProvider();
+//  float needed = p.getMaxEnergyStored() - p.getEnergyStored();
+//  return (int) Math.ceil(Math.min(p.getMaxEnergyReceived(), needed));  
   }
 
 @Override
@@ -175,7 +216,7 @@ public void readFromNBT(NBTTagCompound tag)
   {
   super.readFromNBT(tag);
   NBTTagCompound powerTag = new NBTTagCompound();
-  this.powerHandler.writeToNBT(powerTag);
+  this.internalBuffer.writeToNBT(powerTag);
   tag.setCompoundTag("power", powerTag);
   }
 
@@ -186,31 +227,7 @@ public void writeToNBT(NBTTagCompound tag)
   if(tag.hasKey("power"))
     {
     NBTTagCompound powerTag = tag.getCompoundTag("power");
-    this.powerHandler.readFromNBT(powerTag);
+    this.internalBuffer.readFromNBT(powerTag);
     }
-  }
-
-@Override
-public boolean canEmitPowerFrom(ForgeDirection side)
-  {
-  return side==this.facingDirection;
-  }
-
-@Override
-public PowerReceiver getPowerReceiver(ForgeDirection side)
-  {
-  return side==this.facingDirection ? null : this.powerHandler.getPowerReceiver();
-  }
-
-@Override
-public void doWork(PowerHandler workProvider)
-  {
-  
-  }
-
-@Override
-public World getWorld()
-  {
-  return worldObj;
   }
 }

@@ -72,8 +72,8 @@ public Packet getDescriptionPacket()
 public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
   {
   super.onDataPacket(net, pkt);
-  this.baseBlockID = pkt.data.getInteger("block");
-  this.damageRemaining = pkt.data.getInteger("dmg");
+  this.baseBlockID = pkt.customParam1.getInteger("block");
+  this.damageRemaining = pkt.customParam1.getInteger("dmg");
   }
 
 @Override

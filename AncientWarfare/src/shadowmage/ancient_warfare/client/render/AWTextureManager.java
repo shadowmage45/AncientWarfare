@@ -30,7 +30,6 @@ import net.minecraft.util.ResourceLocation;
 public class AWTextureManager
 {
 
-private static HashMap<String, ResourceLocation> textures = new HashMap<String, ResourceLocation>();
 
 /**
  * 
@@ -42,18 +41,8 @@ public AWTextureManager()
 
 public static void bindTexture(String texture)
   {
-  Minecraft.getMinecraft().renderEngine.bindTexture(getResource(texture));
+  Minecraft.getMinecraft().renderEngine.bindTexture((texture));
   }
 
-public static ResourceLocation getResource(String texture)
-  {
-  ResourceLocation resource = textures.get(texture);
-  if(resource==null)
-    {
-    resource = new ResourceLocation("ancientwarfare", texture);
-    textures.put(texture, resource);
-    }
-  return resource;
-  }
 
 }
