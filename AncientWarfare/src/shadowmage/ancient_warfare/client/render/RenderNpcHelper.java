@@ -144,10 +144,6 @@ protected void renderLivingLabel(EntityLiving par1EntityLiving, String par2Str, 
     }
   }
 
-protected ResourceLocation func_110856_a(EntityLiving par1EntityLiving)
-  {
-  return AWTextureManager.getResource(((NpcBase)par1EntityLiving).getTexture());
-  }
 
 public void renderObjectiveIcon(byte obj)
   {

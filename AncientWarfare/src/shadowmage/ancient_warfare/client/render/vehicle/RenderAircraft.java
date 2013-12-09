@@ -20,16 +20,11 @@
  */
 package shadowmage.ancient_warfare.client.render.vehicle;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelAirplane;
-import shadowmage.ancient_warfare.client.model.ModelBoatBallista;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
 public class RenderAircraft extends RenderVehicleBase
 {

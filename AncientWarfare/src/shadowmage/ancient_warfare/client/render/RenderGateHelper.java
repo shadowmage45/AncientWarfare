@@ -20,12 +20,12 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 
@@ -60,12 +60,6 @@ public void doRender(Entity entity, double d0, double d1, double d2, float f, fl
   RenderRegistry.instance().getGateRender(typeNum).doRender(entity, d0, d1, d2, f, f1);
   GL11.glColor4f(1.f, 1.f, 1.f, 1.f);
   GL11.glPopMatrix();
-  }
-
-@Override
-protected ResourceLocation getEntityTexture(Entity entity)
-  {
-  return AWTextureManager.getResource(((EntityGate)entity).getTexture());
   }
 
 

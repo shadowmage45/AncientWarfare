@@ -203,7 +203,7 @@ public void setPositionAndRotation2(double par1, double par3, double par5, float
   }
 
 @Override
-public boolean interactFirst(EntityPlayer par1EntityPlayer)
+public boolean interact(EntityPlayer par1EntityPlayer)
   {
   if(this.worldObj.isRemote)
     {
@@ -373,7 +373,7 @@ protected void checkForLockStatus()
   }
 
 @Override
-public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
   {
   if(this.worldObj.isRemote)
     {

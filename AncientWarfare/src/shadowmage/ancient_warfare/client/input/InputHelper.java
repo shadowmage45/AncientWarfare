@@ -423,7 +423,7 @@ public MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, float
   Vec3 playerPos = player.getPosition(0);
   Vec3 lookVector = player.getLook(0);
   Vec3 endVector = playerPos.addVector(lookVector.xCoord * range, lookVector.yCoord * range, lookVector.zCoord * range);
-  MovingObjectPosition blockHit = player.worldObj.clip(playerPos, endVector);
+  MovingObjectPosition blockHit = player.worldObj.rayTraceBlocks(playerPos, endVector);
   
   /**
    * reseat vectors, as they get messed with in the rayTrace...

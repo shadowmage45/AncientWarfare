@@ -102,8 +102,9 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   }
 
 @Override
-public String getItemStackDisplayName(ItemStack par1ItemStack)
+public String getLocalizedName(ItemStack par1ItemStack)
   {
+//  return getLocalizedName(par1ItemStack)
   return getItemDisplayName(par1ItemStack);
   }
 

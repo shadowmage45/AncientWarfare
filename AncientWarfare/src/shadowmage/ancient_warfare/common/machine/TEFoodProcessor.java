@@ -106,7 +106,7 @@ public int[] getAccessibleSlotsFromSide(int var1)
 @Override
 public boolean canInsertItem(int i, ItemStack itemstack, int j)
   {
-  return j != 0 && isItemValidForSlot(i, itemstack);
+  return j != 0 && isStackValidForSlot(i, itemstack);
   }
 
 @Override
@@ -188,7 +188,7 @@ public void closeChest()
   }
 
 @Override
-public boolean isItemValidForSlot(int i, ItemStack itemstack)
+public boolean isStackValidForSlot(int i, ItemStack itemstack)
   {
   return i==0 ? false : (itemstack.getItem() instanceof ItemFood);
   }

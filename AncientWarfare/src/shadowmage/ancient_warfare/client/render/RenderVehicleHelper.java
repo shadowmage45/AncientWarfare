@@ -28,8 +28,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StringTranslate;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
@@ -194,10 +192,6 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   GL11.glPopMatrix();
   }
 
-@Override
-protected ResourceLocation getEntityTexture(Entity entity)
-  {
-  return AWTextureManager.getResource(((VehicleBase)entity).getTexture());
-  }
+
 
 }

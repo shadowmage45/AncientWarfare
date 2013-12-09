@@ -22,12 +22,10 @@ package shadowmage.ancient_warfare.common.npcs;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
@@ -172,14 +170,6 @@ protected void entityInit()
   }
 
 @Override
-protected void applyEntityAttributes()
-  {
-  super.applyEntityAttributes();
-  this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(20.f);
-  this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.325f);
-  }
-
-@Override
 @SideOnly(Side.CLIENT)
 public float getShadowSize()
   {
@@ -196,7 +186,7 @@ protected void collideWithEntity(Entity par1Entity)
   }
 
 @Override
-public void setHealth(float health)
+public void setHealth(int health)
   {
   super.setHealth(health);
   if(this.getHealth()<=0 && !this.isDead && !this.worldObj.isRemote)
@@ -613,7 +603,7 @@ public void dismountVehicle()
     Entity et = ridingEntity;
     this.ridingEntity = null;
     et.riddenByEntity = null;
-    this.dismountEntity(et);
+//    this.mountEntity(et);
     VehicleBase vehicle = (VehicleBase)et;
     vehicle.moveHelper.clearInputFromDismount();    
     }
@@ -665,13 +655,6 @@ public void setActionTicksToMax()
   }
 
 @Override
-public void onLivingUpdate()
-  {
-  this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.325f);
-  super.onLivingUpdate();
-  }
-
-@Override
 public void onUpdate()
   {
   long t1 = System.nanoTime();
@@ -679,7 +662,7 @@ public void onUpdate()
   npcTicksExisted++;
   if(this.ridingEntity!=null && this.ridingEntity.riddenByEntity!=this)
     {
-    this.dismountEntity(ridingEntity);
+//    this.mountEntity(ridingEntity);
     this.ridingEntity=null;
     }
   if(!worldObj.isRemote && (npcTicksExisted + this.entityId) % Config.npcAITicks == 0)
@@ -897,7 +880,7 @@ protected void handleHealingUpdate()
   {
   if(this.getHealth()<this.getMaxHealth())
     {
-    this.setHealth(this.getHealth()+1.f);
+    this.setHealth(this.getHealth()+1);
     }
   }
 
@@ -934,7 +917,7 @@ public void handlePacketUpdate(NBTTagCompound tag)
   }
 
 @Override
-public boolean attackEntityFrom(DamageSource damageSource, float damageAmount)
+public boolean attackEntityFrom(DamageSource damageSource, int damageAmount)
   {  
   if(wayNav.getCommander()!=null)
     {
@@ -1175,6 +1158,13 @@ public double getDistanceFrom(double par1, double par3, double par5)
   double d4 = this.posY - par3;
   double d5 = this.posZ - par5;
   return (double)MathHelper.sqrt_double(d3 * d3 + d4 * d4 + d5 * d5);
+  }
+
+
+@Override
+public int getMaxHealth()
+  {
+  return this.npcType.getMaxHealth(rank);
   }
 
 }

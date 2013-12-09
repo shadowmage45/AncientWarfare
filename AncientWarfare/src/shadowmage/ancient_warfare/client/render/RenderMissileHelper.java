@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.client.render;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
 
@@ -38,9 +37,4 @@ public void doRender(Entity var1, double var2, double var4, double var6,  float 
   RenderRegistry.instance().getRenderForMissile(((MissileBase)var1).missileType).doRender(var1, var2, var4, var6, var8, var9);
   }
 
-@Override
-protected ResourceLocation getEntityTexture(Entity entity)
-  {
-  return AWTextureManager.getResource(((MissileBase)entity).getTexture());
-  }
 }
