@@ -153,7 +153,7 @@ public NpcBase(World par1World)
     this.equipmentDropChances[i] = 1.f;
     }
   this.experienceValue = 10;
-  this.setHealth(20.f);
+  this.setHealth(20);
   this.armorInventory = new NpcArmorInventory(this);
   }
 
@@ -185,10 +185,9 @@ protected void collideWithEntity(Entity par1Entity)
     }
   }
 
-@Override
 public void setHealth(int health)
   {
-  super.setHealth(health);
+  this.dataWatcher.updateObject(31, new Integer(health));
   if(this.getHealth()<=0 && !this.isDead && !this.worldObj.isRemote)
     {
     this.setDead();
