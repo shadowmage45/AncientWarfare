@@ -1,3 +1,5 @@
+BC cde6791 -- 1.5.2 branch commit
+
 FROM TESTING
 * iron single gate orientation is (reversed)(or at least inconsistent)?
 * stone slabs render as quartz slabs in research book (possibly other places)
