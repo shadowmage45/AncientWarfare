@@ -136,9 +136,9 @@ public boolean handleBlockBreak(IWorker npc, int x, int y, int z)
     }
 
   List<ItemStack> drops = BlockTools.breakBlock(worldObj, x, y, z, 0);
-  drops.addAll(invDrops);
   if(drops!=null)
     {
+    drops.addAll(invDrops);
     for(ItemStack drop : drops)
       {
       if(this.resourceFilterContains(drop))
