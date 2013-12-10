@@ -68,7 +68,7 @@ protected boolean tryUpgradeNpc(World world, EntityPlayer player, ItemStack stac
       {
       NBTTagCompound tag = new NBTTagCompound();
       npc.writeToNBT(tag);
-      tag.setInteger("rank", level);
+      tag.setInteger("lev", level);
       Entity newNpc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, npc.teamNum);
       newNpc.readFromNBT(tag);
       npc.isDead = true;      
@@ -90,7 +90,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     }
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
     {
-    NBTTagCompound npcTag = stack.getTagCompound().getCompoundTag("AWNpcSpanwer");
+    NBTTagCompound npcTag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
     int level = npcTag.getInteger("lev");    
     hit = BlockTools.offsetForSide(hit, side);  
     Entity npc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, TeamTracker.instance().getTeamForPlayerServer(player.getEntityName()));
@@ -156,6 +156,7 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
       NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
       int i = stack.getItemDamage();
       int rank = tag.getInteger("lev");
+      System.out.println("rank from item: "+rank);
       par3List.add(StatCollector.translateToLocal(NpcTypeBase.getNpcType(i).getDisplayTooltip(rank)));
       if(tag.hasKey("health"))
         {
