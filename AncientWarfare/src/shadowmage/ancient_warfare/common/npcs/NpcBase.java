@@ -162,7 +162,7 @@ public NpcBase(World par1World)
 protected void entityInit()
   {
   super.entityInit();  
-  this.dataWatcher.updateObject(6, Float.valueOf(20.0F));
+//  this.dataWatcher.updateObject(6, Float.valueOf(20.0F));
   this.dataWatcher.addObject(28, Byte.valueOf((byte) -1));//objective
   this.dataWatcher.addObject(29, Byte.valueOf((byte) -1));//task
   this.dataWatcher.addObject(30, Byte.valueOf((byte) -1));//other/error (no food/no deposit)
@@ -1159,11 +1159,10 @@ public double getDistanceFrom(double par1, double par3, double par5)
   return (double)MathHelper.sqrt_double(d3 * d3 + d4 * d4 + d5 * d5);
   }
 
-
 @Override
 public int getMaxHealth()
   {
-  return this.npcType.getMaxHealth(rank);
+  return this.npcType==null? 20 : this.npcType.getMaxHealth(rank);
   }
 
 }

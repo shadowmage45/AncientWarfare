@@ -26,18 +26,9 @@ import net.minecraft.client.Minecraft;
 public class AWTextureManager
 {
 
-
-/**
- * 
- */
-public AWTextureManager()
-  {
-  // TODO Auto-generated constructor stub
-  }
-
 public static void bindTexture(String texture)
   {
-  texture = "/mods/ancientwarfare/"+texture;
+//  texture = "/mods/ancientwarfare/"+texture;
   Minecraft.getMinecraft().renderEngine.bindTexture(texture);
   }
 
