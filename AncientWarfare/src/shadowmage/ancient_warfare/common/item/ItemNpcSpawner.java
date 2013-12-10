@@ -90,7 +90,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     }
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
     {
-    NBTTagCompound npcTag = stack.getTagCompound().getCompoundTag("AWNpcSpanwer");
+    NBTTagCompound npcTag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
     int level = npcTag.getInteger("lev");    
     hit = BlockTools.offsetForSide(hit, side);  
     Entity npc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, TeamTracker.instance().getTeamForPlayerServer(player.getEntityName()));
