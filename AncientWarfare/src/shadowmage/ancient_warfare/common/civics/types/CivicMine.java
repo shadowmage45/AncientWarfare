@@ -45,7 +45,6 @@ public CivicMine(int id, String name, String tooltip, Class <?extends TECivic> t
   this.workSizeMaxHeight = 2;
   this.workSizeMaxHorizontal = hSize;
   this.maxWorkers = 4;
-  this.itemIconTexture = "civicMine1";
   this.blockIconNames[0] = "ancientwarfare:civic/civicFarmWheatBottom";
   this.blockIconNames[1] = "ancientwarfare:civic/civicFarmWheatTop";
   this.blockIconNames[2] = "ancientwarfare:civic/civicFarmWheatSide";  

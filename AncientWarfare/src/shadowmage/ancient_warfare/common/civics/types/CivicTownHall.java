@@ -47,7 +47,6 @@ public CivicTownHall(int id, String name, String tooltip, int inventorySize, Cla
   this.workType = CivicWorkType.UPKEEP;
   this.regularInventorySize = inventorySize;
   this.teClass = teClass;
-  this.itemIconTexture = "civicFarmWheat1";  
   this.addRecipeResource(new ItemStack(Item.paper, 2+size), false);
   this.addRecipeResource(new ItemStack(Block.chest, 1+size), false);  
   this.addRecipeResource(new ItemStack(Item.ingotGold, 3), false);

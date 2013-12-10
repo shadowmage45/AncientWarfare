@@ -68,7 +68,7 @@ public void registerCivics()
     {
 	  if(civ==null || !civ.addToCreativeMenu()){continue;}
     Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.civicPlacer, civ.getGlobalID(), civ.getDisplayName(), "", civ.getDisplayTooltip());
-    d.setIconTexture(civ.getIconTexture(), civ.getGlobalID());
+    d.setIconTexture(civ.getIconNames()[0], civ.getGlobalID());
     Block block = getBlockFor(civ.getGlobalID());
     int meta = civ.getGlobalID()%16;
     LanguageRegistry.addName(new ItemStack(block, 1 , meta), civ.getDisplayName());    

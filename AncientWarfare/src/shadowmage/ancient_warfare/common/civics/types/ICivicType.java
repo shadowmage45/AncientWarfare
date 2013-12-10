@@ -77,7 +77,6 @@ String getLocalizedName();
  */
 String getDisplayTooltip();
 String getLocalizedTooltip();
-String getIconTexture();
 
 String[] getIconNames();
 

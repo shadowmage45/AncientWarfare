@@ -43,7 +43,6 @@ public CivicWarehouse(int id, String name, String tooltip, Class <?extends TECiv
   this.workType = CivicWorkType.COURIER;
   this.workSizeMaxHorizontal = workHorizSize;
   this.workSizeMaxHeight = workVertSize;
-  this.itemIconTexture = "civicMine1";
   this.blockIconNames[0] = "ancientwarfare:civic/civicWarehouseControl1Bottom";
   this.blockIconNames[1] = "ancientwarfare:civic/civicWarehouseControl1Top";
   this.blockIconNames[2] = "ancientwarfare:civic/civicWarehouseControl1Sides"; 

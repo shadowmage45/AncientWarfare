@@ -63,7 +63,7 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Mod.ServerStarting;
+import cpw.mods.fml.common.Mod.ServerStopping;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -204,8 +204,8 @@ public void load(FMLPostInitializationEvent evt)
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
   }
 
-@ServerStarting
-public void serverStarting(FMLServerStoppingEvent evt)
+@ServerStopping
+public void serverStopping(FMLServerStoppingEvent evt)
   {
   if(MinecraftServer.getServer().worldServers[0]!=null)
     {

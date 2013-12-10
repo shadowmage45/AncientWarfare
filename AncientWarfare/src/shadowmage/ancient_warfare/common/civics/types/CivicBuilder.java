@@ -42,7 +42,6 @@ public CivicBuilder(int id)
   this.workType = CivicWorkType.MINE;
   this.maxWorkers = 4;
   this.isWorkSite = true;
-  this.itemIconTexture = "civicMine1";
   this.setBlockIcons("civicBuilderBottom", "civicBuilderTop", "civicBuilderSides");
   }
 
