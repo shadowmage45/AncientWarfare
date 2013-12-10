@@ -1123,7 +1123,7 @@ public VehicleBase getRidingVehicle()
 @Override
 public float getDefaultMoveSpeed()
   {
-  return 1.f;
+  return 0.325f;
   }
 
 @Override
