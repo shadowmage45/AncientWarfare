@@ -156,7 +156,6 @@ public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List 
       NBTTagCompound tag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
       int i = stack.getItemDamage();
       int rank = tag.getInteger("lev");
-      System.out.println("rank from item: "+rank);
       par3List.add(StatCollector.translateToLocal(NpcTypeBase.getNpcType(i).getDisplayTooltip(rank)));
       if(tag.hasKey("health"))
         {
