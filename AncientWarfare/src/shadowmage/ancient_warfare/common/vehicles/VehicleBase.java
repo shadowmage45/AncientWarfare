@@ -646,10 +646,19 @@ public void onUpdateClient()
 public void onUpdateServer()
   {
   if(this.riddenByEntity instanceof EntityPlayerMP)
-    {
-    EntityPlayerMP player = (EntityPlayerMP)this.riddenByEntity;
-    NetServerHandler serv = player.playerNetServerHandler;
-    serv.ticksForFloatKick = 0;
+    { 
+    EntityPlayerMP player = (EntityPlayerMP)this.riddenByEntity;    
+    if(player.isSneaking())
+      {
+      player.mountEntity(this);
+      player.ridingEntity = null;
+      this.riddenByEntity = null;
+      }
+    else
+      {
+      NetServerHandler serv = player.playerNetServerHandler;
+      serv.ticksForFloatKick = 0;
+      }
     }
   }
 
