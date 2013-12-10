@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.client.render;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.client.Minecraft;
 
 public class AWTextureManager
@@ -36,7 +37,8 @@ public AWTextureManager()
 
 public static void bindTexture(String texture)
   {
-  Minecraft.getMinecraft().renderEngine.bindTexture((texture));
+  texture = "/mods/ancientwarfare/"+texture;
+  Minecraft.getMinecraft().renderEngine.bindTexture(texture);
   }
 
 
