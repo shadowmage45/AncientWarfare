@@ -99,12 +99,14 @@ public void drawElement(int mouseX, int mouseY)
     RenderHelper.enableGUIStandardItemLighting();
     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-    GL11.glEnable(GL11.GL_LIGHTING);      
+    GL11.glEnable(GL11.GL_LIGHTING);
+    GL11.glEnable(GL11.GL_DEPTH_TEST);
     short short1 = 240;
     short short2 = 240;
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)short1 / 1.0F, (float)short2 / 1.0F);
     itemRenderer.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack, guiLeft+renderPosX+1, guiTop+renderPosY+1);
     itemRenderer.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, fakeStack,  guiLeft+renderPosX+1, guiTop+renderPosY+1);
+    GL11.glDisable(GL11.GL_DEPTH_TEST);
     GL11.glDisable(GL11.GL_LIGHTING);
     GL11.glDisable(GL12.GL_RESCALE_NORMAL);
     } 
