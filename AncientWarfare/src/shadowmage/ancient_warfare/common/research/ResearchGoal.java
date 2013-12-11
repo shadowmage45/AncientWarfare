@@ -34,6 +34,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchBallistics;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchExplosives;
@@ -159,7 +160,7 @@ protected boolean enabledForResearch;
 
 public static void load()
   {
-  Description d = ItemLoader.instance().registerItemSubtyped(ItemLoader.researchNotes);
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(ItemLoader.researchNotes.itemID);
   boolean enabled;
   for(IResearchGoal goal : researchGoals)
     {

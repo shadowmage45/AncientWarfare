@@ -36,7 +36,7 @@ public class ItemAmmo extends AWItemBase
 public ItemAmmo(int itemID)
   {
   super(itemID, true);
-  this.setCreativeTab(CreativeTabAW.ammoTab);
+  this.setCreativeTab(CreativeTabAW.ammoTab);  
   }
 
 
