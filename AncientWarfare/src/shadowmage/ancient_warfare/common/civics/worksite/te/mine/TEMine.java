@@ -86,11 +86,12 @@ public void handleLadderAction(IWorker npc,  WorkPoint m)
 public void handleTorchAction(IWorker npc, WorkPoint m)
   {
   int id = worldObj.getBlockId(m.x, m.y, m.z);
+  boolean airBelow = worldObj.isAirBlock(m.x, m.y-1, m.z);
   if(id!=0)    
     {
     handleClearAction(npc, m);
     }
-  if(inventory.containsAtLeast(torchFilter, 1))
+  if(!airBelow && inventory.containsAtLeast(torchFilter, 1))
     {
     worldObj.setBlock(m.x, m.y, m.z, Block.torchWood.blockID, 5, 3);  
     inventory.tryRemoveItems(torchFilter, 1);
