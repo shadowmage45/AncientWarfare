@@ -785,17 +785,7 @@ public void onUpdate()
       this.worldObj.villageCollectionObj.addVillagerPosition(floorX, floorY, floorZ);
       }
     }
-//  int id = worldObj.getBlockId(floorX, floorY, floorZ); 
-//  if(!this.worldObj.isRemote && id!=0 && (!this.worldAccess.isWalkable(floorX, floorY, floorZ)) && this.posY % 1.f < 0.25f)
-//    {
-//    this.pushOutOfBlocks();    
-//    }
-  boolean riding = false;
-  if(this.isRidingVehicle())
-    {
-    riding = true;   
-    }
-  if(!this.worldObj.isRemote && this.getTarget()==null && riding)
+  if(!this.worldObj.isRemote && this.getTarget()==null && this.isRidingVehicle())
     {
     VehicleBase vehicle = (VehicleBase)this.ridingEntity;
     vehicle.moveHelper.clearInputFromDismount();    
@@ -814,22 +804,7 @@ public boolean isEntityInsideOpaqueBlock()
     {
     return false;
     }
-  for (int i = 0; i < 8; ++i)
-    {
-    float f = ((float)((i >> 0) % 2) - 0.5F) * this.width * 0.8F;
-    float f1 = ((float)((i >> 1) % 2) - 0.5F) * 0.1F;
-    float f2 = ((float)((i >> 2) % 2) - 0.5F) * this.width * 0.8F;
-    int j = MathHelper.floor_double(this.posX + (double)f);
-    int k = MathHelper.floor_double(this.posY + (double)this.getEyeHeight() + (double)f1);
-    int l = MathHelper.floor_double(this.posZ + (double)f2);
-
-    if (this.worldObj.isBlockNormalCube(j, k, l))
-      {
-      return true;
-      }
-    }
-
-  return false;
+  return super.isEntityInsideOpaqueBlock();
   }
 
 
@@ -866,41 +841,6 @@ public void setErrorID(byte b)
 public void setUpkeepTicks(int ticks)
   {
   this.npcUpkeepTicks = ticks;
-  }
-
-protected void pushOutOfBlocks()
-  {
-  int x = MathHelper.floor_double(posX);
-  int y = MathHelper.floor_double(posY);
-  int z = MathHelper.floor_double(posZ);
-  float dist = Float.POSITIVE_INFINITY;
-  float testDist;
-  BlockPosition closest = new BlockPosition(x,y,z);
-  for(int x1 = x-1; x1 <=x+1; x1++)
-    {
-    for(int z1 = z-1; z1<=z+1; z1++)
-      {
-      if(x1==x &&z1==z){continue;}
-      if(worldAccess.isWalkable(x1, y, z1) || worldAccess.isWalkable(x1, y-1, z1))
-        {
-        testDist = (float) getDistance(x1+0.5d, y, z1+0.5d);
-        if(testDist<dist)
-          {
-          closest.x = x1;
-          closest.y = y;
-          closest.z = z1;
-          dist = testDist;
-          }
-        }           
-      }
-    }
-  if(closest.x!=x || closest.z!=z)
-    {
-    this.setMoveTo(closest.x+0.5d, closest.y, closest.z+0.5d, this.getAIMoveSpeed());
-//    this.nav.currentTarget = null;
-//    this.clearPath();
-//    this.nav.currentTarget = new Node(closest.x, closest.y, closest.z);
-    }
   }
 
 protected void handleHealingUpdate()
