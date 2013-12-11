@@ -41,6 +41,7 @@ public static CreativeTabAW vehicleTab = new CreativeTabAW("Ancient Warfare Vehi
     return new ItemStack(ItemLoader.vehicleSpawner);
     }
   };
+  
 public static CreativeTabAW npcTab = new CreativeTabAW("Ancient Warfare Npcs")
   {
   @Override
@@ -49,6 +50,7 @@ public static CreativeTabAW npcTab = new CreativeTabAW("Ancient Warfare Npcs")
     return new ItemStack(ItemLoader.npcSpawner,1,2);
     }
   };
+  
 public static CreativeTabAW ammoTab = new CreativeTabAW("Ancient Warfare Ammunitions")
   {
   @Override
