@@ -36,6 +36,8 @@ import shadowmage.ancient_warfare.common.structures.data.StructureBuildSettings;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
+import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 
 public class ItemBuilderInstant extends ItemBuilderBase
 {
@@ -238,8 +240,5 @@ public boolean attemptConstruction(World world, ProcessedStructure struct,   Blo
     }
   return false;
   }
-
-
-
 
 }
