@@ -108,7 +108,7 @@ public void onObjectiveStart()
   if(home!=null)
     {
 //    Config.logDebug("ai stay near home: setting move target");
-    npc.setTargetAW(TargetPosition.getNewTarget(home.floorX(), home.floorY(), home.floorZ(), TargetType.MOVE));
+    npc.setTargetAW(TargetPosition.getNewTarget(home.floorX(), home.floorY(), home.floorZ(), TargetType.SHELTER));
     }
   else
     {
