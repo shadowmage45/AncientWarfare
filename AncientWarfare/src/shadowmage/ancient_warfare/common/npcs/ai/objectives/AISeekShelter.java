@@ -99,7 +99,7 @@ public void onObjectiveStart()
     {
     if(p!=null)
       {
-      npc.setTargetAW(TargetPosition.getNewTarget(p.floorX(), p.floorY(), p.floorZ(), TargetType.MOVE));
+      npc.setTargetAW(TargetPosition.getNewTarget(p.floorX(), p.floorY(), p.floorZ(), TargetType.SHELTER));
       }
     }
   }
