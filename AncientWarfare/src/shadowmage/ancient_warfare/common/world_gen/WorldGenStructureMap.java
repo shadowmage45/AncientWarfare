@@ -321,9 +321,11 @@ public NBTTagCompound getNBTTag()
   tag.setTag("x", xList);
   
   NBTTagList uniqueList = new NBTTagList();
+  NBTTagString string;
   for(String unique : this.generatedUniques)
     {
-    uniqueList.appendTag(new NBTTagString(unique));
+    string = new NBTTagString(unique, unique);
+    uniqueList.appendTag(string);
     }
   tag.setTag("uniques", uniqueList);
   return tag;
