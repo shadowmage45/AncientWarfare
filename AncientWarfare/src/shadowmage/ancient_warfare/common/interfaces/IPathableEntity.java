@@ -37,5 +37,6 @@ public float getDefaultMoveSpeed();
 public boolean isPathableEntityOnLadder();
 public Entity getEntity();
 public PathWorldAccess getWorldAccess();
+public void onStuckDetected();
 
 }

@@ -1177,4 +1177,20 @@ public double getDistanceFrom(double par1, double par3, double par5)
   return (double)MathHelper.sqrt_double(d3 * d3 + d4 * d4 + d5 * d5);
   }
 
+@Override
+public void onStuckDetected()
+  {
+  if(!this.worldObj.isRemote && Config.enableNpcTeleportHome && this.wayNav.getHomePoint()!=null && this.getTargetType()==TargetType.SHELTER)
+    {    
+    WayPoint p = this.wayNav.getHomePoint();
+    if(this.worldObj.blockExists(p.floorX(), p.floorY(), p.floorZ()) && this.worldObj.isAirBlock(p.floorX(), p.floorY()+1, p.floorZ()))
+      {
+      this.setPosition(p.floorX()+0.5d, p.floorY(), p.floorZ()+0.5d);   
+      this.motionX = this.motionY = this.motionZ = 0;
+      this.clearPath();
+      this.setTargetAW(null);
+      }
+    }
+  }
+
 }

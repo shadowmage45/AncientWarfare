@@ -1186,6 +1186,15 @@ public float getDefaultMoveSpeed()
   }
 
 @Override
+public void onStuckDetected()
+  {
+  if(this.riddenByEntity instanceof NpcBase)
+    {
+    ((NpcBase)this.riddenByEntity).onStuckDetected();
+    }
+  }
+
+@Override
 public int getSizeInventory()
   {
   return inventory.storageInventory.getSizeInventory();

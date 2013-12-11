@@ -194,6 +194,7 @@ protected void detectStuck()
       {
       if(entity.getDistance(stuckCheckPosition.x, stuckCheckPosition.y, stuckCheckPosition.z)<1.5d)
         {
+        this.owner.onStuckDetected();
 //        Config.logDebug("detecting stuck, clearing path");
         this.clearPath();
         this.currentTarget = null;      

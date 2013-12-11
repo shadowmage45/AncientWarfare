@@ -67,6 +67,7 @@ public static boolean randomizeVillagers = false;
 public static boolean renderHostileNames = false;
 public static boolean renderNpcFlags = true;
 public static boolean allowFriendlyFire = false;
+public static boolean enableNpcTeleportHome = true;
 
 public static boolean updatedVersion = false;
 public static String configVersion = "";
@@ -252,7 +253,8 @@ public void setCoreInfo()
    */
   this.npcAITicks = config.get("b-performance", "npc_aiticks", 5, "How many ticks should pass between updating passive ai tasks for NPCs?").getInt(5);
   this.npcAISearchRange = config.get("b-performance", "npc_search_radius", 140, "How many blocks of radius should entities search for targets and work? (MAX range, some AI limits this further)").getInt(140);
-  this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory_iterations", 20, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);
+  this.trajectoryIterationsServer = config.get("b-performance", "vehicle_trajectory_iterations", 20, "How many iterations should the brute-force trajectory algorith run? (used for soldiers server side)").getInt(20);  
+  this.enableNpcTeleportHome = config.get("a-general-options", "npc_teleport_home", true, "If enabled, NPCs will teleport to home point (if assigned) if stuck and unable to path for too long.").getBoolean(true);
   
   config.get("g_npc_config", "enable_armor_swapping", true);
   }
