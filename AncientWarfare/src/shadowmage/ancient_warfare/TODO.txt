@@ -28,11 +28,8 @@ FROM TESTING
 * crafting tables do not rotate properly from template construction (purely cosmetic..but...)
 * somehow still dropping config information on server crash (lost research...also lost forge forced chunk data though, so may be an error out of my control)
 * chunkloader not working properly?
-
 * possibly look into expanding the reach on npcs slightly so they have a better chance vs players
 * examine swapping over to unique entity-ids for different npc types -- may need to re-sublcass npcBase into various types...
-* add config option to adjust rarity/weight of each added loot type
-* add banners to NPCs to tell that they are an NPC and team color
 
 
 server opt flags::
@@ -41,8 +38,6 @@ https://forums.bukkit.org/threads/optimize-java-for-minecraft-in-a-extreme-way-p
 http://forums.bukkit.org/threads/how-can-i-optimize-java-on-my-server.3967/page-2#post-184208
 
 BALANCE FROM TESTING
-* fortresses too hard to defeat
-* possibly adjust commander bonus damage/damage reduction
 * add specific upkeep materials to some npc types
 * add some specific resource requirements to some higher-end research
     
@@ -90,7 +85,7 @@ NPCS
 
 CIVICS
 * figure out method for NPC civics to 'function' besides disallowing entirely
-    * NPC town hall ocasionally transfer items from civics in bounds (skip couriers)
+    * NPC town hall occasionally transfer items from civics in bounds (skip couriers)
     * NPC town hall plans courier routes (use couriers)    
 * NPC town hall will occasionally respawn missing NPCs
 
@@ -126,7 +121,6 @@ TWEAKS/OPTIMIZATION
 * editor GUI has some really ugly code to render chars....
 * custom block placement code for creative/survival builders (set server block, manually relay to client--should 
         decrease overall network used from vanilla MC resending entire chunks..)
-* move over to the forge-based packet system (basically wrap my packets in a single forge packet)
 * keep a timed list of requested path-to positions, if same path requested (less than 60 blocks) in X time with failed paths, disregard request entirely (unpathable target)
 * npcs need massive optimization pass, using far too much of server tick time
 
@@ -147,6 +141,7 @@ THINGS TO INVESTIGATE
 * structure control block for hostile structures -- coordinates npcs, respawns missing npcs after timer,
 * broadcast 'need-help' on-hit (NPCs) (possibly just broadcast target as an aggro target)
 * progressive additional upkeep requirements for NPCs such as miners, lumberjack, fishermen, farmers
+
 TEXTURE/ART
 
 ********************* DONE STUFF ************************* 
