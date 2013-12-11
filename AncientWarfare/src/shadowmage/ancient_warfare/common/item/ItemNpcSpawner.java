@@ -61,38 +61,6 @@ public ItemNpcSpawner(int itemID)
   this.setCreativeTab(CreativeTabAW.npcTab);  
   }
 
-protected boolean tryUpgradeNpc(World world, EntityPlayer player, ItemStack stack, NpcBase npc)
-  {
-  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("AWNpcSpawner"))
-    {
-    int level = stack.getTagCompound().getCompoundTag("AWNpcSpawner").getInteger("lev");
-    if(level >= npc.rank+1)
-      {
-      NBTTagCompound tag = new NBTTagCompound();
-      npc.writeToNBT(tag);
-      tag.setInteger("lev", level);
-      Entity newNpc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, npc.teamNum);
-      if(newNpc instanceof NpcBase)
-        {
-        NpcBase newNpcBase = (NpcBase)newNpc;
-        ItemStack equip = null;
-        for(int i = 0; i < 5; i++)
-          {
-          equip = newNpcBase.getCurrentItemOrArmor(i);
-          InventoryTools.dropItemInWorld(npc.worldObj, equip, npc.posX, npc.posY+0.5d, npc.posZ);
-          }
-        }      
-      newNpc.readFromNBT(tag);
-      npc.isDead = true;      
-      world.removeEntity(npc);
-      newNpc.setLocationAndAngles(npc.posX, npc.posY, npc.posZ, npc.rotationYaw, npc.rotationPitch);
-      world.spawnEntityInWorld(newNpc);
-      return true;
-      }
-    }
-  return false;
-  }
-
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {

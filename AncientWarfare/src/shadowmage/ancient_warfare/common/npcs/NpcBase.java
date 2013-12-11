@@ -595,6 +595,16 @@ protected boolean tryUpgradeNpc(World world, EntityPlayer player, ItemStack stac
       npc.writeToNBT(tag);
       tag.setInteger("rank", level);
       Entity newNpc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, npc.teamNum);
+      if(newNpc instanceof NpcBase)
+        {
+        NpcBase newNpcBase = (NpcBase)newNpc;
+        ItemStack equip = null;
+        for(int i = 0; i < 5; i++)
+          {
+          equip = newNpcBase.getCurrentItemOrArmor(i);
+          InventoryTools.dropItemInWorld(npc.worldObj, equip, npc.posX, npc.posY+0.5d, npc.posZ);
+          }
+        }      
       newNpc.readFromNBT(tag);
       npc.isDead = true;      
       world.removeEntity(npc);
