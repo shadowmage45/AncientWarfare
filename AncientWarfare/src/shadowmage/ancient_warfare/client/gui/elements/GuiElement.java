@@ -118,9 +118,9 @@ public void setTooltip(List<String> lines)
 
 @Override
 public List<String> getTooltip()
-{  
-return tooltipString;
-}
+  {  
+  return tooltipString;
+  }
 
 @Override
 public GuiElement updateRenderPos(int newX, int newY)

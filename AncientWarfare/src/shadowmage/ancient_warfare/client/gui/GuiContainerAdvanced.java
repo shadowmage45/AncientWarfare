@@ -417,9 +417,9 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   for(Integer i : this.guiElements.keySet())
     {
     GL11.glPushMatrix();
-    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);    
+//    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);    
     this.guiElements.get(i).drawElement(mouseX, mouseY);
-    GL11.glPopAttrib();
+//    GL11.glPopAttrib();
     GL11.glPopMatrix();
     }  
 
@@ -437,7 +437,7 @@ protected void drawTooltips(int mouseX, int mouseY, float partialTick)
   if(this.currentMouseElement instanceof GuiItemStack)
     {    
     GuiItemStack slot = (GuiItemStack)this.currentMouseElement;
-  //  Config.logDebug("mouse is over itemstack element!");
+    Config.logDebug("mouse is over itemstack element!");
     if(slot.renderTooltip)
       {
       
@@ -478,7 +478,7 @@ public void drawScreen(int par1, int par2, float par3)
  * @param x
  * @param y
  */
-public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay, boolean useAlpha)
+public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay, boolean useAlpha, boolean tooltip)
   {
   GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   GL11.glPushMatrix();
@@ -505,7 +505,7 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
     }
   itemRenderer.zLevel = 0.0F;
   GL11.glDisable(GL11.GL_LIGHTING);
-  if(this.isMouseInRawArea(x, y, 16, 16, mouseX, mouseY))
+  if(tooltip && this.isMouseInRawArea(x, y, 16, 16, mouseX, mouseY))
     {
     this.drawItemStackTooltip(stack, x, y);
     }   
@@ -514,9 +514,9 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
   GL11.glPopAttrib();
   }
 
-public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay)
+public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay, boolean tooltip)
   {
-  this.renderItemStack(stack, x, y, mouseX, mouseY, renderOverlay, false);
+  this.renderItemStack(stack, x, y, mouseX, mouseY, renderOverlay, false, tooltip);
   }
 
 /**

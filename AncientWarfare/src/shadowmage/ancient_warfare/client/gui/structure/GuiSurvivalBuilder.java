@@ -69,6 +69,9 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
+  /**
+   * TODO render slot under cursor last
+   */
   this.drawString(fontRenderer, "Needed Blocks:", guiLeft+10, guiTop+10, 0xffffffff);
   int pos = 0;
   int row = 0;
@@ -80,7 +83,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
       {
       continue;      
       }
-    this.renderItemStack(stack, guiLeft+10 +20*col , guiTop+30 + 20*row, mouseX, mouseY, true);    
+    this.renderItemStack(stack, guiLeft+10 +20*col , guiTop+30 + 20*row, mouseX, mouseY, true, true);    
     row++;
     if(row>=10)
       {
