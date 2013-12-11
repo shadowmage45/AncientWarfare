@@ -177,6 +177,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     map = new WorldGenStructureMap();
     WorldGenManager.instance().dimensionStructures.put(dim, map);
     }
+  
   Pair<Float, Integer> values =  WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(chunkX, chunkZ, maxRange);
   foundValue = values.value();
   if(values.key()==-1)
@@ -187,6 +188,10 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     {
     dist = values.key();
     } 
+  if(dist<WorldGenStructureManager.structureGenMinDistance)
+    {
+    return;//early out for structures too close together
+    }
 
   /**
    * select structure from those available to the current available value....
