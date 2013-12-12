@@ -84,7 +84,6 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
       lines = getExportLinesFor(struct);
       struct.setTemplateLines(lines);
       }
-    struct.setTemplateLines(lines);
     for(String line : lines)
       {
       writer.write(line+"\n");
