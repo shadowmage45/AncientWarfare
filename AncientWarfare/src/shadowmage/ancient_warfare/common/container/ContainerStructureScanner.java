@@ -203,7 +203,8 @@ public void export()
 
   
   struct.survival = this.survival;
-  struct.setTemplateLines(StructureExporter.getExportLinesFor(struct));  
+  List<String> templateLines = StructureExporter.getExportLinesFor(struct); 
+  struct.setTemplateLines(templateLines);  
   String path;
   if(this.formatAW)
     {
