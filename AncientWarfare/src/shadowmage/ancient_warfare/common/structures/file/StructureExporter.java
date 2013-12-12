@@ -78,7 +78,7 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
   try
     {
     writer = new FileWriter(outputFile);
-    List<String> lines = struct.getTemplate().getLines();
+    List<String> lines = struct.getTemplate().getLines();   
     if(lines==null)
       {
       lines = getExportLinesFor(struct);

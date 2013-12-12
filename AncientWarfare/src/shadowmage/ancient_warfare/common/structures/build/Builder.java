@@ -847,8 +847,8 @@ protected void handleNamedSpawner(World world, int x, int y, int z, String name)
   world.setBlock(x, y, z, Block.mobSpawner.blockID, 0, 3);
   TileEntityMobSpawner ent = (TileEntityMobSpawner) world.getBlockTileEntity(x, y, z);  
   if(ent!=null)
-    {    
-    ent.func_98049_a().setMobID(name);
+    {
+    ent.func_98049_a().setMobID(name);//t.setMobID(name);
     }
   }
 

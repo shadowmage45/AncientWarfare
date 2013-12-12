@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.structures.data;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
@@ -48,6 +49,7 @@ public String toString()
  */
 public boolean collidesWith(StructureBB bb)
   {
+  Config.logDebug("checking :"+this + " vs: "+bb);
   if(pos2.x < bb.pos1.x)
     {
     return false;
