@@ -80,7 +80,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
       {
       continue;      
       }
-    this.renderItemStack(stack, guiLeft+10 +20*col , guiTop+30 + 20*row, mouseX, mouseY, true);    
+    this.renderItemStack(stack, guiLeft+10 +20*col , guiTop+30 + 20*row, mouseX, mouseY, true, true);    
     row++;
     if(row>=10)
       {

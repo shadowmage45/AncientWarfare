@@ -176,13 +176,15 @@ public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
 
 public void drawProgressForeground()
   {
-  /**
-   * TODO render slot under mouse last
-   */ 
+  int lastx = 0;
+  int lasty = 0;
+  boolean last = false;
+  int lastslot = -1;
   if(this.container.clientRecipe!=null && !this.container.isWorking)
     {
     int x = 0;
     int y = 0;
+    int id = 0;
     for(ItemStackWrapperCrafting stack : this.container.clientRecipe.getResourceList())
       {
       if(x>=3)
@@ -192,9 +194,27 @@ public void drawProgressForeground()
         }      
       if(!this.container.getSlot(36 + y*3+x).getHasStack())
         {
-        this.renderItemStack(stack.getFilter(), guiLeft + 8 + x * 18, guiTop + 8 + 24 + 18 + 4 + 18 + 4 + y*18, mouseX, mouseY, true, true);        
+        if(isMouseInRawArea(guiLeft+8+x*18, guiTop + 8 + 24 + 18 + 4 + 18 + 4 + y*18, 16, 16, mouseX, mouseY))
+          {
+//          this.renderItemStack(stack.getFilter(), guiLeft + 8 + x * 18, guiTop + 8 + 24 + 18 + 4 + 18 + 4 + y*18, mouseX, mouseY, true, false);
+          last = true;
+          lastx = guiLeft+8+x*18;
+          lasty = guiTop + 8 + 24 + 18 + 4 + 18 + 4 + y*18;
+          //lastslot = 36 + y*3 +x;
+          lastslot = id;
+          }
+        else
+          {
+          this.renderItemStack(stack.getFilter(), guiLeft + 8 + x * 18, guiTop + 8 + 24 + 18 + 4 + 18 + 4 + y*18, mouseX, mouseY, true, true);          
+          }        
         }   
       x++;   
+      id++;
+      }
+    if(last)
+      {
+      ItemStackWrapperCrafting item = this.container.clientRecipe.getResourceList().get(lastslot);
+      this.renderItemStack(item.getFilter(), lastx, lasty, mouseX, mouseY, true, true);
       }
     }
   }

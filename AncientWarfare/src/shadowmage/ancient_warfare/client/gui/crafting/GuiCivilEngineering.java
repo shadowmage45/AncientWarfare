@@ -161,12 +161,12 @@ public void drawCurrentRecipeBackground()
   if(this.container.currentRecipe!=null)
     {
     this.drawStringGui(this.container.currentRecipe.getLocalizedDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
-    this.renderItemStack(this.container.currentRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true);
+    this.renderItemStack(this.container.currentRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true, true);
     } 
   if(this.container.clientRecipe!=null)
     {
     this.drawStringGui(this.container.clientRecipe.getLocalizedDisplayName(), 8+18+2, 24+3+4, 0xffffffff);
-    this.renderItemStack(this.container.clientRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true);
+    this.renderItemStack(this.container.clientRecipe.getResult(), guiLeft+8, guiTop+24+3, mouseX, mouseY, true, true);
     } 
   }
 

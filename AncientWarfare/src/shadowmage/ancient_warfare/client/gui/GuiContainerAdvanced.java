@@ -73,6 +73,10 @@ protected static final int WHITE = 0xffffffff;
  */
 protected HashMap<Integer, GuiElement> guiElements = new HashMap<Integer, GuiElement>();
 
+protected ItemStack tooltipStack = null;
+protected int tooltipStackX;
+protected int tooltipStackY;
+
 public GuiContainerAdvanced(Container container)
   {
   super(container);
@@ -416,13 +420,10 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   GL11.glDisable(GL11.GL_DEPTH_TEST);
   for(Integer i : this.guiElements.keySet())
     {
-    GL11.glPushMatrix();
-    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);    
+    GL11.glPushMatrix();   
     this.guiElements.get(i).drawElement(mouseX, mouseY);
-    GL11.glPopAttrib();
     GL11.glPopMatrix();
     }  
-
   GL11.glPopMatrix();
   }
 
@@ -437,7 +438,6 @@ protected void drawTooltips(int mouseX, int mouseY, float partialTick)
   if(this.currentMouseElement instanceof GuiItemStack)
     {    
     GuiItemStack slot = (GuiItemStack)this.currentMouseElement;
-  //  Config.logDebug("mouse is over itemstack element!");
     if(slot.renderTooltip)
       {
       
@@ -451,26 +451,40 @@ protected void drawTooltips(int mouseX, int mouseY, float partialTick)
     {    
     this.renderTooltip(mouseX, mouseY, this.currentMouseElement.getTooltip());
     }
+  if(this.tooltipStack!=null)
+    {
+    this.renderItemStack(tooltipStack, tooltipStackX, tooltipStackY, mouseX, mouseY, true, true, true, false);
+    }
+  this.tooltipStack = null;
   }
 
 @Override
 public void drawScreen(int par1, int par2, float par3)
   {
+  
   GL11.glPushMatrix();
-  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   super.drawScreen(par1, par2, par3);
-  GL11.glPopAttrib();
-  GL11.glPopMatrix();  
+  GL11.glPopMatrix(); 
+  
   GL11.glPushMatrix();
-  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   this.drawExtraForeground(par1, par2, par3);
-  GL11.glPopAttrib();
   GL11.glPopMatrix();
+  
+  Slot slot;
+  for(int i = 0; i < this.inventorySlots.inventorySlots.size(); i++)
+    {
+    slot = this.inventorySlots.getSlot(i);
+    if(slot!=null && slot.getHasStack() && isMouseInAdjustedArea(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, par1, par2))
+      {
+      this.drawItemStackTooltip(slot.getStack(), par1, par2);
+      break;
+      }
+    }
+  
   GL11.glPushMatrix();
-  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   this.drawTooltips(par1, par2, par3);
-  GL11.glPopAttrib();
   GL11.glPopMatrix();
+  
   }
 
 /**
@@ -478,7 +492,7 @@ public void drawScreen(int par1, int par2, float par3)
  * @param x
  * @param y
  */
-public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay, boolean useAlpha)
+public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay, boolean useAlpha, boolean tooltip, boolean defer)
   {
   GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   GL11.glPushMatrix();
@@ -505,18 +519,29 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
     }
   itemRenderer.zLevel = 0.0F;
   GL11.glDisable(GL11.GL_LIGHTING);
-  if(this.isMouseInRawArea(x, y, 16, 16, mouseX, mouseY))
+  if(tooltip && this.isMouseInRawArea(x, y, 16, 16, mouseX, mouseY))
     {
-    this.drawItemStackTooltip(stack, x, y);
+    if(!defer)
+      {
+      this.drawItemStackTooltip(stack, x, y);
+//      this.renderTooltip(x, y, stack.getTooltip(player, false));
+      }
+    else
+      {
+//      Config.logDebug("delaying tooltip for: "+stack);
+      this.tooltipStack = stack;
+      this.tooltipStackX = x;
+      this.tooltipStackY = y;      
+      }
     }   
   GL11.glPopMatrix();
   GL11.glEnable(GL11.GL_DEPTH_TEST);
   GL11.glPopAttrib();
   }
 
-public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay)
+public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay, boolean tooltip)
   {
-  this.renderItemStack(stack, x, y, mouseX, mouseY, renderOverlay, false);
+  this.renderItemStack(stack, x, y, mouseX, mouseY, renderOverlay, false, tooltip, true);
   }
 
 /**
