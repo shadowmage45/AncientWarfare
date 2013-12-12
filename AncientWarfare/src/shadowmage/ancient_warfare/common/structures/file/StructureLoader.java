@@ -263,6 +263,7 @@ public void convertRuinsTemplates()
       continue;
       }    
     raw.name = String.valueOf(name);
+    raw.setTemplateLines(StructureExporter.getExportLinesFor(raw));
     if(!StructureExporter.writeStructureToFile(raw, newFile, false))
       {
       continue;

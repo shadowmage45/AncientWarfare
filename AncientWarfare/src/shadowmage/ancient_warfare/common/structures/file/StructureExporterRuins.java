@@ -63,7 +63,7 @@ public static boolean writeStructureToFile(ProcessedStructure struct, String nam
     Calendar cal = Calendar.getInstance();
     
     writer.write("# Ruins Structure Template File\n");
-    writer.write("# Auto-generated structure file. created on: "+cal.get(cal.MONTH)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND)+"\n");
+    writer.write("# Auto-generated structure file. created on: "+(cal.get(cal.MONTH)+1)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND)+"\n");
     writer.write("# Template was generated with the Ancient Warfare structure exporter");
     writer.write("# Lines beginning with # denote comments\n");
     writer.write("\n"); 
