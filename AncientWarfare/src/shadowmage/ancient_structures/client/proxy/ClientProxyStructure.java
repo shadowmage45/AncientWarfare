@@ -18,39 +18,23 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.config;
+package shadowmage.ancient_structures.client.proxy;
 
-import java.io.File;
-import java.util.logging.Logger;
+import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
 
-import shadowmage.ancient_framework.common.config.ModConfiguration;
-
-public class AWStructuresConfig extends ModConfiguration
+public class ClientProxyStructure extends ClientProxyBase
 {
 
-/**
- * @param config
- * @param log
- */
-public AWStructuresConfig(File config, Logger log)
+public ClientProxyStructure()
   {
-  super(config, log);
-  }
-
-@Override
-public void initializeCategories()
-  {
-  // TODO Auto-generated method stub
   
   }
 
-@Override
-public void initializeValues()
+public void registerClientData()
   {
-  // TODO Auto-generated method stub
-  
+  /**
+   * TODO
+   */
   }
-
-
 
 }

@@ -94,7 +94,7 @@ versionBounds="["+Config.VERSION+",)"
 public class AWStructures extends AWMod implements ITickHandler, INBTTaggable
 {
 
-@SidedProxy(clientSide = "shadowmage.ancient_framework.client.proxy.ClientProxy", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
+@SidedProxy(clientSide = "shadowmage.ancient_framework.client.proxy.ClientProxyBase", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
 public static CommonProxy proxy;
 @Instance("AncientStructures")
 public static AWStructures instance;  

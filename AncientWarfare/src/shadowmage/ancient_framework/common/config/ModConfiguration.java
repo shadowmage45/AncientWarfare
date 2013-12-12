@@ -31,7 +31,7 @@ import net.minecraftforge.common.Configuration;
  * @author Shadowmage
  *
  */
-public class ModConfiguration
+public abstract class ModConfiguration
 {
 
 public Configuration config;
@@ -42,7 +42,12 @@ public ModConfiguration(File configFile, Logger log)
   {
   this.setConfig(configFile);
   this.setLogger(log);
+  this.initializeCategories();
+  this.initializeValues();
   }
+
+public abstract void initializeCategories();
+public abstract void initializeValues();
 
 private void setConfig(File configFile)
   {
@@ -54,6 +59,11 @@ private void setLogger(Logger log)
   logger = log;
   }
 
+public void setDebug(boolean value)
+  {
+  this.debug = value;
+  }
+
 public Configuration getConfig()
   {
   return this.config;
@@ -61,26 +71,50 @@ public Configuration getConfig()
 
 public void log(String info)
   {
-  if(logger!=null)
-    {
-    logger.info(info);
-    }  
+  logger.info(info);
   }
 
 public void logDebug(String info)
   {
-  if(logger!=null && debug)
+  if(debug)
     {    
-    logger.info(String.valueOf("[DEBUG] "+info));        
+    logger.info(String.valueOf("[DEBUG] "+info));      
     }
   }
 
 public void logError(String info)
+  {  
+  logger.severe(info);   
+  }
+
+public void saveConfig()
   {
-  if(logger!=null)
-    {
-    logger.severe(info);
-    }
+  this.config.save();
+  }
+
+public int getItemID(String name, int defaultID)
+  {
+  return getItemID(name, defaultID, "");
+  }
+
+public int getItemID(String name, int defaultID, String comment)
+  {
+  return config.getItem(name, defaultID, comment).getInt(defaultID);
+  }
+
+public int getBlockID(String name, int defaultID)
+  {
+  return getBlockID(name, defaultID, "");
+  }
+
+public int getBlockID(String name, int defaultID, String comment)
+  {
+  return config.getBlock(name, defaultID, comment).getInt(defaultID);
+  }
+
+public int getKeyBindID(String name, int defaultID, String comment)
+  {
+  return config.get("keybinds", name, defaultID, comment).getInt(defaultID);
   }
 
 }

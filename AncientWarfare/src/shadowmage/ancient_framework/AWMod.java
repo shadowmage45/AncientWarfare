@@ -66,4 +66,10 @@ public abstract void serverStopping(FMLServerStoppingEvent evt);
 @EventHandler
 public abstract void serverStopped(FMLServerStoppedEvent evt);
 
+public static void log(String info){}
+ 
+public static void logError(String info){}
+
+public static void logDebug(String info){}
+
 }

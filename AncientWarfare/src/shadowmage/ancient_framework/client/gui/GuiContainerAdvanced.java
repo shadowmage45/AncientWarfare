@@ -37,6 +37,7 @@ import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElementCallback;
 import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.client.render.RenderTools;
@@ -403,7 +404,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   this.renderBackgroundImage(tex);
   if(this.inventorySlots.inventorySlots.size()>0)
     {
-    tex = Config.texturePath+"gui/guiButtons.png";
+    tex = Statics.texturePath+"gui/guiButtons.png";
     AWTextureManager.bindTexture(tex);
     for(Object ob : this.inventorySlots.inventorySlots)    
       {      

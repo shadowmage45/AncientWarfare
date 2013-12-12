@@ -1,5 +1,5 @@
 /**
-   Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+   Copyright 2012-2013 John Cummens (aka Shadowmage, Shadowmage4513)
    This software is distributed under the terms of the GNU General Public License.
    Please see COPYING for precise license information.
 
@@ -17,43 +17,12 @@
 
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
-
-
  */
 package shadowmage.ancient_framework.common.config;
 
-import java.io.File;
-import java.util.logging.Logger;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.Configuration;
-import shadowmage.ancient_structures.AWStructures;
-import shadowmage.ancient_warfare.common.config.Settings;
-import shadowmage.ancient_warfare.common.npcs.INpcType;
-import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
-
-public class Config
+public class Statics
 {
 
-public static void loadConfig(File inputFile)
-  {  
-  Settings.instance().loadSettings();
-  }
-
-
-public void handleClientInit(NBTTagCompound tag)
-  {
-  if(tag.hasKey("cm"))
-    {
-    this.disableResearch = tag.getBoolean("disableResearch");
-    }
-  }
-
-public NBTTagCompound getClientInitData()
-  {
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setBoolean("disableResearch", this.disableResearch);
-  return tag;
-  }
+public static final String texturePath = "textures/";
 
 }
