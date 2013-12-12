@@ -27,7 +27,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import net.minecraft.util.AxisAlignedBB;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;

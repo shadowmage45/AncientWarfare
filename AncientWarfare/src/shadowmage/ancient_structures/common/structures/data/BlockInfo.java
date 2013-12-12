@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
 
 /**

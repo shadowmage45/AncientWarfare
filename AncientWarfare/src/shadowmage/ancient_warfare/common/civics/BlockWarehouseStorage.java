@@ -32,7 +32,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.block.AWBlockBase;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
@@ -80,7 +80,7 @@ public void breakBlock(World world, int x, int y, int z, int id, int meta)
 
 public void registerBlockInfo()
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(blockID);
   d.setName("block.multi.storage.0", 0);
   d.setName("block.multi.storage.1", 1);
   d.setName("block.multi.storage.2",2);
@@ -226,7 +226,7 @@ public void registerIcons(IconRegister reg, Description d)
 @Override
 public Icon getIcon(int side, int meta)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(blockID);
   if(d!=null)
     {
     switch(side)

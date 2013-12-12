@@ -29,7 +29,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -108,7 +108,7 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     GL11.glScalef(0.5f, 0.5f, 0.5f);
     }    
    
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(ItemLoader.civicPlacer.itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(ItemLoader.civicPlacer.itemID);
   Icon ico = blk.getIcon(0, item.getItemDamage()%16);//d.getIconFor(item.getItemDamage()*3);
    
   Tessellator tessellator = Tessellator.instance;

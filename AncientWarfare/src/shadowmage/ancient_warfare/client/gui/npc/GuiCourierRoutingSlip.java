@@ -33,7 +33,6 @@ import shadowmage.ancient_framework.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiFakeSlot;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;

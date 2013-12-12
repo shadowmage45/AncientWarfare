@@ -22,7 +22,6 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.ancient_warfare.common.item.ItemLoader;

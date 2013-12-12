@@ -31,8 +31,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
-import shadowmage.ancient_framework.common.config.Config;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -54,7 +53,7 @@ public AWItemBase(int itemID, boolean hasSubTypes)
 @Override
 public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
   if(d!=null)
     {
     par3List.addAll(d.getDisplayStackCache());
@@ -83,7 +82,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   {
   if(stack!=null)
     {
-    Description d = DescriptionRegistry2.instance().getDescriptionFor(stack.itemID);
+    Description d = DescriptionRegistry.instance().getDescriptionFor(stack.itemID);
     if(d!=null)
       {
       List<String> tips = d.getDisplayTooltips(stack.getItemDamage());
@@ -107,7 +106,7 @@ public String getItemStackDisplayName(ItemStack par1ItemStack)
 @Override
 public String getUnlocalizedName()
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
   if(d!=null)
     {
     return d.getDisplayName(0);
@@ -118,7 +117,7 @@ public String getUnlocalizedName()
 @Override
 public String getUnlocalizedName(ItemStack par1ItemStack)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
   if(d!=null)
     {
     return d.getDisplayName(par1ItemStack.getItemDamage());
@@ -129,7 +128,7 @@ public String getUnlocalizedName(ItemStack par1ItemStack)
 @Override
 public String getItemDisplayName(ItemStack par1ItemStack)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
   if(d!=null)
     {
     String name = d.getDisplayName(par1ItemStack.getItemDamage());
@@ -141,7 +140,7 @@ public String getItemDisplayName(ItemStack par1ItemStack)
 @Override
 public void registerIcons(IconRegister par1IconRegister)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
   if(d!=null)
     {
 //    Config.logDebug("registering icons for : "+itemID +":: "+d.getDisplayName(0));
@@ -152,7 +151,7 @@ public void registerIcons(IconRegister par1IconRegister)
 @Override
 public Icon getIconFromDamage(int par1)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
   if(d!=null)
     {
     return d.getIconFor(par1);

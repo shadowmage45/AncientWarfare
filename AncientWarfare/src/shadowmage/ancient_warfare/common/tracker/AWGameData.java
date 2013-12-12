@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.common.tracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.world_gen.WorldGenManager;
 

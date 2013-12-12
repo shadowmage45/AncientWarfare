@@ -25,7 +25,7 @@ import java.util.List;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.plugins.PluginProxy;
@@ -79,7 +79,7 @@ public static void addSubBlocks(List list)
 
 public static void registerBlockData()
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(BlockLoader.engineBlock.blockID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(BlockLoader.engineBlock.blockID);
   
   GameRegistry.registerTileEntity(PluginProxy.bcProxy.getHandCrankEngineClass(), "Hand Cranked Engine");
   if(PluginProxy.bcLoaded)

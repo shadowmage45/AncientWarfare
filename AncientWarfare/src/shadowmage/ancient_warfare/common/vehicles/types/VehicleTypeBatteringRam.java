@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.item.Item;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_framework.common.utils.Pos3f;

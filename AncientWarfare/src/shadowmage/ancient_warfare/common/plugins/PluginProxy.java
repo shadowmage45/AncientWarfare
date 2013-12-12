@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.plugins;
 
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.common.plugins.bc.BCProxy;
 import shadowmage.ancient_warfare.common.plugins.bc.BCProxyBase;
 

@@ -36,7 +36,6 @@ import shadowmage.ancient_framework.client.gui.elements.GuiTab;
 import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElementCallback;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_warfare.client.render.AWTextureManager;

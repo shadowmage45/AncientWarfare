@@ -28,7 +28,6 @@ import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiTextBox;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 
 public class GuiEditor extends GuiContainerAdvanced

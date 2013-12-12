@@ -35,8 +35,7 @@ import shadowmage.ancient_framework.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiString;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
-import shadowmage.ancient_framework.common.config.Config;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.client.render.RenderTools;
@@ -72,7 +71,7 @@ public GuiInfoBase(GuiContainerAdvanced parent, ResourceListRecipe recipe)
   super(new ContainerDummy());
   this.parent = parent;
   this.recipe = recipe;
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(recipe.getResult().itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(recipe.getResult().itemID);
   if(d!=null)
     {
     String s = d.getDescription(this.recipe.getResult().getItemDamage());

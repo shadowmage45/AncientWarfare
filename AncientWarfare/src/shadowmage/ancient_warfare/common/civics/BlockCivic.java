@@ -32,7 +32,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.block.AWBlockContainer;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
@@ -122,7 +122,7 @@ public void registerIcons(IconRegister reg, Description d)
 @Override
 public Icon getIcon(int side, int meta)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(blockID);
   if(d!=null)
     {
     int iconID = meta*3;//bottomID  --  *3 is for only 3 textures per civic

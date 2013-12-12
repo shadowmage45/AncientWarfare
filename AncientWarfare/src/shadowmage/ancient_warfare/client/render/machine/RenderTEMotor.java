@@ -28,7 +28,6 @@ import net.minecraftforge.common.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.client.model.ModelEngine;
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.machine.EngineData;

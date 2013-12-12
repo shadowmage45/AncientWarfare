@@ -22,7 +22,6 @@ package shadowmage.ancient_warfare.common.machine;
 
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Type;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.AWCore;
 

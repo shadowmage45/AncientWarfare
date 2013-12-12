@@ -21,7 +21,6 @@
 package shadowmage.ancient_framework.client.gui.elements;
 
 import net.minecraft.client.Minecraft;
-import shadowmage.ancient_framework.common.config.Config;
 
 public class GuiTab extends GuiElement
 {

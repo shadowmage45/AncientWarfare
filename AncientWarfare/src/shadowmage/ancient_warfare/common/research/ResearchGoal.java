@@ -29,8 +29,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import shadowmage.ancient_framework.common.config.Config;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
@@ -157,7 +156,7 @@ protected boolean enabledForResearch;
 
 public static void load()
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(ItemLoader.researchNotes.itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(ItemLoader.researchNotes.itemID);
   boolean enabled;
   for(IResearchGoal goal : researchGoals)
     {

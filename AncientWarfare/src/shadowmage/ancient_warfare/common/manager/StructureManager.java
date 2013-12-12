@@ -30,7 +30,6 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;

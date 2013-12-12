@@ -26,7 +26,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;

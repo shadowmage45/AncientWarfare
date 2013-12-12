@@ -25,8 +25,7 @@ package shadowmage.ancient_warfare.common.item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_framework.common.config.Config;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 
 public class ItemLoader
@@ -197,14 +196,14 @@ private void loadDebugItems()
 
 public Description registerItemSubtyped(AWItemBase item, String baseName)
   {
-  Description d = DescriptionRegistry2.instance().registerItem(item, false);
+  Description d = DescriptionRegistry.instance().registerItem(item, false);
 //  GameRegistry.registerItem(item, baseName);
   return d;
   }
 
 public Description registerItemSingle(Item item, String name, String desc, String tip)
   {
-  Description d = DescriptionRegistry2.instance().registerItem(item, true);
+  Description d = DescriptionRegistry.instance().registerItem(item, true);
   d.setName(name, 0);
   d.setDescription(desc, 0);
   d.addTooltip(tip, 0);  
@@ -214,7 +213,7 @@ public Description registerItemSingle(Item item, String name, String desc, Strin
 
 public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name, String desc, String tooltip)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(item.itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(item.itemID);
   if(d!=null)
     {
     d.setName(name, damage);
@@ -226,7 +225,7 @@ public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name
 
 public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(item.itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(item.itemID);
   if(d!=null)
     {
     d.setName(name, damage);   
@@ -236,7 +235,7 @@ public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name
 
 public Description addSubtypeInfoWithIconTexture(AWItemBase item, int damage, String name, String texture)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(item.itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(item.itemID);
   if(d!=null)
     {
     d.setName(name, damage);   

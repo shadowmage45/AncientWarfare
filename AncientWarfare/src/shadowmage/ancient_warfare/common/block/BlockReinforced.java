@@ -30,7 +30,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -58,7 +58,7 @@ public boolean renderAsNormalBlock()
 
 public void registerBlockInfo()
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(this.blockID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(this.blockID);
   d.setName("block.multi.reinforced.0", 0);
   d.setName("block.multi.reinforced.1", 1);
   d.setName("block.multi.reinforced.2", 2);
@@ -81,7 +81,7 @@ public void registerBlockInfo()
 public Icon getBlockTexture(IBlockAccess par1iBlockAccess, int par2, int par3, int par4, int par5)
   {
   TEAWBlockReinforced te = (TEAWBlockReinforced)par1iBlockAccess.getBlockTileEntity(par2, par3, par4);
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(this.blockID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(this.blockID);
   if(d==null){return null;}
   return d.getIconFor(par1iBlockAccess.getBlockMetadata(par2, par3, par4));
   }
@@ -89,7 +89,7 @@ public Icon getBlockTexture(IBlockAccess par1iBlockAccess, int par2, int par3, i
 @Override
 public Icon getIcon(int side, int meta)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(this.blockID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(this.blockID);
   if(d==null){return null;}
   return d.getIconFor(meta);
   }

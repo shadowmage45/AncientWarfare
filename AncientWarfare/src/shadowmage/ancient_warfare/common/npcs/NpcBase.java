@@ -40,7 +40,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;

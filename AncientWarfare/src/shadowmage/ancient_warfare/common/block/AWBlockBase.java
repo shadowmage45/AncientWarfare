@@ -32,7 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.item.CreativeTabAW;
 
@@ -85,7 +85,7 @@ public boolean onBlockActivated(World world, int posX, int posY, int posZ, Entit
 @Override
 public void registerIcons(IconRegister par1IconRegister)
   {
-  registerIcons(par1IconRegister, DescriptionRegistry2.instance().getDescriptionFor(blockID));
+  registerIcons(par1IconRegister, DescriptionRegistry.instance().getDescriptionFor(blockID));
   }
 
 public abstract void registerIcons(IconRegister reg, Description d);
@@ -93,7 +93,7 @@ public abstract void registerIcons(IconRegister reg, Description d);
 @Override
 public Icon getIcon(int side, int meta)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(blockID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(blockID);
   if(d!=null)
     {
     return d.getIconFor(0);    

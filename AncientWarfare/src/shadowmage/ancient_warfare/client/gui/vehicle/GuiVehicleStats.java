@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.client.gui.vehicle;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 

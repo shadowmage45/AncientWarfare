@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.machine;
 
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryMailbox;

@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.item.AWItemBase;
 import shadowmage.ancient_warfare.common.item.ItemLoader;

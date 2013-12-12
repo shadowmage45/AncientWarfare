@@ -26,7 +26,6 @@ import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;

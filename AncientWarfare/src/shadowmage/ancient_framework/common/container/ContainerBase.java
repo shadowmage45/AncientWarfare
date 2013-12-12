@@ -27,7 +27,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.interfaces.IContainerGuiCallback;

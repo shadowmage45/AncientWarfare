@@ -24,7 +24,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 
 public class AmmoBallistaBolt extends Ammo

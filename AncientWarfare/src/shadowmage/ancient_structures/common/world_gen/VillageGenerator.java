@@ -27,7 +27,6 @@ import net.minecraft.world.gen.structure.ComponentVillage;
 import net.minecraft.world.gen.structure.ComponentVillageStartPiece;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.world_gen.village.AWVCFortress;
 import shadowmage.ancient_structures.common.world_gen.village.AWVCLogCabin;

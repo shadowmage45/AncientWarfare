@@ -46,7 +46,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.AWMod;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import shadowmage.ancient_structures.common.config.AWStructuresConfig;
 import shadowmage.ancient_structures.common.structures.build.StructureBuilder;
@@ -136,10 +135,10 @@ public void setExportDefaults()
 
 public void load()
   {  
-  outputDirectory = Config.configPath+"/AWConfig/structures/export/";
-  includeDirectory = Config.configPath+"/AWConfig/structures/included/";
-  convertDirectory = Config.configPath+"/AWConfig/structures/convert/";
-  configBaseDirectory = Config.configPath+"/AWConfig/";
+  outputDirectory = config.configPath+"/AWConfig/structures/export/";
+  includeDirectory = config.configPath+"/AWConfig/structures/included/";
+  convertDirectory = config.configPath+"/AWConfig/structures/convert/";
+  configBaseDirectory = config.configPath+"/AWConfig/";
   this.setValidScannableEntities();
   
   TickRegistry.registerTickHandler(this, Side.SERVER);
@@ -152,7 +151,7 @@ public void load()
   File existTest = new File(outputDirectory);
   if(!existTest.exists())
     {
-    Config.log("Creating default Export Directory");
+    config.log("Creating default Export Directory");
     existTest.mkdirs();
     }
 

@@ -31,7 +31,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_framework.AWMod;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.block.BlockLoader;

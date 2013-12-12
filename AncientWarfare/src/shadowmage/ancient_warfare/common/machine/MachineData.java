@@ -25,8 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
-import shadowmage.ancient_framework.common.config.Config;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
@@ -130,7 +129,7 @@ public static void registerIcons(IconRegister registry, Description d)
 
 public static Icon getIcon(TileEntity te, int meta, int side)
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(BlockLoader.machineBlock.blockID);  
+  Description d = DescriptionRegistry.instance().getDescriptionFor(BlockLoader.machineBlock.blockID);  
   if(te instanceof TEMachine)
     {
     /**
@@ -209,7 +208,7 @@ public static Icon getIcon(TileEntity te, int meta, int side)
 
 public static void registerBlockData()
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(BlockLoader.machineBlock.blockID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(BlockLoader.machineBlock.blockID);
   
   if(Config.getConfig().get("h_additional_toggles", "machine.trashcan.enabled", true).getBoolean(true))
     {

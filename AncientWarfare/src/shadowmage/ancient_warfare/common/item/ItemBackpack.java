@@ -30,7 +30,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
@@ -57,7 +57,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   if(stack!=null)
     {
     int dmg = stack.getItemDamage() - stack.getItemDamage()%16;
-    Description d = DescriptionRegistry2.instance().getDescriptionFor(stack.itemID);
+    Description d = DescriptionRegistry.instance().getDescriptionFor(stack.itemID);
     if(d!=null)
       {
       List<String> tips = d.getDisplayTooltips(stack.getItemDamage());

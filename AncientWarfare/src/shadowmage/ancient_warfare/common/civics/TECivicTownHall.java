@@ -26,7 +26,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;

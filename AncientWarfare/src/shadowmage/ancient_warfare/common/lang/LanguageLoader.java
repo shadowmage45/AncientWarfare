@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.AWCore;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 

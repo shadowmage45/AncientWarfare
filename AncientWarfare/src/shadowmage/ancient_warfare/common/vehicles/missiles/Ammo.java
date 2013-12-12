@@ -33,8 +33,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.config.Config;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
@@ -590,7 +589,7 @@ private float getMaxYaw(int side)
 @Override
 public Icon getDisplayIcon()
   {
-  Description d = DescriptionRegistry2.instance().getDescriptionFor(ItemLoader.ammoItem.itemID);
+  Description d = DescriptionRegistry.instance().getDescriptionFor(ItemLoader.ammoItem.itemID);
   if(d!=null)
     {
     return d.getIconFor(getAmmoType());

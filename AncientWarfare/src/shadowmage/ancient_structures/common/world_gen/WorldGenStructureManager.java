@@ -36,7 +36,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 import net.minecraft.world.biome.BiomeGenBase;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_warfare.common.manager.StructureManager;

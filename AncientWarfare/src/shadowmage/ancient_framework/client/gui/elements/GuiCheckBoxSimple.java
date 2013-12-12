@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_framework.client.gui.elements;
 
-import shadowmage.ancient_framework.common.config.Config;
 
 
 public class GuiCheckBoxSimple extends GuiButtonSimple

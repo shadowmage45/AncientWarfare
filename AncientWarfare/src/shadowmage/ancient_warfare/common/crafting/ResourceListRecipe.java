@@ -33,7 +33,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapper;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;

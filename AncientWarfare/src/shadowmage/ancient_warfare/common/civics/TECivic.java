@@ -39,7 +39,6 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBase;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;

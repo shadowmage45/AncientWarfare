@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
-import shadowmage.ancient_framework.common.config.Config;
 
 public class VehicleTypeBallistaStand extends VehicleTypeBallista
 {

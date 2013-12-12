@@ -25,7 +25,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;

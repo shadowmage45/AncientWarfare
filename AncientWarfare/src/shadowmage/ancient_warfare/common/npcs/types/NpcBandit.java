@@ -25,7 +25,6 @@ import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;

@@ -29,7 +29,6 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.item.ItemLoader;

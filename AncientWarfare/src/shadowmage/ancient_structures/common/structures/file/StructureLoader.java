@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.AWStructures;

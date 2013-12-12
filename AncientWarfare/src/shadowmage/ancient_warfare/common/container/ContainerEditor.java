@@ -28,7 +28,6 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_framework.common.utils.ByteTools;
 import shadowmage.ancient_framework.common.utils.StringTools;

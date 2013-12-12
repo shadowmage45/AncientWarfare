@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 import java.util.List;
 
 import net.minecraft.util.MathHelper;
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.pathfinding.Node;

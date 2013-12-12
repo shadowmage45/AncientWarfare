@@ -26,18 +26,18 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 
-public class DescriptionRegistry2
+public class DescriptionRegistry
 {
 
 
-private static DescriptionRegistry2 INSTANCE;
-private DescriptionRegistry2(){}
+private static DescriptionRegistry INSTANCE;
+private DescriptionRegistry(){}
 
-public static DescriptionRegistry2 instance()
+public static DescriptionRegistry instance()
   {
   if(INSTANCE==null)
     {
-    INSTANCE = new DescriptionRegistry2();
+    INSTANCE = new DescriptionRegistry();
     }
   return INSTANCE;
   }

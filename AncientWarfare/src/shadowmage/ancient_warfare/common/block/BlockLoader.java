@@ -24,8 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_framework.common.config.Config;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.civics.BlockWarehouseStorage;
@@ -166,14 +165,14 @@ public void registerBlock(Block block, String name)
   {
   GameRegistry.registerBlock(block, name);
   LanguageRegistry.addName(block, name);
-  DescriptionRegistry2.instance().registerBlock(block, false);
+  DescriptionRegistry.instance().registerBlock(block, false);
   }
 
 public Description registerBlockWithItem(Block block, String name, Class<? extends ItemBlock>clz)
   {
   GameRegistry.registerBlock(block, clz, name);
   LanguageRegistry.addName(block, name);
-  return DescriptionRegistry2.instance().registerBlock(block, false);
+  return DescriptionRegistry.instance().registerBlock(block, false);
   }
 
 }

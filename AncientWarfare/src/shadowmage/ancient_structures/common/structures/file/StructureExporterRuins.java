@@ -25,7 +25,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 
-import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;
 
