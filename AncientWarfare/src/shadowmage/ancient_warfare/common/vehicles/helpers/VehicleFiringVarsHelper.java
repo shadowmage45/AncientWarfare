@@ -21,9 +21,8 @@
 package shadowmage.ancient_warfare.common.vehicles.helpers;
 
 import net.minecraft.entity.player.EntityPlayer;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;

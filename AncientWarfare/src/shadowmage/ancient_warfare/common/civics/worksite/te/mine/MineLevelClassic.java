@@ -22,7 +22,6 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 /**

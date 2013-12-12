@@ -23,7 +23,7 @@
 package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.client.input.InputHelper;
+import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;

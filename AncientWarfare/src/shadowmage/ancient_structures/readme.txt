@@ -1,0 +1,1 @@
+Ancient Warfare Structure Generation system.  Requires Ancient Framework in order to function.

@@ -25,7 +25,6 @@ import org.lwjgl.opengl.GL11;
 import shadowmage.ancient_warfare.client.model.ModelHelicopter;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 
 public class RenderHelicopter extends RenderVehicleBase
 {

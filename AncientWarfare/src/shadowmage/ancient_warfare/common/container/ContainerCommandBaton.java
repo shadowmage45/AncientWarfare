@@ -26,7 +26,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton;
 import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton.BatonSettings;

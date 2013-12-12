@@ -22,9 +22,8 @@ package shadowmage.ancient_warfare.common.vehicles.armors;
 
 import java.util.Set;
 
-import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 
 public interface IVehicleArmorType
 {

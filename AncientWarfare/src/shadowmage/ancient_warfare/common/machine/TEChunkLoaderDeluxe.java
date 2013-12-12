@@ -20,16 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.machine;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import shadowmage.ancient_warfare.common.AWCore;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
-
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Type;
+import shadowmage.ancient_framework.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class TEChunkLoaderDeluxe extends TEChunkLoader
 {

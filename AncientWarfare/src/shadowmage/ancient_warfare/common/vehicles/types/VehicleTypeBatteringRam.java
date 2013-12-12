@@ -21,9 +21,6 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.item.Item;
-import net.minecraft.util.AxisAlignedBB;
-import shadowmage.ancient_warfare.client.render.AWRenderHelper;
-import shadowmage.ancient_warfare.client.render.BoundingBoxRender;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;

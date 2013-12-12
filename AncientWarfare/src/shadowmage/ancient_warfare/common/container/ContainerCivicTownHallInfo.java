@@ -25,10 +25,9 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
-import shadowmage.ancient_warfare.common.tracker.entry.NpcDataEntry;
 import shadowmage.ancient_warfare.common.tracker.entry.NpcDataList;
 
 public class ContainerCivicTownHallInfo extends ContainerBase

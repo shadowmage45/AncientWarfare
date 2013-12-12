@@ -20,14 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.machine;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 
 public class BlockEngine extends BlockMiscMachine
 {

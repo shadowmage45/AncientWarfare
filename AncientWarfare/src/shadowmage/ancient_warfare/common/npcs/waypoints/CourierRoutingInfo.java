@@ -23,13 +23,11 @@ package shadowmage.ancient_warfare.common.npcs.waypoints;
 import java.util.ArrayList;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 /**
  * routing information for a single routing slip for a courier

@@ -20,19 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.machine;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryMailbox;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.tracker.MailboxData;
 import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
 import shadowmage.ancient_warfare.common.utils.BlockTools;

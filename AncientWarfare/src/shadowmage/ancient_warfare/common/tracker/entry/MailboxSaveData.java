@@ -20,11 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.tracker.entry;
 
-import shadowmage.ancient_warfare.common.tracker.AWGameData;
-import shadowmage.ancient_warfare.common.tracker.MailboxData;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+import shadowmage.ancient_warfare.common.tracker.MailboxData;
 
 public class MailboxSaveData extends WorldSavedData
 {

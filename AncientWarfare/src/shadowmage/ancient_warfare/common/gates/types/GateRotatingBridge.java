@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.common.gates.types;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;

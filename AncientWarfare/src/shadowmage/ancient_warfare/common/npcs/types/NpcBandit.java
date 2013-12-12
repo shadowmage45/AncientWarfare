@@ -31,17 +31,12 @@ import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIAttackTargets;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIChooseCommander;
-import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIFollowPlayer;
-import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIGuardTarget;
-import shadowmage.ancient_warfare.common.npcs.ai.objectives.AINpcUpkeepObjective;
-import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIPatrolPoints;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearCommander;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIStayNearHome;
 import shadowmage.ancient_warfare.common.npcs.ai.objectives.AIWander;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryNpc;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AITargetEntryPlayer;
-import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class NpcBandit extends NpcTypeBase

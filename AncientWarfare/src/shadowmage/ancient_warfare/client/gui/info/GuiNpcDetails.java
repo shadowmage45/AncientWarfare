@@ -21,8 +21,8 @@
 package shadowmage.ancient_warfare.client.gui.info;
 
 import net.minecraft.inventory.Container;
-import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 
 public class GuiNpcDetails extends GuiContainerAdvanced
 {

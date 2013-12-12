@@ -22,8 +22,6 @@ package shadowmage.ancient_warfare.common.pathfinding;
 
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.pathfinding.Node;
-
 public interface IPathableCallback
 {
 

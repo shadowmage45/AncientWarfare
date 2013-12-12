@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.common.structures.data.BlockData;
 import shadowmage.ancient_warfare.common.utils.StringTools;

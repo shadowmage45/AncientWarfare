@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.research.vehicle;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;

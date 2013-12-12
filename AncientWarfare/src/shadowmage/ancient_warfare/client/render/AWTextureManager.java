@@ -22,8 +22,6 @@ package shadowmage.ancient_warfare.client.render;
 
 import java.util.HashMap;
 
-import shadowmage.ancient_warfare.common.config.Config;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 

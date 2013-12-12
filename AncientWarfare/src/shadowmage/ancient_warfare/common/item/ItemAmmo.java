@@ -20,11 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import net.minecraft.client.renderer.texture.IconRegister;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
-import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
-import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public class ItemAmmo extends AWItemBase
 {

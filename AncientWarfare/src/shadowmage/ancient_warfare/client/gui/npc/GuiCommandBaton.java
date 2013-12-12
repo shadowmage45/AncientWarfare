@@ -23,11 +23,11 @@ package shadowmage.ancient_warfare.client.gui.npc;
 import java.util.List;
 
 import net.minecraft.inventory.Container;
-import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
-import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
-import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
-import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_framework.client.gui.elements.GuiNumberInputLine;
+import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;

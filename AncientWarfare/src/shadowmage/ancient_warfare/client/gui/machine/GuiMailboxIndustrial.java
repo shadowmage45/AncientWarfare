@@ -20,9 +20,9 @@
  */
 package shadowmage.ancient_warfare.client.gui.machine;
 
-import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
-import shadowmage.ancient_warfare.client.gui.elements.GuiString;
-import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_framework.client.gui.elements.GuiString;
+import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.container.ContainerMailboxBase;
 
 public class GuiMailboxIndustrial extends GuiMailbox

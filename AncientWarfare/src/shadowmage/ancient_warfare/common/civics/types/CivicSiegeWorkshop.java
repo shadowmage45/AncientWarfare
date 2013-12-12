@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.civics.types;
 
 import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.crafting.TEAWVehicleCraft;
 
 public class CivicSiegeWorkshop extends Civic
 {

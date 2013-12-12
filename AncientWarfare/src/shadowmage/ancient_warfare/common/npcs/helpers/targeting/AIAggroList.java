@@ -25,7 +25,6 @@ import java.util.Iterator;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetPosition;

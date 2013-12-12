@@ -23,19 +23,15 @@ package shadowmage.ancient_warfare.common.world_gen;
 import java.util.Random;
 import java.util.WeakHashMap;
 
-import net.minecraft.village.VillageCollection;
 import net.minecraft.world.gen.structure.ComponentVillage;
-import net.minecraft.world.gen.structure.ComponentVillageHouse1;
 import net.minecraft.world.gen.structure.ComponentVillageStartPiece;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.world_gen.village.AWVCAdvancedLibrary;
 import shadowmage.ancient_warfare.common.world_gen.village.AWVCFortress;
 import shadowmage.ancient_warfare.common.world_gen.village.AWVCLogCabin;
-import shadowmage.ancient_warfare.common.world_gen.village.AWVCTower;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
 public class VillageGenerator

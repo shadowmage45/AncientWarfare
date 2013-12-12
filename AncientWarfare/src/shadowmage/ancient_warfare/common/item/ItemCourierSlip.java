@@ -26,12 +26,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointItemRouting;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class ItemCourierSlip extends AWItemClickable

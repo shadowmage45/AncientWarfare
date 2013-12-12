@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.vehicles.helpers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;

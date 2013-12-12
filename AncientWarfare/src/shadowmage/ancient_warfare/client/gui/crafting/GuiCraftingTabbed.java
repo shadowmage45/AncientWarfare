@@ -28,23 +28,21 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringTranslate;
 
 import org.lwjgl.input.Keyboard;
 
-import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
-import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
-import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
-import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
-import shadowmage.ancient_warfare.client.gui.elements.GuiTab;
-import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
-import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_framework.client.gui.elements.GuiElement;
+import shadowmage.ancient_framework.client.gui.elements.GuiItemStack;
+import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_framework.client.gui.elements.GuiTab;
+import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
+import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.client.gui.info.GuiRecipeDetails;
 import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.config.Config;

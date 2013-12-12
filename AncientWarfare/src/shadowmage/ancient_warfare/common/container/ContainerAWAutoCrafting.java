@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.container;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +28,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.TEAWAutoCrafting;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;

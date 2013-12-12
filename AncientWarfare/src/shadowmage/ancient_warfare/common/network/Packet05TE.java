@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.tileentity.TileEntity;
+import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 
 import com.google.common.io.ByteArrayDataInput;

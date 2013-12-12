@@ -21,15 +21,11 @@
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AICourierInteract;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointItemRouting;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class AICourier extends NpcAIObjective
 {

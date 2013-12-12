@@ -20,24 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.gui.info;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-
-import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
-import shadowmage.ancient_warfare.client.gui.elements.GuiItemStack;
-import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
-import shadowmage.ancient_warfare.client.gui.elements.GuiString;
-import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.container.ContainerDummy;
-import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
+import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.research.IResearchGoal;
-import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GuiRecipeDetails extends GuiInfoBase
 {

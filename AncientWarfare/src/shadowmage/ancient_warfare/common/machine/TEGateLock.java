@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.machine;
 
-import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TEGateLock extends TEMachine

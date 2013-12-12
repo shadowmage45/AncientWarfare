@@ -21,9 +21,8 @@
 package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_warfare.common.interfaces.IEntityPacketHandler;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;

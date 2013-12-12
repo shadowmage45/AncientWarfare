@@ -22,8 +22,6 @@ package shadowmage.ancient_warfare.common.block;
 
 import java.util.Iterator;
 
-import com.google.common.collect.ImmutableSet;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -33,6 +31,8 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+
+import com.google.common.collect.ImmutableSet;
 
 public class TEBuilder extends TileEntity
 {

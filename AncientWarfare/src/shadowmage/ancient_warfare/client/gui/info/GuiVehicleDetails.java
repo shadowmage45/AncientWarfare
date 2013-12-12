@@ -20,7 +20,7 @@
  */
 package shadowmage.ancient_warfare.client.gui.info;
 
-import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;

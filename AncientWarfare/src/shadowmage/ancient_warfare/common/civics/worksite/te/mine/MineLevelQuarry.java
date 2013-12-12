@@ -20,9 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class MineLevelQuarry extends MineLevel
 {

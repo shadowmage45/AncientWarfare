@@ -5,9 +5,9 @@
  
 package shadowmage.ancient_warfare.client.model;
 
-import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
  
  
 public class ModelTable8  extends ModelTEBase

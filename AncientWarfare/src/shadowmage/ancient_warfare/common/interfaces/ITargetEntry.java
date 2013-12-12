@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.interfaces;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 

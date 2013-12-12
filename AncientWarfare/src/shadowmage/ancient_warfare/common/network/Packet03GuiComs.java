@@ -21,6 +21,8 @@
 package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.network.GUIHandler;
+import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IHandlePacketData;
 

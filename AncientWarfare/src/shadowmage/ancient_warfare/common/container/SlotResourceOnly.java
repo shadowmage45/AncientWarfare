@@ -22,14 +22,10 @@ package shadowmage.ancient_warfare.common.container;
 
 import java.util.List;
 
-import shadowmage.ancient_warfare.client.registry.RenderRegistry;
-import shadowmage.ancient_warfare.client.render.RenderTools;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class SlotResourceOnly extends Slot
 {

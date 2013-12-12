@@ -5,7 +5,7 @@ Released under the General Public License v3.0 (or later)
 Refs:
 
 read: http://accidentalnoise.sourceforge.net/minecraftworlds.html
-http://mrl.nyu.edu/~perlin/noise/
+
 http://gafferongames.com/networking-for-game-programmers/what-every-programmer-needs-to-know-about-game-networking/
 http://en.wikipedia.org/wiki/Trajectory_of_a_projectile
 http://gamedev.stackexchange.com/questions/17467/calculating-velocity-needed-to-hit-target-in-parabolic-arc  (its wrong...)

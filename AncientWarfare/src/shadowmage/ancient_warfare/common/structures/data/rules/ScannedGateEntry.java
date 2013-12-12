@@ -20,8 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.structures.data.rules;
 
-import net.minecraft.util.MathHelper;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;

@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;

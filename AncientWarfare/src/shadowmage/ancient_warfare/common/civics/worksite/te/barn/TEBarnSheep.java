@@ -31,7 +31,6 @@ import net.minecraft.util.MathHelper;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TEBarnSheep extends TEWorkSiteAnimalFarm
 {
