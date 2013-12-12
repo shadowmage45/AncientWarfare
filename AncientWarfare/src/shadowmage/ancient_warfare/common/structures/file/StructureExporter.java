@@ -105,7 +105,7 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
   Calendar cal = Calendar.getInstance();
   
   lines.add("# Ancient Warfare Structure Template File");
-  lines.add("# auto-generated structure file. created on: "+cal.get(cal.MONTH)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND));
+  lines.add("# auto-generated structure file. created on: "+(cal.get(cal.MONTH)+1)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND));
   lines.add("# Lines beginning with # denote comments");
   lines.add("");
   lines.add("survival="+String.valueOf(struct.survival));
