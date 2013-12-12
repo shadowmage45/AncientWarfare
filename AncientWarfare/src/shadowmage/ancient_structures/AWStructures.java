@@ -82,7 +82,6 @@ import cpw.mods.fml.relauncher.Side;
 
 
 @Mod( modid = "AncientStructures", name="Ancient Structures", version=Config.VERSION)
-
 @NetworkMod
 (
 clientSideRequired = true,

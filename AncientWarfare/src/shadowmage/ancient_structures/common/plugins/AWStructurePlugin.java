@@ -20,15 +20,36 @@
  */
 package shadowmage.ancient_structures.common.plugins;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
+import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;
+
+
+/**
+ * base class for structure module plugins.
+ * plugins will be responsible for handling additional non-vanilla blocks during scanning and placement
+ * plugins will also be responsible for handling additional non-vanilla entities during scanning and placement
+ * plugins can be used to add additional world gen/village gen structures8
+ * @author Shadowmage
+ *
+ */
 public class AWStructurePlugin
 {
 
-/**
- * 
- */
+String pluginName;
+
 public AWStructurePlugin()
   {
-  // TODO Auto-generated constructor stub
+  
   }
+
+public void loadWorldGenStructures(){}
+public void loadVillageGenStructures(){}
+public void registerBlockHandlingCapabilities(){}
+public void registerEntityHandlingCapabilities(){}
+public void handleBlockScan(World world, int x, int y, int z, StructurePluginData data){}
+public void handleEntityScan(Entity entity, StructurePluginData data){};
+public void handleBlockPlacement(World world, int x, int y, int z, BlockRule rule, StructurePluginData data){}
+public void handleEntityPlacement(World world, Object entityRule, StructurePluginData data){}
 
 }
