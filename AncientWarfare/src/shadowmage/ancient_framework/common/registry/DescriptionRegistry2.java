@@ -18,13 +18,13 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.registry;
+package shadowmage.ancient_framework.common.registry;
 
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
+import shadowmage.ancient_framework.common.registry.entry.Description;
 
 public class DescriptionRegistry2
 {

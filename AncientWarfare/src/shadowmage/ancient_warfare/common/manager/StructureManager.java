@@ -31,11 +31,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_framework.common.config.Config;
-import shadowmage.ancient_structures.common.AWStructures;
+import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_structures.common.world_gen.WorldGenStructureManager;
-import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 

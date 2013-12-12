@@ -28,7 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_structures.common.AWStructures;
+import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.file.StructureExporter;
 import shadowmage.ancient_structures.common.structures.file.StructureExporterRuins;

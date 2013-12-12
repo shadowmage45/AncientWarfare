@@ -34,7 +34,7 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.AWCore;
 
 import com.google.common.collect.ImmutableSet;
 

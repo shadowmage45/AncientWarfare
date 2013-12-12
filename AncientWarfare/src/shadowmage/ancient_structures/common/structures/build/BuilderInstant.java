@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_structures.common.AWStructures;
+import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.structures.data.BlockData;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;

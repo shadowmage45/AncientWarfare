@@ -24,10 +24,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.block.TEAWBlockReinforced;
-import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 
 public class ItemReinforcedBlock extends AWItemBlockBase

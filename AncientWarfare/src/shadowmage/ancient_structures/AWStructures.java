@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common;
+package shadowmage.ancient_structures;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -44,8 +45,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.AWMod;
 import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
+import shadowmage.ancient_structures.common.config.AWStructuresConfig;
 import shadowmage.ancient_structures.common.structures.build.StructureBuilder;
 import shadowmage.ancient_structures.common.structures.file.StructureLoader;
 import shadowmage.ancient_structures.common.world_gen.WorldGenManager;
@@ -61,9 +64,18 @@ import com.google.common.io.ByteStreams;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -80,7 +92,7 @@ channels = {"AW_struct"},
 versionBounds="["+Config.VERSION+",)"
 )
 
-public class AWStructures implements ITickHandler, INBTTaggable
+public class AWStructures extends AWMod implements ITickHandler, INBTTaggable
 {
 
 @SidedProxy(clientSide = "shadowmage.ancient_framework.client.proxy.ClientProxy", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
@@ -217,6 +229,8 @@ private void setValidScannableEntities()
   this.validEntitiesToScan.add(EntityMinecart.class);
   }
 
+/*************************************************************************** STRUCTURE LOADING ****************************************************************************/
+
 public boolean isScannableEntity(Class clz)
   {
   return this.validEntitiesToScan.contains(clz);
@@ -321,6 +335,11 @@ public boolean isBeingBuilt(String name)
   return false;
   }
 
+public void clearAllData()
+  {
+  this.builders.clear();
+  }
+
 /*************************************************************************** TICK HANDLING ****************************************************************************/
 @Override
 public void tickStart(EnumSet<TickType> type, Object... tickData)
@@ -361,6 +380,7 @@ public String getLabel()
   return "AWStructTicker";
   }
 
+/*************************************************************************** NBT LOAD/SAVE ****************************************************************************/
 @Override
 public NBTTagCompound getNBTTag()
   {
@@ -405,8 +425,80 @@ public void readFromNBT(NBTTagCompound tag)
     }
   }
 
-public void clearAllData()
+/*************************************************************************** MOD INIT ****************************************************************************/
+
+@Override
+public void loadConfiguration(File config, Logger log)
   {
-  this.builders.clear();
+  this.config = new AWStructuresConfig(config, log);
   }
+
+@EventHandler
+public void preInit(FMLPreInitializationEvent evt) 
+  {  
+  Config.log("Ancient Warfare Structures Starting Loading.  Version: "+Config.VERSION);
+  this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
+  /**
+   * TODO
+   */
+  Config.log("Ancient Warfare Structures Pre-Init finished.");
+  }
+
+@EventHandler
+public void init(FMLInitializationEvent evt)
+  {
+  Config.log("Ancient Warfare Structures Init started.");
+  /**
+   * TODO
+   */
+  Config.log("Ancient Warfare Structures Init completed.");
+  }
+
+@Override
+@EventHandler
+public void postInit(FMLPostInitializationEvent evt)
+  {
+  Config.log("Ancient Warfare Structures Post-Init started");
+  /**
+   * TODO
+   */
+  Config.log("Ancient Warfare Structures Post-Init completed.  Successfully completed all loading stages."); 
+  }
+
+@Override
+@EventHandler
+public void serverPreStart(FMLServerAboutToStartEvent evt)
+  {
+  
+  }
+
+@Override
+@EventHandler
+public void serverStarting(FMLServerStartingEvent evt)
+  {
+  
+  }
+
+@Override
+@EventHandler
+public void serverStarted(FMLServerStartedEvent evt)
+  {
+  
+  }
+
+@Override
+@EventHandler
+public void serverStopping(FMLServerStoppingEvent evt)
+  {
+  
+  }
+
+@Override
+@EventHandler
+public void serverStopped(FMLServerStoppedEvent evt)
+  {
+  
+  }
+
+
 }

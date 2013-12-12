@@ -25,6 +25,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.civics.BlockWarehouseStorage;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
@@ -66,8 +68,6 @@ import shadowmage.ancient_warfare.common.machine.BlockEngine;
 import shadowmage.ancient_warfare.common.machine.BlockMiscMachine;
 import shadowmage.ancient_warfare.common.machine.EngineData;
 import shadowmage.ancient_warfare.common.machine.MachineData;
-import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 

@@ -34,7 +34,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_structures.common.AWStructures;
+import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_structures.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_structures.common.structures.data.rules.EntityRule;

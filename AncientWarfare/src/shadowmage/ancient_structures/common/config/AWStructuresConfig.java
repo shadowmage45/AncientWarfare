@@ -1,5 +1,5 @@
 /**
-   Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+   Copyright 2012-2013 John Cummens (aka Shadowmage, Shadowmage4513)
    This software is distributed under the terms of the GNU General Public License.
    Please see COPYING for precise license information.
 
@@ -18,27 +18,25 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.registry;
+package shadowmage.ancient_structures.common.config;
 
-import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.AWCore;
-import cpw.mods.fml.common.registry.EntityRegistry;
+import java.io.File;
+import java.util.logging.Logger;
 
-public class AWEntityRegistry
+import shadowmage.ancient_framework.common.config.ModConfiguration;
+
+public class AWStructuresConfig extends ModConfiguration
 {
 
-static int nextIDNumber = 0;
-
-public static int getNextEntityID()
+/**
+ * @param config
+ * @param log
+ */
+public AWStructuresConfig(File config, Logger log)
   {
-  int id = nextIDNumber;
-  nextIDNumber++;
-  return id;
+  super(config, log);
   }
 
-public static void registerEntity(Class <? extends Entity> clz, String name, int range, int freq, boolean velocity)
-  {
-  EntityRegistry.registerModEntity(clz, name, getNextEntityID(), AWCore.instance, range, freq, velocity);
-  }
+
 
 }

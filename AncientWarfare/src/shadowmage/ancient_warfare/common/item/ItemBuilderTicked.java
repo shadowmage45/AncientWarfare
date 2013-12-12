@@ -30,7 +30,7 @@ import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.common.structures.build.BuilderTicked;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.StructureBuildSettings;
-import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.block.TEBuilder;
 

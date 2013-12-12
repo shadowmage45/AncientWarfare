@@ -23,8 +23,8 @@ package shadowmage.ancient_warfare.common.registry;
 import java.util.Iterator;
 
 import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;

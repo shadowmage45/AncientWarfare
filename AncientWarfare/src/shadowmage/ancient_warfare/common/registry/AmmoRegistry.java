@@ -27,9 +27,9 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.item.AWItemBase;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;

@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.Configuration;
-import shadowmage.ancient_structures.common.AWStructures;
+import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;

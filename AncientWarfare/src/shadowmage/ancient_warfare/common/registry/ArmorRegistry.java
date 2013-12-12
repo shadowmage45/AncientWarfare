@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.item.AWItemBase;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.armors.VehicleArmorIron;
 import shadowmage.ancient_warfare.common.vehicles.armors.VehicleArmorObsidian;

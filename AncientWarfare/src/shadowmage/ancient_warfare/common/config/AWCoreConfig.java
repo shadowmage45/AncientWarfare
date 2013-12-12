@@ -20,11 +20,20 @@
  */
 package shadowmage.ancient_warfare.common.config;
 
+import java.io.File;
+import java.util.logging.Logger;
+
 import shadowmage.ancient_framework.common.config.ModConfiguration;
 
 public class AWCoreConfig extends ModConfiguration
 {
-
-
+/**
+ * @param configFile
+ * @param log
+ */
+public AWCoreConfig(File configFile, Logger log)
+  {
+  super(configFile, log);
+  }
 
 }

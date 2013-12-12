@@ -20,19 +20,23 @@
 
 
  */
-package shadowmage.ancient_warfare.common;
+package shadowmage.ancient_warfare;
 
 
+import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
+import shadowmage.ancient_framework.AWMod;
 import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.chunkloading.ChunkLoader;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.event.AWEventHandler;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
@@ -62,6 +66,10 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -80,7 +88,7 @@ channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
 versionBounds="["+Config.VERSION+",)"
 )
 
-public class AWCore 
+public class AWCore extends AWMod
 {	
 
 @SidedProxy(clientSide = "shadowmage.ancient_warfare.client.proxy.ClientProxyCore", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
@@ -89,20 +97,23 @@ public static CommonProxy proxy;
 public static AWCore instance;	
 
 
+@Override
+public void loadConfiguration(File config, Logger log)
+  {
+  this.config = new AWCoreConfig(config, log);
+  }
+
 /**
  * load settings, config, items
  * @param evt
  */
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt) 
-  {  
-  /**
-   * load config file and setup logger
-   */
-  Config.loadConfig(evt.getSuggestedConfigurationFile());
-  Config.setLogger(evt.getModLog());
-  Config.log("Starting Loading.  Version: "+Config.VERSION);
+  {
+  this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());  
+  config.log("Starting Loading.  Version: "+Config.VERSION);
 
+  
   LanguageLoader.instance().loadLanguageFiles();
   PluginProxy.instance().detectAndLoadPlugins();
   /**
@@ -167,13 +178,11 @@ public void init(FMLInitializationEvent evt)
   Config.log("Ancient Warfare Init completed.");
   }
 
-/**
- * finalize config settings, load NPCs (which rely on other crap from other mods..potentially)
- * @param evt
- */
+
+@Override
 @EventHandler
-public void load(FMLPostInitializationEvent evt)
-  {  
+public void postInit(FMLPostInitializationEvent evt)
+  {
   Config.log("Ancient Warfare Post-Init started");
 
   NpcRegistry.instance().registerNPCs(); 
@@ -191,8 +200,30 @@ public void load(FMLPostInitializationEvent evt)
   Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
   }
 
+@Override
 @EventHandler
-public void serverStarting(FMLServerStoppingEvent evt)
+public void serverPreStart(FMLServerAboutToStartEvent evt)
+  {
+ 
+  }
+
+@Override
+@EventHandler
+public void serverStarting(FMLServerStartingEvent evt)
+  {
+ 
+  }
+
+@Override
+@EventHandler
+public void serverStarted(FMLServerStartedEvent evt)
+  {
+ 
+  }
+
+@Override
+@EventHandler
+public void serverStopping(FMLServerStoppingEvent evt)
   {
   if(MinecraftServer.getServer().worldServers[0]!=null)
     {
@@ -200,5 +231,13 @@ public void serverStarting(FMLServerStoppingEvent evt)
     GameDataTracker.instance().resetAllTrackedData();
     }
   }
+
+@Override
+@EventHandler
+public void serverStopped(FMLServerStoppedEvent evt)
+  {
+  
+  }
+
 
 }

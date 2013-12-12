@@ -27,8 +27,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeAim;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradePitchDown;

@@ -30,10 +30,10 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
+import shadowmage.ancient_framework.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
-import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

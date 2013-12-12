@@ -36,7 +36,7 @@ import java.util.Scanner;
 import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
 import shadowmage.ancient_framework.common.utils.StringTools;
-import shadowmage.ancient_structures.common.AWStructures;
+import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_structures.common.structures.data.rules.CivicRule;
