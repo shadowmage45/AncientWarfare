@@ -30,9 +30,9 @@ import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.client.input.Keybind;
 import shadowmage.ancient_warfare.client.input.KeybindManager;
-import shadowmage.ancient_warfare.common.config.Config;
 
 public class GuiKeybinds extends GuiContainerAdvanced
 {

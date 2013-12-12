@@ -26,12 +26,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.AWStructureModule;
+import shadowmage.ancient_structures.common.AWStructures;
+import shadowmage.ancient_structures.common.world_gen.WorldGenManager;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.entry.NpcDataEntry;
 import shadowmage.ancient_warfare.common.tracker.entry.NpcDataList;
-import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 
 /**
  * handles saving and loading of game data to world directory
@@ -144,7 +144,7 @@ public void resetAllTrackedData()
   {
   PlayerTracker.instance().clearAllData();
   TeamTracker.instance().clearAllData();
-  AWStructureModule.instance().clearAllData();
+  AWStructures.instance.clearAllData();
   WorldGenManager.resetMap();
   AWCraftingManager.instance().resetClientData();
   MailboxData.instance().resetTrackedData();

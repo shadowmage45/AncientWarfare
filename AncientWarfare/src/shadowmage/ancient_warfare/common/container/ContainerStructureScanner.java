@@ -26,15 +26,15 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_warfare.common.AWStructureModule;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_structures.common.AWStructures;
+import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_structures.common.structures.file.StructureExporter;
+import shadowmage.ancient_structures.common.structures.file.StructureExporterRuins;
+import shadowmage.ancient_structures.common.world_gen.WorldGenStructureManager;
 import shadowmage.ancient_warfare.common.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
-import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
-import shadowmage.ancient_warfare.common.structures.file.StructureExporterRuins;
-import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 
 public class ContainerStructureScanner extends ContainerBase
 {
@@ -212,11 +212,11 @@ public void export()
     player.addChatMessage("Exporting structure to AW Format: "+name);
     if(!this.includeOnExport)
       {
-      path = String.valueOf(AWStructureModule.outputDirectory+name+"."+Config.templateExtension);
+      path = String.valueOf(AWStructures.instance.outputDirectory+name+"."+Config.templateExtension);
       }
     else
       {
-      path = String.valueOf(AWStructureModule.includeDirectory+name+"."+Config.templateExtension);
+      path = String.valueOf(AWStructures.instance.includeDirectory+name+"."+Config.templateExtension);
       }    
     boolean success = StructureExporter.writeStructureToFile(struct, path, false);
     struct.filePath = path;
@@ -237,7 +237,7 @@ public void export()
   if(this.formatRuins)
     {
     player.addChatMessage("Exporting structure to Ruins Format");
-    path = String.valueOf(AWStructureModule.outputDirectory+name+".tml");
+    path = String.valueOf(AWStructures.instance.outputDirectory+name+".tml");
     StructureExporterRuins.writeStructureToFile(struct, path);
     }  
   }

@@ -7,7 +7,7 @@ package shadowmage.ancient_warfare.client.model;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.utils.Trig;
+import shadowmage.ancient_framework.common.utils.Trig;
  
  
 public class ModelCannonStandTurret extends ModelVehicleBase

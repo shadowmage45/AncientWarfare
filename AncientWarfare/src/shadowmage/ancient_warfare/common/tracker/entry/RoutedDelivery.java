@@ -22,8 +22,8 @@ package shadowmage.ancient_warfare.common.tracker.entry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class RoutedDelivery implements INBTTaggable
 {

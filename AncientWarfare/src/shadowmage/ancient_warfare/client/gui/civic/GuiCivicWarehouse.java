@@ -33,11 +33,11 @@ import shadowmage.ancient_framework.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_framework.common.utils.ItemStackWrapper;
+import shadowmage.ancient_framework.common.utils.StackWrapperComparatorAlphaAZ;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerCivicWarehouse;
-import shadowmage.ancient_warfare.common.utils.ItemStackWrapper;
-import shadowmage.ancient_warfare.common.utils.StackWrapperComparatorAlphaAZ;
 
 public class GuiCivicWarehouse extends GuiContainerAdvanced
 {

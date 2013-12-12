@@ -23,8 +23,8 @@ package shadowmage.ancient_framework.client.gui.elements;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 

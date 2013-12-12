@@ -32,16 +32,16 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_framework.common.utils.InventoryTools;
+import shadowmage.ancient_framework.common.utils.RayTraceUtils;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
-import shadowmage.ancient_warfare.common.utils.RayTraceUtils;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class ItemNpcCommandBaton extends AWItemClickable

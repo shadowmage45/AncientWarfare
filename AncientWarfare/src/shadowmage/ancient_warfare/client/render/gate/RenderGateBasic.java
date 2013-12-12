@@ -26,10 +26,10 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.client.model.ModelGateBasic;
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class RenderGateBasic extends Render
 {

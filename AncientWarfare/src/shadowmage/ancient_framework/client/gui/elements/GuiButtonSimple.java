@@ -21,7 +21,7 @@
 package shadowmage.ancient_framework.client.gui.elements;
 
 import net.minecraft.client.Minecraft;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.config.Config;
 
 public class GuiButtonSimple extends GuiElement
 {

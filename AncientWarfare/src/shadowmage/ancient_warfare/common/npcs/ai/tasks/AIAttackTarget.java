@@ -22,12 +22,12 @@ package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_framework.common.utils.BlockTools;
+import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
-import shadowmage.ancient_warfare.common.utils.BlockTools;
-import shadowmage.ancient_warfare.common.utils.Trig;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AIAttackTarget extends NpcAITask

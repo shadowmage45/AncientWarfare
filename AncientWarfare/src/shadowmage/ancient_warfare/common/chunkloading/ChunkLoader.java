@@ -30,10 +30,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.OrderedLoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.block.TEBuilder;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.machine.TEChunkLoader;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class ChunkLoader implements LoadingCallback, OrderedLoadingCallback
 {

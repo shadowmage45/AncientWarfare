@@ -20,7 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.npcs.inventory;
 
-import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 public class NpcInventory extends AWInventoryBasic

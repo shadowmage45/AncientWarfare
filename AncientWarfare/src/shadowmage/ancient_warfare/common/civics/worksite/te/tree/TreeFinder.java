@@ -25,8 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
-import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class TreeFinder
 {

@@ -21,7 +21,7 @@
 package shadowmage.ancient_warfare.common.interfaces;
 
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
 
 public interface IScannerItem
 {

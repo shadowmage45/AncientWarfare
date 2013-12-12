@@ -29,13 +29,13 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public abstract class TEAWCrafting extends TileEntity implements IInventory, ISidedInventory
 {

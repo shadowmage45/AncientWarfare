@@ -23,8 +23,8 @@ package shadowmage.ancient_warfare.client.gui.civic;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTE;
 
 public class GuiCivicBase extends GuiContainerAdvanced

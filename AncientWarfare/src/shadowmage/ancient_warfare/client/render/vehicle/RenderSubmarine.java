@@ -22,10 +22,10 @@ package shadowmage.ancient_warfare.client.render.vehicle;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.client.model.ModelSubmarine;
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.client.render.RenderVehicleBase;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class RenderSubmarine extends RenderVehicleBase

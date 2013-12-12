@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 
 public class NpcLevelEntry

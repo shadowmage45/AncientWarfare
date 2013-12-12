@@ -22,8 +22,8 @@ package shadowmage.ancient_warfare.common.crafting;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 
 public class TEAWNpcCraft extends TEAWCrafting
 {

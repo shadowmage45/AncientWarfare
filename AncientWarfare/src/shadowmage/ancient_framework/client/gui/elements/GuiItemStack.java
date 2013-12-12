@@ -27,8 +27,8 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
-import shadowmage.ancient_warfare.common.config.Config;
 
 public class GuiItemStack extends GuiElement
 {

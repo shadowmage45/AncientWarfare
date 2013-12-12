@@ -22,11 +22,11 @@ package shadowmage.ancient_warfare.common.gates.types;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_framework.common.utils.BlockTools;
+import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.utils.BlockTools;
-import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GateDoubleIron extends Gate
 {

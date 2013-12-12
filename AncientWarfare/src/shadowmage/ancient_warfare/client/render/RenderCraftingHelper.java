@@ -27,10 +27,10 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_warfare.client.model.ModelTEBase;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
-import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public class RenderCraftingHelper extends TileEntitySpecialRenderer implements IItemRenderer
 {

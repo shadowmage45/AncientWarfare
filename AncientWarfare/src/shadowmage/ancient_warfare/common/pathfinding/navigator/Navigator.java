@@ -29,6 +29,9 @@ import net.minecraft.block.BlockFenceGate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_framework.common.utils.Pos3f;
+import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;
@@ -41,9 +44,6 @@ import shadowmage.ancient_warfare.common.pathfinding.PathFinderCrawler;
 import shadowmage.ancient_warfare.common.pathfinding.PathFinderThetaStar;
 import shadowmage.ancient_warfare.common.pathfinding.PathUtils;
 import shadowmage.ancient_warfare.common.pathfinding.PathWorldAccess;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.utils.Pos3f;
-import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class Navigator implements IEntityNavigator, IPathableCallback
 {

@@ -36,8 +36,8 @@ import net.minecraft.util.Vec3;
 
 import org.lwjgl.input.Keyboard;
 
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;

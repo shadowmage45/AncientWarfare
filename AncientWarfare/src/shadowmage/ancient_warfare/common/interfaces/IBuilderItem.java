@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.interfaces;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
 
 public interface IBuilderItem
 {

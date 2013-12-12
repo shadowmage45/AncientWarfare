@@ -25,7 +25,7 @@ package shadowmage.ancient_warfare.common.item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 

@@ -24,7 +24,7 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.input.Keyboard;
 
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
+import shadowmage.ancient_framework.common.utils.InventoryTools;
 
 public class GuiFakeSlot extends GuiItemStack
 {

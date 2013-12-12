@@ -23,9 +23,9 @@
 package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_warfare.common.AWCore;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -78,13 +78,6 @@ public void setTickTimes(long time, int tps)
   this.packetData.setBoolean("tickTime", true);
   this.packetData.setLong("tick", time);
   this.packetData.setInteger("tps", tps);
-  }
-
-public void setPacketSizes(long s, long r)
-  {
-  this.packetData.setBoolean("packetCount", true);
-  this.packetData.setInteger("sent", (int) s);
-  this.packetData.setInteger("received", (int) r);
   }
 
 @Override

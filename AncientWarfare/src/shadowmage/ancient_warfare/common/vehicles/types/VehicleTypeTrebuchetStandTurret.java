@@ -20,10 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
-import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class VehicleTypeTrebuchetStandTurret extends VehicleTypeTrebuchet
 {

@@ -26,10 +26,10 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 
 public abstract class VehicleArmorBase implements IVehicleArmorType 

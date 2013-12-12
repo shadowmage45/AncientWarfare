@@ -24,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.civics.BlockWarehouseStorage;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
@@ -54,7 +55,6 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmBirch
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmJungle;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmOak;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmSpruce;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.BlockAWCrafting;
 import shadowmage.ancient_warfare.common.gates.BlockGateProxy;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;

@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.inventory;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.inventory.AWInventoryBase;
 import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
 
 public class AWInventoryMailbox extends AWInventoryBase

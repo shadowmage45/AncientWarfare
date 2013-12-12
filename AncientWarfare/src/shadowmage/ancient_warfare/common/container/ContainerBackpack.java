@@ -28,7 +28,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_framework.common.inventory.SlotExcludeOnly;
+import shadowmage.ancient_framework.common.inventory.SlotNoPull;
 import shadowmage.ancient_warfare.common.item.ItemBackpack;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 

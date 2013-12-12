@@ -21,12 +21,12 @@
 package shadowmage.ancient_warfare.common.machine;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryMailbox;
 import shadowmage.ancient_warfare.common.tracker.MailboxData;
 import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
-import shadowmage.ancient_warfare.common.utils.Trig;
 
 public class TEMailBoxIndustrial extends TEMailBoxBase
 {

@@ -30,14 +30,14 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_structures.common.AWStructures;
+import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_structures.common.world_gen.WorldGenStructureManager;
 import shadowmage.ancient_warfare.common.AWCore;
-import shadowmage.ancient_warfare.common.AWStructureModule;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
-import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 
 /**
  * Manages server side processed structures, and their client-side data equivalents
@@ -85,7 +85,7 @@ public boolean tryRemoveStructure(String name)
   if(this.structures.containsKey(name))
     {
     ProcessedStructure struct = this.structures.get(name);
-    if(!struct.isLocked() && !AWStructureModule.instance().isBeingBuilt(name))
+    if(!struct.isLocked() && !AWStructures.instance.isBeingBuilt(name))
       {
       this.structures.remove(name);
       WorldGenStructureManager.instance().removeStructure(name);      
@@ -102,7 +102,7 @@ public boolean tryDeleteStructure(String name)
   {
   if(this.tryRemoveStructure(name))
     {
-    File f = new File(AWStructureModule.includeDirectory+"/"+name+"."+Config.templateExtension);
+    File f = new File(AWStructures.instance.includeDirectory+"/"+name+"."+Config.templateExtension);
     if(f.exists())
       {
       Config.log("Deleting structure for name: "+name + " file: "+f.getAbsolutePath());

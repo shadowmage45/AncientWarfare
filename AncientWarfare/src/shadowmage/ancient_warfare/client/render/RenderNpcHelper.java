@@ -34,9 +34,9 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_warfare.client.model.ModelArrow2;
 import shadowmage.ancient_warfare.client.model.ModelFlag;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;

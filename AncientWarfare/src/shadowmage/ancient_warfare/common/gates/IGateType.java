@@ -23,8 +23,8 @@ package shadowmage.ancient_warfare.common.gates;
 import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public interface IGateType
 {

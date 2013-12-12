@@ -29,7 +29,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -49,7 +50,6 @@ import shadowmage.ancient_warfare.common.research.vehicle.ResearchMaterialLevel;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchMobility;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchTorsion;
 import shadowmage.ancient_warfare.common.research.vehicle.ResearchTurrets;
-import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.materials.VehicleMaterial;
 
 public class ResearchGoal implements IResearchGoal

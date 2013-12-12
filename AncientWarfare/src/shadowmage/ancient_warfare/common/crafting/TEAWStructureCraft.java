@@ -22,10 +22,10 @@ package shadowmage.ancient_warfare.common.crafting;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
-import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_framework.common.utils.InventoryTools;
+import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 
 public class TEAWStructureCraft extends TEAWCrafting
 {

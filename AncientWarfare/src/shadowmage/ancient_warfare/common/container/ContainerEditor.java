@@ -28,15 +28,15 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.utils.ByteTools;
+import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_structures.common.structures.file.StructureExporter;
+import shadowmage.ancient_structures.common.structures.file.StructureLoader;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
-import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.structures.file.StructureExporter;
-import shadowmage.ancient_warfare.common.structures.file.StructureLoader;
-import shadowmage.ancient_warfare.common.utils.ByteTools;
-import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class ContainerEditor extends ContainerBase
 {

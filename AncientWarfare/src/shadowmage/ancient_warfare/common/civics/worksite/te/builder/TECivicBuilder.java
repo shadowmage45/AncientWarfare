@@ -23,12 +23,12 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.builder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_structures.common.structures.build.BuilderTicked;
+import shadowmage.ancient_structures.common.structures.build.StructureBuilder;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
-import shadowmage.ancient_warfare.common.structures.build.Builder;
-import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class TECivicBuilder extends TEWorkSite
@@ -167,7 +167,7 @@ public void readFromNBT(NBTTagCompound par1nbtTagCompound)
     {
 //    Config.logDebug("reading builder data");
     NBTTagCompound builder = par1nbtTagCompound.getCompoundTag("builder");
-    this.builder = Builder.readTickedBuilderFromNBT(builder);
+    this.builder = StructureBuilder.readTickedBuilderFromNBT(builder);
     if(this.builder==null)
       {
       this.shouldRemove = true;

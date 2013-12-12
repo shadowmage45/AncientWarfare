@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.utils;
 
 import java.util.Comparator;
 
-import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
 
 public class ClientStructureComparator implements Comparator<StructureClientInfo>
 {

@@ -136,7 +136,7 @@ public static final int CIVIC_TOWNHALL_INFO = 14;
 public static final int TRASHCAN = 15;
 public static final int MAILBOX = 16;
 public static final int MAILBOX_INDUSTRIAL = 17;
-public static final int CHUNKLOADER = 18;//TODO
+public static final int CHUNKLOADER = 18;
 public static final int CHUNKLOADER_DEULXE = 19;
 public static final int FOOD_PROCESSOR = 20;
 

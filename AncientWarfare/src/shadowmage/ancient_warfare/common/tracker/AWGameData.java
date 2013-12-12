@@ -23,9 +23,9 @@ package shadowmage.ancient_warfare.common.tracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
-import shadowmage.ancient_warfare.common.AWStructureModule;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
+import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_structures.common.AWStructures;
+import shadowmage.ancient_structures.common.world_gen.WorldGenManager;
 
 
 public class AWGameData extends WorldSavedData
@@ -65,7 +65,7 @@ public void readFromNBT(NBTTagCompound tag)
   if(tag.hasKey("builders"))
     {
     Config.logDebug("loading builder data");
-    AWStructureModule.instance().readFromNBT(tag.getCompoundTag("builders"));
+    AWStructures.instance.readFromNBT(tag.getCompoundTag("builders"));
     }  
   if(tag.hasKey("structMap"))
     {
@@ -83,7 +83,7 @@ public void writeToNBT(NBTTagCompound tag)
   {
   tag.setCompoundTag("playerData", PlayerTracker.instance().getNBTTag());  
   tag.setCompoundTag("teamData", TeamTracker.instance().getNBTTag());
-  tag.setCompoundTag("builders", AWStructureModule.instance().getNBTTag());  
+  tag.setCompoundTag("builders", AWStructures.instance.getNBTTag());  
   tag.setCompoundTag("structMap", WorldGenManager.instance().getNBTTag());  
   tag.setCompoundTag("npcMap", GameDataTracker.instance().getNpcMapTag());
   }

@@ -34,16 +34,16 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.inventory.AWInventoryBase;
+import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_framework.common.inventory.AWInventoryMapped;
 import shadowmage.ancient_framework.common.network.GUIHandler;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
-import shadowmage.ancient_warfare.common.inventory.AWInventoryBase;
-import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
-import shadowmage.ancient_warfare.common.inventory.AWInventoryMapped;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TECivicWarehouse extends TECivic implements IEntityContainerSynch
 {

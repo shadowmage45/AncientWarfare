@@ -29,9 +29,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.network.PacketBase;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.utils.NBTWriter;
+import shadowmage.ancient_framework.common.utils.NBTWriter;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;

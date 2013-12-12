@@ -30,19 +30,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.AWStructureModule;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_framework.common.utils.BlockTools;
+import shadowmage.ancient_framework.common.utils.IDPairCount;
+import shadowmage.ancient_structures.common.AWStructures;
+import shadowmage.ancient_structures.common.structures.build.BuilderTicked;
+import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_structures.common.structures.data.ScannedStructureData;
+import shadowmage.ancient_structures.common.structures.data.StructureBuildSettings;
+import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
-import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
-import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.structures.data.ScannedStructureData;
-import shadowmage.ancient_warfare.common.structures.data.StructureBuildSettings;
-import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.utils.BlockTools;
-import shadowmage.ancient_warfare.common.utils.IDPairCount;
 
 public class ItemBuilderDirect extends ItemBuilderBase implements IScannerItem
 {
@@ -269,9 +269,7 @@ public boolean attemptConstruction(World world, ProcessedStructure struct,   Blo
     builder.setWorld(world);
     builder.startConstruction();
     builder.setOverrides(-1, false, false, true);
-    AWStructureModule.instance().addBuilder(builder);
-//    BuilderInstant builder = new BuilderInstant(world, struct, facing, hit);
-//    builder.startConstruction();
+    AWStructures.instance.addBuilder(builder);
     return true;
     }
   return false;

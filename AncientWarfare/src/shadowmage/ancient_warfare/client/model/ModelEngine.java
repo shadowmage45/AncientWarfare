@@ -9,7 +9,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.ForgeDirection;
-import shadowmage.ancient_warfare.common.utils.Trig;
+import shadowmage.ancient_framework.common.utils.Trig;
  
  
 public class ModelEngine extends ModelBase

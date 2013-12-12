@@ -25,14 +25,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_framework.common.utils.BlockTools;
+import shadowmage.ancient_structures.common.structures.build.BuilderTicked;
+import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
+import shadowmage.ancient_structures.common.structures.data.StructureBuildSettings;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.block.TEBuilder;
-import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
-import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.structures.data.StructureBuildSettings;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public class ItemBuilderTicked extends ItemBuilderInstant
 {

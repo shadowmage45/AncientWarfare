@@ -28,8 +28,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.config.Config;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 public class ContainerNpcBase extends ContainerBase
@@ -55,27 +55,6 @@ public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
     {
     this.addArmorSlots();    
     }
-//  IInventory te = npc.inventory;
-//  Config.logDebug("setting npc inventory. size: "+te.getSizeInventory());
-//  for(y = 0; y < te.getSizeInventory()/9; y++)
-//    {
-//    for(x = 0; x < 9; x++)
-//      {
-//      slotNum = y*9 + x;
-//      if(slotNum<te.getSizeInventory())
-//        {
-//        xPos = 8 + x * 18;
-//        yPos = y * 18 + 15;
-//        if(slotNum>=27)
-//          {
-//          xPos = -1000;
-//          yPos = -1000;
-//          }
-//        Slot slot = new Slot(te, slotNum, xPos, yPos);
-//        this.addSlotToContainer(slot);        
-//        }
-//      }
-//    }  
   }
 
 @Override
@@ -131,7 +110,6 @@ public void handlePacketData(NBTTagCompound tag)
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
-  // TODO Auto-generated method stub
 
   }
 

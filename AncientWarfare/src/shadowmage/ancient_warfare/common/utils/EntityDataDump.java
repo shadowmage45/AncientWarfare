@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EntityList;
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.config.Config;
 
 public class EntityDataDump
 {

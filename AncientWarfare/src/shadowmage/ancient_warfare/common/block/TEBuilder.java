@@ -27,10 +27,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.structures.build.Builder;
-import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_framework.common.config.Config;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_structures.common.structures.build.BuilderTicked;
+import shadowmage.ancient_structures.common.structures.build.StructureBuilder;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -86,7 +86,7 @@ public void readFromNBT(NBTTagCompound par1nbtTagCompound)
     {
 //    Config.logDebug("reading builder data");
     NBTTagCompound builder = par1nbtTagCompound.getCompoundTag("builder");
-    this.builder = Builder.readTickedBuilderFromNBT(builder);
+    this.builder = StructureBuilder.readTickedBuilderFromNBT(builder);
     if(this.builder==null)
       {
       this.shouldRemove = true;

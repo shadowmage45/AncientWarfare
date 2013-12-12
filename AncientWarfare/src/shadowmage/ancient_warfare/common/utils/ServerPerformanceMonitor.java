@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.utils;
 
 import java.util.EnumSet;
 
-import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_framework.common.config.Config;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 

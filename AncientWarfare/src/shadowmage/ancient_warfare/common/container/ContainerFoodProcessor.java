@@ -28,6 +28,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.container.ContainerBase;
+import shadowmage.ancient_framework.common.inventory.SlotPullOnly;
 import shadowmage.ancient_warfare.common.machine.TEFoodProcessor;
 
 public class ContainerFoodProcessor extends ContainerBase
