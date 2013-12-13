@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import shadowmage.ancient_framework.common.item.AWItemBase;
+import shadowmage.ancient_framework.common.item.CreativeTabAW;
+
 
 public class ItemAmmo extends AWItemBase
 {
@@ -30,7 +33,7 @@ public class ItemAmmo extends AWItemBase
  */
 public ItemAmmo(int itemID)
   {
-  super(itemID, true);
+  super(itemID);
   this.setCreativeTab(CreativeTabAW.ammoTab);  
   }
 

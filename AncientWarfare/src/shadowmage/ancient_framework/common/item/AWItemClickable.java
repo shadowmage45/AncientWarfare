@@ -18,22 +18,25 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.item;
+package shadowmage.ancient_framework.common.item;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 
-public abstract class AWItemBlockClickable extends AWItemBlockBase
+public abstract class AWItemClickable extends AWItemBase
 {
-protected boolean hasLeftClick;
+
+public boolean hasLeftClick = false;
+
 /**
- * @param par1
+ * @param itemID
+ * @param hasSubTypes
  */
-public AWItemBlockClickable(int par1)
+public AWItemClickable(int itemID)
   {
-  super(par1);  
+  super(itemID);
   }
 
 @Override

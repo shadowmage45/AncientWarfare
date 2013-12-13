@@ -29,6 +29,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.item.AWItemClickable;
+import shadowmage.ancient_framework.common.item.CreativeTabAW;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_warfare.AWCore;
@@ -43,7 +45,7 @@ public class ItemVehicleSpawner extends AWItemClickable
 
 public ItemVehicleSpawner(int itemID)
   {
-  super(itemID,true);
+  super(itemID);
   this.setCreativeTab(CreativeTabAW.vehicleTab);
   }
 

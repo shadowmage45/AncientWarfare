@@ -25,7 +25,7 @@ package shadowmage.ancient_warfare.common.item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
+import shadowmage.ancient_framework.common.item.AWItemBase;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.AWCore;
 
@@ -38,7 +38,7 @@ public class ItemLoader
 public static final AWItemBase vehicleUpgrade = new ItemVehicleUpgrade(AWCore.instance.config.getItemID("itemMulti.vehicleUpgrade", 24001, "Base item for all vehicle upgrades"));
 public static final AWItemBase ammoItem = new ItemAmmo(AWCore.instance.config.getItemID("itemMulti.vehicleAmmo", 24002, "Base item for all vehicle ammunition types"));
 public static final AWItemBase vehicleSpawner = new ItemVehicleSpawner(AWCore.instance.config.getItemID("itemMulti.vehicleSpawner", 24003, "Base item for all vehicle-spawning items"));
-public static final AWItemBase componentItem = new ItemComponent(AWCore.instance.config.getItemID("itemMulti.component", 24004, "Base item for all components and misc items"), true);
+public static final AWItemBase componentItem = new ItemComponent(AWCore.instance.config.getItemID("itemMulti.component", 24004, "Base item for all components and misc items"));
 //public static final AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 24005, "Item used to scan structures"));
 //public static final AWItemBase structureCreativeBuilder = new ItemBuilderInstant(Config.getItemID("itemSingle.structureBuilderCreative", 24006, "Creative-Mode Selectable Structure Builder"));
 //public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Config.getItemID("itemSingle.builderDirect", 24007, "Survival mode builder, uses blocks from inventory"));
@@ -178,52 +178,27 @@ private void loadItems()
   }
 
 public Description registerItemSubtyped(AWItemBase item, String baseName)
-  {
-  Description d = DescriptionRegistry.instance().registerItem(item, false);
-//  GameRegistry.registerItem(item, baseName);
-  return d;
+  {  
+  return null;
   }
 
 public Description registerItemSingle(Item item, String name, String desc, String tip)
   {
-  Description d = DescriptionRegistry.instance().registerItem(item, true);
-  d.setName(name, 0);
-  d.setDescription(desc, 0);
-  d.addTooltip(tip, 0);  
-//  GameRegistry.registerItem(item, name);
-  return d;
+  return null;
   }
 
 public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name, String desc, String tooltip)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(item.itemID);
-  if(d!=null)
-    {
-    d.setName(name, damage);
-    d.setDescription(desc, damage);
-    d.addTooltip(tooltip, damage);  
-    }  
-  return d;
+  return null;
   }
 
 public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(item.itemID);
-  if(d!=null)
-    {
-    d.setName(name, damage);   
-    }  
-  return d;
+  return null;
   }
 
 public Description addSubtypeInfoWithIconTexture(AWItemBase item, int damage, String name, String texture)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(item.itemID);
-  if(d!=null)
-    {
-    d.setName(name, damage);   
-    d.setIconTexture(texture, damage);
-    }  
-  return d;
+  return null;
   }
 }

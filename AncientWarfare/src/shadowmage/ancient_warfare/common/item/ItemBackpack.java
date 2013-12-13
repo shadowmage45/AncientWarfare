@@ -29,8 +29,8 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
@@ -46,7 +46,7 @@ public class ItemBackpack extends AWItemClickable
  */
 public ItemBackpack(int itemID)
   {
-  super(itemID, true);
+  super(itemID);
   this.maxStackSize = 1;
   this.hasLeftClick = false;
   }

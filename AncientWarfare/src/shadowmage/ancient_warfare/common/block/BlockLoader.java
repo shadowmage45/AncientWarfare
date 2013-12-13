@@ -24,7 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
+import shadowmage.ancient_framework.common.item.AWItemBlockBase;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
@@ -59,7 +59,6 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmSpruc
 import shadowmage.ancient_warfare.common.crafting.BlockAWCrafting;
 import shadowmage.ancient_warfare.common.gates.BlockGateProxy;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;
-import shadowmage.ancient_warfare.common.item.AWItemBlockBase;
 import shadowmage.ancient_warfare.common.item.ItemEngine;
 import shadowmage.ancient_warfare.common.item.ItemMachine;
 import shadowmage.ancient_warfare.common.item.ItemReinforcedBlock;

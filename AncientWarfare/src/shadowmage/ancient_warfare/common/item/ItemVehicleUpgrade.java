@@ -22,6 +22,8 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import shadowmage.ancient_framework.common.item.AWItemBase;
+
 
 
 public class ItemVehicleUpgrade extends AWItemBase
@@ -29,7 +31,7 @@ public class ItemVehicleUpgrade extends AWItemBase
 
 public ItemVehicleUpgrade(int itemID)
   {
-  super(itemID,true);
+  super(itemID);
   }
 
 }

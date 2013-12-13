@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import shadowmage.ancient_framework.common.item.AWItemBase;
+
 public class ItemComponent extends AWItemBase
 {
 
@@ -27,10 +29,9 @@ public class ItemComponent extends AWItemBase
  * @param itemID
  * @param hasSubTypes
  */
-public ItemComponent(int itemID, boolean hasSubTypes)
+public ItemComponent(int itemID)
   {
-  super(itemID, hasSubTypes);
-  // TODO Auto-generated constructor stub
+  super(itemID);
   }
 
 }

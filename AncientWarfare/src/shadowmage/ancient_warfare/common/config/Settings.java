@@ -20,9 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.config;
 
-import shadowmage.ancient_warfare.AWCore;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
+import shadowmage.ancient_warfare.AWCore;
 
 /**
  * client-side only game settings

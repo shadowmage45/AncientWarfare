@@ -25,6 +25,8 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.item.AWItemClickable;
+import shadowmage.ancient_framework.common.item.CreativeTabAW;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
@@ -39,7 +41,7 @@ public class ItemResearchNote extends AWItemClickable
  */
 public ItemResearchNote(int itemID)
   {
-  super(itemID, true);
+  super(itemID);
   this.hasLeftClick = false;
   this.setCreativeTab(CreativeTabAW.researchTab);
   this.maxStackSize = 1;

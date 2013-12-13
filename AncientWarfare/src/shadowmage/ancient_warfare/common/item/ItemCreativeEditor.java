@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.item;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 
@@ -35,7 +36,7 @@ public class ItemCreativeEditor extends AWItemClickable
    */
 public ItemCreativeEditor(int itemID)
   {
-  super(itemID, false);
+  super(itemID);
   this.hasLeftClick = false;
   }
 

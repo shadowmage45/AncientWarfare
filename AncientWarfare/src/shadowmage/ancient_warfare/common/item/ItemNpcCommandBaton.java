@@ -32,6 +32,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
@@ -52,7 +53,7 @@ public class ItemNpcCommandBaton extends AWItemClickable
  */
 public ItemNpcCommandBaton(int itemID)
   {
-  super(itemID, true);
+  super(itemID);
   this.maxStackSize = 1;
   this.hasLeftClick = true;
   }

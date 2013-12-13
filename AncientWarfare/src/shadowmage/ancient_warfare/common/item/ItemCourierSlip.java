@@ -27,6 +27,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
@@ -41,7 +42,7 @@ public class ItemCourierSlip extends AWItemClickable
  */
 public ItemCourierSlip(int itemID)
   {
-  super(itemID, true);
+  super(itemID);
   this.hasLeftClick = true;
   this.setMaxStackSize(1);
   }

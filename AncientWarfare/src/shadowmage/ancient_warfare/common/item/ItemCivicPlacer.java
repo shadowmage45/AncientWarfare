@@ -30,6 +30,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.civics.TECivic;
@@ -49,7 +50,7 @@ public class ItemCivicPlacer extends AWItemClickable implements IScannerItem
  */
 public ItemCivicPlacer(int itemID)
   {
-  super(itemID, true);
+  super(itemID);
   this.hasLeftClick = true;
   }
 

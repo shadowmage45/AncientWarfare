@@ -20,10 +20,11 @@
 
 
  */
-package shadowmage.ancient_warfare.common.item;
+package shadowmage.ancient_framework.common.item;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

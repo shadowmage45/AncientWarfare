@@ -76,7 +76,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 
-@Mod( modid = "AncientWarfare", name="Ancient Warfare", version=AWCoreConfig.VERSION, dependencies="AncientWarfareFramework")
+@Mod( modid = "AncientWarfareCore", name="Ancient Warfare Core", version=AWCoreConfig.VERSION, dependencies="AncientWarfare")
 @NetworkMod
 (
 clientSideRequired = true,
@@ -91,9 +91,8 @@ public class AWCore extends AWMod
 
 @SidedProxy(clientSide = "shadowmage.ancient_warfare.client.proxy.ClientProxyCore", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
 public static CommonProxy proxy;
-@Instance("AncientWarfare")
+@Instance("AncientWarfareCore")
 public static AWCore instance;	
-
 
 @Override
 public void loadConfiguration(File config, Logger log)

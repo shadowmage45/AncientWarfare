@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
@@ -40,7 +41,7 @@ public class ItemResearchBook extends AWItemClickable
  */
 public ItemResearchBook(int itemID)
   {
-  super(itemID, false);
+  super(itemID);
   this.hasLeftClick = false;
   this.maxStackSize = 1;
   }

@@ -26,98 +26,38 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class Description
 {
-
-/**
- * one or the other will be populated
- */
-Item item;
-
-Block block;
-
-boolean normalItem = true;//one name/tooltip, no subtypes, damage is used for other things, register retrieve as 0
-
 private final HashMap<Integer, String> names = new HashMap<Integer, String>();
 private final HashMap<Integer, String> descriptions = new HashMap<Integer, String>();
 private final HashMap<Integer, List<String>> tooltips = new HashMap<Integer, List<String>>();
 private final HashMap<Integer, Icon> icons = new HashMap<Integer, Icon>();
 private final HashMap<Integer, String> iconTextures = new HashMap<Integer, String>();
+private final ArrayList<ItemStack> displayStackCache = new ArrayList<ItemStack>();
 
-private ArrayList<ItemStack> displayStackCache = new ArrayList<ItemStack>();
-
-public Description(Item item, boolean single)
+public Description()
   {
-  this.item = item;
-  this.normalItem = single;
-  if(single)
-    {
-    this.displayStackCache.add(new ItemStack(item,1,0));
-    }
-  }
-
-public Description(Block block, boolean single)
-  {
-  this.block = block;
-  this.normalItem = single;
-  if(single)
-    {
-    this.displayStackCache.add(new ItemStack(block,1,0));
-    }
+  
   }
 
 public Description setName(String name, int damage)
   {
-  if(this.normalItem)
-    {
-    damage = 0;
-    if(item!=null)
-      {
-      LanguageRegistry.addName(item, name);
-      }
-    else if(block!=null)
-      {
-      LanguageRegistry.addName(block, name);
-      }    
-    }
-  else
-    {
-    if(item!=null)
-      {
-      LanguageRegistry.addName(new ItemStack(item,1,damage), name);
-      }
-    else if(block!=null)
-      {
-      LanguageRegistry.addName(new ItemStack(block,1,damage), name);
-      }   
-    }
   this.names.put(damage, name);
   return this;
   }
 
 public Description setDescription(String desc, int damage)
   {
-  if(this.normalItem)
-    {
-    damage = 0;
-    }
   this.descriptions.put(damage, desc);
   return this;
   }
 
 public Description addTooltip(String tooltip, int damage)
-  {
-  if(this.normalItem)
-    {
-    damage = 0;
-    }
+  {  
   if(!this.tooltips.containsKey(damage))
     {
     this.tooltips.put(damage, new ArrayList<String>());
@@ -127,11 +67,7 @@ public Description addTooltip(String tooltip, int damage)
   }
 
 public Description setIcon(Icon icon, int damage)
-  {
-  if(this.normalItem)
-    {
-    damage = 0;
-    }
+  { 
   this.icons.put(damage, icon);
   return this;
   }
@@ -144,63 +80,32 @@ public Description setIconTexture(String tex, int damage)
 
 public String getDisplayName(int damage)
   {
-  if(this.normalItem && names.containsKey(0))
-    {
-    return this.names.get(0);
-    }
-  else if(names.containsKey(damage))
-    {
-    return this.names.get(damage);
-    }
-  return "";
+  return this.names.get(damage);
   }
 
 public String getDescription(int damage)
   {
-  if(this.normalItem && descriptions.containsKey(0))
-    {
-    return this.descriptions.get(0);
-    }
-  else if(descriptions.containsKey(damage))
-    {
-    return this.descriptions.get(damage);
-    }
-  return "";
+  return this.descriptions.get(damage);
   }
 
 public List<String> getDisplayTooltips(int damage)
   {
-  if(this.normalItem && tooltips.containsKey(0))
+  List<String> lst = this.tooltips.get(damage);
+  if(lst==null)
     {
-    return this.tooltips.get(0);
+    return Collections.emptyList();
     }
-  else if(tooltips.containsKey(damage))
-    {
-    return this.tooltips.get(damage);
-    }
-  return Collections.emptyList();
+  return lst;
   }
 
 public Icon getIconFor(int damage)
   {
-  if(this.normalItem && this.icons.containsKey(0))
-    {
-    return this.icons.get(0);
-    }
   return this.icons.get(damage);
   }
 
 public String getIconTexture(int damage)
   {
-  if(this.normalItem && this.iconTextures.containsKey(0))
-    {
-    return this.iconTextures.get(0);
-    }
-  else if(this.iconTextures.containsKey(damage))
-    {
-    return this.iconTextures.get(damage);
-    }
-  return "foo";
+  return this.iconTextures.get(damage);
   }
 
 public String getDisplayName(ItemStack stack)

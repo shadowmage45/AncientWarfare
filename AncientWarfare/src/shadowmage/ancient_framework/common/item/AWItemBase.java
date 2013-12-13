@@ -20,7 +20,7 @@
 
 
  */
-package shadowmage.ancient_warfare.common.item;
+package shadowmage.ancient_framework.common.item;
 
 import java.util.List;
 
@@ -31,7 +31,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
-import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import cpw.mods.fml.relauncher.Side;
@@ -40,10 +39,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 public abstract class AWItemBase extends Item
 {
 
-public AWItemBase(int itemID, boolean hasSubTypes)
+public Description description;
+
+public AWItemBase(int itemID)
   {
   super(itemID);  
-  this.setHasSubtypes(hasSubTypes);
   this.setCreativeTab(CreativeTabAW.instance());
   }
 
@@ -53,11 +53,10 @@ public AWItemBase(int itemID, boolean hasSubTypes)
 @SideOnly(Side.CLIENT)
 @Override
 public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
-  {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
-  if(d!=null)
+  {  
+  if(description!=null)
     {
-    par3List.addAll(d.getDisplayStackCache());
+    par3List.addAll(description.getDisplayStackCache());
     }
   else
     {
@@ -83,7 +82,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   {
   if(stack!=null)
     {
-    Description d = DescriptionRegistry.instance().getDescriptionFor(stack.itemID);
+    Description d = description;
     if(d!=null)
       {
       List<String> tips = d.getDisplayTooltips(stack.getItemDamage());
@@ -107,7 +106,7 @@ public String getItemStackDisplayName(ItemStack par1ItemStack)
 @Override
 public String getUnlocalizedName()
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     return d.getDisplayName(0);
@@ -118,7 +117,7 @@ public String getUnlocalizedName()
 @Override
 public String getUnlocalizedName(ItemStack par1ItemStack)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     return d.getDisplayName(par1ItemStack.getItemDamage());
@@ -129,7 +128,7 @@ public String getUnlocalizedName(ItemStack par1ItemStack)
 @Override
 public String getItemDisplayName(ItemStack par1ItemStack)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     String name = d.getDisplayName(par1ItemStack.getItemDamage());
@@ -141,10 +140,9 @@ public String getItemDisplayName(ItemStack par1ItemStack)
 @Override
 public void registerIcons(IconRegister par1IconRegister)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
-//    Config.logDebug("registering icons for : "+itemID +":: "+d.getDisplayName(0));
     d.registerIcons(par1IconRegister);
     }
   }
@@ -152,7 +150,7 @@ public void registerIcons(IconRegister par1IconRegister)
 @Override
 public Icon getIconFromDamage(int par1)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     return d.getIconFor(par1);
