@@ -25,7 +25,6 @@ package shadowmage.ancient_warfare.common.network;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_warfare.AWCore;
-import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.EntityDataDump;
@@ -62,21 +61,9 @@ public void setInitData(NBTTagCompound tag)
   this.packetData.setCompoundTag("init", tag);
   }
 
-public void setStructData(NBTTagCompound tag)
-  {
-  this.packetData.setCompoundTag("struct", tag);
-  }
-
 public void setTeamUpdate(NBTTagCompound tag)
   {
   this.packetData.setCompoundTag("team", tag);
-  }
-
-public void setTickTimes(long time, int tps)
-  {
-  this.packetData.setBoolean("tickTime", true);
-  this.packetData.setLong("tick", time);
-  this.packetData.setInteger("tps", tps);
   }
 
 @Override
@@ -110,26 +97,7 @@ public void execute()
       {
       TeamTracker.instance().handleClientInit(tag.getCompoundTag("teamData"));
       } 
-    if(tag.hasKey("config"))
-      {
-      Config.instance().handleClientInit(tag.getCompoundTag("configData"));
-      }
     }  
-
-  /**
-   * structure information, completely handled in structManager
-   */
-  if(this.packetData.hasKey("struct"))
-    {
-    if(world.isRemote)
-      {
-      StructureManager.instance().handlePacketDataClient(packetData.getCompoundTag("struct"));
-      }
-    else
-      {
-      StructureManager.instance().handlePacketDataServer(packetData.getCompoundTag("struct"));
-      }
-    }
 
   /**
    * team update tag..
@@ -146,19 +114,7 @@ public void execute()
       TeamTracker.instance().handleServerUpdate(tag, player);
       }    
     }  
-
-  if(this.packetData.hasKey("tickTime"))
-    {
-    AWCore.proxy.serverTickTime = packetData.getLong("tick");
-    AWCore.proxy.serverTPS = packetData.getInteger("tps");
-    }
-  
-  if(this.packetData.hasKey("packetCount"))
-    {
-    AWCore.proxy.recPacketAvg = packetData.getInteger("r");
-    AWCore.proxy.sentPacketAvg = packetData.getInteger("s");
-    }
-  
+   
   if(this.packetData.hasKey("research") && player.worldObj.isRemote)
     {
     PlayerTracker.instance().addResearchToPlayer(world, player.getEntityName(), this.packetData.getInteger("new"));

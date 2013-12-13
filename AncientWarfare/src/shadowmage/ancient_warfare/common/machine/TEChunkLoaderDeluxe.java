@@ -38,7 +38,7 @@ public void onBlockPlaced()
   {  
   if(this.worldObj==null || this.worldObj.isRemote){return;}
   this.setTicket(ForgeChunkManager.requestTicket(AWCore.instance, worldObj, Type.NORMAL));  
-  Config.log("Forcing chunk for position: "+xCoord +"," + yCoord +"," + zCoord + " for AW Deluxe chunkloader.");
+//  Config.log("Forcing chunk for position: "+xCoord +"," + yCoord +"," + zCoord + " for AW Deluxe chunkloader.");
   }
 
 }

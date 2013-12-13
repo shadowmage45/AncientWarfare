@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 import java.util.List;
 
 import net.minecraft.util.MathHelper;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
@@ -33,7 +34,7 @@ import shadowmage.ancient_warfare.common.targeting.TargetType;
 public class AIWander extends NpcAIObjective
 {
 
-int tps = 20/Config.npcAITicks;
+int tps = 20/AWCoreConfig.npcAITicks;
 int wanderTick = 0;
 int nextWander = tps;
 

@@ -37,6 +37,7 @@ import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -402,7 +403,7 @@ public Collection<ItemStackWrapperCrafting> getResources()
 
 protected void breakBlockAndDrop(World world, int x, int y, int z)
   {
-  if(Config.blockDestruction)
+  if(AWCoreConfig.blockDestruction)
     {
     BlockTools.breakBlockAndDrop(world, x, y, z);    
     }
@@ -417,7 +418,7 @@ protected void breakBlockAndDrop(World world, int x, int y, int z)
  */
 protected void igniteBlock(World world, int x, int y, int z, int maxSearch)
   { 
-  if(!Config.blockFires)
+  if(!AWCoreConfig.blockFires)
     {
     return;
     }
@@ -438,7 +439,7 @@ protected void igniteBlock(World world, int x, int y, int z, int maxSearch)
 
 public static boolean shouldEffectEntity(World world, Entity entity, MissileBase missile)
   {  
-  if(!Config.allowFriendlyFire && missile.shooterLiving instanceof NpcBase)
+  if(!AWCoreConfig.allowFriendlyFire && missile.shooterLiving instanceof NpcBase)
     {
     NpcBase shooter = (NpcBase) missile.shooterLiving;
     int aTeam = shooter.teamNum;
@@ -471,7 +472,7 @@ public static boolean shouldEffectEntity(World world, Entity entity, MissileBase
  */
 protected void setBlockToLava(World world, int x, int y, int z, int maxSearch)
   { 
-  if(!Config.blockFires)
+  if(!AWCoreConfig.blockFires)
     {
     return;
     }
@@ -492,8 +493,8 @@ protected void setBlockToLava(World world, int x, int y, int z, int maxSearch)
 
 protected void createExplosion(World world, MissileBase missile, float x, float y, float z, float power)
   {
-  boolean destroyBlocks = Config.blockDestruction;
-  boolean fires = Config.blockFires;
+  boolean destroyBlocks = AWCoreConfig.blockDestruction;
+  boolean fires = AWCoreConfig.blockFires;
   Explosion e = world.newExplosion(missile, x, y, z, power, fires, destroyBlocks);
   }
 

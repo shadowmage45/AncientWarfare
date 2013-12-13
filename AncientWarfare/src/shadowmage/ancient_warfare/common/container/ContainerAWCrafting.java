@@ -31,6 +31,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_framework.common.inventory.SlotPullOnly;
 import shadowmage.ancient_framework.common.inventory.SlotResourceOnly;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
@@ -254,7 +255,7 @@ public void handlePacketData(NBTTagCompound tag)
     ItemStack result = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("result"));
     ResourceListRecipe recipe = AWCraftingManager.instance().getRecipeByResult(result);
     te.setRecipe(recipe);
-    Config.logDebug("receiving set recipe packet: " + result + " rec: " +recipe);    
+    AWCore.instance.logDebug("receiving set recipe packet: " + result + " rec: " +recipe);    
     }
   if(tag.hasKey("start"))
     {

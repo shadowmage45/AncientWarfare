@@ -148,10 +148,10 @@ public Icon getIcon(int side, int meta)
 @Override
 public int idDropped(int par1, Random par2Random, int par3)
   {
-  if(blockNum*16 + par1==Civic.builder.getGlobalID())
-    {
-    return 0;
-    }
+//  if(blockNum*16 + par1==Civic.builder.getGlobalID())
+//    {
+//    return 0;
+//    }
   return ItemLoader.civicPlacer.itemID;
   }
 

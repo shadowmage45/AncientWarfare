@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.machine;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.Trig;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryMailbox;
 import shadowmage.ancient_warfare.common.tracker.MailboxData;
 import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
@@ -56,7 +57,7 @@ public void updateEntity()
   {
   if(this.worldObj==null || this.worldObj.isRemote || this.boxData==null){return;}
   this.mailTicks++;
-  if(this.mailTicks>=Config.mailSendTicks)
+  if(this.mailTicks>=AWCoreConfig.mailSendTicks)
     {
     this.mailTicks = 0;
     /**
@@ -83,7 +84,6 @@ public void updateEntity()
           float dist = Trig.getDistance(xCoord, yCoord, zCoord, data.posX(), data.posY(), data.posZ());
           data.addIncomingItem(stack, (int)dist*5);
           this.setInventorySlotContents(slot, null);
-          Config.logDebug("adding stack to mail route for: "+destination + " time: "+((int)dist*5));
           } 
         }
       }  

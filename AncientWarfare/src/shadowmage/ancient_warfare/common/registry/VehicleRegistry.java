@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.registry;
 import java.util.Iterator;
 
 import shadowmage.ancient_framework.common.registry.entry.Description;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -107,22 +108,22 @@ public void registerVehicles()
     {    
     if(vehicle!=null)
       {
-      vehicle.setEnabled(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".enabled", vehicle.isEnabled()).getBoolean(vehicle.isEnabled()));
+      vehicle.setEnabled(AWCore.instance.config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".enabled", vehicle.isEnabled()).getBoolean(vehicle.isEnabled()));
       if(!vehicle.isEnabled())
         {
         VehicleType.vehicleTypes[vehicle.getGlobalVehicleType()]=null;
         continue;
         }
-      vehicle.setEnabledForCrafting(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".craftable", true).getBoolean(true));
-      vehicle.setEnabledForLoot(Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".add_to_chests", true).getBoolean(true));
-      vehicle.setBaseAccuracy((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".accuracy", vehicle.getBaseAccuracy()).getDouble(vehicle.getBaseAccuracy()));
-      vehicle.setBaseForwardSpeed((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".forward_speed", vehicle.getBaseForwardSpeed()).getDouble(vehicle.getBaseForwardSpeed()));
-      vehicle.setBaseHealth((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".health", vehicle.getBaseHealth()).getDouble(vehicle.getBaseHealth()));
-      vehicle.setBaseMissileVelocity((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".missile_speed", vehicle.getBaseMissileVelocityMax()).getDouble(vehicle.getBaseMissileVelocityMax()));
-      vehicle.setBasePitchMax((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".pitch_max", vehicle.getBasePitchMax()).getDouble(vehicle.getBasePitchMax()));
-      vehicle.setBasePitchMin((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".pitch_min", vehicle.getBasePitchMin()).getDouble(vehicle.getBasePitchMin()));
-      vehicle.setBaseStrafeSpeed((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".strafe_speed", vehicle.getBaseStrafeSpeed()).getDouble(vehicle.getBaseStrafeSpeed()));
-      vehicle.setBaseTurretRotationAmount((float) Config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".turret_rotation", vehicle.getBaseTurretRotationAmount()).getDouble(vehicle.getBaseTurretRotationAmount()));
+      vehicle.setEnabledForCrafting(AWCore.instance.config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".craftable", true).getBoolean(true));
+      vehicle.setEnabledForLoot(AWCore.instance.config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".add_to_chests", true).getBoolean(true));
+      vehicle.setBaseAccuracy((float) AWCore.instance.config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".accuracy", vehicle.getBaseAccuracy()).getDouble(vehicle.getBaseAccuracy()));
+      vehicle.setBaseForwardSpeed((float) AWCore.instance.config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".forward_speed", vehicle.getBaseForwardSpeed()).getDouble(vehicle.getBaseForwardSpeed()));
+      vehicle.setBaseHealth((float) AWCore.instance.config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".health", vehicle.getBaseHealth()).getDouble(vehicle.getBaseHealth()));
+      vehicle.setBaseMissileVelocity((float) AWCore.instance.config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".missile_speed", vehicle.getBaseMissileVelocityMax()).getDouble(vehicle.getBaseMissileVelocityMax()));
+      vehicle.setBasePitchMax((float) AWCore.instance.config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".pitch_max", vehicle.getBasePitchMax()).getDouble(vehicle.getBasePitchMax()));
+      vehicle.setBasePitchMin((float) AWCore.instance.config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".pitch_min", vehicle.getBasePitchMin()).getDouble(vehicle.getBasePitchMin()));
+      vehicle.setBaseStrafeSpeed((float) AWCore.instance.config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".strafe_speed", vehicle.getBaseStrafeSpeed()).getDouble(vehicle.getBaseStrafeSpeed()));
+      vehicle.setBaseTurretRotationAmount((float) AWCore.instance.config.getConfig().get("e_vehicle_config", vehicle.getConfigName()+".turret_rotation", vehicle.getBaseTurretRotationAmount()).getDouble(vehicle.getBaseTurretRotationAmount()));
       
       Iterator<IAmmoType> it = vehicle.getValidAmmoTypes().iterator();
       IAmmoType t;

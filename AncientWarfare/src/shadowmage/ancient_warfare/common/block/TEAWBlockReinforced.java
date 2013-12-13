@@ -95,9 +95,7 @@ public void writeToNBT(NBTTagCompound tag)
 
 public void onExploded(Explosion expl)
   {
-  Config.logDebug("dmg: "+this.damageRemaining + " size: "+expl.explosionSize);
   this.damageRemaining -= expl.explosionSize;
-  Config.logDebug("newdmg: "+this.damageRemaining);
   if(this.damageRemaining<=0)
     {
     worldObj.setBlockToAir(xCoord, yCoord, zCoord);    

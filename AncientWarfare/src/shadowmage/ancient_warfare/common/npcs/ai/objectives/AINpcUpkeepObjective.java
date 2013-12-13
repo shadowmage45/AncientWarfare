@@ -29,6 +29,7 @@ import net.minecraft.tileentity.TileEntityChest;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
 import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIDismountVehicle;
@@ -129,7 +130,7 @@ protected void attemptWithdrawalTownHall(TECivicTownHall te)
   if(doWithdrawal)
     {
     InventoryTools.tryRemoveFoodValue(te, 0, te.getSizeInventory()-1, neededValue);
-    npc.npcUpkeepTicks = Config.npcUpkeepTicks;
+    npc.npcUpkeepTicks = AWCoreConfig.npcUpkeepTicks;
     this.setFinished();
     }
   else
@@ -159,7 +160,7 @@ protected void attemptWithdrawalTownHall(TECivicTownHall te)
     if(doWithdrawal)
       {
       InventoryTools.tryRemoveFoodValue(warehouse, 0, warehouse.getSizeInventory()-1, neededValue);
-      npc.npcUpkeepTicks = Config.npcUpkeepTicks;
+      npc.npcUpkeepTicks = AWCoreConfig.npcUpkeepTicks;
       this.setFinished();
       }
     }
@@ -197,7 +198,7 @@ protected void attemptUpkeepWithdrawal()
   if(doWithdrawal)
     {
     InventoryTools.tryRemoveFoodValue(upkeepTarget, 0, upkeepTarget.getSizeInventory()-1, neededValue);
-    npc.npcUpkeepTicks = Config.npcUpkeepTicks;
+    npc.npcUpkeepTicks = AWCoreConfig.npcUpkeepTicks;
     upkeepTarget.onInventoryChanged();
     this.setFinished();
     }

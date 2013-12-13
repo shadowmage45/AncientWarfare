@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
@@ -255,7 +256,7 @@ public void handleClientInit(NBTTagCompound tag)
       }
     else
       {
-      Config.logError("Error reading Team Data from NBT, duplicate team detected");
+    	AWCore.instance.logError("Error reading Team Data from NBT, duplicate team detected");
       }
     }
   }
@@ -354,7 +355,6 @@ public void handleServerUpdate(NBTTagCompound tag, EntityPlayer player)
     tagTeam.handleHostileStatusChange(tag.getByte("oTeam"), tag.getBoolean("status"));
     pkt.setTeamUpdate(tag);
     pkt.sendPacketToAllPlayers();
-//    Config.logDebug("updating team non-hostile status and relaying!!");
     }
   GameDataTracker.instance().markGameDataDirty();
   }
@@ -502,7 +502,8 @@ public void readFromNBT(NBTTagCompound tag)
       }
     else
       {
-      Config.logError("Error reading Team Data from NBT, duplicate team detected");
+      Exception e = new Exception("Error reading Team Data from NBT, duplicate team detected");
+      e.printStackTrace();
       }
     }
   }

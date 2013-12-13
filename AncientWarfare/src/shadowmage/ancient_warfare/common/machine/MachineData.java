@@ -28,6 +28,7 @@ import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.BlockTools;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.plugins.PluginProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -210,42 +211,42 @@ public static void registerBlockData()
   {
   Description d = DescriptionRegistry.instance().getDescriptionFor(BlockLoader.machineBlock.blockID);
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.trashcan.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.trashcan.enabled", true).getBoolean(true))
     {
     GameRegistry.registerTileEntity(TETrashcan.class, "Trashcan");
     d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,0));
     d.setName("block.multi.machine.0", 0);      
     }
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.mailbox.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.mailbox.enabled", true).getBoolean(true))
     {
     GameRegistry.registerTileEntity(TEMailBox.class, "Mailbox");
     d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,1));
     d.setName("block.multi.machine.1", 1);    
     }
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.mailboxindustrial.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.mailboxindustrial.enabled", true).getBoolean(true))
     {
     GameRegistry.registerTileEntity(TEMailBoxIndustrial.class, "MailboxIndustrial");
     d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,2));
     d.setName("block.multi.machine.2", 2);
     }
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.chunkloader.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.chunkloader.enabled", true).getBoolean(true))
     {
     GameRegistry.registerTileEntity(TEChunkLoader.class, "ChunkLoaderSingle");
     d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,3));
     d.setName("block.multi.machine.3", 3);
     }
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.chunkloaderlarge.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.chunkloaderlarge.enabled", true).getBoolean(true))
     {
     GameRegistry.registerTileEntity(TEChunkLoaderDeluxe.class, "ChunkLoaderDeluxe");
     d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,4));
     d.setName("block.multi.machine.4", 4);
     }
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.mechanicalworker.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.mechanicalworker.enabled", true).getBoolean(true))
     {
     GameRegistry.registerTileEntity(PluginProxy.bcProxy.getMotorTEClass(), "Mechanical Worker");
     if(PluginProxy.bcLoaded)
@@ -255,14 +256,14 @@ public static void registerBlockData()
       }
     }
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.foodprocessor.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.foodprocessor.enabled", true).getBoolean(true))
     {
     GameRegistry.registerTileEntity(TEFoodProcessor.class, "Food Processor");
     d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,6));
     d.setName("block.multi.machine.6", 6);
     }
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.gatelock.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.gatelock.enabled", true).getBoolean(true))
     {
     GameRegistry.registerTileEntity(TEGateLock.class, "Gate Lock");
     d.addDisplayStack(new ItemStack(BlockLoader.machineBlock,1,7));

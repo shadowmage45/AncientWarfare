@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.config;
 
+import shadowmage.ancient_warfare.AWCore;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 
@@ -69,7 +70,7 @@ public static Settings instance()
 
 public void loadSettings()
   {
-  this.config = Config.getConfig();
+  this.config = AWCore.instance.config.getConfig();
   config.addCustomCategoryComment("client-settings", "These settings are effective client-side only, and may differ from client to client.  Most only effect local performance, and none may necessarily be used to 'cheat'.");
   this.overlayProp = config.get("client-settings", "render_overlay", true, "Render the basic stats overlay when riding a vehicle?");
   this.advOverlayProp = config.get("client-settings", "render_overlay_advanced", true, "Render the advanced vehicle overlay?");

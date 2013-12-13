@@ -27,6 +27,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
@@ -63,7 +64,7 @@ public NpcFarmer(int type)
 @Override
 public void addTargets(NpcBase npc, NpcTargetHelper helper)
   {
-  helper.addTargetEntry(new AITargetEntry(npc, TargetType.WORK, ITEWorkSite.class, 0, false, Config.npcAISearchRange));
+  helper.addTargetEntry(new AITargetEntry(npc, TargetType.WORK, ITEWorkSite.class, 0, false, AWCoreConfig.npcAISearchRange));
   }
 
 @Override

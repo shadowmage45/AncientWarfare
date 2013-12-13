@@ -28,6 +28,7 @@ import net.minecraft.util.Vec3;
 import shadowmage.ancient_framework.common.utils.Pair;
 import shadowmage.ancient_framework.common.utils.Pos3f;
 import shadowmage.ancient_framework.common.utils.Trig;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
@@ -147,7 +148,7 @@ public void spawnMissile(float ox, float oy, float oz)
         power = vehicle.localLaunchPower > maxPower ? maxPower : vehicle.localLaunchPower;      
         yaw = vehicle.localTurretRotation;
         pitch = vehicle.localTurretPitch + vehicle.rotationPitch; 
-        if(Config.adjustMissilesForAccuracy)
+        if(AWCoreConfig.adjustMissilesForAccuracy)
           {        
           accuracy = getAccuracyAdjusted();        
           yaw   += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;

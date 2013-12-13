@@ -33,6 +33,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
@@ -90,7 +91,7 @@ public static ICivicType treeFarmOak = new CivicTreeFarm(16, "civic.tree.oak", "
 public static ICivicType treeFarmSpruce = new CivicTreeFarm(17, "civic.tree.spruce", "civic.tree.spruce.tooltip", TETreeFarmSpruce.class).setBlockIcons("civicFarmSpruceBottom", "civicFarmSpruceTop", "civicFarmSpruceSides").addResourceItem(new ItemStack(Block.sapling,1,1)).setSpecResourceSize(3).addSpecResourceItem(new ItemStack(Item.dyePowder,1,15));
 public static ICivicType treeFarmBirch = new CivicTreeFarm(18, "civic.tree.birch", "civic.tree.birch.tooltip", TETreeFarmBirch.class).setBlockIcons("civicFarmBirchBottom", "civicFarmBirchTop", "civicFarmBirchSides").addResourceItem(new ItemStack(Block.sapling,1,2)).setSpecResourceSize(3).addSpecResourceItem(new ItemStack(Item.dyePowder,1,15));
 public static ICivicType treeFarmJungle = new CivicTreeFarm(19, "civic.tree.jungle", "civic.tree.jungle.tooltip", TETreeFarmJungle.class).setBlockIcons("civicFarmJungleBottom", "civicFarmJungleTop", "civicFarmJungleSides").addResourceItem(new ItemStack(Block.sapling,1,3)).setSpecResourceSize(3).addSpecResourceItem(new ItemStack(Item.dyePowder,1,15));
-public static ICivicType builder = new CivicBuilder(20);//survival mode ticked builder....
+//public static ICivicType builder = new CivicBuilder(20);//survival mode ticked builder....
 public static ICivicType townHallSmall = new CivicTownHall(21, "civic.town.0", "civic.town.0.tooltip", 9, TECivicTownHall.class, 0).setBlockIcons("civicTownHallSmallBottom", "civicTownHallSmallTop", "civicTownHallSmallSides");
 public static ICivicType townHallMedium = new CivicTownHall(22, "civic.town.1", "civic.town.1.tooltip", 18, TECivicTownHall.class, 1).setBlockIcons("civicTownHallMediumBottom", "civicTownHallMediumTop", "civicTownHallMediumSides");
 public static ICivicType townHallLarge = new CivicTownHall(23, "civic.town.2", "civic.town.2.tooltip", 27, TECivicTownHall.class, 2).setBlockIcons("civicTownHallLargeBottom", "civicTownHallLargeTop", "civicTownHallLargeSides");
@@ -145,7 +146,7 @@ public Civic(int id)
     }
   else
     {
-    Config.logError("Duplicate Civic attempted to register: "+id);
+    AWCore.instance.logError("Duplicate Civic attempted to register: "+id);
     }
   }
 

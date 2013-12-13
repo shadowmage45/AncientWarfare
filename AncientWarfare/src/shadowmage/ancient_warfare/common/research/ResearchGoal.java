@@ -32,6 +32,7 @@ import net.minecraft.util.StatCollector;
 import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -161,16 +162,16 @@ public static void load()
   for(IResearchGoal goal : researchGoals)
     {
 	  if(goal==null){continue;}
-	  enabled = Config.getConfig().get("research_enabled_global", goal.getLocalizedName(), true).getBoolean(true);
+	  enabled = AWCore.instance.config.getConfig().get("research_enabled_global", goal.getLocalizedName(), true).getBoolean(true);
 	  goal.setEnabled(enabled);
 	  if(enabled)
 	    {	    
 	    ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.researchNotes, goal.getGlobalResearchNum(), goal.getDisplayName()).addDisplayStack(new ItemStack(ItemLoader.researchNotes,1,goal.getGlobalResearchNum())).setIconTexture("ancientwarfare:misc/researchNotes", goal.getGlobalResearchNum());
 
-	    enabled = Config.getConfig().get("research_add_to_chests", goal.getLocalizedName(), true).getBoolean(true);
+	    enabled = AWCore.instance.config.getConfig().get("research_add_to_chests", goal.getLocalizedName(), true).getBoolean(true);
 	    goal.setEnabledForLoot(enabled);
 	    
-	    enabled = Config.getConfig().get("research_enabled_research_table", goal.getLocalizedName(), true).getBoolean(true);
+	    enabled = AWCore.instance.config.getConfig().get("research_enabled_research_table", goal.getLocalizedName(), true).getBoolean(true);
 	    goal.setEnabledForResearch(enabled);
 	    }
 	  else
@@ -182,16 +183,7 @@ public static void load()
 
 public ResearchGoal(int num)
   {
-  this.researchGoalNumber = num;
-  if(num<0 || num >= researchGoals.length)
-    {
-    Config.logError("Research goal number out of range: "+num);
-    return;
-    }
-  if(researchGoals[num]!=null)
-    {
-    Config.logError("Research goal being overwritten");
-    }  
+  this.researchGoalNumber = num;  
   this.researchGoals[num] = this;
   }
 

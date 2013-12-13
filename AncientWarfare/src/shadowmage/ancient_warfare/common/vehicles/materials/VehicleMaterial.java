@@ -39,11 +39,6 @@ public VehicleMaterial(int levelCount)
 
 private MaterialLevel getLevel(int num)
   {
-  if(num<0 || num>=this.materialLevels.length)
-    {
-    Config.logError("out of range vehicle material requested. num: "+num+" current levels: "+this.materialLevels.length);
-    return new MaterialLevel();
-    }
   return this.materialLevels[num];
   }
 

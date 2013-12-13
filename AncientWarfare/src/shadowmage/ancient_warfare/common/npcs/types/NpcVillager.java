@@ -66,7 +66,9 @@ public NpcVillager(int type)
     }
   catch(Exception e)
     {
-    Config.logError("Could not access VillagerRegistry.instance() to add mod villager recruit recipes");
+    Exception e1 = new Exception("Could not access VillagerRegistry.instance() to add mod villager recruit recipes");
+    e1.setStackTrace(e.getStackTrace());
+    e1.printStackTrace();
     }
   for(int i = 0; i < level; i++)
     {

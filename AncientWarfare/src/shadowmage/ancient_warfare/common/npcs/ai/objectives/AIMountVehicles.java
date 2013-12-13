@@ -69,21 +69,12 @@ public void updatePriority()
         {
         VehicleBase v = (VehicleBase) npc.ridingEntity;
         npc.wayNav.setMountTarget(v);
-        v.assignedRider = npc;        
         }
       }
     }
   else if(npc.wayNav.getMountTarget()!=null && !npc.wayNav.getMountTarget().isDead)
     {
-    if(npc.wayNav.getMountTarget().assignedRider==npc || npc.wayNav.getMountTarget().assignedRider==null)
-      {
-      this.currentPriority = this.maxPriority;
-      }
-    else
-      {
-      npc.wayNav.setMountTarget(null);
-      this.currentPriority = 0;      
-      }
+    this.currentPriority = this.maxPriority;
     }
   else if(npc.targetHelper.areTargetsInRange(TargetType.MOUNT, maxRange))
     {
@@ -143,7 +134,6 @@ protected void setMountTarget()
       VehicleBase vehicle = (VehicleBase)vehicleEntry.getEntity(npc.worldObj);
       npc.setTargetAW(vehicleEntry);
       npc.wayNav.setMountTarget(vehicle);
-      vehicle.assignedRider = npc;
       }
     else
     {

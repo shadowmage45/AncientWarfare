@@ -141,7 +141,6 @@ public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase e
 @Override
 public TileEntity getNewTileEntity(World world, int meta)
   {
-  Config.logDebug("returning te for meta: "+meta);
   switch(meta)
   {
   case 0:

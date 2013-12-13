@@ -35,13 +35,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.types.ICivicType;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.gates.IGateType;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.plugins.PluginProxy;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
@@ -195,7 +196,7 @@ public List<ResourceListRecipe> getRecipesContaining(PlayerEntry entry, String t
       for(ResourceListRecipe recipe : list)
         {
         name = StatCollector.translateToLocal(recipe.displayName);
-        if(name.toLowerCase().contains(text.toLowerCase()) && (creative || Config.disableResearch || recipe.canBeCraftedBy(entry)))
+        if(name.toLowerCase().contains(text.toLowerCase()) && (creative || AWCoreConfig.disableResearch || recipe.canBeCraftedBy(entry)))
           {
           recipes.add(recipe);
           }
@@ -232,7 +233,6 @@ protected boolean areResourceListsIdentical(ResourceListRecipe a, ResourceListRe
  */
 public void loadRecipes()
   {
-  Config.logDebug("LOADING RECIPES");
   this.addGateRecipes();//done
   this.addCivicRecipes();//done
   this.addUpgradeRecipes();//done
@@ -463,7 +463,7 @@ protected void addCivicRecipes()
   recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
   this.civicMiscRecipes.add(recipe);
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.trashcan.craftable", true).getBoolean(true) && Config.getConfig().get("h_additional_toggles", "machine.trashcan.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.trashcan.craftable", true).getBoolean(true) && AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.trashcan.enabled", true).getBoolean(true))
     {
     recipe = new ResourceListRecipe(BlockLoader.trashcan, RecipeType.CIVIC_MISC);
     recipe.addResource(Item.redstone, 2, false);
@@ -475,7 +475,7 @@ protected void addCivicRecipes()
     this.civicMiscRecipes.add(recipe);
     }
     
-  if(Config.getConfig().get("h_additional_toggles", "machine.mailbox.craftable", true).getBoolean(true) && Config.getConfig().get("h_additional_toggles", "machine.mailbox.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.mailbox.craftable", true).getBoolean(true) && AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.mailbox.enabled", true).getBoolean(true))
     {
     recipe = new ResourceListRecipe(BlockLoader.mailbox, RecipeType.CIVIC_MISC);
     recipe.addResource(Item.enderPearl, 1, false);
@@ -486,7 +486,7 @@ protected void addCivicRecipes()
     this.civicMiscRecipes.add(recipe);
     }
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.mailboxindustrial.craftable", true).getBoolean(true) && Config.getConfig().get("h_additional_toggles", "machine.mailboxindustrial.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.mailboxindustrial.craftable", true).getBoolean(true) && AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.mailboxindustrial.enabled", true).getBoolean(true))
     {
     recipe = new ResourceListRecipe(BlockLoader.mailboxIndustrial, RecipeType.CIVIC_MISC);
     recipe.addResource(Item.enderPearl, 1, false);
@@ -497,7 +497,7 @@ protected void addCivicRecipes()
     this.civicMiscRecipes.add(recipe);
     }
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.chunkloader.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.chunkloader.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.chunkloader.craftable", true).getBoolean(true)&& AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.chunkloader.enabled", true).getBoolean(true))
     {
     recipe = new ResourceListRecipe(BlockLoader.chunkloader, RecipeType.CIVIC_MISC);
     recipe.addResource(Item.enderPearl, 1, false);
@@ -506,7 +506,7 @@ protected void addCivicRecipes()
     this.civicMiscRecipes.add(recipe);
     }
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.chunkloaderlarge.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.chunkloaderlarge.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.chunkloaderlarge.craftable", true).getBoolean(true)&& AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.chunkloaderlarge.enabled", true).getBoolean(true))
     {
     recipe = new ResourceListRecipe(BlockLoader.chunkloaderDeluxe, RecipeType.CIVIC_MISC);
     recipe.addResource(Item.enderPearl, 2, false);
@@ -518,7 +518,7 @@ protected void addCivicRecipes()
   
   if(PluginProxy.bcLoaded)
     {
-    if(Config.getConfig().get("h_additional_toggles", "machine.mechanicalworker.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.mechanicalworker.enabled", true).getBoolean(true))
+    if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.mechanicalworker.craftable", true).getBoolean(true)&& AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.mechanicalworker.enabled", true).getBoolean(true))
       {
       recipe = new ResourceListRecipe(BlockLoader.mechanicalWorker, RecipeType.CIVIC_MISC);
       recipe.addResource(Item.enderPearl, 2, false);
@@ -527,7 +527,7 @@ protected void addCivicRecipes()
       recipe.addNeededResearch(ResearchGoalNumbers.logistics3, ResearchGoalNumbers.mechanics5);
       this.civicMiscRecipes.add(recipe);
       }
-    if(Config.getConfig().get("h_additional_toggles", "machine.handcrankedengine.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.handcrankedengine.enabled", true).getBoolean(true))
+    if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.handcrankedengine.craftable", true).getBoolean(true)&& AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.handcrankedengine.enabled", true).getBoolean(true))
       {
       recipe = new ResourceListRecipe(BlockLoader.handCrankedEngine, RecipeType.CIVIC_MISC);
       recipe.addResource(Block.lever, 1, false);
@@ -539,7 +539,7 @@ protected void addCivicRecipes()
       }
     } 
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.foodprocessor.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.foodprocessor.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.foodprocessor.craftable", true).getBoolean(true)&& AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.foodprocessor.enabled", true).getBoolean(true))
     {
     recipe = new ResourceListRecipe(BlockLoader.foodProcessor, RecipeType.CIVIC_MISC);
     recipe.addResource(Item.ingotIron, 6, false);
@@ -548,7 +548,7 @@ protected void addCivicRecipes()
     this.civicMiscRecipes.add(recipe);
     }
   
-  if(Config.getConfig().get("h_additional_toggles", "machine.gatelock.craftable", true).getBoolean(true)&& Config.getConfig().get("h_additional_toggles", "machine.gatelock.enabled", true).getBoolean(true))
+  if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.gatelock.craftable", true).getBoolean(true)&& AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.gatelock.enabled", true).getBoolean(true))
     {
     recipe = new ResourceListRecipe(BlockLoader.gateLock, RecipeType.CIVIC_MISC);
     recipe.addResource(Item.ingotIron, 2, false);
@@ -613,16 +613,16 @@ protected void addGateRecipes()
 
 protected void addStructureRecipes()
   {
-  ResourceListRecipe recipe;
-  for(ProcessedStructure structure : StructureManager.instance().getSurvivalModeStructures())
-    {
-    if(structure==null){continue;}
-    recipe = structure.constructRecipe();
-    if(recipe!=null)
-      {
-      this.structureRecipesServer.add(recipe);
-      }
-    }
+//  ResourceListRecipe recipe;
+//  for(ProcessedStructure structure : StructureManager.instance().getSurvivalModeStructures())
+//    {
+//    if(structure==null){continue;}
+//    recipe = structure.constructRecipe();
+//    if(recipe!=null)
+//      {
+//      this.structureRecipesServer.add(recipe);
+//      }
+//    }
   }
 
 protected void addNpcRecipes()
@@ -892,51 +892,51 @@ protected void addAmmoRecipes()
   this.componentRecipes.add(recipe);
   }
 
-public void addStructureRecipe(ProcessedStructure struct)
-  {
-  if(struct==null || !struct.survival){return;}
-  ResourceListRecipe recipe = null;
-  for(ResourceListRecipe test : this.structureRecipesServer)
-    {
-    if(test.getDisplayName().equals(struct.name))
-      {
-      recipe = test;
-      break;
-      }
-    }
-  if(recipe!=null)
-    {
-    this.structureRecipesServer.remove(recipe);
-    }
-  recipe = struct.constructRecipe();
-  if(recipe!=null)
-    {
-    this.structureRecipesServer.add(recipe);
-    }
-  }
-
-public void addStructureRecipe(StructureClientInfo info)
-  {
-  if(info==null || !info.survival){return;}
-  ResourceListRecipe recipe = null;
-  for(ResourceListRecipe test : this.structureRecipesClient)
-    {
-    if(test.getDisplayName().equals(info.name))
-      {
-      recipe = test;
-      break;
-      }
-    }
-  if(recipe!=null)
-    {
-    this.structureRecipesClient.remove(recipe);
-    }
-  recipe = info.constructRecipe();
-  if(recipe!=null)
-    {
-    this.structureRecipesClient.add(recipe);
-    }
-  }
+//public void addStructureRecipe(ProcessedStructure struct)
+//  {
+//  if(struct==null || !struct.survival){return;}
+//  ResourceListRecipe recipe = null;
+//  for(ResourceListRecipe test : this.structureRecipesServer)
+//    {
+//    if(test.getDisplayName().equals(struct.name))
+//      {
+//      recipe = test;
+//      break;
+//      }
+//    }
+//  if(recipe!=null)
+//    {
+//    this.structureRecipesServer.remove(recipe);
+//    }
+//  recipe = struct.constructRecipe();
+//  if(recipe!=null)
+//    {
+//    this.structureRecipesServer.add(recipe);
+//    }
+//  }
+//
+//public void addStructureRecipe(StructureClientInfo info)
+//  {
+//  if(info==null || !info.survival){return;}
+//  ResourceListRecipe recipe = null;
+//  for(ResourceListRecipe test : this.structureRecipesClient)
+//    {
+//    if(test.getDisplayName().equals(info.name))
+//      {
+//      recipe = test;
+//      break;
+//      }
+//    }
+//  if(recipe!=null)
+//    {
+//    this.structureRecipesClient.remove(recipe);
+//    }
+//  recipe = info.constructRecipe();
+//  if(recipe!=null)
+//    {
+//    this.structureRecipesClient.add(recipe);
+//    }
+//  }
 
 public void resetClientData()
   {
@@ -956,7 +956,7 @@ public List<ResourceListRecipe> getRecipesOfTypesFor(PlayerEntry entry, boolean 
     List<ResourceListRecipe> recipes = this.recipesByType.get(type);
     for(ResourceListRecipe recipe : recipes)
       {
-      if(creative || Config.disableResearch  || recipe.canBeCraftedBy(entry) )
+      if(creative || AWCoreConfig.disableResearch  || recipe.canBeCraftedBy(entry) )
         {
         found.add(recipe);
         }

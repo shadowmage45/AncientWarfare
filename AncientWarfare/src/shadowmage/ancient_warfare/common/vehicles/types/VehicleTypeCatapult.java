@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
@@ -66,7 +67,7 @@ public VehicleTypeCatapult(int typeNum)
   this.validAmmoTypes.add(Ammo.ammoArrowIron);
   this.validAmmoTypes.add(Ammo.ammoArrowIronFlame);
   
-  if(Config.addOversizeAmmo)
+  if(AWCoreConfig.addOversizeAmmo)
     {
     this.validAmmoTypes.add(Ammo.ammoStoneShot30);
     this.validAmmoTypes.add(Ammo.ammoStoneShot45);

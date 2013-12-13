@@ -102,10 +102,9 @@ protected void forceChunk(ChunkCoordIntPair chunk)
   {
   if(this.tk!=null)
     {
-    Config.log("Forcing chunk: "+chunk.chunkXPos+","+chunk.chunkZPos);
+//    Config.log("Forcing chunk: "+chunk.chunkXPos+","+chunk.chunkZPos);
     ForgeChunkManager.forceChunk(tk, chunk);
     this.forcedChunks.add(chunk);
-    Config.logDebug("forced chunks size: "+this.forcedChunks.size());
     }
   }
 
@@ -113,7 +112,7 @@ protected void releaseChunk(ChunkCoordIntPair chunk)
   {
   if(this.tk!=null)
     {
-    Config.log("Releasing forced chunk: "+chunk.chunkXPos+","+chunk.chunkZPos);
+//    Config.log("Releasing forced chunk: "+chunk.chunkXPos+","+chunk.chunkZPos);
     ForgeChunkManager.unforceChunk(tk, chunk);
     this.forcedChunks.remove(chunk);
     }
@@ -155,7 +154,7 @@ public void releaseTicket()
   {
   if(this.tk!=null)
     {
-    Config.log("Releasing chunks from chunkloader at: "+xCoord+","+yCoord+","+zCoord);  
+//    Config.log("Releasing chunks from chunkloader at: "+xCoord+","+yCoord+","+zCoord);  
     ForgeChunkManager.releaseTicket(tk);
     this.tk = null;
     }
@@ -166,7 +165,7 @@ public void onBlockPlaced()
   {  
   if(this.worldObj==null || this.worldObj.isRemote){return;}
   this.setTicket(ForgeChunkManager.requestTicket(AWCore.instance, worldObj, Type.NORMAL));  
-  Config.log("Forcing chunk for position: "+xCoord +"," + yCoord +"," + zCoord + " for AW single chunkloader.");
+//  Config.log("Forcing chunk for position: "+xCoord +"," + yCoord +"," + zCoord + " for AW single chunkloader.");
   }
 
 @Override

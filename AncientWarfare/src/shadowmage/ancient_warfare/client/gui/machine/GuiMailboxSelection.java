@@ -124,7 +124,6 @@ public void onElementActivated(IGuiElement element)
     }
   else if(element == this.selectButton)
     {
-    Config.logDebug("sending select packet!!");
     NBTTagCompound tag = new NBTTagCompound();
     tag.setString("select", this.inputBox.getText());
     tag.setInteger("box", this.sideSelection);
@@ -171,7 +170,6 @@ public void handleDataFromContainer(NBTTagCompound tag)
   else if(tag.hasKey("reject"))
     {
     String error = tag.getString("reject");
-    Config.logDebug("receiving reject message: "+error);
     parent.refreshGui();
     /**
      * TODO add error GUI

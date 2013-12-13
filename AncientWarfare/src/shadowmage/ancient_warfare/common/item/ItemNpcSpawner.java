@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
@@ -116,7 +117,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       }
     return true;
     }
-  Config.logError("Npc spawner item was missing NBT data, something may have corrupted this item");
+  AWCore.instance.logError("Npc spawner item was missing NBT data, something may have corrupted this item");
   return false;
   }
 

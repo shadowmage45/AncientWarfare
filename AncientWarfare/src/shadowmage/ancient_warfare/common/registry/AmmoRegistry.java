@@ -27,6 +27,7 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.registry.entry.Description;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.item.AWItemBase;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
@@ -59,11 +60,11 @@ public void registerAmmoTypes()
     {
     if(ammo!=null)
       {
-      ammo.setEnabled(Config.getConfig().get("f_ammo_config", ammo.getConfigName()+".enabled", ammo.isEnabled()).getBoolean(ammo.isEnabled()));
+      ammo.setEnabled(AWCore.instance.config.getConfig().get("f_ammo_config", ammo.getConfigName()+".enabled", ammo.isEnabled()).getBoolean(ammo.isEnabled()));
       if(ammo.isEnabled())
         {
-        ammo.setEntityDamage(Config.getConfig().get("f_ammo_config", ammo.getConfigName()+".ent_damage", ammo.getEntityDamage()).getInt(ammo.getEntityDamage()));
-        ammo.setVehicleDamage(Config.getConfig().get("f_ammo_config", ammo.getConfigName()+".veh_damage", ammo.getVehicleDamage()).getInt(ammo.getVehicleDamage()));
+        ammo.setEntityDamage(AWCore.instance.config.getConfig().get("f_ammo_config", ammo.getConfigName()+".ent_damage", ammo.getEntityDamage()).getInt(ammo.getEntityDamage()));
+        ammo.setVehicleDamage(AWCore.instance.config.getConfig().get("f_ammo_config", ammo.getConfigName()+".veh_damage", ammo.getVehicleDamage()).getInt(ammo.getVehicleDamage()));
         this.registerAmmoTypeWithItem(ammo);      
         }
       }
@@ -135,17 +136,8 @@ public void registerAmmoType(IAmmoType ammo)
   if(ammo==null)
     {
     return;
-    }
-  int type = ammo.getAmmoType();
-  if(!this.ammoInstances.containsKey(type))
-    {
-    this.ammoInstances.put(type, ammo);
-    }
-  else
-    {
-    Config.logError("Attempt to register a duplicate ammo type for number: "+type);
-    Config.logError("Ammo attempting to being registered: "+ammo.getDisplayName());
     }  
+  this.ammoInstances.put(ammo.getAmmoType(), ammo);
   }
 
 public IAmmoType getAmmoForStack(ItemStack stack)

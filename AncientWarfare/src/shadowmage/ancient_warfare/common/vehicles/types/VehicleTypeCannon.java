@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
@@ -53,7 +54,7 @@ public VehicleTypeCannon(int typeNum)
   this.validAmmoTypes.add(Ammo.ammoCanisterShot5);
   this.validAmmoTypes.add(Ammo.ammoCanisterShot10);
   
-  if(Config.addOversizeAmmo)
+  if(AWCoreConfig.addOversizeAmmo)
     {
     this.validAmmoTypes.add(Ammo.ammoIronShot15);
     this.validAmmoTypes.add(Ammo.ammoIronShot25);

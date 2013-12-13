@@ -45,6 +45,7 @@ import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.network.Packet05TE;
@@ -63,7 +64,7 @@ private static int teInstanceIDNext = 0;
 
 protected int ticksExisted = 0;
 protected int teID = 0;
-protected int tickDivider = Config.npcAITicks * 10;
+protected int tickDivider = AWCoreConfig.npcAITicks * 10;
 
 /**
  * work-site bounds, may be un-set for non work-site civics
@@ -212,7 +213,7 @@ protected void onCivicUpdate()
   {
   this.validateWorkers();
   this.updateHasWork();
-  this.broadcastWork(Config.civicBroadcastRange);
+  this.broadcastWork(AWCoreConfig.civicBroadcastRange);
   if(!this.overFlow.isEmpty())
     {
     ItemStack stack = this.overFlow.get(0);
@@ -267,7 +268,7 @@ public void broadcastWork(int maxRange)
       {
       if(npc.npcType.isCombatUnit())
         {
-        npc.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, Config.npcAITicks*11);
+        npc.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, AWCoreConfig.npcAITicks*11);
         }      
       }
     else
@@ -276,7 +277,7 @@ public void broadcastWork(int maxRange)
         {    
         if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(civic.getWorkType()) && npc.teamNum==this.teamNum)
           {
-          npc.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
+          npc.handleTileEntityTargetBroadcast(this, TargetType.WORK, AWCoreConfig.npcAITicks*11);
           }
         }
       }
@@ -425,7 +426,7 @@ protected void validateWorkers()
       workIt.remove();
       continue;
       }
-    if(npc.getDistanceFrom(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
+    if(npc.getDistanceFrom(xCoord, yCoord, zCoord)>AWCoreConfig.npcAISearchRange)
       {
       workIt.remove();
       continue;

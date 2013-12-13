@@ -28,6 +28,7 @@ import java.util.WeakHashMap;
 
 import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -58,7 +59,7 @@ public void updateEntity()
   if(this.worldObj!=null && !this.worldObj.isRemote)
     {
     this.validateWorkers();
-    this.broadcastWork(Config.npcAISearchRange);    
+    this.broadcastWork(AWCoreConfig.npcAISearchRange);    
     }
   }
 
@@ -116,13 +117,13 @@ protected void validateWorkers()
     this.workerValidationDelayTicks--;
     return;
     }
-  this.workerValidationDelayTicks = Config.npcAITicks * 10;
+  this.workerValidationDelayTicks = AWCoreConfig.npcAITicks * 10;
   Iterator<IWorker> workIt = this.workers.iterator();
   IWorker npc = null;
   while(workIt.hasNext())
     {
     npc = workIt.next();
-    if(npc==null || npc.isDead() || npc.getDistanceFrom(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
+    if(npc==null || npc.isDead() || npc.getDistanceFrom(xCoord, yCoord, zCoord)>AWCoreConfig.npcAISearchRange)
       {      
       workIt.remove();
       continue;
@@ -154,7 +155,7 @@ public void broadcastWork(int maxRange)
     this.broadcastDelayTicks--;
     return;
     }
-  this.broadcastDelayTicks = Config.npcAITicks * 10;
+  this.broadcastDelayTicks = AWCoreConfig.npcAITicks * 10;
   if(!this.isWorking)
     {
     return;
@@ -171,14 +172,14 @@ public void broadcastWork(int maxRange)
       {
       if(npc.npcType.isCombatUnit())
         {
-        npc.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, Config.npcAITicks*11);
+        npc.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, AWCoreConfig.npcAITicks*11);
         }      
       }
     else
       {
       if(hasWork() && canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(workType) && npc.teamNum==this.teamNum)
         {
-        npc.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
+        npc.handleTileEntityTargetBroadcast(this, TargetType.WORK, AWCoreConfig.npcAITicks*11);
         }
       }
     }

@@ -31,6 +31,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
+import shadowmage.ancient_warfare.AWCore;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
@@ -66,7 +68,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     vehicle.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
     vehicle.prevRotationYaw = vehicle.rotationYaw = -player.rotationYaw + 180;
     vehicle.localTurretDestRot = vehicle.localTurretRotation = vehicle.localTurretRotationHome = vehicle.rotationYaw;
-    if(Config.useVehicleSetupTime)
+    if(AWCoreConfig.useVehicleSetupTime)
       {
       vehicle.setSetupState(true, 100);
       }
@@ -81,7 +83,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       }
     return true;
     }
-  Config.logError("Vehicle spawner item was missing NBT data, something may have corrupted this item");
+  AWCore.instance.logError("Vehicle spawner item was missing NBT data, something may have corrupted this item");
   return false;
   }
 

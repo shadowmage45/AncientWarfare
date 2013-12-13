@@ -26,6 +26,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.civics.BlockWarehouseStorage;
 import shadowmage.ancient_warfare.common.civics.TECivicTownHall;
@@ -35,7 +36,6 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnCow;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnMooshroom;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnPig;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnSheep;
-import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCactus;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCarrot;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCocoa;
@@ -73,17 +73,17 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class BlockLoader
 {
 
-public static final Block builder = new BlockBuilder(Config.getBlockID("blockSingle.builder", 3750, "Placeholder block for ticked-structure builders."));
-public static final Block civicBlock1 = new BlockCivic(Config.getBlockID("blockMulti.civic1", 3751, "Civic Block 1"), "CivicBlock1", 0);
-public static final Block civicBlock2 = new BlockCivic(Config.getBlockID("blockMulti.civic2", 3752, "Civic Block 2"), "CivicBlock2", 1);
-public static final Block civicBlock3 = new BlockCivic(Config.getBlockID("blockMulti.civic3", 3753, "Civic Block 3"), "CivicBlock3", 2);
-public static final Block civicBlock4 = new BlockCivic(Config.getBlockID("blockMulti.civic4", 3754, "Civic Block 4"), "CivicBlock4", 3);
-public static final Block warehouseStorage = new BlockWarehouseStorage(Config.getBlockID("blockSingle.warehouseStorage", 3755, "Warehouse Storage Block"));
-public static final Block gateProxy = new BlockGateProxy(Config.getBlockID("blockSingle.gateProxy", 3756, "Gate collision/sight check proxy block"));
-public static final Block crafting = new BlockAWCrafting(Config.getBlockID("blockMulti.crafting", 3757, "Base block for crafting/research stations"), Config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for crafting blocks").getInt(3707));
-public static final Block reinforced = new BlockReinforced(Config.getBlockID("blockMulti.reinforced", 3758, "Base block for reinforced blocks"), Material.rock, "Reinforced Blocks");
-public static final Block machineBlock = new BlockMiscMachine(Config.getBlockID("blockMulti.machine", 3759, "Base block for misc machines"), Material.rock, "Machine");
-public static final Block engineBlock = new BlockEngine(Config.getBlockID("blockMulti.engine", 3760, "Base block for misc engines"), Material.rock, "block.multi.engine.0");
+//public static final Block builder = new BlockBuilder(Config.getBlockID("blockSingle.builder", 3750, "Placeholder block for ticked-structure builders."));
+public static final Block civicBlock1 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic1", 3751, "Civic Block 1"), "CivicBlock1", 0);
+public static final Block civicBlock2 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic2", 3752, "Civic Block 2"), "CivicBlock2", 1);
+public static final Block civicBlock3 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic3", 3753, "Civic Block 3"), "CivicBlock3", 2);
+public static final Block civicBlock4 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic4", 3754, "Civic Block 4"), "CivicBlock4", 3);
+public static final Block warehouseStorage = new BlockWarehouseStorage(AWCore.instance.config.getBlockID("blockSingle.warehouseStorage", 3755, "Warehouse Storage Block"));
+public static final Block gateProxy = new BlockGateProxy(AWCore.instance.config.getBlockID("blockSingle.gateProxy", 3756, "Gate collision/sight check proxy block"));
+public static final Block crafting = new BlockAWCrafting(AWCore.instance.config.getBlockID("blockMulti.crafting", 3757, "Base block for crafting/research stations"), AWCore.instance.config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for crafting blocks").getInt(3707));
+public static final Block reinforced = new BlockReinforced(AWCore.instance.config.getBlockID("blockMulti.reinforced", 3758, "Base block for reinforced blocks"), Material.rock, "Reinforced Blocks");
+public static final Block machineBlock = new BlockMiscMachine(AWCore.instance.config.getBlockID("blockMulti.machine", 3759, "Base block for misc machines"), Material.rock, "Machine");
+public static final Block engineBlock = new BlockEngine(AWCore.instance.config.getBlockID("blockMulti.engine", 3760, "Base block for misc engines"), Material.rock, "block.multi.engine.0");
 
 public static final ItemStack trashcan = new ItemStack(machineBlock,1,0);
 public static final ItemStack mailbox = new ItemStack(machineBlock,1,1);
@@ -108,7 +108,7 @@ public static BlockLoader instance()
 
 public void load()
   {
-  registerBlock(builder, "block.single.builder"); 
+//  registerBlock(builder, "block.single.builder"); 
   registerBlockWithItem(warehouseStorage, "Warehouse Storage", AWItemBlockBase.class);
   ((BlockWarehouseStorage) warehouseStorage).registerBlockInfo();
   registerBlock(gateProxy, "block.single.gateproxy");
@@ -123,7 +123,7 @@ public void load()
   ((BlockReinforced)reinforced).registerBlockInfo();  
   GameRegistry.registerTileEntity(TEAWBlockReinforced.class, "Reinforced Block");
       
-  GameRegistry.registerTileEntity(TEBuilder.class, "AWBuilder");
+//  GameRegistry.registerTileEntity(TEBuilder.class, "AWBuilder");
   GameRegistry.registerTileEntity(TEGateProxy.class, "AWGateProxyTE");
   GameRegistry.registerTileEntity(TEWorkSiteFarm.class, "AWFarmSiteTE");   
   GameRegistry.registerTileEntity(TEFarmWheat.class, "Wheat Farm");
@@ -143,7 +143,7 @@ public void load()
   GameRegistry.registerTileEntity(TETreeFarmSpruce.class, "Tree Farm Spruce");
   GameRegistry.registerTileEntity(TETreeFarmBirch.class, "Tree Farm Birch");
   GameRegistry.registerTileEntity(TETreeFarmJungle.class, "Tree Farm Jungle");
-  GameRegistry.registerTileEntity(TECivicBuilder.class, "Civic Builder");
+//  GameRegistry.registerTileEntity(TECivicBuilder.class, "Civic Builder");
   GameRegistry.registerTileEntity(TECivicTownHall.class, "Town Hall");
   GameRegistry.registerTileEntity(TEBarnPig.class, "Pig Farm");
   GameRegistry.registerTileEntity(TEBarnCow.class, "Cow Farm");

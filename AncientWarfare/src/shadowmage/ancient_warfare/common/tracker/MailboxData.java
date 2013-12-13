@@ -126,7 +126,6 @@ public boolean tryAssignMailbox(TEMailBoxBase te, String name)
         te.getBoxData().clearAssignment();
         }
       te.setBoxData(data);
-      Config.logDebug("assigning mailbox for name: "+name);
       this.mailboxes.get(name).handleAssignment(te);
       this.markDirty();
       return true;

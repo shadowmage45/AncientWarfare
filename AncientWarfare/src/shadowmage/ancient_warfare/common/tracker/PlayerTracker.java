@@ -30,7 +30,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
@@ -116,7 +115,6 @@ public void onPlayerLogin(EntityPlayer player)
     {
     return;
     }
-  StructureManager.instance().handlePlayerLogin(player);  
   if(!playerEntries.containsKey(player.getEntityName()))
     {
     this.createEntryForNewPlayer(player.getEntityName());
@@ -131,12 +129,7 @@ public void onPlayerLogin(EntityPlayer player)
   if(tag!=null)
     {
     initTag.setCompoundTag("teamData", tag);
-    }
-  tag = Config.instance().getClientInitData();
-  if(tag!=null)
-    {
-    initTag.setCompoundTag("configData", tag);
-    }  
+    } 
   Packet01ModData init = new Packet01ModData();
   init.setInitData(initTag);
   AWCore.proxy.sendPacketToPlayer(player, init);  

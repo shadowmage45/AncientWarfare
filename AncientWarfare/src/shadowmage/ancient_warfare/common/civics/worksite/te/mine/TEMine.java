@@ -31,6 +31,7 @@ import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
@@ -41,7 +42,7 @@ int currentLevelNum = -1;
 int minYLevel = 5;//the lowest
 int levelHeight = 4;
 int mineRescanTicks = 0;
-int mineRescanMax = (20/Config.npcAITicks) * 10;
+int mineRescanMax = (20/AWCoreConfig.npcAITicks) * 10;
 boolean initialized = false;
 boolean mineFinished = false;
 MineLevel currentLevel = null;

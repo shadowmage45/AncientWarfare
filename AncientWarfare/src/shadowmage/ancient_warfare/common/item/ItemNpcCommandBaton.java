@@ -87,11 +87,6 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
           handleNpcCommand(player, stack, getBatonSettings(stack), pos, NpcCommand.CLEAR_PATROL);
           handleNpcCommand(player, stack, getBatonSettings(stack), pos, NpcCommand.PATROL);
           }
-        Config.logDebug("hit pos: "+pos.hitVec + " entity: "+pos.entityHit);
-        }
-      else
-        {
-        Config.logDebug(" NULL HIT ");
         }
       }
     }
@@ -236,7 +231,6 @@ protected void handleNpcCommand(EntityPlayer player, ItemStack stack, BatonSetti
   int commanded = 0;
   int followCommanded = 0;
   
-  Config.logDebug(" commanding for wp: "+p);
   while(it.hasNext())
     {
     npc = it.next();    

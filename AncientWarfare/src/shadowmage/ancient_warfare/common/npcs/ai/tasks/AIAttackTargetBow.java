@@ -28,6 +28,7 @@ import net.minecraft.util.MovingObjectPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.RayTraceUtils;
 import shadowmage.ancient_framework.common.utils.Trig;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -120,7 +121,7 @@ protected void doBowAttack(Entity target)
   IAmmoType ammo = npc.npcType.getAmmoType(npc.rank);
   if(ammo!=null)
     {
-    if(Config.adjustMissilesForAccuracy)
+    if(AWCoreConfig.adjustMissilesForAccuracy)
       {       
       yaw   += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;
       angle += (float)rng.nextGaussian() * (1.f - accuracy)*10.f;    

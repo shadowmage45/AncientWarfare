@@ -142,8 +142,6 @@ public void resetAllTrackedData()
   {
   PlayerTracker.instance().clearAllData();
   TeamTracker.instance().clearAllData();
-  AWStructures.instance.clearAllData();
-  WorldGenManager.resetMap();
   AWCraftingManager.instance().resetClientData();
   MailboxData.instance().resetTrackedData();
   this.npcTracker.clear();

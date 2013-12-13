@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_warfare.common.interfaces.IHandlePacketData;
@@ -88,7 +89,7 @@ public void execute()
     GUIHandler.instance().openGUI(id, player, world, x, y, z);    
     if(world.isRemote)
       {
-      Config.logError("Opening GUI on client-side only from openGUI packet.  This is not proper gui handling.");
+      AWFramework.instance.logError("Opening GUI on client-side only from openGUI packet.  This is not proper gui handling.");
       }
     return;
     }

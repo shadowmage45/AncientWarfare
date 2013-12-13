@@ -28,6 +28,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.Trig;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -94,27 +95,27 @@ public void handleMoveData(NBTTagCompound tag)
   {
   if(tag.hasKey("rp"))
     {
-    this.pitchTicks = Config.vehicleMoveUpdateFrequency+1;
+    this.pitchTicks = AWCoreConfig.vehicleMoveUpdateFrequency+1;
     this.destPitch = tag.getFloat("rp");
     }
   if(tag.hasKey("ry"))
     {
-    this.rotationTicks = Config.vehicleMoveUpdateFrequency+1;
+    this.rotationTicks = AWCoreConfig.vehicleMoveUpdateFrequency+1;
     this.destYaw = tag.getFloat("ry");
     }
   if(tag.hasKey("px"))
     {
-    this.moveTicks = Config.vehicleMoveUpdateFrequency+1;
+    this.moveTicks = AWCoreConfig.vehicleMoveUpdateFrequency+1;
     this.destX = tag.getFloat("px");
     }
   if(tag.hasKey("py"))
     {
-    this.moveTicks = Config.vehicleMoveUpdateFrequency+1;
+    this.moveTicks = AWCoreConfig.vehicleMoveUpdateFrequency+1;
     this.destY = tag.getFloat("py");
     }
   if(tag.hasKey("pz"))
     {
-    this.moveTicks = Config.vehicleMoveUpdateFrequency+1;
+    this.moveTicks = AWCoreConfig.vehicleMoveUpdateFrequency+1;
     this.destZ = tag.getFloat("pz");
     }
   if(tag.hasKey("tr"))
@@ -251,7 +252,7 @@ protected void onUpdateServer()
   this.tearUpGrass();
   boolean sendUpdate = (vehicle.motionX!=0 || vehicle.motionY!=0 || vehicle.motionZ!=0 || vehicle.rotationYaw!=vehicle.prevRotationYaw || vehicle.rotationPitch!=vehicle.prevRotationPitch);
   sendUpdate = sendUpdate || vehicle.riddenByEntity!=null;
-  sendUpdate = sendUpdate && this.vehicle.ticksExisted % Config.vehicleMoveUpdateFrequency==0;
+  sendUpdate = sendUpdate && this.vehicle.ticksExisted % AWCoreConfig.vehicleMoveUpdateFrequency==0;
   sendUpdate = sendUpdate || this.vehicle.ticksExisted%60==0; 
   if(sendUpdate)
     {
@@ -318,7 +319,6 @@ protected void handleSubmarineMovement()
   float maxY = 0.2f;
   if(powerInput!=0)
     {
-    Config.logDebug("adjusting vertical based on power input!!");
     if(Math.abs(vehicle.motionY)<maxY)
       {
       float percent = (float) (Math.abs(vehicle.motionY) / maxY);
@@ -450,7 +450,6 @@ protected void applyThrottleInput()
   if(this.powerInput!=0)
     {
     this.throttle += 0.025f * (float)this.powerInput;
-    Config.logDebug("set throttle to: "+throttle);
     }
   this.throttle = this.throttle < 0.f ? 0.f : this.throttle > 1.f ? 1.f : this.throttle;  
   }
@@ -518,7 +517,6 @@ protected void applyTurnInput(float inputFactor)
     {
     boolean reverse = (turnInput ==-1 && turnMotion>0) || (turnInput ==1 && turnMotion<0);
     float maxSpeed = vehicle.currentStrafeSpeedMax * weightAdjust;
-    Config.logDebug("max strafe speed: "+vehicle.currentStrafeSpeedMax + " current: "+turnMotion);
     float percent = 1 - (Math.abs(turnMotion)/maxSpeed);
     percent = reverse ? 1.f : percent;
     float changeFactor = percent * (turnInput*2) * inputFactor;
@@ -554,7 +552,6 @@ protected void detectCrash()
     {
     if(!wasOnGround || crashSpeed)
       {
-      Config.logDebug("CRASH");
       if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
         {
         EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
@@ -570,7 +567,6 @@ protected void detectCrash()
     {
     if(vertCrashSpeed && !wasOnGround)
       {
-      Config.logDebug(" VERT CRASH");
       if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
         {
         EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
@@ -624,7 +620,7 @@ protected int handleBoatBob(boolean floats)
 
 protected void tearUpGrass()
   {
-  if(vehicle.worldObj.isRemote || !vehicle.onGround || !Config.vehiclesTearUpGrass)
+  if(vehicle.worldObj.isRemote || !vehicle.onGround || !AWCoreConfig.vehiclesTearUpGrass)
     {
     return;
     }

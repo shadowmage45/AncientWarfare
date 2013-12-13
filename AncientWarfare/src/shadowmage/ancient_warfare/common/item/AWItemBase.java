@@ -33,6 +33,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -67,7 +68,7 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 public boolean isShiftClick(EntityPlayer player)
   {
   boolean shift = player.isSneaking();
-  if(Config.invertShiftClickOnItems)
+  if(AWCoreConfig.invertShiftClickOnItems)
     {
     return !shift;
     }

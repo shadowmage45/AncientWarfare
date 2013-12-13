@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
@@ -83,7 +84,7 @@ protected void validateWorkers()
   while(workIt.hasNext())
     {
     npc = workIt.next();
-    if(npc==null || npc.isDead() || npc.getDistanceFrom(xCoord, yCoord, zCoord)>Config.npcAISearchRange)
+    if(npc==null || npc.isDead() || npc.getDistanceFrom(xCoord, yCoord, zCoord)>AWCoreConfig.npcAISearchRange)
       {      
       workIt.remove();
       continue;
@@ -112,7 +113,7 @@ public void broadcastWork(int maxRange)
       {
       if(npc.npcType.isCombatUnit())
         {
-        npc.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, Config.npcAITicks*11);
+        npc.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, AWCoreConfig.npcAITicks*11);
         }      
       }
     else

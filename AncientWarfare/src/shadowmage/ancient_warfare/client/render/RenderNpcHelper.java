@@ -37,6 +37,7 @@ import org.lwjgl.opengl.GL11;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.client.model.ModelArrow2;
 import shadowmage.ancient_warfare.client.model.ModelFlag;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -72,7 +73,7 @@ public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double pa
 protected void renderEquippedItems(EntityLivingBase par1EntityLivingBase, float par2)
   {
   super.renderEquippedItems(par1EntityLivingBase, par2);
-  if(Config.renderNpcFlags)
+  if(AWCoreConfig.renderNpcFlags)
     {
     GL11.glDisable(GL11.GL_TEXTURE_2D);
     this.flag.render(((NpcBase)par1EntityLivingBase).teamNum);
@@ -91,7 +92,7 @@ protected void renderLivingLabel(EntityLivingBase par1EntityLiving, String par2S
     {
     NpcBase npc = (NpcBase)par1EntityLiving;
     boolean hostile = TeamTracker.instance().isHostileTowards(npc.worldObj, npc.teamNum, TeamTracker.instance().getTeamForPlayer(Minecraft.getMinecraft().thePlayer));
-    if(hostile && !Config.renderHostileNames)
+    if(hostile && !AWCoreConfig.renderHostileNames)
       {
       return;
       }

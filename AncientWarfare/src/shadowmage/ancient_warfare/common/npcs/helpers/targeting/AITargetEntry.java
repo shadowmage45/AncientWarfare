@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.npcs.helpers.targeting;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
@@ -36,7 +37,7 @@ private Class targetClass = null;
 public int priority = 0;
 boolean isEntityTarget = false;
 TargetType typeName;
-public float maxTargetRange = Config.npcAISearchRange;
+public float maxTargetRange = AWCoreConfig.npcAISearchRange;
 protected NpcBase npc;
 
 public AITargetEntry(NpcBase owner, TargetType typeName, Class clz, int priority, boolean isEntityTarget, float maxTargetRange)
@@ -88,7 +89,7 @@ public boolean isTileTarget()
 
 public int getAggroAdjustment(AIAggroTargetWrapper target)
   {
-  return Config.npcAITicks;
+  return AWCoreConfig.npcAITicks;
   }
 
 }

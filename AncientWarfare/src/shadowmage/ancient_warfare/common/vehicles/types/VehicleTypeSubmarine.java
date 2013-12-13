@@ -186,7 +186,6 @@ public void readFromNBT(NBTTagCompound tag)
 @Override
 public void onFiringUpdate()
   {   
-  Config.logDebug("starting launch");
   vehicle.firingHelper.startLaunching();  
   }
 
@@ -199,7 +198,6 @@ public void onReloadUpdate()
 @Override
 public void onLaunchingUpdate()
   {  
-  Config.logDebug("launch update...finishing launch");
   if(!vehicle.worldObj.isRemote && vehicle.ammoHelper.getCurrentAmmoCount()>0)
     {
     vehicle.worldObj.playSoundAtEntity(vehicle, "fireworks.launch", 1.0F, 0.5F);

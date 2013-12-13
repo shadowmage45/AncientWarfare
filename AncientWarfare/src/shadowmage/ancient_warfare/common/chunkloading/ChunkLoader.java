@@ -31,7 +31,7 @@ import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.OrderedLoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
-import shadowmage.ancient_warfare.common.block.TEBuilder;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.machine.TEChunkLoader;
 
 public class ChunkLoader implements LoadingCallback, OrderedLoadingCallback
@@ -76,13 +76,13 @@ public void ticketsLoaded(List<Ticket> tickets, World world)
       }
     else if(tag!=null && tag.hasKey("buildTE"))
       {
-      tag = tag.getCompoundTag("buildTE");
-      BlockPosition tePos = new BlockPosition(tag.getCompoundTag("pos"));
-      TEBuilder builder = (TEBuilder) world.getBlockTileEntity(tePos.x, tePos.y, tePos.z);
-      if(builder!=null)
-        {
-        builder.setTicket(tk);
-        }
+//      tag = tag.getCompoundTag("buildTE");
+//      BlockPosition tePos = new BlockPosition(tag.getCompoundTag("pos"));
+//      TEBuilder builder = (TEBuilder) world.getBlockTileEntity(tePos.x, tePos.y, tePos.z);
+//      if(builder!=null)
+//        {
+//        builder.setTicket(tk);
+//        }
       }  
     else if(tag!=null && tag.hasKey("chunkTE"))
       {
@@ -91,7 +91,7 @@ public void ticketsLoaded(List<Ticket> tickets, World world)
       TileEntity te =  world.getBlockTileEntity(tePos.x, tePos.y, tePos.z);
       if(te instanceof TEChunkLoader)
         {
-        Config.logDebug("sending chunk ticket to TE on load");
+        AWCore.instance.logDebug("sending chunk ticket to TE on load");
         ((TEChunkLoader)te).setTicket(tk);
         }
       }

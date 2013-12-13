@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.utils;
 
 import java.util.EnumSet;
 
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -55,7 +56,7 @@ public static long vehicleTimeAverage;
 @Override
 public void tickStart(EnumSet<TickType> type, Object... tickData)
   {
-  if(!Config.enablePerformanceMonitor){return;}
+  if(!AWCoreConfig.enablePerformanceMonitor){return;}
   if(index==20)
     {
     index = 0;    
@@ -69,7 +70,7 @@ public void tickStart(EnumSet<TickType> type, Object... tickData)
 @Override
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {  
-  if(!Config.enablePerformanceMonitor){return;}
+  if(!AWCoreConfig.enablePerformanceMonitor){return;}
   tickTimes[index] = System.nanoTime() - startTime;
   pathTickTimes[index] = pathFindTimeThisTick;
   npcTickTimes[index] = npcTickTimeThisTick;
@@ -84,7 +85,7 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
 
 public void count()
   {
-  if(!Config.enablePerformanceMonitor){return;}
+  if(!AWCoreConfig.enablePerformanceMonitor){return;}
   long total = 0;
   long totalInterval = 0;
   long totalPathTime = 0;

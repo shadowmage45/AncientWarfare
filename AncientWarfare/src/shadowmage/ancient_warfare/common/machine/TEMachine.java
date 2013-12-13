@@ -97,7 +97,6 @@ public boolean receiveClientEvent(int par1, int par2)
   if(par1==100)
     {    
     this.isActivated = par2==1;
-    Config.logDebug("set isWorking to: "+this.isActivated+ " on "+ (this.worldObj.isRemote? "Client" : "Server"));
     this.worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
     flag2 = true;
     }

@@ -32,6 +32,7 @@ import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 
 public class TEAWAutoCrafting extends TEAWCraftingWorkSite
@@ -66,7 +67,7 @@ protected void updateCrafting()
       {
       if(this.workProgress<this.workProgressMax)
         {
-        if(this.canUpdate || !Config.useNpcWorkForCrafting)
+        if(this.canUpdate || !AWCoreConfig.useNpcWorkForCrafting)
           {
           this.workProgress++;
           this.canUpdate = false;
@@ -88,7 +89,7 @@ protected void updateCrafting()
         }
       else
         {
-        this.recipeStartCheckDelayTicks = Config.npcAITicks*10;
+        this.recipeStartCheckDelayTicks = AWCoreConfig.npcAITicks*10;
         this.tryStartCrafting();        
         }
       }

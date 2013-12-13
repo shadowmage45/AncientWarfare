@@ -163,8 +163,6 @@ public int hitAnimationTicks = 0;
  */
 public int moveUpdateTicks = 0;
 
-public NpcBase assignedRider = null;
-
 /**
  * complex stat tracking helpers, move, ammo, upgrades, general stats
  */
@@ -608,13 +606,6 @@ public void onUpdate()
     if(this.setupTicks<=0)
       {
       this.isSettingUp = false;
-      }
-    }
-  if(this.assignedRider!=null)
-    {    
-    if(this.assignedRider.isDead || this.assignedRider.ridingEntity!=this || this.assignedRider.wayNav.getMountTarget()==null || this.assignedRider.wayNav.getMountTarget()!=this || this.getDistanceToEntity(assignedRider)>Config.npcAISearchRange)
-      {
-      this.assignedRider=null;
       }
     }
   ServerPerformanceMonitor.addVehicleTickTime(System.nanoTime() - t1);

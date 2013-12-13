@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.plugins;
 
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.plugins.bc.BCProxy;
 import shadowmage.ancient_warfare.common.plugins.bc.BCProxyBase;
 
@@ -46,18 +47,18 @@ protected void tryLoadBCProxy()
     Class clz = Class.forName("buildcraft.BuildCraftCore");
     if(clz!=null)
       {
-      Config.log("Initializing BC Plugin");
+      AWCore.instance.log("Initializing BC Plugin");
       bcProxy = new BCProxy();      
       bcLoaded = true;
       }
     else
       {
-      Config.log("Skipping BC Plugin loading, BuildCraft not detected...");
+      AWCore.instance.log("Skipping BC Plugin loading, BuildCraft not detected...");
       }
     } 
   catch (ClassNotFoundException e)
     {
-    Config.log("Skipping BC Plugin loading, BuildCraft not detected...");
+    AWCore.instance.log("Skipping BC Plugin loading, BuildCraft not detected...");
     return;
     }  
   }

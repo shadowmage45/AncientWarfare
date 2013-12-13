@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class MineTemplate
@@ -106,7 +107,7 @@ public void parseMineTemplate(List<String> lines)
         }
       else
         {
-        Config.logError("Error parsing mine template -- size was not set before levels");
+        AWCore.instance.logError("Error parsing mine template -- size was not set before levels");
         }
       }    
     }

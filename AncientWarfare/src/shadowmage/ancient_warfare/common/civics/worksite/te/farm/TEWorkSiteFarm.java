@@ -26,6 +26,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.utils.BlockTools;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
@@ -147,7 +148,7 @@ protected void doWork(IWorker npc, WorkPoint p)
       }
     else
       { 
-      Config.logDebug("using bonemeal on: "+p);
+      AWCore.instance.logDebug("using bonemeal on: "+p);
       if(inventory.containsAtLeast(bonemealFilter, 3))
         {
         inventory.tryRemoveItems(bonemealFilter, 3);

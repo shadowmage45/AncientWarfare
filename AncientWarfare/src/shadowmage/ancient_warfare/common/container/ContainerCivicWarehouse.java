@@ -187,7 +187,6 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("reqInit") && !player.worldObj.isRemote)
     {
-    Config.logDebug("sending inventory to client from request");
     this.updateAndSendInventory(true);
     }
   }

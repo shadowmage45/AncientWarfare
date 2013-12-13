@@ -31,6 +31,7 @@ import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_framework.common.inventory.SlotPullOnly;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.crafting.TEAWAutoCrafting;
 
 public class ContainerAWAutoCrafting extends ContainerBase
@@ -188,7 +189,7 @@ public void handlePacketData(NBTTagCompound tag)
       item = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("setItem"));
       }    
     te.setLayoutMatrixSlot(slot, item);
-    Config.logDebug("received set command for slot: "+slot + " item: "+item);
+    AWCore.instance.logDebug("received set command for slot: "+slot + " item: "+item);
     }
   if(tag.hasKey("layout") && player.worldObj.isRemote)//client side full-matrix init
     {
@@ -240,7 +241,7 @@ public void handleLayoutSlotClick(int slot, ItemStack stack)
     {
     tag.setCompoundTag("setItem", stack.writeToNBT(new NBTTagCompound()));
     }  
-  Config.logDebug("sending slot click to server: "+slot + " item: "+stack);
+  AWCore.instance.logDebug("sending slot click to server: "+slot + " item: "+stack);
   this.sendDataToServer(tag);
   }
 
@@ -296,7 +297,7 @@ public void detectAndSendChanges()
     }
   if(sendMatrix)
     {
-    Config.logDebug("sending matrix layout update");
+    AWCore.instance.logDebug("sending matrix layout update");
     if(tag==null){tag = new NBTTagCompound();}
     NBTTagList list = new NBTTagList();
     NBTTagCompound itemTag;

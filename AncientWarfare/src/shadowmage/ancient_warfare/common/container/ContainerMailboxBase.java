@@ -136,7 +136,6 @@ public void handlePacketData(NBTTagCompound tag)
   {
   if(tag.hasKey("nameList"))
     {
-    Config.logDebug("receiving all names list");
     this.boxNames.clear();
     NBTTagList nameList = tag.getTagList("nameList");
     for(int i = 0; i < nameList.tagCount(); i++)
@@ -150,7 +149,6 @@ public void handlePacketData(NBTTagCompound tag)
     }
   if(tag.hasKey("boxList"))
     {
-    Config.logDebug("receiving box names list");
     NBTTagList boxList = tag.getTagList("boxList");
     NBTTagCompound boxTag = null;
     for(int i = 0; i < boxList.tagCount(); i++)
@@ -162,7 +160,6 @@ public void handlePacketData(NBTTagCompound tag)
         {
         name = boxTag.getString("name");
         }
-      Config.logDebug("setting box: "+box + " to: "+name);
       this.setSideName(box, name);
       }
     if(this.gui!=null)

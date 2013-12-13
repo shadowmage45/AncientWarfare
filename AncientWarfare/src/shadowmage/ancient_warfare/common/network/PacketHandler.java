@@ -74,10 +74,10 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
     realPacket.execute();
     }
   catch(Exception e)
-    {
-    Config.logError("Extreme error during packet handling, could not instantiate packet instance, improper packetType info");
-    Config.log("Exception During Packet Handling, problem reading packet data");
-    e.printStackTrace();
+    {    
+    Exception e1 = new Exception("Extreme error during packet handling, could not instantiate packet instance, improper packetType info\n "+"Exception During Packet Handling, problem reading packet data");
+    e1.setStackTrace(e.getStackTrace());
+    e1.printStackTrace();
     }
   
   }

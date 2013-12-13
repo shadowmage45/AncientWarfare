@@ -29,6 +29,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.helpers.targeting.AIAggroList;
@@ -72,13 +73,13 @@ public NpcTargetHelper(NpcBase npc)
 public int getAggroAdjustmentFor(AIAggroTargetWrapper taget)
   {
   //TODO  
-  return Config.npcAITicks;
+  return AWCoreConfig.npcAITicks;
   }
 
 public float getMaxRangeFor(AIAggroTargetWrapper target)
   {
   //TODO //entry.targetEntry.maxTargetRange
-  return Config.npcAISearchRange;
+  return AWCoreConfig.npcAISearchRange;
   }
 
 public void addTargetEntry(AITargetEntry entry)
@@ -168,7 +169,7 @@ public void checkForTargets()
   {    
 //    Config.logDebug("checking for targets");
 //  long t = System.nanoTime();
-  float mr = (float)Config.npcAISearchRange;
+  float mr = (float)AWCoreConfig.npcAISearchRange;
   float dist = 0;
   AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(npc.posX-mr, npc.posY-mr*0.5f, npc.posZ-mr, npc.posX+mr, npc.posY+mr*0.5f, npc.posZ+mr);
   List<Entity> entityList = npc.worldObj.getEntitiesWithinAABBExcludingEntity(npc, bb);
@@ -208,7 +209,7 @@ public void checkForTargets()
           {
 //                    Config.logDebug("adding/updating entity aggro entry for target: "+ent);
           float distPercent = 1.f - (dist / targetEntry.maxTargetRange);
-          int aggroAmt = (int)(Config.npcAITicks + (distPercent * (float)Config.npcAITicks)); 
+          int aggroAmt = (int)(AWCoreConfig.npcAITicks + (distPercent * (float)AWCoreConfig.npcAITicks)); 
           this.addOrUpdateAggroEntry(targetEntry, ent, aggroAmt);
           }
         }     
@@ -276,7 +277,7 @@ public void handleBeingAttacked(EntityLivingBase damager)
     }
   if(this.targetEntries.containsKey(TargetType.ATTACK))
     {
-    this.addOrUpdateAggroEntry(revengeEntry, damager, Config.npcAITicks * 4);
+    this.addOrUpdateAggroEntry(revengeEntry, damager, AWCoreConfig.npcAITicks * 4);
     }
   }
 
@@ -304,7 +305,7 @@ public void handleBroadcastTarget(Entity ent, TargetType type, int multi)
     AITargetEntry entry = list.getEntryFor(ent);
     if(entry!=null)
       {
-      this.addOrUpdateAggroEntry(entry, ent, Config.npcAITicks * multi);
+      this.addOrUpdateAggroEntry(entry, ent, AWCoreConfig.npcAITicks * multi);
       }
     }
   }

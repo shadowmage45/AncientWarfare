@@ -30,6 +30,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.registry.entry.Description;
+import shadowmage.ancient_warfare.AWCore;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -62,17 +64,17 @@ public void registerNPCs()
   for(INpcType type : types)
     {
     if(type==null || type.getGlobalNpcType()==0){continue;}//if null or dummy type, don't register....
-    type.setEnabled(Config.getConfig().get("g_npc_config", type.getConfigName()+".enabled", true).getBoolean(true));
+    type.setEnabled(AWCore.instance.config.getConfig().get("g_npc_config", type.getConfigName()+".enabled", true).getBoolean(true));
     if(!type.isEnabled()){continue;}    
     for(int i = 0; i < type.getNumOfLevels(); i++)
       {
-      type.getLevelEntry(i).setAttackDamage(Config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".damage", type.getAttackDamage(i)).getInt(type.getAttackDamage(i)));
+      type.getLevelEntry(i).setAttackDamage(AWCore.instance.config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".damage", type.getAttackDamage(i)).getInt(type.getAttackDamage(i)));
       if(type.getLevelEntry(i).getHealingDone()>0)
         {
-        type.getLevelEntry(i).setHealingDone( Config.getConfig().get( "g_npc_config", type.getConfigName()+"."+i+".healing", type.getLevelEntry(i).getHealingDone()).getInt(type.getLevelEntry(i).getHealingDone() ) );        
+        type.getLevelEntry(i).setHealingDone( AWCore.instance.config.getConfig().get( "g_npc_config", type.getConfigName()+"."+i+".healing", type.getLevelEntry(i).getHealingDone()).getInt(type.getLevelEntry(i).getHealingDone() ) );        
         }
-      type.getLevelEntry(i).setHealth(Config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".maxhealth", type.getMaxHealth(i)).getInt(type.getMaxHealth(i)));
-      type.getLevelEntry(i).setActionTicks(Config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".actiontime", type.getActionTicks(i)).getInt(type.getActionTicks(i)));
+      type.getLevelEntry(i).setHealth(AWCore.instance.config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".maxhealth", type.getMaxHealth(i)).getInt(type.getMaxHealth(i)));
+      type.getLevelEntry(i).setActionTicks(AWCore.instance.config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".actiontime", type.getActionTicks(i)).getInt(type.getActionTicks(i)));
       }
     Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.npcSpawner, type.getGlobalNpcType(), type.getDisplayName(0), "", type.getDisplayTooltip(0));
     d.setIconTexture(type.getIconTexture(), type.getGlobalNpcType());
@@ -117,7 +119,7 @@ public static Entity getNpcForType(int num, World world, int level, int team)
     }
   if(type.isVanillaVillager())
     {
-    if(Config.randomizeVillagers)
+    if(AWCoreConfig.randomizeVillagers)
       {
       level = random.nextInt(type.getNumOfLevels()+1);
       }
@@ -148,7 +150,6 @@ public static Entity getNpcForType(int num, World world, int level, int team)
     if(!type.isBandit())
       {
       npc.teamNum = team;
-      Config.logDebug("handling npc update from NPC spawn (NpcRegistry.getNpcForType(...))");
       GameDataTracker.instance().handleNpcUpdate(npc);      
       }
     return npc;

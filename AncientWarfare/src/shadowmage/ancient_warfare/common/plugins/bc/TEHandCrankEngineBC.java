@@ -27,6 +27,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.machine.TEHandCrankEngine;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -53,7 +54,7 @@ public TEHandCrankEngineBC()
   this.canUpdate = true;
   powerHandler = new PowerHandler(this, Type.ENGINE);
   powerHandler.configurePowerPerdition(1, 100);
-  powerHandler.configure(0, 75, Config.npcWorkMJ, 1000);
+  powerHandler.configure(0, 75, AWCoreConfig.npcWorkMJ, 1000);
   }
 
 @Override
@@ -64,7 +65,7 @@ public void updateEntity()
   int x = xCoord + facingDirection.offsetX;
   int y = yCoord + facingDirection.offsetY;
   int z = zCoord + facingDirection.offsetZ;
-  this.broadcastWork(Config.npcAISearchRange);
+  this.broadcastWork(AWCoreConfig.npcAISearchRange);
   TileEntity tile = worldObj.getBlockTileEntity(x, y, z);  
   if(isPoweredTile(tile))
     {    
@@ -118,7 +119,7 @@ public void broadcastWork(int maxRange)
     this.broadcastDelayTicks--;
     return;
     }
-  this.broadcastDelayTicks = Config.npcAITicks * 10;
+  this.broadcastDelayTicks = AWCoreConfig.npcAITicks * 10;
   if(!this.hasWork())
     {
     return;
@@ -135,14 +136,14 @@ public void broadcastWork(int maxRange)
       {
       if(npc.npcType.isCombatUnit())
         {
-        npc.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, Config.npcAITicks*11);
+        npc.handleTileEntityTargetBroadcast(this, TargetType.ATTACK_TILE, AWCoreConfig.npcAITicks*11);
         }      
       }
     else
       {
       if(canHaveMoreWorkers(npc) && npc.npcType.getWorkTypes(npc.rank).contains(this.getWorkType()) && npc.teamNum==this.teamNumber)
         {
-        npc.handleTileEntityTargetBroadcast(this, TargetType.WORK, Config.npcAITicks*11);
+        npc.handleTileEntityTargetBroadcast(this, TargetType.WORK, AWCoreConfig.npcAITicks*11);
         }
       }
     }
@@ -159,7 +160,7 @@ public void doWork(IWorker worker)
   {
   if(this.powerHandler!=null && this.powerHandler.getEnergyStored() < this.powerHandler.getMaxEnergyStored())
     {
-    this.powerHandler.addEnergy(Config.npcWorkMJ);
+    this.powerHandler.addEnergy(AWCoreConfig.npcWorkMJ);
     }
   }
 

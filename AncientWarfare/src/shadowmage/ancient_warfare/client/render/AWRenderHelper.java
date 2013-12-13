@@ -38,12 +38,9 @@ import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
-import shadowmage.ancient_warfare.common.item.ItemBuilderBase;
-import shadowmage.ancient_warfare.common.item.ItemBuilderDirect;
 import shadowmage.ancient_warfare.common.item.ItemCivicPlacer;
 import shadowmage.ancient_warfare.common.item.ItemGateSpawner;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.item.ItemStructureScanner;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AWRenderHelper
@@ -121,52 +118,52 @@ private void adjustPositionsForScanBB(BlockPosition p1, BlockPosition p2)
     }
   }
 
-private void renderStructureBB(EntityPlayer player, ItemStack stack, ItemBuilderBase item, float partialTick)
-  {
-  if(player==null || stack==null || item== null)
-    {
-    return;
-    }  
-  StructureClientInfo info = item.getStructureForStack(stack);    
-  if(info==null)
-    {
-    return;
-    }
-  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
-  if(hit==null)
-    {
-    return;
-    }
-  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-  BlockPosition originalHit = hit.copy();
-  hit.y-=info.yOffset;
-  hit = this.offsetForWorldRender(hit, face);  
-
-  if(item.renderBuilderBlockBB())
-    {
-    hit.moveForward(face, -info.zOffset + 1 + info.clearingBuffer);
-    } 
-
-  AxisAlignedBB bb = info.getBBForRender(hit, face);  
-  BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.8f, 0.2f, 0.8f);
-  if(item.renderBuilderBlockBB())
-    {
-    bb = AxisAlignedBB.getBoundingBox(originalHit.x, originalHit.y, originalHit.z, originalHit.x+1, originalHit.y+1, originalHit.z+1);
-    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.3f, 0.3f, 0.8f);
-    }
-
-  if(info.maxClearing > 0|| info.clearingBuffer >0)
-    {
-    bb = info.getClearingBBForRender(hit, face);
-    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.8f, 0.f, 0.f);
-    }
-
-  if(info.maxLeveling >0)
-    {
-    bb = info.getLevelingBBForRender(hit, face);
-    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.3f, 0.8f, 0.3f);
-    }
-  }
+//private void renderStructureBB(EntityPlayer player, ItemStack stack, ItemBuilderBase item, float partialTick)
+//  {
+//  if(player==null || stack==null || item== null)
+//    {
+//    return;
+//    }  
+//  StructureClientInfo info = item.getStructureForStack(stack);    
+//  if(info==null)
+//    {
+//    return;
+//    }
+//  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
+//  if(hit==null)
+//    {
+//    return;
+//    }
+//  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+//  BlockPosition originalHit = hit.copy();
+//  hit.y-=info.yOffset;
+//  hit = this.offsetForWorldRender(hit, face);  
+//
+//  if(item.renderBuilderBlockBB())
+//    {
+//    hit.moveForward(face, -info.zOffset + 1 + info.clearingBuffer);
+//    } 
+//
+//  AxisAlignedBB bb = info.getBBForRender(hit, face);  
+//  BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.8f, 0.2f, 0.8f);
+//  if(item.renderBuilderBlockBB())
+//    {
+//    bb = AxisAlignedBB.getBoundingBox(originalHit.x, originalHit.y, originalHit.z, originalHit.x+1, originalHit.y+1, originalHit.z+1);
+//    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.3f, 0.3f, 0.8f);
+//    }
+//
+//  if(info.maxClearing > 0|| info.clearingBuffer >0)
+//    {
+//    bb = info.getClearingBBForRender(hit, face);
+//    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.8f, 0.f, 0.f);
+//    }
+//
+//  if(info.maxLeveling >0)
+//    {
+//    bb = info.getLevelingBBForRender(hit, face);
+//    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.3f, 0.8f, 0.3f);
+//    }
+//  }
 
 public BlockPosition offsetForWorldRender(BlockPosition hit, int face)
   {
@@ -208,10 +205,6 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     return;
     }
-  if(Config.DEBUG)
-    {
-    RenderDebugPath.renderPaths(player.worldObj, player, evt.partialTicks);
-    }
   
   if(Settings.getRenderAdvOverlay() && player.ridingEntity instanceof VehicleBase && mc.currentScreen==null)
     {
@@ -230,22 +223,22 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     }
   int id = stack.itemID;
 
-  if(ItemBuilderBase.isBuilderItem(id))
-    {
-    this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
-    }  
-  if(id==ItemLoader.structureBuilderDirect.itemID)
-    {
-    if(ItemBuilderDirect.isScanning(stack))
-      {
-      this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks, true);      
-      }
-    }
-  else if(ItemStructureScanner.isScannerItem(id))
-    {
-    this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks, true);
-    }
-  else if(id==ItemLoader.civicPlacer.itemID)
+//  if(ItemBuilderBase.isBuilderItem(id))
+//    {
+//    this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
+//    }  
+//  if(id==ItemLoader.structureBuilderDirect.itemID)
+//    {
+//    if(ItemBuilderDirect.isScanning(stack))
+//      {
+//      this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks, true);      
+//      }
+//    }
+//  else if(ItemStructureScanner.isScannerItem(id))
+//    {
+//    this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks, true);
+//    }
+  if(id==ItemLoader.civicPlacer.itemID)
     {
     this.renderScannerBB(player, stack, (ItemCivicPlacer)stack.getItem(), evt.partialTicks, true);
     }

@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -49,7 +50,7 @@ public void updatePriority()
   {
   this.cooldownTicks = this.maxCooldownticks;
   NpcBase com = npc.wayNav.getCommander();
-  if(com==null || com.isDead || npc.getDistanceToEntity(com) > Config.npcAISearchRange)
+  if(com==null || com.isDead || npc.getDistanceToEntity(com) > AWCoreConfig.npcAISearchRange)
     {
     com = null;
     ITargetEntry entry = npc.targetHelper.getHighestAggroTarget(TargetType.COMMANDER);

@@ -156,10 +156,8 @@ protected void keyTyped(char par1, int par2)
     }
   if(kb!=null)
     {
-//    Config.logDebug("setting keybind "+kb.getKeyName()+" to: "+Keyboard.getKeyName(par2));
     kb.setKeyCode(par2);
     kbButton.setButtonText(kb.getKeyName() + " :: "+kb.getKeyChar());
-    Config.saveConfig();
     kb=null;
     kbButton=null;        
     }  

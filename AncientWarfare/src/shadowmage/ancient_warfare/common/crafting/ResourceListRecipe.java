@@ -36,6 +36,7 @@ import net.minecraft.util.StatCollector;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapper;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
@@ -202,7 +203,7 @@ public boolean isResource(ItemStack filter)
 
 public boolean canBeCraftedBy(PlayerEntry entry)
   {
-  return Config.disableResearch? true : (this.neededResearch==null || this.neededResearch.isEmpty()) ? true : entry==null ? false : entry.hasDoneResearchByNumbers(neededResearch);
+  return AWCoreConfig.disableResearch? true : (this.neededResearch==null || this.neededResearch.isEmpty()) ? true : entry==null ? false : entry.hasDoneResearchByNumbers(neededResearch);
   }
 
 public boolean doesInventoryContainResources(IInventory inventory, int[] slotNums)

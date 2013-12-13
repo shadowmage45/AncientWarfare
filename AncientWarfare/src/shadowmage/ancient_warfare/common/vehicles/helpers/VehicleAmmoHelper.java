@@ -25,6 +25,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
@@ -101,7 +102,7 @@ public void decreaseCurrentAmmo(int num)
  */
 public int getCurrentAmmoCount()
   {
-  if(!Config.soldiersUseAmmo && vehicle.riddenByEntity instanceof NpcBase)
+  if(!AWCoreConfig.soldiersUseAmmo && vehicle.riddenByEntity instanceof NpcBase)
     {
     return 64;
     }
@@ -307,7 +308,7 @@ public void handleAmmoUpdatePacket(NBTTagCompound tag)
 
 public IAmmoType getCurrentAmmoType()
   {  
-  if(!Config.soldiersUseAmmo && vehicle.riddenByEntity instanceof NpcBase)
+  if(!AWCoreConfig.soldiersUseAmmo && vehicle.riddenByEntity instanceof NpcBase)
     {
     NpcBase npc = (NpcBase)vehicle.riddenByEntity;
     return vehicle.vehicleType.getAmmoForSoldierRank(npc.rank);     

@@ -42,6 +42,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_framework.common.utils.Trig;
+import shadowmage.ancient_warfare.AWCore;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
@@ -105,9 +107,9 @@ protected int npcTicksExisted = 0;
  */
 public int shelterExtraTicks = 0;
 
-public int npcUpkeepTicks = Config.npcUpkeepTicks;//how many upkeep ticks worth of food are remaining?
+public int npcUpkeepTicks = AWCoreConfig.npcUpkeepTicks;//how many upkeep ticks worth of food are remaining?
 
-protected int npcHealingTicks = Config.npcHealingTicks;//
+protected int npcHealingTicks = AWCoreConfig.npcHealingTicks;//
 
 public INpcType npcType = NpcTypeBase.npcDummy;
 public NpcVarsHelper varsHelper;// = npcType.getVarsHelper(this);
@@ -252,7 +254,7 @@ public void addConfigTargets()
   String targetType = null;
   if(npcType.isCombatUnit() && !npcType.getConfigName().equals(""))
     {
-    targets = Config.getConfig().get("d-npc_target_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
+    targets = AWCore.instance.config.getConfig().get("d-npc_target_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
     if(targets!=null && targets.length>0)
       {
       Class clz;
@@ -261,14 +263,14 @@ public void addConfigTargets()
         clz = (Class) EntityList.stringToClassMapping.get(name);
         if(clz!=null)
           {
-          targetHelper.addTargetEntry(new AITargetEntry(this, TargetType.ATTACK, clz, 0, true, Config.npcAISearchRange));
+          targetHelper.addTargetEntry(new AITargetEntry(this, TargetType.ATTACK, clz, 0, true, AWCoreConfig.npcAISearchRange));
           }
         }
       }
     }
   else if(npcType.getConfigName().equals("civilian"))
     {
-    targets = Config.getConfig().get("d-npc_target_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
+    targets = AWCore.instance.config.getConfig().get("d-npc_target_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
     if(targets!=null && targets.length>0)
       {
       Class clz;
@@ -277,7 +279,7 @@ public void addConfigTargets()
         clz = (Class) EntityList.stringToClassMapping.get(name);
         if(clz!=null)
           {
-          targetHelper.addTargetEntry(new AITargetEntry(this, TargetType.ATTACK, clz, 0, true, Config.npcAISearchRange));
+          targetHelper.addTargetEntry(new AITargetEntry(this, TargetType.ATTACK, clz, 0, true, AWCoreConfig.npcAISearchRange));
           }
         }
       }
@@ -506,7 +508,7 @@ public float getDistanceFromTarget(ITargetEntry target)
 @Override
 protected void updateAITick() 
   {
-  if(aiTick < Config.npcAITicks || this.isDead)
+  if(aiTick < AWCoreConfig.npcAITicks || this.isDead)
     {
     aiTick++;
     return;
@@ -519,7 +521,7 @@ protected void updateAITick()
 protected void broadcastAggro()  
   {
   List<EntityMob> mobs = worldObj.getEntitiesWithinAABB(EntityMob.class, AxisAlignedBB.getAABBPool().getAABB(posX-16, posY-8, posZ-16, posX+16, posY+8, posZ+16));
-  String[] targets = Config.getConfig().get("d-npc_target_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
+  String[] targets = AWCore.instance.config.getConfig().get("d-npc_target_settings", npcType.getConfigName(), npcType.getDefaultTargets()).getStringList();
   List<String> targ = Lists.newArrayList(targets);
   for(EntityMob mob : mobs)
     {
@@ -689,7 +691,7 @@ public void onUpdate()
     this.dismountEntity(ridingEntity);
     this.ridingEntity=null;
     }
-  if(!worldObj.isRemote && (npcTicksExisted + this.entityId) % Config.npcAITicks == 0)
+  if(!worldObj.isRemote && (npcTicksExisted + this.entityId) % AWCoreConfig.npcAITicks == 0)
     {
     this.targetHelper.updateAggroEntries();
     this.targetHelper.checkForTargets();
@@ -714,7 +716,7 @@ public void onUpdate()
     {
     if(npcHealingTicks==0)
       {
-      npcHealingTicks = Config.npcHealingTicks;
+      npcHealingTicks = AWCoreConfig.npcHealingTicks;
       this.handleHealingUpdate();
       }
     else if(npcHealingTicks>0)
@@ -1127,7 +1129,7 @@ public double getDistanceFrom(double par1, double par3, double par5)
 @Override
 public void onStuckDetected()
   {
-  if(!this.worldObj.isRemote && Config.enableNpcTeleportHome && this.wayNav.getHomePoint()!=null && this.getTargetType()==TargetType.SHELTER)
+  if(!this.worldObj.isRemote && AWCoreConfig.enableNpcTeleportHome && this.wayNav.getHomePoint()!=null && this.getTargetType()==TargetType.SHELTER)
     {    
     WayPoint p = this.wayNav.getHomePoint();
     if(this.worldObj.blockExists(p.floorX(), p.floorY(), p.floorZ()) && this.worldObj.isAirBlock(p.floorX(), p.floorY()+1, p.floorZ()))

@@ -51,24 +51,12 @@ public void readFromNBT(NBTTagCompound tag)
   {
   if(tag.hasKey("playerData"))
     {
-    Config.logDebug("loading player data");
     PlayerTracker.instance().readFromNBT(tag.getCompoundTag("playerData"));
     }
   if(tag.hasKey("teamData"))
     {
-    Config.logDebug("loading team data");
     TeamTracker.instance().readFromNBT(tag.getCompoundTag("teamData"));
-    }
-  if(tag.hasKey("builders"))
-    {
-    Config.logDebug("loading builder data");
-    AWStructures.instance.readFromNBT(tag.getCompoundTag("builders"));
     }  
-  if(tag.hasKey("structMap"))
-    {
-    Config.logDebug("loading spawned structure data");
-    WorldGenManager.instance().readFromNBT(tag.getCompoundTag("structMap"));
-    }
   if(tag.hasKey("npcMap"))
     {
     GameDataTracker.instance().loadNpcMap(tag.getCompoundTag("npcMap"));
@@ -80,8 +68,6 @@ public void writeToNBT(NBTTagCompound tag)
   {
   tag.setCompoundTag("playerData", PlayerTracker.instance().getNBTTag());  
   tag.setCompoundTag("teamData", TeamTracker.instance().getNBTTag());
-  tag.setCompoundTag("builders", AWStructures.instance.getNBTTag());  
-  tag.setCompoundTag("structMap", WorldGenManager.instance().getNBTTag());  
   tag.setCompoundTag("npcMap", GameDataTracker.instance().getNpcMapTag());
   }
 

@@ -65,7 +65,6 @@ import shadowmage.ancient_warfare.common.civics.TECivicWarehouse;
 import shadowmage.ancient_warfare.common.container.ContainerAWAutoCrafting;
 import shadowmage.ancient_warfare.common.container.ContainerAWCrafting;
 import shadowmage.ancient_warfare.common.container.ContainerBackpack;
-import shadowmage.ancient_warfare.common.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.container.ContainerChunkloaderDeluxe;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTE;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTownHallInfo;
@@ -75,15 +74,12 @@ import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.container.ContainerDebugInfo;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
-import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerFoodProcessor;
 import shadowmage.ancient_warfare.common.container.ContainerMailbox;
 import shadowmage.ancient_warfare.common.container.ContainerMailboxIndustrial;
 import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
 import shadowmage.ancient_warfare.common.container.ContainerNpcCourier;
 import shadowmage.ancient_warfare.common.container.ContainerResearch;
-import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
-import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.container.ContainerTrashcan;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
@@ -175,21 +171,21 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   TileEntity te;
   switch(ID)
   {
-  case STRUCTURE_SELECT:
-  return new ContainerCSB(player);
-  
-  case STRUCTURE_SCANNER:
-  return new ContainerStructureScanner(player);
-  
-  case STRUCTURE_BUILD_DIRECT:
-  return new ContainerSurvivalBuilder(player);
-  
-  case STRUCTURE_EDITOR:  
-  return new ContainerEditor(player);
-  
-  case STRUCTURE_SCAN_EDIT:
-  ContainerEditor edit = new ContainerEditor(player);
-  return edit;
+//  case STRUCTURE_SELECT:
+//  return new ContainerCSB(player);
+//  
+//  case STRUCTURE_SCANNER:
+//  return new ContainerStructureScanner(player);
+//  
+//  case STRUCTURE_BUILD_DIRECT:
+//  return new ContainerSurvivalBuilder(player);
+//  
+//  case STRUCTURE_EDITOR:  
+//  return new ContainerEditor(player);
+//  
+//  case STRUCTURE_SCAN_EDIT:
+//  ContainerEditor edit = new ContainerEditor(player);
+//  return edit;
   
   case SETTINGS:
   return new ContainerDummy();

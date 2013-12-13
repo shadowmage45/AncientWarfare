@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EntityList;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 
 public class EntityDataDump
 {
@@ -41,14 +42,13 @@ public EntityDataDump()
 
 public static void dumpEntityData()
   {
-  Config.logDebug("dumping entity data to file");
   List<String> entityNames = new ArrayList<String>();
   String name;
   for(Object obj : EntityList.classToStringMapping.values())
     {
     entityNames.add((String)obj);
     }
-  String path = Config.configPath+"/AWConfig/entityDump.txt";
+  String path = AWCoreConfig.configPath+"/AWConfig/entityDump.txt";
   File file = new File(path);
   try
     {
@@ -67,7 +67,6 @@ public static void dumpEntityData()
     } 
   catch (IOException e)
     {  
-    Config.logError("Error exporting entity name dump -- could not instantiate file");
     e.printStackTrace();
     }
   }

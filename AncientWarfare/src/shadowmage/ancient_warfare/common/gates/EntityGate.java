@@ -31,6 +31,7 @@ import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.Pos3f;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.interfaces.IEntityPacketHandler;
 import shadowmage.ancient_warfare.common.machine.TEGateLock;
@@ -379,7 +380,7 @@ public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
     {
     return true;
     }
-  if(Config.gatesOnlyDamageByRams)
+  if(AWCoreConfig.gatesOnlyDamageByRams)
     {
     if(par1DamageSource.getEntity()==null || !(par1DamageSource.getEntity() instanceof VehicleBase))  
       {
