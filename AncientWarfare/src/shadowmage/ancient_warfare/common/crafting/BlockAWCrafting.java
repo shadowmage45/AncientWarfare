@@ -34,10 +34,10 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.block.AWBlockContainer;
 import shadowmage.ancient_framework.common.item.AWItemBlockBase;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_warfare.common.block.AWBlockContainer;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -196,7 +196,7 @@ public void registerIcons(IconRegister reg, Description d)
 public Icon getIcon(int side, int meta)
   {
   int index = side;
-  Description d = DescriptionRegistry.instance().getDescriptionFor(blockID);
+  Description d = description;
   if(d!=null)
     {
     return d.getIconFor(index);

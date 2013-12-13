@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.block;
+package shadowmage.ancient_framework.common.block;
 
 import java.util.Random;
 
@@ -39,6 +39,7 @@ public abstract class AWBlockBase extends Block
 {
 
 private Random RNG = new Random();
+public Description description;
 
 public AWBlockBase(int par1, Material par2Material, String baseName)
   {
@@ -84,7 +85,7 @@ public boolean onBlockActivated(World world, int posX, int posY, int posZ, Entit
 @Override
 public void registerIcons(IconRegister par1IconRegister)
   {
-  registerIcons(par1IconRegister, DescriptionRegistry.instance().getDescriptionFor(blockID));
+  registerIcons(par1IconRegister, description);
   }
 
 public abstract void registerIcons(IconRegister reg, Description d);
@@ -92,7 +93,7 @@ public abstract void registerIcons(IconRegister reg, Description d);
 @Override
 public Icon getIcon(int side, int meta)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(blockID);
+  Description d = description;
   if(d!=null)
     {
     return d.getIconFor(0);    

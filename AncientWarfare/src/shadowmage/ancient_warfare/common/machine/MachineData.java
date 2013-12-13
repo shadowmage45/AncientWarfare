@@ -129,7 +129,7 @@ public static void registerIcons(IconRegister registry, Description d)
 
 public static Icon getIcon(TileEntity te, int meta, int side)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(BlockLoader.machineBlock.blockID);  
+  Description d = BlockLoader.machineBlock.description;  
   if(te instanceof TEMachine)
     {
     /**
@@ -208,7 +208,7 @@ public static Icon getIcon(TileEntity te, int meta, int side)
 
 public static void registerBlockData()
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(BlockLoader.machineBlock.blockID);
+  Description d = BlockLoader.machineBlock.description;  
   
   if(AWCore.instance.config.getConfig().get("h_additional_toggles", "machine.trashcan.enabled", true).getBoolean(true))
     {

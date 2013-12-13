@@ -34,8 +34,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_framework.common.block.AWBlockContainer;
 import shadowmage.ancient_framework.common.registry.entry.Description;
-import shadowmage.ancient_warfare.common.block.AWBlockContainer;
 import shadowmage.ancient_warfare.common.interfaces.IInteractable;
 
 public class BlockMiscMachine extends AWBlockContainer

@@ -35,6 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemRation extends ItemFood
 {
 
+Description description;
 /**
  * @param id
  */
@@ -55,7 +56,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   {
   if(stack!=null)
     {
-    Description d = DescriptionRegistry.instance().getDescriptionFor(stack.itemID);
+    Description d = description;
     if(d!=null)
       {
       List<String> tips = d.getDisplayTooltips(stack.getItemDamage());
@@ -79,7 +80,7 @@ public String getItemStackDisplayName(ItemStack par1ItemStack)
 @Override
 public String getUnlocalizedName()
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     return d.getDisplayName(0);
@@ -90,7 +91,7 @@ public String getUnlocalizedName()
 @Override
 public String getUnlocalizedName(ItemStack par1ItemStack)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     return d.getDisplayName(par1ItemStack.getItemDamage());
@@ -101,7 +102,7 @@ public String getUnlocalizedName(ItemStack par1ItemStack)
 @Override
 public String getItemDisplayName(ItemStack par1ItemStack)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     return StatCollector.translateToLocal(d.getDisplayName(par1ItemStack.getItemDamage()));

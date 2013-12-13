@@ -46,7 +46,7 @@ public ItemReinforcedBlock(int par1)
 @Override
 public Icon getIconFromDamage(int par1)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(BlockLoader.reinforced.blockID);
+  Description d = description;
   return d.getIconFor(par1);
   }
 

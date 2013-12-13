@@ -78,7 +78,7 @@ public static void addSubBlocks(List list)
 
 public static void registerBlockData()
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(BlockLoader.engineBlock.blockID);
+  Description d = BlockLoader.engineBlock.description;
   
   GameRegistry.registerTileEntity(PluginProxy.bcProxy.getHandCrankEngineClass(), "Hand Cranked Engine");
   if(PluginProxy.bcLoaded)

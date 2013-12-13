@@ -589,7 +589,7 @@ private float getMaxYaw(int side)
 @Override
 public Icon getDisplayIcon()
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(ItemLoader.ammoItem.itemID);
+  Description d = ItemLoader.ammoItem.description;
   if(d!=null)
     {
     return d.getIconFor(getAmmoType());

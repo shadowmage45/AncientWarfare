@@ -156,7 +156,7 @@ protected boolean enabledForResearch;
 
 public static void load()
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(ItemLoader.researchNotes.itemID);
+  Description d = ItemLoader.researchNotes.description;
   boolean enabled;
   for(IResearchGoal goal : researchGoals)
     {

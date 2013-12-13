@@ -24,6 +24,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.AWFramework;
+import shadowmage.ancient_framework.common.block.AWBlockBase;
 import shadowmage.ancient_framework.common.item.AWItemBlockBase;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.AWCore;
@@ -73,16 +75,16 @@ public class BlockLoader
 {
 
 //public static final Block builder = new BlockBuilder(Config.getBlockID("blockSingle.builder", 3750, "Placeholder block for ticked-structure builders."));
-public static final Block civicBlock1 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic1", 3751, "Civic Block 1"), "CivicBlock1", 0);
-public static final Block civicBlock2 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic2", 3752, "Civic Block 2"), "CivicBlock2", 1);
-public static final Block civicBlock3 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic3", 3753, "Civic Block 3"), "CivicBlock3", 2);
-public static final Block civicBlock4 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic4", 3754, "Civic Block 4"), "CivicBlock4", 3);
-public static final Block warehouseStorage = new BlockWarehouseStorage(AWCore.instance.config.getBlockID("blockSingle.warehouseStorage", 3755, "Warehouse Storage Block"));
-public static final Block gateProxy = new BlockGateProxy(AWCore.instance.config.getBlockID("blockSingle.gateProxy", 3756, "Gate collision/sight check proxy block"));
-public static final Block crafting = new BlockAWCrafting(AWCore.instance.config.getBlockID("blockMulti.crafting", 3757, "Base block for crafting/research stations"), AWCore.instance.config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for crafting blocks").getInt(3707));
-public static final Block reinforced = new BlockReinforced(AWCore.instance.config.getBlockID("blockMulti.reinforced", 3758, "Base block for reinforced blocks"), Material.rock, "Reinforced Blocks");
-public static final Block machineBlock = new BlockMiscMachine(AWCore.instance.config.getBlockID("blockMulti.machine", 3759, "Base block for misc machines"), Material.rock, "Machine");
-public static final Block engineBlock = new BlockEngine(AWCore.instance.config.getBlockID("blockMulti.engine", 3760, "Base block for misc engines"), Material.rock, "block.multi.engine.0");
+public static final AWBlockBase civicBlock1 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic1", 3751, "Civic Block 1"), "CivicBlock1", 0);
+public static final AWBlockBase civicBlock2 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic2", 3752, "Civic Block 2"), "CivicBlock2", 1);
+public static final AWBlockBase civicBlock3 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic3", 3753, "Civic Block 3"), "CivicBlock3", 2);
+public static final AWBlockBase civicBlock4 = new BlockCivic(AWCore.instance.config.getBlockID("blockMulti.civic4", 3754, "Civic Block 4"), "CivicBlock4", 3);
+public static final AWBlockBase warehouseStorage = new BlockWarehouseStorage(AWCore.instance.config.getBlockID("blockSingle.warehouseStorage", 3755, "Warehouse Storage Block"));
+public static final AWBlockBase gateProxy = new BlockGateProxy(AWCore.instance.config.getBlockID("blockSingle.gateProxy", 3756, "Gate collision/sight check proxy block"));
+public static final AWBlockBase crafting = new BlockAWCrafting(AWCore.instance.config.getBlockID("blockMulti.crafting", 3757, "Base block for crafting/research stations"), AWCore.instance.config.getConfig().get("renderid", "craftingBlocks", 3707, "renderID for crafting blocks").getInt(3707));
+public static final AWBlockBase reinforced = new BlockReinforced(AWCore.instance.config.getBlockID("blockMulti.reinforced", 3758, "Base block for reinforced blocks"), Material.rock, "Reinforced Blocks");
+public static final AWBlockBase machineBlock = new BlockMiscMachine(AWCore.instance.config.getBlockID("blockMulti.machine", 3759, "Base block for misc machines"), Material.rock, "Machine");
+public static final AWBlockBase engineBlock = new BlockEngine(AWCore.instance.config.getBlockID("blockMulti.engine", 3760, "Base block for misc engines"), Material.rock, "block.multi.engine.0");
 
 public static final ItemStack trashcan = new ItemStack(machineBlock,1,0);
 public static final ItemStack mailbox = new ItemStack(machineBlock,1,1);
@@ -162,6 +164,7 @@ public void load()
 
 public void registerBlock(Block block, String name)
   {
+  AWFramework.instance.
   GameRegistry.registerBlock(block, name);
   LanguageRegistry.addName(block, name);
   DescriptionRegistry.instance().registerBlock(block, false);

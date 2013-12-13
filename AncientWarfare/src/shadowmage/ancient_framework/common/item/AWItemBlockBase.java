@@ -37,6 +37,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class AWItemBlockBase extends ItemBlock
 {
 
+public Description description;
 /**
  * @param par1
  */
@@ -63,7 +64,7 @@ public int getMetadata(int par1)
 @Override
 public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     par3List.addAll(d.getDisplayStackCache());
@@ -92,7 +93,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   {
   if(stack!=null)
     {
-    Description d = DescriptionRegistry.instance().getDescriptionFor(stack.itemID);
+    Description d = description;
     if(d!=null)
       {
       List<String> tips = d.getDisplayTooltips(stack.getItemDamage());
@@ -116,7 +117,7 @@ public String getItemStackDisplayName(ItemStack par1ItemStack)
 @Override
 public String getUnlocalizedName()
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     return d.getDisplayName(0);
@@ -127,7 +128,7 @@ public String getUnlocalizedName()
 @Override
 public String getUnlocalizedName(ItemStack par1ItemStack)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     return d.getDisplayName(par1ItemStack.getItemDamage());
@@ -138,7 +139,7 @@ public String getUnlocalizedName(ItemStack par1ItemStack)
 @Override
 public String getItemDisplayName(ItemStack par1ItemStack)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     return StatCollector.translateToLocal(d.getDisplayName(par1ItemStack.getItemDamage()));
@@ -149,7 +150,7 @@ public String getItemDisplayName(ItemStack par1ItemStack)
 @Override
 public void registerIcons(IconRegister par1IconRegister)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     d.registerIcons(par1IconRegister);
@@ -159,7 +160,7 @@ public void registerIcons(IconRegister par1IconRegister)
 @Override
 public Icon getIconFromDamage(int par1)
   {
-  Description d = DescriptionRegistry.instance().getDescriptionFor(itemID);
+  Description d = description;
   if(d!=null)
     {
     return d.getIconFor(par1);

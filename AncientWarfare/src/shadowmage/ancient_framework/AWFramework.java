@@ -23,6 +23,10 @@ package shadowmage.ancient_framework;
 import java.io.File;
 import java.util.logging.Logger;
 
+import shadowmage.ancient_framework.common.config.AWConfig;
+import shadowmage.ancient_framework.common.registry.ObjectRegistry;
+import shadowmage.ancient_warfare.common.network.PacketHandler;
+import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -33,13 +37,26 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.network.NetworkMod;
 
+
+
+@Mod( modid = "AncientWarfare", name="Ancient Warfare", version=AWConfig.VERSION)
+@NetworkMod
+(
+clientSideRequired = true,
+serverSideRequired = true,
+packetHandler = PacketHandler.class,
+channels = {"AW_mod"},
+versionBounds="["+AWConfig.VERSION+",)"
+)
 public class AWFramework extends AWMod
 {
 
 @Instance("AncientWarfare")
 public static AWFramework instance;
 
+public ObjectRegistry objectRegistry;
 /**
  * 
  */
@@ -51,7 +68,8 @@ public AWFramework()
 @Override
 public void loadConfiguration(File config, Logger log)
   {
-  this.config = new AWFrameworkcon
+  this.config = new AWConfig(config, log, AWConfig.VERSION);
+  objectRegistry = new ObjectRegistry(this.config);
   }
 
 @Override

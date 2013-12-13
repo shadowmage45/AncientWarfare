@@ -57,7 +57,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   if(stack!=null)
     {
     int dmg = stack.getItemDamage() - stack.getItemDamage()%16;
-    Description d = DescriptionRegistry.instance().getDescriptionFor(stack.itemID);
+    Description d = description;
     if(d!=null)
       {
       List<String> tips = d.getDisplayTooltips(stack.getItemDamage());

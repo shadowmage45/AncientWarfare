@@ -107,7 +107,7 @@ public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     GL11.glScalef(0.5f, 0.5f, 0.5f);
     }    
    
-  Description d = DescriptionRegistry.instance().getDescriptionFor(ItemLoader.civicPlacer.itemID);
+  Description d = ItemLoader.civicPlacer.description;
   Icon ico = blk.getIcon(0, item.getItemDamage()%16);//d.getIconFor(item.getItemDamage()*3);
    
   Tessellator tessellator = Tessellator.instance;
