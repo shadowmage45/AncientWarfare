@@ -127,7 +127,7 @@ public static ItemStack clearStructureData(ItemStack stack)
 
 public static boolean isScannerItem(int id)
   {
-  return id == ItemLoader.structureScanner.itemID;
+  return id == ItemLoaderCore.structureScanner.itemID;
   }
 
 public static BlockPosition getPos1(ItemStack stack)

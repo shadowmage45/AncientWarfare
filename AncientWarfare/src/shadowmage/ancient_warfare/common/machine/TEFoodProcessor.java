@@ -29,7 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 
 public class TEFoodProcessor extends TEMachine implements IInventory, ISidedInventory
 {
@@ -65,7 +65,7 @@ public void updateEntity()
   for(int b : otherIndices)
     {
     fromSlot = this.getStackInSlot(b);
-    if(fromSlot==null || !(fromSlot.getItem() instanceof ItemFood)|| fromSlot.itemID == Item.rottenFlesh.itemID || fromSlot.itemID==ItemLoader.rations.itemID){continue;}
+    if(fromSlot==null || !(fromSlot.getItem() instanceof ItemFood)|| fromSlot.itemID == Item.rottenFlesh.itemID || fromSlot.itemID==ItemLoaderCore.rations.itemID){continue;}
     ItemFood item = (ItemFood)fromSlot.getItem();
     this.storedFoodValue += item.getHealAmount();
     fromSlot.stackSize--;
@@ -78,11 +78,11 @@ public void updateEntity()
   if(this.storedFoodValue>=2)
     {
     fromSlot = this.getStackInSlot(0);
-    if(fromSlot==null || (fromSlot.itemID==ItemLoader.rations.itemID && fromSlot.stackSize<fromSlot.getMaxStackSize()))
+    if(fromSlot==null || (fromSlot.itemID==ItemLoaderCore.rations.itemID && fromSlot.stackSize<fromSlot.getMaxStackSize()))
       {
       if(fromSlot==null)
         {
-        fromSlot = new ItemStack(ItemLoader.rations);
+        fromSlot = new ItemStack(ItemLoaderCore.rations);
         this.setInventorySlotContents(0, fromSlot);
         }
       else

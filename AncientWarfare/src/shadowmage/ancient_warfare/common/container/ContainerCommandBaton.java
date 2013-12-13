@@ -27,7 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton;
 import shadowmage.ancient_warfare.common.item.ItemNpcCommandBaton.BatonSettings;
 
@@ -57,7 +57,7 @@ public ContainerCommandBaton(EntityPlayer openingPlayer)
 public void saveSettings()
   {
   ItemStack stack = player.getCurrentEquippedItem();
-  if(stack!=null && stack.itemID == ItemLoader.instance().npcCommandBaton.itemID)
+  if(stack!=null && stack.itemID == ItemLoaderCore.instance().npcCommandBaton.itemID)
     {
     NBTTagCompound tag = settings.getNBTTag();
     tag.setBoolean("save", true);
@@ -72,7 +72,7 @@ protected void handleSaveServer(NBTTagCompound tag)
   {
   this.settings.readFromNBT(tag);
   ItemStack stack = player.getCurrentEquippedItem();
-  if(stack!=null && stack.itemID == ItemLoader.instance().npcCommandBaton.itemID)
+  if(stack!=null && stack.itemID == ItemLoaderCore.instance().npcCommandBaton.itemID)
     {
     ItemNpcCommandBaton.setBatonSettings(stack, settings);
     }

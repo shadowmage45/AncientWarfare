@@ -32,7 +32,7 @@ import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.config.AWCoreConfig;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
@@ -415,7 +415,7 @@ public void onInventoryChanged()
     {
     String name = null;
     ItemStack stack = this.getStackInSlot(10);
-    if(stack!=null && stack.itemID==ItemLoader.researchBook.itemID)
+    if(stack!=null && stack.itemID==ItemLoaderCore.researchBook.itemID)
       {
       if(stack.hasTagCompound() && stack.getTagCompound().getCompoundTag("AWResInfo").hasKey("name"))
         {
@@ -486,7 +486,7 @@ public boolean isItemValidForSlot(int i, ItemStack itemstack)
   {
   if(bookSlot!=null && bookSlot.length>0 && i == bookSlot[0])
     {
-    return itemstack.itemID == ItemLoader.researchBook.itemID;
+    return itemstack.itemID == ItemLoaderCore.researchBook.itemID;
     }
   if(resultSlot!=null && resultSlot.length>0 && i== resultSlot[0])
     {

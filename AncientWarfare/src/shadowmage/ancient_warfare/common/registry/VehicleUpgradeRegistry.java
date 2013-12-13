@@ -28,7 +28,7 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.registry.entry.Description;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradeAim;
 import shadowmage.ancient_warfare.common.vehicles.upgrades.VehicleUpgradePitchDown;
@@ -91,9 +91,9 @@ public void registerUpgrades()
 public void registerUpgrade(IVehicleUpgradeType upgrade)
   {  
   this.upgradeTypeMap.put(upgrade.getUpgradeGlobalTypeNum(), upgrade);
-  Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.vehicleUpgrade, upgrade.getUpgradeGlobalTypeNum(), upgrade.getDisplayName(), "", upgrade.getDisplayTooltip());
+  Description d = ItemLoaderCore.instance().addSubtypeInfoToItem(ItemLoaderCore.vehicleUpgrade, upgrade.getUpgradeGlobalTypeNum(), upgrade.getDisplayName(), "", upgrade.getDisplayTooltip());
   d.setIconTexture(upgrade.getIconTexture(), upgrade.getUpgradeGlobalTypeNum());
-  d.addDisplayStack(new ItemStack(ItemLoader.vehicleUpgrade,1,upgrade.getUpgradeGlobalTypeNum()));
+  d.addDisplayStack(new ItemStack(ItemLoaderCore.vehicleUpgrade,1,upgrade.getUpgradeGlobalTypeNum()));
   }
 
 public IVehicleUpgradeType getUpgrade(int type)
@@ -107,7 +107,7 @@ public IVehicleUpgradeType getUpgrade(ItemStack stack)
     {
     return null;
     }
-  if(stack.itemID == ItemLoader.vehicleUpgrade.itemID)
+  if(stack.itemID == ItemLoaderCore.vehicleUpgrade.itemID)
     {
     return this.upgradeTypeMap.get(stack.getItemDamage());
     }
@@ -120,7 +120,7 @@ public boolean isStackUpgradeItem(ItemStack stack)
     {
     return false;
     }
-  if(stack.itemID==ItemLoader.vehicleUpgrade.itemID)
+  if(stack.itemID==ItemLoaderCore.vehicleUpgrade.itemID)
     {
     return true;
     }  

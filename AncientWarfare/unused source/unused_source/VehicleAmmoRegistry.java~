@@ -30,7 +30,7 @@ import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmo;
 
 /**
  * @author Shadowmage
- * vehicle ammunition registry, called from ItemLoader to register items as an ammo type
+ * vehicle ammunition registry, called from ItemLoaderCore to register items as an ammo type
  * 
  */
 public class VehicleAmmoRegistry
@@ -61,7 +61,7 @@ private Map<String, VehicleAmmo> ammoNameMap = new HashMap<String, VehicleAmmo>(
 private Map<ItemIDPair, VehicleAmmo> ammoItemMap = new HashMap<ItemIDPair, VehicleAmmo>();
 
 /**
- * called from ItemLoader
+ * called from ItemLoaderCore
  * @param entry
  */
 public void registerAmmoType(VehicleAmmo entry)

@@ -29,7 +29,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
 
@@ -156,7 +156,7 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
     for(int i = 0; i < npc.specInventory.getSizeInventory(); i++)
       {
       stack = npc.specInventory.getStackInSlot(i);
-      if(stack!=null && stack.itemID == ItemLoader.courierRouteSlip.itemID)
+      if(stack!=null && stack.itemID == ItemLoaderCore.routingSlip.itemID)
         {
         info = new CourierRoutingInfo(stack);
         for(int k = 0 ; k < info.getRouteSize(); k++)

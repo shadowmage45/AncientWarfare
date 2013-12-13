@@ -27,7 +27,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class AmmoHwachaRocketAirburst extends Ammo
@@ -57,12 +57,12 @@ public AmmoHwachaRocketAirburst(int ammoType)
   this.neededResearch.add(ResearchGoalNumbers.rockets3);
   this.neededResearch.add(ResearchGoalNumbers.ballistics3);  
   this.neededResearch.add(ResearchGoalNumbers.explosives2);
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.rocketCharge, 1, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.rocketCharge, 1, false, false));
   this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.stick), 6, false, false));
   this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.feather), 1, false, false));
   this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.ingotIron), 1, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clusterCharge, 1, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, 1, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.clusterCharge, 1, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.explosiveCharge, 1, false, false));
   }
 
 @Override

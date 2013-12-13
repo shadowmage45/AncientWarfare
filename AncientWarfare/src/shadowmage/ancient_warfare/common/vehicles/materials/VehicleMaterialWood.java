@@ -21,7 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.materials;
 
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class VehicleMaterialWood extends VehicleMaterial
@@ -72,11 +72,11 @@ public VehicleMaterialWood()
   level2.weightFactor = 1.1f;
   level3.weightFactor = 1.3f;
   level4.weightFactor = 1.7f;
-  level0.filter = new ItemStack(ItemLoader.componentItem,1,0);
-  level1.filter = new ItemStack(ItemLoader.componentItem,1,1);
-  level2.filter = new ItemStack(ItemLoader.componentItem,1,2);
-  level3.filter = new ItemStack(ItemLoader.componentItem,1,3);
-  level4.filter = new ItemStack(ItemLoader.componentItem,1,4);
+  level0.filter = new ItemStack(ItemLoaderCore.componentItem,1,0);
+  level1.filter = new ItemStack(ItemLoaderCore.componentItem,1,1);
+  level2.filter = new ItemStack(ItemLoaderCore.componentItem,1,2);
+  level3.filter = new ItemStack(ItemLoaderCore.componentItem,1,3);
+  level4.filter = new ItemStack(ItemLoaderCore.componentItem,1,4);
   level0.neededResearch = ResearchGoalNumbers.wood1;
   level1.neededResearch = ResearchGoalNumbers.wood2;
   level2.neededResearch = ResearchGoalNumbers.wood3;

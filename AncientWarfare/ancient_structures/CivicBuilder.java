@@ -24,7 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 
 public class CivicBuilder extends Civic
 {
@@ -49,7 +49,7 @@ public CivicBuilder(int id)
 @Override
 public ItemStack getItemToConstruct()
   {
-  ItemStack item = new ItemStack(ItemLoader.civicBuilder,1);
+  ItemStack item = new ItemStack(ItemLoaderCore.civicBuilder,1);
   NBTTagCompound tag = new NBTTagCompound();
   item.setTagInfo("structData", tag);
   return item;

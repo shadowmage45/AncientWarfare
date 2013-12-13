@@ -35,7 +35,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.block.AWBlockContainer;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 
 public class BlockCivic extends AWBlockContainer
@@ -151,7 +151,7 @@ public int idDropped(int par1, Random par2Random, int par3)
 //    {
 //    return 0;
 //    }
-  return ItemLoader.civicPlacer.itemID;
+  return ItemLoaderCore.civicPlacer.itemID;
   }
 
 @Override

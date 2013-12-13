@@ -22,16 +22,21 @@ package shadowmage.ancient_framework.common.registry;
 
 import java.util.HashMap;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import shadowmage.ancient_framework.common.block.AWBlockBase;
 import shadowmage.ancient_framework.common.config.ModConfiguration;
 import shadowmage.ancient_framework.common.item.AWItemBase;
+import shadowmage.ancient_framework.common.item.AWItemBlockBase;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ObjectRegistry
 {
 
+private int nextItemID = 24000;
+private int nextBlockID = 3700;
 private ModConfiguration config;
 HashMap<String, ObjectRegistration> registrationByName = new HashMap<String, ObjectRegistration>();
 HashMap<Integer, ObjectRegistration> registrationByNumber = new HashMap<Integer, ObjectRegistration>();
@@ -63,10 +68,65 @@ public Description getDescriptionFor(int id)
   return null;
   }
 
-public void createItem(String name, Class<? extends AWItemBase> itemClz, int defaultID){}
-public void createBlock(String name, Class<? extends AWBlockBase> blockClz, int defaultID){}
-public void createBlock(String name, Class<? extends AWBlockBase> blockClz, Class<? extends ItemBlock> itemClz, int defaultID){}
+public AWItemBase createItem(String name, Class<? extends AWItemBase> itemClz)
+  {
+  try
+    {
+    AWItemBase item = itemClz.getDeclaredConstructor(int.class).newInstance(nextItemID++);
+    registerItem(name, item);
+    return item;
+    } 
+  catch (Exception e)
+    {   
+    e.printStackTrace();
+    } 
+  return null;
+  }
 
+public AWBlockBase createBlock(String name, Class<? extends AWBlockBase> blockClz)
+  {
+  try
+    {
+    AWBlockBase item = blockClz.getDeclaredConstructor(int.class).newInstance(nextBlockID++);
+    registerBlock(name, item);
+    return item;
+    } 
+  catch (Exception e)
+    {   
+    e.printStackTrace();
+    } 
+  return null;
+  }
+
+public AWBlockBase createBlock(String name, Class<? extends AWBlockBase> blockClz, Class<? extends ItemBlock> itemClz)
+  {
+  try
+    {
+    AWBlockBase item = blockClz.getDeclaredConstructor(int.class).newInstance(nextBlockID++);
+    registerBlock(name, item, itemClz);
+    return item;
+    } 
+  catch (Exception e)
+    {   
+    e.printStackTrace();
+    } 
+  return null;
+  }
+
+public <T>T createItemBasic(String name, Class<T> itemClz)
+  {
+  Item item;
+  try
+    {
+    item = (Item) itemClz.getDeclaredConstructor(int.class).newInstance(nextItemID++);
+    return (T) item;
+    } 
+  catch (Exception e)
+    {
+    e.printStackTrace();
+    }   
+  return null;
+  }
 
 public Description registerBlock(String name, AWBlockBase block, Class<? extends ItemBlock> itemClz)
   {
@@ -78,6 +138,8 @@ public Description registerBlock(String name, AWBlockBase block, Class<? extends
   block.description = reg.description;
   GameRegistry.registerBlock(block, itemClz, name);
   registerObject(name, reg, block.blockID);
+  AWItemBlockBase item = (AWItemBlockBase) Item.itemsList[block.blockID];
+  item.description = block.description;
   return block.description;
   }
 
@@ -122,6 +184,7 @@ protected void registerObject(String name, ObjectRegistration reg, int id)
   {
   registrationByNumber.put(id, reg);
   registrationByName.put(name, reg);
+  LanguageRegistry.instance().addName(reg.obj, name);
   }
 
 private class ObjectRegistration

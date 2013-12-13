@@ -43,7 +43,7 @@ import shadowmage.ancient_warfare.common.container.ContainerResearch;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
@@ -261,7 +261,7 @@ protected void handleSearchBoxUpdate()
       {   
       if(g.isEnabledForResearch())
         {
-        recipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,g.getGlobalResearchNum())));        
+        recipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoaderCore.researchNotes,1,g.getGlobalResearchNum())));        
         }
       }
     this.addRecipeButtons(recipes, sorterFilter);     
@@ -284,7 +284,7 @@ protected void handleSearchBoxUpdate()
       {
       if(b.isEnabledForResearch())
         {
-        recipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,b.getGlobalResearchNum())));        
+        recipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoaderCore.researchNotes,1,b.getGlobalResearchNum())));        
         }
       }
     Collections.sort(recipes, sorterFilter);
@@ -328,7 +328,7 @@ protected void addQueuedRecipeButtons()
   List<ResourceListRecipe> queuedRecipes = new ArrayList<ResourceListRecipe>();
   for(Integer i : queuedGoals)
     {
-    queuedRecipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,i)));
+    queuedRecipes.add(AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoaderCore.researchNotes,1,i)));
     }    
   this.queuedRecipes.clear();
   area2.updateTotalHeight(queuedRecipes.size()*18);

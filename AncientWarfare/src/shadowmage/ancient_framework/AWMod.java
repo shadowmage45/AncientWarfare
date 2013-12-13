@@ -23,6 +23,7 @@ package shadowmage.ancient_framework;
 import java.io.File;
 import java.util.logging.Logger;
 
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.ModConfiguration;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -68,17 +69,17 @@ public abstract void serverStopped(FMLServerStoppedEvent evt);
 
 public void logError(String info)
   {
-  this.config.logError(info);
+  AWLog.logError(info);
   }
 
 public void log(String info)
   {
-  this.config.log(info);
+  AWLog.log(info);
   }
 
 public void logDebug(String info)
   {
-  this.config.logDebug(info);
+  AWLog.logDebug(info);
   }
 
 }

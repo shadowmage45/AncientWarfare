@@ -39,7 +39,7 @@ import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -158,7 +158,7 @@ int numCrafted = 10;
 public Ammo(int ammoType)
   {
   this.ammoType = ammoType;
-  this.ammoStack = new ItemStack(ItemLoader.ammoItem.itemID, 1, ammoType);
+  this.ammoStack = new ItemStack(ItemLoaderCore.ammoItem.itemID, 1, ammoType);
   if(ammoType>=0 && ammoType<ammoTypes.length)
     {    
     ammoTypes[ammoType]=this;
@@ -225,7 +225,7 @@ public ItemStack getDisplayStack()
 @Override
 public ItemStack getAmmoStack(int qty)
   {
-  return new ItemStack(ItemLoader.ammoItem.itemID, qty, this.getAmmoType());
+  return new ItemStack(ItemLoaderCore.ammoItem.itemID, qty, this.getAmmoType());
   }
 
 @Override
@@ -589,7 +589,7 @@ private float getMaxYaw(int side)
 @Override
 public Icon getDisplayIcon()
   {
-  Description d = ItemLoader.ammoItem.description;
+  Description d = ItemLoaderCore.ammoItem.description;
   if(d!=null)
     {
     return d.getIconFor(getAmmoType());

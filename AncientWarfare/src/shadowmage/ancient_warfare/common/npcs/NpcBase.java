@@ -49,7 +49,7 @@ import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.npcs.INpcType.NpcVarsHelper;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
 import shadowmage.ancient_warfare.common.npcs.helpers.NpcTargetHelper;
@@ -549,7 +549,7 @@ public boolean interact(EntityPlayer player)
     }
   if(!this.isAggroTowards(player))
     {
-    if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().itemID == ItemLoader.npcSpawner.itemID)
+    if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().itemID == ItemLoaderCore.npcSpawner.itemID)
       {
       if(tryUpgradeNpc(this.worldObj, player, player.getCurrentEquippedItem(), this))
         {

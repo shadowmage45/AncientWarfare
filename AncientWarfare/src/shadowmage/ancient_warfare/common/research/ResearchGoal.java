@@ -34,7 +34,7 @@ import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchBallistics;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchExplosives;
 import shadowmage.ancient_warfare.common.research.ammo.ResearchFlammables;
@@ -136,9 +136,9 @@ public static IResearchGoal materialIron5 = new ResearchMaterialLevel(209, 4, Ve
  */
 public static IResearchGoal command1 = new ResearchCommand(ResearchGoalNumbers.command1, 0);
 public static IResearchGoal command2 = new ResearchCommand(ResearchGoalNumbers.command2, 1).addDependencies(ResearchGoalNumbers.command1);
-public static IResearchGoal command3 = new ResearchCommand(ResearchGoalNumbers.command3, 2).addDependencies(ResearchGoalNumbers.command2).addResource(new ItemStack(ItemLoader.npcCommandBaton,1,0), false, true);
-public static IResearchGoal command4 = new ResearchCommand(ResearchGoalNumbers.command4, 3).addDependencies(ResearchGoalNumbers.command3).addResource(new ItemStack(ItemLoader.npcCommandBaton,1,0), false, true);
-public static IResearchGoal command5 = new ResearchCommand(ResearchGoalNumbers.command5, 4).addDependencies(ResearchGoalNumbers.command4).addResource(new ItemStack(ItemLoader.npcCommandBaton,1,1), false, true);
+public static IResearchGoal command3 = new ResearchCommand(ResearchGoalNumbers.command3, 2).addDependencies(ResearchGoalNumbers.command2).addResource(new ItemStack(ItemLoaderCore.npcCommandBaton,1,0), false, true);
+public static IResearchGoal command4 = new ResearchCommand(ResearchGoalNumbers.command4, 3).addDependencies(ResearchGoalNumbers.command3).addResource(new ItemStack(ItemLoaderCore.npcCommandBaton,1,0), false, true);
+public static IResearchGoal command5 = new ResearchCommand(ResearchGoalNumbers.command5, 4).addDependencies(ResearchGoalNumbers.command4).addResource(new ItemStack(ItemLoaderCore.npcCommandBaton,1,1), false, true);
 
 
 
@@ -156,7 +156,7 @@ protected boolean enabledForResearch;
 
 public static void load()
   {
-  Description d = ItemLoader.researchNotes.description;
+  Description d = ItemLoaderCore.researchNotes.description;
   boolean enabled;
   for(IResearchGoal goal : researchGoals)
     {
@@ -165,7 +165,7 @@ public static void load()
 	  goal.setEnabled(enabled);
 	  if(enabled)
 	    {	    
-	    ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.researchNotes, goal.getGlobalResearchNum(), goal.getDisplayName()).addDisplayStack(new ItemStack(ItemLoader.researchNotes,1,goal.getGlobalResearchNum())).setIconTexture("ancientwarfare:misc/researchNotes", goal.getGlobalResearchNum());
+	    ItemLoaderCore.instance().addSubtypeInfoToItem(ItemLoaderCore.researchNotes, goal.getGlobalResearchNum(), goal.getDisplayName()).addDisplayStack(new ItemStack(ItemLoaderCore.researchNotes,1,goal.getGlobalResearchNum())).setIconTexture("ancientwarfare:misc/researchNotes", goal.getGlobalResearchNum());
 
 	    enabled = AWCore.instance.config.getConfig().get("research_add_to_chests", goal.getLocalizedName(), true).getBoolean(true);
 	    goal.setEnabledForLoot(enabled);
@@ -334,7 +334,7 @@ public List<ItemStackWrapperCrafting> getResearchResources()
 @Override
 public ResourceListRecipe constructRecipe()
   {
-  ResourceListRecipe recipe = new ResourceListRecipe(new ItemStack(ItemLoader.researchNotes,1,this.getGlobalResearchNum()), RecipeType.RESEARCH);
+  ResourceListRecipe recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.researchNotes,1,this.getGlobalResearchNum()), RecipeType.RESEARCH);
   recipe.setDisplayName(getDisplayName());
   recipe.addNeededResearch(dependencies);
   recipe.addResources(getResearchResources());

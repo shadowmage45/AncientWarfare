@@ -25,7 +25,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class AmmoGrapeShot extends Ammo
@@ -77,9 +77,9 @@ public AmmoGrapeShot(int ammoType, int weight)
   break;
   }
  
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clusterCharge, explosives, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, explosives, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.ironCasing, cases, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.clusterCharge, explosives, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.explosiveCharge, explosives, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.ironCasing, cases, false, false));
   }
 
 @Override

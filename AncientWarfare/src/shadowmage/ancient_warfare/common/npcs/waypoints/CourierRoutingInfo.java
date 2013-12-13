@@ -27,7 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 
 /**
  * routing information for a single routing slip for a courier
@@ -158,7 +158,7 @@ public void movePointDown(int index)
 
 public void writeToItem(ItemStack stack)
   {
-  if(stack!=null && stack.itemID==ItemLoader.courierRouteSlip.itemID)
+  if(stack!=null && stack.itemID==ItemLoaderCore.routingSlip.itemID)
     {
     stack.setTagInfo("route", getNBTTag());
     }

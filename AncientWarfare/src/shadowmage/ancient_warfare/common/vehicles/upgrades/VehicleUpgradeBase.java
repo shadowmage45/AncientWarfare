@@ -30,7 +30,7 @@ import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 
 public abstract class VehicleUpgradeBase implements IVehicleUpgradeType
 {
@@ -69,7 +69,7 @@ public String getDisplayTooltip()
 @Override
 public ItemStack getUpgradeStack(int qty)
   {
-  return new ItemStack(ItemLoader.vehicleUpgrade.itemID, qty, this.typeNum);
+  return new ItemStack(ItemLoaderCore.vehicleUpgrade.itemID, qty, this.typeNum);
   }
 
 @Override

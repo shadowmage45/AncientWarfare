@@ -24,7 +24,9 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import shadowmage.ancient_framework.common.config.AWConfig;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.registry.ObjectRegistry;
+import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -41,14 +43,14 @@ import cpw.mods.fml.common.network.NetworkMod;
 
 
 
-@Mod( modid = "AncientWarfare", name="Ancient Warfare", version=AWConfig.VERSION)
+@Mod( modid = "AncientWarfare", name="Ancient Warfare", version=AWCoreConfig.VERSION)
 @NetworkMod
 (
 clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
 channels = {"AW_mod"},
-versionBounds="["+AWConfig.VERSION+",)"
+versionBounds="["+AWCoreConfig.VERSION+",)"
 )
 public class AWFramework extends AWMod
 {
@@ -70,14 +72,14 @@ public void loadConfiguration(File config, Logger log)
   {
   this.config = new AWConfig(config, log, AWConfig.VERSION);
   objectRegistry = new ObjectRegistry(this.config);
+  AWLog.setLogger(log);
   }
 
 @Override
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt)
   {
-  // TODO Auto-generated method stub
-
+  this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
   }
 
 @Override

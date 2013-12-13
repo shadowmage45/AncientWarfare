@@ -35,7 +35,7 @@ import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 
 public class ContainerAWCrafting extends ContainerBase
@@ -108,7 +108,7 @@ public ContainerAWCrafting(EntityPlayer openingPlayer, TEAWCrafting te)
     }
   if(te.bookSlot!=null && te.bookSlot.length>0)
     {
-    slot = new SlotResourceOnly(te, te.bookSlot[0], 8 , 8 + 24, Arrays.asList(new ItemStack(ItemLoader.researchBook))).setIgnoreType(3).setMaxStackSize(1);
+    slot = new SlotResourceOnly(te, te.bookSlot[0], 8 , 8 + 24, Arrays.asList(new ItemStack(ItemLoaderCore.researchBook))).setIgnoreType(3).setMaxStackSize(1);
     bookSlotNum = this.inventorySlots.size();
     this.addSlotToContainer(slot);
     }
@@ -136,7 +136,7 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
     int storageSlots = te.craftMatrix.length;    
     if (slotClickedIndex < 36)//player slots...
       {      
-      if(bookSlotNum>-1 && slotStack.itemID==ItemLoader.researchBook.itemID)
+      if(bookSlotNum>-1 && slotStack.itemID==ItemLoaderCore.researchBook.itemID)
         {
         if(!this.mergeItemStack(slotStack, bookSlotNum, bookSlotNum+1, false))
           {

@@ -25,7 +25,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class AmmoClusterShot extends Ammo
@@ -53,30 +53,30 @@ public AmmoClusterShot(int ammoType, int weight)
   {
   case 10:
   this.neededResearch.add(ResearchGoalNumbers.ballistics1);
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, 1, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clusterCharge, 2, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clayCasing, 2, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.explosiveCharge, 1, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.clusterCharge, 2, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.clayCasing, 2, false, false));
   break;
   
   case 15:
   this.neededResearch.add(ResearchGoalNumbers.ballistics1);
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, 1, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clusterCharge, 3, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clayCasing, 3, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.explosiveCharge, 1, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.clusterCharge, 3, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.clayCasing, 3, false, false));
   break;
   
   case 30:
   this.neededResearch.add(ResearchGoalNumbers.ballistics2);
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, 2, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clusterCharge, 6, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clayCasing, 6, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.explosiveCharge, 2, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.clusterCharge, 6, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.clayCasing, 6, false, false));
   break;
   
   case 45:
   this.neededResearch.add(ResearchGoalNumbers.ballistics3);
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.explosiveCharge, 3, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clusterCharge, 9, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clayCasing, 9, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.explosiveCharge, 3, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.clusterCharge, 9, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.clayCasing, 9, false, false));
   break;
   }
   }

@@ -33,7 +33,7 @@ import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.types.NpcArcher;
 import shadowmage.ancient_warfare.common.npcs.types.NpcBandit;
@@ -447,7 +447,7 @@ public ResourceListRecipe constructRecipe(int level)
       {
       recipe.addResource(stack, 1, false, false);      
       }
-    recipe.addResource(new ItemStack(ItemLoader.rations), this.getUpkeepCost(level), false, false);
+    recipe.addResource(new ItemStack(ItemLoaderCore.rations), this.getUpkeepCost(level), false, false);
     recipe.addResource(new ItemStack(Item.paper), level+1, false, false);
     return recipe;
     }

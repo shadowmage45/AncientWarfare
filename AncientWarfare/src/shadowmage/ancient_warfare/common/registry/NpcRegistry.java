@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.config.AWCoreConfig;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
@@ -57,7 +57,7 @@ public static NpcRegistry instance()
 public void registerNPCs()
   {
   //DEBUG
-  //ItemLoader.instance().addSubtypeToItem(ItemLoader.npcSpawner, npcDummy.getGlobalNpcType(), npcDummy.getDisplayName(), npcDummy.getDisplayTooltip());
+  //ItemLoaderCore.instance().addSubtypeToItem(ItemLoaderCore.npcSpawner, npcDummy.getGlobalNpcType(), npcDummy.getDisplayName(), npcDummy.getDisplayTooltip());
   //END DEBUG...
   
   INpcType[] types = NpcTypeBase.getNpcTypes();
@@ -76,7 +76,7 @@ public void registerNPCs()
       type.getLevelEntry(i).setHealth(AWCore.instance.config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".maxhealth", type.getMaxHealth(i)).getInt(type.getMaxHealth(i)));
       type.getLevelEntry(i).setActionTicks(AWCore.instance.config.getConfig().get("g_npc_config", type.getConfigName()+"."+i+".actiontime", type.getActionTicks(i)).getInt(type.getActionTicks(i)));
       }
-    Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.npcSpawner, type.getGlobalNpcType(), type.getDisplayName(0), "", type.getDisplayTooltip(0));
+    Description d = ItemLoaderCore.instance().addSubtypeInfoToItem(ItemLoaderCore.npcSpawner, type.getGlobalNpcType(), type.getDisplayName(0), "", type.getDisplayTooltip(0));
     d.setIconTexture(type.getIconTexture(), type.getGlobalNpcType());
     } 
   }
@@ -99,7 +99,7 @@ public List getCreativeDisplayItems()
     if(type==null || type.getGlobalNpcType()==0 || !type.isEnabled()){continue;}//if null or dummy type, don't register....
     for(int i = 0; i < type.getNumOfLevels(); i++)
       {
-      stack = new ItemStack(ItemLoader.npcSpawner,1,type.getGlobalNpcType());
+      stack = new ItemStack(ItemLoaderCore.npcSpawner,1,type.getGlobalNpcType());
       tag = new NBTTagCompound();
       tag.setInteger("lev", i);
       stack.setTagInfo("AWNpcSpawner", tag);
@@ -158,7 +158,7 @@ public static Entity getNpcForType(int num, World world, int level, int team)
 
 public static ItemStack getStackFor(INpcType type, int level)
   {
-  ItemStack stack = new ItemStack(ItemLoader.npcSpawner.itemID, 1, type.getGlobalNpcType());
+  ItemStack stack = new ItemStack(ItemLoaderCore.npcSpawner.itemID, 1, type.getGlobalNpcType());
   NBTTagCompound tag = new NBTTagCompound();
   tag.setInteger("lev", level);
   stack.setTagInfo("AWNpcSpawner", tag);

@@ -59,12 +59,12 @@ public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par
 
 public static boolean isBuilderItem(int id)
   {
-  return id== ItemLoader.structureBuilderDirect.itemID || id == ItemLoader.structureCreativeBuilder.itemID || id == ItemLoader.structureCreativeBuilderTicked.itemID || id==ItemLoader.civicBuilder.itemID;
+  return id== ItemLoaderCore.structureBuilderDirect.itemID || id == ItemLoaderCore.structureCreativeBuilder.itemID || id == ItemLoaderCore.structureCreativeBuilderTicked.itemID || id==ItemLoaderCore.civicBuilder.itemID;
   }
 
 public static boolean hasScanBB(int id)
   {
-  return id==ItemLoader.structureBuilderDirect.itemID;
+  return id==ItemLoaderCore.structureBuilderDirect.itemID;
   }
 
 /**

@@ -164,7 +164,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       hit.offsetForMCSide(side);
       placeCivicBlock(world, hit, stack.getItemDamage(), TeamTracker.instance().getTeamForPlayer(player));
       ItemStack item = player.getCurrentEquippedItem();
-      if(item!=null && item.itemID == ItemLoader.civicPlacer.itemID)
+      if(item!=null && item.itemID == ItemLoaderCore.civicPlacer.itemID)
         {
         if(!player.capabilities.isCreativeMode)
           {
@@ -204,7 +204,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         {  
         placeCivicBlock(world, hit, pos1, pos2,  stack.getItemDamage(), TeamTracker.instance().getTeamForPlayer(player));
         ItemStack item = player.getCurrentEquippedItem();
-        if(item!=null && item.itemID == ItemLoader.civicPlacer.itemID)
+        if(item!=null && item.itemID == ItemLoaderCore.civicPlacer.itemID)
           {
           if(!player.capabilities.isCreativeMode)
             {

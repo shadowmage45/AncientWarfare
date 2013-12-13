@@ -113,7 +113,7 @@ public static AWInventoryBasic getInventoryFor(ItemStack stack)
 
 public static void writeInventoryToItem(ItemStack stack, AWInventoryBasic inventory)
   {
-  if(stack!=null && inventory!=null && stack.itemID == ItemLoader.backpack.itemID)
+  if(stack!=null && inventory!=null && stack.itemID == ItemLoaderCore.backpack.itemID)
     {
     NBTTagCompound tag = inventory.getNBTTag();
     tag.setInteger("size", inventory.getSizeInventory());

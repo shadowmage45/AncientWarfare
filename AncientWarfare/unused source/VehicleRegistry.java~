@@ -32,7 +32,7 @@ import java.util.Map.Entry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.entities.VehicleBallista;
@@ -79,7 +79,7 @@ public void registerVehicle(Class <? extends VehicleBase> clz, IVehicleType type
   //AWEntityRegistry.registerEntity(clz, entName, 130, 3, false);
   this.vehicleTypes.put(type.getGlobalVehicleType(), type);
   this.vehicleClasses.put(type, clz);
-  ItemLoader.instance().addSubtypeToItem(ItemLoader.vehicleSpawner, type.getGlobalVehicleType(), type.getDisplayName(), type.getDisplayTooltip());
+  ItemLoaderCore.instance().addSubtypeToItem(ItemLoaderCore.vehicleSpawner, type.getGlobalVehicleType(), type.getDisplayName(), type.getDisplayTooltip());
   }
 
 public IVehicleType getVehicleType(int num)
@@ -146,7 +146,7 @@ public List getCreativeDisplayItems()
       }
     for(int i = 0; i < type.getMaterialType().getNumOfLevels(); i++)
       {
-      stack = new ItemStack(ItemLoader.vehicleSpawner,1,type.getGlobalVehicleType());
+      stack = new ItemStack(ItemLoaderCore.vehicleSpawner,1,type.getGlobalVehicleType());
       NBTTagCompound tag = new NBTTagCompound();
       tag.setInteger("lev", i);
       stack.setTagInfo("AWVehSpawner", tag);

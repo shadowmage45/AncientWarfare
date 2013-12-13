@@ -40,7 +40,7 @@ import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.IGateType;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 
 public abstract class Gate implements IGateType
 {
@@ -86,7 +86,7 @@ public Gate(int id)
     {
     gateTypes[id] = this;
     }
-  this.displayStack = new ItemStack(ItemLoader.gateSpawner,1,id);
+  this.displayStack = new ItemStack(ItemLoaderCore.gateSpawner,1,id);
   }
 
 @Override
@@ -123,7 +123,7 @@ public String getTooltip()
 @Override
 public ItemStack getConstructingItem()
   {
-  return new ItemStack(ItemLoader.gateSpawner,1,this.globalID);
+  return new ItemStack(ItemLoaderCore.gateSpawner,1,this.globalID);
   }
 
 @Override
@@ -358,7 +358,7 @@ public static void registerGateTypes()
 
 private static void registerGateType(IGateType g)
   {
-  Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.gateSpawner, g.getGlobalID(), g.getDisplayName(), "", g.getTooltip());
+  Description d = ItemLoaderCore.instance().addSubtypeInfoToItem(ItemLoaderCore.gateSpawner, g.getGlobalID(), g.getDisplayName(), "", g.getTooltip());
   d.addDisplayStack(g.getDisplayStack());
   d.setIconTexture("ancientwarfare:gate/"+g.getIconTexture(), g.getGlobalID());  
   }

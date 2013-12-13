@@ -86,7 +86,7 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 
 public static ItemStack getCivicBuilderItem(String structure)
   {
-  ItemStack stack = new ItemStack(ItemLoader.civicBuilder.itemID,1,0);
+  ItemStack stack = new ItemStack(ItemLoaderCore.civicBuilder.itemID,1,0);
   NBTTagCompound tag = new NBTTagCompound();
   tag.setString("name", structure);
   stack.setTagInfo("structData", tag);

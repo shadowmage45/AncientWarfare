@@ -25,7 +25,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class AmmoFlameShot extends Ammo
@@ -82,8 +82,8 @@ public AmmoFlameShot(int ammoType, int weight)
   break;
   }
  
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.flameCharge, explosives, false, false));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.clayCasing, cases, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.flameCharge, explosives, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.clayCasing, cases, false, false));
   }
 
 @Override

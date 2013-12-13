@@ -39,7 +39,7 @@ import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.event.AWEventHandler;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.lang.LanguageLoader;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -76,7 +76,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 
-@Mod( modid = "AncientWarfareCore", name="Ancient Warfare Core", version=AWCoreConfig.VERSION, dependencies="AncientWarfare")
+@Mod( modid = "AncientWarfareCore", name="Ancient Warfare Core", version=AWCoreConfig.VERSION, dependencies="required-after:AncientWarfare")
 @NetworkMod
 (
 clientSideRequired = true,
@@ -129,7 +129,7 @@ public void preInit(FMLPreInitializationEvent evt)
   /**
    * load items
    */
-  ItemLoader.instance().load();
+  ItemLoaderCore.instance().load();
   BlockLoader.instance().load();    
   /**
    *load vehicles, ammo, upgrades 

@@ -33,7 +33,7 @@ import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
@@ -49,7 +49,7 @@ IResearchGoal goal;
  */
 public GuiResearchGoal(GuiContainerAdvanced parent, IResearchGoal goal)
   {
-  super(parent, AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,goal.getGlobalResearchNum())));
+  super(parent, AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoaderCore.researchNotes,1,goal.getGlobalResearchNum())));
   this.goal = goal;
 //  int ticks = goal.getResearchTime();
 //  int seconds = ticks/20;

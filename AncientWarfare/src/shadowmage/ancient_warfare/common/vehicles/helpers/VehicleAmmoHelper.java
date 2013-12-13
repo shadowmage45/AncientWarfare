@@ -27,7 +27,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmoEntry;
@@ -74,7 +74,7 @@ public void decreaseCurrentAmmo(int num)
     }
   if(currentAmmoType>=0 && currentAmmoType<this.ammoEntries.size())
     {    
-    num = num - vehicle.inventory.ammoInventory.decreaseCountOf(ItemLoader.ammoItem.itemID, this.getCurrentAmmoType().getAmmoType(), num);
+    num = num - vehicle.inventory.ammoInventory.decreaseCountOf(ItemLoaderCore.ammoItem.itemID, this.getCurrentAmmoType().getAmmoType(), num);
     VehicleAmmoEntry entry = this.ammoEntries.get(this.currentAmmoType);
     int origCount = entry.ammoCount;    
     entry.ammoCount -= num;

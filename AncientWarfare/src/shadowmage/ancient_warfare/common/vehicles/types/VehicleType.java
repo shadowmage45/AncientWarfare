@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
@@ -423,7 +423,7 @@ public List<String> getDisplayTooltip()
 @Override
 public ItemStack getStackForLevel(int level)
   {
-  ItemStack stack = new ItemStack(ItemLoader.vehicleSpawner,1,this.getGlobalVehicleType());
+  ItemStack stack = new ItemStack(ItemLoaderCore.vehicleSpawner,1,this.getGlobalVehicleType());
   stack.setTagCompound(new NBTTagCompound("tag"));
   NBTTagCompound tag = new NBTTagCompound();
   tag.setInteger("lev", level);  
@@ -509,7 +509,7 @@ public static List getCreativeDisplayItems()
       }
     for(int i = 0; i < type.getMaterialType().getNumOfLevels(); i++)
       {
-      stack = new ItemStack(ItemLoader.vehicleSpawner,1,type.getGlobalVehicleType());
+      stack = new ItemStack(ItemLoaderCore.vehicleSpawner,1,type.getGlobalVehicleType());
       NBTTagCompound tag = new NBTTagCompound();
       tag.setInteger("lev", i);
       stack.setTagInfo("AWVehSpawner", tag);

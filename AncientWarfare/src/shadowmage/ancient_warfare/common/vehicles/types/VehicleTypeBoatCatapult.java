@@ -24,7 +24,7 @@ import net.minecraft.block.Block;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.config.AWCoreConfig;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
@@ -162,9 +162,9 @@ public VehicleTypeBoatCatapult(int typeNum)
   this.addNeededResearch(3, ResearchGoal.upgradeMechanics4);
   this.addNeededResearch(4, ResearchGoal.upgradeMechanics5);
   
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.torsionUnit, 3, false, false));
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.mobilityUnit, 1, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.torsionUnit, 3, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.equipmentBay, 1, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.mobilityUnit, 1, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Block.cactus, 2, false, false));
   }
 

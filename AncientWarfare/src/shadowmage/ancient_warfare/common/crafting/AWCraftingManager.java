@@ -42,7 +42,7 @@ import shadowmage.ancient_warfare.common.civics.types.ICivicType;
 import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.gates.IGateType;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.plugins.PluginProxy;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
@@ -99,7 +99,7 @@ private AWCraftingManager()
   recipesByType.put(RecipeType.ALCHEMY, alchemyRecipes);
   recipesByType.put(RecipeType.ALCHEMY_MISC, alchemyMiscRecipes);
   recipesByType.put(RecipeType.NONE, new ArrayList<ResourceListRecipe>());
-  this.recipeItems = new Object[][] {{ItemLoader.ironRings}, {Item.helmetChain}, {Item.plateChain}, {Item.legsChain}, {Item.bootsChain}};
+  this.recipeItems = new Object[][] {{ItemLoaderCore.ironRings}, {Item.helmetChain}, {Item.plateChain}, {Item.legsChain}, {Item.bootsChain}};
 
   }
 
@@ -244,7 +244,7 @@ public void loadRecipes()
   this.addAlchemyRecipes();
   
   //research book
-  this.vanillaRecipeList.add(CraftingManager.getInstance().addRecipe(new ItemStack(ItemLoader.researchBook), new Object[] {"gll","ppp","gll", 'p', Item.paper, 'l', Item.leather, 'g', Item.ingotGold} ));
+  this.vanillaRecipeList.add(CraftingManager.getInstance().addRecipe(new ItemStack(ItemLoaderCore.researchBook), new Object[] {"gll","ppp","gll", 'p', Item.paper, 'l', Item.leather, 'g', Item.ingotGold} ));
   
   //research table
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 0 ), new Object[] {"sps","wcw","w_w", 's', new ItemStack(Block.stoneSingleSlab,1,0), 'w', Block.planks, 'c', Block.chest, 'p', Item.paper}) );
@@ -271,21 +271,21 @@ public void loadRecipes()
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(BlockLoader.crafting,1, 7 ), new Object[] {"ppp","pcp","p_p", 'p', Block.woodSingleSlab, 'c', Block.chest} ));
      
   //iron rings
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(ItemLoader.componentItem, 5, ItemLoader.ironRings.getItemDamage()), new Object[] {"_i_","i_i", 'i', Item.ingotIron} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(new ItemStack(ItemLoaderCore.componentItem, 5, ItemLoaderCore.ironRings.getItemDamage()), new Object[] {"_i_","i_i", 'i', Item.ingotIron} ));
       
   this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(BlockLoader.trashcan.copy(), new Object[] {"psp", "rtr", "blb", 'p', Block.planks, 's', Item.stick, 't', Block.stone, 'r', Item.redstone, 'b', Block.stoneBrick, 'l', Item.bucketLava} ));
   
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer1.copy(), new Object[] {"ms", "ms", "ms", 's', Item.stick, 'm', Block.cobblestone} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoaderCore.hammer1.copy(), new Object[] {"ms", "ms", "ms", 's', Item.stick, 'm', Block.cobblestone} ));
   
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer2.copy(), new Object[] {"ms", "ms", "ms", 's', Item.stick, 'm', Item.ingotIron} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoaderCore.hammer2.copy(), new Object[] {"ms", "ms", "ms", 's', Item.stick, 'm', Item.ingotIron} ));
   
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.hammer3.copy(), new Object[] {"ms", "ms", "ms", 's', Item.stick, 'm', Item.diamond} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoaderCore.hammer3.copy(), new Object[] {"ms", "ms", "ms", 's', Item.stick, 'm', Item.diamond} ));
   
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.quill1.copy(), new Object[] {"__f", "_s_", "m__", 's', Item.stick, 'm', Item.ingotIron, 'f', Item.feather} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoaderCore.quill1.copy(), new Object[] {"__f", "_s_", "m__", 's', Item.stick, 'm', Item.ingotIron, 'f', Item.feather} ));
   
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.quill2.copy(), new Object[] {"__f", "_s_", "m__", 's', Item.stick, 'm', Item.ingotGold, 'f', Item.feather} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoaderCore.quill2.copy(), new Object[] {"__f", "_s_", "m__", 's', Item.stick, 'm', Item.ingotGold, 'f', Item.feather} ));
   
-  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoader.quill3.copy(), new Object[] {"__f", "_s_", "m__", 's', Item.stick, 'm', Item.diamond, 'f', Item.feather} ));
+  this.vanillaRecipeList.add( CraftingManager.getInstance().addRecipe(ItemLoaderCore.quill3.copy(), new Object[] {"__f", "_s_", "m__", 's', Item.stick, 'm', Item.diamond, 'f', Item.feather} ));
   
   //iron ring->chain mail  
   for (int i = 0; i < this.recipeItems[0].length; ++i)
@@ -322,34 +322,34 @@ protected void addAlchemyRecipes()
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.netherrack,4), false, false));
   this.alchemyRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.cement.itemID, 8, ItemLoader.cement.getItemDamage()), RecipeType.ALCHEMY);
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.cement.itemID, 8, ItemLoaderCore.cement.getItemDamage()), RecipeType.ALCHEMY);
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.bucketWater), false, false));
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Block.sand), false, false));
   recipe.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.clay), false, false));
   this.alchemyRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.reinforced,16,0), RecipeType.ALCHEMY_MISC);
-  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoader.cement, false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.cement, false, false));
   recipe.resources.add(new ItemStackWrapperCrafting(Block.stoneBrick, 16, true, false));
   this.alchemyMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.reinforced,16,1), RecipeType.ALCHEMY_MISC);
-  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoader.cement, false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.cement, false, false));
   recipe.resources.add(new ItemStackWrapperCrafting(Block.brick, 16, true, false));
   this.alchemyMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.reinforced,16,2), RecipeType.ALCHEMY_MISC);
-  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoader.cement, false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.cement, false, false));
   recipe.resources.add(new ItemStackWrapperCrafting(Block.netherBrick, 16, true, false));
   this.alchemyMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.reinforced,16,3), RecipeType.ALCHEMY_MISC);
-  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoader.cement, false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.cement, false, false));
   recipe.resources.add(new ItemStackWrapperCrafting(Block.obsidian, 8, true, false));
   this.alchemyMiscRecipes.add(recipe);
   
   recipe = new ResourceListRecipe(new ItemStack(BlockLoader.reinforced,16,4), RecipeType.ALCHEMY_MISC);
-  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoader.cement, false, false));
+  recipe.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.cement, false, false));
   recipe.resources.add(new ItemStackWrapperCrafting(Block.sandStone, 16, true, false));
   this.alchemyMiscRecipes.add(recipe);
   }
@@ -439,25 +439,25 @@ protected void addCivicRecipes()
   recipe.addResource(Block.planks,7,true);
   this.civicMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.backpack,1,0), RecipeType.CIVIC_MISC);
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.backpack,1,0), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,1,false);  
   recipe.addResource(Block.cloth,8,true);
   recipe.addNeededResearch(ResearchGoalNumbers.logistics2);
   this.civicMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.backpack,1,16), RecipeType.CIVIC_MISC);
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.backpack,1,16), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,2,false);  
   recipe.addResource(Block.cloth,8,true);
   recipe.addNeededResearch(ResearchGoalNumbers.logistics3);
   this.civicMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.backpack,1,32), RecipeType.CIVIC_MISC);
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.backpack,1,32), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,3,false);  
   recipe.addResource(Block.cloth,8,true);
   recipe.addNeededResearch(ResearchGoalNumbers.logistics4);
   this.civicMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.backpack,1,48), RecipeType.CIVIC_MISC);
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.backpack,1,48), RecipeType.CIVIC_MISC);
   recipe.addResource(Block.chest,4,false);  
   recipe.addResource(Block.cloth,8,true);
   recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
@@ -557,39 +557,39 @@ protected void addCivicRecipes()
     this.civicMiscRecipes.add(recipe);
     }
   
-  recipe = new ResourceListRecipe(ItemLoader.hammer1, RecipeType.CIVIC_MISC);
+  recipe = new ResourceListRecipe(ItemLoaderCore.hammer1, RecipeType.CIVIC_MISC);
   recipe.addResource(Item.ingotIron, 4, false);
   recipe.addResource(Item.stick, 2, false);
   recipe.addNeededResearch(ResearchGoal.logistics1);
   this.civicMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.hammer2, RecipeType.CIVIC_MISC);
+  recipe = new ResourceListRecipe(ItemLoaderCore.hammer2, RecipeType.CIVIC_MISC);
   recipe.addResource(Item.ingotGold, 4, false);
   recipe.addResource(Item.stick, 2, false);
   recipe.addNeededResearch(ResearchGoal.logistics3);
   this.civicMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.hammer3, RecipeType.CIVIC_MISC);
+  recipe = new ResourceListRecipe(ItemLoaderCore.hammer3, RecipeType.CIVIC_MISC);
   recipe.addResource(Item.diamond, 4, false);
   recipe.addResource(Item.stick, 2, false);
   recipe.addNeededResearch(ResearchGoal.logistics5);
   this.civicMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.quill1, RecipeType.CIVIC_MISC);
+  recipe = new ResourceListRecipe(ItemLoaderCore.quill1, RecipeType.CIVIC_MISC);
   recipe.addResource(Item.ingotIron, 1, false);
   recipe.addResource(Item.stick, 1, false);
   recipe.addResource(Item.feather, 1, false);
   recipe.addNeededResearch(ResearchGoal.logistics1);
   this.civicMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.quill2, RecipeType.CIVIC_MISC);
+  recipe = new ResourceListRecipe(ItemLoaderCore.quill2, RecipeType.CIVIC_MISC);
   recipe.addResource(Item.ingotGold, 1, false);
   recipe.addResource(Item.stick, 1, false);
   recipe.addResource(Item.feather, 1, false);
   recipe.addNeededResearch(ResearchGoal.logistics1);
   this.civicMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.quill3, RecipeType.CIVIC_MISC);
+  recipe = new ResourceListRecipe(ItemLoaderCore.quill3, RecipeType.CIVIC_MISC);
   recipe.addResource(Item.diamond, 1, false);
   recipe.addResource(Item.stick, 1, false);
   recipe.addResource(Item.feather, 1, false);
@@ -641,27 +641,27 @@ protected void addNpcRecipes()
       }      
     }
   
-  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.npcCommandBaton,1,0), RecipeType.NPC_MISC);
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.npcCommandBaton,1,0), RecipeType.NPC_MISC);
   recipe.addResource(Item.stick, 4, false);
   recipe.addResource(Item.ingotIron, 2, false);
   recipe.addNeededResearch(ResearchGoalNumbers.command2);
   this.npcMiscRecipes.add(recipe);  
   
-  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.npcCommandBaton,1,1), RecipeType.NPC_MISC);
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.npcCommandBaton,1,1), RecipeType.NPC_MISC);
   recipe.addResource(Item.stick, 4, false);
   recipe.addResource(Item.ingotGold, 2, false);
   recipe.addResource(Item.diamond, 1, false);
   recipe.addNeededResearch(ResearchGoalNumbers.command4);
   this.npcMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.courierRouteSlip,1,0), RecipeType.NPC_MISC);
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.routingSlip,1,0), RecipeType.NPC_MISC);
   recipe.addResource(Item.paper, 1, false);
   recipe.addResource(Item.dyePowder, 1, 2, false);    
   recipe.addResource(Block.planks, 1, true);
   recipe.addNeededResearch(ResearchGoalNumbers.logistics3);
   this.npcMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.courierRouteSlip,1,1), RecipeType.NPC_MISC);
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.routingSlip,1,1), RecipeType.NPC_MISC);
   recipe.addResource(Item.paper, 2, false);
   recipe.addResource(Item.dyePowder, 1, 2, false);
   recipe.addResource(Item.dyePowder, 4, 2, false);
@@ -670,7 +670,7 @@ protected void addNpcRecipes()
   recipe.addNeededResearch(ResearchGoalNumbers.logistics4);
   this.npcMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.courierRouteSlip,1,2), RecipeType.NPC_MISC);
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.routingSlip,1,2), RecipeType.NPC_MISC);
   recipe.addResource(Item.paper, 3, false);
   recipe.addResource(Item.dyePowder, 0, 2, false);//ink
   recipe.addResource(Item.dyePowder, 1, 2, false);//red
@@ -680,7 +680,7 @@ protected void addNpcRecipes()
   recipe.addNeededResearch(ResearchGoalNumbers.logistics5);
   this.npcMiscRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(new ItemStack(ItemLoader.researchBook), RecipeType.NPC_MISC);
+  recipe = new ResourceListRecipe(new ItemStack(ItemLoaderCore.researchBook), RecipeType.NPC_MISC);
   recipe.addResource(Item.paper, 3, false);
   recipe.addResource(Item.leather, 4, false);
   recipe.addResource(Item.ingotGold, 2, false);  
@@ -727,14 +727,14 @@ protected void addUpgradeRecipes()
  
   RecipeType type = RecipeType.VEHICLE_MISC;
   
-  recipe = new ResourceListRecipe(ItemLoader.mobilityUnit, 1 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.mobilityUnit, 1 , type);
   recipe.addResource(Item.ingotIron, 2, false);
   recipe.addResource(Block.pistonBase, 1, false);
   recipe.addResource(Item.redstone, 4, false);
   recipe.addNeededResearch(ResearchGoalNumbers.mobility1);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.turretComponents, 1 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.turretComponents, 1 , type);
   recipe.addResource(Item.ingotIron, 1, false);
   recipe.addResource(Block.pistonBase, 1, false);
   recipe.addResource(Item.silk, 1, false);
@@ -742,76 +742,76 @@ protected void addUpgradeRecipes()
   recipe.addNeededResearch(ResearchGoalNumbers.turrets1);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.torsionUnit, 1 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.torsionUnit, 1 , type);
   recipe.addResource(Item.ingotIron, 1, false);
   recipe.addResource(Item.stick, 2, false);
   recipe.addResource(Item.silk, 4, false);
   recipe.addNeededResearch(ResearchGoalNumbers.torsion1);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.counterWeightUnit, 1 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.counterWeightUnit, 1 , type);
   recipe.addResource(Item.ingotIron, 2, false);
   recipe.addResource(Block.cobblestone, 4, false);
   recipe.addResource(Item.silk, 4, false);
   recipe.addNeededResearch(ResearchGoalNumbers.counterweights1);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.powderCase, 1 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.powderCase, 1 , type);
   recipe.addResource(Item.ingotIron, 4, false);
   recipe.addResource(Block.cloth, 2, true);
   recipe.addNeededResearch(ResearchGoalNumbers.explosives1);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.equipmentBay, 1 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.equipmentBay, 1 , type);
   recipe.addResource(Item.ingotIron, 6, false);
   recipe.addResource(Block.cloth, 2, true);
   recipe.addResource(Block.planks, 2, true);  
   this.upgradeRecipes.add(recipe);
 
-  recipe = new ResourceListRecipe(ItemLoader.wood1, 8 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.wood1, 8 , type);
   recipe.addResource(Item.leather, 1, false);
   recipe.addResource(Block.planks, 7, true);  
   recipe.addNeededResearch(ResearchGoalNumbers.wood1);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.wood2, 8 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.wood2, 8 , type);
   recipe.addResource(Item.leather, 2, false);
   recipe.addResource(Item.ingotIron, 1, false);
   recipe.addResource(Block.planks, 5, true);    
   recipe.addNeededResearch(ResearchGoalNumbers.wood2);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.wood3, 8 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.wood3, 8 , type);
   recipe.addResource(Item.leather, 1, false);
   recipe.addResource(Item.ingotIron, 3, false);
   recipe.addResource(Block.planks, 4, true);    
   recipe.addNeededResearch(ResearchGoalNumbers.wood3);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.wood4, 8 , type);  
+  recipe = new ResourceListRecipe(ItemLoaderCore.wood4, 8 , type);  
   recipe.addResource(Item.ingotIron, 4, false);
   recipe.addResource(Block.planks, 4, true);    
   recipe.addNeededResearch(ResearchGoalNumbers.wood4);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.iron1, 8 , type);  
+  recipe = new ResourceListRecipe(ItemLoaderCore.iron1, 8 , type);  
   recipe.addResource(Item.ingotIron, 8, false);    
   recipe.addNeededResearch(ResearchGoalNumbers.iron1);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.iron2, 8 , type);  
+  recipe = new ResourceListRecipe(ItemLoaderCore.iron2, 8 , type);  
   recipe.addResource(Item.ingotIron, 8, false);
   recipe.addResource(Item.coal, 2, true);
   recipe.addNeededResearch(ResearchGoalNumbers.iron2);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.iron3, 8 , type);  
+  recipe = new ResourceListRecipe(ItemLoaderCore.iron3, 8 , type);  
   recipe.addResource(Item.ingotIron, 12, false);
   recipe.addResource(Item.coal, 4, true);
   recipe.addNeededResearch(ResearchGoalNumbers.iron3);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.iron4, 8 , type);  
+  recipe = new ResourceListRecipe(ItemLoaderCore.iron4, 8 , type);  
   recipe.addResource(Item.ingotIron, 8, false);
   recipe.addResource(Item.ingotGold, 4, false);
   recipe.addResource(Item.redstone, 4, false);
@@ -819,7 +819,7 @@ protected void addUpgradeRecipes()
   recipe.addNeededResearch(ResearchGoalNumbers.iron4);
   this.upgradeRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.iron5, 8 , type);  
+  recipe = new ResourceListRecipe(ItemLoaderCore.iron5, 8 , type);  
   recipe.addResource(Item.ingotIron, 8, false);
   recipe.addResource(Item.ingotGold, 8, false);
   recipe.addResource(Item.redstone, 4, false);
@@ -846,33 +846,33 @@ protected void addAmmoRecipes()
   
   RecipeType type = RecipeType.AMMO_MISC;
   
-  recipe = new ResourceListRecipe(ItemLoader.flameCharge, 8 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.flameCharge, 8 , type);
   recipe.addResource(Item.coal, 2, true);
   recipe.addResource(Block.cloth, 1, true);
   recipe.addNeededResearch(ResearchGoalNumbers.flammables1);
   this.componentRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.explosiveCharge, 8 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.explosiveCharge, 8 , type);
   recipe.addResource(Item.gunpowder, 2, false);
   recipe.addResource(Item.coal, 1, true);
   recipe.addResource(Item.silk, 1, false);
   recipe.addNeededResearch(ResearchGoalNumbers.explosives1);
   this.componentRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.rocketCharge, 8 , type);
+  recipe = new ResourceListRecipe(ItemLoaderCore.rocketCharge, 8 , type);
   recipe.addResource(Item.gunpowder, 2, false);
   recipe.addResource(Item.paper, 1, false);
   recipe.addResource(Item.silk, 1, false);
   recipe.addNeededResearch(ResearchGoalNumbers.rockets1);
   this.componentRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.clusterCharge, 8 , type);  
+  recipe = new ResourceListRecipe(ItemLoaderCore.clusterCharge, 8 , type);  
   recipe.addResource(Item.ingotIron, 1, false);
   recipe.addResource(Block.cloth, 1, true);
   recipe.addNeededResearch(ResearchGoalNumbers.ballistics1);
   this.componentRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.napalmCharge, 8 , type);  
+  recipe = new ResourceListRecipe(ItemLoaderCore.napalmCharge, 8 , type);  
   recipe.addResource(Item.gunpowder, 4, false);
   recipe.addResource(Block.cloth, 2, true);
   recipe.addResource(Block.cactus, 2, true);
@@ -880,12 +880,12 @@ protected void addAmmoRecipes()
   recipe.addNeededResearch(ResearchGoalNumbers.ballistics1);
   this.componentRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.clayCasing, 8 , type);  
+  recipe = new ResourceListRecipe(ItemLoaderCore.clayCasing, 8 , type);  
   recipe.addResource(Item.clay, 4, false);
   recipe.addResource(Block.cloth, 1, true);
   this.componentRecipes.add(recipe);
   
-  recipe = new ResourceListRecipe(ItemLoader.ironCasing, 8 , type);  
+  recipe = new ResourceListRecipe(ItemLoaderCore.ironCasing, 8 , type);  
   recipe.addResource(Item.ingotIron, 4, false);
   recipe.addResource(Block.cloth, 1, true);
   recipe.addNeededResearch(ResearchGoalNumbers.iron1);

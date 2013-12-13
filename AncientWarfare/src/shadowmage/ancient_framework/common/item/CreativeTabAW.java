@@ -24,7 +24,7 @@ package shadowmage.ancient_framework.common.item;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -38,7 +38,7 @@ public static CreativeTabAW vehicleTab = new CreativeTabAW("Ancient Warfare Vehi
   @Override
   public ItemStack getIconItemStack()
     {
-    return new ItemStack(ItemLoader.vehicleSpawner);
+    return new ItemStack(ItemLoaderCore.vehicleSpawner);
     }
   };
   
@@ -47,7 +47,7 @@ public static CreativeTabAW npcTab = new CreativeTabAW("Ancient Warfare Npcs")
   @Override
   public ItemStack getIconItemStack()
     {
-    return new ItemStack(ItemLoader.npcSpawner,1,2);
+    return new ItemStack(ItemLoaderCore.npcSpawner,1,2);
     }
   };
   
@@ -56,7 +56,7 @@ public static CreativeTabAW ammoTab = new CreativeTabAW("Ancient Warfare Ammunit
   @Override
   public ItemStack getIconItemStack()
     {
-    return new ItemStack(ItemLoader.ammoItem);
+    return new ItemStack(ItemLoaderCore.ammoItem);
     }
   };
 
@@ -65,7 +65,7 @@ public static CreativeTabAW researchTab = new CreativeTabAW("Ancient Warfare Res
   @Override
   public ItemStack getIconItemStack()
     {
-    return new ItemStack(ItemLoader.researchNotes);
+    return new ItemStack(ItemLoaderCore.researchNotes);
     }
   };
   
@@ -87,7 +87,7 @@ private CreativeTabAW(String label)
 @Override
 public ItemStack getIconItemStack()
   {
-  return new ItemStack(ItemLoader.civicPlacer);
+  return new ItemStack(ItemLoaderCore.civicPlacer);
   }
 
 /**

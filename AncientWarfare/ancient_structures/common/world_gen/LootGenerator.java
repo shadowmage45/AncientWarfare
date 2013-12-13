@@ -26,7 +26,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
@@ -69,7 +69,7 @@ public void addLootToTables()
     if(g==null){continue;}
     if(g.isEnabled() && g.isEnabledForLoot())
       {
-      addLoot(new ItemStack(ItemLoader.researchNotes,1,g.getGlobalResearchNum()) , 1 , 1 , 1);      
+      addLoot(new ItemStack(ItemLoaderCore.researchNotes,1,g.getGlobalResearchNum()) , 1 , 1 , 1);      
       }
     }
   for(IVehicleType t : VehicleType.vehicleTypes)
@@ -100,8 +100,8 @@ public void addLootToTables()
 //    addLoot(c.getItemToConstruct(), 1, 1, 1);
 //    }
   
-  addLoot(new ItemStack(ItemLoader.npcCommandBaton,1,0),1,1,15);
-  addLoot(new ItemStack(ItemLoader.npcCommandBaton,1,1),1,1,5);
+  addLoot(new ItemStack(ItemLoaderCore.npcCommandBaton,1,0),1,1,15);
+  addLoot(new ItemStack(ItemLoaderCore.npcCommandBaton,1,1),1,1,5);
     
   
   }

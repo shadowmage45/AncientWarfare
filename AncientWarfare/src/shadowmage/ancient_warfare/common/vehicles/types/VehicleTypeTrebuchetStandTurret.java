@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
 public class VehicleTypeTrebuchetStandTurret extends VehicleTypeTrebuchet
@@ -53,7 +53,7 @@ public VehicleTypeTrebuchetStandTurret(int typeNum)
   this.addNeededResearch(2, ResearchGoal.vehicleTurrets3);
   this.addNeededResearch(3, ResearchGoal.vehicleTurrets4);
   this.addNeededResearch(4, ResearchGoal.vehicleTurrets5);
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.turretComponents, 1, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.turretComponents, 1, false, false));
   }
 
 @Override

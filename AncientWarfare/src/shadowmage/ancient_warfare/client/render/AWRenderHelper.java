@@ -40,7 +40,7 @@ import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.item.ItemCivicPlacer;
 import shadowmage.ancient_warfare.common.item.ItemGateSpawner;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AWRenderHelper
@@ -227,7 +227,7 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
 //    {
 //    this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
 //    }  
-//  if(id==ItemLoader.structureBuilderDirect.itemID)
+//  if(id==ItemLoaderCore.structureBuilderDirect.itemID)
 //    {
 //    if(ItemBuilderDirect.isScanning(stack))
 //      {
@@ -238,11 +238,11 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
 //    {
 //    this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks, true);
 //    }
-  if(id==ItemLoader.civicPlacer.itemID)
+  if(id==ItemLoaderCore.civicPlacer.itemID)
     {
     this.renderScannerBB(player, stack, (ItemCivicPlacer)stack.getItem(), evt.partialTicks, true);
     }
-  else if(id==ItemLoader.gateSpawner.itemID)
+  else if(id==ItemLoaderCore.gateSpawner.itemID)
     {
     this.renderScannerBB(player, stack, (ItemGateSpawner)stack.getItem(), evt.partialTicks, false);
     }

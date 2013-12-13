@@ -29,7 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
@@ -125,7 +125,7 @@ protected boolean tryFinishCrafting()
       IResearchGoal g = ResearchGoal.getGoalByID(num);
       if(!this.workingPlayerEntry.hasDoneResearch(g) && this.workingPlayerEntry.hasDoneResearch(g.getDependencies()))
         {
-        this.recipe = AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1, g.getGlobalResearchNum()));
+        this.recipe = AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoaderCore.researchNotes,1, g.getGlobalResearchNum()));
         this.workProgressMax = g.getResearchTime();
         break;
         }

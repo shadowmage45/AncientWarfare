@@ -96,7 +96,7 @@ import shadowmage.ancient_warfare.client.render.vehicle.RenderTrebuchetStandTurr
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.plugins.PluginProxy;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
@@ -282,7 +282,7 @@ public void loadRenders()
   /**
    * load up the vehicle item renderer...
    */
-  MinecraftForgeClient.registerItemRenderer(ItemLoader.vehicleSpawner.itemID, RenderVehicleHelper.instance());
+  MinecraftForgeClient.registerItemRenderer(ItemLoaderCore.vehicleSpawner.itemID, RenderVehicleHelper.instance());
   
   /**
    * npcs...
@@ -292,7 +292,7 @@ public void loadRenders()
   /**
    * civic item render (render item as block)
    */
-  MinecraftForgeClient.registerItemRenderer(ItemLoader.civicPlacer.itemID, new CivicItemRenderer());
+  MinecraftForgeClient.registerItemRenderer(ItemLoaderCore.civicPlacer.itemID, new CivicItemRenderer());
   RenderTEMotor engineRender = new RenderTEMotor();
   MinecraftForgeClient.registerItemRenderer(BlockLoader.engineBlock.blockID, engineRender);
   ClientRegistry.bindTileEntitySpecialRenderer(PluginProxy.bcProxy.getHandCrankEngineClass(), engineRender);

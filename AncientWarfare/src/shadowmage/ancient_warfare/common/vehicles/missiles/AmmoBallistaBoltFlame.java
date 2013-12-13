@@ -26,7 +26,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class AmmoBallistaBoltFlame extends Ammo
@@ -54,7 +54,7 @@ public AmmoBallistaBoltFlame(int ammoType)
   this.resources.add(new ItemStackWrapperCrafting(Item.stick, 5));
   this.resources.add(new ItemStackWrapperCrafting(Item.ingotIron, 2));
   this.resources.add(new ItemStackWrapperCrafting(Item.feather, 5));
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.flameCharge, 2, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.flameCharge, 2, false, false));
   this.numCrafted = 8;
   }
 

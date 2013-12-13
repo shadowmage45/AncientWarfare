@@ -27,7 +27,7 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.item.AWItemBase;
 import shadowmage.ancient_framework.common.registry.entry.Description;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_warfare.common.vehicles.armors.VehicleArmorIron;
 import shadowmage.ancient_warfare.common.vehicles.armors.VehicleArmorObsidian;
@@ -64,8 +64,8 @@ public Collection<IVehicleArmorType> getArmorTypes()
 
 public void registerArmorType(IVehicleArmorType armor)
   {
-  AWItemBase item = ItemLoader.armorItem; 
-  Description d = ItemLoader.instance().addSubtypeInfoToItem(item, armor.getGlobalArmorType(), armor.getDisplayName(),"", armor.getDisplayTooltip());
+  AWItemBase item = ItemLoaderCore.armorItem; 
+  Description d = ItemLoaderCore.instance().addSubtypeInfoToItem(item, armor.getGlobalArmorType(), armor.getDisplayName(),"", armor.getDisplayTooltip());
   d.setIconTexture(armor.getIconTexture(), armor.getGlobalArmorType());
   d.addDisplayStack(new ItemStack(item,1,armor.getGlobalArmorType()));
   this.armorInstances.put(armor.getGlobalArmorType(), armor);
@@ -78,7 +78,7 @@ public IVehicleArmorType getArmorType(int type)
 
 public IVehicleArmorType getArmorForStack(ItemStack stack)
   {
-  if(stack!=null && stack.itemID==ItemLoader.armorItem.itemID)
+  if(stack!=null && stack.itemID==ItemLoaderCore.armorItem.itemID)
     {
     return armorInstances.get(stack.getItemDamage());
     }      

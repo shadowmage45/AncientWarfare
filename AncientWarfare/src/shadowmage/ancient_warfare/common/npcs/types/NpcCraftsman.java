@@ -27,7 +27,7 @@ import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
@@ -68,15 +68,15 @@ protected ItemStack getToolStack(int level)
   switch(level)
   {
   case 0:
-  sword1 = ItemLoader.hammer1.copy();
+  sword1 = ItemLoaderCore.hammer1.copy();
   return sword1;
   
   case 1:
-  sword1 = ItemLoader.hammer2.copy();
+  sword1 = ItemLoaderCore.hammer2.copy();
   return sword1;
   
   case 2:  
-  sword1 = ItemLoader.hammer3.copy();
+  sword1 = ItemLoaderCore.hammer3.copy();
   return sword1;
   }
   return null;

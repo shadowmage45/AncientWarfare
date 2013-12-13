@@ -91,7 +91,7 @@ import shadowmage.ancient_warfare.common.crafting.TEAWNpcCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWResearch;
 import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
 import shadowmage.ancient_warfare.common.crafting.TEAWVehicleCraft;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.machine.TEChunkLoaderDeluxe;
 import shadowmage.ancient_warfare.common.machine.TEFoodProcessor;
 import shadowmage.ancient_warfare.common.machine.TEMailBox;
@@ -222,7 +222,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   
   case COURIER_SLIP:
   ItemStack stack = player.inventory.getCurrentItem();
-  if(stack!=null && stack.itemID==ItemLoader.courierRouteSlip.itemID)
+  if(stack!=null && stack.itemID==ItemLoaderCore.routingSlip.itemID)
     {    
     CourierRoutingInfo info = new CourierRoutingInfo(stack);
     ContainerCourierRoutingSlip container = new ContainerCourierRoutingSlip(player, info);
@@ -301,7 +301,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   return new ContainerDummy();
   
   case BACKPACK:
-  if(player.inventory.getCurrentItem()!=null && player.inventory.getCurrentItem().itemID == ItemLoader.backpack.itemID)
+  if(player.inventory.getCurrentItem()!=null && player.inventory.getCurrentItem().itemID == ItemLoaderCore.backpack.itemID)
     {
     return new ContainerBackpack(player);
     }
@@ -454,7 +454,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   
   case COURIER_SLIP:
   ItemStack stack = player.inventory.getCurrentItem();
-  if(stack!=null && stack.itemID==ItemLoader.courierRouteSlip.itemID)
+  if(stack!=null && stack.itemID==ItemLoaderCore.routingSlip.itemID)
     {    
     CourierRoutingInfo info = new CourierRoutingInfo(stack);
     ContainerCourierRoutingSlip container = new ContainerCourierRoutingSlip(player, info);
@@ -557,7 +557,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   return null;
   
   case BACKPACK:
-  if(player.inventory.getCurrentItem()!=null && player.inventory.getCurrentItem().itemID == ItemLoader.backpack.itemID)
+  if(player.inventory.getCurrentItem()!=null && player.inventory.getCurrentItem().itemID == ItemLoaderCore.backpack.itemID)
     {
     return new GuiBackpack(new ContainerBackpack(player));   
     }

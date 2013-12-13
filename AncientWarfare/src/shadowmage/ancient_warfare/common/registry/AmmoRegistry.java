@@ -29,7 +29,7 @@ import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.item.AWItemBase;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.AWCore;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.vehicles.missiles.Ammo;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.MissileBase;
@@ -97,9 +97,9 @@ public IAmmoType getAmmoEntry(int type)
 
 public void registerAmmoTypeWithItem(IAmmoType ammo)
   {
-  AWItemBase item = ItemLoader.ammoItem; 
+  AWItemBase item = ItemLoaderCore.ammoItem; 
   List<String> tips = ammo.getDisplayTooltip();  
-  Description d = ItemLoader.instance().addSubtypeInfoToItem(item, ammo.getAmmoType(), ammo.getDisplayName());
+  Description d = ItemLoaderCore.instance().addSubtypeInfoToItem(item, ammo.getAmmoType(), ammo.getDisplayName());
   for(String tip : tips)
     {
     d.addTooltip(tip, ammo.getAmmoType());
@@ -142,7 +142,7 @@ public void registerAmmoType(IAmmoType ammo)
 
 public IAmmoType getAmmoForStack(ItemStack stack)
   {
-  if(stack==null || stack.itemID != ItemLoader.ammoItem.itemID)
+  if(stack==null || stack.itemID != ItemLoaderCore.ammoItem.itemID)
     {
     return null;
     }

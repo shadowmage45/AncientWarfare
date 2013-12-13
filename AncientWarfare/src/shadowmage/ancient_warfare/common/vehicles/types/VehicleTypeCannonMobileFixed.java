@@ -21,7 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 
@@ -54,7 +54,7 @@ public VehicleTypeCannonMobileFixed(int typeNum)
   this.addNeededResearch(2, ResearchGoal.vehicleMobility3);
   this.addNeededResearch(3, ResearchGoal.vehicleMobility4);
   this.addNeededResearch(4, ResearchGoal.vehicleMobility5); 
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.mobilityUnit, 1, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.mobilityUnit, 1, false, false));
   }
 
 }

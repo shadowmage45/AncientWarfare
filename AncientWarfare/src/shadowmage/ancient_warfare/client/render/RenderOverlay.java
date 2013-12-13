@@ -32,7 +32,7 @@ import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.ancient_warfare.common.config.Settings;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.VehicleMovementType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -105,7 +105,7 @@ public void tickEnd(EnumSet<TickType> type, Object... tickData)
     else
       {
       ItemStack stack = mc.thePlayer.getCurrentEquippedItem();
-      if(stack!=null && stack.getItem()==ItemLoader.civicPlacer)
+      if(stack!=null && stack.getItem()==ItemLoaderCore.civicPlacer)
         {
         int xSize = 0;
         int ySize = 0;

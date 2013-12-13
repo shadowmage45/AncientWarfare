@@ -25,7 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -96,9 +96,9 @@ public VehicleTypeHelicopter(int typeNum)
   this.addNeededResearch(5, ResearchGoal.upgradeMechanics5);
   
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.silk, 8, false, false));
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.powderCase, 2, false, false));
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.mobilityUnit, 2, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.powderCase, 2, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.equipmentBay, 1, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.mobilityUnit, 2, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Block.cloth, 10, true, false));
   
   this.baseHealth = 50;

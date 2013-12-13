@@ -29,7 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 
 public class ContainerSurvivalBuilder extends ContainerBase
@@ -54,7 +54,7 @@ public void handlePacketData(NBTTagCompound tag)
   if(tag.hasKey("clear"))
     {
     ItemStack stack = player.getCurrentEquippedItem();
-    if(stack==null || stack.getItem() == null || stack.getItem().itemID!= ItemLoader.structureBuilderDirect.itemID)
+    if(stack==null || stack.getItem() == null || stack.getItem().itemID!= ItemLoaderCore.structureBuilderDirect.itemID)
       {
       return;
       }

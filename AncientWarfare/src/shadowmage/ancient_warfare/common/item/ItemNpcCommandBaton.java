@@ -134,7 +134,7 @@ public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity en
       NpcBase npc = (NpcBase)entity;
       if(npc.teamNum==16)
         {
-        ItemStack ration = new ItemStack(ItemLoader.rations,1);
+        ItemStack ration = new ItemStack(ItemLoaderCore.rations,1);
         int count = InventoryTools.getCountOf(player.inventory, ration, 0, player.inventory.getSizeInventory()-5);
         if(count >= npc.npcType.getUpkeepCost(npc.rank)/2)
           {
@@ -277,7 +277,7 @@ public BatonSettings getBatonSettings(ItemStack stack)
 
 public static BatonSettings getBatonSettingsStatic(ItemStack stack)
   {
-  ItemNpcCommandBaton baton = (ItemNpcCommandBaton)ItemLoader.npcCommandBaton;
+  ItemNpcCommandBaton baton = (ItemNpcCommandBaton)ItemLoaderCore.npcCommandBaton;
   return baton.getBatonSettings(stack);
   }
 

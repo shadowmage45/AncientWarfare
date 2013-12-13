@@ -30,7 +30,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_framework.common.inventory.SlotNoPull;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
 import shadowmage.ancient_warfare.common.npcs.waypoints.RoutingType;
 
@@ -143,7 +143,7 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
   if(!par1EntityPlayer.worldObj.isRemote)
     {
     ItemStack stack = par1EntityPlayer.inventory.getCurrentItem();
-    if(stack!=null && stack.itemID == ItemLoader.courierRouteSlip.itemID)
+    if(stack!=null && stack.itemID == ItemLoaderCore.routingSlip.itemID)
       {
       info.writeToItem(stack);
       }

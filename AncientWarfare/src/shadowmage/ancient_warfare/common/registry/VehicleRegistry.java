@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.AWCore;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
@@ -136,7 +136,7 @@ public void registerVehicles()
           }
         }
       
-      d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.vehicleSpawner, vehicle.getGlobalVehicleType(), vehicle.getDisplayName());
+      d = ItemLoaderCore.instance().addSubtypeInfoToItem(ItemLoaderCore.vehicleSpawner, vehicle.getGlobalVehicleType(), vehicle.getDisplayName());
       for(String tip : vehicle.getDisplayTooltip())
         {
         d.addTooltip(tip, vehicle.getGlobalVehicleType());

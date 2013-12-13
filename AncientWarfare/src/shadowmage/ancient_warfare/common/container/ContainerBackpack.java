@@ -32,7 +32,7 @@ import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.inventory.SlotExcludeOnly;
 import shadowmage.ancient_framework.common.inventory.SlotNoPull;
 import shadowmage.ancient_warfare.common.item.ItemBackpack;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 
 public class ContainerBackpack extends ContainerBase
 {
@@ -50,7 +50,7 @@ public ContainerBackpack(EntityPlayer openingPlayer)
   int slotNum;
   int xPos; 
   int yPos;
-  ItemStack filter = new ItemStack(ItemLoader.backpack);
+  ItemStack filter = new ItemStack(ItemLoaderCore.backpack);
   for (x = 0; x < 9; ++x)//add player hotbar slots
     {
     slotNum = x;

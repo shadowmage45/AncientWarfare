@@ -32,7 +32,7 @@ import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 /**
@@ -65,7 +65,7 @@ public void registerCivics()
   for(Civic civ : Civic.civicList)
     {
 	  if(civ==null || !civ.addToCreativeMenu()){continue;}
-    Description d = ItemLoader.instance().addSubtypeInfoToItem(ItemLoader.civicPlacer, civ.getGlobalID(), civ.getDisplayName(), "", civ.getDisplayTooltip());
+    Description d = ItemLoaderCore.instance().addSubtypeInfoToItem(ItemLoaderCore.civicPlacer, civ.getGlobalID(), civ.getDisplayName(), "", civ.getDisplayTooltip());
     d.setIconTexture(civ.getIconTexture(), civ.getGlobalID());
     Block block = getBlockFor(civ.getGlobalID());
     int meta = civ.getGlobalID()%16;
@@ -171,7 +171,7 @@ public List<ItemStack> getDisplayStacks()
     {
     if(civ!=null && civ.addToCreativeMenu())
       {
-      ItemStack displayStack = new ItemStack(ItemLoader.civicPlacer,1,civ.getGlobalID());
+      ItemStack displayStack = new ItemStack(ItemLoaderCore.civicPlacer,1,civ.getGlobalID());
       NBTTagCompound tag = new NBTTagCompound();
       displayStack.setTagInfo("civicInfo", tag);
       displayStacks.add(displayStack); 

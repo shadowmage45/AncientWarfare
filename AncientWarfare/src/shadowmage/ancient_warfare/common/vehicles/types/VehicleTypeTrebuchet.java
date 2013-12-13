@@ -25,7 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.config.AWCoreConfig;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
@@ -130,8 +130,8 @@ public VehicleTypeTrebuchet(int typeNum)
   this.addNeededResearch(4, ResearchGoal.vehicleCounterweights5);
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.silk, 8, false, false));
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.leather, 4, false, false));
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.counterWeightUnit, 4, false, false));
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.counterWeightUnit, 4, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.equipmentBay, 1, false, false));
   }
 
 @Override

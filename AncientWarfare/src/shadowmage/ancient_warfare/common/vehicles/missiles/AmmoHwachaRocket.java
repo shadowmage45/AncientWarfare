@@ -27,7 +27,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
 public class AmmoHwachaRocket extends Ammo
@@ -56,7 +56,7 @@ public AmmoHwachaRocket(int ammoType)
   this.numCrafted = 12;
   this.neededResearch.add(ResearchGoalNumbers.rockets1);
   this.neededResearch.add(ResearchGoalNumbers.ballistics1);  
-  this.resources.add(new ItemStackWrapperCrafting(ItemLoader.rocketCharge, 1, false, false));
+  this.resources.add(new ItemStackWrapperCrafting(ItemLoaderCore.rocketCharge, 1, false, false));
   this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.stick), 12, false, false));
   this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.feather), 2, false, false));
   this.resources.add(new ItemStackWrapperCrafting(new ItemStack(Item.ingotIron), 1, false, false));

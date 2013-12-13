@@ -64,7 +64,7 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmOak;
 import shadowmage.ancient_warfare.common.civics.worksite.te.tree.TETreeFarmSpruce;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 
 public class Civic implements ICivicType
 {
@@ -280,7 +280,7 @@ public Class<? extends TECivic> getTileEntityClass()
 @Override
 public ItemStack getItemToConstruct()
   {
-  ItemStack item = new ItemStack(ItemLoader.civicPlacer,1, getGlobalID());
+  ItemStack item = new ItemStack(ItemLoaderCore.civicPlacer,1, getGlobalID());
   NBTTagCompound tag = new NBTTagCompound();
   item.setTagInfo("civicInfo", tag);
   return item;

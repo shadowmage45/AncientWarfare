@@ -22,7 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.item.Item;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
@@ -103,8 +103,8 @@ public VehicleTypeBallista(int typeNum)
   this.addNeededResearch(4, ResearchGoal.vehicleTorsion5);
 
   this.additionalMaterials.add(new ItemStackWrapperCrafting(Item.silk, 8, false, false));
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.torsionUnit, 2, false, false));
-  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoader.equipmentBay, 1, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.torsionUnit, 2, false, false));
+  this.additionalMaterials.add(new ItemStackWrapperCrafting(ItemLoaderCore.equipmentBay, 1, false, false));
   }
 
 @Override
