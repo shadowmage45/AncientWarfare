@@ -30,7 +30,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import shadowmage.ancient_framework.common.registry.entry.Description;
-import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -44,7 +43,6 @@ public Description description;
 public AWItemBlockBase(int par1)
   {
   super(par1);
-  this.setCreativeTab(CreativeTabAW.normal);
   this.setHasSubtypes(true);
   }
 
@@ -73,19 +71,6 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
     super.getSubItems(par1, par2CreativeTabs, par3List);
     } 
-  }
-
-public boolean isShiftClick(EntityPlayer player)
-  {
-  boolean shift = player.isSneaking();
-  if(AWCoreConfig.invertShiftClickOnItems)
-    {
-    return !shift;
-    }
-  else
-    {
-    return shift;
-    }
   }
 
 @Override

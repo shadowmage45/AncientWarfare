@@ -18,19 +18,23 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_framework.common.config;
+package shadowmage.ancient_framework.common.event;
 
-public class Statics
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.WorldEvent;
+import shadowmage.ancient_framework.AWFramework;
+
+public class EventHandler
 {
 
-public static final String CONFIG_PATH = "";
-public static final String ASSETS_PATH = "";
-public static final String TEXTURE_PATH = "textures/";
-public static final String MOD_PREFIX = "ancientwarfare";
-public static final String FRAMEWORK_VERSION = "2.2.038-beta-MC164";
-public static final String CORE_VERSION = FRAMEWORK_VERSION;
-public static final String STRUCTURE_VERSION = CORE_VERSION;
-public static final boolean DEBUG = true;
-
+@ForgeSubscribe
+public void onWorlLoad(WorldEvent.Load evt)
+  {
+  if(evt.world instanceof WorldServer)
+    {
+    AWFramework.instance.gameData.handleWorldLoad(evt.world);
+    }  
+  }
 
 }

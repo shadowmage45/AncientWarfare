@@ -28,12 +28,11 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.AWFramework;
+import shadowmage.ancient_framework.common.interfaces.IContainerGuiCallback;
+import shadowmage.ancient_framework.common.interfaces.IEntityContainerSynch;
+import shadowmage.ancient_framework.common.interfaces.IHandlePacketData;
+import shadowmage.ancient_framework.common.network.Packet03GuiComs;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
-import shadowmage.ancient_warfare.AWCore;
-import shadowmage.ancient_warfare.common.interfaces.IContainerGuiCallback;
-import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
-import shadowmage.ancient_warfare.common.interfaces.IHandlePacketData;
-import shadowmage.ancient_warfare.common.network.Packet03GuiComs;
 
 
 
@@ -190,7 +189,7 @@ public void sendDataToServer(NBTTagCompound tag)
     }
   Packet03GuiComs pkt = new Packet03GuiComs();
   pkt.setData(tag);
-  AWCore.proxy.sendPacketToServer(pkt);
+  AWFramework.proxy.sendPacketToServer(pkt);
   }
 
 /**
@@ -208,7 +207,7 @@ public void sendDataToPlayer(NBTTagCompound tag)
     }
   Packet03GuiComs pkt = new Packet03GuiComs();
   pkt.setData(tag);
-  AWCore.proxy.sendPacketToPlayer(player, pkt);
+  AWFramework.proxy.sendPacketToPlayer(player, pkt);
   }
 
 public abstract List<NBTTagCompound> getInitData();

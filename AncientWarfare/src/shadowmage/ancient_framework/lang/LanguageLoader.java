@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import shadowmage.ancient_framework.AWFramework;
-import shadowmage.ancient_warfare.AWCore;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class LanguageLoader
@@ -124,7 +123,7 @@ protected void loadEnglishFile()
   Properties languageFile = new Properties();
   try
     {
-    InputStream is = AWCore.instance.getClass().getResourceAsStream("/assets/ancientwarfare/lang/en_US.lang");	
+    InputStream is = AWFramework.instance.getClass().getResourceAsStream("/assets/ancientwarfare/lang/en_US.lang");	
     if(is==null)
       {
       AWFramework.instance.logError("error loading english language file...could not locate file.../lang/ancientwarfare/en_US.lang");

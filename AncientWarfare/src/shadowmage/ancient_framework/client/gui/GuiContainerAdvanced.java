@@ -37,11 +37,11 @@ import shadowmage.ancient_framework.client.gui.elements.GuiTab;
 import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElementCallback;
+import shadowmage.ancient_framework.client.render.AWTextureManager;
+import shadowmage.ancient_framework.client.render.RenderTools;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_warfare.client.render.AWTextureManager;
-import shadowmage.ancient_warfare.client.render.RenderTools;
-import shadowmage.ancient_warfare.common.interfaces.IContainerGuiCallback;
+import shadowmage.ancient_framework.common.interfaces.IContainerGuiCallback;
 
 
 public abstract class GuiContainerAdvanced extends GuiContainer implements IContainerGuiCallback, IGuiElementCallback

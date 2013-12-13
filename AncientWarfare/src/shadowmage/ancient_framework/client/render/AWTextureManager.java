@@ -18,19 +18,41 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_framework.common.config;
+package shadowmage.ancient_framework.client.render;
 
-public class Statics
+import java.util.HashMap;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
+import shadowmage.ancient_framework.common.config.Statics;
+
+public class AWTextureManager
 {
 
-public static final String CONFIG_PATH = "";
-public static final String ASSETS_PATH = "";
-public static final String TEXTURE_PATH = "textures/";
-public static final String MOD_PREFIX = "ancientwarfare";
-public static final String FRAMEWORK_VERSION = "2.2.038-beta-MC164";
-public static final String CORE_VERSION = FRAMEWORK_VERSION;
-public static final String STRUCTURE_VERSION = CORE_VERSION;
-public static final boolean DEBUG = true;
+private static HashMap<String, ResourceLocation> textures = new HashMap<String, ResourceLocation>();
 
+/**
+ * 
+ */
+public AWTextureManager()
+  {
+  // TODO Auto-generated constructor stub
+  }
+
+public static void bindTexture(String texture)
+  {
+  Minecraft.getMinecraft().renderEngine.bindTexture(getResource(texture));
+  }
+
+public static ResourceLocation getResource(String texture)
+  {
+  ResourceLocation resource = textures.get(texture);
+  if(resource==null)
+    {
+    resource = new ResourceLocation(Statics.MOD_PREFIX, texture);
+    textures.put(texture, resource);
+    }
+  return resource;
+  }
 
 }

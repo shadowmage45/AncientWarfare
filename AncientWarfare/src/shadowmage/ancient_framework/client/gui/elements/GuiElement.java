@@ -30,7 +30,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_warfare.client.render.AWTextureManager;
+import shadowmage.ancient_framework.client.render.AWTextureManager;
 
 public abstract class GuiElement extends Gui implements IGuiElement
 {

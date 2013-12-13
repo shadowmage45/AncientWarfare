@@ -27,8 +27,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.utils.NBTWriter;
-import shadowmage.ancient_warfare.AWCore;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -124,22 +124,22 @@ public Packet250CustomPayload get250Packet()
 
 public void sendPacketToServer()
   {
-  AWCore.proxy.sendPacketToServer(this);
+  AWFramework.proxy.sendPacketToServer(this);
   }
 
 public void sendPacketToAllTrackingClients(Entity ent)
   {
-  AWCore.proxy.sendPacketToAllClientsTracking(ent, this);
+  AWFramework.proxy.sendPacketToAllClientsTracking(ent, this);
   }
 
 public void sendPacketToPlayer(EntityPlayer player)
   {
-  AWCore.proxy.sendPacketToPlayer(player, this);
+  AWFramework.proxy.sendPacketToPlayer(player, this);
   }
 
 public void sendPacketToAllPlayers()
   {
-  AWCore.proxy.sendPacketToAllPlayers(this);
+  AWFramework.proxy.sendPacketToAllPlayers(this);
   }
 
 }

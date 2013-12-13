@@ -18,19 +18,31 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_framework.common.config;
+package shadowmage.ancient_warfare.common.gamedata;
 
-public class Statics
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.WorldSavedData;
+
+public class TeamData extends WorldSavedData
 {
 
-public static final String CONFIG_PATH = "";
-public static final String ASSETS_PATH = "";
-public static final String TEXTURE_PATH = "textures/";
-public static final String MOD_PREFIX = "ancientwarfare";
-public static final String FRAMEWORK_VERSION = "2.2.038-beta-MC164";
-public static final String CORE_VERSION = FRAMEWORK_VERSION;
-public static final String STRUCTURE_VERSION = CORE_VERSION;
-public static final boolean DEBUG = true;
+public static final String name = "AWTeamData";
 
+public TeamData()
+  {
+  super(name);
+  }
+
+@Override
+public void readFromNBT(NBTTagCompound nbttagcompound)
+  {
+  
+  }
+
+@Override
+public void writeToNBT(NBTTagCompound nbttagcompound)
+  {
+  
+  }
 
 }

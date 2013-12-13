@@ -32,7 +32,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.item.CreativeTabAW;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 
 public abstract class AWBlockBase extends Block
@@ -44,7 +43,6 @@ public Description description;
 public AWBlockBase(int par1, Material par2Material, String baseName)
   {
   super(par1, par2Material); 
-  this.setCreativeTab(CreativeTabAW.instance());
   this.setHardness(3.f);
   this.setUnlocalizedName(baseName);
   }

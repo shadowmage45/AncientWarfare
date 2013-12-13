@@ -37,7 +37,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 
 public class BlockTools
 {
@@ -738,15 +737,10 @@ public static BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPo
 
 public static void breakBlockAndDrop(World world, int x, int y, int z)
   {
-  if(!AWCoreConfig.blockDestruction)
-    {
-    return;
-    }
   int id = world.getBlockId(x, y , z);
   int meta = world.getBlockMetadata(x, y , z);
   if(id!=0 && id!=Block.bedrock.blockID && Block.blocksList[id]!=null)
     {      
-//    Config.logDebug("setting block to air: "+x+","+y+","+z);
     Block.blocksList[id].dropBlockAsItem(world, x, y , z, meta, 0);
     world.setBlock(x, y , z, 0);
     }
@@ -764,7 +758,7 @@ public static List<ItemStack> breakBlock(World world, int x, int y, int z, int f
       {
       return drops;
       }
-    }  
+    }
   return Collections.emptyList();
   }
 
