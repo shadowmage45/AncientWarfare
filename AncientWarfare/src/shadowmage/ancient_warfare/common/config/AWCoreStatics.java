@@ -69,6 +69,7 @@ public static int mailDimensionalTime = 2500;
 public static boolean disableResearch = false;
 
 public static final String guiVehicleInventory = "VehicleInventory";
+public static final String guiVehicleAmmoSelect = "VehicleAmmoSelect";
 public static final String guiNpcInventory = "NpcInventory";
 public static final String guiNpcCourier = "NpcCourier";
 public static final String guiPerformance = "Performance";

@@ -40,6 +40,7 @@ import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.network.Packet01ModData;
 import shadowmage.ancient_framework.common.network.Packet02Entity;
 import shadowmage.ancient_warfare.AWCore;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
@@ -309,10 +310,9 @@ protected void handleTickInput(VehicleBase vehicle)
     }
   if(tag!=null)
     {
-//    Config.logDebug("sending input packet to server");
     Packet02Entity pkt = new Packet02Entity();
     pkt.setParams(vehicle);
-    pkt.setInputData(tag);
+    pkt.packetData.setCompoundTag("input", tag);
     pkt.sendPacketToServer();
     }
   }
@@ -324,7 +324,7 @@ private void handleAmmoSelectGui()
     VehicleBase vehicle = (VehicleBase)mc.thePlayer.ridingEntity;
     if(vehicle.vehicleType.getValidAmmoTypes().size()>=1)
       {
-      GUIHandler.instance().openGUI("VehicleAmmoSelect", mc.thePlayer, vehicle.entityId, 0, 0);
+      GUIHandler.instance().openGUI(AWCoreStatics.guiVehicleAmmoSelect, mc.thePlayer, vehicle.entityId, 0, 0);
       } 
     }
   }
