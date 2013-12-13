@@ -22,9 +22,8 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.item.AWItemBase;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.AWCore;
@@ -51,7 +50,7 @@ public static final AWItemBase civicPlacer = new ItemCivicPlacer(AWCore.instance
 //public static final AWItemBase civicBuilder = new ItemCivicBuilder(Config.getItemID("itemMulti.civicBuilder", 24014, "Constructs Structures using Civics"));
 public static final AWItemBase courierRouteSlip = new ItemCourierSlip(AWCore.instance.config.getItemID("itemMulti.courierSlip", 24015, "Holds Routing Info for a Courier"));
 public static final AWItemBase gateSpawner = new ItemGateSpawner(AWCore.instance.config.getItemID("itemMulti.gateSpawner", 24016, "Base gate spawning item."));
-public static final ItemFood rations = new ItemRation(AWCore.instance.config.getItemID("itemSingle.foodRation", 24017, "Food rations for soldiers and npcs."));
+public static final ItemRation rations = new ItemRation(AWCore.instance.config.getItemID("itemSingle.foodRation", 24017, "Food rations for soldiers and npcs."));
 public static final AWItemBase researchNotes = (AWItemBase) new ItemResearchNote(AWCore.instance.config.getItemID("itemMulti.researchNotes", 24018, "Research notes"));
 public static final AWItemBase backpack = new ItemBackpack(AWCore.instance.config.getItemID("itemMulti.backpack", 24019, "Backpack"));
 public static final AWItemBase researchBook = new ItemResearchBook(AWCore.instance.config.getItemID("itemSingle.researchBook", 24020, "Research book to save research progress"));
@@ -130,7 +129,8 @@ private void loadItems()
   this.addSubtypeInfoToItem(courierRouteSlip, 1, "item.routingSlip.1","item.routingSlip.1.description","item.routingSlip.1.tooltip").addDisplayStack(new ItemStack(courierRouteSlip,1,1)).setIconTexture("ancientwarfare:npc/route2", 1);
   this.addSubtypeInfoToItem(courierRouteSlip, 2, "item.routingSlip.2","item.routingSlip.2.description","item.routingSlip.2.tooltip").addDisplayStack(new ItemStack(courierRouteSlip,1,2)).setIconTexture("ancientwarfare:npc/route3", 2);
   this.registerItemSubtyped(gateSpawner, "gateSpawner");
-  this.registerItemSingle(rations, "item.single.rations", "item.single.rations.description", "item.single.rations.tooltip");
+  rations.description = AWFramework.instance.objectRegistry.registerObject("item.single.rations", rations, rations.itemID);
+//  this.registerItemSingle(rations, "item.single.rations", "item.single.rations.description", "item.single.rations.tooltip");
    
   this.registerItemSubtyped(backpack, "backpack");
   this.addSubtypeInfoToItem(backpack, 0, "item.backpack.0").addTooltip("item.backpack.0.tooltip", 0).addDisplayStack(new ItemStack(backpack,1,0)).setIconTexture("ancientwarfare:misc/backpack", 0);
@@ -179,26 +179,36 @@ private void loadItems()
 
 public Description registerItemSubtyped(AWItemBase item, String baseName)
   {  
-  return null;
+  Description d = AWFramework.instance.objectRegistry.registerItem(baseName, item);
+  return d;
   }
 
-public Description registerItemSingle(Item item, String name, String desc, String tip)
+public Description registerItemSingle(AWItemBase item, String name, String desc, String tip)
   {
-  return null;
+  return AWFramework.instance.objectRegistry.registerItem(name, item).setName(name, 0).setDescription(desc, 0).addTooltip(tip, 0);
   }
 
 public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name, String desc, String tooltip)
   {
-  return null;
+  Description d = AWFramework.instance.objectRegistry.getDescriptionFor(item.itemID);
+  d.setName(name, damage);
+  d.setDescription(desc, damage);
+  d.addTooltip(desc, damage);
+  return d;
   }
 
 public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name)
   {
-  return null;
+  Description d = AWFramework.instance.objectRegistry.getDescriptionFor(item.itemID);
+  d.setName(name, damage);
+  return d;
   }
 
 public Description addSubtypeInfoWithIconTexture(AWItemBase item, int damage, String name, String texture)
   {
-  return null;
+  Description d = AWFramework.instance.objectRegistry.getDescriptionFor(item.itemID);
+  d.setName(name, damage);
+  d.setIconTexture(texture, damage);
+  return d;
   }
 }

@@ -34,6 +34,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.block.AWBlockContainer;
 import shadowmage.ancient_framework.common.item.AWItemBlockBase;
 import shadowmage.ancient_framework.common.registry.entry.Description;
@@ -86,7 +87,8 @@ public boolean isBlockSolid(IBlockAccess par1IBlockAccess, int par2, int par3, i
 public void registerBlockInfo()
   {
   String baseTexDir = "ancientwarfare:crafting/";
-  Description d = BlockLoader.instance().registerBlockWithItem(this, "AWCraftingBlock", AWItemBlockBase.class);
+  AWFramework.instance.objectRegistry.registerBlock("AWCraftingBlock", this, AWItemBlockBase.class);
+  Description d = this.description;
   d.setName("block.multi.crafting.0", 0);
   d.addDisplayStack(new ItemStack(this,1,0));
   d.setName("block.multi.crafting.1", 1);

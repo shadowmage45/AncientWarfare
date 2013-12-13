@@ -29,6 +29,7 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
 
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiItemStack;
@@ -36,6 +37,7 @@ import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiString;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.registry.ObjectRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.client.render.RenderTools;
@@ -71,7 +73,7 @@ public GuiInfoBase(GuiContainerAdvanced parent, ResourceListRecipe recipe)
   super(new ContainerDummy());
   this.parent = parent;
   this.recipe = recipe;
-  Description d = DescriptionRegistry.instance().getDescriptionFor(recipe.getResult().itemID);
+  Description d = AWFramework.instance.objectRegistry.getDescriptionFor(recipe.getResult().itemID);
   if(d!=null)
     {
     String s = d.getDescription(this.recipe.getResult().getItemDamage());

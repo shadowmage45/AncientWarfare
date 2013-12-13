@@ -43,11 +43,32 @@ public ObjectRegistry(ModConfiguration config)
   this.config = config;
   }
 
+public Description getDescriptionFor(String name)
+  {
+  ObjectRegistration reg = this.registrationByName.get(name);
+  if(reg!=null)
+    {
+    return reg.description;
+    }
+  return null;
+  }
+
+public Description getDescriptionFor(int id)
+  {
+  ObjectRegistration reg = this.registrationByNumber.get(id);
+  if(reg!=null)
+    {
+    return reg.description;
+    }
+  return null;
+  }
+
 public void createItem(String name, Class<? extends AWItemBase> itemClz, int defaultID){}
 public void createBlock(String name, Class<? extends AWBlockBase> blockClz, int defaultID){}
 public void createBlock(String name, Class<? extends AWBlockBase> blockClz, Class<? extends ItemBlock> itemClz, int defaultID){}
 
-public void registerBlock(String name, AWBlockBase block, Class<? extends ItemBlock> itemClz)
+
+public Description registerBlock(String name, AWBlockBase block, Class<? extends ItemBlock> itemClz)
   {
   ObjectRegistration reg = this.registrationByName.get(name);
   if(reg==null)
@@ -57,9 +78,10 @@ public void registerBlock(String name, AWBlockBase block, Class<? extends ItemBl
   block.description = reg.description;
   GameRegistry.registerBlock(block, itemClz, name);
   registerObject(name, reg, block.blockID);
+  return block.description;
   }
 
-public void registerItem(String name, AWItemBase item)
+public Description registerItem(String name, AWItemBase item)
   {
   ObjectRegistration reg = this.registrationByName.get(name);
   if(reg==null)
@@ -69,9 +91,10 @@ public void registerItem(String name, AWItemBase item)
   item.description = reg.description;
   GameRegistry.registerItem(item, name);
   registerObject(name, reg, item.itemID);
+  return item.description;
   }
 
-public void registerBlock(String name, AWBlockBase block)
+public Description registerBlock(String name, AWBlockBase block)
   {
   ObjectRegistration reg = this.registrationByName.get(name);
   if(reg==null)
@@ -81,6 +104,18 @@ public void registerBlock(String name, AWBlockBase block)
   block.description = reg.description;
   GameRegistry.registerBlock(block, name);
   registerObject(name, reg, block.blockID);
+  return block.description;
+  }
+
+public Description registerObject(String name, Object obj, int id)
+  {
+  ObjectRegistration reg = this.registrationByName.get(name);
+  if(reg==null)
+    {
+    reg = new ObjectRegistration(name, obj);
+    }
+  registerObject(name, reg, id);
+  return reg.description;
   }
 
 protected void registerObject(String name, ObjectRegistration reg, int id)

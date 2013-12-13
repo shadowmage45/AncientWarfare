@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -162,19 +161,14 @@ public void load()
   EngineData.registerBlockData();
   }
 
-public void registerBlock(Block block, String name)
+public void registerBlock(AWBlockBase block, String name)
   {
-  AWFramework.instance.
-  GameRegistry.registerBlock(block, name);
-  LanguageRegistry.addName(block, name);
-  DescriptionRegistry.instance().registerBlock(block, false);
+  AWFramework.instance.objectRegistry.registerBlock(name, block);
   }
 
-public Description registerBlockWithItem(Block block, String name, Class<? extends ItemBlock>clz)
+public void registerBlockWithItem(AWBlockBase block, String name, Class<? extends ItemBlock>clz)
   {
-  GameRegistry.registerBlock(block, clz, name);
-  LanguageRegistry.addName(block, name);
-  return DescriptionRegistry.instance().registerBlock(block, false);
+  AWFramework.instance.objectRegistry.registerBlock(name, block, clz);
   }
 
 }
