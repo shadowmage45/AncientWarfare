@@ -24,7 +24,6 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import shadowmage.ancient_framework.common.config.ModConfiguration;
-import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 
@@ -39,7 +38,6 @@ public static String configPath = "";
 
 public static boolean enablePerformanceMonitor = false;
 public static boolean invertShiftClickOnItems = false;
-public static String templateExtension = "aws";
 public static boolean adjustMissilesForAccuracy = false;
 public static boolean blockDestruction = true;
 public static boolean blockFires = true;
@@ -74,9 +72,9 @@ public static int mailDimensionalTime = 2500;
 
 public static boolean disableResearch = false;
 
-public AWCoreConfig(File configFile, Logger log)
+public AWCoreConfig(File configFile, Logger log, String version)
   {
-  super(configFile, log);
+  super(configFile, log, version);
   }
 
 @Override
@@ -103,7 +101,7 @@ public void initializeValues()
     config.get("version", "version", VERSION, "The mod version used to last save this config").set(VERSION);
     }
   
-  this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").getString();  
+//  this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").getString();  
   this.adjustMissilesForAccuracy = config.get("a-general-options", "missile_accuracy", true, "If true, missiles will be adjusted for vehicle and rider accuracy when launched.").getBoolean(true);
   this.blockDestruction = config.get("a-general-options", "missile_destroy_blocks", true, "If true, missiles will be capable of destroying blocks.").getBoolean(true);
   this.blockFires = config.get("a-general-options", "missile_start_fires", true, "If true, missiles will be capable of lighting fires and placing lava blocks.").getBoolean(true);

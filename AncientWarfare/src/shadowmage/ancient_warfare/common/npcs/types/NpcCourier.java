@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
@@ -53,9 +54,9 @@ public NpcCourier(int type)
   {
   super(type); 
   this.iconTexture = "npcCourier";  
-  this.addLevel(type, 0, Config.texturePath + "models/npc/npcCourier.png", getToolStack(0), null).addTargetType(CivicWorkType.COURIER).setInventorySize(9).setActionTicks(40).setSpecInventorySize(1).addNeededResearch(ResearchGoalNumbers.logistics3).addRecipeResource(new ItemStackWrapperCrafting(ItemLoader.backpack, 1, 0, true));
-  this.addLevel(type, 1, Config.texturePath + "models/npc/npcCourier.png", getToolStack(1), null).addTargetType(CivicWorkType.COURIER).setInventorySize(18).setActionTicks(30).setSpecInventorySize(2).addNeededResearch(ResearchGoalNumbers.logistics4).addRecipeResource(new ItemStackWrapperCrafting(ItemLoader.backpack, 1, 16, true));
-  this.addLevel(type, 2, Config.texturePath + "models/npc/npcCourier.png", getToolStack(2), null).addTargetType(CivicWorkType.COURIER).setInventorySize(27).setActionTicks(20).setSpecInventorySize(4).addNeededResearch(ResearchGoalNumbers.logistics5).addRecipeResource(new ItemStackWrapperCrafting(ItemLoader.backpack, 1, 32, true));
+  this.addLevel(type, 0, Statics.texturePath + "models/npc/npcCourier.png", getToolStack(0), null).addTargetType(CivicWorkType.COURIER).setInventorySize(9).setActionTicks(40).setSpecInventorySize(1).addNeededResearch(ResearchGoalNumbers.logistics3).addRecipeResource(new ItemStackWrapperCrafting(ItemLoader.backpack, 1, 0, true));
+  this.addLevel(type, 1, Statics.texturePath + "models/npc/npcCourier.png", getToolStack(1), null).addTargetType(CivicWorkType.COURIER).setInventorySize(18).setActionTicks(30).setSpecInventorySize(2).addNeededResearch(ResearchGoalNumbers.logistics4).addRecipeResource(new ItemStackWrapperCrafting(ItemLoader.backpack, 1, 16, true));
+  this.addLevel(type, 2, Statics.texturePath + "models/npc/npcCourier.png", getToolStack(2), null).addTargetType(CivicWorkType.COURIER).setInventorySize(27).setActionTicks(20).setSpecInventorySize(4).addNeededResearch(ResearchGoalNumbers.logistics5).addRecipeResource(new ItemStackWrapperCrafting(ItemLoader.backpack, 1, 32, true));
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
   this.configName = "courier";

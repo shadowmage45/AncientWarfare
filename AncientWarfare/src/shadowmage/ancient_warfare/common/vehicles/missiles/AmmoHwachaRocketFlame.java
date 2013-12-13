@@ -25,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
@@ -49,7 +50,7 @@ public AmmoHwachaRocketFlame(int ammoType)
   this.renderScale = 0.2f;
   this.configName = "hwacha_rocket_flame";
   this.iconTexture = "ammoRocketFlame1";
-  this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
+  this.modelTexture = Statics.texturePath+"models/ammo/arrowWood.png";
   
   this.numCrafted = 10;
   this.neededResearch.add(ResearchGoalNumbers.rockets1);

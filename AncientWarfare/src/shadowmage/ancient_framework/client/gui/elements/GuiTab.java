@@ -21,6 +21,7 @@
 package shadowmage.ancient_framework.client.gui.elements;
 
 import net.minecraft.client.Minecraft;
+import shadowmage.ancient_framework.common.config.Statics;
 
 public class GuiTab extends GuiElement
 {
@@ -52,7 +53,7 @@ public void drawElement(int mouseX, int mouseY)
     vOffset = inverted ? vOffset + 24*2 : vOffset;
     int guiLeftOffset = this.renderWithGuiOffset ? this.guiLeft : 0;
     int guiTopOffset = this.renderWithGuiOffset ? this.guiTop : 0;    
-    String tex = Config.texturePath+"gui/guiButtons.png";
+    String tex = Statics.texturePath+"gui/guiButtons.png";
     this.drawQuadedTexture(guiLeftOffset+renderPosX, guiTopOffset+renderPosY, width, height, 104, 24, tex, 152, vOffset+138);
     int fontColor = 14737632;
     if(this.isMouseOver)

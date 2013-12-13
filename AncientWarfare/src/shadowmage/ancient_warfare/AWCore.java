@@ -24,7 +24,6 @@ package shadowmage.ancient_warfare;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import net.minecraft.server.MinecraftServer;
@@ -77,14 +76,14 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 
-@Mod( modid = "AncientWarfare", name="Ancient Warfare", version=Config.VERSION)
+@Mod( modid = "AncientWarfare", name="Ancient Warfare", version=AWCoreConfig.VERSION, dependencies="AncientWarfareFramework")
 @NetworkMod
 (
 clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
 channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
-versionBounds="["+Config.VERSION+",)"
+versionBounds="["+AWCoreConfig.VERSION+",)"
 )
 
 public class AWCore extends AWMod
@@ -99,7 +98,7 @@ public static AWCore instance;
 @Override
 public void loadConfiguration(File config, Logger log)
   {
-  this.config = new AWCoreConfig(config, log);
+  this.config = new AWCoreConfig(config, log, AWCoreConfig.VERSION);
   }
 
 /**
@@ -110,9 +109,7 @@ public void loadConfiguration(File config, Logger log)
 public void preInit(FMLPreInitializationEvent evt) 
   {
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());  
-  config.log("Starting Loading.  Version: "+Config.VERSION);
-
-  
+  config.log("Starting Loading.  Version: "+AWCoreConfig.VERSION);  
   LanguageLoader.instance().loadLanguageFiles();
   PluginProxy.instance().detectAndLoadPlugins();
   /**
@@ -134,20 +131,7 @@ public void preInit(FMLPreInitializationEvent evt)
    * load items
    */
   ItemLoader.instance().load();
-  BlockLoader.instance().load();
-
-  /**
-   * load structure related stuff (needs config directory from this event, could save string and load later)
-   */
-  try
-    {
-    Config.configPath = evt.getModConfigurationDirectory().getCanonicalPath();
-    } 
-  catch (IOException e)
-    {
-    e.printStackTrace();
-    }
-  
+  BlockLoader.instance().load();    
   /**
    *load vehicles, ammo, upgrades 
    */
@@ -161,7 +145,7 @@ public void preInit(FMLPreInitializationEvent evt)
   VehicleRegistry.instance().registerVehicles();
   AWEntityRegistry.registerEntity(NpcBase.class, "entity.npc", 130, 3, true);
   AWEntityRegistry.registerEntity(EntityGate.class, "entity.gate", 130, 100, false);
-  Config.log("Ancient Warfare Pre-Init finished.");
+  config.log("Ancient Warfare Pre-Init finished.");
   }
 
 /**
@@ -171,10 +155,10 @@ public void preInit(FMLPreInitializationEvent evt)
 @EventHandler
 public void init(FMLInitializationEvent evt)
   {
-  Config.log("Ancient Warfare Init started.");
+  config.log("Ancient Warfare Init started.");
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
   proxy.registerClientData(); 
-  Config.log("Ancient Warfare Init completed.");
+  config.log("Ancient Warfare Init completed.");
   }
 
 
@@ -182,7 +166,7 @@ public void init(FMLInitializationEvent evt)
 @EventHandler
 public void postInit(FMLPostInitializationEvent evt)
   {
-  Config.log("Ancient Warfare Post-Init started");
+  config.log("Ancient Warfare Post-Init started");
 
   NpcRegistry.instance().registerNPCs(); 
   CivicRegistry.instance().registerCivics();
@@ -192,11 +176,11 @@ public void postInit(FMLPostInitializationEvent evt)
   /**
    * and finally, save the config in case there were any changes made during init
    */
-  Config.saveConfig();
+  config.saveConfig();
   
   TickRegistry.registerTickHandler(new ServerPerformanceMonitor(), Side.SERVER);
   TickRegistry.registerTickHandler(new ServerTicker(), Side.SERVER);
-  Config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
+  config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
   }
 
 @Override

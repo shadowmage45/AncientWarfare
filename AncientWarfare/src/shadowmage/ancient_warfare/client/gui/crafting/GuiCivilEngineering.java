@@ -41,6 +41,7 @@ import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiTab;
 import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.client.gui.info.GuiRecipeDetails;
 import shadowmage.ancient_warfare.client.render.RenderTools;
@@ -98,7 +99,7 @@ protected void renderBackgroundImage(String tex)
 @Override
 public String getGuiBackGroundTexture()
   {
-  return Config.texturePath+"gui/guiBackgroundLarge.png";
+  return Statics.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override
@@ -129,7 +130,7 @@ public void drawProgressBackground()
   int w1 = 100;
   int x = guiLeft + 7;
   int y = guiTop + 112+18;
-  String tex = Config.texturePath+"gui/guiButtons2.png";
+  String tex = Statics.texturePath+"gui/guiButtons2.png";
   RenderTools.drawQuadedTexture(x, y, w+6, h+6, 256, 40, tex, 0, 0);
   float progress = container.displayProgress;
   float max = container.displayProgressMax;
@@ -139,7 +140,7 @@ public void drawProgressBackground()
     percent = progress/max;
     }
   w1 = (int)(percent*100.f);
-  tex = Config.texturePath+"gui/guiButtons.png"; 
+  tex = Statics.texturePath+"gui/guiButtons.png"; 
   RenderTools.drawQuadedTexture(x+3, y+3, w1, h, 104, 10, tex, 152, 234);
   x += 112;
   y += 4;

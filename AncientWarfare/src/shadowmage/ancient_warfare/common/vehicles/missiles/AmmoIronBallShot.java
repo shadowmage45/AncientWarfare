@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.missiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 
 public class AmmoIronBallShot extends Ammo
@@ -40,7 +41,7 @@ public AmmoIronBallShot(int ammoType)
   this.vehicleDamage = 8;
   this.iconTexture = "ammoStone1";
   this.configName = "iron_ball_shot";
-  this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png";
   this.isCraftable = false;
   }
 

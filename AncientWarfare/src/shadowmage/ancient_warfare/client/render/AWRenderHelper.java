@@ -35,7 +35,6 @@ import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;

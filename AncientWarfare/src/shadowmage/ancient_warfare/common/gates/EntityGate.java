@@ -27,6 +27,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.Pos3f;
@@ -420,7 +421,7 @@ public boolean canBePushed()
 
 public String getTexture()
   {
-  return Config.texturePath + "models/gate/"+gateType.getTexture();
+  return Statics.texturePath + "models/gate/"+gateType.getTexture();
   }
 
 @Override

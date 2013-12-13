@@ -34,6 +34,7 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.client.model.ModelArrow2;
 import shadowmage.ancient_warfare.client.model.ModelFlag;
 import shadowmage.ancient_warfare.common.config.Settings;
@@ -170,13 +171,13 @@ public void renderErrorIcon(byte error)
   {
   if(error>=0)
     {
-    RenderTools.renderIcon(Config.texturePath+"items/testIcon1.png", 16, 16,20,-16);
+    RenderTools.renderIcon(Statics.texturePath+"items/testIcon1.png", 16, 16,20,-16);
     }
   }
 
 public String getObjectiveTexture(byte objective)
   {
-  String base = Config.texturePath+"custom_icons/npc_status/";
+  String base = Statics.texturePath+"custom_icons/npc_status/";
   switch(objective)
   {
   case 0:
@@ -224,7 +225,7 @@ public String getObjectiveTexture(byte objective)
 
 public String getTaskTexture(byte task)
   {
-  String base = Config.texturePath+"custom_icons/npc_status/";
+  String base = Statics.texturePath+"custom_icons/npc_status/";
   switch(task)
   {
   case 0:

@@ -23,8 +23,6 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.builder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.structures.build.BuilderTicked;
-import shadowmage.ancient_structures.common.structures.build.StructureBuilder;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;

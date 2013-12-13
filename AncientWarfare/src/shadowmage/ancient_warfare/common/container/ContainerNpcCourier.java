@@ -89,10 +89,7 @@ public ContainerNpcCourier(EntityPlayer openingPlayer, NpcBase npc)
       this.addSlotToContainer(slot);        
       }
     } 
-  if(Config.getConfig().get("g_npc_config", "enable_armor_swapping", true).getBoolean(true))
-    {
-    this.addArmorSlots();
-    }
+  this.addArmorSlots();
   }
 
 protected void addArmorSlots()

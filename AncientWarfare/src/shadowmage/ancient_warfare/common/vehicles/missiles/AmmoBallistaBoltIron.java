@@ -24,6 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 
@@ -45,7 +46,7 @@ public AmmoBallistaBoltIron(int ammoType)
   this.isPersistent = true;
   this.configName = "ballist_bolt_iron";
   this.iconTexture = "ammoBoltIron1";
-  this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
+  this.modelTexture = Statics.texturePath+"models/ammo/arrowIron.png";
   this.neededResearch.add(ResearchGoalNumbers.ballistics2);
   this.resources.add(new ItemStackWrapperCrafting(Item.ingotIron, 7));
   this.resources.add(new ItemStackWrapperCrafting(Item.feather, 5));

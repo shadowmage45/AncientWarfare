@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.missiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
@@ -43,7 +44,7 @@ public AmmoGrapeShot(int ammoType, int weight)
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoGrape1";
   this.configName = "grape_shot_"+weight;
-  this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png";
   
   this.neededResearch.add(ResearchGoalNumbers.explosives1);
   int cases = 1;

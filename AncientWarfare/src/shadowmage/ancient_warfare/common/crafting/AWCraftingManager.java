@@ -35,8 +35,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
-import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.types.ICivicType;

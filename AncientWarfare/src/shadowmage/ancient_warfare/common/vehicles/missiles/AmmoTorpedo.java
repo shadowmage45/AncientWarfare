@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.missiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
@@ -48,7 +49,7 @@ public AmmoTorpedo(int ammoType, int weight)
   this.vehicleDamage = weight*2;
   float scaleFactor = weight + 45.f;
   this.renderScale = ( weight / scaleFactor ) * 2; 
-  this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png";
   
   int cases = 1;
   int explosives = 1;

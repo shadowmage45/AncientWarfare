@@ -24,6 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
@@ -47,7 +48,7 @@ public class AmmoArrowIronFlame extends Ammo
     this.isFlaming = true;
     this.configName = "arrow_iron_flame";
     this.iconTexture = "ammoArrowIronFlame1";
-    this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";
+    this.modelTexture = Statics.texturePath+"models/ammo/arrowIron.png";
     this.neededResearch.add(ResearchGoalNumbers.ballistics1);
     this.neededResearch.add(ResearchGoalNumbers.flammables1);
     this.resources.add(new ItemStackWrapperCrafting(Item.flint, 5));

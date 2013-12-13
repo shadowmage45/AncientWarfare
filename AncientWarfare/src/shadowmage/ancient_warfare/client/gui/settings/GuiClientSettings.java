@@ -27,6 +27,7 @@ import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
@@ -72,7 +73,7 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  return Config.texturePath+"gui/guiBackgroundLarge.png";
+  return Statics.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override

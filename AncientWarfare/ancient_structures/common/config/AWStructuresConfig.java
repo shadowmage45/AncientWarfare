@@ -28,13 +28,17 @@ import shadowmage.ancient_framework.common.config.ModConfiguration;
 public class AWStructuresConfig extends ModConfiguration
 {
 
+public static final String VERSION = "1.1.037-beta-MC164";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
+
+public static String templateExtension = "aws";
+
 /**
  * @param config
  * @param log
  */
-public AWStructuresConfig(File config, Logger log)
+public AWStructuresConfig(File config, Logger log, String version)
   {
-  super(config, log);
+  super(config, log, version);
   }
 
 @Override

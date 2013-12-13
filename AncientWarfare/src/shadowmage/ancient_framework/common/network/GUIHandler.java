@@ -30,10 +30,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_structures.client.gui.structure.GuiCSB;
-import shadowmage.ancient_structures.client.gui.structure.GuiEditorSelect;
-import shadowmage.ancient_structures.client.gui.structure.GuiStructureScanner;
-import shadowmage.ancient_structures.client.gui.structure.GuiSurvivalBuilder;
 import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicTownHall;
@@ -412,20 +408,20 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   NpcBase npc;
   switch(ID)
   {
-  case STRUCTURE_SELECT:
-  return new GuiCSB(new ContainerCSB(player));
-  
-  case STRUCTURE_SCANNER:
-  return new GuiStructureScanner(new ContainerStructureScanner(player));
-  
-  case STRUCTURE_BUILD_DIRECT:
-  return new GuiSurvivalBuilder(new ContainerSurvivalBuilder(player));
-  
-  case STRUCTURE_EDITOR:  
-  return new GuiEditorSelect(new ContainerEditor(player));
-  
-  case STRUCTURE_SCAN_EDIT:  
-  return new GuiEditorSelect(new ContainerEditor(player));
+//  case STRUCTURE_SELECT:
+//  return new GuiCSB(new ContainerCSB(player));
+//  
+//  case STRUCTURE_SCANNER:
+//  return new GuiStructureScanner(new ContainerStructureScanner(player));
+//  
+//  case STRUCTURE_BUILD_DIRECT:
+//  return new GuiSurvivalBuilder(new ContainerSurvivalBuilder(player));
+//  
+//  case STRUCTURE_EDITOR:  
+//  return new GuiEditorSelect(new ContainerEditor(player));
+//  
+//  case STRUCTURE_SCAN_EDIT:  
+//  return new GuiEditorSelect(new ContainerEditor(player));
   
   case SETTINGS:
   return new GuiClientSettings(player, new ContainerDummy());

@@ -50,10 +50,7 @@ public ContainerNpcBase(EntityPlayer openingPlayer, NpcBase npc)
   int yPos;
 
   this.addPlayerSlots(openingPlayer, 8, 158, 4);   
-  if(Config.getConfig().get("g_npc_config", "enable_armor_swapping", true).getBoolean(true))
-    {
-    this.addArmorSlots();    
-    }
+  this.addArmorSlots();    
   }
 
 @Override

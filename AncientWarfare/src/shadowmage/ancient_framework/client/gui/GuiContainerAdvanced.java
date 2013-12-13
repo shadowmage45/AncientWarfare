@@ -25,6 +25,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiElement;
@@ -173,7 +174,7 @@ public void sendDataToServer(NBTTagCompound tag)
     }
   else
     {
-    Config.logError("Attempt to send data to server container from improperly setup GUI/Container.");
+    AWFramework.instance.logError("Attempt to send data to server container from improperly setup GUI/Container.");
     Exception e = new IllegalAccessException();
     e.printStackTrace();
     }

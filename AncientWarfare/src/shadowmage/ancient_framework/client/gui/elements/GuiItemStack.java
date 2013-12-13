@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
 
 public class GuiItemStack extends GuiElement
@@ -88,7 +89,7 @@ public void drawElement(int mouseX, int mouseY)
 //  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   if(this.renderSlotBackground)
     {
-    String tex = Config.texturePath+"gui/guiButtons.png";
+    String tex = Statics.texturePath+"gui/guiButtons.png";
     AWTextureManager.bindTexture(tex);
     this.drawTexturedModalRect(guiLeft+renderPosX, guiTop+renderPosY, 152, 120, 18, 18);
     } 

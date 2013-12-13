@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
@@ -120,17 +121,17 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Config.texturePath + "models/hwacha1.png";
+    return Statics.texturePath + "models/hwacha1.png";
     case 1:
-    return Config.texturePath + "models/hwacha2.png";
+    return Statics.texturePath + "models/hwacha2.png";
     case 2:
-    return Config.texturePath + "models/hwacha3.png";
+    return Statics.texturePath + "models/hwacha3.png";
     case 3:
-    return Config.texturePath + "models/hwacha4.png";
+    return Statics.texturePath + "models/hwacha4.png";
     case 4:
-    return Config.texturePath + "models/hwacha5.png";
+    return Statics.texturePath + "models/hwacha5.png";
     default:
-    return Config.texturePath + "models/hwacha1.png";
+    return Statics.texturePath + "models/hwacha1.png";
     }
   }
 

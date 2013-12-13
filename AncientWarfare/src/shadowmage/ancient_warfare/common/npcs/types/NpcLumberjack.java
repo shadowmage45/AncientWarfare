@@ -25,6 +25,7 @@ import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -51,9 +52,9 @@ public NpcLumberjack(int type)
   {
   super(type);
   this.iconTexture = "npcLumberjack";  
-  this.addLevel(type, 0, Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(0), null).addTargetType(CivicWorkType.TREE, CivicWorkType.ENGINE).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
-  this.addLevel(type, 1, Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(1), null).addTargetType(CivicWorkType.TREE, CivicWorkType.ENGINE).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
-  this.addLevel(type, 2, Config.texturePath + "models/npc/npcLumberjack.png", getToolStack(2), null).addTargetType(CivicWorkType.TREE, CivicWorkType.ENGINE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
+  this.addLevel(type, 0, Statics.texturePath + "models/npc/npcLumberjack.png", getToolStack(0), null).addTargetType(CivicWorkType.TREE, CivicWorkType.ENGINE).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
+  this.addLevel(type, 1, Statics.texturePath + "models/npc/npcLumberjack.png", getToolStack(1), null).addTargetType(CivicWorkType.TREE, CivicWorkType.ENGINE).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
+  this.addLevel(type, 2, Statics.texturePath + "models/npc/npcLumberjack.png", getToolStack(2), null).addTargetType(CivicWorkType.TREE, CivicWorkType.ENGINE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
   this.configName = "lumberjack";

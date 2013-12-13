@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
@@ -69,17 +70,17 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Config.texturePath + "models/catapultMobileFixed1.png";
+    return Statics.texturePath + "models/catapultMobileFixed1.png";
     case 1:
-    return Config.texturePath + "models/catapultMobileFixed2.png";
+    return Statics.texturePath + "models/catapultMobileFixed2.png";
     case 2:
-    return Config.texturePath + "models/catapultMobileFixed3.png";
+    return Statics.texturePath + "models/catapultMobileFixed3.png";
     case 3:
-    return Config.texturePath + "models/catapultMobileFixed4.png";
+    return Statics.texturePath + "models/catapultMobileFixed4.png";
     case 4:
-    return Config.texturePath + "models/catapultMobileFixed5.png";
+    return Statics.texturePath + "models/catapultMobileFixed5.png";
     default:
-    return Config.texturePath + "models/catapultMobileFixed1.png";
+    return Statics.texturePath + "models/catapultMobileFixed1.png";
     }
   }
 }

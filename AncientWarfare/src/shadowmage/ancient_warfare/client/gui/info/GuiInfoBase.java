@@ -35,6 +35,7 @@ import shadowmage.ancient_framework.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiString;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.registry.DescriptionRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
@@ -109,7 +110,7 @@ protected void keyTyped(char par1, int par2)
 @Override
 public String getGuiBackGroundTexture()
   {
-  return Config.texturePath+"gui/guiBackgroundLarge.png";
+  return Statics.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override

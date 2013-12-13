@@ -37,8 +37,10 @@ public abstract class ModConfiguration
 public Configuration config;
 public Logger logger;
 private boolean debug = false;
+private boolean updatedVersion = false;
+private boolean exportOnUpdate = false;
 
-public ModConfiguration(File configFile, Logger log)
+public ModConfiguration(File configFile, Logger log, String version)
   {
   this.setConfig(configFile);
   this.setLogger(log);
@@ -115,6 +117,16 @@ public int getBlockID(String name, int defaultID, String comment)
 public int getKeyBindID(String name, int defaultID, String comment)
   {
   return config.get("keybinds", name, defaultID, comment).getInt(defaultID);
+  }
+
+public boolean updatedVersion()
+  {
+  return this.updatedVersion;
+  }
+
+public boolean autoExportOnUpdate()
+  {
+  return this.autoExportOnUpdate();
   }
 
 }

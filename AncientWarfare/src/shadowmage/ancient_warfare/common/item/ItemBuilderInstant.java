@@ -29,10 +29,6 @@ import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_structures.common.structures.build.BuilderInstant;
-import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_structures.common.structures.data.StructureBuildSettings;
-import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 
 public class ItemBuilderInstant extends ItemBuilderBase

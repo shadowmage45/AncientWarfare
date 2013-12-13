@@ -22,7 +22,6 @@ package shadowmage.ancient_warfare.common.manager;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import shadowmage.ancient_structures.common.structures.data.BlockInfo;
 
 public class BlockDataManager
 {

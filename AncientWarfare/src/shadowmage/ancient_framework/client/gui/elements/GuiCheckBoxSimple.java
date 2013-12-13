@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_framework.client.gui.elements;
 
+import shadowmage.ancient_framework.common.config.Statics;
+
 
 
 public class GuiCheckBoxSimple extends GuiButtonSimple
@@ -56,7 +58,7 @@ public void drawElement(int mouseX, int mouseY)
     int texOffset = this.getHoverState();
     int vOffset = texOffset * 40;//will return 0, 40, or 80..for inactive, active, hover, apply to Y offset in UV rendering
     int hOffset = checked ? 40 : 0;
-    String tex = Config.texturePath+"gui/guiButtons.png";
+    String tex = Statics.texturePath+"gui/guiButtons.png";
     this.drawQuadedTexture(guiLeft+renderPosX, guiTop+renderPosY, width, height, 40, 40, tex, 0+hOffset, 120+vOffset);
     if(!this.displayString.equals(""))
       {

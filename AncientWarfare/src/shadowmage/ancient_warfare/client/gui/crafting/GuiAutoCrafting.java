@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiFakeSlot;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.container.ContainerAWAutoCrafting;
 
@@ -64,7 +65,7 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  return Config.texturePath+"gui/guiBackgroundLarge.png";
+  return Statics.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override
@@ -80,7 +81,7 @@ public void drawProgressBackground()
   int w1 = 100;
   int x = guiLeft + 7;
   int y = guiTop + 112+18+3;
-  String tex = Config.texturePath+"gui/guiButtons2.png";
+  String tex = Statics.texturePath+"gui/guiButtons2.png";
   RenderTools.drawQuadedTexture(x, y, w+6, h+6, 256, 40, tex, 0, 0);
   float progress = container.displayProgress;
   float max = container.displayProgressMax;
@@ -90,7 +91,7 @@ public void drawProgressBackground()
     percent = progress/max;
     }
   w1 = (int)(percent*100.f);
-  tex = Config.texturePath+"gui/guiButtons.png"; 
+  tex = Statics.texturePath+"gui/guiButtons.png"; 
   RenderTools.drawQuadedTexture(x+3, y+3, w1, h, 104, 10, tex, 152, 234);
   x += 112;
   y += 4;

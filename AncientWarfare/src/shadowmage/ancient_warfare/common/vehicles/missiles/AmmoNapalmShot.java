@@ -24,6 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
@@ -44,7 +45,7 @@ public AmmoNapalmShot(int ammoType, int weight)
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoNapalm1";
   this.configName = "napalm_shot_"+weight;
-  this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png";
   this.isFlaming = true;
   
   this.neededResearch.add(ResearchGoalNumbers.flammables3);

@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.types;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
@@ -138,17 +139,17 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Config.texturePath + "models/submarine1.png";
+    return Statics.texturePath + "models/submarine1.png";
     case 1:
-    return Config.texturePath + "models/submarine2.png";
+    return Statics.texturePath + "models/submarine2.png";
     case 2:
-    return Config.texturePath + "models/submarine3.png";
+    return Statics.texturePath + "models/submarine3.png";
     case 3:
-    return Config.texturePath + "models/submarine4.png";
+    return Statics.texturePath + "models/submarine4.png";
     case 4:
-    return Config.texturePath + "models/submarine5.png";
+    return Statics.texturePath + "models/submarine5.png";
     default:
-    return Config.texturePath + "models/submarine1.png";
+    return Statics.texturePath + "models/submarine1.png";
     }
   }
 

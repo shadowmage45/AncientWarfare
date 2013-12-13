@@ -37,6 +37,7 @@ import net.minecraft.util.Vec3;
 import org.lwjgl.input.Keyboard;
 
 import shadowmage.ancient_framework.common.network.GUIHandler;
+import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
@@ -95,33 +96,33 @@ public static Keybind control;
 public void loadKeysFromConfig()
   {
   KeybindManager.addHandler(this);
-  forward = new Keybind(Config.getKeyBindID("keybind.forward", Keyboard.KEY_W, "forwards/accelerate"), "Forward");
+  forward = new Keybind(AWCore.instance.config.getKeyBindID("keybind.forward", Keyboard.KEY_W, "forwards/accelerate"), "Forward");
   KeybindManager.addKeybind(forward);
-  reverse = new Keybind(Config.getKeyBindID("keybind.reverse", Keyboard.KEY_S, "reverse/deccelerate"), "Reverse");
+  reverse = new Keybind(AWCore.instance.config.getKeyBindID("keybind.reverse", Keyboard.KEY_S, "reverse/deccelerate"), "Reverse");
   KeybindManager.addKeybind(reverse);
-  left = new Keybind(Config.getKeyBindID("keybind.left", Keyboard.KEY_A, "turn/strafe left"), "Left Turn");
+  left = new Keybind(AWCore.instance.config.getKeyBindID("keybind.left", Keyboard.KEY_A, "turn/strafe left"), "Left Turn");
   KeybindManager.addKeybind(left);
-  right = new Keybind(Config.getKeyBindID("keybind.right", Keyboard.KEY_D, "turn/strafe right"), "Right Turn");
+  right = new Keybind(AWCore.instance.config.getKeyBindID("keybind.right", Keyboard.KEY_D, "turn/strafe right"), "Right Turn");
   KeybindManager.addKeybind(right);
-  fire = new Keybind(Config.getKeyBindID("keybind.fire", Keyboard.KEY_SPACE, "fire missile"), "Fire");
+  fire = new Keybind(AWCore.instance.config.getKeyBindID("keybind.fire", Keyboard.KEY_SPACE, "fire missile"), "Fire");
   KeybindManager.addKeybind(fire);  
-  ammoPrev = new Keybind(Config.getKeyBindID("keybind.ammoPrev", Keyboard.KEY_T, "previous ammo"), "Prev Ammo");
+  ammoPrev = new Keybind(AWCore.instance.config.getKeyBindID("keybind.ammoPrev", Keyboard.KEY_T, "previous ammo"), "Prev Ammo");
   KeybindManager.addKeybind(ammoPrev);
-  ammoNext = new Keybind(Config.getKeyBindID("keybind.ammoNext", Keyboard.KEY_G, "next ammo"), "Next Ammo");
+  ammoNext = new Keybind(AWCore.instance.config.getKeyBindID("keybind.ammoNext", Keyboard.KEY_G, "next ammo"), "Next Ammo");
   KeybindManager.addKeybind(ammoNext);
-  pitchUp = new Keybind(Config.getKeyBindID("keybind.aimUp", Keyboard.KEY_R, "Aim Up"), "Aim Up");
+  pitchUp = new Keybind(AWCore.instance.config.getKeyBindID("keybind.aimUp", Keyboard.KEY_R, "Aim Up"), "Aim Up");
   KeybindManager.addKeybind(pitchUp);
-  pitchDown = new Keybind(Config.getKeyBindID("keybind.aimDown", Keyboard.KEY_F, "Aim Down"), "Aim Down");
+  pitchDown = new Keybind(AWCore.instance.config.getKeyBindID("keybind.aimDown", Keyboard.KEY_F, "Aim Down"), "Aim Down");
   KeybindManager.addKeybind(pitchDown);
-  turretLeft = new Keybind(Config.getKeyBindID("keybind.turretLeft", Keyboard.KEY_Z, "turret left"),"Turret Left");
+  turretLeft = new Keybind(AWCore.instance.config.getKeyBindID("keybind.turretLeft", Keyboard.KEY_Z, "turret left"),"Turret Left");
   KeybindManager.addKeybind(turretLeft);
-  turretRight = new Keybind(Config.getKeyBindID("keybind.turretRight", Keyboard.KEY_X, "turret right"),"Turret Right");  
+  turretRight = new Keybind(AWCore.instance.config.getKeyBindID("keybind.turretRight", Keyboard.KEY_X, "turret right"),"Turret Right");  
   KeybindManager.addKeybind(turretRight);  
-  mouseAim = new Keybind(Config.getKeyBindID("keybind.mouseAim", Keyboard.KEY_C, "Enable/Disable Mouse Aim"), "Mouse Aim");
+  mouseAim = new Keybind(AWCore.instance.config.getKeyBindID("keybind.mouseAim", Keyboard.KEY_C, "Enable/Disable Mouse Aim"), "Mouse Aim");
   KeybindManager.addKeybind(mouseAim);
-  ammoSelect = new Keybind(Config.getKeyBindID("keybind.ammoSelect", Keyboard.KEY_V, "Open ammo Select GUI"), "Ammo Select");
+  ammoSelect = new Keybind(AWCore.instance.config.getKeyBindID("keybind.ammoSelect", Keyboard.KEY_V, "Open ammo Select GUI"), "Ammo Select");
   KeybindManager.addKeybind(ammoSelect);
-  control = new Keybind(Config.getKeyBindID("keybind.control", Keyboard.KEY_LCONTROL, "Control/Alt function key"), "Control");
+  control = new Keybind(AWCore.instance.config.getKeyBindID("keybind.control", Keyboard.KEY_LCONTROL, "Control/Alt function key"), "Control");
   KeybindManager.addKeybind(control);
   }
 

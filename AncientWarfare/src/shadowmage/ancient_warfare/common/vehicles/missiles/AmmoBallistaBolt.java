@@ -24,6 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 
 public class AmmoBallistaBolt extends Ammo
@@ -44,7 +45,7 @@ public AmmoBallistaBolt(int ammoType)
   this.isPersistent = true;
   this.iconTexture = "ammoBolt1";
   this.configName = "ballist_bolt";
-  this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
+  this.modelTexture = Statics.texturePath+"models/ammo/arrowWood.png";
   
   this.resources.add(new ItemStackWrapperCrafting(Item.stick, 5));
   this.resources.add(new ItemStackWrapperCrafting(Item.ingotIron, 2));

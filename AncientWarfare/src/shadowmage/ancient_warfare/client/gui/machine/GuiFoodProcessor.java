@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.client.gui.machine;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.Statics;
 
 public class GuiFoodProcessor extends GuiContainerAdvanced
 {
@@ -58,7 +59,7 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  return Config.texturePath+"gui/guiBackgroundLarge.png";
+  return Statics.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override

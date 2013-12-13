@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.missiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
@@ -56,7 +57,7 @@ public AmmoExplosiveShot(int ammoType, int weight, boolean bigExplosion)
     this.configName = "explosive_"+weight;
     this.neededResearch.add(ResearchGoalNumbers.explosives2);
     }
-  this.modelTexture = Config.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png";
     
   int cases = 1;
   int explosives = 1;

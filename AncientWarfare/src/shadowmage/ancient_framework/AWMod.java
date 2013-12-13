@@ -66,10 +66,19 @@ public abstract void serverStopping(FMLServerStoppingEvent evt);
 @EventHandler
 public abstract void serverStopped(FMLServerStoppedEvent evt);
 
-public static void log(String info){}
- 
-public static void logError(String info){}
+public void logError(String info)
+  {
+  this.config.logError(info);
+  }
 
-public static void logDebug(String info){}
+public void log(String info)
+  {
+  this.config.log(info);
+  }
+
+public void logDebug(String info)
+  {
+  this.config.logDebug(info);
+  }
 
 }

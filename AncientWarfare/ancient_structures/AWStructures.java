@@ -80,14 +80,14 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 
-@Mod( modid = "AncientStructures", name="Ancient Structures", version=Config.VERSION)
+@Mod( modid = "AncientStructures", name="Ancient Structures", version=AWStructuresConfig.VERSION, dependencies="AncientWarfareFramework")
 @NetworkMod
 (
 clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
 channels = {"AW_struct"},
-versionBounds="["+Config.VERSION+",)"
+versionBounds="["+AWStructuresConfig.VERSION+",)"
 )
 
 public class AWStructures extends AWMod implements ITickHandler, INBTTaggable
@@ -135,10 +135,7 @@ public void setExportDefaults()
 
 public void load()
   {  
-  outputDirectory = config.configPath+"/AWConfig/structures/export/";
-  includeDirectory = config.configPath+"/AWConfig/structures/included/";
-  convertDirectory = config.configPath+"/AWConfig/structures/convert/";
-  configBaseDirectory = config.configPath+"/AWConfig/";
+ 
   this.setValidScannableEntities();
   
   TickRegistry.registerTickHandler(this, Side.SERVER);
@@ -158,25 +155,25 @@ public void load()
   existTest = new File(includeDirectory);
   if(!existTest.exists())
     {
-    Config.log("Creating default Include Directory");
+    config.log("Creating default Include Directory");
     existTest.mkdirs();
     }
   
   existTest = new File(convertDirectory);
   if(!existTest.exists())
     {
-    Config.log("Creating default Convert Directory");
+    config.log("Creating default Convert Directory");
     existTest.mkdirs();
     }
   
   existTest = new File(configBaseDirectory);
   if(!existTest.exists())
     {
-    Config.log("Creating AWConfig directory in config/");
+    config.log("Creating AWConfig directory in config/");
     existTest.mkdirs();
     }
      
-  if(shouldExportDefaults || (Config.updatedVersion && Config.autoExportOnUpdate))
+  if(shouldExportDefaults || (config.updatedVersion() && config.autoExportOnUpdate()))
     {
     this.copyDefaultStructures(includeDirectory);
     this.shouldExportDefaults = false;
@@ -244,7 +241,7 @@ private void copyDefaultStructures(String pathName)
   InputStream is = null;
   FileOutputStream os = null;
   File file = null;
-  Config.log("Exporting default structures....");
+  config.log("Exporting default structures....");
   int exportCount = 0;
   byte[] byteBuffer;
   for(String fileName : defaultExportStructures)
@@ -258,17 +255,17 @@ private void copyDefaultStructures(String pathName)
         }
       
       String trimmedName = fileName.substring(0, fileName.length()-4);
-      fileName = trimmedName +"."+Config.templateExtension;
+      fileName = trimmedName +"."+AWStructuresConfig.templateExtension;
       file = new File(includeDirectory,fileName);
   
       if(!file.exists())
         {
-        Config.log("Exporting: "+fileName);
+        config.log("Exporting: "+fileName);
         file.createNewFile();
         }
       else
         {
-        Config.log("Overwriting: "+fileName);
+        config.log("Overwriting: "+fileName);
         }
   
       byteBuffer = ByteStreams.toByteArray(is);
@@ -283,11 +280,11 @@ private void copyDefaultStructures(String pathName)
       }
     catch(Exception e)
       {
-      Config.logError("Error during export of: "+fileName);
+      config.logError("Error during export of: "+fileName);
       e.printStackTrace();
       }    
     }
-  Config.log("Exported "+exportCount+" structures");  
+  config.log("Exported "+exportCount+" structures");  
   }
 
 private void createDirectory(File file)
@@ -398,7 +395,7 @@ public void readFromNBT(NBTTagCompound tag)
   MinecraftServer server = MinecraftServer.getServer();
   if(server==null)
     {
-    Config.logError("SEVERE ERROR LOADING BUILDERS, NULL SERVER");
+    config.logError("SEVERE ERROR LOADING BUILDERS, NULL SERVER");
     return;
     }
   NBTTagList builderList = tag.getTagList("builderList");
@@ -418,7 +415,7 @@ public void readFromNBT(NBTTagCompound tag)
       }
     else
       {
-      Config.logError("SEVERE ERROR LOADING BUILDERS, NULL WORLD FOR DIMENSION: "+dimension);
+      config.logError("SEVERE ERROR LOADING BUILDERS, NULL WORLD FOR DIMENSION: "+dimension);
       }
     }
   }
@@ -428,39 +425,45 @@ public void readFromNBT(NBTTagCompound tag)
 @Override
 public void loadConfiguration(File config, Logger log)
   {
-  this.config = new AWStructuresConfig(config, log);
+  this.config = new AWStructuresConfig(config, log, AWStructuresConfig.VERSION);
   }
 
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt) 
   {  
-  Config.log("Ancient Warfare Structures Starting Loading.  Version: "+Config.VERSION);
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
+  config.log("Ancient Warfare Structures Starting Loading.  Version: "+AWStructuresConfig.VERSION);
+  
+  String path = evt.getModConfigurationDirectory().getAbsolutePath();
+  outputDirectory = path+"/AWConfig/structures/export/";
+  includeDirectory = path+"/AWConfig/structures/included/";
+  convertDirectory = path+"/AWConfig/structures/convert/";
+  configBaseDirectory = path+"/AWConfig/";  
   /**
    * TODO
    */
-  Config.log("Ancient Warfare Structures Pre-Init finished.");
+  config.log("Ancient Warfare Structures Pre-Init finished.");
   }
 
 @EventHandler
 public void init(FMLInitializationEvent evt)
   {
-  Config.log("Ancient Warfare Structures Init started.");
+  config.log("Ancient Warfare Structures Init started.");
   /**
    * TODO
    */
-  Config.log("Ancient Warfare Structures Init completed.");
+  config.log("Ancient Warfare Structures Init completed.");
   }
 
 @Override
 @EventHandler
 public void postInit(FMLPostInitializationEvent evt)
   {
-  Config.log("Ancient Warfare Structures Post-Init started");
+  config.log("Ancient Warfare Structures Post-Init started");
   /**
    * TODO
    */
-  Config.log("Ancient Warfare Structures Post-Init completed.  Successfully completed all loading stages."); 
+  config.log("Ancient Warfare Structures Post-Init completed.  Successfully completed all loading stages."); 
   }
 
 @Override

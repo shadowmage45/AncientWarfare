@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
@@ -73,17 +74,17 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Config.texturePath + "models/ballistaMobile1.png";
+    return Statics.texturePath + "models/ballistaMobile1.png";
     case 1:
-    return Config.texturePath + "models/ballistaMobile2.png";
+    return Statics.texturePath + "models/ballistaMobile2.png";
     case 2:
-    return Config.texturePath + "models/ballistaMobile3.png";
+    return Statics.texturePath + "models/ballistaMobile3.png";
     case 3:
-    return Config.texturePath + "models/ballistaMobile4.png";
+    return Statics.texturePath + "models/ballistaMobile4.png";
     case 4:
-    return Config.texturePath + "models/ballistaMobile5.png";
+    return Statics.texturePath + "models/ballistaMobile5.png";
     default:
-    return Config.texturePath + "models/ballistaMobile1.png";
+    return Statics.texturePath + "models/ballistaMobile1.png";
     }
   }
 

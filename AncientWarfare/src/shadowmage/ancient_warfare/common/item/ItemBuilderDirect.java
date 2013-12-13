@@ -34,12 +34,6 @@ import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
-import shadowmage.ancient_structures.AWStructures;
-import shadowmage.ancient_structures.common.structures.build.BuilderTicked;
-import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_structures.common.structures.data.ScannedStructureData;
-import shadowmage.ancient_structures.common.structures.data.StructureBuildSettings;
-import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 

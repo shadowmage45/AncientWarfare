@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.types;
 
+import shadowmage.ancient_framework.common.config.Statics;
+
 
 
 public class VehicleTypeCatapultStandFixed extends VehicleTypeCatapult
@@ -59,17 +61,17 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Config.texturePath + "models/catapultStandFixed1.png";
+    return Statics.texturePath + "models/catapultStandFixed1.png";
     case 1:
-    return Config.texturePath + "models/catapultStandFixed2.png";
+    return Statics.texturePath + "models/catapultStandFixed2.png";
     case 2:
-    return Config.texturePath + "models/catapultStandFixed3.png";
+    return Statics.texturePath + "models/catapultStandFixed3.png";
     case 3:
-    return Config.texturePath + "models/catapultStandFixed4.png";
+    return Statics.texturePath + "models/catapultStandFixed4.png";
     case 4:
-    return Config.texturePath + "models/catapultStandFixed5.png";
+    return Statics.texturePath + "models/catapultStandFixed5.png";
     default:
-    return Config.texturePath + "models/catapultStandFixed1.png";
+    return Statics.texturePath + "models/catapultStandFixed1.png";
     }
   }
 

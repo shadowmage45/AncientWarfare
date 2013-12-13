@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.missiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 
 public class AmmoSoldierArrow extends Ammo
@@ -53,11 +54,11 @@ public AmmoSoldierArrow(int ammoType, int damage, boolean flaming)
     }  
   if(damage<=5)
     {
-    this.modelTexture = Config.texturePath+"models/ammo/arrowWood.png";
+    this.modelTexture = Statics.texturePath+"models/ammo/arrowWood.png";
     }
   else
     {
-    this.modelTexture = Config.texturePath+"models/ammo/arrowIron.png";    
+    this.modelTexture = Statics.texturePath+"models/ammo/arrowIron.png";    
     }
   }
 

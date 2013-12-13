@@ -32,6 +32,7 @@ import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiString;
 import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.common.container.ContainerMailboxBase;
 
 public class GuiMailboxSelection extends GuiContainerAdvanced
@@ -93,7 +94,7 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  return Config.texturePath+"gui/guiBackgroundLarge.png";
+  return Statics.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override

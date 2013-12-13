@@ -26,8 +26,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.AWStructures;
-import shadowmage.ancient_structures.common.world_gen.WorldGenManager;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.entry.NpcDataEntry;

@@ -23,6 +23,7 @@ package shadowmage.ancient_framework.client.gui.elements;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -63,7 +64,7 @@ public void drawElement(int mouseX, int mouseY)
     int vOffset = texOffset * 40;//will return 0, 40, or 80..for inactive, active, hover, apply to Y offset in UV rendering
     int guiLeftOffset = this.renderWithGuiOffset ? this.guiLeft : 0;
     int guiTopOffset = this.renderWithGuiOffset ? this.guiTop : 0;    
-    String tex = Config.texturePath+"gui/guiButtons.png";
+    String tex = Statics.texturePath+"gui/guiButtons.png";
     this.drawQuadedTexture(guiLeftOffset+renderPosX, guiTopOffset+renderPosY, width, height, 256, 40, tex, 0, vOffset);
     
     //draw ammo icon on left

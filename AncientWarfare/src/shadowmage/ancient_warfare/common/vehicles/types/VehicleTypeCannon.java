@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
@@ -114,17 +115,17 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Config.texturePath + "models/cannon1.png";
+    return Statics.texturePath + "models/cannon1.png";
     case 1:
-    return Config.texturePath + "models/cannon2.png";
+    return Statics.texturePath + "models/cannon2.png";
     case 2:
-    return Config.texturePath + "models/cannon3.png";
+    return Statics.texturePath + "models/cannon3.png";
     case 3:
-    return Config.texturePath + "models/cannon4.png";
+    return Statics.texturePath + "models/cannon4.png";
     case 4:
-    return Config.texturePath + "models/cannon5.png";
+    return Statics.texturePath + "models/cannon5.png";
     default:
-    return Config.texturePath + "models/cannon1.png";
+    return Statics.texturePath + "models/cannon1.png";
     }
   }
 

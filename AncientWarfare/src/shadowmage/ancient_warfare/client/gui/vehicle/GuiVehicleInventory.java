@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.client.gui.vehicle;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
@@ -58,7 +59,7 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  return Config.texturePath+"gui/guiBackgroundLarge.png";
+  return Statics.texturePath+"gui/guiBackgroundLarge.png";
   }
 
 @Override

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraftforge.client.MinecraftForgeClient;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.client.model.ModelAirplane;
 import shadowmage.ancient_warfare.client.model.ModelBallistaMobile;
 import shadowmage.ancient_warfare.client.model.ModelBallistaStand;
@@ -269,14 +270,14 @@ public void loadRenders()
   this.addTEModel(6, new ModelTable7());
   this.addTEModel(7, new ModelTable8());
   
-  this.teModelTextures.put(0, Config.texturePath+"models/crafting/teResearchTable.png");
-  this.teModelTextures.put(1, Config.texturePath+"models/crafting/teEngineeringStation.png");
-  this.teModelTextures.put(2, Config.texturePath+"models/crafting/teCivilEngineeringStation.png");
-  this.teModelTextures.put(3, Config.texturePath+"models/crafting/teVehicleStation.png");
-  this.teModelTextures.put(4, Config.texturePath+"models/crafting/teAmmoStation.png");
-  this.teModelTextures.put(5, Config.texturePath+"models/crafting/teNpcStation.png");
-  this.teModelTextures.put(6, Config.texturePath+"models/crafting/teAlchemyStation.png");
-  this.teModelTextures.put(7, Config.texturePath+"models/crafting/teAutoCrafting.png");
+  this.teModelTextures.put(0, Statics.texturePath+"models/crafting/teResearchTable.png");
+  this.teModelTextures.put(1, Statics.texturePath+"models/crafting/teEngineeringStation.png");
+  this.teModelTextures.put(2, Statics.texturePath+"models/crafting/teCivilEngineeringStation.png");
+  this.teModelTextures.put(3, Statics.texturePath+"models/crafting/teVehicleStation.png");
+  this.teModelTextures.put(4, Statics.texturePath+"models/crafting/teAmmoStation.png");
+  this.teModelTextures.put(5, Statics.texturePath+"models/crafting/teNpcStation.png");
+  this.teModelTextures.put(6, Statics.texturePath+"models/crafting/teAlchemyStation.png");
+  this.teModelTextures.put(7, Statics.texturePath+"models/crafting/teAutoCrafting.png");
   
   /**
    * load up the vehicle item renderer...

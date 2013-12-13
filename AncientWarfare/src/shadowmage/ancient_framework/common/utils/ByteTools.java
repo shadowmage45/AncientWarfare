@@ -28,6 +28,7 @@ import java.util.List;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.AWFramework;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -177,7 +178,7 @@ public static void writeNBTTagCompound(NBTTagCompound par0NBTTagCompound, ByteAr
       } 
     catch (IOException e)
       {
-      Config.logError("Severe error writing NBTTagCompound to dataStream");
+      AWFramework.instance.logError("Severe error writing NBTTagCompound to dataStream");
       e.printStackTrace();
       } 
     }
@@ -204,7 +205,7 @@ public static NBTTagCompound readNBTTagCompound(ByteArrayDataInput data)
       } 
     catch (IOException e)
       {
-      Config.logError("Severe error reading NBTTagCompound to dataStream");
+      AWFramework.instance.logError("Severe error reading NBTTagCompound to dataStream");
       e.printStackTrace();
       }
     }
