@@ -37,6 +37,7 @@ import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_framework.common.utils.RayTraceUtils;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.commands.NpcCommand;
@@ -64,7 +65,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   if(world.isRemote){return false;}
   if(player.isSneaking())
     {
-    GUIHandler.instance().openGUI(GUIHandler.instance().NPC_COMMAND_BATON, player, world, 0, 0, 0);
+    GUIHandler.instance().openGUI(AWCoreStatics.guiBaton, player, 0, 0, 0);
     }
   else
     {

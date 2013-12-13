@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 
 public class TEAWCivicCraft extends TEAWCraftingWorkSite
 {
@@ -47,7 +48,7 @@ public TEAWCivicCraft()
 public void onBlockClicked(EntityPlayer player)
   {
   if(player.worldObj.isRemote){return;}
-  GUIHandler.instance().openGUI(GUIHandler.ENGINEERING, player, player.worldObj, xCoord, yCoord, zCoord);
+  GUIHandler.instance().openGUI(AWCoreStatics.guiCraftCivic, player, xCoord, yCoord, zCoord);
   }
 
 

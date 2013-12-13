@@ -43,6 +43,7 @@ import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 
 public class TECivicWarehouse extends TECivic implements IEntityContainerSynch
@@ -116,7 +117,7 @@ public boolean onInteract(World world, EntityPlayer player)
   {
   if(!world.isRemote)
     {
-    GUIHandler.instance().openGUI(GUIHandler.CIVIC_WAREHOUSE, player, world, xCoord, yCoord, zCoord);
+    GUIHandler.instance().openGUI(AWCoreStatics.guiCivicWarehouse, player, xCoord, yCoord, zCoord);
     }
   return true;
   }

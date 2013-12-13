@@ -24,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 
 public class TEAWNpcCraft extends TEAWCrafting
 {
@@ -72,7 +73,7 @@ public void readExtraNBT(NBTTagCompound tag)
 public void onBlockClicked(EntityPlayer player)
   {
   if(player.worldObj.isRemote){return;}
-  GUIHandler.instance().openGUI(GUIHandler.NPC_CRAFT, player, player.worldObj, xCoord, yCoord, zCoord);
+  GUIHandler.instance().openGUI(AWCoreStatics.guiCraftNpc, player, xCoord, yCoord, zCoord);
   }
 
 }

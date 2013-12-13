@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPointItemRouting;
 
@@ -81,7 +82,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     }
   else
     {
-    GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, world, 0, 0, 0);
+    GUIHandler.instance().openGUI(AWCoreStatics.guiRoutingSlip, player, 0, 0, 0);
     }
   return true;
   }
@@ -103,7 +104,7 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player,  ItemStack stac
       {
       info.addRoutePoint(new WayPointItemRouting(hit.x, hit.y, hit.z, side));
       info.writeToItem(stack);    
-      GUIHandler.instance().openGUI(GUIHandler.COURIER_SLIP, player, player.worldObj, 0, 0, 0);
+      GUIHandler.instance().openGUI(AWCoreStatics.guiRoutingSlip, player, 0, 0, 0);
       }
     else
       {

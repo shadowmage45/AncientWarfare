@@ -30,6 +30,7 @@ import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.network.Packet01ModData;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 import shadowmage.ancient_warfare.common.config.Settings;
 
 public class GuiClientSettings extends GuiContainerAdvanced
@@ -132,7 +133,7 @@ public void onElementActivated(IGuiElement element)
     break;
     
     case 10:
-    GUIHandler.instance().openGUI(GUIHandler.PERFORMANCE, player, player.worldObj, 0, 0, 0);    
+    GUIHandler.instance().openGUI(AWCoreStatics.guiPerformance, player, 0, 0, 0);    
     break;
     
     case 11:

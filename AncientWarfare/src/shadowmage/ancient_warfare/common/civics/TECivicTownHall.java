@@ -47,7 +47,7 @@ public boolean onInteract(World world, EntityPlayer player)
   {
   if(!world.isRemote)
     {
-    GUIHandler.instance().openGUI(GUIHandler.CIVIC_TOWNHALL, player, world, xCoord, yCoord, zCoord);
+    GUIHandler.instance().openGUI(AWCoreStatics.guiTownHall, player, xCoord, yCoord, zCoord);
     }
   return true;
   }

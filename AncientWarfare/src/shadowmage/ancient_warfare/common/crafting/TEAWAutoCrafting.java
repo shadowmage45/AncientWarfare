@@ -225,7 +225,7 @@ public void readExtraNBT(NBTTagCompound tag)
 public void onBlockClicked(EntityPlayer player)
   {
   if(player.worldObj.isRemote){return;}
-  GUIHandler.instance().openGUI(GUIHandler.AUTO_CRAFT, player, player.worldObj, xCoord, yCoord, zCoord);
+  GUIHandler.instance().openGUI(AWCoreStatics.guiCraftAuto, player, xCoord, yCoord, zCoord);
   }
 
 public ItemStack getLayoutMatrixSlot(int num)

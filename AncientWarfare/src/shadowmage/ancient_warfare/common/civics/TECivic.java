@@ -288,7 +288,7 @@ public boolean onInteract(World world, EntityPlayer player)
   {
   if(!world.isRemote && inventory!=null && inventory.getSizeInventory()>0)
     {
-    GUIHandler.instance().openGUI(GUIHandler.CIVIC_BASE, player, world, xCoord, yCoord, zCoord);
+    GUIHandler.instance().openGUI(AWCoreStatics.guiCivicBase, player, xCoord, yCoord, zCoord);
     }
   return true;
   }

@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 
@@ -82,7 +83,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       String name = tag.getString("name");
       if(name.equals(player.getEntityName()))
         {
-        GUIHandler.instance().openGUI(GUIHandler.INFO, player, world, 0, 0, 0);        
+        GUIHandler.instance().openGUI(AWCoreStatics.guiInfo, player, 0, 0, 0);        
         }
       else        
         {

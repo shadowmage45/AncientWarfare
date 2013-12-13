@@ -86,7 +86,7 @@ import cpw.mods.fml.relauncher.Side;
 clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
-channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
+channels = {"AW_entity", "AW_tile", "AW_mod"},
 versionBounds="["+Statics.CORE_VERSION+",)"
 )
 

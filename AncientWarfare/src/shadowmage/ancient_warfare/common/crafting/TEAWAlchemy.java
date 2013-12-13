@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 
 public class TEAWAlchemy extends TEAWCraftingWorkSite
 {
@@ -71,7 +72,7 @@ public void readExtraNBT(NBTTagCompound tag)
 public void onBlockClicked(EntityPlayer player)
   {
   if(player.worldObj.isRemote){return;}
-  GUIHandler.instance().openGUI(GUIHandler.ALCHEMY_CRAFT, player, player.worldObj, xCoord, yCoord, zCoord);
+  GUIHandler.instance().openGUI(AWCoreStatics.guiCraftAlchemy, player, xCoord, yCoord, zCoord);
   }
 
 }

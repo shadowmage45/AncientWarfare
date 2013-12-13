@@ -29,6 +29,7 @@ import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTownHallInfo;
 import shadowmage.ancient_warfare.common.tracker.entry.NpcDataEntry;
 
@@ -89,7 +90,7 @@ public void onElementActivated(IGuiElement element)
   if(element.getElementNumber()==0)
     {
     this.closeGUI();
-    GUIHandler.instance().openGUI(GUIHandler.CIVIC_TOWNHALL, player, player.worldObj, teBase.xCoord, teBase.yCoord, teBase.zCoord);
+    GUIHandler.instance().openGUI(AWCoreStatics.guiTownHall, player, teBase.xCoord, teBase.yCoord, teBase.zCoord);
     }
   else if(element.getElementNumber()==3)//clear living
     {

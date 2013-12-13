@@ -29,6 +29,7 @@ import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
@@ -84,7 +85,7 @@ public List<NpcAIObjective> getAI(NpcBase npc, int level)
 @Override
 public void openGui(EntityPlayer player, NpcBase npc)
   {  
-  GUIHandler.instance().openGUI(GUIHandler.NPC_COURIER, player, npc.worldObj, npc.entityId, 0, 0);
+  GUIHandler.instance().openGUI(AWCoreStatics.guiNpcCourier, player, npc.entityId, 0, 0);
   }
 
 }

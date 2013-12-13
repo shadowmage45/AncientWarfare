@@ -70,6 +70,28 @@ public static boolean disableResearch = false;
 
 public static final String guiVehicleInventory = "VehicleInventory";
 public static final String guiNpcInventory = "NpcInventory";
+public static final String guiNpcCourier = "NpcCourier";
+public static final String guiPerformance = "Performance";
+public static final String guiTownHall = "CivicTownHall";
+public static final String guiTownHallInfo = "CivicTownHallInfo";
+public static final String guiCivicBase = "CivicBase";
+public static final String guiCivicWarehouse = "CivicWarehouse";
+public static final String guiCraftAlchemy = "CraftAlchemy";
+public static final String guiCraftAuto = "CraftAuto";
+public static final String guiCraftAmmo = "CraftAmmo";
+public static final String guiCraftStructure = "CraftStructure";
+public static final String guiCraftCivic = "CraftCivic";
+public static final String guiCraftNpc = "CraftNpc";
+public static final String guiCraftResearch = "CraftResearch";
+public static final String guiCraftVehicle = "CraftVehicle";
+public static final String guiResearch = "Research";
+public static final String guiRoutingSlip = "RoutingSlip";
+public static final String guiBaton = "Baton";
+public static final String guiInfo = "Info";
+public static final String guiEditor = "StructureEditor";
+public static final String guiScanner = "StructureScanner";
+public static final String guiBuilder = "StructureBuilder";
+public static final String guiBuilderOverrides = "StructureBuilderOverrides";
 
 public AWCoreStatics(File configFile, Logger log, String version)
   {

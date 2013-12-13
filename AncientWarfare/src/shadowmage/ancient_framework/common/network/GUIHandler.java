@@ -137,16 +137,27 @@ public void openGUI(String name, EntityPlayer player, int x, int y, int z)
   openGUI(id, player, x, y, z);
   }
 
+public void registerGuiID(String name, int id)
+  {
+  guisByName.put(name, id);
+  }
+
 public void registerContainer(int id, String name, Class<? extends ContainerBase> containerClz)
   {
-  containerMap.put(id, containerClz);
-  guisByName.put(name, id);
+  int testID = guisByName.get(name);
+  if(testID==id)
+    {
+    containerMap.put(id, containerClz);    
+    }  
   }
 
 public void registerGui(int id, String name, Class<? extends GuiContainerAdvanced> guiClass)
   {
-  guiMap.put(id, guiClass);
-  guisByName.put(name, id);
+  int testID = guisByName.get(name);
+  if(testID==id)
+    {
+    guiMap.put(id, guiClass);    
+    }
   }
 
 }

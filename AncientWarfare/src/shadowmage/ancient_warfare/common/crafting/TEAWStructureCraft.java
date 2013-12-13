@@ -26,6 +26,7 @@ import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 
 public class TEAWStructureCraft extends TEAWCrafting
 {
@@ -48,7 +49,7 @@ public TEAWStructureCraft()
 @Override
 public void onBlockClicked(EntityPlayer player)
   {
-  GUIHandler.instance().openGUI(GUIHandler.CIVIL_ENGINEERING, player, worldObj, xCoord, yCoord, zCoord);
+  GUIHandler.instance().openGUI(AWCoreStatics.guiCraftStructure, player, xCoord, yCoord, zCoord);
   }
 
 @Override

@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 
@@ -122,7 +123,7 @@ public void onBlockClicked(EntityPlayer player)
   {
   if(!player.worldObj.isRemote)
     {
-    GUIHandler.instance().openGUI(GUIHandler.VEHICLE_CRAFT, player, player.worldObj, xCoord, yCoord, zCoord);
+    GUIHandler.instance().openGUI(AWCoreStatics.guiCraftVehicle, player, xCoord, yCoord, zCoord);
     }
   }
 

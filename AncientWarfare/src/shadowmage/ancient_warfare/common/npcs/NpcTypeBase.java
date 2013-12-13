@@ -31,6 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
+import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
@@ -408,7 +409,7 @@ public String getIconTexture()
 @Override
 public void openGui(EntityPlayer player, NpcBase npc)
   {  
-  GUIHandler.instance().openGUI(GUIHandler.NPC_BASE, player, npc.worldObj, npc.entityId, 0, 0);
+  GUIHandler.instance().openGUI(AWCoreStatics.guiNpcInventory, player, npc.entityId, 0, 0);
   }
 
 @Override
