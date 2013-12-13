@@ -32,10 +32,10 @@ import net.minecraft.util.MathHelper;
  */
 public class Trig
 {
-private static final float PI = 3.141592653589793f;
-private static final float TORADIANS = PI / 180.f;
-private static final float TODEGREES = 180.f / PI;
-private static final float GRAVITY = 9.81f;
+public static final float PI = 3.141592653589793f;
+public static final float TORADIANS = PI / 180.f;
+public static final float TODEGREES = 180.f / PI;
+public static final float GRAVITY = 9.81f;
 
 public static int getPower(int num, int exp)
   {
