@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 import shadowmage.ancient_framework.common.config.AWConfig;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.registry.ObjectRegistry;
-import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -41,6 +41,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 
 
 
@@ -53,6 +54,7 @@ packetHandler = PacketHandler.class,
 channels = {"AW_mod"},
 versionBounds="["+Statics.FRAMEWORK_VERSION+",)"
 )
+
 public class AWFramework extends AWMod
 {
 
@@ -73,7 +75,8 @@ public void loadConfiguration(File config, Logger log)
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt)
   {
-  this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
+  this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());  
+  NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
   }
 
 @Override

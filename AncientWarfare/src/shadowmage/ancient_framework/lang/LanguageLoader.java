@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.lang;
+package shadowmage.ancient_framework.lang;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -124,7 +124,7 @@ protected void loadEnglishFile()
   Properties languageFile = new Properties();
   try
     {
-    InputStream is = AWCore.instance.getClass().getResourceAsStream("/lang/ancientwarfare/en_US.lang");	
+    InputStream is = AWCore.instance.getClass().getResourceAsStream("/assets/ancientwarfare/lang/en_US.lang");	
     if(is==null)
       {
       AWFramework.instance.logError("error loading english language file...could not locate file.../lang/ancientwarfare/en_US.lang");
@@ -152,7 +152,7 @@ protected void loadOtherLocalizations()
     Properties languageFile = new Properties();
     try
       {
-      InputStream is = this.getClass().getResourceAsStream("/lang/ancientwarfare/"+langName+".lang");          
+      InputStream is = this.getClass().getResourceAsStream("assets/ancientwarfare/lang/"+langName+".lang");          
       if(is!=null)
         {
         languageFile.load(is);
@@ -163,9 +163,9 @@ protected void loadOtherLocalizations()
         LanguageRegistry.instance().addStringLocalization(defaultLanguage, langName);
         }
       if(is!=null)
-      {
-          is.close();    	  
-      }
+        {
+        is.close();    	  
+        }
       } 
     catch (IOException e)
       {

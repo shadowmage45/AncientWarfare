@@ -27,7 +27,6 @@ import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.item.AWItemBase;
 import shadowmage.ancient_framework.common.registry.ObjectRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
-import shadowmage.ancient_warfare.AWCore;
 
 public class ItemLoaderCore
 {

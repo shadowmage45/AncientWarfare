@@ -29,19 +29,19 @@ import java.util.logging.Logger;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.AWMod;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
+import shadowmage.ancient_framework.lang.LanguageLoader;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.chunkloading.ChunkLoader;
-import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.event.AWEventHandler;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
-import shadowmage.ancient_warfare.common.lang.LanguageLoader;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.plugins.PluginProxy;
@@ -98,89 +98,55 @@ public static AWCore instance;
 @Override
 public void loadConfiguration(File config, Logger log)
   {
-  this.config = new AWCoreConfig(config, log, Statics.CORE_VERSION);
+  this.config = AWFramework.instance.config;
   }
 
-/**
- * load settings, config, items
- * @param evt
- */
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt) 
   {
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());  
   config.log("Starting Loading.  Version: "+Statics.CORE_VERSION);  
   LanguageLoader.instance().loadLanguageFiles();
-  PluginProxy.instance().detectAndLoadPlugins();
-  /**
-   * register player tracker
-   */
+  PluginProxy.instance().detectAndLoadPlugins(); 
   GameRegistry.registerPlayerTracker(PlayerTracker.instance());
-
-  /**
-   * register eventHandler
-   */
   MinecraftForge.EVENT_BUS.register(AWEventHandler.instance());
-
-  /**
-   * register chunk loader 
-   */
-  ForgeChunkManager.setForcedChunkLoadingCallback(this, ChunkLoader.instance());
-  
-  /**
-   * load items
-   */
+  ForgeChunkManager.setForcedChunkLoadingCallback(this, ChunkLoader.instance());  
   ItemLoaderCore.instance().load();
-  BlockLoader.instance().load();    
-  /**
-   *load vehicles, ammo, upgrades 
-   */
-  AmmoRegistry.instance().registerAmmoTypes();
-  VehicleUpgradeRegistry.instance().registerUpgrades();
-  ArmorRegistry.instance().registerArmorTypes();
-  /**
-   * have to load vehicles after everything else i think...
-   */
-  AWEntityRegistry.registerEntity(VehicleBase.class, "entity.vehicle", 130, 10, false);
-  VehicleRegistry.instance().registerVehicles();
-  AWEntityRegistry.registerEntity(NpcBase.class, "entity.npc", 130, 3, true);
-  AWEntityRegistry.registerEntity(EntityGate.class, "entity.gate", 130, 100, false);
-  config.log("Ancient Warfare Pre-Init finished.");
+  BlockLoader.instance().load();   
+  config.log("Pre-Init finished.");
   }
 
-/**
- * load registry stuff....
- * @param evt
- */
 @EventHandler
 public void init(FMLInitializationEvent evt)
   {
-  config.log("Ancient Warfare Init started.");
-  NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
-  proxy.registerClientData(); 
-  config.log("Ancient Warfare Init completed.");
+  config.log("Init started.");
+  AWEntityRegistry.registerEntity(VehicleBase.class, "entity.vehicle", 130, 10, false);
+  AWEntityRegistry.registerEntity(NpcBase.class, "entity.npc", 130, 3, true);
+  AWEntityRegistry.registerEntity(EntityGate.class, "entity.gate", 130, 100, false);
+  proxy.registerClientData();  
+  config.log("Init completed.");
   }
-
 
 @Override
 @EventHandler
 public void postInit(FMLPostInitializationEvent evt)
   {
-  config.log("Ancient Warfare Post-Init started");
+  config.log("Post-Init started");
 
+  AmmoRegistry.instance().registerAmmoTypes();
+  VehicleUpgradeRegistry.instance().registerUpgrades();
+  ArmorRegistry.instance().registerArmorTypes();
+  VehicleRegistry.instance().registerVehicles();
   NpcRegistry.instance().registerNPCs(); 
   CivicRegistry.instance().registerCivics();
   Gate.registerGateTypes();
   ResearchGoal.load();
   AWCraftingManager.instance().loadRecipes();
-  /**
-   * and finally, save the config in case there were any changes made during init
-   */
-  config.saveConfig();
-  
+   
+  config.saveConfig();  
   TickRegistry.registerTickHandler(new ServerPerformanceMonitor(), Side.SERVER);
   TickRegistry.registerTickHandler(new ServerTicker(), Side.SERVER);
-  config.log("Ancient Warfare Post-Init completed.  Successfully completed all loading stages."); 
+  config.log("Post-Init completed.  Successfully completed all loading stages."); 
   }
 
 @Override

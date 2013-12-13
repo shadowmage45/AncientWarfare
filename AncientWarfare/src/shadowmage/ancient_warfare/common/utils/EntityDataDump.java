@@ -28,7 +28,6 @@ import java.util.List;
 
 import net.minecraft.entity.EntityList;
 import shadowmage.ancient_framework.common.config.Statics;
-import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 
 public class EntityDataDump
 {

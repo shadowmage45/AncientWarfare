@@ -26,7 +26,6 @@ import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.block.AWBlockBase;
 import shadowmage.ancient_framework.common.item.AWItemBlockBase;
-import shadowmage.ancient_framework.common.registry.entry.Description;
 import shadowmage.ancient_warfare.AWCore;
 import shadowmage.ancient_warfare.common.civics.BlockCivic;
 import shadowmage.ancient_warfare.common.civics.BlockWarehouseStorage;
@@ -68,7 +67,6 @@ import shadowmage.ancient_warfare.common.machine.BlockMiscMachine;
 import shadowmage.ancient_warfare.common.machine.EngineData;
 import shadowmage.ancient_warfare.common.machine.MachineData;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class BlockLoader
 {
