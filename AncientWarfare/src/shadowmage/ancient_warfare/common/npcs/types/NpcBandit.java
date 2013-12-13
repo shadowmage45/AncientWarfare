@@ -54,9 +54,9 @@ public NpcBandit(int type)
   this.defaultTargets = defaultTargetList;
   this.isAvailableInSurvival = false;
   this.isBandit = true;
-  this.addLevel(type, 0, Statics.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4).setUpkeep(6);
-  this.addLevel(type, 1, Statics.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6).setUpkeep(8);
-  this.addLevel(type, 2, Statics.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8).setUpkeep(10);
+  this.addLevel(type, 0, Statics.TEXTURE_PATH + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4).setUpkeep(6);
+  this.addLevel(type, 1, Statics.TEXTURE_PATH + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6).setUpkeep(8);
+  this.addLevel(type, 2, Statics.TEXTURE_PATH + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8).setUpkeep(10);
   }
 
 @Override

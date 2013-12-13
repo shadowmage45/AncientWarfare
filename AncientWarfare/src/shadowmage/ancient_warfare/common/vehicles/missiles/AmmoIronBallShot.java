@@ -41,7 +41,7 @@ public AmmoIronBallShot(int ammoType)
   this.vehicleDamage = 8;
   this.iconTexture = "ammoStone1";
   this.configName = "iron_ball_shot";
-  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/ammoStoneShot.png";
   this.isCraftable = false;
   }
 

@@ -51,7 +51,7 @@ public void renderVehicle(VehicleBase veh, double x, double y, double z, float y
   GL11.glEnable(GL11.GL_BLEND);  
   GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
   GL11.glDepthMask(false);
-  AWTextureManager.bindTexture(Statics.texturePath+"models/submarine_screen.png");
+  AWTextureManager.bindTexture(Statics.TEXTURE_PATH+"models/submarine_screen.png");
   model.render(veh, 0, 0, 0, 0, 0, 0.0625f);
   GL11.glDepthMask(true);
   GL11.glDisable(GL11.GL_BLEND);

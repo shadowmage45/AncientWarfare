@@ -404,7 +404,7 @@ protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouse
   this.renderBackgroundImage(tex);
   if(this.inventorySlots.inventorySlots.size()>0)
     {
-    tex = Statics.texturePath+"gui/guiButtons.png";
+    tex = Statics.TEXTURE_PATH+"gui/guiButtons.png";
     AWTextureManager.bindTexture(tex);
     for(Object ob : this.inventorySlots.inventorySlots)    
       {      

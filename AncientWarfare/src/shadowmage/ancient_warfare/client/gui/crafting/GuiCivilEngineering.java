@@ -99,7 +99,7 @@ protected void renderBackgroundImage(String tex)
 @Override
 public String getGuiBackGroundTexture()
   {
-  return Statics.texturePath+"gui/guiBackgroundLarge.png";
+  return Statics.TEXTURE_PATH+"gui/guiBackgroundLarge.png";
   }
 
 @Override
@@ -130,7 +130,7 @@ public void drawProgressBackground()
   int w1 = 100;
   int x = guiLeft + 7;
   int y = guiTop + 112+18;
-  String tex = Statics.texturePath+"gui/guiButtons2.png";
+  String tex = Statics.TEXTURE_PATH+"gui/guiButtons2.png";
   RenderTools.drawQuadedTexture(x, y, w+6, h+6, 256, 40, tex, 0, 0);
   float progress = container.displayProgress;
   float max = container.displayProgressMax;
@@ -140,7 +140,7 @@ public void drawProgressBackground()
     percent = progress/max;
     }
   w1 = (int)(percent*100.f);
-  tex = Statics.texturePath+"gui/guiButtons.png"; 
+  tex = Statics.TEXTURE_PATH+"gui/guiButtons.png"; 
   RenderTools.drawQuadedTexture(x+3, y+3, w1, h, 104, 10, tex, 152, 234);
   x += 112;
   y += 4;

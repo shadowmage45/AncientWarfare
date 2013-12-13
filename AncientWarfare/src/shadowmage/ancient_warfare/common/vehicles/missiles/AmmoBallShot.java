@@ -43,7 +43,7 @@ public AmmoBallShot(int ammoType)
   this.configName = "ball_shot";
   this.iconTexture = "ammoStone1";
   this.isCraftable = false;
-  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/ammoStoneShot.png";
   }
 
 @Override

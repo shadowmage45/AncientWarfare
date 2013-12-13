@@ -57,7 +57,7 @@ public AmmoExplosiveShot(int ammoType, int weight, boolean bigExplosion)
     this.configName = "explosive_"+weight;
     this.neededResearch.add(ResearchGoalNumbers.explosives2);
     }
-  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/ammoStoneShot.png";
     
   int cases = 1;
   int explosives = 1;

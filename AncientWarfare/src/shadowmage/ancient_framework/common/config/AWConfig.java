@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 
 public class AWConfig extends ModConfiguration
 {
-public static final String VERSION = "";
-public static final boolean DEBUG = true;
+
+
 /**
  * @param configFile
  * @param log

@@ -51,7 +51,7 @@ public AmmoHwachaRocketAirburst(int ammoType)
   this.renderScale = 0.2f;
   this.configName = "hwacha_rocket_airburst";
   this.iconTexture = "ammoRocketAirburst1";
-  this.modelTexture = Statics.texturePath+"models/ammo/arrowWood.png";
+  this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/arrowWood.png";
   
   this.numCrafted = 6;
   this.neededResearch.add(ResearchGoalNumbers.rockets3);

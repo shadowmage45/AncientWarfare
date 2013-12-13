@@ -30,6 +30,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_framework.AWMod;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
@@ -76,14 +77,14 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 
-@Mod( modid = "AncientWarfareCore", name="Ancient Warfare Core", version=AWCoreConfig.VERSION, dependencies="required-after:AncientWarfare")
+@Mod( modid = "AncientWarfareCore", name="Ancient Warfare Core", version=Statics.CORE_VERSION, dependencies="required-after:AncientWarfare")
 @NetworkMod
 (
 clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
 channels = {"AW_vehicle", "AW_tile", "AW_gui", "AW_soldier", "AW_mod"},
-versionBounds="["+AWCoreConfig.VERSION+",)"
+versionBounds="["+Statics.CORE_VERSION+",)"
 )
 
 public class AWCore extends AWMod
@@ -97,7 +98,7 @@ public static AWCore instance;
 @Override
 public void loadConfiguration(File config, Logger log)
   {
-  this.config = new AWCoreConfig(config, log, AWCoreConfig.VERSION);
+  this.config = new AWCoreConfig(config, log, Statics.CORE_VERSION);
   }
 
 /**
@@ -108,7 +109,7 @@ public void loadConfiguration(File config, Logger log)
 public void preInit(FMLPreInitializationEvent evt) 
   {
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());  
-  config.log("Starting Loading.  Version: "+AWCoreConfig.VERSION);  
+  config.log("Starting Loading.  Version: "+Statics.CORE_VERSION);  
   LanguageLoader.instance().loadLanguageFiles();
   PluginProxy.instance().detectAndLoadPlugins();
   /**

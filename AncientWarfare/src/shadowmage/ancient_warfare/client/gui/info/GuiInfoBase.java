@@ -111,7 +111,7 @@ protected void keyTyped(char par1, int par2)
 @Override
 public String getGuiBackGroundTexture()
   {
-  return Statics.texturePath+"gui/guiBackgroundLarge.png";
+  return Statics.TEXTURE_PATH+"gui/guiBackgroundLarge.png";
   }
 
 @Override

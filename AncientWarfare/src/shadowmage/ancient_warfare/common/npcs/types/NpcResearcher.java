@@ -53,9 +53,9 @@ public NpcResearcher(int type)
   {
   super(type);
   this.iconTexture = "npcResearcher";
-  this.addLevel(type, 0, Statics.texturePath + "models/npc/npcResearcher.png", getToolStack(0), null).addTargetType(CivicWorkType.RESEARCH, CivicWorkType.ENGINE).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
-  this.addLevel(type, 1, Statics.texturePath + "models/npc/npcResearcher.png", getToolStack(1), null).addTargetType(CivicWorkType.RESEARCH, CivicWorkType.ENGINE).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
-  this.addLevel(type, 2, Statics.texturePath + "models/npc/npcResearcher.png", getToolStack(2), null).addTargetType(CivicWorkType.RESEARCH, CivicWorkType.ENGINE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
+  this.addLevel(type, 0, Statics.TEXTURE_PATH + "models/npc/npcResearcher.png", getToolStack(0), null).addTargetType(CivicWorkType.RESEARCH, CivicWorkType.ENGINE).setActionTicks(40).setUpkeep(4).addNeededResearch(ResearchGoalNumbers.logistics1);
+  this.addLevel(type, 1, Statics.TEXTURE_PATH + "models/npc/npcResearcher.png", getToolStack(1), null).addTargetType(CivicWorkType.RESEARCH, CivicWorkType.ENGINE).setActionTicks(30).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.logistics3);
+  this.addLevel(type, 2, Statics.TEXTURE_PATH + "models/npc/npcResearcher.png", getToolStack(2), null).addTargetType(CivicWorkType.RESEARCH, CivicWorkType.ENGINE).setActionTicks(20).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.logistics5);
   this.isCombatUnit = false;
   this.defaultTargets = defaultTargetList;
   this.configName = "researcher";

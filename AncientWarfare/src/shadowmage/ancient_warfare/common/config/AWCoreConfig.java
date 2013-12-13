@@ -24,16 +24,12 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import shadowmage.ancient_framework.common.config.ModConfiguration;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 
 public class AWCoreConfig extends ModConfiguration
 {
-
-public static final String VERSION = "1.1.037-beta-MC164";//major version(mc version updates/major revisions), minor version(releases), build version(test releases total)
-public static String texturePath = "textures/";
-public static String configPath = "";
-
 //***************************************************LOADED CONFIGS******************************************//
 
 public static boolean enablePerformanceMonitor = false;
@@ -95,10 +91,10 @@ public void initializeCategories()
 @Override
 public void initializeValues()
   {
-  if(!configVersion.equals(VERSION))
+  if(!configVersion.equals(Statics.CORE_VERSION))
     {
     this.updatedVersion = true;
-    config.get("version", "version", VERSION, "The mod version used to last save this config").set(VERSION);
+    config.get("version", "version", Statics.CORE_VERSION, "The mod version used to last save this config").set(Statics.CORE_VERSION);
     }
   
 //  this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").getString();  

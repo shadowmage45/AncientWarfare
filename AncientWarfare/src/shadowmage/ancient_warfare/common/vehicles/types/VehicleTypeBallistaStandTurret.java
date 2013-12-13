@@ -71,17 +71,17 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Statics.texturePath + "models/ballistaStand1.png";
+    return Statics.TEXTURE_PATH + "models/ballistaStand1.png";
     case 1:
-    return Statics.texturePath + "models/ballistaStand2.png";
+    return Statics.TEXTURE_PATH + "models/ballistaStand2.png";
     case 2:
-    return Statics.texturePath + "models/ballistaStand3.png";
+    return Statics.TEXTURE_PATH + "models/ballistaStand3.png";
     case 3:
-    return Statics.texturePath + "models/ballistaStand4.png";
+    return Statics.TEXTURE_PATH + "models/ballistaStand4.png";
     case 4:
-    return Statics.texturePath + "models/ballistaStand5.png";
+    return Statics.TEXTURE_PATH + "models/ballistaStand5.png";
     default:
-    return Statics.texturePath + "models/ballistaStand1.png";
+    return Statics.TEXTURE_PATH + "models/ballistaStand1.png";
     }
   }
 

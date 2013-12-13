@@ -89,7 +89,7 @@ public void drawElement(int mouseX, int mouseY)
 //  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   if(this.renderSlotBackground)
     {
-    String tex = Statics.texturePath+"gui/guiButtons.png";
+    String tex = Statics.TEXTURE_PATH+"gui/guiButtons.png";
     AWTextureManager.bindTexture(tex);
     this.drawTexturedModalRect(guiLeft+renderPosX, guiTop+renderPosY, 152, 120, 18, 18);
     } 

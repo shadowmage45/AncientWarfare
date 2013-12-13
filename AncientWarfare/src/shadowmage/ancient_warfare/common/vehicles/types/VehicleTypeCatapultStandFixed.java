@@ -61,17 +61,17 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Statics.texturePath + "models/catapultStandFixed1.png";
+    return Statics.TEXTURE_PATH + "models/catapultStandFixed1.png";
     case 1:
-    return Statics.texturePath + "models/catapultStandFixed2.png";
+    return Statics.TEXTURE_PATH + "models/catapultStandFixed2.png";
     case 2:
-    return Statics.texturePath + "models/catapultStandFixed3.png";
+    return Statics.TEXTURE_PATH + "models/catapultStandFixed3.png";
     case 3:
-    return Statics.texturePath + "models/catapultStandFixed4.png";
+    return Statics.TEXTURE_PATH + "models/catapultStandFixed4.png";
     case 4:
-    return Statics.texturePath + "models/catapultStandFixed5.png";
+    return Statics.TEXTURE_PATH + "models/catapultStandFixed5.png";
     default:
-    return Statics.texturePath + "models/catapultStandFixed1.png";
+    return Statics.TEXTURE_PATH + "models/catapultStandFixed1.png";
     }
   }
 

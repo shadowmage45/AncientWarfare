@@ -48,7 +48,7 @@ public AmmoHwachaRocketExplosive(int ammoType)
   this.renderScale = 0.2f;
   this.configName = "hwacha_rocket_explosive";
   this.iconTexture = "ammoRocketExplosive1";
-  this.modelTexture = Statics.texturePath+"models/ammo/arrowWood.png";
+  this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/arrowWood.png";
   
   this.numCrafted = 8;
   this.neededResearch.add(ResearchGoalNumbers.rockets2);

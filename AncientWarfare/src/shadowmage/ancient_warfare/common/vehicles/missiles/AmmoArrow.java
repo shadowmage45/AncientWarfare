@@ -42,7 +42,7 @@ public AmmoArrow(int ammoType)
   this.isPersistent = true;
   this.iconTexture = "ammoArrow1";
   this.configName = "arrow";
-  this.modelTexture = Statics.texturePath+"models/ammo/arrowWood.png";
+  this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/arrowWood.png";
   this.resources.add(new ItemStackWrapperCrafting(Item.flint, 5));
   this.resources.add(new ItemStackWrapperCrafting(Item.stick, 5));
   this.resources.add(new ItemStackWrapperCrafting(Item.feather, 5));

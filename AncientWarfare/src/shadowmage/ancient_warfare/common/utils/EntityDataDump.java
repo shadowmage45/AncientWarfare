@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EntityList;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 
 public class EntityDataDump
@@ -48,7 +49,7 @@ public static void dumpEntityData()
     {
     entityNames.add((String)obj);
     }
-  String path = AWCoreConfig.configPath+"/AWConfig/entityDump.txt";
+  String path = Statics.CONFIG_PATH+"/AWConfig/entityDump.txt";
   File file = new File(path);
   try
     {

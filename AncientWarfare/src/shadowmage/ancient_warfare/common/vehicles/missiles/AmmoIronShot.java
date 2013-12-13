@@ -44,7 +44,7 @@ public AmmoIronShot(int ammoType, int weight, int damage)
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoIron1";
   this.configName = "iron_shot_"+weight;
-  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/ammoStoneShot.png";
   
   int cases = 1;
   this.numCrafted = 8;

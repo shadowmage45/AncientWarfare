@@ -39,8 +39,8 @@ public NpcDummy(int type)
   {
   super(type);
   this.isAvailableInSurvival = false;
-  this.addLevel(type, 0, Statics.texturePath + "models/npcDefault.png", null, null);
-  this.addLevel(type, 1, Statics.texturePath + "models/npcDefault.png", null, null);
+  this.addLevel(type, 0, Statics.TEXTURE_PATH + "models/npcDefault.png", null, null);
+  this.addLevel(type, 1, Statics.TEXTURE_PATH + "models/npcDefault.png", null, null);
   this.isCombatUnit = true;
   }
 

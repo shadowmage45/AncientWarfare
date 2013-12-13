@@ -59,10 +59,10 @@ public NpcArcher(int type)
   this.configName = "archer";
   this.isCombatUnit = true;  
   this.iconTexture = "npcArcher";
-  this.addLevel(type, 0, Statics.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setRange(20).setAccuracy(0.88f).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.command1);
-  this.addLevel(type, 1, Statics.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setRange(20).setAccuracy(0.91f).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);
-  this.addLevel(type, 2, Statics.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setRange(20).setAccuracy(0.94f).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command3);
-  this.addLevel(type, 3, Statics.texturePath + "models/npcDefault.png", getToolStack(3), getArmorStack(3)).setRange(20).setAccuracy(0.97f).setUpkeep(10).addNeededResearch(ResearchGoalNumbers.command3);
+  this.addLevel(type, 0, Statics.TEXTURE_PATH + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setRange(20).setAccuracy(0.88f).setUpkeep(6).addNeededResearch(ResearchGoalNumbers.command1);
+  this.addLevel(type, 1, Statics.TEXTURE_PATH + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setRange(20).setAccuracy(0.91f).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);
+  this.addLevel(type, 2, Statics.TEXTURE_PATH + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setRange(20).setAccuracy(0.94f).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command3);
+  this.addLevel(type, 3, Statics.TEXTURE_PATH + "models/npcDefault.png", getToolStack(3), getArmorStack(3)).setRange(20).setAccuracy(0.97f).setUpkeep(10).addNeededResearch(ResearchGoalNumbers.command3);
   this.defaultTargets = defaultTargetList;
   }
 

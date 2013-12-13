@@ -23,8 +23,14 @@ package shadowmage.ancient_framework.common.config;
 public class Statics
 {
 
-public static final String texturePath = "textures/";
-
+public static final String CONFIG_PATH = "";
+public static final String ASSETS_PATH = "";
+public static final String TEXTURE_PATH = "textures/";
+public static final String MOD_PREFIX = "ancientwarfare:";
+public static final String FRAMEWORK_VERSION = "2.2.038-beta-MC164";
+public static final String CORE_VERSION = FRAMEWORK_VERSION;
+public static final String STRUCTURE_VERSION = CORE_VERSION;
+public static final boolean DEBUG = true;
 
 
 }

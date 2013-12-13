@@ -55,9 +55,9 @@ public NpcCommander(int type)
   this.isCombatUnit = true;
   this.iconTexture = "npcCommander";
   this.defaultTargets = defaultTargetList;
-  this.addLevel(type, 0, Statics.texturePath + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);
-  this.addLevel(type, 1, Statics.texturePath + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6).setUpkeep(10).addNeededResearch(ResearchGoalNumbers.command3);
-  this.addLevel(type, 2, Statics.texturePath + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8).setUpkeep(12).addNeededResearch(ResearchGoalNumbers.command5);  
+  this.addLevel(type, 0, Statics.TEXTURE_PATH + "models/npcDefault.png", getToolStack(0), getArmorStack(0)).setAttackDamage(4).setUpkeep(8).addNeededResearch(ResearchGoalNumbers.command2);
+  this.addLevel(type, 1, Statics.TEXTURE_PATH + "models/npcDefault.png", getToolStack(1), getArmorStack(1)).setAttackDamage(6).setUpkeep(10).addNeededResearch(ResearchGoalNumbers.command3);
+  this.addLevel(type, 2, Statics.TEXTURE_PATH + "models/npcDefault.png", getToolStack(2), getArmorStack(2)).setAttackDamage(8).setUpkeep(12).addNeededResearch(ResearchGoalNumbers.command5);  
   }
 
 @Override

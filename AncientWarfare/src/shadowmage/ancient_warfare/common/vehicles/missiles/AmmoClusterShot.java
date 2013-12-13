@@ -42,7 +42,7 @@ public AmmoClusterShot(int ammoType, int weight)
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoCluster1";
   this.configName = "cluster_shot_"+weight;
-  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/ammoStoneShot.png";
 
   this.entityDamage = 5;
   this.vehicleDamage = 5;

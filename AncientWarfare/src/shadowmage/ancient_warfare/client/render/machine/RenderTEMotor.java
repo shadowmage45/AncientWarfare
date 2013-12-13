@@ -44,7 +44,7 @@ public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, doub
   {
   GL11.glPushMatrix();
   TEEngine engine = (TEEngine)tileentity;
-  String tex = Statics.texturePath+"models/"+engine.getTexture();
+  String tex = Statics.TEXTURE_PATH+"models/"+engine.getTexture();
   AWTextureManager.bindTexture(tex);
   GL11.glTranslated(d0+0.5d, d1+0.5d, d2+0.5d);
   teModel.setDirection(engine.getFacing());
@@ -70,7 +70,7 @@ public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRe
 public void renderItem(ItemRenderType type, ItemStack item, Object... data)
   {
   GL11.glPushMatrix();
-  String tex = Statics.texturePath+"models/"+EngineData.getEngineTexture(item.getItemDamage());
+  String tex = Statics.TEXTURE_PATH+"models/"+EngineData.getEngineTexture(item.getItemDamage());
   AWTextureManager.bindTexture(tex);
   GL11.glTranslated(0.5d, 0.5d, 0.5d);
   teModel.setDirection(ForgeDirection.UP);

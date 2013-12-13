@@ -45,7 +45,7 @@ public static void logError(String info)
 
 public static void logDebug(String info)
   {
-  if(AWConfig.DEBUG)
+  if(Statics.DEBUG)
     {
     log.log(Level.INFO, "[DEBUG] "+info);
     }

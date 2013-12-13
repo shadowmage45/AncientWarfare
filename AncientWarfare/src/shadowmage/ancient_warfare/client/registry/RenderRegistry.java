@@ -270,14 +270,14 @@ public void loadRenders()
   this.addTEModel(6, new ModelTable7());
   this.addTEModel(7, new ModelTable8());
   
-  this.teModelTextures.put(0, Statics.texturePath+"models/crafting/teResearchTable.png");
-  this.teModelTextures.put(1, Statics.texturePath+"models/crafting/teEngineeringStation.png");
-  this.teModelTextures.put(2, Statics.texturePath+"models/crafting/teCivilEngineeringStation.png");
-  this.teModelTextures.put(3, Statics.texturePath+"models/crafting/teVehicleStation.png");
-  this.teModelTextures.put(4, Statics.texturePath+"models/crafting/teAmmoStation.png");
-  this.teModelTextures.put(5, Statics.texturePath+"models/crafting/teNpcStation.png");
-  this.teModelTextures.put(6, Statics.texturePath+"models/crafting/teAlchemyStation.png");
-  this.teModelTextures.put(7, Statics.texturePath+"models/crafting/teAutoCrafting.png");
+  this.teModelTextures.put(0, Statics.TEXTURE_PATH+"models/crafting/teResearchTable.png");
+  this.teModelTextures.put(1, Statics.TEXTURE_PATH+"models/crafting/teEngineeringStation.png");
+  this.teModelTextures.put(2, Statics.TEXTURE_PATH+"models/crafting/teCivilEngineeringStation.png");
+  this.teModelTextures.put(3, Statics.TEXTURE_PATH+"models/crafting/teVehicleStation.png");
+  this.teModelTextures.put(4, Statics.TEXTURE_PATH+"models/crafting/teAmmoStation.png");
+  this.teModelTextures.put(5, Statics.TEXTURE_PATH+"models/crafting/teNpcStation.png");
+  this.teModelTextures.put(6, Statics.TEXTURE_PATH+"models/crafting/teAlchemyStation.png");
+  this.teModelTextures.put(7, Statics.TEXTURE_PATH+"models/crafting/teAutoCrafting.png");
   
   /**
    * load up the vehicle item renderer...

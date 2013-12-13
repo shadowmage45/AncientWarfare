@@ -69,7 +69,7 @@ public int getYSize()
 @Override
 public String getGuiBackGroundTexture()
   {
-  return Statics.texturePath+"gui/guiBackgroundLarge.png";
+  return Statics.TEXTURE_PATH+"gui/guiBackgroundLarge.png";
   }
 
 @Override

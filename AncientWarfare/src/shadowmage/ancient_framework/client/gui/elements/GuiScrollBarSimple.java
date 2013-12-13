@@ -60,7 +60,7 @@ public void drawElement(int mouseX, int mouseY)
   {
   if(!this.hidden)
     {
-    String tex = Statics.texturePath+"gui/guiButtons.png";
+    String tex = Statics.TEXTURE_PATH+"gui/guiButtons.png";
     this.drawQuadedTexture(renderPosX+guiLeft, renderPosY+guiTop, width, height, 40, 128, tex, 80, 120); 
     this.drawQuadedTexture(renderPosX+guiLeft+buffer, renderPosY+guiTop+buffer+handleTop, width-buffer*2, handleHeight, 32, 128, tex, 120, 120);
     }

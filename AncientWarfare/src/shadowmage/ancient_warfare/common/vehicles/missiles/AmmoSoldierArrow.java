@@ -54,11 +54,11 @@ public AmmoSoldierArrow(int ammoType, int damage, boolean flaming)
     }  
   if(damage<=5)
     {
-    this.modelTexture = Statics.texturePath+"models/ammo/arrowWood.png";
+    this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/arrowWood.png";
     }
   else
     {
-    this.modelTexture = Statics.texturePath+"models/ammo/arrowIron.png";    
+    this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/arrowIron.png";    
     }
   }
 

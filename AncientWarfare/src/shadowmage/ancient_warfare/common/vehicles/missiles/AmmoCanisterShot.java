@@ -42,7 +42,7 @@ public AmmoCanisterShot(int ammoType, int weight)
   this.renderScale = ( weight / scaleFactor ) * 2; 
   this.iconTexture = "ammoCanister1";
   this.configName = "canister_shot_"+weight;
-  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png"; 
+  this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/ammoStoneShot.png"; 
   this.entityDamage = 8;
   this.vehicleDamage = 8;
   this.neededResearch.add(ResearchGoalNumbers.explosives1);

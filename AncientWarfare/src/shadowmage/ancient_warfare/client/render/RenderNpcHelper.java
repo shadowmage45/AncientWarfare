@@ -172,13 +172,13 @@ public void renderErrorIcon(byte error)
   {
   if(error>=0)
     {
-    RenderTools.renderIcon(Statics.texturePath+"items/testIcon1.png", 16, 16,20,-16);
+    RenderTools.renderIcon(Statics.TEXTURE_PATH+"items/testIcon1.png", 16, 16,20,-16);
     }
   }
 
 public String getObjectiveTexture(byte objective)
   {
-  String base = Statics.texturePath+"custom_icons/npc_status/";
+  String base = Statics.TEXTURE_PATH+"custom_icons/npc_status/";
   switch(objective)
   {
   case 0:
@@ -226,7 +226,7 @@ public String getObjectiveTexture(byte objective)
 
 public String getTaskTexture(byte task)
   {
-  String base = Statics.texturePath+"custom_icons/npc_status/";
+  String base = Statics.TEXTURE_PATH+"custom_icons/npc_status/";
   switch(task)
   {
   case 0:

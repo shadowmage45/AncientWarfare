@@ -121,17 +121,17 @@ public String getTextureForMaterialLevel(int level)
   switch(level)
     {
     case 0:
-    return Statics.texturePath + "models/hwacha1.png";
+    return Statics.TEXTURE_PATH + "models/hwacha1.png";
     case 1:
-    return Statics.texturePath + "models/hwacha2.png";
+    return Statics.TEXTURE_PATH + "models/hwacha2.png";
     case 2:
-    return Statics.texturePath + "models/hwacha3.png";
+    return Statics.TEXTURE_PATH + "models/hwacha3.png";
     case 3:
-    return Statics.texturePath + "models/hwacha4.png";
+    return Statics.TEXTURE_PATH + "models/hwacha4.png";
     case 4:
-    return Statics.texturePath + "models/hwacha5.png";
+    return Statics.TEXTURE_PATH + "models/hwacha5.png";
     default:
-    return Statics.texturePath + "models/hwacha1.png";
+    return Statics.TEXTURE_PATH + "models/hwacha1.png";
     }
   }
 

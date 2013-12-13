@@ -49,7 +49,7 @@ public AmmoFlameShot(int ammoType, int weight)
   this.configName = "flame_shot_"+weight;
   this.vehicleDamage = 8;
   this.entityDamage = 8;
-  this.modelTexture = Statics.texturePath+"models/ammo/ammoStoneShot.png";
+  this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/ammoStoneShot.png";
   
   this.neededResearch.add(ResearchGoalNumbers.flammables2);
   int cases = 1;

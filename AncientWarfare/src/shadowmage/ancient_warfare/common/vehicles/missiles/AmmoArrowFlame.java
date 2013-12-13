@@ -48,7 +48,7 @@ public class AmmoArrowFlame extends Ammo
     this.isFlaming = true;
     this.iconTexture = "ammoArrowFlame1";
     this.configName = "arrow_flame";
-    this.modelTexture = Statics.texturePath+"models/ammo/arrowWood.png";
+    this.modelTexture = Statics.TEXTURE_PATH+"models/ammo/arrowWood.png";
     this.neededResearch.add(ResearchGoalNumbers.flammables1);
     this.resources.add(new ItemStackWrapperCrafting(Item.flint, 5));
     this.resources.add(new ItemStackWrapperCrafting(Item.stick, 5));

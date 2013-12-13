@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import shadowmage.ancient_framework.common.config.AWConfig;
 import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.registry.ObjectRegistry;
 import shadowmage.ancient_warfare.common.config.AWCoreConfig;
 import shadowmage.ancient_warfare.common.network.PacketHandler;
@@ -43,14 +44,14 @@ import cpw.mods.fml.common.network.NetworkMod;
 
 
 
-@Mod( modid = "AncientWarfare", name="Ancient Warfare", version=AWCoreConfig.VERSION)
+@Mod( modid = "AncientWarfare", name="Ancient Warfare Mod Framework", version=Statics.FRAMEWORK_VERSION)
 @NetworkMod
 (
 clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
 channels = {"AW_mod"},
-versionBounds="["+AWCoreConfig.VERSION+",)"
+versionBounds="["+Statics.FRAMEWORK_VERSION+",)"
 )
 public class AWFramework extends AWMod
 {
@@ -59,18 +60,11 @@ public class AWFramework extends AWMod
 public static AWFramework instance;
 
 public ObjectRegistry objectRegistry;
-/**
- * 
- */
-public AWFramework()
-  {
-  // TODO Auto-generated constructor stub
-  }
 
 @Override
 public void loadConfiguration(File config, Logger log)
   {
-  this.config = new AWConfig(config, log, AWConfig.VERSION);
+  this.config = new AWConfig(config, log, Statics.FRAMEWORK_VERSION);
   objectRegistry = new ObjectRegistry(this.config);
   AWLog.setLogger(log);
   }
@@ -86,7 +80,6 @@ public void preInit(FMLPreInitializationEvent evt)
 @EventHandler
 public void init(FMLInitializationEvent evt)
   {
-  // TODO Auto-generated method stub
 
   }
 
@@ -94,7 +87,6 @@ public void init(FMLInitializationEvent evt)
 @EventHandler
 public void postInit(FMLPostInitializationEvent evt)
   {
-  // TODO Auto-generated method stub
 
   }
 
@@ -102,7 +94,6 @@ public void postInit(FMLPostInitializationEvent evt)
 @EventHandler
 public void serverPreStart(FMLServerAboutToStartEvent evt)
   {
-  // TODO Auto-generated method stub
 
   }
 
@@ -110,7 +101,6 @@ public void serverPreStart(FMLServerAboutToStartEvent evt)
 @EventHandler
 public void serverStarting(FMLServerStartingEvent evt)
   {
-  // TODO Auto-generated method stub
 
   }
 
@@ -118,7 +108,6 @@ public void serverStarting(FMLServerStartingEvent evt)
 @EventHandler
 public void serverStarted(FMLServerStartedEvent evt)
   {
-  // TODO Auto-generated method stub
 
   }
 
@@ -126,7 +115,6 @@ public void serverStarted(FMLServerStartedEvent evt)
 @EventHandler
 public void serverStopping(FMLServerStoppingEvent evt)
   {
-  // TODO Auto-generated method stub
 
   }
 
@@ -134,7 +122,6 @@ public void serverStopping(FMLServerStoppingEvent evt)
 @EventHandler
 public void serverStopped(FMLServerStoppedEvent evt)
   {
-  // TODO Auto-generated method stub
 
   }
 

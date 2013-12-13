@@ -220,7 +220,7 @@ public int getGlobalID()
 @Override
 public String getIconTexture()
   {
-  return Statics.texturePath+"blocks/civic/"+itemIconTexture;
+  return Statics.TEXTURE_PATH+"blocks/civic/"+itemIconTexture;
   }
 
 @Override

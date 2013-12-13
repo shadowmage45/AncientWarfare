@@ -422,7 +422,7 @@ public boolean canBePushed()
 
 public String getTexture()
   {
-  return Statics.texturePath + "models/gate/"+gateType.getTexture();
+  return Statics.TEXTURE_PATH + "models/gate/"+gateType.getTexture();
   }
 
 @Override
