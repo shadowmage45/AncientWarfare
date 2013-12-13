@@ -372,7 +372,7 @@ public void handleFireUpdate()
         pkt.setParams(vehicle);
         NBTTagCompound reply = new NBTTagCompound();
         reply.setBoolean("fm", true);
-        pkt.setInputData(reply);
+        pkt.packetData.setCompoundTag("input", reply);
         pkt.sendPacketToAllTrackingClients(vehicle);
         }
       this.initiateLaunchSequence();
@@ -411,7 +411,7 @@ public void handleAimUpdate(NBTTagCompound tag)
     reply.setBoolean("aim", true);
     Packet02Entity pkt = new Packet02Entity();
     pkt.setParams(vehicle);
-    pkt.setInputData(reply);
+    pkt.packetData.setCompoundTag("input", reply);
     pkt.sendPacketToAllTrackingClients(vehicle);
     }
   }
@@ -434,7 +434,7 @@ public void handleFireInput(Vec3 target)
       }
     Packet02Entity pkt = new Packet02Entity();
     pkt.setParams(vehicle);
-    pkt.setInputData(tag);
+    pkt.packetData.setCompoundTag("input", tag);
     pkt.sendPacketToServer();
     }
   }
@@ -508,7 +508,7 @@ public void handleAimKeyInput(float pitch, float yaw)
       }
     Packet02Entity pkt = new Packet02Entity();
     pkt.setParams(vehicle);
-    pkt.setInputData(tag);
+    pkt.packetData.setCompoundTag("input", tag);
     pkt.sendPacketToServer();
     }
   }
@@ -601,7 +601,7 @@ public void handleAimInput(Vec3 target)
       }
     Packet02Entity pkt = new Packet02Entity();
     pkt.setParams(vehicle);
-    pkt.setInputData(tag);
+    pkt.packetData.setCompoundTag("input", tag);
     pkt.sendPacketToServer();
     }
   }
@@ -721,7 +721,7 @@ public void handleSoldierTargetInput(double targetX, double targetY, double targ
       {
       Packet02Entity pkt = new Packet02Entity();
       pkt.setParams(vehicle);
-      pkt.setInputData(tag);
+      pkt.packetData.setCompoundTag("input", tag);
       pkt.sendPacketToAllTrackingClients(vehicle);
       }   
     }
