@@ -272,10 +272,7 @@ public void updateAmmoCounts()
     tagList.appendTag(entryTag);
     }  
   tag.setTag("list", tagList);
-  Packet02Entity pkt = new Packet02Entity();
-  pkt.setParams(vehicle);
-  pkt.setAmmoData(tag);
-  pkt.sendPacketToAllTrackingClients(vehicle);
+  vehicle.packetHandler.addData("ammoCount", tag);
   }
 
 /**

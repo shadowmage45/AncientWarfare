@@ -40,19 +40,24 @@ import cpw.mods.fml.common.network.Player;
 public class PacketHandler implements IPacketHandler
 {
 
-private Map<Integer, Class<? extends PacketBase>> packetTypes = new HashMap<Integer, Class<? extends PacketBase>>();
+private static Map<Integer, Class<? extends PacketBase>> packetTypes = new HashMap<Integer, Class<? extends PacketBase>>();
+
+static
+{
+packetTypes.put(1, Packet01ModData.class);
+packetTypes.put(2, Packet02Entity.class);
+packetTypes.put(3, Packet03GuiComs.class);
+packetTypes.put(4, Packet04TE.class);
+}
 
 public PacketHandler()  
   {
-  this.packetTypes.put(1, Packet01ModData.class);
-  this.packetTypes.put(2, Packet02Entity.class);
-  this.packetTypes.put(3, Packet03GuiComs.class);
-  this.packetTypes.put(4, Packet04TE.class);
+
   }
 
-public void registerPacketType(int id, Class<? extends PacketBase> pktClass)
+public static void registerPacketType(int id, Class<? extends PacketBase> pktClass)
   {
-  this.packetTypes.put(id, pktClass);
+  packetTypes.put(id, pktClass);
   }
 
 @Override
@@ -93,9 +98,9 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
  * @throws IllegalAccessException 
  * @throws InstantiationException 
  */
-public PacketBase constructPacket(int type) throws InstantiationException, IllegalAccessException
+public static PacketBase constructPacket(int type) throws InstantiationException, IllegalAccessException
   {
-  return this.packetTypes.get(type).newInstance();
+  return packetTypes.get(type).newInstance();
   }
 
 }

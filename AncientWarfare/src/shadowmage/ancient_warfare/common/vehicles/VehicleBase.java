@@ -39,6 +39,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.interfaces.IEntityContainerSynch;
+import shadowmage.ancient_framework.common.interfaces.IHandlePacketData;
 import shadowmage.ancient_framework.common.network.Packet02Entity;
 import shadowmage.ancient_framework.common.utils.ByteTools;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
@@ -61,6 +62,7 @@ import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleAmmoHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleMoveHelper;
+import shadowmage.ancient_warfare.common.vehicles.helpers.VehiclePacketDataManager;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleUpgradeHelper;
 import shadowmage.ancient_warfare.common.vehicles.materials.IVehicleMaterial;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -72,7 +74,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IEntityContainerSynch, IPathableEntity, IInventory
+public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IEntityContainerSynch, IPathableEntity, IInventory, IHandlePacketData
 {
 
 
@@ -178,10 +180,12 @@ public Navigator nav;
 public PathWorldAccessEntity worldAccess;
 public IVehicleType vehicleType = VehicleRegistry.CATAPULT_STAND_FIXED;//set to dummy vehicle so it is never null...
 public int vehicleMaterialLevel = 0;//the current material level of this vehicle. should be read/set prior to calling updateBaseStats
+public VehiclePacketDataManager packetHandler;
 
 public VehicleBase(World par1World)
   {
   super(par1World);
+  this.packetHandler = new VehiclePacketDataManager(this);
   this.upgradeHelper = new VehicleUpgradeHelper(this);
   this.moveHelper = new VehicleMoveHelper(this);
   this.ammoHelper = new VehicleAmmoHelper(this);
@@ -189,7 +193,7 @@ public VehicleBase(World par1World)
   this.firingVarsHelper = new DummyVehicleHelper(this);
   this.inventory = new VehicleInventory(this);
   this.worldAccess = new PathWorldAccessEntity(par1World, this);  
-  this.nav = new Navigator(this);
+  this.nav = new Navigator(this);  
   this.nav.setStuckCheckTicks(100);
   this.stepHeight = 1.12f;
   this.entityCollisionReduction = 0.9f;
@@ -806,9 +810,7 @@ public void sendCompleteTurretPacket()
   NBTTagCompound tag = new NBTTagCompound();
   tag.setFloat("p", localTurretPitch);
   tag.setFloat("r", localTurretRotation);  
-  Packet02Entity pkt = new Packet02Entity();
-  pkt.setTurretParams(tag);  
-  pkt.sendPacketToAllTrackingClients(this);
+  this.packetHandler.addData("turretData", tag);
   }
 
 protected void handleTurretPacket(NBTTagCompound tag)
@@ -1261,5 +1263,23 @@ public void closeChest()
 public boolean isItemValidForSlot(int i, ItemStack itemstack)
   {
   return inventory.storageInventory.isItemValidForSlot(i, itemstack);
+  }
+
+@Override
+public void handleRawPacketData(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public void handlePacketData(NBTTagCompound tag)
+  {
+  this.packetHandler.onPacketReceived(tag);
+  }
+
+@Override
+public void handleInitData(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub  
   }
 }
