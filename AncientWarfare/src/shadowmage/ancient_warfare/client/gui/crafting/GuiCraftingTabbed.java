@@ -205,7 +205,7 @@ public void drawProgressForeground()
           }
         else
           {
-          this.renderItemStack(stack.getFilter(), guiLeft + 8 + x * 18, guiTop + 8 + 24 + 18 + 4 + 18 + 4 + y*18, mouseX, mouseY, true, true);          
+          this.renderItemStack(stack.getFilter(), guiLeft + 8 + x * 18, guiTop + 8 + 24 + 18 + 4 + 18 + 4 + y*18, mouseX, mouseY, true, true, false, false);       
           }        
         }   
       x++;   
@@ -214,7 +214,7 @@ public void drawProgressForeground()
     if(last)
       {
       ItemStackWrapperCrafting item = this.container.clientRecipe.getResourceList().get(lastslot);
-      this.renderItemStack(item.getFilter(), lastx, lasty, mouseX, mouseY, true, true);
+      this.renderItemStack(item.getFilter(), lastx, lasty, mouseX, mouseY, true, true, true, false);
       }
     }
   }

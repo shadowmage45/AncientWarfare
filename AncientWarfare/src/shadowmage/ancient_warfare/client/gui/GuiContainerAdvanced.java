@@ -494,7 +494,6 @@ public void drawScreen(int par1, int par2, float par3)
  */
 public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay, boolean useAlpha, boolean tooltip, boolean defer)
   {
-  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
   GL11.glPushMatrix();
   RenderHelper.enableGUIStandardItemLighting();
   GL11.glDisable(GL11.GL_LIGHTING);
@@ -524,19 +523,17 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
     if(!defer)
       {
       this.drawItemStackTooltip(stack, x, y);
-//      this.renderTooltip(x, y, stack.getTooltip(player, false));
       }
     else
       {
-//      Config.logDebug("delaying tooltip for: "+stack);
       this.tooltipStack = stack;
       this.tooltipStackX = x;
       this.tooltipStackY = y;      
       }
     }   
   GL11.glPopMatrix();
+  GL11.glDisable(GL11.GL_LIGHTING);
   GL11.glEnable(GL11.GL_DEPTH_TEST);
-  GL11.glPopAttrib();
   }
 
 public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouseY, boolean renderOverlay, boolean tooltip)
@@ -556,14 +553,16 @@ protected void renderTooltip(int x, int y, List<String> info)
     {
     return;
     }
-  GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-  RenderHelper.disableStandardItemLighting();
+  GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+//  GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+//  RenderHelper.disableStandardItemLighting();
   GL11.glDisable(GL11.GL_LIGHTING);
   GL11.glDisable(GL11.GL_DEPTH_TEST);
   Iterator<String> it = info.iterator();
   String line;
   if(!it.hasNext())
     {
+    GL11.glPopAttrib();
     return;
     }  
   int widestLength = 0;
@@ -621,6 +620,7 @@ protected void renderTooltip(int x, int y, List<String> info)
     }
   this.zLevel = 0.0F;
   itemRenderer.zLevel = 0.0F;
+  GL11.glPopAttrib();
   }
 
 /**

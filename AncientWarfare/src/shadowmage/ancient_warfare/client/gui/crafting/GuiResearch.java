@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
@@ -238,6 +239,7 @@ public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
       }
     else if(this.activeTab==this.tab2)
       {
+      GL11.glDisable(GL11.GL_LIGHTING);
       this.drawStringGui("Queued: ", 5, 21+18+10+5+18+70+2, 0xffffffff);
       }
     }
