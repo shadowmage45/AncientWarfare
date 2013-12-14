@@ -369,6 +369,20 @@ public void updateBaseStats()
     }
   }
 
+
+
+@Override
+public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
+  {
+  super.onCollideWithPlayer(par1EntityPlayer);
+  if(!worldObj.isRemote && par1EntityPlayer instanceof EntityPlayerMP && par1EntityPlayer.posY > posY && par1EntityPlayer.isCollidedVertically)
+    {
+    EntityPlayerMP player = (EntityPlayerMP)par1EntityPlayer;
+    NetServerHandler serv = player.playerNetServerHandler;
+    serv.ticksForFloatKick = 0;
+    }
+  }
+
 /**
  * return an itemStack tagged appropriately for this vehicle
  * @return
