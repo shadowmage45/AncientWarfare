@@ -89,7 +89,9 @@ public void addLootToTables()
     int level = t.getMaterialType().getNumOfLevels();
     for(int i = 0; i< t.getMaterialType().getNumOfLevels(); i++)
       {
-      level = t.getMaterialType().getNumOfLevels() -i;      
+      level = t.getMaterialType().getNumOfLevels() -i;    
+      level/=2;
+      level = level==0? 1 : level;
       addLoot(t.getStackForLevel(i), 1, 1, level);
       }
     }
