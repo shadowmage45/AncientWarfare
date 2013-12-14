@@ -25,6 +25,7 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
@@ -61,7 +62,11 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   IResearchGoal goal = ResearchGoal.getGoalByID(stack.getItemDamage());
   if(goal!=null && !PlayerTracker.instance().getEntryFor(player).hasDoneResearch(goal))
     {
-    player.addChatMessage("Learning research from notes: " + goal.getDisplayName());
+    if(world.isRemote)
+      {      
+      player.addChatMessage("Learning research from notes: " + StatCollector.translateToLocal(goal.getDisplayName()));
+      return false;
+      }    
     PlayerTracker.instance().addResearchToPlayer(world, player.getEntityName(), goal.getGlobalResearchNum());
     if(!player.capabilities.isCreativeMode)
       {
