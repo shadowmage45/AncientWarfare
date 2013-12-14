@@ -25,7 +25,9 @@ package shadowmage.ancient_warfare.common.vehicles;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -646,19 +648,55 @@ public void onUpdateClient()
 public void onUpdateServer()
   {
   if(this.riddenByEntity instanceof EntityPlayerMP)
-    { 
-    EntityPlayerMP player = (EntityPlayerMP)this.riddenByEntity;    
+    {
+    EntityPlayerMP player = (EntityPlayerMP)this.riddenByEntity;
+    NetServerHandler serv = player.playerNetServerHandler;
+    serv.ticksForFloatKick = 0;
     if(player.isSneaking())
       {
-      player.mountEntity(this);
-      player.ridingEntity = null;
-      this.riddenByEntity = null;
+      this.handleDismount(player);
+      player.setSneaking(false);
       }
-    else
+    }
+  }
+
+public void handleDismount(EntityLiving rider)
+  {
+  int xMin = MathHelper.floor_double(this.posX - this.width/2);
+  int zMin = MathHelper.floor_double(this.posZ - this.width/2);
+  int yMin = MathHelper.floor_double(posY)-2;
+  boolean foundTarget = false;
+  rider.mountEntity(null);
+  searchLabel:
+  for(int y = yMin; y<=yMin+3; y++)
+    {
+    for(int x = xMin; x <= xMin + (int)width; x++)
       {
-      NetServerHandler serv = player.playerNetServerHandler;
-      serv.ticksForFloatKick = 0;
+      for(int z = zMin; z<= zMin + (int)width; z++)
+        {
+        if(worldObj.doesBlockHaveSolidTopSurface(x, y, z) || this.worldObj.getBlockMaterial(x, y, z) == Material.water)
+          {
+          if(worldObj.isAirBlock(x, y+1, z) && worldObj.isAirBlock(x, y+2, z))
+            {
+            rider.setPositionAndUpdate(x+0.5d, y+1, z+0.5d);   
+            foundTarget = true;
+            break searchLabel;            
+            }
+          }
+        }
       }
+    }  
+  }
+
+@Override
+public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
+  {
+  super.onCollideWithPlayer(par1EntityPlayer);
+  if(!worldObj.isRemote && par1EntityPlayer instanceof EntityPlayerMP && par1EntityPlayer.posY > posY && par1EntityPlayer.isCollidedVertically)
+    {
+    EntityPlayerMP player = (EntityPlayerMP)par1EntityPlayer;
+    NetServerHandler serv = player.playerNetServerHandler;
+    serv.ticksForFloatKick = 0;
     }
   }
 

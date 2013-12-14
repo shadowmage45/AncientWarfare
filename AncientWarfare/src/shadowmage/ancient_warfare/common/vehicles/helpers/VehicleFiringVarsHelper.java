@@ -72,7 +72,7 @@ public boolean interact(EntityPlayer player)
     player.mountEntity(vehicle);
     return true;
     }
-  else if(control)
+  else if(control || player.isSneaking())
     {
     GUIHandler.instance().openGUI(GUIHandler.VEHICLE_DEBUG, player, vehicle.worldObj, vehicle.entityId, 0, 0);
     }
