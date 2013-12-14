@@ -25,7 +25,9 @@ package shadowmage.ancient_warfare.common.vehicles;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -650,7 +652,40 @@ public void onUpdateServer()
     EntityPlayerMP player = (EntityPlayerMP)this.riddenByEntity;
     NetServerHandler serv = player.playerNetServerHandler;
     serv.ticksForFloatKick = 0;
+    if(player.isSneaking())
+      {
+      this.handleDismount(player);
+      player.setSneaking(false);
+      }
     }
+  }
+
+public void handleDismount(EntityLivingBase rider)
+  {
+  int xMin = MathHelper.floor_double(this.posX - this.width/2);
+  int zMin = MathHelper.floor_double(this.posZ - this.width/2);
+  int yMin = MathHelper.floor_double(posY)-2;
+  boolean foundTarget = false;
+  rider.mountEntity(null);
+  searchLabel:
+  for(int y = yMin; y<=yMin+3; y++)
+    {
+    for(int x = xMin; x <= xMin + (int)width; x++)
+      {
+      for(int z = zMin; z<= zMin + (int)width; z++)
+        {
+        if(worldObj.doesBlockHaveSolidTopSurface(x, y, z) || this.worldObj.getBlockMaterial(x, y, z) == Material.water)
+          {
+          if(worldObj.isAirBlock(x, y+1, z) && worldObj.isAirBlock(x, y+2, z))
+            {
+            rider.setPositionAndUpdate(x+0.5d, y+1, z+0.5d);   
+            foundTarget = true;
+            break searchLabel;            
+            }
+          }
+        }
+      }
+    }  
   }
 
 public void updateTurretPitch()
