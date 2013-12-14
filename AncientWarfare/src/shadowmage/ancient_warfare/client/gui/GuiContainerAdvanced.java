@@ -554,8 +554,6 @@ protected void renderTooltip(int x, int y, List<String> info)
     return;
     }
   GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-//  GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-//  RenderHelper.disableStandardItemLighting();
   GL11.glDisable(GL11.GL_LIGHTING);
   GL11.glDisable(GL11.GL_DEPTH_TEST);
   Iterator<String> it = info.iterator();
