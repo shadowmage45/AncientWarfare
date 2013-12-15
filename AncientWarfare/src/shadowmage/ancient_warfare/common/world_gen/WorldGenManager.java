@@ -240,10 +240,10 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
       }    
     if(placed)
       {   
-      Config.logDebug("generated : "+struct.name);
       WorldGenStructureEntry ent = struct.getWorldGenEntry();
       if(ent!=null)
         {
+        Config.logDebug("generated : "+struct.name + " unique: "+ent.unique + " in biome: "+biomeName + " has exclusions of: "+ent.biomesNot + "  has inclusions of: "+ent.biomesOnly);
         WorldGenManager.instance().setGeneratedAt(dim, x, y, z, face, ent.value, ent.name, ent.unique);
         }      
       }
