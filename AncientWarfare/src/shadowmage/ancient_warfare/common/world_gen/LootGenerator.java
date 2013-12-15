@@ -62,13 +62,13 @@ public void generateLootFor(IInventory inventory, int slots, int level, Random r
   {
   default:
   case 0:
-  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 9);
+  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 3);
   break;
   case 1:
-  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 18);
+  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 6);
   break;
   case 2:
-  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 27);
+  WeightedRandomChestContent.generateChestContents(random, ChestGenHooks.getItems(ChestGenHooks.DUNGEON_CHEST, random), inventory, 9);
   break;
   }
   }
@@ -89,31 +89,33 @@ public void addLootToTables()
     int level = t.getMaterialType().getNumOfLevels();
     for(int i = 0; i< t.getMaterialType().getNumOfLevels(); i++)
       {
-      level = i;
-      level /=2;
-      if(level==0){level=1;}
+      level = t.getMaterialType().getNumOfLevels() -i;    
+      level/=2;
+      level = level==0? 1 : level;
       addLoot(t.getStackForLevel(i), 1, 1, level);
       }
     }
-//  for(IVehicleUpgradeType t : VehicleUpgradeRegistry.instance().getUpgradeList())
-//    {
-//    if(t==null){continue;}
-//    addLoot(t.getUpgradeStack(1), 1, 1, 2);
-//    }  
-//  for(IAmmoType t : Ammo.ammoTypes)
-//    {
-//    if(t==null){continue;}
-//    addLoot(t.getAmmoStack(1),5,32,2);
-//    }
+  for(IAmmoType t : Ammo.ammoTypes)
+    {
+    if(t==null){continue;}
+    addLoot(t.getAmmoStack(1),2,32,3);
+    }
+  for(IVehicleUpgradeType t : VehicleUpgradeRegistry.instance().getUpgradeList())
+    {
+    if(t==null){continue;}
+    addLoot(t.getUpgradeStack(1), 1, 1, 2);
+    }
+  addLoot(new ItemStack(ItemLoader.npcCommandBaton,1,0),1,1,3);
+  addLoot(new ItemStack(ItemLoader.npcCommandBaton,1,1),1,1,1);
+  addLoot(new ItemStack(Item.diamond), 1, 3, 1);
+  addLoot(new ItemStack(Item.ingotGold), 1, 3, 2);
+  addLoot(new ItemStack(Item.ingotIron), 1, 3, 3);
+  addLoot(new ItemStack(Item.compass), 1, 1, 1);    
 //  for(ICivicType c : Civic.civicList)
 //    {
 //    if(c==null){continue;}
 //    addLoot(c.getItemToConstruct(), 1, 1, 1);
-//    }
-  
-  addLoot(new ItemStack(ItemLoader.npcCommandBaton,1,0),1,1,15);
-  addLoot(new ItemStack(ItemLoader.npcCommandBaton,1,1),1,1,5);
-    
+//    }   
   
   }
 
